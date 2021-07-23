@@ -5,8 +5,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-import loader_fisdom from 'assets/loader_gif_fisdom.gif';
-import loader_myway from 'assets/loader_gif_myway.gif';
+import loader_fisdom from 'assets/fisdom/loader_gif.gif';
+import loader_myway from 'assets/finity/loader_gif.gif';
 import check_mark from 'assets/check_mark.png';
 
 import { getTerms } from '../Invest/common/api';

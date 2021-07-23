@@ -24,6 +24,8 @@
     "@nivo/line": "0.64.0",
     "@nivo/pie": "0.66.0",
     "@nivo/tooltip": "0.64.0",
+    "@sentry/react": "^6.2.5",
+    "@sentry/tracing": "^6.2.5",
     "acorn": "^6.0.0",
     "acorn-dynamic-import": "^4.0.0",
     "autoprefixer": "7.1.6",

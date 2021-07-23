@@ -93,9 +93,20 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty('--dark', '#0A1D32');
   html.style.setProperty('--steelgrey', '#767E86');
   html.style.setProperty('--on-focus-background', `${config_to_return.uiElements.button.focusBackgroundColor}`);
-  html.style.setProperty('--on-hover-background', `${config_to_return.uiElements.button.hoverBackgroundColor}`);
-  html.style.setProperty('--on-hover-secondary-background', `${config_to_return.uiElements.button.hoverSecondaryBackgroundColor}`);
+  html.style.setProperty('--on-hover-background', `${config_to_return.uiElements.button.hoverBackgroundColor || config_to_return.styles.secondaryColor}`);
+  html.style.setProperty('--on-hover-secondary-background', `${config_to_return.uiElements.button.hoverSecondaryBackgroundColor || config_to_return.styles.secondaryColor}`);
   html.style.setProperty('--secondary-green', `${config_to_return.styles.secondaryGreen}`);
+  html.style.setProperty(`--mustard`, '#FFDA2C');
+  html.style.setProperty(`--pink`, '#F16FA0');
+  html.style.setProperty(`--purple`, '#A38CEB');
+  html.style.setProperty(`--lime`, '#7ED321');
+  html.style.setProperty(`--red`, '#D0021B');
+  html.style.setProperty(`--primaryVariant1`, `${config_to_return.styles.primaryVariant1}`);
+  html.style.setProperty(`--primaryVariant4`, `${config_to_return.styles.primaryVariant4}`);
+  html.style.setProperty(`--spacing`, '10px');
+  html.style.setProperty(`--gunmetal`, '#161A2E');
+  html.style.setProperty(`--linkwater`, '#D3DBE4');
+  html.style.setProperty(`--border-radius`, `${config_to_return.uiElements.button.borderRadius}px`);
 
   return config_to_return;
 }
@@ -179,6 +190,8 @@ export const getConfig = () => {
     if (main_pathname.indexOf('term') >= 0) {
       project_child = 'term';
     }
+  } else if (main_pathname.indexOf('fhc') >= 0) {
+    project = 'fhc';
   } else if (main_pathname.indexOf('insurance') >= 0) {
     project = 'insurance';
   } else if (main_pathname.indexOf('risk') >= 0) {
@@ -209,6 +222,8 @@ export const getConfig = () => {
     project = 'portfolio-rebalancing';
   } else if (main_pathname.indexOf('iw-dashboard') >= 0) {
     project = 'iw-dashboard';
+  } else if (main_pathname.indexOf('tax-filing') >= 0) {
+    generic_callback = true
   }
 
   if(!partner_code) {
@@ -312,7 +327,14 @@ export const getConfig = () => {
     searchParams += getParamsMark(searchParams) + `app_version=${app_version}`;
     searchParamsMustAppend += getParamsMark(searchParams) + `app_version=${app_version}`;
   }
-
+  let isProdEnv = false;
+  if (
+    base_url.indexOf("my.fisdom.com") >= 0 ||
+    base_url.indexOf("api.mywaywealth.com") >= 0 ||
+    base_url.indexOf("api.finity.in") >= 0
+  ) {
+    isProdEnv = true;
+  }
   // should be last
   returnConfig.current_params = main_query_params;
   returnConfig.base_url = base_url;
@@ -325,6 +347,8 @@ export const getConfig = () => {
   returnConfig.isIframe = isIframe();
   returnConfig.platform = !returnConfig.isIframe ? (returnConfig.Web ? "web" : "sdk" ): "iframe";
   returnConfig.isLoggedIn = storageService().get("currentUser");
+  returnConfig.isProdEnv = isProdEnv
+
   return returnConfig;
 };
 
@@ -592,4 +616,13 @@ export const getInvestCards = (keysToCheck=[]) => {
     }
   })
   return cardsToShow;
+}
+
+export function stringToHexa(str) {
+  const arr1 = []
+  for (let i = 0; i < str.length; ++i) {
+    const hex = Number(str.charCodeAt(i)).toString(16)
+    arr1.push(hex)
+  }
+  return arr1.join('')
 }

@@ -332,8 +332,14 @@ input.default-otp-input {
   display: flex;
   justify-content: space-between;
   margin: 80px 0 0 0;
+
+  .left-arrow:hover, .right-arrow:hover{
+    background-color: var(--on-hover-background);
+  }
+
 }
 .left-arrow {
+  cursor: pointer;
   width: fit-content;
   background: #ececec;
   padding: 12px 20px 12px 20px;
@@ -344,6 +350,7 @@ input.default-otp-input {
   width: 20px;
 }
 .right-arrow {
+  cursor: pointer;
   // width: 200px;
   background: var(--secondary);
   padding: 12px 20px 12px 20px;

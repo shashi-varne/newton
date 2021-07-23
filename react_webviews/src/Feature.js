@@ -30,6 +30,7 @@ import Landing from './dashboard';
 import ProtectedRoute from './common/components/ProtectedRoute';
 import FeedBack from './feedback';
 import Partner from "./partner"
+import TaxFiling from './tax_filing'
 
 import Kyc from './kyc';
 import 'common/theme/Style.scss';
@@ -69,6 +70,7 @@ const Feature = () => {
       <Route path='/fund-details' component={FundDetails} />
       <Route path='/feedback' component={FeedBack} />
       <Route path='/partner' component={Partner} />
+      <Route path='/tax-filing' component={TaxFiling} />
 
       <ProtectedRoute path='/withdraw' component={Withdraw} />
       <ProtectedRoute path='/reports' component={Report} />

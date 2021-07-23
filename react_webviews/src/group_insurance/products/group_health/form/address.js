@@ -33,7 +33,6 @@ class GroupHealthPlanAddressDetails extends Component {
             next_state: 'nominee',
             screen_name: 'address_screen',
             same_address: '',
-            sameAddressCheck: false
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
@@ -310,7 +309,7 @@ class GroupHealthPlanAddressDetails extends Component {
             }
         }
 
-        if(this.state.sameAddressCheck){
+        if(this.state.same_address === 'YES'){
             for(var form_key in form_data){
                 if(form_key.includes('p_') && form_key.includes('_error')){
                     delete form_data[form_key];

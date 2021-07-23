@@ -18,6 +18,8 @@ function Referral() {
     { name: "Karnataka Bank", value: "ktb" },
     { name: "Indian Bank", value: "indb" },
     { name: "City Union Bank", value: "cub" },
+    { name: "Sahaj", value: "sahaj" },
+    { name: "Mitr Sewa Private Limited", value: "mspl" },
   ]);
   const [referralUrl, setReferralUrl] = useState("");
   const [showLoader, setShowLoader] = useState(false);

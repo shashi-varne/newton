@@ -184,12 +184,12 @@ export class FooterLayoutBase extends Component {
   insuranceDefault = (props) => {
     return (
       <div className="FooterDefaultLayout" onClick={this.clickHandler}>
-      <div className="FlexItem1">
-        <img
-          alt=""
-          src={props.logo}
-          className="FooterImage" />
-      </div>
+        <div className="FlexItem1">
+          <img
+            alt=""
+            src={props.logo}
+            className="FooterImage" />
+        </div>
       <div className="FlexItem2">
         <Button
           type={props.type}
@@ -208,11 +208,7 @@ export class FooterLayoutBase extends Component {
           this.clickHandler();
         }
       }}>
-      <div className={`FlexItem2 ${!props.disable ? 'FlexButtonGenericColor' : ''}`} 
-        style={{
-          borderRadius: getConfig().uiElements?.button?.borderRadius || 6
-        }} 
-      >
+      <div className={`FlexItem2 ${!props.disable ? 'FlexButtonGenericColor' : ''}`} >
         <Button
           type={props.type}
           disable={props.disable}

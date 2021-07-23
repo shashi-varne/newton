@@ -1,3 +1,5 @@
+@import './utils.scss';
+
 .configPrimaryColorClass {
   color: var(--primary) !important;
 }
@@ -724,9 +726,14 @@ button {
   text-align: center;
 }
 
-.FlexButtonGenericColor{
-  background-color: var(--secondary);
-  color: white;
+.FlexButtonGenericColor {
+  border-radius: var(--border-radius);
+
+  button{
+    background-color: var(--secondary);
+    color: white;
+    border-radius: var(--border-radius);
+  }
 }
 
 .FooterTwoButtonLayout button.borderButton {

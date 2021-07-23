@@ -91,12 +91,11 @@
           -ms-flex-align: center;
           align-items: center;
           background-color: #f0f7ff;
-          color: #767e86;
+          color: var(--steelgrey);
 
           .img {
             width: 10px;
             margin-right: 5px;
-            margin-top: -3px;
           }
         }
         .returns {
