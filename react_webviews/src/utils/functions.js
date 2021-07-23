@@ -9,6 +9,7 @@ import {
   commonCardsConfig, 
   partnerConfigs 
 } from './partnerConfigs';
+import isEmpty from "lodash/isEmpty";
 
 export const getHost = (pathname) => {
   return window.location.origin + pathname;
@@ -568,4 +569,21 @@ export {
   checkBeforeRedirection, 
   checkAfterRedirection, 
   backButtonHandler
+}
+
+export const getInvestCards = (keysToCheck=[]) => {
+  const config = getConfig();
+  const investSections = config.investSections || [];
+  const investSubSectionMap = config.investSubSectionMap;
+  const cardsToShow = {};
+  investSections.forEach(section => {
+    if(!isEmpty(investSubSectionMap[section])) {
+      investSubSectionMap[section].forEach(subSections => {
+        if (keysToCheck.includes(subSections)) {
+          cardsToShow[subSections] = true;
+        }
+      })
+    }
+  })
+  return cardsToShow;
 }

@@ -37,7 +37,7 @@ export const commonCardsConfig = {
     "popularCards",
   ],
   investSubSectionMap: {
-    ourRecommendations: ["instaredeem", "buildwealth", "savetax"],
+    ourRecommendations: ["buildwealth", "savetax"],
     diy: ["diyv2"],
     bottomScrollCards: ["parkmoney", "savegoal"],
     bottomCards: ["nfo"],
@@ -48,7 +48,7 @@ export const basePartnerConfig = {
   fisdom: {
     productName: "fisdom",
     email: "ask@fisdom.com",
-    mobile: "+91-7829228886",
+    mobile: "+91-9642596425",
     appLink: "https://fisdom.onelink.me/CQFA/3e75c8f6",
     termsLink: "https://www.fisdom.com/terms/",
     schemeLink: "https://www.fisdom.com/scheme-offer-documents/",
@@ -58,11 +58,15 @@ export const basePartnerConfig = {
     configPrimaryBackgroundColorClass: 'fisdomBackColor',
     emailDomain: "fisdom.com",
     riskEnabledFunnels: false,
+    referralConfig: {
+      applyRefferal: true, // same as hide_apply_referral but with opposite value
+      shareRefferal: true, // same as hide_share_referral but with opposite value
+    },
   },
   finity: {
     productName: "finity",
     email: "ask@finity.in",
-    mobile: "+91-8048039999",
+    mobile: "+91-8142381423",
     appLink: "https://myway.onelink.me/W4GN/1f539fd2",
     termsLink: "https://finity.in/terms/",
     schemeLink: "https://finity.in/scheme/",
@@ -72,6 +76,10 @@ export const basePartnerConfig = {
     configPrimaryBackgroundColorClass: 'fisdomBackColor',
     emailDomain: "finity.in",
     riskEnabledFunnels: true,
+    referralConfig: {
+      applyRefferal: false,
+      shareRefferal: false,
+    },
   },
 };
 
@@ -183,11 +191,11 @@ export const partnerConfigs = {
     message: "",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
-      ourRecommendations: ["100_sip", "instaredeem", "buildwealth", "savetax"],
+      ourRecommendations: ["100_sip", "buildwealth", "savetax"],
       financialTools: ["risk_profile"],
     },
     landingMarketingBanners: [
-      { image: "nfo.svg", type: "nfo" },
+      { image: "nfo.svg", type: "nfo", endDate: '07/21/2021' },
       { image: "mb_4.svg", type: "100_sip" },
       { image: "mb_6.svg", type: "diy" },
       { image: "mb_5.svg", type: "buildwealth" },
@@ -212,6 +220,10 @@ export const partnerConfigs = {
     email: "alb@fisdom.com",
     message: "",
     mobile: "+91-7829733111",
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      ourRecommendations: ["buildwealth", "savetax", "nps"],
+    },
     styles: {
       primaryColor: "#2E3192",
       secondaryColor: "#00aeef",
@@ -249,6 +261,7 @@ export const partnerConfigs = {
       primaryColor: "#8C0094",
     },
     referralConfig: {
+      applyRefferal: true,
       shareRefferal: false,
     },
   },
@@ -267,6 +280,11 @@ export const partnerConfigs = {
     mobile: "1800-212-5997",
     email: "care.futuremoney@fisdom.com",
     message: "",
+    landingMarketingBanners: [
+      { image: "nfo.svg", type: "nfo", endDate: '07/21/2021' },
+      { image: "fpg_mb_insta.svg", type: "instaredeem" },
+      { image: "fpg_mb_100.svg", type: "buildwealth" },
+    ],
     investSections: [
       "kyc",
       "ourRecommendations",
@@ -310,7 +328,6 @@ export const partnerConfigs = {
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
       ourRecommendations: [
-        "instaredeem",
         "buildwealth",
         "insurance",
         "savetax",
@@ -358,7 +375,6 @@ export const partnerConfigs = {
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
       ourRecommendations: [
-        "instaredeem",
         "buildwealth",
         "insurance",
         "savetax",
@@ -374,7 +390,6 @@ export const partnerConfigs = {
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
       ourRecommendations: [
-        "instaredeem",
         "buildwealth",
         "insurance",
         "savetax",
@@ -394,9 +409,10 @@ export const partnerConfigs = {
     message: "",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
-      ourRecommendations: ["instaredeem", "buildwealth", "savetax", "nps"],
+      ourRecommendations: ["buildwealth", "savetax", "nps"],
     },
     referralConfig: {
+      applyRefferal: true,
       shareRefferal: false, // same as hide_share_referral but with opposite value
     },
     styles: {
@@ -412,7 +428,7 @@ export const partnerConfigs = {
     message: "",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
-      ourRecommendations: ["instaredeem", "buildwealth", "savetax", "nps"],
+      ourRecommendations: ["buildwealth", "savetax", "nps"],
     },
     styles: {
       primaryColor: "#007AFF",
@@ -430,7 +446,6 @@ export const partnerConfigs = {
     logo: "moneycontrol_logo.svg",
     code: "moneycontrol",
     email: "moneycontrol@finity.in",
-    mobile: "+91-7829228886", // check with satendra -> mobile is of fisdom
     message: "",
     styles: {
       primaryColor: "#3792FC",
@@ -449,11 +464,9 @@ export const partnerConfigs = {
     investSections: ["kyc", "ourRecommendations"],
     investSubSectionMap: {
       ourRecommendations: [
-        "instaredeem",
-        "buildwealth",
-        "insurance",
         "savetax",
         "nps",
+        "insurance",
       ],
     },
   },
@@ -467,8 +480,34 @@ export const partnerConfigs = {
     },
   },
   quesscorp: {
+    logo: "quesscorp.svg",
     code: 'quesscorp',
-    mobile: '+91-9642596425',
-    search_button: 'search.png'
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      diy: ["diyv2", "gold"],
+    },
+  },
+  sahaj: {
+    code: "sahaj",
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      ourRecommendations: ["buildwealth", "savetax", "nps"],
+      diy: ["diyv2", "gold"],
+    },
+    styles: {
+      primaryColor: "#e5322d",
+    },
+  },
+  mspl: {
+    code: "mspl",
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      ourRecommendations: ["buildwealth", "savetax", "nps"],
+      diy: ["diyv2", "gold"],
+    },
+    styles: {
+      primaryColor: "#252B69",
+    },
+    navLinkOptions:{loan: true}
   }
 };
