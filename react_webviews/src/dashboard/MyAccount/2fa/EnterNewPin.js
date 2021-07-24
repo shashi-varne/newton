@@ -1,28 +1,36 @@
 import "./commonStyles.scss";
 import React, { useState } from 'react';
-import Container from "../../common/Container";
-import { twofaPostApi } from '../../../2fa/common/ApiCalls';
+import { verifyPin } from '../../../2fa/common/ApiCalls';
 import EnterMPin from "../../../2fa/components/EnterMPin";
-
+import Container from "../../common/Container";
 import { navigate as navigateFunc } from "../../../utils/functions";
 
-const confirmResetPin = (props) => {
-  const routeParams = props.location?.params || {};
+const EnterNewPin = (props) => {
+  const routeParams = props.location?.params || {}; console.log(routeParams, 'step 2')
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
 
   const navigate = navigateFunc.bind(props);
 
+  const handlePin = (value) => {
+    setPin(value);
+    setPinError('');
+  }
+
   const handleClick = async () => {
     try {
-      setIsApiRunning(true);
-      await twofaPostApi(routeParams?.reset_url, { new_mpin: pin });
+      setIsApiRunning("button");
+      await verifyPin({
+        validate_only: true,
+        mpin: pin
+      });
       setIsApiRunning(false);
-      navigate('security-settings');
+      navigate('confirm-reset-pin', {
+        params: { reset_url: routeParams.reset_url }
+      });
     } catch (err) {
       console.log(err);
-      navigate('security-settings');
       setPinError(err);
     } finally {
       setIsApiRunning(false);
@@ -30,19 +38,15 @@ const confirmResetPin = (props) => {
   };
 
 
-  const handlePin = (value) => {
-    setPin(value);
-    setPinError('');
-  }
-
   return (
     <Container
+      data-aid='my-account-screen'
       showLoader={isApiRunning}
       handleClick={handleClick}
       buttonTitle="Continue"
     >
       <EnterMPin
-        title="Confirm fisdom PIN"
+        title="Enter new fisdom PIN"
         subtitle="Keep your account safe and secure"
         otpProps={{
           otp: pin,
@@ -55,4 +59,4 @@ const confirmResetPin = (props) => {
   )
 };
 
-export default confirmResetPin;
+export default EnterNewPin;

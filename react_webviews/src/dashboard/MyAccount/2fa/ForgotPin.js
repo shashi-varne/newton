@@ -6,12 +6,11 @@ import { navigate as navigateFunc } from "../../../utils/functions";
 import { forgotPinOtpTrigger, obscuredAuthGetter } from '../../../2fa/common/ApiCalls';
 
 const ForgotPin = (props) => {
-  const stateParams = props.history.match;
   const [authDetails, setAuthDetails] = useState({});
-  const [showLoader, setShowLoader] = useState(false);
   const [pan, setPan] = useState('');
   const [panError, setPanError] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
+  const [isFetchApiRunning, setIsFetchApiRunning] = useState(false);
   const navigate = navigateFunc.bind(props);
 
   useEffect(() => {
@@ -21,10 +20,13 @@ const ForgotPin = (props) => {
 
   const fetchAuthDetails = async () => {
     try {
+      setIsFetchApiRunning(true);
       const response = await obscuredAuthGetter();
       setAuthDetails(response);
-    } catch(err) {
+    } catch (err) {
       console.log(err);
+    } finally {
+      setIsFetchApiRunning(false);
     }
   }
 
@@ -37,7 +39,7 @@ const ForgotPin = (props) => {
       setIsApiRunning("button");
       const response = await forgotPinOtpTrigger(pan ? { pan } : '');
       setIsApiRunning(false);
-      navigate('verify-pin-otp', {
+      navigate('verify-otp', {
         params: response
       });
     } catch (err) {
@@ -53,15 +55,17 @@ const ForgotPin = (props) => {
     <Container
       data-aid='myaccount-forgot-pin'
       showLoader={isApiRunning}
+      skelton={isFetchApiRunning}
       handleClick={handleClick}
       buttonTitle="Continue"
       hideInPageTitle
       hidePageTitle
     >
       <ForgotMPin
-        primaryAuthType={stateParams?.authType}
-        primaryAuthValue={stateParams?.authValue}
-        isPANRequired={stateParams?.isPanRequired}
+        primaryAuthType={authDetails?.obscured_auth_type === 'mobile' ? 'mobile' : 'email'}
+        primaryAuthValue={authDetails?.obscured_auth}
+        isLoading={isFetchApiRunning}
+        isPanRequired={authDetails?.is_pan_verified}
         pan={pan}
         panError={panError}
         onPanInputChange={handlePanInput}

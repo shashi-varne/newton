@@ -33,7 +33,7 @@ const OtpContainer = ({
 
     return (
         <div className={`verify-otp-container ${classes.body}`}>
-            {title && 
+            {title &&
                 <WVInPageTitle>{title}</WVInPageTitle>
             }
             <div className={`verify-otp-header ${classes.subtitle}`}>
@@ -66,12 +66,14 @@ const OtpContainer = ({
                             {timeAvailable < 10 ? `0${timeAvailable}` : timeAvailable}s
                         </div>
                     )}
-                    {(timeAvailable <= 0 || !timeAvailable) && (
+                    {(timeAvailable <= 0 || !timeAvailable || showDotLoader) && (
                         <div
                             className={`cd-otp-resend-text ${classes.resendText}`}
                             onClick={() => {
-                                resendOtp();
-                                setTimeAvailable(otpData?.timeAvailable);
+                                if(!showDotLoader){
+                                    resendOtp();
+                                    setTimeAvailable(otpData?.timeAvailable);
+                                }
                             }}
                         >
                             {showDotLoader ? (

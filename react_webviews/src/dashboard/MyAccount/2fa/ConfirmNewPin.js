@@ -5,7 +5,7 @@ import EnterMPin from "../../../2fa/components/EnterMPin";
 
 import { navigate as navigateFunc } from "../../../utils/functions";
 
-const ConfirmSetPin = (props) => {
+const ConfirmNewPin = (props) => {
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [otp, setOtp] = useState('');
@@ -23,7 +23,7 @@ const ConfirmSetPin = (props) => {
   return (
     <Container
       data-aid='my-account-screen'
-      showLoader={isApiRunning}
+      skelton={isApiRunning}
       handleClick={handleClick}
       buttonTitle="Continue"
     >
@@ -43,4 +43,4 @@ const ConfirmSetPin = (props) => {
   )
 };
 
-export default ConfirmSetPin;
+export default ConfirmNewPin;

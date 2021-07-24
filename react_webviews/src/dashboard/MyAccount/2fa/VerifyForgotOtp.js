@@ -29,11 +29,11 @@ const VerifyForgotOtp = (props) => {
 
     const handleClick = async () => {
         try {
-            setIsApiRunning(true);
+            setIsApiRunning("button");
             const result = await otpApiCall(routeParams?.verify_url, otp);
             setIsApiRunning(false);
             navigate('new-pin', {
-                params: { modify_url: result.modify_url }
+                params: { reset_url: result.reset_url }
             });
         } catch (err) {
             console.log(err);
@@ -66,7 +66,7 @@ const VerifyForgotOtp = (props) => {
         >
             <OtpContainer
                 otpData={{ ...otpData, otp }}
-                showDotLoader={isApiRunning}
+                showDotLoader={isResendApiRunning}
                 handleOtp={handleOtp}
                 resendOtp={handleResendOtp}
                 isWrongOtp={!!otpError}
