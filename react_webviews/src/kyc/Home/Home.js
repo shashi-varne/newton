@@ -252,7 +252,7 @@ const Home = (props) => {
     let name = "fisdom";
     if (config.productName === "finity") name = "finity";
     const toastMessage = `The PAN is already associated with another ${name} account. Kindly send mail to ${email} for any clarification`;
-    if (showPageDialog) {
+    if (config.isIframe && config.code !== 'moneycontrol') {
       toast(toastMessage);
     } else {
       let response = await checkMerge(pan.toUpperCase());
