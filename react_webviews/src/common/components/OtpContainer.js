@@ -70,10 +70,8 @@ const OtpContainer = ({
                         <div
                             className={`cd-otp-resend-text ${classes.resendText}`}
                             onClick={() => {
-                                if(!showDotLoader){
                                     resendOtp();
                                     setTimeAvailable(otpData?.timeAvailable);
-                                }
                             }}
                         >
                             {showDotLoader ? (
