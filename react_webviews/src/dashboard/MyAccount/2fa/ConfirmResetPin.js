@@ -40,6 +40,7 @@ const confirmResetPin = (props) => {
       showLoader={isApiRunning}
       handleClick={handleClick}
       buttonTitle="Continue"
+      disable={pin?.length === 4 ? false : true}
     >
       <EnterMPin
         title="Confirm fisdom PIN"

@@ -44,6 +44,7 @@ const EnterNewPin = (props) => {
       showLoader={isApiRunning}
       handleClick={handleClick}
       buttonTitle="Continue"
+      disable={pin?.length === 4 ? false : true}
     >
       <EnterMPin
         title="Enter new fisdom PIN"

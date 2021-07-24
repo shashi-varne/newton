@@ -26,6 +26,7 @@ const SetPin = (props) => {
       showLoader={isApiRunning}
       handleClick={handleClick}
       buttonTitle="Continue"
+      disable={otp?.length === 4 ? false : true}
       fullWidthButton
     >
       <EnterMPin

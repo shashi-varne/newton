@@ -26,6 +26,7 @@ const ConfirmNewPin = (props) => {
       skelton={isApiRunning}
       handleClick={handleClick}
       buttonTitle="Continue"
+      disable={otp?.length === 4 ? false : true}
     >
       <EnterMPin
         title="Confirm fisdom PIN"
