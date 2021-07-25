@@ -4,6 +4,7 @@ import OtpContainer from "../../common/OtpContainer";
 import { initialize } from "../../functions";
 import "./secondaryVerification.scss";
 import { toast } from "react-toastify";
+import { formatMobileNumber } from "utils/validators";
 
 export class SecondaryOtpVerification extends Component {
   constructor(props) {
@@ -69,7 +70,7 @@ export class SecondaryOtpVerification extends Component {
   }
 
   render() {
-    const { showDotLoader, communicationType, value, isWrongOtp, otpData } = this.state;
+    const { isResendOtpApiRunning, communicationType, value, isWrongOtp, otpData } = this.state;
     return (
       <Container
         title={`Enter OTP to verify your ${communicationType === "email" ? "email" : "number"
@@ -88,12 +89,12 @@ export class SecondaryOtpVerification extends Component {
             body: "verify-otp-container-secondary"
           }}
           otpData={otpData}
-          showDotLoader={showDotLoader}
+          showDotLoader={isResendOtpApiRunning}
           handleOtp={this.handleOtp}
           resendOtp={this.handleResendOtp}
           isWrongOtp={isWrongOtp}
-          bottomText={isWrongOtp ? "Invalid OTP": ""}
-          value={value}>
+          bottomText={isWrongOtp ? "Invalid OTP" : ""}
+          value={communicationType !== "email" ? formatMobileNumber(value) : value}>
         </OtpContainer>
       </Container>
     );

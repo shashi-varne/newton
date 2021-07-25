@@ -6,22 +6,25 @@ import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClick
 import WVInPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
 import WVInPageHeader from "../../common/ui/InPageHeader/WVInPageHeader";
 
-const OtpContainer = (props) => {
-    const {
-        title,
-        otpData,
-        handleClick,
-        handleOtp,
-        showDotLoader,
-        resendOtp,
-        isWrongOtp,
-        value,
-        isDisabled,
-        children,
-        classes = {},
-        handleClickText, } = props || {};
+const OtpContainer = ({
+    title,
+    otpData,
+    handleClick,
+    handleOtp,
+    showDotLoader,
+    resendOtp,
+    isWrongOtp,
+    value,
+    isDisabled,
+    children,
+    classes = {},
+    handleClickText,
+}) => {
     const [timeAvailable, setTimeAvailable] = useState(otpData?.timeAvailable);
     useEffect(() => {
+        if (!!showDotLoader) {
+            setTimeAvailable(otpData?.timeAvailable)
+        }
         var timmer = setTimeout(() => {
             if (timeAvailable <= 0) {
                 clearTimeout(timmer);
@@ -29,8 +32,7 @@ const OtpContainer = (props) => {
             }
             setTimeAvailable(timeAvailable - 1)
         }, 1000);
-
-    }, [timeAvailable])
+    }, [timeAvailable, showDotLoader])
 
     return (
         <div className={`verify-otp-container ${classes.body}`}>
@@ -68,13 +70,10 @@ const OtpContainer = (props) => {
                             {timeAvailable < 10 ? `0${timeAvailable}` : timeAvailable}s
                         </div>
                     )}
-                    {(timeAvailable <= 0 || !timeAvailable) && (
+                    {(timeAvailable <= 0 || !timeAvailable || showDotLoader) && (
                         <div
-                            className={`cd-otp-resend-text ${props.class}`}
-                            onClick={() => {
-                                resendOtp(),
-                                setTimeAvailable(otpData?.timeAvailable)
-                            }}
+                            className={`cd-otp-resend-text ${classes.resendText}`}
+                            onClick={resendOtp}
                         >
                             {showDotLoader ? (
                                 <DotDotLoader className="cd-resend-loader" />

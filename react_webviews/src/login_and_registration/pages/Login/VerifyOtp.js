@@ -4,6 +4,7 @@ import toast from "common/ui/Toast";
 import OtpContainer from "../../common/OtpContainer"
 import WVButton from "../../../common/ui/Button/WVButton";
 import LoginContainer from "./LoginContainer"
+import { formatMobileNumber } from "utils/validators";
 class Otp extends Component {
   constructor(props) {
     super(props);
@@ -65,19 +66,18 @@ class Otp extends Component {
   }
 
   render() {
-    let { value, isApiRunning, otpData, isWrongOtp, communicationType } = this.state;
+    let { value, isApiRunning, otpData, isWrongOtp, communicationType, isResendOtpApiRunning } = this.state;
     let disabled = otpData.otp?.length !== 4;
-    let showDotLoader = false;
     return (
       <LoginContainer>
         <OtpContainer
           title={`Enter OTP to verify your ${communicationType === "email" ? "email" : "number"}`}
           otpData={this.state.otpData}
-          showDotLoader={showDotLoader}
+          showDotLoader={isResendOtpApiRunning}
           handleOtp={this.handleOtp}
           resendOtp={this.handleResendOtp}
           isWrongOtp={isWrongOtp}
-          value={value}
+          value={communicationType !== "email" ? formatMobileNumber(value) : value}
           classes={{
             subtitle: "login-subtitle"
           }}

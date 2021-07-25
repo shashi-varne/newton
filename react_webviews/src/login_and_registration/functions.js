@@ -1,7 +1,6 @@
-import { validateEmail } from "utils/validators";
 import toast from "common/ui/Toast";
 import Api from "utils/api";
-import { storageService, getUrlParams } from "utils/validators";
+import { storageService, getUrlParams, validateEmail } from "utils/validators";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { isEmpty } from "../utils/validators";
 import { nativeCallback } from "../utils/native_callback";
@@ -587,12 +586,12 @@ export async function applyCode(user) {
 }
 
 export async function resendOtp(otp_id) {
-  this.setState({ isApiRunning: "button" });
+  this.setState({ isResendOtpApiRunning: true });
   try {
     const res = await Api.post(`/api/communication/resend/otp/${otp_id}`);
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
-      this.setState({ isApiRunning: false });
+      this.setState({ isResendOtpApiRunning: false });
       toast(result.message || "Success!");
     } else {
       toast(result.message || result.error || errorMessage);
@@ -601,12 +600,12 @@ export async function resendOtp(otp_id) {
     console.log(error);
     toast(errorMessage);
   } finally {
-    this.setState({ isApiRunning: false });
+    this.setState({ isResendOtpApiRunning: false });
   }
 }
 
 export async function resendLoginOtp(resend_url) {
-  this.setState({ isApiRunning: "button" });
+  this.setState({ isResendOtpApiRunning: true });
   try {
     const res = await Api.get(resend_url);
     const { result, status_code: status } = res.pfwresponse;
@@ -620,7 +619,7 @@ export async function resendLoginOtp(resend_url) {
     console.log(error);
     toast(errorMessage);
   } finally {
-    this.setState({ isApiRunning: false });
+    this.setState({ isResendOtpApiRunning: false });
   }
 }
 
