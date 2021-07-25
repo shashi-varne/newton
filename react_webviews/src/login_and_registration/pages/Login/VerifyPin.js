@@ -7,6 +7,7 @@ import { navigate as navigateFunc } from '../../../utils/functions';
 import { verifyPin } from '../../../2fa/common/ApiCalls';
 import WVButton from '../../../common/ui/Button/WVButton';
 import DotDotLoader from '../../../common/ui/DotDotLoaderNew';
+import { redirectAfterLogin } from '../../functions';
 
 const VerifyPin = (props) => {
   const { name } = storageService().getObject('user') || {};
@@ -37,7 +38,11 @@ const VerifyPin = (props) => {
     try {
       setIsApiRunning(true);
       await verifyPin({ mpin });
-      // TODO: Handle post verification redirection
+      redirectAfterLogin(
+        { firstLogin: false },
+        '',
+        navigate
+      );
     } catch(err) {
       console.log(err);
       setMpinError(err);
