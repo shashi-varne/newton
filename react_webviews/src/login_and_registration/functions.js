@@ -771,6 +771,7 @@ export async function authCheckApi(type, data) {
       throw error;
     }
   } catch (err) {
+    console.log(err)
     Toast(err, "error");
   } finally {
     this.setState({
