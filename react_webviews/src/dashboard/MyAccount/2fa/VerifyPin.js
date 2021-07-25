@@ -65,7 +65,7 @@ const VerifyPin = (props) => {
           Enter your current fisdom PIN
         </EnterMPin.Title>
       </EnterMPin>
-      <WVClickableTextElement onClick={() => navigate("/forgot-fisdom-mpin")}>
+      <WVClickableTextElement onClick={() => navigate("/forgot-fisdom-pin")}>
         <p className="clickable-text-ele">FORGOT PIN?</p>
       </WVClickableTextElement>
     </Container>
