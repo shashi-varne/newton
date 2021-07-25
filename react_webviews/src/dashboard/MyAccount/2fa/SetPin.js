@@ -1,17 +1,17 @@
 import "./commonStyles.scss";
 import React, { useState } from 'react';
-import WVClickableTextElement from "common/ui/ClickableTextElement/WVClickableTextElement"
 import Container from "../../common/Container";
 import EnterMPin from "../../../2fa/components/EnterMPin";
 import { navigate as navigateFunc } from "../../../utils/functions";
 
-const VerifyPin = (props) => {
+const SetPin = (props) => {
   const navigate = navigateFunc.bind(props);
   const [showLoader, setShowLoader] = useState(false);
+  const [isApiRunning, setIsApiRunning] = useState(false);
   const [otp, setOtp] = useState('');
 
   const handleClick = (route) => {
-    // Call Verify API 
+   console.log("hiJ A oPQ")
   };
 
 
@@ -23,24 +23,25 @@ const VerifyPin = (props) => {
   return (
     <Container
       data-aid='my-account-screen'
-      showLoader={showLoader}
+      showLoader={isApiRunning}
       handleClick={handleClick}
       buttonTitle="Continue"
-    > 
+      fullWidthButton
+    >
       <EnterMPin
+        title="Set fisdom PIN"
+        subtitle="Ensuring maximum security for your investment account"
+        showLoader={isApiRunning}
         otpProps={{
           handleChange: handleOtp,
           otp,
           // isDisabled:,
           // hasError:,
-          bottomText: "Enter Fisdom PIN"
+          bottomText: ""
         }}
       />
-      <WVClickableTextElement onClick={() => navigate("/forgot-fisdom-pin")}>
-        <p className="clickable-text-ele">FORGOT PIN?</p>
-      </WVClickableTextElement>
     </Container>
   )
 };
 
-export default VerifyPin;
+export default SetPin;

@@ -92,7 +92,7 @@ export class SecondaryOtpVerification extends Component {
           handleOtp={this.handleOtp}
           resendOtp={this.handleResendOtp}
           isWrongOtp={isWrongOtp}
-          bottomText={isWrongOtp ? "Invalid OTP": ""}
+          bottomText={isWrongOtp ? "Invalid OTP" : ""}
           value={value}>
         </OtpContainer>
       </Container>
