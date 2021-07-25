@@ -17,7 +17,6 @@ export function initialize() {
   this.triggerOtpApi = triggerOtpApi.bind(this);
   this.initiateOtpApi = initiateOtpApi.bind(this);
   this.verifyCode = verifyCode.bind(this);
-  this.emailRegister = emailRegister.bind(this);
   this.resendVerificationLink = resendVerificationLink.bind(this);
   this.otpVerification = otpVerification.bind(this);
   this.otpLoginVerification = otpLoginVerification.bind(this);
@@ -252,11 +251,11 @@ export async function triggerOtpApi(body, loginType) {
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       this.setState({ isApiRunning: false });
+      this.sendEvents("next")
       if (body?.secondaryVerification) {
         this.navigate("secondary-otp-verification", {
           state: {
             value: body.mobile ||  body.email,
-            rebalancing_redirect_url: this.state.rebalancingRedirectUrl,
             otp_id: result?.otp_id,
             communicationType: loginType,
           },
@@ -265,7 +264,6 @@ export async function triggerOtpApi(body, loginType) {
         this.navigate("verify-otp", {
           state: {
             value: body.mobile || body.email,
-            rebalancing_redirect_url: this.state.rebalancingRedirectUrl,
             otp_id: result?.otp_id,
             communicationType: loginType,
           },
@@ -303,10 +301,10 @@ export async function initiateOtpApi(body, loginType) {
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       this.setState({ isApiRunning: false });
+      this.sendEvents("next")
       this.navigate("verify-otp", {
         state: {
           value: body.auth_value,
-          rebalancing_redirect_url: this.state.rebalancingRedirectUrl,
           communicationType: loginType,
           verify_url: result?.verify_url,
           resend_url: result?.resend_url,
@@ -316,41 +314,6 @@ export async function initiateOtpApi(body, loginType) {
 
     } 
     toast(result?.message || result?.error || errorMessage);
-  } catch (error) {
-    console.log(error);
-    toast(errorMessage);
-  } finally {
-    this.setState({ isApiRunning: false });
-  }
-}
-
-export async function emailRegister(body) {
-  try {
-    const res = await Api.post(
-      `/api/user/register?email=${body.email}&password=${body.password}&redirect_url=${body.redirect_url}&referrer_code=${body.referrer_code}`,
-      body
-    );
-    const { result, status_code: status } = res.pfwresponse;
-    if (status === 200) {
-      if (this.state.rebalancingRedirectUrl) {
-        window.location.href = this.state.rebalancingRedirectUrl;
-        return;
-      }
-      if (this.state.isPromoSuccess) {
-        var item = {
-          user_id: result.user.user_id,
-          promo_code: body.referrer_code,
-        };
-        storageService().setObject("user_promo", item);
-      }
-
-      toast(
-        "Please click on the verification link sent to your email account."
-      );
-      this.setState({ resendVerification: true, isApiRunning: false });
-    } else {
-      toast(result.message || result.error || errorMessage);
-    }
   } catch (error) {
     console.log(error);
     toast(errorMessage);
@@ -374,6 +337,7 @@ export async function verifyCode(form_data) {
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       toast("Success");
+      this.sendEvents("next")
       this.setState({
         isPromoSuccess: true,
         promo_status: "Valid",
@@ -505,6 +469,7 @@ export async function otpVerification(body) {
     );
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
+      this.sendEvents("next");
       let eventObj = {
         event_name: "user loggedin",
       };
@@ -591,6 +556,7 @@ export async function resendOtp(otp_id) {
     const res = await Api.post(`/api/communication/resend/otp/${otp_id}`);
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
+      this.sendEvents("resend")
       this.setState({ isResendOtpApiRunning: false });
       toast(result.message || "Success!");
     } else {

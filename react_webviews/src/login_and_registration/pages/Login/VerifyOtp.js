@@ -5,6 +5,7 @@ import OtpContainer from "../../common/OtpContainer"
 import WVButton from "../../../common/ui/Button/WVButton";
 import LoginContainer from "./LoginContainer"
 import { formatMobileNumber } from "utils/validators";
+import { nativeCallback } from "../../../utils/native_callback";
 class Otp extends Component {
   constructor(props) {
     super(props);
@@ -60,11 +61,29 @@ class Otp extends Component {
 
   handleResendOtp = () => {
     this.resendLoginOtp(this.state.resend_url)
+    this.sendEvents("resend");
     this.setState({
       otpData: { ...this.state.otpData, timeAvailable: 15, },
     });
   }
 
+  sendEvents = (userAction) => {
+    let properties = {
+      "otp_entered": userAction === "next" ? "yes" : "no",
+      "mode_entry": "manual",
+      "user_action": userAction,
+      "screen_name": `${this.state.communicationType}_otp`,
+    }
+    let eventObj = {
+      "event_name": 'onboarding',
+      "properties": properties,
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
   render() {
     let { value, isApiRunning, otpData, isWrongOtp, communicationType, isResendOtpApiRunning } = this.state;
     let disabled = otpData.otp?.length !== 4;
@@ -94,7 +113,10 @@ class Otp extends Component {
           >
             CONTINUE
             </WVButton>
-          <WVButton classes={{ label: 'go-back-to-login', }} style={{ margin: "40px auto 0px" }} onClick={() => this.props.history.goBack()}>
+          <WVButton classes={{ label: 'go-back-to-login', }} style={{ margin: "40px auto 0px" }} onClick={() => {
+            this.props.history.goBack();
+            this.sendEvents("back");
+          }}>
             Go Back to Login
             </WVButton>
         </OtpContainer >

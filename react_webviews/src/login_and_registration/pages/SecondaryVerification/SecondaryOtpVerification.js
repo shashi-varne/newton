@@ -5,6 +5,7 @@ import { initialize } from "../../functions";
 import "./secondaryVerification.scss";
 import { toast } from "react-toastify";
 import { formatMobileNumber } from "utils/validators";
+import { nativeCallback } from "../../../utils/native_callback";
 
 export class SecondaryOtpVerification extends Component {
   constructor(props) {
@@ -54,13 +55,16 @@ export class SecondaryOtpVerification extends Component {
     });
   };
 
-  secondaryOtpNavigate = () => this.navigate('/secondary-verification', {
-    state: {
-      communicationType: this.state.communicationType,
-      contactValue: this.state.value,
-      edit: true,
-    }
-  })
+  secondaryOtpNavigate = () => {
+    this.sendEvents("edit")
+    this.navigate('/secondary-verification', {
+      state: {
+        communicationType: this.state.communicationType,
+        contactValue: this.state.value,
+        edit: true,
+      }
+    })
+  }
 
   handleResendOtp = () => {
     this.resendOtp(this.state.otp_id)
@@ -69,18 +73,39 @@ export class SecondaryOtpVerification extends Component {
     });
   }
 
+  sendEvents = (userAction) => {
+    let properties = {
+      "otp_entered": userAction === "next" ? "yes" : "no",
+      "mode_entry": "manual",
+      "user_action": userAction,
+      "screen_name": `${this.state.communicationType}_otp`,
+    }
+    let eventObj = {
+      "event_name": 'onboarding',
+      "properties": properties,
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   render() {
     const { isResendOtpApiRunning, communicationType, value, isWrongOtp, otpData } = this.state;
     return (
       <Container
-        title={`Enter OTP to verify your ${communicationType === "email" ? "email" : "number"
-          }`}
+        title={`Enter OTP to verify your ${communicationType === "email" ? "email" : "number"}`}
+        events={this.sendEvents('just_set_events')}
         buttonTitle="VERIFY"
         disable={otpData.otp?.length === 4 ? false : true}
         showLoader={this.state.isApiRunning}
         canSkip={true}
-        onSkipClick={() => this.navigate("/")}
-        handleClick={() => this.handleClick()}
+        onSkipClick={() => {
+          this.navigate("/");
+          this.sendEvents("skip");
+      }}
+        handleClick={this.handleClick}
       >
         <OtpContainer
           handleClickText={"EDIT"}

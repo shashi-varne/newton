@@ -18,9 +18,8 @@ class SecondaryVerification extends Component {
         this.state = {
             productName: getConfig().productName,
             form_data: { whatsapp_consent: true, code: "+91" },
-            loginType: "mobile",
             accountAlreadyExists: false,
-            isEdit: true
+            isEdit: false
         }
         this.initialize = initialize.bind(this);
     }
@@ -63,8 +62,6 @@ class SecondaryVerification extends Component {
     handleClick = async () => {
         let { form_data, loginType } = this.state;
         let keys_to_check = ["mobile", "code"];
-        if (loginType !== "email")
-            this.sendEvents();
         if (loginType === "email") keys_to_check = ["email"];
         let result = await this.authCheckApi(loginType, { "contact_value": form_data[loginType] })
         if (result?.is_user) {
@@ -79,8 +76,21 @@ class SecondaryVerification extends Component {
     }
 
     sendEvents = (userAction) => {
+        const { loginType, form_data } = this.state;
+        let properties = {
+            "screen_name": loginType === 'email' ? 'email' : 'enter mobile number',
+            "user_action": userAction
+        }
+        if (loginType === "mobile") {
+            properties = {
+                ...properties,
+                "whatsapp_agree": form_data.whatsapp_consent ? "yes" : "no",
+                "number_entered": userAction !== "skip" ? "yes" : "no",
+            }
+        } else properties.email_entered = userAction !== "skip" ? "yes" : "no";
         let eventObj = {
-            "event_name": 'otp sent to user',
+            "event_name": 'onboarding',
+            "properties": properties,
         };
         if (userAction === 'just_set_events') {
             return eventObj;
@@ -100,6 +110,7 @@ class SecondaryVerification extends Component {
         };
         const otpResponse = await this.generateOtp(body);
         if (otpResponse) {
+            this.sendEvents("next")
             this.navigate("secondary-otp-verification", {
                 state: {
                     value: type === "email" ? form_data?.email : form_data?.mobile,
@@ -128,12 +139,16 @@ class SecondaryVerification extends Component {
 
         return (
             <Container
+                events={this.sendEvents('just_set_events')}
                 fullWidthButton={true}
                 onlyButton={true}
                 buttonTitle="CONTINUE"
-                handleClick={() => this.handleClick()}
+                handleClick={this.handleClick}
                 canSkip={true}
-                onSkipClick={() => this.navigate("/")}
+                onSkipClick={() => {
+                    this.navigate("/");
+                    this.sendEvents("skip");
+                }}
                 showLoader={this.state.isApiRunning}
                 title={isEdit ? `Edit ${loginType === "mobile" ? 'mobile number' : 'email'}` : loginType === "mobile" ? "Share your mobile number" : "Share your email address"}>
                 <div className="form" data-aid='form'>

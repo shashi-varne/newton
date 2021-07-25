@@ -51,16 +51,29 @@ class Login extends Component {
   handleClick = (event) => {
     let { form_data, loginType } = this.state;
     let keys_to_check = ["mobile", "code"];
-    if (loginType !== "email")
-      this.sendEvents();
     if (loginType === "email") keys_to_check = ["email"];
     this.formCheckFields(keys_to_check, form_data, "LOGIN", loginType);
     event.preventDefault()
   };
 
   sendEvents = (userAction) => {
+    const { loginType, form_data } = this.state;
+    let properties = {
+      "screen_name": "explore",
+      "user_action": userAction,
+      "login_with_mobile": loginType === "mobile" ? "yes" : "no",
+      "login_with_email": loginType === "mobile" ? "no" : "yes",
+    }
+    if (loginType === "mobile") {
+      properties = {
+        ...properties,
+        "whatsapp_agree": form_data.whatsapp_consent ? "yes" : "no",
+        "number_entered": "yes",
+      }
+    } else properties.email_entered = "yes";
     let eventObj = {
-      "event_name": 'otp sent to user',
+      "event_name": 'onboarding',
+      "properties": properties,
     };
     if (userAction === 'just_set_events') {
       return eventObj;
@@ -108,7 +121,7 @@ class Login extends Component {
             {loginType === "mobile" && (
               <div className="form-field">
                 <div className="country-code" data-aid='country-code'>
-                  <div  className="dropdown-without-icon">
+                  <div className="dropdown-without-icon">
                     <DropdownWithoutIcon
                       onChange={this.handleChange("code")}
                       error={!!form_data.code_error ? true : false}
