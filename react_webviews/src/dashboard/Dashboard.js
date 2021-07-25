@@ -37,7 +37,6 @@ import VerifyPin from "./MyAccount/2fa/VerifyPin";
 import SetPin from "./MyAccount/2fa/SetPin";
 import EnterNewPin from "./MyAccount/2fa/EnterNewPin";
 import ConfirmNewPin from "./MyAccount/2fa/ConfirmNewPin";
-import confirmResetPin from "./MyAccount/2fa/ConfirmResetPin";
 import VerifyPinOtp from "./MyAccount/2fa/VerifyForgotOtp";
 import Referral from "../login_and_registration/pages/Referral/Referral.js";
 import SecondaryVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryVerification";
@@ -152,7 +151,6 @@ const Home = (props) => {
         <Route exact path={`${url}set-fisdom-pin`} component={SetPin} />
         <Route exact path={`${url}new-pin`} component={EnterNewPin} />
         <Route exact path={`${url}confirm-pin`} component={ConfirmNewPin} />
-        <Route exact path={`${url}confirm-reset-pin`} component={confirmResetPin} />
         <Route exact path={`${url}verify-otp`} component={VerifyPinOtp} />
 
 

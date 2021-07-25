@@ -41,8 +41,7 @@ const VerifyPin = (props) => {
 
   return (
     <Container
-      data-aid='my-account-screen'
-      showLoader={isApiRunning}
+      skelton={isApiRunning}
       handleClick={handleClick}
       noFooter={true}
       hideInPageTitle

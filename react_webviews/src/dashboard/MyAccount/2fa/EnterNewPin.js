@@ -26,16 +26,16 @@ const EnterNewPin = (props) => {
         mpin: pin
       });
       setIsApiRunning(false);
-      if(routeParams.reset_flow){
-        navigate("confirm-pin", {
-          params: { old_mpin : routeParams.old_mpin }
-        })
+      let params = {};
+      if (routeParams.reset_flow) {
+        params = { old_mpin: routeParams.old_mpin, new_mpin: pin }
       }
       else {
-        navigate('confirm-reset-pin', {
-          params: { reset_url: routeParams.reset_url }
-        });
+        params = { reset_url: routeParams.reset_url }
       }
+      navigate("confirm-pin", {
+        params: params
+      })
     } catch (err) {
       console.log(err);
       setPinError(err);
