@@ -22,7 +22,6 @@ const confirmResetPin = (props) => {
       navigate('security-settings');
     } catch (err) {
       console.log(err);
-      navigate('security-settings');
       setPinError(err);
     } finally {
       setIsApiRunning(false);
@@ -40,7 +39,7 @@ const confirmResetPin = (props) => {
       showLoader={isApiRunning}
       handleClick={handleClick}
       buttonTitle="Continue"
-      disable={pin?.length === 4 ? false : true}
+      disable={pin?.length !== 4}
     >
       <EnterMPin
         title="Confirm fisdom PIN"

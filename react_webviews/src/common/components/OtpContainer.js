@@ -57,8 +57,8 @@ const OtpContainer = ({
                         value={otpData.otp}
                         isDisabled={isDisabled || false}
                         hasError={isWrongOtp}
-                        bottomText={isWrongOtp ? "Invalid OTP": ""}
-                        // TODO: Support custom bottomText ^
+                        bottomText={isWrongOtp ? "Invalid OTP" : ""}
+                    // TODO: Support custom bottomText ^
                     />
                     {timeAvailable > 0 && !showDotLoader && (
                         <div className="cd-otp-time-text">
@@ -70,15 +70,15 @@ const OtpContainer = ({
                         <div
                             className={`cd-otp-resend-text ${classes.resendText}`}
                             onClick={() => {
-                                    resendOtp();
-                                    setTimeAvailable(otpData?.timeAvailable);
+                                resendOtp();
+                                setTimeAvailable(otpData?.timeAvailable);
                             }}
                         >
                             {showDotLoader ? (
                                 <DotDotLoader className="cd-resend-loader" />
                             ) : (
-                                "RESEND OTP"
-                            )}
+                                    "RESEND OTP"
+                                )}
                         </div>
                     )}
                 </div>

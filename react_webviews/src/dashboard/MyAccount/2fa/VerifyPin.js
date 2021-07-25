@@ -1,30 +1,48 @@
 import "./commonStyles.scss";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import WVClickableTextElement from "common/ui/ClickableTextElement/WVClickableTextElement"
 import Container from "../../common/Container";
 import EnterMPin from "../../../2fa/components/EnterMPin";
 import { Imgc } from "../../../common/ui/Imgc";
 import { navigate as navigateFunc } from "../../../utils/functions";
+import { verifyPin } from '../../../2fa/common/ApiCalls';
 
 const VerifyPin = (props) => {
   const navigate = navigateFunc.bind(props);
-  const [showLoader, setShowLoader] = useState(false);
-  const [otp, setOtp] = useState('');
+  const [mpinError, setMpinError] = useState(false);
+  const [mpin, setMpin] = useState('');
+  const [isApiRunning, setIsApiRunning] = useState(false);
 
-  const handleClick = (route) => {
-    // Call Verify API 
-  };
+  useEffect(() => {
+    if (mpin.length === 4) {
+      handleClick();
+    }
+  }, [mpin])
+
+  const handleClick = async () => {
+    try {
+      setIsApiRunning(true);
+      await verifyPin({ mpin });
+      navigate('new-pin', {
+        params: { reset_flow: true, old_mpin: mpin }
+      });
+    } catch (err) {
+      console.log(err);
+      setMpinError(err);
+    } finally {
+      setIsApiRunning(false);
+    }
+  }
 
 
-  const handleOtp = (otp) => {
-    setOtp(otp);
-  };
-
+  const onPinChange = (val) => {
+    setMpin(val);
+  }
 
   return (
     <Container
       data-aid='my-account-screen'
-      showLoader={showLoader}
+      showLoader={isApiRunning}
       handleClick={handleClick}
       noFooter={true}
       hideInPageTitle
@@ -32,11 +50,10 @@ const VerifyPin = (props) => {
     >
       <EnterMPin
         otpProps={{
-          handleChange: handleOtp,
-          otp,
-          // isDisabled:,
-          // hasError:,
-          bottomText: "Enter Fisdom PIN"
+          otp: mpin,
+          handleOtp: onPinChange,
+          hasError: !!mpinError,
+          bottomText: mpinError || '',
         }}
       >
         <Imgc
@@ -48,7 +65,7 @@ const VerifyPin = (props) => {
           Enter your current fisdom PIN
         </EnterMPin.Title>
       </EnterMPin>
-      <WVClickableTextElement onClick={() => navigate("/forgot-fisdom-pin")}>
+      <WVClickableTextElement onClick={() => navigate("/forgot-fisdom-mpin")}>
         <p className="clickable-text-ele">FORGOT PIN?</p>
       </WVClickableTextElement>
     </Container>

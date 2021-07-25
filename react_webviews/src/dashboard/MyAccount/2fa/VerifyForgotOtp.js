@@ -62,7 +62,7 @@ const VerifyForgotOtp = (props) => {
             buttonTitle="VERIFY"
             showLoader={isApiRunning}
             handleClick={handleClick}
-            disable={otp?.length === 4 ? false : true}
+            disable={otp?.length !== 4}
         >
             <OtpContainer
                 otpData={{ ...otpData, otp }}

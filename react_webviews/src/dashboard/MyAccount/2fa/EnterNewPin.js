@@ -6,7 +6,7 @@ import Container from "../../common/Container";
 import { navigate as navigateFunc } from "../../../utils/functions";
 
 const EnterNewPin = (props) => {
-  const routeParams = props.location?.params || {}; console.log(routeParams, 'step 2')
+  const routeParams = props.location?.params || {};
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -26,9 +26,16 @@ const EnterNewPin = (props) => {
         mpin: pin
       });
       setIsApiRunning(false);
-      navigate('confirm-reset-pin', {
-        params: { reset_url: routeParams.reset_url }
-      });
+      if(routeParams.reset_flow){
+        navigate("confirm-pin", {
+          params: { old_mpin : routeParams.old_mpin }
+        })
+      }
+      else {
+        navigate('confirm-reset-pin', {
+          params: { reset_url: routeParams.reset_url }
+        });
+      }
     } catch (err) {
       console.log(err);
       setPinError(err);
@@ -44,7 +51,7 @@ const EnterNewPin = (props) => {
       showLoader={isApiRunning}
       handleClick={handleClick}
       buttonTitle="Continue"
-      disable={pin?.length === 4 ? false : true}
+      disable={pin?.length !== 4}
     >
       <EnterMPin
         title="Enter new fisdom PIN"
