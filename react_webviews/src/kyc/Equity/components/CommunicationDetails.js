@@ -267,6 +267,8 @@ const CommunicationDetails = (props) => {
         } else {
           await otpVerification();
         }
+        setShowLoader("button");
+        handleNavigation();
       } else {
         const body = getPayLoad();
         if (!body) return;
