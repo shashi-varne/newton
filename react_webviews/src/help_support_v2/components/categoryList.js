@@ -225,6 +225,8 @@ class CategoryList extends Component {
   };
 
   handleContact = () => {
+    this.sendEvents("contact_us");
+
     if (getConfig().Web) {
       this.setState({
         open: true,
