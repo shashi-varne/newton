@@ -5,7 +5,7 @@ import Toast from "../../../common/ui/Toast";
 import OtpContainer from "../../../common/components/OtpContainer";
 
 import { navigate as navigateFunc } from "../../../utils/functions";
-import { otpApiCall } from '../../../2fa/common/ApiCalls';
+import { twofaPostApi } from '../../../2fa/common/ApiCalls';
 
 const VerifyForgotOtp = (props) => {
     const routeParams = props.location.params || {};
@@ -30,7 +30,7 @@ const VerifyForgotOtp = (props) => {
     const handleClick = async () => {
         try {
             setIsApiRunning(true);
-            const result = await otpApiCall(routeParams?.verify_url, otp);
+            const result = await twofaPostApi(routeParams?.verify_url, otp);
             setIsApiRunning(false);
             navigate('new-pin', {
                 params: { modify_url: result.modify_url }
@@ -46,7 +46,7 @@ const VerifyForgotOtp = (props) => {
     const handleResendOtp = async () => {
         try {
             setIsResendApiRunning(true);
-            await otpApiCall(routeParams?.resend_url);
+            await twofaPostApi(routeParams?.resend_url);
         } catch (err) {
             console.log(err);
             Toast(err);

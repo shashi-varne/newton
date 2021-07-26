@@ -1063,7 +1063,15 @@ body[data-device="mobile"] {
   }
 }
 
+.input-skeleton {
+  width: 100% !important;
+  height: 50px !important;
+  border-radius: 6px;
+}
 
+.input-skeleton + .input-skeleton {
+  margin-top: 40px !important;
+}
 
 /**
  * ==============================================

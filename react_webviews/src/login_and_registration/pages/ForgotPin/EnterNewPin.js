@@ -1,28 +1,65 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { verifyPin } from '../../../2fa/common/ApiCalls';
 import EnterMPin from '../../../2fa/components/EnterMPin';
+import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 import { navigate as navigateFunc } from '../../../utils/functions';
 import LoginButton from '../../common/LoginButton';
 
 const EnterNewPin = (props) => {
-  const [otp, setOtp] = useState('');
+  const { routeParams, persistRouteParams } = usePersistRouteParams();
+  const [pin, setPin] = useState('');
+  const [pinError, setPinError] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
   
   const navigate = navigateFunc.bind(props);
 
-  const handleClick = () => {
-    navigate('confirm-pin');
+  const handlePin = (value) => {
+    setPin(value);
+    setPinError('');
+  }
+
+  const handleClick = async () => {
+    try {
+      setIsApiRunning(true);
+      await verifyPin({
+        validate_only: true,
+        mpin: pin
+      });
+      setIsApiRunning(false);
+
+      persistRouteParams({ ...routeParams, newPin: pin });
+      navigate('confirm-pin');
+    } catch(err) {
+      console.log(err);
+      setPinError(err);
+    } finally {
+      setIsApiRunning(false);
+    }
   };
+
+  useEffect(() => {
+    // TODO: Intercept back click 
+    // props.history.listen((location) => {
+    //   console.log(props.history);
+    // });
+  }, []);
+  
 
   return (
     <>
       <EnterMPin
         title="Enter new fisdom PIN"
         subtitle="Keep your account safe and secure"
-        otpProps={{}}
+        otpProps={{
+          otp: pin,
+          handleOtp: handlePin,
+          hasError: !!pinError,
+          bottomText: pinError || '',
+        }}
       />
       <LoginButton
         onClick={handleClick}
-        // disabled={!otp}
+        disabled={pin.length !== 4}
         showLoader={isApiRunning}
       >
         Continue

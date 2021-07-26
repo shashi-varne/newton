@@ -5,10 +5,11 @@ import WVButton from '../../../common/ui/Button/WVButton';
 import { navigate as navigateFunc } from '../../../utils/functions';
 import LoginButton from '../../common/LoginButton';
 import Toast from 'common/ui/Toast';
-import { otpApiCall } from '../../../2fa/common/ApiCalls';
+import { twofaPostApi } from '../../../2fa/common/ApiCalls';
+import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 
 const VerifyForgotOtp = (props) => {
-  const routeParams = props.location.params || {};
+  const { routeParams, persistRouteParams } = usePersistRouteParams();
   // TODO: handle direct landing on this page gracefully => routeParams is empty
   const authType = routeParams.obscured_auth_type === 'mobile' ? 'mobile' : 'email';
   const authValue = routeParams.obscured_auth;
@@ -20,17 +21,18 @@ const VerifyForgotOtp = (props) => {
   const [otpError, setOtpError] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [isResendApiRunning, setIsResendApiRunning] = useState(false);
-
   const navigate = navigateFunc.bind(props);
 
   const handleOtp = (value) => {
-    setOtp(otp);
+    setOtp(value);
+    setOtpError('');
   }
 
   const handleResendOtp = async () => {
     try {
       setIsResendApiRunning(true);
-      await otpApiCall(routeParams?.resend_url);
+      await twofaPostApi(routeParams?.resend_url);
+      setOtp('');
     } catch(err) {
       console.log(err);
       Toast(err);
@@ -42,10 +44,12 @@ const VerifyForgotOtp = (props) => {
   const handleClick = async () => {
     try {
       setIsApiRunning(true);
-      const result = await otpApiCall(routeParams?.verify_url, otp);
+      const result = await twofaPostApi(routeParams?.verify_url, { otp });
       setIsApiRunning(false);
+      persistRouteParams({ reset_url: result.reset_url });
       navigate('new-pin', {
-        params: { modify_url: result.modify_url }
+        edit: true,
+        // ^ to replace this path with next screen's path so that on click of 'back' this screen is skipped
       });
     } catch(err) {
       console.log(err);
