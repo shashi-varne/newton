@@ -5,6 +5,7 @@ import WVButton from '../../../common/ui/Button/WVButton';
 import { navigate as navigateFunc } from '../../../utils/functions';
 import LoginButton from '../../common/LoginButton';
 import { forgotPinOtpTrigger, obscuredAuthGetter } from '../../../2fa/common/ApiCalls';
+import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 
 const ForgotPin = (props) => {
   const [authDetails, setAuthDetails] = useState({});
@@ -12,7 +13,7 @@ const ForgotPin = (props) => {
   const [panError, setPanError] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [isFetchApiRunning, setIsFetchApiRunning] = useState(false);
-
+  const { clearRouteParams, persistRouteParams } = usePersistRouteParams();
   const navigate = navigateFunc.bind(props);
 
   const handlePanInput = (value) => {
@@ -36,9 +37,8 @@ const ForgotPin = (props) => {
       setIsApiRunning(true);
       const response = await forgotPinOtpTrigger(pan ? { pan } : '');
       setIsApiRunning(false);
-      navigate('forgot-pin/verify-otp', {
-        params: response
-      });
+      persistRouteParams(response);
+      navigate('forgot-pin/verify-otp');
     } catch(err) {
       console.log(err);
       setPanError(err);
@@ -48,6 +48,7 @@ const ForgotPin = (props) => {
   }
 
   useEffect(() => {
+    clearRouteParams();
     fetchAuthDetails();
   }, []);
   

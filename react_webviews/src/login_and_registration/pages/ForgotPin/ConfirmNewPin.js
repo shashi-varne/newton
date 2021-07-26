@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { twofaPostApi } from '../../../2fa/common/ApiCalls';
 import EnterMPin from '../../../2fa/components/EnterMPin';
+import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 import { navigate as navigateFunc } from '../../../utils/functions';
 import LoginButton from '../../common/LoginButton';
 
 const ConfirmNewPin = (props) => {
-  const routeParams = props.location?.params || {};
+  const { routeParams, clearRouteParams } = usePersistRouteParams();
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -17,11 +18,23 @@ const ConfirmNewPin = (props) => {
     setPinError('');
   }
 
+  const validatePin = () => {
+    if (routeParams?.newPin !== pin) {
+      // eslint-disable-next-line no-throw-literal
+      throw "PIN doesn’t match, Please try again";
+    }
+    return true;
+  }
+
   const handleClick = async () => {
     try {
+      validatePin();
+
       setIsApiRunning(true);
       await twofaPostApi(routeParams?.reset_url, { new_mpin: pin });
       setIsApiRunning(false);
+
+      clearRouteParams();
       navigate('success');
     } catch (err) {
       console.log(err);

@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { verifyPin } from '../../../2fa/common/ApiCalls';
 import EnterMPin from '../../../2fa/components/EnterMPin';
+import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 import { navigate as navigateFunc } from '../../../utils/functions';
 import LoginButton from '../../common/LoginButton';
 
 const EnterNewPin = (props) => {
-  const routeParams = props.location?.params || {};
-  console.log(routeParams);
+  const { routeParams, persistRouteParams } = usePersistRouteParams();
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -26,9 +26,9 @@ const EnterNewPin = (props) => {
         mpin: pin
       });
       setIsApiRunning(false);
-      navigate('confirm-pin', {
-        params: { reset_url: routeParams.reset_url }
-      });
+
+      persistRouteParams({ ...routeParams, newPin: pin });
+      navigate('confirm-pin');
     } catch(err) {
       console.log(err);
       setPinError(err);
@@ -36,6 +36,14 @@ const EnterNewPin = (props) => {
       setIsApiRunning(false);
     }
   };
+
+  useEffect(() => {
+    // TODO: Intercept back click 
+    // props.history.listen((location) => {
+    //   console.log(props.history);
+    // });
+  }, []);
+  
 
   return (
     <>
