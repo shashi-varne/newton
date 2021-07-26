@@ -52,6 +52,7 @@ class Landing extends Component {
       properties: {
         user_action: userAction,
         card_clicked: card_name,
+        screen_name: "home_screen",
       },
     };
 
