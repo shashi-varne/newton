@@ -33,8 +33,6 @@ const returnField = [
   'three_year_return',
   'five_year_return',
 ]
-const config = getConfig()
-const productType = config.productName
 function TabContainer(props) {
   return (
     <Typography component="div" style={{ padding: 8 * 3 }}>
@@ -43,6 +41,8 @@ function TabContainer(props) {
   )
 }
 const FundList = (props) => {
+  const config = getConfig()
+  const productType = config.productName
   const { match, classes, ...parentProps } = props
   const name = props?.location?.state?.name || "";
   const [value, setValue] = useState(4)
@@ -291,6 +291,8 @@ const DiyFundCard = ({
   sendEvents,
   ...props
 }) => {
+  const config = getConfig()
+  const productType = config.productName
   const rating = config.code === "hbl" ? props.the_hindu_rating : props.morning_star_rating
   const handleClick = (data) => {
     sendEvents('next', "", "", props.legal_name)

@@ -24,13 +24,10 @@ import { isFunction } from 'lodash';
 import { isNewIframeDesktopLayout } from '../../utils/functions';
 
 let start_time = '';
-const config = getConfig();
-const iframe = config.isIframe;
-const isMoneycontrol = config.code === "moneycontrol";
-const isBfdl = config.code === "bfdlmobile";
-const newIframeDesktopLayout = isNewIframeDesktopLayout();
 export function didMount() {
     start_time = new Date();
+    const config = getConfig();
+    const newIframeDesktopLayout = isNewIframeDesktopLayout();
 
     this.getHeightFromTop = getHeightFromTop.bind(this);
     this.onScroll = onScroll.bind(this);
@@ -111,11 +108,15 @@ export function headerGoBack() {
 }
 
 function addContainerClass (props_base){
-    const containerClass = newIframeDesktopLayout ? 'iframeContainerWrapper' : (isBfdl && iframe) ? 'bfdlContainerWrapper' : 'ContainerWrapper'
+    const config = getConfig();
+    const containerClass = isNewIframeDesktopLayout() ? 'iframeContainerWrapper' : (config.code === "bfdlmobile" && config.isIframe) ? 'bfdlContainerWrapper' : 'ContainerWrapper'
     return `${containerClass} ${this.props.background || ''} ${props_base &&  props_base.classOverRide ? props_base.classOverRide : ''} ${this.props.classOverRide || ''} ${this.props.noPadding ? "no-padding" : ""}`;
 }
 
 export function commonRender(props_base) {
+    const config = getConfig();
+    const isMoneycontrol = config.code === "moneycontrol";
+    const newIframeDesktopLayout = isNewIframeDesktopLayout();
 
     this.addContainerClass = addContainerClass.bind(this);
 
@@ -156,7 +157,7 @@ export function commonRender(props_base) {
                 {/* Header Block */}
                 {(!this.props.noHeader && !getConfig().hide_header) && this.props.showLoader !== true
                 && !this.props.showLoaderModal && !this.props.loaderWithData && 
-                (isMoneycontrol && iframe ? 
+                (isMoneycontrol && config.isIframe ? 
                     <IframeHeader
                         disableBack={this.props.disableBack}
                         type={getConfig().productName}
@@ -299,7 +300,7 @@ export function commonRender(props_base) {
 
 export function unmount() {
     window.callbackWeb.remove_listener({});
-    if(!newIframeDesktopLayout){
+    if(!isNewIframeDesktopLayout()){
         window.removeEventListener("scroll", this.onScroll, true);
     }
 
@@ -337,7 +338,7 @@ export function check_hide_header_title() {
 }
 
 export function getHeightFromTop() {
-    const Container = newIframeDesktopLayout ? 'IframeContainer' : 'Container'
+    const Container = isNewIframeDesktopLayout() ? 'IframeContainer' : 'Container'
     var el = document.getElementsByClassName(Container)[0];
     if(!el) return;
     var height = el.getBoundingClientRect().top;

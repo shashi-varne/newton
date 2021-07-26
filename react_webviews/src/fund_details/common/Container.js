@@ -23,11 +23,11 @@ import './Style.scss';
 import UiSkelton from '../../common/ui/Skelton';
 import IframeHeader from 'common/components/Iframe/Header';
 import { isNewIframeDesktopLayout } from '../../utils/functions';
-const config = getConfig();
-const iframe = config.isIframe;
-const isMobileDevice = config.isMobileDevice;
-const newIframeDesktopLayout = isNewIframeDesktopLayout();
 const Container = (props) => {
+  const config = getConfig();
+  const iframe = config.isIframe;
+  const isMobileDevice = config.isMobileDevice;
+  const newIframeDesktopLayout = isNewIframeDesktopLayout();
   const [openDialog, setOpenDialog] = useState(false);
   const x = React.useRef(true);
   // const loaderMain = getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom;

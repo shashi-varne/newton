@@ -8,7 +8,6 @@ import { getConfig } from 'utils/functions';
 import './IframeView.scss';
 import { initialize } from '../../functions';
 import InvestExploreCard from './InvestExploreCard';
-const isMobileDevice = getConfig().isMobileDevice;
 
 class IframeView extends Component {
   constructor(props) {
@@ -16,6 +15,7 @@ class IframeView extends Component {
     this.state = {
       show_loader: false,
       kycStatusLoader: false,
+      isMobileDevice: getConfig().isMobileDevice,
     };
     this.initialize = initialize.bind(this);
   }
@@ -37,7 +37,7 @@ class IframeView extends Component {
   };
 
   render() {
-    const { kycStatusData, isReadyToInvestBase } = this.state;
+    const { kycStatusData, isReadyToInvestBase, isMobileDevice } = this.state;
     return (
       <div className='diy-iframe-view'>
         {isMobileDevice && <div className='title'>Where do you want to invest?</div>}

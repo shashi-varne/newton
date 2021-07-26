@@ -23,35 +23,37 @@ import { nativeCallback } from '../../../../utils/native_callback'
 import { flowName } from '../../constants'
 import { isNewIframeDesktopLayout } from '../../../../utils/functions'
 
-const config = getConfig();
-const iframe = config.isIframe;
-const isMobileDevice = config.isMobileDevice;
-const partnerCode = config.code;
-const newIframeDesktopLayout = isNewIframeDesktopLayout();
-export const exploreMFMappings = [
-  {
-    title: 'Equity',
-    description: 'Invest in large, mid and small-sized companies',
-    src: newIframeDesktopLayout ? equity_icon : diy_equity_icon,
-  },
-  {
-    title: 'Debt',
-    description: 'Stable returns with bonds and securities',
-    src: newIframeDesktopLayout ? debt_icon : diy_debt_icon,
-  },
-  {
-    title: 'Hybrid',
-    description: 'Perfect balance of equity and debt',
-    src: newIframeDesktopLayout ? hybrid_icon : diy_hybrid_icon,
-  },
-  {
-    title: 'Goal Oriented',
-    description: 'Align investments with your life goals',
-    src: newIframeDesktopLayout ? goal_icon : diy_goal_icon,
-  },
-]
 const InvestExplore = (props) => {
   const [loader, setLoader] = useState(true)
+  const config = getConfig();
+  const iframe = config.isIframe;
+  const isMobileDevice = config.isMobileDevice;
+  const partnerCode = config.code;
+  const newIframeDesktopLayout = isNewIframeDesktopLayout();
+
+  const exploreMFMappings = [
+    {
+      title: 'Equity',
+      description: 'Invest in large, mid and small-sized companies',
+      src: newIframeDesktopLayout ? equity_icon : diy_equity_icon,
+    },
+    {
+      title: 'Debt',
+      description: 'Stable returns with bonds and securities',
+      src: newIframeDesktopLayout ? debt_icon : diy_debt_icon,
+    },
+    {
+      title: 'Hybrid',
+      description: 'Perfect balance of equity and debt',
+      src: newIframeDesktopLayout ? hybrid_icon : diy_hybrid_icon,
+    },
+    {
+      title: 'Goal Oriented',
+      description: 'Align investments with your life goals',
+      src: newIframeDesktopLayout ? goal_icon : diy_goal_icon,
+    },
+  ]
+
   useEffect(() => {
     storageService().remove(FUNDSLIST)
     storageService().remove(CART)

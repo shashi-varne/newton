@@ -21,14 +21,13 @@ import "./SipDates.scss";
 import { nativeCallback } from "../../utils/native_callback";
 import { flowName } from "../Invest/constants";
 
-const config = getConfig();
 /* eslint-disable */
 class SipDates extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
-      productName: config.productName,
+      productName: getConfig().productName,
       screenName: "sip_dates",
       dialogStates: {},
       isSipDatesScreen: true,
@@ -77,7 +76,7 @@ class SipDates extends Component {
 
     const paymentRedirectUrl = encodeURIComponent(
       `${getBasePath()}/page/callback/sip/${sipBaseData.investment.amount}${
-        config.searchParams
+        getConfig().searchParams
       }`
     );
 
@@ -121,10 +120,11 @@ class SipDates extends Component {
   };
 
   handleSuccessDialog = () => {
+    const config = getConfig();
     this.sendEvents('next', "sip_dates_popup", {intent: "date confirmation"})
     let { investResponse, paymentRedirectUrl } = this.state;
     let pgLink = investResponse.investments[0].pg_link;
-    pgLink = `${pgLink}${pgLink.match(/[\?]/g) ? "&" : "?"}redirect_url=${paymentRedirectUrl}&partner_code=${getConfig().code}`
+    pgLink = `${pgLink}${pgLink.match(/[\?]/g) ? "&" : "?"}redirect_url=${paymentRedirectUrl}&partner_code=${config.code}`
     if (config.Web) {
       if (config.isIframe) {
         handleIframeInvest(

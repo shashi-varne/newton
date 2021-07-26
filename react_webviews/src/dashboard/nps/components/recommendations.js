@@ -19,10 +19,6 @@ import { getBasePath } from "../../../utils/functions";
 import { keyBy } from 'lodash';
 import { isEmpty } from "../../../utils/validators";
 
-const config = getConfig();
-const isMobileDevice = config.isMobileDevice;
-const partnerCode = config.code;
-
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -44,7 +40,9 @@ class Recommendations extends Component {
       pension_house: {},
       skelton: "g",
       pran: '',
-      alternativeRiskOptsMap: {}
+      alternativeRiskOptsMap: {},
+      partnerCode: getConfig().code,
+      isMobileDevice: getConfig().isMobileDevice
     };
     this.initialize = initialize.bind(this);
 ;  }
@@ -257,7 +255,7 @@ class Recommendations extends Component {
   };
 
   handleClick = async () => {
-    let { pran, pension_house, recommendations, amount } = this.state;
+    let { pran, pension_house, recommendations, amount, partnerCode } = this.state;
 
     let data = {
       amount: this.state.amount,
@@ -327,6 +325,7 @@ class Recommendations extends Component {
       pieChartData,
       display_summary_only,
       url,
+      isMobileDevice
     } = this.state;
 
     return (
@@ -499,7 +498,7 @@ class Recommendations extends Component {
                 <img src={require("assets/terms_agree.png")} alt="" width="25" />
                 <div>
                   By tapping on proceed, I agree that I have read the {" "}
-                  <span onClick={() => this.openInBrowser(config.termsLink)} style={{textDecoration:'underline', cursor:'pointer'}}>
+                  <span onClick={() => this.openInBrowser(getConfig().termsLink)} style={{textDecoration:'underline', cursor:'pointer'}}>
                     terms & conditions
                   </span>
                 </div>

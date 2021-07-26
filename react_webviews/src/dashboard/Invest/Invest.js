@@ -30,7 +30,7 @@ import { isIframe, getConfig } from 'utils/functions';
 
 const Invest = (props) => {
   const { url } = props.match;
-  const partnerCode = getConfig().partner_code;
+  const partnerCode = getConfig().code;
   return (
     <Switch>
       <Route

@@ -6,8 +6,8 @@ import { getConfig } from "../../../../utils/functions";
 import { storageService } from "../../../../utils/validators";
 import { nativeCallback } from "../../../../utils/native_callback";
 
-const config = getConfig();
 const Refer = (props) => {
+  const config = getConfig();
   const referralData = storageService().getObject("referral") || {};
   const referral = referralData.p2p?.data || {};
 

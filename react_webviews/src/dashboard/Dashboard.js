@@ -32,8 +32,8 @@ import Prepare from "./Invest/components/SdkLanding/Prepare";
 import Refer from "./Invest/components/SdkLanding/Refer";
 import CampaignCallback from "./Invest/components/PageCallback/CampaignCallback";
 
-const config = getConfig();
 const Home = (props) => {
+  const config = getConfig();
   const { url } = props.match;
   return (
     <Fragment>

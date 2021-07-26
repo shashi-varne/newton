@@ -4,9 +4,9 @@ import { isEmpty, storageService } from "../../utils/validators";
 import Container from "../common/Container";
 import "./AccountMerge.scss";
 
-const config = getConfig();
-const productName = config.productName;
 const AccountMerge = (props) => {
+  const config = getConfig();
+  const productName = config.productName;
   const navigate = navigateFunc.bind(props);
   const auth_ids = storageService().getObject("auth_ids") || {};
   const pan_number = props.match?.params?.pan_number || "";

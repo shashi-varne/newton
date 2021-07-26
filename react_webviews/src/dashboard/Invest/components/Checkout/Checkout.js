@@ -18,8 +18,6 @@ import {
 import "./Checkout.scss";
 import { nativeCallback } from "../../../../utils/native_callback";
 
-const config = getConfig();
-const productName = config.productName;
 class Checkout extends Component {
   constructor(props) {
     super(props);
@@ -29,7 +27,7 @@ class Checkout extends Component {
       ctc_title: "INVEST",
       form_data: [],
       investType: props.type === "diy" ? "sip" : "onetime",
-      partner_code: config.code,
+      partner_code: getConfig().code,
       disableInput: [],
       fundsData: [],
       renderData: nfoData.checkoutInvestType,
@@ -37,7 +35,7 @@ class Checkout extends Component {
       currentUser: storageService().getObject("user") || {},
       dialogStates: {},
       purchaseLimitData: {},
-      productType : config.productName
+      productName : getConfig().productName
     };
     this.initializeComponentFunctions = initializeComponentFunctions.bind(this);
   }
@@ -159,7 +157,7 @@ class Checkout extends Component {
   };
 
   goBack = () => {
-    if(config.code === "moneycontrol") {
+    if(this.state.partner_code === "moneycontrol") {
       this.navigate("/");
     } else {
       this.props.history.goBack();
@@ -293,7 +291,8 @@ class Checkout extends Component {
       type,
       renderData,
       dialogStates,
-      partner_code
+      partner_code,
+      productName
     } = this.state;
     let allowedFunds = this.getAllowedFunds(fundsData, investType);
     if (allowedFunds && allowedFunds.length === 0) ctc_title = "BACK";
@@ -311,7 +310,7 @@ class Checkout extends Component {
         loaderData={{
           loadingText:"Your payment is being processed. Please do not close this window or click the back button on your browser."
         }}
-        iframeRightContent={require(`assets/${this.state.productType}/invest_fund.svg`)}
+        iframeRightContent={require(`assets/${productName}/invest_fund.svg`)}
       >
         <div className="nfo-checkout" data-aid='nfo-checkout'>
           <div

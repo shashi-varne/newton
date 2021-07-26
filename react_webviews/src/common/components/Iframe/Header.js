@@ -13,15 +13,15 @@ const headerIconMapper = {
   back: back_arrow,
   close: close_icn,
 };
-
-const config = getConfig();
-const logo = config.logo;
-const partnerCode = config.partner_code;
-const partnerPrimaryColor = config.styles.primaryColor;
-const isMobileDevice = config.isMobileDevice;
-const isWeb = config.Web;
-const isSdk = config.isSdk;
 const Header = ({ classes, goBack, disableBack, headerData = {}, showIframePartnerLogo }) => {
+  const config = getConfig();
+  const logo = config.logo;
+  const partnerCode = config.code;
+  const partnerPrimaryColor = config.styles.primaryColor;
+  const isMobileDevice = config.isMobileDevice;
+  const isWeb = config.Web;
+  const isSdk = config.isSdk;
+
   return (
     <AppBar
       position='fixed'
@@ -92,9 +92,9 @@ const Header = ({ classes, goBack, disableBack, headerData = {}, showIframePartn
 const styles = {
   root: {
     flexGrow: 1,
-    height: isMobileDevice ? '56px' : '80px',
+    height: getConfig().isMobileDevice ? '56px' : '80px',
     boxShadow: 'none',
-    backgroundColor: isMobileDevice ? 'white' : `${partnerPrimaryColor} !important`,
+    backgroundColor: getConfig().isMobileDevice ? 'white' : `${getConfig().styles.primaryColor} !important`,
   },
   flex: {
     flex: 1,
@@ -106,8 +106,8 @@ const styles = {
   },
   toolbarRoot: {
     display: 'flex',
-    paddingLeft: isMobileDevice ? '0px' : '80px !important',
-    paddingRight: isMobileDevice ? '0px' : '80px !important',
+    paddingLeft: getConfig().isMobileDevice ? '0px' : '80px !important',
+    paddingRight: getConfig().isMobileDevice ? '0px' : '80px !important',
     justifyContent: 'space-between',
     alignItems: 'center',
     height: '100%',

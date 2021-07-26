@@ -7,8 +7,8 @@ import toast from "../../../common/ui/Toast";
 // import { nps_config } from "../constants";
 
 const genericErrMsg = "Something went wrong";
-const config = getConfig();
 export async function initialize() {
+  const config = getConfig();
   this.navigate = navigateFunc.bind(this.props);
   this.formCheckUpdate = formCheckUpdate.bind(this);
   this.get_recommended_funds = get_recommended_funds.bind(this);
@@ -529,8 +529,8 @@ export async function getNPSInvestmentStatus() {
 }
 
 export async function accountMerge() {
+  const config = getConfig();
   if (config.isIframe) {
-    const config = getConfig();
     const email = config.email;
     let name = "fisdom";
     if (config.productName === "finity") name = "finity";
