@@ -66,7 +66,7 @@ const WVProductListCard = ({
             className={`wv-pch-image ${classes.headerImage}`}
             alt=""
             src={image}
-            style={{width: "40px" , minHeight: "40px"}}
+            style={{width: "50px" , minHeight: "50px"}}
           />
         }
       </div>
