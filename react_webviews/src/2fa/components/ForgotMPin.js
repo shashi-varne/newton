@@ -1,10 +1,10 @@
 import "./commonStyles.scss"
-import React, { useState } from 'react';
-import { validateNumber } from "utils/validators";
+import React from 'react';
 import Input from "common/ui/Input";
 import WVInPageSubtitle from "common/ui/InPageHeader/WVInPageSubtitle";
 import WVInPageHeader from "../../common/ui/InPageHeader/WVInPageHeader";
 import WVInPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
+import UiSkelton from "../../common/ui/Skelton";
 
 const ForgotMPin = ({
     primaryAuthType,
@@ -13,6 +13,7 @@ const ForgotMPin = ({
     pan,
     onPanInputChange,
     panError,
+    isLoading
 }) => {
     const authTypeText = primaryAuthType === 'mobile' ? 'mobile number' : 'email';
 
@@ -26,38 +27,40 @@ const ForgotMPin = ({
             <WVInPageHeader>
                 <WVInPageTitle>Forgot fisdom PIN</WVInPageTitle>
                 <WVInPageSubtitle>OTP will be sent to your registered {authTypeText}</WVInPageSubtitle>
-            </WVInPageHeader>   
-
-            <div className="login-form-field">
-                <span className="input-field">
-                    <Input
-                        type="text"
-                        value={primaryAuthValue || ""}
-                        class="input mobile-number"
-                        id="mobile"
-                        label={`Registered ${authTypeText}`}
-                        name="mobile"
-                        disabled
-                        autoFocus
-                    />
-                </span>
-                {isPanRequired &&
+            </WVInPageHeader>
+            {isLoading ? 
+                <UiSkelton type="inputs" /> :
+                <div className="login-form-field">
                     <span className="input-field">
                         <Input
-                            error={!!panError}
                             type="text"
-                            value={pan}
-                            helperText={panError || "Enter PAN number to confirm your account"}
-                            class="input pan-number"
-                            id="pan_number"
-                            label="Enter registered PAN number"
-                            name="pan_number"
-                            onChange={handleChange}
+                            value={primaryAuthValue || ""}
+                            class="input mobile-number"
+                            id="mobile"
+                            label={`Registered ${authTypeText}`}
+                            name="mobile"
+                            disabled
                             autoFocus
                         />
                     </span>
-                }
-            </div>
+                    {isPanRequired &&
+                        <span className="input-field">
+                            <Input
+                                error={!!panError}
+                                type="text"
+                                value={pan}
+                                helperText={panError || "Enter PAN number to confirm your account"}
+                                class="input pan-number"
+                                id="pan_number"
+                                label="Enter registered PAN number"
+                                name="pan_number"
+                                onChange={handleChange}
+                                autoFocus
+                            />
+                        </span>
+                    }
+                </div>
+            }
         </div>
     );
 };

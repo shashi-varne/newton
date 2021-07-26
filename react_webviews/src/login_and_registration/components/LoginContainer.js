@@ -2,17 +2,17 @@ import "./LoginContainer.scss";
 import React from "react";
 import { getConfig } from "utils/functions";
 import { Route, Switch } from "react-router-dom";
-import PinChangeSuccess from "../ForgotPin/ForgotPinSuccess";
-import Login from "./Login";
-import VerifyLoginOtp from "./VerifyLoginOtp";
-import VerifyPin from "./VerifyPin";
-import Referral from "../Referral/Referral";
-import { FISDOM_DISCLAMER } from "./constants";
-import VerifyForgotOtp from "../ForgotPin/VerifyForgotOtp";
-import EnterNewPin from "../ForgotPin/EnterNewPin";
-import ConfirmNewPin from "../ForgotPin/ConfirmNewPin";
-import ForgotPinSuccess from "../ForgotPin/ForgotPinSuccess";
-import ForgotPin from "../ForgotPin/ForgotPin";
+import PinChangeSuccess from "../pages/ForgotPin/ForgotPinSuccess";
+import Login from "../pages/Login/Login";
+import VerifyLoginOtp from "../pages/Login/VerifyLoginOtp";
+import VerifyPin from "../pages/Login/VerifyPin";
+import Referral from "../pages/Referral/Referral";
+import VerifyForgotOtp from "../pages/ForgotPin/VerifyForgotOtp";
+import EnterNewPin from "../pages/ForgotPin/EnterNewPin";
+import ConfirmNewPin from "../pages/ForgotPin/ConfirmNewPin";
+import ForgotPinSuccess from "../pages/ForgotPin/ForgotPinSuccess";
+import ForgotPin from "../pages/ForgotPin/ForgotPin";
+import SVG from 'react-inlinesvg';
 
 const config = getConfig();
 const { productName } = config;
@@ -25,6 +25,7 @@ const LoginContainer = (props) => {
   return (
     <div className="login" data-aid='login'>
       <div className="header">
+        {/* TODO: fix logo for header */}
         <img src={require(`assets/${config.logo}`)} alt="logo" />
       </div>
       <div className="login-details">
@@ -64,15 +65,23 @@ export default LoginContainer;
 const FooterTitle = () => {
   return (
     <div className="login-footer">
-      {FISDOM_DISCLAMER.map((item) => (
-        <>
-          {item.src ? <img src={require(`assets/${productName}/${item.src}`)} alt="logo" className="brand-logo" /> :
-            <div className="title-text">
-              {item.key}{" "}-{" "}
-              <strong>{item.value}</strong>
-            </div>}
-        </>
-      ))}
+      <div className="lf-logos">
+        <SVG
+          height="20px"
+          width="64px"
+          preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.primaryColor)}
+          src={require(`assets/${productName}/fisdom_logo_white.svg`)}
+        />
+        <SVG
+          width="20px"
+          height="20px"
+          preProcessor={code => code.replace(/fill=".*?"/g, 'fill=#2D2D94')}
+          src={require(`assets/sebi_logo.svg`)}
+        />
+      </div>
+      <div className="title-text">
+        NSE member code - 90228 | BSE member code - 6696 | NSE/BSE - SEBI registration no. - INZ000209036 | CDSL - SEBI registeration no. - IN-DP-572-2021 , INA200005323 | AMFI registration no. ARN 103168
+      </div>
     </div>
   );
 };
