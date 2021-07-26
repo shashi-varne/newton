@@ -15,7 +15,6 @@ import KycStatusDialog from '../../mini-components/KycStatusDialog';
 import { nativeCallback } from '../../../../utils/native_callback';
 import { Imgc } from '../../../../common/ui/Imgc';
 
-const config = getConfig();
 const PATHNAME_MAPPER = {
   nfo: "/advanced-investing/new-fund-offers/info",
   diy: "/invest/explore",
@@ -28,10 +27,7 @@ class SdkLanding extends Component {
     this.state = {
       show_loader: false,
       kycStatusLoader: false,
-      productName: config.productName,
-      landingMarketingBanners: config.landingMarketingBanners,
       screenName: 'sdk_landing',
-      isWeb: config.Web,
       invest_show_data: {},
       render_cards: [],
       verificationFailed: false,
@@ -42,7 +38,6 @@ class SdkLanding extends Component {
       dotLoader: false,
       openBottomSheet: false,
       bottom_sheet_dialog_data: [],
-      headerStyle: config.uiElements?.header?.backgroundColor
     };
     this.initialize = initialize.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
@@ -137,7 +132,6 @@ class SdkLanding extends Component {
     let {
       isReadyToInvestBase,
       kycStatusLoader,
-      landingMarketingBanners,
       dotLoader,
       referral,
       kycJourneyStatusMapperData,
@@ -147,6 +141,10 @@ class SdkLanding extends Component {
       modalData
     } = this.state;
 
+    const config = getConfig();
+    const landingMarketingBanners= config.landingMarketingBanners;
+    const headerStyle=  config.uiElements?.header?.backgroundColor;
+
     return (
       <Container
         skelton={this.state.show_loader}
@@ -155,7 +153,7 @@ class SdkLanding extends Component {
         notification
         handleNotification={this.handleNotification}
         background='sdk-background'
-        classHeader={this.state.headerStyle ? 'sdk-partner-header' : 'sdk-header'}
+        classHeader={headerStyle ? 'sdk-partner-header' : 'sdk-header'}
         showLoader={this.state.showPageLoader}
         headerData={{goBack: this.goBack, partnerLogo: true}}
         data-aid='sdk-landing-screen'
