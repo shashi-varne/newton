@@ -3,8 +3,8 @@ import { getConfig } from "utils/functions";
 import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
 import { isEmpty } from "lodash";
-import { authCheckApi, generateOtp } from "../function";
-import "./Style.scss";
+import { authCheckApi, generateOtp } from "../functions";
+import "./commonStyles.scss";
 
 const product = getConfig().productName;
 class VerifyDetailDialog extends Component {
@@ -22,11 +22,12 @@ class VerifyDetailDialog extends Component {
     const { data, type } = this.props;
     if (isEmpty(data)) {
       this.props.parent.navigate("/secondary-verification", {
-        communicationType: type
+        state: {
+          communicationType: type
+        }
       });
     } else {
       const result = await this.authCheckApi(type, data);
-      console.log(result);
       if (result.is_user === false) {
         let body = {};
         if (type === "email") {
@@ -34,18 +35,19 @@ class VerifyDetailDialog extends Component {
         } else {
           body.mobile = data.contact_value;
           body.whatsapp_consent = true;
-        } // by default should this be true or false in case of bottomsheet?
+        }
         const otpResponse = await this.generateOtp(body);
         if (otpResponse) {
           this.props.parent.navigate("secondary-otp-verification", {
             state: {
-              mobile_number: data.contact_value,
-              forgot: false, // flag to be checked
+              value: data?.contact_value,
               otp_id: otpResponse.otp_id,
+              communicationType: type,
             },
           });
         }
-      } else if (result.is_user === true) {
+      } else if (result.is_user === true) { 
+        result.user.data = data;
         this.props.showAccountAlreadyExist(true, result.user);
       }
     }
@@ -56,6 +58,7 @@ class VerifyDetailDialog extends Component {
       state: {
         communicationType: this.props?.type,
         contactValue: this.props?.data?.contact_value,
+        edit: true,
       },
     });
   };

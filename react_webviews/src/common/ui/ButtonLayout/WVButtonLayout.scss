@@ -29,10 +29,4 @@
     /* Add margin between consecutive buttons */
     margin-left: 30px;
   }
-
-  .wv-layout-button-secondary {
-    /* Allows for type="secondary" buttons to be more
-     flexible (squeeze/expand) in a 'horizontal' layout */
-    // flex: 1; //TODO: Ask Vinod about this 
-  }
 }

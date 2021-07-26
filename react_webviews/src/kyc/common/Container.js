@@ -6,9 +6,10 @@ import {
 } from "../../common/components/container_functions";
 import { nativeCallback } from "utils/native_callback";
 import "../../utils/native_listener";
-import { navigate as navigateFunc } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { storageService } from "../../utils/validators";
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
+import { PATHNAME_MAPPER } from "../constants";
 
 class Container extends Component {
   constructor(props) {
@@ -54,6 +55,7 @@ class Container extends Component {
       case "/kyc/upload/fno-income-proof":
       case "/kyc/digilocker/success":
       case "/kyc/digilocker/failed":
+      case "/kyc/trading-experience":
         this.setState({ openConfirmBack: true });
         openDialog=true;
         break;
@@ -91,6 +93,10 @@ class Container extends Component {
           case "/kyc/add-bank":
           case "/kyc/approved/banks/doc":
           case "/kyc/journey":
+          case "/kyc/nri-error":
+          case "/kyc/account-info":
+          case "/kyc/stocks-status":
+          case "/kyc/upload/progress":
             nativeCallback({ action: "exit_web" });
             break;
           default:
@@ -116,10 +122,20 @@ class Container extends Component {
   };
 
   redirectToJourney = () => {
+    const kyc = storageService().getObject("kyc");
+    this.navigate = navigateFunc.bind(this.props);
+    const config = getConfig();
     if (this.getEvents("back")) {
       nativeCallback({ events: this.getEvents("back") });
     }
-    this.navigate("/kyc/journey");
+    const showAadhaar = !(kyc.address.meta_data.is_nri || kyc.kyc_type === "manual");
+    if (kyc.kyc_status !== "compliant") {
+      this.navigate(PATHNAME_MAPPER.journey, {
+        searchParams: `${config.searchParams}&show_aadhaar=${showAadhaar}`
+      });
+    } else {
+      this.navigate(PATHNAME_MAPPER.journey)
+    }
   };
 
   render() {

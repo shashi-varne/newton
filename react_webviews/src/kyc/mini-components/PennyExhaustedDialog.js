@@ -14,12 +14,12 @@ const PennyExhaustedDialog = ({ isOpen, redirect, uploadDocuments }) => {
       button1Props={{
         title: "UPLOAD BANK DOCUMENTS",
         onClick: uploadDocuments,
-        type: "primary",
+        variant: "contained",
       }}
       button2Props={{
         title: "TRY LATER",
         onClick: redirect,
-        type: "textonly",
+        variant: "text",
       }}
       classes={{
         content: "penny-bank-verification-dialog-content",

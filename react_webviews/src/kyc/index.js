@@ -36,7 +36,7 @@ import PersonalDetails2 from "./PersonalDetails/Screen2";
 import PersonalDetails3 from "./PersonalDetails/Screen3";
 import PersonalDetails4 from "./PersonalDetails/Screen4";
 import KycUploadDocuments from "./BankKyc/KycUploadDocuments";
-import BankSampleDocuments from "./BankKyc/BankSampleDocuments";
+import SampleDocuments from "./BankKyc/SampleDocuments";
 import AddressDetails2 from "./Address/AddressDetails2";
 import AddressDetails1 from "./Address/AddressDetails1";
 import DigilockerPersonalDetails1 from "./Digilocker/PersonalDetails1";
@@ -50,7 +50,8 @@ import Selfie from "./Upload/Selfie";
 import IpvVideo from "./Upload/IpvVideo";
 import NRIAddressUpload from "./Upload/NriAddress";
 import ChangeAddressDetails2 from "./Address/ChangeAddress/ChangeAddressDetails2";
-import Native from "./Native/Native";
+import KycNative from "./Native/KycNative";
+import StocksNative from "./Native/StocksNative";
 import LocationPermission from "./Upload/LocationPermission";
 import SelfieSteps from "./Upload/SelfieSteps";
 import FnOIncomeProof from "./Upload/FnOIncomeProof";
@@ -73,7 +74,8 @@ const Kyc = (props) => {
     <Fragment>
       <Switch>
         <Route exact path={`${url}/journey`} component={Journey} />
-        <Route exact path={`${url}/native`} component={Native} />
+        <Route exact path={`${url}/native`} component={KycNative} />
+        <Route exact path={`${url}/stocks/native`} component={StocksNative} />
         <Route
           exact
           path={`${url}/personal-details1`}
@@ -185,7 +187,7 @@ const Kyc = (props) => {
           component={Nominee}
         />
         <Route 
-          exact
+          exact 
           path={`${url}/report`} 
           component={Report} 
         />
@@ -277,7 +279,7 @@ const Kyc = (props) => {
         <Route
           exact
           path={`${url}/sample-documents`}
-          component={BankSampleDocuments}
+          component={SampleDocuments}
         />
         <Route
           exact
@@ -353,6 +355,11 @@ const Kyc = (props) => {
           exact 
           path={`${url}/manual-signature`} 
           component={ManualSignature} 
+        />
+        <Route 
+          exact 
+          path={`${url}/fno-sample-documents`} 
+          component={FnOSampleDocuments} 
         />
         <Route 
           exact 

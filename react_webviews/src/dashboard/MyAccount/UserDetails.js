@@ -2,7 +2,7 @@ import "./MyAccount.scss";
 import React, { Component } from 'react';
 import WVInPageSubtitle from "../../common/ui/InPageHeader/WVInPageSubtitle";
 import WVInPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
-import { authCheckApi } from "../../login_and_registration/function";
+import { authCheckApi } from "../../login_and_registration/functions";
 // import { isEmpty } from "lodash"
 
 class MyaccountDetails extends Component {
@@ -17,7 +17,7 @@ class MyaccountDetails extends Component {
         if (prevProp.contacts !== this.props.contacts) {
             const contacts = this.props.contacts;
             const auth_type = contacts?.auth_type;
-            const verification_done = false //contacts?.verification_done; // change This
+            const verification_done = contacts?.verification_done || false;
             let contact_value = "";
 
             if (verification_done) {
@@ -42,21 +42,13 @@ class MyaccountDetails extends Component {
         const { auth_type, contact_value } = this.state;
         const contact_type = auth_type === 'mobile' ? "email" : auth_type;
         let result = await this.authCheckApi(contact_type, { "contact_value": contact_value })
-        if (result?.is_user) {
-            this.props.handleClick("/kyc/communication-details")
+        if (!result?.is_user) {
+            this.props.handleClick("/kyc/communication-details", { state: { goBack: "/my-account" } })
+            return;
         }
-        else if (!result?.is_user) {              
-            result = {
-                "message": "User found",   // REMOVE THIS
-                "is_user": true,
-                "user": {
-                    "mobile": "9738950664",
-                    "pan_number": "HPDPK****K",
-                    "user_id": "4693250414739457",
-                    "email": "op********st@yopmail.com"
-                }
-            }
-            result.user.from = "my-account"
+        else if (result?.is_user) {
+            result.user.from = "my-account";
+            result.user.contact_value = contact_value;
             this.props.showAccountAlreadyExist(true, result.user, contact_type);
         }
     }
@@ -70,12 +62,12 @@ class MyaccountDetails extends Component {
             <div className="my-acct-details">
                 <WVInPageTitle className="my-acct-user-name" children={this.props.name} />
                 <WVInPageTitle className="my-acct-user-auth" children={is_auth} />
-                <WVInPageSubtitle className="my-acct-user-details" children={`PAN: ${this.props.pan_no}`} />
+                {this.props.pan_no && <WVInPageSubtitle className="my-acct-user-details" children={`PAN: ${this.props.pan_no}`} />}
                 {verification_done !== null && <div style={{ display: "flex", justifyContent: "space-between", }}>
-                    <WVInPageSubtitle className="my-acct-user-details" children={is_auth === 'mobile' ? `Mobile: ${contact_value}` : `Email: ${contact_value}`} />
-                    <span onClick={() => this.handleClick(verification_done)} className={`my-acct-tag ${verification_done ? "my-acct-verified-tag" : ""}`}>
+                    {contact_value && <WVInPageSubtitle className="my-acct-user-details" children={is_auth === 'mobile' ? `Mobile: ${contact_value}` : `Email: ${contact_value}`} />}
+                    {contact_value && <span onClick={() => this.handleClick(verification_done)} className={`my-acct-tag ${verification_done ? "my-acct-verified-tag" : ""}`}>
                         {verification_done ? 'VERIFIED' : 'VERIFY'}
-                    </span>
+                    </span>}
                 </div>}
             </div>
         )
@@ -84,26 +76,6 @@ class MyaccountDetails extends Component {
 
 
 const UserDetails = (props) => {
-
-    if (props.contacts) {                                       // REMOVE THIS
-        props.contacts.unverified_email_contacts = [
-            {
-                contact_type: "email",
-                contact_value: "srikantagowda07@gmail.com",
-                contact_verified: true,
-                dt_created: "21/06/2021 07:58",
-                dt_updated: "21/06/2021 14:20",
-                id: 2055,
-                is_auth: true,
-                sms_consent: true,
-                sms_subscribed: true,
-                user_id: "6586478659371009",
-                whatsapp_consent: true,
-                whatsapp_subscribed: true,
-            }
-        ]
-    }
-
     return (<MyaccountDetails {...props} />)
 }
 

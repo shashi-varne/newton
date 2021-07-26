@@ -17,7 +17,7 @@ import ConfirmBackDialog from "../../mini-components/ConfirmBackDialog";
 
 const NRIAddressDetails2 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
-  const {kyc, isLoading} = useUserKycHook();
+  const { kyc, isLoading } = useUserKycHook();
   const [form_data, setFormData] = useState({
     nri_pincode: "",
   });
@@ -42,6 +42,8 @@ const NRIAddressDetails2 = (props) => {
     formData.state = kyc?.nri_address?.meta_data?.state || "";
     formData.city = kyc?.nri_address?.meta_data?.city || "";
     formData.country = kyc?.nri_address?.meta_data?.country || "";
+    formData.tin_number = kyc.nri_address?.tin_number || "";
+
     setFormData({ ...formData });
     setOldState({ ...formData });
   };
@@ -49,7 +51,7 @@ const NRIAddressDetails2 = (props) => {
   const stateParams = props?.location?.state;
 
   const handleSubmit = async () => {
-    sendEvents("next")
+    sendEvents("next");
     let keysToCheck = [
       "nri_pincode",
       "addressline",
@@ -68,17 +70,19 @@ const NRIAddressDetails2 = (props) => {
       return;
     }
 
+    keysToCheck.push("tin_number");
     if (compareObjects(keysToCheck, oldState, form_data)) {
       handleNavigation();
       return;
     }
 
-    let userKycDetails = {...kyc};
+    let userKycDetails = { ...kyc };
     userKycDetails.nri_address.meta_data.city = form_data.city;
     userKycDetails.nri_address.meta_data.state = form_data.state;
     userKycDetails.nri_address.meta_data.country = form_data.country;
     userKycDetails.nri_address.meta_data.pincode = form_data.nri_pincode;
     userKycDetails.nri_address.meta_data.addressline = form_data.addressline;
+    userKycDetails.nri_address.meta_data.tin_number = form_data.tin_number;
 
     try {
       let item = {
@@ -99,7 +103,7 @@ const NRIAddressDetails2 = (props) => {
   const handleNavigation = () => {
     const data = { state: { isEdit } };
     if (stateParams?.backToJourney) {
-      navigate("/kyc/upload/address", data);
+      navigate("/kyc/upload/address-nri", data);
     } else if (stateParams?.userType === "compliant") {
       navigate("/kyc/compliant-personal-details4", data);
     } else {
@@ -113,7 +117,7 @@ const NRIAddressDetails2 = (props) => {
     if (value && name === "nri_pincode" && !validateNumber(value)) return;
     let formData = { ...form_data };
     formData[name] = value;
-    if (!value) {
+    if (!value && name !== "tin_number") {
       formData[`${name}_error`] = "This is required";
     } else formData[`${name}_error`] = "";
     setFormData({ ...formData });
@@ -136,13 +140,7 @@ const NRIAddressDetails2 = (props) => {
     }
   }
 
-  let address_proof = "";
-
-  // if (kyc?.address?.meta_data?.is_nri) {
-  //   address_proof = "Passport";
-  // } else {
-    address_proof = NRI_DOCUMENTS_MAPPER[kyc?.address_doc_type];
-  // }
+  let addressProof = NRI_DOCUMENTS_MAPPER[kyc?.nri_address_doc_type] || "";
 
   const getPageDetails = (userKyc) => {
     let pageDetails = {}
@@ -156,15 +154,16 @@ const NRIAddressDetails2 = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "nri_address_details_2",
-        "pincode_entered": form_data.nri_pincode ? "yes" : "no",
-        "address_entered": form_data.addressline ? "yes" : "no"
-      }
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "nri_address_details_2",
+        country: form_data.country || "",
+        pincode_entered: form_data.nri_pincode ? "yes" : "no",
+        address_entered: form_data.addressline ? "yes" : "no",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
@@ -193,8 +192,12 @@ const NRIAddressDetails2 = (props) => {
       data-aid='kyc-nri-address-details-screen-2'
       headerData={{ goBack }}
     >
-      <section data-aid='kyc-address-details-2'>
-        <div className="kyc-main-subtitle" data-aid='kyc-sub-title'>Address as per {address_proof}</div>
+      <section className="kyc-nri-address-details" data-aid='kyc-address-details-2'>
+        <div className="kyc-main-subtitle" data-aid="kyc-sub-title">
+          {kyc.kyc_status === "compliant"
+            ? "Enter address details"
+            : `Address as per ${addressProof}`}
+        </div>
         <form className="form-container" data-aid='kyc-form-container'>
           <TextField
             label="Pincode"
@@ -211,7 +214,6 @@ const NRIAddressDetails2 = (props) => {
           <TextField
             label="Address"
             name="addressline"
-            className=""
             value={form_data.addressline}
             helperText={form_data.addressline_error || ""}
             error={form_data.addressline_error ? true : false}
@@ -222,7 +224,6 @@ const NRIAddressDetails2 = (props) => {
           <TextField
             label="City"
             name="city"
-            className=""
             value={form_data.city}
             helperText={form_data.city_error || ""}
             error={form_data.city_error ? true : false}
@@ -232,7 +233,6 @@ const NRIAddressDetails2 = (props) => {
           <TextField
             label="State"
             name="state"
-            className=""
             value={form_data.state}
             helperText={form_data.state_error || ""}
             error={form_data.state_error ? true : false}
@@ -247,6 +247,20 @@ const NRIAddressDetails2 = (props) => {
             error={form_data.country_error ? true : false}
             margin="normal"
             onChange={handleChange}
+          />
+          <TextField
+            label="Taxpayer Identification Number (optional)"
+            value={form_data.tin_number || ""}
+            error={form_data.tin_number_error ? true : false}
+            helperText={form_data.tin_number_error || ""}
+            onChange={handleChange}
+            name="tin_number"
+            margin="normal"
+            type="text"
+            disabled={isApiRunning}
+            inputProps={{
+              maxLength: 20,
+            }}
           />
         </form>
       </section>

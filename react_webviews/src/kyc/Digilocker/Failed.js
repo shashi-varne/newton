@@ -15,11 +15,14 @@ import { updateQueryStringParameter } from "../common/functions";
 const config = getConfig();
 const productName = config.productName;
 const basePath = getBasePath();
+
 const Failed = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const navigate = navigateFunc.bind(props);
+  const {kyc, isLoading} = useUserKycHook();
   
   const manual = async () => {
+    sendEvents('upload_manually')
     try {
       setIsApiRunning(true);
       await setKycType("manual");
@@ -31,9 +34,23 @@ const Failed = (props) => {
     }
   };
 
-  const {kyc, isLoading} = useUserKycHook();
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "aadhar_kyc_failed",
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   const handleProceed = () => {
+    sendEvents('retry');
     const redirect_url = encodeURIComponent(
       `${basePath}/digilocker/callback${
         config.searchParams
@@ -98,16 +115,17 @@ const Failed = (props) => {
 
   return (
     <Container
+      events={sendEvents("just_set_events")}
       title="Aadhaar KYC Failed!"
       data-aid='kyc-aadhaar-kyc-failed-screen'
       twoButtonVertical={true}
       button1Props={{
-        type: 'primary',
+        variant: "contained",
         title: "RETRY",
         onClick: handleProceed,
       }}
       button2Props={{
-        type: 'secondary',
+        variant: "outlined",
         title: "UPLOAD DOCUMENTS MANUALLY",
         onClick: manual,
         showLoader: isApiRunning

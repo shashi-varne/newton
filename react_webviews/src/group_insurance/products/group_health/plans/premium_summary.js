@@ -12,6 +12,7 @@ import ReligarePremium from "../religare/religare_premium";
 import HDFCPremium from "../hdfc/hdfc_premium";
 import StarPremium from "../Star/star_premium";
 import GMCPremium from "../gmc/gmc_premium";
+import {Imgc} from '../../../../common/ui/Imgc'
 import { isEmpty } from "../../../../utils/validators";
 
 class GroupHealthPlanPremiumSummary extends Component {
@@ -66,6 +67,14 @@ class GroupHealthPlanPremiumSummary extends Component {
         if ( post_body.account_type.includes("parents") && groupHealthPlanData.ui_members.parents_option ) {
           body.account_type = groupHealthPlanData.ui_members.parents_option;
           body.insurance_type = groupHealthPlanData.ui_members.parents_option;
+        }
+
+        if(post_body.account_type === 'family' || post_body.account_type === 'self_family'){
+          var parents_total = groupHealthPlanData.star_parents_total;
+          var parents_in_law_total = groupHealthPlanData.star_parents_in_law_total;
+          body.parents = parents_total;
+          body.parents_in_law = parents_in_law_total;
+          body.adults = body.adults - (body.parents + body.parents_in_law)
         }
       }
       if(this.state.providerConfig.provider_api === 'care_plus'){
@@ -325,8 +334,9 @@ class GroupHealthPlanPremiumSummary extends Component {
         <div className="group-health-plan-premium-summary">
           <div className="group-health-top-content-plan-logo">
             <div className="tc-right">
-              <img
+              <Imgc
                 src={require(`assets/${this.state.providerData.logo_card}`)}
+                className="insurance-logo-top-right"
                 alt=""
               />
             </div>

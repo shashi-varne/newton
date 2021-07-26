@@ -12,6 +12,7 @@ import { nativeCallback } from "../../utils/native_callback";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import { ConfirmPan } from "../Equity/mini-components/ConfirmPan";
 import CheckCompliant from "../Equity/mini-components/CheckCompliant";
+import { isDigilockerFlow } from "../common/functions";
 
 const residentialStatusOptions = [
   {
@@ -44,7 +45,8 @@ const Home = (props) => {
   const [openCheckCompliant, setOpenCheckCompliant] = useState(false);
   const [residentialStatus, setResidentialStatus] = useState(true);
   const [userName, setUserName] = useState("");
-  const [tradingEnabled, setTradingEnabled] = useState()
+  const [tradingEnabled, setTradingEnabled] = useState();
+  const [disableResidentialStatus, setDisableResidentialStatus] = useState();
 
   const isTradingEnabled = (isIndian) => {
     return !config.isSdk && isIndian
@@ -58,6 +60,7 @@ const Home = (props) => {
     setPan(kyc.pan?.meta_data?.pan_number || "");
     setResidentialStatus(!kyc.address?.meta_data?.is_nri);
     setTradingEnabled(isTradingEnabled(!kyc.address?.meta_data?.is_nri));
+    setDisableResidentialStatus(!!kyc.identification.meta_data.tax_status)
     let data = {
       investType: "mutual fund",
       npsDetailsRequired: false,
@@ -92,7 +95,6 @@ const Home = (props) => {
   };
 
   const handleClick = async () => {
-    
     try {
       if (pan.length !== 10) {
         setPanError("Minimum length is 10");
@@ -109,6 +111,7 @@ const Home = (props) => {
         return;
       }
       const skipApiCall = pan === kyc?.pan?.meta_data?.pan_number;
+      sendEvents("next");
       if (skipApiCall || isStartKyc) {
         setIsStartKyc(true);
         setUserName(kyc?.pan?.meta_data?.name);
@@ -176,10 +179,12 @@ const Home = (props) => {
   };
 
   const closeAccountMerge = () => {
+    sendEvents("re-enter_pan", "pan_aleady_exists");
     setOpenAccountMerge(false);
   };
 
   const handleMerge = async (step) => {
+    sendEvents("link_account", "pan_aleady_exists");
     if (step === "STEP1") {
       storageService().setObject(STORAGE_CONSTANTS.AUTH_IDS, authIds);
       navigate(`${PATHNAME_MAPPER.accountMerge}${pan.toUpperCase()}`);
@@ -230,7 +235,6 @@ const Home = (props) => {
   };
 
   const savePan = async (is_nri) => {
-    // sendEvents(`${is_nri ? "no" : "yes"}`,'resident popup')
     try {
       if (is_nri) {
         kyc.address.meta_data.is_nri = true;
@@ -249,18 +253,28 @@ const Home = (props) => {
         },
       };
 
+      const addkycType = kyc.kyc_status === "non-compliant" && !isDigilockerFlow(kyc);
       if(tradingEnabled) {
         body.set_kyc_product_type = "equity";
+        if(addkycType && kyc.kyc_type !== "manual")
+          body.set_kyc_type = "manual";
+      } else {
+        body.set_kyc_product_type = "mf";
+        if(addkycType && kyc.kyc_type !== "init")
+          body.set_kyc_type = "init";
       }
 
       let result = await kycSubmit(body);
       if (!result) return;
       if (result?.kyc?.kyc_status === "compliant") {
         setIsUserCompliant(true);
+        if(result?.kyc?.kyc_type !== "init") {
+          result = await kycSubmit({ kyc: {}, set_kyc_type: "init"})
+        }
       } else {
         setIsUserCompliant(false);
       }
-      handleNavigation(is_nri, result.kyc.kyc_status);
+      handleNavigation(is_nri, result.kyc);
     } catch (err) {
       console.log(err);
       toast(err.message || genericErrorMessage);
@@ -269,16 +283,16 @@ const Home = (props) => {
     }
   };
 
-  const handleNavigation = (is_nri, kyc_status) => {
+  const handleNavigation = (is_nri, kycDetails) => {
     if (
-      (isUserCompliant || kyc_status === "compliant") &&
+      (isUserCompliant || kycDetails.kyc_status === "compliant") &&
       (homeData.kycConfirmPanScreen || isPremiumFlow)
     ) {
       sendEvents("next", "pan_entry")
       navigate(PATHNAME_MAPPER.compliantPersonalDetails1);
     } else {
       const kycProductType = storageService().get("kycStartPoint");
-      if (isUserCompliant || kyc_status === "compliant") {
+      if (isUserCompliant || kycDetails.kyc_status === "compliant") {
         if (is_nri) {
           if (!tradingEnabled && kycProductType === "stocks") {
             navigate(PATHNAME_MAPPER.nriError);
@@ -290,7 +304,7 @@ const Home = (props) => {
         }
         sendEvents("next", "pan_entry")
       } else {
-        sendEvents(`${is_nri ? "no" : "yes"}`,'resident popup')
+        // sendEvents(`${is_nri ? "no" : "yes"}`, "resident popup");
         if (is_nri) {
           if (!tradingEnabled && kycProductType === "stocks") {
             navigate(PATHNAME_MAPPER.nriError);
@@ -300,7 +314,7 @@ const Home = (props) => {
             });
           }
         } else {
-          if (kyc?.application_status_v2 !== "init" && kyc?.kyc_type === "manual") {
+          if (kycDetails?.application_status_v2 !== "init" && kycDetails?.kyc_type === "manual") {
             navigate(`${PATHNAME_MAPPER.journey}`, {
               searchParams: `${config.searchParams}&show_aadhaar=false`,
             });
@@ -315,14 +329,15 @@ const Home = (props) => {
   };
 
   const handleConfirmPan = async () => {
-    const skipApiCall =
+    sendEvents("next", "confirm_pan");
+    const skipApiCall = 
       pan === kyc?.pan?.meta_data?.pan_number &&
       kyc.address?.meta_data?.is_nri === !residentialStatus;
     setOpenConfirmPan(false);
     if (skipApiCall) {
       handleNavigation(
         kyc.address?.meta_data?.is_nri || false,
-        kyc?.kyc_status
+        kyc
       );
     } else {
       setOpenCheckCompliant(true);
@@ -332,21 +347,27 @@ const Home = (props) => {
 
   const sendEvents = (userAction, screenName) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction,
-        "screen_name": screenName || "pan_check",
-        "pan": pan ? "yes" : "no",
-        "initial_kyc_status": kyc?.initial_kyc_status || ""
-      }
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction,
+        screen_name: screenName || "pan_entry",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (eventObj.properties.screen_name === "pan_entry") {
+      eventObj.properties.resident_indian = residentialStatus ? "yes" : "no";
+    }
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
   }
-  console.log("trading enabled ",tradingEnabled)
+
+  const handleClose = () => {
+    sendEvents("edit_pan", "confirm_pan");
+    setOpenConfirmPan(false);
+  };
+
   return (
     <Container
       events={sendEvents("just_set_events")}
@@ -382,7 +403,8 @@ const Home = (props) => {
                 options={residentialStatusOptions}
                 value={residentialStatus}
                 onChange={handleResidentialStatus}
-                disabled={showLoader}
+                disabled={showLoader || disableResidentialStatus}
+                disabledWithValue={disableResidentialStatus}
               />
             </div>
           </main>
@@ -390,7 +412,7 @@ const Home = (props) => {
             isOpen={openConfirmPan}
             name={userName}
             pan={pan}
-            close={() => setOpenConfirmPan(false)}
+            close={handleClose}
             handleClick={handleConfirmPan}
           />
           <CheckCompliant isOpen={openCheckCompliant} />

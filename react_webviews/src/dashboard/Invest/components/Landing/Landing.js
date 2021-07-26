@@ -14,10 +14,12 @@ import { SkeltonRect } from 'common/ui/Skelton';
 import WVButton from "../../../../common/ui/Button/WVButton"
 import './Landing.scss';
 import isEmpty from "lodash/isEmpty";
-import VerifyDetailDialog from "../../../../login_and_registration/bottomsheet/VerifyDetailDialog";
-import AccountAlreadyExistDialog from "../../../../login_and_registration/bottomsheet/AccountAlreadyExistDialog";
+import VerifyDetailDialog from "../../../../login_and_registration/components/VerifyDetailDialog";
+import AccountAlreadyExistDialog from "../../../../login_and_registration/components/AccountAlreadyExistDialog";
+import { generateOtp } from "../../../../login_and_registration/functions";
+import { Imgc } from "../../../../common/ui/Imgc";
 
-const fromLoginStates = ["/login", "/register", "/forgot-password", "/mobile/verify", "/logout", "/verify-otp"]
+const fromLoginStates = ["/login", "/logout", "/verify-otp"]
 const isMobileDevice = getConfig().isMobileDevice;
 class Landing extends Component {
   constructor(props) {
@@ -44,6 +46,7 @@ class Landing extends Component {
       stateParams: props.location.state || {},
     };
     this.initialize = initialize.bind(this);
+    this.generateOtp = generateOtp.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
     this.handleCampaignRedirection = handleCampaignRedirection.bind(this);
   }
@@ -90,20 +93,14 @@ class Landing extends Component {
 
   addBank = () => {
     const userKyc = this.state.userKyc || {};
-    this.navigate(`/kyc/${userKyc.kyc_status}/bank-details`);
+    this.navigate(`/kyc/${userKyc.kyc_status}/bank-details`, {
+      state: { goBack: "/invest" }
+    });
   };
 
   updateDocument = () => {
     this.navigate("/kyc/add-bank");
   };
-
-  setAccountAlreadyExistsData = (show, data) => {
-    this.setState({
-      accountAlreadyExists: show,
-      accountAlreadyExistsData: data,
-      verifyDetails: false
-    })
-  }
 
   closeVerificationFailed = () => {
     this.setState({ verificationFailed: false });
@@ -119,6 +116,7 @@ class Landing extends Component {
     });
   };
 
+  // email mobile verification
   closeVerifyDetailsDialog = () => {
     this.setState({
       verifyDetails: false
@@ -130,6 +128,48 @@ class Landing extends Component {
       accountAlreadyExists: false
     })
   }
+
+  setAccountAlreadyExistsData = (show, data) => {
+    this.setState({
+      accountAlreadyExists: show,
+      accountAlreadyExistsData: data,
+      verifyDetails: false,
+      contact_type: data?.data?.contact_type,
+      contact_value: data?.data?.contact_value,
+    })
+  }
+
+  continueAccountAlreadyExists = async (type, data) => {
+    let body = {};
+    if (type === "email") {
+      body.email = data?.data?.contact_value;
+    } else {
+      body.mobile = data?.data?.contact_value
+      body.whatsapp_consent = true;
+    }
+    const otpResponse = await this.generateOtp(body);
+    if (otpResponse) {
+      this.navigate("secondary-otp-verification", {
+        state: {
+          value: data?.contact_value,
+          otp_id: otpResponse.pfwresponse.result.otp_id,
+          communicationType: type,
+        },
+      });
+    }
+  };
+
+  editDetailsAccountAlreadyExists = () => {
+    this.navigate("/secondary-verification", {
+      state: {
+        page: "landing",
+        edit: true,
+        communicationType: this.state.contact_type,
+        contactValue: this.state.contact_value,
+      },
+    });
+  };
+
 
   handleKycPremiumLanding = () => {
     if (
@@ -165,7 +205,6 @@ class Landing extends Component {
     handleCampaignRedirection(campLink);
   }
 
-  
   render() {
     const {
       isReadyToInvestBase,
@@ -182,6 +221,9 @@ class Landing extends Component {
       verifyDetails,
       accountAlreadyExists,
       stateParams,
+      tradingEnabled,
+      kycButtonLoader,
+      stocksButtonLoader
     } = this.state;
     const {
       ourRecommendations,
@@ -216,7 +258,8 @@ class Landing extends Component {
           {
             !kycStatusLoader &&
             <div className="generic-page-subtitle" data-aid='generic-page-subtitle'>
-              {isReadyToInvestBase 
+              {((!tradingEnabled && isReadyToInvestBase) ||
+-                (tradingEnabled && isEquityCompletedBase)) 
                 ? " Your KYC is verified, You’re ready to invest"
                 : "Invest in your future"}
             </div>
@@ -237,7 +280,8 @@ class Landing extends Component {
                 case "kyc":
                   return (
                     <React.Fragment key={index}>
-                      {!isReadyToInvestBase && kycStatusData && !kycStatusLoader && (
+                      {(!kycStatusLoader && kycStatusData && ((!tradingEnabled && !isReadyToInvestBase) ||
+-                      (tradingEnabled && !isEquityCompletedBase))) ? (
                         <div
                           data-aid='kyc-invest-sections-cards'
                           className="kyc"
@@ -245,7 +289,7 @@ class Landing extends Component {
                             backgroundImage: `url(${require(`assets/${productName}/${kycStatusData.icon}`)})`,
                           }}
                           onClick={() =>
-                            this.clickCard("kyc", kycStatusData.title)
+                            !kycButtonLoader && !stocksButtonLoader && this.clickCard("kyc", kycStatusData.title)
                           }
                         >
                           <div className="title">{kycStatusData.title}</div>
@@ -258,9 +302,10 @@ class Landing extends Component {
                             classes={{
                               button: "invest-landing-button",
                             }}
+                            showLoader={kycButtonLoader}
                           />
                         </div>
-                      )}
+                      ): null}
                     </React.Fragment>
                   );
                 case "stocks":
@@ -268,13 +313,15 @@ class Landing extends Component {
                     <React.Fragment key={index}>
                       {!isEquityCompletedBase && (
                         <div className="invest-main-top-title" 
-                          onClick={() => this.clickCard("stocks") } 
+                          onClick={() => {!kycStatusLoader && !stocksButtonLoader && !kycButtonLoader && this.clickCard("stocks") }} 
                           data-aid='stocks-title'
                         >
                           <WVButton
                             variant='contained'
                             size='large'
                             color="secondary"
+                            disabled={kycStatusLoader}
+                            showLoader={stocksButtonLoader}
                             // fullWidth
                           >
                             Stocks
@@ -350,7 +397,7 @@ class Landing extends Component {
                                     src={require(`assets/${productName}/${item.icon_line}`)}
                                     alt=""
                                   />
-                                  <img
+                                  <Imgc
                                     src={require(`assets/${productName}/${item.icon}`)}
                                     alt=""
                                     className="icon"
@@ -399,10 +446,10 @@ class Landing extends Component {
                                   >
                                     <div className="content">
                                       <div className="title"  data-aid={`financial-tool-title-${data.key}`}>{data.title}</div>
-                                      <img
+                                      <Imgc
                                         src={require(`assets/${productName}/${data.icon}`)}
                                         alt=""
-                                        className="icon"
+                                        className="ft-icon"
                                       />
                                     </div>
                                     <div className="subtitle" data-aid={`financial-tool-subtitle-${data.key}`}>
@@ -512,7 +559,6 @@ class Landing extends Component {
           {verifyDetails && (
             <VerifyDetailDialog
               type={this.state.verifyDetailsType}
-              // data="uttam@fisdom.com" // verifyDetailsData
               data={this.state.verifyDetailsData}
               showAccountAlreadyExist={this.setAccountAlreadyExistsData}
               isOpen={verifyDetails}
@@ -523,11 +569,11 @@ class Landing extends Component {
         {accountAlreadyExists && (
           <AccountAlreadyExistDialog
             type={this.state.verifyDetailsType}
-            // data="98*****487" // accountAlreadyExistsData
             data={this.state.accountAlreadyExistsData}
             isOpen={accountAlreadyExists}
             onClose={this.closeAccountAlreadyExistDialog}
-            parent={this}
+            next={this.continueAccountAlreadyExists}
+            editDetails={this.editDetailsAccountAlreadyExists}
           ></AccountAlreadyExistDialog>
         )}
       </Container>

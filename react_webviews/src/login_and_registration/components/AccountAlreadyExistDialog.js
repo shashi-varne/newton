@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 import { getConfig } from "utils/functions";
 import { isEmpty } from "lodash";
-import "./Style.scss";
-import { generateOtp } from "../function";
+import "./commonStyles.scss";
 
 const product = getConfig().productName;
 export class AccountAlreadyExistDialog extends Component {
@@ -13,45 +12,10 @@ export class AccountAlreadyExistDialog extends Component {
     this.state = {
       loading: false,
     };
-    this.generateOtp = generateOtp.bind(this);
   }
 
-  handleClick = async () => {
-    const { type, data } = this.props;
-    let body = {};
-    if (data?.from === "my-account") {
-      this.props.parent.navigate("/kyc/communication-details")
-      return;
-    };
-    if (type === "email") {
-      body.email = data?.email;
-    } else {
-      body.mobile = data?.mobile;
-      body.whatsapp_consent = true;
-    } // by default should this be true or false in case of bottomsheet?
-    const otpResponse = await this.generateOtp(body);
-    if (otpResponse) {
-      this.props.parent.navigate("secondary-otp-verification", {
-        state: {
-          mobile_number: data?.contact_value,
-          forgot: false, // flag to be checked
-          otp_id: otpResponse.pfwresponse.result.otp_id,
-        },
-      });
-    }
-  };
-
-  editDetails = () => {
-    this.props.parent.navigate("/kyc/communication-details", {
-      state: {
-        page: "landing",
-        edit: true,
-      },
-    });
-  };
-
   render() {
-    const { data, isOpen, onClose, type } = this.props; console.log(type)
+    const { data, isOpen, onClose, type, next, editDetails } = this.props;
     return (
       <WVBottomSheet
         isOpen={isOpen}
@@ -61,13 +25,13 @@ export class AccountAlreadyExistDialog extends Component {
         button1Props={{
           type: "secondary",
           title: `EDIT ${type === "email" ? "EMAIL" : "NUMBER"}`,
-          onClick: this.editDetails,
+          onClick: editDetails,
         }}
         button2Props={{
           type: "primary",
           title: "CONTINUE",
           showLoader: this.state.loading,
-          onClick: this.handleClick,
+          onClick: () => next(type, data),
         }}
         classes={{
           container: "account-already-exists-container",
@@ -75,7 +39,7 @@ export class AccountAlreadyExistDialog extends Component {
       >
         <p className="text">
           Your {type === "email" ? "email address" : "mobile number"} is already
-          registered with {isEmpty(data) && <span>some other account</span>}
+          registered with {(isEmpty(data) && type === "email" ? data?.mobile : data?.email) && <span>some other account</span>}
         </p>
         <div
           style={{

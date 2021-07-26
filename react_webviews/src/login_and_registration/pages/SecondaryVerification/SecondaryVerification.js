@@ -1,68 +1,96 @@
-import "./Style.scss";
+import "./secondaryVerification.scss";
 import React, { Component } from 'react';
-import Container from "../dashboard/common/Container";
+import Container from "../../../dashboard/common/Container";
 import Input from "common/ui/Input";
 import { getConfig } from 'utils/functions';
-import { countries } from "./constants";
-import { initialize } from "./function";
+import { countries } from "../../constants";
+import { initialize } from "../../functions";
 import { validateNumber } from "utils/validators";
-import { nativeCallback } from "../utils/native_callback";
+import { nativeCallback } from "../../../utils/native_callback";
 import DropDownNew from "common/ui/DropDownNew";
-import Checkbox from "../common/ui/Checkbox";
-import WVInPageSubtitle from "../common/ui/InPageHeader/WVInPageSubtitle";
-
+import Checkbox from "../../../common/ui/Checkbox";
+import WVInPageSubtitle from "../../../common/ui/InPageHeader/WVInPageSubtitle";
+import AccountAlreadyExistDialog from "../../components/AccountAlreadyExistDialog";
 
 class SecondaryVerification extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
             productName: getConfig().productName,
-            form_data: { whatsapp_consent: true, code: "+91"},
-            loginType: "mobile",
+            form_data: { whatsapp_consent: true, code: "+91" },
+            accountAlreadyExists: false,
+            isEdit: false
         }
         this.initialize = initialize.bind(this);
     }
 
     componentWillMount() {
         this.initialize();
-        countries.map((item, idx) => {
-            item.name = "+" + item.value;
+        const { state } = this.props.location;
+        let { form_data } = this.state;
+        let loginType = state?.communicationType || "mobile";
+        if (state.edit) {
+            form_data[state?.communicationType] = state?.contactValue;
+            this.setState({ isEdit: true })
+        }
+        this.setState({ loginType, form_data })
+        countries.map((item) => {
+            return item.name = "+" + item.value;
         })
     }
 
     componentDidMount() {
         this.setState({
-            form_data:{
+            form_data: {
                 ...this.state.form_data,
                 mobile: this.props.location?.state?.contactValue
             },
-            loginType: this.props.location?.communicationType || "mobile"// to be changed
         })
     }
-    
+
     handleChange = (name) => (event) => {
         let value = event.target ? event.target.value : event;
-        if (name === "mobile" && value && !validateNumber(value)) return;
         let { form_data } = this.state;
+        if (name === "mobile" && value && !validateNumber(value)) return;
+        if (name === "mobile" && form_data.code === "+91" & value.length > 10) return;
         form_data[name] = value;
         if (name === "whatsapp_consent") form_data[name] = !form_data?.whatsapp_consent;
         form_data[`${name}_error`] = "";
         this.setState({ form_data: form_data });
     };
 
-    handleClick() {
+    handleClick = async () => {
         let { form_data, loginType } = this.state;
         let keys_to_check = ["mobile", "code"];
-        if (loginType !== "email")
-            this.sendEvents();
         if (loginType === "email") keys_to_check = ["email"];
-        this.formCheckFields(keys_to_check, form_data, "LOGIN", loginType, true);
+        let result = await this.authCheckApi(loginType, { "contact_value": form_data[loginType] })
+        if (result?.is_user) {
+            this.setState({
+                accountAlreadyExists: true,
+                accountAlreadyExistsData: result?.user,
+                verifyDetailsType: loginType,
+            })
+        } else if (!result?.is_user) {
+            this.formCheckFields(keys_to_check, form_data, "LOGIN", loginType, true);
+        }
     }
 
     sendEvents = (userAction) => {
+        const { loginType, form_data } = this.state;
+        let properties = {
+            "screen_name": loginType === 'email' ? 'email' : 'enter mobile number',
+            "user_action": userAction
+        }
+        if (loginType === "mobile") {
+            properties = {
+                ...properties,
+                "whatsapp_agree": form_data.whatsapp_consent ? "yes" : "no",
+                "number_entered": userAction !== "skip" ? "yes" : "no",
+            }
+        } else properties.email_entered = userAction !== "skip" ? "yes" : "no";
         let eventObj = {
-            "event_name": 'otp sent to user',
+            "event_name": 'onboarding',
+            "properties": properties,
         };
         if (userAction === 'just_set_events') {
             return eventObj;
@@ -71,20 +99,64 @@ class SecondaryVerification extends Component {
         }
     }
 
+    continueAccountAlreadyExists = async (type, data) => {
+        let body = {};
+        let { form_data } = this.state;
+        if (type === "email") {
+            body.email = form_data?.email;
+        } else {
+            body.mobile = form_data?.mobile;
+            body.whatsapp_consent = true;
+        };
+        const otpResponse = await this.generateOtp(body);
+        if (otpResponse) {
+            this.sendEvents("next")
+            this.navigate("secondary-otp-verification", {
+                state: {
+                    value: type === "email" ? form_data?.email : form_data?.mobile,
+                    otp_id: otpResponse.pfwresponse.result.otp_id,
+                    communicationType: type,
+                },
+            });
+        }
+    };
+
+    editDetailsAccountAlreadyExists = () => {
+        this.setState({
+            accountAlreadyExists: false
+        })
+    };
+
+    closeAccountAlreadyExistDialog = () => {
+        this.setState({
+            accountAlreadyExists: false
+        })
+    }
+
+
     render() {
-        const {loginType, form_data } = this.state;
+        const { loginType, form_data, isEdit } = this.state;
 
         return (
             <Container
+                events={this.sendEvents('just_set_events')}
                 fullWidthButton={true}
                 onlyButton={true}
                 buttonTitle="CONTINUE"
-                handleClick={() => this.handleClick()}
+                handleClick={this.handleClick}
                 canSkip={true}
-                onSkipClick={() => this.navigate("/")}
+                onSkipClick={() => {
+                    this.navigate("/");
+                    this.sendEvents("skip");
+                }}
                 showLoader={this.state.isApiRunning}
-                title={loginType === "mobile" ? "Enter Your Number to get started" : "Share your email address"}>
+                title={isEdit ? `Edit ${loginType === "mobile" ? 'mobile number' : 'email'}` : loginType === "mobile" ? "Share your mobile number" : "Share your email address"}>
                 <div className="form" data-aid='form'>
+                    {isEdit &&
+                        <WVInPageSubtitle
+                            children={`This ${loginType === "mobile" ? 'number' : 'email'} is only for communication; your existing ${loginType === "mobile" ? 'number' : 'email'} linked with the investment account will remain the same`}
+                            style={{ margin: "-5px 0 15px" }}
+                        />}
                     {loginType === "mobile" && (
                         <div>
                             <div className="login-form-field">
@@ -118,7 +190,7 @@ class SecondaryVerification extends Component {
                                 </span>
                             </div>
                             <WVInPageSubtitle children={"We'll send an OTP to verify your mobile number"} />
-                            <div className="declaration-container">
+                            <div className="declaration-container whatsapp-consent">
                                 <Checkbox
                                     defaultChecked
                                     checked={form_data?.whatsapp_consent}
@@ -153,6 +225,14 @@ class SecondaryVerification extends Component {
                         </>
                     }
                 </div>
+                <AccountAlreadyExistDialog
+                    type={this.state.verifyDetailsType}
+                    data={this.state.accountAlreadyExistsData}
+                    isOpen={this.state.accountAlreadyExists}
+                    onClose={this.closeAccountAlreadyExistDialog}
+                    next={this.continueAccountAlreadyExists}
+                    editDetails={this.editDetailsAccountAlreadyExists}
+                ></AccountAlreadyExistDialog>
             </Container >
         )
     }

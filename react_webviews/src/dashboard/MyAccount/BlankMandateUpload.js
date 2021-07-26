@@ -137,6 +137,7 @@ const BlankMandateUpload = (props) => {
 
   return (
     <Container
+      data-aid='blank-mandate-update-screen'
       events={sendEvents("just_set_events")}
       title="Upload Mandate"
       skelton={showLoader}
@@ -145,15 +146,15 @@ const BlankMandateUpload = (props) => {
       disable={!file}
       showLoader={isApiRunning}
     >
-      <div className="blank-mandate-upload">
-        <header>Share the picture of your mandate form</header>
+      <div className="blank-mandate-upload" data-aid='blank-mandate-upload'>
+        <header data-aid='blank-mandate-header'>Share the picture of your mandate form</header>
         {file && fileToShow && (
           <div className="preview-container">
             <img src={fileToShow} className="preview" alt="Uploaded File" />
           </div>
         )}
         {!config.Web && (
-          <div className="blank-mandate-doc-upload-container">
+          <div className="blank-mandate-doc-upload-container" data-aid='blank-mandate-doc-upload-container'>
             <div className="blank-mandate-upload-doc-actions">
               <div className="mobile-actions">
                 <div>
@@ -169,9 +170,10 @@ const BlankMandateUpload = (props) => {
                     data-click-type="camera-front"
                     onClick={() => handleUpload("open_camera")}
                     className="blank-mandate-upload-button"
+                    data-aid='blank-mandate-upload-btn'
                   >
                     <img alt="" src={require(`assets/take_pic_green.svg`)} />
-                    <div className="upload-action" data-aid='kyc-open-camera-text'>open camera</div>
+                    <div className="upload-action" data-aid='blank-mandate-open-camera-text'>open camera</div>
                   </button>
                 </div>
                 <div>- OR -</div>
@@ -185,12 +187,13 @@ const BlankMandateUpload = (props) => {
                   <button
                     onClick={() => handleUpload("open_gallery")}
                     className="blank-mandate-upload-button"
+                    data-aid='blank-mandate-upload-btn'
                   >
                     <img
                       alt=""
                       src={require(`assets/go_to_gallery_green.svg`)}
                     />
-                    <div className="upload-action" data-aid='kyc-open-gallery-text'>Open Gallery</div>
+                    <div className="upload-action" data-aid='blank-mandate-open-gallery-text'>Open Gallery</div>
                   </button>
                 </div>
               </div>
@@ -198,7 +201,7 @@ const BlankMandateUpload = (props) => {
           </div>
         )}
         {config.Web && (
-          <div className="blank-mandate-doc-upload-container">
+          <div className="blank-mandate-doc-upload-container" data-aid='blank-mandate-doc-upload-container'>
             <div className="blank-mandate-upload-doc-actions">
               <input
                 ref={inputEl}
@@ -209,9 +212,10 @@ const BlankMandateUpload = (props) => {
               <button
                 onClick={() => handleUpload("open_gallery")}
                 className="blank-mandate-upload-button"
+                data-aid='blank-mandate-upload-btn'
               >
                 <img alt="" src={require(`assets/go_to_gallery_green.svg`)} />
-                <div className="upload-action" data-aid='kyc-open-gallery-text'>Open Gallery</div>
+                <div className="upload-action" data-aid='blank-mandate-open-gallery-text'>Open Gallery</div>
               </button>
             </div>
           </div>

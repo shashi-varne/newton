@@ -1,17 +1,17 @@
 import React, { Component } from 'react'
 import Container from "../../common/Container";
 import { getConfig } from "utils/functions";
-import toast from "../../../common/ui/Toast";
 import { storageService} from '../../../utils/validators';
 import Api from "utils/api";
 import { nativeCallback } from "utils/native_callback";
+import {Imgc} from 'common/ui/Imgc';
 
 class ResumeIntermediatePage extends Component {
 
     constructor(props){
         super(props);
         this.state={
-            show_loader: true,
+            skelton: true,
             fyntune_ref_id: storageService().getObject('fyntune_ref_id') || ''
         }
     }
@@ -39,10 +39,42 @@ class ResumeIntermediatePage extends Component {
         }
     }
 
-    async componentDidMount(){
-        nativeCallback({ action: 'take_control_reset' });
+    setErrorData = (type) => {
+
         this.setState({
-            show_loader: true
+          showError: false
+        });
+        if(type) {
+          let mapper = {
+            'onload':  {
+              handleClick1: this.onload,
+              button_text1: 'Retry',
+              title1: ''
+            },
+            'submit': {
+              handleClick1: this.handleClick,
+              button_text1: 'Retry',
+              handleClick2: () => {
+                this.setState({
+                  showError: false
+                })
+              },
+              button_text2: 'Edit'
+            }
+          };
+      
+          this.setState({
+            errorData: {...mapper[type], setErrorData : this.setErrorData}
+          })
+        }
+    }
+
+    onload = async () => {
+        this.setErrorData("onload");
+        let error='';
+        let errorType='';
+        this.setState({
+            skelton: true
         })
         
         try{    
@@ -50,7 +82,7 @@ class ResumeIntermediatePage extends Component {
             console.log(res);
             
             this.setState({
-                show_loader: false
+                skelton: false
             })
 
             var resultData = res.pfwresponse.result;
@@ -59,17 +91,30 @@ class ResumeIntermediatePage extends Component {
                     payment_data: resultData
                 })
             } else {
-                
-              toast(resultData.error || resultData.message || "Something went wrong");
+              error = resultData.error || resultData.message || true;
             }     
         }catch(err){
+            console.log(err)
             this.setState({
-                show_loader: false
+                skelton: false
             });
-            toast("Something went wrong");
+            error = true;
+            errorType = "crash";
         }
-         
-
+        if (error) {
+            this.setState({
+                errorData: {
+                    ...this.state.errorData,
+                    title2: error,
+                    type: errorType
+                },
+                showError: true,
+            });
+        }
+    }
+    async componentDidMount(){
+        nativeCallback({ action: 'take_control_reset' });
+        this.onload();
     }
     handleClick = () =>{
         this.sendEvents('next')
@@ -92,6 +137,9 @@ class ResumeIntermediatePage extends Component {
             <Container
             showLoader={this.state.show_loader}
             fullWidthButton={true}
+            skelton={this.state.skelton}
+            showError={this.state.showError}
+            errorData={this.state.errorData}
             buttonTitle="OK"
             onlyButton={true}
             handleClick={() => this.handleClick()}
@@ -99,7 +147,7 @@ class ResumeIntermediatePage extends Component {
                 <div>
                       <h1 className="resume-page-title">Please note!</h1>         
                       <div className="resume-hero-container">
-                            <img
+                            <Imgc
                                 className="resume-hero-img"
                                 src={require(`assets/resume_redirection.png`)}
                                 alt=""

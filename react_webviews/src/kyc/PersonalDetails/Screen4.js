@@ -9,7 +9,8 @@ import {
   validateFields,
   compareObjects,
   getTotalPagesInPersonalDetails,
-  getFlow
+  getFlow,
+  isDocSubmittedOrApproved
 } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
@@ -27,9 +28,9 @@ const PersonalDetails4 = (props) => {
   const isEdit = props.location.state?.isEdit || false;
   const [oldState, setOldState] = useState({});
   const [totalPages, setTotalPages] = useState();
-  let title = "Nominee detail";
+  let title = "Nominee details";
   if (isEdit) {
-    title = "Edit nominee detail";
+    title = "Edit nominee details";
   }
   const type = props.type || "";
   const keysToCheck = ["dob", "name", "relationship"];
@@ -68,19 +69,21 @@ const PersonalDetails4 = (props) => {
       if (!result.canSubmit) {
         let data = { ...result.formData };
         setFormData(data);
-        sendEvents("next")
+        sendEvents("next");
         return;
       }
     }
-    sendEvents("next")
+    sendEvents("next");
     if (isChecked) {
       if (kyc.nomination.nominee_optional) {
         handleNavigation();
         return;
       }
-    } else if (compareObjects(keysToCheck, oldState, form_data)) {
-      handleNavigation();
-      return;
+    } else {
+      if (!kyc.nomination.nominee_optional && compareObjects(keysToCheck, oldState, form_data)) {
+        handleNavigation();
+        return;
+      }
     }
 
     let userkycDetails = { ...kyc };
@@ -95,7 +98,10 @@ const PersonalDetails4 = (props) => {
       userkycDetails.nomination.meta_data.name = form_data.name;
       userkycDetails.nomination.meta_data.relationship = form_data.relationship;
       body.kyc = {
-        nomination: userkycDetails.nomination.meta_data,
+        nomination: {
+          ...userkycDetails.nomination.meta_data,
+          nominee_optional: false
+        }
       };
     }
     savePersonalDetails4(body);
@@ -117,7 +123,11 @@ const PersonalDetails4 = (props) => {
 
   const handleNavigation = () => {
     if (type === "digilocker") {
-      navigate(PATHNAME_MAPPER.uploadSign);
+      if(!isDocSubmittedOrApproved("sign")) {
+        navigate(PATHNAME_MAPPER.uploadSign);
+      } else {
+        navigate(PATHNAME_MAPPER.journey);
+      }
     } else {
       navigate(PATHNAME_MAPPER.journey);
     }
@@ -154,24 +164,21 @@ const PersonalDetails4 = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "nominee details",
-        "name": form_data.name ? "yes" : "no",
-        "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
-        "relationship": form_data.relationship ? "yes" : "no",
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "nominee_details",
+        add_nominee: isChecked ? "no" : "yes",
         "flow": getFlow(kyc) || "",
-        "add_nominee":isChecked ? "no":"yes",
-        "initial_kyc_status" : kyc.kyc_status || ""
-      }
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
+
   return (
     <Container
       events={sendEvents("just_set_events")}
@@ -217,7 +224,7 @@ const PersonalDetails4 = (props) => {
             disabled={isChecked || isApiRunning}
           />
           <Input
-            label="Date of birth(DD/MM/YYYY)"
+            label="Date of birth (DD/MM/YYYY)"
             class="input"
             value={form_data.dob || ""}
             error={form_data.dob_error ? true : false}

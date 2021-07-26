@@ -1,10 +1,10 @@
-import "./Style.scss";
 import React, { Component } from 'react';
-import Container from "../dashboard/common/Container";
-import WVInPageSubtitle from "../common/ui/InPageHeader/WVInPageSubtitle"
+import Container from "../../../dashboard/common/Container";
+import WVInPageSubtitle from "../../../common/ui/InPageHeader/WVInPageSubtitle"
 import Input from "common/ui/Input";
-import { initialize } from "./function";
+import { initialize } from "../../functions";
 import { getConfig } from "utils/functions";
+import { nativeCallback } from "../../../utils/native_callback";
 
 
 class Referral extends Component {
@@ -22,12 +22,21 @@ class Referral extends Component {
 
   componentWillMount() {
     this.initialize();
+    const { state } = this.props.location;
+    let communicationType = state?.communicationType || "mobile";
+    this.setState({ communicationType })
   }
 
 
-  componentDidUpdate(){
-    if(this.state.promo_status === "Valid")  this.navigate("/secondary-verification")
-  }
+  componentDidUpdate() {
+    if (this.state.promo_status === "Valid") {
+      this.navigate("/secondary-verification", {
+        state: {
+          communicationType: this.state.communicationType === "mobile" ? "email" : "mobile"
+        }
+      })
+    };
+  };
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
@@ -37,25 +46,48 @@ class Referral extends Component {
     this.setState({ form_data: form_data });
   };
 
+  sendEvents = (userAction) => {
+    let properties = {
+      "user_action": userAction,
+      "screen_name": "referral_code",
+    }
+    let eventObj = {
+      "event_name": 'onboarding',
+      "properties": properties,
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
   render() {
 
     const { form_data, isPromoApiRunning } = this.state;
 
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         fullWidthButton={true}
         twoButtonVertical={true}
         dualbuttonwithouticon={true}
         button1Props={{
-          type: 'primary',
+          variant: "contained",
           title: "CONTINUE",
-          showLoader: this.state.isPromoApiRunning,
-          onClick : () => this.verifyCode(form_data)
+          showLoader: isPromoApiRunning,
+          onClick: () => this.verifyCode(form_data)
         }}
         button2Props={{
-          type: 'secondary',
+          variant: "outlined",
           title: "SKIP",
-          onClick: () => this.navigate("/secondary-verification"),
+          onClick: () => {
+            this.sendEvents("skip");
+            this.navigate("/secondary-verification", {
+              state: {
+                communicationType: this.state.communicationType === "mobile" ? "email" : "mobile",
+              }
+            })
+          },
           showLoader: false,
         }}
         showLoader={this.state.showLoader}

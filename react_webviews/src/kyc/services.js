@@ -94,7 +94,7 @@ export async function initData() {
   }
 }
 
-async function setSummaryData(result) {
+export async function setSummaryData(result) {
   const currentUser = result.data.user.user.data
   const userKyc = result.data.kyc.kyc.data
   if (userKyc.firstlogin) {
@@ -138,23 +138,24 @@ async function setSummaryData(result) {
 
 export function getCampaignBySection(notifications, sections) {
   if (!sections) {
-    sections = []
+    sections = [];
   }
 
   if (!notifications) {
-    notifications = storageService().getObject('campaign') || []
+    notifications = storageService().getObject("campaign") || [];
   }
 
-  const notificationsData = notifications.map((notification) => {
-    return {
-      ...notification,
-      campaign: {
-        ...notification.campaign,
-        name: 'PlutusPendingTransactionCampaign',
-      },
+  let notificationsData = [];
+
+  for (let i = 0; i < notifications.length; i++) {
+    if (notifications[i].campaign.name === "PlutusPendingTransactionCampaign") {
+      continue;
     }
-  })
-  return notificationsData
+
+    notificationsData.push(notifications[i]);
+  }
+
+  return notificationsData;
 }
 
 function setSDKSummaryData(result) {
@@ -178,7 +179,7 @@ async function setNpsData(result) {
     if(!data) return;
     storageService().setObject("nps_additional_details", data.registration_details);
     storageService().setObject("nps_data", data);
-    if (!data.registration_details.additional_details_status) {
+    if (!data?.registration_details?.additional_details_status) {
       storageService().set('nps_additional_details_required', true)
     } else {
       storageService().set('nps_additional_details_required', false)
@@ -256,11 +257,15 @@ export function getKycAppStatus(kyc) {
 
   var status;
   if (rejected > 0) {
-    status = "rejected";
-    result.status = status;
-    return result;
-  } else {
     if (!TRADING_ENABLED) {
+      status = "rejected";
+      result.status = status;
+      return result;
+    } else {
+      status = kyc.equity_application_status;
+    }
+  } else {
+    if (!TRADING_ENABLED || (kyc?.kyc_product_type !== "equity" && isReadyToInvest()) || kyc?.mf_kyc_processed) {
       status = kyc.application_status_v2;
     } else {
       status = kyc.equity_application_status;
@@ -294,13 +299,17 @@ export function getKycAppStatus(kyc) {
   if (kyc.kyc_status !== 'compliant' && kyc.application_status_v2 === 'init' && kyc.pan.meta_data.pan_number &&
       kyc.kyc_type === "manual" && (kyc.dl_docs_status === '' || kyc.dl_docs_status === 'init' || kyc.dl_docs_status === null)) {
       status = 'incomplete';
-    }
+  }
+
+  if (kyc.kyc_status !== 'compliant' && kyc.address.meta_data.is_nri && kyc.application_status_v2 === 'incomplete') {
+    status = 'incomplete';
+  }
 
   if (kyc.kyc_status !== 'compliant' && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && kyc.sign_status !== 'signed') {
     status = 'incomplete';
   }
 
-  if (TRADING_ENABLED && (kyc.equity_application_status === 'submitted' || kyc.equity_application_status === 'complete') && kyc.equity_sign_status !== "signed") {
+  if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && (kyc.equity_application_status === 'submitted' || kyc.equity_application_status === 'complete') && kyc.equity_sign_status !== "signed") {
     status = 'incomplete';
   }
 
@@ -378,7 +387,7 @@ export function getDocuments(userKyc) {
     const data = {
       key: "nriaddress",
       title: "Foreign Address proof",
-      subtitle: DOCUMENTS_MAPPER[userKyc.address_doc_type],
+      subtitle: DOCUMENTS_MAPPER[userKyc.nri_address_doc_type],
       doc_status: userKyc.nri_address.doc_status,
       default_image: "regi_default.svg",
       approved_image:"regi_approved.svg",
@@ -399,7 +408,6 @@ function getAddressProof(userKyc) {
 export function isReadyToInvest() {
   let userRTI = storageService().getObject("user");
   let kycRTI = storageService().getObject("kyc");
-  const TRADING_ENABLED = isTradingEnabled(kycRTI);
 
   if (!kycRTI || !userRTI) {
     return false;
@@ -411,9 +419,7 @@ export function isReadyToInvest() {
       (kycRTI.friendly_application_status === "submitted" &&
         kycRTI.bank.meta_data_status === "approved")
     ) {
-      if (!TRADING_ENABLED || (TRADING_ENABLED && kycRTI.equity_sign_status === "signed")) {
-        return true;
-      }
+      return true;
     } else if (userRTI.kyc_registration_v2 === "complete") {
       return true;
     } else if (kycRTI.provisional_action_status === "approved") {
@@ -443,7 +449,8 @@ export async function setKycProductType(data) {
     if (!submitResult) {
       throw new Error("Something went wrong");
     }
-    return true;
+    storageService().setObject("kyc", submitResult.kyc);
+    return submitResult;
   } catch (err) {
     console.log(err.message);
     toast(err.message || "Something went wrong");

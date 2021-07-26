@@ -12,6 +12,7 @@ import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble';
 import "./commonStyles.scss";
 import { nativeCallback } from '../../utils/native_callback'
 import KycUploadContainer from '../mini-components/KycUploadContainer'
+import Toast from '../../common/ui/Toast'
 
 const config = getConfig();
 const productName = config.productName
@@ -29,6 +30,7 @@ const IpvVideo = (props) => {
   const [noCameraFound, setNoCameraFound] = useState(false);
   const [noCameraPermission, setNoCameraPermission] = useState(false);
   const [errorContent, setErrorContent] = useState("");
+  const [attempt, setAttempt] = useState(0);
 
   const SUPPORTED_VIDEO_TYPES = ["mp4", "webm", "ogg", "x-flv", "x-ms-wmv"];
 
@@ -93,6 +95,25 @@ const IpvVideo = (props) => {
     }
   }
 
+  const sendEvents = (userAction, type) => {
+    let eventObj = {
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "upload_ipv",
+        take_video_again: attempt !== 0 && attempt !== 1 ? "yes" : "no",
+        attempt: `attempt${attempt}`,
+        // "type": type || "",
+        // "screen_name": "selfie_video_doc",
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   const handleClick = (e) => {
     if (!showVideoRecoreder) {
       setShowVideoRecorder(!showVideoRecoreder);
@@ -100,6 +121,7 @@ const IpvVideo = (props) => {
   }
 
   const onRecordingComplete = (videoBlob) => {
+    setAttempt((val) => val++);
     const fileFromBlob = new File([videoBlob], "ipv-video.webm");
     setFile(fileFromBlob);
     setUploadCTAText("TAKE VIDEO AGAIN");
@@ -107,24 +129,13 @@ const IpvVideo = (props) => {
   }
 
   const onVideoRecorderError = (error) => {
-    setShowVideoRecorder(!showVideoRecoreder);
-    setNoCameraPermission(!noCameraPermission);
-  }
-
-  const sendEvents = (userAction, type) => {
-    let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "selfie_video_doc",
-        "type": type || "",
-      }
-    };
-    if (userAction === 'just_set_events') {
-      return eventObj;
+    console.log(error.message);
+    if (error.message === "Permission denied") {
+      setNoCameraPermission(!noCameraPermission);
     } else {
-      nativeCallback({ events: eventObj });
+      Toast("Something went wrong!")
     }
+    setShowVideoRecorder(!showVideoRecoreder);
   }
 
   const renderInitialIllustration = useCallback(() => {
@@ -190,7 +201,7 @@ const IpvVideo = (props) => {
                 showReplayControls
                 replayVideoAutoplayAndLoopOff
                 onRecordingComplete={onRecordingComplete}
-                countdownTime={15}
+                timeLimit={15000}
                 onError={onVideoRecorderError}
               />
             }
@@ -206,18 +217,21 @@ const IpvVideo = (props) => {
             {!isWeb && !errorContent &&
               <KycUploadContainer.Button
                 dataAid='take-video-btn'
-                type="outlined"
-                fileName="ipv_video"
+                outlined
                 withPicker
-                nativePickerMethodName="open_video_camera"
-                onFileSelectComplete={onFileSelectComplete}
-                onFileSelectError={onFileSelectError}
-                supportedFormats={SUPPORTED_VIDEO_TYPES}
-                fileHandlerParams={{
-                  doc_type: "ipvvideo",
-                  message: "Look at the screen and read the verification number loud",
-                  ipv_code: ipvcode
+                filePickerProps={{
+                  nativePickerMethodName: "open_video_camera",
+                  fileName: "ipv_video",
+                  onFileSelectComplete: onFileSelectComplete,
+                  onFileSelectError: onFileSelectError,
+                  supportedFormats: SUPPORTED_VIDEO_TYPES,
+                  fileHandlerParams: {
+                    doc_type: "ipvvideo",
+                    message: "Look at the screen and read the verification number loud",
+                    ipv_code: ipvcode
+                  }
                 }}
+                back
               >
                 {uploadCTAText}
               </KycUploadContainer.Button>

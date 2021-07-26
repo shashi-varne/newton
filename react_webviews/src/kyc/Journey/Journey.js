@@ -6,16 +6,15 @@ import { isEmpty, storageService, getUrlParams } from '../../utils/validators'
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
-import { isDigilockerFlow, isIncompleteEquityApplication, updateQueryStringParameter } from "../common/functions";
-import { getFlow } from "../common/functions";
+import { isDigilockerFlow, isIncompleteEquityApplication, updateQueryStringParameter, getFlow } from "../common/functions";
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
-import KycBackModal from '../mini-components/KycBack'
-import { navigate as navigateFunc } from '../../utils/functions'
+import { isTradingEnabled, navigate as navigateFunc } from '../../utils/functions'
 import "./Journey.scss"
 import { nativeCallback } from '../../utils/native_callback'
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble'
 import { getJourneyData } from './JourneyFunction';
+import ConfirmBackDialog from '../mini-components/ConfirmBackDialog'
 
 const HEADER_MAPPER_DATA = {
   kycDone: {
@@ -85,6 +84,7 @@ const Journey = (props) => {
   }
 
   const backHandlingCondition = () => {
+    const kycStartPoint = storageService().get("kycStartPoint");
     if (config.isIframe) {
       if (config.code === 'moneycontrol') {
         navigate("/invest/money-control");
@@ -93,14 +93,16 @@ const Journey = (props) => {
       }
       return;
     } else if (!config.Web) {
-      if (storageService().get('native')) {
+      if (storageService().get('native') && (!TRADING_ENABLED || kycStartPoint !== "stocks")) {
         nativeCallback({ action: "exit_web" });
-      } else {
-        navigate("/");
+        return;
       }
-      return;
     }
-    navigate("/landing");
+    if (kycStartPoint === "stocks" && TRADING_ENABLED){
+      navigate(PATHNAME_MAPPER.stocksStatus);
+    } else {
+      navigate("/");
+    }
   }
 
   const openGoBackModal = () => {
@@ -114,8 +116,9 @@ const Journey = (props) => {
   }
 
   const confirmGoBack = () => {
-      closeGoBackModal()
-      backHandlingCondition();
+    sendEvents("back");
+    closeGoBackModal()
+    backHandlingCondition();
   }
 
   useEffect(() => {
@@ -199,6 +202,13 @@ const Journey = (props) => {
             ) {
               journeyData[i].isEditAllowed = false
             }
+          } else if (!isCompliant && !show_aadhaar) {
+            if (
+              journeyData[i].key === 'pan' &&
+              kyc.pan.doc_status === "approved"
+            ) {
+              journeyData[i].isEditAllowed = false
+            }
           }
           for (j = 0; j < journeyData[i].inputsForStatus.length; j++) {
             for (
@@ -214,9 +224,11 @@ const Journey = (props) => {
               ) {
                 if (
                   data.name === 'nomination' &&
-                  (kyc.nomination.nominee_optional ||
-                    (kyc.address.meta_data.is_nri &&
-                      kyc.nomination.nominee_optional === null))
+                  (kyc.nomination.nominee_optional 
+                    // ||
+                    // (kyc.address.meta_data.is_nri &&
+                    //   kyc.nomination.nominee_optional === null)
+                      )
                 ) {
                   //
                 } else {
@@ -236,6 +248,12 @@ const Journey = (props) => {
                     status = 'init';
                     break;
                   }
+                }
+
+                const keysToCheck = ["email_verified", "mobile_number_verified"]
+                if(data.name === "identification" && keysToCheck.includes(data.keys[k]) && !kyc[data.name]['meta_data'][data.keys[k]]) {
+                  status = 'init';
+                  break;
                 }
               }
             }
@@ -343,9 +361,9 @@ const Journey = (props) => {
   }
 
   const handleEdit = (key, index, isEdit) => {
-    if(isEdit)
+    if(isEdit) {
       sendEvents('edit')
-    console.log('Inside handleEdit')
+    }
     let stateMapper = {}
     if (kyc?.kyc_status === 'compliant') {
       // if (key === 'pan' && !customerVerified) {
@@ -424,13 +442,9 @@ const Journey = (props) => {
       if (npsDetailsReq) {
         navigate('/nps/identity')
       } else if (isCompliant) {
-        if (kyc?.bank?.meta_data_status === 'approved') {
-          navigate('/kyc/compliant-report-verified')
-        } else {
-          navigate('/kyc-esign/nsdl', {
-            searchParams: `${config.searchParams}&status=success`,
-          })
-        }
+        navigate('/kyc-esign/nsdl', {
+          searchParams: `${config.searchParams}&status=success`,
+        })
       } else {
         navigate('/kyc/report')
       }
@@ -455,7 +469,7 @@ const Journey = (props) => {
         ${storageService().get("is_secure")}`,
       message: "You are almost there, do you really want to go back?",
     };
-    if (isMobile.any() && storageService().get(STORAGE_CONSTANTS.NATIVE)) {
+    if (!config.Web && storageService().get(STORAGE_CONSTANTS.NATIVE)) {
       if (isMobile.iOS()) {
         nativeCallback({
           action: "show_top_bar",
@@ -463,7 +477,7 @@ const Journey = (props) => {
         });
       }
       nativeCallback({ action: "take_back_button_control", message: data });
-    } else if (!isMobile.any()) {
+    } else if (!config.Web) {
       const redirectData = {
         show_toolbar: false,
         icon: "back",
@@ -525,7 +539,8 @@ const Journey = (props) => {
     var stageDetail = ''
     var investmentPending = null
     var isCompliant = kyc?.kyc_status === 'compliant'
-    var journeyStatus = getKycAppStatus(kyc).status || ''
+    var kycAppStatus = getKycAppStatus(kyc)
+    var journeyStatus = kycAppStatus.status || ''
     var dlCondition = isDigilockerFlow(kyc)
     var show_aadhaar =
       journeyStatus === 'ground_aadhaar' ||
@@ -537,8 +552,7 @@ const Journey = (props) => {
     var headerKey = 
       isKycDone
       ? "kycDone"
-      : 
-      isCompliant
+      : isCompliant
       ? "compliant"
       : dlCondition
       ? "dlFlow"
@@ -575,7 +589,8 @@ const Journey = (props) => {
       !show_aadhaar &&
       user.kyc_registration_v2 !== 'submitted' &&
       user.kyc_registration_v2 !== 'complete' &&
-      fromState !== "/kyc/digilocker/failed"
+      fromState !== "/kyc/digilocker/failed" &&
+      kycAppStatus?.rejectedItems?.length === 0
     ) {
       if (
         !storageService().get('show_aadhaar') &&
@@ -588,16 +603,19 @@ const Journey = (props) => {
     }
   }
   if (!isEmpty(kyc) && !isEmpty(user)) {
+    var TRADING_ENABLED = isTradingEnabled(kyc);
     if (npsDetailsReq && user.kyc_registration_v2 === 'submitted') {
-      navigate('/nps/identity')
-    } else if (
+      navigate('/nps/identity', {
+        state: { goBack: '/invest' },
+      })
+    } else if (!TRADING_ENABLED &&
       user.kyc_registration_v2 === 'submitted' &&
       kyc.sign_status === 'signed'
     ) {
       navigate('/kyc/report', {
         state: { goBack: '/invest' },
       })
-    } else if (
+    } else if (!TRADING_ENABLED &&
       user.kyc_registration_v2 === 'complete' &&
       kyc.sign_status === 'signed'
     ) {
@@ -605,37 +623,59 @@ const Journey = (props) => {
     }
   }
 
+  const isResumeJourney = () => {
+    let fromStateArray = ["/", "/landing", "/invest", "/kyc/native", "/kyc/stocks/native"]
+    return fromStateArray.includes(fromState);
+  }
+
   const sendEvents = (userAction, screen_name) => {
-    let stageData=0;
-    let stageDetailData='';
+    let stageData = 0;
+    // let stageDetailData='';
     for (var i = 0; i < kycJourneyData?.length; i++) {
       if (
-        kycJourneyData[i].status === 'init' ||
-        kycJourneyData[i].status === 'pending'
+        kycJourneyData[i].status === "init" ||
+        kycJourneyData[i].status === "pending"
       ) {
-        stageData = i + 1
-        stageDetailData = kycJourneyData[i].key
-        break
+        stageData = i + 1;
+        // stageDetailData = kycJourneyData[i].key
+        break;
       }
     }
-    let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "" ,
-        "screen_name": screen_name || "kyc_journey",
-        stage: stageData,
-        details: stageDetailData,
-        "rti": "",
-        "initial_kyc_status": kyc.initial_kyc_status || "",
-        "flow": getFlow(kyc) || ""
-      }
-    };
-    if (userAction === 'just_set_events') {
+    let eventObj;
+    if (screen_name === "ensure_mobile_linked_to_aadhar") {
+      eventObj = {
+        event_name: "kyc_registration",
+        properties: {
+          user_action: userAction || "",
+          screen_name: screen_name,
+        },
+      };
+    } else {
+      eventObj = {
+        event_name: "kyc_registration",
+        properties: {
+          user_action: userAction || "",
+          screen_name: screen_name || "kyc_journey",
+          premium_onboarding: kyc.kyc_status === "compliant" ? "yes" : "no",
+          kyc_flow: getFlow(kyc) || "",
+          step: `step${stageData}`,
+          resume_journey: isResumeJourney() ? "yes" : "no"
+
+          // "stage": stageData,
+          // "details": stageDetailData,
+          // "rti": "",
+          // "initial_kyc_status": kyc.initial_kyc_status || "",
+          // "flow": getFlow(kyc) || ""
+        },
+      };
+    }
+
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container
@@ -643,7 +683,7 @@ const Journey = (props) => {
       events={sendEvents("just_set_events")}
       buttonTitle={ctaText}
       classOverRideContainer="pr-container"
-      skelton={isLoading || isEmpty(kyc) || isEmpty(user)}
+      skelton={isLoading}
       handleClick={goNext}
       showLoader={isApiRunning}
       headerData={{ goBack: openGoBackModal }}
@@ -665,17 +705,22 @@ const Journey = (props) => {
               alt=""
             />
           </div>
-          {show_aadhaar && !isCompliant && !isKycDone && 
+          {!isCompliant && ((show_aadhaar && !isKycDone) || (!show_aadhaar && isKycDone)) && 
           (
             <FastAndSecureDisclaimer alignInRow options={DL_HEADER_BOTTOM_DATA} />
           )}
           <div className="kyc-journey-title" data-aid='kyc-journey-title'>{topTitle}</div>
-          {!show_aadhaar && !isCompliant && (
+          {!show_aadhaar && !isCompliant && !isKycDone && (
             <div className="kyc-journey-subtitle" data-aid='kyc-journey-subtitle'>
               <WVInfoBubble isDismissable isOpen type="info">
                 Please keep your <b>PAN card</b> ({kyc?.pan?.meta_data?.pan_number}){" "}
                 and <b>address proof</b> handy to complete KYC
               </WVInfoBubble>
+            </div>
+          )}
+          {isKycDone && (
+            <div className="kyc-compliant-subtitle" data-aid="kyc-complete-subtitle">
+              Complete the last few steps to open your trading and demat account
             </div>
           )}
           {isCompliant && !investmentPending && (
@@ -757,11 +802,10 @@ const Journey = (props) => {
         onClose={() => setDlAadhaar(false)}
         redirect={cancel}
       />
-      <KycBackModal
-        id="kyc-back-modal"
-        open={goBackModal}
-        confirm={confirmGoBack}
-        cancel={closeGoBackModal}
+      <ConfirmBackDialog
+        goBack={confirmGoBack}
+        close={closeGoBackModal}
+        isOpen={goBackModal}
       />
     </Container>
   )

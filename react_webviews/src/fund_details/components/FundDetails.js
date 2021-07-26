@@ -278,10 +278,10 @@ const FundDetails = ({ classes, history }) => {
       body: body,
       paymentRedirectUrl: paymentRedirectUrl,
       isSipDatesScreen: false,
-      history: history,
       userKyc: kyc,
       handleApiRunning: handleApiRunning,
       handleDialogStates: handleDialogStates,
+      navigate: navigate,
     });
   };
 
@@ -636,9 +636,9 @@ const FundDetails = ({ classes, history }) => {
         )}
         {type === "mf" && (
           <>
-            {dialogStates.openPennyVerificationPendind && (
+            {dialogStates.openPennyVerificationPending && (
               <PennyVerificationPending
-                isOpen={dialogStates.openPennyVerificationPendind}
+                isOpen={dialogStates.openPennyVerificationPending}
                 handleClick={() => navigate("/kyc/add-bank")}
               />
             )}

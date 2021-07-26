@@ -3,8 +3,8 @@ import { getConfig } from "utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 import { initializeComponentFunctions } from "./MyAccountFunctions";
 import Container from "../common/Container";
-import VerifyDetailDialog from "../../login_and_registration/bottomsheet/VerifyDetailDialog";
-import AccountAlreadyExistDialog from "../../login_and_registration/bottomsheet/AccountAlreadyExistDialog";
+import VerifyDetailDialog from "../../login_and_registration/components/VerifyDetailDialog";
+import AccountAlreadyExistDialog from "../../login_and_registration/components/AccountAlreadyExistDialog";
 import Button from "material-ui/Button";
 import UserDetails from "./UserDetails";
 import Dialog, {
@@ -52,10 +52,38 @@ class MyAccount extends Component {
     this.setState({
       accountAlreadyExists: show,
       accountAlreadyExistsData: data,
-      verifyDetails: false,
+      verifyDetails: true,
       verifyDetailsType: type,
-    })
+    });
   };
+
+  continueAccountAlreadyExists = async () => {
+    this.navigate("/kyc/communication-details", {
+      state: {
+        accountAlreadyExistsData: this.state.accountAlreadyExistsData,
+        callHandleClick: true,
+        continueAccountAlreadyExists: true,
+      },
+    });
+  };
+
+  editDetailsAccountAlreadyExists = () => {
+    this.navigate("/kyc/communication-details", {
+      state: {
+        accountAlreadyExistsData : this.state.accountAlreadyExistsData,
+        page: "my-account",
+        edit: true,
+      },
+    });
+  };
+
+  closeAccountAlreadyExistDialog = () => {
+    this.setState({
+      accountAlreadyExists: false
+    })
+  }
+
+
   renderDialog = () => {
     return (
       <Dialog
@@ -64,8 +92,9 @@ class MyAccount extends Component {
         onClose={this.handleClose}
         aria-labelledby="responsive-dialog-title"
         className="my-account-dialog"
+        data-aid='my-account-dialog'
       >
-        <DialogContent className="content">
+        <DialogContent className="content" data-aid='dialog-content'>
           <DialogContentText className="subtitle">
             {this.state.subtitle}
           </DialogContentText>
@@ -77,6 +106,7 @@ class MyAccount extends Component {
               onClick={() => this.handleClick2()}
               color="secondary"
               autoFocus
+              data-aid='cancel-btn'
             >
               {this.state.buttonTitle2}
             </Button>
@@ -86,6 +116,7 @@ class MyAccount extends Component {
             onClick={() => this.handleClick1(this.state.twoButton)}
             color="secondary"
             autoFocus
+            data-aid='confirm-btn'
           >
             {this.state.buttonTitle1}
           </Button>
@@ -158,24 +189,28 @@ class MyAccount extends Component {
     let bank = userKyc.bank || {};
     return (
       <Container
+        data-aid='my-account-screen'
         events={this.sendEvents("just_set_events")}
         noFooter={true}
         skelton={this.state.showLoader}
         title="My Account"
       >
-        <div className="my-account">
+        <div className="my-account" data-aid='my-account'>
           <div className="my-account-content">
             <UserDetails
               pan_no={userKyc?.pan?.meta_data?.pan_number}
               contacts={contacts}
               name={currentUser?.name}
               handleClick={(path) => this.handleClick(path)}
-              showAccountAlreadyExist={(show, data, type) => this.setAccountAlreadyExistsData(show, data, type)}
+              showAccountAlreadyExist={(show, data, type) =>
+                this.setAccountAlreadyExistsData(show, data, type)
+              }
             />
             <div className="account">
-              <div className="account-head-title">Account options</div>
+              <div className="account-head-title" data-aid='account-head-title'>Account options</div>
               {isReadyToInvestBase && (
                 <div
+                  data-aid='change-address'
                   className="account-options"
                   onClick={() => {
                     this.sendEvents("change address");
@@ -188,6 +223,7 @@ class MyAccount extends Component {
               )}
               {(isReadyToInvestBase || bank.doc_status === "rejected") && (
                 <div
+                  data-aid='add-bank-mandate'
                   className="account-options"
                   onClick={() => {
                     this.sendEvents("add bank/mandate");
@@ -202,6 +238,7 @@ class MyAccount extends Component {
                 currentUser.active_investment &&
                 Capitalgain && (
                   <div
+                    data-aid='capital-gain-statement'
                     className="account-options"
                     onClick={() => {
                       this.sendEvents("capital gain statement");
@@ -219,6 +256,7 @@ class MyAccount extends Component {
                 currentUser.active_investment &&
                 investment80C && (
                   <div
+                    data-aid='investment-proof'
                     className="account-options"
                     onClick={() => {
                       this.sendEvents("elss statement");
@@ -231,6 +269,7 @@ class MyAccount extends Component {
                 )}
               {isReadyToInvestBase && currentUser.active_investment && (
                 <div
+                  data-aid='export-transaction-history'
                   className="account-options"
                   onClick={() => this.confirmTransactions()}
                 >
@@ -242,6 +281,7 @@ class MyAccount extends Component {
                 </div>
               )}
               <div
+                data-aid='upload-mandate'
                 className="account-options"
                 onClick={() => {
                   this.sendEvents("upload mandate");
@@ -259,10 +299,11 @@ class MyAccount extends Component {
               pendingMandate.show_status ||
               mandateRequired ||
               npsUpload) && (
-              <div className="account">
-                <div className="account-head-title">Pending</div>
+              <div className="account" data-aid='account'>
+                <div className="account-head-title" data-aid='account-head-title'>Pending</div>
                 {pendingMandate.show_status && (
                   <div
+                    data-aid='pending-mandate'
                     className="account-options"
                     onClick={() => this.handleClick(pendingMandate.state)}
                   >
@@ -272,6 +313,7 @@ class MyAccount extends Component {
                 )}
                 {mandateRequired && (
                   <div
+                    data-aid='mandate-required'
                     className="account-options"
                     onClick={() => this.authenticate()}
                   >
@@ -283,6 +325,7 @@ class MyAccount extends Component {
                 )}
                 {npsUpload && (
                   <div
+                    data-aid='nps-upload'
                     className="account-options"
                     onClick={() => this.handleClick("/nps/identity")}
                   >
@@ -304,15 +347,16 @@ class MyAccount extends Component {
               parent={this}
             ></VerifyDetailDialog>
           )}
-        {accountAlreadyExists && (
-          <AccountAlreadyExistDialog
-            type={this.state.verifyDetailsType}
-            data={this.state.accountAlreadyExistsData}
-            isOpen={accountAlreadyExists}
-            onClose={this.closeAccountAlreadyExistDialog}
-            parent={this}
-          ></AccountAlreadyExistDialog>
-        )}
+          {accountAlreadyExists && (
+            <AccountAlreadyExistDialog
+              type={this.state.verifyDetailsType}
+              data={this.state.accountAlreadyExistsData}
+              isOpen={accountAlreadyExists}
+              onClose={this.closeAccountAlreadyExistDialog}
+              editDetails={this.editDetailsAccountAlreadyExists}
+              next={this.continueAccountAlreadyExists}
+            ></AccountAlreadyExistDialog>
+          )}
         </div>
       </Container>
     );

@@ -10,10 +10,13 @@ import { companyDetails } from "../../constants";
 import { getKRAForm } from "../../common/api"
 import "./commonStyles.scss";
 import { getConfig, navigate as navigateFunc } from '../../../utils/functions';
+import Toast from '../../../common/ui/Toast';
+import { openPdf } from '../../common/functions';
 
 const config = getConfig();
 const ManualSignature = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
   const {kyc, isLoading} = useUserKycHook();
   const navigate = navigateFunc.bind(props)
 
@@ -64,23 +67,27 @@ const ManualSignature = (props) => {
   }, []);
 
   const handleDownloadFormsClick = async () => {
+    sendEvents('download_forms')
     try {
       setIsApiRunning(true);
       const params = { "kyc_product_type": "equity" }
       const result = await getKRAForm(params);
       const formUrl = result?.filled_form_url;
-      const link = document.createElement("a");
-      link.href = formUrl;
-      link.setAttribute('download', "download");
-      link.click();
+      if (config.isSdk) {
+        setShowLoader(true);
+      } 
+      openPdf(formUrl, "download_kra_form");
     } catch (err) {
       console.log(err);
+      Toast("Something went wrong");
     } finally {
       setIsApiRunning(false);
+      setShowLoader(false);
     }
   }
 
   const handleCTAClick = () => {
+    sendEvents("home");
     if(config.Web) {
       navigate("/");
     } else {
@@ -94,14 +101,31 @@ const ManualSignature = (props) => {
     { "id": 3, "title": "Courier the signed documents at our given address", render: renderStep3Content }
   ]
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "manual_signature",
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       title="Manual Signature"
       buttonTitle="HOME"
       handleClick={handleCTAClick}
       data-aid='kyc-manual-signature-screen'
       skelton={isLoading}
       disable={isApiRunning}
+      showLoader={showLoader}
     >
       <section id="manual-signature" data-aid='manual-signature'>
         <div className="generic-page-subtitle manual-signature-subtile" data-aid='generic-page-subtitle'>

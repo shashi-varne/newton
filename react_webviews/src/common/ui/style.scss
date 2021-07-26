@@ -125,7 +125,7 @@
 .RadioLabel {
   color: var(--label);
   font-size: 14px;
-  font-family: "Roboto";
+  font-family: "Rubik", "Roboto", sans-serif;
   font-weight: 500;
 }
 .RadioWithIcon {
@@ -166,7 +166,7 @@
   text-align: left;
   margin-top: 8px;
   min-height: 1em;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-family: "Rubik", "Roboto", sans-serif;
   line-height: 1em;
   color: #f44336;
   position: relative;
@@ -355,12 +355,15 @@ input.default-otp-input {
   width: 20px;
 }
 
-.input-prefix-character{
-  color: #160D2E;
-  position: absolute;
-  font-size: 15px;
-  top: 26.5px;
-  left: 2px;
+.input-prefix-container{
+  position: relative;
+  .input-prefix-character{
+    color: #160D2E;
+    position: absolute;
+    font-size: 15px;
+    top: 26.5px;
+    left: 2px;
+  }
 }
 
 .status-bar-container{
@@ -534,9 +537,14 @@ input.default-otp-input {
     font-size: 14px;
   }
 
-  .completed-icon {
-    width: 14px;
-    margin: 4px 0 0 8px;
+  .completed-icon, .select-floater-img {
+    width: 14px !important;
+    height: 14px !important;
+    margin: 0;
+  }
+  .save-text-icon{
+    width: 10px !important;
+    height: 10px !important;
   }
 }
 
@@ -731,7 +739,7 @@ body[data-device="mobile"] {
   text-align: left;
   margin-top: 8px;
   min-height: 1em;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-family: "Rubik", "Roboto", sans-serif;
   line-height: 1em;
   margin-bottom: 10px;
   position: relative;
@@ -787,7 +795,10 @@ body[data-device="mobile"] {
     margin: "0 0 0 10px";
     z-index: 99999;
   }
-
+  .generic-tooltip-img{
+    width: 14px !important;
+    height: 14px !important;
+  }
   .tooltip-arrrow {
     right: 20px;
     position: relative;
@@ -1293,6 +1304,10 @@ label{
 .react-select__indicators{
 padding-right: 12px !important;
 }
+.imgc-box-landing{
+  width: 70px !important;
+  min-height: 60px !important;
+}
 
 .details-card-container{
   font-family: 'Rubik', sans-serif;
@@ -1301,6 +1316,7 @@ padding-right: 12px !important;
   border-radius: 6px;
   margin: 20px 20px 30px 20px;
   box-shadow: 0 0 4px rgba(192, 192, 192, 0.4);
+  cursor: pointer;
   p{margin: 0}
   .status-bar{
     display: flex;
@@ -1336,9 +1352,9 @@ padding-right: 12px !important;
     display: flex;
     align-items: center;
     justify-content: space-between;    
-    img{
-      width: 36px;
-      height: 36px;
+    .details-card-logo{
+      width: 36px !important;
+      height: 36px !important;
       object-fit: cover;
       background-color: #fff;
       align-self: flex-start;
