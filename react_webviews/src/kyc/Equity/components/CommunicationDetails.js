@@ -263,11 +263,11 @@ const CommunicationDetails = (props) => {
             provider: stateParams?.provider,
             otp: otpData?.otp,
           }
+          setShowLoader("button");
           await verifyGoldOtp(body);
         } else {
           await otpVerification();
         }
-        setShowLoader("button");
         handleNavigation();
       } else {
         const body = getPayLoad();
