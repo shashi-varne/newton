@@ -5,10 +5,10 @@ import { DL_DOCS } from '../constants'
 import "./Digilocker.scss";
 import ConfirmBackDialog from '../mini-components/ConfirmBackDialog'
 
-const config = getConfig();
-const productName = config.productName;
 const Success = (props) => {
   const [isBackDialogOpen, setBackDialogOpen] = useState(false);
+  const config = getConfig();
+  const productName = config.productName;
   const proceed = () => {
     const navigate = navigateFunc.bind(props)
     navigate('/kyc/journey')

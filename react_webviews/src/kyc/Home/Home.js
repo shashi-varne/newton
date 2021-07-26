@@ -14,9 +14,9 @@ import { nativeCallback } from "../../utils/native_callback";
 import internalStorage from '../common/InternalStorage';
 import isEmpty from 'lodash/isEmpty';
 
-const config = getConfig();
 const showPageDialog = isNewIframeDesktopLayout();
 const Home = (props) => {
+  const config = getConfig();
   const navigate = navigateFunc.bind(props);
   const genericErrorMessage = "Something Went wrong!";
   const [showLoader, setShowLoader] = useState(false);

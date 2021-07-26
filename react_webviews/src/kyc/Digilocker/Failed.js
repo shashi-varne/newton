@@ -10,11 +10,11 @@ import "./Digilocker.scss";
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 import { isNewIframeDesktopLayout, popupWindowCenter } from "../../utils/functions";
 
-const config = getConfig();
 const Failed = (props) => {
   const [open, setOpen] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [isBackDialogOpen, setBackDialogOpen] = useState(false);
+  const config = getConfig();
   const navigate = navigateFunc.bind(props);
 
   const close = () => {

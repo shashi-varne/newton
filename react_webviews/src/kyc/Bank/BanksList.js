@@ -9,12 +9,13 @@ import { initData } from "../services";
 import "./BanksList.scss";
 import { nativeCallback } from "../../utils/native_callback";
 
-const productName = getConfig().productName;
 const BanksList = (props) => {
   const [showLoader, setShowLoader] = useState(true);
   const [changeRequest, setChangerequest] = useState({});
   const navigate = navigateFunc.bind(props);
   const [banks, setBanks] = useState([]);
+  const config = getConfig();
+  const productName = config.productName;
 
   useEffect(() => {
     initialize();
@@ -52,7 +53,6 @@ const BanksList = (props) => {
     navigate(`${PATHNAME_MAPPER.bankDetails}${bank_id}`);
   };
 
-  const config = getConfig();
 
   const sendEvents = (userAction) => {
     let eventObj = {
