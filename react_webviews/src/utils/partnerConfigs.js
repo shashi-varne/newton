@@ -230,7 +230,6 @@ export const partnerConfigs = {
     styles: {
       primaryColor: "#004164",
       secondaryColor: "#ff5928",
-      backButtonColor: "#ff5928",
     },
     uiElements: {
       button: {
