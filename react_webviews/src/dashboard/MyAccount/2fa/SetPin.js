@@ -2,22 +2,39 @@ import "./commonStyles.scss";
 import React, { useState } from 'react';
 import Container from "../../common/Container";
 import EnterMPin from "../../../2fa/components/EnterMPin";
+import { verifyPin } from '../../../2fa/common/ApiCalls';
 import { navigate as navigateFunc } from "../../../utils/functions";
 
 const SetPin = (props) => {
   const navigate = navigateFunc.bind(props);
-  const [showLoader, setShowLoader] = useState(false);
+  const [mpinError, setMpinError] = useState(false);
+  const [mpin, setMpin] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
-  const [otp, setOtp] = useState('');
-
-  const handleClick = (route) => {
-   console.log("hiJ A oPQ")
-  };
 
 
-  const handleOtp = (otp) => {
-    setOtp(otp);
-  };
+  const handleClick = async () => {
+    try {
+      setIsApiRunning("button");
+      await verifyPin({
+        validate_only: true,
+        mpin: mpin
+      }); // TODO  Api Throwing 500 Error Hve to Look Into this!~
+      navigate('confirm-pin', {
+        params: { new_mpin: mpin, set_flow: true }
+      });
+    } catch (err) {
+      console.log(err);
+      setMpinError(err);
+    } finally {
+      setIsApiRunning(false);
+    }
+  }
+
+
+  const onPinChange = (val) => {
+    setMpin(val);
+    setMpinError('')
+  }
 
 
   return (
@@ -26,19 +43,17 @@ const SetPin = (props) => {
       showLoader={isApiRunning}
       handleClick={handleClick}
       buttonTitle="Continue"
-      disable={otp?.length !== 4}
+      disable={mpin?.length !== 4}
       fullWidthButton
     >
       <EnterMPin
         title="Set fisdom PIN"
         subtitle="Ensuring maximum security for your investment account"
-        showLoader={isApiRunning}
         otpProps={{
-          handleChange: handleOtp,
-          otp,
-          // isDisabled:,
-          // hasError:,
-          bottomText: ""
+          otp: mpin,
+          handleOtp: onPinChange,
+          hasError: !!mpinError,
+          bottomText: mpinError || '',
         }}
       />
     </Container>

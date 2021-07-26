@@ -37,6 +37,7 @@ const VerifyPin = (props) => {
 
   const onPinChange = (val) => {
     setMpin(val);
+    setMpinError('')
   }
 
   return (
