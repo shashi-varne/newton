@@ -51,9 +51,7 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
     if (showLoader) {
       await fetch();
     }
-    if(!config.partner) {
-      theme.updateTheme();
-    }
+    theme.updateTheme();
   }
 
   return (
