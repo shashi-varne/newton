@@ -29,7 +29,7 @@ const TrendingCard = ({ cart, setCart, type, parentProps, ...props }) => {
   }
   const handleAddToCart = () => {
     if(config.productName === "finity") {
-      storageService().setObject('diystore_fundInfo', props)
+      storageService().setObject(CART, [props])
       navigate("/diy/invest");
       return;
     }
