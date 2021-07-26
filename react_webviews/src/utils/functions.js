@@ -48,6 +48,8 @@ function getPartnerConfig(partner_code) {
   const ismyway =
     search.indexOf('api.mywaywealth.com') >= 0 ||
     search.indexOf('plutus-finwizard-pro.appspot.com') >= 0 || 
+    origin.indexOf('app.finity.in') >= 0 ||
+    origin.indexOf('app.mywaywealth.com') >= 0 || 
     origin.indexOf('wv.mywaywealth.com') >= 0 || 
     origin.indexOf('wv.finity.in') >= 0 || 
     origin.indexOf('api.mywaywealth.com') >= 0;
@@ -148,12 +150,12 @@ export const getPlatformConfig = () => {
 export const getConfig = () => {
   let main_pathname = window.location.pathname;
   let main_query_params = getUrlParams();
-  let { base_url } = main_query_params;
+  let { base_url = ""  } = main_query_params;
   let origin = window.location.origin;
   let generic_callback = true;
 
-  let isProdFisdom = origin.indexOf('wv.fisdom.com') >= 0;
-  let isProdFinity = origin.indexOf('wv.mywaywealth.com') >= 0;
+  let isProdFisdom = origin.indexOf('app.fisdom.com') >= 0  || origin.indexOf('wv.fisdom.com') >= 0 ;
+  let isProdFinity = origin.indexOf('app.mywaywealth.com') >= 0 || origin.indexOf('wv.mywaywealth.com') >= 0;
 
   let base_href = window.sessionStorage.getItem('base_href') || '';
   let base_url_default = '';
@@ -327,14 +329,7 @@ export const getConfig = () => {
     searchParams += getParamsMark(searchParams) + `app_version=${app_version}`;
     searchParamsMustAppend += getParamsMark(searchParams) + `app_version=${app_version}`;
   }
-  let isProdEnv = false;
-  if (
-    base_url.indexOf("my.fisdom.com") >= 0 ||
-    base_url.indexOf("api.mywaywealth.com") >= 0 ||
-    base_url.indexOf("api.finity.in") >= 0
-  ) {
-    isProdEnv = true;
-  }
+  let isProdEnv = isProdFinity || isProdFisdom;
   // should be last
   returnConfig.current_params = main_query_params;
   returnConfig.base_url = base_url;
