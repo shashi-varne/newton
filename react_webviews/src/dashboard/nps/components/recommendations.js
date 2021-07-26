@@ -21,7 +21,7 @@ import { isEmpty } from "../../../utils/validators";
 
 const config = getConfig();
 const isMobileDevice = config.isMobileDevice;
-const partnerCode = config.partner_code;
+const partnerCode = config.code;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Route, Redirect } from "react-router-dom";
 import { initData } from "../../kyc/services";
 import { storageService } from "utils/validators";
@@ -6,11 +6,13 @@ import isEmpty from "lodash/isEmpty";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
 import UiSkelton from "../ui/Skelton";
+import ThemeContext from "../../utils/ThemeContext";
 const config = getConfig();
 const isSdk = config.isSdk;
 const isNative = config.isNative;
 const isIframe = config.isIframe;
 const ProtectedRoute = ({ component: Component, ...rest }) => {
+  const theme = useContext(ThemeContext);
   let current_user = storageService().get("currentUser");
   let user = storageService().get("user") || {};
   let kyc = storageService().get("kyc") || {};
@@ -40,11 +42,20 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
     }
     setShowLoader(false);
   };
+
   useEffect(() => {
-    if (showLoader) {
-      fetch();
-    }
+    initialize()
   }, []);
+
+  const initialize = async () => {
+    if (showLoader) {
+      await fetch();
+    }
+    if(!config.partner) {
+      theme.updateTheme();
+    }
+  }
+
   return (
     <Route
       {...rest}

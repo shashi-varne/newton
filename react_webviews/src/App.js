@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import Login from './login_and_registration/Login';
@@ -32,6 +32,7 @@ import {getConfig, isIframe} from './utils/functions';
 import 'common/theme/Style.scss';
 import { storageService } from './utils/validators';
 import PartnerAuthentication from './login_and_registration/Authentication';
+import { ThemeProvider } from './utils/ThemeContext';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -41,7 +42,9 @@ const jss = create(jssPreset());
 // We define a custom insertion point that JSS will look for injecting the styles in the DOM.
 // jss.options.insertionPoint = 'jss-insertion-point';
 
-const theme = createMuiTheme(themeConfig);
+const getMuiThemeConfig = () => { 
+  return createMuiTheme(themeConfig());
+}
 
 var basename = window.sessionStorage.getItem('base_href') || '';
 if (basename && basename.indexOf('appl/webview') !== -1) {
@@ -77,13 +80,18 @@ const ScrollToTop = withRouter(
 );
 
 const App = () => {
+  const [themeConfiguration, setThemeConfiguration] = useState(getMuiThemeConfig());
+  const updateTheme = () => {
+    const theme = getMuiThemeConfig();
+    setThemeConfiguration(theme)
+  }
   const iframe = isIframe();
-  
     return (
       <BrowserRouter basename={basename}>
         <JssProvider jss={jss} generateClassName={generateClassName}>
-          <MuiThemeProvider theme={theme}>
-          <ScrollToTop />
+          <ThemeProvider value={{updateTheme: updateTheme}} >
+            <MuiThemeProvider theme={themeConfiguration}>
+            <ScrollToTop />
             <Tooltip />
             <ToastContainer autoClose={3000} />
             <Switch>
@@ -106,7 +114,8 @@ const App = () => {
               }
               <Route component={NotFound} />
             </Switch>
-          </MuiThemeProvider>
+            </MuiThemeProvider>
+          </ThemeProvider>
         </JssProvider>
       </BrowserRouter>
     );

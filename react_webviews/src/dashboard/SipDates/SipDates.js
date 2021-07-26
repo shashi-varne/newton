@@ -22,7 +22,6 @@ import { nativeCallback } from "../../utils/native_callback";
 import { flowName } from "../Invest/constants";
 
 const config = getConfig();
-const partnerCode = config.partner_code;
 /* eslint-disable */
 class SipDates extends Component {
   constructor(props) {
@@ -125,7 +124,7 @@ class SipDates extends Component {
     this.sendEvents('next', "sip_dates_popup", {intent: "date confirmation"})
     let { investResponse, paymentRedirectUrl } = this.state;
     let pgLink = investResponse.investments[0].pg_link;
-    pgLink = `${pgLink}${pgLink.match(/[\?]/g) ? "&" : "?"}redirect_url=${paymentRedirectUrl}${partnerCode ? "&partner_code="+partnerCode : ""}`
+    pgLink = `${pgLink}${pgLink.match(/[\?]/g) ? "&" : "?"}redirect_url=${paymentRedirectUrl}&partner_code=${getConfig().code}`
     if (config.Web) {
       if (config.isIframe) {
         handleIframeInvest(
