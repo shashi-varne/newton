@@ -98,7 +98,7 @@ if(getConfig().productName === "fisdom" && getConfig().isProdEnv)
   Sentry.init({
     dsn: "https://38815adc8fd842e78c2145a583d26351@o60572.ingest.sentry.io/5726998",
     integrations: [new Integrations.BrowserTracing()],
-    allowUrls:["wv.fisdom.com"],
+    allowUrls:["app.fisdom.com","wv.fisdom.com"],
     tracesSampleRate: 1.0,
   });
 }
@@ -106,7 +106,7 @@ else if(getConfig().productName === "finity" && getConfig().isProdEnv){
   Sentry.init({
     dsn: "https://84e342a0046748bab6860aafcf7e86da@o60572.ingest.sentry.io/5727007",
     integrations: [new Integrations.BrowserTracing()],
-    allowUrls:["wv.mywaywealth.com", "wv.finity.in"],
+    allowUrls:["app.mywaywealth.com","app.finity.in","wv.mywaywealth.com", "wv.finity.in"],
     tracesSampleRate: 1.0,
   });
 }
