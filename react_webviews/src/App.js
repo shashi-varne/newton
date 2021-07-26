@@ -20,13 +20,12 @@ import DesktopLayout from './desktopLayout';
 
 
 import Feature from './Feature';
-import NotFound from './common/components/NotFound';
 import Tooltip from 'common/ui/Tooltip';
 import {getConfig} from './utils/functions';
 import ComponentTest from './ComponentTest';
 import 'common/theme/Style.scss';
 import { storageService } from './utils/validators';
-import LoginContainer from './login_and_registration/pages/Login/LoginContainer';
+import LoginContainer from './login_and_registration/components/LoginContainer';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,

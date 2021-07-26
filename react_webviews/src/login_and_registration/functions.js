@@ -714,7 +714,6 @@ export function redirectAfterLogin(data, user, navigateFunc) {
     user.kyc_registration_v2 === "incomplete" &&
     !user.active_investment
   ) {
-    // TODO: Check with Alekhya
     navigate("/landing", { state: { goBack: "/" } });
   } else if (
     kyc &&
@@ -725,7 +724,6 @@ export function redirectAfterLogin(data, user, navigateFunc) {
   } else if (user.active_investment) {
     navigate("/landing", { state: { goBack: "/landing" } });
   } else {
-    // TODO: Check with Alekhya
     navigate("/landing", { state: { goBack: "/" } });
   }
 }
