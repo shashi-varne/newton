@@ -26,6 +26,7 @@ import { isNewIframeDesktopLayout } from '../../utils/functions';
 let start_time = '';
 const config = getConfig();
 const iframe = config.isIframe;
+const isMobileDevice = config.isMobileDevice;
 const isMoneycontrol = config.code === "moneycontrol";
 const isBfdl = config.code === "bfdlmobile";
 const newIframeDesktopLayout = isNewIframeDesktopLayout();
@@ -156,7 +157,7 @@ export function commonRender(props_base) {
                 {/* Header Block */}
                 {(!this.props.noHeader && !getConfig().hide_header) && this.props.showLoader !== true
                 && !this.props.showLoaderModal && !this.props.loaderWithData && 
-                (isMoneycontrol && iframe ? 
+                (isMoneycontrol && iframe && !isMobileDevice ? 
                     <IframeHeader
                         disableBack={this.props.disableBack}
                         type={getConfig().productName}

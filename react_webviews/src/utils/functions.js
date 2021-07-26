@@ -418,7 +418,7 @@ export function manageDialog(id, display, aboutScroll) {
 export function setHeights(data) {
   const newIframeDesktopLayout = isNewIframeDesktopLayout();
   const config = getConfig();
-  const headerClass = config.isIframe && config.code === "moneycontrol" && config.isMobileDevice ? 'IframeHeader' : 'Header';
+  const headerClass = 'Header';
   const containerClass = newIframeDesktopLayout ? 'iframeContainerWrapper' : config.isIframe && config.code === "bfdlmobile" ? 'bfdlContainerWrapper' : 'ContainerWrapper'
   let head =
     document.getElementsByClassName(headerClass) && document.getElementsByClassName(headerClass)[0]
