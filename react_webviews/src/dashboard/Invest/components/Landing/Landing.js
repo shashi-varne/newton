@@ -16,15 +16,13 @@ import isEmpty from "lodash/isEmpty";
 import { Imgc } from "../../../../common/ui/Imgc";
 
 const fromLoginStates = ["/login", "/register", "/forgot-password", "/mobile/verify", "/logout"]
-const config = getConfig();
-const isMobileDevice = config.isMobileDevice;
 class Landing extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
       kycStatusLoader: false,
-      productName: config.productName,
+      productName: getConfig().productName,
       screenName: "invest_landing",
       investCardsData: {},
       investSections: [],
@@ -34,7 +32,7 @@ class Landing extends Component {
       openKycPremiumLanding: false,
       openBottomSheet: false,
       bottom_sheet_dialog_data: [],
-      isWeb: config.Web,
+      isWeb: getConfig().Web,
       stateParams: props.location.state || {},
     };
     this.initialize = initialize.bind(this);
@@ -122,6 +120,7 @@ class Landing extends Component {
       popularCards,
       financialTools,
     } = investCardsData;
+    const config = getConfig();
     return (
       <Container
         skelton={this.state.show_loader}
@@ -131,12 +130,12 @@ class Landing extends Component {
         showLoader={this.state.showPageLoader}
         noBackIcon={!config.isSdk || config.isIframe}
         background={
-          isMobileDevice &&
+          config.isMobileDevice &&
           fromLoginStates.includes(stateParams.fromState) &&
           "invest-landing-background"
         }
         classHeader={
-          isMobileDevice &&
+          config.isMobileDevice &&
           fromLoginStates.includes(stateParams.fromState) &&
           (this.state.headerStyle
             ? "invest-landing-partner-header"

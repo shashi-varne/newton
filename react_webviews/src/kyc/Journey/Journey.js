@@ -18,9 +18,8 @@ import "./Journey.scss"
 import { nativeCallback } from '../../utils/native_callback'
 import { getBasePath, navigate as navigateFunc, popupWindowCenter, isNewIframeDesktopLayout } from '../../utils/functions'
 
-
-const newIframeDesktopLayout = isNewIframeDesktopLayout();
 const Journey = (props) => {
+  const newIframeDesktopLayout = isNewIframeDesktopLayout();
   const navigate = navigateFunc.bind(props)
   const urlParams = getUrlParams(props?.location?.search)
   const stateParams = props?.location?.state;

@@ -25,9 +25,9 @@ import { flowName } from '../constants';
 
 const date = new Date();
 const month = date.getMonth();
-const riskEnabledFunnel = getConfig().riskEnabledFunnels;
 
 const InvestAmount = (props) => {
+  const riskEnabledFunnel = getConfig().riskEnabledFunnels;
   const {
     funnelData,
     funnelGoalData,

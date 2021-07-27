@@ -505,7 +505,7 @@ export const getPartnerData = (productType, partnerCode) => {
     ...commonCardsConfig,
     ...basePartnerConfig[productType],
   };
-  const partnerData = partnerConfigs[partnerCode] || partnerConfigs["fisdom"];
+  const partnerData = partnerConfigs[partnerCode] || partnerConfigs[productType] || partnerConfigs["fisdom"];
   partnerConfigToReturn = {
     message: getPartnerMessage(partnerData.code.toUpperCase()),
     ...partnerConfigToReturn, // taking the base config of the productType(fisdom/finity)

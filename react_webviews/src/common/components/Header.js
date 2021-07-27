@@ -25,13 +25,6 @@ const headerIconMapper = {
   search: search,
   restart: restart
 }
-const config = getConfig();
-const isMobileDevice = config.isMobileDevice;
-const partnerLogo = config.logo;
-const isWeb = config.Web;
-const backgroundColor = !isWeb ? config.uiElements?.header?.backgroundColor : '';
-const backButtonColor = (!isWeb || config.isIframe) ? config.styles?.backButtonColor : '';
-const notificationsColor = !isWeb || config.isSdk ? config?.styles.notificationsColor : '';
 const Header = ({ classes, title, count, total, current, goBack, 
   edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
   inPageTitle, force_hide_inpage_title, topIcon, handleTopIcon, 
@@ -40,7 +33,14 @@ const Header = ({ classes, title, count, total, current, goBack,
     const [referDialog, setReferDialog] = useState(false);
     const [mobileViewDrawer, setMobileViewDrawer] = useState(false);
     const campaign = storageService().getObject("campaign");
-    const moneycontrolHeader = config.isMobileDevice && config.code === 'moneycontrol';
+    const config = getConfig();
+    const isMobileDevice = config.isMobileDevice;
+    const partnerLogo = config.logo;
+    const isWeb = config.Web;
+    const backgroundColor = !isWeb ? config.uiElements?.header?.backgroundColor : '';
+    const backButtonColor = (!isWeb || config.isIframe) ? config.styles?.backButtonColor : '';
+    const notificationsColor = !isWeb || config.isSdk ? config?.styles.notificationsColor : '';
+    const moneycontrolHeader = isMobileDevice && config.code === 'moneycontrol';
 
     const handleMobileViewDrawer = () => {
       setMobileViewDrawer(!mobileViewDrawer);

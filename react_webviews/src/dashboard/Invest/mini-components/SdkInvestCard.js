@@ -5,7 +5,6 @@ import Button from '@material-ui/core/Button';
 import {SkeltonRect} from '../../../common/ui/Skelton';
 import DotLoader from 'common/ui/DotDotLoaderNew';
 import { getConfig } from '../../../utils/functions';
-const productName = getConfig().productName;
 const SdkInvestCard = ({
   title,
   subtitle,
@@ -23,6 +22,7 @@ const SdkInvestCard = ({
   dot,
   dotLoader
 }) => {
+  const productName = getConfig().productName;
   let titleBg;
   if (titleImg) {
     titleBg = require(`assets/${productName}/${titleImg}`);

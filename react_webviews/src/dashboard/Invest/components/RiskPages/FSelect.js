@@ -3,7 +3,6 @@ import './FSelect.scss';
 import { findIndex, isFunction } from 'lodash';
 import { getConfig } from '../../../../utils/functions';
 
-const productName = getConfig().productName;
 const FSelect = ({
   preselectFirst,
   options,
@@ -65,6 +64,7 @@ const FSelect = ({
 
 const RenderOption = (props) => {
   const { opt, idx, selected, onClick, renderItem } = props;
+  const productName = getConfig().productName;
 
   if (isFunction(renderItem) && renderItem(opt)) {
     return (

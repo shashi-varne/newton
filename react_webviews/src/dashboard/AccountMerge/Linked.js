@@ -6,8 +6,8 @@ import { storageService } from "../../utils/validators";
 import Container from "../common/Container";
 import "./Linked.scss";
 
-const config = getConfig();
 const AccountLinked = (props) => {
+  const config = getConfig();
   const navigate = navigateFunc.bind(props);
   const productName = config.productName;
   const handleClick = () => {

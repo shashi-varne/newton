@@ -1,8 +1,8 @@
 import React from "react";
 import {getConfig, isNewIframeDesktopLayout } from "../../utils/functions";
 
-const hideImage = isNewIframeDesktopLayout()
 const Complete = ({ navigateToReports, dl_flow, show_note }) => {
+  const hideImage = isNewIframeDesktopLayout()
   const productName = getConfig().productName;
 
   return (

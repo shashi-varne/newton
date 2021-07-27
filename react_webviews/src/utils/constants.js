@@ -1,7 +1,8 @@
 import { getConfig } from 'utils/functions';
 
-const config = getConfig();
-export const themeConfig = {
+export const themeConfig =  () => {
+  const config = getConfig();
+  return {
     palette: {
         primary: {
             // light: will be calculated from palette.primary.main,
@@ -132,8 +133,8 @@ export const themeConfig = {
             }
         }
     }
+  }
 }
-
 
 export function bankAccountTypeOptions(isNri) {
     var account_types = [];

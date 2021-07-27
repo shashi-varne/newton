@@ -8,8 +8,8 @@ import { getBase64, getConfig, navigate as navigateFunc } from "../../utils/func
 import { upload } from "./MyAccountFunctions";
 import { nativeCallback } from "../../utils/native_callback";
 
-const config = getConfig();
 const BlankMandateUpload = (props) => {
+  const config = getConfig();
   const navigate = navigateFunc.bind(props)
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);

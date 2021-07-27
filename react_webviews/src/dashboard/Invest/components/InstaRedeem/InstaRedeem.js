@@ -18,9 +18,9 @@ import useFunnelDataHook from "../../common/funnelDataHook";
 import { nativeCallback } from "../../../../utils/native_callback";
 import { Imgc } from "../../../../common/ui/Imgc";
 
-const { partner_code, productName } = getConfig();
 
 const InstaRedeem = (props) => {
+  const { code: partner_code, productName } = getConfig();
   const navigate = navigateFunc.bind(props);
   const { benefits, faqData } = investRedeemData;
 
