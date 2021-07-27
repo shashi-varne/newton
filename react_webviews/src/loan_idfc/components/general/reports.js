@@ -19,6 +19,7 @@ class ReportDetails extends Component {
       personal_info: {},
       application_info: {},
       vendor_info: {},
+      screen_name: 'loan_reports'
     };
 
     this.initialize = initialize.bind(this);

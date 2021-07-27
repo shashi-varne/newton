@@ -130,9 +130,9 @@ export async function initialize() {
     this.getUserStatus();
   }
 
-  if (this.state.screen_name === "loan_eligible") {
-    this.getUserStatus();
-  }
+  // if (this.state.screen_name === "loan_eligible") {
+  //   this.getUserStatus();
+  // }
 
   if (this.state.screen_name === "main_landing_screen" && provider === "idfc") {
     this.getUserStatus();
@@ -314,18 +314,18 @@ export async function getOrCreate(params) {
       });
     }
 
+    let { screen_name } = this.state;
+
+    let vendorInfoScreens = ['journey_screen', 'perfios_state', 'eligible_loan', 'loan_eligible', 'additional_details', 'final_loan', 'loan_reports', 'document_list']
+
     let body = {
       create_new: (params && params.create_new) || false,
       reset_application: (params && params.reset) || false,
-      application_info: true,
-      personal_info: true,
-      professional_info: true,
-      address_info: true,
-      bank_info: true,
-      document_info: true,
-      vendor_info: true,
-      bt_info: true,
-      perfios_info: true,
+      personal_info: screen_name === 'basic_details' || screen_name === 'personal_details_screen' || screen_name === 'final_loan',
+      professional_info: screen_name === 'professional_details_screen',
+      address_info: screen_name === 'address_details' || screen_name === 'additional_details',
+      vendor_info: vendorInfoScreens.includes(screen_name),
+      perfios_info: screen_name === 'perfios_state',
     };
 
     let lead = {};

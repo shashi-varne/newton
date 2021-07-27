@@ -8,6 +8,9 @@ const journeyMapper2 = {
   basic_details_uploaded: {
     index: "1",
   },
+  pan: {
+    index: "1",
+  },
   ckyc: {
     index: "1",
   },
