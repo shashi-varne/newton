@@ -15,8 +15,8 @@ import internalStorage from '../common/InternalStorage';
 import isEmpty from 'lodash/isEmpty';
 
 const config = getConfig();
-const showPageDialog = isNewIframeDesktopLayout();
 const Home = (props) => {
+  const showPageDialog = isNewIframeDesktopLayout();
   const navigate = navigateFunc.bind(props);
   const genericErrorMessage = "Something Went wrong!";
   const [showLoader, setShowLoader] = useState(false);

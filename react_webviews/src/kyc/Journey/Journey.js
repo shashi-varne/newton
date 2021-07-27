@@ -21,8 +21,8 @@ import { getBasePath, navigate as navigateFunc, popupWindowCenter, isNewIframeDe
 const config = getConfig();
 const isMobileDevice = config.isMobileDevice;
 const iframe = config.isIframe;
-const newIframeDesktopLayout = isNewIframeDesktopLayout();
 const Journey = (props) => {
+  const newIframeDesktopLayout = isNewIframeDesktopLayout();
   const navigate = navigateFunc.bind(props)
   const urlParams = getUrlParams(props?.location?.search)
   const stateParams = props?.location?.state;
