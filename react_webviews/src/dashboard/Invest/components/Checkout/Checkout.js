@@ -61,11 +61,9 @@ class Checkout extends Component {
     const {isin} = getUrlParams();
     let fundDataIsin;
     if(isin) {
-      this.setState({show_loader: true});
       fundDataIsin = await this.getFundInfoDetails(isin);
       storageService().setObject("diystore_fundInfo",fundDataIsin);
       storageService().setObject(CART, []);
-      this.setState({show_loader: false});
     }
     if (type === "nfo") {
       let fund = storageService().getObject("nfo_detail_fund");
@@ -121,8 +119,15 @@ class Checkout extends Component {
   };
 
   getFundInfoDetails = async (isin) => {
-    const result = await getdiyGraphDataWithISIN(isin);
-    return result.fundinfo;
+    try {
+      this.setState({show_loader: true});
+      const result = await getdiyGraphDataWithISIN(isin);
+      return result.fundinfo;
+    } catch(err) {
+      toast(err);
+    } finally {
+      this.setState({show_loader: false});
+    }
   }
 
   getPurchaseLimit = async (isins) => {
