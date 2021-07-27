@@ -215,10 +215,10 @@ class GoldRegister extends Component {
     });
 
     let options = {
-      mobile_number: this.state.mobile_no,
+      mobile: this.state.mobile_no,
     }
     try {
-      const res = await Api.post('/api/gold/user/verify/mobilenumber', options);
+      const res = await Api.post('/api/gold/contact/trigger/otp', options);
 
       if (res.pfwresponse.status_code === 200) {
         this.setState({
