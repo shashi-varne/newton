@@ -31,8 +31,12 @@ export const checkAfterRedirection = (props, fromState, toState) => {
 
 export const backButtonHandler = (props, fromState, currentState, params) => {
   const navigate = navigateFunc.bind(props);
-  
-  const landingRedirectPaths = ["/sip/payment/callback", "/kyc/report", "/notification", "/diy/fundlist/direct",
+  const pathName = props.location.pathname;
+  if(pathName === '/prepare') {
+    nativeCallback({ action: "exit_web" });
+    return;
+  }
+  const landingRedirectPaths = ["/mf", "/sip/payment/callback", "/kyc/report", "/notification", "/diy/fundlist/direct",
     "/diy/fundinfo/direct", "/diy/invest", "/invest/doityourself/direct", "/risk/recommendations/error"];
 
   const fromStateArray = ['/payment/callback', '/nps/payment/callback', '/sip/payment/callback', '/invest', '/reports',
