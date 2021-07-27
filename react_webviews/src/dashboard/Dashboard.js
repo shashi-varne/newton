@@ -40,8 +40,9 @@ import ConfirmSetPin from "./MyAccount/2fa/ConfirmSetPin";
 import confirmResetPin from "./MyAccount/2fa/ConfirmResetPin";
 import VerifyPinOtp from "./MyAccount/2fa/VerifyForgotOtp";
 import Referral from "../login_and_registration/pages/Referral/Referral.js";
-import SecondaryVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryVerification";
-import SecondaryOtpVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryOtpVerification";
+import SecondaryVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryVerification"
+import SecondaryOtpVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryOtpVerification"
+import StatusCallback from "../kyc/Native/StatusCallback";
 
 const Home = (props) => {
   const { url } = props.match;
@@ -130,6 +131,11 @@ const Home = (props) => {
           exact
           path={`${url}digilocker/callback`}
           component={DigilockerCallback}
+        />
+        <Route
+          exact
+          path={`${url}status/callback/native`}
+          component={StatusCallback}
         />
         <Route exact path={`${url}account/merge/:pan_number`} component={AccountMerge} />
         <Route exact path={`${url}account/merge/otp/:pan_number`} component={AccountMergeOtp} />

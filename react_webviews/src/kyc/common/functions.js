@@ -1,5 +1,6 @@
 import { calculateAge, isValidDate, validateEmail } from 'utils/validators'
-import { isTradingEnabled } from '../../utils/functions'
+import { isTradingEnabled, getConfig } from '../../utils/functions'
+import { nativeCallback, openPdfCall } from '../../utils/native_callback'
 import { isEmpty, storageService } from '../../utils/validators'
 import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS, GENDER_OPTIONS } from '../constants'
 
@@ -346,4 +347,54 @@ export const skipBankDetails = () => {
 export const getGenderValue = (gender="", key="value") => {
   const generData = GENDER_OPTIONS.find(data => data.value === gender) || {};
   return generData[key] || "";
+}
+
+export function openInBrowser(url, type) {
+  if(!url) {
+      return;
+  }
+
+  const config = getConfig();
+
+  // add new key value pair with same structure
+  const mapper = {
+    'download_kra_form' : {
+        header_title: 'Download Forms',
+        file_name: 'KRA_Form.pdf'
+    }
+  }
+
+  const mapper_data = mapper[type];
+
+  if(config.Android && !config.isWebOrSdk) {
+    nativeCallback({
+      action: 'download_on_device',
+      message: {
+        url: url || '',
+        file_name: mapper_data.file_name
+      }
+    });
+  } else {
+    const data = {
+        url: url,
+        header_title: mapper_data.header_title,
+        icon: 'close'
+    };
+
+    openPdfCall(data);
+  }
+};
+
+export function openPdf(pdfLink, pdfType){
+  if (getConfig().iOS){
+      nativeCallback({
+        action: 'open_inapp_tab',
+        message: {
+            url: pdfLink  || '',
+            back_url: ''
+        }
+      });
+  } else {
+    openInBrowser(pdfLink, pdfType);
+  }
 }

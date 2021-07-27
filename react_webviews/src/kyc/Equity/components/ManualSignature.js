@@ -10,10 +10,13 @@ import { companyDetails } from "../../constants";
 import { getKRAForm } from "../../common/api"
 import "./commonStyles.scss";
 import { getConfig, navigate as navigateFunc } from '../../../utils/functions';
+import Toast from '../../../common/ui/Toast';
+import { openPdf } from '../../common/functions';
 
 const config = getConfig();
 const ManualSignature = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
   const {kyc, isLoading} = useUserKycHook();
   const navigate = navigateFunc.bind(props)
 
@@ -70,14 +73,16 @@ const ManualSignature = (props) => {
       const params = { "kyc_product_type": "equity" }
       const result = await getKRAForm(params);
       const formUrl = result?.filled_form_url;
-      const link = document.createElement("a");
-      link.href = formUrl;
-      link.setAttribute('download', "download");
-      link.click();
+      if (config.isSdk) {
+        setShowLoader(true);
+      } 
+      openPdf(formUrl, "download_kra_form");
     } catch (err) {
       console.log(err);
+      Toast("Something went wrong");
     } finally {
       setIsApiRunning(false);
+      setShowLoader(false);
     }
   }
 
@@ -120,6 +125,7 @@ const ManualSignature = (props) => {
       data-aid='kyc-manual-signature-screen'
       skelton={isLoading}
       disable={isApiRunning}
+      showLoader={showLoader}
     >
       <section id="manual-signature" data-aid='manual-signature'>
         <div className="generic-page-subtitle manual-signature-subtile" data-aid='generic-page-subtitle'>

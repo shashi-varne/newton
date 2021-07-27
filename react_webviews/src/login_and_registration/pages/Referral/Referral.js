@@ -4,6 +4,7 @@ import WVInPageSubtitle from "../../../common/ui/InPageHeader/WVInPageSubtitle"
 import Input from "common/ui/Input";
 import { initialize } from "../../functions";
 import { getConfig } from "utils/functions";
+import { nativeCallback } from "../../../utils/native_callback";
 
 
 class Referral extends Component {
@@ -45,12 +46,28 @@ class Referral extends Component {
     this.setState({ form_data: form_data });
   };
 
+  sendEvents = (userAction) => {
+    let properties = {
+      "user_action": userAction,
+      "screen_name": "referral_code",
+    }
+    let eventObj = {
+      "event_name": 'onboarding',
+      "properties": properties,
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
   render() {
 
     const { form_data, isPromoApiRunning } = this.state;
 
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         fullWidthButton={true}
         twoButtonVertical={true}
         dualbuttonwithouticon={true}
@@ -63,11 +80,14 @@ class Referral extends Component {
         button2Props={{
           variant: "outlined",
           title: "SKIP",
-          onClick: () => this.navigate("/secondary-verification", {
-            state: {
-              communicationType: this.state.communicationType === "mobile" ? "email" : "mobile",
-            }
-          }),
+          onClick: () => {
+            this.sendEvents("skip");
+            this.navigate("/secondary-verification", {
+              state: {
+                communicationType: this.state.communicationType === "mobile" ? "email" : "mobile",
+              }
+            })
+          },
           showLoader: false,
         }}
         showLoader={this.state.showLoader}
