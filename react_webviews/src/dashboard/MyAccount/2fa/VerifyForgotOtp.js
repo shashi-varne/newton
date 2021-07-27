@@ -1,9 +1,9 @@
 import "./commonStyles.scss";
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Container from "../../common/Container";
 import Toast from "../../../common/ui/Toast";
 import OtpContainer from "../../../common/components/OtpContainer";
-
+import { nativeCallback } from "../../../utils/native_callback";
 import { navigate as navigateFunc } from "../../../utils/functions";
 import { otpApiCall } from '../../../2fa/common/ApiCalls';
 
@@ -55,9 +55,27 @@ const VerifyForgotOtp = (props) => {
         }
     }
 
+    const sendEvents = (user_action) => {
+        let eventObj = {
+            "event_name": '2fa',
+            "properties": {
+                "user_action": user_action,
+                "screen_name": 'OTP_verification',
+                "verification_type": authType,
+            }
+        };
+
+        if (user_action === 'just_set_events') {
+            return eventObj;
+        } else {
+            nativeCallback({ events: eventObj });
+        }
+    };
+
 
     return (
         <Container
+            events={sendEvents("just_set_events")}
             title={`Enter OTP to verify your ${authType === "email" ? "email" : "number"}`}
             buttonTitle="VERIFY"
             showLoader={isApiRunning}

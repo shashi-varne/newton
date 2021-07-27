@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ForgotMPin from '../../../2fa/components/ForgotMPin';
 import Container from '../../common/Container';
-
+import { nativeCallback } from "../../../utils/native_callback";
 import { navigate as navigateFunc } from "../../../utils/functions";
 import { forgotPinOtpTrigger, obscuredAuthGetter } from '../../../2fa/common/ApiCalls';
 
@@ -39,6 +39,7 @@ const ForgotPin = (props) => {
       setIsApiRunning("button");
       const response = await forgotPinOtpTrigger(pan ? { pan } : '');
       setIsApiRunning(false);
+      sendEvents("next");
       navigate('verify-otp', {
         params: response
       });
@@ -48,12 +49,29 @@ const ForgotPin = (props) => {
     } finally {
       setIsApiRunning(false);
     }
-  }
+  };
+
+  const sendEvents = (user_action) => {
+    let eventObj = {
+      "event_name": '2fa',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'forgot_pin',
+        "correct_details_entered": panError ? "no" : "yes",
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
 
 
   return (
     <Container
-      data-aid='myaccount-forgot-pin'
+      events={sendEvents("just_set_events")}
       showLoader={isApiRunning}
       skelton={isFetchApiRunning}
       handleClick={handleClick}

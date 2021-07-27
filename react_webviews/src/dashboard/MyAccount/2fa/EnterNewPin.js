@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { verifyPin } from '../../../2fa/common/ApiCalls';
 import EnterMPin from "../../../2fa/components/EnterMPin";
 import Container from "../../common/Container";
+import { nativeCallback } from "../../../utils/native_callback";
 import { navigate as navigateFunc } from "../../../utils/functions";
 
 const EnterNewPin = (props) => {
@@ -33,6 +34,7 @@ const EnterNewPin = (props) => {
       else {
         params = { reset_url: routeParams.reset_url }
       }
+      sendEvents("next");
       navigate("confirm-pin", {
         params: params
       })
@@ -44,10 +46,26 @@ const EnterNewPin = (props) => {
     }
   };
 
+  const sendEvents = (user_action) => {
+    let eventObj = {
+      "event_name": '2fa',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'enter_current_pin',
+        "enable_biometrics": "no",
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
 
   return (
     <Container
-      data-aid='my-account-screen'
+      events={sendEvents("just_set_events")}
       showLoader={isApiRunning}
       handleClick={handleClick}
       buttonTitle="Continue"

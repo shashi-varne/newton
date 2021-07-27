@@ -2,6 +2,7 @@ import "./commonStyles.scss";
 import React, { useState, useEffect } from 'react';
 import Container from "../../common/Container";
 import EnterMPin from "../../../2fa/components/EnterMPin";
+import { nativeCallback } from "../../../utils/native_callback";
 import { twofaPostApi, modifyPin, setPin } from '../../../2fa/common/ApiCalls';
 
 import { navigate as navigateFunc } from "../../../utils/functions";
@@ -23,7 +24,7 @@ const ConfirmNewPin = (props) => {
 
   const handleClick = async () => {
     try {
-      setIsApiRunning(true);
+      setIsApiRunning("button");
       if (newMpin) {
         if (newMpin !== mpin) {
           throw "PIN doesn't match, Please try again";
@@ -36,6 +37,7 @@ const ConfirmNewPin = (props) => {
         await twofaPostApi(routeParams?.reset_url, { new_mpin: mpin });
       }
       setIsApiRunning(false);
+      sendEvents("next");
       navigate('security-settings');
     } catch (err) {
       console.log(err);
@@ -51,9 +53,28 @@ const ConfirmNewPin = (props) => {
     setPinError('');
   }
 
+  const sendEvents = (user_action) => {
+    let eventObj = {
+      "event_name": '2fa',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'confirm_fisdom_pin',
+        "enable_biometrics": "no",
+        "journey": routeParams.set_flow ? "set_fisdom_pin" : "reset_fisdom_pin",
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
-      skelton={isApiRunning}
+      events={sendEvents("just_set_events")}
+      showLoader={isApiRunning}
       handleClick={handleClick}
       buttonTitle="Continue"
       disable={mpin?.length !== 4}
