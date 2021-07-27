@@ -6,8 +6,7 @@ import { verifyPin } from '../../../2fa/common/ApiCalls';
 import { navigate as navigateFunc } from "../../../utils/functions";
 import { nativeCallback } from "../../../utils/native_callback";
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
-import WVPopUpDialog from "../../../common/ui/PopUpDialog/WVPopUpDialog"
-import { storageService } from "../../../utils/validators";
+import WVPopUpDialog from "../../../common/ui/PopUpDialog/WVPopUpDialog";
 
 const SetPin = (props) => {
   const { persistRouteParams } = usePersistRouteParams();
@@ -19,7 +18,7 @@ const SetPin = (props) => {
   const [kycFlow, setKycFlow] = useState(false);
 
   useEffect(() => {
-    if (storageService().get("kyc_completed_set_pin")) {
+    if (props.match.params?.coming_from === "kyc-complete") {
       setKycFlow(true)
     }
   }, []);
@@ -33,7 +32,8 @@ const SetPin = (props) => {
       });
       sendEvents("next");
       persistRouteParams({ new_mpin: mpin, set_flow: true });
-      navigate('confirm-pin');
+      let path = kycFlow ? "/confirm-pin/kyc-complete" : "confirm-pin"
+      navigate(path);
     } catch (err) {
       console.log(err);
       setMpinError(err);

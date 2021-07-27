@@ -15,10 +15,14 @@ const ConfirmNewPin = (props) => {
   const [pinError, setPinError] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [newMpin, setNewMpin] = useState(false);
+  const [kycFlow, setKycFlow] = useState(false);
 
   const navigate = navigateFunc.bind(props);
 
   useEffect(() => {
+    if (props.match.params?.coming_from === "kyc-complete") {
+      setKycFlow(true)
+    }
     if (routeParams.new_mpin) {
       setNewMpin(routeParams.new_mpin)
     }
@@ -41,13 +45,8 @@ const ConfirmNewPin = (props) => {
       setIsApiRunning(false);
       sendEvents("next");
       clearRouteParams();
-      if (storageService().get("kyc_completed_set_pin")) {
-        storageService().remove("kyc_completed_set_pin")
-        navigate('/invest' , {
-          state: {
-            fisdom_pin_set: true
-          }
-        });
+      if (kycFlow) {
+        navigate('/invest')
       } else navigate('/security-settings');
     } catch (err) {
       console.log(err);
@@ -69,7 +68,7 @@ const ConfirmNewPin = (props) => {
       "properties": {
         "user_action": user_action,
         "screen_name": 'confirm_fisdom_pin',
-        
+
         "journey": routeParams.set_flow ? "set_fisdom_pin" : "reset_fisdom_pin",
       }
     };

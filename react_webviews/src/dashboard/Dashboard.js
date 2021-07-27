@@ -154,9 +154,11 @@ const Home = (props) => {
         <Route exact path={`${url}reset-pin-verify`} component={VerifyPin} />
         <Route exact path={`${url}reset-pin-confirm`} component={VerifyPin} />
 
-        <Route exact path={`${url}set-fisdom-pin`} component={SetPin} />
+        <Route path={`${url}set-fisdom-pin/:coming_from`} component={SetPin} />
+        <Route path={`${url}set-fisdom-pin`} component={SetPin} />
         <Route exact path={`${url}new-pin`} component={EnterNewPin} />
-        <Route exact path={`${url}confirm-pin`} component={ConfirmNewPin} />
+        <Route path={`${url}confirm-pin/:coming_from`} component={ConfirmNewPin} />
+        <Route path={`${url}confirm-pin`} component={ConfirmNewPin} />
         <Route exact path={`${url}verify-otp`} component={VerifyPinOtp} />
 
 

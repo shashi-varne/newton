@@ -76,8 +76,7 @@ class DigiStatus extends Component {
       nativeCallback({ action: 'exit_web' });
     } else {
       if (this.state.set2faPin) {
-        storageService().set("kyc_completed_set_pin", true)
-        this.navigate("/set-fisdom-pin");
+        this.navigate("/set-fisdom-pin/kyc-complete");
       } else {
         this.navigate("/invest");
       }
