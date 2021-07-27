@@ -93,8 +93,12 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
 
   const diyDirectEntryArr = ["/diy/fundlist/direct", "/diy/fundinfo/direct", "/diy/invest", "/invest/doityourself/direct"];
 
-  if ((currentState === "/kyc-esign/nsdl" && params?.status === "success") ||
-    currentState.includes(diyDirectEntryArr)) {
+  const verifyCurrentStateWithDirect = () => {
+    const current = currentState.split("/:")[0];
+    return diyDirectEntryArr.includes(current);
+  }
+
+  if ((currentState === "/kyc-esign/nsdl" && params?.status === "success") || verifyCurrentStateWithDirect()) {
     if (config?.code === 'moneycontrol') {
       navigate("/");
       return true;
