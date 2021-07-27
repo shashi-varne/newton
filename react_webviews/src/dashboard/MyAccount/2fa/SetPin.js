@@ -5,8 +5,10 @@ import EnterMPin from "../../../2fa/components/EnterMPin";
 import { verifyPin } from '../../../2fa/common/ApiCalls';
 import { navigate as navigateFunc } from "../../../utils/functions";
 import { nativeCallback } from "../../../utils/native_callback";
+import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 
 const SetPin = (props) => {
+  const { routeParams, persistRouteParams } = usePersistRouteParams();
   const navigate = navigateFunc.bind(props);
   const [mpinError, setMpinError] = useState(false);
   const [mpin, setMpin] = useState('');
@@ -21,9 +23,8 @@ const SetPin = (props) => {
         mpin: mpin
       });
       sendEvents("next");
-      navigate('confirm-pin', {
-        params: { new_mpin: mpin, set_flow: true }
-      });
+      persistRouteParams({...routeParams, new_mpin: mpin, set_flow: true });
+      navigate('confirm-pin');
     } catch (err) {
       console.log(err);
       setMpinError(err);

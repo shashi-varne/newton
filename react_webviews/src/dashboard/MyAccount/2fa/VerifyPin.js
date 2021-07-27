@@ -7,8 +7,10 @@ import { Imgc } from "../../../common/ui/Imgc";
 import { nativeCallback } from "../../../utils/native_callback";
 import { navigate as navigateFunc } from "../../../utils/functions";
 import { verifyPin } from '../../../2fa/common/ApiCalls';
+import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 
 const VerifyPin = (props) => {
+  const { routeParams, persistRouteParams } = usePersistRouteParams();
   const navigate = navigateFunc.bind(props);
   const [mpinError, setMpinError] = useState(false);
   const [mpin, setMpin] = useState('');
@@ -25,9 +27,8 @@ const VerifyPin = (props) => {
       setIsApiRunning(true);
       await verifyPin({ mpin });
       sendEvents("next");
-      navigate('new-pin', {
-        params: { reset_flow: true, old_mpin: mpin }
-      });
+      persistRouteParams({ ...routeParams, reset_flow: true, old_mpin: mpin })
+      navigate('new-pin');
     } catch (err) {
       console.log(err);
       setMpinError(err);

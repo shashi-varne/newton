@@ -4,11 +4,12 @@ import Container from "../../common/Container";
 import EnterMPin from "../../../2fa/components/EnterMPin";
 import { nativeCallback } from "../../../utils/native_callback";
 import { twofaPostApi, modifyPin, setPin } from '../../../2fa/common/ApiCalls';
+import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 
 import { navigate as navigateFunc } from "../../../utils/functions";
 
 const ConfirmNewPin = (props) => {
-  const routeParams = props.location?.params || {};
+  const { routeParams, clearRouteParams } = usePersistRouteParams();
   const [mpin, setMpin] = useState('');
   const [pinError, setPinError] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -38,6 +39,7 @@ const ConfirmNewPin = (props) => {
       }
       setIsApiRunning(false);
       sendEvents("next");
+      clearRouteParams();
       navigate('security-settings');
     } catch (err) {
       console.log(err);

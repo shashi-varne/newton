@@ -5,9 +5,10 @@ import EnterMPin from "../../../2fa/components/EnterMPin";
 import Container from "../../common/Container";
 import { nativeCallback } from "../../../utils/native_callback";
 import { navigate as navigateFunc } from "../../../utils/functions";
+import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 
 const EnterNewPin = (props) => {
-  const routeParams = props.location?.params || {};
+  const { routeParams, persistRouteParams } = usePersistRouteParams();
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -35,9 +36,8 @@ const EnterNewPin = (props) => {
         params = { reset_url: routeParams.reset_url }
       }
       sendEvents("next");
-      navigate("confirm-pin", {
-        params: params
-      })
+      persistRouteParams({ ...routeParams, ...params})
+      navigate("confirm-pin")
     } catch (err) {
       console.log(err);
       setPinError(err);

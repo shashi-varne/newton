@@ -4,6 +4,7 @@ import Container from '../../common/Container';
 import { nativeCallback } from "../../../utils/native_callback";
 import { navigate as navigateFunc } from "../../../utils/functions";
 import { forgotPinOtpTrigger, obscuredAuthGetter } from '../../../2fa/common/ApiCalls';
+import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 
 const ForgotPin = (props) => {
   const [authDetails, setAuthDetails] = useState({});
@@ -11,9 +12,11 @@ const ForgotPin = (props) => {
   const [panError, setPanError] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [isFetchApiRunning, setIsFetchApiRunning] = useState(false);
+  const { clearRouteParams, persistRouteParams } = usePersistRouteParams();
   const navigate = navigateFunc.bind(props);
 
   useEffect(() => {
+    clearRouteParams();
     fetchAuthDetails();
   }, []);
 
@@ -40,9 +43,8 @@ const ForgotPin = (props) => {
       const response = await forgotPinOtpTrigger(pan ? { pan } : '');
       setIsApiRunning(false);
       sendEvents("next");
-      navigate('verify-otp', {
-        params: response
-      });
+      persistRouteParams(response)
+      navigate('verify-otp');
     } catch (err) {
       console.log(err);
       setPanError(err);

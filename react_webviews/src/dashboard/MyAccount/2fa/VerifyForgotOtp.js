@@ -6,10 +6,10 @@ import OtpContainer from "../../../common/components/OtpContainer";
 import { nativeCallback } from "../../../utils/native_callback";
 import { navigate as navigateFunc } from "../../../utils/functions";
 import { twofaPostApi } from '../../../2fa/common/ApiCalls';
+import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 
 const VerifyForgotOtp = (props) => {
-    const routeParams = props.location.params || {};
-    // TODO: handle direct landing on this page gracefully => routeParams is empty
+    const { routeParams, persistRouteParams } = usePersistRouteParams();
     const authType = routeParams.obscured_auth_type === 'mobile' ? 'mobile' : 'email';
     const authValue = routeParams.obscured_auth;
     const otpData = {
@@ -32,9 +32,8 @@ const VerifyForgotOtp = (props) => {
             setIsApiRunning(true);
             const result = await twofaPostApi(routeParams?.verify_url, { otp });
             setIsApiRunning(false);
-            navigate('new-pin', {
-                params: { reset_url: result.reset_url }
-            });
+            persistRouteParams({reset_url: result.reset_url})
+            navigate('new-pin');
         } catch (err) {
             console.log(err);
             setOtpError(err);
