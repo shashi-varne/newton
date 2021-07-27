@@ -6,6 +6,7 @@ import WVButton from "../../../common/ui/Button/WVButton";
 import OtpContainer from '../../../common/components/OtpContainer';
 import LoginButton from '../../common/LoginButton';
 import { nativeCallback } from "../../../utils/native_callback";
+import { formatMobileNumber } from "../../../utils/validators"
 
 class VerifyLoginOtp extends Component {
   constructor(props) {
@@ -98,7 +99,7 @@ class VerifyLoginOtp extends Component {
       <OtpContainer
         title={`Enter OTP to verify your ${communicationType === "email" ? "email" : "number"}`}
         otpData={this.state.otpData}
-        showDotLoader={showDotLoader}
+        showDotLoader={isResendOtpApiRunning}
         handleOtp={this.handleOtp}
         resendOtp={this.handleResendOtp}
         isWrongOtp={isWrongOtp}
@@ -117,7 +118,7 @@ class VerifyLoginOtp extends Component {
         <WVButton
           color="secondary"
           classes={{ root: 'go-back-to-login' }}
-          onClick={goBackToLogin}
+          onClick={this.goBackToLogin}
         >
           Go Back to Login
         </WVButton>
