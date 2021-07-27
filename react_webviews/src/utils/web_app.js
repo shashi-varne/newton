@@ -18,7 +18,7 @@ export const checkBeforeRedirection = (fromState, toState) => {
   if (getConfig().isLoggedIn) {
     if (toState === "/login" && storageService().get("deeplink_url")) {
       window.location.href = decodeURIComponent(
-        storageService.get("deeplink_url")
+        storageService().get("deeplink_url")
       );
       return;
     } else {

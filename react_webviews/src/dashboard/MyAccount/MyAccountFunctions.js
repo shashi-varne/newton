@@ -128,7 +128,7 @@ export async function getMyAccount() {
         } else {
           pendingMandate = { show_status: false };
         }
-        storageService.setObject("pending_mandate", pendingMandate);
+        storageService().setObject("pending_mandate", pendingMandate);
       }
 
       let isReadyToInvestBase = isReadyToInvest();
