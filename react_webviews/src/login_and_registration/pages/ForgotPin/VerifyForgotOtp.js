@@ -1,12 +1,12 @@
 import '../Login/commonStyles.scss'; //TODO: figure out proper path for this
 import React, { useState } from 'react';
 import OtpContainer from '../../../common/components/OtpContainer';
-import WVButton from '../../../common/ui/Button/WVButton';
 import { navigate as navigateFunc } from '../../../utils/functions';
 import LoginButton from '../../common/LoginButton';
 import Toast from 'common/ui/Toast';
 import { twofaPostApi } from '../../../2fa/common/ApiCalls';
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
+import GoBackToLoginBtn from '../../common/GoBackToLoginBtn';
 
 const VerifyForgotOtp = (props) => {
   const { routeParams, persistRouteParams } = usePersistRouteParams();
@@ -80,13 +80,7 @@ const VerifyForgotOtp = (props) => {
       >
         CONTINUE
       </LoginButton>
-      <WVButton
-        color="secondary"
-        classes={{ root: 'go-back-to-login' }}
-        onClick={() => navigate('/login')}
-      >
-        Go Back to Login
-      </WVButton>
+      <GoBackToLoginBtn navigateFunc={navigate} />
     </OtpContainer>
   );
 }

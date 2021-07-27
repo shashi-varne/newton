@@ -1,16 +1,18 @@
 import '../Login/commonStyles.scss';
 import React, { useEffect, useState } from 'react';
 import ForgotMPin from '../../../2fa/components/ForgotMPin';
-import WVButton from '../../../common/ui/Button/WVButton';
 import { navigate as navigateFunc } from '../../../utils/functions';
 import LoginButton from '../../common/LoginButton';
 import { forgotPinOtpTrigger, obscuredAuthGetter } from '../../../2fa/common/ApiCalls';
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
+import GoBackToLoginBtn from '../../common/GoBackToLoginBtn';
+import SessionExpiredUi from '../../components/SessionExpiredUi';
 
 const ForgotPin = (props) => {
   const [authDetails, setAuthDetails] = useState({});
   const [pan, setPan] = useState('');
   const [panError, setPanError] = useState('');
+  const [fetchError, setFetchError] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [isFetchApiRunning, setIsFetchApiRunning] = useState(false);
   const { clearRouteParams, persistRouteParams } = usePersistRouteParams();
@@ -27,6 +29,7 @@ const ForgotPin = (props) => {
       setAuthDetails(response);
     } catch(err) {
       console.log(err);
+      setFetchError(true);
     } finally {
       setIsFetchApiRunning(false);
     }
@@ -62,19 +65,15 @@ const ForgotPin = (props) => {
         pan={pan}
         panError={panError}
         onPanInputChange={handlePanInput}
+        noData={fetchError}
+        renderNoData={<SessionExpiredUi navigateFunc={navigate} />}
       />
-      {!isFetchApiRunning &&
+      {!isFetchApiRunning && !fetchError &&
         <>
           <LoginButton onClick={handleClick} showLoader={isApiRunning}>
             Continue
           </LoginButton>
-          <WVButton
-            color="secondary"
-            classes={{ root: 'go-back-to-login' }}
-            onClick={() => navigate('/login')}
-          >
-            Go Back to Login
-          </WVButton>
+          <GoBackToLoginBtn navigateFunc={navigate} />
         </>
       }
     </>
