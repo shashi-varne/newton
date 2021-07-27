@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import Login from './login_and_registration/Login';
@@ -32,7 +32,6 @@ import {getConfig, isIframe} from './utils/functions';
 import 'common/theme/Style.scss';
 import { storageService } from './utils/validators';
 import PartnerAuthentication from './login_and_registration/Authentication';
-import { ThemeProvider } from './utils/ThemeContext';
 import Prepare from './dashboard/Invest/components/SdkLanding/Prepare';
 
 const generateClassName = createGenerateClassName({
@@ -82,7 +81,15 @@ const ScrollToTop = withRouter(
 
 const App = () => {
   const [themeConfiguration, setThemeConfiguration] = useState(getMuiThemeConfig());
-  const updateTheme = () => {
+  useEffect(() => {
+    window.addEventListener('storage', updateTheme);
+    return () => {
+      window.removeEventListener('storage', updateTheme)
+    }
+  }, []);
+
+  const updateTheme = (event) => {
+    if(event?.key !== "partner") return;
     const theme = getMuiThemeConfig();
     setThemeConfiguration(theme)
   }
@@ -90,8 +97,7 @@ const App = () => {
     return (
       <BrowserRouter basename={basename}>
         <JssProvider jss={jss} generateClassName={generateClassName}>
-          <ThemeProvider value={{updateTheme: updateTheme}} >
-            <MuiThemeProvider theme={themeConfiguration}>
+          <MuiThemeProvider theme={themeConfiguration}>
             <ScrollToTop />
             <Tooltip />
             <ToastContainer autoClose={3000} />
@@ -116,8 +122,7 @@ const App = () => {
               }
               <Route component={NotFound} />
             </Switch>
-            </MuiThemeProvider>
-          </ThemeProvider>
+          </MuiThemeProvider>
         </JssProvider>
       </BrowserRouter>
     );

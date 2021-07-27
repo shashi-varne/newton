@@ -306,9 +306,9 @@ const FundDetails = ({ classes, history }) => {
     })
   }
 
-  const handleInvest = () => {
-    window.location.href =  getConfig().webAppUrl + 'diy/invest';
-  }
+  // const handleInvest = () => {
+  //   window.location.href =  getConfig().webAppUrl + 'diy/invest';
+  // }
 
   const ContainerData = () => (
     <>
