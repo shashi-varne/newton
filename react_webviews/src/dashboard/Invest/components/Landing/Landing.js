@@ -90,8 +90,7 @@ class Landing extends Component {
     if (!isBottomSheetDisplayed && this.state.isWeb) {
       this.handleCampaignNotification();
     }
-     console.log(this.state.stateParams)
-    if(this.state.stateParamsstateParams.fisdom_pin_set){
+    if(this.state.stateParams.fisdom_pin_set){
      toast("fisdom security enabled")
     }
   };
