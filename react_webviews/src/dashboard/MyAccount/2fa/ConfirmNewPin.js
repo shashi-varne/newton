@@ -4,7 +4,7 @@ import Container from "../../common/Container";
 import EnterMPin from "../../../2fa/components/EnterMPin";
 import { nativeCallback } from "../../../utils/native_callback";
 import { twofaPostApi, modifyPin, setPin } from '../../../2fa/common/ApiCalls';
-import { storageService } from "../../../utils/validators";
+import WVPopUpDialog from "../../../common/ui/PopUpDialog/WVPopUpDialog";
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 
 import { navigate as navigateFunc } from "../../../utils/functions";
@@ -16,6 +16,7 @@ const ConfirmNewPin = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [newMpin, setNewMpin] = useState(false);
   const [kycFlow, setKycFlow] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
 
   const navigate = navigateFunc.bind(props);
 
@@ -45,9 +46,7 @@ const ConfirmNewPin = (props) => {
       setIsApiRunning(false);
       sendEvents("next");
       clearRouteParams();
-      if (kycFlow) {
-        navigate('/landing')
-      } else navigate('/security-settings');
+      setOpenDialog(true)
     } catch (err) {
       console.log(err);
       setPinError(err);
@@ -80,6 +79,13 @@ const ConfirmNewPin = (props) => {
     }
   }
 
+  const handleYes = () => {
+    sendEvents("next");
+    if (kycFlow) {
+      navigate('/landing')
+    } else navigate('/security-settings');
+  }
+
   return (
     <Container
       events={sendEvents("just_set_events")}
@@ -97,6 +103,13 @@ const ConfirmNewPin = (props) => {
           hasError: !!pinError,
           bottomText: pinError || '',
         }}
+      />
+      <WVPopUpDialog
+        open={openDialog}
+        handleYes={handleYes}
+        text="fisdom security enabled"
+        optionYes="OKAY"
+        optionNo=""
       />
     </Container>
   )

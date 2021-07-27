@@ -14,7 +14,7 @@ const SetPin = (props) => {
   const [mpinError, setMpinError] = useState(false);
   const [mpin, setMpin] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
-  const [openDialogReset, setOpenDialogReset] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
   const [kycFlow, setKycFlow] = useState(false);
 
   useEffect(() => {
@@ -65,11 +65,16 @@ const SetPin = (props) => {
     }
   }
 
+  const handleYes = () => {
+    sendEvents("back");
+    navigate("/invest");
+  }
+
   return (
     <Container
       events={sendEvents("just_set_events")}
       showLoader={isApiRunning}
-      headerData={kycFlow ? { icon: "close", goBack: () => setOpenDialogReset(true) } : ""}
+      headerData={kycFlow ? { icon: "close", goBack: () => setOpenDialog(true) } : ""}
       handleClick={handleClick}
       buttonTitle="Continue"
       disable={mpin?.length !== 4}
@@ -86,12 +91,9 @@ const SetPin = (props) => {
         }}
       />
       <WVPopUpDialog
-        open={openDialogReset}
-        handleNo={() => setOpenDialogReset(false)}
-        handleYes={() => {
-          sendEvents("back");
-          navigate("/invest");
-        }}
+        open={openDialog}
+        handleNo={() => setOpenDialog(false)}
+        handleYes={handleYes}
         text="This is a mandatory process to complete your application. Do you want to go exit?"
       />
     </Container>

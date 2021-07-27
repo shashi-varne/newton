@@ -90,9 +90,6 @@ class Landing extends Component {
     if (!isBottomSheetDisplayed && this.state.isWeb) {
       this.handleCampaignNotification();
     }
-    if(this.state.stateParams.fisdom_pin_set){
-     toast("fisdom security enabled")
-    }
   };
 
   addBank = () => {

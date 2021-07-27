@@ -29,12 +29,14 @@ function WVPopUpDialog({
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleNo} color="default">
-          {optionNo}
-        </Button>
-        <Button onClick={handleYes} color="default" autoFocus>
-          {optionYes}
-        </Button>
+        {optionNo &&
+          <Button onClick={handleNo} color="default">
+            {optionNo}
+          </Button>}
+        {optionYes &&
+          <Button onClick={handleYes} color="default" autoFocus>
+            {optionYes}
+          </Button>}
       </DialogActions>
     </Dialog>
   );
