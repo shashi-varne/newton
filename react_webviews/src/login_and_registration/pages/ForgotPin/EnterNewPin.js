@@ -21,7 +21,7 @@ const EnterNewPin = (props) => {
 
   const handleClick = async () => {
     try {
-      setIsApiRunning("button");
+      setIsApiRunning(true);
       await verifyPin({
         validate_only: true,
         mpin: pin
@@ -52,7 +52,6 @@ const EnterNewPin = (props) => {
       "properties": {
         "user_action": user_action,
         "screen_name": 'enter_current_pin',
-        "enable_biometrics": "no",
       }
     };
 

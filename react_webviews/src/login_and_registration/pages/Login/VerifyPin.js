@@ -61,7 +61,6 @@ const VerifyPin = (props) => {
         "user_action": user_action,
         "screen_name": '2fa_authentication',
         "journey": 'login',
-        "biometric_login": "no",
         //account_inactive if user is logging in again due to inactivity TODO
       }
     };

@@ -10,7 +10,7 @@ import { verifyPin } from '../../../2fa/common/ApiCalls';
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 
 const VerifyPin = (props) => {
-  const { routeParams, persistRouteParams } = usePersistRouteParams();
+  const { persistRouteParams } = usePersistRouteParams();
   const navigate = navigateFunc.bind(props);
   const [mpinError, setMpinError] = useState(false);
   const [mpin, setMpin] = useState('');
@@ -27,7 +27,7 @@ const VerifyPin = (props) => {
       setIsApiRunning(true);
       await verifyPin({ mpin });
       sendEvents("next");
-      persistRouteParams({ ...routeParams, reset_flow: true, old_mpin: mpin })
+      persistRouteParams({ reset_flow: true, old_mpin: mpin })
       navigate('new-pin');
     } catch (err) {
       console.log(err);
@@ -59,6 +59,11 @@ const VerifyPin = (props) => {
     }
   };
 
+  const forgotPin = () => {
+    navigate("/forgot-fisdom-pin");
+    sendEvents("next");
+  }
+
   return (
     <Container
       events={sendEvents('just_set_events')}
@@ -85,10 +90,7 @@ const VerifyPin = (props) => {
           Enter your current fisdom PIN
         </EnterMPin.Title>
       </EnterMPin>
-      <WVClickableTextElement onClick={() => {
-        navigate("/forgot-fisdom-pin");
-        sendEvents("next");
-      }}>
+      <WVClickableTextElement onClick={forgotPin}>
         <p className="clickable-text-ele">FORGOT PIN?</p>
       </WVClickableTextElement>
     </Container>

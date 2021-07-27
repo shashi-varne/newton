@@ -52,7 +52,6 @@ const EnterNewPin = (props) => {
       "properties": {
         "user_action": user_action,
         "screen_name": 'enter_current_pin',
-        "enable_biometrics": "no",
       }
     };
 

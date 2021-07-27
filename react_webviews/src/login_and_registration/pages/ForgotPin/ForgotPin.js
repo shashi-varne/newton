@@ -35,10 +35,11 @@ const ForgotPin = (props) => {
 
   const handleClick = async () => {
     try {
-      setIsApiRunning("button");
+      setIsApiRunning(true);
       const response = await forgotPinOtpTrigger(pan ? { pan } : '');
       setIsApiRunning(false);
       persistRouteParams(response);
+      sendEvents("next")
       navigate('forgot-pin/verify-otp');
     } catch(err) {
       console.log(err);
@@ -69,6 +70,12 @@ const ForgotPin = (props) => {
       nativeCallback({ events: eventObj });
     }
   };
+
+  const goBack = () => {
+    navigate('/login');
+    sendEvents("back");
+  }
+
   
   return (
     <>
@@ -83,19 +90,13 @@ const ForgotPin = (props) => {
       />
       {!isFetchApiRunning &&
         <>
-          <LoginButton onClick={() =>{
-            handleClick()
-            sendEvents("next")
-          }} showLoader={isApiRunning}>
+          <LoginButton onClick={handleClick} showLoader={isApiRunning}>
             Continue
           </LoginButton>
           <WVButton
             color="secondary"
             classes={{ root: 'go-back-to-login' }}
-            onClick={() => {
-              navigate('/login');
-              sendEvents("back");
-            }}
+            onClick={goBack}
           >
             Go Back to Login
           </WVButton>

@@ -30,7 +30,7 @@ const ConfirmNewPin = (props) => {
   const handleClick = async () => {
     try {
       validatePin();
-      setIsApiRunning("button");
+      setIsApiRunning(true);
       await twofaPostApi(routeParams?.reset_url, { new_mpin: pin });
       setIsApiRunning(false);
       sendEvents("next")
@@ -50,7 +50,6 @@ const ConfirmNewPin = (props) => {
       "properties": {
         "user_action": user_action,
         "screen_name": 'confirm_fisdom_pin',
-        "enable_biometrics": "no",
         "journey": routeParams.set_flow ? "set_fisdom_pin" : "reset_fisdom_pin",
       }
     };

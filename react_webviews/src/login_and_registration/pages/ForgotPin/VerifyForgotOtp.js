@@ -44,7 +44,7 @@ const VerifyForgotOtp = (props) => {
 
   const handleClick = async () => {
     try {
-      setIsApiRunning("button");
+      setIsApiRunning(true);
       const result = await twofaPostApi(routeParams?.verify_url, { otp });
       setIsApiRunning(false);
       persistRouteParams({ reset_url: result.reset_url });
@@ -78,6 +78,11 @@ const VerifyForgotOtp = (props) => {
     }
   };
 
+  const goBack = () => {
+    navigate('/login')
+    sendEvents("back")
+  }
+
   return (
     <OtpContainer
       title={`Enter OTP to verify your ${authType === "email" ? "email" : "number"}`}
@@ -101,10 +106,7 @@ const VerifyForgotOtp = (props) => {
       <WVButton
         color="secondary"
         classes={{ root: 'go-back-to-login' }}
-        onClick={() => {
-          navigate('/login')
-          sendEvents("back")
-        }}
+        onClick={goBack}
       >
         Go Back to Login
       </WVButton>

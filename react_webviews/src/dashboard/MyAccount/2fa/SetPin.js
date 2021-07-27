@@ -10,7 +10,7 @@ import WVPopUpDialog from "../../../common/ui/PopUpDialog/WVPopUpDialog"
 import { storageService } from "../../../utils/validators";
 
 const SetPin = (props) => {
-  const { routeParams, persistRouteParams } = usePersistRouteParams();
+  const { persistRouteParams } = usePersistRouteParams();
   const navigate = navigateFunc.bind(props);
   const [mpinError, setMpinError] = useState(false);
   const [mpin, setMpin] = useState('');
@@ -32,7 +32,7 @@ const SetPin = (props) => {
         mpin: mpin
       });
       sendEvents("next");
-      persistRouteParams({ ...routeParams, new_mpin: mpin, set_flow: true });
+      persistRouteParams({ new_mpin: mpin, set_flow: true });
       navigate('confirm-pin');
     } catch (err) {
       console.log(err);
@@ -54,7 +54,6 @@ const SetPin = (props) => {
       "properties": {
         "user_action": user_action,
         "screen_name": 'set_fisdom_pin',
-        "enable_biometrics": "no",
         "journey": "account" // KYC if user has come from KYC jouney ? in which flow does the user comes from KYC Screen 
       }
     };
