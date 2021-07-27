@@ -31,13 +31,15 @@ import InvestError from '../../dashboard/Invest/mini-components/InvestError';
 import InvestReferralDialog from '../../dashboard/Invest/mini-components/InvestReferralDialog';
 import { SkeltonRect } from '../../common/ui/Skelton';
 import { getBasePath, isNewIframeDesktopLayout } from '../../utils/functions';
+import { getdiyGraphDataWithISIN } from '../../dashboard/Invest/common/api';
 
 const styles = {
   root: {
     margin: '10px',
   },
 };
-const FundDetails = ({ classes, history }) => {
+const FundDetails = ({ classes, history, ...props }) => {
+  const flowType = props.flowType
   const [isLoading, setLoading] = useState(true);
   const [fundDetails, setFundDetails] = useState(null);
   const [reports, setReports] = useState(null);
@@ -46,6 +48,9 @@ const FundDetails = ({ classes, history }) => {
   const productType = getConfig().productName;
   const {isin} = useParams();
   let { isins, selected_isin, type } = getUrlParams();
+  if(!type) {
+    type = flowType
+  }
   const EMPTY_CART = 'EMPTY_CART';
   const FUND_ADDED = 'FUND_ADDED';
   const ADD_CART = '+ Add to Cart';
@@ -123,12 +128,28 @@ const FundDetails = ({ classes, history }) => {
   };
   
 
+  const getFundData = async () => {
+    try {
+      setLoading(true);
+      const isin = props.match.params.isin
+      const graphData = await getdiyGraphDataWithISIN(isin);
+      storageService().setObject('diystore_fundInfo', graphData.fundinfo);
+    } catch (error) {
+      console.log(error);
+      toast(error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
     if(status === FUND_ADDED && type === 'diy' && productType !== 'finity') {
       setButtonTitle(buttonData(cart.length));
     } 
     (async () => {
+      if(flowType === "diy") {
+        await getFundData();
+      } 
       try {
         setLoading(true);
         if(isin){
