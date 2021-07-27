@@ -33,6 +33,7 @@ import 'common/theme/Style.scss';
 import { storageService } from './utils/validators';
 import PartnerAuthentication from './login_and_registration/Authentication';
 import { ThemeProvider } from './utils/ThemeContext';
+import Prepare from './dashboard/Invest/components/SdkLanding/Prepare';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -105,6 +106,7 @@ const App = () => {
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />
               <Route path="/partner-authentication/:partnerCode" component={PartnerAuthentication} />
               <Route path='/logout' component={Logout} />
+              <Route path="/prepare" component={Prepare} />
               {
                 isMobileDevice || iframe ?
                 <Route component={Feature}/>:
