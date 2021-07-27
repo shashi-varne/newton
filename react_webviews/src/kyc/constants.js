@@ -219,6 +219,7 @@ export const OCCUPATION_TYPE_OPTIONS = [
   { name: "Business", value: "BUSINESS" },
   { name: "Agriculturist", value: "AGRICULTURIST" },
   { name: "Professional", value: "PROFESSIONAL" },
+  { name: "Others", value: "OTHERS" },
 ];
 
 export const getIfscCodeError = (code) => {
