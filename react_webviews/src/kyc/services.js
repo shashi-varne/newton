@@ -122,7 +122,7 @@ export async function setSummaryData(result) {
   } else if (partner === "obcweb") {
     storageService().set("partner", "obc");
   } else if (partner === "moneycontrolweb") {
-    storageService.set("partner", "moneycontrol");
+    storageService().set("partner", "moneycontrol");
   } else if (
     subBrokerCodePartersList.indexOf(result.data.referral.subbroker.data.subbroker_code) !== -1
   ) {
