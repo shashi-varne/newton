@@ -8,8 +8,8 @@ import { updateQueryStringParameter } from "../common/functions";
 import { STORAGE_CONSTANTS } from "../constants";
 import "./mini-components.scss";
 
-const config = getConfig();
 const AadhaarDialog = ({ id, open, close, kyc, handleIframeKyc, ...props }) => {
+  const config = getConfig();
   const productName = config.productName;
   const basePath = getBasePath();
   const handleProceed = () => {

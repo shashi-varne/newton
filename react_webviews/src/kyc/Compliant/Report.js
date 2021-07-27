@@ -8,13 +8,13 @@ import { isEmpty } from "../../utils/validators";
 import { nativeCallback } from "../../utils/native_callback";
 import { getConfig } from "../../utils/functions";
 
-const config = getConfig();
 const CompliantReport = (props) => {
   const [openIndex, setOpenIndex] = useState(-1);
   const [isCompliant] = useState(true);
   const [is_nri, setIsNri] = useState(false);
   const [cardDetails, setCardDetails] = useState([]);
   const [topTitle, setTopTitle] = useState("KYC details");
+  const config = getConfig();
 
   const handleTiles = (index, key) => {
     if (key === "docs") {

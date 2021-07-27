@@ -14,9 +14,9 @@ import InvestReferralDialog from "../../dashboard/Invest/mini-components/InvestR
 import { getBasePath, getConfig } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 
-const config = getConfig();
 const InvestMore = (props) => {
   const navigate = navigateFunc.bind(props);
+  const config = getConfig();
   const params = props?.match?.params || {};
   if (isEmpty(params) || !params.mode) props.history.goBack();
   const state = props.location.state || {};

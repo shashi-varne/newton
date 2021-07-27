@@ -4,8 +4,8 @@ import Dialog, { DialogContent } from "material-ui/Dialog";
 import Button from "@material-ui/core/Button";
 import "./mini-components.scss";
 
-const config = getConfig();
 const CompliantHelpDialog = ({ close, isOpen, pan }) => {
+  const config = getConfig();
   return (
     <Dialog
       onClose={() => close()}

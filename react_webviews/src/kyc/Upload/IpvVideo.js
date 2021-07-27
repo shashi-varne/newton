@@ -9,9 +9,6 @@ import useUserKycHook from '../common/hooks/userKycHook'
 import "./commonStyles.scss";
 import { nativeCallback } from '../../utils/native_callback'
 
-const config = getConfig();
-const productName = config.productName
-const isWeb = config.Web
 const IpvVideo = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)
@@ -19,6 +16,9 @@ const IpvVideo = (props) => {
   const [ipvcode, setIpvCode] = useState('')
   const {kyc, isLoading, updateKyc} = useUserKycHook();
   const [showKnowMoreDialog, setKnowMoreDialog] = useState(false)
+  const config = getConfig();
+  const productName = config.productName
+  const isWeb = config.Web
   const open = () => {
     setKnowMoreDialog(true)
   }

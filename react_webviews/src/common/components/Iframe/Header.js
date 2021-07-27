@@ -47,7 +47,7 @@ const Header = ({ classes, goBack, disableBack, headerData = {}, showIframePartn
               src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
             />
           )}
-          {(disableBack === true || disableBack === 'summary') && !headerData.hide_icon && (
+          {disableBack && !headerData.hide_icon && (
             <Close color={isMobileDevice ? 'primary': 'default'}/>
           )}
           {showIframePartnerLogo && isWeb && isMobileDevice && (
@@ -60,9 +60,9 @@ const Header = ({ classes, goBack, disableBack, headerData = {}, showIframePartn
           )}
           {showIframePartnerLogo && isSdk && isMobileDevice && partnerCode === 'moneycontrol' &&(
             <img
-              src={require(`assets/moneycontrol_sdk_logo.svg`)}
+              src={require(`assets/moneycontrol_logo.svg`)}
               alt='partnerLogo'
-              height={16}
+              height={20}
               style={{marginLeft: '15px'}}
             />
           )}

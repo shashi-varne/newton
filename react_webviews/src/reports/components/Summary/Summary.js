@@ -15,9 +15,9 @@ import "./commonStyles.scss";
 import CheckInvestment from "../mini-components/CheckInvestment";
 import { getInvestCards } from "../../../utils/functions";
 
-const config = getConfig();
-const productName = config.productName;
 const Summary = (props) => {
+  const config = getConfig();
+  const productName = config.productName;
   const navigate = navigateFunc.bind(props);
   const [report, setReportData] = useState({});
   const [current, setCurrent] = useState(true);
@@ -176,7 +176,6 @@ const Summary = (props) => {
     }
   };
   const investMore = () => {
-    const config = getConfig();
     var _event = {
       'event_name': 'journey_details',
       'properties': {
@@ -478,6 +477,7 @@ export const SummaryCard = ({
   iconClassName,
   dataAid,
 }) => {
+  const productName = getConfig().productName;
   return (
     <div className="content" data-aid={dataAid} onClick={goNext}>
       <img

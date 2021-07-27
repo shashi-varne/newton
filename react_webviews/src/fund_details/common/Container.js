@@ -132,7 +132,7 @@ const Container = (props) => {
       }`}
     >
       {/* Header Block */}
-      {!props.noHeader && !getConfig().hide_header && !config.isIframe && config.isWebOrSdk ?(
+      {!props.noHeader && !getConfig().hide_header && !newIframeDesktopLayout ?(
         <Header
           disableBack={props.disableBack}
           title={props.title}
