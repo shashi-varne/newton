@@ -5,6 +5,7 @@ import toast from "common/ui/Toast";
 import WVButton from "../../../common/ui/Button/WVButton";
 import OtpContainer from '../../../common/components/OtpContainer';
 import LoginButton from '../../common/LoginButton';
+import { nativeCallback } from "../../../utils/native_callback";
 
 class VerifyLoginOtp extends Component {
   constructor(props) {
@@ -61,15 +62,38 @@ class VerifyLoginOtp extends Component {
 
   handleResendOtp = () => {
     this.resendLoginOtp(this.state.resend_url)
+    this.sendEvents("resend");
     this.setState({
       otpData: { ...this.state.otpData, timeAvailable: 15, },
     });
   }
 
+  sendEvents = (userAction) => {
+    let properties = {
+      "otp_entered": userAction === "next" ? "yes" : "no",
+      "mode_entry": "manual",
+      "user_action": userAction,
+      "screen_name": `${this.state.communicationType}_otp`,
+    }
+    let eventObj = {
+      "event_name": 'onboarding',
+      "properties": properties,
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
+  goBackToLogin = () => {
+    this.sendEvents("back");
+    this.props.history.goBack();
+  }
+
   render() {
-    let { value, isApiRunning, otpData, isWrongOtp, communicationType } = this.state;
+    let { value, isApiRunning, otpData, isWrongOtp, communicationType, isResendOtpApiRunning } = this.state;
     let disabled = otpData.otp?.length !== 4;
-    let showDotLoader = false;
     return (
       <OtpContainer
         title={`Enter OTP to verify your ${communicationType === "email" ? "email" : "number"}`}
@@ -78,7 +102,7 @@ class VerifyLoginOtp extends Component {
         handleOtp={this.handleOtp}
         resendOtp={this.handleResendOtp}
         isWrongOtp={isWrongOtp}
-        value={value}
+        value={communicationType !== "email" ? formatMobileNumber(value) : value}
         classes={{
           subtitle: "login-subtitle"
         }}
@@ -93,7 +117,7 @@ class VerifyLoginOtp extends Component {
         <WVButton
           color="secondary"
           classes={{ root: 'go-back-to-login' }}
-          onClick={() => this.props.history.goBack()}
+          onClick={goBackToLogin}
         >
           Go Back to Login
         </WVButton>

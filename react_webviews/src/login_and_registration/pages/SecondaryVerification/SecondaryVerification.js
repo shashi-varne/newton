@@ -18,8 +18,8 @@ class SecondaryVerification extends Component {
         this.state = {
             productName: getConfig().productName,
             form_data: { whatsapp_consent: true, code: "+91" },
-            loginType: "mobile",
-            accountAlreadyExists: false
+            accountAlreadyExists: false,
+            isEdit: false
         }
         this.initialize = initialize.bind(this);
     }
@@ -31,6 +31,7 @@ class SecondaryVerification extends Component {
         let loginType = state?.communicationType || "mobile";
         if (state.edit) {
             form_data[state?.communicationType] = state?.contactValue;
+            this.setState({ isEdit: true })
         }
         this.setState({ loginType, form_data })
         countries.map((item) => {
@@ -61,8 +62,6 @@ class SecondaryVerification extends Component {
     handleClick = async () => {
         let { form_data, loginType } = this.state;
         let keys_to_check = ["mobile", "code"];
-        if (loginType !== "email")
-            this.sendEvents();
         if (loginType === "email") keys_to_check = ["email"];
         let result = await this.authCheckApi(loginType, { "contact_value": form_data[loginType] })
         if (result?.is_user) {
@@ -71,14 +70,27 @@ class SecondaryVerification extends Component {
                 accountAlreadyExistsData: result?.user,
                 verifyDetailsType: loginType,
             })
-        } else {
+        } else if (!result?.is_user) {
             this.formCheckFields(keys_to_check, form_data, "LOGIN", loginType, true);
         }
     }
 
     sendEvents = (userAction) => {
+        const { loginType, form_data } = this.state;
+        let properties = {
+            "screen_name": loginType === 'email' ? 'email' : 'enter mobile number',
+            "user_action": userAction
+        }
+        if (loginType === "mobile") {
+            properties = {
+                ...properties,
+                "whatsapp_agree": form_data.whatsapp_consent ? "yes" : "no",
+                "number_entered": userAction !== "skip" ? "yes" : "no",
+            }
+        } else properties.email_entered = userAction !== "skip" ? "yes" : "no";
         let eventObj = {
-            "event_name": 'otp sent to user',
+            "event_name": 'onboarding',
+            "properties": properties,
         };
         if (userAction === 'just_set_events') {
             return eventObj;
@@ -98,6 +110,7 @@ class SecondaryVerification extends Component {
         };
         const otpResponse = await this.generateOtp(body);
         if (otpResponse) {
+            this.sendEvents("next")
             this.navigate("secondary-otp-verification", {
                 state: {
                     value: type === "email" ? form_data?.email : form_data?.mobile,
@@ -122,19 +135,28 @@ class SecondaryVerification extends Component {
 
 
     render() {
-        const { loginType, form_data } = this.state;
+        const { loginType, form_data, isEdit } = this.state;
 
         return (
             <Container
+                events={this.sendEvents('just_set_events')}
                 fullWidthButton={true}
                 onlyButton={true}
                 buttonTitle="CONTINUE"
-                handleClick={() => this.handleClick()}
+                handleClick={this.handleClick}
                 canSkip={true}
-                onSkipClick={() => this.navigate("/")}
+                onSkipClick={() => {
+                    this.navigate("/");
+                    this.sendEvents("skip");
+                }}
                 showLoader={this.state.isApiRunning}
-                title={loginType === "mobile" ? "Share your mobile number" : "Share your email address"}>
+                title={isEdit ? `Edit ${loginType === "mobile" ? 'mobile number' : 'email'}` : loginType === "mobile" ? "Share your mobile number" : "Share your email address"}>
                 <div className="form" data-aid='form'>
+                    {isEdit &&
+                        <WVInPageSubtitle
+                            children={`This ${loginType === "mobile" ? 'number' : 'email'} is only for communication; your existing ${loginType === "mobile" ? 'number' : 'email'} linked with the investment account will remain the same`}
+                            style={{ margin: "-5px 0 15px" }}
+                        />}
                     {loginType === "mobile" && (
                         <div>
                             <div className="login-form-field">

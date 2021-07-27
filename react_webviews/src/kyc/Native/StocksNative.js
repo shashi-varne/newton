@@ -93,7 +93,7 @@ function Native(props) {
               result = await setProductType();
             }
 
-            if (result?.kyc?.mf_kyc_processed || kyc?.mf_kyc_processed) {
+            if (isReadyToInvestUser && (result?.kyc?.mf_kyc_processed || kyc?.mf_kyc_processed)) {
               navigate(PATHNAME_MAPPER.accountInfo)
             } else {
               const showAadhaar = !(result?.kyc?.address.meta_data.is_nri || result?.kyc?.kyc_type === "manual");

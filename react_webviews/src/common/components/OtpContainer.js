@@ -21,6 +21,9 @@ const OtpContainer = ({
 }) => {
     const [timeAvailable, setTimeAvailable] = useState(otpData?.timeAvailable);
     useEffect(() => {
+        if (!!showDotLoader) {
+            setTimeAvailable(otpData?.timeAvailable)
+        }
         var timmer = setTimeout(() => {
             if (timeAvailable <= 0) {
                 clearTimeout(timmer);
@@ -28,8 +31,7 @@ const OtpContainer = ({
             }
             setTimeAvailable(timeAvailable - 1)
         }, 1000);
-
-    }, [timeAvailable])
+    }, [timeAvailable, showDotLoader])
 
     return (
         <div className={`verify-otp-container ${classes.body}`}>
