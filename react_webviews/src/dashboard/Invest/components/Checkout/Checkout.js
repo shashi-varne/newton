@@ -14,9 +14,12 @@ import { initializeComponentFunctions } from "./checkoutFunctions";
 import {
   convertInrAmountToNumber,
   formatAmountInr,
+  getUrlParams,
 } from "../../../../utils/validators";
 import "./Checkout.scss";
 import { nativeCallback } from "../../../../utils/native_callback";
+import { getdiyGraphDataWithISIN } from "../../common/api";
+import isEmpty from 'lodash/isEmpty';
 
 class Checkout extends Component {
   constructor(props) {
@@ -44,7 +47,7 @@ class Checkout extends Component {
     this.initializeComponentFunctions();
   }
 
-  onload = () => {
+  onload = async () => {
     let fundsData = [];
     let {
       form_data,
@@ -55,6 +58,13 @@ class Checkout extends Component {
       investType,
     } = this.state;
     ctc_title = this.getButtonText(investType);
+    const {isin} = getUrlParams();
+    let fundDataIsin;
+    if(isin) {
+      fundDataIsin = await this.getFundInfoDetails(isin);
+      storageService().setObject("diystore_fundInfo",fundDataIsin);
+      storageService().setObject(CART, []);
+    }
     if (type === "nfo") {
       let fund = storageService().getObject("nfo_detail_fund");
       if (fund) {
@@ -77,7 +87,7 @@ class Checkout extends Component {
       const fundInfo = storageService().getObject("diystore_fundInfo")
         ? [storageService().getObject("diystore_fundInfo")]
         : false;
-      fundsData = !storageService().getObject(CART)
+      fundsData = isEmpty(storageService().getObject(CART))
         ? fundInfo
         : storageService().getObject(CART);
 
@@ -107,6 +117,18 @@ class Checkout extends Component {
       );
     }
   };
+
+  getFundInfoDetails = async (isin) => {
+    try {
+      this.setState({show_loader: true});
+      const result = await getdiyGraphDataWithISIN(isin);
+      return result.fundinfo;
+    } catch(err) {
+      toast(err);
+    } finally {
+      this.setState({show_loader: false});
+    }
+  }
 
   getPurchaseLimit = async (isins) => {
     if (this.props.type === "diy") {
