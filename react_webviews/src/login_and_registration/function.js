@@ -236,7 +236,7 @@ export async function mobileLogin(body) {
         let item = {
           promo_code: this.state.referrer,
         };
-        storageService.setObject("user_promo", item);
+        storageService().setObject("user_promo", item);
       }
 
       if (this.state.isPromoSuccess && this.state.form_data.referral_code !== "") {
@@ -442,7 +442,7 @@ export async function applyCode(user) {
       });
       const { status_code: status } = res.pfwresponse;
       if (status === 200) {
-        storageService.remove("user_promo");
+        storageService().remove("user_promo");
       }
     } catch (error) {
       console.log(error);
