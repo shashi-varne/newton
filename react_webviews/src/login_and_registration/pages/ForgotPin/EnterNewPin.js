@@ -4,6 +4,7 @@ import EnterMPin from '../../../2fa/components/EnterMPin';
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 import { navigate as navigateFunc } from '../../../utils/functions';
 import LoginButton from '../../common/LoginButton';
+import { nativeCallback } from "../../../utils/native_callback";
 
 const EnterNewPin = (props) => {
   const { routeParams, persistRouteParams } = usePersistRouteParams();
@@ -20,7 +21,7 @@ const EnterNewPin = (props) => {
 
   const handleClick = async () => {
     try {
-      setIsApiRunning(true);
+      setIsApiRunning("button");
       await verifyPin({
         validate_only: true,
         mpin: pin
@@ -28,6 +29,7 @@ const EnterNewPin = (props) => {
       setIsApiRunning(false);
 
       persistRouteParams({ ...routeParams, newPin: pin });
+      sendEvents("next");
       navigate('confirm-pin');
     } catch(err) {
       console.log(err);
@@ -43,6 +45,23 @@ const EnterNewPin = (props) => {
     //   console.log(props.history);
     // });
   }, []);
+
+  const sendEvents = (user_action) => {
+    let eventObj = {
+      "event_name": '2fa',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'enter_current_pin',
+        "enable_biometrics": "no",
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
   
 
   return (

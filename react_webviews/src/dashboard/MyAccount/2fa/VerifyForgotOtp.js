@@ -33,6 +33,7 @@ const VerifyForgotOtp = (props) => {
             const result = await twofaPostApi(routeParams?.verify_url, { otp });
             setIsApiRunning(false);
             persistRouteParams({reset_url: result.reset_url})
+            sendEvents("next");
             navigate('new-pin');
         } catch (err) {
             console.log(err);

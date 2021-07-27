@@ -4,6 +4,7 @@ import ForgotMPin from '../../../2fa/components/ForgotMPin';
 import WVButton from '../../../common/ui/Button/WVButton';
 import { navigate as navigateFunc } from '../../../utils/functions';
 import LoginButton from '../../common/LoginButton';
+import { nativeCallback } from "../../../utils/native_callback";
 import { forgotPinOtpTrigger, obscuredAuthGetter } from '../../../2fa/common/ApiCalls';
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 
@@ -34,7 +35,7 @@ const ForgotPin = (props) => {
 
   const handleClick = async () => {
     try {
-      setIsApiRunning(true);
+      setIsApiRunning("button");
       const response = await forgotPinOtpTrigger(pan ? { pan } : '');
       setIsApiRunning(false);
       persistRouteParams(response);
@@ -51,6 +52,23 @@ const ForgotPin = (props) => {
     clearRouteParams();
     fetchAuthDetails();
   }, []);
+
+  const sendEvents = (user_action) => {
+    let eventObj = {
+      "event_name": '2fa',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'forgot_pin',
+        "correct_details_entered": panError ? "no" : "yes",
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
   
   return (
     <>
@@ -65,13 +83,19 @@ const ForgotPin = (props) => {
       />
       {!isFetchApiRunning &&
         <>
-          <LoginButton onClick={handleClick} showLoader={isApiRunning}>
+          <LoginButton onClick={() =>{
+            handleClick()
+            sendEvents("next")
+          }} showLoader={isApiRunning}>
             Continue
           </LoginButton>
           <WVButton
             color="secondary"
             classes={{ root: 'go-back-to-login' }}
-            onClick={() => navigate('/login')}
+            onClick={() => {
+              navigate('/login');
+              sendEvents("back");
+            }}
           >
             Go Back to Login
           </WVButton>

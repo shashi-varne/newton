@@ -4,6 +4,7 @@ import EnterMPin from '../../../2fa/components/EnterMPin';
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 import { navigate as navigateFunc } from '../../../utils/functions';
 import LoginButton from '../../common/LoginButton';
+import { nativeCallback } from "../../../utils/native_callback";
 
 const ConfirmNewPin = (props) => {
   const { routeParams, clearRouteParams } = usePersistRouteParams();
@@ -29,11 +30,10 @@ const ConfirmNewPin = (props) => {
   const handleClick = async () => {
     try {
       validatePin();
-
-      setIsApiRunning(true);
+      setIsApiRunning("button");
       await twofaPostApi(routeParams?.reset_url, { new_mpin: pin });
       setIsApiRunning(false);
-
+      sendEvents("next")
       clearRouteParams();
       navigate('success');
     } catch (err) {
@@ -43,6 +43,24 @@ const ConfirmNewPin = (props) => {
       setIsApiRunning(false);
     }
   };
+
+  const sendEvents = (user_action) => {
+    let eventObj = {
+      "event_name": '2fa',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'confirm_fisdom_pin',
+        "enable_biometrics": "no",
+        "journey": routeParams.set_flow ? "set_fisdom_pin" : "reset_fisdom_pin",
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   return (
     <>
