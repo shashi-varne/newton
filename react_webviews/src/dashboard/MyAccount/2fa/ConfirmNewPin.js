@@ -46,7 +46,7 @@ const ConfirmNewPin = (props) => {
       sendEvents("next");
       clearRouteParams();
       if (kycFlow) {
-        navigate('/invest')
+        navigate('/landing')
       } else navigate('/security-settings');
     } catch (err) {
       console.log(err);
