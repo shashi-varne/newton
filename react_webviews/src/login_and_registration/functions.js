@@ -698,30 +698,33 @@ export async function getKycFromSummary() {
   }
 }
 
-export function redirectAfterLogin(data, user) {
+export function redirectAfterLogin(data, user, navigateFunc) {
   const kyc = storageService().getObject("kyc");
+  user = user || storageService().getObject("user");
+  const navigate = navigateFunc || this.navigate;
+
   if (data.firstLogin) {
-    this.navigate("login/referral-code", { state: { goBack: "/", communicationType: data?.contacts?.auth_type } });
+    navigate("login/referral-code", { state: { goBack: "/", communicationType: data?.contacts?.auth_type } });
   } else if (
     user.kyc_registration_v2 === "incomplete" &&
     user.active_investment
   ) {
-    this.navigate("/kyc/journey", { state: { goBack: "/invest" } });
+    navigate("/kyc/journey", { state: { goBack: "/invest" } });
   } else if (
     user.kyc_registration_v2 === "incomplete" &&
     !user.active_investment
   ) {
-    this.navigate("/", { state: { goBack: "/" } });
+    navigate("/landing", { state: { goBack: "/" } });
   } else if (
     kyc &&
     !kyc.pan.meta_data.pan_number &&
     user.kyc_registration_v2 === "init"
   ) {
-    this.navigate("/kyc/home", { state: { goBack: "/invest" } });
+    navigate("/landing", { state: { goBack: "/invest" } });
   } else if (user.active_investment) {
-    this.navigate("/landing", { state: { goBack: "/landing" } });
+    navigate("/landing", { state: { goBack: "/landing" } });
   } else {
-    this.navigate("/", { state: { goBack: "/" } });
+    navigate("/landing", { state: { goBack: "/" } });
   }
 }
 
