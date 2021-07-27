@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { verifyPin } from '../../../2fa/common/ApiCalls';
 import EnterMPin from '../../../2fa/components/EnterMPin';
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 import { navigate as navigateFunc } from '../../../utils/functions';
+import { isEmpty } from 'lodash';
 import LoginButton from '../../common/LoginButton';
+import SessionExpiredUi from '../../components/SessionExpiredUi';
 
 const EnterNewPin = (props) => {
   const { routeParams, persistRouteParams } = usePersistRouteParams();
+  const routeParamsExist = useMemo(() => {
+    return !isEmpty(routeParams);
+  }, []);
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -56,14 +61,18 @@ const EnterNewPin = (props) => {
           hasError: !!pinError,
           bottomText: pinError || '',
         }}
+        noData={!routeParamsExist}
+        renderNoData={<SessionExpiredUi navigateFunc={navigate} />}
       />
-      <LoginButton
-        onClick={handleClick}
-        disabled={pin.length !== 4}
-        showLoader={isApiRunning}
-      >
-        Continue
-      </LoginButton>
+      {routeParamsExist &&
+        <LoginButton
+          onClick={handleClick}
+          disabled={pin.length !== 4}
+          showLoader={isApiRunning}
+        >
+          Continue
+        </LoginButton>
+      }
     </>
   );
 }

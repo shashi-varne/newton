@@ -13,7 +13,9 @@ const ForgotMPin = ({
     pan,
     onPanInputChange,
     panError,
-    isLoading
+    isLoading,
+    noData,
+    renderNoData
 }) => {
     const authTypeText = primaryAuthType === 'mobile' ? 'mobile number' : 'email';
 
@@ -21,6 +23,18 @@ const ForgotMPin = ({
         const value = event.target ? event.target.value : event;
         onPanInputChange(value);
     };
+
+    if (noData) {
+        return (
+            <div className="forgot-fisdom-pin">
+                <WVInPageHeader>
+                    <WVInPageTitle>Forgot fisdom PIN</WVInPageTitle>
+                    <WVInPageSubtitle>OTP will be sent to your registered {authTypeText}</WVInPageSubtitle>
+                </WVInPageHeader>
+                {renderNoData || ''}
+            </div>
+        );
+    }
     
     return (
         <div className="forgot-fisdom-pin">
