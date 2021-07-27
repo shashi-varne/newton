@@ -129,7 +129,7 @@ class Landing extends Component {
         title="Start Investing"
         data-aid='start-investing-screen'
         showLoader={this.state.showPageLoader}
-        noBackIcon={!config.isSdk}
+        noBackIcon={!config.isSdk || config.isIframe}
         background={
           isMobileDevice &&
           fromLoginStates.includes(stateParams.fromState) &&

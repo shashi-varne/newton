@@ -43,6 +43,7 @@ const Home = (props) => {
         <Route exact path={`${url}refer`} component={Refer} />
         <Route path={`${url}invest`} component={Invest} />
         <Route path={`${url}landing`} component={Invest} />
+        <Route path={`${url}mf`} component={Invest} />
         <Route path={`${url}diy`} component={DIY} />
         <Route path={`${url}invest-journey`} component={InvestJourney} />
         <Route path={`${url}nps`} component={NPS} />
