@@ -32,7 +32,7 @@ import Refer from "./Invest/components/SdkLanding/Refer";
 import CampaignCallback from "./Invest/components/PageCallback/CampaignCallback";
 
 const Home = (props) => {
-  const config = getConfig();
+  const config = getConfig(); 
   const { url } = props.match;
   return (
     <Fragment>

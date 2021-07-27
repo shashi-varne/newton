@@ -40,6 +40,7 @@ const Header = ({ classes, title, count, total, current, goBack,
     const backgroundColor = !isWeb ? config.uiElements?.header?.backgroundColor : '';
     const backButtonColor = (!isWeb || config.isIframe) ? config.styles?.backButtonColor : '';
     const notificationsColor = !isWeb || config.isSdk ? config?.styles.notificationsColor : '';
+    const moneycontrolHeader = isMobileDevice && config.code === 'moneycontrol';
 
     const handleMobileViewDrawer = () => {
       setMobileViewDrawer(!mobileViewDrawer);
@@ -52,7 +53,7 @@ const Header = ({ classes, title, count, total, current, goBack,
     };
     return (
       <AppBar position="fixed" color="primary" data-aid='app-bar'
-      className={`Header transition ${classes.root} ${!headerData.partnerLogo ? 'header-topbar-white' : 'header-topbar-primary'} ${className || ''}`}
+      className={`Header transition ${classes.root} ${(!headerData.partnerLogo || moneycontrolHeader) ? 'header-topbar-white' : 'header-topbar-primary'} ${className || ''}`}
       style={style}
       >
         <Toolbar>
@@ -68,13 +69,20 @@ const Header = ({ classes, title, count, total, current, goBack,
               />
               }
               {(disableBack === true || disableBack === 'summary') && !headerData.hide_icon &&
-              <Close />}
+              <Close color="primary"/>}
             </IconButton>
           }
           {
-            headerData.partnerLogo && config.isMobileDevice &&
+            headerData.partnerLogo && config.isMobileDevice && !(moneycontrolHeader && isWeb) &&
              <div className='sdk-header-partner-logo'>
                 <img src={require(`assets/${partnerLogo}`)} alt="partner logo" /> 
+            </div>
+          }
+
+          {
+            headerData.partnerLogo && moneycontrolHeader && isWeb &&
+             <div className='sdk-header-partner-logo'>
+                <img src={require(`assets/finity/finity_navlogo.svg`)} alt="partner logo" height={20}/> 
             </div>
           }
 
@@ -127,47 +135,44 @@ const Header = ({ classes, title, count, total, current, goBack,
               </div>
             }
             </div>
-            <div className='header-right-nav-components'>
-              {resetpage &&
-                <SVG
-                style={{marginLeft: 'auto', width:20}}
-                onClick={handleReset}
-                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header && backgroundColor ?  getConfig().styles.secondaryColor : getConfig().styles.primaryColor))}
-                src={restart}
-              />
-              }
-              {topIcon &&
-                <SVG
-                style={{marginLeft: '20px', width:25, cursor:'pointer'}}
-                onClick={handleTopIcon}
-                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header && backgroundColor ?  getConfig().styles.secondaryColor : getConfig().styles.primaryColor))}
-                src={rightIcon}
-              />
-              }
-              {notification &&
-                <SVG
-                style={{marginLeft: '20px', width:25, cursor:'pointer'}}
-                onClick={handleNotification}
-                preProcessor={code => code.replace(/fill="#FFF"/, 'fill=' + notificationsColor)}
-                src={isEmpty(campaign) ? notificationLogo : notificationBadgeLogo}
-              />
-              }
-              {isMobileDevice && isWeb && !config.isIframe &&
-                <div className='mobile-navbar-menu'>
-                  <IconButton onClick={handleMobileViewDrawer}>
-                    <MenuIcon style={{color: new_header && backgroundColor ?  getConfig().styles.secondaryColor : headerData.partnerLogo ? 'white' : getConfig().styles.primaryColor}}/>
-                  </IconButton>
-                  <Drawer mobileViewDrawer={mobileViewDrawer} handleMobileViewDrawer={handleMobileViewDrawer} handleReferModal={handleReferModal} />
-                </div>
-              }
-          </div>
-          {/* The product logo will come here -> (will need asset) */}
-          {
-            false && 
-            <div>
-              <img src={require('assets/finity/finity_navlogo.svg')} alt="productType" />
-            </div>
+            {
+              !(moneycontrolHeader && headerData.partnerLogo) &&
+              <div className='header-right-nav-components'>
+                {resetpage &&
+                  <SVG
+                  style={{marginLeft: 'auto', width:20}}
+                  onClick={handleReset}
+                  preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header && backgroundColor ?  getConfig().styles.secondaryColor : getConfig().styles.primaryColor))}
+                  src={restart}
+                />
+                }
+                {topIcon &&
+                  <SVG
+                  style={{marginLeft: '20px', width:25, cursor:'pointer'}}
+                  onClick={handleTopIcon}
+                  preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header && backgroundColor ?  getConfig().styles.secondaryColor : getConfig().styles.primaryColor))}
+                  src={rightIcon}
+                />
+                }
+                {notification &&
+                  <SVG
+                  style={{marginLeft: '20px', width:25, cursor:'pointer'}}
+                  onClick={handleNotification}
+                  preProcessor={code => code.replace(/fill="#FFF"/, 'fill=' + notificationsColor)}
+                  src={isEmpty(campaign) ? notificationLogo : notificationBadgeLogo}
+                />
+                }
+                {isMobileDevice && isWeb && !config.isIframe &&
+                  <div className='mobile-navbar-menu'>
+                    <IconButton onClick={handleMobileViewDrawer}>
+                      <MenuIcon style={{color: new_header && backgroundColor ?  getConfig().styles.secondaryColor : headerData.partnerLogo ? 'white' : getConfig().styles.primaryColor}}/>
+                    </IconButton>
+                    <Drawer mobileViewDrawer={mobileViewDrawer} handleMobileViewDrawer={handleMobileViewDrawer} handleReferModal={handleReferModal} />
+                  </div>
+                }
+              </div>
           }
+          
           </>
         }
 

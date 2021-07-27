@@ -18,9 +18,6 @@ import "./Journey.scss"
 import { nativeCallback } from '../../utils/native_callback'
 import { getBasePath, navigate as navigateFunc, popupWindowCenter, isNewIframeDesktopLayout } from '../../utils/functions'
 
-const config = getConfig();
-const isMobileDevice = config.isMobileDevice;
-const iframe = config.isIframe;
 const Journey = (props) => {
   const newIframeDesktopLayout = isNewIframeDesktopLayout();
   const navigate = navigateFunc.bind(props)
@@ -44,6 +41,9 @@ const Journey = (props) => {
   const closeGoBackModal = () => {
     setGoBackModal(false)
   }
+  const config = getConfig();
+  const isMobileDevice = config.isMobileDevice;
+  const iframe = config.isIframe;
 
   const backHandlingCondition = () => {
     if (config.isIframe) {

@@ -157,7 +157,7 @@ export function commonRender(props_base) {
                 {/* Header Block */}
                 {(!this.props.noHeader && !getConfig().hide_header) && this.props.showLoader !== true
                 && !this.props.showLoaderModal && !this.props.loaderWithData && 
-                (isMoneycontrol && config.isIframe ? 
+                (isMoneycontrol && config.isIframe && !config.isMobileDevice ? 
                     <IframeHeader
                         disableBack={this.props.disableBack}
                         type={getConfig().productName}

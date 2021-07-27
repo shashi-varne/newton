@@ -112,7 +112,7 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
             navigate(backMapper(currentState));
             return true;
           } else {
-            // $window.history.back();
+            // window.history.back();
           }
         } else {
           nativeCallback({ action: "exit_web" });
@@ -120,7 +120,10 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
       }
   }
   
-  const npsDetailsCheckCasesArr = ["/nps/payment/callback", "/nps/mandate/callback", "/nps/success", "/page/invest/campaign/callback", "/invest", "/reports"]
+  let npsDetailsCheckCasesArr = ["/nps/payment/callback", "/nps/mandate/callback", "/nps/success", "/page/invest/campaign/callback"];
+  if(getConfig().code !== 'moneycontrol') {
+    npsDetailsCheckCasesArr = [...npsDetailsCheckCasesArr, "/invest", "/reports"];
+  }
   if (npsDetailsCheckCasesArr.indexOf(currentState) !== -1 || currentState.indexOf("/nps/payment/callback") !== -1) {
     if (storageService().getObject("nps_additional_details_required")) {
       if (isNpsOutsideSdk(fromState, currentState)) {

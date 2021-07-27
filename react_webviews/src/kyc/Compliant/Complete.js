@@ -8,12 +8,12 @@ import { nativeCallback } from "utils/native_callback";
 import "./commonStyles.scss";
 import { isNewIframeDesktopLayout } from "../../utils/functions";
 
-const config = getConfig();
-const productName = config.productName;
-const iframe = config.isIframe;
+
 const Complete = (props) => {
   const navigate = navigateFunc.bind(props);
-
+  const config = getConfig();
+  const productName = config.productName;
+  const iframe = config.isIframe;
   const handleClick = () => {
     sendEvents('next')
     if (storageService().get(STORAGE_CONSTANTS.NATIVE)) {

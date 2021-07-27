@@ -14,8 +14,6 @@ import InternalStorage from "../common/InternalStorage";
 import "./KycUploadDocuments.scss";
 import { nativeCallback } from "../../utils/native_callback";
 
-const config = getConfig();
-const isWeb = config.Web;
 const KycUploadDocuments = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [selected, setSelected] = useState(null);
@@ -24,7 +22,9 @@ const KycUploadDocuments = (props) => {
   const inputEl = useRef(null);
   const [dlFlow, setDlFlow] = useState(false);
   const navigate = navigateFunc.bind(props);
-  const productName = getConfig().productName;
+  const config = getConfig();
+  const isWeb = config.Web;
+  const productName = config.productName;
   const {kyc, isLoading, updateKyc} = useUserKycHook();
   const [fileToShow, setFileToShow] = useState(null)
   const [showLoader, setShowLoader] = useState(false)

@@ -29,7 +29,7 @@ const InvestExplore = (props) => {
   const iframe = config.isIframe;
   const isMobileDevice = config.isMobileDevice;
   const partnerCode = config.code;
-  const newIframeDesktopLayout = isNewIframeDesktopLayout();
+  const newIframeDesktopLayout = isNewIframeDesktopLayout() || (partnerCode === 'moneycontrol' && !isMobileDevice);
 
   const exploreMFMappings = [
     {
@@ -116,18 +116,19 @@ const InvestExplore = (props) => {
       data-aid='explore-all-mutual-funds-screen'
       classOverRIde="pr-error-container"
       noFooter
-      title={newIframeDesktopLayout ? "" : "Explore All Mutual Funds"}
+      title={partnerCode === 'moneycontrol' ? "" : "Explore All Mutual Funds"}
       classOverRideContainer="pr-container"
-      hidePageTitle={iframe && isMobileDevice}
+      hidePageTitle={partnerCode === 'moneycontrol'}
       handleClick={goNext}
       skelton={loader}
       rightIcon="search"
       handleTopIcon={handleRightIconClick}
-      disableBack={iframe && partnerCode === 'moneycontrol'}
+      disableBack={(iframe || config.isSdk) && partnerCode === 'moneycontrol'}
       showIframePartnerLogo
+      headerData={{partnerLogo : (iframe || config.isSdk) && partnerCode === 'moneycontrol'}}
     >
       {
-        iframe && partnerCode === 'moneycontrol' ? <IframeView exploreMFMappings={exploreMFMappings} goNext={goNext} handleRightIconClick={handleRightIconClick}/> :
+        partnerCode === 'moneycontrol' ? <IframeView exploreMFMappings={exploreMFMappings} goNext={goNext} handleRightIconClick={handleRightIconClick}/> :
       <section className="invest-explore-cards" id="invest-explore" data-aid='invest-explore'>
         <div className='title'>Where do you want to invest?</div>
         {exploreMFMappings.map(({ title, description, src }) => (

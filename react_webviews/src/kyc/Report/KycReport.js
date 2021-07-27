@@ -17,8 +17,6 @@ import { nativeCallback } from "utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { isNewIframeDesktopLayout } from "../../utils/functions";
 
-const config = getConfig();
-const productName = config.productName;
 const Report = (props) => {
   const navigate = navigateFunc.bind(props);
   const [cardDetails, setCardDetails] = useState([]);
@@ -29,6 +27,8 @@ const Report = (props) => {
   const [addressProof, setAddressProof] = useState({});
   const [buttonTitle, setButtonTitle] = useState("OK");
   const [dlFlow, setDlFlow] = useState(false);
+  const config = getConfig();
+  const productName = config.productName;
   const appText = "Your application is submitted.";
   const goBackPage = props.location.state?.goBack || "";
 
