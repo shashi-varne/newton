@@ -5,7 +5,6 @@ import { storageService } from "utils/validators";
 import { formatAmountInr } from "utils/validators";
 import { getConfig } from "../../../utils/functions";
 
-const config = getConfig();
 class NpsPaymentCallback extends Component {
   constructor(props) {
     super(props);
@@ -43,6 +42,7 @@ class NpsPaymentCallback extends Component {
         }
       }
     };
+    const config = getConfig();
   
     // send event
     if (!config.Web) {
@@ -59,6 +59,7 @@ class NpsPaymentCallback extends Component {
   };
 
   handleClick = async () => {
+    const config = getConfig();
     if (this.state.status !== 'success') {
       this.navigate('/invest')
     } else {

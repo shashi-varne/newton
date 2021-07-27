@@ -1,7 +1,7 @@
 import React from "react";
 import { getConfig } from "utils/functions";
-let productName = getConfig().productName;
 const SecureInvest = () => {
+  let productName = getConfig().productName;
   return (
     <div className="secure-invest-bottom" data-aid='secure-invest-bottom'>
       <div className="content">

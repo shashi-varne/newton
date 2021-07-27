@@ -16,8 +16,8 @@ import './mini-components.scss';
 import Button from '../../common/ui/Button';
 import { nativeCallback } from '../../utils/native_callback';
 
-const config = getConfig();
 const TermsAndCond = () => {
+  const config = getConfig();
   const [open, setOpen] = useState(false);
   const [data, setData] = useState({
     terms: '',

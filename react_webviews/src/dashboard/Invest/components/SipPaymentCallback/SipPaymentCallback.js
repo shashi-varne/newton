@@ -10,8 +10,8 @@ import { getBasePath } from "utils/functions";
 import "./SipPaymentCallback.scss";
 import { isNewIframeDesktopLayout } from "../../../../utils/functions";
 
-const hideImage = isNewIframeDesktopLayout();
 const SipPaymentCallback = (props) => {
+  const hideImage = isNewIframeDesktopLayout();
   const navigate = navigateFunc.bind(props);
   const params = props.match.params || {};
   const status = params.status || "";

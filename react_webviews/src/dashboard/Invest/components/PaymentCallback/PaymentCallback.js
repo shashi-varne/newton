@@ -8,8 +8,8 @@ import useUserKycHook from "../../../../kyc/common/hooks/userKycHook";
 import { storageService } from "../../../../utils/validators";
 import { isNewIframeDesktopLayout } from "../../../../utils/functions";
 
-const config = getConfig();
 const PaymentCallback = (props) => {
+  const config = getConfig();
   const params = props.match.params || {};
   const navigate = navigateFunc.bind(props);
   const { user, isLoading } = useUserKycHook();

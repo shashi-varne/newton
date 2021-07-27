@@ -28,7 +28,6 @@ import NPS from "./nps";
 import {getConfig} from 'utils/functions';
 import BlankMandateUpload from "./MyAccount/BlankMandateUpload";
 import InvestmentProof from "./MyAccount/InvestmentProof";
-import Prepare from "./Invest/components/SdkLanding/Prepare";
 import Refer from "./Invest/components/SdkLanding/Refer";
 import CampaignCallback from "./Invest/components/PageCallback/CampaignCallback";
 
@@ -39,7 +38,6 @@ const Home = (props) => {
     <Fragment>
       <Switch>
         <Route exact path={`${url}`} component={config.isSdk && config.code !== "moneycontrol" ? SdkLanding : Invest} />
-        <Route exact path={`${url}prepare`} component={Prepare} />
         <Route exact path={`${url}refer`} component={Refer} />
         <Route path={`${url}invest`} component={Invest} />
         <Route path={`${url}landing`} component={Invest} />

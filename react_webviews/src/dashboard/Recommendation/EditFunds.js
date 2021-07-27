@@ -10,8 +10,8 @@ import './EditFunds.scss';
 import Button from '../../common/ui/Button';
 import { getConfig } from '../../utils/functions';
 
-const productName = getConfig().productName;
 const EditFunds = (props) => {
+  const productName = getConfig().productName;
   const [open, setOpen] = useState(false);
   const { funnelData } = useFunnelDataHook();
   const { recommendation, alternatives } = funnelData;

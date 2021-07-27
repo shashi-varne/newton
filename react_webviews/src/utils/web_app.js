@@ -27,7 +27,8 @@ export const checkBeforeRedirection = (fromState, toState) => {
         toState === "/login" ||
         toState === "/register" ||
         toState === "/forgot-password" ||
-        toState === "/mobile/verify"
+        toState === "/mobile/verify" ||
+        toState === "/prepare"
       ) {
         if (!fromState) {
           return "/";
@@ -48,6 +49,7 @@ export const checkAfterRedirection = (props, fromState, toState) => {
       toState !== "/register" &&
       toState !== "/forgot-password" &&
       toState !== "/mobile/verify" &&
+      toState === "/prepare" &&
       !toState.includes("/partner-authentication")
     ) {
       if (!getConfig().isLoggedIn) {

@@ -16,8 +16,8 @@ import { get_recommended_funds } from "./common/api";
 import { getBasePath, getInvestCards } from "../../utils/functions";
 
 let errorMessage = "Something went wrong!";
-const config = getConfig();
 export async function initialize() {
+  const config = getConfig();
   this.getSummary = getSummary.bind(this);
   this.setSummaryData = setSummaryData.bind(this);
   this.setInvestCardsData = setInvestCardsData.bind(this);
@@ -109,6 +109,7 @@ export async function getSummary() {
 }
 
 export function setInvestCardsData() {
+  const config = getConfig();
   const disabledPartnersMap = {
     insurance: [
       "cccb",
@@ -282,6 +283,7 @@ export function corpusValue(data) {
 }
 
 export async function getRecommendations(amount) {
+  const config = getConfig();
   try {
     const result = await get_recommended_funds({
       type: this.state.investType,
@@ -324,6 +326,7 @@ export async function getRecommendations(amount) {
 }
 
 export function navigate(pathname, data = {}) {
+  const config = getConfig();
   if (this.props.edit || data.edit) {
     this.props.history.replace({
       pathname: pathname,
@@ -340,6 +343,7 @@ export function navigate(pathname, data = {}) {
 }
 
 export function initilizeKyc() {
+  const config = getConfig();
   let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
   let currentUser =
     this.state.currentUser || storageService().getObject("user") || {};
@@ -409,6 +413,7 @@ export function openPremiumOnboardBottomSheet(
   bottom_sheet_dialog_data_premium,
   userKyc
 ) {
+  const config = getConfig();
   let is_bottom_sheet_displayed_kyc_premium = storageService().get(
     "is_bottom_sheet_displayed_kyc_premium"
   );
@@ -490,6 +495,7 @@ function handleInvestSubtitle ()  {
 };
 
 export function handleRenderCard() {
+  const config = getConfig();
   let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
   let currentUser = this.state.currentUser || storageService().getObject("user") || {};
   let isReadyToInvestBase = isReadyToInvest();
@@ -549,7 +555,7 @@ export function handleCampaignRedirection (url) {
   let campLink = url;
   // Adding redirect url for testing
   // eslint-disable-next-line
-  campLink = `${campLink}${campLink.match(/[\?]/g) ? "&" : "?"}generic_callback=true&plutus_redirect_url=${encodeURIComponent(`${getBasePath()}/?is_secure=${storageService().get("is_secure")}&partner_code=${config.code}`)}`
+  campLink = `${campLink}${campLink.match(/[\?]/g) ? "&" : "?"}generic_callback=true&plutus_redirect_url=${encodeURIComponent(`${getBasePath()}/?is_secure=${storageService().get("is_secure")}&partner_code=${getConfig().code}`)}`
   window.location.href = campLink;
 }
 
