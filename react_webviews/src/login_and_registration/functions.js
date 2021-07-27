@@ -302,7 +302,7 @@ export async function initiateOtpApi(body, loginType) {
     if (status === 200) {
       this.setState({ isApiRunning: false });
       this.sendEvents("next");
-      this.navigate("verify-otp", {
+      this.navigate("login/verify-otp", {
         state: {
           value: body.auth_value,
           communicationType: loginType,
@@ -669,7 +669,7 @@ export function redirectAfterLogin(data, user, navigateFunc) {
   const navigate = navigateFunc || this.navigate;
 
   if (data.firstLogin) {
-    navigate("login/referral-code", { state: { goBack: "/", communicationType: data?.contacts?.auth_type } });
+    navigate("/referral-code", { state: { goBack: "/", communicationType: data?.contacts?.auth_type } });
   } else if (
     user.kyc_registration_v2 === "incomplete" &&
     user.active_investment

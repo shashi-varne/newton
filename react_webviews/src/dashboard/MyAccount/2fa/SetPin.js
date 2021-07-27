@@ -1,11 +1,13 @@
 import "./commonStyles.scss";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Container from "../../common/Container";
 import EnterMPin from "../../../2fa/components/EnterMPin";
 import { verifyPin } from '../../../2fa/common/ApiCalls';
 import { navigate as navigateFunc } from "../../../utils/functions";
 import { nativeCallback } from "../../../utils/native_callback";
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
+import WVPopUpDialog from "../../../common/ui/PopUpDialog/WVPopUpDialog"
+import { storageService } from "../../../utils/validators";
 
 const SetPin = (props) => {
   const { routeParams, persistRouteParams } = usePersistRouteParams();
@@ -13,7 +15,14 @@ const SetPin = (props) => {
   const [mpinError, setMpinError] = useState(false);
   const [mpin, setMpin] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
+  const [openDialogReset, setOpenDialogReset] = useState(false);
+  const [kycFlow, setKycFlow] = useState(false);
 
+  useEffect(() => {
+    if (storageService().get("kyc_completed_set_pin")) {
+      setKycFlow(true)
+    }
+  }, []);
 
   const handleClick = async () => {
     try {
@@ -23,7 +32,7 @@ const SetPin = (props) => {
         mpin: mpin
       });
       sendEvents("next");
-      persistRouteParams({...routeParams, new_mpin: mpin, set_flow: true });
+      persistRouteParams({ ...routeParams, new_mpin: mpin, set_flow: true });
       navigate('confirm-pin');
     } catch (err) {
       console.log(err);
@@ -61,6 +70,7 @@ const SetPin = (props) => {
     <Container
       events={sendEvents("just_set_events")}
       showLoader={isApiRunning}
+      headerData={kycFlow ? { icon: "close", goBack: () => setOpenDialogReset(true) } : ""}
       handleClick={handleClick}
       buttonTitle="Continue"
       disable={mpin?.length !== 4}
@@ -75,6 +85,15 @@ const SetPin = (props) => {
           hasError: !!mpinError,
           bottomText: mpinError || '',
         }}
+      />
+      <WVPopUpDialog
+        open={openDialogReset}
+        handleNo={() => setOpenDialogReset(false)}
+        handleYes={() => {
+          sendEvents("back");
+          navigate("/invest");
+        }}
+        text="This is a mandatory process to complete your application. Do you want to go exit?"
       />
     </Container>
   )

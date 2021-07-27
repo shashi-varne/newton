@@ -18,6 +18,7 @@ import VerifyDetailDialog from "../../../../login_and_registration/components/Ve
 import AccountAlreadyExistDialog from "../../../../login_and_registration/components/AccountAlreadyExistDialog";
 import { generateOtp } from "../../../../login_and_registration/functions";
 import { Imgc } from "../../../../common/ui/Imgc";
+import toast from "../../../../common/ui/Toast"
 
 const fromLoginStates = ["/login", "/logout", "/verify-otp"]
 const isMobileDevice = getConfig().isMobileDevice;
@@ -88,6 +89,10 @@ class Landing extends Component {
     }
     if (!isBottomSheetDisplayed && this.state.isWeb) {
       this.handleCampaignNotification();
+    }
+     console.log(this.state.stateParams)
+    if(this.state.stateParamsstateParams.fisdom_pin_set){
+     toast("fisdom security enabled")
     }
   };
 
