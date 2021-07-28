@@ -4,6 +4,7 @@ import { storageService } from "utils/validators";
 import { nativeCallback } from "./native_callback";
 import { commonBackMapper } from "utils/constants";
 import { getConfig } from "./functions";
+import isEmpty from "lodash/isEmpty";
 
 export const backMapper = (state) => {
   return commonBackMapper[state] || "";
@@ -32,17 +33,33 @@ export const checkAfterRedirection = (props, fromState, toState) => {
 export const backButtonHandler = (props, fromState, currentState, params) => {
   const navigate = navigateFunc.bind(props);
   const pathName = props.location.pathname;
-  if(pathName === '/prepare') {
-    nativeCallback({ action: "exit_web" });
-    return;
-  }
-  const landingRedirectPaths = ["/mf", "/sip/payment/callback", "/kyc/report", "/notification", "/diy/fundlist/direct",
+  const entryPath = storageService().get('entry_path');
+  console.log("pathName", pathName);
+  console.log("entryPath", entryPath);
+  
+  const landingRedirectPaths = ["/sip/payment/callback", "/kyc/report", "/notification", "/diy/fundlist/direct",
     "/diy/fundinfo/direct", "/diy/invest", "/invest/doityourself/direct", "/risk/recommendations/error"];
 
   // const fromStateArray = ['/payment/callback', '/nps/payment/callback', '/sip/payment/callback', '/invest', '/reports',
   //  '/landing', '', '/new/mandate', '/otm-options', '/mandate', '/nps/mandate/callback', '/nps/success',
   //   '/nps/sip', '/my-account', '/modal', '/page/callback', '/reports/sip/pause-request', '/kyc/journey'];
+
+  const directEnteries = ["/invest/doityourself/direct", "/nps",
+     "/direct/gold", "/invest/instaredeem", "/reports", "/invest/savegoal", "/invest", "/withdraw"];
+
+  const directEntriesWithParams = ["/diy/fundinfo/direct", "/diy/fundlist/direct"];
+
+  const verifyDirectEntriesWithParams = () => {
+    return directEntriesWithParams.find(el => pathName.match(el));
+  }
     
+  if(directEnteries.indexOf(pathName) !== -1 || !isEmpty(verifyDirectEntriesWithParams())) {
+    if(pathName === entryPath) {
+      nativeCallback({ action: "exit_web" });
+      return true;
+    }
+  }
+
   if (landingRedirectPaths.indexOf(currentState) !== -1) {
     navigate("/");
     return true;
