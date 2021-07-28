@@ -16,7 +16,7 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   let current_user = storageService().get("currentUser");
   let user = storageService().getObject("user") || {};
   let kyc = storageService().getObject("kyc") || {};
-  const userDataAvailable = current_user && !isEmpty(kyc) && !isEmpty(user) ? false : true;
+  const userDataAvailable = current_user && !isEmpty(kyc) && !isEmpty(user);
   const [showLoader, setShowLoader] = useState(!userDataAvailable);
   const [isLoginValid, setIsLoginValid] = useState(userDataAvailable);
 

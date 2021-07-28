@@ -4,6 +4,7 @@ import axios from 'axios';
 import { storageService } from './validators';
 import { encrypt, decrypt } from './encryption';
 import { getConfig } from 'utils/functions';
+import { redirectTo2FA } from './native_callback';
 
 let base_url = getConfig().base_url;
 
@@ -56,6 +57,10 @@ class Api {
           response.data = JSON.parse(decrypt(response.data._encr_payload));
         }
 
+        if (response.data.pfwstatus_code === 416) {
+          // storageService().setBoolean('2fa-required', true);
+          window.location.href = redirectTo2FA();
+        }
         let force_error_api = window.sessionStorage.getItem('force_error_api');
         if(force_error_api) {
           response.data.pfwresponse.status_code = 410;

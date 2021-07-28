@@ -28,6 +28,7 @@ export async function getAccountSummary(params = {}) {
   }
   try {
     const response = await Api.post(url, params);
+
     if (
       response.pfwstatus_code !== 200 ||
       !response.pfwresponse ||
