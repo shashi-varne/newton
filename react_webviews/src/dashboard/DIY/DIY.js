@@ -16,7 +16,7 @@ const DIY = (props) => {
         path={`${url}/invest`}
         render={(props) => <Checkout {...props} type="diy" />}
       />
-      <Route path={`${url}/fundinfo/direct/:isin`} component={FundDetails} /> 
+      <Route path={`${url}/fundinfo/direct/:isin`} render={(props) => <FundDetails {...props} flowType="diy" />} /> 
       <Route exact path={`${url}/invest/search`} component={Search} />
       <Route
         exact
