@@ -1276,7 +1276,7 @@ table.iwd-transactions-table {
 
   .iwd-holding-card {
     padding: $card-padding-mob; //TODO: reuse iwd-card
-    height: 460px;
+    height: auto;
     width: 100%;
     flex: 0 1 48%;
     margin-right: 0;

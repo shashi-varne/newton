@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import Container from '../common/Container';
 import wallet from 'assets/wallet_icon.svg';
+import wallet_finity from 'assets/finity/wallet_icon.svg';
 import Button from 'material-ui/Button';
 import Grid from '@material-ui/core/Grid';
 import { getAcronym } from 'utils/functions';
@@ -283,7 +284,7 @@ class Earnings extends Component {
           <div className="ReferPaytmGrid pad20">
             <Grid container spacing={24} alignItems="center">
               <Grid item xs={3}>
-                <img src={wallet} alt="" />
+                <img src={getConfig().productName !== 'fisdom' ? wallet_finity : wallet} alt="" />
               </Grid>
               <Grid item xs={9}>
                 <p><span className="blue">Pay</span><span className="blue_light">tm</span> earnings</p>

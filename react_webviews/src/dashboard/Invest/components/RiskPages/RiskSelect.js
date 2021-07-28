@@ -10,12 +10,12 @@ import { nativeCallback } from '../../../../utils/native_callback';
 import { storageService } from '../../../../utils/validators'
 import toast from 'common/ui/Toast'
 
-const { productName } = getConfig();
 
 const RiskSelect = ({
   canSkip,
   ...otherProps
 }) => {
+  const { productName } = getConfig();
   const {
     funnelData,
     userRiskProfile,

@@ -5,8 +5,8 @@ import Banner from 'common/ui/Banner';
 import UiSkelton from 'common/ui/Skelton';
 import Footer from 'common/components/footer';
 import Header from 'common/components/Header';
-
-import React from "react";
+import IframeHeader from 'common/components/Iframe/Header';
+import React, { Fragment } from "react";
 
 import Button from "material-ui/Button";
 import Dialog, {
@@ -21,12 +21,13 @@ import BottomSheet from '../../common/ui/BottomSheet';
 import { disableBodyTouch } from 'utils/validators';
 import { checkAfterRedirection, backButtonHandler } from "utils/functions";
 import { isFunction } from 'lodash';
+import { isNewIframeDesktopLayout } from '../../utils/functions';
 
 let start_time = '';
-
 export function didMount() {
     start_time = new Date();
     const config = getConfig();
+    const newIframeDesktopLayout = isNewIframeDesktopLayout();
 
     this.getHeightFromTop = getHeightFromTop.bind(this);
     this.onScroll = onScroll.bind(this);
@@ -56,13 +57,28 @@ export function didMount() {
         force_show_inpage_title: true,
         inPageTitle: true
     }, () => {
-        this.onScroll();
+        if(!newIframeDesktopLayout){
+            this.onScroll();
+        }
     })
 
     setHeights({ 'header': true, 'container': false });
 
     let that = this;
     if (config.isIframe) {
+        const hideLoaderEvent = {
+            event_name: "hide_loader",
+            properties: {
+              journey: {
+                name: "",
+                trigger: "",
+                journey_status: "",
+                next_journey: "",
+              },
+            },
+        };
+      
+        window.callbackWeb.sendEvent(hideLoaderEvent);
         const partnerEvents = function (res) {
             switch (res.type) {
               case "back_pressed":
@@ -81,10 +97,10 @@ export function didMount() {
             that.historyGoBack();
         }
     });
-
-    window.addEventListener("scroll", this.onScroll, true);
-
-    this.check_hide_header_title();
+    if(!newIframeDesktopLayout){   
+        window.addEventListener("scroll", this.onScroll, true);
+        this.check_hide_header_title();
+    }
 }
 
 export function headerGoBack() {
@@ -92,10 +108,15 @@ export function headerGoBack() {
 }
 
 function addContainerClass (props_base){
-    return `ContainerWrapper  ${this.props.background || ''} ${props_base &&  props_base.classOverRide ? props_base.classOverRide : ''} ${this.props.classOverRide || ''} ${this.props.noPadding ? "no-padding" : ""}`;
+    const config = getConfig();
+    const containerClass = isNewIframeDesktopLayout() ? 'iframeContainerWrapper' : (config.code === "bfdlmobile" && config.isIframe) ? 'bfdlContainerWrapper' : 'ContainerWrapper'
+    return `${containerClass} ${this.props.background || ''} ${props_base &&  props_base.classOverRide ? props_base.classOverRide : ''} ${this.props.classOverRide || ''} ${this.props.noPadding ? "no-padding" : ""}`;
 }
 
 export function commonRender(props_base) {
+    const config = getConfig();
+    const isMoneycontrol = config.code === "moneycontrol";
+    const newIframeDesktopLayout = isNewIframeDesktopLayout();
 
     this.addContainerClass = addContainerClass.bind(this);
 
@@ -135,41 +156,50 @@ export function commonRender(props_base) {
             <div className={this.addContainerClass(props_base)} data-aid={`${this.props['data-aid']}-parent-container`}>
                 {/* Header Block */}
                 {(!this.props.noHeader && !getConfig().hide_header) && this.props.showLoader !== true
-                && !this.props.showLoaderModal && !this.props.loaderWithData &&
-                <Header
-                    disableBack={this.props.disableBack}
-                    title={this.props.title}
-                    smallTitle={this.props.smallTitle}
-                    provider={this.props.provider}
-                    count={this.props.count}
-                    total={this.props.total}
-                    current={this.props.current}
-                    edit={this.props.edit}
-                    noBack={this.props.noBack}
-                    type={getConfig().productName}
-                    resetpage={this.props.resetpage}
-                    handleReset={this.props.handleReset}
-                    topIcon={this.props.topIcon || this.props.rightIcon}
-                    canSkip={this.props.canSkip}
-                    hideHamburger={this.props.hideHamburger}
-                    onSkipClick={this.props.onSkipClick}
-                    handleTopIcon={this.handleTopIcon}
-                    inPageTitle={this.state.inPageTitle}
-                    force_hide_inpage_title={this.state.force_hide_inpage_title}
-                    style={this.props.styleHeader}
-                    className={this.props.classHeader}
-                    headerData={this.props.headerData}
-                    new_header={this.state.new_header || this.state.project === 'help'}
-                    goBack={this.headerGoBack || this.historyGoBack}
-                    filterPage={this.props.filterPage}
-                    handleFilter={this.props.handleFilter} 
-                    hideBack={this.props.hideBack}
-                    logo={this.props.logo}
-                    notification={this.props.notification}
-                    handleNotification={this.props.handleNotification}  
-                    noBackIcon={this.props.noBackIcon}        
-                />
-                }
+                && !this.props.showLoaderModal && !this.props.loaderWithData && 
+                (isMoneycontrol && config.isIframe && !config.isMobileDevice ? 
+                    <IframeHeader
+                        disableBack={this.props.disableBack}
+                        type={getConfig().productName}
+                        headerData={this.props.headerData}
+                        goBack={this.headerGoBack || this.historyGoBack}
+                        showIframePartnerLogo={this.props.showIframePartnerLogo}
+                    />
+                :
+                    <Header
+                        disableBack={this.props.disableBack}
+                        title={this.props.title}
+                        smallTitle={this.props.smallTitle}
+                        provider={this.props.provider}
+                        count={this.props.count}
+                        total={this.props.total}
+                        current={this.props.current}
+                        edit={this.props.edit}
+                        noBack={this.props.noBack}
+                        type={getConfig().productName}
+                        resetpage={this.props.resetpage}
+                        handleReset={this.props.handleReset}
+                        topIcon={this.props.topIcon || this.props.rightIcon}
+                        handleTopIcon={this.handleTopIcon}
+                        inPageTitle={this.state.inPageTitle}
+                        force_hide_inpage_title={this.state.force_hide_inpage_title}
+                        style={this.props.styleHeader}
+                        className={this.props.classHeader}
+                        headerData={this.props.headerData}
+                        new_header={this.state.new_header || this.state.project === 'help'}
+                        goBack={this.headerGoBack || this.historyGoBack}
+                        filterPage={this.props.filterPage}
+                        handleFilter={this.props.handleFilter} 
+                        hideBack={this.props.hideBack}
+                        notification={this.props.notification}
+                        handleNotification={this.props.handleNotification}  
+                        noBackIcon={this.props.noBackIcon}
+                        canSkip={this.props.canSkip}
+                        hideHamburger={this.props.hideHamburger}
+                        onSkipClick={this.props.onSkipClick}        
+                    />
+                )}
+            
                 {/* Below Header Block */}
                 <div id="HeaderHeight" style={{ top: 56 }}>
 
@@ -206,16 +236,24 @@ export function commonRender(props_base) {
                 {/* Children Block */}
                 <div
                     style={{ ...this.props.styleContainer, backgroundColor: this.props.skelton ? '#fff' : 'initial' }}
-                    className={`Container  ${this.props.background || ''} 
+                    className={`${newIframeDesktopLayout ? 'IframeContainer' : 'Container'}  ${this.props.background || ''} 
                     ${props_base && props_base.classOverRideContainer ? props_base.classOverRideContainer : ''} 
                     ${this.props.classOverRideContainer || '' } 
-                    ${this.props.noPadding ? "no-padding" : ""}`}>
+                    ${this.props.noPadding ? "no-padding" : ""}
+                    ${!this.props.noFooter ? "iframe-bottom-padding": ''}`}
+                    >
                     <div
                         className={`${!this.props.skelton ? 'fadein-animation' : ''}`}
                         style={{ display: this.props.skelton ? 'none' : '' }}
                     >
                         {this.props.children}
                     </div>
+                    {
+                        this.props.iframeRightContent && newIframeDesktopLayout &&
+                        <div className='iframe-right-content'>
+                            <img src={this.props.iframeRightContent} alt="right_img" />
+                        </div>
+                    }
                 </div>
 
                 {/* Footer Block */}
@@ -265,7 +303,9 @@ export function commonRender(props_base) {
 
 export function unmount() {
     window.callbackWeb.remove_listener({});
-    window.removeEventListener("scroll", this.onScroll, false);
+    if(!isNewIframeDesktopLayout()){
+        window.removeEventListener("scroll", this.onScroll, true);
+    }
 
     this.setState({
         mounted: false
@@ -301,7 +341,8 @@ export function check_hide_header_title() {
 }
 
 export function getHeightFromTop() {
-    var el = document.getElementsByClassName('Container')[0];
+    const Container = isNewIframeDesktopLayout() ? 'IframeContainer' : 'Container'
+    var el = document.getElementsByClassName(Container)[0];
     if(!el) return;
     var height = el.getBoundingClientRect().top;
     return height;
@@ -606,20 +647,29 @@ export function calcReadtime(endtime) {
 
 export function new_header_scroll() {
     return (
+        <Fragment>
+            <div id="header-title-page"
+                style={this.props.styleHeader}
+                className={`header-title-page  ${this.props.classHeader}`}
+                data-aid='header-title-page'
+            >
+                <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{ width: this.props.count ? '75%' : '100%' }} data-aid='header-title-page-text'>
+                    {this.props.title}
+                </div>
 
-        <div id="header-title-page" data-aid='header-title-page'
-            style={this.props.styleHeader}
-            className={`header-title-page  ${this.props.classHeader}`}>
-            <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{ width: this.props.count ? '75%' : '100%' }} data-aid='header-title-page-text'>
-                {this.props.title}
+                {this.state.inPageTitle && this.props.count &&
+                    <span color="inherit"
+                        className={`header-title-page-count-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`}>
+                        <span style={{ fontWeight: 600 }}>{this.props.current}</span>/<span>{this.props.total}</span>
+                    </span>
+                }
             </div>
-
-            {this.state.inPageTitle && this.props.count &&
-                <span color="inherit"
-                    className={`header-title-page-count-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`}>
-                    <span style={{ fontWeight: 600 }}>{this.props.current}</span>/<span>{this.props.total}</span>
-                </span>}
-        </div>
-
+            {this?.props?.smallTitle && (
+                <div className={`body-text2 text-secondary m-top-1x pd-left-2x ${this.props?.classSmallTitle}`}>
+                    {this.props?.smallTitle}
+                </div>
+            )}
+            
+        </Fragment>
     )
 }

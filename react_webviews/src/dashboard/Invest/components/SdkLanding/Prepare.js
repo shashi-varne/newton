@@ -5,7 +5,6 @@ import SdkInvestCard from "../../mini-components/SdkInvestCard";
 import "./SdkLanding.scss";
 import { prepareInvestMaaper } from "../../constants";
 
-const config = getConfig();
 class Prepare extends Component {
   constructor(props) {
     super(props);
@@ -25,7 +24,7 @@ class Prepare extends Component {
   navigate = (path) => {
     this.props.history.push({
       pathname: path,
-      search: config.searchParams,
+      search: getConfig().searchParams,
     });
   };
 

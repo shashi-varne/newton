@@ -81,7 +81,7 @@ class Report extends Component {
     if (cta_path === 'invest/term_insurance') {
       this.navigate('/group-insurance/term/intro');
     } else {
-      openModule(cta_path);
+      openModule(cta_path, this.props);
     }
   }
 
@@ -96,7 +96,6 @@ class Report extends Component {
         handleClick={this.handleClick}
         edit={this.props.edit}
         resetpage={true}
-        topIcon="restart"
         handleReset={this.restartFHC}
         noFooter={true}
         classOverRideContainer="bg-grey"

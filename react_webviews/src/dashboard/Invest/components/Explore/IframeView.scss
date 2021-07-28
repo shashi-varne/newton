@@ -1,0 +1,122 @@
+.diy-iframe-view {
+  padding-bottom: 20px;
+  .title{
+    font-weight: 600;
+    padding-bottom: 20px;
+  }
+}
+.diy-iframe-search {
+  width: 100%;
+  border: 1px solid #979797;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  cursor: pointer; 
+  position: relative;
+
+  .diy-iframe-search-placeholder {
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 15px;
+    letter-spacing: 0px;
+    color: #979797;
+  }
+  .diy-iframe-search-icon{
+    position: absolute;
+    right: 20px;
+    top: 55%;
+    transform: translateY(-50%);
+  }
+}
+
+.diy-iframe-categories-container {
+  margin-top: 30px;
+
+  .diy-iframe-category-head{
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0px;
+    color: #160D2E;
+    margin-bottom: 15px;
+  }
+
+  .diy-iframe-categories{
+    display: flex;
+    justify-content: space-between;
+    min-width: 130px;
+    margin-bottom: 35px;
+    .diy-iframe-category{
+      margin-right: 10px;
+      flex: 1 1 100%;
+      cursor: pointer; 
+      .diy-iframe-category-icon{
+        width: 130px;
+        height: 130px;
+
+        img{
+          width: 100%;
+        }
+      }
+
+      .diy-iframe-category-title{
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 19px;
+        letter-spacing: 0px;
+        color: #160D2E;
+        margin-top: 10px;
+        margin-bottom: 5px;
+      }
+
+      .diy-iframe-category-desc{
+        font-size: 13px;
+        font-weight: 400;
+        line-height: 18px;
+        letter-spacing: 0px;
+        color: #767E86;
+      }
+    }
+  }
+
+  .diy-iframe-categories-mob{
+    flex-direction: column;
+    margin-top: 15px;
+  }
+}
+
+.diy-iframe-categories-container-mob{
+  margin-top: 0px;
+}
+
+.diy-kyc-status-card{
+  padding: 20px;
+  background-color: var(--highlight);
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.12), 0px 2px 2px rgba(0, 0, 0, 0.0483186);
+  border-radius: 4px;
+  position: relative;
+  cursor: pointer;
+  .diy-kyc-status-title{
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 18px;
+    letter-spacing: 0px;
+    margin-bottom: 10px;
+  }
+
+  .diy-kyc-status-subtitle{
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: 0px;
+    width: 60%;
+  }
+
+  .diy-kyc-status-card-icon{
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+}

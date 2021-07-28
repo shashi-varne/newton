@@ -5,17 +5,17 @@ import { Imgc } from "common/ui/Imgc";
 import { resetRiskProfileJourney } from "../../functions";
 import "./PaymentCallback.scss";
 import useUserKycHook from "../../../../kyc/common/hooks/userKycHook";
-import { isIframe } from "../../../../utils/functions";
 import { storageService } from "../../../../utils/validators";
+import { isNewIframeDesktopLayout } from "../../../../utils/functions";
 
 const PaymentCallback = (props) => {
+  const config = getConfig();
   const params = props.match.params || {};
   const navigate = navigateFunc.bind(props);
   const { user, isLoading } = useUserKycHook();
   const status = params.status || "";
   let message = params.message || "";
   resetRiskProfileJourney()
-  const config = getConfig();
   const eventData = storageService().getObject('mf_invest_data')
   let _event = {
     event_name: "payment_status",
@@ -62,7 +62,14 @@ const PaymentCallback = (props) => {
     } else if (config.isIframe) {
       window.callbackWeb.sendEvent(_event);
     }
-    navigate("/reports");
+    if(config.code === "moneycontrol") {
+      navigate("/");
+    } else {
+      if(config.code === "bfdlmobile" && config.isIframe) {
+        return;
+      }
+      navigate("/reports");
+    }
   };
 
   const goBack = () => {
@@ -72,15 +79,7 @@ const PaymentCallback = (props) => {
     ) {
       navigate("/kyc/journey");
     } else {
-      if(isIframe() && config?.code === 'moneycontrol') {
-        navigate("/invest/money-control");
-        return;
-      }
-      if(config.isSdk) {
-        navigate("/");
-        return;
-      }
-      navigate("/landing");
+      navigate("/");
     }
   }
 
@@ -92,15 +91,18 @@ const PaymentCallback = (props) => {
       handleClick={handleClick}
       headerData={{goBack}}
       skelton={isLoading}
+      iframeRightContent={require(`assets/${config.productName}/${paymentError ? 'error_illustration' : 'congratulations_illustration'}.svg`)}
     >
       <section className="invest-payment-callback" data-aid='invest-payment-callback'>
         {!paymentError && (
           <div className="content" data-aid='payment-error'>
-            <Imgc
-              src={require(`assets/check_icon.png`)}
-              alt=""
-              className="success-icon"
-            />
+            {!isNewIframeDesktopLayout() && (
+              <Imgc
+                src={require(`assets/check_icon.png`)}
+                alt=""
+                className="success-icon"
+              />
+            )}
             <h3>Congratulations!</h3>
             <p>A very wise investment indeed</p>
             <div className="message" data-aid='payment-message'>
@@ -113,6 +115,22 @@ const PaymentCallback = (props) => {
                 Units will be allotted by <span>next working day</span>
               </div>
             </div>
+            {
+              config.code === 'moneycontrol' && 
+              <div className='important-message'>
+              <div className='info-icon'>
+                <img src={require(`assets/${config.productName}/info_icon.svg`)} alt="" />
+              </div>
+              <div className='info-msg'>
+                  <div className='info-head'>Important</div>
+                  <div className='info-msg-content'>
+                    The Mutual Fund(s) will reflect in your Moneycontrol Portfolio
+                    once units are allocated by the AMC(s). Check the <span>‘Pending Transaction’</span>{" "}
+                    tab under ‘Portfolio’ to know more.
+                  </div>
+              </div>
+            </div>
+            }
           </div>
         )}
         {paymentError && (
@@ -121,13 +139,15 @@ const PaymentCallback = (props) => {
             <p data-aid='payment-message'>{message}</p>
           </div>
         )}
-        <div className="contact-us" data-aid='contact-us'>
-          <div>For any query, reach us at</div>
-          <div className="info" data-aid='info'>
-            <div className="text border-right">{config.mobile}</div>
-            <div className="text">{config.email}</div>
+        {!config.isIframe && (
+          <div className="contact-us" data-aid="contact-us">
+            <div>For any query, reach us at</div>
+            <div className="info" data-aid="info">
+              <div className="text border-right">{config.mobile}</div>
+              <div className="text">{config.email}</div>
+            </div>
           </div>
-        </div>
+        )}
       </section>
     </Container>
   );

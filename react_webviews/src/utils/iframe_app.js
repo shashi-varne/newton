@@ -2,19 +2,6 @@ import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { storageService } from "utils/validators";
 import { commonBackMapper } from "utils/constants";
 
-  let _event = {
-    event_name: "hide_loader",
-    properties: {
-      journey: {
-        name: "",
-        trigger: "",
-        journey_status: "",
-        next_journey: ""
-      }
-    }
-  };
-
-  window.callbackWeb.sendEvent(_event);
 // required
   // try {
   //   if ($rootScope.currentUser) {
@@ -38,10 +25,12 @@ export const backMapper = (state) => {
   return commonBackMapper[state] || "";
 }
 
-export const checkBeforeRedirection = (props, fromState, toState) => {
+export const checkBeforeRedirection = (fromState, toState) => {
   if (getConfig().isLoggedIn) {
     if (
-      toState === "/login" // ||
+      toState === "/login" ||
+      toState === "/login/verify-otp" ||  // TODO: Check with Alekhya 
+      toState?.includes("/partner-authentication")
       // toState === "/register" ||
       // toState === "/forgot-password" ||
       // toState === "/mobile/verify"
@@ -63,23 +52,24 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
     "/funds/",
     "/reports",
     "/withdraw",
-    "/withdraw-reason/",
+    "/withdraw/reason",
     "/payment/callback/",
     "/sip/payment/callback/",
     "/new/mandate/"
   ];
 
   if (backEnabledPages.indexOf(currentState) !== -1) {
-    var message = JSON.stringify({
+    const message = JSON.stringify({
       type: "iframe_close"
     });
     if(getConfig().code === 'moneycontrol' && ["/payment/callback","/sip/payment/callback"].includes(currentState)) {
-      backButtonHandlerWeb(props, fromState, currentState, params)
+      return backButtonHandlerWeb(props, fromState, currentState, params)
     } else {
       window.callbackWeb.sendEvent(message);
+      return true;
     }
   } else {
-    backButtonHandlerWeb(props, fromState, currentState, params)
+    return backButtonHandlerWeb(props, fromState, currentState, params)
   }
 }
 
@@ -88,7 +78,7 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
   const config = getConfig();
   
   const landingRedirectPaths = ["/kyc/report", "/notification", "/nps/payment/callback",
-    "/nps/mandate/callback", "/nps/success", "/page/invest/campaign/callback", "/invest", "/reports"];
+    "/nps/mandate/callback", "/nps/success", "/page/invest/campaign/callback", "/reports"];
 
   if (landingRedirectPaths.indexOf(currentState) !== -1 || currentState.indexOf("/nps/payment/callback") !== -1) {
     navigate("/landing");
@@ -104,10 +94,14 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
 
   const diyDirectEntryArr = ["/diy/fundlist/direct", "/diy/fundinfo/direct", "/diy/invest", "/invest/doityourself/direct"];
 
-  if ((currentState === "/kyc-esign/nsdl" && params?.status === "success") ||
-    diyDirectEntryArr.includes(currentState)) {
+  const verifyCurrentStateWithDirect = () => {
+    const current = currentState.split("/:")[0];
+    return diyDirectEntryArr.includes(current);
+  }
+
+  if ((currentState === "/kyc-esign/nsdl" && params?.status === "success") || verifyCurrentStateWithDirect()) {
     if (config?.code === 'moneycontrol') {
-      navigate("/invest/money-control");
+      navigate("/");
       return true;
     } else {
       navigate("/invest");
@@ -119,8 +113,9 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
     case "/sip/payment/callback":
     case "/kyc/report":
     case "/notification":
+    case "/kyc/home":
       if (config?.code === 'moneycontrol') {
-        navigate("/invest/money-control");
+        navigate("/");
         return true;
       } else {
         navigate("/landing");
@@ -135,23 +130,31 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
         storageService().clear();
       } else {
         navigate("/logout");
-        return true;
       }
-      break;
-    case '/invest/money-control':
-      let message = JSON.stringify({
-        type: "iframe_close"
-      });
-      window.callbackWeb.sendEvent(message);
-      storageService().clear();
-      break;
-    case '/account/merge/linked/success':
-      if (config?.code === 'moneycontrol') {
-        window.history.go(-2);
-      }// check later
-      // navigate kyc home
-      break;
+      return true;
+    // case '/invest/money-control':
+    //   let message = JSON.stringify({
+    //     type: "iframe_close"
+    //   });
+    //   window.callbackWeb.sendEvent(message);
+    //   storageService().clear();
+    //   break;
+    // case '/account/merge/linked/success':
+    //   if (config?.code === 'moneycontrol') {
+    //     window.history.go(-2);
+    //   }// check later
+    //   // navigate kyc home
+    //   break;
     default:
+      const closeIframeStates = ["/", "/invest", "/landing", "/reports", "/withdraw"]
+      if(closeIframeStates.includes(currentState) && config?.code === 'moneycontrol') {
+        let message = JSON.stringify({
+          type: "iframe_close"
+        });
+        window.callbackWeb.sendEvent(message);
+        storageService().clear();
+        return true; 
+      }
       if (backMapper(currentState)) {
         navigate(backMapper(currentState));
         return true;

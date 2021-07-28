@@ -14,9 +14,12 @@ import { initializeComponentFunctions } from "./checkoutFunctions";
 import {
   convertInrAmountToNumber,
   formatAmountInr,
+  getUrlParams,
 } from "../../../../utils/validators";
 import "./Checkout.scss";
 import { nativeCallback } from "../../../../utils/native_callback";
+import { getdiyGraphDataWithISIN } from "../../common/api";
+import isEmpty from 'lodash/isEmpty';
 
 class Checkout extends Component {
   constructor(props) {
@@ -27,7 +30,7 @@ class Checkout extends Component {
       ctc_title: "INVEST",
       form_data: [],
       investType: props.type === "diy" ? "sip" : "onetime",
-      partner_code: getConfig().partner_code,
+      partner_code: getConfig().code,
       disableInput: [],
       fundsData: [],
       renderData: nfoData.checkoutInvestType,
@@ -35,6 +38,7 @@ class Checkout extends Component {
       currentUser: storageService().getObject("user") || {},
       dialogStates: {},
       purchaseLimitData: {},
+      productName : getConfig().productName
     };
     this.initializeComponentFunctions = initializeComponentFunctions.bind(this);
   }
@@ -43,7 +47,7 @@ class Checkout extends Component {
     this.initializeComponentFunctions();
   }
 
-  onload = () => {
+  onload = async () => {
     let fundsData = [];
     let {
       form_data,
@@ -54,6 +58,13 @@ class Checkout extends Component {
       investType,
     } = this.state;
     ctc_title = this.getButtonText(investType);
+    const {isin} = getUrlParams();
+    let fundDataIsin;
+    if(isin) {
+      fundDataIsin = await this.getFundInfoDetails(isin);
+      storageService().setObject("diystore_fundInfo",fundDataIsin);
+      storageService().setObject(CART, []);
+    }
     if (type === "nfo") {
       let fund = storageService().getObject("nfo_detail_fund");
       if (fund) {
@@ -76,7 +87,7 @@ class Checkout extends Component {
       const fundInfo = storageService().getObject("diystore_fundInfo")
         ? [storageService().getObject("diystore_fundInfo")]
         : false;
-      fundsData = !storageService().getObject(CART)
+      fundsData = isEmpty(storageService().getObject(CART))
         ? fundInfo
         : storageService().getObject(CART);
 
@@ -106,6 +117,18 @@ class Checkout extends Component {
       );
     }
   };
+
+  getFundInfoDetails = async (isin) => {
+    try {
+      this.setState({show_loader: true});
+      const result = await getdiyGraphDataWithISIN(isin);
+      return result.fundinfo;
+    } catch(err) {
+      toast(err);
+    } finally {
+      this.setState({show_loader: false});
+    }
+  }
 
   getPurchaseLimit = async (isins) => {
     if (this.props.type === "diy") {
@@ -155,12 +178,20 @@ class Checkout extends Component {
     return funds.filter((data) => data.allow_purchase[investType]);
   };
 
+  goBack = () => {
+    if(this.state.partner_code === "moneycontrol") {
+      this.navigate("/");
+    } else {
+      this.props.history.goBack();
+    }
+  }
+
   handleClick = () => {
     this.sendEvents('next')
     let { fundsData, type, investType } = this.state;
     let allowedFunds = this.getAllowedFunds(fundsData, investType);
     if (fundsData.length === 0 || allowedFunds.length === 0) {
-      this.props.history.goBack();
+      this.goBack();
       return;
     }
     let submit = true;
@@ -282,6 +313,8 @@ class Checkout extends Component {
       type,
       renderData,
       dialogStates,
+      partner_code,
+      productName
     } = this.state;
     let allowedFunds = this.getAllowedFunds(fundsData, investType);
     if (allowedFunds && allowedFunds.length === 0) ctc_title = "BACK";
@@ -296,6 +329,10 @@ class Checkout extends Component {
         title={type === "nfo" && "Your Mutual Fund Plan"}
         hidePageTitle={type !== "nfo"}
         showLoader={isApiRunning}
+        loaderData={{
+          loadingText:"Your payment is being processed. Please do not close this window or click the back button on your browser."
+        }}
+        iframeRightContent={require(`assets/${productName}/invest_fund.svg`)}
       >
         <div className="nfo-checkout" data-aid='nfo-checkout'>
           <div
@@ -321,7 +358,7 @@ class Checkout extends Component {
                     }
                   >
                     {investType === data.value && (
-                      <img alt="" src={require(`assets/${data.icon}`)} />
+                      <img alt="" src={require(`assets/${productName}/${data.icon}`)} />
                     )}
                     {investType !== data.value && (
                       <img
@@ -335,7 +372,7 @@ class Checkout extends Component {
                       <img
                         className="icon"
                         alt=""
-                        src={require(`assets/${data.selected_icon}`)}
+                        src={require(`assets/${productName}/${data.selected_icon}`)}
                       />
                     )}
                   </div>
@@ -359,7 +396,7 @@ class Checkout extends Component {
                     <div className="text" data-aid='checkout-text'>
                       <h4>
                         {fund.friendly_name || fund.legal_name}
-                        {type === "diy" && (
+                        {type === "diy" && partner_code !== "moneycontrol" && (
                           <span>
                             <img
                               onClick={() => this.deleteFund(index)}

@@ -1,0 +1,43 @@
+.tax-filing-details .MuiInputLabel-root {
+  color: var(--steelgrey);
+  font-size: 11px;
+  line-height: calc(11px * 1.6);
+  top: 5px;
+  left: 10px;
+}
+
+.tax-filing-details .MuiInput-input {
+  color: var(--gunmetal);
+  margin-left: 10px;
+}
+
+.tax-filing-details .MuiFormControl-root {
+  background: rgba(238, 238, 238, 0.3);
+  padding: 5px 0px 0px 0px;
+  margin-top: calc(var(--spacing) * 3);
+}
+
+.tax-filing-details .MuiInput-focused {
+  outline: 0;
+}
+
+.tax-filing-details .MuiFormHelperText-root {
+  min-height: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  background-color: #fff;
+  padding-top: 8px;
+  padding-left: 10px;
+}
+
+.tax-filing-details .MuiInputLabel-formControl {
+  position: absolute;
+}
+
+.tax-filing-details .MuiInputLabel-formControl[data-shrink='false'] {
+  transform: translate(0, 16px) scale(1);
+}
+
+.tax-filing-details .MuiInputLabel-formControl[data-shrink='true'] {
+  top: 5px;
+}

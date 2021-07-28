@@ -7,8 +7,8 @@ import toast from "../../../common/ui/Toast";
 // import { nps_config } from "../constants";
 
 const genericErrMsg = "Something went wrong";
-
 export async function initialize() {
+  const config = getConfig();
   this.navigate = navigateFunc.bind(this.props);
   this.formCheckUpdate = formCheckUpdate.bind(this);
   this.get_recommended_funds = get_recommended_funds.bind(this);
@@ -39,10 +39,23 @@ export async function initialize() {
     this.setState({ npsData });
   }
   nativeCallback({ action: "take_control_reset" });
+  const user = storageService().getObject("user") || {};
+  const screenNames = ["nps_info", "nps_amount"]
+  if(config.isIframe && user.nps_investment && screenNames.includes(this.state.screen_name)) {
+    if (user.kyc_registration_v2 === 'init') {
+      this.navigate("/kyc/home")
+    } else if (user.kyc_registration_v2 === 'incomplete') {
+      this.navigate("/kyc/journey");
+    } else if (storageService().get('nps_additional_details_required')) {
+      this.navigate("/nps/identity");
+    } else {
+      this.navigate("/nps/amount/one-time");
+    }
+  }
 
   this.setState(
     {
-      productName: getConfig().productName,
+      productName: config.productName,
     },
     () => {
       this.onload();
@@ -436,7 +449,7 @@ export async function submitPran(params) {
         case 301:
           this.navigate('/nps/pan');
           break;
-        case 303:
+        case 302:
           let _event = {
             event_name: "journey_details",
             properties: {
@@ -516,8 +529,8 @@ export async function getNPSInvestmentStatus() {
 }
 
 export async function accountMerge() {
-  if (this.state.isIframe) {
-    const config = getConfig();
+  const config = getConfig();
+  if (config.isIframe) {
     const email = config.email;
     let name = "fisdom";
     if (config.productName === "finity") name = "finity";

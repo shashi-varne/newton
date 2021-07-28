@@ -26,14 +26,17 @@ import RiskCustomize from "./components/RiskPages/RiskCustomize";
 import RiskInfo from "./components/RiskPages/RiskInfo";
 import HowWeRecommend from "../Recommendation/HowWeRecommend";
 
+import { getConfig } from 'utils/functions';
+
 const Invest = (props) => {
   const { url } = props.match;
+  const partnerCode = getConfig().code;
   return (
     <Switch>
       <Route
         exact
         path={`${url}`}
-        component={Landing}
+        component={partnerCode === 'moneycontrol' ? ExploreFunds : Landing}
       />
       <Route
         exact
@@ -57,7 +60,7 @@ const Invest = (props) => {
       />
       <Route
         exact
-        path={`${url}/explore`}
+        path={[`${url}/explore`,`${url}/doityourself/direct`]}
         component={ExploreFunds}
       />
       <Route

@@ -43,7 +43,7 @@ const Insta = (props) => {
         investments: [{ itype, name, subtype, allocations }],
       })
       if (result?.resend_redeem_otp_link && result?.verification_link) {
-        navigate('/withdraw/verify', { state:{...result} })
+        navigate('/withdraw/verify', { state:{...result, type: 'instaredeem'} })
         return
       }
     } catch (err) {

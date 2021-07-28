@@ -1,3 +1,5 @@
+@import './utils.scss';
+
 .configPrimaryColorClass {
   color: var(--primary) !important;
 }
@@ -38,6 +40,10 @@ body[data-device="web"] #root {
 
 button {
   font-family: "Rubik", "Roboto", sans-serif;
+}
+
+body.IframeBody #root {
+  background: #fff;
 }
 
 body[data-device="web"] {
@@ -84,12 +90,275 @@ body[data-device="web"] {
     margin-bottom: 20px;
   }
 
-  .ContainerWrapper {
+  ::-webkit-scrollbar-thumb {
+    background: #dbdbdb;
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #c4c4c4; 
+  }
+
+  .ContainerWrapper, .bfdlContainerWrapper {
     max-width: var(--desktop-width);
     margin: 0 auto;
     padding-bottom: 3px;
     overflow: auto;
   }
+
+  //////////// Iframe Css /////////////////
+  .iframeContainerWrapper{
+    background-color: white;
+    height: 100%;
+    overflow: hidden;
+    overflow-y: auto;
+    padding: 80px;
+    padding-bottom: 0px;
+    .header-title-page{
+      padding-left: 0px;
+      min-height: auto;
+      padding-top: 20px;
+      max-width: 51%;
+      min-width: 440px;
+    }
+    .Loader {
+      top: 80px !important;
+      max-width: 100%;
+    }
+    .nfo-checkout{
+      padding: 0 20px;
+
+      .checkout-invest-type{
+        background-color: white !important;
+      }
+
+      .cart-items .item {
+        margin: 0 0 15px 0;
+      }
+    }
+
+    .invest-journey-container {
+      padding: 20px 10px 0 25px;
+    }
+
+    .diy-search{
+      background-color: white;
+      height: auto;
+      padding-bottom: 0px;
+
+      .search-content {
+        padding-bottom: 0px;
+      }
+
+      .search-loader {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 50%;
+      }
+
+      .search-list{
+        height: 70vh;
+        box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.12), 0px 2px 2px rgba(0, 0, 0, 0.0483186);
+        border-radius: 6px;
+        padding: 10px;
+        margin-left: 2px;
+        .text{
+          padding: 12px;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 300;
+          line-height: 17px;
+          letter-spacing: 0px;
+          text-align: left;
+          color: #6D6E71;
+        }
+      }
+    }
+
+    .Footer{
+      position: fixed !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0px;
+      padding:10px 0px 20px 0px;
+      display: flex;
+      justify-content: center;
+      border-radius: 0px;
+
+      .FooterTwoButtonLayout,.FooterDefaultLayout{
+        button{
+          min-width: 310px !important;
+          width: max-content !important;
+        }
+        button.borderButton{
+          border: none !important;
+        }
+      }
+    }
+
+    .kyc-compliant-complete,.kyc-esign-complete{
+      header{
+        text-align: left;
+      }
+    }
+
+    .kyc-esign-complete{
+      header{
+        margin-top: 40px;
+      }
+      .text {
+        text-align: left;
+        justify-content: left;
+      }
+    }
+
+    .kyc-compliant-complete{
+    
+      .kyc-compliant-complete-msg{
+        font-size: 13px;
+        font-weight: 400;
+        line-height: 21px;
+        letter-spacing: 0px;
+        text-align: left;
+        color: #767E86;
+        margin-top: 125px;
+        margin-bottom: 30px;
+        span{
+          font-size: 13px;
+          font-weight: 500;
+          line-height: 21px;
+          letter-spacing: 0px;
+          text-align: left;
+        }
+      }
+    }
+
+    .nsdl-status{
+      .nsdl-status-text{
+        margin-top: 120px;
+      }
+    }
+
+    .account-merge-linked{
+      text-align: left;
+      margin-top: 125px;
+    }
+
+    .invest-payment-callback {
+      box-shadow: none;
+      text-align: left;
+
+      .content .message {
+        justify-content: flex-start;
+      }
+    }
+
+    .sip-dates {
+      padding-left: 5px;
+    }
+
+    .invest-sip-payment-callback{
+      
+      .content {
+        margin-top: 60px;
+        text-align: left;
+        .subtitle {
+          font-size: 18px;
+          font-weight: 500;
+          line-height: 21px;
+          letter-spacing: 0px;
+          margin-top: 10px;
+          margin-bottom: 20px;
+        }
+
+        .message{
+          justify-content: left;
+        }
+      }
+      .content-iframe-style{
+        margin-top: 140px;
+      }
+    }
+
+    .generic-page-loader{
+      top: 0px !important;
+    }
+
+    #digilocker-failed{
+      .body-text1{
+        margin-top: 80px;
+      }
+    }
+  }
+
+  .IframeContainer.iframe-bottom-padding{
+    padding-bottom: 100px !important;
+  }
+  .IframeContainer{
+    display: flex;
+    padding-bottom: 0px !important;
+    .fadein-animation{
+      margin-top: 20px;
+      flex: 1 1 55%;
+      // overflow: hidden;
+      // padding-bottom: 100px;
+      min-width: 420px;
+      .diy-tab-container{
+        margin: 0px !important;
+      }
+    }
+
+    .iframe-right-content{
+      display: grid;
+      place-items: center;
+      height: 60vh;
+      flex:1 1 55%;
+      img{
+        width: 100%;
+        min-width: 300px;
+        height: auto;
+        max-width:300px;
+      }
+    }
+    #invest-explore-fund-type .top-title{
+      margin-top: 0px;
+    }
+    .fund-container{
+      width: 100%;
+      padding-bottom: 100px;
+    }
+  }
+////////////End of Iframe Css /////////////////
+
+/////////// BFDL Container Css Start///////////////
+
+  .bfdlContainerWrapper {
+    // padding: 20px 20px 50px 20px;
+    max-width: 100%;
+    height: 100%;
+    background-color: #fff;
+
+    .Header, .Step {
+      max-width: 100%;
+    }
+
+    .recommendations-disclaimer .tc_link {
+      color: var(--secondary);
+    }
+  }
+
+/////////// BFDL Container Css End ///////////////
 
   .Step {
     max-width: var(--desktop-width);
@@ -186,7 +455,25 @@ body[data-device="web"] {
   cursor: pointer;
 }
 
+body.IframeBody {
+  .Loader {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+}
 
+.bfdlContainerWrapper {
+  background: #fff;
+
+  .generic-page-loader {
+    top: 0px !important;
+  }
+  
+  .recommendations-disclaimer .tc_link,
+  .reports .reports-header .summary-green-text {
+    color: var(--secondary);
+  }
+}
 
 
 .fadein-animation {
@@ -440,9 +727,14 @@ button {
   text-align: center;
 }
 
-.FlexButtonGenericColor{
-  background-color: var(--secondary);
-  color: white;
+.FlexButtonGenericColor {
+  border-radius: var(--border-radius);
+
+  button{
+    background-color: var(--secondary);
+    color: white;
+    border-radius: var(--border-radius);
+  }
 }
 
 .FooterTwoButtonLayout button.borderButton {
@@ -1125,7 +1417,7 @@ $header-title-font-size: 20px;
 
 .main-top-title-header-old {
   @include main-top-title-header-base();
-  color: white;
+  color: var(--primary);
 }
 
 .slide-fade {
@@ -1840,8 +2132,8 @@ $header-title-font-size: 20px;
   column-gap: 18px;
   font-size: 13px;
   text-transform: lowercase;
-  min-width: 100px;
-  padding: 4px 10px;
+  min-width: 120px;
+  padding: 10px;
   margin: -10px 0;
 
   .cart-content {
@@ -1857,7 +2149,7 @@ $header-title-font-size: 20px;
       position: absolute;
       border-radius: 50%;
       background-color: #477d3c;
-      padding: 5px;
+      padding: 3px;
       width: 25px;
       height: 25px;
       right: -15px;

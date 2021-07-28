@@ -15,12 +15,9 @@ import LocationPermDummy from "./LocationPermDummy";
 import KycUploadContainer from "../mini-components/KycUploadContainer";
 import SelfieUploadStatus from "../Equity/mini-components/SelfieUploadStatus";
 import { nativeCallback } from '../../utils/native_callback'
-import { openFilePicker } from "../../utils/functions";
+import { isNewIframeDesktopLayout, openFilePicker } from "../../utils/functions";
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 import { capitalize } from 'lodash';
-
-const config = getConfig();
-const { productName, isNative, Web: isWeb, isSdk } = config;
 
 const Selfie = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -41,6 +38,9 @@ const Selfie = (props) => {
   const [fileHandlerParams, setFileHandlerParams] = useState();
   const [goBackModal, setGoBackModal] = useState(false);
   const navigate = navigateFunc.bind(props);
+
+  const config = getConfig();
+  const { productName, isNative, Web: isWeb, isSdk } = config;  
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -69,6 +69,10 @@ const Selfie = (props) => {
 
   const handleNavigation = () => {
     if (bottomSheetType === "failed") {
+      if(isNewIframeDesktopLayout()) {
+        navigate(PATHNAME_MAPPER.uploadSelfie);
+        return;
+      }
       setOpenBottomSheet(false);
       setFile(null);
       setFileToShow(null);
@@ -248,6 +252,7 @@ const Selfie = (props) => {
       showLoader={isApiRunning}
       title="Take a selfie"
       headerData={{goBack}}
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-upload-selfie-screen'
       events={sendEvents("just_set_events")}
     >
@@ -318,6 +323,7 @@ const Selfie = (props) => {
             onClose={() => setOpenBottomSheet(false)}
             onCtaClick={handleNavigation}
             kyc={kyc}
+            navigate={navigate}
           />
           {goBackModal ?
             <ConfirmBackDialog

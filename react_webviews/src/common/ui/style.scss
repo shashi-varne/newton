@@ -332,8 +332,14 @@ input.default-otp-input {
   display: flex;
   justify-content: space-between;
   margin: 80px 0 0 0;
+
+  .left-arrow:hover, .right-arrow:hover{
+    background-color: var(--on-hover-background);
+  }
+
 }
 .left-arrow {
+  cursor: pointer;
   width: fit-content;
   background: #ececec;
   padding: 12px 20px 12px 20px;
@@ -344,6 +350,7 @@ input.default-otp-input {
   width: 20px;
 }
 .right-arrow {
+  cursor: pointer;
   // width: 200px;
   background: var(--secondary);
   padding: 12px 20px 12px 20px;
@@ -590,6 +597,10 @@ body[data-device="mobile"] {
   .__react_component_tooltip.show {
     opacity: 1;
    }
+
+   .generic-page-loader {
+     top: 0px;
+   }
 }
 
 .generic-render-benefits {
@@ -653,6 +664,10 @@ body[data-device="mobile"] {
     width: auto;
     text-align: left;
     background: white;
+  }
+
+  .dropdown-in-modal-close{
+    cursor: pointer;
   }
 }
 
@@ -1130,7 +1145,7 @@ body[data-device="mobile"] {
   }
   50%,
   100% {
-    background-color: #119A4B;
+    background-color: var(--on-focus-background);
     opacity: 0.7;
   }
 }

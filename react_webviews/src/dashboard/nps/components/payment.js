@@ -27,6 +27,30 @@ class NpsPaymentCallback extends Component {
       this.navigate("/");
       return;
     }
+    const npsRecommended = storageService().getObject("nps-recommend") || {};
+    const _eventOnLoad = {
+      'event_name': 'payment_status',
+      'properties': {
+        'status': params.status,
+        'amount': params.amount,
+        'payment_id': params.id,
+        'journey': {
+          'name': 'nps',
+          'investment_type': params.type,
+          'investment_subtype': '',
+          'risk_type': npsRecommended.risk
+        }
+      }
+    };
+    const config = getConfig();
+  
+    // send event
+    if (!config.Web) {
+      window.callbackWeb.eventCallback(_eventOnLoad);
+    } else if (config.isIframe) {
+      const message = JSON.stringify(_eventOnLoad);
+      window.callbackWeb.sendEvent(message);
+    }
     const amount = params.amount || storageService().get('npsAmount');
     this.setState({
       amount: amount,
@@ -66,7 +90,7 @@ class NpsPaymentCallback extends Component {
           } else if (config.isIframe) {
             window.callbackWeb.sendEvent(_event);
           }
-          this.navigate('/kyc/journey');
+          this.navigate('/kyc/home');
         } else if (currentUser.kyc_registration_v2 === 'incomplete') {
           // send event
           if (!config.Web) {
@@ -96,7 +120,9 @@ class NpsPaymentCallback extends Component {
         } else if (config.isIframe) {
           window.callbackWeb.sendEvent(_event);
         }
-        this.navigate('/nps/investments');
+        if(!config.isIframe) {
+          this.navigate('/nps/investments');
+        }
       }
     }
   };

@@ -4,19 +4,20 @@ import { getConfig, isIframe } from 'utils/functions';
 import expand from 'assets/expand_icn.png';
 import shrink from 'assets/shrink_icn.png';
 import top_icon_fisdom from 'assets/sip_action_illustration_fisdom.svg';
-import top_icon_myway from 'assets/sip_action_illustration_myway.svg';
-import ic_b_myway from 'assets/ic_auth_bank_myway.svg';
-import ic_e_myway from 'assets/ic_auth_emandate_myway.svg';
+import top_icon_myway from 'assets/finity/sip_action_illustration_myway.svg';
+import ic_b_myway from 'assets/finity/ic_auth_bank_myway.svg';
+import ic_e_myway from 'assets/finity/ic_esign_otp_finity.svg';
 import ic_sb_myway from 'assets/ic_select_bank_myway.svg';
 import ic_b_fisdom from 'assets/ic_auth_bank_fisdom.svg';
 import ic_e_fisdom from 'assets/ic_auth_emandate_fisdom.svg';
 import ic_sb_fisdom from 'assets/ic_select_bank_fisdom.svg';
 import trust_icon from 'assets/trust_icons_emandate.svg';
-import illustration from 'assets/finity/illustration.svg'
+import illustration from 'assets/finity/sip_action_illustration_myway.svg'
 import toast from '../../common/ui/Toast';
 import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
 import {Imgc} from '../../common/ui/Imgc';
+import Container from '../common/Container';
 
 const aboutQuestions = [
   {
@@ -51,7 +52,8 @@ class About extends Component {
       emandate: {},
       pc_urlsafe: getConfig().pc_urlsafe,
       params: getConfig().current_params,
-      iframe: isIframe()
+      iframe: isIframe(),
+      isMobileDevice: getConfig().isMobileDevice,
     }
 
     this.renderQuestions = this.renderQuestions.bind(this);
@@ -195,16 +197,16 @@ class About extends Component {
     )
   }
 
-  loadComponent() {
-    if (this.state.iframe) {
-      return require(`../commoniFrame/Container`).default;
-    } else {
-      return require(`../common/Container`).default;
-    }
-  }
+  // loadComponent() {
+  //   if (this.state.iframe) {
+  //     return require(`../commoniFrame/Container`).default;
+  //   } else {
+  //     return require(`../common/Container`).default;
+  //   }
+  // }
 
   render() {
-      const Container = this.loadComponent();
+      // const Container = this.loadComponent();
     return (
       <Container
         noBack={this.state.params.referral_code ? true: false}
@@ -214,10 +216,10 @@ class About extends Component {
         edit={this.props.edit}
         buttonTitle="Select Bank for e-mandate"
         events={this.sendEvents('just_set_events')}
-        iframeIcon={this.state.iframeIcon}
+        iframeRightContent={this.state.iframeIcon}
       >
         <div style={{ textAlign: 'center' }}>
-        {!this.state.iframe && <Imgc style={{minHeight:140, width:"100%"}} src={this.state.top_icon} alt="Mandate" />}
+        {(!this.state.iframe || this.state.isMobileDevice) && <Imgc style={{minHeight:140, width:"100%"}} src={this.state.top_icon} alt="Mandate" />}
         </div>
         <div style={{
           color: '#767e86', margin: '10px 0px 10px 0px',
