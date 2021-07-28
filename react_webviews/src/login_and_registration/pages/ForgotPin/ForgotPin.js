@@ -13,7 +13,7 @@ const ForgotPin = (props) => {
   const [authDetails, setAuthDetails] = useState({});
   const [pan, setPan] = useState('');
   const [panError, setPanError] = useState('');
-  const [fetchError, setFetchError] = useState(false);
+  const [authFetchError, setAuthFetchError] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [isFetchApiRunning, setIsFetchApiRunning] = useState(false);
   const { clearRouteParams, persistRouteParams } = usePersistRouteParams();
@@ -30,7 +30,7 @@ const ForgotPin = (props) => {
       setAuthDetails(response);
     } catch(err) {
       console.log(err);
-      setFetchError(true);
+      setAuthFetchError(true);
     } finally {
       setIsFetchApiRunning(false);
     }
@@ -90,10 +90,10 @@ const ForgotPin = (props) => {
         pan={pan}
         panError={panError}
         onPanInputChange={handlePanInput}
-        noData={fetchError}
+        noData={authFetchError}
         renderNoData={<SessionExpiredUi onGoBackClicked={goBack} />}
       />
-      {!isFetchApiRunning && !fetchError &&
+      {!isFetchApiRunning && !authFetchError &&
         <>
           <LoginButton onClick={handleClick} showLoader={isApiRunning}>
             Continue

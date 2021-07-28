@@ -1,7 +1,7 @@
 import "./LoginContainer.scss";
 import React from "react";
 import { getConfig } from "utils/functions";
-import { Route, Switch } from "react-router-dom";
+import { Link, Route, Switch } from "react-router-dom";
 import PinChangeSuccess from "../pages/ForgotPin/ForgotPinSuccess";
 import Login from "../pages/Login/Login";
 import VerifyLoginOtp from "../pages/Login/VerifyLoginOtp";
@@ -13,6 +13,8 @@ import ConfirmNewPin from "../pages/ForgotPin/ConfirmNewPin";
 import ForgotPinSuccess from "../pages/ForgotPin/ForgotPinSuccess";
 import ForgotPin from "../pages/ForgotPin/ForgotPin";
 import SVG from 'react-inlinesvg';
+import WVInPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
+import GoBackToLoginBtn from "../common/GoBackToLoginBtn";
 
 const config = getConfig();
 const { productName } = config;
@@ -32,26 +34,28 @@ const LoginContainer = (props) => {
           <img src={require(`assets/${productName}/ils_login.svg`)} alt="login" />
         </div>
         <div className="ld-right">
-          <Switch>
+          <>
             {pathName === 'login' &&
-              <>
+              <Switch>
                 <Route path={`${url}`} exact component={Login} />
                 <Route path={`${url}/pin-change-success`} component={PinChangeSuccess} />
                 <Route path={`${url}/verify-otp`} component={VerifyLoginOtp} />
                 <Route path={`${url}/verify-pin`} component={VerifyPin} />
                 <Route path={`${url}/referral`} component={Referral} />
-              </>
+                <Route component={PageNotFound} />
+              </Switch>
             }
             {pathName === 'forgot-pin' &&
-              <>
+              <Switch>
                 <Route path={`${url}`} exact component={ForgotPin} />
                 <Route path={`${url}/verify-otp`} component={VerifyForgotOtp} />
                 <Route path={`${url}/new-pin`} component={EnterNewPin} />
                 <Route path={`${url}/confirm-pin`} component={ConfirmNewPin} />
                 <Route path={`${url}/success`} component={ForgotPinSuccess} />
-              </>
+                <Route component={PageNotFound} />
+              </Switch>
             }
-          </Switch>
+          </>
         </div>
       </div>
       <FooterTitle/>
@@ -84,3 +88,14 @@ const FooterTitle = () => {
     </div>
   );
 };
+
+const PageNotFound = () => {
+  return (
+    <>
+      <WVInPageTitle style={{ textAlign: 'center' }}>Lost your way?</WVInPageTitle>
+      <Link to="/login" component={GoBackToLoginBtn} style={{ textDecoration: 'none' }}>
+        <GoBackToLoginBtn />
+      </Link>
+    </>
+  );
+}
