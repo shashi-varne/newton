@@ -201,6 +201,7 @@ class SdkLanding extends Component {
         showLoader={this.state.showPageLoader}
         headerData={{goBack: this.goBack, partnerLogo: true}}
         data-aid='sdk-landing-screen'
+        events={this.sendEvents("just_set_events")}
       >
         <div className='sdk-landing' data-aid='sdk-landing'>
           {!this.state.kycStatusLoader ? (
