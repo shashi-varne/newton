@@ -28,7 +28,7 @@ const SnapScrollContainer = ({
 
   useEffect(() => {
     createObserver();
-    // Todo: Need to unobserve
+    
     if (!isLoading && !error) {
       setTimeout(() => setShowBtnGlow(true), 4000);
     }
