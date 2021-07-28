@@ -621,12 +621,24 @@ export function stringToHexa(str) {
 export function isAuthenticatedUser(props) {
   const fromState = props.location?.state?.fromState || "";
   const navigation = navigate.bind(props);
+  const data = {
+    state: {
+      goBack: "/"
+    }
+  }
   if (getConfig().isLoggedIn) {
-    if (!fromState) {
-      navigation("/")
+    if (!fromState || isUnAuthenticatedPath(fromState)) {
+      navigation("/", data)
     } else {
-      navigation(fromState);
+      navigation(fromState, data);
     }
     return true;
   }
+}
+
+export function isUnAuthenticatedPath(path) {
+  const unAuthenticatedPaths = ["/login", "/register", "/forgot-password", "/mobile/verify", "/logout", "/prepare"];
+  const unAuthenticatedPathsWithParams = ["/partner-authentication"];
+  const pathname = unAuthenticatedPathsWithParams.find(el => path.match(el))
+  return unAuthenticatedPaths.includes(path) || !isEmpty(pathname); 
 }
