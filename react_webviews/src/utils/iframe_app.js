@@ -167,7 +167,7 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
       }
       return true;
     default:
-      const closeIframeStates = ["/", "/invest", "/landing", "/reports", "/withdraw"]
+      const closeIframeStates = ["/", "/invest", "/landing", "/reports", "/withdraw", "/invest/explore"];
       if(closeIframeStates.includes(currentState) && config?.code === 'moneycontrol') {
         let message = JSON.stringify({
           type: "iframe_close"
