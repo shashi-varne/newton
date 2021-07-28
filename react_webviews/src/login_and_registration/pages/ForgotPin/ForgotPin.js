@@ -21,6 +21,7 @@ const ForgotPin = (props) => {
 
   const handlePanInput = (value) => {
     setPan(value);
+    setPanError('');
   }
 
   const fetchAuthDetails = async () => {
