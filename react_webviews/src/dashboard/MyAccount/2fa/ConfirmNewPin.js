@@ -80,7 +80,7 @@ const ConfirmNewPin = (props) => {
     }
   }
 
-  const handleYes = async () => {
+  const handleYes = () => {
     sendEvents("next");
     if (kycFlow) {
       navigate('/landing')
