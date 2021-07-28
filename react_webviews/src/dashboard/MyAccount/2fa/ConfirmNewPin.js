@@ -4,6 +4,8 @@ import Container from "../../common/Container";
 import EnterMPin from "../../../2fa/components/EnterMPin";
 import { nativeCallback } from "../../../utils/native_callback";
 import { twofaPostApi, modifyPin, setPin } from '../../../2fa/common/ApiCalls';
+import { getKycFromSummary } from "../../../login_and_registration/functions"
+import { storageService } from "utils/validators";
 import WVPopUpDialog from "../../../common/ui/PopUpDialog/WVPopUpDialog";
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 
@@ -46,7 +48,10 @@ const ConfirmNewPin = (props) => {
       setIsApiRunning(false);
       sendEvents("next");
       clearRouteParams();
-      setOpenDialog(true)
+      let result = await getKycFromSummary({user: ["user"]})
+      let user = result.data.user.user.data;
+      storageService().setObject("user", user);
+      setOpenDialog(true);
     } catch (err) {
       console.log(err);
       setPinError(err);
@@ -67,7 +72,6 @@ const ConfirmNewPin = (props) => {
       "properties": {
         "user_action": user_action,
         "screen_name": 'confirm_fisdom_pin',
-
         "journey": routeParams.set_flow ? "set_fisdom_pin" : "reset_fisdom_pin",
       }
     };
