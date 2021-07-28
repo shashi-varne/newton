@@ -25,11 +25,9 @@ export async function proceedInvestment(data) {
     paymentRedirectUrl,
     handleApiRunning,
     handleDialogStates,
-    userKyc,
     navigate
   } = data;
 
-  const kycJourneyStatus = getKycAppStatus(userKyc).status;
   let isKycNeeded = false;
   if (
     (partnerCode === "bfdlmobile" && !data.isInvestJourney) ||

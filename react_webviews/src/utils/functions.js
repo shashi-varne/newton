@@ -3,7 +3,6 @@ import { checkValidString, getUrlParams, storageService } from './validators';
 import { isArray, isEmpty } from 'lodash';
 import $ from 'jquery';
 import {  getPartnerData  } from './partnerConfigs';
-import isEmpty from "lodash/isEmpty";
 
 export const getHost = (pathname) => {
   return window.location.origin + pathname;
