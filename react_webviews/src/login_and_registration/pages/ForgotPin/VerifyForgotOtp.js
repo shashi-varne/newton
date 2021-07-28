@@ -103,7 +103,7 @@ const VerifyForgotOtp = (props) => {
       >
         CONTINUE
       </LoginButton>
-      <GoBackToLoginBtn navigateFunc={navigate} />
+      <GoBackToLoginBtn onClick={goBack} />
     </OtpContainer>
   );
 }

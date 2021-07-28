@@ -91,14 +91,14 @@ const ForgotPin = (props) => {
         panError={panError}
         onPanInputChange={handlePanInput}
         noData={fetchError}
-        renderNoData={<SessionExpiredUi navigateFunc={navigate} />}
+        renderNoData={<SessionExpiredUi onGoBackClicked={goBack} />}
       />
       {!isFetchApiRunning && !fetchError &&
         <>
           <LoginButton onClick={handleClick} showLoader={isApiRunning}>
             Continue
           </LoginButton>
-          <GoBackToLoginBtn navigateFunc={navigate} />
+          <GoBackToLoginBtn onClick={goBack} />
         </>
       }
     </>

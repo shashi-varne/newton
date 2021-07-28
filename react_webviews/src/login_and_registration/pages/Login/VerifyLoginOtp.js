@@ -115,7 +115,7 @@ class VerifyLoginOtp extends Component {
         >
           CONTINUE
         </LoginButton>
-        <GoBackToLoginBtn navigateFunc={this.navigate} />
+        <GoBackToLoginBtn onClick={this.goBackToLogin} />
       </OtpContainer>
     );
   }
