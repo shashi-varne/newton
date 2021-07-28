@@ -5,7 +5,7 @@ import { storageService, getUrlParams } from "utils/validators";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { isEmpty } from "../utils/validators";
 import { nativeCallback } from "../utils/native_callback";
-import { getBasePath } from "../utils/functions";
+import { getBasePath, isAuthenticatedUser } from "../utils/functions";
 
 const isMobileView = getConfig().isMobileDevice;
 const errorMessage = "Something went wrong!";
@@ -26,6 +26,10 @@ export function initialize() {
   this.redirectAfterLogin = redirectAfterLogin.bind(this);
   let main_query_params = getUrlParams();
   let { referrer = "" } = main_query_params;
+
+  if(isAuthenticatedUser(this.props)) {
+    return;
+  }
 
   let redirectUrl = encodeURIComponent(`${basePath}/`);
   const partners = [

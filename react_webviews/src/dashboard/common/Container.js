@@ -3,6 +3,7 @@ import { withRouter } from "react-router";
 import {
   didMount,
   commonRender,
+  handleOnBackClick
 } from "../../common/components/container_functions";
 import { nativeCallback } from "utils/native_callback";
 import "../../utils/native_listener";
@@ -26,6 +27,7 @@ class Container extends Component {
 
     this.didMount = didMount.bind(this);
     this.commonRender = commonRender.bind(this);
+    this.handleOnBackClick = handleOnBackClick.bind(this);
   }
 
   componentDidMount() {
@@ -42,20 +44,12 @@ class Container extends Component {
   };
 
   historyGoBack = (backData) => {
-    const fromState = this.props.location?.state?.fromState || "";
-    const toState = this.props.location?.state?.toState || "";
-    const params = this.props.location?.params || {};
-    const pathname = this.props.location?.pathname || "";
-    const currentState = toState || pathname;
     if (this.getEvents("back")) {
       nativeCallback({ events: this.getEvents("back") });
     }
-
-    if (currentState) {
-      let isRedirected = this.backButtonHandler(this.props, fromState, currentState, params);
-      if (isRedirected) {
-        return;
-      }
+    const backHandle = this.handleOnBackClick();
+    if(backHandle) {
+      return;
     }
 
     if (this.props.headerData && this.props.headerData.goBack) {

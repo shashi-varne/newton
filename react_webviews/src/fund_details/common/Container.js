@@ -29,7 +29,6 @@ const Container = (props) => {
   const isMobileDevice = config.isMobileDevice;
   const newIframeDesktopLayout = isNewIframeDesktopLayout();
   const [openDialog, setOpenDialog] = useState(false);
-  const x = React.useRef(true);
   // const loaderMain = getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom;
   const inPageTitle = true;
 
@@ -63,14 +62,10 @@ const Container = (props) => {
   };
   useEffect(() => {
     setHeights({ header: true, container: false });
-    if (x.current) {
-      x.current = false;
-    } else {
-      window.callbackWeb.addEventListener({
+    window.callbackWeb.add_listener({
         type: 'back_pressed',
-        go_back: () => historyGoBack(),
-      });
-    }
+        go_back: () => historyGoBack()
+    });
   }, []);
 
   const getEvents = (user_action) => {
