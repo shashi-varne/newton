@@ -119,7 +119,7 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
       }
       break;
     default:
-      const landingScreenPaths = ["/", "/invest", "/landing"]
+      const landingScreenPaths = ["/", "/invest", "/landing", "/invest/explore"]
       if(landingScreenPaths.includes(currentState) && getConfig().code === 'moneycontrol') {
         nativeCallback({ action: "exit_web" });
         return true; 
