@@ -8,7 +8,7 @@ import { verifyPin } from '../../../2fa/common/ApiCalls';
 import { nativeCallback } from "../../../utils/native_callback";
 import WVButton from '../../../common/ui/Button/WVButton';
 import DotDotLoader from '../../../common/ui/DotDotLoaderNew';
-import { redirectAfterLogin } from '../../functions';
+import { postLoginSetup, redirectAfterLogin } from '../../functions';
 
 const VerifyPin = (props) => {
   const { name } = storageService().getObject('user') || {};
@@ -40,6 +40,7 @@ const VerifyPin = (props) => {
       setIsApiRunning(true);
       await verifyPin({ mpin });
       sendEvents("next");
+      await postLoginSetup();
       redirectAfterLogin(
         { firstLogin: false },
         '',
