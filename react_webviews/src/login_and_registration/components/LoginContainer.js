@@ -20,7 +20,6 @@ const { productName } = config;
 const LoginContainer = (props) => {
   const { url } = props.match;
   const pathName = url.split('/')[1];
-  console.log(pathName);
 
   return (
     <div className="login" data-aid='login'>

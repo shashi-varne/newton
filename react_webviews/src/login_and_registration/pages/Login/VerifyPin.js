@@ -5,6 +5,7 @@ import { Imgc } from '../../../common/ui/Imgc';
 import { storageService } from '../../../utils/validators';
 import { navigate as navigateFunc } from '../../../utils/functions';
 import { verifyPin } from '../../../2fa/common/ApiCalls';
+import { nativeCallback } from "../../../utils/native_callback";
 import WVButton from '../../../common/ui/Button/WVButton';
 import DotDotLoader from '../../../common/ui/DotDotLoaderNew';
 import { redirectAfterLogin } from '../../functions';
@@ -38,18 +39,33 @@ const VerifyPin = (props) => {
     try {
       setIsApiRunning(true);
       await verifyPin({ mpin });
+      sendEvents("next");
       redirectAfterLogin(
         { firstLogin: false },
         '',
         navigate
       );
-    } catch(err) {
+    } catch (err) {
       console.log(err);
       setMpinError(err);
     } finally {
       setIsApiRunning(false);
     }
   }
+
+
+  const sendEvents = (user_action) => {
+    let eventObj = {
+      "event_name": '2fa',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": '2fa_authentication',
+        "journey": 'login',
+        //account_inactive if user is logging in again due to inactivity TODO
+      }
+    };
+    nativeCallback({ events: eventObj });
+  };
 
   return (
     <div className="login-verify-pin">
@@ -75,10 +91,20 @@ const VerifyPin = (props) => {
         </EnterMPin.Subtitle>
       </EnterMPin>
       <div className="lvp-footer">
-        <WVButton color="secondary" onClick={() => navigate('/login')} disabled={isApiRunning}>
+        <WVButton color="secondary"
+          onClick={() => {
+            sendEvents("switch_account");
+            navigate('/login')
+          }}
+          disabled={isApiRunning}>
           Switch Account
         </WVButton>
-        <WVButton color="secondary" onClick={() => navigate('/forgot-pin')} disabled={isApiRunning}>
+        <WVButton color="secondary" 
+        onClick={() => {
+          sendEvents("forgot_pin");
+          navigate('/forgot-pin')
+        }} 
+        disabled={isApiRunning}>
           Forgot PIN?
         </WVButton>
       </div>

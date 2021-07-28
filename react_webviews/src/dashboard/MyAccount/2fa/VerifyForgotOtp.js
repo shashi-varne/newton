@@ -1,15 +1,15 @@
 import "./commonStyles.scss";
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Container from "../../common/Container";
 import Toast from "../../../common/ui/Toast";
 import OtpContainer from "../../../common/components/OtpContainer";
-
+import { nativeCallback } from "../../../utils/native_callback";
 import { navigate as navigateFunc } from "../../../utils/functions";
 import { twofaPostApi } from '../../../2fa/common/ApiCalls';
+import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 
 const VerifyForgotOtp = (props) => {
-    const routeParams = props.location.params || {};
-    // TODO: handle direct landing on this page gracefully => routeParams is empty
+    const { routeParams, persistRouteParams } = usePersistRouteParams();
     const authType = routeParams.obscured_auth_type === 'mobile' ? 'mobile' : 'email';
     const authValue = routeParams.obscured_auth;
     const otpData = {
@@ -30,10 +30,13 @@ const VerifyForgotOtp = (props) => {
     const handleClick = async () => {
         try {
             setIsApiRunning(true);
-            const result = await twofaPostApi(routeParams?.verify_url, otp);
+            const result = await twofaPostApi(routeParams?.verify_url, { otp });
             setIsApiRunning(false);
+            persistRouteParams({reset_url: result.reset_url})
+            sendEvents("next");
             navigate('new-pin', {
-                params: { modify_url: result.modify_url }
+                edit: true,
+                // ^ to replace this path with next screen's path so that on click of 'back' this screen is skipped
             });
         } catch (err) {
             console.log(err);
@@ -55,18 +58,36 @@ const VerifyForgotOtp = (props) => {
         }
     }
 
+    const sendEvents = (user_action) => {
+        let eventObj = {
+            "event_name": '2fa',
+            "properties": {
+                "user_action": user_action,
+                "screen_name": 'OTP_verification',
+                "verification_type": authType,
+            }
+        };
+
+        if (user_action === 'just_set_events') {
+            return eventObj;
+        } else {
+            nativeCallback({ events: eventObj });
+        }
+    };
+
 
     return (
         <Container
+            events={sendEvents("just_set_events")}
             title={`Enter OTP to verify your ${authType === "email" ? "email" : "number"}`}
             buttonTitle="VERIFY"
             showLoader={isApiRunning}
             handleClick={handleClick}
-            disable={otp?.length === 4 ? false : true}
+            disable={otp?.length !== 4}
         >
             <OtpContainer
                 otpData={{ ...otpData, otp }}
-                showDotLoader={isApiRunning}
+                showDotLoader={isResendApiRunning}
                 handleOtp={handleOtp}
                 resendOtp={handleResendOtp}
                 isWrongOtp={!!otpError}

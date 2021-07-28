@@ -1,22 +1,18 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import "./commonStyles.scss";
+import React, { useState } from 'react';
 import { verifyPin } from '../../../2fa/common/ApiCalls';
-import EnterMPin from '../../../2fa/components/EnterMPin';
-import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
-import { navigate as navigateFunc } from '../../../utils/functions';
-import { isEmpty } from 'lodash';
-import LoginButton from '../../common/LoginButton';
+import EnterMPin from "../../../2fa/components/EnterMPin";
+import Container from "../../common/Container";
 import { nativeCallback } from "../../../utils/native_callback";
-import SessionExpiredUi from '../../components/SessionExpiredUi';
+import { navigate as navigateFunc } from "../../../utils/functions";
+import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 
 const EnterNewPin = (props) => {
   const { routeParams, persistRouteParams } = usePersistRouteParams();
-  const routeParamsExist = useMemo(() => {
-    return !isEmpty(routeParams);
-  }, []);
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
-  
+
   const navigate = navigateFunc.bind(props);
 
   const handlePin = (value) => {
@@ -26,30 +22,29 @@ const EnterNewPin = (props) => {
 
   const handleClick = async () => {
     try {
-      setIsApiRunning(true);
+      setIsApiRunning("button");
       await verifyPin({
         validate_only: true,
         mpin: pin
       });
       setIsApiRunning(false);
-
-      persistRouteParams({ ...routeParams, newPin: pin });
+      let params = {};
+      if (routeParams.reset_flow) {
+        params = { old_mpin: routeParams.old_mpin, new_mpin: pin }
+      }
+      else {
+        params = { reset_url: routeParams.reset_url }
+      }
       sendEvents("next");
-      navigate('confirm-pin');
-    } catch(err) {
+      persistRouteParams({ ...routeParams, ...params})
+      navigate("confirm-pin")
+    } catch (err) {
       console.log(err);
       setPinError(err);
     } finally {
       setIsApiRunning(false);
     }
   };
-
-  useEffect(() => {
-    // TODO: Intercept back click 
-    // props.history.listen((location) => {
-    //   console.log(props.history);
-    // });
-  }, []);
 
   const sendEvents = (user_action) => {
     let eventObj = {
@@ -66,10 +61,15 @@ const EnterNewPin = (props) => {
       nativeCallback({ events: eventObj });
     }
   };
-  
 
   return (
-    <>
+    <Container
+      events={sendEvents("just_set_events")}
+      showLoader={isApiRunning}
+      handleClick={handleClick}
+      buttonTitle="Continue"
+      disable={pin?.length !== 4}
+    >
       <EnterMPin
         title="Enter new fisdom PIN"
         subtitle="Keep your account safe and secure"
@@ -79,20 +79,9 @@ const EnterNewPin = (props) => {
           hasError: !!pinError,
           bottomText: pinError || '',
         }}
-        noData={!routeParamsExist}
-        renderNoData={<SessionExpiredUi navigateFunc={navigate} />}
       />
-      {routeParamsExist &&
-        <LoginButton
-          onClick={handleClick}
-          disabled={pin.length !== 4}
-          showLoader={isApiRunning}
-        >
-          Continue
-        </LoginButton>
-      }
-    </>
-  );
-}
+    </Container>
+  )
+};
 
 export default EnterNewPin;

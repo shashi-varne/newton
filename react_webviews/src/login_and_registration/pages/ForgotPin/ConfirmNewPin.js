@@ -4,6 +4,7 @@ import EnterMPin from '../../../2fa/components/EnterMPin';
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 import { navigate as navigateFunc } from '../../../utils/functions';
 import LoginButton from '../../common/LoginButton';
+import { nativeCallback } from "../../../utils/native_callback";
 import SessionExpiredUi from '../../components/SessionExpiredUi';
 import { isEmpty } from 'lodash';
 
@@ -34,11 +35,10 @@ const ConfirmNewPin = (props) => {
   const handleClick = async () => {
     try {
       validatePin();
-
       setIsApiRunning(true);
       await twofaPostApi(routeParams?.reset_url, { new_mpin: pin });
       setIsApiRunning(false);
-
+      sendEvents("next")
       clearRouteParams();
       navigate('success');
     } catch (err) {
@@ -48,6 +48,23 @@ const ConfirmNewPin = (props) => {
       setIsApiRunning(false);
     }
   };
+
+  const sendEvents = (user_action) => {
+    let eventObj = {
+      "event_name": '2fa',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'confirm_fisdom_pin',
+        "journey": routeParams.set_flow ? "set_fisdom_pin" : "reset_fisdom_pin",
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   return (
     <>

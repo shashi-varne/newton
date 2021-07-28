@@ -35,7 +35,7 @@ const OtpContainer = ({
 
     return (
         <div className={`verify-otp-container ${classes.body}`}>
-            {title && 
+            {title &&
                 <WVInPageTitle>{title}</WVInPageTitle>
             }
             <div className={`verify-otp-header ${classes.subtitle}`}>
@@ -59,8 +59,8 @@ const OtpContainer = ({
                         value={otpData.otp}
                         isDisabled={isDisabled || false}
                         hasError={isWrongOtp}
-                        bottomText={isWrongOtp ? "Invalid OTP": ""}
-                        // TODO: Support custom bottomText ^
+                        bottomText={isWrongOtp ? "Invalid OTP" : ""}
+                    // TODO: Support custom bottomText ^
                     />
                     {timeAvailable > 0 && !showDotLoader && (
                         <div className="cd-otp-time-text">
@@ -79,8 +79,8 @@ const OtpContainer = ({
                             {showDotLoader ? (
                                 <DotDotLoader className="cd-resend-loader" />
                             ) : (
-                                "RESEND OTP"
-                            )}
+                                    "RESEND OTP"
+                                )}
                         </div>
                     )}
                 </div>

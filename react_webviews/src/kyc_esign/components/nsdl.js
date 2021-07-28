@@ -42,6 +42,10 @@ class DigiStatus extends Component {
         dl_flow = true;
       }
 
+      if (user.pin_status === "init") {
+        this.setState({ set2faPin: true })
+      }
+
       if (
         user.kyc_registration_v2 === "submitted" &&
         // kyc.sign_status === "signed" &&
@@ -71,7 +75,11 @@ class DigiStatus extends Component {
     if (getConfig().isNative) {
       nativeCallback({ action: 'exit_web' });
     } else {
-      this.navigate("/invest");
+      if (this.state.set2faPin) {
+        this.navigate("/set-fisdom-pin/kyc-complete");
+      } else {
+        this.navigate("/invest");
+      }
     }
   };
 
@@ -178,7 +186,7 @@ class DigiStatus extends Component {
     }
 
   render() {
-    let { show_loader, skelton, dl_flow, show_note, kyc } = this.state;
+    let { show_loader, skelton, dl_flow, show_note, kyc, set2faPin } = this.state;
     const { status = "failed" } = this.state.params;
     const headerData = {
       icon: "close",
@@ -192,13 +200,7 @@ class DigiStatus extends Component {
         events={this.sendEvents("just_set_events")}
         title={status === "success" ? "" : "Complete eSign"}
         handleClick={status === "success" ? this.handleClick : this.retry}
-        buttonTitle={
-          status === "success"
-            ? dl_flow && !show_note
-              ? "START INVESTING"
-              : "HOME"
-            : "RETRY E-SIGN"
-        }
+        buttonTitle={status === "success" ? set2faPin ? "CONTINUE" : dl_flow && !show_note ? "START INVESTING" : "HOME" : "RETRY E-SIGN"}
         headerData={headerData}
         skelton={skelton}
         hidePageTitle={status === "success" ? true : false}

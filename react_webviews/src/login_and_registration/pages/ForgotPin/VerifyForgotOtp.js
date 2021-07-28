@@ -5,6 +5,7 @@ import { navigate as navigateFunc } from '../../../utils/functions';
 import LoginButton from '../../common/LoginButton';
 import Toast from 'common/ui/Toast';
 import { twofaPostApi } from '../../../2fa/common/ApiCalls';
+import { nativeCallback } from "../../../utils/native_callback";
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 import GoBackToLoginBtn from '../../common/GoBackToLoginBtn';
 
@@ -33,7 +34,7 @@ const VerifyForgotOtp = (props) => {
       setIsResendApiRunning(true);
       await twofaPostApi(routeParams?.resend_url);
       setOtp('');
-    } catch(err) {
+    } catch (err) {
       console.log(err);
       Toast(err);
     } finally {
@@ -47,11 +48,12 @@ const VerifyForgotOtp = (props) => {
       const result = await twofaPostApi(routeParams?.verify_url, { otp });
       setIsApiRunning(false);
       persistRouteParams({ reset_url: result.reset_url });
+      sendEvents('next');
       navigate('new-pin', {
         edit: true,
         // ^ to replace this path with next screen's path so that on click of 'back' this screen is skipped
       });
-    } catch(err) {
+    } catch (err) {
       console.log(err);
       setOtpError(err);
     } finally {
@@ -59,7 +61,28 @@ const VerifyForgotOtp = (props) => {
     }
   }
 
-  
+  const sendEvents = (user_action) => {
+    let eventObj = {
+      "event_name": '2fa',
+      "properties": {
+        "user_action": user_action,
+        "screen_name": 'OTP_verification',
+        "verification_type": authType,
+      }
+    };
+
+    if (user_action === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
+  const goBack = () => {
+    navigate('/login')
+    sendEvents("back")
+  }
+
   return (
     <OtpContainer
       title={`Enter OTP to verify your ${authType === "email" ? "email" : "number"}`}
