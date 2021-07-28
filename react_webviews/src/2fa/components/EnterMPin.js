@@ -20,7 +20,7 @@ const EnterMPin = ({
                 </Title>
             }
             {subtitle &&
-                <Subtitle style={{ margin: '20px 0 60px' }}>
+                <Subtitle style={{ margin: noData ? '20px 0 30px' : '20px 0 60px' }}>
                     {subtitle}
                 </Subtitle>
             }

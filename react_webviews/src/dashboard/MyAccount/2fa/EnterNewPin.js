@@ -1,14 +1,19 @@
 import "./commonStyles.scss";
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { verifyPin } from '../../../2fa/common/ApiCalls';
 import EnterMPin from "../../../2fa/components/EnterMPin";
 import Container from "../../common/Container";
 import { nativeCallback } from "../../../utils/native_callback";
 import { navigate as navigateFunc } from "../../../utils/functions";
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
+import { isEmpty } from "lodash";
+import WVInfoBubble from "../../../common/ui/InfoBubble/WVInfoBubble";
 
 const EnterNewPin = (props) => {
   const { routeParams, persistRouteParams } = usePersistRouteParams();
+  const routeParamsExist = useMemo(() => {
+    return !isEmpty(routeParams);
+  }, []);
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -80,6 +85,16 @@ const EnterNewPin = (props) => {
           hasError: !!pinError,
           bottomText: pinError || '',
         }}
+        noData={!routeParamsExist}
+        renderNoData={
+          <WVInfoBubble
+            type="error"
+            hasTitle
+            customTitle="Session not found or expired"
+          >
+            Please go back to 'My Account' settings and try again
+          </WVInfoBubble>
+        }
       />
     </Container>
   )

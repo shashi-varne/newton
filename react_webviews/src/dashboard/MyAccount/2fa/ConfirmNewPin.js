@@ -1,5 +1,5 @@
 import "./commonStyles.scss";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Container from "../../common/Container";
 import EnterMPin from "../../../2fa/components/EnterMPin";
 import { nativeCallback } from "../../../utils/native_callback";
@@ -7,15 +7,18 @@ import { twofaPostApi, modifyPin, setPin } from '../../../2fa/common/ApiCalls';
 import { getKycFromSummary } from "../../../login_and_registration/functions";
 import WVPopUpDialog from "../../../common/ui/PopUpDialog/WVPopUpDialog";
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
-
 import { navigate as navigateFunc } from "../../../utils/functions";
+import { isEmpty } from "lodash";
+import WVInfoBubble from "../../../common/ui/InfoBubble/WVInfoBubble";
 
 const ConfirmNewPin = (props) => {
   const { routeParams, clearRouteParams } = usePersistRouteParams();
+  const routeParamsExist = useMemo(() => {
+    return !isEmpty(routeParams);
+  }, []);
   const [mpin, setMpin] = useState('');
   const [pinError, setPinError] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
-  const [newMpin, setNewMpin] = useState(false);
   const [kycFlow, setKycFlow] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -25,20 +28,18 @@ const ConfirmNewPin = (props) => {
     if (props.match.params?.coming_from === "kyc-complete") {
       setKycFlow(true)
     }
-    if (routeParams.new_mpin) {
-      setNewMpin(routeParams.new_mpin)
-    }
   }, []);
 
   const handleClick = async () => {
     try {
       setIsApiRunning("button");
-      if (newMpin) {
-        if (newMpin !== mpin) {
+      const { new_mpin } = routeParams;
+      if (new_mpin) {
+        if (new_mpin !== mpin) {
           // eslint-disable-next-line no-throw-literal
           throw "PIN doesn't match, Please try again";
         } else if (routeParams.set_flow) {
-          await setPin({ mpin })
+          await setPin({ mpin });
         } else {
           await modifyPin({ new_mpin: mpin, old_mpin: routeParams?.old_mpin });
         }
@@ -108,6 +109,16 @@ const ConfirmNewPin = (props) => {
           hasError: !!pinError,
           bottomText: pinError || '',
         }}
+        noData={!routeParamsExist}
+        renderNoData={
+          <WVInfoBubble
+            type="error"
+            hasTitle
+            customTitle="Session not found or expired."
+          >
+            Please go back to 'My Account' settings and try again
+          </WVInfoBubble>
+        }
       />
       <WVPopUpDialog
         open={openDialog}
