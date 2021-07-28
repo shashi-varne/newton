@@ -78,7 +78,7 @@ const VerifyPin = (props) => {
           otp: mpin,
           handleOtp: onPinChange,
           hasError: !!mpinError,
-          bottomText: mpinError || '',
+          bottomText: mpinError || 'Enter fisdom PIN ',
         }}
       >
         <Imgc
