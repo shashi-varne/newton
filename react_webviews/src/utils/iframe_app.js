@@ -95,8 +95,8 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
     "/nps/mandate/callback", "/nps/success", "/page/invest/campaign/callback", "/reports"];
 
   // Note: will have to remove "/invest/explore"  from the direct enteries.
-  const directEnteries = ["/invest/doityourself/direct", "/nps",
-     "/direct/gold", "/invest/instaredeem", "/reports", "/invest/savegoal", "/invest", "/withdraw", "/invest/explore"];
+  const directEnteries = ["/invest/doityourself/direct/", "/nps",
+     "/direct/gold", "/invest/instaredeem", "/reports", "/invest/savegoal", "/invest", "/withdraw", "/invest/explore", "/kyc/journey"];
 
   const directEntriesWithParams = ["/diy/fundinfo/direct", "/diy/fundlist/direct"];
 
@@ -127,7 +127,7 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
     return true;
   }
 
-  const diyDirectEntryArr = ["/diy/fundlist/direct", "/diy/fundinfo/direct", "/diy/invest", "/invest/doityourself/direct"];
+  const diyDirectEntryArr = ["/diy/fundlist/direct", "/diy/fundinfo/direct", "/diy/invest", "/invest/doityourself/direct/"];
 
   const verifyCurrentStateWithDirect = () => {
     return diyDirectEntryArr.some(el => currentState.match(el));

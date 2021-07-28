@@ -45,15 +45,15 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
   console.log("entryPath", entryPath);
   
   const landingRedirectPaths = ["/sip/payment/callback", "/kyc/report", "/notification", "/diy/fundlist/direct",
-    "/diy/fundinfo/direct", "/diy/invest", "/invest/doityourself/direct", "/risk/recommendations/error"];
+    "/diy/fundinfo/direct", "/diy/invest", "/invest/doityourself/direct/", "/risk/recommendations/error"];
 
   // const fromStateArray = ['/payment/callback', '/nps/payment/callback', '/sip/payment/callback', '/invest', '/reports',
   //  '/landing', '', '/new/mandate', '/otm-options', '/mandate', '/nps/mandate/callback', '/nps/success',
   //   '/nps/sip', '/my-account', '/modal', '/page/callback', '/reports/sip/pause-request', '/kyc/journey'];
   
   // Note: will have to remove "/invest/explore"  from the direct enteries.
-  const directEnteries = ["/invest/doityourself/direct", "/nps",
-     "/direct/gold", "/invest/instaredeem", "/reports", "/invest/savegoal", "/invest", "/withdraw", "/invest/explore"];
+  const directEnteries = ["/invest/doityourself/direct/", "/nps",
+     "/direct/gold", "/invest/instaredeem", "/reports", "/invest/savegoal", "/invest", "/withdraw", "/invest/explore", "/kyc/journey"];
 
   const directEntriesWithParams = ["/diy/fundinfo/direct", "/diy/fundlist/direct"];
 
