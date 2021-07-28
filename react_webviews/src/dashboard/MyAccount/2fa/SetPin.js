@@ -94,7 +94,7 @@ const SetPin = (props) => {
         open={openDialog}
         handleNo={() => setOpenDialog(false)}
         handleYes={handleYes}
-        text="This is a mandatory process to complete your application. Do you want to go exit?"
+        text="This is a mandatory process to complete your application. Do you want to exit?"
       />
     </Container>
   )
