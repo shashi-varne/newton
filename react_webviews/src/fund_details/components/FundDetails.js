@@ -32,13 +32,16 @@ import InvestReferralDialog from '../../dashboard/Invest/mini-components/InvestR
 import { SkeltonRect } from '../../common/ui/Skelton';
 import { getBasePath, isNewIframeDesktopLayout } from '../../utils/functions';
 import { getdiyGraphDataWithISIN } from '../../dashboard/Invest/common/api';
+import { navigate as navigateFunc } from "../../utils/functions"
 
 const styles = {
   root: {
     margin: '10px',
   },
 };
-const FundDetails = ({ classes, history, flowType }) => {
+const FundDetails = (props) => {
+  const { classes, history, flowType } = props;
+  const navigate = navigateFunc.bind(props);
   const [isLoading, setLoading] = useState(true);
   const [fundDetails, setFundDetails] = useState(null);
   const [reports, setReports] = useState(null);
@@ -318,12 +321,6 @@ const FundDetails = ({ classes, history, flowType }) => {
     handleApiRunning(false)
   };
 
-  const navigate = (pathname) => {
-    history.push({
-      pathname: pathname,
-      search: getConfig().searchParams,
-    })
-  }
 
   // const handleInvest = () => {
   //   window.location.href =  getConfig().webAppUrl + 'diy/invest';

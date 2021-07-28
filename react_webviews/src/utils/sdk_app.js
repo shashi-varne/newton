@@ -54,7 +54,7 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
     }
   }
 
-  if ("/diy/fundinfo/direct".indexOf(currentState) !== -1) {
+  if (currentState.indexOf("/diy/fundinfo/direct") !== -1) {
     nativeCallback({ action: "clear_history" });
   }
 
