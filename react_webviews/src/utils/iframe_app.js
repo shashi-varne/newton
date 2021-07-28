@@ -75,6 +75,7 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
       return backButtonHandlerWeb(props, fromState, currentState, params)
     } else {
       window.callbackWeb.sendEvent(message);
+      storageService().clear();
       return true;
     }
   } else {

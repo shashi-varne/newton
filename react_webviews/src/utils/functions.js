@@ -617,3 +617,16 @@ export function stringToHexa(str) {
   }
   return arr1.join('')
 }
+
+export function isAuthenticatedUser(props) {
+  const fromState = props.location?.state?.fromState || "";
+  const navigation = navigate.bind(props);
+  if (getConfig().isLoggedIn) {
+    if (!fromState) {
+      navigation("/")
+    } else {
+      navigation(fromState);
+    }
+    return true;
+  }
+}
