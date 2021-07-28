@@ -6,7 +6,7 @@ import fisdomLogo from 'assets/fisdom/fisdom_logo_white.svg';
 import close from 'assets/ic_close_white.svg';
 import banner from 'assets/fisdom/its_help.svg';
 import bannerMob from 'assets/fisdom/its_help_mob.svg';
-import IcSebi from '../../assets/fisdom/ic_sebi_white.svg';
+import IcSebi from '../../assets/fisdom/ic_sebi_transparent.svg';
 import IcAMFI from '../../assets/fisdom/ic_amfi_white.svg';
 import IcBSE from '../../assets/fisdom/ic_bse_white.svg';
 // -------------------------------------

@@ -193,7 +193,7 @@ export async function triggerOtpApi(body, loginType) {
       this.setState({ isApiRunning: false });
       this.sendEvents("next")
       if (body?.secondaryVerification) {
-        this.navigate("login/secondary-otp-verification", {
+        this.navigate("/secondary-otp-verification", {
           state: {
             value: body.mobile ||  body.email,
             otp_id: result?.otp_id,
@@ -381,6 +381,7 @@ export async function otpLoginVerification(verify_url, body) {
         "user-data": userData,
         isApiRunning: false,
       });
+
       if (storageService().get("deeplink_url")) {
         window.location.href = decodeURIComponent(
           storageService().get("deeplink_url")

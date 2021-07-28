@@ -1,4 +1,5 @@
 import React from "react";
+import SVG from 'react-inlinesvg';
 
 export default function Footer() {
   return (
@@ -9,11 +10,23 @@ export default function Footer() {
       </div>
       <div className="wr-register">
         <div className="wr-title">
-          <img src={require(`assets/sebi-logo.png`)} alt="" width="32" />
+          <SVG
+            width={32}
+            height={32}
+            preProcessor={code => code.replace(/fill=".*?"/g, 'fill=#C7C7C7')}
+            src={require(`assets/sebi_logo.svg`)}
+            alt="sebi"
+          />
           SEBI REGISTERED INVESTMENT ADVISOR INA200005323
         </div>
         <div className="wr-title-mob">
-          <img src={require(`assets/sebi-logo.png`)} alt="" width="19" />
+          <SVG
+            width={19}
+            height={19}
+            preProcessor={code => code.replace(/fill=".*?"/g, 'fill=#C7C7C7')}
+            src={require(`assets/sebi_logo.svg`)}
+            alt="sebi"
+          />
           SEBI REGISTERED INVESTMENT ADVISOR
         </div>
         <div className="wr-title">
