@@ -13,7 +13,6 @@ const errorMessage = "Something went wrong!";
 const basePath = getBasePath();
 export function initialize() {
   this.formCheckFields = formCheckFields.bind(this);
-  this.emailLogin = emailLogin.bind(this);
   this.triggerOtpApi = triggerOtpApi.bind(this);
   this.initiateOtpApi = initiateOtpApi.bind(this);
   this.verifyCode = verifyCode.bind(this);
@@ -179,67 +178,6 @@ export function setBaseHref() {
     var myBaseHrefUrl = '/appl/webview/' + pathname.split('/')[3] + '/';
     myBaseHref.href = myBaseHrefUrl;
     window.sessionStorage.setItem('base_href', myBaseHrefUrl);
-  }
-}
-
-export async function emailLogin(body) {
-  try {
-    const res = await Api.post(`/api/user/login`, body);
-    const { result, status_code: status } = res.pfwresponse;
-    if (status === 200) {
-      if (this.state.rebalancingRedirectUrl) {
-        window.location.href = this.state.rebalancingRedirectUrl;
-        return;
-      }
-      storageService().setObject("user", result.user);
-      if (!isMobileView && result.firstLogin) {
-        storageService().setObject("first_login", result.firstLogin);
-      }
-      storageService().set("currentUser", true);
-      let userData = {};
-      let kycResult = await getKycFromSummary();
-      if (!kycResult) {
-        this.setState({ isApiRunning: false });
-        return;
-      }
-      if (config.Web && kycResult.data.partner.partner.data) {
-        storageService().set(
-          "partner",
-          kycResult.data.partner.partner.data.name
-        );
-      }
-
-      let user = kycResult.data.user.user.data;
-      userData.me = user;
-      storageService().set("dataSettedInsideBoot", true);
-      storageService().setObject("referral", kycResult.data.referral);
-      storageService().setObject(
-        "campaign",
-        kycResult.data.campaign.user_campaign.data
-      );
-      setBaseHref();
-
-      this.setState({
-        currentUser: true,
-        "user-data": userData,
-        isApiRunning: false,
-      });
-      if (storageService().get("deeplink_url")) {
-        window.location.href = decodeURIComponent(
-          storageService().get("deeplink_url")
-        );
-      } else {
-        this.redirectAfterLogin(result, user);
-      }
-    } else {
-      toast(result.message || result.error || errorMessage);
-    }
-    this.setState({ isApiRunning: false });
-  } catch (error) {
-    console.log(error);
-    toast(error || errorMessage);
-  } finally {
-    this.setState({ isApiRunning: false });
   }
 }
 
@@ -641,15 +579,19 @@ export async function verifyForgotOtp(body) {
   }
 }
 
-export async function getKycFromSummary() {
-  const res = await Api.post(`/api/user/account/summary`, {
-    kyc: ["kyc"],
-    user: ["user"],
-    partner: ["partner"],
-    campaign: ["user_campaign"],
-    referral: ["subbroker", "p2p"],
-    contacts: ["contacts"],
-  });
+export async function getKycFromSummary(params = {}) {
+  if (isEmpty(params)) {
+    // Default params
+    params = {
+      kyc: ["kyc"],
+      user: ["user"],
+      partner: ["partner"],
+      campaign: ["user_campaign"],
+      referral: ["subbroker", "p2p"],
+      contacts: ["contacts"],
+    }
+  }
+  const res = await Api.post(`/api/user/account/summary`, params);
   if (!res || !res.pfwresponse) throw errorMessage;
   const { result, status_code: status } = res.pfwresponse;
   if (status === 200) {
