@@ -38,8 +38,7 @@ const styles = {
     margin: '10px',
   },
 };
-const FundDetails = ({ classes, history, ...props }) => {
-  const flowType = props.flowType
+const FundDetails = ({ classes, history, flowType }) => {
   const [isLoading, setLoading] = useState(true);
   const [fundDetails, setFundDetails] = useState(null);
   const [reports, setReports] = useState(null);
@@ -48,7 +47,7 @@ const FundDetails = ({ classes, history, ...props }) => {
   const productType = getConfig().productName;
   const {isin} = useParams();
   let { isins, selected_isin, type } = getUrlParams();
-  if(!type) {
+  if(flowType) {
     type = flowType
   }
   const EMPTY_CART = 'EMPTY_CART';
@@ -131,7 +130,6 @@ const FundDetails = ({ classes, history, ...props }) => {
   const getFundData = async () => {
     try {
       setLoading(true);
-      const isin = props.match.params.isin
       const graphData = await getdiyGraphDataWithISIN(isin);
       storageService().setObject('diystore_fundInfo', graphData.fundinfo);
     } catch (error) {
