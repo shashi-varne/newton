@@ -74,8 +74,6 @@ const VerifyPin = (props) => {
     <Container
       events={sendEvents('just_set_events')}
       title="Reset fisdom PIN"
-      showLoader={isApiRunning}
-      handleClick={handleClick}
       noFooter={true}
     >
       <EnterMPin
