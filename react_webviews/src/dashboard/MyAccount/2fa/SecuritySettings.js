@@ -35,12 +35,14 @@ const SecuritySettings = (props) => {
             nativeCallback({ events: eventObj });
         }
     };
-    
+
     return (
         <Container
+            title="Security settings"
             events={sendEvents('just_set_events')}
             data-aid='my-account-screen'
             noFooter={true}
+            headerData={{ goBack: () => navigate("/my-account") }}
         >
             <div className="security-settings">
                 <>
@@ -60,6 +62,7 @@ const SecuritySettings = (props) => {
                     <Imgc
                         src={require(`assets/padlock1.svg`)}
                         alt=""
+                        className="padlock-imgc"
                     />
                     <div>{pinText}</div>
                 </div>

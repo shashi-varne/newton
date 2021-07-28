@@ -78,7 +78,6 @@ const FooterTitle = () => {
         <SVG
           width="20px"
           height="20px"
-          preProcessor={code => code.replace(/fill=".*?"/g, 'fill=#2D2D94')}
           src={require(`assets/sebi_logo.svg`)}
         />
       </div>

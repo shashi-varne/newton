@@ -4,8 +4,7 @@ import Container from "../../common/Container";
 import EnterMPin from "../../../2fa/components/EnterMPin";
 import { nativeCallback } from "../../../utils/native_callback";
 import { twofaPostApi, modifyPin, setPin } from '../../../2fa/common/ApiCalls';
-import { getKycFromSummary } from "../../../login_and_registration/functions"
-import { storageService } from "utils/validators";
+import { getKycFromSummary } from "../../../login_and_registration/functions";
 import WVPopUpDialog from "../../../common/ui/PopUpDialog/WVPopUpDialog";
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 
@@ -45,12 +44,10 @@ const ConfirmNewPin = (props) => {
       } else if (routeParams.reset_url) {
         await twofaPostApi(routeParams?.reset_url, { new_mpin: mpin });
       }
+      await getKycFromSummary({user: ["user"], kyc: ["kyc"] })
       setIsApiRunning(false);
       sendEvents("next");
       clearRouteParams();
-      let result = await getKycFromSummary({user: ["user"]})
-      let user = result.data.user.user.data;
-      storageService().setObject("user", user);
       setOpenDialog(true);
     } catch (err) {
       console.log(err);
@@ -92,6 +89,7 @@ const ConfirmNewPin = (props) => {
 
   return (
     <Container
+      title={routeParams.set_flow  ? "Security settings" : "Reset fisdom PIN"}
       events={sendEvents("just_set_events")}
       showLoader={isApiRunning}
       handleClick={handleClick}
@@ -100,7 +98,7 @@ const ConfirmNewPin = (props) => {
     >
       <EnterMPin
         title="Confirm fisdom PIN"
-        subtitle={newMpin ? "Ensuring maximum security for your investment account" : "Keep your account safe and secure"}
+        subtitle={routeParams.set_flow  ? "Ensuring maximum security for your investment account" : "Keep your account safe and secure"}
         otpProps={{
           otp: mpin,
           handleOtp: handlePin,

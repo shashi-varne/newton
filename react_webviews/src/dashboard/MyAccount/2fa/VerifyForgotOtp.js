@@ -29,7 +29,7 @@ const VerifyForgotOtp = (props) => {
 
     const handleClick = async () => {
         try {
-            setIsApiRunning(true);
+            setIsApiRunning("button");
             const result = await twofaPostApi(routeParams?.verify_url, { otp });
             setIsApiRunning(false);
             persistRouteParams({reset_url: result.reset_url})
