@@ -67,11 +67,10 @@ const VerifyPin = (props) => {
   return (
     <Container
       events={sendEvents('just_set_events')}
+      title="Reset fisdom PIN"
       skelton={isApiRunning}
       handleClick={handleClick}
       noFooter={true}
-      hideInPageTitle
-      hidePageTitle
     >
       <EnterMPin
         otpProps={{

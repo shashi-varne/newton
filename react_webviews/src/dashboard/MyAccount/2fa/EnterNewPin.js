@@ -65,6 +65,7 @@ const EnterNewPin = (props) => {
   return (
     <Container
       events={sendEvents("just_set_events")}
+      title={"Reset fisdom PIN"}
       showLoader={isApiRunning}
       handleClick={handleClick}
       buttonTitle="Continue"

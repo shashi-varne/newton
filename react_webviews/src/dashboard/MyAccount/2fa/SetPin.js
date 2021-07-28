@@ -54,7 +54,7 @@ const SetPin = (props) => {
       "properties": {
         "user_action": user_action,
         "screen_name": 'set_fisdom_pin',
-        "journey": "account" // KYC if user has come from KYC jouney ? in which flow does the user comes from KYC Screen 
+        "journey": kycFlow ?  "KYC" : "account",
       }
     };
 
@@ -72,6 +72,7 @@ const SetPin = (props) => {
 
   return (
     <Container
+      title="Security settings"
       events={sendEvents("just_set_events")}
       showLoader={isApiRunning}
       headerData={kycFlow ? { icon: "close", goBack: () => setOpenDialog(true) } : ""}
