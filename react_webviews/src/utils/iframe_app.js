@@ -94,8 +94,7 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
   const diyDirectEntryArr = ["/diy/fundlist/direct", "/diy/fundinfo/direct", "/diy/invest", "/invest/doityourself/direct"];
 
   const verifyCurrentStateWithDirect = () => {
-    const current = currentState.split("/:")[0];
-    return diyDirectEntryArr.includes(current);
+    return diyDirectEntryArr.some(el => currentState.match(el));
   }
 
   if ((currentState === "/kyc-esign/nsdl" && params?.status === "success") || verifyCurrentStateWithDirect()) {
@@ -131,19 +130,6 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
         navigate("/logout");
       }
       return true;
-    // case '/invest/money-control':
-    //   let message = JSON.stringify({
-    //     type: "iframe_close"
-    //   });
-    //   window.callbackWeb.sendEvent(message);
-    //   storageService().clear();
-    //   break;
-    // case '/account/merge/linked/success':
-    //   if (config?.code === 'moneycontrol') {
-    //     window.history.go(-2);
-    //   }// check later
-    //   // navigate kyc home
-    //   break;
     default:
       const closeIframeStates = ["/", "/invest", "/landing", "/reports", "/withdraw"]
       if(closeIframeStates.includes(currentState) && config?.code === 'moneycontrol') {
