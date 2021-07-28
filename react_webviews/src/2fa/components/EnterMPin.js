@@ -8,7 +8,9 @@ const EnterMPin = ({
     otpProps = {},
     title = '',
     subtitle = '',
-    children
+    children,
+    noData,
+    renderNoData
 }) => {
     return (
         <div className="verify-mpin">
@@ -22,15 +24,20 @@ const EnterMPin = ({
                     {subtitle}
                 </Subtitle>
             }
-            {children}
-            <WVOtp
-                onChange={otpProps.handleOtp}
-                value={otpProps.otp}
-                isDisabled={otpProps.isDisabled}
-                hasError={otpProps.hasError}
-                bottomText={otpProps.bottomText}
-                classes={{ container: 'vm-otp-container' }}
-            />
+            {noData ?
+                renderNoData :
+                <>
+                    {children}
+                    <WVOtp
+                        onChange={otpProps.handleOtp}
+                        value={otpProps.otp}
+                        isDisabled={otpProps.isDisabled}
+                        hasError={otpProps.hasError}
+                        bottomText={otpProps.bottomText}
+                        classes={{ container: 'vm-otp-container' }}
+                    />
+                </>
+            }
         </div>
     );
 }

@@ -2,11 +2,11 @@ import './commonStyles.scss';
 import React, { Component } from "react";
 import { initialize } from "../../functions";
 import toast from "common/ui/Toast";
-import WVButton from "../../../common/ui/Button/WVButton";
 import OtpContainer from '../../../common/components/OtpContainer';
 import LoginButton from '../../common/LoginButton';
+import GoBackToLoginBtn from '../../common/GoBackToLoginBtn';
 import { nativeCallback } from "../../../utils/native_callback";
-import { formatMobileNumber } from "../../../utils/validators"
+import { formatMobileNumber } from '../../../utils/validators';
 
 class VerifyLoginOtp extends Component {
   constructor(props) {
@@ -115,13 +115,7 @@ class VerifyLoginOtp extends Component {
         >
           CONTINUE
         </LoginButton>
-        <WVButton
-          color="secondary"
-          classes={{ root: 'go-back-to-login' }}
-          onClick={this.goBackToLogin}
-        >
-          Go Back to Login
-        </WVButton>
+        <GoBackToLoginBtn onClick={this.goBackToLogin} />
       </OtpContainer>
     );
   }

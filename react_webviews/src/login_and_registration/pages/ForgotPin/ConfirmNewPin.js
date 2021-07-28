@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { twofaPostApi } from '../../../2fa/common/ApiCalls';
 import EnterMPin from '../../../2fa/components/EnterMPin';
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 import { navigate as navigateFunc } from '../../../utils/functions';
 import LoginButton from '../../common/LoginButton';
 import { nativeCallback } from "../../../utils/native_callback";
+import SessionExpiredUi from '../../components/SessionExpiredUi';
+import { isEmpty } from 'lodash';
 
 const ConfirmNewPin = (props) => {
   const { routeParams, clearRouteParams } = usePersistRouteParams();
+  const routeParamsExist = useMemo(() => {
+    return !isEmpty(routeParams);
+  }, []);
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -72,14 +77,20 @@ const ConfirmNewPin = (props) => {
           hasError: !!pinError,
           bottomText: pinError || '',
         }}
+        noData={!routeParamsExist}
+        renderNoData={
+          <SessionExpiredUi onGoBackClicked={() => navigate('/login')} />
+        }
       />
-      <LoginButton
-        onClick={handleClick}
-        disabled={pin.length !== 4}
-        showLoader={isApiRunning}
-      >
-        Continue
-      </LoginButton>
+      {routeParamsExist &&
+        <LoginButton
+          onClick={handleClick}
+          disabled={pin.length !== 4}
+          showLoader={isApiRunning}
+        >
+          Continue
+        </LoginButton>
+      }
     </>
   );
 }
