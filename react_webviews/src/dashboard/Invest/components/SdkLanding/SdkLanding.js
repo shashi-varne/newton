@@ -96,7 +96,7 @@ class SdkLanding extends Component {
   }
 
   handleCampaign = () => {
-    this.setState({show_loader : 'page', openBottomSheet : false});
+    this.setState({showPageLoader : 'page', openBottomSheet : false});
     let campLink = this.state.bottom_sheet_dialog_data.url;
     handleCampaignRedirection(campLink);
   }
@@ -156,13 +156,12 @@ class SdkLanding extends Component {
         skelton={this.state.show_loader}
         noFooter={true}
         title='Hello'
-        logo={true}
         notification
         handleNotification={this.handleNotification}
         background='sdk-background'
         classHeader={this.state.headerStyle ? 'sdk-partner-header' : 'sdk-header'}
-        showLoader={this.state.show_loader}
-        headerData={{goBack:this.goBack}}
+        showLoader={this.state.showPageLoader}
+        headerData={{goBack: this.goBack, partnerLogo: true}}
         data-aid='sdk-landing-screen'
       >
         <div className='sdk-landing' data-aid='sdk-landing'>

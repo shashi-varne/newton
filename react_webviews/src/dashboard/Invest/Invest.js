@@ -26,14 +26,17 @@ import RiskCustomize from "./components/RiskPages/RiskCustomize";
 import RiskInfo from "./components/RiskPages/RiskInfo";
 import HowWeRecommend from "../Recommendation/HowWeRecommend";
 
+import { isIframe, getConfig } from 'utils/functions';
+
 const Invest = (props) => {
   const { url } = props.match;
+  const partnerCode = getConfig().partner_code;
   return (
     <Switch>
       <Route
         exact
         path={`${url}`}
-        component={Landing}
+        component={isIframe() && partnerCode === 'moneycontrol' ? ExploreFunds : Landing}
       />
       <Route
         exact

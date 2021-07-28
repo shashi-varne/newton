@@ -27,8 +27,8 @@ import DesktopLayout from './desktopLayout';
 import Feature from './Feature';
 import NotFound from './common/components/NotFound';
 import Tooltip from 'common/ui/Tooltip';
-import {getConfig} from './utils/functions';
 import ComponentTest from './ComponentTest';
+import {getConfig, isIframe} from './utils/functions';
 import 'common/theme/Style.scss';
 import { storageService } from './utils/validators';
 
@@ -76,6 +76,7 @@ const ScrollToTop = withRouter(
 );
 
 const App = () => {
+  const iframe = isIframe();
   
     return (
       <BrowserRouter basename={basename}>
@@ -95,7 +96,7 @@ const App = () => {
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />
               <Route path='/logout' component={Logout} />
               {
-                isMobileDevice ?
+                isMobileDevice || iframe ?
                 <Route component={Feature}/>:
                 <DesktopLayout>
                   <Feature />

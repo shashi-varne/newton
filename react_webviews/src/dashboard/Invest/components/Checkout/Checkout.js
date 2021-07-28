@@ -18,6 +18,7 @@ import {
 import "./Checkout.scss";
 import { nativeCallback } from "../../../../utils/native_callback";
 
+const config = getConfig();
 class Checkout extends Component {
   constructor(props) {
     super(props);
@@ -27,7 +28,7 @@ class Checkout extends Component {
       ctc_title: "INVEST",
       form_data: [],
       investType: props.type === "diy" ? "sip" : "onetime",
-      partner_code: getConfig().partner_code,
+      partner_code: config.code,
       disableInput: [],
       fundsData: [],
       renderData: nfoData.checkoutInvestType,
@@ -35,6 +36,7 @@ class Checkout extends Component {
       currentUser: storageService().getObject("user") || {},
       dialogStates: {},
       purchaseLimitData: {},
+      productType : config.productName
     };
     this.initializeComponentFunctions = initializeComponentFunctions.bind(this);
   }
@@ -282,6 +284,7 @@ class Checkout extends Component {
       type,
       renderData,
       dialogStates,
+      partner_code
     } = this.state;
     let allowedFunds = this.getAllowedFunds(fundsData, investType);
     if (allowedFunds && allowedFunds.length === 0) ctc_title = "BACK";
@@ -296,6 +299,10 @@ class Checkout extends Component {
         title={type === "nfo" && "Your Mutual Fund Plan"}
         hidePageTitle={type !== "nfo"}
         showLoader={isApiRunning}
+        loaderData={{
+          loadingText:"Your payment is being processed. Please do not close this window or click the back button on your browser."
+        }}
+        iframeRightContent={require(`assets/${this.state.productType}/invest_fund.svg`)}
       >
         <div className="nfo-checkout" data-aid='nfo-checkout'>
           <div
@@ -359,7 +366,7 @@ class Checkout extends Component {
                     <div className="text" data-aid='checkout-text'>
                       <h4>
                         {fund.friendly_name || fund.legal_name}
-                        {type === "diy" && (
+                        {type === "diy" && partner_code !== "moneycontrol" && (
                           <span>
                             <img
                               onClick={() => this.deleteFund(index)}

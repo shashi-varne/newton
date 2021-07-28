@@ -1176,9 +1176,11 @@
   .member-tile {
       display: flex;
       margin: 16px 0;
+      align-items: center;
       .final-summary-tile{
         width: 30px !important;
         height: 30px !important;
+        vertical-align: middle;
       }
       .mt-right {
         margin: 0 0 0 10px;
@@ -1190,7 +1192,7 @@
     .mtr-top {
         color: #0A1D32;
         font-size: 8px;
-        font-weight: 700;
+        font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 1px;
     }

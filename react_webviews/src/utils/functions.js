@@ -430,9 +430,13 @@ export function manageDialog(id, display, aboutScroll) {
 }
 
 export function setHeights(data) {
+  const newIframeDesktopLayout = isNewIframeDesktopLayout();
+  const config = getConfig();
+  const headerClass = config.isIframe && config.code === "moneycontrol" && config.isMobileDevice ? 'IframeHeader' : 'Header';
+  const containerClass = newIframeDesktopLayout ? 'iframeContainerWrapper' : config.isIframe && config.code === "bfdlmobile" ? 'bfdlContainerWrapper' : 'ContainerWrapper'
   let head =
-    document.getElementsByClassName('Header') && document.getElementsByClassName('Header')[0]
-      ? document.getElementsByClassName('Header')[0].offsetHeight
+    document.getElementsByClassName(headerClass) && document.getElementsByClassName(headerClass)[0]
+      ? document.getElementsByClassName(headerClass)[0].offsetHeight
       : 0;
   let banner = document.getElementsByClassName('Banner')[0];
   let bannerHeight = banner ? banner.offsetHeight : 0;
@@ -444,9 +448,9 @@ export function setHeights(data) {
       ? document.getElementsByTagName('body')[0].offsetHeight
       : 0;
   let client =
-    document.getElementsByClassName('ContainerWrapper') &&
-    document.getElementsByClassName('ContainerWrapper')[0]
-      ? document.getElementsByClassName('ContainerWrapper')[0].offsetHeight
+    document.getElementsByClassName(containerClass) &&
+    document.getElementsByClassName(containerClass)[0]
+      ? document.getElementsByClassName(containerClass)[0].offsetHeight
       : 0;
   let foot =
     document.getElementsByClassName('Footer') && document.getElementsByClassName('Footer')[0]
@@ -637,4 +641,30 @@ export {
   checkBeforeRedirection, 
   checkAfterRedirection, 
   backButtonHandler
+}
+
+export const popupWindowCenter = (w, h, url) => {
+  let dualScreenLeft =
+    window.screenLeft !== undefined ? window.screenLeft : window.screenX;
+  let dualScreenTop =
+    window.screenTop !== undefined ? window.screenTop : window.screenY;
+  let left = window.screen.width / 2 - w / 2 + dualScreenLeft;
+  let top = window.screen.height / 2 - h / 2 + dualScreenTop;
+  return window.open(
+    url,
+    "_blank",
+    "width=" +
+      w +
+      ",height=" +
+      h +
+      ",resizable,scrollbars,status,top=" +
+      top +
+      ",left=" +
+      left
+  );
+}
+
+export const isNewIframeDesktopLayout = () => {
+  const config = getConfig();
+  return config.code === "moneycontrol" && !config.isMobileDevice && config.isIframe
 }

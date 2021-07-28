@@ -318,15 +318,15 @@ export const kycStatusMapper = {
 export const kycStatusMapperInvest = {
   init: {
     icon: "ic_card_kyc_default.svg",
-    title: "Create investment profile",
-    subtitle: "Paperless KYC in two minutes",
+    title: "Are you investment ready?",
+    subtitle: "Check your KYC status",
     button_text: "CREATE NOW",
     next_state: "/kyc/journey",
   },
   ground: {
     icon: "ic_card_kyc_default.svg",
-    title: "Create investment profile",
-    subtitle: "Paperless KYC in two minutes",
+    title: "Are you investment ready?",
+    subtitle: "Check your KYC status",
     button_text: "CREATE NOW",
     next_state: "/kyc/home",
   },

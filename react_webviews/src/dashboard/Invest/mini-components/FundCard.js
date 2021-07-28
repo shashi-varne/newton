@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { formatAmountInr } from 'utils/validators';
-import RatingStar from '../../../fund_details/common/RatingStar';
 import { navigate as navigateFunc } from 'utils/functions';
 import './mini-components.scss';
 
@@ -71,7 +70,9 @@ const FundCard = ({
         <span>{amount && formatAmountInr(amount)}</span>
         </div>
         <div className='recommendations-funds-item-rating' data-aid='recommendations-funds-item-rating'>
-          <RatingStar value={rating} />
+        {rating > 0 && rating < 6 && (
+          <img src={require(`assets/rating${rating}.png`)} className="rf-rating-icon" alt="" />
+        )}
         </div>
       </div>
     </div>

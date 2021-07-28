@@ -3,7 +3,6 @@ import Container from '../../common/Container'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import Typography from '@material-ui/core/Typography'
-import RatingStar from '../../../fund_details/common/RatingStar'
 import Button from 'common/ui/Button'
 import { storageService } from '../../../utils/validators'
 import { getConfig, navigate as navigateFunc } from 'utils/functions'
@@ -24,6 +23,7 @@ import remove_cart_icon from '../../../assets/remove_cart_icon.png'
 
 import "./FundList.scss";
 import { nativeCallback } from '../../../utils/native_callback'
+import { Imgc } from '../../../common/ui/Imgc'
 
 const returnField = [
   'one_month_return',
@@ -33,7 +33,8 @@ const returnField = [
   'three_year_return',
   'five_year_return',
 ]
-
+const config = getConfig()
+const productType = config.productName
 function TabContainer(props) {
   return (
     <Typography component="div" style={{ padding: 8 * 3 }}>
@@ -55,7 +56,6 @@ const FundList = (props) => {
   const [cart, setCart] = useState(storageService().getObject(CART) || [])
   const [showLoader, setShowLoader] = useState(false)
   const [initialCartCount] = useState(cart.length)
-  const productType = getConfig().productName
   const handleChange = (_, value) => {
     setValue(value)
   }
@@ -291,8 +291,7 @@ const DiyFundCard = ({
   sendEvents,
   ...props
 }) => {
-  const productType = getConfig().productName
-
+  const rating = config.code === "hbl" ? props.the_hindu_rating : props.morning_star_rating
   const handleClick = (data) => {
     sendEvents('next', "", "", props.legal_name)
     const navigate = navigateFunc.bind(parentProps)
@@ -315,11 +314,14 @@ const DiyFundCard = ({
   return (
     <div className="diy-fund-card" data-aid='diy-fund-card'>
       <div className="diy-fund-card-img">
-        <img
+        <Imgc
           src={props.amc_logo_small}
           alt="some"
-          width="90"
           onClick={() => handleClick(props)}
+          style={{
+            width: "90px",
+            height: "90px",
+          }}
         />
       </div>
       <div className="diy-fund-card-details" data-aid='diy-fund-card-details'>
@@ -330,13 +332,15 @@ const DiyFundCard = ({
           <div className="diy-fund-card-info" data-aid='diy-fund-card-info'>
             <p>AUM: {Math.round(props.aum, 0)} Crs</p>
             <p>
-              Return: 
+              Return:{" "}
               {props[returnField[value]] > 0 && <span>+</span>}
               <span className={props[returnField[value]] < 0 ? 'diy-fund-card-info-negative' : ''}>
                 {props[returnField[value]]}%
               </span>
             </p>
-            <RatingStar value={props.morning_star_rating} />
+            {rating > 0 && rating < 6 && (
+              <img src={require(`assets/rating${rating}.png`)} className="diy-fc-rating" alt="" />
+            )}
           </div>
           {productType !== 'finity' ? (
             <div
@@ -360,12 +364,8 @@ const DiyFundCard = ({
             <Button
               dataAid='diy-fundlist-invest-btn'
               buttonTitle="Invest"
-              style={{
-                height: '20px',
-                color: '#fff',
-                borderRadius: '4px',
-                backgroundColor: '#35cb5d',
-                width: '90px',
+              classes={{
+                button: "diy-fl-invest-button"
               }}
               onClick={handleInvest}
             />

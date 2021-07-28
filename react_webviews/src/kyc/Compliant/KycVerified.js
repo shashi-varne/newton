@@ -7,6 +7,7 @@ import { nativeCallback } from "utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
 import "./commonStyles.scss";
 
+import { isNewIframeDesktopLayout } from "../../utils/functions";
 const config = getConfig();
 const productName = config.productName;
 const KycVerified = (props) => {
@@ -70,13 +71,16 @@ const KycVerified = (props) => {
       title="KYC verified"
       data-aid='kyc-compliant-verify-screen'
       skelton={isLoading}
+      iframeRightContent={require(`assets/kyc_complete.svg`)}
     >
       <div className="kyc-compliant-complete" data-aid='kyc-compliant-complete'>
         <header data-aid='kyc-compliant-verify-header'>
-          <img
-            src={require(`assets/${productName}/ic_process_done.svg`)}
-            alt=""
-          />
+          {!isNewIframeDesktopLayout() && (
+            <img
+              src={require(`assets/${productName}/ic_process_done.svg`)}
+              alt=""
+            />
+          )}
           <div className="title" data-aid='kyc-title'>You're ready to invest!</div>
           <div
             className="subtitle margin-top"

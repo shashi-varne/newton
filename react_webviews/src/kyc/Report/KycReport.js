@@ -7,11 +7,13 @@ import {
 } from "../constants";
 import ContactUs from "../../common/components/contact_us";
 import { getFlow, getGenderValue, isDigilockerFlow } from "../common/functions";
-import { navigate as navigateFunc } from "utils/functions";
+import { navigate as navigateFunc, getConfig } from "utils/functions";
 import { isEmpty } from "../../utils/validators";
 import { nativeCallback } from "utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
 
+const config = getConfig();
+const productName = config.productName;
 const Report = (props) => {
   const navigate = navigateFunc.bind(props);
   const [cardDetails, setCardDetails] = useState([]);
@@ -21,6 +23,7 @@ const Report = (props) => {
   const [topTitle, setTopTitle] = useState("KYC details");
   const [addressProof, setAddressProof] = useState({});
   const goBackPage = props.location.state?.goBack || "";
+  const [isDlFlow, setIsDlFlow] = useState(false);
 
   const handleTiles = (index, key) => {
     if (key === "docs") {
@@ -48,6 +51,7 @@ const Report = (props) => {
   const initialize = () => {
     let compliant = kyc.kyc_status === "compliant";
     const dlFlow = isDigilockerFlow(kyc);
+    setIsDlFlow(dlFlow)
     setIsCompliant(compliant);
     if (
       compliant &&
@@ -278,6 +282,7 @@ const Report = (props) => {
       headerData={{ goBack }}
       skelton={isLoading}
       noFooter
+      iframeRightContent={require(`assets/${productName}/${isDlFlow ? "digilocker_kyc" : "kyc_illust"}.svg`)}
     >
       <div className="kyc-report" data-aid='kyc-report-section'>
         {cardDetails &&

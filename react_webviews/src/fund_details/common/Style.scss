@@ -1,3 +1,7 @@
+.fd-iframe-container{
+  height: 100vh !important;
+}
+
 .return-table-header {
   padding-left: 15px;
   font-weight: 700;
@@ -42,79 +46,3 @@
   transform: rotate(180deg);
   margin-left: auto;
 }
-
-/////// Fund Details Two Button Footer Start ///////
-
-.fund-detail-two-button {
-  display: flex;
-  align-items: center;
-
-  .button {
-    background-color: var(--secondary);
-    color: #ffffff;
-    min-height: 55px;
-    font-size: 14px;
-  }
-
-  .button:hover, .button:focus {
-    background-color: var(--secondary);
-  }
-
-  .button1 {
-    background-color: #73C555;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    text-transform: lowercase;
-
-
-    .fund-details-dual-button-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      column-gap: 18px;
-      font-size: 13px;
-      text-transform: lowercase;
-      min-width: 100px;
-      padding: 4px 10px;
-      margin: -10px 0;
-
-      .cart-content {
-        display: flex;
-        position: relative;
-
-        img {
-          width: 22px;
-          height: 38px;
-        }
-
-        .circle {
-          position: absolute;
-          border-radius: 50%;
-          background-color: #477d3c;
-          padding: 5px;
-          width: 25px;
-          height: 25px;
-          right: -15px;
-          top: -4px;
-          text-align: center;
-          span {
-            font-size: 14px;
-          }
-        }
-      }
-    }
-  }
-
-  .button1:hover, .button1:focus {
-    background-color: #73C555;
-  }
-
-  .button2 {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    width: 100%;
-  }
-
-}
-
-/////// Fund Details Two Button Footer End ///////

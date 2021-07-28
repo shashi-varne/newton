@@ -253,7 +253,7 @@ const InvestAmount = (props) => {
             }
           </p>
         </div>
-        {!riskEnabledFunnel &&
+        {(!riskEnabledFunnel || funnelGoalData.id === 'savetax')  &&
           <div className='invest-amount-corpus' data-aid='invest-amount-corpus'>
             <div className='invest-amount-corpus-duration'>
               {funnelGoalData.id === 'savetax' ?

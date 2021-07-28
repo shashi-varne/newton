@@ -14,6 +14,13 @@ const Logout = (props) => {
 
   const initialize = async () => {
     if (config.Web) {
+      if (config.isIframe) {
+        let message = JSON.stringify({
+          type: "iframe_close",
+        });
+        window.callbackWeb.sendEvent(message);
+        return;
+      }
       try {
         storageService().clear();
         window.localStorage.clear();

@@ -1,10 +1,11 @@
 import toast from "../common/ui/Toast";
 import { getKycAppStatus } from "../kyc/services";
 import Api from "../utils/api";
-import { getConfig } from "../utils/functions";
-import { storageService, isFunction } from "../utils/validators";
+import { getConfig, popupWindowCenter } from "../utils/functions";
+import { storageService } from "../utils/validators";
 import { apiConstants } from "./Invest/constants";
-const partnerCode = getConfig().partner_code;
+const config = getConfig();
+const partnerCode = config.code;
 /* eslint-disable */
 export function isInvestRefferalRequired(partner_code) {
   if (partner_code === "ktb") {
@@ -22,7 +23,6 @@ export async function proceedInvestment(data) {
     paymentRedirectUrl,
     handleApiRunning,
     handleDialogStates,
-    handleIsRedirectToPayment,
     userKyc,
     navigate
   } = data;
@@ -69,9 +69,13 @@ export async function proceedInvestment(data) {
           });
           return;
         }
-        if (getConfig().Web) {
-          // handleIframe
-          window.location.href = pgLink;
+        if (config.Web) {
+          if (config.isIframe) {
+            handleIframeInvest(pgLink, result, navigate, handleApiRunning);
+          } else {
+            handleApiRunning("page");
+            window.location.href = pgLink;
+          }
         } else {
           if (result.rta_enabled) {
             navigate("/payment/options", {
@@ -89,11 +93,9 @@ export async function proceedInvestment(data) {
               state: { show_aadhaar: (userKyc.address.meta_data.nri || userKyc.kyc_type === "manual") ? false : true } 
             });
           }
+          handleApiRunning(false);
         }
       } else {
-        if (isFunction(handleIsRedirectToPayment)) {
-          handleIsRedirectToPayment(false);
-        }
         let errorMessage = result.error || result.message || "Error";
         storageService().setObject("is_debit_enabled", result.is_debit_enabled);
         switch (status) {
@@ -110,8 +112,8 @@ export async function proceedInvestment(data) {
             handleDialogStates("openInvestError", true, errorMessage);
             break;
         }
+        handleApiRunning(false);
       }
-      handleApiRunning(false);
     } catch (error) {
       console.log(error);
       handleApiRunning(false);
@@ -154,4 +156,72 @@ export function redirectToKyc(userKyc, kycJourneyStatus, navigate) {
       state: { show_aadhaar: (userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual") ? false : true } 
     });
   }
+}
+
+export function handleIframeInvest(pgLink, result, navigate, handleApiRunning) {
+  let popup_window = popupWindowCenter(900, 580, pgLink);
+  handleApiRunning("page")
+  pollProgress(600000, 5000, result.investments[0].id, popup_window).then(
+    function (poll_data) {
+      popup_window.close();
+      if (poll_data.status === "success") {
+        // Success
+        navigate(
+          `/page/callback/${result.investments[0].order_type}/${result.investments[0].amount}/success/success`
+        );
+      } else if (poll_data.status === "failed") {
+        toast("Payment failed. Please try again");
+        // Failed
+      } else if (poll_data.status === "closed") {
+        // Closed
+        toast("Payment window closed. Please try again");
+      }
+      handleApiRunning(false);
+    },
+    function (err) {
+      popup_window.close();
+      handleApiRunning(false);
+      console.log(err);
+      if (err?.status === "timeout") {
+        toast("Payment has been time out. Please try again");
+      } else {
+        toast("Something went wrong. Please try again.");
+      }
+    }
+  );
+}
+
+function pollProgress(timeout, interval, id, popup_window) {
+  const endTime = Number(new Date()) + (timeout || 3 * 1000 * 60);
+  interval = interval || 1000;
+  let checkCondition = async function (resolve, reject) {
+    if (popup_window.closed) {
+      resolve({ status: "closed" });
+    } else {
+      try {
+        const res = await getInvestmentStatus(id);
+        let { result, status_code } = res.pfwresponse;
+        if (status_code === 200) {
+          if (result.investment.status === "pg_success") {
+            resolve({ status: "success" });
+          } else if (result.investment.status === "pg_failed") {
+            resolve({ status: "failed" });
+          } else if (Number(new Date()) < endTime) {
+            setTimeout(checkCondition, interval, resolve, reject);
+          } else {
+            reject({ status: "timeout" });
+          }
+        }
+      } catch (err) {
+        console.log(err);
+        reject(err);
+      }
+    }
+  };
+  return new Promise(checkCondition);
+}
+
+async function getInvestmentStatus(id) {
+  const res = await Api.get(`/api/invest/${id}`);
+  return res;
 }

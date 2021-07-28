@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
-import { storageService, validatePan, isEmpty } from "utils/validators";
+import { storageService, validatePan } from "utils/validators";
 import Input from "../../common/ui/Input";
 import { checkMerge, getPan, kycSubmit } from "../common/api";
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import toast from "../../common/ui/Toast";
 import AccountMerge from "../mini-components/AccountMerge";
-import { getConfig, navigate as navigateFunc } from "../../utils/functions";
+import { getConfig, isNewIframeDesktopLayout, navigate as navigateFunc } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import { ConfirmPan } from "../Equity/mini-components/ConfirmPan";
 import CheckCompliant from "../Equity/mini-components/CheckCompliant";
-import { isDigilockerFlow } from "../common/functions";
+import { isDigilockerFlow, panUiSet } from "../common/functions";
+import internalStorage from '../common/InternalStorage';
+import isEmpty from 'lodash/isEmpty';
 
 const residentialStatusOptions = [
   {
@@ -26,6 +28,7 @@ const residentialStatusOptions = [
 ];
 
 const config = getConfig();
+const showPageDialog = isNewIframeDesktopLayout();
 const Home = (props) => {
   const navigate = navigateFunc.bind(props);
   const genericErrorMessage = "Something Went wrong!";
@@ -51,6 +54,15 @@ const Home = (props) => {
   const isTradingEnabled = (isIndian) => {
     return !config.isSdk && isIndian
   }
+  // const [navigateTo, setNavigateTo] = useState('');
+  // const [x,setX] = useState(false);
+
+  const savedPan = storageService().get('pan');
+  useEffect(() => {
+    if(savedPan){
+      setPan(savedPan);
+    }
+  },[])
 
   useEffect(() => {
     if (!isEmpty(kyc) && !isEmpty(user)) initialize();
@@ -69,6 +81,11 @@ const Home = (props) => {
         "As per SEBI, valid PAN is mandatory to open a trading & demat account",
       kycConfirmPanScreen: false,
     };
+    if(isEmpty(savedPan)){
+      setPan(kyc.pan?.meta_data?.pan_number || "");
+    } else{
+      storageService().remove('pan');
+    }
     if (
       user.nps_investment &&
       storageService().get("nps_additional_details_required")
@@ -120,7 +137,7 @@ const Home = (props) => {
         } else {
           setIsUserCompliant(false);
         }
-        setOpenConfirmPan(true);
+        handleShowConfirmPan();
         return;
       }
       setShowLoader("button");
@@ -129,6 +146,26 @@ const Home = (props) => {
       toast(err.message || genericErrorMessage);
     }
   };
+
+  const handleShowConfirmPan = () => {
+    if(showPageDialog) {
+      const newData = {
+        title: 'Confirm PAN',
+        buttonOneTitle: 'EDIT PAN',
+        buttonTwoTitle: 'CONFIRM PAN',
+        twoButton: true,
+        message: `Hi${userName && ` ${userName}`}, please confirm that this PAN belongs to you: ${panUiSet(pan)}`,
+        status: 'confirmPan'
+      }
+      storageService().set('pan',pan);
+      internalStorage.setData('handleClickOne', reEnterPan);
+      internalStorage.setData('handleClickTwo', handleConfirmPan);
+      internalStorage.setData('isApiCall', true);
+      navigate('/kyc/confirm-pan',{state:{...newData}});
+    } else {
+      setOpenConfirmPan(true)
+    }
+  }
 
   const checkPanValidity = async (showConfirmPan = false) => {
     let body = {
@@ -146,7 +183,7 @@ const Home = (props) => {
       if (isEmpty(result)) return;
       setUserName(result.kyc.name);
       setIsStartKyc(true);
-      if (showConfirmPan) setOpenConfirmPan(true);
+      if (showConfirmPan) handleShowConfirmPan();
     } catch (err) {
       console.log(err);
       toast(err.message);
@@ -186,7 +223,8 @@ const Home = (props) => {
   const handleMerge = async (step) => {
     sendEvents("link_account", "pan_aleady_exists");
     if (step === "STEP1") {
-      storageService().setObject(STORAGE_CONSTANTS.AUTH_IDS, authIds);
+      if(!isEmpty(authIds))
+        storageService().setObject(STORAGE_CONSTANTS.AUTH_IDS, authIds);
       navigate(`${PATHNAME_MAPPER.accountMerge}${pan.toUpperCase()}`);
     } else {
       if (config.Web) {
@@ -197,13 +235,16 @@ const Home = (props) => {
     }
   };
 
+  const reEnterPan = () => {
+    navigate('/kyc/home');
+  }
+
   const accountMerge = async () => {
-    let config = getConfig();
     let email = config.email;
     let name = "fisdom";
     if (config.productName === "finity") name = "finity";
     const toastMessage = `The PAN is already associated with another ${name} account. Kindly send mail to ${email} for any clarification`;
-    if (config.isIframe) {
+    if (showPageDialog) {
       toast(toastMessage);
     } else {
       let response = await checkMerge(pan.toUpperCase());
@@ -211,23 +252,52 @@ const Home = (props) => {
       let { result, status_code } = response;
       let { different_login, auth_ids } = result;
       if (status_code === 200) {
-        setAuthIds(auth_ids);
-        setAccountMergeData({
-          title: "PAN Already Exists",
-          subtitle:
-            "Sorry! this PAN is already registered with another account.",
-          buttonTitle: "LINK ACCOUNT",
+        const accountDetail = {
+          title: "PAN already exists",
+          message: "Sorry! this PAN is already registered with another account.",
           step: "STEP1",
-        });
-        setOpenAccountMerge(true);
+        };
+        setAuthIds(auth_ids);
+        // setAccountMergeData(accountDetail);
+        if (showPageDialog) {
+          // setNavigateTo('pan-status');
+          const newData = {
+            buttonOneTitle: 'RE-ENTER PAN',
+            buttonTwoTitle: 'LINK ACCOUNT',
+            twoButton: true,
+            status: 'linkAccount'
+          }
+          storageService().set('pan',pan);
+          storageService().setObject(STORAGE_CONSTANTS.AUTH_IDS, auth_ids);
+          internalStorage.setData('handleClickOne', reEnterPan);
+          internalStorage.setData('handleClickTwo', handleMerge);
+          navigate('pan-status',{state:{...accountDetail, ...newData}});
+        } else { 
+          setAccountMergeData({...accountDetail, buttonTitle:'LINK ACCOUNT' });
+          setOpenAccountMerge(true);
+        }
       } else if (different_login) {
-        setAccountMergeData({
+        const accountDetail = {
           title: "PAN Is already registered",
-          subtitle: result?.message,
-          buttonTitle: "SIGN OUT",
+          message: result?.message,
           step: "STEP2",
-        });
-        setOpenAccountMerge(true);
+        };
+        if (showPageDialog) {
+          // setNavigateTo('pan-status');
+          const newData = {
+            buttonOneTitle: 'RE-ENTER PAN',
+            buttonTwoTitle: 'SIGN OUT',
+            twoButton: true,
+            status: 'signOut'
+          }
+          storageService().set('pan',pan);
+          internalStorage.setData('handleClickOne', reEnterPan);
+          internalStorage.setData('handleClickTwo', handleMerge);
+          navigate('pan-status',{state:{...accountDetail, ...newData}});
+        } else { 
+          setAccountMergeData({...accountDetail,buttonTitle:'SIGN OUT'});
+          setOpenAccountMerge(true);
+        }
       } else {
         toast(toastMessage);
       }
@@ -377,6 +447,7 @@ const Home = (props) => {
       showLoader={showLoader}
       handleClick={handleClick}
       title={homeData.title}
+      iframeRightContent={require(`assets/${config.productName}/kyc_illust.svg`)}
       data-aid='kyc-home-screen'
     >
       {!isEmpty(homeData) && (
@@ -393,7 +464,7 @@ const Home = (props) => {
               minLenth={10}
               maxLength={10}
               type="text"
-              disabled={showLoader}
+              disabled={!!showLoader}
               autoFocus
             />
             <div className={`input ${showLoader && `disabled`}`}>

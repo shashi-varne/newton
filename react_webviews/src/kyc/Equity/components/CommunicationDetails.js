@@ -20,7 +20,7 @@ import {
 import useUserKycHook from "../../common/hooks/userKycHook";
 import CheckBox from "../../../common/ui/Checkbox";
 import { PATHNAME_MAPPER } from "../../constants";
-import { navigate as navigateFunc } from "../../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import Otp from "../mini-components/Otp";
 import { nativeCallback } from "../../../utils/native_callback";
 import {
@@ -37,6 +37,7 @@ import {
 //     <div>Continue with Google</div>
 //   </a>
 // );
+const config = getConfig();
 const CommunicationDetails = (props) => {
   const navigate = navigateFunc.bind(props);
   const stateParams = props.location?.state || {};
@@ -333,6 +334,7 @@ const CommunicationDetails = (props) => {
       showLoader={showLoader}
       skelton={isLoading || showSkelton}
       disable={showDotLoader}
+      iframeRightContent={require(`assets/${config.productName}/kyc_illust.svg`)}
     >
       <div
         className={`kyc-communication-details ${
