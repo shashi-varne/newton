@@ -25,13 +25,14 @@ export const backMapper = (state) => {
   return commonBackMapper[state] || "";
 }
 
-export const checkBeforeRedirection = (props, fromState, toState) => {
+export const checkBeforeRedirection = (fromState, toState) => {
   if (getConfig().isLoggedIn) {
     if (
       toState === "/login" ||
       toState === "/register" ||
       toState === "/forgot-password" ||
-      toState === "/mobile/verify"
+      toState === "/mobile/verify" || 
+      toState?.includes("/partner-authentication")
     ) {
       if (!fromState) {
         return "/";
@@ -64,6 +65,7 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
       return backButtonHandlerWeb(props, fromState, currentState, params)
     } else {
       window.callbackWeb.sendEvent(message);
+      return true;
     }
   } else {
     return backButtonHandlerWeb(props, fromState, currentState, params)
@@ -75,7 +77,7 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
   const config = getConfig();
   
   const landingRedirectPaths = ["/kyc/report", "/notification", "/nps/payment/callback",
-    "/nps/mandate/callback", "/nps/success", "/page/invest/campaign/callback", "/invest", "/reports"];
+    "/nps/mandate/callback", "/nps/success", "/page/invest/campaign/callback", "/reports"];
 
   if (landingRedirectPaths.indexOf(currentState) !== -1 || currentState.indexOf("/nps/payment/callback") !== -1) {
     navigate("/landing");
@@ -91,8 +93,12 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
 
   const diyDirectEntryArr = ["/diy/fundlist/direct", "/diy/fundinfo/direct", "/diy/invest", "/invest/doityourself/direct"];
 
-  if ((currentState === "/kyc-esign/nsdl" && params?.status === "success") ||
-    diyDirectEntryArr.includes(currentState)) {
+  const verifyCurrentStateWithDirect = () => {
+    const current = currentState.split("/:")[0];
+    return diyDirectEntryArr.includes(current);
+  }
+
+  if ((currentState === "/kyc-esign/nsdl" && params?.status === "success") || verifyCurrentStateWithDirect()) {
     if (config?.code === 'moneycontrol') {
       navigate("/");
       return true;
@@ -139,8 +145,8 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
     //   // navigate kyc home
     //   break;
     default:
-      const landingScreens = ["/", "/invest", "/landing"]
-      if(landingScreens.includes(currentState) && config?.code === 'moneycontrol') {
+      const closeIframeStates = ["/", "/invest", "/landing", "/reports", "/withdraw"]
+      if(closeIframeStates.includes(currentState) && config?.code === 'moneycontrol') {
         let message = JSON.stringify({
           type: "iframe_close"
         });

@@ -1,3 +1,5 @@
+@import './utils.scss';
+
 .configPrimaryColorClass {
   color: var(--primary) !important;
 }
@@ -246,13 +248,6 @@ body[data-device="web"] {
       .nsdl-status-text{
         margin-top: 120px;
       }
-    }
-
-    .esign-bottom {
-      position: fixed;
-      bottom: 60px;
-      left: 50%;
-      transform: translateX(-50%);
     }
 
     .account-merge-linked{
@@ -732,9 +727,14 @@ button {
   text-align: center;
 }
 
-.FlexButtonGenericColor{
-  background-color: var(--secondary);
-  color: white;
+.FlexButtonGenericColor {
+  border-radius: var(--border-radius);
+
+  button{
+    background-color: var(--secondary);
+    color: white;
+    border-radius: var(--border-radius);
+  }
 }
 
 .FooterTwoButtonLayout button.borderButton {
@@ -1417,7 +1417,7 @@ $header-title-font-size: 20px;
 
 .main-top-title-header-old {
   @include main-top-title-header-base();
-  color: white;
+  color: var(--primary);
 }
 
 .slide-fade {

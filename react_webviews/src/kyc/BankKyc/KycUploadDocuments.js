@@ -18,7 +18,6 @@ import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClick
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 import { isReadyToInvest } from "../services";
 
-const config = getConfig();
 const INIT_BOTTOMSHEET_TEXT = "We've added your bank account details. The verification is in progress, meanwhile you can continue with KYC."
 
 const KycUploadDocuments = (props) => {
@@ -33,7 +32,9 @@ const KycUploadDocuments = (props) => {
   const [bottomsheetText, setBottomSheetText] = useState(INIT_BOTTOMSHEET_TEXT);
   const [bottomsheetCtaText, setBottomSheetCtaText] = useState("CONTINUE WITH KYC");
   const [tradingEnabled, setTradingEnabled] = useState(false);
+  
   const navigate = navigateFunc.bind(props);
+  const config = getConfig();
   const goBackPath = props.location?.state?.goBack || "";
 
   useEffect(() => {

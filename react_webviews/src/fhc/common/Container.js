@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { withRouter } from 'react-router';
 
-import { nativeCallback } from 'utils/native_callback';
+import { nativeCallback, handleNativeExit } from 'utils/native_callback';
 import '../../utils/native_listener';
 import { getConfig } from 'utils/functions';
 import { storageService } from '../../utils/validators';
@@ -45,14 +45,15 @@ class Container extends Component {
     let pathname = this.props.history.location.pathname;
     let { params } = this.props.location;
     if (params && params.disableBack) {
-      nativeCallback({ action: 'exit' });
+      handleNativeExit(this.props, {action: "exit"});
       return;
     }
     switch (pathname) {
       case "/fhc":
       case "/fhc/final-report":
         storageService().remove('fhc_data'); // remove cached fhc data
-        nativeCallback({ action: 'exit', events: this.getEvents('back') });
+        nativeCallback({ events: this.getEvents('back') });
+        handleNativeExit(this.props, {action: "exit"});
         break;
       case "/fhc/personal1":
         this.navigate('/fhc', { fromScreen1: true });
@@ -82,7 +83,8 @@ class Container extends Component {
       const fhc_data = storageService().getObject('fhc_data');
       await uploadFHCData(fhc_data, true);
       storageService().remove('fhc_data'); // remove cached fhc data when exiting
-      nativeCallback({ action: this.state.callbackType, events: this.getEvents('exit_yes') });
+      nativeCallback({ events: this.getEvents('exit_yes') });
+      handleNativeExit(this.props, {action: this.state.callbackType});
     } catch (e) {
       this.setState({ show_loader: false });
       console.log(e);

@@ -4,13 +4,15 @@ import { getConfig, navigate as navigateFunc } from '../../utils/functions'
 import { DL_DOCS } from '../constants'
 import "./Digilocker.scss";
 
-const config = getConfig();
-const productName = config.productName;
 const Success = (props) => {
+  const config = getConfig();
+  const productName = config.productName;
+
   const proceed = () => {
     const navigate = navigateFunc.bind(props)
     navigate('/kyc/journey')
   }
+  
   return (
     <Container
       title="Share details"

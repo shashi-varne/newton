@@ -75,7 +75,7 @@ const Search = (props) => {
     >
         <div className={`diy-search ${isMobileDevice ? "diy-search-mob" : ""}`} data-aid='diy-search'>
       {
-        iframe ? < IframeSearch value={value} handleChange={handleChange} />
+        (iframe || (getConfig().code === 'moneycontrol' && !getConfig().Web)) ? < IframeSearch value={value} handleChange={handleChange} />
         :
         <div className="search-content" data-aid='search-content'>
           <div className="search-option">

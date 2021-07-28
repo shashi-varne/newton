@@ -18,7 +18,7 @@ export const checkBeforeRedirection = (fromState, toState) => {
   if (getConfig().isLoggedIn) {
     if (toState === "/login" && storageService().get("deeplink_url")) {
       window.location.href = decodeURIComponent(
-        storageService.get("deeplink_url")
+        storageService().get("deeplink_url")
       );
       return;
     } else {
@@ -27,7 +27,8 @@ export const checkBeforeRedirection = (fromState, toState) => {
         toState === "/login" ||
         toState === "/register" ||
         toState === "/forgot-password" ||
-        toState === "/mobile/verify"
+        toState === "/mobile/verify" ||
+        toState === "/prepare"
       ) {
         if (!fromState) {
           return "/";
@@ -47,7 +48,9 @@ export const checkAfterRedirection = (props, fromState, toState) => {
       toState !== "/login" &&
       toState !== "/register" &&
       toState !== "/forgot-password" &&
-      toState !== "/mobile/verify"
+      toState !== "/mobile/verify" &&
+      toState === "/prepare" &&
+      !toState.includes("/partner-authentication")
     ) {
       if (!getConfig().isLoggedIn) {
         navigate("/login");

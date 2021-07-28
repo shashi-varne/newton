@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Container from '../../common/Container';
 import qs from 'qs';
 import sip_resumed_fisdom from 'assets/ils_esign_success_fisdom.svg';
-import sip_resumed_myway from 'assets/ils_esign_success_myway.svg';
+import sip_resumed_myway from 'assets/finity/ils_esign_success_myway.svg';
 import { getConfig } from 'utils/functions';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
@@ -57,7 +57,7 @@ class EnpsSuccess extends Component {
 
   handleClick = () => {
     this.sendEvents('ok');
-    openModule('app/portfolio');
+    openModule('app/portfolio', this.props);
   }
 
   navigate = (pathname) => {

@@ -262,16 +262,16 @@ export const nfoData = {
     {
       value: "sip",
       name: "SIP / Monthly",
-      icon: "sip_icn.png",
+      icon: "sip_icn.svg",
       icon_light: "sip_icn_light.png",
-      selected_icon: "selected.png",
+      selected_icon: "selected.svg",
     },
     {
       value: "onetime",
       name: "One Time",
-      icon: "one_time_icn.png",
+      icon: "one_time_icn.svg",
       icon_light: "one_time_icn_light.png",
-      selected_icon: "selected.png",
+      selected_icon: "selected.svg",
     },
   ],
 };
@@ -466,7 +466,7 @@ export const sdkInvestCardMapper = [
     title: 'Refer & Earn',
     subtitle: 'Refer to your friends & earn rewards',
     img: 'ic_db_refer.svg',
-    path: '/referral'
+    path: '/refer'
   },
   {
     key: 'help',

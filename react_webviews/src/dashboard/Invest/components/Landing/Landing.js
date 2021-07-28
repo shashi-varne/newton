@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Container from "../../../common/Container";
 import { getConfig } from "utils/functions";
 import Button from "common/ui/Button";
-import { initialize, handleCampaignNotification, handleCampaignRedirection } from "../../functions";
+import { initialize, handleCampaignNotification } from "../../functions";
 import InvestCard from "../../mini-components/InvestCard";
 import SecureInvest from "../../mini-components/SecureInvest";
 import VerificationFailedDialog from "../../mini-components/VerificationFailedDialog";
@@ -17,15 +17,13 @@ import isEmpty from "lodash/isEmpty";
 import { Imgc } from "../../../../common/ui/Imgc";
 
 const fromLoginStates = ["/login", "/register", "/forgot-password", "/mobile/verify", "/logout"]
-const config = getConfig();
-const isMobileDevice = config.isMobileDevice;
 class Landing extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
       kycStatusLoader: false,
-      productName: config.productName,
+      productName: getConfig().productName,
       screenName: "invest_landing",
       investCardsData: {},
       investSections: [],
@@ -35,12 +33,11 @@ class Landing extends Component {
       openKycPremiumLanding: false,
       openBottomSheet: false,
       bottom_sheet_dialog_data: [],
-      isWeb: config.Web,
+      isWeb: getConfig().Web,
       stateParams: props.location.state || {},
     };
     this.initialize = initialize.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
-    this.handleCampaignRedirection = handleCampaignRedirection.bind(this);
   }
 
   componentWillMount() {
@@ -104,16 +101,6 @@ class Landing extends Component {
     }
   };
 
-  closeCampaignDialog = () => {
-    this.setState({ openBottomSheet: false });
-  };
-
-  handleCampaign = () => {
-    this.setState({showPageLoader : 'page', openBottomSheet : false});
-    let campLink = this.state.bottom_sheet_dialog_data.url;
-    handleCampaignRedirection(campLink);
-  }
-
   render() {
     const {
       isReadyToInvestBase,
@@ -140,6 +127,7 @@ class Landing extends Component {
       popularCards,
       financialTools,
     } = investCardsData;
+    const config = getConfig();
     return (
       <Container
         skelton={this.state.show_loader}
@@ -147,21 +135,21 @@ class Landing extends Component {
         title="Start Investing"
         data-aid='start-investing-screen'
         showLoader={this.state.showPageLoader}
-        noBackIcon={fromLoginStates.includes(stateParams.fromState)}
+        noBackIcon={!config.isSdk || config.isIframe}
         background={
-          isMobileDevice &&
+          config.isMobileDevice &&
           fromLoginStates.includes(stateParams.fromState) &&
           "invest-landing-background"
         }
         classHeader={
-          isMobileDevice &&
+          config.isMobileDevice &&
           fromLoginStates.includes(stateParams.fromState) &&
           (this.state.headerStyle
             ? "invest-landing-partner-header"
             : "invest-landing-header")
         }
         headerData={{
-          partnerLogo: fromLoginStates.includes(stateParams.fromState)
+          partnerLogo: !config.isSdk && config.isMobileDevice
         }}
       >
         <div className="invest-landing" data-aid='invest-landing'>
@@ -210,9 +198,10 @@ class Landing extends Component {
                             dataAid='kyc-btn'
                             buttonTitle={kycStatusData.button_text}
                             classes={{
-                              button: "invest-landing-button",
+                              button: "invest-landing-button invest-kyc-button",
                             }}
                             showLoader={kycButtonLoader}
+                            type={productName === "finity" ? "outlined" : ""}
                           />
                         </div>
                       ): null}

@@ -4,7 +4,7 @@ import { withRouter } from "react-router";
 import {didMount ,commonRender} from '../../common/components/container_functions';
 
 
-import { nativeCallback } from "utils/native_callback";
+import { nativeCallback, handleNativeExit } from "utils/native_callback";
 import '../../utils/native_listener';
 import {checkStringInString, storageService} from 'utils/validators';
 import {forceBackState, goBackMap} from '../constants';
@@ -104,7 +104,7 @@ class Container extends Component {
       case "/gold/my-gold":
       case "/gold/about":
       case "/gold/landing":
-        nativeCallback({ action: "native_back"});
+        handleNativeExit(this.props, {action: "native_back"});
         break;
       default:
         this.props.history.goBack();
@@ -124,8 +124,8 @@ class Container extends Component {
     this.setState({
         openPopup: false
     });
-
-    nativeCallback({ action: "native_back", events: this.getEvents("back") });
+    nativeCallback({ events: this.getEvents("back") });
+    handleNativeExit(this.props, {action: "native_back"});
   };
 
   render() {

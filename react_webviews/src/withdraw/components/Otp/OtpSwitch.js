@@ -13,7 +13,6 @@ import { nativeCallback } from '../../../utils/native_callback'
 import { getConfig } from '../../../utils/functions'
 import WVBottomSheet from '../../../common/ui/BottomSheet/WVBottomSheet'
 
-const config = getConfig();
 const OtpSwitch = (props) => {
   const navigate = navigateFunc.bind(props)
   const stateParams = props?.location?.state
@@ -23,6 +22,7 @@ const OtpSwitch = (props) => {
   const [resendClicked, setResendClicked] = useState(false)
   const [errorMessage, setErrorMessage] = useState("");
   const [openPopup, setOpenPopup] = useState(false);
+  const config = getConfig();
   
   const handleChange = (event) => {
     if (!touched) {

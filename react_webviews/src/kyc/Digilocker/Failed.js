@@ -14,14 +14,15 @@ import { nativeCallback } from "../../utils/native_callback";
 import { updateQueryStringParameter } from "../common/functions";
 import { isNewIframeDesktopLayout, popupWindowCenter } from "../../utils/functions";
 
-const config = getConfig();
-const productName = config.productName;
-const basePath = getBasePath();
-const newIframeDesktopLayout = isNewIframeDesktopLayout();
 const Failed = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
+  const config = getConfig();
   const navigate = navigateFunc.bind(props);
   const {kyc, isLoading} = useUserKycHook();
+  
+  const productName = config.productName;
+  const basePath = getBasePath();
+  const newIframeDesktopLayout = isNewIframeDesktopLayout();
   
   const manual = async () => {
     sendEvents('upload_manually')

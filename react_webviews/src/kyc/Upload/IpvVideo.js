@@ -14,9 +14,6 @@ import { nativeCallback } from '../../utils/native_callback'
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 import Toast from '../../common/ui/Toast'
 
-const config = getConfig();
-const productName = config.productName
-const isWeb = config.Web
 const IpvVideo = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)
@@ -31,6 +28,10 @@ const IpvVideo = (props) => {
   const [noCameraPermission, setNoCameraPermission] = useState(false);
   const [errorContent, setErrorContent] = useState("");
   const [attempt, setAttempt] = useState(0);
+
+  const config = getConfig();
+  const productName = config.productName
+  const isWeb = config.Web
 
   const SUPPORTED_VIDEO_TYPES = ["mp4", "webm", "ogg", "x-flv", "x-ms-wmv"];
 
@@ -51,6 +52,7 @@ const IpvVideo = (props) => {
     }
   }, [noCameraFound, noCameraPermission])
 
+  
   const open = () => {
     setKnowMoreDialog(true)
   }

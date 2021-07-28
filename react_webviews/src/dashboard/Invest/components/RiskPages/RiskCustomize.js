@@ -13,9 +13,9 @@ import useFunnelDataHook from '../../common/funnelDataHook';
 import { nativeCallback } from '../../../../utils/native_callback';
 import { flowName } from '../../constants';
 
-const { productName } = getConfig();
 
 const RiskCustomize = (props) => {
+  const { productName } = getConfig();
   const {
     funnelData,
     updateFunnelData,

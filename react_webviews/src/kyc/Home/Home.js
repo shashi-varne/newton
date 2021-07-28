@@ -27,9 +27,9 @@ const residentialStatusOptions = [
   },
 ];
 
-const config = getConfig();
-const showPageDialog = isNewIframeDesktopLayout();
 const Home = (props) => {
+  const showPageDialog = isNewIframeDesktopLayout();
+  const config = getConfig();
   const navigate = navigateFunc.bind(props);
   const genericErrorMessage = "Something Went wrong!";
   const [showLoader, setShowLoader] = useState(false);
@@ -244,7 +244,7 @@ const Home = (props) => {
     let name = "fisdom";
     if (config.productName === "finity") name = "finity";
     const toastMessage = `The PAN is already associated with another ${name} account. Kindly send mail to ${email} for any clarification`;
-    if (showPageDialog) {
+    if (config.isIframe && config.code !== 'moneycontrol') {
       toast(toastMessage);
     } else {
       let response = await checkMerge(pan.toUpperCase());

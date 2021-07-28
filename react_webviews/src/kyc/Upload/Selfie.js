@@ -19,9 +19,6 @@ import { isNewIframeDesktopLayout, openFilePicker } from "../../utils/functions"
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 import { capitalize } from 'lodash';
 
-const config = getConfig();
-const { productName, isNative, Web: isWeb, isSdk } = config;
-
 const Selfie = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [file, setFile] = useState(null);
@@ -41,6 +38,9 @@ const Selfie = (props) => {
   const [fileHandlerParams, setFileHandlerParams] = useState();
   const [goBackModal, setGoBackModal] = useState(false);
   const navigate = navigateFunc.bind(props);
+
+  const config = getConfig();
+  const { productName, isNative, Web: isWeb, isSdk } = config;  
 
   useEffect(() => {
     if (!isEmpty(kyc)) {

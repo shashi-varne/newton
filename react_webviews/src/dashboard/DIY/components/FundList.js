@@ -33,8 +33,6 @@ const returnField = [
   'three_year_return',
   'five_year_return',
 ]
-const config = getConfig()
-const productType = config.productName
 function TabContainer(props) {
   return (
     <Typography component="div" style={{ padding: 8 * 3 }}>
@@ -43,9 +41,11 @@ function TabContainer(props) {
   )
 }
 const FundList = (props) => {
+  const config = getConfig()
+  const productType = config.productName
   const { match, classes, ...parentProps } = props
-  const name = props?.location?.state?.name || "";
-  const [value, setValue] = useState(4)
+  const [value, setValue] = useState(4);
+  const [name, setName] = useState(props?.location?.state?.name || "");
   const [fundsList, setFundsList] = useState(
     storageService().getObject(FUNDSLIST) || []
   )
@@ -76,7 +76,11 @@ const FundList = (props) => {
   }, [])
 
   useEffect(() => {
-    const { key, type } = match.params
+    const { key, type } = match.params;
+    const urlParamName = match.params?.name;
+    if(urlParamName) {
+      setName(urlParamName?.replace(/_/g, ' '));
+    }
     const category = storageService().get(CATEGORY)
     const subCategory = storageService().get(SUBCATEGORY)
     if (
@@ -168,7 +172,7 @@ const FundList = (props) => {
               "screen_name": "fund list",
               "user_action": userAction || "",
               "years_selected": yearsOptions[value],
-              "category_name": titleCase(match.params?.key?.replace(/_/g, " ")),
+              "category_name": match.params?.name || name,
               "fund_name": fundName || "",
               "scheme_type": titleCase(match.params.type) || "",
               "add_to_cart": productType === 'finity' ? 0 : cart.length,
@@ -208,7 +212,7 @@ const FundList = (props) => {
       events={sendEvents("just_set_events")}
       classOverRIde="pr-error-container"
       noFooter
-      title={name || match.params?.key?.replace(/_/g, ' ') || ''}
+      title={name || ''}
       skelton={showLoader}
       classOverRideContainer="pr-container"
       id="diy-fundlist-container"
@@ -291,6 +295,8 @@ const DiyFundCard = ({
   sendEvents,
   ...props
 }) => {
+  const config = getConfig()
+  const productType = config.productName
   const rating = config.code === "hbl" ? props.the_hindu_rating : props.morning_star_rating
   const handleClick = (data) => {
     sendEvents('next', "", "", props.legal_name)

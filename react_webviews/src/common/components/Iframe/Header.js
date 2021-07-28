@@ -13,11 +13,15 @@ const headerIconMapper = {
   back: back_arrow,
   close: close_icn,
 };
-const logo = getConfig().logo;
-const partnerCode = getConfig().partner_code;
-const partnerPrimaryColor = getConfig().styles.primaryColor;
-const isMobileDevice = getConfig().isMobileDevice;
-const Header = ({ classes, goBack, disableBack, headerData = {} }) => {
+const Header = ({ classes, goBack, disableBack, headerData = {}, showIframePartnerLogo }) => {
+  const config = getConfig();
+  const logo = config.logo;
+  const partnerCode = config.code;
+  const partnerPrimaryColor = config.styles.primaryColor;
+  const isMobileDevice = config.isMobileDevice;
+  const isWeb = config.Web;
+  const isSdk = config.isSdk;
+
   return (
     <AppBar
       position='fixed'
@@ -43,8 +47,24 @@ const Header = ({ classes, goBack, disableBack, headerData = {} }) => {
               src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
             />
           )}
-          {(disableBack === true || disableBack === 'summary') && !headerData.hide_icon && (
+          {disableBack && !headerData.hide_icon && (
             <Close color={isMobileDevice ? 'primary': 'default'}/>
+          )}
+          {showIframePartnerLogo && isWeb && isMobileDevice && (
+            <img
+              src={require(`assets/finity/finity_navlogo.svg`)}
+              alt='partnerLogo'
+              height={25}
+              style={{marginLeft: '15px'}}
+            />
+          )}
+          {showIframePartnerLogo && isSdk && isMobileDevice && partnerCode === 'moneycontrol' &&(
+            <img
+              src={require(`assets/moneycontrol_logo.svg`)}
+              alt='partnerLogo'
+              height={20}
+              style={{marginLeft: '15px'}}
+            />
           )}
         </div>
         {!isMobileDevice && (
@@ -59,7 +79,7 @@ const Header = ({ classes, goBack, disableBack, headerData = {} }) => {
         )}
         {partnerCode === 'moneycontrol' && !isMobileDevice ? (
           <div>
-            <img src={require(`assets/finity_white_logo_2.png`)} alt='' />
+            <img style={{verticalAlign: "middle"}} src={require(`assets/finity_white_logo.svg`)} height="35" alt='' />
           </div>
         ) : (
           <div />
@@ -72,9 +92,9 @@ const Header = ({ classes, goBack, disableBack, headerData = {} }) => {
 const styles = {
   root: {
     flexGrow: 1,
-    height: isMobileDevice ? '56px' : '80px',
+    height: getConfig().isMobileDevice ? '56px' : '80px',
     boxShadow: 'none',
-    backgroundColor: isMobileDevice ? 'white' : `${partnerPrimaryColor} !important`,
+    backgroundColor: getConfig().isMobileDevice ? 'white' : `${getConfig().styles.primaryColor} !important`,
   },
   flex: {
     flex: 1,
@@ -86,8 +106,8 @@ const styles = {
   },
   toolbarRoot: {
     display: 'flex',
-    paddingLeft: isMobileDevice ? '0px' : '80px !important',
-    paddingRight: isMobileDevice ? '0px' : '80px !important',
+    paddingLeft: getConfig().isMobileDevice ? '0px' : '80px !important',
+    paddingRight: getConfig().isMobileDevice ? '0px' : '80px !important',
     justifyContent: 'space-between',
     alignItems: 'center',
     height: '100%',

@@ -5,14 +5,14 @@ import { storageService } from "../../utils/validators";
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import { nativeCallback } from "utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
+import { isNewIframeDesktopLayout } from "../../utils/functions";
 import "./commonStyles.scss";
 
-import { isNewIframeDesktopLayout } from "../../utils/functions";
-const config = getConfig();
-const productName = config.productName;
 const KycVerified = (props) => {
   const navigate = navigateFunc.bind(props);
-  const { kyc, isLoading } = useUserKycHook();
+  const {kyc, isLoading} = useUserKycHook();
+  const config = getConfig();
+  const productName = config.productName;
   const handleClick = () => {
     let _event = {
       event_name: "journey_details",

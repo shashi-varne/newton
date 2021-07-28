@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {useParams} from 'react-router-dom';
 import Container from '../common/Container';
 import { fetch_fund_details, fetch_fund_graph } from '../common/ApiCalls';
 import Typography from '@material-ui/core/Typography';
@@ -30,21 +31,25 @@ import InvestError from '../../dashboard/Invest/mini-components/InvestError';
 import InvestReferralDialog from '../../dashboard/Invest/mini-components/InvestReferralDialog';
 import { SkeltonRect } from '../../common/ui/Skelton';
 import { getBasePath, isNewIframeDesktopLayout } from '../../utils/functions';
+import { getdiyGraphDataWithISIN } from '../../dashboard/Invest/common/api';
 
 const styles = {
   root: {
     margin: '10px',
   },
 };
-const FundDetails = ({ classes, history }) => {
+const FundDetails = ({ classes, history, flowType }) => {
   const [isLoading, setLoading] = useState(true);
   const [fundDetails, setFundDetails] = useState(null);
   const [reports, setReports] = useState(null);
   const [graph, setGraph] = useState(null);
   const [selectedIsin, setSelectedIsin] = useState(0);
   const productType = getConfig().productName;
-
-  const { isins, selected_isin, type } = getUrlParams();
+  const {isin} = useParams();
+  let { isins, selected_isin, type } = getUrlParams();
+  if(flowType) {
+    type = flowType
+  }
   const EMPTY_CART = 'EMPTY_CART';
   const FUND_ADDED = 'FUND_ADDED';
   const ADD_CART = '+ Add to Cart';
@@ -122,14 +127,32 @@ const FundDetails = ({ classes, history }) => {
   };
   
 
+  const getFundData = async () => {
+    try {
+      setLoading(true);
+      const graphData = await getdiyGraphDataWithISIN(isin);
+      storageService().setObject('diystore_fundInfo', graphData.fundinfo);
+    } catch (error) {
+      console.log(error);
+      toast(error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
     if(status === FUND_ADDED && type === 'diy' && productType !== 'finity') {
       setButtonTitle(buttonData(cart.length));
     } 
     (async () => {
+      if(flowType === "diy") {
+        await getFundData();
+      } 
       try {
         setLoading(true);
+        if(isin){
+          isins = isin;
+        }
         const response = await fetch_fund_details(isins);
         let index = response?.text_report?.findIndex((el) => el.isin === selected_isin);
         if(isins === selected_isin){
@@ -302,9 +325,9 @@ const FundDetails = ({ classes, history }) => {
     })
   }
 
-  const handleInvest = () => {
-    window.location.href =  getConfig().webAppUrl + 'diy/invest';
-  }
+  // const handleInvest = () => {
+  //   window.location.href =  getConfig().webAppUrl + 'diy/invest';
+  // }
 
   const ContainerData = () => (
     <>
@@ -336,7 +359,7 @@ const FundDetails = ({ classes, history }) => {
             <Typography
               align='center'
               style={{
-                color: '#35CB5D',
+                color: getConfig().styles.secondaryGreen,
                 fontWeight: '500',
                 letterSpacing: '0.5px',
                 lineHeight: '1.5em',

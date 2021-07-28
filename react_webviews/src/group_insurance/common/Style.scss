@@ -1465,11 +1465,15 @@
   opacity: 0.4;
 }
 
+.call-back-popup-button:hover{
+  background-color: var(--on-hover-background);
+}
+
 .call-back-popup-button{
   padding: 10px 0;
   width: 100%;
   margin-bottom: -5px;
-  background-color: #35CB5D;
+  background-color: var(--secondary);
   color: white;
   border: none;
   padding: 16px 0;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router';
 
-import Header from './Header';
+import Header from '../../common/components/Header';
 import Footer from '../../common/components/footer';
 // import loader_fisdom from 'assets/loader_gif_fisdom.gif';
 // import loader_myway from 'assets/loader_gif_myway.gif';
@@ -23,11 +23,11 @@ import './Style.scss';
 import UiSkelton from '../../common/ui/Skelton';
 import IframeHeader from 'common/components/Iframe/Header';
 import { isNewIframeDesktopLayout } from '../../utils/functions';
-const config = getConfig();
-const iframe = config.isIframe;
-const isMobileDevice = config.isMobileDevice;
-const newIframeDesktopLayout = isNewIframeDesktopLayout();
 const Container = (props) => {
+  const config = getConfig();
+  const iframe = config.isIframe;
+  const isMobileDevice = config.isMobileDevice;
+  const newIframeDesktopLayout = isNewIframeDesktopLayout();
   const [openDialog, setOpenDialog] = useState(false);
   const x = React.useRef(true);
   // const loaderMain = getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom;
@@ -132,7 +132,7 @@ const Container = (props) => {
       }`}
     >
       {/* Header Block */}
-      {!props.noHeader && !getConfig().hide_header && config.code !== "moneycontrol" ?(
+      {!props.noHeader && !getConfig().hide_header && !newIframeDesktopLayout ?(
         <Header
           disableBack={props.disableBack}
           title={props.title}
@@ -151,6 +151,7 @@ const Container = (props) => {
           style={props.styleHeader}
           className={props.classHeader}
           headerData={props.headerData}
+          new_header={true}
         />
       )
       :
@@ -218,7 +219,7 @@ const Container = (props) => {
       )}
 
       {props.skelton &&
-        <div className="Loader" style={{paddingTop: "56px"}}>
+        <div className="Loader" style={!config.isMobileDevice ? {top: "120px"} : {top: "56px"}}>
           <UiSkelton type={props.skelton} />
         </div>
       }

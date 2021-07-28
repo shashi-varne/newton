@@ -5,7 +5,7 @@ import WVSteps from "../../common/ui/Steps/WVSteps";
 import { isDocSubmittedOrApproved } from "../../kyc/common/functions";
 import { isReadyToInvest } from "../../kyc/services";
 import { isEmpty } from "../../utils/validators";
-const hideImage = isNewIframeDesktopLayout()
+
 
 const stepsData = [
   { title: "Mutual fund", status: "Ready to invest" },
@@ -14,14 +14,15 @@ const stepsData = [
 ]
 const initialSubtitleText = "Trading & demat A/c will be ready in 2 hours. Till then you can start investing in mutual funds";
 
-const config = getConfig();
-const productName = config.productName;
-
 const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
   const [steps, setSteps] = useState(stepsData);
   const [tradingEnabled, setTradingEnabled] = useState(false);
   const [showAccountStatus, setShowAccountStatus] = useState(false);
   const [tradingSubtitleText, setTradingSubtitleText] = useState(initialSubtitleText);
+  
+  const hideImage = isNewIframeDesktopLayout();
+  const config = getConfig();
+  const productName = config.productName; 
 
   useEffect(() => {
     if(!isEmpty(kyc)) {

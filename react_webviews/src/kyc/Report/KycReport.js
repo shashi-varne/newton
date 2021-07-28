@@ -12,8 +12,6 @@ import { isEmpty } from "../../utils/validators";
 import { nativeCallback } from "utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
 
-const config = getConfig();
-const productName = config.productName;
 const Report = (props) => {
   const navigate = navigateFunc.bind(props);
   const [cardDetails, setCardDetails] = useState([]);
@@ -22,6 +20,8 @@ const Report = (props) => {
   const [isNri, setIsNri] = useState(false);
   const [topTitle, setTopTitle] = useState("KYC details");
   const [addressProof, setAddressProof] = useState({});
+  const config = getConfig();
+  const productName = config.productName;
   const goBackPage = props.location.state?.goBack || "";
   const [isDlFlow, setIsDlFlow] = useState(false);
 

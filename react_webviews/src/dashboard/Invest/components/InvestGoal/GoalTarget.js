@@ -14,9 +14,9 @@ import {
 import { nativeCallback } from '../../../../utils/native_callback';
 import { flowName } from '../../constants';
 
-const riskEnabled = getConfig().riskEnabledFunnels;
 
 const GoalTarget = (props) => {
+  const riskEnabled = getConfig().riskEnabledFunnels;
   const navigate = navigateFunc.bind(props);
   
   const [loader, setLoader] = useState(false);

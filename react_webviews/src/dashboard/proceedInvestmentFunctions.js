@@ -4,8 +4,6 @@ import Api from "../utils/api";
 import { getConfig, popupWindowCenter } from "../utils/functions";
 import { storageService } from "../utils/validators";
 import { apiConstants } from "./Invest/constants";
-const config = getConfig();
-const partnerCode = config.code;
 /* eslint-disable */
 export function isInvestRefferalRequired(partner_code) {
   if (partner_code === "ktb") {
@@ -15,6 +13,10 @@ export function isInvestRefferalRequired(partner_code) {
 }
 
 export async function proceedInvestment(data) {
+  const config = getConfig();
+  const partnerCode = config.code;
+  let userKyc = data.userKyc || storageService().getObject("kyc") || {};
+  const kycJourneyStatus = getKycAppStatus(userKyc).status;
   let {
     sipOrOnetime,
     isSipDatesScreen,

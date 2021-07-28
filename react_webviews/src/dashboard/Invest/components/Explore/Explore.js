@@ -23,35 +23,37 @@ import { nativeCallback } from '../../../../utils/native_callback'
 import { flowName } from '../../constants'
 import { isNewIframeDesktopLayout } from '../../../../utils/functions'
 
-const config = getConfig();
-const iframe = config.isIframe;
-const isMobileDevice = config.isMobileDevice;
-const partnerCode = config.code;
-const newIframeDesktopLayout = isNewIframeDesktopLayout();
-export const exploreMFMappings = [
-  {
-    title: 'Equity',
-    description: 'Invest in large, mid and small-sized companies',
-    src: newIframeDesktopLayout ? equity_icon : diy_equity_icon,
-  },
-  {
-    title: 'Debt',
-    description: 'Stable returns with bonds and securities',
-    src: newIframeDesktopLayout ? debt_icon : diy_debt_icon,
-  },
-  {
-    title: 'Hybrid',
-    description: 'Perfect balance of equity and debt',
-    src: newIframeDesktopLayout ? hybrid_icon : diy_hybrid_icon,
-  },
-  {
-    title: 'Goal Oriented',
-    description: 'Align investments with your life goals',
-    src: newIframeDesktopLayout ? goal_icon : diy_goal_icon,
-  },
-]
 const InvestExplore = (props) => {
   const [loader, setLoader] = useState(true)
+  const config = getConfig();
+  const iframe = config.isIframe;
+  const isMobileDevice = config.isMobileDevice;
+  const partnerCode = config.code;
+  const newIframeDesktopLayout = isNewIframeDesktopLayout() || (partnerCode === 'moneycontrol' && !isMobileDevice);
+
+  const exploreMFMappings = [
+    {
+      title: 'Equity',
+      description: 'Invest in large, mid and small-sized companies',
+      src: newIframeDesktopLayout ? equity_icon : diy_equity_icon,
+    },
+    {
+      title: 'Debt',
+      description: 'Stable returns with bonds and securities',
+      src: newIframeDesktopLayout ? debt_icon : diy_debt_icon,
+    },
+    {
+      title: 'Hybrid',
+      description: 'Perfect balance of equity and debt',
+      src: newIframeDesktopLayout ? hybrid_icon : diy_hybrid_icon,
+    },
+    {
+      title: 'Goal Oriented',
+      description: 'Align investments with your life goals',
+      src: newIframeDesktopLayout ? goal_icon : diy_goal_icon,
+    },
+  ]
+
   useEffect(() => {
     storageService().remove(FUNDSLIST)
     storageService().remove(CART)
@@ -114,17 +116,19 @@ const InvestExplore = (props) => {
       data-aid='explore-all-mutual-funds-screen'
       classOverRIde="pr-error-container"
       noFooter
-      title={newIframeDesktopLayout ? "" : "Explore All Mutual Funds"}
+      title={partnerCode === 'moneycontrol' ? "" : "Explore All Mutual Funds"}
       classOverRideContainer="pr-container"
-      hidePageTitle={iframe && isMobileDevice}
+      hidePageTitle={partnerCode === 'moneycontrol'}
       handleClick={goNext}
       skelton={loader}
       rightIcon="search"
       handleTopIcon={handleRightIconClick}
-      disableBack={iframe && partnerCode === 'moneycontrol'}
+      disableBack={(iframe || config.isSdk) && partnerCode === 'moneycontrol'}
+      showIframePartnerLogo
+      headerData={{partnerLogo : (iframe || config.isSdk) && partnerCode === 'moneycontrol'}}
     >
       {
-        iframe && partnerCode === 'moneycontrol' ? <IframeView exploreMFMappings={exploreMFMappings} goNext={goNext} handleRightIconClick={handleRightIconClick}/> :
+        partnerCode === 'moneycontrol' ? <IframeView exploreMFMappings={exploreMFMappings} goNext={goNext} handleRightIconClick={handleRightIconClick}/> :
       <section className="invest-explore-cards" id="invest-explore" data-aid='invest-explore'>
         <div className='title'>Where do you want to invest?</div>
         {exploreMFMappings.map(({ title, description, src }) => (

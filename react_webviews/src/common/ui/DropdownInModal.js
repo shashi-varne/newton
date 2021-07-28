@@ -140,7 +140,7 @@ class DropdownInModalClass extends Component {
           aria-describedby='alert-dialog-description'
         >
           <DialogTitle id='dropdown-in-modal-dialog-title'>
-            <div onClick={this.handleClose}>
+            <div onClick={this.handleClose} className='dropdown-in-modal-close'>
               <SVG
                 preProcessor={(code) => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.primaryColor)}
                 src={close_icn}

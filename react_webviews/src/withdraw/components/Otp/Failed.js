@@ -1,16 +1,15 @@
 import React from 'react'
 import Container from '../../common/Container'
 import { getConfig, navigate as navigateFunc } from 'utils/functions'
-import { getUrlParams } from '../../../utils/validators'
 
 import './Failed.scss';
 import ContactUs from '../../../common/components/contact_us'
 import { nativeCallback } from '../../../utils/native_callback'
 
 const Failed = (props) => {
-  const productName = getConfig().productName
-  const urlParams = getUrlParams(props?.location?.search)
-  const partnerCode = urlParams?.partner_code
+  const config = getConfig();
+  const productName = config.productName
+  const partnerCode = config.code;
 
   const goTo = () => {
     sendEvents('next')

@@ -78,15 +78,12 @@ class Container extends Component {
       }
     }
 
-    console.log("Container props...", this.props);
-
     if (this.props.headerData && this.props.headerData.goBack) {
       this.props.headerData.goBack();
       return;
     }
 
     const goBackPath = this.props.location?.state?.goBack || "";
-    console.log("goBackPath...", goBackPath)
 
     if (goBackPath) {
       if (goBackPath === "exit" && storageService().get("native")) {
@@ -111,7 +108,6 @@ class Container extends Component {
       return;
     }
 
-    console.log("Props history goBack...");
     this.props.history.goBack();
   };
 

@@ -38,10 +38,11 @@ const sipTypesKeys = [
   "goldsip",
   "diysip",
 ];
-const riskEnabledFunnel = getConfig().riskEnabledFunnels;
-const partner_code = getConfig().partner_code;
 
 const Recommendations = (props) => {
+  const config = getConfig();
+  const riskEnabledFunnel = config.riskEnabledFunnels;
+  const partner_code = config.code;
   const routeState = get(props, 'location.state', {});
   const navigate = navigateFunc.bind(props);
   const {

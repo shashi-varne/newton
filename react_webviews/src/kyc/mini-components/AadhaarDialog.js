@@ -7,11 +7,12 @@ import { STORAGE_CONSTANTS } from "../constants";
 import "./mini-components.scss";
 import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 
-const config = getConfig();
-const productName = config.productName;
 
 const AadhaarDialog = ({ id, open, close, kyc, handleIframeKyc, sendEvents, ...props }) => {
+  const config = getConfig();
+  const productName = config.productName;
   const basePath = getBasePath();
+  
   const handleProceed = () => {
     sendEvents('next', 'ensure_mobile_linked_to_aadhar')
     const redirect_url = encodeURIComponent(

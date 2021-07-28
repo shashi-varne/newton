@@ -22,6 +22,8 @@ import "@fontsource/roboto/latin-400.css";
 import "@fontsource/roboto/latin-500.css";
 import "@fontsource/roboto/latin-700.css";
 // ------------------------------
+import * as Sentry from "@sentry/react";
+import { Integrations } from "@sentry/tracing";
 
 $(document).ready(function () {
   if(isIframe()) {
@@ -90,5 +92,23 @@ $(document).ready(function () {
   //   runGoogleAds();
   // }
 });
+
+if(getConfig().productName === "fisdom" && getConfig().isProdEnv)
+{
+  Sentry.init({
+    dsn: "https://38815adc8fd842e78c2145a583d26351@o60572.ingest.sentry.io/5726998",
+    integrations: [new Integrations.BrowserTracing()],
+    allowUrls:["app.fisdom.com","wv.fisdom.com"],
+    tracesSampleRate: 1.0,
+  });
+}
+else if(getConfig().productName === "finity" && getConfig().isProdEnv){
+  Sentry.init({
+    dsn: "https://84e342a0046748bab6860aafcf7e86da@o60572.ingest.sentry.io/5727007",
+    integrations: [new Integrations.BrowserTracing()],
+    allowUrls:["app.mywaywealth.com","app.finity.in","wv.mywaywealth.com", "wv.finity.in"],
+    tracesSampleRate: 1.0,
+  });
+}
 
 ReactDOM.render(<App />, document.getElementById('root'));

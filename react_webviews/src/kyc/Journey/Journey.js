@@ -65,26 +65,23 @@ const HEADER_BOTTOM_DATA = [
 
 const DL_HEADER_BOTTOM_DATA = HEADER_BOTTOM_DATA.reverse();
 
-const config = getConfig();
-const productName = config.productName
-const newIframeDesktopLayout = isNewIframeDesktopLayout();
 const Journey = (props) => {
+  const newIframeDesktopLayout = isNewIframeDesktopLayout();
   const navigate = navigateFunc.bind(props)
   const urlParams = getUrlParams(props?.location?.search)
   const stateParams = props?.location?.state;
   const [isApiRunning, setIsApiRunning] = useState(false)
-  const [npsDetailsReq] = useState(
-    storageService().get('nps_additional_details_required')
-  )
-
+  const [npsDetailsReq] = useState( storageService().get('nps_additional_details_required'))
   const [showDlAadhaar, setDlAadhaar] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [goBackModal, setGoBackModal] = useState(false)
-
   const [kyc, setKyc] = useState({})
   const [user, setUser] = useState({})
   const state = props.location.state || {};
   let { fromState } = state;
+  
+  const config = getConfig();
+  const productName = config.productName
 
   const closeGoBackModal = () => {
     setGoBackModal(false)
@@ -874,6 +871,8 @@ const Journey = (props) => {
 export default Journey
 
 export const FastAndSecureDisclaimer = ({options=[], alignInRow }) => {
+  const config = getConfig();
+  
   return (
     <div
       className={`kyc-pj-bottom ${alignInRow && "flex-between"}`}

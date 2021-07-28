@@ -31,8 +31,12 @@ export const checkAfterRedirection = (props, fromState, toState) => {
 
 export const backButtonHandler = (props, fromState, currentState, params) => {
   const navigate = navigateFunc.bind(props);
-  
-  const landingRedirectPaths = ["/sip/payment/callback", "/kyc/report", "/notification", "/diy/fundlist/direct",
+  const pathName = props.location.pathname;
+  if(pathName === '/prepare') {
+    nativeCallback({ action: "exit_web" });
+    return;
+  }
+  const landingRedirectPaths = ["/mf", "/sip/payment/callback", "/kyc/report", "/notification", "/diy/fundlist/direct",
     "/diy/fundinfo/direct", "/diy/invest", "/invest/doityourself/direct", "/risk/recommendations/error"];
 
   const fromStateArray = ['/payment/callback', '/nps/payment/callback', '/sip/payment/callback', '/invest', '/reports',
@@ -99,8 +103,8 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
       }
       break;
     default:
-      const landingScreens = ["/", "/invest", "/landing"]
-      if(landingScreens.includes(currentState) && getConfig().code === 'moneycontrol') {
+      const landingScreenPaths = ["/", "/invest", "/landing"]
+      if(landingScreenPaths.includes(currentState) && getConfig().code === 'moneycontrol') {
         nativeCallback({ action: "exit_web" });
         return true; 
       }
@@ -112,7 +116,7 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
             navigate(backMapper(currentState));
             return true;
           } else {
-            // $window.history.back();
+            // window.history.back();
           }
         } else {
           nativeCallback({ action: "exit_web" });
@@ -120,13 +124,16 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
       }
   }
   
-  const npsDetailsCheckCasesArr = ["/nps/payment/callback", "/nps/mandate/callback", "/nps/success", "/page/invest/campaign/callback", "/invest", "/reports"]
+  let npsDetailsCheckCasesArr = ["/nps/payment/callback", "/nps/mandate/callback", "/nps/success", "/page/invest/campaign/callback"];
+  if(getConfig().code !== 'moneycontrol') {
+    npsDetailsCheckCasesArr = [...npsDetailsCheckCasesArr, "/invest", "/reports"];
+  }
   if (npsDetailsCheckCasesArr.indexOf(currentState) !== -1 || currentState.indexOf("/nps/payment/callback") !== -1) {
     if (storageService().getObject("nps_additional_details_required")) {
       if (isNpsOutsideSdk(fromState, currentState)) {
         nativeCallback({ action: "clear_history" });
       }
-      navigate("/nps/sdk");
+      navigate("/nps");
       return true;
     } else {
       navigate("/");

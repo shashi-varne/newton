@@ -32,7 +32,7 @@ const CampaignDialog = ({ isOpen, close, handleClick, cancel, data }) => {
       <DialogActions className='dialog-action'>
         {data?.action_buttons?.buttons?.length === 2 && (
           <Button className='button no-bg' onClick={cancel} data-aid='not-now-btn'>
-            NOT NOW
+            {data?.action_buttons?.buttons[1]?.title || "NOT NOW"}
           </Button>
         )}
         <Button className='button bg-full' onClick={handleClick} data-aid='dialog-btn'>

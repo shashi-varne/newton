@@ -13,10 +13,9 @@ import { nativeCallback } from '../../../../utils/native_callback'
 import { flowName } from '../../constants'
 import { getConfig, navigate as navigateFunc } from '../../../../utils/functions'
 
-const config = getConfig();
-const isMobileDevice = config.isMobileDevice;
 const TrendingCard = ({ cart, setCart, type, parentProps, ...props }) => {
   const navigate = navigateFunc.bind(parentProps);
+  const config = getConfig();
   const handleNavigate = (data) => {
     let dataCopy = Object.assign({}, data);
     dataCopy.category = "scheme carousel";
@@ -29,7 +28,7 @@ const TrendingCard = ({ cart, setCart, type, parentProps, ...props }) => {
   }
   const handleAddToCart = () => {
     if(config.productName === "finity") {
-      storageService().setObject('diystore_fundInfo', props)
+      storageService().setObject(CART, [props])
       navigate("/diy/invest");
       return;
     }
@@ -104,6 +103,8 @@ const CategoryCard = ({ label, name, trivia, sendEvents, icon, type, ...props })
 
 const FundType = (props) => {
   const type = props.match.params?.type.toLowerCase()
+  const config = getConfig();
+  const isMobileDevice = config.isMobileDevice;
   const [cart, setCart] = useState(storageService().getObject(CART) || [])
   const [cartActive, setCartActive] = useState(false)
   const trendingFunds = storageService().getObject('diystore_trending') || [];

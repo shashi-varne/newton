@@ -8,8 +8,8 @@ import useUserKycHook from "../../../../kyc/common/hooks/userKycHook";
 import { storageService } from "../../../../utils/validators";
 import { isNewIframeDesktopLayout } from "../../../../utils/functions";
 
-const config = getConfig();
 const PaymentCallback = (props) => {
+  const config = getConfig();
   const params = props.match.params || {};
   const navigate = navigateFunc.bind(props);
   const { user, isLoading } = useUserKycHook();
@@ -91,7 +91,7 @@ const PaymentCallback = (props) => {
       handleClick={handleClick}
       headerData={{goBack}}
       skelton={isLoading}
-      iframeRightContent={require(`assets/${config.productName}/${paymentError ? 'payment_failed' : 'payment_success'}.svg`)}
+      iframeRightContent={require(`assets/${config.productName}/${paymentError ? 'error_illustration' : 'congratulations_illustration'}.svg`)}
     >
       <section className="invest-payment-callback" data-aid='invest-payment-callback'>
         {!paymentError && (
