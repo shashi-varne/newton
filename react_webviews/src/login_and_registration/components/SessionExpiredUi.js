@@ -2,7 +2,7 @@ import React from 'react';
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble';
 import GoBackToLoginBtn from '../common/GoBackToLoginBtn';
 
-export default function SessionExpiredUi({ navigateFunc }) {
+export default function SessionExpiredUi({ onGoBackClicked }) {
   return (
     <>
       <WVInfoBubble
@@ -10,7 +10,7 @@ export default function SessionExpiredUi({ navigateFunc }) {
         hasTitle
         customTitle="Session not found or expired"
       />
-      <GoBackToLoginBtn navigateFunc={navigateFunc} />
+      <GoBackToLoginBtn onClick={onGoBackClicked} />
     </>
   );
 }

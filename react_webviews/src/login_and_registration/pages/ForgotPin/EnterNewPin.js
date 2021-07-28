@@ -80,7 +80,9 @@ const EnterNewPin = (props) => {
           bottomText: pinError || '',
         }}
         noData={!routeParamsExist}
-        renderNoData={<SessionExpiredUi navigateFunc={navigate} />}
+        renderNoData={
+          <SessionExpiredUi onGoBackClicked={() => navigate('/login')} />
+        }
       />
       {routeParamsExist &&
         <LoginButton
