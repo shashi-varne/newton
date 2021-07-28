@@ -108,6 +108,7 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
         type: "iframe_close"
       });
       window.callbackWeb.sendEvent(message);
+      storageService().clear();
       return true;
     }
   }
