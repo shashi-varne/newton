@@ -14,6 +14,7 @@ import { SkeltonRect } from 'common/ui/Skelton';
 import './Landing.scss';
 import isEmpty from "lodash/isEmpty";
 import { Imgc } from "../../../../common/ui/Imgc";
+import { nativeCallback } from "../../../../utils/native_callback";
 
 const fromLoginStates = ["/login", "/register", "/forgot-password", "/mobile/verify", "/logout"]
 class Landing extends Component {
@@ -65,6 +66,7 @@ class Landing extends Component {
   };
 
   closeKycStatusDialog = () => {
+    this.sendEvents("dismiss", "kyc_bottom_sheet");
     this.setState({ openKycStatusDialog: false });
   };
 
@@ -86,6 +88,7 @@ class Landing extends Component {
   };
 
   handleKycStatus = () => {
+    this.sendEvents("next", "kyc_bottom_sheet");
     let { kycJourneyStatus } = this.state;
     if (kycJourneyStatus === "submitted") {
       this.closeKycStatusDialog();
@@ -95,6 +98,34 @@ class Landing extends Component {
           goBack: "/invest",
         },
       });
+    }
+  };
+
+  sendEvents = (userAction, cardClick = "") => {
+    let eventObj = {
+      event_name: "landing_page",
+      properties: {
+        action: userAction,
+        screen_name: "invest home",
+        primary_category: "primary navigation",
+        card_click: cardClick,
+        intent: "",
+        option_clicked: "",
+        channel: getConfig().code,
+      },
+    };
+    if (cardClick === "kyc") {
+      eventObj.properties.kyc_status = this.state.kycJourneyStatus;
+    }
+    if (cardClick === "kyc_bottom_sheet") {
+      eventObj.event_name = "bottom_sheet";
+      eventObj.properties.intent = "kyc status";
+      eventObj.properties.option_clicked = userAction;
+    }
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
     }
   };
 
@@ -144,6 +175,7 @@ class Landing extends Component {
         headerData={{
           partnerLogo: !config.isSdk && config.isMobileDevice
         }}
+        events={this.sendEvents("just_set_events")}
       >
         <div className="invest-landing" data-aid='invest-landing'>
           {

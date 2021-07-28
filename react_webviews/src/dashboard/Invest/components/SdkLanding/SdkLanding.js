@@ -21,6 +21,16 @@ const PATHNAME_MAPPER = {
   buildwealth: "/invest/buildwealth",
   instaredeem: "/invest/instaredeem",
 }
+
+const cardNameMapper = {
+  portfolio: "Portfolio",
+  withdraw: "short_term",
+  account: "Account",
+  refer: "refer&earn",
+  help: "help&support",
+  gold: "gold card",
+  "100_sip": "SIP 100",
+};
 class SdkLanding extends Component {
   constructor(props) {
     super(props);
@@ -63,10 +73,11 @@ class SdkLanding extends Component {
     this.navigate('/notification');
   };
 
-  handleCard = (path) => () => {
+  handleCard = (path, key) => () => {
+    this.sendEvents("next", key);
     if (path) {
       if (path === '/kyc') {
-        this.clickCard('kyc', this.state.kycStatusData.title);
+        this.openKyc();
       } else {
         this.navigate(path);
       }
@@ -86,6 +97,7 @@ class SdkLanding extends Component {
   };
 
   handleMarketingBanner = (bannerType="") => () => {
+    this.sendEvents("marketing_banner_clicked", bannerType);
     if(bannerType === '100_sip'){
       this.getRecommendationApi(100);
     } else {
@@ -108,10 +120,12 @@ class SdkLanding extends Component {
   };
 
   closeKycStatusDialog = () => {
+    this.sendEvents("dismiss", "kyc_bottom_sheet");
     this.setState({ openKycStatusDialog: false });
   };
 
   handleKycStatus = () => {
+    this.sendEvents("next", "kyc_bottom_sheet");
     let { kycJourneyStatus } = this.state;
     if (kycJourneyStatus === "submitted") {
       this.closeKycStatusDialog();
@@ -127,6 +141,36 @@ class SdkLanding extends Component {
   goBack = () => {
     nativeCallback({action: "exit_web"})
   }
+
+  sendEvents = (userAction, cardClick = "") => {
+    let eventObj = {
+      event_name: "landing_page",
+      properties: {
+        user_action: "next",
+        action: userAction,
+        screen_name: "sdk landing",
+        primary_category: "primary navigation",
+        card_click: cardNameMapper[cardClick] || cardClick,
+        intent: "",
+        kyc_status: this.state.kycJourneyStatus,
+        option_clicked: "",
+        channel: getConfig().code,
+      },
+    };
+    if (cardClick === "kyc_bottom_sheet") {
+      eventObj.event_name = "bottom_sheet";
+      eventObj.properties.intent = "kyc status";
+      eventObj.properties.option_clicked = userAction;
+    } else if (userAction === 'marketing_banner_clicked') {
+      eventObj.properties.action = 'next';
+      eventObj.properties.primary_category = 'marketing carousel';
+    }
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
 
   render() {
     let {
@@ -251,7 +295,7 @@ class SdkLanding extends Component {
                     referral={referral}
                     handleReferral={this.handleReferral}
                     {...el}
-                    handleCard={this.handleCard(el?.path)}
+                    handleCard={this.handleCard(el?.path, el?.key)}
                     dotLoader={dotLoader}
                   />
                 );
