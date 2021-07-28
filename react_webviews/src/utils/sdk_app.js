@@ -50,9 +50,10 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
   // const fromStateArray = ['/payment/callback', '/nps/payment/callback', '/sip/payment/callback', '/invest', '/reports',
   //  '/landing', '', '/new/mandate', '/otm-options', '/mandate', '/nps/mandate/callback', '/nps/success',
   //   '/nps/sip', '/my-account', '/modal', '/page/callback', '/reports/sip/pause-request', '/kyc/journey'];
-
+  
+  // Note: will have to remove "/invest/explore"  from the direct enteries.
   const directEnteries = ["/invest/doityourself/direct", "/nps",
-     "/direct/gold", "/invest/instaredeem", "/reports", "/invest/savegoal", "/invest", "/withdraw"];
+     "/direct/gold", "/invest/instaredeem", "/reports", "/invest/savegoal", "/invest", "/withdraw", "/invest/explore"];
 
   const directEntriesWithParams = ["/diy/fundinfo/direct", "/diy/fundlist/direct"];
 

@@ -94,8 +94,9 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
   const landingRedirectPaths = ["/kyc/report", "/notification", "/nps/payment/callback",
     "/nps/mandate/callback", "/nps/success", "/page/invest/campaign/callback", "/reports"];
 
+  // Note: will have to remove "/invest/explore"  from the direct enteries.
   const directEnteries = ["/invest/doityourself/direct", "/nps",
-     "/direct/gold", "/invest/instaredeem", "/reports", "/invest/savegoal", "/invest", "/withdraw"];
+     "/direct/gold", "/invest/instaredeem", "/reports", "/invest/savegoal", "/invest", "/withdraw", "/invest/explore"];
 
   const directEntriesWithParams = ["/diy/fundinfo/direct", "/diy/fundlist/direct"];
 
