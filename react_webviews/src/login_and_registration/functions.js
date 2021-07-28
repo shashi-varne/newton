@@ -335,12 +335,9 @@ export async function otpLoginVerification(verify_url, body) {
   this.setState({ isApiRunning: "button" });
   try {
     const res = await Api.post(verify_url, formData);
-    const { result, status_code: status } = res.pfwresponse;       console.log(result) ;
+    const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       // TODO: When to trigger these events
-      if (result.user.pin_status === 'pin_setup_complete') {
-        return this.navigate('verify-pin');
-      }
       let eventObj = {
         event_name: "user loggedin",
       };
@@ -383,13 +380,13 @@ export async function otpLoginVerification(verify_url, body) {
         isApiRunning: false,
       });
 
-      console.log(result) ;
       if (storageService().get("deeplink_url")) {
         window.location.href = decodeURIComponent(
           storageService().get("deeplink_url")
         );
-      } 
-      else {
+      } else if (result.user.pin_status === 'pin_setup_complete') {
+        return this.navigate('verify-pin');
+      } else {
         this.redirectAfterLogin(result, user);
       }
     } else {
