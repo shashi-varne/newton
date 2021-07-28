@@ -35,6 +35,7 @@ const ConfirmNewPin = (props) => {
       setIsApiRunning("button");
       if (newMpin) {
         if (newMpin !== mpin) {
+          // eslint-disable-next-line no-throw-literal
           throw "PIN doesn't match, Please try again";
         } else if (routeParams.set_flow) {
           await setPin({ mpin })
@@ -44,10 +45,12 @@ const ConfirmNewPin = (props) => {
       } else if (routeParams.reset_url) {
         await twofaPostApi(routeParams?.reset_url, { new_mpin: mpin });
       }
-      await getKycFromSummary({user: ["user"], kyc: ["kyc"] })
-      setIsApiRunning(false);
-      sendEvents("next");
+      await getKycFromSummary({
+        kyc: ["kyc"],
+        user: ["user"]
+      });
       clearRouteParams();
+      setIsApiRunning(false);
       setOpenDialog(true);
     } catch (err) {
       console.log(err);

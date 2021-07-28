@@ -77,7 +77,7 @@ class OtpDefaultClass extends Component {
             inputStyle='default-otp-input'
             onChange={this.props.parent.handleOtp}
             hasErrored={true}
-            placeholder='X'
+            placeholder='XXXX'
             value={this.props.parent.state.otp}
             isDisabled={this.props.isDisabled || false}
             //   separator={<span>-</span>}

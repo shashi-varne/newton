@@ -91,7 +91,12 @@ const FooterTitle = () => {
 const PageNotFound = () => {
   return (
     <>
-      <WVInPageTitle style={{ textAlign: 'center' }}>Lost your way?</WVInPageTitle>
+      <WVInPageTitle style={{ textAlign: 'center', marginBottom: '20px' }}>Lost your way?</WVInPageTitle>
+      <img
+        src={require(`assets/${productName}/error_illustration.svg`)}
+        style={{ width: '100%' }}
+        alt="404"
+      />
       <Link to="/login" component={GoBackToLoginBtn} style={{ textDecoration: 'none' }}>
         <GoBackToLoginBtn />
       </Link>
