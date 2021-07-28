@@ -1,3 +1,10 @@
+///////////////////////NOTE///////////////////////////////////
+
+// please add the direct enteries path in:
+// 1. without param => directEnteries (ex : "/invest/doityourself/direct")
+// 2. with param => directEntriesWithParams (ex: "diy/fundlist/direct/:name/:key/:type" should be added as "diy/fundlist/direct")
+
+//////////////////////////////////////////////////////////
 
 import { navigate as navigateFunc, isNpsOutsideSdk } from "utils/functions";
 import { storageService } from "utils/validators";
