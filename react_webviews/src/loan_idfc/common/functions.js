@@ -130,10 +130,6 @@ export async function initialize() {
     this.getUserStatus();
   }
 
-  // if (this.state.screen_name === "loan_eligible") {
-  //   this.getUserStatus();
-  // }
-
   if (this.state.screen_name === "main_landing_screen" && provider === "idfc") {
     this.getUserStatus();
   }
