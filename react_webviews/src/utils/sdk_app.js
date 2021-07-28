@@ -39,22 +39,16 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
   const landingRedirectPaths = ["/mf", "/sip/payment/callback", "/kyc/report", "/notification", "/diy/fundlist/direct",
     "/diy/fundinfo/direct", "/diy/invest", "/invest/doityourself/direct", "/risk/recommendations/error"];
 
-  const fromStateArray = ['/payment/callback', '/nps/payment/callback', '/sip/payment/callback', '/invest', '/reports',
-   '/landing', '', '/new/mandate', '/otm-options', '/mandate', '/nps/mandate/callback', '/nps/success',
-    '/nps/sip', '/my-account', '/modal', '/page/callback', '/reports/sip/pause-request', '/kyc/journey'];
+  // const fromStateArray = ['/payment/callback', '/nps/payment/callback', '/sip/payment/callback', '/invest', '/reports',
+  //  '/landing', '', '/new/mandate', '/otm-options', '/mandate', '/nps/mandate/callback', '/nps/success',
+  //   '/nps/sip', '/my-account', '/modal', '/page/callback', '/reports/sip/pause-request', '/kyc/journey'];
     
   if (landingRedirectPaths.indexOf(currentState) !== -1) {
     navigate("/");
     return true;
   }
 
-  if ("/modal".indexOf(currentState) !== -1) {
-    if (fromStateArray.indexOf(fromState) !== -1) {
-      nativeCallback({ action: "clear_history" });
-    }
-  }
-
-  if ("/diy/fundinfo/direct".indexOf(currentState) !== -1) {
+  if (currentState.indexOf("/diy/fundinfo/direct") !== -1) {
     nativeCallback({ action: "clear_history" });
   }
 
@@ -88,9 +82,6 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
         }
       }
       break;
-    // case "/invest/money-control":
-    //   nativeCallback({ action: "exit_web" });
-    //   break;
     case "/account/merge/linked/success":
       nativeCallback({ action: "session_expired" });
       break;

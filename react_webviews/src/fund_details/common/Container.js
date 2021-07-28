@@ -22,7 +22,7 @@ import { isFunction } from '../../utils/validators';
 import './Style.scss';
 import UiSkelton from '../../common/ui/Skelton';
 import IframeHeader from 'common/components/Iframe/Header';
-import { isNewIframeDesktopLayout } from '../../utils/functions';
+import { backButtonHandler, isNewIframeDesktopLayout } from '../../utils/functions';
 const Container = (props) => {
   const config = getConfig();
   const iframe = config.isIframe;
@@ -36,6 +36,12 @@ const Container = (props) => {
   const historyGoBack = (backData) => {
     // let fromHeader = backData ? backData.fromHeader : false;
     // let pathname = this.props.history.location.pathname;
+    nativeCallback({ events: getEvents('back') });
+
+    const fromState = props.location?.state?.fromState || "";
+    const toState = props.location?.state?.toState || "";
+    const pathname = props.location?.pathname || "";
+    const currentState = toState || pathname;
     let { params } = props.location;
 
     if (params && params.disableBack) {
@@ -43,10 +49,16 @@ const Container = (props) => {
       return;
     }
 
+    if (currentState) {
+      let isRedirected = backButtonHandler(props, fromState, currentState, params);
+      if (isRedirected) {
+        return;
+      }
+    }
+
     if (isFunction(props.goBack)) {
       return props.goBack(params);
     }
-    nativeCallback({ events: getEvents('back') });
     props.history.goBack();
   };
   useEffect(() => {
