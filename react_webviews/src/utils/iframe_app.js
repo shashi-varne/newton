@@ -1,6 +1,16 @@
+///////////////////////NOTE///////////////////////////////////
+
+// please add the direct enteries path in:
+// 1. without param => directEnteries (ex : "/invest/doityourself/direct")
+// 2. with param => directEntriesWithParams (ex: "diy/fundlist/direct/:name/:key/:type" should be added as "diy/fundlist/direct")
+
+//////////////////////////////////////////////////////////
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { storageService } from "utils/validators";
 import { commonBackMapper } from "utils/constants";
+import isEmpty from "lodash/isEmpty";
+
+
 
 // required
   // try {
@@ -75,9 +85,33 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
 export const backButtonHandlerWeb = (props, fromState, currentState, params) => {
   const navigate = navigateFunc.bind(props);
   const config = getConfig();
+  const pathName = props.location.pathname;
+  const entryPath = storageService().get('entry_path');
+  console.log("pathName", pathName);
+  console.log("entryPath", entryPath);
   
   const landingRedirectPaths = ["/kyc/report", "/notification", "/nps/payment/callback",
     "/nps/mandate/callback", "/nps/success", "/page/invest/campaign/callback", "/reports"];
+
+  const directEnteries = ["/invest/doityourself/direct", "/nps",
+     "/direct/gold", "/invest/instaredeem", "/reports", "/invest/savegoal", "/invest", "/withdraw"];
+
+  const directEntriesWithParams = ["/diy/fundinfo/direct", "/diy/fundlist/direct"];
+
+  const verifyDirectEntriesWithParams = () => {
+    return directEntriesWithParams.find(el => pathName.match(el));
+  }
+    
+  if(directEnteries.indexOf(pathName) !== -1 || !isEmpty(verifyDirectEntriesWithParams())) {
+    if(pathName === entryPath) {
+      const message = JSON.stringify({
+        type: "iframe_close"
+      });
+      window.callbackWeb.sendEvent(message);
+      storageService().clear();
+      return true;
+    }
+  }
 
   if (landingRedirectPaths.indexOf(currentState) !== -1 || currentState.indexOf("/nps/payment/callback") !== -1) {
     navigate("/landing");
