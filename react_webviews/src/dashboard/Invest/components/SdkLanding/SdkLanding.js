@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
-import { initialize, handleCampaignNotification, handleCampaignRedirection } from '../../functions';
+import { initialize, handleCampaignNotification, dateValidation } from '../../functions';
 import { SkeltonRect } from 'common/ui/Skelton';
 import SdkInvestCard from '../../mini-components/SdkInvestCard';
 import { storageService } from 'utils/validators';
@@ -13,17 +13,31 @@ import './SdkLanding.scss';
 import VerificationFailedDialog from '../../mini-components/VerificationFailedDialog';
 import KycStatusDialog from '../../mini-components/KycStatusDialog';
 import { nativeCallback } from '../../../../utils/native_callback';
+import { Imgc } from '../../../../common/ui/Imgc';
 
+const PATHNAME_MAPPER = {
+  nfo: "/advanced-investing/new-fund-offers/info",
+  diy: "/invest/explore",
+  buildwealth: "/invest/buildwealth",
+  instaredeem: "/invest/instaredeem",
+}
+
+const cardNameMapper = {
+  portfolio: "Portfolio",
+  withdraw: "short_term",
+  account: "Account",
+  refer: "refer&earn",
+  help: "help&support",
+  gold: "gold card",
+  "100_sip": "SIP 100",
+};
 class SdkLanding extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
       kycStatusLoader: false,
-      productName: getConfig().productName,
-      partner: getConfig().partner,
       screenName: 'sdk_landing',
-      isWeb: getConfig().Web,
       invest_show_data: {},
       render_cards: [],
       verificationFailed: false,
@@ -34,11 +48,9 @@ class SdkLanding extends Component {
       dotLoader: false,
       openBottomSheet: false,
       bottom_sheet_dialog_data: [],
-      headerStyle: getConfig().uiElements?.header
     };
     this.initialize = initialize.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
-    this.handleCampaignRedirection = handleCampaignRedirection.bind(this);
   }
 
   componentWillMount() {
@@ -61,10 +73,11 @@ class SdkLanding extends Component {
     this.navigate('/notification');
   };
 
-  handleCard = (path) => () => {
+  handleCard = (path, key) => () => {
+    this.sendEvents("next", key);
     if (path) {
       if (path === '/kyc') {
-        this.clickCard('kyc', this.state.kycStatusData.title);
+        this.openKyc();
       } else {
         this.navigate(path);
       }
@@ -83,22 +96,14 @@ class SdkLanding extends Component {
     }
   };
 
-  closeCampaignDialog = () => {
-    this.setState({ openBottomSheet: false });
-  };
-
-  handleMarketingBanner = (path) => () => {
-    if(path === '/invest/recommendations'){
+  handleMarketingBanner = (bannerType="") => () => {
+    this.sendEvents("marketing_banner_clicked", bannerType);
+    if(bannerType === '100_sip'){
       this.getRecommendationApi(100);
     } else {
+      const path = PATHNAME_MAPPER[bannerType] || "/";
       this.navigate(path);
     }
-  }
-
-  handleCampaign = () => {
-    this.setState({show_loader : 'page', openBottomSheet : false});
-    let campLink = this.state.bottom_sheet_dialog_data.url;
-    handleCampaignRedirection(campLink);
   }
 
   addBank = () => {
@@ -115,10 +120,12 @@ class SdkLanding extends Component {
   };
 
   closeKycStatusDialog = () => {
+    this.sendEvents("dismiss", "kyc_bottom_sheet");
     this.setState({ openKycStatusDialog: false });
   };
 
   handleKycStatus = () => {
+    this.sendEvents("next", "kyc_bottom_sheet");
     let { kycJourneyStatus } = this.state;
     if (kycJourneyStatus === "submitted") {
       this.closeKycStatusDialog();
@@ -135,11 +142,40 @@ class SdkLanding extends Component {
     nativeCallback({action: "exit_web"})
   }
 
+  sendEvents = (userAction, cardClick = "") => {
+    let eventObj = {
+      event_name: "landing_page",
+      properties: {
+        user_action: "next",
+        action: userAction,
+        screen_name: "sdk landing",
+        primary_category: "primary navigation",
+        card_click: cardNameMapper[cardClick] || cardClick,
+        intent: "",
+        kyc_status: this.state.kycJourneyStatus,
+        option_clicked: "",
+        channel: getConfig().code,
+      },
+    };
+    if (cardClick === "kyc_bottom_sheet") {
+      eventObj.event_name = "bottom_sheet";
+      eventObj.properties.intent = "kyc status";
+      eventObj.properties.option_clicked = userAction;
+    } else if (userAction === 'marketing_banner_clicked') {
+      eventObj.properties.action = 'next';
+      eventObj.properties.primary_category = 'marketing carousel';
+    }
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   render() {
     let {
       isReadyToInvestBase,
       kycStatusLoader,
-      partner,
       dotLoader,
       referral,
       kycJourneyStatusMapperData,
@@ -149,6 +185,10 @@ class SdkLanding extends Component {
       modalData
     } = this.state;
 
+    const config = getConfig();
+    const landingMarketingBanners= config.landingMarketingBanners;
+    const headerStyle=  config.uiElements?.header?.backgroundColor;
+
     return (
       <Container
         skelton={this.state.show_loader}
@@ -157,10 +197,11 @@ class SdkLanding extends Component {
         notification
         handleNotification={this.handleNotification}
         background='sdk-background'
-        classHeader={this.state.headerStyle ? 'sdk-partner-header' : 'sdk-header'}
-        showLoader={this.state.show_loader}
+        classHeader={headerStyle ? 'sdk-partner-header' : 'sdk-header'}
+        showLoader={this.state.showPageLoader}
         headerData={{goBack: this.goBack, partnerLogo: true}}
         data-aid='sdk-landing-screen'
+        events={this.sendEvents("just_set_events")}
       >
         <div className='sdk-landing' data-aid='sdk-landing'>
           {!this.state.kycStatusLoader ? (
@@ -176,23 +217,45 @@ class SdkLanding extends Component {
           )}
 
           {/* Marketing Banners */}
-          {!isEmpty(partner?.landing_marketing_banners) && (
+          {!isEmpty(landingMarketingBanners) && (
             <div className='landing-marketing-banners' data-aid='landing-marketing-banners'>
-              {partner?.landing_marketing_banners?.length === 1 ? (
+              {landingMarketingBanners?.length === 1 ? (
                 <div className='single-marketing-banner'>
-                  <img
-                    src={require(`assets/${partner?.landing_marketing_banners[0].image}`)}
-                    alt=''
-                    style={{ width: '100%' }}
-                  />
+                  {dateValidation(
+                    landingMarketingBanners[0]?.endDate,
+                    landingMarketingBanners[0]?.startDate
+                  ) && (
+                    <Imgc
+                      src={require(`assets/${landingMarketingBanners[0].image}`)}
+                      alt=""
+                      style={{ width: "100%", minHeight: "120px" }}
+                      onClick={this.handleMarketingBanner(
+                        landingMarketingBanners[0]?.type
+                      )}
+                    />
+                  )}
                 </div>
               ) : (
                 <div className='marketing-banners-list' data-aid='marketing-banners-list'>
-                  {partner?.landing_marketing_banners.map((el, idx) => (
-                    <div className='marketing-banner-icon-wrapper' key={idx} onClick={this.handleMarkettingBanner(el?.path)}>
-                      <img src={require(`assets/${el.image}`)} alt='' style={{ width: '100%' }} />
-                    </div>
-                  ))}
+                  {landingMarketingBanners?.map((el, idx) => {
+                    return (
+                      <>
+                        {dateValidation(el?.endDate, el?.startDate) && (
+                          <div
+                            className="marketing-banner-icon-wrapper"
+                            key={idx}
+                            onClick={this.handleMarketingBanner(el?.type)}
+                          >
+                            <Imgc
+                              src={require(`assets/${el.image}`)}
+                              alt=""
+                              style={{ width: "100%" }}
+                            />
+                          </div>
+                        )}
+                      </>
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -233,12 +296,22 @@ class SdkLanding extends Component {
                     referral={referral}
                     handleReferral={this.handleReferral}
                     {...el}
-                    handleCard={this.handleCard(el?.path)}
+                    handleCard={this.handleCard(el?.path, el?.key)}
                     dotLoader={dotLoader}
                   />
                 );
               })}
             </div>
+          )}
+          {!["fisdom", "finity", "ktb"].includes(config.code) && (
+              <div className="invest-contact-us" data-aid='invest-contact-us'>
+                In partnership with
+                <span>
+                  {config.productName === "finity"
+                    ? " Finity"
+                    : " Fisdom"}
+                </span>
+              </div>
           )}
         </div>
         <CampaignDialog

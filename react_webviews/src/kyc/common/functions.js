@@ -1,5 +1,6 @@
 import { getConfig } from 'utils/functions'
-import { calculateAge, isValidDate, validateEmail } from 'utils/validators'
+import { calculateAge, isValidDate, validateEmail,isEmpty } from 'utils/validators'
+import { getKyc } from './api'
 
 export function navigate(pathname, data = {}) {
   if (data?.edit) {
@@ -40,13 +41,13 @@ export const validateFields = (formData, keyToCheck) => {
             canSubmit = false
           }
           break
-        // case 'account_number':
-        // case 'c_account_number':
-        //   if (value.length !== 16) {
-        //     formData[`${key}_error`] = 'Minimum length is 16'
-        //     canSubmit = false
-        //   }
-        //   break
+        case 'account_number':
+        case 'c_account_number':
+          if (value.length < 5) {
+            formData[`${key}_error`] = 'Minimum length is 5'
+            canSubmit = false
+          }
+          break
         case 'ifsc_code':
           if (value.length !== 11) {
             formData[`${key}_error`] = 'Minimum length is 11'
@@ -153,6 +154,36 @@ export const compareObjects = (keysToCheck, oldState, newState) => {
   });
   return compare;
 };
+
+export const pollProgress = (timeout, interval, popup_window) => {
+  const endTime = Number(new Date()) + (timeout || 3 * 1000 * 60);
+  interval = interval || 1000;
+  const dlSuccessStates = ["docs_fetched", "docs_fetch_failed"]
+  let checkCondition = async function (resolve, reject) {
+    if (popup_window.closed) {
+      resolve({ status: "closed" });
+    } else {
+      try {
+        const result = await getKyc();
+        if (!isEmpty(result)) {
+          if (dlSuccessStates.includes(result?.kyc?.dl_docs_status)) {
+            resolve({ status: "success" });
+          } else if (result.kyc?.all_dl_doc_statuses?.aadhaar_fetch_status === "failed") {
+            resolve({ status: "failed" });
+          } else if (Number(new Date()) < endTime) {
+            setTimeout(checkCondition, interval, resolve, reject);
+          } else {
+            reject({ status: "timeout" });
+          }
+        }
+      } catch (err) {
+        console.log(err);
+        reject(err);
+      }
+    }
+  };
+  return new Promise(checkCondition);
+}
 
 export const getFlow = (kycData) => {
   let flow = "";

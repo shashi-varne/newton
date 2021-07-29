@@ -6,11 +6,12 @@ import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import { nativeCallback } from "utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
 import "./commonStyles.scss";
-const config = getConfig();
-const productName = config.productName;
+import { isNewIframeDesktopLayout } from "../../utils/functions";
 const Verify = (props) => {
   const navigate = navigateFunc.bind(props);
   const {kyc, isLoading} = useUserKycHook();
+  const config = getConfig();
+  const productName = config.productName;
   const handleClick = () => {
     let _event = {
       event_name: "journey_details",
@@ -45,7 +46,7 @@ const Verify = (props) => {
         "user_action": userAction || "",
         "screen_name": "kyc_verified",
         "initial_kyc_status": kyc.initial_kyc_status || '' ,
-        "channel": getConfig().code    
+        "channel": config.code    
       }
     };
     if (userAction === 'just_set_events') {
@@ -64,13 +65,16 @@ const Verify = (props) => {
       title="KYC verified"
       data-aid='kyc-compliant-verify-screen'
       skelton={isLoading}
+      iframeRightContent={require(`assets/kyc_complete.svg`)}
     >
       <div className="kyc-compliant-complete" data-aid='kyc-compliant-complete'>
         <header data-aid='kyc-compliant-verify-header'>
-          <img
-            src={require(`assets/${productName}/ic_process_done.svg`)}
-            alt=""
-          />
+          {!isNewIframeDesktopLayout() && (
+            <img
+              src={require(`assets/${productName}/ic_process_done.svg`)}
+              alt=""
+            />
+          )}
           <div className="title" data-aid='kyc-title'>You're ready to invest!</div>
           <div
             className="subtitle margin-top"

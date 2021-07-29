@@ -18,7 +18,7 @@ const ShowAadharDialog = ({ open, onClose, redirect }) => {
           />
         </header>
         <p className="description" data-aid='kyc-description'>
-          Link with Digilocker to complete paperless KYC
+          Link with DigiLocker to complete paperless KYC
         </p>
         <main className="content" data-aid='kyc-content'>
           <div className="info-box" data-aid='info-box-one'>
@@ -38,7 +38,7 @@ const ShowAadharDialog = ({ open, onClose, redirect }) => {
             <div className="title">No document asked</div>
           </div>
         </main>
-        <Button variant="contained" fullWidth className="action-btn" data-aid='kyc-action-btn' onClick={redirect}>
+        <Button variant="raised" fullWidth className="action-btn" data-aid='kyc-action-btn' onClick={redirect}>
           <span className="btn-text">connect digilocker</span>
         </Button>
       </section>

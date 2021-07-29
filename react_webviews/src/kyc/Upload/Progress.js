@@ -6,6 +6,7 @@ import { isEmpty } from "utils/validators";
 import { navigate as navigateFunc } from "utils/functions";
 import { PATHNAME_MAPPER } from "../constants";
 import useUserKycHook from "../common/hooks/userKycHook";
+import { getConfig } from 'utils/functions'
 import "./commonStyles.scss";
 import { nativeCallback } from "../../utils/native_callback";
 
@@ -13,6 +14,7 @@ const Progress = (props) => {
   const {kyc, isLoading} = useUserKycHook();
   const disableNext = props.location.state?.disableNext || false;
   const navigate = navigateFunc.bind(props);
+  const productName = getConfig().productName;
 
   let documents = [];
   let totalDocs = 0;
@@ -89,6 +91,7 @@ const Progress = (props) => {
         navigate(PATHNAME_MAPPER.journey);
       }}
       title="Upload documents"
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       headerData={{goBack}}
       data-aid='kyc-progress-screen'
     >

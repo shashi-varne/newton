@@ -7,14 +7,13 @@ import { getUrlParams, isEmpty } from "utils/validators";
 import { getFlow } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
-import { getBase64, getConfig, navigate as navigateFunc } from "../../utils/functions";
+import { getBase64, getConfig, isNewIframeDesktopLayout, navigate as navigateFunc } from "../../utils/functions";
 import toast from '../../common/ui/Toast'
 import { PATHNAME_MAPPER } from "../constants";
+import InternalStorage from "../common/InternalStorage";
 import "./KycUploadDocuments.scss";
 import { nativeCallback } from "../../utils/native_callback";
 
-const config = getConfig();
-const isWeb = config.Web;
 const KycUploadDocuments = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [selected, setSelected] = useState(null);
@@ -22,6 +21,10 @@ const KycUploadDocuments = (props) => {
   const [file, setFile] = useState(null);
   const inputEl = useRef(null);
   const [dlFlow, setDlFlow] = useState(false);
+  const navigate = navigateFunc.bind(props);
+  const config = getConfig();
+  const isWeb = config.Web;
+  const productName = config.productName;
   const {kyc, isLoading, updateKyc} = useUserKycHook();
   const [fileToShow, setFileToShow] = useState(null)
   const [showLoader, setShowLoader] = useState(false)
@@ -132,6 +135,17 @@ const KycUploadDocuments = (props) => {
     URL.revokeObjectURL(event.target.src);
   };
 
+  const bankUploadStatus = () => {
+    const bankStatus = {
+      title : 'Bank Verification Pending!',
+      message: 'We’ve added your bank account details. The verification is in progress, meanwhile you can continue with KYC.',
+      buttonTitle: 'CONTINUE WITH KYC',
+      status: 'bankVerificationPending'
+    }
+    InternalStorage.setData('handleClick',proceed);
+    navigate('bank-status',{state: bankStatus})
+  }
+
   const handleSubmit = async () => {
     sendEvents('next')
     if (selected === null || !file) return;
@@ -144,9 +158,13 @@ const KycUploadDocuments = (props) => {
       );
       if(!isEmpty(result))
         updateKyc(result.kyc)
-      setShowPendingModal(true);
+      if(isNewIframeDesktopLayout()) {
+        bankUploadStatus();
+      } else {
+        setShowPendingModal(true);
+      }
     } catch (err) {
-      toast("Image upload failed, please retry")
+      toast("Image upload failed, please retry");
     } finally {
       setIsApiRunning(false);
     }
@@ -159,7 +177,6 @@ const KycUploadDocuments = (props) => {
   };
 
   const handleSampleDocument = () => {
-    const navigate = navigateFunc.bind(props);
     navigate("/kyc/sample-documents");
   };
 
@@ -236,6 +253,7 @@ const KycUploadDocuments = (props) => {
       handleClick={handleSubmit}
       showLoader={isApiRunning}
       title="Upload documents"
+      iframeRightContent={require(`assets/${productName}/add_bank.svg`)}
       data-aid='kyc-upload-documents-page'
     >
       <section id="kyc-bank-kyc-upload-docs" data-aid='kyc-bank-kyc-upload-docs'>

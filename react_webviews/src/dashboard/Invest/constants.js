@@ -272,16 +272,16 @@ export const nfoData = {
     {
       value: "sip",
       name: "SIP / Monthly",
-      icon: "sip_icn.png",
+      icon: "sip_icn.svg",
       icon_light: "sip_icn_light.png",
-      selected_icon: "selected.png",
+      selected_icon: "selected.svg",
     },
     {
       value: "onetime",
       name: "One Time",
-      icon: "one_time_icn.png",
+      icon: "one_time_icn.svg",
       icon_light: "one_time_icn_light.png",
-      selected_icon: "selected.png",
+      selected_icon: "selected.svg",
     },
   ],
 };
@@ -328,15 +328,15 @@ export const kycStatusMapper = {
 export const kycStatusMapperInvest = {
   init: {
     icon: "ic_card_kyc_default.svg",
-    title: "Create investment profile",
-    subtitle: "Paperless KYC in two minutes",
+    title: "Are you investment ready?",
+    subtitle: "Check your KYC status",
     button_text: "CREATE NOW",
     next_state: "/kyc/journey",
   },
   ground: {
     icon: "ic_card_kyc_default.svg",
-    title: "Create investment profile",
-    subtitle: "Paperless KYC in two minutes",
+    title: "Are you investment ready?",
+    subtitle: "Check your KYC status",
     button_text: "CREATE NOW",
     next_state: "/kyc/home",
   },
@@ -469,7 +469,7 @@ export const sdkInvestCardMapper = [
     title: 'Refer & Earn',
     subtitle: 'Refer to your friends & earn rewards',
     img: 'ic_db_refer.svg',
-    path: '/referral'
+    path: '/refer'
   },
   {
     key: 'help',

@@ -245,7 +245,7 @@ class PanDetails extends Component {
                 <div className="sub-title">{this.state.subtitle}</div>
               </div>
               <img
-                src={require(`assets/${this.state.productName}/popup_kyc_pending.svg`)}
+                src={require(`assets/${this.state.productName}/ic_popup_kyc_pending.svg`)}
                 alt=""
               />
             </div>

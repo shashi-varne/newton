@@ -11,6 +11,7 @@ import {
 import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import { isEmpty, validateNumber } from "../../../utils/validators";
+import { getConfig } from "utils/functions";
 import "../commonStyles.scss";
 import { nativeCallback } from "../../../utils/native_callback";
 
@@ -22,6 +23,7 @@ const NRIAddressDetails2 = (props) => {
   });
   const [oldState, setOldState] = useState({});
   const navigate = navigateFunc.bind(props);
+  const productName = getConfig().productName;
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();
@@ -90,7 +92,7 @@ const NRIAddressDetails2 = (props) => {
 
   const handleNavigation = () => {
     if (stateParams?.backToJourney) {
-      navigate("/kyc/upload/address");
+      navigate("/kyc/upload/address-nri");
     } else if (stateParams?.userType === "compliant") {
       navigate("/kyc/compliant-personal-details4");
     } else {
@@ -127,13 +129,7 @@ const NRIAddressDetails2 = (props) => {
     }
   }
 
-  let address_proof = "";
-
-  if (kyc?.address?.meta_data?.is_nri) {
-    address_proof = "Passport";
-  } else {
-    address_proof = NRI_DOCUMENTS_MAPPER[kyc?.address_doc_type];
-  }
+  const address_proof = NRI_DOCUMENTS_MAPPER[kyc?.address_doc_type] || "Passport";
 
   const sendEvents = (userAction) => {
     let eventObj = {
@@ -163,10 +159,11 @@ const NRIAddressDetails2 = (props) => {
       current={4}
       count={4}
       total={4}
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-nri-address-details-screen-2'
     >
       <section data-aid='kyc-address-details-2'>
-        <div className="sub-title" data-aid='kyc-sub-title'>Address as per {address_proof}</div>
+        <div className="kyc-main-subtitle" data-aid='kyc-sub-title'>Address as per {address_proof}</div>
         <form className="form-container" data-aid='kyc-form-container'>
           <TextField
             label="Pincode"

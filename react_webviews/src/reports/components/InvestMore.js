@@ -14,9 +14,9 @@ import InvestReferralDialog from "../../dashboard/Invest/mini-components/InvestR
 import { getBasePath, getConfig } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 
-const config = getConfig();
 const InvestMore = (props) => {
   const navigate = navigateFunc.bind(props);
+  const config = getConfig();
   const params = props?.match?.params || {};
   if (isEmpty(params) || !params.mode) props.history.goBack();
   const state = props.location.state || {};
@@ -135,12 +135,12 @@ const InvestMore = (props) => {
       history: props.history,
       handleApiRunning: handleApiRunning,
       handleDialogStates: handleDialogStates,
-      handleIsRedirectToPayment,
     });
   };
 
   const handleApiRunning = (result) => {
     setIsApiRunning(result);
+    if(!result) setIsReadyToPayment(false);
   };
 
   const handleDialogStates = (key, value, errorMessage) => {
@@ -149,10 +149,6 @@ const InvestMore = (props) => {
     if (errorMessage) dialog_states["errorMessage"] = errorMessage;
     setDialogStates({ ...dialog_states });
     handleApiRunning(false);
-  };
-
-  const handleIsRedirectToPayment = (result) => {
-    setIsReadyToPayment(result);
   };
 
   const openInBrowser = (url) => () => {
@@ -169,14 +165,14 @@ const InvestMore = (props) => {
       data-aid='reports-invest-more'
       hidePageTitle={true}
       buttonTitle={title}
-      handleClick={() => handleClick()}
+      handleClick={handleClick}
       noFooter={isReadyToPayment}
       disable={
         termsCheck && schemeCheck && form_data.amount && !form_data.amount_error
           ? false
           : true
       }
-      showLoader={isApiRunning}
+      showLoader={isApiRunning === "page" ? isApiRunning : false}
       skelton={isLoading}
     >
       <div className="reports-invest-more" data-aid='reports-invest-more'>

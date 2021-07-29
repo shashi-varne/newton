@@ -5,7 +5,7 @@ import { storageService, getUrlParams } from "utils/validators";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { isEmpty } from "../utils/validators";
 import { nativeCallback } from "../utils/native_callback";
-import { getBasePath } from "../utils/functions";
+import { getBasePath, isAuthenticatedUser } from "../utils/functions";
 
 const isMobileView = getConfig().isMobileDevice;
 const errorMessage = "Something went wrong!";
@@ -27,6 +27,10 @@ export function initialize() {
   let main_query_params = getUrlParams();
   let { referrer = "" } = main_query_params;
 
+  if(isAuthenticatedUser(this.props)) {
+    return;
+  }
+
   let redirectUrl = encodeURIComponent(`${basePath}/`);
   const partners = [
     "hbl",
@@ -37,6 +41,8 @@ export function initialize() {
     "taxwin",
     "ippb",
     "quesscorp",
+    "sahaj",
+    "mspl"
   ];
   const partner = storageService().get("partner") || "";
   if (partners.includes(partner)) {
@@ -234,7 +240,7 @@ export async function mobileLogin(body) {
         let item = {
           promo_code: this.state.referrer,
         };
-        storageService.setObject("user_promo", item);
+        storageService().setObject("user_promo", item);
       }
 
       if (this.state.isPromoSuccess && this.state.form_data.referral_code !== "") {
@@ -440,7 +446,7 @@ export async function applyCode(user) {
       });
       const { status_code: status } = res.pfwresponse;
       if (status === 200) {
-        storageService.remove("user_promo");
+        storageService().remove("user_promo");
       }
     } catch (error) {
       console.log(error);
@@ -589,3 +595,22 @@ export const logout = async () => {
     toast(e);
   }
 };
+
+export const partnerAuthentication = async (data) => {
+  const res = await Api.post(`/api/partner/${data.partnerCode}/redirect?token=${data.token}&view=${data.view}`);
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw new Error(res?.pfwmessage || errorMessage);
+  }
+
+  const { result, status_code: status } = res.pfwresponse;
+
+  if (status === 200) {
+    return result;
+  } else {
+    throw new Error(result.error || result.message || errorMessage);
+  }
+} 

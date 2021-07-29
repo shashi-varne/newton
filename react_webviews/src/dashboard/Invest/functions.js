@@ -13,11 +13,11 @@ import {
 } from "./constants";
 import { getKycAppStatus, isReadyToInvest, setSummaryData } from "../../kyc/services";
 import { get_recommended_funds } from "./common/api";
-import { getBasePath } from "../../utils/functions";
+import { getBasePath, getInvestCards } from "../../utils/functions";
 
 let errorMessage = "Something went wrong!";
-const config = getConfig();
 export async function initialize() {
+  const config = getConfig();
   this.getSummary = getSummary.bind(this);
   this.setSummaryData = setSummaryData.bind(this);
   this.setInvestCardsData = setInvestCardsData.bind(this);
@@ -31,6 +31,8 @@ export async function initialize() {
   this.initilizeKyc = initilizeKyc.bind(this);
   this.openKyc = openKyc.bind(this);
   this.openPremiumOnboardBottomSheet = openPremiumOnboardBottomSheet.bind(this);
+  this.handleCampaign = handleCampaign.bind(this);
+  this.closeCampaignDialog = closeCampaignDialog.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
   if ( (this.state.screenName === "invest_landing" || this.state.screenName === "sdk_landing" ) && dataSettedInsideBoot) {
     storageService().set("dataSettedInsideBoot", false);
@@ -49,6 +51,26 @@ export async function initialize() {
     await this.getSummary();
   }
   if (this.onload) this.onload();
+  if(this.props?.location?.state?.fromState === "/kyc/registration/success") {
+    const _event = {
+      event_name: "journey_details",
+      properties: {
+        journey: {
+          name: "kyc",
+          trigger: "cta",
+          journey_status: "complete",
+          next_journey: "reports"
+        }
+      }
+    };
+
+    // send event
+    if (!config.Web) {
+      window.callbackWeb.eventCallback(_event);
+    } else if (config.isIframe) {
+      window.callbackWeb.sendEvent(_event);
+    }
+  }
 }
 
 export async function getSummary() {
@@ -87,9 +109,9 @@ export async function getSummary() {
 }
 
 export function setInvestCardsData() {
+  const config = getConfig();
   const disabledPartnersMap = {
     insurance: [
-      "lvb",
       "cccb",
       "sury",
       "obc",
@@ -100,7 +122,7 @@ export function setInvestCardsData() {
       "cub",
     ],
     nps: ["cccb", "sury", "obc", "svcho", "ktb", "sbm", "cub"],
-    gold: ["apna", "lvb", "cccb", "sury", "obc", "svcho", "alb", "ktb", "cub"],
+    gold: ["apna", "cccb", "sury", "obc", "svcho", "alb", "ktb", "cub"],
   };
 
   const referralData = storageService().getObject("referral") || {};
@@ -138,7 +160,7 @@ export function setInvestCardsData() {
 }
 
 export function clickCard(state, title) {
-  //  this.sendCleverTapEvents("next", title);
+  this.sendEvents("next", title);
   switch (state) {
     case "100_sip":
       this.getRecommendationApi(100);
@@ -264,6 +286,7 @@ export function corpusValue(data) {
 }
 
 export async function getRecommendations(amount) {
+  const config = getConfig();
   try {
     const result = await get_recommended_funds({
       type: this.state.investType,
@@ -306,6 +329,7 @@ export async function getRecommendations(amount) {
 }
 
 export function navigate(pathname, data = {}) {
+  const config = getConfig();
   if (this.props.edit || data.edit) {
     this.props.history.replace({
       pathname: pathname,
@@ -322,6 +346,7 @@ export function navigate(pathname, data = {}) {
 }
 
 export function initilizeKyc() {
+  const config = getConfig();
   let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
   let currentUser =
     this.state.currentUser || storageService().getObject("user") || {};
@@ -376,7 +401,7 @@ export function initilizeKyc() {
   this.setState({ bottom_sheet_dialog_data_premium });
   if (premium_onb_status && !isEmpty(bottom_sheet_dialog_data_premium)) {
     let banklist = storageService().getObject("banklist");
-    if (banklist && banklist.length) {
+    if ((banklist && banklist.length) || config.code === "moneycontrol") {
       return;
     } else {
       this.openPremiumOnboardBottomSheet(
@@ -391,6 +416,7 @@ export function openPremiumOnboardBottomSheet(
   bottom_sheet_dialog_data_premium,
   userKyc
 ) {
+  const config = getConfig();
   let is_bottom_sheet_displayed_kyc_premium = storageService().get(
     "is_bottom_sheet_displayed_kyc_premium"
   );
@@ -456,33 +482,29 @@ export const resetRiskProfileJourney = () => {
   return;
 };
 
-function handleInvestSubtitle (partner = '')  {
-  let investCardSubtitle = 'Mutual funds, Save tax';
+function handleInvestSubtitle ()  {
+  const investCards = getInvestCards(["nps", "gold"]);
+  let investCardSubtitle = 'Mutual funds';
+  if (investCards?.gold) {
+    investCardSubtitle = investCardSubtitle += ', Gold, Save tax';
+  } else {
+   investCardSubtitle = 'Mutual funds, Save tax';
+  }
 
-  if (partner) {
-    let invest_screen_cards = partner.invest_screen_cards;
-    investCardSubtitle = 'Mutual funds';
-    if (invest_screen_cards?.gold) {
-      investCardSubtitle = investCardSubtitle += ', Gold, Save tax';
-    } else {
-      investCardSubtitle = 'Mutual funds, Save tax';
-    }
-
-    if (invest_screen_cards?.nps) {
-      investCardSubtitle = investCardSubtitle += ', NPS';
-    }
+  if (investCards?.nps) {
+    investCardSubtitle = investCardSubtitle += ', NPS';
   }
   return investCardSubtitle;
 };
 
 export function handleRenderCard() {
+  const config = getConfig();
   let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
-  let partner = this.state.partner || storageService().get("partner") || {};
   let currentUser = this.state.currentUser || storageService().getObject("user") || {};
   let isReadyToInvestBase = isReadyToInvest();
   const isWeb = config.Web;
-  const hideReferral = currentUser.active_investment && !isWeb && !partner?.feature_manager?.hide_share_refferal;
-  const referralCode = !currentUser.active_investment && !isWeb && !partner?.feature_manager?.hide_apply_refferal;
+  const hideReferral = currentUser.active_investment && !isWeb && config?.referralConfig?.shareRefferal;
+  const referralCode = !currentUser.active_investment && !isWeb && config?.referralConfig?.applyRefferal;
   const myAccount = isReadyToInvestBase || userKyc.bank.doc_status === 'rejected';
   const kyc = !isReadyToInvestBase;
   const cards = sdkInvestCardMapper.filter(el => {
@@ -500,7 +522,7 @@ export function handleRenderCard() {
       }
     } else {
       if(el.key === 'invest') {
-        el.subtitle = handleInvestSubtitle(partner)
+        el.subtitle = handleInvestSubtitle()
       }
       return true;
     }
@@ -536,6 +558,56 @@ export function handleCampaignRedirection (url) {
   let campLink = url;
   // Adding redirect url for testing
   // eslint-disable-next-line
-  campLink = `${campLink}${campLink.match(/[\?]/g) ? "&" : "?"}generic_callback=true&plutus_redirect_url=${encodeURIComponent(`${getBasePath()}/?is_secure=${storageService().get("is_secure")}`)}`
+  campLink = `${campLink}${campLink.match(/[\?]/g) ? "&" : "?"}generic_callback=true&plutus_redirect_url=${encodeURIComponent(`${getBasePath()}/?is_secure=${storageService().get("is_secure")}&partner_code=${getConfig().code}`)}`
   window.location.href = campLink;
+}
+
+export function dateValidation(endDate, startDate) {
+  const date = new Date();
+  const currentDate = (date.getMonth() + 1) + "/" + date.getDate() + "/"  +date.getFullYear();
+  if(!endDate && !startDate) return true;
+  const startDateInMs = Date.parse(startDate);
+  const endDateInMs = Date.parse(endDate);
+  const currentDateInMs = Date.parse(currentDate);
+  if(startDate && endDate && (startDateInMs <= endDateInMs) && (startDateInMs <= currentDateInMs) && (currentDateInMs <= endDateInMs)) {
+    return true;
+  } 
+  if(startDate && !endDate && (startDateInMs <= currentDateInMs)) {
+    return true;
+  } 
+  if(!startDate && endDate && (currentDateInMs <= endDateInMs)) {
+    return true;
+  }
+  return false;
+}
+
+export function handleCampaign() {
+  const { bottom_sheet_dialog_data = {} } = this.state
+  const campLink = bottom_sheet_dialog_data.url;
+  if(bottom_sheet_dialog_data.campaign_name === "insurance_o2o_campaign"){
+    hitFeedbackURL(bottom_sheet_dialog_data.action_buttons?.buttons[0]?.feedback_url)
+    return;
+  }
+  this.setState({show_loader : 'page', openBottomSheet : false});
+  handleCampaignRedirection(campLink);
+}
+
+export async function hitFeedbackURL(url) {
+  try {
+    const res = await Api.get(url);
+    const { result, status_code: status } = res.pfwresponse;
+    if (status === 200) {
+      return result;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export function closeCampaignDialog() {
+  const { bottom_sheet_dialog_data = {} } = this.state
+  if(bottom_sheet_dialog_data.campaign_name === "insurance_o2o_campaign"){
+    hitFeedbackURL(bottom_sheet_dialog_data.action_buttons?.buttons[0]?.feedback_url)
+  }
+  this.setState({ openBottomSheet: false })
 }

@@ -3,8 +3,8 @@ import { getConfig } from "utils/functions";
 import ReactHtmlParser from "react-html-parser";
 import Button from "../../../common/ui/Button";
 import { Imgc } from "../../../common/ui/Imgc";
-let productName = getConfig().productName;
 const InvestCard = (props) => {
+  const productName = getConfig().productName;
   return (
     <>
     <div className="card invest-card" onClick={() => props.handleClick()} data-aid={`${props.data.key}`}>

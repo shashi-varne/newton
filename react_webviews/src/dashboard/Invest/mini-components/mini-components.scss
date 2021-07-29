@@ -142,6 +142,10 @@
       flex: 1 1 70%;
       display: flex;
       flex-direction: column;
+
+      .rf-rating-icon {
+        width: 80px;
+      }
   
       .recommendations-funds-item-name {
         font-size: 16px;
@@ -386,6 +390,10 @@
         background-color: var(--secondary);
       }
 
+      .bg-full:hover {
+        background-color: var(--on-hover-background);
+      }
+
       .no-bg {
         background-color: white;
         color: #878787;
@@ -584,6 +592,10 @@
     .bg-full {
       color: white;
       background-color: var(--secondary);
+    }
+
+    .bg-full:hover {
+      background-color: var(--on-hover-background);
     }
 
     .no-bg {

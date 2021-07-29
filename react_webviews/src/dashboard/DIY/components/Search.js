@@ -4,9 +4,11 @@ import { getConfig } from "utils/functions";
 import Close from "@material-ui/icons/Close";
 import SearchIcon from "@material-ui/icons/Search";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import IframeSearch from './IframeSearch';
 import { storageService } from "utils/validators";
 import { querySearch } from "../../Invest/common/api";
 import debounce from "lodash/debounce";
+import {isIframe} from 'utils/functions';
 import "./Search.scss";
 
 const Search = (props) => {
@@ -15,6 +17,9 @@ const Search = (props) => {
   const [showLoader, setShowLoader] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [showNoFundmessage, setShowNoFundmessage] = useState(false);
+  const iframe = isIframe();
+  const isMobileDevice = getConfig().isMobileDevice;
+  const productName = getConfig().productName;
 
   const handleChange = (event) => {
     let value = event.target.value || "";
@@ -63,12 +68,15 @@ const Search = (props) => {
   return (
     <Container
       noFooter
-      data-aid='diy-search-screen'
-      title="Search"
+      title={iframe ? isMobileDevice ? 'Where do you want to invest?' : "" : "Search"}
       classOverRideContainer="diy-search-container-main"
       classOverRide="diy-search-container"
+      data-aid='diy-search-screen'
     >
-      <div className="diy-search" data-aid='diy-search'>
+        <div className={`diy-search ${isMobileDevice ? "diy-search-mob" : ""}`} data-aid='diy-search'>
+      {
+        (iframe || (getConfig().code === 'moneycontrol' && !getConfig().Web)) ? < IframeSearch value={value} handleChange={handleChange} />
+        :
         <div className="search-content" data-aid='search-content'>
           <div className="search-option">
             <div className="search-input" data-aid='search-input'>
@@ -76,10 +84,10 @@ const Search = (props) => {
                 placeholder="Fund Search..."
                 value={value}
                 onChange={handleChange}
-              />
+                />
               {value && value.length !== 0 && (
                 <Close
-                  className="close-icon"
+                className="close-icon"
                   onClick={() => {
                     setValue("");
                     setShowNoFundmessage(false);
@@ -103,6 +111,12 @@ const Search = (props) => {
             </div>
           )}
         </div>
+      }
+      {showErrorMessage && (
+        <div className="error-message message">
+          Minimum 4 characters required
+        </div>
+      )}
         {showLoader && (
           <div className="search-loader">
             <CircularProgress
@@ -135,6 +149,13 @@ const Search = (props) => {
             )}
           </>
         )}
+        {
+          !fundResult && iframe && !isMobileDevice && !showLoader &&(
+            <div className="diy-iframe-search-content">
+              <img src={require(`assets/${productName}/diy_search_iframe.svg`)} alt='search' />
+            </div>
+          )
+        }
       </div>
     </Container>
   );

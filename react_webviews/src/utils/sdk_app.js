@@ -1,8 +1,17 @@
+///////////////////////NOTE///////////////////////////////////
+
+// please add the direct enteries path in:
+// 1. without param => directEnteries (ex : "/invest/doityourself/direct")
+// 2. with param => directEntriesWithParams (ex: "diy/fundlist/direct/:name/:key/:type" should be added as "diy/fundlist/direct")
+
+//////////////////////////////////////////////////////////
 
 import { navigate as navigateFunc, isNpsOutsideSdk } from "utils/functions";
 import { storageService } from "utils/validators";
 import { nativeCallback } from "./native_callback";
 import { commonBackMapper } from "utils/constants";
+import { getConfig } from "./functions";
+import isEmpty from "lodash/isEmpty";
 
 export const backMapper = (state) => {
   return commonBackMapper[state] || "";
@@ -30,26 +39,41 @@ export const checkAfterRedirection = (props, fromState, toState) => {
 
 export const backButtonHandler = (props, fromState, currentState, params) => {
   const navigate = navigateFunc.bind(props);
+  const pathName = props.location.pathname;
+  const entryPath = storageService().get('entry_path');
+  console.log("pathName", pathName);
+  console.log("entryPath", entryPath);
   
   const landingRedirectPaths = ["/sip/payment/callback", "/kyc/report", "/notification", "/diy/fundlist/direct",
-    "/diy/fundinfo/direct", "/diy/invest", "/invest/doityourself/direct", "/risk/recommendations/error"];
+    "/diy/fundinfo/direct", "/diy/invest", "/invest/doityourself/direct/", "/risk/recommendations/error"];
 
-  const fromStateArray = ['/payment/callback', '/nps/payment/callback', '/sip/payment/callback', '/invest', '/reports',
-   '/landing', '', '/new/mandate', '/otm-options', '/mandate', '/nps/mandate/callback', '/nps/success',
-    '/nps/sip', '/my-account', '/modal', '/page/callback', '/reports/sip/pause-request', '/kyc/journey'];
+  // const fromStateArray = ['/payment/callback', '/nps/payment/callback', '/sip/payment/callback', '/invest', '/reports',
+  //  '/landing', '', '/new/mandate', '/otm-options', '/mandate', '/nps/mandate/callback', '/nps/success',
+  //   '/nps/sip', '/my-account', '/modal', '/page/callback', '/reports/sip/pause-request', '/kyc/journey'];
+  
+  // Note: will have to remove "/invest/explore"  from the direct enteries.
+  const directEnteries = ["/invest/doityourself/direct/", "/nps",
+     "/direct/gold", "/invest/instaredeem", "/reports", "/invest/savegoal", "/invest", "/withdraw", "/invest/explore", "/kyc/journey"];
+
+  const directEntriesWithParams = ["/diy/fundinfo/direct", "/diy/fundlist/direct"];
+
+  const verifyDirectEntriesWithParams = () => {
+    return directEntriesWithParams.find(el => pathName.match(el));
+  }
     
+  if(directEnteries.indexOf(pathName) !== -1 || !isEmpty(verifyDirectEntriesWithParams())) {
+    if(pathName === entryPath) {
+      nativeCallback({ action: "exit_web" });
+      return true;
+    }
+  }
+
   if (landingRedirectPaths.indexOf(currentState) !== -1) {
     navigate("/");
     return true;
   }
 
-  if ("/modal".indexOf(currentState) !== -1) {
-    if (fromStateArray.indexOf(fromState) !== -1) {
-      nativeCallback({ action: "clear_history" });
-    }
-  }
-
-  if ("/diy/fundinfo/direct".indexOf(currentState) !== -1) {
+  if (currentState.indexOf("/diy/fundinfo/direct") !== -1) {
     nativeCallback({ action: "clear_history" });
   }
 
@@ -83,9 +107,6 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
         }
       }
       break;
-    case "/invest/money-control":
-      nativeCallback({ action: "exit_web" });
-      break;
     case "/account/merge/linked/success":
       nativeCallback({ action: "session_expired" });
       break;
@@ -98,6 +119,11 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
       }
       break;
     default:
+      const landingScreenPaths = ["/", "/invest", "/landing", "/invest/explore"]
+      if(landingScreenPaths.includes(currentState) && getConfig().code === 'moneycontrol') {
+        nativeCallback({ action: "exit_web" });
+        return true; 
+      }
       if (currentState === "/" || isNpsOutsideSdk(fromState, currentState)) {
         nativeCallback({ action: "exit_web" });
       } else {
@@ -106,7 +132,7 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
             navigate(backMapper(currentState));
             return true;
           } else {
-            // $window.history.back();
+            // window.history.back();
           }
         } else {
           nativeCallback({ action: "exit_web" });
@@ -114,13 +140,16 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
       }
   }
   
-  const npsDetailsCheckCasesArr = ["/nps/payment/callback", "/nps/mandate/callback", "/nps/success", "/page/invest/campaign/callback", "/invest", "/reports"]
+  let npsDetailsCheckCasesArr = ["/nps/payment/callback", "/nps/mandate/callback", "/nps/success", "/page/invest/campaign/callback"];
+  if(getConfig().code !== 'moneycontrol') {
+    npsDetailsCheckCasesArr = [...npsDetailsCheckCasesArr, "/invest", "/reports"];
+  }
   if (npsDetailsCheckCasesArr.indexOf(currentState) !== -1 || currentState.indexOf("/nps/payment/callback") !== -1) {
     if (storageService().getObject("nps_additional_details_required")) {
       if (isNpsOutsideSdk(fromState, currentState)) {
         nativeCallback({ action: "clear_history" });
       }
-      navigate("/nps/sdk");
+      navigate("/nps");
       return true;
     } else {
       navigate("/");

@@ -3,6 +3,7 @@ import { withRouter } from "react-router";
 import {
   didMount,
   commonRender,
+  handleOnBackClick,
 } from "../../common/components/container_functions";
 import { nativeCallback } from "utils/native_callback";
 import "../../utils/native_listener";
@@ -26,6 +27,7 @@ class Container extends Component {
 
     this.didMount = didMount.bind(this);
     this.commonRender = commonRender.bind(this);
+    this.handleOnBackClick = handleOnBackClick.bind(this);
   }
 
   componentDidMount() {
@@ -38,23 +40,16 @@ class Container extends Component {
   }
 
   historyGoBack = (backData) => {
-    const fromState = this.props.location?.state?.fromState || "";
-    const toState = this.props.location?.state?.toState || "";
-    const params = this.props.location?.params || {};
     const pathname = this.props.location?.pathname || "";
 
     if (this.getEvents("back")) {
       nativeCallback({ events: this.getEvents("back") });
     }
     
-    if (toState) {
-      let isRedirected = this.backButtonHandler(this.props, fromState, toState, params);
-      if (isRedirected) {
-        return;
-      }
+    const backHandle = this.handleOnBackClick();
+    if(backHandle) {
+      return;
     }
-
-    console.log("Container props...", this.props);
 
     if (this.props.headerData && this.props.headerData.goBack) {
       this.props.headerData.goBack();
@@ -62,7 +57,6 @@ class Container extends Component {
     }
 
     const goBackPath = this.props.location?.state?.goBack || "";
-    console.log("goBackPath...", goBackPath)
 
     if (goBackPath) {
       if (goBackPath === "exit" && storageService().get("native")) {
@@ -83,7 +77,6 @@ class Container extends Component {
       return;
     }
 
-    console.log("Props history goBack...");
     this.props.history.goBack();
   };
 

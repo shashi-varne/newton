@@ -8,7 +8,6 @@ import "./mini-components.scss";
 import { getConfig } from '../../../utils/functions'
 import { storageService } from '../../../utils/validators'
 
-const isMobileDevice = getConfig().isMobileDevice;
 const CartFooter = ({
   cart,
   setCart,
@@ -21,6 +20,7 @@ const CartFooter = ({
   sendEvents,
   ...props
 }) => {
+  const isMobileDevice = getConfig().isMobileDevice;
   const [filterActive, setFilterActive] = useState(false)
   const [cartActive, setCartActive] = useState(false)
   return (

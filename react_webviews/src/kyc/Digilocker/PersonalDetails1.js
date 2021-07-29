@@ -17,7 +17,9 @@ import { kycSubmit } from "../common/api";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
+import { getConfig } from "../../utils/functions";
 
+const productName = getConfig().productName;
 const PersonalDetails1 = (props) => {
   const navigate = navigateFunc.bind(props);
   const [showLoader, setShowLoader] = useState(false);
@@ -178,6 +180,7 @@ const PersonalDetails1 = (props) => {
       current={1}
       total={3}
       data-aid='kyc-personal-details-screen-1'
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
     >
       <div className="kyc-personal-details" data-aid='kyc-personal-details-page'>
         <div className="kyc-main-subtitle" data-aid='kyc-main-subtitle-text'>
@@ -193,7 +196,7 @@ const PersonalDetails1 = (props) => {
             onChange={handleChange("name")}
             maxLength={20}
             type="text"
-            disabled={showLoader}
+            disabled={showLoader || !!kyc.pan.meta_data.name}
           />
           {user.email === null && (
             <Input

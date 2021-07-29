@@ -1,5 +1,5 @@
 .fund-detail-cover-bg {
-  background-color: #4f2da7;
+  background-color: var(--primary);
   height: 5em;
   width: 100%;
   z-index: -1;
@@ -259,7 +259,7 @@
 }
 
 .fd-container {
-  padding-bottom: 100px !important;
+  padding-bottom: 50px !important;
   overflow: hidden;
   margin-bottom: 0px !important;
 }
@@ -426,7 +426,7 @@
         line-height: 19px;
         letter-spacing: 0px;
         text-align: left;
-        color: #7ED321;
+        color: var(--secondary-green);
       }
     }
   }

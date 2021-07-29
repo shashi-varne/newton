@@ -13,12 +13,14 @@ import SuccessDialog from "../Invest/mini-components/SuccessDialog";
 import InvestError from "../Invest/mini-components/InvestError";
 import PennyVerificationPending from "../Invest/mini-components/PennyVerificationPending";
 import { getBasePath } from "../../utils/functions";
-import { proceedInvestment } from "../proceedInvestmentFunctions";
+import {
+  handleIframeInvest,
+  proceedInvestment,
+} from "../proceedInvestmentFunctions";
 import "./SipDates.scss";
 import { nativeCallback } from "../../utils/native_callback";
 import { flowName } from "../Invest/constants";
 
-const partnerCode = getConfig().partner_code;
 /* eslint-disable */
 class SipDates extends Component {
   constructor(props) {
@@ -118,13 +120,22 @@ class SipDates extends Component {
   };
 
   handleSuccessDialog = () => {
+    const config = getConfig();
     this.sendEvents('next', "sip_dates_popup", {intent: "date confirmation"})
     let { investResponse, paymentRedirectUrl } = this.state;
     let pgLink = investResponse.investments[0].pg_link;
-    pgLink = `${pgLink}${pgLink.match(/[\?]/g) ? "&" : "?"}redirect_url=${paymentRedirectUrl}${partnerCode ? "&partner_code="+partnerCode : ""}`
-    if (getConfig().Web) {
-      // handleIframe
-      window.location.href = pgLink;
+    pgLink = `${pgLink}${pgLink.match(/[\?]/g) ? "&" : "?"}redirect_url=${paymentRedirectUrl}&partner_code=${config.code}`
+    if (config.Web) {
+      if (config.isIframe) {
+        handleIframeInvest(
+          pgLink,
+          investResponse,
+          this.props.history,
+          this.handleApiRunning
+        );
+      } else {
+        window.location.href = pgLink;
+      }
     } else {
       if (investResponse.rta_enabled) {
         this.navigate("/payment/options", {
@@ -204,6 +215,10 @@ class SipDates extends Component {
         buttonTitle={buttonTitle}
         title="Select investment date"
         showLoader={isApiRunning}
+        loaderData={{
+          loadingText:"Your payment is being processed. Please do not close this window or click the back button on your browser."
+        }}
+        iframeRightContent={require(`assets/${this.state.productName}/sip_date.svg`)}
       >
         <div className="sip-dates" data-aid='select-investment-date'>
           {sips &&

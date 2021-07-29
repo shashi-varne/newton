@@ -17,9 +17,11 @@ import {
 import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
 import useUserKycHook from "../common/hooks/userKycHook";
+import { getConfig } from "utils/functions";
 import toast from "../../common/ui/Toast";
 import { nativeCallback } from "../../utils/native_callback";
 
+const productName = getConfig().productName;
 const PersonalDetails1 = (props) => {
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -173,6 +175,7 @@ const PersonalDetails1 = (props) => {
       count="1"
       current="1"
       total="4"
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-personal-details-screen-1'
     >
       <div className="kyc-personal-details">
@@ -189,7 +192,7 @@ const PersonalDetails1 = (props) => {
             onChange={handleChange("name")}
             maxLength={20}
             type="text"
-            disabled={isApiRunning}
+            disabled={isApiRunning || !!kyc.pan.meta_data.name}
           />
           <Input
             label="Date of birth(DD/MM/YYYY)"

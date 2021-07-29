@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getConfig, navigate as navigateFunc } from "utils/functions";
+import { getConfig, navigate as navigateFunc, isIframe } from "utils/functions";
 import Container from "../../../common/Container";
 import { Imgc } from "common/ui/Imgc";
 import { resetRiskProfileJourney } from "../../functions";
@@ -8,8 +8,10 @@ import { isEmpty, storageService } from "utils/validators";
 import { getCampaignBySection, initData } from "../../../../kyc/services";
 import { getBasePath } from "utils/functions";
 import "./SipPaymentCallback.scss";
+import { isNewIframeDesktopLayout } from "../../../../utils/functions";
 
 const SipPaymentCallback = (props) => {
+  const hideImage = isNewIframeDesktopLayout();
   const navigate = navigateFunc.bind(props);
   const params = props.match.params || {};
   const status = params.status || "";
@@ -24,6 +26,7 @@ const SipPaymentCallback = (props) => {
 
   resetRiskProfileJourney();
   const config = getConfig();
+  const iframe = isIframe();
   const eventData = storageService().getObject('mf_invest_data')
   let _event = {
     'event_name': 'payment_status',
@@ -53,7 +56,6 @@ const SipPaymentCallback = (props) => {
   }
 
   const [buttonTitle, setButtonTitle] = useState(paymentError ? "OK" : "DONE");
-
   useEffect(() => {
     initialize();
   }, []);
@@ -109,7 +111,6 @@ const SipPaymentCallback = (props) => {
         !isEmpty(campaign) &&
         campaign.notification_visual_data.target
       ) {
-        setIsApiRunning("button");
         campaign.notification_visual_data.target.forEach((target) => {
           if (
             (campaign.campaign.name === "auto_debit_campaign" ||
@@ -117,22 +118,23 @@ const SipPaymentCallback = (props) => {
               campaign.campaign.name === "indb_mandate_campaign") &&
             target.section === "in_flow"
           ) {
+            setIsApiRunning("page");
             let auto_debit_campaign_url = target.url;
             // eslint-disable-next-line
-            auto_debit_campaign_url = `${auto_debit_campaign_url}${auto_debit_campaign_url.match(/[\?]/g) ? "&" : "?"}generic_callback=true&plutus_redirect_url=${encodeURIComponent(`${basePath}/?is_secure=${storageService().get("is_secure")}`)}`
+            auto_debit_campaign_url = `${auto_debit_campaign_url}${auto_debit_campaign_url.match(/[\?]/g) ? "&" : "?"}generic_callback=true&plutus_redirect_url=${encodeURIComponent(`${basePath}/?is_secure=${storageService().get("is_secure")}&partner_code=${config.code}`)}`
             window.location.href = auto_debit_campaign_url;
           } else if (
             campaign.campaign.name !== "auto_debit_campaign" ||
             campaign.campaign.name !== "enach_mandate_campaign" ||
             campaign.campaign.name !== "indb_mandate_campaign"
           ) {
+            setIsApiRunning("page");
             let url = campaign.notification_visual_data.target[0].url;
             // eslint-disable-next-line
-            url = `${url}${url.match(/[\?]/g) ? "&" : "?"}generic_callback=true&plutus_redirect_url=${encodeURIComponent(`${basePath}/?is_secure=${storageService().get("is_secure")}`)}`
+            url = `${url}${url.match(/[\?]/g) ? "&" : "?"}generic_callback=true&plutus_redirect_url=${encodeURIComponent(`${basePath}/?is_secure=${storageService().get("is_secure")}&partner_code=${config.code}`)}`
             window.location.href = url;
           }
         });
-        setIsApiRunning(false);
       } else {
         navigate("/reports");
       }
@@ -140,7 +142,7 @@ const SipPaymentCallback = (props) => {
   };
 
   const goBack = () => {
-    navigate("/landing");
+    navigate("/");
   }
 
   return (
@@ -148,6 +150,7 @@ const SipPaymentCallback = (props) => {
       buttonTitle={buttonTitle}
       showLoader={isApiRunning}
       handleClick={() => handleClick()}
+      iframeRightContent={require(`assets/${config.productName}/${paymentError ? 'error_illustration' : 'congratulations_illustration'}.svg`)}
       title={!paymentError ? "Payment successful" : "Payment failed"}
       skelton={skelton}
       headerData={{goBack}}
@@ -156,11 +159,14 @@ const SipPaymentCallback = (props) => {
       <section className="invest-sip-payment-callback" data-aid='invest-sip-payment-callback'>
         {!paymentError && (
           <div className="content" data-aid='payment-error'>
-            <Imgc
+            {
+              !hideImage &&
+              <Imgc
               src={require(`assets/${config.productName}/congratulations_illustration.svg`)}
               alt=""
               className="img"
-            />
+              />
+            }
             <h4>Order placed</h4>
             <p>You are one step closer to your financial freedom</p>
             <div className="message" data-aid='payment-message'>
@@ -171,16 +177,35 @@ const SipPaymentCallback = (props) => {
               />
               <div>Units will be allotted by next working day</div>
             </div>
+            {
+              config.code === 'moneycontrol' && 
+              <div className='important-message'>
+              <div className='info-icon'>
+                <img src={require(`assets/${config.productName}/info_icon.svg`)} alt="" />
+              </div>
+              <div className='info-msg'>
+                  <div className='info-head'>Important</div>
+                  <div className='info-msg-content'>
+                    The Mutual Fund(s) will reflect in your Moneycontrol Portfolio
+                    once units are allocated by the AMC(s). Check the <span>‘Pending Transaction’</span>{" "}
+                    tab under ‘Portfolio’ to know more.
+                  </div>
+              </div>
+            </div>
+            }
           </div>
         )}
         {paymentError && (
-          <div className="content" data-aid='payment-error'>
+          <div className={`content ${iframe && 'content-iframe-style'}`} data-aid='payment-error'>
+          {
+            !hideImage &&
             <Imgc
-              src={require(`assets/${config.productName}/error_illustration.svg`)}
-              alt=""
-              className="img"
+            src={require(`assets/${config.productName}/error_illustration.svg`)}
+            alt=""
+            className="img"
             />
-            <p data-aid='payment-message'>{message}</p>
+          }
+            <p data-aid='payment-message'>{message ? message : 'Something went wrong, please retry with correct details'}</p>
           </div>
         )}
       </section>

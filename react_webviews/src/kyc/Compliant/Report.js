@@ -6,6 +6,7 @@ import { SkeltonRect } from "../../common/ui/Skelton";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { isEmpty } from "../../utils/validators";
 import { nativeCallback } from "../../utils/native_callback";
+import { getConfig } from "../../utils/functions";
 
 const CompliantReport = (props) => {
   const [openIndex, setOpenIndex] = useState(-1);
@@ -13,6 +14,7 @@ const CompliantReport = (props) => {
   const [is_nri, setIsNri] = useState(false);
   const [cardDetails, setCardDetails] = useState([]);
   const [topTitle, setTopTitle] = useState("KYC details");
+  const config = getConfig();
 
   const handleTiles = (index, key) => {
     if (key === "docs") {
@@ -168,7 +170,14 @@ const CompliantReport = (props) => {
   }
 
   return (
-    <Container id="kyc-home" noFooter={true} title={topTitle} events={sendEvents("just_set_events")} data-aid='kyc-reports-screen'>
+    <Container
+      id="kyc-home"
+      noFooter={true}
+      title={topTitle}
+      events={sendEvents("just_set_events")}
+      data-aid="kyc-reports-screen"
+      iframeRightContent={require(`assets/${config.productName}/kyc_illust.svg`)}
+    >
       <div className="kyc-report">
         <main data-aid='kyc-report'>
           <section data-aid='kyc-reports-screen-page'>

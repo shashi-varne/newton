@@ -51,6 +51,7 @@ import Selfie from "./Upload/Selfie";
 import IpvVideo from "./Upload/IpvVideo";
 import NRIAddressUpload from "./Upload/NriAddress";
 import ChangeAddressDetails2 from "./Address/ChangeAddress/ChangeAddressDetails2";
+import DialogAsPage from './mini_components/DialogAsPage';
 import Native from "./Native/Native";
 
 const Kyc = (props) => {
@@ -144,6 +145,15 @@ const Kyc = (props) => {
           exact 
           path={`${url}/home`} 
           component={Home} 
+        />
+        <Route
+          exact
+          path={[`${url}/penny-status`,
+                 `${url}/pan-status`,
+                 `${url}/residence-status`,
+                 `${url}/:userType/bank-status`
+               ]}
+          component={DialogAsPage}
         />
         <Route
           exact

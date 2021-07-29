@@ -15,10 +15,9 @@ import { storageService, isEmpty } from "../../utils/validators";
 import { SkeltonRect } from "../../common/ui/Skelton";
 import { nativeCallback } from "utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
+import { isNewIframeDesktopLayout } from "../../utils/functions";
 
 const Report = (props) => {
-  const config = getConfig();
-  const productName = config.productName;
   const navigate = navigateFunc.bind(props);
   const [cardDetails, setCardDetails] = useState([]);
   const [openIndex, setOpenIndex] = useState(-1);
@@ -27,6 +26,9 @@ const Report = (props) => {
   const [topTitle, setTopTitle] = useState("KYC status");
   const [addressProof, setAddressProof] = useState({});
   const [buttonTitle, setButtonTitle] = useState("OK");
+  const [dlFlow, setDlFlow] = useState(false);
+  const config = getConfig();
+  const productName = config.productName;
   const appText = "Your application is submitted.";
   const goBackPage = props.location.state?.goBack || "";
 
@@ -63,6 +65,14 @@ const Report = (props) => {
     ) {
       setTopTitle("Investment status");
     }
+    const dlCondition =
+      !is_compliant &&
+      !kyc.address.meta_data.is_nri &&
+      kyc.dl_docs_status !== '' &&
+      kyc.dl_docs_status !== 'init' &&
+      kyc.dl_docs_status !== null
+
+    setDlFlow(dlCondition);
 
     let address_proof = "";
     let address_proof_nri = "";
@@ -137,7 +147,7 @@ const Report = (props) => {
     } else if (config.isIframe) {
       window.callbackWeb.sendEvent(_event);
     }
-    if (getConfig().Web) {
+    if (config.Web) {
       navigate(PATHNAME_MAPPER.invest);
     } else {
       if (storageService().get(STORAGE_CONSTANTS.NATIVE)) {
@@ -169,7 +179,7 @@ const Report = (props) => {
         window.callbackWeb.sendEvent(_event);
       }
 
-      if (!getConfig().isIframe) {
+      if (!config.isIframe) {
         navigate(PATHNAME_MAPPER.reports);
       }
     } else {
@@ -191,7 +201,7 @@ const Report = (props) => {
         window.callbackWeb.sendEvent(_event);
       }
 
-      if (getConfig().Web) {
+      if (config.Web) {
         navigate(PATHNAME_MAPPER.invest);
       } else {
         if (storageService().get(STORAGE_CONSTANTS.NATIVE)) {
@@ -279,10 +289,10 @@ const Report = (props) => {
                   Foreign Address as per {addressProof.address_proof_nri}
                 </div>
                 <div className="subtitle">
-                  {kyc.address.meta_data.addressline},
-                  {kyc.address.meta_data.city},{kyc.address.meta_data.state},
-                  {kyc.address.meta_data.country},
-                  {kyc.address.meta_data.pincode}
+                  {kyc.nri_address.meta_data.addressline},
+                  {kyc.nri_address.meta_data.city},{kyc.address.meta_data.state},
+                  {kyc.nri_address.meta_data.country},
+                  {kyc.nri_address.meta_data.pincode}
                 </div>
               </div>
             )}
@@ -388,15 +398,19 @@ const Report = (props) => {
       title={topTitle}
       noFooter={isEmpty(cardDetails)}
       headerData={{goBack}}
+      iframeRightContent={require(`assets/${productName}/${dlFlow ? "digilocker_kyc" : "kyc_illust"}.svg`)}
       data-aid='kyc-report-screen'
     >
       <div className="kyc-report">
         <main data-aid='kyc-report'>
-          <Imgc
-            src={require(`assets/${productName}/congratulations_illustration.svg`)}
-            alt="img"
-            className="img"
-          />
+          {
+            (!isNewIframeDesktopLayout()) &&
+              <Imgc
+                src={require(`assets/${productName}/congratulations_illustration.svg`)}
+                alt="img"
+                className="img"
+              />
+          }
           <div className="congrats" data-aid='kyc-congratulations-text'>Congratulations!</div>
           <div className="text" data-aid='kyc-app-text'>{appText}</div>
           <div className="text message" data-aid='kyc-text-message'>

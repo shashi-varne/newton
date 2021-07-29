@@ -112,7 +112,7 @@
             font-weight: bold;
             font-size: 11px;
             line-height: 13px;
-            color: #4f2da7;
+            color: var(--primary);
             cursor: pointer;
             padding: 10px 10px 10px 5px;
 
@@ -299,7 +299,7 @@
       .resend-otp {
         font-size: 14px;
         cursor: pointer;
-        color: purple;
+        color: var(--primary);
         text-align: center;
         margin-left: auto;
         display: table;
@@ -375,6 +375,12 @@
 
           .underline {
             margin: 5px 0;
+          }
+
+        }
+        .country-code {
+          .MuiSelect-root {
+            margin-bottom: 1px;
           }
         }
       }

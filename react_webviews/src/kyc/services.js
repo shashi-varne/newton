@@ -116,11 +116,13 @@ export async function setSummaryData(result) {
     consent_required = result.data.partner.partner.data.consent_required;
   }
   storageService().set("consent_required", consent_required);
-  const subBrokerCodePartersList = ["hbl", "sbm", "flexi", "medlife", "life99"]
+  const subBrokerCodePartersList = ["hbl", "sbm", "flexi", "medlife", "life99", "taxwin", "ippb", "quesscorp", "sahaj", "mspl"]
   if (partner === "bfdl") {
     storageService().set("partner", "bfdlmobile");
   } else if (partner === "obcweb") {
     storageService().set("partner", "obc");
+  } else if (partner === "moneycontrolweb") {
+    storageService().set("partner", "moneycontrol");
   } else if (
     subBrokerCodePartersList.indexOf(result.data.referral.subbroker.data.subbroker_code) !== -1
   ) {
@@ -188,6 +190,7 @@ async function setNpsData(result) {
 }
 
 export function getKycAppStatus(kyc) {
+  if(isEmpty(kyc)) return {};
   var rejected = 0;
   var metaRejected = 0;
   var docRejected = 0;

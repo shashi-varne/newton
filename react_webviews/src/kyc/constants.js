@@ -219,6 +219,7 @@ export const OCCUPATION_TYPE_OPTIONS = [
   { name: "Business", value: "BUSINESS" },
   { name: "Agriculturist", value: "AGRICULTURIST" },
   { name: "Professional", value: "PROFESSIONAL" },
+  { name: "Others", value: "OTHERS" },
 ];
 
 export const getIfscCodeError = (code) => {
@@ -245,8 +246,7 @@ export const ADDRESS_PROOF_OPTIONS = [
   { name: "Passport", value: "PASSPORT" },
   { name: "Aadhaar card", value: "AADHAAR" },
   { name: "Voter ID", value: "VOTER_ID_CARD" },
-  { name: "Gas receipt", value: "UTILITY_BILL" },
-  { name: "Passbook", value: "LAT_BANK_PB" }
+  { name: "NREGA ID", value: "NREGA_ID" }
 ];
 
 export const NRI_ADDRESS_PROOF_OPTIONS = [

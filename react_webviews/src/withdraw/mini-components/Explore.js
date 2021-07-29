@@ -49,7 +49,9 @@ const Explore = (props) => {
       window.callbackWeb.sendEvent(_event);
     }
 
-    navigate('/invest')
+    if(!config.isIframe || config.code === "moneycontrol") {
+      navigate('/invest');
+    }
   }
   return (
     <section className="withdraw-explore-investment-options" data-aid='withdraw-explore-investment-options'>

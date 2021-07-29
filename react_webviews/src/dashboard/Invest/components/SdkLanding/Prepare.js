@@ -4,14 +4,18 @@ import { getConfig } from "utils/functions";
 import SdkInvestCard from "../../mini-components/SdkInvestCard";
 import "./SdkLanding.scss";
 import { prepareInvestMaaper } from "../../constants";
+import { isAuthenticatedUser } from "../../../../utils/functions";
 
-const config = getConfig();
 class Prepare extends Component {
   constructor(props) {
     super(props);
     this.state = {
       showSkelton: false,
     };
+  }
+
+  componentDidMount = () => {
+    isAuthenticatedUser(this.props);
   }
 
   handleCard = (path) => () => {
@@ -25,7 +29,7 @@ class Prepare extends Component {
   navigate = (path) => {
     this.props.history.push({
       pathname: path,
-      search: config.searchParams,
+      search: getConfig().searchParams,
     });
   };
 

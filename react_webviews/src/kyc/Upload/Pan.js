@@ -55,6 +55,7 @@ const Pan = (props) => {
   const [title, setTitle] = useState("Note")
   const [subTitle, setSubTitle] = useState('')
   const [showLoader, setShowLoader] = useState(false)
+  const productName = getConfig().productName;
   const {kyc, isLoading, updateKyc} = useUserKycHook();
   
   const inputEl = useRef(null)
@@ -192,6 +193,7 @@ const Pan = (props) => {
       disable={!file}
       showLoader={isApiRunning}
       title="Upload PAN"
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-upload-pan-screen'
     >
       {!isEmpty(kyc) && (

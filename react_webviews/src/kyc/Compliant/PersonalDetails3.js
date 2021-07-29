@@ -17,7 +17,9 @@ import { kycSubmit, getCVL } from "../common/api";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
+import { getConfig } from "../../utils/functions";
 
+const productName = getConfig().productName;
 const PersonalDetails3 = (props) => {
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -148,7 +150,7 @@ const PersonalDetails3 = (props) => {
       skelton={isLoading}
       events={sendEvents("just_set_events")}
       id="kyc-personal-details3"
-      buttonTitle="CONTINUE"
+      buttonTitle="SAVE AND CONTINUE"
       showLoader={isApiRunning}
       handleClick={handleClick}
       title={title}
@@ -156,6 +158,7 @@ const PersonalDetails3 = (props) => {
       current={3}
       total={3}
       data-aid='kyc-personal-details-screen-3'
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
     >
       <div className="kyc-personal-details" data-aid='kyc-personal-details-page'>
         <main data-aid='kyc-personal-details'>

@@ -8,16 +8,15 @@ import useUserKycHook from '../common/hooks/userKycHook'
 import "./commonStyles.scss";
 import { nativeCallback } from '../../utils/native_callback'
 
-const config = getConfig();
-const productName = config.productName;
-const isWeb = config.Web;
 const Sign = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)
   const [fileToShow, setFileToShow] = useState(null)
   const [showLoader, setShowLoader] = useState(false)
-
   const inputEl = useRef(null)
+  const config = getConfig();
+  const productName = config.productName;
+  const isWeb = config.Web;
 
   const native_call_handler = (method_name, doc_type, doc_name, doc_side) => {
     window.callbackWeb[method_name]({
@@ -109,6 +108,7 @@ const Sign = (props) => {
     }
   }
 
+  
   const sendEvents = (userAction, type) => {
     let eventObj = {
       "event_name": 'KYC_registration',
@@ -134,6 +134,7 @@ const Sign = (props) => {
       disable={!file}
       showLoader={isApiRunning}
       title="Upload Selfie"
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-upload-selfie-screen'
     >
       {!isEmpty(kyc) && (

@@ -11,6 +11,7 @@ import Api from "../../utils/api";
 import { getUserKycFromSummary } from "../../kyc/common/api";
 import { storageService } from "../../utils/validators";
 import { isEmpty } from "../../utils/validators";
+import kycComplete from 'assets/kyc_complete.svg';
 import { getBasePath, navigate as navigateFunc } from "../../utils/functions";
 
 class DigiStatus extends Component {
@@ -187,7 +188,7 @@ class DigiStatus extends Component {
 }
 
   render() {
-    let { show_loader, skelton, dl_flow, show_note } = this.state;
+    let { show_loader, skelton, dl_flow, show_note, productName } = this.state;
     const { status = "failed" } = this.state.params;
     const headerData = {
       icon: "close",
@@ -207,28 +208,13 @@ class DigiStatus extends Component {
           status === "success"
             ? dl_flow && !show_note
               ? "START INVESTING"
-              : "OKAY"
+              : "OK"
             : "RETRY E-SIGN"
         }
         headerData={headerData}
         skelton={skelton}
+        iframeRightContent={status === "success" ? kycComplete : require(`assets/${productName}/esign_kyc_fail.svg`)}
       >
-        {/* <div className="nsdl-status">
-          <img
-            src={require(`assets/${productName}/ils_esign_${status}.svg`)}
-            style={{ width: "100%" }}
-            alt="Nsdl Status"
-          />
-          {status === "success" ?
-            <div className="nsdl-status-text">
-              You have successfully signed your KYC documents.
-            </div>
-            :
-            <div className="nsdl-status-text">
-              Sorry! the eSign verification is failed. Please try again.
-            </div>
-          }
-        </div> */}
         {status === "success" ? (
           <Complete
             navigateToReports={this.navigateToReports}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router';
 
-import Header from './Header';
+import Header from '../../common/components/Header';
 import Footer from '../../common/components/footer';
 // import loader_fisdom from 'assets/loader_gif_fisdom.gif';
 // import loader_myway from 'assets/loader_gif_myway.gif';
@@ -21,16 +21,26 @@ import { isFunction } from '../../utils/validators';
 
 import './Style.scss';
 import UiSkelton from '../../common/ui/Skelton';
-
+import IframeHeader from 'common/components/Iframe/Header';
+import { backButtonHandler, isNewIframeDesktopLayout } from '../../utils/functions';
 const Container = (props) => {
+  const config = getConfig();
+  const iframe = config.isIframe;
+  const isMobileDevice = config.isMobileDevice;
+  const newIframeDesktopLayout = isNewIframeDesktopLayout();
   const [openDialog, setOpenDialog] = useState(false);
-  const x = React.useRef(true);
   // const loaderMain = getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom;
   const inPageTitle = true;
 
   const historyGoBack = (backData) => {
     // let fromHeader = backData ? backData.fromHeader : false;
     // let pathname = this.props.history.location.pathname;
+    nativeCallback({ events: getEvents('back') });
+
+    const fromState = props.location?.state?.fromState || "";
+    const toState = props.location?.state?.toState || "";
+    const pathname = props.location?.pathname || "";
+    const currentState = toState || pathname;
     let { params } = props.location;
 
     if (params && params.disableBack) {
@@ -38,22 +48,24 @@ const Container = (props) => {
       return;
     }
 
+    if (currentState) {
+      let isRedirected = backButtonHandler(props, fromState, currentState, params);
+      if (isRedirected) {
+        return;
+      }
+    }
+
     if (isFunction(props.goBack)) {
       return props.goBack(params);
     }
-    nativeCallback({ events: getEvents('back') });
     props.history.goBack();
   };
   useEffect(() => {
     setHeights({ header: true, container: false });
-    if (x.current) {
-      x.current = false;
-    } else {
-      window.callbackWeb.addEventListener({
+    window.callbackWeb.add_listener({
         type: 'back_pressed',
-        go_back: () => historyGoBack(),
-      });
-    }
+        go_back: () => historyGoBack()
+    });
   }, []);
 
   const getEvents = (user_action) => {
@@ -122,12 +134,12 @@ const Container = (props) => {
 
   return (
     <div
-      className={`ContainerWrapper   ${props.classOverRide}  ${
-        getConfig().productName !== 'fisdom' ? 'blue' : ''
+      className={`${newIframeDesktopLayout ? 'iframeContainerWrapper' : (iframe && config.code === "bfdlmobile") ? 'bfdlContainerWrapper' : 'ContainerWrapper'}   ${props.classOverRide}  ${
+        config.productName !== 'fisdom' ? 'blue' : ''
       }`}
     >
       {/* Header Block */}
-      {!props.noHeader && !getConfig().hide_header && (
+      {!props.noHeader && !getConfig().hide_header && !newIframeDesktopLayout ?(
         <Header
           disableBack={props.disableBack}
           title={props.title}
@@ -146,14 +158,41 @@ const Container = (props) => {
           style={props.styleHeader}
           className={props.classHeader}
           headerData={props.headerData}
+          new_header={true}
         />
-      )}
+      )
+      :
+      (
+        <IframeHeader
+          disableBack={props.disableBack}
+          title={props.title}
+          smallTitle={props.smallTitle}
+          provider={props.provider}
+          count={props.count}
+          total={props.total}
+          current={props.current}
+          goBack={headerGoBack}
+          edit={props.edit}
+          type={getConfig().productName}
+          rightIcon={props.rightIcon}
+          handleRightIconClick={props.handleRightIconClick}
+          inPageTitle={inPageTitle}
+          force_hide_inpage_title={props.hideInPageTitle}
+          style={props.styleHeader}
+          className={props.classHeader}
+          headerData={props.headerData}
+        />
+      )
+    }
 
       {/* Below Header Block */}
-      <div id='HeaderHeight' style={{ top: 56 }}>
+      {
+        (!newIframeDesktopLayout)&&
+        <div id='HeaderHeight' style={{ top: 56 }}>
         {/* Loader Block */}
         {/* {renderPageLoader()} */}
       </div>
+      }
 
       {/*  */}
 
@@ -187,7 +226,7 @@ const Container = (props) => {
       )}
 
       {props.skelton &&
-        <div className="Loader" style={{paddingTop: "56px"}}>
+        <div className="Loader" style={!config.isMobileDevice ? {top: "120px"} : {top: "56px"}}>
           <UiSkelton type={props.skelton} />
         </div>
       }
@@ -197,12 +236,14 @@ const Container = (props) => {
         <div
           style={props.styleContainer}
           className={`
-            Container 
+            ${iframe && !isMobileDevice ? 'IframeContainer' :'Container'} 
             ${props.classOverRideContainer}
             ${props.noPadding ? 'no-padding' : ''}
           `}
         >
-          {props.children}
+          <div className= 'fadein-animation'>
+            {props.children}
+          </div>
         </div>
       }
 
