@@ -18,7 +18,6 @@ import VerifyDetailDialog from "../../../../login_and_registration/components/Ve
 import AccountAlreadyExistDialog from "../../../../login_and_registration/components/AccountAlreadyExistDialog";
 import { generateOtp } from "../../../../login_and_registration/functions";
 import { Imgc } from "../../../../common/ui/Imgc";
-import toast from "../../../../common/ui/Toast"
 
 const fromLoginStates = ["/login", "/logout", "/verify-otp"]
 const isMobileDevice = getConfig().isMobileDevice;
