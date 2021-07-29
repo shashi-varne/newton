@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "../common/Container";
 import UploadCard from "./UploadCard";
 import { getDocuments } from "../services";
@@ -10,17 +10,26 @@ import "./commonStyles.scss";
 import { nativeCallback } from "../../utils/native_callback";
 import { getConfig } from "../../utils/functions";
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
+import { storageService } from "../../utils/validators";
+import { landingEntryPoints } from "../../utils/constants";
 
-const productName = getConfig().productName;
 const Progress = (props) => {
+  const { productName, Web } = getConfig();
   const { kyc, isLoading } = useUserKycHook();
-  const disableNext = props.location.state?.disableNext || false;
+  const disableNext = props.location?.state?.disableNext || false;
+  const fromState = props.location?.state?.fromState;
   const navigate = navigateFunc.bind(props);
   const [openConfirmBack, setOpenConfirmBack] = useState(false);
 
   let documents = [];
   let totalDocs = 0;
   let canGoNext = false;
+
+  useEffect(() => {
+    if (landingEntryPoints.includes(fromState)) {
+      storageService().set("uploadDocsEntry", "landing");
+    }
+  },[])
 
   if (!isEmpty(kyc) && !isLoading) {
     documents = getDocuments(kyc);
@@ -68,6 +77,29 @@ const Progress = (props) => {
     setOpenConfirmBack(true);
   }
 
+  const goBackToPath = () => {
+    console.log("fromState", fromState);
+    if (!Web) {
+      if (storageService().get("native") && !fromState) {
+        nativeCallback({ action: "exit_web"});
+      } else {
+        navigate(fromState);
+      }
+    } else {
+      if (storageService().get("uploadDocsEntry") === "landing") {
+        storageService().remove("uploadDocsEntry");
+        navigate("/");
+      } else {
+        navigate(PATHNAME_MAPPER.journey);
+      }
+    }
+  };
+
+  const goNext = () => {
+    sendEvents('next');
+    goBackToPath();
+  }
+
   const sendEvents = (userAction, docs) => {
     let eventObj = {
       event_name: "kyc_registration",
@@ -94,10 +126,7 @@ const Progress = (props) => {
       classOverRideContainer="pr-container"
       skelton={isLoading}
       skeltonType="p"
-      handleClick={() => {
-        sendEvents('next');
-        navigate(PATHNAME_MAPPER.journey);
-      }}
+      handleClick={goNext}
       title="Upload documents"
       iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       headerData={{goBack}}
@@ -137,7 +166,7 @@ const Progress = (props) => {
         </footer>
         <ConfirmBackDialog 
           isOpen={openConfirmBack}
-          goBack={() => navigate('/kyc/journey')}
+          goBack={goBackToPath}
           close={() => setOpenConfirmBack(false)}
         />
       </section>
