@@ -56,15 +56,16 @@ const VerifyPin = (props) => {
 
 
   const sendEvents = (user_action) => {
+    const sessionTimeout = storageService().getBoolean('session-timeout');
     let eventObj = {
       "event_name": '2fa',
       "properties": {
         "user_action": user_action,
         "screen_name": '2fa_authentication',
-        "journey": 'login',
-        //account_inactive if user is logging in again due to inactivity TODO
+        "journey": sessionTimeout ? 'account_inactive' : 'login',
       }
     };
+    storageService().setBoolean('session-timeout', false);
     nativeCallback({ events: eventObj });
   };
 

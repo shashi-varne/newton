@@ -61,7 +61,7 @@ class Api {
         }
 
         if (response.data.pfwstatus_code === 416) {
-          // storageService().setBoolean('2fa-required', true);
+          storageService().setBoolean('session-timeout', true);
           window.location.href = redirectTo2FA();
         } //TODO: CHeck with Satendra about where this code must be relative to below code
 
