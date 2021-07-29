@@ -365,6 +365,13 @@ export const kycStatusMapperInvest = {
     button_text: "UPDATE KYC",
     next_state: "/kyc/upload/progress",
   },
+  fno_rejected: {
+    icon: "ic_card_kyc_pending.svg",
+    title: "FnO Doc Rejected",
+    subtitle: "FnO rejected",
+    button_text: "UPDATE FnO",
+    next_state: "/kyc/upload/fno-income-proof",
+  },
   submitted: {
     icon: "ic_card_kyc_underprocess.svg",
     title: "KYC application submitted",

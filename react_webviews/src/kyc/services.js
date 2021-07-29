@@ -205,7 +205,8 @@ export function getKycAppStatus(kyc) {
       { name: "bank", keys: ["meta_data_status"] },
       { name: "identification", keys: ["meta_data_status"] },
       { name: "nomination", keys: ["meta_data_status"] },
-      { name: "sign", keys: ["doc_status"] }
+      { name: "sign", keys: ["doc_status"] },
+      { name: "equity_income", keys: ["doc_status"] }
     ];
   } else {
     fieldsToCheck = [
@@ -215,7 +216,8 @@ export function getKycAppStatus(kyc) {
       { name: "identification", keys: ["doc_status", "meta_data_status"] },
       { name: "nomination", keys: ["doc_status", "meta_data_status"] },
       { name: "sign", keys: ["doc_status"] },
-      { name: "ipvvideo", keys: ["doc_status"] }
+      { name: "ipvvideo", keys: ["doc_status"] },
+      { name: "equity_income", keys: ["doc_status"] }
     ];
   }
 
@@ -260,7 +262,11 @@ export function getKycAppStatus(kyc) {
 
   var status;
   if (rejected > 0) {
-    status = "rejected";
+    if (rejected === 1 && rejectedItems[0].name === "equity_income") {
+      status = "fno_rejected"
+    } else {
+      status = "rejected";
+    }
     result.status = status;
     return result;
   } else {
