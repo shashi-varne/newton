@@ -39,14 +39,10 @@ const DocumentVerification = (props) => {
   }
 
   const goBack = () => {
-    if (kycStartPoint === "stocks") {
-      navigate(PATHNAME_MAPPER.stocksStatus);
+    if(config.Web) {
+      navigate("/");
     } else {
-      if(config.Web) {
-        navigate("/");
-      } else {
-        nativeCallback({ action: "exit_web" });
-      }
+      nativeCallback({ action: "exit_web" });
     }
   }
 
