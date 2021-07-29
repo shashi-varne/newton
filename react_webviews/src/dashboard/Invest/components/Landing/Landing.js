@@ -211,7 +211,7 @@ class Landing extends Component {
                 case "stocks":
                   return (
                     <React.Fragment key={index}>
-                      {!isEquityCompletedBase && (
+                      {tradingEnabled && !isEquityCompletedBase && (
                         <div className="invest-main-top-title" 
                           onClick={() => {!kycStatusLoader && !stocksButtonLoader && !kycButtonLoader && this.clickCard("stocks") }} 
                           data-aid='stocks-title'
