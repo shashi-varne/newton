@@ -93,11 +93,16 @@ class Notification extends Component {
     this.sendEvents('next', target.campaign_name)
     this.setState({ showLoader: true });
     let campLink = "";
-    const showRedirectUrl = target.campaign_name === "whatsapp_consent"
+    const redirectUrlCampaignNames = ["whatsapp_consent", "ins_policy_issued", "o2o_application_added"];
+    const showRedirectUrl = redirectUrlCampaignNames.includes(target.campaign_name);
     campLink = this.getRedirectionUrlWebview(
       target.url,
       showRedirectUrl
     );
+    const insuranceCampaignNames = ["ins_policy_issued", "o2o_application_added"];
+    if(insuranceCampaignNames.includes(target.campaign_name)){
+      campLink += "&from_notification=true";
+    }
     storageService().set("flow-type", "notification");
     window.location.href = campLink;
   };
