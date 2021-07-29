@@ -52,11 +52,13 @@ function KycNative(props) {
     let kycStatusData = kycStatusMapperInvest[kycStatus];
     storageService().set("native", true);
     const TRADING_ENABLED = isTradingEnabled(kyc);
+    const isBrokingActivated = false; // To be removed after we get flag from backend
     const data = {
       state: {
         goBack: "exit",
       }
     }
+
     if (urlParams?.type === 'addbank') {
       navigate("/kyc/approved/banks/doc", data);
     } else if (urlParams?.type === 'banklist') {
@@ -73,7 +75,15 @@ function KycNative(props) {
     } else if (kycStatus === "submitted") {
       nativeCallback({ action: "exit_web"});
     } else if (kycStatus === "esign_pending") {
-      navigate("/kyc-esign/info")
+      navigate("/kyc-esign/info");
+    } 
+    // Todo: remove this condition after audit
+    else if (kycStatus === "complete" && kyc.equity_sign_status === "signed" && !isBrokingActivated) {
+      navigate("/kyc-esign/nsdl", {
+        searchParams: `${getConfig().searchParams}&status=success`
+      });
+    } else if (kycStatus === "fno_rejected") {
+      navigate("/kyc/upload/fno-income-proof");
     } else if ((TRADING_ENABLED && kyc?.kyc_product_type !== "equity") || kyc?.mf_kyc_processed) {
       let result;
       if (!kyc?.mf_kyc_processed) {

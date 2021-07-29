@@ -402,7 +402,7 @@ export function initilizeKyc() {
       bottom_sheet_dialog_data_premium.status = premium_onb_status;
     }
 
-    // Todo: Remove it later, as this sets bottomsheets data and shows on firts app landing which will now be shown on card click
+    // Todo: Remove it later, as this sets bottomsheets data and shows on first app landing which will now be shown on card click
     // if (["rejected"].indexOf(kycJourneyStatus) !== -1) {
     //   bottom_sheet_dialog_data_premium = kycStatusMapper[premium_onb_status];
     //   bottom_sheet_dialog_data_premium.status = premium_onb_status;

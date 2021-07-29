@@ -16,8 +16,8 @@ import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet';
 import { storageService } from '../../utils/validators';
 import { getConfig, isNewIframeDesktopLayout, navigate as navigateFunc } from '../../utils/functions';
 import InternalStorage from '../common/InternalStorage';
+import { landingEntryPoints } from '../../utils/constants';
 
-const { productName } = getConfig();
 const UPLOAD_OPTIONS_MAP = {
   'bank-statement': {
     title: 'Bank statement',
@@ -58,6 +58,9 @@ const FnOIncomeProof = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const navigate = navigateFunc.bind(props);
   const { kyc, isLoading, updateKyc } = useUserKycHook();
+  const fromState = props?.location?.state?.fromState;
+  const { productName, Web } = getConfig();
+  const hideSkipOption = !Web ? (storageService().get("native") && !fromState) : landingEntryPoints.includes(fromState);
 
   useEffect(() => {
     setFilePassword('');
@@ -106,11 +109,24 @@ const FnOIncomeProof = (props) => {
     if(skip) {
       sendEvents("skip");
     }
-    const areDocsPending = await checkDocsPending(kyc);
-    if (areDocsPending) {
-      navigate('/kyc/document-verification');
+
+    if (!Web) {
+      if (storageService().get("native") && !fromState) {
+        nativeCallback({ action: "exit_web"});
+      } else {
+        navigate(fromState);
+      }
     } else {
-      navigate('/kyc-esign/info');
+      if (landingEntryPoints.includes(fromState)) {
+        navigate("/");
+      } else {
+        const areDocsPending = await checkDocsPending(kyc);
+        if (areDocsPending) {
+          navigate('/kyc/document-verification');
+        } else {
+          navigate('/kyc-esign/info');
+        }
+      }
     }
   }
 
@@ -147,7 +163,7 @@ const FnOIncomeProof = (props) => {
   return (
     <Container
       events={sendEvents("just_set_events")}
-      canSkip
+      canSkip={!hideSkipOption}
       hidePageTitle
       hideHamburger
       handleClick={uploadAndGoNext}
@@ -159,7 +175,9 @@ const FnOIncomeProof = (props) => {
       skelton={isLoading}
     >
       <WVInPageHeader style={{ marginBottom: '15px' }}>
-        <WVInPageTitle>Provide income proof for F&O trading <span className="kyc-fno-header-optional-text"> (Optional)</span></WVInPageTitle>
+        <WVInPageTitle>Provide income proof for F&O trading 
+          {!hideSkipOption && <span className="kyc-fno-header-optional-text"> (Optional)</span>}
+          </WVInPageTitle>
       </WVInPageHeader>
       <WVInfoBubble>
         In case of multiple files/images, merge them into a single pdf to upload
