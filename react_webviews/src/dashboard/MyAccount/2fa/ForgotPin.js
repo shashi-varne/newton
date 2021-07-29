@@ -3,7 +3,7 @@ import ForgotMPin from '../../../2fa/components/ForgotMPin';
 import Container from '../../common/Container';
 import { nativeCallback } from "../../../utils/native_callback";
 import { navigate as navigateFunc } from "../../../utils/functions";
-import { forgotPinOtpTrigger, obscuredAuthGetter } from '../../../2fa/common/ApiCalls';
+import { forgotPinOtpTrigger, obscuredAuthGetter } from '../../../2fa/common/apiCalls';
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 
 const ForgotPin = (props) => {

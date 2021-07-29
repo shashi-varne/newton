@@ -24,9 +24,9 @@ const OtpContainer = ({
         if (!!showDotLoader) {
             setTimeAvailable(otpData?.timeAvailable)
         }
-        var timmer = setTimeout(() => {
+        const timer = setTimeout(() => {
             if (timeAvailable <= 0) {
-                clearTimeout(timmer);
+                clearTimeout(timer);
                 return;
             }
             setTimeAvailable(timeAvailable - 1)

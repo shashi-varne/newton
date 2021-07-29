@@ -59,6 +59,7 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
     if (showLoader) {
       await fetch();
     }
+    // In order to update app theme based on partner code
     theme.updateTheme();
   }
 

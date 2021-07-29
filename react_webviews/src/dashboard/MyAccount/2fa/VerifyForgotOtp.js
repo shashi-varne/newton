@@ -5,7 +5,7 @@ import Toast from "../../../common/ui/Toast";
 import OtpContainer from "../../../common/components/OtpContainer";
 import { nativeCallback } from "../../../utils/native_callback";
 import { navigate as navigateFunc } from "../../../utils/functions";
-import { twofaPostApi } from '../../../2fa/common/ApiCalls';
+import { twofaPostApi } from '../../../2fa/common/apiCalls';
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 
 const VerifyForgotOtp = (props) => {

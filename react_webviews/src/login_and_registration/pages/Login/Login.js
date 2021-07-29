@@ -225,22 +225,22 @@ class Login extends Component {
           </div>
         )}
         <div className="agree-terms" data-aid='agree-terms'>
-          By signing in, you agree to fisdom's{" "}
+          By signing in, you agree to {config.productName}'s{" "}
           <a
-            href="https://www.fisdom.com/terms/"
+            href={config.termsLink}
             target="_blank"
             rel="noopener noreferrer"
           >
             Terms and Conditions
-            </a>{" "}
-            and{" "}
+          </a>{" "}
+          and{" "}
           <a
-            href="https://www.fisdom.com/privacy/"
+            href={config.privacyLink}
             target="_blank"
             rel="noopener noreferrer"
           >
             Privacy Policy
-            </a>
+          </a>
         </div>
       </div>
     );

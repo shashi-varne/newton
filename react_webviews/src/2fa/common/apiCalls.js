@@ -4,9 +4,7 @@ const genericErrMsg = 'Something went wrong. Please try again!'
 
 export const setPin = async (params = {}) => {
   try {
-    const res = await Api.post('/api/iam/mpin/v2/set', {
-      ...params,
-    });
+    const res = await Api.post('/api/iam/mpin/v2/set', params);
 
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
@@ -26,9 +24,7 @@ export const setPin = async (params = {}) => {
 
 export const verifyPin = async (params = {}) => {
   try {
-    const res = await Api.post('/api/iam/mpin/v2/verify', {
-      ...params,
-    });
+    const res = await Api.post('/api/iam/mpin/v2/verify', params);
 
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
@@ -68,7 +64,7 @@ export const obscuredAuthGetter = async () => {
 
 export const forgotPinOtpTrigger = async (params = {}) => {
   try {
-    const res = await Api.post('/api/iam/mpin/v2/forgot', { ...params });
+    const res = await Api.post('/api/iam/mpin/v2/forgot', params);
 
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
@@ -86,10 +82,10 @@ export const forgotPinOtpTrigger = async (params = {}) => {
   }
 }
 
-export const twofaPostApi = async (url, params) => {
+export const twofaPostApi = async (url, params = {}) => {
   // Generic function to make a POST API call
   try {
-    const res = await Api.post(url, { ...params });
+    const res = await Api.post(url, params);
 
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
@@ -108,7 +104,7 @@ export const twofaPostApi = async (url, params) => {
 }
 export const modifyPin = async (params = {}) => {
   try {
-    const res = await Api.post('/api/iam/mpin/v2/modify', { ...params });
+    const res = await Api.post('/api/iam/mpin/v2/modify', params);
 
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
