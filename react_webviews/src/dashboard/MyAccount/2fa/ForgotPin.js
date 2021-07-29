@@ -13,6 +13,7 @@ const ForgotPin = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [isFetchApiRunning, setIsFetchApiRunning] = useState(false);
   const { clearRouteParams, persistRouteParams } = usePersistRouteParams();
+  const [panCorrectDetails, setPanCorrectDetails] = useState(false);
   const navigate = navigateFunc.bind(props);
 
   useEffect(() => {
@@ -49,6 +50,7 @@ const ForgotPin = (props) => {
     } catch (err) {
       console.log(err);
       setPanError(err);
+      setPanCorrectDetails(true)
     } finally {
       setIsApiRunning(false);
     }
@@ -60,7 +62,7 @@ const ForgotPin = (props) => {
       "properties": {
         "user_action": user_action,
         "screen_name": 'forgot_pin',
-        "correct_details_entered": panError ? "no" : "yes",
+        "correct_details_entered": panCorrectDetails ? "no" : "yes",
       }
     };
 
