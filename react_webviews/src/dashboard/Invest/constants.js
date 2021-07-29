@@ -139,7 +139,7 @@ export const investCardsBase = {
 
 export const keyPathMapper = {
   nfo: "/advanced-investing/new-fund-offers/info",
-  passiveIndexFunds: "landing",
+  passiveIndexFunds: "/passive-index-funds/landing",
   instaredeem: "invest/instaredeem",
   buildwealth: "invest/buildwealth",
   savetax: "invest/savetax",
