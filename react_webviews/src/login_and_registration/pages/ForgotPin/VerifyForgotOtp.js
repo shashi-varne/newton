@@ -4,7 +4,7 @@ import OtpContainer from '../../../common/components/OtpContainer';
 import { navigate as navigateFunc } from '../../../utils/functions';
 import LoginButton from '../../common/LoginButton';
 import Toast from 'common/ui/Toast';
-import { twofaPostApi } from '../../../2fa/common/ApiCalls';
+import { twofaPostApi } from '../../../2fa/common/apiCalls';
 import { nativeCallback } from "../../../utils/native_callback";
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 import GoBackToLoginBtn from '../../common/GoBackToLoginBtn';

@@ -16,10 +16,11 @@ import { isEmpty, cloneDeep, get } from "lodash";
 import { getInstaRecommendation } from "../../common/api";
 import useFunnelDataHook from "../../common/funnelDataHook";
 import { nativeCallback } from "../../../../utils/native_callback";
+import { Imgc } from "../../../../common/ui/Imgc";
 
-const { partner_code, productName } = getConfig();
 
 const InstaRedeem = (props) => {
+  const { code: partner_code, productName } = getConfig();
   const navigate = navigateFunc.bind(props);
   const { benefits, faqData } = investRedeemData;
 
@@ -112,6 +113,7 @@ const InstaRedeem = (props) => {
           <HowToSteps
             baseData={investRedeemData.withdrawSteps}
             style={{ margin: "0", padding: "5px 0 0 0" }}
+            classNameIcon="insta-redeem-dialog-icon"
           />
           <div className="sub-text" data-aid='sub-text-one'>
             Max limit is 50 k or 90% of folio value with redemption time of 30
@@ -180,9 +182,10 @@ const InstaRedeem = (props) => {
         {benefits.map((data, index) => {
           return (
             <div key={index} className="benefit" data-aid={`${data.key}-benefits`}>
-              <img
+              <Imgc
                 src={require(`assets/${productName}/${data.icon}`)}
                 alt=""
+                className="benefit-img"
               />
               <div className="text">
                 {data.disc}

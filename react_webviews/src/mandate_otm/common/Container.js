@@ -1,7 +1,7 @@
 import React, { Component , Fragment } from 'react';
 import { withRouter } from 'react-router';
 
-import { nativeCallback } from 'utils/native_callback';
+import { nativeCallback, handleNativeExit } from 'utils/native_callback';
 import '../../utils/native_listener';
 import { getConfig } from 'utils/functions';
 
@@ -27,6 +27,11 @@ class Container extends Component {
 
   componentDidMount() {
     this.didMount();
+    if (getConfig().generic_callback) {
+      if (getConfig().iOS) {
+        nativeCallback({ action: 'hide_top_bar' });
+      }
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -56,7 +61,8 @@ class Container extends Component {
     let { params } = this.props.location;
     console.log(this.props);
     if ((params && params.disableBack) || this.props.disableBack) {
-      nativeCallback({ action: 'exit', events: this.getEvents('exit') });
+      nativeCallback({ events: this.getEvents('exit') });
+      handleNativeExit(this.props, {action: "exit"});
       return;
     }
 
@@ -66,7 +72,8 @@ class Container extends Component {
       case "/mandate-otm/form-request/success":
       case "/mandate-otm/form-upload/upload":
       case "/mandate-otm/form-upload/success":
-        nativeCallback({ action: 'exit', events: this.getEvents('exit') });
+        nativeCallback({ events: this.getEvents('exit') });
+        handleNativeExit(this.props, {action: "exit"});
         break;
       default:
         // if (navigator.onLine) {
@@ -96,7 +103,7 @@ class Container extends Component {
       openPopup: false
     });
 
-    nativeCallback({ action: this.state.callbackType });
+    handleNativeExit(this.props, {action: this.state.callbackType});
 
   }
 

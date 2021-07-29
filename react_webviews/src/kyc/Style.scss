@@ -51,7 +51,6 @@
 //// KYC NOMINEE END ////
 
 //// KYC REPORT START ////
-
 .kyc-report {
   padding: 30px 0;
   line-height: 1.5;
@@ -126,7 +125,7 @@
 
     .help {
       font-size: 12px;
-      font-weight: 800;
+      font-weight: 700;
       color: var(--secondary);
       cursor: pointer;
     }
@@ -291,7 +290,7 @@
 
     .edit {
       font-size: 13px;
-      color: #35cb5d;
+      color: var(--secondary);
       font-weight: bold;
       cursor: pointer;
     }
@@ -311,4 +310,14 @@
 
 .penny-bank-verification-dialog-subtitle {
   margin: 10px 0 0;
+}
+///////////// SAMPLE DOCUMENTS END //////////////
+
+.kyc-dialog-page-message {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 21px;
+  letter-spacing: 0px;
+  color: var(--steelgrey);
+  margin-top: 6em;
 }

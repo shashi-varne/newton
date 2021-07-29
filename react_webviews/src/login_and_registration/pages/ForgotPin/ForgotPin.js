@@ -4,7 +4,7 @@ import ForgotMPin from '../../../2fa/components/ForgotMPin';
 import { navigate as navigateFunc } from '../../../utils/functions';
 import LoginButton from '../../common/LoginButton';
 import { nativeCallback } from "../../../utils/native_callback";
-import { forgotPinOtpTrigger, obscuredAuthGetter } from '../../../2fa/common/ApiCalls';
+import { forgotPinOtpTrigger, obscuredAuthGetter } from '../../../2fa/common/apiCalls';
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 import GoBackToLoginBtn from '../../common/GoBackToLoginBtn';
 import SessionExpiredUi from '../../components/SessionExpiredUi';

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Route, Redirect } from "react-router-dom";
 import { initData } from "../../kyc/services";
 import { storageService } from "utils/validators";
@@ -6,19 +6,23 @@ import isEmpty from "lodash/isEmpty";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
 import UiSkelton from "../ui/Skelton";
-
+import ThemeContext from "../../utils/ThemeContext";
 const config = getConfig();
 const isSdk = config.isSdk;
 const isNative = config.isNative;
 const isIframe = config.isIframe;
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
+  const theme = useContext(ThemeContext)
   let current_user = storageService().get("currentUser");
   let user = storageService().getObject("user") || {};
   let kyc = storageService().getObject("kyc") || {};
+  let partner = storageService().get("partner") || "";
+
   const userDataAvailable = current_user && !isEmpty(kyc) && !isEmpty(user);
-  const [showLoader, setShowLoader] = useState(!userDataAvailable);
-  const [isLoginValid, setIsLoginValid] = useState(userDataAvailable);
+  const sdkCheck = isSdk ? !!partner : true; // same as: !isSdk || (isSdk && partner)
+  const [showLoader, setShowLoader] = useState(!userDataAvailable || !sdkCheck);
+  const [isLoginValid, setIsLoginValid] = useState(userDataAvailable && sdkCheck);
 
   const fetch = async () => {
     try {
@@ -26,17 +30,19 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
       current_user = storageService().get("currentUser");
       user = storageService().getObject("user") || {};
       kyc = storageService().getObject("kyc") || {};
-      const userDataAvailable =
-        current_user && !isEmpty(kyc) && !isEmpty(user) ? true : false;
+      const userDataAvailable = current_user && !isEmpty(kyc) && !isEmpty(user);
       setIsLoginValid(userDataAvailable);
       if (!userDataAvailable) {
         if (isNative) {
           nativeCallback({ action: "exit_web" });
-        } else if (isSdk) {
-          nativeCallback({ action: "session_expired" });
-        } else if(isIframe) {
-          // handle iframe close
         }
+      } else if (isSdk) {
+        nativeCallback({ action: "session_expired" });
+      } else if (isIframe) {
+        let message = JSON.stringify({
+          type: "iframe_close",
+        });
+        window.callbackWeb.sendEvent(message);
       }
     } catch (e) {
       console.log(e);
@@ -46,10 +52,16 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   };
 
   useEffect(() => {
-    if (showLoader) {
-      fetch();
-    }
+    initialize()
   }, []);
+
+  const initialize = async () => {
+    if (showLoader) {
+      await fetch();
+    }
+    // In order to update app theme based on partner code
+    theme.updateTheme();
+  }
 
   return (
     <Route
@@ -57,9 +69,14 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
       render={(props) => {
         if (showLoader) {
           return (
-            <div className="ContainerWrapper">
-              <div style={{ height: "56px" }}>
-              </div>
+            <div
+              className={
+                isIframe ? "iframeContainerWrapper" : "ContainerWrapper"
+              }
+            >
+              {(!isIframe || config.isMobileDevice) && (
+                <div style={{ height: "56px" }}></div>
+              )}
               <UiSkelton type />
             </div>
           );

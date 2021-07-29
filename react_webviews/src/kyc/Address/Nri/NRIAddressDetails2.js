@@ -11,6 +11,7 @@ import {
 import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import { isEmpty, validateNumber } from "../../../utils/validators";
+import { getConfig } from "utils/functions";
 import "../commonStyles.scss";
 import { nativeCallback } from "../../../utils/native_callback";
 import ConfirmBackDialog from "../../mini-components/ConfirmBackDialog";
@@ -24,6 +25,7 @@ const NRIAddressDetails2 = (props) => {
   const [oldState, setOldState] = useState({});
   const [openConfirmBack, setOpenConfirmBack] = useState(false);
   const navigate = navigateFunc.bind(props);
+  const productName = getConfig().productName;
 
   const closeConfirmBack = () => {
     setOpenConfirmBack(false);
@@ -189,6 +191,7 @@ const NRIAddressDetails2 = (props) => {
       current={pageDetails.current}
       count={pageDetails.current}
       total={pageDetails.total}
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-nri-address-details-screen-2'
       headerData={{ goBack }}
     >

@@ -197,8 +197,8 @@ class PlanSummaryClass extends Component {
         pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
           '&app=' + app + '&back_url=' + back_url + '&generic_callback=' + getConfig().generic_callback;
 
-        if (getConfig().partner_code) {
-          pgLink += '&partner_code=' + getConfig().partner_code;
+        if (getConfig().code) {
+          pgLink += '&partner_code=' + getConfig().code;
         }
 
         this.sendEvents('next');

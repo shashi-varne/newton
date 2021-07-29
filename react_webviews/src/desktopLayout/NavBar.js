@@ -6,9 +6,9 @@ import {navigate as navigateFunc} from 'utils/functions'
 import {withRouter} from 'react-router-dom';
 import './NavBar.scss';
 import { storageService } from "../utils/validators";
-const {partner,logo} = getConfig();
 
 const NavBar = (props) => {
+  const {code,logo} = getConfig();
   const navigate = navigateFunc.bind(props);
   const user = storageService().getObject('user');
   const handleLogout =() => {
@@ -19,7 +19,7 @@ const NavBar = (props) => {
     <AppBar position="sticky" className="navbar NavBar"  data-aid='navbar'>
       <Toolbar className='navbar-container'>
         <div className='header-partner-logo'>
-          <img src={require(`assets/${logo}`)} alt={partner} />
+          <img src={require(`assets/${logo}`)} alt={code} />
         </div>
         <div className='navbar-right-container'>
             <div className='user-profile-data' data-aid='user-profile-data'>

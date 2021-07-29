@@ -1,7 +1,7 @@
 import React, { Component , Fragment } from 'react';
 import { withRouter } from 'react-router';
 
-import { nativeCallback } from 'utils/native_callback';
+import { nativeCallback, handleNativeExit } from 'utils/native_callback';
 import '../../utils/native_listener';
 import { getConfig } from 'utils/functions';
 
@@ -67,7 +67,7 @@ class Container extends Component {
     }
 
     if (params && params.disableBack) {
-      nativeCallback({ action: 'exit' });
+      handleNativeExit(this.props, {action: "exit"});
       return;
     }
 
@@ -86,7 +86,8 @@ class Container extends Component {
           nativeCallback({ events: this.getEvents('back') });
           this.props.history.goBack();
         } else {
-          nativeCallback({ action: 'exit', events: this.getEvents('back') });
+          nativeCallback({ events: this.getEvents('back') });
+          handleNativeExit(this.props, {action: "exit"});
         }
         break;
       case "/risk/recommendation":
@@ -120,7 +121,8 @@ class Container extends Component {
       openPopup: false
     });
 
-    nativeCallback({ action: this.state.callbackType, events: this.getEvents('exit_yes') });
+    nativeCallback({ events: this.getEvents('exit_yes') });
+    handleNativeExit(this.props, {action: this.state.callbackType});
   }
 
 

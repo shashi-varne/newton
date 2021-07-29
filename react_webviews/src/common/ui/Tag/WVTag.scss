@@ -1,0 +1,27 @@
+.wv-tag {
+  padding: 0 10px;
+  color: #ffffff;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.wv-tag__attention {
+  background-color: var(--pink);
+}
+
+.wv-tag__info {
+  background-color: var(--mustard);
+}
+
+.wv-tag__success {
+  background-color: var(--lime);
+}
+
+.wv-tag__other {
+  background-color: var(--purple);
+}
+
+.wv-tag__error {
+  background-color: var(--red);
+}

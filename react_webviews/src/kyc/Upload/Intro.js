@@ -37,6 +37,7 @@ const Intro = (props) => {
       events={sendEvents("just_set_events")}
       handleClick={handleClick}
       title='Upload documents'
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-intro-screen'
     >
       <section id="kyc-upload-intro" data-aid='kyc-upload-intro'>

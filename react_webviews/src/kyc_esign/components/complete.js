@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { getConfig, isTradingEnabled } from "utils/functions";
+import { getConfig, isTradingEnabled, isNewIframeDesktopLayout } from "utils/functions";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 import WVSteps from "../../common/ui/Steps/WVSteps";
 import { isDocSubmittedOrApproved } from "../../kyc/common/functions";
 import { isReadyToInvest } from "../../kyc/services";
 import { isEmpty } from "../../utils/validators";
+
 
 const stepsData = [
   { title: "Mutual fund", status: "Ready to invest" },
@@ -13,14 +14,15 @@ const stepsData = [
 ]
 const initialSubtitleText = "Trading & demat A/c will be ready in 2 hours. Till then you can start investing in mutual funds";
 
-const config = getConfig();
-const productName = config.productName;
-
 const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
   const [steps, setSteps] = useState(stepsData);
   const [tradingEnabled, setTradingEnabled] = useState(false);
   const [showAccountStatus, setShowAccountStatus] = useState(false);
   const [tradingSubtitleText, setTradingSubtitleText] = useState(initialSubtitleText);
+  
+  const hideImage = isNewIframeDesktopLayout();
+  const config = getConfig();
+  const productName = config.productName; 
 
   useEffect(() => {
     if(!isEmpty(kyc)) {
@@ -44,10 +46,13 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
   return (
     <div className="kyc-esign-complete" data-aid='kyc-esign-complete'>
       <header data-aid='kyc-esign-header'>
-        <img
+        {
+          !hideImage &&
+          <img
           src={require(`assets/${productName}/ic_process_done.svg`)}
           alt=""
-        />
+          />
+        }
         {showAccountStatus && (
           <div className="title" data-aid='kyc-header-title'>KYC complete!</div>
         )}

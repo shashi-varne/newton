@@ -18,8 +18,10 @@ import { validateAlphabets } from "../../utils/validators";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
+import { getConfig } from "utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 
+const productName = getConfig().productName;
 const PersonalDetails4 = (props) => {
   const [isChecked, setIsChecked] = useState(false);
   const navigate = navigateFunc.bind(props);
@@ -28,11 +30,11 @@ const PersonalDetails4 = (props) => {
   const isEdit = props.location.state?.isEdit || false;
   const [oldState, setOldState] = useState({});
   const [totalPages, setTotalPages] = useState();
+  const type = props.type || "";
   let title = "Nominee details";
   if (isEdit) {
     title = "Edit nominee details";
   }
-  const type = props.type || "";
   const keysToCheck = ["dob", "name", "relationship"];
 
   const { kyc, user, isLoading } = useUserKycHook();
@@ -192,6 +194,7 @@ const PersonalDetails4 = (props) => {
       count={totalPages}
       current={totalPages}
       total={totalPages}
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-personal-details-screen-4'
     >
       <div className="kyc-nominee">

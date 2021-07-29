@@ -37,7 +37,7 @@ const RebalanceSuccessful = () => {
 
   const handleClick = () => {
     sendEvents('next');
-    openModule('app/portfolio');
+    openModule('app/portfolio', this.props);
   };
 
   return (

@@ -2,7 +2,7 @@
   padding-bottom: 30px;
 
   .generic-page-subtitle {
-    margin: -20px 0 20px 0;
+    margin: -10px 0 20px 0;
   }
 
   .title {
@@ -20,8 +20,10 @@
     padding-top: 15px;
     padding-bottom: 15px;
 
-    img {
-      margin-right: 15px;
+    .benefit-img {
+      margin-right: 15px !important;
+      width: 80px !important;
+      min-height: 60px;
     }
 
     .text {
@@ -30,7 +32,7 @@
       line-height: 22px;
 
       .insta-redeem-know-more {
-        color: #35cb5d;
+        color: var(--secondary);
         font-size: 10px;
         font-weight: 600;
         cursor: pointer;
@@ -51,10 +53,9 @@
     align-items: center;
     margin-bottom: 0;
     cursor: pointer;
+    justify-content: space-between;
 
     .text {
-      -ms-flex: 6;
-      flex: 6;
 
       h1 {
         margin: 0;
@@ -92,12 +93,11 @@
           -ms-flex-align: center;
           align-items: center;
           background-color: #f0f7ff;
-          color: #767e86;
+          color: var(--steelgrey);
 
           .img {
             width: 10px;
             margin-right: 5px;
-            margin-top: -3px;
           }
         }
         .returns {
@@ -105,17 +105,16 @@
           .highlight-return {
             margin-right: 5px;
             font-weight: 600;
-            color: #7ed321;
+            color: var(--secondary-green);
           }
         }
       }
     }
 
     .icon {
-      -ms-flex: 1;
-      flex: 1;
       vertical-align: middle;
       width: 60px;
+      margin-left: 10px;
     }
   }
 
@@ -124,7 +123,7 @@
 
     .top-tile {
       font-size: 13px;
-      font-weight: 800;
+      font-weight: 700;
     }
 
     .subtitle {

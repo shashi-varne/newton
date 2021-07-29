@@ -188,7 +188,7 @@ const SipDetails = (props) => {
                       <div className="step completed">
                         <img
                           alt=""
-                          src={require(`assets/completed_step.svg`)}
+                          src={require(`assets/${productName}/completed_step.svg`)}
                         />
                         <div className="text">SIP mandate created</div>
                       </div>
@@ -201,7 +201,7 @@ const SipDetails = (props) => {
                         {mandate_approved.includes(report.friendly_status) ? (
                           <img
                             alt=""
-                            src={require(`assets/completed_step.svg`)}
+                            src={require(`assets/${productName}/completed_step.svg`)}
                           />
                         ) : (
                           <div className="circle"></div>
@@ -216,7 +216,7 @@ const SipDetails = (props) => {
                         {report.friendly_status === "active" ? (
                           <img
                             alt=""
-                            src={require(`assets/completed_step.svg`)}
+                            src={require(`assets/${productName}/completed_step.svg`)}
                           />
                         ) : (
                           <div className="circle"></div>
@@ -231,7 +231,7 @@ const SipDetails = (props) => {
                         {report.friendly_status === "active" ? (
                           <img
                             alt=""
-                            src={require(`assets/completed_step.svg`)}
+                            src={require(`assets/${productName}/completed_step.svg`)}
                           />
                         ) : (
                           <div className="circle"></div>
@@ -245,7 +245,7 @@ const SipDetails = (props) => {
                       <div className="step completed">
                         <img
                           alt=""
-                          src={require(`assets/completed_step.svg`)}
+                          src={require(`assets/${productName}/completed_step.svg`)}
                         />
                         <div className="text">Requested to pause</div>
                       </div>
@@ -257,7 +257,7 @@ const SipDetails = (props) => {
                         {report.friendly_status === "paused" ? (
                           <img
                             alt=""
-                            src={require(`assets/completed_step.svg`)}
+                            src={require(`assets/${productName}/completed_step.svg`)}
                           />
                         ) : (
                           <div className="circle"></div>
@@ -271,7 +271,7 @@ const SipDetails = (props) => {
                       <div className="step completed">
                         <img
                           alt=""
-                          src={require(`assets/completed_step.svg`)}
+                          src={require(`assets/${productName}/completed_step.svg`)}
                         />
                         <div className="text">Requested to cancel</div>
                       </div>
@@ -284,7 +284,7 @@ const SipDetails = (props) => {
                         {report.friendly_status === "cancelled" ? (
                           <img
                             alt=""
-                            src={require(`assets/completed_step.svg`)}
+                            src={require(`assets/${productName}/completed_step.svg`)}
                           />
                         ) : (
                           <div className="circle"></div>

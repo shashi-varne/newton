@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { twofaPostApi } from '../../../2fa/common/ApiCalls';
+import { twofaPostApi } from '../../../2fa/common/apiCalls';
 import EnterMPin from '../../../2fa/components/EnterMPin';
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 import { navigate as navigateFunc } from '../../../utils/functions';

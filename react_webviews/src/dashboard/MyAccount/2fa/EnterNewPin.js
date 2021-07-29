@@ -1,6 +1,6 @@
 import "./commonStyles.scss";
 import React, { useMemo, useState } from 'react';
-import { verifyPin } from '../../../2fa/common/ApiCalls';
+import { verifyPin } from '../../../2fa/common/apiCalls';
 import EnterMPin from "../../../2fa/components/EnterMPin";
 import Container from "../../common/Container";
 import { nativeCallback } from "../../../utils/native_callback";

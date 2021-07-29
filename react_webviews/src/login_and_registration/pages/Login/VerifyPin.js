@@ -4,7 +4,7 @@ import EnterMPin from '../../../2fa/components/EnterMPin';
 import { Imgc } from '../../../common/ui/Imgc';
 import { storageService } from '../../../utils/validators';
 import { navigate as navigateFunc } from '../../../utils/functions';
-import { verifyPin } from '../../../2fa/common/ApiCalls';
+import { verifyPin } from '../../../2fa/common/apiCalls';
 import { nativeCallback } from "../../../utils/native_callback";
 import WVButton from '../../../common/ui/Button/WVButton';
 import DotDotLoader from '../../../common/ui/DotDotLoaderNew';

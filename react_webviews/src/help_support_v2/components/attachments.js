@@ -145,7 +145,7 @@ class RenderAttachment extends Component {
           className="input"
           style={{
             border: `1px solid ${
-              this.state.productName === "finity" ? "#CBDEF6" : "#D5CCE9"
+              this.state.productName === "fisdom" ? "#D5CCE9" : `${getConfig().styles.secondaryColor}` 
             }`,
           }}
         >
@@ -189,7 +189,7 @@ class RenderAttachment extends Component {
             />
             <SVG
               preProcessor={(code) =>
-                code.replace(/fill=".*?"/g, "fill=" + getConfig().secondary)
+                code.replace(/fill=".*?"/g, "fill=" + getConfig().styles.secondaryColor)
               }
               src={ic_clip}
             />

@@ -251,7 +251,7 @@
     
     .add-button button, .footer button, .upi-button button {
       width: 100%;
-      background: #35cb5d;
+      background: var(--secondary);
       border-radius: 5px;
       padding: 15px;
       border: 0;
@@ -260,6 +260,10 @@
       text-transform: uppercase;
       font-weight: bold;
     }
+
+    .add-button button:hover, .upi-button button.active:hover{
+      background-color: var(--on-hover-background);
+    }
     
     .add-button button.bfdl, .footer button.bfdl, .upi-button button.bfdl {
       background: #ff5928;
@@ -267,7 +271,7 @@
     
     .upi-button button {
       width: 100%;
-      background: #b5b5b5;
+      background: var(--color-action-disable);
       border-radius: 5px;
       padding: 15px;
       border: 0;
@@ -276,7 +280,7 @@
     }
     
     .upi-button button.active {
-      background: #35cb5d;
+      background: var(--secondary);
     }
     
     .upi-button button.active.bfdl {
@@ -318,7 +322,7 @@
       font-size: 12px;
       font-weight: bold;
       line-height: 14px;
-      color: #35CB5D;
+      color: var(--secondary);
       cursor: pointer;
     }
     
@@ -1010,4 +1014,37 @@ body[data-device="web"] {
 }
 .ic_close {
   padding: 14px 14px 0;
+}
+
+.po-ippb-disclaimer {
+  .po-ippb-disclaimer-title {
+    padding-bottom: 10px !important;
+  }
+  
+  .po-ippb-disclaimer-content {
+    p {
+      padding: 10px 0;
+      font-size: 14px;
+      color: var(--label);
+      margin: 0;
+  
+      b {
+        font-weight: 600;
+        color: var(--default);
+      }
+
+      .text-transform-uppercase {
+        text-transform: uppercase;
+      }
+
+      .text-transform-capitalize {
+        text-transform: capitalize;
+      }
+    }
+  }
+
+  .po-ippb-disclaimer-actions {
+    margin: 0;
+    padding: 10px 20px;
+  }
 }

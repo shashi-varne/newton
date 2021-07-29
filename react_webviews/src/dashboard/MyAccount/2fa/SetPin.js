@@ -2,7 +2,7 @@ import "./commonStyles.scss";
 import React, { useState, useEffect } from 'react';
 import Container from "../../common/Container";
 import EnterMPin from "../../../2fa/components/EnterMPin";
-import { verifyPin } from '../../../2fa/common/ApiCalls';
+import { verifyPin } from '../../../2fa/common/apiCalls';
 import { navigate as navigateFunc } from "../../../utils/functions";
 import { nativeCallback } from "../../../utils/native_callback";
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';

@@ -14,7 +14,8 @@ import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
 import { checkDocsPending } from '../common/functions';
 import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet';
 import { storageService } from '../../utils/validators';
-import { getConfig, navigate as navigateFunc } from '../../utils/functions';
+import { getConfig, isNewIframeDesktopLayout, navigate as navigateFunc } from '../../utils/functions';
+import InternalStorage from '../common/InternalStorage';
 
 const { productName } = getConfig();
 const UPLOAD_OPTIONS_MAP = {
@@ -81,7 +82,18 @@ const FnOIncomeProof = (props) => {
       setIsApiRunning("button")
       const result = await upload(selectedFile, 'income', data);
       updateKyc(result.kyc);
-      setOpenBottomSheet(true);
+      if(isNewIframeDesktopLayout()) {
+        const stateParams = {
+          title: "Income proof uploaded",
+          buttonTitle: "CONTINUE",
+          message: "Great, just one more step to go! Now complete eSign to get investment ready",
+          image: "doc-uploaded.svg"
+        }
+        InternalStorage.setData('handleClick', goNext);
+        navigate('/kyc/fno-income-proof-status',{state:{...stateParams}});
+      } else {
+        setOpenBottomSheet(true);
+      }
     } catch (err) {
       console.error(err);
       Toast('Something went wrong! Please try again')
