@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { verifyPin } from '../../../2fa/common/apiCalls';
 import EnterMPin from '../../../2fa/components/EnterMPin';
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
@@ -7,6 +7,7 @@ import { isEmpty } from 'lodash';
 import LoginButton from '../../common/LoginButton';
 import { nativeCallback } from "../../../utils/native_callback";
 import SessionExpiredUi from '../../components/SessionExpiredUi';
+import { Prompt } from 'react-router-dom';
 
 const EnterNewPin = (props) => {
   const { routeParams, persistRouteParams } = usePersistRouteParams();
@@ -16,6 +17,7 @@ const EnterNewPin = (props) => {
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
+  const [showPrompt, setShowPrompt] = useState(true);
   
   const navigate = navigateFunc.bind(props);
 
@@ -26,6 +28,7 @@ const EnterNewPin = (props) => {
 
   const handleClick = async () => {
     try {
+      setShowPrompt(false);
       setIsApiRunning(true);
       await verifyPin({
         validate_only: true,
@@ -38,18 +41,12 @@ const EnterNewPin = (props) => {
       navigate('confirm-pin');
     } catch(err) {
       console.log(err);
+      setShowPrompt(true);
       setPinError(err);
     } finally {
       setIsApiRunning(false);
     }
   };
-
-  useEffect(() => {
-    // TODO: Intercept back click 
-    // props.history.listen((location) => {
-    //   console.log(props.history);
-    // });
-  }, []);
 
   const sendEvents = (user_action) => {
     let eventObj = {
@@ -93,6 +90,10 @@ const EnterNewPin = (props) => {
           Continue
         </LoginButton>
       }
+      <Prompt
+        when={showPrompt}
+        message="Going back will restart the process. Are you sure you want to go back?"
+      />
     </>
   );
 }
