@@ -669,11 +669,21 @@ const Journey = (props) => {
       navigate('/kyc/report', {
         state: { goBack: '/invest' },
       })
-    } else if (!TRADING_ENABLED &&
+    } else if ((!TRADING_ENABLED &&
       user.kyc_registration_v2 === 'complete' &&
-      kyc.sign_status === 'signed'
+      kyc.sign_status === 'signed') ||
+      (TRADING_ENABLED && kyc.equity_application_status === "complete" &&
+      kyc.equity_sign_status === "signed")
     ) {
-      navigate('/invest')
+      if (!config.Web) {
+        if (storageService().get("native") && !fromState) {
+          nativeCallback({ action: "exit_web"});
+        } else {
+          navigate(fromState);
+        }
+      } else {
+        navigate('/invest')
+      }
     }
   }
 
