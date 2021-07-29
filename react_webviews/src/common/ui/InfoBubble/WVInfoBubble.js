@@ -16,7 +16,7 @@ Example syntax:
 */
 
 import './WVInfoBubble.scss';
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { getConfig } from 'utils/functions';
 import Fade from '@material-ui/core/Fade';
@@ -63,13 +63,22 @@ const WVInfoBubble = ({
   hasTitle, // Sets this to use the default title value from 'TYPES'
   customTitle, // Overrirdes default title value
   type, // Sets bubble type - values: info/warning/error/success [default='info']
-  children // Info bubble content
+  children, // Info bubble content
+  ...props // Other props that are spread into the container div
 }) => {
   const typeConfig = TYPES[type] || {};
-
+  const extraProps = useMemo(() => {
+    return props || {};
+  }, [props]);
+  
   return (
     <Fade in={isOpen} timeout={350}>
-      <div className='wv-info-bubble' style={{ backgroundColor: typeConfig.bgColor }} data-aid={`wv-info-bubble-${dataAidSuffix}`}>
+      <div
+        {...extraProps}
+        className='wv-info-bubble'
+        style={{ backgroundColor: typeConfig.bgColor, ...extraProps.style }}
+        data-aid={`wv-info-bubble-${dataAidSuffix}`}
+      >
         {typeConfig.icon &&
           <SVG
             className='wv-ib-icon'
