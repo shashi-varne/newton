@@ -52,7 +52,6 @@ function KycNative(props) {
     let kycStatusData = kycStatusMapperInvest[kycStatus];
     storageService().set("native", true);
     const TRADING_ENABLED = isTradingEnabled(kyc);
-    const isBrokingActivated = false; // To be removed after we get flag from backend
     const data = {
       state: {
         goBack: "exit",
@@ -78,7 +77,7 @@ function KycNative(props) {
       navigate("/kyc-esign/info");
     } 
     // Todo: remove this condition after audit
-    else if (kycStatus === "complete" && kyc.equity_sign_status === "signed" && !isBrokingActivated) {
+    else if (kycStatus === "complete" && kyc?.equity_sign_status === "signed" && (!kyc?.equity_investment_ready || !kyc?.fno_active)) {
       navigate("/kyc-esign/nsdl", {
         searchParams: `${getConfig().searchParams}&status=success`
       });
