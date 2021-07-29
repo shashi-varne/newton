@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import completed_step from "assets/completed_step.svg";
 import './FSelect.scss';
 import { findIndex, isFunction } from 'lodash';
+import { getConfig } from '../../../../utils/functions';
 
 const FSelect = ({
   preselectFirst,
@@ -64,6 +64,7 @@ const FSelect = ({
 
 const RenderOption = (props) => {
   const { opt, idx, selected, onClick, renderItem } = props;
+  const productName = getConfig().productName;
 
   if (isFunction(renderItem) && renderItem(opt)) {
     return (
@@ -84,7 +85,7 @@ const RenderOption = (props) => {
         {selected &&
           <img
             className="fselect-selected-icon"
-            src={completed_step}
+            src={require(`assets/${productName}/completed_step.svg`)}
             alt="Check"
           />
         }

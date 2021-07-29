@@ -24,9 +24,9 @@ const OtpContainer = ({
         if (!!showDotLoader) {
             setTimeAvailable(otpData?.timeAvailable)
         }
-        var timmer = setTimeout(() => {
+        const timer = setTimeout(() => {
             if (timeAvailable <= 0) {
-                clearTimeout(timmer);
+                clearTimeout(timer);
                 return;
             }
             setTimeAvailable(timeAvailable - 1)
@@ -55,7 +55,7 @@ const OtpContainer = ({
                         align="left"
                         onChange={handleOtp}
                         hasErrored={true}
-                        placeholder="X"
+                        placeholder=""
                         value={otpData.otp}
                         isDisabled={isDisabled || false}
                         hasError={isWrongOtp}

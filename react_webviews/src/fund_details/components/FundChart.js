@@ -6,6 +6,7 @@ import { formatAmountInr } from 'utils/validators';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 
+const config = getConfig();
 const FundChart = (props) => {
   const graphDataForBenchMark = props?.graphData.graph_report[0].graph_data_for_benchmark;
   const fundGraph = props?.graphData.graph_report[0].graph_data_for_amfi;
@@ -17,8 +18,8 @@ const FundChart = (props) => {
 
   useEffect(() => {
     if (productName !== 'fisdom') {
-      setButtonColor('#3792fc');
-      setButtonBgColor('#3792fc');
+      setButtonColor(config.styles.primaryColor);
+      setButtonBgColor(config.styles.primaryColor);
     } else {
       setButtonColor('#4985E1');
       setButtonBgColor('#039');

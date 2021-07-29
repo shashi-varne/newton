@@ -25,11 +25,11 @@ class Container extends Component {
    if (type === 'back') {
     // Added for testing
      url = `${getBasePath()}/page/invest/campaign/callback?name=mandate&message=back&code=400&destination=`
-    //  url = 'http://app.fisdom.com/#/page/invest/campaign/callback?name=mandate&message=back&code=400&destination=';
+    //  url = 'https://app.fisdom.com/#!/page/invest/campaign/callback?name=mandate&message=back&code=400&destination=';
    } else {
     // Added for testing
      url = `${getBasePath()}/page/invest/campaign/callback?name=mandate&message=success&code=200&destination=`
-    //  url = 'http://app.fisdom.com/#/page/invest/campaign/callback?name=mandate&message=success&code=200&destination=';
+    //  url = 'https://app.fisdom.com/#!/page/invest/campaign/callback?name=mandate&message=success&code=200&destination=';
    }
    window.location.replace(url);
  }

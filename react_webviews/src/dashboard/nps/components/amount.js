@@ -12,6 +12,7 @@ class EnterAmount extends Component {
       amount: "50000",
       taxsaved: "15450",
       show_loader: false,
+      screen_name: "nps_amount",
     };
     this.initialize = initialize.bind(this);
   }

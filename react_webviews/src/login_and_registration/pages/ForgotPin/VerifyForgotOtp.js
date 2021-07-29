@@ -1,17 +1,21 @@
-import '../Login/commonStyles.scss'; //TODO: figure out proper path for this
-import React, { useState } from 'react';
+import '../Login/commonStyles.scss';
+import React, { useMemo, useState } from 'react';
 import OtpContainer from '../../../common/components/OtpContainer';
 import { navigate as navigateFunc } from '../../../utils/functions';
 import LoginButton from '../../common/LoginButton';
 import Toast from 'common/ui/Toast';
-import { twofaPostApi } from '../../../2fa/common/ApiCalls';
+import { twofaPostApi } from '../../../2fa/common/apiCalls';
 import { nativeCallback } from "../../../utils/native_callback";
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 import GoBackToLoginBtn from '../../common/GoBackToLoginBtn';
+import SessionExpiredUi from '../../components/SessionExpiredUi';
+import { isEmpty } from 'lodash';
 
 const VerifyForgotOtp = (props) => {
   const { routeParams, persistRouteParams } = usePersistRouteParams();
-  // TODO: handle direct landing on this page gracefully => routeParams is empty
+  const routeParamsExist = useMemo(() => {
+    return !isEmpty(routeParams);
+  }, []);
   const authType = routeParams.obscured_auth_type === 'mobile' ? 'mobile' : 'email';
   const authValue = routeParams.obscured_auth;
   const otpData = {
@@ -81,6 +85,12 @@ const VerifyForgotOtp = (props) => {
   const goBack = () => {
     navigate('/login')
     sendEvents("back")
+  }
+
+  if (!routeParamsExist) {
+    return (
+      <SessionExpiredUi onGoBackClicked={goBack} />
+    );
   }
 
   return (

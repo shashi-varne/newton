@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 
 import NotFound from './common/components/NotFound';
 import Insurance from './insurance';
@@ -30,17 +30,26 @@ import Landing from './dashboard';
 import ProtectedRoute from './common/components/ProtectedRoute';
 import FeedBack from './feedback';
 import Partner from "./partner"
+import TaxFiling from './tax_filing'
 
 import Kyc from './kyc';
 import 'common/theme/Style.scss';
 
 const Feature = () => {
+  // old # route support added
+  // start
+  const history = useHistory()
+  if (window.location.hash.startsWith('#!/')) {
+    history.push(window.location.hash.replace('#!', ''))
+  }
+  // end
+
   return (
     <Switch>
       <ProtectedRoute path='/insurance' component={Insurance} />
       <ProtectedRoute path='/group-insurance' component={GroupInsurance} />
       <ProtectedRoute path='/referral' component={Referral} />
-      <ProtectedRoute path='/gold' component={Gold} />
+      <ProtectedRoute path={['/gold','/direct/gold']} component={Gold} />
       <ProtectedRoute path='/fhc' component={Fhc} />
       <ProtectedRoute path='/mandate' component={Mandate} />
       <ProtectedRoute path='/mandate-otm' component={Mandate_OTM} />
@@ -60,7 +69,7 @@ const Feature = () => {
       <ProtectedRoute path='/fund-details' component={FundDetails} />
       <ProtectedRoute path='/feedback' component={FeedBack} />
       <ProtectedRoute path='/partner' component={Partner} />
-
+      <ProtectedRoute path='/tax-filing' component={TaxFiling} />
       <ProtectedRoute path='/withdraw' component={Withdraw} />
       <ProtectedRoute path='/reports' component={Report} />
       <ProtectedRoute path='/kyc' component={Kyc} />

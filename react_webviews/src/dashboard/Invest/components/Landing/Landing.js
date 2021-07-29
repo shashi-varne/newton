@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Container from "../../../common/Container";
 import { getConfig } from "utils/functions";
 import Button from "common/ui/Button";
-import { initialize, handleCampaignNotification, handleCampaignRedirection } from "../../functions";
+import { initialize, handleCampaignNotification } from "../../functions";
 import InvestCard from "../../mini-components/InvestCard";
 import SecureInvest from "../../mini-components/SecureInvest";
 import VerificationFailedDialog from "../../mini-components/VerificationFailedDialog";
@@ -20,7 +20,6 @@ import { generateOtp } from "../../../../login_and_registration/functions";
 import { Imgc } from "../../../../common/ui/Imgc";
 
 const fromLoginStates = ["/login", "/logout", "/verify-otp"]
-const isMobileDevice = getConfig().isMobileDevice;
 class Landing extends Component {
   constructor(props) {
     super(props);
@@ -48,7 +47,6 @@ class Landing extends Component {
     this.initialize = initialize.bind(this);
     this.generateOtp = generateOtp.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
-    this.handleCampaignRedirection = handleCampaignRedirection.bind(this);
   }
 
   componentWillMount() {
@@ -186,16 +184,6 @@ class Landing extends Component {
     }
   };
 
-  closeCampaignDialog = () => {
-    this.setState({ openBottomSheet: false });
-  };
-
-  handleCampaign = () => {
-    this.setState({show_loader : 'page', openBottomSheet : false});
-    let campLink = this.state.bottom_sheet_dialog_data.url;
-    handleCampaignRedirection(campLink);
-  }
-
   render() {
     const {
       isReadyToInvestBase,
@@ -224,26 +212,30 @@ class Landing extends Component {
       popularCards,
       financialTools,
     } = investCardsData;
+    const config = getConfig();
     return (
       <Container
         skelton={this.state.show_loader}
         noFooter={true}
         title="Start Investing"
-        showLoader={this.state.show_loader}
         data-aid='start-investing-screen'
-        noBackIcon={fromLoginStates.includes(stateParams.fromState)}
+        showLoader={this.state.showPageLoader}
+        noBackIcon={!config.isSdk || config.isIframe}
         background={
-          isMobileDevice &&
+          config.isMobileDevice &&
           fromLoginStates.includes(stateParams.fromState) &&
           "invest-landing-background"
         }
         classHeader={
-          isMobileDevice &&
+          config.isMobileDevice &&
           fromLoginStates.includes(stateParams.fromState) &&
           (this.state.headerStyle
             ? "invest-landing-partner-header"
             : "invest-landing-header")
         }
+        headerData={{
+          partnerLogo: !config.isSdk && config.isMobileDevice
+        }}
       >
         <div className="invest-landing" data-aid='invest-landing'>
           {
@@ -291,9 +283,10 @@ class Landing extends Component {
                             dataAid='kyc-btn'
                             buttonTitle={kycStatusData.button_text}
                             classes={{
-                              button: "invest-landing-button",
+                              button: "invest-landing-button invest-kyc-button",
                             }}
                             showLoader={kycButtonLoader}
+                            type={productName === "finity" ? "outlined" : ""}
                           />
                         </div>
                       ): null}
@@ -501,15 +494,11 @@ class Landing extends Component {
               }
             })}
           <SecureInvest />
-          {productName !== "fisdom" &&
-            productName !== "finity" &&
-            productName !== "ktb" && (
+          {!["fisdom", "finity", "ktb"].includes(config.code) && (
               <div className="invest-contact-us" data-aid='invest-contact-us'>
                 In partnership with
                 <span>
-                  {productName === "bfdlmobile" ||
-                  this.state.isIframe ||
-                  this.state.finity
+                  {productName === "finity"
                     ? " Finity"
                     : " Fisdom"}
                 </span>

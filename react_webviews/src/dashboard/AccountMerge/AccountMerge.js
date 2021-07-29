@@ -5,6 +5,8 @@ import Container from "../common/Container";
 import "./AccountMerge.scss";
 
 const AccountMerge = (props) => {
+  const config = getConfig();
+  const productName = config.productName;
   const navigate = navigateFunc.bind(props);
   const auth_ids = storageService().getObject("auth_ids") || {};
   const pan_number = props.match?.params?.pan_number || "";
@@ -12,11 +14,18 @@ const AccountMerge = (props) => {
     props.history.goBack();
   }
   const auth_id = auth_ids[0];
-  const productName = getConfig().productName;
 
   const handleClick = () => {
     navigate(`/account/merge/otp/${pan_number}`);
   };
+
+  const goBack = () => {
+    if(config.code === "moneycontrol" && config.isIframe) {
+      navigate("/kyc/home");
+    } else {
+      props.history.goBack();
+    }
+  }
 
   return (
     <Container
@@ -24,6 +33,8 @@ const AccountMerge = (props) => {
       buttonTitle="SEND OTP"
       title="Link Account"
       handleClick={handleClick}
+      iframeRightContent={require(`assets/${productName}/link_account.svg`)}
+      headerData={{goBack}}
     >
       <div className="account-merge" data-aid='account-merge'>
         <p>We need to verify your account credentials to link account.</p>

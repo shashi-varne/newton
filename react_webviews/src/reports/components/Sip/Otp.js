@@ -3,7 +3,7 @@ import Container from "../../common/Container";
 import OtpDefault from "common/ui/otp";
 import toast from "common/ui/Toast";
 import { navigate as navigateFunc} from "utils/functions";
-import { storageService, isEmpty } from "../../../utils/validators";
+import { storageService, isEmpty, validateNumber } from "../../../utils/validators";
 import { getPathname, storageConstants } from "../../constants";
 import { initData } from "../../../kyc/services";
 import { resendOtp, submitOtp } from "../../common/api";
@@ -86,6 +86,7 @@ class Otp extends Component {
   };
 
   handleOtp = (otp) => {
+    if(otp && !validateNumber(otp)) return;
     this.setState({
       otp: otp,
       otp_error: "",

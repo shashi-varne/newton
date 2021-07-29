@@ -158,6 +158,7 @@ const NRIAddressUpload = (props) => {
       disable={!frontDoc || (!onlyFrontDocRequired && !backDoc)}
       showLoader={isApiRunning}
       title="Upload foreign address proof"
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-upload-foreign-address-proof-screen'
       events={sendEvents("just_set_events")}
     >

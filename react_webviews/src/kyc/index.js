@@ -67,6 +67,7 @@ import ManualSignature from "./Equity/components/ManualSignature";
 import CommunicationDetails from "./Equity/components/CommunicationDetails";
 import CommunicationCallback from "./Equity/components/CommunicationCallback";
 import FnOSampleDocuments from "./Upload/FnOSampleDocuments";
+import DialogAsPage from './mini_components/DialogAsPage';
 
 const Kyc = (props) => {
   const { url } = props.match;
@@ -180,6 +181,18 @@ const Kyc = (props) => {
           exact 
           path={`${url}/home`} 
           component={Home} 
+        />
+        <Route
+          exact
+          path={[`${url}/penny-status`,
+                 `${url}/pan-status`,
+                 `${url}/selfie-status`,
+                 `${url}/fno-income-proof-status`,
+                 `${url}/upload-pan-status`,
+                 `${url}/confirm-pan`,
+                 `${url}/:userType/bank-status`,
+               ]}
+          component={DialogAsPage}
         />
         <Route
           exact

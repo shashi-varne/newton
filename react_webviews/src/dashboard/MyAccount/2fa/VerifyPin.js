@@ -6,25 +6,32 @@ import EnterMPin from "../../../2fa/components/EnterMPin";
 import { Imgc } from "../../../common/ui/Imgc";
 import { nativeCallback } from "../../../utils/native_callback";
 import { navigate as navigateFunc } from "../../../utils/functions";
-import { verifyPin } from '../../../2fa/common/ApiCalls';
+import { verifyPin } from '../../../2fa/common/apiCalls';
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
+import DotDotLoader from "../../../common/ui/DotDotLoaderNew";
 
 const VerifyPin = (props) => {
   const { persistRouteParams } = usePersistRouteParams();
   const navigate = navigateFunc.bind(props);
   const [mpinError, setMpinError] = useState(false);
   const [mpin, setMpin] = useState('');
+  const [bottomText, setBottomText] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
 
   useEffect(() => {
-    if (mpin.length === 4) {
+    if (!mpin || !mpin.length) {
+      setBottomText('Enter fisdom PIN');
+    } else if (mpin.length === 4) {
       handleClick();
+      setBottomText(<DotDotLoader />);
+    } else {
+      setBottomText('');
     }
   }, [mpin])
 
   const handleClick = async () => {
     try {
-      setIsApiRunning(true);
+      setIsApiRunning("button");
       await verifyPin({ mpin });
       sendEvents("next");
       persistRouteParams({ reset_flow: true, old_mpin: mpin })
@@ -36,7 +43,6 @@ const VerifyPin = (props) => {
       setIsApiRunning(false);
     }
   }
-
 
   const onPinChange = (val) => {
     setMpin(val);
@@ -68,8 +74,6 @@ const VerifyPin = (props) => {
     <Container
       events={sendEvents('just_set_events')}
       title="Reset fisdom PIN"
-      skelton={isApiRunning}
-      handleClick={handleClick}
       noFooter={true}
     >
       <EnterMPin
@@ -77,7 +81,7 @@ const VerifyPin = (props) => {
           otp: mpin,
           handleOtp: onPinChange,
           hasError: !!mpinError,
-          bottomText: mpinError || 'Enter fisdom PIN ',
+          bottomText: mpinError || bottomText
         }}
       >
         <Imgc

@@ -1,7 +1,7 @@
 import React, { Component , Fragment} from 'react';
 import { withRouter } from 'react-router';
 
-import { nativeCallback } from 'utils/native_callback';
+import { nativeCallback, handleNativeExit } from 'utils/native_callback';
 import '../../utils/native_listener';
 import { getConfig } from 'utils/functions';
 
@@ -50,7 +50,8 @@ class Container extends Component {
 
     switch (pathname) {
       case "/isip/biller/about":
-        nativeCallback({ action: 'exit', events: this.getEvents('back') });
+        nativeCallback({ events: this.getEvents('back') });
+        handleNativeExit(this.props, { action: "exit" });
         break;
       default:
         // if (navigator.onLine) {
@@ -79,7 +80,7 @@ class Container extends Component {
       openPopup: false
     });
 
-    nativeCallback({ action: this.state.callbackType });
+    handleNativeExit(this.props, { action: this.state.callbackType });
 
   }
 

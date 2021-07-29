@@ -1,11 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import {Imgc} from 'common/ui/Imgc';
+
+import { isFunction } from 'lodash'
 
 class DetailsCard extends Component {
     render() {
         var {item} = this.props;
         return (
-            <div className="details-card-container" onClick={() => this.props.handleClick(item)} style={{backgroundColor: item.backgroundColor}}>
+            <div className="details-card-container" onClick={() => this.props.handleClick(item)} style={{backgroundColor: item.backgroundColor}} data-aid={`wv-details-card-${this.props.dataAidSuffix}`}>
                 
                 <div className="status-bar">
                     {item.topTextLeft && <div className="status-container">
@@ -37,8 +39,13 @@ class DetailsCard extends Component {
                     {
                         item.bottomValues.map( (val, index) =>(
                             <div className="individual-card-info" key={index}>
-                                <p className="info-title">{val.title}</p>
-                                <p className="info-subtitle">{val.subtitle}{val.postfix && <span>{val.postfix}</span>}  </p>
+                                {isFunction(val?.renderItem) ? val.renderItem() : (
+                                    <Fragment>
+                                        <p className="info-title">{val.title}</p>
+                                        <p className="info-subtitle">{val.subtitle}{val.postfix && <span>{val.postfix}</span>}  </p>
+                                    </Fragment>
+                                )}
+                                
                             </div>
                         ))
                     }

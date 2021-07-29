@@ -12,7 +12,7 @@
   height: calc(100vh - 120px);
 
   .search-content {
-    padding: 20px 0;
+    padding-bottom: 20px;
     .search-option {
       display: flex;
       align-items: center;
@@ -107,5 +107,36 @@
   .error-message {
     text-align: left;
     color:red;
+  }
+}
+
+
+.diy-search-mob{
+  background-color: white;
+  .diy-iframe-search-input{
+    .diy-fund-search{
+      padding: 12px 20px !important;
+    }
+  }
+
+  .search-list {
+    margin-top: 10px;
+  }
+
+  .search-loader {
+    margin-top: 40px;
+  }
+}
+
+.diy-iframe-search-content {
+  width: 100%;
+  height: 60vh;
+  display: grid;
+  place-items: center;
+
+  img {
+    min-width: 400px;
+    width:100%;
+    max-width: 500px;
   }
 }

@@ -42,7 +42,7 @@ class CustomButton extends Component {
             variant="raised"
             size="large"
             color="secondary"
-            style={{backgroundColor: getConfig().styles.secondaryColor, color: 'white', width: '310px' , height: '50px'}}
+            style={{color: 'white', width: '310px' , height: '50px'}}
             className={buttonClass}
             classes={classes}
             disabled={props.disable}
@@ -163,7 +163,7 @@ class CustomButton extends Component {
 const styles = {
   button: {
     padding: !getConfig().isMobileDevice ? '12px 15px 12px 15px !important' : '16px !important',
-    borderRadius: getConfig().uiElements?.bottomCta?.borderRadius || 6,
+    borderRadius: getConfig().uiElements?.button?.borderRadius || 6,
     boxShadow: 'none',
     width: !getConfig().isMobileDevice ? 'auto' :  '100%'
   },

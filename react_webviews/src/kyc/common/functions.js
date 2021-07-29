@@ -1,8 +1,8 @@
-import { calculateAge, isValidDate, validateEmail } from 'utils/validators'
+import { calculateAge, isValidDate, validateEmail, isEmpty, storageService } from 'utils/validators'
 import { isTradingEnabled, getConfig } from '../../utils/functions'
 import { nativeCallback, openPdfCall } from '../../utils/native_callback'
-import { isEmpty, storageService } from '../../utils/validators'
 import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS, GENDER_OPTIONS } from '../constants'
+import { getKyc } from './api'
 
 export const validateFields = (formData, keyToCheck) => {
   let canSubmit = true
@@ -280,6 +280,36 @@ export function isDocSubmittedOrApproved(doc) {
   const { kyc = {} } = getKycUserFromSession(); 
   if (isEmpty(kyc)) return false;
   return kyc[doc]?.doc_status === "submitted" || kyc[doc]?.doc_status === "approved";
+}
+
+export const pollProgress = (timeout, interval, popup_window) => {
+  const endTime = Number(new Date()) + (timeout || 3 * 1000 * 60);
+  interval = interval || 1000;
+  const dlSuccessStates = ["docs_fetched", "docs_fetch_failed"]
+  let checkCondition = async function (resolve, reject) {
+    if (popup_window.closed) {
+      resolve({ status: "closed" });
+    } else {
+      try {
+        const result = await getKyc();
+        if (!isEmpty(result)) {
+          if (dlSuccessStates.includes(result?.kyc?.dl_docs_status)) {
+            resolve({ status: "success" });
+          } else if (result.kyc?.all_dl_doc_statuses?.aadhaar_fetch_status === "failed") {
+            resolve({ status: "failed" });
+          } else if (Number(new Date()) < endTime) {
+            setTimeout(checkCondition, interval, resolve, reject);
+          } else {
+            reject({ status: "timeout" });
+          }
+        }
+      } catch (err) {
+        console.log(err);
+        reject(err);
+      }
+    }
+  };
+  return new Promise(checkCondition);
 }
 
 export const getFlow = (kycData) => {

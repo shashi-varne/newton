@@ -104,7 +104,7 @@ const PeriodWiseReturns = ({
                 <img
                   alt="i"
                   src={require('assets/info_icon_grey.svg')}
-                  className="info-icn"
+                  className="info-icn pointer"
                   onClick={toggleInfoSheet}
                 />
               }

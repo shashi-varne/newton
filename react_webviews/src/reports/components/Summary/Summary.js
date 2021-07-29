@@ -13,14 +13,11 @@ import { getSummaryV2 } from "../../common/api";
 import useUserKycHook from "../../../kyc/common/hooks/userKycHook";
 import "./commonStyles.scss";
 import CheckInvestment from "../mini-components/CheckInvestment";
+import { getInvestCards } from "../../../utils/functions";
 
-const config = getConfig();
-const productName = config.productName;
-const imageMapper = {
-  finity: "svg",
-  fisdom: "png",
-};
 const Summary = (props) => {
+  const config = getConfig();
+  const productName = config.productName;
   const navigate = navigateFunc.bind(props);
   const [report, setReportData] = useState({});
   const [current, setCurrent] = useState(true);
@@ -32,30 +29,16 @@ const Summary = (props) => {
   });
   const [data, setData] = useState({});
   const [showSkelton, setShowSkelton] = useState(true);
-  const [investCards, setInvestCards] = useState({});
   const [isAmountSliderUsed, setIsAmountSliderUsed] = useState(false);
   const [isYearSliderUsed, setIsYearSliderUsed] = useState(false);
   const { user: currentUser, isLoading } = useUserKycHook();
+  const investCards = getInvestCards(["nps", "insurance", "gold"]);
 
   useEffect(() => {
     initialize();
   }, []);
 
   const initialize = async () => {
-    const investSections = config.investSections;
-    const investSubSectionMap = config.investSubSectionMap;
-    const keysToCheck = ["nps", "insurance", "gold"];
-    const cardsToShow = {};
-    for (let section of investSections) {
-      if (!isEmpty(investSubSectionMap[section])) {
-        for (let subSections of investSubSectionMap[section]) {
-          if (keysToCheck.includes(subSections)) {
-            cardsToShow[subSections] = true;
-          }
-        }
-      }
-    }
-    setInvestCards(cardsToShow);
     const result = await getSummaryV2();
     if (!result) {
       setShowSkelton(false);
@@ -193,7 +176,6 @@ const Summary = (props) => {
     }
   };
   const investMore = () => {
-    const config = getConfig();
     var _event = {
       'event_name': 'journey_details',
       'properties': {
@@ -213,7 +195,9 @@ const Summary = (props) => {
       window.callbackWeb.sendEvent(_event);
     }
 
-    navigate(getPathname.invest)
+    if(!config.isIframe || config.code === "moneycontrol") {
+      navigate(getPathname.invest)
+    }
   }
 
   return (
@@ -347,28 +331,30 @@ const Summary = (props) => {
                     <SummaryCard
                       dataAid='nps-investments'
                       goNext={() => flowOptions("npsInvestments")}
-                      icon={`nps_report_icon.${imageMapper[productName]}`}
+                      icon={`nps_report_icon.svg`}
                       title="NPS Investments"
                       iconClassName={
                         productName === "finity" && "reports-finity-icon"
                       }
                     />
                   )}
-                  <SummaryCard
-                    dataAid='track-my-goals'
-                    goNext={showGoals}
-                    icon={`goalwise.${imageMapper[productName]}`}
-                    title="Track my goals"
-                    subtitle="View Goal Wise Investments"
-                    iconClassName={
-                      productName === "finity" && "reports-finity-icon"
-                    }
-                  />
+                  {data.showTrackGoals && (
+                    <SummaryCard
+                      dataAid="track-my-goals"
+                      goNext={showGoals}
+                      icon={`goalwise.svg`}
+                      title="Track my goals"
+                      subtitle="View Goal Wise Investments"
+                      iconClassName={
+                        productName === "finity" && "reports-finity-icon"
+                      }
+                    />
+                  )}
                   {data.showPendingPurchase && (
                     <SummaryCard
                       dataAid='pending-purchase'
                       goNext={() => flowOptions("reportsPurchased")}
-                      icon={`pending_purchase.${imageMapper[productName]}`}
+                      icon={`pending_purchase.svg`}
                       title="Pending Purchase"
                       subtitle={formatAmountInr(report.pending.invested)}
                       iconClassName={
@@ -380,7 +366,7 @@ const Summary = (props) => {
                     <SummaryCard
                       dataAid='pending-withdrawals'
                       goNext={() => flowOptions("reportsRedeemed")}
-                      icon={`pending_redemption.${imageMapper[productName]}`}
+                      icon={`pending_redemption.svg`}
                       title="Pending Withdrawals"
                       subtitle={formatAmountInr(report.pending.redeemed)}
                       iconClassName={
@@ -392,7 +378,7 @@ const Summary = (props) => {
                     <SummaryCard
                       dataAid='pending-switch'
                       goNext={() => flowOptions("reportsSwitched")}
-                      icon={`pending_purchase.${imageMapper[productName]}`}
+                      icon={`pending_purchase.svg`}
                       title="Pending Switch"
                       subtitle={formatAmountInr(report.pending.switched)}
                       iconClassName={
@@ -404,7 +390,7 @@ const Summary = (props) => {
                     <SummaryCard
                       dataAid='existing-sip'
                       goNext={() => flowOptions("reportsSip")}
-                      icon={`sip.${imageMapper[productName]}`}
+                      icon={`sip.svg`}
                       title="Existing SIPs"
                       subtitle={formatAmountInr(report.sips.total_payment)}
                       iconClassName={
@@ -417,7 +403,7 @@ const Summary = (props) => {
                       <SummaryCard
                         dataAid='transactions'
                         goNext={() => flowOptions("reportsTransactions")}
-                        icon={`transactions.${imageMapper[productName]}`}
+                        icon={`transactions.svg`}
                         title="Transactions"
                         iconClassName={
                           productName === "finity" && "reports-finity-icon"
@@ -426,7 +412,7 @@ const Summary = (props) => {
                       <SummaryCard
                         dataAid='track-fund-performance'
                         goNext={() => flowOptions("reportsFundswiseSummary")}
-                        icon={`fundwise.${imageMapper[productName]}`}
+                        icon={`fundwise.svg`}
                         title="Track Fund Performance"
                         subtitle="View fund wise summary"
                         iconClassName={
@@ -491,6 +477,7 @@ export const SummaryCard = ({
   iconClassName,
   dataAid,
 }) => {
+  const productName = getConfig().productName;
   return (
     <div className="content" data-aid={dataAid} onClick={goNext}>
       <img

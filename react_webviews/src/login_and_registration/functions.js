@@ -42,6 +42,8 @@ export function initialize() {
     "taxwin",
     "ippb",
     "quesscorp",
+    "sahaj",
+    "mspl"
   ];
   const partner = storageService().get("partner") || "";
   if (partners.includes(partner)) {
@@ -210,7 +212,7 @@ export async function triggerOtpApi(body, loginType) {
         let item = {
           promo_code: this.state.referrer,
         };
-        storageService.setObject("user_promo", item);
+        storageService().setObject("user_promo", item);
       }
 
       if (this.state.isPromoSuccess && this.state.form_data.referral_code !== "") {
@@ -338,45 +340,35 @@ export async function otpLoginVerification(verify_url, body) {
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       // TODO: When to trigger these events
-      let eventObj = {
+      const eventObj = {
         event_name: "user loggedin",
       };
       nativeCallback({ events: eventObj });
       applyCode(result.user);
       storageService().setObject("user", result.user);
       storageService().set("currentUser", true);
+
+      // Redirect to PIN Verification
+      if (result.user.pin_status === 'pin_setup_complete') {
+        return this.navigate('verify-pin');
+      }
+
       if (this.state.rebalancing_redirect_url) {
         window.location.href = this.state.rebalancing_redirect_url;
         return;
       }
-      let userData = {};
-      let kycResult = await getKycFromSummary();
+
+      const kycResult = await postLoginSetup(true);
 
       if (!kycResult) {
         this.setState({ isApiRunning: false });
         return;
       }
 
-      if (config.Web && kycResult.data.partner.partner.data) {
-        storageService().set(
-          "partner",
-          kycResult.data.partner.partner.data.name
-        );
-      }
-
-      let user = kycResult.data.user.user.data;
-      userData.me = user;
-      storageService().set("dataSettedInsideBoot", true);
-      storageService().setObject("referral", kycResult.data.referral);
-      storageService().setObject(
-        "campaign",
-        kycResult.data.campaign.user_campaign.data
-      );
-      setBaseHref();
-
+      const user = kycResult.data.user.user.data;
       this.setState({
         currentUser: true,
-        "user-data": userData,
+        "user-data": { me: user },
         isApiRunning: false,
       });
 
@@ -384,8 +376,6 @@ export async function otpLoginVerification(verify_url, body) {
         window.location.href = decodeURIComponent(
           storageService().get("deeplink_url")
         );
-      } else if (result.user.pin_status === 'pin_setup_complete') {
-        return this.navigate('verify-pin');
       } else {
         this.redirectAfterLogin(result, user);
       }
@@ -400,6 +390,31 @@ export async function otpLoginVerification(verify_url, body) {
     toast(errorMessage);
   } finally {
     this.setState({ isApiRunning: false });
+  }
+}
+
+export const postLoginSetup = async (getKycResult) => {
+  try {
+    const kycResult = await getKycFromSummary();
+  
+    if (config.Web && kycResult.data.partner.partner.data) {
+      storageService().set(
+        "partner",
+        kycResult.data.partner.partner.data.name
+      );
+    }
+  
+    storageService().set("dataSettedInsideBoot", true);
+    storageService().setObject("referral", kycResult.data.referral);
+    storageService().setObject(
+      "campaign",
+      kycResult.data.campaign.user_campaign.data
+    );
+    setBaseHref();
+  
+    if (getKycResult) return kycResult;
+  } catch (err) {
+    throw err;
   }
 }
 
@@ -484,7 +499,7 @@ export async function applyCode(user) {
       });
       const { status_code: status } = res.pfwresponse;
       if (status === 200) {
-        storageService.remove("user_promo");
+        storageService().remove("user_promo");
       }
     } catch (error) {
       console.log(error);
@@ -662,8 +677,6 @@ export const logout = async () => {
   }
 };
 
-
-
 export async function authCheckApi(type, data) {
   let error = "";
   try {
@@ -721,3 +734,22 @@ export async function generateOtp(data) {
     });
   }
 }
+
+export const partnerAuthentication = async (data) => {
+  const res = await Api.post(`/api/partner/${data.partnerCode}/redirect?token=${data.token}&view=${data.view}`);
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw new Error(res?.pfwmessage || errorMessage);
+  }
+
+  const { result, status_code: status } = res.pfwresponse;
+
+  if (status === 200) {
+    return result;
+  } else {
+    throw new Error(result.error || result.message || errorMessage);
+  }
+} 

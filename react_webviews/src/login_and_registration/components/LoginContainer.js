@@ -1,7 +1,7 @@
 import "./LoginContainer.scss";
 import React from "react";
 import { getConfig } from "utils/functions";
-import { Route, Switch } from "react-router-dom";
+import { Link, Route, Switch } from "react-router-dom";
 import PinChangeSuccess from "../pages/ForgotPin/ForgotPinSuccess";
 import Login from "../pages/Login/Login";
 import VerifyLoginOtp from "../pages/Login/VerifyLoginOtp";
@@ -13,6 +13,9 @@ import ConfirmNewPin from "../pages/ForgotPin/ConfirmNewPin";
 import ForgotPinSuccess from "../pages/ForgotPin/ForgotPinSuccess";
 import ForgotPin from "../pages/ForgotPin/ForgotPin";
 import SVG from 'react-inlinesvg';
+import WVInPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
+import GoBackToLoginBtn from "../common/GoBackToLoginBtn";
+import { navigate as navigateFunc } from "../../utils/functions";
 
 const config = getConfig();
 const { productName } = config;
@@ -20,6 +23,7 @@ const { productName } = config;
 const LoginContainer = (props) => {
   const { url } = props.match;
   const pathName = url.split('/')[1];
+  const navigate = navigateFunc.bind(props);
 
   return (
     <div className="login" data-aid='login'>
@@ -32,26 +36,32 @@ const LoginContainer = (props) => {
           <img src={require(`assets/${productName}/ils_login.svg`)} alt="login" />
         </div>
         <div className="ld-right">
-          <Switch>
+          <>
             {pathName === 'login' &&
-              <>
+              <Switch>
                 <Route path={`${url}`} exact component={Login} />
                 <Route path={`${url}/pin-change-success`} component={PinChangeSuccess} />
                 <Route path={`${url}/verify-otp`} component={VerifyLoginOtp} />
                 <Route path={`${url}/verify-pin`} component={VerifyPin} />
                 <Route path={`${url}/referral`} component={Referral} />
-              </>
+                <Route>
+                  <PageNotFound navigateFunc={navigate} />
+                </Route>
+              </Switch>
             }
             {pathName === 'forgot-pin' &&
-              <>
+              <Switch>
                 <Route path={`${url}`} exact component={ForgotPin} />
                 <Route path={`${url}/verify-otp`} component={VerifyForgotOtp} />
                 <Route path={`${url}/new-pin`} component={EnterNewPin} />
                 <Route path={`${url}/confirm-pin`} component={ConfirmNewPin} />
                 <Route path={`${url}/success`} component={ForgotPinSuccess} />
-              </>
+                <Route>
+                  <PageNotFound navigateFunc={navigate} />
+                </Route>
+              </Switch>
             }
-          </Switch>
+          </>
         </div>
       </div>
       <FooterTitle/>
@@ -68,8 +78,8 @@ const FooterTitle = () => {
         <SVG
           height="20px"
           width="64px"
-          preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.primaryColor)}
-          src={require(`assets/${productName}/fisdom_logo_white.svg`)}
+          preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + config.styles.primaryColor)}
+          src={require(`assets/${config.logo}`)}
         />
         <SVG
           width="20px"
@@ -83,3 +93,17 @@ const FooterTitle = () => {
     </div>
   );
 };
+
+const PageNotFound = ({ navigateFunc }) => {
+  return (
+    <>
+      <WVInPageTitle style={{ textAlign: 'center', marginBottom: '20px' }}>Lost your way?</WVInPageTitle>
+      <img
+        src={require(`assets/${productName}/error_illustration.svg`)}
+        style={{ width: '100%' }}
+        alt="404"
+      />
+      <GoBackToLoginBtn onClick={() => navigateFunc('/login')} />
+    </>
+  );
+}

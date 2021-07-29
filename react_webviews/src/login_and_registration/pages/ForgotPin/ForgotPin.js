@@ -4,7 +4,7 @@ import ForgotMPin from '../../../2fa/components/ForgotMPin';
 import { navigate as navigateFunc } from '../../../utils/functions';
 import LoginButton from '../../common/LoginButton';
 import { nativeCallback } from "../../../utils/native_callback";
-import { forgotPinOtpTrigger, obscuredAuthGetter } from '../../../2fa/common/ApiCalls';
+import { forgotPinOtpTrigger, obscuredAuthGetter } from '../../../2fa/common/apiCalls';
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 import GoBackToLoginBtn from '../../common/GoBackToLoginBtn';
 import SessionExpiredUi from '../../components/SessionExpiredUi';
@@ -13,7 +13,7 @@ const ForgotPin = (props) => {
   const [authDetails, setAuthDetails] = useState({});
   const [pan, setPan] = useState('');
   const [panError, setPanError] = useState('');
-  const [fetchError, setFetchError] = useState(false);
+  const [authFetchError, setAuthFetchError] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [isFetchApiRunning, setIsFetchApiRunning] = useState(false);
   const [panEntryFailed, setPanEntryFailed] = useState(false);
@@ -32,7 +32,7 @@ const ForgotPin = (props) => {
       setAuthDetails(response);
     } catch(err) {
       console.log(err);
-      setFetchError(true);
+      setAuthFetchError(true);
     } finally {
       setIsFetchApiRunning(false);
     }
@@ -93,10 +93,10 @@ const ForgotPin = (props) => {
         pan={pan}
         panError={panError}
         onPanInputChange={handlePanInput}
-        noData={fetchError}
+        noData={authFetchError}
         renderNoData={<SessionExpiredUi onGoBackClicked={goBack} />}
       />
-      {!isFetchApiRunning && !fetchError &&
+      {!isFetchApiRunning && !authFetchError &&
         <>
           <LoginButton onClick={handleClick} showLoader={isApiRunning}>
             Continue

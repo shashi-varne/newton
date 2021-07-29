@@ -28,7 +28,6 @@ import NPS from "./nps";
 import {getConfig} from 'utils/functions';
 import BlankMandateUpload from "./MyAccount/BlankMandateUpload";
 import InvestmentProof from "./MyAccount/InvestmentProof";
-import Prepare from "./Invest/components/SdkLanding/Prepare";
 import Refer from "./Invest/components/SdkLanding/Refer";
 import CampaignCallback from "./Invest/components/PageCallback/CampaignCallback";
 import SecuritySettings from "./MyAccount/2fa/SecuritySettings";
@@ -44,19 +43,25 @@ import SecondaryOtpVerification from "../login_and_registration/pages/SecondaryV
 import StatusCallback from "../kyc/Native/StatusCallback";
 
 const Home = (props) => {
+  const config = getConfig(); 
   const { url } = props.match;
-  const isSdk = getConfig().isSdk;
   return (
     <Fragment>
       <Switch>
         <Route exact path={`${url}secondary-verification`} component={SecondaryVerification} />
         <Route exact path={`${url}secondary-otp-verification`} component={SecondaryOtpVerification} />
         <Route path={`${url}referral-code`} component={Referral} />
-        <Route exact path={`${url}`} component={isSdk ? SdkLanding : Invest} />
-        <Route exact path={`${url}prepare`} component={Prepare} />
+        <Route
+          exact
+          path={`${url}`}
+          component={
+            config.isSdk && config.code !== "moneycontrol" ? SdkLanding : Invest
+          }
+        />
         <Route exact path={`${url}refer`} component={Refer} />
         <Route path={`${url}invest`} component={Invest} />
         <Route path={`${url}landing`} component={Invest} />
+        <Route path={`${url}mf`} component={SdkLanding} />
         <Route path={`${url}diy`} component={DIY} />
         <Route path={`${url}invest-journey`} component={InvestJourney} />
         <Route path={`${url}nps`} component={NPS} />

@@ -1,24 +1,25 @@
 import axios from 'axios';
-
+import * as Sentry from '@sentry/browser'
 
 import { storageService } from './validators';
 import { encrypt, decrypt } from './encryption';
 import { getConfig } from 'utils/functions';
+import { redirectTo2FA } from './native_callback';
 
-let base_url = getConfig().base_url;
+const config = getConfig();
+let base_url = config.base_url;
 
-let sdk_capabilities = getConfig().sdk_capabilities;
+let sdk_capabilities = config.sdk_capabilities;
 let is_secure = false;
 
 axios.defaults.baseURL = decodeURIComponent(base_url).replace(/\/$/, "");
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.withCredentials = true;
-
 class Api {
   static get(route, params) {
     return this.xhr(route, params, 'get');
   }
-
+  
   static put(route, params) {
     return this.xhr(route, params, 'put')
   }
@@ -42,6 +43,9 @@ class Api {
     if (sdk_capabilities) {
       axios.defaults.headers.common['sdk-capabilities'] = sdk_capabilities;
     }
+    if(route.includes("/api/") && storageService().get("x-plutus-auth") && config.isIframe) {
+      axios.defaults.headers.common["X-Plutus-Auth"] = storageService().get("x-plutus-auth")
+    }
     let options = Object.assign({
       method: verb,
       url: route,
@@ -56,6 +60,31 @@ class Api {
           response.data = JSON.parse(decrypt(response.data._encr_payload));
         }
 
+        if (response.data.pfwstatus_code === 416) {
+          // storageService().setBoolean('2fa-required', true);
+          window.location.href = redirectTo2FA();
+        } //TODO: CHeck with Satendra about where this code must be relative to below code
+
+        if (response.config.url.includes("/api/") && response.headers["x-plutus-auth"] && config.isIframe) {
+          storageService().set("x-plutus-auth", response.headers["x-plutus-auth"])
+        }
+
+        if (response.data.pfwresponse.status_code !== 200) {
+          var errorMsg = response.data.pfwresponse.result.error || response.data.pfwresponse.result.message || "Something went wrong";
+          var main_pathname=window.location.pathname
+          var project=getConfig().project || 'Others'
+          Sentry.configureScope(
+            scope=>scope
+            .setTag("squad",project)
+            .setTag("pathname",main_pathname)
+            .setTransactionName(`Error on ${verb} request`)
+            .setLevel(Sentry.Severity.Warning)
+            .setExtra("api_res",JSON.stringify(response.data))
+          )
+          var SentryError = new Error(errorMsg)
+          SentryError.name= `${project} ${main_pathname}`
+          Sentry.captureException(SentryError)
+        }
         let force_error_api = window.sessionStorage.getItem('force_error_api');
         if(force_error_api) {
           response.data.pfwresponse.status_code = 410;
@@ -64,9 +93,11 @@ class Api {
         }
         return response.data;
       }, error => {
+        Sentry.captureException(error);
         return error;
       })
       .catch(error => {
+        Sentry.captureException(error);
         return error;
       });
   }

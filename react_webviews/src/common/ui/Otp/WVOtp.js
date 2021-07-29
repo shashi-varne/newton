@@ -6,7 +6,7 @@ const WVOtp = ({
   align = 'center',
   numInputs = 4,
   onChange,
-  placeholder = 'X',
+  placeholder = '',
   value,
   isDisabled,
   hasError,
