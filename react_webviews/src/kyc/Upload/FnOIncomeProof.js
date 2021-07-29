@@ -13,10 +13,12 @@ import WVInPageHeader from '../../common/ui/InPageHeader/WVInPageHeader';
 import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
 import { checkDocsPending } from '../common/functions';
 import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet';
+import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 import { storageService } from '../../utils/validators';
 import { getConfig, isNewIframeDesktopLayout, navigate as navigateFunc } from '../../utils/functions';
 import InternalStorage from '../common/InternalStorage';
 import { landingEntryPoints } from '../../utils/constants';
+import { PATHNAME_MAPPER } from '../constants';
 
 const UPLOAD_OPTIONS_MAP = {
   'bank-statement': {
@@ -56,9 +58,11 @@ const FnOIncomeProof = (props) => {
   const [filePassword, setFilePassword] = useState('');
   const [openBottomSheet, setOpenBottomSheet] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(false);
+  const [goBackModal, setGoBackModal] = useState(false);
   const navigate = navigateFunc.bind(props);
   const { kyc, isLoading, updateKyc } = useUserKycHook();
   const fromState = props?.location?.state?.fromState;
+  const goBackPath = props.location?.state?.goBack || "";
   const { productName, Web } = getConfig();
   const hideSkipOption = !Web ? (storageService().get("native") && !fromState) : landingEntryPoints.includes(fromState);
 
@@ -111,11 +115,7 @@ const FnOIncomeProof = (props) => {
     }
 
     if (!Web) {
-      if (storageService().get("native") && !fromState) {
-        nativeCallback({ action: "exit_web"});
-      } else {
-        navigate(fromState);
-      }
+      commonNativeNavigation();
     } else {
       if (landingEntryPoints.includes(fromState)) {
         navigate("/");
@@ -130,6 +130,14 @@ const FnOIncomeProof = (props) => {
     }
   }
 
+  const commonNativeNavigation = () => {
+    if (storageService().get("native") && !fromState) {
+      nativeCallback({ action: "exit_web"});
+    } else {
+      navigate(fromState);
+    }
+  }
+
   const onPasswordChange = (event) => {
     setFilePassword(event.target.value);
   }
@@ -138,7 +146,29 @@ const FnOIncomeProof = (props) => {
     storageService().remove("view_sample_clicked") 
   }
 
+  const closeConfirmBackDialog = () => {
+    setGoBackModal(false);
+  };
 
+  const goBackToPath = () => {
+    if (goBackPath) {
+      navigate(goBackPath);
+    } else {
+      if (!Web) {
+        commonNativeNavigation();
+      } else {
+        if (landingEntryPoints.includes(fromState)) {
+          navigate("/");
+        } else {
+          navigate(PATHNAME_MAPPER.journey);
+        }
+      }
+    }
+  };
+
+  const goBack = () => {
+    setGoBackModal(true)
+  }
 
   const sendEvents = (userAction) => {
     let eventObj = {
@@ -173,6 +203,7 @@ const FnOIncomeProof = (props) => {
       disable={!selectedFile}
       showLoader={isApiRunning}
       skelton={isLoading}
+      headerData={{goBack}}
     >
       <WVInPageHeader style={{ marginBottom: '15px' }}>
         <WVInPageTitle>Provide income proof for F&O trading 
@@ -262,7 +293,15 @@ const FnOIncomeProof = (props) => {
           variant: "contained",
           onClick: goNext
         }}
-      />
+        />
+        {goBackModal ?
+          <ConfirmBackDialog
+            isOpen={goBackModal}
+            close={closeConfirmBackDialog}
+            goBack={goBackToPath}
+          />
+          : null
+        }
     </Container>
   );
 }
