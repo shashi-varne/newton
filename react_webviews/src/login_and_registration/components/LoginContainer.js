@@ -28,7 +28,6 @@ const LoginContainer = (props) => {
   return (
     <div className="login" data-aid='login'>
       <div className="header">
-        {/* TODO: fix logo for header */}
         <img src={require(`assets/${config.logo}`)} alt="logo" />
       </div>
       <div className="login-details">

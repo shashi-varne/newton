@@ -716,9 +716,9 @@ ul#iwd-bars {
 .iwd-holding-card {
   background: white;
   position: relative;
-  border-radius: 8px; //TODO: reuse iwd-card
-  padding: 40px 50px 50px; //TODO: reuse iwd-card
-  box-sizing: border-box; //TODO: reuse iwd-card
+  border-radius: 8px;
+  padding: 40px 50px 50px;
+  box-sizing: border-box;
   box-shadow: 0px 0px 4px rgba(31, 14, 74, 0.06);
   height: 79%;
   width: 48%;
@@ -1275,7 +1275,7 @@ table.iwd-transactions-table {
   }
 
   .iwd-holding-card {
-    padding: $card-padding-mob; //TODO: reuse iwd-card
+    padding: $card-padding-mob;
     height: auto;
     width: 100%;
     flex: 0 1 48%;

@@ -29,7 +29,7 @@ export const checkBeforeRedirection = (fromState, toState) => {
   if (getConfig().isLoggedIn) {
     if (
       toState === "/login" ||
-      toState === "/login/verify-otp" ||  // TODO: Check with Alekhya 
+      toState === "/login/verify-otp" ||
       toState?.includes("/partner-authentication")
       // toState === "/register" ||
       // toState === "/forgot-password" ||

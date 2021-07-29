@@ -25,7 +25,7 @@ export const checkBeforeRedirection = (fromState, toState) => {
       if (
         toState === "/partner-landing" ||
         toState === "/login" ||
-        toState === "/login/verify-otp" || //TODO: CHeck with Alekhya
+        toState === "/login/verify-otp" ||
         toState === "/prepare"
         // toState === "/register" ||
         // toState === "/forgot-password" ||
@@ -47,7 +47,7 @@ export const checkAfterRedirection = (props, fromState, toState) => {
     if (
       toState !== "/partner-landing" &&
       toState !== "/login" &&
-      toState !== "/login/verify-otp" &&  //TODO: CHeck with Alekhya
+      toState !== "/login/verify-otp" &&
       toState === "/prepare" &&
       !toState.includes("/partner-authentication")
       // toState !== "/register" &&
