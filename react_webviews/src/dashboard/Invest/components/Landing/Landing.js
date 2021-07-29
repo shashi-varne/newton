@@ -44,7 +44,7 @@ class Landing extends Component {
     this.initialize();
   }
 
-  sendEvents = (userAction, card_name) => {
+  sendEventsIndexFunds = (userAction, card_name) => {
     let eventObj = {
       event_name: "home_screen",
       properties: {
@@ -259,7 +259,7 @@ class Landing extends Component {
                               handleClick={() =>
                                 {
                                   this.clickCard(item.key, item.title)
-                                  this.sendEvents("next", "explore_passive_funds")
+                                  this.sendEventsIndexFunds("next", "explore_passive_funds")
                                 }
                               }
                             />
