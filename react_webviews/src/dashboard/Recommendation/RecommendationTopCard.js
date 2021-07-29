@@ -3,13 +3,13 @@ import BottomSheet from '../../common/ui/BottomSheet';
 import { getConfig, navigate as navigateFunc } from '../../utils/functions';
 import { formatAmountInr, getFinancialYear } from '../../utils/validators';
 import './RecommendationTopCard.scss';
-const { productName } = getConfig();
 
 const RecommendationTopCard = ({
   data = {},
   parentProps,
   sendEvents
 }) => {
+  const { productName } = getConfig();
   const navigate = navigateFunc.bind(parentProps);
   const { userRiskProfile, funnelData } = data;
   const [showRiskInfo, setShowRiskInfo] = useState(false);
@@ -30,7 +30,7 @@ const RecommendationTopCard = ({
                   <img
                     onClick={toggleRiskInfoDialog}
                     src={require('assets/info_icon_grey.svg')}
-                    className="info-icn"
+                    className="info-icn pointer"
                     alt="i"
                   />
                 </div>

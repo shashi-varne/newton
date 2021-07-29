@@ -23,7 +23,7 @@ const Funds = (props) => {
   const [selectedFund, setSelectedFund] = useState({});
   const [investTypeData, setInvestTypeData] = useState({});
   const [showSkelton, setShowSkelton] = useState(true);
-  const [openIndex, setOpenindex] = useState(-1);
+  const [openIndex, setOpenindex] = useState(0);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const onlySips = ["saveforgoal"];
   const onlyOt = [

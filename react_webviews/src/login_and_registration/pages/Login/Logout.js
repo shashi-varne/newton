@@ -4,8 +4,8 @@ import { nativeCallback } from "../../../utils/native_callback";
 import { storageService } from "../../../utils/validators";
 import { logout } from "../../functions";
 
+const config = getConfig();
 const Logout = (props) => {
-  const config = getConfig();
   const navigate = navigateFunc.bind(props); 
 
   useEffect(() => {
@@ -14,6 +14,13 @@ const Logout = (props) => {
 
   const initialize = async () => {
     if (config.Web) {
+      if (config.isIframe) {
+        let message = JSON.stringify({
+          type: "iframe_close",
+        });
+        window.callbackWeb.sendEvent(message);
+        return;
+      }
       try {
         storageService().clear();
         window.localStorage.clear();

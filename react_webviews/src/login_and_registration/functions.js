@@ -42,6 +42,8 @@ export function initialize() {
     "taxwin",
     "ippb",
     "quesscorp",
+    "sahaj",
+    "mspl"
   ];
   const partner = storageService().get("partner") || "";
   if (partners.includes(partner)) {
@@ -210,7 +212,7 @@ export async function triggerOtpApi(body, loginType) {
         let item = {
           promo_code: this.state.referrer,
         };
-        storageService.setObject("user_promo", item);
+        storageService().setObject("user_promo", item);
       }
 
       if (this.state.isPromoSuccess && this.state.form_data.referral_code !== "") {
@@ -484,7 +486,7 @@ export async function applyCode(user) {
       });
       const { status_code: status } = res.pfwresponse;
       if (status === 200) {
-        storageService.remove("user_promo");
+        storageService().remove("user_promo");
       }
     } catch (error) {
       console.log(error);
@@ -662,8 +664,6 @@ export const logout = async () => {
   }
 };
 
-
-
 export async function authCheckApi(type, data) {
   let error = "";
   try {
@@ -721,3 +721,22 @@ export async function generateOtp(data) {
     });
   }
 }
+
+export const partnerAuthentication = async (data) => {
+  const res = await Api.post(`/api/partner/${data.partnerCode}/redirect?token=${data.token}&view=${data.view}`);
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw new Error(res?.pfwmessage || errorMessage);
+  }
+
+  const { result, status_code: status } = res.pfwresponse;
+
+  if (status === 200) {
+    return result;
+  } else {
+    throw new Error(result.error || result.message || errorMessage);
+  }
+} 

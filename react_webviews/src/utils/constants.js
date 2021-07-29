@@ -1,22 +1,24 @@
 import { getConfig } from 'utils/functions';
 
-export const themeConfig = {
+export const themeConfig =  () => {
+  const config = getConfig();
+  return {
     palette: {
         primary: {
             // light: will be calculated from palette.primary.main,
-            main: getConfig().styles.primaryColor,
+            main: config.styles.primaryColor,
             // dark: will be calculated from palette.primary.main,
             contrastText: '#ffffff',
         },
         secondary: {
             // light: '#0066ff',
-            main: getConfig().styles.secondaryColor,
+            main: config.styles.secondaryColor,
             // dark: will be calculated from palette.secondary.main,
             contrastText: '#ffffff',
         },
         default: {
             // light: '#0066ff',
-            main: getConfig().styles.default,
+            main: config.styles.default,
             // dark: will be calculated from palette.secondary.main,
             contrastText: '#ffffff',
         }
@@ -31,10 +33,10 @@ export const themeConfig = {
         MuiFormLabel: {
             root: {
                 "&$focused": {
-                  color: getConfig().styles.primaryColor,
+                  color: config.styles.primaryColor,
                 },
                 "&$focused&$error": {
-                    color: getConfig().styles.primaryColor,
+                    color: config.styles.primaryColor,
                 },
                 "&$error": {
                     color: '#f44336',
@@ -50,20 +52,20 @@ export const themeConfig = {
             input: {
                 padding: '11px 0 7px',
                 fontSize: '14px',
-                color: getConfig().styles.default
+                color: config.styles.default
             },
             fullWidth: {
                 // marginBottom: '12px'
             },
             focused: {
-                borderColor: getConfig().styles.inputFocusedColor || getConfig().styles.primaryColor,
+                borderColor: config.styles.inputFocusedColor || config.styles.primaryColor,
             },
             underline: {
                 "&$error": {
-                    color: getConfig().styles.primaryColor,
+                    color: config.styles.primaryColor,
                 },
                 '&:after': {
-                    backgroundColor: getConfig().styles.inputFocusedColor || getConfig().styles.primaryColor
+                    backgroundColor: config.styles.inputFocusedColor || config.styles.primaryColor
                 },
                 transform: 'inherit',
                 transition: 'transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms',
@@ -82,7 +84,7 @@ export const themeConfig = {
         MuiInputLabel: {
             root: {
                 fontSize: '0.9rem',
-                color: getConfig().uiElements.formLabel.color,
+                color: config.uiElements.formLabel.color,
                 fontWeight: 'normal'
             },
             shrink: {
@@ -92,24 +94,24 @@ export const themeConfig = {
         MuiButton: {
             raisedSecondary: {
                 '&:hover': {
-                    backgroundColor: getConfig().styles.secondaryColor
+                    backgroundColor: config.uiElements.button.hoverBackgroundColor || config.styles.secondaryColor
                 },
-                backgroundColor: getConfig().styles.secondaryColor,
+                backgroundColor: config.styles.secondaryColor,
                 color: '#fff',
-                borderRadius: getConfig().uiElements?.button?.borderRadius || 4,
+                borderRadius: config.uiElements.button.borderRadius,
                 boxShadow: 'none'
             },
             disabled: {
                 // opacity: 0.4,
-                color: '#fff !important',
-                backgroundColor: 'var(--color-action-disable) !important',
+                color: `${config.uiElements.button.disabledColor} !important`,
+                backgroundColor: `${config.uiElements.button.disabledBackgroundColor} !important`,
                 touchAction: 'none'
             },
             label: {
                 textTransform: 'uppercase'
             },
             root: {
-                borderRadius: getConfig().uiElements?.button?.borderRadius || 4,
+                borderRadius: config.uiElements.button.borderRadius,
                 boxShadow: 'none !important'
             }
         },
@@ -120,7 +122,7 @@ export const themeConfig = {
         },
         MuiCheckbox: {
             root: {
-                color: getConfig().styles.primaryColor,
+                color: config.styles.primaryColor,
                 position: 'relative',
                 left: '-15px'
             }
@@ -131,8 +133,8 @@ export const themeConfig = {
             }
         }
     }
+  }
 }
-
 
 export function bankAccountTypeOptions(isNri) {
     var account_types = [];

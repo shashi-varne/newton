@@ -188,6 +188,7 @@ const AddressUpload = (props) => {
       handleClick={handleSubmit}
       disable={!frontDoc || (!onlyFrontDocRequired && !backDoc)}
       showLoader={isApiRunning}
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       title={title}
       data-aid='kyc-upload-adress-proof-screen'
     >

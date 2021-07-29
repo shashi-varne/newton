@@ -12,6 +12,7 @@ import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../../common/api";
 import toast from "../../../common/ui/Toast";
 import useUserKycHook from "../../common/hooks/userKycHook";
+import { getConfig } from "utils/functions";
 import "../commonStyles.scss";
 import { nativeCallback } from "../../../utils/native_callback";
 
@@ -22,6 +23,7 @@ const NriAddressDetails1 = (props) => {
   const state = props.location.state || {};
   const isEdit = state.isEdit || false;
   const [oldState, setOldState] = useState({});
+  const productName = getConfig().productName;
   let title = "Foreign address details";
   if (isEdit) {
     title = "Edit foreign address details";
@@ -148,6 +150,7 @@ const NriAddressDetails1 = (props) => {
       current={3}
       count={3}
       total={4}
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-nri-address-details-screen-1'
     >
       <div className="kyc-personal-details kyc-address-details">

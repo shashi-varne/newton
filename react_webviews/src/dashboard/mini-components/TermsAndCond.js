@@ -5,8 +5,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-import loader_fisdom from 'assets/loader_gif_fisdom.gif';
-import loader_myway from 'assets/loader_gif_myway.gif';
+import loader_fisdom from 'assets/fisdom/loader_gif.gif';
+import loader_myway from 'assets/finity/loader_gif.gif';
 import check_mark from 'assets/check_mark.png';
 
 import { getTerms } from '../Invest/common/api';
@@ -16,8 +16,8 @@ import './mini-components.scss';
 import Button from '../../common/ui/Button';
 import { nativeCallback } from '../../utils/native_callback';
 
-const config = getConfig();
 const TermsAndCond = () => {
+  const config = getConfig();
   const [open, setOpen] = useState(false);
   const [data, setData] = useState({
     terms: '',
@@ -64,7 +64,7 @@ const TermsAndCond = () => {
           <img alt='check_mark' src={check_mark} width='15' />
           <span data-aid='terms-and-conditions'>
             By clicking on the button below, I agree that I have read and accepted the{' '}
-            {isWeb && productName !== 'finity' && (
+            {isWeb && (productName !== 'finity' || (productName === 'finity' && config.code === "moneycontrol")) && (
               <>
                 <a target='_blank' rel='noopener noreferrer' href={config.termsLink} data-aid='terms-offer-link'>
                   terms & conditions
@@ -81,7 +81,7 @@ const TermsAndCond = () => {
                 </a>
               </>
             )}
-            {isWeb && productName === 'finity' && (
+            {isWeb && productName === 'finity' && config.code !== "moneycontrol" && (
               <>
                 <span className='tc_link' data-aid='terms-link' onClick={handleClickOpen('terms')}>
                   terms

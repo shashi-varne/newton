@@ -72,8 +72,8 @@ const FooterTitle = () => {
         <SVG
           height="20px"
           width="64px"
-          preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.primaryColor)}
-          src={require(`assets/${productName}/fisdom_logo_white.svg`)}
+          preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + config.styles.primaryColor)}
+          src={require(`assets/${config.logo}`)}
         />
         <SVG
           width="20px"

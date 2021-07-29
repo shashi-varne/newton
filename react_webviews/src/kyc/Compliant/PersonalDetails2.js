@@ -14,7 +14,9 @@ import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import toast from "common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
+import { getConfig } from "../../utils/functions";
 
+const productName = getConfig().productName;
 const PersonalDetails2 = (props) => {
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -146,6 +148,7 @@ const PersonalDetails2 = (props) => {
       current={2}
       total={totalPages}
       data-aid='kyc-personal-details-screen-2'
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
     >
       <div className="kyc-personal-details" data-aid='kyc-personal-details-page'>
         {!isLoading && (

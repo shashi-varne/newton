@@ -4,8 +4,8 @@ import Dialog, { DialogContent } from "material-ui/Dialog";
 import Button from "@material-ui/core/Button";
 import "./mini-components.scss";
 
-const config = getConfig();
 const CompliantHelpDialog = ({ close, isOpen, pan }) => {
+  const config = getConfig();
   return (
     <Dialog
       onClose={() => close()}
@@ -27,7 +27,7 @@ const CompliantHelpDialog = ({ close, isOpen, pan }) => {
           <div>|</div>
           <div data-aid='kyc-email-id'>{config.email}</div>
         </div>
-        <Button data-aid='ok-btn' onClick={() => close()}>OK</Button>
+        <Button className="kphd-button" data-aid='ok-btn' onClick={close}>OK</Button>
       </DialogContent>
     </Dialog>
   );

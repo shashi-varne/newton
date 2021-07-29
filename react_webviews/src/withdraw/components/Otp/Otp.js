@@ -3,11 +3,12 @@ import Container from '../../common/Container'
 import OtpDefault from 'common/ui/otp'
 import { navigate as navigateFunc } from 'utils/functions'
 import toast from 'common/ui/Toast'
-import { isEmpty } from '../../../utils/validators'
+import { isEmpty, validateNumber } from '../../../utils/validators'
 import { verify, resend } from '../../common/Api'
 import './Otp.scss';
 import { nativeCallback } from '../../../utils/native_callback'
 import { getConfig } from '../../../utils/functions'
+import WVBottomSheet from '../../../common/ui/BottomSheet/WVBottomSheet'
 
 function useInterval(callback, delay) {
   const savedCallback = useRef()
@@ -37,7 +38,9 @@ const Otp = (props) => {
     otp: '',
     totalTime: 30,
     timeAvailable: 30,
-  })
+  });
+  const [errorMessage, setErrorMessage] = useState("");
+  const [openPopup, setOpenPopup] = useState(false);
 
   const stateParams = props?.location?.state
 
@@ -90,30 +93,33 @@ const Otp = (props) => {
         window.callbackWeb.sendEvent(_event);
       }
 
-      navigate("/withdraw/otp/success", {
-        state: {
-          type: stateParams?.type,
-          message: result?.message,
-        },
-      });
-      } catch (err) {
-        if(err.message.includes('wrong')){
-        toast(err.message, 'error')
-      } else {
-        toast(err.message, 'error')
-        navigate('/withdraw/otp/failed', {
-          state :{
+      if(!config.isIframe || config.code === "moneycontrol") {
+        navigate("/withdraw/otp/success", {
+          state: {
             type: stateParams?.type,
-            message: err.message,
-          }
-        })
+            message: result?.message,
+          },
+        });
       }
+      } catch (err) {
+        if(stateParams.type === "instaredeem"){
+          navigate('/withdraw/otp/failed', {
+            state :{
+              type: stateParams?.type,
+              message: err.message,
+            }
+          })
+        } else {
+          setOpenPopup(true);
+          setErrorMessage(err.message || "Something went wrong! Please try again later");
+        }
     } finally {
       setIsApiRunning(false)
     }
   }
 
   const handleOtp = (otp) => {
+    if(otp && !validateNumber(otp)) return;
     setState((state) => {
       return {
         ...state,
@@ -157,6 +163,15 @@ const Otp = (props) => {
           below
         </div>
         <OtpDefault parent={{ state, handleOtp, resendOtp }} class1="center" />
+        <WVBottomSheet
+          open={openPopup}
+          subtitle={errorMessage}
+          button1Props={{
+            title: "OK",
+            variant: "contained",
+            onClick: () => setOpenPopup(false)
+          }}
+        />
       </section>
     </Container>
   )

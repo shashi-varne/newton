@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import Logout from './login_and_registration/pages/Login/Logout.js';
@@ -21,11 +21,14 @@ import DesktopLayout from './desktopLayout';
 
 import Feature from './Feature';
 import Tooltip from 'common/ui/Tooltip';
-import {getConfig} from './utils/functions';
 import ComponentTest from './ComponentTest';
+import {getConfig, isIframe} from './utils/functions';
 import 'common/theme/Style.scss';
 import { storageService } from './utils/validators';
 import LoginContainer from './login_and_registration/components/LoginContainer';
+import PartnerAuthentication from './login_and_registration/pages/Authentication';
+import Prepare from './dashboard/Invest/components/SdkLanding/Prepare';
+import { ThemeProvider } from './utils/ThemeContext';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -35,7 +38,9 @@ const jss = create(jssPreset());
 // We define a custom insertion point that JSS will look for injecting the styles in the DOM.
 // jss.options.insertionPoint = 'jss-insertion-point';
 
-const theme = createMuiTheme(themeConfig);
+const getMuiThemeConfig = () => { 
+  return createMuiTheme(themeConfig());
+}
 
 var basename = window.sessionStorage.getItem('base_href') || '';
 if (basename && basename.indexOf('appl/webview') !== -1) {
@@ -75,12 +80,19 @@ const ScrollToTop = withRouter(
 );
 
 const App = () => {
-  
+  const [themeConfiguration, setThemeConfiguration] = useState(getMuiThemeConfig());
+
+  const updateTheme = (event) => {
+    const theme = getMuiThemeConfig();
+    setThemeConfiguration(theme)
+  }
+  const iframe = isIframe();
     return (
       <BrowserRouter basename={basename}>
         <JssProvider jss={jss} generateClassName={generateClassName}>
-          <MuiThemeProvider theme={theme}>
-          <ScrollToTop />
+          <ThemeProvider value={{updateTheme}}>
+          <MuiThemeProvider theme={themeConfiguration}>
+            <ScrollToTop />
             <Tooltip />
             <ToastContainer autoClose={3000} />
             <Switch>
@@ -94,10 +106,12 @@ const App = () => {
                 component={LoginContainer}
               />
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />
+              <Route path="/partner-authentication/:partnerCode" component={PartnerAuthentication} />
               <Route path='/logout' component={Logout} />
               <Route path='/component-test' component={ComponentTest} />
+              <Route path="/prepare" component={Prepare} />
               {
-                isMobileDevice ?
+                isMobileDevice || iframe ?
                 <Route component={Feature}/>:
                 <DesktopLayout>
                   <Feature />
@@ -105,6 +119,7 @@ const App = () => {
               }
             </Switch>
           </MuiThemeProvider>
+          </ThemeProvider>
         </JssProvider>
       </BrowserRouter>
     );

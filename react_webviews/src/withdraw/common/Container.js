@@ -43,13 +43,15 @@ class Container extends Component {
     const fromState = this.props.location?.state?.fromState || "";
     const toState = this.props.location?.state?.toState || "";
     const params = this.props.location?.params || {};
+    const pathname = this.props.location?.pathname || "";
+    const currentState = toState || pathname;
 
     if (this.getEvents("back")) {
       nativeCallback({ events: this.getEvents("back") });
     }
     
-    if (toState) {
-      let isRedirected = this.backButtonHandler(this.props, fromState, toState, params);
+    if (currentState) {
+      let isRedirected = this.backButtonHandler(this.props, fromState, currentState, params);
       if (isRedirected) {
         return;
       }

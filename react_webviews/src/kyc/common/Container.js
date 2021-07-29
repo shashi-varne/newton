@@ -84,7 +84,6 @@ class Container extends Component {
     }
 
     const goBackPath = this.props.location?.state?.goBack || "";
-    console.log("goBackPath...", goBackPath)
 
     if (goBackPath) {
       if (goBackPath === "exit" && storageService().get("native")) {
@@ -109,7 +108,6 @@ class Container extends Component {
       return;
     }
 
-    console.log("Props history goBack...");
     this.props.history.goBack();
   };
 

@@ -64,14 +64,12 @@ class Container extends Component {
     }
 
     const goBackPath = this.props.location?.state?.goBack || "";
-    console.log("goBackPath...", goBackPath)
 
     if(goBackPath) {
       this.navigate(goBackPath);
       return;
     }
     
-    console.log("Props history goBack...");
     this.props.history.goBack();
   };
 

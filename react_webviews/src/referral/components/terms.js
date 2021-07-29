@@ -53,7 +53,7 @@ class Terms extends Component {
           <div className="List">
             <div className="Number">5.</div>
             <div className="Text">
-              Your referred friends will not receive any reward amount upon making their first investment on Finity.
+              Your referred friends will not receive any reward amount upon making their first investment on {capitalize(this.state.type)}.
             </div>
           </div>
           <div className="List">

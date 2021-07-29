@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../common/Container';
 import { nativeCallback } from 'utils/native_callback';
-import { getConfig, getBasePath, isTradingEnabled, navigate as navigateFunc } from 'utils/functions';
+import { getConfig, getBasePath, isTradingEnabled, navigate as navigateFunc, isIframe } from 'utils/functions';
 import toast from '../../common/ui/Toast';
 import Api from '../../utils/api';
 import ConfirmBackModal from './confirm_back'
@@ -9,14 +9,21 @@ import { storageService } from "../../utils/validators";
 import { isEmpty } from "../../utils/validators";
 import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet';
 import { isDigilockerFlow } from '../../kyc/common/functions';
+import otp_img_finity from 'assets/finity/ic_verify_otp_finity.svg';
+import esign_otp_img_finity from 'assets/finity/ic_esign_otp_finity.svg';
+import done_img_finity from  'assets/finity/ic_esign_done_finity.svg';
+import otp_img_fisdom from 'assets/fisdom/ic_verify_otp_fisdom.svg';
+import esign_otp_img_fisdom from 'assets/fisdom/ic_esign_otp_fisdom.svg';
+import done_img_fisdom from  'assets/fisdom/ic_esign_done_fisdom.svg';
 
-const config = getConfig();
+
+
 class ESignInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
-      productName: config.productName,
+      productName: getConfig().productName,
       backModal: false,
       dl_flow: false,
       showAadharDialog: false,
@@ -59,6 +66,8 @@ class ESignInfo extends Component {
   }
 
   handleClick = async () => {
+    const config = getConfig();
+
     if(this.state.showAadharDialog) {
       this.closeAadharDialog();
     }
@@ -164,15 +173,19 @@ class ESignInfo extends Component {
         handleClick={this.goNext}
         buttonTitle='PROCEED'
         headerData={headerData}
+        iframeRightContent={require(`assets/${productName}/esign-kyc.svg`)}
         data-aid='kyc-esign-screen'
       >
-        <div className="esign-image">
-          <img
-            src={require(`assets/${productName}/ils_esign_kyc.svg`)}
-            style={{ width: "100%" }}
-            alt="eSign KYC icon"
-          />
-        </div>
+        {
+          !isIframe() &&
+            <div className="esign-image">
+              <img
+                src={require(`assets/${productName}/ils_esign_kyc.svg`)}
+                style={{ width: "100%" }}
+                alt="eSign KYC icon"
+                />
+            </div>
+        }
         <div className="esign-desc" data-aid='esign-desc'>
           eSign is an online electronic signature service by UIDAI to facilitate <strong>Aadhaar holder to digitally sign</strong> documents.
         </div>
@@ -180,7 +193,7 @@ class ESignInfo extends Component {
         <div className="esign-steps" data-aid='esign-steps'>
           <div className="step">
             <div className="icon-container">
-              <img src={require(`assets/ic_verify_otp_${productName}.svg`)} alt="Verify OTP" />
+              <img src={getConfig().productName !== 'fisdom' ? otp_img_finity :otp_img_fisdom} alt="Verify OTP" />
             </div>
             <div className="step-text" data-aid='step-text-1'>
               1. Verify mobile and enter Aadhaar number
@@ -188,7 +201,7 @@ class ESignInfo extends Component {
           </div>
           <div className="step">
             <div className="icon-container">
-              <img src={require(`assets/ic_esign_otp_${productName}.svg`)} alt="Esign OTP icon" />
+              <img src={getConfig().productName !== 'fisdom' ? esign_otp_img_finity :esign_otp_img_fisdom} alt="Esign OTP icon" />
             </div>
             <div className="step-text" data-aid='step-text-2'>
               2. Enter OTP recieved on your Aadhaar linked mobile number
@@ -196,7 +209,7 @@ class ESignInfo extends Component {
           </div>
           <div className="step">
             <div className="icon-container">
-              <img src={require(`assets/ic_esign_done_${productName}.svg`)} alt="Esign Done icon" />
+              <img src={getConfig().productName !== 'fisdom' ? done_img_finity :done_img_fisdom} alt="Esign Done icon" />
             </div>
             <div className="step-text" data-aid='step-text-3'>
               3. e-Sign is successfully done

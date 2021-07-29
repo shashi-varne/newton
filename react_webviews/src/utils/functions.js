@@ -2,14 +2,7 @@
 import { checkValidString, getUrlParams, storageService } from './validators';
 import { isArray, isEmpty } from 'lodash';
 import $ from 'jquery';
-import { 
-  basePartnerConfig, 
-  baseStylesConfig, 
-  baseTypographyConfig, 
-  baseUIElementsConfig, 
-  commonCardsConfig, 
-  partnerConfigs 
-} from './partnerConfigs';
+import {  getPartnerData  } from './partnerConfigs';
 
 export const getHost = (pathname) => {
   return window.location.origin + pathname;
@@ -55,13 +48,16 @@ function getPartnerConfig(partner_code) {
   const ismyway =
     search.indexOf('api.mywaywealth.com') >= 0 ||
     search.indexOf('plutus-finwizard-pro.appspot.com') >= 0 || 
+    origin.indexOf('app.finity.in') >= 0 ||
+    origin.indexOf('app.mywaywealth.com') >= 0 || 
     origin.indexOf('wv.mywaywealth.com') >= 0 || 
     origin.indexOf('wv.finity.in') >= 0 || 
     origin.indexOf('api.mywaywealth.com') >= 0;
   const isminvest = search.indexOf('my.barodaminvest.com') >= 0;
   const isStaging = search.indexOf('staging') >= 0;
   let productType = 'fisdom';
-  if (ismyway || partner_code === 'bfdlmobile' || partner_code === 'finity' || partner_code === 'moneycontrol') {
+  const finityPartners = ["bfdlmobile", "finity", "moneycontrol"]
+  if (ismyway || finityPartners.includes(partner_code)) {
     productType = 'finity';
   }
 
@@ -69,11 +65,9 @@ function getPartnerConfig(partner_code) {
     productType = "minvest";
   }
 
-  // Appending base config of the productType(fisdom/finity) with the common config accross all partners
-  let config_to_return = {
-    ...commonCardsConfig,
-    ...basePartnerConfig[productType],
-  };
+  // Generating partnerData
+  const partnerData = getPartnerData(productType, partner_code); 
+  let config_to_return = partnerData;
 
   if (isStaging) {
     // config_to_return.webAppUrl = 'https://mayank-dot-plutus-web.appspot.com/#!/';
@@ -82,30 +76,6 @@ function getPartnerConfig(partner_code) {
   }
 
   config_to_return.isStaging = isStaging;
-
-  if (partner_code === "bfdl") {
-    partner_code = "bfdlmobile";
-  }
-
-  // Generating partnerData
-  let partnerData = partnerConfigs[partner_code] || partnerConfigs["fisdom"];
-  config_to_return = {
-    ...config_to_return, // taking the base config of the productType(fisdom/finity)
-    ...partnerData, // overriding with particular partner config
-    styles: {
-      ...baseStylesConfig.common,
-      ...baseStylesConfig[productType], //taking common base styles config
-      ...partnerData?.styles, // overriding with the partner styles
-    },
-    uiElements: {
-      ...baseUIElementsConfig,
-      ...partnerData?.uiElements,
-    },
-    typography: {
-      ...baseTypographyConfig[productType],
-      ...partnerData?.typography,
-    }
-  };
 
   let html = document.querySelector(`html`);
   html.style.setProperty(`--secondary`,`${config_to_return.styles.secondaryColor}`);
@@ -117,10 +87,24 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--label`, `${config_to_return.uiElements.formLabel.color}`);
   html.style.setProperty(`--desktop-width`, "640px");
   html.style.setProperty(`--tooltip-width`, "540px");
-  html.style.setProperty("--color-action-disable", "#E8ECF1");
+  html.style.setProperty("--color-action-disable", `${config_to_return.uiElements.button.disabledBackgroundColor}`);
   html.style.setProperty('--dark', '#0A1D32');
   html.style.setProperty('--steelgrey', '#767E86');
+  html.style.setProperty('--on-focus-background', `${config_to_return.uiElements.button.focusBackgroundColor}`);
+  html.style.setProperty('--on-hover-background', `${config_to_return.uiElements.button.hoverBackgroundColor || config_to_return.styles.secondaryColor}`);
+  html.style.setProperty('--on-hover-secondary-background', `${config_to_return.uiElements.button.hoverSecondaryBackgroundColor || config_to_return.styles.secondaryColor}`);
+  html.style.setProperty('--secondary-green', `${config_to_return.styles.secondaryGreen}`);
+  html.style.setProperty(`--mustard`, '#FFDA2C');
+  html.style.setProperty(`--pink`, '#F16FA0');
+  html.style.setProperty(`--purple`, '#A38CEB');
+  html.style.setProperty(`--lime`, '#7ED321');
   html.style.setProperty(`--red`, '#D0021B');
+  html.style.setProperty(`--primaryVariant1`, `${config_to_return.styles.primaryVariant1}`);
+  html.style.setProperty(`--primaryVariant4`, `${config_to_return.styles.primaryVariant4}`);
+  html.style.setProperty(`--spacing`, '10px');
+  html.style.setProperty(`--gunmetal`, '#161A2E');
+  html.style.setProperty(`--linkwater`, '#D3DBE4');
+  html.style.setProperty(`--border-radius`, `${config_to_return.uiElements.button.borderRadius}px`);
 
   return config_to_return;
 }
@@ -162,12 +146,12 @@ export const getPlatformConfig = () => {
 export const getConfig = () => {
   let main_pathname = window.location.pathname;
   let main_query_params = getUrlParams();
-  let { base_url } = main_query_params;
+  let { base_url = ""  } = main_query_params;
   let origin = window.location.origin;
   let generic_callback = true;
 
-  let isProdFisdom = origin.indexOf('wv.fisdom.com') >= 0;
-  let isProdFinity = origin.indexOf('wv.mywaywealth.com') >= 0;
+  let isProdFisdom = origin.indexOf('app.fisdom.com') >= 0  || origin.indexOf('wv.fisdom.com') >= 0 ;
+  let isProdFinity = origin.indexOf('app.mywaywealth.com') >= 0 || origin.indexOf('wv.mywaywealth.com') >= 0;
 
   let base_href = window.sessionStorage.getItem('base_href') || '';
   let base_url_default = '';
@@ -213,6 +197,8 @@ export const getConfig = () => {
     if (main_pathname.indexOf('term') >= 0) {
       project_child = 'term';
     }
+  } else if (main_pathname.indexOf('fhc') >= 0) {
+    project = 'fhc';
   } else if (main_pathname.indexOf('insurance') >= 0) {
     project = 'insurance';
   } else if (main_pathname.indexOf('risk') >= 0) {
@@ -243,6 +229,8 @@ export const getConfig = () => {
     project = 'portfolio-rebalancing';
   } else if (main_pathname.indexOf('iw-dashboard') >= 0) {
     project = 'iw-dashboard';
+  } else if (main_pathname.indexOf('tax-filing') >= 0) {
+    generic_callback = true
   }
 
   if(!partner_code) {
@@ -346,7 +334,7 @@ export const getConfig = () => {
     searchParams += getParamsMark(searchParams) + `app_version=${app_version}`;
     searchParamsMustAppend += getParamsMark(searchParams) + `app_version=${app_version}`;
   }
-
+  let isProdEnv = isProdFinity || isProdFisdom;
   // should be last
   returnConfig.current_params = main_query_params;
   returnConfig.base_url = base_url;
@@ -359,6 +347,8 @@ export const getConfig = () => {
   returnConfig.isIframe = isIframe();
   returnConfig.platform = !returnConfig.isIframe ? (returnConfig.Web ? "web" : "sdk" ): "iframe";
   returnConfig.isLoggedIn = storageService().get("currentUser");
+  returnConfig.isProdEnv = isProdEnv
+
   return returnConfig;
 };
 
@@ -431,9 +421,13 @@ export function manageDialog(id, display, aboutScroll) {
 }
 
 export function setHeights(data) {
+  const newIframeDesktopLayout = isNewIframeDesktopLayout();
+  const config = getConfig();
+  const headerClass = 'Header';
+  const containerClass = newIframeDesktopLayout ? 'iframeContainerWrapper' : config.isIframe && config.code === "bfdlmobile" ? 'bfdlContainerWrapper' : 'ContainerWrapper'
   let head =
-    document.getElementsByClassName('Header') && document.getElementsByClassName('Header')[0]
-      ? document.getElementsByClassName('Header')[0].offsetHeight
+    document.getElementsByClassName(headerClass) && document.getElementsByClassName(headerClass)[0]
+      ? document.getElementsByClassName(headerClass)[0].offsetHeight
       : 0;
   let banner = document.getElementsByClassName('Banner')[0];
   let bannerHeight = banner ? banner.offsetHeight : 0;
@@ -445,9 +439,9 @@ export function setHeights(data) {
       ? document.getElementsByTagName('body')[0].offsetHeight
       : 0;
   let client =
-    document.getElementsByClassName('ContainerWrapper') &&
-    document.getElementsByClassName('ContainerWrapper')[0]
-      ? document.getElementsByClassName('ContainerWrapper')[0].offsetHeight
+    document.getElementsByClassName(containerClass) &&
+    document.getElementsByClassName(containerClass)[0]
+      ? document.getElementsByClassName(containerClass)[0].offsetHeight
       : 0;
   let foot =
     document.getElementsByClassName('Footer') && document.getElementsByClassName('Footer')[0]
@@ -549,7 +543,7 @@ export function isNpsOutsideSdk(fromState, toState) {
     return false;
   }
 
-  if (fromState === "/nps/sdk" ||
+  if (fromState === "/nps" ||
     ((fromState.indexOf("/nps/amount") !== -1) && toState === "/nps/info") ||
     ((fromState.indexOf("/nps/payment/callback") !== -1) &&
       ((toState.indexOf("/nps/amount") !== -1) || toState === "/nps/investments" ||
@@ -638,4 +632,56 @@ export {
   checkBeforeRedirection, 
   checkAfterRedirection, 
   backButtonHandler
+}
+
+export const popupWindowCenter = (w, h, url) => {
+  let dualScreenLeft =
+    window.screenLeft !== undefined ? window.screenLeft : window.screenX;
+  let dualScreenTop =
+    window.screenTop !== undefined ? window.screenTop : window.screenY;
+  let left = window.screen.width / 2 - w / 2 + dualScreenLeft;
+  let top = window.screen.height / 2 - h / 2 + dualScreenTop;
+  return window.open(
+    url,
+    "_blank",
+    "width=" +
+      w +
+      ",height=" +
+      h +
+      ",resizable,scrollbars,status,top=" +
+      top +
+      ",left=" +
+      left
+  );
+}
+
+export const isNewIframeDesktopLayout = () => {
+  const config = getConfig();
+  return config.code === "moneycontrol" && !config.isMobileDevice && config.isIframe
+}
+
+export const getInvestCards = (keysToCheck=[]) => {
+  const config = getConfig();
+  const investSections = config.investSections || [];
+  const investSubSectionMap = config.investSubSectionMap;
+  const cardsToShow = {};
+  investSections.forEach(section => {
+    if(!isEmpty(investSubSectionMap[section])) {
+      investSubSectionMap[section].forEach(subSections => {
+        if (keysToCheck.includes(subSections)) {
+          cardsToShow[subSections] = true;
+        }
+      })
+    }
+  })
+  return cardsToShow;
+}
+
+export function stringToHexa(str) {
+  const arr1 = []
+  for (let i = 0; i < str.length; ++i) {
+    const hex = Number(str.charCodeAt(i)).toString(16)
+    arr1.push(hex)
+  }
+  return arr1.join('')
 }

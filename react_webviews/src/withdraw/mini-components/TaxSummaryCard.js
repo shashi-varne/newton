@@ -63,7 +63,7 @@ const TaxSummaryCard = ({
             <div className="value">{formatAmountInr(stcg_tax + ltcg_tax)}</div>
           </div>
           <div className="tile tile2 flex-between-center" data-aid='withdraw-stcg'>
-            <div className="name">Equity STCG tax @{stcg_percent}</div>
+            <div className="name">Equity STCG tax @{stcg_percent}%</div>
             <div className="value">{formatAmountInr(stcg_tax)}</div>
           </div>
           <div className="tile tile2 flex-between-center" data-aid='withdraw-ltcg'>

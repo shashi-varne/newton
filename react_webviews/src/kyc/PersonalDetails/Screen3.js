@@ -18,7 +18,8 @@ import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
-import { isEmpty } from "../../utils/validators";
+import { getConfig } from "utils/functions";
+import isEmpty from "lodash/isEmpty";
 import { nativeCallback } from "../../utils/native_callback";
 
 const PersonalDetails3 = (props) => {
@@ -29,6 +30,7 @@ const PersonalDetails3 = (props) => {
   const isEdit = props.location.state?.isEdit || false;
   const [totalPages, setTotalPages] = useState();
   let title = "Professional details";
+  const productName = getConfig().productName;
   if (isEdit) {
     title = "Edit professional details";
   }
@@ -159,6 +161,7 @@ const PersonalDetails3 = (props) => {
       count={type === "digilocker" ? 2 : 3}
       current={type === "digilocker" ? 2 : 3}
       total={totalPages}
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-personal-details-screen-3'
     >
       <div className="kyc-personal-details" data-aid='kyc-personal-details-page'>

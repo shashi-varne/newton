@@ -12,6 +12,7 @@ import {
 import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { validateNumber } from "utils/validators";
+import { getConfig } from "utils/functions";
 import "./commonStyles.scss";
 import { nativeCallback } from "../../utils/native_callback";
 
@@ -23,6 +24,7 @@ const AddressDetails2 = (props) => {
   });
   const [oldState, setOldState] = useState({});
   const navigate = navigateFunc.bind(props);
+  const productName = getConfig().productName;
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();
@@ -214,6 +216,7 @@ const AddressDetails2 = (props) => {
       current={2}
       count={2}
       total={getTotalPages(kyc)}
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-address-details-screen-2'
     >
       <section data-aid='kyc-address-details-2'>

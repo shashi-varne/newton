@@ -62,6 +62,10 @@
       text-align: left;
       padding: 15px 0 5px 0;
     }
+
+    .aadhar:hover {
+      background-color: var(--on-hover-background);
+    }
   }
   
   .second-step-content {
@@ -124,7 +128,7 @@
 
       span {
         font-size: 13px;
-        color: var(--primary);
+        color: #5AAAF6;
         margin-left: 10px;
       }
     }
@@ -165,7 +169,7 @@
       font-weight: 500;
     }
 
-    button {
+    .kphd-button {
       margin: 10px 0 5px 0;
       width: 100%;
       color: white;
@@ -173,8 +177,8 @@
       min-height: 40px;
     }
 
-    button:hover {
-      background-color: var(--secondary);
+    .kphd-button:hover {
+      background-color: var(--on-hover-background);
     }
   }
 }
@@ -229,6 +233,10 @@
         background-color: var(--secondary);
       }
 
+      .bg-full:hover {
+        background-color: var(--on-hover-background);
+      }
+  
       .no-bg {
         background-color: white;
         color: #878787;

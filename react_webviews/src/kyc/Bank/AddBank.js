@@ -204,12 +204,9 @@ const AddBank = (props) => {
         bankData.ifsc_code.toUpperCase().startsWith("LAVB")) ||
       (code === "cub" &&
         bankData.ifsc_code.toUpperCase().startsWith("CIUB")) ||
-      (code === "ippb" &&
-        bankData.ifsc_code.toUpperCase().startsWith("IPOS")) ||
       (code !== "ktb" &&
         code !== "lvb" &&
-        code !== "cub" &&
-        code !== "ippb")
+        code !== "cub")
     ) {
       setIfscDisabled(true);
       try {

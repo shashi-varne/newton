@@ -302,7 +302,8 @@ class Container extends Component {
             handleReset={this.props.handleReset}
             onlyButton={this.props.onlyButton}
             noFooter={this.props.noFooter}
-            isDisabled={this.props.isDisabled} />
+            isDisabled={this.props.isDisabled}
+            />
         } 
         </div>
         {/* No Internet */}

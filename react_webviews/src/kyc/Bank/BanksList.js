@@ -9,12 +9,13 @@ import { initData } from "../services";
 import "./BanksList.scss";
 import { nativeCallback } from "../../utils/native_callback";
 
-const productName = getConfig().productName;
 const BanksList = (props) => {
   const [showLoader, setShowLoader] = useState(true);
   const [changeRequest, setChangerequest] = useState({});
   const navigate = navigateFunc.bind(props);
   const [banks, setBanks] = useState([]);
+  const config = getConfig();
+  const productName = config.productName;
 
   useEffect(() => {
     initialize();
@@ -52,7 +53,6 @@ const BanksList = (props) => {
     navigate(`${PATHNAME_MAPPER.bankDetails}${bank_id}`);
   };
 
-  const config = getConfig();
 
   const sendEvents = (userAction) => {
     let eventObj = {
@@ -74,16 +74,14 @@ const BanksList = (props) => {
     navigate("/my-account");
   }
 
+  const showFooter = changeRequest.add_bank_enabled && ((config.Web && !config.isIframe) || !!storageService().get("native"))
   return (
     <Container
       skelton={showLoader}
       events={sendEvents("just_set_events")}
       buttonTitle="ADD ANOTHER BANK"
       handleClick={handleClick}
-      noFooter={
-        !(changeRequest.add_bank_enabled &&
-        ((config.Web && !config.isIframe) || !!storageService().get("native")))
-      }
+      noFooter={!showFooter}
       title="Bank accounts"
       type="outlined"
       data-aid='kyc-add-other-bank-screen'

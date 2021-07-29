@@ -3,7 +3,7 @@ import toast from "common/ui/Toast";
 import OtpDefault from "../../common/ui/otp";
 import { getMerge } from "../../kyc/common/api";
 import Api from "../../utils/api";
-import { navigate as navigateFunc } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { isEmpty } from "../../utils/validators";
 import Container from "../common/Container";
 import "./Otp.scss";
@@ -20,6 +20,7 @@ class AccountMergeOtp extends Component {
       timeAvailable: 30,
       totalTime: 30,
       otp: "",
+      productName: getConfig().productName,
       openConfirmBack: false
     };
 
@@ -123,6 +124,7 @@ class AccountMergeOtp extends Component {
         title="Enter OTP to verify"
         disable={otp.length !== 4}
         showLoader={isApiRunning}
+        iframeRightContent={require(`assets/${this.state.productName}/kyc_illust.svg`)}
         headerData={{ goBack: () => this.setState({ openConfirmBack: true }) }}
       >
         {!isEmpty(otpData) && (
