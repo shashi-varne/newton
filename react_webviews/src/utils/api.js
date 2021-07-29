@@ -4,6 +4,7 @@ import * as Sentry from '@sentry/browser'
 import { storageService } from './validators';
 import { encrypt, decrypt } from './encryption';
 import { getConfig } from 'utils/functions';
+import { redirectTo2FA } from './native_callback';
 
 const config = getConfig();
 let base_url = config.base_url;
@@ -58,6 +59,11 @@ class Api {
         if (response.data._encr_payload) {
           response.data = JSON.parse(decrypt(response.data._encr_payload));
         }
+
+        if (response.data.pfwstatus_code === 416) {
+          // storageService().setBoolean('2fa-required', true);
+          window.location.href = redirectTo2FA();
+        } //TODO: CHeck with Satendra about where this code must be relative to below code
 
         if (response.config.url.includes("/api/") && response.headers["x-plutus-auth"] && config.isIframe) {
           storageService().set("x-plutus-auth", response.headers["x-plutus-auth"])

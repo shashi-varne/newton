@@ -279,6 +279,10 @@ export function redirectToLanding() {
   return `${getBasePath()}/${getConfig().searchParams}`;
 }
 
+export function redirectTo2FA() {
+  return `${getBasePath()}/login/verify-pin${getConfig().searchParams}`;
+}
+
 export function handleNativeExit(props, data) {
   const config = getConfig();
   const navigate = navigateFunc.bind(props);

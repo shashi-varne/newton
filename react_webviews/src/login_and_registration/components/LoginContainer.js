@@ -15,6 +15,7 @@ import ForgotPin from "../pages/ForgotPin/ForgotPin";
 import SVG from 'react-inlinesvg';
 import WVInPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
 import GoBackToLoginBtn from "../common/GoBackToLoginBtn";
+import { navigate as navigateFunc } from "../../utils/functions";
 
 const config = getConfig();
 const { productName } = config;
@@ -22,6 +23,7 @@ const { productName } = config;
 const LoginContainer = (props) => {
   const { url } = props.match;
   const pathName = url.split('/')[1];
+  const navigate = navigateFunc.bind(props);
 
   return (
     <div className="login" data-aid='login'>
@@ -42,7 +44,9 @@ const LoginContainer = (props) => {
                 <Route path={`${url}/verify-otp`} component={VerifyLoginOtp} />
                 <Route path={`${url}/verify-pin`} component={VerifyPin} />
                 <Route path={`${url}/referral`} component={Referral} />
-                <Route component={PageNotFound} />
+                <Route>
+                  <PageNotFound navigateFunc={navigate} />
+                </Route>
               </Switch>
             }
             {pathName === 'forgot-pin' &&
@@ -52,7 +56,9 @@ const LoginContainer = (props) => {
                 <Route path={`${url}/new-pin`} component={EnterNewPin} />
                 <Route path={`${url}/confirm-pin`} component={ConfirmNewPin} />
                 <Route path={`${url}/success`} component={ForgotPinSuccess} />
-                <Route component={PageNotFound} />
+                <Route>
+                  <PageNotFound navigateFunc={navigate} />
+                </Route>
               </Switch>
             }
           </>
@@ -88,13 +94,16 @@ const FooterTitle = () => {
   );
 };
 
-const PageNotFound = () => {
+const PageNotFound = ({ navigateFunc }) => {
   return (
     <>
-      <WVInPageTitle style={{ textAlign: 'center' }}>Lost your way?</WVInPageTitle>
-      <Link to="/login" component={GoBackToLoginBtn} style={{ textDecoration: 'none' }}>
-        <GoBackToLoginBtn />
-      </Link>
+      <WVInPageTitle style={{ textAlign: 'center', marginBottom: '20px' }}>Lost your way?</WVInPageTitle>
+      <img
+        src={require(`assets/${productName}/error_illustration.svg`)}
+        style={{ width: '100%' }}
+        alt="404"
+      />
+      <GoBackToLoginBtn onClick={() => navigateFunc('/login')} />
     </>
   );
 }
