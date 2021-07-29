@@ -379,6 +379,13 @@ export const kycStatusMapperInvest = {
     button_text: "UPGRADE NOW",
     next_state: "/kyc/journey",
   },
+  esign_pending: {
+    icon: "ic_card_kyc_default.svg",
+    title: "Complete Esign",
+    subtitle: "Don’t miss out good returns by Delaying",
+    button_text: "COMPLETE ESIGN",
+    next_state: "/kyc-esign/info",
+  },
 };
 
 export const premiumBottomSheetMapper = {

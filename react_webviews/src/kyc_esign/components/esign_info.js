@@ -54,7 +54,18 @@ class ESignInfo extends Component {
 
   confirm = () => {
     const navigate = navigateFunc.bind(this.props);
-    navigate('/kyc/journey');
+    const fromState = this.props?.location?.state?.fromState;
+    if (!getConfig().Web) {
+      if (storageService().get('native') && !fromState) {
+        nativeCallback({ action: "exit_web" })
+      }
+    } else {
+      if (this.props.location.state.fromState === "/") {
+        navigate("/")
+      } else {
+        navigate('/kyc/journey');
+      }
+    }
   }
 
   cancel = () => {
