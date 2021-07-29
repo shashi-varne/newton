@@ -23,12 +23,14 @@ export class AccountAlreadyExistDialog extends Component {
         title={`Account already exists!`}
         image={require(`../../assets/${product}/bottomsheet_account_exist.svg`)}
         button1Props={{
-          type: "secondary",
+          color: "secondary",
+          variant: "outlined",
           title: `EDIT ${type === "email" ? "EMAIL" : "NUMBER"}`,
           onClick: editDetails,
         }}
         button2Props={{
-          type: "primary",
+          color: "secondary",
+          variant: "contained",
           title: "CONTINUE",
           showLoader: this.state.loading,
           onClick: () => next(type, data),
@@ -39,7 +41,7 @@ export class AccountAlreadyExistDialog extends Component {
       >
         <p className="text">
           Your {type === "email" ? "email address" : "mobile number"} is already
-          registered with {(isEmpty(data) && type === "email" ? data?.mobile : data?.email) && <span>some other account</span>}
+          registered with {(isEmpty(data) || type === "email" ? isEmpty(data?.mobile) : isEmpty(data?.email)) && <span>some other account</span>}
         </p>
         <div
           style={{

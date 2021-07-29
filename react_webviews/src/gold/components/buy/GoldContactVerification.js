@@ -8,6 +8,7 @@ import TextField from "@material-ui/core/TextField";
 import CheckBox from "../../../common/ui/Checkbox";
 import toast from "../../../common/ui/Toast";
 import Otp from "../../../kyc/Equity/mini-components/Otp";
+import useUserKycHook from "../../../kyc/common/hooks/userKycHook";
 import AccountAlreadyExistDialog from "../../../login_and_registration/components/AccountAlreadyExistDialog";
 import {
     validateEmail,
@@ -35,6 +36,7 @@ const GoldContactVerification = (props) => {
     const [accountAlreadyExists, setAccountAlreadyExists] = useState(false);
     const [showOtpContainer, setShowOtpContainer] = useState(false);
     const [error, setError] = useState(false);
+    const { kyc } = useUserKycHook();
 
 
     const [formData, setFormData] = useState({
@@ -46,16 +48,24 @@ const GoldContactVerification = (props) => {
     });
 
     useEffect(() => {
-        stateParams.goto = "/gold/mmtc/gold-register"
-        if (!goldUserInfo?.email_verified) {
-            setCommunicationType("email")
-        } else if (!goldUserInfo?.mobile_number_verified || goldUserInfo?.registered_with_another_account) {
-            setCommunicationType("mobile")
-        }
-        else if (goldUserInfo?.email_verified && goldUserInfo?.mobile_number_verified && !goldUserInfo?.registered_with_another_account) {
+        const data = { ...formData };
+        setShowOtpContainer(false);
+        if (goldUserInfo?.email && goldUserInfo?.mobile_no) {
             sendEvents("next")
             navigate(stateParams?.goto)
         }
+        else if (!goldUserInfo?.mobile_number_verified || !!goldUserInfo?.registered_with_another_account || !goldUserInfo?.mobile_no) {
+            setCommunicationType("mobile")
+            let mobileNumber = kyc.identification.meta_data.mobile_number || goldUserInfo?.mobile_no || "";
+            const [extension, number] = mobileNumber.toString().split("|");
+            if (extension) mobileNumber = number;
+            data.mobile = mobileNumber;
+        }
+        else if (goldUserInfo?.email_verified || !goldUserInfo?.email ) {
+            setCommunicationType("email")
+            data.email = kyc.identification.meta_data.email || goldUserInfo?.email || "";
+        }
+        setFormData({ ...data });
     }, [goldUserInfo]);
 
 
@@ -121,9 +131,6 @@ const GoldContactVerification = (props) => {
             } else {
                 const body = getPayLoad();
                 if (!body) return;
-                if (communicationType === "mobile" && formData.mobileNumberVerified) {
-                    await sendWhatsappConsent(body);
-                }
                 if (authCheckRequired) {
                     const result = await authCheckApi(body, communicationType);
                     if (result.is_user) {
@@ -155,6 +162,9 @@ const GoldContactVerification = (props) => {
                 otp: "",
                 otpId: result.otp_id,
             });
+            if (communicationType === "mobile" && formData.whatsappConsent) {
+                await sendWhatsappConsent(body);
+            }
         } catch (err) {
             console.log(err);
             toast(err.message)
@@ -179,33 +189,33 @@ const GoldContactVerification = (props) => {
 
     const sendEvents = (userAction) => {
         let eventObj = {
-          event_name: "kyc_registration",
-          properties: {
-            user_action: userAction || "",
-            screen_name: showOtpContainer
-              ? "communication_details_otp"
-              : "communication_details",
-          },
+            event_name: "kyc_registration",
+            properties: {
+                user_action: userAction || "",
+                screen_name: showOtpContainer
+                    ? "communication_details_otp"
+                    : "communication_details",
+            },
         };
         if (showOtpContainer) {
-          eventObj.properties.otp_entered = otpData.otp ? "yes" : "no";
-          eventObj.properties.mode_entry = "manual";
+            eventObj.properties.otp_entered = otpData.otp ? "yes" : "no";
+            eventObj.properties.mode_entry = "manual";
         } else {
-          if (communicationType === "email") {
-            eventObj.properties[`email_entered`] = formData.email ? "yes" : "no";
-          } else {
-            eventObj.properties[`mobile_entered`] = formData.mobile ? "yes" : "no";
-            eventObj.properties["whatsapp_agree"] = formData.whatsappConsent
-              ? "yes"
-              : "no";
-          }
+            if (communicationType === "email") {
+                eventObj.properties[`email_entered`] = formData.email ? "yes" : "no";
+            } else {
+                eventObj.properties[`mobile_entered`] = formData.mobile ? "yes" : "no";
+                eventObj.properties["whatsapp_agree"] = formData.whatsappConsent
+                    ? "yes"
+                    : "no";
+            }
         }
         if (userAction === "just_set_events") {
-          return eventObj;
+            return eventObj;
         } else {
-          nativeCallback({ events: eventObj });
+            nativeCallback({ events: eventObj });
         }
-      };
+    };
 
 
     const handleChange = (name) => (event) => {
@@ -236,9 +246,9 @@ const GoldContactVerification = (props) => {
         setOtpData({ ...otpData, otp });
     };
 
-    const handleEdit = () => {
+    const handleEdit = (noevent) => {
         setAuthCheckRequired(true);
-        sendEvents("edit");
+         if(!noevent) sendEvents("edit");
         if (showDotLoader) return;
         setAccountAlreadyExists(false)
         setShowOtpContainer(false);
@@ -368,7 +378,7 @@ const GoldContactVerification = (props) => {
                     type={communicationType}
                     data={accountAlreadyExists}
                     isOpen={accountAlreadyExists}
-                    onClose={() => setAccountAlreadyExists(false)}
+                    onClose={() => handleEdit(true)}
                     editDetails={handleEdit}
                     next={onClickbottomSheet}
                 ></AccountAlreadyExistDialog>
