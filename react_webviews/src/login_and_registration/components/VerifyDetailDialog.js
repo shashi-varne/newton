@@ -75,8 +75,9 @@ class VerifyDetailDialog extends Component {
           type === "email" ? "Email" : "Mobile"
         } verification is mandatory for investment as per SEBI`}
         button1Props={{
-          type: "primary",
+          color: "secondary",
           title: "CONTINUE",
+          variant: "contained",
           onClick: this.handleClick,
           showLoader: this.state.loading,
         }}
