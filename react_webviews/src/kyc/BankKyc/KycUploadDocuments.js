@@ -144,7 +144,7 @@ const KycUploadDocuments = (props) => {
       navigate("/kyc/add-bank");
     } else if (userType === "compliant") {
       if (isEdit || kyc.address.meta_data.is_nri) navigate(PATHNAME_MAPPER.journey);
-      else navigate(PATHNAME_MAPPER.tradingExperience)
+      else navigate(PATHNAME_MAPPER.accountInfo)
     } else {
       if (dlFlow) {
         const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
@@ -154,7 +154,7 @@ const KycUploadDocuments = (props) => {
           });
         } else {
           if (kyc.equity_sign_status !== 'signed') {
-            navigate(PATHNAME_MAPPER.tradingExperience);
+            navigate(PATHNAME_MAPPER.accountInfo);
           } else {
             navigate(PATHNAME_MAPPER.journey);
           }

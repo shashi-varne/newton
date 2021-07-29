@@ -69,7 +69,7 @@ const AccountInfo = (props) => {
         }
       }
     } else {
-      navigate(PATHNAME_MAPPER.homeKyc);
+      navigate(PATHNAME_MAPPER.tradingExperience);
     }
   };
 
