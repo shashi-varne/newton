@@ -77,6 +77,10 @@ function KycNative(props) {
       navigate("/kyc-esign/info");
     } 
     // Todo: remove this condition after audit
+    else if (kycStatus === "complete" && kyc?.equity_sign_status === "signed" && kyc?.equity_income.doc_status === "init") {
+      navigate("/kyc/upload/fno-income-proof");
+    } 
+    // Todo: remove this condition after audit
     else if (kycStatus === "complete" && kyc?.equity_sign_status === "signed" && (!kyc?.equity_investment_ready || !kyc?.fno_active)) {
       navigate("/kyc-esign/nsdl", {
         searchParams: `${getConfig().searchParams}&status=success`
