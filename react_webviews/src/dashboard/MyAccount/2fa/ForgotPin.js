@@ -83,6 +83,7 @@ const ForgotPin = (props) => {
       buttonTitle="Continue"
       hideInPageTitle
       hidePageTitle
+      disable={authDetails?.is_pan_verified && !pan}
     >
       <ForgotMPin
         primaryAuthType={authDetails?.obscured_auth_type === 'mobile' ? 'mobile' : 'email'}

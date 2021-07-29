@@ -98,7 +98,11 @@ const ForgotPin = (props) => {
       />
       {!isFetchApiRunning && !authFetchError &&
         <>
-          <LoginButton onClick={handleClick} showLoader={isApiRunning}>
+          <LoginButton
+            onClick={handleClick}
+            showLoader={isApiRunning}
+            disabled={authDetails?.is_pan_verified && !pan}
+          >
             Continue
           </LoginButton>
           <GoBackToLoginBtn onClick={goBack} />
