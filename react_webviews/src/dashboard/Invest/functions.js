@@ -587,7 +587,7 @@ export function handleCampaign() {
     hitFeedbackURL(bottom_sheet_dialog_data.action_buttons?.buttons[0]?.feedback_url)
     return;
   }
-  this.setState({show_loader : 'page', openBottomSheet : false});
+  this.setState({showPageLoader : 'page', openBottomSheet : false});
   const showRedirectUrl = bottom_sheet_dialog_data.campaign_name === "whatsapp_consent";
   handleCampaignRedirection(campLink, showRedirectUrl);
 }
