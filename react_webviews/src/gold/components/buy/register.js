@@ -374,16 +374,17 @@ class GoldRegister extends Component {
             this.setState({
               mobile_no_disabled: false,
               show_loader: false,
-              mobileAlreadyExist: true,
               mobile_no_error: error
             })
             // toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
             //   'Something went wrong');
-          } else if(
-            // res.pfwresponse.result.message === 'success'  || 
-            res.pfwresponse.result.mobile_verified === false || this.state.mobileAlreadyExist) {
-            this.verifyMobile();
-          } else if(res.pfwresponse.result.mobile_verified === true || res.pfwresponse.result.coutinue_gold_profile_registration === true) {
+          }
+          //  else if(
+          //   // res.pfwresponse.result.message === 'success'  || 
+          //   res.pfwresponse.result.mobile_verified === false) {
+          //   this.verifyMobile();
+          // } 
+          else if(res.pfwresponse.result.mobile_verified === true || res.pfwresponse.result.coutinue_gold_profile_registration === true) {
             this.createUser();
           } else {
   

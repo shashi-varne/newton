@@ -10,9 +10,6 @@ import {
   sendWhatsappConsent,
   verifyOtp,
   authCheckApi,
-  sendGoldOtp,
-  resendGoldOtp,
-  verifyGoldOtp,
 } from "../../common/api";
 import toast from "../../../common/ui/Toast";
 import {
@@ -67,8 +64,6 @@ const CommunicationDetails = (props) => {
   const [isKycDone, setIsKycDone] = useState();
   const [totalPages, setTotalPages] = useState();
   const [isDlFlow, setIsDlFlow] = useState();
-  const [goldVerificationLink, setVerificationLink] = useState();
-  const [goldResendVerificationOtpLink, setGoldResendVerificationOtpLink]  = useState();
   const [continueAccountAlreadyExists, setContinueAccountAlreadyExists] = useState(false);
   const [accountAlreadyExists, setAccountAlreadyExists] = useState(false);
 
@@ -161,16 +156,11 @@ const CommunicationDetails = (props) => {
     sendEvents("resend");
     setShowDotLoader(true);
     try {
-      if (stateParams?.fromState === "/buy-gold") {
-        const res = await resendGoldOtp(goldResendVerificationOtpLink);
-        console.log(res)
-      } else {
-        const result = await resendOtp(otpData.otpId);
-        setOtpData({
-          otp: "",
-          otpId: result.otp_id,
-        });
-      }
+      const result = await resendOtp(otpData.otpId);
+      setOtpData({
+        otp: "",
+        otpId: result.otp_id,
+      });
     } catch (err) {
       toast(err.message);
     } finally {
@@ -253,22 +243,7 @@ const CommunicationDetails = (props) => {
     }
     try {
       if (showOtpContainer) {
-        if (otpData.otp.length !== 4) {
-          toast("Minimum otp length is 4");
-          return;
-        }
-        if (stateParams?.fromState === "/buy-gold") {
-          let body = {
-            verify_link: goldVerificationLink,
-            provider: stateParams?.provider,
-            otp: otpData?.otp,
-          }
-          setShowLoader("button");
-          await verifyGoldOtp(body);
-        } else {
-          await otpVerification();
-        }
-        handleNavigation();
+        await otpVerification();
       } else {
         const body = getPayLoad();
         if (!body) return;
@@ -286,11 +261,7 @@ const CommunicationDetails = (props) => {
           return;
         }
         setShowLoader("button");
-        if (stateParams?.fromState === "/buy-gold") {
-          const result = await sendGoldOtp(body);
-          setVerificationLink(result?.verification_link);
-          setGoldResendVerificationOtpLink(result?.resend_verification_otp_link);
-        } else  if (!continueAccountAlreadyExists && !stateParams.continueAccountAlreadyExists) {
+        if (!continueAccountAlreadyExists && !stateParams.continueAccountAlreadyExists) {
           const result = await authCheckApi(body, communicationType);
           if (result.is_user) {
             userFound(result);
@@ -351,12 +322,8 @@ const CommunicationDetails = (props) => {
   };
 
   const handleNavigation = () => {
-    if(stateParams?.fromState === "/my-account") {
+    if (stateParams?.fromState === "/my-account") {
       navigate(stateParams?.goBack);
-      return;
-    };
-    if(stateParams?.fromState === "/buy-gold" ){
-      navigate(stateParams?.goTO);
       return;
     }
     if (isKycDone) {

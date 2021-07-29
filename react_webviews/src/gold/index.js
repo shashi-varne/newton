@@ -44,6 +44,7 @@ import GoldDeliveryProducts from "./components/delivery/products";
 
 import CommonRenderBenefits from './components/common/RenderBenefits';
 import CommonRenderFaqs from './components/common/RenderFaqs';
+import GoldContactVerification from "./components/buy/GoldContactVerification";
 
 const Gold = props => {
   const { url } = props.match;
@@ -73,6 +74,7 @@ const Gold = props => {
           <Route path={`${url}/:provider/:orderType/verify`} component={Otp} />
           <Route path={`${url}/providers`} component={GoldSelectProvider} />
           <Route path={`${url}/:provider/:orderType/transaction/:transact_id/`} component={GoldTransactionDetail} />
+          <Route path={`${url}/contact-verification`} component={GoldContactVerification} />
 
           {/* buy */}
           <Route path={`${url}/buy`} component={GoldBuyHome} />

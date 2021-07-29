@@ -233,10 +233,11 @@ class GoldBuyHome extends Component {
     } 
     
     if (!this.state.isRegistered) {
-      if (!this.state.user_info.mobile_number_verified || !this.state.user_info.email_verified) {
-        this.navigate("/kyc/communication-details", {
+      if ((!this.state.user_info?.mobile_number_verified || !this.state.user_info?.registered_with_another_account) || !this.state.user_info?.email_verified) {
+        this.navigate("/gold/contact-verification", {
           fromState: "/buy-gold", goBack: "/gold/buy",
-          goTO: `/gold/${this.state.provider}/gold-register`, provider: this.state.provider
+          goto: `/gold/${this.state.provider}/gold-register`,
+          user_info: this.state.user_info
         });
         return;
       }
