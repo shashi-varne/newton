@@ -56,7 +56,7 @@ const EnterNewPin = (props) => {
       "event_name": '2fa',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'enter_current_pin',
+        "screen_name": 'enter_new_pin',
       }
     };
 
