@@ -385,7 +385,7 @@ const Journey = (props) => {
         bank: '/kyc/compliant/bank-details',
         sign: PATHNAME_MAPPER.uploadSign,
         pan: PATHNAME_MAPPER.homeKyc,
-        trading_esign: PATHNAME_MAPPER.tradingExperience
+        trading_esign: PATHNAME_MAPPER.accountInfo
       }
       navigate(stateMapper[key], {
         state: {
@@ -402,7 +402,7 @@ const Journey = (props) => {
           personal: PATHNAME_MAPPER.digilockerPersonalDetails1,
           bank: '/kyc/non-compliant/bank-details',
           bank_esign: '/kyc/non-compliant/bank-details',
-          trading_esign: PATHNAME_MAPPER.tradingExperience,
+          trading_esign: PATHNAME_MAPPER.accountInfo,
           address: PATHNAME_MAPPER.addressDetails1,
           docs: PATHNAME_MAPPER.uploadProgress,
           esign: PATHNAME_MAPPER.kycEsign,
@@ -423,7 +423,7 @@ const Journey = (props) => {
           address: PATHNAME_MAPPER.addressDetails1,
           docs: PATHNAME_MAPPER.uploadProgress,
           esign: PATHNAME_MAPPER.kycEsign,
-          trading_esign: PATHNAME_MAPPER.tradingExperience,
+          trading_esign: PATHNAME_MAPPER.accountInfo,
         }
         console.log(stateMapper[key])
       }
