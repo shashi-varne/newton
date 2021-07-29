@@ -552,8 +552,10 @@ export function handleCampaignNotification () {
 };
 
 export function handleCampaignRedirection (url, showRedirectUrl) {
+  const config = getConfig();
   let campLink = url;
-  let plutusRedirectUrl = `${getBasePath()}/?is_secure=${storageService().get("is_secure")}&partner_code=${getConfig().code}`;
+  let plutusRedirectUrl = `${getBasePath()}/?is_secure=${config.isSdk}&partner_code=${config.code}`;
+  console.log(plutusRedirectUrl)
   // Adding redirect url for testing
   // eslint-disable-next-line
   campLink = `${campLink}${campLink.match(/[\?]/g) ? "&" : "?"}generic_callback=true&${showRedirectUrl ? "redirect_url" : "plutus_redirect_url"}=${encodeURIComponent(plutusRedirectUrl)}&campaign_version=1`
