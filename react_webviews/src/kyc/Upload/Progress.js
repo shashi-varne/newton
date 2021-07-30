@@ -16,8 +16,8 @@ import { landingEntryPoints } from "../../utils/constants";
 const Progress = (props) => {
   const { productName, Web } = getConfig();
   const { kyc, isLoading } = useUserKycHook();
-  const disableNext = props.location?.state?.disableNext || false;
-  const fromState = props.location?.state?.fromState;
+  const disableNext = props?.location?.state?.disableNext || false;
+  const fromState = props?.location?.state?.fromState;
   const navigate = navigateFunc.bind(props);
   const [openConfirmBack, setOpenConfirmBack] = useState(false);
 
@@ -26,7 +26,7 @@ const Progress = (props) => {
   let canGoNext = false;
 
   useEffect(() => {
-    if ((Web && landingEntryPoints.includes(fromState)) || (!Web && !fromState)) {
+    if ((landingEntryPoints.includes(fromState)) || (!Web && storageService().get("native") && !fromState)) {
       storageService().set("uploadDocsEntry", "landing");
     }
   },[])
