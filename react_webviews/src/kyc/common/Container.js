@@ -3,6 +3,7 @@ import { withRouter } from "react-router";
 import {
   didMount,
   commonRender,
+  handleOnBackClick,
 } from "../../common/components/container_functions";
 import { nativeCallback } from "utils/native_callback";
 import "../../utils/native_listener";
@@ -27,6 +28,7 @@ class Container extends Component {
     this.historyGoBack = this.historyGoBack.bind(this);
     this.didMount = didMount.bind(this);
     this.commonRender = commonRender.bind(this);
+    this.handleOnBackClick = handleOnBackClick.bind(this);
   }
 
   componentDidMount() {
@@ -39,13 +41,7 @@ class Container extends Component {
   }
 
   historyGoBack = (backData) => {
-    const fromState = this.props.location?.state?.fromState || "";
-    const toState = this.props.location?.state?.toState || "";
-    const params = this.props.location?.params || {};
-    let pathname = this.props.location?.pathname || "";
-    if(pathname.indexOf('appl/webview') !== -1) {
-      pathname = pathname.split("/")[5] || "/";
-    }
+    const pathname = this.props.location?.pathname || "";
 
     let openDialog = false;
     switch (pathname) {
@@ -69,12 +65,10 @@ class Container extends Component {
     if (this.getEvents("back")) {
       nativeCallback({ events: this.getEvents("back") });
     }
-
-    if (toState) {
-      let isRedirected = this.backButtonHandler(this.props, fromState, toState, params);
-      if (isRedirected) {
-        return;
-      }
+    
+    const backHandle = this.handleOnBackClick();
+    if(backHandle) {
+      return;
     }
 
     if (this.props.headerData && this.props.headerData.goBack) {

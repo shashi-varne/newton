@@ -26,14 +26,14 @@ const FundSummaryMenu = ({
       getContentAnchorEl={null}
       className="fundwise-summary-menu"
     >
-      <MenuItem>
-        <div className="menu-item" onClick={() => handleSwitch()}>
+      <MenuItem onClick={handleSwitch}>
+        <div className="menu-item">
           <img src={require(`assets/switch_icon.png`)} alt="" />
           <div>Switch</div>
         </div>
       </MenuItem>
-      <MenuItem>
-        <div className="menu-item" onClick={() => handleTransactions()}>
+      <MenuItem onClick={handleTransactions}>
+        <div className="menu-item">
           <img src={require(`assets/trans_icon.png`)} alt="" />
           <div>Transactions</div>
         </div>

@@ -1,6 +1,16 @@
+///////////////////////NOTE///////////////////////////////////
+
+// please add the direct enteries path in:
+// 1. without param => directEnteries (ex : "/invest/doityourself/direct")
+// 2. with param => directEntriesWithParams (ex: "diy/fundlist/direct/:name/:key/:type" should be added as "diy/fundlist/direct")
+
+//////////////////////////////////////////////////////////
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { storageService } from "utils/validators";
 import { commonBackMapper } from "utils/constants";
+import isEmpty from "lodash/isEmpty";
+
+
 
 // required
   // try {
@@ -65,6 +75,7 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
       return backButtonHandlerWeb(props, fromState, currentState, params)
     } else {
       window.callbackWeb.sendEvent(message);
+      storageService().clear();
       return true;
     }
   } else {
@@ -75,9 +86,34 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
 export const backButtonHandlerWeb = (props, fromState, currentState, params) => {
   const navigate = navigateFunc.bind(props);
   const config = getConfig();
+  const pathName = props.location.pathname;
+  const entryPath = storageService().get('entry_path');
+  console.log("pathName", pathName);
+  console.log("entryPath", entryPath);
   
   const landingRedirectPaths = ["/kyc/report", "/notification", "/nps/payment/callback",
     "/nps/mandate/callback", "/nps/success", "/page/invest/campaign/callback", "/reports"];
+
+  // Note: will have to remove "/invest/explore"  from the direct enteries.
+  const directEnteries = ["/invest/doityourself/direct/", "/nps", "/advanced-investing/new-fund-offers/info",
+     "/direct/gold", "/invest/instaredeem", "/reports", "/invest/savegoal", "/invest", "/withdraw", "/invest/explore", "/kyc/journey"];
+
+  const directEntriesWithParams = ["/diy/fundinfo/direct", "/diy/fundlist/direct", "/direct/new-fund-offers"];
+
+  const verifyDirectEntriesWithParams = () => {
+    return directEntriesWithParams.find(el => pathName.match(el));
+  }
+    
+  if(directEnteries.indexOf(pathName) !== -1 || !isEmpty(verifyDirectEntriesWithParams())) {
+    if(pathName === entryPath) {
+      const message = JSON.stringify({
+        type: "iframe_close"
+      });
+      window.callbackWeb.sendEvent(message);
+      storageService().clear();
+      return true;
+    }
+  }
 
   if (landingRedirectPaths.indexOf(currentState) !== -1 || currentState.indexOf("/nps/payment/callback") !== -1) {
     navigate("/landing");
@@ -91,11 +127,10 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
     return true;
   }
 
-  const diyDirectEntryArr = ["/diy/fundlist/direct", "/diy/fundinfo/direct", "/diy/invest", "/invest/doityourself/direct"];
+  const diyDirectEntryArr = ["/diy/fundlist/direct", "/diy/fundinfo/direct", "/diy/invest", "/invest/doityourself/direct/"];
 
   const verifyCurrentStateWithDirect = () => {
-    const current = currentState.split("/:")[0];
-    return diyDirectEntryArr.includes(current);
+    return diyDirectEntryArr.some(el => currentState.match(el));
   }
 
   if ((currentState === "/kyc-esign/nsdl" && params?.status === "success") || verifyCurrentStateWithDirect()) {
@@ -131,21 +166,8 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
         navigate("/logout");
       }
       return true;
-    // case '/invest/money-control':
-    //   let message = JSON.stringify({
-    //     type: "iframe_close"
-    //   });
-    //   window.callbackWeb.sendEvent(message);
-    //   storageService().clear();
-    //   break;
-    // case '/account/merge/linked/success':
-    //   if (config?.code === 'moneycontrol') {
-    //     window.history.go(-2);
-    //   }// check later
-    //   // navigate kyc home
-    //   break;
     default:
-      const closeIframeStates = ["/", "/invest", "/landing", "/reports", "/withdraw"]
+      const closeIframeStates = ["/", "/invest", "/landing", "/reports", "/withdraw", "/invest/explore"];
       if(closeIframeStates.includes(currentState) && config?.code === 'moneycontrol') {
         let message = JSON.stringify({
           type: "iframe_close"

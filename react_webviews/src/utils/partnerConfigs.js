@@ -31,6 +31,7 @@ export const commonCardsConfig = {
   investSections: [
     "kyc",
     "stocks",
+    "indexFunds",
     "ourRecommendations",
     "diy",
     "bottomScrollCards",
@@ -55,6 +56,8 @@ export const basePartnerConfig = {
     termsLink: "https://www.fisdom.com/terms/",
     schemeLink: "https://www.fisdom.com/scheme-offer-documents/",
     privacyLink: "https://www.fisdom.com/privacy/",
+    refundLink: "https://www.fisdom.com/refund/",
+    disclaimerLink: "https://www.fisdom.com/disclaimer/",
     webAppUrl: "https://app.fisdom.com/#!/",
     configPrimaryColorClass: 'configPrimaryColorClass',
     configPrimaryBackgroundColorClass: 'fisdomBackColor',
@@ -73,6 +76,8 @@ export const basePartnerConfig = {
     termsLink: "https://finity.in/terms/",
     schemeLink: "https://finity.in/scheme/",
     privacyLink: "https://www.finity.in/privacy/",
+    refundLink: "https://www.finity.in/refund/",
+    disclaimerLink: "https://www.finity.in/disclaimer/",
     webAppUrl: "https://app.mywaywealth.com/#!/",
     configPrimaryColorClass: 'configPrimaryColorClass',
     configPrimaryBackgroundColorClass: 'fisdomBackColor',
@@ -205,6 +210,7 @@ export const partnerConfigs = {
     mobile: "+91-9916149111",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
+      indexFunds : ["passiveIndexFunds"],
       ourRecommendations: ["instaredeem", "buildwealth", "savetax"],
       financialTools: ["fhc", "risk_profile"],
     },
