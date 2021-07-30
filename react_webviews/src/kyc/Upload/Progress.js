@@ -78,15 +78,15 @@ const Progress = (props) => {
   }
 
   const goBackToPath = () => {
-    if (!Web && storageService().get("native") && !fromState) {
-      nativeCallback({ action: "exit_web"});
-    } else {
-      if (storageService().get("uploadDocsEntry") === "landing") {
-        storageService().remove("uploadDocsEntry");
-        navigate("/");
+    if (storageService().get("uploadDocsEntry") === "landing") {
+      storageService().remove("uploadDocsEntry");
+      if (!Web) {
+        nativeCallback({ action: "exit_web"});
       } else {
-        navigate(PATHNAME_MAPPER.journey);
+        navigate("/");
       }
+    } else {
+      navigate(PATHNAME_MAPPER.journey);
     }
   };
 
