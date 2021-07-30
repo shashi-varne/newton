@@ -102,7 +102,7 @@ WVCustomCarousel.defaultProps = {
   showArrows: true,
   infiniteLoop: false,
   indicatorStyles: {
-    background: productName !== "fisdom" ? "#9CC0FF" : "#DFD8EF",
+    background: productName !== "fisdom" ? "#DCDEE6" : "#DFD8EF",
   },
   customArrowStyle: {},
 };
