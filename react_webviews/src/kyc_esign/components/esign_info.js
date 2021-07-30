@@ -56,9 +56,9 @@ class ESignInfo extends Component {
 
   confirm = () => {
     const navigate = navigateFunc.bind(this.props);
-    const fromState = this.props?.location?.state?.fromState;
+    const goBackPath = this.props?.location?.state?.goBack;
     if (!getConfig().Web) {
-      if (storageService().get('native') && !fromState) {
+      if (storageService().get('native') && (goBackPath === "exit")) {
         nativeCallback({ action: "exit_web" })
       } else {
         navigate(PATHNAME_MAPPER.journey);

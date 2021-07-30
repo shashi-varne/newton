@@ -78,7 +78,7 @@ const Journey = (props) => {
   const [kyc, setKyc] = useState({})
   const [user, setUser] = useState({})
   const state = props.location.state || {};
-  let { fromState } = state;
+  let { fromState, goBack: goBackPath } = state;
   
   const config = getConfig();
   const productName = config.productName
@@ -676,10 +676,10 @@ const Journey = (props) => {
       kyc.equity_sign_status === "signed")
     ) {
       if (!config.Web) {
-        if (storageService().get("native") && !fromState) {
+        if (storageService().get("native") && (goBackPath === "exit")) {
           nativeCallback({ action: "exit_web"});
         } else {
-          navigate(fromState);
+          navigate("/invest");
         }
       } else {
         navigate('/invest')

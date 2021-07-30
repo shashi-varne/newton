@@ -64,7 +64,9 @@ const FnOIncomeProof = (props) => {
   const fromState = props?.location?.state?.fromState;
   const goBackPath = props.location?.state?.goBack || "";
   const { productName, Web } = getConfig();
-  const hideSkipOption = !Web ? (storageService().get("native") && !fromState) : landingEntryPoints.includes(fromState);
+  console.log("config...", getConfig());
+  console.log("fromState..", fromState);
+  const hideSkipOption = !Web ? (storageService().get("native") && (goBackPath === "exit")) : landingEntryPoints.includes(fromState);
 
   useEffect(() => {
     setFilePassword('');
@@ -135,7 +137,7 @@ const FnOIncomeProof = (props) => {
   }
 
   const commonNativeNavigation = () => {
-    if (storageService().get("native") && !fromState) {
+    if (storageService().get("native") && (goBackPath === "exit")) {
       nativeCallback({ action: "exit_web"});
     } else {
       commonRedirection();

@@ -18,6 +18,7 @@ const Progress = (props) => {
   const { kyc, isLoading } = useUserKycHook();
   const disableNext = props?.location?.state?.disableNext || false;
   const fromState = props?.location?.state?.fromState;
+  const goBackPath = props.location?.state?.goBack || "";
   const navigate = navigateFunc.bind(props);
   const [openConfirmBack, setOpenConfirmBack] = useState(false);
 
@@ -26,7 +27,7 @@ const Progress = (props) => {
   let canGoNext = false;
 
   useEffect(() => {
-    if ((landingEntryPoints.includes(fromState)) || (!Web && storageService().get("native") && !fromState)) {
+    if ((landingEntryPoints.includes(fromState)) || (!Web && storageService().get("native") && (goBackPath === "exit"))) {
       storageService().set("uploadDocsEntry", "landing");
     }
   },[])
