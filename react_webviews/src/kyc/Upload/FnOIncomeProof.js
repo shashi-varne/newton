@@ -113,20 +113,24 @@ const FnOIncomeProof = (props) => {
     if(skip) {
       sendEvents("skip");
     }
-
+    
     if (!Web) {
       commonNativeNavigation();
     } else {
       if (landingEntryPoints.includes(fromState)) {
         navigate("/");
       } else {
-        const areDocsPending = await checkDocsPending(kyc);
-        if (areDocsPending) {
-          navigate('/kyc/document-verification');
-        } else {
-          navigate('/kyc-esign/info');
-        }
+        commonRedirection();
       }
+    }
+  }
+  
+  const commonRedirection = async () => {
+    const areDocsPending = await checkDocsPending(kyc);
+    if (areDocsPending) {
+      navigate('/kyc/document-verification');
+    } else {
+      navigate('/kyc-esign/info');
     }
   }
 
@@ -134,7 +138,7 @@ const FnOIncomeProof = (props) => {
     if (storageService().get("native") && !fromState) {
       nativeCallback({ action: "exit_web"});
     } else {
-      navigate(fromState);
+      commonRedirection();
     }
   }
 
