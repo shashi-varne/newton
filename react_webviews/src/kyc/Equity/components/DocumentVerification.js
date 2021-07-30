@@ -4,10 +4,9 @@ import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import Container from "../../common/Container";
 import WVJourneyShortening from "../../../common/ui/JourneyShortening/JourneyShortening";
 import useUserKycHook from "../../common/hooks/userKycHook";
-import { isEmpty, storageService } from "../../../utils/validators";
+import { isEmpty } from "../../../utils/validators";
 import { getPendingDocuments } from "../../common/functions";
 import "./commonStyles.scss";
-import { PATHNAME_MAPPER } from "../../constants";
 
 const config = getConfig();
 const productName = config.productName;
@@ -16,7 +15,6 @@ const DocumentVerification = (props) => {
   const navigate = navigateFunc.bind(props);
   const {kyc, isLoading} = useUserKycHook();
   const [docs, setDocs] = useState([]);
-  const kycStartPoint = storageService().get("kycStartPoint");
 
   useEffect(() => {
     const init = async () => {
