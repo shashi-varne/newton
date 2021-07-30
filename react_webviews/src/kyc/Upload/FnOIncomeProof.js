@@ -64,8 +64,6 @@ const FnOIncomeProof = (props) => {
   const fromState = props?.location?.state?.fromState;
   const goBackPath = props.location?.state?.goBack || "";
   const { productName, Web } = getConfig();
-  console.log("config...", getConfig());
-  console.log("fromState..", fromState);
   const hideSkipOption = !Web ? (storageService().get("native") && (goBackPath === "exit")) : landingEntryPoints.includes(fromState);
 
   useEffect(() => {
