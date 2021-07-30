@@ -29,6 +29,7 @@ export const commonCardsConfig = {
   logo: "logo_white.png",
   investSections: [
     "kyc",
+    "indexFunds",
     "ourRecommendations",
     "diy",
     "bottomScrollCards",
@@ -207,6 +208,7 @@ export const partnerConfigs = {
     mobile: "+91-9916149111",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
+      indexFunds : ["passiveIndexFunds"],
       ourRecommendations: ["instaredeem", "buildwealth", "savetax"],
       financialTools: ["fhc", "risk_profile"],
     },

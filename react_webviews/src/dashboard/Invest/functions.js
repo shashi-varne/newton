@@ -160,7 +160,7 @@ export function setInvestCardsData() {
 }
 
 export function clickCard(state, title) {
-  this.sendEvents("next", title);
+  if (state !== "passiveIndexFunds") this.sendEvents("next", title);
   switch (state) {
     case "100_sip":
       this.getRecommendationApi(100);

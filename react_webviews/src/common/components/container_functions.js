@@ -209,6 +209,7 @@ export function commonRender(props_base) {
                         notification={this.props.notification}
                         handleNotification={this.props.handleNotification}  
                         noBackIcon={this.props.noBackIcon}        
+                        customBackButtonColor={this.props.customBackButtonColor}
                     />
                 )}
             
