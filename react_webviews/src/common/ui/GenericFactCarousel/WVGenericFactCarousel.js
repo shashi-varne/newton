@@ -47,7 +47,7 @@ function WVGenericFactCarousel({
         title={label}
         style={{ ...arrowStyles, left: 0 }}
       >
-        <img src={require("assets/carousel-prev.svg")} alt="prev-btn" />
+        <img src={require("assets/finity/carousel-prev.svg")} alt="prev-btn" />
       </div>
     );
   arrowProps["renderArrowNext"] = (onClickHandler, hasNext, label) =>
@@ -57,7 +57,7 @@ function WVGenericFactCarousel({
         title={label}
         style={{ ...arrowStyles, right: 0 }}
       >
-        <img src={require("assets/carousel-next.svg")} alt="next-btn" />
+        <img src={require("assets/finity/carousel-next.svg")} alt="next-btn" />
       </div>
     );
 

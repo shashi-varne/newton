@@ -27,7 +27,7 @@ class Landing extends Component {
       playing: false,
       unmount: true,
       skelton: true,
-      productName: getConfig().productName,
+      productName: "finity" || getConfig().productName,
     };
     this.initialize = initialize.bind(this);
   }

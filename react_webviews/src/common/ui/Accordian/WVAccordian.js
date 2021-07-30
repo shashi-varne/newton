@@ -13,8 +13,8 @@ Example:
 
 import React, { memo, useState } from "react";
 import Collapse from "@material-ui/core/Collapse";
-import ExpandMoreIcon from "../../../assets/expand_more.svg";
-import ExpandLessIcon from "../../../assets/expand_less.svg";
+import ExpandMoreIcon from "../../../assets/finity/expand_more.svg";
+import ExpandLessIcon from "../../../assets/finity/expand_less.svg";
 import PropTypes from "prop-types";
 import "./WVAccordian.scss";
 
