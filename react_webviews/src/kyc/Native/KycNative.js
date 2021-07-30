@@ -72,7 +72,15 @@ function KycNative(props) {
         }
       });
     } else if (kycStatus === "submitted") {
-      nativeCallback({ action: "exit_web"});
+      // nativeCallback({ action: "exit_web"});
+      // Todo: remove this condition after audit
+      if (TRADING_ENABLED) {
+        navigate(PATHNAME_MAPPER.documentVerification)
+      } else {
+        navigate("/kyc-esign/nsdl", {
+          searchParams: `${getConfig().searchParams}&status=success`
+        });
+      }
     } else if (kycStatus === "esign_pending") {
       navigate("/kyc-esign/info");
     } 

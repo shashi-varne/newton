@@ -310,7 +310,7 @@ export function getKycAppStatus(kyc) {
     status = 'incomplete';
   }
 
-  if (kyc.kyc_status !== 'compliant' && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && kyc.sign_status !== 'signed') {
+  if (!TRADING_ENABLED && kyc.kyc_status !== 'compliant' && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && kyc.sign_status !== 'signed') {
     status = 'incomplete';
   }
 
