@@ -316,8 +316,9 @@ export const sendWhatsappConsent = async (body) => {
   return handleApi(res);
 }
 
+// ------------------ Gold Related API ----------------- 
 export const verifyGoldOtp = async (body) => {
-  let url = body?.verify_link + '/' + body?.provider + '?otp=' + body?.otp;
+  let url = body?.verify_link + '?otp=' + body?.otp;
   const res = await Api.post(url);
   return handleApi(res);
 }
@@ -334,6 +335,13 @@ export const resendGoldOtp = async (body) => {
 
 export const authCheckApi = async (body, contact_type) => {
   const res = await Api.get(`${API_CONSTANTS.authCheck}?contact_type=${contact_type}&contact_value=${body[contact_type]}`);
+  return handleApi(res);
+};
+
+// -------------------------------------------------------
+
+export const comfirmVerification = async (body) => {
+  const res = await Api.get(body)
   return handleApi(res);
 };
 
