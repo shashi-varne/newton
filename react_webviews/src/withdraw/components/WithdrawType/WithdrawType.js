@@ -40,7 +40,7 @@ const Landing = (props) => {
           let val = {}
           // eslint-disable-next-line no-unused-expressions
           data?.recommendations[0]?.allocations?.forEach((el) => {
-            val = { ...val, [el?.mf?.isin]: Math.ceil(el?.amount) }
+            val = { ...val, [el?.mf?.isin]: Math.round(el?.amount) }
           })
           setValue(val)
           const totalAmount = getTotalAmount(val)

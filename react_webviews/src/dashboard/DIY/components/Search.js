@@ -105,15 +105,10 @@ const Search = (props) => {
               <SearchIcon className="search-icon" />
             </div>
           </div>
-          {showErrorMessage && (
-            <div className="error-message message" data-aid='error-message message'>
-              Minimum 4 characters required
-            </div>
-          )}
         </div>
       }
       {showErrorMessage && (
-        <div className="error-message message">
+        <div className="error-message message" data-aid='error-message message'>
           Minimum 4 characters required
         </div>
       )}

@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router";
 
-import {didMount ,commonRender} from '../../common/components/container_functions';
+import {didMount ,commonRender, handleOnBackClick} from '../../common/components/container_functions';
 
 
 import { nativeCallback, handleNativeExit } from "utils/native_callback";
@@ -24,6 +24,7 @@ class Container extends Component {
     };
 
     this.didMount = didMount.bind(this);
+    this.handleOnBackClick = handleOnBackClick.bind(this);
     this.commonRender =  commonRender.bind(this);
   }
 
@@ -36,11 +37,13 @@ class Container extends Component {
   }
 
   historyGoBack = (backData) => {
-    
     if (this.getEvents("back")) {
       nativeCallback({ events: this.getEvents("back") });
     }
-    
+    const backHandle = this.handleOnBackClick();
+    if(backHandle) {
+      return;
+    }
     let fromHeader = backData ? backData.fromHeader : false;
     let pathname = this.props.history.location.pathname;
 

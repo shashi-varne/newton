@@ -208,11 +208,10 @@ const Balance = (props) => {
                 ({ title, desc, redirectUrl, openModal, type }, idx) => {
                   const showCard = type !== "instaredeem" ? true : investCards.instaredeem;
                   return (
-                    <>
+                    <React.Fragment key={idx}>
                       {showCard && (
                         <div
                           className="withdraw-list-item flex"
-                          key={idx}
                           data-aid={`withdraw-list-item flex-${idx + 1}`}
                           onClick={() =>
                             redirect(title, redirectUrl, openModal)
@@ -233,7 +232,7 @@ const Balance = (props) => {
                           </div>
                         </div>
                       )}
-                    </>
+                    </React.Fragment>
                   );
                 }
               )}

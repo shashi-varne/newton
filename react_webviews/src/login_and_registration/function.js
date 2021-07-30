@@ -5,7 +5,7 @@ import { storageService, getUrlParams } from "utils/validators";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { isEmpty } from "../utils/validators";
 import { nativeCallback } from "../utils/native_callback";
-import { getBasePath } from "../utils/functions";
+import { getBasePath, isAuthenticatedUser } from "../utils/functions";
 
 const config = getConfig();
 const isMobileView = config.isMobileDevice;
@@ -30,6 +30,10 @@ export function initialize() {
   let { referrer = "" } = main_query_params;
 
   let redirectUrl = encodeURIComponent(`${basePath}/${config.searchParams}`);
+  if(isAuthenticatedUser(this.props)) {
+    return;
+  }
+
   const partners = [
     "hbl",
     "sbm",

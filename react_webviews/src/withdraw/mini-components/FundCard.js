@@ -26,7 +26,7 @@ const FundCard = ({ type, expand, data,disabled, calcTotalAmount, checkError, au
     } else {
       setFundValue('');
     }
-    checkLimit(Math.ceil(value), Math.ceil(amount),data?.mf?.isin)
+    checkLimit(Math.round(value), Math.round(amount),data?.mf?.isin)
   }
   const handleToggle = () => {
     setOpen(!open);
@@ -76,7 +76,7 @@ const FundCard = ({ type, expand, data,disabled, calcTotalAmount, checkError, au
         }
       }
     } else {
-      if (num > Math.ceil(compNum)) {
+      if (num > Math.round(compNum)) {
         setError(true);
         setHelperText('Amount cannot be more than withdrawable amount');
         checkError(isin, true);
@@ -125,7 +125,7 @@ const FundCard = ({ type, expand, data,disabled, calcTotalAmount, checkError, au
       <div className='withdraw-investment-container' data-aid='withdraw-investment-container'>
         <div className='withdraw-amount-container' data-aid='withdraw-amount-withdrawable-text'>
           <div className='amount-header-text'>WITHDRAWABLE AMOUNT</div>
-          <div>{inrFormatDecimal(Math.ceil(type === 'systematic' ? balance : amount))}</div>
+          <div>{inrFormatDecimal(Math.round(type === 'systematic' ? balance : amount))}</div>
         </div>
         <div className='withdraw-amount-container' data-aid='withdraw-amount-investment-text'>
           <div className='investment-header-text'>INVESTMENT SINCE</div>
@@ -137,9 +137,9 @@ const FundCard = ({ type, expand, data,disabled, calcTotalAmount, checkError, au
           <Input
             id='amount'
             label='Withdraw Amount'
-            value={type === 'systematic' ? formatAmountInr(Math.ceil(amount)) : fundValue ? formatAmountInr(fundValue) : ""}
+            value={type === 'systematic' ? formatAmountInr(Math.round(amount)) : fundValue ? formatAmountInr(fundValue) : ""}
             onChange={handleChange}
-            disabled={disabled || Math.ceil(amount) === 0}
+            disabled={disabled || Math.round(amount) === 0}
             error={error}
             helperText={error && helperText}
             type='text'

@@ -4,6 +4,7 @@ import { getConfig } from "utils/functions";
 import SdkInvestCard from "../../mini-components/SdkInvestCard";
 import "./SdkLanding.scss";
 import { prepareInvestMaaper } from "../../constants";
+import { isAuthenticatedUser } from "../../../../utils/functions";
 
 class Prepare extends Component {
   constructor(props) {
@@ -11,6 +12,10 @@ class Prepare extends Component {
     this.state = {
       showSkelton: false,
     };
+  }
+
+  componentDidMount = () => {
+    isAuthenticatedUser(this.props);
   }
 
   handleCard = (path) => () => {
