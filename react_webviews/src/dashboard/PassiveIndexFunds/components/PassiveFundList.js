@@ -192,7 +192,7 @@ class FundList extends Component {
             title: 'Expense Ratio',
             propName: 'expense_ratio',
             formatter: (value) =>
-                <span style={{}}>
+                <span>
                     {value ? value + "%" : "NA"}
                 </span>
         }, {
@@ -210,7 +210,7 @@ class FundList extends Component {
             title: 'Tracking Error',
             propName: 'tracking_error',
             formatter: (value) =>
-                <span style={{}}>
+                <span>
                     {value ? value + `% (1Y)` : 'NA'}
                 </span>
         }])

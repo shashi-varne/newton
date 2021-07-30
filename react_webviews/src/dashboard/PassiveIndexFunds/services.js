@@ -1,5 +1,5 @@
 import Api from "../../utils/api";
-import { isEmpty } from 'lodash';
+import isEmpty from "lodash/isEmpty";
 import toast from '../../common/ui/Toast';
 
 

@@ -9,11 +9,12 @@ import { storageService } from "utils/validators";
 import { initialize } from "../common/commonFunctions";
 import { nativeCallback } from "../../../utils/native_callback";
 import VideoBlockImageSection from "../mini-components/VideoBlockImageSection"
+import { getConfig } from "utils/functions";
 import { Imgc } from "../../../common/ui/Imgc";
 import { isEmpty } from 'lodash';
 import WVMenuListDropdownItem from "../../../common/ui/MenuListDropdown/WVMenuListDropdownItem"
-import KeyInsightBackground from "../../../assets/passiveFundKeyInsights.svg";
-import ActivePassiveBackground from "../../../assets/active_passive_background.svg";
+import KeyInsightBackground from "../../../assets/finity/passiveFundKeyInsights.svg";
+import ActivePassiveBackground from "../../../assets/finity/active_passive_background.svg";
 import WVInPageSubtitle from "../../../common/ui/InPageHeader/WVInPageSubtitle";
 import WVGenericContentCarousel from "../../../common/ui/GenericContentCarousel/WVGenericContentCarousel";
 import WVGenericFactCarousel from "../../../common/ui/GenericFactCarousel/WVGenericFactCarousel";
@@ -26,6 +27,7 @@ class Landing extends Component {
       playing: false,
       unmount: true,
       skelton: true,
+      productName: getConfig().productName,
     };
     this.initialize = initialize.bind(this);
   }
@@ -81,7 +83,7 @@ class Landing extends Component {
 
   render() {
 
-    const { playing, unmount } = this.state;
+    const { playing, unmount, productName } = this.state;
     return (
       <Container
         events={this.sendEvents("just_set_events")}
@@ -113,7 +115,7 @@ class Landing extends Component {
                 light={true}
                 playIcon={
                   <Imgc
-                    src={require(`assets/icon_play_btn.svg`)}
+                    src={require(`assets/${productName}/icon_play_btn.svg`)}
                     className="react-player play-icon"
                     alt=""
                   />
@@ -126,7 +128,7 @@ class Landing extends Component {
               />
             </div>}
             {!unmount && this.setState({ unmount: true })}
-            <VideoBlockImageSection />
+            <VideoBlockImageSection productName={productName} />
           </div>
           <div className="content-main" data-aid="content-main">
             <h1 className="category-title" data-aid="category-title-1">Top index funds</h1>

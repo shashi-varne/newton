@@ -5,6 +5,7 @@ import WVAccordian from "../../../common/ui/Accordian/WVAccordian";
 import { List } from "@material-ui/core";
 import MorningStar from "../../../assets/logo_morningstar.svg";
 import moment from "moment";
+import { formatAmountInr } from 'utils/validators';
 import {
   fetch_fund_details,
   fetch_fund_graph,
@@ -95,7 +96,7 @@ function PassiveFundDetails({ history }) {
       "3Y": [],
       "5Y": [],
     };
-    for (var i = 0; i < amfi_data.length; i++) {
+    for (let i = 0; i < amfi_data.length; i++) {
       let presentValue = amfi_data[i][0];
       if (presentValue <= maxi) {
         if (presentValue >= one_month_minimum) {
@@ -236,7 +237,7 @@ function PassiveFundDetails({ history }) {
                 </span>
               </p>
               <p className="pfd-nav-returns" style={{ color: "var(--dark)" }}>
-                ₹{fundDetails?.performance?.current_nav}
+                {formatAmountInr(fundDetails?.performance?.current_nav)}
               </p>
             </div>
             <div>
