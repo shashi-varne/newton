@@ -1,6 +1,6 @@
-import { productName } from "./common/commonFunctions";
-import Radio from '@material-ui/core/Radio'
-export const product_name = 'finity' || productName()
+import { getConfig } from "utils/functions";
+import Radio from '@material-ui/core/Radio';
+export const productName = 'finity' || getConfig().productName;
 
 
 export const KEY_INSIGHTS_CAROUSEL = [
@@ -68,25 +68,25 @@ export const FUND_CATEGORY = [
     key: 'nifty_backers',
     title: 'Nifty backers',
     subtitle: 'Invest in Nifty backed funds',
-    icon: require(`assets/${product_name}/nifty_backers.svg`)
+    icon: require(`assets/${productName}/nifty_backers.svg`)
   },
   {
     key: 'sensex_backers',
     title: 'Sensex backers',
     subtitle: 'Top S&P BSE Sensex funds',
-    icon: require(`assets/${product_name}/sensex_backers.svg`)
+    icon: require(`assets/${productName}/sensex_backers.svg`)
   },
   {
     key: 'thematic_funds',
     title: 'Thematic funds',
     subtitle: 'Funds tracking sectoral indices',
-    icon: require(`assets/${product_name}/thematic_funds.svg`)
+    icon: require(`assets/${productName}/thematic_funds.svg`)
   },
   {
     key: 'global_indices',
     title: 'Global indices',
     subtitle: 'Invest in international indices',
-    icon: require(`assets/${product_name}/global_indices.svg`)
+    icon: require(`assets/${productName}/global_indices.svg`)
   }
 ];
 
