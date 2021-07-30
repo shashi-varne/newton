@@ -1204,6 +1204,7 @@ body[data-device="mobile"] {
     margin-left: 16px;
   }
 }
+
 .Toastify__toast{
   min-height: 40px !important;
   margin: 0 20px;
@@ -1428,4 +1429,13 @@ padding-right: 12px !important;
     }
   }
 
+}
+
+  
+//Passive Funds List Style :
+.fundlist-data {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0 20px 0;
 }

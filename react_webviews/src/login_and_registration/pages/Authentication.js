@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import UiSkelton from "common/ui/Skelton";
-import toast from "common/ui/Toast";
-import { getConfig, navigate as navigateFunc } from "../../utils/functions";
-import { getUrlParams, storageService } from "../../utils/validators";
-import { partnerAuthentication } from "../functions";
+import UiSkelton from "../common/ui/Skelton";
+import toast from "../common/ui/Toast";
+import { getConfig, navigate as navigateFunc, isAuthenticatedUser } from "../utils/functions";
+import { getUrlParams, storageService } from "../utils/validators";
+import { partnerAuthentication } from "./function";
 
 const config = getConfig();
 const PartnerAuthentication = (props) => {
@@ -17,6 +17,9 @@ const PartnerAuthentication = (props) => {
   }, []);
 
   const initialize = async () => {
+    if(isAuthenticatedUser(props)) {
+      return;
+    }
     try {
       const result = await partnerAuthentication({
         partnerCode,

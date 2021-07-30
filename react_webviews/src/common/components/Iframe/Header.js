@@ -2,7 +2,6 @@ import React from 'react';
 import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
-import Close from '@material-ui/icons/Close';
 import SVG from 'react-inlinesvg';
 import back_arrow from 'assets/iframe_back.svg';
 import close_icn from 'assets/iframe_close.svg';
@@ -22,6 +21,10 @@ const Header = ({ classes, goBack, disableBack, headerData = {}, showIframePartn
   const isWeb = config.Web;
   const isSdk = config.isSdk;
 
+  if(disableBack) {
+    headerData.icon = "close"
+  }
+
   return (
     <AppBar
       position='fixed'
@@ -36,7 +39,7 @@ const Header = ({ classes, goBack, disableBack, headerData = {}, showIframePartn
           aria-label='Menu'
           onClick={headerData.goBack || goBack}
         >
-          {!disableBack && !headerData.hide_icon && (
+          {!headerData.hide_icon && (
             <SVG
               preProcessor={(code) =>
                 code.replace(
@@ -46,9 +49,6 @@ const Header = ({ classes, goBack, disableBack, headerData = {}, showIframePartn
               }
               src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
             />
-          )}
-          {disableBack && !headerData.hide_icon && (
-            <Close color={isMobileDevice ? 'primary': 'default'}/>
           )}
           {showIframePartnerLogo && isWeb && isMobileDevice && (
             <img
@@ -70,6 +70,7 @@ const Header = ({ classes, goBack, disableBack, headerData = {}, showIframePartn
         {!isMobileDevice && (
           <div>
             <img
+              style={{verticalAlign: "middle"}}
               src={require(`assets/${logo}`)}
               className={classes.img}
               alt='partnerLogo'

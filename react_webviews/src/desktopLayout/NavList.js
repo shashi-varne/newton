@@ -89,12 +89,13 @@ let data = [
     path: '/logout',
   },
 ];
-const productName = getConfig().productName;
-const isMobileDevice = getConfig().isMobileDevice;
-const partnerLoan = getConfig()?.navLinkOptions?.loan;
-const showReferral = !getConfig()?.referralConfig?.shareRefferal;
 
 const NavList = (props) => {
+  const config = getConfig();
+  const productName = config.productName;
+  const isMobileDevice = config.isMobileDevice;
+  const partnerLoan = config?.navLinkOptions?.loan;
+  const showReferral = !config?.referralConfig?.shareRefferal;
   const navigate = navigateFunc.bind(props);
   const [referDialog, setReferDialog] = useState(false);
   const [activePath, setActivePath] = useState('');
@@ -196,7 +197,7 @@ const NavList = (props) => {
             <a
               rel='noopener noreferrer'
               target='_blank'
-              href={`https://www.${productName}.com/privacy/`}
+              href={config.privacyLink}
             >
               Privacy Policy
             </a>
@@ -205,7 +206,7 @@ const NavList = (props) => {
             <a
               rel='noopener noreferrer'
               target='_blank'
-              href={`https://www.${productName}.com/terms/`}
+              href={config.termsLink}
             >
               Terms
             </a>
@@ -214,7 +215,7 @@ const NavList = (props) => {
             <a
               rel='noopener noreferrer'
               target='_blank'
-              href={`https://www.${productName}.com/disclaimer/`}
+              href={config.disclaimerLink}
             >
               Disclaimer
             </a>
@@ -223,7 +224,7 @@ const NavList = (props) => {
             <a
               rel='noopener noreferrer'
               target='_blank'
-              href={`https://www.${productName}.com/refund/`}
+              href={config.refundLink}
             >
               Refund
             </a>
@@ -232,7 +233,7 @@ const NavList = (props) => {
             <a
               rel='noopener noreferrer'
               target='_blank'
-              href={`https://www.${productName}.com/scheme-offer-documents/`}
+              href={config.schemeLink}
             >
               Scheme Offer Documents
             </a>
