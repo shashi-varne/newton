@@ -157,17 +157,13 @@ const FnOIncomeProof = (props) => {
   };
 
   const goBackToPath = () => {
-    if (goBackPath) {
-      navigate(goBackPath);
+    if (!Web) {
+      commonNativeNavigation();
     } else {
-      if (!Web) {
-        commonNativeNavigation();
+      if (landingEntryPoints.includes(fromState)) {
+        navigate("/");
       } else {
-        if (landingEntryPoints.includes(fromState)) {
-          navigate("/");
-        } else {
-          navigate(PATHNAME_MAPPER.journey);
-        }
+        navigate(PATHNAME_MAPPER.journey);
       }
     }
   };
