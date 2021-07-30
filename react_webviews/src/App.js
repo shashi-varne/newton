@@ -28,7 +28,7 @@ import Feature from './Feature';
 
 import NotFound from './common/components/NotFound';
 import Tooltip from 'common/ui/Tooltip';
-import {getConfig, isIframe} from './utils/functions';
+import {getConfig} from './utils/functions';
 import 'common/theme/Style.scss';
 import { storageService } from './utils/validators';
 import PartnerAuthentication from './login_and_registration/Authentication';

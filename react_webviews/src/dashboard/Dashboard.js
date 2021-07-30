@@ -60,7 +60,7 @@ const Home = (props) => {
           component={NfoFunds}
         />
         <Route
-          path={`${url}advanced-investing/new-fund-offers/fund`}
+          path={[`${url}advanced-investing/new-fund-offers/fund`,'/direct/new-fund-offers/:isin']}
           component={NfoFundDetail}
         />
         <Route

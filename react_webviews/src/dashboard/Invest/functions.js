@@ -551,11 +551,13 @@ export function handleCampaignNotification () {
   }
 };
 
-export function handleCampaignRedirection (url) {
+export function handleCampaignRedirection (url, showRedirectUrl) {
+  const config = getConfig();
   let campLink = url;
+  let plutusRedirectUrl = `${getBasePath()}/?is_secure=${config.isSdk}&partner_code=${config.code}`;
   // Adding redirect url for testing
   // eslint-disable-next-line
-  campLink = `${campLink}${campLink.match(/[\?]/g) ? "&" : "?"}generic_callback=true&plutus_redirect_url=${encodeURIComponent(`${getBasePath()}/?is_secure=${storageService().get("is_secure")}&partner_code=${getConfig().code}`)}`
+  campLink = `${campLink}${campLink.match(/[\?]/g) ? "&" : "?"}generic_callback=true&${showRedirectUrl ? "redirect_url" : "plutus_redirect_url"}=${encodeURIComponent(plutusRedirectUrl)}&campaign_version=1`
   window.location.href = campLink;
 }
 
@@ -585,8 +587,9 @@ export function handleCampaign() {
     hitFeedbackURL(bottom_sheet_dialog_data.action_buttons?.buttons[0]?.feedback_url)
     return;
   }
-  this.setState({show_loader : 'page', openBottomSheet : false});
-  handleCampaignRedirection(campLink);
+  this.setState({showPageLoader : 'page', openBottomSheet : false});
+  const showRedirectUrl = bottom_sheet_dialog_data.campaign_name === "whatsapp_consent";
+  handleCampaignRedirection(campLink, showRedirectUrl);
 }
 
 export async function hitFeedbackURL(url) {

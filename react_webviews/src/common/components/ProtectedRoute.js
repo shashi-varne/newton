@@ -13,21 +13,21 @@ const isNative = config.isNative;
 const isIframe = config.isIframe;
 const ProtectedRoute = ({ component: Component, ...rest }) => {
   const theme = useContext(ThemeContext)
-  let current_user = storageService().get("currentUser");
+  let currentUser = storageService().get("currentUser");
   let user = storageService().get("user") || {};
   let kyc = storageService().get("kyc") || {};
   let partner = storageService().get("partner") || "";
   let loader =
-    current_user && !isEmpty(kyc) && !isEmpty(user) && (isSdk ? !!partner : true )? false : true;
+    currentUser && !isEmpty(kyc) && !isEmpty(user) && (isSdk ? !!partner : true )? false : true;
   const [showLoader, setShowLoader] = useState(loader);
   const [showComponent, setShowComponent] = useState(!loader);
   const fetch = async () => {
     await initData();
-    current_user = storageService().get("currentUser");
+    currentUser = storageService().get("currentUser");
     user = storageService().get("user") || {};
     kyc = storageService().get("kyc") || {};
     let renderComponent =
-      current_user && !isEmpty(kyc) && !isEmpty(user) ? true : false;
+      currentUser && !isEmpty(kyc) && !isEmpty(user) ? true : false;
     setShowComponent(renderComponent);
     if (!renderComponent) {
       if (isNative) {

@@ -8,6 +8,7 @@ import { getConfig } from 'utils/functions';
 import './IframeView.scss';
 import { initialize } from '../../functions';
 import InvestExploreCard from './InvestExploreCard';
+// import { Imgc } from '../../../../common/ui/Imgc';
 
 class IframeView extends Component {
   constructor(props) {
@@ -85,6 +86,14 @@ class IframeView extends Component {
             })}
           </div>
         </section>
+        {/* <div>
+        {
+          isMobileDevice ? 
+          <Imgc src={require('assets/finity/mobilemc_nfo.svg')} alt="nfo" style={{marginTop: '20px', width: '100%'}}/>
+          :
+          <Imgc src={require('assets/finity/mc_nfo.svg')} alt="nfo" style={{marginTop: '35px', width: '100%'}}/>
+        }
+        </div> */}
         {!isReadyToInvestBase && (
           <div className='diy-kyc-status-card' onClick={this.checkKyc}>
             <div className='diy-kyc-status-title'>{kycStatusData.title}</div>
