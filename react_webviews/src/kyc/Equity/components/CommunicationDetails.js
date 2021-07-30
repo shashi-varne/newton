@@ -76,28 +76,11 @@ const CommunicationDetails = (props) => {
   const [authCheckRequired, setAuthCheckRequired] = useState(true);
 
   useEffect(() => {
-    if (!isEmpty(kyc) && !continueAccountAlreadyExists) {
+    if ((!isEmpty(kyc) && !continueAccountAlreadyExists) && isEmpty(goldUserInfo)) {
       initialize();
     }
     if (!isEmpty(goldUserInfo)) {
-      const data = { ...formData };
-      setShowOtpContainer(false);
-      if (goldUserInfo?.email && goldUserInfo?.mobile_no) {
-        sendEvents("next")
-        navigate(stateParams?.goto)
-      }
-      else if (!goldUserInfo?.mobile_number_verified || !!goldUserInfo?.registered_with_another_account || !goldUserInfo?.mobile_no) {
-        setCommunicationType("mobile")
-        let mobileNumber = kyc.identification.meta_data.mobile_number || goldUserInfo?.mobile_no || "";
-        const [extension, number] = mobileNumber.toString().split("|");
-        if (extension) mobileNumber = number;
-        data.mobile = mobileNumber;
-      }
-      else if (goldUserInfo?.email_verified || !goldUserInfo?.email) {
-        setCommunicationType("email")
-        data.email = kyc.identification.meta_data.email || goldUserInfo?.email || "";
-      }
-      setFormData({ ...data });
+      initializegold();
     }
     if ((callHandleClick && communicationType) || continueAccountAlreadyExists) handleClick();
   }, [kyc, communicationType, continueAccountAlreadyExists, goldUserInfo]);
@@ -136,6 +119,27 @@ const CommunicationDetails = (props) => {
     }
     setFormData({ ...data });
   };
+
+  const initializegold = async () => {
+    const data = { ...formData };
+    setShowOtpContainer(false);
+    if (goldUserInfo?.email && goldUserInfo?.mobile_no) {
+      sendEvents("next")
+      navigate(stateParams?.goNext)
+    }
+    else if (!goldUserInfo?.mobile_number_verified || !!goldUserInfo?.registered_with_another_account || !goldUserInfo?.mobile_no) {
+      setCommunicationType("mobile")
+      let mobileNumber = kyc?.identification?.meta_data?.mobile_number || goldUserInfo?.mobile_no || "";
+      const [extension, number] = mobileNumber.toString().split("|");
+      if (extension) mobileNumber = number;
+      data.mobile = mobileNumber;
+    }
+    else if (goldUserInfo?.email_verified || !goldUserInfo?.email) {
+      setCommunicationType("email")
+      data.email = kyc?.identification?.meta_data?.email || goldUserInfo?.email || "";
+    }
+    setFormData({ ...data });
+  }
 
   const getContactId = async (number) => {
     let contacts = storageService().getObject("contacts") || {};
@@ -316,13 +320,11 @@ const CommunicationDetails = (props) => {
     }
   };
 
-  const handleEdit = (noevent) => {
+  const handleEdit = () => {
     setAuthCheckRequired(true);
-    if (!noevent) sendEvents("edit");
-    if (showDotLoader) return;
-    setAccountAlreadyExists(false)
     sendEvents("edit");
     if (showDotLoader) return;
+    setAccountAlreadyExists(false)
     setShowOtpContainer(false);
     setButtonTitle("CONTINUE");
   };
@@ -453,10 +455,9 @@ const CommunicationDetails = (props) => {
     }
   }
 
-  const handleGoldNavigation = async () => {
-    const url = '/api/gold/user/account/mmtc';
+  const handleGoldNavigation = async () => { console.log("hi")
     try {
-      const result = await comfirmVerification(url);
+      const result = await comfirmVerification();
       const user_info = result.gold_user_info.user_info || {};
       setGoldUserInfo(user_info)
     } catch (err) {
@@ -465,6 +466,7 @@ const CommunicationDetails = (props) => {
     }
   }
 
+  const handleClicked = () => !isEmpty(goldUserInfo) ? handleClickGold() : handleClick();
   const pageNumber = isDlFlow ? 3 : 4;
   return (
     <Container
@@ -474,7 +476,7 @@ const CommunicationDetails = (props) => {
       count={!isKycDone && pageNumber}
       current={pageNumber}
       total={!isKycDone && totalPages}
-      handleClick={!isEmpty(goldUserInfo) ? handleClickGold : handleClick}
+      handleClick={handleClicked}
       showLoader={showLoader}
       skelton={isLoading || showSkelton}
       disable={showDotLoader}
@@ -609,7 +611,7 @@ const CommunicationDetails = (props) => {
           type={communicationType}
           data={accountAlreadyExists}
           isOpen={accountAlreadyExists}
-          onClose={() => handleEdit(false)}
+          onClose={handleEdit}
           editDetails={handleEdit}
           next={onClickbottomSheet}
         ></AccountAlreadyExistDialog>

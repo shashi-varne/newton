@@ -338,12 +338,11 @@ export const authCheckApi = async (body, contact_type) => {
   return handleApi(res);
 };
 
-// -------------------------------------------------------
-
-export const comfirmVerification = async (body) => {
-  const res = await Api.get(body)
+export const comfirmVerification = async () => {
+  const res = await Api.get(`${API_CONSTANTS.goldUserInfo}`)
   return handleApi(res);
 };
+// -------------------------------------------------------
 
 export const getContactsFromSummary = async () => {
   const res = await Api.post(API_CONSTANTS.accountSummary, {

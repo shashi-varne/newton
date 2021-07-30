@@ -431,7 +431,6 @@ class GoldRegister extends Component {
         buttonTitle="CONTINUE"
         buttonData={this.state.bottomButtonData}
         events={this.sendEvents('just_set_events')}
-        goBack={this.goBack}
         headerData={{
           goBack: this.goBack
         }}
