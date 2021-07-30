@@ -80,7 +80,7 @@ const CommunicationDetails = (props) => {
       initialize();
     }
     if (!isEmpty(goldUserInfo) && !isEmpty(kyc) ) {
-      initializegold();
+      initializeGold();
     }
     if ((callHandleClick && communicationType) || continueAccountAlreadyExists) handleClick();
   }, [kyc, communicationType, continueAccountAlreadyExists, goldUserInfo]);
@@ -120,7 +120,7 @@ const CommunicationDetails = (props) => {
     setFormData({ ...data });
   };
 
-  const initializegold = async () => {
+  const initializeGold = async () => {
     const data = { ...formData };
     setShowOtpContainer(false);
     if (goldUserInfo?.email && goldUserInfo?.mobile_no) {
