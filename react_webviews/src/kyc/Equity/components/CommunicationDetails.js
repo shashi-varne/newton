@@ -134,7 +134,7 @@ const CommunicationDetails = (props) => {
       if (extension) mobileNumber = number;
       data.mobile = mobileNumber;
     }
-    else if (goldUserInfo?.email_verified || !goldUserInfo?.email) {
+    else if (!goldUserInfo?.email_verified || !goldUserInfo?.email) {
       setCommunicationType("email")
       data.email = kyc?.identification?.meta_data?.email || goldUserInfo?.email || "";
     }
