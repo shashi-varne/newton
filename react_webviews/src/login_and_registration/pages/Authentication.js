@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import UiSkelton from "../common/ui/Skelton";
-import toast from "../common/ui/Toast";
-import { getConfig, navigate as navigateFunc, isAuthenticatedUser } from "../utils/functions";
-import { getUrlParams, storageService } from "../utils/validators";
-import { partnerAuthentication } from "./function";
+import UiSkelton from "common/ui/Skelton";
+import toast from "common/ui/Toast";
+import { getConfig, navigate as navigateFunc, isAuthenticatedUser } from "../../utils/functions";
+import { getUrlParams, storageService } from "../../utils/validators";
+import { partnerAuthentication } from "../functions";
 
 const config = getConfig();
 const PartnerAuthentication = (props) => {
