@@ -79,7 +79,7 @@ const CommunicationDetails = (props) => {
     if ((!isEmpty(kyc) && !continueAccountAlreadyExists) && isEmpty(goldUserInfo)) {
       initialize();
     }
-    if (!isEmpty(goldUserInfo)) {
+    if (!isEmpty(goldUserInfo) && !isEmpty(kyc) ) {
       initializegold();
     }
     if ((callHandleClick && communicationType) || continueAccountAlreadyExists) handleClick();
