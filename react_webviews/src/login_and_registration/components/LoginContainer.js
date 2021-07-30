@@ -16,6 +16,7 @@ import SVG from 'react-inlinesvg';
 import WVInPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
 import GoBackToLoginBtn from "../common/GoBackToLoginBtn";
 import { navigate as navigateFunc } from "../../utils/functions";
+import { Imgc } from "../../common/ui/Imgc";
 
 const config = getConfig();
 const { productName } = config;
@@ -32,7 +33,7 @@ const LoginContainer = (props) => {
       </div>
       <div className="login-details">
         <div className="ld-left">
-          <img src={require(`assets/${productName}/ils_login.svg`)} alt="login" />
+          <Imgc src={require(`assets/${productName}/ils_login.svg`)} alt="login" />
         </div>
         <div className="ld-right">
           <>

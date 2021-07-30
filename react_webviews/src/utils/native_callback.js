@@ -74,6 +74,15 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     }
   }
 
+  if (action === '2fa_required') {
+    if (getConfig().Web) {
+      storageService().setBoolean('session-timeout', true);
+      window.location.href = redirectTo2FA();
+    } else {
+      nativeCallback({ action })
+    }
+  }
+
   if (getConfig().generic_callback) {
     if (action === 'take_control_reset_hard' || action === 'take_control_reset') {
       nativeCallback({ action: 'hide_top_bar' });

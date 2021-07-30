@@ -84,7 +84,7 @@ const Header = ({ classes, title, count, total, current, goBack,
           {
             headerData.partnerLogo && moneycontrolHeader && isWeb &&
              <div className='sdk-header-partner-logo'>
-                <img src={require(`assets/finity/finity_navlogo.svg`)} alt="partner logo" height={20}/> 
+                <img src={require(`assets/${config.colorLogo}`)} alt="partner logo" height={20}/> 
             </div>
           }
 

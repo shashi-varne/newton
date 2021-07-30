@@ -52,7 +52,7 @@ const Header = ({ classes, goBack, disableBack, headerData = {}, showIframePartn
           )}
           {showIframePartnerLogo && isWeb && isMobileDevice && (
             <img
-              src={require(`assets/finity/finity_navlogo.svg`)}
+              src={require(`assets/${config.colorLogo}`)}
               alt='partnerLogo'
               height={25}
               style={{marginLeft: '15px'}}
@@ -79,7 +79,7 @@ const Header = ({ classes, goBack, disableBack, headerData = {}, showIframePartn
         )}
         {partnerCode === 'moneycontrol' && !isMobileDevice ? (
           <div>
-            <img style={{verticalAlign: "middle"}} src={require(`assets/finity_white_logo.svg`)} height="35" alt='' />
+            <img style={{verticalAlign: "middle"}} src={require(`assets/finity/finity_logo_white.svg`)} height="35" alt='' />
           </div>
         ) : (
           <div />

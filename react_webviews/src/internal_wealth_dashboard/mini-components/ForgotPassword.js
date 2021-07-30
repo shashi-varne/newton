@@ -4,7 +4,7 @@ import { Button, CircularProgress, FormControl, TextField } from 'material-ui';
 import { validateEmail } from '../../utils/validators';
 import { forgotPassword } from '../../common/responsive-components/LoginFields/login_apis';
 // ---------- Image Imports ------------
-import fisdomIcon from 'assets/fisdom/fisdom_icon.svg';
+import fisdomIcon from 'assets/fisdom/fisdom_logo_icon.svg';
 import close from 'assets/ic_close.svg';
 // -------------------------------------
 
