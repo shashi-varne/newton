@@ -29,11 +29,7 @@ const DocumentVerification = (props) => {
 
   const handleCTAClick = () => {
     sendEvents("next");
-    if(config.Web) {
-      navigate("/");
-    } else {
-      nativeCallback({ action: "exit_web" })
-    }
+    goBack();
   }
 
   const goBack = () => {
