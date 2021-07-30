@@ -26,7 +26,7 @@ const Progress = (props) => {
   let canGoNext = false;
 
   useEffect(() => {
-    if (landingEntryPoints.includes(fromState)) {
+    if ((Web && landingEntryPoints.includes(fromState)) || (!Web && !fromState)) {
       storageService().set("uploadDocsEntry", "landing");
     }
   },[])
@@ -80,7 +80,7 @@ const Progress = (props) => {
   const goBackToPath = () => {
     if (storageService().get("uploadDocsEntry") === "landing") {
       storageService().remove("uploadDocsEntry");
-      if (!Web) {
+      if (!Web && storageService().get("native")) {
         nativeCallback({ action: "exit_web"});
       } else {
         navigate("/");
