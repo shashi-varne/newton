@@ -82,11 +82,11 @@ function KycNative(props) {
         });
       }
     } else if (kycStatus === "esign_pending") {
-      navigate("/kyc-esign/info");
+      navigate(PATHNAME_MAPPER.kycEsign);
     } 
     // Todo: remove this condition after audit
     else if (kycStatus === "complete" && kyc?.equity_sign_status === "signed" && kyc?.equity_income.doc_status === "init") {
-      navigate("/kyc/upload/fno-income-proof");
+      navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
     } 
     // Todo: remove this condition after audit
     else if (kycStatus === "complete" && kyc?.equity_sign_status === "signed" && (!kyc?.equity_investment_ready || !kyc?.fno_active)) {
@@ -94,7 +94,7 @@ function KycNative(props) {
         searchParams: `${getConfig().searchParams}&status=success`
       });
     } else if (kycStatus === "fno_rejected") {
-      navigate("/kyc/upload/fno-income-proof");
+      navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
     } else if ((TRADING_ENABLED && kyc?.kyc_product_type !== "equity") || kyc?.mf_kyc_processed) {
       let result;
       if (!kyc?.mf_kyc_processed) {
