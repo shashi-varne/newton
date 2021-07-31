@@ -399,10 +399,7 @@ export async function otpLoginVerification(verify_url, body) {
     const res = await Api.post(verify_url, formData);
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
-      let eventObj = {
-        event_name: "user loggedin",
-      };
-      nativeCallback({ events: eventObj });
+      this.sendEvents("next")
       applyCode(result.user);
       storageService().setObject("user", result.user);
       storageService().set("currentUser", true);
