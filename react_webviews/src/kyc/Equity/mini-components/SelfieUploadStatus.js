@@ -1,6 +1,7 @@
 import React from "react";
-import { getConfig, isTradingEnabled } from "../../../utils/functions";
+import { getConfig, isNewIframeDesktopLayout, isTradingEnabled } from "../../../utils/functions";
 import WVBottomSheet from "../../../common/ui/BottomSheet/WVBottomSheet";
+import internalStorage from "../../common/InternalStorage";
 
 const productName = getConfig().productName;
 const uploadStatus = {
@@ -19,7 +20,7 @@ const uploadStatus = {
   },
 };
 
-const SelfieUploadStatus = ({ status, isOpen, onClose, onCtaClick, kyc }) => {
+const SelfieUploadStatus = ({ status, isOpen, onClose, onCtaClick, kyc, navigate }) => {
   if (!status) return '';
   
   const data = uploadStatus[status] || {};
@@ -28,6 +29,17 @@ const SelfieUploadStatus = ({ status, isOpen, onClose, onCtaClick, kyc }) => {
     if (!TRADING_ENABLED || (kyc?.kyc_status === "non-compliant" && kyc?.kyc_type === "manual" && !kyc?.equity_data.meta_data.trading_experience)) {
       data.subtitle = ""
     }
+  }
+
+  if(isNewIframeDesktopLayout()) {
+    const stateParams = {
+      title: data.title,
+      buttonTitle: data.ctaText,
+      message: data.subtitle,
+      image: data.icon
+    }
+    internalStorage.setData('handleClick', onCtaClick);
+    navigate('/kyc/selfie-status',{state:{...stateParams}});
   }
   
 

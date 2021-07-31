@@ -12,13 +12,13 @@ import { nativeCallback } from '../../../../utils/native_callback';
 import toast from 'common/ui/Toast';
 import { flowName } from '../../constants';
 
-const { productName } = getConfig();
 
 const RiskModify = ({
   canSkip,
   modifyRisk,
   ...otherProps
 }) => {
+  const { productName } = getConfig();
   const {
     funnelData,
     funnelGoalData,

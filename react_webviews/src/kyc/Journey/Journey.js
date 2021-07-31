@@ -1,15 +1,22 @@
 import React, { useState, useEffect } from 'react'
-import { getConfig, getBasePath, isMobile } from 'utils/functions'
 import Container from '../common/Container'
 import ShowAadharDialog from '../mini-components/ShowAadharDialog'
 import { isEmpty, storageService, getUrlParams } from '../../utils/validators'
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
-import { isDigilockerFlow, isIncompleteEquityApplication, updateQueryStringParameter, getFlow } from "../common/functions";
+import { isDigilockerFlow, isIncompleteEquityApplication, updateQueryStringParameter, getFlow, pollProgress } from "../common/functions";
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
-import { isTradingEnabled, navigate as navigateFunc } from '../../utils/functions'
+import { 
+  isTradingEnabled, 
+  navigate as navigateFunc, 
+  popupWindowCenter, 
+  isNewIframeDesktopLayout, 
+  getBasePath, 
+  getConfig, 
+  isMobile 
+} from '../../utils/functions'
 import "./Journey.scss"
 import { nativeCallback } from '../../utils/native_callback'
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble'
@@ -58,26 +65,23 @@ const HEADER_BOTTOM_DATA = [
 
 const DL_HEADER_BOTTOM_DATA = HEADER_BOTTOM_DATA.reverse();
 
-const config = getConfig();
-const productName = config.productName
-
 const Journey = (props) => {
+  const newIframeDesktopLayout = isNewIframeDesktopLayout();
   const navigate = navigateFunc.bind(props)
   const urlParams = getUrlParams(props?.location?.search)
   const stateParams = props?.location?.state;
   const [isApiRunning, setIsApiRunning] = useState(false)
-  const [npsDetailsReq] = useState(
-    storageService().get('nps_additional_details_required')
-  )
-
+  const [npsDetailsReq] = useState( storageService().get('nps_additional_details_required'))
   const [showDlAadhaar, setDlAadhaar] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [goBackModal, setGoBackModal] = useState(false)
-
   const [kyc, setKyc] = useState({})
   const [user, setUser] = useState({})
   const state = props.location.state || {};
   let { fromState } = state;
+  
+  const config = getConfig();
+  const productName = config.productName
 
   const closeGoBackModal = () => {
     setGoBackModal(false)
@@ -87,7 +91,7 @@ const Journey = (props) => {
     const kycStartPoint = storageService().get("kycStartPoint");
     if (config.isIframe) {
       if (config.code === 'moneycontrol') {
-        navigate("/invest/money-control");
+        navigate("/");
       } else {
         navigate("/landing");
       }
@@ -165,6 +169,11 @@ const Journey = (props) => {
           }
         } else if (['esign', 'bank_esign'].includes(journeyData[i].key)) {
           if (kyc.sign_status !== 'signed') {
+            status = 'init'
+            break
+          }
+
+          if(journeyData[i].key === 'bank_esign' && kyc.bank.meta_data_status === 'rejected') {
             status = 'init'
             break
           }
@@ -348,7 +357,7 @@ const Journey = (props) => {
         }
       }
 
-      if (kyc.kyc_status === 'rejected' && !show_aadhaar) {
+      if (journeyStatus === 'rejected' && !show_aadhaar) {
         handleEdit(kycJourneyData[3].key, 3)
       }
 
@@ -528,9 +537,54 @@ const Journey = (props) => {
   }
 
   const proceed = () => {
-    // setAadhaarLinkDialog(true)
-    handleProceed();
+    if (newIframeDesktopLayout) {
+      const redirect_url = encodeURIComponent(
+        `${getBasePath()}/digilocker/callback${
+          config.searchParams
+        }&is_secure=${storageService().get("is_secure")}`
+      );
+      handleIframeKyc(
+        updateQueryStringParameter(
+          kyc.digilocker_url,
+          "redirect_url",
+          redirect_url
+        )
+      )
+    } else {
+      handleProceed();
+    }
   }
+
+  const handleIframeKyc = (url) => {
+    let popup_window = popupWindowCenter(900, 580, url);
+    setIsApiRunning("page");
+    pollProgress(600000, 5000, popup_window).then(
+      function (poll_data) {
+        popup_window.close();
+        if (poll_data.status === "success") {
+          // Success
+          navigate("/kyc/digilocker/success");
+        } else if (poll_data.status === "failed") {
+          // Failed
+          navigate("/kyc/digilocker/failed");
+        } else if (poll_data.status === "closed") {
+          // Closed
+          toast("Digilocker window closed. Please try again");
+        }
+        setIsApiRunning(false);
+      },
+      function (err) {
+        popup_window.close();
+        setIsApiRunning(false);
+        console.log(err);
+        if (err?.status === "timeout") {
+          toast("Digilocker has been timedout . Please try again");
+        } else {
+          toast("Something went wrong. Please try again.");
+        }
+      }
+    );
+  };
 
   if (!isEmpty(kyc) && !isEmpty(user)) {
     var topTitle = ''
@@ -687,6 +741,8 @@ const Journey = (props) => {
       handleClick={goNext}
       showLoader={isApiRunning}
       headerData={{ goBack: openGoBackModal }}
+      loaderData={{loadingText: " "}}
+      iframeRightContent={require(`assets/${productName}/${show_aadhaar ? "digilocker_kyc" : "kyc_illust"}.svg`)}
       data-aid='kyc-journey-screen'
     >
       {!isEmpty(kyc) && !isEmpty(user) && (
@@ -766,6 +822,7 @@ const Journey = (props) => {
                       <span className="field_value">{item?.value}</span>
                     )}
                   </div>
+                  
 
                   {item.status === 'completed' && item.isEditAllowed && (
                     <span
@@ -814,6 +871,8 @@ const Journey = (props) => {
 export default Journey
 
 export const FastAndSecureDisclaimer = ({options=[], alignInRow }) => {
+  const config = getConfig();
+  
   return (
     <div
       className={`kyc-pj-bottom ${alignInRow && "flex-between"}`}

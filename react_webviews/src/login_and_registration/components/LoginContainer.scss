@@ -1,0 +1,127 @@
+.login {
+  background-color: #ffffff;
+  color: #333333;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .header {
+    background-color: var(--primary);
+    z-index: 1;
+    position: fixed;
+    width: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+
+    img {
+      height: 30px;
+      margin-left: 26px;
+    }
+  }
+
+  .login-details {
+    display: -ms-flexbox;
+    display: flex;
+    flex: 1;
+    -ms-flex-pack: center;
+    justify-content: center;
+    align-items: center;
+    padding-top: 56px;
+
+    .ld-left {
+      // margin-top: 150px;
+      margin-right: 220px;
+      padding: 0 20px;
+    }
+
+    .ld-right {
+      width: 375px;
+      padding: 20px;
+    }
+
+    .login-left-icon {
+      min-width: 480px;
+      min-height: 330px;
+    }
+  }
+
+// ---------------------- login footer css start-----------------------//
+  .login-footer {
+    min-height: 80px;
+    background-color: #F8F8F8;
+    width: 100%;
+    padding: 20px 80px;
+
+    .lf-logos {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+
+    div:nth-of-type(2) {
+      margin-bottom: 5px;
+    }
+
+    .title-text {
+      font-size: 11px;
+      line-height: 18px;
+      color: var(--steelgrey);
+    }
+  }
+
+  .brand-logo {
+    height: 22px;
+    width: 64px;
+    margin-bottom: 15px;
+  }
+// ---------------------- login footer css end-----------------------//
+
+
+}
+
+@media only screen and (max-width: 1200px) {
+  .login {
+    .login-details {
+      .ld-left {
+        margin-right: 20px;
+      }
+    }
+  }
+}
+  
+@media only screen and (max-width: 960px) {
+  .login {
+    .login-details {
+      // padding-top: 0;
+      .ld-left {
+        display: none;
+      }
+      .ld-right {
+        width: 100%;
+        padding-top: 40px;
+        padding-bottom: 60px;
+        height: 100%;
+      }
+    }
+    .login-footer {
+      display: none;
+   }
+  }
+}
+  
+@media only screen and (max-width: 767px) {
+  .login {
+    .header {
+      img {
+        height: 20px;
+        margin-left: 20px;
+      }
+    }
+  }
+}

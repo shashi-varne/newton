@@ -11,7 +11,7 @@ import location from 'assets/location_dark_icn.png';
 import Api from 'utils/api';
 import TitleWithIcon from '../../../../common/ui/TitleWithIcon';
 import pincode from 'assets/address_details_icon.svg';
-import pincode_myway from 'assets/address_details_icn.svg';
+import pincode_myway from 'assets/finity/address_icon.svg';
 import { validateNumber, formatAmount, clearInsuranceQuoteData } from 'utils/validators';
 import Dialog, {
   DialogActions,

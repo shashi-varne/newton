@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Container from "../../../common/Container";
 import { getConfig } from "utils/functions";
 import Button from "common/ui/Button";
-import { initialize, handleCampaignNotification, handleCampaignRedirection } from "../../functions";
+import { initialize, handleCampaignNotification } from "../../functions";
 import InvestCard from "../../mini-components/InvestCard";
 import SecureInvest from "../../mini-components/SecureInvest";
 import VerificationFailedDialog from "../../mini-components/VerificationFailedDialog";
@@ -18,9 +18,9 @@ import VerifyDetailDialog from "../../../../login_and_registration/components/Ve
 import AccountAlreadyExistDialog from "../../../../login_and_registration/components/AccountAlreadyExistDialog";
 import { generateOtp } from "../../../../login_and_registration/functions";
 import { Imgc } from "../../../../common/ui/Imgc";
+import { nativeCallback } from "../../../../utils/native_callback";
 
 const fromLoginStates = ["/login", "/logout", "/verify-otp"]
-const isMobileDevice = getConfig().isMobileDevice;
 class Landing extends Component {
   constructor(props) {
     super(props);
@@ -48,37 +48,44 @@ class Landing extends Component {
     this.initialize = initialize.bind(this);
     this.generateOtp = generateOtp.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
-    this.handleCampaignRedirection = handleCampaignRedirection.bind(this);
   }
 
   componentWillMount() {
     this.initialize();
   }
 
+  sendEventsIndexFunds = (userAction, card_name) => {
+    let eventObj = {
+      event_name: "home_screen",
+      properties: {
+        user_action: userAction,
+        card_clicked: card_name,
+        screen_name: "home_screen",
+      },
+    };
+
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   onload = () => {
     this.initilizeKyc();
     const isBottomSheetDisplayed = storageService().get(
       "is_bottom_sheet_displayed"
     );
-    const isVerifyDetailsSheetDisplayed  = storageService().get("verifyDetailsSheetDisplayed")
+    const isVerifyDetailsSheetDisplayed = storageService().get("verifyDetailsSheetDisplayed")
     if (!isVerifyDetailsSheetDisplayed) {
       const { contactDetails } = this.state;
-      if (contactDetails?.verification_done === null) {
-        this.setState({
-          verifyDetails: true,
-          verifyDetailsData: {},
-          verifyDetailsType:
-            contactDetails?.auth_type === "mobile" ? "email" : "mobile",
-        });
-        storageService().set("verifyDetailsSheetDisplayed", true);
-      } else if (contactDetails?.verification_done === false) {
+      if (contactDetails?.verification_done === false) {
         this.setState({
           verifyDetails: true,
           verifyDetailsData:
             contactDetails[
-              `unverified_${
-                contactDetails?.auth_type === "mobile" ? "email" : "mobile"
-              }_contacts`
+            `unverified_${contactDetails?.auth_type === "mobile" ? "email" : "mobile"
+            }_contacts`
             ][0],
           verifyDetailsType:
             contactDetails?.auth_type === "mobile" ? "email" : "mobile",
@@ -107,6 +114,7 @@ class Landing extends Component {
   };
 
   closeKycStatusDialog = () => {
+    this.sendEvents("dismiss", "kyc_bottom_sheet");
     this.setState({ openKycStatusDialog: false });
   };
 
@@ -183,6 +191,7 @@ class Landing extends Component {
   };
 
   handleKycStatus = () => {
+    this.sendEvents("next", "kyc_bottom_sheet");
     let { kycJourneyStatus } = this.state;
     if (kycJourneyStatus === "submitted") {
       this.closeKycStatusDialog();
@@ -195,15 +204,33 @@ class Landing extends Component {
     }
   };
 
-  closeCampaignDialog = () => {
-    this.setState({ openBottomSheet: false });
+  sendEvents = (userAction, cardClick = "") => {
+    let eventObj = {
+      event_name: "landing_page",
+      properties: {
+        action: userAction,
+        screen_name: "invest home",
+        primary_category: "primary navigation",
+        card_click: cardClick,
+        intent: "",
+        option_clicked: "",
+        channel: getConfig().code,
+      },
+    };
+    if (cardClick === "kyc") {
+      eventObj.properties.kyc_status = this.state.kycJourneyStatus;
+    }
+    if (cardClick === "kyc_bottom_sheet") {
+      eventObj.event_name = "bottom_sheet";
+      eventObj.properties.intent = "kyc status";
+      eventObj.properties.option_clicked = userAction;
+    }
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
   };
-
-  handleCampaign = () => {
-    this.setState({show_loader : 'page', openBottomSheet : false});
-    let campLink = this.state.bottom_sheet_dialog_data.url;
-    handleCampaignRedirection(campLink);
-  }
 
   render() {
     const {
@@ -226,6 +253,7 @@ class Landing extends Component {
       stocksButtonLoader
     } = this.state;
     const {
+      indexFunds,
       ourRecommendations,
       diy,
       bottomScrollCards,
@@ -233,26 +261,31 @@ class Landing extends Component {
       popularCards,
       financialTools,
     } = investCardsData;
+    const config = getConfig();
     return (
       <Container
         skelton={this.state.show_loader}
         noFooter={true}
         title="Start Investing"
-        showLoader={this.state.show_loader}
         data-aid='start-investing-screen'
-        noBackIcon={fromLoginStates.includes(stateParams.fromState)}
+        showLoader={this.state.showPageLoader}
+        noBackIcon={!config.isSdk || config.isIframe}
         background={
-          isMobileDevice &&
+          config.isMobileDevice &&
           fromLoginStates.includes(stateParams.fromState) &&
           "invest-landing-background"
         }
         classHeader={
-          isMobileDevice &&
+          config.isMobileDevice &&
           fromLoginStates.includes(stateParams.fromState) &&
           (this.state.headerStyle
             ? "invest-landing-partner-header"
             : "invest-landing-header")
         }
+        headerData={{
+          partnerLogo: !config.isSdk && config.isMobileDevice
+        }}
+        events={this.sendEvents("just_set_events")}
       >
         <div className="invest-landing" data-aid='invest-landing'>
           {
@@ -300,9 +333,10 @@ class Landing extends Component {
                             dataAid='kyc-btn'
                             buttonTitle={kycStatusData.button_text}
                             classes={{
-                              button: "invest-landing-button",
+                              button: "invest-landing-button invest-kyc-button",
                             }}
                             showLoader={kycButtonLoader}
+                            type={productName === "finity" ? "outlined" : ""}
                           />
                         </div>
                       ): null}
@@ -328,6 +362,26 @@ class Landing extends Component {
                           </WVButton>
                         </div>
                       )}
+                    </React.Fragment>
+                  );
+                case "indexFunds":
+                  return (
+                    <React.Fragment key={index}>
+                      {!isEmpty(indexFunds) &&
+                        indexFunds.map((item, index) => {
+                          return (
+                            <InvestCard
+                              data={item}
+                              key={index}
+                              handleClick={() =>
+                                {
+                                  this.clickCard(item.key, item.title)
+                                  this.sendEventsIndexFunds("next", "explore_passive_funds")
+                                }
+                              }
+                            />
+                          );
+                        })}
                     </React.Fragment>
                   );
                 case "ourRecommendations":
@@ -510,15 +564,11 @@ class Landing extends Component {
               }
             })}
           <SecureInvest />
-          {productName !== "fisdom" &&
-            productName !== "finity" &&
-            productName !== "ktb" && (
+          {!["fisdom", "finity", "ktb"].includes(config.code) && (
               <div className="invest-contact-us" data-aid='invest-contact-us'>
                 In partnership with
                 <span>
-                  {productName === "bfdlmobile" ||
-                  this.state.isIframe ||
-                  this.state.finity
+                  {productName === "finity"
                     ? " Finity"
                     : " Fisdom"}
                 </span>

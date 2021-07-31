@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import Container from "../../../dashboard/common/Container";
-import OtpContainer from "../../common/OtpContainer";
 import { initialize } from "../../functions";
 import "./secondaryVerification.scss";
 import { toast } from "react-toastify";
+import OtpContainer from "../../../common/components/OtpContainer";
 import { formatMobileNumber } from "utils/validators";
 import { nativeCallback } from "../../../utils/native_callback";
 

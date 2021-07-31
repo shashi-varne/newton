@@ -6,24 +6,28 @@ const WVOtp = ({
   align = 'center',
   numInputs = 4,
   onChange,
-  placeholder = 'X',
+  placeholder = '',
   value,
   isDisabled,
   hasError,
   bottomText,
+  classes = {},
   additionalOtpProps = {},
 }) => {
   return (
-    <div className="wv-otp-parent-container">
+    <div
+      className={`wv-otp-parent-container ${classes.container}`}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: align
+      }}
+    >
       <div>
         <OtpInput
           hasErrored
           id="wv-otp"
           numInputs={numInputs}
-          containerStyle={{
-            display: 'flex',
-            justifyContent: align,
-          }}
           inputStyle="wv-otp-input"
           onChange={onChange}
           placeholder={placeholder}
@@ -33,11 +37,15 @@ const WVOtp = ({
           {...additionalOtpProps}
         />
       </div>
-      {bottomText &&
-        <span className={hasError ? "wv-otp-error-text" : ""}>
-          {bottomText}
-        </span>
-      }
+      <div
+        className={`
+          wv-otp-text 
+          ${hasError ? `wv-otp-text-error ${classes.bottomTextError}` : ''} 
+          ${classes.bottomText}
+        `}
+      >
+        {bottomText}
+      </div>
     </div>
   );
 }

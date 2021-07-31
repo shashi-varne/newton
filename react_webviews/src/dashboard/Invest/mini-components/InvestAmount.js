@@ -25,9 +25,9 @@ import { flowName } from '../constants';
 
 const date = new Date();
 const month = date.getMonth();
-const riskEnabledFunnel = getConfig().riskEnabledFunnels;
 
 const InvestAmount = (props) => {
+  const riskEnabledFunnel = getConfig().riskEnabledFunnels;
   const {
     funnelData,
     funnelGoalData,
@@ -253,7 +253,7 @@ const InvestAmount = (props) => {
             }
           </p>
         </div>
-        {!riskEnabledFunnel &&
+        {(!riskEnabledFunnel || funnelGoalData.id === 'savetax')  &&
           <div className='invest-amount-corpus' data-aid='invest-amount-corpus'>
             <div className='invest-amount-corpus-duration'>
               {funnelGoalData.id === 'savetax' ?

@@ -3,9 +3,8 @@ import React from 'react';
 import { capitalize, getConfig } from '../../utils/functions';
 import Container from '../common/Container';
 
-const { productName } = getConfig();
-
 const HowWeRecommend = (props) => {
+  const { productName } = getConfig();
   return (
     <Container
       buttonTitle="GO BACK"

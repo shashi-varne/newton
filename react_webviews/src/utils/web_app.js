@@ -18,13 +18,15 @@ export const checkBeforeRedirection = (fromState, toState) => {
   if (getConfig().isLoggedIn) {
     if (toState === "/login" && storageService().get("deeplink_url")) {
       window.location.href = decodeURIComponent(
-        storageService.get("deeplink_url")
+        storageService().get("deeplink_url")
       );
       return;
     } else {
       if (
         toState === "/partner-landing" ||
-        toState === "/login" // ||
+        toState === "/login" ||
+        toState === "/login/verify-otp" ||
+        toState === "/prepare"
         // toState === "/register" ||
         // toState === "/forgot-password" ||
         // toState === "/mobile/verify"
@@ -44,7 +46,10 @@ export const checkAfterRedirection = (props, fromState, toState) => {
   if (window.top === window.self) {
     if (
       toState !== "/partner-landing" &&
-      toState !== "/login" // &&
+      toState !== "/login" &&
+      toState !== "/login/verify-otp" &&
+      toState === "/prepare" &&
+      !toState.includes("/partner-authentication")
       // toState !== "/register" &&
       // toState !== "/forgot-password" &&
       // toState !== "/mobile/verify"

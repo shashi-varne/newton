@@ -178,6 +178,7 @@ const Pan = (props) => {
       disable={!file}
       showLoader={isApiRunning}
       title="Upload PAN"
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-upload-pan-screen'
     >
       {!isEmpty(kyc) && (
@@ -231,6 +232,7 @@ const Pan = (props) => {
               disableBackdropClick
               onCtaClick={bottomSheetType === "success" ? handleNavigation : handleRetryClick}
               kyc={kyc}
+              navigate={navigate}
             />
           }
         </section>

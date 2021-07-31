@@ -282,7 +282,9 @@ import { getConfig } from './functions';
   }
 
   function set_session_storage(key, value) {
-    value = JSON.stringify(value);
+    if(typeof value === 'object') {
+      value = JSON.stringify(value);
+    }
     window.sessionStorage.setItem(key, value);
   }
 

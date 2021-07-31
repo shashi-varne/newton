@@ -3,6 +3,7 @@ import next_arrow from  'assets/arrow_next.svg';
 import back_arrow from  'assets/arrow_back.svg';
 import './style.scss';
 import SVG from 'react-inlinesvg';
+import { getConfig } from '../../utils/functions';
 // import {getConfig} from 'utils/functions';
 
 class LeftRightFooterClass extends Component {
@@ -31,7 +32,7 @@ class LeftRightFooterClass extends Component {
                     }           
 
                     {this.state.leftButtonData.title &&  
-                        <span style={{color: '#767E86', fontSize:12, fontWeight:700}}>
+                        <span style={{color: getConfig().styles.secondaryColor, fontSize:12, fontWeight:700}}>
                             {this.state.leftButtonData.title}
                         </span>
                     }
@@ -45,7 +46,7 @@ class LeftRightFooterClass extends Component {
                         />}
 
                     {this.state.rightButtonData.title &&  
-                        <span style={{color: 'white', fontSize:12, fontWeight:700}}>
+                        <span style={{backgroundColor: getConfig().styles.secondaryColor, color: 'white', fontSize:12, fontWeight:700}}>
                             {this.state.rightButtonData.title}
                         </span>
                     }

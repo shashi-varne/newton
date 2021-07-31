@@ -4,12 +4,12 @@ import Button from '@material-ui/core/Button';
 import pointer_icon from 'assets/fisdom/pointer_icon.svg';
 import report_icon from 'assets/fisdom/report_icon.svg';
 import landing_step_verified from 'assets/fisdom/landing_step_verified.svg';
-import sebi_logo from 'assets/sebi_logo.svg';
 import amfi_logo from 'assets/amfi_logo.svg';
 import bombay_stock_exchange_logo from 'assets/bombay_stock_exchange_logo.svg';
 // import pnb_logo from "assets/pnb_logo.svg"
 import fisdom_logo from "assets/fisdom/fisdom_white_logo.svg"
 import { navigate as navigateFunc} from '../common/commonFunction';
+import SVG from 'react-inlinesvg';
 
 const Landing = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -80,7 +80,13 @@ const Landing = (props) => {
             </div>
           </div>
             <div className='fd-landing-footer-sub'>
-              <img className='fd-landing-step-img' src={sebi_logo} alt='s' />
+              <SVG
+                width="20px"
+                height="20px"
+                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=#FFF')}
+                src={require(`assets/sebi_logo.svg`)}
+                alt="sebi"
+              />
               <div className='fd-landing-footer-text'>
                 SEBI registered investment advisor INA200005323
               </div>

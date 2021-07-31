@@ -1,24 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="70px" height="60px" viewBox="0 0 70 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
-    <title>70x60_icons/others/register_icon/default</title>
-    <desc>Created with Sketch.</desc>
-    <g id="70x60_icons/others/register_icon/default" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect id="base" x="0" y="0" width="70" height="60"></rect>
-        <g id="70x60_icons" transform="translate(15.000000, 11.000000)">
-            <g id="register_icn">
-                <polygon id="base" fill="#F0F7FF" points="12 3 40 3 40 33 35 38 12 38"></polygon>
-                <polygon id="Rectangle-path" fill="#EEEEEE" points="13 10 37 10 37 12 13 12"></polygon>
-                <polygon id="Rectangle-path" fill="#EEEEEE" points="17 17 37 17 37 19 17 19"></polygon>
-                <polygon id="Rectangle-path" fill="#EEEEEE" points="17 24 37 24 37 26 17 26"></polygon>
-                <rect id="base" fill="#94C5FF" x="0" y="0" width="30" height="34"></rect>
-                <polygon id="Rectangle-path" fill="#3792FC" points="25 10 27 10 27 12 25 12"></polygon>
-                <polygon id="Rectangle-path" fill="#3792FC" points="21 10 23 10 23 12 21 12"></polygon>
-                <polygon id="Rectangle-path" fill="#3792FC" points="17 10 19 10 19 12 17 12"></polygon>
-                <path d="M15,4 L3,4 L3,18 L15,18 L15,4 L15,4 Z M13,16 L5,16 L5,6 L13,6 L13,16 Z" id="Shape" fill="#F0F7FF"></path>
-                <polygon id="Rectangle-path" fill="#D3DBE4" points="3 21 27 21 27 23 3 23"></polygon>
-                <polygon id="Rectangle-path" fill="#D3DBE4" points="3 26 23 26 23 28 3 28"></polygon>
-            </g>
-        </g>
-    </g>
+<svg width="70" height="60" viewBox="0 0 70 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M27 14H55V44L50 49H27V14Z" fill="#EFEEFB"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M28 21H52V23H28V21Z" fill="#EFEEFB"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M32 28H52V30H32V28Z" fill="#EFEEFB"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M32 35H52V37H32V35Z" fill="#EFEEFB"/>
+<path d="M45 11H15V45H45V11Z" fill="#C6C2F9"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M40 21H42V23H40V21Z" fill="#675AF6"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M36 21H38V23H36V21Z" fill="#675AF6"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M32 21H34V23H32V21Z" fill="#675AF6"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M30 15H18V29H30V15ZM28 27H20V17H28V27Z" fill="#EFEEFB"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M18 32H42V34H18V32Z" fill="#EFEEFB"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M18 37H38V39H18V37Z" fill="#EFEEFB"/>
 </svg>

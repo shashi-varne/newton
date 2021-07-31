@@ -18,7 +18,9 @@ import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 import { nativeCallback } from "../../utils/native_callback";
+import { getConfig } from "../../utils/functions";
 
+const productName = getConfig().productName;
 const PersonalDetails4 = (props) => {
   const [isChecked, setIsChecked] = useState(false);
   const navigate = navigateFunc.bind(props);
@@ -188,6 +190,7 @@ const PersonalDetails4 = (props) => {
       count={totalPages}
       total={totalPages}
       data-aid='kyc-personal-details-screen-4'
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
     >
       <div className="kyc-nominee">
         <main data-aid='kyc-nominee-page'>

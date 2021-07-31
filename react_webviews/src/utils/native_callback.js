@@ -1,7 +1,8 @@
-import { isMobile } from './functions';
+import { isMobile, navigate as navigateFunc } from './functions';
 import { getConfig, getBasePath } from './functions';
 import { open_browser_web, renameObjectKeys } from 'utils/validators';
 import Api from 'utils/api';
+import { storageService } from './validators';
 
 export const nativeCallback = async ({ action = null, message = null, events = null, action_path = null } = {}) => {
   let newAction = null;
@@ -172,8 +173,9 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       pathname = pathname.split("/")[5] || "/";
     }
     
-    if (getConfig().isSdk && pathname !== "/" && (callbackData.action === 'exit_web' || callbackData.action === 'exit_module' || callbackData.action === 'open_module')) {
-      window.location.href = redirectToLanding();
+    const entryPath = storageService().get('entry_path'); 
+    if (getConfig().isSdk && pathname !== "/" && (entryPath !== pathname) && (callbackData.action === 'exit_web' || callbackData.action === 'exit_module' || callbackData.action === 'open_module')) {
+        window.location.href = redirectToLanding();
     } else {
       if (getConfig().app === 'android') {
         window.Android.callbackNative(JSON.stringify(callbackData));
@@ -209,21 +211,26 @@ export function openNativeModule(moduleName) {
   });
 }
 
-export function openModule(moduleName) {
+export function openModule(moduleName, props) {
 
   if (getConfig().isWebOrSdk) {
 
     let module_mapper = {
-      'app/portfolio': 'reports',
-      'app/profile': 'my-account',
-      'invest/save_tax': 'invest',
-      'invest/nps': 'nps/info',
+      'app/portfolio': '/reports',
+      'app/profile': '/my-account',
+      'invest/save_tax': '/invest',
+      'invest/nps': '/nps/info',
+    }
+    
+    let moduleNameWeb = module_mapper[moduleName] || '/';
+    if(props) {
+      const navigate = navigateFunc.bind(props);
+      navigate(moduleNameWeb)
+    } else {
+      let module_url = `${getBasePath()}${moduleNameWeb}${getConfig().searchParams}`;
+      window.location.href = module_url;
     }
 
-    let moduleNameWeb = module_mapper[moduleName] || '';
-    let module_url = `${getBasePath()}/${moduleNameWeb}${getConfig().searchParams}`;
-
-    window.location.href = module_url;
   } else {
     openNativeModule(moduleName);
   }
@@ -271,4 +278,36 @@ export function openPdfCall(data = {}) {
 
 export function redirectToLanding() {
   return `${getBasePath()}/${getConfig().searchParams}`;
+}
+
+export function redirectTo2FA() {
+  return `${getBasePath()}/login/verify-pin${getConfig().searchParams}`;
+}
+
+export function handleNativeExit(props, data) {
+  const config = getConfig();
+  const navigate = navigateFunc.bind(props);
+  const nativeExitActions = ["native_back", "exit"];
+  const sdkExitActions = ["exit_web", "exit_module", "open_module"];
+  const entryPath = storageService().get('entry_path');
+  if (
+    (nativeExitActions.includes(data.action) && !config.isNative) ||
+    (config.isSdk &&
+      props.location?.pathname !== "/" && (entryPath !== props.location.pathname) &&
+      sdkExitActions.includes(data.action))
+  ) {
+    const searchParams = `base_url=${config.base_url}&partner_code=${config.code}`;
+    if(storageService().get("flow-type") === "notification") {
+      storageService().remove("flow-type");
+      navigate("/notification", {
+        searchParams: searchParams
+      });
+    } else {
+      navigate("/", {
+        searchParams: searchParams
+      });
+    }
+  } else {
+    nativeCallback(data);
+  }
 }

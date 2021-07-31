@@ -1,5 +1,4 @@
 .report-goals {
-  margin-top: -20px;
   line-height: 1.5;
   color: #333333;
 
@@ -16,7 +15,7 @@
         text-align: center;
         margin: 0;
         font-size: 16px;
-        font-weight: 700;
+        font-weight: 600;
         line-height: 1.1;
         padding: 15px 0;
       }
@@ -52,7 +51,7 @@
           }
 
           .goals-green-text {
-            color: #71bf1c;
+            color: var(--secondary-green);
           }
 
           .goals-red-text {
@@ -83,21 +82,18 @@
       }
     }
 
-    button {
-      min-height: 45px;
+    .rg-invest-more-button {
       width: 100%;
-      background-color: var(--secondary);
-      color: white;
       border-top-left-radius: 0;
       border-top-right-radius: 0;
       border-bottom-left-radius: 5px;
       border-bottom-right-radius: 5px;
+      padding: 13px 0 !important;
     }
   }
 }
 
 .reports-funds {
-  margin-top: -20px;
   line-height: 1.5;
   color: #333333;
 
@@ -161,7 +157,7 @@
         }
 
         .funds-green-text {
-          color: #71bf1c;
+          color: var(--secondary-green);
         }
 
         .funds-red-text {
@@ -218,7 +214,7 @@
       .switch-step {
         color: #4a4a4a;
         font-size: 14px;
-        font-weight: 700;
+        font-weight: 600;
         display: flex;
         align-items: flex-start;
         column-gap: 10px;
@@ -285,7 +281,7 @@
     .redeemed-head {
       font-size: 14px;
       color: #4a4a4a;
-      font-weight: 700;
+      font-weight: 600;
     }
 
     .head-info {
@@ -315,7 +311,7 @@
 
         .redeemed-text {
           color: #4a4a4a;
-          font-weight: 700;
+          font-weight: 600;
 
           h4 {
             color: #4a4a4a;
@@ -365,7 +361,7 @@
         .text {
           padding: 0 10px;
           color: #4a4a4a;
-          font-weight: 700;
+          font-weight: 600;
           font-size: 10px;
           text-align: center;
 
@@ -412,7 +408,7 @@
         background-color: #ffffff;
         padding: 9px 50px;
         border-radius: 20px;
-        color: #b2b2b2;
+        color: #ADB1C3;
       }
     }
   }
@@ -423,7 +419,6 @@
   margin: 0 -20px -56px -20px;
   padding: 20px 20px 40px 20px;
   color: #333333;
-  background: #f1f1f1;
 
   header {
     margin: -20px -20px 0 -20px;
@@ -496,7 +491,6 @@
   main {
     margin: 0 -20px;
     padding: 20px 20px 0 20px;
-    background: #f1f1f1;
 
     .reports-switch-fund {
       border: 1px solid #d8d5d5;
@@ -544,11 +538,10 @@
           }
         }
 
-        button {
-          width: fit-content;
-          background-color: var(--secondary);
-          color: white;
+        .reports-switch-fund-btn {
+          width: 130px;
           border-radius: 8px;
+          padding: 10px !important;
         }
       }
     }
@@ -576,7 +569,7 @@
       margin: 0 15px;
 
       .name {
-        color: black;
+        color: var(--dark);
         font-weight: 500;
         font-size: 14px;
       }
@@ -620,7 +613,7 @@
         font-size: 16px;
 
         .text {
-          color: black;
+          color: var(--dark);
         }
       }
 
@@ -691,7 +684,7 @@
 
     .rim-terms-text {
       cursor: pointer;
-      color: #337ab7;
+      color: var(--primary);
       text-decoration: none;
     }
   }
@@ -715,7 +708,7 @@
         margin-bottom: 20px;
         color: #555;
         font-size: 18px;
-        font-weight: 700;
+        font-weight: 600;
         line-height: 1.1;
         text-align: center;
       }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {useParams} from 'react-router-dom';
 import Container from '../common/Container';
 import { fetch_fund_details, fetch_fund_graph } from '../common/ApiCalls';
 import Typography from '@material-ui/core/Typography';
@@ -21,7 +22,6 @@ import { getConfig, isIframe } from 'utils/functions';
 import { withStyles } from '@material-ui/core/styles';
 import { storageService } from 'utils/validators';
 import CartDialog from './CartDialog';
-import IframeContainer from '../../e_mandate/commoniFrame/Container';
 
 import './Style.scss';
 import { isInvestRefferalRequired, proceedInvestment } from '../../dashboard/proceedInvestmentFunctions';
@@ -30,22 +30,29 @@ import PennyVerificationPending from '../../dashboard/Invest/mini-components/Pen
 import InvestError from '../../dashboard/Invest/mini-components/InvestError';
 import InvestReferralDialog from '../../dashboard/Invest/mini-components/InvestReferralDialog';
 import { SkeltonRect } from '../../common/ui/Skelton';
-import { getBasePath } from '../../utils/functions';
+import { getBasePath, isNewIframeDesktopLayout } from '../../utils/functions';
+import { getdiyGraphDataWithISIN } from '../../dashboard/Invest/common/api';
+import { navigate as navigateFunc } from "../../utils/functions"
 
 const styles = {
   root: {
     margin: '10px',
   },
 };
-const FundDetails = ({ classes, history }) => {
+const FundDetails = (props) => {
+  const { classes, history, flowType } = props;
+  const navigate = navigateFunc.bind(props);
   const [isLoading, setLoading] = useState(true);
   const [fundDetails, setFundDetails] = useState(null);
   const [reports, setReports] = useState(null);
   const [graph, setGraph] = useState(null);
   const [selectedIsin, setSelectedIsin] = useState(0);
   const productType = getConfig().productName;
-
-  const { isins, selected_isin, type } = getUrlParams();
+  const {isin} = useParams();
+  let { isins, selected_isin, type } = getUrlParams();
+  if(flowType) {
+    type = flowType
+  }
   const EMPTY_CART = 'EMPTY_CART';
   const FUND_ADDED = 'FUND_ADDED';
   const ADD_CART = '+ Add to Cart';
@@ -90,7 +97,6 @@ const FundDetails = ({ classes, history }) => {
   const { kyc, isLoading: loading } = useUserKycHook();
   const [dialogStates, setDialogStates] = useState({});
   const [isApiRunning, setIsApiRunning] = useState(false);
-  const partnerCode = getConfig().partner_code;
   const [open, setOpen] = useState(false);
   const iframe = isIframe();
   const isMobile = getConfig().isMobileDevice;
@@ -124,14 +130,32 @@ const FundDetails = ({ classes, history }) => {
   };
   
 
+  const getFundData = async () => {
+    try {
+      setLoading(true);
+      const graphData = await getdiyGraphDataWithISIN(isin);
+      storageService().setObject('diystore_fundInfo', graphData.fundinfo);
+    } catch (error) {
+      console.log(error);
+      toast(error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
     if(status === FUND_ADDED && type === 'diy' && productType !== 'finity') {
       setButtonTitle(buttonData(cart.length));
     } 
     (async () => {
+      if(flowType === "diy") {
+        await getFundData();
+      } 
       try {
         setLoading(true);
+        if(isin){
+          isins = isin;
+        }
         const response = await fetch_fund_details(isins);
         let index = response?.text_report?.findIndex((el) => el.isin === selected_isin);
         if(isins === selected_isin){
@@ -152,7 +176,7 @@ const FundDetails = ({ classes, history }) => {
           await fetch_graph_data(response?.text_report[0]?.isin);
         }
       } catch (err) {
-        toast('wrong', 'error');
+        toast('Something went wrong', 'error');
         setLoading(false);
       }
     })();
@@ -297,16 +321,10 @@ const FundDetails = ({ classes, history }) => {
     handleApiRunning(false)
   };
 
-  const navigate = (pathname) => {
-    history.push({
-      pathname: pathname,
-      search: getConfig().searchParams,
-    })
-  }
 
-  const handleInvest = () => {
-    window.location.href =  getConfig().webAppUrl + 'diy/invest';
-  }
+  // const handleInvest = () => {
+  //   window.location.href =  getConfig().webAppUrl + 'diy/invest';
+  // }
 
   const ContainerData = () => (
     <>
@@ -338,7 +356,7 @@ const FundDetails = ({ classes, history }) => {
             <Typography
               align='center'
               style={{
-                color: '#35CB5D',
+                color: getConfig().styles.secondaryGreen,
                 fontWeight: '500',
                 letterSpacing: '0.5px',
                 lineHeight: '1.5em',
@@ -666,55 +684,102 @@ const FundDetails = ({ classes, history }) => {
     setOpen(!open);
   };
 
+  const ContainerProps = isNewIframeDesktopLayout() ?
+  {
+    hideInPageTitle:true,
+    noPadding: true,
+    fullWidthButton: true,
+    handleClick:handleClick,
+    buttonTitle: type === "diy" ? 'INVEST NOW' : "OK",
+    skelton:isLoading,
+    classOverRide:'fd-iframe-container',
+  }
+  :
+  {
+    // title={fundDetails?.performance?.friendly_name},
+    // hideInPageTitle={true},
+    // noPadding,
+    // fullWidthButton,
+    // handleClick={handleClick},
+    // buttonTitle={buttonTitle},
+    // showLoader={isLoading},
+    // classOverRideContainer='fd-container',
+    title:fundDetails?.performance?.friendly_name,
+    hidePageTitle:true,
+    hideInPageTitle:true,
+    noPadding: true,
+    // fullWidthButton,
+    handleClick:handleClick,
+    handleClickOne:handleClick,
+    buttonTitle:buttonTitle,
+    buttonOneTitle:buttonTitle,
+    skelton:isLoading || loading, // new container field
+    // classOverRideContainer:'fd-container',
+    classOverRide:"fd-container",
+    twoButton: status === 'FUND_ADDED' && productType !== 'finity' ,
+    buttonTwoTitle: ENTER_AMOUNT ,
+    handleClickTwo:handleClick2,
+    // handleClick2={handleClick2}, // old container field
+    // buttonTitle2={ENTER_AMOUNT}, // old container field
+    showLoader:isApiRunning, // new container field
+    // showLoader={isLoading || loading}, // old container field
+    type: status === 'FUND_ADDED' && productType !== 'finity' ? "fundDetailsDualButton" : "",
+  }
+
   return (
     <div>
-      {!iframe && partnerCode !== 'moneycontrol' ? (
-        <Container
-          // title={fundDetails?.performance?.friendly_name}
-          // hideInPageTitle={true}
-          // noPadding
-          // fullWidthButton
-          // handleClick={handleClick}
-          // buttonTitle={buttonTitle}
-          // showLoader={isLoading}
-          // classOverRideContainer='fd-container'
-          title={fundDetails?.performance?.friendly_name}
-          hidePageTitle={true}
-          hideInPageTitle={true}
-          noPadding
-          // fullWidthButton
-          handleClick={handleClick}
-          handleClickOne={handleClick}
-          buttonTitle={buttonTitle}
-          buttonOneTitle={buttonTitle}
-          skelton={isLoading || loading} // new container field
-          classOverRideContainer='fd-container'
-          classOverRide="fd-container"
-          twoButton= {status === 'FUND_ADDED' && productType !== 'finity' }
-          buttonTwoTitle={ ENTER_AMOUNT }
-          handleClickTwo={handleClick2}
-          // handleClick2={handleClick2} // old container field
-          // buttonTitle2={ENTER_AMOUNT} // old container field
-          showLoader={isApiRunning} // new container field
-          // showLoader={isLoading || loading} // old container field
-          type={status === 'FUND_ADDED' && productType !== 'finity' ? "fundDetailsDualButton" : ""}
-        >
-          {fundDetails && ContainerData()}
-        </Container>
-      ) : (
-        <IframeContainer
-          hideInPageTitle={true}
-          noPadding
-          fullWidthButton
-          handleClick={handleInvest}
-          buttonTitle={'INVEST NOW'}
-          showLoader={isLoading}
-          classOverRideContainer='fd-container-iframe'
-        >
-          {fundDetails && ContainerData()}
-        </IframeContainer>
-      )}
+      <Container {...ContainerProps} >
+        {fundDetails && ContainerData()}
+      </Container>
     </div>
+    // <div>
+    //   {!iframe && partnerCode !== 'moneycontrol' ? (
+    //     <Container
+    //       // title={fundDetails?.performance?.friendly_name}
+    //       // hideInPageTitle={true}
+    //       // noPadding
+    //       // fullWidthButton
+    //       // handleClick={handleClick}
+    //       // buttonTitle={buttonTitle}
+    //       // showLoader={isLoading}
+    //       // classOverRideContainer='fd-container'
+    //       title={fundDetails?.performance?.friendly_name}
+    //       hidePageTitle={true}
+    //       hideInPageTitle={true}
+    //       noPadding
+    //       // fullWidthButton
+    //       handleClick={handleClick}
+    //       handleClickOne={handleClick}
+    //       buttonTitle={buttonTitle}
+    //       buttonOneTitle={buttonTitle}
+    //       skelton={isLoading || loading} // new container field
+    //       classOverRideContainer='fd-container'
+    //       classOverRide="fd-container"
+    //       twoButton= {status === 'FUND_ADDED' && productType !== 'finity' }
+    //       buttonTwoTitle={ ENTER_AMOUNT }
+    //       handleClickTwo={handleClick2}
+    //       // handleClick2={handleClick2} // old container field
+    //       // buttonTitle2={ENTER_AMOUNT} // old container field
+    //       showLoader={isApiRunning} // new container field
+    //       // showLoader={isLoading || loading} // old container field
+    //       type={status === 'FUND_ADDED' && productType !== 'finity' ? "fundDetailsDualButton" : ""}
+    //     >
+    //       {fundDetails && ContainerData()}
+    //     </Container>
+    //   ) : (
+    //     <IframeContainer
+    //       hideInPageTitle={true}
+    //       noPadding
+    //       fullWidthButton
+    //       handleClick={handleInvest}
+    //       buttonTitle={'INVEST NOW'}
+    //       showLoader={isLoading}
+    //       classOverRideContainer='fd-container-iframe'
+    //     >
+    //       {fundDetails && ContainerData()}
+    //     </IframeContainer>
+    //   )}
+    // </div>
   );
 };
 

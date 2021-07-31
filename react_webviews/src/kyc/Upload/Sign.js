@@ -12,7 +12,8 @@ import KycUploadContainer from '../mini-components/KycUploadContainer'
 import { nativeCallback } from '../../utils/native_callback'
 import "./commonStyles.scss";
 
-const isWeb = getConfig().Web
+const config = getConfig();
+const { productName, Web: isWeb } = config
 const Sign = (props) => {
   const navigate = navigateFunc.bind(props)
   const [isApiRunning, setIsApiRunning] = useState(false)
@@ -91,6 +92,7 @@ const Sign = (props) => {
       disable={!file}
       showLoader={isApiRunning}
       title="Share Signature"
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-signature-screen'
     >
       {!isEmpty(kyc) && (
