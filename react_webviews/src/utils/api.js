@@ -62,8 +62,9 @@ class Api {
         console.log(response.data);
 
         if (response.data.pfwstatus_code === 416) {
-          nativeCallback({ action: '2fa_required' });
-        } //TODO: CHeck with Satendra about where this code must be relative to below code
+          return nativeCallback({ action: '2fa_required' });
+          // return response.data;
+        }
 
         if (response.config.url.includes("/api/") && response.headers["x-plutus-auth"] && config.isIframe) {
           storageService().set("x-plutus-auth", response.headers["x-plutus-auth"])
