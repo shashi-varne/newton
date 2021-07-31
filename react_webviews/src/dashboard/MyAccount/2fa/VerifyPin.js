@@ -31,7 +31,7 @@ const VerifyPin = (props) => {
 
   const handleClick = async () => {
     try {
-      setIsApiRunning("button");
+      setIsApiRunning(true);
       await verifyPin({ mpin });
       sendEvents("next");
       persistRouteParams({ reset_flow: true, old_mpin: mpin })
@@ -80,6 +80,7 @@ const VerifyPin = (props) => {
         otpProps={{
           otp: mpin,
           handleOtp: onPinChange,
+          isDisabled: isApiRunning,
           hasError: !!mpinError,
           bottomText: mpinError || bottomText
         }}

@@ -18,6 +18,7 @@ import VerifyDetailDialog from "../../../../login_and_registration/components/Ve
 import AccountAlreadyExistDialog from "../../../../login_and_registration/components/AccountAlreadyExistDialog";
 import { generateOtp } from "../../../../login_and_registration/functions";
 import { Imgc } from "../../../../common/ui/Imgc";
+import { nativeCallback } from "../../../../utils/native_callback";
 
 const fromLoginStates = ["/login", "/logout", "/verify-otp"]
 class Landing extends Component {
@@ -52,6 +53,23 @@ class Landing extends Component {
   componentWillMount() {
     this.initialize();
   }
+
+  sendEventsIndexFunds = (userAction, card_name) => {
+    let eventObj = {
+      event_name: "home_screen",
+      properties: {
+        user_action: userAction,
+        card_clicked: card_name,
+        screen_name: "home_screen",
+      },
+    };
+
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
 
   onload = () => {
     this.initilizeKyc();
@@ -96,6 +114,7 @@ class Landing extends Component {
   };
 
   closeKycStatusDialog = () => {
+    this.sendEvents("dismiss", "kyc_bottom_sheet");
     this.setState({ openKycStatusDialog: false });
   };
 
@@ -172,6 +191,7 @@ class Landing extends Component {
   };
 
   handleKycStatus = () => {
+    this.sendEvents("next", "kyc_bottom_sheet");
     let { kycJourneyStatus } = this.state;
     if (kycJourneyStatus === "submitted") {
       this.closeKycStatusDialog();
@@ -181,6 +201,34 @@ class Landing extends Component {
           goBack: "/invest",
         },
       });
+    }
+  };
+
+  sendEvents = (userAction, cardClick = "") => {
+    let eventObj = {
+      event_name: "landing_page",
+      properties: {
+        action: userAction,
+        screen_name: "invest home",
+        primary_category: "primary navigation",
+        card_click: cardClick,
+        intent: "",
+        option_clicked: "",
+        channel: getConfig().code,
+      },
+    };
+    if (cardClick === "kyc") {
+      eventObj.properties.kyc_status = this.state.kycJourneyStatus;
+    }
+    if (cardClick === "kyc_bottom_sheet") {
+      eventObj.event_name = "bottom_sheet";
+      eventObj.properties.intent = "kyc status";
+      eventObj.properties.option_clicked = userAction;
+    }
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
     }
   };
 
@@ -205,6 +253,7 @@ class Landing extends Component {
       stocksButtonLoader
     } = this.state;
     const {
+      indexFunds,
       ourRecommendations,
       diy,
       bottomScrollCards,
@@ -236,6 +285,7 @@ class Landing extends Component {
         headerData={{
           partnerLogo: !config.isSdk && config.isMobileDevice
         }}
+        events={this.sendEvents("just_set_events")}
       >
         <div className="invest-landing" data-aid='invest-landing'>
           {
@@ -312,6 +362,26 @@ class Landing extends Component {
                           </WVButton>
                         </div>
                       )}
+                    </React.Fragment>
+                  );
+                case "indexFunds":
+                  return (
+                    <React.Fragment key={index}>
+                      {!isEmpty(indexFunds) &&
+                        indexFunds.map((item, index) => {
+                          return (
+                            <InvestCard
+                              data={item}
+                              key={index}
+                              handleClick={() =>
+                                {
+                                  this.clickCard(item.key, item.title)
+                                  this.sendEventsIndexFunds("next", "explore_passive_funds")
+                                }
+                              }
+                            />
+                          );
+                        })}
                     </React.Fragment>
                   );
                 case "ourRecommendations":

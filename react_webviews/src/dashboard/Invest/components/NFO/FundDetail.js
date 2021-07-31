@@ -7,6 +7,10 @@ import Button from "common/ui/Button";
 import "./FundDetail.scss";
 import { nativeCallback } from "../../../../utils/native_callback";
 import { flowName } from "../../constants";
+import { isNewIframeDesktopLayout } from "../../../../utils/functions";
+import { getNfoFundInfo } from "../../common/api";
+import Toast from "../../../../common/ui/Toast";
+import isEmpty from "lodash/isEmpty";
 
 class FundDetail extends Component {
   constructor(props) {
@@ -14,6 +18,8 @@ class FundDetail extends Component {
     this.state = {
       show_loader: false,
       screenName: "nfo_fund_detail",
+      isIframeLayout: isNewIframeDesktopLayout(),
+      isApiRunning: false
     };
     this.navigate = navigateFunc.bind(this.props);
   }
@@ -22,10 +28,28 @@ class FundDetail extends Component {
     this.onload();
   }
 
-  onload = () => {
+  getNfoFundFromIsin = async (isin) => {
+    try {
+      this.setState({isApiRunning: true});
+      const fundInfo = await getNfoFundInfo(isin);
+      storageService().setObject("nfo_detail_fund",fundInfo.nfo);
+      return fundInfo.nfo;
+    } catch(err) {
+      Toast(err);
+    } finally {
+      this.setState({isApiRunning: false});
+    }
+  }
+
+  onload = async () => {
     let { state } = this.props.location || {};
-    let fund = storageService().getObject("nfo_detail_fund");
-    if (state && state.mfid && fund) {
+    const {isin = ""} = this.props.match.params;
+    let fundDataFromIsin = {};
+    if(isin) {
+      fundDataFromIsin = await this.getNfoFundFromIsin(isin); 
+    } 
+    let fund = !isEmpty(fundDataFromIsin) ? fundDataFromIsin : storageService().getObject("nfo_detail_fund");
+    if ((state && state.mfid && fund) || (isin && fund)) {
       this.setState({ fund: fund });
     } else {
       this.props.history.goBack();
@@ -56,14 +80,17 @@ class FundDetail extends Component {
   }
 
   render() {
-    let { fund } = this.state;
+    let { fund, isIframeLayout } = this.state;
     return (
       <Container
         events={this.sendEvents("just_set_events")}
         data-aid='nfo-fund-details-screen'
         showLoader={this.state.show_loader}
-        noFooter={true}
+        noFooter={!isIframeLayout}
         title="Fund Details"
+        buttonTitle={isIframeLayout ? "INVEST" : ""}
+        handleClick={this.handleClick}
+        skelton={this.state.isApiRunning}
       >
         {fund && (
           <div className="nfo-fund-detail" data-aid='nfo-fund-detail'>
@@ -87,12 +114,15 @@ class FundDetail extends Component {
               </span>
               {fund.tax_plan === "elss" && <span>Tax saving</span>}
             </div>
-            <Button
-              dataAid='invest-btn'
-              onClick={this.handleClick}
-              buttonTitle="INVEST"
-              classes={{ button: "nfo-invest-button" }}
-            />
+            {
+              !isIframeLayout &&
+              <Button
+                dataAid='invest-btn'
+                onClick={this.handleClick}
+                buttonTitle="INVEST"
+                classes={{ button: "nfo-invest-button" }}
+              />
+            }
             <div className="risk" data-aid='nfo-risk'>
               <div className="text">
                 <b>Risk</b>

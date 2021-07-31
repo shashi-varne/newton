@@ -14,12 +14,12 @@ const isIframe = config.isIframe;
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
   const theme = useContext(ThemeContext)
-  let current_user = storageService().get("currentUser");
+  let currentUser = storageService().get("currentUser");
   let user = storageService().getObject("user") || {};
   let kyc = storageService().getObject("kyc") || {};
   let partner = storageService().get("partner") || "";
 
-  const userDataAvailable = current_user && !isEmpty(kyc) && !isEmpty(user);
+  const userDataAvailable = currentUser && !isEmpty(kyc) && !isEmpty(user);
   const sdkCheck = isSdk ? !!partner : true; // same as: !isSdk || (isSdk && partner)
   const [showLoader, setShowLoader] = useState(!userDataAvailable || !sdkCheck);
   const [isLoginValid, setIsLoginValid] = useState(userDataAvailable && sdkCheck);
@@ -27,10 +27,10 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   const fetch = async () => {
     try {
       await initData();
-      current_user = storageService().get("currentUser");
+      currentUser = storageService().get("currentUser");
       user = storageService().getObject("user") || {};
       kyc = storageService().getObject("kyc") || {};
-      const userDataAvailable = current_user && !isEmpty(kyc) && !isEmpty(user);
+      const userDataAvailable = currentUser && !isEmpty(kyc) && !isEmpty(user);
       setIsLoginValid(userDataAvailable);
       if (!userDataAvailable) {
         if (isNative) {

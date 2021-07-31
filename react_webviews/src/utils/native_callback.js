@@ -298,10 +298,11 @@ export function handleNativeExit(props, data) {
   const navigate = navigateFunc.bind(props);
   const nativeExitActions = ["native_back", "exit"];
   const sdkExitActions = ["exit_web", "exit_module", "open_module"];
+  const entryPath = storageService().get('entry_path');
   if (
     (nativeExitActions.includes(data.action) && !config.isNative) ||
     (config.isSdk &&
-      props.location?.pathname !== "/" &&
+      props.location?.pathname !== "/" && (entryPath !== props.location.pathname) &&
       sdkExitActions.includes(data.action))
   ) {
     const searchParams = `base_url=${config.base_url}&partner_code=${config.code}`;

@@ -219,7 +219,7 @@ class MyAccount extends Component {
                     this.handleClick("/kyc/change-address-details1");
                   }}
                 >
-                  <Imgc className="my-imgc" src={require(`assets/address_icon.svg`)} alt="" className="my-imgc"/>
+                  <Imgc className="my-imgc" src={require(`assets/address_icon.svg`)} alt="" />
                   <div>Change Address</div>
                 </div>
               )}

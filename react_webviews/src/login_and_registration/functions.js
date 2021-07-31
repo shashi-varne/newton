@@ -4,13 +4,13 @@ import { storageService, getUrlParams, validateEmail } from "utils/validators";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { isEmpty } from "../utils/validators";
 import { nativeCallback } from "../utils/native_callback";
-import { getBasePath } from "../utils/functions";
 import Toast from "../common/ui/Toast";
+import { getBasePath, isAuthenticatedUser } from "../utils/functions";
 
 const config = getConfig();
-const isMobileView = config.isMobileDevice;
 const errorMessage = "Something went wrong!";
 const basePath = getBasePath();
+
 export function initialize() {
   this.formCheckFields = formCheckFields.bind(this);
   this.triggerOtpApi = triggerOtpApi.bind(this);
@@ -30,6 +30,10 @@ export function initialize() {
   let { referrer = "" } = main_query_params;
 
   let redirectUrl = encodeURIComponent(`${basePath}/${config.searchParams}`);
+  if(isAuthenticatedUser(this.props)) {
+    return;
+  }
+
   const partners = [
     "hbl",
     "sbm",

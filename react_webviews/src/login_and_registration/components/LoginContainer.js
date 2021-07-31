@@ -1,7 +1,7 @@
 import "./LoginContainer.scss";
 import React from "react";
 import { getConfig } from "utils/functions";
-import { Link, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import PinChangeSuccess from "../pages/ForgotPin/ForgotPinSuccess";
 import Login from "../pages/Login/Login";
 import VerifyLoginOtp from "../pages/Login/VerifyLoginOtp";
