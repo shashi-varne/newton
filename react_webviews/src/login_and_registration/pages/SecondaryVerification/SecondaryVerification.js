@@ -2,9 +2,9 @@ import "./secondaryVerification.scss";
 import React, { Component } from 'react';
 import Container from "../../../dashboard/common/Container";
 import Input from "common/ui/Input";
-import { getConfig } from 'utils/functions';
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { countries } from "../../constants";
-import { initialize } from "../../functions";
+import { authCheckApi, generateOtp, formCheckFields } from "../../functions";
 import { validateNumber } from "utils/validators";
 import { nativeCallback } from "../../../utils/native_callback";
 import DropDownNew from "common/ui/DropDownNew";
@@ -21,11 +21,13 @@ class SecondaryVerification extends Component {
             accountAlreadyExists: false,
             isEdit: false
         }
-        this.initialize = initialize.bind(this);
+        this.authCheckApi = authCheckApi.bind(this);
+        this.generateOtp = generateOtp.bind(this);
+        this.formCheckFields = formCheckFields.bind(this);
+        this.navigate = navigateFunc.bind(this.props);
     }
 
     componentWillMount() {
-        this.initialize();
         const { state } = this.props.location;
         let { form_data } = this.state;
         let loginType = state?.communicationType || "mobile";

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Container from "../../../dashboard/common/Container";
-import { initialize } from "../../functions";
+import { navigate as navigateFunc } from "utils/functions";
+import { otpVerification, resendOtp, redirectAfterLogin } from "../../functions";
 import "./secondaryVerification.scss";
 import { toast } from "react-toastify";
 import OtpContainer from "../../../common/components/OtpContainer";
@@ -20,7 +21,10 @@ export class SecondaryOtpVerification extends Component {
       communicationType: "mobile",
       showDotLoader: false
     };
-    this.initialize = initialize.bind(this);
+    this.otpVerification = otpVerification.bind(this);
+    this.resendOtp = resendOtp.bind(this);
+    this.redirectAfterLogin = redirectAfterLogin.bind(this);
+    this.navigate = navigateFunc.bind(this.props);
   }
 
   componentWillMount() {
@@ -38,7 +42,6 @@ export class SecondaryOtpVerification extends Component {
       rebalancing_redirect_url: rebalancing_redirect_url,
       communicationType: communicationType
     });
-    this.initialize();
   }
 
   handleOtp = (otp) => {
@@ -104,7 +107,7 @@ export class SecondaryOtpVerification extends Component {
         onSkipClick={() => {
           this.navigate("/");
           this.sendEvents("skip");
-      }}
+        }}
         handleClick={this.handleClick}
       >
         <OtpContainer

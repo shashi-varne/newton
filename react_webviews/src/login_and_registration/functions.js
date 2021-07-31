@@ -15,7 +15,6 @@ export function initialize() {
   this.formCheckFields = formCheckFields.bind(this);
   this.triggerOtpApi = triggerOtpApi.bind(this);
   this.initiateOtpApi = initiateOtpApi.bind(this);
-  this.verifyCode = verifyCode.bind(this);
   this.resendVerificationLink = resendVerificationLink.bind(this);
   this.otpVerification = otpVerification.bind(this);
   this.otpLoginVerification = otpLoginVerification.bind(this);
@@ -23,8 +22,6 @@ export function initialize() {
   this.generateOtp = generateOtp.bind(this);
   this.resendOtp = resendOtp.bind(this);
   this.resendLoginOtp = resendLoginOtp.bind(this);
-  this.forgotPassword = forgotPassword.bind(this);
-  this.verifyForgotOtp = verifyForgotOtp.bind(this);
   this.navigate = navigateFunc.bind(this.props);
   this.getKycFromSummary = getKycFromSummary.bind(this);
   this.redirectAfterLogin = redirectAfterLogin.bind(this);
@@ -262,41 +259,6 @@ export async function initiateOtpApi(body, loginType) {
   }
 }
 
-export async function verifyCode(form_data) {
-  if (!form_data.referral_code) {
-    form_data[`referral_code_error`] = "This is required";
-    this.setState({ form_data: form_data });
-    return;
-  }
-  this.setState({ isPromoApiRunning: true });
-  let body = {
-    code: form_data.referral_code,
-  };
-  try {
-    const res = await Api.get(`/api/checkpromocode`, body);
-    const { result, status_code: status } = res.pfwresponse;
-    if (status === 200) {
-      toast("Success");
-      this.sendEvents("next")
-      this.setState({
-        isPromoSuccess: true,
-        promo_status: "Valid",
-        isPromoApiRunning: false,
-      });
-    } else {
-      this.setState({
-        isPromoSuccess: false,
-        promo_status: "Invalid",
-        isPromoApiRunning: false,
-      });
-      toast(result.message || result.error || errorMessage);
-    }
-  } catch (error) {
-    console.log(error);
-    toast(errorMessage);
-    this.setState({ isPromoApiRunning: false });
-  }
-}
 
 export async function resendVerificationLink() {
   let { loginType, form_data } = this.state;
@@ -427,13 +389,6 @@ export async function otpVerification(body) {
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       this.sendEvents("next");
-      let eventObj = {
-        event_name: "user loggedin",
-      };
-      nativeCallback({ events: eventObj });
-      applyCode(result.user);
-      storageService().setObject("user", result.user);
-      storageService().set("currentUser", true);
       if (this.state.rebalancing_redirect_url) {
         window.location.href = this.state.rebalancing_redirect_url;
         return;
@@ -543,54 +498,6 @@ export async function resendLoginOtp(resend_url) {
     toast(errorMessage);
   } finally {
     this.setState({ isResendOtpApiRunning: false });
-  }
-}
-
-export async function forgotPassword(body) {
-  try {
-    const res = await Api.get(`/api/forgotpassword`, body);
-    const { result, status_code: status } = res.pfwresponse;
-    let { loginType } = this.state;
-    if (status === 200) {
-      this.setState({ isApiRunning: false });
-      if (loginType === "email") toast(`A link has been sent to ${body.email}`);
-      else {
-        this.navigate("mobile/verify", {
-          state: {
-            mobile_number: body.mobile,
-            forgot: true,
-          },
-        });
-      }
-    } else {
-      toast(result.message || result.error || errorMessage);
-    }
-    this.setState({ isApiRunning: false });
-  } catch (error) {
-    console.log(error);
-    toast(errorMessage);
-  } finally {
-    this.setState({ isApiRunning: false });
-  }
-}
-
-export async function verifyForgotOtp(body) {
-  this.setState({ isApiRunning: "button" });
-  try {
-    const res = await Api.post(`/api/user/verifymobile?otp=${body.otp}`);
-    const { result, status_code: status } = res.pfwresponse;
-    if (status === 200) {
-      this.setState({ isApiRunning: false });
-      toast("Login to continue");
-      this.navigate("/login");
-    } else {
-      toast(result.message || result.error || errorMessage);
-    }
-  } catch (error) {
-    console.log(error);
-    toast(errorMessage);
-  } finally {
-    this.setState({ isApiRunning: false });
   }
 }
 
