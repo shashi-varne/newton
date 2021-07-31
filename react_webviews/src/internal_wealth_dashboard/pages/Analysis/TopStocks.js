@@ -3,7 +3,7 @@ import IwdCard from '../../mini-components/IwdCard';
 import { isEmpty } from 'utils/validators';
 import { topStocksIconMappings } from '../../constants';
 import { formatPercentVal } from '../../common/commonFunctions';
-const TopStocks = ({ topStocks }) => {
+const TopStocks = ({ topStocks = [] }) => {
   return (
     <div className='iwd-scroll-child' data-pgno='2'>
       <IwdCard

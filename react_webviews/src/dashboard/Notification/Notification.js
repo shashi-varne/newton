@@ -9,12 +9,11 @@ import { getBasePath, navigate as navigateFunc } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 
 const genericErrorMessage = "Something went wrong!";
-const config = getConfig();
 class Notification extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      productName: config.productName,
+      productName: getConfig().productName,
       showLoader: false,
       notifications: [],
     };
@@ -83,7 +82,7 @@ class Notification extends Component {
 
   getRedirectionUrlWebview = (url, showRedirectUrl) => {
     let webRedirectionUrl = url;
-    let plutusRedirectUrl = `${getBasePath()}/notification?is_secure=${storageService().get("is_secure")}`;
+    let plutusRedirectUrl = `${getBasePath()}/notification?is_secure=${storageService().get("is_secure")}&partner_code=${getConfig().code}`;
     // Adding redirect url for testing
     // eslint-disable-next-line
     webRedirectionUrl = `${webRedirectionUrl}${webRedirectionUrl.match(/[\?]/g) ? "&" : "?"}generic_callback=true&${showRedirectUrl ?"redirect_url":"plutus_redirect_url"}=${encodeURIComponent(plutusRedirectUrl)}&campaign_version=1`
@@ -94,11 +93,17 @@ class Notification extends Component {
     this.sendEvents('next', target.campaign_name)
     this.setState({ showLoader: true });
     let campLink = "";
-    const showRedirectUrl = target.campaign_name === "whatsapp_consent"
+    const redirectUrlCampaignNames = ["whatsapp_consent", "ins_policy_issued", "o2o_application_added"];
+    const showRedirectUrl = redirectUrlCampaignNames.includes(target.campaign_name);
     campLink = this.getRedirectionUrlWebview(
       target.url,
       showRedirectUrl
     );
+    const insuranceCampaignNames = ["ins_policy_issued", "o2o_application_added"];
+    if(insuranceCampaignNames.includes(target.campaign_name)){
+      campLink += "&from_notification=true";
+    }
+    storageService().set("flow-type", "notification");
     window.location.href = campLink;
   };
 

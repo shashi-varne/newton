@@ -15,12 +15,15 @@ import ic_close from 'assets/close_icon.svg';
 import SVG from 'react-inlinesvg';
 import Api from 'utils/api';
 import toast from '../../common/ui/Toast';
+import Dialog, { DialogContent, DialogActions, DialogTitle } from "material-ui/Dialog";
+import Button from '../../common/ui/Button';
 
 let store = {};
 let intent_supported = false;
 let upi_others = true;
 let upi_apps = {};
 let nativeData;
+const config = getConfig();
 function getAllUrlParams(url) {
 
   // get query string from url (optional) or window
@@ -133,26 +136,31 @@ const UpiRows = (props) => {
             i++;
             rows.push(<div onClick={() => props.goToPayment('com.google.android.apps.nbu.paisa.user')} key={i}><img alt="payment" src={getImage('com.google.android.apps.nbu.paisa.user')} /><div className="bottomtext">GPay</div></div>)
             gpay = false;
+            continue;
           }
           if (phonepe) {
             i++;
             rows.push(<div onClick={() => props.goToPayment('com.phonepe.app')} key={i}><img alt="payment" src={getImage('com.phonepe.app')} /><div className="bottomtext">PhonePe</div></div>)
             phonepe = false;
+            continue;
           }
           if (paytm) {
             i++;
             rows.push(<div onClick={() => props.goToPayment('net.one97.paytm')} key={i}><img alt="payment" src={getImage('net.one97.paytm')} /><div className="bottomtext">Paytm</div></div>)
             paytm = false;
+            continue;
           }
 
           if (i < 3 && (!gpay || !phonepe || !paytm)) {
             i++;
             rows.push(<div onClick={() => props.goToPayment(upi_apps[key].package_name)} key={i}><img alt="payment" src={getImage(upi_apps[key].package_name)} /><div className="bottomtext">{key.split(" ")[0]}</div></div>)
+            continue;
           }
 
         } else {
           i++;
           rows.push(<div onClick={() => props.goToPayment(upi_apps[key].package_name)} key={i}><img alt="payment" src={getImage(upi_apps[key].package_name)} /><div className="bottomtext">{key.split(" ")[0]}</div></div>)
+          continue;
         }
       }
     }
@@ -253,6 +261,45 @@ const SelectBankModal = (props) => {
   );
 };
 
+const IppbDisclaimer = ({ open, close }) => {
+  return (
+    <Dialog open={open} className="po-ippb-disclaimer">
+      <DialogTitle className="po-ippb-disclaimer-title">
+        DISCLAIMER:
+      </DialogTitle>
+      <DialogContent className="po-ippb-disclaimer-content">
+        <p>
+          <b>1.</b> India Post Payments Bank (hereto also referred as "IPPB") has
+          entered into a limited term partnership with M/s Finwizard Technology
+          Pvt Ltd. (popularly known & hereafter referred as "<span className="text-transform-uppercase">{config.productName}</span>") to
+          facilitate Mutual Fund investments.
+        </p>
+        <p>
+          <b>2.</b> IPPB, the bank, through its field distribution teams, including the
+          BC channel will only provide referral of the "<span className="text-transform-uppercase">{config.productName}</span> Mobile App" to
+          its customers.
+        </p>
+        <p><b>3.</b> Mutual Funds are subject to market risks.</p>
+        <p>
+          <b>4.</b> IPPB nor any of its affiliates, does not in any way, assure any
+          quantum of returns from the mutual funds
+        </p>
+        <p>
+          <b>5.</b> IPPB and all its affiliates shall not be responsible for any kind
+          of deficiency in the services of <span className="text-transform-capitalize">{config.productName}</span>.
+        </p>
+        <p>
+          <b>6.</b> I have read, understood and agree to the terms and conditions as
+          above.
+        </p>
+      </DialogContent>
+      <DialogActions className="po-ippb-disclaimer-actions">
+        <Button buttonTitle="CONTINUE" onClick={close} style={{ width: "100%" }} />
+      </DialogActions>
+    </Dialog>
+  );
+};
+
 class PaymentOption extends React.Component {
   constructor(props) {
     super(props);
@@ -295,6 +342,7 @@ class PaymentOption extends React.Component {
       showDebitLoader: false,
       showBilldeskLoader: false,
       skelton: true,
+      openIppbDisclaimer: false,
       productName: getConfig().productName
     };
 
@@ -311,6 +359,7 @@ class PaymentOption extends React.Component {
     this.selectedUpiBank = this.selectedUpiBank.bind(this);
     this.selectedBank = this.selectedBank.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.closeIppbDisclaimer = this.closeIppbDisclaimer.bind(this);
   }
 
   componentWillMount() {
@@ -335,6 +384,7 @@ class PaymentOption extends React.Component {
       if (store.partner === 'ippb') {
         intent_supported = false;
         upi_others = true;
+        this.setState({ openIppbDisclaimer: true })
       }
       const supportedBanks = store.banks.filter((item, i) => {
         return item.bank_supported;
@@ -503,6 +553,10 @@ class PaymentOption extends React.Component {
 
   closeModal() {
     this.setState({ showCancelModal: false, reason: '' });
+  }
+
+  closeIppbDisclaimer() {
+    this.setState({ openIppbDisclaimer: false });
   }
 
   selectptype(type) {
@@ -711,7 +765,7 @@ class PaymentOption extends React.Component {
             </div>
             <div className="block-padding payusing">
               Pay ₹ {store.amount.toLocaleString()} using
-          </div>
+            </div>
             <div className="tabs">
               {(store.has_upi_banks || (store.upi_add_bank_url && store.upi_enabled)) && this.state.selectedBank.upi_supported &&
                 <div className="paymentcard upi tab" onClick={() => this.selectptype('upi')}>
@@ -799,6 +853,12 @@ class PaymentOption extends React.Component {
                 closeBankModal={this.closeBankModal}
                 activeIndex={this.state.activeIndex} />
             }
+            {this.state.openIppbDisclaimer && (
+              <IppbDisclaimer
+                open={this.state.openIppbDisclaimer}
+                close={this.closeIppbDisclaimer}
+              />
+            )}
           </div>
         }
       </Container>

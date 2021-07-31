@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import { formatAmountInr, isEmpty, storageService } from "utils/validators";
-import Button from "material-ui/Button";
+import Button from "common/ui/Button";
 import { getPathname, storageConstants } from "../constants";
 import {
   getAvailableFundsForSwitch,
@@ -165,9 +165,7 @@ const SwitchFund = (props) => {
                             src={require(`assets/know_more_new.png`)}
                           />
                         </div>
-                        <Button onClick={() => switchFund(fund)} data-aid='reports-switch-fund-btn'>
-                          Switch Fund
-                        </Button>
+                        <Button onClick={() => switchFund(fund)} data-aid='reports-switch-fund-btn' buttonTitle="Switch Fund" classes={{button: "reports-switch-fund-btn"}} />
                       </div>
                     </div>
                   );

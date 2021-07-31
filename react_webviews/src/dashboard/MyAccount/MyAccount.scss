@@ -57,8 +57,8 @@
 
       .account-head-title {
         padding: 20px 10px 10px 20px;
-        font-weight: 900;
-        color: #4a4a4a;
+        font-weight: 600;
+        color: var(--default);
         font-size: 16px;
       }
 
@@ -70,9 +70,14 @@
         display: flex;
         align-items: center;
         color: #333333;
-        img {
-          width: 25px;
-          margin-right: 15px;
+        .alert-icn {
+          width: 30px !important;
+          border: 1px solid red;
+        }
+        .my-imgc {
+          width: 25px !important;
+          min-height: 30px;
+          margin-right: 15px !important;
           margin-top: -3px;
         }
         .pending {
@@ -207,7 +212,7 @@
 
       .upload-action {
         font-size: 16px;
-        color: var(--secondary);
+        color: var(--secondary-green);
         margin-top: 4px;
       }
     }

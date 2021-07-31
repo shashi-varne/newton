@@ -4,8 +4,11 @@ import Container from '../common/Container';
 import Card from '../common/Card';
 import Api from 'utils/api';
 import wallet from 'assets/wallet_icon.svg';
+import wallet_finity from 'assets/finity/wallet_icon.svg';
 import gift from 'assets/refer_gift_icon.png';
+import gift_finity from 'assets/finity/refer_gift_icon.svg';
 import diwali_banner from 'assets/diwali_banner.svg';
+import diwali_banner_finity from 'assets/finity/diwali_banner_finity.svg';
 import Button from 'material-ui/Button';
 import Grid from '@material-ui/core/Grid';
 import { nativeCallback } from 'utils/native_callback';
@@ -182,7 +185,7 @@ class Details extends Component {
       >
         <div className="Refer">
           <Card nopadding={true}>
-            {(this.state.type === 'fisdom' && this.state.current_campaign_id === this.state.campaign_id) ? <img src={diwali_banner} alt="" /> : <img src={gift} alt="" />}
+            {(this.state.type === 'fisdom' && this.state.current_campaign_id === this.state.campaign_id) ? <img src={getConfig().productName !== 'fisdom' ? diwali_banner_finity : diwali_banner} alt="" /> : <img src={ getConfig().productName !== 'fisdom' ? gift_finity : gift} alt="" />}
             <div className={`margin_top ${(this.state.type === 'fisdom' && this.state.current_campaign_id === this.state.campaign_id) ? 'nomargin' : ''}`} style={{ padding: '15px' }}>
               <h1>{this.state.refer_message_1}</h1>
               <p>
@@ -213,7 +216,7 @@ class Details extends Component {
             <Card nopadding={true}>
               <Grid container spacing={24} alignItems="center" className={`ReferPaytmGrid (!this.state.campaign_expiry_date) ? ReferTermsGrid : ''`} onClick={() => this.navigate('/referral/earnings')}>
                 <Grid item xs>
-                  <img src={wallet} alt="" />
+                  <img src={getConfig().productName !== 'fisdom' ? wallet_finity : wallet} alt="" />
                 </Grid>
                 <Grid item xs={6}>
                   <p><span className="blue">Pay</span><span className="blue_light">tm</span> earnings</p>

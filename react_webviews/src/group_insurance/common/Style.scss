@@ -1176,9 +1176,11 @@
   .member-tile {
       display: flex;
       margin: 16px 0;
+      align-items: center;
       .final-summary-tile{
         width: 30px !important;
         height: 30px !important;
+        vertical-align: middle;
       }
       .mt-right {
         margin: 0 0 0 10px;
@@ -1190,7 +1192,7 @@
     .mtr-top {
         color: #0A1D32;
         font-size: 8px;
-        font-weight: 700;
+        font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 1px;
     }
@@ -1361,12 +1363,10 @@
   }
 
   .insurance_plans_logos_small{
-    margin-right:25px !important;
-    width: 40px !important;
-    height: 40px !important;
+    margin : 20px 25px 0px 3px;
+    width: 40px;
+    height: 40px;
     border-radius: 2px;
-    margin-top: 20px;
-    margin-left: 3px;
     padding-left: 3px;
     padding-right: 3px;
   }
@@ -1463,11 +1463,15 @@
   opacity: 0.4;
 }
 
+.call-back-popup-button:hover{
+  background-color: var(--on-hover-background);
+}
+
 .call-back-popup-button{
   padding: 10px 0;
   width: 100%;
   margin-bottom: -5px;
-  background-color: #35CB5D;
+  background-color: var(--secondary);
   color: white;
   border: none;
   padding: 16px 0;

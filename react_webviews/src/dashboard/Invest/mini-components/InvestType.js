@@ -2,8 +2,8 @@ import React from "react";
 import { getConfig } from "utils/functions";
 import { Imgc } from "../../../common/ui/Imgc";
 import './mini-components.scss';
-let productName = getConfig().productName;
 const InvestType = (props) => {
+  const productName = getConfig().productName;
   return (
     <div className="invest-type" data-aid='invest-type'>
       {props.baseData.subtitle && (

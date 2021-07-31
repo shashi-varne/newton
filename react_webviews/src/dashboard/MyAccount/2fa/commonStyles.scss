@@ -1,0 +1,32 @@
+.clickable-text-ele{
+  margin-top: 60px;
+  display: flex;
+  justify-content: center;
+}
+
+.security-settings {
+  .img-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      min-height: 200px;
+    }
+    
+  .bottom-space{
+      margin-bottom: 44px;
+  }
+  .account-options {
+    border-bottom: none;
+    padding: 15px 15px 15px 0px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: #333333;
+    .padlock-imgc {
+      width: 25px !important;
+      margin-right: 15px !important;
+      margin-top: -3px;
+    }
+  }     
+}

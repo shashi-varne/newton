@@ -6,6 +6,7 @@ import Container from "../common/Container";
 import VerifyDetailDialog from "../../login_and_registration/components/VerifyDetailDialog";
 import AccountAlreadyExistDialog from "../../login_and_registration/components/AccountAlreadyExistDialog";
 import Button from "material-ui/Button";
+import { Imgc } from "../../common/ui/Imgc"
 import UserDetails from "./UserDetails";
 import Dialog, {
   DialogActions,
@@ -151,16 +152,17 @@ class MyAccount extends Component {
     });
   };
 
-  sendEvents = (userAction, screenName) => {
+  sendEvents = (userAction, screenName, settings_clicked) => {
     let eventObj = {
       event_name: "my_account",
       properties: {
         account_options:
           (userAction === "just_set_events" ? "back" : userAction) || "",
         screen_name: screenName || "my_account",
+        settings_clicked: settings_clicked ? "yes" : "no",
       },
     };
-    if (screenName === "export transaction history") {
+    if (screenName === "export transaction history" || screenName === "") {
       delete eventObj.properties.account_options;
       eventObj.properties.user_action = userAction;
     }
@@ -192,7 +194,7 @@ class MyAccount extends Component {
         data-aid='my-account-screen'
         events={this.sendEvents("just_set_events")}
         noFooter={true}
-        skelton={this.state.showLoader}
+        // skelton={this.state.showLoader}
         title="My Account"
       >
         <div className="my-account" data-aid='my-account'>
@@ -217,7 +219,7 @@ class MyAccount extends Component {
                     this.handleClick("/kyc/change-address-details1");
                   }}
                 >
-                  <img src={require(`assets/address_icon.svg`)} alt="" />
+                  <Imgc className="my-imgc" src={require(`assets/address_icon.svg`)} alt="" />
                   <div>Change Address</div>
                 </div>
               )}
@@ -230,7 +232,7 @@ class MyAccount extends Component {
                     this.handleClick("/kyc/add-bank");
                   }}
                 >
-                  <img src={require(`assets/add_bank_icn.svg`)} alt="" />
+                  <Imgc className="my-imgc" src={require(`assets/add_bank_icn.svg`)} alt="" />
                   <div>Add Bank/Mandate</div>
                 </div>
               )}
@@ -245,7 +247,7 @@ class MyAccount extends Component {
                       this.handleClick("/capital-gain");
                     }}
                   >
-                    <img
+                    <Imgc className="my-imgc"
                       src={require(`assets/capital_gains_icon.svg`)}
                       alt=""
                     />
@@ -263,7 +265,7 @@ class MyAccount extends Component {
                       this.handleClick("/investment-proof");
                     }}
                   >
-                    <img src={require(`assets/80c_icon.svg`)} alt="" />
+                    <Imgc className="my-imgc" src={require(`assets/80c_icon.svg`)} alt="" />
                     <div>80C Investment Proof</div>
                   </div>
                 )}
@@ -273,7 +275,7 @@ class MyAccount extends Component {
                   className="account-options"
                   onClick={() => this.confirmTransactions()}
                 >
-                  <img
+                  <Imgc className="my-imgc"
                     src={require(`assets/export_transaction_icon.svg`)}
                     alt=""
                   />
@@ -288,11 +290,25 @@ class MyAccount extends Component {
                   this.handleClick("/blank-mandate/upload");
                 }}
               >
-                <img
+                <Imgc className="my-imgc"
                   src={require(`assets/export_transaction_icon.svg`)}
                   alt=""
                 />
                 <div>Upload Mandate</div>
+              </div>
+              <div
+                data-aid='security-setting'
+                className="account-options"
+                onClick={() => {
+                  this.sendEvents("next", "", true);
+                  this.handleClick("/security-settings");
+                }}
+              >
+                <Imgc className="my-imgc"
+                  src={require(`assets/security.svg`)}
+                  alt=""
+                />
+                <div>Security setting</div>
               </div>
             </div>
             {(mandate.prompt ||
@@ -307,7 +323,7 @@ class MyAccount extends Component {
                     className="account-options"
                     onClick={() => this.handleClick(pendingMandate.state)}
                   >
-                    <img src={require(`assets/alert_icon.svg`)} alt="" />
+                    <Imgc className="my-imgc" src={require(`assets/alert_icon.svg`)} alt="" />
                     <div className="pending">{pendingMandate.message}</div>
                   </div>
                 )}
@@ -317,7 +333,7 @@ class MyAccount extends Component {
                     className="account-options"
                     onClick={() => this.authenticate()}
                   >
-                    <img src={require(`assets/alert_icon.svg`)} alt="" />
+                    <Imgc className="my-imgc" src={require(`assets/alert_icon.svg`)} alt="" />
                     <div className="pending">
                       Authenticate E-Mandate for NPS
                     </div>
@@ -329,7 +345,7 @@ class MyAccount extends Component {
                     className="account-options"
                     onClick={() => this.handleClick("/nps/identity")}
                   >
-                    <img src={require(`assets/alert_icon.svg`)} alt="" />
+                    <Imgc className="my-imgc alert-icn" style={{width: "30px"}} src={require(`assets/alert_icon.svg`)} alt=""  />
                     <div className="pending">Upload NPS Details</div>
                   </div>
                 )}

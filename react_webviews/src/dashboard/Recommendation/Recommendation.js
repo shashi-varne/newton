@@ -38,10 +38,11 @@ const sipTypesKeys = [
   "goldsip",
   "diysip",
 ];
-const riskEnabledFunnel = getConfig().riskEnabledFunnels;
-const partner_code = getConfig().partner_code;
 
 const Recommendations = (props) => {
+  const config = getConfig();
+  const riskEnabledFunnel = config.riskEnabledFunnels;
+  const partner_code = config.code;
   const routeState = get(props, 'location.state', {});
   const navigate = navigateFunc.bind(props);
   const {
@@ -72,6 +73,7 @@ const Recommendations = (props) => {
   });
   const [isins, setIsins] = useState("");
   const [isApiRunning, setIsApiRunning] = useState(false);
+  const [showSkelton, setShowSkelton] = useState(false)
   const {kyc: userKyc, user: currentUser, isLoading} = useUserKycHook();
   let sipOrOneTime = "";
   if ((funnelData.type !== "riskprofile") & (funnelData.type !== "insta-redeem")) {
@@ -99,7 +101,7 @@ const Recommendations = (props) => {
     };
 
     try {
-      setIsApiRunning(true);
+      setShowSkelton(true);
       const res = await get_recommended_funds(params);
 
       if (res.rp_indicator) {
@@ -107,10 +109,11 @@ const Recommendations = (props) => {
       }
       updateFunnelData(res);
 
-      setIsApiRunning(false);
     } catch (err) {
       console.log(err);
       toast(err);
+    } finally {
+      setShowSkelton(false)
     }
   };
 
@@ -292,7 +295,6 @@ const Recommendations = (props) => {
 
   const goBack = () => {
     sendEvents('back')
-    //TODO below code to be checked
     const goBackPath = props.location?.state?.goBack || "";
     if(goBackPath) {
       props.history.push({
@@ -315,11 +317,14 @@ const Recommendations = (props) => {
           ? "HOW IT WORKS?"
           : investCtaText
       }
-      skelton={isLoading}
+      skelton={isLoading || showSkelton}
       title='Recommended Funds'
       handleClick={goNext}
       showLoader={isApiRunning}
       hidePageTitle
+      loaderData={{
+        loadingText:"Your payment is being processed. Please do not close this window or click the back button on your browser."
+      }}
       headerData={{goBack}}
     > 
       <div className="recommendation-page" data-aid='recommendation-page'>

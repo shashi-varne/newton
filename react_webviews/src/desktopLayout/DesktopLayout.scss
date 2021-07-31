@@ -12,24 +12,10 @@
   }
 
   .feature-container {
-    width: 640px !important;
+    width: var(--desktop-width) !important;
     overflow: auto;
     height: 100%;
 
-    ::-webkit-scrollbar-thumb {
-      background: #dbdbdb;
-      border-radius: 5px;
-    }
-
-    ::-webkit-scrollbar {
-      width: 10px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: #f1f1f1;
-      border-radius: 5px;
-    }
-    
     .ContainerWrapper {
       margin: 0px !important;
       max-width: 100% !important;
@@ -38,14 +24,14 @@
       & > header {
         position: fixed;
         top: 60px;
-        width: 640px !important;
+        width: var(--desktop-width) !important;
         margin-left: 300px !important;
         z-index: 1300 !important;
       }
 
       #HeaderHeight {
         .Step{
-          max-width: 640px !important;
+          max-width: var(--desktop-width) !important;
           margin-left: 300px !important;
           top: 124px !important;
         }
@@ -67,7 +53,7 @@
     margin-left: 300px !important;
     position: fixed !important;
     width: calc(100% - 300px) !important;
-    max-width: 640px !important;
+    max-width: var(--desktop-width) !important;
     height: initial !important;
 
     .MuiDialog-paper {
@@ -97,15 +83,6 @@
     position: absolute !important;
   }
 
-  // Temp fix for the fund details screen(will be removed once we use new container)
-  .fd-container {
-    .Loader {
-      margin-left: 300px !important;
-      max-width: 640px !important;
-      margin-top: 56px !important;
-    }
-  }
-
   .MuiModal-root{
     .MuiPopover-paper{
       min-width: 160px;
@@ -122,6 +99,10 @@
       }
     }
   }
+
+  #kyc-bank-verification-dialog .MuiDialog-paper{
+    bottom: unset !important;
+  }
 }
 
 @media only screen and (max-width: 500px) {
@@ -135,5 +116,17 @@
   }
   .main-container .feature-container .ContainerWrapper header {
     width: 100% !important;
+  }
+}
+
+@media only screen and (min-width: 500px) {
+  body.IframeBody { 
+    .MuiModal-root[role='dialog']{
+      top: 0px !important;
+      margin-left: 0px !important;
+      max-width: 100% !important;
+      width: 100% !important;
+      height: 100% !important;
+    }
   }
 }

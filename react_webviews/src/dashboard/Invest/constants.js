@@ -24,6 +24,15 @@ export const investCardsBase = {
       icon: "icn_nps.svg",
     },
   },
+  indexFunds :{
+    passiveIndexFunds: {
+      button_text: "EXPLORE",
+      icon: "passive_index_funds.svg",
+      subtitle: "*Earn upto <b>2%</b> more than actively managed fund",
+      title: "Passive index funds",
+      belowCardDescription : "*Based on TER averages of regular large cap and direct index funds",
+    },
+  },
   ourRecommendations: {
     buildwealth: {
       title: "High growth funds (Build Wealth)",
@@ -130,6 +139,7 @@ export const investCardsBase = {
 
 export const keyPathMapper = {
   nfo: "/advanced-investing/new-fund-offers/info",
+  passiveIndexFunds: "/passive-index-funds/landing",
   instaredeem: "invest/instaredeem",
   buildwealth: "invest/buildwealth",
   savetax: "invest/savetax",
@@ -262,16 +272,16 @@ export const nfoData = {
     {
       value: "sip",
       name: "SIP / Monthly",
-      icon: "sip_icn.png",
+      icon: "sip_icn.svg",
       icon_light: "sip_icn_light.png",
-      selected_icon: "selected.png",
+      selected_icon: "selected.svg",
     },
     {
       value: "onetime",
       name: "One Time",
-      icon: "one_time_icn.png",
+      icon: "one_time_icn.svg",
       icon_light: "one_time_icn_light.png",
-      selected_icon: "selected.png",
+      selected_icon: "selected.svg",
     },
   ],
 };
@@ -318,15 +328,15 @@ export const kycStatusMapper = {
 export const kycStatusMapperInvest = {
   init: {
     icon: "ic_card_kyc_default.svg",
-    title: "Create investment profile",
-    subtitle: "Paperless KYC in two minutes",
+    title: "Are you investment ready?",
+    subtitle: "Check your KYC status",
     button_text: "CREATE NOW",
     next_state: "/kyc/journey",
   },
   ground: {
     icon: "ic_card_kyc_default.svg",
-    title: "Create investment profile",
-    subtitle: "Paperless KYC in two minutes",
+    title: "Are you investment ready?",
+    subtitle: "Check your KYC status",
     button_text: "CREATE NOW",
     next_state: "/kyc/home",
   },
@@ -431,10 +441,10 @@ export const riskProfiles = [{
 }];
 
 export const sdkInvestCardMapper = [
- {
+  {
     key: 'invest',
     title: 'Start investing',
-    titleImg:'ic_db_invest_solid.svg',
+    titleImg: 'ic_db_invest_solid.svg',
     subtitle: 'Mutual Funds',
     img: 'ic_db_invest.svg',
     height: '133px',
@@ -466,7 +476,7 @@ export const sdkInvestCardMapper = [
     title: 'Refer & Earn',
     subtitle: 'Refer to your friends & earn rewards',
     img: 'ic_db_refer.svg',
-    path: '/referral'
+    path: '/refer'
   },
   {
     key: 'help',

@@ -13,8 +13,10 @@ import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
+import { getConfig } from "utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 
+const productName = getConfig().productName;
 const PersonalDetails2 = (props) => {
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -138,6 +140,7 @@ const PersonalDetails2 = (props) => {
       count="2"
       current="2"
       total={totalPages}
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-personal-details-screen-2'
     >
       <div className="kyc-personal-details">

@@ -28,12 +28,13 @@ export async function getAccountSummary(params = {}) {
   }
   try {
     const response = await Api.post(url, params);
+
     if (
       response.pfwstatus_code !== 200 ||
       !response.pfwresponse ||
       isEmpty(response.pfwresponse)
     ) {
-      throw new Error( response?.pfwmessage || "Something went wrong!");
+      throw new Error(response?.pfwmessage || "Something went wrong!");
     }
     if (response?.pfwresponse?.status_code === 200) {
       return response?.pfwresponse?.result;
@@ -118,11 +119,13 @@ export async function setSummaryData(result) {
     consent_required = result.data.partner.partner.data.consent_required;
   }
   storageService().set("consent_required", consent_required);
-  const subBrokerCodePartersList = ["hbl", "sbm", "flexi", "medlife", "life99"]
+  const subBrokerCodePartersList = ["hbl", "sbm", "flexi", "medlife", "life99", "taxwin", "ippb", "quesscorp", "sahaj", "mspl"]
   if (partner === "bfdl") {
     storageService().set("partner", "bfdlmobile");
   } else if (partner === "obcweb") {
     storageService().set("partner", "obc");
+  } else if (partner === "moneycontrolweb") {
+    storageService().set("partner", "moneycontrol");
   } else if (
     subBrokerCodePartersList.indexOf(result.data.referral.subbroker.data.subbroker_code) !== -1
   ) {
@@ -190,6 +193,7 @@ async function setNpsData(result) {
 }
 
 export function getKycAppStatus(kyc) {
+  if(isEmpty(kyc)) return {};
   const TRADING_ENABLED = isTradingEnabled(kyc);
   var rejected = 0;
   var metaRejected = 0;

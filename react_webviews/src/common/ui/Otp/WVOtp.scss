@@ -43,11 +43,14 @@
   border-bottom: 2px solid var(--red);
 }
 
-
-.wv-otp-error-text {
-  color: var(--red);
+.wv-otp-text {
+  color: var(--steelgrey);
   margin-bottom: 25px;
-  font-size: 11px;
-  line-height: 18px;
-  margin-top: 5px;
+  font-size: 13px;
+  line-height: 22px;
+  margin-top: 10px;
+}
+
+.wv-otp-text-error {
+  color: var(--red);
 }

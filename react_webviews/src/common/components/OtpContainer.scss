@@ -1,0 +1,35 @@
+//----------------------------verify-otp-container--------------------------- //
+.verify-otp-container {
+  min-height: 100%;
+  // max-width: 614px;
+  background-color: white;
+
+  .verify-otp-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 55px;
+    margin-top: 5px;
+
+    p {
+      font-size: 13px;
+      line-height: 21px;
+      color: var(--steelgrey);
+      margin: 0;
+    }
+  } 
+  
+  .default-otp-input-container {
+    justify-content: start;
+    margin-top: 30px;
+    .default-otp-input {
+      background-color: rgba(238, 238, 238, 0.3);
+      font-size: 13px;
+      line-height: 21px;
+      padding: 4px;
+    }
+  }
+}
+.verify-otp-container-secondary{
+  padding: 0 !important
+}
+//----------------------------verify-otp-CSS-END--------------------------- //

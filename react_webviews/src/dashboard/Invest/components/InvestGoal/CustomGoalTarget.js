@@ -14,9 +14,9 @@ import { get_recommended_funds } from '../../common/api';
 import { nativeCallback } from '../../../../utils/native_callback';
 import { flowName } from '../../constants';
 
-const riskEnabled = getConfig().riskEnabledFunnels;
 
 const CustomGoalTarget = (props) => {
+  const riskEnabled = getConfig().riskEnabledFunnels;
   const navigate = navigateFunc.bind(props);
   
   const [targetAmount, setTargetAmount] = useState(0);

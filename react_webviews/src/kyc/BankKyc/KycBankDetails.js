@@ -26,6 +26,8 @@ import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 import { nativeCallback } from "../../utils/native_callback";
 import PennyFailedDialog from "../mini-components/PennyFailedDialog";
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
+import internalStorage from '../common/InternalStorage';
+import { isNewIframeDesktopLayout } from "../../utils/functions"
 
 const config = getConfig();
 let titleText = "Enter bank account details";
@@ -75,6 +77,20 @@ const KycBankDetails = (props) => {
     }
   }, [kyc, user]);
 
+  const handlePennyExhaust = () => {
+    const pennyDetails = {
+      title : 'Unable to add bank!',
+      message : "Oops! You have exhausted all the 3 attempts. Continue by uploading your documents or check back later",
+      buttonOneTitle: 'TRY AGAIN LATER',
+      buttonTwoTitle: 'UPLOAD BANK DOCUMENTS',
+      twoButton: true,
+      status: 'pennyExhausted'
+    }
+    internalStorage.setData('handleClickOne', redirect);
+    internalStorage.setData('handleClickTwo', uploadDocuments);
+    navigate('/kyc/penny-status',{state:pennyDetails});
+  }
+
   let initialize = async () => {
     let disableData = { ...disableFields };
     if (skipBankDetails()) {
@@ -92,7 +108,11 @@ const KycBankDetails = (props) => {
     let data = kyc.bank.meta_data || {};
     data.c_account_number = data.account_number;
     if (data.user_rejection_attempts === 0) {
-      setIsPennyExhausted(true);
+      if(isNewIframeDesktopLayout()) {
+        handlePennyExhaust()
+      } else {
+        setIsPennyExhausted(true);
+      }
     } else if (data.user_rejection_attempts === 2) {
       setNote({
         info_text:
@@ -250,6 +270,10 @@ const KycBankDetails = (props) => {
     if (name.includes("account_number") && value && (!validateNumber(value) || value.length > 16))
       return;
 
+    if(name === "ifsc_code" && value) {
+      value = value.toUpperCase();
+    }
+
     let formData = Object.assign({}, form_data);
     let bank = Object.assign({}, bankData);
     if(name === "ifsc_code") {
@@ -379,6 +403,7 @@ const KycBankDetails = (props) => {
       handleClick={handleClick}
       title={titleText}
       headerData={{goBack}}
+      iframeRightContent={require(`assets/${config.productName}/add_bank.svg`)}
       data-aid='kyc-enter-bank-account-details-screen'
     >
       <div className="kyc-approved-bank" data-aid='kyc-approved-bank-page'>

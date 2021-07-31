@@ -36,7 +36,7 @@ const ErrorScreen = (props) => {
       alignItems: "center",
       justifyContent: "center",
       minHeight: "300px",
-      height: isMobileView ? "40vh" : "60vh", //TODO: Double-check this value
+      height: isMobileView ? "40vh" : "60vh",
       clear: "right",
       background: "white",
       borderRadius: "6px",

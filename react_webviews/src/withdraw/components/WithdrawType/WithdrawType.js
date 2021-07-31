@@ -40,7 +40,7 @@ const Landing = (props) => {
           let val = {}
           // eslint-disable-next-line no-unused-expressions
           data?.recommendations[0]?.allocations?.forEach((el) => {
-            val = { ...val, [el?.mf?.isin]: Math.ceil(el?.amount) }
+            val = { ...val, [el?.mf?.isin]: Math.round(el?.amount) }
           })
           setValue(val)
           const totalAmount = getTotalAmount(val)
@@ -222,7 +222,7 @@ const Landing = (props) => {
       skelton={isEmpty(recommendedFunds) && showSkeltonLoader}
       buttonData={{
         leftTitle: "Withdraw amount",
-        leftSubtitle: formatAmountInr(totalAmount),
+        leftSubtitle: formatAmountInr(totalAmount || 0),
       }}
       type={type !== 'insta-redeem' ? "withProvider" : ''}
       title={getTitle()}
@@ -306,7 +306,7 @@ const InstaRedeemFailed = () => {
     <div className="pr-error-container withdraw-insta-failed" data-aid='withdraw-insta-failed'>
       <section className="image-cover">
         <img
-          src={require(`assets/${product_name}/server_error_page.svg`)}
+          src={require(`assets/${product_name}/error_illustration.svg`)}
           alt="Server Error"
           className="error-page"
         />

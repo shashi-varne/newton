@@ -14,9 +14,9 @@ import {
 import { nativeCallback } from '../../../../utils/native_callback';
 import { flowName } from '../../constants';
 
-const riskEnabled = getConfig().riskEnabledFunnels;
 
 const GoalTarget = (props) => {
+  const riskEnabled = getConfig().riskEnabledFunnels;
   const navigate = navigateFunc.bind(props);
   
   const [loader, setLoader] = useState(false);
@@ -50,7 +50,7 @@ const GoalTarget = (props) => {
         return;
       }
 
-      updateFunnelData({ ...data, corpus, userEnteredAmt: 0 });
+      updateFunnelData({ ...data, corpus, userEnteredAmt: 0, amount: 0 });
 
       navigate(`/invest/savegoal/${subtype}/amount`);
     } catch (err) {
