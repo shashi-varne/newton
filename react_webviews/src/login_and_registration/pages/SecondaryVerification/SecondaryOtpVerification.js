@@ -94,6 +94,12 @@ export class SecondaryOtpVerification extends Component {
     }
   };
 
+  onSkip = () => {
+    this.sendEvents("skip");
+    this.navigate("/", {
+      edit: true,
+    });
+  }
   render() {
     const { isResendOtpApiRunning, communicationType, value, isWrongOtp, otpData } = this.state;
     return (
@@ -104,10 +110,7 @@ export class SecondaryOtpVerification extends Component {
         disable={otpData.otp?.length === 4 ? false : true}
         showLoader={this.state.isApiRunning}
         canSkip={true}
-        onSkipClick={() => {
-          this.navigate("/");
-          this.sendEvents("skip");
-        }}
+        onSkipClick={this.onSkip}
         handleClick={this.handleClick}
       >
         <OtpContainer

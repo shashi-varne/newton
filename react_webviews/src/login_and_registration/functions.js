@@ -535,7 +535,6 @@ export function redirectAfterLogin(data, user, navigateFunc) {
   const kyc = storageService().getObject("kyc");
   user = user || storageService().getObject("user");
   const navigate = navigateFunc || this.navigate;
-
   if (data.firstLogin) {
     navigate("/referral-code", { state: { goBack: "/", communicationType: data?.contacts?.auth_type } });
   } else if (
@@ -547,17 +546,17 @@ export function redirectAfterLogin(data, user, navigateFunc) {
     user.kyc_registration_v2 === "incomplete" &&
     !user.active_investment
   ) {
-    navigate("/landing", { state: { goBack: "/" } });
+    navigate("/landing", { edit: true, state: { goBack: "/" } });
   } else if (
     kyc &&
     !kyc.pan.meta_data.pan_number &&
     user.kyc_registration_v2 === "init"
   ) {
-    navigate("/landing", { state: { goBack: "/invest" } });
+    navigate("/landing", { edit: true, state: { goBack: "/invest" } });
   } else if (user.active_investment) {
-    navigate("/landing", { state: { goBack: "/landing" } });
+    navigate("/landing", { edit: true, state: { goBack: "/landing" } });
   } else {
-    navigate("/landing", { state: { goBack: "/" } });
+    navigate("/landing", { edit: true, state: { goBack: "/" } });
   }
 }
 
