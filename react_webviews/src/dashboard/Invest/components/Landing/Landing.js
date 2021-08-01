@@ -159,7 +159,7 @@ class Landing extends Component {
     if (otpResponse) {
       this.navigate("secondary-otp-verification", {
         state: {
-          value: data?.contact_value,
+          value:  data?.data?.contact_type,
           otp_id: otpResponse.pfwresponse.result.otp_id,
           communicationType: type,
         },

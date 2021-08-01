@@ -194,7 +194,7 @@ class MyAccount extends Component {
         data-aid='my-account-screen'
         events={this.sendEvents("just_set_events")}
         noFooter={true}
-        // skelton={this.state.showLoader}
+        skelton={this.state.showLoader}
         title="My Account"
       >
         <div className="my-account" data-aid='my-account'>
