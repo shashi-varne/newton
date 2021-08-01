@@ -14,12 +14,6 @@ export class AccountAlreadyExistDialog extends Component {
     };
   }
 
-  onClick = (next, type, data) => {
-    next(type, data);
-    this.setState({
-      loading: true,
-    })
-  };
 
   render() {
     const { data, isOpen, onClose, type, next, editDetails } = this.props;
@@ -40,7 +34,12 @@ export class AccountAlreadyExistDialog extends Component {
           variant: "contained",
           title: "CONTINUE",
           showLoader: this.state.loading,
-          onClick: this.onClick(next, type, data)
+          onClick: () => {
+            next(type, data)
+            this.setState({
+              loading: true,
+            })
+          }
         }}
         classes={{
           container: "account-already-exists-container",
