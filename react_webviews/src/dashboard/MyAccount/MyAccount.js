@@ -78,9 +78,10 @@ class MyAccount extends Component {
     });
   };
 
-  closeAccountAlreadyExistDialog = () => {
+  onCloseBottomSheet = () => {
     this.setState({
-      accountAlreadyExists: false
+      accountAlreadyExists: false,
+      verifyDetails: false,
     })
   }
 
@@ -173,6 +174,12 @@ class MyAccount extends Component {
     }
   };
 
+  showLoader = () =>{
+    this.setState({
+      showLoader: !this.state.showLoader
+    })
+  }
+
   render() {
     let {
       pendingMandate,
@@ -204,6 +211,7 @@ class MyAccount extends Component {
               contacts={contacts}
               name={currentUser?.name}
               handleClick={(path) => this.handleClick(path)}
+              showLoader={this.showLoader}
               showAccountAlreadyExist={(show, data, type) =>
                 this.setAccountAlreadyExistsData(show, data, type)
               }
@@ -359,7 +367,7 @@ class MyAccount extends Component {
               data={this.state.verifyDetailsData}
               showAccountAlreadyExist={this.setAccountAlreadyExistsData}
               isOpen={verifyDetails}
-              onClose={this.closeVerifyDetailsDialog}
+              onClose={this.onCloseBottomSheet}
               parent={this}
             ></VerifyDetailDialog>
           )}
@@ -368,7 +376,7 @@ class MyAccount extends Component {
               type={this.state.verifyDetailsType}
               data={this.state.accountAlreadyExistsData}
               isOpen={accountAlreadyExists}
-              onClose={this.closeAccountAlreadyExistDialog}
+              onClose={this.onCloseBottomSheet}
               editDetails={this.editDetailsAccountAlreadyExists}
               next={this.continueAccountAlreadyExists}
             ></AccountAlreadyExistDialog>

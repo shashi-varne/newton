@@ -39,9 +39,11 @@ class MyaccountDetails extends Component {
     handleClick = async (verified) => {
 
         if (verified) return;
+        this.props.showLoader();
         const { auth_type, contact_value } = this.state;
         const contact_type = auth_type === 'mobile' ? "email" : auth_type;
         let result = await this.authCheckApi(contact_type, { "contact_value": contact_value })
+        this.props.showLoader();
         if (!result?.is_user) {
             this.props.handleClick("/kyc/communication-details", { state: { goBack: "/my-account" } })
             return;
