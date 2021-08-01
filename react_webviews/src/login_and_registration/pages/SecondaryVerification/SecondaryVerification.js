@@ -101,7 +101,11 @@ class SecondaryVerification extends Component {
         }
     }
 
-    continueAccountAlreadyExists = async (type, data) => {
+    continueAccountAlreadyExists = async (type) => {
+        this.setState({
+            accountAlreadyExists: false,
+            isApiRunning: "button",
+        });
         let body = {};
         let { form_data } = this.state;
         if (type === "email") {
@@ -129,11 +133,6 @@ class SecondaryVerification extends Component {
         })
     };
 
-    closeAccountAlreadyExistDialog = () => {
-        this.setState({
-            accountAlreadyExists: false
-        })
-    }
 
 
     render() {
