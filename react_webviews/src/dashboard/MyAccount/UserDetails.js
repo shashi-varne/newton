@@ -27,7 +27,7 @@ class MyaccountDetails extends Component {
             }
 
             this.setState({
-                is_auth: auth_type === "mobile" ? contacts?.verified_mobile_contacts[0]?.contact_value : contacts?.verified_email_contacts[0]?.contact_value,
+                is_auth: auth_type === "mobile" ? (contacts?.verified_mobile_contacts[0]?.contact_value).slice(-10) : contacts?.verified_email_contacts[0]?.contact_value,
                 verification_done: verification_done,
                 contact_value: contact_value,
                 auth_type: auth_type,
