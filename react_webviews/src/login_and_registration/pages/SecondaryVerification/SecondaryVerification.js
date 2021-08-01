@@ -4,7 +4,7 @@ import Container from "../../../dashboard/common/Container";
 import Input from "common/ui/Input";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { countries } from "../../constants";
-import { authCheckApi, generateOtp, formCheckFields } from "../../functions";
+import { authCheckApi, generateOtp, formCheckFields, triggerOtpApi } from "../../functions";
 import { validateNumber } from "utils/validators";
 import { nativeCallback } from "../../../utils/native_callback";
 import DropDownNew from "common/ui/DropDownNew";
@@ -25,6 +25,7 @@ class SecondaryVerification extends Component {
         this.generateOtp = generateOtp.bind(this);
         this.formCheckFields = formCheckFields.bind(this);
         this.navigate = navigateFunc.bind(this.props);
+        this.triggerOtpApi = triggerOtpApi.bind(this)
     }
 
     componentWillMount() {
