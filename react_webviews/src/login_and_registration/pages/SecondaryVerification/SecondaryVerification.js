@@ -223,7 +223,7 @@ class SecondaryVerification extends Component {
                                     autoFocus
                                 />
                             </div>
-                            <WVInPageSubtitle children={"we'll keep you updated on your Investments"} />
+                            <WVInPageSubtitle children={"we'll keep you updated on your Investments"} className="input-subtitle" />
                         </>
                     }
                 </div>
