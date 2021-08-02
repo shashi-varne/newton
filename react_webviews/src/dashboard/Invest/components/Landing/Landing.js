@@ -83,10 +83,10 @@ class Landing extends Component {
         this.setState({
           verifyDetails: true,
           verifyDetailsData:
-          contactDetails[
-          `unverified_${contactDetails?.auth_type === "mobile" ? "email" : "mobile"
-          }_contacts`
-          ][0],
+            contactDetails[
+            `unverified_${contactDetails?.auth_type === "mobile" ? "email" : "mobile"
+            }_contacts`
+            ][0],
           verifyDetailsType:
             contactDetails?.auth_type === "mobile" ? "email" : "mobile",
         });

@@ -17,7 +17,7 @@ export class AccountAlreadyExistDialog extends Component {
 
   render() {
     const { data, isOpen, onClose, type, next, editDetails } = this.props;
-    const alternateRegisteredAccount = type === "email" ? isEmpty(data?.mobile) : isEmpty(data?.email) || isEmpty(data);
+    const alternateRegisteredAccount = type === "email" ? isEmpty(data.mobile) : isEmpty(data.email) || isEmpty(data);
     return (
       <WVBottomSheet
         isOpen={isOpen}
