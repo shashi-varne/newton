@@ -165,7 +165,8 @@ class Landing extends Component {
       stateParams,
       tradingEnabled,
       kycButtonLoader,
-      stocksButtonLoader
+      stocksButtonLoader,
+      kycJourneyStatus
     } = this.state;
     const {
       indexFunds,
@@ -229,7 +230,7 @@ class Landing extends Component {
                   return (
                     <React.Fragment key={index}>
                       {(!kycStatusLoader && kycStatusData && ((!tradingEnabled && !isReadyToInvestBase) ||
--                      (tradingEnabled && !isEquityCompletedBase))) ? (
+-                      (tradingEnabled && (!isEquityCompletedBase || (isEquityCompletedBase && kycJourneyStatus === "fno_rejected"))))) ? (
                         <div
                           data-aid='kyc-invest-sections-cards'
                           className="kyc"
@@ -260,7 +261,7 @@ class Landing extends Component {
                 case "stocks":
                   return (
                     <React.Fragment key={index}>
-                      {!isEquityCompletedBase && (
+                      {tradingEnabled && !isEquityCompletedBase && (
                         <div className="invest-main-top-title" 
                           onClick={() => {!kycStatusLoader && !stocksButtonLoader && !kycButtonLoader && this.clickCard("stocks") }} 
                           data-aid='stocks-title'

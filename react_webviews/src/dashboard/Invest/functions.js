@@ -402,10 +402,11 @@ export function initilizeKyc() {
       bottom_sheet_dialog_data_premium.status = premium_onb_status;
     }
 
-    if (["rejected"].indexOf(kycJourneyStatus) !== -1) {
-      bottom_sheet_dialog_data_premium = kycStatusMapper[premium_onb_status];
-      bottom_sheet_dialog_data_premium.status = premium_onb_status;
-    }
+    // Todo: Remove it later, as this sets bottomsheets data and shows on first app landing which will now be shown on card click
+    // if (["rejected"].indexOf(kycJourneyStatus) !== -1) {
+    //   bottom_sheet_dialog_data_premium = kycStatusMapper[premium_onb_status];
+    //   bottom_sheet_dialog_data_premium.status = premium_onb_status;
+    // }
   }
 
   this.setState({ bottom_sheet_dialog_data_premium });
@@ -446,6 +447,7 @@ export function openPremiumOnboardBottomSheet(
   }
 
   storageService().set("is_bottom_sheet_displayed_kyc_premium", true);
+  // Todo: Remove the bank rejection only logic after discussing with Mayank
   if (!TRADING_ENABLED && userKyc.bank.meta_data_status === "rejected") {
     this.setState({ verificationFailed: true });
   } else {

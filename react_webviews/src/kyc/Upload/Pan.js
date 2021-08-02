@@ -79,7 +79,7 @@ const Pan = (props) => {
       if (dlFlow) {
         if (kyc.equity_sign_status !== 'signed') {
           if (isPanAvailable && !kyc.equity_data.meta_data.trading_experience) {
-            navigate(PATHNAME_MAPPER.tradingExperience);
+            navigate(PATHNAME_MAPPER.accountInfo);
           } else {
             commonRedirection();
           }

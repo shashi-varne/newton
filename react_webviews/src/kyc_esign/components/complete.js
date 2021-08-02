@@ -40,6 +40,15 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
         setSteps((stepsArr) => stepsArr.filter((step) => step.title !== "Mutual fund"))
         setTradingSubtitleText("Trading & demat A/c will be ready in 2 hours")
       }
+
+      if (isReadyToInvestUser && kyc.equity_investment_ready) {
+        setSteps((stepsArr) => stepsArr.map((step) => {
+          if (step.title === "Stocks & IPO" || (kyc.fno_active && step.title === "Futures & Options")) {
+            step.status = "Ready to invest"
+          }
+          return step;
+        }));
+      }
     }
   }, [kyc]);
 

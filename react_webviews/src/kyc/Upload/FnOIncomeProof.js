@@ -13,11 +13,13 @@ import WVInPageHeader from '../../common/ui/InPageHeader/WVInPageHeader';
 import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
 import { checkDocsPending } from '../common/functions';
 import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet';
+import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 import { storageService } from '../../utils/validators';
 import { getConfig, isNewIframeDesktopLayout, navigate as navigateFunc } from '../../utils/functions';
 import InternalStorage from '../common/InternalStorage';
+import { landingEntryPoints } from '../../utils/constants';
+import { PATHNAME_MAPPER } from '../constants';
 
-const { productName } = getConfig();
 const UPLOAD_OPTIONS_MAP = {
   'bank-statement': {
     title: 'Bank statement',
@@ -56,8 +58,13 @@ const FnOIncomeProof = (props) => {
   const [filePassword, setFilePassword] = useState('');
   const [openBottomSheet, setOpenBottomSheet] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(false);
+  const [goBackModal, setGoBackModal] = useState(false);
   const navigate = navigateFunc.bind(props);
   const { kyc, isLoading, updateKyc } = useUserKycHook();
+  const fromState = props?.location?.state?.fromState;
+  const goBackPath = props.location?.state?.goBack || "";
+  const { productName, Web } = getConfig();
+  const hideSkipOption = !Web ? (storageService().get("native") && (goBackPath === "exit")) : landingEntryPoints.includes(fromState);
 
   useEffect(() => {
     setFilePassword('');
@@ -106,11 +113,32 @@ const FnOIncomeProof = (props) => {
     if(skip) {
       sendEvents("skip");
     }
+    
+    if (!Web) {
+      commonNativeNavigation();
+    } else {
+      if (landingEntryPoints.includes(fromState)) {
+        navigate("/");
+      } else {
+        commonRedirection();
+      }
+    }
+  }
+  
+  const commonRedirection = async () => {
     const areDocsPending = await checkDocsPending(kyc);
     if (areDocsPending) {
       navigate('/kyc/document-verification');
     } else {
       navigate('/kyc-esign/info');
+    }
+  }
+
+  const commonNativeNavigation = () => {
+    if (storageService().get("native") && (goBackPath === "exit")) {
+      nativeCallback({ action: "exit_web"});
+    } else {
+      commonRedirection();
     }
   }
 
@@ -122,7 +150,25 @@ const FnOIncomeProof = (props) => {
     storageService().remove("view_sample_clicked") 
   }
 
+  const closeConfirmBackDialog = () => {
+    setGoBackModal(false);
+  };
 
+  const goBackToPath = () => {
+    if (!Web) {
+      commonNativeNavigation();
+    } else {
+      if (landingEntryPoints.includes(fromState)) {
+        navigate("/");
+      } else {
+        navigate(PATHNAME_MAPPER.journey);
+      }
+    }
+  };
+
+  const goBack = () => {
+    setGoBackModal(true)
+  }
 
   const sendEvents = (userAction) => {
     let eventObj = {
@@ -147,7 +193,7 @@ const FnOIncomeProof = (props) => {
   return (
     <Container
       events={sendEvents("just_set_events")}
-      canSkip
+      canSkip={!hideSkipOption}
       hidePageTitle
       hideHamburger
       handleClick={uploadAndGoNext}
@@ -157,9 +203,12 @@ const FnOIncomeProof = (props) => {
       disable={!selectedFile}
       showLoader={isApiRunning}
       skelton={isLoading}
+      headerData={{goBack}}
     >
       <WVInPageHeader style={{ marginBottom: '15px' }}>
-        <WVInPageTitle>Provide income proof for F&O trading <span className="kyc-fno-header-optional-text"> (Optional)</span></WVInPageTitle>
+        <WVInPageTitle>Provide income proof for F&O trading 
+          {!hideSkipOption && <span className="kyc-fno-header-optional-text"> (Optional)</span>}
+          </WVInPageTitle>
       </WVInPageHeader>
       <WVInfoBubble>
         In case of multiple files/images, merge them into a single pdf to upload
@@ -244,7 +293,15 @@ const FnOIncomeProof = (props) => {
           variant: "contained",
           onClick: goNext
         }}
-      />
+        />
+        {goBackModal ?
+          <ConfirmBackDialog
+            isOpen={goBackModal}
+            close={closeConfirmBackDialog}
+            goBack={goBackToPath}
+          />
+          : null
+        }
     </Container>
   );
 }

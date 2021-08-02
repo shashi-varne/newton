@@ -15,6 +15,8 @@ import done_img_finity from  'assets/finity/ic_esign_done_finity.svg';
 import otp_img_fisdom from 'assets/fisdom/ic_verify_otp_fisdom.svg';
 import esign_otp_img_fisdom from 'assets/fisdom/ic_esign_otp_fisdom.svg';
 import done_img_fisdom from  'assets/fisdom/ic_esign_done_fisdom.svg';
+import { landingEntryPoints } from '../../utils/constants';
+import { PATHNAME_MAPPER } from '../../kyc/constants';
 
 
 
@@ -54,7 +56,20 @@ class ESignInfo extends Component {
 
   confirm = () => {
     const navigate = navigateFunc.bind(this.props);
-    navigate('/kyc/journey');
+    const goBackPath = this.props?.location?.state?.goBack;
+    if (!getConfig().Web) {
+      if (storageService().get('native') && (goBackPath === "exit")) {
+        nativeCallback({ action: "exit_web" })
+      } else {
+        navigate(PATHNAME_MAPPER.journey);
+      }
+    } else {
+      if (landingEntryPoints.includes(this.props?.location?.state?.fromState)) {
+        navigate("/")
+      } else {
+        navigate(PATHNAME_MAPPER.journey);
+      }
+    }
   }
 
   cancel = () => {

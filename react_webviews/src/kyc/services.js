@@ -205,7 +205,8 @@ export function getKycAppStatus(kyc) {
       { name: "bank", keys: ["meta_data_status"] },
       { name: "identification", keys: ["meta_data_status"] },
       { name: "nomination", keys: ["meta_data_status"] },
-      { name: "sign", keys: ["doc_status"] }
+      { name: "sign", keys: ["doc_status"] },
+      { name: "equity_income", keys: ["doc_status"] }
     ];
   } else {
     fieldsToCheck = [
@@ -215,7 +216,8 @@ export function getKycAppStatus(kyc) {
       { name: "identification", keys: ["doc_status", "meta_data_status"] },
       { name: "nomination", keys: ["doc_status", "meta_data_status"] },
       { name: "sign", keys: ["doc_status"] },
-      { name: "ipvvideo", keys: ["doc_status"] }
+      { name: "ipvvideo", keys: ["doc_status"] },
+      { name: "equity_income", keys: ["doc_status"] }
     ];
   }
 
@@ -260,13 +262,13 @@ export function getKycAppStatus(kyc) {
 
   var status;
   if (rejected > 0) {
-    if (!TRADING_ENABLED) {
-      status = "rejected";
-      result.status = status;
-      return result;
+    if (rejected === 1 && rejectedItems[0].name === "equity_income") {
+      status = "fno_rejected"
     } else {
-      status = kyc.equity_application_status;
+      status = "rejected";
     }
+    result.status = status;
+    return result;
   } else {
     if (!TRADING_ENABLED || (kyc?.kyc_product_type !== "equity" && isReadyToInvest()) || kyc?.mf_kyc_processed) {
       status = kyc.application_status_v2;
@@ -308,12 +310,12 @@ export function getKycAppStatus(kyc) {
     status = 'incomplete';
   }
 
-  if (kyc.kyc_status !== 'compliant' && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && kyc.sign_status !== 'signed') {
+  if (!TRADING_ENABLED && kyc.kyc_status !== 'compliant' && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && kyc.sign_status !== 'signed') {
     status = 'incomplete';
   }
 
-  if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && (kyc.equity_application_status === 'submitted' || kyc.equity_application_status === 'complete') && kyc.equity_sign_status !== "signed") {
-    status = 'incomplete';
+  if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && kyc.equity_application_status === 'complete' && kyc.equity_sign_status !== "signed") {
+    status = 'esign_pending';
   }
 
   result.status = status;

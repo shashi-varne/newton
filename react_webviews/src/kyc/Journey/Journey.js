@@ -78,7 +78,7 @@ const Journey = (props) => {
   const [kyc, setKyc] = useState({})
   const [user, setUser] = useState({})
   const state = props.location.state || {};
-  let { fromState } = state;
+  let { fromState, goBack: goBackPath } = state;
   
   const config = getConfig();
   const productName = config.productName
@@ -385,7 +385,7 @@ const Journey = (props) => {
         bank: '/kyc/compliant/bank-details',
         sign: PATHNAME_MAPPER.uploadSign,
         pan: PATHNAME_MAPPER.homeKyc,
-        trading_esign: PATHNAME_MAPPER.tradingExperience
+        trading_esign: PATHNAME_MAPPER.accountInfo
       }
       navigate(stateMapper[key], {
         state: {
@@ -402,7 +402,7 @@ const Journey = (props) => {
           personal: PATHNAME_MAPPER.digilockerPersonalDetails1,
           bank: '/kyc/non-compliant/bank-details',
           bank_esign: '/kyc/non-compliant/bank-details',
-          trading_esign: PATHNAME_MAPPER.tradingExperience,
+          trading_esign: PATHNAME_MAPPER.accountInfo,
           address: PATHNAME_MAPPER.addressDetails1,
           docs: PATHNAME_MAPPER.uploadProgress,
           esign: PATHNAME_MAPPER.kycEsign,
@@ -423,7 +423,7 @@ const Journey = (props) => {
           address: PATHNAME_MAPPER.addressDetails1,
           docs: PATHNAME_MAPPER.uploadProgress,
           esign: PATHNAME_MAPPER.kycEsign,
-          trading_esign: PATHNAME_MAPPER.tradingExperience,
+          trading_esign: PATHNAME_MAPPER.accountInfo,
         }
         console.log(stateMapper[key])
       }
@@ -669,11 +669,21 @@ const Journey = (props) => {
       navigate('/kyc/report', {
         state: { goBack: '/invest' },
       })
-    } else if (!TRADING_ENABLED &&
+    } else if ((!TRADING_ENABLED &&
       user.kyc_registration_v2 === 'complete' &&
-      kyc.sign_status === 'signed'
+      kyc.sign_status === 'signed') ||
+      (TRADING_ENABLED && kyc.equity_application_status === "complete" &&
+      kyc.equity_sign_status === "signed")
     ) {
-      navigate('/invest')
+      if (!config.Web) {
+        if (storageService().get("native") && (goBackPath === "exit")) {
+          nativeCallback({ action: "exit_web"});
+        } else {
+          navigate("/invest");
+        }
+      } else {
+        navigate('/invest')
+      }
     }
   }
 
