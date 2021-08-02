@@ -313,13 +313,16 @@ export async function getOrCreate(params) {
     let { screen_name } = this.state;
 
     let vendorInfoScreens = ['journey_screen', 'perfios_state', 'eligible_loan', 'loan_eligible', 'additional_details', 'final_loan', 'loan_reports', 'document_list']
+    const addressInfoScreens = ["address_details", "additional_details", "ckyc_summary"];
+    const professionalInfoScreens = ["professional_details_screen", "application_summary"];
+    const personalInfoScreens = ["basic_details", "personal_details_screen", "final_loan", "loan_reports", "application_summary", "ckyc_summary"];
 
     let body = {
       create_new: (params && params.create_new) || false,
       reset_application: (params && params.reset) || false,
-      personal_info: screen_name === 'basic_details' || screen_name === 'personal_details_screen' || screen_name === 'final_loan',
-      professional_info: screen_name === 'professional_details_screen',
-      address_info: screen_name === 'address_details' || screen_name === 'additional_details',
+      personal_info: personalInfoScreens.includes(screen_name),
+      professional_info: professionalInfoScreens.includes(screen_name),
+      address_info: addressInfoScreens.includes(screen_name),
       vendor_info: vendorInfoScreens.includes(screen_name),
       perfios_info: screen_name === 'perfios_state',
     };

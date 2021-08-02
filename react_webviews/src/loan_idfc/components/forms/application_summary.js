@@ -13,6 +13,7 @@ class ApplicationSummary extends Component {
       accordianData: [],
       detail_clicked: [],
       isSelfEmployee: false,
+      screen_name: "application_summary",
     };
     this.initialize = initialize.bind(this);
   }
