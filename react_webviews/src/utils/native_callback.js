@@ -183,8 +183,14 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       pathname = pathname.split("/")[5] || "/";
     }
     
-    if (config.isSdk && pathname !== "/" && (callbackData.action === 'exit_web' || callbackData.action === 'exit_module' || callbackData.action === 'open_module')) {
-      window.location.href = redirectToLanding();
+    const entryPath = storageService().get('entry_path'); 
+    if (
+      config.isSdk &&
+      pathname !== "/" &&
+      (entryPath !== pathname) &&
+      (callbackData.action === 'exit_web' || callbackData.action === 'exit_module' || callbackData.action === 'open_module')
+    ) {
+        window.location.href = redirectToLanding();
     } else {
       if (config.app === 'android') {
         window.Android.callbackNative(JSON.stringify(callbackData));
