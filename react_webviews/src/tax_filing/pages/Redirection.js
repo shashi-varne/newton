@@ -29,6 +29,7 @@ function Redirection(props) {
   useEffect(() => {
     const timerHandle = setTimeout(() => {
       clearITRSessionStorage()
+      const backUrl = getBasePath() + '/tax-filing' + getConfig().searchParams
       const fisdomReturnUrl = getBasePath() + '/tax-filing/callback'
       if (getConfig().app === 'ios') {
         nativeCallback({
