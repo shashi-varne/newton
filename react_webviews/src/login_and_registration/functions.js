@@ -305,14 +305,8 @@ export async function otpLoginVerification(verify_url, body) {
     const res = await Api.post(verify_url, formData);
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
-      // TODO: When to trigger these events
-      const eventObj = {
-        event_name: "user loggedin",
-      };
-      nativeCallback({ events: eventObj });
       applyCode(result.user);
       storageService().setObject("user", result.user);
-      storageService().set("currentUser", true);
 
       // Redirect to PIN Verification
       if (result.user.pin_status === 'pin_setup_complete') {
@@ -362,7 +356,8 @@ export async function otpLoginVerification(verify_url, body) {
 export const postLoginSetup = async (getKycResult) => {
   try {
     const kycResult = await getKycFromSummary();
-  
+    storageService().set("currentUser", true);
+
     if (config.Web && kycResult.data.partner.partner.data) {
       storageService().set(
         "partner",
@@ -377,7 +372,10 @@ export const postLoginSetup = async (getKycResult) => {
       kycResult.data.campaign.user_campaign.data
     );
     setBaseHref();
-  
+    const eventObj = {
+      event_name: "user loggedin",
+    };
+    nativeCallback({ events: eventObj });
     if (getKycResult) return kycResult;
   } catch (err) {
     throw err;
