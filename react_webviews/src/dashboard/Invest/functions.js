@@ -37,6 +37,7 @@ export async function initialize() {
   this.handleKycSubmittedOrRejectedState = handleKycSubmittedOrRejectedState.bind(this);
   this.handleCampaign = handleCampaign.bind(this);
   this.closeCampaignDialog = closeCampaignDialog.bind(this);
+  this.handleStocksAndIpoCards = handleStocksAndIpoCards.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
   if ( (this.state.screenName === "invest_landing" || this.state.screenName === "sdk_landing" ) && dataSettedInsideBoot) {
     storageService().set("dataSettedInsideBoot", false);
@@ -176,7 +177,9 @@ export function clickCard(state, title) {
       this.openKyc();
       break;
     case "stocks":
-      this.openStocks();
+    case "ipo":
+      this.handleStocksAndIpoCards(state)
+      // this.openStocks();
       break;
     case "insurance":
       let insurancePath = "/group-insurance";
@@ -366,7 +369,7 @@ export function initilizeKyc() {
   }
   let isReadyToInvestBase = isReadyToInvest();
   let isEquityCompletedBase = isEquityCompleted();
-  let kycJourneyStatusMapperData = kycStatusMapper[kycJourneyStatus];
+  let kycJourneyStatusMapperData = kycJourneyStatus.includes("ground") ? kycStatusMapper["ground"] : kycStatusMapper[kycJourneyStatus];
   const TRADING_ENABLED = isTradingEnabled(userKyc);
 
   this.setState({
@@ -398,7 +401,7 @@ export function initilizeKyc() {
       !currentUser.active_investment &&
       userKyc.bank.meta_data_status === "approved"
     ) {
-      bottom_sheet_dialog_data_premium = kycStatusMapper["complete"];
+      bottom_sheet_dialog_data_premium = premiumBottomSheetMapper["complete"];
       bottom_sheet_dialog_data_premium.status = premium_onb_status;
     }
 
@@ -464,7 +467,12 @@ export function handleKycSubmittedOrRejectedState() {
   if (rejectedItems.length === 1 && userKyc.bank.meta_data_status === "rejected") {
     this.setState({ verificationFailed: true });
   } else {
-    let modalData = kycJourneyStatusMapperData;
+    let modalData = Object.assign({}, kycJourneyStatusMapperData);
+    modalData.button1Props = {
+      title: modalData.buttonTitle,
+      variant: "contained",
+      onClick: this.handleKycstatus,
+    }
     this.setState({ modalData, openKycStatusDialog: true });
   }
 }
@@ -487,19 +495,23 @@ export async function openKyc() {
     } else if (kycJourneyStatus === "ground_pan") {
       this.navigate("/kyc/journey", {
         state: {
-          show_aadhaar: !userKyc.address.meta_data.is_nri ? true : false,
+          show_aadhaar: !(userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual") ? true : false,
           fromState: "invest",
         },
       });
+    } else if (kycJourneyStatus === "esign_pending") {
+      navigate(PATHNAME_MAPPER.kycEsign);
+    } else if (kycJourneyStatus === "fno_rejected") {
+      navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
     } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity") || userKyc?.mf_kyc_processed) {
-      // already kyc done users
       let result;
-      if (!userKyc?.mf_kyc_processed) {
+      if (!userKyc?.mf_kyc_processed && !this.kycButtonLoader) {
         this.setState({ kycButtonLoader: "button"})
         result = await this.setProductType();
         this.setState({ userKyc: result?.kyc });
       }
-
+      
+      // already kyc done users
       if (isReadyToInvestBase && (result?.kyc?.mf_kyc_processed || userKyc?.mf_kyc_processed)) {
         this.navigate(PATHNAME_MAPPER.accountInfo)
       } else {
@@ -572,6 +584,30 @@ export async function openStocks() {
       }
     }
   }
+}
+
+export function handleStocksAndIpoCards(key) {
+  let { kycJourneyStatusMapperData } = this.state;
+  let modalData = Object.assign({}, kycJourneyStatusMapperData);
+  if(key === "ipo" && !kycJourneyStatusMapperData.oneButton) {
+    modalData.button1Props = {
+      title: modalData.button2Title,
+      variant: "outlined",
+      onClick: this.closeKycStatusDialog,
+    }
+    modalData.button2Props = {
+      title: modalData.buttonTitle,
+      variant: "contained",
+      onClick: this.handleKycstatus,
+    }
+  } else {
+    modalData.button1Props = {
+      title: modalData.buttonTitle,
+      variant: "contained",
+      onClick: this.handleKycstatus,
+    }
+  }
+  this.setState({ modalData, openKycStatusDialog: true });
 }
 
 async function setProductType() {

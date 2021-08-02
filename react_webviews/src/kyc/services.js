@@ -318,6 +318,11 @@ export function getKycAppStatus(kyc) {
     status = 'esign_pending';
   }
 
+  if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && kyc.equity_application_status === 'complete' && kyc.equity_sign_status === "signed" &&
+  !kyc?.equity_investment_ready) {
+    status = 'equity_activation_pending';
+  }
+
   result.status = status;
 
   return result;
