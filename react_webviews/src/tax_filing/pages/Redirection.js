@@ -42,7 +42,8 @@ function Redirection(props) {
       nativeCallback({
         action: 'take_control',
         message: {
-          enable_history_back: true
+          enable_history_back: true,
+          history_back_url: backUrl
         }
       })
       window.location.href =

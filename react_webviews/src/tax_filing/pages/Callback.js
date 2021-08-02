@@ -54,6 +54,7 @@ function Callback(props) {
         action: 'take_control',
         message: {
           enable_history_back: true,
+          history_back_url: backUrl
         }
       })
       window.location.href = data?.url
