@@ -44,11 +44,7 @@ function Callback(props) {
       const backUrl = getBasePath() + '/tax-filing' + getConfig().searchParams
       if (getConfig().app === 'ios') {
         nativeCallback({
-          action: 'show_top_bar',
-          message: {
-            title: 'You are almost there, do you really want to go back?',
-            enable_history_back: true,
-          }
+          action: 'show_top_bar'
         })
       }
       nativeCallback({
