@@ -467,7 +467,12 @@ export function handleKycSubmittedOrRejectedState() {
   if (rejectedItems.length === 1 && userKyc.bank.meta_data_status === "rejected") {
     this.setState({ verificationFailed: true });
   } else {
-    let modalData = kycJourneyStatusMapperData;
+    let modalData = Object.assign({}, kycJourneyStatusMapperData);
+    modalData.button1Props = {
+      title: modalData.buttonTitle,
+      variant: "contained",
+      onClick: this.handleKycstatus,
+    }
     this.setState({ modalData, openKycStatusDialog: true });
   }
 }
