@@ -381,36 +381,54 @@ export const kycStatusMapperInvest = {
     title: "KYC application",
     subtitle: "REJECTED",
     next_state: "/kyc/upload/progress",
+    addPoint: true,
+    subTitleClass: "kyc-rejected",
+    subtitleColor: "#D0021B"
   },
   fno_rejected: {
     icon: "ic_kyc_rejected.svg",
     title: "F&O verification",
     subtitle: "DOCUMENT REJECTED",
     next_state: "/kyc/upload/fno-income-proof",
+    addPoint: true,
+    subTitleClass: "kyc-rejected",
+    subtitleColor: "#D0021B"
   },
   submitted: {
     icon: "ic_kyc_under_process.svg",
     title: "KYC application",
     subtitle: "IN-PROGRESS",
     next_state: "/kyc-esign/nsdl",
+    addPoint: true,
+    subTitleClass: "kyc-submitted",
+    subtitleColor: "#B39712"
   },
   complete: {
     icon: "ic_kyc_complete.svg",
     title: "You’re ready to invest in mutual funds",
     subtitle: "UPGRAGE ACCOUNT",
     next_state: "/kyc/journey",
+    addPoint: true,
+    subTitleClass: "kyc-complete",
+    subtitleColor: "#35CB5D"
   },
   esign_pending: {
     icon: "ic_kyc_complete.svg",
     title: "KYC application",
     subtitle: "COMPLETE_ESIGN",
     next_state: "/kyc-esign/info",
+    addPoint: true,
+    subTitleClass: "kyc-complete",
+    subtitleColor: "#35CB5D"
   },
   equity_activation_pending: {
     icon: "ic_kyc_under_process.svg",
     title: "You’re ready to invest in mutual funds",
     subtitle: "VERIFYING TRADING A/C",
     next_state: "/kyc-esign/nsdl",
+    addPoint: true,
+    subTitleClass: "kyc-submitted",
+    subtitleColor: "#B39712"
   }
 };
 

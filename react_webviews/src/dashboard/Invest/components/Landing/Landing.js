@@ -241,11 +241,15 @@ class Landing extends Component {
                         >
                           <div className="kyc-card-text">
                             <div className="title">{kycStatusData.title}</div>
-                            <div className="subtitle">
-                              {kycStatusData.subtitle}
+                            <div className={`subtitle ${kycStatusData.subTitleClass}`}>
+                              {kycStatusData.addPoint ? 
+                                <span className="point" style={kycStatusData.subtitleColor ? { backgroundColor: kycStatusData.subtitleColor } : {}}>{''}</span> 
+                                : null
+                              }
+                              <span>{kycStatusData.subtitle}</span>
                             </div>
                           </div>
-                          <Imgc src={require(`assets/${productName}/${kycStatusData.icon}`)} alt="" className="kyc-card-image" />
+                          <Imgc src={require(`assets/${productName}/${kycStatusData.icon}`)} alt="" />
                         </div>
                       ): null}
                     </React.Fragment>
