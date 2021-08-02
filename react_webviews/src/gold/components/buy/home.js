@@ -21,6 +21,7 @@ import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
 import {Imgc} from '../../../common/ui/Imgc';
+import { isEmpty } from '../../../utils/validators';
 
 const plusOptionsAmount = [
   500, 1000, 2000, 5000
@@ -231,9 +232,12 @@ class GoldBuyHome extends Component {
       // handlling through backend in place order component
       // this.navigate(this.state.provider + '/buy-pan');
     } 
-    
+
     if (!this.state.isRegistered) {
-      if (!this.state.user_info?.mobile_number_verified || !!this.state.user_info?.registered_with_another_account || !this.state.user_info?.email_verified) {
+      if (!isEmpty(this.state.user_info?.mobile_number_verified) &&
+        (!this.state.user_info?.mobile_number_verified ||
+          !!this.state.user_info?.registered_with_another_account ||
+          !this.state.user_info?.email_verified)) {
         this.navigate("/kyc/communication-details", {
           fromState: "/buy-gold", goBack: "/gold/buy",
           goNext: `/gold/${this.state.provider}/gold-register`,

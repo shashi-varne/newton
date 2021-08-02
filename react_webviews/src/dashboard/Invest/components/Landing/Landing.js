@@ -79,30 +79,16 @@ class Landing extends Component {
     const isVerifyDetailsSheetDisplayed = storageService().get("verifyDetailsSheetDisplayed")
     if (!isVerifyDetailsSheetDisplayed) {
       const { contactDetails } = this.state;
-      if (contactDetails?.verification_done !== false) {
+      if (contactDetails?.verification_done === false) {
         this.setState({
           verifyDetails: true,
           verifyDetailsData:
-          {
-            contact_type: "mobile",
-            contact_value: "8553957208",
-            contact_verified: false,
-            dt_created: "21/06/2021 07:58",
-            dt_updated: "21/06/2021 14:20",
-            id: 2055,
-            is_auth: true,
-            sms_consent: true,
-            sms_subscribed: true,
-            user_id: "6586478659371009",
-            whatsapp_consent: true,
-            whatsapp_subscribed: true,
-          },
-          // contactDetails[
-          // `unverified_${contactDetails?.auth_type === "mobile" ? "email" : "mobile"
-          // }_contacts`
-          // ][0],
+          contactDetails[
+          `unverified_${contactDetails?.auth_type === "mobile" ? "email" : "mobile"
+          }_contacts`
+          ][0],
           verifyDetailsType:
-            contactDetails?.auth_type !== "mobile" ? "email" : "mobile",
+            contactDetails?.auth_type === "mobile" ? "email" : "mobile",
         });
         storageService().set("verifyDetailsSheetDisplayed", true);
       }
