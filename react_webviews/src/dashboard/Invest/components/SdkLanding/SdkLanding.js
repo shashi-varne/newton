@@ -277,7 +277,7 @@ class SdkLanding extends Component {
                       : '';
                   const kycSubTitle =
                     !isEmpty(kycJourneyStatusMapperData) && kycJourneyStatus !== 'ground_premium'
-                      ? kycJourneyStatusMapperData?.landing_text
+                      ? kycJourneyStatusMapperData?.landingText
                       : '';
                   if (premiumKyc) {
                     el.title = el.title + premiumKyc;

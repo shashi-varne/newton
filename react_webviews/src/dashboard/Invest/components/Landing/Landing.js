@@ -219,7 +219,7 @@ class Landing extends Component {
             <SkeltonRect
               style={{
                 width: '100%',
-                height: '84px',
+                height: '85px',
                 marginBottom: "15px",
               }}
             />
