@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Container from "../../../dashboard/common/Container";
-import { initialize } from "../../functions";
+import { navigate as navigateFunc } from "utils/functions";
+import { otpVerification, resendOtp, redirectAfterLogin } from "../../functions";
 import "./secondaryVerification.scss";
 import { toast } from "react-toastify";
 import OtpContainer from "../../../common/components/OtpContainer";
@@ -20,7 +21,10 @@ export class SecondaryOtpVerification extends Component {
       communicationType: "mobile",
       showDotLoader: false
     };
-    this.initialize = initialize.bind(this);
+    this.otpVerification = otpVerification.bind(this);
+    this.resendOtp = resendOtp.bind(this);
+    this.redirectAfterLogin = redirectAfterLogin.bind(this);
+    this.navigate = navigateFunc.bind(this.props);
   }
 
   componentWillMount() {
@@ -38,12 +42,12 @@ export class SecondaryOtpVerification extends Component {
       rebalancing_redirect_url: rebalancing_redirect_url,
       communicationType: communicationType
     });
-    this.initialize();
   }
 
   handleOtp = (otp) => {
     this.setState({
       otpData: { ...this.state.otpData, otp },
+      isWrongOtp: false,
     });
   };
 
@@ -69,7 +73,12 @@ export class SecondaryOtpVerification extends Component {
   handleResendOtp = () => {
     this.resendOtp(this.state.otp_id)
     this.setState({
-      otpData: { ...this.state.otpData, timeAvailable: 15, },
+      otpData: {
+        ...this.state.otpData,
+        timeAvailable: 15,
+        otp: ''
+      },
+      isWrongOtp: false,
     });
   }
 
@@ -91,6 +100,12 @@ export class SecondaryOtpVerification extends Component {
     }
   };
 
+  onSkip = () => {
+    this.sendEvents("skip");
+    this.navigate("/", {
+      edit: true,
+    });
+  }
   render() {
     const { isResendOtpApiRunning, communicationType, value, isWrongOtp, otpData } = this.state;
     return (
@@ -101,10 +116,7 @@ export class SecondaryOtpVerification extends Component {
         disable={otpData.otp?.length === 4 ? false : true}
         showLoader={this.state.isApiRunning}
         canSkip={true}
-        onSkipClick={() => {
-          this.navigate("/");
-          this.sendEvents("skip");
-      }}
+        onSkipClick={this.onSkip}
         handleClick={this.handleClick}
       >
         <OtpContainer

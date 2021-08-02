@@ -28,7 +28,7 @@ class VerifyDetailDialog extends Component {
       });
     } else {
       const result = await this.authCheckApi(type, data);
-      if (result.is_user === false) {
+      if (result?.is_user === false) {
         let body = {};
         if (type === "email") {
           body.email = data.contact_value;
@@ -46,7 +46,7 @@ class VerifyDetailDialog extends Component {
             },
           });
         }
-      } else if (result.is_user === true) { 
+      } else if (result?.is_user === true) { 
         result.user.data = data;
         this.props.showAccountAlreadyExist(true, result.user);
       }

@@ -59,7 +59,6 @@ class Api {
         if (response.data._encr_payload) {
           response.data = JSON.parse(decrypt(response.data._encr_payload));
         }
-        console.log(response.data);
 
         if (response.data.pfwstatus_code === 416) {
           return nativeCallback({ action: '2fa_required' });
