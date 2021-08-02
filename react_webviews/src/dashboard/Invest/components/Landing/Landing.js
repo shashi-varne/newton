@@ -149,7 +149,7 @@ class Landing extends Component {
 
   continueAccountAlreadyExists = async (type, data) => {
     let body = {};
-    if (false && type !== "email") {
+    if (type === "email") {
       body.email = data?.data?.contact_value;
     } else {
       body.mobile = data?.data?.contact_value
