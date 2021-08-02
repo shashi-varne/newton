@@ -7,7 +7,7 @@ import landing_step_verified from 'assets/fisdom/landing_step_verified.svg';
 import amfi_logo from 'assets/amfi_logo.svg';
 import bombay_stock_exchange_logo from 'assets/bombay_stock_exchange_logo.svg';
 // import pnb_logo from "assets/pnb_logo.svg"
-import fisdom_logo from "assets/fisdom/fisdom_white_logo.svg"
+import fisdom_logo from "assets/fisdom/fisdom_logo_white.svg"
 import { navigate as navigateFunc} from '../common/commonFunction';
 import SVG from 'react-inlinesvg';
 

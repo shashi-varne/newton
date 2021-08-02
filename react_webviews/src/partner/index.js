@@ -9,10 +9,10 @@ const Partner = props => {
 
   return (
     <Fragment>
-        <Switch>
-          <Route path={`${url}/referral`} component={Referral} />
-        </Switch>
-  </Fragment>
+      <Switch>
+        <Route path={`${url}/referral`} component={Referral} />
+      </Switch>
+    </Fragment>
   );
 };
 

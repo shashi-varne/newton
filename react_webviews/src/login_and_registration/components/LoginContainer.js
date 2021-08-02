@@ -2,11 +2,9 @@ import "./LoginContainer.scss";
 import React from "react";
 import { getConfig } from "utils/functions";
 import { Route, Switch } from "react-router-dom";
-import PinChangeSuccess from "../pages/ForgotPin/ForgotPinSuccess";
 import Login from "../pages/Login/Login";
 import VerifyLoginOtp from "../pages/Login/VerifyLoginOtp";
 import VerifyPin from "../pages/Login/VerifyPin";
-import Referral from "../pages/Referral/Referral";
 import VerifyForgotOtp from "../pages/ForgotPin/VerifyForgotOtp";
 import EnterNewPin from "../pages/ForgotPin/EnterNewPin";
 import ConfirmNewPin from "../pages/ForgotPin/ConfirmNewPin";
@@ -16,6 +14,7 @@ import SVG from 'react-inlinesvg';
 import WVInPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
 import GoBackToLoginBtn from "../common/GoBackToLoginBtn";
 import { navigate as navigateFunc } from "../../utils/functions";
+import { Imgc } from "../../common/ui/Imgc";
 
 const config = getConfig();
 const { productName } = config;
@@ -32,17 +31,15 @@ const LoginContainer = (props) => {
       </div>
       <div className="login-details">
         <div className="ld-left">
-          <img src={require(`assets/${productName}/ils_login.svg`)} alt="login" />
+          <Imgc src={require(`assets/${productName}/ils_login.svg`)} alt="login" />
         </div>
         <div className="ld-right">
           <>
             {pathName === 'login' &&
               <Switch>
                 <Route path={`${url}`} exact component={Login} />
-                <Route path={`${url}/pin-change-success`} component={PinChangeSuccess} />
                 <Route path={`${url}/verify-otp`} component={VerifyLoginOtp} />
                 <Route path={`${url}/verify-pin`} component={VerifyPin} />
-                <Route path={`${url}/referral`} component={Referral} />
                 <Route>
                   <PageNotFound navigateFunc={navigate} />
                 </Route>
