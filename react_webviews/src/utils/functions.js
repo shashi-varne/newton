@@ -686,7 +686,7 @@ export const getConfig = () => {
   let main_query_params = getUrlParams();
 
 
-  let { base_url } = main_query_params;
+  let { base_url = '' } = main_query_params;
 
   let origin = window.location.origin;
 
