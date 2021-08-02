@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import Logout from './login_and_registration/pages/Login/Logout.js';
@@ -22,7 +22,7 @@ import DesktopLayout from './desktopLayout';
 import Feature from './Feature';
 import Tooltip from 'common/ui/Tooltip';
 import ComponentTest from './ComponentTest';
-import {getConfig, isIframe} from './utils/functions';
+import {getConfig} from './utils/functions';
 import 'common/theme/Style.scss';
 import { storageService } from './utils/validators';
 import LoginContainer from './login_and_registration/components/LoginContainer';
@@ -46,7 +46,6 @@ var basename = window.sessionStorage.getItem('base_href') || '';
 if (basename && basename.indexOf('appl/webview') !== -1) {
   basename = basename ? basename + 'view/' : '';
 }
-const isMobileDevice = getConfig().isMobileDevice;
 
 const isBottomSheetDisplayed = storageService().get('is_bottom_sheet_displayed');
 if(isBottomSheetDisplayed) {
@@ -80,13 +79,19 @@ const ScrollToTop = withRouter(
 );
 
 const App = () => {
+  const config = getConfig();
+  const isMobileDevice = config.isMobileDevice;
   const [themeConfiguration, setThemeConfiguration] = useState(getMuiThemeConfig());
-
+  useEffect(() => {
+    if(config.isSdk || config.isIframe) {
+      storageService().set("entry_path",window.location.pathname);
+    }
+  },[]);
   const updateTheme = (event) => {
     const theme = getMuiThemeConfig();
     setThemeConfiguration(theme)
   }
-  const iframe = isIframe();
+  const iframe = config.isIframe;
     return (
       <BrowserRouter basename={basename}>
         <JssProvider jss={jss} generateClassName={generateClassName}>

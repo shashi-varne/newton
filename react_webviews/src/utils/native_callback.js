@@ -183,8 +183,14 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       pathname = pathname.split("/")[5] || "/";
     }
     
-    if (config.isSdk && pathname !== "/" && (callbackData.action === 'exit_web' || callbackData.action === 'exit_module' || callbackData.action === 'open_module')) {
-      window.location.href = redirectToLanding();
+    const entryPath = storageService().get('entry_path'); 
+    if (
+      config.isSdk &&
+      pathname !== "/" &&
+      (entryPath !== pathname) &&
+      (callbackData.action === 'exit_web' || callbackData.action === 'exit_module' || callbackData.action === 'open_module')
+    ) {
+        window.location.href = redirectToLanding();
     } else {
       if (config.app === 'android') {
         window.Android.callbackNative(JSON.stringify(callbackData));
@@ -298,10 +304,11 @@ export function handleNativeExit(props, data) {
   const navigate = navigateFunc.bind(props);
   const nativeExitActions = ["native_back", "exit"];
   const sdkExitActions = ["exit_web", "exit_module", "open_module"];
+  const entryPath = storageService().get('entry_path');
   if (
     (nativeExitActions.includes(data.action) && !config.isNative) ||
     (config.isSdk &&
-      props.location?.pathname !== "/" &&
+      props.location?.pathname !== "/" && (entryPath !== props.location.pathname) &&
       sdkExitActions.includes(data.action))
   ) {
     const searchParams = `base_url=${config.base_url}&partner_code=${config.code}`;

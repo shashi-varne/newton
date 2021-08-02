@@ -1,0 +1,33 @@
+ .wvyear-filter {
+   display: flex;
+   justify-content: space-between;
+   cursor: pointer;
+   margin-bottom: 5px;
+   position: sticky;
+   left: 0;
+   right: 0;
+   top: 50px;
+   background-color: #fff;
+   z-index: 5;
+   .wvtext-block {
+     width: 36px;
+     height: 24px;
+     background-color: #EFEEFB;
+     color: var(--steelgrey);
+     padding-top: 4px;
+     border-radius: 4px;
+   }
+   .disabled{
+     opacity: 0.6;
+     cursor: auto;
+   }
+   .wvselected {
+   color: white;
+   background-color: var(--primary);
+   }
+
+   p {
+     text-align: center;
+    }
+
+}

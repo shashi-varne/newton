@@ -25,6 +25,7 @@ import AccountMergeOtp from "./AccountMerge/Otp";
 import AccountLinked from "./AccountMerge/Linked";
 import SdkLanding from './Invest/components/SdkLanding';
 import NPS from "./nps";
+import PassiveIndexFunds from "./PassiveIndexFunds"
 import {getConfig} from 'utils/functions';
 import BlankMandateUpload from "./MyAccount/BlankMandateUpload";
 import InvestmentProof from "./MyAccount/InvestmentProof";
@@ -65,6 +66,7 @@ const Home = (props) => {
         <Route path={`${url}diy`} component={DIY} />
         <Route path={`${url}invest-journey`} component={InvestJourney} />
         <Route path={`${url}nps`} component={NPS} />
+        <Route path={`${url}passive-index-funds`} component={PassiveIndexFunds} />
         <Route
           path={`${url}advanced-investing/new-fund-offers/info`}
           component={NfoInfo}
@@ -78,7 +80,7 @@ const Home = (props) => {
           component={NfoFunds}
         />
         <Route
-          path={`${url}advanced-investing/new-fund-offers/fund`}
+          path={[`${url}advanced-investing/new-fund-offers/fund`,'/direct/new-fund-offers/:isin']}
           component={NfoFundDetail}
         />
         <Route

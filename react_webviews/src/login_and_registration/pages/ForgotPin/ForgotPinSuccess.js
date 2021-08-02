@@ -1,6 +1,5 @@
 import React from 'react';
 import MPinChangeSuccess from '../../../2fa/components/MPinChangeSuccess';
-import WVButton from 'common/ui/Button/WVButton';
 import { navigate as navigateFunc } from "utils/functions";
 import LoginButton from '../../common/LoginButton';
 
