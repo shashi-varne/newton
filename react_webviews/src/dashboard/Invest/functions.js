@@ -487,19 +487,23 @@ export async function openKyc() {
     } else if (kycJourneyStatus === "ground_pan") {
       this.navigate("/kyc/journey", {
         state: {
-          show_aadhaar: !userKyc.address.meta_data.is_nri ? true : false,
+          show_aadhaar: !(userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual") ? true : false,
           fromState: "invest",
         },
       });
+    } else if (kycJourneyStatus === "esign_pending") {
+      navigate(PATHNAME_MAPPER.kycEsign);
+    } else if (kycJourneyStatus === "fno_rejected") {
+      navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
     } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity") || userKyc?.mf_kyc_processed) {
-      // already kyc done users
       let result;
-      if (!userKyc?.mf_kyc_processed) {
+      if (!userKyc?.mf_kyc_processed && !this.kycButtonLoader) {
         this.setState({ kycButtonLoader: "button"})
         result = await this.setProductType();
         this.setState({ userKyc: result?.kyc });
       }
-
+      
+      // already kyc done users
       if (isReadyToInvestBase && (result?.kyc?.mf_kyc_processed || userKyc?.mf_kyc_processed)) {
         this.navigate(PATHNAME_MAPPER.accountInfo)
       } else {
