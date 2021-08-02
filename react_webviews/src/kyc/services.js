@@ -220,7 +220,7 @@ export function getKycAppStatus(kyc) {
     ];
   }
 
-  if (kyc.address.meta_data.is_nri) {
+  if (kyc.address?.meta_data?.is_nri) {
     var obj = {
       name: "nri_address",
       keys: ["doc_status", "meta_data_status"]

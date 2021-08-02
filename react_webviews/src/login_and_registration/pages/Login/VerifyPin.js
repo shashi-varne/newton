@@ -96,7 +96,7 @@ const VerifyPin = (props) => {
         <WVButton color="secondary"
           onClick={() => {
             sendEvents("switch_account");
-            navigate('/login')
+            navigate('/logout');
           }}
           disabled={isApiRunning}>
           Switch Account
@@ -104,7 +104,7 @@ const VerifyPin = (props) => {
         <WVButton color="secondary" 
         onClick={() => {
           sendEvents("forgot_pin");
-          navigate('/forgot-pin')
+          navigate('/forgot-pin');
         }} 
         disabled={isApiRunning}>
           Forgot PIN?
