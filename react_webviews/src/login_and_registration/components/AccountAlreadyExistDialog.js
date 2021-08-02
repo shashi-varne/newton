@@ -14,6 +14,7 @@ export class AccountAlreadyExistDialog extends Component {
     };
   }
 
+
   render() {
     const { data, isOpen, onClose, type, next, editDetails } = this.props;
     const alternateRegisteredAccount = type === "email" ? isEmpty(data?.mobile) : isEmpty(data?.email) || isEmpty(data);
@@ -34,7 +35,12 @@ export class AccountAlreadyExistDialog extends Component {
           variant: "contained",
           title: "CONTINUE",
           showLoader: this.state.loading,
-          onClick: () => next(type, data),
+          onClick: () => {
+            next(type, data)
+            this.setState({
+              loading: true,
+            })
+          }
         }}
         classes={{
           container: "account-already-exists-container",

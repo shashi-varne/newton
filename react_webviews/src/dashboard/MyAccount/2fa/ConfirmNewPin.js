@@ -100,26 +100,28 @@ const ConfirmNewPin = (props) => {
       buttonTitle="Continue"
       disable={mpin?.length !== 4}
     >
-      <EnterMPin
-        title="Confirm fisdom PIN"
-        subtitle={routeParams.set_flow  ? "Ensuring maximum security for your investment account" : "Keep your account safe and secure"}
-        otpProps={{
-          otp: mpin,
-          handleOtp: handlePin,
-          hasError: !!pinError,
-          bottomText: pinError || '',
-        }}
-        noData={!routeParamsExist}
-        renderNoData={
-          <WVInfoBubble
-            type="error"
-            hasTitle
-            customTitle="Session not found or expired."
-          >
-            Please go back to 'My Account' settings and try again
-          </WVInfoBubble>
-        }
-      />
+      <div style={{ paddingTop: '60px' }}>
+        <EnterMPin
+          title="Confirm fisdom PIN"
+          subtitle={routeParams.set_flow  ? "Ensuring maximum security for your investment account" : "Keep your account safe and secure"}
+          otpProps={{
+            otp: mpin,
+            handleOtp: handlePin,
+            hasError: !!pinError,
+            bottomText: pinError || '',
+          }}
+          noData={!routeParamsExist}
+          renderNoData={
+            <WVInfoBubble
+              type="error"
+              hasTitle
+              customTitle="Session not found or expired."
+            >
+              Please go back to 'My Account' settings and try again
+            </WVInfoBubble>
+          }
+        />
+      </div>
       <WVPopUpDialog
         open={openDialog}
         handleYes={handleYes}

@@ -15,7 +15,6 @@ export function initialize() {
   this.formCheckFields = formCheckFields.bind(this);
   this.triggerOtpApi = triggerOtpApi.bind(this);
   this.initiateOtpApi = initiateOtpApi.bind(this);
-  this.verifyCode = verifyCode.bind(this);
   this.resendVerificationLink = resendVerificationLink.bind(this);
   this.otpVerification = otpVerification.bind(this);
   this.otpLoginVerification = otpLoginVerification.bind(this);
@@ -23,8 +22,6 @@ export function initialize() {
   this.generateOtp = generateOtp.bind(this);
   this.resendOtp = resendOtp.bind(this);
   this.resendLoginOtp = resendLoginOtp.bind(this);
-  this.forgotPassword = forgotPassword.bind(this);
-  this.verifyForgotOtp = verifyForgotOtp.bind(this);
   this.navigate = navigateFunc.bind(this.props);
   this.getKycFromSummary = getKycFromSummary.bind(this);
   this.redirectAfterLogin = redirectAfterLogin.bind(this);
@@ -266,41 +263,6 @@ export async function initiateOtpApi(body, loginType) {
   }
 }
 
-export async function verifyCode(form_data) {
-  if (!form_data.referral_code) {
-    form_data[`referral_code_error`] = "This is required";
-    this.setState({ form_data: form_data });
-    return;
-  }
-  this.setState({ isPromoApiRunning: true });
-  let body = {
-    code: form_data.referral_code,
-  };
-  try {
-    const res = await Api.get(`/api/checkpromocode`, body);
-    const { result, status_code: status } = res.pfwresponse;
-    if (status === 200) {
-      toast("Success");
-      this.sendEvents("next")
-      this.setState({
-        isPromoSuccess: true,
-        promo_status: "Valid",
-        isPromoApiRunning: false,
-      });
-    } else {
-      this.setState({
-        isPromoSuccess: false,
-        promo_status: "Invalid",
-        isPromoApiRunning: false,
-      });
-      toast(result.message || result.error || errorMessage);
-    }
-  } catch (error) {
-    console.log(error);
-    toast(errorMessage);
-    this.setState({ isPromoApiRunning: false });
-  }
-}
 
 export async function resendVerificationLink() {
   let { loginType, form_data } = this.state;
@@ -430,13 +392,6 @@ export async function otpVerification(body) {
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       this.sendEvents("next");
-      let eventObj = {
-        event_name: "user loggedin",
-      };
-      nativeCallback({ events: eventObj });
-      applyCode(result.user);
-      storageService().setObject("user", result.user);
-      storageService().set("currentUser", true);
       if (this.state.rebalancing_redirect_url) {
         window.location.href = this.state.rebalancing_redirect_url;
         return;
@@ -549,54 +504,6 @@ export async function resendLoginOtp(resend_url) {
   }
 }
 
-export async function forgotPassword(body) {
-  try {
-    const res = await Api.get(`/api/forgotpassword`, body);
-    const { result, status_code: status } = res.pfwresponse;
-    let { loginType } = this.state;
-    if (status === 200) {
-      this.setState({ isApiRunning: false });
-      if (loginType === "email") toast(`A link has been sent to ${body.email}`);
-      else {
-        this.navigate("mobile/verify", {
-          state: {
-            mobile_number: body.mobile,
-            forgot: true,
-          },
-        });
-      }
-    } else {
-      toast(result.message || result.error || errorMessage);
-    }
-    this.setState({ isApiRunning: false });
-  } catch (error) {
-    console.log(error);
-    toast(errorMessage);
-  } finally {
-    this.setState({ isApiRunning: false });
-  }
-}
-
-export async function verifyForgotOtp(body) {
-  this.setState({ isApiRunning: "button" });
-  try {
-    const res = await Api.post(`/api/user/verifymobile?otp=${body.otp}`);
-    const { result, status_code: status } = res.pfwresponse;
-    if (status === 200) {
-      this.setState({ isApiRunning: false });
-      toast("Login to continue");
-      this.navigate("/login");
-    } else {
-      toast(result.message || result.error || errorMessage);
-    }
-  } catch (error) {
-    console.log(error);
-    toast(errorMessage);
-  } finally {
-    this.setState({ isApiRunning: false });
-  }
-}
-
 export async function getKycFromSummary(params = {}) {
   if (isEmpty(params)) {
     // Default params
@@ -627,7 +534,6 @@ export function redirectAfterLogin(data, user, navigateFunc) {
   const kyc = storageService().getObject("kyc");
   user = user || storageService().getObject("user");
   const navigate = navigateFunc || this.navigate;
-
   if (data.firstLogin) {
     navigate("/referral-code", { state: { goBack: "/", communicationType: data?.contacts?.auth_type } });
   } else if (
@@ -639,17 +545,17 @@ export function redirectAfterLogin(data, user, navigateFunc) {
     user.kyc_registration_v2 === "incomplete" &&
     !user.active_investment
   ) {
-    navigate("/landing", { state: { goBack: "/" } });
+    navigate("/landing", { edit: true, state: { goBack: "/" } });
   } else if (
     kyc &&
     !kyc.pan.meta_data.pan_number &&
     user.kyc_registration_v2 === "init"
   ) {
-    navigate("/landing", { state: { goBack: "/invest" } });
+    navigate("/landing", { edit: true, state: { goBack: "/invest" } });
   } else if (user.active_investment) {
-    navigate("/landing", { state: { goBack: "/landing" } });
+    navigate("/landing", { edit: true, state: { goBack: "/landing" } });
   } else {
-    navigate("/landing", { state: { goBack: "/" } });
+    navigate("/landing", { edit: true, state: { goBack: "/" } });
   }
 }
 

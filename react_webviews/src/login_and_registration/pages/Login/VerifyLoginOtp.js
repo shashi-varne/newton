@@ -58,6 +58,7 @@ class VerifyLoginOtp extends Component {
   handleOtp = (otp) => {
     this.setState({
       otpData: { ...this.state.otpData, otp },
+      isWrongOtp: false,
     });
   };
 
@@ -65,7 +66,12 @@ class VerifyLoginOtp extends Component {
     this.resendLoginOtp(this.state.resend_url)
     this.sendEvents("resend");
     this.setState({
-      otpData: { ...this.state.otpData, timeAvailable: 15, },
+      otpData: {
+        ...this.state.otpData,
+        timeAvailable: 15,
+        otp: ''
+      },
+      isWrongOtp: false,
     });
   }
 
