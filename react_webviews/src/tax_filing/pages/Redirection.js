@@ -30,6 +30,18 @@ function Redirection(props) {
     const timerHandle = setTimeout(() => {
       clearITRSessionStorage()
       const fisdomReturnUrl = getBasePath() + '/tax-filing/callback'
+      if (getConfig().app === 'ios') {
+        nativeCallback({
+          action: 'show_top_bar'
+        })
+      }
+      nativeCallback({
+        action: 'take_control',
+        message: {
+          enable_history_back: true,
+          history_back_url: backUrl
+        }
+      })
       window.location.href =
         redirectionUrl + `&ru=${stringToHexa(fisdomReturnUrl)}`
     }, 2000)
