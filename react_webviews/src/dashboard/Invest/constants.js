@@ -337,6 +337,16 @@ export const kycStatusMapper = {
     icon: "ic_popup_kyc_verified.svg",
     next_state: "/invest",
   },
+  equity_activation_pending: {
+    color: "#3792fc",
+    popup_header: "Trading & Demat account set up in progress",
+    popup_message:
+      "Meanwhile, you can invest in more than 5000+ mutual funds",
+    button_text: "OK",
+    oneButton: true,
+    landing_text: "UNDER PROCESS",
+    icon: "ic_popup_kyc_underprocess.svg",
+  }
 };
 
 export const kycStatusMapperInvest = {
