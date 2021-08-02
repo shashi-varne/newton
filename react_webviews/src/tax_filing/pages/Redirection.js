@@ -41,7 +41,9 @@ function Redirection(props) {
       }
       nativeCallback({
         action: 'take_control',
-        enable_history_back: true,
+        message: {
+          enable_history_back: true
+        }
       })
       window.location.href =
         redirectionUrl + `&ru=${stringToHexa(fisdomReturnUrl)}`
