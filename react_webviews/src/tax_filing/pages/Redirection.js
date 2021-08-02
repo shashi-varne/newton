@@ -37,6 +37,7 @@ function Redirection(props) {
           message: {
             title: 'You are almost there, do you really want to go back?',
           },
+          enable_history_back: true,
         })
       }
       nativeCallback({
