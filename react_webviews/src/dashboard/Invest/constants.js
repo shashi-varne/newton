@@ -10,6 +10,20 @@ export const apiConstants = {
 };
 
 export const investCardsBase = {
+  stocksAndIpo: {
+    stocks: {
+      title: "Stocks, Futures & Options",
+      subtitle: "Invest in your favourite companies",
+      button_text: "INVEST",
+      icon: "ic_stocks.svg",
+    },
+    ipo: {
+      title: "IPO, Gold Bonds and more",
+      subtitle: "Primary market products",
+      button_text: "INVEST",
+      icon: "ic_ipo.svg",
+    },
+  },
   popularCards: {
     top_equity: {
       title: "Top equity funds",

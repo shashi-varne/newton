@@ -176,6 +176,7 @@ class Landing extends Component {
       bottomCards,
       popularCards,
       financialTools,
+      stocksAndIpo
     } = investCardsData;
     const config = getConfig();
     return (
@@ -309,6 +310,29 @@ class Landing extends Component {
                             Our recommendations
                           </div>
                           {ourRecommendations.map((item, index) => {
+                            return (
+                              <InvestCard
+                                data={item}
+                                key={index}
+                                handleClick={() =>
+                                  this.clickCard(item.key, item.title)
+                                }
+                              />
+                            );
+                          })}
+                        </>
+                      )}
+                    </React.Fragment>
+                  );
+                case "stocksAndIpo":
+                  return (
+                    <React.Fragment key={index}>
+                      {!isEmpty(stocksAndIpo) && (
+                        <>
+                          <div className="invest-main-top-title" data-aid='recommendations-title'>
+                            Stocks & IPOs
+                          </div>
+                          {stocksAndIpo.map((item, index) => {
                             return (
                               <InvestCard
                                 data={item}
