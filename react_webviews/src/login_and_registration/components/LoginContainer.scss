@@ -80,9 +80,40 @@
     width: 64px;
     margin-bottom: 15px;
   }
+}
 // ---------------------- login footer css end-----------------------//
 
+.ldr-animatedFade {
+  @extend .ldr-animated, .ldr-animatedFadeInUp, .ldr-fadeInUp;
+}
 
+.ldr-animated {
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+  -webkit-animation-duration: 0.5s;
+  animation-delay: 0.1s;
+  -webkit-animation-fill-mode: both;
+}
+
+.ldr-animatedFadeInUp {
+  opacity: 0;
+}
+
+.ldr-fadeInUp {
+  opacity: 0;
+  animation-name: ldr-fadeInUp;
+  -webkit-animation-name: ldr-fadeInUp;
+}
+
+@keyframes ldr-fadeInUp {
+  from {
+    transform: translate3d(0, 10px, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
 }
 
 @media only screen and (max-width: 1200px) {

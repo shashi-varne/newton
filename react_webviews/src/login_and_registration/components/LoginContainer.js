@@ -20,7 +20,7 @@ const config = getConfig();
 const { productName } = config;
 
 const LoginContainer = (props) => {
-  const { url } = props.match;
+  const { match: { url }, location } = props;
   const pathName = url.split('/')[1];
   const navigate = navigateFunc.bind(props);
 
@@ -33,17 +33,18 @@ const LoginContainer = (props) => {
         <div className="ld-left">
           <Imgc src={require(`assets/${productName}/ils_login.svg`)} alt="login" />
         </div>
-        <div className="ld-right">
+        <div className="ld-right ldr-animatedFade" key={location.key}>
           <>
             {pathName === 'login' &&
-              <Switch>
-                <Route path={`${url}`} exact component={Login} />
-                <Route path={`${url}/verify-otp`} component={VerifyLoginOtp} />
-                <Route path={`${url}/verify-pin`} component={VerifyPin} />
-                <Route>
-                  <PageNotFound navigateFunc={navigate} />
-                </Route>
-              </Switch>
+              
+                <Switch location={location}>
+                  <Route path={`${url}`} exact component={Login} />
+                  <Route path={`${url}/verify-otp`} component={VerifyLoginOtp} />
+                  <Route path={`${url}/verify-pin`} component={VerifyPin} />
+                  <Route>
+                    <PageNotFound navigateFunc={navigate} />
+                  </Route>
+                </Switch>
             }
             {pathName === 'forgot-pin' &&
               <Switch>
