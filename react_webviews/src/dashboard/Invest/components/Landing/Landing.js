@@ -235,52 +235,43 @@ class Landing extends Component {
                         <div
                           data-aid='kyc-invest-sections-cards'
                           className="kyc"
-                          style={{
-                            backgroundImage: `url(${require(`assets/${productName}/${kycStatusData.icon}`)})`,
-                          }}
                           onClick={() =>
                             !kycButtonLoader && !stocksButtonLoader && this.clickCard("kyc", kycStatusData.title)
                           }
                         >
-                          <div className="title">{kycStatusData.title}</div>
-                          <div className="subtitle">
-                            {kycStatusData.subtitle}
+                          <div className="kyc-card-text">
+                            <div className="title">{kycStatusData.title}</div>
+                            <div className="subtitle">
+                              {kycStatusData.subtitle}
+                            </div>
                           </div>
-                          <Button
-                            dataAid='kyc-btn'
-                            buttonTitle={kycStatusData.button_text}
-                            classes={{
-                              button: "invest-landing-button invest-kyc-button",
-                            }}
-                            showLoader={kycButtonLoader}
-                            type={productName === "finity" ? "outlined" : ""}
-                          />
+                          <Imgc src={require(`assets/${productName}/${kycStatusData.icon}`)} alt="" className="kyc-card-image" />
                         </div>
                       ): null}
                     </React.Fragment>
                   );
-                case "stocks":
-                  return (
-                    <React.Fragment key={index}>
-                      {tradingEnabled && !isEquityCompletedBase && (
-                        <div className="invest-main-top-title" 
-                          onClick={() => {!kycStatusLoader && !stocksButtonLoader && !kycButtonLoader && this.clickCard("stocks") }} 
-                          data-aid='stocks-title'
-                        >
-                          <WVButton
-                            variant='contained'
-                            size='large'
-                            color="secondary"
-                            disabled={kycStatusLoader}
-                            showLoader={stocksButtonLoader}
-                            // fullWidth
-                          >
-                            Stocks
-                          </WVButton>
-                        </div>
-                      )}
-                    </React.Fragment>
-                  );
+                // case "stocks":
+                //   return (
+                //     <React.Fragment key={index}>
+                //       {tradingEnabled && !isEquityCompletedBase && (
+                //         <div className="invest-main-top-title" 
+                //           onClick={() => {!kycStatusLoader && !stocksButtonLoader && !kycButtonLoader && this.clickCard("stocks") }} 
+                //           data-aid='stocks-title'
+                //         >
+                //           <WVButton
+                //             variant='contained'
+                //             size='large'
+                //             color="secondary"
+                //             disabled={kycStatusLoader}
+                //             showLoader={stocksButtonLoader}
+                //             // fullWidth
+                //           >
+                //             Stocks
+                //           </WVButton>
+                //         </div>
+                //       )}
+                //     </React.Fragment>
+                //   );
                 case "indexFunds":
                   return (
                     <React.Fragment key={index}>
