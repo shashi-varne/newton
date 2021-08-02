@@ -47,6 +47,7 @@ export class SecondaryOtpVerification extends Component {
   handleOtp = (otp) => {
     this.setState({
       otpData: { ...this.state.otpData, otp },
+      isWrongOtp: false,
     });
   };
 
@@ -72,7 +73,12 @@ export class SecondaryOtpVerification extends Component {
   handleResendOtp = () => {
     this.resendOtp(this.state.otp_id)
     this.setState({
-      otpData: { ...this.state.otpData, timeAvailable: 15, },
+      otpData: {
+        ...this.state.otpData,
+        timeAvailable: 15,
+        otp: ''
+      },
+      isWrongOtp: false,
     });
   }
 

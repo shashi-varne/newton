@@ -80,27 +80,29 @@ const EnterNewPin = (props) => {
       buttonTitle="Continue"
       disable={pin?.length !== 4}
     >
-      <EnterMPin
-        title="Enter new fisdom PIN"
-        subtitle="Keep your account safe and secure"
-        otpProps={{
-          otp: pin,
-          handleOtp: handlePin,
-          hasError: !!pinError,
-          bottomText: pinError || '',
-        }}
-        noData={!routeParamsExist}
-        renderNoData={
-          <WVInfoBubble
-            type="error"
-            hasTitle
-            customTitle="Session not found or expired"
-          >
-            Please go back to 'My Account' settings and try again
-          </WVInfoBubble>
-        }
-      />
-      {routeParams?.reset_url &&
+      <div style={{ paddingTop: '60px' }}>
+        <EnterMPin
+          title="Enter new fisdom PIN"
+          subtitle="Keep your account safe and secure"
+          otpProps={{
+            otp: pin,
+            handleOtp: handlePin,
+            hasError: !!pinError,
+            bottomText: pinError || '',
+          }}
+          noData={!routeParamsExist}
+          renderNoData={
+            <WVInfoBubble
+              type="error"
+              hasTitle
+              customTitle="Session not found or expired"
+            >
+              Please go back to 'My Account' settings and try again
+            </WVInfoBubble>
+          }
+        />
+      </div>
+      {routeParamsExist &&
         <Prompt
           when={showPrompt}
           message="Going back will restart the process. Are you sure you want to go back?"

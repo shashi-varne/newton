@@ -90,10 +90,12 @@ const EnterNewPin = (props) => {
           Continue
         </LoginButton>
       }
-      <Prompt
-        when={showPrompt}
-        message="Going back will restart the process. Are you sure you want to go back?"
-      />
+      {routeParamsExist &&
+        <Prompt
+          when={showPrompt}
+          message="Going back will restart the process. Are you sure you want to go back?"
+        />
+      }
     </>
   );
 }

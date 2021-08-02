@@ -43,7 +43,7 @@ class DigiStatus extends Component {
         dl_flow = true;
       }
 
-      if (user.pin_status === "init") {
+      if (user.pin_status !== "pin_setup_complete") {
         this.setState({ set2faPin: true })
       }
 

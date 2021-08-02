@@ -25,6 +25,7 @@ const VerifyForgotOtp = (props) => {
 
     const handleOtp = (value) => {
         setOtp(value);
+        setOtpError(false);
     }
 
     const handleClick = async () => {
@@ -50,6 +51,7 @@ const VerifyForgotOtp = (props) => {
         try {
             setIsResendApiRunning(true);
             await twofaPostApi(routeParams?.resend_url);
+            handleOtp('');
         } catch (err) {
             console.log(err);
             Toast(err);
