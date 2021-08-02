@@ -307,7 +307,7 @@ export const kycStatusMapper = {
       "To invest in stocks, primary market products, F&O you need to verify your KYC",
     buttonTitle: "Start KYC",
     button2Title: "Later",
-    landing_text: "Check your KYC status",
+    landingText: "Check your KYC status",
     icon: "icn_kyc_incomplete.svg",
     nextState: "/kyc/home",
   },
@@ -318,7 +318,7 @@ export const kycStatusMapper = {
       "Our team is working on your KYC application. We will notify you once it’s done. This may take upto 48 hours",
     buttonTitle: "OKAY",
     oneButton: true,
-    landing_text: "UNDER PROCESS",
+    landingText: "UNDER PROCESS",
     icon: "icn_kyc_doc_verification.svg",
   },
   rejected: {
@@ -326,7 +326,7 @@ export const kycStatusMapper = {
     title: "KYC application rejected ",
     subtitle: "We were unable to process your KYC. Please tap 'Update KYC' to check and submit the correct documents",
     buttonTitle: "Update KYC",
-    landing_text: "PENDING",
+    landingText: "PENDING",
     button2Title: "Later",
     icon: "icn_kyc_doc_rejected.svg",
     nextState: "/kyc/upload/progress",
@@ -337,7 +337,7 @@ export const kycStatusMapper = {
     subtitle: "KYC is a mandatory process to invest in stocks, primary market products, F&O",
     button2Title: "Later",
     buttonTitle: "COMPLETE NOW",
-    landing_text: "INCOMPLETE",
+    landingText: "INCOMPLETE",
     icon: "icn_kyc_incomplete.svg",
   },
   complete: {
@@ -354,7 +354,7 @@ export const kycStatusMapper = {
     subtitle: "Great, just one more step to go! Now complete eSign to get investment ready",
     button2Title: "NOT NOW",
     buttonTitle: "Complete esign",
-    landing_text: "INCOMPLETE",
+    landingText: "INCOMPLETE",
     icon: "icn_kyc_completed.svg",
   },
   fno_rejected: {
@@ -363,7 +363,7 @@ export const kycStatusMapper = {
     subtitle: "Couldn't process your F&O application as the wrong income proof document was submitted. Please upload the correct file",
     button2Title: "Later",
     buttonTitle: "Update document",
-    landing_text: "INCOMPLETE",
+    landingText: "INCOMPLETE",
     icon: "icn_kyc_doc_rejected.svg",
   },
 };
