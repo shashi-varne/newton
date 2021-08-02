@@ -587,8 +587,15 @@ export async function openStocks() {
 }
 
 export function handleStocksAndIpoCards(key) {
-  let { kycJourneyStatusMapperData } = this.state;
+  let { kycJourneyStatusMapperData, kycJourneyStatus } = this.state;
   let modalData = Object.assign({}, kycJourneyStatusMapperData);
+  if (key === "ipo" && kycJourneyStatus === "equity_activation_pending") {
+    modalData = {
+      ...modalData,
+      subtitle: "This process could take upto 48 hours. We will notify you once it’s done. Meanwhile, you can explore stocks,primary market products, F&O",
+      buttonTitle: "CONTINUE"
+    }
+  }
   if(key === "ipo" && !kycJourneyStatusMapperData.oneButton) {
     modalData.button1Props = {
       title: modalData.button2Title,
