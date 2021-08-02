@@ -2,11 +2,9 @@ import "./LoginContainer.scss";
 import React from "react";
 import { getConfig } from "utils/functions";
 import { Route, Switch } from "react-router-dom";
-import PinChangeSuccess from "../pages/ForgotPin/ForgotPinSuccess";
 import Login from "../pages/Login/Login";
 import VerifyLoginOtp from "../pages/Login/VerifyLoginOtp";
 import VerifyPin from "../pages/Login/VerifyPin";
-import Referral from "../pages/Referral/Referral";
 import VerifyForgotOtp from "../pages/ForgotPin/VerifyForgotOtp";
 import EnterNewPin from "../pages/ForgotPin/EnterNewPin";
 import ConfirmNewPin from "../pages/ForgotPin/ConfirmNewPin";
@@ -40,10 +38,8 @@ const LoginContainer = (props) => {
             {pathName === 'login' &&
               <Switch>
                 <Route path={`${url}`} exact component={Login} />
-                <Route path={`${url}/pin-change-success`} component={PinChangeSuccess} />
                 <Route path={`${url}/verify-otp`} component={VerifyLoginOtp} />
                 <Route path={`${url}/verify-pin`} component={VerifyPin} />
-                <Route path={`${url}/referral`} component={Referral} />
                 <Route>
                   <PageNotFound navigateFunc={navigate} />
                 </Route>
