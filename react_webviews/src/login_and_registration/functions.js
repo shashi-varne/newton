@@ -305,6 +305,7 @@ export async function otpLoginVerification(verify_url, body) {
     const res = await Api.post(verify_url, formData);
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
+      this.sendEvents("next")
       applyCode(result.user);
       storageService().setObject("user", result.user);
 
