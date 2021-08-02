@@ -44,6 +44,23 @@ class Landing extends Component {
     this.initialize();
   }
 
+  sendEventsIndexFunds = (userAction, card_name) => {
+    let eventObj = {
+      event_name: "home_screen",
+      properties: {
+        user_action: userAction,
+        card_clicked: card_name,
+        screen_name: "home_screen",
+      },
+    };
+
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   onload = () => {
     this.initilizeKyc();
     const isBottomSheetDisplayed = storageService().get('is_bottom_sheet_displayed');
@@ -144,6 +161,7 @@ class Landing extends Component {
       stateParams,
     } = this.state;
     const {
+      indexFunds,
       ourRecommendations,
       diy,
       bottomScrollCards,
@@ -227,6 +245,26 @@ class Landing extends Component {
                           />
                         </div>
                       )}
+                    </React.Fragment>
+                  );
+                case "indexFunds":
+                  return (
+                    <React.Fragment key={index}>
+                      {!isEmpty(indexFunds) &&
+                        indexFunds.map((item, index) => {
+                          return (
+                            <InvestCard
+                              data={item}
+                              key={index}
+                              handleClick={() =>
+                                {
+                                  this.clickCard(item.key, item.title)
+                                  this.sendEventsIndexFunds("next", "explore_passive_funds")
+                                }
+                              }
+                            />
+                          );
+                        })}
                     </React.Fragment>
                   );
                 case "ourRecommendations":

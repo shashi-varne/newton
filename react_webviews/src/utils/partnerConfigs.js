@@ -29,6 +29,7 @@ export const commonCardsConfig = {
   logo: "logo_white.png",
   investSections: [
     "kyc",
+    "indexFunds",
     "ourRecommendations",
     "diy",
     "bottomScrollCards",
@@ -207,6 +208,7 @@ export const partnerConfigs = {
     mobile: "+91-9916149111",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
+      indexFunds : ["passiveIndexFunds"],
       ourRecommendations: ["instaredeem", "buildwealth", "savetax"],
       financialTools: ["fhc", "risk_profile"],
     },
@@ -222,7 +224,7 @@ export const partnerConfigs = {
       financialTools: ["risk_profile"],
     },
     landingMarketingBanners: [
-      { image: "nfo.svg", type: "nfo", endDate: '07/21/2021' },
+      { image: "nfo.svg", type: "nfo", endDate: '08/08/2021' },
       { image: "mb_4.svg", type: "100_sip" },
       { image: "mb_6.svg", type: "diy" },
       { image: "mb_5.svg", type: "buildwealth" },
@@ -305,7 +307,7 @@ export const partnerConfigs = {
     mobile: "1800-212-5997",
     email: "care.futuremoney@fisdom.com",
     landingMarketingBanners: [
-      { image: "nfo.svg", type: "nfo", endDate: '07/21/2021' },
+      { image: "nfo.svg", type: "nfo", endDate: '08/08/2021' },
       { image: "fpg_mb_insta.svg", type: "instaredeem" },
       { image: "fpg_mb_100.svg", type: "buildwealth" },
     ],
