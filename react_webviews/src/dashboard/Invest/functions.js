@@ -37,6 +37,7 @@ export async function initialize() {
   this.handleKycSubmittedOrRejectedState = handleKycSubmittedOrRejectedState.bind(this);
   this.handleCampaign = handleCampaign.bind(this);
   this.closeCampaignDialog = closeCampaignDialog.bind(this);
+  this.handleStocksAndIpoCards = handleStocksAndIpoCards.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
   if ( (this.state.screenName === "invest_landing" || this.state.screenName === "sdk_landing" ) && dataSettedInsideBoot) {
     storageService().set("dataSettedInsideBoot", false);
@@ -176,7 +177,9 @@ export function clickCard(state, title) {
       this.openKyc();
       break;
     case "stocks":
-      this.openStocks();
+    case "ipo":
+      this.handleStocksAndIpoCards(state)
+      // this.openStocks();
       break;
     case "insurance":
       let insurancePath = "/group-insurance";
@@ -366,7 +369,7 @@ export function initilizeKyc() {
   }
   let isReadyToInvestBase = isReadyToInvest();
   let isEquityCompletedBase = isEquityCompleted();
-  let kycJourneyStatusMapperData = kycStatusMapper[kycJourneyStatus];
+  let kycJourneyStatusMapperData = kycJourneyStatus.includes("ground") ? kycStatusMapper["ground"] : kycStatusMapper[kycJourneyStatus];
   const TRADING_ENABLED = isTradingEnabled(userKyc);
 
   this.setState({
@@ -572,6 +575,30 @@ export async function openStocks() {
       }
     }
   }
+}
+
+export function handleStocksAndIpoCards(key) {
+  let { kycJourneyStatusMapperData } = this.state;
+  let modalData = Object.assign({}, kycJourneyStatusMapperData);
+  if(key === "ipo" && !kycJourneyStatusMapperData.oneButton) {
+    modalData.button1Props = {
+      title: modalData.button2Title,
+      variant: "outlined",
+      onClick: this.closeKycStatusDialog,
+    }
+    modalData.button2Props = {
+      title: modalData.buttonTitle,
+      variant: "contained",
+      onClick: this.handleKycstatus,
+    }
+  } else {
+    modalData.button1Props = {
+      title: modalData.buttonTitle,
+      variant: "contained",
+      onClick: this.handleKycstatus,
+    }
+  }
+  this.setState({ modalData, openKycStatusDialog: true });
 }
 
 async function setProductType() {
