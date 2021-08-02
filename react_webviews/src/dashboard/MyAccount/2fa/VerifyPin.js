@@ -76,24 +76,26 @@ const VerifyPin = (props) => {
       title="Reset fisdom PIN"
       noFooter={true}
     >
-      <EnterMPin
-        otpProps={{
-          otp: mpin,
-          handleOtp: onPinChange,
-          isDisabled: isApiRunning,
-          hasError: !!mpinError,
-          bottomText: mpinError || bottomText
-        }}
-      >
-        <Imgc
-          src={require(`assets/padlock1.svg`)}
-          alt=""
-          style={{ height: '20px', width: '20px', marginBottom: '20px' }}
-        />
-        <EnterMPin.Title style={{ marginBottom: '75px' }}>
-          Enter your current fisdom PIN
-        </EnterMPin.Title>
-      </EnterMPin>
+      <div style={{ paddingTop: '60px' }}>
+        <EnterMPin
+          otpProps={{
+            otp: mpin,
+            handleOtp: onPinChange,
+            isDisabled: isApiRunning,
+            hasError: !!mpinError,
+            bottomText: mpinError || bottomText
+          }}
+        >
+          <Imgc
+            src={require(`assets/padlock1.svg`)}
+            alt=""
+            style={{ height: '20px', width: '20px', marginBottom: '20px' }}
+          />
+          <EnterMPin.Title style={{ marginBottom: '75px' }}>
+            Enter your current fisdom PIN
+          </EnterMPin.Title>
+        </EnterMPin>
+      </div>
       <WVClickableTextElement onClick={forgotPin}>
         <p className="clickable-text-ele">FORGOT PIN?</p>
       </WVClickableTextElement>

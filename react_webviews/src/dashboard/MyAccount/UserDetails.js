@@ -27,7 +27,7 @@ class MyaccountDetails extends Component {
             }
 
             this.setState({
-                is_auth: auth_type === "mobile" ? contacts?.verified_mobile_contacts[0]?.contact_value : contacts?.verified_email_contacts[0]?.contact_value,
+                is_auth: auth_type === "mobile" ? (contacts?.verified_mobile_contacts[0]?.contact_value)?.slice(-10) : contacts?.verified_email_contacts[0]?.contact_value,
                 verification_done: verification_done,
                 contact_value: contact_value,
                 auth_type: auth_type,
@@ -39,9 +39,11 @@ class MyaccountDetails extends Component {
     handleClick = async (verified) => {
 
         if (verified) return;
+        this.props.showLoader();
         const { auth_type, contact_value } = this.state;
         const contact_type = auth_type === 'mobile' ? "email" : auth_type;
         let result = await this.authCheckApi(contact_type, { "contact_value": contact_value })
+        this.props.showLoader();
         if (!result?.is_user) {
             this.props.handleClick("/kyc/communication-details", { state: { goBack: "/my-account" } })
             return;
