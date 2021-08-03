@@ -132,12 +132,14 @@ class GoldBuyHome extends Component {
         let isRegistered = isUserRegistered(result);
         let user_info = result.gold_user_info.user_info || {};
         let provider_info = result.gold_user_info.provider_info || {};
+        let is_new_gold_user = result.is_new_gold_user || false;
         this.setState({
           provider_info: provider_info,
           user_info: user_info,
           maxWeight: parseFloat(((30 - provider_info.gold_balance) || 30).toFixed(4)),
           isRegistered: isRegistered,
-          enableInputs: true
+          enableInputs: true,
+          is_new_gold_user: is_new_gold_user,
         });
       
       } else {
@@ -234,7 +236,7 @@ class GoldBuyHome extends Component {
     } 
 
     if (!this.state.isRegistered) {
-      if ((this.state.user_info.mobile_number_verified !== undefined) &&
+      if ((this.state.is_new_gold_user) &&
         (!this.state.user_info?.mobile_number_verified ||
           !!this.state.user_info?.registered_with_another_account ||
           !this.state.user_info?.email_verified)) {
@@ -244,6 +246,7 @@ class GoldBuyHome extends Component {
           goNext: `/gold/${this.state.provider}/gold-register`,
           user_info: this.state.user_info,
           provider: this.state.provider,
+          is_new_gold_user: this.state.is_new_gold_user,
         });
         return;
       }
