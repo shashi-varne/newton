@@ -589,14 +589,24 @@ export async function openStocks() {
 export function handleStocksAndIpoCards(key) {
   let { kycJourneyStatusMapperData, kycJourneyStatus } = this.state;
   let modalData = Object.assign({}, kycJourneyStatusMapperData);
-  if (key === "ipo" && kycJourneyStatus === "equity_activation_pending") {
-    modalData = {
-      ...modalData,
-      subtitle: "This process could take upto 48 hours. We will notify you once it’s done. Meanwhile, you can explore primary market products",
-      buttonTitle: "CONTINUE",
-      // handleClick: this.closeKycStatusDialog  // Todo: include logic to take user to ipo sdk for equity_activation_pending case
+  
+  if (key === "ipo") {
+    if (kycJourneyStatus === "equity_activation_pending") {
+      modalData = {
+        ...modalData,
+        subtitle: "This process could take upto 48 hours. We will notify you once it’s done. Meanwhile, you can explore primary market products",
+        buttonTitle: "CONTINUE",
+        // handleClick: this.closeKycStatusDialog  // Todo: include logic to take user to ipo sdk for equity_activation_pending case
+      }
+    } else if (kycJourneyStatus === "kyc_verified") {
+      // Todo: handle redirection to ipo sdk
+    }
+  } else if (key === "stocks") {
+    if (kycJourneyStatus === "kyc_verified") {
+      // Todo: handle redirection to stocks sdk
     }
   }
+
   if(key === "ipo" && !kycJourneyStatusMapperData.oneButton) {
     modalData.button1Props = {
       title: modalData.button2Title,
