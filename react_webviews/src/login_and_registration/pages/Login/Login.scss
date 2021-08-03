@@ -1,0 +1,150 @@
+.logout {
+  padding: 50px 20px;
+  text-align: center;
+  color: #333333;
+}
+
+.declaration-container{
+  margin-left: -12px;
+  margin-top: 10px;
+  display: flex;
+  align-items: flex-start;
+  svg{
+    width: 20px;
+    height: 20px;
+  }
+  p{
+    font-size: 13px;
+    line-height: 21px;
+  }
+  .Checkbox{
+    margin-top: -2px;
+  }
+}
+
+.login-form {
+  background-color: #ffffff;
+  width: 380px;
+
+  .header-text {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    text-align: center;
+    letter-spacing: 3px;
+    padding: 0px 0 30px;
+  }
+
+  .login-type {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    column-gap: 36px;
+    padding: 10px 10px 10px 0;
+    margin-bottom: 20px;
+    cursor: pointer;
+
+    .underline {
+      width: 20px;
+      height: 2px;
+      margin: 5px auto;
+      background-color: var(--primary);
+    }
+
+    .text {
+      font-size: 14px;
+      color: var(--primary);
+    }
+  }
+
+  .footer {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    margin-top: 40px;
+    padding: 0 5px;
+    overflow: hidden;
+    text-align: center;
+
+    span {
+      cursor: pointer;
+      color: var(--secondary);
+    }
+  }
+
+  .features {
+    margin: 30px auto 0px auto;
+    .item {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-align: center;
+      align-items: center;
+      -ms-flex: 1 0 100%;
+      flex: 1 0 100%;
+      padding: 5px 0;
+
+      img {
+        vertical-align: middle;
+        margin-right: 10px;
+        width: 15px;
+      }
+    }
+  }
+
+  .agree-terms {
+    margin-top: 50px;
+    margin-bottom: 30px;
+    text-align: center;
+    clear: both;
+    font-size: 8px;
+    line-height: 16px;
+    color: #767e86;
+
+    a {
+      color: #767e86;
+      text-decoration: none;
+    }
+  }
+}
+  
+  
+@media only screen and (max-height: 767px) {
+  .login-form {
+    width: 100%;
+
+    .header-text {
+      text-align: left;
+      padding-bottom: 10px;
+    }
+
+    .login-type {
+      justify-content: flex-start;
+
+      .underline {
+        margin: 5px 0;
+      }
+    }
+
+    .form-field .country-code {
+      .MuiSelect-root {
+        margin-bottom: 1px;
+      }
+    }
+  }
+}
+
+@media only screen and (max-height: 900px) {
+  .whatsapp-consent{
+    position: absolute;
+    bottom: 80px;
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  .login-form {
+    width: 100%;
+  }
+}
+
+  

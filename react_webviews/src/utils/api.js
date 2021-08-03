@@ -4,6 +4,7 @@ import * as Sentry from '@sentry/browser'
 import { storageService } from './validators';
 import { encrypt, decrypt } from './encryption';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from './native_callback';
 
 const config = getConfig();
 let base_url = config.base_url;
@@ -59,11 +60,16 @@ class Api {
           response.data = JSON.parse(decrypt(response.data._encr_payload));
         }
 
+        if (response.data.pfwstatus_code === 416) {
+          return nativeCallback({ action: '2fa_required' });
+          // return response.data;
+        }
+
         if (response.config.url.includes("/api/") && response.headers["x-plutus-auth"] && config.isIframe) {
           storageService().set("x-plutus-auth", response.headers["x-plutus-auth"])
         }
 
-        if (response.data.pfwresponse.status_code !== 200) {
+        if (response.data?.pfwresponse?.status_code !== 200) {
           var errorMsg = response.data.pfwresponse.result.error || response.data.pfwresponse.result.message || "Something went wrong";
           var main_pathname=window.location.pathname
           var project=getConfig().project || 'Others'
@@ -85,12 +91,16 @@ class Api {
           // response.data.pfwresponse.result = {};
           response.data.pfwresponse.result.error = 'Sorry, we could not process your request';
         }
+
         return response.data;
       }, error => {
+        console.log(error);
         Sentry.captureException(error);
         return error;
       })
       .catch(error => {
+        console.log(error);
+
         Sentry.captureException(error);
         return error;
       });

@@ -31,6 +31,16 @@ import BlankMandateUpload from "./MyAccount/BlankMandateUpload";
 import InvestmentProof from "./MyAccount/InvestmentProof";
 import Refer from "./Invest/components/SdkLanding/Refer";
 import CampaignCallback from "./Invest/components/PageCallback/CampaignCallback";
+import SecuritySettings from "./MyAccount/2fa/SecuritySettings";
+import ForgotPin from "./MyAccount/2fa/ForgotPin";
+import VerifyPin from "./MyAccount/2fa/VerifyPin";
+import SetPin from "./MyAccount/2fa/SetPin";
+import EnterNewPin from "./MyAccount/2fa/EnterNewPin";
+import ConfirmNewPin from "./MyAccount/2fa/ConfirmNewPin";
+import VerifyPinOtp from "./MyAccount/2fa/VerifyForgotOtp";
+import Referral from "../login_and_registration/pages/Referral/Referral.js";
+import SecondaryVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryVerification"
+import SecondaryOtpVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryOtpVerification"
 import StatusCallback from "../kyc/Native/StatusCallback";
 
 const Home = (props) => {
@@ -39,7 +49,16 @@ const Home = (props) => {
   return (
     <Fragment>
       <Switch>
-        <Route exact path={`${url}`} component={config.isSdk && config.code !== "moneycontrol" ? SdkLanding : Invest} />
+        <Route exact path={`${url}secondary-verification`} component={SecondaryVerification} />
+        <Route exact path={`${url}secondary-otp-verification`} component={SecondaryOtpVerification} />
+        <Route path={`${url}referral-code`} component={Referral} />
+        <Route
+          exact
+          path={`${url}`}
+          component={
+            config.isSdk && config.code !== "moneycontrol" ? SdkLanding : Invest
+          }
+        />
         <Route exact path={`${url}refer`} component={Refer} />
         <Route path={`${url}invest`} component={Invest} />
         <Route path={`${url}landing`} component={Invest} />
@@ -137,6 +156,19 @@ const Home = (props) => {
           render={(props) => <InvestmentProof {...props} type="capital-gain" />} 
         />
         <Route exact path={`${url}page/invest/campaign/callback`} component={CampaignCallback} />
+        <Route exact path={`${url}security-settings`} component={SecuritySettings} />
+        <Route exact path={`${url}forgot-fisdom-pin`} component={ForgotPin} />
+        <Route exact path={`${url}reset-pin-verify`} component={VerifyPin} />
+        <Route exact path={`${url}reset-pin-confirm`} component={VerifyPin} />
+
+        <Route path={`${url}set-fisdom-pin/:coming_from`} component={SetPin} />
+        <Route path={`${url}set-fisdom-pin`} component={SetPin} />
+        <Route exact path={`${url}new-pin`} component={EnterNewPin} />
+        <Route path={`${url}confirm-pin/:coming_from`} component={ConfirmNewPin} />
+        <Route path={`${url}confirm-pin`} component={ConfirmNewPin} />
+        <Route exact path={`${url}verify-otp`} component={VerifyPinOtp} />
+
+
         <Route component={NotFound} />
       </Switch>
     </Fragment>

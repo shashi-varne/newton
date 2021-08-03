@@ -433,7 +433,7 @@ class Recommendation extends Component {
             <div className={`ui-tab2 ${this.getTabClassName('yearTab', 1)}`} onClick={() => this.handleChangeTabs('yearTab', 1)}>6m-1y</div>
             <div className={`ui-tab2 ${this.getTabClassName('yearTab', 2)}`} onClick={() => this.handleChangeTabs('yearTab', 2)}>1y-3y</div>
             <div className={`ui-tab2 ${this.getTabClassName('yearTab', 3)}`} onClick={() => this.handleChangeTabs('yearTab', 3)}>3y-5y</div>
-            <div className={`ui-tab2 ${this.getTabClassName('yearTab', 4)}`} onClick={() => this.handleChangeTabs('yearTab', 4)}>>5y</div>
+            <div className={`ui-tab2 ${this.getTabClassName('yearTab', 4)}`} onClick={() => this.handleChangeTabs('yearTab', 4)}>5y</div>
           </div>
           <FormControl fullWidth style={{ marginTop: '20px' }} >
             {/* <div className="InputField" >

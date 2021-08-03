@@ -41,6 +41,18 @@
 }
 
 .communication-details-otp-container {
+  margin-top: 15px;
+  
+  .otp-error-style {
+    border-bottom: 1px solid var(--red) !important;
+  }
+  .invalid-otp{
+    color: var(--red);
+    margin-bottom: 25px;
+    font-size: 11px;
+    line-height: 18px;
+    margin-top: 5px;
+  }
   .cd-otp-time-text {
     color: var(--steelgrey);
     font-size: 13px;

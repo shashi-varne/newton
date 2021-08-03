@@ -14,10 +14,13 @@ import { SkeltonRect } from 'common/ui/Skelton';
 import WVButton from "../../../../common/ui/Button/WVButton"
 import './Landing.scss';
 import isEmpty from "lodash/isEmpty";
+import VerifyDetailDialog from "../../../../login_and_registration/components/VerifyDetailDialog";
+import AccountAlreadyExistDialog from "../../../../login_and_registration/components/AccountAlreadyExistDialog";
+import { generateOtp } from "../../../../login_and_registration/functions";
 import { Imgc } from "../../../../common/ui/Imgc";
 import { nativeCallback } from "../../../../utils/native_callback";
 
-const fromLoginStates = ["/login", "/register", "/forgot-password", "/mobile/verify", "/logout"]
+const fromLoginStates = ["/login", "/logout", "/verify-otp"]
 class Landing extends Component {
   constructor(props) {
     super(props);
@@ -32,12 +35,18 @@ class Landing extends Component {
       modalData: {},
       openKycStatusDialog: false,
       openKycPremiumLanding: false,
+      verifyDetails: false,
+      verifyDetailsType: '',
+      verifyDetailsData: {},
+      accountAlreadyExists: false,
+      accountAlreadyExistsData : {},
       openBottomSheet: false,
       bottom_sheet_dialog_data: [],
       isWeb: getConfig().Web,
       stateParams: props.location.state || {},
     };
     this.initialize = initialize.bind(this);
+    this.generateOtp = generateOtp.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
   }
 
@@ -64,7 +73,26 @@ class Landing extends Component {
 
   onload = () => {
     this.initilizeKyc();
-    const isBottomSheetDisplayed = storageService().get('is_bottom_sheet_displayed');
+    const isBottomSheetDisplayed = storageService().get(
+      "is_bottom_sheet_displayed"
+    );
+    const isVerifyDetailsSheetDisplayed = storageService().get("verifyDetailsSheetDisplayed")
+    if (!isVerifyDetailsSheetDisplayed) {
+      const { contactDetails } = this.state;
+      if (contactDetails?.verification_done === false) {
+        this.setState({
+          verifyDetails: true,
+          verifyDetailsData:
+            contactDetails[
+            `unverified_${contactDetails?.auth_type === "mobile" ? "email" : "mobile"
+            }_contacts`
+            ][0],
+          verifyDetailsType:
+            contactDetails?.auth_type === "mobile" ? "email" : "mobile",
+        });
+        storageService().set("verifyDetailsSheetDisplayed", true);
+      }
+    }
     if (!isBottomSheetDisplayed && this.state.isWeb) {
       this.handleCampaignNotification();
     }
@@ -95,6 +123,61 @@ class Landing extends Component {
       openKycPremiumLanding: false,
     });
   };
+
+  // email mobile verification
+  closeVerifyDetailsDialog = () => {
+    this.setState({
+      verifyDetails: false
+    })
+  }
+
+  closeAccountAlreadyExistDialog = () => {
+    this.setState({
+      accountAlreadyExists: false
+    })
+  }
+
+  setAccountAlreadyExistsData = (show, data) => {
+    this.setState({
+      accountAlreadyExists: show,
+      accountAlreadyExistsData: data,
+      verifyDetails: false,
+      contact_type: data?.data?.contact_type,
+      contact_value: data?.data?.contact_value,
+    })
+  }
+
+  continueAccountAlreadyExists = async (type, data) => {
+    let body = {};
+    if (type === "email") {
+      body.email = data?.data?.contact_value;
+    } else {
+      body.mobile = data?.data?.contact_value
+      body.whatsapp_consent = true;
+    }
+    const otpResponse = await this.generateOtp(body);
+    if (otpResponse) {
+      this.navigate("secondary-otp-verification", {
+        state: {
+          value:  data?.data?.contact_value,
+          otp_id: otpResponse.pfwresponse.result.otp_id,
+          communicationType: type,
+        },
+      });
+    }
+  };
+
+  editDetailsAccountAlreadyExists = () => {
+    this.navigate("/secondary-verification", {
+      state: {
+        page: "landing",
+        edit: true,
+        communicationType: this.state.contact_type,
+        contactValue: this.state.contact_value,
+      },
+    });
+  };
+
 
   handleKycPremiumLanding = () => {
     if (
@@ -162,6 +245,8 @@ class Landing extends Component {
       openKycStatusDialog,
       modalData,
       openKycPremiumLanding,
+      verifyDetails,
+      accountAlreadyExists,
       stateParams,
       tradingEnabled,
       kycButtonLoader,
@@ -541,6 +626,26 @@ class Landing extends Component {
           data={this.state.bottom_sheet_dialog_data}
           handleClick={this.handleCampaign}
         />
+          {verifyDetails && (
+            <VerifyDetailDialog
+              type={this.state.verifyDetailsType}
+              data={this.state.verifyDetailsData}
+              showAccountAlreadyExist={this.setAccountAlreadyExistsData}
+              isOpen={verifyDetails}
+              onClose={this.closeVerifyDetailsDialog}
+              parent={this}
+            ></VerifyDetailDialog>
+          )}
+        {accountAlreadyExists && (
+          <AccountAlreadyExistDialog
+            type={this.state.verifyDetailsType}
+            data={this.state.accountAlreadyExistsData}
+            isOpen={accountAlreadyExists}
+            onClose={this.closeAccountAlreadyExistDialog}
+            next={this.continueAccountAlreadyExists}
+            editDetails={this.editDetailsAccountAlreadyExists}
+          ></AccountAlreadyExistDialog>
+        )}
       </Container>
     );
   }

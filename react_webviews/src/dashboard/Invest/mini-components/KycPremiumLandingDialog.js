@@ -18,6 +18,7 @@ const KycPremiumLandingDialog = ({
       onClose={() => close()}
       aria-labelledby="verification-failed-dialog"
       keepMounted
+      disableEnforceFocus
       aria-describedby="verification-failed-dialog"
       className="verification-failed-dialog"
       id="invest-bottom-dialog"
