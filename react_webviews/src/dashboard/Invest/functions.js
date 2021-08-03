@@ -593,7 +593,8 @@ export function handleStocksAndIpoCards(key) {
     modalData = {
       ...modalData,
       subtitle: "This process could take upto 48 hours. We will notify you once it’s done. Meanwhile, you can explore stocks,primary market products, F&O",
-      buttonTitle: "CONTINUE"
+      buttonTitle: "CONTINUE",
+      // handleClick: this.closeKycStatusDialog  // Todo: include logic to take user to ipo sdk for equity_activation_pending case
     }
   }
   if(key === "ipo" && !kycJourneyStatusMapperData.oneButton) {

@@ -16,6 +16,7 @@ import './Landing.scss';
 import isEmpty from "lodash/isEmpty";
 import { Imgc } from "../../../../common/ui/Imgc";
 import { nativeCallback } from "../../../../utils/native_callback";
+import { PATHNAME_MAPPER } from "../../../../kyc/constants";
 
 const fromLoginStates = ["/login", "/register", "/forgot-password", "/mobile/verify", "/logout"]
 class Landing extends Component {
@@ -110,14 +111,18 @@ class Landing extends Component {
   handleKycStatus = () => {
     this.sendEvents("next", "kyc_bottom_sheet");
     let { kycJourneyStatus } = this.state;
-    if (kycJourneyStatus === "submitted") {
+    if (["submitted", "equity_activation_pending"].includes(kycJourneyStatus)) {
       this.closeKycStatusDialog();
     } else if (kycJourneyStatus === "rejected") {
-      this.navigate("/kyc/upload/progress", {
+      this.navigate(PATHNAME_MAPPER.uploadProgress, {
         state: {
           goBack: "/invest",
         },
       });
+    } else if (kycJourneyStatus === "esign_pending") {
+      this.navigate(PATHNAME_MAPPER.kycEsign);
+    } else if (kycJourneyStatus === "fno_rejected") {
+      this.navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
     }
   };
 
