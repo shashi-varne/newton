@@ -403,7 +403,7 @@ export function initilizeKyc() {
       !currentUser.active_investment &&
       userKyc.bank.meta_data_status === "approved"
     ) {
-      bottom_sheet_dialog_data_premium = TRADING_ENABLED ? kycJourneyStatusMapperData["kyc_verified"] : kycJourneyStatusMapperData["mf_complete"];
+      bottom_sheet_dialog_data_premium = TRADING_ENABLED ? kycStatusMapper["kyc_verified"] : kycStatusMapper["mf_complete"];
       bottom_sheet_dialog_data_premium.status = premium_onb_status;
     }
 
@@ -416,9 +416,14 @@ export function initilizeKyc() {
     let modalData = {}
     if (["equity_activation_pending", "complete"].includes(kycJourneyStatus)) {
       if (kycJourneyStatus === "complete") {
-        modalData = TRADING_ENABLED ? kycJourneyStatusMapperData["kyc_verified"] : kycJourneyStatusMapperData["mf_complete"];
+        modalData = TRADING_ENABLED ? kycStatusMapper["kyc_verified"] : kycStatusMapper["mf_complete"];
+        modalData.button1Props = {
+          title: modalData.buttonTitle,
+          variant: "contained",
+          onClick: this.handleKycStatus,
+        }
       } else {
-        modalData = kycJourneyStatusMapperData[kycJourneyStatus];
+        modalData = kycStatusMapper[kycJourneyStatus];
       }
     }
 
@@ -646,11 +651,11 @@ export function handleStocksAndIpoCards(key) {
         buttonTitle: "CONTINUE"
         // onClick:  // Todo: handle redirection to ipo sdk
       }
-    } else if (userKyc.equity_investment_ready) {
+    } else if (userKyc.equity_investment_ready || kycJourneyStatus === "complete") {
       // Todo: handle redirection to ipo sdk
     }
   } else if (key === "stocks") {
-    if (userKyc.equity_investment_ready) {
+    if (userKyc.equity_investment_ready || kycJourneyStatus === "complete") {
       // Todo: handle redirection to stocks sdk
     }
   }
@@ -675,7 +680,10 @@ export function handleStocksAndIpoCards(key) {
       showLoader: kycButtonLoader || false
     }
   }
-  this.setState({ modalData, openKycStatusDialog: true });
+
+  if (kycJourneyStatus !== "complete") {
+    this.setState({ modalData, openKycStatusDialog: true });
+  }
 }
 
 async function setProductType() {
