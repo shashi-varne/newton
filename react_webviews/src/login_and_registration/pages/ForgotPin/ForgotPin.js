@@ -1,7 +1,7 @@
 import '../Login/commonStyles.scss';
 import React, { useEffect, useState } from 'react';
 import ForgotMPin from '../../../2fa/components/ForgotMPin';
-import { navigate as navigateFunc } from '../../../utils/functions';
+import { getConfig, navigate as navigateFunc } from '../../../utils/functions';
 import LoginButton from '../../common/LoginButton';
 import { nativeCallback } from "../../../utils/native_callback";
 import { forgotPinOtpTrigger, obscuredAuthGetter } from '../../../2fa/common/apiCalls';
@@ -78,7 +78,12 @@ const ForgotPin = (props) => {
   };
 
   const goBack = () => {
-    navigate('/login');
+    if (getConfig().isLoggedIn) {
+      // Doing this to prevent logout API errors for when no active login session is available
+      navigate('/logout');
+    } else {
+      navigate('/login');
+    }
     sendEvents("back");
   }
 

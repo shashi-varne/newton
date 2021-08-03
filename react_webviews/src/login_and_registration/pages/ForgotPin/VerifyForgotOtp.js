@@ -1,7 +1,7 @@
 import '../Login/commonStyles.scss';
 import React, { useMemo, useState } from 'react';
 import OtpContainer from '../../../common/components/OtpContainer';
-import { navigate as navigateFunc } from '../../../utils/functions';
+import { getConfig, navigate as navigateFunc } from '../../../utils/functions';
 import LoginButton from '../../common/LoginButton';
 import Toast from 'common/ui/Toast';
 import { twofaPostApi } from '../../../2fa/common/apiCalls';
@@ -83,7 +83,12 @@ const VerifyForgotOtp = (props) => {
   };
 
   const goBack = () => {
-    navigate('/login')
+    if (getConfig().isLoggedIn) {
+      // Doing this to prevent logout API errors for when no active login session is available
+      navigate('/logout');
+    } else {
+      navigate('/login');
+    }
     sendEvents("back")
   }
 

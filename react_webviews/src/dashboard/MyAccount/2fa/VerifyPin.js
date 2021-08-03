@@ -5,12 +5,13 @@ import Container from "../../common/Container";
 import EnterMPin from "../../../2fa/components/EnterMPin";
 import { Imgc } from "../../../common/ui/Imgc";
 import { nativeCallback } from "../../../utils/native_callback";
-import { navigate as navigateFunc } from "../../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import { verifyPin } from '../../../2fa/common/apiCalls';
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 import DotDotLoader from "../../../common/ui/DotDotLoaderNew";
 
 const VerifyPin = (props) => {
+  const { productName } = getConfig();
   const { persistRouteParams } = usePersistRouteParams();
   const navigate = navigateFunc.bind(props);
   const [mpinError, setMpinError] = useState(false);
@@ -20,7 +21,7 @@ const VerifyPin = (props) => {
 
   useEffect(() => {
     if (!mpin || !mpin.length) {
-      setBottomText('Enter fisdom PIN');
+      setBottomText(`Enter ${productName} PIN`);
     } else if (mpin.length === 4) {
       handleClick();
       setBottomText(<DotDotLoader />);
