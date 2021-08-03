@@ -31,20 +31,23 @@ const LoginContainer = (props) => {
       </div>
       <div className="login-details">
         <div className="ld-left">
-          <Imgc src={require(`assets/${productName}/ils_login.svg`)} alt="login" />
+          <Imgc
+            src={require(`assets/${productName}/ils_login.svg`)}
+            alt="login"
+            style={{ width: '480px', height: '330px' }}
+          />
         </div>
         <div className="ld-right ldr-animatedFade" key={location.key}>
           <>
             {pathName === 'login' &&
-              
-                <Switch location={location}>
-                  <Route path={`${url}`} exact component={Login} />
-                  <Route path={`${url}/verify-otp`} component={VerifyLoginOtp} />
-                  <Route path={`${url}/verify-pin`} component={VerifyPin} />
-                  <Route>
-                    <PageNotFound navigateFunc={navigate} />
-                  </Route>
-                </Switch>
+              <Switch location={location}>
+                <Route path={`${url}`} exact component={Login} />
+                <Route path={`${url}/verify-otp`} component={VerifyLoginOtp} />
+                <Route path={`${url}/verify-pin`} component={VerifyPin} />
+                <Route>
+                  <PageNotFound navigateFunc={navigate} />
+                </Route>
+              </Switch>
             }
             {pathName === 'forgot-pin' &&
               <Switch>
