@@ -399,7 +399,6 @@ const CommunicationDetails = (props) => {
 
   const handleClickGold = async () => {
     setShowLoader("button");
-    sendEvents("next");
     try {
       if (showOtpContainer) {
         if (otpData.otp.length !== 4) {
@@ -411,6 +410,7 @@ const CommunicationDetails = (props) => {
           otp: otpData?.otp,
         }
         await verifyGoldOtp(body);
+        sendEvents("next");
         handleGoldNavigation();
       } else {
         const body = getPayLoad();
@@ -424,6 +424,7 @@ const CommunicationDetails = (props) => {
             return
           }
         }
+        sendEvents("next");
         await callGoldOtp(body)
       }
     } catch (err) {
