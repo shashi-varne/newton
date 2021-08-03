@@ -401,7 +401,7 @@ export function initilizeKyc() {
       !currentUser.active_investment &&
       userKyc.bank.meta_data_status === "approved"
     ) {
-      bottom_sheet_dialog_data_premium = premiumBottomSheetMapper["complete"];
+      bottom_sheet_dialog_data_premium = TRADING_ENABLED ? kycJourneyStatusMapperData["kyc_verified"] : kycJourneyStatusMapperData["mf_complete"];
       bottom_sheet_dialog_data_premium.status = premium_onb_status;
     }
 
@@ -592,7 +592,7 @@ export function handleStocksAndIpoCards(key) {
   if (key === "ipo" && kycJourneyStatus === "equity_activation_pending") {
     modalData = {
       ...modalData,
-      subtitle: "This process could take upto 48 hours. We will notify you once it’s done. Meanwhile, you can explore stocks,primary market products, F&O",
+      subtitle: "This process could take upto 48 hours. We will notify you once it’s done. Meanwhile, you can explore primary market products",
       buttonTitle: "CONTINUE",
       // handleClick: this.closeKycStatusDialog  // Todo: include logic to take user to ipo sdk for equity_activation_pending case
     }

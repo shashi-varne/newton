@@ -110,19 +110,11 @@ class Landing extends Component {
 
   handleKycStatus = () => {
     this.sendEvents("next", "kyc_bottom_sheet");
-    let { kycJourneyStatus } = this.state;
+    let { kycJourneyStatus, kycStatusData } = this.state;
     if (["submitted", "equity_activation_pending"].includes(kycJourneyStatus)) {
       this.closeKycStatusDialog();
-    } else if (kycJourneyStatus === "rejected") {
-      this.navigate(PATHNAME_MAPPER.uploadProgress, {
-        state: {
-          goBack: "/invest",
-        },
-      });
-    } else if (kycJourneyStatus === "esign_pending") {
-      this.navigate(PATHNAME_MAPPER.kycEsign);
-    } else if (kycJourneyStatus === "fno_rejected") {
-      this.navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
+    } else {
+      this.navigate(kycStatusData.next_state);
     }
   };
 
