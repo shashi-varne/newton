@@ -124,7 +124,7 @@ const CommunicationDetails = (props) => {
   const initializeGold = async () => {
     const data = { ...formData };
     setShowOtpContainer(false);
-    if ((goldUserInfo?.email_verified && goldUserInfo?.mobile_number_verified && goldUserInfo?.mobile_number_verified !== undefined) ||
+    if ((goldUserInfo?.email_verified && goldUserInfo?.mobile_number_verified && goldUserInfo.mobile_number_verified !== undefined) ||
       (goldUserInfo?.email && goldUserInfo?.mobile_no && goldUserInfo?.mobile_number_verified === undefined)
     ) {
       sendEvents("next")
