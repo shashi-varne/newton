@@ -545,17 +545,17 @@ export function redirectAfterLogin(data, user, navigateFunc) {
     user.kyc_registration_v2 === "incomplete" &&
     !user.active_investment
   ) {
-    navigate("/landing", { edit: true, state: { goBack: "/" } });
+    navigate("/invest", { edit: true, state: { goBack: "/" } });
   } else if (
     kyc &&
     !kyc.pan.meta_data.pan_number &&
     user.kyc_registration_v2 === "init"
   ) {
-    navigate("/landing", { edit: true, state: { goBack: "/invest" } });
+    navigate("/invest", { edit: true, state: { goBack: "/invest" } });
   } else if (user.active_investment) {
-    navigate("/landing", { edit: true, state: { goBack: "/landing" } });
+    navigate("/invest", { edit: true, state: { goBack: "/invest" } });
   } else {
-    navigate("/landing", { edit: true, state: { goBack: "/" } });
+    navigate("/invest", { edit: true, state: { goBack: "/" } });
   }
 }
 

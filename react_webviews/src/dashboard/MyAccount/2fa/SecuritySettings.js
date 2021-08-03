@@ -67,7 +67,7 @@ const SecuritySettings = (props) => {
                 </div>
             </div>
 
-        </Container >
+        </Container>
     )
 };
 

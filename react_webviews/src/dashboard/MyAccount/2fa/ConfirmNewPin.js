@@ -7,7 +7,7 @@ import { twofaPostApi, modifyPin, setPin } from '../../../2fa/common/apiCalls';
 import { getKycFromSummary } from "../../../login_and_registration/functions";
 import WVPopUpDialog from "../../../common/ui/PopUpDialog/WVPopUpDialog";
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
-import { navigate as navigateFunc } from "../../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import { isEmpty } from "lodash";
 import WVInfoBubble from "../../../common/ui/InfoBubble/WVInfoBubble";
 
@@ -87,7 +87,11 @@ const ConfirmNewPin = (props) => {
   const handleYes = () => {
     sendEvents("next");
     if (kycFlow) {
-      navigate('/landing')
+      if (getConfig().isNative) {
+        nativeCallback({ action: 'exit_web' });
+      } else {
+        navigate("/invest");
+      }
     } else navigate('/security-settings');
   }
 

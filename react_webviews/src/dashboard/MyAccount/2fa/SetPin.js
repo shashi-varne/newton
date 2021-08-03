@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Container from "../../common/Container";
 import EnterMPin from "../../../2fa/components/EnterMPin";
 import { verifyPin } from '../../../2fa/common/apiCalls';
-import { navigate as navigateFunc } from "../../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import { nativeCallback } from "../../../utils/native_callback";
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 import WVPopUpDialog from "../../../common/ui/PopUpDialog/WVPopUpDialog";
@@ -67,7 +67,11 @@ const SetPin = (props) => {
 
   const handleYes = () => {
     sendEvents("back");
-    navigate("/invest");
+    if (getConfig().isNative) {
+      nativeCallback({ action: 'exit_web' });
+    } else {
+      navigate("/invest");
+    }
   }
 
   return (
@@ -81,16 +85,18 @@ const SetPin = (props) => {
       disable={mpin?.length !== 4}
       fullWidthButton
     >
-      <EnterMPin
-        title="Set fisdom PIN"
-        subtitle="Ensuring maximum security for your investment account"
-        otpProps={{
-          otp: mpin,
-          handleOtp: onPinChange,
-          hasError: !!mpinError,
-          bottomText: mpinError || '',
-        }}
-      />
+      <div style={{ paddingTop: '60px' }}>
+        <EnterMPin
+          title="Set fisdom PIN"
+          subtitle="Ensuring maximum security for your investment account"
+          otpProps={{
+            otp: mpin,
+            handleOtp: onPinChange,
+            hasError: !!mpinError,
+            bottomText: mpinError || '',
+          }}
+        />
+      </div>
       <WVPopUpDialog
         open={openDialog}
         handleNo={() => setOpenDialog(false)}

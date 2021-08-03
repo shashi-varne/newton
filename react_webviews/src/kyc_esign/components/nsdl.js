@@ -73,14 +73,13 @@ class DigiStatus extends Component {
     } else {
       this.sendEvents('home');
     }
+    if (this.state.set2faPin) {
+      this.navigate("/set-fisdom-pin/kyc-complete");
+    }
     if (getConfig().isNative) {
       nativeCallback({ action: 'exit_web' });
     } else {
-      if (this.state.set2faPin) {
-        this.navigate("/set-fisdom-pin/kyc-complete");
-      } else {
-        this.navigate("/invest");
-      }
+      this.navigate("/invest");
     }
   };
 
