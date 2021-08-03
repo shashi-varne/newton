@@ -124,20 +124,18 @@ const CommunicationDetails = (props) => {
   const initializeGold = async () => {
     const data = { ...formData };
     setShowOtpContainer(false);
-    if ((goldUserInfo?.email_verified && goldUserInfo?.mobile_number_verified && goldUserInfo.mobile_number_verified !== undefined) ||
-      (goldUserInfo?.email && goldUserInfo?.mobile_no && goldUserInfo.mobile_number_verified === undefined)
-    ) {
+    if (goldUserInfo?.email_verified && goldUserInfo?.mobile_number_verified && stateParams.is_new_gold_user) {
       sendEvents("next")
       navigate(stateParams?.goNext)
     }
-    else if (!goldUserInfo?.mobile_number_verified || goldUserInfo?.registered_with_another_account || !goldUserInfo?.mobile_no) {
+    else if (!goldUserInfo?.mobile_number_verified || goldUserInfo?.registered_with_another_account) {
       setCommunicationType("mobile")
       let mobileNumber = kyc?.identification?.meta_data?.mobile_number || goldUserInfo?.mobile_no || "";
       const [extension, number] = mobileNumber.toString().split("|");
       if (extension) mobileNumber = number;
       data.mobile = mobileNumber;
     }
-    else if (!goldUserInfo?.email_verified || !goldUserInfo?.email) {
+    else if (!goldUserInfo?.email_verified) {
       setCommunicationType("email")
       data.email = kyc?.identification?.meta_data?.email || goldUserInfo?.email || "";
     }
