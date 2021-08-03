@@ -33,16 +33,14 @@ function Redirection(props) {
       const fisdomReturnUrl = getBasePath() + '/tax-filing/callback'
       if (getConfig().app === 'ios') {
         nativeCallback({
-          action: 'show_top_bar',
-          message: {
-            title: 'You are almost there, do you really want to go back?',
-          },
+          action: 'show_top_bar'
         })
       }
       nativeCallback({
         action: 'take_control',
         message: {
-          enable_history_back: true
+          enable_history_back: true,
+          history_back_url: backUrl
         }
       })
       window.location.href =
