@@ -316,7 +316,7 @@ class MyAccount extends Component {
                   src={require(`assets/security.svg`)}
                   alt=""
                 />
-                <div>Security setting</div>
+                <div>Security settings</div>
               </div>
             </div>
             {(mandate.prompt ||

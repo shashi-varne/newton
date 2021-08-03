@@ -30,7 +30,10 @@ const EnterMPin = ({
                     {children}
                     <WVOtp
                         align="center"
-                        additionalOtpProps={{ isInputSecure: true }}
+                        additionalOtpProps={{
+                            isInputSecure: true,
+                            shouldAutoFocus: true
+                        }}
                         onChange={otpProps.handleOtp}
                         value={otpProps.otp}
                         isDisabled={otpProps.isDisabled}

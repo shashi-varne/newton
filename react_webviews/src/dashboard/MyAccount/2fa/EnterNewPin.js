@@ -97,7 +97,7 @@ const EnterNewPin = (props) => {
               hasTitle
               customTitle="Session not found or expired"
             >
-              Please go back to 'My Account' settings and try again
+              Please go back to <b>My Account &gt; Security settings</b> and try again
             </WVInfoBubble>
           }
         />
