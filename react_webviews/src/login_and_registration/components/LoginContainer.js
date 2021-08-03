@@ -26,7 +26,12 @@ const LoginContainer = (props) => {
   return (
     <div className="login" data-aid='login'>
       <div className="header">
-        <img src={require(`assets/${config.logo}`)} alt="logo" />
+        <img
+          src={require(`assets/${config.logo}`)}
+          alt={productName}
+          style={{ cursor: 'pointer' }}
+          onClick={() => navigate('/login')}
+        />
       </div>
       <div className="login-details">
         <div className="ld-left">
