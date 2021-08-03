@@ -124,11 +124,13 @@ const CommunicationDetails = (props) => {
   const initializeGold = async () => {
     const data = { ...formData };
     setShowOtpContainer(false);
-    if (goldUserInfo?.email && goldUserInfo?.mobile_no) {
+    if ((goldUserInfo?.email_verified && goldUserInfo?.mobile_number_verified && goldUserInfo.mobile_number_verified !== undefined) ||
+      (goldUserInfo?.email && goldUserInfo?.mobile_no && goldUserInfo.mobile_number_verified === undefined)
+    ) {
       sendEvents("next")
       navigate(stateParams?.goNext)
     }
-    else if (!goldUserInfo?.mobile_number_verified || !!goldUserInfo?.registered_with_another_account || !goldUserInfo?.mobile_no) {
+    else if (!goldUserInfo?.mobile_number_verified || goldUserInfo?.registered_with_another_account || !goldUserInfo?.mobile_no) {
       setCommunicationType("mobile")
       let mobileNumber = kyc?.identification?.meta_data?.mobile_number || goldUserInfo?.mobile_no || "";
       const [extension, number] = mobileNumber.toString().split("|");
@@ -397,7 +399,6 @@ const CommunicationDetails = (props) => {
 
   const handleClickGold = async () => {
     setShowLoader("button");
-    sendEvents("next");
     try {
       if (showOtpContainer) {
         if (otpData.otp.length !== 4) {
@@ -409,6 +410,7 @@ const CommunicationDetails = (props) => {
           otp: otpData?.otp,
         }
         await verifyGoldOtp(body);
+        sendEvents("next");
         handleGoldNavigation();
       } else {
         const body = getPayLoad();
@@ -422,6 +424,7 @@ const CommunicationDetails = (props) => {
             return
           }
         }
+        sendEvents("next");
         await callGoldOtp(body)
       }
     } catch (err) {
