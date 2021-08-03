@@ -271,7 +271,7 @@ export function getKycAppStatus(kyc) {
     result.status = status;
     return result;
   } else {
-    if (!TRADING_ENABLED || (kyc?.kyc_product_type !== "equity" && isReadyToInvest()) || kyc?.mf_kyc_processed) {
+    if (!TRADING_ENABLED || (kyc?.kyc_product_type !== "equity" && isReadyToInvest())) {
       status = kyc.application_status_v2;
     } else {
       status = kyc.equity_application_status;
@@ -311,14 +311,21 @@ export function getKycAppStatus(kyc) {
     status = 'incomplete';
   }
 
+  // this condition handles retro kyc submitted users
+  if (kyc.application_status_v2 === "submitted") {
+    status = "submitted"
+  }
+
   if (!TRADING_ENABLED && kyc.kyc_status !== 'compliant' && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && kyc.sign_status !== 'signed') {
     status = 'incomplete';
   }
 
+  // this condition handles equity esign pending case
   if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && kyc.equity_application_status === 'complete' && kyc.equity_sign_status !== "signed") {
     status = 'esign_pending';
   }
 
+  // this condition handles equity activation pending case
   if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && kyc.equity_application_status === 'complete' && kyc.equity_sign_status === "signed" &&
   !kyc?.equity_investment_ready) {
     status = 'equity_activation_pending';

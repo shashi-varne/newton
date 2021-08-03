@@ -17,6 +17,7 @@ import internalStorage from '../common/InternalStorage';
 import { nativeCallback } from "../../utils/native_callback";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 import { isNewIframeDesktopLayout } from "../../utils/functions";
+import { storageService } from "../../utils/validators";
 
 const showPageDialog = isNewIframeDesktopLayout();
 const productName = getConfig().productName;
@@ -291,10 +292,15 @@ const KycBankVerify = (props) => {
   };
 
   const handleSuccess = () => {
-    if (isTradingEnabled()) {
-      handleOtherPlatformNavigation();
+    if (storageService().get("bankEntryPoint") === "uploadDocuments") {
+      storageService().remove("bankEntryPoint")
+      navigate(PATHNAME_MAPPER.uploadProgress);
     } else {
-      handleSdkNavigation();
+      if (isTradingEnabled()) {
+        handleOtherPlatformNavigation();
+      } else {
+        handleSdkNavigation();
+      }
     }
   };
 

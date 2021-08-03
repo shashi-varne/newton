@@ -348,6 +348,14 @@ export const kycStatusMapper = {
     buttonTitle: "UPGRADE NOW",
     icon: "ic_upgrade.svg",
   },
+  mf_complete: {
+    color: "#ffa60b",
+    popup_header: "Congratulations! KYC verified",
+    popup_message: "You're ready to invest in Mutual Funds",
+    button_text: "START INVESTING",
+    icon: "icn_kyc_completed.svg",
+    next_state: "/invest",
+  },
   esign_pending: {
     color: "#ffa60b",
     title: "Documents verified",
@@ -366,6 +374,23 @@ export const kycStatusMapper = {
     landingText: "INCOMPLETE",
     icon: "icn_kyc_doc_rejected.svg",
   },
+  equity_activation_pending: {
+    color: "#3792fc",
+    title: "Trading & Demat account set up in progress",
+    subtitle: "Meanwhile, you can invest in more than 5000+ mutual funds",
+    buttonTitle: "OK",
+    oneButton: true,
+    landing_text: "UNDER PROCESS",
+    icon: "icn_kyc_doc_verification.svg",
+  },
+  kyc_verified: {
+    color: "#ffa60b",
+    title: "You're investment ready",
+    subtitle: "You can start your investment journey by investing in your favourite stocks, mutual funds, F&O ",
+    buttonTitle: "OKAY",
+    oneButton: true,
+    icon: "icn_kyc_completed.svg",
+  }
 };
 
 export const kycStatusMapperInvest = {
@@ -436,7 +461,7 @@ export const kycStatusMapperInvest = {
     icon: "ic_kyc_complete.svg",
     title: "You’re ready to invest in mutual funds",
     subtitle: "UPGRAGE ACCOUNT",
-    next_state: "/kyc/journey",
+    next_state: "/kyc/account-info",
     addPoint: true,
     subTitleClass: "kyc-complete",
     subtitleColor: "#35CB5D"

@@ -17,6 +17,7 @@ import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 import { isReadyToInvest } from "../services";
+import { storageService } from "../../utils/validators";
 
 const INIT_BOTTOMSHEET_TEXT = "We've added your bank account details. The verification is in progress, meanwhile you can continue with KYC."
 
@@ -204,10 +205,15 @@ const KycUploadDocuments = (props) => {
   };
 
   const proceed = () => {
-    if (tradingEnabled) {
-      handleOtherPlatformNavigation();
+    if (storageService().get("bankEntryPoint") === "uploadDocuments") {
+      storageService().remove("bankEntryPoint");
+      navigate(PATHNAME_MAPPER.uploadProgress);
     } else {
-      handleSdkNavigation();
+      if (tradingEnabled) {
+        handleOtherPlatformNavigation();
+      } else {
+        handleSdkNavigation();
+      }
     }
   };
 
@@ -216,7 +222,10 @@ const KycUploadDocuments = (props) => {
   };
 
   const goBackToPath = () => {
-    if (goBackPath) {
+    if (storageService().get("bankEntryPoint") === "uploadDocuments") {
+      storageService().remove("bankEntryPoint");
+      navigate(PATHNAME_MAPPER.uploadProgress);
+    } else if (goBackPath) {
       navigate(goBackPath);
     } else if (additional) {
       navigate(PATHNAME_MAPPER.bankList);
