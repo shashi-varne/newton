@@ -348,6 +348,14 @@ export const kycStatusMapper = {
     buttonTitle: "UPGRADE NOW",
     icon: "ic_upgrade.svg",
   },
+  mf_complete: {
+    color: "#ffa60b",
+    popup_header: "Congratulations! KYC verified",
+    popup_message: "You're ready to invest in Mutual Funds",
+    button_text: "START INVESTING",
+    icon: "icn_kyc_completed.svg",
+    next_state: "/invest",
+  },
   esign_pending: {
     color: "#ffa60b",
     title: "Documents verified",
@@ -374,6 +382,14 @@ export const kycStatusMapper = {
     oneButton: true,
     landing_text: "UNDER PROCESS",
     icon: "icn_kyc_doc_verification.svg",
+  },
+  kyc_verified: {
+    color: "#ffa60b",
+    title: "You're investment ready",
+    subtitle: "You can start your investment journey by investing in your favourite stocks, mutual funds, F&O ",
+    buttonTitle: "OKAY",
+    oneButton: true,
+    icon: "icn_kyc_completed.svg",
   }
 };
 
