@@ -484,7 +484,7 @@ export function handleKycSubmittedOrRejectedState() {
     modalData.button1Props = {
       title: modalData.buttonTitle,
       variant: "contained",
-      onClick: this.handleKycstatus,
+      onClick: this.handleKycStatus,
     }
     this.setState({ modalData, openKycStatusDialog: true });
   }
@@ -629,13 +629,13 @@ export function handleStocksAndIpoCards(key) {
     modalData.button2Props = {
       title: modalData.buttonTitle,
       variant: "contained",
-      onClick: this.handleKycstatus,
+      onClick: this.handleKycStatus,
     }
   } else {
     modalData.button1Props = {
       title: modalData.buttonTitle,
       variant: "contained",
-      onClick: this.handleKycstatus,
+      onClick: this.handleKycStatus,
     }
   }
   this.setState({ modalData, openKycStatusDialog: true });
