@@ -456,9 +456,9 @@ const CommunicationDetails = (props) => {
     }
   }
 
-  const handleGoldNavigation = async () => { console.log("hi")
+  const handleGoldNavigation = async () => {
     try {
-      const result = await comfirmVerification();
+      const result = await comfirmVerification(stateParams?.provider || 'mmtc');
       const user_info = result.gold_user_info.user_info || {};
       setGoldUserInfo(user_info)
     } catch (err) {

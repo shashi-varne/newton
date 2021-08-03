@@ -21,7 +21,7 @@ import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
 import {Imgc} from '../../../common/ui/Imgc';
-import { isEmpty } from '../../../utils/validators';
+import { isEmpty } from "lodash";
 
 const plusOptionsAmount = [
   500, 1000, 2000, 5000
@@ -242,7 +242,8 @@ class GoldBuyHome extends Component {
           fromState: "/buy-gold",
           goBack: "/gold/buy",
           goNext: `/gold/${this.state.provider}/gold-register`,
-          user_info: this.state.user_info
+          user_info: this.state.user_info,
+          provider: this.state.provider,
         });
         return;
       }
