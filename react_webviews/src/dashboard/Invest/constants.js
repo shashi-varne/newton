@@ -497,6 +497,14 @@ export const premiumBottomSheetMapper = {
     next_state: "/kyc/journey",
     icon: "ic_popup_premium_onboarding_big.svg",
   },
+  complete: {
+    popup_header: `Congratulations! KYC verified`,
+    title: "Premium Onboarding",
+    popup_message: "You're ready to invest in Mutual Funds",
+    button_text: "START INVESTING",
+    next_state: "/invest",
+    icon: "ic_popup_kyc_verified.svg",
+  }
 };
 
 export const riskProfiles = [{

@@ -401,7 +401,7 @@ export function initilizeKyc() {
       !currentUser.active_investment &&
       userKyc.bank.meta_data_status === "approved"
     ) {
-      bottom_sheet_dialog_data_premium = kycStatusMapper["complete"];
+      bottom_sheet_dialog_data_premium = premiumBottomSheetMapper["complete"];
       bottom_sheet_dialog_data_premium.status = premium_onb_status;
     }
 
