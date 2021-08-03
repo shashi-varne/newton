@@ -242,7 +242,8 @@ class GoldBuyHome extends Component {
           fromState: "/buy-gold",
           goBack: "/gold/buy",
           goNext: `/gold/${this.state.provider}/gold-register`,
-          user_info: this.state.user_info
+          user_info: this.state.user_info,
+          provider: this.state.provider,
         });
         return;
       }

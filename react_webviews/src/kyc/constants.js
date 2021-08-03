@@ -16,7 +16,7 @@ export const API_CONSTANTS = {
   socialAuth: '/api/communication',
   sendContactConsent: '/api/communication/contact/consent',
   authCheck: '/api/iam/auth/check',
-  goldUserInfo: '/api/gold/user/account/mmtc',
+  goldUserInfo: '/api/gold/user/account',
 }
 
 export const PATHNAME_MAPPER = {
