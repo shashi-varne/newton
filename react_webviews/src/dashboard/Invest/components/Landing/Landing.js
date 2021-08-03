@@ -327,15 +327,27 @@ class Landing extends Component {
                             Stocks & IPOs
                           </div>
                           {stocksAndIpo.map((item, index) => {
-                            return (
-                              <InvestCard
-                                data={item}
-                                key={index}
-                                handleClick={() =>
-                                  this.clickCard(item.key, item.title)
-                                }
-                              />
-                            );
+                            if (kycStatusLoader) {
+                              return (
+                                <SkeltonRect
+                                  style={{
+                                    width: '100%',
+                                    height: '170px',
+                                    marginBottom: "15px",
+                                  }}
+                                />
+                              )
+                            } else {
+                              return (
+                                <InvestCard
+                                  data={item}
+                                  key={index}
+                                  handleClick={() =>
+                                    this.clickCard(item.key, item.title)
+                                  }
+                                />
+                              );
+                            }
                           })}
                         </>
                       )}
