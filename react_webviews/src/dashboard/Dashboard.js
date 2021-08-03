@@ -32,6 +32,7 @@ import InvestmentProof from "./MyAccount/InvestmentProof";
 import Refer from "./Invest/components/SdkLanding/Refer";
 import CampaignCallback from "./Invest/components/PageCallback/CampaignCallback";
 import StatusCallback from "../kyc/Native/StatusCallback";
+import ProductMarketTypes from './ProductMarketTypes';
 
 const Home = (props) => {
   const config = getConfig(); 
@@ -48,6 +49,7 @@ const Home = (props) => {
         <Route path={`${url}invest-journey`} component={InvestJourney} />
         <Route path={`${url}nps`} component={NPS} />
         <Route path={`${url}passive-index-funds`} component={PassiveIndexFunds} />
+        <Route path={`${url}product-types`} component={ProductMarketTypes} />
         <Route
           path={`${url}advanced-investing/new-fund-offers/info`}
           component={NfoInfo}
