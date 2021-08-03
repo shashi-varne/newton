@@ -28,8 +28,8 @@ const VerifyPin = (props) => {
     if (!mpin || !mpin.length) {
       setBottomText('Enter fisdom PIN');
     } else if (mpin.length === 4) {
-      handleClick();
       setBottomText(<DotDotLoader />);
+      handleClick();
     } else {
       setBottomText('');
     }
