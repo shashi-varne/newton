@@ -60,6 +60,7 @@ const OtpContainer = ({
                         isDisabled={isDisabled || false}
                         hasError={isWrongOtp}
                         bottomText={isWrongOtp ? "Invalid OTP" : ""}
+                        additionalOtpProps={{ shouldAutoFocus: true }}
                     // TODO: Support custom bottomText ^
                     />
                     {timeAvailable > 0 && !showDotLoader && (
