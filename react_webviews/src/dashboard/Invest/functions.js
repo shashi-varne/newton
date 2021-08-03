@@ -611,6 +611,12 @@ export function handleStocksAndIpoCards(key) {
         buttonTitle: "CONTINUE",
         // handleClick: this.closeKycStatusDialog  // Todo: include logic to take user to ipo sdk for equity_activation_pending case
       }
+    } else if (kycJourneyStatus === "submitted") {
+      modalData = {
+        ...modalData,
+        buttonTitle: "CONTINUE"
+        // onClick:  // Todo: handle redirection to ipo sdk
+      }
     } else if (userKyc.equity_investment_ready) {
       // Todo: handle redirection to ipo sdk
     }
