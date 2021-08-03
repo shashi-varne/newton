@@ -517,7 +517,7 @@ export async function openKyc() {
       navigate(PATHNAME_MAPPER.kycEsign);
     } else if (kycJourneyStatus === "fno_rejected") {
       navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
-    } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity") || userKyc?.mf_kyc_processed) {
+    } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity")) {
       await this.setKycProductTypeAndRedirect();
     } else {
       this.navigate(kycStatusData.next_state, {

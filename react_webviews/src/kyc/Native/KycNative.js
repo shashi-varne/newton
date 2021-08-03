@@ -95,7 +95,7 @@ function KycNative(props) {
       });
     } else if (kycStatus === "fno_rejected") {
       navigate(PATHNAME_MAPPER.uploadFnOIncomeProof, data);
-    } else if ((TRADING_ENABLED && kyc?.kyc_product_type !== "equity") || kyc?.mf_kyc_processed) {
+    } else if ((TRADING_ENABLED && kyc?.kyc_product_type !== "equity")) {
       let result;
       if (!kyc?.mf_kyc_processed) {
         result = await setProductType();
