@@ -43,6 +43,7 @@ const WVOtp = ({
           ${hasError ? `wv-otp-text-error ${classes.bottomTextError}` : ''} 
           ${classes.bottomText}
         `}
+        style={{ textAlign: align }}
       >
         {bottomText}
       </div>

@@ -311,7 +311,7 @@ export async function otpLoginVerification(verify_url, body) {
 
       // Redirect to PIN Verification
       if (result.user.pin_status === 'pin_setup_complete') {
-        return this.navigate('verify-pin');
+        return this.navigate('verify-pin', { edit: true });
       }
 
       if (this.state.rebalancing_redirect_url) {

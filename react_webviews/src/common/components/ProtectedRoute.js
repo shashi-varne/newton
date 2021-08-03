@@ -27,6 +27,9 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   const fetch = async () => {
     try {
       await initData();
+    } catch (e) {
+      console.log(e);
+    } finally {
       currentUser = storageService().get("currentUser");
       user = storageService().getObject("user") || {};
       kyc = storageService().getObject("kyc") || {};
@@ -35,18 +38,15 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
       if (!userDataAvailable) {
         if (isNative) {
           nativeCallback({ action: "exit_web" });
+        } else if (isSdk) {
+          nativeCallback({ action: "session_expired" });
+        } else if (isIframe) {
+          let message = JSON.stringify({
+            type: "iframe_close",
+          });
+          window.callbackWeb.sendEvent(message);
         }
-      } else if (isSdk) {
-        nativeCallback({ action: "session_expired" });
-      } else if (isIframe) {
-        let message = JSON.stringify({
-          type: "iframe_close",
-        });
-        window.callbackWeb.sendEvent(message);
       }
-    } catch (e) {
-      console.log(e);
-    } finally {
       setShowLoader(false);
     }
   };

@@ -7,7 +7,7 @@ const Input = (props) => {
     const code = event.keyCode;
     if (code === 13) {
       // eslint-disable-next-line no-unused-expressions
-      props?.onEnterPressed(event);
+      props.onEnterPressed?.(event);
     }
   }
   
