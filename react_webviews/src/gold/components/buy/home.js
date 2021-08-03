@@ -234,7 +234,7 @@ class GoldBuyHome extends Component {
     } 
 
     if (!this.state.isRegistered) {
-      if (!isEmpty(this.state.user_info?.mobile_number_verified) &&
+      if ((this.state.user_info?.mobile_number_verified !== undefined) &&
         (!this.state.user_info?.mobile_number_verified ||
           !!this.state.user_info?.registered_with_another_account ||
           !this.state.user_info?.email_verified)) {
