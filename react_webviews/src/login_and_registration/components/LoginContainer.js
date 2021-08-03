@@ -16,10 +16,9 @@ import GoBackToLoginBtn from "../common/GoBackToLoginBtn";
 import { navigate as navigateFunc } from "../../utils/functions";
 import { Imgc } from "../../common/ui/Imgc";
 
-const config = getConfig();
-const { productName } = config;
-
 const LoginContainer = (props) => {
+  const config = getConfig();
+  const { productName } = config;
   const { match: { url }, location } = props;
   const pathName = url.split('/')[1];
   const navigate = navigateFunc.bind(props);
@@ -45,7 +44,7 @@ const LoginContainer = (props) => {
                 <Route path={`${url}/verify-otp`} component={VerifyLoginOtp} />
                 <Route path={`${url}/verify-pin`} component={VerifyPin} />
                 <Route>
-                  <PageNotFound navigateFunc={navigate} />
+                  <PageNotFound navigateFunc={navigate} config={config} />
                 </Route>
               </Switch>
             }
@@ -57,21 +56,21 @@ const LoginContainer = (props) => {
                 <Route path={`${url}/confirm-pin`} component={ConfirmNewPin} />
                 <Route path={`${url}/success`} component={ForgotPinSuccess} />
                 <Route>
-                  <PageNotFound navigateFunc={navigate} />
+                  <PageNotFound navigateFunc={navigate} config={config} />
                 </Route>
               </Switch>
             }
           </>
         </div>
       </div>
-      <FooterTitle/>
+      <FooterTitle config={config} />
     </div>
   );
 }
 
 export default LoginContainer;
 
-const FooterTitle = () => {
+const FooterTitle = ({ config }) => {
   return (
     <div className="login-footer">
       <div className="lf-logos">
@@ -94,12 +93,12 @@ const FooterTitle = () => {
   );
 };
 
-const PageNotFound = ({ navigateFunc }) => {
+const PageNotFound = ({ navigateFunc, config }) => {
   return (
     <>
       <WVInPageTitle style={{ textAlign: 'center', marginBottom: '20px' }}>Lost your way?</WVInPageTitle>
       <img
-        src={require(`assets/${productName}/error_illustration.svg`)}
+        src={require(`assets/${config.productName}/error_illustration.svg`)}
         style={{ width: '100%' }}
         alt="404"
       />

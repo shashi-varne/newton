@@ -75,15 +75,6 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     }
   }
 
-  if (action === '2fa_required') {
-    if (config.Web) {
-      storageService().setBoolean('session-timeout', true);
-      window.location.href = redirectTo2FA();
-    } else {
-      nativeCallback({ action })
-    }
-  }
-
   if (config.generic_callback) {
     if (action === 'take_control_reset_hard' || action === 'take_control_reset') {
       nativeCallback({ action: 'hide_top_bar' });
@@ -183,7 +174,8 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       pathname = pathname.split("/")[5] || "/";
     }
     
-    const entryPath = storageService().get('entry_path'); 
+    const entryPath = storageService().get('entry_path');
+
     if (
       config.isSdk &&
       pathname !== "/" &&
@@ -205,6 +197,9 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       open_browser_web(message.url, '_blank')
     } else if (action === 'resume_provider') {
       open_browser_web(message.resume_link, '_self')
+    } else if (action === '2fa_required') {
+      storageService().setBoolean('session-timeout', true);
+      window.location.href = redirectTo2FA();
     } else {
       return;
     }

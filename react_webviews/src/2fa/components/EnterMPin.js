@@ -29,6 +29,7 @@ const EnterMPin = ({
                 <>
                     {children}
                     <WVOtp
+                        align="center"
                         additionalOtpProps={{ isInputSecure: true }}
                         onChange={otpProps.handleOtp}
                         value={otpProps.otp}

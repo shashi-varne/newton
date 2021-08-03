@@ -3,19 +3,25 @@ import React, { useEffect, useState } from 'react';
 import EnterMPin from '../../../2fa/components/EnterMPin';
 import { Imgc } from '../../../common/ui/Imgc';
 import { storageService } from '../../../utils/validators';
-import { navigate as navigateFunc } from '../../../utils/functions';
+import { getConfig, navigate as navigateFunc } from '../../../utils/functions';
 import { verifyPin } from '../../../2fa/common/apiCalls';
 import { nativeCallback } from "../../../utils/native_callback";
 import WVButton from '../../../common/ui/Button/WVButton';
 import DotDotLoader from '../../../common/ui/DotDotLoaderNew';
 import { postLoginSetup, redirectAfterLogin } from '../../functions';
 
+const pinAttemptsKey = 'pin-attempts'; // key name for session store
+
 const VerifyPin = (props) => {
+  const { productName } = getConfig();
   const { name } = storageService().getObject('user') || {};
   const [mpinError, setMpinError] = useState(false);
   const [mpin, setMpin] = useState('');
   const [bottomText, setBottomText] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
+  const [attemptsCount, setAttemptsCount] = useState(
+    storageService().get(pinAttemptsKey) || 0
+  );
 
   const navigate = navigateFunc.bind(props);
 
@@ -25,8 +31,15 @@ const VerifyPin = (props) => {
   }
 
   useEffect(() => {
+    if (attemptsCount >=5) {
+      setMpinError('You have exceeded the maximum number of retries. Please reset your PIN using the ‘Forgot PIN’ option');
+    }
+    storageService().set(pinAttemptsKey, attemptsCount);
+  }, [attemptsCount]);
+
+  useEffect(() => {
     if (!mpin || !mpin.length) {
-      setBottomText('Enter fisdom PIN');
+      setBottomText(`Enter ${productName} PIN`);
     } else if (mpin.length === 4) {
       setBottomText(<DotDotLoader />);
       handleClick();
@@ -39,6 +52,8 @@ const VerifyPin = (props) => {
     try {
       setIsApiRunning(true);
       await verifyPin({ mpin });
+      setAttemptsCount(attemptsCount + 1);
+      storageService().clear(pinAttemptsKey);
       sendEvents("next");
       await postLoginSetup();
       redirectAfterLogin(
@@ -49,6 +64,7 @@ const VerifyPin = (props) => {
     } catch (err) {
       console.log(err);
       setMpinError(err);
+      setAttemptsCount(attemptsCount + 1);
     } finally {
       setIsApiRunning(false);
     }
@@ -75,7 +91,7 @@ const VerifyPin = (props) => {
         otpProps={{
           otp: mpin,
           handleOtp: onOtpChange,
-          isDisabled: isApiRunning,
+          isDisabled: isApiRunning || attemptsCount >= 5,
           hasError: !!mpinError,
           bottomText: mpinError || bottomText
         }}
@@ -101,12 +117,13 @@ const VerifyPin = (props) => {
           disabled={isApiRunning}>
           Switch Account
         </WVButton>
-        <WVButton color="secondary" 
-        onClick={() => {
-          sendEvents("forgot_pin");
-          navigate('/forgot-pin');
-        }} 
-        disabled={isApiRunning}>
+        <WVButton
+          color="secondary" 
+          onClick={() => {
+            sendEvents("forgot_pin");
+            navigate('/forgot-pin');
+          }} 
+          disabled={isApiRunning}>
           Forgot PIN?
         </WVButton>
       </div>

@@ -10,6 +10,7 @@ import Button from "../../../common/ui/Button";
 import { nativeCallback } from "../../../utils/native_callback";
 import Checkbox from "../../../common/ui/Checkbox";
 import { navigate } from "../../../utils/functions";
+import { storageService } from "../../../utils/validators";
 
 const config = getConfig();
 class Login extends Component {
@@ -26,6 +27,7 @@ class Login extends Component {
   }
 
   componentWillMount() {
+    storageService().clear('pin-attempts');
     this.initialize();
     let { form_data } = this.state;
     form_data.code = "91";
