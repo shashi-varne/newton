@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "../common/Container";
 import { formatAmountInr, isEmpty } from "utils/validators";
 import { getPurchaseProcessData, storageConstants } from "../constants";
@@ -6,16 +6,40 @@ import Process from "./mini-components/Process";
 import { storageService } from "../../utils/validators";
 import ProgressStep from "./mini-components/ProgressStep";
 import { nativeCallback } from "../../utils/native_callback";
+import { getSummaryV2 } from "../common/api";
 
 const Purchase = (props) => {
-  const transactions = storageService().getObject(
-    storageConstants.PENDING_PURCHASE
-  );
-  if (!transactions) {
-    props.history.goBack();
-  }
+  const stateParams = props.location?.state || {};
+  const [transactions, setTransactions] = useState([]);
+  const [showSkelton, setShowSkelton] = useState(true);
   const [openProcess, setOpenProcess] = useState(false);
   const [selectedPurchase, setSelectedPurchase] = useState({});
+
+  useEffect(() => {
+    const transactionsData = storageService().getObject(
+      storageConstants.PENDING_PURCHASE
+    ) || [];
+    if (!isEmpty(transactionsData) && stateParams.fromPath === "reports") {
+      setTransactions(transactionsData);
+      setShowSkelton(false);
+    } else {
+      initialize();
+    }
+  }, []);
+
+  const initialize = async () => {
+    const result = await getSummaryV2();
+    if (!result) {
+      setShowSkelton(false);
+      return;
+    }
+    setTransactions(result.report?.pending?.invested_transactions || []);
+    storageService().setObject(
+      storageConstants.PENDING_PURCHASE,
+      result.report?.pending?.invested_transactions || []
+    );
+    setShowSkelton(false);
+  };
 
   const handleProcess = (purchased) => {
     setSelectedPurchase(purchased);
@@ -43,6 +67,7 @@ const Purchase = (props) => {
       noFooter={true}
       title="Pending Purchase"
       data-aid='reports-pending-purchase'
+      skelton={showSkelton}
     >
       <div className="report-purchase" data-aid='report-purchase'>
         {!isEmpty(transactions) &&
