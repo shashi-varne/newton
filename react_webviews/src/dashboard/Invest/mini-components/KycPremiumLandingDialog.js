@@ -15,7 +15,7 @@ const KycPremiumLandingDialog = ({
   return (
     <Dialog
       open={isOpen}
-      onClose={() => close()}
+      onClose={close}
       aria-labelledby="verification-failed-dialog"
       keepMounted
       aria-describedby="verification-failed-dialog"
@@ -25,7 +25,7 @@ const KycPremiumLandingDialog = ({
     >
       <DialogContent className="verification-failed-dialog-content kyc-premium-content" data-aid='verification-failed-dialog-content'>
         <div className="title" data-aid='dialog-title'>
-          <div className="text">{data.popup_header}</div>
+          <div className="text">{data.title}</div>
           {data.icon && (
             <img
               src={require(`assets/${productName}/${data.icon}`)}
@@ -35,7 +35,7 @@ const KycPremiumLandingDialog = ({
           )}
         </div>
         <div className="subtitle" id="subtitle" data-aid='dialog-subtitle'>
-          {data.bold_text && <b>{data.bold_text}</b>} {data.popup_message}
+          {data.boldText && <b>{data.boldText}</b>} {data.subtitle}
         </div>
         {data.status === "ground_premium" && (
           <div className="vfdc-bottom-info" data-aid='bottom-info'>
@@ -60,12 +60,12 @@ const KycPremiumLandingDialog = ({
         )}
         <div className="action">
           {!data.oneButton && (
-            <Button className="button no-bg" onClick={() => cancel()} data-aid='not-now-btn'>
+            <Button className="button no-bg" onClick={cancel} data-aid='not-now-btn'>
               NOT NOW
             </Button>
           )}
-          <Button className="button bg-full" onClick={() => handleClick()} data-aid='dialog-btn'>
-            {data.button_text}
+          <Button className="button bg-full" onClick={handleClick} data-aid='dialog-btn'>
+            {data.buttonTitle}
           </Button>
         </div>
       </DialogContent>
