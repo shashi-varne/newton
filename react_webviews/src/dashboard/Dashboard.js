@@ -42,6 +42,7 @@ import Referral from "../login_and_registration/pages/Referral/Referral.js";
 import SecondaryVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryVerification"
 import SecondaryOtpVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryOtpVerification"
 import StatusCallback from "../kyc/Native/StatusCallback";
+import ProductMarketTypes from './ProductMarketTypes';
 
 const Home = (props) => {
   const config = getConfig(); 
@@ -67,6 +68,7 @@ const Home = (props) => {
         <Route path={`${url}invest-journey`} component={InvestJourney} />
         <Route path={`${url}nps`} component={NPS} />
         <Route path={`${url}passive-index-funds`} component={PassiveIndexFunds} />
+        <Route path={`${url}product-types`} component={ProductMarketTypes} />
         <Route
           path={`${url}advanced-investing/new-fund-offers/info`}
           component={NfoInfo}
