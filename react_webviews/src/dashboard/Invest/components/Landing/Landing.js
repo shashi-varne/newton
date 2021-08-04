@@ -11,7 +11,6 @@ import KycPremiumLandingDialog from "../../mini-components/KycPremiumLandingDial
 import CampaignDialog from '../../mini-components/CampaignDialog';
 import { storageService } from 'utils/validators';
 import { SkeltonRect } from 'common/ui/Skelton';
-import WVButton from "../../../../common/ui/Button/WVButton"
 import './Landing.scss';
 import isEmpty from "lodash/isEmpty";
 import VerifyDetailDialog from "../../../../login_and_registration/components/VerifyDetailDialog";
@@ -19,7 +18,6 @@ import AccountAlreadyExistDialog from "../../../../login_and_registration/compon
 import { generateOtp } from "../../../../login_and_registration/functions";
 import { Imgc } from "../../../../common/ui/Imgc";
 import { nativeCallback } from "../../../../utils/native_callback";
-import { PATHNAME_MAPPER } from "../../../../kyc/constants";
 
 const fromLoginStates = ["/login", "/logout", "/verify-otp"]
 class Landing extends Component {

@@ -10,7 +10,8 @@ import './ProductMarketTypes.scss';
 
 
 const ProductMarketTypes = () => {
-  const productName = getConfig().productName;
+  const config = getConfig();
+  const productName = config.productName;
   const categoryLists = [
     {
       name: 'IPO',
@@ -39,7 +40,8 @@ const ProductMarketTypes = () => {
     },
   ];
   const handleOnClick = (el) => () => {
-    console.log('the val is', el.name);
+    let type = (el.name).toLowerCase();
+    window.location.href = `${config.base_url}/page/equity/tpp/${type}`;
   };
   return (
     <Container

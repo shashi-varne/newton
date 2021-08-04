@@ -641,6 +641,7 @@ export async function openStocks() {
 }
 
 export function handleStocksAndIpoCards(key) {
+  const config = getConfig();
   let { kycJourneyStatusMapperData, kycJourneyStatus, userKyc, kycButtonLoader } = this.state;
   let modalData = Object.assign({}, kycJourneyStatusMapperData);
 
@@ -663,7 +664,7 @@ export function handleStocksAndIpoCards(key) {
     }
   } else if (key === "stocks") {
     if (userKyc.equity_investment_ready || kycJourneyStatus === "complete") {
-      // Todo: handle redirection to stocks sdk
+      window.location.href = `${config.base_url}/page/equity/launchapp`
     }
   }
 
