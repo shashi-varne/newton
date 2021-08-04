@@ -115,7 +115,7 @@ function KycNative(props) {
         }
       }
     } else {
-      navigate(kycStatusData.next_state, data);
+      navigate(kycStatusData.nextState, data);
     }
   }
 
