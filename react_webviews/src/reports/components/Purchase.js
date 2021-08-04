@@ -117,6 +117,7 @@ const Purchase = (props) => {
               </div>
             );
           })}
+        {isEmpty(transactions) && <p className="TextCenter" data-aid='no-transactions-to-show'>No transactions to show</p>}
         {openProcess && (
           <Process
             isOpen={openProcess}
