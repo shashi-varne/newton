@@ -533,12 +533,12 @@ export async function openKyc() {
 }
 
 export async function setKycProductTypeAndRedirect() {
-  let { userKyc, isReadyToInvestBase, modalData } = this.state;
+  let { userKyc, isReadyToInvestBase } = this.state;
   let result;
   if (!userKyc?.mf_kyc_processed && !this.kycButtonLoader) {
-    let showLoader = "button";
+    let showLoader = true;
     await this.setLoaderInModalData(showLoader);
-    this.setState({ modalData, kycButtonLoader: showLoader })
+    this.setState({ kycButtonLoader: showLoader })
     result = await this.setProductType();
     this.setState({ userKyc: result?.kyc });
   }

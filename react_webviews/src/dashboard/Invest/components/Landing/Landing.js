@@ -180,7 +180,7 @@ class Landing extends Component {
     const config = getConfig();
     return (
       <Container
-        skelton={this.state.show_loader}
+        skelton={this.state.show_loader || kycButtonLoader}
         noFooter={true}
         title="Start Investing"
         data-aid='start-investing-screen'
