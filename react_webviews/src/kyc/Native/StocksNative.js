@@ -106,7 +106,7 @@ function Native(props) {
               }
             }
           } else {
-            navigate(kycStatusData.next_state, {
+            navigate(kycStatusData.nextState, {
               state: { 
                 fromState: "invest", 
                 ...data.state
