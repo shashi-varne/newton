@@ -606,13 +606,13 @@ const Journey = (props) => {
     var headerKey = 
       isKycDone
       ? "kycDone"
-      : isCompliant
+      : (isCompliant && !kyc.equity_enabled)
       ? "compliant"
       : dlCondition
       ? "dlFlow"
       : "default";
     var headerData = HEADER_MAPPER_DATA[headerKey];
-    if(isCompliant) {
+    if(isCompliant && !kyc.equity_enabled) {
       if (journeyStatus === "ground_premium") {
         headerData.title = "You’re eligible for premium onboarding!";
       }
