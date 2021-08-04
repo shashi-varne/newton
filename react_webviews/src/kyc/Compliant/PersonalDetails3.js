@@ -154,7 +154,7 @@ const PersonalDetails3 = (props) => {
             : form_data.occupation.toLowerCase()
           : "",
         income_range: form_data.income ? incomeMapper[form_data.income] : "",
-        "flow": 'premium onboarding'
+        "flow": !kyc.equity_enabled ? 'premium onboarding' : 'general'
       },
     };
     if (userAction === "just_set_events") {
