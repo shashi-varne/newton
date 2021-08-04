@@ -339,36 +339,6 @@
       margin: 20px 0;
     }
 
-    .vfdc-bottom-info {
-      display: -ms-flexbox;
-      display: flex;
-      -ms-flex-align: center;
-      align-items: center;
-      -ms-flex-pack: justify;
-      justify-content: space-between;
-      background-color: white;
-
-      .bottom-info-box {
-        display: -ms-flexbox;
-        display: flex;
-        padding: 0 10px 0 10px;
-
-        img {
-          margin: 0 10px 0 0px;
-        }
-
-        .bottom-info-content {
-          color: #767e86;
-          font-size: 13px;
-          font-weight: 400;
-        }
-      }
-
-      .bottom-info-mid {
-        border-left: 1px solid #d3dbe4;
-        height: 12px;
-      }
-    }
 
     .action {
       display: flex;
@@ -400,21 +370,36 @@
       }
     }
   }
+}
 
-  .kyc-premium-content {
-    .title {
-      .text {
-        margin-bottom: 30px;
-      }
+.vfdc-bottom-info {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  background-color: white;
+
+  .bottom-info-box {
+    display: -ms-flexbox;
+    display: flex;
+    padding: 0 10px 0 10px;
+
+    img {
+      margin: 0 10px 0 0px;
     }
 
-    .subtitle {
-      margin: 30px 0 10px 0;
+    .bottom-info-content {
+      color: var(--steelgrey);
+      font-size: 13px;
+      font-weight: 400;
     }
+  }
 
-    .action {
-      margin-top: 30px;
-    }
+  .bottom-info-mid {
+    border-left: 1px solid #d3dbe4;
+    height: 12px;
   }
 }
 

@@ -526,7 +526,7 @@ export async function openKyc() {
     } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity")) {
       await this.setKycProductTypeAndRedirect();
     } else {
-      this.navigate(kycStatusData.next_state, {
+      this.navigate(kycStatusData.nextState, {
         state: { fromState: "invest" },
       });
     }
@@ -629,7 +629,7 @@ export async function openStocks() {
             }
           }
         } else {
-          this.navigate(kycStatusData.next_state, {
+          this.navigate(kycStatusData.nextState, {
             state: { fromState: "invest" },
           });
         }
