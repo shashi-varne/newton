@@ -125,7 +125,7 @@ const PersonalDetails2 = (props) => {
           : "",
         "mother's_name": form_data.mother_name ? "yes" : "no",
         spouse_name: form_data.spouse_name ? "yes" : "no",
-        "flow": 'premium onboarding'
+        "flow": !kyc.equity_enabled ? 'premium onboarding' : 'general'
       },
     };
     if (userAction === "just_set_events") {

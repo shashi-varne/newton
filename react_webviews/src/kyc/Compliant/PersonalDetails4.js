@@ -163,7 +163,7 @@ const PersonalDetails4 = (props) => {
         user_action: userAction || "",
         screen_name: "nominee_details",
         add_nominee: isChecked ? "no" : "yes",
-        "flow": 'premium onboarding',
+        "flow": !kyc.equity_enabled ? 'premium onboarding' : 'general',
         // "name": form_data.name ? "yes" : "no",
         // "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
         // "relationship": form_data.relationship ? "yes" : "no",

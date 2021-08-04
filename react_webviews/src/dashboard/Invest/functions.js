@@ -360,6 +360,7 @@ export function navigate(pathname, data = {}) {
 export function initilizeKyc() {
   const config = getConfig();
   let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
+  const TRADING_ENABLED = isTradingEnabled(userKyc);
   let currentUser =
     this.state.currentUser || storageService().getObject("user") || {};
   let isCompliant = userKyc.kyc_status === "compliant" ? true : false;
@@ -367,7 +368,7 @@ export function initilizeKyc() {
   let kycJourneyStatus = getKycAppStatusData.status;
   let kycStatusData = kycStatusMapperInvest[kycJourneyStatus];
   const rejectedItems = getKycAppStatusData.rejectedItems;
-  if (isCompliant) {
+  if (isCompliant && !TRADING_ENABLED) {
     if (["init", "incomplete"].indexOf(kycJourneyStatus) !== -1) {
       kycStatusData = kycStatusMapperInvest["ground_premium"];
     }
@@ -375,7 +376,6 @@ export function initilizeKyc() {
   let isReadyToInvestBase = isReadyToInvest();
   let isEquityCompletedBase = isEquityCompleted();
   let kycJourneyStatusMapperData = kycJourneyStatus.includes("ground") ? kycStatusMapper["ground"] : kycStatusMapper[kycJourneyStatus];
-  const TRADING_ENABLED = isTradingEnabled(userKyc);
 
   this.setState({
     isCompliant,
@@ -391,7 +391,7 @@ export function initilizeKyc() {
   });
   let bottom_sheet_dialog_data_premium = {};
   let premium_onb_status = "";
-  if (isCompliant) {
+  if (isCompliant && !TRADING_ENABLED) {
     premium_onb_status = kycJourneyStatus;
     if (
       ["ground_premium", "init", "incomplete"].indexOf(kycJourneyStatus) !== -1
@@ -406,7 +406,7 @@ export function initilizeKyc() {
       !currentUser.active_investment &&
       userKyc.bank.meta_data_status === "approved"
     ) {
-      bottom_sheet_dialog_data_premium = TRADING_ENABLED ? kycStatusMapper["kyc_verified"] : kycStatusMapper["mf_complete"];
+      bottom_sheet_dialog_data_premium = kycStatusMapper["mf_complete"];
       bottom_sheet_dialog_data_premium.status = premium_onb_status;
     }
 
@@ -415,38 +415,46 @@ export function initilizeKyc() {
     //   bottom_sheet_dialog_data_premium = kycStatusMapper[premium_onb_status];
     //   bottom_sheet_dialog_data_premium.status = premium_onb_status;
     // }
-  } else {
-    let modalData = {}
-    if (["equity_activation_pending", "complete"].includes(kycJourneyStatus)) {
-      if (kycJourneyStatus === "complete") {
-        modalData = TRADING_ENABLED ? kycStatusMapper["kyc_verified"] : kycStatusMapper["mf_complete"];
-        modalData.button1Props = {
-          title: modalData.buttonTitle,
-          variant: "contained",
-          onClick: this.handleKycStatus,
-        }
-      } else {
-        modalData = kycStatusMapper[kycJourneyStatus];
-      }
-    }
 
-    if (!isEmpty(modalData)) {
-      this.setState({ modalData, openKycStatusDialog: true });
+    this.setState({ bottom_sheet_dialog_data_premium });
+    if (premium_onb_status && !isEmpty(bottom_sheet_dialog_data_premium)) {
+      let banklist = storageService().getObject("banklist");
+      if ((banklist && banklist.length) || config.code === "moneycontrol") {
+        return;
+      } else {
+        this.openPremiumOnboardBottomSheet(
+          bottom_sheet_dialog_data_premium,
+          userKyc,
+          TRADING_ENABLED
+        );
+      }
     }
   }
 
-  this.setState({ bottom_sheet_dialog_data_premium });
-  if (premium_onb_status && !isEmpty(bottom_sheet_dialog_data_premium)) {
-    let banklist = storageService().getObject("banklist");
-    if ((banklist && banklist.length) || config.code === "moneycontrol") {
-      return;
+  let modalData = {}
+  if (["equity_activation_pending", "complete"].includes(kycJourneyStatus)) {
+    if (kycJourneyStatus === "complete") {
+      if (TRADING_ENABLED) {
+        if (userKyc.equity_investment_ready) {
+          modalData = kycStatusMapper["kyc_verified"];
+        }
+      } else {
+        modalData = kycStatusMapper["mf_complete"];
+      }
+      
     } else {
-      this.openPremiumOnboardBottomSheet(
-        bottom_sheet_dialog_data_premium,
-        userKyc,
-        TRADING_ENABLED
-      );
+      modalData = kycStatusMapper[kycJourneyStatus];
     }
+
+    modalData.button1Props = {
+      title: modalData.buttonTitle,
+      variant: "contained",
+      onClick: this.handleKycStatus,
+    }
+  }
+
+  if (!isEmpty(modalData)) {
+    this.setState({ modalData, openKycStatusDialog: true });
   }
 }
 
@@ -521,10 +529,6 @@ export async function openKyc() {
           fromState: "invest",
         },
       });
-    } else if (kycJourneyStatus === "esign_pending") {
-      navigate(PATHNAME_MAPPER.kycEsign);
-    } else if (kycJourneyStatus === "fno_rejected") {
-      navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
     } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity")) {
       await this.setKycProductTypeAndRedirect();
     } else {
@@ -657,7 +661,7 @@ export function handleStocksAndIpoCards(key) {
       modalData = {
         ...modalData,
         buttonTitle: "CONTINUE",
-        onClick: this.handleIpoCardRedirection
+        handleClick: this.handleIpoCardRedirection
       }
     } else if (userKyc.equity_investment_ready || kycJourneyStatus === "complete") {
       this.handleIpoCardRedirection();
@@ -684,7 +688,7 @@ export function handleStocksAndIpoCards(key) {
     modalData.button1Props = {
       title: modalData.buttonTitle,
       variant: "contained",
-      onClick: this.handleKycStatus,
+      onClick: modalData.handleClick || this.handleKycStatus,
       showLoader: kycButtonLoader || false
     }
   }
