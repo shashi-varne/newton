@@ -40,6 +40,7 @@ export async function initialize() {
   this.handleStocksAndIpoCards = handleStocksAndIpoCards.bind(this);
   this.setKycProductTypeAndRedirect = setKycProductTypeAndRedirect.bind(this);
   this.setLoaderInModalData = setLoaderInModalData.bind(this);
+  this.handleIpoCardRedirection = handleIpoCardRedirection.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
   if ( (this.state.screenName === "invest_landing" || this.state.screenName === "sdk_landing" ) && dataSettedInsideBoot) {
     storageService().set("dataSettedInsideBoot", false);
@@ -533,12 +534,12 @@ export async function openKyc() {
 }
 
 export async function setKycProductTypeAndRedirect() {
-  let { userKyc, isReadyToInvestBase, modalData } = this.state;
+  let { userKyc, isReadyToInvestBase } = this.state;
   let result;
   if (!userKyc?.mf_kyc_processed && !this.kycButtonLoader) {
-    let showLoader = "button";
+    let showLoader = true;
     await this.setLoaderInModalData(showLoader);
-    this.setState({ modalData, kycButtonLoader: showLoader })
+    this.setState({ kycButtonLoader: showLoader })
     result = await this.setProductType();
     this.setState({ userKyc: result?.kyc });
   }
@@ -577,6 +578,10 @@ export async function setLoaderInModalData(showLoader) {
   }
   
   this.setState({ modalData })
+}
+
+export function handleIpoCardRedirection() {
+  this.navigate("/product-types")
 }
           
 export async function openStocks() {
@@ -643,16 +648,16 @@ export function handleStocksAndIpoCards(key) {
         ...modalData,
         subtitle: "This process could take upto 48 hours. We will notify you once it’s done. Meanwhile, you can explore primary market products",
         buttonTitle: "CONTINUE",
-        // handleClick: this.closeKycStatusDialog  // Todo: include logic to take user to ipo sdk for equity_activation_pending case
+        handleClick: this.handleIpoCardRedirection
       }
     } else if (kycJourneyStatus === "submitted") {
       modalData = {
         ...modalData,
-        buttonTitle: "CONTINUE"
-        // onClick:  // Todo: handle redirection to ipo sdk
+        buttonTitle: "CONTINUE",
+        onClick: this.handleIpoCardRedirection
       }
     } else if (userKyc.equity_investment_ready || kycJourneyStatus === "complete") {
-      // Todo: handle redirection to ipo sdk
+      this.handleIpoCardRedirection();
     }
   } else if (key === "stocks") {
     if (userKyc.equity_investment_ready || kycJourneyStatus === "complete") {
@@ -664,7 +669,7 @@ export function handleStocksAndIpoCards(key) {
     modalData.button1Props = {
       title: modalData.button2Title,
       variant: "outlined",
-      onClick: this.closeKycStatusDialog,
+      onClick: this.handleIpoCardRedirection,
     }
     modalData.button2Props = {
       title: modalData.buttonTitle,
