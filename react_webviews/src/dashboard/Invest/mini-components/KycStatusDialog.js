@@ -6,7 +6,7 @@ const KycStatusDialog = ({ isOpen, close, data }) => {
   const productName = getConfig().productName;
   return (
     <WVBottomSheet
-      open={isOpen}
+      isOpen={isOpen}
       onClose={close}
       title={data.title}
       subtitle={data.subtitle}

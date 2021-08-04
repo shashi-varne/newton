@@ -340,7 +340,7 @@ export const isEquityCompleted = () => {
   const kyc = storageService().getObject("kyc");
   if (isEmpty(kyc)) return false;
 
-  return (kyc.equity_application_status === "complete" && kyc.equity_sign_status === "signed");
+  return (kyc.equity_application_status === "complete" && kyc.equity_sign_status === "signed" && kyc.equity_investment_ready);
 }
 
 export const isIncompleteEquityApplication = (kyc) => {

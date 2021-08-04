@@ -28,6 +28,7 @@ import PennyFailedDialog from "../mini-components/PennyFailedDialog";
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 import internalStorage from '../common/InternalStorage';
 import { isNewIframeDesktopLayout } from "../../utils/functions"
+import { storageService } from "../../utils/validators";
 
 const config = getConfig();
 let titleText = "Enter bank account details";
@@ -70,10 +71,15 @@ const KycBankDetails = (props) => {
   const [goBackModal, setGoBackModal] = useState(false);
   const { kyc, user, isLoading } = useUserKycHook();
   const goBackPath = props.location?.state?.goBack || "";
+  const fromState = props.location?.state?.fromState || "";
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
       initialize();
+
+      if (fromState === PATHNAME_MAPPER.uploadProgress) {
+        storageService().set("bankEntryPoint", "uploadDocuments")
+      }
     }
   }, [kyc, user]);
 
@@ -351,7 +357,10 @@ const KycBankDetails = (props) => {
 
   const goBackToPath = () => {
     sendEvents("back");
-    if (goBackPath) {
+    if (fromState === PATHNAME_MAPPER.uploadProgress || (storageService().get("bankEntryPoint") === "uploadProgress")) {
+      storageService().remove("bankEntryPoint");
+      navigate(PATHNAME_MAPPER.uploadProgress);
+    } else if (goBackPath) {
       navigate(goBackPath);
     } else {
       if (kyc?.kyc_status === "non-compliant" && (kyc?.kyc_type === "manual" || kyc?.address?.meta_data?.is_nri)) {

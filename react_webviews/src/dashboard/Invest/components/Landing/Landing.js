@@ -16,6 +16,7 @@ import './Landing.scss';
 import isEmpty from "lodash/isEmpty";
 import { Imgc } from "../../../../common/ui/Imgc";
 import { nativeCallback } from "../../../../utils/native_callback";
+import { PATHNAME_MAPPER } from "../../../../kyc/constants";
 
 const fromLoginStates = ["/login", "/register", "/forgot-password", "/mobile/verify", "/logout"]
 class Landing extends Component {
@@ -107,17 +108,15 @@ class Landing extends Component {
     this.navigate(this.state.bottom_sheet_dialog_data_premium.next_state);
   };
 
-  handleKycStatus = () => {
+  handleKycStatus = async () => {
     this.sendEvents("next", "kyc_bottom_sheet");
-    let { kycJourneyStatus } = this.state;
-    if (kycJourneyStatus === "submitted") {
+    let { kycJourneyStatus, kycStatusData, tradingEnabled, userKyc } = this.state;
+    if (["submitted", "equity_activation_pending", "complete"].includes(kycJourneyStatus)) {
       this.closeKycStatusDialog();
-    } else if (kycJourneyStatus === "rejected") {
-      this.navigate("/kyc/upload/progress", {
-        state: {
-          goBack: "/invest",
-        },
-      });
+    } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity")) {
+      await this.setKycProductTypeAndRedirect();
+    } else {
+      this.navigate(kycStatusData.next_state);
     }
   };
 
@@ -328,15 +327,27 @@ class Landing extends Component {
                             Stocks & IPOs
                           </div>
                           {stocksAndIpo.map((item, index) => {
-                            return (
-                              <InvestCard
-                                data={item}
-                                key={index}
-                                handleClick={() =>
-                                  this.clickCard(item.key, item.title)
-                                }
-                              />
-                            );
+                            if (kycStatusLoader) {
+                              return (
+                                <SkeltonRect
+                                  style={{
+                                    width: '100%',
+                                    height: '170px',
+                                    marginBottom: "15px",
+                                  }}
+                                />
+                              )
+                            } else {
+                              return (
+                                <InvestCard
+                                  data={item}
+                                  key={index}
+                                  handleClick={() =>
+                                    this.clickCard(item.key, item.title)
+                                  }
+                                />
+                              );
+                            }
                           })}
                         </>
                       )}
