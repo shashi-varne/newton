@@ -4,45 +4,40 @@ import { Imgc } from '../../common/ui/Imgc';
 import WVInPageHeader from '../../common/ui/InPageHeader/WVInPageHeader';
 import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
 import WVInPageSubtitle from '../../common/ui/InPageHeader/WVInPageSubtitle';
+import { getConfig } from '../../utils/functions';
 
 import './ProductMarketTypes.scss';
 
-/// Assets
-import ipo from 'assets/fisdom/ipo.svg';
-import sgb from 'assets/fisdom/sgb.svg';
-import ncd from 'assets/fisdom/ncd.svg';
-import fpo from 'assets/fisdom/fpo.svg';
-import buyback from 'assets/fisdom/buyback.svg';
-
-const categoryLists = [
-  {
-    name: 'IPO',
-    info: 'Initial public offer',
-    icon: ipo,
-  },
-  {
-    name: 'SGB',
-    info: 'Sovereign gold bonds',
-    icon: sgb,
-  },
-  {
-    name: 'NCD',
-    info: 'Non convertible debentures',
-    icon: ncd,
-  },
-  {
-    name: 'FPO',
-    info: 'Follow-on public offer',
-    icon: fpo,
-  },
-  {
-    name: 'Buyback',
-    info: 'Participate in share re-purchases',
-    icon: buyback,
-  },
-];
 
 const ProductMarketTypes = () => {
+  const productName = getConfig().productName;
+  const categoryLists = [
+    {
+      name: 'IPO',
+      info: 'Initial public offer',
+      icon: require(`assets/${productName}/ipo.svg`),
+    },
+    {
+      name: 'SGB',
+      info: 'Sovereign gold bonds',
+      icon: require(`assets/${productName}/sgb.svg`),
+    },
+    {
+      name: 'NCD',
+      info: 'Non convertible debentures',
+      icon: require(`assets/${productName}/ncd.svg`),
+    },
+    {
+      name: 'FPO',
+      info: 'Follow-on public offer',
+      icon: require(`assets/${productName}/fpo.svg`),
+    },
+    {
+      name: 'Buyback',
+      info: 'Participate in share re-purchases',
+      icon: require(`assets/${productName}/buyback.svg`),
+    },
+  ];
   const handleOnClick = (el) => () => {
     console.log('the val is', el.name);
   };
