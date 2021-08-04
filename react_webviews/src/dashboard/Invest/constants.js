@@ -350,9 +350,9 @@ export const kycStatusMapper = {
   },
   mf_complete: {
     color: "#ffa60b",
-    popup_header: "Congratulations! KYC verified",
-    popup_message: "You're ready to invest in Mutual Funds",
-    button_text: "START INVESTING",
+    title: "Congratulations! KYC verified",
+    subtitle: "You're ready to invest in Mutual Funds",
+    buttonTitle: "START INVESTING",
     icon: "icn_kyc_completed.svg",
     nextState: "/invest",
   },
@@ -380,7 +380,7 @@ export const kycStatusMapper = {
     subtitle: "Meanwhile, you can invest in more than 5000+ mutual funds",
     buttonTitle: "OK",
     oneButton: true,
-    landing_text: "UNDER PROCESS",
+    landingText: "UNDER PROCESS",
     icon: "icn_kyc_doc_verification.svg",
   },
   kyc_verified: {

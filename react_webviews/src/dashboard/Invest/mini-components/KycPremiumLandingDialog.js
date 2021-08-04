@@ -1,8 +1,7 @@
 import React from "react";
-import Dialog, { DialogContent } from "material-ui/Dialog";
 import { getConfig } from "utils/functions";
-import Button from "@material-ui/core/Button";
-import './mini-components.scss';
+import "./mini-components.scss";
+import WVBottomSheet from "../../../common/ui/BottomSheet/WVBottomSheet";
 
 const KycPremiumLandingDialog = ({
   isOpen,
@@ -12,64 +11,64 @@ const KycPremiumLandingDialog = ({
   data,
 }) => {
   const productName = getConfig().productName;
+  const subtitle = (
+    <>
+      {data.boldText && <b>{data.boldText}</b>} {data.subtitle}
+    </>
+  );
+  let button1Props = {};
+  let button2Props = {};
+  const defaultButtonProps = {
+    variant: "contained",
+    title: data.title,
+    onClick: handleClick,
+  };
+  if (data.oneButton) {
+    button1Props = defaultButtonProps;
+  } else {
+    button1Props = {
+      variant: "outlined",
+      title: "NOT NOW",
+      onClick: cancel,
+    };
+    button2Props = defaultButtonProps;
+  }
   return (
-    <Dialog
-      open={isOpen}
+    <WVBottomSheet
+      isOpen={isOpen}
       onClose={close}
-      aria-labelledby="verification-failed-dialog"
-      keepMounted
-      aria-describedby="verification-failed-dialog"
-      className="verification-failed-dialog"
-      id="invest-bottom-dialog"
-      data-aid='invest-bottom-dialog'
+      title={data.title}
+      subtitle={subtitle}
+      image={require(`assets/${productName}/${data.icon}`)}
+      button1Props={button1Props}
+      button2Props={button2Props}
     >
-      <DialogContent className="verification-failed-dialog-content kyc-premium-content" data-aid='verification-failed-dialog-content'>
-        <div className="title" data-aid='dialog-title'>
-          <div className="text">{data.title}</div>
-          {data.icon && (
+      {data.status === "ground_premium" && (
+        <div className="vfdc-bottom-info" data-aid="bottom-info">
+          <div className="bottom-info-box">
             <img
-              src={require(`assets/${productName}/${data.icon}`)}
+              src={require(`assets/${productName}/ic_instant.svg`)}
               alt=""
               className="img"
             />
-          )}
-        </div>
-        <div className="subtitle" id="subtitle" data-aid='dialog-subtitle'>
-          {data.boldText && <b>{data.boldText}</b>} {data.subtitle}
-        </div>
-        {data.status === "ground_premium" && (
-          <div className="vfdc-bottom-info" data-aid='bottom-info'>
-            <div className="bottom-info-box">
-              <img
-                src={require(`assets/${productName}/ic_instant.svg`)}
-                alt=""
-                className="img"
-              />
-              <div className="bottom-info-content" data-aid='instant-investment'>Instant investment</div>
-            </div>
-            <div className="bottom-info-mid"></div>
-            <div className="bottom-info-box">
-              <img
-                src={require(`assets/${productName}/ic_no_doc.svg`)}
-                alt=""
-                className="img"
-              />
-              <div className="bottom-info-content" data-aid='no-document-asked'>No document asked</div>
+            <div className="bottom-info-content" data-aid="instant-investment">
+              Instant investment
             </div>
           </div>
-        )}
-        <div className="action">
-          {!data.oneButton && (
-            <Button className="button no-bg" onClick={cancel} data-aid='not-now-btn'>
-              NOT NOW
-            </Button>
-          )}
-          <Button className="button bg-full" onClick={handleClick} data-aid='dialog-btn'>
-            {data.buttonTitle}
-          </Button>
+          <div className="bottom-info-mid"></div>
+          <div className="bottom-info-box">
+            <img
+              src={require(`assets/${productName}/ic_no_doc.svg`)}
+              alt=""
+              className="img"
+            />
+            <div className="bottom-info-content" data-aid="no-document-asked">
+              No document asked
+            </div>
+          </div>
         </div>
-      </DialogContent>
-    </Dialog>
+      )}
+    </WVBottomSheet>
   );
 };
 
