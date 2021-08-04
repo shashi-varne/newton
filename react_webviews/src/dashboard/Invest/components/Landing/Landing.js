@@ -100,12 +100,12 @@ class Landing extends Component {
   handleKycPremiumLanding = () => {
     if (
       this.state.screenName === "invest_landing" &&
-      this.state.bottom_sheet_dialog_data_premium.next_state === "/invest"
+      this.state.bottom_sheet_dialog_data_premium.nextState === "/invest"
     ) {
       this.closeKycPremiumLandingDialog();
       return;
     }
-    this.navigate(this.state.bottom_sheet_dialog_data_premium.next_state);
+    this.navigate(this.state.bottom_sheet_dialog_data_premium.nextState);
   };
 
   handleKycStatus = async () => {
@@ -116,7 +116,7 @@ class Landing extends Component {
     } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity")) {
       await this.setKycProductTypeAndRedirect();
     } else {
-      this.navigate(kycStatusData.next_state);
+      this.navigate(kycStatusData.nextState);
     }
   };
 

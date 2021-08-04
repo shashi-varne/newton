@@ -354,7 +354,7 @@ export const kycStatusMapper = {
     popup_message: "You're ready to invest in Mutual Funds",
     button_text: "START INVESTING",
     icon: "icn_kyc_completed.svg",
-    next_state: "/invest",
+    nextState: "/invest",
   },
   esign_pending: {
     color: "#ffa60b",
@@ -398,43 +398,43 @@ export const kycStatusMapperInvest = {
     icon: "ic_kyc_incomplete.svg",
     title: "Are you investment ready?",
     subtitle: "Check your KYC status",
-    next_state: "/kyc/journey",
+    nextState: "/kyc/journey",
   },
   ground: {
     icon: "ic_kyc_incomplete.svg",
     title: "Are you investment ready?",
     subtitle: "Check your KYC status",
-    next_state: "/kyc/home",
+    nextState: "/kyc/home",
   },
   ground_premium: {
     icon: "ic_kyc_incomplete.svg",
     title: "Premium onboarding",
     subtitle: "No documentation  |  Instant investment",
-    next_state: "/kyc/journey",
+    nextState: "/kyc/journey",
   },
   ground_pan: {
     icon: "ic_kyc_incomplete.svg",
     title: "Complete your KYC",
     subtitle: "You’re just a few steps away!",
-    next_state: "/kyc/journey"
+    nextState: "/kyc/journey"
   },
   ground_aadhaar: {
     icon: "ic_kyc_incomplete.svg",
     title: "Complete your KYC",
     subtitle: "You’re just a few steps away!",
-    next_state: "/kyc/journey",
+    nextState: "/kyc/journey",
   },
   incomplete: {
     icon: "ic_kyc_incomplete.svg",
     title: "Complete your KYC",
     subtitle: "You’re just a few steps away!",
-    next_state: "/kyc/journey",
+    nextState: "/kyc/journey",
   },
   rejected: {
     icon: "ic_kyc_rejected.svg",
     title: "KYC application",
     subtitle: "REJECTED",
-    next_state: "/kyc/upload/progress",
+    nextState: "/kyc/upload/progress",
     addPoint: true,
     subTitleClass: "kyc-rejected",
     subtitleColor: "#D0021B"
@@ -443,7 +443,7 @@ export const kycStatusMapperInvest = {
     icon: "ic_kyc_rejected.svg",
     title: "F&O verification",
     subtitle: "DOCUMENT REJECTED",
-    next_state: "/kyc/upload/fno-income-proof",
+    nextState: "/kyc/upload/fno-income-proof",
     addPoint: true,
     subTitleClass: "kyc-rejected",
     subtitleColor: "#D0021B"
@@ -452,7 +452,7 @@ export const kycStatusMapperInvest = {
     icon: "ic_kyc_under_process.svg",
     title: "KYC application",
     subtitle: "IN-PROGRESS",
-    next_state: "/kyc-esign/nsdl",
+    nextState: "/kyc-esign/nsdl",
     addPoint: true,
     subTitleClass: "kyc-submitted",
     subtitleColor: "#B39712"
@@ -461,7 +461,7 @@ export const kycStatusMapperInvest = {
     icon: "ic_kyc_complete.svg",
     title: "You’re ready to invest in mutual funds",
     subtitle: "UPGRAGE ACCOUNT",
-    next_state: "/kyc/account-info",
+    nextState: "/kyc/account-info",
     addPoint: true,
     subTitleClass: "kyc-complete",
     subtitleColor: "#35CB5D"
@@ -470,7 +470,7 @@ export const kycStatusMapperInvest = {
     icon: "ic_kyc_complete.svg",
     title: "KYC application",
     subtitle: "COMPLETE_ESIGN",
-    next_state: "/kyc-esign/info",
+    nextState: "/kyc-esign/info",
     addPoint: true,
     subTitleClass: "kyc-complete",
     subtitleColor: "#35CB5D"
@@ -479,7 +479,7 @@ export const kycStatusMapperInvest = {
     icon: "ic_kyc_under_process.svg",
     title: "You’re ready to invest in mutual funds",
     subtitle: "VERIFYING TRADING A/C",
-    next_state: "/kyc-esign/nsdl",
+    nextState: "/kyc-esign/nsdl",
     addPoint: true,
     subTitleClass: "kyc-submitted",
     subtitleColor: "#B39712"
