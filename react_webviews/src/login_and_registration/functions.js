@@ -222,11 +222,11 @@ export async function triggerOtpApi(body, loginType) {
         };
         storageService().setObject("user_promo", item);
       }
-    }
-     toast(result?.message || result?.error || errorMessage);
+      toast(result?.error || result?.message || errorMessage);
+    } else throw result?.error || result?.message || errorMessage;
   } catch (error) {
     console.log(error);
-    toast(errorMessage);
+    toast(error);
   } finally {
     this.setState({ isApiRunning: false });
   }
@@ -253,11 +253,10 @@ export async function initiateOtpApi(body, loginType) {
         },
       });
 
-    } 
-    toast(result?.message || result?.error || errorMessage);
+    } else throw result?.error || result?.message || errorMessage
   } catch (error) {
     console.log(error);
-    toast(errorMessage);
+    toast(error);
   } finally {
     this.setState({ isApiRunning: false });
   }
@@ -433,15 +432,16 @@ export async function otpVerification(body) {
       } else {
         this.redirectAfterLogin(result, user);
       }
+      toast(result?.message)
     } else {
       if (result.error === "Wrong OTP is Entered") {
         this.setState({ isWrongOtp: true })
       }
-      toast(result.message || result.error || errorMessage);
+       throw result.error || result.message || errorMessage;
     }
   } catch (error) {
     console.log(error);
-    toast(errorMessage);
+    toast(error);
   } finally {
     this.setState({ isApiRunning: false });
   }
@@ -475,11 +475,11 @@ export async function resendOtp(otp_id) {
       this.setState({ isResendOtpApiRunning: false });
       toast(result.message || "Success!");
     } else {
-      toast(result.message || result.error || errorMessage);
+      throw result.error || result.message || errorMessage;
     }
   } catch (error) {
     console.log(error);
-    toast(errorMessage);
+    toast(error);
   } finally {
     this.setState({ isResendOtpApiRunning: false });
   }
@@ -494,11 +494,11 @@ export async function resendLoginOtp(resend_url) {
       this.setState({ isApiRunning: false });
       toast(result.message || "Success!");
     } else {
-      toast(result.message || result.error || errorMessage);
+      throw result.error || result.message || errorMessage;
     }
   } catch (error) {
     console.log(error);
-    toast(errorMessage);
+    toast(error);
   } finally {
     this.setState({ isResendOtpApiRunning: false });
   }
