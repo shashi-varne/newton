@@ -65,7 +65,7 @@ export const PATHNAME_MAPPER = {
   communicationDetails: '/kyc/communication-details',
   selfieSteps: '/kyc/upload/selfie-steps',
   stocksStatus: '/kyc/stocks-status',
-  accountInfo: '/kyc/account-info',
+  tradingInfo: '/kyc/account-info',
   documentVerification: '/kyc/document-verification',
 }
 

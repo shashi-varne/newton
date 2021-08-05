@@ -194,7 +194,7 @@ const KycBankDetails = (props) => {
   const handleOtherPlatformNavigation = () => {
     if (userType === "compliant") {
       if (isEdit) navigate(PATHNAME_MAPPER.journey);
-      else navigate(PATHNAME_MAPPER.accountInfo)
+      else navigate(PATHNAME_MAPPER.tradingInfo)
     } else {
       if (dl_flow) {
         const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
@@ -203,7 +203,7 @@ const KycBankDetails = (props) => {
             state: { goBack: PATHNAME_MAPPER.journey }
           });
         } else {
-          navigate(PATHNAME_MAPPER.accountInfo);
+          navigate(PATHNAME_MAPPER.tradingInfo);
         }
       } else {
         navigate(PATHNAME_MAPPER.uploadProgress);
