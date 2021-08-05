@@ -452,9 +452,6 @@ const CommunicationDetails = (props) => {
         otp: "",
         otpId: result.otp_id,
       });
-      if (communicationType === "mobile" && formData.whatsappConsent) {
-        await sendWhatsappConsent(body);
-      }
     } catch (err) {
       console.log(err);
       toast(err.message)
