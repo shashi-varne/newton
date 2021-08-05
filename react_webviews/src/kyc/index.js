@@ -351,7 +351,7 @@ const Kyc = (props) => {
         />
         <Route 
           exact 
-          path={`${url}/account-info`} 
+          path={`${url}/trading-info`} 
           component={AccountInfo} 
         />
         <Route 

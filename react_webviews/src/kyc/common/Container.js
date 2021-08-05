@@ -86,7 +86,7 @@ class Container extends Component {
           case "/kyc/approved/banks/doc":
           case "/kyc/journey":
           case "/kyc/nri-error":
-          case "/kyc/account-info":
+          case "/kyc/trading-info":
           case "/kyc/stocks-status":
           case "/kyc/upload/progress":
             nativeCallback({ action: "exit_web" });

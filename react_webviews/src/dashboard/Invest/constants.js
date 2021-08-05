@@ -461,7 +461,7 @@ export const kycStatusMapperInvest = {
     icon: "ic_kyc_complete.svg",
     title: "You’re ready to invest in mutual funds",
     subtitle: "UPGRAGE ACCOUNT",
-    nextState: "/kyc/account-info",
+    nextState: "/kyc/trading-info",
     addPoint: true,
     subTitleClass: "kyc-complete",
     subtitleColor: "#35CB5D"
