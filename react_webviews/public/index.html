@@ -165,6 +165,12 @@
         window.sessionStorage.setItem('base_href', myBaseHrefUrl);
       }
 
+      if(pathname.indexOf('webapp') !== -1) {
+        var myBaseHrefUrl = '/webapp/';
+        myBaseHref.href = myBaseHrefUrl;
+        window.sessionStorage.setItem('base_href', myBaseHrefUrl);
+      }
+
     </script>
 
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
