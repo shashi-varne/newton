@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import Container from "../../common/Container";
 import Checkbox from "../../../common/ui/Checkbox";
@@ -9,6 +9,7 @@ import { PATHNAME_MAPPER } from "../../constants";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import Toast from "../../../common/ui/Toast";
 import { nativeCallback } from "../../../utils/native_callback";
+import { formatAmountInr } from "../../../utils/validators";
 
 const config = getConfig();
 const productName = config.productName;
@@ -26,11 +27,76 @@ const BENEFITS = [
     text: "Get the best investment experience",
   },
 ];
+
+const getEquityChargesData = (equityChargesData={}) => {
+  return [
+    {
+      title: "Fees and charges",
+      list: [
+        {
+          name: "Account opening charges",
+          subText: "(one-time fee)",
+          value: `${formatAmountInr(equityChargesData.account_opening?.charges)}/yr + GST`,
+          message: equityChargesData.account_opening?.actual_charges,
+          lineStroke: true,
+        },
+        {
+          name: "Platform charges",
+          value: `${formatAmountInr(equityChargesData.platform?.charges)}/yr + GST`,
+          message: equityChargesData.platform?.actual_charges,
+          lineStroke: true,
+        }
+      ]
+    },
+    {
+      title: "Brokerages",
+      list: [
+        {
+          name: "Delivery",
+          value: `${equityChargesData.brokerage_delivery?.percentage}% or min ${formatAmountInr(equityChargesData.brokerage_delivery?.rupees)}/-`,
+          subValue: "on transaction value"
+        },
+        {
+          name: "Intraday",
+          value: `${equityChargesData.brokerage_intraday?.percentage}% or min ${formatAmountInr(equityChargesData.brokerage_intraday?.rupees)}/-`,
+          subValue: "on transaction value"
+        },
+        {
+          name: "Futures",
+          value: `Flat ${formatAmountInr(equityChargesData.brokerage_future?.rupees)} per lot`,
+          subValue: "on executed order"
+        },
+        {
+          name: "Options",
+          value: `Flat ${formatAmountInr(equityChargesData.brokerage_options?.rupees)} per lot`,
+          subValue: "on executed order"
+        }
+      ]
+    },
+  ];
+}
+
 const AccountInfo = (props) => {
   const navigate = navigateFunc.bind(props);
   const [checkTermsAndConditions, setCheckTermsAndConditions] = useState(true);
+  const [selectedIndexs, setSelectedIndexs] = useState([0]);
+  const [equityChargesData, setEquityChargesData] = useState([])
   const { kyc, isLoading } = useUserKycHook();
   const userType = kyc?.kyc_status;
+
+  useEffect(() => {
+    setEquityChargesData(getEquityChargesData(kyc.equity_account_charges))
+  }, [kyc])
+
+  const handleTiles = (index) => () => {
+    let newValues = []
+    if(selectedIndexs?.includes(index)) {
+      newValues = selectedIndexs.filter(el => el !== index) || [];
+    } else {
+      newValues = [...selectedIndexs, index];
+    }
+    setSelectedIndexs(newValues);
+  }
   
   const handleCheckBox = () => {
     setCheckTermsAndConditions(!checkTermsAndConditions);
@@ -117,28 +183,17 @@ const AccountInfo = (props) => {
               })}
             </div>
           </div>
-          <div>
-            <div className="generic-page-title" data-aid='kyc-free-charges'>Fees & charges</div>
-            <div className="kaim-fees-info" data-aid='kyc-opening-charges'>
-              <div className="kaim-fees-info-text">
-                <div>Account opening charges</div>
-                <div className="kaim-fees-info-subtext">(one-time fee)</div>
-              </div>
-              <div>
-                <div className="kaim-no-fees-text1">₹ 250/yr+ GST</div>
-                <div className="kaim-no-fees-text2">FREE</div>
-              </div>
-            </div>
-            <div className="kaim-fees-info" data-aid='kyc-platform-charges'>
-              <div className="kaim-fees-info-text">
-                <div>Platform charges</div>
-              </div>
-              <div>
-                <div className="kaim-no-fees-text1">₹ 250/yr+ GST</div>
-                <div className="kaim-no-fees-text2">FREE</div>
-              </div>
-            </div>
-          </div>
+          {equityChargesData.map((data, index) => {
+            return (
+              <AccountAndBrokerageCharges
+                {...data}
+                open={selectedIndexs.includes(index)}
+                key={index}
+                onClick={handleTiles(index)}
+              />
+            );
+          })}
+          <div className="line-divider"/>
           <div className="kaim-terms" data-aid='kaim-terms'>
             <Checkbox
               checked={checkTermsAndConditions}
@@ -193,3 +248,52 @@ const AccountInfo = (props) => {
 };
 
 export default AccountInfo;
+
+const AccountAndBrokerageCharges = ({open, onClick, ...props }) => {
+  return (
+    <div className="account-and-brokerage-charges" onClick={onClick}>
+      <div className="flex-between-center">
+        <div className="generic-page-title" data-aid="kyc-free-charges">
+          {props.title}
+        </div>
+        <img
+          alt=""
+          src={require(`assets/${open ? `plus_icon` : `minus_icon`}.svg`)}
+        />
+      </div>
+      {open &&
+        props?.list?.map((data, idx) => {
+          return (
+            <div
+              className="kaim-fees-info"
+              data-aid="kyc-opening-charges"
+              key={idx}
+            >
+              <div className="kaim-fees-info-text">
+                <div>{data.name}</div>
+                <div className="kaim-fees-info-subtext">{data.subText}</div>
+              </div>
+              <div>
+                <div
+                  className="kaim-no-fees-text1"
+                  style={{
+                    textDecorationLine: data.lineStroke
+                      ? "line-through"
+                      : "none",
+                  }}
+                >
+                  {data.value}
+                </div>
+                {data.message && (
+                  <div className="kaim-no-fees-text2">{data.message}</div>
+                )}
+                {data.subValue && (
+                  <div className="kaim-fees-info-subtext">{data.subValue}</div>
+                )}
+              </div>
+            </div>
+          );
+        })}
+    </div>
+  );
+};
