@@ -1,13 +1,10 @@
 import React from 'react';
 import Container from '../common/Container';
-import { Imgc } from '../../common/ui/Imgc';
 import WVInPageHeader from '../../common/ui/InPageHeader/WVInPageHeader';
 import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
 import WVInPageSubtitle from '../../common/ui/InPageHeader/WVInPageSubtitle';
+import MarketProductCard from '../mini-components/MarketProductCard';
 import { getConfig } from '../../utils/functions';
-
-import './ProductMarketTypes.scss';
-
 
 const ProductMarketTypes = () => {
   const productName = getConfig().productName;
@@ -54,16 +51,7 @@ const ProductMarketTypes = () => {
         <WVInPageSubtitle>Market’s latest enteries</WVInPageSubtitle>
       </WVInPageHeader>
       {categoryLists?.map((el, idx) => (
-        <div key={idx} className='category-block' onClick={handleOnClick(el)}>
-          <div className='image-wrapper'>
-            <Imgc src={el.icon} alt={el.name} />
-          </div>
-          <div className='content-wrapper'>
-            <div className='category-name'>{el.name}</div>
-            <div className='category-fullform'>{el.info}</div>
-            <div className='category-divider' />
-          </div>
-        </div>
+        <MarketProductCard key={idx} {...el} onClick={handleOnClick(el)} />
       ))}
     </Container>
   );
