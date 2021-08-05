@@ -60,11 +60,15 @@ export class SecondaryOtpVerification extends Component {
   };
 
   secondaryOtpNavigate = () => {
+    let value = this.state.value;
+    if (value?.includes("+91|")) {
+      value = this.state.value.slice(-10);
+    }
     this.sendEvents("edit")
     this.navigate('/secondary-verification', {
       state: {
         communicationType: this.state.communicationType,
-        contactValue: this.state.value,
+        contactValue: value,
         edit: true,
       }
     })
