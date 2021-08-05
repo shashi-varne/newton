@@ -43,7 +43,10 @@ class DigiStatus extends Component {
         dl_flow = true;
       }
 
-      if (user.pin_status !== "pin_setup_complete") {
+      if (
+        user.pin_status !== "pin_setup_complete" &&
+        kyc.kyc_product_type === 'equity'
+        ) {
         this.setState({ set2faPin: true })
       }
 
@@ -67,6 +70,7 @@ class DigiStatus extends Component {
   };
 
   handleClick = () => {
+    const config = getConfig();
     const {dl_flow, show_note} = this.state;
     if (dl_flow && !show_note) {
       this.sendEvents('next');
@@ -74,12 +78,24 @@ class DigiStatus extends Component {
       this.sendEvents('home');
     }
     if (this.state.set2faPin) {
-      this.navigate("/set-fisdom-pin/kyc-complete");
-    }
-    if (getConfig().isNative) {
-      nativeCallback({ action: 'exit_web' });
+      if (config.isNative) {
+        nativeCallback({
+          action: 'open_module',
+          message: {
+            action_url: "https://fis.do/m/module?action_type=native&native_module=account%2Fsetup_2fa"
+          }
+        });
+        return nativeCallback({ action: 'exit_web' });
+        // TODO: Test native behaviour for this code
+      } else {
+        return this.navigate("/set-fisdom-pin/kyc-complete");
+      }
     } else {
-      this.navigate("/invest");
+      if (config.isNative) {
+        nativeCallback({ action: 'exit_web' });
+      } else {
+        this.navigate("/invest");
+      }
     }
   };
 
@@ -186,7 +202,7 @@ class DigiStatus extends Component {
     }
 
   render() {
-    let { show_loader, skelton, dl_flow, show_note, kyc, set2faPin, productName } = this.state;
+    const { show_loader, skelton, dl_flow, show_note, kyc, set2faPin, productName } = this.state;
     const { status = "failed" } = this.state.params;
     const headerData = {
       icon: "close",

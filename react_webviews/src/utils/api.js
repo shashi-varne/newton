@@ -61,7 +61,7 @@ class Api {
         }
 
         if (response.data.pfwstatus_code === 416) {
-          return nativeCallback({ action: '2fa_required' });
+          return nativeCallback({ action: '2fa_expired' });
           // return response.data;
         }
 
