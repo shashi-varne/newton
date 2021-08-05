@@ -30,9 +30,9 @@ export function initialize() {
   let { referrer = "" } = main_query_params;
 
   let redirectUrl = encodeURIComponent(`${basePath}/${config.searchParams}`);
-  if(isAuthenticatedUser(this.props)) {
-    return;
-  }
+  // if(isAuthenticatedUser(this.props)) {
+  //   return;
+  // }
 
   const partners = [
     "hbl",

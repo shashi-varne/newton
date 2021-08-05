@@ -29,6 +29,7 @@ import LoginContainer from './login_and_registration/components/LoginContainer';
 import PartnerAuthentication from './login_and_registration/pages/Authentication';
 import Prepare from './dashboard/Invest/components/SdkLanding/Prepare';
 import { ThemeProvider } from './utils/ThemeContext';
+import UnAuthenticatedRoute from './common/components/UnAuthenticatedRoute.js';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -103,7 +104,7 @@ const App = () => {
             <Switch>
               <Route path="/iw-dashboard" component={InternalWealthDashboard} />
               <Route path='/w-report' component={WealthReport} />
-              <Route
+              <UnAuthenticatedRoute
                 path={[
                   '/login',
                   '/forgot-pin'
@@ -111,10 +112,10 @@ const App = () => {
                 component={LoginContainer}
               />
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />
-              <Route path="/partner-authentication/:partnerCode" component={PartnerAuthentication} />
+              <UnAuthenticatedRoute path="/partner-authentication/:partnerCode" component={PartnerAuthentication} />
               <Route path='/logout' component={Logout} />
               <Route path='/component-test' component={ComponentTest} />
-              <Route path="/prepare" component={Prepare} />
+              <UnAuthenticatedRoute path="/prepare" component={Prepare} />
               {
                 isMobileDevice || iframe ?
                 <Route component={Feature}/>:

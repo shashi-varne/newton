@@ -17,9 +17,9 @@ const PartnerAuthentication = (props) => {
   }, []);
 
   const initialize = async () => {
-    if(isAuthenticatedUser(props)) {
-      return;
-    }
+    // if(isAuthenticatedUser(props)) {
+    //   return;
+    // }
     try {
       const result = await partnerAuthentication({
         partnerCode,

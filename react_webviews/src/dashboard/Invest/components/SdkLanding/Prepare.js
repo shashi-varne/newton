@@ -15,7 +15,7 @@ class Prepare extends Component {
   }
 
   componentDidMount = () => {
-    isAuthenticatedUser(this.props);
+    // isAuthenticatedUser(this.props);
   }
 
   handleCard = (path) => () => {
