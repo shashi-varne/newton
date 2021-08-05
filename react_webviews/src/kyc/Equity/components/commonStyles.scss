@@ -130,6 +130,12 @@
       border-top: 1px solid var(--linkwater);
       padding: 15px 0;
       cursor: pointer;
+
+      .aabc-title {
+        font-size: 13px;
+        color: var(--gunmetal);
+        font-weight: 500;
+      }
     }
 
     .kaim-fees-info {

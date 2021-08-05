@@ -253,7 +253,7 @@ const AccountAndBrokerageCharges = ({open, onClick, ...props }) => {
   return (
     <div className="account-and-brokerage-charges" onClick={onClick}>
       <div className="flex-between-center">
-        <div className="generic-page-title" data-aid="kyc-free-charges">
+        <div className="aabc-title" data-aid="kyc-free-charges">
           {props.title}
         </div>
         <img
