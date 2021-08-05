@@ -146,7 +146,7 @@ export const getPlatformConfig = () => {
 export const getConfig = () => {
   let main_pathname = window.location.pathname;
   let main_query_params = getUrlParams();
-  let { base_url = "https://vishnu-dot-plutus-staging.appspot.com"  } = main_query_params;
+  let { base_url = ""  } = main_query_params;
   let origin = window.location.origin;
   let generic_callback = true;
 
@@ -157,6 +157,8 @@ export const getConfig = () => {
   let base_url_default = '';
   
   const isStaging = origin.indexOf('plutus-web-staging') >= 0;
+  const isFisdomStaging = origin.indexOf('fisdomapp.staging.finwizard.co.in') >= 0;
+  const isFinityStaging = origin.indexOf('finityapp.staging.finwizard.co.in') >= 0;
   const isLocal = origin.indexOf('localhost') >=0;
 
   if(base_href) {
@@ -175,6 +177,14 @@ export const getConfig = () => {
     // change server url here for local and staging url builds (Not commit id one's)
     if (isStaging || isLocal) {
       base_url_default = "https://anandb-dot-plutus-staging.appspot.com";
+    }
+
+    if(isFisdomStaging) {
+      base_url_default = 'https://fisdomapp.staging.finwizard.co.in';
+    }
+  
+    if(isFinityStaging) {
+      base_url_default = 'https://finityapp.staging.finwizard.co.in';
     }
   }
   
