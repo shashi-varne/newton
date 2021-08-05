@@ -237,6 +237,7 @@ export async function initiateOtpApi(body, loginType) {
   formData.append("auth_type", loginType);
   formData.append("auth_value", body.auth_value);
   formData.append("Content-Type", "application/x-www-form-urlencoded")   // [ "multipart/form-data" ]
+  formData.append("user_whatsapp_consent", body?.user_whatsapp_consent);
   try {
     const res = await Api.post(`/api/user/login/v4/initiate`, formData)
     const { result, status_code: status } = res.pfwresponse;
@@ -249,7 +250,6 @@ export async function initiateOtpApi(body, loginType) {
           communicationType: loginType,
           verify_url: result?.verify_url,
           resend_url: result?.resend_url,
-          user_whatsapp_consent: body?.user_whatsapp_consent || '',
         },
       });
 
