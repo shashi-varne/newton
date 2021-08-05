@@ -127,7 +127,7 @@
     }
 
     .account-and-brokerage-charges {
-      border-top: 1px solid var(--linkwater);
+      border-top: 1px solid #D6D6D6;
       padding: 15px 0;
       cursor: pointer;
 
@@ -173,8 +173,11 @@
 
     .line-divider {
       height: 1px;
-      width: 100%;
-      background: var(--linkwater);
+      background: #D6D6D6;
+    }
+
+    .bottom-line-divider {
+      margin: 40px -20px 20px;
     }
 
     .kaim-terms {

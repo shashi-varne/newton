@@ -3,7 +3,7 @@ import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import Container from "../../common/Container";
 import Checkbox from "../../../common/ui/Checkbox";
 import "./commonStyles.scss";
-import SecurityDisclaimer from "../../../common/ui/SecurityDisclaimer/WVSecurityDisclaimer";
+import SebiRegistrationFooter from "../../../common/ui/SebiRegistrationFooter/WVSebiRegistrationFooter";
 import { isEmailAndMobileVerified } from "../../common/functions";
 import { PATHNAME_MAPPER } from "../../constants";
 import useUserKycHook from "../../common/hooks/userKycHook";
@@ -240,7 +240,8 @@ const AccountInfo = (props) => {
               )}
             </div>
           </div>
-          <SecurityDisclaimer />
+          <div className="line-divider bottom-line-divider" />
+          <SebiRegistrationFooter />
         </main>
       </div>
     </Container>
