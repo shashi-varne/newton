@@ -60,6 +60,10 @@ const PrimaryMarketProducts = (props) => {
     }
   };
 
+  const handleFaqs = () => {
+    navigate("/help");
+  };
+
   return (
     <Container
       data-aid="market-products-screen"
@@ -105,7 +109,7 @@ const PrimaryMarketProducts = (props) => {
           }}
         />
         <div className="pmp-catergories-title">Things to know</div>
-        <div className="pmp-faq flex justify-start align-center">
+        <div className="pmp-faq flex justify-start align-center" onClick={handleFaqs} >
           <Imgc
             src={require(`assets/${productName}/ic_document_copy.svg`)}
             alt="faq"
