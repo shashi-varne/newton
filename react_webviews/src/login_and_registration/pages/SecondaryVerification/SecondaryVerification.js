@@ -130,7 +130,8 @@ class SecondaryVerification extends Component {
 
     editDetailsAccountAlreadyExists = () => {
         this.setState({
-            accountAlreadyExists: false
+            accountAlreadyExists: false,
+            isEdit: true,
         })
     };
 
