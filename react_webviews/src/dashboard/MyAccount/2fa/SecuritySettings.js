@@ -44,12 +44,11 @@ const SecuritySettings = (props) => {
             headerData={{ goBack: () => navigate("/my-account") }}
         >
             <div className="security-settings">
-                <>
-                    <Imgc
-                        src={require(`assets/group_12.svg`)}
-                        alt=""
-                        className="img-center bottom-space" />
-                </>
+                <Imgc
+                    src={require(`assets/group_12.svg`)}
+                    alt=""
+                    className="img-center bottom-space"
+                />
                 <div
                     data-aid='security-setting'
                     className="account-options"

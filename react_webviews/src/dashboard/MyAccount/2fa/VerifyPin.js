@@ -20,13 +20,11 @@ const VerifyPin = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
 
   useEffect(() => {
-    if (!mpin || !mpin.length) {
-      setBottomText(`Enter ${productName} PIN`);
-    } else if (mpin.length === 4) {
-      handleClick();
+    if (mpin.length === 4) {
       setBottomText(<DotDotLoader />);
+      handleClick();
     } else {
-      setBottomText('');
+      setBottomText(`Enter ${productName} PIN`);
     }
   }, [mpin])
 
