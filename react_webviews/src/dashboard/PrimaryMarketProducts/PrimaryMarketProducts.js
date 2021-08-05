@@ -46,11 +46,6 @@ export const KEY_INSIGHTS_CAROUSEL = [
     content: "Get updates on your orders with each step",
   },
   {
-    title: "Performance",
-    content:
-      "Nifty has <b>outperformed 90%</b> of the large-cap funds over a 5-year cycle",
-  },
-  {
     title: "Order tracking",
     content: "Get updates on your orders with each step",
   },
