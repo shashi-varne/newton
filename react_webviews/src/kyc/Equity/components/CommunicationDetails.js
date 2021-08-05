@@ -71,6 +71,7 @@ const CommunicationDetails = (props) => {
   const [totalPages, setTotalPages] = useState();
   const [isDlFlow, setIsDlFlow] = useState();
   const [continueAccountAlreadyExists, setContinueAccountAlreadyExists] = useState(false);
+  const [sendRequest, setSendRequest ] = useState(false);
   const [accountAlreadyExists, setAccountAlreadyExists] = useState(false);
   const [goldVerificationLink, setVerificationLink] = useState();
   const [goldResendVerificationOtpLink, setGoldResendVerificationOtpLink] = useState();
@@ -80,11 +81,14 @@ const CommunicationDetails = (props) => {
     if ((!isEmpty(kyc) && !continueAccountAlreadyExists) && isEmpty(goldUserInfo)) {
       initialize();
     }
-    if (!isEmpty(goldUserInfo) && !isEmpty(kyc) ) {
+    if (!isEmpty(goldUserInfo) && !isEmpty(kyc)) {
       initializeGold();
     }
-    if ((callHandleClick && communicationType) || continueAccountAlreadyExists) handleClick();
-  }, [kyc, communicationType, continueAccountAlreadyExists, goldUserInfo]);
+    if ((callHandleClick && communicationType) || continueAccountAlreadyExists){
+      handleClick();
+      setContinueAccountAlreadyExists(false)
+    }
+  }, [kyc, communicationType, sendRequest, goldUserInfo]);
 
   const initialize = async () => {
     setIsKycDone(kyc?.mf_kyc_processed);
@@ -326,6 +330,7 @@ const CommunicationDetails = (props) => {
     sendEvents("edit");
     if (showDotLoader) return;
     setAccountAlreadyExists(false)
+    setContinueAccountAlreadyExists(false)
     setShowOtpContainer(false);
     setButtonTitle("CONTINUE");
   };
@@ -392,6 +397,7 @@ const CommunicationDetails = (props) => {
     setAccountAlreadyExists(false)
     if (!isEmpty(goldUserInfo)) return handleClickGold();
     setContinueAccountAlreadyExists(true)
+    setSendRequest(!sendRequest)
   }
 
 

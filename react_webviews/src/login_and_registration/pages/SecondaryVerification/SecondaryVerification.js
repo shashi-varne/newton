@@ -217,7 +217,7 @@ class SecondaryVerification extends Component {
                                     helperText={form_data.email_error || ""}
                                     class="input"
                                     id="email"
-                                    label="Enter email address"
+                                    label="Email address"
                                     name="email"
                                     onChange={this.handleChange("email")}
                                     autoFocus
