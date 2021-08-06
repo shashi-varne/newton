@@ -374,6 +374,7 @@ const Journey = (props) => {
       sendEvents('edit')
     }
     let stateMapper = {}
+    const tradingEsignPath = kyc.show_equity_charges_page ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
     if (kyc?.kyc_status === 'compliant') {
       // if (key === 'pan' && !customerVerified) {
       //   navigate('/kyc/compliant-confirm-pan')
@@ -385,7 +386,7 @@ const Journey = (props) => {
         bank: '/kyc/compliant/bank-details',
         sign: PATHNAME_MAPPER.uploadSign,
         pan: PATHNAME_MAPPER.homeKyc,
-        trading_esign: PATHNAME_MAPPER.tradingInfo
+        trading_esign: tradingEsignPath
       }
       navigate(stateMapper[key], {
         state: {
@@ -402,7 +403,7 @@ const Journey = (props) => {
           personal: PATHNAME_MAPPER.digilockerPersonalDetails1,
           bank: '/kyc/non-compliant/bank-details',
           bank_esign: '/kyc/non-compliant/bank-details',
-          trading_esign: PATHNAME_MAPPER.tradingInfo,
+          trading_esign: tradingEsignPath,
           address: PATHNAME_MAPPER.addressDetails1,
           docs: PATHNAME_MAPPER.uploadProgress,
           esign: PATHNAME_MAPPER.kycEsign,
@@ -423,7 +424,7 @@ const Journey = (props) => {
           address: PATHNAME_MAPPER.addressDetails1,
           docs: PATHNAME_MAPPER.uploadProgress,
           esign: PATHNAME_MAPPER.kycEsign,
-          trading_esign: PATHNAME_MAPPER.tradingInfo,
+          trading_esign: tradingEsignPath,
         }
         console.log(stateMapper[key])
       }
