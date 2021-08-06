@@ -147,7 +147,7 @@ const PersonalDetails1 = (props) => {
             : form_data?.gender?.toLowerCase()
           : "",
         "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
-        "flow": !kyc.equity_enabled ? 'premium onboarding' : 'general'
+        "flow": !isTradingEnabled(kyc) ? 'premium onboarding' : 'general'
         // "mobile": form_data.mobile ? "yes" : "no",
         // "email": form_data.email_error ? "invalid" : form_data.email ? "yes" : "no",
         // "help": isOpen ? 'yes' : 'no',

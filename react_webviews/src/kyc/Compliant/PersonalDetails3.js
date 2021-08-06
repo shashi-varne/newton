@@ -19,7 +19,7 @@ import { kycSubmit, getCVL } from "../common/api";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
-import { getConfig } from "../../utils/functions";
+import { getConfig, isTradingEnabled } from "../../utils/functions";
 
 const productName = getConfig().productName;
 const PersonalDetails3 = (props) => {
@@ -154,7 +154,7 @@ const PersonalDetails3 = (props) => {
             : form_data.occupation.toLowerCase()
           : "",
         income_range: form_data.income ? incomeMapper[form_data.income] : "",
-        "flow": !kyc.equity_enabled ? 'premium onboarding' : 'general'
+        "flow": !isTradingEnabled(kyc) ? 'premium onboarding' : 'general'
       },
     };
     if (userAction === "just_set_events") {

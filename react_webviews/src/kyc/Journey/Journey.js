@@ -587,6 +587,7 @@ const Journey = (props) => {
   };
 
   if (!isEmpty(kyc) && !isEmpty(user)) {
+    var TRADING_ENABLED = isTradingEnabled(kyc);
     var topTitle = ''
     var stage = 0
     // eslint-disable-next-line
@@ -606,13 +607,13 @@ const Journey = (props) => {
     var headerKey = 
       isKycDone
       ? "kycDone"
-      : (isCompliant && !kyc.equity_enabled)
+      : (isCompliant && !TRADING_ENABLED)
       ? "compliant"
       : dlCondition
       ? "dlFlow"
       : "default";
     var headerData = HEADER_MAPPER_DATA[headerKey];
-    if(isCompliant && !kyc.equity_enabled) {
+    if(isCompliant && !TRADING_ENABLED) {
       if (journeyStatus === "ground_premium") {
         headerData.title = "You’re eligible for premium onboarding!";
       }
@@ -657,7 +658,6 @@ const Journey = (props) => {
     }
   }
   if (!isEmpty(kyc) && !isEmpty(user)) {
-    var TRADING_ENABLED = isTradingEnabled(kyc);
     if (npsDetailsReq && user.kyc_registration_v2 === 'submitted') {
       navigate('/nps/identity', {
         state: { goBack: '/invest' },
