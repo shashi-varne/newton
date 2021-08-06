@@ -79,15 +79,12 @@ const FooterTitle = ({ config }) => {
   return (
     <div className="login-footer">
       <div className="lf-logos">
-        <SVG
-          height="20px"
-          width="64px"
-          preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + config.styles.primaryColor)}
-          src={require(`assets/${config.logo}`)}
+        <Imgc
+          style={{ width: "60px" }}
+          src={require(`assets/${config.colorLogo}`)}
         />
-        <SVG
-          width="20px"
-          height="20px"
+        <Imgc
+          style={{ height: "20px", width: "20px" }}
           src={require(`assets/sebi_logo.svg`)}
         />
       </div>

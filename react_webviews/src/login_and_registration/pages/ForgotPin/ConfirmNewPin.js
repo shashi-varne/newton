@@ -55,7 +55,7 @@ const ConfirmNewPin = (props) => {
       "properties": {
         "user_action": user_action,
         "screen_name": 'confirm_fisdom_pin',
-        "journey": routeParams.set_flow ? "set_fisdom_pin" : "reset_fisdom_pin",
+        "journey": 'reset_fisdom_pin',
       }
     };
 

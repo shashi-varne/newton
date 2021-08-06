@@ -35,21 +35,25 @@ const SecuritySettings = (props) => {
         }
     };
 
+    const goBack = () => {
+        sendEvents('back');
+        navigate('/my-account');
+    }
+
     return (
         <Container
             title="Security settings"
             events={sendEvents('just_set_events')}
             data-aid='my-account-screen'
             noFooter={true}
-            headerData={{ goBack: () => navigate("/my-account") }}
+            headerData={{ goBack }}
         >
             <div className="security-settings">
-                <>
-                    <Imgc
-                        src={require(`assets/group_12.svg`)}
-                        alt=""
-                        className="img-center bottom-space" />
-                </>
+                <Imgc
+                    src={require(`assets/group_12.svg`)}
+                    alt=""
+                    className="img-center bottom-space"
+                />
                 <div
                     data-aid='security-setting'
                     className="account-options"

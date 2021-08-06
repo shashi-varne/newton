@@ -153,14 +153,13 @@ class MyAccount extends Component {
     });
   };
 
-  sendEvents = (userAction, screenName, settings_clicked) => {
+  sendEvents = (userAction, screenName) => {
     let eventObj = {
       event_name: "my_account",
       properties: {
         account_options:
           (userAction === "just_set_events" ? "back" : userAction) || "",
         screen_name: screenName || "my_account",
-        settings_clicked: settings_clicked ? "yes" : "no",
       },
     };
     if (screenName === "export transaction history" || screenName === "") {
@@ -308,7 +307,7 @@ class MyAccount extends Component {
                 data-aid='security-setting'
                 className="account-options"
                 onClick={() => {
-                  this.sendEvents("next", "", true);
+                  this.sendEvents("settings_clicked", "");
                   this.handleClick("/security-settings");
                 }}
               >
