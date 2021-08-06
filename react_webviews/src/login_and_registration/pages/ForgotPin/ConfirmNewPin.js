@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { twofaPostApi } from '../../../2fa/common/apiCalls';
 import EnterMPin from '../../../2fa/components/EnterMPin';
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
-import { navigate as navigateFunc } from '../../../utils/functions';
+import { getConfig, navigate as navigateFunc } from '../../../utils/functions';
 import LoginButton from '../../common/LoginButton';
 import { nativeCallback } from "../../../utils/native_callback";
 import SessionExpiredUi from '../../components/SessionExpiredUi';
@@ -69,7 +69,7 @@ const ConfirmNewPin = (props) => {
   return (
     <>
       <EnterMPin
-        title="Confirm fisdom PIN"
+        title={`Confirm ${getConfig().productName} PIN`}
         subtitle="Keep your account safe and secure"
         otpProps={{
           otp: pin,

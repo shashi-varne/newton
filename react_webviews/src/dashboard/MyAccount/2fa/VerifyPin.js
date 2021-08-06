@@ -72,7 +72,7 @@ const VerifyPin = (props) => {
   return (
     <Container
       events={sendEvents('just_set_events')}
-      title="Reset fisdom PIN"
+      title={`Reset ${productName} PIN`}
       noFooter={true}
     >
       <div style={{ paddingTop: '60px' }}>
@@ -91,7 +91,7 @@ const VerifyPin = (props) => {
             style={{ height: '20px', width: '20px', marginBottom: '20px' }}
           />
           <EnterMPin.Title style={{ marginBottom: '75px' }}>
-            Enter your current fisdom PIN
+            Enter your current {productName} PIN
           </EnterMPin.Title>
         </EnterMPin>
       </div>

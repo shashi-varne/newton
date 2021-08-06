@@ -23,7 +23,7 @@ const SecuritySettings = (props) => {
             "event_name": '2fa',
             "properties": {
                 "user_action": user_action,
-                "screen_name": 'securtity_settings',
+                "screen_name": 'security_settings',
                 "type": pinText === "Reset fisdom PIN" ? "reset_fisdom_pin" : "set_fisdom_pin",
             }
         };

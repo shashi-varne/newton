@@ -14,6 +14,7 @@ import { isEmpty } from "lodash";
 import { isDigilockerFlow } from "../../kyc/common/functions";
 import { getBasePath, isTradingEnabled, navigate as navigateFunc } from "../../utils/functions";
 import kycComplete from 'assets/kyc_complete.svg';
+import { openModule } from "../../utils/native_callback";
 
 class DigiStatus extends Component {
   constructor(props) {
@@ -78,17 +79,11 @@ class DigiStatus extends Component {
       this.sendEvents('home');
     }
     if (this.state.set2faPin) {
+      // Handles behaviour for both web as well as native
+      openModule('account/setup_2fa', this.props);
       if (config.isNative) {
-        nativeCallback({
-          action: 'open_module',
-          message: {
-            action_url: "https://fis.do/m/module?action_type=native&native_module=account%2Fsetup_2fa"
-          }
-        });
         return nativeCallback({ action: 'exit_web' });
         // TODO: Test native behaviour for this code
-      } else {
-        return this.navigate("/set-fisdom-pin/kyc-complete");
       }
     } else {
       if (config.isNative) {

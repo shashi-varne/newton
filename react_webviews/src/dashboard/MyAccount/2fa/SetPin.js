@@ -83,7 +83,7 @@ const SetPin = (props) => {
     >
       <div style={{ paddingTop: '60px' }}>
         <EnterMPin
-          title="Set fisdom PIN"
+          title={`Set ${getConfig().productName} PIN`}
           subtitle="Ensuring maximum security for your investment account"
           otpProps={{
             otp: mpin,

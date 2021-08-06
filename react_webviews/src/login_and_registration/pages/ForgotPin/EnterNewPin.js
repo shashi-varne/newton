@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { verifyPin } from '../../../2fa/common/apiCalls';
 import EnterMPin from '../../../2fa/components/EnterMPin';
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
-import { navigate as navigateFunc } from '../../../utils/functions';
+import { getConfig, navigate as navigateFunc } from '../../../utils/functions';
 import { isEmpty } from 'lodash';
 import LoginButton from '../../common/LoginButton';
 import { nativeCallback } from "../../../utils/native_callback";
@@ -68,7 +68,7 @@ const EnterNewPin = (props) => {
   return (
     <>
       <EnterMPin
-        title="Enter new fisdom PIN"
+        title={`Enter new ${getConfig().productName} PIN`}
         subtitle="Keep your account safe and secure"
         otpProps={{
           otp: pin,

@@ -231,6 +231,7 @@ export function openModule(moduleName, props) {
       'app/profile': '/my-account',
       'invest/save_tax': '/invest',
       'invest/nps': '/nps/info',
+      'account/setup_2fa': '/set-fisdom-pin/kyc-complete'
     }
     
     let moduleNameWeb = module_mapper[moduleName] || '/';
