@@ -7,7 +7,7 @@ import { twofaPostApi, modifyPin, setPin } from '../../../2fa/common/apiCalls';
 import { getKycFromSummary } from "../../../login_and_registration/functions";
 import WVPopUpDialog from "../../../common/ui/PopUpDialog/WVPopUpDialog";
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
-import { navigate as navigateFunc } from "../../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import { isEmpty } from "lodash";
 import WVInfoBubble from "../../../common/ui/InfoBubble/WVInfoBubble";
 
@@ -16,7 +16,8 @@ const ConfirmNewPin = (props) => {
   const routeParamsExist = useMemo(() => {
     return !isEmpty(routeParams);
   }, []);
-  const successText = routeParams.set_flow ? "fisdom security enabled" : "fisdom PIN changed";
+  const { productName } = getConfig();
+  const successText = routeParams.set_flow ? `${productName} security enabled` : `${productName} PIN changed`;
   const [mpin, setMpin] = useState('');
   const [pinError, setPinError] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -96,7 +97,7 @@ const ConfirmNewPin = (props) => {
 
   return (
     <Container
-      title={routeParams.set_flow  ? "Security settings" : "Reset fisdom PIN"}
+      title={routeParams.set_flow  ? "Security settings" : `Reset ${productName} PIN`}
       events={sendEvents("just_set_events")}
       showLoader={isApiRunning}
       handleClick={handleClick}
@@ -105,7 +106,7 @@ const ConfirmNewPin = (props) => {
     >
       <div style={{ paddingTop: '60px' }}>
         <EnterMPin
-          title="Confirm fisdom PIN"
+          title={`Confirm ${productName} PIN`}
           subtitle={routeParams.set_flow  ? "Ensuring maximum security for your investment account" : "Keep your account safe and secure"}
           otpProps={{
             otp: mpin,
