@@ -1,18 +1,11 @@
 /* eslint-disable no-unused-expressions */
 import React from 'react';
 import { Redirect, Route } from 'react-router';
-import { getConfig, navigate as navigateFunc } from '../../utils/functions';
-import { storageService } from '../../utils/validators';
-
-// const data = {
-//   state: {
-//     goBack: '/'
-//   }
-// };
+import { getConfig } from '../../utils/functions';
 
 export default function UnAuthenticatedRoute({ children, component, ...rest }) {
-  const isLoggedIn = storageService().get("currentUser");
-  console.log('INSIDE UAR', isLoggedIn);
+  const config = getConfig();
+  const { isLoggedIn, searchParams } = config;
 
   const isUnAuthenticatedPath = (path) => {
     const unAuthenticatedPaths = [
@@ -32,7 +25,7 @@ export default function UnAuthenticatedRoute({ children, component, ...rest }) {
         {...rest}
         render={({ location }) => {
           const fromState = location?.state?.fromState
-          const path = (!fromState || isUnAuthenticatedPath(fromState)) ? '/invest' : fromState;
+          const path = (!fromState || isUnAuthenticatedPath(fromState)) ? '/' : fromState;
 
           // Alternate Option ---------------
           // const navigate = navigateFunc.bind(props)
@@ -40,13 +33,14 @@ export default function UnAuthenticatedRoute({ children, component, ...rest }) {
           // -------------------------------------
 
           return <Redirect
+            push={true}
             to={{
               pathname: path,
               state: {
                 from: location,
                 goBack: "/"
               },
-              search: getConfig().searchParams,
+              search: searchParams,
             }}
           />
         }}
