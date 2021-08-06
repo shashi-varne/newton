@@ -550,7 +550,7 @@ export async function setKycProductTypeAndRedirect() {
   
   // already kyc done users
   if (isReadyToInvestBase && (result?.kyc?.mf_kyc_processed || userKyc?.mf_kyc_processed)) {
-    this.navigate(PATHNAME_MAPPER.accountInfo)
+    this.navigate(PATHNAME_MAPPER.tradingInfo)
   } else {
     const showAadhaar = !(result?.kyc?.address.meta_data.is_nri || result?.kyc?.kyc_type === "manual");
     if (result?.kyc?.kyc_status !== "compliant") {
@@ -621,7 +621,7 @@ export async function openStocks() {
           }
 
           if (isReadyToInvestBase && (result?.kyc?.mf_kyc_processed || userKyc?.mf_kyc_processed)) {
-            this.navigate(PATHNAME_MAPPER.accountInfo)
+            this.navigate(PATHNAME_MAPPER.tradingInfo)
           } else {
             const showAadhaar = !(result?.kyc?.address.meta_data.is_nri || result?.kyc?.kyc_type === "manual");
             if (result?.kyc?.kyc_status !== "compliant") {

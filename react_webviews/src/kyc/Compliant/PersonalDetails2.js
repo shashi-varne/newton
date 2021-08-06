@@ -14,7 +14,7 @@ import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import toast from "common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
-import { getConfig } from "../../utils/functions";
+import { getConfig, isTradingEnabled } from "../../utils/functions";
 
 const productName = getConfig().productName;
 const PersonalDetails2 = (props) => {
@@ -125,7 +125,7 @@ const PersonalDetails2 = (props) => {
           : "",
         "mother's_name": form_data.mother_name ? "yes" : "no",
         spouse_name: form_data.spouse_name ? "yes" : "no",
-        "flow": !kyc.equity_enabled ? 'premium onboarding' : 'general'
+        "flow": !isTradingEnabled(kyc) ? 'premium onboarding' : 'general'
       },
     };
     if (userAction === "just_set_events") {
