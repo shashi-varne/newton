@@ -79,7 +79,7 @@ const getEquityChargesData = (equityChargesData={}) => {
 const TradingInfo = (props) => {
   const navigate = navigateFunc.bind(props);
   const [checkTermsAndConditions, setCheckTermsAndConditions] = useState(true);
-  const [selectedIndexs, setSelectedIndexs] = useState([0]);
+  const [selectedTiles, setSelectedTiles] = useState([0]);
   const [equityChargesData, setEquityChargesData] = useState([])
   const { kyc, isLoading } = useUserKycHook();
   const userType = kyc?.kyc_status;
@@ -90,12 +90,12 @@ const TradingInfo = (props) => {
 
   const handleTiles = (index) => () => {
     let newValues = []
-    if(selectedIndexs?.includes(index)) {
-      newValues = selectedIndexs.filter(el => el !== index) || [];
+    if(selectedTiles?.includes(index)) {
+      newValues = selectedTiles.filter(el => el !== index) || [];
     } else {
-      newValues = [...selectedIndexs, index];
+      newValues = [...selectedTiles, index];
     }
-    setSelectedIndexs(newValues);
+    setSelectedTiles(newValues);
   }
   
   const handleCheckBox = () => {
@@ -187,7 +187,7 @@ const TradingInfo = (props) => {
             return (
               <AccountAndBrokerageCharges
                 {...data}
-                open={selectedIndexs.includes(index)}
+                open={selectedTiles.includes(index)}
                 key={index}
                 onClick={handleTiles(index)}
               />
