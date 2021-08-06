@@ -50,7 +50,7 @@ const VerifyPin = (props) => {
     try {
       setIsApiRunning(true);
       await verifyPin({ mpin });
-      storageService().clear(pinAttemptsKey);
+      storageService().remove(pinAttemptsKey);
       sendEvents("next");
       await postLoginSetup();
       redirectAfterLogin(
@@ -78,7 +78,9 @@ const VerifyPin = (props) => {
         "journey": sessionTimeout ? 'account_inactive' : 'login',
       }
     };
-    storageService().setBoolean('session-timeout', false);
+    if(user_action === 'next') {
+      storageService().setBoolean('session-timeout', false);
+    }
     nativeCallback({ events: eventObj });
   };
 

@@ -198,7 +198,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     } else if (action === 'resume_provider') {
       open_browser_web(message.resume_link, '_self')
     } else if (action === '2fa_expired') {
-      storageService().clear('currentUser');
+      storageService().remove('currentUser');
       storageService().setBoolean('session-timeout', true);
       window.location.href = redirectTo2FA();
     } else {
