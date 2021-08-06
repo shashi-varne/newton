@@ -589,7 +589,7 @@ const CommunicationDetails = (props) => {
               <div className="kcd-otp-content">
                 <Otp
                   otpData={otpData}
-                  totalTime={30}
+                  totalTime={15}
                   showDotLoader={showDotLoader}
                   handleOtp={handleOtp}
                   resendOtp={resendOtpVerification}
