@@ -5,7 +5,7 @@ import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { isEmpty } from "../utils/validators";
 import { nativeCallback } from "../utils/native_callback";
 import Toast from "../common/ui/Toast";
-import { getBasePath, isAuthenticatedUser } from "../utils/functions";
+import { getBasePath } from "../utils/functions";
 
 const config = getConfig();
 const errorMessage = "Something went wrong!";
@@ -30,9 +30,6 @@ export function initialize() {
   let { referrer = "" } = main_query_params;
 
   let redirectUrl = encodeURIComponent(`${basePath}/${config.searchParams}`);
-  if(isAuthenticatedUser(this.props)) {
-    return;
-  }
 
   const partners = [
     "hbl",
