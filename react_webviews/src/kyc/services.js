@@ -3,6 +3,7 @@ import { isEmpty, storageService } from '../utils/validators'
 import toast from '../common/ui/Toast'
 import { isTradingEnabled } from '../utils/functions'
 import { kycSubmit } from './common/api'
+import { isDigilockerFlow } from './common/functions'
 
 const DOCUMENTS_MAPPER = {
   DL: 'Driving license',
@@ -337,7 +338,29 @@ export function getKycAppStatus(kyc) {
 
 export function getDocuments(userKyc) {
   if(userKyc.kyc_status === 'compliant') {
-    return [
+    let documents = [
+      {
+        key: "pan",
+        title: "PAN card",
+        subtitle: userKyc.pan.meta_data.pan_number,
+        doc_status: userKyc.pan.doc_status,
+        default_image: 'pan_default.svg',
+        approved_image: "pan_approved.svg",
+      },
+      {
+        key: "selfie",
+        title: "Selfie",
+        doc_status: userKyc.identification.doc_status,
+        default_image: 'selfie_default.svg',
+        approved_image: "selfie_approved.svg",
+      },
+      {
+        key: "bank",
+        title: "Bank details",
+        doc_status: userKyc.bank.meta_data_status,
+        default_image: 'default.svg',
+        approved_image: "approved.svg",
+      },
       {
         key: "sign",
         title: "Signature",
@@ -346,6 +369,13 @@ export function getDocuments(userKyc) {
         approved_image: "sign_approved.svg",
       }
     ];
+
+    if (!isTradingEnabled(userKyc)) {
+      // Removing Pan and Selfie
+      documents.splice(0, 2);
+    }
+
+    return documents;
   }
 
   let documents =  [
@@ -412,6 +442,12 @@ export function getDocuments(userKyc) {
 
     documents.splice(2, 0, data);
   }
+
+  if (isDigilockerFlow(userKyc)) {
+    // removing selfie video (IPV)
+    documents.splice(3, 1);
+  }
+
   return documents;
 }
 

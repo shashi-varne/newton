@@ -431,27 +431,23 @@ export function initilizeKyc() {
 
   let modalData = {}
   if (["equity_activation_pending", "complete"].includes(kycJourneyStatus)) {
-    if (kycJourneyStatus === "complete") {
-      if (TRADING_ENABLED) {
-        if (userKyc.equity_investment_ready) {
-          modalData = kycStatusMapper["kyc_verified"];
-        }
-      } else {
+    if ( kycJourneyStatus === "complete") {
+      if (TRADING_ENABLED && userKyc.equity_investment_ready) {
+        modalData = kycStatusMapper["kyc_verified"];
+      } else if (!TRADING_ENABLED && !isCompliant) {
         modalData = kycStatusMapper["mf_complete"];
       }
-      
     } else {
       modalData = kycStatusMapper[kycJourneyStatus];
     }
-
+  }
+  
+  if (!isEmpty(modalData)) {
     modalData.button1Props = {
       title: modalData.buttonTitle,
       variant: "contained",
       onClick: this.handleKycStatus,
     }
-  }
-
-  if (!isEmpty(modalData)) {
     this.setState({ modalData, openKycStatusDialog: true });
   }
 }
