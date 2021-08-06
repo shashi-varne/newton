@@ -60,7 +60,7 @@ import FnOIncomeProof from "./Upload/FnOIncomeProof";
 import TradingExperience from "./Equity/components/TradingExperience";
 import StocksStatus from "./Equity/components/StocksStatus";
 import NriError from "./Equity/components/NriError";
-import AccountInfo from "./Equity/components/AccountInfo";
+import TradingInfo from "./Equity/components/TradingInfo";
 import UploadInstructions from "./Equity/components/UploadInstructions";
 import DocumentVerification from "./Equity/components/DocumentVerification";
 import ManualSignature from "./Equity/components/ManualSignature";
@@ -351,8 +351,8 @@ const Kyc = (props) => {
         />
         <Route 
           exact 
-          path={`${url}/account-info`} 
-          component={AccountInfo} 
+          path={`${url}/trading-info`} 
+          component={TradingInfo} 
         />
         <Route 
           exact 

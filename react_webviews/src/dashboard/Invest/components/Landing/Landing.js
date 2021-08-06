@@ -4,7 +4,7 @@ import { getConfig } from "utils/functions";
 import Button from "common/ui/Button";
 import { initialize, handleCampaignNotification } from "../../functions";
 import InvestCard from "../../mini-components/InvestCard";
-import SecureInvest from "../../mini-components/SecureInvest";
+import SebiRegistrationFooter from "../../../../common/ui/SebiRegistrationFooter/WVSebiRegistrationFooter";
 import VerificationFailedDialog from "../../mini-components/VerificationFailedDialog";
 import KycStatusDialog from "../../mini-components/KycStatusDialog";
 import KycPremiumLandingDialog from "../../mini-components/KycPremiumLandingDialog";
@@ -509,17 +509,7 @@ class Landing extends Component {
                   return <></>;
               }
             })}
-          <SecureInvest />
-          {!["fisdom", "finity", "ktb"].includes(config.code) && (
-              <div className="invest-contact-us" data-aid='invest-contact-us'>
-                In partnership with
-                <span>
-                  {productName === "finity"
-                    ? " Finity"
-                    : " Fisdom"}
-                </span>
-              </div>
-            )}
+          <SebiRegistrationFooter className="invest-sebi-registration-disclaimer" />
           <VerificationFailedDialog
             isOpen={verificationFailed}
             close={this.closeVerificationFailed}

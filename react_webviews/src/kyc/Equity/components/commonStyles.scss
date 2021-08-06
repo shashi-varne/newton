@@ -126,6 +126,18 @@
       }
     }
 
+    .account-and-brokerage-charges {
+      border-top: 1px solid #D6D6D6;
+      padding: 15px 0;
+      cursor: pointer;
+
+      .aabc-title {
+        font-size: 13px;
+        color: var(--gunmetal);
+        font-weight: 500;
+      }
+    }
+
     .kaim-fees-info {
       display: flex;
       justify-content: space-between;
@@ -136,18 +148,17 @@
         font-size: 13px;
         line-height: 21px;
         color: var(--dark);
+      }
 
-        .kaim-fees-info-subtext {
-          font-size: 11px;
-          line-height: 18px;
-          color: var(--steelgrey);
-        }
+      .kaim-fees-info-subtext {
+        font-size: 11px;
+        line-height: 18px;
+        color: var(--steelgrey);
       }
 
       .kaim-no-fees-text1 {
         font-size: 13px;
         line-height: 21px;
-        text-decoration-line: line-through;
         color: var(--steelgrey);
       }
 
@@ -158,6 +169,15 @@
         color: var(--primary);
         text-align: right;
       }
+    }
+
+    .line-divider {
+      height: 1px;
+      background: #D6D6D6;
+    }
+
+    .bottom-line-divider {
+      margin: 40px -20px 20px;
     }
 
     .kaim-terms {

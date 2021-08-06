@@ -94,7 +94,7 @@ function Native(props) {
             }
 
             if (isReadyToInvestUser && (result?.kyc?.mf_kyc_processed || kyc?.mf_kyc_processed)) {
-              navigate(PATHNAME_MAPPER.accountInfo)
+              navigate(PATHNAME_MAPPER.tradingInfo)
             } else {
               const showAadhaar = !(result?.kyc?.address.meta_data.is_nri || result?.kyc?.kyc_type === "manual");
               if (result?.kyc?.kyc_status !== "compliant") {

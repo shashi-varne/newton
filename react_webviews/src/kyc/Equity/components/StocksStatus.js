@@ -18,7 +18,7 @@ const STATUS_MAPPER = {
     title: "Open free trading & demat account ",
     subtitle: "Trade & invest like a pro anytime, anywhere",
     buttonTitle: "OPEN ACCOUNT",
-    path: "/kyc/account-info",
+    path: "/kyc/trading-info",
     icon: "kyc_status_icon.svg",
   },
   incomplete: {
