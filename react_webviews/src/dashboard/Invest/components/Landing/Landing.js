@@ -509,7 +509,7 @@ class Landing extends Component {
                   return <></>;
               }
             })}
-          <SebiRegistrationFooter className="invest-sebi-resgistration-disclaimer" />
+          <SebiRegistrationFooter className="invest-sebi-registration-disclaimer" />
           <VerificationFailedDialog
             isOpen={verificationFailed}
             close={this.closeVerificationFailed}
