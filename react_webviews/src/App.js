@@ -42,7 +42,7 @@ const getMuiThemeConfig = () => {
   return createMuiTheme(themeConfig());
 }
 
-var basename = window.sessionStorage.getItem('base_href') || '';
+var basename = window.localStorage.getItem('base_href') || '';
 if (basename && basename.indexOf('appl/webview') !== -1) {
   basename = basename ? basename + 'view/' : '';
 }

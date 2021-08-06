@@ -180,7 +180,7 @@ export function setBaseHref() {
   if (pathname.indexOf('appl/webview') !== -1) {
     var myBaseHrefUrl = '/appl/webview/' + pathname.split('/')[3] + '/';
     myBaseHref.href = myBaseHrefUrl;
-    window.sessionStorage.setItem('base_href', myBaseHrefUrl);
+    window.localStorage.setItem('base_href', myBaseHrefUrl);
   }
 }
 
