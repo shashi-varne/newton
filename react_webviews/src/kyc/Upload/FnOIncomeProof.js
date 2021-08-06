@@ -117,7 +117,9 @@ const FnOIncomeProof = (props) => {
     if (!Web) {
       commonNativeNavigation();
     } else {
-      if (landingEntryPoints.includes(fromState)) {
+      if(goBackPath && goBackPath !== "exit") {
+        navigate(goBackPath)
+      } else if (landingEntryPoints.includes(fromState)) {
         navigate("/");
       } else {
         commonRedirection();
@@ -158,7 +160,9 @@ const FnOIncomeProof = (props) => {
     if (!Web) {
       commonNativeNavigation();
     } else {
-      if (landingEntryPoints.includes(fromState)) {
+      if(goBackPath && goBackPath !== "exit") {
+        navigate(goBackPath)
+      } else if (landingEntryPoints.includes(fromState)) {
         navigate("/");
       } else {
         navigate(PATHNAME_MAPPER.journey);
