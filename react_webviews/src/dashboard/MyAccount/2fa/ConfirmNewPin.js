@@ -16,6 +16,7 @@ const ConfirmNewPin = (props) => {
   const routeParamsExist = useMemo(() => {
     return !isEmpty(routeParams);
   }, []);
+  const successText = routeParams.set_flow ? "fisdom security enabled" : "fisdom PIN changed";
   const [mpin, setMpin] = useState('');
   const [pinError, setPinError] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -86,14 +87,11 @@ const ConfirmNewPin = (props) => {
   }
 
   const handleYes = () => {
-    sendEvents("next");
     if (kycFlow) {
-      if (getConfig().isNative) {
-        nativeCallback({ action: 'exit_web' });
-      } else {
-        navigate("/invest");
-      }
-    } else navigate('/security-settings');
+      navigate("/invest");
+    } else {
+      navigate('/security-settings');
+    }
   }
 
   return (
@@ -130,7 +128,7 @@ const ConfirmNewPin = (props) => {
       <WVPopUpDialog
         open={openDialog}
         handleYes={handleYes}
-        text="fisdom security enabled"
+        text={successText}
         optionYes="OKAY"
         optionNo=""
       />
