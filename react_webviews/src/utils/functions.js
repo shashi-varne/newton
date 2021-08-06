@@ -501,12 +501,17 @@ export function isIframe() {
     return false;
   }
 }
+
+export function stripTrailingSlash (str) {
+  return str.endsWith('/') ? str.slice(0, -1) : str;
+};
+
 export function getBasePath() {
   var basename = window.localStorage.getItem('base_href') || '';
   if(basename && basename.indexOf('appl/webview') !== -1) {
     basename = basename ? basename + 'view' : '';
   }
-  return window.location.origin + basename;
+  return window.location.origin + stripTrailingSlash(basename);
 }
 
 export function isTradingEnabled(userKyc = {}) {
