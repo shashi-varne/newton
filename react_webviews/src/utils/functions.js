@@ -174,7 +174,7 @@ export const getConfig = () => {
 
     // change server url here for local and staging url builds (Not commit id one's)
     if (isStaging || isLocal) {
-      base_url_default = "https://anandb-dot-plutus-staging.appspot.com";
+      base_url_default = "https://campaign-test-dot-plutus-staging.appspot.com";
     }
   }
   
