@@ -76,7 +76,7 @@ const getEquityChargesData = (equityChargesData={}) => {
   ];
 }
 
-const AccountInfo = (props) => {
+const TradingInfo = (props) => {
   const navigate = navigateFunc.bind(props);
   const [checkTermsAndConditions, setCheckTermsAndConditions] = useState(true);
   const [selectedIndexs, setSelectedIndexs] = useState([0]);
@@ -248,7 +248,7 @@ const AccountInfo = (props) => {
   );
 };
 
-export default AccountInfo;
+export default TradingInfo;
 
 const AccountAndBrokerageCharges = ({open, onClick, ...props }) => {
   return (
