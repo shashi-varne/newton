@@ -37,6 +37,19 @@ body[data-device="web"] #root {
   height: 100%;
   background: #f3f4f6;
 }
+.enable-body-touch{
+  overflow: auto !important;
+  touch-action: auto !important;
+  pointer-events: auto !important;
+  touch-action: unset !important;
+  pointer-events: unset !important;
+}
+
+.disable-body-touch{
+  overflow: hidden !important;
+  touch-action: none !important;
+  pointer-events: none !important;
+}
 
 button {
   font-family: "Rubik", "Roboto", sans-serif;
