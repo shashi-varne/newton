@@ -21,6 +21,7 @@ import {
   storageService,
   validateEmail,
   validateNumber,
+  getUrlParams,
 } from "../../../utils/validators";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import CheckBox from "../../../common/ui/Checkbox";
@@ -47,6 +48,7 @@ const config = getConfig();
 const CommunicationDetails = (props) => {
   const navigate = navigateFunc.bind(props);
   const stateParams = props.location?.state || {};
+  const isNotification = getUrlParams()?.from_notification;
   const isEdit = stateParams.isEdit || false;
   const userType = stateParams.userType || "";
   const callHandleClick = stateParams.callHandleClick;
@@ -97,9 +99,9 @@ const CommunicationDetails = (props) => {
     if (showOtpContainer) {
       setShowOtpContainer(false);
     }
-    const type = !kyc.identification.meta_data.email_verified
-      ? "email"
-      : "mobile";
+    const type = !kyc.identification.meta_data.mobile_number_verified
+      ? "mobile"
+      : "email";
     setCommunicationType(type);
     const data = { ...formData };
     if (type === "email") {
@@ -368,6 +370,10 @@ const CommunicationDetails = (props) => {
   const handleNavigation = () => {
     if (stateParams?.fromState === "/my-account") {
       navigate(stateParams?.goBack);
+      return;
+    }
+    if(isNotification){
+      navigate("/my-account");
       return;
     }
     if (isKycDone) {
