@@ -140,12 +140,13 @@ const KycUploadDocuments = (props) => {
   };
 
   const handleOtherPlatformNavigation = () => {
+    const nextStep = kyc.show_equity_charges_page ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
     sendEvents('next', 'bank_verification_pending');
     if (additional) {
       navigate("/kyc/add-bank");
     } else if (userType === "compliant") {
       if (isEdit || kyc.address.meta_data.is_nri) navigate(PATHNAME_MAPPER.journey);
-      else navigate(PATHNAME_MAPPER.tradingInfo)
+      else navigate(nextStep)
     } else {
       if (dlFlow) {
         const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
@@ -155,7 +156,7 @@ const KycUploadDocuments = (props) => {
           });
         } else {
           if (kyc.equity_sign_status !== 'signed') {
-            navigate(PATHNAME_MAPPER.tradingInfo);
+            navigate(nextStep);
           } else {
             navigate(PATHNAME_MAPPER.journey);
           }
