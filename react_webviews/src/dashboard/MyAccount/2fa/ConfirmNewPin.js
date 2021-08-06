@@ -7,7 +7,7 @@ import { twofaPostApi, modifyPin, setPin } from '../../../2fa/common/apiCalls';
 import { getKycFromSummary } from "../../../login_and_registration/functions";
 import WVPopUpDialog from "../../../common/ui/PopUpDialog/WVPopUpDialog";
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
-import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
+import { navigate as navigateFunc } from "../../../utils/functions";
 import { isEmpty } from "lodash";
 import WVInfoBubble from "../../../common/ui/InfoBubble/WVInfoBubble";
 
@@ -46,6 +46,7 @@ const ConfirmNewPin = (props) => {
       } else if (routeParams.reset_url) {
         await twofaPostApi(routeParams?.reset_url, { new_mpin: mpin });
       }
+      sendEvents("next");
       await getKycFromSummary({
         kyc: ["kyc"],
         user: ["user"]

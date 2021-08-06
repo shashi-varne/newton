@@ -67,11 +67,7 @@ const SetPin = (props) => {
 
   const handleYes = () => {
     sendEvents("back");
-    if (getConfig().isNative) {
-      nativeCallback({ action: 'exit_web' });
-    } else {
-      navigate("/invest");
-    }
+    navigate("/invest");
   }
 
   return (
