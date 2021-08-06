@@ -321,7 +321,7 @@ class Landing extends Component {
                 case "stocksAndIpo":
                   return (
                     <React.Fragment key={index}>
-                      {!isEmpty(stocksAndIpo) && (
+                      {!isEmpty(stocksAndIpo) && tradingEnabled && (
                         <>
                           <div className="invest-main-top-title" data-aid='recommendations-title'>
                             Stocks & IPOs

@@ -18,7 +18,7 @@ import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { kycSubmit } from "../common/api";
 import { nativeCallback } from "../../utils/native_callback";
-import { getConfig } from "../../utils/functions";
+import { getConfig, isTradingEnabled } from "../../utils/functions";
 
 const productName = getConfig().productName;
 const PersonalDetails1 = (props) => {
@@ -147,7 +147,7 @@ const PersonalDetails1 = (props) => {
             : form_data?.gender?.toLowerCase()
           : "",
         "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
-        "flow": !kyc.equity_enabled ? 'premium onboarding' : 'general'
+        "flow": !isTradingEnabled(kyc) ? 'premium onboarding' : 'general'
         // "mobile": form_data.mobile ? "yes" : "no",
         // "email": form_data.email_error ? "invalid" : form_data.email ? "yes" : "no",
         // "help": isOpen ? 'yes' : 'no',

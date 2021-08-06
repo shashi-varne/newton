@@ -314,7 +314,7 @@ export const pollProgress = (timeout, interval, popup_window) => {
 
 export const getFlow = (kycData) => {
   let flow = "";
-  if (kycData.kyc_status === 'compliant' && !kycData.equity_enabled) {
+  if (kycData.kyc_status === 'compliant' && !isTradingEnabled(kycData)) {
     flow = 'premium onboarding'
   } else {
     if (isDigilockerFlow(kycData)) {
