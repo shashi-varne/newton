@@ -5,11 +5,11 @@ import EnterMPin from "../../../2fa/components/EnterMPin";
 import { nativeCallback } from "../../../utils/native_callback";
 import { twofaPostApi, modifyPin, setPin } from '../../../2fa/common/apiCalls';
 import { getKycFromSummary } from "../../../login_and_registration/functions";
-import WVPopUpDialog from "../../../common/ui/PopUpDialog/WVPopUpDialog";
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import { isEmpty } from "lodash";
 import WVInfoBubble from "../../../common/ui/InfoBubble/WVInfoBubble";
+import WVBottomSheet from "../../../common/ui/BottomSheet/WVBottomSheet";
 
 const ConfirmNewPin = (props) => {
   const { routeParams, clearRouteParams } = usePersistRouteParams();
@@ -126,12 +126,19 @@ const ConfirmNewPin = (props) => {
           }
         />
       </div>
-      <WVPopUpDialog
+      <WVBottomSheet
+        title={successText}
+        image={require(`assets/${productName}/pin_changed.svg`)}
         open={openDialog}
-        handleYes={handleYes}
-        text={successText}
-        optionYes="OKAY"
-        optionNo=""
+        button1Props={{
+          color: "secondary",
+          variant: "contained",
+          title: "OKAY",
+          onClick: handleYes,
+        }}
+        classes={{
+          image: "pin-changed-img"
+        }}
       />
     </Container>
   )
