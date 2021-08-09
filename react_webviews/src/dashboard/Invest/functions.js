@@ -581,7 +581,7 @@ export async function setLoaderInModalData(showLoader) {
 }
 
 export function handleIpoCardRedirection() {
-  this.navigate("/product-types")
+  this.navigate("/market-products")
 }
           
 export async function openStocks() {
