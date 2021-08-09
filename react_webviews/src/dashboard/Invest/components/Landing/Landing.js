@@ -117,6 +117,12 @@ class Landing extends Component {
     } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity")) {
       this.closeKycStatusDialog();
       await this.setKycProductTypeAndRedirect();
+    } else if (kycJourneyStatus === "ground_pan") {
+      this.navigate("/kyc/journey", {
+        state: {
+          show_aadhaar: !(userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual"),
+        },
+      });
     } else {
       this.navigate(kycStatusData.nextState);
     }
