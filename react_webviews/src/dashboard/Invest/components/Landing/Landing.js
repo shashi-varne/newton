@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
-import { getConfig } from "utils/functions";
 import Button from "common/ui/Button";
 import { initialize, handleCampaignNotification } from "../../functions";
 import InvestCard from "../../mini-components/InvestCard";
@@ -17,6 +16,7 @@ import isEmpty from "lodash/isEmpty";
 import { Imgc } from "../../../../common/ui/Imgc";
 import { nativeCallback } from "../../../../utils/native_callback";
 import { PATHNAME_MAPPER } from "../../../../kyc/constants";
+import { getConfig, isTradingEnabled } from "../../../../utils/functions";
 
 const fromLoginStates = ["/login", "/register", "/forgot-password", "/mobile/verify", "/logout"]
 class Landing extends Component {
@@ -37,6 +37,7 @@ class Landing extends Component {
       bottom_sheet_dialog_data: [],
       isWeb: getConfig().Web,
       stateParams: props.location.state || {},
+      tradingEnabled: isTradingEnabled(),
     };
     this.initialize = initialize.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
@@ -114,6 +115,7 @@ class Landing extends Component {
     if (["submitted", "equity_activation_pending", "complete"].includes(kycJourneyStatus)) {
       this.closeKycStatusDialog();
     } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity")) {
+      this.closeKycStatusDialog();
       await this.setKycProductTypeAndRedirect();
     } else {
       this.navigate(kycStatusData.nextState);
@@ -180,7 +182,7 @@ class Landing extends Component {
     const config = getConfig();
     return (
       <Container
-        skelton={this.state.show_loader || kycButtonLoader}
+        skelton={this.state.show_loader}
         noFooter={true}
         title="Start Investing"
         data-aid='start-investing-screen'

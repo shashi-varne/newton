@@ -39,7 +39,6 @@ export async function initialize() {
   this.closeCampaignDialog = closeCampaignDialog.bind(this);
   this.handleStocksAndIpoCards = handleStocksAndIpoCards.bind(this);
   this.setKycProductTypeAndRedirect = setKycProductTypeAndRedirect.bind(this);
-  this.setLoaderInModalData = setLoaderInModalData.bind(this);
   this.handleIpoCardRedirection = handleIpoCardRedirection.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
   if ( (this.state.screenName === "invest_landing" || this.state.screenName === "sdk_landing" ) && dataSettedInsideBoot) {
@@ -534,12 +533,11 @@ export async function openKyc() {
 }
 
 export async function setKycProductTypeAndRedirect() {
-  let { userKyc, isReadyToInvestBase } = this.state;
+  let { userKyc, isReadyToInvestBase, kycJourneyStatus } = this.state;
   let result;
-  if (!userKyc?.mf_kyc_processed && !this.kycButtonLoader) {
+  if (!userKyc?.mf_kyc_processed) {
     let showLoader = true;
-    await this.setLoaderInModalData(showLoader);
-    this.setState({ kycButtonLoader: showLoader })
+    this.setState({ show_loader: showLoader })
     result = await this.setProductType();
     this.setState({ userKyc: result?.kyc });
   }
@@ -547,6 +545,8 @@ export async function setKycProductTypeAndRedirect() {
   // already kyc done users
   if (isReadyToInvestBase && (result?.kyc?.mf_kyc_processed || userKyc?.mf_kyc_processed)) {
     this.navigate(PATHNAME_MAPPER.tradingInfo)
+  } else if (kycJourneyStatus === "ground") {
+    this.navigate("/kyc/home");
   } else {
     const showAadhaar = !(result?.kyc?.address.meta_data.is_nri || result?.kyc?.kyc_type === "manual");
     if (result?.kyc?.kyc_status !== "compliant") {
@@ -557,27 +557,6 @@ export async function setKycProductTypeAndRedirect() {
       this.navigate(PATHNAME_MAPPER.journey)
     }
   }
-}
-
-export async function setLoaderInModalData(showLoader) {
-  let { modalData } = this.state;
-
-  if (modalData.button2Props) {
-    modalData = {
-      ...modalData,
-      button2Props: {
-        ...modalData.button2Props,
-        showLoader
-      }
-    }
-  } else {
-    modalData.button1Props = {
-      ...modalData.button1Props,
-      showLoader
-    }
-  }
-  
-  this.setState({ modalData })
 }
 
 export function handleIpoCardRedirection() {
@@ -639,7 +618,7 @@ export async function openStocks() {
 }
 
 export function handleStocksAndIpoCards(key) {
-  let { kycJourneyStatusMapperData, kycJourneyStatus, userKyc, kycButtonLoader } = this.state;
+  let { kycJourneyStatusMapperData, kycJourneyStatus, userKyc } = this.state;
   let modalData = Object.assign({}, kycJourneyStatusMapperData);
 
   if (key === "ipo") {
@@ -675,14 +654,12 @@ export function handleStocksAndIpoCards(key) {
       title: modalData.buttonTitle,
       variant: "contained",
       onClick: this.handleKycStatus,
-      showLoader: kycButtonLoader || false
     }
   } else {
     modalData.button1Props = {
       title: modalData.buttonTitle,
       variant: "contained",
       onClick: modalData.handleClick || this.handleKycStatus,
-      showLoader: kycButtonLoader || false
     }
   }
 
@@ -704,8 +681,7 @@ async function setProductType() {
     toast(err.message)
   } finally {
     let showLoader = false;
-    await this.setLoaderInModalData(showLoader);
-    this.setState({ kycButtonLoader: showLoader, stocksButtonLoader: showLoader})
+    this.setState({ show_loader: showLoader, stocksButtonLoader: showLoader})
   }
 }
 
