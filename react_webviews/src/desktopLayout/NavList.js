@@ -100,7 +100,6 @@ const NavList = (props) => {
   const [referDialog, setReferDialog] = useState(false);
   const [activePath, setActivePath] = useState('');
   const user = storageService().getObject('user');
-  const userKyc = storageService().getObject('kyc');
 
   useEffect(() => {
     filterNavList();
@@ -142,9 +141,6 @@ const NavList = (props) => {
       return  null;
     }
     if (id === 'fhc' && productName === 'finity') {
-      return null;
-    }
-    if (id === 'myAccount' && (!isReadyToInvestBase && userKyc?.bank?.doc_status !== 'rejected')) {
       return null;
     }
     if (id === 'refer' && !showReferral) {

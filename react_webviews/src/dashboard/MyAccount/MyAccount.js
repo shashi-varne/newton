@@ -9,8 +9,52 @@ import Dialog, {
   DialogContent,
   DialogContentText,
 } from "material-ui/Dialog";
+import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
+import { isTradingEnabled } from "../../utils/functions";
+import { getKycAppStatus } from "../../kyc/services";
 import "./MyAccount.scss";
 
+const MF_AND_STOCKS_STATUS_MAPPER = {
+  init: {
+    subtitle: "KYC not started",
+    disable: true,
+  },
+  inprogress: {
+    subtitle: "KYC In-progress",
+    icon: "badge-warning.svg",
+  },
+  complete: {
+    subtitle: "Ready to invest",
+    icon: "badge-success.svg",
+  },
+  rejected: {
+    subtitle: "KYC rejected",
+    icon: "badge-error.svg",
+  }
+}
+const FNO_STATUS_MAPPER = {
+  init: {
+    subtitle: "Not activated",
+    disable: true,
+  },
+  activate: {
+    subtitle: "Not activated",
+    buttonText: "ACTIVATE NOW",
+    disable: true,
+  },
+  inprogress: {
+    subtitle: "Not activated",
+    icon: "badge-warning.svg",
+  },
+  complete: {
+    subtitle: "Activated",
+    icon: "badge-success.svg",
+  },
+  rejected: {
+    subtitle: "Document rejected",
+    icon: "badge-error.svg",
+  }
+}
 class MyAccount extends Component {
   constructor(props) {
     super(props);
@@ -21,6 +65,7 @@ class MyAccount extends Component {
       pendingMandate: {},
       userKyc: {},
       openDialog: false,
+      kycStatusData: [],
     };
     this.initializeComponentFunctions = initializeComponentFunctions.bind(this);
   }
@@ -31,7 +76,58 @@ class MyAccount extends Component {
 
   onload = () => {
     this.getMyAccount();
+    this.setKycStatusData();
   };
+
+  setKycStatusData = () => {
+    const tradingEnabled = isTradingEnabled();
+    let { userKyc, kycStatusData } = this.state;
+    const kycJourneyStatus = getKycAppStatus(userKyc) || {};
+    const kycStatus = kycJourneyStatus.status;
+    let mfStatus = "inprogress";
+    let stocksStatus = "inprogress";
+    let fnoStatus = "init";
+    if (kycStatus === "ground") {
+      mfStatus = "init";
+      stocksStatus = "init";
+    } else if (kycStatus === "complete") {
+      mfStatus = "complete";
+    } else if (kycStatus === "rejected") {
+      stocksStatus = "rejected";
+      mfStatus = "rejected";
+    }
+
+    kycStatusData.push({ ...MF_AND_STOCKS_STATUS_MAPPER[mfStatus], status: mfStatus, key: "mf", title: "Mutual fund" });
+
+    if (tradingEnabled) {
+      if (userKyc.equity_investment_ready) {
+        stocksStatus = "complete";
+      }
+      if (userKyc.fno_active) {
+        fnoStatus = "complete";
+      } else if (userKyc.equity_income?.doc_status === "rejected") {
+        fnoStatus = "rejected";
+      } else if (
+        userKyc.equity_income?.doc_status === "init" &&
+        userKyc.equity_application_status === "submitted"
+      ) {
+        fnoStatus = "activate";
+      } else if (userKyc.equity_income?.doc_status === "submitted") {
+        fnoStatus = "inprogress";
+      }
+      kycStatusData.push({ ...MF_AND_STOCKS_STATUS_MAPPER[stocksStatus], status: stocksStatus, key: "stocks", title: "Stocks & IPO" });
+      kycStatusData.push({ ...FNO_STATUS_MAPPER[fnoStatus], status: fnoStatus, key: "fno", title: "Futures & Options" });
+    }
+    this.setState({ kycStatusData });
+  }
+
+  handleInvestmentCard = (data) => () => {
+    if(data.key === "fno" && data.status === "activate") {
+      this.navigate("/kyc/upload/fno-income-proof", {
+        state: { goBack: "/my-account" },
+      });
+    }
+  }
 
   handleClick = (route) => {
     this.navigate(route);
@@ -141,6 +237,7 @@ class MyAccount extends Component {
       isReadyToInvestBase,
       userKyc,
       currentUser,
+      kycStatusData
     } = this.state;
     let bank = userKyc.bank || {};
     return (
@@ -152,6 +249,25 @@ class MyAccount extends Component {
         title="My Account"
       >
         <div className="my-account" data-aid='my-account'>
+          <div className="my-account-content">
+            <div className="account">
+              <div
+                className="account-head-title ma-kir-title"
+                data-aid="account-head-title"
+              >
+                INVESTMENT READY
+              </div>
+              {kycStatusData.map((data, index) => {
+                return (
+                  <InvestmentCard
+                    {...data}
+                    key={index}
+                    onClick={this.handleInvestmentCard(data)}
+                  />
+                );
+              })}
+            </div>
+          </div>
           <div className="my-account-content">
             <div className="account">
               <div className="account-head-title" data-aid='account-head-title'>Account options</div>
@@ -291,3 +407,20 @@ class MyAccount extends Component {
 }
 
 export default MyAccount;
+
+const InvestmentCard = ({ title, subtitle, icon, disable, buttonText, onClick }) => {
+  return (
+    <div className="my-account-investment-card">
+      <div className="maic-content">
+        <div className={`maic-title ${disable && "maic-title-disable"}`}>{title}</div>
+        <div className="maic-subtitle">{subtitle}</div>
+      </div>
+      <div className="maic-content">
+        {icon && !disable && <img src={require(`assets/${icon}`)} alt="icon" />}
+        {buttonText && (
+          <WVClickableTextElement onClick={onClick}>{buttonText}</WVClickableTextElement>
+        )}
+      </div>
+    </div>
+  );
+};
