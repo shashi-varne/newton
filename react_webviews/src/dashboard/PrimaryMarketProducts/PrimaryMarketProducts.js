@@ -105,7 +105,7 @@ const PrimaryMarketProducts = (props) => {
         <WVGenericContentCarousel
           customData={KEY_INSIGHTS_CAROUSEL}
           carouselPageStyle={{
-            backgroundImage: `url(${require(`assets/${productName}/icn_crousal_card1.svg`)})`,
+            backgroundImage: `url(${require(`assets/${productName}/icn_scroller_card1.svg`)})`,
           }}
         />
         <div className="pmp-catergories-title">Things to know</div>
