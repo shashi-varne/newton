@@ -10,6 +10,7 @@ import useUserKycHook from "../../common/hooks/userKycHook";
 import Toast from "../../../common/ui/Toast";
 import { nativeCallback } from "../../../utils/native_callback";
 import { formatAmountInr } from "../../../utils/validators";
+import SVG from 'react-inlinesvg';
 
 const config = getConfig();
 const productName = config.productName;
@@ -257,9 +258,14 @@ const AccountAndBrokerageCharges = ({open, onClick, ...props }) => {
         <div className="aabc-title" data-aid="kyc-free-charges">
           {props.title}
         </div>
-        <img
-          alt=""
-          src={require(`assets/${open ? `plus_icon` : `minus_icon`}.svg`)}
+        <SVG
+          preProcessor={(code) =>
+            code.replace(
+              /fill=".*?"/g,
+              "fill=" + getConfig().styles.primaryColor
+            )
+          }
+          src={require(`assets/${open ? `collapse` : `expand`}.svg`)}
         />
       </div>
       {open &&
