@@ -126,16 +126,16 @@ const ConfirmNewPin = (props) => {
           }
         />
       </div>
-      < WVBottomSheet
-      title={successText}
-      button1Props={{
+      <WVBottomSheet
+        title={successText}
+        image={require(`assets/${productName}/pin_changed.svg`)}
+        open={openDialog}
+        button1Props={{
           color: "secondary",
           variant: "contained",
           title: "OKAY",
           onClick: handleYes,
         }}
-      image={require(`assets/${productName}/pin_changed.svg`)}
-      open={openDialog}
       />
     </Container>
   )
