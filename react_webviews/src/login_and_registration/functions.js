@@ -284,7 +284,7 @@ export async function resendVerificationLink() {
         "Please click on the verification link sent to your email account."
       );
     } else {
-      toast(result.message || result.error || errorMessage);
+      toast(result.error || result.message|| errorMessage);
     }
     this.setState({ resendVerificationApi: false });
   } catch (error) {
@@ -340,10 +340,10 @@ export async function otpLoginVerification(verify_url, body) {
         this.redirectAfterLogin(result, user);
       }
     } else {
-      if (result?.error === "Wrong OTP is Entered" || result?.error === "Verification failed") {
+      if (result?.status_code === 439) {
         this.setState({ isWrongOtp: true })
       }
-      toast(result.message || result.error || errorMessage);
+      toast(result.error || result.message || errorMessage);
     }
   } catch (error) {
     console.log(error);
@@ -432,9 +432,9 @@ export async function otpVerification(body) {
       } else {
         this.redirectAfterLogin(result, user);
       }
-      toast(result?.message)
+      toast(result?.error || result.message || errorMessage)
     } else {
-      if (result.error === "Wrong OTP is Entered") {
+      if (result.status_code === 439) {
         this.setState({ isWrongOtp: true })
       }
        throw result.error || result.message || errorMessage;
@@ -526,7 +526,7 @@ export async function getKycFromSummary(params = {}) {
     storageService().setObject("user", user);
     return result;
   } else {
-    throw result.message || result.error || errorMessage;
+    throw result.error || result.message || errorMessage;
   }
 }
 
@@ -602,8 +602,8 @@ export async function authCheckApi(type, data) {
       return result;
     } else {
       error =
-        result.message ||
         result.error ||
+        result.message ||
         "Something went wrong!";
       throw error;
     }
@@ -630,8 +630,8 @@ export async function generateOtp(data) {
       return otpResponse;
     } else {
       error =
-        otpResponse.pfwresponse.result.message ||
         otpResponse.pfwresponse.result.error ||
+        otpResponse.pfwresponse.result.message ||
         "Something went wrong!";
       throw error;
     }
