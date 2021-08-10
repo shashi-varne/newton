@@ -632,7 +632,7 @@ export function handleStocksAndIpoCards(key) {
         buttonTitle: "CONTINUE",
         handleClick: this.handleIpoCardRedirection
       }
-    } else if (userKyc.equity_investment_ready || kycJourneyStatus === "complete") {
+    } else if (userKyc.equity_investment_ready || (kycJourneyStatus === "complete" && userKyc.mf_kyc_processed)) {
       this.handleIpoCardRedirection();
     }
   } else if (key === "stocks") {
@@ -660,7 +660,7 @@ export function handleStocksAndIpoCards(key) {
     }
   }
 
-  if (kycJourneyStatus !== "complete") {
+  if (kycJourneyStatus !== "complete" || (kycJourneyStatus === "complete" && !userKyc.mf_kyc_processed)) {
     this.setState({ modalData, openKycStatusDialog: true });
   }
 }
