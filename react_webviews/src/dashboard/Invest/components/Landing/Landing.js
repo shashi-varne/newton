@@ -112,7 +112,7 @@ class Landing extends Component {
   handleKycStatus = async () => {
     this.sendEvents("next", "kyc_bottom_sheet");
     let { kycJourneyStatus, kycStatusData, tradingEnabled, userKyc } = this.state;
-    if (["submitted", "equity_activation_pending", "complete"].includes(kycJourneyStatus)) {
+    if (["submitted", "equity_activation_pending"].includes(kycJourneyStatus) || (kycJourneyStatus === "complete" && userKyc.mf_kyc_processed)) {
       this.closeKycStatusDialog();
     } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity")) {
       this.closeKycStatusDialog();
