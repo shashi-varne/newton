@@ -519,15 +519,12 @@ export async function openKyc() {
       this.navigate("/kyc/journey", {
         state: {
           show_aadhaar: !(userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual") ? true : false,
-          fromState: "invest",
         },
       });
     } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity")) {
       await this.setKycProductTypeAndRedirect();
-    } else {
-      this.navigate(kycStatusData.nextState, {
-        state: { fromState: "invest" },
-      });
+    } else if (kycStatusData.nextState) {
+      this.navigate(kycStatusData.nextState);
     }
   }
 }

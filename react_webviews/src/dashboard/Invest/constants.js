@@ -479,7 +479,6 @@ export const kycStatusMapperInvest = {
     icon: "ic_kyc_under_process.svg",
     title: "You’re ready to invest in mutual funds",
     subtitle: "VERIFYING TRADING A/C",
-    nextState: "/kyc-esign/nsdl",
     addPoint: true,
     subTitleClass: "kyc-submitted",
     subtitleColor: "#B39712"
