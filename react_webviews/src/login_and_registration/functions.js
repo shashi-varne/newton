@@ -222,7 +222,7 @@ export async function triggerOtpApi(body, loginType) {
         };
         storageService().setObject("user_promo", item);
       }
-      toast(result?.error || result?.message || errorMessage);
+      toast(result?.message || "Success");
     } else throw result?.error || result?.message || errorMessage;
   } catch (error) {
     console.log(error);
