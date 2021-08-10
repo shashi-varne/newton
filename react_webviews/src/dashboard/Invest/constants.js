@@ -469,7 +469,7 @@ export const kycStatusMapperInvest = {
   esign_pending: {
     icon: "ic_kyc_complete.svg",
     title: "KYC application",
-    subtitle: "COMPLETE_ESIGN",
+    subtitle: "COMPLETE ESIGN",
     nextState: "/kyc-esign/info",
     addPoint: true,
     subTitleClass: "kyc-complete",
