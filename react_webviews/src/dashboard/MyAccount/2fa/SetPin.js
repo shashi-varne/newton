@@ -67,11 +67,7 @@ const SetPin = (props) => {
 
   const handleYes = () => {
     sendEvents("back");
-    if (getConfig().isNative) {
-      nativeCallback({ action: 'exit_web' });
-    } else {
-      navigate("/invest");
-    }
+    navigate("/invest");
   }
 
   return (
@@ -87,7 +83,7 @@ const SetPin = (props) => {
     >
       <div style={{ paddingTop: '60px' }}>
         <EnterMPin
-          title="Set fisdom PIN"
+          title={`Set ${getConfig().productName} PIN`}
           subtitle="Ensuring maximum security for your investment account"
           otpProps={{
             otp: mpin,

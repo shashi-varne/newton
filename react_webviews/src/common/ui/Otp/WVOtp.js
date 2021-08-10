@@ -26,6 +26,7 @@ const WVOtp = ({
       <div>
         <OtpInput
           hasErrored
+          isInputNum
           id="wv-otp"
           numInputs={numInputs}
           inputStyle="wv-otp-input"

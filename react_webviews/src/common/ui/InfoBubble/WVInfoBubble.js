@@ -119,7 +119,7 @@ WVInfoBubble.propTypes = {
   hasTitle: PropTypes.bool,
   customTitle: PropTypes.string,
   type: PropTypes.oneOf(Object.keys(TYPES)),
-  children: PropTypes.string.isRequired
+  children: PropTypes.node
 };
 
 WVInfoBubble.defaultProps = {

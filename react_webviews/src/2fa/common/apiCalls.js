@@ -12,7 +12,7 @@ const handleApiResponse = (res) => {
   if (status === 200) {
     return result;
   } else {
-    throw result.message || genericErrMsg;
+    throw result.error || result.message || genericErrMsg;
   }
 }
 

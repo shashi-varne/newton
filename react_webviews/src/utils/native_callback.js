@@ -197,7 +197,8 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       open_browser_web(message.url, '_blank')
     } else if (action === 'resume_provider') {
       open_browser_web(message.resume_link, '_self')
-    } else if (action === '2fa_required') {
+    } else if (action === '2fa_expired') {
+      storageService().remove('currentUser');
       storageService().setBoolean('session-timeout', true);
       window.location.href = redirectTo2FA();
     } else {
@@ -230,6 +231,7 @@ export function openModule(moduleName, props) {
       'app/profile': '/my-account',
       'invest/save_tax': '/invest',
       'invest/nps': '/nps/info',
+      'account/setup_2fa': '/set-fisdom-pin/kyc-complete'
     }
     
     let moduleNameWeb = module_mapper[moduleName] || '/';

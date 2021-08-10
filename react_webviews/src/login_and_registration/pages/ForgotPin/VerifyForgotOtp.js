@@ -113,7 +113,7 @@ const VerifyForgotOtp = (props) => {
     >
       <LoginButton
         onClick={handleClick}
-        // disabled={!otp}
+        disabled={otp.length !== 4}
         showLoader={isApiRunning}
       >
         CONTINUE
