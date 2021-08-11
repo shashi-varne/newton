@@ -90,11 +90,15 @@ class MyAccount extends Component {
     if (kycStatus === "ground") {
       mfStatus = "init";
       stocksStatus = "init";
-    } else if (kycStatus === "complete") {
-      mfStatus = "complete";
     } else if (kycStatus === "rejected") {
       stocksStatus = "rejected";
-      mfStatus = "rejected";
+      if(userKyc.application_status_v2 !== "complete") {
+        mfStatus = "rejected";
+      }
+    }
+
+    if (userKyc.application_status_v2 === "complete") {
+      mfStatus = "complete";
     }
 
     kycStatusData.push({ ...MF_AND_STOCKS_STATUS_MAPPER[mfStatus], status: mfStatus, key: "mf", title: "Mutual fund" });
