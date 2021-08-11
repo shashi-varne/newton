@@ -232,11 +232,11 @@ class Landing extends Component {
             />
           }
           {investSections &&
-            investSections.map((element, index) => {
+            investSections.map((element, idx) => {
               switch (element) {
                 case "kyc":
                   return (
-                    <React.Fragment key={index}>
+                    <React.Fragment key={idx}>
                       {(!kycStatusLoader && kycStatusData && ((!tradingEnabled && !isReadyToInvestBase) ||
 -                      (tradingEnabled && (!isEquityCompletedBase || (isEquityCompletedBase && kycJourneyStatus === "fno_rejected"))))) ? (
                         <div
@@ -285,7 +285,7 @@ class Landing extends Component {
                 //   );
                 case "indexFunds":
                   return (
-                    <React.Fragment key={index}>
+                    <React.Fragment key={idx}>
                       {!isEmpty(indexFunds) &&
                         indexFunds.map((item, index) => {
                           return (
@@ -305,7 +305,7 @@ class Landing extends Component {
                   );
                 case "ourRecommendations":
                   return (
-                    <React.Fragment key={index}>
+                    <React.Fragment key={idx}>
                       {!isEmpty(ourRecommendations) && (
                         <>
                           <div className="invest-main-top-title" data-aid='recommendations-title'>
@@ -328,7 +328,7 @@ class Landing extends Component {
                   );
                 case "stocksAndIpo":
                   return (
-                    <React.Fragment key={index}>
+                    <React.Fragment key={idx}>
                       {!isEmpty(stocksAndIpo) && tradingEnabled && (
                         <>
                           <div className="invest-main-top-title" data-aid='recommendations-title'>
@@ -343,6 +343,7 @@ class Landing extends Component {
                                     height: '170px',
                                     marginBottom: "15px",
                                   }}
+                                  key={index}
                                 />
                               )
                             } else {
@@ -363,7 +364,7 @@ class Landing extends Component {
                   );
                 case "diy":
                   return (
-                    <React.Fragment key={index}>
+                    <React.Fragment key={idx}>
                       {!isEmpty(diy) && (
                         <>
                           <div className="invest-main-top-title" data-aid='diy-title'>
@@ -386,7 +387,7 @@ class Landing extends Component {
                   );
                 case "bottomScrollCards":
                   return (
-                    <div className="bottom-scroll-cards" key={index} data-aid='bottomScrollCards-title'>
+                    <div className="bottom-scroll-cards" key={idx} data-aid='bottomScrollCards-title'>
                       <div className="list" data-aid='bottomScrollCards-list'>
                         {!isEmpty(bottomScrollCards) &&
                           bottomScrollCards.map((item, index) => {
@@ -419,7 +420,7 @@ class Landing extends Component {
                   );
                 case "bottomCards":
                   return (
-                    <React.Fragment key={index}>
+                    <React.Fragment key={idx}>
                       {!isEmpty(bottomCards) &&
                         bottomCards.map((item, index) => {
                           return (
@@ -436,7 +437,7 @@ class Landing extends Component {
                   );
                 case "financialTools":
                   return (
-                    <React.Fragment key={index}>
+                    <React.Fragment key={idx}>
                       {!isEmpty(financialTools) && (
                         <>
                           <div className="invest-main-top-title" data-aid='financial-tools-title'>
@@ -482,7 +483,7 @@ class Landing extends Component {
                   );
                 case "popularCards":
                   return (
-                    <React.Fragment key={index}>
+                    <React.Fragment key={idx}>
                       {!isEmpty(popularCards) && (
                         <>
                           <div className="invest-main-top-title" data-aid='popularCards-tools-title'>
@@ -514,7 +515,7 @@ class Landing extends Component {
                     </React.Fragment>
                   );
                 default:
-                  return <></>;
+                  return <React.Fragment key={idx}></React.Fragment>;
               }
             })}
           <SebiRegistrationFooter className="invest-sebi-registration-disclaimer" />
