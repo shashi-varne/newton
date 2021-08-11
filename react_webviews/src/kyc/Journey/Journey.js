@@ -25,7 +25,7 @@ import ConfirmBackDialog from '../mini-components/ConfirmBackDialog'
 
 const HEADER_MAPPER_DATA = {
   kycDone: {
-    icon: "ic_premium_onboarding_mid",
+    icon: "ic_premium_onboarding",
     title: "Finish account upgrade",
     subtitle: "",
   },

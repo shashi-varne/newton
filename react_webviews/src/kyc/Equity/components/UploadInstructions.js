@@ -1,4 +1,5 @@
 import React from "react";
+import { getConfig } from "../../../utils/functions";
 import Container from "../../common/Container";
 import "./commonStyles.scss";
 
@@ -32,6 +33,7 @@ const instructionsMapper = {
   },
 };
 const UploadInstructions = (props) => {
+  const productName = getConfig().productName;
   const state = props.location.state || {};
   const data = instructionsMapper[state.document] || instructionsMapper["pan"];
   const goBack = () => {
@@ -46,12 +48,12 @@ const UploadInstructions = (props) => {
             <img
               alt=""
               className="left-img"
-              src={require(`assets/pan_sample_right.svg`)}
+              src={require(`assets/${productName}/pan_sample_right.svg`)}
             />
             <img
               alt=""
               className="left-img"
-              src={require(`assets/${data.wrong_icon}`)}
+              src={require(`assets/${productName}/${data.wrong_icon}`)}
             />
           </div>
         );

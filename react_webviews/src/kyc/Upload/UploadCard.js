@@ -32,14 +32,6 @@ const UploadCard = (props) => {
           className="icon"
           id={`icon${index+1}`}
         />
-        {doc_status === "rejected" && (
-          <img
-            src={require(`assets/attention_icon.svg`)}
-            alt=""
-            className="check-icon"
-            id={`check-icon-rejected_${index+1}`}
-          />
-        )}
       </div>
       <div>
         <div className="title" id={`title_${index+1}`} data-aid={`title_${index+1}`}>{title}</div>
@@ -53,6 +45,14 @@ const UploadCard = (props) => {
           id={`check-icon-submitted_${index + 1}`}
         />
       }
+      {doc_status === "rejected" && (
+        <img
+          src={require(`assets/badge-error.svg`)}
+          alt="rejected"
+          style={{ marginLeft: 'auto' }}
+          id={`check-icon-rejected_${index+1}`}
+        />
+      )}
     </div>
   );
 };

@@ -48,7 +48,7 @@ const WVSteps = ({
 }
 
 const checkImg = (
-  <img src={require('assets/badge-success.svg')} alt="" />
+  <img src={require('assets/badge-success.svg')} alt="" width="100%" />
 );
 
 WVSteps.propTypes = {
