@@ -121,8 +121,8 @@
     "whatwg-fetch": "2.0.3"
   },
   "scripts": {
-    "start": "node scripts/start.js",
-    "build": "node --max_old_space_size=4096 scripts/build.js",
+    "start": "NODE_PATH=./src node scripts/start.js",
+    "build": "NODE_PATH=./src node --max_old_space_size=4096 scripts/build.js",
     "test": "NODE_PATH=./src node scripts/test.js --env=jsdom"
   },
   "jest": {
