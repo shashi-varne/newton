@@ -207,7 +207,6 @@ export function getKycAppStatus(kyc) {
       { name: "identification", keys: ["meta_data_status"] },
       { name: "nomination", keys: ["meta_data_status"] },
       { name: "sign", keys: ["doc_status"] },
-      { name: "equity_income", keys: ["doc_status"] }
     ];
   } else {
     fieldsToCheck = [
@@ -215,11 +214,21 @@ export function getKycAppStatus(kyc) {
       { name: "address", keys: ["doc_status", "meta_data_status"] },
       { name: "bank", keys: ["meta_data_status"] },
       { name: "identification", keys: ["doc_status", "meta_data_status"] },
-      { name: "nomination", keys: ["doc_status", "meta_data_status"] },
+      { name: "nomination", keys: ["meta_data_status"] },
       { name: "sign", keys: ["doc_status"] },
       { name: "ipvvideo", keys: ["doc_status"] },
-      { name: "equity_income", keys: ["doc_status"] }
     ];
+  }
+
+  let newFieldsToCheck;
+  if (TRADING_ENABLED) {
+    newFieldsToCheck = [
+      { name: "equity_pan", keys: ["doc_status", "meta_data_status"] },
+      { name: "equity_identification", keys: ["doc_status", "meta_data_status"] },
+      { name: "equity_income", keys: ["doc_status"] },
+    ]
+    fieldsToCheck = [...fieldsToCheck, ...newFieldsToCheck];
+    fieldsToCheck = fieldsToCheck.filter((fieldObj) => !["pan", "identification"].includes(fieldObj.name));
   }
 
   if (kyc.address.meta_data.is_nri) {
