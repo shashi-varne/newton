@@ -97,14 +97,14 @@ const WVFileUploadCard = ({
   );
 }
 
-WVFilePickerWrapper.propTypes = {
+WVFileUploadCard.propTypes = {
   title: PropTypes.node,
   subtitle: PropTypes.node,
   file: PropTypes.object,
   classes: PropTypes.object,
 }
 
-WVFilePickerWrapper.defaultProps = {
+WVFileUploadCard.defaultProps = {
   classes: {},
 }
 

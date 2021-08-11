@@ -53,8 +53,8 @@ const compressImage = async (file) => {
 
 export const WVFilePickerWrapper = ({
   dataAidSuffix,
-  nativePickerMethodName = '', // Method name for native file handler (open_gallery, open_canvas, etc.) 
-  customPickerId = 'wv-file-input', /*
+  nativePickerMethodName, // Method name for native file handler (open_gallery, open_canvas, etc.) 
+  customPickerId, /*
     To uniquely identify the internal <input /> element
     (Required when there's more than 1 file pickers in a single page)
   */
@@ -188,7 +188,7 @@ WVFilePickerWrapper.propTypes = {
 }
 
 WVFilePickerWrapper.defaultProps = {
-  customPickerId: '',
+  customPickerId: 'wv-file-input',
   showOptionsDialog: false,
   onFileSelectError: null,
   extraValidation: null,
