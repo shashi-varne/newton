@@ -462,18 +462,14 @@ export const kycStatusMapperInvest = {
     title: "You’re ready to invest in mutual funds",
     subtitle: "UPGRAGE ACCOUNT",
     nextState: "/kyc/trading-info",
-    addPoint: true,
     subTitleClass: "kyc-complete",
-    subtitleColor: "#35CB5D"
   },
   esign_pending: {
     icon: "ic_kyc_complete.svg",
     title: "KYC application",
     subtitle: "COMPLETE ESIGN",
     nextState: "/kyc-esign/info",
-    addPoint: true,
     subTitleClass: "kyc-complete",
-    subtitleColor: "#35CB5D"
   },
   equity_activation_pending: {
     icon: "ic_kyc_under_process.svg",
