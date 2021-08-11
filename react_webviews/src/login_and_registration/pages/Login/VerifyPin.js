@@ -8,7 +8,7 @@ import { verifyPin } from '../../../2fa/common/apiCalls';
 import { nativeCallback } from "../../../utils/native_callback";
 import WVButton from '../../../common/ui/Button/WVButton';
 import DotDotLoader from '../../../common/ui/DotDotLoaderNew';
-import { postLoginSetup, redirectAfterLogin } from '../../functions';
+import { redirectToLaunchDiet, postLoginSetup, redirectAfterLogin } from '../../functions';
 
 const pinAttemptsKey = 'pin-attempts'; // key name for session store
 
@@ -56,6 +56,7 @@ const VerifyPin = (props) => {
       storageService().clear(pinAttemptsKey);
       sendEvents("next");
       await postLoginSetup();
+      // await redirectToLaunchDiet()
       redirectAfterLogin(
         { firstLogin: false },
         '',

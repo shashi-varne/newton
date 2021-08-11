@@ -6,6 +6,7 @@ import "typeface-poppins";
 import 'idempotent-babel-polyfill';
 import 'react-app-polyfill/ie11';
 import 'react-app-polyfill/stable';
+import cssVars from 'css-vars-ponyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
@@ -14,7 +15,7 @@ import { isMobile } from 'utils/functions';
 import scrollIntoView from 'scroll-into-view-if-needed';
 import './common/theme/Style.scss';
 import "./common/ui/style.scss";
-import { getConfig, isIframe } from './utils/functions';
+import { getCssVarObject, getConfig, isIframe } from './utils/functions';
 // ----- Rubik font imports -----
 import "@fontsource/rubik/latin.css"; // all weights from 300 to 900, (does not include italics)
 import "@fontsource/rubik/latin-400-italic.css";
@@ -28,6 +29,11 @@ import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
 
 $(document).ready(function () {
+  const cssVarObj = getCssVarObject();
+  cssVars({
+    preserveVars:true,
+    variables: cssVarObj
+  });
   if(isIframe()) {
     let bodyElement =  document.getElementsByTagName('body');
     bodyElement[0].classList.add('IframeBody');

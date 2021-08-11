@@ -10,12 +10,13 @@
     margin-bottom: 20px;
 
     .country-code {
+      width: 80px;
       width: fit-content;
       margin-bottom: -20px;
 
       .dropdown-without-icon{
         position: relative;
-        top: -7px;
+        top: -8px;
         left: 2px;
 
         .MuiSelect-root {
