@@ -437,7 +437,7 @@ export const kycStatusMapperInvest = {
     nextState: "/kyc/upload/progress",
     addPoint: true,
     subTitleClass: "kyc-rejected",
-    subtitleColor: "#D0021B"
+    subtitleColor: "var(--red)"
   },
   fno_rejected: {
     icon: "ic_kyc_rejected.svg",
@@ -446,7 +446,7 @@ export const kycStatusMapperInvest = {
     nextState: "/kyc/upload/fno-income-proof",
     addPoint: true,
     subTitleClass: "kyc-rejected",
-    subtitleColor: "#D0021B"
+    subtitleColor: "var(--red)"
   },
   submitted: {
     icon: "ic_kyc_under_process.svg",
@@ -455,7 +455,7 @@ export const kycStatusMapperInvest = {
     nextState: "/kyc-esign/nsdl",
     addPoint: true,
     subTitleClass: "kyc-submitted",
-    subtitleColor: "#B39712"
+    subtitleColor: "var(--mustard)"
   },
   complete: {
     icon: "ic_kyc_complete.svg",
@@ -477,7 +477,7 @@ export const kycStatusMapperInvest = {
     subtitle: "VERIFYING TRADING A/C",
     addPoint: true,
     subTitleClass: "kyc-submitted",
-    subtitleColor: "#B39712"
+    subtitleColor: "var(--mustard)"
   }
 };
 
