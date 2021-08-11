@@ -53,7 +53,6 @@ const ConfirmNewPin = (props) => {
         kyc: ["kyc"],
         user: ["user"]
       });
-      clearRouteParams();
       setIsApiRunning(false);
       setOpenDialog(true);
     } catch (err) {
@@ -88,6 +87,7 @@ const ConfirmNewPin = (props) => {
   }
 
   const handleYes = () => {
+    clearRouteParams();
     if (kycFlow) {
       navigate("/invest");
     } else {
