@@ -476,31 +476,23 @@ export function openPremiumOnboardBottomSheet(
   }
 
   storageService().set("is_bottom_sheet_displayed_kyc_premium", true);
-  // Todo: Remove the bank rejection only logic after discussing with Mayank
-  if (!TRADING_ENABLED && userKyc.bank.meta_data_status === "rejected") {
-    this.setState({ verificationFailed: true });
-  } else {
-    this.setState({
-      modalData: bottom_sheet_dialog_data_premium,
-      openKycPremiumLanding: true,
-    });
-  }
+  
+  this.setState({
+    modalData: bottom_sheet_dialog_data_premium,
+    openKycPremiumLanding: true,
+  });
 }
 
 export function handleKycSubmittedOrRejectedState() {
-  let { userKyc, kycJourneyStatusMapperData, rejectedItems } = this.state;
-
-  if (rejectedItems.length === 1 && userKyc.bank.meta_data_status === "rejected") {
-    this.setState({ verificationFailed: true });
-  } else {
-    let modalData = Object.assign({}, kycJourneyStatusMapperData);
-    modalData.button1Props = {
-      title: modalData.buttonTitle,
-      variant: "contained",
-      onClick: this.handleKycStatus,
-    }
-    this.setState({ modalData, openKycStatusDialog: true });
+  let { kycJourneyStatusMapperData } = this.state;
+  
+  let modalData = Object.assign({}, kycJourneyStatusMapperData);
+  modalData.button1Props = {
+    title: modalData.buttonTitle,
+    variant: "contained",
+    onClick: this.handleKycStatus,
   }
+  this.setState({ modalData, openKycStatusDialog: true });
 }
 
 export async function openKyc() {
