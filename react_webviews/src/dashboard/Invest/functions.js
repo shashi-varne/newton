@@ -500,7 +500,7 @@ export async function openKyc() {
   } = this.state;
 
   storageService().set("kycStartPoint", "mf");
-  if (["submitted", "rejected", "equity_activation_pending"].includes(kycJourneyStatus)) {
+  if (["submitted", "rejected", "equity_activation_pending", "fno_rejected", "esign_pending"].includes(kycJourneyStatus)) {
     this.handleKycSubmittedOrRejectedState();
   } else {
     if (kycJourneyStatus === "ground") {
