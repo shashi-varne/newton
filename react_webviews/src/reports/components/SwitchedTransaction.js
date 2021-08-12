@@ -10,7 +10,7 @@ import { nativeCallback } from "../../utils/native_callback";
 
 const SwitchedTransaction = (props) => {
   const stateParams = props.location?.state || {};
-  const [transactions, setTransactions] = useState({});
+  const [transactions, setTransactions] = useState([]);
   const [openProcess, setOpenProcess] = useState(false);
   const [selectedSwitch, setSelectedSwitch] = useState({});
   const [showSkelton, setShowSkelton] = useState(true);
@@ -18,7 +18,7 @@ const SwitchedTransaction = (props) => {
   useEffect(() => {
     const transactionsData = storageService().getObject(
       storageConstants.PENDING_SWITCH
-    );
+    ) || [];
     if (!isEmpty(transactionsData) && stateParams.fromPath === "reports") {
       setTransactions(transactionsData);
       setShowSkelton(false);
@@ -33,10 +33,10 @@ const SwitchedTransaction = (props) => {
       setShowSkelton(false);
       return;
     }
-    setTransactions(result.report?.pending?.switch_transactions || {});
+    setTransactions(result.report?.pending?.switch_transactions || []);
     storageService().setObject(
       storageConstants.PENDING_SWITCH,
-      result.report?.pending?.switch_transactions || {}
+      result.report?.pending?.switch_transactions || []
     );
     setShowSkelton(false);
   };

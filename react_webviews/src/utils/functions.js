@@ -224,6 +224,10 @@ export const getConfig = () => {
     generic_callback = true
   }
 
+  if(!sdk_capabilities) {
+    sdk_capabilities = storageService().get("sdk_capabilities") || "";
+  }
+
   if(!partner_code) {
     partner_code = storageService().get("partner") || ""
   }
