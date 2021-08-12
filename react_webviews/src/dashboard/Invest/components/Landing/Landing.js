@@ -251,28 +251,6 @@ class Landing extends Component {
                       ): null}
                     </React.Fragment>
                   );
-                // case "stocks":
-                //   return (
-                //     <React.Fragment key={index}>
-                //       {tradingEnabled && !isEquityCompletedBase && (
-                //         <div className="invest-main-top-title" 
-                //           onClick={() => {!kycStatusLoader && !stocksButtonLoader && !kycButtonLoader && this.clickCard("stocks") }} 
-                //           data-aid='stocks-title'
-                //         >
-                //           <WVButton
-                //             variant='contained'
-                //             size='large'
-                //             color="secondary"
-                //             disabled={kycStatusLoader}
-                //             showLoader={stocksButtonLoader}
-                //             // fullWidth
-                //           >
-                //             Stocks
-                //           </WVButton>
-                //         </div>
-                //       )}
-                //     </React.Fragment>
-                //   );
                 case "indexFunds":
                   return (
                     <React.Fragment key={index}>
