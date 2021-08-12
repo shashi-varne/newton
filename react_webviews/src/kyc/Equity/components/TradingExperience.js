@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import { kycSubmit } from "../../common/api";
 import useUserKycHook from "../../common/hooks/userKycHook";
-import { checkDLPanFetchAndApprovedStatus, checkDocsPending, isDocSubmittedOrApproved } from "../../common/functions"
+import { checkDLPanFetchAndApprovedStatus, checkDocsPending, isDigilockerFlow, isDocSubmittedOrApproved } from "../../common/functions"
 import toast from "../../../common/ui/Toast";
 import { isEmpty } from "../../../utils/validators";
 import { PATHNAME_MAPPER } from "../../constants";
@@ -83,7 +83,7 @@ const TradingExperience = (props) => {
 
   const handleNavigation = () => {
     const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
-    if (kyc.initial_kyc_status === "compliant" || isPanFailedAndNotApproved) {
+    if (kyc.initial_kyc_status === "compliant" || (isDigilockerFlow(kyc) && isPanFailedAndNotApproved)) {
       if (!isDocSubmittedOrApproved("equity_pan")) {
         navigate(PATHNAME_MAPPER.uploadPan, {
           state: { goBack: "/kyc/trading-experience" }

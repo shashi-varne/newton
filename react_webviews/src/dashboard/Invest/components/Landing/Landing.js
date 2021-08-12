@@ -111,7 +111,7 @@ class Landing extends Component {
 
   handleKycStatus = async () => {
     this.sendEvents("next", "kyc_bottom_sheet");
-    let { kycJourneyStatus, kycStatusData, tradingEnabled, userKyc } = this.state;
+    let { kycJourneyStatus, modalData, tradingEnabled, userKyc } = this.state;
     if (["submitted", "equity_activation_pending"].includes(kycJourneyStatus) || (kycJourneyStatus === "complete" && userKyc.mf_kyc_processed)) {
       this.closeKycStatusDialog();
     } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity")) {
@@ -123,8 +123,10 @@ class Landing extends Component {
           show_aadhaar: !(userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual"),
         },
       });
+    } else if (modalData.nextState === "/invest") {
+      this.closeKycStatusDialog();
     } else {
-      this.navigate(kycStatusData.nextState);
+      this.navigate(modalData.nextState);
     }
   };
 
