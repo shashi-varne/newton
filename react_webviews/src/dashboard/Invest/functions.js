@@ -428,10 +428,13 @@ export function initilizeKyc() {
   }
 
   let modalData = {}
-  if (["equity_activation_pending", "complete"].includes(kycJourneyStatus)) {
-    if ( kycJourneyStatus === "complete") {
+  if (["equity_activation_pending", "complete", "fno_rejected"].includes(kycJourneyStatus)) {
+    if (["fno_rejected", "complete"].includes(kycJourneyStatus)) {
       if (TRADING_ENABLED && userKyc.equity_investment_ready) {
         modalData = kycStatusMapper["kyc_verified"];
+        if (kycJourneyStatus === "fno_rejected") {
+          modalData.subtitle = "You can start your investment journey by investing in your favourite stocks, mutual funds."
+        }
       } else if (!TRADING_ENABLED && !isCompliant) {
         modalData = kycStatusMapper["mf_complete"];
       }
