@@ -13,10 +13,11 @@
       width: 80px;
       width: fit-content;
       margin-bottom: -20px;
+      position: relative;
+      top: -8px;
 
       .dropdown-without-icon{
         position: relative;
-        top: -8px;
         left: 2px;
 
         .MuiSelect-root {
