@@ -268,7 +268,11 @@ class Landing extends Component {
                               <span>{kycStatusData.subtitle}</span>
                             </div>
                           </div>
-                          <Imgc src={require(`assets/${productName}/${kycStatusData.icon}`)} alt="" />
+                          <Imgc
+                            className="kyc-card-image"
+                            src={require(`assets/${productName}/${kycStatusData.icon}`)}
+                            alt=""
+                          />
                         </div>
                       ): null}
                     </React.Fragment>
