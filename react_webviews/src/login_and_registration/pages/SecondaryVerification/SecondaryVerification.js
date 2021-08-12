@@ -4,9 +4,10 @@ import Container from "../../../dashboard/common/Container";
 import Input from "common/ui/Input";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { countries } from "../../constants";
-import { authCheckApi, generateOtp, formCheckFields, triggerOtpApi } from "../../functions";
-import { validateNumber } from "utils/validators";
+import { authCheckApi, formCheckFields, triggerOtpApi } from "../../functions";
+import { validateNumber, validateEmail } from "utils/validators";
 import { nativeCallback } from "../../../utils/native_callback";
+import toast from "common/ui/Toast";
 import DropDownNew from "common/ui/DropDownNew";
 import Checkbox from "../../../common/ui/Checkbox";
 import WVInPageSubtitle from "../../../common/ui/InPageHeader/WVInPageSubtitle";
@@ -22,7 +23,6 @@ class SecondaryVerification extends Component {
             isEdit: false
         }
         this.authCheckApi = authCheckApi.bind(this);
-        this.generateOtp = generateOtp.bind(this);
         this.formCheckFields = formCheckFields.bind(this);
         this.navigate = navigateFunc.bind(this.props);
         this.triggerOtpApi = triggerOtpApi.bind(this)
@@ -54,10 +54,10 @@ class SecondaryVerification extends Component {
     handleChange = (name) => (event) => {
         let value = event.target ? event.target.value : event;
         let { form_data } = this.state;
-        if (name === "mobile" && value && !validateNumber(value)) return;
-        if (name === "mobile" && form_data.code === "+91" & value.length > 10) return;
+        if(name === "mobile" && value && !validateNumber(value)) return;
+        if(name === "mobile" && form_data.code === "+91" & value.length > 10) return;
         form_data[name] = value;
-        if (name === "whatsapp_consent") form_data[name] = !form_data?.whatsapp_consent;
+        if(name === "whatsapp_consent") form_data[name] = !form_data?.whatsapp_consent;
         form_data[`${name}_error`] = "";
         this.setState({ form_data: form_data });
     };
@@ -66,6 +66,10 @@ class SecondaryVerification extends Component {
         let { form_data, loginType } = this.state;
         let keys_to_check = ["mobile", "code"];
         if (loginType === "email") keys_to_check = ["email"];
+        if (loginType === "email" && !validateEmail(form_data["email"])) {
+            toast("Invalid email");
+            return;
+          }
         let result = await this.authCheckApi(loginType, { "contact_value": form_data[loginType] })
         if (result?.is_user) {
             this.setState({
@@ -107,7 +111,7 @@ class SecondaryVerification extends Component {
             accountAlreadyExists: false,
             isApiRunning: "button",
         });
-        let body = {};
+        let body = { secondaryVerification: true};
         let { form_data } = this.state;
         if (type === "email") {
             body.email = form_data?.email;
@@ -115,22 +119,13 @@ class SecondaryVerification extends Component {
             body.mobile = form_data?.mobile;
             body.whatsapp_consent = true;
         };
-        const otpResponse = await this.generateOtp(body);
-        if (otpResponse) {
-            this.sendEvents("next")
-            this.navigate("secondary-otp-verification", {
-                state: {
-                    value: type === "email" ? form_data?.email : form_data?.mobile,
-                    otp_id: otpResponse.pfwresponse.result.otp_id,
-                    communicationType: type,
-                },
-            });
-        }
+        await this.triggerOtpApi(body, type);
     };
 
     editDetailsAccountAlreadyExists = () => {
         this.setState({
-            accountAlreadyExists: false
+            accountAlreadyExists: false,
+            isEdit: true,
         })
     };
 
@@ -217,7 +212,7 @@ class SecondaryVerification extends Component {
                                     helperText={form_data.email_error || ""}
                                     class="input"
                                     id="email"
-                                    label="Enter email address"
+                                    label="Email address"
                                     name="email"
                                     onChange={this.handleChange("email")}
                                     autoFocus

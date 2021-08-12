@@ -21,6 +21,7 @@ import {
   storageService,
   validateEmail,
   validateNumber,
+  getUrlParams,
 } from "../../../utils/validators";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import CheckBox from "../../../common/ui/Checkbox";
@@ -47,6 +48,7 @@ const config = getConfig();
 const CommunicationDetails = (props) => {
   const navigate = navigateFunc.bind(props);
   const stateParams = props.location?.state || {};
+  const isNotification = getUrlParams()?.from_notification;
   const isEdit = stateParams.isEdit || false;
   const userType = stateParams.userType || "";
   const callHandleClick = stateParams.callHandleClick;
@@ -71,6 +73,7 @@ const CommunicationDetails = (props) => {
   const [totalPages, setTotalPages] = useState();
   const [isDlFlow, setIsDlFlow] = useState();
   const [continueAccountAlreadyExists, setContinueAccountAlreadyExists] = useState(false);
+  const [sendRequest, setSendRequest ] = useState(false);
   const [accountAlreadyExists, setAccountAlreadyExists] = useState(false);
   const [goldVerificationLink, setVerificationLink] = useState();
   const [goldResendVerificationOtpLink, setGoldResendVerificationOtpLink] = useState();
@@ -80,11 +83,14 @@ const CommunicationDetails = (props) => {
     if ((!isEmpty(kyc) && !continueAccountAlreadyExists) && isEmpty(goldUserInfo)) {
       initialize();
     }
-    if (!isEmpty(goldUserInfo) && !isEmpty(kyc) ) {
+    if (!isEmpty(goldUserInfo) && !isEmpty(kyc)) {
       initializeGold();
     }
-    if ((callHandleClick && communicationType) || continueAccountAlreadyExists) handleClick();
-  }, [kyc, communicationType, continueAccountAlreadyExists, goldUserInfo]);
+    if ((callHandleClick && communicationType) || continueAccountAlreadyExists){
+      handleClick();
+      setContinueAccountAlreadyExists(false)
+    }
+  }, [kyc, communicationType, sendRequest, goldUserInfo]);
 
   const initialize = async () => {
     setIsKycDone(kyc?.mf_kyc_processed);
@@ -93,9 +99,9 @@ const CommunicationDetails = (props) => {
     if (showOtpContainer) {
       setShowOtpContainer(false);
     }
-    const type = !kyc.identification.meta_data.email_verified
-      ? "email"
-      : "mobile";
+    const type = !kyc.identification.meta_data.mobile_number_verified
+      ? "mobile"
+      : "email";
     setCommunicationType(type);
     const data = { ...formData };
     if (type === "email") {
@@ -326,6 +332,7 @@ const CommunicationDetails = (props) => {
     sendEvents("edit");
     if (showDotLoader) return;
     setAccountAlreadyExists(false)
+    setContinueAccountAlreadyExists(false)
     setShowOtpContainer(false);
     setButtonTitle("CONTINUE");
   };
@@ -365,6 +372,10 @@ const CommunicationDetails = (props) => {
       navigate(stateParams?.goBack);
       return;
     }
+    if(isNotification){
+      navigate("/my-account");
+      return;
+    }
     if (isKycDone) {
       navigate(PATHNAME_MAPPER.tradingExperience);
       return;
@@ -392,6 +403,7 @@ const CommunicationDetails = (props) => {
     setAccountAlreadyExists(false)
     if (!isEmpty(goldUserInfo)) return handleClickGold();
     setContinueAccountAlreadyExists(true)
+    setSendRequest(!sendRequest)
   }
 
 
@@ -446,9 +458,6 @@ const CommunicationDetails = (props) => {
         otp: "",
         otpId: result.otp_id,
       });
-      if (communicationType === "mobile" && formData.whatsappConsent) {
-        await sendWhatsappConsent(body);
-      }
     } catch (err) {
       console.log(err);
       toast(err.message)
@@ -586,7 +595,7 @@ const CommunicationDetails = (props) => {
               <div className="kcd-otp-content">
                 <Otp
                   otpData={otpData}
-                  totalTime={30}
+                  totalTime={15}
                   showDotLoader={showDotLoader}
                   handleOtp={handleOtp}
                   resendOtp={resendOtpVerification}
