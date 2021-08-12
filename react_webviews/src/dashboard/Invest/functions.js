@@ -429,12 +429,16 @@ export function initilizeKyc() {
   }
 
   let modalData = {}
-  if (kycJourneyStatus === "complete") {
-    if (TRADING_ENABLED && userKyc.equity_investment_ready) {
-      modalData = kycStatusMapper["kyc_verified"];
-    } else if (!TRADING_ENABLED && !isCompliant) {
-      modalData = kycStatusMapper["mf_complete"];
-    }  
+  if (["equity_activation_pending", "complete"].includes(kycJourneyStatus)) {
+    if ( kycJourneyStatus === "complete") {
+      if (TRADING_ENABLED && userKyc.equity_investment_ready) {
+        modalData = kycStatusMapper["kyc_verified"];
+      } else if (!TRADING_ENABLED && !isCompliant) {
+        modalData = kycStatusMapper["mf_complete"];
+      }
+    } else {
+      modalData = kycStatusMapper[kycJourneyStatus];
+    }
   }
   
   if (!isEmpty(modalData)) {
@@ -500,7 +504,7 @@ export async function openKyc() {
   } = this.state;
 
   storageService().set("kycStartPoint", "mf");
-  if (["submitted", "rejected", "equity_activation_pending", "fno_rejected", "esign_pending"].includes(kycJourneyStatus)) {
+  if (["submitted", "rejected", "fno_rejected", "esign_pending"].includes(kycJourneyStatus)) {
     this.handleKycSubmittedOrRejectedState();
   } else {
     if (kycJourneyStatus === "ground") {
