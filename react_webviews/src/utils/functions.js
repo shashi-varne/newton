@@ -222,6 +222,18 @@ export const getConfig = () => {
     project = 'iw-dashboard';
   } else if (main_pathname.indexOf('tax-filing') >= 0) {
     generic_callback = true
+  } else if (main_pathname.indexOf('kyc') >= 0) {
+    project = 'kyc';
+  } else if (main_pathname.indexOf('reports') >= 0) {
+    project = 'reports';
+  } else if (main_pathname.indexOf('withdraw') >= 0) {
+    project = 'withdraw';
+  } else if (main_pathname.indexOf('nps') >= 0) {
+    project = 'nps';
+  } else if (main_pathname.indexOf('diy') >= 0) {
+    project = 'diy';
+  } else if (main_pathname.indexOf('invest') >= 0) {
+    project = 'invest';
   }
 
   if(!sdk_capabilities) {
