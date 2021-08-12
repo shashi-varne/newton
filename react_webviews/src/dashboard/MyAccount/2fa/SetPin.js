@@ -16,6 +16,7 @@ const SetPin = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [kycFlow, setKycFlow] = useState(false);
+  const config = getConfig();
 
   useEffect(() => {
     if (props.match.params?.coming_from === "kyc-complete") {
@@ -32,7 +33,7 @@ const SetPin = (props) => {
       });
       sendEvents("next");
       persistRouteParams({ new_mpin: mpin, set_flow: true });
-      let path = kycFlow ? "/confirm-pin/kyc-complete" : "confirm-pin"
+      let path = `/account/confirm-pin${kycFlow ? "/kyc-complete" : ""}`;
       navigate(path);
     } catch (err) {
       console.log(err);
@@ -53,7 +54,7 @@ const SetPin = (props) => {
       "event_name": '2fa',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'set_fisdom_pin',
+        "screen_name": `set_${config.productName}_pin`,
         "journey": kycFlow ?  "KYC" : "account",
       }
     };
@@ -83,7 +84,7 @@ const SetPin = (props) => {
     >
       <div style={{ paddingTop: '60px' }}>
         <EnterMPin
-          title={`Set ${getConfig().productName} PIN`}
+          title={`Set ${config.productName} PIN`}
           subtitle="Ensuring maximum security for your investment account"
           otpProps={{
             otp: mpin,

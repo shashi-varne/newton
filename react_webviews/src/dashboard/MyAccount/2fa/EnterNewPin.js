@@ -4,7 +4,7 @@ import { verifyPin } from '../../../2fa/common/apiCalls';
 import EnterMPin from "../../../2fa/components/EnterMPin";
 import Container from "../../common/Container";
 import { nativeCallback } from "../../../utils/native_callback";
-import { navigate as navigateFunc } from "../../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 import { isEmpty } from "lodash";
 import WVInfoBubble from "../../../common/ui/InfoBubble/WVInfoBubble";
@@ -16,6 +16,7 @@ const EnterNewPin = (props) => {
   const routeParamsExist = useMemo(() => {
     return !isEmpty(routeParams);
   }, []);
+  const config = getConfig();
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -45,7 +46,7 @@ const EnterNewPin = (props) => {
       }
       sendEvents("next");
       persistRouteParams({ ...routeParams, ...params})
-      navigate("confirm-pin")
+      navigate("/account/confirm-pin")
     } catch (err) {
       console.log(err);
       setPinError(err);
@@ -74,7 +75,7 @@ const EnterNewPin = (props) => {
   return (
     <Container
       events={sendEvents("just_set_events")}
-      title={"Reset fisdom PIN"}
+      title={`Reset ${config.productName} PIN`}
       showLoader={isApiRunning}
       handleClick={handleClick}
       buttonTitle="Continue"
@@ -82,7 +83,7 @@ const EnterNewPin = (props) => {
     >
       <div style={{ paddingTop: '60px' }}>
         <EnterMPin
-          title="Enter new fisdom PIN"
+          title={`Enter new ${config.productName} PIN`}
           subtitle="Keep your account safe and secure"
           otpProps={{
             otp: pin,

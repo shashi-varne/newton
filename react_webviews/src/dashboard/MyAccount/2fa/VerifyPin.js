@@ -34,7 +34,7 @@ const VerifyPin = (props) => {
       await verifyPin({ mpin });
       sendEvents("next");
       persistRouteParams({ reset_flow: true, old_mpin: mpin })
-      navigate('new-pin');
+      navigate('/account/new-pin');
     } catch (err) {
       console.log(err);
       setMpinError(err);
@@ -65,7 +65,7 @@ const VerifyPin = (props) => {
   };
 
   const forgotPin = () => {
-    navigate("/forgot-fisdom-pin");
+    navigate("/account/forgot-pin");
     sendEvents("next");
   }
 

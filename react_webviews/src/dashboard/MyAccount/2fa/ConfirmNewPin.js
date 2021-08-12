@@ -74,8 +74,8 @@ const ConfirmNewPin = (props) => {
       "event_name": '2fa',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'confirm_fisdom_pin',
-        "journey": routeParams.set_flow ? "set_fisdom_pin" : "reset_fisdom_pin",
+        "screen_name": `confirm_${productName}_pin`,
+        "journey": routeParams.set_flow ? `set_${productName}_pin` : `reset_${productName}_pin`,
       }
     };
 
@@ -91,7 +91,7 @@ const ConfirmNewPin = (props) => {
     if (kycFlow) {
       navigate("/invest");
     } else {
-      navigate('/security-settings');
+      navigate('/account/security-settings');
     }
   }
 
@@ -129,7 +129,7 @@ const ConfirmNewPin = (props) => {
       <WVBottomSheet
         title={successText}
         image={require(`assets/${productName}/pin_changed.svg`)}
-        open={openDialog}
+        isOpen={openDialog}
         button1Props={{
           color: "secondary",
           variant: "contained",

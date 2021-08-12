@@ -13,9 +13,9 @@ const SecuritySettings = (props) => {
     const isPinSet = user.pin_status === 'pin_setup_complete';
     const [navigatePath, pinText] = useMemo(() => {
         if (isPinSet) {
-            return ["/reset-pin-verify", `Reset ${config.productName} PIN`];
+            return ["/account/reset-pin-verify", `Reset ${config.productName} PIN`];
         }
-        return ["/set-fisdom-pin", `Set ${config.productName} PIN`];
+        return ["/account/set-pin", `Set ${config.productName} PIN`];
     }, [isPinSet]);
 
     const sendEvents = (user_action) => {
@@ -24,7 +24,7 @@ const SecuritySettings = (props) => {
             "properties": {
                 "user_action": user_action,
                 "screen_name": 'security_settings',
-                "type": isPinSet ? "reset_fisdom_pin" : "set_fisdom_pin",
+                "type": isPinSet ? `reset_${config.productName}_pin` : `set_${config.productName}_pin`,
             }
         };
 
