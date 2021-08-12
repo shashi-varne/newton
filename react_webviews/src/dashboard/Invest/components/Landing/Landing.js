@@ -123,10 +123,10 @@ class Landing extends Component {
           show_aadhaar: !(userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual"),
         },
       });
-    } else if (modalData.nextState === "/invest") {
-      this.closeKycStatusDialog();
-    } else {
+    } else if (modalData.nextState && modalData.nextState !== "/invest") {
       this.navigate(modalData.nextState);
+    } else {
+      this.closeKycStatusDialog();
     }
   };
 
