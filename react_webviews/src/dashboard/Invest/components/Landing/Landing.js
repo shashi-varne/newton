@@ -130,6 +130,16 @@ class Landing extends Component {
     }
   };
 
+  handleStocksAndIpoRedirection = () => {
+    let { modalData } = this.state;
+    if(modalData.key === "ipo") {
+      this.handleIpoCardRedirection();
+    } else {
+      // To do: redirect to sdk page for fno_rejected status
+      this.closeKycStatusDialog();
+    }
+  }
+
   sendEvents = (userAction, cardClick = "") => {
     let eventObj = {
       event_name: "landing_page",
@@ -533,6 +543,7 @@ class Landing extends Component {
               data={modalData}
               close={this.closeKycStatusDialog}
               handleClick={this.handleKycStatus}
+              handleClick2={this.handleStocksAndIpoRedirection}
               cancel={this.closeKycStatusDialog}
             />
           )}

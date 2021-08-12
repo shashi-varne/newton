@@ -113,7 +113,7 @@ class MyAccount extends Component {
         fnoStatus = "rejected";
       } else if (
         userKyc.equity_income?.doc_status === "init" &&
-        userKyc.equity_application_status === "submitted"
+        ["submitted", "complete"].includes(userKyc.equity_application_status)
       ) {
         fnoStatus = "activate";
       } else if (userKyc.equity_income?.doc_status === "submitted") {

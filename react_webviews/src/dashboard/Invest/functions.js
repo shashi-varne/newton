@@ -438,11 +438,8 @@ export function initilizeKyc() {
   }
   
   if (!isEmpty(modalData)) {
-    modalData.button1Props = {
-      title: modalData.buttonTitle,
-      variant: "contained",
-      onClick: this.handleKycStatus,
-    }
+    if(!modalData.dualButton)
+      modalData.oneButton = true;
     this.setState({ modalData, openKycStatusDialog: true });
   }
 }
@@ -488,11 +485,8 @@ export function handleKycSubmittedOrRejectedState() {
     this.setState({ verificationFailed: true });
   } else {
     let modalData = Object.assign({}, kycJourneyStatusMapperData);
-    modalData.button1Props = {
-      title: modalData.buttonTitle,
-      variant: "contained",
-      onClick: this.handleKycStatus,
-    }
+    if(!modalData.dualButton)
+      modalData.oneButton = true;
     this.setState({ modalData, openKycStatusDialog: true });
   }
 }
@@ -553,6 +547,7 @@ export async function setKycProductTypeAndRedirect() {
 }
 
 export function handleIpoCardRedirection() {
+  // Todo: handle redirection to stocks sdk for equity_activation_pending status
   this.navigate("/market-products")
 }
           
@@ -612,7 +607,7 @@ export async function openStocks() {
 
 export function handleStocksAndIpoCards(key) {
   let { kycJourneyStatusMapperData, kycJourneyStatus, userKyc } = this.state;
-  let modalData = Object.assign({}, kycJourneyStatusMapperData);
+  let modalData = Object.assign({key}, kycJourneyStatusMapperData);
 
   if (key === "ipo") {
     if (kycJourneyStatus === "equity_activation_pending") {
@@ -628,8 +623,9 @@ export function handleStocksAndIpoCards(key) {
         buttonTitle: "CONTINUE",
         handleClick: this.handleIpoCardRedirection
       }
-    } else if (userKyc.equity_investment_ready || (kycJourneyStatus === "complete" && userKyc.mf_kyc_processed)) {
+    } else if (userKyc.equity_investment_ready || (kycJourneyStatus === "complete" && userKyc.mf_kyc_processed) || kycJourneyStatus === "fno_rejected") {
       this.handleIpoCardRedirection();
+      return
     }
   } else if (key === "stocks") {
     if (userKyc.equity_investment_ready || kycJourneyStatus === "complete") {
@@ -637,23 +633,8 @@ export function handleStocksAndIpoCards(key) {
     }
   }
 
-  if(key === "ipo" && !kycJourneyStatusMapperData.oneButton) {
-    modalData.button1Props = {
-      title: modalData.button2Title,
-      variant: "outlined",
-      onClick: this.handleIpoCardRedirection,
-    }
-    modalData.button2Props = {
-      title: modalData.buttonTitle,
-      variant: "contained",
-      onClick: this.handleKycStatus,
-    }
-  } else {
-    modalData.button1Props = {
-      title: modalData.buttonTitle,
-      variant: "contained",
-      onClick: modalData.handleClick || this.handleKycStatus,
-    }
+  if(key === "stocks" && !modalData.dualButton) {
+    modalData.oneButton = true
   }
 
   if (kycJourneyStatus !== "complete" || (kycJourneyStatus === "complete" && !userKyc.mf_kyc_processed)) {

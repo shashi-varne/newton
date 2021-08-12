@@ -339,6 +339,7 @@ export const kycStatusMapper = {
     buttonTitle: "COMPLETE NOW",
     landingText: "INCOMPLETE",
     icon: "icn_kyc_incomplete.svg",
+    nextState: "/kyc/journey"
   },
   complete: {
     color: "#ffa60b",
@@ -364,6 +365,8 @@ export const kycStatusMapper = {
     buttonTitle: "Complete esign",
     landingText: "INCOMPLETE",
     icon: "icn_kyc_completed.svg",
+    oneButton: true,
+    nextState: "/kyc-esign/info",
   },
   fno_rejected: {
     color: "#d0021b",
@@ -373,6 +376,8 @@ export const kycStatusMapper = {
     buttonTitle: "Update document",
     landingText: "INCOMPLETE",
     icon: "icn_kyc_doc_rejected.svg",
+    nextState: "/kyc/upload/fno-income-proof",
+    dualButton: true,
   },
   equity_activation_pending: {
     color: "#3792fc",
