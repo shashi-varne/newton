@@ -1,3 +1,5 @@
+import { PATHNAME_MAPPER as KYC_PATHNAME_MAPPER } from "../../kyc/constants";
+
 export const apiConstants = {
   accountSummary: "/api/user/account/summary",
   npsInvestStatus: "/api/nps/invest/status/v2",
@@ -309,7 +311,7 @@ export const kycStatusMapper = {
     button2Title: "Later",
     landingText: "Check your KYC status",
     icon: "icn_kyc_incomplete.svg",
-    nextState: "/kyc/home",
+    nextState: KYC_PATHNAME_MAPPER.homeKyc
   },
   submitted: {
     color: "#3792fc",
@@ -329,7 +331,7 @@ export const kycStatusMapper = {
     landingText: "PENDING",
     button2Title: "Later",
     icon: "icn_kyc_doc_rejected.svg",
-    nextState: "/kyc/upload/progress",
+    nextState: KYC_PATHNAME_MAPPER.uploadProgress
   },
   incomplete: {
     color: "#ffa60b",
@@ -339,7 +341,7 @@ export const kycStatusMapper = {
     buttonTitle: "COMPLETE NOW",
     landingText: "INCOMPLETE",
     icon: "icn_kyc_incomplete.svg",
-    nextState: "/kyc/journey"
+    nextState: KYC_PATHNAME_MAPPER.journey
   },
   complete: {
     color: "#ffa60b",
@@ -366,7 +368,7 @@ export const kycStatusMapper = {
     landingText: "INCOMPLETE",
     icon: "icn_kyc_completed.svg",
     oneButton: true,
-    nextState: "/kyc-esign/info",
+    nextState: KYC_PATHNAME_MAPPER.kycEsign,
   },
   fno_rejected: {
     color: "#d0021b",
@@ -376,7 +378,7 @@ export const kycStatusMapper = {
     buttonTitle: "Update document",
     landingText: "INCOMPLETE",
     icon: "icn_kyc_doc_rejected.svg",
-    nextState: "/kyc/upload/fno-income-proof",
+    nextState: KYC_PATHNAME_MAPPER.uploadFnOIncomeProof,
     dualButton: true,
   },
   equity_activation_pending: {
@@ -403,43 +405,43 @@ export const kycStatusMapperInvest = {
     icon: "ic_kyc_incomplete.svg",
     title: "Are you investment ready?",
     subtitle: "Check your KYC status",
-    nextState: "/kyc/journey",
+    nextState: KYC_PATHNAME_MAPPER.journey,
   },
   ground: {
     icon: "ic_kyc_incomplete.svg",
     title: "Are you investment ready?",
     subtitle: "Check your KYC status",
-    nextState: "/kyc/home",
+    nextState: KYC_PATHNAME_MAPPER.homeKyc,
   },
   ground_premium: {
     icon: "ic_kyc_incomplete.svg",
     title: "Premium onboarding",
     subtitle: "No documentation  |  Instant investment",
-    nextState: "/kyc/journey",
+    nextState: KYC_PATHNAME_MAPPER.journey,
   },
   ground_pan: {
     icon: "ic_kyc_incomplete.svg",
     title: "Complete your KYC",
     subtitle: "You’re just a few steps away!",
-    nextState: "/kyc/journey"
+    nextState: KYC_PATHNAME_MAPPER.journey
   },
   ground_aadhaar: {
     icon: "ic_kyc_incomplete.svg",
     title: "Complete your KYC",
     subtitle: "You’re just a few steps away!",
-    nextState: "/kyc/journey",
+    nextState: KYC_PATHNAME_MAPPER.journey,
   },
   incomplete: {
     icon: "ic_kyc_incomplete.svg",
     title: "Complete your KYC",
     subtitle: "You’re just a few steps away!",
-    nextState: "/kyc/journey",
+    nextState: KYC_PATHNAME_MAPPER.journey,
   },
   rejected: {
     icon: "ic_kyc_rejected.svg",
     title: "KYC application",
     subtitle: "REJECTED",
-    nextState: "/kyc/upload/progress",
+    nextState: KYC_PATHNAME_MAPPER.uploadProgress,
     addPoint: true,
     subTitleClass: "kyc-rejected",
     subtitleColor: "var(--red)"
@@ -448,7 +450,7 @@ export const kycStatusMapperInvest = {
     icon: "ic_kyc_rejected.svg",
     title: "F&O verification",
     subtitle: "DOCUMENT REJECTED",
-    nextState: "/kyc/upload/fno-income-proof",
+    nextState: KYC_PATHNAME_MAPPER.uploadFnOIncomeProof,
     addPoint: true,
     subTitleClass: "kyc-rejected",
     subtitleColor: "var(--red)"
@@ -466,14 +468,14 @@ export const kycStatusMapperInvest = {
     icon: "ic_kyc_complete.svg",
     title: "You’re ready to invest in mutual funds",
     subtitle: "UPGRAGE ACCOUNT",
-    nextState: "/kyc/trading-info",
+    nextState: KYC_PATHNAME_MAPPER.tradingInfo,
     subTitleClass: "kyc-complete",
   },
   esign_pending: {
     icon: "ic_kyc_complete.svg",
     title: "KYC application",
     subtitle: "COMPLETE ESIGN",
-    nextState: "/kyc-esign/info",
+    nextState: KYC_PATHNAME_MAPPER.kycEsign,
     subTitleClass: "kyc-complete",
   },
   equity_activation_pending: {
@@ -493,21 +495,21 @@ export const premiumBottomSheetMapper = {
     subtitle: `You have been selected for Premium onboarding. Fast track your investment journey.`,
     buttonTitle: "CONTINUE",
     oneButton: true,
-    nextState: "/kyc/journey",
+    nextState: KYC_PATHNAME_MAPPER.journey,
     icon: "ic_premium_onboarding_small.svg",
   },
   init: {
     title: "Premium Onboarding",
     subtitle: "Fast track your investment with Premium onboarding!",
     buttonTitle: "COMPLETE NOW",
-    nextState: "/kyc/journey",
+    nextState: KYC_PATHNAME_MAPPER.journey,
     icon: "ic_popup_premium_onboarding_big.svg",
   },
   incomplete: {
     title: `Premium Onboarding`,
     subtitle: "Fast track your investment with Premium onboarding!",
     buttonTitle: "COMPLETE NOW",
-    nextState: "/kyc/journey",
+    nextState: KYC_PATHNAME_MAPPER.journey,
     icon: "ic_popup_premium_onboarding_big.svg",
   },
   complete: {

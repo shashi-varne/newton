@@ -13,6 +13,7 @@ import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClick
 import { isTradingEnabled } from "../../utils/functions";
 import { getKycAppStatus } from "../../kyc/services";
 import "./MyAccount.scss";
+import { PATHNAME_MAPPER as KYC_PATHNAME_MAPPER } from "../../kyc/constants";
 
 const MF_AND_STOCKS_STATUS_MAPPER = {
   init: {
@@ -127,7 +128,7 @@ class MyAccount extends Component {
 
   handleInvestmentCard = (data) => () => {
     if(data.key === "fno" && data.status === "activate") {
-      this.navigate("/kyc/upload/fno-income-proof", {
+      this.navigate(KYC_PATHNAME_MAPPER.uploadFnOIncomeProof, {
         state: { goBack: "/my-account" },
       });
     }
@@ -281,7 +282,7 @@ class MyAccount extends Component {
                   className="account-options"
                   onClick={() => {
                     this.sendEvents("change address");
-                    this.handleClick("/kyc/change-address-details1");
+                    this.handleClick(KYC_PATHNAME_MAPPER.changeAddressDetails1);
                   }}
                 >
                   <img src={require(`assets/address_icon.svg`)} alt="" />
@@ -294,7 +295,7 @@ class MyAccount extends Component {
                   className="account-options"
                   onClick={() => {
                     this.sendEvents("add bank/mandate");
-                    this.handleClick("/kyc/add-bank");
+                    this.handleClick(KYC_PATHNAME_MAPPER.bankList);
                   }}
                 >
                   <img src={require(`assets/add_bank_icn.svg`)} alt="" />
