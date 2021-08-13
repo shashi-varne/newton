@@ -64,10 +64,31 @@ class SecondaryVerification extends Component {
     };
 
     handleClick = async () => {
-        let { form_data, loginType } = this.state;
+        let {
+            form_data,
+            loginType
+        } = this.state;
         let keys_to_check = ["mobile", "code"];
         if (loginType === "email") keys_to_check = ["email"];
-        if (loginType === "mobile" && (!validateNumber(form_data["mobile"] && isEmpty(form_data["code"])) || (form_data["code"] === "+91" && form_data["mobile"].length < 10))) {
+        this.checkValidation(loginType, form_data)
+        let result = await this.authCheckApi(loginType, {
+            "contact_value": form_data[loginType]
+        });
+        if (result && result.is_user) {
+            this.setState({
+                accountAlreadyExists: true,
+                accountAlreadyExistsData: result.user,
+                verifyDetailsType: loginType,
+            })
+        } else if (result && !result.is_user) {
+            this.formCheckFields(keys_to_check, form_data, "LOGIN", loginType, true);
+        }
+    }
+    
+    checkValidation = (loginType, form_data) => {
+        if (loginType === "mobile" &&
+            (!validateNumber(form_data["mobile"] && isEmpty(form_data["code"])) ||
+                (form_data["code"] === "+91" && form_data["mobile"].length < 10))) {
             this.setState({
                 form_data: {
                     ...form_data,
@@ -77,8 +98,7 @@ class SecondaryVerification extends Component {
             });
             toast("Invalid mobile number");
             return;
-        }
-        if (loginType === "email" && !validateEmail(form_data["email"])                   ) {
+        } else if (loginType === "email" && !validateEmail(form_data["email"])) {
             this.setState({
                 form_data: {
                     ...form_data,
@@ -87,16 +107,6 @@ class SecondaryVerification extends Component {
             });
             toast("Invalid email");
             return;
-          }
-        let result = await this.authCheckApi(loginType, { "contact_value": form_data[loginType] });
-        if (result && result?.is_user) {
-            this.setState({
-                accountAlreadyExists: true,
-                accountAlreadyExistsData: result?.user,
-                verifyDetailsType: loginType,
-            })
-        } else if (result && !result?.is_user) {
-            this.formCheckFields(keys_to_check, form_data, "LOGIN", loginType, true);
         }
     }
 

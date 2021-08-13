@@ -14,50 +14,48 @@ class MyaccountDetails extends Component {
     }
 
     componentDidUpdate(prevProp) {
-            if (prevProp.contactInfo !== this.props.contactInfo) {
-                const contactDetails = this.props.contactInfo;
-                let contact_type, contact_value, auth_type, isVerified = true,
-                    auth_value;
-                if (!isEmpty(contactDetails)) {
-                    if (contactDetails?.mobile_number_verified) {
-                        auth_type = "mobile";
-                        let numberVal = contactDetails?.mobile_number?.split('|');
-                        if (numberVal.length > 1) {
-                            auth_value = numberVal[1];
-                        } else {
-                            [auth_value] = numberVal;
-                        }
-                    } else if (contactDetails?.email_verified) {
-                        auth_value = contactDetails?.email;
-                        auth_type = "email";
+        if (prevProp.contactInfo !== this.props.contactInfo) {
+            const contactDetails = this.props.contactInfo;
+            let contact_type, contact_value, auth_type, isVerified = true, auth_value;
+            if (!isEmpty(contactDetails)) {
+                if (contactDetails?.mobile_number_verified) {
+                    auth_type = "mobile";
+                    let numberVal = contactDetails?.mobile_number?.split('|');
+                    if (numberVal.length > 1) {
+                        auth_value = numberVal[1];
+                    } else {
+                        [auth_value] = numberVal;
                     }
-
-                    if (!isEmpty(contactDetails.mobile_number) && contactDetails.mobile_number_verified === false) {
-                        contact_type = "mobile";
-                        isVerified = false;
-                        let numberVal = contactDetails?.mobile_number?.split('|');
-                        if (numberVal.length > 1) {
-                            contact_value = numberVal[1];
-                        } else {
-                            [contact_value] = numberVal;
-                        }
-                    } else if (!isEmpty(contactDetails.email) && contactDetails.email_verified === false) {
-                        contact_type = "email";
-                        contact_value = contactDetails.email;
-                        isVerified = false;
-                    }
-
-
-                    this.setState({
-                        isVerified,
-                        auth_type,
-                        auth_value,
-                        contact_value: isVerified ? contactDetails?.email : contact_value,
-                        contact_type: isVerified ? "email" : contact_type,
-                        dataAvaliable: !isEmpty(contactDetails.email) && !isEmpty(contactDetails.mobile_number),
-                    })
+                } else if (contactDetails?.email_verified) {
+                    auth_value = contactDetails?.email;
+                    auth_type = "email";
                 }
+
+                if (!isEmpty(contactDetails.mobile_number) && contactDetails.mobile_number_verified === false) {
+                    contact_type = "mobile";
+                    isVerified = false;
+                    let numberVal = contactDetails?.mobile_number?.split('|');
+                    if (numberVal.length > 1) {
+                        contact_value = numberVal[1];
+                    } else {
+                        [contact_value] = numberVal;
+                    }
+                } else if (!isEmpty(contactDetails.email) && contactDetails.email_verified === false) {
+                    contact_type = "email";
+                    contact_value = contactDetails.email;
+                    isVerified = false;
+                }
+                
+                this.setState({
+                    isVerified,
+                    auth_type,
+                    auth_value,
+                    contact_value: isVerified ? contactDetails?.email : contact_value,
+                    contact_type: isVerified ? "email" : contact_type,
+                    dataAvaliable: !isEmpty(contactDetails.email) && !isEmpty(contactDetails.mobile_number),
+                })
             }
+        }
     }
 
     handleClick = async (verified) => {
