@@ -13,6 +13,7 @@ const ConfirmNewPin = (props) => {
   const routeParamsExist = useMemo(() => {
     return !isEmpty(routeParams);
   }, []);
+  const { productName } = getConfig();
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -54,8 +55,8 @@ const ConfirmNewPin = (props) => {
       "event_name": '2fa',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'confirm_fisdom_pin',
-        "journey": 'reset_fisdom_pin',
+        "screen_name": `confirm_${productName}_pin`,
+        "journey": `reset_${productName}_pin`,
       }
     };
 
@@ -69,7 +70,7 @@ const ConfirmNewPin = (props) => {
   return (
     <>
       <EnterMPin
-        title={`Confirm ${getConfig().productName} PIN`}
+        title={`Confirm ${productName} PIN`}
         subtitle="Keep your account safe and secure"
         otpProps={{
           otp: pin,

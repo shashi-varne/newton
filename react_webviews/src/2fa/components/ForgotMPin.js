@@ -16,7 +16,8 @@ const ForgotMPin = ({
     panError,
     isLoading,
     noData,
-    renderNoData
+    renderNoData,
+    productName = 'fisdom'
 }) => {
     const authTypeText = primaryAuthType === 'mobile' ? 'mobile number' : 'email';
 
@@ -29,7 +30,7 @@ const ForgotMPin = ({
         return (
             <div className="forgot-fisdom-pin">
                 <WVInPageHeader>
-                    <WVInPageTitle>Forgot fisdom PIN</WVInPageTitle>
+                    <WVInPageTitle>Forgot {productName} PIN</WVInPageTitle>
                     <WVInPageSubtitle>OTP will be sent to your registered {authTypeText}</WVInPageSubtitle>
                 </WVInPageHeader>
                 {renderNoData || ''}
@@ -40,7 +41,7 @@ const ForgotMPin = ({
     return (
         <div className="forgot-fisdom-pin">
             <WVInPageHeader>
-                <WVInPageTitle>Forgot fisdom PIN</WVInPageTitle>
+                <WVInPageTitle>Forgot {productName} PIN</WVInPageTitle>
                 <WVInPageSubtitle>OTP will be sent to your registered {authTypeText}</WVInPageSubtitle>
             </WVInPageHeader>
             {isLoading ? 

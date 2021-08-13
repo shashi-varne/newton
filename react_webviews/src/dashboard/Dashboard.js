@@ -143,32 +143,31 @@ const Home = (props) => {
           path={`${url}status/callback/native`}
           component={StatusCallback}
         />
+        {/* -----------My Account sub-routes ------------- */}
         <Route exact path={`${url}account/merge/:pan_number`} component={AccountMerge} />
         <Route exact path={`${url}account/merge/otp/:pan_number`} component={AccountMergeOtp} />
         <Route exact path={`${url}account/merge/linked/success`} component={AccountLinked} />
+        <Route exact path={`${url}account/security-settings`} component={SecuritySettings} />
+        <Route exact path={`${url}account/forgot-pin`} component={ForgotPin} />
+        <Route exact path={`${url}account/reset-pin-verify`} component={VerifyPin} />
+        <Route exact path={`${url}account/new-pin`} component={EnterNewPin} />
+        <Route exact path={`${url}account/verify-otp`} component={VerifyPinOtp} />
+        <Route path={`${url}account/set-pin/:coming_from?`} component={SetPin} />
+        <Route path={`${url}account/confirm-pin/:coming_from?`} component={ConfirmNewPin} />
+        {/* ------------------------------------------- */}
+
         <Route exact path={`${url}blank-mandate/upload`} component={BlankMandateUpload} />
         <Route 
-          exact path={`${url}investment-proof`} 
+          exact
+          path={`${url}investment-proof`} 
           render={(props) => <InvestmentProof {...props} type="investment-proof" />} 
         />
         <Route 
-          exact path={`${url}capital-gain`} 
+          exact
+          path={`${url}capital-gain`} 
           render={(props) => <InvestmentProof {...props} type="capital-gain" />} 
         />
         <Route exact path={`${url}page/invest/campaign/callback`} component={CampaignCallback} />
-        <Route exact path={`${url}security-settings`} component={SecuritySettings} />
-        <Route exact path={`${url}forgot-fisdom-pin`} component={ForgotPin} />
-        <Route exact path={`${url}reset-pin-verify`} component={VerifyPin} />
-        <Route exact path={`${url}reset-pin-confirm`} component={VerifyPin} />
-
-        <Route path={`${url}set-fisdom-pin/:coming_from`} component={SetPin} />
-        <Route path={`${url}set-fisdom-pin`} component={SetPin} />
-        <Route exact path={`${url}new-pin`} component={EnterNewPin} />
-        <Route path={`${url}confirm-pin/:coming_from`} component={ConfirmNewPin} />
-        <Route path={`${url}confirm-pin`} component={ConfirmNewPin} />
-        <Route exact path={`${url}verify-otp`} component={VerifyPinOtp} />
-
-
         <Route component={NotFound} />
       </Switch>
     </Fragment>

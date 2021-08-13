@@ -308,7 +308,7 @@ class MyAccount extends Component {
                 className="account-options"
                 onClick={() => {
                   this.sendEvents("settings_clicked", "");
-                  this.handleClick("/security-settings");
+                  this.handleClick("/account/security-settings");
                 }}
               >
                 <Imgc className="my-imgc"

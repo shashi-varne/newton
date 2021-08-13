@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ForgotMPin from '../../../2fa/components/ForgotMPin';
 import Container from '../../common/Container';
 import { nativeCallback } from "../../../utils/native_callback";
-import { navigate as navigateFunc } from "../../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import { forgotPinOtpTrigger, obscuredAuthGetter } from '../../../2fa/common/apiCalls';
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 
@@ -46,7 +46,7 @@ const ForgotPin = (props) => {
       setIsApiRunning(false);
       sendEvents("next");
       persistRouteParams(response)
-      navigate('verify-otp');
+      navigate('/account/verify-otp');
     } catch (err) {
       console.log(err);
       setPanError(err);
@@ -93,6 +93,7 @@ const ForgotPin = (props) => {
         pan={pan}
         panError={panError}
         onPanInputChange={handlePanInput}
+        productName={getConfig().productName}
       />
     </Container>
   );

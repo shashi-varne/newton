@@ -35,7 +35,7 @@ const VerifyForgotOtp = (props) => {
             setIsApiRunning(false);
             persistRouteParams({reset_url: result.reset_url})
             sendEvents("next");
-            navigate('new-pin', {
+            navigate('/account/new-pin', {
                 edit: true,
                 // ^ to replace this path with next screen's path so that on click of 'back' this screen is skipped
             });

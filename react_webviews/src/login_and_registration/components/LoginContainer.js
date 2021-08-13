@@ -10,7 +10,6 @@ import EnterNewPin from "../pages/ForgotPin/EnterNewPin";
 import ConfirmNewPin from "../pages/ForgotPin/ConfirmNewPin";
 import ForgotPinSuccess from "../pages/ForgotPin/ForgotPinSuccess";
 import ForgotPin from "../pages/ForgotPin/ForgotPin";
-import SVG from 'react-inlinesvg';
 import WVInPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
 import GoBackToLoginBtn from "../common/GoBackToLoginBtn";
 import { navigate as navigateFunc } from "../../utils/functions";
