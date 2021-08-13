@@ -104,7 +104,7 @@ class MyAccount extends Component {
       }
     }
 
-    if (userKyc.application_status_v2 === "complete") {
+    if (userKyc.application_status_v2 === "complete" && userKyc.sign_status === 'signed') {
       mfStatus = "complete";
     }
 

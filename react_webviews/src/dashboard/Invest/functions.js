@@ -501,7 +501,7 @@ export async function openKyc() {
   } = this.state;
 
   storageService().set("kycStartPoint", "mf");
-  const kycStatusesToShowDialog = ["submitted", "rejected", "fno_rejected", "esign_pending", "equity_activation_pending"];
+  const kycStatusesToShowDialog = ["submitted", "rejected", "fno_rejected", "esign_pending", "verifying_trading_account"];
   if (kycStatusesToShowDialog.includes(kycJourneyStatus)) {
     this.handleKycSubmittedOrRejectedState();
   } else {
