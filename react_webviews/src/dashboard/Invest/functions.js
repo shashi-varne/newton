@@ -31,7 +31,6 @@ export async function initialize() {
   this.clickCard = clickCard.bind(this);
   this.initilizeKyc = initilizeKyc.bind(this);
   this.openKyc = openKyc.bind(this);
-  this.openStocks = openStocks.bind(this);
   this.setProductType = setProductType.bind(this);
   this.openPremiumOnboardBottomSheet = openPremiumOnboardBottomSheet.bind(this);
   this.handleKycSubmittedOrRejectedState = handleKycSubmittedOrRejectedState.bind(this);
@@ -181,7 +180,6 @@ export function clickCard(state, title) {
     case "stocks":
     case "ipo":
       this.handleStocksAndIpoCards(state)
-      // this.openStocks();
       break;
     case "insurance":
       let insurancePath = "/group-insurance";
@@ -429,10 +427,13 @@ export function initilizeKyc() {
   }
 
   let modalData = {}
-  if (["equity_activation_pending", "complete"].includes(kycJourneyStatus)) {
-    if ( kycJourneyStatus === "complete") {
+  if (["equity_activation_pending", "complete", "fno_rejected"].includes(kycJourneyStatus)) {
+    if (["fno_rejected", "complete"].includes(kycJourneyStatus)) {
       if (TRADING_ENABLED && userKyc.equity_investment_ready) {
         modalData = kycStatusMapper["kyc_verified"];
+        if (kycJourneyStatus === "fno_rejected") {
+          modalData.subtitle = "You can start your investment journey by investing in your favourite stocks, mutual funds."
+        }
       } else if (!TRADING_ENABLED && !isCompliant) {
         modalData = kycStatusMapper["mf_complete"];
       }
@@ -471,28 +472,21 @@ export function openPremiumOnboardBottomSheet(
   }
 
   storageService().set("is_bottom_sheet_displayed_kyc_premium", true);
-  // Todo: Remove the bank rejection only logic after discussing with Mayank
-  if (!TRADING_ENABLED && userKyc.bank.meta_data_status === "rejected") {
-    this.setState({ verificationFailed: true });
-  } else {
-    this.setState({
-      modalData: bottom_sheet_dialog_data_premium,
-      openKycPremiumLanding: true,
-    });
-  }
+  
+  this.setState({
+    modalData: bottom_sheet_dialog_data_premium,
+    openKycPremiumLanding: true,
+  });
 }
 
 export function handleKycSubmittedOrRejectedState() {
-  let { userKyc, kycJourneyStatusMapperData, rejectedItems } = this.state;
-
-  if (rejectedItems.length === 1 && userKyc.bank.meta_data_status === "rejected") {
-    this.setState({ verificationFailed: true });
-  } else {
-    let modalData = Object.assign({}, kycJourneyStatusMapperData);
-    if(!modalData.dualButton)
-      modalData.oneButton = true;
-    this.setState({ modalData, openKycStatusDialog: true });
+  let { kycJourneyStatusMapperData } = this.state;
+  
+  let modalData = Object.assign({}, kycJourneyStatusMapperData);
+  if(!modalData.dualButton) {
+    modalData.oneButton = true;
   }
+  this.setState({ modalData, openKycStatusDialog: true });
 }
 
 export async function openKyc() {
@@ -556,60 +550,6 @@ export function handleIpoCardRedirection() {
   this.navigate("/market-products")
 }
           
-export async function openStocks() {
-  let { userKyc, kycJourneyStatus, kycStatusData, tradingEnabled, isReadyToInvestBase } = this.state;
-  storageService().set("kycStartPoint", "stocks");
-
-  if (kycJourneyStatus === "rejected") {
-    this.handleKycSubmittedOrRejectedState();
-  } else {
-    if (kycJourneyStatus === "ground") {
-      this.navigate(PATHNAME_MAPPER.stocksStatus);
-    } else {
-      // only NRI conditions
-      if (userKyc?.address?.meta_data?.is_nri) {
-        this.navigate(PATHNAME_MAPPER.nriError, {
-          state: {noStockOption: (isReadyToInvestBase || userKyc?.application_status_v2 === "submitted")}
-        });
-      } else {
-        if (kycJourneyStatus === "ground_pan") {
-          this.navigate(PATHNAME_MAPPER.journey, {
-            state: {
-              show_aadhaar: !userKyc.address.meta_data.is_nri ? true : false,
-              fromState: "invest",
-            },
-          });
-        } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity") || userKyc?.mf_kyc_processed) {
-          // already kyc done users
-          let result;
-          if (!userKyc?.mf_kyc_processed) {
-            this.setState({ stocksButtonLoader: "button"})
-            result = await this.setProductType();
-            this.setState({ userKyc: result?.kyc })
-          }
-
-          if (isReadyToInvestBase && (result?.kyc?.mf_kyc_processed || userKyc?.mf_kyc_processed)) {
-            this.navigate(PATHNAME_MAPPER.tradingInfo)
-          } else {
-            const showAadhaar = !(result?.kyc?.address.meta_data.is_nri || result?.kyc?.kyc_type === "manual");
-            if (result?.kyc?.kyc_status !== "compliant") {
-              this.navigate(PATHNAME_MAPPER.journey, {
-                searchParams: `${getConfig().searchParams}&show_aadhaar=${showAadhaar}`
-              });
-            } else {
-              this.navigate(PATHNAME_MAPPER.journey)
-            }
-          }
-        } else {
-          this.navigate(kycStatusData.nextState, {
-            state: { fromState: "invest" },
-          });
-        }
-      }
-    }
-  }
-}
-
 export function handleStocksAndIpoCards(key) {
   let { kycJourneyStatusMapperData, kycJourneyStatus, userKyc } = this.state;
   let modalData = Object.assign({key}, kycJourneyStatusMapperData);
