@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
-import { getConfig } from "utils/functions";
 import Button from "common/ui/Button";
 import { initialize, handleCampaignNotification } from "../../functions";
 import InvestCard from "../../mini-components/InvestCard";
@@ -15,6 +14,7 @@ import './Landing.scss';
 import isEmpty from "lodash/isEmpty";
 import { Imgc } from "../../../../common/ui/Imgc";
 import { nativeCallback } from "../../../../utils/native_callback";
+import { getConfig, isTradingEnabled } from "../../../../utils/functions";
 
 const fromLoginStates = ["/login", "/register", "/forgot-password", "/mobile/verify", "/logout"]
 class Landing extends Component {
@@ -35,6 +35,7 @@ class Landing extends Component {
       bottom_sheet_dialog_data: [],
       isWeb: getConfig().Web,
       stateParams: props.location.state || {},
+      tradingEnabled: isTradingEnabled(),
     };
     this.initialize = initialize.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
@@ -108,15 +109,34 @@ class Landing extends Component {
 
   handleKycStatus = async () => {
     this.sendEvents("next", "kyc_bottom_sheet");
-    let { kycJourneyStatus, kycStatusData, tradingEnabled, userKyc } = this.state;
-    if (["submitted", "verifying_trading_account", "complete"].includes(kycJourneyStatus)) {
+    let { kycJourneyStatus, modalData, tradingEnabled, userKyc } = this.state;
+    if (["submitted", "verifying_trading_account"].includes(kycJourneyStatus) || (kycJourneyStatus === "complete" && userKyc.mf_kyc_processed)) {
       this.closeKycStatusDialog();
     } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity")) {
+      this.closeKycStatusDialog();
       await this.setKycProductTypeAndRedirect();
+    } else if (kycJourneyStatus === "ground_pan") {
+      this.navigate("/kyc/journey", {
+        state: {
+          show_aadhaar: !(userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual"),
+        },
+      });
+    } else if (modalData.nextState && modalData.nextState !== "/invest") {
+      this.navigate(modalData.nextState);
     } else {
-      this.navigate(kycStatusData.nextState);
+      this.closeKycStatusDialog();
     }
   };
+
+  handleStocksAndIpoRedirection = () => {
+    let { modalData } = this.state;
+    if(modalData.key === "ipo") {
+      this.handleIpoCardRedirection();
+    } else {
+      // To do: redirect to stocks sdk page for fno_rejected status
+      this.closeKycStatusDialog();
+    }
+  }
 
   sendEvents = (userAction, cardClick = "") => {
     if(cardClick === "ipo") {
@@ -178,7 +198,7 @@ class Landing extends Component {
     const config = getConfig();
     return (
       <Container
-        skelton={this.state.show_loader || kycButtonLoader}
+        skelton={this.state.show_loader}
         noFooter={true}
         title="Start Investing"
         data-aid='start-investing-screen'
@@ -222,11 +242,11 @@ class Landing extends Component {
             />
           }
           {investSections &&
-            investSections.map((element, index) => {
+            investSections.map((element, idx) => {
               switch (element) {
                 case "kyc":
                   return (
-                    <React.Fragment key={index}>
+                    <React.Fragment key={idx}>
                       {(!kycStatusLoader && kycStatusData && ((!tradingEnabled && !isReadyToInvestBase) ||
 -                      (tradingEnabled && (!isEquityCompletedBase || (isEquityCompletedBase && kycJourneyStatus === "fno_rejected"))))) ? (
                         <div
@@ -246,14 +266,18 @@ class Landing extends Component {
                               <span>{kycStatusData.subtitle}</span>
                             </div>
                           </div>
-                          <Imgc src={require(`assets/${productName}/${kycStatusData.icon}`)} alt="" />
+                          <Imgc
+                            className="kyc-card-image"
+                            src={require(`assets/${productName}/${kycStatusData.icon}`)}
+                            alt=""
+                          />
                         </div>
                       ): null}
                     </React.Fragment>
                   );
                 case "indexFunds":
                   return (
-                    <React.Fragment key={index}>
+                    <React.Fragment key={idx}>
                       {!isEmpty(indexFunds) &&
                         indexFunds.map((item, index) => {
                           return (
@@ -273,7 +297,7 @@ class Landing extends Component {
                   );
                 case "ourRecommendations":
                   return (
-                    <React.Fragment key={index}>
+                    <React.Fragment key={idx}>
                       {!isEmpty(ourRecommendations) && (
                         <>
                           <div className="invest-main-top-title" data-aid='recommendations-title'>
@@ -296,7 +320,7 @@ class Landing extends Component {
                   );
                 case "stocksAndIpo":
                   return (
-                    <React.Fragment key={index}>
+                    <React.Fragment key={idx}>
                       {!isEmpty(stocksAndIpo) && tradingEnabled && (
                         <>
                           <div className="invest-main-top-title" data-aid='recommendations-title'>
@@ -311,6 +335,7 @@ class Landing extends Component {
                                     height: '170px',
                                     marginBottom: "15px",
                                   }}
+                                  key={index}
                                 />
                               )
                             } else {
@@ -331,7 +356,7 @@ class Landing extends Component {
                   );
                 case "diy":
                   return (
-                    <React.Fragment key={index}>
+                    <React.Fragment key={idx}>
                       {!isEmpty(diy) && (
                         <>
                           <div className="invest-main-top-title" data-aid='diy-title'>
@@ -354,7 +379,7 @@ class Landing extends Component {
                   );
                 case "bottomScrollCards":
                   return (
-                    <div className="bottom-scroll-cards" key={index} data-aid='bottomScrollCards-title'>
+                    <div className="bottom-scroll-cards" key={idx} data-aid='bottomScrollCards-title'>
                       <div className="list" data-aid='bottomScrollCards-list'>
                         {!isEmpty(bottomScrollCards) &&
                           bottomScrollCards.map((item, index) => {
@@ -387,7 +412,7 @@ class Landing extends Component {
                   );
                 case "bottomCards":
                   return (
-                    <React.Fragment key={index}>
+                    <React.Fragment key={idx}>
                       {!isEmpty(bottomCards) &&
                         bottomCards.map((item, index) => {
                           return (
@@ -404,7 +429,7 @@ class Landing extends Component {
                   );
                 case "financialTools":
                   return (
-                    <React.Fragment key={index}>
+                    <React.Fragment key={idx}>
                       {!isEmpty(financialTools) && (
                         <>
                           <div className="invest-main-top-title" data-aid='financial-tools-title'>
@@ -450,7 +475,7 @@ class Landing extends Component {
                   );
                 case "popularCards":
                   return (
-                    <React.Fragment key={index}>
+                    <React.Fragment key={idx}>
                       {!isEmpty(popularCards) && (
                         <>
                           <div className="invest-main-top-title" data-aid='popularCards-tools-title'>
@@ -482,7 +507,7 @@ class Landing extends Component {
                     </React.Fragment>
                   );
                 default:
-                  return <></>;
+                  return <React.Fragment key={idx}></React.Fragment>;
               }
             })}
           <SebiRegistrationFooter className="invest-sebi-registration-disclaimer" />
@@ -498,6 +523,7 @@ class Landing extends Component {
               data={modalData}
               close={this.closeKycStatusDialog}
               handleClick={this.handleKycStatus}
+              handleClick2={this.handleStocksAndIpoRedirection}
               cancel={this.closeKycStatusDialog}
             />
           )}
