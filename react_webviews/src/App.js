@@ -48,21 +48,17 @@ if (basename && basename.indexOf('appl/webview') !== -1) {
   basename = basename ? basename + 'view/' : '';
 }
 
-const isBottomSheetDisplayed = storageService().get('is_bottom_sheet_displayed');
-if(isBottomSheetDisplayed) {
-  storageService().set("is_bottom_sheet_displayed", false);
-}
+const clearBottomsheetDisplays = () => {
+  const bottomSheetsArr = [
+    "is_bottom_sheet_displayed", 
+    "verifyDetailsSheetDisplayed", 
+    "is_bottom_sheet_displayed_kyc_premium", 
+    "landingBottomSheetDisplayed"
+  ];
 
-const verifyDetailsSheetDisplayed = storageService().get('verifyDetailsSheetDisplayed');
-if(verifyDetailsSheetDisplayed)
-  storageService().set("verifyDetailsSheetDisplayed", false)
-  
-const isBottomSheetDisplayedKycPremium = storageService().get(
-  "is_bottom_sheet_displayed_kyc_premium"
-);
-
-if(isBottomSheetDisplayedKycPremium) {
-  storageService().set("is_bottom_sheet_displayed_kyc_premium", false);
+  bottomSheetsArr.forEach((bottomSheet) => {
+    storageService().remove(bottomSheet);
+  });
 }
 
 const ScrollToTop = withRouter(
@@ -87,6 +83,7 @@ const App = () => {
     if(config.isSdk || config.isIframe) {
       storageService().set("entry_path",window.location.pathname);
     }
+    clearBottomsheetDisplays();
   },[]);
   const updateTheme = (event) => {
     const theme = getMuiThemeConfig();
