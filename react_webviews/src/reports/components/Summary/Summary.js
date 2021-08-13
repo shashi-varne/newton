@@ -129,7 +129,7 @@ const Summary = (props) => {
       case "npsInvestments":
         sendEvents("next", "NPS Investments");
         break;
-      case "tax2win":
+      case "taxFiling":
         sendTax2winEvents();
         break;
       default:
@@ -344,7 +344,7 @@ const Summary = (props) => {
               {config.features?.tax2win && (
                 <div
                   className="reports-tax2win-card card"
-                  onClick={() => flowOptions("tax2win")}
+                  onClick={() => flowOptions("taxFiling")}
                 >
                   <div className="flex-between">
                     <div>
