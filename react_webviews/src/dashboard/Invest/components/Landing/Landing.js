@@ -137,7 +137,8 @@ class Landing extends Component {
         user_investment_status: this.state.currentUser?.active_investment
       },
     };
-    if (["kyc", "stocks", "ipo_gold"].includes(cardClick)) {
+    const showKycStatus = ["kyc", "stocks", "ipo_gold"];
+    if (showKycStatus.includes(cardClick)) {
       eventObj.properties.kyc_status = this.state.kycJourneyStatus;
     }
     if (cardClick === "kyc_bottom_sheet") {
