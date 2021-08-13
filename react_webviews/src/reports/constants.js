@@ -48,6 +48,7 @@ export const getPathname = {
   pausePeriod: "/reports/sip/pause-period",
   sipOtp: "/reports/sip/otp/",
   pauseRequest: "/reports/sip/pause-request",
+  tax2win: "/tax-filing",
 };
 
 export const storageConstants = {

@@ -14,6 +14,7 @@ import useUserKycHook from "../../../kyc/common/hooks/userKycHook";
 import "./commonStyles.scss";
 import CheckInvestment from "../mini-components/CheckInvestment";
 import { getInvestCards } from "../../../utils/functions";
+import { Imgc } from "../../../common/ui/Imgc";
 
 const Summary = (props) => {
   const config = getConfig();
@@ -128,6 +129,9 @@ const Summary = (props) => {
       case "npsInvestments":
         sendEvents("next", "NPS Investments");
         break;
+      case "tax2win":
+        sendTax2winEvents();
+        break;
       default:
         sendEvents("next");
         break;
@@ -155,6 +159,23 @@ const Summary = (props) => {
     if (report.invested === 0) return;
     navigate(getPathname.reportGoals);
   };
+
+  const sendTax2winEvents = () => {
+    const kyc = storageService().getObject("kyc") || {};
+    const investmentStatus = kyc.investment_status ? "Y" : "N"
+    const kycStatus = kyc.kyc_status ? "Y" : "N"
+    let eventObj = {
+      event_name: "PORTFOLIO",
+      properties: {
+        user_action: "next",
+        screen_name: "Portfolio Landing",
+        card_click: "free_tax_filing",
+        investment_status: investmentStatus,
+        kyc_status: kycStatus
+      },
+    };
+    nativeCallback({ events: eventObj });
+  }
 
   const sendEvents = (userAction, flow) => {
     let eventObj = {
@@ -320,6 +341,25 @@ const Summary = (props) => {
                   <img src={require(`assets/plant.svg`)} alt="" />
                 </div>
               )}
+              <div
+                className="reports-tax2win-card card"
+                onClick={() => flowOptions("tax2win")}
+              >
+                <div className="flex-between">
+                  <div>
+                    <div className="rt2w-card-title"> Free tax filing </div>
+                    <div className="rt2w-card-subtitle">
+                      Get your taxes done in 3 easy and secure steps
+                    </div>
+                  </div>
+                  <Imgc
+                    className="rt2w-card-image"
+                    src={require(`assets/${productName}/icn_tax_filing.svg`)}
+                    alt=""
+                  />
+                </div>
+                <div className="rt2w-know-more">KNOW MORE</div>
+              </div>
               {currentUser.nps_investment ||
               data.showTrackGoals ||
               data.showPendingPurchase ||
