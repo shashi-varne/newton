@@ -12,7 +12,7 @@ import '../common/Style.scss'
 import { isEmpty } from 'utils/validators';
 import {Imgc} from   '../../common/ui/Imgc'
 import Button from 'material-ui/Button';
-import {setReportData, getReportCardsData, getProviderObject, getProviderObject_offline} from '../products/group_health/common_data';
+import {setReportData, getReportCardsData, getProviderObject, getProviderObject_offline, getApiUrl} from '../products/group_health/common_data';
 
 class Landing extends Component {
 
@@ -121,7 +121,8 @@ class Landing extends Component {
     let error = ''
     let errorType = ''
     try{
-      var res = await Api.get(`api/insurancev2/api/insurance/advisory/resume/check`);
+      var url = getApiUrl(`api/insurancev2/api/insurance/advisory/resume/check`)
+      var res = await Api.get(url);
         var resultData = res.pfwresponse.result;
 
         if (res.pfwresponse.status_code === 200) {

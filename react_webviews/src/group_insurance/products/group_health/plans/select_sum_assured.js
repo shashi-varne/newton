@@ -5,7 +5,7 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import Api from 'utils/api';
 import { numDifferentiationInr, isEmpty, compareObjects } from 'utils/validators';
-import { initialize, updateBottomPremium, getAddOnsData } from '../common_data';
+import { initialize, updateBottomPremium, getAddOnsData, getApiUrl } from '../common_data';
 import GenericTooltip from '../../../../common/ui/GenericTooltip';
 import ValueSelector from '../../../../common/ui/ValueSelector';
 
@@ -168,7 +168,8 @@ class GroupHealthPlanSelectSumAssured extends Component {
                 body[key] = post_body[key];
             }
             try {
-                const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,body);
+                var url = this.getApiUrl(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`)
+                const res = await Api.post(url ,body);
                 
                 var resultData = res.pfwresponse.result;
                 if (res.pfwresponse.status_code === 200) {

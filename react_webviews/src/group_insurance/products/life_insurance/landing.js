@@ -18,6 +18,7 @@ import Button from 'material-ui/Button';
 import {open_browser_web} from  'utils/validators';
 import {Imgc} from 'common/ui/Imgc';
 import {reportsfrequencyMapper} from 'group_insurance/constants';
+import {getApiUrl} from 'group_insurance/products/group_health/common_data'
 
 class FyntuneLanding extends Component {
   constructor(props) {
@@ -91,7 +92,8 @@ class FyntuneLanding extends Component {
     })
     //resume api
     try{
-      var res = await Api.get(`api/ins_service/api/insurance/fyntune/get/resumelist`);
+      var url = getApiUrl(`api/ins_service/api/insurance/fyntune/get/resumelist`)
+      var res = await Api.get(url);
       var resultData = res.pfwresponse.result;
       var resume_frequency = '';
       if (res.pfwresponse.status_code === 200) {
@@ -333,7 +335,8 @@ class FyntuneLanding extends Component {
     })
     //create lead api
     try{
-      var res = await Api.post(`api/ins_service/api/insurance/fyntune/lead/create`, body);
+      var url = getApiUrl(`api/ins_service/api/insurance/fyntune/lead/create`)
+      var res = await Api.post(url, body);
 
         if (res.pfwresponse.status_code === 200) {
           var resultData = res.pfwresponse.result;

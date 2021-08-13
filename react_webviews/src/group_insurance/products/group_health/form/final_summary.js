@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
-
+import Toast from '../../../../common/ui/Toast'
 import { getConfig, getBasePath, getParamsMark } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { initialize, updateLead, resetQuote, openMedicalDialog, openPdf } from '../common_data';
@@ -39,7 +39,8 @@ class GroupHealthPlanFinalSummary extends Component {
             openDialogReset: false,
             quote_id: storageService().get('ghs_ergo_quote_id'),
             screen_name:'final_summary_screen',
-            pgReached: getUrlParams().pgReached ? true : false
+            pgReached: getUrlParams().pgReached ? true : false,
+            isRmJourney: (!!storageService().getObject('guestLeadId')) && (!storageService().getObject('guestUser'))
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
@@ -630,10 +631,12 @@ class GroupHealthPlanFinalSummary extends Component {
             // this.redirectToPayment();
         //     return;
         // }
-        let application_id = storageService().get('health_insurance_application_id');
+        let application_id = storageService().getObject('health_insurance_application_id')
+        
         try {
-            let res = await Api.get(`api/insurancev2/api/insurance/health/payment/start_payment/${this.state.providerConfig.provider_api}?application_id=${application_id}`);       
-           
+            var url = this.getApiUrl(`api/insurancev2/api/insurance/health/payment/start_payment/${this.state.providerConfig.provider_api}?application_id=${application_id}`)
+            console.log('ddd', url)
+            let res = await Api.get(url);       
             var resultData = res.pfwresponse.result;
             this.setState({
                 pg_data: resultData
@@ -959,11 +962,24 @@ class GroupHealthPlanFinalSummary extends Component {
         });
     }
 
+    copyPaymentLink = async () =>{
+        let application_id = storageService().get('health_insurance_application_id');
+        let guestLeadId = storageService().getObject('guestLeadId');
+
+        let finalSummaryScreenUrl = `${window.origin}/group-insurance/group-health/${this.state.provider}/final-summary${getConfig().searchParams}&provider=${this.state.providerConfig.provider_api}&application_id=${application_id}&guestUser=true&guestLeadId=${guestLeadId}`
+
+        navigator.clipboard.writeText(finalSummaryScreenUrl).then(()=>{
+            Toast('Payment link copied!')
+        }, (e)=>{
+            Toast('Something went wrong! Please try again.')
+        })
+    }
     render() {
         return (
             <Container
             provider={this.state.provider}
-            resetpage={true}
+            resetpage={!this.state.isRmJourney}
+            noBackIcon={this.state.isRmJourney}
             handleReset={this.showDialog}
             events={this.sendEvents('just_set_events')}
             showLoader={this.state.show_loader}
@@ -973,8 +989,8 @@ class GroupHealthPlanFinalSummary extends Component {
             title="Summary"
             fullWidthButton={true}
             onlyButton={true}
-            buttonTitle={`MAKE PAYMENT OF ${inrFormatDecimal(this.state.quotation.total_premium)}`}
-            handleClick={() => this.handleClick()}
+            buttonTitle={this.state.isRmJourney ?  'COPY PAYMENT LINK' : `MAKE PAYMENT OF ${inrFormatDecimal(this.state.quotation.total_premium)}`}
+            handleClick={this.state.isRmJourney ? ()=> this.copyPaymentLink() : () => this.handleClick()}
             pgReached={this.state.pgReached}
         >
 

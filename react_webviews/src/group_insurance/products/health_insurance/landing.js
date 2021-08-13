@@ -29,6 +29,7 @@ import back_nav_bar_icon_up from '../../../assets/back_nav_bar_icon_up.png'
 import Api from '../../../utils/api'
 import { setTermInsData } from '../../common/commonFunction'
 import {Imgc} from   '../../../common/ui/Imgc'
+import {getApiUrl} from 'group_insurance/products/group_health/common_data'
 
 class HealthInsuranceLanding extends Component {
 
@@ -180,7 +181,8 @@ class HealthInsuranceLanding extends Component {
     let error = "";
     let errorType = "";
     try {
-      const res = await Api.get(`/api/ins_service/api/insurance/health/journey/started?product_name=${data.Product_name}`);
+      var url = getApiUrl(`/api/ins_service/api/insurance/health/journey/started?product_name=${data.Product_name}`)
+      const res = await Api.get(url);
 
       let resultData = res.pfwresponse
       if(res.pfwresponse.status_code === 200){
@@ -223,7 +225,8 @@ class HealthInsuranceLanding extends Component {
     let error = '';
     let errorType = '';
     try {
-      const res = await Api.get('/api/ins_service/api/insurance/application/summary')
+      var url = getApiUrl(`/api/ins_service/api/insurance/application/summary`)
+      const res = await Api.get(url)
 
       if (res.pfwresponse.status_code === 200) {
         var resultData = res.pfwresponse.result.response;
@@ -290,13 +293,9 @@ class HealthInsuranceLanding extends Component {
         });
 
       } else {
-        error = res.pfwresponse.result.error || res.pfwresponse.result.message
-        || true;
+        error = res.pfwresponse.result.error || res.pfwresponse.result.message || true;
       }
-
-      
-
-    } catch (err) {
+      } catch (err) {
       console.log(err)
       this.setState({
         skelton: false,

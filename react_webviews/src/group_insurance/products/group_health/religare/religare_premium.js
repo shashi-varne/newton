@@ -44,7 +44,6 @@ export default class ReligarePremium extends Component {
           <div className="pi-tile-right">{inrFormatDecimal(this.props.base_premium)}</div>
         </div>
 
-        {/* TODO: move inline styles to stylesheet */}
         {this.props.add_ons && this.props.add_ons.length !==0 &&
           <div className="premium-addons" style={{margin: '30px 0 25px'}}>
             <div className="premium-addon-title" style={{

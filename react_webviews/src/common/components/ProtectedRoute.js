@@ -1,12 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Route, Redirect } from "react-router-dom";
 import { initData } from "../../kyc/services";
-import { storageService } from "utils/validators";
+import { storageService, getUrlParams } from "utils/validators";
 import isEmpty from "lodash/isEmpty";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
 import UiSkelton from "../ui/Skelton";
 import ThemeContext from "../../utils/ThemeContext";
+
 const config = getConfig();
 const isSdk = config.isSdk;
 const isNative = config.isNative;
@@ -17,17 +18,28 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   let user = storageService().get("user") || {};
   let kyc = storageService().get("kyc") || {};
   let partner = storageService().get("partner") || "";
+  let guestLeadId = storageService().get('guestLeadId') || "" ;
   let loader =
     currentUser && !isEmpty(kyc) && !isEmpty(user) && (isSdk ? !!partner : true )? false : true;
   const [showLoader, setShowLoader] = useState(loader);
   const [showComponent, setShowComponent] = useState(!loader);
+
   const fetch = async () => {
-    await initData();
+    const urlParams = getUrlParams();
+    const guestUser = urlParams?.guestUser || false;
+    if(guestUser){
+      storageService().setObject('guestUser', true);
+    }
+
+    if(!guestLeadId && !guestUser){
+      await initData();
+    }
     currentUser = storageService().get("currentUser");
     user = storageService().get("user") || {};
     kyc = storageService().get("kyc") || {};
+    
     let renderComponent =
-      currentUser && !isEmpty(kyc) && !isEmpty(user) ? true : false;
+      (currentUser && !isEmpty(kyc) && !isEmpty(user)) || guestLeadId || guestUser
     setShowComponent(renderComponent);
     if (!renderComponent) {
       if (isNative) {

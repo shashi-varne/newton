@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Container from '../../common/Container';
 import '../../common/Style.css';
 import provider from 'assets/provider.svg';
-import { numDifferentiationInr } from '../../../utils/validators';
+import { getUrlParams, numDifferentiationInr, storageService } from '../../../utils/validators';
 
 import Api from 'utils/api';
 import { getConfig, getBasePath } from 'utils/functions';
@@ -11,6 +11,8 @@ import { nativeCallback } from 'utils/native_callback';
 import instant_fisdom from 'assets/instant_fisdom.svg';
 import instant_myway from 'assets/instant_myway.svg';
 import {Imgc} from 'common/ui/Imgc';
+import Toast from '../../../common/ui/Toast';
+import {getApiUrl} from 'group_insurance/products/group_health/common_data'
 
 class PlanSummaryClass extends Component {
   constructor(props) {
@@ -21,11 +23,15 @@ class PlanSummaryClass extends Component {
       summaryData: {},
       leadData: this.props.parent.props.location.state ? this.props.parent.props.location.state.lead : '',
       type: getConfig().productName,
-      group_insurance_payment_started: window.sessionStorage.getItem('group_insurance_payment_started') || ''
+      group_insurance_payment_started: window.sessionStorage.getItem('group_insurance_payment_started') || '',
+      isRmJourney: (!!storageService().getObject('guestLeadId')) && (!storageService().getObject('guestUser')),
+      isGuestUser : !!storageService().get('guestUser')
     };
 
+    console.log((!!storageService().getObject('guestLeadId')))
+    console.log((!!storageService().getObject('guestUser')))
     this.handleClickCurrent = this.handleClickCurrent.bind(this);
-
+    
   }
 
   componentWillMount() {
@@ -33,7 +39,7 @@ class PlanSummaryClass extends Component {
     if (this.state.group_insurance_payment_started) {
       window.sessionStorage.setItem('group_insurance_payment_started', '');
     }
-
+    
     let instant_icon = this.state.type !== 'fisdom' ? instant_myway : instant_fisdom;
     let product_title = insuranceProductTitleMapper[this.props.parent ? this.props.parent.state.product_key : ''];
     nativeCallback({ action: 'take_control_reset' });
@@ -86,18 +92,40 @@ class PlanSummaryClass extends Component {
     }
 
     var lead = this.state.leadData;
-   
+    
     if(!this.state.leadData) {
+      
       this.setState({
         skelton: true
       })
       let error = '';
       let errorType = '';
       try {
-        let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)    
+        var url = '';
+        var res = {}
+        
+        if(this.state.isGuestUser){
+          var guestLeadId = getUrlParams().guestLeadId
+          url = `api/guest/user/session/summary/data/fetch?guest_lead_id=${guestLeadId}`
+          
+          let post_body = {
+            summary_url: `api/insurancev2/api/insurance/bhartiaxa/lead/update`,
+            method: 'post',
+            request_body: JSON.parse(getUrlParams().request_data)
+          }
+          res = await Api.post(url, post_body) 
+        }else{
+          url = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id) 
+          res = await Api.get(url)    
+        }
+        
         if (res.pfwresponse.status_code === 200) {
 
-          lead = res.pfwresponse.result.lead;
+          if(this.state.isGuestUser){
+            lead = res.pfwresponse.result.insurancev2_result.updated_lead
+          }else{
+            lead = res.pfwresponse.result.lead;
+          }
           this.setState({
             skelton: false
           })
@@ -176,7 +204,8 @@ class PlanSummaryClass extends Component {
         show_loader: 'button'
       })
       let res2;
-      res2 = await Api.get('api/insurancev2/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id)
+      let url = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id)
+      res2 = await Api.get(url)
 
       if (res2.pfwresponse.status_code === 200) {
         let basepath = getBasePath();
@@ -266,13 +295,31 @@ class PlanSummaryClass extends Component {
       nativeCallback({ events: eventObj });
     }
   }
+  
+  copyPaymentLink = () =>{
+
+    var productMapper = {
+      'DENGUE': 'dengue', 
+      'HOSPICASH': 'hospicash', 
+      'PERSONAL_ACCIDENT': 'accident',
+      'SMART_WALLET': 'wallet'
+    }
+    var postBodyData =  storageService().getObject('baxaGuestUserData')
+    var guestLeadId = storageService().getObject('guestLeadId')
+    var baxaSumaryUrl = `${window.location.origin}/group-insurance/${productMapper[this.props.parent.state.product_key]}/summary${getConfig().searchParams}&request_data=${JSON.stringify(postBodyData)}&guestLeadId=${guestLeadId}&guestUser=true`
+    navigator.clipboard.writeText(baxaSumaryUrl).then(()=>{
+        Toast('Payment link copied!')
+    }, (e)=>{
+        Toast('Something went wrong! Please try again.')
+    })
+  }
 
   render() {
 
     return (
       <Container
         fullWidthButton={true}
-        buttonTitle='Make Payment'
+        buttonTitle={this.state.isRmJourney ? 'Copy payment link' : 'Make payment'}
         onlyButton={true}
         product_key={this.props.parent ? this.props.parent.state.product_key : ''}
         events={this.sendEvents('just_set_events')}
@@ -280,7 +327,7 @@ class PlanSummaryClass extends Component {
         skelton={this.state.skelton}
         showError={this.state.showError}
         errorData={this.state.errorData}
-        handleClick={() => this.handleClickCurrent()}
+        handleClick={this.state.isRmJourney ? ()=>this.copyPaymentLink() : () => this.handleClickCurrent()}
         title="Summary"
         classOverRide="fullHeight"
         classOverRideContainer="plan-summary"
