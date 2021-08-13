@@ -15,6 +15,7 @@ import { getKycAppStatus, isReadyToInvest, setKycProductType, setSummaryData } f
 import { get_recommended_funds } from "./common/api";
 import { PATHNAME_MAPPER } from "../../kyc/constants";
 import { isEquityCompleted } from "../../kyc/common/functions";
+import { nativeCallback, openModule } from "../../utils/native_callback";
 
 let errorMessage = "Something went wrong!";
 export async function initialize() {
@@ -40,7 +41,10 @@ export async function initialize() {
   this.setKycProductTypeAndRedirect = setKycProductTypeAndRedirect.bind(this);
   this.handleIpoCardRedirection = handleIpoCardRedirection.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
-  if ( (this.state.screenName === "invest_landing" || this.state.screenName === "sdk_landing" ) && dataSettedInsideBoot) {
+  if (config) {
+    this.setState({ config });
+  }
+  if ((this.state.screenName === "invest_landing" || this.state.screenName === "sdk_landing" ) && dataSettedInsideBoot) {
     storageService().set("dataSettedInsideBoot", false);
   }
   if(this.state.screenName === "invest_landing"){
@@ -117,7 +121,7 @@ export async function getSummary() {
 }
 
 export function setInvestCardsData() {
-  const config = getConfig();
+  const { config = getConfig() } = this.state;
   const disabledPartnersMap = {
     insurance: [
       "cccb",
@@ -295,7 +299,7 @@ export function corpusValue(data) {
 }
 
 export async function getRecommendations(amount) {
-  const config = getConfig();
+  const { config = getConfig() } = this.state;
   try {
     const result = await get_recommended_funds({
       type: this.state.investType,
@@ -338,7 +342,7 @@ export async function getRecommendations(amount) {
 }
 
 export function navigate(pathname, data = {}) {
-  const config = getConfig();
+  const { config = getConfig() } = this.state;
   if (this.props.edit || data.edit) {
     this.props.history.replace({
       pathname: pathname,
@@ -355,7 +359,7 @@ export function navigate(pathname, data = {}) {
 }
 
 export function initilizeKyc() {
-  const config = getConfig();
+  const { config = getConfig() } = this.state;
   let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
   const TRADING_ENABLED = isTradingEnabled(userKyc);
   let currentUser =
@@ -471,7 +475,7 @@ export function openPremiumOnboardBottomSheet(
   userKyc,
   TRADING_ENABLED
 ) {
-  const config = getConfig();
+  const { config = getConfig() } = this.state;
   let is_bottom_sheet_displayed_kyc_premium = storageService().get(
     "is_bottom_sheet_displayed_kyc_premium"
   );
@@ -536,7 +540,7 @@ export async function openKyc() {
 }
 
 export async function setKycProductTypeAndRedirect() {
-  let { userKyc, isReadyToInvestBase, kycJourneyStatus } = this.state;
+  let { userKyc, isReadyToInvestBase, kycJourneyStatus, config = getConfig() } = this.state;
   let result;
   if (!userKyc?.mf_kyc_processed) {
     let showLoader = true;
@@ -554,7 +558,7 @@ export async function setKycProductTypeAndRedirect() {
     const showAadhaar = !(result?.kyc?.address.meta_data.is_nri || result?.kyc?.kyc_type === "manual");
     if (result?.kyc?.kyc_status !== "compliant") {
       this.navigate(PATHNAME_MAPPER.journey, {
-        searchParams: `${getConfig().searchParams}&show_aadhaar=${showAadhaar}`
+        searchParams: `${config.searchParams}&show_aadhaar=${showAadhaar}`
       });
     } else {
       this.navigate(PATHNAME_MAPPER.journey)
@@ -563,12 +567,24 @@ export async function setKycProductTypeAndRedirect() {
 }
 
 export function handleIpoCardRedirection() {
+  const { userKyc, config = getConfig() } = this.state;
+  if (
+      userKyc.equity_investment_ready &&
+      this.state.currentUser?.pin_status !== 'pin_setup_complete'
+  ) {
+    openModule('account/setup_2fa', this.props, { routeUrlParams: '/ipo' });
+    if (config.isNative) {
+      return nativeCallback({ action: 'exit_web' });
+      // TODO: Test native behaviour for this code
+    }
+  } else {
+    this.navigate("/market-products");
+  }
   // Todo: handle redirection to stocks sdk for equity_activation_pending status
-  this.navigate("/market-products")
 }
           
 export function handleStocksAndIpoCards(key) {
-  let { kycJourneyStatusMapperData, kycJourneyStatus, userKyc } = this.state;
+  let { kycJourneyStatusMapperData, kycJourneyStatus, userKyc, currentUser } = this.state;
   let modalData = Object.assign({key}, kycJourneyStatusMapperData);
 
   if (key === "ipo") {
@@ -591,7 +607,14 @@ export function handleStocksAndIpoCards(key) {
     }
   } else if (key === "stocks") {
     if (userKyc.equity_investment_ready || kycJourneyStatus === "complete") {
-      // Todo: handle redirection to stocks sdk
+      if (currentUser?.pin_status !== 'pin_setup_complete') {
+        openModule('account/setup_2fa', this.props, { routeUrlParams: '/stocks' });
+        const { config = getConfig() } = this.state;
+        if (config.isNative) {
+          return nativeCallback({ action: 'exit_web' });
+          // TODO: Test native behaviour for this code
+        }
+      }
     }
   }
 
@@ -643,10 +666,10 @@ function handleInvestSubtitle ()  {
 };
 
 export function handleRenderCard() {
-  const config = getConfig();
   let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
   let currentUser = this.state.currentUser || storageService().getObject("user") || {};
   let isReadyToInvestBase = isReadyToInvest();
+  const { config = getConfig() } = this.state;
   const isWeb = config.Web;
   const hideReferral = currentUser.active_investment && !isWeb && config?.referralConfig?.shareRefferal;
   const referralCode = !currentUser.active_investment && !isWeb && config?.referralConfig?.applyRefferal;
@@ -700,7 +723,7 @@ export function handleCampaignNotification () {
 };
 
 export function handleCampaignRedirection (url, showRedirectUrl) {
-  const config = getConfig();
+  const { config = getConfig() } = this.state;
   let campLink = url;
   let plutusRedirectUrl = `${getBasePath()}/?is_secure=${config.isSdk}&partner_code=${config.code}`;
   // Adding redirect url for testing
