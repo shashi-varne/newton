@@ -36,7 +36,7 @@ const ConfirmNewPin = (props) => {
           // eslint-disable-next-line no-throw-literal
           throw "PIN doesn't match, Please try again";
         } else if (routeParams.set_flow) {
-          // await setPin({ mpin });
+          await setPin({ mpin });
         } else {
           await modifyPin({ new_mpin: mpin, old_mpin: routeParams?.old_mpin });
         }
