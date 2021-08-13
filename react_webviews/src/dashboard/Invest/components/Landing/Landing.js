@@ -135,7 +135,7 @@ class Landing extends Component {
     if(modalData.key === "ipo") {
       this.handleIpoCardRedirection();
     } else {
-      // To do: redirect to sdk page for fno_rejected status
+      // To do: redirect to stocks sdk page for fno_rejected status
       this.closeKycStatusDialog();
     }
   }
