@@ -3,7 +3,11 @@ import { getConfig } from "utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 import { initializeComponentFunctions } from "./MyAccountFunctions";
 import Container from "../common/Container";
+import VerifyDetailDialog from "../../login_and_registration/components/VerifyDetailDialog";
+import AccountAlreadyExistDialog from "../../login_and_registration/components/AccountAlreadyExistDialog";
 import Button from "material-ui/Button";
+import { Imgc } from "../../common/ui/Imgc"
+import UserDetails from "./UserDetails";
 import Dialog, {
   DialogActions,
   DialogContent,
@@ -67,6 +71,8 @@ class MyAccount extends Component {
       userKyc: {},
       openDialog: false,
       kycStatusData: [],
+      verifyDetails: false,
+      accountAlreadyExists: false,
     };
     this.initializeComponentFunctions = initializeComponentFunctions.bind(this);
   }
@@ -144,6 +150,43 @@ class MyAccount extends Component {
     });
   };
 
+  setAccountAlreadyExistsData = (show, data, type) => {
+    this.setState({
+      accountAlreadyExists: show,
+      accountAlreadyExistsData: data,
+      verifyDetails: true,
+      verifyDetailsType: type,
+    });
+  };
+
+  continueAccountAlreadyExists = async () => {
+    this.navigate("/kyc/communication-details", {
+      state: {
+        accountAlreadyExistsData: this.state.accountAlreadyExistsData,
+        callHandleClick: true,
+        continueAccountAlreadyExists: true,
+      },
+    });
+  };
+
+  editDetailsAccountAlreadyExists = () => {
+    this.navigate("/kyc/communication-details", {
+      state: {
+        accountAlreadyExistsData : this.state.accountAlreadyExistsData,
+        page: "my-account",
+        edit: true,
+      },
+    });
+  };
+
+  onCloseBottomSheet = () => {
+    this.setState({
+      accountAlreadyExists: false,
+      verifyDetails: false,
+    })
+  }
+
+
   renderDialog = () => {
     return (
       <Dialog
@@ -220,7 +263,7 @@ class MyAccount extends Component {
         screen_name: screenName || "my_account",
       },
     };
-    if (screenName === "export transaction history") {
+    if (screenName === "export transaction history" || screenName === "") {
       delete eventObj.properties.account_options;
       eventObj.properties.user_action = userAction;
     }
@@ -230,6 +273,12 @@ class MyAccount extends Component {
       nativeCallback({ events: eventObj });
     }
   };
+
+  showLoader = () =>{
+    this.setState({
+      showLoader: !this.state.showLoader
+    })
+  }
 
   render() {
     let {
@@ -242,7 +291,10 @@ class MyAccount extends Component {
       isReadyToInvestBase,
       userKyc,
       currentUser,
-      kycStatusData
+      kycStatusData,
+      contacts,
+      verifyDetails,
+      accountAlreadyExists,
     } = this.state;
     let bank = userKyc.bank || {};
     return (
@@ -255,6 +307,16 @@ class MyAccount extends Component {
       >
         <div className="my-account" data-aid='my-account'>
           <div className="my-account-content">
+            <UserDetails
+              pan_no={userKyc?.pan?.meta_data?.pan_number}
+              contacts={contacts}
+              name={currentUser?.name}
+              handleClick={(path) => this.handleClick(path)}
+              showLoader={this.showLoader}
+              showAccountAlreadyExist={(show, data, type) =>
+                this.setAccountAlreadyExistsData(show, data, type)
+              }
+            />
             <div className="account">
               <div
                 className="account-head-title ma-kir-title"
@@ -285,7 +347,7 @@ class MyAccount extends Component {
                     this.handleClick(KYC_PATHNAME_MAPPER.changeAddressDetails1);
                   }}
                 >
-                  <img src={require(`assets/address_icon.svg`)} alt="" />
+                  <Imgc className="my-imgc" src={require(`assets/address_icon.svg`)} alt="" />
                   <div>Change Address</div>
                 </div>
               )}
@@ -298,7 +360,7 @@ class MyAccount extends Component {
                     this.handleClick(KYC_PATHNAME_MAPPER.bankList);
                   }}
                 >
-                  <img src={require(`assets/add_bank_icn.svg`)} alt="" />
+                  <Imgc className="my-imgc" src={require(`assets/add_bank_icn.svg`)} alt="" />
                   <div>Add Bank/Mandate</div>
                 </div>
               )}
@@ -313,7 +375,7 @@ class MyAccount extends Component {
                       this.handleClick("/capital-gain");
                     }}
                   >
-                    <img
+                    <Imgc className="my-imgc"
                       src={require(`assets/capital_gains_icon.svg`)}
                       alt=""
                     />
@@ -331,7 +393,7 @@ class MyAccount extends Component {
                       this.handleClick("/investment-proof");
                     }}
                   >
-                    <img src={require(`assets/80c_icon.svg`)} alt="" />
+                    <Imgc className="my-imgc" src={require(`assets/80c_icon.svg`)} alt="" />
                     <div>80C Investment Proof</div>
                   </div>
                 )}
@@ -341,7 +403,7 @@ class MyAccount extends Component {
                   className="account-options"
                   onClick={() => this.confirmTransactions()}
                 >
-                  <img
+                  <Imgc className="my-imgc"
                     src={require(`assets/export_transaction_icon.svg`)}
                     alt=""
                   />
@@ -356,11 +418,25 @@ class MyAccount extends Component {
                   this.handleClick("/blank-mandate/upload");
                 }}
               >
-                <img
+                <Imgc className="my-imgc"
                   src={require(`assets/export_transaction_icon.svg`)}
                   alt=""
                 />
                 <div>Upload Mandate</div>
+              </div>
+              <div
+                data-aid='security-setting'
+                className="account-options"
+                onClick={() => {
+                  this.sendEvents("settings_clicked", "");
+                  this.handleClick("/account/security-settings");
+                }}
+              >
+                <Imgc className="my-imgc"
+                  src={require(`assets/security.svg`)}
+                  alt=""
+                />
+                <div>Security settings</div>
               </div>
             </div>
             {(mandate.prompt ||
@@ -375,7 +451,7 @@ class MyAccount extends Component {
                     className="account-options"
                     onClick={() => this.handleClick(pendingMandate.state)}
                   >
-                    <img src={require(`assets/alert_icon.svg`)} alt="" />
+                    <Imgc className="my-imgc" src={require(`assets/alert_icon.svg`)} alt="" />
                     <div className="pending">{pendingMandate.message}</div>
                   </div>
                 )}
@@ -385,7 +461,7 @@ class MyAccount extends Component {
                     className="account-options"
                     onClick={() => this.authenticate()}
                   >
-                    <img src={require(`assets/alert_icon.svg`)} alt="" />
+                    <Imgc className="my-imgc" src={require(`assets/alert_icon.svg`)} alt="" />
                     <div className="pending">
                       Authenticate E-Mandate for NPS
                     </div>
@@ -397,7 +473,7 @@ class MyAccount extends Component {
                     className="account-options"
                     onClick={() => this.handleClick("/nps/identity")}
                   >
-                    <img src={require(`assets/alert_icon.svg`)} alt="" />
+                    <Imgc className="my-imgc alert-icn" style={{width: "30px"}} src={require(`assets/alert_icon.svg`)} alt=""  />
                     <div className="pending">Upload NPS Details</div>
                   </div>
                 )}
@@ -405,6 +481,26 @@ class MyAccount extends Component {
             )}
             {this.renderDialog()}
           </div>
+          {verifyDetails && (
+            <VerifyDetailDialog
+              type={this.state.verifyDetailsType}
+              data={this.state.verifyDetailsData}
+              showAccountAlreadyExist={this.setAccountAlreadyExistsData}
+              isOpen={verifyDetails}
+              onClose={this.onCloseBottomSheet}
+              parent={this}
+            ></VerifyDetailDialog>
+          )}
+          {accountAlreadyExists && (
+            <AccountAlreadyExistDialog
+              type={this.state.verifyDetailsType}
+              data={this.state.accountAlreadyExistsData}
+              isOpen={accountAlreadyExists}
+              onClose={this.onCloseBottomSheet}
+              editDetails={this.editDetailsAccountAlreadyExists}
+              next={this.continueAccountAlreadyExists}
+            ></AccountAlreadyExistDialog>
+          )}
         </div>
       </Container>
     );

@@ -26,7 +26,6 @@ const Experience = (props) => {
   const [experienceName, setExperienceName] = useState("0 to 1 year");
 
   const sendEvents = (userAction) => {
-    // TODO sendEvents('next)
     let eventObj = {
       event_name: "trading_onboarding",
       properties: {

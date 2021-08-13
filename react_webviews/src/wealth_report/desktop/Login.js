@@ -557,7 +557,7 @@ const Login = (props) => {
     <Fragment>
       <div id="wr-continue">
         <img
-          src={require('assets/fisdom/fisdom_logo.png')}
+          src={require('assets/fisdom/fisdom_logo.svg')}
           alt="fisdom"
         />
         <div id="wr-title">Portfolio Report</div>
@@ -595,7 +595,7 @@ const Login = (props) => {
           <div style={{ flex: 1, paddingLeft: '7%'  }}>
             <div id="wr-login-right-panel">
               <img
-                src={require('assets/fisdom/fisdom_logo_coloured.png')}
+                src={require('assets/fisdom/fisdom_logo.svg')}
                 style={{ cursor: 'pointer' }}
                 alt="fisdom" width={130}
                 onClick={() => goBack()}

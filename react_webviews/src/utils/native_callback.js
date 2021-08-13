@@ -7,7 +7,8 @@ import { storageService } from './validators';
 export const nativeCallback = async ({ action = null, message = null, events = null, action_path = null } = {}) => {
   let newAction = null;
   let callbackData = {};
-  let project = getConfig().project;
+  const config = getConfig();
+  let project = config.project;
 
   let oldToNewMethodsMapper = {
     'open_pdf': 'open_url',
@@ -38,22 +39,22 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   }
 
   if (action === 'native_back' || action === 'exit') {
-    if (getConfig().isNative) callbackData.action = 'exit_web';
+    if (config.isNative) callbackData.action = 'exit_web';
     else window.location.href = redirectToLanding();
   }
 
   if (action === 'open_pdf') {
-    if (getConfig().Android) {
+    if (config.Android) {
       message.url = "https://docs.google.com/gview?embedded=true&url=" + message.url;
     }
   }
 
   if (action === 'open_inapp_tab') {
-    if (getConfig().Web) {
+    if (config.Web) {
       open_browser_web(message.url, '')
     } else {
       let url = 'https://fis.do/m/module?action_type=native';
-      if (getConfig().productName === 'finity') {
+      if (config.productName === 'finity') {
         url = 'https://w-ay.in/m/module?action_type=native';
       }
 
@@ -74,7 +75,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     }
   }
 
-  if (getConfig().generic_callback) {
+  if (config.generic_callback) {
     if (action === 'take_control_reset_hard' || action === 'take_control_reset') {
       nativeCallback({ action: 'hide_top_bar' });
     }
@@ -167,21 +168,27 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     }
   }
 
-  if (getConfig().app !== 'web') {
+  if (config.app !== 'web') {
     let pathname = window.location?.pathname || ""
     if(pathname.indexOf('appl/webview') !== -1) {
       pathname = pathname.split("/")[5] || "/";
     }
     
-    const entryPath = storageService().get('entry_path'); 
-    if (getConfig().isSdk && pathname !== "/" && (entryPath !== pathname) && (callbackData.action === 'exit_web' || callbackData.action === 'exit_module' || callbackData.action === 'open_module')) {
+    const entryPath = storageService().get('entry_path');
+
+    if (
+      config.isSdk &&
+      pathname !== "/" &&
+      (entryPath !== pathname) &&
+      (callbackData.action === 'exit_web' || callbackData.action === 'exit_module' || callbackData.action === 'open_module')
+    ) {
         window.location.href = redirectToLanding();
     } else {
-      if (getConfig().app === 'android') {
+      if (config.app === 'android') {
         window.Android.callbackNative(JSON.stringify(callbackData));
       }
 
-      if (getConfig().app === 'ios') {
+      if (config.app === 'ios') {
         window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
       }
     }
@@ -190,6 +197,10 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       open_browser_web(message.url, '_blank')
     } else if (action === 'resume_provider') {
       open_browser_web(message.resume_link, '_self')
+    } else if (action === '2fa_expired') {
+      storageService().remove('currentUser');
+      storageService().setBoolean('session-timeout', true);
+      window.location.href = redirectTo2FA();
     } else {
       return;
     }
@@ -220,6 +231,7 @@ export function openModule(moduleName, props) {
       'app/profile': '/my-account',
       'invest/save_tax': '/invest',
       'invest/nps': '/nps/info',
+      'account/setup_2fa': '/account/set-pin/kyc-complete'
     }
     
     let moduleNameWeb = module_mapper[moduleName] || '/';
@@ -278,6 +290,10 @@ export function openPdfCall(data = {}) {
 
 export function redirectToLanding() {
   return `${getBasePath()}/${getConfig().searchParams}`;
+}
+
+export function redirectTo2FA() {
+  return `${getBasePath()}/login/verify-pin${getConfig().searchParams}`;
 }
 
 export function handleNativeExit(props, data) {

@@ -27,7 +27,6 @@ Exhaustive list of property values:
 
 // common config across all partners
 export const commonCardsConfig = {
-  logo: "logo_white.png",
   investSections: [
     "kyc",
     "stocks",
@@ -53,6 +52,8 @@ export const basePartnerConfig = {
     // remove once 2fa changes are merged
     colorLogo: "fisdom/fisdom_logo_coloured.png",
     productName: "fisdom",
+    logo: "fisdom/fisdom_logo_white.svg",
+    colorLogo: "fisdom/fisdom_logo.svg",
     email: "ask@fisdom.com",
     mobile: "+91-9642596425",
     appLink: "https://fisdom.onelink.me/CQFA/3e75c8f6",
@@ -75,6 +76,8 @@ export const basePartnerConfig = {
     // remove once 2fa changes are merged
     colorLogo: "finity/finity_logo.svg",
     productName: "finity",
+    logo: "finity/finity_logo_white.svg",
+    colorLogo: "finity/finity_logo.svg",
     email: "ask@finity.in",
     mobile: "+91-8142381423",
     appLink: "https://myway.onelink.me/W4GN/1f539fd2",
@@ -211,7 +214,6 @@ export const partnerConfigs = {
     navLinkOptions:{loan: true}
   },
   finity: {
-    logo: "finity_white_logo.svg",
     code: "finity",
     mobile: "+91-9916149111",
     investSubSectionMap: {
