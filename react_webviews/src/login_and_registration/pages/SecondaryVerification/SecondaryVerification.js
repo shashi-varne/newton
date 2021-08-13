@@ -12,6 +12,7 @@ import DropDownNew from "common/ui/DropDownNew";
 import Checkbox from "../../../common/ui/Checkbox";
 import WVInPageSubtitle from "../../../common/ui/InPageHeader/WVInPageSubtitle";
 import AccountAlreadyExistDialog from "../../components/AccountAlreadyExistDialog";
+import { isEmpty } from "../../../utils/validators";
 
 class SecondaryVerification extends Component {
     constructor(props) {
@@ -66,18 +67,35 @@ class SecondaryVerification extends Component {
         let { form_data, loginType } = this.state;
         let keys_to_check = ["mobile", "code"];
         if (loginType === "email") keys_to_check = ["email"];
-        if (loginType === "email" && !validateEmail(form_data["email"])) {
+        if (loginType === "mobile" && (!validateNumber(form_data["mobile"] && isEmpty(form_data["code"])) || (form_data["code"] === "+91" && form_data["mobile"].length < 10))) {
+            this.setState({
+                form_data: {
+                    ...form_data,
+                    mobile_error: "Invalid mobile number",
+                    code_error: isEmpty(form_data["code"]) ? "required" : "",
+                }
+            });
+            toast("Invalid mobile number");
+            return;
+        }
+        if (loginType === "email" && !validateEmail(form_data["email"])                   ) {
+            this.setState({
+                form_data: {
+                    ...form_data,
+                    email_error: "Invalid email",
+                }
+            });
             toast("Invalid email");
             return;
           }
-        let result = await this.authCheckApi(loginType, { "contact_value": form_data[loginType] })
-        if (result?.is_user) {
+        let result = await this.authCheckApi(loginType, { "contact_value": form_data[loginType] });
+        if (result && result?.is_user) {
             this.setState({
                 accountAlreadyExists: true,
                 accountAlreadyExistsData: result?.user,
                 verifyDetailsType: loginType,
             })
-        } else if (!result?.is_user) {
+        } else if (result && !result?.is_user) {
             this.formCheckFields(keys_to_check, form_data, "LOGIN", loginType, true);
         }
     }
@@ -186,7 +204,7 @@ class SecondaryVerification extends Component {
                                     />
                                 </span>
                             </div>
-                            <WVInPageSubtitle children={"We'll send an OTP to verify your mobile number"} />
+                            <WVInPageSubtitle style={{ marginTop : form_data?.mobile_error ? "12px" : ""}} children={"We'll send an OTP to verify your mobile number"} />
                             <div className="declaration-container whatsapp-consent">
                                 <Checkbox
                                     defaultChecked
