@@ -196,9 +196,11 @@ const CommunicationDetails = (props) => {
     setShowDotLoader(true);
     try {
       if (!isEmpty(goldUserInfo)) {
-        await resendGoldOtp(goldResendVerificationOtpLink);
+        let result = await resendGoldOtp(goldResendVerificationOtpLink);
+        toast(result.message || "Success")
       } else {
         const result = await resendOtp(otpData.otpId);
+        toast(result.message || "Success")
         setOtpData({
           otp: "",
           otpId: result.otp_id,
@@ -224,6 +226,7 @@ const CommunicationDetails = (props) => {
       }
       setShowLoader("button");
       const otpResult = await verifyOtp(otpData);
+      toast(otpResult.message || "Success")
       updateKyc(otpResult.kyc);
       if (
         otpResult.kyc.identification.meta_data.mobile_number_verified &&
@@ -313,6 +316,7 @@ const CommunicationDetails = (props) => {
           }
         }
         const result = await sendOtp(body);
+        toast(result.message || "Success");
         setShowOtpContainer(true);
         setOtpData({
           otp: "",
@@ -419,7 +423,8 @@ const CommunicationDetails = (props) => {
           verify_link: goldVerificationLink,
           otp: otpData?.otp,
         }
-        await verifyGoldOtp(body);
+        let result = await verifyGoldOtp(body);
+        toast(result.message || 'Success');
         sendEvents("next");
         handleGoldNavigation();
       } else {
@@ -450,6 +455,7 @@ const CommunicationDetails = (props) => {
       setAuthCheckRequired(true);
       setShowLoader("button");
       const result = await sendGoldOtp(body);
+      toast(result.message || "Success")
       setVerificationLink(result?.verification_link);
       setGoldResendVerificationOtpLink(result?.resend_verification_otp_link);
       setShowOtpContainer(true);
