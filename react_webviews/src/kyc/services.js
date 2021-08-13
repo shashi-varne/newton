@@ -316,7 +316,7 @@ export function getKycAppStatus(kyc) {
   }
 
   // this condition handles retro kyc submitted users
-  if (kyc.application_status_v2 === "submitted") {
+  if (kyc.kyc_product_type !== "equity" && kyc.application_status_v2 === "submitted") {
     status = "submitted"
   }
 
