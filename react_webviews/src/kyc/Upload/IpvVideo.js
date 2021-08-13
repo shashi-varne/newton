@@ -13,6 +13,7 @@ import "./commonStyles.scss";
 import { nativeCallback } from '../../utils/native_callback'
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 import Toast from '../../common/ui/Toast'
+import { PATHNAME_MAPPER } from '../constants'
 
 const IpvVideo = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
@@ -32,7 +33,8 @@ const IpvVideo = (props) => {
   const config = getConfig();
   const productName = config.productName
   const isWeb = config.Web
-
+  const navigate = navigateFunc.bind(props)
+  const goBackPath = props.location?.state?.goBack || "";
   const SUPPORTED_VIDEO_TYPES = ["mp4", "webm", "ogg", "x-flv", "x-ms-wmv"];
 
   useEffect(() => {
@@ -83,17 +85,25 @@ const IpvVideo = (props) => {
 
   const handleSubmit = async () => {
     sendEvents('next')
-    const navigate = navigateFunc.bind(props)
+    
     try {
       setIsApiRunning("button")
       const result = await upload(file, 'ipvvideo', { ipv_code: ipvcode })
       updateKyc(result.kyc)
-      navigate('/kyc/upload/progress')
+      handleNavigation();
     } catch (err) {
       toast(err?.message)
       console.error(err)
     } finally {
       setIsApiRunning(false)
+    }
+  }
+
+  const handleNavigation = () => {
+    if (goBackPath) {
+      navigate(goBackPath);
+    } else {
+      navigate(PATHNAME_MAPPER.uploadProgress)
     }
   }
 
