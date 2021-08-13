@@ -37,6 +37,7 @@ export async function initialize() {
   this.handleKycSubmittedOrRejectedState = handleKycSubmittedOrRejectedState.bind(this);
   this.handleCampaign = handleCampaign.bind(this);
   this.closeCampaignDialog = closeCampaignDialog.bind(this);
+  this.contactVerification = contactVerification.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
   if ( (this.state.screenName === "invest_landing" || this.state.screenName === "sdk_landing" ) && dataSettedInsideBoot) {
     storageService().set("dataSettedInsideBoot", false);
@@ -101,8 +102,7 @@ export async function getSummary() {
       this.setSummaryData(result);
       currentUser = result.data.user.user.data;
       userKyc = result.data.kyc.kyc.data;
-      let contactDetails = result.data.contacts.contacts.data;
-      this.setState({ show_loader: false, kycStatusLoader : false, userKyc, currentUser, contactDetails });
+      this.setState({ show_loader: false, kycStatusLoader : false, userKyc, currentUser });
     } else {
       this.setState({ show_loader: false, kycStatusLoader : false });
       toast(result.message || result.error || errorMessage);
@@ -423,6 +423,7 @@ export function initilizeKyc() {
       );
     }
   }
+  this.contactVerification()
 }
 
 export function openPremiumOnboardBottomSheet(
@@ -667,6 +668,39 @@ export function handleCampaignNotification () {
     this.setState({ bottom_sheet_dialog_data, openBottomSheet: true });
   }
 };
+
+export function contactVerification() {
+  const isVerifyDetailsSheetDisplayed = storageService().get("verifyDetailsSheetDisplayed");
+  if (!isVerifyDetailsSheetDisplayed) {
+    let userKyc = storageService().getObject("kyc") || {};
+    let contactDetails = userKyc?.identification?.meta_data;
+      if (!isEmpty(contactDetails)) {
+        let contact_type, contact_value, isVerified = true;
+        if (!isEmpty(contactDetails.email) && contactDetails.email_verified === false) {
+          contact_type = "email";
+          contact_value = contactDetails.email
+          isVerified = false;
+        } else if (!isEmpty(contactDetails.mobile_number) && contactDetails.mobile_number_verified === false) {
+          contact_type = "mobile";
+          contact_value = contactDetails.mobile_number;
+          isVerified = false
+        }
+        if (!isVerified) {
+          this.setState({
+            openKycPremiumLanding: false, // This(openKycPremiumLanding, openBottomSheet for campign) two are Onload bottomSheet Which Are Disable As contactVerification Takes highest priority.
+            openBottomSheet: false,
+            verifyDetails: true,
+            verifyDetailsData: {
+              contact_type,
+              contact_value
+            },
+            verifyDetailsType: contact_type
+          })
+          storageService().set("verifyDetailsSheetDisplayed", true);
+        }
+      }
+  }
+}
 
 export function handleCampaignRedirection (url, showRedirectUrl) {
   const config = getConfig();
