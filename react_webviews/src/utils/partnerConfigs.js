@@ -202,7 +202,7 @@ export const partnerConfigs = {
     },
     features: {
       loan: true,
-      tax2win: true,
+      taxFiling: true,
     }
   },
   finity: {
@@ -216,7 +216,7 @@ export const partnerConfigs = {
       financialTools: ["fhc", "risk_profile"],
     },
     features: {
-      tax2win: true
+      taxFiling: true
     }
   },
   bfdlmobile: {

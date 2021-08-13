@@ -341,25 +341,25 @@ const Summary = (props) => {
                   <img src={require(`assets/plant.svg`)} alt="" />
                 </div>
               )}
-              {config.features?.tax2win && (
+              {config.features?.taxFiling && (
                 <div
-                  className="reports-tax2win-card card"
+                  className="reports-tax-filing-card card"
                   onClick={() => flowOptions("taxFiling")}
                 >
                   <div className="flex-between">
                     <div>
-                      <div className="rt2w-card-title"> Free tax filing </div>
-                      <div className="rt2w-card-subtitle">
+                      <div className="rtf-card-title"> Free tax filing </div>
+                      <div className="rtf-card-subtitle">
                         Get your taxes done in 3 easy and secure steps
                       </div>
                     </div>
                     <Imgc
-                      className="rt2w-card-image"
+                      className="rtf-card-image"
                       src={require(`assets/${productName}/icn_tax_filing.svg`)}
                       alt=""
                     />
                   </div>
-                  <div className="rt2w-know-more">KNOW MORE</div>
+                  <div className="rtf-know-more">KNOW MORE</div>
                 </div>
               )}
               {currentUser.nps_investment ||
