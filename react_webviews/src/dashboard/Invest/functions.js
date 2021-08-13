@@ -460,10 +460,10 @@ export function initilizeKyc() {
   }
   
   if (!isEmpty(modalData)) {
-    if (["verifying_trading_account", "complete"].includes(kycJourneyStatus)) {
+    if (["verifying_trading_account", "complete", "fno_rejected"].includes(kycJourneyStatus)) {
       storageService().set("landingBottomSheetDisplayed", true);
     }
-    
+
     if(!modalData.dualButton)
       modalData.oneButton = true;
     this.setState({ modalData, openKycStatusDialog: true });
