@@ -682,8 +682,13 @@ export function contactVerification() {
           isVerified = false;
         } else if (!isEmpty(contactDetails.mobile_number) && contactDetails.mobile_number_verified === false) {
           contact_type = "mobile";
-          contact_value = contactDetails.mobile_number;
           isVerified = false
+          let numberVal = contactDetails?.mobile_number?.split('|');
+          if (numberVal.length > 1) {
+              contact_value = numberVal[1];
+          } else {
+              [contact_value] = numberVal;
+          }
         }
         if (!isVerified) {
           this.setState({
