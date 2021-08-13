@@ -279,7 +279,7 @@ export const nfoData = {
     {
       title: "Dividend",
       subtitle:
-        "The fund to pay out fractions of your gains in form of periodic dividends",
+        "The fund to pay out fractions of your gains in the form of periodic dividends",
       icon: "dividend_icon.png",
       value: "dividend",
     },
@@ -383,7 +383,7 @@ export const kycStatusMapper = {
   },
   verifying_trading_account: {
     color: "#3792fc",
-    title: "Trading & Demat account set up in progress",
+    title: "Trading & Demat account setup in progress",
     subtitle: "Meanwhile, you can invest in more than 5000+ mutual funds",
     buttonTitle: "OK",
     oneButton: true,
