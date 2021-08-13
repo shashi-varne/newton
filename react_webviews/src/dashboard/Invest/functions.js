@@ -369,6 +369,11 @@ export function initilizeKyc() {
     if (["init", "incomplete"].indexOf(kycJourneyStatus) !== -1) {
       kycStatusData = kycStatusMapperInvest["ground_premium"];
     }
+  } else if (isCompliant && TRADING_ENABLED) {
+    // need not to show premium onboarding info to trading customers
+    if (kycJourneyStatus === "ground_premium") {
+      kycStatusData = kycStatusMapperInvest["incomplete"];
+    }
   }
   let isReadyToInvestBase = isReadyToInvest();
   let isEquityCompletedBase = isEquityCompleted();
