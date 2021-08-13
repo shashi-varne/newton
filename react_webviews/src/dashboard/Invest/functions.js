@@ -435,7 +435,12 @@ export function initilizeKyc() {
   }
 
   let modalData = {}
+  let isLandingBottomSheetDisplayed = storageService().get("landingBottomSheetDisplayed");
   if (["verifying_trading_account", "complete", "fno_rejected"].includes(kycJourneyStatus)) {
+    if (isLandingBottomSheetDisplayed) {
+      return;
+    }
+
     if (["fno_rejected", "complete"].includes(kycJourneyStatus)) {
       if (TRADING_ENABLED && userKyc.equity_investment_ready) {
         modalData = kycStatusMapper["kyc_verified"];
@@ -451,6 +456,10 @@ export function initilizeKyc() {
   }
   
   if (!isEmpty(modalData)) {
+    if (["verifying_trading_account", "complete"].includes(kycJourneyStatus)) {
+      storageService().set("landingBottomSheetDisplayed", true);
+    }
+    
     if(!modalData.dualButton)
       modalData.oneButton = true;
     this.setState({ modalData, openKycStatusDialog: true });
