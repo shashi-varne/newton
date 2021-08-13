@@ -233,7 +233,7 @@ class Landing extends Component {
                           data-aid='kyc-invest-sections-cards'
                           className="kyc"
                           onClick={() =>
-                            !kycButtonLoader && !stocksButtonLoader && this.clickCard("kyc", element)
+                            !kycButtonLoader && !stocksButtonLoader && this.clickCard("kyc", kycStatusData.title)
                           }
                         >
                           <div className="kyc-card-text">
