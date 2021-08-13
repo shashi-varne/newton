@@ -430,7 +430,7 @@ export function initilizeKyc() {
   }
 
   let modalData = {}
-  if (["equity_activation_pending", "complete"].includes(kycJourneyStatus)) {
+  if (["verifying_trading_account", "complete"].includes(kycJourneyStatus)) {
     if ( kycJourneyStatus === "complete") {
       if (TRADING_ENABLED && userKyc.equity_investment_ready) {
         modalData = kycStatusMapper["kyc_verified"];
@@ -643,7 +643,7 @@ export function handleStocksAndIpoCards(key) {
   let modalData = Object.assign({}, kycJourneyStatusMapperData);
 
   if (key === "ipo") {
-    if (kycJourneyStatus === "equity_activation_pending") {
+    if (kycJourneyStatus === "verifying_trading_account") {
       modalData = {
         ...modalData,
         subtitle: "This process could take upto 48 hours. We will notify you once it’s done. Meanwhile, you can explore primary market products",

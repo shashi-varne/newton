@@ -374,7 +374,7 @@ export const kycStatusMapper = {
     landingText: "INCOMPLETE",
     icon: "icn_kyc_doc_rejected.svg",
   },
-  equity_activation_pending: {
+  verifying_trading_account: {
     color: "#3792fc",
     title: "Trading & Demat account set up in progress",
     subtitle: "Meanwhile, you can invest in more than 5000+ mutual funds",
@@ -475,7 +475,7 @@ export const kycStatusMapperInvest = {
     subTitleClass: "kyc-complete",
     subtitleColor: "#35CB5D"
   },
-  equity_activation_pending: {
+  verifying_trading_account: {
     icon: "ic_kyc_under_process.svg",
     title: "You’re ready to invest in mutual funds",
     subtitle: "VERIFYING TRADING A/C",
