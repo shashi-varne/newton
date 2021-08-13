@@ -221,7 +221,7 @@ export const getConfig = () => {
   } else if (main_pathname.indexOf('iw-dashboard') >= 0) {
     project = 'iw-dashboard';
   } else if (main_pathname.indexOf('tax-filing') >= 0) {
-    generic_callback = true
+    project = 'tax-filing';
   } else if (main_pathname.indexOf('kyc') >= 0) {
     project = 'kyc';
   } else if (main_pathname.indexOf('reports') >= 0) {
