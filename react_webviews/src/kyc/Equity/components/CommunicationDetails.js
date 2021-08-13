@@ -204,7 +204,6 @@ const CommunicationDetails = (props) => {
           otpId: result.otp_id,
         });
       }
-      toast("Success")
     } catch (err) {
       toast(err.message);
     } finally {

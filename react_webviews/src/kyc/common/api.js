@@ -303,11 +303,19 @@ export const sendOtp = async (body) => {
 
 export const resendOtp = async (otpId) => {
   const res = await Api.post(`${API_CONSTANTS.resendOtp}/${otpId}`)
+  const { result, status_code: status } = res.pfwresponse;
+  if (status === 200) {
+    toast(result.message || 'Success');
+  }
   return handleApi(res);
 };
 
 export const verifyOtp = async (body) => {
   const res = await Api.post(`${API_CONSTANTS.verifyOtp}/${body.otpId}?otp=${body.otp}`)
+  const { result, status_code: status } = res.pfwresponse;
+  if (status === 200) {
+    toast(result.message || 'Success');
+  }
   return handleApi(res);
 };
 
@@ -320,6 +328,10 @@ export const sendWhatsappConsent = async (body) => {
 export const verifyGoldOtp = async (body) => {
   let url = body?.verify_link + '?otp=' + body?.otp;
   const res = await Api.post(url);
+  const { result, status_code: status } = res.pfwresponse;
+  if (status === 200) {
+    toast(result.message || 'Success');
+  }
   return handleApi(res);
 }
 
@@ -330,6 +342,10 @@ export const sendGoldOtp = async (body) => {
 
 export const resendGoldOtp = async (body) => {
   const res = await Api.get(body)
+  const { result, status_code: status } = res.pfwresponse;
+  if (status === 200) {
+    toast(result.message || 'Success');
+  }
   return handleApi(res);
 }
 
