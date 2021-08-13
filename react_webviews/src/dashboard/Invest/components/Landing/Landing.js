@@ -121,6 +121,9 @@ class Landing extends Component {
   };
 
   sendEvents = (userAction, cardClick = "") => {
+    if(cardClick === "ipo") {
+      cardClick = "ipo_gold";
+    }
     let eventObj = {
       event_name: "landing_page",
       properties: {
@@ -131,9 +134,10 @@ class Landing extends Component {
         intent: "",
         option_clicked: "",
         channel: getConfig().code,
+        user_investment_status: this.state.currentUser?.active_investment
       },
     };
-    if (cardClick === "kyc") {
+    if (["kyc", "stocks", "ipo_gold"].includes(cardClick)) {
       eventObj.properties.kyc_status = this.state.kycJourneyStatus;
     }
     if (cardClick === "kyc_bottom_sheet") {
@@ -235,7 +239,7 @@ class Landing extends Component {
                           data-aid='kyc-invest-sections-cards'
                           className="kyc"
                           onClick={() =>
-                            !kycButtonLoader && !stocksButtonLoader && this.clickCard("kyc", kycStatusData.title)
+                            !kycButtonLoader && !stocksButtonLoader && this.clickCard("kyc", element)
                           }
                         >
                           <div className="kyc-card-text">
@@ -343,7 +347,7 @@ class Landing extends Component {
                                   data={item}
                                   key={index}
                                   handleClick={() =>
-                                    this.clickCard(item.key, item.title)
+                                    this.clickCard(item.key, item.key)
                                   }
                                 />
                               );

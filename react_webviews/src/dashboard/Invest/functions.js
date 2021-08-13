@@ -380,6 +380,7 @@ export function initilizeKyc() {
     kycStatusData,
     kycJourneyStatusMapperData,
     userKyc,
+    currentUser,
     kycJourneyStatus,
     isReadyToInvestBase,
     isEquityCompletedBase,
