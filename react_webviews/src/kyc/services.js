@@ -29,12 +29,13 @@ export async function getAccountSummary(params = {}) {
   }
   try {
     const response = await Api.post(url, params);
+
     if (
       response.pfwstatus_code !== 200 ||
       !response.pfwresponse ||
       isEmpty(response.pfwresponse)
     ) {
-      throw new Error( response?.pfwmessage || "Something went wrong!");
+      throw new Error(response?.pfwmessage || "Something went wrong!");
     }
     if (response?.pfwresponse?.status_code === 200) {
       return response?.pfwresponse?.result;
@@ -230,7 +231,7 @@ export function getKycAppStatus(kyc) {
     fieldsToCheck = fieldsToCheck.filter((fieldObj) => !["pan", "identification"].includes(fieldObj.name));
   }
 
-  if (kyc.address.meta_data.is_nri) {
+  if (kyc?.address?.meta_data?.is_nri) {
     var obj = {
       name: "nri_address",
       keys: ["doc_status", "meta_data_status"]

@@ -214,7 +214,7 @@
   @extend .iwd-animatedFade;
 }
 
-.example-appear-active, .example-enter-active { //TODO: change names
+.example-appear-active, .example-enter-active {
   animation-name: iwd-fadeInUp;
   -webkit-animation-name: iwd-fadeInUp;
 }

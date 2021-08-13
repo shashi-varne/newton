@@ -31,6 +31,16 @@ import BlankMandateUpload from "./MyAccount/BlankMandateUpload";
 import InvestmentProof from "./MyAccount/InvestmentProof";
 import Refer from "./Invest/components/SdkLanding/Refer";
 import CampaignCallback from "./Invest/components/PageCallback/CampaignCallback";
+import SecuritySettings from "./MyAccount/2fa/SecuritySettings";
+import ForgotPin from "./MyAccount/2fa/ForgotPin";
+import VerifyPin from "./MyAccount/2fa/VerifyPin";
+import SetPin from "./MyAccount/2fa/SetPin";
+import EnterNewPin from "./MyAccount/2fa/EnterNewPin";
+import ConfirmNewPin from "./MyAccount/2fa/ConfirmNewPin";
+import VerifyPinOtp from "./MyAccount/2fa/VerifyForgotOtp";
+import Referral from "../login_and_registration/pages/Referral/Referral.js";
+import SecondaryVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryVerification"
+import SecondaryOtpVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryOtpVerification"
 import StatusCallback from "../kyc/Native/StatusCallback";
 import ProductMarketTypes from './ProductMarketTypes';
 import PrimaryMarketProducts from "./PrimaryMarketProducts/PrimaryMarketProducts";
@@ -41,7 +51,16 @@ const Home = (props) => {
   return (
     <Fragment>
       <Switch>
-        <Route exact path={`${url}`} component={config.isSdk && config.code !== "moneycontrol" ? SdkLanding : Invest} />
+        <Route exact path={`${url}secondary-verification`} component={SecondaryVerification} />
+        <Route exact path={`${url}secondary-otp-verification`} component={SecondaryOtpVerification} />
+        <Route path={`${url}referral-code`} component={Referral} />
+        <Route
+          exact
+          path={`${url}`}
+          component={
+            config.isSdk && config.code !== "moneycontrol" ? SdkLanding : Invest
+          }
+        />
         <Route exact path={`${url}refer`} component={Refer} />
         <Route path={`${url}invest`} component={Invest} />
         <Route path={`${url}landing`} component={Invest} />
@@ -128,16 +147,28 @@ const Home = (props) => {
           path={`${url}status/callback/native`}
           component={StatusCallback}
         />
+        {/* -----------My Account sub-routes ------------- */}
         <Route exact path={`${url}account/merge/:pan_number`} component={AccountMerge} />
         <Route exact path={`${url}account/merge/otp/:pan_number`} component={AccountMergeOtp} />
         <Route exact path={`${url}account/merge/linked/success`} component={AccountLinked} />
+        <Route exact path={`${url}account/security-settings`} component={SecuritySettings} />
+        <Route exact path={`${url}account/forgot-pin`} component={ForgotPin} />
+        <Route exact path={`${url}account/reset-pin-verify`} component={VerifyPin} />
+        <Route exact path={`${url}account/new-pin`} component={EnterNewPin} />
+        <Route exact path={`${url}account/verify-otp`} component={VerifyPinOtp} />
+        <Route path={`${url}account/set-pin/:coming_from?`} component={SetPin} />
+        <Route path={`${url}account/confirm-pin/:coming_from?`} component={ConfirmNewPin} />
+        {/* ------------------------------------------- */}
+
         <Route exact path={`${url}blank-mandate/upload`} component={BlankMandateUpload} />
         <Route 
-          exact path={`${url}investment-proof`} 
+          exact
+          path={`${url}investment-proof`} 
           render={(props) => <InvestmentProof {...props} type="investment-proof" />} 
         />
         <Route 
-          exact path={`${url}capital-gain`} 
+          exact
+          path={`${url}capital-gain`} 
           render={(props) => <InvestmentProof {...props} type="capital-gain" />} 
         />
         <Route exact path={`${url}page/invest/campaign/callback`} component={CampaignCallback} />

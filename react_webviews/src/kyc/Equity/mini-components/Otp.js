@@ -69,7 +69,7 @@ class Otp extends Component {
             inputStyle="default-otp-input"
             onChange={this.props.handleOtp}
             hasErrored={true}
-            placeholder="X"
+            placeholder="XXXX"
             value={this.props.otpData.otp}
             isDisabled={this.props.isDisabled || false}
           />

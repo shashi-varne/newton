@@ -1,5 +1,5 @@
 // -------------- Assets ---------------
-import fisdomLogo from 'assets/fisdom/fisdom_logo_coloured.png';
+import fisdomLogo from 'assets/fisdom/fisdom_logo.svg';
 import bgWaves from 'assets/bg_waves.svg';
 import HelpPage from '../mini-components/Help';
 import ForgotPasswordPage from '../mini-components/ForgotPassword';

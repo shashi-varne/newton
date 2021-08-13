@@ -1,3 +1,14 @@
+/* 
+  Use: Acts as a wrapper component to WVInPageTitle and WVInPageSubtitle providing
+    some basic styling enhancements as per Finwizard Component Design Standard
+
+  Example syntax:
+    <WVInPageHeader>
+      <WVInPageTitle>Hello</WVInPageTitle>
+      <WVInPageSubtitle>World</WVInPageSubtitle>
+    </WVInPageHeader>
+*/
+
 import './commonStyles.scss';
 import React from 'react';
 import WVInPageTitle from './WVInPageTitle';

@@ -20,6 +20,7 @@ const VerificationFailedDialog = ({
       aria-describedby="verification-failed-dialog"
       className="verification-failed-dialog"
       id="invest-bottom-dialog"
+      disableEnforceFocus
       data-aid='invest-bottom-dialog'
     >
       <DialogContent className="verification-failed-dialog-content" data-aid='verification-failed-dialog-content'>
