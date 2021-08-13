@@ -19,10 +19,7 @@ class MyaccountDetails extends Component {
                 let contact_type, contact_value, auth_type, isVerified = true,
                     auth_value;
                 if (!isEmpty(contactDetails)) {
-                    if (contactDetails?.email_verified) {
-                        auth_value = contactDetails?.email;
-                        auth_type = "email";
-                    } else if (contactDetails?.mobile_number_verified) {
+                    if (contactDetails?.mobile_number_verified) {
                         auth_type = "mobile";
                         let numberVal = contactDetails?.mobile_number?.split('|');
                         if (numberVal.length > 1) {
@@ -30,6 +27,9 @@ class MyaccountDetails extends Component {
                         } else {
                             [auth_value] = numberVal;
                         }
+                    } else if (contactDetails?.email_verified) {
+                        auth_value = contactDetails?.email;
+                        auth_type = "email";
                     }
 
                     if (!isEmpty(contactDetails.mobile_number) && contactDetails.mobile_number_verified === false) {
