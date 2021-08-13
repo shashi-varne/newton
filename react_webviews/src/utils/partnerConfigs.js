@@ -200,7 +200,10 @@ export const partnerConfigs = {
       bottomCards: ["nfo"],
       financialTools: ["fhc", "risk_profile"],
     },
-    navLinkOptions:{loan: true}
+    features: {
+      loan: true,
+      tax2win: true,
+    }
   },
   finity: {
     logo: "finity_white_logo.svg",
@@ -212,6 +215,9 @@ export const partnerConfigs = {
       ourRecommendations: ["instaredeem", "buildwealth", "savetax"],
       financialTools: ["fhc", "risk_profile"],
     },
+    features: {
+      tax2win: true
+    }
   },
   bfdlmobile: {
     logo: "bfdl_white_sdk_logo.svg",
@@ -501,7 +507,7 @@ export const partnerConfigs = {
     styles: {
       primaryColor: "#252B69",
     },
-    navLinkOptions:{loan: true}
+    features:{loan: true}
   }
 };
 

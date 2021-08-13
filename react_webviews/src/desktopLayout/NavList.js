@@ -94,7 +94,7 @@ const NavList = (props) => {
   const config = getConfig();
   const productName = config.productName;
   const isMobileDevice = config.isMobileDevice;
-  const partnerLoan = config?.navLinkOptions?.loan;
+  const partnerLoan = config?.features?.loan;
   const showReferral = !config?.referralConfig?.shareRefferal;
   const navigate = navigateFunc.bind(props);
   const [referDialog, setReferDialog] = useState(false);
