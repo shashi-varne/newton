@@ -49,8 +49,6 @@ export const commonCardsConfig = {
 
 export const basePartnerConfig = {
   fisdom: {
-    // remove once 2fa changes are merged
-    colorLogo: "fisdom/fisdom_logo_coloured.png",
     productName: "fisdom",
     logo: "fisdom/fisdom_logo_white.svg",
     colorLogo: "fisdom/fisdom_logo.svg",
@@ -73,8 +71,6 @@ export const basePartnerConfig = {
     },
   },
   finity: {
-    // remove once 2fa changes are merged
-    colorLogo: "finity/finity_logo.svg",
     productName: "finity",
     logo: "finity/finity_logo_white.svg",
     colorLogo: "finity/finity_logo.svg",
