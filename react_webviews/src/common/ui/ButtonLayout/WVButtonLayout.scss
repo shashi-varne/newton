@@ -24,7 +24,7 @@
 .wv-button-layout-horizontal {
   display: flex;
   flex-direction: row;
-
+  justify-content: center;
   .wv-layout-button + .wv-layout-button {
     /* Add margin between consecutive buttons */
     margin-left: 30px;
