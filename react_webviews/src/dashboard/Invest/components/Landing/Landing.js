@@ -129,16 +129,11 @@ class Landing extends Component {
         screen_name: "invest home",
         primary_category: "primary navigation",
         card_click: cardClick,
-        intent: "",
-        option_clicked: "",
         channel: getConfig().code,
-        user_investment_status: this.state.currentUser?.active_investment
+        user_investment_status: this.state.currentUser?.active_investment,
+        kyc_status: this.state.kycJourneyStatus
       },
     };
-    const showKycStatus = ["kyc", "stocks", "ipo_gold"];
-    if (showKycStatus.includes(cardClick)) {
-      eventObj.properties.kyc_status = this.state.kycJourneyStatus;
-    }
     if (cardClick === "kyc_bottom_sheet") {
       eventObj.event_name = "bottom_sheet";
       eventObj.properties.intent = "kyc status";
