@@ -338,7 +338,7 @@ export function getKycAppStatus(kyc) {
   // this condition handles equity activation pending case
   if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && kyc.equity_application_status === 'complete' && kyc.equity_sign_status === "signed" &&
   !kyc?.equity_investment_ready) {
-    status = 'equity_activation_pending';
+    status = 'verifying_trading_account';
   }
 
   result.status = status;

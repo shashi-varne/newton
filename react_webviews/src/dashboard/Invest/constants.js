@@ -381,7 +381,7 @@ export const kycStatusMapper = {
     nextState: KYC_PATHNAME_MAPPER.uploadFnOIncomeProof,
     dualButton: true,
   },
-  equity_activation_pending: {
+  verifying_trading_account: {
     color: "#3792fc",
     title: "Trading & Demat account set up in progress",
     subtitle: "Meanwhile, you can invest in more than 5000+ mutual funds",
@@ -478,7 +478,7 @@ export const kycStatusMapperInvest = {
     nextState: KYC_PATHNAME_MAPPER.kycEsign,
     subTitleClass: "kyc-complete",
   },
-  equity_activation_pending: {
+  verifying_trading_account: {
     icon: "ic_kyc_under_process.svg",
     title: "You’re ready to invest in mutual funds",
     subtitle: "VERIFYING TRADING A/C",

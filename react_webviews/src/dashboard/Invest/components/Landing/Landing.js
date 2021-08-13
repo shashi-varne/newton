@@ -110,7 +110,7 @@ class Landing extends Component {
   handleKycStatus = async () => {
     this.sendEvents("next", "kyc_bottom_sheet");
     let { kycJourneyStatus, modalData, tradingEnabled, userKyc } = this.state;
-    if (["submitted", "equity_activation_pending"].includes(kycJourneyStatus) || (kycJourneyStatus === "complete" && userKyc.mf_kyc_processed)) {
+    if (["submitted", "verifying_trading_account"].includes(kycJourneyStatus) || (kycJourneyStatus === "complete" && userKyc.mf_kyc_processed)) {
       this.closeKycStatusDialog();
     } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity")) {
       this.closeKycStatusDialog();
@@ -139,6 +139,9 @@ class Landing extends Component {
   }
 
   sendEvents = (userAction, cardClick = "") => {
+    if(cardClick === "ipo") {
+      cardClick = "ipo_gold";
+    }
     let eventObj = {
       event_name: "landing_page",
       properties: {
@@ -146,14 +149,11 @@ class Landing extends Component {
         screen_name: "invest home",
         primary_category: "primary navigation",
         card_click: cardClick,
-        intent: "",
-        option_clicked: "",
         channel: getConfig().code,
+        user_investment_status: this.state.currentUser?.active_investment,
+        kyc_status: this.state.kycJourneyStatus
       },
     };
-    if (cardClick === "kyc") {
-      eventObj.properties.kyc_status = this.state.kycJourneyStatus;
-    }
     if (cardClick === "kyc_bottom_sheet") {
       eventObj.event_name = "bottom_sheet";
       eventObj.properties.intent = "kyc status";
@@ -344,7 +344,7 @@ class Landing extends Component {
                                   data={item}
                                   key={index}
                                   handleClick={() =>
-                                    this.clickCard(item.key, item.title)
+                                    this.clickCard(item.key, item.key)
                                   }
                                 />
                               );
