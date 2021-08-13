@@ -130,7 +130,7 @@ const Summary = (props) => {
         sendEvents("next", "NPS Investments");
         break;
       case "taxFiling":
-        sendTax2winEvents();
+        sendTaxFilingEvents();
         break;
       default:
         sendEvents("next");
@@ -160,11 +160,11 @@ const Summary = (props) => {
     navigate(getPathname.reportGoals);
   };
 
-  const sendTax2winEvents = () => {
+  const sendTaxFilingEvents = () => {
     const kyc = storageService().getObject("kyc") || {};
     const investmentStatus = kyc.investment_status ? "Y" : "N"
     const kycStatus = kyc.kyc_status ? "Y" : "N"
-    let eventObj = {
+    const eventObj = {
       event_name: "PORTFOLIO",
       properties: {
         user_action: "next",
