@@ -121,7 +121,7 @@ export async function getSummary() {
 }
 
 export function setInvestCardsData() {
-  const { config = {} } = this.state;
+  const { config = getConfig() } = this.state;
   const disabledPartnersMap = {
     insurance: [
       "cccb",
@@ -299,7 +299,7 @@ export function corpusValue(data) {
 }
 
 export async function getRecommendations(amount) {
-  const { config = {} } = this.state;
+  const { config = getConfig() } = this.state;
   try {
     const result = await get_recommended_funds({
       type: this.state.investType,
@@ -342,7 +342,7 @@ export async function getRecommendations(amount) {
 }
 
 export function navigate(pathname, data = {}) {
-  const { config = {} } = this.state;
+  const { config = getConfig() } = this.state;
   if (this.props.edit || data.edit) {
     this.props.history.replace({
       pathname: pathname,
@@ -359,7 +359,7 @@ export function navigate(pathname, data = {}) {
 }
 
 export function initilizeKyc() {
-  const { config = {} } = this.state;
+  const { config = getConfig() } = this.state;
   let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
   const TRADING_ENABLED = isTradingEnabled(userKyc);
   let currentUser =
@@ -475,7 +475,7 @@ export function openPremiumOnboardBottomSheet(
   userKyc,
   TRADING_ENABLED
 ) {
-  const { config = {} } = this.state;
+  const { config = getConfig() } = this.state;
   let is_bottom_sheet_displayed_kyc_premium = storageService().get(
     "is_bottom_sheet_displayed_kyc_premium"
   );
@@ -540,7 +540,7 @@ export async function openKyc() {
 }
 
 export async function setKycProductTypeAndRedirect() {
-  let { userKyc, isReadyToInvestBase, kycJourneyStatus, config = {} } = this.state;
+  let { userKyc, isReadyToInvestBase, kycJourneyStatus, config = getConfig() } = this.state;
   let result;
   if (!userKyc?.mf_kyc_processed) {
     let showLoader = true;
@@ -567,9 +567,13 @@ export async function setKycProductTypeAndRedirect() {
 }
 
 export function handleIpoCardRedirection() {
-  if (this.state.currentUser?.pin_status !== 'pin_setup_complete') {
+  const { userKyc, config = getConfig() } = this.state;
+  if (
+      userKyc.equity_investment_ready &&
+      this.state.currentUser?.pin_status !== 'pin_setup_complete'
+  ) {
     openModule('account/setup_2fa', this.props, { routeUrlParams: '/ipo' });
-    if (this.state.config.isNative) {
+    if (config.isNative) {
       return nativeCallback({ action: 'exit_web' });
       // TODO: Test native behaviour for this code
     }
@@ -597,7 +601,7 @@ export function handleStocksAndIpoCards(key) {
         buttonTitle: "CONTINUE",
         handleClick: this.handleIpoCardRedirection
       }
-    } else if (userKyc.equity_investment_ready || (kycJourneyStatus === "complete" && userKyc.mf_kyc_processed) || kycJourneyStatus === "fno_rejected") {
+    } else if (userKyc.mf_kyc_processed) {
       this.handleIpoCardRedirection();
       return
     }
@@ -605,7 +609,8 @@ export function handleStocksAndIpoCards(key) {
     if (userKyc.equity_investment_ready || kycJourneyStatus === "complete") {
       if (currentUser?.pin_status !== 'pin_setup_complete') {
         openModule('account/setup_2fa', this.props, { routeUrlParams: '/stocks' });
-        if (this.state.config.isNative) {
+        const { config = getConfig() } = this.state;
+        if (config.isNative) {
           return nativeCallback({ action: 'exit_web' });
           // TODO: Test native behaviour for this code
         }
@@ -664,7 +669,7 @@ export function handleRenderCard() {
   let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
   let currentUser = this.state.currentUser || storageService().getObject("user") || {};
   let isReadyToInvestBase = isReadyToInvest();
-  const { config = {} } = this.state;
+  const { config = getConfig() } = this.state;
   const isWeb = config.Web;
   const hideReferral = currentUser.active_investment && !isWeb && config?.referralConfig?.shareRefferal;
   const referralCode = !currentUser.active_investment && !isWeb && config?.referralConfig?.applyRefferal;
@@ -718,7 +723,7 @@ export function handleCampaignNotification () {
 };
 
 export function handleCampaignRedirection (url, showRedirectUrl) {
-  const { config = {} } = this.state;
+  const { config = getConfig() } = this.state;
   let campLink = url;
   let plutusRedirectUrl = `${getBasePath()}/?is_secure=${config.isSdk}&partner_code=${config.code}`;
   // Adding redirect url for testing
