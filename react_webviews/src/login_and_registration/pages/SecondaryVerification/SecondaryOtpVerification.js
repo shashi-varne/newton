@@ -91,10 +91,10 @@ export class SecondaryOtpVerification extends Component {
 
   sendEvents = (userAction) => {
     let properties = {
-      "otp_entered": userAction === "next" ? "yes" : "no",
-      "mode_entry": "manual",
-      "user_action": userAction,
       "screen_name": `${this.state.communicationType}_otp`,
+      "user_action": userAction,
+      "otp_entered": this.state.otpData?.otp?.length === 4 ? "yes" : "no",
+      "mode_entry": "manual",
     }
     let eventObj = {
       "event_name": 'onboarding',

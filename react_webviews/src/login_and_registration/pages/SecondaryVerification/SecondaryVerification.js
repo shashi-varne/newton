@@ -109,10 +109,10 @@ class SecondaryVerification extends Component {
         if (loginType === "mobile") {
             properties = {
                 ...properties,
+                "number_entered": form_data?.mobile ? "yes" : "no",
                 "whatsapp_agree": form_data.whatsapp_consent ? "yes" : "no",
-                "number_entered": userAction !== "skip" ? "yes" : "no",
             }
-        } else properties.email_entered = userAction !== "skip" ? "yes" : "no";
+        } else properties.email_entered = form_data.email ? "yes" : "no";
         let eventObj = {
             "event_name": 'onboarding',
             "properties": properties,
