@@ -29,6 +29,7 @@ const AddressUpload = (props) => {
   const [file, setFile] = useState(null)
   const [state, setState] = useState({})
   const {kyc, isLoading, updateKyc} = useUserKycHook();
+  const goBackPath = props.location?.state?.goBack || "";
 
   const onFileSelectComplete = (type) => (file, fileBase64) => {
     sendEvents('get_image', 'gallery', type);
@@ -79,18 +80,26 @@ const AddressUpload = (props) => {
         })
       }
       updateKyc(result.kyc)
-      if(isMyAccountFlow) {
-        toast("Address changed successfully");
-        navigate("/my-account");
-      } else {
-        navigate(PATHNAME_MAPPER.uploadProgress)
-      }
+      handleNavigation();
     } catch (err) {
       console.error(err)
       toast(err?.message)
     } finally {
       console.log('uploaded')
       setIsApiRunning(false)
+    }
+  }
+
+  const handleNavigation = () => {
+    if (goBackPath) {
+      navigate(goBackPath);
+    } else {
+      if(isMyAccountFlow) {
+        toast("Address changed successfully");
+        navigate("/my-account");
+      } else {
+        navigate(PATHNAME_MAPPER.uploadProgress)
+      }
     }
   }
 
