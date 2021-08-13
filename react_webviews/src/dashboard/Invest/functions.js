@@ -601,7 +601,7 @@ export function handleStocksAndIpoCards(key) {
         buttonTitle: "CONTINUE",
         handleClick: this.handleIpoCardRedirection
       }
-    } else if (userKyc.equity_investment_ready || (kycJourneyStatus === "complete" && userKyc.mf_kyc_processed) || kycJourneyStatus === "fno_rejected") { {
+    } else if (userKyc.equity_investment_ready || (kycJourneyStatus === "complete" && userKyc.mf_kyc_processed) || kycJourneyStatus === "fno_rejected") {
       this.handleIpoCardRedirection();
       return
     }
