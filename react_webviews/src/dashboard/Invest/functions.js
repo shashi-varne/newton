@@ -692,8 +692,8 @@ export function contactVerification() {
         }
         if (!isVerified) {
           this.setState({
-            openKycPremiumLanding: false, // This(openKycPremiumLanding, openBottomSheet for campign) two are Onload bottomSheet Which Are Disable As contactVerification Takes highest priority.
-            openBottomSheet: false,
+            openKycPremiumLanding: false, // This(openKycPremiumLanding, openBottomSheet for campign) two are Onload bottomSheet
+            openBottomSheet: false, //Which Are Disable As contactVerification Takes highest priority.
             verifyDetails: true,
             verifyDetailsData: {
               contact_type,

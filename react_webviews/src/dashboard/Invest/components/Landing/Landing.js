@@ -76,7 +76,7 @@ class Landing extends Component {
     const isBottomSheetDisplayed = storageService().get(
       "is_bottom_sheet_displayed"
     );
-    if (!isBottomSheetDisplayed && this.state.isWeb) {
+    if (!isBottomSheetDisplayed && this.state.isWeb && !this.state.verifyDetails) {
       this.handleCampaignNotification();
     }
   };
