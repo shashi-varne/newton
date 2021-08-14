@@ -19,6 +19,7 @@ import AccountAlreadyExistDialog from "../../../../login_and_registration/compon
 import { generateOtp } from "../../../../login_and_registration/functions";
 import { Imgc } from "../../../../common/ui/Imgc";
 import { nativeCallback } from "../../../../utils/native_callback";
+import toast from "../../../../common/ui/Toast"
 
 const fromLoginStates = ["/login", "/logout", "/verify-otp"]
 class Landing extends Component {
@@ -140,6 +141,8 @@ class Landing extends Component {
     }
     const otpResponse = await this.generateOtp(body);
     if (otpResponse) {
+      let result = otpResponse.pfwresponse.result;
+      toast(result.message || "Success");
       this.navigate("secondary-otp-verification", {
         state: {
           value:  data?.data?.contact_value,
