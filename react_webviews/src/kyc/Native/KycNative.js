@@ -93,6 +93,8 @@ function KycNative(props) {
       navigate("/kyc-esign/nsdl", {
         searchParams: `${getConfig().searchParams}&status=success`
       });
+    } else if (kycStatus === "rejected") {
+      navigate(PATHNAME_MAPPER.uploadProgress, data);
     } else if (kycStatus === "fno_rejected") {
       navigate(PATHNAME_MAPPER.uploadFnOIncomeProof, data);
     } else if ((TRADING_ENABLED && kyc?.kyc_product_type !== "equity")) {
@@ -104,8 +106,6 @@ function KycNative(props) {
       // already kyc completed users
       if (isReadyToInvestUser && (result?.kyc?.mf_kyc_processed || kyc?.mf_kyc_processed)) {
         navigate(PATHNAME_MAPPER.tradingInfo);
-      } else if (kycStatus === "rejected") {
-        navigate(PATHNAME_MAPPER.uploadProgress, data);
       } else {
         const showAadhaar = !(result?.kyc?.address.meta_data.is_nri || result?.kyc?.kyc_type === "manual");
         if (result?.kyc?.kyc_status !== "compliant") {
