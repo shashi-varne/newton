@@ -95,7 +95,7 @@ class VerifyDetailDialog extends Component {
                 src={require(`../../assets/bottom_sheet_icon_${type}.svg`)}
                 alt=""
               />
-              <span className="text">{data?.contact_value}</span>
+              <span className="text">{isNaN(data?.contact_value) ? data?.contact_value : `+91 - ${data?.contact_value}`}</span>
             </div>
             <WVClickableTextElement onClick={this.editDetails}>
               EDIT
