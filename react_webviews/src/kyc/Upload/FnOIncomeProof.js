@@ -52,6 +52,8 @@ const ORElem = (
   <div className="kyc-fno-OR">OR</div>
 );
 
+const hideSkipOptionPaths = [...landingEntryPoints, "/my-account"]
+
 const FnOIncomeProof = (props) => {
   const [selectedFile, setSelectedFile] = useState();
   const [selectedType, setSelectedType] = useState('');
@@ -64,7 +66,8 @@ const FnOIncomeProof = (props) => {
   const fromState = props?.location?.state?.fromState;
   const goBackPath = props.location?.state?.goBack || "";
   const { productName, Web } = getConfig();
-  const hideSkipOption = !Web ? (storageService().get("native") && (goBackPath === "exit")) : landingEntryPoints.includes(fromState);
+  const hideSkipOption = !Web ? (storageService().get("native") && (goBackPath === "exit")) : hideSkipOptionPaths.includes(fromState);
+  const isMyAccountFlow = fromState === "/my-account";
 
   useEffect(() => {
     setFilePassword('');
@@ -117,8 +120,8 @@ const FnOIncomeProof = (props) => {
     if (!Web) {
       commonNativeNavigation();
     } else {
-      if(goBackPath && goBackPath !== "exit") {
-        navigate(goBackPath)
+      if (isMyAccountFlow) {
+        navigate("/my-account");
       } else if (landingEntryPoints.includes(fromState)) {
         navigate("/");
       } else {

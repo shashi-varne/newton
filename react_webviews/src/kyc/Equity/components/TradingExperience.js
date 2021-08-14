@@ -85,9 +85,7 @@ const TradingExperience = (props) => {
     const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
     if (kyc.initial_kyc_status === "compliant" || (isDigilockerFlow(kyc) && isPanFailedAndNotApproved)) {
       if (!isDocSubmittedOrApproved("equity_pan")) {
-        navigate(PATHNAME_MAPPER.uploadPan, {
-          state: { goBack: "/kyc/trading-experience" }
-        });
+        navigate(PATHNAME_MAPPER.uploadPan);
         return;
       }
     } 

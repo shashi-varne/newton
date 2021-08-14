@@ -381,7 +381,7 @@ export function initilizeKyc() {
   }
   let isReadyToInvestBase = isReadyToInvest();
   let isEquityCompletedBase = isEquityCompleted();
-  let kycJourneyStatusMapperData = kycJourneyStatus.includes("ground") ? kycStatusMapper["ground"] : kycStatusMapper[kycJourneyStatus];
+  let kycJourneyStatusMapperData = kycJourneyStatus.includes("ground_") ? kycStatusMapper["incomplete"] : kycStatusMapper[kycJourneyStatus];
 
   this.setState({
     isCompliant,
@@ -439,8 +439,9 @@ export function initilizeKyc() {
   }
 
   let modalData = {}
+  const kycStatusesToShowDialog = ["verifying_trading_account", "complete", "fno_rejected", "esign_pending"];
   let isLandingBottomSheetDisplayed = storageService().get("landingBottomSheetDisplayed");
-  if (["verifying_trading_account", "complete", "fno_rejected"].includes(kycJourneyStatus)) {
+  if (kycStatusesToShowDialog.includes(kycJourneyStatus)) {
     if (isLandingBottomSheetDisplayed) {
       return;
     }
@@ -519,7 +520,7 @@ export async function openKyc() {
   } = this.state;
 
   storageService().set("kycStartPoint", "mf");
-  const kycStatusesToShowDialog = ["submitted", "rejected", "fno_rejected", "esign_pending", "equity_activation_pending"];
+  const kycStatusesToShowDialog = ["submitted", "rejected", "fno_rejected", "esign_pending", "verifying_trading_account"];
   if (kycStatusesToShowDialog.includes(kycJourneyStatus)) {
     this.handleKycSubmittedOrRejectedState();
   } else {
