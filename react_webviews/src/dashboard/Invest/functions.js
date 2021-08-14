@@ -555,7 +555,7 @@ export async function setKycProductTypeAndRedirect() {
   } else if (kycJourneyStatus === "ground") {
     this.navigate("/kyc/home");
   } else if (kycJourneyStatus === "rejected") {
-    navigate(PATHNAME_MAPPER.uploadProgress);
+    this.navigate(PATHNAME_MAPPER.uploadProgress);
   } else {
     const showAadhaar = !(result?.kyc?.address.meta_data.is_nri || result?.kyc?.kyc_type === "manual");
     if (result?.kyc?.kyc_status !== "compliant") {
