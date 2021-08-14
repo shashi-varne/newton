@@ -295,6 +295,22 @@ export async function resendVerificationLink() {
   }
 }
 
+export const redirectToLaunchDiet = async () => {
+  const url = '/api/equity/stub/equityvariables?ucc=DEMO100';
+  try {
+    const res = await Api.post(url);
+    const { result, status_code: status } = res.pfwresponse;
+    if (status === 200) {
+      window.location.href = 'https://vishnu-dot-plutus-staging.appspot.com/page/equity/launchdiet';
+    } else {
+      toast(result.message || result.error || errorMessage);
+    }
+  } catch (error) {
+    console.log(error);
+    toast(errorMessage);
+  }
+} 
+
 export async function otpLoginVerification(verify_url, body) {
   let formData = new FormData();
   formData.append("otp", body?.otp);
@@ -338,6 +354,7 @@ export async function otpLoginVerification(verify_url, body) {
           storageService().get("deeplink_url")
         );
       } else {
+        // await redirectToLaunchDiet();
         this.redirectAfterLogin(result, user);
       }
     } else {
@@ -431,6 +448,7 @@ export async function otpVerification(body) {
           storageService().get("deeplink_url")
         );
       } else {
+        // await redirectToLaunchDiet();
         this.redirectAfterLogin(result, user);
       }
     } else {

@@ -105,7 +105,7 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--gunmetal`, '#161A2E');
   html.style.setProperty(`--linkwater`, '#D3DBE4');
   html.style.setProperty(`--border-radius`, `${config_to_return.uiElements.button.borderRadius}px`);
-
+  
   return config_to_return;
 }
 
@@ -724,4 +724,38 @@ export function isUnAuthenticatedPath(path) {
   const unAuthenticatedPathsWithParams = ["/partner-authentication"];
   const pathname = unAuthenticatedPathsWithParams.find(el => path.match(el))
   return unAuthenticatedPaths.includes(path) || !isEmpty(pathname); 
+}
+
+export const getCssVarObject = () => {
+  const config = getConfig();
+  const cssVarObj = {
+    '--secondary': config.styles.secondaryColor,
+    '--highlight': config.styles.highlightColor,
+    '--skelton-color':  config.styles.skeletonColor,
+    '--primary':  config.styles.primaryColor,
+    '--header-background':  config?.uiElements?.header?.backgroundColor,
+    '--default':  config.styles.default,
+    '--label':  config.uiElements.formLabel.color,
+    '--desktop-width':  "640px",
+    '--tooltip-width':  "540px",
+    '--color-action-disable':  config.uiElements.button.disabledBackgroundColor,
+    '--dark':  '#0A1D32',
+    '--steelgrey':  '#767E86',
+    '--on-focus-background':  config.uiElements.button.focusBackgroundColor,
+    '--on-hover-background':  config.uiElements.button.hoverBackgroundColor || config.styles.secondaryColor,
+    '--on-hover-secondary-background':  config.uiElements.button.hoverSecondaryBackgroundColor || config.styles.secondaryColor,
+    '--secondary-green':  config.styles.secondaryGreen,
+    '--mustard':  '#FFDA2C',
+    '--pink':  '#F16FA0',
+    '--purple':  '#A38CEB',
+    '--lime':  '#7ED321',
+    '--red':  '#D0021B',
+    '--primaryVariant1':  config.styles.primaryVariant1,
+    '--primaryVariant4':  config.styles.primaryVariant4,
+    '--spacing':  '10px',
+    '--gunmetal':  '#161A2E',
+    '--linkwater':  '#D3DBE4',
+    '--border-radius':  `${config.uiElements.button.borderRadius}px`
+  }
+  return cssVarObj;
 }

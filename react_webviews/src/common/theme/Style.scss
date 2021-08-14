@@ -1,5 +1,15 @@
 @import './utils.scss';
 
+* {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+*::before,
+*::after {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+ }
+
 .configPrimaryColorClass {
   color: var(--primary) !important;
 }
@@ -36,6 +46,19 @@ body[data-device="web"] #root {
   /* autoprefixer: off */
   height: 100%;
   background: #f3f4f6;
+}
+.enable-body-touch{
+  overflow: auto !important;
+  touch-action: auto !important;
+  pointer-events: auto !important;
+  touch-action: unset !important;
+  pointer-events: unset !important;
+}
+
+.disable-body-touch{
+  overflow: hidden !important;
+  touch-action: none !important;
+  pointer-events: none !important;
 }
 
 button {
