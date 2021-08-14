@@ -51,7 +51,7 @@ const CommunicationDetails = (props) => {
   const isNotification = getUrlParams()?.from_notification;
   const isEdit = stateParams.isEdit || false;
   const userType = stateParams.userType || "";
-  const callHandleClick = stateParams.callHandleClick;
+  const [callHandleClick, setCallHandleClick] = useState(stateParams.callHandleClick)
   const [goldUserInfo, setGoldUserInfo] = useState(stateParams?.user_info);
   const [accountAlreadyExistsData, setAccountAlreadyExistsData] = useState(stateParams?.accountAlreadyExistsData);
   const [formData, setFormData] = useState({
@@ -229,6 +229,7 @@ const CommunicationDetails = (props) => {
       toast(otpResult.message || "Success") 
       setAccountAlreadyExistsData(false)
       setContinueAccountAlreadyExists(false);
+      setCallHandleClick(false)
       updateKyc(otpResult.kyc);
       if (
         otpResult.kyc.identification.meta_data.mobile_number_verified &&
@@ -306,6 +307,7 @@ const CommunicationDetails = (props) => {
           contactResult?.contact_details?.whatsapp_consent;
           setAccountAlreadyExistsData(false)
           setContinueAccountAlreadyExists(false)
+          setCallHandleClick(false)
           updateKyc({ ...kyc, whatsapp_consent: whatsappConsent });
           handleNavigation();
           return;
