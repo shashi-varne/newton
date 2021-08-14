@@ -18,6 +18,7 @@ import { generateOtp } from "../../../../login_and_registration/functions";
 import { Imgc } from "../../../../common/ui/Imgc";
 import { nativeCallback } from "../../../../utils/native_callback";
 import { getConfig, isTradingEnabled } from "../../../../utils/functions";
+import { PATHNAME_MAPPER } from "../../../../kyc/constants";
 
 const fromLoginStates = ["/login", "/logout", "/verify-otp"]
 class Landing extends Component {
@@ -195,6 +196,8 @@ class Landing extends Component {
     let { kycJourneyStatus, modalData, tradingEnabled, userKyc } = this.state;
     if (["submitted", "verifying_trading_account"].includes(kycJourneyStatus) || (kycJourneyStatus === "complete" && userKyc.mf_kyc_processed)) {
       this.closeKycStatusDialog();
+    } else if (kycJourneyStatus === "rejected") {
+      this.navigate(PATHNAME_MAPPER.uploadProgress);
     } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity")) {
       this.closeKycStatusDialog();
       await this.setKycProductTypeAndRedirect();
