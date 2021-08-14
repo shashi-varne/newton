@@ -56,7 +56,7 @@ class SecondaryVerification extends Component {
         let value = event.target ? event.target.value : event;
         let { form_data } = this.state;
         if(name === "mobile" && value && !validateNumber(value)) return;
-        if(name === "mobile" && form_data.code === "91" & value.length > 10) return;
+        if(name === "mobile" && form_data.code === "91" && value.length > 10) return;
         form_data[name] = value;
         if(name === "whatsapp_consent") form_data[name] = !form_data?.whatsapp_consent;
         form_data[`${name}_error`] = "";
@@ -78,7 +78,7 @@ class SecondaryVerification extends Component {
         } = this.state;
         let keys_to_check = ["mobile", "code"];
         if (loginType === "email") keys_to_check = ["email"];
-        if (loginType === "mobile"  && this.isMobileNotValid(form_data)) {
+        if (loginType === "mobile" && this.isMobileNotValid(form_data)) {
             this.setState({
                 form_data: {
                     ...form_data,
