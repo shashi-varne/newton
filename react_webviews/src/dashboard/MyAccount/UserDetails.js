@@ -64,11 +64,11 @@ class MyaccountDetails extends Component {
         const { contact_type, contact_value } = this.state;
         let result = await this.authCheckApi(contact_type, { "contact_value": contact_value })
         this.props.showLoader();
-        if (!result?.is_user) {
+        if (result && !result?.is_user) {
             this.props.handleClick("/kyc/communication-details")
             return;
         }
-        else if (result?.is_user) {
+        else if (result && result?.is_user) {
             result.user.from = "my-account";
             result.user.contact_value = contact_value;
             this.props.showAccountAlreadyExist(true, result.user, contact_type);
