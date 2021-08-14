@@ -53,7 +53,7 @@ const CommunicationDetails = (props) => {
   const userType = stateParams.userType || "";
   const callHandleClick = stateParams.callHandleClick;
   const [goldUserInfo, setGoldUserInfo] = useState(stateParams?.user_info);
-  const accountAlreadyExistsData = stateParams.accountAlreadyExistsData;
+  const [accountAlreadyExistsData, setAccountAlreadyExistsData] = useState(stateParams?.accountAlreadyExistsData);
   const [formData, setFormData] = useState({
     whatsappConsent: true,
   });
@@ -226,7 +226,9 @@ const CommunicationDetails = (props) => {
       }
       setShowLoader("button");
       const otpResult = await verifyOtp(otpData);
-      toast(otpResult.message || "Success")
+      toast(otpResult.message || "Success") 
+      setAccountAlreadyExistsData(false)
+      setContinueAccountAlreadyExists(false);
       updateKyc(otpResult.kyc);
       if (
         otpResult.kyc.identification.meta_data.mobile_number_verified &&
@@ -301,7 +303,9 @@ const CommunicationDetails = (props) => {
           setShowLoader("button");
           const contactResult = await sendWhatsappConsent(body);
           const whatsappConsent =
-            contactResult?.contact_details?.whatsapp_consent;
+          contactResult?.contact_details?.whatsapp_consent;
+          setAccountAlreadyExistsData(false)
+          setContinueAccountAlreadyExists(false)
           updateKyc({ ...kyc, whatsapp_consent: whatsappConsent });
           handleNavigation();
           return;
