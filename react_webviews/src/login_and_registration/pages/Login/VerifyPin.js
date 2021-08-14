@@ -13,7 +13,8 @@ import { redirectToLaunchDiet, postLoginSetup, redirectAfterLogin } from '../../
 const pinAttemptsKey = 'pin-attempts'; // key name for session store
 
 const VerifyPin = (props) => {
-  const { productName } = getConfig();
+  const config = getConfig();
+  const productName = config.productName;
   const { name } = storageService().getObject('user') || {};
   const [mpinError, setMpinError] = useState(false);
   const [mpin, setMpin] = useState('');
@@ -56,12 +57,15 @@ const VerifyPin = (props) => {
       storageService().clear(pinAttemptsKey);
       sendEvents("next");
       await postLoginSetup();
-      // await redirectToLaunchDiet()
-      redirectAfterLogin(
-        { firstLogin: false },
-        '',
-        navigate
-      );
+      if(config.diet) {
+        await redirectToLaunchDiet();
+      } else {
+        redirectAfterLogin(
+          { firstLogin: false },
+          '',
+          navigate
+        );
+      }
     } catch (err) {
       console.log(err);
       setMpinError(err);

@@ -199,6 +199,7 @@ export const getConfig = () => {
   let { partner_code } = main_query_params;
   let { app_version } = main_query_params;
   let { pc_urlsafe } = main_query_params;
+  let { diet = false } = main_query_params;
   let project = '';
   let project_child = '';
   if (main_pathname.indexOf('group-insurance') >= 0) {
@@ -289,6 +290,12 @@ export const getConfig = () => {
     returnConfig.pc_urlsafe = pc_urlsafe;
     searchParams += getParamsMark(searchParams) + `pc_urlsafe=${pc_urlsafe}`;
     searchParamsMustAppend += getParamsMark(searchParams) + `pc_urlsafe=${pc_urlsafe}`;
+  }
+
+  if(checkValidString(diet)) {
+    returnConfig.diet = diet;
+    searchParams += getParamsMark(searchParams) + `diet=${diet}`;
+    searchParamsMustAppend +=  getParamsMark(searchParams) + `diet=${diet}`;
   }
 
   if (project === 'insurance' || project_child === 'term') {

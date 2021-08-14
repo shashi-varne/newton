@@ -301,7 +301,7 @@ export const redirectToLaunchDiet = async () => {
     const res = await Api.post(url);
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
-      window.location.href = 'https://vishnu-dot-plutus-staging.appspot.com/page/equity/launchdiet';
+      window.location.href = `${config.base_url}/page/equity/launchdiet`;
     } else {
       toast(result.message || result.error || errorMessage);
     }
@@ -354,8 +354,12 @@ export async function otpLoginVerification(verify_url, body) {
           storageService().get("deeplink_url")
         );
       } else {
-        // await redirectToLaunchDiet();
-        this.redirectAfterLogin(result, user);
+        console.log(config.diet)
+        if(config.diet) {
+          await redirectToLaunchDiet();
+        } else {
+          this.redirectAfterLogin(result, user);
+        }
       }
     } else {
       if (result?.error === "Wrong OTP is Entered" || result?.error === "Verification failed") {
@@ -448,8 +452,11 @@ export async function otpVerification(body) {
           storageService().get("deeplink_url")
         );
       } else {
-        // await redirectToLaunchDiet();
-        this.redirectAfterLogin(result, user);
+        if(config.diet) {
+          await redirectToLaunchDiet();
+        } else {
+          this.redirectAfterLogin(result, user);
+        }
       }
     } else {
       if (result.error === "Wrong OTP is Entered") {
