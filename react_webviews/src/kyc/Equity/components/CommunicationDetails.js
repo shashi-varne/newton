@@ -491,13 +491,13 @@ const CommunicationDetails = (props) => {
 
   const handleClicked = () => !isEmpty(goldUserInfo) ? handleClickGold() : handleClick();
   const pageNumber = isDlFlow ? 3 : 4;
-  const showCount = !isEmpty(goldUserInfo) || stateParams?.fromState !== "/my-account";
+  const ShowCount = stateParams?.fromState !== "/my-account"
   return (
     <Container
       events={sendEvents("just_set_events")}
       buttonTitle={buttonTitle}
       title="Communication details"
-      count={showCount && !isKycDone && pageNumber}
+      count={isEmpty(goldUserInfo) && ShowCount && !isKycDone && pageNumber}
       current={pageNumber}
       total={!isKycDone && totalPages}
       handleClick={handleClicked}
