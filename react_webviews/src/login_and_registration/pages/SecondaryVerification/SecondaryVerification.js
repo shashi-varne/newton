@@ -63,6 +63,14 @@ class SecondaryVerification extends Component {
         this.setState({ form_data });
     };
 
+    isMobileNotValid = (form_data) => {
+        return (
+            !validateNumber(form_data["mobile"]) ||
+            !form_data.code ||
+            (form_data.code === "91" && form_data?.mobile?.length < 10)
+        )
+    }
+    
     handleClick = async () => {
         let {
             form_data,
@@ -70,9 +78,7 @@ class SecondaryVerification extends Component {
         } = this.state;
         let keys_to_check = ["mobile", "code"];
         if (loginType === "email") keys_to_check = ["email"];
-        if (loginType === "mobile" &&
-            (!validateNumber(form_data["mobile"]) || isEmpty(form_data["code"]) ||
-                (form_data["code"] === "91" && form_data["mobile"].length < 10))) {
+        if (loginType === "mobile"  && this.isMobileNotValid(form_data)) {
             this.setState({
                 form_data: {
                     ...form_data,
