@@ -104,7 +104,8 @@ class MyAccount extends Component {
       }
     }
 
-    if (userKyc.application_status_v2 === "complete" && userKyc.sign_status === 'signed') {
+    const checkSignStatus = userKyc.initial_kyc_status !== "compliant" ? userKyc.sign_status === 'signed' : true;
+    if (userKyc.application_status_v2 === "complete" && checkSignStatus) {
       mfStatus = "complete";
     }
 
