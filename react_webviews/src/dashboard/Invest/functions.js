@@ -354,7 +354,6 @@ export function navigate(pathname, data = {}) {
 export function initilizeKyc() {
   const config = getConfig();
   let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
-  this.contactVerification(userKyc)
   let currentUser =
     this.state.currentUser || storageService().getObject("user") || {};
   let isCompliant = userKyc.kyc_status === "compliant" ? true : false;
@@ -424,6 +423,7 @@ export function initilizeKyc() {
       );
     }
   }
+  this.contactVerification(userKyc);
 }
 
 export function openPremiumOnboardBottomSheet(
