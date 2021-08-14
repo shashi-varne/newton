@@ -354,6 +354,7 @@ export function navigate(pathname, data = {}) {
 export function initilizeKyc() {
   const config = getConfig();
   let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
+  this.contactVerification(userKyc)
   let currentUser =
     this.state.currentUser || storageService().getObject("user") || {};
   let isCompliant = userKyc.kyc_status === "compliant" ? true : false;
@@ -423,7 +424,6 @@ export function initilizeKyc() {
       );
     }
   }
-  this.contactVerification()
 }
 
 export function openPremiumOnboardBottomSheet(
@@ -669,10 +669,9 @@ export function handleCampaignNotification () {
   }
 };
 
-export function contactVerification() {
+export function contactVerification(userKyc) {
   const isVerifyDetailsSheetDisplayed = storageService().get("verifyDetailsSheetDisplayed");
   if (!isVerifyDetailsSheetDisplayed) {
-    let userKyc = storageService().getObject("kyc") || {};
     let contactDetails = userKyc?.identification?.meta_data;
       if (!isEmpty(contactDetails)) {
         let contact_type, contact_value, isVerified = true;

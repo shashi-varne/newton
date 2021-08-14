@@ -72,8 +72,8 @@ class Landing extends Component {
     }
   };
 
-  onload = () => {
-    this.initilizeKyc();
+  onload = async () => {
+    await this.initilizeKyc();
     const isBottomSheetDisplayed = storageService().get(
       "is_bottom_sheet_displayed"
     );
