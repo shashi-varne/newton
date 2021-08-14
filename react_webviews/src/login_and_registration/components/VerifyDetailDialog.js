@@ -5,6 +5,7 @@ import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClick
 import { isEmpty } from "lodash";
 import { authCheckApi, generateOtp } from "../functions";
 import "./commonStyles.scss";
+import toast from '../../common/ui/Toast';
 
 const product = getConfig().productName;
 class VerifyDetailDialog extends Component {
@@ -38,10 +39,12 @@ class VerifyDetailDialog extends Component {
         }
         const otpResponse = await this.generateOtp(body);
         if (otpResponse) {
+          let result = otpResponse.pfwresponse.result;
+          toast(result.message || "Success");
           this.props.parent.navigate("secondary-otp-verification", {
             state: {
               value: data?.contact_value,
-              otp_id: otpResponse.otp_id,
+              otp_id: result.otp_id,
               communicationType: type,
             },
           });
