@@ -78,6 +78,7 @@ export class SecondaryOtpVerification extends Component {
   }
 
   handleResendOtp = () => {
+    this.sendEvents("resend")
     this.resendOtp(this.state.otp_id)
     this.setState({
       otpData: {
