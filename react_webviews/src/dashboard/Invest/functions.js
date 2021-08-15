@@ -675,11 +675,7 @@ export function contactVerification(userKyc) {
     let contactDetails = userKyc?.identification?.meta_data;
       if (!isEmpty(contactDetails)) {
         let contact_type, contact_value, isVerified = true;
-        if (!isEmpty(contactDetails.email) && contactDetails.email_verified === false) {
-          contact_type = "email";
-          contact_value = contactDetails.email
-          isVerified = false;
-        } else if (!isEmpty(contactDetails.mobile_number) && contactDetails.mobile_number_verified === false) {
+        if (!isEmpty(contactDetails.mobile_number) && contactDetails.mobile_number_verified === false) {
           contact_type = "mobile";
           isVerified = false
           let numberVal = contactDetails?.mobile_number?.split('|');
@@ -688,6 +684,10 @@ export function contactVerification(userKyc) {
           } else {
               [contact_value] = numberVal;
           }
+        } else if (!isEmpty(contactDetails.email) && contactDetails.email_verified === false) {
+          contact_type = "email";
+          contact_value = contactDetails.email
+          isVerified = false;
         }
         if (!isVerified) {
           this.setState({
