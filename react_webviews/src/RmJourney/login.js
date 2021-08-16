@@ -54,7 +54,6 @@ class Login extends Component {
 
   handleClick = (event) => {
     var {form_data} = this.state
-    console.log(form_data)
     var canSubmitForm = true
     if((this.state.form_data.mobile_no && this.state.form_data.mobile_no.length !== 10) || !validateNumber(form_data.mobile_no) || !numberShouldStartWith(this.state.form_data.mobile_no) ){
         form_data['mobile_no_error'] = 'Enter valid mobile number'

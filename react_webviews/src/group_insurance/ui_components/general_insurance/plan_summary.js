@@ -28,8 +28,6 @@ class PlanSummaryClass extends Component {
       isGuestUser : !!storageService().get('guestUser')
     };
 
-    console.log((!!storageService().getObject('guestLeadId')))
-    console.log((!!storageService().getObject('guestUser')))
     this.handleClickCurrent = this.handleClickCurrent.bind(this);
     
   }

@@ -635,7 +635,6 @@ class GroupHealthPlanFinalSummary extends Component {
         let application_id = storageService().get('health_insurance_application_id')
         try {
             var url = this.getApiUrl(`api/insurancev2/api/insurance/health/payment/start_payment/${this.state.providerConfig.provider_api}?application_id=${application_id}`)
-            console.log('ddd', url)
             let res = await Api.get(url);       
             var resultData = res.pfwresponse.result;
             this.setState({

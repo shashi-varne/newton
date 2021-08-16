@@ -11,7 +11,6 @@ export async function onload(){
         if (res.pfwresponse.status_code === 200) {
 
             this.setState({skelton: false})
-            console.log(res)
         } else {
             error = resultData.error || resultData.message || 'Something went wrong. Please try again';
             Toast(error);
@@ -33,7 +32,6 @@ export async function startJourney(){
         const res = await Api.get(url);
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
-            console.log(resultData)
             var guestLeadId = resultData.insurance_guest_lead.id;
             storageService().setObject('guestLeadId', guestLeadId);
             this.navigate('/group-insurance')
