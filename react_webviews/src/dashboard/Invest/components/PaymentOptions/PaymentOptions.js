@@ -43,6 +43,7 @@ const PaymentOptions = (props) => {
           setShowSkelton(false);
           return;
         }
+        const accountNumber = pg_options.length === 1 ? result.post_args.account_no : result.post_args.account_number;
         let redirectData = {
           redirect_url: encodeURIComponent(
             `${basePath}/sdk/page/callback${
@@ -51,7 +52,7 @@ const PaymentOptions = (props) => {
           ),
           invest_id: result.post_args.ppt_id,
           remark: remark,
-          account_number: result.post_args.account_no,
+          account_number: accountNumber,
           amount: result.post_args.amount,
           data: {
             type: "bank",
