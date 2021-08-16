@@ -112,8 +112,24 @@ class SecondaryVerification extends Component {
         }
     }
 
-    sendEvents = (userAction) => {
+    sendEvents = (userAction, type) => {
         const { loginType, form_data } = this.state;
+        if(type === "bottomsheet"){
+            let properties = {
+                "screen_name": "account_already_exists",
+                "user_action": userAction,
+            }
+            let eventObj = {
+                "event_name": 'verification_bottom_sheet',
+                "properties": properties,
+            };
+            if (userAction === 'just_set_events') {
+                return eventObj;
+            } else {
+                nativeCallback({ events: eventObj });
+            }
+            return;
+        }
         let properties = {
             "screen_name": loginType === 'email' ? 'email' : 'enter mobile number',
             "user_action": userAction
@@ -149,16 +165,24 @@ class SecondaryVerification extends Component {
             body.mobile = `${form_data["code"]}|${form_data["mobile"]}`;
             body.whatsapp_consent = true;
         };
-        await this.triggerOtpApi(body, type);
+        await this.triggerOtpApi(body, type, true);
+        this.sendEvents("next", "bottomsheet");
     };
 
     editDetailsAccountAlreadyExists = () => {
+        this.sendEvents("edit", "bottomsheet");
         this.setState({
             accountAlreadyExists: false,
             isEdit: true,
         })
     };
 
+    closeAccountAlreadyExistDialog = () => {
+        this.sendEvents("back", "bottomsheet");
+        this.setState({
+            accountAlreadyExists: false,
+        })
+    }
 
 
     render() {
