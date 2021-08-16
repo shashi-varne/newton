@@ -60,6 +60,7 @@ class MyaccountDetails extends Component {
 
     handleClick = async (verified) => {
         if (verified) return;
+        this.props.sendEvents("next")
         this.props.showLoader();
         const { contact_type, contact_value } = this.state;
         let result = await this.authCheckApi(contact_type, { "contact_value": contact_value })

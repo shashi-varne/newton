@@ -232,6 +232,7 @@ class MyAccount extends Component {
               name={currentUser?.name}
               handleClick={(path) => this.handleClick(path)}
               showLoader={this.showLoader}
+              sendEvents={this.sendEvents}
               showAccountAlreadyExist={(show, data, type) =>
                 this.setAccountAlreadyExistsData(show, data, type)
               }

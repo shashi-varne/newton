@@ -102,6 +102,7 @@ class SecondaryVerification extends Component {
             "contact_value": form_data[loginType]
         });
         if (result && result.is_user) {
+            this.sendEvents("next")
             this.setState({
                 accountAlreadyExists: true,
                 accountAlreadyExistsData: result.user,
