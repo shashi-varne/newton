@@ -84,7 +84,7 @@ definitions:
               PROJECT: 'plutus-sites'
               BUCKET: 'plutus-sites-${BITBUCKET_DEPLOYMENT_ENVIRONMENT}-tf-apps'
               SOURCE: '.'
-              CACHE_CONTROL: 'max-age=3600'
+              CACHE_CONTROL: 'max-age=0'
               EXTRA_ARGS: '-Z'
 
 pipelines:
@@ -108,13 +108,13 @@ pipelines:
 
       - step:
           <<: *prod-deploy
-          name: Production deploy
+          name: Fisdom Production deploy
           trigger: manual
           deployment: fisdom-prod
 
       - step:
           <<: *prod-deploy
-          name: Production deploy
+          name: Finity Production deploy
           trigger: manual
           deployment: finity-prod
       
