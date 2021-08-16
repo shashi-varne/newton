@@ -68,7 +68,7 @@ const FnOIncomeProof = (props) => {
   const goBackPath = props.location?.state?.goBack || "";
   const { productName, Web } = getConfig();
   const urlParams = getUrlParams(props?.location?.search);
-  const hideSkipOptionInNative = storageService().get("native") && (goBackPath === "exit" || urlParams?.type === "myaccounts");
+  const hideSkipOptionInNative = storageService().get("native") && (goBackPath === "exit" || urlParams?.type === "myaccount");
   const hideSkipOption = !Web ? hideSkipOptionInNative : hideSkipOptionPaths.includes(fromState);
   const isMyAccountFlow = fromState === "/my-account";
 
