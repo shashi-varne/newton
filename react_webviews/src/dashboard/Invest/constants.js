@@ -303,6 +303,16 @@ export const nfoData = {
 };
 
 export const kycStatusMapper = {
+  init: {
+    title: "Are you investment ready?",
+    subtitle:
+      "To invest in stocks, primary market products, F&O you need to verify your KYC",
+    buttonTitle: "Start KYC",
+    button2Title: "Later",
+    landingText: "Check your KYC status",
+    icon: "icn_kyc_incomplete.svg",
+    nextState: KYC_PATHNAME_MAPPER.journey
+  },
   ground: {
     title: "Are you investment ready?",
     subtitle:
