@@ -221,7 +221,23 @@ export const getConfig = () => {
   } else if (main_pathname.indexOf('iw-dashboard') >= 0) {
     project = 'iw-dashboard';
   } else if (main_pathname.indexOf('tax-filing') >= 0) {
-    generic_callback = true
+    project = 'tax-filing';
+  } else if (main_pathname.indexOf('kyc') >= 0) {
+    project = 'kyc';
+  } else if (main_pathname.indexOf('reports') >= 0) {
+    project = 'reports';
+  } else if (main_pathname.indexOf('withdraw') >= 0) {
+    project = 'withdraw';
+  } else if (main_pathname.indexOf('nps') >= 0) {
+    project = 'nps';
+  } else if (main_pathname.indexOf('diy') >= 0) {
+    project = 'diy';
+  } else if (main_pathname.indexOf('invest') >= 0) {
+    project = 'invest';
+  }
+
+  if(!sdk_capabilities) {
+    sdk_capabilities = storageService().get("sdk_capabilities") || "";
   }
 
   if(!partner_code) {

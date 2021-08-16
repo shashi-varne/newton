@@ -109,11 +109,46 @@
       }
     }
 
+    .reports-tax-filing-card {
+      cursor: pointer;
+      padding: 5px 0 15px 15px;
+
+      .rtf-card-title {
+        padding-top: 10px;
+        color: var(--gunmetal);
+        font-size: 17px;
+        line-height: 26px;
+        font-weight: bold;
+      }
+
+      .rtf-card-subtitle {
+        color: var(--steelgrey);
+        font-size: 13px;
+        line-height: 19px;
+        margin-top: 8px;
+      }
+
+      .rtf-card-image {
+        max-width: 150px;
+        min-height: 80px;
+      }
+
+      .rtf-know-more {
+        color: var(--secondary);
+        letter-spacing: 1px;
+        font-size: 12px;
+        font-weight: 700;
+        margin-top: 7px;
+      }
+    }
+
     .check-investment {
       background-color: white;
       padding: 15px;
-      color: #333333;
+      color: var(--default);
       margin-bottom: 15px;
+      border-radius: 5px;
+      box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
 
       p {
         font-size: 14px;
