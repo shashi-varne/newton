@@ -139,14 +139,13 @@ export async function initialize() {
             }else if(this.state.screen_name === 'final_summary_screen' && isGuestUser){
 
                 const urlParams = getUrlParams();
-                const application_id = urlParams?.application_id; 
-                const provider = urlParams?.provider;
-                const guestLeadId = urlParams?.guestLeadId;
-                storageService().setObject('health_insurance_application_id', application_id)
-                storageService().setObject('guestLeadId', guestLeadId)
-
+                let application_id = application_id = urlParams?.application_id || storageService().get('health_insurance_application_id')  || ''
+                const provider = urlParams?.provider || storageService().get('provider')  || '';
+                const guestLeadId = urlParams?.guestLeadId || storageService().get('health_insurance_application_id')  || '' ;
+                storageService().set('health_insurance_application_id', application_id)
+                storageService().set('provider', provider)
                 const summaryUrl = `api/insurancev2/api/insurance/proposal/${provider}/get_application_details?application_id=${application_id}&form_submitted=true&guest_lead_id=${guestLeadId}`
-                this.guestUserDataFetch(summaryUrl, guestLeadId, providerConfig)
+                this.guestUserDataFetch(summaryUrl, providerConfig)
 
             }else if(application_id && this.state.screen_name === 'final_summary_screen'){
                 this.getApplicationDetails(application_id, providerConfig);
@@ -326,7 +325,7 @@ export function updateBottomPremiumAddOns(premium) {
     }
 }
 
-export async function guestUserDataFetch(summary_url, guestLeadId, providerConfig){
+export async function guestUserDataFetch(summary_url, providerConfig){
     this.setErrorData('onload')
         var error = ''
         var errorType = ''
@@ -338,13 +337,21 @@ export async function guestUserDataFetch(summary_url, guestLeadId, providerConfi
             'summary_url':  summary_url
         }
         try{
-            var url = `api/guest/user/session/summary/data/fetch?guest_lead_id=${guestLeadId}`
+            var url = getApiUrl(`api/guest/user/session/summary/data/fetch`)
             let res = await Api.post(url, post_body)
             var resultData = res.pfwresponse.result;
            if (res.pfwresponse.status_code === 200) {
             this.setState({skelton: false})
             var lead = resultData.insurancev2_result.quotation_details;
             var member_base = ghGetMember(lead, providerConfig);
+
+            var groupHealthPlanData = this.state.groupHealthPlanData;
+            groupHealthPlanData.application_form_data = resultData.insurancev2_result;
+            var application_data = !isEmpty(groupHealthPlanData.application_data) ? groupHealthPlanData.application_data  : {} ;
+            application_data['personal_details_screen'] = groupHealthPlanData.application_data && !isEmpty(groupHealthPlanData.application_data.personal_details_screen) ? groupHealthPlanData.application_data.personal_details_screen : {}
+            application_data['select_ped_screen'] = groupHealthPlanData.application_data && !isEmpty(groupHealthPlanData.application_data.select_ped_screen) ? groupHealthPlanData.application_data.select_ped_screen : {}
+            groupHealthPlanData.application_data = application_data;
+            this.setLocalProviderData(groupHealthPlanData);            
 
             this.setState({
                 lead: resultData.insurancev2_result || {},
@@ -1083,8 +1090,8 @@ export async function resetQuote() {
     let error = "";
     let errorType = "";
     try {
-
-        const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/${this.state.providerConfig.provider_api}/reset_previous_quotations`);
+        var url = getApiUrl(`api/insurancev2/api/insurance/health/quotation/${this.state.providerConfig.provider_api}/reset_previous_quotations`)
+        const res = await Api.post(url);
 
         var resultData = res.pfwresponse.result;
         
@@ -1665,8 +1672,9 @@ export function getProviderObject(policy) {
 
 
 export function getApiUrl(apiUrl){
-    var guest_id = storageService().getObject('guestLeadId');
-    if(guest_id){ // true only for RM journey
+    var guest_id = storageService().getObject('guestLeadId') || getUrlParams().guestLeadId;
+    
+    if(guest_id){ // true only for RM/guest journey
         var url_char = apiUrl.indexOf('?') >= 0 ? '&' : '?';
         return apiUrl + `${url_char}guest_lead_id=${guest_id}`
     }

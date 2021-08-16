@@ -17,6 +17,7 @@ import {
 // validateStreetName, validateEmpty, validateConsecutiveChar, validateMinChar
 import { nativeCallback } from 'utils/native_callback';
 import {Imgc} from 'common/ui/Imgc';
+import { getApiUrl } from '../../products/group_health/common_data';
 
 class PaymentSuccessClass extends Component {
 
@@ -108,8 +109,8 @@ class PaymentSuccessClass extends Component {
     let error = '';
     let errorType = '';
     try {
-
-      let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
+      let url = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
+      let res = await Api.get(url)
 
       if (res.pfwresponse.status_code === 200) {
 
@@ -175,7 +176,8 @@ class PaymentSuccessClass extends Component {
 
     if (pincode.length === 6) {
       try {
-        const res = await Api.get('/api/pincode/' + pincode);
+        var url = getApiUrl('/api/pincode/' + pincode) 
+        const res = await Api.get(url);
 
         if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
           address_details_data.city = res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name;
@@ -301,7 +303,8 @@ class PaymentSuccessClass extends Component {
           show_loader: 'button'
         })
         let res2 = {};
-        res2 = await Api.post('api/insurancev2/api/insurance/bhartiaxa/lead/update', final_data)
+        var url = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/lead/update')
+        res2 = await Api.post(url, final_data)
         this.setState({
           show_loader: false
         })

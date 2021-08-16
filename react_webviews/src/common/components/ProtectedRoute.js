@@ -30,6 +30,10 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
     if(guestUser){
       storageService().setObject('guestUser', true);
     }
+    if(!guestLeadId && getUrlParams().guestLeadId ){
+      console.log('writing ', getUrlParams().guestLeadId)
+      storageService().setObject('guestLeadId', getUrlParams().guestLeadId);
+    }
 
     if(!guestLeadId && !guestUser){
       await initData();

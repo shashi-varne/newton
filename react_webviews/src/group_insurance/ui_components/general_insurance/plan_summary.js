@@ -12,7 +12,7 @@ import instant_fisdom from 'assets/instant_fisdom.svg';
 import instant_myway from 'assets/instant_myway.svg';
 import {Imgc} from 'common/ui/Imgc';
 import Toast from '../../../common/ui/Toast';
-import {getApiUrl} from 'group_insurance/products/group_health/common_data'
+import { getApiUrl } from 'group_insurance/products/group_health/common_data'
 
 class PlanSummaryClass extends Component {
   constructor(props) {
@@ -43,7 +43,9 @@ class PlanSummaryClass extends Component {
     let instant_icon = this.state.type !== 'fisdom' ? instant_myway : instant_fisdom;
     let product_title = insuranceProductTitleMapper[this.props.parent ? this.props.parent.state.product_key : ''];
     nativeCallback({ action: 'take_control_reset' });
-    let lead_id = window.sessionStorage.getItem('group_insurance_lead_id_selected');
+    let lead_id = window.sessionStorage.getItem('group_insurance_lead_id_selected') || getUrlParams().leadId;
+    storageService().set('group_insurance_lead_id_selected', lead_id)
+
     this.setState({
       lead_id: lead_id || '',
       instant_icon: instant_icon,
@@ -94,7 +96,6 @@ class PlanSummaryClass extends Component {
     var lead = this.state.leadData;
     
     if(!this.state.leadData) {
-      
       this.setState({
         skelton: true
       })
@@ -103,29 +104,11 @@ class PlanSummaryClass extends Component {
       try {
         var url = '';
         var res = {}
-        
-        if(this.state.isGuestUser){
-          var guestLeadId = getUrlParams().guestLeadId
-          url = `api/guest/user/session/summary/data/fetch?guest_lead_id=${guestLeadId}`
-          
-          let post_body = {
-            summary_url: `api/insurancev2/api/insurance/bhartiaxa/lead/update`,
-            method: 'post',
-            request_body: JSON.parse(getUrlParams().request_data)
-          }
-          res = await Api.post(url, post_body) 
-        }else{
           url = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id) 
           res = await Api.get(url)    
-        }
         
         if (res.pfwresponse.status_code === 200) {
-
-          if(this.state.isGuestUser){
-            lead = res.pfwresponse.result.insurancev2_result.updated_lead
-          }else{
             lead = res.pfwresponse.result.lead;
-          }
           this.setState({
             skelton: false
           })
@@ -306,7 +289,7 @@ class PlanSummaryClass extends Component {
     }
     var postBodyData =  storageService().getObject('baxaGuestUserData')
     var guestLeadId = storageService().getObject('guestLeadId')
-    var baxaSumaryUrl = `${window.location.origin}/group-insurance/${productMapper[this.props.parent.state.product_key]}/summary${getConfig().searchParams}&request_data=${JSON.stringify(postBodyData)}&guestLeadId=${guestLeadId}&guestUser=true`
+    var baxaSumaryUrl = `${window.location.origin}/group-insurance/${productMapper[this.props.parent.state.product_key]}/summary${getConfig().searchParams}&leadId=${this.state.lead_id}&guestLeadId=${guestLeadId}&guestUser=true`
     navigator.clipboard.writeText(baxaSumaryUrl).then(()=>{
         Toast('Payment link copied!')
     }, (e)=>{

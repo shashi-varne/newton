@@ -22,7 +22,7 @@ class PaymentCallbackClass extends Component {
 
   componentWillMount() {
 
-    let lead_id = window.sessionStorage.getItem('group_insurance_lead_id_selected');
+    let lead_id = window.sessionStorage.getItem('group_insurance_lead_id_selected')
     let group_insurance_payment_urlsafe = window.sessionStorage.getItem('group_insurance_payment_urlsafe');
     
     this.setState({
@@ -123,7 +123,8 @@ class PaymentCallbackClass extends Component {
         show_loader: 'button'
       })
       let res2;
-      res2 = await Api.get('api/insurancev2/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id)
+      let url = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id)
+      res2 = await Api.get(url)
 
       
       if (res2.pfwresponse.status_code === 200) {

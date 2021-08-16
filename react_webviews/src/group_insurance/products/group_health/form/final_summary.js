@@ -40,7 +40,8 @@ class GroupHealthPlanFinalSummary extends Component {
             quote_id: storageService().get('ghs_ergo_quote_id'),
             screen_name:'final_summary_screen',
             pgReached: getUrlParams().pgReached ? true : false,
-            isRmJourney: (!!storageService().getObject('guestLeadId')) && (!storageService().getObject('guestUser'))
+            isRmJourney: (!!storageService().getObject('guestLeadId')) && (!storageService().getObject('guestUser')),
+            isGuestUser: !!storageService().getObject('guestUser')
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
@@ -631,8 +632,7 @@ class GroupHealthPlanFinalSummary extends Component {
             // this.redirectToPayment();
         //     return;
         // }
-        let application_id = storageService().getObject('health_insurance_application_id')
-        
+        let application_id = storageService().get('health_insurance_application_id')
         try {
             var url = this.getApiUrl(`api/insurancev2/api/insurance/health/payment/start_payment/${this.state.providerConfig.provider_api}?application_id=${application_id}`)
             console.log('ddd', url)
@@ -962,7 +962,7 @@ class GroupHealthPlanFinalSummary extends Component {
         });
     }
 
-    copyPaymentLink = async () =>{
+    copyPaymentLink = () =>{
         let application_id = storageService().get('health_insurance_application_id');
         let guestLeadId = storageService().getObject('guestLeadId');
 
@@ -978,8 +978,8 @@ class GroupHealthPlanFinalSummary extends Component {
         return (
             <Container
             provider={this.state.provider}
-            resetpage={!this.state.isRmJourney}
-            noBackIcon={this.state.isRmJourney}
+            resetpage={!this.state.isGuestUser}
+            noBackIcon={this.state.isGuestUser}
             handleReset={this.showDialog}
             events={this.sendEvents('just_set_events')}
             showLoader={this.state.show_loader}
