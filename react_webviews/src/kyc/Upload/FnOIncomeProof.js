@@ -68,8 +68,8 @@ const FnOIncomeProof = (props) => {
   const goBackPath = props.location?.state?.goBack || "";
   const { productName, Web } = getConfig();
   const urlParams = getUrlParams(props?.location?.search);
-  const hideSkipOptionInNative = storageService().get("native") && (goBackPath === "exit" || urlParams?.type === "myaccount");
-  const hideSkipOption = !Web ? hideSkipOptionInNative : hideSkipOptionPaths.includes(fromState);
+  const fromNativeLandingOrMyAccounts = storageService().get("native") && (goBackPath === "exit" || urlParams?.type === "myaccount");
+  const hideSkipOption = !Web ? fromNativeLandingOrMyAccounts : hideSkipOptionPaths.includes(fromState);
   const isMyAccountFlow = fromState === "/my-account";
 
   useEffect(() => {
@@ -143,7 +143,6 @@ const FnOIncomeProof = (props) => {
   }
 
   const commonNativeNavigation = () => {
-    const fromNativeLandingOrMyAccounts = hideSkipOptionInNative;
     if (fromNativeLandingOrMyAccounts) {
       nativeCallback({ action: "exit_web"});
     } else {
@@ -164,7 +163,6 @@ const FnOIncomeProof = (props) => {
   };
 
   const goBackToPath = () => {
-    const fromNativeLandingOrMyAccounts = hideSkipOptionInNative;
     if (fromNativeLandingOrMyAccounts) {
       return nativeCallback({ action: "exit_web"});
     } 
