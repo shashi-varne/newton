@@ -461,7 +461,7 @@ export function initilizeKyc() {
   }
   
   if (!isEmpty(modalData)) {
-    if (["verifying_trading_account", "complete", "fno_rejected"].includes(kycJourneyStatus)) {
+    if (kycStatusesToShowDialog.includes(kycJourneyStatus)) {
       storageService().set("landingBottomSheetDisplayed", true);
     }
 
@@ -623,7 +623,7 @@ export function handleStocksAndIpoCards(key) {
     modalData.oneButton = true
   }
 
-  if (kycJourneyStatus !== "complete" || (kycJourneyStatus === "complete" && !userKyc.mf_kyc_processed)) {
+  if (!isEmpty(modalData) && (kycJourneyStatus !== "complete" || (kycJourneyStatus === "complete" && !userKyc.mf_kyc_processed))) {
     this.setState({ modalData, openKycStatusDialog: true });
   }
 }
