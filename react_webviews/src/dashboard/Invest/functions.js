@@ -40,6 +40,7 @@ export async function initialize() {
   this.handleStocksAndIpoCards = handleStocksAndIpoCards.bind(this);
   this.setKycProductTypeAndRedirect = setKycProductTypeAndRedirect.bind(this);
   this.handleIpoCardRedirection = handleIpoCardRedirection.bind(this);
+  this.handleCommonKycRedirections = handleCommonKycRedirections.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
   if (config) {
     this.setState({ config });
@@ -512,31 +513,31 @@ export function handleKycSubmittedOrRejectedState() {
 }
 
 export async function openKyc() {
-  let {
-    userKyc,
-    kycJourneyStatus,
-    kycStatusData,
-    tradingEnabled,
-  } = this.state;
+  let { kycJourneyStatus } = this.state;
 
   storageService().set("kycStartPoint", "mf");
   const kycStatusesToShowDialog = ["submitted", "rejected", "fno_rejected", "esign_pending", "verifying_trading_account"];
   if (kycStatusesToShowDialog.includes(kycJourneyStatus)) {
     this.handleKycSubmittedOrRejectedState();
   } else {
-    if (kycJourneyStatus === "ground") {
-      this.navigate("/kyc/home");
-    } else if (kycJourneyStatus === "ground_pan") {
-      this.navigate("/kyc/journey", {
-        state: {
-          show_aadhaar: !(userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual") ? true : false,
-        },
-      });
-    } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity")) {
-      await this.setKycProductTypeAndRedirect();
-    } else if (kycStatusData.nextState) {
-      this.navigate(kycStatusData.nextState);
-    }
+    this.handleCommonKycRedirections();
+  }
+}
+
+export async function handleCommonKycRedirections() {
+  let { userKyc, kycJourneyStatus, tradingEnabled, kycStatusData } = this.state;
+  if (kycJourneyStatus === "ground") {
+    this.navigate("/kyc/home");
+  } else if (kycJourneyStatus === "ground_pan") {
+    this.navigate("/kyc/journey", {
+      state: {
+        show_aadhaar: !(userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual") ? true : false,
+      },
+    });
+  } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity")) {
+    await this.setKycProductTypeAndRedirect();
+  } else if (kycStatusData.nextState) {
+    this.navigate(kycStatusData.nextState);
   }
 }
 
