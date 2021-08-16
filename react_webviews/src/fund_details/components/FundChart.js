@@ -120,7 +120,7 @@ const FundChart = (props) => {
     tooltip: {
       valueDecimals: 2,
       split: false,
-      enabled: false,
+      enabled: true,
       animation: true,
       shared: true,
     },
@@ -149,6 +149,7 @@ const FundChart = (props) => {
       zoomType: '',
       zoomKey: '',
     },
+    colors:['#7cb5ec', '#434348'],
     scrollbar: {
       enabled: false,
     },
@@ -189,7 +190,11 @@ const FundChart = (props) => {
       itemDistance: 30,
     },
     xAxis: {
-      crosshair: false,
+      crosshair: {
+        width: 1,
+        color: 'gray',
+        dashStyle: 'shortdot'
+      },
       labels: {
         enabled: true,
         step: 1,
