@@ -68,7 +68,7 @@ const FnOIncomeProof = (props) => {
   const goBackPath = props.location?.state?.goBack || "";
   const { productName, Web } = getConfig();
   const urlParams = getUrlParams(props?.location?.search);
-  const fromNativeLandingOrMyAccounts = storageService().get("native") && (goBackPath === "exit" || urlParams?.type === "myaccount");
+  const fromNativeLandingOrMyAccounts = storageService().get("native") && (goBackPath === "exit" || urlParams?.type === "fno");
   const hideSkipOption = !Web ? fromNativeLandingOrMyAccounts : hideSkipOptionPaths.includes(fromState);
   const isMyAccountFlow = fromState === "/my-account";
 
