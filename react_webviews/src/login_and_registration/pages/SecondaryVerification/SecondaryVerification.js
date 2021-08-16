@@ -114,7 +114,7 @@ class SecondaryVerification extends Component {
     }
 
     sendEvents = (userAction, type) => {
-        const { loginType, form_data } = this.state;
+        const { loginType, form_data, isEdit } = this.state;
         if(type === "bottomsheet"){
             let eventObj = {
                 "event_name": 'verification_bottom_sheet',
@@ -130,8 +130,9 @@ class SecondaryVerification extends Component {
             }
             return;
         }
+        let screen_name = loginType === 'email' ? 'email' : 'enter mobile number'
         let properties = {
-            "screen_name": loginType === 'email' ? 'email' : 'enter mobile number',
+            "screen_name": isEdit ? screen_name === "email" ? "edit_email" :  "edit_mobile_number" : screen_name,
             "user_action": userAction
         }
         if (loginType === "mobile") {
@@ -142,7 +143,7 @@ class SecondaryVerification extends Component {
             }
         } else properties.email_entered = form_data.email ? "yes" : "no";
         let eventObj = {
-            "event_name": 'onboarding',
+            "event_name":  isEdit ? "verification_bottom_sheet" :'onboarding',
             "properties": properties,
         };
         if (userAction === 'just_set_events') {
