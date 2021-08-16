@@ -461,7 +461,7 @@ export function initilizeKyc() {
   }
   
   if (!isEmpty(modalData)) {
-    if (["verifying_trading_account", "complete", "fno_rejected"].includes(kycJourneyStatus)) {
+    if (kycStatusesToShowDialog.includes(kycJourneyStatus)) {
       storageService().set("landingBottomSheetDisplayed", true);
     }
 
