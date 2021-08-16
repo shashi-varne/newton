@@ -110,12 +110,14 @@ class Landing extends Component {
 
   // email mobile verification
   closeVerifyDetailsDialog = () => {
+    this.sendEvents("back", "BottomSheet");
     this.setState({
       verifyDetails: false
     })
   }
 
   closeAccountAlreadyExistDialog = () => {
+    this.sendEvents("back", "continuebottomsheet");
     this.setState({
       accountAlreadyExists: false
     })
@@ -132,6 +134,7 @@ class Landing extends Component {
   }
 
   continueAccountAlreadyExists = async (type, data) => {
+    this.sendEvents("next", "continuebottomsheet");
     let body = {};
     if (type === "email") {
       body.email = data?.data?.contact_value;
@@ -154,6 +157,7 @@ class Landing extends Component {
   };
 
   editDetailsAccountAlreadyExists = () => {
+    this.sendEvents("edit", "continuebottomsheet");
     this.navigate("/secondary-verification", {
       state: {
         page: "landing",
@@ -191,6 +195,26 @@ class Landing extends Component {
   };
 
   sendEvents = (userAction, cardClick = "") => {
+    if (cardClick === "bottomsheet" || cardClick === "continuebottomsheet") {
+      let screen_name = cardClick === "continuebottomsheet" ? "account_already_exists" :
+        this.state.verifyDetailsType === "email" ? "verify_email" : "verify_mobile";
+      let properties = {
+        "screen_name": screen_name,
+        "user_action": userAction,
+      }
+      let eventObj = {
+        "event_name": 'verification_bottom_sheet',
+        "properties": properties,
+      };
+      if (userAction === "just_set_events") {
+        return eventObj;
+      } else {
+        nativeCallback({
+          events: eventObj
+        });
+      }
+      return
+    }
     let eventObj = {
       event_name: "landing_page",
       properties: {
