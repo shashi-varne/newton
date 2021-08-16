@@ -59,6 +59,7 @@ class MyAccount extends Component {
   };
 
   continueAccountAlreadyExists = async () => {
+    this.sendEvents("next", "continuebottomsheet");
     this.navigate("/kyc/communication-details", {
       state: {
         accountAlreadyExistsData: this.state.accountAlreadyExistsData,
@@ -69,6 +70,7 @@ class MyAccount extends Component {
   };
 
   editDetailsAccountAlreadyExists = () => {
+    this.sendEvents("edit", "continuebottomsheet");
     this.navigate("/kyc/communication-details", {
       state: {
         accountAlreadyExistsData : this.state.accountAlreadyExistsData,
@@ -79,6 +81,7 @@ class MyAccount extends Component {
   };
 
   onCloseBottomSheet = () => {
+    this.sendEvents("back", "continuebottomsheet");
     this.setState({
       accountAlreadyExists: false,
       verifyDetails: false,
@@ -154,6 +157,24 @@ class MyAccount extends Component {
   };
 
   sendEvents = (userAction, screenName) => {
+    if (screenName === "continuebottomsheet") {
+      let properties = {
+        "screen_name": "account_already_exists",
+        "user_action": userAction,
+      }
+      let eventObj = {
+        "event_name": 'verification_bottom_sheet',
+        "properties": properties,
+      };
+      if (userAction === 'just_set_events') {
+        return eventObj;
+      } else {
+        nativeCallback({
+          events: eventObj
+        });
+      }
+      return;
+    }
     let eventObj = {
       event_name: "my_account",
       properties: {

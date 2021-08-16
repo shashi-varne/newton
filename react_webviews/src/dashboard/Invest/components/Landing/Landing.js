@@ -110,7 +110,7 @@ class Landing extends Component {
 
   // email mobile verification
   closeVerifyDetailsDialog = () => {
-    this.sendEvents("back", "BottomSheet");
+    this.sendEvents("back", "bottomsheet");
     this.setState({
       verifyDetails: false
     })
