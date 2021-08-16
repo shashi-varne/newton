@@ -143,8 +143,8 @@ const FnOIncomeProof = (props) => {
   }
 
   const commonNativeNavigation = () => {
-    const fromLandingOrMyAccounts = hideSkipOptionInNative;
-    if (fromLandingOrMyAccounts) {
+    const fromNativeLandingOrMyAccounts = hideSkipOptionInNative;
+    if (fromNativeLandingOrMyAccounts) {
       nativeCallback({ action: "exit_web"});
     } else {
       commonRedirection();
