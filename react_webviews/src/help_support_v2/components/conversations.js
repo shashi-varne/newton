@@ -11,6 +11,8 @@ import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
 import { TicketStatus } from "../common/mini_components";
 import SVG from "react-inlinesvg";
+import { getUrlParams } from "../../utils/validators";
+import isEmpty from 'lodash/isEmpty';
 
 const moment = require("moment");
 class TicketConversations extends Component {
@@ -45,8 +47,11 @@ class TicketConversations extends Component {
   }
 
   onload = async () => {
-    let ticket = this.props.location.state.ticket;
-
+    let ticket = this.props.location?.state?.ticket || {};
+    const { ticket_id } = getUrlParams();
+    if( ticket_id ) {
+      ticket['ticket_id'] = ticket_id;
+    }
     this.setState({
       ticket: ticket,
       skelton: true,
@@ -54,7 +59,7 @@ class TicketConversations extends Component {
 
     let result = await this.getTicketConversations(ticket.ticket_id);
 
-    if (result) {
+    if (!isEmpty(result)) {
       this.setState({
         category: result.category || "",
         sub_category: result.sub_category || "",
@@ -62,6 +67,8 @@ class TicketConversations extends Component {
         old_ticket_reference_id: result.old_ticket_reference_id || ""
       });
       this.sortConversations(result);
+    } else {
+      this.goBack();
     }
   };
 
