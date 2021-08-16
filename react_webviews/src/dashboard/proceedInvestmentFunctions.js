@@ -3,7 +3,7 @@ import { getKycAppStatus } from "../kyc/services";
 import Api from "../utils/api";
 import { getConfig, popupWindowCenter } from "../utils/functions";
 import { storageService } from "../utils/validators";
-import { apiConstants } from "./Invest/constants";
+import { apiConstants, kycStatusMapperInvest } from "./Invest/constants";
 /* eslint-disable */
 export function isInvestRefferalRequired(partner_code) {
   if (partner_code === "ktb") {
@@ -149,12 +149,16 @@ export function redirectToKyc(userKyc, kycJourneyStatus, navigate) {
     var message = JSON.stringify(_event);
     window.callbackWeb.sendEvent(_event);
   }
-  if (kycJourneyStatus === "ground") {
-    navigate("/kyc/home");
-  } else {
+
+  const kycStatusData = kycStatusMapperInvest[kycJourneyStatus];
+  if (kycJourneyStatus === "ground_pan") {
     navigate("/kyc/journey", {
       state: { show_aadhaar: (userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual") ? false : true } 
     });
+  } else if (kycJourneyStatus === "submitted") {
+    navigate("/kyc/journey");
+  } else if (kycStatusData?.nextState) {
+    navigate(kycStatusData.nextState);
   }
 }
 
