@@ -14,7 +14,7 @@ import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
 import { checkDocsPending } from '../common/functions';
 import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet';
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
-import { getUrlParams, storageService } from '../../utils/validators';
+import { storageService } from '../../utils/validators';
 import { getConfig, isNewIframeDesktopLayout, navigate as navigateFunc } from '../../utils/functions';
 import InternalStorage from '../common/InternalStorage';
 import { landingEntryPoints } from '../../utils/constants';
@@ -67,8 +67,7 @@ const FnOIncomeProof = (props) => {
   const fromState = props?.location?.state?.fromState;
   const goBackPath = props.location?.state?.goBack || "";
   const { productName, Web } = getConfig();
-  const urlParams = getUrlParams(props?.location?.search);
-  const fromNativeLandingOrMyAccounts = storageService().get("native") && (goBackPath === "exit" || urlParams?.type === "fno");
+  const fromNativeLandingOrMyAccounts = storageService().get("native") && goBackPath === "exit";
   const hideSkipOption = !Web ? fromNativeLandingOrMyAccounts : hideSkipOptionPaths.includes(fromState);
   const isMyAccountFlow = fromState === "/my-account";
 
