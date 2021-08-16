@@ -126,6 +126,10 @@ class MyAccount extends Component {
       } else if (userKyc.equity_income?.doc_status === "submitted") {
         fnoStatus = "inprogress";
       }
+      if(userKyc.kyc_product_type !== "equity") {
+        fnoStatus = "init";
+        stocksStatus = "init";
+      }
       kycStatusData.push({ ...MF_AND_STOCKS_STATUS_MAPPER[stocksStatus], status: stocksStatus, key: "stocks", title: "Stocks & IPO" });
       kycStatusData.push({ ...FNO_STATUS_MAPPER[fnoStatus], status: fnoStatus, key: "fno", title: "Futures & Options" });
     }
