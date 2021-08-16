@@ -5,7 +5,6 @@ import Input from "common/ui/Input";
 import { onload, startJourney } from "./functions";
 import { validateNumber, numberShouldStartWith } from "utils/validators";
 import Button from "common/ui/Button";
-import { nativeCallback } from "utils/native_callback";
 import { Imgc } from "common/ui/Imgc";
 
 const config = getConfig();
@@ -61,7 +60,6 @@ class Login extends Component {
         form_data['mobile_no_error'] = 'Enter valid mobile number'
         canSubmitForm = false
     }
-    //validate rm emp id
     this.setState({form_data})
 
     if(canSubmitForm){

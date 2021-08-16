@@ -287,7 +287,7 @@ class PlanSummaryClass extends Component {
       'PERSONAL_ACCIDENT': 'accident',
       'SMART_WALLET': 'wallet'
     }
-    var postBodyData =  storageService().getObject('baxaGuestUserData')
+    
     var guestLeadId = storageService().getObject('guestLeadId')
     var baxaSumaryUrl = `${window.location.origin}/group-insurance/${productMapper[this.props.parent.state.product_key]}/summary${getConfig().searchParams}&leadId=${this.state.lead_id}&guestLeadId=${guestLeadId}&guestUser=true`
     navigator.clipboard.writeText(baxaSumaryUrl).then(()=>{

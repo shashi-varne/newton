@@ -5,7 +5,7 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import Api from 'utils/api';
 import { numDifferentiationInr, isEmpty, compareObjects } from 'utils/validators';
-import { initialize, updateBottomPremium, getAddOnsData, getApiUrl } from '../common_data';
+import { initialize, updateBottomPremium, getAddOnsData } from '../common_data';
 import GenericTooltip from '../../../../common/ui/GenericTooltip';
 import ValueSelector from '../../../../common/ui/ValueSelector';
 

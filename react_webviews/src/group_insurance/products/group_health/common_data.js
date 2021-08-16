@@ -139,7 +139,7 @@ export async function initialize() {
             }else if(this.state.screen_name === 'final_summary_screen' && isGuestUser){
 
                 const urlParams = getUrlParams();
-                let application_id = application_id = urlParams?.application_id || storageService().get('health_insurance_application_id')  || ''
+                application_id = application_id = urlParams?.application_id || storageService().get('health_insurance_application_id')  || ''
                 const provider = urlParams?.provider || storageService().get('provider')  || '';
                 const guestLeadId = urlParams?.guestLeadId || storageService().get('health_insurance_application_id')  || '' ;
                 storageService().set('health_insurance_application_id', application_id)

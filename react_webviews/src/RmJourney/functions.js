@@ -1,7 +1,6 @@
 import Api from "utils/api";
 import Toast from 'common/ui/Toast';
 import { storageService } from "utils/validators";
-import { getConfig } from "utils/functions";
 
 export async function onload(){
     let error = ''
