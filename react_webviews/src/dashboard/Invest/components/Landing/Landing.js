@@ -19,6 +19,7 @@ import AccountAlreadyExistDialog from "../../../../login_and_registration/compon
 import { generateOtp } from "../../../../login_and_registration/functions";
 import { Imgc } from "../../../../common/ui/Imgc";
 import { nativeCallback } from "../../../../utils/native_callback";
+import toast from "../../../../common/ui/Toast"
 
 const fromLoginStates = ["/login", "/logout", "/verify-otp"]
 class Landing extends Component {
@@ -71,29 +72,12 @@ class Landing extends Component {
     }
   };
 
-  onload = () => {
-    this.initilizeKyc();
+  onload = async () => {
+    await this.initilizeKyc();
     const isBottomSheetDisplayed = storageService().get(
       "is_bottom_sheet_displayed"
     );
-    const isVerifyDetailsSheetDisplayed = storageService().get("verifyDetailsSheetDisplayed")
-    if (!isVerifyDetailsSheetDisplayed) {
-      const { contactDetails } = this.state;
-      if (contactDetails?.verification_done === false) {
-        this.setState({
-          verifyDetails: true,
-          verifyDetailsData:
-            contactDetails[
-            `unverified_${contactDetails?.auth_type === "mobile" ? "email" : "mobile"
-            }_contacts`
-            ][0],
-          verifyDetailsType:
-            contactDetails?.auth_type === "mobile" ? "email" : "mobile",
-        });
-        storageService().set("verifyDetailsSheetDisplayed", true);
-      }
-    }
-    if (!isBottomSheetDisplayed && this.state.isWeb) {
+    if (!isBottomSheetDisplayed && this.state.isWeb && !this.state.verifyDetails) {
       this.handleCampaignNotification();
     }
   };
@@ -157,6 +141,8 @@ class Landing extends Component {
     }
     const otpResponse = await this.generateOtp(body);
     if (otpResponse) {
+      let result = otpResponse.pfwresponse.result;
+      toast(result.message || "Success");
       this.navigate("secondary-otp-verification", {
         state: {
           value:  data?.data?.contact_value,

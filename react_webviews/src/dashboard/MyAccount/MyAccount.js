@@ -190,7 +190,7 @@ class MyAccount extends Component {
       isReadyToInvestBase,
       userKyc,
       currentUser,
-      contacts,
+      contactInfo,
       verifyDetails,
       accountAlreadyExists,
     } = this.state;
@@ -207,7 +207,7 @@ class MyAccount extends Component {
           <div className="my-account-content">
             <UserDetails
               pan_no={userKyc?.pan?.meta_data?.pan_number}
-              contacts={contacts}
+              contactInfo={contactInfo}
               name={currentUser?.name}
               handleClick={(path) => this.handleClick(path)}
               showLoader={this.showLoader}
