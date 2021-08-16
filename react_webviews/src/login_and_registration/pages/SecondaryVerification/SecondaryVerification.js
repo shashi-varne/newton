@@ -116,13 +116,12 @@ class SecondaryVerification extends Component {
     sendEvents = (userAction, type) => {
         const { loginType, form_data } = this.state;
         if(type === "bottomsheet"){
-            let properties = {
-                "screen_name": "account_already_exists",
-                "user_action": userAction,
-            }
             let eventObj = {
                 "event_name": 'verification_bottom_sheet',
-                "properties": properties,
+                "properties": {
+                    "screen_name": "account_already_exists",
+                    "user_action": userAction,
+                },
             };
             if (userAction === 'just_set_events') {
                 return eventObj;
