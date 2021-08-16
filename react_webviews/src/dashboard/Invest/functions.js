@@ -623,7 +623,7 @@ export function handleStocksAndIpoCards(key) {
     modalData.oneButton = true
   }
 
-  if (kycJourneyStatus !== "complete" || (kycJourneyStatus === "complete" && !userKyc.mf_kyc_processed)) {
+  if (!isEmpty(modalData) && (kycJourneyStatus !== "complete" || (kycJourneyStatus === "complete" && !userKyc.mf_kyc_processed))) {
     this.setState({ modalData, openKycStatusDialog: true });
   }
 }
