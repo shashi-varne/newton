@@ -74,7 +74,7 @@ class VerifyDetailDialog extends Component {
       <WVBottomSheet
         isOpen={isOpen}
         onClose={onClose}
-        title={`Verify your ${type} address`}
+        title={`Verify your ${type === "email" ? "email address" : "mobile number"}`}
         image={require(`../../assets/${product}/bottomsheet_verify_${type}.svg`)}
         subtitle={`${
           type === "email" ? "Email" : "Mobile"
