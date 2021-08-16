@@ -164,11 +164,9 @@ const FnOIncomeProof = (props) => {
   };
 
   const goBackToPath = () => {
-    if (!Web) {
-      const fromLandingOrMyAccounts = hideSkipOptionInNative;
-      if (fromLandingOrMyAccounts) {
-        return nativeCallback({ action: "exit_web"});
-      } 
+    const fromNativeLandingOrMyAccounts = hideSkipOptionInNative;
+    if (fromNativeLandingOrMyAccounts) {
+      return nativeCallback({ action: "exit_web"});
     } 
 
     if(goBackPath && goBackPath !== "exit") {
