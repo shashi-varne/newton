@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import OtpInput from "react-otp-input";
 import DotDotLoader from "../../../common/ui/DotDotLoaderNew";
+import WVOtp from "../../../common/ui/Otp/WVOtp";
 
 class Otp extends Component {
   constructor(props) {
@@ -62,16 +62,15 @@ class Otp extends Component {
     return (
       <div className="communication-details-otp-container">
         <div>
-          <OtpInput
-            numInputs={4}
+          <WVOtp
             id="default-otp"
-            containerStyle="default-otp-input-container"
-            inputStyle="default-otp-input"
+            align="left"
             onChange={this.props.handleOtp}
             hasErrored={true}
             placeholder="XXXX"
             value={this.props.otpData.otp}
             isDisabled={this.props.isDisabled || false}
+            additionalOtpProps={{ shouldAutoFocus: true }}
           />
         </div>
 
