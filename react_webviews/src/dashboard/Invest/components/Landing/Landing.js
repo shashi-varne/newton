@@ -198,13 +198,12 @@ class Landing extends Component {
     if (cardClick === "bottomsheet" || cardClick === "continuebottomsheet") {
       let screen_name = cardClick === "continuebottomsheet" ? "account_already_exists" :
         this.state.verifyDetailsType === "email" ? "verify_email" : "verify_mobile";
-      let properties = {
-        "screen_name": screen_name,
-        "user_action": userAction,
-      }
       let eventObj = {
         "event_name": 'verification_bottom_sheet',
-        "properties": properties,
+        "properties": {
+          "screen_name": screen_name,
+          "user_action": userAction,
+        },
       };
       if (userAction === "just_set_events") {
         return eventObj;
