@@ -1,0 +1,110 @@
+import React, { Component } from "react";
+import { getConfig } from "utils/functions";
+import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
+import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
+import { isEmpty } from "lodash";
+import { authCheckApi, generateOtp } from "../functions";
+import "./commonStyles.scss";
+import toast from '../../common/ui/Toast';
+
+const product = getConfig().productName;
+class VerifyDetailDialog extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      loading: false,
+    };
+    this.authCheckApi = authCheckApi.bind(this);
+    this.generateOtp = generateOtp.bind(this);
+  }
+
+  handleClick = async () => {
+    const { data, type } = this.props;
+    if (isEmpty(data)) {
+      this.props.parent.navigate("/secondary-verification", {
+        state: {
+          communicationType: type
+        }
+      });
+    } else {
+      const result = await this.authCheckApi(type, data);
+      if (result?.is_user === false) {
+        let body = {};
+        if (type === "email") {
+          body.email = data.contact_value;
+        } else {
+          body.mobile = data.contact_value;
+          body.whatsapp_consent = true;
+        }
+        const otpResponse = await this.generateOtp(body);
+        if (otpResponse) {
+          let result = otpResponse.pfwresponse.result;
+          toast(result.message || "Success");
+          this.props.parent.navigate("secondary-otp-verification", {
+            state: {
+              value: data?.contact_value,
+              otp_id: result.otp_id,
+              communicationType: type,
+            },
+          });
+        }
+      } else if (result?.is_user === true) { 
+        result.user.data = data;
+        this.props.showAccountAlreadyExist(true, result.user);
+      }
+    }
+  };
+
+  editDetails = () => {
+    this.props.parent.navigate("/secondary-verification", {
+      state: {
+        communicationType: this.props?.type,
+        contactValue: this.props?.data?.contact_value,
+        edit: true,
+      },
+    });
+  };
+
+  render() {
+    const { isOpen, onClose, type, data } = this.props;
+    return (
+      <WVBottomSheet
+        isOpen={isOpen}
+        onClose={onClose}
+        title={`Verify your ${type} address`}
+        image={require(`../../assets/${product}/bottomsheet_verify_${type}.svg`)}
+        subtitle={`${
+          type === "email" ? "Email" : "Mobile"
+        } verification is mandatory for investment as per SEBI`}
+        button1Props={{
+          color: "secondary",
+          title: "CONTINUE",
+          variant: "contained",
+          onClick: this.handleClick,
+          showLoader: this.state.loading,
+        }}
+        classes={{
+          container: "verify-details-container",
+        }}
+      >
+        {!isEmpty(data) && (
+          <div className="details">
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <img
+                src={require(`../../assets/bottom_sheet_icon_${type}.svg`)}
+                alt=""
+              />
+              <span className="text">{isNaN(data?.contact_value) ? data?.contact_value : `+91 - ${data?.contact_value}`}</span>
+            </div>
+            <WVClickableTextElement onClick={this.editDetails}>
+              EDIT
+            </WVClickableTextElement>
+          </div>
+        )}
+      </WVBottomSheet>
+    );
+  }
+}
+
+export default VerifyDetailDialog;

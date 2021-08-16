@@ -1,14 +1,9 @@
 import React, { Component, useState, useEffect } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import Login from './login_and_registration/Login';
-import Register from './login_and_registration/Register';
-import Otp from './login_and_registration/Otp';
-import ForgotPassword from './login_and_registration/ForgotPassword';
-import Logout from './login_and_registration/Logout';
+import Logout from './login_and_registration/pages/Login/Logout.js';
 import FisdomPartnerRedirect from './fisdom_partner_redirect';
 import WealthReport from './wealth_report';
-import SocialCallback from './login_and_registration/SocialCallback';
 
 
 import { create } from 'jss';
@@ -25,15 +20,16 @@ import DesktopLayout from './desktopLayout';
 
 
 import Feature from './Feature';
-import NotFound from './common/components/NotFound';
 import Tooltip from 'common/ui/Tooltip';
 import ComponentTest from './ComponentTest';
 import {getConfig} from './utils/functions';
 import 'common/theme/Style.scss';
 import { storageService } from './utils/validators';
-import PartnerAuthentication from './login_and_registration/Authentication';
+import LoginContainer from './login_and_registration/components/LoginContainer';
+import PartnerAuthentication from './login_and_registration/pages/Authentication';
 import Prepare from './dashboard/Invest/components/SdkLanding/Prepare';
 import { ThemeProvider } from './utils/ThemeContext';
+import UnAuthenticatedRoute from './common/components/UnAuthenticatedRoute.js';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -57,6 +53,10 @@ if(isBottomSheetDisplayed) {
   storageService().set("is_bottom_sheet_displayed", false);
 }
 
+const verifyDetailsSheetDisplayed = storageService().get('verifyDetailsSheetDisplayed');
+if(verifyDetailsSheetDisplayed)
+  storageService().set("verifyDetailsSheetDisplayed", false)
+  
 const isBottomSheetDisplayedKycPremium = storageService().get(
   "is_bottom_sheet_displayed_kyc_premium"
 );
@@ -104,15 +104,18 @@ const App = () => {
             <Switch>
               <Route path="/iw-dashboard" component={InternalWealthDashboard} />
               <Route path='/w-report' component={WealthReport} />
-              <Route path='/login' component={Login} />
-              <Route path='/register' component={Register} />
-              <Route path='/mobile/verify' component={Otp} />
-              <Route path='/forgot-password' component={ForgotPassword} />
-              <Route path='/social/callback' component={SocialCallback} />
+              <UnAuthenticatedRoute
+                path={[
+                  '/login',
+                  '/forgot-pin'
+                ]}
+                component={LoginContainer}
+              />
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />
-              <Route path="/partner-authentication/:partnerCode" component={PartnerAuthentication} />
+              <UnAuthenticatedRoute path="/partner-authentication/:partnerCode" component={PartnerAuthentication} />
               <Route path='/logout' component={Logout} />
-              <Route path="/prepare" component={Prepare} />
+              <Route path='/component-test' component={ComponentTest} />
+              <UnAuthenticatedRoute path="/prepare" component={Prepare} />
               {
                 isMobileDevice || iframe ?
                 <Route component={Feature}/>:
@@ -120,8 +123,6 @@ const App = () => {
                   <Feature />
                 </DesktopLayout>
               }
-              <Route path='/component-test' component={ComponentTest} />
-              <Route component={NotFound} />
             </Switch>
           </MuiThemeProvider>
           </ThemeProvider>

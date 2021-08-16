@@ -131,12 +131,14 @@ class GoldBuyHome extends Component {
         let isRegistered = isUserRegistered(result);
         let user_info = result.gold_user_info.user_info || {};
         let provider_info = result.gold_user_info.provider_info || {};
+        let is_new_gold_user = result.is_new_gold_user || false;
         this.setState({
           provider_info: provider_info,
           user_info: user_info,
           maxWeight: parseFloat(((30 - provider_info.gold_balance) || 30).toFixed(4)),
           isRegistered: isRegistered,
-          enableInputs: true
+          enableInputs: true,
+          is_new_gold_user: is_new_gold_user,
         });
       
       } else {
@@ -231,8 +233,22 @@ class GoldBuyHome extends Component {
       // handlling through backend in place order component
       // this.navigate(this.state.provider + '/buy-pan');
     } 
-    
+
     if (!this.state.isRegistered) {
+      if ((this.state.is_new_gold_user) &&
+        (!this.state.user_info?.mobile_number_verified ||
+          !!this.state.user_info?.registered_with_another_account ||
+          !this.state.user_info?.email_verified)) {
+        this.navigate("/kyc/communication-details", {
+          fromState: "/buy-gold",
+          goBack: "/gold/buy",
+          goNext: `/gold/${this.state.provider}/gold-register`,
+          user_info: this.state.user_info,
+          provider: this.state.provider,
+          is_new_gold_user: this.state.is_new_gold_user,
+        });
+        return;
+      }
       this.navigate(this.state.provider + '/gold-register');
       return;
     } else {
@@ -244,10 +260,11 @@ class GoldBuyHome extends Component {
 
   }
 
-  navigate = (pathname) => {
+  navigate = (pathname, state) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams
+      search: getConfig().searchParams,
+      state: state || {},
     });
   }
 

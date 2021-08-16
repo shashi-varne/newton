@@ -1,3 +1,22 @@
+
+/*
+
+Use: A card UI to support document upload on click
+
+Example syntax:
+  <WVFileUploadCard
+    title: 'Bank statement',
+    subtitle: 'Last 6 months',
+    nativePickerMethodName: 'open_file',
+    supportedFormats: "pdf",
+    fileName: "bank-statement"
+    customPickerId="bank-statement-picker"
+    onFileSelectComplete={onFileSelectComplete('bank-statement')}
+    ...
+  />
+
+*/
+
 import './WVFileUploadCard.scss';
 import React, { useEffect, useState } from 'react';
 import { WVFilePickerWrapper } from '../FileUploadWrapper/WVFilePickerWrapper';
@@ -10,9 +29,9 @@ const WVFileUploadCard = ({
   title,
   subtitle,
   file,
-  classes = {},
-  className,
-  ...wrapperProps
+  classes,
+  className, // class name to apply to parent element
+  ...wrapperProps // props for WVFilePickerWrapper (required to support file picking)
 }) => {
   const [selectedFile, setSelectedFile] = useState(file);
   const [truncatedFileName, setTruncatedFileName] = useState('');
@@ -78,9 +97,15 @@ const WVFileUploadCard = ({
   );
 }
 
-WVFilePickerWrapper.propTypes = {
+WVFileUploadCard.propTypes = {
   title: PropTypes.node,
   subtitle: PropTypes.node,
+  file: PropTypes.object,
+  classes: PropTypes.object,
+}
+
+WVFileUploadCard.defaultProps = {
+  classes: {},
 }
 
 export default WVFileUploadCard;

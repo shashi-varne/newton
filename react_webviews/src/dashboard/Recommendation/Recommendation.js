@@ -295,7 +295,6 @@ const Recommendations = (props) => {
 
   const goBack = () => {
     sendEvents('back')
-    //TODO below code to be checked
     const goBackPath = props.location?.state?.goBack || "";
     if(goBackPath) {
       props.history.push({

@@ -13,6 +13,7 @@ const CampaignDialog = ({ isOpen, close, handleClick, cancel, data }) => {
       onClose={close}
       aria-labelledby='campaign-dialog'
       keepMounted
+      disableEnforceFocus
       aria-describedby='campaign-dialog'
       TransitionComponent={Transition}
       className='campaign-dialog'

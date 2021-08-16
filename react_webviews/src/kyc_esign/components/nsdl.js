@@ -14,6 +14,7 @@ import { isEmpty } from "lodash";
 import { isDigilockerFlow } from "../../kyc/common/functions";
 import { getBasePath, isTradingEnabled, navigate as navigateFunc } from "../../utils/functions";
 import kycComplete from 'assets/kyc_complete.svg';
+import { openModule } from "../../utils/native_callback";
 
 class DigiStatus extends Component {
   constructor(props) {
@@ -44,6 +45,13 @@ class DigiStatus extends Component {
       }
 
       if (
+        user.pin_status !== "pin_setup_complete" &&
+        kyc.kyc_product_type === 'equity'
+        ) {
+        this.setState({ set2faPin: true })
+      }
+
+      if (
         user.kyc_registration_v2 === "submitted" &&
         // kyc.sign_status === "signed" &&
         kyc.bank.meta_data_status !== "approved"
@@ -63,16 +71,26 @@ class DigiStatus extends Component {
   };
 
   handleClick = () => {
+    const config = getConfig();
     const {dl_flow, show_note} = this.state;
     if (dl_flow && !show_note) {
       this.sendEvents('next');
     } else {
       this.sendEvents('home');
     }
-    if (getConfig().isNative) {
-      nativeCallback({ action: 'exit_web' });
+    if (this.state.set2faPin) {
+      // Handles behaviour for both web as well as native
+      openModule('account/setup_2fa', this.props);
+      if (config.isNative) {
+        return nativeCallback({ action: 'exit_web' });
+        // TODO: Test native behaviour for this code
+      }
     } else {
-      this.navigate("/invest");
+      if (config.isNative) {
+        nativeCallback({ action: 'exit_web' });
+      } else {
+        this.navigate("/invest");
+      }
     }
   };
 
@@ -179,7 +197,7 @@ class DigiStatus extends Component {
     }
 
   render() {
-    let { show_loader, skelton, dl_flow, show_note, kyc, productName } = this.state;
+    const { show_loader, skelton, dl_flow, show_note, kyc, set2faPin, productName } = this.state;
     const { status = "failed" } = this.state.params;
     const headerData = {
       icon: "close",
@@ -193,13 +211,7 @@ class DigiStatus extends Component {
         events={this.sendEvents("just_set_events")}
         title={status === "success" ? "" : "Complete eSign"}
         handleClick={status === "success" ? this.handleClick : this.retry}
-        buttonTitle={
-          status === "success"
-            ? dl_flow && !show_note
-              ? "START INVESTING"
-              : "HOME"
-            : "RETRY E-SIGN"
-        }
+        buttonTitle={status === "success" ? set2faPin ? "CONTINUE" : dl_flow && !show_note ? "START INVESTING" : "HOME" : "RETRY E-SIGN"}
         headerData={headerData}
         skelton={skelton}
         hidePageTitle={status === "success" ? true : false}

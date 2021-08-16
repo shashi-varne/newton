@@ -1,5 +1,20 @@
-import './WVJourneyCard.scss'
 
+/*
+
+Use: Card-style UI for journey summary (eg. currently used in KYC Journey)
+
+Example syntax:
+  <WVJourneyCard
+    title={title}
+    subtitle={subtitle}
+    iconSrc={require(`assets/${productName}/${icon}.svg`)}
+    dataAidSuffix=".."
+    stepCount={1}
+  />
+
+*/
+
+import './WVJourneyCard.scss'
 import React from 'react'
 import PropTypes from 'prop-types'
 import WVCard from '../Card/WVCard'
@@ -7,10 +22,10 @@ import { Imgc } from '../Imgc'
 function WVJourneyCard({
   title,
   subtitle,
-  iconSrc,
-  withStep,
-  withIcon,
-  stepCount,
+  withStep, // Boolean to show step count as identifier for step
+  stepCount, // Renders a step count to the left of step, if required
+  withIcon, // Boolean to show icon instead of step count as identifier for step
+  iconSrc, // Image element to render within step identifier, if required
   classes,
   dataAidSuffix,
   ...props

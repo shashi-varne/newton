@@ -215,10 +215,10 @@ class GoldRegister extends Component {
     });
 
     let options = {
-      mobile_number: this.state.mobile_no,
+      mobile: this.state.mobile_no,
     }
     try {
-      const res = await Api.post('/api/gold/user/verify/mobilenumber', options);
+      const res = await Api.post('/api/gold/contact/trigger/otp', options);
 
       if (res.pfwresponse.status_code === 200) {
         this.setState({
@@ -266,7 +266,7 @@ class GoldRegister extends Component {
     try {
       const res = await Api.post('/api/gold/user/account/create/'  + this.state.provider);
 
-      if (res.pfwresponse.status_code === 200) {
+      if (res.pfwresponse.status_code === 200 || res.pfwresponse.status_code === 412) {
         // place order
         this.setState({
           proceedForOrder: true
@@ -368,8 +368,9 @@ class GoldRegister extends Component {
   
         try {
           const res = await Api.post('/api/gold/user/account/' + this.state.provider, options);
+          const result = res.pfwresponse.result;
   
-          if(res.pfwresponse.result.registered_with_another_account === true) {
+          if(result.registered_with_another_account === true) {
             let error = 'Mobile number already registered with ' + this.state.provider + ', enter another mobile number';
             this.setState({
               mobile_no_disabled: false,
@@ -378,17 +379,20 @@ class GoldRegister extends Component {
             })
             // toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
             //   'Something went wrong');
-          } else if(res.pfwresponse.result.message === 'success'  || 
-            res.pfwresponse.result.mobile_verified === false) {
-            this.verifyMobile();
-          } else if(res.pfwresponse.result.mobile_verified === true) {
+          }
+          //  else if(
+          //   // res.pfwresponse.result.message === 'success'  || 
+          //   res.pfwresponse.result.mobile_verified === false) {
+          //   this.verifyMobile();
+          // } 
+          else if(result.mobile_verified === true || result.coutinue_gold_profile_registration === true) {
             this.createUser();
           } else {
   
             this.setState({
               show_loader: false
             });
-            toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
+            toast(result.error || result.message ||
               'Something went wrong');
   
           }
@@ -410,6 +414,10 @@ class GoldRegister extends Component {
       price_summary_clicked: true
     })
   }
+   goBack = () => {
+    this.sendEvents('back');
+    this.navigate("/gold/buy");
+  };
 
   render() {
     return (
@@ -424,6 +432,9 @@ class GoldRegister extends Component {
         buttonTitle="CONTINUE"
         buttonData={this.state.bottomButtonData}
         events={this.sendEvents('just_set_events')}
+        headerData={{
+          goBack: this.goBack
+        }}
       >
         <div className="common-top-page-subtitle">
           We need following details to open your {gold_providers[this.state.provider].title} account

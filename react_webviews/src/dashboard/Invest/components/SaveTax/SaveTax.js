@@ -10,7 +10,6 @@ import { isRecurring } from '../../common/commonFunctions';
 import { navigate as navigateFunc } from 'utils/functions';
 
 const term = 15;
-// TODO: What does this code do?
 const currentMonth = moment().month() + 1;
 let duration = currentMonth > 3 ? 15 - currentMonth : 3 - currentMonth;
 if (duration === 0) {
