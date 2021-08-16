@@ -602,12 +602,19 @@ export function handleStocksAndIpoCards(key) {
         buttonTitle: "CONTINUE",
         handleClick: this.handleIpoCardRedirection
       }
-    } else if (userKyc.equity_investment_ready || (kycJourneyStatus === "complete" && userKyc.mf_kyc_processed) || kycJourneyStatus === "fno_rejected") {
+    } else if (
+      userKyc.equity_investment_ready ||
+      (kycJourneyStatus === "complete" && userKyc.kyc_product_type === 'equity') ||
+      kycJourneyStatus === "fno_rejected"
+    ) {
       this.handleIpoCardRedirection();
       return
     }
   } else if (key === "stocks") {
-    if (userKyc.equity_investment_ready || kycJourneyStatus === "complete") {
+    if (
+      userKyc.equity_investment_ready ||
+      (kycJourneyStatus === "complete" && userKyc.kyc_product_type === 'equity')
+    ) {
       if (currentUser?.pin_status !== 'pin_setup_complete') {
         openModule('account/setup_2fa', this.props, { routeUrlParams: '/stocks' });
         const { config = getConfig() } = this.state;
