@@ -191,7 +191,7 @@ const FundChart = (props) => {
     },
     xAxis: {
       crosshair: {
-        width: 2,
+        width: 1,
         color: 'gray',
         dashStyle: 'shortdot'
       },
