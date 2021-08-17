@@ -6,7 +6,7 @@ import { FormControl } from 'material-ui/Form';
 
 import Input from '../../../common/ui/Input';
 import { initialize } from '../../common/functions';
-import DropdownWithoutIcon from '../../../common/ui/SelectWithoutIcon';
+import DropDownNew from '../../../common/ui/DropDownNew';
 import RadioWithoutIcon from '../../../common/ui/RadioWithoutIcon';
 import {
     formatDate, validatePan, validateAlphabets
@@ -61,10 +61,11 @@ class PersonalDetails extends Component {
 
         if (this.props.edit) {
             this.setState({
-                next_state: `/loan/form-summary`
+                next_state: `/loan/dmi/form-summary`
             })
         }
 
+        let { maritalStatusOptions } = this.state;
         let lead = this.state.lead || {};
 
         let personal_info = lead.personal_info || {};
@@ -75,7 +76,7 @@ class PersonalDetails extends Component {
             father_name: personal_info.father_name || '',
             dob: personal_info.dob || '',
             gender: (personal_info.gender || '').toUpperCase() || '',
-            marital_status: personal_info.marital_status || ''
+            marital_status: maritalStatusOptions.includes(personal_info.marital_status) ? personal_info.marital_status : '',
         };
 
         form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
@@ -270,7 +271,7 @@ class PersonalDetails extends Component {
                             onChange={this.handleChangeRadio('gender')} />
                     </div>
                     <div className="InputField">
-                        <DropdownWithoutIcon
+                        <DropDownNew
                             width="40"
                             options={this.state.maritalStatusOptions}
                             id="marital_status"

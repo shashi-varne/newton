@@ -13,7 +13,7 @@ const FundPortfolio = ({ portfolio, navDate }) => {
           <Report title='Asset Allocation'>
             <AssetAllocation assetAllocationData={asset_allocation} />
           </Report>
-          <Divider />
+          <Divider style={{marginLeft:'10px', marginRight: '10px'}}/>
         </>
       )}
       {sector_allocation?.length > 0 && (
@@ -21,7 +21,7 @@ const FundPortfolio = ({ portfolio, navDate }) => {
           <Report title='Sector Allocation' subTitle={navDate}>
             <SectorAllocation sectorAllocationData={sector_allocation} navDate={navDate} />
           </Report>
-          <Divider />
+          <Divider style={{marginLeft:'10px', marginRight: '10px'}}/>
         </>
       )}
       {top_ten_holdings?.length > 0 && (

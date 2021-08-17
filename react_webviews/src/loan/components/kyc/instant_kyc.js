@@ -4,7 +4,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
 import next_arrow from 'assets/next_arrow.svg';
 import SVG from 'react-inlinesvg';
-import { getConfig } from "utils/functions";
+import { getConfig, getBasePath } from "utils/functions";
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import completed_step from "assets/completed_step.svg";
@@ -79,13 +79,13 @@ class InstantKycHome extends Component {
 
           let okyc_id = resultData.okyc_id;
           storageService().set('loan_okyc_id', okyc_id);
-
+          let basepath = getBasePath();
           let paymentRedirectUrl = encodeURIComponent(
-            window.location.origin + `/loan/redirection-status/kyc` + getConfig().searchParams
+            basepath + `/loan/dmi/redirection-status/kyc` + getConfig().searchParams
           );
 
           let back_url = encodeURIComponent(
-            window.location.origin + `/loan/instant-kyc-status` + getConfig().searchParams + 
+            basepath + `/loan/dmi/instant-kyc-status` + getConfig().searchParams + 
             '&flow=kyc&okyc_id=' + okyc_id
           );
 
@@ -148,7 +148,7 @@ class InstantKycHome extends Component {
     if (resultData.callback_status) {
       this.triggerDecision();
     } else {
-      let searchParams = getConfig().searchParams + '&status=pending';
+      let searchParams = getConfig().searchParams + '&status=pending&flow=kyc';
       this.navigate('instant-kyc-status', { searchParams: searchParams });
     }
 

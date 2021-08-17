@@ -5,6 +5,8 @@ import { nativeCallback } from 'utils/native_callback';
 import BottomInfo from '../../../../common/ui/BottomInfo';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import { initialize } from '../common_data';
+import { storageService } from "utils/validators";
+import { isEmpty } from '../../../../utils/validators';
 
 class GroupHealthSelectInsureType extends Component {
 
@@ -18,6 +20,8 @@ class GroupHealthSelectInsureType extends Component {
 
   componentWillMount() {
     this.initialize();
+    storageService().setObject("resumeToPremiumHealthInsurance", false)
+    storageService().remove('paymentFailed');
   }
 
 
@@ -26,7 +30,7 @@ class GroupHealthSelectInsureType extends Component {
     this.setState({
       account_type: this.state.groupHealthPlanData.account_type || '',
       account_type_name: this.state.groupHealthPlanData.account_type_name || '',
-      account_type_options: this.state.screenData.account_type_options
+      account_type_options: this.state.screenData.account_type_options,
     })
 
   }
@@ -46,6 +50,14 @@ class GroupHealthSelectInsureType extends Component {
 
     groupHealthPlanData.eldest_member = ''; //reset
     groupHealthPlanData.eldest_dob = ''; //reset
+    //reset
+    let keys_to_empty = ['selectedIndexFloater', 'selectedIndexCover', 'selectedIndexSumAssured'];
+    for(var x of keys_to_empty){
+        groupHealthPlanData[x] = ""
+    }
+    if(!isEmpty(groupHealthPlanData.previous_add_ons_data)){
+      groupHealthPlanData.previous_add_ons_data = {}
+    }
 
     let post_body = groupHealthPlanData.post_body || {};
 
@@ -123,6 +135,9 @@ class GroupHealthSelectInsureType extends Component {
         provider={this.state.provider}
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
+        skelton={this.state.skelton}
         title="Who would you like to insure?"
         fullWidthButton={true}
         buttonTitle="CONTINUE"
@@ -144,7 +159,7 @@ class GroupHealthSelectInsureType extends Component {
             value={this.state.account_type || ''}
             onChange={this.handleChangeRadio('account_type')} />
         </div>
-        <BottomInfo baseData={{ 'content': 'Pro Tip: The first step to get financial stability is to be medically insured along with your family' }} />
+        <BottomInfo baseData={{ 'content': this.state.screenData.bottom_info_text }} />
       </Container>
     );
   }

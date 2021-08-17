@@ -18,7 +18,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import ReactTooltip from "react-tooltip";
 import Button from 'material-ui/Button';
-import DropdownWithoutIcon from '../../../../common/ui/SelectWithoutIcon';
+import DropDownNew from '../../../../common/ui/DropDownNew'
 import GenericTooltip from '../../../../common/ui/GenericTooltip';
 import { storageService } from 'utils/validators';
 
@@ -28,10 +28,8 @@ class GroupHealthPlanPersonalDetails extends Component {
     super(props);
     this.state = {
       type: getConfig().productName,
-      header_title: 'Personal details',
       form_data: {},
       ctaWithProvider: true,
-      show_loader: true,
       quotation : { member_details : {}  },
       get_lead: true,
       openBmiDialog: false,
@@ -42,6 +40,21 @@ class GroupHealthPlanPersonalDetails extends Component {
     this.initialize = initialize.bind(this);
     this.updateLead = updateLead.bind(this);
     this.resetQuote = resetQuote.bind(this);
+  }
+  
+  pageTitle = () =>{
+    let member_key = this.props.member_key;
+    let header_title = `${capitalizeFirstLetter(childeNameMapper(member_key))}'s details`;
+    let header_subtitle = '';
+
+    if (member_key === 'self') {
+      header_title = 'Personal details';
+      header_subtitle = 'Policy will be issued basis the below details';
+    }
+    this.setState({
+      header_title: header_title,
+      header_subtitle: header_subtitle
+    })
   }
 
   onload = () => {
@@ -133,8 +146,8 @@ class GroupHealthPlanPersonalDetails extends Component {
       })
       
       let occupationIndex = '';
-      occupationIndex = occupation !== null && occupationOptions.findIndex(item => item.name === occupation || item.value === occupation);
-      form_data.occupation = (occupationIndex && occupationIndex !== -1) && occupationOptions[occupationIndex].value;
+      occupationIndex = occupation !== null ? occupationOptions.findIndex(item => item.name === occupation || item.value === occupation) : '';
+      form_data.occupation = (occupationIndex.toString() && occupationIndex !== -1) ? occupationOptions[occupationIndex].value : '';
     };
 
     var selectedIndex = 123;
@@ -184,15 +197,16 @@ class GroupHealthPlanPersonalDetails extends Component {
   async componentDidUpdate(prevState) {
     if (this.state.member_key && this.state.member_key !== this.props.member_key) {
       this.onload();
+      this.initialize();
     }
     storageService().setObject('applicationPhaseReached', true);
   }
 
   componentWillMount() {
+    this.pageTitle()
     this.initialize()
   }
 
- 
   handleChange = name => event => {
 
     var input = document.getElementById('dob');
@@ -208,6 +222,8 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     if(name === 'weight'){
       value = event.target ? event.target.value.substr(0,3) : event;
+      // eslint-disable-next-line
+      if(parseInt(value) <= 0) return;
     }
 
     if(containsSpecialCharactersAndNumbers(value) && name === 'name'){
@@ -314,7 +330,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     let { provider } = this.state;
 
-    if (provider === 'STAR' && (form_data.occupation === null || form_data.occupation === false) && this.state.member_key !== 'applicant') {
+    if ((provider === 'STAR' && (form_data.occupation === null || form_data.occupation === false || form_data.occupation === '') && this.state.member_key !== 'applicant')) {
       form_data.occupation_error = 'please select one occupation';
     }
 
@@ -364,8 +380,9 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     let weight_limit = form_data.weight ? form_data.weight.toString() : ''
-    // .weight.toString()
-
+    if(form_data.weight){
+      form_data.weight = form_data.weight.toString();
+    }
     if(weight_limit.length > 3){
       form_data.weight_error = "Invalid weight";
     }
@@ -469,8 +486,21 @@ class GroupHealthPlanPersonalDetails extends Component {
           } 
         }
       }
+      //for api optimization
+      var current_state = {};
+      var keys_to_add = ['name', 'dob', 'gender', 'height', 'weight', 'pan_no', 'occupation']
+      var current_member = this.state.member_key === 'applicant' ? body.buyer_details : body.insured_people_details[0];
+      
 
-      this.updateLead(body);
+      for(var x in current_member){
+        if(keys_to_add.indexOf(x) >= 0){
+          current_state[x] = current_member[x];
+        }
+      }
+      if(this.state.pan_needed){
+        current_state['pan_no'] = form_data.pan_no
+      }
+      this.updateLead(body, '', current_state );
     }
   }
 
@@ -608,12 +638,14 @@ class GroupHealthPlanPersonalDetails extends Component {
   }
 
   render() {
-
     let currentDate = new Date().toISOString().slice(0, 10);    
     return (
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
+        skelton={this.state.skelton}
         title={this.setEditTitle(this.state.header_title)}
         withProvider={true}
         handleClick2={this.handleClick2}
@@ -668,6 +700,7 @@ class GroupHealthPlanPersonalDetails extends Component {
               width="40"
               label="Gender"
               class="Gender:"
+              disabledWithValue={this.state.insured_account_type === 'self_family'}
               options={genderOptions}
               id="gender"
               name="gender"
@@ -711,7 +744,7 @@ class GroupHealthPlanPersonalDetails extends Component {
             </div>
           )}
         {this.state.member_key !== "applicant" && (
-          <div>
+          <div className="InputField">
             <DropdownInModal
               parent={this}
               options={this.state.height_options}
@@ -749,19 +782,19 @@ class GroupHealthPlanPersonalDetails extends Component {
         {this.state.providerConfig.key === "STAR" &&
           this.state.member_key !== "applicant" && (
             <div className="InputField">
-              <DropdownWithoutIcon
-                width="40"
-                dataType="AOB"
-                options={this.state.occupationOptions}
-                id="occupation"
-                label="Occupation"
-                name="occupation"
-                error={this.state.form_data.occupation_error ? true : false}
-                helperText={this.state.form_data.occupation_error}
-                value={this.state.form_data.occupation || ""}
-                onChange={this.handleChange("occupation")}
-              />
+            < DropDownNew   
+              options={this.state.occupationOptions}
+              label='Occupation'
+              id="occupation"
+              name="occupation"
+              error={this.state.form_data.occupation_error ? true : false}
+              helperText={this.state.form_data.occupation_error}
+              value={this.state.form_data.occupation || ""}
+              onChange={this.handleChange("occupation")}
+            />
             </div>
+
+            
           )}
         <ConfirmDialog parent={this} />
         {this.renderBmiDialog()}

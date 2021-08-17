@@ -2,7 +2,7 @@ import {
     storageService, getEditTitle, dobFormatTest,
     inrFormatTest
 } from 'utils/validators';
-import { getConfig } from 'utils/functions';
+import { getConfig, getBasePath } from 'utils/functions';
 import Api from 'utils/api';
 import toast from '../../common/ui/Toast';
 import { openPdfCall } from 'utils/native_callback';
@@ -66,7 +66,7 @@ export async function initialize() {
             for (var key in this.state.getLeadBodyKeys) {
                 body[this.state.getLeadBodyKeys[key]] = "True";
             }
-            const res = await Api.post('/relay/api/loan/get/application', body);
+            const res = await Api.post('/relay/api/loan/get/application/dmi', body);
 
             var resultData = res.pfwresponse.result;
 
@@ -142,7 +142,7 @@ export async function updateLead(body, application_id) {
             show_loader: true
         });
 
-        const res = await Api.post('/relay/api/loan/update/application/' + application_id,
+        const res = await Api.post('/relay/api/loan/update/application/dmi/' + application_id,
             body);
 
         var resultData = res.pfwresponse.result;
@@ -198,7 +198,7 @@ export async function acceptAgreement() {
 
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200 && !resultData.error) {
-            this.navigate(this.state.next_state || '/loan/home');
+            this.navigate(this.state.next_state || '/loan/dmi/loan-know-more');
 
         } else {
 
@@ -493,14 +493,14 @@ export async function redirectMandate() {
 
     let resultData = res.pfwresponse.result;
     if (res.pfwresponse.status_code === 200 && !resultData.error) {
-
+        let basepath = getBasePath();
         let paymentRedirectUrl = encodeURIComponent(
-            window.location.origin + `/loan/redirection-status/mandate` + getConfig().searchParams
+            basepath + `/loan/dmi/redirection-status/mandate` + getConfig().searchParams
         );
 
 
         let back_url = encodeURIComponent(
-            window.location.origin + `/loan/mandate-status` + getConfig().searchParams
+            basepath + `/loan/dmi/mandate-status` + getConfig().searchParams
         );
 
         // for web no issue

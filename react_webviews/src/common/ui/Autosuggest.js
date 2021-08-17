@@ -20,6 +20,10 @@ class AutosuggestInput extends Component {
   }
   handleChange = (value) => {
     this.props.onChange(value);
+
+    if (this.props.options !== this.state.suggestions) {
+      this.setState({ suggestions: this.props.options })
+    }
   };
 
   componentDidMount(){

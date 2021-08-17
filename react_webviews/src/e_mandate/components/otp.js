@@ -14,7 +14,7 @@ class eMandateOtpClass extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false,
+      skelton: false,
       otp: '',
       referral_code: props.location.state ? props.location.state.referral_code: '',
       timeAvailable: 30,
@@ -26,12 +26,12 @@ class eMandateOtpClass extends Component {
   async componentDidMount() {
 
     this.setState({
-      show_loader: true
+      skelton: true
     })
     try {
       const res = await Api.get('/api/mandate/enach/otp/auth/' + this.state.referral_code);
       this.setState({
-        show_loader: false
+        skelton: false
       })
 
       if (res.pfwresponse.result && !res.pfwresponse.result.error) {
@@ -47,7 +47,7 @@ class eMandateOtpClass extends Component {
 
     } catch (err) {
       this.setState({
-        show_loader: false
+        skelton: false
       })
       toast("Something went wrong");
     }
@@ -79,7 +79,7 @@ class eMandateOtpClass extends Component {
 
     try {
       this.setState({
-        show_loader: true
+        show_loader: 'button'
       })
       const res = await Api.get(url);
       this.setState({
@@ -137,7 +137,7 @@ class eMandateOtpClass extends Component {
   resendOtp = async () => {
 
     this.setState({
-      show_loader: true,
+      show_loader: 'page',
       otp_error: '',
       otp: '',
       timeAvailable: this.state.totalTime
@@ -171,6 +171,7 @@ class eMandateOtpClass extends Component {
         buttonTitle='Verify OTP'
         onlyButton={true}
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         handleClick={() => this.handleClick()}
         title="easySIP"
         classOverRideContainer="payment-failed"

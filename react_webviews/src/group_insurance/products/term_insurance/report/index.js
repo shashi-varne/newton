@@ -162,7 +162,7 @@ class FinalReport extends Component {
           <div className="ins-report-bottom-dropdown">
             <div className="ins-report-bottom-dropdown1" onClick={() => this.expendAddOn()}>
               <div className="ins-report-bottom-dropdown1a">
-                <span className="ins-report-bottom-dropdown1b">Add on Benefits</span>
+                <span className="ins-report-bottom-dropdown1b">Nominee details</span>
                 <img className="ins-report-bottom-dropdown1c"
                   src={!this.state.expendAddOnOpen ? this.state.dropdown_arrow : this.state.dropdown_arrow} alt="Insurance" />
               </div>

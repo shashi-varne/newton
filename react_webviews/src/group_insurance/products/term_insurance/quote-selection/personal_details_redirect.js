@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
 import qs from 'qs';
 
-import toast from '../../../../common/ui/Toast';
+// import toast from '../../../../common/ui/Toast';
 import Container from '../../../common/Container';
 import MobileInputWithoutIcon from '../../../../common/ui/MobileInputWithoutIcon';
 import Input from '../../../../common/ui/Input';
@@ -16,7 +16,7 @@ import {
   validateEmail, validateNumber, numberShouldStartWith,
   validateEmpty, open_browser_web
 } from 'utils/validators';
-import { getConfig } from 'utils/functions';
+import { getConfig, getBasePath } from 'utils/functions';
 import { nativeCallback, openPdfCall } from 'utils/native_callback';
 
 import LoaderModal from '../../../common/Modal';
@@ -26,7 +26,7 @@ class PersonalDetails1 extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: true,
       name: '',
       openModal: false,
       name_error: '',
@@ -55,7 +55,8 @@ class PersonalDetails1 extends Component {
     }
 
     let provider = this.state.params.provider;
-    let current_url = window.location.origin + '/group-insurance/life-insurance/term/landing' + getConfig().searchParams;
+    let basepath = getBasePath();
+    let current_url = basepath + '/group-insurance/life-insurance/term/landing' + getConfig().searchParams;
     this.setState({
       current_url: current_url,
       provider: provider,
@@ -64,12 +65,49 @@ class PersonalDetails1 extends Component {
     });
   }
 
+  setErrorData = (type) => {
+    this.setState({
+      showError: false
+    });
+    if(type) {
+      let mapper = {
+        'onload':  {
+          handleClick1: this.onload,
+          button_text1: 'Retry',
+          title1: ''
+        },
+        'submit': {
+          handleClick1: this.handleClick,
+          button_text1: 'Retry',
+          handleClick2: () => {
+            this.setState({
+              showError: false
+            })
+          },
+          button_text2: 'Edit'
+        }
+      };
+      this.setState({
+        errorData: {...mapper[type], setErrorData : this.setErrorData}
+      })
+    }
+  }
+
   async componentDidMount() {
+    this.onload();
+  }
+
+  onload = async () => {
+    this.setErrorData('onload');
+    let error = ''
+    let errorType = '';
+    this.setState({
+      skelton: true
+    });
+
     try {
       const res = await Api.get('/api/ins_service/api/insurance/account/summary')
-      this.setState({
-        show_loader: false
-      });
+      
 
       if (res.pfwresponse.status_code === 200) {
         const { name, email, mobile_number } = res.pfwresponse.result.insurance_account;
@@ -78,19 +116,34 @@ class PersonalDetails1 extends Component {
           email: email || '',
           mobile_number: mobile_number || '',
         });
+        this.setState({
+          skelton: false
+        });
       } else if (res.pfwresponse.status_code === 401) {
 
       } else {
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message
-          || 'Something went wrong');
+        // toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
+        error = res.pfwresponse.result.message || res.pfwresponse.result.message || true
       }
-
 
     } catch (err) {
       this.setState({
-        show_loader: false
+        skelton: false,
       });
-      toast('Something went wrong');
+      error= true;
+      errorType= "crash";
+    }
+
+    // set error data
+    if(error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error,
+          type: errorType
+        },
+        showError: 'page'
+      })
     }
   }
 
@@ -134,6 +187,9 @@ class PersonalDetails1 extends Component {
 
     this.sendEvents('next');
 
+    this.setErrorData('submit');
+    let error = '';
+    let errorType = '';
     var canSubmitForm = true;
 
     if (!validateEmpty(this.state.name)) {
@@ -170,7 +226,12 @@ class PersonalDetails1 extends Component {
     if (canSubmitForm) {
       try {
         let openModalMessage = 'Redirecting to ' + this.state.insurance_title + ' portal';
-        this.setState({ openModal: true, openModalMessage: openModalMessage });
+        this.setState({
+          //  openModal: true,
+          //   openModalMessage: openModalMessage , 
+          loaderData: { loadingText: openModalMessage },
+          show_loader: 'page'
+        });
 
         var kotakBody = {
           name: this.state.name,
@@ -178,16 +239,16 @@ class PersonalDetails1 extends Component {
           email: this.state.email
         };
         const res = await Api.post('/api/ins_service/api/insurance/kotak/lead/create', kotakBody);
-
         if (res.pfwresponse.status_code === 200) {
 
           var kotakUrl = res.pfwresponse.result.lead;
           if (getConfig().app === 'web') {
 
             this.setState({
-              show_loader: false,
+              skelton: false,
               openModal: false,
-              openModalMessage: ''
+              openModalMessage: '',
+              show_loader: "page"
             });
 
             open_browser_web(kotakUrl, '_blank');
@@ -214,22 +275,42 @@ class PersonalDetails1 extends Component {
             window.location.href = kotakUrl;
           }
 
-        } else {
           this.setState({
-            show_loader: false, openModal: false,
-            openModalMessage: ''
+            show_loader: false
           });
 
-          toast(res.pfwresponse.result.error || 'Something went wrong');
+        } else {
+          this.setState({
+            skelton: false, openModal: false,
+            openModalMessage: '',
+            show_loader: false
+          });
+          error = res.pfwresponse.result.message || res.pfwresponse.result.message || true
+          // toast(res.pfwresponse.result.error || 'Something went wrong');
         }
       } catch (err) {
         this.setState({
+          skelton: false,
+          showError: true,
           show_loader: false
         });
-        toast('Something went wrong');
+        error = true;
+        errorType = 'crash';
+      }
+  
+      // set error data
+      if(error) {
+        this.setState({
+          errorData: {
+            ...this.state.errorData,
+            title2: error,
+            type: errorType
+          },
+          showError: true,
+          show_loader: false
+        })
       }
     }
-
   }
 
   sendEvents(user_action) {
@@ -274,7 +355,7 @@ class PersonalDetails1 extends Component {
     this.sendEvents('tnc_clicked');
     if (!getConfig().Web) {
       this.setState({
-        show_loader: true
+        skelton: true
       })
     }
 
@@ -292,7 +373,11 @@ class PersonalDetails1 extends Component {
       <Container
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
-        hide_header={this.state.show_loader}
+        showError={this.state.showError}
+        skelton={this.state.skelton}
+        loaderData={this.state.loaderData}
+        errorData={this.state.errorData}
+        hide_header={this.state.skelton}
         title="Personal Details"
         banner={true}
         bannerText={this.bannerText()}

@@ -8,7 +8,7 @@ import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
 import { initialize, updateLead } from '../common_data';
 import ConfirmDialog from './../plans/confirm_dialog';
-import DropdownWithoutIcon from '../../../../common/ui/SelectWithoutIcon';
+import DropDownNew from '../../../../common/ui/DropDownNew'
 import { isEmpty , validateLengthDynamic } from '../../../../utils/validators';
 import DotDotLoader from '../../../../common/ui/DotDotLoader';
 
@@ -115,14 +115,14 @@ class StarAddress extends Component {
       value = event.target ? event.target.value.substr(0, 240) : event;
     }
 
-    if (name === 'city_id') {
+    if (name === 'city_id' && value) {
       form_data.city_id = value;
       form_data.city_id_error = '';
       form_data.area_id = '';
       form_data.area_id_error = '';
       form_data.city = this.state.cityList.find(city => city.value === value).name;
       this.fetchAreaList(form_data);
-    } else if (name === 'area_id') {
+    } else if (name === 'area_id' && value) {
       form_data.area_id = value;
       form_data.area_id_error = '';
       form_data.area = this.state.areaList.find(area => area.value === value).name;
@@ -216,7 +216,16 @@ class StarAddress extends Component {
         }
       }
 
-      this.updateLead(body);
+      var keys_to_add = ['addr_line1', 'addr_line2', 'pincode', 'city', 'area', 'state'];
+      var current_state = {}
+
+      for(var x in body.address_details.permanent_address){
+        if(keys_to_add.indexOf(x) >= 0){
+          current_state[x] = body.address_details.permanent_address[x];
+        }
+      }
+
+      this.updateLead(body, '', current_state);
     }
   };
 
@@ -317,7 +326,10 @@ class StarAddress extends Component {
     return (
       <Container
         events={this.sendEvents('just_set_events')}
+        skelton={this.state.skelton}
         showLoader={this.state.show_loader}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         title={this.setEditTitle("Address details")}
         buttonTitle="CONTINUE"
         withProvider={true}
@@ -370,7 +382,7 @@ class StarAddress extends Component {
             </div>
           </FormControl>
           <div className="InputField">
-            <DropdownWithoutIcon
+            <DropDownNew
               width="40"
               dataType="AOB"
               options={this.state.cityList}
@@ -389,10 +401,10 @@ class StarAddress extends Component {
             />
           </div>
           <div className="InputField">
-            <DropdownWithoutIcon
+            <DropDownNew
               width="40"
               dataType="AOB"
-              options={this.state.areaList}
+              options={this.state.areaList || [{name: 'null' , value: 'null'}]}
               id="area"
               label="Area"
               name="area"

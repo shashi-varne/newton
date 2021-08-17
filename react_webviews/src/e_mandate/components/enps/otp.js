@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../../common/Container';
 import '../../common/Style.css';
-import { getConfig } from 'utils/functions';
+import { getConfig, getBasePath } from 'utils/functions';
 
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
@@ -92,7 +92,8 @@ class eNPSOtpClass extends Component {
         let result = res.pfwresponse.result;
         if (result.message === 'success') {
           let redirect_url = getConfig().redirect_url;
-          let current_url = window.location.origin + '/e-mandate/enps/redirection' + getConfig().searchParams;
+          let basepath = getBasePath();
+          let current_url = basepath + '/e-mandate/enps/redirection' + getConfig().searchParams;
           var pgLink = getConfig().base_url + result.redirect_url;
           if (!redirect_url) {
             if (getConfig().app === 'ios') {

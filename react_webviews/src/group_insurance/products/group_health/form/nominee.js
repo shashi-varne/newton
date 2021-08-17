@@ -6,7 +6,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { FormControl } from 'material-ui/Form';
 import { validateAlphabets, calculateAge, isValidDate,
     formatDate, dobFormatTest, IsFutureDate, containsSpecialCharactersAndNumbers} from 'utils/validators';
-import DropdownWithoutIcon from '../../../../common/ui/SelectWithoutIcon';
+import DropDownNew from '../../../../common/ui/DropDownNew'
 import Input from '../../../../common/ui/Input';
 import { initialize, updateLead } from '../common_data';
 import ConfirmDialog from './../plans/confirm_dialog';
@@ -72,7 +72,7 @@ class GroupHealthPlanNomineeDetails extends Component {
         this.setState({
             form_data: form_data,
             lead: lead,
-            renderAppointee: !!(age && age < 18),
+            renderAppointee: !!(age && age < 18) && this.state.providerConfig.nominee_screen.showAppointee ? true :false,
         });
 
         this.setState({
@@ -212,7 +212,7 @@ class GroupHealthPlanNomineeDetails extends Component {
         }
         
 
-        let relationMap = this.state.relationshipOptions.filter(data => data.value === relation);
+        let relationMap = this.state.relationshipOptions.filter(data => data.value.toLowerCase() === relation.toLowerCase());
 
         if (!relation || relationMap.length === 0) {
             form_data.relation_error = 'please select relation'
@@ -289,7 +289,24 @@ class GroupHealthPlanNomineeDetails extends Component {
                 }
             }        
             
-            this.updateLead(body);     
+            var keys_to_add = ['name', 'relation', 'dob'];
+            var current_state = {}
+            
+            for(var x in body.nominee_details){
+                if(keys_to_add.indexOf(x) >= 0){
+                    current_state[x] = body.nominee_details[x];
+                }
+            }
+            if(this.state.renderAppointee){
+                var appointee_data = body.nominee_details.appointee_details;
+                for(var y in appointee_data){
+                    if(keys_to_add.indexOf(y) >= 0){
+                        current_state[`appointee_${y}`] = appointee_data[y];
+                    }
+                }   
+            }
+
+            this.updateLead(body, '',  current_state);     
         }
     }
 
@@ -351,7 +368,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                 />
               </div>
               <div className="InputField">
-                <DropdownWithoutIcon
+                <DropDownNew
                   width="40"
                   dataType="AOB"
                   options={this.state.appointeeRelationOptions}
@@ -395,6 +412,9 @@ class GroupHealthPlanNomineeDetails extends Component {
             <Container
                 events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
+                skelton={this.state.skelton}
+                showError={this.state.showError}
+                errorData={this.state.errorData}
                 title={this.setEditTitle("Nominee details")}
                 buttonTitle="CONTINUE"
                 withProvider={true}
@@ -419,7 +439,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                             onChange={this.handleChange('name')} />
                     </div>
                     <div className="InputField">
-                        <DropdownWithoutIcon
+                        <DropDownNew
                             width="40"
                             dataType="AOB"
                             options={this.state.relationshipOptions}

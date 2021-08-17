@@ -17,8 +17,8 @@ const FundChart = (props) => {
 
   useEffect(() => {
     if (productName !== 'fisdom') {
-      setButtonColor('#3792fc');
-      setButtonBgColor('#3792fc');
+      setButtonColor(getConfig().secondary);
+      setButtonBgColor(getConfig().secondary);
     } else {
       setButtonColor('#4985E1');
       setButtonBgColor('#039');

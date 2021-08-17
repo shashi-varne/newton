@@ -1,18 +1,14 @@
-import React, { Component } from 'react';
+import React, { Fragment } from 'react';
 import {
   Route,
   Switch
 } from 'react-router-dom';
-import { withRouter } from "react-router";
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
-import '../common/theme/Style.scss';
+
 // import { getConfig } from 'utils/functions';
-import { themeConfig } from 'utils/constants';
-import { ToastContainer } from 'react-toastify';
 
 import './common/Style.scss';
 import './products/term_insurance/Style.css';
-import NotFound from '../common/components/NotFound';
+import NotFound from 'common/components/NotFound';
 import Landing from './home/landing';
 
 /***********************TERM INSURANCE START   **************/
@@ -46,9 +42,6 @@ import FinalReport from './products/term_insurance/report/index'
 import InsuranceHome from './products/term_insurance/home/index'
 
 
-import { create } from 'jss';
-import JssProvider from 'react-jss/lib/JssProvider';
-import { createGenerateClassName, jssPreset } from '@material-ui/core/styles';
 
 import PersonalDetailsRedirect from './products/term_insurance/quote-selection/personal_details_redirect'
 
@@ -111,7 +104,6 @@ import LifeInsuranceEntry from './products/life_insurance/entry';
 
 /******************************* Other Insurnace ******************/
 import OtherInsuranceEntry from './products/other_insurance/entry';
-
 /*******************  Health ******************/
 import HealthInsuranceLanding from './products/health_insurance/landing';
 
@@ -162,7 +154,8 @@ import GroupHealthPlanSelectPed from './products/group_health/form/select_ped';
 import GroupHealthPlanFinalSummary from './products/group_health/form/final_summary';
 import GroupHealthPayment from './products/group_health/payment/index';
 import GroupHealthReportDetails from './products/group_health/report_details';
-
+import GroupHealthPlanSelectPaymentFrequency from './products/group_health/gmc/payment_frequency';
+import GroupHealthPlanGoodHealthDeclaration from './products/group_health/gmc/good-health-dec';
 
 /***************Star Health******************/
 import GroupHealthPlanStarPincode from './products/group_health/Star/star_pincode';
@@ -187,6 +180,15 @@ import ResumeIntermediatePage from './products/life_insurance/resumeIntermediate
 import FyntuneReportDetails from './products/life_insurance/fyntune_report_details';
 import LifeInsuranceAppUpdate from './products/life_insurance/app_update';
 
+//Advisory
+import AdvisoryLanding from './advisory/landing';
+import AdvisoryBasicDetails from './advisory/basic_details';
+import AdvisoryIncomeDetails from './advisory/income_details';
+import AdvisoryLiabilityDetails from './advisory/liability_details.js';
+import AdvisoryAssetDetails from './advisory/asset_details.js';
+import AdivsoryRecommendations from './advisory/recommendations.js';
+import EmailReport from './advisory/email_report.js';
+
 //call back
 import CallBackDetails from './call_back/call_back';
 
@@ -203,48 +205,27 @@ import HealthInsuranceEntry from './products/group_health/plans/entry';
 import GroupHealthPlanHowToClaimStar from './products/group_health/plans/how_to_claim_star';
 import GroupHealthPlanHowToClaimReligare from './products/group_health/plans/how_to_claim_religare';
 
-import Tooltip from '../common/ui/Tooltip';
 import StarAddress from './products/group_health/Star/star_address';
-
-
-
-
-const generateClassName = createGenerateClassName({
-  dangerouslyUseGlobalCSS: true,
-  productionPrefix: 'f',
-});
-const jss = create(jssPreset());
-// We define a custom insertion point that JSS will look for injecting the styles in the DOM.
-// jss.options.insertionPoint = 'jss-insertion-point';
-
-const theme = createMuiTheme(themeConfig);
-
-const ScrollToTop = withRouter(
-  class ScrollToTopWithoutRouter extends Component {
-    componentDidUpdate(prevProps) {
-      if (this.props.location !== prevProps.location) {
-        window.scrollTo(0, 0)
-      }
-    }
-
-    render() {
-      return null;
-    }
-  }
-);
+import SystemMaintenance from '../group_insurance/common/SystemMaintenance';
 
 const Insurance = (props) => {
   const { url } = props.match;
 
   return (
-    <JssProvider jss={jss} generateClassName={generateClassName}>
-      <MuiThemeProvider theme={theme}>
-        <ScrollToTop />
-        <ToastContainer autoClose={3000} />
-        <Tooltip />
+
+    <Fragment>
+        
         <Switch>
           <Route exact path={`${url}`} component={Landing} />
 
+          {/* INSURANCE ADVISORY */}
+          <Route path={`${url}/advisory/landing`} component={AdvisoryLanding} />
+          <Route path={`${url}/advisory/basic-details`} component={AdvisoryBasicDetails} />
+          <Route path={`${url}/advisory/income-details`} component={AdvisoryIncomeDetails} />
+          <Route path={`${url}/advisory/liability-details`} component={AdvisoryLiabilityDetails} />
+          <Route path={`${url}/advisory/asset-details`} component={AdvisoryAssetDetails} />
+          <Route path={`${url}/advisory/recommendations`} component={AdivsoryRecommendations} />
+          <Route path={`${url}/advisory/email-report`} component={EmailReport} />
           {/********** CALL BACK **********/}
           <Route path={`${url}/call-back-details`} component={CallBackDetails}/>
 
@@ -389,6 +370,8 @@ const Insurance = (props) => {
           <Route path={`${url}/group-health/:provider/plan-list`} component={GroupHealthPlanList} />
           <Route path={`${url}/group-health/:provider/plan-details`} component={GroupHealthPlanDetails} />
           <Route path={`${url}/group-health/:provider/plan-select-sum-assured`} component={GroupHealthPlanSelectSumAssured} />
+          <Route path={`${url}/group-health/:provider/plan-select-paying-frequency`} component={GroupHealthPlanSelectPaymentFrequency}/>
+          <Route path={`${url}/group-health/:provider/plan-good-health-dec`} component={GroupHealthPlanGoodHealthDeclaration}/>
           <Route path={`${url}/group-health/:provider/plan-select-cover-period`} component={GroupHealthPlanSelectCoverPeriod} />
           <Route path={`${url}/group-health/:provider/plan-select-floater`} component={GroupHealthPlanSelectFloater} />
           <Route path={`${url}/group-health/:provider/plan-premium-summary`} component={GroupHealthPlanPremiumSummary} />
@@ -550,6 +533,7 @@ const Insurance = (props) => {
             { /********** Other Insurance-page **********/}
             <Route path={`${url}/other-insurance/entry`} component={OtherInsuranceEntry} />
 
+
           {/* common */}
           <Route path={`${url}/common/report`} component={Report} />
           <Route path={`${url}/common/reportdetails/:policy_id`} component={ReportDetails} />
@@ -566,10 +550,11 @@ const Insurance = (props) => {
           <Route path={`${url}/group-insurance/add-policy`} component={AddPolicy} />
           <Route path={`${url}/group-health/offline-to-online-report-details/:policy_id`} component={OfflineReport} />
 
+          <Route path={`${url}/system-maintenance`} component={SystemMaintenance} />
+          
           <Route component={NotFound} />
         </Switch>
-      </MuiThemeProvider>
-    </JssProvider>
+      </Fragment>
   );
 };
 

@@ -15,7 +15,8 @@ class GroupHealthPlanMedicalHistory extends Component {
       ctaWithProvider: true,
       get_lead: true,
       medical_questions: {},
-      next_state: 'is-ped'
+      next_state: 'is-ped',
+      screen_name: 'medical_history_details'
     };
 
     this.initialize = initialize.bind(this);
@@ -42,6 +43,11 @@ class GroupHealthPlanMedicalHistory extends Component {
        element.relation = relation.key
      });
 
+     if(this.props.edit) {
+      this.setState({
+        next_state : `/group-insurance/group-health/${this.state.provider}/final-summary`
+      })
+    }
      member_base.sort((a, b) => {return this.state.member_base.findIndex(p => p.backend_key === a.relation_key) - this.state.member_base.findIndex(p => p.backend_key === b.relation_key)})
     
      let radio_options = [
@@ -264,7 +270,16 @@ class GroupHealthPlanMedicalHistory extends Component {
 
 
       this.sendEvents("next");     
-      this.updateLead(body);
+      var current_state = {}
+      for(var x in body.answers){
+        for(var y of body.answers[x].medical_history_details){
+          if(y.yes_no) current_state[`${x}_${y.question_id}`] = y.yes_no;
+        }
+      }
+      if(isEmpty(current_state)){
+        current_state['none'] = true;
+      }
+      this.updateLead(body, '', current_state);
 
     }
 }
@@ -290,7 +305,10 @@ class GroupHealthPlanMedicalHistory extends Component {
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
-        title="Medical history details"
+        skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
+        title={this.setEditTitle('Medical history details')}
         buttonTitle="CONTINUE"
         withProvider={true}
         handleClick2={this.handleClick2}

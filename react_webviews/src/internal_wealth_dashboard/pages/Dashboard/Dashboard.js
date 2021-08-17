@@ -13,7 +13,7 @@ import IwdCard from '../../mini-components/IwdCard';
 import { getOverview } from '../../common/ApiCalls';
 import RadialBarChart from '../../mini-components/RadialBarChart';
 import { isEmpty, storageService } from '../../../utils/validators';
-import PortfolioGrowth from './PortfolioGrowth';
+// import PortfolioGrowth from './PortfolioGrowth';
 import PortfolioRisk from './PortfolioRisk';
 import { formatNumVal } from '../../common/commonFunctions';
 import { genericErrMsg } from '../../constants';
@@ -176,7 +176,15 @@ const Dashboard = () => {
             </IwdCard>
           </div>
           <div className='iwd-scroll-child' data-pgno='2'>
-            <PortfolioGrowth />
+            {/* <PortfolioGrowth /> */}
+            <IwdCard
+              id="iwd-d-growth-graph"
+              headerText="Portfolio growth"
+              noData
+              noDataText="We are working on improving your portfolio growth reporting and the update will be available soon."
+            >
+              
+            </IwdCard>
           </div> 
           <div className='iwd-scroll-child' data-pgno='3'>
             <PortfolioRisk />

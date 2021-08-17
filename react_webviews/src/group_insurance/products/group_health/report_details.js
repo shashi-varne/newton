@@ -1,24 +1,25 @@
  import React, { Component } from 'react';
 import Container from '../../common/Container';
-
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {
     inrFormatDecimal,
-    numDifferentiationInr, dateOrdinal , capitalizeFirstLetter
+    numDifferentiationInr, dateOrdinal , capitalizeFirstLetter, convertDateFormat, storageService
 } from 'utils/validators';
 import Api from 'utils/api';
-import toast from '../../../common/ui/Toast';
 import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
 import ic_hs_main_benefits from 'assets/ic_hs_main_benefits.svg';
-import { initialize } from './common_data';
+import { initialize, openPdf } from './common_data';
 import { ghGetMember, getCssMapperReport } from '../../constants';
 import download from 'assets/download.svg';
 import text_error_icon from 'assets/text_error_icon.svg';
 import ReactHtmlParser from 'react-html-parser';
 import { childeNameMapper , ProviderName } from '../../constants';
 import {getCoverageType} from './constants';
+import {Imgc} from 'common/ui/Imgc';
 
+
+var hide_policy_period = ['incomplete', 'expired', 'rejected', 'policy_expired', 'failed', 'cancelled', 'Pending', 'Rejected', 'declined']
 class GroupHealthReportDetails extends Component {
 
     constructor(props) {
@@ -40,12 +41,14 @@ class GroupHealthReportDetails extends Component {
             policy_data: {
                 cssMapper: {}
             },
-            show_loader: true,
+            skelton:true,
             ic_hs_special_benefits: ic_hs_special_benefits,
-            ic_hs_main_benefits: ic_hs_main_benefits
+            ic_hs_main_benefits: ic_hs_main_benefits,
+            dURL:""
         }
 
         this.initialize = initialize.bind(this);
+        this.openPdf = openPdf.bind(this);
 
     }
 
@@ -56,16 +59,33 @@ class GroupHealthReportDetails extends Component {
             policy_id: policy_id
         })
     }
-
     async componentDidMount() {
-
+        this.onload();
+    }
+    componentDidUpdate(){
+        var pending_statuses = ['pending', 'init', 'incomplete', 'pending_from_vendor', 'request_pending', 'plutus_submitted'];
+        var issued_statuses = ['issued', 'policy_issued', 'success', 'complete'];
+        var reportSelectedTab = '';
+        var policy_status = this.state.policy_data.status;
+        if(policy_status){
+            if(issued_statuses.indexOf(policy_status.toLowerCase()) > -1){
+                reportSelectedTab = 'activeReports';
+            }else if(pending_statuses.indexOf(policy_status.toLowerCase()) > -1 ){
+              reportSelectedTab = 'pendingReports';
+            }else{
+              reportSelectedTab = 'inactiveReports';
+            }
+            storageService().setObject('reportSelectedTab', reportSelectedTab)    
+        }
+        
+    }
+    onload = async()=>{
+        this.setErrorData("onload");
+        let error='';
+        let errorType='';
         try {        
             
             const res = await Api.get(`api/insurancev2/api/insurance/health/policy/${this.state.providerConfig.provider_api}/check_status?application_id=${this.state.policy_id}`);
-        
-            this.setState({
-                show_loader: false
-            });
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
                 let lead = {};
@@ -76,16 +96,10 @@ class GroupHealthReportDetails extends Component {
                 let payment_details = resultData.payment_details;
                 let application_details = resultData.application_details;
                 
-                let dt_created = new Date(policy_data.dt_created);
-                let dt_updated = new Date(policy_data.dt_updated);
-                let payment_success_dt = new Date(payment_details.payment_success_dt);
-
-                // let valid_from = getDateBreakup(policy_data.valid_from)
-                // let formatted_day = valid_from.plainDate.toString().length === 1 ? '0' +valid_from.plainDate : valid_from.plainDate ;
-                payment_details.payment_success_dt = payment_success_dt.getDate()+'/'+ (payment_success_dt.getMonth()+1) +'/'+ payment_success_dt.getFullYear();
-                policy_data.dt_created = dt_created.getDate()+'/'+ (dt_created.getMonth()+1) +'/'+ dt_created.getFullYear();
-                policy_data.dt_updated = dt_updated.getDate()+'/'+ (dt_updated.getMonth()+1) +'/'+ dt_updated.getFullYear();
-                // policy_data.valid_from =  formatted_day +' '+ valid_from.month +' '+ valid_from.year;
+                payment_details.payment_success_dt = convertDateFormat(payment_details.payment_success_dt)
+                
+                policy_data.valid_from = convertDateFormat(policy_data.valid_from)
+                policy_data.valid_upto = convertDateFormat(policy_data.valid_upto)
                 
                 lead.insurance_type = resultData.quotation_details.insurance_type;
                 let insured_members = resultData.insured_member_details;
@@ -98,6 +112,7 @@ class GroupHealthReportDetails extends Component {
                 }
 
                 lead.member_details = member_details;
+                lead.vendor = resultData?.quotation_details?.vendor;
                 lead.member_base = ghGetMember(lead, this.state.providerConfig);
                 let member_base = lead.member_base;
                 let applicantIndex = member_base.findIndex(item => item.key === 'applicant');
@@ -111,6 +126,10 @@ class GroupHealthReportDetails extends Component {
                 policy_data.status = data.status;
                 policy_data.cssMapper = data.cssMapper;
 
+                if(this.state.provider === "GMC"){
+                    var premium_payment_frequency = resultData.quotation_details.payment_frequency === "YEARLY" ? 'Annual' : 'Monthly';
+                }
+                
                 this.setState({
                     resultData: resultData,
                     common_data: common_data,
@@ -121,26 +140,47 @@ class GroupHealthReportDetails extends Component {
                     quotation_details: resultData.quotation_details,
                     applicantIndex: applicantIndex,
                     application_details: application_details,
-                    payment_details: payment_details
+                    payment_details: payment_details,
+                    premium_payment_frequency: premium_payment_frequency
                 })
-
+                this.setState({
+                    skelton:false
+                });
 
             } else {
-                toast(resultData.error || resultData.message
-                    || 'Something went wrong');
+                error=resultData.error || resultData.message
+                    || true;
             }
         } catch (err) {
             console.log(err)
             this.setState({
-                show_loader: false
+                skelton: false
             });
-            toast('Something went wrong');
+            error = true;
+            errorType = "crash";
+        }
+        if (error) {
+            this.setState({
+                errorData: {
+                    ...this.state.errorData,
+                    title2: error,
+                    type: errorType
+                },
+                showError: "page",
+            });
         }
     }
 
-    downloadPolicy(url) {
 
-
+    downloadPolicy = (url) => {
+        if(url){
+            this.setState({
+                dURL:url
+            })
+        }else{
+            url=this.state.dURL
+        }
+       
         if (this.state.download_link || url) {
             // this.sendEvents('download');
             nativeCallback({
@@ -155,25 +195,29 @@ class GroupHealthReportDetails extends Component {
 
         this.setState({
             download_policy: true
+        }, ()=>{
+            this.sendEvents('next');
         })
 
     }
 
     getDownloadLink = async () => {
+        this.setErrorData("submit", true, this.downloadPolicy)
+        let error = "";
+        let errorType = "";
         try {
 
             this.setState({
-                show_loader: true
+                show_loader: "page"
             });
 
            const res = await Api.get(`api/insurancev2/api/insurance/health/policy/${this.state.providerConfig.provider_api}/policy_download?application_id=${this.state.policy_id}`);
-            this.setState({
-                show_loader: false
-            });
+        
             var resultData = res.pfwresponse.result;
-            if (res.pfwresponse.status_code === 200) {
-
-
+            this.setState({
+                show_loader:false
+            })
+            if (res.pfwresponse.status_code === 200) {  
                 let download_link = resultData.download_link;
                 this.setState({
                     download_link: download_link
@@ -183,15 +227,26 @@ class GroupHealthReportDetails extends Component {
 
 
             } else {
-                toast(resultData.error || resultData.message
-                    || 'Something went wrong');
+                error = resultData.error || resultData.message
+                    || true;
             }
         } catch (err) {
             console.log(err)
             this.setState({
                 show_loader: false
             });
-            toast('Something went wrong');
+            error = true;
+            errorType = "crash";
+        }
+        if(error){
+            this.setState({
+                errorData: {
+                    ...this.state.errorData,
+                    title2: error,
+                    type: errorType
+                },
+                showError: true,
+            });
         }
     }
 
@@ -232,7 +287,7 @@ class GroupHealthReportDetails extends Component {
                 'steps': {
                     'options': mapper_data.steps
                 },
-                'cta_title': 'OK'
+                'cta_title': 'OKAY'
             }
     
             if (type === 'how_to_claim') {
@@ -250,11 +305,16 @@ class GroupHealthReportDetails extends Component {
                         }
                     ]
                 }
-    
                 let basePath = `/group-insurance/group-health/${provider}/`;
-                if(provider === 'RELIGARE') {
-                    this.navigate(basePath + 'how-to-claim-religare');
-                    return;
+                if(provider === 'RELIGARE' || provider === 'GMC' ) {
+                    this.props.history.push({
+                      pathname: basePath + 'how-to-claim-religare',
+                      search: getConfig().searchParams,
+                      params: {
+                          cta_title: 'OKAY' 
+                      }
+                  });
+                  return;
                 }
     
                 if(provider === 'STAR') {
@@ -311,7 +371,8 @@ class GroupHealthReportDetails extends Component {
     renderSteps = (option, index) => {
         return (
             <div key={index} className="tile">
-                <img className="icon"
+                <Imgc
+                    className="render-steps-icon icon"
                     src={option.img} alt="Gold" />
                 <div className="content">
                     <div className="content">
@@ -327,7 +388,7 @@ class GroupHealthReportDetails extends Component {
             return (
                 <div className="member-tile" key={index}>
                     <div className="mt-left">
-                        <img src={require(`assets/${this.state.productName}/ic_hs_insured.svg`)} alt="" />
+                        <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/ic_hs_insured.svg`)} alt="" />
                     </div>
                     <div className="mt-right">
                         <div className="mtr-top">
@@ -343,14 +404,14 @@ class GroupHealthReportDetails extends Component {
             return (
                 <div className="member-tile" key={index}>
                     <div className="mt-left">
-                        <img src={require(`assets/${this.state.productName}/ic_hs_insured.svg`)} alt="" />
+                        <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/ic_hs_insured.svg`)} alt="" />
                     </div>
                     <div className="mt-right">
                         <div className="mtr-top">
                         {this.state.applicantIndex === -1 ? (this.state.lead.insurance_type !== 'self' ? dateOrdinal(index + 1) : '') :dateOrdinal(index)} Insured name
                         </div>
                         <div className="mtr-bottom">
-                            {props.name} ({childeNameMapper(props.key)})
+                            {props.name} <span style={{textTransform: 'none'}}> {props.key === 'self' && this.state.quotation_details.insurance_type === 'self'? '': `(${childeNameMapper(props.key)})`}</span>
                         </div>
                     </div>
                 </div>
@@ -372,27 +433,30 @@ class GroupHealthReportDetails extends Component {
             <Container
                 events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
+                skelton={this.state.skelton}
+                showError={this.state.showError}
+                errorData={this.state.errorData}
                 title={'Health insurance'}
                 fullWidthButton={true}
-                buttonTitle="OK"
+                buttonTitle="OKAY"
                 onlyButton={true}
                 handleClick={() => this.handleClick()}
                 noFooter={!this.state.showPlanDetails}
             >
-                 <div className="group-health-plan-details group-health-final-summary">
+                 <div className="group-health-plan-details group-health-final-summary group-health-report-details">
 
-                    <div style={{ margin: '18px 0 12px 0' }} className={`report-color-state ${this.state.policy_data.cssMapper.color}`}>
-                        <div className="circle"></div>
-                        <div className="report-color-state-title">{this.state.policy_data.cssMapper.disc}</div>
+                    <div style={{ margin: '18px 0 12px 0'}} className={`report-color-state`}>
+                        <div className="circle" style={{ backgroundColor: this.state.policy_data.cssMapper.color}}></div>
+                        <div className="report-color-state-title" style={{ color: this.state.policy_data.cssMapper.color}}>{this.state.policy_data.cssMapper.disc}</div>
                     </div>
                     <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                         <div className="left">
                             <div className="tc-title">{provider === 'HDFCERGO' ? this.state.providerData.subtitle  : this.state.provider === 'STAR' ? this.state.providerConfig.title: ''}</div>
-                            <div className="tc-subtitle">{Object.keys(this.state.plan_selected).length > 0 && this.state.provider !== 'STAR' ? this.state.plan_selected.plan_title : this.state.provider === 'HDFCERGO' && this.state.quotation_details ? this.state.providerConfig.hdfc_plan_title_mapper[this.state.quotation_details.plan_id]: this.state.providerConfig.subtitle}</div>
+                            <div className="tc-subtitle" style={{marginTop: (this.state.provider === 'GMC' || this.state.provider === 'RELIGARE') ? "-22px": "", fontSize: '17px'}} >{Object.keys(this.state.plan_selected).length > 0 && this.state.provider !== 'STAR' ? this.state.plan_selected.plan_title : this.state.provider === 'HDFCERGO' && this.state.quotation_details ? this.state.providerConfig.hdfc_plan_title_mapper[this.state.quotation_details.plan_id]: this.state.providerConfig.subtitle}</div>
                         </div>
 
                         <div className="tc-right">
-                            <img src={require(`assets/${this.state.providerData.logo_card}`)} alt="" />
+                            <Imgc className="insurance-logo-top-right" src={require(`assets/${this.state.providerData.logo_card}`)} alt="" />
                         </div>
                     </div>
 
@@ -402,7 +466,7 @@ class GroupHealthReportDetails extends Component {
 
                         <div className="member-tile">
                             <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/ic_how_to_claim2.svg`)} alt="" />
+                                <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/ic_how_to_claim2.svg`)} alt="" />
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
@@ -416,7 +480,7 @@ class GroupHealthReportDetails extends Component {
 
                         <div className="member-tile">
                             <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
+                                <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
@@ -431,10 +495,10 @@ class GroupHealthReportDetails extends Component {
                             </div>
                         </div>
 
-                       {this.state.quotation_details && 
+                       {this.state.quotation_details && this.state.quotation_details.insurance_type !== 'self' && 
                         <div className="member-tile">
                             <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
+                                <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
@@ -448,17 +512,17 @@ class GroupHealthReportDetails extends Component {
 
                         <div className="member-tile">
                             <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
+                                <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
-                                 PREMIUM PAID
+                                 TOTAL PREMIUM
                                 </div>
 
                                 <div className="mtr-bottom flex" style={{textTransform:'none'}}>
                                         <div>
                                             <div>  { this.state.quotation_details && inrFormatDecimal(this.state.quotation_details.total_premium - this.state.quotation_details.gst)} </div>
-                                            <div style={{fontSize:10}}> (Net premium)</div>
+                                            <div style={{fontSize:10}}> {this.state.provider !== 'GMC' ? '(Net premium)' : '(Basic premium)'}</div>
                                         </div>
                                         <div>
                                             &nbsp;+&nbsp;
@@ -477,11 +541,27 @@ class GroupHealthReportDetails extends Component {
 
                             </div>
                         </div>
+
+                        {this.state.provider === 'GMC' ? ( 
+                        <div className="member-tile">
+                            <div className="mt-left">
+                                <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/cash-payment.svg`)} alt="" />
+                            </div>
+                            <div className="mt-right">
+                                <div className="mtr-top">
+                                    PREMIUM PAYMENT FREQUENCY
+                                </div>
+                                <div className="mtr-bottom">
+                                    {this.state.premium_payment_frequency}
+                                </div>
+                            </div>
+                        </div>): null}
+
                     </div>
 
                     <div className="member-tile">
                         <div className="mt-left">
-                            <img src={require(`assets/${this.state.productName}/ic_date_payment.svg`)} alt="" />
+                            <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/ic_date_payment.svg`)} alt="" />
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">
@@ -492,11 +572,30 @@ class GroupHealthReportDetails extends Component {
                             </div>
                         </div>
                     </div>
+                    
+                    {hide_policy_period.indexOf(this.state.policy_data.status) === -1 ? (
+                    <div className="member-tile">
+                        <div className="mt-left">
+                            <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/ic_policy_period.svg`)} alt="" />
+                        </div>
+                        <div className="mt-right">
+                            <div className="mtr-top">
+                                POLICY PERIOD
+                                </div>
+                            <div className="mtr-bottom">
+                            {
+                                this.state.policy_data && this.state.policy_data.status === 'policy_issued' ? `${this.state.policy_data.valid_from} - ${this.state.policy_data.valid_upto}`: 'To be issued'
+                            }
+                            </div>
+                        </div>
+                    </div>) : (null)
+                    }
+                    
 
                     {this.state.policy_data.status && this.state.policy_data.status === 'policy_issued' &&
                       <div className="member-tile">
                         <div className="mt-left">
-                            <img src={require(`assets/${this.state.productName}/ic_hs_policy.svg`)} alt="" />
+                            <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/ic_hs_policy.svg`)} alt="" />
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">
@@ -511,7 +610,7 @@ class GroupHealthReportDetails extends Component {
                     {this.state.policy_data && this.state.policy_data.status === 'pending' &&
                       <div className="member-tile">
                         <div className="mt-left">
-                            <img src={require(`assets/${this.state.productName}/ic_hs_policy.svg`)} alt="" />
+                            <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/ic_hs_policy.svg`)} alt="" />
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">
@@ -528,7 +627,7 @@ class GroupHealthReportDetails extends Component {
                     position: 'relative',background: '#FDF5F6'}} 
                     className="highlight-text highlight-color-info">
                         <div>
-                        <img className="highlight-text11"
+                        <Imgc className="highlight-text11"
                             src={text_error_icon}
                             alt="info" />
                         </div>
@@ -546,7 +645,7 @@ class GroupHealthReportDetails extends Component {
                     </div>}
 
                     {!this.state.showPlanDetails &&
-                        <div className="report-detail-download">
+                        <div className="report-detail-download" style={{border: 'none'}}>
 
                             <div className="report-detail-download-text" style={{ fontWeight: 400 }} onClick={() => {
                                 this.setState({
@@ -560,13 +659,13 @@ class GroupHealthReportDetails extends Component {
                             </div>
                             {this.state.policy_data && this.state.policy_data.status === 'policy_issued' &&
                                 <div className="flex">
-                                    <div style={{ color: '#d8dadd', margin: '0 10px 0 10px' }}>
+                                    <div style={{ color: '#d8dadd', margin: '0 22px' }}>
                                         |
                                     </div>
 
                                     <div className="flex"
                                         onClick={() => this.downloadPolicy()}>
-                                        <img src={download} alt="" />
+                                        <Imgc style={{width: '16px', height: '16px', margin: '0'}} src={download} alt="" />
                                         <div className="report-detail-download-text" style={{ fontWeight: 400 }}>Download Policy</div>
                                     </div>
 
@@ -581,16 +680,16 @@ class GroupHealthReportDetails extends Component {
                             <div className="common-how-steps" style={{ border: 'none', marginTop: 0, marginBottom: 0 }}>
                                 <div className="top-tile">
                                     <div className="top-title">
-                                        Benefits under this plan
+                                        Plan highlights
                             </div>
                                 </div>
 
 
                                 <div className="special-benefit"
                                     style={{ backgroundImage: `url(${this.state.ic_hs_special_benefits})` }}>
-                                    <img className="special-benefit-img" src={require(`assets/ic_hs_special.svg`)}
+                                    <Imgc className="imgc-tile1 special-benefit-img" src={require(`assets/ic_hs_special.svg`)}
                                         alt="" />
-                                    <span className="special-benefit-text">Special benefits</span>
+                                    <span className="special-benefit-text">Special features</span>
                                 </div>
                                 <div className='common-steps-images'>
                                     {this.state.extra_data.benefits.special.map(this.renderSteps)}
@@ -598,9 +697,9 @@ class GroupHealthReportDetails extends Component {
 
                                 <div className="special-benefit"
                                     style={{ backgroundImage: `url(${this.state.ic_hs_main_benefits})` }}>
-                                    <img className="special-benefit-img" src={require(`assets/ic_hs_main.svg`)}
+                                    <Imgc className="imgc-tile1 special-benefit-img" src={require(`assets/ic_hs_main.svg`)}
                                         alt="" />
-                                    <span className="special-benefit-text">Main benefits</span>
+                                    <span className="special-benefit-text">Key benefits</span>
                                 </div>
                                 <div className='common-steps-images'>
                                     {this.state.extra_data.benefits.main.map(this.renderSteps)}
@@ -626,7 +725,7 @@ class GroupHealthReportDetails extends Component {
                              <span
                                style={{ color: getConfig().primary }}
                                onClick={() =>
-                                 this.openInBrowser(
+                                 this.openPdf(
                                    this.state.common_data.policy_prospectus,
                                    "read_document"
                                  )
@@ -642,17 +741,17 @@ class GroupHealthReportDetails extends Component {
                     <div className="bototm-design">
                         {this.state.showPlanDetails &&
                             <div className="bd-tile" onClick={() => this.navigateBenefits('whats_included')}>
-                                <img className="bf-img" src={require(`assets/${this.state.productName}/ic_whats_covered.svg`)}
+                                <Imgc className="bf-img imgc-tile" src={require(`assets/${this.state.productName}/ic_whats_covered.svg`)}
                                     alt="" />
                                 <div className="bd-content">What is covered?</div>
                             </div>}
                         {this.state.showPlanDetails && <div className="bd-tile" onClick={() => this.navigateBenefits('whats_not_included')}>
-                            <img className="bf-img" src={require(`assets/${this.state.productName}/ic_whats_not_covered.svg`)}
+                            <Imgc className="bf-img imgc-tile" src={require(`assets/${this.state.productName}/ic_whats_not_covered.svg`)}
                                 alt="" />
                             <div className="bd-content">What is not covered?</div>
                         </div>}
                         <div className="bd-tile" onClick={() => this.navigateBenefits('how_to_claim')}>
-                            <img className="bf-img" src={require(`assets/${this.state.productName}/ic_how_to_claim.svg`)}
+                            <Imgc className="bf-img imgc-tile" src={require(`assets/${this.state.productName}/ic_how_to_claim.svg`)}
                                 alt="" />
                             <div className="bd-content">How to claim?</div>
                         </div>

@@ -18,7 +18,7 @@ import Dialog, {
   DialogContentText
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
-import { getConfig } from 'utils/functions';
+import { getConfig, getBasePath } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 
 class Resume extends Component {
@@ -356,8 +356,9 @@ class Resume extends Component {
     this.setState({
       show_loader: true
     });
+    let basepath = getBasePath();
     let paymentRedirectUrl = encodeURIComponent(
-      window.location.origin + 'payment'
+      basepath + 'payment'
     );
     var pgLink = this.state.payment_link;
     // eslint-disable-next-line

@@ -10,6 +10,7 @@ import toast from '../../../common/ui/Toast'
 
 import { getBhartiaxaStatusToState, insuranceStateMapper } from '../../constants'
 import { setTermInsData } from '../../common/commonFunction'
+import { Imgc } from '../../../common/ui/Imgc';
 
 
 class LifeInsuranceEntry extends Component {
@@ -17,7 +18,7 @@ class LifeInsuranceEntry extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false,
+      skelton: false,
       type: getConfig().productName,
       insuranceProducts: [],
       params: qs.parse(props.history.location.search.slice(1)),
@@ -70,7 +71,7 @@ class LifeInsuranceEntry extends Component {
   async componentDidMount() {
 
     this.setState({
-      show_loader: true
+      skelton: true
     })
 
     try {
@@ -78,7 +79,7 @@ class LifeInsuranceEntry extends Component {
 
       if (!this.state.openModuleData.sub_module) {
         this.setState({
-          show_loader: false
+          skelton: false
         })
       }
 
@@ -147,13 +148,13 @@ class LifeInsuranceEntry extends Component {
       }
 
       this.setState({
-        show_loader: false
+        skelton: false
       })
 
     } catch (err) {
       console.log(err)
       this.setState({
-        show_loader: false
+        skelton: false
       });
       toast('Something went wrong');
     }
@@ -215,7 +216,7 @@ class LifeInsuranceEntry extends Component {
               style={{ width : '100%'}}
              >   
           <div className='insurance_plans_types' style={{ width : '100%'}}>
-                  <img src={require(`assets/${this.state.type}/${props.icon}.svg`)} alt='' className="insurance_plans_logos" style={{marginTop : 'auto' , marginBottom : 'auto'}} />
+                  <Imgc src={require(`assets/${this.state.type}/${props.icon}.svg`)} alt='' className="insurance_plans_logos" style={{marginTop : 'auto' , marginBottom : 'auto'}} />
             <div  style={{  borderBottomWidth: '1px',  width : '100%',
                           borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '22px' ,   paddingBottom: '22px'}}    >
               <div className='insurance_plans_logos_text'
@@ -263,9 +264,9 @@ class LifeInsuranceEntry extends Component {
       <Container
         events={this.sendEvents('just_set_events')}
         noFooter={true}
-        showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title="Other Insurance"
-        styleHeader={{marginLeft: '10px'}}> 
+       > 
         <div className="group-health-insurance-entry">
           <div className='products'>
             <div className='health_insurance'>Insurance plans for specific needs</div>

@@ -16,14 +16,14 @@ class HowToStepsClass extends Component {
   renderList = (option, index) => {
     return (
       <div key={index} className="tile tile_step">
-        {option.icon && <Imgc hideSkelton={!this.props.showSkelton} className={`icon ${this.props.classNameIcon}`}
+        {option.icon && <Imgc className={`icon ${this.props.classNameIcon}`}
           src={require(`assets/${this.state.productName}/${option.icon}.svg`)} alt="Icon" />}
-        {option.img && <Imgc hideSkelton={!this.props.showSkelton} className={`icon ${this.props.classNameIcon}`}
+        {option.img && <Imgc className={`icon ${this.props.classNameIcon}`}
           src={option.img} alt="Icon" />}
         <div className="content content_step">
           {this.state.baseData.show_index && <span> {index + 1}. </span>}
           <div className="content content_step">
-            {option.title && <div className="content-title">{option.title}</div>}
+            {option.title && <div className="content-title" style={{fontSize: '15px', fontWeight: '500'}}>{option.title}</div>}
             {option.subtitle && <div className="content-subtitle">{option.subtitle}</div>}
           </div>
         </div>
@@ -38,7 +38,7 @@ class HowToStepsClass extends Component {
       <div className="common-how-steps" style={{ border: 'none', ...this.props.style }}>
         {this.state.baseData.title && <div className="top-tile">
           <div className="generic-page-title">
-            {this.state.baseData.title}
+            <b>{this.state.baseData.title}</b>
           </div>
         </div>}
 

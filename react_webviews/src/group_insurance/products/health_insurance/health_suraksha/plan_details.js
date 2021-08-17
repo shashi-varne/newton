@@ -20,6 +20,7 @@ import ic_hs_b5_myway from 'assets/ic_hs_b5_myway.svg';
 
 import ic_pa_b1_fisdom from 'assets/ic_pa_b1_fisdom.svg';
 import ic_pa_b1_myway from 'assets/ic_pa_b1_myway.svg';
+import { Fragment } from 'react';
 
 class HealthSuraksha extends Component {
 
@@ -169,11 +170,11 @@ class HealthSuraksha extends Component {
 
   render() {
     return (
-      <div>
+      <Fragment>
         <PlanDetails
           parent={this}
         />
-      </div>
+      </Fragment>
     );
   }
 

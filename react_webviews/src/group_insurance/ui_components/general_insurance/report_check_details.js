@@ -8,11 +8,11 @@ import icn_call_fisdom from 'assets/icn_call_fisdom.svg';
 import icn_call_myway from 'assets/icn_call_myway.svg';
 
 import Api from 'utils/api';
-import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
-import { numDifferentiation, inrFormatDecimal, getUrlParams, capitalizeFirstLetter } from '../../../utils/validators';
+import { numDifferentiation, inrFormatDecimal, getUrlParams, capitalizeFirstLetter, storageService } from '../../../utils/validators';
 import { insuranceStateMapper } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
+import {Imgc} from 'common/ui/Imgc';
 
 class ReportDetails extends Component {
 
@@ -25,7 +25,7 @@ class ReportDetails extends Component {
 
         }
       },
-      show_loader: true,
+      skelton: true,
       noFooter: true,
       icn_call: getConfig().productName !== 'fisdom' ? icn_call_myway : icn_call_fisdom,
       params: getUrlParams()
@@ -55,35 +55,74 @@ class ReportDetails extends Component {
     });
   }
 
-  async componentDidMount() {
+  setErrorData = (type) => {
 
+    this.setState({
+      showError: false
+    });
+    if(type) {
+      let mapper = {
+        'onload':  {
+          handleClick1: this.onload,
+          button_text1: 'Retry',
+          title1: ''
+        },
+        'submit': {
+          handleClick1: this.handleClickCurrent,
+          button_text1: 'Retry',
+          handleClick2: () => {
+            this.setState({
+              showError: false
+            })
+          },
+          button_text2: 'Dismiss'
+        }
+      };
+  
+      this.setState({
+        errorData: {...mapper[type], setErrorData : this.setErrorData}
+      })
+    }
+
+  }
+
+  onload = async() => {
+
+    let error = '';
+    let errorType = '';
+    this.setErrorData('onload');
     try {
+      let service = this.state.provider.toLowerCase() === 'bhartiaxa' ? 'insurancev2': 'ins_service';
 
-      let res = await Api.get('api/ins_service/api/insurance/' + (this.state.provider).toLowerCase() + 
+      let res = await Api.get('api/'+ service +'/api/insurance/' + (this.state.provider).toLowerCase() + 
       '/policy/get/' + this.state.policy_id);
       
-      this.setState({
-        show_loader: false
-      })
-      if (res.pfwresponse.status_code === 200) {
 
-        var policyData = res.pfwresponse.result.lead;
+      
+      if (res.pfwresponse.status_code === 200) {
+        
+        var policyData = res.pfwresponse.result.policy;
         policyData.provider = this.state.provider;
         let buttonTitle = 'Resume';
+        var reportSelectedTab = 'activeReports';
 
         let path = '';
         let noFooter = false;
         if (policyData.status === 'expired') {
           buttonTitle = 'Buy Again';
           path = '';
+          reportSelectedTab = 'inactiveReports'
         } else if (policyData.status === 'init' && policyData.lead_payment_status === 'payment_done') {
           path = 'payment-success';
+          reportSelectedTab = 'pendingReports'
         } else if (policyData.status === 'init') {
           path = 'plan';
+          reportSelectedTab = 'pendingReports'
         } else {
           noFooter = true;
         }
 
+        storageService().setObject('reportSelectedTab', reportSelectedTab)
         let redirectPath = '/group-insurance';
 
         if (path) {
@@ -95,20 +134,39 @@ class ReportDetails extends Component {
           redirectPath: redirectPath,
           buttonTitle: buttonTitle
         })
-
+        this.setState({
+          skelton: false
+        })
       } else {
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message
-          || 'Something went wrong');
+        error = res.pfwresponse.result.error || res.pfwresponse.result.message
+          || true;
       }
 
     } catch (err) {
       this.setState({
-        show_loader: false
+        skelton: false,
       });
-      toast('Something went wrong');
+      error = true;
+      errorType = "crash";
+
     }
 
+    // set error data
+    if(error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error,
+          type: errorType
+        },
+        showError:'page'
+      })
+    }
 
+  }
+
+  async componentDidMount() {
+     this.onload();
   }
 
   openInBrowser(url) {
@@ -173,18 +231,20 @@ class ReportDetails extends Component {
       <Container
         events={this.sendEvents('just_set_events')}
         noFooter={this.state.noFooter}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         handleClick={this.handleClick}
         fullWidthButton={true}
         buttonTitle={this.state.buttonTitle}
         onlyButton={true}
         title={this.state.policyData.provider === 'EDELWEISS' ?  'Term insurance' : this.state.policyData.product_title}
-        showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         classOverRideContainer="report-detail"
       >
         <div className="card">
           <div className="report-detail-header">
             <div className="report-detail-icon">
-              <img src={this.state.policyData.logo} alt="" />
+              <Imgc src={this.state.policyData.logo} alt="" />
             </div>
             <div>
               <div className="report-detail-ins-name">{this.state.policyData.product_title}</div>
@@ -221,7 +281,7 @@ class ReportDetails extends Component {
           }
           {this.state.policyData.provider === 'EDELWEISS' && 
             <div style={{display: 'flex', alignItems: 'end', margin: '30px 0 0 0'}}>
-              <img src={this.state.icn_call} alt="" />
+              <Imgc src={this.state.icn_call} alt="" />
               <div style={{color: '#4A4A4A', fontSize:13, fontWeight: 400, margin: '0 0 0 10px'}}>
                 Edelweiss team will call you to assist in policy issuance.
               </div>
@@ -230,16 +290,16 @@ class ReportDetails extends Component {
         </div>
         {this.state.policyData.status === 'policy_issued' &&
           <div onClick={() => this.openInBrowser(this.state.policyData.coi_blob_key)} className="report-detail-download">
-            <img src={download} alt="" />
+            <Imgc className="baxa-report-download-icon" src={download} alt="" />
             <div className="report-detail-download-text">Download Policy</div>
           </div>}
         {this.state.policyData.status === 'policy_issued' && <div className="Accordion">
           <div className="AccordionTitle" onClick={() => this.toggleAccordion()}>
             <div className="AccordionList">
               <span className="AccordionList1">
-                <img className="AccordionListIcon" src={(this.state.accordionTab) ? shrink : expand} alt="" width="20" />
+                <Imgc className="baxa-report-bottom-img AccordionListIcon" src={(this.state.accordionTab) ? shrink : expand} alt="" width="20" />
               </span>
-              <span>How to claim the policy?</span>
+              <span style={{marginLeft: '10px'}}>How to claim the policy?</span>
             </div>
           </div>
           {this.state.accordionTab && <div className="AccordionDescription">

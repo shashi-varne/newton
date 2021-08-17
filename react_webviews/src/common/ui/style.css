@@ -12,9 +12,6 @@
   color: #fff;
   border: 1px solid;
 }
-.MuiDialogContent-root:first-child {
-  padding-top: 24px !important;
-}
 .RadioButton label.professional {
   padding: 8px;
   display: inline-block;
@@ -136,22 +133,19 @@
   height: auto;
 }
 .error-radiogrp {
-  margin: 0;
+  /* margin: 0; */
   font-size: 0.75rem;
   text-align: left;
-  margin-top: 8px;
+  /* margin-top: 8px; */
   min-height: 1em;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   line-height: 1em;
-  color: #f44336;
+  color: #D0021B;
   position: relative;
-  top: 5px;
+  /* top: 5px; */
 }
 .MuiDialog-paper {
   margin: 0 20px 0px 20px !important;
-}
-.MuiDialogContent-root {
-  padding: 0 14px 24px 14px !important;
 }
 .spinner {
   width: 70px;
@@ -247,13 +241,12 @@
 }
 input.default-otp-input {
   width: 33px !important;
-  height: 20px;
-  border-bottom: 2px solid #5446a6 !important;
+  height: auto;
   border: none;
   margin: 0 10px 0 0;
   width: 20%;
   text-align: center;
-  padding: 5px 0px;
+  padding: 0px;
   outline: none;
   background: transparent;
   color: black;

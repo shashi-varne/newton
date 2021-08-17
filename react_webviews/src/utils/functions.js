@@ -21,7 +21,7 @@ const partnersConfigBase = {
     primary_color: '#CC0E00',
     code: 'lvb',
     email: 'lvb@fisdom.com',
-    mobile: '+91-7829228886',
+    mobile: '+91-9642596425',
     message:
       "Make smart investments with zero paper work, use LVB Mobile app if you're a registered user on lvb app or download fisdom http:m.onelink.me/32660e84. Use my referral code ",
     banner: 'obc_banner.png',
@@ -34,7 +34,7 @@ const partnersConfigBase = {
     primary_color: '#213B68',
     code: 'svc',
     email: 'svc@fisdom.com',
-    mobile: '+91-7829228886',
+    mobile: '+91-9642596425',
     message:
       "Make smart investments with zero paper work, use SVC app if you're a registered user on svc app or download fisdom http:m.onelink.me/32660e84. Use my referral code ",
     banner: 'obc_banner.png',
@@ -47,7 +47,7 @@ const partnersConfigBase = {
     primary_color: '#4f2da7',
     code: 'fisdom',
     email: 'ask@fisdom.com',
-    mobile: '+91-7829228886',
+    mobile: '+91-9642596425',
     message: '',
     banner: 'obc_banner.png',
     back_button: 'back_icon_white.png',
@@ -64,10 +64,10 @@ const partnersConfigBase = {
   },
   finity: {
     logo: 'finity_white_logo.png',
-    primary_color: '#3792FC',
+    primary_color: '#675AF6',
     code: 'finity',
     email: 'ask@finity.in',
-    mobile: '+91-9916149111',
+    mobile: '+91-8142381423',
     message: '',
     banner: 'obc_banner.png',
     back_button: 'back_icon_white.png',
@@ -87,7 +87,7 @@ const partnersConfigBase = {
     primary_color: '#4f2da7',
     code: 'fisdom',
     email: 'ask@fisdom.com',
-    mobile: '+91-7829228886',
+    mobile: '+91-9642596425',
     message: '',
     banner: 'obc_banner.png',
     back_button: 'back_icon_white.png',
@@ -156,7 +156,7 @@ const partnersConfigBase = {
     primary_color: '#2d2851',
     code: 'tvscredit',
     email: 'tvscredit@fisdom.com',
-    mobile: '+91-7829228886',
+    mobile: '+91-9642596425',
     message:
       "Make smart investments with zero paper work, use Tvs Credit app if you're a registered user on Tvs Credit app or download fisdom http:m.onelink.me/32660e84. Use my referral code ",
     banner: 'tvs_banner.png',
@@ -186,7 +186,7 @@ const partnersConfigBase = {
     logo: 'cub.png',
     primary_color: '#000180',
     code: 'cub',
-    mobile: '+91-7829228886',
+    mobile: '+91-9642596425',
     email: 'cub@fisdom.com',
     message: '',
     banner: 'bfdl_banner.png',
@@ -245,7 +245,7 @@ const partnersConfigBase = {
     logo: 'hbl.png',
     primary_color: '#0066B3',
     code: 'hbl',
-    mobile: '+91-7829228886',
+    mobile: '+91-9642596425',
     email: 'ask@fisdom.com',
     message: '',
     banner: 'bfdl_banner.png',
@@ -282,7 +282,7 @@ const partnersConfigBase = {
     logo: 'sbm.svg',
     primary_color: '#1e3769',
     code: 'sbm',
-    mobile: '+91-7829228886',
+    mobile: '+91-9642596425',
     email: 'sbm@fisdom.com',
     message: '',
     banner: 'bfdl_banner.png',
@@ -295,7 +295,7 @@ const partnersConfigBase = {
     primary_color: '#4f2da7',
     code: 'flexi',
     email: 'ask@fisdom.com',
-    mobile: '+91-7829228886',
+    mobile: '+91-9642596425',
     message: '',
     banner: 'obc_banner.png',
     back_button: 'back_icon_white.png',
@@ -313,7 +313,7 @@ const partnersConfigBase = {
     primary_color: '#4f2da7',
     code: 'medlife',
     email: 'ask@fisdom.com',
-    mobile: '+91-7829228886',
+    mobile: '+91-9642596425',
     message: '',
     banner: 'obc_banner.png',
     back_button: 'back_icon_white.png',
@@ -331,7 +331,7 @@ const partnersConfigBase = {
     primary_color: '#4f2da7',
     code: 'life99',
     email: 'ask@fisdom.com',
-    mobile: '+91-7829228886',
+    mobile: '+91-9642596425',
     message: '',
     banner: 'obc_banner.png',
     back_button: 'back_icon_white.png',
@@ -350,6 +350,21 @@ const partnersConfigBase = {
     close_button: 'close_nav_icon.svg',
     search_button: 'search.png',
     white_header: true,
+    webAppUrl: 'https://google-dot-plutus-web.appspot.com/#!/'
+  },
+  gpay: {
+    logo: 'logo_white.png',
+    primary_color: '#4f2da7',
+    code: 'gpay',
+    email: 'ask@fisdom.com',
+    mobile: '+80-48-093070',
+    message: '',
+    banner: 'obc_banner.png',
+    back_button: 'back_icon_white.png',
+    close_button: 'close_nav_icon.svg',
+    search_button: 'search.png',
+    white_header: true,
+    webAppUrl: 'https://google-dot-plutus-web.appspot.com/#!/'
   },
   indb: {
     logo: 'logo_white.png',
@@ -369,7 +384,55 @@ const partnersConfigBase = {
     primary_color: "#4f2da7",
     code: "taxwin",
     email: "ask@fisdom.com",
-    mobile: "+91-7829228886",
+    mobile: "+91-9642596425",
+    message: "",
+    banner: "obc_banner.png",
+    back_button: "back_icon_white.png",
+    close_button: "close_nav_icon.svg",
+    search_button: "search.png"
+  },
+  quesscorp: {
+    logo: 'logo_white.png',
+    primary_color: '#4f2da7',
+    code: 'quesscorp',
+    email: 'ask@fisdom.com',
+    mobile: '+91-9642596425',
+    message: '',
+    banner: 'obc_banner.png',
+    back_button: 'back_icon_white.png',
+    close_button: 'close_nav_icon.svg',
+    search_button: 'search.png'
+  },
+  ippb: {
+    logo: "logo_white.png",
+    primary_color: "#3F1027",
+    code: "ippb",
+    email: "ask@fisdom.com",
+    mobile: "+91-9642596425",
+    message: "",
+    banner: "obc_banner.png",
+    back_button: "back_icon_white.png",
+    close_button: "close_nav_icon.svg",
+    search_button: "search.png"
+  },
+  sahaj: {
+    logo: "logo_white.png",
+    primary_color: "#e5322d",
+    code: "sahaj",
+    email: "ask@fisdom.com",
+    mobile: "+91-9642596425",
+    message: "",
+    banner: "obc_banner.png",
+    back_button: "back_icon_white.png",
+    close_button: "close_nav_icon.svg",
+    search_button: "search.png"
+  },
+  mspl: {
+    logo: "logo_white.png",
+    primary_color: "#252B69",
+    code: "mspl",
+    email: "ask@fisdom.com",
+    mobile: "+91-9642596425",
     message: "",
     banner: "obc_banner.png",
     back_button: "back_icon_white.png",
@@ -421,35 +484,48 @@ function getPartnerConfig(partner_code) {
     fisdom: {
       primary: '#4f2da7',
       secondary: '#35cb5d',
+      onHover: '#35cb5d',
       default: '#4a4a4a',
       highlight_color: '#f6f2ff',
       skelton_color: '#E7E7E7',
-      label: '#a2a2a2',
+      label: '#767E86',
       type: 'fisdom',
       // inputFocusedColor: '#4f2da7',
+      colors: {
+        primary1: "#DFD8EF",
+        primary4: "#482998", 
+      },
       productName: 'fisdom',
       appLink: 'https://fisdom.onelink.me/CQFA/3e75c8f6',
+      actionUrl: 'https://fis.do/m/module',
       termsLink: 'https://www.fisdom.com/terms/',
       schemeLink: 'https://www.fisdom.com/scheme-offer-documents/',
       askEmail: 'ask@fisdom.com',
-      mobile: '+91-7829228886',
+      mobile: '+91-9642596425',
       configPrimaryColorClass: 'configPrimaryColorClass',
       configPrimaryBackgroundColorClass: 'fisdomBackColor',
       webAppUrl: 'https://app.fisdom.com/#!/',
       email_domain: 'fisdom.com',
     },
     finity: {
-      primary: '#3792fc',
-      secondary: '#35cb5d',
+      primary: '#675AF6',
+      secondary: '#675AF6',
+      onHover: '#4F47BA',
+      disabled: '#E6E5F4',
       default: '#4a4a4a',
-      highlight_color: '#F0F7FF',
+      highlight_color: '#EFEEFB',
       skelton_color: '#E7E7E7',
-      label: '#a2a2a2',
+      label: '#767E86',
       type: 'finity',
+      colors: {
+        primary1: "#F0F7FF",
+        primary4: "#68AEFF"
+      },
       // inputFocusedColor: '#3792fc',
       productName: 'finity',
       mobile: '+91-8048039999',
       appLink: 'https://myway.onelink.me/W4GN/1f539fd2',
+      actionUrl: 'https://w-ay.in/m/module',
       termsLink: 'https://finity.in/terms/',
       schemeLink: 'https://finity.in/scheme/',
       askEmail: 'ask@finity.in',
@@ -463,10 +539,11 @@ function getPartnerConfig(partner_code) {
       secondary: '#35cb5d',
       default: '#4a4a4a',
       highlight_color: '#f6f2ff',
-      label: '#a2a2a2',
+      label: '#767E86',
       type: 'minvest',
       productName: 'minvest',
       appLink: 'https://fisdom.onelink.me/CQFA/3e75c8f6',
+      actionUrl: '',
       termsLink: 'https://www.fisdom.com/terms/',
       schemeLink: 'https://www.fisdom.com/scheme-offer-documents/',
       askEmail: 'ask@fisdom.com',
@@ -478,13 +555,18 @@ function getPartnerConfig(partner_code) {
     },
   };
 
+  let origin = window.location.origin;
+
   const ismyway =
     search.indexOf('api.mywaywealth.com') >= 0 ||
-    search.indexOf('plutus-finwizard-pro.appspot.com') >= 0;
+    search.indexOf('plutus-finwizard-pro.appspot.com') >= 0 || 
+    origin.indexOf('wv.mywaywealth.com') >= 0 || 
+    origin.indexOf('wv.finity.in') >= 0 || 
+    origin.indexOf('api.mywaywealth.com') >= 0;
   const isminvest = search.indexOf('my.barodaminvest.com') >= 0;
   const isStaging = search.indexOf('staging') >= 0;
   let productType = 'fisdom';
-  if (ismyway || partner_code === 'bfdlmobile' || partner_code === 'finity') {
+  if (ismyway || partner_code === 'bfdlmobile' || partner_code === 'finity' || partner_code === 'moneycontrol') {
     productType = 'finity';
   }
 
@@ -495,8 +577,9 @@ function getPartnerConfig(partner_code) {
   let config_to_return = baseConfig[productType];
 
   if (isStaging) {
-    config_to_return.webAppUrl = 'https://mayank-dot-plutus-web.appspot.com/#!/';
+    // config_to_return.webAppUrl = 'https://mayank-dot-plutus-web.appspot.com/#!/';
     // config_to_return.webAppUrl = 'http://localhost:3001/#!/';
+    config_to_return.webAppUrl = window.location.origin + '/appl/web/view#!/';
   }
 
   config_to_return.isStaging = isStaging;
@@ -513,6 +596,7 @@ function getPartnerConfig(partner_code) {
     header_title_color: 'header_title_color',
     inputFocusedColor: 'inputFocusedColor',
     white_header: 'white_header',
+    webAppUrl: 'webAppUrl'
   };
 
   config_to_return.isFinwiz = true;
@@ -521,7 +605,7 @@ function getPartnerConfig(partner_code) {
     checkValidString(partner_code) &&
     partner_code !== 'fisdom' &&
     partner_code !== 'finity' &&
-    partner_code !== 'test'
+    partner_code !== 'test' 
   ) {
     if (partner_code === 'bfdl') {
       partner_code = 'bfdlmobile';
@@ -546,6 +630,21 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--label`, `${config_to_return.label}`);
   html.style.setProperty(`--desktop-width`, '640px');
   html.style.setProperty(`--tooltip-width`, '540px');
+  html.style.setProperty('--color-action-disable',  `${config_to_return.disabled || '#E8ECF1'}`);
+  html.style.setProperty(`--on-hover`, `${config_to_return.onHover ? config_to_return.onHover : config_to_return.secondary }`);
+
+  html.style.setProperty(`--mustard`, '#FFDA2C');
+  html.style.setProperty(`--pink`, '#F16FA0');
+  html.style.setProperty(`--purple`, '#A38CEB');
+  html.style.setProperty(`--lime`, '#7ED321');
+  html.style.setProperty(`--red`, '#D0021B');
+  html.style.setProperty(`--primaryVariant1`, `${config_to_return.colors.primary1}`);
+  html.style.setProperty(`--primaryVariant4`, `${config_to_return.colors.primary4}`);
+  html.style.setProperty(`--steelgrey`, '#767E86');
+  html.style.setProperty(`--spacing`, '10px');
+  html.style.setProperty(`--gunmetal`, '#161A2E');
+  html.style.setProperty(`--linkwater`, '#D3DBE4');
+  html.style.setProperty(`--dark`, '#0a1d32');
 
   return config_to_return;
 }
@@ -578,17 +677,53 @@ export const isMobileDevice = () => {
   return mobileDevice;
 };
 
+export function getParamsMark(data) {
+  return (data.match(/[?]/g) ? "&": "?");
+}
+
 export const getConfig = () => {
   let main_pathname = window.location.pathname;
   let main_query_params = getUrlParams();
-  let { base_url } = main_query_params;
+
+
+  let { base_url = '' } = main_query_params;
+
+  let origin = window.location.origin;
+
+  let isProdFisdom = origin.indexOf('wv.fisdom.com') >= 0;
+  let isProdFinity = origin.indexOf('wv.mywaywealth.com') >= 0;
+
+  var base_href = window.sessionStorage.getItem('base_href') || '';
+  let base_url_default = '';
+
+  if(base_href) {
+    base_url_default = window.location.origin;
+  }
+
+  if(!base_url) {
+    if(isProdFisdom) {
+      base_url_default = 'https://my.fisdom.com';
+    }
+  
+    if(isProdFinity) {
+      base_url_default = 'https://api.mywaywealth.com';
+    }
+  }
+  
+
+  if(base_url_default) {
+    base_url = base_url_default;
+  }
+
+
   let { generic_callback } = main_query_params;
+  let { from_notification } = main_query_params;
   let { redirect_url } = main_query_params;
   let { sdk_capabilities } = main_query_params;
   let { partner_code } = main_query_params;
   let { app_version } = main_query_params;
   let { pc_urlsafe } = main_query_params;
-  let project = 'insurance';
+  let project = '';
   let project_child = '';
   if (main_pathname.indexOf('group-insurance') >= 0) {
     project = 'group-insurance';
@@ -597,6 +732,8 @@ export const getConfig = () => {
     if (main_pathname.indexOf('term') >= 0) {
       project_child = 'term';
     }
+  } else if (main_pathname.indexOf('fhc') >= 0) {
+    project = 'fhc';
   } else if (main_pathname.indexOf('insurance') >= 0) {
     project = 'insurance';
   } else if (main_pathname.indexOf('risk') >= 0) {
@@ -631,6 +768,8 @@ export const getConfig = () => {
     generic_callback = 'true';
   } else if (main_pathname.indexOf('iw-dashboard') >= 0) {
     project = 'iw-dashboard';
+  } else if (main_pathname.indexOf('tax-filing') >= 0) {
+    generic_callback = true
   }
 
   let search = window.location.search;
@@ -638,13 +777,27 @@ export const getConfig = () => {
 
   let returnConfig = getPartnerConfig(partner_code);
 
-  let searchParams = `?base_url=${base_url}`;
-  let searchParamsMustAppend = `?base_url=${base_url}`;
+  let searchParams = ``;
+  let searchParamsMustAppend = ``;
+
+
+  base_url_default = '' // removing as of now, because from backend its getting appended & in plutus_redirect_url, so need atleast one from from webview
+  if(!base_url_default) {
+    searchParams += getParamsMark(searchParams) + `base_url=${base_url}`;
+    searchParamsMustAppend += getParamsMark(searchParams) + `base_url=${base_url}`;
+  }
+  
 
   if (checkValidString(generic_callback)) {
     returnConfig.generic_callback = generic_callback;
-    searchParams += `&generic_callback=${generic_callback}`;
-    searchParamsMustAppend += `&generic_callback=${generic_callback}`;
+    searchParams += getParamsMark(searchParams) + `generic_callback=${generic_callback}`;
+    searchParamsMustAppend +=  getParamsMark(searchParams) + `generic_callback=${generic_callback}`;
+  }
+  
+  if (checkValidString(from_notification)) {
+    returnConfig.from_notification = from_notification;
+    searchParams += getParamsMark(searchParams) + `from_notification=${from_notification}`;
+    searchParamsMustAppend +=  getParamsMark(searchParams) + `from_notification=${from_notification}`;
   }
 
   returnConfig.redirect_url = '';
@@ -654,26 +807,26 @@ export const getConfig = () => {
     returnConfig.webAppUrl = decodeURIComponent(redirect_url).split('#')[0] + '#!/';
     redirect_url = encodeURIComponent(redirect_url);
     returnConfig.redirect_url = redirect_url;
-    searchParams += `&redirect_url=${redirect_url}`;
-    searchParamsMustAppend += `&redirect_url=${redirect_url}`;
+    searchParams +=  getParamsMark(searchParams) +  `redirect_url=${redirect_url}`;
+    searchParamsMustAppend += getParamsMark(searchParams) +  `redirect_url=${redirect_url}`;
   }
 
   if (sdk_capabilities) {
     returnConfig.sdk_capabilities = sdk_capabilities;
-    searchParams += `&sdk_capabilities=${sdk_capabilities}`;
-    searchParamsMustAppend += `&sdk_capabilities=${sdk_capabilities}`;
+    searchParams += getParamsMark(searchParams) +  `sdk_capabilities=${sdk_capabilities}`;
+    searchParamsMustAppend += getParamsMark(searchParams) +  `sdk_capabilities=${sdk_capabilities}`;
   }
 
   if (checkValidString(partner_code)) {
     returnConfig.partner_code = partner_code;
-    searchParams += `&partner_code=${partner_code}`;
-    searchParamsMustAppend += `&partner_code=${partner_code}`;
+    searchParams += getParamsMark(searchParams) + `partner_code=${partner_code}`;
+    searchParamsMustAppend += getParamsMark(searchParams) +  `partner_code=${partner_code}`;
   }
 
   if (checkValidString(pc_urlsafe)) {
     returnConfig.pc_urlsafe = pc_urlsafe;
-    searchParams += `&pc_urlsafe=${pc_urlsafe}`;
-    searchParamsMustAppend += `&pc_urlsafe=${pc_urlsafe}`;
+    searchParams += getParamsMark(searchParams) + `pc_urlsafe=${pc_urlsafe}`;
+    searchParamsMustAppend += getParamsMark(searchParams) + `pc_urlsafe=${pc_urlsafe}`;
   }
 
   if (project === 'insurance' || project_child === 'term') {
@@ -681,12 +834,12 @@ export const getConfig = () => {
     let { insurance_id } = main_query_params;
     let { isJourney } = main_query_params;
 
-    searchParams += '&insurance_id=' + insurance_id + '&insurance_v2=' + insurance_v2;
-    searchParamsMustAppend += '&insurance_v2=' + insurance_v2;
+    searchParams += getParamsMark(searchParams) + 'insurance_id=' + insurance_id + '&insurance_v2=' + insurance_v2;
+    searchParamsMustAppend += getParamsMark(searchParams) + 'insurance_v2=' + insurance_v2;
 
     if (checkValidString(isJourney)) {
-      searchParams += '&isJourney=' + isJourney;
-      searchParamsMustAppend += '&isJourney=' + isJourney;
+      searchParams += getParamsMark(searchParams) + 'isJourney=' + isJourney;
+      searchParamsMustAppend += getParamsMark(searchParams) + 'isJourney=' + isJourney;
     }
   }
 
@@ -697,7 +850,7 @@ export const getConfig = () => {
   let { insurance_allweb } = main_query_params;
   if (insurance_allweb) {
     returnConfig.insurance_allweb = insurance_allweb;
-    searchParams += '&insurance_allweb=' + insurance_allweb;
+    searchParams += getParamsMark(searchParams) + 'insurance_allweb=' + insurance_allweb;
   }
 
   if (isMobile.Android() && typeof window.Android !== 'undefined') {
@@ -721,8 +874,8 @@ export const getConfig = () => {
     let { email } = main_query_params;
     let campaign_version = generic_callback === 'true' ? 1 : main_query_params.campaign_version;
     let { html_camera } = main_query_params;
-    searchParams +=
-      '&key=' + key + '&name=' + name + '&email=' + email + '&campaign_version=' + campaign_version;
+    searchParams += getParamsMark(searchParams) + 
+      'key=' + key + '&name=' + name + '&email=' + email + '&campaign_version=' + campaign_version;
 
     // eslint-disable-next-line
     returnConfig.campaign_version = parseInt(campaign_version);
@@ -740,7 +893,7 @@ export const getConfig = () => {
 
   if (project === 'isip') {
     let campaign_version = generic_callback === 'true' ? 1 : main_query_params.campaign_version;
-    searchParams += '&campaign_version=' + campaign_version;
+    searchParams += getParamsMark(searchParams) + 'campaign_version=' + campaign_version;
 
     // eslint-disable-next-line
     returnConfig.campaign_version = parseInt(campaign_version);
@@ -752,16 +905,23 @@ export const getConfig = () => {
   returnConfig.app_version = '';
   if (checkValidString(app_version)) {
     returnConfig.app_version = app_version;
-    searchParams += `&app_version=${app_version}`;
-    searchParamsMustAppend += `&app_version=${app_version}`;
+    searchParams += getParamsMark(searchParams) + `app_version=${app_version}`;
+    searchParamsMustAppend += getParamsMark(searchParams) + `app_version=${app_version}`;
   }
-
+  let isProdEnv = false;
+  if (
+    base_url.indexOf("my.fisdom.com") >= 0 ||
+    base_url.indexOf("api.mywaywealth.com") >= 0 ||
+    base_url.indexOf("api.finity.in") >= 0
+  ) {
+    isProdEnv = true;
+  }
   // should be last
   returnConfig.current_params = main_query_params;
   returnConfig.base_url = base_url;
   returnConfig.searchParams = searchParams;
   returnConfig.searchParamsMustAppend = searchParamsMustAppend;
-
+  returnConfig.isProdEnv = isProdEnv
   returnConfig.isWebCode = returnConfig.Web || returnConfig.redirect_url;
 
   return returnConfig;
@@ -886,4 +1046,28 @@ export function capitalize(string) {
   return string.toLowerCase().replace(/(^|\s)[a-z]/g, function (f) {
     return f.toUpperCase();
   });
+}
+
+export function isIframe() {
+  if (window.top !== window.self) {
+    return true;
+  } else {
+    return false;
+  }
+}
+export function getBasePath() {
+  var basename = window.sessionStorage.getItem('base_href') || '';
+  if(basename && basename.indexOf('appl/webview') !== -1) {
+    basename = basename ? basename + 'view' : '';
+  }
+  return window.location.origin + basename;
+}
+
+export function stringToHexa(str) {
+  const arr1 = []
+  for (let i = 0; i < str.length; ++i) {
+    const hex = Number(str.charCodeAt(i)).toString(16)
+    arr1.push(hex)
+  }
+  return arr1.join('')
 }

@@ -20,7 +20,7 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
-import { getConfig } from 'utils/functions';
+import { getConfig, getBasePath } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 
 class Summary extends Component {
@@ -63,7 +63,8 @@ class Summary extends Component {
   }
 
   componentWillMount() {
-    let current_url = window.location.origin + '/group-insurance/term/journey' + getConfig().searchParams;
+    let basepath = getBasePath();
+    let current_url = basepath + '/group-insurance/term/journey' + getConfig().searchParams;
     this.setState({
       current_url: current_url
     });
@@ -111,8 +112,9 @@ class Summary extends Component {
     });
 
     let app = getConfig().app;
+    let basepath = getBasePath();
     let paymentRedirectUrl = encodeURIComponent(
-      window.location.origin + '/group-insurance/term/payment/' + this.state.params.insurance_id
+      basepath + '/group-insurance/term/payment/' + this.state.params.insurance_id
     );
     var pgLink = payment_link;
     var back_url = encodeURIComponent(this.state.current_url);

@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
-import BottomInfo from '../../../../common/ui/BottomInfo';
 import { getConfig } from 'utils/functions';
-import { initialize } from '../common_data';
+import { initialize, getPlanDetails, getPlanList } from '../common_data';
 import Input from '../../../../common/ui/Input';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
-import { formatDate, dobFormatTest, isValidDate, capitalizeFirstLetter } from 'utils/validators';
-import { calculateAge } from '../../../../utils/validators';
+import { isEmpty, formatDate, dobFormatTest, isValidDate, capitalizeFirstLetter } from 'utils/validators';
+import { calculateAge, compareObjects } from '../../../../utils/validators';
 import {getInsuredMembersUi, resetInsuredMembers} from '../constants';
 
 const eldMemOptionMapper = {
@@ -29,6 +28,8 @@ class GroupHealthPlanDobReligare extends Component {
         }
 
         this.initialize = initialize.bind(this);
+        this.getPlanDetails = getPlanDetails.bind(this);
+        this.getPlanList = getPlanList.bind(this);
     }
 
     componentWillMount() {
@@ -42,7 +43,7 @@ class GroupHealthPlanDobReligare extends Component {
         
         this.setState({
             header_title: isSelf ? 'Your date of birth' : 'Date of birth details',
-            default_helper_text: `${isSelf ? "Your" : "Adult member's"} age should be more than 18 yrs`,
+            default_helper_text: `${isSelf ? "You" : "Adult member's age"} should be 18 years or older`,
         });
 
 
@@ -92,7 +93,7 @@ class GroupHealthPlanDobReligare extends Component {
                 "user_action": user_action,
                 "screen_name": "enter birthday",
                 "flow": this.state.insured_account_type || '',
-                product: 'religare',
+                product: this.state.providerConfig.provider_api,
                 is_dob_entered: this.state.eldest_dob ? 'yes' : 'no',
                 eldest_member: this.state.eldest_member,
             }
@@ -105,11 +106,16 @@ class GroupHealthPlanDobReligare extends Component {
         }
     }
 
-    handleClick = () => {
+    handleClick = async () => {
         this.sendEvents('next');
         let {validation_props, groupHealthPlanData } = this.state || {};
+        var {provider} = this.state;
 
         groupHealthPlanData = resetInsuredMembers(groupHealthPlanData) || {};
+        var post_body = groupHealthPlanData.post_body;
+        if(post_body && post_body.quotation_id){
+            delete post_body['quotation_id'];
+        }
 
         let ui_members = groupHealthPlanData.ui_members || {};
         
@@ -138,8 +144,6 @@ class GroupHealthPlanDobReligare extends Component {
 
             canProceed = false;
         }
-
-       
 
         if (canProceed) {
             let post_body = groupHealthPlanData.post_body || {};
@@ -170,10 +174,56 @@ class GroupHealthPlanDobReligare extends Component {
             
             post_body.eldest_member = this.memberKeyMapper(this.state.eldest_member).backend_key;
             post_body.eldest_dob = this.state.eldest_dob;
-
+            
+            if(provider === 'GMC'){
+                post_body.plan_id = 'fisdom_health_protect';
+            }
             groupHealthPlanData.post_body = post_body;
             this.setLocalProviderData(groupHealthPlanData);
-            this.navigate(this.state.next_screen);
+
+            var keys_to_check = ['account_type']
+            var current_state = {}
+            for(var x in post_body){
+                if(keys_to_check.indexOf(x) >= 0){
+                    current_state[x] = post_body[x]
+                }
+            }
+            for(var y in post_body.member_details){
+                current_state[`${y}_dob`] = post_body.member_details[y].dob;
+            }
+            if(provider === 'GMC'){
+                this.setState({
+                    current_state
+                }, ()=>{
+                    var sameData = compareObjects( Object.keys(current_state),current_state, groupHealthPlanData.plan_list_current_state);
+                    if(!sameData || isEmpty(groupHealthPlanData.plan_details_screen)){
+                        this.getPlanDetails();
+                    }else{
+                        this.setLocalProviderData(groupHealthPlanData);
+                        this.navigate(this.state.next_screen);
+                        return;
+                    }
+                })
+            }else if(provider === 'RELIGARE'){
+                this.setLocalProviderData(groupHealthPlanData);
+                let current_state = {}
+                current_state['account_type'] = post_body['account_type'];
+                for(let x in post_body.member_details){
+                    current_state[`${x}`] = post_body.member_details[x]['dob'];
+                }
+                var previousData = groupHealthPlanData.list_previous_data || {};
+                var sameData = compareObjects(Object.keys(current_state), current_state, previousData)
+                this.setState({
+                    current_state
+                }, ()=>{
+                    if(!sameData || isEmpty(groupHealthPlanData.plan_list)){
+                        this.getPlanList();
+                    }else{
+                        this.navigate('plan-list')
+                    }
+                })
+                return;
+            }
         }
 
     }
@@ -208,11 +258,12 @@ class GroupHealthPlanDobReligare extends Component {
         let currentDate = new Date().toISOString().slice(0, 10);
         const { eldest_member, default_helper_text } = this.state;
         const isSelf = eldest_member === 'self';
+        
 
         return (
             <Container
                 events={this.sendEvents('just_set_events')}
-                show_loader={this.state.show_loader}
+                showLoader={this.state.show_loader}
                 title={isSelf ? 'Your date of birth' : 'Date of birth details'}
                 fullWidthButton={true}
                 buttonTitle="CONTINUE"
@@ -262,8 +313,6 @@ class GroupHealthPlanDobReligare extends Component {
                     </div>
 
                 }
-
-                <BottomInfo baseData={{ 'content': 'Illness can hit you any time, get insured today to cover your medical expenses' }} />
             </Container>
         );
     }

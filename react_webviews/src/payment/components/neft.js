@@ -149,11 +149,11 @@ class NEFT extends React.Component {
                                         </tr>
                                         <tr>
                                             <td>A/C No</td>
-                                            <td>57500000331444</td>
+                                            <td>602860</td>
                                         </tr>
                                         <tr>
                                             <td>IFSC</td>
-                                            <td>HDFC0000523</td>
+                                            <td>YESB0CMSNOC</td>
                                         </tr>
                                     </tbody>
                                 }

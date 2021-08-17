@@ -18,23 +18,7 @@ const Header = ({ classes, title, count, total, current, goBack, edit, type, res
       </IconButton>
       }
       <Typography variant="subheading" color="inherit" className={classes.flex}>
-        {smallTitle && smallTitle !== undefined &&
-          <div>
-            <div style={{ fontWeight: 500 }}>{title}</div>
-            <div style={{ fontSize: 11, marginTop: -5, textTransform: 'uppercase' }}>
-              {smallTitle === 'HDFC' &&
-                'HDFC Life Click 2 Protect 3D Plus'}
-              {smallTitle === 'IPRU' &&
-                'ICICI Pru iProtect Smart'}
-              {smallTitle !== 'HDFC' && smallTitle !== 'IPRU' &&
-                smallTitle
-              }
-            </div>
-          </div>}
-        {!smallTitle &&
-
-          title
-        }
+        {title}
       </Typography>
       {resetpage &&
         <img onClick={handleReset}
@@ -44,7 +28,7 @@ const Header = ({ classes, title, count, total, current, goBack, edit, type, res
         />
       }
       {topIcon === 'close' && <Close onClick={handleTopIcon} />}
-      {!edit && count && <span color="inherit">{current}/{total}</span>}
+      
     </Toolbar>
   </AppBar>
 );

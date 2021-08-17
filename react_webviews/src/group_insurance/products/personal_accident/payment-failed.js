@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Fragment } from 'react';
 import PaymentFailed from '../../ui_components/general_insurance/payment_failed';
 
 class AccidentFailed extends Component {
@@ -12,11 +13,11 @@ class AccidentFailed extends Component {
 
   render() {
     return (
-      <div>
+      <Fragment>
         <PaymentFailed
           parent={this}
         />
-      </div>
+      </Fragment>
     );
   }
 }

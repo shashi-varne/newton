@@ -18,7 +18,7 @@ class DeliveryIntro extends Component {
       show_loader: false,
       provider: this.props.match.params.provider,
       productName: getConfig().productName,
-      deliveryDisabled: false
+      deliveryDisabled: true
     }
   }
 
@@ -76,6 +76,7 @@ class DeliveryIntro extends Component {
         buttonTitle="SELECT GOLD COIN"
         events={this.sendEvents('just_set_events')}
         disable={this.state.deliveryDisabled}
+        noFooter={this.state.deliveryDisabled}
       >
 
         <div className="common-top-page-subtitle">
@@ -96,7 +97,7 @@ class DeliveryIntro extends Component {
         </div>
        {this.state.deliveryDisabled && 
         <div style={{margin: '40px 0px 0px 0px', color: 'red', fontWeight:500, lineHeight:1.3}}>
-          Due to temporary restrictions in movement and staffing because of the novel coronavirus, 
+          Due to temporary restrictions in movement and staffing because of COVID-19, 
           we are unable to process any deliveries until these restrictions are lifted.
           </div>}
       </Container>

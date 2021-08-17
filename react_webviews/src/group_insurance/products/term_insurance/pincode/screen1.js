@@ -11,7 +11,7 @@ import location from 'assets/location_dark_icn.png';
 import Api from 'utils/api';
 import TitleWithIcon from '../../../../common/ui/TitleWithIcon';
 import pincode from 'assets/address_details_icon.svg';
-import pincode_myway from 'assets/address_details_icn.svg';
+import pincode_myway from 'assets/finity/address_icon.svg';
 import { validateNumber, formatAmount, clearInsuranceQuoteData } from 'utils/validators';
 import Dialog, {
   DialogActions,
@@ -19,7 +19,7 @@ import Dialog, {
   DialogContentText
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
-import { getConfig } from 'utils/functions';
+import { getConfig, getBasePath } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 
 class Pincode extends Component {
@@ -255,12 +255,12 @@ class Pincode extends Component {
 
       if (res.pfwresponse && res.pfwresponse.status_code === 200) {
         let result = res.pfwresponse.result
-
+        let basepath = getBasePath();
         this.setState({
           show_loader: true
         });
         let paymentRedirectUrl = encodeURIComponent(
-          window.location.origin + 'payment'
+          basepath + 'payment'
         );
         var pgLink = result.payment_link;
         // eslint-disable-next-line

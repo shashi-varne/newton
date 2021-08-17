@@ -4,7 +4,7 @@ import GoldLivePrice from './live_price';
 import Dialog, {
     DialogContent
   } from 'material-ui/Dialog';
-import { WithProviderLayout } from '../../common/footer/layout';
+import { FooterLayoutBase } from 'common/components/footer/layout';
 import ReactHtmlParser from 'react-html-parser'; 
 
 class ConfirmDialogClass extends Component {
@@ -54,7 +54,8 @@ class ConfirmDialogClass extends Component {
                 {this.props.parent.state.orderType !== 'delivery' &&
                  <GoldLivePrice parent={this.props.parent} />}
                 <div className="mid-buttons">
-                  <WithProviderLayout type="default"
+                  <FooterLayoutBase 
+                    type="withProvider"
                      handleClick2={this.props.parent.handleClose}
                     //  handleClick={this.props.parent.handleClick}
                     handleClick={this.props.parent.handleClose}
