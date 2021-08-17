@@ -10,8 +10,8 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
-import { getUrlParams, isEmpty, storageService } from '../../../utils/validators';
-import { pick, get } from 'lodash';
+import { getUrlParams, storageService } from '../../../utils/validators';
+import { pick, get, isEmpty } from 'lodash';
 import { riskProfileMap } from '../../constants';
 
 class Result extends Component {
@@ -27,12 +27,28 @@ class Result extends Component {
 
   setEntryParams = () => {
     let urlParams = getUrlParams();
+    const routeParams = get(this.props, 'location.state');
+    
+    if (!isEmpty(routeParams)) {
+      urlParams = routeParams
+    }
+
     if (urlParams.fromExternalSrc) {
       storageService().setObject(
         'risk-entry-params',
         pick(
           urlParams,
-          ['amount', 'flow', 'term', 'type', 'year', 'subType', 'hideRPReset', 'hideClose']
+          [
+            'amount',
+            'flow',
+            'term',
+            'type',
+            'year', 
+            'subType',
+            'hideRPReset',
+            'hideClose',
+            'internalRedirect'
+          ]
         )
       );
     } else {
@@ -81,7 +97,7 @@ class Result extends Component {
     }
   }
 
-  navigate = (pathname, replace) => {
+  navigate = (pathname, replace, state) => {
     let params = {
       indicator: (this.state.score) ? this.state.score.indicator : false
     };
@@ -91,6 +107,7 @@ class Result extends Component {
         pathname: pathname,
         search: getConfig().searchParams,
         params,
+        state: state
       });
     } else {
       this.props.history.replace({
@@ -118,6 +135,22 @@ class Result extends Component {
     }
   }
 
+  redirectToInvestFlow = () => {
+    const entryParams = this.state.params || {};
+
+    if (entryParams.type === 'saveforgoal') {
+      this.navigate(`/invest/savegoal/${entryParams.subType}/amount`);
+    } else {
+      this.navigate(
+        '/invest/recommendations',
+        false,
+        {
+          fromRiskProfiler: true,
+        }
+      );
+    }
+  }
+
   handleClick = async () => {
     this.sendEvents('next');
     if (!this.props.useNewFlow) {
@@ -125,9 +158,13 @@ class Result extends Component {
       return;
     }
    
-    const openWebModule = getConfig().isWebCode;
+    const openWebModule = getConfig().isWebOrSdk;
     if (openWebModule) {
-      window.location.href = this.redirectUrlBuilder();
+      if (get(this.state, 'params.internalRedirect')) {
+        this.redirectToInvestFlow();
+      } else {
+        this.navigate('/');
+      }
     } else {
       const entryParams = this.state.params || {};
 
@@ -303,6 +340,10 @@ class Result extends Component {
     }
   }
 
+  allowReset = () => {
+    return !["true", true].includes(this.state.params.hideRPReset);
+  }
+
   renderUi() {
     if (this.state.score) {
       return (
@@ -314,9 +355,8 @@ class Result extends Component {
           handleClick={this.handleClick}
           edit={this.props.edit}
           buttonTitle="Invest Now"
-          topIcon={this.state.params.hideRPReset !== "true" ? '' : "restart"}
           handleReset={this.showDialog}
-          resetpage={this.state.params.hideRPReset !== "true"}
+          resetpage={this.allowReset()}
           events={this.sendEvents('just_set_events')}
         >
           {this.state.score ?

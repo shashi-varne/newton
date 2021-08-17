@@ -152,7 +152,6 @@
   }
   .journey-top-text2 {
     color: #4a4a4a;
-    font-family: 'Roboto';
     font-weight: 500;
     font-size: 14px;
     text-transform: lowercase;
@@ -174,7 +173,6 @@
     text-align: left;
     /* margin-top: 8px; */
     min-height: 1em;
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     line-height: 1em;
     color: #D0021B;
     position: relative;
@@ -183,7 +181,6 @@
   .payment-dialog {
     font-size: 1rem;
       font-weight: 400;
-      font-family: "Roboto", "Helvetica", "Arial", sans-serif;
       line-height: 1.5em;
       margin: 0;
       display: block;
@@ -304,7 +301,6 @@
   .annual-inc-dialog {
     font-size: 1rem;
       font-weight: 400;
-      font-family: "Roboto", "Helvetica", "Arial", sans-serif;
       line-height: 1.5em;
       margin: -10px 0 0px 0;
       display: block;

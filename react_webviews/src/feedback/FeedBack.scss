@@ -1,0 +1,47 @@
+
+
+.feedback-message{
+  border: 1px solid #e8e8e8;
+    border-radius: 3px;
+    padding: 10px;
+
+  .MuiInput-underline:before,.MuiInput-underline:after{
+    display: none;
+  }
+
+  .MuiFormHelperText-root{
+    text-align: right;
+  }
+}
+
+.feedback-dialog{
+  .feedback-message-dialog{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .feedback-dialog-res{
+      font-size: 16px;
+      text-align: center;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+  }
+
+  .button-bg-full {
+    width: 100%;
+    padding: 5px 15px;
+    font-size: 14px;
+    border-radius: 5px;
+    min-height: 47px;
+    font-weight: bold;
+    margin: 0px !important;
+    letter-spacing: 0.01em;
+    color: white !important;
+    background-color: var(--secondary) !important;
+    .MuiButton-label{
+      text-transform: uppercase !important;
+    }
+  }
+}

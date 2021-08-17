@@ -6,11 +6,11 @@ import { Fragment } from 'react';
 const FundInfo = (props) => {
   const { url } = props.match;
   return (
-        <Fragment>
-          <Switch>
-            <Route path={url} exact component={FundDetails} />
-          </Switch>
-        </Fragment>
+    <Fragment>
+      <Switch>
+        <Route path={url} exact component={FundDetails} />
+      </Switch>
+    </Fragment>
   );
 };
 

@@ -269,7 +269,7 @@ class SelectAddress extends Component {
           {this.state.addressData && this.state.addressData.map(this.renderAddress)}
           {this.state.addressData && this.state.addressData.length < 3 &&
             <div
-              style={{color: getConfig().secondary}}
+              style={{color: getConfig().styles.secondaryColor}}
               onClick={() => this.navigate('/mandate/add-address')}
               className="select-add-new-button">
               + Add New Address

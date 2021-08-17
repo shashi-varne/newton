@@ -208,7 +208,7 @@ class GoldTransactionDetail extends Component {
     if (index === this.state.journeyData.length - 1) {
       return '2px solid white';
     } else if (props.status === 'success') {
-      return '2px solid ' + getConfig().primary;
+      return '2px solid ' + getConfig().styles.primaryColor;
     }
 
     return '';
@@ -221,13 +221,13 @@ class GoldTransactionDetail extends Component {
           {props.status === 'success' &&
             <SVG
               style={{ backgroundColor: '#fff', zIndex: 111 }}
-              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.primaryColor)}
               src={require(`assets/${this.state.icon_mapper[props.status]}.svg`)}
               className="icon normal-step-icon"
             />}
           {props.status !== 'success' &&
             <SVG
-              // preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+              // preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.primaryColor)}
               src={require(`assets/${this.state.icon_mapper[props.status]}.svg`)}
               className="icon normal-step-icon"
             />}
@@ -401,7 +401,7 @@ class GoldTransactionDetail extends Component {
                       <span
                         onClick={() => this.openInBrowser(this.state.order.tracking_link)}
                         style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase',
-                        color: getConfig().primary,marginLeft:10, cursor: 'pointer',
+                        color: getConfig().styles.primaryColor,marginLeft:10, cursor: 'pointer',
                         textDecoration:'underline' }}>Track
                       </span>
                     }
@@ -410,7 +410,7 @@ class GoldTransactionDetail extends Component {
                       <span
                         onClick={() => this.copyItem(this.state.order.courier_tracking_id)}
                         style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase',
-                        color: getConfig().secondary,marginLeft:10, cursor: 'pointer' }}>{this.state.copyText}
+                        color: getConfig().styles.secondaryColor,marginLeft:10, cursor: 'pointer' }}>{this.state.copyText}
                       </span>
                     }
 
@@ -451,12 +451,12 @@ class GoldTransactionDetail extends Component {
           {!this.state.invoiceSent && this.state.order.orderType !== 'buy_back' &&
             <div className="send-invoice">
               <SVG
-                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().secondary)}
+                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.secondaryColor)}
                 src={ic_send_email}
               />
               {!this.state.invoiceLoading &&
                 <div onClick={() => this.emailInvoice()}
-                  style={{ color: getConfig().secondary, marginLeft: 10 }}>
+                  style={{ color: getConfig().styles.secondaryColor, marginLeft: 10 }}>
                   Email invoice
                 </div>
               }

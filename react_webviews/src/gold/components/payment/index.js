@@ -524,7 +524,7 @@ class Payment extends Component {
                         }
 
                         <div style={{ margin: '30px 0 30px 0' }} className="highlight-text highlight-color-info">
-                          <div  style={{textAlign: 'right', fontSize:10, color: getConfig().primary}}>{this.state.providerData.karat}</div>
+                          <div  style={{textAlign: 'right', fontSize:10, color: getConfig().styles.primaryColor}}>{this.state.providerData.karat}</div>
                           <div className="highlight-text1">
                             <img className="highlight-text11" style={{width: 34}} 
                             src={this.state.orderData.media.images[0]} alt="info" />
@@ -625,12 +625,12 @@ class Payment extends Component {
                       {!this.state.invoiceSent && 
                         <div className="send-invoice">
                           <SVG
-                            preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().secondary)}
+                            preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.secondaryColor)}
                             src={ic_send_email}
                           />
                           {!this.state.invoiceLoading &&
                             <div onClick={() => this.emailInvoice()}
-                            style={{color: getConfig().secondary, marginLeft: 10}}>
+                            style={{color: getConfig().styles.secondaryColor, marginLeft: 10}}>
                               Email invoice
                             </div>
                           }

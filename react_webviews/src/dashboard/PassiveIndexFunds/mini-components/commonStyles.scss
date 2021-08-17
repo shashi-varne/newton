@@ -1,0 +1,65 @@
+// Passive Fund Chart Styles
+.passive-funds-details{
+  .tooltip-container {
+    background-color: white;
+    padding: 10px 10px;
+    border-radius: 4px;
+  }
+  .date {
+    text-align: center;
+  }
+  .dot {
+    background-color: #7ed321;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    align-self: center;
+    margin-right: 5px !important;
+  }
+  .next-line-container {
+    display: flex;
+    align-items: center;
+  }
+  .date {
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 16px;
+    letter-spacing: 1px;
+    text-align: center;
+    color: var(--steelgrey);
+    padding: 0;
+    margin: 0;
+  }
+  .content {
+    font-size: 13px;
+    line-height: 20px;
+    font-weight: 400;
+    letter-spacing: 0px;
+    color: var(--dark);
+    padding: 0;
+    margin: 0;
+  }
+  .xaxis-label {
+    font-size: 9px;
+    font-weight: 600;
+    line-height: 9px;
+    letter-spacing: 0px;
+    fill: var(--steelgrey);
+    opacity: 0.5;
+  }
+  .yaxis-label {
+    font-size: 9px;
+    font-weight: 600;
+    line-height: 9px;
+    letter-spacing: 0px;
+    text-align: right;
+    fill: var(--steelgrey);
+    opacity: 0.5;
+  }
+}
+
+.info-container{
+  p{
+    color: #94C5FF !important
+  }
+}

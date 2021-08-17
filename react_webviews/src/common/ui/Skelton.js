@@ -9,7 +9,7 @@ import './style.scss';
 // import { TextBlock, MediaBlock, TextRow, RectShape, RoundShape } from 'react-placeholder/lib/placeholders';
 
 
-let highlight_color = getConfig().skelton_color;
+let highlight_color = getConfig().styles.skeletonColor;
 
 
 

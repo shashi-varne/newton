@@ -120,10 +120,7 @@ class Summary extends Component {
     var back_url = encodeURIComponent(this.state.current_url);
     // eslint-disable-next-line
     pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
-      '&app=' + app + '&back_url=' + back_url;
-    if (getConfig().generic_callback) {
-      pgLink += '&generic_callback=' + getConfig().generic_callback;
-    }
+      '&app=' + app + '&back_url=' + back_url + '&generic_callback=' + getConfig().generic_callback;
     window.location.href = pgLink;
     return;
   }
@@ -1078,7 +1075,7 @@ class Summary extends Component {
                 <img src={this.state.image} alt="" style={{ width: '100%' }} />
               </Grid>
               <Grid item xs={7}>
-                <div className="Title" style={{ color: '#444', fontFamily: 'Roboto', fontWeight: 500, fontSize: 18 }}>
+                <div className="Title" style={{ color: '#444', fontFamily: 'Rubik', fontWeight: 500, fontSize: 18 }}>
                   {this.state.provider !== 'Maxlife' && <span>{this.state.providerName}</span>} {this.state.cover_plan}
                   <div style={{ marginTop: 7, marginBottom: 7 }}>{
                     this.state.application_id &&
@@ -1089,7 +1086,7 @@ class Summary extends Component {
             </Grid>
           </div>
           <div style={{ marginTop: 30 }}>
-            <div className="Title" style={{ color: '#444', fontFamily: 'Roboto', fontWeight: 500, fontSize: 18, marginBottom: 20 }}>
+            <div className="Title" style={{ color: '#444', fontFamily: 'Rubik', fontWeight: 500, fontSize: 18, marginBottom: 20 }}>
               Insurance details
           </div>
             <Grid container spacing={8} alignItems="center">
@@ -1099,7 +1096,7 @@ class Summary extends Component {
                     <img src={cover_period} alt="" width="40" />
                   </div>
                   <div className="Text">
-                    <div style={{ color: '#4a4a4a', fontFamily: 'Roboto', fontWeight: 500, fontSize: 14 }}>Cover period</div>
+                    <div style={{ color: '#4a4a4a', fontFamily: 'Rubik', fontWeight: 500, fontSize: 14 }}>Cover period</div>
                     <div style={{ color: '#4a4a4a' }}>{this.state.term} years</div>
                   </div>
                 </div>
@@ -1111,7 +1108,7 @@ class Summary extends Component {
                       <img src={life_cover} alt="" width="40" />
                     </div>
                     <div className="Text">
-                      <div style={{ color: '#4a4a4a', fontFamily: 'Roboto', fontWeight: 500, fontSize: 14 }}>Life cover</div>
+                      <div style={{ color: '#4a4a4a', fontFamily: 'Rubik', fontWeight: 500, fontSize: 14 }}>Life cover</div>
                       <div style={{ color: '#4a4a4a' }}>{this.state.cover_amount}</div>
                     </div>
                   </div>
@@ -1126,7 +1123,7 @@ class Summary extends Component {
                     <img src={income} alt="" width="40" />
                   </div>
                   <div className="Text">
-                    <div style={{ color: '#4a4a4a', fontFamily: 'Roboto', fontWeight: 500, fontSize: 14 }}>Annual income</div>
+                    <div style={{ color: '#4a4a4a', fontFamily: 'Rubik', fontWeight: 500, fontSize: 14 }}>Annual income</div>
                     <div style={{ color: '#4a4a4a' }}>
                       {this.state.annual_income}
                     </div>
@@ -1140,7 +1137,7 @@ class Summary extends Component {
                       <img src={smoking} alt="" width="40" />
                     </div>
                     <div className="Text">
-                      <div style={{ color: '#4a4a4a', fontFamily: 'Roboto', fontWeight: 500, fontSize: 14 }}>Use tobacco</div>
+                      <div style={{ color: '#4a4a4a', fontFamily: 'Rubik', fontWeight: 500, fontSize: 14 }}>Use tobacco</div>
                       <div style={{ color: '#4a4a4a' }}>{(this.state.tobacco_choice === 'N') ? 'No' : 'Yes'}</div>
                     </div>
                   </div>
@@ -1168,7 +1165,7 @@ class Summary extends Component {
                       <img style={{ position: 'relative', top: 2 }} src={(this.state.accordianTab === 'personal') ? shrink : expand} alt="" width="20" />
                     </span>
                     <span>Personal details</span>
-                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().secondary, fontSize: 13 }} onClick={() => this.navigate('edit-personal')}>Edit</span>}
+                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().styles.secondaryColor, fontSize: 13 }} onClick={() => this.navigate('edit-personal')}>Edit</span>}
                   </div>
                 </div>
                 {this.renderAccordionBody('personal')}
@@ -1180,7 +1177,7 @@ class Summary extends Component {
                       <img style={{ position: 'relative', top: 2 }} src={(this.state.accordianTab === 'contact') ? shrink : expand} alt="" width="20" />
                     </span>
                     <span>Contact details</span>
-                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().secondary, fontSize: 13 }} onClick={() => this.navigate('edit-contact')}>Edit</span>}
+                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().styles.secondaryColor, fontSize: 13 }} onClick={() => this.navigate('edit-contact')}>Edit</span>}
                   </div>
                 </div>
                 {this.renderAccordionBody('contact')}
@@ -1192,7 +1189,7 @@ class Summary extends Component {
                       <img style={{ position: 'relative', top: 2 }} src={(this.state.accordianTab === 'professional') ? shrink : expand} alt="" width="20" />
                     </span>
                     <span>Professional details</span>
-                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().secondary, fontSize: 13 }} onClick={() => this.navigate('edit-professional')}>Edit</span>}
+                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().styles.secondaryColor, fontSize: 13 }} onClick={() => this.navigate('edit-professional')}>Edit</span>}
                   </div>
                 </div>
                 {this.renderAccordionBody('professional')}
@@ -1204,7 +1201,7 @@ class Summary extends Component {
                       <img style={{ position: 'relative', top: 2 }} src={(this.state.accordianTab === 'nominee') ? shrink : expand} alt="" width="20" />
                     </span>
                     <span>Nominee details</span>
-                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().secondary, fontSize: 13 }} onClick={() => this.navigate('edit-nominee')}>Edit</span>}
+                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().styles.secondaryColor, fontSize: 13 }} onClick={() => this.navigate('edit-nominee')}>Edit</span>}
                   </div>
                 </div>
                 {this.renderAccordionBody('nominee')}
@@ -1217,7 +1214,7 @@ class Summary extends Component {
                         <img style={{ position: 'relative', top: 2 }} src={(this.state.accordianTab === 'appointee') ? shrink : expand} alt="" width="20" />
                       </span>
                       <span>Appointee details</span>
-                      {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().secondary, fontSize: 13 }} onClick={() => this.navigate('edit-appointee')}>Edit</span>}
+                      {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().styles.secondaryColor, fontSize: 13 }} onClick={() => this.navigate('edit-appointee')}>Edit</span>}
                     </div>
                   </div>
                   {this.renderAccordionBody('appointee')}

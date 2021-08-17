@@ -3,7 +3,7 @@ import { withRouter } from 'react-router'
 
 import { didMount, commonRender } from 'common/components/container_functions'
 import { nativeCallback } from 'utils/native_callback'
-import '../../utils/native_listner'
+import '../../utils/native_listener'
 import { trackBackButtonPress, untrackBackButtonPress } from './functions'
 
 class Container extends Component {

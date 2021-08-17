@@ -13,6 +13,7 @@ const Returns = ({ returnsData,iframe }) => {
         iframe={iframe}
       />
       <Typography
+        className="return-condition"
         style={{
           fontSize: '12px',
           color: 'rgb(135, 135, 135)',

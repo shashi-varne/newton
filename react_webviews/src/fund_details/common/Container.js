@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router';
 
-import Header from './Header';
-import Footer from './footer';
-import loader_fisdom from 'assets/loader_gif_fisdom.gif';
-import loader_myway from 'assets/finity/loader_gif.gif';
+import Header from '../../common/components/Header';
+import Footer from '../../common/components/footer';
+// import loader_fisdom from 'assets/loader_gif_fisdom.gif';
+// import loader_myway from 'assets/loader_gif_myway.gif';
 import { nativeCallback } from 'utils/native_callback';
 import Button from '@material-ui/core/Button';
 import {
@@ -14,22 +14,33 @@ import {
   DialogContent,
   DialogContentText,
 } from '@material-ui/core';
-import '../../utils/native_listner';
+import '../../utils/native_listener';
 import { getConfig, setHeights } from 'utils/functions';
 // import {checkStringInString, storageService} from 'utils/validators';
 import { isFunction } from '../../utils/validators';
 
 import './Style.scss';
-
+import UiSkelton from '../../common/ui/Skelton';
+import IframeHeader from 'common/components/Iframe/Header';
+import { backButtonHandler, isNewIframeDesktopLayout } from '../../utils/functions';
 const Container = (props) => {
+  const config = getConfig();
+  const iframe = config.isIframe;
+  const isMobileDevice = config.isMobileDevice;
+  const newIframeDesktopLayout = isNewIframeDesktopLayout();
   const [openDialog, setOpenDialog] = useState(false);
-  const x = React.useRef(true);
-  const loaderMain = getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom;
+  // const loaderMain = getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom;
   const inPageTitle = true;
 
   const historyGoBack = (backData) => {
     // let fromHeader = backData ? backData.fromHeader : false;
     // let pathname = this.props.history.location.pathname;
+    nativeCallback({ events: getEvents('back') });
+
+    const fromState = props.location?.state?.fromState || "";
+    const toState = props.location?.state?.toState || "";
+    const pathname = props.location?.pathname || "";
+    const currentState = toState || pathname;
     let { params } = props.location;
 
     if (params && params.disableBack) {
@@ -37,29 +48,24 @@ const Container = (props) => {
       return;
     }
 
+    if (currentState) {
+      let isRedirected = backButtonHandler(props, fromState, currentState, params);
+      if (isRedirected) {
+        return;
+      }
+    }
+
     if (isFunction(props.goBack)) {
       return props.goBack(params);
     }
-    nativeCallback({ events: getEvents('back') });
     props.history.goBack();
   };
   useEffect(() => {
     setHeights({ header: true, container: false });
-    if (x.current) {
-      x.current = false;
-    } else {
-      if (getConfig().generic_callback) {
-        window.callbackWeb.addEventListener({
-          type: 'back_pressed',
-          go_back: () => historyGoBack(),
-        });
-      } else {
-        window.PlutusSdk.addEventListener({
-          type: 'back_pressed',
-          go_back: () => historyGoBack(),
-        });
-      }
-    }
+    window.callbackWeb.add_listener({
+        type: 'back_pressed',
+        go_back: () => historyGoBack()
+    });
   }, []);
 
   const getEvents = (user_action) => {
@@ -96,22 +102,22 @@ const Container = (props) => {
     );
   };
 
-  const renderPageLoader = () => {
-    if (props.showLoader) {
-      return (
-        <div className={`Loader ${props.loaderData ? props.loaderData.loaderClass : ''}`}>
-          <div className='LoaderOverlay'>
-            <img src={loaderMain} alt='' />
-            {props.loaderData && props.loaderData.loadingText && (
-              <div className='LoaderOverlayText'>{props.loaderData.loadingText}</div>
-            )}
-          </div>
-        </div>
-      );
-    } else {
-      return null;
-    }
-  };
+  // const renderPageLoader = () => {
+  //   if (props.showLoader) {
+  //     return (
+  //       <div className={`Loader ${props.loaderData ? props.loaderData.loaderClass : ''}`}>
+  //         <div className='LoaderOverlay'>
+  //           <img src={loaderMain} alt='' />
+  //           {props.loaderData && props.loaderData.loadingText && (
+  //             <div className='LoaderOverlayText'>{props.loaderData.loadingText}</div>
+  //           )}
+  //         </div>
+  //       </div>
+  //     );
+  //   } else {
+  //     return null;
+  //   }
+  // };
 
   const headerGoBack = () => {
     historyGoBack({ fromHeader: true });
@@ -128,12 +134,12 @@ const Container = (props) => {
 
   return (
     <div
-      className={`ContainerWrapper   ${props.classOverRide}  ${
-        getConfig().productName !== 'fisdom' ? 'blue' : ''
+      className={`${newIframeDesktopLayout ? 'iframeContainerWrapper' : (iframe && config.code === "bfdlmobile") ? 'bfdlContainerWrapper' : 'ContainerWrapper'}   ${props.classOverRide}  ${
+        config.productName !== 'fisdom' ? 'blue' : ''
       }`}
     >
       {/* Header Block */}
-      {!props.noHeader && !getConfig().hide_header && (
+      {!props.noHeader && !getConfig().hide_header && !newIframeDesktopLayout ?(
         <Header
           disableBack={props.disableBack}
           title={props.title}
@@ -152,14 +158,41 @@ const Container = (props) => {
           style={props.styleHeader}
           className={props.classHeader}
           headerData={props.headerData}
+          new_header={true}
         />
-      )}
+      )
+      :
+      (
+        <IframeHeader
+          disableBack={props.disableBack}
+          title={props.title}
+          smallTitle={props.smallTitle}
+          provider={props.provider}
+          count={props.count}
+          total={props.total}
+          current={props.current}
+          goBack={headerGoBack}
+          edit={props.edit}
+          type={getConfig().productName}
+          rightIcon={props.rightIcon}
+          handleRightIconClick={props.handleRightIconClick}
+          inPageTitle={inPageTitle}
+          force_hide_inpage_title={props.hideInPageTitle}
+          style={props.styleHeader}
+          className={props.classHeader}
+          headerData={props.headerData}
+        />
+      )
+    }
 
       {/* Below Header Block */}
-      <div id='HeaderHeight' style={{ top: 56 }}>
+      {
+        (!newIframeDesktopLayout)&&
+        <div id='HeaderHeight' style={{ top: 56 }}>
         {/* Loader Block */}
-        {renderPageLoader()}
+        {/* {renderPageLoader()} */}
       </div>
+      }
 
       {/*  */}
 
@@ -192,20 +225,30 @@ const Container = (props) => {
         </div>
       )}
 
+      {props.skelton &&
+        <div className="Loader" style={!config.isMobileDevice ? {top: "120px"} : {top: "56px"}}>
+          <UiSkelton type={props.skelton} />
+        </div>
+      }
+
       {/* Children Block */}
-      <div
-        style={props.styleContainer}
-        className={`
-            Container 
+      {!props.skelton &&
+        <div
+          style={props.styleContainer}
+          className={`
+            ${iframe && !isMobileDevice ? 'IframeContainer' :'Container'} 
             ${props.classOverRideContainer}
             ${props.noPadding ? 'no-padding' : ''}
           `}
-      >
-        {props.children}
-      </div>
+        >
+          <div className= 'fadein-animation'>
+            {props.children}
+          </div>
+        </div>
+      }
 
       {/* Footer Block */}
-      {!props.noFooter && (
+      {!props.noFooter && !props.skelton && (
         <Footer
           noFooter={props.noFooter}
           fullWidthButton={props.fullWidthButton}
@@ -215,6 +258,15 @@ const Container = (props) => {
           onlyButton={props.onlyButton}
           disable={props.disable}
           buttonData={props.buttonData}
+          twoButton={props.twoButton}
+          buttonTitle2={props.buttonTitle2}
+          showLoader={props.showLoader}
+          dualbuttonwithouticon={props.dualbuttonwithouticon}
+          buttonOneTitle={props.buttonOneTitle}
+          buttonTwoTitle={props.buttonTwoTitle}
+          handleClickOne={props.handleClickOne}
+          handleClickTwo={props.handleClickTwo}
+          {...props}
         />
       )}
       {/* No Internet */}
@@ -224,3 +276,80 @@ const Container = (props) => {
 };
 
 export default withRouter(Container);
+
+//////////////   NEW CONTAINER      ////////////////////////
+
+// import React, { Component, Fragment } from "react";
+// import { withRouter } from "react-router";
+// import {
+//   didMount,
+//   commonRender,
+// } from "../../common/components/container_functions";
+// import { nativeCallback } from "utils/native_callback";
+// import "../../utils/native_listener";
+// import "./Style.scss"
+// import { isFunction } from "../../utils/validators";
+
+// class Container extends Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       openDialog: false,
+//       openPopup: false,
+//       popupText: "",
+//       callbackType: "",
+//       inPageTitle: true,
+//       force_hide_inpage_title: this.props.hidePageTitle,
+//       new_header: true,
+//       project: "fund-details", //to use in common functions
+//     };
+//     this.historyGoBack = this.historyGoBack.bind(this);
+//     this.handleTopIcon = this.handleTopIcon.bind(this);
+
+//     this.didMount = didMount.bind(this);
+//     this.commonRender = commonRender.bind(this);
+//   }
+
+
+//   componentDidMount() {
+//     this.didMount();
+//   }
+
+//   historyGoBack = (backData) => {
+//     let fromHeader = backData ? backData.fromHeader : false;
+//     let pathname = this.props.history.location.pathname;
+//     let { params } = this.props.location;
+
+//     if (params && params.disableBack) {
+//       nativeCallback({ action: 'exit' });
+//       return;
+//     }
+
+//     if (isFunction(this.props.goBack)) {
+//       return this.props.goBack(params);
+//     }
+//     nativeCallback({ events: this.getEvents('back') });
+//     this.props.history.goBack();
+//   };
+
+//   componentWillUnmount() {
+//     this.unmount();
+//   }
+
+//   handleTopIcon = () => {
+//     this.props.handleTopIcon();
+//   };
+
+//   componentDidUpdate(prevProps) {
+//     this.didupdate();
+//   }
+
+//   render() {
+//     let props_base = {
+//       classOverRide: "loanMainContainer",
+//     };
+//     return <Fragment>{this.commonRender(props_base)}</Fragment>;
+//   }
+// }
+
+// export default withRouter(Container);

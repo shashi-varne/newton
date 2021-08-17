@@ -1,22 +1,24 @@
 import { getConfig } from 'utils/functions';
 
-export const themeConfig = {
+export const themeConfig =  () => {
+  const config = getConfig();
+  return {
     palette: {
         primary: {
             // light: will be calculated from palette.primary.main,
-            main: getConfig().primary,
+            main: config.styles.primaryColor,
             // dark: will be calculated from palette.primary.main,
             contrastText: '#ffffff',
         },
         secondary: {
             // light: '#0066ff',
-            main: getConfig().secondary,
+            main: config.styles.secondaryColor,
             // dark: will be calculated from palette.secondary.main,
             contrastText: '#ffffff',
         },
         default: {
             // light: '#0066ff',
-            main: getConfig().default,
+            main: config.styles.default,
             // dark: will be calculated from palette.secondary.main,
             contrastText: '#ffffff',
         }
@@ -31,10 +33,10 @@ export const themeConfig = {
         MuiFormLabel: {
             root: {
                 "&$focused": {
-                  color: getConfig().primary,
+                  color: config.styles.primaryColor,
                 },
                 "&$focused&$error": {
-                    color: getConfig().primary,
+                    color: config.styles.primaryColor,
                 },
                 "&$error": {
                     color: '#f44336',
@@ -50,20 +52,20 @@ export const themeConfig = {
             input: {
                 padding: '11px 0 7px',
                 fontSize: '14px',
-                color: getConfig().default
+                color: config.styles.default
             },
             fullWidth: {
                 // marginBottom: '12px'
             },
             focused: {
-                borderColor: getConfig().inputFocusedColor || getConfig().primary,
+                borderColor: config.styles.inputFocusedColor || config.styles.primaryColor,
             },
             underline: {
                 "&$error": {
-                    color: getConfig().primary,
+                    color: config.styles.primaryColor,
                 },
                 '&:after': {
-                    backgroundColor: getConfig().inputFocusedColor || getConfig().primary
+                    backgroundColor: config.styles.inputFocusedColor || config.styles.primaryColor
                 },
                 transform: 'inherit',
                 transition: 'transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms',
@@ -82,7 +84,7 @@ export const themeConfig = {
         MuiInputLabel: {
             root: {
                 fontSize: '0.9rem',
-                color: getConfig().label,
+                color: config.uiElements.formLabel.color,
                 fontWeight: 'normal'
             },
             shrink: {
@@ -92,23 +94,24 @@ export const themeConfig = {
         MuiButton: {
             raisedSecondary: {
                 '&:hover': {
-                    backgroundColor: getConfig().onHover
+                    backgroundColor: config.uiElements.button.hoverBackgroundColor || config.styles.secondaryColor
                 },
-                backgroundColor: getConfig().secondary,
+                backgroundColor: config.styles.secondaryColor,
                 color: '#fff',
-                borderRadius: 4,
+                borderRadius: config.uiElements.button.borderRadius,
                 boxShadow: 'none'
             },
             disabled: {
                 // opacity: 0.4,
-                color: '#fff !important',
-                backgroundColor: 'var(--color-action-disable) !important',
+                color: `${config.uiElements.button.disabledColor} !important`,
+                backgroundColor: `${config.uiElements.button.disabledBackgroundColor} !important`,
                 touchAction: 'none'
             },
             label: {
-                textTransform: 'capitalize'
+                textTransform: 'uppercase'
             },
             root: {
+                borderRadius: config.uiElements.button.borderRadius,
                 boxShadow: 'none !important'
             }
         },
@@ -119,7 +122,7 @@ export const themeConfig = {
         },
         MuiCheckbox: {
             root: {
-                color: getConfig().primary,
+                color: config.styles.primaryColor,
                 position: 'relative',
                 left: '-15px'
             }
@@ -130,6 +133,7 @@ export const themeConfig = {
             }
         }
     }
+  }
 }
 
 export function bankAccountTypeOptions(isNri) {
@@ -171,3 +175,19 @@ export function bankAccountTypeOptions(isNri) {
       'SB-NRE': 'Non Resident External Account (NRE)',
       'SB-NRO': 'Non Resident Ordinary Account (NRO)'
   }
+
+export const commonBackMapper = {
+    '/withdraw/insta': '/withdraw',
+    '/withdraw': '/',
+    '/my-account': '/',
+    '/withdraw/otp/success': '/',
+    '/withdraw/otp/failed': '/withdraw',
+    '/kyc/compliant-report-verified': '/',
+    '/kyc/compliant-report-complete': '/',
+    '/kyc/compliant-personal-details': '/kyc/journey',
+    '/reports/redeemed-transaction': '/reports',
+    '/reports/switched-transaction': '/reports',
+    '/reports/sip/pause-request': '/reports/sip',
+    '/reports/sip/details': '/reports/sip',
+    '/reports/sip': '/reports',
+}

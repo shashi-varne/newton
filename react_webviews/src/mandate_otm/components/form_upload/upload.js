@@ -10,7 +10,7 @@ import gallery_green from 'assets/go_to_gallery_green.svg';
 import gallery_grey from 'assets/go_to_gallery_grey.svg';
 import correct from 'assets/correct_otm_sample_image.svg';
 import incorrect from 'assets/incorrect_otm_sample_image.svg';
-import '../../../utils/native_listner_otm';
+import '../../../utils/native_listener';
 import $ from 'jquery';
 
 import Dialog, {
@@ -43,7 +43,7 @@ class Upload extends Component {
 
   componentWillMount() {
 
-    if (!getConfig().campaign_version && !getConfig().html_camera) {
+    if (!getConfig().html_camera) {
       this.setState({
         openDialogOldClient: true
       })
@@ -52,46 +52,27 @@ class Upload extends Component {
 
   componentDidMount() {
     let that = this;
-    if (getConfig().generic_callback) {
 
-      if (getConfig().iOS) {
-        nativeCallback({ action: 'hide_top_bar' });
-      }
-
-      window.callbackWeb.add_listener({
-        type: 'back_pressed',
-        go_back: function () {
-          that.setState({
-            openDialog: false
-          });
-        }
-      });
-
-      window.callbackWeb.add_listener({
-        type: 'native_receiver_image',
-        show_loader: function (show_loader) {
-
-          that.showLoaderNative();
-        }
-      });
-    } else {
-      window.PaymentCallback.add_listener({
-        type: 'back_pressed',
-        go_back: function () {
-          that.setState({
-            openDialog: false
-          });
-        }
-      });
-
-      window.PaymentCallback.add_listener({
-        type: 'native_receiver_image',
-        show_loader: function (show_loader) {
-
-          that.showLoaderNative();
-        }
-      });
+    if (getConfig().iOS) {
+      nativeCallback({ action: 'hide_top_bar' });
     }
+
+    window.callbackWeb.add_listener({
+      type: 'back_pressed',
+      go_back: function () {
+        that.setState({
+          openDialog: false
+        });
+      }
+    });
+
+    window.callbackWeb.add_listener({
+      type: 'native_receiver_image',
+      show_loader: function (show_loader) {
+
+        that.showLoaderNative();
+      }
+    });
   }
 
   navigate = (pathname) => {
@@ -182,96 +163,50 @@ class Upload extends Component {
 
   native_call_handler(method_name, doc_type, doc_name, doc_side) {
     let that = this;
-    if (getConfig().generic_callback) {
-      window.callbackWeb[method_name]({
-        type: 'doc',
-        doc_type: doc_type,
-        doc_name: doc_name,
-        doc_side: doc_side,
-        // callbacks from native
-        upload: function upload(file) {
-          try {
-            that.setState({
-              docType: this.doc_type,
-              docName: this.docName,
-              doc_side: this.doc_side,
-              openDialog: false,
-              show_loader: true
-            })
-            switch (file.type) {
-              case 'image/jpeg':
-              case 'image/jpg':
-              case 'image/png':
-              case 'image/bmp':
-                that.mergeDocs(file);
-                break;
-              default:
-                alert('Please select image file');
-                that.setState({
-                  docType: this.doc_type,
-                  show_loader: false
-                })
-            }
-          } catch (e) {
-            // 
-          }
-        }
-      });
-
-      window.callbackWeb.add_listener({
-        type: 'native_receiver_image',
-        show_loader: function (show_loader) {
+    window.callbackWeb[method_name]({
+      type: 'doc',
+      doc_type: doc_type,
+      doc_name: doc_name,
+      doc_side: doc_side,
+      // callbacks from native
+      upload: function upload(file) {
+        try {
           that.setState({
+            docType: this.doc_type,
+            docName: this.docName,
+            doc_side: this.doc_side,
+            openDialog: false,
             show_loader: true
           })
-          that.showLoaderNative();
-        }
-      });
-    } else {
-      window.PaymentCallback[method_name]({
-        type: 'doc',
-        doc_type: doc_type,
-        doc_name: doc_name,
-        doc_side: doc_side,
-        // callbacks from native
-        upload: function upload(file) {
-          try {
-            that.setState({
-              docType: this.doc_type,
-              docName: this.docName,
-              doc_side: this.doc_side,
-              openDialog: false,
-              show_loader: true
-            })
-            switch (file.type) {
-              case 'image/jpeg':
-              case 'image/jpg':
-              case 'image/png':
-              case 'image/bmp':
-                that.mergeDocs(file);
-                break;
-              default:
-                alert('Please select image file');
-            }
-          } catch (e) {
-            // 
+          switch (file.type) {
+            case 'image/jpeg':
+            case 'image/jpg':
+            case 'image/png':
+            case 'image/bmp':
+              that.mergeDocs(file);
+              break;
+            default:
+              alert('Please select image file');
+              that.setState({
+                docType: this.doc_type,
+                show_loader: false
+              })
           }
+        } catch (e) {
+          // 
         }
-      });
+      }
+    });
 
-      window.PaymentCallback.add_listener({
-        type: 'native_receiver_image',
-        show_loader: function (show_loader) {
-          that.setState({
-            show_loader: true
-          })
-          that.showLoaderNative();
-        }
-      });
-    }
-
-
-
+    window.callbackWeb.add_listener({
+      type: 'native_receiver_image',
+      show_loader: function (show_loader) {
+        that.setState({
+          show_loader: true
+        })
+        that.showLoaderNative();
+      }
+    });
   }
 
   startUpload(method_name, doc_type, doc_name, doc_side) {
@@ -386,7 +321,7 @@ class Upload extends Component {
             }}>
               <input type="file" style={{ display: 'none' }} onChange={this.getPhoto} id="myFile" />
               <img src={this.state.productName !== 'fisdom' ? camera_finity : camera_green} alt="OTM"></img>
-              <div style={{ color: getConfig().secondary }}>Click here to upload</div>
+              <div style={{ color: getConfig().styles.secondaryColor }}>Click here to upload</div>
             </div>
           </div>
         </div>}
@@ -403,7 +338,7 @@ class Upload extends Component {
             }}>
               <input type="file" style={{ display: 'none' }} onChange={this.getPhoto} id="myFile" />
               <img src={camera_grey} alt="OTM"></img>
-              <div style={{color: getConfig().secondary }}>Click here to upload</div>
+              <div style={{color: getConfig().styles.secondaryColor }}>Click here to upload</div>
             </div>
           </div>
         </div>}
@@ -604,7 +539,7 @@ class Upload extends Component {
             <div style={{ color: '#4a4a4a', fontSize: 14, fontWeight: 600 }}>
               Didn’t recieve my OTM form?
             </div>
-            <div onClick={() => this.navigate('send-email')} style={{ color: getConfig().secondary, fontSize: 14, fontWeight: 500, marginTop: 10 }}>
+            <div onClick={() => this.navigate('send-email')} style={{ color: getConfig().styles.secondaryColor, fontSize: 14, fontWeight: 500, marginTop: 10 }}>
               Send me again.
           </div>
           </div>

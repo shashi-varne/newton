@@ -29,7 +29,7 @@ const FundInfo = ({ title, content }) => {
           if (item.period) {
             return (
               <Typography key={index} style={valueStyle}>
-                {`${nonRoundingToFixed(item.value, 2)}% (${item.period})`}
+                {`${item.value === 0 ? '0.000' : nonRoundingToFixed(item.value, 3)}% (${item.period})`}
               </Typography>
             );
           }

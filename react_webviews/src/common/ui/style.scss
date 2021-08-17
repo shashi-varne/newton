@@ -125,7 +125,7 @@
 .RadioLabel {
   color: var(--label);
   font-size: 14px;
-  font-family: "Roboto";
+  font-family: "Rubik", "Roboto", sans-serif;
   font-weight: 500;
 }
 .RadioWithIcon {
@@ -166,7 +166,7 @@
   text-align: left;
   margin-top: 8px;
   min-height: 1em;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-family: "Rubik", "Roboto", sans-serif;
   line-height: 1em;
   color: #f44336;
   position: relative;
@@ -334,7 +334,7 @@ input.default-otp-input {
   margin: 80px 0 0 0;
 
   .left-arrow:hover, .right-arrow:hover{
-    background-color: var(--on-hover);
+    background-color: var(--on-hover-background);
   }
 
 }
@@ -597,6 +597,10 @@ body[data-device="mobile"] {
   .__react_component_tooltip.show {
     opacity: 1;
    }
+
+   .generic-page-loader {
+     top: 0px;
+   }
 }
 
 .generic-render-benefits {
@@ -661,6 +665,10 @@ body[data-device="mobile"] {
     text-align: left;
     background: white;
   }
+
+  .dropdown-in-modal-close{
+    cursor: pointer;
+  }
 }
 
 .plus-minus-input-label {
@@ -680,6 +688,10 @@ body[data-device="mobile"] {
     justify-content: space-between;
     align-items: center;
     margin: 0 0 10px 0;
+
+    .t-right {
+      margin-left: 10px;
+    }
   }
 
   div#alert-dialog-description {
@@ -742,7 +754,7 @@ body[data-device="mobile"] {
   text-align: left;
   margin-top: 8px;
   min-height: 1em;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-family: "Rubik", "Roboto", sans-serif;
   line-height: 1em;
   margin-bottom: 10px;
   position: relative;
@@ -1125,7 +1137,7 @@ body[data-device="mobile"] {
   }
   50%,
   100% {
-    background-color: #119A4B;
+    background-color: var(--on-focus-background);
     opacity: 0.7;
   }
 }
@@ -1153,6 +1165,36 @@ body[data-device="mobile"] {
 .generic-button-raised {
   color: white;
   background-color: var(--secondary);
+}
+
+
+#f-info-box {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  border-radius: 6px;
+  background: var(--highlight);
+
+  #f-info-box-img {
+    margin-right: 16px;
+  }
+
+  #f-info-box-body {
+    flex-basis: 60%;
+    word-break: break-word;
+    flex: 1;
+  }
+
+  #f-info-box-ctrl {
+    font-size: 12px;
+    letter-spacing: 1px;;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: var(--secondary);
+    margin-left: 16px;
+  }
 }
 
 .Toastify__toast{
@@ -1379,4 +1421,13 @@ padding-right: 12px !important;
     }
   }
 
+}
+
+  
+//Passive Funds List Style :
+.fundlist-data {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0 20px 0;
 }

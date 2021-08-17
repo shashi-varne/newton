@@ -490,7 +490,7 @@ class GroupHealthLanding extends Component {
             />
             <div
               className="accident-plan-read-text"
-              style={{ color: getConfig().primary, marginLeft: '10px' }}
+              style={{ color: getConfig().styles.primaryColor, marginLeft: '10px' }}
             >
               Read full-policy description
             </div>
@@ -516,7 +516,7 @@ class GroupHealthLanding extends Component {
                       this.openPdf(this.state.common.tnc, "tnc")
                     }
                     className="accident-plan-terms-bold"
-                    style={{ color: getConfig().primary, textDecoration: 'underline' }}
+                    style={{ color: getConfig().styles.primaryColor, textDecoration: 'underline' }}
                   >
                     Terms and conditions
                   </span> 

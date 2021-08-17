@@ -8,7 +8,7 @@ class JourneyStepsClass extends Component {
     super(props);
     this.state = {
       baseData: this.props.baseData,
-      productName: getConfig().type,
+      productName: getConfig().productName,
     };
   }
 

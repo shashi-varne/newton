@@ -39,7 +39,7 @@ const Header = ({ classes, width, goBack, resetpage, handleReset, disableBack })
             </div>
 
             <img
-              src={require(`assets/finity/moneycontrol_logo.svg`)}
+              src={require(`assets/moneycontrol_logo.svg`)}
               className={classes.img}
               style={{ marginTop: '20px', marginBottom: '20px' }}
               alt=''
@@ -90,7 +90,7 @@ const styles = function () {
         height: '80px',
       },
       topBar: {
-        backgroundColor: getConfig().primary,
+        backgroundColor: getConfig().styles.primaryColor,
         width: '100%',
         height: '80px',
         display: 'flex',

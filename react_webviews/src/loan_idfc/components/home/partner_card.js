@@ -68,7 +68,7 @@ class PartnerCard extends Component {
               Benefits
               <SVG
                 preProcessor={(code) =>
-                  code.replace(/fill=".*?"/g, "fill=" + getConfig().primary)
+                  code.replace(/fill=".*?"/g, "fill=" + getConfig().styles.primaryColor)
                 }
                 src={require(`assets/${
                   this.props.isSelected ? "minus_icon" : "plus_icon"

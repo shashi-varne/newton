@@ -1,16 +1,15 @@
 import axios from 'axios';
 import * as Sentry from '@sentry/browser'
 
-import { checkValidString } from './validators';
 import { isEmpty } from 'lodash';
+import { storageService } from './validators';
 import { encrypt, decrypt } from './encryption';
 import { getConfig } from 'utils/functions';
 
 const genericErrMsg = "Something went wrong";
+const config = getConfig();
+let base_url = config.base_url;
 
-let base_url = getConfig().base_url;
-let redirect_url = getConfig().redirect_url;
-let sdk_capabilities = getConfig().sdk_capabilities;
 let is_secure = false;
 
 axios.defaults.baseURL = decodeURIComponent(base_url).replace(/\/$/, "");
@@ -35,20 +34,19 @@ class Api {
   }
 
   static xhr(route, params, verb) {
-    if (redirect_url && verb !== 'get') {
+    if (verb !== 'get') {
       if (params instanceof FormData) {
         is_secure = false;
       } else {
-        redirect_url = decodeURIComponent(redirect_url);
-        let redirect_url_data = redirect_url.split("?is_secure=")
-        if (redirect_url_data.length === 2) {
-          is_secure = checkValidString(redirect_url_data[1]);
-        }
-
+        is_secure = storageService().get("is_secure");
       }
     }
+    const sdk_capabilities = getConfig().sdk_capabilities;
     if (sdk_capabilities) {
       axios.defaults.headers.common['sdk-capabilities'] = sdk_capabilities;
+    }
+    if(route.includes("/api/") && storageService().get("x-plutus-auth") && config.isIframe) {
+      axios.defaults.headers.common["X-Plutus-Auth"] = storageService().get("x-plutus-auth")
     }
     let options = Object.assign({
       method: verb,
@@ -62,6 +60,10 @@ class Api {
       .then(response => {
         if (response.data._encr_payload) {
           response.data = JSON.parse(decrypt(response.data._encr_payload));
+        }
+
+        if (response.config.url.includes("/api/") && response.headers["x-plutus-auth"] && config.isIframe) {
+          storageService().set("x-plutus-auth", response.headers["x-plutus-auth"])
         }
 
         const pfwResponseData = response?.data?.pfwresponse;

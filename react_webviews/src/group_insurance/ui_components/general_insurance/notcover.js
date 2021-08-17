@@ -11,7 +11,7 @@ class RenderDiseasesClass extends Component {
         product_diseases_covered: []
       },
       type: getConfig().productName,
-      color: getConfig().primary,
+      color: getConfig().styles.primaryColor,
     };
 
     this.handleClickCurrent = this.handleClickCurrent.bind(this);

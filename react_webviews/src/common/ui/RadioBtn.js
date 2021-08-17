@@ -17,7 +17,7 @@ export default class RadioBtn extends Component {
         onClick={() => this.handleClick()} 
         >
         <div
-          style={{ color: getConfig().primary }}
+          style={{ color: getConfig().styles.primaryColor }}
           className={`ContainerWrapper ${this.props.isChecked ? "RadioButton checked" : "RadioButton unchecked"}`}
           data-value={this.props.value} >
           <label 
@@ -28,7 +28,7 @@ export default class RadioBtn extends Component {
             <div className="inside-text" style={{fontWeight: `${this.props.isChecked ? '700' : '400'}`}}>{this.props.text}</div>
             {this.props.isChecked && 
              <SVG className="tickmark-img"
-             preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+             preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.primaryColor)}
              src={check_selected}
             />
             }

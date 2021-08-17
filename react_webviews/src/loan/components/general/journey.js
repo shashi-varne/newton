@@ -201,7 +201,7 @@ class Journey extends Component {
     if (index === this.state.journeyData.length - 1) {
       return '2px solid white';
     } else if (props.status === 'success') {
-      return '2px solid ' + getConfig().primary;
+      return '2px solid ' + getConfig().styles.primaryColor;
     }
 
     return '';
@@ -214,7 +214,7 @@ class Journey extends Component {
           {props.status === 'success' &&
             <SVG
               style={{ backgroundColor: '#fff', zIndex: 111 }}
-              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.primaryColor)}
               src={require(`assets/${this.state.icon_mapper[props.status]}.svg`)}
               className="icon normal-step-icon"
             />}
@@ -224,7 +224,7 @@ class Journey extends Component {
 
           {props.status === 'pending' &&
             <SVG
-              // preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+              // preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.primaryColor)}
               src={require(`assets/${this.state.icon_mapper[props.status]}.svg`)}
               className="icon normal-step-icon"
             />

@@ -1,0 +1,38 @@
+/* Button Styles */
+.wv-layout-button-text {
+  .MuiButton-label {
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+}
+
+/* Button Layouts */
+
+.wv-button-layout-stacked {
+  display: flex;
+  flex-direction: column;
+
+  .wv-layout-button + .wv-layout-button {
+    /* Add margin between consecutive buttons */
+    margin-top: 20px;
+  }
+}
+
+.wv-button-layout-horizontal {
+  display: flex;
+  flex-direction: row;
+
+  .wv-layout-button + .wv-layout-button {
+    /* Add margin between consecutive buttons */
+    margin-left: 30px;
+  }
+
+  .wv-layout-button-secondary {
+    /* Allows for type="secondary" buttons to be more
+     flexible (squeeze/expand) in a 'horizontal' layout */
+    // flex: 1; //TODO: Ask Vinod about this 
+  }
+}

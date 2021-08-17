@@ -13,7 +13,7 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
-import '../../utils/native_listner_otm';
+import '../../utils/native_listener';
 import { getConfig, setHeights } from 'utils/functions';
 
 import "./Style.scss"
@@ -39,24 +39,15 @@ class Container extends Component {
     this.update();
     setHeights({ 'header': true, 'container': false });
     let that = this;
-    if (getConfig().generic_callback) {
-      if (getConfig().iOS) {
-        nativeCallback({ action: 'hide_top_bar' });
-      }
-      window.callbackWeb.add_listener({
-        type: 'back_pressed',
-        go_back: function () {
-          that.historyGoBack();
-        }
-      });
-    } else {
-      window.PaymentCallback.add_listener({
-        type: 'back_pressed',
-        go_back: function () {
-          that.historyGoBack();
-        }
-      });
+    if (getConfig().iOS) {
+      nativeCallback({ action: 'hide_top_bar' });
     }
+    window.callbackWeb.add_listener({
+      type: 'back_pressed',
+      go_back: function () {
+        that.historyGoBack();
+      }
+    });
   }
 
 
@@ -69,11 +60,7 @@ class Container extends Component {
   };
 
   componentWillUnmount() {
-    if (getConfig().generic_callback) {
-      window.callbackWeb.remove_listener({});
-    } else {
-      window.PaymentCallback.remove_listener({});
-    }
+    window.callbackWeb.remove_listener({});
   }
 
   navigate = (pathname) => {
@@ -240,7 +227,7 @@ class Container extends Component {
     for (var i = 0; i < this.props.total; i++) {
       if (this.props.current > i) {
         steps.push(<span className='active'
-          style={{ background: getConfig().primary, marginRight: 0 }} key={i}></span>);
+          style={{ background: getConfig().styles.primaryColor, marginRight: 0 }} key={i}></span>);
       } else {
         steps.push(<span key={i} style={{ marginRight: 0 }}></span>);
       }
