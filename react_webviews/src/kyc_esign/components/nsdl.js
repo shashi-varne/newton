@@ -80,9 +80,8 @@ class DigiStatus extends Component {
     if (this.state.set2faPin) {
       // Handles behaviour for both web as well as native
       openModule('account/setup_2fa', this.props, { routeUrlParams: '/kyc-complete' });
-    } else {
-      this.redirectToHome();
     }
+    this.redirectToHome();
   };
 
   redirectToHome = () => {
