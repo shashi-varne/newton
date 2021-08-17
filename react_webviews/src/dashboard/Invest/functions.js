@@ -582,7 +582,6 @@ export function handleIpoCardRedirection() {
   } else {
     this.navigate("/market-products");
   }
-  // Todo: handle redirection to stocks sdk for equity_activation_pending status
 }
           
 export function handleStocksAndIpoCards(key) {
@@ -623,6 +622,9 @@ export function handleStocksAndIpoCards(key) {
           return nativeCallback({ action: 'exit_web' });
           // TODO: Test native behaviour for this code
         }
+      } else {
+        console.log("redirection"); // Todo: Remove this console once you enter redirection path to stocks sdk
+        // Todo: Redirect to stocks sdk
       }
     }
   }
@@ -631,7 +633,7 @@ export function handleStocksAndIpoCards(key) {
     modalData.oneButton = true
   }
 
-  if (!isEmpty(modalData) && (kycJourneyStatus !== "complete" || (kycJourneyStatus === "complete" && !userKyc.mf_kyc_processed))) {
+  if (!isEmpty(modalData) && (kycJourneyStatus !== "complete" || (kycJourneyStatus === "complete" && userKyc.kyc_product_type !== "equity"))) {
     this.setState({ modalData, openKycStatusDialog: true });
   }
 }
