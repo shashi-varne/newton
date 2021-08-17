@@ -501,7 +501,7 @@ export function getBasePath() {
 
 export function isTradingEnabled(userKyc = {}) {
   const kyc = !isEmpty(userKyc) ? userKyc : storageService().getObject("kyc");
-  return kyc?.equity_enabled
+  return !getConfig().isSdk && kyc?.equity_enabled;
 }
 const { checkBeforeRedirection, checkAfterRedirection, backButtonHandler } = require(`./${getConfig().platform}_app`);
 
