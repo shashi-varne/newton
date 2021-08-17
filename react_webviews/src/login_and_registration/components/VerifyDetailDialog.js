@@ -5,6 +5,7 @@ import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClick
 import { isEmpty } from "lodash";
 import { authCheckApi, generateOtp } from "../functions";
 import "./commonStyles.scss";
+import toast from '../../common/ui/Toast';
 
 const product = getConfig().productName;
 class VerifyDetailDialog extends Component {
@@ -20,6 +21,7 @@ class VerifyDetailDialog extends Component {
 
   handleClick = async () => {
     const { data, type } = this.props;
+    this.props.parent.sendEvents("next", "bottomsheet")
     if (isEmpty(data)) {
       this.props.parent.navigate("/secondary-verification", {
         state: {
@@ -38,10 +40,12 @@ class VerifyDetailDialog extends Component {
         }
         const otpResponse = await this.generateOtp(body);
         if (otpResponse) {
+          let result = otpResponse.pfwresponse.result;
+          toast(result.message || "Success");
           this.props.parent.navigate("secondary-otp-verification", {
             state: {
               value: data?.contact_value,
-              otp_id: otpResponse.otp_id,
+              otp_id: result.otp_id,
               communicationType: type,
             },
           });
@@ -54,6 +58,7 @@ class VerifyDetailDialog extends Component {
   };
 
   editDetails = () => {
+    this.props.parent.sendEvents("edit", "bottomsheet");
     this.props.parent.navigate("/secondary-verification", {
       state: {
         communicationType: this.props?.type,
@@ -69,7 +74,7 @@ class VerifyDetailDialog extends Component {
       <WVBottomSheet
         isOpen={isOpen}
         onClose={onClose}
-        title={`Verify your ${type} address`}
+        title={`Verify your ${type === "email" ? "email address" : "mobile number"}`}
         image={require(`../../assets/${product}/bottomsheet_verify_${type}.svg`)}
         subtitle={`${
           type === "email" ? "Email" : "Mobile"
@@ -92,7 +97,7 @@ class VerifyDetailDialog extends Component {
                 src={require(`../../assets/bottom_sheet_icon_${type}.svg`)}
                 alt=""
               />
-              <span className="text">{data?.contact_value}</span>
+              <span className="text">{isNaN(data?.contact_value) ? data?.contact_value : `+91 - ${data?.contact_value}`}</span>
             </div>
             <WVClickableTextElement onClick={this.editDetails}>
               EDIT

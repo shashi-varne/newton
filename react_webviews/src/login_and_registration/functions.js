@@ -181,7 +181,7 @@ export function setBaseHref() {
   }
 }
 
-export async function triggerOtpApi(body, loginType) {
+export async function triggerOtpApi(body, loginType, bottomsheet) {
   try {
     const res = await Api.post(
       `/api/communication/send/otp`, body
@@ -189,7 +189,7 @@ export async function triggerOtpApi(body, loginType) {
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       this.setState({ isApiRunning: false });
-      this.sendEvents("next")
+      if(!bottomsheet) this.sendEvents("next");
       if (body?.secondaryVerification) {
         this.navigate("/secondary-otp-verification", {
           state: {
@@ -468,7 +468,6 @@ export async function resendOtp(otp_id) {
     const res = await Api.post(`/api/communication/resend/otp/${otp_id}`);
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
-      this.sendEvents("resend")
       this.setState({ isResendOtpApiRunning: false });
       toast(result.message || "Success!");
     } else {
@@ -606,7 +605,7 @@ export async function authCheckApi(type, data) {
     }
   } catch (err) {
     console.log(err)
-    Toast(err, "error");
+    toast(err);
   } finally {
     this.setState({
       loading: false,
