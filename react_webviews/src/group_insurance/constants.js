@@ -627,7 +627,7 @@ export function ghGetMember(lead, providerConfig) {
     'parent_in_law_account2_key'
   ];
   const { add_members_screen: { son_max, daughter_max }} = providerConfig;
-
+  
   let backend_child_keys = [];
   for (let i = 0; i < (son_max + daughter_max); i++) {
     backend_child_keys.push(`child_account${i+1}_key`);
@@ -640,6 +640,11 @@ export function ghGetMember(lead, providerConfig) {
     'parents': ['parent_account1_key', 'parent_account2_key'],
     'parents_in_law': ['parent_in_law_account1_key', 'parent_in_law_account2_key'],
   };
+
+  if(lead.vendor === 'star' && (lead.insurance_type === 'family' || lead.insurance_type === 'self_family')){
+    allowed_as_per_account['family'] = [...allowed_as_per_account['family'], 'parent_account1_key', 'parent_account2_key', 'parent_in_law_account1_key', 'parent_in_law_account2_key']
+    allowed_as_per_account['self_family'] = [...allowed_as_per_account['self_family'], 'parent_account1_key', 'parent_account2_key', 'parent_in_law_account1_key', 'parent_in_law_account2_key']
+  } 
   const allowed_mapper = allowed_as_per_account[lead.insurance_type];
 
   let member_base = [];
@@ -686,16 +691,33 @@ export function ghGetMember(lead, providerConfig) {
     }
   }
   
+  if(lead.vendor === 'star' && (lead.insurance_type === 'family' || lead.insurance_type === 'self_family')){
+    member_base = starMemberSort(member_base);
+  }
+  
   if(['parents', 'parents_in_law', 'family'].includes(lead.insurance_type)) {
     let obj = lead.member_details['self_account_key'] || {};
     obj.backend_key = 'self_account_key';
     obj.key = 'applicant';
     member_base.push(obj);
-
   }
 
-  return member_base; 
+  
 
+  return member_base; 
+}
+
+export function starMemberSort(current_member_data){
+  var dobOrder = ['self', 'husband', 'wife', 'daughter', 'daughter1', 'daughter2', 'daughter3', 'son', 'son1', 'son2', 'son3', 'father', 'mother', 'father_in_law', 'mother_in_law']
+  var member_base = [];
+  for(let x of dobOrder){
+    for(let y of current_member_data){
+      if(x === y.key){
+          member_base.push(y);
+      }   
+    }
+  }
+  return member_base;
 }
 
 export function getCssMapperReport(policy) {

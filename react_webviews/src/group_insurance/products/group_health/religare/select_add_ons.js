@@ -170,7 +170,7 @@ class GroupHealthPlanAddOns extends Component {
                                     </div>
                                     <div id="add_ons_bottom_text">{item.bottom_text}</div>
                                 </div>
-                          <GenericTooltip content={item.description} productName={getConfig().productName} />
+                                <GenericTooltip content={item.description} productName={getConfig().productName} />
                             </span>
                             {item.checked && Array.isArray(item.price) && <DropdownInModal
                                 parent={this}

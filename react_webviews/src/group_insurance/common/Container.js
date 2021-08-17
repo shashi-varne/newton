@@ -39,6 +39,7 @@ class Container extends Component {
     if (pathname === '/group-insurance' 
        || pathname.indexOf('other-insurance') >= 0 
        || pathname.indexOf('life-insurance') >= 0 
+       || pathname.indexOf('system-maintenance') >= 0 
        || pathname.includes('/group-insurance/group-health')
        || pathname === '/group-insurance/group-insurance/add-policy' 
        || pathname === '/group-insurance/health/landing'

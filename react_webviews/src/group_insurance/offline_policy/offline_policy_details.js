@@ -9,8 +9,8 @@ import {
 import Api from 'utils/api';
 import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
 import ic_hs_main_benefits from 'assets/ic_hs_main_benefits.svg';
-import ReactHtmlParser from 'react-html-parser';
 import { getCssMapperReport ,  TitleMaper , ProviderName } from '../constants'
+import {Imgc} from 'common/ui/Imgc';
 
 class GroupHealthReportDetails extends Component {
 
@@ -138,20 +138,6 @@ class GroupHealthReportDetails extends Component {
         }
     }
 
-    renderSteps = (option, index) => {
-        return (
-            <div key={index} className="tile">
-                <img className="icon"
-                    src={option.img} alt="Gold" />
-                <div className="content">
-                    <div className="content">
-                        <div className="content-title">{ReactHtmlParser(option.content)}</div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
     render() {
 
         return (
@@ -168,7 +154,7 @@ class GroupHealthReportDetails extends Component {
                 handleClick={() => this.handleClick()}
                 noFooter={!this.state.showPlanDetails}
             >
-                <div className="group-health-plan-details group-health-final-summary">
+                <div className="group-health-plan-details group-health-final-summary group-health-report-details">
 
                     <div style={{ margin: '20px 0 14px 0' }} className={`report-color-state ${this.state.policy_data.cssMapper.color}`}>
                         <div className="circle" style={{backgroundColor: this.state.policy_data.cssMapper.color}}></div>
@@ -181,7 +167,7 @@ class GroupHealthReportDetails extends Component {
                         </div>
 
                         <div className="tc-right">
-                        <img style={{ width: 50 }} src={this.state.lead.logo} alt="" />
+                        <Imgc style={{ width: 50, minHeight: 50 }} src={this.state.lead.logo} alt="" />
                         </div>
                     </div>
 
@@ -190,7 +176,7 @@ class GroupHealthReportDetails extends Component {
                     { this.state.lead.customer_name && 
                     <div className="member-tile">
                             <div className="mt-left">
-                            <img src={require(`assets/${this.state.productName}/ic_hs_insured.svg`)} alt="" />
+                            <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/ic_hs_insured.svg`)} alt="" />
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
@@ -205,7 +191,7 @@ class GroupHealthReportDetails extends Component {
                     { this.state.lead.customer_name &&
                     <div className="member-tile">
                             <div className="mt-left">
-                            <img src={require(`assets/${this.state.productName}/ic_hs_insured.svg`)} alt="" />
+                            <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/ic_hs_insured.svg`)} alt="" />
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
@@ -220,7 +206,7 @@ class GroupHealthReportDetails extends Component {
                         { this.state.lead.mobile_number &&
                         <div className="member-tile">
                             <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/icn_phn_no.svg`)} alt="" />
+                                <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/icn_phn_no.svg`)} alt="" />
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
@@ -235,7 +221,7 @@ class GroupHealthReportDetails extends Component {
                          {this.state.lead.email_id &&
                         <div className="member-tile">
                             <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/icn_mail_id.svg`)} alt="" />
+                                <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/icn_mail_id.svg`)} alt="" />
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
@@ -250,7 +236,7 @@ class GroupHealthReportDetails extends Component {
                         {this.state.lead.policy_number &&
                         <div className="member-tile">
                             <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/ic_hs_policy.svg`)} alt="" />
+                                <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/ic_hs_policy.svg`)} alt="" />
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
@@ -265,7 +251,7 @@ class GroupHealthReportDetails extends Component {
                         {!this.state.lead.policy_number &&  this.state.lead.application_number &&
                         <div className="member-tile">
                             <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/ic_hs_policy.svg`)} alt="" />
+                                <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/ic_hs_policy.svg`)} alt="" />
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
@@ -280,7 +266,7 @@ class GroupHealthReportDetails extends Component {
                         {this.state.lead.total_amount &&
                         <div className="member-tile">
                             <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/ic_how_to_claim2.svg`)} alt="" />
+                                <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/ic_how_to_claim2.svg`)} alt="" />
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
@@ -295,7 +281,7 @@ class GroupHealthReportDetails extends Component {
                          {this.state.lead.cover_period &&
                         <div className="member-tile">
                             <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
+                                <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
@@ -310,7 +296,7 @@ class GroupHealthReportDetails extends Component {
                        {this.state.lead.plan_type && 
                         <div className="member-tile">
                             <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/icn_plan_type.svg`)} alt="" />
+                                <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/icn_plan_type.svg`)} alt="" />
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
@@ -326,7 +312,7 @@ class GroupHealthReportDetails extends Component {
                        {this.state.lead.cover_type || 
                         <div className="member-tile">
                             <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/icn_time.svg`)} alt="" />
+                                <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/icn_time.svg`)} alt="" />
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
@@ -340,7 +326,7 @@ class GroupHealthReportDetails extends Component {
 
                         <div className="member-tile">
                             <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
+                                <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
@@ -385,7 +371,7 @@ class GroupHealthReportDetails extends Component {
                     {this.state.lead.frequency &&
                     <div className="member-tile">
                         <div className="mt-left">
-                            <img src={require(`assets/${this.state.productName}/icn_payment_frequency.svg`)} alt="" />  
+                            <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/icn_payment_frequency.svg`)} alt="" />  
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">
@@ -400,7 +386,7 @@ class GroupHealthReportDetails extends Component {
                      {this.state.lead.dt_policy_issued  &&
                     <div className="member-tile">
                         <div className="mt-left">
-                            <img src={require(`assets/${this.state.productName}/icn_issue_date.svg`)} alt="" />
+                            <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/icn_issue_date.svg`)} alt="" />
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top"> 
@@ -415,7 +401,7 @@ class GroupHealthReportDetails extends Component {
                     {this.state.lead.dt_policy_start && 
                       <div className="member-tile">
                         <div className="mt-left">
-                            <img src={require(`assets/${this.state.productName}/icn_start_date_1.svg`)} alt="" />
+                            <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/icn_start_date_1.svg`)} alt="" />
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">
@@ -430,7 +416,7 @@ class GroupHealthReportDetails extends Component {
                     {this.state.lead.dt_policy_end && 
                       <div className="member-tile">
                         <div className="mt-left">
-                            <img src={require(`assets/${this.state.productName}/icn_end_date.svg`)} alt="" />
+                            <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/icn_end_date.svg`)} alt="" />
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">
@@ -445,7 +431,7 @@ class GroupHealthReportDetails extends Component {
                     {this.state.lead.dt_next_renewal && 
                       <div className="member-tile">
                         <div className="mt-left">
-                            <img src={require(`assets/${this.state.productName}/icn_start_date_1.svg`)} alt="" />
+                            <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/icn_start_date_1.svg`)} alt="" />
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">

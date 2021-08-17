@@ -40,6 +40,11 @@ export var fyntuneConstants = {
         text: 'EXPIRED',
         color: 'red',
         reportTab: 'inactiveReports'
+      }, 
+      payment_done: {
+        text: 'PENDING',
+        color: '#d3bd13',
+        reportTab: 'pendingReports'
       }
     },
     stepsToFollow : [

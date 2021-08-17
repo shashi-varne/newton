@@ -32,6 +32,7 @@ class GroupHealthPlanStarHealthDetails extends Component {
         let groupHealthPlanData = this.state.groupHealthPlanData;
         let account_type = groupHealthPlanData.account_type;
         let value = groupHealthPlanData.health_details;
+        let ui_members = this.state.groupHealthPlanData.ui_members || {};
 
         let radio_options = [
             {
@@ -47,7 +48,8 @@ class GroupHealthPlanStarHealthDetails extends Component {
         this.setState({
             account_type: account_type,
             radio_options: radio_options,
-            value: value
+            value: value,
+            ui_members
         });
     }
 
@@ -158,10 +160,10 @@ class GroupHealthPlanStarHealthDetails extends Component {
         if (canProceed) {
             
             groupHealthPlanData.health_details = this.state.value;
-            groupHealthPlanData.sum_assured = "300000";
+            groupHealthPlanData.sum_assured = "400000";
             groupHealthPlanData.cover_plan = "FHONEW";
-            groupHealthPlanData.post_body.sum_assured = "300000";
-            groupHealthPlanData.post_body.si = "300000";
+            groupHealthPlanData.post_body.sum_assured = "400000";
+            groupHealthPlanData.post_body.si = "400000";
             groupHealthPlanData.post_body.cover_plan = "FHONEW";
             groupHealthPlanData.post_body.plan_id = "FHONEW";
             groupHealthPlanData.plan_selected = {

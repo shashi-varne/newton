@@ -92,7 +92,7 @@ export const themeConfig = {
         MuiButton: {
             raisedSecondary: {
                 '&:hover': {
-                    backgroundColor: getConfig().secondary
+                    backgroundColor: getConfig().onHover
                 },
                 backgroundColor: getConfig().secondary,
                 color: '#fff',

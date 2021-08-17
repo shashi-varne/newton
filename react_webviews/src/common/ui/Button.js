@@ -41,7 +41,7 @@ class CustomButton extends Component {
             variant="raised"
             size="large"
             color="secondary"
-            style={{backgroundColor: getConfig().secondary, color: 'white', width: '310px' , height: '50px'}}
+            style={{color: 'white', width: '310px' , height: '50px'}}
             className={buttonClass}
             classes={classes}
             disabled={props.disable}

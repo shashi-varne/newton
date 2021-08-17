@@ -85,7 +85,7 @@ export var advisoryConstants = {
       'health': '/group-insurance/group-health/RELIGARE/landing',
       'ci': '/group-insurance/health/critical_illness/plan',
       'corona': '/group-insurance/corona/plan',
-      'term': '/group-insurance/life-insurance/term/landing'
+      'term': '/group-insurance/system-maintenance'
     }
 
 }

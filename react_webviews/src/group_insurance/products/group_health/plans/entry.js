@@ -6,7 +6,7 @@ import star_logo from '../../../../assets/ic_star_health.svg'
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-
+import {Imgc} from   '../../../../common/ui/Imgc'
 class HealthInsuranceEntry extends Component {
 
   constructor(props) {
@@ -83,7 +83,7 @@ class HealthInsuranceEntry extends Component {
       return (
         <div className='insurance_plans' style={{width : '100%'}} key={index} onClick={() => this.props.parent.handleClickEntry(props)}>
           <div className='insurance_plans_types' style={{width : '100%', padding : '0px'}}>
-            <img src={props.icon} alt="" className="insurance_plans_logos_small"/>
+            <Imgc src={props.icon} alt="" className="insurance_plans_logos_small"/>
             <div style={{ borderBottomWidth: '1px', width: this.state.insuranceProducts.length - 1 !== index ? `calc(100% - 85px)` : '100%',
                   borderBottomColor: '#EFEDF2', borderBottomStyle:'solid',   paddingTop: '20px', paddingBottom: this.state.insuranceProducts.length - 1 !== index ? '20px' : '40px',
                   justifyContent: 'space-between', cursor: 'pointer' }}>

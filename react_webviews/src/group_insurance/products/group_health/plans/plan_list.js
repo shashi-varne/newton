@@ -5,9 +5,9 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { initialize, getPlanDetails } from '../common_data';
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
+import {Imgc} from '../../../../common/ui/Imgc'
 import Button from '../../../../common/ui/Button'
-import {formatAmount, isEmpty} from '../../../../utils/validators';
-import { compareObjects } from 'utils/validators';
+import {formatAmount, isEmpty, compareObjects} from '../../../../utils/validators';
 
 class GroupHealthPlanList extends Component {
 
@@ -159,10 +159,10 @@ class GroupHealthPlanList extends Component {
                         <div className="tc-subtitle">{this.state.provider === 'HDFCERGO' ? this.state.providerConfig.hdfc_plan_title_mapper[props.plan_id] : plan_data.plan_name}</div>
                     </div>
                     <div className="tc-right">
-                        <img
+                        <Imgc
                             src={require(`assets/${this.state.providerData.logo_card}`)}
                             alt=""
-                            style={{ maxWidth: '140px' }} />
+                            className="insurance-logo-top-right" />
                     </div>
                 </div>
 

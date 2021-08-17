@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import Container from '../common/Container';
 import '../common/Style.css';
 import failed_fisdom from 'assets/error_illustration_fisdom.svg';
-import failed_myway from 'assets/error_illustration_myway.svg';
+import failed_myway from 'assets/finity/error_illustration_myway.svg';
 import { getConfig , isIframe} from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import ils_error from 'assets/finity/ils_error.svg'

@@ -6,7 +6,7 @@ import { FormControl } from 'material-ui/Form';
 import Input from '../../../common/ui/Input';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
 import contact from 'assets/address_details_icon.svg';
-import contact_myway from 'assets/address_details_icn.svg';
+import contact_myway from 'assets/finity/address_icon.svg';
 
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
@@ -16,6 +16,7 @@ import {
 } from 'utils/validators';
 // validateStreetName, validateEmpty, validateConsecutiveChar, validateMinChar
 import { nativeCallback } from 'utils/native_callback';
+import {Imgc} from 'common/ui/Imgc';
 
 class PaymentSuccessClass extends Component {
 
@@ -386,8 +387,8 @@ class PaymentSuccessClass extends Component {
       >
         <div>
           <div className="payment-success-heading">
-            <img className="payment-success-icon" src={thumb} alt="" width="60" />
-            <div>
+            <Imgc className="payment-success-icon" src={thumb} alt=""/>
+            <div style={{marginLeft: '15px'}} >
               <div className="payment-success-title">Payment successful</div>
               <div className="payment-success-subtitle">One final step! Share your address and you are insured. </div>
             </div>
