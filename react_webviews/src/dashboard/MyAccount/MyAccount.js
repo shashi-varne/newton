@@ -104,8 +104,7 @@ class MyAccount extends Component {
       }
     }
 
-    const checkSignStatus = userKyc.initial_kyc_status !== "compliant" ? userKyc.sign_status === 'signed' : true;
-    if (userKyc.application_status_v2 === "complete" && checkSignStatus) {
+    if (userKyc.kyc_allow_investment_status === "INVESTMENT_ALLOWED") {
       mfStatus = "complete";
     }
 
@@ -126,6 +125,10 @@ class MyAccount extends Component {
         fnoStatus = "activate";
       } else if (userKyc.equity_income?.doc_status === "submitted") {
         fnoStatus = "inprogress";
+      }
+      if(userKyc.kyc_product_type !== "equity") {
+        fnoStatus = "init";
+        stocksStatus = "init";
       }
       kycStatusData.push({ ...MF_AND_STOCKS_STATUS_MAPPER[stocksStatus], status: stocksStatus, key: "stocks", title: "Stocks & IPO" });
       kycStatusData.push({ ...FNO_STATUS_MAPPER[fnoStatus], status: fnoStatus, key: "fno", title: "Futures & Options" });

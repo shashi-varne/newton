@@ -40,6 +40,7 @@ export async function initialize() {
   this.handleStocksAndIpoCards = handleStocksAndIpoCards.bind(this);
   this.setKycProductTypeAndRedirect = setKycProductTypeAndRedirect.bind(this);
   this.handleIpoCardRedirection = handleIpoCardRedirection.bind(this);
+  this.handleCommonKycRedirections = handleCommonKycRedirections.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
   if (config) {
     this.setState({ config });
@@ -461,7 +462,7 @@ export function initilizeKyc() {
   }
   
   if (!isEmpty(modalData)) {
-    if (["verifying_trading_account", "complete", "fno_rejected"].includes(kycJourneyStatus)) {
+    if (kycStatusesToShowDialog.includes(kycJourneyStatus)) {
       storageService().set("landingBottomSheetDisplayed", true);
     }
 
@@ -512,31 +513,31 @@ export function handleKycSubmittedOrRejectedState() {
 }
 
 export async function openKyc() {
-  let {
-    userKyc,
-    kycJourneyStatus,
-    kycStatusData,
-    tradingEnabled,
-  } = this.state;
+  let { kycJourneyStatus } = this.state;
 
   storageService().set("kycStartPoint", "mf");
   const kycStatusesToShowDialog = ["submitted", "rejected", "fno_rejected", "esign_pending", "verifying_trading_account"];
   if (kycStatusesToShowDialog.includes(kycJourneyStatus)) {
     this.handleKycSubmittedOrRejectedState();
   } else {
-    if (kycJourneyStatus === "ground") {
-      this.navigate("/kyc/home");
-    } else if (kycJourneyStatus === "ground_pan") {
-      this.navigate("/kyc/journey", {
-        state: {
-          show_aadhaar: !(userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual") ? true : false,
-        },
-      });
-    } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity")) {
-      await this.setKycProductTypeAndRedirect();
-    } else if (kycStatusData.nextState) {
-      this.navigate(kycStatusData.nextState);
-    }
+    this.handleCommonKycRedirections();
+  }
+}
+
+export async function handleCommonKycRedirections() {
+  let { userKyc, kycJourneyStatus, tradingEnabled, kycStatusData } = this.state;
+  if (kycJourneyStatus === "ground") {
+    this.navigate("/kyc/home");
+  } else if (kycJourneyStatus === "ground_pan") {
+    this.navigate("/kyc/journey", {
+      state: {
+        show_aadhaar: !(userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual") ? true : false,
+      },
+    });
+  } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity")) {
+    await this.setKycProductTypeAndRedirect();
+  } else if (kycStatusData.nextState) {
+    this.navigate(kycStatusData.nextState);
   }
 }
 
@@ -581,7 +582,6 @@ export function handleIpoCardRedirection() {
   } else {
     this.navigate("/market-products");
   }
-  // Todo: handle redirection to stocks sdk for equity_activation_pending status
 }
           
 export function handleStocksAndIpoCards(key) {
@@ -622,6 +622,9 @@ export function handleStocksAndIpoCards(key) {
           return nativeCallback({ action: 'exit_web' });
           // TODO: Test native behaviour for this code
         }
+      } else {
+        console.log("redirection"); // Todo: Remove this console once you enter redirection path to stocks sdk
+        // Todo: Redirect to stocks sdk
       }
     }
   }
@@ -630,7 +633,7 @@ export function handleStocksAndIpoCards(key) {
     modalData.oneButton = true
   }
 
-  if (kycJourneyStatus !== "complete" || (kycJourneyStatus === "complete" && !userKyc.mf_kyc_processed)) {
+  if (!isEmpty(modalData) && (kycJourneyStatus !== "complete" || (kycJourneyStatus === "complete" && userKyc.kyc_product_type !== "equity"))) {
     this.setState({ modalData, openKycStatusDialog: true });
   }
 }

@@ -62,6 +62,8 @@ function KycNative(props) {
       navigate("/kyc/approved/banks/doc", data);
     } else if (urlParams?.type === 'banklist') {
        navigate('/kyc/add-bank', data);
+    } else if (urlParams?.type === 'fno') {
+      navigate(PATHNAME_MAPPER.uploadFnOIncomeProof, data);
     } else if (kycStatus === 'ground') {
        navigate('/kyc/home', data);
     } else if (kycStatus === "ground_pan") {

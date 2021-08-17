@@ -63,10 +63,12 @@ const FnOIncomeProof = (props) => {
   const [goBackModal, setGoBackModal] = useState(false);
   const navigate = navigateFunc.bind(props);
   const { kyc, isLoading, updateKyc } = useUserKycHook();
+  
   const fromState = props?.location?.state?.fromState;
   const goBackPath = props.location?.state?.goBack || "";
   const { productName, Web } = getConfig();
-  const hideSkipOption = !Web ? (storageService().get("native") && (goBackPath === "exit")) : hideSkipOptionPaths.includes(fromState);
+  const fromNativeLandingOrMyAccounts = storageService().get("native") && goBackPath === "exit";
+  const hideSkipOption = !Web ? fromNativeLandingOrMyAccounts : hideSkipOptionPaths.includes(fromState);
   const isMyAccountFlow = fromState === "/my-account";
 
   useEffect(() => {
@@ -140,7 +142,7 @@ const FnOIncomeProof = (props) => {
   }
 
   const commonNativeNavigation = () => {
-    if (storageService().get("native") && (goBackPath === "exit")) {
+    if (fromNativeLandingOrMyAccounts) {
       nativeCallback({ action: "exit_web"});
     } else {
       commonRedirection();
@@ -160,16 +162,16 @@ const FnOIncomeProof = (props) => {
   };
 
   const goBackToPath = () => {
-    if (!Web) {
-      commonNativeNavigation();
+    if (fromNativeLandingOrMyAccounts) {
+      return nativeCallback({ action: "exit_web"});
+    } 
+
+    if(goBackPath && goBackPath !== "exit") {
+      navigate(goBackPath)
+    } else if (landingEntryPoints.includes(fromState)) {
+      navigate("/");
     } else {
-      if(goBackPath && goBackPath !== "exit") {
-        navigate(goBackPath)
-      } else if (landingEntryPoints.includes(fromState)) {
-        navigate("/");
-      } else {
-        navigate(PATHNAME_MAPPER.journey);
-      }
+      navigate(PATHNAME_MAPPER.journey);
     }
   };
 
