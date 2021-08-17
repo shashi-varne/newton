@@ -193,7 +193,11 @@ const FundChart = (props) => {
       itemDistance: 30,
     },
     xAxis: {
-      crosshair: false,
+      crosshair: {
+        width: 1,
+        color: 'gray',
+        dashStyle: 'shortdot'
+      },
       labels: {
         enabled: true,
         step: 1,
