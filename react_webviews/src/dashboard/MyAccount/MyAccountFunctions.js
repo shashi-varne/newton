@@ -140,7 +140,7 @@ export async function getMyAccount() {
         investment80C: investment80C,
         Capitalgain: Capitalgain,
         user: result?.user,
-        contacts: result?.contacts,
+        contactInfo: result?.kyc?.identification?.meta_data,
         isReadyToInvestBase,
       });
     } else {

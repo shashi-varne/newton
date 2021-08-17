@@ -60,17 +60,25 @@ export class SecondaryOtpVerification extends Component {
   };
 
   secondaryOtpNavigate = () => {
+    let val = this.state.value;
+    let numberVal = val?.split('|');
+    if (numberVal.length > 1) {
+      val = numberVal[1];
+    } else {
+      [val] = numberVal;
+    }
     this.sendEvents("edit")
     this.navigate('/secondary-verification', {
       state: {
         communicationType: this.state.communicationType,
-        contactValue: this.state.value,
+        contactValue: val,
         edit: true,
       }
     })
   }
 
   handleResendOtp = () => {
+    this.sendEvents("resend")
     this.resendOtp(this.state.otp_id)
     this.setState({
       otpData: {
@@ -84,10 +92,10 @@ export class SecondaryOtpVerification extends Component {
 
   sendEvents = (userAction) => {
     let properties = {
-      "otp_entered": userAction === "next" ? "yes" : "no",
-      "mode_entry": "manual",
-      "user_action": userAction,
       "screen_name": `${this.state.communicationType}_otp`,
+      "user_action": userAction,
+      "otp_entered": this.state.otpData?.otp?.length === 4 ? "yes" : "no",
+      "mode_entry": "manual",
     }
     let eventObj = {
       "event_name": 'onboarding',

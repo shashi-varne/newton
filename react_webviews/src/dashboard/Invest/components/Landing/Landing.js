@@ -18,6 +18,7 @@ import AccountAlreadyExistDialog from "../../../../login_and_registration/compon
 import { generateOtp } from "../../../../login_and_registration/functions";
 import { Imgc } from "../../../../common/ui/Imgc";
 import { nativeCallback } from "../../../../utils/native_callback";
+import toast from "../../../../common/ui/Toast"
 
 const fromLoginStates = ["/login", "/logout", "/verify-otp"]
 class Landing extends Component {
@@ -70,29 +71,12 @@ class Landing extends Component {
     }
   };
 
-  onload = () => {
-    this.initilizeKyc();
+  onload = async () => {
+    await this.initilizeKyc();
     const isBottomSheetDisplayed = storageService().get(
       "is_bottom_sheet_displayed"
     );
-    const isVerifyDetailsSheetDisplayed = storageService().get("verifyDetailsSheetDisplayed")
-    if (!isVerifyDetailsSheetDisplayed) {
-      const { contactDetails } = this.state;
-      if (contactDetails?.verification_done === false) {
-        this.setState({
-          verifyDetails: true,
-          verifyDetailsData:
-            contactDetails[
-            `unverified_${contactDetails?.auth_type === "mobile" ? "email" : "mobile"
-            }_contacts`
-            ][0],
-          verifyDetailsType:
-            contactDetails?.auth_type === "mobile" ? "email" : "mobile",
-        });
-        storageService().set("verifyDetailsSheetDisplayed", true);
-      }
-    }
-    if (!isBottomSheetDisplayed && this.state.isWeb) {
+    if (!isBottomSheetDisplayed && this.state.isWeb && !this.state.verifyDetails) {
       this.handleCampaignNotification();
     }
   };
@@ -125,12 +109,14 @@ class Landing extends Component {
 
   // email mobile verification
   closeVerifyDetailsDialog = () => {
+    this.sendEvents("back", "bottomsheet");
     this.setState({
       verifyDetails: false
     })
   }
 
   closeAccountAlreadyExistDialog = () => {
+    this.sendEvents("back", "continuebottomsheet");
     this.setState({
       accountAlreadyExists: false
     })
@@ -147,6 +133,7 @@ class Landing extends Component {
   }
 
   continueAccountAlreadyExists = async (type, data) => {
+    this.sendEvents("next", "continuebottomsheet");
     let body = {};
     if (type === "email") {
       body.email = data?.data?.contact_value;
@@ -156,6 +143,8 @@ class Landing extends Component {
     }
     const otpResponse = await this.generateOtp(body);
     if (otpResponse) {
+      let result = otpResponse.pfwresponse.result;
+      toast(result.message || "Success");
       this.navigate("secondary-otp-verification", {
         state: {
           value:  data?.data?.contact_value,
@@ -167,6 +156,7 @@ class Landing extends Component {
   };
 
   editDetailsAccountAlreadyExists = () => {
+    this.sendEvents("edit", "continuebottomsheet");
     this.navigate("/secondary-verification", {
       state: {
         page: "landing",
@@ -202,6 +192,25 @@ class Landing extends Component {
   };
 
   sendEvents = (userAction, cardClick = "") => {
+    if (cardClick === "bottomsheet" || cardClick === "continuebottomsheet") {
+      let screen_name = cardClick === "continuebottomsheet" ? "account_already_exists" :
+        this.state.verifyDetailsType === "email" ? "verify_email" : "verify_mobile";
+      let eventObj = {
+        "event_name": 'verification_bottom_sheet',
+        "properties": {
+          "screen_name": screen_name,
+          "user_action": userAction,
+        },
+      };
+      if (userAction === "just_set_events") {
+        return eventObj;
+      } else {
+        nativeCallback({
+          events: eventObj
+        });
+      }
+      return
+    }
     let eventObj = {
       event_name: "landing_page",
       properties: {

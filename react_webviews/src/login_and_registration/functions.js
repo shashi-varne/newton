@@ -5,7 +5,7 @@ import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { isEmpty } from "../utils/validators";
 import { nativeCallback } from "../utils/native_callback";
 import Toast from "../common/ui/Toast";
-import { getBasePath, isAuthenticatedUser } from "../utils/functions";
+import { getBasePath } from "../utils/functions";
 
 const config = getConfig();
 const errorMessage = "Something went wrong!";
@@ -30,9 +30,6 @@ export function initialize() {
   let { referrer = "" } = main_query_params;
 
   let redirectUrl = encodeURIComponent(`${basePath}/${config.searchParams}`);
-  if(isAuthenticatedUser(this.props)) {
-    return;
-  }
 
   const partners = [
     "hbl",
@@ -184,7 +181,7 @@ export function setBaseHref() {
   }
 }
 
-export async function triggerOtpApi(body, loginType) {
+export async function triggerOtpApi(body, loginType, bottomsheet) {
   try {
     const res = await Api.post(
       `/api/communication/send/otp`, body
@@ -192,7 +189,7 @@ export async function triggerOtpApi(body, loginType) {
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       this.setState({ isApiRunning: false });
-      this.sendEvents("next")
+      if(!bottomsheet) this.sendEvents("next");
       if (body?.secondaryVerification) {
         this.navigate("/secondary-otp-verification", {
           state: {
@@ -222,11 +219,11 @@ export async function triggerOtpApi(body, loginType) {
         };
         storageService().setObject("user_promo", item);
       }
-    }
-     toast(result?.message || result?.error || errorMessage);
+      toast(result?.message || "Success");
+    } else throw result?.error || result?.message || errorMessage;
   } catch (error) {
     console.log(error);
-    toast(errorMessage);
+    toast(error);
   } finally {
     this.setState({ isApiRunning: false });
   }
@@ -237,6 +234,7 @@ export async function initiateOtpApi(body, loginType) {
   formData.append("auth_type", loginType);
   formData.append("auth_value", body.auth_value);
   formData.append("Content-Type", "application/x-www-form-urlencoded")   // [ "multipart/form-data" ]
+  formData.append("user_whatsapp_consent", body?.user_whatsapp_consent);
   try {
     const res = await Api.post(`/api/user/login/v4/initiate`, formData)
     const { result, status_code: status } = res.pfwresponse;
@@ -249,15 +247,13 @@ export async function initiateOtpApi(body, loginType) {
           communicationType: loginType,
           verify_url: result?.verify_url,
           resend_url: result?.resend_url,
-          user_whatsapp_consent: body?.user_whatsapp_consent || '',
         },
       });
 
-    } 
-    toast(result?.message || result?.error || errorMessage);
+    } else throw result?.error || result?.message || errorMessage
   } catch (error) {
     console.log(error);
-    toast(errorMessage);
+    toast(error);
   } finally {
     this.setState({ isApiRunning: false });
   }
@@ -285,7 +281,7 @@ export async function resendVerificationLink() {
         "Please click on the verification link sent to your email account."
       );
     } else {
-      toast(result.message || result.error || errorMessage);
+      toast(result.error || result.message|| errorMessage);
     }
     this.setState({ resendVerificationApi: false });
   } catch (error) {
@@ -362,10 +358,10 @@ export async function otpLoginVerification(verify_url, body) {
         }
       }
     } else {
-      if (result?.error === "Wrong OTP is Entered" || result?.error === "Verification failed") {
+      if (result?.status_code === 439) {
         this.setState({ isWrongOtp: true })
       }
-      toast(result.message || result.error || errorMessage);
+      toast(result.error || result.message || errorMessage);
     }
   } catch (error) {
     console.log(error);
@@ -458,15 +454,16 @@ export async function otpVerification(body) {
           this.redirectAfterLogin(result, user);
         }
       }
+      toast(result?.error || result.message || errorMessage)
     } else {
-      if (result.error === "Wrong OTP is Entered") {
+      if (result.status_code === 439) {
         this.setState({ isWrongOtp: true })
       }
-      toast(result.message || result.error || errorMessage);
+       throw result.error || result.message || errorMessage;
     }
   } catch (error) {
     console.log(error);
-    toast(errorMessage);
+    toast(error);
   } finally {
     this.setState({ isApiRunning: false });
   }
@@ -496,15 +493,14 @@ export async function resendOtp(otp_id) {
     const res = await Api.post(`/api/communication/resend/otp/${otp_id}`);
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
-      this.sendEvents("resend")
       this.setState({ isResendOtpApiRunning: false });
       toast(result.message || "Success!");
     } else {
-      toast(result.message || result.error || errorMessage);
+      throw result.error || result.message || errorMessage;
     }
   } catch (error) {
     console.log(error);
-    toast(errorMessage);
+    toast(error);
   } finally {
     this.setState({ isResendOtpApiRunning: false });
   }
@@ -519,11 +515,11 @@ export async function resendLoginOtp(resend_url) {
       this.setState({ isApiRunning: false });
       toast(result.message || "Success!");
     } else {
-      toast(result.message || result.error || errorMessage);
+      throw result.error || result.message || errorMessage;
     }
   } catch (error) {
     console.log(error);
-    toast(errorMessage);
+    toast(error);
   } finally {
     this.setState({ isResendOtpApiRunning: false });
   }
@@ -551,7 +547,7 @@ export async function getKycFromSummary(params = {}) {
     storageService().setObject("user", user);
     return result;
   } else {
-    throw result.message || result.error || errorMessage;
+    throw result.error || result.message || errorMessage;
   }
 }
 
@@ -627,14 +623,14 @@ export async function authCheckApi(type, data) {
       return result;
     } else {
       error =
-        result.message ||
         result.error ||
+        result.message ||
         "Something went wrong!";
       throw error;
     }
   } catch (err) {
     console.log(err)
-    Toast(err, "error");
+    toast(err);
   } finally {
     this.setState({
       loading: false,
@@ -655,8 +651,8 @@ export async function generateOtp(data) {
       return otpResponse;
     } else {
       error =
-        otpResponse.pfwresponse.result.message ||
         otpResponse.pfwresponse.result.error ||
+        otpResponse.pfwresponse.result.message ||
         "Something went wrong!";
       throw error;
     }

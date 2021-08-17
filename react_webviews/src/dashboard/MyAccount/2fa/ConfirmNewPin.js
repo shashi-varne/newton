@@ -5,17 +5,19 @@ import EnterMPin from "../../../2fa/components/EnterMPin";
 import { nativeCallback } from "../../../utils/native_callback";
 import { twofaPostApi, modifyPin, setPin } from '../../../2fa/common/apiCalls';
 import { getKycFromSummary } from "../../../login_and_registration/functions";
-import WVPopUpDialog from "../../../common/ui/PopUpDialog/WVPopUpDialog";
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
 import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import { isEmpty } from "lodash";
 import WVInfoBubble from "../../../common/ui/InfoBubble/WVInfoBubble";
+import WVBottomSheet from "../../../common/ui/BottomSheet/WVBottomSheet";
 
 const ConfirmNewPin = (props) => {
   const { routeParams, clearRouteParams } = usePersistRouteParams();
   const routeParamsExist = useMemo(() => {
     return !isEmpty(routeParams);
   }, []);
+  const { productName } = getConfig();
+  const successText = routeParams.set_flow ? `${productName} security enabled` : `${productName} PIN changed`;
   const [mpin, setMpin] = useState('');
   const [pinError, setPinError] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -46,11 +48,11 @@ const ConfirmNewPin = (props) => {
       } else if (routeParams.reset_url) {
         await twofaPostApi(routeParams?.reset_url, { new_mpin: mpin });
       }
+      sendEvents("next");
       await getKycFromSummary({
         kyc: ["kyc"],
         user: ["user"]
       });
-      clearRouteParams();
       setIsApiRunning(false);
       setOpenDialog(true);
     } catch (err) {
@@ -72,8 +74,8 @@ const ConfirmNewPin = (props) => {
       "event_name": '2fa',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'confirm_fisdom_pin',
-        "journey": routeParams.set_flow ? "set_fisdom_pin" : "reset_fisdom_pin",
+        "screen_name": `confirm_${productName}_pin`,
+        "journey": routeParams.set_flow ? `set_${productName}_pin` : `reset_${productName}_pin`,
       }
     };
 
@@ -85,19 +87,17 @@ const ConfirmNewPin = (props) => {
   }
 
   const handleYes = () => {
-    sendEvents("next");
+    clearRouteParams();
     if (kycFlow) {
-      if (getConfig().isNative) {
-        nativeCallback({ action: 'exit_web' });
-      } else {
-        navigate("/invest");
-      }
-    } else navigate('/security-settings');
+      navigate("/invest");
+    } else {
+      navigate('/account/security-settings');
+    }
   }
 
   return (
     <Container
-      title={routeParams.set_flow  ? "Security settings" : "Reset fisdom PIN"}
+      title={routeParams.set_flow  ? "Security settings" : `Reset ${productName} PIN`}
       events={sendEvents("just_set_events")}
       showLoader={isApiRunning}
       handleClick={handleClick}
@@ -106,7 +106,7 @@ const ConfirmNewPin = (props) => {
     >
       <div style={{ paddingTop: '60px' }}>
         <EnterMPin
-          title="Confirm fisdom PIN"
+          title={`Confirm ${productName} PIN`}
           subtitle={routeParams.set_flow  ? "Ensuring maximum security for your investment account" : "Keep your account safe and secure"}
           otpProps={{
             otp: mpin,
@@ -126,12 +126,19 @@ const ConfirmNewPin = (props) => {
           }
         />
       </div>
-      <WVPopUpDialog
-        open={openDialog}
-        handleYes={handleYes}
-        text="fisdom security enabled"
-        optionYes="OKAY"
-        optionNo=""
+      <WVBottomSheet
+        title={successText}
+        image={require(`assets/${productName}/pin_changed.svg`)}
+        isOpen={openDialog}
+        button1Props={{
+          color: "secondary",
+          variant: "contained",
+          title: "OKAY",
+          onClick: handleYes,
+        }}
+        classes={{
+          image: "pin-changed-img"
+        }}
       />
     </Container>
   )

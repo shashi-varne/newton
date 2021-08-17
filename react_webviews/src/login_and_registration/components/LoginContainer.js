@@ -10,7 +10,6 @@ import EnterNewPin from "../pages/ForgotPin/EnterNewPin";
 import ConfirmNewPin from "../pages/ForgotPin/ConfirmNewPin";
 import ForgotPinSuccess from "../pages/ForgotPin/ForgotPinSuccess";
 import ForgotPin from "../pages/ForgotPin/ForgotPin";
-import SVG from 'react-inlinesvg';
 import WVInPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
 import GoBackToLoginBtn from "../common/GoBackToLoginBtn";
 import { navigate as navigateFunc } from "../../utils/functions";
@@ -79,15 +78,12 @@ const FooterTitle = ({ config }) => {
   return (
     <div className="login-footer">
       <div className="lf-logos">
-        <SVG
-          height="20px"
-          width="64px"
-          preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + config.styles.primaryColor)}
-          src={require(`assets/${config.logo}`)}
+        <Imgc
+          style={{ width: "60px" }}
+          src={require(`assets/${config.colorLogo}`)}
         />
-        <SVG
-          width="20px"
-          height="20px"
+        <Imgc
+          style={{ height: "20px", width: "20px" }}
           src={require(`assets/sebi_logo.svg`)}
         />
       </div>

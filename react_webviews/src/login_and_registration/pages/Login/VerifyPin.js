@@ -21,7 +21,7 @@ const VerifyPin = (props) => {
   const [bottomText, setBottomText] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [attemptsCount, setAttemptsCount] = useState(
-    storageService().get(pinAttemptsKey) || 0
+    Number(storageService().get(pinAttemptsKey)) || 0
   );
 
   const navigate = navigateFunc.bind(props);
@@ -32,20 +32,18 @@ const VerifyPin = (props) => {
   }
 
   useEffect(() => {
-    if (attemptsCount >=5) {
+    if (attemptsCount >= 5) {
       setMpinError('You have exceeded the maximum number of retries. Please reset your PIN using the ‘Forgot PIN’ option');
     }
     storageService().set(pinAttemptsKey, attemptsCount);
   }, [attemptsCount]);
 
   useEffect(() => {
-    if (!mpin || !mpin.length) {
-      setBottomText(`Enter ${productName} PIN`);
-    } else if (mpin.length === 4) {
+    if (mpin.length === 4) {
       setBottomText(<DotDotLoader />);
       handleClick();
     } else {
-      setBottomText('');
+      setBottomText(`Enter ${productName} PIN`);
     }
   }, [mpin])
 
@@ -53,8 +51,7 @@ const VerifyPin = (props) => {
     try {
       setIsApiRunning(true);
       await verifyPin({ mpin });
-      setAttemptsCount(attemptsCount + 1);
-      storageService().clear(pinAttemptsKey);
+      storageService().remove(pinAttemptsKey);
       sendEvents("next");
       await postLoginSetup();
       if(config.diet) {
@@ -86,7 +83,9 @@ const VerifyPin = (props) => {
         "journey": sessionTimeout ? 'account_inactive' : 'login',
       }
     };
-    storageService().setBoolean('session-timeout', false);
+    if(user_action === 'next') {
+      storageService().setBoolean('session-timeout', false);
+    }
     nativeCallback({ events: eventObj });
   };
 

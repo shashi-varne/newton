@@ -91,7 +91,7 @@ const DocumentVerification = (props) => {
             stepName="Complete esign"
             stepActionText="Pending"
             stepActionType="pending"
-        />
+          />
         </main>
       </div>
     </Container>

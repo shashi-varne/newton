@@ -20,13 +20,11 @@ const VerifyPin = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
 
   useEffect(() => {
-    if (!mpin || !mpin.length) {
-      setBottomText(`Enter ${productName} PIN`);
-    } else if (mpin.length === 4) {
-      handleClick();
+    if (mpin.length === 4) {
       setBottomText(<DotDotLoader />);
+      handleClick();
     } else {
-      setBottomText('');
+      setBottomText(`Enter ${productName} PIN`);
     }
   }, [mpin])
 
@@ -36,7 +34,7 @@ const VerifyPin = (props) => {
       await verifyPin({ mpin });
       sendEvents("next");
       persistRouteParams({ reset_flow: true, old_mpin: mpin })
-      navigate('new-pin');
+      navigate('/account/new-pin');
     } catch (err) {
       console.log(err);
       setMpinError(err);
@@ -67,14 +65,14 @@ const VerifyPin = (props) => {
   };
 
   const forgotPin = () => {
-    navigate("/forgot-fisdom-pin");
+    navigate("/account/forgot-pin");
     sendEvents("next");
   }
 
   return (
     <Container
       events={sendEvents('just_set_events')}
-      title="Reset fisdom PIN"
+      title={`Reset ${productName} PIN`}
       noFooter={true}
     >
       <div style={{ paddingTop: '60px' }}>
@@ -93,7 +91,7 @@ const VerifyPin = (props) => {
             style={{ height: '20px', width: '20px', marginBottom: '20px' }}
           />
           <EnterMPin.Title style={{ marginBottom: '75px' }}>
-            Enter your current fisdom PIN
+            Enter your current {productName} PIN
           </EnterMPin.Title>
         </EnterMPin>
       </div>

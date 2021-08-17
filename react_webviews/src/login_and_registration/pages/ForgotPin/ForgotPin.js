@@ -19,6 +19,7 @@ const ForgotPin = (props) => {
   const [panEntryFailed, setPanEntryFailed] = useState(false);
   const { clearRouteParams, persistRouteParams } = usePersistRouteParams();
   const navigate = navigateFunc.bind(props);
+  const config = getConfig();
 
   const handlePanInput = (value) => {
     setPan(value);
@@ -78,7 +79,7 @@ const ForgotPin = (props) => {
   };
 
   const goBack = () => {
-    if (getConfig().isLoggedIn) {
+    if (config.isLoggedIn) {
       // Doing this to prevent logout API errors for when no active login session is available
       navigate('/logout');
     } else {
@@ -100,6 +101,7 @@ const ForgotPin = (props) => {
         onPanInputChange={handlePanInput}
         noData={authFetchError}
         renderNoData={<SessionExpiredUi onGoBackClicked={goBack} />}
+        productName={config.productName}
       />
       {!isFetchApiRunning && !authFetchError &&
         <>

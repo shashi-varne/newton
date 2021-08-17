@@ -29,7 +29,7 @@ class VerifyLoginOtp extends Component {
       this.props.history.goBack();
       return;
     }
-    let { value, otp_id, communicationType, verify_url, resend_url, user_whatsapp_consent } = state;
+    let { value, otp_id, communicationType, verify_url, resend_url } = state;
     let rebalancing_redirect_url = state.rebalancing_redirect_url || false;
     let forgot = state.forgot;
     let body = {
@@ -41,7 +41,6 @@ class VerifyLoginOtp extends Component {
       verify_url,
       resend_url
     }
-    if (user_whatsapp_consent) body.user_whatsapp_consent = true;
 
     this.setState(body);
     this.initialize();
@@ -50,7 +49,6 @@ class VerifyLoginOtp extends Component {
   handleClick = () => {
     let body = {
       otp: this.state.otpData["otp"],
-      user_whatsapp_consent: this.state.user_whatsapp_consent || "",
     }
     this.otpLoginVerification(this.state.verify_url, body);
   };
@@ -77,10 +75,10 @@ class VerifyLoginOtp extends Component {
 
   sendEvents = (userAction) => {
     let properties = {
-      "otp_entered": userAction === "next" ? "yes" : "no",
-      "mode_entry": "manual",
-      "user_action": userAction,
       "screen_name": `${this.state.communicationType}_otp`,
+      "user_action": userAction,
+      "otp_entered": this.state.otpData.otp?.length === 4 ? "yes" : "no",
+      "mode_entry": "manual",
     }
     let eventObj = {
       "event_name": 'onboarding',

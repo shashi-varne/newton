@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { twofaPostApi } from '../../../2fa/common/apiCalls';
 import EnterMPin from '../../../2fa/components/EnterMPin';
 import usePersistRouteParams from '../../../common/customHooks/usePersistRouteParams';
-import { navigate as navigateFunc } from '../../../utils/functions';
+import { getConfig, navigate as navigateFunc } from '../../../utils/functions';
 import LoginButton from '../../common/LoginButton';
 import { nativeCallback } from "../../../utils/native_callback";
 import SessionExpiredUi from '../../components/SessionExpiredUi';
@@ -13,6 +13,7 @@ const ConfirmNewPin = (props) => {
   const routeParamsExist = useMemo(() => {
     return !isEmpty(routeParams);
   }, []);
+  const { productName } = getConfig();
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -54,8 +55,8 @@ const ConfirmNewPin = (props) => {
       "event_name": '2fa',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'confirm_fisdom_pin',
-        "journey": routeParams.set_flow ? "set_fisdom_pin" : "reset_fisdom_pin",
+        "screen_name": `confirm_${productName}_pin`,
+        "journey": `reset_${productName}_pin`,
       }
     };
 
@@ -69,7 +70,7 @@ const ConfirmNewPin = (props) => {
   return (
     <>
       <EnterMPin
-        title="Confirm fisdom PIN"
+        title={`Confirm ${productName} PIN`}
         subtitle="Keep your account safe and secure"
         otpProps={{
           otp: pin,

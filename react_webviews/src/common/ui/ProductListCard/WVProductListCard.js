@@ -1,42 +1,41 @@
 /* 
-example Data Object structure: 
-dataObj: {
-  amc_name: "Icici",
-  fund_type: "Nifty Midcap",
-  amc_logo: "...",
-  rating: 4,
-  expense_ratio_new: {value: '10%'},
-  returns: '20%',
-  tracking_error: '1.7%'
-}
+  Example Data Object structure: 
+    dataObj: {
+      amc_name: "Icici",
+      fund_type: "Nifty Midcap",
+      amc_logo: "...",
+      rating: 4,
+      expense_ratio_new: {value: '10%'},
+      returns: '20%',
+      tracking_error: '1.7%'
+    }
 
-example Data Props Map:
+  example Data Props Map:
+    DATA_PROP_MAP_LIST: [{
+      title: 'Expense Ratio',
+      propName: 'expense_ratio_new',
+    }, {
+      title: 'Returns',
+      propName: 'returns',
+      formatter: (value) =>
+        <span style={{ fontWeight: 'bold', color: 'limegreen' }}>
+          {value.value} (new stuff)
+        </span>
+    }, {
+      title: 'Tracking Error',
+      propName: 'tracking_error',
+    }]
 
-DATA_PROP_MAP_LIST: [{
-  title: 'Expense Ratio',
-  propName: 'expense_ratio_new',
-}, {
-  title: 'Returns',
-  propName: 'returns',
-  formatter: (value) =>
-    <span style={{ fontWeight: 'bold', color: 'limegreen' }}>
-      {value.value} (new stuff)
-    </span>
-}, {
-  title: 'Tracking Error',
-  propName: 'tracking_error',
-}]
+  Example Usage:
+    <WVProductListCard
+      productData={dataObj}
+      title={dataObj.amc_name}
+      subtitle={<CardSubtitle value={dataObj} />}
+      image={dataObj.amc_logo}
+      contentPropsMapList={DATA_PROP_MAP_LIST}
+    />
 
-Example Usage:
-  <WVProductListCard
-    productData={dataObj}
-    title={dataObj.amc_name}
-    subtitle={<CardSubtitle value={dataObj} />}
-    image={dataObj.amc_logo}
-    contentPropsMapList={DATA_PROP_MAP_LIST}
-  />
-
-  CardSubtitle = (obj) => <div>{obj.fund_type} | Heloo World</div>
+    CardSubtitle = (obj) => <div>{obj.fund_type} | Heloo World</div>
 */
 import './WVProductListCard.scss';
 import React from 'react';

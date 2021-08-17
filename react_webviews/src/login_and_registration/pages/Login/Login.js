@@ -27,7 +27,7 @@ class Login extends Component {
   }
 
   componentWillMount() {
-    storageService().clear('pin-attempts');
+    storageService().remove('pin-attempts');
     this.initialize();
     let { form_data } = this.state;
     form_data.code = "91";
