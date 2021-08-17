@@ -6,7 +6,7 @@ import { numDifferentiationInr, formatAmountInr } from 'utils/validators';
 import Api from 'utils/api';
 import DotDotLoader from 'common/ui/DotDotLoader';
 import { getConfig } from 'utils/functions';
-import { isEmpty } from '../../../../utils/validators';
+import { isEmpty, storageService } from '../../../../utils/validators';
 import toast from '../../../../common/ui/Toast';
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
 
@@ -15,7 +15,7 @@ class GroupHealthPlanStarSumInsured extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            sum_assured_data: [300000, 400000, 500000, 1000000, 1500000, 2000000, 2500000],
+            sum_assured_data: [400000, 500000, 1000000, 1500000, 2000000, 2500000],
             next_screen: '',
             premiumAmt: null,
             selectedIndex: 0,
@@ -29,55 +29,52 @@ class GroupHealthPlanStarSumInsured extends Component {
     componentWillMount() {
         this.initialize();
     }
-    
-    async componentDidMount() {
-        let groupHealthPlanData = this.state.groupHealthPlanData;
-        let post_body = groupHealthPlanData.post_body;
+    setErrorData = (type) => {
 
-        let allowed_post_body_keys = ['adults', 'children', 'member_details', 'plan_id', 'postal_code'];
-        let body = {};
-        for(let key of allowed_post_body_keys){
-            body[key] = post_body[key];
-        }
-        body['si'] = '300000';
         this.setState({
-            show_loader: true,
+          showError: false
+        });
+        if(type) {
+          let mapper = {
+            'onload':  {
+              handleClick1: this.onload,
+              button_text1: 'Retry',
+              title1: ''
+            },
+            'submit': {
+              handleClick1: this.handleClick,
+              button_text1: 'Retry',
+              handleClick2: () => {
+                this.setState({
+                  showError: false
+                })
+              },
+              button_text2: 'Edit'
+            }
+          };
+      
+          this.setState({
+            errorData: {...mapper[type], setErrorData : this.setErrorData}
+          })
+        }
+    
+      }
+    async componentDidMount() {
+        this.onload();
+    }
+
+    onload = async() =>{
+        let groupHealthPlanData = this.state.groupHealthPlanData;
+        this.setState({
             loadingPremium: true
         });
-
-        try {
-            this.setState({ loadingPremium: true, apiError :false });
-            const res = await Api.post('api/insurancev2/api/insurance/health/quotation/get_premium/star', body);
-
-            this.setState({ loadingPremium: false, premiumData: [] });
-            let resultData = res.pfwresponse.result;
-            if (res.pfwresponse.status_code === 200) {
-    
-                this.setState({
-                    premiumAmt: resultData.premium_details.premium,
-                    plan_selected_final: resultData.premium_details,
-                    loadingPremium: false
-                });
-            } else {
-                this.setState({
-                    premiumAmt: '--',
-                    apiError :true
-                })
-                toast(resultData.error || 'Something went wrong! Please try again.');
-            }
-           this.setState({
-                show_loader: false
-            });
-
-        } catch (err) {
-            console.log(err);
-            toast('Something went wrong');
-            this.setState({
-                premiumAmt: '--',
-                loadingPremium: false,
-                apiError :true
-            });
-        }
+        var resultData = groupHealthPlanData.sum_assured_screen;
+        this.setState({
+            premiumAmt: resultData.premium_details.premium,
+            plan_selected_final: resultData.premium_details,
+            loadingPremium: false,
+            selectedIndex: groupHealthPlanData.selectedIndexSumAssured || 0
+        });
 
         let dob_data = {};
         groupHealthPlanData.final_dob_data.forEach(item => {
@@ -121,6 +118,7 @@ class GroupHealthPlanStarSumInsured extends Component {
        
         const { groupHealthPlanData } = this.state;
         let post_body = groupHealthPlanData.post_body;
+        let account_type = groupHealthPlanData.account_type;
 
         let allowed_post_body_keys = ['adults', 'children', 'member_details', 'plan_id', 'postal_code'];
         let body = {};
@@ -128,7 +126,15 @@ class GroupHealthPlanStarSumInsured extends Component {
         for(let key of allowed_post_body_keys){
             body[key] = post_body[key];
         }
-        body['si'] = this.state.sum_assured_data[index]; ;
+        body['si'] = this.state.sum_assured_data[index];
+
+        if(account_type === 'family' || account_type === 'self_family'){
+            var parents_total = groupHealthPlanData.star_parents_total;
+            var parents_in_law_total = groupHealthPlanData.star_parents_in_law_total;
+            body.parents = parents_total;
+            body.parents_in_law = parents_in_law_total;
+            body.adults = body.adults - (body.parents + body.parents_in_law)
+        }
         
         try{
             const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/star`, body);
@@ -182,6 +188,7 @@ class GroupHealthPlanStarSumInsured extends Component {
         groupHealthPlanData.post_body.sum_assured = this.state.sum_assured_data[this.state.selectedIndex];
         groupHealthPlanData.post_body.individual_si = this.state.sum_assured_data[this.state.selectedIndex];
         groupHealthPlanData.plan_selected_final = plan_selected_final;
+        groupHealthPlanData.sum_assured_screen.premium_details = plan_selected_final;
 
         Object.assign(groupHealthPlanData.post_body, {
             tenure: plan_selected_final.tenure,
@@ -198,8 +205,12 @@ class GroupHealthPlanStarSumInsured extends Component {
             gst: plan_selected_final.gst[1],
             floater_type: plan_selected_final.floater_type
         });
-
-
+        if(storageService().getObject('applicationPhaseReached')){
+            delete groupHealthPlanData.post_body['quotation_id'];
+            if(!isEmpty(groupHealthPlanData.application_data)){
+                groupHealthPlanData.application_data = {};
+            }
+        }
         this.setLocalProviderData(groupHealthPlanData);
         this.navigate(this.state.next_screen || 'plan-premium-summary');
 
@@ -217,6 +228,9 @@ class GroupHealthPlanStarSumInsured extends Component {
             <Container
                 events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
+                skelton={this.state.skelton}
+                showError={this.state.showError}
+                errorData={this.state.errorData}
                 title="Select sum insured"
                 buttonTitle="CONTINUE"
                 buttonDisabled={this.state.loadingPremium || this.state.apiError}

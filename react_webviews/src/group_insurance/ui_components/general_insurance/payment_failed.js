@@ -5,7 +5,7 @@ import failed_fisdom from 'assets/ils_covid_failed_fisdom.svg';
 import failed_myway from 'assets/ils_covid_failed_myway.svg';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-
+import {Imgc} from 'common/ui/Imgc';
 class PaymentFailedClass extends Component {
 
   constructor(props) {
@@ -18,7 +18,7 @@ class PaymentFailedClass extends Component {
 
   handleClick = () => {
     this.setState({
-      show_loader: true
+      show_loader: 'button'
     })
     let pgLink = window.sessionStorage.getItem('group_insurance_payment_url');
     if (pgLink) {
@@ -65,12 +65,14 @@ class PaymentFailedClass extends Component {
         buttonTitle='Retry Payment'
         onlyButton={true}
         showLoader={this.state.show_loader}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         handleClick={() => this.handleClick()}
         title="Payment Failed"
         classOverRideContainer="payment-failed"
       >
         <div>
-          <div className="payment-failed-icon"><img src={this.state.failed_icon} alt="" /></div>
+          <div className="payment-failed-icon"><Imgc className="payment-failed-img" src={this.state.failed_icon} alt="" /></div>
           <div className="payment-failed-title">Payment Failed!</div>
           <div className="payment-failed-subtitle">Seems like an internal issue. Don’t worry we are on to it, please retry after sometime.</div>
         </div>

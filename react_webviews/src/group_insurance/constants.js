@@ -1,4 +1,4 @@
-import {isEmpty} from 'utils/validators';
+import {isEmpty, numDifferentiationInr, inrFormatDecimal} from 'utils/validators';
 
 export const maritalOptions = [
   {
@@ -539,6 +539,10 @@ export const back_button_mapper = {
   '/group-insurance/life-insurance/entry': '/group-insurance',
   '/group-insurance/life-insurance/app-update': '/group-insurance/life-insurance/entry',
   '/group-insurance/call-back-details' : '/group-insurance',
+  '/group-insurance/advisory/recommendations' : '/group-insurance',
+  '/group-insurance/advisory/landing': '/group-insurance',
+  '/group-insurance/advisory/basic-details': '/group-insurance/advisory/landing',
+  '/group-insurance/life-insurance/resume-intermediate': '/group-insurance/life-insurance/savings-plan/landing'
 };
 
 export const insuranceMaritalStatus = [
@@ -581,6 +585,9 @@ export const insuranceProductTitleMapper = {
   'term_insurance': 'Term Insurance',
   'DENGUE': 'Dengue insurance',
   'CORONA': 'Coronavirus insurance',
+  'HOME_INSURANCE': 'Home insurance',
+  'HEALTH_SUPER_TOPUP':'Health super top-up',
+  'CRITICAL_HEALTH_INSURANCE': 'Critical illness insurance'
 }
 
 export function getBhartiaxaStatusToState(policy) {
@@ -620,7 +627,7 @@ export function ghGetMember(lead, providerConfig) {
     'parent_in_law_account2_key'
   ];
   const { add_members_screen: { son_max, daughter_max }} = providerConfig;
-
+  
   let backend_child_keys = [];
   for (let i = 0; i < (son_max + daughter_max); i++) {
     backend_child_keys.push(`child_account${i+1}_key`);
@@ -633,6 +640,11 @@ export function ghGetMember(lead, providerConfig) {
     'parents': ['parent_account1_key', 'parent_account2_key'],
     'parents_in_law': ['parent_in_law_account1_key', 'parent_in_law_account2_key'],
   };
+
+  if(lead.vendor === 'star' && (lead.insurance_type === 'family' || lead.insurance_type === 'self_family')){
+    allowed_as_per_account['family'] = [...allowed_as_per_account['family'], 'parent_account1_key', 'parent_account2_key', 'parent_in_law_account1_key', 'parent_in_law_account2_key']
+    allowed_as_per_account['self_family'] = [...allowed_as_per_account['self_family'], 'parent_account1_key', 'parent_account2_key', 'parent_in_law_account1_key', 'parent_in_law_account2_key']
+  } 
   const allowed_mapper = allowed_as_per_account[lead.insurance_type];
 
   let member_base = [];
@@ -679,16 +691,33 @@ export function ghGetMember(lead, providerConfig) {
     }
   }
   
+  if(lead.vendor === 'star' && (lead.insurance_type === 'family' || lead.insurance_type === 'self_family')){
+    member_base = starMemberSort(member_base);
+  }
+  
   if(['parents', 'parents_in_law', 'family'].includes(lead.insurance_type)) {
     let obj = lead.member_details['self_account_key'] || {};
     obj.backend_key = 'self_account_key';
     obj.key = 'applicant';
     member_base.push(obj);
-
   }
 
-  return member_base; 
+  
 
+  return member_base; 
+}
+
+export function starMemberSort(current_member_data){
+  var dobOrder = ['self', 'husband', 'wife', 'daughter', 'daughter1', 'daughter2', 'daughter3', 'son', 'son1', 'son2', 'son3', 'father', 'mother', 'father_in_law', 'mother_in_law']
+  var member_base = [];
+  for(let x of dobOrder){
+    for(let y of current_member_data){
+      if(x === y.key){
+          member_base.push(y);
+      }   
+    }
+  }
+  return member_base;
 }
 
 export function getCssMapperReport(policy) {
@@ -697,23 +726,23 @@ export function getCssMapperReport(policy) {
 
   let cssMapper = {
     'init': {
-      color: 'yellow',
-      disc: 'Policy Pending'
+      color: '#f7b500',
+      disc: 'Pending'
     },
     'request_pending': {
-      color: 'yellow',
+      color: '#f7b500',
       disc: 'Status awaited from'
     },
     'Issued': {
-      color: 'green',
+      color: '#35CB5D',
       disc: 'Issued'
     },
     'Pending': {
-      color: 'yellow',
+      color: '#f7b500',
       disc: 'Pending'
     },
     'In_Process': {
-      color: 'yellow',
+      color: '#f7b500',
       disc: 'In process'
     },
     'Rejected': {
@@ -729,39 +758,43 @@ export function getCssMapperReport(policy) {
       disc: 'Cancelled'
     },
     'incomplete': {
-      color: 'yellow',
-      disc: 'Policy Pending'
+      color: '#f7b500',
+      disc: 'Pending'
     },
     'policy_issued': {
-      color: 'green',
-      disc: 'Policy Issued'
+      color: '#35CB5D',
+      disc: 'Issued'
     }, 
     'success': {
-      color: 'green',
-      disc: 'Policy Issued'
+      color: '#35CB5D',
+      disc: 'Issued'
     },
     'complete': {
-      color: 'green',
-      disc: 'Policy Issued'
+      color: '#35CB5D',
+      disc: 'Issued'
     },
     'policy_expired': {
       color: 'red',
-      disc: 'Policy Expired'
+      disc: 'Expired'
+    },
+    'expired': {
+      color: 'red',
+      disc: 'Expired'
     },
     'rejected': {
       color: 'red',
-      disc: 'Policy Rejected'
+      disc: 'Rejected'
     },
     'failed': {
       color: 'red',
-      disc: 'Policy Failed'
+      disc: 'Failed'
     },
     'cancelled': {
       color: 'red',
-      disc: 'Policy Cancelled'
+      disc: 'Cancelled'
     },
     'pending_from_vendor': {
-      color: 'yellow',
+      color: '#f7b500',
       disc: 'Status awaited from star health'
     }
   }
@@ -776,9 +809,20 @@ export function getCssMapperReport(policy) {
     cssMapper.policy_issued.disc = 'Issued';
   }
 
-
   let obj = {};
   let policy_status = policy.status;
+
+  var pending_statuses = ['pending', 'init', 'incomplete', 'pending_from_vendor', 'request_pending', 'plutus_submitted'];
+  var issued_statuses = ['issued', 'policy_issued', 'success', 'complete'];
+
+  var backgroundColor = "";
+  if(issued_statuses.indexOf(policy_status.toLowerCase()) > -1){
+    backgroundColor = "#F5FBED"
+  }else if(pending_statuses.indexOf(policy_status.toLowerCase()) > -1 ){
+    backgroundColor = "#FFFDF2"
+  }else{
+    backgroundColor = "#FDF7F8"
+  }
 
   if (policy.key === 'TERM_INSURANCE') {
     if (policy_status === 'failed') {
@@ -793,7 +837,7 @@ export function getCssMapperReport(policy) {
   }
 
   obj.cssMapper = cssMapper[obj.status] || cssMapper['init'];
-
+  obj.cssMapper['backgroundColor'] = backgroundColor;
   if(policy_status === 'request_pending') {
     if(provider === 'STAR') {
       obj.cssMapper.disc += ` Star Health`;
@@ -804,8 +848,23 @@ export function getCssMapperReport(policy) {
 
   return obj;
 }
+export function productNameMapper(key){
+  let mapper = {
+    'religare': 'Health insurance',
+    'care_plus': 'Health insurance',
+    'HOSPICASH': 'Health insurance',
+    'CORONA': 'Health insurance',
+    'DENGUE': 'Health insurance',
+    'star': 'Health insurance',
+    'hdfc_ergo': 'Health insurance',
+    'PERSONAL_ACCIDENT': 'Other insurance'
+    //add sanchay plus and click to invest and smart wallet
+  }
 
+  return mapper[key];
+}
 export function childeNameMapper(name) {
+  
   let mapper = {
     'son1': '1st Son',
     'son2': '2nd Son',
@@ -820,9 +879,8 @@ export function childeNameMapper(name) {
     'father_in_law': 'father in law',
     'mother_in_law': 'mother in law'
   };
-
-  return mapper[name] || name;
   
+  return (mapper[name] || name).toLowerCase();
 }
 
 export function TitleMaper(name){
@@ -859,4 +917,49 @@ export function ProviderName(name) {
 
   return ProviderName[NameData] ? ProviderName[NameData] : NameData
 
+}
+
+export function reportsfrequencyMapper(key, frequency, product_key){
+  try{
+    var freqMapper = {
+      'monthly': '/mth', 
+      'yearly': '/yr', 
+      'annually':'/yr',
+      'quarterly': '/qr', 
+      'quaterly': '/qr',
+      'half yearly': '/HY',
+      'half-yearly': '/HY',
+      'at once': '', 
+      'single': ''
+    } 
+    if((['hdfc_ergo', 'star', 'religare' ].indexOf(key) > -1 || key === "BHARTIAXA") && product_key !== 'offline_insurance'){
+      return '/yr'
+    }else if(key === 'care_plus' && frequency){
+      return frequency.toLowerCase() === 'monthly' ? '/mth' : '/yr'
+    }else if(frequency && (key === 'FYNTUNE' || product_key === 'offline_insurance' || product_key === 'TERM_INSURANCE')){
+      return freqMapper[frequency.toLowerCase()] || ''
+    }else{
+      return ''
+    }
+  }catch(err){
+    return ''
+  }
+}
+
+export function reportCoverAmountValue(val){
+  if(val < 100000){
+    if(Number.isInteger(val)){
+      return inrFormatDecimal(val)
+    }else{
+      return inrFormatDecimal(val, 2)
+    }
+  }else{
+    return numDifferentiationInr(val)
+  }
+}
+
+export var reportTopTextMapper = {
+  'activeReports' : 'Issued policies for which claim can be made',
+  'pendingReports': 'Applications under process with insurance company', 
+  'inactiveReports': 'Expired, rejected and cancelled policies for which claim cannot be made'
 }

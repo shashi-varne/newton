@@ -4,7 +4,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
 import Input from "common/ui/Input";
 import Api from 'utils/api';
-import DropdownWithoutIcon from '../../../common/ui/SelectWithoutIcon';
+import DropDownNew from '../../../common/ui/DropDownNew';
 import { FormControl } from 'material-ui/Form';
 import toast from '../../../common/ui/Toast';
 import BottomInfo from '../../../common/ui/BottomInfo';
@@ -410,7 +410,7 @@ class MandateBank extends Component {
             </div>
 
             <div className="InputField">
-              <DropdownWithoutIcon
+              <DropDownNew
                 disabled={this.state.formDisabled}
                 width="40"
                 options={this.state.accountTypeOptions}

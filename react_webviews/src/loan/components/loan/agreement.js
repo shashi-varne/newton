@@ -341,7 +341,7 @@ const Agreement = (props) => {
                 </tr>
                 <tr>
                     <td>Net loan amount</td>
-                    <td>{formatAmountInr(parentState.vendor_info.net_amount_final)}</td>
+                    <td>{parentState.vendor_info.is_insured ? formatAmountInr(parentState.vendor_info.net_amount_final - parentState.vendor_info.insurance_premium_final) : formatAmountInr(parentState.vendor_info.net_amount_final)}</td>
                 </tr>
                 </tbody>
             </table>

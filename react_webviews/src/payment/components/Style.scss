@@ -43,7 +43,6 @@
     }
     
     .bold {
-      font-family: 'RobotoB';
     }
     
     .blue {
@@ -132,7 +131,6 @@
     #payment {
       margin: 0;
       padding: 0;
-      font-family: 'RobotoR';
       max-width: 767px;
       margin: 0 auto;
       overflow-y: scroll;
@@ -159,7 +157,6 @@
     header p {
       margin: 0;
       line-height: normal;
-      font-family: 'RobotoL';
       font-style: italic;
     }
     
@@ -254,8 +251,7 @@
     
     .add-button button, .footer button, .upi-button button {
       width: 100%;
-      font-family: 'RobotoB';
-      background: #35cb5d;
+      background: var(--secondary);
       border-radius: 5px;
       padding: 15px;
       border: 0;
@@ -264,6 +260,10 @@
       text-transform: uppercase;
       font-weight: bold;
     }
+
+    .add-button button:hover, .upi-button button.active:hover{
+      background-color: var(--on-hover);
+    }
     
     .add-button button.bfdl, .footer button.bfdl, .upi-button button.bfdl {
       background: #ff5928;
@@ -271,8 +271,7 @@
     
     .upi-button button {
       width: 100%;
-      font-family: 'RobotoB';
-      background: #b5b5b5;
+      background: var(--color-action-disable);
       border-radius: 5px;
       padding: 15px;
       border: 0;
@@ -281,7 +280,7 @@
     }
     
     .upi-button button.active {
-      background: #35cb5d;
+      background: var(--secondary);
     }
     
     .upi-button button.active.bfdl {
@@ -323,7 +322,8 @@
       font-size: 12px;
       font-weight: bold;
       line-height: 14px;
-      color: #35CB5D;
+      color: var(--secondary);
+      cursor: pointer;
     }
     
     .payusing {
@@ -332,6 +332,9 @@
         font-weight: bold;
         font-size: 15px;
         line-height: 18px;
+        padding-bottom: 20px;
+        border-top: 1px solid #ededed;
+        margin-top: 5px;
         padding-bottom: 20px;
     }
     
@@ -348,7 +351,6 @@
     
     .card-footer-images .more {
       color: #b0b0b0;
-      font-family: 'RobotoB';
       font-size: 18px;
     }
     
@@ -480,8 +482,9 @@
       padding: 10px;
       margin: 0;
     }
-    .footer.old-ios {
+    .footer.ios {
       position: relative !important;
+      margin-top: 50px;
     }
     .consent {
       color: #878787;
@@ -849,7 +852,6 @@
       border: 1px solid #35cb5d;
       background: #fff;
       padding: 15px;
-      font-family: 'RobotoB';
       font-size: 16px;
     }
     
@@ -931,6 +933,7 @@
       justify-content: space-between;
       padding: 20px 15px;
       align-items: center;
+      cursor: pointer;
      /* Icon */
     }
     .tab-label:hover {
@@ -1011,4 +1014,37 @@ body[data-device="web"] {
 }
 .ic_close {
   padding: 14px 14px 0;
+}
+
+.po-ippb-disclaimer {
+  .po-ippb-disclaimer-title {
+    padding-bottom: 10px !important;
+  }
+  
+  .po-ippb-disclaimer-content {
+    p {
+      padding: 10px 0;
+      font-size: 14px;
+      color: var(--label);
+      margin: 0;
+  
+      b {
+        font-weight: 600;
+        color: var(--default);
+      }
+
+      .text-transform-uppercase {
+        text-transform: uppercase;
+      }
+
+      .text-transform-capitalize {
+        text-transform: capitalize;
+      }
+    }
+  }
+
+  .po-ippb-disclaimer-actions {
+    margin: 0;
+    padding: 10px 20px;
+  }
 }

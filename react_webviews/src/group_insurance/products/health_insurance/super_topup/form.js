@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Fragment } from 'react';
 import BasicDetailsRedirection from '../../../ui_components/general_insurance/basic_details_redirection';
 
 class HealthSuperTopupForm extends Component {
@@ -14,11 +15,11 @@ class HealthSuperTopupForm extends Component {
 
     render() {
         return (
-            <div>
+            <Fragment>
                 <BasicDetailsRedirection
                     parent={this}
                 />
-            </div>
+            </Fragment>
         );
     }
 }

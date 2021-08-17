@@ -8,7 +8,7 @@ import Input from '../../common/ui/Input'
 import Dialog, { DialogContent  } from 'material-ui/Dialog';
 import Api from '../../../src/utils/api';
 import toast from '../../common/ui/Toast'
-import DropdownWithoutIcon from '../../common/ui/SelectWithoutIcon'
+import DropDownNew from '../../common/ui/DropDownNew'
 
 class AddPolicy extends Component {
 
@@ -92,11 +92,11 @@ handleChange = name => event => {
   if (!name) {
     return
   }
-
+  let form_data = this.state.form_data
   if(name === 'number'){
     var value = event ? event.target.value : event;
+    form_data.name_error = ''
   }
-  let form_data = this.state.form_data
   form_data.title = 'CONTINUE'
   form_data.notfound = false
   form_data.found = false
@@ -104,6 +104,7 @@ handleChange = name => event => {
     // eslint-disable-next-line
     var value = event
     form_data.index = event
+    form_data.name_error2 = ''
   };
   form_data[name] = value;
   form_data[name + '_error'] = '';
@@ -324,7 +325,7 @@ handleClick = async () => {
         {/* <div className='health_insurance' style={{fontWeight: '700', fontSize:'20px', marginTop:'' }}> Enter your policy details   </div> */}
             <div className="InputField">
             <div>
-            <DropdownWithoutIcon
+            <DropDownNew
               parent={this}
               header_title="Insurance Company"
               cta_title="SAVE"

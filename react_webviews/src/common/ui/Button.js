@@ -7,10 +7,55 @@ import SVG from 'react-inlinesvg';
 import './style.scss';
 import { getConfig } from 'utils/functions';
 
+import DotDotLoaderNew from './DotDotLoaderNew';
+import { disableBodyTouch } from 'utils/validators';
+
+const typeToClass = {
+  'outlined' : 'generic-button-outlined',
+  'textonly': 'generic-button-textonly'
+}
+
 class CustomButton extends Component {
   render() {
-    const props = this.props;
+    let props = this.props;
+    let showLoader = props.showLoader;
+    showLoader = showLoader === 'button' ? true : false;
+
+    if(props.multipleCTA && showLoader){
+      disableBodyTouch(); //disable touch
+    }else if((!showLoader || !props.showError) && !props.multipleCTA){
+      disableBodyTouch(true); //touch enabled
+    }
+
+    if(props.showError){
+      // disableBodyOverflow();
+    }
+
     const { button: buttonClass, ...classes } = props.classes || {};
+
+      if(props.iframe){
+        return(
+          <div>
+          <Button
+            fullWidth={(props.reset || props.type === 'summary') ? true : false}
+            variant="raised"
+            size="large"
+            color="secondary"
+            style={{color: 'white', width: '310px' , height: '50px'}}
+            className={buttonClass}
+            classes={classes}
+            disabled={props.disable}
+          >
+            {props.buttonTitle}
+            {
+              props.arrow &&
+              <img alt="" src={arrow} width={20} className="FooterButtonArrow" />
+            }
+          </Button>
+        </div>
+        )
+      }
+
     if (props.twoButton && props.dualbuttonwithouticon) {
       return (
         <div className="FlexButton">
@@ -37,7 +82,10 @@ class CustomButton extends Component {
             className={`${buttonClass} filledButton`}
             disabled={props.disable}
           >
-            {props.buttonTwoTitle}
+            {!showLoader && props.buttonTwoTitle}
+            {showLoader && <DotDotLoaderNew
+            styleBounce={{backgroundColor:'white'}}
+            />}
           </Button>
         </div>
       );
@@ -76,24 +124,29 @@ class CustomButton extends Component {
       );
     } else {
       return (
-        <div>
+        // <div>
           <Button
             fullWidth={(props.reset || props.type === 'summary') ? true : false}
             variant="raised"
             size="large"
             color="secondary"
-            style={{backgroundColor: getConfig().secondary, color: 'white'}}
-            className={buttonClass}
+            style={props.style}
+            className={`${buttonClass} ${typeToClass[props.type || ''] || ''}`}
             classes={classes}
-            disabled={props.disable}
+            disabled={props.buttonDisabled || props.disable}
+            onClick={props.onClick}
           >
-            {props.buttonTitle}
+            {!showLoader && props.buttonTitle}
+            {showLoader && 
+            <DotDotLoaderNew
+              styleBounce={{backgroundColor:'white'}}
+            />}
             {
               props.arrow &&
               <img alt="" src={arrow} width={20} className="FooterButtonArrow" />
             }
           </Button>
-        </div>
+        // </div>
       );
     }
     
@@ -105,10 +158,12 @@ const styles = {
     padding: !getConfig().isMobileDevice ? '12px 15px 12px 15px !important' : '16px 0px !important',
     borderRadius: 6,
     textTransform: 'capitalize',
-    fontSize: '16px !important',
+    fontSize: '12px !important',
     boxShadow: 'none',
+    fontWeight: 'bold',
+    letterSpacing: '1px',
     // boxShadow: '0 1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149)',
-    width: !getConfig().isMobileDevice ? 'auto' : '100% !important'
+    width: !getConfig().isMobileDevice ? 'auto' :  '100%'
   },
   label: {},
 }

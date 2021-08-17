@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
-import { getConfig } from 'utils/functions';
+import { getConfig, getBasePath } from 'utils/functions';
 import { storageService } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 
@@ -21,11 +21,12 @@ class PlaceBuyOrderClass extends Component {
     }
 
     redirect(pgLink) {
-        let nativeRedirectUrl = window.location.origin +
+        let basepath = getBasePath();
+        let nativeRedirectUrl = basepath +
             '/gold/buy' + getConfig().searchParams;
-
+        
         let paymentRedirectUrl = encodeURIComponent(
-            window.location.origin + '/gold/' + this.state.provider + '/buy/payment' + getConfig().searchParams
+            basepath + '/gold/' + this.state.provider + '/buy/payment' + getConfig().searchParams
         );
 
         // eslint-disable-next-line

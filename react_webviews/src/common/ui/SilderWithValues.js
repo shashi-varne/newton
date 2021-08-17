@@ -25,7 +25,7 @@ class SliderWithValues extends Component {
                 <div className="content-1">
                     <span className="name">{this.props.label}</span>
                     <span className="amount">
-                        {this.props.label !== "Loan tenor" ?
+                        {this.props.label !== "Loan tenure" ?
                             '₹ '+formatAmount(this.state.value) :
                             this.state.value + " months"
                         }

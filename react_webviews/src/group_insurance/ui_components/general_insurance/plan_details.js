@@ -16,13 +16,13 @@ import ic_ci_d1_fisdom from 'assets/ic_ci_d1_fisdom.svg';
 import ic_ci_d1_myway from 'assets/ic_ci_d1_myway.svg';
 
 import Api from 'utils/api';
-import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { insuranceProductTitleMapper } from '../../constants';
 import {
   inrFormatDecimal, calculateAge
 } from 'utils/validators';
+import {Imgc} from '../../../common/ui/Imgc'
 
 const coverAmountMapper = {
   'PERSONAL_ACCIDENT': {
@@ -82,8 +82,8 @@ class PlanDetailsClass extends Component {
     super(props);
     this.state = {
       selectedIndex: 0,
+      skelton: true,
       checked: true,
-      show_loader: true,
       parent: this.props.parent || {
         'plan_data': {
 
@@ -197,8 +197,42 @@ class PlanDetailsClass extends Component {
     })
   }
 
-  async componentDidMount() {
+  setErrorData = (type) => {
+
     this.setState({
+      showError: false
+    });
+    if(type) {
+      let mapper = {
+        'onload':  {
+          handleClick1: this.onload,
+          button_text1: 'Retry'
+        },
+        'submit': {
+          handleClick1: this.handleClickCurrent,
+          button_text1: 'Retry',
+          handleClick2: () => {
+            this.setState({
+              showError: false
+            })
+          },
+          button_text2: 'DISMISS'
+        }
+      };
+  
+      this.setState({
+        errorData: {...mapper[type], setErrorData : this.setErrorData}
+      })
+    }
+
+  }
+
+  onload = async () => {
+
+    this.setErrorData('onload');
+
+    this.setState({
+      skelton: true,
       ic_claim_assist: this.state.type !== 'fisdom' ? ic_claim_assist_myway : ic_claim_assist_fisdom,
       ic_read: this.state.type !== 'fisdom' ? ic_read_myway : ic_read_fisdom
     })
@@ -214,28 +248,35 @@ class PlanDetailsClass extends Component {
       color: this.state.color
     }
 
+    let error = '';
+    let errorType = '';
     try {
-
+      
       let provider = this.props.parent.state.provider || 'bhartiaxa';
-      const resQuote = await Api.get('/api/ins_service/api/insurance/' +
+      let service = provider === 'bhartiaxa' ? 'insurancev2': 'ins_service';
+      
+      const resQuote = await Api.get('/api/'+ service +'/api/insurance/' +
         provider + '/get/quote?product_name=' +
         this.props.parent.state.product_key)
 
       if (resQuote && resQuote.pfwresponse.status_code === 200) {
 
         let quoteData = resQuote.pfwresponse.result;
+        var checkLogo = ['HEALTH_SUPER_TOPUP', 'CRITICAL_HEALTH_INSURANCE', 'HOME_INSURANCE']
+        var topLogo = checkLogo.indexOf(this.props.parent.state.product_key) >= 0 ? quoteData.logo : bhartiaxa_logo;
         this.setState({
           quoteData: quoteData,
+          topLogo,
           productTitle: quoteData.product_title || this.state.productTitle
         })
 
       } else {
-        toast(resQuote.pfwresponse.result.error || resQuote.pfwresponse.result.message
-          || 'Something went wrong');
+        error = resQuote.pfwresponse.result.error || resQuote.pfwresponse.result.message
+        || true;
       }
 
       if (this.state.lead_id) {
-        let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
+        let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
 
 
         if (res.pfwresponse.status_code === 200) {
@@ -244,15 +285,12 @@ class PlanDetailsClass extends Component {
           this.setPremiumData(premium_details, leadData);
           this.setState({
             leadData: leadData,
-            show_loader: false
+            skelton: false
           })
 
         } else {
-          this.setState({
-            show_loader: false
-          })
-          toast(res.pfwresponse.result.error || res.pfwresponse.result.message
-            || 'Something went wrong');
+          error = res.pfwresponse.result.error || res.pfwresponse.result.message
+          || true;
         }
       } else {
 
@@ -262,26 +300,44 @@ class PlanDetailsClass extends Component {
         }
         this.setPremiumData(premium_details, data || {});
 
-        this.setState({
-          show_loader: false
-        })
+        if(!error) {
+          this.setState({
+            skelton: false
+          })
+        }
+        
       }
 
     } catch (err) {
       console.log(err)
+      error = true;
+      errorType = 'crash';
       this.setState({
-        show_loader: false
-      });
-      toast('Something went wrong');
+        skelton:false
+      })
+    }
+
+    // set error data
+   
+     if(error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error,
+          type: errorType
+        },
+        showError:'page'
+      })
     }
 
     this.setState({
       premium_details: premium_details
     })
-
   }
 
-
+  async componentDidMount() {
+    this.onload();
+  }
 
 
   componentDidUpdate(prevState) {
@@ -304,7 +360,8 @@ class PlanDetailsClass extends Component {
     return (
       <div key={index} className={`plan-details-item ${(props.isDisabled) ? 'disabled' : ''}`}
       >
-        <img className="plan-details-icon" src={props.icon} alt="" />
+        <Imgc className="imgc-box-plandeatils plan-details-icon" src={props.icon} alt="" />
+        <div style={{marginRight: '10px'}} />
         <div>
           <div className="plan-details-text">{props.disc}</div>
           {((props.isDisabled && props.disc2) ||
@@ -322,7 +379,8 @@ class PlanDetailsClass extends Component {
         display: 'flex', alignItems: 'center', borderTop: index === 0 ? '1px solid #EFEDF2' : '', borderBottom: '1px solid #EFEDF2', paddingTop: '15px',
         paddingBottom: '15px', cursor: 'pointer'
       }}>
-        <img className="plan-details-icon" src={props.icon} alt="" />
+        <Imgc className="plan-details-render-img" src={props.icon} alt="" />
+        <div style={{marginRight: '10px'}} />
         <div>
           <div className="plan-details-text">{props.disc} ?</div>
         </div>
@@ -410,14 +468,15 @@ class PlanDetailsClass extends Component {
       pathname: pathname,
       search: search ? search : getConfig().searchParams,
       params: {
-        premium_details: premium_details || {},
         diseasesData: diseasesData || {}
       }
-    });
+    }, {premium_details: premium_details});
   }
 
-  async handleClickCurrent() {  
+  async handleClickCurrent() { 
     this.sendEvents('next');
+
+    this.setErrorData('submit');
 
     var final_data = {
       "product_plan": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].product_plan,
@@ -432,21 +491,25 @@ class PlanDetailsClass extends Component {
     window.sessionStorage.setItem('group_insurance_plan_final_data',
       JSON.stringify(group_insurance_plan_final_data));
 
-    this.setState({
-      show_loader: true
-    })
+   
 
     if (this.state.isRedirectionModal) {
       this.navigate('form-redirection', '', final_data);
       return;
     }
 
+    this.setState({
+      show_loader: 'button'
+    });
+
+    let error = '';
+    let errorType = '';
     try {
 
       let res2 = {};
       if (this.state.lead_id) {
         final_data.lead_id = this.state.lead_id;
-        res2 = await Api.post('api/ins_service/api/insurance/bhartiaxa/lead/update', final_data)
+        res2 = await Api.post('api/insurancev2/api/insurance/bhartiaxa/lead/update', final_data)
 
 
         if (res2.pfwresponse.status_code === 200) {
@@ -455,6 +518,8 @@ class PlanDetailsClass extends Component {
           let createdAge = calculateAge(dt_created);
           let ageRef = calculateAge('18/11/2020');
           let diffAge = ageRef - createdAge;
+
+          final_data.lead  = res2.pfwresponse.result.updated_lead || {};
 
 
           if(this.props.parent.state.product_key === 'CORONA' && diffAge <= 0){
@@ -466,8 +531,8 @@ class PlanDetailsClass extends Component {
           this.setState({
             show_loader: false
           })
-          toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message
-            || 'Something went wrong');
+          error = res2.pfwresponse.result.error || res2.pfwresponse.result.message
+          || true;
         }
       } else {
           if(this.props.parent.state.product_key === 'CORONA' && !this.state.lead_id){
@@ -477,7 +542,23 @@ class PlanDetailsClass extends Component {
       }
     }
     } catch (err) {
-      toast('Something went wrong');                                                                                                                                                                          
+      error = true;
+      errorType = "crash";
+      this.setState({
+        show_loader: false
+      })                                                                                                                                                                          
+    }
+    // set error data
+    if(error) {
+      this.setState({
+        show_loader:false,
+        errorData: {
+          ...this.state.errorData,
+          title2: error,
+          type: errorType
+        },
+        showError:true
+      })
     }
 
   }
@@ -576,9 +657,12 @@ class PlanDetailsClass extends Component {
         product_key={this.props.parent ? this.props.parent.state.product_key : ''}
         buttonTitle={this.props.parent.state.provider === 'hdfcergo' ? 'Get Free Quote' : 'Get this Plan'}
         onlyButton={true}
-        hide_header={this.state.show_loader}
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
+        showError={this.state.showError}
+        // showError={true}
+        errorData={this.state.errorData}
         handleClick={() => this.handleClickCurrent()}
         title={this.state.productTitle || ''}
         classOverRideContainer="accident-plan">
@@ -591,7 +675,7 @@ class PlanDetailsClass extends Component {
               <h1  style={{fontWeight:'bold'}} className="accident-plan-title">{this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_tag_line} 
               <span style={{fontWeight:'400'}}>{this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_tag_line2}</span> </h1>
             }
-            <img src={this.state.quoteData.logo || bhartiaxa_logo} alt="" />
+            <Imgc style={{width:'79px', height:'56px' }} src={this.state.topLogo} alt="" />
           </div>
           <div className="accident-plan-subtitle">
             {this.props.parent.state.plan_data.product_tag_line}
@@ -603,7 +687,7 @@ class PlanDetailsClass extends Component {
               fontSize: '14px', lineHeight: '24px', color: '#4a4a4a',
               display: 'flex', width: 'fit-content', background: '#ede9f5', padding: '0px 10px 0 10px'
             }}>
-              <img style={{ margin: '0px 5px 0 0' }} src={this.state.instant_icon} alt="" />
+              <Imgc className="instant-issurance-img" src={this.state.instant_icon} alt="" />
               instant policy issuance
               </div>
           </div>}
@@ -636,7 +720,8 @@ class PlanDetailsClass extends Component {
           <div style={{ marginTop: '40px', padding: '0 15px' }}>
             <div style={{ color: '#160d2e', fontSize: '16px', fontWeight: '500', marginBottom: '10px' }}>Diseases covered</div>
             <div className="plan-details-item" >
-              <img className="plan-details-icon" src={this.state.ic_ci_d1_icon} alt="" />
+              <Imgc className="imgc-box-plandeatils plan-details-icon" src={this.state.ic_ci_d1_icon} alt="" />
+              <div style={{marginRight: '10px'}} />
               <div>
                 <div className="plan-details-text">{this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_diseases_covered.length} life-threatening diseases covered</div>
                 <div onClick={() => this.openDiseases()} className="round-visible-button">
@@ -706,7 +791,7 @@ class PlanDetailsClass extends Component {
         }
         {this.props.parent.state.product_key !== 'CORONA' &&
           <div className="accident-plan-claim">
-            <img className="accident-plan-claim-icon" src={this.state.ic_claim_assist} alt="" />
+            <Imgc className="accident-plan-claim-icon" src={this.state.ic_claim_assist} alt="" />
             <div>
               <div className="accident-plan-claim-title">Claim assistance</div>
               <div className="accident-plan-claim-subtitle">{this.state.quoteData.claim_assistance_line ||
@@ -717,7 +802,7 @@ class PlanDetailsClass extends Component {
         {this.props.parent.state.provider !== 'hdfcergo' &&
           <div className="accident-plan-read"
             onClick={() => this.openInBrowser(this.state.quoteData.read_document, 'read_document')}>
-            <img className="accident-plan-read-icon" src={this.state.ic_read} alt="" />
+            <Imgc className="accident-plan-read-icon" src={this.state.ic_read} alt="" />
             <div className="accident-plan-read-text" style={styles.color}>Read Detailed Document</div>
           </div>}
 

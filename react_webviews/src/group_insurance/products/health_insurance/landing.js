@@ -27,25 +27,28 @@ import back_nav_bar_icon_up from '../../../assets/back_nav_bar_icon_up.png'
 
 
 import Api from '../../../utils/api'
-import toast from '../../../common/ui/Toast'
 import { setTermInsData } from '../../common/commonFunction'
+import {Imgc} from   '../../../common/ui/Imgc'
 
 class HealthInsuranceLanding extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: true,
       type: getConfig().productName,
       insuranceProducts: [],
       params: qs.parse(props.history.location.search.slice(1)),
       Comprehensive : false,
-      DiseasesSpecificPlan : false
+      DiseasesSpecificPlan : false,
+      lastClickedItem:"",
+      title:"Health insurance"
     }
 
     this.renderPorducts = this.renderPorducts.bind(this);
     this.setTermInsData = setTermInsData.bind(this);
   }
+  
 
   componentWillMount() {
 
@@ -61,16 +64,16 @@ class HealthInsuranceLanding extends Component {
     let ic_hospicash = this.state.type !== 'fisdom' ? ic_hospicash_finity : ic_hospicash_fisdom;
     let icn_diseases = this.state.type !== 'fisdom' ? icn_diseases_insurance_finity : icn_diseases_insurance_fisdom
 
-    var health_insurance_option = {
-      key: 'HealthInsuranceEntry',
-      title: 'Comprehensive',
-      subtitle: 'Complete healthcare in one policy',
-      icon: health_suraksha_icon,
-      dropdown : back_nav_bar_icon,
-      uparrow : back_nav_bar_icon_up
-    }
 
     let insuranceProducts = [
+      {
+        key: 'HealthInsuranceEntry',
+        title: 'Comprehensive',
+        subtitle: 'Complete healthcare in one policy',
+        icon: health_suraksha_icon,
+        dropdown : back_nav_bar_icon,
+        uparrow : back_nav_bar_icon_up
+      },
       {
         key: 'DISEASE_SPECIFIC_PLANS',
         title: 'Disease specific plans',
@@ -93,9 +96,6 @@ class HealthInsuranceLanding extends Component {
       }
     ];
 
-    if(!getConfig().iOS){
-      insuranceProducts.unshift(health_insurance_option);
-    }
 
 
     let { params } = this.props.location || {};
@@ -109,7 +109,7 @@ class HealthInsuranceLanding extends Component {
     //   }
     // } else {
     //   this.setState({
-    //     show_loader: false
+    //     skelton: false
     //   })
     // }
 
@@ -130,19 +130,100 @@ class HealthInsuranceLanding extends Component {
     });
   }
 
+  setErrorData = (type) => {
 
-  async componentDidMount() {
+    this.setState({
+      showError: false
+    });
+    if(type) {
+      let mapper = {
+        'onload':  {
+          handleClick1: this.onload,
+          button_text1: 'Retry',
+          title1: ''
+        },
+        submit: {
+          handleClick1: this.handleClickEntry,
+          button_text1: "Retry",
+          handleClick2: () => {
+            this.setState({
+              showError: false,
+            });
+          },
+          button_text2: "Dismiss",
+        },
+      };
+  
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
 
-    this.setState({ show_loader: true });
+  }
+
+  handleClickEntry = async (data) => {
+    if (data) {
+      this.setState({
+        lastClickedItem: data
+      })
+    }
+    else {
+      data = this.state.lastClickedItem
+    }
+      this.setState({
+        title:''
+      })
+    this.setErrorData("submit");
+    this.setState({
+      skelton: true
+    });
+    let error = "";
+    let errorType = "";
+    try {
+      const res = await Api.get(`/api/ins_service/api/insurance/health/journey/started?product_name=${data.Product_name}`);
+
+      let resultData = res.pfwresponse
+      if(res.pfwresponse.status_code === 200){
+        data.insurance_type = 'Comprehensive health insurance'
+        this.sendEvents('next', data.insurance_type, data.Product_name);
+        let fullPath = data.key + '/landing';
+        this.navigate('/group-insurance/group-health/' + fullPath);  
+      }else {
+        error = resultData.error || resultData.message || true;
+      }
+    } catch (err) {
+      console.log(err)
+      this.setState({
+        skelton: false,
+      });
+      error = true;
+      errorType = "crash";
+    }
     
+    if(error)
+    {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error,
+          type: errorType
+        },
+        showError: "page",
+      });
+    }
+
+  }
+
+  onload = async () => {
+    this.setErrorData('onload');
+
+
+    this.setState({ skelton: true });
+    
+    let error = '';
+    let errorType = '';
     try {
       const res = await Api.get('/api/ins_service/api/insurance/application/summary')
-
-      if (!this.state.openModuleData.sub_module) {
-        this.setState({
-          show_loader: false
-        })
-      }
 
       if (res.pfwresponse.status_code === 200) {
         var resultData = res.pfwresponse.result.response;
@@ -204,23 +285,42 @@ class HealthInsuranceLanding extends Component {
             this.state.openModuleData.sub_module;
           this.handleClick(pathname);
         }
+        this.setState({
+          skelton: false
+        });
 
       } else {
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message
-          || 'Something went wrong');
+        error = res.pfwresponse.result.error || res.pfwresponse.result.message
+        || true;
       }
 
-      this.setState({
-        show_loader: false
-      });
+      
 
     } catch (err) {
       console.log(err)
       this.setState({
-        show_loader: false
+        skelton: false,
       });
-      toast('Something went wrong');
+      error= true;
+      errorType= "crash";
     }
+
+    // set error data
+    if(error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error,
+          type:errorType
+        },
+        showError:'page'
+      })
+    }
+  }
+
+
+  async componentDidMount() {
+    this.onload();
   }
 
   getLeadId(product_key) {
@@ -237,7 +337,7 @@ class HealthInsuranceLanding extends Component {
 
   handleClick2 = () => {
     this.setState({
-      show_loader: true
+      skelton:true
     })
   }
 
@@ -266,7 +366,6 @@ class HealthInsuranceLanding extends Component {
       this.DISEASE_SPECIFIC_PLANS();
       return;
     }
-
     this.sendEvents('next', title ? title : '')
 
     if (product_key === 'HEALTH_SUPER_TOPUP') {
@@ -318,9 +417,10 @@ class HealthInsuranceLanding extends Component {
       <div onClick={() => this.handleClick(props.key, props.title)} style={{
         display: 'flex', alignItems: 'center'}}>
         <div style={{ display: 'flex' , width : '100%'}}>
-          <img src={props.icon} alt="" style={{ marginRight: '15px' ,paddingTop: '20px', paddingBottom: '22px' }} />
+          <Imgc src={props.icon} className='imgc health-insurance-plan-list-img'  alt="" />
+          <div style={{ marginRight: '15px'}} />
           <div style={ (props.key === 'HealthInsuranceEntry') ? {width : '100%' ,borderBottomWidth: '1px', borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index  && !this.state.Comprehensive ? 'solid' : '',   
-                paddingTop: '20px', paddingBottom: '22px', justifyContent: 'space-between', cursor: 'pointer'} : (props.key === 'DISEASE_SPECIFIC_PLANS') ? {width : '100%' ,borderBottomWidth: '1px', 
+                paddingTop: '20px', paddingBottom: '28px', justifyContent: 'space-between', cursor: 'pointer'} : (props.key === 'DISEASE_SPECIFIC_PLANS') ? {width : '100%' ,borderBottomWidth: '1px', 
                 borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index  && !this.state.DiseasesSpecificPlan ? 'solid' : '', paddingTop: '20px', paddingBottom: '22px', 
                 justifyContent: 'space-between', cursor: 'pointer'}  : {width : '100%' ,borderBottomWidth: '1px', borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '',   
                 paddingTop: '20px', paddingBottom: '22px', justifyContent: 'space-between', cursor: 'pointer'} }>
@@ -329,19 +429,19 @@ class HealthInsuranceLanding extends Component {
                  borderRadius: 7 , padding: '2px 4px', marginTop : '-30px' , color : 'white', fontWeight : '700' , width :'40px' , left:'6px', height:'14px', 
              }}>Resume</span>}
                  {props.key === 'HealthInsuranceEntry'  && !this.state.Comprehensive && <span style={{ "float" : "right" , color : 'blue'}}>                  
-                  <img src={props.dropdown} alt="" style={{ marginLeft: '15px' }} />
+                  <Imgc src={props.dropdown} alt="" className='imgc health-landing-img-left'  />
                   </span>}
 
                   {props.key === 'HealthInsuranceEntry'  &&  this.state.Comprehensive &&<span style={{ "float" : "right" , color : 'blue'}}>                  
-                  <img src={props.uparrow} alt="" style={{ marginLeft : '15px' }} />  
+                  <Imgc src={props.uparrow} alt="" className='imgc health-landing-img-left' />  
                   </span>}
 
                    { props.key === 'DISEASE_SPECIFIC_PLANS' && !this.state.DiseasesSpecificPlan && <span style={{ "float" : "right" , color : 'blue'}}>                  
-                  <img src={props.dropdown} alt="" style={{ marginLeft: '15px' }} />
+                  <Imgc src={props.dropdown} alt="" className='imgc health-landing-img-left' />
                   </span>}
 
                   {props.key === 'DISEASE_SPECIFIC_PLANS' && this.state.DiseasesSpecificPlan &&<span style={{ "float" : "right" , color : 'blue'}}>                  
-                  <img src={props.uparrow} alt="" style={{ marginLeft: '15px' }} />
+                  <Imgc src={props.uparrow} alt="" className='imgc health-landing-img-left' />
                   </span>}
 
             </div>
@@ -378,6 +478,8 @@ class HealthInsuranceLanding extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'health insurance',
+        'insurance_type': insurance_type,
+        'product_selected': product_selected
       }
     };
 
@@ -403,9 +505,16 @@ class HealthInsuranceLanding extends Component {
       <Container
         events={this.sendEvents('just_set_events')}
         noFooter={true}
-        showLoader={this.state.show_loader}
-        title="Health insurance">
+        skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
+        title={this.state.title}
+        force_hide_inpage_title={true}
+        >
         <div>
+        <div>
+          <p style={{fontSize: '20px', marginBottom: '24px', fontWeight: '700'}}>Health Insurance</p>
+        </div>
           <div className='products' style={{marginTop : '10px'}}>
             <h1 style={{ fontWeight: '500', color: '#160d2e', fontSize: '17px', lineHeight : '20.15px', marginBottom : '15px'}}>Explore best plans for your health</h1>
             <div  style={{height : '100vh'}}>

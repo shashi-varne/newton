@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
 
-import { getConfig } from 'utils/functions';
+import { getConfig, getBasePath, getParamsMark } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import toast from '../../../../common/ui/Toast';
-import { initialize, updateLead, resetQuote, openMedicalDialog } from '../common_data';
+import { initialize, updateLead, resetQuote, openMedicalDialog, openPdf } from '../common_data';
 import BottomInfo from '../../../../common/ui/BottomInfo';
 import {
     numDifferentiationInr, inrFormatDecimal,
-    capitalizeFirstLetter, storageService, dateOrdinal
+    capitalizeFirstLetter, storageService, dateOrdinal, getUrlParams
 } from 'utils/validators';
 import Api from 'utils/api';
 import Button from 'material-ui/Button';
@@ -20,10 +19,9 @@ import Dialog, {
 import BottomSheet from '../../../../common/ui/BottomSheet';
 import { childeNameMapper } from '../../../constants';
 import {getCoverageType} from '../constants';
+import {Imgc} from '../../../../common/ui/Imgc'
 
-import Checkbox from 'material-ui/Checkbox';
 // import Checkbox from '../../../../common/ui/Checkbox';
-import Grid from 'material-ui/Grid';
 
 class GroupHealthPlanFinalSummary extends Component {
 
@@ -37,15 +35,16 @@ class GroupHealthPlanFinalSummary extends Component {
                 member_base: []
             },
             quotation : {  member_base : []},
-            tncChecked: true,
             accordianData: [],
             openDialogReset: false,
             quote_id: storageService().get('ghs_ergo_quote_id'),
             screen_name:'final_summary_screen',
+            pgReached: getUrlParams().pgReached ? true : false
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
         this.resetQuote = resetQuote.bind(this);
+        this.openPdf = openPdf.bind(this);
         this.openMedicalDialog = openMedicalDialog.bind(this);
     }
 
@@ -54,7 +53,36 @@ class GroupHealthPlanFinalSummary extends Component {
         nativeCallback({ action: 'take_control_reset' });
         this.initialize();
     }
+    setErrorData = (type) => {
 
+        this.setState({
+          showError: false
+        });
+        if(type) {
+          let mapper = {
+            'onload':  {
+              handleClick1: this.onload,
+              button_text1: 'Retry',
+              title1: ''
+            },
+            'submit': {
+              handleClick1: this.handleClick,
+              button_text1: 'Retry',
+              handleClick2: () => {
+                this.setState({
+                  showError: false
+                })
+              },
+              button_text2: 'Dismiss'
+            }
+          };
+      
+          this.setState({
+            errorData: {...mapper[type], setErrorData : this.setErrorData}
+          })
+        }
+    
+      }
  
     onload = () => {
         let { lead, provider } = this.state;  
@@ -87,10 +115,13 @@ class GroupHealthPlanFinalSummary extends Component {
         }
          member_base.sort((a, b) => {return this.state.member_base.findIndex(p => p.backend_key === a.relation_key) - this.state.member_base.findIndex(p => p.backend_key === b.relation_key)})
 
-
+        if(this.state.provider === "GMC"){
+            var premium_payment_frequency = lead.quotation_details.payment_frequency === "YEARLY" ? 'Annual' : 'Monthly';
+        }
         this.setState({
             applicantIndex: applicantIndex,
-            member_base: member_base
+            member_base: member_base,
+            premium_payment_frequency: premium_payment_frequency || ''
         });
 
         let pan_amount = this.state.pan_amount;
@@ -199,12 +230,15 @@ class GroupHealthPlanFinalSummary extends Component {
                 edit_state: `/group-insurance/group-health/${this.state.provider}/edit-personal-details/${member.key}`
             }
 
+            if(member.key === 'self' && lead.quotation_details.insurance_type === 'self_family'){
+                obj.title = 'Self details';
+            }
             if (member.key === 'applicant') {
                 obj.title = 'Applicant details';
             }
 
             if (lead.quotation_details.insurance_type === 'self') {
-                obj.title = 'Personal details';
+                obj.title = 'Self details';
             }
 
             let info = {};
@@ -214,6 +248,9 @@ class GroupHealthPlanFinalSummary extends Component {
                 info = Object.assign({}, personal_details_to_copy[pc]);
                 info.subtitle = member[info.key];
 
+                if(info.key === 'gender'){
+                    info.subtitle = capitalizeFirstLetter((member[info.key] || '').toLowerCase());
+                }
                 if (member.key === 'applicant') {
 
                     if (info.key === 'name') {
@@ -343,7 +380,6 @@ class GroupHealthPlanFinalSummary extends Component {
                 }
             }
         }
-        // console.log(med_ques_data);
 
         let contact_data = {
             'title': 'Contact details',
@@ -363,7 +399,6 @@ class GroupHealthPlanFinalSummary extends Component {
         accordianData.push(contact_data);
     
         let address_data_backend = [lead.address_details.correspondence_address ,lead.address_details.permanent_address];
-
         if (['HDFCERGO', 'STAR'].includes(provider)) {
             address_data_backend = [lead.address_details.permanent_address]
         }
@@ -371,10 +406,10 @@ class GroupHealthPlanFinalSummary extends Component {
         let data = address_data_backend.map((item, index) => {
             return [
                 {
-                    'title': `${provider==='RELIGARE'? index === 0 ? 'Current address' : 'Permanent address':''}`,
+                    'title': `${(provider==='RELIGARE' || provider === 'GMC') ? index === 0 ? 'Current address' : 'Permanent address':''}`,
                     'subtitle': ' ',
                     'key': 'heading'
-                },                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+                },
                 {
                     'title': 'Address line 1',
                     'subtitle': item.addr_line1
@@ -525,14 +560,16 @@ class GroupHealthPlanFinalSummary extends Component {
         }
 
 
-        let ped_edit_state = provider === 'STAR'  ? 'edit-star-select-ped' : 'edit-is-ped';
-        let diseases_data = {
-            'title': 'Pre-existing diseases',
-            edit_state: `/group-insurance/group-health/${this.state.provider}/${ped_edit_state}`,
-            data: diseases_data_backend
+        if(provider !== 'GMC'){
+            let ped_edit_state = provider === 'STAR'  ? 'edit-star-select-ped' : 'edit-is-ped';
+            let diseases_data = {
+                'title': 'Pre-existing diseases',
+                edit_state: `/group-insurance/group-health/${this.state.provider}/${ped_edit_state}`,
+                data: diseases_data_backend
+            }
+            accordianData.push(diseases_data);
         }
-
-        accordianData.push(diseases_data);
+        
         this.setState({
             accordianData: accordianData
         })
@@ -542,9 +579,10 @@ class GroupHealthPlanFinalSummary extends Component {
         let resultData = this.state.pg_data;
         let current_url = window.location.href;
         let nativeRedirectUrl = current_url;
-
+        let basepath = getBasePath();
+        
         let paymentRedirectUrl = encodeURIComponent(
-            window.location.origin + `/group-insurance/group-health/${this.state.provider}/payment` + getConfig().searchParams
+            basepath + `/group-insurance/group-health/${this.state.provider}/payment` + getConfig().searchParams
         );
 
 
@@ -558,8 +596,8 @@ class GroupHealthPlanFinalSummary extends Component {
         if (getConfig().generic_callback) {
             pgLink += '&generic_callback=' + getConfig().generic_callback;
         }
-
-
+        nativeRedirectUrl += getParamsMark(nativeRedirectUrl) + 'pgReached=true';
+        
         if (getConfig().app === 'ios') {
             nativeCallback({
                 action: 'show_top_bar', message: {
@@ -580,12 +618,14 @@ class GroupHealthPlanFinalSummary extends Component {
 
 
     startPayment = async (data={}) => {
-
+        this.setErrorData("submit",true);
+        let error="";
+        let errorType="";
         if (this.state.medical_dialog) {
             this.sendEventsPopup('next');
         }
         this.setState({
-            show_loader: true
+            show_loader: "button"
         })
         this.handleClose();
 
@@ -597,7 +637,6 @@ class GroupHealthPlanFinalSummary extends Component {
         try {
             let res = await Api.get(`api/insurancev2/api/insurance/health/payment/start_payment/${this.state.providerConfig.provider_api}?application_id=${application_id}`);       
            
-
             var resultData = res.pfwresponse.result;
             this.setState({
                 pg_data: resultData
@@ -625,16 +664,27 @@ class GroupHealthPlanFinalSummary extends Component {
                 this.setState({
                     show_loader: false
                 });
-                toast(resultData.error || resultData.message
-                    || 'Something went wrong');
+                error=resultData.error || resultData.message
+                    || true;
             }
         } catch (err) {
             console.log(err)
             this.setState({
                 show_loader: false
             });
-            toast('Something went wrong');
+            error=true;
+            errorType= "crash";
         }
+        if (error) {
+            this.setState({
+              errorData: {
+                ...this.state.errorData,
+                title2: error,
+                type: errorType
+              },
+              showError: true,
+            });
+          }
     }
 
     // checkPPC = async () => {
@@ -678,12 +728,6 @@ class GroupHealthPlanFinalSummary extends Component {
     // }
 
     handleClick = async () => {
-
-
-        if(!this.state.tncChecked){
-            toast('Please Agree to the Terms and Conditions');
-            return;
-          }
         this.sendEvents('next');
         let {lead}  = this.state;
 
@@ -714,7 +758,6 @@ class GroupHealthPlanFinalSummary extends Component {
                 'restart_clicked': this.state.restart_clicked ? 'yes' : 'no',
                 'restart_conformation': this.state.restart_conformation ? 'yes' : 'no',
                 'edit_clicked': data.edit_clicked || '',
-                't&c_clicked': this.state.tncChecked ? 'yes' : 'no',
             }
         };
 
@@ -749,7 +792,7 @@ class GroupHealthPlanFinalSummary extends Component {
             return (
                 <div className="member-tile" key={index}>
                     <div className="mt-left">
-                        <img src={require(`assets/${this.state.productName}/ic_hs_insured.svg`)} alt="" />
+                        <Imgc src={require(`assets/${this.state.productName}/ic_hs_insured.svg`)} alt="" className="final-summary-tile" />
                     </div>
                     <div className="mt-right">
                         <div className="mtr-top">
@@ -765,14 +808,14 @@ class GroupHealthPlanFinalSummary extends Component {
             return (
                 <div className="member-tile" key={index}>
                     <div className="mt-left">
-                        <img src={require(`assets/${this.state.productName}/ic_hs_insured.svg`)} alt="" />
+                        <Imgc src={require(`assets/${this.state.productName}/ic_hs_insured.svg`)} alt="" className="final-summary-tile" />
                     </div>
                     <div className="mt-right">
                         <div className="mtr-top">
                             {this.state.applicantIndex === -1 ? (this.state.quotation.insurance_type !== 'self' ? dateOrdinal(index + 1) : '') : dateOrdinal(index)} Insured name
                         </div>
                         <div className="mtr-bottom">
-                            {props.name} ({childeNameMapper(props.key)})
+                            {props.name}<span style={{textTransform: 'none'}}> {props.key === 'self' && this.state.quotation.insurance_type === 'self'? '': `(${childeNameMapper(props.key)})`}</span>
                         </div>
                     </div>
                 </div>
@@ -792,7 +835,7 @@ class GroupHealthPlanFinalSummary extends Component {
                         </div>
                         <div className="subtitle" style={{margin : '7px 0 0 0', overflowWrap: 'break-word'}}>
                           {capitalizeFirstLetter(props.subtitle + "")}
-                             {(props.title==='Height' && <span>cm</span>) || (props.title==='Weight' && <span>kg</span>)}
+                             {(props.title==='Height' && <span> cm</span>) || (props.title==='Weight' && <span> kg</span>)}
                         </div>
                         {props.subtitle2 && <div className="subtitle">
                             {props.subtitle2}
@@ -804,7 +847,6 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     renderAccordian = (props, index) => {
-
         return (
             <div key={index} onClick={() => this.handleAccordian(index)} className="bc-tile">
                 <div className="bct-top">
@@ -812,7 +854,7 @@ class GroupHealthPlanFinalSummary extends Component {
                         {props.title}
                     </div>
                     <div className="bct-icon">
-                        <img src={require(`assets/${props.open ? 'minus_icon' : 'plus_icon'}.svg`)} alt="" />
+                        <Imgc className="accordian-marker" src={require(`assets/${props.open ? 'minus_icon' : 'plus_icon'}.svg`)} alt="" />
                     </div>
                 </div>
 
@@ -833,7 +875,7 @@ class GroupHealthPlanFinalSummary extends Component {
                             EDIT
                         </div>
                         <br />
-                        {this.state.provider === 'RELIGARE' && <React.Fragment>
+                        {(this.state.provider === 'RELIGARE' || this.state.provider === 'GMC') && <React.Fragment>
                             {props.data[1].map(this.renderAccordiansubData)}
                             <div onClick={() => this.openEdit(props.edit_state, props.title)} className="generic-page-button-small">
                                 EDIT
@@ -896,16 +938,16 @@ class GroupHealthPlanFinalSummary extends Component {
             >
                 <DialogContent>
                     <DialogContentText>
-                        You will lose your progress till now. Are you sure you want to restart?
-              </DialogContentText>
+                    <p style={{color: '#0A1D32'}}>You will lose your progress till now. Are you sure you want to restart?</p>
+                    </DialogContentText>
                 </DialogContent>
-                <DialogActions>
+                <DialogActions className="final-summary-dialog-options">
                     <Button onClick={this.resetQuote} color="default">
                         YES
-              </Button>
+                    </Button>
                     <Button onClick={this.handleClose} color="default" autoFocus>
-                        CANCEL
-              </Button>
+                        NO
+                    </Button>
                 </DialogActions>
             </Dialog>
         );
@@ -920,12 +962,6 @@ class GroupHealthPlanFinalSummary extends Component {
         });
     }
 
-    handleTermsAndConditions = () =>{
-        this.setState({
-          tncChecked : !this.state.tncChecked
-        });
-      }
-      
     render() {
         return (
             <Container
@@ -934,26 +970,30 @@ class GroupHealthPlanFinalSummary extends Component {
             handleReset={this.showDialog}
             events={this.sendEvents('just_set_events')}
             showLoader={this.state.show_loader}
+            skelton={this.state.skelton}
+            showError={this.state.showError}
+            errorData={this.state.errorData}
             title="Summary"
             fullWidthButton={true}
             onlyButton={true}
             buttonTitle={`MAKE PAYMENT OF ${inrFormatDecimal(this.state.quotation.total_premium)}`}
             handleClick={() => this.handleClick()}
+            pgReached={this.state.pgReached}
         >
 
             <div className="group-health-final-summary">
                 <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                     <div className="left">
                           {
-                              this.state.provider !== 'RELIGARE' ? <div className="tc-title">{this.state.providerData.title2 || this.state.common_data.base_plan_title}</div>: ''
+                              this.state.provider === 'HDFCERGO' || this.state.provider === 'STAR' ? <div className="tc-title">{this.state.providerData.title2 || this.state.common_data.base_plan_title}</div>: ''
                           }
                           
 
-                        <div className="tc-subtitle">{ this.state.providerData.hdfc_plan_title_mapper ? this.state.providerData.hdfc_plan_title_mapper[this.state.quotation.plan_id] : this.state.providerData.subtitle }</div>
+                        <div className="tc-subtitle" style={{fontSize: '17px', marginTop: `${this.state.provider === 'GMC' ? '-24px': ''}`}}>{ this.state.providerData.hdfc_plan_title_mapper ? this.state.providerData.hdfc_plan_title_mapper[this.state.quotation.plan_id] : this.state.providerData.subtitle }</div>
                     </div>
 
                     <div className="tc-right">
-                        <img src={require(`assets/${this.state.providerData.logo_card}`)} alt="" />
+                        <Imgc src={require(`assets/${this.state.providerData.logo_card}`)} alt="" className="insurance-logo-top-right" />
                     </div>
                 </div>
 
@@ -963,7 +1003,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
                     <div className="member-tile">
                         <div className="mt-left">
-                            <img src={require(`assets/${this.state.productName}/ic_how_to_claim2.svg`)} alt="" />
+                            <Imgc src={require(`assets/${this.state.productName}/ic_how_to_claim2.svg`)} alt="" className="final-summary-tile"/>
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">
@@ -977,7 +1017,7 @@ class GroupHealthPlanFinalSummary extends Component {
                    
                     { this.state.add_ons_show && (Object.keys(this.state.quotation.add_ons).length > 0) && <div className="member-tile">
                         <div className="mt-left">
-                            <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
+                            <Imgc src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" className="final-summary-tile" />
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">
@@ -989,10 +1029,24 @@ class GroupHealthPlanFinalSummary extends Component {
                         </div>
                     </div>}
 
-                   {this.state.quotation.floater_type &&
                     <div className="member-tile">
                         <div className="mt-left">
-                            <img src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
+                            <Imgc src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" className="final-summary-tile" />
+                        </div>
+                        <div className="mt-right">
+                            <div className="mtr-top">
+                                COVER PERIOD
+                            </div>
+                            <div className="mtr-bottom">
+                                {this.state.quotation.tenure} year{this.state.quotation.tenure>'1' && <span>s</span>}
+                            </div>
+                        </div>
+                    </div>
+                    
+                   {this.state.quotation.floater_type && this.state.quotation.insurance_type !== 'self' &&
+                    <div className="member-tile">
+                        <div className="mt-left">
+                            <Imgc src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" className="final-summary-tile"/>
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">
@@ -1006,21 +1060,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
                     <div className="member-tile">
                         <div className="mt-left">
-                            <img src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
-                        </div>
-                        <div className="mt-right">
-                            <div className="mtr-top">
-                                COVER PERIOD
-                            </div>
-                            <div className="mtr-bottom">
-                                {this.state.quotation.tenure} year{this.state.quotation.tenure>'1' && <span>s</span>}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="member-tile">
-                        <div className="mt-left">
-                            <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
+                            <Imgc src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" className="final-summary-tile"/>
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">
@@ -1029,7 +1069,7 @@ class GroupHealthPlanFinalSummary extends Component {
                             <div className="mtr-bottom flex" style={{textTransform:'none'}}>
                                 <div>
                                     <div> {inrFormatDecimal(this.state.quotation.total_premium - this.state.quotation.gst)} </div>
-                                    <div style={{ fontSize: 10 }}> (Net premium)</div>
+                                    <div style={{ fontSize: 10 }}> {this.state.provider !== 'GMC' ? '(Net premium)' : '(Basic premium)'}</div>
                                 </div>
                                 <div>
                                     &nbsp;+&nbsp;
@@ -1047,6 +1087,22 @@ class GroupHealthPlanFinalSummary extends Component {
                             </div>
                         </div>
                     </div>
+
+                    {this.state.provider === 'GMC' ?
+                        (<div className="member-tile">
+                            <div className="mt-left">
+                                <Imgc src={require(`assets/${this.state.productName}/ic_hs_pay_freq.svg`)} alt="" className="final-summary-tile"/>
+                            </div>
+                            <div className="mt-right">
+                                <div className="mtr-top">
+                                    PREMIUM PAYMENT FREQUENCY
+                                </div>
+                                <div className="mtr-bottom">
+                                    {this.state.premium_payment_frequency}
+                                </div>
+                            </div>
+                        </div>): null
+                    }
                 </div>
 
                 <div className="bottom-content">
@@ -1056,32 +1112,10 @@ class GroupHealthPlanFinalSummary extends Component {
 
 
                 </div>
-
-                <div className="CheckBlock2 accident-plan-terms" style={{ padding: 0 }}>
-                    <Grid container spacing={16} alignItems="center">
-                    <Grid item xs={1} className="TextCenter">           
-                    <Checkbox
-                  defaultChecked
-                  checked={this.state.tncChecked}
-                  color="default"
-                  value="checked"
-                  name="checked"
-                  onChange={this.handleTermsAndConditions}
-                  className="Checkbox"
-                />
-                    </Grid>
-                    <Grid item xs={11}>
-                        <div className="accident-plan-terms-text" style={{}}>
-                        I agree to the <span onClick={() => this.openInBrowser(this.state.lead.terms_and_condition,
-                        'tnc')} className="accident-plan-terms-bold" style={{ color: getConfig().primary }}>
-                            Terms and conditions</span></div>
-                    </Grid>
-                    </Grid>
-                </div>
-                  <BottomInfo baseData={{ 'content': 'Complete your details and get quality medical treatments at affordable cost' }} />
+                  <BottomInfo baseData={{ 'content': 'Get best health insurance benefits at this amount and have a secured future' }} />
             </div>
             {this.state.medical_dialog_data &&
-                <BottomSheet parent={this} data={this.state.medical_dialog_data} />}
+                <BottomSheet iconClassName="final-summary-medical-review-img" parent={this} data={this.state.medical_dialog_data} />}
             {this.renderDialog()}
         </Container>
     );

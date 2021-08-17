@@ -6,12 +6,12 @@ import shrink from 'assets/shrink_icn.png';
 import congratulations_fisdom from 'assets/ils_covid_success_fisdom.svg';
 import congratulations_myway from 'assets/ils_covid_success_myway.svg';
 import {
-  inrFormatDecimal
+  inrFormatDecimal, storageService
 } from '../../../utils/validators';
 import Api from 'utils/api';
-import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
+import {Imgc} from 'common/ui/Imgc';
 
 const product_config = {
   'PERSONAL_ACCIDENT': {
@@ -45,7 +45,6 @@ class PlanSuccessClass extends Component {
       lead_data: {
         nominee: {}
       },
-      show_loader: true,
       accordians_data: [],
       type: getConfig().productName
     };
@@ -77,18 +76,44 @@ class PlanSuccessClass extends Component {
     });
   }
 
-  async componentDidMount() {
+  setErrorData = (type) => {
 
+    this.setState({
+      showError: false
+    });
+    if(type) {
+      let mapper = {
+        'onload':  {
+          handleClick1: this.onload,
+          button_text1: 'Retry',
+          title1: ''
+        }
+      };
+  
+      this.setState({
+        errorData: {...mapper[type], setErrorData : this.setErrorData}
+      })
+    }
+
+  }
+
+  onload = async() => {
+    this.setErrorData('onload');
+    this.setState({
+      skelton: true
+    })
+
+    let error = '';
+    let errorType = '';
     try {
 
-      let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
+      let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
 
-      this.setState({
-        show_loader: false
-      })
+      
       if (res.pfwresponse.status_code === 200) {
-
-
+        this.setState({
+          skelton: false
+        })
         let lead_data = res.pfwresponse.result.lead;
 
         let accordians_data = [
@@ -120,21 +145,35 @@ class PlanSuccessClass extends Component {
           accordians_data: accordians_data
         })
       } else {
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message
-          || 'Something went wrong');
+        error = res.pfwresponse.result.error || res.pfwresponse.result.message
+        || true;
       }
 
+
     } catch (err) {
-      console.log(err)
       this.setState({
-        show_loader: false
+        skelton: false,
       });
-      toast('Something went wrong');
+      error= true;
+      errorType= 'crash';
     }
 
 
+    // set error data
+    if(error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error,
+          type: errorType
+        },
+        showError:'page'
+      })
+    }
+  }
 
-
+  async componentDidMount() {
+    this.onload();
   }
 
   async handleClickCurrent() {
@@ -164,8 +203,8 @@ class PlanSuccessClass extends Component {
   getAddress = (addr) => {
     return (
       <div>
-        {addr.address_line + ', ' +
-          addr.landmark + ', ' +
+        {addr.addr_line1 + ', ' +
+          // addr.landmark + ', ' +
           addr.pincode + ', ' +
           addr.city + ', ' +
           this.capitalize(addr.state) + ', ' +
@@ -249,16 +288,19 @@ class PlanSuccessClass extends Component {
   }
 
   renderAccordions(props, index) {
+    if(props.name === 'Nominee' && this.state.lead_data && !this.state.lead_data.nominee_details){
+      return;
+    }
     return (
       <div key={index} className="plan-summary-accordion">
         <div className="accordion-container">
           <div className="Accordion">
             <div className="AccordionTitle" onClick={() => this.toggleAccordian(props.key)}>
-              <div className="AccordionList">
+                <div className="AccordionList">
                 <span className="AccordionList1">
-                  <img className="AccordionListIcon" src={(this.state.accordianTab === props.key) ? shrink : expand} alt="" width="20" />
+                  <Imgc className="AccordionListIcon" src={(this.state.accordianTab === props.key) ? shrink : expand} alt="" width="20" />
                 </span>
-                <span>{props.name}</span>
+                <span className="AccordianTitleValue">{props.name}</span>
               </div>
             </div>
             {this.state.accordianTab === props.key && this.renderAccordionBody(props.key)}
@@ -283,6 +325,7 @@ class PlanSuccessClass extends Component {
 
   handleClickTwo() {
     this.sendEvents('check_details');
+    storageService().setObject('backToInsuranceLanding', true);
     let path = '/group-insurance/common/reportdetails/' + this.state.lead_data.bhariaxa_policy_id;
     this.navigate(path);
   }
@@ -307,20 +350,22 @@ class PlanSuccessClass extends Component {
   render() {
     return (
       <Container
-        twoButtons={true}
+        twoButton={true}
         product_key={this.props.parent ? this.props.parent.state.product_key : ''}
         events={this.sendEvents('just_set_events')}
         buttonOneTitle="Download Policy"
         buttonTwoTitle="Check details"
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         handleClickOne={() => this.handleClickOne()}
         handleClickTwo={() => this.handleClickTwo()}
         title="Success"
         disableBack={true}
         classOverRideContainer="plan-success"
-        showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
       >
         <div className="plan-success-heading">
-          <div className="plan-success-heading-icon"><img src={this.state.congratulations_icon} alt="" /></div>
+          <div className="plan-success-heading-icon"><Imgc className="plan-success-heading-img" src={this.state.congratulations_icon} alt="" /></div>
           <div className="plan-success-heading-title">Congratulations!</div>
           <div className="plan-success-heading-subtitle">{product_config[this.getProductKey()].top_title1} <span className="plan-success-heading-subtitle-bold">
             {product_config[this.getProductKey()].top_title2}</span>

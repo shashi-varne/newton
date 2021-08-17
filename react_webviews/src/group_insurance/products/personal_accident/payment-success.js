@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
+import { Fragment } from 'react';
 import PaymentSuccess from '../../ui_components/general_insurance/payment_success';
 
 class AccidentPaymentSuccess extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      product_key: 'PERSONAL_ACCIDENT'
+      product_key: 'PERSONAL_ACCIDENT',
+      headerTitle: 'Personal accident insurance'
     }
   }
 
   render() {
     return (
-      <div>
+      <Fragment>
         <PaymentSuccess
           parent={this}
         />
-      </div>
+      </Fragment>
     );
   }
 }

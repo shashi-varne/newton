@@ -4,7 +4,6 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { FormControl } from 'material-ui/Form';
-
 import MobileInputWithoutIcon from '../../../../common/ui/MobileInputWithoutIcon';
 import {validateEmail, numberShouldStartWith, validateNumber} from 'utils/validators';
 import Input from '../../../../common/ui/Input';
@@ -149,7 +148,8 @@ class GroupHealthPlanContactDetails extends Component {
                     "email": this.state.form_data.email,
                 }
             }
-            this.updateLead(body);
+            
+            this.updateLead(body, '', {...body.buyer_details});
         }
     }
 
@@ -162,8 +162,8 @@ class GroupHealthPlanContactDetails extends Component {
                 "product": this.state.providerConfig.provider_api,
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'contact details',
-                'email': this.state.form_data.email,
-                'phone_number': this.state.form_data.phone_number,
+                'email': this.state.form_data.email || '',
+                'mobile_number': this.state.form_data.phone_number || '',
                 'from_edit': this.props.edit ? 'yes' : 'no'
             }
         };
@@ -181,6 +181,9 @@ class GroupHealthPlanContactDetails extends Component {
             <Container
                 events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
+                skelton={this.state.skelton}
+                showError={this.state.showError}
+                errorData={this.state.errorData}
                 title={this.setEditTitle("Contact details")}
                 buttonTitle="CONTINUE"
                 withProvider={true}

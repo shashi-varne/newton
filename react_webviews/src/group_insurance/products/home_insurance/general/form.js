@@ -14,11 +14,11 @@ class HomeInsuranceForm extends Component {
 
     render() {
         return (
-            <div>
+            // <div>
                 <BasicDetailsRedirection
                     parent={this}
                 />
-            </div>
+            // </div>
         );
     }
 }

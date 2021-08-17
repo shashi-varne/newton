@@ -93,7 +93,7 @@ class FormSummary extends Component {
         }
         let personal_data = {
             'title': 'Personal details',
-            edit_state: `/loan/edit-personal-details`,
+            edit_state: `/loan/dmi/edit-personal-details`,
             data: [
                 {
                     'title': 'PAN detail',
@@ -126,7 +126,7 @@ class FormSummary extends Component {
 
         let contact_data = {
             'title': 'Contact details',
-            edit_state: `/loan/edit-contact-details`,
+            edit_state: `/loan/dmi/edit-contact-details`,
             data: [
                 {
                     'title': 'Mobile number',
@@ -144,7 +144,7 @@ class FormSummary extends Component {
 
         let address_data = {
             'title': 'Address details',
-            edit_state: `/loan/edit-address-details`,
+            edit_state: `/loan/dmi/edit-address-details`,
             data: [
                 {
                     'title': 'Residence type (Current address)',
@@ -175,7 +175,7 @@ class FormSummary extends Component {
 
         let professional_data = {
             'title': 'Professional details',
-            edit_state: `/loan/edit-professional-details`,
+            edit_state: `/loan/dmi/edit-professional-details`,
             data: [
                 {
                     'title': 'Educational qualification',
@@ -259,7 +259,7 @@ class FormSummary extends Component {
             this.openCreateProfile();
         } else {
             try {
-                let res = await Api.get(`/relay/api/loan/submit/application/${this.state.application_id}`);
+                let res = await Api.get(`/relay/api/loan/submit/application/dmi/${this.state.application_id}`);
 
                 var resultData = res.pfwresponse.result;
                 if (res.pfwresponse.status_code === 200 && !resultData.error) {

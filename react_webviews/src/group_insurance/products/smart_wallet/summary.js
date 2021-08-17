@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Fragment } from 'react';
 import PlanSummary from '../../ui_components/general_insurance/plan_summary';
 
 class SmartwalletSummary extends Component {
@@ -12,11 +13,11 @@ class SmartwalletSummary extends Component {
 
   render() {
     return (
-      <div>
+      <Fragment>
         <PlanSummary
           parent={this}
         />
-      </div>
+      </Fragment>
     );
   }
 }

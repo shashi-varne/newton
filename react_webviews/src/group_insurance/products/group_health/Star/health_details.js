@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
-import { initialize } from '../common_data';
+import { initialize, getPlanDetails } from '../common_data';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import Dialog, {
     DialogContent
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import { getConfig } from 'utils/functions';
+import { isEmpty, compareObjects } from '../../../../utils/validators';
 
 class GroupHealthPlanStarHealthDetails extends Component {
 
@@ -20,6 +21,7 @@ class GroupHealthPlanStarHealthDetails extends Component {
         }
 
         this.initialize = initialize.bind(this);
+        this.getPlanDetails = getPlanDetails.bind(this);
     }
 
     componentWillMount() {
@@ -30,6 +32,7 @@ class GroupHealthPlanStarHealthDetails extends Component {
         let groupHealthPlanData = this.state.groupHealthPlanData;
         let account_type = groupHealthPlanData.account_type;
         let value = groupHealthPlanData.health_details;
+        let ui_members = this.state.groupHealthPlanData.ui_members || {};
 
         let radio_options = [
             {
@@ -45,7 +48,8 @@ class GroupHealthPlanStarHealthDetails extends Component {
         this.setState({
             account_type: account_type,
             radio_options: radio_options,
-            value: value
+            value: value,
+            ui_members
         });
     }
 
@@ -136,7 +140,7 @@ class GroupHealthPlanStarHealthDetails extends Component {
         )
     }
 
-    handleClick = () => {
+    handleClick = async () => {
 
     
         this.sendEvents('next');
@@ -156,10 +160,12 @@ class GroupHealthPlanStarHealthDetails extends Component {
         if (canProceed) {
             
             groupHealthPlanData.health_details = this.state.value;
-            groupHealthPlanData.sum_assured = "500000";
+            groupHealthPlanData.sum_assured = "400000";
             groupHealthPlanData.cover_plan = "FHONEW";
-            groupHealthPlanData.post_body.sum_assured = "500000";
+            groupHealthPlanData.post_body.sum_assured = "400000";
+            groupHealthPlanData.post_body.si = "400000";
             groupHealthPlanData.post_body.cover_plan = "FHONEW";
+            groupHealthPlanData.post_body.plan_id = "FHONEW";
             groupHealthPlanData.plan_selected = {
                 copay: ' 0% copay is applicable only where insured age is less than 60 yrs, there will be 20% copay for insured whose age at the time of entry is above 60 yrs',
                 recommendation_tag: '',
@@ -169,8 +175,32 @@ class GroupHealthPlanStarHealthDetails extends Component {
                 claim_settlement_ratio: '78.15'
             }
             groupHealthPlanData.post_body.plan_title = 'Family Health Optima';
+            
             this.setLocalProviderData(groupHealthPlanData);
-            this.navigate(this.state.next_screen);
+            var post_body = groupHealthPlanData.post_body;
+            var keys_to_check = ['account_type', 'adults', 'children','postal_code']
+            var current_state = {}
+            for(var x in post_body){
+                if(keys_to_check.indexOf(x) >= 0){
+                    current_state[x] = post_body[x]
+                }
+            }
+            for(var y in post_body.member_details){
+                current_state[`${y}_dob`] = post_body.member_details[y].dob;
+            }
+            this.setState({
+                current_state
+            },()=>{
+                var sameData = compareObjects(Object.keys(current_state),current_state, groupHealthPlanData.plan_list_current_state);
+                if(!sameData || isEmpty(groupHealthPlanData.plan_details_screen)){
+                    this.getPlanDetails();
+                    return;
+                }else{
+                    this.setLocalProviderData(groupHealthPlanData);
+                    this.navigate(this.state.next_screen);
+                    return;
+                }
+            })
         }
     }
 
@@ -179,6 +209,9 @@ class GroupHealthPlanStarHealthDetails extends Component {
             <Container
                 events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
+                skelton={this.state.skelton}
+                showError={this.state.showError}
+                errorData={this.state.errorData}
                 title={this.state.header_title}
                 fullWidthButton={true}
                 onlyButton={true}

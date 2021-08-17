@@ -1,6 +1,7 @@
 // import { func } from "prop-types";
 import qs from 'qs';
 import moment from 'moment';
+import { isBoolean } from 'lodash';
 
 export function validateEmpty(string) {
   let nameSplit = string.split(" ").filter(e => e);
@@ -199,7 +200,9 @@ export function formatAmount(amount) {
   if (!amount) {
     return '';
   }
-
+  if(typeof amount === 'string' && amount.includes(',')){
+    amount = amount.replace(/,/g, "");
+  }
   amount = Number(amount);
   amount = amount.toFixed(0);
   amount = amount.toString();
@@ -287,11 +290,24 @@ export function numDifferentiation(val, withSymbol, decimalPlaces = 2, retainLea
     val = '';
   }
   const isNegativeVal = val < 0;
+  
+  function postFix(val){
+    return parseFloat(val) < 2
+  }
+
   val = Math.abs(val);
-  if (val >= 10000000) val = (val / 10000000).toFixed(decimalPlaces) + ' Cr';
-  else if (val >= 100000) val = (val / 100000).toFixed(decimalPlaces) + ' L';
-  else if (val >= 1000) val = (val / 1000).toFixed(decimalPlaces) + ' K';
-  else if (val) return inrFormatDecimal(val);
+  if (val >= 10000000){ 
+    val = (val / 10000000).toFixed(decimalPlaces) + ' Crore';
+    val = postFix(val) ? val : val + 's' ;
+  }
+  else if (val >= 100000){
+    val = (val / 100000).toFixed(decimalPlaces) + ' Lakh'; 
+    val = postFix(val) ? val : val + 's' ;
+  } 
+  else if (val >= 1000)
+     val = (val / 1000).toFixed(decimalPlaces) + ' K';
+  else if (val) 
+    return inrFormatDecimal(val);
 
   val = val.toString();
   // remove .00
@@ -308,6 +324,7 @@ export function numDifferentiation(val, withSymbol, decimalPlaces = 2, retainLea
   }
   return val;
 }
+
 
 export function numDifferentiationInr(val, decimalPlaces, retainLeadingZeroes) {
   return numDifferentiation(val, true, decimalPlaces, retainLeadingZeroes);
@@ -599,6 +616,8 @@ export function storageService() {
     get: get,
     setObject: setObject,
     getObject: getObject,
+    setBoolean: setBoolean,
+    getBoolean: getBoolean,
     remove: remove,
     clear: clear
   };
@@ -618,6 +637,18 @@ export function storageService() {
     return false;
   }
 
+  function setBoolean(key, value) {
+    set(key, value);
+  }
+
+  function getBoolean(key) {
+    const value = window.sessionStorage.getItem(key);
+    const isValueBoolean = checkValidString(value) && isBoolean(JSON.parse(value));
+
+    if (sessionStorageValid && isValueBoolean) return value;
+    return false;
+  }
+
   function setObject(key, value) {
     if (sessionStorageValid) {
       window.sessionStorage.setItem(key, JSON.stringify(value));
@@ -625,8 +656,10 @@ export function storageService() {
   }
 
   function getObject(key) {
-    if (sessionStorageValid && checkValidString(window.sessionStorage.getItem(key))) {
-      return JSON.parse(window.sessionStorage.getItem(key)) || {};
+    const value = window.sessionStorage.getItem(key);
+    
+    if (sessionStorageValid && checkValidString(value)) {
+      return JSON.parse(value) || {};
     }
 
     return false;
@@ -925,16 +958,174 @@ export function containsSpecialCharacters(value){
   return format.test(value);
 }
 
+export function containsNumbersAndComma(value){
+  var format = /^[0-9,]*$/g;
+  return format.test(value);
+}
+
 export function charsNotAllowedHDFC(value){
   var format = /[$&+:;=?@|\\_[\]{}'<>^*()%!"-]/g;
   return format.test(value);
 }
 
 export function containsSpecialCharactersAndNumbers(value){
-  var format = /[$&+,:;=?@#|'<>.^*()%!"-\d]/g;
+  var format = /[$&+,:;=[\]{}\\/_?@#|'<>.^*()%!"-\d]/g;
   return format.test(value);
+}
+
+export function bytesToSize(bytes, decimals = 2) {
+  if (bytes === 0) return "0 Bytes";
+
+  const k = 1000;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
+}
+
+export function timeStampToDate(timestamp) {
+  let date = timestamp.substring(0, 10);
+
+  let new_date = date.split('-').reverse().join('/')
+  return new_date
+}
+
+export function changeNumberFormat(number, decimals, recursiveCall) {
+  const decimalPoints = decimals || 2;
+  const noOfLakhs = number / 100000;
+  let displayStr;
+  let isPlural;
+
+  // Rounds off digits to decimalPoints decimal places
+  function roundOf(integer) {
+      return +integer.toLocaleString(undefined, {
+          minimumFractionDigits: decimalPoints,
+          maximumFractionDigits: decimalPoints,
+      });
+  }
+
+  if (noOfLakhs >= 1 && noOfLakhs <= 99) {
+      const lakhs = roundOf(noOfLakhs);
+      isPlural = lakhs > 1 && !recursiveCall;
+      displayStr = `${lakhs} lakh${isPlural ? 's' : ''}`;
+  } else if (noOfLakhs >= 100) {
+      const crores = roundOf(noOfLakhs / 100);
+      const crorePrefix = crores >= 100000 ? changeNumberFormat(crores, decimals, true) : crores;
+      isPlural = crores > 1 && !recursiveCall;
+      displayStr = `${crorePrefix} crore${isPlural ? 's' : ''}`;
+  } else {
+      displayStr = roundOf(+number);
+  }
+
+  return displayStr;
 }
 
 export function countChars(line) {
   return line.split(' ').filter(word => !isEmpty(word)).reduce((acc, cur) => acc += cur.length, 0)
+}
+
+export function formatAmountToNumber(value){
+  if(value){
+    return parseFloat(value.replace(/,/g,""))
+  }
+}
+
+export function disableBodyTouch(enable) {
+  if(!enable) {
+    document.body.style.overflow = 'hidden';
+    document.body.style.touchAction = 'none';
+    document.body.style.pointerEvents = 'none';
+  } else {
+    document.body.style.overflow = 'auto';
+    document.body.style.touchAction = 'unset';
+    document.body.style.pointerEvents = 'unset';
+  }
+}
+
+export function disableBodyOverflow(enable) {
+  if(!enable) {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = 'auto';
+  }
+}
+
+export function disableContainerTouch(enable) {
+
+  let Container = document.getElementsByClassName('Container') ? document.getElementsByClassName('Container')[0] : '';
+
+  if(!Container) {
+    return;
+  }
+  if(!enable) {
+    Container.style.overflow = 'hidden';
+    Container.style.touchAction = 'none';
+    Container.style.pointerEvents = 'none';
+  } else {
+    Container.style.overflow = 'auto';
+    Container.style.touchAction = 'unset';
+    Container.style.pointerEvents = 'unset';
+  }
+}
+
+
+export function numberToSentence(num){ //9 digit limit
+  var a = ['','one ','two ','three ','four ', 'five ','six ','seven ','eight ','nine ','ten ','eleven ','twelve ','thirteen ','fourteen ','fifteen ','sixteen ','seventeen ','eighteen ','nineteen '];
+  var b = ['', '', 'twenty','thirty','forty','fifty', 'sixty','seventy','eighty','ninety'];
+
+  if(num){
+    if(num.toString().indexOf(',') > -1){
+      num = num.replace(/,/g, "");
+    }
+    /*eslint-disable */
+    if ((num = num.toString()).length > 9) return 'over limit';
+    var n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+    if (!n) return; var str = '';
+    str += (n[1] != 0) ? (a[Number(n[1])] || b[n[1][0]] + ' ' + a[n[1][1]]) + 'crore ' : '';
+    str += (n[2] != 0) ? (a[Number(n[2])] || b[n[2][0]] + ' ' + a[n[2][1]]) + 'lakh ' : '';
+    str += (n[3] != 0) ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + 'thousand ' : '';
+    str += (n[4] != 0) ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + 'hundred ' : '';
+    str += (n[5] != 0) ? ((str != '') ? 'and ' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) : '';
+    /*eslint-enable */
+    var splitted = str.split(' ');
+    str = splitted[splitted.length - 2] === 'lakh' && splitted[0] !== 'one' ?  str.replace(/lakh/g, 'lakhs ') : str
+    str = splitted[splitted.length - 2] === 'crore' && splitted[0] !== 'one' ?  str.replace(/crore/g, 'crores ') : str
+    
+    return capitalizeFirstLetter(str);
+  }
+}
+
+export function convertDateFormat(inputFormat) {
+  function pad(s) { return (s < 10) ? '0' + s : s; }
+  var d = new Date(inputFormat)
+  return [pad(d.getDate()), pad(d.getMonth()+1), d.getFullYear()].join('/')
+}
+
+
+export const compareObjects = (keysToCheck, oldState, newState) => {
+  let compare = true;
+  if(isEmpty(oldState) && isEmpty(newState)) return true;
+  if(isEmpty(oldState) || isEmpty(newState)) return false;
+  if(Object.keys(oldState).length !== Object.keys(newState).length) return false;
+
+  keysToCheck.forEach((key) => {
+    if ((oldState[key] && !newState[key]) || 
+        (newState[key] && !oldState[key]) || 
+         (oldState[key] && newState[key] && (oldState[key].toString().trim() !== newState[key].toString().trim()))) 
+        {
+        compare = false;
+        }
+  });
+  return compare;
+};
+
+export function Casesensitivity(str){
+  if(!str || !isNaN(str)){
+    return str
+  }
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() + "";
+}
+
+export function sortArrayOfObjectsByTime(array, key){
+  return array.sort((a,b) => new Date(b[key]) - new Date(a[key])) //desc
 }

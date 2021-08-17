@@ -7,11 +7,10 @@ import { FormControl } from 'material-ui/Form';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
 import DropdownInModal from '../../../../common/ui/DropdownInModal';
-import { initialize, updateBottomPremium, updateBottomPremiumAddOns } from '../common_data';
-import Api from 'utils/api';
-import toast from '../../../../common/ui/Toast';
+import { initialize, updateBottomPremium, updateBottomPremiumAddOns, getCoverPeriodData } from '../common_data';
 import { compact } from 'lodash';
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
+import { compareObjects, isEmpty } from '../../../../utils/validators';
 
 class GroupHealthPlanAddOns extends Component {
 
@@ -20,7 +19,6 @@ class GroupHealthPlanAddOns extends Component {
         this.state = {
             ctaWithProvider: true,
             add_ons_data: [],
-            show_loader: true,
             screen_name: 'add_ons_screen',
             total_add_on_premiums: 0
         }
@@ -28,90 +26,57 @@ class GroupHealthPlanAddOns extends Component {
         this.initialize = initialize.bind(this);
         this.updateBottomPremium = updateBottomPremium.bind(this);
         this.updateBottomPremiumAddOns = updateBottomPremiumAddOns.bind(this);
+        this.getCoverPeriodData = getCoverPeriodData.bind(this);
     };
 
     componentWillMount() {
         this.initialize();
     }
+    setErrorData = (type) => {
 
-    async componentDidMount() {
-
-        let post_body = this.state.groupHealthPlanData.post_body;
-
-        let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'insurance_type','floater_type', "plan_id","si"];
-        let body = {};
-        for(let key of allowed_post_body_keys){
-            body[key] = post_body[key];
-        }
-        if(this.state.groupHealthPlanData.account_type === "self" || Object.keys(this.state.groupHealthPlanData.post_body.member_details).length === 1){
-            body['floater_type'] = 'non_floater';
-        }
-
-        let add_ons_data = this.state.groupHealthPlanData.add_ons_data || []; 
-        // eslint-disable-next-line radix
-        let cta_premium = this.state.groupHealthPlanData.post_body.premium || this.state.bottomButtonData.leftSubtitleUnformatted;
-        this.updateBottomPremiumAddOns(cta_premium);
-        
-        if (add_ons_data.length === 0) {
-            try {
-                const res = await Api.post('api/insurancev2/api/insurance/health/quotation/get_add_ons/religare', body);
-
+        this.setState({
+          showError: false
+        });
+        if(type) {
+          let mapper = {
+            'onload':  {
+              handleClick1: this.onload,
+              button_text1: 'Retry',
+              title1: ''
+            },
+            'submit': {
+              handleClick1: this.handleClick,
+              button_text1: 'Retry',
+              handleClick2: () => {
                 this.setState({
-                    show_loader: false
-                });
-                var resultData = res.pfwresponse.result;
-                if (res.pfwresponse.status_code === 200) {
-                    
-                    add_ons_data = resultData.compulsary.concat(resultData.optional)  || [];
-
-                    
-                    let options = [];
-                    let opd_data_options = add_ons_data[1].price;
-                    for(var key in opd_data_options){
-                        let opt = {
-                            name: key,
-                            premium: add_ons_data[1].price[key]
-                        }
-                        options.push(opt);
-                    }
-
-                    let temp = add_ons_data[2];
-                        add_ons_data[2] = add_ons_data[3];
-                        add_ons_data[3] = temp;
-                    
-                    
-                    if(this.state.groupHealthPlanData.post_body.si === "400000"){
-                        
-                        for(var item in add_ons_data){
-                            if(add_ons_data[item].id === "ncb"){
-                                add_ons_data[item].checked = true;
-                                add_ons_data[item].disabled = true;
-                                add_ons_data[item].bottom_text = "This benefit is mandatory with your selected plan";
-                            }
-                        }    
-                    }
-
-                    add_ons_data[1].price = options;
-                    add_ons_data[1].default_premium = add_ons_data[1].price[0].premium;
-                    add_ons_data[1].default_cover_amount = add_ons_data[1].price[0].name;
-                    
-                } else {
-                    toast(resultData.error || resultData.message
-                        || 'Something went wrong');
-                }
-            } catch (err) {
-                console.log(err)
-                this.setState({
-                    show_loader: false
-                });
-                toast('Something went wrong');
+                  showError: false
+                })
+              },
+              button_text2: 'Edit'
             }
-
-        } else {
-            this.setState({
-                show_loader: false
-            })
+          };
+      
+          this.setState({
+            errorData: {...mapper[type], setErrorData : this.setErrorData}
+          })
         }
+    
+      }
+    async componentDidMount() {
+        this.onload();        
+    }
+
+    onload = async () => {
+        let cta_premium = '';
+        var groupHealthPlanData = this.state.groupHealthPlanData;
+        if(groupHealthPlanData.account_type === 'self'){
+            cta_premium =   groupHealthPlanData.selectedSumInsuredPremium || this.state.groupHealthPlanData.post_body.premium;
+        }else{
+            cta_premium =   groupHealthPlanData.net_premium_addons || this.state.groupHealthPlanData.post_body.premium;
+        }
+        this.updateBottomPremiumAddOns(cta_premium);
+        var add_ons_data = this.state.groupHealthPlanData[this.state.screen_name];
+
 
         this.setState({
             cta_premium: cta_premium,
@@ -119,7 +84,6 @@ class GroupHealthPlanAddOns extends Component {
         }, () => {
             this.updateCtaPremium()
         })
-        
     }
 
     updateCtaPremium = () => {
@@ -134,7 +98,6 @@ class GroupHealthPlanAddOns extends Component {
         });
 
         let updated_premium = cta_premium + total_premium;
-        
         this.updateBottomPremiumAddOns(updated_premium);
     }
 
@@ -179,7 +142,6 @@ class GroupHealthPlanAddOns extends Component {
     }
 
     renderOptions = (add_ons_data) => {
-        
         return (
             <div>
                 {add_ons_data.map((item, index) => (
@@ -208,7 +170,7 @@ class GroupHealthPlanAddOns extends Component {
                                     </div>
                                     <div id="add_ons_bottom_text">{item.bottom_text}</div>
                                 </div>
-                          <GenericTooltip content={item.description} productName={getConfig().productName} />
+                                <GenericTooltip content={item.description} productName={getConfig().productName} />
                             </span>
                             {item.checked && Array.isArray(item.price) && <DropdownInModal
                                 parent={this}
@@ -301,9 +263,32 @@ class GroupHealthPlanAddOns extends Component {
             }
         })
         groupHealthPlanData.post_body.add_on_premium = add_ons_total;
+        
         this.setLocalProviderData(groupHealthPlanData);
-
-        this.navigate(this.state.next_screen);
+        
+        var current_state = {}
+        
+        for(var x in add_ons_json){
+            current_state[`${x}`] = add_ons_json[x].price;
+        }
+        
+        if(isEmpty(current_state)){
+            current_state = {'none': true}
+        }
+        this.setState({
+            current_state
+        }, ()=>{
+            var sameData = compareObjects(Object.keys(current_state), groupHealthPlanData.previous_add_ons_data, current_state);
+            if(!sameData || isEmpty(groupHealthPlanData['cover_period_screen'])){
+                this.getCoverPeriodData();
+            }else{
+                this.navigate('plan-select-cover-period')
+                return;
+            }
+        })
+        
+        
+        
 
     }
 
@@ -313,6 +298,9 @@ class GroupHealthPlanAddOns extends Component {
         return (
             <Container
                 events={this.sendEvents('just_set_events')}
+                skelton={this.state.skelton}
+                showError={this.state.showError}
+                errorData={this.state.errorData}
                 showLoader={this.state.show_loader}
                 title='Select add-ons'
                 buttonTitle="CONTINUE"

@@ -3,7 +3,7 @@ import Container from "../../common/Container";
 
 import Api from "utils/api";
 import toast from "../../../common/ui/Toast";
-import { getConfig } from "utils/functions";
+import { getConfig, getBasePath } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
 import HowToSteps from "../../../common/ui/HowToSteps";
 import {fyntuneConstants} from './constants';
@@ -16,17 +16,18 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import {open_browser_web} from  'utils/validators';
+import {Imgc} from 'common/ui/Imgc';
+import {reportsfrequencyMapper} from 'group_insurance/constants';
 
 class FyntuneLanding extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: true,
       productName: getConfig().productName,
       stepsContentMapper: fyntuneConstants.stepsContentMapper,
       stepsToFollow: fyntuneConstants.stepsToFollow,
       faq_data: fyntuneConstants.faq_data,
-      logo_cta: fyntuneConstants.logo_cta,
       openDialogRefresh: false
     };
   }
@@ -38,41 +39,116 @@ class FyntuneLanding extends Component {
     });
   };
 
+  setErrorData = (type, cb) => {
+    this.setState({
+      showError: false
+    });
+    if(type) {
+      let mapper = {
+        'onload':  {
+          handleClick1: this.onload,
+          button_text1: 'Retry',
+          title1: ''
+        },
+        'onload_provider_error':  {
+          handleClick1: this.handleProviderError,
+          button_text1: 'Okay',
+          title1: ''
+        },
+        'submit': {
+          handleClick1: this.handleClick,
+          button_text1: 'Retry',
+          handleClick2: () => {
+            this.setState({
+              showError: false,
+              skelton: false,
+            })
+          },
+          button_text2: 'CLOSE'
+        }
+      };
+      this.setState({
+        errorData: {...mapper[type], setErrorData : this.setErrorData}
+      }, () => {
+        if(typeof cb === 'function') {
+          return cb();
+        }
+        
+      })
+    }
+  }
+
   onload = async() => {
+
+    this.setErrorData('onload');
+    let error = ''
+    let errorType = '';
     nativeCallback({ action: 'take_control_reset' });
     this.setState({
-      show_loader: true,
-      openDialogRefresh: false
+      skelton: true,
+      openDialogRefresh: false,
+      providerError: ''
     })
     //resume api
     try{
       var res = await Api.get(`api/ins_service/api/insurance/fyntune/get/resumelist`);
-      
-      this.setState({
-        show_loader: false
-      })
       var resultData = res.pfwresponse.result;
-
+      var resume_frequency = '';
       if (res.pfwresponse.status_code === 200) {
-      
-      if(resultData.resume_present){
-        let fyntuneRefId = resultData.lead.fyntune_ref_id;
-        storageService().setObject('fyntune_ref_id', fyntuneRefId);
-      }
-      
-      this.setState({ resume_data : resultData});
+        
+        if(resultData.resume_present){
+          let fyntuneRefId = resultData.lead.fyntune_ref_id;
+          storageService().setObject('fyntune_ref_id', fyntuneRefId); 
+          var frequency = resultData.lead.premium_payment_freq || resultData.lead.payout_type || '';
+          resume_frequency = reportsfrequencyMapper('FYNTUNE', frequency)
+          if(resume_frequency){
+            resume_frequency = resume_frequency.substring(1) || ''
+          }
+        }
+        
+        this.setState({ 
+          skelton: false,
+          resume_data : resultData,
+          resume_frequency: resume_frequency || ''
+        });
         
       } else {
-        toast(resultData.error || resultData.message || "Something went wrong");
+        this.setState({
+          skelton: false
+        })
+
+        let providerErrors = ["Network error",
+        "Network error call status not in 200",
+        "Error in ref id creation"];
+        error = res.pfwresponse.result.error || res.pfwresponse.result.message || true;
+
+        if(providerErrors.indexOf(error) !== -1) {
+          error = '';
+          this.setErrorData('onload_provider_error');
+          this.setState({
+            providerError: "Something's not right. Retry in a while"
+          })
+        }
       }
-    }catch(err){
-      console.log(err)
+    } catch (err) {
       this.setState({
-        show_loader: false
+        skelton: false,
       });
-      toast("Something went wrong");
+      error=true;
+      errorType= "crash";
     }
-  
+
+    // set error data
+    if(error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error,
+          type: errorType
+        },
+        showError: 'page'
+      })
+    }
   }
 
   async componentDidMount(){
@@ -121,6 +197,12 @@ class FyntuneLanding extends Component {
     this.onload();
   }
 
+  handleProviderError = () => {
+    this.setState({
+      showError: false
+    })
+  }
+
   renderDialog = () => {
     return (
         <Dialog
@@ -146,15 +228,16 @@ class FyntuneLanding extends Component {
     if (!this.state.resume_data.resume_present) {
       return;
     }
-
+    storageService().setObject('backToInsuranceLanding', true);
+    let basepath = getBasePath();
     this.sendEvents("next", {resume_clicked: "yes"});
     var resume_redirection_url = this.state.resume_data.redirection_url;
     var redirectToHDFC = this.state.resume_data.chrome_tab_enable;
 
     let intermediateScreenURL = encodeURIComponent(
-      window.location.origin + `/group-insurance/life-insurance/resume-intermediate` + getConfig().searchParams
+      basepath + `/group-insurance/life-insurance/resume-intermediate` + getConfig().searchParams
     );
-    let landingScreenURL = window.location.origin + `/group-insurance/life-insurance/savings-plan/landing` + getConfig().searchParams;
+    let landingScreenURL = basepath + `/group-insurance/life-insurance/savings-plan/landing` + getConfig().searchParams;
     
     var journeyURL = resume_redirection_url + '?back_url_webview='+  intermediateScreenURL + '&resume_url_webview='+ landingScreenURL;
 
@@ -216,17 +299,37 @@ class FyntuneLanding extends Component {
 
   handleClick = async () => {
     this.sendEvents("next");
+
+    if(this.state.providerError) {
+      this.setErrorData('onload_provider_error',() => {
+        this.setState({
+          errorData: {
+            ...this.state.errorData,
+            title2: this.state.providerError
+          },
+          showError: true
+        })
+      });
+      
+
+      return;
+    }
+    storageService().setObject('backToInsuranceLanding', true);
+    this.setErrorData('submit');
+    let error = '';
+    let errorType = '';
     var body = {}
-    
-    let landingScreenURL = window.location.origin + `/group-insurance/life-insurance/savings-plan/landing` + getConfig().searchParams;
+    let basepath = getBasePath();
+    let landingScreenURL = basepath + `/group-insurance/life-insurance/savings-plan/landing` + getConfig().searchParams;
     
     let intermediateScreenURL = encodeURIComponent(
-      window.location.origin + `/group-insurance/life-insurance/resume-intermediate` + getConfig().searchParams
+      basepath + `/group-insurance/life-insurance/resume-intermediate` + getConfig().searchParams
     );
     
     
     this.setState({
-      show_loader: true
+      show_loader:"button"
+      // show_loader: true
     })
     //create lead api
     try{
@@ -254,6 +357,7 @@ class FyntuneLanding extends Component {
           if(getConfig().Web) {
             open_browser_web(journeyURL, '_blank')
             this.setState({
+              show_loader:false,
               openDialogRefresh: true
             });
           } else {
@@ -275,15 +379,30 @@ class FyntuneLanding extends Component {
           }
             
         } else {
-            toast(resultData.error || resultData.message || "Something went wrong");
+          error = res.pfwresponse.result.message || res.pfwresponse.result.message || true
+            // toast(resultData.error || resultData.message || "Something went wrong");
         }
-      }catch(err){
-        console.log(err)
+      }catch (err) {
         this.setState({
-          show_loader: false
+          show_loader: false,
+          showError: true
         });
-        toast("Something went wrong");
-    }
+        error = true;
+        errorType = "crash";
+      }
+  
+      // set error data
+      if(error) {
+        this.setState({
+          errorData: {
+            ...this.state.errorData,
+            title2: error,
+            type: errorType
+          },
+          show_loader: false,
+          showError: true
+        })
+      }
 
 };
 
@@ -293,6 +412,9 @@ class FyntuneLanding extends Component {
     return (
       <Container
         events={this.sendEvents('just_set_events')}
+        showError={this.state.showError}
+        skelton={this.state.skelton}
+        errorData={this.state.errorData}
         showLoader={this.state.show_loader}
         title="Insurance Savings Plan"
         fullWidthButton={true}
@@ -302,8 +424,8 @@ class FyntuneLanding extends Component {
       >
       <div className="fyntune-landing">
         <div className="landing-hero-container">
-            <img
-                className="landing-hero-img"
+            <Imgc
+                className="fyntune-landing-hero-img"
                 src={require(`assets/${this.state.productName}/fyntune_landing_page_hero.svg`)}
                 alt=""
               />
@@ -317,8 +439,9 @@ class FyntuneLanding extends Component {
               <div className="rc-tile" style={{ marginBottom: 0 }}>
                 <div className="rc-tile-left">
                   <div className="">
-                    <img
-                      src={require(`assets/${this.state.logo_cta}`)}
+                    <Imgc
+                      className="resume-card-logo"
+                      src={this.state.resume_data.lead.logo}
                       alt=""
                     />
                   </div>
@@ -327,7 +450,13 @@ class FyntuneLanding extends Component {
                       {this.state.resume_data.lead.base_plan_title}
                     </div>
                     <div className="rct-subtitle" style={{fontSize: '20px'}}>
-                      {inrFormatDecimal(this.state.resume_data.lead.base_premium)}/<span style={{fontSize: '16px', fontWeight: '300'}}>year</span>
+                      {inrFormatDecimal(this.state.resume_data.lead.base_premium)}
+                      {this.state.resume_frequency ? 
+                        <span>
+                          <span className="rct-subtitle-frequency">/</span><span className="rct-subtitle-frequency-value">{this.state.resume_frequency}</span>
+                        </span>:
+                      null
+                      }
                     </div>
                   </div>
                 </div>
@@ -348,26 +477,26 @@ class FyntuneLanding extends Component {
           )}
         <div>
           <p className="fyntune-heading">What is Insurance Savings Plan?</p>
-          <p className="fyntune-info" style={{textAlign: 'justify'}}>
-            This is a plan for your investment cum insurance needs. Sanchay Plus from HDFC Life is one such product which provides you with a chance to create wealth and even gives financial security to your loved ones in case of any unforseen event.
+          <p className="fyntune-info">
+          This is a plan for your investment cum insurance needs which provides you with a chance to create wealth and even gives financial security to your loved ones in case of any unforeseen event.
           </p>
         </div>
 
         <p className="fyntune-heading">Major benefits</p>
         <div className="his" >
           <div className="horizontal-images-scroll">
-            <img
-              className="image"
+            <Imgc
+              className="image imgc-space3"
               src={require(`assets/${this.state.productName}/ic_why_fyn1.png`)}
               alt=""
             />
-            <img
-              className="image"
+            <Imgc
+              className="image imgc-space3"
               src={require(`assets/${this.state.productName}/ic_why_fyn2.png`)}
               alt=""
             />
-            <img
-              className="image"
+            <Imgc
+              className="image imgc-space3"
               src={require(`assets/${this.state.productName}/ic_why_fyn3.png`)}
               alt=""
             />
@@ -387,6 +516,8 @@ class FyntuneLanding extends Component {
             We make this process easy with
           </p>
           <HowToSteps
+            showSkelton={true}
+            classNameIcon="fyntune-how-to-step"
             style={{ marginTop: 20, marginBottom: 0 }}
             baseData={this.state.stepsContentMapper}
           />
@@ -396,13 +527,14 @@ class FyntuneLanding extends Component {
           <div className="generic-hr" style={{marginBottom: "12px" }}></div>
           <div className="flex-center fyntune-faq" onClick={() => this.openFaqs()}>
             <div>
-              <img
+              <Imgc
                 className="accident-plan-read-icon"
+                style={{width: '30px', height: '30px', marginRight: '0' }}
                 src={require(`assets/${this.state.productName}/ic_document_copy.svg`)}
                 alt=""
               />
             </div>
-            <div style={{fontSize: '17px'}}>Frequently asked questions</div>
+            <div style={{fontSize: '17px', marginLeft: '10px'}}>Frequently asked questions</div>
           </div>
           <div className="generic-hr" style={{ marginTop: "12px" }}></div>
         </div>

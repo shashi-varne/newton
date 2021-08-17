@@ -4,7 +4,7 @@ import GoldLivePrice from './live_price';
 import Dialog, {
     DialogContent
   } from 'material-ui/Dialog';
-import { WithProviderLayout } from '../../common/footer/layout';
+import { FooterLayoutBase } from 'common/components/footer/layout';
 import ReactHtmlParser from 'react-html-parser'; 
 import {getConfig} from 'utils/functions';
 
@@ -122,7 +122,7 @@ class PriceChangeClass extends Component {
 
                 <GoldLivePrice style={{opacity: this.props.parent.state.price_crashed ? 0.3 : 1}} parent={this.props.parent} />
                 <div className="mid-buttons">
-                  <WithProviderLayout type="default"
+                  <FooterLayoutBase type="withProvider"
                      handleClick2={this.props.parent.handleClose}
                      handleClick={this.refreshData}
                      buttonTitle={this.props.parent.state.timeAvailable > 0 || this.props.parent.state.price_crashed ? 'OK' : this.props.parent.state.priceChangeDialogData.buttonTitle}

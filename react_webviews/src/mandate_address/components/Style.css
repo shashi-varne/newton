@@ -6,7 +6,7 @@
   width: 74%;
 }
 .select-edit-button {
-  color: rgb(111, 219, 79);
+  color: var(--secondary);
   font-weight: 600;
   font-size: 16px;
   text-align: right;

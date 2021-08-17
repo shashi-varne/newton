@@ -5,7 +5,7 @@ import Container from '../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import update_insurance_fisdom from 'assets/update_insurance_fisdom.svg';
-import update_insurance_myway from 'assets/update_insurance_myway.svg';
+import update_insurance_myway from 'assets/finity/update_insurance_myway.svg';
 
 
 class AppUpdateInfo extends Component {
@@ -51,6 +51,8 @@ class AppUpdateInfo extends Component {
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="UPDATE NOW"
+        fullWidthButton={true}
+        onlyButton={true}
       >
       <div style={{textAlign: 'center'}}>
        <div>

@@ -3,6 +3,7 @@ import Container from  '../../common/Container';
 
 import { getConfig } from '../../../utils/functions';
 import { nativeCallback } from '../../../utils/native_callback'
+import {Imgc} from   '../../../common/ui/Imgc'
 
 
 
@@ -21,13 +22,6 @@ class LifeInsuranceEntry extends Component {
   componentWillMount() {
 
     nativeCallback({ action: 'take_control_reset' });
-    var life_insurance_option = {
-      key: 'savings plan',
-      title: 'Insurance Savings plan',
-      subtitle: 'Enjoy wealth creation cum life coverage',
-      icon: 'money_pig',
-      disabled: false
-    }
 
     let insuranceProducts = [
       {
@@ -36,12 +30,15 @@ class LifeInsuranceEntry extends Component {
         subtitle: 'Get comprehensive life coverage',
         icon: 'ic_term_insurance',
         disabled: false
+      },
+      {
+        key: 'savings plan',
+        title: 'Insurance Savings plan',
+        subtitle: 'Enjoy wealth creation cum life coverage',
+        icon: 'money_pig',
+        disabled: false
       }
     ];
-
-    if(!getConfig().iOS){
-      insuranceProducts.push(life_insurance_option);
-    }
 
     this.setState({
       insuranceProducts: insuranceProducts
@@ -71,8 +68,9 @@ class LifeInsuranceEntry extends Component {
         this.navigate('/group-insurance/life-insurance/savings-plan/landing');
       // }
     } else {
-      let fullPath = data.key + '/landing';
-      this.navigate('/group-insurance/life-insurance/' + fullPath);
+      this.navigate('/group-insurance/system-maintenance');
+      // let fullPath = data.key + '/landing';
+      // this.navigate('/group-insurance/life-insurance/' + fullPath);
     }
   }
 
@@ -83,7 +81,7 @@ class LifeInsuranceEntry extends Component {
         <div className='insurance_plans' key={index} onClick={() => this.handleClick(props)}
         style={{ width : '100%'}}>   
           <div className='insurance_plans_types' style={{width : '100%'}}>
-       <img src={require(`assets/${this.state.type}/${props.icon}.svg`)} alt='' className="insurance_plans_logos" style={{marginTop: '20px', marginBottom : '15px'}} />
+       <Imgc src={require(`assets/${this.state.type}/${props.icon}.svg`)} alt='' className="insurance_plans_logos" />
             <div    style={{ width : '100%',  cursor: 'pointer',  borderBottomWidth: '1px',
            borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '20px', paddingBottom : '20px',   borderBottomColor: '#EFEDF2'}}>
               <div className='insurance_plans_logos_text'
@@ -131,7 +129,7 @@ class LifeInsuranceEntry extends Component {
         noFooter={true}
         showLoader={this.state.show_loader}
         title="Life Insurance"
-        styleHeader={{marginLeft: '10px'}}> 
+        > 
         <div className="group-health-insurance-entry">
           <div className='products'>
             <div className='health_insurance'>Must have plans for your family</div>

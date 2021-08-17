@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Fragment } from 'react';
 import PaymentCallback from '../../ui_components/general_insurance/payment_callback';
 
 class AccidentPaymentCallback extends Component {
@@ -11,11 +12,11 @@ class AccidentPaymentCallback extends Component {
 
   render() {
     return (
-      <div>
+      <Fragment>
         <PaymentCallback
           parent={this}
         />
-      </div>
+      </Fragment>
     );
   }
 }

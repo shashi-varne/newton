@@ -9,8 +9,8 @@ import { withStyles } from '@material-ui/core/styles';
 const styles = {
   primary: {
     color: '#878787',
-    fontSize: '13px',
-    fontWeight: '400 ',
+    fontSize: '15px',
+    fontWeight: '500 ',
   },
   root: {
     paddingLeft: '0px',
@@ -33,7 +33,7 @@ const Accordian = ({ title, children, classes }) => {
             <RemoveIcon
               style={{
                 border: '2px #878787 solid',
-                fontSize: '10px',
+                fontSize: '18px',
                 borderRadius: '3px',
                 color: '#878787',
               }}
@@ -42,7 +42,7 @@ const Accordian = ({ title, children, classes }) => {
             <AddIcon
               style={{
                 border: '2px #878787 solid',
-                fontSize: '10px',
+                fontSize: '18px',
                 borderRadius: '3px',
                 color: '#878787',
               }}

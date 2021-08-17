@@ -44,7 +44,7 @@ const Login = (props) => {
   const [commonLoginErr, setCommonLoginErr] = useState("");
   const [resendDisabled, disableResend] = useState(false);
   const serverUrl = 'https://my.fisdom.com';
-  const socialRedirectUrl = encodeURIComponent('https://wv.fisdom.com/w-report/main/overview?base_url=https://my.fisdom.com');
+  const socialRedirectUrl = encodeURIComponent('https://wv.fisdom.com/w-report/main/overview');
 
   const sendEvents = (user_action, props) => {
     let eventObj = {

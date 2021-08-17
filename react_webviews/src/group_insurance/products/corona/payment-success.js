@@ -5,7 +5,8 @@ class CoronaPaymentSuccess extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      product_key: 'CORONA'
+      product_key: 'CORONA',
+      headerTitle: 'Coronavirus insurance'
     }
   }
 
