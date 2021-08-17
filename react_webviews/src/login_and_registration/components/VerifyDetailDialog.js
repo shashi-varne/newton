@@ -21,6 +21,7 @@ class VerifyDetailDialog extends Component {
 
   handleClick = async () => {
     const { data, type } = this.props;
+    this.props.parent.sendEvents("next", "bottomsheet")
     if (isEmpty(data)) {
       this.props.parent.navigate("/secondary-verification", {
         state: {
@@ -57,6 +58,7 @@ class VerifyDetailDialog extends Component {
   };
 
   editDetails = () => {
+    this.props.parent.sendEvents("edit", "bottomsheet");
     this.props.parent.navigate("/secondary-verification", {
       state: {
         communicationType: this.props?.type,
@@ -72,7 +74,7 @@ class VerifyDetailDialog extends Component {
       <WVBottomSheet
         isOpen={isOpen}
         onClose={onClose}
-        title={`Verify your ${type} address`}
+        title={`Verify your ${type === "email" ? "email address" : "mobile number"}`}
         image={require(`../../assets/${product}/bottomsheet_verify_${type}.svg`)}
         subtitle={`${
           type === "email" ? "Email" : "Mobile"

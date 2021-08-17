@@ -281,7 +281,7 @@ const CommunicationDetails = (props) => {
     setAccountAlreadyExists(data?.user)
   }
   const handleClick = async () => {
-    sendEvents("next");
+    sendEvents("next", continueAccountAlreadyExists ? "bottomsheet" : "");
     if (
       formData.mobileNumberVerified &&
       kyc.identification.meta_data.email_verified &&
@@ -337,9 +337,9 @@ const CommunicationDetails = (props) => {
     }
   };
 
-  const handleEdit = () => {
+  const handleEdit = (userAction, type) => {
     setAuthCheckRequired(true);
-    sendEvents("edit");
+    sendEvents(userAction, type);
     if (showDotLoader) return;
     setAccountAlreadyExists(false)
     setContinueAccountAlreadyExists(false)
@@ -347,7 +347,22 @@ const CommunicationDetails = (props) => {
     setButtonTitle("CONTINUE");
   };
 
-  const sendEvents = (userAction) => {
+  const sendEvents = (userAction, type) => {
+    if(type === "bottomsheet"){
+      let eventObj = {
+          "event_name": 'verification_bottom_sheet',
+          "properties": {
+            "screen_name": "account_already_exists",
+            "user_action": userAction,
+        },
+      };
+      if (userAction === 'just_set_events') {
+          return eventObj;
+      } else {
+          nativeCallback({ events: eventObj });
+      }
+      return;
+  }
     let eventObj = {
       event_name: "kyc_registration",
       properties: {
@@ -549,7 +564,7 @@ const CommunicationDetails = (props) => {
                 InputProps={{
                   endAdornment: showOtpContainer && (
                     <InputAdornment position="end">
-                      <div className="kcd-input-edit" onClick={handleEdit}>
+                      <div className="kcd-input-edit" onClick={() => handleEdit("edit")}>
                         EDIT
                       </div>
                     </InputAdornment>
@@ -575,7 +590,7 @@ const CommunicationDetails = (props) => {
                 InputProps={{
                   endAdornment: showOtpContainer && (
                     <InputAdornment position="end">
-                      <div className="kcd-input-edit" onClick={handleEdit}>
+                      <div className="kcd-input-edit" onClick={() => handleEdit("edit")}>
                         EDIT
                     </div>
                     </InputAdornment>
@@ -636,8 +651,8 @@ const CommunicationDetails = (props) => {
           type={communicationType}
           data={accountAlreadyExists}
           isOpen={accountAlreadyExists}
-          onClose={handleEdit}
-          editDetails={handleEdit}
+          onClose={() => handleEdit("back", "bottomsheet")}
+          editDetails={() => handleEdit("edit", "bottomsheet")}
           next={onClickbottomSheet}
         ></AccountAlreadyExistDialog>
       )}
