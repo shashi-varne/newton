@@ -21,15 +21,19 @@
   .iwd-profile-content {
     opacity: 0;
   }
+  & + #iwd-profile-short #iwd-profile-icon {
+    opacity: 0;
+    transition: opacity 0.3s ease-out 0.2s;
+  }
 }
 .boxEffect-enter-active {
   width: 340px;
   height: 300px;
-  transition: width 500ms, height 441ms ease-out;
+  transition: width 350ms, height 291ms ease-out;
   .iwd-profile-content {
     opacity: 0;
     padding: 30px 40px 20px;
-    @include iwd-fadeCreator(0.2, ease-in-out, 0.4);
+    @include iwd-fadeCreator(0.3, ease-in-out, 0.3);
   }
 }
 .boxEffect-enter-done {
@@ -37,6 +41,9 @@
   height: 300px;
   .iwd-profile-content {
     padding: 30px 40px 20px;
+  }
+  & + #iwd-profile-short #iwd-profile-icon {
+    opacity: 0;
   }
 }
 .boxEffect-exit {
@@ -46,6 +53,11 @@
   .iwd-profile-content {
     padding: 30px 40px 20px;
   }
+  & + #iwd-profile-short #iwd-profile-icon {
+    position: relative;
+    z-index: 9999;
+    @include iwd-fadeCreator(0.2, ease-in-out, 0.2);
+  }
 }
 .boxEffect-exit-active {
   .iwd-profile-content {
@@ -54,8 +66,8 @@
   }
   width: 0;
   height: 0;
-  transition: width 500ms, height 441ms ease-out;
-  transition-delay: 0.2s;
+  opacity: 0;
+  transition: width 300ms ease-out 0.2s, height 291ms ease-out 0.2s, opacity 300ms linear 0.2s;
 }
 
 .circularExpand {

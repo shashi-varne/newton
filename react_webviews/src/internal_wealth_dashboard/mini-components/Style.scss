@@ -593,6 +593,8 @@ ul#iwd-bars {
   text-align: center;
   cursor: pointer;
   text-transform: uppercase;
+  position: relative;
+  z-index: 5;
 }
 
 .iwd-profile-icon__primary {
