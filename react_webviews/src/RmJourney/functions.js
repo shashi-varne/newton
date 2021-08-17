@@ -4,20 +4,23 @@ import { storageService } from "utils/validators";
 
 export async function onload(){
     let error = ''
+    this.setState({isApiRunning: true})
     try{
         var url = `api/guest/user/session/create`
         const res = await Api.get(url);
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
-
-            this.setState({skelton: false})
+            window.sessionStorage.clear();
+            //no ui changes required here. Taken care of in the backend
+            this.setState({isApiRunning: false})
         } else {
+            this.setState({isApiRunning: false})
             error = resultData.error || resultData.message || 'Something went wrong. Please try again';
             Toast(error);
         }
     }catch(err){
         this.setState({
-          show_loader: false,
+            isApiRunning: false,
         });
     }
 }

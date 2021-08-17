@@ -7,7 +7,7 @@ import { logout } from "./function";
 const config = getConfig();
 const Logout = (props) => {
   const navigate = navigateFunc.bind(props); 
-
+  const isRmJourney = (!!storageService().getObject('guestLeadId')) && (!storageService().getObject('guestUser'))
   useEffect(() => {
     initialize();
   }, []);
@@ -23,12 +23,18 @@ const Logout = (props) => {
         return;
       }
       try {
-        window.localStorage.clear();
-        await logout();
+        if(!isRmJourney){
+          window.localStorage.clear();
+          await logout();
+        }
       } catch (err) {
         console.log(err);
       } finally {
-        navigate("/login")
+        if(isRmJourney){
+          navigate("/rm-login")  
+        }else{
+          navigate("/login")
+        }
       }
     } else {
       nativeCallback({ action: "session_expired" });

@@ -6,6 +6,7 @@ import { onload, startJourney } from "./functions";
 import { validateNumber, numberShouldStartWith } from "utils/validators";
 import Button from "common/ui/Button";
 import { Imgc } from "common/ui/Imgc";
+import UiSkelton  from "common/ui/Skelton";
 
 const config = getConfig();
 class Login extends Component {
@@ -14,6 +15,7 @@ class Login extends Component {
     this.state = {
       productName: config.productName,
       form_data: {},
+      isApiRunning: true
     };
     this.onload = onload.bind(this);
     this.startJourney = startJourney.bind(this);
@@ -69,10 +71,14 @@ class Login extends Component {
   render() {
     let {
       show_loader,
-      productName
+      productName,
+      isApiRunning
     } = this.state;
     return (
-      <div className="login" data-aid='login'>
+      <div>
+      {
+        isApiRunning ?  <UiSkelton type="g"/> : 
+        <div className="login" data-aid='login'>       
         <div className="header">
           <img src={require(`assets/${config.logo}`)} alt="logo" />
         </div>
@@ -133,6 +139,8 @@ class Login extends Component {
                   </div>
           </div>
         </div>
+      </div>
+      }
       </div>
     );
   }
