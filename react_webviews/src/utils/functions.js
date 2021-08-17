@@ -1,6 +1,6 @@
 // import colors from '../common/theme/Style.scss';
 import { checkValidString, getUrlParams, storageService } from './validators';
-import { isArray, isEmpty } from 'lodash';
+import { isArray, isEmpty, isFunction } from 'lodash';
 import $ from 'jquery';
 import {  getPartnerData  } from './partnerConfigs';
 
@@ -593,9 +593,16 @@ export const base64ToBlob = (b64Data, contentType = '', sliceSize = 512) => {
   return blob;
 }
 
-export function openFilePicker (filepickerId, methodName, docName, nativeHandler, fileHandlerParams = {}) {
+export function openFilePicker (
+  filePickerId,
+  methodName,
+  docName,
+  nativeHandler,
+  fileHandlerParams = {},
+  onFilePicked
+) {
   if (getConfig().Web) {
-    const filepicker = document.getElementById(filepickerId);
+    const filepicker = document.getElementById(filePickerId);
 
     if (filepicker) {
       filepicker.value = null; // Required to allow same file to be picked again QA-4238 (https://stackoverflow.com/questions/12030686)
@@ -608,6 +615,16 @@ export function openFilePicker (filepickerId, methodName, docName, nativeHandler
       upload: nativeHandler,
       ...fileHandlerParams // callback from native
     });
+
+    if (isFunction(onFilePicked)) {
+      // This callback is triggered once a user selects a file
+      window.callbackWeb.add_listener({
+        type: "native_receiver_image",
+        show_loader: function () {
+          onFilePicked();
+        },
+      });
+    }
   }
 }
 
