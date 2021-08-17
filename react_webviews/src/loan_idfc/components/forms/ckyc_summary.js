@@ -12,7 +12,8 @@ class ApplicationSummary extends Component {
       accordianData: [],
       detail_clicked: [],
       confirm_details: false,
-      skelton: 'g'
+      skelton: 'g',
+      screen_name: "ckyc_summary",
     };
     this.initialize = initialize.bind(this);
   }

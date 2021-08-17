@@ -10,6 +10,7 @@ class IncomeDetails extends Component {
     super(props);
     this.state = {
       show_loader: false,
+      screen_name: 'income_details',
       skelton: "g",
     };
 
