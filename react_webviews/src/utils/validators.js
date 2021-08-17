@@ -1,6 +1,7 @@
 // import { func } from "prop-types";
 import qs from 'qs';
 import moment from 'moment';
+import { isBoolean } from 'lodash';
 
 export function validateEmpty(string) {
   let nameSplit = string.split(" ").filter(e => e);
@@ -615,6 +616,8 @@ export function storageService() {
     get: get,
     setObject: setObject,
     getObject: getObject,
+    setBoolean: setBoolean,
+    getBoolean: getBoolean,
     remove: remove,
     clear: clear
   };
@@ -634,6 +637,18 @@ export function storageService() {
     return false;
   }
 
+  function setBoolean(key, value) {
+    set(key, value);
+  }
+
+  function getBoolean(key) {
+    const value = window.sessionStorage.getItem(key);
+    const isValueBoolean = checkValidString(value) && isBoolean(JSON.parse(value));
+
+    if (sessionStorageValid && isValueBoolean) return value;
+    return false;
+  }
+
   function setObject(key, value) {
     if (sessionStorageValid) {
       window.sessionStorage.setItem(key, JSON.stringify(value));
@@ -641,8 +656,10 @@ export function storageService() {
   }
 
   function getObject(key) {
-    if (sessionStorageValid && checkValidString(window.sessionStorage.getItem(key))) {
-      return JSON.parse(window.sessionStorage.getItem(key)) || {};
+    const value = window.sessionStorage.getItem(key);
+    
+    if (sessionStorageValid && checkValidString(value)) {
+      return JSON.parse(value) || {};
     }
 
     return false;
