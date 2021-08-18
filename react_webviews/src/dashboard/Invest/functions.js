@@ -1,5 +1,5 @@
 import Api from "utils/api";
-import { storageService, isEmpty } from "utils/validators";
+import { storageService, isEmpty, splitMobileNumberFromContryCode } from "utils/validators";
 import toast from "../../common/ui/Toast";
 import { getConfig, navigate as navigateFunc, getBasePath, isTradingEnabled, getInvestCards } from "utils/functions";
 import {
@@ -586,7 +586,7 @@ export function handleIpoCardRedirection() {
 }
           
 export function handleStocksAndIpoCards(key) {
-  let { kycJourneyStatusMapperData, kycJourneyStatus, userKyc, currentUser, contactNotVerified } = this.state;
+  let { kycJourneyStatusMapperData, kycJourneyStatus, userKyc, currentUser } = this.state;
   let modalData = Object.assign({key}, kycJourneyStatusMapperData);
 
   if (key === "ipo") {
@@ -633,9 +633,6 @@ export function handleStocksAndIpoCards(key) {
     modalData.oneButton = true
   }
 
-  if(!!contactNotVerified){
-    modalData.oneButton = false;
-   }
   if (!isEmpty(modalData) && (kycJourneyStatus !== "complete" || (kycJourneyStatus === "complete" && userKyc.kyc_product_type !== "equity"))) {
     this.setState({ modalData, openKycStatusDialog: true });
   }
@@ -741,12 +738,7 @@ export function contactVerification(userKyc) {
   // ---------------- IPO Contact Verification Setting state for BottomSheet---------------//
   if (!isEmpty(contactDetails)) {
     if (contactDetails.mobile_number_verified === false) {
-      let contactValue, numberVal = contactDetails?.mobile_number?.split('|');
-      if (numberVal.length > 1) {
-        contactValue = numberVal[1];
-      } else {
-        contactValue = [numberVal];
-      }
+      const contactValue = splitMobileNumberFromContryCode(contactDetails?.mobile_number)
       this.setState({
         communicationType: "mobile",
         contactValue,
@@ -768,12 +760,7 @@ export function contactVerification(userKyc) {
         if (!isEmpty(contactDetails.mobile_number) && contactDetails.mobile_number_verified === false) {
           contact_type = "mobile";
           isVerified = false
-          let numberVal = contactDetails?.mobile_number?.split('|');
-          if (numberVal.length > 1) {
-              contact_value = numberVal[1];
-          } else {
-              [contact_value] = numberVal;
-          }
+          contact_value = splitMobileNumberFromContryCode(contactDetails?.mobile_number)
         } else if (!isEmpty(contactDetails.email) && contactDetails.email_verified === false) {
           contact_type = "email";
           contact_value = contactDetails.email
@@ -781,8 +768,9 @@ export function contactVerification(userKyc) {
         }
         if (!isVerified) {
           this.setState({
-            openKycPremiumLanding: false, // This(openKycPremiumLanding, openBottomSheet for campign) two are Onload bottomSheet
+            openKycPremiumLanding: false, // This(openKycPremiumLanding, openBottomSheet, openKycStatusDialog for campign) 3 are Onload bottomSheet
             openBottomSheet: false, //Which Are Disable As contactVerification Takes highest priority.
+            openKycStatusDialog: false,
             verifyDetails: true,
             verifyDetailsData: {
               contact_type,

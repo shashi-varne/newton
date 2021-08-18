@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import WVInPageSubtitle from "../../common/ui/InPageHeader/WVInPageSubtitle";
 import WVInPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
 import { authCheckApi } from "../../login_and_registration/functions";
+import { splitMobileNumberFromContryCode } from "../../utils/validators"
 import isEmpty from 'lodash/isEmpty';
 
 class MyaccountDetails extends Component {
@@ -20,12 +21,7 @@ class MyaccountDetails extends Component {
             if (!isEmpty(contactDetails)) {
                 if (contactDetails?.mobile_number_verified) {
                     auth_type = "mobile";
-                    let numberVal = contactDetails?.mobile_number?.split('|');
-                    if (numberVal.length > 1) {
-                        auth_value = numberVal[1];
-                    } else {
-                        [auth_value] = numberVal;
-                    }
+                    auth_value = splitMobileNumberFromContryCode(contactDetails?.mobile_number)
                 } else if (contactDetails?.email_verified) {
                     auth_value = contactDetails?.email;
                     auth_type = "email";
@@ -34,12 +30,7 @@ class MyaccountDetails extends Component {
                 if (!isEmpty(contactDetails.mobile_number) && contactDetails.mobile_number_verified === false) {
                     contact_type = "mobile";
                     isVerified = false;
-                    let numberVal = contactDetails?.mobile_number?.split('|');
-                    if (numberVal.length > 1) {
-                        contact_value = numberVal[1];
-                    } else {
-                        [contact_value] = numberVal;
-                    }
+                    contact_value = splitMobileNumberFromContryCode(contactDetails?.mobile_number)
                 } else if (!isEmpty(contactDetails.email) && contactDetails.email_verified === false) {
                     contact_type = "email";
                     contact_value = contactDetails.email;
