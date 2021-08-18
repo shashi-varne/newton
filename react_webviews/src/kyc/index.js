@@ -51,16 +51,14 @@ import IpvVideo from "./Upload/IpvVideo";
 import NRIAddressUpload from "./Upload/NriAddress";
 import ChangeAddressDetails2 from "./Address/ChangeAddress/ChangeAddressDetails2";
 import KycNative from "./Native/KycNative";
-import StocksNative from "./Native/StocksNative";
 import LocationPermission from "./Upload/LocationPermission";
 import SelfieSteps from "./Upload/SelfieSteps";
 import FnOIncomeProof from "./Upload/FnOIncomeProof";
 
 // Equity Components
 import TradingExperience from "./Equity/components/TradingExperience";
-import StocksStatus from "./Equity/components/StocksStatus";
 import NriError from "./Equity/components/NriError";
-import AccountInfo from "./Equity/components/AccountInfo";
+import TradingInfo from "./Equity/components/TradingInfo";
 import UploadInstructions from "./Equity/components/UploadInstructions";
 import DocumentVerification from "./Equity/components/DocumentVerification";
 import ManualSignature from "./Equity/components/ManualSignature";
@@ -76,7 +74,6 @@ const Kyc = (props) => {
       <Switch>
         <Route exact path={`${url}/journey`} component={Journey} />
         <Route exact path={`${url}/native`} component={KycNative} />
-        <Route exact path={`${url}/stocks/native`} component={StocksNative} />
         <Route
           exact
           path={`${url}/personal-details1`}
@@ -341,18 +338,13 @@ const Kyc = (props) => {
         />
         <Route 
           exact 
-          path={`${url}/stocks-status`} 
-          component={StocksStatus} 
-        />
-        <Route 
-          exact 
           path={`${url}/nri-error`} 
           component={NriError} 
         />
         <Route 
           exact 
-          path={`${url}/account-info`} 
-          component={AccountInfo} 
+          path={`${url}/trading-info`} 
+          component={TradingInfo} 
         />
         <Route 
           exact 

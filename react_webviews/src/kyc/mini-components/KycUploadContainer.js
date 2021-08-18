@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import WVButton from '../../common/ui/Button/WVButton';
 import { WVFilePickerWrapper } from '../../common/ui/FileUploadWrapper/WVFilePickerWrapper';
+import { isFunction } from '../../utils/validators';
 
 const KycUploadContainer = ({
   classes = {},
@@ -72,16 +73,46 @@ const Button = ({
   dataAidSuffix,
   children,
   filePickerProps = {}, // Check WVFilePickerWrapper for props list
+  showLoader,
   ...buttonProps
 }) => {
+  const [fileLoading, setFileLoading] = useState(false);
+
+  const onFileSelectStart = (...functionProps) => {
+    setFileLoading(true);
+    if (isFunction(filePickerProps?.onFileSelectStart)) {
+      filePickerProps.onFileSelectStart(...functionProps);
+    }
+  };
+
+  const onFileSelectComplete = (...functionProps) => {
+    setFileLoading(false);
+    if (isFunction(filePickerProps?.onFileSelectComplete)) {
+      filePickerProps.onFileSelectComplete(...functionProps);
+    }
+  };
+
+  const onFileSelectError = (...functionProps) => {
+    setFileLoading(false);
+    if (isFunction(filePickerProps?.onFileSelectError)) {
+      filePickerProps.onFileSelectError(...functionProps);
+    }
+  };
+
   if (withPicker) {
     return (
-      <WVFilePickerWrapper {...filePickerProps}>
+      <WVFilePickerWrapper
+        {...filePickerProps}
+        onFileSelectStart={onFileSelectStart}
+        onFileSelectComplete={onFileSelectComplete}
+        onFileSelectError={onFileSelectError}
+      >
         <WVButton
           outlined
           dataAidSuffix={dataAidSuffix}
           color="secondary"
           classes={{ root: 'kuc-action-btn' }}
+          showLoader={fileLoading || showLoader}
           {...buttonProps}
         >
           {children || 'ATTACH DOCUMENT'}

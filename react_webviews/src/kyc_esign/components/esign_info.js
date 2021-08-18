@@ -115,6 +115,7 @@ class ESignInfo extends Component {
             back_text: 'You are almost there, do you really want to go back?'
           }
         });
+        this.setState({ show_loader: "page" })
         window.location.href = resultData.esign_link;
       } else {
         if (resultData && resultData.error === "all documents are not submitted") {
@@ -134,9 +135,9 @@ class ESignInfo extends Component {
           toast(resultData.error ||
             resultData.message || 'Something went wrong', 'error');
         }
+        this.setState({ show_loader: false });
       }
 
-      this.setState({ show_loader: false });
     } catch (err) {
       this.setState({
         show_loader: false

@@ -15,6 +15,7 @@ import { getKycAppStatus, isReadyToInvest, setKycProductType, setSummaryData } f
 import { get_recommended_funds } from "./common/api";
 import { PATHNAME_MAPPER } from "../../kyc/constants";
 import { isEquityCompleted } from "../../kyc/common/functions";
+import { nativeCallback, openModule } from "../../utils/native_callback";
 
 let errorMessage = "Something went wrong!";
 export async function initialize() {
@@ -31,7 +32,6 @@ export async function initialize() {
   this.clickCard = clickCard.bind(this);
   this.initilizeKyc = initilizeKyc.bind(this);
   this.openKyc = openKyc.bind(this);
-  this.openStocks = openStocks.bind(this);
   this.setProductType = setProductType.bind(this);
   this.openPremiumOnboardBottomSheet = openPremiumOnboardBottomSheet.bind(this);
   this.handleKycSubmittedOrRejectedState = handleKycSubmittedOrRejectedState.bind(this);
@@ -39,11 +39,14 @@ export async function initialize() {
   this.closeCampaignDialog = closeCampaignDialog.bind(this);
   this.handleStocksAndIpoCards = handleStocksAndIpoCards.bind(this);
   this.setKycProductTypeAndRedirect = setKycProductTypeAndRedirect.bind(this);
-  this.setLoaderInModalData = setLoaderInModalData.bind(this);
   this.handleIpoCardRedirection = handleIpoCardRedirection.bind(this);
   this.contactVerification = contactVerification.bind(this);
+  this.handleCommonKycRedirections = handleCommonKycRedirections.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
-  if ( (this.state.screenName === "invest_landing" || this.state.screenName === "sdk_landing" ) && dataSettedInsideBoot) {
+  if (config) {
+    this.setState({ config });
+  }
+  if ((this.state.screenName === "invest_landing" || this.state.screenName === "sdk_landing" ) && dataSettedInsideBoot) {
     storageService().set("dataSettedInsideBoot", false);
   }
   if(this.state.screenName === "invest_landing"){
@@ -119,7 +122,7 @@ export async function getSummary() {
 }
 
 export function setInvestCardsData() {
-  const config = getConfig();
+  const { config = getConfig() } = this.state;
   const disabledPartnersMap = {
     insurance: [
       "cccb",
@@ -184,7 +187,6 @@ export function clickCard(state, title) {
     case "stocks":
     case "ipo":
       this.handleStocksAndIpoCards(state)
-      // this.openStocks();
       break;
     case "insurance":
       let insurancePath = "/group-insurance";
@@ -298,7 +300,7 @@ export function corpusValue(data) {
 }
 
 export async function getRecommendations(amount) {
-  const config = getConfig();
+  const { config = getConfig() } = this.state;
   try {
     const result = await get_recommended_funds({
       type: this.state.investType,
@@ -341,7 +343,7 @@ export async function getRecommendations(amount) {
 }
 
 export function navigate(pathname, data = {}) {
-  const config = getConfig();
+  const { config = getConfig() } = this.state;
   if (this.props.edit || data.edit) {
     this.props.history.replace({
       pathname: pathname,
@@ -358,7 +360,7 @@ export function navigate(pathname, data = {}) {
 }
 
 export function initilizeKyc() {
-  const config = getConfig();
+  const { config = getConfig() } = this.state;
   let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
   const TRADING_ENABLED = isTradingEnabled(userKyc);
   let currentUser =
@@ -372,16 +374,22 @@ export function initilizeKyc() {
     if (["init", "incomplete"].indexOf(kycJourneyStatus) !== -1) {
       kycStatusData = kycStatusMapperInvest["ground_premium"];
     }
+  } else if (isCompliant && TRADING_ENABLED) {
+    // need not to show premium onboarding info to trading customers
+    if (kycJourneyStatus === "ground_premium") {
+      kycStatusData = kycStatusMapperInvest["incomplete"];
+    }
   }
   let isReadyToInvestBase = isReadyToInvest();
   let isEquityCompletedBase = isEquityCompleted();
-  let kycJourneyStatusMapperData = kycJourneyStatus.includes("ground") ? kycStatusMapper["ground"] : kycStatusMapper[kycJourneyStatus];
+  let kycJourneyStatusMapperData = kycJourneyStatus.includes("ground_") ? kycStatusMapper["incomplete"] : kycStatusMapper[kycJourneyStatus];
 
   this.setState({
     isCompliant,
     kycStatusData,
     kycJourneyStatusMapperData,
     userKyc,
+    currentUser,
     kycJourneyStatus,
     isReadyToInvestBase,
     isEquityCompletedBase,
@@ -432,28 +440,34 @@ export function initilizeKyc() {
   }
 
   let modalData = {}
-  if (["equity_activation_pending", "complete"].includes(kycJourneyStatus)) {
-    if (kycJourneyStatus === "complete") {
-      if (TRADING_ENABLED) {
-        if (userKyc.equity_investment_ready) {
-          modalData = kycStatusMapper["kyc_verified"];
+  const kycStatusesToShowDialog = ["verifying_trading_account", "complete", "fno_rejected", "esign_pending"];
+  let isLandingBottomSheetDisplayed = storageService().get("landingBottomSheetDisplayed");
+  if (kycStatusesToShowDialog.includes(kycJourneyStatus)) {
+    if (isLandingBottomSheetDisplayed) {
+      return;
+    }
+
+    if (["fno_rejected", "complete"].includes(kycJourneyStatus)) {
+      if (TRADING_ENABLED && userKyc.equity_investment_ready) {
+        modalData = kycStatusMapper["kyc_verified"];
+        if (kycJourneyStatus === "fno_rejected") {
+          modalData.subtitle = "You can start your investment journey by investing in your favourite stocks, mutual funds."
         }
-      } else {
+      } else if (!TRADING_ENABLED && !isCompliant) {
         modalData = kycStatusMapper["mf_complete"];
       }
-      
     } else {
       modalData = kycStatusMapper[kycJourneyStatus];
     }
-
-    modalData.button1Props = {
-      title: modalData.buttonTitle,
-      variant: "contained",
-      onClick: this.handleKycStatus,
-    }
   }
-
+  
   if (!isEmpty(modalData)) {
+    if (kycStatusesToShowDialog.includes(kycJourneyStatus)) {
+      storageService().set("landingBottomSheetDisplayed", true);
+    }
+
+    if(!modalData.dualButton)
+      modalData.oneButton = true;
     this.setState({ modalData, openKycStatusDialog: true });
   }
   this.contactVerification(userKyc);
@@ -464,7 +478,7 @@ export function openPremiumOnboardBottomSheet(
   userKyc,
   TRADING_ENABLED
 ) {
-  const config = getConfig();
+  const { config = getConfig() } = this.state;
   let is_bottom_sheet_displayed_kyc_premium = storageService().get(
     "is_bottom_sheet_displayed_kyc_premium"
   );
@@ -482,83 +496,72 @@ export function openPremiumOnboardBottomSheet(
   }
 
   storageService().set("is_bottom_sheet_displayed_kyc_premium", true);
-  // Todo: Remove the bank rejection only logic after discussing with Mayank
-  if (!TRADING_ENABLED && userKyc.bank.meta_data_status === "rejected") {
-    this.setState({ verificationFailed: true });
-  } else {
-    this.setState({
-      modalData: bottom_sheet_dialog_data_premium,
-      openKycPremiumLanding: true,
-    });
-  }
+  
+  this.setState({
+    modalData: bottom_sheet_dialog_data_premium,
+    openKycPremiumLanding: true,
+  });
 }
 
 export function handleKycSubmittedOrRejectedState() {
-  let { userKyc, kycJourneyStatusMapperData, rejectedItems } = this.state;
-
-  if (rejectedItems.length === 1 && userKyc.bank.meta_data_status === "rejected") {
-    this.setState({ verificationFailed: true });
-  } else {
-    let modalData = Object.assign({}, kycJourneyStatusMapperData);
-    modalData.button1Props = {
-      title: modalData.buttonTitle,
-      variant: "contained",
-      onClick: this.handleKycStatus,
-    }
-    this.setState({ modalData, openKycStatusDialog: true });
+  let { kycJourneyStatusMapperData } = this.state;
+  
+  let modalData = Object.assign({}, kycJourneyStatusMapperData);
+  if(!modalData.dualButton) {
+    modalData.oneButton = true;
   }
+  this.setState({ modalData, openKycStatusDialog: true });
 }
 
 export async function openKyc() {
-  let {
-    userKyc,
-    kycJourneyStatus,
-    kycStatusData,
-    tradingEnabled,
-  } = this.state;
+  let { kycJourneyStatus } = this.state;
 
   storageService().set("kycStartPoint", "mf");
-  if (kycJourneyStatus === "submitted" || kycJourneyStatus === "rejected") {
+  const kycStatusesToShowDialog = ["submitted", "rejected", "fno_rejected", "esign_pending", "verifying_trading_account"];
+  if (kycStatusesToShowDialog.includes(kycJourneyStatus)) {
     this.handleKycSubmittedOrRejectedState();
   } else {
-    if (kycJourneyStatus === "ground") {
-      this.navigate("/kyc/home");
-    } else if (kycJourneyStatus === "ground_pan") {
-      this.navigate("/kyc/journey", {
-        state: {
-          show_aadhaar: !(userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual") ? true : false,
-          fromState: "invest",
-        },
-      });
-    } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity")) {
-      await this.setKycProductTypeAndRedirect();
-    } else {
-      this.navigate(kycStatusData.nextState, {
-        state: { fromState: "invest" },
-      });
-    }
+    this.handleCommonKycRedirections();
+  }
+}
+
+export async function handleCommonKycRedirections() {
+  let { userKyc, kycJourneyStatus, tradingEnabled, kycStatusData } = this.state;
+  if (kycJourneyStatus === "ground") {
+    this.navigate("/kyc/home");
+  } else if (kycJourneyStatus === "ground_pan") {
+    this.navigate("/kyc/journey", {
+      state: {
+        show_aadhaar: !(userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual") ? true : false,
+      },
+    });
+  } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity")) {
+    await this.setKycProductTypeAndRedirect();
+  } else if (kycStatusData.nextState) {
+    this.navigate(kycStatusData.nextState);
   }
 }
 
 export async function setKycProductTypeAndRedirect() {
-  let { userKyc, isReadyToInvestBase } = this.state;
+  let { userKyc, isReadyToInvestBase, kycJourneyStatus, config = getConfig() } = this.state;
   let result;
-  if (!userKyc?.mf_kyc_processed && !this.kycButtonLoader) {
+  if (!userKyc?.mf_kyc_processed) {
     let showLoader = true;
-    await this.setLoaderInModalData(showLoader);
-    this.setState({ kycButtonLoader: showLoader })
+    this.setState({ show_loader: showLoader })
     result = await this.setProductType();
     this.setState({ userKyc: result?.kyc });
   }
   
   // already kyc done users
   if (isReadyToInvestBase && (result?.kyc?.mf_kyc_processed || userKyc?.mf_kyc_processed)) {
-    this.navigate(PATHNAME_MAPPER.accountInfo)
+    this.navigate(PATHNAME_MAPPER.tradingInfo)
+  } else if (kycJourneyStatus === "ground") {
+    this.navigate("/kyc/home");
   } else {
     const showAadhaar = !(result?.kyc?.address.meta_data.is_nri || result?.kyc?.kyc_type === "manual");
     if (result?.kyc?.kyc_status !== "compliant") {
       this.navigate(PATHNAME_MAPPER.journey, {
-        searchParams: `${getConfig().searchParams}&show_aadhaar=${showAadhaar}`
+        searchParams: `${config.searchParams}&show_aadhaar=${showAadhaar}`
       });
     } else {
       this.navigate(PATHNAME_MAPPER.journey)
@@ -566,92 +569,28 @@ export async function setKycProductTypeAndRedirect() {
   }
 }
 
-export async function setLoaderInModalData(showLoader) {
-  let { modalData } = this.state;
-
-  if (modalData.button2Props) {
-    modalData = {
-      ...modalData,
-      button2Props: {
-        ...modalData.button2Props,
-        showLoader
-      }
+export function handleIpoCardRedirection() {
+  const { userKyc, config = getConfig() } = this.state;
+  if (
+      userKyc.equity_investment_ready &&
+      this.state.currentUser?.pin_status !== 'pin_setup_complete'
+  ) {
+    openModule('account/setup_2fa', this.props, { routeUrlParams: '/ipo' });
+    if (config.isNative) {
+      return nativeCallback({ action: 'exit_web' });
+      // TODO: Test native behaviour for this code
     }
   } else {
-    modalData.button1Props = {
-      ...modalData.button1Props,
-      showLoader
-    }
+    this.navigate("/market-products");
   }
-  
-  this.setState({ modalData })
-}
-
-export function handleIpoCardRedirection() {
-  this.navigate("/product-types")
 }
           
-export async function openStocks() {
-  let { userKyc, kycJourneyStatus, kycStatusData, tradingEnabled, isReadyToInvestBase } = this.state;
-  storageService().set("kycStartPoint", "stocks");
-
-  if (kycJourneyStatus === "rejected") {
-    this.handleKycSubmittedOrRejectedState();
-  } else {
-    if (kycJourneyStatus === "ground") {
-      this.navigate(PATHNAME_MAPPER.stocksStatus);
-    } else {
-      // only NRI conditions
-      if (userKyc?.address?.meta_data?.is_nri) {
-        this.navigate(PATHNAME_MAPPER.nriError, {
-          state: {noStockOption: (isReadyToInvestBase || userKyc?.application_status_v2 === "submitted")}
-        });
-      } else {
-        if (kycJourneyStatus === "ground_pan") {
-          this.navigate(PATHNAME_MAPPER.journey, {
-            state: {
-              show_aadhaar: !userKyc.address.meta_data.is_nri ? true : false,
-              fromState: "invest",
-            },
-          });
-        } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity") || userKyc?.mf_kyc_processed) {
-          // already kyc done users
-          let result;
-          if (!userKyc?.mf_kyc_processed) {
-            this.setState({ stocksButtonLoader: "button"})
-            result = await this.setProductType();
-            this.setState({ userKyc: result?.kyc })
-          }
-
-          if (isReadyToInvestBase && (result?.kyc?.mf_kyc_processed || userKyc?.mf_kyc_processed)) {
-            this.navigate(PATHNAME_MAPPER.accountInfo)
-          } else {
-            const showAadhaar = !(result?.kyc?.address.meta_data.is_nri || result?.kyc?.kyc_type === "manual");
-            if (result?.kyc?.kyc_status !== "compliant") {
-              this.navigate(PATHNAME_MAPPER.journey, {
-                searchParams: `${getConfig().searchParams}&show_aadhaar=${showAadhaar}`
-              });
-            } else {
-              this.navigate(PATHNAME_MAPPER.journey)
-            }
-          }
-        } else {
-          this.navigate(kycStatusData.nextState, {
-            state: { fromState: "invest" },
-          });
-        }
-      }
-    }
-  }
-}
-
 export function handleStocksAndIpoCards(key) {
-  const config = getConfig();
-  let { kycJourneyStatusMapperData, kycJourneyStatus, userKyc, kycButtonLoader } = this.state;
-  let modalData = Object.assign({}, kycJourneyStatusMapperData);
+  const { kycJourneyStatusMapperData, kycJourneyStatus, userKyc, currentUser, config } = this.state;
+  let modalData = Object.assign({key}, kycJourneyStatusMapperData);
 
   if (key === "ipo") {
-    if (kycJourneyStatus === "equity_activation_pending") {
+    if (kycJourneyStatus === "verifying_trading_account") {
       modalData = {
         ...modalData,
         subtitle: "This process could take upto 48 hours. We will notify you once it’s done. Meanwhile, you can explore primary market products",
@@ -664,37 +603,37 @@ export function handleStocksAndIpoCards(key) {
         buttonTitle: "CONTINUE",
         handleClick: this.handleIpoCardRedirection
       }
-    } else if (userKyc.equity_investment_ready || kycJourneyStatus === "complete") {
+    } else if (
+      userKyc.equity_investment_ready ||
+      (kycJourneyStatus === "complete" && userKyc.kyc_product_type === 'equity') ||
+      kycJourneyStatus === "fno_rejected"
+    ) {
       this.handleIpoCardRedirection();
+      return
     }
   } else if (key === "stocks") {
-    if (userKyc.equity_investment_ready || kycJourneyStatus === "complete") {
-      window.location.href = `${config.base_url}/page/equity/launchapp`
+    if (
+      userKyc.equity_investment_ready ||
+      (kycJourneyStatus === "complete" && userKyc.kyc_product_type === 'equity')
+    ) {
+      if (currentUser?.pin_status !== 'pin_setup_complete') {
+        openModule('account/setup_2fa', this.props, { routeUrlParams: '/stocks' });
+        const { config = getConfig() } = this.state;
+        if (config.isNative) {
+          return nativeCallback({ action: 'exit_web' });
+          // TODO: Test native behaviour for this code
+        }
+      } else {
+        window.location.href = `${config.base_url}/page/equity/launchapp`
+      }
     }
   }
 
-  if(key === "ipo" && !kycJourneyStatusMapperData.oneButton) {
-    modalData.button1Props = {
-      title: modalData.button2Title,
-      variant: "outlined",
-      onClick: this.handleIpoCardRedirection,
-    }
-    modalData.button2Props = {
-      title: modalData.buttonTitle,
-      variant: "contained",
-      onClick: this.handleKycStatus,
-      showLoader: kycButtonLoader || false
-    }
-  } else {
-    modalData.button1Props = {
-      title: modalData.buttonTitle,
-      variant: "contained",
-      onClick: modalData.handleClick || this.handleKycStatus,
-      showLoader: kycButtonLoader || false
-    }
+  if(key === "stocks" && !modalData.dualButton) {
+    modalData.oneButton = true
   }
 
-  if (kycJourneyStatus !== "complete") {
+  if (!isEmpty(modalData) && (kycJourneyStatus !== "complete" || (kycJourneyStatus === "complete" && userKyc.kyc_product_type !== "equity"))) {
     this.setState({ modalData, openKycStatusDialog: true });
   }
 }
@@ -712,8 +651,7 @@ async function setProductType() {
     toast(err.message)
   } finally {
     let showLoader = false;
-    await this.setLoaderInModalData(showLoader);
-    this.setState({ kycButtonLoader: showLoader, stocksButtonLoader: showLoader})
+    this.setState({ show_loader: showLoader, stocksButtonLoader: showLoader})
   }
 }
 
@@ -739,10 +677,10 @@ function handleInvestSubtitle ()  {
 };
 
 export function handleRenderCard() {
-  const config = getConfig();
   let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
   let currentUser = this.state.currentUser || storageService().getObject("user") || {};
   let isReadyToInvestBase = isReadyToInvest();
+  const { config = getConfig() } = this.state;
   const isWeb = config.Web;
   const hideReferral = currentUser.active_investment && !isWeb && config?.referralConfig?.shareRefferal;
   const referralCode = !currentUser.active_investment && !isWeb && config?.referralConfig?.applyRefferal;
@@ -833,7 +771,7 @@ export function contactVerification(userKyc) {
 }
 
 export function handleCampaignRedirection (url, showRedirectUrl) {
-  const config = getConfig();
+  const { config = getConfig() } = this.state;
   let campLink = url;
   let plutusRedirectUrl = `${getBasePath()}/?is_secure=${config.isSdk}&partner_code=${config.code}`;
   // Adding redirect url for testing

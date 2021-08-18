@@ -222,16 +222,15 @@ export function openNativeModule(moduleName) {
   });
 }
 
-export function openModule(moduleName, props) {
+export function openModule(moduleName, props, additionalParams) {
 
   if (getConfig().isWebOrSdk) {
-
-    let module_mapper = {
+    const module_mapper = {
       'app/portfolio': '/reports',
       'app/profile': '/my-account',
       'invest/save_tax': '/invest',
       'invest/nps': '/nps/info',
-      'account/setup_2fa': '/account/set-pin/kyc-complete'
+      'account/setup_2fa': `/account/set-pin${additionalParams.routeUrlParams || ''}`
     }
     
     let moduleNameWeb = module_mapper[moduleName] || '/';

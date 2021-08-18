@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
-import { getConfig } from "utils/functions";
 import Button from "common/ui/Button";
 import { initialize, handleCampaignNotification } from "../../functions";
 import InvestCard from "../../mini-components/InvestCard";
-import SecureInvest from "../../mini-components/SecureInvest";
+import SebiRegistrationFooter from "../../../../common/ui/SebiRegistrationFooter/WVSebiRegistrationFooter";
 import VerificationFailedDialog from "../../mini-components/VerificationFailedDialog";
 import KycStatusDialog from "../../mini-components/KycStatusDialog";
 import KycPremiumLandingDialog from "../../mini-components/KycPremiumLandingDialog";
@@ -19,6 +18,8 @@ import { generateOtp } from "../../../../login_and_registration/functions";
 import { Imgc } from "../../../../common/ui/Imgc";
 import { nativeCallback } from "../../../../utils/native_callback";
 import toast from "../../../../common/ui/Toast"
+import { getConfig, isTradingEnabled } from "../../../../utils/functions";
+import { PATHNAME_MAPPER } from "../../../../kyc/constants";
 
 const fromLoginStates = ["/login", "/logout", "/verify-otp"]
 class Landing extends Component {
@@ -44,6 +45,7 @@ class Landing extends Component {
       bottom_sheet_dialog_data: [],
       isWeb: getConfig().Web,
       stateParams: props.location.state || {},
+      tradingEnabled: isTradingEnabled(),
     };
     this.initialize = initialize.bind(this);
     this.generateOtp = generateOtp.bind(this);
@@ -181,15 +183,36 @@ class Landing extends Component {
 
   handleKycStatus = async () => {
     this.sendEvents("next", "kyc_bottom_sheet");
-    let { kycJourneyStatus, kycStatusData, tradingEnabled, userKyc } = this.state;
-    if (["submitted", "equity_activation_pending", "complete"].includes(kycJourneyStatus)) {
+    let { kycJourneyStatus, modalData, tradingEnabled, userKyc } = this.state;
+    if (["submitted", "verifying_trading_account"].includes(kycJourneyStatus) || (kycJourneyStatus === "complete" && userKyc.mf_kyc_processed)) {
       this.closeKycStatusDialog();
+    } else if (kycJourneyStatus === "rejected") {
+      this.navigate(PATHNAME_MAPPER.uploadProgress);
     } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity")) {
+      this.closeKycStatusDialog();
       await this.setKycProductTypeAndRedirect();
+    } else if (kycJourneyStatus === "ground_pan") {
+      this.navigate("/kyc/journey", {
+        state: {
+          show_aadhaar: !(userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual"),
+        },
+      });
+    } else if (modalData.nextState && modalData.nextState !== "/invest") {
+      this.navigate(modalData.nextState);
     } else {
-      this.navigate(kycStatusData.nextState);
+      this.closeKycStatusDialog();
     }
   };
+
+  handleStocksAndIpoRedirection = () => {
+    let { modalData } = this.state;
+    if(modalData.key === "ipo") {
+      this.handleIpoCardRedirection();
+    } else {
+      // To do: redirect to stocks sdk page for fno_rejected status
+      this.closeKycStatusDialog();
+    }
+  }
 
   sendEvents = (userAction, cardClick = "") => {
     if (cardClick === "bottomsheet" || cardClick === "continuebottomsheet") {
@@ -210,7 +233,10 @@ class Landing extends Component {
         });
       }
       return
+    } else if(cardClick === "ipo") {
+      cardClick = "ipo_gold";
     }
+
     let eventObj = {
       event_name: "landing_page",
       properties: {
@@ -218,14 +244,11 @@ class Landing extends Component {
         screen_name: "invest home",
         primary_category: "primary navigation",
         card_click: cardClick,
-        intent: "",
-        option_clicked: "",
         channel: getConfig().code,
+        user_investment_status: this.state.currentUser?.active_investment,
+        kyc_status: this.state.kycJourneyStatus
       },
     };
-    if (cardClick === "kyc") {
-      eventObj.properties.kyc_status = this.state.kycJourneyStatus;
-    }
     if (cardClick === "kyc_bottom_sheet") {
       eventObj.event_name = "bottom_sheet";
       eventObj.properties.intent = "kyc status";
@@ -272,7 +295,7 @@ class Landing extends Component {
     const config = getConfig();
     return (
       <Container
-        skelton={this.state.show_loader || kycButtonLoader}
+        skelton={this.state.show_loader}
         noFooter={true}
         title="Start Investing"
         data-aid='start-investing-screen'
@@ -316,11 +339,11 @@ class Landing extends Component {
             />
           }
           {investSections &&
-            investSections.map((element, index) => {
+            investSections.map((element, idx) => {
               switch (element) {
                 case "kyc":
                   return (
-                    <React.Fragment key={index}>
+                    <React.Fragment key={idx}>
                       {(!kycStatusLoader && kycStatusData && ((!tradingEnabled && !isReadyToInvestBase) ||
 -                      (tradingEnabled && (!isEquityCompletedBase || (isEquityCompletedBase && kycJourneyStatus === "fno_rejected"))))) ? (
                         <div
@@ -340,36 +363,18 @@ class Landing extends Component {
                               <span>{kycStatusData.subtitle}</span>
                             </div>
                           </div>
-                          <Imgc src={require(`assets/${productName}/${kycStatusData.icon}`)} alt="" />
+                          <Imgc
+                            className="kyc-card-image"
+                            src={require(`assets/${productName}/${kycStatusData.icon}`)}
+                            alt=""
+                          />
                         </div>
                       ): null}
                     </React.Fragment>
                   );
-                // case "stocks":
-                //   return (
-                //     <React.Fragment key={index}>
-                //       {tradingEnabled && !isEquityCompletedBase && (
-                //         <div className="invest-main-top-title" 
-                //           onClick={() => {!kycStatusLoader && !stocksButtonLoader && !kycButtonLoader && this.clickCard("stocks") }} 
-                //           data-aid='stocks-title'
-                //         >
-                //           <WVButton
-                //             variant='contained'
-                //             size='large'
-                //             color="secondary"
-                //             disabled={kycStatusLoader}
-                //             showLoader={stocksButtonLoader}
-                //             // fullWidth
-                //           >
-                //             Stocks
-                //           </WVButton>
-                //         </div>
-                //       )}
-                //     </React.Fragment>
-                //   );
                 case "indexFunds":
                   return (
-                    <React.Fragment key={index}>
+                    <React.Fragment key={idx}>
                       {!isEmpty(indexFunds) &&
                         indexFunds.map((item, index) => {
                           return (
@@ -389,7 +394,7 @@ class Landing extends Component {
                   );
                 case "ourRecommendations":
                   return (
-                    <React.Fragment key={index}>
+                    <React.Fragment key={idx}>
                       {!isEmpty(ourRecommendations) && (
                         <>
                           <div className="invest-main-top-title" data-aid='recommendations-title'>
@@ -412,8 +417,8 @@ class Landing extends Component {
                   );
                 case "stocksAndIpo":
                   return (
-                    <React.Fragment key={index}>
-                      {!isEmpty(stocksAndIpo) && (
+                    <React.Fragment key={idx}>
+                      {!isEmpty(stocksAndIpo) && tradingEnabled && (
                         <>
                           <div className="invest-main-top-title" data-aid='recommendations-title'>
                             Stocks & IPOs
@@ -427,6 +432,7 @@ class Landing extends Component {
                                     height: '170px',
                                     marginBottom: "15px",
                                   }}
+                                  key={index}
                                 />
                               )
                             } else {
@@ -435,7 +441,7 @@ class Landing extends Component {
                                   data={item}
                                   key={index}
                                   handleClick={() =>
-                                    this.clickCard(item.key, item.title)
+                                    this.clickCard(item.key, item.key)
                                   }
                                 />
                               );
@@ -447,7 +453,7 @@ class Landing extends Component {
                   );
                 case "diy":
                   return (
-                    <React.Fragment key={index}>
+                    <React.Fragment key={idx}>
                       {!isEmpty(diy) && (
                         <>
                           <div className="invest-main-top-title" data-aid='diy-title'>
@@ -470,7 +476,7 @@ class Landing extends Component {
                   );
                 case "bottomScrollCards":
                   return (
-                    <div className="bottom-scroll-cards" key={index} data-aid='bottomScrollCards-title'>
+                    <div className="bottom-scroll-cards" key={idx} data-aid='bottomScrollCards-title'>
                       <div className="list" data-aid='bottomScrollCards-list'>
                         {!isEmpty(bottomScrollCards) &&
                           bottomScrollCards.map((item, index) => {
@@ -503,7 +509,7 @@ class Landing extends Component {
                   );
                 case "bottomCards":
                   return (
-                    <React.Fragment key={index}>
+                    <React.Fragment key={idx}>
                       {!isEmpty(bottomCards) &&
                         bottomCards.map((item, index) => {
                           return (
@@ -520,7 +526,7 @@ class Landing extends Component {
                   );
                 case "financialTools":
                   return (
-                    <React.Fragment key={index}>
+                    <React.Fragment key={idx}>
                       {!isEmpty(financialTools) && (
                         <>
                           <div className="invest-main-top-title" data-aid='financial-tools-title'>
@@ -566,7 +572,7 @@ class Landing extends Component {
                   );
                 case "popularCards":
                   return (
-                    <React.Fragment key={index}>
+                    <React.Fragment key={idx}>
                       {!isEmpty(popularCards) && (
                         <>
                           <div className="invest-main-top-title" data-aid='popularCards-tools-title'>
@@ -598,20 +604,10 @@ class Landing extends Component {
                     </React.Fragment>
                   );
                 default:
-                  return <></>;
+                  return <React.Fragment key={idx}></React.Fragment>;
               }
             })}
-          <SecureInvest />
-          {!["fisdom", "finity", "ktb"].includes(config.code) && (
-              <div className="invest-contact-us" data-aid='invest-contact-us'>
-                In partnership with
-                <span>
-                  {productName === "finity"
-                    ? " Finity"
-                    : " Fisdom"}
-                </span>
-              </div>
-            )}
+          <SebiRegistrationFooter className="invest-sebi-registration-disclaimer" />
           <VerificationFailedDialog
             isOpen={verificationFailed}
             close={this.closeVerificationFailed}
@@ -624,6 +620,7 @@ class Landing extends Component {
               data={modalData}
               close={this.closeKycStatusDialog}
               handleClick={this.handleKycStatus}
+              handleClick2={this.handleStocksAndIpoRedirection}
               cancel={this.closeKycStatusDialog}
             />
           )}

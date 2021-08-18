@@ -1,0 +1,55 @@
+.primary-market-products {
+  .pmp-info-card {
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: var(--gunmetal);
+    padding: 20px 0 20px 20px;
+
+    .pmp-info-icon {
+      max-width: 110px;
+      min-height: 70px;
+    }
+
+    .title {
+      font-weight: 500;
+      line-height: 24px;
+      font-size: 15px;
+
+      .veritical-line {
+        height: 2px;
+        width: 26px;
+        background: var(--gunmetal);
+        margin-top: 10px;
+      }
+    }
+
+    .subtitle {
+      padding-right: 60px;
+      font-size: 13px;
+    }
+  }
+
+  .pmp-catergories-title {
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--gunmetal);
+    line-height: 20px;
+    margin: 40px 0 20px;
+  }
+
+  .pmp-faq {
+    padding: 15px 0;
+    font-size: 14px;
+    line-height: 20px;
+    border-top: 1px solid var(--linkwater);
+    border-bottom: 1px solid var(--linkwater);
+    cursor: pointer;
+    color: var(--dark);
+
+    .pmp-faq-icon {
+      width: 30px !important;
+      height: 30px;
+      margin-right: 20px !important;
+    }
+  }
+}

@@ -112,7 +112,10 @@ const ForgotPin = (props) => {
           >
             Continue
           </LoginButton>
-          <GoBackToLoginBtn onClick={goBack} />
+          <GoBackToLoginBtn
+            onClick={goBack}
+            disabled={isApiRunning}
+          />
         </>
       }
     </>

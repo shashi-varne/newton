@@ -38,6 +38,7 @@ const Selfie = (props) => {
   const [fileHandlerParams, setFileHandlerParams] = useState();
   const [goBackModal, setGoBackModal] = useState(false);
   const navigate = navigateFunc.bind(props);
+  const goBackPath = props.location?.state?.goBack || "";
 
   const config = getConfig();
   const { productName, isNative, Web: isWeb, isSdk } = config;  
@@ -77,13 +78,17 @@ const Selfie = (props) => {
       setFile(null);
       setFileToShow(null);
     } else {
-      if (isTradingFlow && kyc?.kyc_type !== "manual") {
-       commonNavigation();
+      if (goBackPath) {
+        navigate(goBackPath);
       } else {
-        if (kyc?.kyc_type === "manual" && kyc?.equity_data.meta_data.trading_experience) {
-          commonNavigation();
+        if (isTradingFlow && kyc?.kyc_type !== "manual") {
+         commonNavigation();
         } else {
-          navigate(PATHNAME_MAPPER.uploadProgress);
+          if (kyc?.kyc_type === "manual" && kyc?.equity_data.meta_data.trading_experience) {
+            commonNavigation();
+          } else {
+            navigate(PATHNAME_MAPPER.uploadProgress);
+          }
         }
       }
     }
@@ -231,11 +236,15 @@ const Selfie = (props) => {
   };
 
   const goBackToPath = () => {
-    if (kyc?.kyc_status === "non-compliant" &&
-     ((kyc?.kyc_type === "manual" && !kyc?.equity_data.meta_data.trading_experience) || kyc?.address?.meta_data?.is_nri)) {
-      navigate(PATHNAME_MAPPER.uploadProgress)
+    if (goBackPath) {
+      navigate(goBackPath);
     } else {
-      navigate(PATHNAME_MAPPER.journey);
+      if (kyc?.kyc_status === "non-compliant" &&
+       ((kyc?.kyc_type === "manual" && !kyc?.equity_data.meta_data.trading_experience) || kyc?.address?.meta_data?.is_nri)) {
+        navigate(PATHNAME_MAPPER.uploadProgress)
+      } else {
+        navigate(PATHNAME_MAPPER.journey);
+      }
     }
   };
 

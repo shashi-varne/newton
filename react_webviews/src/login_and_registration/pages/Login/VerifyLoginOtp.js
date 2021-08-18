@@ -119,7 +119,10 @@ class VerifyLoginOtp extends Component {
         >
           CONTINUE
         </LoginButton>
-        <GoBackToLoginBtn onClick={this.goBackToLogin} />
+        <GoBackToLoginBtn
+          onClick={this.goBackToLogin}
+          disabled={isApiRunning || isResendOtpApiRunning}
+        />
       </OtpContainer>
     );
   }

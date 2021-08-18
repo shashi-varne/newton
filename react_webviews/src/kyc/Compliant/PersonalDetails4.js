@@ -18,7 +18,7 @@ import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 import { nativeCallback } from "../../utils/native_callback";
-import { getConfig } from "../../utils/functions";
+import { getConfig, isTradingEnabled } from "../../utils/functions";
 
 const productName = getConfig().productName;
 const PersonalDetails4 = (props) => {
@@ -163,7 +163,7 @@ const PersonalDetails4 = (props) => {
         user_action: userAction || "",
         screen_name: "nominee_details",
         add_nominee: isChecked ? "no" : "yes",
-        "flow": !kyc.equity_enabled ? 'premium onboarding' : 'general',
+        "flow": !isTradingEnabled(kyc) ? 'premium onboarding' : 'general',
         // "name": form_data.name ? "yes" : "no",
         // "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
         // "relationship": form_data.relationship ? "yes" : "no",

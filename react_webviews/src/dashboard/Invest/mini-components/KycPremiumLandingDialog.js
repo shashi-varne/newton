@@ -20,7 +20,7 @@ const KycPremiumLandingDialog = ({
   let button2Props = {};
   const defaultButtonProps = {
     variant: "contained",
-    title: data.title,
+    title: data.buttonTitle,
     onClick: handleClick,
   };
   if (data.oneButton) {

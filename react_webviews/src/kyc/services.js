@@ -3,6 +3,7 @@ import { isEmpty, storageService } from '../utils/validators'
 import toast from '../common/ui/Toast'
 import { isTradingEnabled } from '../utils/functions'
 import { kycSubmit } from './common/api'
+import { isDigilockerFlow } from './common/functions'
 
 const DOCUMENTS_MAPPER = {
   DL: 'Driving license',
@@ -207,7 +208,6 @@ export function getKycAppStatus(kyc) {
       { name: "identification", keys: ["meta_data_status"] },
       { name: "nomination", keys: ["meta_data_status"] },
       { name: "sign", keys: ["doc_status"] },
-      { name: "equity_income", keys: ["doc_status"] }
     ];
   } else {
     fieldsToCheck = [
@@ -215,14 +215,23 @@ export function getKycAppStatus(kyc) {
       { name: "address", keys: ["doc_status", "meta_data_status"] },
       { name: "bank", keys: ["meta_data_status"] },
       { name: "identification", keys: ["doc_status", "meta_data_status"] },
-      { name: "nomination", keys: ["doc_status", "meta_data_status"] },
+      { name: "nomination", keys: ["meta_data_status"] },
       { name: "sign", keys: ["doc_status"] },
       { name: "ipvvideo", keys: ["doc_status"] },
-      { name: "equity_income", keys: ["doc_status"] }
     ];
   }
 
-  if (kyc.address?.meta_data?.is_nri) {
+  let newFieldsToCheck;
+  if (TRADING_ENABLED) {
+    newFieldsToCheck = [
+      { name: "equity_pan", keys: ["doc_status", "meta_data_status"] },
+      { name: "equity_identification", keys: ["doc_status", "meta_data_status"] },
+    ]
+    fieldsToCheck = [...fieldsToCheck, ...newFieldsToCheck];
+    fieldsToCheck = fieldsToCheck.filter((fieldObj) => !["pan", "identification"].includes(fieldObj.name));
+  }
+
+  if (kyc?.address?.meta_data?.is_nri) {
     var obj = {
       name: "nri_address",
       keys: ["doc_status", "meta_data_status"]
@@ -263,11 +272,7 @@ export function getKycAppStatus(kyc) {
 
   var status;
   if (rejected > 0) {
-    if (rejected === 1 && rejectedItems[0].name === "equity_income") {
-      status = "fno_rejected"
-    } else {
-      status = "rejected";
-    }
+    status = "rejected";
     result.status = status;
     return result;
   } else {
@@ -312,23 +317,29 @@ export function getKycAppStatus(kyc) {
   }
 
   // this condition handles retro kyc submitted users
-  if (kyc.application_status_v2 === "submitted") {
+  if (kyc.kyc_product_type !== "equity" && kyc.application_status_v2 === "submitted") {
     status = "submitted"
   }
 
   if (!TRADING_ENABLED && kyc.kyc_status !== 'compliant' && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && kyc.sign_status !== 'signed') {
     status = 'incomplete';
   }
-
+  
   // this condition handles equity esign pending case
   if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && kyc.equity_application_status === 'complete' && kyc.equity_sign_status !== "signed") {
     status = 'esign_pending';
   }
 
+  // this condition handles fno doc rejected case
+  if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && kyc.equity_application_status === 'complete' && kyc.equity_sign_status === "signed" &&
+  kyc?.equity_investment_ready && kyc?.equity_income.doc_status === "rejected") {
+    status = 'fno_rejected';
+  }
+
   // this condition handles equity activation pending case
   if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && kyc.equity_application_status === 'complete' && kyc.equity_sign_status === "signed" &&
   !kyc?.equity_investment_ready) {
-    status = 'equity_activation_pending';
+    status = 'verifying_trading_account';
   }
 
   result.status = status;
@@ -338,7 +349,29 @@ export function getKycAppStatus(kyc) {
 
 export function getDocuments(userKyc) {
   if(userKyc.kyc_status === 'compliant') {
-    return [
+    let documents = [
+      {
+        key: "pan",
+        title: "PAN card",
+        subtitle: userKyc.pan.meta_data.pan_number,
+        doc_status: userKyc.pan.doc_status,
+        default_image: 'pan_default.svg',
+        approved_image: "pan_approved.svg",
+      },
+      {
+        key: "selfie",
+        title: "Selfie",
+        doc_status: userKyc.equity_identification.doc_status,
+        default_image: 'selfie_default.svg',
+        approved_image: "selfie_approved.svg",
+      },
+      {
+        key: "bank",
+        title: "Bank details",
+        doc_status: userKyc.bank.meta_data_status,
+        default_image: 'default.svg',
+        approved_image: "approved.svg",
+      },
       {
         key: "sign",
         title: "Signature",
@@ -347,6 +380,13 @@ export function getDocuments(userKyc) {
         approved_image: "sign_approved.svg",
       }
     ];
+
+    if (!isTradingEnabled(userKyc)) {
+      // Removing Pan and Selfie
+      documents.splice(0, 2);
+    }
+
+    return documents;
   }
 
   let documents =  [
@@ -371,7 +411,7 @@ export function getDocuments(userKyc) {
     {
       key: "selfie",
       title: "Selfie",
-      doc_status: userKyc.identification.doc_status,
+      doc_status: userKyc.equity_identification.doc_status,
       default_image: 'selfie_default.svg',
       approved_image: "selfie_approved.svg",
     },
@@ -413,6 +453,21 @@ export function getDocuments(userKyc) {
 
     documents.splice(2, 0, data);
   }
+
+  if (isDigilockerFlow(userKyc)) {
+    // removing selfie video (IPV)
+    documents.splice(3, 1);
+  }
+
+  if (!isTradingEnabled(userKyc)) {
+    documents = documents.map((document) => {
+      if (document.key === "selfie") {
+        document.doc_status = userKyc.identification.doc_status
+      }
+      return document;
+    });
+  }
+
   return documents;
 }
 

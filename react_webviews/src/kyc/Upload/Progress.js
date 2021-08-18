@@ -66,7 +66,9 @@ const Progress = (props) => {
       }/bank-details`,
       sign: PATHNAME_MAPPER.uploadSign,
     };
-    navigate(stateMapper[key]);
+    navigate(stateMapper[key], {
+      state: { goBack: PATHNAME_MAPPER.uploadProgress }
+    });
   };
 
   const goBack = () => {

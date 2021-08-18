@@ -62,6 +62,8 @@ function KycNative(props) {
       navigate("/kyc/approved/banks/doc", data);
     } else if (urlParams?.type === 'banklist') {
        navigate('/kyc/add-bank', data);
+    } else if (urlParams?.type === 'fno') {
+      navigate(PATHNAME_MAPPER.uploadFnOIncomeProof, data);
     } else if (kycStatus === 'ground') {
        navigate('/kyc/home', data);
     } else if (kycStatus === "ground_pan") {
@@ -93,6 +95,8 @@ function KycNative(props) {
       navigate("/kyc-esign/nsdl", {
         searchParams: `${getConfig().searchParams}&status=success`
       });
+    } else if (kycStatus === "rejected") {
+      navigate(PATHNAME_MAPPER.uploadProgress, data);
     } else if (kycStatus === "fno_rejected") {
       navigate(PATHNAME_MAPPER.uploadFnOIncomeProof, data);
     } else if ((TRADING_ENABLED && kyc?.kyc_product_type !== "equity")) {
@@ -103,7 +107,7 @@ function KycNative(props) {
       
       // already kyc completed users
       if (isReadyToInvestUser && (result?.kyc?.mf_kyc_processed || kyc?.mf_kyc_processed)) {
-        navigate(PATHNAME_MAPPER.accountInfo)
+        navigate(PATHNAME_MAPPER.tradingInfo);
       } else {
         const showAadhaar = !(result?.kyc?.address.meta_data.is_nri || result?.kyc?.kyc_type === "manual");
         if (result?.kyc?.kyc_status !== "compliant") {

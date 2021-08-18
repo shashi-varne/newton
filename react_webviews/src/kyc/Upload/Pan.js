@@ -28,6 +28,7 @@ const Pan = (props) => {
   const [areDocsPending, setDocsPendingStatus] = useState();
   const [tradingEnabled, setTradingEnabled] = useState();
   const [isPanAvailable, setIsPanAvailable] = useState(false);
+  const goBackPath = props.location?.state?.goBack || "";
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -78,8 +79,8 @@ const Pan = (props) => {
     } else {
       if (dlFlow) {
         if (kyc.equity_sign_status !== 'signed') {
-          if (isPanAvailable && !kyc.equity_data.meta_data.trading_experience) {
-            navigate(PATHNAME_MAPPER.accountInfo);
+          if (isPanAvailable && !kyc.show_equity_charges_page) {
+            navigate(PATHNAME_MAPPER.tradingInfo);
           } else {
             commonRedirection();
           }
@@ -101,11 +102,15 @@ const Pan = (props) => {
   };
 
   const handleNavigation = () => {
-    sendEvents("next", "pan_uploaded")
-    if (tradingEnabled) {
-      handleOtherPlatformNavigation();
+    sendEvents("next", "pan_uploaded");
+    if (goBackPath) {
+      navigate(goBackPath);
     } else {
-      handleSdkNavigation();
+      if (tradingEnabled) {
+        handleOtherPlatformNavigation();
+      } else {
+        handleSdkNavigation();
+      }
     }
   }
 
