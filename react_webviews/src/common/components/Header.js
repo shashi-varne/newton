@@ -60,8 +60,8 @@ const Header = ({ classes, title, count, total, current, goBack,
           {
             !noBackIcon &&
             <IconButton className={classes.menuButton} color="inherit" aria-label="Menu"
-              onClick={headerData.goBack ||
-              goBack}
+              onClick={headerData.goBack || goBack} 
+              // Important Note:  whenever adding goBack func in headerData Container prop within component, do add native condition for correct back navigation 
               data-aid='tool-bar-icon-btn'
             >
               {!disableBack && !headerData.hide_icon &&
