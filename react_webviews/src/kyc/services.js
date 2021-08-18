@@ -317,7 +317,7 @@ export function getKycAppStatus(kyc) {
   }
 
   // this condition handles retro kyc submitted users
-  if (kyc.kyc_product_type !== "equity" && kyc.application_status_v2 === "submitted") {
+  if (kyc.kyc_product_type !== "equity" && isMfApplicationSubmitted(kyc)) {
     status = "submitted"
   }
 
@@ -511,6 +511,20 @@ export function isReadyToInvest() {
     } else if (kycRTI.friendly_application_status === "complete") {
       return true;
     }
+  }
+
+  return false;
+}
+
+export function isMfApplicationSubmitted(kyc) {
+  if (isEmpty(kyc)) return false;
+  const isCompliantAppSubmitted = kyc.kyc_status === "compliant" && kyc.application_status_v2 === "submitted" &&
+    kyc.bank.meta_data_status !== "approved";
+  const isNonCompliantAppSubmitted = kyc.kyc_status !== "compliant" && kyc.application_status_v2 === "submitted" &&
+    kyc.sign_status === "signed";
+  
+  if (isCompliantAppSubmitted || isNonCompliantAppSubmitted) {
+    return true;
   }
 
   return false;
