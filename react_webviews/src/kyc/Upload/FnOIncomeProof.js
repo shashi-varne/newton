@@ -25,7 +25,7 @@ const UPLOAD_OPTIONS_MAP = {
     title: 'Bank statement',
     subtitle: 'Last 6 months',
     nativePickerMethodName: 'open_file',
-    supportedFormats: "pdf",
+    supportedFormats: ["pdf"],
     fileName: "bank-statement",
     api_doc_type: "bank_statement",
   },
@@ -33,7 +33,7 @@ const UPLOAD_OPTIONS_MAP = {
     title: 'Income tax returns',
     subtitle: 'Any ITR copy within the last 2 years',
     nativePickerMethodName: 'open_file',
-    supportedFormats: "pdf",
+    supportedFormats: ["pdf"],
     fileName: "itr",
     api_doc_type: "itr_acknowledgement",
   },
@@ -41,7 +41,7 @@ const UPLOAD_OPTIONS_MAP = {
     title: 'Salary slips',
     subtitle: 'Last 3 months',
     nativePickerMethodName: 'open_file',
-    supportedFormats: "pdf",
+    supportedFormats: ["pdf"],
     fileName: "salary-slip",
     api_doc_type: "payslips",
   },
@@ -91,7 +91,7 @@ const FnOIncomeProof = (props) => {
         doc_password: filePassword || undefined,
         doc_type: UPLOAD_OPTIONS_MAP[selectedType]?.api_doc_type
       };
-      setIsApiRunning("button")
+      setIsApiRunning("button");
       const result = await upload(selectedFile, 'income', data);
       updateKyc(result.kyc);
       if(isNewIframeDesktopLayout()) {
@@ -226,38 +226,30 @@ const FnOIncomeProof = (props) => {
         <div className="kyc-fip-title">
           Upload any 1 document
         </div>
-        {(!selectedFile || (selectedType === 'bank-statement')) &&
-          <WVFileUploadCard
-            {...UPLOAD_OPTIONS_MAP['bank-statement']}
-            customPickerId="bank-statement-picker"
-            onFileSelectComplete={onFileSelectComplete('bank-statement')}
-            onFileSelectError={onFileSelectError}
-            sizeLimit={10}
-            file={selectedFile}
-          />
-        }
-        {!selectedFile && ORElem}
-        {(!selectedFile || (selectedType === 'itr')) &&
-          <WVFileUploadCard
-            {...UPLOAD_OPTIONS_MAP['itr']}
-            customPickerId="itr-picker"
-            onFileSelectComplete={onFileSelectComplete('itr')}
-            onFileSelectError={onFileSelectError}
-            sizeLimit={10}
-            file={selectedFile}
-          />
-        }
-        {!selectedFile && ORElem}
-        {(!selectedFile || (selectedType === 'salary-slip')) &&
-          <WVFileUploadCard
-            {...UPLOAD_OPTIONS_MAP['salary-slip']}
-            customPickerId="salary-slip-picker"
-            onFileSelectComplete={onFileSelectComplete('salary-slip')}
-            onFileSelectError={onFileSelectError}
-            sizeLimit={10}
-            file={selectedFile}
-          />
-        }
+        {Object
+          .entries(UPLOAD_OPTIONS_MAP)
+          .map((
+            [optionKey, optionObj],
+            idx,
+            arr
+          ) => {
+            if (!selectedFile || selectedType === optionKey) {
+              return (
+                <React.Fragment key={idx}>
+                  <WVFileUploadCard
+                    {...optionObj}
+                    customPickerId={`${optionKey}-picker`}
+                    onFileSelectComplete={onFileSelectComplete(optionKey)}
+                    onFileSelectError={onFileSelectError}
+                    sizeLimit={10}
+                    file={selectedFile}
+                  />
+                  {!selectedFile && (idx !== arr.length - 1) && ORElem}
+                </React.Fragment>
+              );
+            }
+            return null;
+        })}
         {selectedFile &&
           <TextField
             variant="filled"
@@ -353,8 +345,6 @@ const OtherOptions = ({
             onFileSelectComplete={onFileSelectComplete(option)}
             onFileSelectError={onFileSelectError}
             sizeLimit={10}
-            supportedFormats="pdf"
-            fileName={option}
             className="kyc-fi-upload-card"
           />
         ))}
