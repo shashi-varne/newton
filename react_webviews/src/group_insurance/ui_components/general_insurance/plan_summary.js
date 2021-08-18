@@ -12,7 +12,7 @@ import instant_fisdom from 'assets/instant_fisdom.svg';
 import instant_myway from 'assets/instant_myway.svg';
 import {Imgc} from 'common/ui/Imgc';
 import Toast from '../../../common/ui/Toast';
-import { getApiUrl } from 'group_insurance/products/group_health/common_data'
+import { getApiUrl, isRmJourney } from 'group_insurance/products/group_health/common_data'
 
 class PlanSummaryClass extends Component {
   constructor(props) {
@@ -24,8 +24,8 @@ class PlanSummaryClass extends Component {
       leadData: this.props.parent.props.location.state ? this.props.parent.props.location.state.lead : '',
       type: getConfig().productName,
       group_insurance_payment_started: window.sessionStorage.getItem('group_insurance_payment_started') || '',
-      isRmJourney: (!!storageService().getObject('guestLeadId')) && (!storageService().getObject('guestUser')),
-      isGuestUser : !!storageService().get('guestUser')
+      isRmJourney: isRmJourney(),
+      isGuestUser : storageService().getBoolean('guestUser')
     };
 
     this.handleClickCurrent = this.handleClickCurrent.bind(this);
@@ -100,10 +100,9 @@ class PlanSummaryClass extends Component {
       let error = '';
       let errorType = '';
       try {
-        var url = '';
         var res = {}
-          url = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id) 
-          res = await Api.get(url)    
+        const url  = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id) 
+        res = await Api.get(url)
         
         if (res.pfwresponse.status_code === 200) {
             lead = res.pfwresponse.result.lead;
@@ -185,7 +184,7 @@ class PlanSummaryClass extends Component {
         show_loader: 'button'
       })
       let res2;
-      let url = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id)
+      const url = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id)
       res2 = await Api.get(url)
 
       if (res2.pfwresponse.status_code === 200) {
@@ -308,7 +307,7 @@ class PlanSummaryClass extends Component {
         skelton={this.state.skelton}
         showError={this.state.showError}
         errorData={this.state.errorData}
-        handleClick={this.state.isRmJourney ? ()=>this.copyPaymentLink() : () => this.handleClickCurrent()}
+        handleClick={this.state.isRmJourney ? this.copyPaymentLink : () => this.handleClickCurrent}
         title="Summary"
         classOverRide="fullHeight"
         classOverRideContainer="plan-summary"

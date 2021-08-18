@@ -255,7 +255,7 @@ class PlanDetailsClass extends Component {
       
       let provider = this.props.parent.state.provider || 'bhartiaxa';
       let service = provider === 'bhartiaxa' ? 'insurancev2': 'ins_service';
-      var url = getApiUrl('/api/'+ service +'/api/insurance/' + provider + '/get/quote?product_name=' + this.props.parent.state.product_key)
+      const url = getApiUrl('/api/'+ service +'/api/insurance/' + provider + '/get/quote?product_name=' + this.props.parent.state.product_key)
       const resQuote = await Api.get(url)
 
       if (resQuote && resQuote.pfwresponse.status_code === 200) {
@@ -275,7 +275,7 @@ class PlanDetailsClass extends Component {
       }
 
       if (this.state.lead_id) {
-        var url2 = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
+        const url2 = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
         let res = await Api.get(url2)
 
 
@@ -509,7 +509,7 @@ class PlanDetailsClass extends Component {
       let res2 = {};
       if (this.state.lead_id) {
         final_data.lead_id = this.state.lead_id;
-        var url = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/lead/update')
+        const url = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/lead/update')
         res2 = await Api.post(url, final_data)
 
 

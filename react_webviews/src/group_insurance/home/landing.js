@@ -121,7 +121,7 @@ class Landing extends Component {
     let error = ''
     let errorType = ''
     try{
-      var url = getApiUrl(`api/insurancev2/api/insurance/advisory/resume/check`)
+      const url = getApiUrl(`api/insurancev2/api/insurance/advisory/resume/check`)
       var res = await Api.get(url);
         var resultData = res.pfwresponse.result;
 

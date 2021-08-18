@@ -1,4 +1,5 @@
 import { isEmpty } from "lodash";
+import { storageService } from "../../utils/validators";
 
 export function setTermInsData(termData) {
 
@@ -38,8 +39,8 @@ export function setTermInsData(termData) {
             application: application,
             required_fields: required_fields
           }
-          window.sessionStorage.setItem('cameFromHome', true);
-          window.sessionStorage.setItem('homeApplication', JSON.stringify(data));
+          storageService().set('cameFromHome', true);
+          storageService().set('homeApplication', JSON.stringify(data));
           pathname = 'journey';
           this.setState({
             termApplication: application

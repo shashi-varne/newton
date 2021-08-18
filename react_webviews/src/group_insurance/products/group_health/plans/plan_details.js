@@ -203,7 +203,7 @@ class GroupHealthPlanDetails extends Component {
           }
 
           try {
-            var url = getApiUrl(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`)
+            const url = getApiUrl(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`)
             const res = await Api.post(url ,body);
             
             var resultData = res.pfwresponse.result;

@@ -92,7 +92,7 @@ class FyntuneLanding extends Component {
     })
     //resume api
     try{
-      var url = getApiUrl(`api/ins_service/api/insurance/fyntune/get/resumelist`)
+      const url = getApiUrl(`api/ins_service/api/insurance/fyntune/get/resumelist`)
       var res = await Api.get(url);
       var resultData = res.pfwresponse.result;
       var resume_frequency = '';
@@ -335,7 +335,7 @@ class FyntuneLanding extends Component {
     })
     //create lead api
     try{
-      var url = getApiUrl(`api/ins_service/api/insurance/fyntune/lead/create`)
+      const url = getApiUrl(`api/ins_service/api/insurance/fyntune/lead/create`)
       var res = await Api.post(url, body);
 
         if (res.pfwresponse.status_code === 200) {

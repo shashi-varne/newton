@@ -176,7 +176,7 @@ class PaymentSuccessClass extends Component {
 
     if (pincode.length === 6) {
       try {
-        var url = getApiUrl('/api/pincode/' + pincode) 
+        const url = getApiUrl('/api/pincode/' + pincode) 
         const res = await Api.get(url);
 
         if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
@@ -303,7 +303,7 @@ class PaymentSuccessClass extends Component {
           show_loader: 'button'
         })
         let res2 = {};
-        var url = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/lead/update')
+        const url = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/lead/update')
         res2 = await Api.post(url, final_data)
         this.setState({
           show_loader: false

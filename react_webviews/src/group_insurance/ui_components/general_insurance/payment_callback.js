@@ -77,7 +77,7 @@ class PaymentCallbackClass extends Component {
           skelton: true
         })
         let res;
-        var url = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/confirm/payment/' + this.state.group_insurance_payment_urlsafe)
+        const url = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/confirm/payment/' + this.state.group_insurance_payment_urlsafe)
         res = await Api.get(url)
         
         

@@ -22,6 +22,7 @@ export async function initialize() {
     this.memberKeyMapper = memberKeyMapper.bind(this);
     this.getApplicationDetails = getApplicationDetails.bind(this);
     this.guestUserDataFetch = guestUserDataFetch.bind(this);
+    this.isRmJourney = isRmJourney.bind(this);
     let provider = this.props.parent && this.props.parent.props ? this.props.parent.props.match.params.provider : this.props.match.params.provider;
     let providerConfig = getGhProviderConfig(provider);
     let screenData = {};
@@ -85,7 +86,7 @@ export async function initialize() {
             let resume = storageService().getObject("resumeToPremiumHealthInsurance");
             let application_id = storageService().get('health_insurance_application_id');
             let url;
-            const isGuestUser = storageService().get('guestUser')
+            const isGuestUser = storageService().getBoolean('guestUser')
 
             var resultData = {}
             if (resume && !application_id) {
@@ -337,37 +338,37 @@ export async function guestUserDataFetch(summary_url, providerConfig){
             'summary_url':  summary_url
         }
         try{
-            var url = getApiUrl(`api/guest/user/session/summary/data/fetch`)
+            const url = getApiUrl(`api/guest/user/session/summary/data/fetch`)
             let res = await Api.post(url, post_body)
             var resultData = res.pfwresponse.result;
-           if (res.pfwresponse.status_code === 200) {
-            this.setState({skelton: false})
-            var lead = resultData.insurancev2_result.quotation_details;
-            var member_base = ghGetMember(lead, providerConfig);
+            if (res.pfwresponse.status_code === 200) {
+                this.setState({skelton: false})
+                var lead = resultData.insurancev2_result.quotation_details;
+                var member_base = ghGetMember(lead, providerConfig);
 
-            var groupHealthPlanData = this.state.groupHealthPlanData;
-            groupHealthPlanData.application_form_data = resultData.insurancev2_result;
-            var application_data = !isEmpty(groupHealthPlanData.application_data) ? groupHealthPlanData.application_data  : {} ;
-            application_data['personal_details_screen'] = groupHealthPlanData.application_data && !isEmpty(groupHealthPlanData.application_data.personal_details_screen) ? groupHealthPlanData.application_data.personal_details_screen : {}
-            application_data['select_ped_screen'] = groupHealthPlanData.application_data && !isEmpty(groupHealthPlanData.application_data.select_ped_screen) ? groupHealthPlanData.application_data.select_ped_screen : {}
-            groupHealthPlanData.application_data = application_data;
-            this.setLocalProviderData(groupHealthPlanData);            
+                var groupHealthPlanData = this.state.groupHealthPlanData;
+                groupHealthPlanData.application_form_data = resultData.insurancev2_result;
+                var application_data = !isEmpty(groupHealthPlanData.application_data) ? groupHealthPlanData.application_data  : {} ;
+                application_data['personal_details_screen'] = groupHealthPlanData.application_data && !isEmpty(groupHealthPlanData.application_data.personal_details_screen) ? groupHealthPlanData.application_data.personal_details_screen : {}
+                application_data['select_ped_screen'] = groupHealthPlanData.application_data && !isEmpty(groupHealthPlanData.application_data.select_ped_screen) ? groupHealthPlanData.application_data.select_ped_screen : {}
+                groupHealthPlanData.application_data = application_data;
+                this.setLocalProviderData(groupHealthPlanData);            
 
-            this.setState({
-                lead: resultData.insurancev2_result || {},
-                member_base: member_base,
-                quotation: resultData.insurancev2_result.quotation_details || {},
-                common_data: {
-                    ...resultData.insurancev2_result.common,
-                    tnc: resultData.insurancev2_result.common.tnc || resultData.insurancev2_result.tnc
-                },
-                insured_account_type: lead.insurance_type || ''
-            }, () => {
-                if (this.onload && !this.state.ctaWithProvider) {
-                    this.onload();
-                }
-            })
-            
+                this.setState({
+                    lead: resultData.insurancev2_result || {},
+                    member_base: member_base,
+                    quotation: resultData.insurancev2_result.quotation_details || {},
+                    common_data: {
+                        ...resultData.insurancev2_result.common,
+                        tnc: resultData.insurancev2_result.common.tnc || resultData.insurancev2_result.tnc
+                    },
+                    insured_account_type: lead.insurance_type || ''
+                }, () => {
+                    if (this.onload && !this.state.ctaWithProvider) {
+                        this.onload();
+                    }
+                })
+
             } else {
                 this.setState({
                     skelton: false
@@ -403,7 +404,7 @@ export async function getApplicationDetails(application_id, providerConfig) {
         skelton: true
     });
     try{
-        var url = getApiUrl(`api/insurancev2/api/insurance/proposal/${providerConfig.provider_api}/get_application_details?application_id=${application_id}&form_submitted=true`)
+        const url = getApiUrl(`api/insurancev2/api/insurance/proposal/${providerConfig.provider_api}/get_application_details?application_id=${application_id}&form_submitted=true`)
         const res = await Api.get(url);
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
@@ -494,8 +495,8 @@ export async function getPlanList(){
             body[key] = post_body[key];
         }
         try {
-            var url = getApiUrl(`api/insurancev2/api/insurance/health/quotation/plans/${this.state.providerConfig.provider_api}`)
-             const res = await Api.post(url,body);
+            const url = getApiUrl(`api/insurancev2/api/insurance/health/quotation/plans/${this.state.providerConfig.provider_api}`)
+            const res = await Api.post(url,body);
 
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
@@ -623,7 +624,7 @@ export async function getPlanDetails(){
             })
                 this.setState({ show_loader: "button"});
                 try {
-                    var url = getApiUrl(`api/insurancev2/api/insurance/health/quotation/plan_information/${this.state.providerConfig.provider_api}`)
+                    const url = getApiUrl(`api/insurancev2/api/insurance/health/quotation/plan_information/${this.state.providerConfig.provider_api}`)
                     const res = await Api.post(url ,body);
                     var resultData = res.pfwresponse.result;
                     if (res.pfwresponse.status_code === 200) {
@@ -671,7 +672,7 @@ export async function getCityDetails(){
     var city = '';
     try {
             try {
-                var url = getApiUrl(`api/insurancev2/api/insurance/health/quotation/account_summary`)
+                const url = getApiUrl(`api/insurancev2/api/insurance/health/quotation/account_summary`)
                 const res = await Api.post(url, body);
                 if (res.pfwstatus_code === 200) {
                     
@@ -700,7 +701,7 @@ export async function getCityDetails(){
                 error=true;
                 errorType= "crash";
             }
-        var url2 = getApiUrl('api/insurancev2/api/insurance/health/quotation/get_cities/hdfc_ergo')
+        const url2 = getApiUrl('api/insurancev2/api/insurance/health/quotation/get_cities/hdfc_ergo')
         const res2 = await Api.get(url2);
         
         var resultData2 = res2.pfwresponse.result
@@ -768,7 +769,7 @@ export async function getAddOnsData(){
         // eslint-disable-next-line radix
         this.setState({show_loader: 'button'})
             try {
-                var url = getApiUrl(`api/insurancev2/api/insurance/health/quotation/get_add_ons/religare`)
+                const url = getApiUrl(`api/insurancev2/api/insurance/health/quotation/get_add_ons/religare`)
                 const res = await Api.post(url, body);
 
                 var resultData = res.pfwresponse.result;
@@ -867,7 +868,7 @@ export async function getCoverPeriodData(){
                     body['floater_type'] = 'non_floater';
                 }
                 try {
-                    var url = getApiUrl(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`)
+                    const url = getApiUrl(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`)
                     const res = await Api.post(url ,body);
                     
                     var resultData = res.pfwresponse.result;
@@ -963,7 +964,7 @@ export async function updateLead( body, quote_id, current_state) {
         let application_id = storageService().get('health_insurance_application_id');
          body.application_id = application_id
 
-        var url = getApiUrl(`api/insurancev2/api/insurance/proposal/${this.state.provider_api}/update_application_details`)
+        const url = getApiUrl(`api/insurancev2/api/insurance/proposal/${this.state.provider_api}/update_application_details`)
         const res = await Api.put(url, body)
         var resultData = res.pfwresponse.result;
         
@@ -1090,7 +1091,7 @@ export async function resetQuote() {
     let error = "";
     let errorType = "";
     try {
-        var url = getApiUrl(`api/insurancev2/api/insurance/health/quotation/${this.state.providerConfig.provider_api}/reset_previous_quotations`)
+        const url = getApiUrl(`api/insurancev2/api/insurance/health/quotation/${this.state.providerConfig.provider_api}/reset_previous_quotations`)
         const res = await Api.post(url);
 
         var resultData = res.pfwresponse.result;
@@ -1340,7 +1341,7 @@ export async function getReportCardsData(){
     let errorType = '';
     this.setErrorData('onload');
     try {
-      var url = getApiUrl('api/ins_service/api/insurance/get/report')
+      const url = getApiUrl('api/ins_service/api/insurance/get/report')
       let res = await Api.get(url);
       if (res.pfwresponse.status_code === 200) {
 
@@ -1393,30 +1394,30 @@ export function setReportData(termData, group_insurance_policies, health_insuran
     let pathname = ''
 
     if (!termData.error) {
-      canShowReport = true;
-      let insurance_apps = termData.insurance_apps || {};
-      if(!isEmpty(insurance_apps)){
-        if (insurance_apps.complete.length > 0) {
-            canShowReport = true;
-            application = insurance_apps.complete[0];
-            pathname = 'report';
-          } else if (insurance_apps.failed.length > 0) {
-            canShowReport = true;
-            application = insurance_apps.failed[0];
-            pathname = 'report';
-          } else if (insurance_apps.init.length > 0) {
-            canShowReport = true;
-            application = insurance_apps.init[0];
-            pathname = 'journey';
-          } else if (insurance_apps.submitted.length > 0) {
-            canShowReport = true;
-            application = insurance_apps.submitted[0];
-            pathname = 'journey';
-          } else {
-            // intro
-            pathname = 'intro';
-          }
-      }
+        canShowReport = true;
+        let insurance_apps = termData.insurance_apps || {};
+        if(!isEmpty(insurance_apps)){
+            if (insurance_apps.complete.length > 0) {
+              canShowReport = true;
+              application = insurance_apps.complete[0];
+              pathname = 'report';
+            } else if (insurance_apps.failed.length > 0) {
+              canShowReport = true;
+              application = insurance_apps.failed[0];
+              pathname = 'report';
+            } else if (insurance_apps.init.length > 0) {
+              canShowReport = true;
+              application = insurance_apps.init[0];
+              pathname = 'journey';
+            } else if (insurance_apps.submitted.length > 0) {
+              canShowReport = true;
+              application = insurance_apps.submitted[0];
+              pathname = 'journey';
+            } else {
+              // intro
+              pathname = 'intro';
+            }
+        }
     } 
 
     let fullPath = '/group-insurance/term/' + pathname;
@@ -1680,3 +1681,7 @@ export function getApiUrl(apiUrl){
     }
     return apiUrl
 }  
+
+export function isRmJourney(){
+    return (!!storageService().getObject('guestLeadId')) && (!storageService().getObject('guestUser'))
+}

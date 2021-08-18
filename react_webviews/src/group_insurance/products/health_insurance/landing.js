@@ -181,7 +181,7 @@ class HealthInsuranceLanding extends Component {
     let error = "";
     let errorType = "";
     try {
-      var url = getApiUrl(`/api/ins_service/api/insurance/health/journey/started?product_name=${data.Product_name}`)
+      const url = getApiUrl(`/api/ins_service/api/insurance/health/journey/started?product_name=${data.Product_name}`)
       const res = await Api.get(url);
 
       let resultData = res.pfwresponse
@@ -225,7 +225,7 @@ class HealthInsuranceLanding extends Component {
     let error = '';
     let errorType = '';
     try {
-      var url = getApiUrl(`/api/ins_service/api/insurance/application/summary`)
+      const url = getApiUrl(`/api/ins_service/api/insurance/application/summary`)
       const res = await Api.get(url)
 
       if (res.pfwresponse.status_code === 200) {

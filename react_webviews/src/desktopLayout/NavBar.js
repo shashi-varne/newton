@@ -11,7 +11,7 @@ const NavBar = (props) => {
   const {code,logo} = getConfig();
   const navigate = navigateFunc.bind(props);
   const user = storageService().getObject('user');
-  const isGuestUser = storageService().get('guestUser');
+  const isGuestUser = storageService().getBoolean('guestUser');
   const handleLogout =() => {
     navigate('/logout');
   }

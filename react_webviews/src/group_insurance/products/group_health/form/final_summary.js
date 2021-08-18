@@ -40,8 +40,8 @@ class GroupHealthPlanFinalSummary extends Component {
             quote_id: storageService().get('ghs_ergo_quote_id'),
             screen_name:'final_summary_screen',
             pgReached: getUrlParams().pgReached ? true : false,
-            isRmJourney: (!!storageService().getObject('guestLeadId')) && (!storageService().getObject('guestUser')),
-            isGuestUser: !!storageService().getObject('guestUser')
+            isRmJourney: this.isRmJourney(),
+            isGuestUser: storageService().getBoolean('guestUser')
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
@@ -56,7 +56,7 @@ class GroupHealthPlanFinalSummary extends Component {
         this.initialize();
     }
     setErrorData = (type) => {
-
+        
         this.setState({
           showError: false
         });
@@ -634,7 +634,7 @@ class GroupHealthPlanFinalSummary extends Component {
         // }
         let application_id = storageService().get('health_insurance_application_id')
         try {
-            var url = this.getApiUrl(`api/insurancev2/api/insurance/health/payment/start_payment/${this.state.providerConfig.provider_api}?application_id=${application_id}`)
+            const url = this.getApiUrl(`api/insurancev2/api/insurance/health/payment/start_payment/${this.state.providerConfig.provider_api}?application_id=${application_id}`)
             let res = await Api.get(url);       
             var resultData = res.pfwresponse.result;
             this.setState({
@@ -989,7 +989,7 @@ class GroupHealthPlanFinalSummary extends Component {
             fullWidthButton={true}
             onlyButton={true}
             buttonTitle={this.state.isRmJourney ?  'COPY PAYMENT LINK' : `MAKE PAYMENT OF ${inrFormatDecimal(this.state.quotation.total_premium)}`}
-            handleClick={this.state.isRmJourney ? ()=> this.copyPaymentLink() : () => this.handleClick()}
+            handleClick={this.state.isRmJourney ? this.copyPaymentLink : this.handleClick}
             pgReached={this.state.pgReached}
         >
 

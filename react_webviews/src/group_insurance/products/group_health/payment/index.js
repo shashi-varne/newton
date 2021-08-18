@@ -50,8 +50,7 @@ class GroupHealthPayment extends Component {
       productName: getConfig().productName,
       force_onload_call: true,
       screen_name: 'payment_screen',
-      isGuestUser: storageService().getObject('guestUser') || false
-
+      isGuestUser: storageService().getBoolean('guestUser') || false
     }
 
     this.initialize = initialize.bind(this);
@@ -150,7 +149,7 @@ class GroupHealthPayment extends Component {
         });
   
        let application_id = storageService().get('health_insurance_application_id'); 
-        var url = this.getApiUrl(`api/insurancev2/api/insurance/health/policy/${this.state.provider_api}/check_status?application_id=${application_id}`)
+        const url = this.getApiUrl(`api/insurancev2/api/insurance/health/policy/${this.state.provider_api}/check_status?application_id=${application_id}`)
         const res = await Api.get(url);
   
         var resultData = res.pfwresponse.result;

@@ -19,7 +19,7 @@ import {
   validateEmail, validateNumber, numberShouldStartWith,
   validateConsecutiveChar, validateLengthNames, IsFutureDate, storageService
 } from 'utils/validators';
-import {getApiUrl} from 'group_insurance/products/group_health/common_data';
+import {getApiUrl, isRmJourney} from 'group_insurance/products/group_health/common_data';
 
 import { nativeCallback } from 'utils/native_callback';
 
@@ -36,8 +36,8 @@ class BasicDetailsForm extends Component {
       inputDisabled: {},
       relationshipOptions: [],
       age: 0,
-      isRmJourney: (!!storageService().getObject('guestLeadId')) && (!!storageService().getObject('guestUser')),
-      isGuestUser : !!storageService().get('guestUser')
+      isRmJourney: isRmJourney(),
+      isGuestUser : storageService().getBoolean('guestUser')
     };
 
     this.handleClickCurrent = this.handleClickCurrent.bind(this);
@@ -306,7 +306,7 @@ class BasicDetailsForm extends Component {
           skelton: true
         })
         if(!leadData) {
-          var url = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
+          const url = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
           let res = await Api.get(url)
     
           leadData = res.pfwresponse.result.lead; 
@@ -591,10 +591,10 @@ class BasicDetailsForm extends Component {
         if (this.state.lead_id) {
           final_data.lead_id = this.state.lead_id;
           storageService().setObject('baxaGuestUserData', final_data)
-          var url = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/lead/update')
+          const url = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/lead/update')
           res2 = await Api.post(url, final_data)
         } else {
-          var url2 = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/lead/create')
+          const url2 = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/lead/create')
           res2 = await Api.post(url2, final_data)
         }
 
@@ -603,7 +603,7 @@ class BasicDetailsForm extends Component {
           var lead_id_updated = this.state.lead_id || res2.pfwresponse.result.lead.id;
           window.sessionStorage.setItem('group_insurance_lead_id_selected', lead_id_updated || '');
           let lead = res2.pfwresponse.result.updated_lead || res2.pfwresponse.result.lead;
-          this.navigate('summary', {lead: lead || {}, })
+          this.navigate('summary', {lead: lead || {} })
         } else {
           this.setState({
             show_loader: false,

@@ -12,7 +12,7 @@ import Api from 'utils/api';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {Imgc} from 'common/ui/Imgc';
-import { getApiUrl } from '../../products/group_health/common_data';
+import { getApiUrl, isRmJourney } from '../../products/group_health/common_data';
 
 const product_config = {
   'PERSONAL_ACCIDENT': {
@@ -48,8 +48,8 @@ class PlanSuccessClass extends Component {
       },
       accordians_data: [],
       type: getConfig().productName,
-      isGuestUser: storageService().getObject('guestUser') || false,
-      isRmJourney: (!!storageService().getObject('guestLeadId')) && (!storageService().getObject('guestUser')),
+      isGuestUser: storageService().getBoolean('guestUser') || false,
+      isRmJourney: isRmJourney(),
     };
 
     this.handleClickCurrent = this.handleClickCurrent.bind(this);
@@ -376,7 +376,7 @@ class PlanSuccessClass extends Component {
         buttonTwoTitle="Check details"
         showError={this.state.showError}
         errorData={this.state.errorData}
-        handleClick={() => this.downloadFisdom()}
+        handleClick={this.downloadFisdom}
         handleClickOne={() => this.handleClickOne()}
         handleClickTwo={() => this.handleClickTwo()}
         title="Success"

@@ -1,149 +1,171 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import "./rm_login.scss";
-import { getConfig } from "utils/functions";
-import Input from "common/ui/Input";
-import { onload, startJourney } from "./functions";
-import { validateNumber, numberShouldStartWith } from "utils/validators";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
+import { validateNumber, numberShouldStartWith, storageService } from "utils/validators";
 import Button from "common/ui/Button";
 import { Imgc } from "common/ui/Imgc";
 import UiSkelton  from "common/ui/Skelton";
+import Api from "utils/api";
+import Toast from 'common/ui/Toast';
+import Input from 'common/ui/Input';
 
 const config = getConfig();
-class Login extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      productName: config.productName,
-      form_data: {},
-      isApiRunning: true
-    };
-    this.onload = onload.bind(this);
-    this.startJourney = startJourney.bind(this);
-  }
+let productName = config.productName;
 
-  componentWillMount() {
-    this.onload();
-  }
-  
-  handleChange = name => event => {
-    let form_data = this.state.form_data;
+const RmLogin = (props) => {
+  const navigate = navigateFunc.bind(props);
+  const [isApiRunning, setIsApiRunning] = useState(true);
+  const [showLoader, setShowLoader] = useState(false);
+  const [formData, setformData] = useState({});
 
-    if (!name) {
-      name = event.target.name;
+  const onload = async () => {
+    let error = ''
+    setIsApiRunning(true)
+    try{
+        var url = `api/guest/user/session/create`
+        const res = await Api.get(url);
+        var resultData = res.pfwresponse.result;
+        if (res.pfwresponse.status_code === 200) {
+            window.sessionStorage.clear();
+            //no ui changes required here. It's handled in the backend
+            setIsApiRunning(false)
+        } else {
+          setIsApiRunning(false)
+            error = resultData.error || resultData.message || 'Something went wrong. Please try again';
+            Toast(error);
+        }
+    }catch(err){
+        setIsApiRunning(false)
+        Toast('Something went wrong. Please try again')
     }
+  }
 
-    var value = event.target ? event.target.value : event;
-    
+  const startJourney = async () =>{
+    var error = ''
+    setShowLoader('button')
+    try{
+        var url = `api/guest/user/lead/create?rm_id=${formData.rm_emp_id}&mobile_no=${formData.mobile_no}`
+        const res = await Api.get(url);
+        var resultData = res.pfwresponse.result;
+        if (res.pfwresponse.status_code === 200) {
+            var guestLeadId = resultData.insurance_guest_lead.id;
+            storageService().setObject('guestLeadId', guestLeadId);
+            navigate('/group-insurance')
+        } else {
+            setShowLoader(false)
+            error = resultData.error || resultData.message || 'Something went wrong. Please try again';
+            Toast(error);
+        }
+    }catch(err){
+      setShowLoader(false)
+      Toast('Something went wrong. Please try again')
+    }
+}
+
+const handleChange = (name) => (event) => {
+    const value = event.target ? event.target.value : event;
+    var data = {...formData}
     if (name === 'mobile_no') {
         if (value.length <= 10) {
-            form_data[name] = value;
-            form_data[name + '_error'] = '';
+            data[name] = value;
+            data[name + '_error'] = '';
         }
     }else{
-        form_data[name] = value;
-        form_data[name + '_error'] = '';
+        data[name] = value;
+        data[name + '_error'] = '';
     }
-    
-    this.setState({form_data});
-    }
-
-  navigate = (pathname) => {
-    this.props.history.push({
-        pathname: pathname,
-        search: getConfig().searchParams
-    });
+    setformData({...data})
   }
-
-  handleClick = (event) => {
-    var {form_data} = this.state
+  
+  const handleClick = (event) => {
     var canSubmitForm = true
-    if((this.state.form_data.mobile_no && this.state.form_data.mobile_no.length !== 10) || !validateNumber(form_data.mobile_no) || !numberShouldStartWith(this.state.form_data.mobile_no) ){
-        form_data['mobile_no_error'] = 'Enter valid mobile number'
+    var data = {...formData}
+
+    if((data.mobile_no && data.mobile_no.length !== 10) || !validateNumber(data.mobile_no) || !numberShouldStartWith(data.mobile_no) ){
+        data['mobile_no_error'] = 'Enter valid mobile number'
         canSubmitForm = false
     }
-    this.setState({form_data})
+    setformData({...data})
 
     if(canSubmitForm){
-      this.startJourney();    
+      startJourney();    
     }
   };
 
-  render() {
-    let {
-      show_loader,
-      productName,
-      isApiRunning
-    } = this.state;
-    return (
-      <div>
-      {
-        isApiRunning ?  <UiSkelton type="g"/> : 
-        <div className="login" data-aid='login'>       
-        <div className="header">
-          <img src={require(`assets/${config.logo}`)} alt="logo" />
-        </div>
-        <div className="login-details">
-          <div className="left-image">
-            <Imgc
-              src={require(`assets/${productName}/ils_login.svg`)}
-              alt="login"
-              className="login-left-icon"
-            />
-          </div>
-          <div className="login-form" data-aid='login-form'>
-                <div className="rm-login-container">
-                      <div className="InputField">
-                          <Input
-                            type="text"
-                            width="40"
-                            label="Enter customer mobile number"
-                            class="mobile_no"
-                            id="mobile_no"
-                            name="mobile_no"
-                            error={this.state.form_data.mobile_no_error ? true : false}
-                            helperText={this.state.form_data.mobile_no_error}
-                            value={this.state.form_data.mobile_no || ""}
-                            onChange={this.handleChange()}
-                          />
-                      </div>
+  useEffect(() => {
+    onload();
+  }, []); 
 
-                      <div className="InputField">
-                          <Input
-                            type="text"
-                            width="40"
-                            label="Enter RM emp ID"
-                            class="rm_emp_id"
-                            id="rm_emp_id"
-                            name="rm_emp_id"
-                            error={this.state.form_data.rm_emp_id_error ? true : false}
-                            helperText={'*This field is required only if policy is sold by BD team'}
-                            value={this.state.form_data.rm_emp_id || ""}
-                            onChange={this.handleChange()}
-                          />
-                      </div>
-                      <Button
-                        buttonTitle="START"
-                        buttonType="submit"
-                        onClick={this.handleClick}
-                        showLoader={show_loader}
-                        style={{
-                          width: "100%",
-                          marginTop: "20px",
-                          letterSpacing: "2px",
-                          minHeight: "45px",
-                          borderRadius: `${
-                            config?.uiElements?.button?.borderRadius || "2px"
-                          }`,
-                        }}
-                    />
-                  </div>
-          </div>
+  return (
+    <div>
+    {
+      isApiRunning ?  <UiSkelton type="g"/> : 
+      <div className="login" data-aid='login'>       
+      <div className="header">
+        <img src={require(`assets/${config.logo}`)} alt="logo" />
+      </div>
+      <div className="login-details">
+        <div className="left-image">
+          <Imgc
+            src={require(`assets/${productName}/ils_login.svg`)}
+            alt="login"
+            className="login-left-icon"
+          />
+        </div>
+        <div className="login-form" data-aid='login-form'>
+              <div className="rm-login-container">
+                    <div className="InputField">
+                        <Input
+                          type="text"
+                          width="40"
+                          label="Enter customer mobile number"
+                          class="mobile_no"
+                          id="mobile_no"
+                          name="mobile_no"
+                          error={formData.mobile_no_error ? true : false}
+                          helperText={formData.mobile_no_error}
+                          value={formData.mobile_no || ""}
+                          onChange={handleChange('mobile_no')}
+                        />
+                    </div>
+
+                    <div className="InputField">
+                        <Input
+                          type="text"
+                          width="40"
+                          label="Enter RM emp ID"
+                          class="rm_emp_id"
+                          id="rm_emp_id"
+                          name="rm_emp_id"
+                          error={formData.rm_emp_id_error ? true : false}
+                          helperText={'*This field is required only if policy is sold by BD team'}
+                          value={formData.rm_emp_id || ""}
+                          onChange={handleChange('rm_emp_id')}
+                        />
+                    </div>
+                    <Button
+                      buttonTitle="START"
+                      buttonType="submit"
+                      onClick={handleClick}
+                      showLoader={showLoader}
+                      style={{
+                        width: "100%",
+                        marginTop: "20px",
+                        letterSpacing: "2px",
+                        minHeight: "45px",
+                        borderRadius: `${
+                          config?.uiElements?.button?.borderRadius || "2px"
+                        }`,
+                      }}
+                  />
+                </div>
         </div>
       </div>
-      }
-      </div>
-    );
-  }
-}
+    </div>
+    }
+    </div>
+  );
+};
 
-export default Login;
+
+export default RmLogin;

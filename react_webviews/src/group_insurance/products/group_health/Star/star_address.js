@@ -74,7 +74,7 @@ class StarAddress extends Component {
     }, async () => {
       try {
         const { pincode, city_id } = form_data;
-        var url = this.getApiUrl(`api/insurancev2/api/insurance/proposal/star/area_options?pincode=${pincode}&city_id=${city_id}`)
+        const url = this.getApiUrl(`api/insurancev2/api/insurance/proposal/star/area_options?pincode=${pincode}&city_id=${city_id}`)
         const res = await Api.get(url);
 
         if (res.pfwresponse.status_code === 200 && !isEmpty(res.pfwresponse.result)) {
@@ -279,7 +279,7 @@ class StarAddress extends Component {
     if (pincode.length === 6) {
       try {
         this.setState({ isLoadingCity: true });
-        var url = this.getApiUrl(`api/insurancev2/api/insurance/proposal/star/city_options?pincode=${pincode}`)
+        const url = this.getApiUrl(`api/insurancev2/api/insurance/proposal/star/city_options?pincode=${pincode}`)
         const res = await Api.get(url);
 
         if (res.pfwresponse.status_code === 200 && !isEmpty(res.pfwresponse.result)) {
