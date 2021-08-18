@@ -97,12 +97,8 @@ class Api {
 function triggerSentryError(verb, response, errorMsg) {
   var main_pathname = window.location.pathname;
   var project = getConfig().project || 'Others';
-  var partner_code = getConfig().productName;
-  var user_id = storageService().getObject('user')?.user_id;
   Sentry.configureScope(
     scope => scope
-      .setTag("user_id", user_id)
-      .setTag("partner_code", partner_code)
       .setTag("squad", project)
       .setTag("pathname", main_pathname)
       .setTransactionName(`Error on ${verb} request`)

@@ -24,6 +24,7 @@ import "@fontsource/roboto/latin-700.css";
 // ------------------------------
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
+import { storageService } from './utils/validators';
 
 $(document).ready(function () {
   if(isIframe()) {
@@ -93,6 +94,9 @@ $(document).ready(function () {
   // }
 });
 
+var partner_code = getConfig().code;
+var user_id = storageService().getObject('user')?.user_id;
+
 if(getConfig().productName === "fisdom" && getConfig().isProdEnv)
 {
   Sentry.init({
@@ -100,6 +104,10 @@ if(getConfig().productName === "fisdom" && getConfig().isProdEnv)
     integrations: [new Integrations.BrowserTracing()],
     allowUrls:["app.fisdom.com","wv.fisdom.com"],
     tracesSampleRate: 1.0,
+    initialScope: scope => {
+      scope.setTags({ "user_id": user_id, "partner_code": partner_code });
+      return scope;
+    },
   });
 }
 else if(getConfig().productName === "finity" && getConfig().isProdEnv){
@@ -108,6 +116,10 @@ else if(getConfig().productName === "finity" && getConfig().isProdEnv){
     integrations: [new Integrations.BrowserTracing()],
     allowUrls:["app.mywaywealth.com","app.finity.in","wv.mywaywealth.com", "wv.finity.in"],
     tracesSampleRate: 1.0,
+    initialScope: scope => {
+      scope.setTags({ "user_id": user_id, "partner_code": partner_code });
+      return scope;
+    },
   });
 }
 
