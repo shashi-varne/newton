@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
-import Toast from '../../../../common/ui/Toast'
 import { getConfig, getBasePath, getParamsMark } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { initialize, updateLead, resetQuote, openMedicalDialog, openPdf, isRmJourney } from '../common_data';
