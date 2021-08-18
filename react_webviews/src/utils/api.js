@@ -1,19 +1,21 @@
 import axios from 'axios';
 import * as Sentry from '@sentry/browser'
 
+import { isEmpty } from 'lodash';
 import { storageService } from './validators';
 import { encrypt, decrypt } from './encryption';
 import { getConfig } from 'utils/functions';
 
+const genericErrMsg = "Something went wrong";
 const config = getConfig();
 let base_url = config.base_url;
 
-let sdk_capabilities = config.sdk_capabilities;
 let is_secure = false;
 
 axios.defaults.baseURL = decodeURIComponent(base_url).replace(/\/$/, "");
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.withCredentials = true;
+
 class Api {
   static get(route, params) {
     return this.xhr(route, params, 'get');
@@ -39,6 +41,7 @@ class Api {
         is_secure = storageService().get("is_secure");
       }
     }
+    const sdk_capabilities = getConfig().sdk_capabilities;
     if (sdk_capabilities) {
       axios.defaults.headers.common['sdk-capabilities'] = sdk_capabilities;
     }
@@ -63,22 +66,16 @@ class Api {
           storageService().set("x-plutus-auth", response.headers["x-plutus-auth"])
         }
 
-        if (response.data.pfwresponse.status_code !== 200) {
-          var errorMsg = response.data.pfwresponse.result.error || response.data.pfwresponse.result.message || "Something went wrong";
-          var main_pathname=window.location.pathname
-          var project=getConfig().project || 'Others'
-          Sentry.configureScope(
-            scope=>scope
-            .setTag("squad",project)
-            .setTag("pathname",main_pathname)
-            .setTransactionName(`Error on ${verb} request`)
-            .setLevel(Sentry.Severity.Warning)
-            .setExtra("api_res",JSON.stringify(response.data))
-          )
-          var SentryError = new Error(errorMsg)
-          SentryError.name= `${project} ${main_pathname}`
-          Sentry.captureException(SentryError)
+        const pfwResponseData = response?.data?.pfwresponse;
+
+        if (isEmpty(pfwResponseData)) {
+          const errorMsg = response.data?.pfwmessage || genericErrMsg;
+          triggerSentryError(verb, response.data, errorMsg);
+        } else if (pfwResponseData.status_code !== 200) {
+          const errorMsg = pfwResponseData.result.error || pfwResponseData.result.message || genericErrMsg;
+          triggerSentryError(verb, response.data, errorMsg);
         }
+
         let force_error_api = window.sessionStorage.getItem('force_error_api');
         if(force_error_api) {
           response.data.pfwresponse.status_code = 410;
@@ -95,6 +92,22 @@ class Api {
         return error;
       });
   }
+}
+
+function triggerSentryError(verb, response, errorMsg) {
+  var main_pathname = window.location.pathname;
+  var project = getConfig().project || 'Others';
+  Sentry.configureScope(
+    scope => scope
+      .setTag("squad", project)
+      .setTag("pathname", main_pathname)
+      .setTransactionName(`Error on ${verb} request`)
+      .setLevel(Sentry.Severity.Warning)
+      .setExtra("api_res", JSON.stringify(response))
+  )
+  var SentryError = new Error(errorMsg)
+  SentryError.name = `${project} ${main_pathname}`
+  Sentry.captureException(SentryError)
 }
 
 export default Api;

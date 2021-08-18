@@ -5,11 +5,12 @@ import Report from '../common/Report';
 import { formatAmountInr } from 'utils/validators';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
+import isEmpty from 'lodash/isEmpty';
 
 const config = getConfig();
 const FundChart = (props) => {
-  const graphDataForBenchMark = props?.graphData.graph_report[0].graph_data_for_benchmark;
-  const fundGraph = props?.graphData.graph_report[0].graph_data_for_amfi;
+  const graphDataForBenchMark = props?.graphData.graph_report[0]?.graph_data_for_benchmark;
+  const fundGraph = props?.graphData.graph_report[0]?.graph_data_for_amfi;
   const [buttonColor, setButtonColor] = useState('');
   const [buttonBgColor, setButtonBgColor] = useState('');
   let graphBenchmarkTitle = props?.graphData.graph_report[0].graph_benchmark_title;
@@ -98,7 +99,9 @@ const FundChart = (props) => {
       }
     }
   };
-  chopDates(fundGraph, graphDataForBenchMark);
+  if(!isEmpty(fundGraph)){
+    chopDates(fundGraph, graphDataForBenchMark);
+  }
 
   const configPrice = {
     yAxis: {
@@ -190,7 +193,11 @@ const FundChart = (props) => {
       itemDistance: 30,
     },
     xAxis: {
-      crosshair: false,
+      crosshair: {
+        width: 1,
+        color: 'gray',
+        dashStyle: 'shortdot'
+      },
       labels: {
         enabled: true,
         step: 1,

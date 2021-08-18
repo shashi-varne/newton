@@ -502,7 +502,7 @@ export function handleRenderCard() {
   const isWeb = config.Web;
   const hideReferral = currentUser.active_investment && !isWeb && config?.referralConfig?.shareRefferal;
   const referralCode = !currentUser.active_investment && !isWeb && config?.referralConfig?.applyRefferal;
-  const myAccount = isReadyToInvestBase || userKyc.bank.doc_status === 'rejected';
+  const myAccount = isReadyToInvestBase || userKyc?.bank?.doc_status === 'rejected';
   const kyc = !isReadyToInvestBase;
   const cards = sdkInvestCardMapper.filter(el => {
     if(el.key === 'kyc') {
