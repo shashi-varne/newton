@@ -205,13 +205,14 @@ class Landing extends Component {
   };
 
   handleStocksAndIpoRedirection = () => {
-    let { modalData, communicationType } = this.state;
+    let { modalData, communicationType, contactValue } = this.state;
     if(modalData.key === "ipo") {
       if(!!this.state.contactNotVerified){
         storageService().set("ipoContactNotVerified", true);
         this.navigate("/secondary-verification", {
           state : {
             communicationType,
+            contactValue,
           }
         })
         return;

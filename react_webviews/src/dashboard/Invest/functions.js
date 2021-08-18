@@ -741,13 +741,21 @@ export function contactVerification(userKyc) {
   // ---------------- IPO Contact Verification Setting state for BottomSheet---------------//
   if (!isEmpty(contactDetails)) {
     if (contactDetails.mobile_number_verified === false) {
+      let contactValue, numberVal = contactDetails?.mobile_number?.split('|');
+      if (numberVal.length > 1) {
+        contactValue = numberVal[1];
+      } else {
+        contactValue = [numberVal];
+      }
       this.setState({
         communicationType: "mobile",
+        contactValue,
         contactNotVerified: true,
       })
     } else if (contactDetails.email_verified === false) {
       this.setState({
         communicationType: "email",
+        contactValue: contactDetails?.email || "",
         contactNotVerified: true,
       })
     }
