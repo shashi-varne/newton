@@ -95,8 +95,6 @@ $(document).ready(function () {
 });
 
 var partner_code = getConfig().code;
-var user_id = storageService()?.getObject('user')?.user_id;
-
 if(getConfig().productName === "fisdom" && getConfig().isProdEnv)
 {
   Sentry.init({
@@ -105,7 +103,7 @@ if(getConfig().productName === "fisdom" && getConfig().isProdEnv)
     allowUrls:["app.fisdom.com","wv.fisdom.com"],
     tracesSampleRate: 1.0,
     initialScope: scope => {
-      scope.setTags({ "user_id": user_id, "partner_code": partner_code });
+      scope.setTags({"partner_code": partner_code });
       return scope;
     },
   });
@@ -117,7 +115,7 @@ else if(getConfig().productName === "finity" && getConfig().isProdEnv){
     allowUrls:["app.mywaywealth.com","app.finity.in","wv.mywaywealth.com", "wv.finity.in"],
     tracesSampleRate: 1.0,
     initialScope: scope => {
-      scope.setTags({ "user_id": user_id, "partner_code": partner_code });
+      scope.setTags({"partner_code": partner_code });
       return scope;
     },
   });
