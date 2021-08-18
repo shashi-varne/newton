@@ -96,7 +96,6 @@ $(document).ready(function () {
 
 if(getConfig().productName === "fisdom" && getConfig().isProdEnv)
 {
-  console.log("12345566666");
   Sentry.init({
     dsn: "https://38815adc8fd842e78c2145a583d26351@o60572.ingest.sentry.io/5726998",
     beforeSend(event) {
