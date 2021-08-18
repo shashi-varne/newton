@@ -58,9 +58,11 @@ class TicketConversations extends Component {
     });
 
     let result = await this.getTicketConversations(ticket.ticket_id);
-
+    
     if (!isEmpty(result)) {
+      ticket['status'] = result.status.toLowerCase();
       this.setState({
+        ticket: ticket,
         category: result.category || "",
         sub_category: result.sub_category || "",
         ticket_status: result.status || "",
