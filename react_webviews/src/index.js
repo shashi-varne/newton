@@ -24,7 +24,6 @@ import "@fontsource/roboto/latin-700.css";
 // ------------------------------
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
-import { storageService } from './utils/validators';
 
 $(document).ready(function () {
   if(isIframe()) {
