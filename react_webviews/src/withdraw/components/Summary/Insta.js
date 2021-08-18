@@ -39,7 +39,7 @@ const Insta = (props) => {
         },
         []
       )
-      const result = await redeemOrders('insta_redeem', {
+      const result = await redeemOrders('insta-redeem', {
         investments: [{ itype, name, subtype, allocations }],
       })
       if (result?.resend_redeem_otp_link && result?.verification_link) {

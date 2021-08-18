@@ -1138,7 +1138,7 @@ export function getFinancialYear() {
 export const convertInrAmountToNumber = (value) => {
   let amount = (value.match(/\d+/g) || "").toString();
   if (amount) {
-    amount = amount.replaceAll(",", "");
+    amount = amount.split(",").join("");
   }
   return parseInt(amount, 10);
 }
