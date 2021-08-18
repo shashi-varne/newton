@@ -393,8 +393,8 @@ const CommunicationDetails = (props) => {
   };
 
   const handleNavigation = () => {
-    if (stateParams?.fromState === "/my-account") {
-      props.history?.goBack()
+    if (stateParams?.goBack) {
+      navigate(stateParams.goBack)
       return;
     }
     if(isNotification){

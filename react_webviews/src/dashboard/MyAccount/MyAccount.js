@@ -170,6 +170,7 @@ class MyAccount extends Component {
         accountAlreadyExistsData: this.state.accountAlreadyExistsData,
         callHandleClick: true,
         continueAccountAlreadyExists: true,
+        goBack: "/my-account"
       },
     });
   };
@@ -335,7 +336,7 @@ class MyAccount extends Component {
               pan_no={userKyc?.pan?.meta_data?.pan_number}
               contactInfo={contactInfo}
               name={currentUser?.name}
-              handleClick={(path) => this.handleClick(path)}
+              handleClick={(path, state) => this.navigate(path, state)}
               showLoader={this.showLoader}
               sendEvents={this.sendEvents}
               showAccountAlreadyExist={(show, data, type) =>

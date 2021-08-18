@@ -57,7 +57,11 @@ class MyaccountDetails extends Component {
         let result = await this.authCheckApi(contact_type, { "contact_value": contact_value })
         this.props.showLoader();
         if (result && !result?.is_user) {
-            this.props.handleClick("/kyc/communication-details")
+            this.props.handleClick("/kyc/communication-details", {
+                state: {
+                    goBack: "/my-account"
+                }
+            })
             return;
         }
         else if (result && result?.is_user) {
