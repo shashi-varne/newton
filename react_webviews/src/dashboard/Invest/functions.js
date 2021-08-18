@@ -586,7 +586,7 @@ export function handleIpoCardRedirection() {
 }
           
 export function handleStocksAndIpoCards(key) {
-  let { kycJourneyStatusMapperData, kycJourneyStatus, userKyc, currentUser } = this.state;
+  let { kycJourneyStatusMapperData, kycJourneyStatus, userKyc, currentUser, contactNotVerified } = this.state;
   let modalData = Object.assign({key}, kycJourneyStatusMapperData);
 
   if (key === "ipo") {
@@ -629,11 +629,13 @@ export function handleStocksAndIpoCards(key) {
       }
     }
   }
-
   if(key === "stocks" && !modalData.dualButton) {
     modalData.oneButton = true
   }
 
+  if(!!contactNotVerified){
+    modalData.oneButton = false;
+   }
   if (!isEmpty(modalData) && (kycJourneyStatus !== "complete" || (kycJourneyStatus === "complete" && userKyc.kyc_product_type !== "equity"))) {
     this.setState({ modalData, openKycStatusDialog: true });
   }
@@ -735,9 +737,24 @@ export function handleCampaignNotification () {
 };
 
 export function contactVerification(userKyc) {
+  const contactDetails = userKyc?.identification?.meta_data;
+  // ---------------- IPO Contact Verification Setting state for BottomSheet---------------//
+  if (!isEmpty(contactDetails)) {
+    if (contactDetails.mobile_number_verified === false) {
+      this.setState({
+        communicationType: "mobile",
+        contactNotVerified: true,
+      })
+    } else if (contactDetails.email_verified === false) {
+      this.setState({
+        communicationType: "email",
+        contactNotVerified: true,
+      })
+    }
+  }
+  // ---------------- Above Condition For IPO Contact Verification---------------//
   const isVerifyDetailsSheetDisplayed = storageService().get("verifyDetailsSheetDisplayed");
   if (!isVerifyDetailsSheetDisplayed) {
-    let contactDetails = userKyc?.identification?.meta_data;
       if (!isEmpty(contactDetails)) {
         let contact_type, contact_value, isVerified = true;
         if (!isEmpty(contactDetails.mobile_number) && contactDetails.mobile_number_verified === false) {

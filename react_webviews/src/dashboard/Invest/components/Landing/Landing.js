@@ -205,8 +205,17 @@ class Landing extends Component {
   };
 
   handleStocksAndIpoRedirection = () => {
-    let { modalData } = this.state;
+    let { modalData, communicationType } = this.state;
     if(modalData.key === "ipo") {
+      if(!!this.state.contactNotVerified){
+        storageService().set("ipoContactNotVerified", true);
+        this.navigate("/secondary-verification", {
+          state : {
+            communicationType,
+          }
+        })
+        return;
+      } // Email/mobile if Not Verified!
       this.handleIpoCardRedirection();
     } else {
       // To do: redirect to stocks sdk page for fno_rejected status

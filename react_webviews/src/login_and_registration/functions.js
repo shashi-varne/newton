@@ -528,10 +528,14 @@ export async function getKycFromSummary(params = {}) {
 
 export function redirectAfterLogin(data, user, navigateFunc) {
   const kyc = storageService().getObject("kyc");
+  const ipoContactNotVerified = storageService().get("ipoContactNotVerified") || false;
   user = user || storageService().getObject("user");
   const navigate = navigateFunc || this.navigate;
   if (data.firstLogin) {
     navigate("/referral-code", { state: { goBack: "/", communicationType: data?.contacts?.auth_type } });
+  } else if (ipoContactNotVerified){
+    storageService().set("ipoContactNotVerified", false);
+    navigate("/market-products", { state: { goBack: "/invest" } });
   } else if (
     user.kyc_registration_v2 === "incomplete" &&
     user.active_investment
