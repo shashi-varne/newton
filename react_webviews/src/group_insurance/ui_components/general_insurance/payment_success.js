@@ -17,7 +17,7 @@ import {
 // validateStreetName, validateEmpty, validateConsecutiveChar, validateMinChar
 import { nativeCallback } from 'utils/native_callback';
 import {Imgc} from 'common/ui/Imgc';
-import { getApiUrl } from '../../products/group_health/common_data';
+import { getGuestUserRoute } from '../../../utils/functions';
 
 class PaymentSuccessClass extends Component {
 
@@ -109,7 +109,7 @@ class PaymentSuccessClass extends Component {
     let error = '';
     let errorType = '';
     try {
-      let url = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
+      let url = 'api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id;
       let res = await Api.get(url)
 
       if (res.pfwresponse.status_code === 200) {
@@ -176,7 +176,7 @@ class PaymentSuccessClass extends Component {
 
     if (pincode.length === 6) {
       try {
-        const url = getApiUrl('/api/pincode/' + pincode) 
+        const url = getGuestUserRoute('/api/pincode/' + pincode);
         const res = await Api.get(url);
 
         if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
@@ -303,7 +303,7 @@ class PaymentSuccessClass extends Component {
           show_loader: 'button'
         })
         let res2 = {};
-        const url = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/lead/update')
+        const url = 'api/insurancev2/api/insurance/bhartiaxa/lead/update';
         res2 = await Api.post(url, final_data)
         this.setState({
           show_loader: false

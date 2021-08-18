@@ -26,7 +26,7 @@ const RmLogin = (props) => {
         const res = await Api.get(url);
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
-            window.sessionStorage.clear();
+            storageService().clear();
             //no ui changes required here. It's handled in the backend
             setIsApiRunning(false)
         } else {
@@ -49,7 +49,7 @@ const RmLogin = (props) => {
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
             var guestLeadId = resultData.insurance_guest_lead.id;
-            storageService().setObject('guestLeadId', guestLeadId);
+            storageService().set('guestLeadId', guestLeadId);
             navigate('/group-insurance')
         } else {
             setShowLoader(false)
@@ -62,7 +62,7 @@ const RmLogin = (props) => {
     }
 }
 
-const handleChange = (name) => (event) => {
+  const handleChange = (name) => (event) => {
     const value = event.target ? event.target.value : event;
     var data = {...formData}
     if (name === 'mobile_no') {
@@ -81,14 +81,17 @@ const handleChange = (name) => (event) => {
     var canSubmitForm = true
     var data = {...formData}
 
-    if((data.mobile_no && data.mobile_no.length !== 10) || !validateNumber(data.mobile_no) || !numberShouldStartWith(data.mobile_no) ){
+    if((data.mobile_no && data.mobile_no.length !== 10) || 
+      !validateNumber(data.mobile_no) || 
+      !numberShouldStartWith(data.mobile_no) )
+      {
         data['mobile_no_error'] = 'Enter valid mobile number'
         canSubmitForm = false
-    }
-    setformData({...data})
+      }
+      setformData({...data})
 
-    if(canSubmitForm){
-      startJourney();    
+      if(canSubmitForm){
+        startJourney();    
     }
   };
 

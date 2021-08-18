@@ -29,7 +29,6 @@ import back_nav_bar_icon_up from '../../../assets/back_nav_bar_icon_up.png'
 import Api from '../../../utils/api'
 import { setTermInsData } from '../../common/commonFunction'
 import {Imgc} from   '../../../common/ui/Imgc'
-import {getApiUrl} from 'group_insurance/products/group_health/common_data'
 
 class HealthInsuranceLanding extends Component {
 
@@ -181,7 +180,7 @@ class HealthInsuranceLanding extends Component {
     let error = "";
     let errorType = "";
     try {
-      const url = getApiUrl(`/api/ins_service/api/insurance/health/journey/started?product_name=${data.Product_name}`)
+      const url = `/api/ins_service/api/insurance/health/journey/started?product_name=${data.Product_name}`;
       const res = await Api.get(url);
 
       let resultData = res.pfwresponse
@@ -225,7 +224,7 @@ class HealthInsuranceLanding extends Component {
     let error = '';
     let errorType = '';
     try {
-      const url = getApiUrl(`/api/ins_service/api/insurance/application/summary`)
+      const url = `/api/ins_service/api/insurance/application/summary`;
       const res = await Api.get(url)
 
       if (res.pfwresponse.status_code === 200) {

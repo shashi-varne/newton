@@ -12,7 +12,7 @@ import Api from 'utils/api';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {Imgc} from 'common/ui/Imgc';
-import { getApiUrl, isRmJourney } from '../../products/group_health/common_data';
+import { isRmJourney } from '../../products/group_health/common_data';
 
 const product_config = {
   'PERSONAL_ACCIDENT': {
@@ -48,7 +48,7 @@ class PlanSuccessClass extends Component {
       },
       accordians_data: [],
       type: getConfig().productName,
-      isGuestUser: storageService().getBoolean('guestUser') || false,
+      isGuestUser: storageService().getBoolean('guestUser'),
       isRmJourney: isRmJourney(),
     };
 
@@ -109,7 +109,7 @@ class PlanSuccessClass extends Component {
     let error = '';
     let errorType = '';
     try {
-      let url = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id) 
+      let url = 'api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id
       let res = await Api.get(url)
       
       if (res.pfwresponse.status_code === 200) {
@@ -358,7 +358,7 @@ class PlanSuccessClass extends Component {
     });
   }
 
-  downloadFisdom = () =>{
+  downloadApp = () =>{
     let url = getConfig().appLink;
     this.redirectToApp(url);
   }
@@ -376,9 +376,9 @@ class PlanSuccessClass extends Component {
         buttonTwoTitle="Check details"
         showError={this.state.showError}
         errorData={this.state.errorData}
-        handleClick={this.downloadFisdom}
-        handleClickOne={() => this.handleClickOne()}
-        handleClickTwo={() => this.handleClickTwo()}
+        handleClick={this.downloadApp}
+        handleClickOne={this.handleClickOne}
+        handleClickTwo={this.handleClickTwo}
         title="Success"
         disableBack={true}
         classOverRideContainer="plan-success"
@@ -395,7 +395,7 @@ class PlanSuccessClass extends Component {
         {this.state.accordians_data.map(this.renderAccordions)}
 
         {
-          this.state.isGuestUser &&  <p className='download-fisdom-text'>Download fisdom app to view all your policy details</p>
+          this.state.isGuestUser &&  <p className='download-fisdom-text'>Download {getConfig().productName} app to view all your policy details</p>
         }
       </Container>
     );

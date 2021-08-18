@@ -4,7 +4,7 @@ import * as Sentry from '@sentry/browser'
 import { isEmpty } from 'lodash';
 import { storageService } from './validators';
 import { encrypt, decrypt } from './encryption';
-import { getConfig } from 'utils/functions';
+import { getConfig, getGuestUserRoute } from 'utils/functions';
 
 const genericErrMsg = "Something went wrong";
 const config = getConfig();
@@ -47,6 +47,9 @@ class Api {
     }
     if(route.includes("/api/") && storageService().get("x-plutus-auth") && config.isIframe) {
       axios.defaults.headers.common["X-Plutus-Auth"] = storageService().get("x-plutus-auth")
+    }
+    if(route.includes('api/insurance')){  
+      route = getGuestUserRoute(route)
     }
     let options = Object.assign({
       method: verb,

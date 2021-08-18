@@ -12,7 +12,6 @@ import GenericTooltip from '../../../../common/ui/GenericTooltip';
 import {formatAmount} from '../../../../utils/validators';
 import {Imgc} from '../../../../common/ui/Imgc'
 import { isEmpty } from '../../../../utils/validators';
-import {getApiUrl} from 'group_insurance/products/group_health/common_data'
 
 class GroupHealthPlanDetails extends Component {
 
@@ -203,7 +202,7 @@ class GroupHealthPlanDetails extends Component {
           }
 
           try {
-            const url = getApiUrl(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`)
+            const url = `api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`;
             const res = await Api.post(url ,body);
             
             var resultData = res.pfwresponse.result;

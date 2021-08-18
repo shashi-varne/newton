@@ -11,8 +11,7 @@ import { nativeCallback } from 'utils/native_callback';
 import instant_fisdom from 'assets/instant_fisdom.svg';
 import instant_myway from 'assets/instant_myway.svg';
 import {Imgc} from 'common/ui/Imgc';
-import Toast from '../../../common/ui/Toast';
-import { getApiUrl, isRmJourney } from 'group_insurance/products/group_health/common_data'
+import { isRmJourney, getShortUrl } from 'group_insurance/products/group_health/common_data';
 
 class PlanSummaryClass extends Component {
   constructor(props) {
@@ -25,9 +24,10 @@ class PlanSummaryClass extends Component {
       type: getConfig().productName,
       group_insurance_payment_started: window.sessionStorage.getItem('group_insurance_payment_started') || '',
       isRmJourney: isRmJourney(),
-      isGuestUser : storageService().getBoolean('guestUser')
+      isGuestUser : storageService().getBoolean('guestUser'),
+      screen_name: 'plan_summary'
     };
-
+    this.getShortUrl = getShortUrl.bind(this);
     this.handleClickCurrent = this.handleClickCurrent.bind(this);
     
   }
@@ -52,7 +52,7 @@ class PlanSummaryClass extends Component {
 
   }
 
-  setErrorData = (type) => {
+  setErrorData = (type, func) => {
 
     this.setState({
       showError: false
@@ -65,7 +65,7 @@ class PlanSummaryClass extends Component {
           title1: ''
         },
         'submit': {
-          handleClick1: this.handleClickCurrent,
+          handleClick1:  func ? func : this.handleClickCurrent,
           button_text1: 'Retry',
           handleClick2: () => {
             this.setState({
@@ -101,7 +101,7 @@ class PlanSummaryClass extends Component {
       let errorType = '';
       try {
         var res = {}
-        const url  = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id) 
+        const url  = 'api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id;
         res = await Api.get(url)
         
         if (res.pfwresponse.status_code === 200) {
@@ -184,7 +184,7 @@ class PlanSummaryClass extends Component {
         show_loader: 'button'
       })
       let res2;
-      const url = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id)
+      const url = 'api/insurancev2/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id;
       res2 = await Api.get(url)
 
       if (res2.pfwresponse.status_code === 200) {
@@ -285,13 +285,11 @@ class PlanSummaryClass extends Component {
       'SMART_WALLET': 'wallet'
     }
     
-    var guestLeadId = storageService().getObject('guestLeadId')
+    var guestLeadId = storageService().get('guestLeadId')
     var baxaSumaryUrl = `${window.location.origin}/group-insurance/${productMapper[this.props.parent.state.product_key]}/summary${getConfig().searchParams}&leadId=${this.state.lead_id}&guestLeadId=${guestLeadId}&guestUser=true`
-    navigator.clipboard.writeText(baxaSumaryUrl).then(()=>{
-        Toast('Payment link copied!')
-    }, (e)=>{
-        Toast('Something went wrong! Please try again.')
-    })
+    
+    this.setErrorData('submit', this.copyPaymentLink)
+    this.getShortUrl(baxaSumaryUrl);
   }
 
   render() {
@@ -307,7 +305,7 @@ class PlanSummaryClass extends Component {
         skelton={this.state.skelton}
         showError={this.state.showError}
         errorData={this.state.errorData}
-        handleClick={this.state.isRmJourney ? this.copyPaymentLink : () => this.handleClickCurrent}
+        handleClick={this.state.isRmJourney ? this.copyPaymentLink : this.handleClickCurrent}
         title="Summary"
         classOverRide="fullHeight"
         classOverRideContainer="plan-summary"

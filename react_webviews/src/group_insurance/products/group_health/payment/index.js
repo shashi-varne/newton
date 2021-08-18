@@ -149,7 +149,7 @@ class GroupHealthPayment extends Component {
         });
   
        let application_id = storageService().get('health_insurance_application_id'); 
-        const url = this.getApiUrl(`api/insurancev2/api/insurance/health/policy/${this.state.provider_api}/check_status?application_id=${application_id}`)
+        const url = `api/insurancev2/api/insurance/health/policy/${this.state.provider_api}/check_status?application_id=${application_id}`;
         const res = await Api.get(url);
   
         var resultData = res.pfwresponse.result;
@@ -269,7 +269,7 @@ class GroupHealthPayment extends Component {
     });
   }
 
-  downloadFisdom = () =>{
+  downloadApp = () =>{
     let url = getConfig().appLink;
     this.redirectToApp(url);
   }
@@ -289,7 +289,7 @@ class GroupHealthPayment extends Component {
         errorData={this.state.errorData}
         noHeader={this.state.show_loader}
         title={this.state.commonMapper['top_title']}
-        handleClick={ this.state.isGuestUser && this.state.status !== 'failure' ? this.downloadFisdom : this.handleClick}
+        handleClick={ this.state.isGuestUser && this.state.status !== 'failure' ? this.downloadApp : this.handleClick}
         edit={this.props.edit}
         fullWidthButton={this.state.paymentSuccess}
         onlyButton={this.state.paymentSuccess}
@@ -455,7 +455,7 @@ class GroupHealthPayment extends Component {
             }
           </div>
           {
-            this.state.isGuestUser ?  <p className='download-fisdom-text'>Download fisdom app to view all your policy details</p> : <ContactUs />
+            this.state.isGuestUser ?  <p className='download-fisdom-text'>Download {getConfig().productName} app to view all your policy details</p> : <ContactUs />
           }
           
           <ConfirmDialog parent={this} />

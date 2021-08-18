@@ -3,11 +3,13 @@ import { getConfig, navigate as navigateFunc } from "../utils/functions";
 import { nativeCallback } from "../utils/native_callback";
 import { storageService } from "../utils/validators";
 import { logout } from "./function";
+import { isRmJourney } from "../group_insurance/products/group_health/common_data";
 
 const config = getConfig();
 const Logout = (props) => {
   const navigate = navigateFunc.bind(props); 
-  const isRmJourney = (!!storageService().getObject('guestLeadId')) && (!storageService().getObject('guestUser'))
+  const isRmJourney = isRmJourney();
+
   useEffect(() => {
     initialize();
   }, []);

@@ -7,17 +7,18 @@ import { ghGetMember, getCssMapperReport } from '../../constants';
 import Api from 'utils/api';
 import {  openPdfCall } from 'utils/native_callback';
 import { nativeCallback } from 'utils/native_callback';
-import {isEmpty, sortArrayOfObjectsByTime, getDateBreakup, capitalizeFirstLetter, capitalize, getUrlParams} from '../../../utils/validators';
+import {isEmpty, sortArrayOfObjectsByTime, getDateBreakup, capitalizeFirstLetter, capitalize, getUrlParams, copyToClipboard} from '../../../utils/validators';
 import ReactTooltip from "react-tooltip";
 import {getGhProviderConfig, memberKeyMapperFunction} from './constants';
 import {TitleMaper, reportsfrequencyMapper, reportTopTextMapper, reportCoverAmountValue} from '../../../group_insurance/constants'
+import Toast from 'common/ui/Toast';
 
 export async function initialize() {
     this.setErrorData =setErrorData.bind(this)
     this.navigate = navigate.bind(this);
     this.openInBrowser = openInBrowser.bind(this);
     this.setEditTitle = setEditTitle.bind(this);
-    this.getApiUrl = getApiUrl.bind(this);
+    this.getShortUrl = getShortUrl.bind(this);
     this.setLocalProviderData = setLocalProviderData.bind(this);
     this.memberKeyMapper = memberKeyMapper.bind(this);
     this.getApplicationDetails = getApplicationDetails.bind(this);
@@ -86,12 +87,12 @@ export async function initialize() {
             let resume = storageService().getObject("resumeToPremiumHealthInsurance");
             let application_id = storageService().get('health_insurance_application_id');
             let url;
-            const isGuestUser = storageService().getBoolean('guestUser')
+            const isGuestUser = storageService().get('guestUser') || getUrlParams().guestUser;
 
             var resultData = {}
             if (resume && !application_id) {
                 
-                url = getApiUrl(`api/insurancev2/api/insurance/health/quotation/get/quotation_details?quotation_id=${quote_id}`)
+                url = `api/insurancev2/api/insurance/health/quotation/get/quotation_details?quotation_id=${quote_id}`;
                 const res = await Api.get(url);
                 resultData = res.pfwresponse.result;
                 if (res.pfwresponse.status_code === 200) {
@@ -138,17 +139,16 @@ export async function initialize() {
                         skelton: false
                     });
             }else if(this.state.screen_name === 'final_summary_screen' && isGuestUser){
-
                 const urlParams = getUrlParams();
                 application_id = application_id = urlParams?.application_id || storageService().get('health_insurance_application_id')  || ''
                 const provider = urlParams?.provider || storageService().get('provider')  || '';
-                const guestLeadId = urlParams?.guestLeadId || storageService().get('health_insurance_application_id')  || '' ;
+                const guestLeadId = urlParams?.guestLeadId || storageService().get('guestLeadId')  || '' ;
                 storageService().set('health_insurance_application_id', application_id)
                 storageService().set('provider', provider)
                 const summaryUrl = `api/insurancev2/api/insurance/proposal/${provider}/get_application_details?application_id=${application_id}&form_submitted=true&guest_lead_id=${guestLeadId}`
-                this.guestUserDataFetch(summaryUrl, providerConfig)
+                this.guestUserDataFetch(summaryUrl, providerConfig, guestLeadId)
 
-            }else if(application_id && this.state.screen_name === 'final_summary_screen'){
+            }else if(application_id && this.state.screen_name === 'final_summary_screen' && !isGuestUser){
                 this.getApplicationDetails(application_id, providerConfig);
             }
         } catch (err) {
@@ -326,19 +326,18 @@ export function updateBottomPremiumAddOns(premium) {
     }
 }
 
-export async function guestUserDataFetch(summary_url, providerConfig){
+export async function guestUserDataFetch(summary_url, providerConfig, guestLeadId){
     this.setErrorData('onload')
         var error = ''
         var errorType = ''
         this.setState({
             skelton: true
         })
-
         var post_body = {
             'summary_url':  summary_url
         }
         try{
-            const url = getApiUrl(`api/guest/user/session/summary/data/fetch`)
+            const url = `api/guest/user/session/summary/data/fetch?guest_lead_id=${guestLeadId}`;
             let res = await Api.post(url, post_body)
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
@@ -395,6 +394,61 @@ export async function guestUserDataFetch(summary_url, providerConfig){
         }
 }
 
+export async function getShortUrl(urlToShorten, func){
+    let error="";
+    let errorType="";   
+    if(this.state.screen === 'final_summary_screen'){
+        this.setErrorData("submit", true, func)
+    }
+    const guestLeadId = storageService().get('guestLeadId') || getUrlParams().guestLeadId;
+    this.setState({
+       show_loader: 'button'
+    });
+    const post_body = {url: urlToShorten}
+    try{
+        const url = `api/task_manager/get/short/url?guest_lead_id=${guestLeadId}`;
+        console.log(url)
+        const res = await Api.post(url, post_body);
+        var resultData = res.pfwresponse.result;
+
+        if (res.pfwresponse.status_code === 200) {
+            console.log(resultData)
+            this.setState({
+                show_loader: false
+            });
+            var shortUrl = resultData?.url;
+            navigator.clipboard.writeText(shortUrl).then(()=>{
+                Toast('Payment link copied.')
+            }, (e)=>{
+                Toast('Something went wrong! Please try again.')
+            })
+        }else{
+            error=resultData.error || resultData.message || true;
+            this.setState({
+                show_loader: false
+            });
+        }
+    }catch(err){
+        console.log(err)
+        this.setState({
+            show_loader: false
+        });
+        error=true;
+        errorType="crash";
+    }
+
+    if(error){
+        this.setState({
+            errorData: {
+              ...this.state.errorData,
+              title2: error,
+              type: errorType
+            },
+            showError: true,
+        });
+    }
+}
+
 export async function getApplicationDetails(application_id, providerConfig) {
     let error="";
     let errorType="";
@@ -404,7 +458,7 @@ export async function getApplicationDetails(application_id, providerConfig) {
         skelton: true
     });
     try{
-        const url = getApiUrl(`api/insurancev2/api/insurance/proposal/${providerConfig.provider_api}/get_application_details?application_id=${application_id}&form_submitted=true`)
+        const url = `api/insurancev2/api/insurance/proposal/${providerConfig.provider_api}/get_application_details?application_id=${application_id}&form_submitted=true`;
         const res = await Api.get(url);
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
@@ -495,7 +549,7 @@ export async function getPlanList(){
             body[key] = post_body[key];
         }
         try {
-            const url = getApiUrl(`api/insurancev2/api/insurance/health/quotation/plans/${this.state.providerConfig.provider_api}`)
+            const url = `api/insurancev2/api/insurance/health/quotation/plans/${this.state.providerConfig.provider_api}`;
             const res = await Api.post(url,body);
 
             var resultData = res.pfwresponse.result;
@@ -624,7 +678,7 @@ export async function getPlanDetails(){
             })
                 this.setState({ show_loader: "button"});
                 try {
-                    const url = getApiUrl(`api/insurancev2/api/insurance/health/quotation/plan_information/${this.state.providerConfig.provider_api}`)
+                    const url = `api/insurancev2/api/insurance/health/quotation/plan_information/${this.state.providerConfig.provider_api}`;
                     const res = await Api.post(url ,body);
                     var resultData = res.pfwresponse.result;
                     if (res.pfwresponse.status_code === 200) {
@@ -672,7 +726,7 @@ export async function getCityDetails(){
     var city = '';
     try {
             try {
-                const url = getApiUrl(`api/insurancev2/api/insurance/health/quotation/account_summary`)
+                const url = `api/insurancev2/api/insurance/health/quotation/account_summary`;
                 const res = await Api.post(url, body);
                 if (res.pfwstatus_code === 200) {
                     
@@ -701,7 +755,7 @@ export async function getCityDetails(){
                 error=true;
                 errorType= "crash";
             }
-        const url2 = getApiUrl('api/insurancev2/api/insurance/health/quotation/get_cities/hdfc_ergo')
+        const url2 = 'api/insurancev2/api/insurance/health/quotation/get_cities/hdfc_ergo';
         const res2 = await Api.get(url2);
         
         var resultData2 = res2.pfwresponse.result
@@ -769,7 +823,7 @@ export async function getAddOnsData(){
         // eslint-disable-next-line radix
         this.setState({show_loader: 'button'})
             try {
-                const url = getApiUrl(`api/insurancev2/api/insurance/health/quotation/get_add_ons/religare`)
+                const url = `api/insurancev2/api/insurance/health/quotation/get_add_ons/religare`;
                 const res = await Api.post(url, body);
 
                 var resultData = res.pfwresponse.result;
@@ -868,7 +922,7 @@ export async function getCoverPeriodData(){
                     body['floater_type'] = 'non_floater';
                 }
                 try {
-                    const url = getApiUrl(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`)
+                    const url = `api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`;
                     const res = await Api.post(url ,body);
                     
                     var resultData = res.pfwresponse.result;
@@ -964,7 +1018,7 @@ export async function updateLead( body, quote_id, current_state) {
         let application_id = storageService().get('health_insurance_application_id');
          body.application_id = application_id
 
-        const url = getApiUrl(`api/insurancev2/api/insurance/proposal/${this.state.provider_api}/update_application_details`)
+        const url = `api/insurancev2/api/insurance/proposal/${this.state.provider_api}/update_application_details`;
         const res = await Api.put(url, body)
         var resultData = res.pfwresponse.result;
         
@@ -1091,7 +1145,7 @@ export async function resetQuote() {
     let error = "";
     let errorType = "";
     try {
-        const url = getApiUrl(`api/insurancev2/api/insurance/health/quotation/${this.state.providerConfig.provider_api}/reset_previous_quotations`)
+        const url = `api/insurancev2/api/insurance/health/quotation/${this.state.providerConfig.provider_api}/reset_previous_quotations`;
         const res = await Api.post(url);
 
         var resultData = res.pfwresponse.result;
@@ -1341,7 +1395,7 @@ export async function getReportCardsData(){
     let errorType = '';
     this.setErrorData('onload');
     try {
-      const url = getApiUrl('api/ins_service/api/insurance/get/report')
+      const url = 'api/ins_service/api/insurance/get/report';
       let res = await Api.get(url);
       if (res.pfwresponse.status_code === 200) {
 
@@ -1671,17 +1725,6 @@ export function getProviderObject(policy) {
     return obj;
   }
 
-
-export function getApiUrl(apiUrl){
-    var guest_id = storageService().getObject('guestLeadId') || getUrlParams().guestLeadId;
-    
-    if(guest_id){ // true only for RM/guest journey
-        var url_char = apiUrl.indexOf('?') >= 0 ? '&' : '?';
-        return apiUrl + `${url_char}guest_lead_id=${guest_id}`
-    }
-    return apiUrl
-}  
-
 export function isRmJourney(){
-    return (!!storageService().getObject('guestLeadId')) && (!storageService().getObject('guestUser'))
+    return (!!storageService().get('guestLeadId')) && (!storageService().getBoolean('guestUser'))
 }

@@ -19,7 +19,7 @@ import {
   validateEmail, validateNumber, numberShouldStartWith,
   validateConsecutiveChar, validateLengthNames, IsFutureDate, storageService
 } from 'utils/validators';
-import {getApiUrl, isRmJourney} from 'group_insurance/products/group_health/common_data';
+import { isRmJourney } from 'group_insurance/products/group_health/common_data';
 
 import { nativeCallback } from 'utils/native_callback';
 
@@ -306,7 +306,7 @@ class BasicDetailsForm extends Component {
           skelton: true
         })
         if(!leadData) {
-          const url = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
+          const url = 'api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id;
           let res = await Api.get(url)
     
           leadData = res.pfwresponse.result.lead; 
@@ -337,7 +337,7 @@ class BasicDetailsForm extends Component {
         this.setState({
           skelton: true
         })
-        let url = getApiUrl('api/ins_service/api/insurance/account/summary?provider=BHARTIAXA')
+        let url = 'api/ins_service/api/insurance/account/summary?provider=BHARTIAXA';
         let res = await Api.get(url)
 
         
@@ -591,10 +591,10 @@ class BasicDetailsForm extends Component {
         if (this.state.lead_id) {
           final_data.lead_id = this.state.lead_id;
           storageService().setObject('baxaGuestUserData', final_data)
-          const url = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/lead/update')
+          const url = 'api/insurancev2/api/insurance/bhartiaxa/lead/update';
           res2 = await Api.post(url, final_data)
         } else {
-          const url2 = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/lead/create')
+          const url2 = 'api/insurancev2/api/insurance/bhartiaxa/lead/create';
           res2 = await Api.post(url2, final_data)
         }
 

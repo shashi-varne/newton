@@ -8,7 +8,6 @@ import { nativeCallback } from 'utils/native_callback';
 import { insuranceStateMapper } from '../../constants';
 import Api from 'utils/api';
 import {Imgc} from 'common/ui/Imgc';
-import { getApiUrl } from '../../products/group_health/common_data';
 
 class PaymentCallbackClass extends Component {
 
@@ -77,7 +76,7 @@ class PaymentCallbackClass extends Component {
           skelton: true
         })
         let res;
-        const url = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/confirm/payment/' + this.state.group_insurance_payment_urlsafe)
+        const url = 'api/insurancev2/api/insurance/bhartiaxa/confirm/payment/' + this.state.group_insurance_payment_urlsafe;
         res = await Api.get(url)
         
         
@@ -123,7 +122,7 @@ class PaymentCallbackClass extends Component {
         show_loader: 'button'
       })
       let res2;
-      let url = getApiUrl('api/insurancev2/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id)
+      let url = 'api/insurancev2/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id;
       res2 = await Api.get(url)
 
       

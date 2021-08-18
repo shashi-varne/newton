@@ -23,7 +23,6 @@ import GenericImageSlider from "../../../common/ui/GenericImageSlider";
 import {insuranceTypeMapper} from './constants';
 import {Imgc} from '../../../common/ui/Imgc'
 import { isEmpty } from "../../../utils/validators";
-import {getApiUrl} from 'group_insurance/products/group_health/common_data'
 
 const screen_name = "landing_screen";
 
@@ -135,7 +134,7 @@ class GroupHealthLanding extends Component {
     const provider =  this.state.providerConfig.provider_api
     const body = {"provider": provider};
     try {
-      const url = getApiUrl(`api/insurancev2/api/insurance/health/quotation/account_summary`)
+      const url = `api/insurancev2/api/insurance/health/quotation/account_summary`;
       const res = await Api.post(url, body);
         
       let resultData =  res.pfwresponse.result;

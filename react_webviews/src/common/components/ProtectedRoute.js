@@ -29,12 +29,6 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
 
   const fetch = async () => {
     try {
-      if(guestUser){
-        storageService().setBoolean('guestUser', true);
-      }
-      if(!guestLeadId && getUrlParams().guestLeadId ){
-        storageService().set('guestLeadId', urlParams.guestLeadId);
-      }
       if(!guestLeadId && !guestUser){
         await initData();
       }
@@ -67,6 +61,16 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   }, []);
 
   const initialize = async () => {
+    if(currentUser && guestLeadId){ // fallback case to remove guestLeadId when user logs in
+      storageService().remove('guestLeadId')
+    }
+    if(guestUser){
+      storageService().setBoolean('guestUser', true);
+    }
+    if(!guestLeadId && urlParams.guestLeadId){
+      storageService().set('guestLeadId', urlParams.guestLeadId);
+    }
+
     if (showLoader) {
       await fetch();
     }

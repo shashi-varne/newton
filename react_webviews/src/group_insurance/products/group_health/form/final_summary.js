@@ -3,7 +3,7 @@ import Container from '../../../common/Container';
 import Toast from '../../../../common/ui/Toast'
 import { getConfig, getBasePath, getParamsMark } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import { initialize, updateLead, resetQuote, openMedicalDialog, openPdf } from '../common_data';
+import { initialize, updateLead, resetQuote, openMedicalDialog, openPdf, isRmJourney } from '../common_data';
 import BottomInfo from '../../../../common/ui/BottomInfo';
 import {
     numDifferentiationInr, inrFormatDecimal,
@@ -40,7 +40,7 @@ class GroupHealthPlanFinalSummary extends Component {
             quote_id: storageService().get('ghs_ergo_quote_id'),
             screen_name:'final_summary_screen',
             pgReached: getUrlParams().pgReached ? true : false,
-            isRmJourney: this.isRmJourney(),
+            isRmJourney: isRmJourney(),
             isGuestUser: storageService().getBoolean('guestUser')
         }
         this.initialize = initialize.bind(this);
@@ -634,8 +634,8 @@ class GroupHealthPlanFinalSummary extends Component {
         // }
         let application_id = storageService().get('health_insurance_application_id')
         try {
-            const url = this.getApiUrl(`api/insurancev2/api/insurance/health/payment/start_payment/${this.state.providerConfig.provider_api}?application_id=${application_id}`)
-            let res = await Api.get(url);       
+            const url = `api/insurancev2/api/insurance/health/payment/start_payment/${this.state.providerConfig.provider_api}?application_id=${application_id}`;
+            const res = await Api.get(url);       
             var resultData = res.pfwresponse.result;
             this.setState({
                 pg_data: resultData
@@ -961,17 +961,12 @@ class GroupHealthPlanFinalSummary extends Component {
         });
     }
 
-    copyPaymentLink = () =>{
+    copyPaymentLink = async () =>{
         let application_id = storageService().get('health_insurance_application_id');
-        let guestLeadId = storageService().getObject('guestLeadId');
-
+        let guestLeadId = storageService().get('guestLeadId');
         let finalSummaryScreenUrl = `${window.origin}/group-insurance/group-health/${this.state.provider}/final-summary${getConfig().searchParams}&provider=${this.state.providerConfig.provider_api}&application_id=${application_id}&guestUser=true&guestLeadId=${guestLeadId}`
-
-        navigator.clipboard.writeText(finalSummaryScreenUrl).then(()=>{
-            Toast('Payment link copied!')
-        }, (e)=>{
-            Toast('Something went wrong! Please try again.')
-        })
+        
+        this.getShortUrl(finalSummaryScreenUrl, this.copyPaymentLink);
     }
     render() {
         return (
