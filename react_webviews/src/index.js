@@ -95,7 +95,7 @@ $(document).ready(function () {
 });
 
 var partner_code = getConfig().code;
-var user_id = storageService().getObject('user')?.user_id;
+var user_id = storageService()?.getObject('user')?.user_id;
 
 if(getConfig().productName === "fisdom" && getConfig().isProdEnv)
 {
