@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
 import Container from "../common/Container";
 
 import "./InvestJourney.scss";
@@ -12,7 +13,7 @@ import InvestError from "../Invest/mini-components/InvestError";
 import { getBasePath, getConfig, navigate as navigateFunc } from "../../utils/functions";
 import InvestReferralDialog from "../Invest/mini-components/InvestReferralDialog";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
-import { formatAmountInr, storageService } from "../../utils/validators";
+import { formatAmountInr, isEmpty, storageService } from "../../utils/validators";
 
 const imageSuffix = {
   fisdom: "png",
@@ -26,12 +27,22 @@ const InvestJourney = (props) => {
     openInvestError: false,
     errorMessage: "",
   });
-  const {kyc: userKyc, isLoading} = useUserKycHook()
-  const state = props.location.state || {};
-  const productName = getConfig().productName;
-  const investment =
-    storageService().getObject("investment") ||
-    JSON.parse(state.investment);
+  const {kyc: userKyc, isLoading} = useUserKycHook();
+  const config = getConfig();
+  const productName = config.productName;
+  const investment = storageService().getObject("investment") || {};
+  
+  if (isEmpty(investment)) {
+    return (
+      <Redirect
+        to={{
+          pathname: "/",
+          search: config.searchParams,
+        }}
+      />
+    );
+  }
+
   let { type, order_type } = investment;
   const sipTypesKeys = [
     "buildwealth",
