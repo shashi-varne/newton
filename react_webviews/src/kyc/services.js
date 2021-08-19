@@ -361,7 +361,7 @@ export function getDocuments(userKyc) {
       {
         key: "selfie",
         title: "Selfie",
-        doc_status: userKyc.identification.doc_status,
+        doc_status: userKyc.equity_identification.doc_status,
         default_image: 'selfie_default.svg',
         approved_image: "selfie_approved.svg",
       },
@@ -411,7 +411,7 @@ export function getDocuments(userKyc) {
     {
       key: "selfie",
       title: "Selfie",
-      doc_status: userKyc.identification.doc_status,
+      doc_status: userKyc.equity_identification.doc_status,
       default_image: 'selfie_default.svg',
       approved_image: "selfie_approved.svg",
     },
@@ -457,6 +457,15 @@ export function getDocuments(userKyc) {
   if (isDigilockerFlow(userKyc)) {
     // removing selfie video (IPV)
     documents.splice(3, 1);
+  }
+
+  if (!isTradingEnabled(userKyc)) {
+    documents = documents.map((document) => {
+      if (document.key === "selfie") {
+        document.doc_status = userKyc.identification.doc_status
+      }
+      return document;
+    });
   }
 
   return documents;
