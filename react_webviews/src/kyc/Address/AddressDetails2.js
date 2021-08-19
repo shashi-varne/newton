@@ -102,7 +102,7 @@ const AddressDetails2 = (props) => {
     } else {
       if (kyc?.address?.meta_data?.is_nri) {
         navigate("/kyc/nri-address-details1", {
-          isEdit,
+          state: { isEdit }
         });
       } else {
         navigate("/kyc/journey");
