@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Container from '../common/Container'
 import ShowAadharDialog from '../mini-components/ShowAadharDialog'
-import { storageService, getUrlParams } from '../../utils/validators'
-import { isEmpty } from 'lodash';
+import { isEmpty, storageService, getUrlParams } from '../../utils/validators'
+// import { isEmpty } from 'lodash';
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
