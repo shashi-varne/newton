@@ -68,7 +68,7 @@ const FnOIncomeProof = (props) => {
   const goBackPath = props.location?.state?.goBack || "";
   const { productName, Web } = getConfig();
   const fromNativeLandingOrMyAccounts = storageService().get("native") && goBackPath === "exit";
-  const hideSkipOption = !Web ? fromNativeLandingOrMyAccounts : hideSkipOptionPaths.includes(fromState);
+  const isFromKycJourney = !(!Web ? fromNativeLandingOrMyAccounts : hideSkipOptionPaths.includes(fromState));
   const isMyAccountFlow = fromState === "/my-account";
 
   useEffect(() => {
@@ -202,7 +202,7 @@ const FnOIncomeProof = (props) => {
   return (
     <Container
       events={sendEvents("just_set_events")}
-      canSkip={!hideSkipOption}
+      canSkip={isFromKycJourney}
       hidePageTitle
       hideHamburger
       handleClick={uploadAndGoNext}
@@ -216,7 +216,7 @@ const FnOIncomeProof = (props) => {
     >
       <WVInPageHeader style={{ marginBottom: '15px' }}>
         <WVInPageTitle>Provide income proof for F&O trading 
-          {!hideSkipOption && <span className="kyc-fno-header-optional-text"> (Optional)</span>}
+          {isFromKycJourney && <span className="kyc-fno-header-optional-text"> (Optional)</span>}
           </WVInPageTitle>
       </WVInPageHeader>
       <WVInfoBubble>
@@ -287,10 +287,14 @@ const FnOIncomeProof = (props) => {
         isOpen={openBottomSheet}
         onClose={() => setOpenBottomSheet(false)}
         title="Income proof uploaded"
-        subtitle="Great, just one more step to go! Now complete eSign to get investment ready"
+        subtitle={
+          isFromKycJourney ?
+          "Great, just one more step to go! Now complete eSign to get investment ready" :
+          "We will update you when verification has been completed"
+        }
         image={require(`assets/${productName}/doc-uploaded.svg`)}
         button1Props={{
-          title: 'Continue',
+          title: isFromKycJourney ? 'Continue' : 'Okay',
           variant: "contained",
           onClick: goNext
         }}
