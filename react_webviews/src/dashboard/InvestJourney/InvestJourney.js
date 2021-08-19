@@ -12,7 +12,7 @@ import InvestError from "../Invest/mini-components/InvestError";
 import { getBasePath, getConfig, navigate as navigateFunc } from "../../utils/functions";
 import InvestReferralDialog from "../Invest/mini-components/InvestReferralDialog";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
-import { formatAmountInr } from "../../utils/validators";
+import { formatAmountInr, storageService } from "../../utils/validators";
 
 const imageSuffix = {
   fisdom: "png",
@@ -30,7 +30,7 @@ const InvestJourney = (props) => {
   const state = props.location.state || {};
   const productName = getConfig().productName;
   const investment =
-    JSON.parse(window.localStorage.getItem("investment")) ||
+    storageService().getObject("investment") ||
     JSON.parse(state.investment);
   let { type, order_type } = investment;
   const sipTypesKeys = [

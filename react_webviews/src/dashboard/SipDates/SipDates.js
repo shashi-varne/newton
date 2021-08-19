@@ -105,7 +105,7 @@ class SipDates extends Component {
       sipBaseData.investment.allocations[index].sip_date = sip.sip_date;
     });
 
-    window.localStorage.setItem("investment", JSON.stringify(sipBaseData));
+    storageService().setObject("investment", sipBaseData);
 
     this.proceedInvestment({
       userKyc: userKyc,
@@ -134,6 +134,7 @@ class SipDates extends Component {
           this.handleApiRunning
         );
       } else {
+        this.setState({ isApiRunning: "page" });
         window.location.href = pgLink;
       }
     } else {
