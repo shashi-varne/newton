@@ -10,7 +10,7 @@ class Prepare extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showLoader: "page",
+      showSkelton: true,
     };
   }
 
@@ -35,7 +35,7 @@ class Prepare extends Component {
 
   render() {
     return (
-      <Container showLoader={this.state.showLoader} noFooter={true} title="Hello">
+      <Container skelton={this.state.showSkelton} noFooter={true} title="Hello" noBackIcon={true}>
         <div className="sdk-landing">
           <div className="generic-page-subtitle">
             Let’s make your money work for you!
