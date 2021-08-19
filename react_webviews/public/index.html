@@ -175,7 +175,12 @@
       homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
     -->
     <base id="myBaseHref"  />
-
+    <script>
+      var browser = window.navigator.userAgent;
+      if(browser.indexOf("MSIE") !== -1) {
+        window.location.href='./support.html';
+      }
+    </script>
     <script>
 
       window.localStorage.setItem('base_href', '');
