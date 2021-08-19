@@ -29,7 +29,11 @@ class SipDates extends Component {
       show_loader: false,
       productName: getConfig().productName,
       screenName: "sip_dates",
-      dialogStates: {},
+      dialogStates: {
+        openInvestError: false,
+        openPennyVerificationPending: false
+      },
+      openSuccessDialog: false,
       isSipDatesScreen: true,
     };
     this.navigate = navigateFunc.bind(this.props);
