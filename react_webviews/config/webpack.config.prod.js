@@ -256,7 +256,10 @@ module.exports = {
     // in `package.json`, in which case it will be the pathname of that URL.
     
     // Generates an `index.html` file with the <script> injected.
-    new CleanWebpackPlugin(),
+    new CleanWebpackPlugin({
+      root: process.cwd(),
+      cleanOnceBeforeBuildPatterns: ["**/*","!images/**"],
+    }),
     new HtmlWebpackPlugin({
       inject: true,
       template: paths.appHtml,
@@ -272,6 +275,22 @@ module.exports = {
         minifyCSS: true,
         minifyURLs: true,
       },
+    }),
+    new HtmlWebpackPlugin({
+      inject: false,
+      template: paths.supportHtml,
+      filename: 'support.html',
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeRedundantAttributes: true,
+        useShortDoctype: true,
+        removeEmptyAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        keepClosingSlash: true,
+        minifyCSS: true,
+        minifyURLs: true,
+      }
     }),
     new InterpolateHtmlPlugin(HtmlWebpackPlugin, env.raw),
     // Makes some environment variables available to the JS code, for example:
