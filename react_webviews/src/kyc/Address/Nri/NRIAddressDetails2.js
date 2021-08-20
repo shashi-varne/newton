@@ -211,7 +211,8 @@ const NRIAddressDetails2 = (props) => {
             helperText={form_data.nri_pincode_error || ""}
             error={form_data.nri_pincode_error ? true : false}
             inputProps={{
-              inputMode: "numeric"
+              inputMode: "numeric",
+              maxLength: 20
             }}
           />
           <TextField
@@ -235,6 +236,9 @@ const NRIAddressDetails2 = (props) => {
             error={form_data.city_error ? true : false}
             margin="normal"
             onChange={handleChange}
+            inputProps={{
+              maxLength: 30
+            }}
           />
           <TextField
             label="State"
@@ -244,6 +248,9 @@ const NRIAddressDetails2 = (props) => {
             error={form_data.state_error ? true : false}
             margin="normal"
             onChange={handleChange}
+            inputProps={{
+              maxLength: 30
+            }}
           />
           <TextField
             label="Country"
@@ -253,6 +260,9 @@ const NRIAddressDetails2 = (props) => {
             error={form_data.country_error ? true : false}
             margin="normal"
             onChange={handleChange}
+            inputProps={{
+              maxLength: 30
+            }}
           />
           <TextField
             label="Taxpayer Identification Number (optional)"
