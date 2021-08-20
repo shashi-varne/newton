@@ -1,59 +1,63 @@
-import React, { Component, useState, useEffect } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import React, { Component, useState, useEffect } from "react";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-import Login from './login_and_registration/Login';
-import Register from './login_and_registration/Register';
-import Otp from './login_and_registration/Otp';
-import ForgotPassword from './login_and_registration/ForgotPassword';
-import Logout from './login_and_registration/Logout';
-import FisdomPartnerRedirect from './fisdom_partner_redirect';
-import WealthReport from './wealth_report';
-import SocialCallback from './login_and_registration/SocialCallback';
-
-
-import { create } from 'jss';
-import JssProvider from 'react-jss/lib/JssProvider';
-import { createGenerateClassName, jssPreset,
-  MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { themeConfig } from 'utils/constants';
+import { create } from "jss";
+import JssProvider from "react-jss/lib/JssProvider";
+import {
+  createGenerateClassName,
+  jssPreset,
+  MuiThemeProvider,
+  createMuiTheme,
+} from "@material-ui/core/styles";
+import { themeConfig } from "utils/constants";
 import { withRouter } from "react-router";
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer } from "react-toastify";
+import Loadable from "react-loadable";
 
-import InternalWealthDashboard from './internal_wealth_dashboard';
-import DesktopLayout from './desktopLayout';
+import InternalWealthDashboard from "./internal_wealth_dashboard";
+import DesktopLayout from "./desktopLayout";
+import Login from "./login_and_registration/Login";
+import Register from "./login_and_registration/Register";
+import Otp from "./login_and_registration/Otp";
+import ForgotPassword from "./login_and_registration/ForgotPassword";
+import Logout from "./login_and_registration/Logout";
+import FisdomPartnerRedirect from "./fisdom_partner_redirect";
+import WealthReport from "./wealth_report";
+import SocialCallback from "./login_and_registration/SocialCallback";
 // import CommonRenderFaqs from './common/components/RenderFaqs';
 
+import Feature from "./Feature";
 
-import Feature from './Feature';
-
-import NotFound from './common/components/NotFound';
-import Tooltip from 'common/ui/Tooltip';
-import {getConfig} from './utils/functions';
-import 'common/theme/Style.scss';
-import { storageService } from './utils/validators';
-import PartnerAuthentication from './login_and_registration/Authentication';
-import Prepare from './dashboard/Invest/components/SdkLanding/Prepare';
-import { ThemeProvider } from './utils/ThemeContext';
+import NotFound from "./common/components/NotFound";
+import Tooltip from "common/ui/Tooltip";
+import { getConfig } from "./utils/functions";
+import "common/theme/Style.scss";
+import { storageService } from "./utils/validators";
+import PartnerAuthentication from "./login_and_registration/Authentication";
+import Prepare from "./dashboard/Invest/components/SdkLanding/Prepare";
+import { ThemeProvider } from "./utils/ThemeContext";
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
-  productionPrefix: 'f',
+  productionPrefix: "f",
 });
 const jss = create(jssPreset());
 // We define a custom insertion point that JSS will look for injecting the styles in the DOM.
 // jss.options.insertionPoint = 'jss-insertion-point';
 
-const getMuiThemeConfig = () => { 
+const getMuiThemeConfig = () => {
   return createMuiTheme(themeConfig());
+};
+
+var basename = window.sessionStorage.getItem("base_href") || "";
+if (basename && basename.indexOf("appl/webview") !== -1) {
+  basename = basename ? basename + "view/" : "";
 }
 
-var basename = window.sessionStorage.getItem('base_href') || '';
-if (basename && basename.indexOf('appl/webview') !== -1) {
-  basename = basename ? basename + 'view/' : '';
-}
-
-const isBottomSheetDisplayed = storageService().get('is_bottom_sheet_displayed');
-if(isBottomSheetDisplayed) {
+const isBottomSheetDisplayed = storageService().get(
+  "is_bottom_sheet_displayed"
+);
+if (isBottomSheetDisplayed) {
   storageService().set("is_bottom_sheet_displayed", false);
 }
 
@@ -61,7 +65,7 @@ const isBottomSheetDisplayedKycPremium = storageService().get(
   "is_bottom_sheet_displayed_kyc_premium"
 );
 
-if(isBottomSheetDisplayedKycPremium) {
+if (isBottomSheetDisplayedKycPremium) {
   storageService().set("is_bottom_sheet_displayed_kyc_premium", false);
 }
 
@@ -69,7 +73,7 @@ const ScrollToTop = withRouter(
   class ScrollToTopWithoutRouter extends Component {
     componentDidUpdate(prevProps) {
       if (this.props.location !== prevProps.location) {
-        window.scrollTo(0, 0)
+        window.scrollTo(0, 0);
       }
     }
 
@@ -79,54 +83,74 @@ const ScrollToTop = withRouter(
   }
 );
 
+const InternalWealthDashboardComponent = Loadable({
+  loader: () => import("./internal_wealth_dashboard"),
+  loading: () => <div>Loading...</div>,
+});
+const LoginComponent = Loadable({
+  loader: () =>
+    import(/*webpackChunkName: "Login"*/ "./login_and_registration/Login"),
+  loading: () => <div>Loading...</div>,
+});
 const App = () => {
   const config = getConfig();
   const isMobileDevice = config.isMobileDevice;
-  const [themeConfiguration, setThemeConfiguration] = useState(getMuiThemeConfig());
+  const [themeConfiguration, setThemeConfiguration] = useState(
+    getMuiThemeConfig()
+  );
   useEffect(() => {
-    if(config.isSdk || config.isIframe) {
-      storageService().set("entry_path",window.location.pathname);
+    if (config.isSdk || config.isIframe) {
+      storageService().set("entry_path", window.location.pathname);
     }
-  },[]);
+  }, []);
   const updateTheme = (event) => {
     const theme = getMuiThemeConfig();
-    setThemeConfiguration(theme)
-  }
+    setThemeConfiguration(theme);
+  };
   const iframe = config.isIframe;
-    return (
-      <BrowserRouter basename={basename}>
-        <JssProvider jss={jss} generateClassName={generateClassName}>
-          <ThemeProvider value={{updateTheme}}>
+  return (
+    <BrowserRouter basename={basename}>
+      <JssProvider jss={jss} generateClassName={generateClassName}>
+        <ThemeProvider value={{ updateTheme }}>
           <MuiThemeProvider theme={themeConfiguration}>
             <ScrollToTop />
             <Tooltip />
             <ToastContainer autoClose={3000} />
             <Switch>
-              <Route path="/iw-dashboard" component={InternalWealthDashboard} />
-              <Route path='/w-report' component={WealthReport} />
-              <Route path='/login' component={Login} />
-              <Route path='/register' component={Register} />
-              <Route path='/mobile/verify' component={Otp} />
-              <Route path='/forgot-password' component={ForgotPassword} />
-              <Route path='/social/callback' component={SocialCallback} />
-              <Route path='/partner-landing' component={FisdomPartnerRedirect} />
-              <Route path="/partner-authentication/:partnerCode" component={PartnerAuthentication} />
-              <Route path='/logout' component={Logout} />
+              <Route
+                path="/iw-dashboard"
+                component={InternalWealthDashboardComponent}
+              />
+              <Route path="/w-report" component={WealthReport} />
+              <Route path="/login" component={LoginComponent} />
+              <Route path="/register" component={Register} />
+              <Route path="/mobile/verify" component={Otp} />
+              <Route path="/forgot-password" component={ForgotPassword} />
+              <Route path="/social/callback" component={SocialCallback} />
+              <Route
+                path="/partner-landing"
+                component={FisdomPartnerRedirect}
+              />
+              <Route
+                path="/partner-authentication/:partnerCode"
+                component={PartnerAuthentication}
+              />
+              <Route path="/logout" component={Logout} />
               <Route path="/prepare" component={Prepare} />
-              {
-                isMobileDevice || iframe ?
-                <Route component={Feature}/>:
+              {isMobileDevice || iframe ? (
+                <Route component={Feature} />
+              ) : (
                 <DesktopLayout>
                   <Feature />
                 </DesktopLayout>
-              }
+              )}
               <Route component={NotFound} />
             </Switch>
           </MuiThemeProvider>
-          </ThemeProvider>
-        </JssProvider>
-      </BrowserRouter>
-    );
-}
+        </ThemeProvider>
+      </JssProvider>
+    </BrowserRouter>
+  );
+};
 
 export default App;
