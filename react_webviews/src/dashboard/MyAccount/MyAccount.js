@@ -182,6 +182,7 @@ class MyAccount extends Component {
         accountAlreadyExistsData : this.state.accountAlreadyExistsData,
         page: "my-account",
         edit: true,
+        goBack: "/my-account"
       },
     });
   };
