@@ -65,6 +65,15 @@ export const validateFields = (formData, keyToCheck) => {
             canSubmit = false
           }
           break
+        case 'name':
+        case 'father_name':
+        case 'mother_name':
+        case 'spouse_name':
+          if (value.length < 3) {
+            formData[`${key}_error`] = 'Minimum length is 3'
+            canSubmit = false
+          }
+          break
         default:
           break
       }
