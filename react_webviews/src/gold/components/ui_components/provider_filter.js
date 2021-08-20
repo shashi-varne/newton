@@ -30,10 +30,10 @@ class GoldProviderFilterClass extends Component {
                     <div className="tile1-left">
                         <span style={{textTransform: 'capitalize'}}>{this.props.parent.state.orderType}</span> gold:
                         <span onClick={() => this.navigate('providers', { redirect_state: 'buy-home' })}
-                            style={{ color: getConfig().primary,cursor: 'pointer' }}> {this.state.providerInfo.title}
+                            style={{ color: getConfig().styles.primaryColor,cursor: 'pointer' }}> {this.state.providerInfo.title}
                             <SVG
                                 className="arrow-img"
-                                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+                                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.primaryColor)}
                                 src={down_arrow}
                             />
                         </span>

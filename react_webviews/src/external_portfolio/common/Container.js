@@ -4,7 +4,7 @@ import { withRouter } from "react-router";
 import Header from "./Header";
 import Footer from "./footer";
 
-import { nativeCallback } from "utils/native_callback";
+import { nativeCallback, handleNativeExit } from "utils/native_callback";
 import Button from "material-ui/Button";
 import Dialog, {
   DialogActions,
@@ -12,7 +12,7 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
-import '../../utils/native_listner';
+import '../../utils/native_listener';
 import { getConfig, setHeights } from 'utils/functions';
 // import {checkStringInString, storageService} from 'utils/validators';
 import { isEmpty, isFunction } from "../../utils/validators";
@@ -34,32 +34,18 @@ class Container extends Component {
     // this.check_hide_header_title();
     setHeights({ 'header': true, 'container': false });
     let that = this;
-    if (getConfig().generic_callback) {
-      window.callbackWeb.add_listener({
-        type: 'back_pressed',
-        go_back: function () {
-          that.historyGoBack();
-        }
-      });
-    } else {
-      window.PlutusSdk.add_listener({
-        type: 'back_pressed',
-        go_back: function () {
-          that.historyGoBack();
-        }
-      });
-    }
+    window.callbackWeb.add_listener({
+      type: 'back_pressed',
+      go_back: function () {
+        that.historyGoBack();
+      }
+    });
 
     window.addEventListener("scroll", this.onScroll, false);
   }
 
   componentWillUnmount() {
-    if (getConfig().generic_callback) {
-      window.callbackWeb.remove_listener({});
-    } else {
-      window.PlutusSdk.remove_listener({});
-    }
-
+    window.callbackWeb.remove_listener({});
     window.removeEventListener("scroll", this.onScroll, false);
   }
 
@@ -85,7 +71,7 @@ class Container extends Component {
     let { params } = this.props.location;
     
     if (params && params.disableBack) {
-      nativeCallback({ action: 'exit' });
+      handleNativeExit(this.props, { action: "exit"});
       return;
     }
 
@@ -136,7 +122,8 @@ class Container extends Component {
       openPopup: false
     });
 
-    nativeCallback({ action: "native_back", events: this.getEvents("back") });
+    nativeCallback({ events: this.getEvents("back") });
+    handleNativeExit(this.props, { action: "native_back"});
   };
 
   renderPopup = () => {

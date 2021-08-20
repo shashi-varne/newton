@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {useParams} from 'react-router-dom';
 import Container from '../common/Container';
 import { fetch_fund_details, fetch_fund_graph } from '../common/ApiCalls';
 import Typography from '@material-ui/core/Typography';
@@ -10,43 +11,156 @@ import FundPortfolio from './FundPortfolio';
 import Returns from './Returns';
 import FundInfo from './FundInfo';
 import RiskDetails from './RiskDetails';
-import { getUrlParams } from '../../utils/validators';
+import { getUrlParams, isEmpty } from '../../utils/validators';
 import FundCarousel from './FundCarousel';
 import FundChart from './FundChart';
 import RatingStar from '../common/RatingStar';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import toast from '../../common/ui/Toast';
 import morning_star_logo from 'assets/morning_star_logo.png';
 import morning_star_small from 'assets/morning_star_small.svg';
 import { getConfig, isIframe } from 'utils/functions';
 import { withStyles } from '@material-ui/core/styles';
-import IframeContainer from '../../e_mandate/commoniFrame/Container';
+import { storageService } from 'utils/validators';
+import CartDialog from './CartDialog';
 
 import './Style.scss';
+import { isInvestRefferalRequired, proceedInvestment } from '../../dashboard/proceedInvestmentFunctions';
+import useUserKycHook from '../../kyc/common/hooks/userKycHook';
+import PennyVerificationPending from '../../dashboard/Invest/mini-components/PennyVerificationPending';
+import InvestError from '../../dashboard/Invest/mini-components/InvestError';
+import InvestReferralDialog from '../../dashboard/Invest/mini-components/InvestReferralDialog';
+import { SkeltonRect } from '../../common/ui/Skelton';
+import { getBasePath, isNewIframeDesktopLayout } from '../../utils/functions';
+import { getdiyGraphDataWithISIN } from '../../dashboard/Invest/common/api';
+import { navigate as navigateFunc } from "../../utils/functions"
+
 const styles = {
   root: {
     margin: '10px',
   },
 };
-const FundDetails = ({ classes, history }) => {
+const FundDetails = (props) => {
+  const { classes, history, flowType } = props;
+  const navigate = navigateFunc.bind(props);
   const [isLoading, setLoading] = useState(true);
   const [fundDetails, setFundDetails] = useState(null);
   const [reports, setReports] = useState(null);
   const [graph, setGraph] = useState(null);
   const [selectedIsin, setSelectedIsin] = useState(0);
   const productType = getConfig().productName;
-  const partnerCode = getConfig().partner_code;
+  const {isin} = useParams();
+  let { isins, selected_isin, type } = getUrlParams();
+  if(flowType) {
+    type = flowType
+  }
+  const EMPTY_CART = 'EMPTY_CART';
+  const FUND_ADDED = 'FUND_ADDED';
+  const ADD_CART = '+ Add to Cart';
+  const ENTER_AMOUNT = 'Enter Amount';
+  const INVEST = 'INVEST';
+  const CART_LIMIT = 24;
+
+  const funds = storageService().getObject('diystore_cart') || [];
+  const fund = storageService().getObject('diystore_fundInfo') || {};
+  let currentStatus = type === 'diy' ? EMPTY_CART : '';
+  let currentTitle = 'Ok';
+
+  const investment = JSON.parse(window.localStorage.getItem("investment")) || {};
+
+  switch (type) {
+    case "diy" :
+      funds.forEach((item) => {
+        if (item.isin === fund.isin) {
+          currentStatus = FUND_ADDED;
+        }
+      });
+      if( productType === 'finity' ) {
+        currentTitle = INVEST;
+      } else {
+        currentTitle = ADD_CART;
+      }
+    break;
+    case "mf": 
+      if(isEmpty(investment)) {
+        history.goBack();
+      }
+      currentTitle = INVEST;
+      break;
+    default:
+      break;
+  }
+
+  const [cart, setCart] = useState([...funds])
+  const [isOpen, setIsOpen] = useState(false)
+  const [status, setStatus] = useState(currentStatus)
+  const [buttonTitle, setButtonTitle] = useState(currentTitle);
+  const { kyc, isLoading: loading } = useUserKycHook();
+  const [dialogStates, setDialogStates] = useState({});
+  const [isApiRunning, setIsApiRunning] = useState(false);
   const [open, setOpen] = useState(false);
   const iframe = isIframe();
   const isMobile = getConfig().isMobileDevice;
-  const { isins, selected_isin, type } = getUrlParams();
+  
+  
+  const buttonData = (length) => {
+    return (
+      <div className="fund-details-dual-button-content">
+        <div className="cart-content">
+          <img alt="" src={require(`assets/add_cart_icon.png`)} />
+          <div className="circle"><span>{length}</span></div>
+        </div>
+        <span>funds <br/> in cart</span>
+      </div>
+    );
+  };
+
+  const handleRemoveFromCart = (item) => () => {
+    if (cart.length > 0) {
+      const updatedCartItems = cart.filter(({ isin }) => isin !== item.isin);
+      setCart(updatedCartItems);
+      storageService().setObject("diystore_cart", updatedCartItems);
+      if(item.isin === fund.isin) {
+        setStatus(EMPTY_CART)
+        setButtonTitle(ADD_CART)  
+      } else {
+        setButtonTitle(buttonData(updatedCartItems.length))
+      }
+      if(updatedCartItems.length === 0) close();
+    }
+  };
+  
+
+  const getFundData = async () => {
+    try {
+      setLoading(true);
+      const graphData = await getdiyGraphDataWithISIN(isin);
+      storageService().setObject('diystore_fundInfo', graphData.fundinfo);
+    } catch (error) {
+      console.log(error);
+      toast(error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
+    if(status === FUND_ADDED && type === 'diy' && productType !== 'finity') {
+      setButtonTitle(buttonData(cart.length));
+    } 
     (async () => {
+      if(flowType === "diy") {
+        await getFundData();
+      } 
       try {
         setLoading(true);
+        if(isin){
+          isins = isin;
+        }
         const response = await fetch_fund_details(isins);
-        const index = response?.text_report?.findIndex((el) => el.isin === selected_isin);
+        let index = response?.text_report?.findIndex((el) => el.isin === selected_isin);
+        if(isins === selected_isin){
+          index = -1;
+        }
 
         const { idx, array } = swap_fund_index(index, response?.text_report);
         if (idx) {
@@ -62,7 +176,7 @@ const FundDetails = ({ classes, history }) => {
           await fetch_graph_data(response?.text_report[0]?.isin);
         }
       } catch (err) {
-        toast('wrong', 'error');
+        toast('Something went wrong', 'error');
         setLoading(false);
       }
     })();
@@ -93,17 +207,124 @@ const FundDetails = ({ classes, history }) => {
     fetch_graph_data(reports[el].isin);
     setFundDetails(reports[el]);
   };
-  const goBack = () => {
-    if(type === 'diy'){
-      handleInvest();
-    } else {
-      history.goBack();
+
+  const handleClick = () => {
+    if (productType === "finity" && type === "diy") {
+      storageService().setObject("diystore_cart", [fund]);
+      handleClick2();
+      return;
+    }
+    switch (type) {
+      case "diy":
+        let stage = status;
+        switch (stage) {
+          case "EMPTY_CART":
+            if (cart.length >= CART_LIMIT) {
+              toast(
+                `You can only invest in ${CART_LIMIT} funds at a time. Please change one of the funds.`
+              );
+              return;
+            }
+            let updatedList = [...cart, fund];
+            setCart(updatedList);
+            storageService().setObject("diystore_cart", updatedList);
+            setButtonTitle(buttonData(updatedList.length));
+            setStatus(FUND_ADDED);
+            break;
+          case "FUND_ADDED":
+            setIsOpen(true);
+            break;
+          default:
+            break;
+        }
+        break;
+      case "mf":
+        goNext()
+        break;
+      default:
+        history.goBack();
+        break;
     }
   };
 
-  const handleInvest = () => {
-    window.location.href =  getConfig().webAppUrl + 'diy/invest';
+  const close = () => {
+    setIsOpen(false)
   }
+
+  const handleClick2 = () => {
+    navigate("/diy/invest")
+  };
+
+  const goNext = (investReferralData, isReferralGiven) => {
+    const sipTypesKeys = [
+      "buildwealth",
+      "savetaxsip",
+      "saveforgoal",
+      "indexsip",
+      "shariahsip",
+      "sectoralsip",
+      "midcapsip",
+      "balancedsip",
+      "goldsip",
+      "diysip",
+    ];
+    let sipOrOneTime = "";
+    if ((investment.type !== "riskprofile") & (investment.type !== "insta-redeem")) {
+      sipOrOneTime = "onetime";
+      if (sipTypesKeys.indexOf(investment.type) !== -1) {
+        sipOrOneTime = "sip";
+      }
+    } else {
+      sipOrOneTime = investment.order_type;
+    }
+    let paymentRedirectUrl = encodeURIComponent(
+      `${getBasePath()}/page/callback/${sipOrOneTime}/${investment.amount}${getConfig().searchParams}`
+    );
+
+    if (
+      isInvestRefferalRequired(getConfig().code) &&
+      !isReferralGiven
+    ) {
+      handleDialogStates("openInvestReferral", true);
+      return;
+    }
+
+    let body = {
+      investment: investment,
+    };
+
+    if (isReferralGiven && investReferralData.code) {
+      body.referral_code = investReferralData.code;
+    }
+
+    proceedInvestment({
+      sipOrOnetime: sipOrOneTime,
+      body: body,
+      paymentRedirectUrl: paymentRedirectUrl,
+      isSipDatesScreen: false,
+      history: history,
+      userKyc: kyc,
+      handleApiRunning: handleApiRunning,
+      handleDialogStates: handleDialogStates,
+    });
+  };
+
+  const handleApiRunning = (result) => {
+    setIsApiRunning(result);
+  };
+
+  const handleDialogStates = (key, value, errorMessage) => {
+    let dialog_states = { ...dialogStates };
+    dialog_states[key] = value;
+    if (errorMessage) dialog_states["errorMessage"] = errorMessage;
+    setDialogStates({ ...dialog_states });
+    handleApiRunning(false)
+  };
+
+
+  // const handleInvest = () => {
+  //   window.location.href =  getConfig().webAppUrl + 'diy/invest';
+  // }
 
   const ContainerData = () => (
     <>
@@ -135,7 +356,7 @@ const FundDetails = ({ classes, history }) => {
             <Typography
               align='center'
               style={{
-                color: '#35CB5D',
+                color: getConfig().styles.secondaryGreen,
                 fontWeight: '500',
                 letterSpacing: '0.5px',
                 lineHeight: '1.5em',
@@ -328,7 +549,13 @@ const FundDetails = ({ classes, history }) => {
                 placeItems: 'center',
               }}
             >
-              <CircularProgress size={50} style={{ color: '#878787' }} />
+             <SkeltonRect
+                    style={{
+                        width: 'calc(100% - 30px)',
+                        height: '100%',
+                        // margin: "0 15px",
+                      }}
+              />
             </div>
           )}
         </section>
@@ -415,6 +642,40 @@ const FundDetails = ({ classes, history }) => {
             the fund. Funds with less than three years of performance history are not rated.
           </div>
         )}
+        {type === "diy" && (
+          <CartDialog
+            open={isOpen}
+            close={close}
+            cart={cart}
+            setCart={setCart}
+            handleRemoveFromCart={handleRemoveFromCart}
+            handleClick={handleClick2}
+          />
+        )}
+        {type === "mf" && (
+          <>
+            {dialogStates.openPennyVerificationPending && (
+              <PennyVerificationPending
+                isOpen={dialogStates.openPennyVerificationPending}
+                handleClick={() => navigate("/kyc/add-bank")}
+              />
+            )}
+            {dialogStates.openInvestError && (
+              <InvestError
+                isOpen={dialogStates.openInvestError}
+                errorMessage={dialogStates.errorMessage}
+                handleClick={() => navigate("/invest")}
+                close={() => handleDialogStates("openInvestError", false)}
+              />
+            )}
+            {dialogStates.openInvestReferral && (
+              <InvestReferralDialog
+                isOpen={dialogStates.openInvestReferral}
+                goNext={goNext}
+              />
+            )}
+          </>
+        )}
       </div>
     </>
   );
@@ -423,35 +684,102 @@ const FundDetails = ({ classes, history }) => {
     setOpen(!open);
   };
 
+  const ContainerProps = isNewIframeDesktopLayout() ?
+  {
+    hideInPageTitle:true,
+    noPadding: true,
+    fullWidthButton: true,
+    handleClick:handleClick,
+    buttonTitle: type === "diy" ? 'INVEST NOW' : "OK",
+    skelton:isLoading,
+    classOverRide:'fd-iframe-container',
+  }
+  :
+  {
+    // title={fundDetails?.performance?.friendly_name},
+    // hideInPageTitle={true},
+    // noPadding,
+    // fullWidthButton,
+    // handleClick={handleClick},
+    // buttonTitle={buttonTitle},
+    // showLoader={isLoading},
+    // classOverRideContainer='fd-container',
+    title:fundDetails?.performance?.friendly_name,
+    hidePageTitle:true,
+    hideInPageTitle:true,
+    noPadding: true,
+    // fullWidthButton,
+    handleClick:handleClick,
+    handleClickOne:handleClick,
+    buttonTitle:buttonTitle,
+    buttonOneTitle:buttonTitle,
+    skelton:isLoading || loading, // new container field
+    // classOverRideContainer:'fd-container',
+    classOverRide:"fd-container",
+    twoButton: status === 'FUND_ADDED' && productType !== 'finity' ,
+    buttonTwoTitle: ENTER_AMOUNT ,
+    handleClickTwo:handleClick2,
+    // handleClick2={handleClick2}, // old container field
+    // buttonTitle2={ENTER_AMOUNT}, // old container field
+    showLoader:isApiRunning, // new container field
+    // showLoader={isLoading || loading}, // old container field
+    type: status === 'FUND_ADDED' && productType !== 'finity' ? "fundDetailsDualButton" : "",
+  }
+
   return (
     <div>
-      {!iframe && partnerCode !== 'moneycontrol' ? (
-        <Container
-          title={fundDetails?.performance?.friendly_name}
-          hideInPageTitle={true}
-          noPadding
-          fullWidthButton
-          handleClick={goBack}
-          buttonTitle={type === 'diy' ? 'INVEST' : 'OK'}
-          showLoader={isLoading}
-          classOverRideContainer='fd-container'
-        >
-          {fundDetails && ContainerData()}
-        </Container>
-      ) : (
-        <IframeContainer
-          hideInPageTitle={true}
-          noPadding
-          fullWidthButton
-          handleClick={handleInvest}
-          buttonTitle={'INVEST NOW'}
-          showLoader={isLoading}
-          classOverRideContainer='fd-container-iframe'
-        >
-          {fundDetails && ContainerData()}
-        </IframeContainer>
-      )}
+      <Container {...ContainerProps} >
+        {fundDetails && ContainerData()}
+      </Container>
     </div>
+    // <div>
+    //   {!iframe && partnerCode !== 'moneycontrol' ? (
+    //     <Container
+    //       // title={fundDetails?.performance?.friendly_name}
+    //       // hideInPageTitle={true}
+    //       // noPadding
+    //       // fullWidthButton
+    //       // handleClick={handleClick}
+    //       // buttonTitle={buttonTitle}
+    //       // showLoader={isLoading}
+    //       // classOverRideContainer='fd-container'
+    //       title={fundDetails?.performance?.friendly_name}
+    //       hidePageTitle={true}
+    //       hideInPageTitle={true}
+    //       noPadding
+    //       // fullWidthButton
+    //       handleClick={handleClick}
+    //       handleClickOne={handleClick}
+    //       buttonTitle={buttonTitle}
+    //       buttonOneTitle={buttonTitle}
+    //       skelton={isLoading || loading} // new container field
+    //       classOverRideContainer='fd-container'
+    //       classOverRide="fd-container"
+    //       twoButton= {status === 'FUND_ADDED' && productType !== 'finity' }
+    //       buttonTwoTitle={ ENTER_AMOUNT }
+    //       handleClickTwo={handleClick2}
+    //       // handleClick2={handleClick2} // old container field
+    //       // buttonTitle2={ENTER_AMOUNT} // old container field
+    //       showLoader={isApiRunning} // new container field
+    //       // showLoader={isLoading || loading} // old container field
+    //       type={status === 'FUND_ADDED' && productType !== 'finity' ? "fundDetailsDualButton" : ""}
+    //     >
+    //       {fundDetails && ContainerData()}
+    //     </Container>
+    //   ) : (
+    //     <IframeContainer
+    //       hideInPageTitle={true}
+    //       noPadding
+    //       fullWidthButton
+    //       handleClick={handleInvest}
+    //       buttonTitle={'INVEST NOW'}
+    //       showLoader={isLoading}
+    //       classOverRideContainer='fd-container-iframe'
+    //     >
+    //       {fundDetails && ContainerData()}
+    //     </IframeContainer>
+    //   )}
+    // </div>
   );
 };
 

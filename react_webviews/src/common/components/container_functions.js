@@ -1,11 +1,11 @@
 
-import { getConfig, setHeights } from 'utils/functions';
+import { getConfig, setHeights, listenPartnerEvents } from 'utils/functions';
 // import { nativeCallback } from "utils/native_callback";
 import Banner from 'common/ui/Banner';
 import UiSkelton from 'common/ui/Skelton';
 import Footer from 'common/components/footer';
 import Header from 'common/components/Header';
-
+import IframeHeader from 'common/components/Iframe/Header';
 import React, { Fragment } from "react";
 
 import Button from "material-ui/Button";
@@ -15,16 +15,19 @@ import Dialog, {
     DialogContent,
     DialogContentText
 } from 'material-ui/Dialog';
-import '../../utils/native_listner';
+import '../../utils/native_listener';
 import { Imgc } from '../../common/ui/Imgc';
 import BottomSheet from '../../common/ui/BottomSheet';
 import { disableBodyTouch } from 'utils/validators';
+import { checkAfterRedirection, backButtonHandler } from "utils/functions";
 import { isFunction } from 'lodash';
+import { isNewIframeDesktopLayout } from '../../utils/functions';
 
 let start_time = '';
-
 export function didMount() {
     start_time = new Date();
+    const config = getConfig();
+    const newIframeDesktopLayout = isNewIframeDesktopLayout();
 
     this.getHeightFromTop = getHeightFromTop.bind(this);
     this.onScroll = onScroll.bind(this);
@@ -41,38 +44,78 @@ export function didMount() {
     this.commonRender = commonRender.bind(this);
     this.headerGoBack = headerGoBack.bind(this);
     this.renderGenericError = renderGenericError.bind(this);
+    this.checkAfterRedirection = checkAfterRedirection.bind(this);
+    this.backButtonHandler = backButtonHandler.bind(this);
+
+    const fromState = this.props?.location?.state?.fromState || "";
+    const toState = this.props?.location?.state?.toState || "";
+    this.checkAfterRedirection(this.props, fromState, toState);
 
     this.setState({
-        productName: getConfig().productName,
+        productName: config.productName,
         mounted: true,
         force_show_inpage_title: true,
         inPageTitle: true
     }, () => {
-        this.onScroll();
+        if(!newIframeDesktopLayout){
+            this.onScroll();
+        }
     })
 
     setHeights({ 'header': true, 'container': false });
 
     let that = this;
-    if (getConfig().generic_callback || this.state.project === 'help') {
-        window.callbackWeb.add_listener({
-            type: 'back_pressed',
-            go_back: function () {
+    if (config.isIframe) {
+        const hideLoaderEvent = {
+            event_name: "hide_loader",
+            properties: {
+              journey: {
+                name: "",
+                trigger: "",
+                journey_status: "",
+                next_journey: "",
+              },
+            },
+        };
+      
+        window.callbackWeb.sendEvent(hideLoaderEvent);
+        const partnerEvents = function (res) {
+            switch (res.type) {
+              case "back_pressed":
                 that.historyGoBack();
+                break;
+  
+              default:
+                break;
             }
-        });
-    } else {
-        window.PlutusSdk.add_listener({
-            type: 'back_pressed',
-            go_back: function () {
-                that.historyGoBack();
-            }
-        });
+        };
+        listenPartnerEvents(partnerEvents);
     }
+    window.callbackWeb.add_listener({
+        type: 'back_pressed',
+        go_back: function () {
+            that.historyGoBack();
+        }
+    });
+    if(!newIframeDesktopLayout){   
+        window.addEventListener("scroll", this.onScroll, true);
+        this.check_hide_header_title();
+    }
+}
 
-    window.addEventListener("scroll", this.onScroll, true);
-
-    this.check_hide_header_title();
+export function handleOnBackClick () {
+    const fromState = this.props.location?.state?.fromState || "";
+    const toState = this.props.location?.state?.toState || "";
+    const params = this.props.location?.params || {};
+    const pathname = this.props.location?.pathname || "";
+    const currentState = toState || pathname;
+    if (currentState) {
+      let isRedirected = this.backButtonHandler(this.props, fromState, currentState, params);
+      if (isRedirected) {
+        return true;
+      }
+    }
+    return false;
 }
 
 export function headerGoBack() {
@@ -80,10 +123,15 @@ export function headerGoBack() {
 }
 
 function addContainerClass (props_base){
-    return `ContainerWrapper  ${this.props.background || ''} ${props_base &&  props_base.classOverRide ? props_base.classOverRide : ''} ${this.props.classOverRide || ''} ${this.props.noPadding ? "no-padding" : ""}`;
+    const config = getConfig();
+    const containerClass = isNewIframeDesktopLayout() ? 'iframeContainerWrapper' : (config.code === "bfdlmobile" && config.isIframe) ? 'bfdlContainerWrapper' : 'ContainerWrapper'
+    return `${containerClass} ${this.props.background || ''} ${props_base &&  props_base.classOverRide ? props_base.classOverRide : ''} ${this.props.classOverRide || ''} ${this.props.noPadding ? "no-padding" : ""}`;
 }
 
 export function commonRender(props_base) {
+    const config = getConfig();
+    const isMoneycontrol = config.code === "moneycontrol";
+    const newIframeDesktopLayout = isNewIframeDesktopLayout();
 
     this.addContainerClass = addContainerClass.bind(this);
 
@@ -91,7 +139,7 @@ export function commonRender(props_base) {
     for (var i = 0; i < this.props.total; i++) {
         if (this.props.current > i) {
             steps.push(<span className='active'
-                style={{ background: getConfig().primary, marginRight: 0 }} key={i}></span>);
+                style={{ background: getConfig().styles.primaryColor, marginRight: 0 }} key={i}></span>);
         } else {
             steps.push(<span key={i} style={{ marginRight: 0 }}></span>);
         }
@@ -120,37 +168,51 @@ export function commonRender(props_base) {
 
     if (this.state.mounted) {
         return (
-
-   <div className={this.addContainerClass(props_base)}>
+            <div className={this.addContainerClass(props_base)} data-aid={`${this.props['data-aid']}-parent-container`}>
                 {/* Header Block */}
                 {(!this.props.noHeader && !getConfig().hide_header) && this.props.showLoader !== true
-                && !this.props.showLoaderModal && !this.props.loaderWithData && <Header
-                    disableBack={this.props.disableBack}
-                    title={this.props.title}
-                    smallTitle={this.props.smallTitle}
-                    provider={this.props.provider}
-                    count={this.props.count}
-                    total={this.props.total}
-                    current={this.props.current}
-                    edit={this.props.edit}
-                    noBack={this.props.noBack}
-                    type={getConfig().productName}
-                    resetpage={this.props.resetpage}
-                    handleReset={this.props.handleReset}
-                    topIcon={this.props.topIcon || this.props.rightIcon}
-                    handleTopIcon={this.handleTopIcon}
-                    inPageTitle={this.state.inPageTitle}
-                    force_hide_inpage_title={this.state.force_hide_inpage_title}
-                    style={this.props.styleHeader}
-                    className={this.props.classHeader}
-                    headerData={this.props.headerData}
-                    new_header={this.state.new_header || this.state.project === 'help'}
-                    goBack={this.headerGoBack || this.historyGoBack}
-                    filterPage={this.props.filterPage}
-                    handleFilter={this.props.handleFilter} 
-                    hideBack={this.props.hideBack}
-                />
-                }
+                && !this.props.showLoaderModal && !this.props.loaderWithData && 
+                (isMoneycontrol && config.isIframe && !config.isMobileDevice ? 
+                    <IframeHeader
+                        disableBack={this.props.disableBack}
+                        type={getConfig().productName}
+                        headerData={this.props.headerData}
+                        goBack={this.headerGoBack || this.historyGoBack}
+                        showIframePartnerLogo={this.props.showIframePartnerLogo}
+                    />
+                :
+                    <Header
+                        disableBack={this.props.disableBack}
+                        title={this.props.title}
+                        smallTitle={this.props.smallTitle}
+                        provider={this.props.provider}
+                        count={this.props.count}
+                        total={this.props.total}
+                        current={this.props.current}
+                        edit={this.props.edit}
+                        noBack={this.props.noBack}
+                        type={getConfig().productName}
+                        resetpage={this.props.resetpage}
+                        handleReset={this.props.handleReset}
+                        topIcon={this.props.topIcon || this.props.rightIcon}
+                        handleTopIcon={this.handleTopIcon}
+                        inPageTitle={this.state.inPageTitle}
+                        force_hide_inpage_title={this.state.force_hide_inpage_title}
+                        style={this.props.styleHeader}
+                        className={this.props.classHeader}
+                        headerData={this.props.headerData}
+                        new_header={this.state.new_header || this.state.project === 'help'}
+                        goBack={this.headerGoBack || this.historyGoBack}
+                        filterPage={this.props.filterPage}
+                        handleFilter={this.props.handleFilter} 
+                        hideBack={this.props.hideBack}
+                        notification={this.props.notification}
+                        handleNotification={this.props.handleNotification}  
+                        noBackIcon={this.props.noBackIcon}        
+                        customBackButtonColor={this.props.customBackButtonColor}
+                    />
+                )}
+            
                 {/* Below Header Block */}
                 <div id="HeaderHeight" style={{ top: 56 }}>
 
@@ -187,16 +249,24 @@ export function commonRender(props_base) {
                 {/* Children Block */}
                 <div
                     style={{ ...this.props.styleContainer, backgroundColor: this.props.skelton ? '#fff' : 'initial' }}
-                    className={`Container  ${this.props.background || ''} 
+                    className={`${newIframeDesktopLayout ? 'IframeContainer' : 'Container'}  ${this.props.background || ''} 
                     ${props_base && props_base.classOverRideContainer ? props_base.classOverRideContainer : ''} 
                     ${this.props.classOverRideContainer || '' } 
-                    ${this.props.noPadding ? "no-padding" : ""}`}>
+                    ${this.props.noPadding ? "no-padding" : ""}
+                    ${!this.props.noFooter ? "iframe-bottom-padding": ''}`}
+                    >
                     <div
                         className={`${!this.props.skelton ? 'fadein-animation' : ''}`}
                         style={{ display: this.props.skelton ? 'none' : '' }}
                     >
                         {this.props.children}
                     </div>
+                    {
+                        this.props.iframeRightContent && newIframeDesktopLayout &&
+                        <div className='iframe-right-content'>
+                            <img src={this.props.iframeRightContent} alt="right_img" />
+                        </div>
+                    }
                 </div>
 
                 {/* Footer Block */}
@@ -223,6 +293,9 @@ export function commonRender(props_base) {
                         project={this.props.project || this.state.project}
                         dualbuttonwithouticon={this.props.dualbuttonwithouticon}
                         twoButton={this.props.twoButton}
+                        twoButtonVertical={this.props.twoButtonVertical}
+                        button1Props={this.props.button1Props}
+                        button2Props={this.props.button2Props}
                         buttonOneTitle={this.props.buttonOneTitle}
                         buttonTwoTitle={this.props.buttonTwoTitle}
                         handleClickOne={this.props.handleClickOne}
@@ -242,19 +315,10 @@ export function commonRender(props_base) {
 }
 
 export function unmount() {
-    if (getConfig().generic_callback || this.state.project === 'help') {
-        window.callbackWeb.remove_listener({});
-    } else {
-        if (window.PlutusSdk) {
-            window.PlutusSdk.remove_listener({})
-        }
-
-        if (window.PaymentCallback) {
-            window.PaymentCallback.remove_listener({})
-        }
+    window.callbackWeb.remove_listener({});
+    if(!isNewIframeDesktopLayout()){
+        window.removeEventListener("scroll", this.onScroll, true);
     }
-
-    window.removeEventListener("scroll", this.onScroll, true);
 
     this.setState({
         mounted: false
@@ -290,7 +354,9 @@ export function check_hide_header_title() {
 }
 
 export function getHeightFromTop() {
-    var el = document.getElementsByClassName('Container')[0];
+    const Container = isNewIframeDesktopLayout() ? 'IframeContainer' : 'Container'
+    var el = document.getElementsByClassName(Container)[0];
+    if(!el) return;
     var height = el.getBoundingClientRect().top;
     return height;
 }
@@ -598,7 +664,7 @@ export function new_header_scroll() {
             <div id="header-title-page"
                 style={this.props.styleHeader}
                 className={`header-title-page  ${this.props.classHeader}`}>
-                <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{ width: this.props.count ? '75%' : '100%' }}>
+                <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{ width: this.props.count ? '75%' : '100%' }} data-aid='header-title-page-text'>
                     {this.props.title}
                 </div>
 

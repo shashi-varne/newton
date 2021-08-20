@@ -18,7 +18,7 @@ class BillerSteps extends Component {
       openDialog: true,
       bank_code: '',
       copyText: 'Copy',
-      callback_supported: getConfig().campaign_version === 1 ? true : false,
+      callback_supported: true,
       params: qs.parse(props.history.location.search.slice(1))
     }
 

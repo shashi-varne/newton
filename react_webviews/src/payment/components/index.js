@@ -11,7 +11,7 @@ import icn_debit_card from 'assets/icn_debit_card.svg';
 import icn_more from 'assets/icn_more.svg';
 import icn_secure_payment from 'assets/icn_secure_payment.svg';
 import completed_step from 'assets/completed_step.svg';
-import ic_close from 'assets/fisdom/ic_close.svg';
+import ic_close from 'assets/close_icon.svg';
 import SVG from 'react-inlinesvg';
 import Api from 'utils/api';
 import toast from '../../common/ui/Toast';
@@ -245,7 +245,7 @@ const SelectBankModal = (props) => {
     <div id="selectBankModal" className="modal modal-center">
       <div className="modal-content">
         <header className={`${getConfig().productName}`}>
-          <SVG className="ic_close" preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)} src={ic_close} width="25" onClick={() => props.closeBankModal()} />
+          <SVG className="ic_close" preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.primaryColor)} src={ic_close} width="25" onClick={() => props.closeBankModal()} />
         </header>
         <div className="header">
           <h1>Select preferred bank</h1>

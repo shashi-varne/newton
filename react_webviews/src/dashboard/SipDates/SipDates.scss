@@ -1,0 +1,69 @@
+.sip-dates {
+  padding-bottom: 20px;
+
+  .content {
+    margin-top: 20px;
+
+    .text {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      -ms-flex-align: end;
+      align-items: flex-end;
+
+      .title {
+        color: #160d2e;
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 1.6;
+      }
+
+      .subtitle {
+        min-width: -webkit-fit-content;
+        min-width: fit-content;
+        color: #333333;
+        font-size: 16px;
+      }
+    }
+
+    .mid-content {
+      color: #160d2e;
+      font-size: 13px;
+      font-weight: 300;
+      margin: 15px 0 0 0;
+    }
+
+    .input-box {
+      padding: 10px 15px 3px 15px;
+      background: #f8f8f8;
+      margin-top: 10px;
+
+      .input-value {
+        font-weight: 700;
+        color: var(--primary);
+      }
+
+      .appened-text {
+        color: #767e86;
+        font-size: 13px;
+        font-weight: 300;
+        margin: 1px 0 0 20px;
+      }
+    }
+  }
+}
+
+.content {
+  .content-selected {
+    font-weight: 600 !important;
+    font-size: 16px;
+  }
+
+  .appened-text {
+    color: #767e86;
+    font-size: 13px;
+    font-weight: 300;
+    margin: 1px 0 0 20px;
+  }
+}

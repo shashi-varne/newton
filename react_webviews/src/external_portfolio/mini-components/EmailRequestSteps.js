@@ -8,7 +8,7 @@ import InfoBox from './InfoBox';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import { isFunction, storageService } from '../../utils/validators';
 import { getConfig } from '../../utils/functions';
-const emailDomain = getConfig().email_domain;
+const emailDomain = getConfig().emailDomain;
 
 const theme = createMuiTheme({
   overrides: {

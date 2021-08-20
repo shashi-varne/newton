@@ -32,6 +32,7 @@ const Input = (props) => {
       <TextField
         inputref={props.inputref}
         error={props.error}
+        rows={props.rows}
         disabled={props.disabled}
         type={props.type}
         defaultValue={props.defaultValue}
@@ -50,10 +51,14 @@ const Input = (props) => {
         onKeyPress={props.onKeyChange}
         inputProps={{
           maxLength: props.maxLength,
-          inputMode: props.inputMode
+          inputMode: props.inputMode,
+          pattern:props.pattern,
         }}
         onClick={props.onClick}
         autoComplete={props.autoComplete}
+        autoFocus={props.autoFocus}
+        multiline={props.multiline}
+        rowsMax="3"
       />
     );
   }

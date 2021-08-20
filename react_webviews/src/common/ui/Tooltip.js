@@ -20,10 +20,10 @@ class TooltipClass extends Component {
     render() {
         return (
             <ReactTooltip
-                backgroundColor={getConfig().highlight_color}
+                backgroundColor={getConfig().styles.highlightColor}
                 textColor={'#767E86'}
                 place={'bottom'}
-                arrowColor={getConfig().highlight_color}
+                arrowColor={getConfig().styles.highlightColor}
                 // arrowColor={'transparent'}
                 effect="solid"
                 multiline={true}

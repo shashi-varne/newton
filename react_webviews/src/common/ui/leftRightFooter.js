@@ -32,7 +32,7 @@ class LeftRightFooterClass extends Component {
                     }           
 
                     {this.state.leftButtonData.title &&  
-                        <span style={{color: getConfig().secondary, fontSize:12, fontWeight:700}}>
+                        <span style={{color: getConfig().styles.secondaryColor, fontSize:12, fontWeight:700}}>
                             {this.state.leftButtonData.title}
                         </span>
                     }
@@ -46,7 +46,7 @@ class LeftRightFooterClass extends Component {
                         />}
 
                     {this.state.rightButtonData.title &&  
-                        <span style={{backgroundColor: getConfig().secondary, color: 'white', fontSize:12, fontWeight:700}}>
+                        <span style={{backgroundColor: getConfig().styles.secondaryColor, color: 'white', fontSize:12, fontWeight:700}}>
                             {this.state.rightButtonData.title}
                         </span>
                     }

@@ -1,0 +1,23 @@
+.wv-in-page-header {
+  margin-bottom: 30px;
+}
+
+.wv-ip-title {
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 24px;
+  color: var(--dark);
+  word-break: break-word;
+}
+
+.wv-ip-subtitle {
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 21px;
+  color: var(--steelgrey);
+  word-break: break-word;
+}
+
+.wv-ip-title + .wv-ip-subtitle {
+  margin-top: 10px;
+}

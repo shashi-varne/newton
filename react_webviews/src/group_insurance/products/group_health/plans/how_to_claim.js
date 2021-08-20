@@ -12,7 +12,7 @@ class GroupHealthPlanHowToClaim extends Component {
                 steps:[]
             },
             type: getConfig().productName,
-            color: getConfig().primary,
+            color: getConfig().styles.primaryColor,
             show_loader: true
         };
 

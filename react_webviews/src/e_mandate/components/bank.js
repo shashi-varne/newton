@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import qs from 'qs';
 import { getConfig , isIframe, getBasePath} from 'utils/functions';
-// import Container from '../common/Container';
 import info_icon_fisdom from 'assets/info_icon_fisdom.svg'
 import info_icon_myway from 'assets/finity/info_icon_myway.svg'
 import trust_icon from 'assets/trust_icons_emandate.svg';
@@ -10,6 +9,8 @@ import toast from '../../common/ui/Toast';
 import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
 import bank_building from 'assets/finity/bank_building.svg'
+import { storageService } from '../../utils/validators';
+import Container from '../common/Container';
 
 
 class SelectBank extends Component {
@@ -156,6 +157,8 @@ class SelectBank extends Component {
       let bank_data = { selected_bank: this.state.selected_bank };
       const res = await Api.post('/api/mandate/enach/user/banks/' + this.state.pc_urlsafe, bank_data);
       let basepath = getBasePath();
+
+      const redirect_url = encodeURIComponent(`${basepath}/invest${getConfig().searchParams}&is_secure=${storageService().get("is_secure")}`);
       
       if (res.pfwresponse.result && !res.pfwresponse.result.error) {
         let paymentRedirectUrl = encodeURIComponent(
@@ -163,14 +166,13 @@ class SelectBank extends Component {
         );
         var pgLink = res.pfwresponse.result.enach_start_url;
         let app = getConfig().app;
-        let redirect_url = getConfig().redirect_url;
         // eslint-disable-next-line
         pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
-          '&app=' + app + '&redirect_url=' + redirect_url;
-        if (getConfig().generic_callback) {
-          pgLink += '&generic_callback=' + getConfig().generic_callback;
-        }
-        if (!redirect_url) {
+          '&app=' + app + '&generic_callback=' + getConfig().generic_callback + '&is_secure=' + storageService().get("is_secure") + '&redirect_url='+redirect_url;
+        
+        console.log("is sdk ", getConfig().isSdk)
+        console.log("is native ", getConfig().isNative)
+        if (getConfig().isNative) {
           if (getConfig().app === 'ios') {
             nativeCallback({
               action: 'show_top_bar', message: {
@@ -183,7 +185,7 @@ class SelectBank extends Component {
               back_text: 'You are almost there, do you really want to go back?'
             }
           });
-        } else {
+        } else { 
           let redirectData = {
             show_toolbar: false,
             icon: 'back',
@@ -231,16 +233,16 @@ class SelectBank extends Component {
     }
   }
 
-  loadComponent() {
-    if (this.state.iframe) {
-      return require(`../commoniFrame/Container`).default;
-    } else {
-      return require(`../common/Container`).default;
-    }
-  }
+  // loadComponent() {
+  //   if (this.state.iframe) {
+  //     return require(`../commoniFrame/Container`).default;
+  //   } else {
+  //     return require(`../common/Container`).default;
+  //   }
+  // }
 
   render() {
-    const Container = this.loadComponent();
+    // const Container = this.loadComponent();
     return (
       <Container
         events={this.sendEvents('just_set_events')}
@@ -249,7 +251,7 @@ class SelectBank extends Component {
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="AUTHORISE E-MANDATE"
-        iframeIcon={this.state.iframeIcon}
+        iframeRightContent={this.state.iframeIcon}
       >
         <div className="infocard" style={{marginTop: this.state.iframe ? '0px' : '20px'}}>
           <div className="title">

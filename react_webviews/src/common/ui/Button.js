@@ -37,6 +37,7 @@ class CustomButton extends Component {
         return(
           <div>
           <Button
+            data-aid={props.dataAid}
             fullWidth={(props.reset || props.type === 'summary') ? true : false}
             variant="raised"
             size="large"
@@ -60,24 +61,26 @@ class CustomButton extends Component {
       return (
         <div className="FlexButton">
           <Button
+            data-aid={props.dataAid}
             onClick={props.handleClickOne}
             fullWidth={false}
             variant="raised"
             size="large"
             className={`${buttonClass} borderButton`}
-            style={{color: getConfig().secondary, borderColor: getConfig().secondary,
+            style={{color: getConfig().styles.secondaryColor, borderColor: getConfig().styles.secondaryColor,
             flex: !getConfig().isMobileDevice ? 'inherit': 2}}
             disabled={props.disable}
           >
             {props.buttonOneTitle}
           </Button>
           <Button
+            data-aid={props.dataAid}
             onClick={props.handleClickTwo}
             fullWidth={false}
             variant="raised"
             size="large"
             color="secondary"
-            style={{ borderColor: getConfig().secondary, 
+            style={{ borderColor: getConfig().styles.secondaryColor, 
               flex: !getConfig().isMobileDevice ? 'inherit': 2}}
             className={`${buttonClass} filledButton`}
             disabled={props.disable}
@@ -94,22 +97,24 @@ class CustomButton extends Component {
       return (
         <div className="FlexButton">
           <Button
+            data-aid={props.dataAid}
             onClick={props.handleClickOne}
             fullWidth={false}
             variant="raised"
             size="large"
             className={`${buttonClass} borderButton`}
-            style={{color: getConfig().secondary, borderColor: getConfig().secondary,
+            style={{color: getConfig().styles.secondaryColor, borderColor: getConfig().styles.secondaryColor,
             flex: !getConfig().isMobileDevice ? 'inherit': 2}}
             disabled={props.disable}
           >
               <SVG
-              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().secondary)}
+              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.secondaryColor)}
               src={download}
             /> 
             {props.buttonOneTitle}
           </Button>
           <Button
+            data-aid={props.dataAid}
             onClick={props.handleClickTwo}
             fullWidth={false}
             variant="raised"
@@ -126,6 +131,7 @@ class CustomButton extends Component {
       return (
         // <div>
           <Button
+            data-aid={props.dataAid}
             fullWidth={(props.reset || props.type === 'summary') ? true : false}
             variant="raised"
             size="large"
@@ -135,6 +141,7 @@ class CustomButton extends Component {
             classes={classes}
             disabled={props.buttonDisabled || props.disable}
             onClick={props.onClick}
+            type={props.buttonType}
           >
             {!showLoader && props.buttonTitle}
             {showLoader && 
@@ -155,17 +162,18 @@ class CustomButton extends Component {
 
 const styles = {
   button: {
-    padding: !getConfig().isMobileDevice ? '12px 15px 12px 15px !important' : '16px 0px !important',
-    borderRadius: 6,
-    textTransform: 'capitalize',
-    fontSize: '12px !important',
+    padding: !getConfig().isMobileDevice ? '12px 15px 12px 15px !important' : '16px !important',
+    borderRadius: getConfig().uiElements?.button?.borderRadius || 6,
     boxShadow: 'none',
-    fontWeight: 'bold',
-    letterSpacing: '1px',
-    // boxShadow: '0 1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149)',
     width: !getConfig().isMobileDevice ? 'auto' :  '100%'
   },
-  label: {},
+  label: {
+    fontFamily: 'Rubik',
+    fontSize: '12px !important',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
+  },
 }
 
 export default withStyles(styles)(CustomButton);

@@ -1,0 +1,143 @@
+.category-description {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 21px;
+  letter-spacing: 0px;
+  color: var(--steelgrey);
+  margin-top: -12px !important;
+  .category-desc-button {
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 14px;
+    letter-spacing: 1px;
+    color: var(--primary);
+    cursor: pointer;
+  }
+}
+
+.Container.passive-fund-list-page{
+  overflow: visible !important;
+}
+.fund-number{
+  color: var(--steelgrey);
+  line-height: 16px;
+  font-size: 10px;
+  font-weight: 400;
+  margin-top: -5px !important;
+}
+
+.react-responsive-carousel {
+  width: 100%;
+  margin-bottom: 45px;
+}
+
+.educational-video-block {
+  background-color: #002576;
+  color: white;
+  width: 100%;
+  padding-bottom: 20px;
+
+  .inpage-subtitle{
+    padding: 5px 0 30px 20px;
+    color: white;
+  }
+  p{
+    margin: 0;
+    padding: 0;
+  }
+  .info-container{
+     width: 100%;
+     display: flex;
+     justify-content: space-around;
+     align-items: center;
+     padding: 30px 0px;
+    p{
+      color: var(--highlight);
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 21px;
+      letter-spacing: 0px;
+      text-align: center;
+    }
+    .info-block{
+      width: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      div{
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background-image: radial-gradient(50% 50% at 50% 50%, rgba(0, 33, 72, 0.06) 0%, rgba(255, 255, 255, 0.06) 100%);
+        margin-bottom: 10px;
+      }
+    }
+  }
+}
+
+.player-wrapper {
+  padding: 0px 20px;
+  width: auto; 
+  height: auto;
+}
+.react-player {
+  padding-top: 56.25%; // 16:9 Video ratio.
+  position: relative;
+}
+
+.react-player > div {
+  position: absolute; 
+  top: 0px;
+}
+
+.play-icon {
+  padding-top: 0px;
+  min-width: 80px;
+  min-height: 80px;
+}
+
+.play-info {
+  max-height: 150px;
+  width: auto;
+}
+
+.content-main{
+  padding: 10px 20px;
+  background-color: white;
+  z-index: 1;
+  border-radius: 7px;
+  margin-top: -25px;
+
+  .category-title{
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 27px;
+    color: var(--dark);
+    margin: 20px 0px 20px 0px;
+  }
+
+}
+
+.star-icon-na{
+  position: absolute;
+  margin-top: 0px !important;
+}
+
+.wv-pdl-header-title{
+  margin-right: 10px !important;
+}
+
+.wv-pdl-header-image{
+  margin-left: auto !important;
+  border: 1px solid  var(--highlight);
+}
+
+
+.wv-card-subtitle{
+  font-size: 11px;
+  line-height: 18px;
+  color:  var(--steelgrey);
+}

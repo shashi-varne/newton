@@ -34,7 +34,7 @@ const RebalanceFundItem = ({ classes, data, ...props }) => {
 
   const [toolTip, setToolTip] = useState(false);
 
-  const color = getConfig().primary;
+  const color = getConfig().styles.primaryColor;
 
   const [open, setOpen] = useState(false);
   const product_name = getConfig().productName;

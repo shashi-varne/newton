@@ -1,0 +1,96 @@
+.sdk-landing {
+  .landing-marketing-banners {
+    overflow-x: auto;
+    margin: 0 -20px 0 -20px;
+    padding: 0 20px 0 20px;
+    .marketing-banners-list {
+      display: flex;
+      width: fit-content;
+      margin-bottom: 20px;
+    }
+
+    .marketing-banner-icon-wrapper {
+      margin-right: 20px;
+      width: 250px;
+      height: 100px;
+      display: block;
+      padding-bottom: 0px;
+      cursor: pointer;
+    }
+
+    .single-marketing-banner {
+      min-height: 120px;
+      width: 100%;
+      cursor: pointer;
+    }
+  }
+
+  .sdk-landing-cards {
+    margin-top: 20px;
+  }
+  
+  .generic-page-subtitle{
+    margin-top: -20px;
+  }
+
+  .invest-contact-us {
+    text-align: center;
+    color: var(--steelgrey);
+    padding: 0 10px 20px 10px;
+    font-size: 10px;
+    font-weight: 600;
+
+    span {
+      color: var(--primary);
+    }
+  }
+}
+
+.sdk-background{
+  background: #ffffff !important;
+  .header-title-page{
+    background: #ffffff !important;
+  }
+}
+.sdk-header{
+  background-color: var(--primary) !important;
+}
+
+.sdk-partner-header{
+  background-color: var(--header-background) !important;
+}
+
+.sdk-refer {
+  text-align: center;
+
+  .img {
+    margin: 50px 0 10px;
+    min-height: 160px;
+  }
+
+  .refer-message-title {
+    font-size: 20px;
+    color: #160d2e;
+    margin: 20px 0 20px 0;
+  }
+
+  .refer-share-code {
+    border: 1px dashed var(--primary);
+    color: #878787;
+    border-radius: 4px;
+    padding: 6px;
+    margin: 15px 0 0 0;
+
+    .refer-share-code-text {
+      color: #160d2e;
+      font-weight: 600;
+      font-size: 16px;
+      text-transform: uppercase;
+      line-height: 30px;
+    }
+  }
+
+  .no-refer-message {
+    margin-top: 70px;
+  }
+}

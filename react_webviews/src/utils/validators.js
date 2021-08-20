@@ -217,7 +217,11 @@ export function formatAmount(amount) {
 
 export function formatAmountInr(amount) {
   if (!amount) {
-    return '₹';
+    if(amount === 0) {
+      return '₹' + amount;
+    } else {
+      return '₹';
+    }
   }
 
   amount = Number(amount);
@@ -569,6 +573,22 @@ export function checkValidString(value) {
   } else {
     return true;
   }
+}
+
+export function checkObjectWithinString(value) {
+  const isValueString = typeof value === "string" && !['', 'undefined', 'false'].includes(value);
+  try {
+    if (isValueString) {
+      const o = JSON.parse(value);
+      if (o && typeof o === "object") {
+          return true;
+      }
+    }
+    return false;
+  } catch (ex) {
+    console.log(ex.toString());
+    return false;
+   }
 }
 
 export function split2(str, delim) {
@@ -1095,6 +1115,26 @@ export function numberToSentence(num){ //9 digit limit
   }
 }
 
+export function getFinancialYear() {
+  let currentMonth = moment().month() + 1;
+  let currentFinYear = moment().year();
+  let nextFinYear = currentFinYear;
+  // If current month is past March, new financial year
+  if (currentMonth > 3) {
+    nextFinYear += 1;
+  } else {
+    currentFinYear -= 1;
+  }
+  return 'FY ' + currentFinYear + '-' + nextFinYear.toString().slice(-2);
+}
+
+export const convertInrAmountToNumber = (value) => {
+  let amount = (value.match(/\d+/g) || "").toString();
+  if (amount) {
+    amount = amount.split(",").join("");
+  }
+  return parseInt(amount, 10);
+}
 export function convertDateFormat(inputFormat) {
   function pad(s) { return (s < 10) ? '0' + s : s; }
   var d = new Date(inputFormat)

@@ -1,0 +1,69 @@
+.passive-funds-details {
+  p {
+    margin: 0;
+    padding: 0;
+  }
+  .pf-flex {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  .pfd-title {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 32px;
+    letter-spacing: 0px;
+    color: var(--dark);
+    // padding-bottom: 10px;
+  }
+  .pfd-info {
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 18px;
+    letter-spacing: 0px;
+    color: var(--steelgrey);
+    padding-bottom: 18px;
+    .pfd-check-btn {
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 14px;
+      letter-spacing: 1px;
+      color: var(--secondary);
+      cursor: pointer;
+    }
+  }
+  .pfd-points {
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 16px;
+    letter-spacing: 1px;
+    color: var(--steelgrey);
+  }
+  .pfd-values {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 21px;
+    letter-spacing: 0px;
+    color: var(--steelgrey);
+  }
+  .pfd-nav-returns {
+    font-size: 15px;
+    line-height: 24px;
+  }
+  .pfd-padding {
+    padding: 0 20px 0 20px;
+    cursor: pointer;
+  }
+  .pfd-line {
+    height: 1.5px;
+    background-color: #ededed;
+    margin: 30px 20px 30px 20px;
+  }
+  .return-condition {
+    color: #d6d6d6 !important;
+  }
+}
+.pfd-image {
+  width: 50px;
+  height: 50px;
+}

@@ -363,7 +363,7 @@ const Login = (props) => {
           'Send OTP'
         }
       </WrButton>
-      <img src={require('assets/fisdom/ORDivider.svg')} alt="or" style={{ width: '100%', margin: '30px 0' }} />
+      <img src={require('assets/ORDivider.svg')} alt="or" style={{ width: '100%', margin: '30px 0' }} />
       <div id="wr-alternate-login-btns">
         <Button
         fullWidth={true}

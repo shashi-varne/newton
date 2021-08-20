@@ -2,8 +2,8 @@ import React, { Component, Fragment } from 'react';
 import { withRouter } from 'react-router';
 import { getConfig, manageDialog } from 'utils/functions';
 
-import { nativeCallback, openModule } from 'utils/native_callback';
-import '../../utils/native_listner';
+import { nativeCallback, openModule, handleNativeExit } from 'utils/native_callback';
+import '../../utils/native_listener';
 import { back_button_mapper } from '../constants';
 import { storageService, checkStringInString } from '../../utils/validators';
 import {didMount ,commonRender} from '../../common/components/container_functions';
@@ -343,13 +343,15 @@ class Container extends Component {
 
     switch (pathname) {
       case "/group-insurance":
-        nativeCallback({ action: 'exit', events: this.getEvents('back') });
+        nativeCallback({ events: this.getEvents('back') });
+        handleNativeExit(this.props, {action: "exit"});
         break;
       case "/group-insurance/common/report":
         if(!getConfig().from_notification){
-          openModule('app/portfolio')
+          openModule('app/portfolio', this.props)
         }else{
-          nativeCallback({ action: 'exit', events: this.getEvents('back') });
+          nativeCallback({ events: this.getEvents('back') });
+          handleNativeExit(this.props, {action: "exit"});
         }
         break;
       case "/group-insurance/term/resume":

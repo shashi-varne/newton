@@ -1,0 +1,45 @@
+#withdraw-otp-switch {
+  .otp-text {
+    text-align: center;
+    font-size: 16px;
+  }
+
+  .page {
+    padding-bottom: 50px;
+  }
+
+  .otp {
+    padding: auto 30px;
+  }
+
+  .input {
+    display: block;
+    margin: 0 auto;
+    width: 150px;
+    font-size: 22px;
+  }
+
+  input {
+    text-align: center;
+    width: 150px;
+  }
+  .otp-input {
+    margin-bottom: 50px;
+    text-align: center;
+  }
+
+  .resend-otp {
+    font-size: 14px;
+    cursor: pointer;
+    color: var(--primary);
+    text-align: center;
+    display: table;
+    margin: 32px auto;
+  }
+
+  .page-footer {
+    margin: 50px !important;
+    display: flex;
+    justify-content: center;
+  }
+}

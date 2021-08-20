@@ -108,14 +108,14 @@ class PlusMinusInputClass extends Component {
                                      (!parentState[name + '_onlycheckbox'] && !parentState.onlycheckbox) &&
                                         <div className="images">
                                             <SVG className="plus-minus-icons"
-                                                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+                                                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.primaryColor)}
                                                 src={minus_icon}
                                                 onClick={() => this.handleClick(name, 'minus')}
                                             />
                                             <div className="number">{parentState[name + '_total']}</div>
                                             <SVG className="plus-minus-icons"
                                                 style={{ opacity: parentState[name + '_ismax'] || parentState[name + '_total'] === parentState[name + '_max'] ? 0.3 : 1 }}
-                                                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+                                                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.primaryColor)}
                                                 src={plus_icon}
                                                 onClick={() => this.handleClick(name, 'plus')}
                                             />

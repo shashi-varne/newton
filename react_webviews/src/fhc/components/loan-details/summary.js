@@ -114,7 +114,7 @@ class LoanSummary extends Component {
                   <img style={{ position: 'relative', top: 2 }} src={(this.state.accordianTab === type.key) ? shrink : expand} alt="" width="20" />
                 </span>
                 <span>{type.label} detail</span>
-                {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().secondary, fontSize: 13 }} onClick={() => this.navigate(type.editPath)}>Edit</span>}
+                {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().styles.secondaryColor, fontSize: 13 }} onClick={() => this.navigate(type.editPath)}>Edit</span>}
               </div>
             </div>
             {this.renderAccordionBody(type.key)}
