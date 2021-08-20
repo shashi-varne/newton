@@ -250,7 +250,7 @@ const Journey = (props) => {
                   const isBankNotPennyVerified = (kyc[data.name].meta_data_status === 'approved' && 
                     !['verified', 'doc_submitted'].includes(kyc[data.name].meta_data.bank_status)) || (kyc[data.name].meta_data_status === 'submitted' && 
                     kyc[data.name].meta_data.bank_status === 'submitted') || (kyc[data.name].meta_data_status === 'rejected' && 
-                    kyc[data.name].meta_data.bank_status === 'rejected') || (kyc[data.name].meta_data_status === 'submitted' && 
+                    ['rejected', 'pd_triggered'].includes(kyc[data.name].meta_data.bank_status)) || (kyc[data.name].meta_data_status === 'submitted' && 
                     kyc[data.name].meta_data.bank_status === 'pd_triggered')
 
                   if (isBankNotPennyVerified) {
