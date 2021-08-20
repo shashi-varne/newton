@@ -153,7 +153,16 @@ const KycBankDetails = (props) => {
 
   const redirect = () => {
     sendEvents("check_bank_details", "unable_to_add_bank");
-    navigate(PATHNAME_MAPPER.journey);
+    if (storageService().get("bankEntryPoint") === "uploadDocuments") {
+      redirectToUploadProgress();
+    } else {
+      navigate(PATHNAME_MAPPER.journey);
+    }
+  };
+
+  const redirectToUploadProgress = () => {
+    storageService().remove("bankEntryPoint");
+    navigate(PATHNAME_MAPPER.uploadProgress);
   };
 
   const handleClick = () => {
@@ -359,8 +368,7 @@ const KycBankDetails = (props) => {
   const goBackToPath = () => {
     sendEvents("back");
     if (fromState === PATHNAME_MAPPER.uploadProgress || (storageService().get("bankEntryPoint") === "uploadProgress")) {
-      storageService().remove("bankEntryPoint");
-      navigate(PATHNAME_MAPPER.uploadProgress);
+      redirectToUploadProgress();
     } else if (goBackPath) {
       navigate(goBackPath);
     } else {
