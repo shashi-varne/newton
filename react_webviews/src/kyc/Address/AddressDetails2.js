@@ -111,14 +111,12 @@ const AddressDetails2 = (props) => {
   };
 
   const handleChange = (event) => {
-    const name = event.target.name;
-    const value = event.target.value;
-    if (
-      name === "pincode" &&
-      value &&
-      (value.length > 6 || !validateNumber(value))
-    )
-      return;
+    const target = event.target;
+    const name = target.name;
+    const value = target.value;
+    const maxLength = target.maxLength;
+    if (name === "pincode" && value && !validateNumber(value)) return;
+    if (value && maxLength && value.length > maxLength) return;
     let formData = { ...form_data };
     formData[name] = value;
     if (!value) {
@@ -232,7 +230,8 @@ const AddressDetails2 = (props) => {
             helperText={form_data.pincode_error || ""}
             error={form_data.pincode_error ? true : false}
             inputProps={{
-              inputMode:"numeric"
+              inputMode:"numeric",
+              maxLength: 6,
             }}
           /> 
           <TextField

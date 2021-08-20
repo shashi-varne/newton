@@ -114,9 +114,12 @@ const NRIAddressDetails2 = (props) => {
   };
 
   const handleChange = (event) => {
-    const name = event.target.name;
-    const value = event.target.value;
+    const target = event.target;
+    const name = target.name;
+    const value = target.value;
+    const maxLength = target.maxLength;
     if (value && name === "nri_pincode" && !validateNumber(value)) return;
+    if(value && maxLength && value.length > maxLength) return;
     let formData = { ...form_data };
     formData[name] = value;
     if (!value && name !== "tin_number") {
