@@ -245,6 +245,9 @@ const AddressDetails2 = (props) => {
             onChange={handleChange}
             margin="normal"
             multiline
+            inputProps={{
+              maxLength: 150
+            }}
           />
           <TextField
             label="City"
