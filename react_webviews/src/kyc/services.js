@@ -321,6 +321,11 @@ export function getKycAppStatus(kyc) {
     status = "submitted"
   }
 
+  // this condition handles nri compliant bank document pending case 
+  if (!TRADING_ENABLED && kyc.address.meta_data.is_nri && kyc.kyc_status === 'compliant' && kyc.bank.meta_data.bank_status !== "doc_submitted") {
+    status = "incomplete"
+  }
+
   if (!TRADING_ENABLED && kyc.kyc_status !== 'compliant' && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && kyc.sign_status !== 'signed') {
     status = 'incomplete';
   }

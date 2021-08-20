@@ -30,11 +30,10 @@ import internalStorage from '../common/InternalStorage';
 import { isNewIframeDesktopLayout } from "../../utils/functions"
 import { storageService } from "../../utils/validators";
 
-const config = getConfig();
 let titleText = "Enter bank account details";
-
+const genericErrorMessage = "Something Went wrong!";
 const KycBankDetails = (props) => {
-  const genericErrorMessage = "Something Went wrong!";
+  const config = getConfig();
   const code = config.code;
   const navigate = navigateFunc.bind(props);
   const [isPennyExhausted, setIsPennyExhausted] = useState(false);
@@ -113,6 +112,11 @@ const KycBankDetails = (props) => {
     setName(kyc.pan.meta_data.name || "");
     let data = kyc.bank.meta_data || {};
     data.c_account_number = data.account_number;
+    const accountTypeOptions = bankAccountTypeOptions(kyc?.address?.meta_data?.is_nri || "");
+    const selectedAccountType = accountTypeOptions.filter(el => el.value === data.account_type);
+    if(isEmpty(selectedAccountType)) {
+      data.account_type = "";
+    }
     if (data.user_rejection_attempts === 0) {
       if(isNewIframeDesktopLayout()) {
         handlePennyExhaust()
@@ -142,7 +146,7 @@ const KycBankDetails = (props) => {
     setBankData({ ...data });
     setBankIcon(data.ifsc_image || "");
     setAccountTypes([
-      ...bankAccountTypeOptions(kyc?.address?.meta_data?.is_nri || ""),
+      ...accountTypeOptions,
     ]);
   };
 

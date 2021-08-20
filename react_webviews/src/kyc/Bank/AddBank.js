@@ -79,10 +79,15 @@ const AddBank = (props) => {
         });
       }
     }
+    const accountTypeOptions = bankAccountTypeOptions(kyc?.address?.meta_data?.is_nri || "");
+    const selectedAccountType = accountTypeOptions.filter(el => el.value === data.account_type);
+    if(isEmpty(selectedAccountType)) {
+      data.account_type = "";
+    }
     setBankData({ ...data });
     setBankIcon(data.ifsc_image || '')
     setAccountTypes([
-      ...bankAccountTypeOptions(kyc?.address?.meta_data?.is_nri || ""),
+      ...accountTypeOptions,
     ]);
   };
 
