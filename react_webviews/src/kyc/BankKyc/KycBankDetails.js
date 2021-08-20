@@ -208,7 +208,9 @@ const KycBankDetails = (props) => {
     const nextStep = kyc.show_equity_charges_page ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
     if (userType === "compliant") {
       if (isEdit) navigate(PATHNAME_MAPPER.journey);
-      else navigate(nextStep)
+      else navigate(nextStep, {
+        state: { goBack: PATHNAME_MAPPER.journey }
+      })
     } else {
       if (dl_flow) {
         const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
@@ -217,7 +219,9 @@ const KycBankDetails = (props) => {
             state: { goBack: PATHNAME_MAPPER.journey }
           });
         } else {
-          navigate(nextStep);
+          navigate(nextStep, {
+            state: { goBack: PATHNAME_MAPPER.journey }
+          });
         }
       } else {
         navigate(PATHNAME_MAPPER.uploadProgress);
