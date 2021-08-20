@@ -248,7 +248,7 @@ const Journey = (props) => {
                 if (journeyData[i].key === 'bank') {
                   // this condition covers users who are not penny verified
                   const isBankNotPennyVerified = (kyc[data.name].meta_data_status === 'approved' && 
-                    kyc[data.name].meta_data.bank_status !== 'verified') || (kyc[data.name].meta_data_status === 'submitted' && 
+                    !['verified', 'doc_submitted'].includes(kyc[data.name].meta_data.bank_status)) || (kyc[data.name].meta_data_status === 'submitted' && 
                     kyc[data.name].meta_data.bank_status === 'submitted') || (kyc[data.name].meta_data_status === 'rejected' && 
                     kyc[data.name].meta_data.bank_status === 'rejected') || (kyc[data.name].meta_data_status === 'submitted' && 
                     kyc[data.name].meta_data.bank_status === 'pd_triggered')
