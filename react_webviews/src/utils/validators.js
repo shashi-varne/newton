@@ -159,9 +159,12 @@ export function validateStreetName(string) {
   return rule.test(string);
 }
 
-export function validateAlphabets(string) {
+export function validateAlphabets(string, checkStartingSpace) {
   if (!string) {
     return false;
+  }
+  if(checkStartingSpace) {
+    return string.match(/[a-zA-Z][a-z A-Z]*$/);
   }
   return string.match(/^[a-z A-Z]+$/);
 }

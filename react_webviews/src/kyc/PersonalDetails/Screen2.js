@@ -101,9 +101,9 @@ const PersonalDetails2 = (props) => {
 
   const handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
-    if (!validateAlphabets(value) && value) return;
+    if (!validateAlphabets(value, true) && value) return;
     let formData = { ...form_data };
-    formData[name] = value.trimStart();
+    formData[name] = value;
     if (!value) formData[`${name}_error`] = "This is required";
     else formData[`${name}_error`] = "";
     setFormData({ ...formData });

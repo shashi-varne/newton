@@ -149,7 +149,7 @@ const PersonalDetails4 = (props) => {
     }
 
     let value = event.target ? event.target.value : event;
-    if (name === "name" && value && !validateAlphabets(value)) return;
+    if (name === "name" && value && !validateAlphabets(value, true)) return;
     let formData = { ...form_data };
     if (name === "dob") {
       if (!dobFormatTest(value)) {

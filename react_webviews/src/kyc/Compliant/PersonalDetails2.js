@@ -102,7 +102,7 @@ const PersonalDetails2 = (props) => {
 
   const handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
-    if (name.includes("name") && value && (!validateAlphabets(value) || value.indexOf(" ") === 0)) {
+    if (name.includes("name") && value && !validateAlphabets(value, true)) {
       return;
     }
     let formData = { ...form_data };

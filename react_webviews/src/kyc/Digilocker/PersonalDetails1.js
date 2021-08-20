@@ -135,7 +135,7 @@ const PersonalDetails1 = (props) => {
 
   const handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
-    if (value && name.includes("name") && (!validateAlphabets(value) || value.indexOf(" ") === 0)) return;
+    if (value && name.includes("name") && !validateAlphabets(value, true)) return;
     let formData = { ...form_data };
     if (name === "marital_status")
       formData[name] = MARITAL_STATUS_OPTIONS[value].value;

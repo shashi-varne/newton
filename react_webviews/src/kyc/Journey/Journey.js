@@ -390,6 +390,7 @@ const Journey = (props) => {
         pan: PATHNAME_MAPPER.homeKyc,
         trading_esign: tradingEsignPath
       }
+      console.log(stateMapper[key])
       navigate(stateMapper[key], {
         state: {
           isEdit: isEdit,
@@ -743,6 +744,7 @@ const Journey = (props) => {
       nativeCallback({ events: eventObj });
     }
   };
+  console.log(kycJourneyData)
 
   return (
     <Container

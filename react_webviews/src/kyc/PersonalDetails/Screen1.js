@@ -125,7 +125,7 @@ const PersonalDetails1 = (props) => {
 
   const handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
-    if (value && name === "name" && !validateAlphabets(value)) return;
+    if (value && name === "name" && !validateAlphabets(value, true)) return;
 
     let formData = { ...form_data };
     if (name === "marital_status") {
@@ -139,8 +139,6 @@ const PersonalDetails1 = (props) => {
       let input = document.getElementById("dob");
       input.onkeyup = formatDate;
       formData[name] = value;
-    } else if (name === "name") {
-      formData[name] = value.trimStart();
     } else {
       formData[name] = value;
     }
