@@ -61,10 +61,6 @@ const AddBank = (props) => {
     if (bank_id) {
       data = kyc.additional_approved_banks.find((obj) => obj.bank_id === bank_id) || {};
 
-      if (isEmpty(data) && (bank_id === kyc.bank.meta_data.bank_id)) {
-        data = kyc.bank.meta_data;
-      };
-
       data.c_account_number = data.account_number;
       if (data.user_rejection_attempts === 0) {
         setIsPennyExhausted(true);
