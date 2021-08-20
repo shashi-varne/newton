@@ -308,7 +308,7 @@ class CategoryList extends Component {
             }`,
           }}
         >
-          <div className="Header header-title-page header-title-page-text" style={{paddingLeft:"0px"}}>
+          <div className="custom-header header-title-page header-title-page-text" style={{paddingLeft:"0px"}}>
             <MyQueries
               title="How can we help?"
               onClick={this.handleQuery}

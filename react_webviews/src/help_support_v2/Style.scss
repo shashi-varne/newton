@@ -28,6 +28,13 @@
     }
   }
 
+  .custom-header {
+    position: fixed;
+    top: 60px;
+    width: var(--desktop-width) !important;
+    left: 300px;
+  }
+
   .search-inputs {
     cursor: pointer;
     padding: 20px;
@@ -692,6 +699,11 @@
 
 @media only screen and (min-width: 300px) and (max-width: 500px) {
   .help-CategoryList {
+    .custom-header {
+      top: 0px;
+      width: 100% !important;
+      left: 0px;
+    }
     .category {
       .img {
         width: 18%;
