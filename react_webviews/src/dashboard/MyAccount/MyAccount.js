@@ -164,16 +164,19 @@ class MyAccount extends Component {
   };
 
   continueAccountAlreadyExists = async () => {
+    this.sendEvents("next", "continuebottomsheet");
     this.navigate("/kyc/communication-details", {
       state: {
         accountAlreadyExistsData: this.state.accountAlreadyExistsData,
         callHandleClick: true,
         continueAccountAlreadyExists: true,
+        goBack: "/my-account"
       },
     });
   };
 
   editDetailsAccountAlreadyExists = () => {
+    this.sendEvents("edit", "continuebottomsheet");
     this.navigate("/kyc/communication-details", {
       state: {
         accountAlreadyExistsData : this.state.accountAlreadyExistsData,
@@ -184,6 +187,7 @@ class MyAccount extends Component {
   };
 
   onCloseBottomSheet = () => {
+    this.sendEvents("back", "continuebottomsheet");
     this.setState({
       accountAlreadyExists: false,
       verifyDetails: false,
@@ -259,6 +263,23 @@ class MyAccount extends Component {
   };
 
   sendEvents = (userAction, screenName) => {
+    if (screenName === "continuebottomsheet") {
+      let eventObj = {
+        "event_name": 'verification_bottom_sheet',
+        "properties": {
+          "screen_name": "account_already_exists",
+          "user_action": userAction,
+        },
+      };
+      if (userAction === 'just_set_events') {
+        return eventObj;
+      } else {
+        nativeCallback({
+          events: eventObj
+        });
+      }
+      return;
+    }
     let eventObj = {
       event_name: "my_account",
       properties: {
@@ -296,7 +317,7 @@ class MyAccount extends Component {
       userKyc,
       currentUser,
       kycStatusData,
-      contacts,
+      contactInfo,
       verifyDetails,
       accountAlreadyExists,
     } = this.state;
@@ -313,10 +334,11 @@ class MyAccount extends Component {
           <div className="my-account-content">
             <UserDetails
               pan_no={userKyc?.pan?.meta_data?.pan_number}
-              contacts={contacts}
+              contactInfo={contactInfo}
               name={currentUser?.name}
-              handleClick={(path) => this.handleClick(path)}
+              handleClick={(path, state) => this.navigate(path, state)}
               showLoader={this.showLoader}
+              sendEvents={this.sendEvents}
               showAccountAlreadyExist={(show, data, type) =>
                 this.setAccountAlreadyExistsData(show, data, type)
               }

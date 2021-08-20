@@ -51,9 +51,9 @@ const CommunicationDetails = (props) => {
   const isNotification = getUrlParams()?.from_notification;
   const isEdit = stateParams.isEdit || false;
   const userType = stateParams.userType || "";
-  const callHandleClick = stateParams.callHandleClick;
+  const [callHandleClick, setCallHandleClick] = useState(stateParams.callHandleClick)
   const [goldUserInfo, setGoldUserInfo] = useState(stateParams?.user_info);
-  const accountAlreadyExistsData = stateParams.accountAlreadyExistsData;
+  const [accountAlreadyExistsData, setAccountAlreadyExistsData] = useState(stateParams?.accountAlreadyExistsData);
   const [formData, setFormData] = useState({
     whatsappConsent: true,
   });
@@ -196,9 +196,11 @@ const CommunicationDetails = (props) => {
     setShowDotLoader(true);
     try {
       if (!isEmpty(goldUserInfo)) {
-        await resendGoldOtp(goldResendVerificationOtpLink);
+        let result = await resendGoldOtp(goldResendVerificationOtpLink);
+        toast(result.message || "Success")
       } else {
         const result = await resendOtp(otpData.otpId);
+        toast(result.message || "Success")
         setOtpData({
           otp: "",
           otpId: result.otp_id,
@@ -224,6 +226,10 @@ const CommunicationDetails = (props) => {
       }
       setShowLoader("button");
       const otpResult = await verifyOtp(otpData);
+      toast(otpResult.message || "Success") 
+      setAccountAlreadyExistsData(false)
+      setContinueAccountAlreadyExists(false);
+      setCallHandleClick(false)
       updateKyc(otpResult.kyc);
       if (
         otpResult.kyc.identification.meta_data.mobile_number_verified &&
@@ -275,7 +281,7 @@ const CommunicationDetails = (props) => {
     setAccountAlreadyExists(data?.user)
   }
   const handleClick = async () => {
-    sendEvents("next");
+    sendEvents("next", continueAccountAlreadyExists ? "bottomsheet" : "");
     if (
       formData.mobileNumberVerified &&
       kyc.identification.meta_data.email_verified &&
@@ -298,7 +304,10 @@ const CommunicationDetails = (props) => {
           setShowLoader("button");
           const contactResult = await sendWhatsappConsent(body);
           const whatsappConsent =
-            contactResult?.contact_details?.whatsapp_consent;
+          contactResult?.contact_details?.whatsapp_consent;
+          setAccountAlreadyExistsData(false)
+          setContinueAccountAlreadyExists(false)
+          setCallHandleClick(false)
           updateKyc({ ...kyc, whatsapp_consent: whatsappConsent });
           handleNavigation();
           return;
@@ -313,6 +322,7 @@ const CommunicationDetails = (props) => {
           }
         }
         const result = await sendOtp(body);
+        toast(result.message || "Success");
         setShowOtpContainer(true);
         setOtpData({
           otp: "",
@@ -327,9 +337,9 @@ const CommunicationDetails = (props) => {
     }
   };
 
-  const handleEdit = () => {
+  const handleEdit = (userAction, type) => {
     setAuthCheckRequired(true);
-    sendEvents("edit");
+    sendEvents(userAction, type);
     if (showDotLoader) return;
     setAccountAlreadyExists(false)
     setContinueAccountAlreadyExists(false)
@@ -337,7 +347,22 @@ const CommunicationDetails = (props) => {
     setButtonTitle("CONTINUE");
   };
 
-  const sendEvents = (userAction) => {
+  const sendEvents = (userAction, type) => {
+    if(type === "bottomsheet"){
+      let eventObj = {
+          "event_name": 'verification_bottom_sheet',
+          "properties": {
+            "screen_name": "account_already_exists",
+            "user_action": userAction,
+        },
+      };
+      if (userAction === 'just_set_events') {
+          return eventObj;
+      } else {
+          nativeCallback({ events: eventObj });
+      }
+      return;
+  }
     let eventObj = {
       event_name: "kyc_registration",
       properties: {
@@ -369,7 +394,7 @@ const CommunicationDetails = (props) => {
 
   const handleNavigation = () => {
     if (stateParams?.fromState === "/my-account") {
-      navigate(stateParams?.goBack);
+      navigate("/my-account");
       return;
     }
     if(isNotification){
@@ -419,7 +444,8 @@ const CommunicationDetails = (props) => {
           verify_link: goldVerificationLink,
           otp: otpData?.otp,
         }
-        await verifyGoldOtp(body);
+        let result = await verifyGoldOtp(body);
+        toast(result.message || 'Success');
         sendEvents("next");
         handleGoldNavigation();
       } else {
@@ -450,6 +476,7 @@ const CommunicationDetails = (props) => {
       setAuthCheckRequired(true);
       setShowLoader("button");
       const result = await sendGoldOtp(body);
+      toast(result.message || "Success")
       setVerificationLink(result?.verification_link);
       setGoldResendVerificationOtpLink(result?.resend_verification_otp_link);
       setShowOtpContainer(true);
@@ -479,12 +506,13 @@ const CommunicationDetails = (props) => {
 
   const handleClicked = () => !isEmpty(goldUserInfo) ? handleClickGold() : handleClick();
   const pageNumber = isDlFlow ? 3 : 4;
+  const showCount = stateParams?.fromState !== "/my-account"
   return (
     <Container
       events={sendEvents("just_set_events")}
       buttonTitle={buttonTitle}
       title="Communication details"
-      count={!isKycDone && pageNumber}
+      count={isEmpty(goldUserInfo) && showCount && !isKycDone && pageNumber}
       current={pageNumber}
       total={!isKycDone && totalPages}
       handleClick={handleClicked}
@@ -536,7 +564,7 @@ const CommunicationDetails = (props) => {
                 InputProps={{
                   endAdornment: showOtpContainer && (
                     <InputAdornment position="end">
-                      <div className="kcd-input-edit" onClick={handleEdit}>
+                      <div className="kcd-input-edit" onClick={() => handleEdit("edit")}>
                         EDIT
                       </div>
                     </InputAdornment>
@@ -562,7 +590,7 @@ const CommunicationDetails = (props) => {
                 InputProps={{
                   endAdornment: showOtpContainer && (
                     <InputAdornment position="end">
-                      <div className="kcd-input-edit" onClick={handleEdit}>
+                      <div className="kcd-input-edit" onClick={() => handleEdit("edit")}>
                         EDIT
                     </div>
                     </InputAdornment>
@@ -623,8 +651,8 @@ const CommunicationDetails = (props) => {
           type={communicationType}
           data={accountAlreadyExists}
           isOpen={accountAlreadyExists}
-          onClose={handleEdit}
-          editDetails={handleEdit}
+          onClose={() => handleEdit("back", "bottomsheet")}
+          editDetails={() => handleEdit("edit", "bottomsheet")}
           next={onClickbottomSheet}
         ></AccountAlreadyExistDialog>
       )}
