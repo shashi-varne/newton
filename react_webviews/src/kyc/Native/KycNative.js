@@ -74,8 +74,7 @@ function KycNative(props) {
         }
       });
     } else if (kycStatus === "submitted") {
-      // nativeCallback({ action: "exit_web"});
-      // Todo: remove this condition after audit
+      // this condition will help in redirection from sdk
       if (TRADING_ENABLED) {
         navigate(PATHNAME_MAPPER.documentVerification)
       } else {
@@ -90,7 +89,7 @@ function KycNative(props) {
     else if (kycStatus === "complete" && kyc?.equity_sign_status === "signed" && kyc?.equity_income.doc_status === "init") {
       navigate(PATHNAME_MAPPER.uploadFnOIncomeProof, data);
     } 
-    // Todo: remove this condition after audit
+    // this condition will help in redirection from sdk
     else if (kycStatus === "complete" && kyc?.equity_sign_status === "signed" && (!kyc?.equity_investment_ready || !kyc?.fno_active)) {
       navigate("/kyc-esign/nsdl", {
         searchParams: `${getConfig().searchParams}&status=success`
