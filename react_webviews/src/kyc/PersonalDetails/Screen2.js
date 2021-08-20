@@ -103,7 +103,7 @@ const PersonalDetails2 = (props) => {
     let value = event.target ? event.target.value : event;
     if (!validateAlphabets(value) && value) return;
     let formData = { ...form_data };
-    formData[name] = value;
+    formData[name] = value.trimStart();
     if (!value) formData[`${name}_error`] = "This is required";
     else formData[`${name}_error`] = "";
     setFormData({ ...formData });
