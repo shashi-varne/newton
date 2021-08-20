@@ -65,7 +65,7 @@ const FundDetails = (props) => {
   let currentStatus = type === 'diy' ? EMPTY_CART : '';
   let currentTitle = 'Ok';
 
-  const investment = storageService().getObject("investment");
+  const investment = storageService().getObject("investment") || {};
 
   switch (type) {
     case "diy" :
