@@ -30,11 +30,10 @@ import internalStorage from '../common/InternalStorage';
 import { isNewIframeDesktopLayout } from "../../utils/functions"
 import { storageService } from "../../utils/validators";
 
-const config = getConfig();
 let titleText = "Enter bank account details";
-
+const genericErrorMessage = "Something Went wrong!";
 const KycBankDetails = (props) => {
-  const genericErrorMessage = "Something Went wrong!";
+  const config = getConfig();
   const code = config.code;
   const navigate = navigateFunc.bind(props);
   const [isPennyExhausted, setIsPennyExhausted] = useState(false);
