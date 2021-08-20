@@ -68,11 +68,16 @@ const PrimaryMarketProducts = (props) => {
     navigate("/help");
   };
 
+  const goBack = () => {
+    navigate("/");
+  };
+
   return (
     <Container
       data-aid="market-products-screen"
       noFooter={true}
       title="IPO, Gold Bonds and more"
+      headerData={{ goBack }}
     >
       <div className="primary-market-products">
         <div
