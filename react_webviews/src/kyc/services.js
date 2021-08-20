@@ -524,7 +524,7 @@ export function isReadyToInvest() {
 export function isMfApplicationSubmitted(kyc) {
   if (isEmpty(kyc)) return false;
   const isCompliantAppSubmitted = kyc.kyc_status === "compliant" && kyc.application_status_v2 === "submitted" &&
-    kyc.bank.meta_data_status !== "approved";
+    (kyc.bank.meta_data_status !== "approved" && ["pd_triggered", "doc_submitted"].includes(kyc.bank.meta_data.bank_status));
   const isNonCompliantAppSubmitted = kyc.kyc_status !== "compliant" && kyc.application_status_v2 === "submitted" &&
     kyc.sign_status === "signed";
   
