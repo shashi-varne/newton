@@ -126,20 +126,28 @@ const PersonalDetails1 = (props) => {
   const handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
     if (value && name === "name" && !validateAlphabets(value)) return;
+
     let formData = { ...form_data };
-    if (name === "marital_status")
+    if (name === "marital_status") {
       formData[name] = MARITAL_STATUS_OPTIONS[value].value;
-    else if (name === "gender") formData[name] = GENDER_OPTIONS[value].value;
-    else if (name === "dob") {
+    } else if (name === "gender") {
+      formData[name] = GENDER_OPTIONS[value].value;
+    } else if (name === "dob") {
       if (!dobFormatTest(value)) {
         return;
       }
       let input = document.getElementById("dob");
       input.onkeyup = formatDate;
       formData[name] = value;
-    } else formData[name] = value;
+    } else if (name === "name") {
+      formData[name] = value.trimStart();
+    } else {
+      formData[name] = value;
+    }
+
     if (!value && value !== 0) formData[`${name}_error`] = "This is required";
     else formData[`${name}_error`] = "";
+
     setFormData({ ...formData });
   };
 
@@ -195,7 +203,7 @@ const PersonalDetails1 = (props) => {
             error={form_data.name_error ? true : false}
             helperText={form_data.name_error || ""}
             onChange={handleChange("name")}
-            maxLength={20}
+            maxLength={30}
             type="text"
             disabled={isApiRunning || !!kyc?.pan?.meta_data?.name}
           />

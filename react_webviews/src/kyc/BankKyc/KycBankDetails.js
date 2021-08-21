@@ -30,11 +30,10 @@ import internalStorage from '../common/InternalStorage';
 import { isNewIframeDesktopLayout } from "../../utils/functions"
 import { storageService } from "../../utils/validators";
 
-const config = getConfig();
 let titleText = "Enter bank account details";
-
+const genericErrorMessage = "Something Went wrong!";
 const KycBankDetails = (props) => {
-  const genericErrorMessage = "Something Went wrong!";
+  const config = getConfig();
   const code = config.code;
   const navigate = navigateFunc.bind(props);
   const [isPennyExhausted, setIsPennyExhausted] = useState(false);
@@ -113,6 +112,11 @@ const KycBankDetails = (props) => {
     setName(kyc.pan.meta_data.name || "");
     let data = kyc.bank.meta_data || {};
     data.c_account_number = data.account_number;
+    const accountTypeOptions = bankAccountTypeOptions(kyc?.address?.meta_data?.is_nri || "");
+    const selectedAccountType = accountTypeOptions.filter(el => el.value === data.account_type);
+    if(isEmpty(selectedAccountType)) {
+      data.account_type = "";
+    }
     if (data.user_rejection_attempts === 0) {
       if(isNewIframeDesktopLayout()) {
         handlePennyExhaust()
@@ -142,7 +146,7 @@ const KycBankDetails = (props) => {
     setBankData({ ...data });
     setBankIcon(data.ifsc_image || "");
     setAccountTypes([
-      ...bankAccountTypeOptions(kyc?.address?.meta_data?.is_nri || ""),
+      ...accountTypeOptions,
     ]);
   };
 
@@ -153,7 +157,16 @@ const KycBankDetails = (props) => {
 
   const redirect = () => {
     sendEvents("check_bank_details", "unable_to_add_bank");
-    navigate(PATHNAME_MAPPER.journey);
+    if (storageService().get("bankEntryPoint") === "uploadDocuments") {
+      redirectToUploadProgress();
+    } else {
+      navigate(PATHNAME_MAPPER.journey);
+    }
+  };
+
+  const redirectToUploadProgress = () => {
+    storageService().remove("bankEntryPoint");
+    navigate(PATHNAME_MAPPER.uploadProgress);
   };
 
   const handleClick = () => {
@@ -195,7 +208,9 @@ const KycBankDetails = (props) => {
     const nextStep = kyc.show_equity_charges_page ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
     if (userType === "compliant") {
       if (isEdit) navigate(PATHNAME_MAPPER.journey);
-      else navigate(nextStep)
+      else navigate(nextStep, {
+        state: { goBack: PATHNAME_MAPPER.journey }
+      })
     } else {
       if (dl_flow) {
         const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
@@ -204,7 +219,9 @@ const KycBankDetails = (props) => {
             state: { goBack: PATHNAME_MAPPER.journey }
           });
         } else {
-          navigate(nextStep);
+          navigate(nextStep, {
+            state: { goBack: PATHNAME_MAPPER.journey }
+          });
         }
       } else {
         navigate(PATHNAME_MAPPER.uploadProgress);
@@ -359,8 +376,7 @@ const KycBankDetails = (props) => {
   const goBackToPath = () => {
     sendEvents("back");
     if (fromState === PATHNAME_MAPPER.uploadProgress || (storageService().get("bankEntryPoint") === "uploadProgress")) {
-      storageService().remove("bankEntryPoint");
-      navigate(PATHNAME_MAPPER.uploadProgress);
+      redirectToUploadProgress();
     } else if (goBackPath) {
       navigate(goBackPath);
     } else {

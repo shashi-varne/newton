@@ -19,6 +19,7 @@ import { Imgc } from "../../../../common/ui/Imgc";
 import { nativeCallback } from "../../../../utils/native_callback";
 import { getConfig, isTradingEnabled } from "../../../../utils/functions";
 import { PATHNAME_MAPPER } from "../../../../kyc/constants";
+import toast from "../../../../common/ui/Toast"
 
 const fromLoginStates = ["/login", "/logout", "/verify-otp"]
 class Landing extends Component {
@@ -72,29 +73,12 @@ class Landing extends Component {
     }
   };
 
-  onload = () => {
-    this.initilizeKyc();
+  onload = async () => {
+    await this.initilizeKyc();
     const isBottomSheetDisplayed = storageService().get(
       "is_bottom_sheet_displayed"
     );
-    const isVerifyDetailsSheetDisplayed = storageService().get("verifyDetailsSheetDisplayed")
-    if (!isVerifyDetailsSheetDisplayed) {
-      const { contactDetails } = this.state;
-      if (contactDetails?.verification_done === false) {
-        this.setState({
-          verifyDetails: true,
-          verifyDetailsData:
-            contactDetails[
-            `unverified_${contactDetails?.auth_type === "mobile" ? "email" : "mobile"
-            }_contacts`
-            ][0],
-          verifyDetailsType:
-            contactDetails?.auth_type === "mobile" ? "email" : "mobile",
-        });
-        storageService().set("verifyDetailsSheetDisplayed", true);
-      }
-    }
-    if (!isBottomSheetDisplayed && this.state.isWeb) {
+    if (!isBottomSheetDisplayed && this.state.isWeb && !this.state.verifyDetails) {
       this.handleCampaignNotification();
     }
   };
@@ -127,12 +111,14 @@ class Landing extends Component {
 
   // email mobile verification
   closeVerifyDetailsDialog = () => {
+    this.sendEvents("back", "bottomsheet");
     this.setState({
       verifyDetails: false
     })
   }
 
   closeAccountAlreadyExistDialog = () => {
+    this.sendEvents("back", "continuebottomsheet");
     this.setState({
       accountAlreadyExists: false
     })
@@ -149,6 +135,7 @@ class Landing extends Component {
   }
 
   continueAccountAlreadyExists = async (type, data) => {
+    this.sendEvents("next", "continuebottomsheet");
     let body = {};
     if (type === "email") {
       body.email = data?.data?.contact_value;
@@ -158,6 +145,8 @@ class Landing extends Component {
     }
     const otpResponse = await this.generateOtp(body);
     if (otpResponse) {
+      let result = otpResponse.pfwresponse.result;
+      toast(result.message || "Success");
       this.navigate("secondary-otp-verification", {
         state: {
           value:  data?.data?.contact_value,
@@ -169,6 +158,7 @@ class Landing extends Component {
   };
 
   editDetailsAccountAlreadyExists = () => {
+    this.sendEvents("edit", "continuebottomsheet");
     this.navigate("/secondary-verification", {
       state: {
         page: "landing",
@@ -215,8 +205,18 @@ class Landing extends Component {
   };
 
   handleStocksAndIpoRedirection = () => {
-    let { modalData } = this.state;
+    let { modalData, communicationType, contactValue } = this.state;
     if(modalData.key === "ipo") {
+      if(!!this.state.contactNotVerified){
+        storageService().set("ipoContactNotVerified", true);
+        this.navigate("/secondary-verification", {
+          state : {
+            communicationType,
+            contactValue,
+          }
+        })
+        return;
+      } // Email/mobile if Not Verified!
       this.handleIpoCardRedirection();
     } else {
       // To do: redirect to stocks sdk page for fno_rejected status
@@ -227,6 +227,25 @@ class Landing extends Component {
   sendEvents = (userAction, cardClick = "") => {
     if(cardClick === "ipo") {
       cardClick = "ipo_gold";
+    }
+    if (cardClick === "bottomsheet" || cardClick === "continuebottomsheet") {
+      let screen_name = cardClick === "continuebottomsheet" ? "account_already_exists" :
+        this.state.verifyDetailsType === "email" ? "verify_email" : "verify_mobile";
+      let eventObj = {
+        "event_name": 'verification_bottom_sheet',
+        "properties": {
+          "screen_name": screen_name,
+          "user_action": userAction,
+        },
+      };
+      if (userAction === "just_set_events") {
+        return eventObj;
+      } else {
+        nativeCallback({
+          events: eventObj
+        });
+      }
+      return
     }
     let eventObj = {
       event_name: "landing_page",

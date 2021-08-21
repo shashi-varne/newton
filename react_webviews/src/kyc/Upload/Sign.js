@@ -12,8 +12,6 @@ import KycUploadContainer from '../mini-components/KycUploadContainer'
 import { nativeCallback } from '../../utils/native_callback'
 import "./commonStyles.scss";
 
-const config = getConfig();
-const { productName, Web: isWeb } = config
 const Sign = (props) => {
   const navigate = navigateFunc.bind(props)
   const [isApiRunning, setIsApiRunning] = useState(false)
@@ -21,6 +19,9 @@ const Sign = (props) => {
   const [fileToShow, setFileToShow] = useState(null)
   const {kyc, isLoading, updateKyc} = useUserKycHook();
   const goBackPath = props.location?.state?.goBack || "";
+  
+  const config = getConfig();
+  const { productName, Web: isWeb } = config
 
   const onFileSelectComplete = (file, fileBase64) => {
     sendEvents("sign");

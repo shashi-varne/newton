@@ -1,5 +1,5 @@
 import Api from "utils/api";
-import { storageService, isEmpty } from "utils/validators";
+import { storageService, isEmpty, splitMobileNumberFromContryCode } from "utils/validators";
 import toast from "../../common/ui/Toast";
 import { getConfig, navigate as navigateFunc, getBasePath, isTradingEnabled, getInvestCards } from "utils/functions";
 import {
@@ -41,6 +41,7 @@ export async function initialize() {
   this.setKycProductTypeAndRedirect = setKycProductTypeAndRedirect.bind(this);
   this.handleIpoCardRedirection = handleIpoCardRedirection.bind(this);
   this.handleCommonKycRedirections = handleCommonKycRedirections.bind(this);
+  this.contactVerification = contactVerification.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
   if (config) {
     this.setState({ config });
@@ -108,8 +109,7 @@ export async function getSummary() {
       this.setSummaryData(result);
       currentUser = result.data.user.user.data;
       userKyc = result.data.kyc.kyc.data;
-      let contactDetails = result.data.contacts.contacts.data;
-      this.setState({ show_loader: false, kycStatusLoader : false, userKyc, currentUser, contactDetails });
+      this.setState({ show_loader: false, kycStatusLoader : false, userKyc, currentUser });
     } else {
       this.setState({ show_loader: false, kycStatusLoader : false });
       toast(result.message || result.error || errorMessage);
@@ -470,6 +470,7 @@ export function initilizeKyc() {
       modalData.oneButton = true;
     this.setState({ modalData, openKycStatusDialog: true });
   }
+  this.contactVerification(userKyc);
 }
 
 export function openPremiumOnboardBottomSheet(
@@ -628,7 +629,6 @@ export function handleStocksAndIpoCards(key) {
       }
     }
   }
-
   if(key === "stocks" && !modalData.dualButton) {
     modalData.oneButton = true
   }
@@ -732,6 +732,57 @@ export function handleCampaignNotification () {
     this.setState({ bottom_sheet_dialog_data, openBottomSheet: true });
   }
 };
+
+export function contactVerification(userKyc) {
+  const contactDetails = userKyc?.identification?.meta_data;
+  // ---------------- IPO Contact Verification Setting state for BottomSheet---------------//
+  if (!isEmpty(contactDetails)) {
+    if (contactDetails.mobile_number_verified === false) {
+      const contactValue = splitMobileNumberFromContryCode(contactDetails?.mobile_number)
+      this.setState({
+        communicationType: "mobile",
+        contactValue,
+        contactNotVerified: true,
+      })
+    } else if (contactDetails.email_verified === false) {
+      this.setState({
+        communicationType: "email",
+        contactValue: contactDetails?.email || "",
+        contactNotVerified: true,
+      })
+    }
+  }
+  // ---------------- Above Condition For IPO Contact Verification---------------//
+  const isVerifyDetailsSheetDisplayed = storageService().get("verifyDetailsSheetDisplayed");
+  if (!isVerifyDetailsSheetDisplayed) {
+      if (!isEmpty(contactDetails)) {
+        let contact_type, contact_value, isVerified = true;
+        if (!isEmpty(contactDetails.mobile_number) && contactDetails.mobile_number_verified === false) {
+          contact_type = "mobile";
+          isVerified = false
+          contact_value = splitMobileNumberFromContryCode(contactDetails?.mobile_number)
+        } else if (!isEmpty(contactDetails.email) && contactDetails.email_verified === false) {
+          contact_type = "email";
+          contact_value = contactDetails.email
+          isVerified = false;
+        }
+        if (!isVerified) {
+          this.setState({
+            openKycPremiumLanding: false, // This(openKycPremiumLanding, openBottomSheet, openKycStatusDialog for campign) 3 are Onload bottomSheet
+            openBottomSheet: false, //Which Are Disable As contactVerification Takes highest priority.
+            openKycStatusDialog: false,
+            verifyDetails: true,
+            verifyDetailsData: {
+              contact_type,
+              contact_value
+            },
+            verifyDetailsType: contact_type
+          })
+          storageService().set("verifyDetailsSheetDisplayed", true);
+        }
+      }
+  }
+}
 
 export function handleCampaignRedirection (url, showRedirectUrl) {
   const { config = getConfig() } = this.state;

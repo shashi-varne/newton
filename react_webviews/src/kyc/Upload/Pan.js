@@ -80,7 +80,9 @@ const Pan = (props) => {
       if (dlFlow) {
         if (kyc.equity_sign_status !== 'signed') {
           if (isPanAvailable && !kyc.show_equity_charges_page) {
-            navigate(PATHNAME_MAPPER.tradingInfo);
+            navigate(PATHNAME_MAPPER.tradingInfo, {
+              state: { goBack: PATHNAME_MAPPER.journey }
+            });
           } else {
             commonRedirection();
           }
