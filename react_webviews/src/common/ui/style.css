@@ -242,7 +242,6 @@
 input.default-otp-input {
   width: 33px !important;
   height: auto;
-  border-bottom: 2px solid #5446a6 !important;
   border: none;
   margin: 0 10px 0 0;
   width: 20%;

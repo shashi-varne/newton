@@ -591,6 +591,10 @@ img.gold-offer-slide-img {
 
 
 .gold-payment-container {
+  .payment-screen-banner{
+    width: 100% !important;
+    min-height: 160px !important; 
+  }
   .content-points {
     color: #0a1d32;
     font-size: 14px;
@@ -630,6 +634,11 @@ img.gold-offer-slide-img {
     color: #767e86;
     font-size: 10px;
     font-weight: 600;
+  }
+  .payment-screen-product-logo{
+    width: 30px !important;
+    height: 30px !important;
+    margin: 0;
   }
 }
 

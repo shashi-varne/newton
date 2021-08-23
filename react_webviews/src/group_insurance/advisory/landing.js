@@ -140,7 +140,6 @@ class AdvisoryLanding extends Component {
             handleClick={()=>this.handleClick()}
             >
             <div className="advisory-landing-container">
-
             <Imgc style={{minHeight: '140px'}} className="advisory-entry-hero" alt="" src={require(`assets/${this.state.type}/advisory_entry_hero.svg`)}/>
               <p className="advisory-hero-desc">We'll recommend insurance coverage options that work for you, based on your profile</p>
             <p className="" style={{marginBottom: '20px', color: 'black', fontWeight: '600', fontSize: '16px' }}>Find the right coverage in 5 easy steps</p>

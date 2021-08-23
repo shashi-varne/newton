@@ -258,7 +258,7 @@ class UploadBank extends Component {
     this.setState({
       fileUploaded: true,
       documents: documents,
-      confirmed: duplicate.length !== 0 ? true : false,
+      confirmed: false,
       editId: "",
       count: count,
     });
@@ -311,7 +311,7 @@ class UploadBank extends Component {
       fileUploaded: true,
       documents: documents,
       show_loader: false,
-      confirmed: duplicate.length !== 0 ? true : false,
+      confirmed: false,
       editId: "",
       count: count,
     });

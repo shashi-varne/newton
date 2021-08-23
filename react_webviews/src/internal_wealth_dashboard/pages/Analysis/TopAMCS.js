@@ -2,7 +2,7 @@ import React from 'react';
 import IwdCard from '../../mini-components/IwdCard';
 import { isEmpty } from 'utils/validators';
 import { formatPercentVal } from '../../common/commonFunctions';
-const TopAMCS = ({ topAMCs }) => {
+const TopAMCS = ({ topAMCs = [] }) => {
   return (
     <div className='iwd-scroll-child' data-pgno='3'>
       <IwdCard

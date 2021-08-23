@@ -33,6 +33,7 @@ import KycEsign from './kyc_esign';
 import PortfolioRebalancing from './portfolio_rebalancing';
 import FundDetails from './fund_details';
 import Whatsapp from './whatsapp';
+import TaxFiling from './tax_filing'
 import FisdomPartnerRedirect from "./fisdom_partner_redirect"
 import Partner from "./partner"
 import Tooltip from 'common/ui/Tooltip';
@@ -103,6 +104,7 @@ class App extends Component {
               <Route path='/fund-details' component={FundDetails} />
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />
               <Route path='/partner' component={Partner} />
+              <Route path='/tax-filing' component={TaxFiling} />
               <Route component={NotFound} />
             </Switch>
           

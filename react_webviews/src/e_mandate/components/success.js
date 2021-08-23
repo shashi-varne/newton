@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import Container from '../common/Container';
 import qs from 'qs';
 import sip_resumed_fisdom from 'assets/sip_resumed_illustration_fisdom.svg';
-import sip_resumed_myway from 'assets/sip_resumed_illustration_myway.svg';
+import sip_resumed_myway from 'assets/finity/sip_resumed_illustration_myway.svg';
 import { getConfig , isIframe} from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import ContactUs from '../../common/components/contact_us';

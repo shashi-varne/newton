@@ -77,7 +77,7 @@ class CategoryList extends Component {
 
     categoryList.map((item) => {
       item.name = item.cms_category_name;
-      item.icon = categories[item.cms_category_name].icon;
+      item.icon = categories[item.cms_category_name]?.icon;
       storageService().set(item.cms_category_name, item.cms_category_id);
       return item;
     });
@@ -225,6 +225,8 @@ class CategoryList extends Component {
   };
 
   handleContact = () => {
+    this.sendEvents("contact_us");
+
     if (getConfig().Web) {
       this.setState({
         open: true,

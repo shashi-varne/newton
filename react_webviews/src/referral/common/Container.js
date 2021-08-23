@@ -19,6 +19,9 @@ class Container extends Component {
   }
 
   historyGoBack = () => {
+    if (this.getEvents("back")) {
+      nativeCallback({ events: this.getEvents("back") });
+    }
     let pathname = this.props.history.location.pathname;
     switch (pathname) {
       case "/referral":

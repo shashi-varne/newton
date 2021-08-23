@@ -40,6 +40,11 @@ export var fyntuneConstants = {
         text: 'EXPIRED',
         color: 'red',
         reportTab: 'inactiveReports'
+      }, 
+      payment_done: {
+        text: 'PENDING',
+        color: '#d3bd13',
+        reportTab: 'pendingReports'
       }
     },
     stepsToFollow : [
@@ -70,7 +75,7 @@ export var fyntuneConstants = {
           'options': [
               {
                   'title': 'What are the products available?',
-                  'subtitle': 'We are currently offering HDFC Life Sanchay Plus and HDFC Life Click-2-Invest products.'
+                  'subtitle': 'We are currently offering HDFC Life Sanchay Plus and HDFC Life Click 2 Invest products, and Edelweiss Active Income Plan.'
               },
               {
                   'title': 'What are bonuses and how do the Cash Bonus work?',

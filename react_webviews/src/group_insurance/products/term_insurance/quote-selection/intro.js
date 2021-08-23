@@ -9,6 +9,7 @@ import { nativeCallback } from 'utils/native_callback';
 import dropdown_arrow_fisdom from 'assets/fisdom/down_arrow_fisdom.svg';
 import dropdown_arrow_myway from 'assets/down_arrow_myway.svg';
 // import kotak_logo from 'assets/kotak_life_logo.png';
+import {Imgc} from 'common/ui/Imgc';
 import {
   inrFormatDecimal
 } from '../../../../utils/validators';
@@ -302,7 +303,7 @@ class Intro extends Component {
         <div className="quote-tiles" style={{ margin: index !== 0 ? '20px 0 0 0' : '' }}>
           <div className="quote-tiles1">
             <div className="quote-tiles1a">
-              <img style={{ width: 90 }} src={props.quote_provider_logo} alt="Insurance" />
+              <Imgc style={{ width: '90px', minHeight: '40px' }} src={props.quote_provider_logo} alt="Insurance" />
             </div>
             <div className="quote-tiles1b">{props.insurance_title}</div>
           </div>
