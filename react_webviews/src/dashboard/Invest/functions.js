@@ -448,13 +448,15 @@ export function initilizeKyc() {
     }
 
     if (["fno_rejected", "complete"].includes(kycJourneyStatus)) {
-      if (TRADING_ENABLED && userKyc.equity_investment_ready) {
-        modalData = kycStatusMapper["kyc_verified"];
-        if (kycJourneyStatus === "fno_rejected") {
-          modalData.subtitle = "You can start your investment journey by investing in your favourite stocks, mutual funds."
+      if (!currentUser.active_investment) {
+        if (TRADING_ENABLED && userKyc.equity_investment_ready) {
+          modalData = kycStatusMapper["kyc_verified"];
+          if (kycJourneyStatus === "fno_rejected") {
+            modalData.subtitle = "You can start your investment journey by investing in your favourite stocks, mutual funds."
+          }
+        } else if (!TRADING_ENABLED && !isCompliant) {
+          modalData = kycStatusMapper["mf_complete"];
         }
-      } else if (!TRADING_ENABLED && !isCompliant) {
-        modalData = kycStatusMapper["mf_complete"];
       }
     } else {
       modalData = kycStatusMapper[kycJourneyStatus];
