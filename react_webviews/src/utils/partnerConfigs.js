@@ -508,7 +508,27 @@ export const partnerConfigs = {
       primaryColor: "#252B69",
     },
     features:{loan: true}
-  }
+  },
+  ucomb: {
+    code: "ucomb",
+    logo: "ucomb.jpg",
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      ourRecommendations: ["buildwealth", "savetax"],
+      diy: ["diyv2"],
+    },
+    styles: {
+      primaryColor: "#002759",
+      secondaryColor: "#002759",
+      backButtonColor: "#002759",
+      notificationsColor: "#002759"
+    },
+    uiElements: {
+      header: {
+        backgroundColor : "#FFF112",
+      }
+    },
+  },
 };
 
 export const getPartnerData = (productType, partnerCode) => {
