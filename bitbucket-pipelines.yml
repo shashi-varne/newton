@@ -61,6 +61,8 @@ definitions:
     - step: &prod-deploy
         name: Production deploy
         size: 2x
+        # caches:
+        #   - nodemodules
         script:
           - export HTTP_ADDR=app.fisdom.com
           - export HTTP_PORT=3000
@@ -104,19 +106,20 @@ pipelines:
       - step:
           name: Ready Steady Go....
           script:
-            - echo "Deploying now, please wait... :)"
+            - echo "Go ahead and deploy now... :)"
 
-      - step:
-          <<: *prod-deploy
-          name: Fisdom Production deploy
-          trigger: manual
-          deployment: fisdom-prod
+      - parallel:
+        - step:
+            <<: *prod-deploy
+            name: Fisdom Production deploy
+            trigger: manual
+            deployment: fisdom-prod
 
-      - step:
-          <<: *prod-deploy
-          name: Finity Production deploy
-          trigger: manual
-          deployment: finity-prod
+        - step:
+            <<: *prod-deploy
+            name: Finity Production deploy
+            trigger: manual
+            deployment: finity-prod
       
       # - step:
       #     <<: *prod-deploy
@@ -128,3 +131,7 @@ pipelines:
       - step:
           <<: *master-deploy
           name: Master deploy
+
+# definitions:
+#   caches:
+#     nodemodules: react_webviews/node_modules
