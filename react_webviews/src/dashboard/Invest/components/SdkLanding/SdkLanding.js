@@ -286,8 +286,9 @@ class SdkLanding extends Component {
                   }
                   if (kycSubTitle) {
                     el.subtitle = kycSubTitle;
-                    if(el.color)
+                    if(el.color) {
                       el.dot = true;
+                    }
                   }
                 }
 
