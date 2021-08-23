@@ -61,8 +61,8 @@ definitions:
     - step: &prod-deploy
         name: Production deploy
         size: 2x
-        caches:
-          - nodemodules
+        # caches:
+        #   - nodemodules
         script:
           - export HTTP_ADDR=app.fisdom.com
           - export HTTP_PORT=3000
