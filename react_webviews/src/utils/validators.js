@@ -456,6 +456,7 @@ export function validateName(string) {
   if (!string) {
     return false;
   }
+  // Validate alphabets & space at 0th position
   return string.match(/^(?![\s])[a-z A-Z]+$/);
 }
 
