@@ -52,7 +52,7 @@ const Home = (props) => {
   const [disableResidentialStatus, setDisableResidentialStatus] = useState();
 
   const isTradingEnabled = (isIndian) => {
-    return kyc.equity_enabled && isIndian
+    return !config.isSdk && kyc.equity_enabled && isIndian
   }
   // const [navigateTo, setNavigateTo] = useState('');
   // const [x,setX] = useState(false);

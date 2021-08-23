@@ -316,6 +316,11 @@ export function getKycAppStatus(kyc) {
     status = 'incomplete';
   }
 
+  // this condition handles nri compliant bank document pending case 
+  if (kyc.address.meta_data.is_nri && kyc.kyc_status === 'compliant' && !["verified", "doc_submitted"].includes(kyc.bank.meta_data.bank_status)) {
+    status = "incomplete"
+  }
+
   // this condition handles retro kyc submitted users
   if (kyc.kyc_product_type !== "equity" && isMfApplicationSubmitted(kyc)) {
     status = "submitted"
