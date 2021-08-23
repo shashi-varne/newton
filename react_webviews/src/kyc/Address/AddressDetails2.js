@@ -116,6 +116,7 @@ const AddressDetails2 = (props) => {
     const maxLength = target.maxLength;
     if (name === "pincode" && value && !validateNumber(value)) return;
     if (value && maxLength && value.length > maxLength) return;
+    if(value && name === "addressline" && value.indexOf(" ") === 0) return;
     let formData = { ...form_data };
     formData[name] = value;
     if (!value) {

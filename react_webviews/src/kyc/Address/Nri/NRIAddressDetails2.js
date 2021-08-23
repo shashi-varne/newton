@@ -10,7 +10,7 @@ import {
 } from "../../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../../common/hooks/userKycHook";
-import { isEmpty, validateNumber } from "../../../utils/validators";
+import { isEmpty, validateName, validateNumber } from "../../../utils/validators";
 import { getConfig } from "utils/functions";
 import "../commonStyles.scss";
 import { nativeCallback } from "../../../utils/native_callback";
@@ -118,8 +118,12 @@ const NRIAddressDetails2 = (props) => {
     const name = target.name;
     const value = target.value;
     const maxLength = target.maxLength;
+    const validateNameFields = ["city", "state", "country"];
+    const validateStartingSpaceFields = ["addressline", "tin_number"]
     if (value && name === "nri_pincode" && !validateNumber(value)) return;
     if(value && maxLength && value.length > maxLength) return;
+    if(value && validateNameFields.includes(name) && !validateName(value)) return;
+    if(value && validateStartingSpaceFields.includes(name) && value.indexOf(" ") === 0) return;
     let formData = { ...form_data };
     formData[name] = value;
     if (!value && name !== "tin_number") {
