@@ -359,10 +359,6 @@ const Journey = (props) => {
         }
       }
 
-      if (journeyStatus === 'rejected' && !show_aadhaar) {
-        handleEdit(kycJourneyData[3].key, 3)
-      }
-
       if (canSubmit()) {
         await submitData()
       }
