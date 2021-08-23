@@ -59,9 +59,8 @@ const AddBank = (props) => {
     setName(kyc.pan.meta_data.name || "");
     let data = { ...bankData };
     if (bank_id) {
-      data =
-        kyc.additional_approved_banks.find((obj) => obj.bank_id === bank_id) ||
-        {};
+      data = kyc.additional_approved_banks.find((obj) => obj.bank_id === bank_id) || {};
+
       data.c_account_number = data.account_number;
       if (data.user_rejection_attempts === 0) {
         setIsPennyExhausted(true);
@@ -347,7 +346,7 @@ const AddBank = (props) => {
                 error={form_data.c_account_number_error ? true : false}
                 helperText={form_data.c_account_number_error || ""}
                 onChange={handleChange("c_account_number")}
-                type="number"
+                type="number"addBank
                 InputProps={{
                   endAdornment: (
                     <>
