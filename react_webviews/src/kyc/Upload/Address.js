@@ -154,6 +154,7 @@ const AddressUpload = (props) => {
     navigate("/kyc/address-details1", {
       state: {
         backToJourney: true,
+        isEdit: true
       },
     });
   };

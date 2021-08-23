@@ -136,6 +136,7 @@ const NRIAddressUpload = (props) => {
     navigate("/kyc/nri-address-details1", {
       state: {
         backToJourney: true,
+        isEdit: true
       },
     });
   };

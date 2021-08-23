@@ -191,7 +191,7 @@ export const commonBackMapper = {
     '/reports/sip/details': '/reports/sip',
     '/reports/sip': '/reports',
     '/kyc/upload/address': '/kyc/upload/progress',
-    '/kyc/upload/nri-address': '/kyc/upload/progress',
+    '/kyc/upload/address-nri': '/kyc/upload/progress',
 }
 
 export const landingEntryPoints = ["/", "/invest", "/landing"];
