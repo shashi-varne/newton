@@ -20,12 +20,14 @@ import { Dialog, DialogActions, DialogContent } from '@material-ui/core';
 import React from 'react';
 import Close from '@material-ui/icons/Close';
 import PropTypes from 'prop-types';
+import WVInPageTitle from '../InPageHeader/WVInPageTitle';
 
 const WVFullscreenDialog = ({
   dataAidSuffix,
   open,
   onClose,
-  children
+  children,
+  ...dialogProps
 }) => {
   return (
     <Dialog
@@ -35,6 +37,7 @@ const WVFullscreenDialog = ({
       onClose={onClose}
       className="wv-fullscreen-dialog"
       aria-labelledby="fullscreen-dialog"
+      {...dialogProps}
     >
       {children}
     </Dialog>
@@ -45,19 +48,23 @@ const Content = ({
   dataAidSuffix,
   onCloseClick, // Callback function to handle 'close' icon click behaviour
   closeIconPosition, // Sets position of 'close' icon, defaults to 'left'
+  headerTitle, // Will show up as a sticky title at top of page under 'close' 
   children
 }) => {
   return (
     <DialogContent>
-      <div style={{ textAlign: closeIconPosition, marginBottom: '40px' }}>
+      <div className="wv-fd-content-header" style={{ textAlign: closeIconPosition }}>
         <Close
-          data-aid={`wv-close-dialog-${dataAidSuffix}`}
+          data-aid={`wv-fd-close-dialog-${dataAidSuffix}`}
           color="primary"
           onClick={onCloseClick}
-          classes={{ root: 'wv-fullscreen-dialog-close' }}
+          classes={{ root: 'wv-fd-close' }}
         />
+        {headerTitle &&
+          <WVInPageTitle style={{ marginTop: '20px' }}>{headerTitle}</WVInPageTitle>
+        }
       </div>
-      <div>
+      <div className="wv-fd-content-body">
         {children}
       </div>
     </DialogContent>
@@ -67,10 +74,12 @@ const Content = ({
 Content.propTypes = {
   onCloseClick: PropTypes.func.isRequired,
   closeIconPosition: PropTypes.oneOf(['left', 'right']),
+  headerTitle: PropTypes.node,
 }
 
 Content.defaultProps = {
-  closeIconPosition: 'left'
+  closeIconPosition: 'left',
+  headerTitle: ''
 }
 
 WVFullscreenDialog.Content = Content; // Extends custom styling over MUI DialogContent

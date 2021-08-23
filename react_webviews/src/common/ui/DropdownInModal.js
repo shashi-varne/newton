@@ -4,14 +4,14 @@ import tick_icon_myway from 'assets/check_selected_blue.svg';
 import './style.css';
 import { getConfig } from 'utils/functions';
 import scrollIntoView from 'scroll-into-view-if-needed';
-import close_icn from 'assets/close_icn.svg';
 import { FormControl } from 'material-ui/Form';
-import Button from 'material-ui/Button';
-import Dialog, { DialogActions, DialogContent, DialogTitle } from 'material-ui/Dialog';
 import { InputLabel } from 'material-ui/Input';
 import down_arrow from 'assets/down_arrow.svg';
 import SVG from 'react-inlinesvg';
 import { formatAmountInr } from 'utils/validators';
+import WVButton from './Button/WVButton';
+import WVFullscreenDialog from './FullscreenDialog/WVFullscreenDialog';
+
 class DropdownInModalClass extends Component {
   constructor(props) {
     super(props);
@@ -126,48 +126,30 @@ class DropdownInModalClass extends Component {
   renderPopUp() {
     if (this.state.openPopUp) {
       return (
-        <Dialog
-          fullWidth={true}
-          fullScreen={!!getConfig().isMobileDevice}
-          style={{ margin: 0 }}
-          id='dropdown-in-modal-dialog'
-          paper={{
-            margin: '0px',
-          }}
+        <WVFullscreenDialog
           open={this.state.openPopUp}
           onClose={this.handleClose}
-          aria-labelledby='alert-dialog-title'
-          aria-describedby='alert-dialog-description'
+          id="dropdown-in-modal-dialog"
         >
-          <DialogTitle id='dropdown-in-modal-dialog-title'>
-            <div onClick={this.handleClose} className='dropdown-in-modal-close'>
-              <SVG
-                preProcessor={(code) => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.primaryColor)}
-                src={close_icn}
-              />
-            </div>
-            <div className='dialog-head' style={{ height: this.props.height }}>
-              {this.props.header_title}
-            </div>
-          </DialogTitle>
-          <DialogContent>
+          <WVFullscreenDialog.Content
+            onCloseClick={this.handleClose}
+            headerTitle={this.props.header_title}
+          >
             <div className='content' id='alert-dialog-description'>
               {this.props.options.map(this.renderList)}
             </div>
-          </DialogContent>
-          <DialogActions className='content-button'>
-            <Button
-              fullWidth={true}
-              variant='raised'
-              size='large'
+          </WVFullscreenDialog.Content>
+          <WVFullscreenDialog.Action>
+            <WVButton
+              fullWidth
+              contained
               color='secondary'
               onClick={this.handleCloseAction}
-              autoFocus
             >
               {this.props.cta_title}
-            </Button>
-          </DialogActions>
-        </Dialog>
+            </WVButton>
+          </WVFullscreenDialog.Action>
+        </WVFullscreenDialog>
       );
     }
     return null;
