@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Input from "../../common/ui/Input";
 import { PATHNAME_MAPPER } from "../constants";
-import { isEmpty, validateAlphabets } from "../../utils/validators";
+import { isEmpty, validateName } from "../../utils/validators";
 import {
   validateFields,
   compareObjects,
@@ -101,7 +101,7 @@ const PersonalDetails2 = (props) => {
 
   const handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
-    if (!validateAlphabets(value, true) && value) return;
+    if (value && !validateName(value)) return;
     let formData = { ...form_data };
     formData[name] = value;
     if (!value) formData[`${name}_error`] = "This is required";

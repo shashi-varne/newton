@@ -159,12 +159,9 @@ export function validateStreetName(string) {
   return rule.test(string);
 }
 
-export function validateAlphabets(string, checkStartingSpace) {
+export function validateAlphabets(string) {
   if (!string) {
     return false;
-  }
-  if(checkStartingSpace) {
-    return string.match(/[a-zA-Z][a-z A-Z]*$/);
   }
   return string.match(/^[a-z A-Z]+$/);
 }
@@ -456,7 +453,10 @@ export function isValidMonthYear(input) {
 }
 
 export function validateName(string) {
-  return string.trim().indexOf(' ') !== -1;
+  if (!string) {
+    return false;
+  }
+  return string.match(/^(?![\s])[a-z A-Z]+$/);
 }
 
 export function capitalize(string) {
