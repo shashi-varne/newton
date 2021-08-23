@@ -77,7 +77,7 @@ class CategoryList extends Component {
 
     categoryList.map((item) => {
       item.name = item.cms_category_name;
-      item.icon = categories[item.cms_category_name].icon;
+      item.icon = categories[item.cms_category_name]?.icon;
       storageService().set(item.cms_category_name, item.cms_category_id);
       return item;
     });
@@ -308,7 +308,7 @@ class CategoryList extends Component {
             }`,
           }}
         >
-          <div className="Header header-title-page header-title-page-text" style={{paddingLeft:"0px"}}>
+          <div className="custom-header header-title-page header-title-page-text" style={{paddingLeft:"0px"}}>
             <MyQueries
               title="How can we help?"
               onClick={this.handleQuery}

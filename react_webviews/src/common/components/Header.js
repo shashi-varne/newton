@@ -123,7 +123,6 @@ const Header = ({ classes, title, count, total, current, goBack,
 
         {!headerData.progressHeaderData && 
           <>
-            <div>
             {
               !headerData.partnerLogo && 
               <div
@@ -134,7 +133,6 @@ const Header = ({ classes, title, count, total, current, goBack,
                 {title}
               </div>
             }
-            </div>
             {
               !(moneycontrolHeader && headerData.partnerLogo) &&
               <div className='header-right-nav-components'>
