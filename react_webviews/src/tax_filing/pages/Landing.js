@@ -8,7 +8,7 @@ import Carousal from '../mini-components/Carousal'
 import FeatureListItem from '../mini-components/FeatureListItem'
 import WVCard from 'common/ui/Card/WVCard'
 import { Imgc } from 'common/ui/Imgc'
-import ListItem from 'common/ui/ListItem/WVListItem'
+import WVListItem from 'common/ui/ListItem/WVListItem'
 import Tax2WinLogo from '../mini-components/Tax2WinLogo'
 
 import { nativeCallback } from 'utils/native_callback'
@@ -180,7 +180,7 @@ function Landing(props) {
         {TAX_FILING_OPTIONS.map(({ title, subtitle, icon, type }, idx) => {
           if (type === 'free') {
             return (
-              <ListItem
+              <WVListItem
                 key={title}
                 iconSrc={require(`assets/${productName}/${icon}.svg`)}
                 title={<CustomTitle title={title} />}
@@ -192,7 +192,7 @@ function Landing(props) {
             )
           } else {
             return (
-              <ListItem
+              <WVListItem
                 key={title}
                 iconSrc={require(`assets/${productName}/${icon}.svg`)}
                 title={title}
