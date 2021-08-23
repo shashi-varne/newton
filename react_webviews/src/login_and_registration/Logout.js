@@ -23,7 +23,6 @@ const Logout = (props) => {
         return;
       }
       try {
-        window.localStorage.clear();
         await logout();
       } catch (err) {
         console.log(err);
