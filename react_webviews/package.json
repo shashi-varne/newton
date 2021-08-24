@@ -164,7 +164,8 @@
       "@babel/react"
     ],
     "plugins": [
-      "@babel/plugin-proposal-class-properties"
+      "@babel/plugin-proposal-class-properties",
+      "@babel/plugin-syntax-dynamic-import"
     ]
   },
   "homepage": "https://app.fisdom.com",
@@ -182,7 +183,6 @@
     "node-sass": "^4.9.0",
     "sass-loader": "^7.3.1",
     "terser-webpack-plugin": "^4.1.0",
-    "webpack-bundle-analyzer": "^4.4.2"
   },
   "resolutions": {
     "material-ui/@babel/runtime": "7.0.0-beta.42",

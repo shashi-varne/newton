@@ -14,26 +14,14 @@ import { withRouter } from "react-router";
 import { ToastContainer } from "react-toastify";
 import Loadable from "react-loadable";
 
-import InternalWealthDashboard from "./internal_wealth_dashboard";
 import DesktopLayout from "./desktopLayout";
-import Login from "./login_and_registration/Login";
-import Register from "./login_and_registration/Register";
-import Otp from "./login_and_registration/Otp";
-import ForgotPassword from "./login_and_registration/ForgotPassword";
-import Logout from "./login_and_registration/Logout";
-import FisdomPartnerRedirect from "./fisdom_partner_redirect";
-import WealthReport from "./wealth_report";
-import SocialCallback from "./login_and_registration/SocialCallback";
 // import CommonRenderFaqs from './common/components/RenderFaqs';
-
-import Feature from "./Feature";
 
 import NotFound from "./common/components/NotFound";
 import Tooltip from "common/ui/Tooltip";
 import { getConfig } from "./utils/functions";
 import "common/theme/Style.scss";
 import { storageService } from "./utils/validators";
-import PartnerAuthentication from "./login_and_registration/Authentication";
 import Prepare from "./dashboard/Invest/components/SdkLanding/Prepare";
 import { ThemeProvider } from "./utils/ThemeContext";
 
@@ -84,12 +72,70 @@ const ScrollToTop = withRouter(
 );
 
 const InternalWealthDashboardComponent = Loadable({
-  loader: () => import("./internal_wealth_dashboard"),
+  loader: () =>
+    import(
+      /*webpackChunkName: "internal_wealth_dashboard"*/ "./internal_wealth_dashboard"
+    ),
   loading: () => <div>Loading...</div>,
 });
 const LoginComponent = Loadable({
   loader: () =>
     import(/*webpackChunkName: "Login"*/ "./login_and_registration/Login"),
+  loading: () => <div>Loading...</div>,
+});
+const RegistrationComponent = Loadable({
+  loader: () =>
+    import(
+      /*webpackChunkName: "Registration"*/ "./login_and_registration/Register"
+    ),
+  loading: () => <div>Loading...</div>,
+});
+const OtpComponent = Loadable({
+  loader: () =>
+    import(/*webpackChunkName: "Otp"*/ "./login_and_registration/Otp"),
+  loading: () => <div>Loading...</div>,
+});
+const ForgotPasswordComponent = Loadable({
+  loader: () =>
+    import(
+      /*webpackChunkName: "ForgotPassword"*/ "./login_and_registration/ForgotPassword"
+    ),
+  loading: () => <div>Loading...</div>,
+});
+const WealthReportComponent = Loadable({
+  loader: () =>
+    import(/* webpackChunkName: "Wealth_Report" */ "./wealth_report"),
+  loading: () => <div>Loading...</div>,
+});
+const SocialCallbackComponent = Loadable({
+  loader: () =>
+    import(
+      /* webpackChunkName: "Social_Callback" */ "./login_and_registration/SocialCallback"
+    ),
+  loading: () => <div>Loading...</div>,
+});
+const FisdomPartnerRedirectComponent = Loadable({
+  loader: () =>
+    import(
+      /* webpackChunkName: "FisdomPartnerRedirect" */ "./fisdom_partner_redirect"
+    ),
+  loading: () => <div>Loading...</div>,
+});
+
+const PartnerAuthenticationComponent = Loadable({
+  loader: () =>
+    import(
+      /* webpackChunkName: "Authentication" */ "./login_and_registration/Authentication"
+    ),
+  loading: () => <div>Loading...</div>,
+});
+const FeatureComponent = Loadable({
+  loader: () => import(/* webpackChunkName: "Feature" */ "./Feature"),
+  loading: () => <div>Loading...</div>,
+});
+const LogoutComponent = Loadable({
+  loader: () =>
+    import(/* webpackChunkName: "Logout" */ "./login_and_registration/Logout"),
   loading: () => <div>Loading...</div>,
 });
 const App = () => {
@@ -121,27 +167,33 @@ const App = () => {
                 path="/iw-dashboard"
                 component={InternalWealthDashboardComponent}
               />
-              <Route path="/w-report" component={WealthReport} />
+              <Route path="/w-report" component={WealthReportComponent} />
               <Route path="/login" component={LoginComponent} />
-              <Route path="/register" component={Register} />
-              <Route path="/mobile/verify" component={Otp} />
-              <Route path="/forgot-password" component={ForgotPassword} />
-              <Route path="/social/callback" component={SocialCallback} />
+              <Route path="/register" component={RegistrationComponent} />
+              <Route path="/mobile/verify" component={OtpComponent} />
+              <Route
+                path="/forgot-password"
+                component={ForgotPasswordComponent}
+              />
+              <Route
+                path="/social/callback"
+                component={SocialCallbackComponent}
+              />
               <Route
                 path="/partner-landing"
-                component={FisdomPartnerRedirect}
+                component={FisdomPartnerRedirectComponent}
               />
               <Route
                 path="/partner-authentication/:partnerCode"
-                component={PartnerAuthentication}
+                component={PartnerAuthenticationComponent}
               />
-              <Route path="/logout" component={Logout} />
+              <Route path="/logout" component={LogoutComponent} />
               <Route path="/prepare" component={Prepare} />
               {isMobileDevice || iframe ? (
-                <Route component={Feature} />
+                <Route component={FeatureComponent} />
               ) : (
                 <DesktopLayout>
-                  <Feature />
+                  <FeatureComponent />
                 </DesktopLayout>
               )}
               <Route component={NotFound} />
