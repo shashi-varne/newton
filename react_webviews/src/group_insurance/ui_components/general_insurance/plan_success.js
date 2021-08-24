@@ -349,18 +349,9 @@ class PlanSuccessClass extends Component {
     }
   }
 
-  redirectToApp(url) {
-    nativeCallback({
-      action: 'open_browser',
-      message: {
-        url: url
-      }
-    });
-  }
-
   downloadApp = () =>{
     let url = getConfig().appLink;
-    this.redirectToApp(url);
+    this.openInBrowser(url)
   }
 
   render() {
