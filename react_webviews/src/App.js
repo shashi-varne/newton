@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import Logout from './login_and_registration/pages/Login/Logout.js';
 import FisdomPartnerRedirect from './fisdom_partner_redirect';
-import WealthReport from './wealth_report';
+// import WealthReport from './wealth_report';
 
 
 import { create } from 'jss';
@@ -14,7 +14,7 @@ import { themeConfig } from 'utils/constants';
 import { withRouter } from "react-router";
 import { ToastContainer } from 'react-toastify';
 
-import InternalWealthDashboard from './internal_wealth_dashboard';
+// import InternalWealthDashboard from './internal_wealth_dashboard';
 import DesktopLayout from './desktopLayout';
 // import CommonRenderFaqs from './common/components/RenderFaqs';
 
@@ -43,7 +43,7 @@ const getMuiThemeConfig = () => {
   return createMuiTheme(themeConfig());
 }
 
-var basename = window.sessionStorage.getItem('base_href') || '';
+var basename = window.localStorage.getItem('base_href') || '';
 if (basename && basename.indexOf('appl/webview') !== -1) {
   basename = basename ? basename + 'view/' : '';
 }
@@ -99,8 +99,11 @@ const App = () => {
             <Tooltip />
             <ToastContainer autoClose={3000} />
             <Switch>
-              <Route path="/iw-dashboard" component={InternalWealthDashboard} />
-              <Route path='/w-report' component={WealthReport} />
+              {/* Not working */}
+              {/* <Route path="/iw-dashboard" component={InternalWealthDashboard} /> */}
+              {/* <Route path='/w-report' component={WealthReport} /> */}
+               {/* Not working */}
+              {/* Working category*/}
               <UnAuthenticatedRoute
                 path={[
                   '/login',

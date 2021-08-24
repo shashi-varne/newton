@@ -8,12 +8,13 @@ import { verifyPin } from '../../../2fa/common/apiCalls';
 import { nativeCallback } from "../../../utils/native_callback";
 import WVButton from '../../../common/ui/Button/WVButton';
 import DotDotLoader from '../../../common/ui/DotDotLoaderNew';
-import { postLoginSetup, redirectAfterLogin } from '../../functions';
+import { redirectToLaunchDiet, postLoginSetup, redirectAfterLogin } from '../../functions';
 
 const pinAttemptsKey = 'pin-attempts'; // key name for session store
 
 const VerifyPin = (props) => {
-  const { productName } = getConfig();
+  const config = getConfig();
+  const productName = config.productName;
   const { name } = storageService().getObject('user') || {};
   const [mpinError, setMpinError] = useState(false);
   const [mpin, setMpin] = useState('');
@@ -53,11 +54,15 @@ const VerifyPin = (props) => {
       storageService().remove(pinAttemptsKey);
       sendEvents("next");
       await postLoginSetup();
-      redirectAfterLogin(
-        { firstLogin: false },
-        '',
-        navigate
-      );
+      if(config.diet) {
+        await redirectToLaunchDiet();
+      } else {
+        redirectAfterLogin(
+          { firstLogin: false },
+          '',
+          navigate
+        );
+      }
     } catch (err) {
       console.log(err);
       setMpinError(err);

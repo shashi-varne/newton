@@ -52,11 +52,15 @@ export const KEY_INSIGHTS_CAROUSEL = [
 ];
 
 const PrimaryMarketProducts = (props) => {
+  const config = getConfig();
   const navigate = navigateFunc.bind(props);
   const productName = getConfig().productName;
   const handleOnClick = (el = {}) => () => {
     if (el.nextState) {
       navigate(el.nextState);
+    } else {
+      const type = el.key;
+      window.location.href = `${config.base_url}/page/equity/tpp/${type}`;
     }
   };
 
@@ -64,11 +68,16 @@ const PrimaryMarketProducts = (props) => {
     navigate("/help");
   };
 
+  const goBack = () => {
+    navigate("/");
+  };
+
   return (
     <Container
       data-aid="market-products-screen"
       noFooter={true}
       title="IPO, Gold Bonds and more"
+      headerData={{ goBack }}
     >
       <div className="primary-market-products">
         <div
