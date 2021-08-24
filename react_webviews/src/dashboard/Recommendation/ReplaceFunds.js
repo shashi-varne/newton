@@ -214,8 +214,8 @@ const ReplaceFunds = (props) => {
         </div>
       </section>
       <AmountUpdateDialog
-        fundName={selectedFund.mf?.mfname}
-        fundMinPurchase={selectedFund.mf?.min_purchase}
+        fundName={selectedFund?.mf?.mfname}
+        fundMinPurchase={selectedFund?.mf?.min_purchase}
         isOpen={openDialog}
         onClose={CloseDialog}
         onConfirm={onConfirmDialog}
