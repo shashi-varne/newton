@@ -30,6 +30,9 @@ const KycStatusDialog = ({ isOpen, close, data, handleClick, handleClick2}) => {
       image={require(`assets/${productName}/${data.icon}`)}
       button1Props={button1Props}
       button2Props={button2Props}
+      classes={{
+        image: "kyc-sd-right-icon"
+      }}
     />
   );
 };
