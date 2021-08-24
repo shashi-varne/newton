@@ -3,6 +3,7 @@ import { getConfig } from "utils/functions";
 import "./mini-components.scss";
 import Button from "../../common/ui/Button";
 import WVFullscreenDialog from "../../common/ui/FullscreenDialog/WVFullscreenDialog";
+import { Imgc } from "../../common/ui/Imgc";
 
 const config = getConfig();
 const productName = config.productName;
@@ -22,18 +23,20 @@ const KnowMore = ({ isOpen, close }) => {
               Before recording ensure you are in a quiet place and your full
               face is visible. Once ready start recording.
             </div>
-            <img
+            <Imgc
               alt="start-recording"
               src={require(`assets/${productName}/start_recording.svg`)}
+              className="kyc-kmdc-img"
             />
           </div>
           <div className="content second-step-content">
             <div className="text" data-aid="kyc-content-step-2">
               Say the verification code and stop recording
             </div>
-            <img
+            <Imgc
               alt="start-recording"
               src={require(`assets/${productName}/state_ipv_number.svg`)}
+              className="kyc-kmdc-img"
             />
           </div>
         </main>
