@@ -262,7 +262,7 @@ class GroupHealthPayment extends Component {
 
   redirectToApp(url) {
     nativeCallback({
-      action: 'open_browser',
+      action: 'open_in_browser',
       message: {
         url: url
       }
