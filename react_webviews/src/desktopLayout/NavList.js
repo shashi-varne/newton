@@ -94,7 +94,7 @@ const NavList = (props) => {
   const config = getConfig();
   const productName = config.productName;
   const isMobileDevice = config.isMobileDevice;
-  const partnerLoan = config?.navLinkOptions?.loan;
+  const partnerLoan = config?.features?.loan;
   const showReferral = !config?.referralConfig?.shareRefferal;
   const navigate = navigateFunc.bind(props);
   const [referDialog, setReferDialog] = useState(false);
@@ -182,17 +182,6 @@ const NavList = (props) => {
 
       <div>
         <div className='navlink-footer-list' data-aid='navlink-footer-list'>
-          {productName === 'fisdom' && (
-            <div className='navlink-footer-item' data-aid='navlink-faq'>
-              <a
-                rel='noopener noreferrer'
-                target='_blank'
-                href={`https://www.${productName}.com/faqs/`}
-              >
-                FAQ
-              </a>
-            </div>
-          )}
           <div className='navlink-footer-item' data-aid='navlink-privacy-policy'>
             <a
               rel='noopener noreferrer'

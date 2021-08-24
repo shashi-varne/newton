@@ -200,7 +200,10 @@ export const partnerConfigs = {
       bottomCards: ["nfo"],
       financialTools: ["fhc", "risk_profile"],
     },
-    navLinkOptions:{loan: true}
+    features: {
+      loan: true,
+      taxFiling: true,
+    }
   },
   finity: {
     logo: "finity_white_logo.svg",
@@ -212,6 +215,9 @@ export const partnerConfigs = {
       ourRecommendations: ["instaredeem", "buildwealth", "savetax"],
       financialTools: ["fhc", "risk_profile"],
     },
+    features: {
+      taxFiling: true
+    }
   },
   bfdlmobile: {
     logo: "bfdl_white_sdk_logo.svg",
@@ -224,7 +230,7 @@ export const partnerConfigs = {
       financialTools: ["risk_profile"],
     },
     landingMarketingBanners: [
-      { image: "nfo.svg", type: "nfo", endDate: '08/08/2021' },
+      { image: "nfo.svg", type: "nfo", endDate: '08/24/2021' },
       { image: "mb_4.svg", type: "100_sip" },
       { image: "mb_6.svg", type: "diy" },
       { image: "mb_5.svg", type: "buildwealth" },
@@ -307,7 +313,7 @@ export const partnerConfigs = {
     mobile: "1800-212-5997",
     email: "care.futuremoney@fisdom.com",
     landingMarketingBanners: [
-      { image: "nfo.svg", type: "nfo", endDate: '08/08/2021' },
+      { image: "nfo.svg", type: "nfo", endDate: '08/24/2021' },
       { image: "fpg_mb_insta.svg", type: "instaredeem" },
       { image: "fpg_mb_100.svg", type: "buildwealth" },
     ],
@@ -501,8 +507,28 @@ export const partnerConfigs = {
     styles: {
       primaryColor: "#252B69",
     },
-    navLinkOptions:{loan: true}
-  }
+    features:{loan: true}
+  },
+  ucomb: {
+    code: "ucomb",
+    logo: "ucomb.jpg",
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      ourRecommendations: ["buildwealth", "savetax"],
+      diy: ["diyv2"],
+    },
+    styles: {
+      primaryColor: "#002759",
+      secondaryColor: "#002759",
+      backButtonColor: "#002759",
+      notificationsColor: "#002759"
+    },
+    uiElements: {
+      header: {
+        backgroundColor : "#FFF112",
+      }
+    },
+  },
 };
 
 export const getPartnerData = (productType, partnerCode) => {
