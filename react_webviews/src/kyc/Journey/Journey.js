@@ -23,6 +23,7 @@ import { nativeCallback } from '../../utils/native_callback'
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble'
 import { getJourneyData } from './JourneyFunction';
 import ConfirmBackDialog from '../mini-components/ConfirmBackDialog'
+import { Imgc } from '../../common/ui/Imgc'
 
 const HEADER_MAPPER_DATA = {
   kycDone: {
@@ -765,9 +766,10 @@ const Journey = (props) => {
                 <FastAndSecureDisclaimer options={HEADER_BOTTOM_DATA} />
               )}
             </div>
-            <img
+            <Imgc
               src={require(`assets/${productName}/${headerData.icon}.svg`)}
               alt=""
+              className="kyc-pj-icon"
             />
           </div>
           {!isCompliant && ((show_aadhaar && !isKycDone) || (!show_aadhaar && isKycDone)) && 
