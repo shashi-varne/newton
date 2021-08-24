@@ -80,7 +80,7 @@ class Otp extends Component {
             {productName === "finity" && (
               <div class="logo" data-aid='logo-text'>
                 <img src={require(`assets/finity/finity_navlogo.svg`)} alt="finity" />
-                <h5>Direct Mutual Funds | NPS</h5>
+                <h5>Direct Mutual Funds</h5>
               </div>
             )}
             {isMobileView && productName !== "finity" && (

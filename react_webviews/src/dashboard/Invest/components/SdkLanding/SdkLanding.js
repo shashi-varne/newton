@@ -268,7 +268,7 @@ class SdkLanding extends Component {
                 if (el.key === 'kyc') {
                   el.isLoading = kycStatusLoader;
                   el.color = kycJourneyStatusMapperData?.color;
-                  const premiumKyc = kycJourneyStatus === 'ground_premium' ? 'PREMIUM' : '';
+                  const premiumKyc = kycJourneyStatus === 'ground_premium';
                   const kycDefaultSubTitle =
                     !kycJourneyStatusMapperData || kycJourneyStatus === 'ground_premium'
                       ? 'Create investment profile'
@@ -278,7 +278,7 @@ class SdkLanding extends Component {
                       ? kycJourneyStatusMapperData?.landing_text
                       : '';
                   if (premiumKyc) {
-                    el.title = el.title + premiumKyc;
+                    el.title = 'KYC PREMIUM';
                   }
                   if (kycDefaultSubTitle) {
                     el.subtitle = kycDefaultSubTitle;

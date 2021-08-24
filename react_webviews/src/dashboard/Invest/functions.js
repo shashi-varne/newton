@@ -465,7 +465,7 @@ export function openKyc() {
           fromState: "invest",
         },
       });
-    } else {
+    } else if (kycStatusData?.next_state) {
       this.navigate(kycStatusData.next_state, {
         state: { fromState: "invest" },
       });
