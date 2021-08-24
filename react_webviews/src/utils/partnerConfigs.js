@@ -203,6 +203,7 @@ export const partnerConfigs = {
     features: {
       loan: true,
       taxFiling: true,
+      addAnotherBank: true
     }
   },
   finity: {
@@ -216,7 +217,8 @@ export const partnerConfigs = {
       financialTools: ["fhc", "risk_profile"],
     },
     features: {
-      taxFiling: true
+      taxFiling: true,
+      addAnotherBank: true
     }
   },
   bfdlmobile: {
@@ -528,6 +530,9 @@ export const partnerConfigs = {
         backgroundColor : "#FFF112",
       }
     },
+    features: {
+      addAnotherBank: true
+    }
   },
 };
 

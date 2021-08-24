@@ -235,6 +235,13 @@ export const getIfscCodeError = (code) => {
   }
 }
 
+export const BANK_IFSC_CODES = {
+  'ktb': 'KARB',
+  'lvb': 'LAVB',
+  'cub': 'CIUB',
+  'ucomb': 'UCBA',
+}
+
 export const VERIFICATION_DOC_OPTIONS = [
   { name: 'Bank statement', value: 'bankstatement' },
   { name: 'Cancelled cheque', value: 'cheque' },
