@@ -92,25 +92,37 @@ class PlanSummaryClass extends Component {
     }
 
     var lead = this.state.leadData;
-    
+
     if(!this.state.leadData) {
       this.setState({
         skelton: true
       })
       let error = '';
       let errorType = '';
+      let url = ''
+      let res = {}
+      const summary_url = 'api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id;
       try {
-        var res = {}
-        const url  = 'api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id;
-        res = await Api.get(url)
+
+        if(this.state.isGuestUser){
+          const guestLeadId = storageService().get('guestLeadId') || '';
+          url  = `api/guest/user/session/summary/data/fetch?guest_lead_id=${guestLeadId}`
+          const body = {
+            'summary_url':  summary_url
+          }
+          res = await Api.post(url, body)
+          lead = res.pfwresponse.result.insurancev2_result.lead;
+        }else{
+          url  = summary_url
+          res = await Api.get(url)
+          lead = res.pfwresponse.result.lead;
+        }
+        
         
         if (res.pfwresponse.status_code === 200) {
-            lead = res.pfwresponse.result.lead;
           this.setState({
             skelton: false
           })
-  
-
         } else {
           error = res.pfwresponse.result.error || res.pfwresponse.result.message
           || true;

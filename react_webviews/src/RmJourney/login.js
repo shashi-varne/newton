@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./rm_login.scss";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
-import { validateNumber, numberShouldStartWith, storageService } from "utils/validators";
+import { validateNumber, numberShouldStartWith, storageService, validateAlphabets } from "utils/validators";
 import Button from "common/ui/Button";
 import { Imgc } from "common/ui/Imgc";
 import UiSkelton  from "common/ui/Skelton";
@@ -66,10 +66,11 @@ const RmLogin = (props) => {
     const value = event.target ? event.target.value : event;
     var data = {...formData}
     if (name === 'mobile_no') {
-        if (value.length <= 10) {
-            data[name] = value;
-            data[name + '_error'] = '';
-        }
+      if(validateAlphabets(value)) return;
+      if (value.length <= 10) {
+          data[name] = value;
+          data[name + '_error'] = '';
+      }
     }else{
         data[name] = value;
         data[name + '_error'] = '';

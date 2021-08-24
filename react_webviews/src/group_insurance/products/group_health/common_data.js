@@ -407,7 +407,6 @@ export async function getShortUrl(urlToShorten, func){
     const post_body = {url: urlToShorten}
     try{
         const url = `api/task_manager/get/short/url?guest_lead_id=${guestLeadId}`;
-        console.log(url)
         const res = await Api.post(url, post_body);
         var resultData = res.pfwresponse.result;
 
