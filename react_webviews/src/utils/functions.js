@@ -162,8 +162,8 @@ export const getConfig = () => {
   let base_url_default = '';
   
   const isStaging = origin.indexOf('plutus-web-staging') >= 0;
-  const isFisdomStaging = origin.indexOf('fisdomapp.staging.finwizard.co.in') >= 0;
-  const isFinityStaging = origin.indexOf('finityapp.staging.finwizard.co.in') >= 0;
+  const isFisdomStaging = origin.indexOf('my.preprod.fisdom.com') >= 0;
+  const isFinityStaging = origin.indexOf('my.preprod.finity.in') >= 0;
   const isLocal = origin.indexOf('localhost') >=0;
 
   if(base_href) {
@@ -185,11 +185,11 @@ export const getConfig = () => {
     }
 
     if(isFisdomStaging) {
-      base_url_default = 'https://fisdomapp.staging.finwizard.co.in';
+      base_url_default = 'https://my.preprod.fisdom.com';
     }
   
     if(isFinityStaging) {
-      base_url_default = 'https://finityapp.staging.finwizard.co.in';
+      base_url_default = 'https://my.preprod.finity.in';
     }
   }
   
