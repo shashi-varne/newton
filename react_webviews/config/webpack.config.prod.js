@@ -17,11 +17,12 @@ const TerserPlugin = require("terser-webpack-plugin");
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
-const publicPath = process.env.IS_PIPELINE ? '' : paths.servedPath;
+const publicPath = process.env.IS_PIPELINE ? "" : paths.servedPath;
 
 // Some apps do not use client-side routing with pushState.
 // For these, "homepage" can be set to "." to enable relative asset paths.
-const shouldUseRelativeAssetPaths = publicPath === './' || process.env.IS_PIPELINE ? true : false;
+const shouldUseRelativeAssetPaths =
+  publicPath === "./" || process.env.IS_PIPELINE ? true : false;
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== "false";
 // `publicUrl` is just like `publicPath`, but we will provide it to our app
@@ -68,7 +69,7 @@ module.exports = {
     // There will be one main bundle, and one file per asynchronous chunk.
     // We don't currently advertise code splitting but Webpack supports it.
     filename: "static/js/script.js",
-    chunkFilename: "static/js/script.chunk.js",
+    chunkFilename: "static/js/[name].chunk.js",
     // We inferred the "public path" (such as / or /my-project) from homepage.
     publicPath: publicPath,
     // Point sourcemap entries to original disk location (format as URL on Windows)
