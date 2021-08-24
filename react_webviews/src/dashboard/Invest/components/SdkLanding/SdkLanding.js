@@ -267,7 +267,7 @@ class SdkLanding extends Component {
             <div className='sdk-landing-cards'>
               {this.state.renderLandingCards.map((el, idx) => {
                 if (el.key === 'kyc') {
-                  if(isReadyToInvestBase) {
+                  if (isReadyToInvestBase) {
                     return null
                   }
                   el.isLoading = kycStatusLoader;
@@ -289,7 +289,7 @@ class SdkLanding extends Component {
                   }
                   if (kycSubTitle) {
                     el.subtitle = kycSubTitle;
-                    if(el.color) {
+                    if (el.color) {
                       el.dot = true;
                     }
                   }
