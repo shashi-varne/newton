@@ -14,7 +14,7 @@ import {
 } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
-import { validateAlphabets } from "../../utils/validators";
+import { validateName } from "../../utils/validators";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
@@ -149,7 +149,7 @@ const PersonalDetails4 = (props) => {
     }
 
     let value = event.target ? event.target.value : event;
-    if (name === "name" && value && !validateAlphabets(value)) return;
+    if (name === "name" && value && !validateName(value)) return;
     let formData = { ...form_data };
     if (name === "dob") {
       if (!dobFormatTest(value)) {

@@ -84,14 +84,6 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
         return true;
       }
       break;
-    case "/kyc/add-bank":
-      if (storageService().get('native')) {
-        nativeCallback({ action: "exit_web" });
-      } else {
-        navigate("/my-account");
-        return true;
-      }
-      break;
     case "/kyc/digilocker/failed":
       navigate("/kyc/journey", {
         state: { show_aadhaar: true }

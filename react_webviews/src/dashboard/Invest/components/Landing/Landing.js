@@ -17,9 +17,9 @@ import AccountAlreadyExistDialog from "../../../../login_and_registration/compon
 import { generateOtp } from "../../../../login_and_registration/functions";
 import { Imgc } from "../../../../common/ui/Imgc";
 import { nativeCallback } from "../../../../utils/native_callback";
-import toast from "../../../../common/ui/Toast"
 import { getConfig, isTradingEnabled } from "../../../../utils/functions";
 import { PATHNAME_MAPPER } from "../../../../kyc/constants";
+import toast from "../../../../common/ui/Toast"
 
 const fromLoginStates = ["/login", "/logout", "/verify-otp"]
 class Landing extends Component {
@@ -205,8 +205,18 @@ class Landing extends Component {
   };
 
   handleStocksAndIpoRedirection = () => {
-    let { modalData } = this.state;
+    let { modalData, communicationType, contactValue } = this.state;
     if(modalData.key === "ipo") {
+      if(!!this.state.contactNotVerified){
+        storageService().set("ipoContactNotVerified", true);
+        this.navigate("/secondary-verification", {
+          state : {
+            communicationType,
+            contactValue,
+          }
+        })
+        return;
+      } // Email/mobile if Not Verified!
       this.handleIpoCardRedirection();
     } else {
       // To do: redirect to stocks sdk page for fno_rejected status

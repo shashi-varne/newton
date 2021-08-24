@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Input from "common/ui/Input";
 import { PATHNAME_MAPPER, MARITAL_STATUS_OPTIONS } from "../constants";
-import { isEmpty, validateAlphabets } from "utils/validators";
+import { isEmpty, validateName } from "utils/validators";
 import {
   validateFields,
   compareObjects,
@@ -102,7 +102,7 @@ const PersonalDetails2 = (props) => {
 
   const handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
-    if (name.includes("name") && value && !validateAlphabets(value)) {
+    if (name.includes("name") && value && !validateName(value)) {
       return;
     }
     let formData = { ...form_data };

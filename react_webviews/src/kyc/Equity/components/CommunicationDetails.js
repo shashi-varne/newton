@@ -394,7 +394,7 @@ const CommunicationDetails = (props) => {
 
   const handleNavigation = () => {
     if (stateParams?.fromState === "/my-account") {
-      props.history.goBack()
+      navigate("/my-account");
       return;
     }
     if(isNotification){
@@ -506,13 +506,13 @@ const CommunicationDetails = (props) => {
 
   const handleClicked = () => !isEmpty(goldUserInfo) ? handleClickGold() : handleClick();
   const pageNumber = isDlFlow ? 3 : 4;
-  const ShowCount = stateParams?.fromState !== "/my-account"
+  const showCount = stateParams?.fromState !== "/my-account"
   return (
     <Container
       events={sendEvents("just_set_events")}
       buttonTitle={buttonTitle}
       title="Communication details"
-      count={isEmpty(goldUserInfo) && ShowCount && !isKycDone && pageNumber}
+      count={isEmpty(goldUserInfo) && showCount && !isKycDone && pageNumber}
       current={pageNumber}
       total={!isKycDone && totalPages}
       handleClick={handleClicked}

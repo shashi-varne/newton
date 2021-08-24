@@ -13,10 +13,9 @@ import KycUploadContainer from '../mini-components/KycUploadContainer'
 import "./commonStyles.scss";
 import { nativeCallback } from '../../utils/native_callback'
 
-const config = getConfig();
-const productName = config.productName
-
 const NRIAddressUpload = (props) => {
+  const config = getConfig();
+  const productName = config.productName
   const navigate = navigateFunc.bind(props)
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [frontDoc, setFrontDoc] = useState(null)
@@ -137,6 +136,7 @@ const NRIAddressUpload = (props) => {
     navigate("/kyc/nri-address-details1", {
       state: {
         backToJourney: true,
+        isEdit: true
       },
     });
   };

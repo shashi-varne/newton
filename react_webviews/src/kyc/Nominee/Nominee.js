@@ -10,7 +10,7 @@ import {
 import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
 import {
-  validateAlphabets,
+  validateName,
   isEmpty,
   dobFormatTest,
   formatDate,
@@ -90,7 +90,7 @@ const Nominee = (props) => {
 
   const handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
-    if (name === "name" && value && !validateAlphabets(value)) return;
+    if (name === "name" && value && !validateName(value)) return;
     let formData = { ...form_data };
     if (name === "dob") {
       if (!dobFormatTest(value)) {

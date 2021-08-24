@@ -125,7 +125,12 @@ export function getParamsMark(data) {
 }
 
 export const getPlatformConfig = () => {
-  const config = {};
+  let config = {
+    Web: false, 
+    Android: false,
+    iOS: false
+  };
+
   if (isMobile.Android() && typeof window.Android !== 'undefined') {
     config.app = 'android';
     config.Android = true;

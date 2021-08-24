@@ -1,5 +1,5 @@
 import Api from "utils/api";
-import { storageService, isEmpty } from "utils/validators";
+import { storageService, isEmpty, splitMobileNumberFromContryCode } from "utils/validators";
 import toast from "../../common/ui/Toast";
 import { getConfig, navigate as navigateFunc, getBasePath, isTradingEnabled, getInvestCards } from "utils/functions";
 import {
@@ -42,6 +42,7 @@ export async function initialize() {
   this.handleIpoCardRedirection = handleIpoCardRedirection.bind(this);
   this.contactVerification = contactVerification.bind(this);
   this.handleCommonKycRedirections = handleCommonKycRedirections.bind(this);
+  this.contactVerification = contactVerification.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
   if (config) {
     this.setState({ config });
@@ -448,13 +449,15 @@ export function initilizeKyc() {
     }
 
     if (["fno_rejected", "complete"].includes(kycJourneyStatus)) {
-      if (TRADING_ENABLED && userKyc.equity_investment_ready) {
-        modalData = kycStatusMapper["kyc_verified"];
-        if (kycJourneyStatus === "fno_rejected") {
-          modalData.subtitle = "You can start your investment journey by investing in your favourite stocks, mutual funds."
+      if (!currentUser.active_investment) {
+        if (TRADING_ENABLED && userKyc.equity_investment_ready) {
+          modalData = kycStatusMapper["kyc_verified"];
+          if (kycJourneyStatus === "fno_rejected") {
+            modalData.subtitle = "You can start your investment journey by investing in your favourite stocks, mutual funds."
+          }
+        } else if (!TRADING_ENABLED && !isCompliant) {
+          modalData = kycStatusMapper["mf_complete"];
         }
-      } else if (!TRADING_ENABLED && !isCompliant) {
-        modalData = kycStatusMapper["mf_complete"];
       }
     } else {
       modalData = kycStatusMapper[kycJourneyStatus];
@@ -628,7 +631,6 @@ export function handleStocksAndIpoCards(key) {
       }
     }
   }
-
   if(key === "stocks" && !modalData.dualButton) {
     modalData.oneButton = true
   }
@@ -734,20 +736,33 @@ export function handleCampaignNotification () {
 };
 
 export function contactVerification(userKyc) {
+  const contactDetails = userKyc?.identification?.meta_data;
+  // ---------------- IPO Contact Verification Setting state for BottomSheet---------------//
+  if (!isEmpty(contactDetails)) {
+    if (contactDetails.mobile_number_verified === false) {
+      const contactValue = splitMobileNumberFromContryCode(contactDetails?.mobile_number)
+      this.setState({
+        communicationType: "mobile",
+        contactValue,
+        contactNotVerified: true,
+      })
+    } else if (contactDetails.email_verified === false) {
+      this.setState({
+        communicationType: "email",
+        contactValue: contactDetails?.email || "",
+        contactNotVerified: true,
+      })
+    }
+  }
+  // ---------------- Above Condition For IPO Contact Verification---------------//
   const isVerifyDetailsSheetDisplayed = storageService().get("verifyDetailsSheetDisplayed");
   if (!isVerifyDetailsSheetDisplayed) {
-    let contactDetails = userKyc?.identification?.meta_data;
       if (!isEmpty(contactDetails)) {
         let contact_type, contact_value, isVerified = true;
         if (!isEmpty(contactDetails.mobile_number) && contactDetails.mobile_number_verified === false) {
           contact_type = "mobile";
           isVerified = false
-          let numberVal = contactDetails?.mobile_number?.split('|');
-          if (numberVal.length > 1) {
-              contact_value = numberVal[1];
-          } else {
-              [contact_value] = numberVal;
-          }
+          contact_value = splitMobileNumberFromContryCode(contactDetails?.mobile_number)
         } else if (!isEmpty(contactDetails.email) && contactDetails.email_verified === false) {
           contact_type = "email";
           contact_value = contactDetails.email
@@ -755,8 +770,9 @@ export function contactVerification(userKyc) {
         }
         if (!isVerified) {
           this.setState({
-            openKycPremiumLanding: false, // This(openKycPremiumLanding, openBottomSheet for campign) two are Onload bottomSheet
+            openKycPremiumLanding: false, // This(openKycPremiumLanding, openBottomSheet, openKycStatusDialog for campign) 3 are Onload bottomSheet
             openBottomSheet: false, //Which Are Disable As contactVerification Takes highest priority.
+            openKycStatusDialog: false,
             verifyDetails: true,
             verifyDetailsData: {
               contact_type,

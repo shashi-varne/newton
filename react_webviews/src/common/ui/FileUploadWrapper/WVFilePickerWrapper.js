@@ -64,6 +64,7 @@ export const WVFilePickerWrapper = ({
   onFileSelectStart, /*
     Callback called once file is picked, before starting file processing
     Ideally used to trigger loader on file selection
+    **Works only for Native for now**
   */
   onFileSelectComplete, // Callback for when file selection is successful
   onFileSelectError, // Callback for when file selection fails

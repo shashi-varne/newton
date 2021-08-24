@@ -7,7 +7,7 @@ import {
   MARITAL_STATUS_OPTIONS,
   PATHNAME_MAPPER,
 } from "../constants";
-import { validateAlphabets, isEmpty} from "utils/validators";
+import { validateName, isEmpty} from "utils/validators";
 import {
   validateFields,
   compareObjects,
@@ -135,7 +135,7 @@ const PersonalDetails1 = (props) => {
 
   const handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
-    if (value && name.includes("name") && !validateAlphabets(value)) return;
+    if (value && name.includes("name") && !validateName(value)) return;
     let formData = { ...form_data };
     if (name === "marital_status")
       formData[name] = MARITAL_STATUS_OPTIONS[value].value;
