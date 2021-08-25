@@ -325,7 +325,7 @@ import { getConfig } from './functions';
     var json_data = {};
     if (data_json_str !== "" && typeof data_json_str === "string") {
       json_data = JSON.parse(data_json_str);
-    } else {
+    } else if (typeof data_json_str === "object") {
       json_data = data_json_str;
     }
     set_session_storage("currentUser", true);
