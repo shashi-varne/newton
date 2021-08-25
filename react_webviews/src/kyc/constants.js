@@ -230,6 +230,8 @@ export const getIfscCodeError = (code) => {
       return "Please enter a valid ifsc code of City Union Bank";
     case "ippb":
       return "Please enter a valid ifsc code of India Post Payments Bank";
+    case "ucomb":
+      return "Please enter a valid ifsc code of United Commercial Bank";
     default:
       return "Please enter a valid ifsc code";
   }
