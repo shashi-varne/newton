@@ -121,10 +121,6 @@ const Funds = (props) => {
       if (!result.purchase_flag) setFundNotAvailable(true);
       if (canShowBothOptions(itype)) {
         if (result.sip_flag && result.ot_flag) {
-          item.type =
-            itype === "buildwealth"
-              ? "buildwealth"
-              : dontAddSuffixInType(itype);
           // send event
           if (!config.Web) {
             window.callbackWeb.eventCallback(_event);

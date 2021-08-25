@@ -16,7 +16,7 @@ const sliderConstants = {
 };
 const Goals = (props) => {
   const navigate = navigateFunc.bind(props);
-  const [goals, setGoals] = useState({});
+  const [goals, setGoals] = useState([]);
   const [showSkelton, setShowSkelton] = useState(true);
 
   useEffect(() => {

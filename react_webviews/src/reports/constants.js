@@ -1,3 +1,5 @@
+import { getConfig } from "../utils/functions";
+
 export const apiConstants = {
   reportSummaryV2:
     "/api/invest/reportv4/portfolio/summary/v2?upcoming_needed=y",
@@ -46,6 +48,7 @@ export const getPathname = {
   pausePeriod: "/reports/sip/pause-period",
   sipOtp: "/reports/sip/otp/",
   pauseRequest: "/reports/sip/pause-request",
+  taxFiling: "/tax-filing",
 };
 
 export const storageConstants = {
@@ -69,6 +72,7 @@ export const getPurchaseProcessData = (
   expected_credit_date = "",
   nfo_recommendation = false
 ) => {
+  const productName = getConfig().productName;
   return {
     purchase: [
       {
@@ -91,7 +95,7 @@ export const getPurchaseProcessData = (
       {
         title: "Investment confirmed",
         desc:
-          "fisdom has received confirmation of the investment from the mutual fund company and your portfolio is updated.",
+          `${productName} has received confirmation of the investment from the mutual fund company and your portfolio is updated.`,
         time: "2-3 days",
       },
     ],
@@ -114,7 +118,7 @@ export const getPurchaseProcessData = (
       {
         title: "Amount credited",
         desc:
-          "fisdom has received confirmation of the withdrawal from the mutual fund company.",
+          `${productName} has received confirmation of the withdrawal from the mutual fund company.`,
         time: expected_credit_date,
       },
     ],
@@ -138,7 +142,7 @@ export const getPurchaseProcessData = (
       {
         title: "Switch confirmed",
         desc:
-          "fisdom has received confirmation of the switch from the mutual fund company.",
+          `${productName} has received confirmation of the switch from the mutual fund company.`,
         time: "3-6 days*",
       },
     ],
@@ -158,7 +162,7 @@ export const getPurchaseProcessData = (
       {
         title: "Investment confirmed",
         desc:
-          "fisdom has received confirmation of the investment from the mutual fund company and your portfolio is updated.",
+          `${productName} has received confirmation of the investment from the mutual fund company and your portfolio is updated.`,
         time: "2-3 days",
       },
     ],

@@ -122,7 +122,7 @@ const PeriodWiseReturns = ({
           >
             <>
               <div className="avg-return-ror" data-aid='avg-return-ror'>
-                <span className="value">{getRateOfInterest(equity).toFixed(2)}%*</span>
+                <span className="value">{getRateOfInterest(equity)?.toFixed(2)}%*</span>
                 <span className="text">is the Rate of Return (RoR) used to estimate projected returns.</span>
               </div>
               <div className="avg-return-content" data-aid='avg-return-content'>

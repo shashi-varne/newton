@@ -40,6 +40,7 @@ export async function initialize() {
   this.handleStocksAndIpoCards = handleStocksAndIpoCards.bind(this);
   this.setKycProductTypeAndRedirect = setKycProductTypeAndRedirect.bind(this);
   this.handleIpoCardRedirection = handleIpoCardRedirection.bind(this);
+  this.contactVerification = contactVerification.bind(this);
   this.handleCommonKycRedirections = handleCommonKycRedirections.bind(this);
   this.contactVerification = contactVerification.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
@@ -588,7 +589,7 @@ export function handleIpoCardRedirection() {
 }
           
 export function handleStocksAndIpoCards(key) {
-  let { kycJourneyStatusMapperData, kycJourneyStatus, userKyc, currentUser } = this.state;
+  const { kycJourneyStatusMapperData, kycJourneyStatus, userKyc, currentUser, config } = this.state;
   let modalData = Object.assign({key}, kycJourneyStatusMapperData);
 
   if (key === "ipo") {
@@ -626,8 +627,7 @@ export function handleStocksAndIpoCards(key) {
           // TODO: Test native behaviour for this code
         }
       } else {
-        console.log("redirection"); // Todo: Remove this console once you enter redirection path to stocks sdk
-        // Todo: Redirect to stocks sdk
+        window.location.href = `${config.base_url}/page/equity/launchapp`
       }
     }
   }
@@ -686,7 +686,7 @@ export function handleRenderCard() {
   const isWeb = config.Web;
   const hideReferral = currentUser.active_investment && !isWeb && config?.referralConfig?.shareRefferal;
   const referralCode = !currentUser.active_investment && !isWeb && config?.referralConfig?.applyRefferal;
-  const myAccount = isReadyToInvestBase || userKyc.bank.doc_status === 'rejected';
+  const myAccount = isReadyToInvestBase || userKyc?.bank?.doc_status === 'rejected';
   const kyc = !isReadyToInvestBase;
   const cards = sdkInvestCardMapper.filter(el => {
     if(el.key === 'kyc') {
