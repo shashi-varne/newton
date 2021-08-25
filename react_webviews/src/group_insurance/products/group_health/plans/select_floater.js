@@ -120,7 +120,6 @@ class GroupHealthPlanSelectFloater extends Component {
             let type_of_plan = this.state.premium_data_floater[this.state.selectedIndex].key;
             let selectedPlan = this.state.premium_base[type_of_plan][0]; //first of WF or NF;
             groupHealthPlanData.net_premium_addons = selectedPlan.premium;
-            groupHealthPlanData.selectedIndexSumAssured = this.state.selectedIndex;
             groupHealthPlanData.selectedIndexFloater = this.state.selectedIndex;
 
             groupHealthPlanData.post_body.premium = this.state.premium_data_floater[this.state.selectedIndex].premium
