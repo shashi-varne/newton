@@ -384,7 +384,7 @@ const Home = (props) => {
             });
           }
         } else {
-          if (kycDetails?.application_status_v2 !== "init" && kycDetails?.kyc_type === "manual") {
+          if (kycDetails?.kyc_type === "manual") {
             navigate(`${PATHNAME_MAPPER.journey}`, {
               searchParams: `${config.searchParams}&show_aadhaar=false`,
             });
