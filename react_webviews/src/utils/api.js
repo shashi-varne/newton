@@ -62,6 +62,8 @@ class Api {
 
         if (response.data.pfwstatus_code === 416) {
           return nativeCallback({ action: '2fa_expired' });
+        } else if (response.data.pfwstatus_code === 403) {
+          return nativeCallback({ action: 'login_required' });
         }
 
         if (response.config.url.includes("/api/") && response.headers["x-plutus-auth"] && config.isIframe) {
