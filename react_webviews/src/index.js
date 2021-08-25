@@ -102,8 +102,12 @@ $(document).ready(function () {
 });
 if(getConfig().productName === "finity") {
   document.title = 'Finity';
+  const favIcon = document.getElementById('favicon');
+  favIcon.href="./images/finity_logo_icon.svg";
 } else {
+  const favIcon = document.getElementById('favicon');
   document.title = 'Fisdom';
+  favIcon.href="./images/fisdom_logo_icon.svg";
 }
 
 if(getConfig().productName === "fisdom" && getConfig().isProdEnv)
