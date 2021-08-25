@@ -52,7 +52,8 @@ function getPartnerConfig(partner_code) {
     origin.indexOf('app.mywaywealth.com') >= 0 || 
     origin.indexOf('wv.mywaywealth.com') >= 0 || 
     origin.indexOf('wv.finity.in') >= 0 || 
-    origin.indexOf('finityapp.staging.finwizard.co.in') >= 0;
+    origin.indexOf('my.preprod.finity.in') >= 0 || 
+    origin.indexOf('app2.finity.in') >= 0;
   const isminvest = search.indexOf('my.barodaminvest.com') >= 0;
   const isStaging = search.indexOf('staging') >= 0;
   let productType = 'fisdom';

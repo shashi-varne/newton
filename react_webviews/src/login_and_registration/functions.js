@@ -179,6 +179,11 @@ export function setBaseHref() {
     myBaseHref.href = myBaseHrefUrl;
     window.localStorage.setItem('base_href', myBaseHrefUrl);
   }
+  if(pathname.indexOf('webapp') !== -1) {
+    var myBaseHrefUrl = '/webapp/';
+    myBaseHref.href = myBaseHrefUrl;
+    window.localStorage.setItem('base_href', myBaseHrefUrl);
+  }
 }
 
 export async function triggerOtpApi(body, loginType, bottomsheet) {
