@@ -303,6 +303,11 @@ export const partnerConfigs = {
     logo: "cub.png",
     code: "cub",
     email: "cub@fisdom.com",
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      ourRecommendations: ["buildwealth", "savetax", "nps"],
+      diy: ["diyv2","gold"],
+    },
     styles: {
       primaryColor: "#000180",
     },
