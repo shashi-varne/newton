@@ -521,6 +521,7 @@ const Journey = (props) => {
       }
       nativeCallback({ action: "third_party_redirect", message: redirectData });
     }
+    setIsApiRunning("page")
     window.location.href = updateQueryStringParameter(
       kyc.digilocker_url,
       "redirect_url",
