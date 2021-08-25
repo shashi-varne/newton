@@ -40,7 +40,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
 
   if (action === 'native_back' || action === 'exit') {
     if (config.isNative) callbackData.action = 'exit_web';
-    else window.location.href = redirectToLanding();
+    else window.location.href = redirectToPath('/');
   }
 
   if (action === 'open_pdf') {
@@ -182,7 +182,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       (entryPath !== pathname) &&
       (callbackData.action === 'exit_web' || callbackData.action === 'exit_module' || callbackData.action === 'open_module')
     ) {
-        window.location.href = redirectToLanding();
+        window.location.href = redirectToPath('/');
     } else {
       if (config.app === 'android') {
         window.Android.callbackNative(JSON.stringify(callbackData));
@@ -200,7 +200,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     } else if (action === '2fa_expired') {
       storageService().remove('currentUser');
       storageService().setBoolean('session-timeout', true);
-      window.location.href = redirectTo2FA();
+      window.location.href = redirectToPath('/login/verify-pin');
     } else {
       return;
     }
@@ -287,12 +287,8 @@ export function openPdfCall(data = {}) {
 
 }
 
-export function redirectToLanding() {
-  return `${getBasePath()}/${getConfig().searchParams}`;
-}
-
-export function redirectTo2FA() {
-  return `${getBasePath()}/login/verify-pin${getConfig().searchParams}`;
+export function redirectToPath(path) {
+  return `${getBasePath()}${path}${getConfig().searchParams}`;
 }
 
 export function handleNativeExit(props, data) {
