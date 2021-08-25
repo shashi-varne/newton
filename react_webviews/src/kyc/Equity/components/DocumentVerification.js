@@ -7,6 +7,7 @@ import useUserKycHook from "../../common/hooks/userKycHook";
 import { isEmpty, storageService } from "../../../utils/validators";
 import { getPendingDocuments } from "../../common/functions";
 import "./commonStyles.scss";
+import { Imgc } from "../../../common/ui/Imgc";
 
 const config = getConfig();
 const productName = config.productName;
@@ -70,9 +71,10 @@ const DocumentVerification = (props) => {
       <div className="kyc-document-verification" data-aid='kyc-document-verification'>
         <header className="kyc-document-verification-header" data-aid='kyc-document-verification-header'>
           <div className="kdv-text">Document verification is under process</div>
-          <img
+          <Imgc
             src={require(`assets/${productName}/upload_documents_pending.svg`)}
             alt=""
+            className="kyc-dv-header-icon"
           />
         </header>
         <main className="kyc-document-verification-main" data-aid='kyc-document-verification-main'>

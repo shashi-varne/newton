@@ -71,14 +71,14 @@ const Home = (props) => {
   const initialize = () => {
     setPan(kyc.pan?.meta_data?.pan_number || "");
     setResidentialStatus(!kyc.address?.meta_data?.is_nri);
-    setTradingEnabled(isTradingEnabled(!kyc.address?.meta_data?.is_nri));
+    const TRADING_ENABLED = isTradingEnabled(!kyc.address?.meta_data?.is_nri);
+    setTradingEnabled(TRADING_ENABLED);
     setDisableResidentialStatus(!!kyc.identification.meta_data.tax_status)
     let data = {
       investType: "mutual fund",
       npsDetailsRequired: false,
       title: "Verify PAN",
-      subtitle:
-        "As per SEBI, valid PAN is mandatory to open a trading & demat account",
+      subtitle: TRADING_ENABLED ? "As per SEBI, valid PAN is mandatory to open a trading & demat account" : "As per SEBI, valid PAN is required to invest in mutual funds",
       kycConfirmPanScreen: false,
     };
     if(isEmpty(savedPan)){
@@ -384,7 +384,7 @@ const Home = (props) => {
             });
           }
         } else {
-          if (kycDetails?.application_status_v2 !== "init" && kycDetails?.kyc_type === "manual") {
+          if (kycDetails?.kyc_type === "manual") {
             navigate(`${PATHNAME_MAPPER.journey}`, {
               searchParams: `${config.searchParams}&show_aadhaar=false`,
             });

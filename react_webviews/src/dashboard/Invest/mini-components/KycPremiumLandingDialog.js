@@ -42,6 +42,9 @@ const KycPremiumLandingDialog = ({
       image={require(`assets/${productName}/${data.icon}`)}
       button1Props={button1Props}
       button2Props={button2Props}
+      classes={{
+        image: "kyc-pld-right-icon"
+      }}
     >
       {data.status === "ground_premium" && (
         <div className="vfdc-bottom-info" data-aid="bottom-info">

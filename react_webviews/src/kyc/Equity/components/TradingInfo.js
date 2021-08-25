@@ -11,6 +11,7 @@ import Toast from "../../../common/ui/Toast";
 import { nativeCallback } from "../../../utils/native_callback";
 import { formatAmountInr } from "../../../utils/validators";
 import SVG from 'react-inlinesvg';
+import { Imgc } from "../../../common/ui/Imgc";
 
 const config = getConfig();
 const productName = config.productName;
@@ -162,7 +163,11 @@ const TradingInfo = (props) => {
       <div className="kyc-account-info" data-aid='kyc-account-info'>
         <header className="kyc-account-info-header" data-aid='kyc-account-info-header'>
           <div className="kaih-text">Trading & demat account</div>
-          <img src={require(`assets/${productName}/ic_upgrade.svg`)} alt="" />
+          <Imgc 
+            src={require(`assets/${productName}/ic_upgrade.svg`)} 
+            alt=""
+            className="kyc-ai-header-icon" 
+          />
         </header>
         <main className="kyc-account-info-main" data-aid='kyc-account-info-main'>
           <div className="kaim-subtitle" data-aid='kyc-subtitle'>
@@ -174,9 +179,10 @@ const TradingInfo = (props) => {
               {BENEFITS.map((data, index) => {
                 return (
                   <div key={index} className="kaim-benefits-info" data-aid='kaim-benefits-info'>
-                    <img
+                    <Imgc
                       src={require(`assets/${productName}/${data.icon}`)}
                       alt=""
+                      className="kaim-benefits-icon"
                     />
                     <div className="kaim-benefits-info-text">{data.text}</div>
                   </div>
