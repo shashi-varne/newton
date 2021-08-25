@@ -15,6 +15,7 @@ import "./common/ui/style.scss";
 import { getConfig } from './utils/functions';
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
+import { storageService } from "./utils/validators"
 
 $(document).ready(function () {
   if (isMobile.Android()) {
@@ -54,6 +55,12 @@ if(getConfig().productName === "fisdom" && getConfig().isProdEnv)
 {
   Sentry.init({
     dsn: "https://38815adc8fd842e78c2145a583d26351@o60572.ingest.sentry.io/5726998",
+    beforeSend(event) {
+      event.tags = event.tags || {};
+      event.tags["partner_code"] = getConfig().code;
+      event.tags["user_id"] = storageService()?.getObject('user')?.user_id;
+      return event;
+    },
     integrations: [new Integrations.BrowserTracing()],
     allowUrls:["wv.fisdom.com"],
     tracesSampleRate: 1.0,
@@ -62,6 +69,12 @@ if(getConfig().productName === "fisdom" && getConfig().isProdEnv)
 else if(getConfig().productName === "finity" && getConfig().isProdEnv){
   Sentry.init({
     dsn: "https://84e342a0046748bab6860aafcf7e86da@o60572.ingest.sentry.io/5727007",
+    beforeSend(event) {
+      event.tags = event.tags || {};
+      event.tags["partner_code"] = getConfig().code;
+      event.tags["user_id"] = storageService()?.getObject('user')?.user_id;
+      return event;
+    },
     integrations: [new Integrations.BrowserTracing()],
     allowUrls:["wv.mywaywealth.com", "wv.finity.in"],
     tracesSampleRate: 1.0,
