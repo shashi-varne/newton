@@ -121,8 +121,8 @@ export function setInvestCardsData() {
       "sbm",
       "cub",
     ],
-    nps: ["cccb", "sury", "obc", "svcho", "ktb", "sbm", "cub"],
-    gold: ["apna", "cccb", "sury", "obc", "svcho", "alb", "ktb", "cub"],
+    nps: ["cccb", "sury", "obc", "svcho", "ktb", "sbm"],
+    gold: ["apna", "cccb", "sury", "obc", "svcho", "alb", "ktb"],
   };
 
   const referralData = storageService().getObject("referral") || {};
