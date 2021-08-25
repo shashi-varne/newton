@@ -102,10 +102,11 @@ class PlanSummaryClass extends Component {
       let url = ''
       let res = {}
       const summary_url = 'api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id;
+      const urlParams = getUrlParams();
       try {
 
-        if(this.state.isGuestUser){
-          const guestLeadId = storageService().get('guestLeadId') || '';
+        if(urlParams.guestUser){
+          const guestLeadId = storageService().get('guestLeadId') || urlParams.guestLeadId ||'';
           url  = `api/guest/user/session/summary/data/fetch?guest_lead_id=${guestLeadId}`
           const body = {
             'summary_url':  summary_url
