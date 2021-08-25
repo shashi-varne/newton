@@ -78,7 +78,7 @@ const Home = (props) => {
       npsDetailsRequired: false,
       title: "Verify PAN",
       subtitle:
-        "As per SEBI, valid PAN is mandatory to open a trading & demat account",
+        "As per SEBI, valid PAN is required to invest in mutual funds",
       kycConfirmPanScreen: false,
     };
     if(isEmpty(savedPan)){
