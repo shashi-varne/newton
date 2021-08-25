@@ -1,4 +1,5 @@
 import React from "react";
+import { Imgc } from "../../../common/ui/Imgc";
 import Container from "../../common/Container";
 import "./commonStyles.scss";
 
@@ -43,14 +44,14 @@ const UploadInstructions = (props) => {
         return (
           <div key={index} className="stocks-pan-instructions">
             <div className="spi-text" data-aid={`spi-text-${index}`}>{data.text}</div>
-            <img
+            <Imgc
               alt=""
-              className="left-img"
+              className="spi-img"
               src={require(`assets/pan_sample_right.svg`)}
             />
-            <img
+            <Imgc
               alt=""
-              className="left-img"
+              className="spi-img"
               src={require(`assets/${data.wrong_icon}`)}
             />
           </div>
