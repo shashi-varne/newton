@@ -13,10 +13,9 @@ import { isEmpty } from 'lodash';
 import "./commonStyles.scss";
 import { nativeCallback } from '../../utils/native_callback'
 
-const config = getConfig();
-const productName = config.productName
-
 const AddressUpload = (props) => {
+  const config = getConfig();
+  const productName = config.productName
   const navigate = navigateFunc.bind(props)
   const stateParams = props?.location?.state || {}
   const isMyAccountFlow = stateParams.flow === "myAccount";
@@ -155,6 +154,7 @@ const AddressUpload = (props) => {
     navigate("/kyc/address-details1", {
       state: {
         backToJourney: true,
+        isEdit: true
       },
     });
   };

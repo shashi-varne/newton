@@ -152,7 +152,6 @@ const PersonalDetails2 = (props) => {
             error={form_data.father_name_error ? true : false}
             helperText={form_data.father_name_error || ""}
             onChange={handleChange("father_name")}
-            maxLength={20}
             type="text"
             disabled={isApiRunning || (!!kyc?.pan?.meta_data.father_name && kyc?.pan?.meta_data_status === "approved")}
           />

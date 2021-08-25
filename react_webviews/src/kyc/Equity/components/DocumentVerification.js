@@ -4,7 +4,7 @@ import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import Container from "../../common/Container";
 import WVJourneyShortening from "../../../common/ui/JourneyShortening/JourneyShortening";
 import useUserKycHook from "../../common/hooks/userKycHook";
-import { isEmpty } from "../../../utils/validators";
+import { isEmpty, storageService } from "../../../utils/validators";
 import { getPendingDocuments } from "../../common/functions";
 import "./commonStyles.scss";
 
@@ -33,10 +33,10 @@ const DocumentVerification = (props) => {
   }
 
   const goBack = () => {
-    if(config.Web) {
-      navigate("/");
-    } else {
+    if(!config.Web && storageService().get("native")) {
       nativeCallback({ action: "exit_web" });
+    } else {
+      navigate("/");
     }
   }
 
