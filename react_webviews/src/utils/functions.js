@@ -162,8 +162,8 @@ export const getConfig = () => {
   let base_url_default = '';
   
   const isStaging = origin.indexOf('plutus-web-staging') >= 0;
-  const isFisdomStaging = origin.indexOf('my.preprod.fisdom.com') >= 0;
-  const isFinityStaging = origin.indexOf('my.preprod.finity.in') >= 0;
+  const isFisdomStaging = origin.indexOf('my.preprod.fisdom.com') >= 0 || origin.indexOf('app2.fisdom.com') >= 0;
+  const isFinityStaging = origin.indexOf('my.preprod.finity.in') >= 0 || origin.indexOf('app2.finity.in') >= 0;
   const isLocal = origin.indexOf('localhost') >=0;
 
   if(base_href) {
