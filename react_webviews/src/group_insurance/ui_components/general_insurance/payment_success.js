@@ -12,7 +12,7 @@ import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import {
-  validateNumber, validateLengthDynamic,
+  validateNumber, validateLengthDynamic, storageService
 } from 'utils/validators';
 // validateStreetName, validateEmpty, validateConsecutiveChar, validateMinChar
 import { nativeCallback } from 'utils/native_callback';
@@ -32,7 +32,8 @@ class PaymentSuccessClass extends Component {
       landmark: '',
       city: '',
       state: '',
-      leadData: {}
+      leadData: {},
+      isGuestUser: storageService().getBoolean('guestUser')
     };
 
     this.handleClickCurrent = this.handleClickCurrent.bind(this);
@@ -377,6 +378,7 @@ class PaymentSuccessClass extends Component {
         events={this.sendEvents('just_set_events')}
         fullWidthButton={true}
         product_key={this.props.parent ? this.props.parent.state.product_key : ''}
+        noBackIcon={this.state.isGuestUser}
         disableBack={!this.state.fromHome}
         showLoader={this.state.show_loader}
         skelton={this.state.skelton}

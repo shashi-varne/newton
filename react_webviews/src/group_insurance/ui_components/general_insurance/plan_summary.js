@@ -312,6 +312,7 @@ class PlanSummaryClass extends Component {
         fullWidthButton={true}
         buttonTitle={this.state.isRmJourney ? 'Copy payment link' : 'Make payment'}
         onlyButton={true}
+        noBackIcon={this.state.isGuestUser}
         product_key={this.props.parent ? this.props.parent.state.product_key : ''}
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
