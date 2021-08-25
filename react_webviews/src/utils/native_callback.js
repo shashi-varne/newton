@@ -38,6 +38,23 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     console.log(events.properties);
   }
 
+  if (action === 'login_required') {
+    if (config.Web) {
+      storageService().clear();
+      if (config.isIframe) {
+        let message = JSON.stringify({
+          type: "iframe_close",
+        });
+        window.callbackWeb.sendEvent(message);
+        return;
+      }
+      window.location.href = redirectToPath('/login');
+    } else {
+      nativeCallback({ action: "session_expired" });
+    }
+    return;
+  }
+
   if (action === 'native_back' || action === 'exit') {
     if (config.isNative) callbackData.action = 'exit_web';
     else window.location.href = redirectToPath('/');
