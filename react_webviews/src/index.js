@@ -100,6 +100,11 @@ $(document).ready(function () {
   //   runGoogleAds();
   // }
 });
+if(getConfig().productName === "finity") {
+  document.title = 'Finity';
+} else {
+  document.title = 'Fisdom';
+}
 
 if(getConfig().productName === "fisdom" && getConfig().isProdEnv)
 {
