@@ -142,8 +142,8 @@ export const addAdditionalBank = async (data) => {
 }
 
 export const upload = async (file, type, data = {}) => {
-  const formData = new FormData()
-  formData.set('res', file)
+  const formData = new FormData();
+  formData.set('res', file);
   let doc_type = ''
   if (!isEmpty(data)) {
     switch (type) {
@@ -161,7 +161,9 @@ export const upload = async (file, type, data = {}) => {
         break
       case 'income':
         doc_type = data?.doc_type;
-        formData.append('doc_password', data.doc_password);
+        if (data.doc_password) {
+          formData.append('doc_password', data.doc_password);
+        }
         break;
       case 'identification':
         if (data.kyc_product_type) {
