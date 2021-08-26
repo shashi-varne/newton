@@ -188,7 +188,7 @@ class SecondaryVerification extends Component {
 
 
     render() {
-        const { loginType, form_data, isEdit, firstTimeLogin } = this.state;
+        const { loginType, form_data, isEdit, firstTimeLogin} = this.state;
 
         return (
             <Container
