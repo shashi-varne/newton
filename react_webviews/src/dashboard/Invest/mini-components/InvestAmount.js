@@ -241,7 +241,6 @@ const InvestAmount = (props) => {
               helperText={error && errorMsg}
               autoFocus
               inputMode='numeric'
-              pattern='[0-9]*'
             />
           </div>
           <p className='invest-amount-input-duration' data-aid='invest-amount-input-duration'>

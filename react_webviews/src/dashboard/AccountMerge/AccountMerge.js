@@ -33,7 +33,7 @@ const AccountMerge = (props) => {
       buttonTitle="SEND OTP"
       title="Link Account"
       handleClick={handleClick}
-      iframeRightContent={require(`assets/${productName}/link_account.svg`)}
+      iframeRightContent={require(`assets/finity/link_account.svg`)}
       headerData={{goBack}}
     >
       <div className="account-merge" data-aid='account-merge'>

@@ -24,8 +24,7 @@ export function getFormattedDate(input, addYear) {
         "Dec",
       ];
       return (
-        (p1 < 10 ? "0" + p1 : p1) +
-        " " +
+        p1+ " " +
         months[p2 - 1] +
         (addYear ? " " + p3 : "")
       );

@@ -149,6 +149,7 @@ class Login extends Component {
                 inputMode="numeric"
                 onChange={this.handleChange("mobile")}
                 autoFocus
+                onEnterPressed={this.handleClick}
               />
             </div>
           )}
@@ -180,6 +181,7 @@ class Login extends Component {
                   name="email"
                   onChange={this.handleChange("email")}
                   autoFocus
+                  onEnterPressed={this.handleClick}
                 />
               </div>
             </>

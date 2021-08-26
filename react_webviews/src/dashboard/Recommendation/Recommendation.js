@@ -159,7 +159,7 @@ const Recommendations = (props) => {
       `${getBasePath()}/page/callback/${sipOrOneTime}/${investmentObject.amount}${getConfig().searchParams}`
     );
 
-    window.localStorage.setItem("investment", JSON.stringify(investmentObject));
+    storageService().setObject("investment", investmentObject);
 
     let investmentEventData = {};
 
