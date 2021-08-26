@@ -220,7 +220,7 @@ class Landing extends Component {
       } // Email/mobile if Not Verified!
       this.handleIpoCardRedirection();
     } else {
-      if (kycJourneyStatus = "fno_rejected") {
+      if (kycJourneyStatus === "fno_rejected") {
         this.setState({ showPageLoader: "page" });
         window.location.href = `${config.base_url}/page/equity/launchapp`;
       }
