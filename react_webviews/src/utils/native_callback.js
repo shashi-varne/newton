@@ -49,7 +49,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
         return;
       }
       
-      let path = message?.route || "/login"; 
+      let path = ['iw-dashboard', 'w-report'].includes(config.project) ? `/${config.project}/login` : '/login'; 
       window.location.href = redirectToPath(path);
     } else {
       nativeCallback({ action: "session_expired" });
