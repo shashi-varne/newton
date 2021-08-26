@@ -78,7 +78,7 @@ class Landing extends Component {
     const isBottomSheetDisplayed = storageService().get(
       "is_bottom_sheet_displayed"
     );
-    let { isWeb, verifyDetails, openKycPremiumLanding, openKycStatusDialog } = this.state;
+    const { isWeb, verifyDetails, openKycPremiumLanding, openKycStatusDialog } = this.state;
     if (!isBottomSheetDisplayed && isWeb && !verifyDetails && !openKycPremiumLanding && !openKycStatusDialog) {
       this.handleCampaignNotification();
     }
