@@ -48,7 +48,9 @@ export const nativeCallback = async ({ action = null, message = null, events = n
         window.callbackWeb.sendEvent(message);
         return;
       }
-      window.location.href = redirectToPath('/login');
+      
+      let path = message?.route || "/login"; 
+      window.location.href = redirectToPath(path);
     } else {
       nativeCallback({ action: "session_expired" });
     }
