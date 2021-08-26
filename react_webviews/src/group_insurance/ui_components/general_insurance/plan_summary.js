@@ -276,7 +276,9 @@ class PlanSummaryClass extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'summary',
-        "type": this.props.parent.state.product_key
+        "type": this.props.parent.state.product_key,
+        'rm_payment_link_copied': user_action === 'copy' ? 'yes' : 'no',
+        'guest_user_make_payment': this.state.isGuestUser ? 'yes' : 'no',
       }
     };
 
@@ -288,7 +290,7 @@ class PlanSummaryClass extends Component {
   }
   
   copyPaymentLink = () =>{
-
+    this.sendEvents('copy');
     var productMapper = {
       'DENGUE': 'dengue', 
       'HOSPICASH': 'hospicash', 

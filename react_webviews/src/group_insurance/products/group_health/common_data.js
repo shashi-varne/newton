@@ -411,7 +411,6 @@ export async function getShortUrl(urlToShorten, func){
         var resultData = res.pfwresponse.result;
 
         if (res.pfwresponse.status_code === 200) {
-            console.log(resultData)
             this.setState({
                 show_loader: false
             });

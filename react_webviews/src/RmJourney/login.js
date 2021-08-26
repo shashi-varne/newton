@@ -8,6 +8,7 @@ import UiSkelton  from "common/ui/Skelton";
 import Api from "utils/api";
 import Toast from 'common/ui/Toast';
 import Input from 'common/ui/Input';
+import { nativeCallback } from "utils/native_callback";
 
 const config = getConfig();
 let productName = config.productName;
@@ -61,6 +62,20 @@ const RmLogin = (props) => {
       Toast('Something went wrong. Please try again')
     }
 }
+  const sendEvents = (user_action) => {
+    let eventObj = {
+      event_name: "insurance_webapp",
+      properties: {
+        user_action: user_action,
+        rm_journey_started: 'yes'
+      },
+    };
+    if(user_action === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   const handleChange = (name) => (event) => {
     const value = event.target ? event.target.value : event;
@@ -92,6 +107,7 @@ const RmLogin = (props) => {
       setformData({...data})
 
       if(canSubmitForm){
+        sendEvents('next')
         startJourney();    
     }
   };

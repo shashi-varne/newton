@@ -53,7 +53,6 @@ class GroupHealthPlanFinalSummary extends Component {
     componentWillMount() {
         nativeCallback({ action: 'take_control_reset' });
         this.initialize();
-        console.log('guestuser', this.state.isGuestUser)
     }
 
     setErrorData = (type) => {
@@ -758,6 +757,8 @@ class GroupHealthPlanFinalSummary extends Component {
                 'restart_clicked': this.state.restart_clicked ? 'yes' : 'no',
                 'restart_conformation': this.state.restart_conformation ? 'yes' : 'no',
                 'edit_clicked': data.edit_clicked || '',
+                'rm_payment_link_copied': user_action === 'copy' ? 'yes' : 'no',
+                'guest_user_make_payment': this.state.isGuestUser ? 'yes' : 'no',
             }
         };
 
@@ -963,6 +964,7 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     copyPaymentLink = async () =>{
+        this.sendEvents('copy')
         let application_id = storageService().get('health_insurance_application_id');
         let guestLeadId = storageService().get('guestLeadId');
         let finalSummaryScreenUrl = `${window.origin}/group-insurance/group-health/${this.state.provider}/final-summary${getConfig().searchParams}&provider=${this.state.providerConfig.provider_api}&application_id=${application_id}&guestUser=true&guestLeadId=${guestLeadId}`
