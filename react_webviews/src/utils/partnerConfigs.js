@@ -525,7 +525,7 @@ export const partnerConfigs = {
   },
   ucomb: {
     code: "ucomb",
-    logo: "ucomb.jpg",
+    logo: "ucomb.svg",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
       ourRecommendations: ["buildwealth", "savetax"],
@@ -539,7 +539,7 @@ export const partnerConfigs = {
     },
     uiElements: {
       header: {
-        backgroundColor : "#FFF112",
+        backgroundColor : "#FFF500",
       }
     },
     features: {
