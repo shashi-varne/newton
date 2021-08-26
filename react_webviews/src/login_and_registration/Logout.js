@@ -26,7 +26,6 @@ const Logout = (props) => {
       }
       try {
         if(!isRM){
-          window.localStorage.clear();
           await logout();
         }
       } catch (err) {
