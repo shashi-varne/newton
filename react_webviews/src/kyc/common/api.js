@@ -38,7 +38,7 @@ export const getUserKycFromSummary = async () => {
     }
     return result;
   } catch (err) {
-    console.log(err)
+    toast(err.message);
   }
 }
 
