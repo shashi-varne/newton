@@ -475,11 +475,7 @@ export function initilizeKyc() {
   this.contactVerification(userKyc);
 }
 
-export function openPremiumOnboardBottomSheet(
-  bottom_sheet_dialog_data_premium,
-  userKyc,
-  TRADING_ENABLED
-) {
+export function openPremiumOnboardBottomSheet(bottom_sheet_dialog_data_premium) {
   const { config = getConfig() } = this.state;
   let is_bottom_sheet_displayed_kyc_premium = storageService().get(
     "is_bottom_sheet_displayed_kyc_premium"
@@ -493,7 +489,7 @@ export function openPremiumOnboardBottomSheet(
     return;
   }
 
-  if (!config.Web && this.state.screenName !== "landing") {
+  if (!config.Web && this.state.screenName !== "sdk_landing") {
     return;
   }
 
@@ -580,7 +576,6 @@ export function handleIpoCardRedirection() {
     openModule('account/setup_2fa', this.props, { routeUrlParams: '/ipo' });
     if (config.isNative) {
       return nativeCallback({ action: 'exit_web' });
-      // TODO: Test native behaviour for this code
     }
   } else {
     this.navigate("/market-products");
@@ -588,7 +583,7 @@ export function handleIpoCardRedirection() {
 }
           
 export function handleStocksAndIpoCards(key) {
-  let { kycJourneyStatusMapperData, kycJourneyStatus, userKyc, currentUser } = this.state;
+  let { kycJourneyStatusMapperData, kycJourneyStatus, userKyc, currentUser, config = getConfig() } = this.state;
   let modalData = Object.assign({key}, kycJourneyStatusMapperData);
 
   if (key === "ipo") {
@@ -620,14 +615,13 @@ export function handleStocksAndIpoCards(key) {
     ) {
       if (currentUser?.pin_status !== 'pin_setup_complete') {
         openModule('account/setup_2fa', this.props, { routeUrlParams: '/stocks' });
-        const { config = getConfig() } = this.state;
         if (config.isNative) {
           return nativeCallback({ action: 'exit_web' });
-          // TODO: Test native behaviour for this code
         }
-      } else {
-        console.log("redirection"); // Todo: Remove this console once you enter redirection path to stocks sdk
-        // Todo: Redirect to stocks sdk
+      } else if (kycJourneyStatus !== "fno_rejected") {
+        this.setState({ showPageLoader: "page" });
+        window.location.href = `${config.base_url}/page/equity/launchapp`;
+        return;
       }
     }
   }
