@@ -740,12 +740,6 @@ export function contactVerification(userKyc) {
         contactValue,
         contactNotVerified: true,
       })
-    } else if (contactDetails.email_verified === false) {
-      this.setState({
-        communicationType: "email",
-        contactValue: contactDetails?.email || "",
-        contactNotVerified: true,
-      })
     }
   }
   // ---------------- Above Condition For IPO Contact Verification---------------//

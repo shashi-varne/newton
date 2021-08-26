@@ -196,6 +196,7 @@ export async function triggerOtpApi(body, loginType, bottomsheet) {
             value: body.mobile ||  body.email,
             otp_id: result?.otp_id,
             communicationType: loginType,
+            firstTimeLogin: this.state.firstTimeLogin || false,
           },
         });
       } else {
