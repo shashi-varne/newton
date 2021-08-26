@@ -618,7 +618,7 @@ export function handleStocksAndIpoCards(key) {
         if (config.isNative) {
           return nativeCallback({ action: 'exit_web' });
         }
-      } else {
+      } else if (kycJourneyStatus !== "fno_rejected") {
         this.setState({ showPageLoader: "page" });
         window.location.href = `${config.base_url}/page/equity/launchapp`;
         return;
