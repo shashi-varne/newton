@@ -4,6 +4,7 @@ import Container from "../../common/Container";
 import Input from "../../../common/ui/Input";
 import { initialize } from "../common/commonFunctions";
 import { formatAmountInr, storageService, formatAmount } from "utils/validators";
+import { convertInrAmountToNumber } from "../../../utils/validators";
 
 class EnterAmount extends Component {
   constructor(props) {
@@ -30,12 +31,7 @@ class EnterAmount extends Component {
     let value = (name === "custom-amt") ? event.target.id : event.target.value;
 
     if (name === 'amount') {
-      let amt = (value.match(/\d+/g) || "").toString();
-      if (amt) {
-        value = amt.replaceAll(",", "");
-      } else {
-        value = amt;
-      }
+      value = convertInrAmountToNumber(value);
     }
 
     let taxSaved = Math.min(value * 0.309, 61800);

@@ -51,7 +51,7 @@ const PaymentOptions = (props) => {
           ),
           invest_id: result.post_args.ppt_id,
           remark: remark,
-          account_number: result.post_args.account_number,
+          account_number: result.post_args.account_no,
           amount: result.post_args.amount,
           data: {
             type: "bank",

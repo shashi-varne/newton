@@ -137,7 +137,6 @@ const CustomGoalTarget = (props) => {
             helperText={errorMessage}
             autoFocus
             inputMode='numeric'
-            pattern='[0-9]*'
           />
         </div>
       </section>

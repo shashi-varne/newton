@@ -642,10 +642,4 @@ export const prepareInvestMaaper = [
     img: "ic_db_refer.svg",
     path:"/refer"
   },
-  {
-    key: "refer",
-    referralCode: true,
-    title: "Referral Code",
-    img: "ic_db_refer.svg",
-  },
 ];
