@@ -124,6 +124,7 @@ const RmLogin = (props) => {
                           width="40"
                           label="Enter customer mobile number"
                           class="mobile_no"
+                          inputMode="numeric"
                           id="mobile_no"
                           name="mobile_no"
                           error={formData.mobile_no_error ? true : false}

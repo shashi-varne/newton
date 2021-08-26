@@ -40,7 +40,7 @@ class GroupHealthPlanFinalSummary extends Component {
             screen_name:'final_summary_screen',
             pgReached: getUrlParams().pgReached ? true : false,
             isRmJourney: isRmJourney(),
-            isGuestUser: storageService().getBoolean('guestUser')
+            isGuestUser: storageService().getBoolean('guestUser') || getUrlParams().guestUser
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
@@ -53,14 +53,7 @@ class GroupHealthPlanFinalSummary extends Component {
     componentWillMount() {
         nativeCallback({ action: 'take_control_reset' });
         this.initialize();
-    }
-
-    componentDidUpdate(){
-        if(getUrlParams().guestUser && !this.state.isGuestUser){
-            this.setState({
-              isGuestUser : storageService().getBoolean('guestUser'),
-            })
-        }
+        console.log('guestuser', this.state.isGuestUser)
     }
 
     setErrorData = (type) => {

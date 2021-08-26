@@ -24,7 +24,7 @@ class PlanSummaryClass extends Component {
       type: getConfig().productName,
       group_insurance_payment_started: window.sessionStorage.getItem('group_insurance_payment_started') || '',
       isRmJourney: isRmJourney(),
-      isGuestUser : storageService().getBoolean('guestUser'),
+      isGuestUser : storageService().getBoolean('guestUser') || getUrlParams().guestUser,
       screen_name: 'plan_summary'
     };
     this.getShortUrl = getShortUrl.bind(this);
@@ -174,12 +174,6 @@ class PlanSummaryClass extends Component {
     if (this.state.parent !== this.props.parent) {
       this.setState({
         parent: this.props.parent || {}
-      })
-    }
-
-    if(getUrlParams().guestUser && !this.state.isGuestUser){
-      this.setState({
-        isGuestUser : storageService().getBoolean('guestUser'),
       })
     }
   }
