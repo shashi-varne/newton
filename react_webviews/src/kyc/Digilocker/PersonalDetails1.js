@@ -199,7 +199,6 @@ const PersonalDetails1 = (props) => {
             error={form_data.name_error ? true : false}
             helperText={form_data.name_error || ""}
             onChange={handleChange("name")}
-            maxLength={20}
             type="text"
             disabled={showLoader || !!kyc?.pan?.meta_data.name}
           />
@@ -210,7 +209,6 @@ const PersonalDetails1 = (props) => {
             error={form_data.father_name_error ? true : false}
             helperText={form_data.father_name_error || ""}
             onChange={handleChange("father_name")}
-            maxLength={20}
             type="text"
             disabled={showLoader || (!!kyc?.pan?.meta_data.father_name && kyc?.pan?.meta_data_status === "approved")}
           />

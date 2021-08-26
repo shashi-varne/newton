@@ -201,7 +201,6 @@ const PersonalDetails1 = (props) => {
             error={form_data.name_error ? true : false}
             helperText={form_data.name_error || ""}
             onChange={handleChange("name")}
-            maxLength={30}
             type="text"
             disabled={isApiRunning || !!kyc?.pan?.meta_data?.name}
           />

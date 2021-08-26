@@ -124,6 +124,7 @@ class Referral extends Component {
             this.navigate("/secondary-verification", {
               state: {
                 communicationType: this.state.communicationType === "mobile" ? "email" : "mobile",
+                firstTimeLogin: true,
               }
             })
           },

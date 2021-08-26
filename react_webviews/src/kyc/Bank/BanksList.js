@@ -78,7 +78,7 @@ const BanksList = (props) => {
     }
   }
 
-  const showFooter = changeRequest.add_bank_enabled && ((config.Web && !config.isIframe) || !!storageService().get("native"))
+  const showFooter = changeRequest.add_bank_enabled && ((config.Web && !config.isIframe) || !!storageService().get("native")) && config?.features?.addAnotherBank 
   return (
     <Container
       skelton={showLoader}
