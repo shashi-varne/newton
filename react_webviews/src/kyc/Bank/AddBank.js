@@ -346,7 +346,7 @@ const AddBank = (props) => {
                 error={form_data.c_account_number_error ? true : false}
                 helperText={form_data.c_account_number_error || ""}
                 onChange={handleChange("c_account_number")}
-                type="number"addBank
+                type="number"
                 InputProps={{
                   endAdornment: (
                     <>

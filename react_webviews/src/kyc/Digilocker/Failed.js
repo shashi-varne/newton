@@ -13,6 +13,7 @@ import { getBasePath, isMobile } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 import { updateQueryStringParameter } from "../common/functions";
 import { isNewIframeDesktopLayout, popupWindowCenter } from "../../utils/functions";
+import { Imgc } from "../../common/ui/Imgc";
 
 const Failed = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -183,7 +184,7 @@ const Failed = (props) => {
       <section id="digilocker-failed"  data-aid='kyc-digilocker-failed'>
         {
           !newIframeDesktopLayout &&
-          <img
+          <Imgc
             className="digi-image"
             alt=""
             src={require(`assets/${productName}/ils_digilocker_failed.svg`)}

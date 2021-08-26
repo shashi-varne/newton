@@ -3,6 +3,7 @@ import Container from '../common/Container'
 import { getConfig, navigate as navigateFunc } from '../../utils/functions'
 import { DL_DOCS } from '../constants'
 import "./Digilocker.scss";
+import { Imgc } from '../../common/ui/Imgc';
 
 const Success = (props) => {
   const config = getConfig();
@@ -29,7 +30,7 @@ const Success = (props) => {
         <main className="esign-steps" data-aid='kyc-esign-steps'>
           {DL_DOCS.map(({ name, icon }, idx) => (
             <div className="doc flex-center" key={icon}>
-              <img
+              <Imgc
                 src={require(`assets/${productName}/${icon}.svg`)}
                 className="doc-icon"
                 alt=""
