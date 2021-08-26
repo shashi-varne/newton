@@ -291,6 +291,7 @@ class GroupHealthPayment extends Component {
         title={this.state.commonMapper['top_title']}
         handleClick={ this.state.isGuestUser && this.state.status !== 'failure' ? this.downloadApp : this.handleClick}
         edit={this.props.edit}
+        noBackIcon={this.state.isGuestUser}
         fullWidthButton={this.state.paymentSuccess}
         onlyButton={this.state.paymentSuccess}
         withProvider={this.state.paymentFailed}

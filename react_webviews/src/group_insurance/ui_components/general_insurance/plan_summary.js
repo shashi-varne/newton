@@ -177,7 +177,11 @@ class PlanSummaryClass extends Component {
       })
     }
 
-
+    if(getUrlParams().guestUser && !this.state.isGuestUser){
+      this.setState({
+        isGuestUser : storageService().getBoolean('guestUser'),
+      })
+    }
   }
 
   navigate = (pathname) => {

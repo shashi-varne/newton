@@ -54,6 +54,15 @@ class GroupHealthPlanFinalSummary extends Component {
         nativeCallback({ action: 'take_control_reset' });
         this.initialize();
     }
+
+    componentDidUpdate(){
+        if(getUrlParams().guestUser && !this.state.isGuestUser){
+            this.setState({
+              isGuestUser : storageService().getBoolean('guestUser'),
+            })
+        }
+    }
+
     setErrorData = (type) => {
         
         this.setState({
