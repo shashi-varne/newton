@@ -1,7 +1,5 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { Component, useState, useEffect, lazy, Suspense } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-
-import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
 import {
   createGenerateClassName,
@@ -9,21 +7,60 @@ import {
   MuiThemeProvider,
   createMuiTheme,
 } from "@material-ui/core/styles";
-import { themeConfig } from "utils/constants";
+import { create } from "jss";
 import { withRouter } from "react-router";
-import { ToastContainer } from "react-toastify";
-import Loadable from "react-loadable";
-
-import DesktopLayout from "./desktopLayout";
-// import CommonRenderFaqs from './common/components/RenderFaqs';
-
-import NotFound from "./common/components/NotFound";
-import Tooltip from "common/ui/Tooltip";
-import { getConfig } from "./utils/functions";
 import "common/theme/Style.scss";
+import { themeConfig } from "utils/constants";
+import { getConfig } from "./utils/functions";
 import { storageService } from "./utils/validators";
-import Prepare from "./dashboard/Invest/components/SdkLanding/Prepare";
 import { ThemeProvider } from "./utils/ThemeContext";
+import { ToastContainer } from "react-toastify";
+import DesktopLayout from "./desktopLayout";
+import ErrorBoundary from "./ErrorBoundary";
+// import Feature from "./Feature";
+
+const Prepare = lazy(() => import(
+  /*webpackChunkName: "Prepare"*/ "./dashboard/Invest/components/SdkLanding/Prepare"
+));
+const Tooltip = lazy(() => import(
+  /*webpackChunkName: "Tooltip"*/ "common/ui/Tooltip"
+));
+const NotFound = lazy(() => import(
+  /*webpackChunkName: "NotFound"*/ "./common/components/NotFound"
+));
+const InternalWealthDashboard = lazy(() => import(
+  /*webpackChunkName: "InternalWealthDashboard"*/ "./internal_wealth_dashboard"
+));
+const Login = lazy(() => import(
+  /*webpackChunkName: "Login"*/ "./login_and_registration/Login"
+));
+const Registration = lazy(() => import(
+  /*webpackChunkName: "Registration"*/ "./login_and_registration/Register")
+);
+const Otp = lazy(() => import(
+  /*webpackChunkName: "Otp"*/ "./login_and_registration/Otp")
+);
+const ForgotPassword = lazy(() => import(
+  /*webpackChunkName: "ForgotPassword"*/ "./login_and_registration/ForgotPassword")
+);
+const WealthReport = lazy(() => import(
+  /* webpackChunkName: "WealthReport" */ "./wealth_report")
+);
+const SocialCallback = lazy(() => import(
+  /* webpackChunkName: "SocialCallback" */ "./login_and_registration/SocialCallback")
+);
+const FisdomPartnerRedirect = lazy(() => import(
+  /* webpackChunkName: "FisdomPartnerRedirect" */ "./fisdom_partner_redirect")
+);
+const PartnerAuthentication = lazy(() => import(
+  /* webpackChunkName: "Authentication" */ "./login_and_registration/Authentication")
+);
+const Logout = lazy(() =>
+  import(/* webpackChunkName: "Logout" */ "./login_and_registration/Logout")
+);
+const Feature = lazy(() =>
+  import(/* webpackChunkName: "Feature" */ "./Feature")
+);
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -71,73 +108,6 @@ const ScrollToTop = withRouter(
   }
 );
 
-const InternalWealthDashboardComponent = Loadable({
-  loader: () =>
-    import(
-      /*webpackChunkName: "internal_wealth_dashboard"*/ "./internal_wealth_dashboard"
-    ),
-  loading: () => <div>Loading...</div>,
-});
-const LoginComponent = Loadable({
-  loader: () =>
-    import(/*webpackChunkName: "Login"*/ "./login_and_registration/Login"),
-  loading: () => <div>Loading...</div>,
-});
-const RegistrationComponent = Loadable({
-  loader: () =>
-    import(
-      /*webpackChunkName: "Registration"*/ "./login_and_registration/Register"
-    ),
-  loading: () => <div>Loading...</div>,
-});
-const OtpComponent = Loadable({
-  loader: () =>
-    import(/*webpackChunkName: "Otp"*/ "./login_and_registration/Otp"),
-  loading: () => <div>Loading...</div>,
-});
-const ForgotPasswordComponent = Loadable({
-  loader: () =>
-    import(
-      /*webpackChunkName: "ForgotPassword"*/ "./login_and_registration/ForgotPassword"
-    ),
-  loading: () => <div>Loading...</div>,
-});
-const WealthReportComponent = Loadable({
-  loader: () =>
-    import(/* webpackChunkName: "Wealth_Report" */ "./wealth_report"),
-  loading: () => <div>Loading...</div>,
-});
-const SocialCallbackComponent = Loadable({
-  loader: () =>
-    import(
-      /* webpackChunkName: "Social_Callback" */ "./login_and_registration/SocialCallback"
-    ),
-  loading: () => <div>Loading...</div>,
-});
-const FisdomPartnerRedirectComponent = Loadable({
-  loader: () =>
-    import(
-      /* webpackChunkName: "FisdomPartnerRedirect" */ "./fisdom_partner_redirect"
-    ),
-  loading: () => <div>Loading...</div>,
-});
-
-const PartnerAuthenticationComponent = Loadable({
-  loader: () =>
-    import(
-      /* webpackChunkName: "Authentication" */ "./login_and_registration/Authentication"
-    ),
-  loading: () => <div>Loading...</div>,
-});
-const FeatureComponent = Loadable({
-  loader: () => import(/* webpackChunkName: "Feature" */ "./Feature"),
-  loading: () => <div>Loading...</div>,
-});
-const LogoutComponent = Loadable({
-  loader: () =>
-    import(/* webpackChunkName: "Logout" */ "./login_and_registration/Logout"),
-  loading: () => <div>Loading...</div>,
-});
 const App = () => {
   const config = getConfig();
   const isMobileDevice = config.isMobileDevice;
@@ -160,44 +130,66 @@ const App = () => {
         <ThemeProvider value={{ updateTheme }}>
           <MuiThemeProvider theme={themeConfiguration}>
             <ScrollToTop />
-            <Tooltip />
             <ToastContainer autoClose={3000} />
-            <Switch>
-              <Route
-                path="/iw-dashboard"
-                component={InternalWealthDashboardComponent}
-              />
-              <Route path="/w-report" component={WealthReportComponent} />
-              <Route path="/login" component={LoginComponent} />
-              <Route path="/register" component={RegistrationComponent} />
-              <Route path="/mobile/verify" component={OtpComponent} />
-              <Route
-                path="/forgot-password"
-                component={ForgotPasswordComponent}
-              />
-              <Route
-                path="/social/callback"
-                component={SocialCallbackComponent}
-              />
-              <Route
-                path="/partner-landing"
-                component={FisdomPartnerRedirectComponent}
-              />
-              <Route
-                path="/partner-authentication/:partnerCode"
-                component={PartnerAuthenticationComponent}
-              />
-              <Route path="/logout" component={LogoutComponent} />
-              <Route path="/prepare" component={Prepare} />
-              {isMobileDevice || iframe ? (
-                <Route component={FeatureComponent} />
-              ) : (
-                <DesktopLayout>
-                  <FeatureComponent />
-                </DesktopLayout>
-              )}
-              <Route component={NotFound} />
-            </Switch>
+            <ErrorBoundary>
+              <Suspense fallback={<div>Loading</div>}>
+                <Tooltip />
+                <Switch>
+                  <Route
+                    path="/iw-dashboard"
+                    component={InternalWealthDashboard}
+                  />
+                  <Route
+                    path="/w-report"
+                    component={WealthReport}
+                  />
+                  <Route
+                    path="/login"
+                    component={Login}
+                  />
+                  <Route
+                    path="/register"
+                    component={Registration}
+                  />
+                  <Route
+                    path="/mobile/verify"
+                    component={Otp}
+                  />
+                  <Route
+                    path="/forgot-password"
+                    component={ForgotPassword}
+                  />
+                  <Route
+                    path="/social/callback"
+                    component={SocialCallback}
+                  />
+                  <Route
+                    path="/partner-landing"
+                    component={FisdomPartnerRedirect}
+                  />
+                  <Route
+                    path="/partner-authentication/:partnerCode"
+                    component={PartnerAuthentication}
+                  />
+                  <Route
+                    path="/logout"
+                    component={Logout}
+                  />
+                  <Route
+                    path="/prepare"
+                    component={Prepare}
+                  />
+                  {isMobileDevice || iframe ? (
+                    <Route component={Feature} />
+                  ) : (
+                    <DesktopLayout>
+                      <Feature />
+                    </DesktopLayout>
+                  )}
+                  <Route component={NotFound} />
+                </Switch>
+              </Suspense>
+            </ErrorBoundary>
           </MuiThemeProvider>
         </ThemeProvider>
       </JssProvider>
