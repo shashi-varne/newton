@@ -141,11 +141,23 @@ module.exports = {
           // assets smaller than specified size as data URLs to avoid requests.
           {
             test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
-            loader: require.resolve("url-loader"),
-            options: {
-              limit: 10000,
-              name: "static/media/[name].[hash:8].[ext]",
-            },
+            /*
+              Should ideally add svg files here as well but it causes a slight increase in
+              our main.chunk.js due to the minimum file size limit used by url-loader.
+              Also, build time increases by a bit as well but adding svg files here would
+              allow us to remove the image-loader call from the rule matching all other files
+              used below with file-loader
+            */
+            use: [
+              {
+                loader: require.resolve("url-loader"),
+                options: {
+                  limit: 10000,
+                  name: "static/media/[name].[hash:8].[ext]",
+                },
+              },
+              'image-webpack-loader'
+            ],
           },
           // Process JS with Babel.
           {
@@ -232,15 +244,20 @@ module.exports = {
           // This loader doesn't use a "test" so it will catch all modules
           // that fall through the other loaders.
           {
-            loader: require.resolve("file-loader"),
-            // Exclude `js` files to keep "css" loader working as it injects
-            // it's runtime that would otherwise processed through "file" loader.
-            // Also exclude `html` and `json` extensions so they get processed
-            // by webpacks internal loaders.
             exclude: [/\.(js|jsx|mjs)$/, /\.html$/, /\.json$/],
-            options: {
-              name: "static/media/[name].[hash:8].[ext]",
-            },
+            use: [
+              {
+                loader: require.resolve("file-loader"),
+                // Exclude `js` files to keep "css" loader working as it injects
+                // it's runtime that would otherwise processed through "file" loader.
+                // Also exclude `html` and `json` extensions so they get processed
+                // by webpacks internal loaders.
+                options: {
+                  name: "static/media/[name].[hash:8].[ext]",
+                },
+              },
+              'image-webpack-loader' // required for all the SVG files that get matched by this rule
+            ],
           },
           // ** STOP ** Are you adding a new loader?
           // Make sure to add the new loader(s) before the "file" loader.
