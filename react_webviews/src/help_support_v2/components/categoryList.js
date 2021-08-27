@@ -84,8 +84,8 @@ class CategoryList extends Component {
 
     this.setState({
       categoryList: categoryList,
-      kyc_status: result.kyc_status,
-      contact: result.customer_care_no
+      kyc_status: result?.kyc_status,
+      contact: result?.customer_care_no
     });
   };
 
