@@ -7,6 +7,7 @@ import {
   bankAccountTypeOptions,
   PATHNAME_MAPPER,
   getIfscCodeError,
+  BANK_IFSC_CODES,
 } from "../constants";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -180,17 +181,7 @@ const AddBank = (props) => {
     let formData = Object.assign({}, form_data);
     let bank = Object.assign({}, bankData);
     let bankIcon = "";
-    if (
-      (code === "ktb" &&
-        bankData.ifsc_code.toUpperCase().startsWith("KARB")) ||
-      (code === "lvb" &&
-        bankData.ifsc_code.toUpperCase().startsWith("LAVB")) ||
-      (code === "cub" &&
-        bankData.ifsc_code.toUpperCase().startsWith("CIUB")) ||
-      (code !== "ktb" &&
-        code !== "lvb" &&
-        code !== "cub")
-    ) {
+    if (!BANK_IFSC_CODES[code] || bankData.ifsc_code.toUpperCase().startsWith(BANK_IFSC_CODES[code])) {
       setIsApiRunning("button");
       try {
         const result = (await getIFSC(bankData.ifsc_code)) || [];
