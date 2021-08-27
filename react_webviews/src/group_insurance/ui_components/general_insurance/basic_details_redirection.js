@@ -46,8 +46,8 @@ class BasicDetailsRedirectionForm extends Component {
         nativeCallback({ action: 'take_control_reset' });
         let premium_details = this.state.premium_details_all[this.props.parent.state.product_key];
         if (isEmpty(premium_details)) {
-            toast("please choose a plan"); // TODO ASK P.Manger for the message
-            this.navigate("plan");
+            toast("please choose a plan");
+            this.props.parent.props.history.goBack();
             return;
         };
         let providerLogoMapper = {
