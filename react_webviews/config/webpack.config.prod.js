@@ -5,7 +5,6 @@ const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const ManifestPlugin = require("webpack-manifest-plugin");
 const InterpolateHtmlPlugin = require("react-dev-utils/InterpolateHtmlPlugin");
 const SWPrecacheWebpackPlugin = require("sw-precache-webpack-plugin");
@@ -15,6 +14,7 @@ const paths = require("./paths");
 const getClientEnvironment = require("./env");
 const TerserPlugin = require("terser-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
 const publicPath = process.env.IS_PIPELINE ? "" : paths.servedPath;
@@ -319,6 +319,7 @@ module.exports = {
     },
     minimize: true,
     minimizer: [
+      new CssMinimizerPlugin(), //currently works only for prod due to devtool source-map restriction
       new TerserPlugin({
         terserOptions: {
           ecma: undefined,
