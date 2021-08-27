@@ -176,6 +176,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-1": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
+    "cache-loader": "^4.1.0",
     "clean-webpack-plugin": "^3.0.0",
     "eslint-loader": "^2.1.2",
     "fork-ts-checker-notifier-webpack-plugin": "^1.0.0",
