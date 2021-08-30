@@ -2,7 +2,6 @@
 import qs from 'qs';
 import moment from 'moment';
 import { isBoolean } from 'lodash';
-import Toast from 'common/ui/Toast';
 
 export function validateEmpty(string) {
   let nameSplit = string.split(" ").filter(e => e);
