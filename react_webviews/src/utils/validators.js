@@ -2,7 +2,6 @@
 import qs from 'qs';
 import moment from 'moment';
 import { isBoolean } from 'lodash';
-import { getConfig } from 'utils/functions';
 import Toast from 'common/ui/Toast';
 
 export function validateEmpty(string) {
@@ -1174,24 +1173,37 @@ export function sortArrayOfObjectsByTime(array, key){
 
 
 export function customCopyToClipboard(text, message) { //supports android, ios and web
-  const textArea = document.createElement('textArea');
-  textArea.value = text;
-  document.body.appendChild(textArea);
+  let textarea;
+  let result;
 
-  if (getConfig().iOS) {
-      const range = document.createRange();
-      range.selectNodeContents(textArea);
-      let selection = window.getSelection();
-      selection.removeAllRanges();
-      selection.addRange(range);
-      textArea.setSelectionRange(0, 999999);
-  } else {
-      textArea.select();
+  try {
+    textarea = document.createElement('textarea');
+    textarea.setAttribute('readonly', true);
+    textarea.setAttribute('contenteditable', true);
+    textarea.style.position = 'fixed'; // prevent scroll from jumping to the bottom when focus is set.
+    textarea.value = text;
+
+    document.body.appendChild(textarea);
+
+    textarea.focus();
+    textarea.select();
+
+    const range = document.createRange();
+    range.selectNodeContents(textarea);
+
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+
+    textarea.setSelectionRange(0, textarea.value.length);
+    result = document.execCommand('copy');
+  } catch (err) {
+    console.error(err);
+    result = null;
+  } finally {
+    document.body.removeChild(textarea);
   }
-
-  document.execCommand('copy');
-  document.body.removeChild(textArea);
-
+  
   if(message){
       Toast(message)
   }
