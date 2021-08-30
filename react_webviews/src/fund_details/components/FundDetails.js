@@ -672,6 +672,7 @@ const FundDetails = (props) => {
               <InvestReferralDialog
                 isOpen={dialogStates.openInvestReferral}
                 goNext={goNext}
+                close={() => handleDialogStates("openInvestReferral", false)}
               />
             )}
           </>
