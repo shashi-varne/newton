@@ -52,7 +52,6 @@ export const KEY_INSIGHTS_CAROUSEL = [
 ];
 
 const PrimaryMarketProducts = (props) => {
-  const config = getConfig();
   const [showLoader, setShowLoader] = useState(false);
   const navigate = navigateFunc.bind(props);
   const config = getConfig();
