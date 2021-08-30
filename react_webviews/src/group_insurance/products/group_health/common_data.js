@@ -7,10 +7,11 @@ import { ghGetMember, getCssMapperReport } from '../../constants';
 import Api from 'utils/api';
 import {  openPdfCall } from 'utils/native_callback';
 import { nativeCallback } from 'utils/native_callback';
-import {isEmpty, sortArrayOfObjectsByTime, getDateBreakup, capitalizeFirstLetter, capitalize, getUrlParams, customCopyToClipboard} from '../../../utils/validators';
+import {isEmpty, sortArrayOfObjectsByTime, getDateBreakup, capitalizeFirstLetter, capitalize, getUrlParams} from '../../../utils/validators';
 import ReactTooltip from "react-tooltip";
 import {getGhProviderConfig, memberKeyMapperFunction} from './constants';
 import {TitleMaper, reportsfrequencyMapper, reportTopTextMapper, reportCoverAmountValue} from '../../../group_insurance/constants'
+import Toast from 'common/ui/Toast';
 
 export async function initialize() {
     this.setErrorData =setErrorData.bind(this)
@@ -414,10 +415,10 @@ export async function getShortUrl(urlToShorten, func){
                 show_loader: false
             });
             var shortUrl = resultData?.url;
-            customCopyToClipboard(shortUrl, 'Payment link copied.')
-            
+            navigator.clipboard.writeText(shortUrl);
+            Toast('Payment link copied.');
         }else{
-            error = resultData.error || resultData.message || true;
+            error=resultData.error || resultData.message || true;
             this.setState({
                 show_loader: false
             });
