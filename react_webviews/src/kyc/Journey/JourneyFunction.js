@@ -21,7 +21,7 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
         status: 'init',
         isEditAllowed: true,
         inputsForStatus: [
-          { name: 'pan', keys: ['dob'] },
+          { name: 'pan', keys: ['dob', 'mother_name'] },
           {
             name: 'identification',
             keys: [
