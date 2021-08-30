@@ -6,7 +6,7 @@ import WVInPageSubtitle from '../../common/ui/InPageHeader/WVInPageSubtitle';
 import MarketProductCard from '../mini-components/MarketProductCard';
 import { getConfig, navigate as navigateFunc } from '../../utils/functions';
 
-const ProductMarketTypes = () => {
+const ProductMarketTypes = (props) => {
   const navigate = navigateFunc.bind(props);
   const [showLoader, setShowLoader] = useState(false);
   const config = getConfig();
