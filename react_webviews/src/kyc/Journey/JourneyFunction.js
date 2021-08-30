@@ -237,18 +237,6 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
       journeyData[3].inputsForStatus.push('nri_address')
     }
 
-    if (
-      kyc?.identification?.meta_data?.marital_status &&
-      kyc?.identification?.meta_data?.marital_status?.toLowerCase() ===
-        'married'
-    ) {
-      if(!isCompliant && show_aadhaar) {
-        journeyData[2].inputsForStatus[1].keys.push('spouse_name')
-      } else {
-        journeyData[1].inputsForStatus[1].keys.push('spouse_name')
-      }
-    }
-
     const tradingJourneyData = [
       {
         key: 'trading_esign',
@@ -265,6 +253,15 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
     }
   }
 
+  if (
+    kyc?.identification?.meta_data?.marital_status?.toLowerCase() === 'married'
+  ) {
+    if (!isCompliant && show_aadhaar) {
+      journeyData[2].inputsForStatus[1].keys.push('spouse_name')
+    } else {
+      journeyData[1].inputsForStatus[1].keys.push('spouse_name')
+    }
+  }
   
 
   return journeyData;
