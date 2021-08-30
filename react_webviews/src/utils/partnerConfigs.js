@@ -25,6 +25,13 @@ Exhaustive list of property values:
     "fhc", "risk_profile" (only used under 'financialTools' key)
 */
 
+/*
+Note: To enable nps, gold or insurance in partner config :
+      After updating the below partnerConfigs, please check if the partner(for the particular feature which has to be enabled)
+      is removed from the disabledPartnersMap variable.
+      path for disabledPartnersMap variable -> 'invest/functions' file -> 'setInvestCardsData' function.
+*/
+
 // common config across all partners
 export const commonCardsConfig = {
   investSections: [
@@ -210,6 +217,7 @@ export const partnerConfigs = {
     features: {
       loan: true,
       taxFiling: true,
+      addAnotherBank: true
     }
   },
   finity: {
@@ -223,7 +231,8 @@ export const partnerConfigs = {
       financialTools: ["fhc", "risk_profile"],
     },
     features: {
-      taxFiling: true
+      taxFiling: true,
+      addAnotherBank: true
     }
   },
   bfdlmobile: {
@@ -310,6 +319,11 @@ export const partnerConfigs = {
     logo: "cub.png",
     code: "cub",
     email: "cub@fisdom.com",
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      ourRecommendations: ["buildwealth", "savetax", "nps"],
+      diy: ["diyv2","gold"],
+    },
     styles: {
       primaryColor: "#000180",
     },
@@ -515,7 +529,30 @@ export const partnerConfigs = {
       primaryColor: "#252B69",
     },
     features:{loan: true}
-  }
+  },
+  ucomb: {
+    code: "ucomb",
+    logo: "ucomb.jpg",
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      ourRecommendations: ["buildwealth", "savetax"],
+      diy: ["diyv2"],
+    },
+    styles: {
+      primaryColor: "#002759",
+      secondaryColor: "#002759",
+      backButtonColor: "#002759",
+      notificationsColor: "#002759"
+    },
+    uiElements: {
+      header: {
+        backgroundColor : "#FFF112",
+      }
+    },
+    features: {
+      addAnotherBank: true
+    }
+  },
 };
 
 export const getPartnerData = (productType, partnerCode) => {

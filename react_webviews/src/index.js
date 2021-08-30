@@ -27,6 +27,7 @@ import "@fontsource/roboto/latin-700.css";
 // ------------------------------
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
+import { storageService } from "./utils/validators"
 
 $(document).ready(function () {
   const cssVarObj = getCssVarObject();
@@ -110,10 +111,26 @@ if(getConfig().productName === "finity") {
   favIcon.href="./images/fisdom_logo_icon.svg";
 }
 
+if(getConfig().productName === 'finity') {
+  document.title = 'Finity';
+  const favicon = document.getElementById('favicon');
+  favicon.href = './images/finity_icon.svg';
+} else {
+  document.title = 'Fisdom';
+  const favicon = document.getElementById('favicon');
+  favicon.href = './images/fisdom_icon.svg';
+}
+
 if(getConfig().productName === "fisdom" && getConfig().isProdEnv)
 {
   Sentry.init({
     dsn: "https://38815adc8fd842e78c2145a583d26351@o60572.ingest.sentry.io/5726998",
+    beforeSend(event) {
+      event.tags = event.tags || {};
+      event.tags["partner_code"] = getConfig().code;
+      event.tags["user_id"] = storageService()?.getObject('user')?.user_id;
+      return event;
+    },
     integrations: [new Integrations.BrowserTracing()],
     allowUrls:["app.fisdom.com","wv.fisdom.com"],
     tracesSampleRate: 1.0,
@@ -122,6 +139,12 @@ if(getConfig().productName === "fisdom" && getConfig().isProdEnv)
 else if(getConfig().productName === "finity" && getConfig().isProdEnv){
   Sentry.init({
     dsn: "https://84e342a0046748bab6860aafcf7e86da@o60572.ingest.sentry.io/5727007",
+    beforeSend(event) {
+      event.tags = event.tags || {};
+      event.tags["partner_code"] = getConfig().code;
+      event.tags["user_id"] = storageService()?.getObject('user')?.user_id;
+      return event;
+    },
     integrations: [new Integrations.BrowserTracing()],
     allowUrls:["app.mywaywealth.com","app.finity.in","wv.mywaywealth.com", "wv.finity.in"],
     tracesSampleRate: 1.0,

@@ -206,9 +206,9 @@ class Landing extends Component {
   };
 
   handleStocksAndIpoRedirection = () => {
-    let { modalData, communicationType, contactValue } = this.state;
-    if(modalData.key === "ipo") {
-      if(!!this.state.contactNotVerified){
+    let { modalData, communicationType, contactValue, kycJourneyStatus, config } = this.state;
+    if (modalData.key === "ipo") {
+      if (!!this.state.contactNotVerified) {
         storageService().set("ipoContactNotVerified", true);
         this.navigate("/secondary-verification", {
           state : {
@@ -220,7 +220,10 @@ class Landing extends Component {
       } // Email/mobile if Not Verified!
       this.handleIpoCardRedirection();
     } else {
-      // To do: redirect to stocks sdk page for fno_rejected status
+      if (kycJourneyStatus === "fno_rejected") {
+        this.setState({ showPageLoader: "page" });
+        window.location.href = `${config.base_url}/page/equity/launchapp`;
+      }
       this.closeKycStatusDialog();
     }
   }

@@ -182,7 +182,7 @@ export const getConfig = () => {
 
     // change server url here for local and staging url builds (Not commit id one's)
     if (isStaging || isLocal) {
-      base_url_default = "https://anandb-dot-plutus-staging.appspot.com";
+      base_url_default = "https://wdash-dot-plutus-staging.appspot.com";
     }
 
     if(isFisdomStaging) {
@@ -318,6 +318,14 @@ export const getConfig = () => {
     returnConfig.diet = diet;
     searchParams += getParamsMark(searchParams) + `diet=${diet}`;
     searchParamsMustAppend +=  getParamsMark(searchParams) + `diet=${diet}`;
+  }
+  
+  if( main_pathname === '/webview/help-conversation' ) {
+    const { ticket_id } = main_query_params;
+    if (checkValidString(ticket_id)) {
+      searchParams += getParamsMark(searchParams) + `ticket_id=${ticket_id}`;
+      searchParamsMustAppend += getParamsMark(searchParams) + `ticket_id=${ticket_id}`;
+    }
   }
 
   if (project === 'insurance' || project_child === 'term') {
