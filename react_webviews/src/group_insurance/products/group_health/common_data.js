@@ -7,11 +7,10 @@ import { ghGetMember, getCssMapperReport } from '../../constants';
 import Api from 'utils/api';
 import {  openPdfCall } from 'utils/native_callback';
 import { nativeCallback } from 'utils/native_callback';
-import {isEmpty, sortArrayOfObjectsByTime, getDateBreakup, capitalizeFirstLetter, capitalize, getUrlParams} from '../../../utils/validators';
+import {isEmpty, sortArrayOfObjectsByTime, getDateBreakup, capitalizeFirstLetter, capitalize, getUrlParams, customCopyToClipboard} from '../../../utils/validators';
 import ReactTooltip from "react-tooltip";
 import {getGhProviderConfig, memberKeyMapperFunction} from './constants';
 import {TitleMaper, reportsfrequencyMapper, reportTopTextMapper, reportCoverAmountValue} from '../../../group_insurance/constants'
-import Toast from 'common/ui/Toast';
 
 export async function initialize() {
     this.setErrorData =setErrorData.bind(this)
@@ -397,7 +396,7 @@ export async function guestUserDataFetch(summary_url, providerConfig, guestLeadI
 export async function getShortUrl(urlToShorten, func){
     let error="";
     let errorType="";   
-    if(this.state.screen === 'final_summary_screen'){
+    if(this.state.screen_name === 'final_summary_screen'){
         this.setErrorData("submit", true, func)
     }
     const guestLeadId = storageService().get('guestLeadId') || getUrlParams().guestLeadId;
@@ -415,13 +414,10 @@ export async function getShortUrl(urlToShorten, func){
                 show_loader: false
             });
             var shortUrl = resultData?.url;
-            navigator.clipboard.writeText(shortUrl).then(()=>{
-                Toast('Payment link copied.')
-            }, (e)=>{
-                Toast('Something went wrong! Please try again.')
-            })
+            customCopyToClipboard(shortUrl, 'Payment link copied.')
+            
         }else{
-            error=resultData.error || resultData.message || true;
+            error = resultData.error || resultData.message || true;
             this.setState({
                 show_loader: false
             });

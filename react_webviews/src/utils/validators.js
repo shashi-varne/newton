@@ -2,6 +2,8 @@
 import qs from 'qs';
 import moment from 'moment';
 import { isBoolean } from 'lodash';
+import { getConfig } from 'utils/functions';
+import Toast from 'common/ui/Toast';
 
 export function validateEmpty(string) {
   let nameSplit = string.split(" ").filter(e => e);
@@ -1168,4 +1170,29 @@ export function Casesensitivity(str){
 
 export function sortArrayOfObjectsByTime(array, key){
   return array.sort((a,b) => new Date(b[key]) - new Date(a[key])) //desc
+}
+
+
+export function customCopyToClipboard(text, message) { //supports android, ios and web
+  const textArea = document.createElement('textArea');
+  textArea.value = text;
+  document.body.appendChild(textArea);
+
+  if (getConfig().iOS) {
+      const range = document.createRange();
+      range.selectNodeContents(textArea);
+      let selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      textArea.setSelectionRange(0, 999999);
+  } else {
+      textArea.select();
+  }
+
+  document.execCommand('copy');
+  document.body.removeChild(textArea);
+
+  if(message){
+      Toast(message)
+  }
 }
