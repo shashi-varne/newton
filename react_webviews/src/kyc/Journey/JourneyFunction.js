@@ -21,7 +21,7 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
         status: 'init',
         isEditAllowed: true,
         inputsForStatus: [
-          { name: 'pan', keys: ['dob'] },
+          { name: 'pan', keys: ['dob', 'mother_name'] },
           {
             name: 'identification',
             keys: [
@@ -238,12 +238,15 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
     }
 
     if (
-      isCompliant &&
       kyc?.identification?.meta_data?.marital_status &&
       kyc?.identification?.meta_data?.marital_status?.toLowerCase() ===
         'married'
     ) {
-      journeyData[1].inputsForStatus[1].keys.push('spouse_name')
+      if(!isCompliant && show_aadhaar) {
+        journeyData[2].inputsForStatus[1].keys.push('spouse_name')
+      } else {
+        journeyData[1].inputsForStatus[1].keys.push('spouse_name')
+      }
     }
 
     const tradingJourneyData = [

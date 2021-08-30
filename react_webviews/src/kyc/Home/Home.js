@@ -336,13 +336,23 @@ const Home = (props) => {
 
       let result = await kycSubmit(body);
       if (!result) return;
+      const payload = { kyc: {} };
+      let callKycSubmitApi = false;
+      if (result.kyc.kyc_product_type !== "equity" && result.kyc.equity_enabled && !config.isSdk) {
+        payload.set_kyc_product_type = "equity";
+        callKycSubmitApi = true;
+      }
       if (result?.kyc?.kyc_status === "compliant") {
         setIsUserCompliant(true);
-        if(result?.kyc?.kyc_type !== "init") {
-          result = await kycSubmit({ kyc: {}, set_kyc_type: "init"})
+        if (result?.kyc?.kyc_type !== "init") {
+          payload.set_kyc_type = "init";
+          callKycSubmitApi = true;
         }
       } else {
         setIsUserCompliant(false);
+      }
+      if (callKycSubmitApi) {
+        result = await kycSubmit(payload);
       }
       handleNavigation(is_nri, result.kyc);
     } catch (err) {
