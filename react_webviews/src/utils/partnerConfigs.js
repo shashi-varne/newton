@@ -24,6 +24,13 @@ Exhaustive list of property values:
     "fhc", "risk_profile" (only used under 'financialTools' key)
 */
 
+/*
+Note: To enable nps, gold or insurance in partner config :
+      After updating the below partnerConfigs, please check if the partner(for the particular feature which has to be enabled)
+      is removed from the disabledPartnersMap variable.
+      path for disabledPartnersMap variable -> 'invest/functions' file -> 'setInvestCardsData' function.
+*/
+
 // common config across all partners
 export const commonCardsConfig = {
   logo: "logo_white.png",
@@ -203,6 +210,7 @@ export const partnerConfigs = {
     features: {
       loan: true,
       taxFiling: true,
+      addAnotherBank: true
     }
   },
   finity: {
@@ -216,7 +224,8 @@ export const partnerConfigs = {
       financialTools: ["fhc", "risk_profile"],
     },
     features: {
-      taxFiling: true
+      taxFiling: true,
+      addAnotherBank: true
     }
   },
   bfdlmobile: {
@@ -303,6 +312,11 @@ export const partnerConfigs = {
     logo: "cub.png",
     code: "cub",
     email: "cub@fisdom.com",
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      ourRecommendations: ["buildwealth", "savetax", "nps"],
+      diy: ["diyv2","gold"],
+    },
     styles: {
       primaryColor: "#000180",
     },
@@ -511,7 +525,7 @@ export const partnerConfigs = {
   },
   ucomb: {
     code: "ucomb",
-    logo: "ucomb.jpg",
+    logo: "ucomb.svg",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
       ourRecommendations: ["buildwealth", "savetax"],
@@ -525,9 +539,12 @@ export const partnerConfigs = {
     },
     uiElements: {
       header: {
-        backgroundColor : "#FFF112",
+        backgroundColor : "#FFF500",
       }
     },
+    features: {
+      addAnotherBank: true
+    }
   },
 };
 
