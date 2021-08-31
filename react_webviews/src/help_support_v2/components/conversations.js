@@ -276,7 +276,7 @@ class TicketConversations extends Component {
         }}
         title={
           <TicketStatus
-            title={`Ticket ID: ${ticket.ticket_id}`}
+            title={`Ticket ID: ${ticket?.ticket_id || ""}`}
             headerStatus={ticket_status}
           />
         }
