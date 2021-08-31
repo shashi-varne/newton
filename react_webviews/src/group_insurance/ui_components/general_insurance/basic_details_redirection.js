@@ -43,6 +43,7 @@ class BasicDetailsRedirectionForm extends Component {
     }
 
     componentWillMount() {
+        
         nativeCallback({ action: 'take_control_reset' });
         let premium_details = this.state.premium_details_all[this.props.parent.state.product_key];
         if (isEmpty(premium_details)) {

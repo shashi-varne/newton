@@ -779,7 +779,7 @@ export async function getCoverPeriodData(){
                 }
                 if(this.state.screen_name === 'cover_type_screen'){
                     type_of_plan = this.state.premium_data_floater[this.state.selectedIndex]?.key;
-                    body['floater_type'] = this.state.premium_data_floater[this.state.selectedIndex].key;
+                    body['floater_type'] = this.state.premium_data_floater[this.state.selectedIndex]?.key;
                 }
 
                 if(this.state.groupHealthPlanData.account_type === "self" || Object.keys(this.state.groupHealthPlanData.post_body.member_details).length === 1){
@@ -792,7 +792,7 @@ export async function getCoverPeriodData(){
                     
                     var resultData = res?.pfwresponse?.result;
                     
-                    if (res.pfwresponse.status_code === 200){
+                    if (res?.pfwresponse?.status_code === 200){
                         groupHealthPlanData['cover_period_screen']  = resultData;
                         
                         if(this.state.screen_name === 'cover_type_screen'){
