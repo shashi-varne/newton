@@ -123,7 +123,7 @@ class MyAccount extends Component {
         ["submitted", "complete"].includes(userKyc.equity_application_status)
       ) {
         fnoStatus = "activate";
-      } else if (userKyc.equity_income?.doc_status === "submitted") {
+      } else if (["submitted", "approved"].includes(userKyc.equity_income?.doc_status)) {
         fnoStatus = "inprogress";
       }
       if(userKyc.kyc_product_type !== "equity") {

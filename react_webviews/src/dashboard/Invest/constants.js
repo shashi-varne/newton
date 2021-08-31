@@ -469,7 +469,6 @@ export const kycStatusMapperInvest = {
     icon: "ic_kyc_under_process.svg",
     title: "KYC application",
     subtitle: "IN-PROGRESS",
-    nextState: "/kyc-esign/nsdl",
     addPoint: true,
     subTitleClass: "kyc-submitted",
     subtitleColor: "var(--mustard)"
