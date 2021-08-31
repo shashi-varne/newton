@@ -94,33 +94,42 @@ $(document).ready(function () {
   // }
 });
 
-if(getConfig().productName === "fisdom" && getConfig().isProdEnv)
-{
+var tracesSampleRate = 1.0;
+if (getConfig().productName === "fisdom" && getConfig().isProdEnv) {
   Sentry.init({
     dsn: "https://38815adc8fd842e78c2145a583d26351@o60572.ingest.sentry.io/5726998",
     beforeSend(event) {
+      if (event?.level === "warning") {
+        return tracesSampleRate = 0;
+      }
       event.tags = event.tags || {};
       event.tags["partner_code"] = getConfig().code;
       event.tags["user_id"] = storageService()?.getObject('user')?.user_id;
       return event;
     },
     integrations: [new Integrations.BrowserTracing()],
-    allowUrls:["app.fisdom.com","wv.fisdom.com"],
-    tracesSampleRate: 1.0,
+    allowUrls: ["app.fisdom.com", "wv.fisdom.com"],
+    tracesSampler: samplingContext => {
+      return tracesSampleRate;
+    }
   });
-}
-else if(getConfig().productName === "finity" && getConfig().isProdEnv){
+} else if (getConfig().productName === "finity" && getConfig().isProdEnv) {
   Sentry.init({
     dsn: "https://84e342a0046748bab6860aafcf7e86da@o60572.ingest.sentry.io/5727007",
     beforeSend(event) {
+      if (event?.level === "warning") {
+        return tracesSampleRate = 0;
+      }
       event.tags = event.tags || {};
       event.tags["partner_code"] = getConfig().code;
       event.tags["user_id"] = storageService()?.getObject('user')?.user_id;
       return event;
     },
     integrations: [new Integrations.BrowserTracing()],
-    allowUrls:["app.mywaywealth.com","app.finity.in","wv.mywaywealth.com", "wv.finity.in"],
-    tracesSampleRate: 1.0,
+    allowUrls: ["app.mywaywealth.com", "app.finity.in", "wv.mywaywealth.com", "wv.finity.in"],
+    tracesSampler: samplingContext => {
+      return tracesSampleRate;
+    }
   });
 }
 
