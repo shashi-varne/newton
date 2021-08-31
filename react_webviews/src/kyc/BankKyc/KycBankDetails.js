@@ -273,7 +273,12 @@ const KycBankDetails = (props) => {
         (result.kyc.bank.meta_data.bank_status === "doc_submitted" || result.kyc.bank.meta_data.bank_status === "verified")) {
         handleNavigation();
       } else {
-        navigate(`/kyc/${userType}/bank-verify`);
+        navigate(`/kyc/${userType}/bank-verify`, {
+          state: {
+            isPartnerBank: result.meta_update_dict?.is_partner_bank,
+            isPartnerEquityEnabled: result.meta_update_dict?.is_partner_equity_enabled
+          }
+        });
       }
     } catch (err) {
       if ((kyc?.bank.meta_data_status === "submitted" && kyc?.bank.meta_data.bank_status === "pd_triggered") ||
