@@ -202,7 +202,7 @@ class GroupHealthPlanPremiumSummary extends Component {
 
   async componentDidMount() {
     let groupHealthPlanData = this.state.groupHealthPlanData || {};
-    let group_health_landing = "/group-insurance/health/landing";
+    let group_health_landing = "/group-insurance/group-health/entry";
 
     if (!this.state.get_lead)  {
 	    if (!groupHealthPlanData.post_body) {

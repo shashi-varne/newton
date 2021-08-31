@@ -94,8 +94,20 @@ $(document).ready(function () {
   // }
 });
 
+
+if(getConfig().productName === 'finity') {
+  document.title = 'Finity';
+  const favicon = document.getElementById('favicon');
+  favicon.href = './images/finity_icon.svg';
+} else {
+  document.title = 'Fisdom';
+  const favicon = document.getElementById('favicon');
+  favicon.href = './images/fisdom_icon.svg';
+}
+
 var tracesSampleRate = 1.0;
-if (getConfig().productName === "fisdom" && getConfig().isProdEnv) {
+if(getConfig().productName === "fisdom" && getConfig().isProdEnv)
+{
   Sentry.init({
     dsn: "https://38815adc8fd842e78c2145a583d26351@o60572.ingest.sentry.io/5726998",
     beforeSend(event) {
