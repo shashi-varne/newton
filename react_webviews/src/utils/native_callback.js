@@ -177,7 +177,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     if (getConfig().isSdk && pathname !== "/" && (entryPath !== pathname) && (callbackData.action === 'exit_web' || callbackData.action === 'exit_module' || callbackData.action === 'open_module')) {
         window.location.href = redirectToLanding();
     } else {
-      if (typeof window.Android !== "undefined") {
+      if (getConfig().app === 'android') {
         window.Android.callbackNative(JSON.stringify(callbackData));
       }
 
