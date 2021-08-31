@@ -131,7 +131,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
             var next_state = ''
             let body = {};
 
-            if(provider === 'HDFCERGO' && account_type === 'self'){
+            if(provider === 'HDFCERGO' && (account_type === 'self' || total_member === 1)){
                 next_state = 'cover_period_screen'
                 allowed_post_body_keys.push('city')
                 body['floater_type'] = 'non_floater'
