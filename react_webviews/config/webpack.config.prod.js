@@ -257,7 +257,10 @@ module.exports = {
     // in `package.json`, in which case it will be the pathname of that URL.
     
     // Generates an `index.html` file with the <script> injected.
-    new CleanWebpackPlugin(),
+    new CleanWebpackPlugin({
+      root: process.cwd(),
+      cleanOnceBeforeBuildPatterns: ["**/*","!images/**"],
+    }),
     new HtmlWebpackPlugin({
       inject: true,
       template: paths.appHtml,

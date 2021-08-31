@@ -190,7 +190,7 @@ export async function goNext(investReferralData, isReferralGiven) {
   );
 
   investment.allocations = allocations;
-  window.localStorage.setItem("investment", JSON.stringify(investment));
+  storageService().setObject("investment", investment);
   let body = {
     investment: investment,
   };
