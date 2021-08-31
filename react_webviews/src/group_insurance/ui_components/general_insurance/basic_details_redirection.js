@@ -3,7 +3,7 @@ import Container from '../../common/Container';
 import Input from '../../../common/ui/Input';
 import MobileInputWithoutIcon from '../../../common/ui/MobileInputWithoutIcon';
 import Api from 'utils/api';
-// import toast from '../../../common/ui/Toast';
+import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import {
     validateEmail, validateNumber, numberShouldStartWith,
@@ -14,7 +14,7 @@ import { FormControl } from 'material-ui/Form';
 import qs from 'qs';
 
 import LoaderModal from '../../common/Modal';
-
+import isEmpty from "lodash/isEmpty";
 import { nativeCallback } from 'utils/native_callback';
 
 class BasicDetailsRedirectionForm extends Component {
@@ -46,6 +46,11 @@ class BasicDetailsRedirectionForm extends Component {
 
         nativeCallback({ action: 'take_control_reset' });
         let premium_details = this.state.premium_details_all[this.props.parent.state.product_key];
+        if (isEmpty(premium_details)) {
+            toast("please choose a plan");
+            this.props.parent.props.history.goBack();
+            return;
+        };
         let providerLogoMapper = {
             'hdfcergo': {
                 'insurance_title': 'HDFC ERGO'

@@ -77,7 +77,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
                     "product": this.state.providerConfig.provider_api,
                     "flow": this.state.insured_account_type || '',
                     "screen_name": 'select sum insured',
-                    'sum_assured' : this.state.selectedIndex >= 0 ? this.state.premium_data[this.state.selectedIndex].sum_insured : ''
+                    'sum_assured' : this.state.selectedIndex >= 0 ? this.state.premium_data[this.state.selectedIndex]?.sum_insured : ''
                 }
             };
             
@@ -243,7 +243,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
             if(this.state.provider === 'GMC'){
                 postfix = '/year';
             }
-            this.updateBottomPremium(this.state.premium_data[this.state.selectedIndex].premium, postfix);
+            this.updateBottomPremium(this.state.premium_data[this.state.selectedIndex]?.premium, postfix);
         });
     }
 
