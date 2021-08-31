@@ -12,6 +12,7 @@ import Api from 'utils/api';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {Imgc} from 'common/ui/Imgc';
+import { isRmJourney } from '../../products/group_health/common_data';
 
 const product_config = {
   'PERSONAL_ACCIDENT': {
@@ -46,7 +47,9 @@ class PlanSuccessClass extends Component {
         nominee: {}
       },
       accordians_data: [],
-      type: getConfig().productName
+      type: getConfig().productName,
+      isGuestUser: storageService().getBoolean('guestUser'),
+      isRmJourney: isRmJourney(),
     };
 
     this.handleClickCurrent = this.handleClickCurrent.bind(this);
@@ -106,9 +109,8 @@ class PlanSuccessClass extends Component {
     let error = '';
     let errorType = '';
     try {
-
-      let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
-
+      let url = 'api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id
+      let res = await Api.get(url)
       
       if (res.pfwresponse.status_code === 200) {
         this.setState({
@@ -347,18 +349,28 @@ class PlanSuccessClass extends Component {
     }
   }
 
+  downloadApp = () =>{
+    let url = getConfig().appLink;
+    this.openInBrowser(url)
+  }
+
   render() {
     return (
       <Container
-        twoButton={true}
+        twoButton={!this.state.isGuestUser && !this.state.isRmJourney}
+        fullWidthButton={this.state.isGuestUser || this.state.isRmJourney}
+        buttonTitle={this.state.isGuestUser || this.state.isRmJourney ? 'DOWNLOAD NOW' : ''}
+        onlyButton={this.state.isGuestUser || this.state.isRmJourney}
+        noBackIcon={this.state.isGuestUser}
         product_key={this.props.parent ? this.props.parent.state.product_key : ''}
         events={this.sendEvents('just_set_events')}
         buttonOneTitle="Download Policy"
         buttonTwoTitle="Check details"
         showError={this.state.showError}
         errorData={this.state.errorData}
-        handleClickOne={() => this.handleClickOne()}
-        handleClickTwo={() => this.handleClickTwo()}
+        handleClick={this.downloadApp}
+        handleClickOne={this.handleClickOne}
+        handleClickTwo={this.handleClickTwo}
         title="Success"
         disableBack={true}
         classOverRideContainer="plan-success"
@@ -373,6 +385,10 @@ class PlanSuccessClass extends Component {
         </div>
 
         {this.state.accordians_data.map(this.renderAccordions)}
+
+        {
+          this.state.isGuestUser &&  <p className='download-fisdom-text'>Download {getConfig().productName} app to view all your policy details</p>
+        }
       </Container>
     );
   }
