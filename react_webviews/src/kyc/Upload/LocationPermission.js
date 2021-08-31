@@ -41,7 +41,7 @@ const PAGE_TYPE_CONTENT_MAP = {
     subtitle: 'As per SEBI, we need to capture your location while you take the selfie'
   }
 };
-const GEOCODER = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCe5PrvBwabfWYOSftl0DlpGKan4o7se2A&libraries=&v=weekly"
+const GEOCODER = "https://maps.googleapis.com/maps/api/js?key=AIzaSyDWYwMM4AaZj3zE4sEcMH1nenEs3dOYZ14&libraries=&v=weekly"
 
 const LocationPermission = ({
   isOpen,
