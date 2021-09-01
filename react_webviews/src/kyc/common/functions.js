@@ -1,7 +1,7 @@
 import { calculateAge, isValidDate, validateEmail, isEmpty, storageService } from 'utils/validators'
 import { isTradingEnabled, getConfig } from '../../utils/functions'
 import { nativeCallback, openPdfCall } from '../../utils/native_callback'
-import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS, GENDER_OPTIONS } from '../constants'
+import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS, GENDER_OPTIONS, PATHNAME_MAPPER } from '../constants'
 import { getKyc } from './api'
 
 export const validateFields = (formData, keyToCheck) => {
@@ -435,5 +435,18 @@ export function openPdf(pdfLink, pdfType){
       });
   } else {
     openInBrowser(pdfLink, pdfType);
+  }
+}
+
+export const getUpgradeAccountFlowNextStep = (kyc) => {
+  const userType = kyc?.kyc_status;
+  if (!isEmailAndMobileVerified()) {
+    return PATHNAME_MAPPER.communicationDetails;
+  } else {
+    if (kyc?.bank?.meta_data_status === "approved" && kyc?.bank?.meta_data?.bank_status !== "verified") {
+      return `/kyc/${userType}/bank-details`;
+    } else {
+      return PATHNAME_MAPPER.tradingExperience;
+    }
   }
 }

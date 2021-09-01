@@ -1432,10 +1432,7 @@ $header-title-font-size: 20px;
 
 .main-top-title-header {
   @include main-top-title-header-base();
-  // white-space: nowrap;
-  // overflow: hidden;
-  // text-overflow: ellipsis;
-  // max-width: 95%;
+  flex-basis: 100%;
 }
 
 .main-top-title-header-old {

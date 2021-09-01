@@ -58,12 +58,12 @@ const FnOIncomeProof = (props) => {
   const [selectedFile, setSelectedFile] = useState();
   const [selectedType, setSelectedType] = useState('');
   const [filePassword, setFilePassword] = useState('');
+  const [filePasswordErr, setFilePasswordErr] = useState('');
   const [openBottomSheet, setOpenBottomSheet] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [goBackModal, setGoBackModal] = useState(false);
   const navigate = navigateFunc.bind(props);
   const { kyc, isLoading, updateKyc } = useUserKycHook();
-  
   const fromState = props?.location?.state?.fromState;
   const goBackPath = props.location?.state?.goBack || "";
   const { productName, Web } = getConfig();
@@ -87,8 +87,12 @@ const FnOIncomeProof = (props) => {
   const uploadAndGoNext = async () => {
     sendEvents("next");
     try {
+      if (filePassword.match(/\s/)) {
+        setFilePasswordErr('Password cannot have spaces');
+        return;
+      }
       const data = {
-        doc_password: filePassword || undefined,
+        doc_password: filePassword,
         doc_type: UPLOAD_OPTIONS_MAP[selectedType]?.api_doc_type
       };
       setIsApiRunning("button");
@@ -150,6 +154,7 @@ const FnOIncomeProof = (props) => {
   }
 
   const onPasswordChange = (event) => {
+    setFilePasswordErr('');
     setFilePassword(event.target.value);
   }
 
@@ -255,6 +260,8 @@ const FnOIncomeProof = (props) => {
             variant="filled"
             label="Enter password (if any)"
             value={filePassword}
+            error={!!filePasswordErr}
+            helperText={filePasswordErr}
             type="password"
             onChange={onPasswordChange}
             classes={{
@@ -285,6 +292,8 @@ const FnOIncomeProof = (props) => {
       </div>
       <WVBottomSheet
         isOpen={openBottomSheet}
+        disableEscapeKeyDown
+        disableBackdropClick
         onClose={() => setOpenBottomSheet(false)}
         title="Income proof uploaded"
         subtitle={

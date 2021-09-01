@@ -4,16 +4,15 @@ import Container from "../../common/Container";
 import Checkbox from "../../../common/ui/Checkbox";
 import "./commonStyles.scss";
 import SebiRegistrationFooter from "../../../common/ui/SebiRegistrationFooter/WVSebiRegistrationFooter";
-import { isEmailAndMobileVerified } from "../../common/functions";
+import { getUpgradeAccountFlowNextStep } from "../../common/functions";
 import { PATHNAME_MAPPER } from "../../constants";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import Toast from "../../../common/ui/Toast";
 import { nativeCallback } from "../../../utils/native_callback";
 import { formatAmountInr } from "../../../utils/validators";
 import SVG from 'react-inlinesvg';
+import { Imgc } from "../../../common/ui/Imgc";
 
-const config = getConfig();
-const productName = config.productName;
 const BENEFITS = [
   {
     icon: "one_account.svg",
@@ -78,12 +77,13 @@ const getEquityChargesData = (equityChargesData={}) => {
 }
 
 const TradingInfo = (props) => {
+  const config = getConfig();
+  const productName = config.productName;
   const navigate = navigateFunc.bind(props);
   const [checkTermsAndConditions, setCheckTermsAndConditions] = useState(true);
   const [selectedTiles, setSelectedTiles] = useState([0]);
   const [equityChargesData, setEquityChargesData] = useState([])
   const { kyc, isLoading } = useUserKycHook();
-  const userType = kyc?.kyc_status;
 
   useEffect(() => {
     setEquityChargesData(getEquityChargesData(kyc.equity_account_charges))
@@ -126,14 +126,20 @@ const TradingInfo = (props) => {
       return;
     }
     if (kyc?.mf_kyc_processed) {
-      if (!isEmailAndMobileVerified()) {
-        navigate(PATHNAME_MAPPER.communicationDetails);
-      } else {
-        if (kyc?.bank?.meta_data_status === "approved" && kyc?.bank?.meta_data?.bank_status !== "verified") {
-          navigate(`/kyc/${userType}/bank-details`);
+      if (!kyc.pan?.meta_data?.mother_name) {
+        const data = {
+          state: {
+            flow: "upgradeAccount"
+          }
+        };
+        if (kyc.initial_kyc_status === "compliant") {
+          navigate(PATHNAME_MAPPER.compliantPersonalDetails2, data);
         } else {
-          navigate(PATHNAME_MAPPER.tradingExperience);
+          navigate(PATHNAME_MAPPER.personalDetails2, data);
         }
+      } else {
+        const pathName = getUpgradeAccountFlowNextStep(kyc);
+        navigate(pathName);
       }
     } else {
       navigate(PATHNAME_MAPPER.tradingExperience);
@@ -162,7 +168,11 @@ const TradingInfo = (props) => {
       <div className="kyc-account-info" data-aid='kyc-account-info'>
         <header className="kyc-account-info-header" data-aid='kyc-account-info-header'>
           <div className="kaih-text">Trading & demat account</div>
-          <img src={require(`assets/${productName}/ic_upgrade.svg`)} alt="" />
+          <Imgc 
+            src={require(`assets/${productName}/ic_upgrade.svg`)} 
+            alt=""
+            className="kyc-ai-header-icon" 
+          />
         </header>
         <main className="kyc-account-info-main" data-aid='kyc-account-info-main'>
           <div className="kaim-subtitle" data-aid='kyc-subtitle'>
@@ -174,9 +184,10 @@ const TradingInfo = (props) => {
               {BENEFITS.map((data, index) => {
                 return (
                   <div key={index} className="kaim-benefits-info" data-aid='kaim-benefits-info'>
-                    <img
+                    <Imgc
                       src={require(`assets/${productName}/${data.icon}`)}
                       alt=""
+                      className="kaim-benefits-icon"
                     />
                     <div className="kaim-benefits-info-text">{data.text}</div>
                   </div>

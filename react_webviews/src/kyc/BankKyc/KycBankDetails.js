@@ -7,6 +7,7 @@ import {
   bankAccountTypeOptions,
   PATHNAME_MAPPER,
   getIfscCodeError,
+  BANK_IFSC_CODES
 } from "../constants";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -328,14 +329,10 @@ const KycBankDetails = (props) => {
     let formData = Object.assign({}, form_data);
     let bank = Object.assign({}, bankData);
     let bankIcon = "";
-    if (
-      (code === "ktb" && bankData.ifsc_code.toUpperCase().startsWith("KARB")) ||
-      (code === "lvb" && bankData.ifsc_code.toUpperCase().startsWith("LAVB")) ||
-      (code === "cub" && bankData.ifsc_code.toUpperCase().startsWith("CIUB")) ||
-      (code === "ippb" &&
-        bankData.ifsc_code.toUpperCase().startsWith("IPOS")) ||
-      (code !== "ktb" && code !== "lvb" && code !== "cub" && code !== "ippb")
-    ) {
+
+    // the ippb is not kept inside BANK_IFSC_CODES, because we don't validate the IFSC code for ippb in my account flow(AddBank.js)
+    BANK_IFSC_CODES.ippb = 'IPOS';
+    if (!BANK_IFSC_CODES[code] || bankData.ifsc_code.toUpperCase().startsWith(BANK_IFSC_CODES[code])) {
       try {
         setIfscDisabled(true);
         const result = (await getIFSC(bankData.ifsc_code)) || [];

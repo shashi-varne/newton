@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import WVButton from '../../common/ui/Button/WVButton';
 import { WVFilePickerWrapper } from '../../common/ui/FileUploadWrapper/WVFilePickerWrapper';
+import { Imgc } from '../../common/ui/Imgc';
 import { isFunction } from '../../utils/validators';
 
 const KycUploadContainer = ({
@@ -56,7 +57,7 @@ KycUploadContainer.TitleText = TitleText;
 
 const Image = ({ fileToShow, illustration, alt, className, dataAidSuffix, ...props }) => {
   return (
-    <img
+    <Imgc
       src={fileToShow || illustration}
       className={`kuc-image ${className}`}
       data-aid={`kuc-image-${dataAidSuffix}`}
