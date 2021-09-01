@@ -302,7 +302,7 @@ export async function initialize() {
 
 export function updateBottomPremium(premium, postfix) {
     if(this.state.premium_data){
-        var value = inrFormatDecimal(premium || this.state.premium_data[this.state.selectedIndex].premium || '');
+        var value = inrFormatDecimal(premium || this.state.premium_data[this.state.selectedIndex]?.premium || '');
         if(this.state.provider  === 'GMC'){
             value += postfix;
         }
@@ -909,8 +909,8 @@ export async function getCoverPeriodData(){
                     body['add_ons'] = post_body.add_ons_array;
                 }
                 if(this.state.screen_name === 'cover_type_screen'){
-                    type_of_plan = this.state.premium_data_floater[this.state.selectedIndex].key;
-                    body['floater_type'] = this.state.premium_data_floater[this.state.selectedIndex].key;
+                    type_of_plan = this.state.premium_data_floater[this.state.selectedIndex]?.key;
+                    body['floater_type'] = this.state.premium_data_floater[this.state.selectedIndex]?.key;
                 }
 
                 if(this.state.groupHealthPlanData.account_type === "self" || Object.keys(this.state.groupHealthPlanData.post_body.member_details).length === 1){
@@ -920,9 +920,9 @@ export async function getCoverPeriodData(){
                     const url = `api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`;
                     const res = await Api.post(url ,body);
                     
-                    var resultData = res.pfwresponse.result;
+                    var resultData = res?.pfwresponse?.result;
                     
-                    if (res.pfwresponse.status_code === 200){
+                    if (res?.pfwresponse?.status_code === 200){
                         groupHealthPlanData['cover_period_screen']  = resultData;
                         
                         if(this.state.screen_name === 'cover_type_screen'){
