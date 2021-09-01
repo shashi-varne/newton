@@ -33,7 +33,8 @@ class Referral extends Component {
     if (this.state.promo_status === "Valid") {
       this.navigate("/secondary-verification", {
         state: {
-          communicationType: this.state.communicationType === "mobile" ? "email" : "mobile"
+          communicationType: this.state.communicationType === "mobile" ? "email" : "mobile",
+          firstTimeLogin: true,
         }
       })
     };

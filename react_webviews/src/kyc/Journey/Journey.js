@@ -604,7 +604,7 @@ const Journey = (props) => {
       dlCondition
     // var customerVerified = journeyStatus === 'ground_premium' ? false : true
     var isKycDone = kyc?.mf_kyc_processed;
-    var kycJourneyData = initJourneyData() || []
+    var kycJourneyData = initJourneyData() || [];
     var headerKey = 
       isKycDone
       ? "kycDone"

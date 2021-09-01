@@ -155,10 +155,10 @@ export function redirectToKyc(userKyc, kycJourneyStatus, navigate) {
     navigate("/kyc/journey", {
       state: { show_aadhaar: (userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual") ? false : true } 
     });
-  } else if (kycJourneyStatus === "submitted") {
-    navigate("/kyc/journey");
   } else if (kycStatusData?.nextState) {
     navigate(kycStatusData.nextState);
+  } else {
+    navigate("/kyc/journey");
   }
 }
 
