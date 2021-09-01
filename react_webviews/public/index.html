@@ -202,7 +202,11 @@
       }
 
       if(myBaseHrefUrl) {
-        // myBaseHref.href = myBaseHrefUrl;
+
+        if(pathname.indexOf('webapp') === -1) { // not adding again for webapp, for others its needed
+          myBaseHref.href = myBaseHrefUrl;
+        }
+        
         // document.write("<base href="+ myBaseHrefUrl+" />");
         window.localStorage.setItem('base_href', myBaseHrefUrl);
       }
