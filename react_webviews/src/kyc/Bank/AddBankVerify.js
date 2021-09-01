@@ -20,6 +20,15 @@ import { nativeCallback } from "../../utils/native_callback";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 import useUserKycHook from "../common/hooks/userKycHook";
 
+const INITIAL_INFO_CONTENT = "We will credit ₹1 to your bank account for verification.";
+const NON_EQUITY_PARTNER_INFO = (
+  <ul className="note-list">
+    <li>This bank account belongs to our partner. Equity and Trading account is not available,
+      kindly change bank account if you want to avail Trading facility. </li>
+    <li>{INITIAL_INFO_CONTENT}</li>
+  </ul>
+);
+
 const AddBankVerify = (props) => {
   const [count, setCount] = useState(20);
   const [showLoader, setShowLoader] = useState(true);
@@ -38,6 +47,8 @@ const AddBankVerify = (props) => {
   const navigate = navigateFunc.bind(props);
   const { isLoading, updateKyc } = useUserKycHook();
   const stateParams = props.location?.state || {};
+  const [infoContent, setInfoContent] = useState(INITIAL_INFO_CONTENT);
+  const { isPartnerBank = false, isPartnerEquityEnabled = false } = stateParams;
 
   useEffect(() => {
     initialize();
@@ -53,7 +64,13 @@ const AddBankVerify = (props) => {
     if(!data && kyc.bank.meta_data.bank_id === Number(bank_id)) {
       data = kyc.bank.meta_data;
       data.status = "default";
-    } 
+    }
+
+    let bankMandates = storageService().getObject(STORAGE_CONSTANTS.BANK_MANDATES);
+    let isAnyBankVerified = bankMandates.length && bankMandates.some((bank) => bank.bank_status === "verified");
+    if (isPartnerBank && !isPartnerEquityEnabled && !isAnyBankVerified) {
+      setInfoContent(NON_EQUITY_PARTNER_INFO);
+    }
     setShowLoader(false);
     setBankData({ ...data });
     setUserKyc(kyc);
@@ -237,7 +254,7 @@ const AddBankVerify = (props) => {
           customTitle="Important"
           dataAid='kyc-verification-wvinfo'
         >
-          We will credit ₹1 to your bank account for verification.
+          {infoContent}
         </WVInfoBubble>
         {showLoader && (
           <>

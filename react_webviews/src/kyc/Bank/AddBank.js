@@ -146,9 +146,12 @@ const AddBank = (props) => {
         toast("Congratulations!, new account added succesfully");
         navigate(PATHNAME_MAPPER.bankList);
       } else {
+        const bankMetaUpdateDict = result.meta_update_dict?.bank || {};
         navigate(`${PATHNAME_MAPPER.addBankVerify}${result.bank.bank_id}`, {
           state: {
-            goBackToAddBank: true
+            goBackToAddBank: true,
+            isPartnerBank: bankMetaUpdateDict?.is_partner_bank,
+            isPartnerEquityEnabled: bankMetaUpdateDict?.is_partner_equity_enabled
           }
         });
       }
@@ -209,6 +212,8 @@ const AddBank = (props) => {
         if (result && result.length > 0) {
           const data = result[0] || {};
           formData.ifsc_code_error = "";
+          bank.ifsc_details = data;
+          bank.bank_code = data.bank_code;
           bank.branch_name = data.branch;
           bank.bank_name = data.bank;
           bankIcon = data.image || "";

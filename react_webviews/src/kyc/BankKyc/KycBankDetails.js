@@ -346,6 +346,7 @@ const KycBankDetails = (props) => {
           const data = result[0] || {};
           formData.ifsc_code_error = "";
           bank.ifsc_details = data;
+          bank.bank_code = data.bank_code;
           bank.branch_name = data.branch;
           bank.bank_name = data.bank;
           bankIcon = data.image || "";
