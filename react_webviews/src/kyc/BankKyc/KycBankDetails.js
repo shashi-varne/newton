@@ -273,10 +273,11 @@ const KycBankDetails = (props) => {
         (result.kyc.bank.meta_data.bank_status === "doc_submitted" || result.kyc.bank.meta_data.bank_status === "verified")) {
         handleNavigation();
       } else {
+        const bankMetaUpdateDict = result.meta_update_dict?.bank || {};
         navigate(`/kyc/${userType}/bank-verify`, {
           state: {
-            isPartnerBank: result.meta_update_dict?.is_partner_bank,
-            isPartnerEquityEnabled: result.meta_update_dict?.is_partner_equity_enabled
+            isPartnerBank: bankMetaUpdateDict?.is_partner_bank,
+            isPartnerEquityEnabled: bankMetaUpdateDict?.is_partner_equity_enabled
           }
         });
       }
@@ -344,6 +345,7 @@ const KycBankDetails = (props) => {
         if (result && result.length > 0) {
           const data = result[0] || {};
           formData.ifsc_code_error = "";
+          bank.ifsc_details = data;
           bank.branch_name = data.branch;
           bank.bank_name = data.bank;
           bankIcon = data.image || "";
