@@ -403,7 +403,7 @@ export const kycStatusMapper = {
   kyc_verified: {
     color: "#ffa60b",
     title: "You're investment ready",
-    subtitle: "You can start your investment journey by investing in your favourite stocks, mutual funds, F&O ",
+    subtitle: "You can start your investment journey by investing in your favourite stocks, mutual funds & more",
     buttonTitle: "OKAY",
     oneButton: true,
     icon: "icn_kyc_completed.svg",
