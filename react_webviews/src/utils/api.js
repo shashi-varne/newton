@@ -74,7 +74,7 @@ class Api {
         if (isEmpty(pfwResponseData)) {
           const errorMsg = response.data?.pfwmessage || genericErrMsg;
           triggerSentryError(verb, response.data, errorMsg);
-        } else if (pfwResponseData.status_code !== 200) {
+        } else if (pfwResponseData.status_code !== 200 && pfwResponseData.status_code !== 400) {
           const errorMsg = pfwResponseData.result.error || pfwResponseData.result.message || genericErrMsg;
           triggerSentryError(verb, response.data, errorMsg);
         }
