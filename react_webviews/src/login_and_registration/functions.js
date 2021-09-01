@@ -179,6 +179,11 @@ export function setBaseHref() {
     myBaseHref.href = myBaseHrefUrl;
     window.localStorage.setItem('base_href', myBaseHrefUrl);
   }
+  if(pathname.indexOf('webapp') !== -1) {
+    var myBaseHrefUrl = '/webapp/';
+    myBaseHref.href = myBaseHrefUrl;
+    window.localStorage.setItem('base_href', myBaseHrefUrl);
+  }
 }
 
 export async function triggerOtpApi(body, loginType, bottomsheet) {
@@ -196,6 +201,7 @@ export async function triggerOtpApi(body, loginType, bottomsheet) {
             value: body.mobile ||  body.email,
             otp_id: result?.otp_id,
             communicationType: loginType,
+            firstTimeLogin: this.state.firstTimeLogin || false,
           },
         });
       } else {
@@ -600,7 +606,6 @@ export const logout = async () => {
 
     if (status === 200) {
       storageService().clear();
-      window.localStorage.clear();
       return result;
     } else {
       throw result.error || result.message || errorMessage;

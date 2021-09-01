@@ -185,7 +185,7 @@ class ESignInfo extends Component {
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={show_loader}
-        title='eSign KYC'
+        title='Complete eSign'
         handleClick={this.goNext}
         buttonTitle='PROCEED'
         headerData={headerData}
@@ -205,7 +205,7 @@ class ESignInfo extends Component {
         <div className="esign-desc" data-aid='esign-desc'>
           eSign is an online electronic signature service by UIDAI to facilitate <strong>Aadhaar holder to digitally sign</strong> documents.
         </div>
-        <div className="esign-subtitle" data-aid='esign-subtitle'>How to eSign documents</div>
+        <div className="esign-subtitle" data-aid='esign-subtitle'>How to eSign</div>
         <div className="esign-steps" data-aid='esign-steps'>
           <div className="step">
             <div className="icon-container">

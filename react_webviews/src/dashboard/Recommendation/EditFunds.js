@@ -30,12 +30,12 @@ const EditFunds = (props) => {
     return alternatives[mftype];
   };
 
-  const showAlternateFunds = ({ amount, mf: { mfid, mftype } }) => (e) => {
-    const alternateFunds = filterAlternateFunds(mftype);
+  const showAlternateFunds = (el) => (e) => {
+    const alternateFunds = filterAlternateFunds(el.mf.mftype);
     if (isEmpty(alternateFunds)) {
       setOpen(true);
     } else {
-      navigate('/invest/recommendations/alternate-funds', { state: {mftype, mfid, amount, alternateFunds} });
+      navigate('/invest/recommendations/alternate-funds', { state: {originalFund : el, alternateFunds} });
     }
   };
 

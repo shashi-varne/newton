@@ -14,6 +14,7 @@ import { nativeCallback } from '../../utils/native_callback'
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 import Toast from '../../common/ui/Toast'
 import { PATHNAME_MAPPER } from '../constants'
+import { Imgc } from '../../common/ui/Imgc'
 
 const IpvVideo = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
@@ -160,7 +161,7 @@ const IpvVideo = (props) => {
         </div>
         <div className="ipv-code" data-aid='ipv-code'>{ipvcode}</div>
         <div className="ipv-initial-asset">
-          <img
+          <Imgc
             src={require(`assets/${productName}/state_ipv_number.svg`)}
             alt="Upload Selfie"
             className="default"

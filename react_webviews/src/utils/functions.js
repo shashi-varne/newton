@@ -52,7 +52,8 @@ function getPartnerConfig(partner_code) {
     origin.indexOf('app.mywaywealth.com') >= 0 || 
     origin.indexOf('wv.mywaywealth.com') >= 0 || 
     origin.indexOf('wv.finity.in') >= 0 || 
-    origin.indexOf('finityapp.staging.finwizard.co.in') >= 0;
+    origin.indexOf('my.preprod.finity.in') >= 0 || 
+    origin.indexOf('app2.finity.in') >= 0;
   const isminvest = search.indexOf('my.barodaminvest.com') >= 0;
   const isStaging = search.indexOf('staging') >= 0;
   let productType = 'fisdom';
@@ -162,8 +163,8 @@ export const getConfig = () => {
   let base_url_default = '';
   
   const isStaging = origin.indexOf('plutus-web-staging') >= 0;
-  const isFisdomStaging = origin.indexOf('my.preprod.fisdom.com') >= 0;
-  const isFinityStaging = origin.indexOf('my.preprod.finity.in') >= 0;
+  const isFisdomStaging = origin.indexOf('my.preprod.fisdom.com') >= 0 || origin.indexOf('app2.fisdom.com') >= 0;
+  const isFinityStaging = origin.indexOf('my.preprod.finity.in') >= 0 || origin.indexOf('app2.finity.in') >= 0;
   const isLocal = origin.indexOf('localhost') >=0;
 
   if(base_href) {
@@ -181,7 +182,7 @@ export const getConfig = () => {
 
     // change server url here for local and staging url builds (Not commit id one's)
     if (isStaging || isLocal) {
-      base_url_default = "https://anandb-dot-plutus-staging.appspot.com";
+      base_url_default = "https://wdash-dot-plutus-staging.appspot.com";
     }
 
     if(isFisdomStaging) {
@@ -317,6 +318,14 @@ export const getConfig = () => {
     returnConfig.diet = diet;
     searchParams += getParamsMark(searchParams) + `diet=${diet}`;
     searchParamsMustAppend +=  getParamsMark(searchParams) + `diet=${diet}`;
+  }
+  
+  if( main_pathname === '/webview/help-conversation' ) {
+    const { ticket_id } = main_query_params;
+    if (checkValidString(ticket_id)) {
+      searchParams += getParamsMark(searchParams) + `ticket_id=${ticket_id}`;
+      searchParamsMustAppend += getParamsMark(searchParams) + `ticket_id=${ticket_id}`;
+    }
   }
 
   if (project === 'insurance' || project_child === 'term') {

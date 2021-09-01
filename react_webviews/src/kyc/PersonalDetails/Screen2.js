@@ -8,6 +8,7 @@ import {
   compareObjects,
   getTotalPagesInPersonalDetails,
   getFlow,
+  getUpgradeAccountFlowNextStep,
 } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
@@ -21,9 +22,11 @@ const PersonalDetails2 = (props) => {
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
-  const isEdit = props.location.state?.isEdit || false;
   const [oldState, setOldState] = useState({});
   const [totalPages, setTotalPages] = useState();
+  const stateParams = props?.location?.state || {};
+  const isEdit = stateParams.isEdit || false;
+  const isUpgradeFlow = stateParams.flow === "upgradeAccount";
   let title = "Personal details";
   if (isEdit) {
     title = "Edit personal details";
@@ -47,6 +50,19 @@ const PersonalDetails2 = (props) => {
     setTotalPages(getTotalPagesInPersonalDetails(isEdit))
   };
 
+  const handleNavigation = () => {
+    if (isUpgradeFlow) {
+      const pathName = getUpgradeAccountFlowNextStep(kyc);
+      navigate(pathName);
+    } else {
+      navigate(PATHNAME_MAPPER.personalDetails3, {
+        state: {
+          isEdit: isEdit,
+        },
+      });
+    }
+  }
+
   const handleClick = () => {
     sendEvents("next");
     let keysToCheck = ["mother_name", "father_name"];
@@ -65,11 +81,7 @@ const PersonalDetails2 = (props) => {
         form_data.spouse_name;
 
     if (compareObjects(keysToCheck, oldState, form_data)) {
-      navigate(PATHNAME_MAPPER.personalDetails3, {
-        state: {
-          isEdit: isEdit,
-        },
-      });
+      handleNavigation();
       return;
     }
     savePersonalDetails2(userkycDetails);
@@ -86,11 +98,7 @@ const PersonalDetails2 = (props) => {
       };
       const submitResult = await kycSubmit(item);
       if (!submitResult) return;
-      navigate(PATHNAME_MAPPER.personalDetails3, {
-        state: {
-          isEdit: isEdit,
-        },
-      });
+      handleNavigation();
     } catch (err) {
       console.log(err);
       toast(err.message);
@@ -137,9 +145,9 @@ const PersonalDetails2 = (props) => {
       skelton={isLoading}
       showLoader={isApiRunning}
       title={title}
-      count="2"
+      count={!isUpgradeFlow && 2}
       current="2"
-      total={totalPages}
+      total={!isUpgradeFlow && totalPages}
       iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-personal-details-screen-2'
     >
