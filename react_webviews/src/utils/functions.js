@@ -666,3 +666,13 @@ export function isUnAuthenticatedPath(path) {
   const pathname = unAuthenticatedPathsWithParams.find(el => path.match(el))
   return unAuthenticatedPaths.includes(path) || !isEmpty(pathname); 
 }
+
+export function getGuestUserRoute(apiUrl){
+  var guest_id = storageService().get('guestLeadId') || getUrlParams().guestLeadId;
+  
+  if(guest_id){ // true only for RM/guest journey
+      var url_char = apiUrl.indexOf('?') >= 0 ? '&' : '?';
+      return apiUrl + `${url_char}guest_lead_id=${guest_id}`
+  }
+  return apiUrl
+}  
