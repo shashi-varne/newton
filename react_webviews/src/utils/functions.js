@@ -828,6 +828,14 @@ export const getConfig = () => {
     searchParams += getParamsMark(searchParams) + `pc_urlsafe=${pc_urlsafe}`;
     searchParamsMustAppend += getParamsMark(searchParams) + `pc_urlsafe=${pc_urlsafe}`;
   }
+  
+  if( main_pathname === '/webview/help-conversation' ) {
+    const { ticket_id } = main_query_params;
+    if (checkValidString(ticket_id)) {
+      searchParams += getParamsMark(searchParams) + `ticket_id=${ticket_id}`;
+      searchParamsMustAppend += getParamsMark(searchParams) + `ticket_id=${ticket_id}`;
+    }
+  }
 
   if (project === 'insurance' || project_child === 'term') {
     let insurance_v2 = generic_callback === 'true' ? true : main_query_params.insurance_v2;
