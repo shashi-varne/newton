@@ -21,8 +21,8 @@ import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
 import { getConfig } from "../../utils/functions";
 
-const productName = getConfig().productName;
 const PersonalDetails1 = (props) => {
+  const productName = getConfig().productName;
   const navigate = navigateFunc.bind(props);
   const [showLoader, setShowLoader] = useState(false);
   const [form_data, setFormData] = useState({});

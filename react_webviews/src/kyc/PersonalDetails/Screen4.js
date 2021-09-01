@@ -21,8 +21,8 @@ import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 
-const productName = getConfig().productName;
 const PersonalDetails4 = (props) => {
+  const productName = getConfig().productName;
   const [isChecked, setIsChecked] = useState(false);
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -222,7 +222,6 @@ const PersonalDetails4 = (props) => {
             error={form_data.name_error ? true : false}
             helperText={form_data.name_error || ""}
             onChange={handleChange("name")}
-            maxLength={20}
             type="text"
             disabled={isChecked || isApiRunning}
           />

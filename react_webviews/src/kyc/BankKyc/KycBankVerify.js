@@ -19,8 +19,6 @@ import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 import { isNewIframeDesktopLayout } from "../../utils/functions";
 import { storageService } from "../../utils/validators";
 
-const showPageDialog = isNewIframeDesktopLayout();
-const productName = getConfig().productName;
 const KycBankVerify = (props) => {
   const [count, setCount] = useState(20);
   const [countdownInterval, setCountdownInterval] = useState();
@@ -36,6 +34,8 @@ const KycBankVerify = (props) => {
   const navigate = navigateFunc.bind(props);
   const [dl_flow, setDlFlow] = useState(false);
   const {kyc, isLoading, updateKyc} = useUserKycHook();
+  const showPageDialog = isNewIframeDesktopLayout();
+  const productName = getConfig().productName;
 
   useEffect(() => {
     if (!isEmpty(kyc)) {

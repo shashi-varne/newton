@@ -153,7 +153,6 @@ const Nominee = (props) => {
               error={form_data.name_error ? true : false}
               helperText={form_data.name_error || ""}
               onChange={handleChange("name")}
-              maxLength={20}
               type="text"
             />
             <Input
