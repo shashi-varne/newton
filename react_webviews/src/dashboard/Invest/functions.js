@@ -451,9 +451,6 @@ export function initilizeKyc() {
       if (!currentUser.active_investment) {
         if (TRADING_ENABLED && userKyc.equity_investment_ready) {
           modalData = kycStatusMapper["kyc_verified"];
-          if (kycJourneyStatus === "fno_rejected") {
-            modalData.subtitle = "You can start your investment journey by investing in your favourite stocks, mutual funds."
-          }
         } else if (!TRADING_ENABLED && !isCompliant) {
           modalData = kycStatusMapper["mf_complete"];
         }
