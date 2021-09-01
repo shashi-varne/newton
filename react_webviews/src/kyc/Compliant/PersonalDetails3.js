@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Container from "../common/Container";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
@@ -22,7 +22,6 @@ import { nativeCallback } from "../../utils/native_callback";
 import { getConfig, isTradingEnabled } from "../../utils/functions";
 
 const PersonalDetails3 = (props) => {
-  const productName = getConfig().productName;
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
@@ -34,7 +33,10 @@ const PersonalDetails3 = (props) => {
   if (isEdit) {
     title = "Edit professional details";
   }
-
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
+  
   useEffect(() => {
     if (!isEmpty(kyc) && !isEmpty(user)) initialize();
   }, [kyc, user]);

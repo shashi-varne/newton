@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Container from "../common/Container";
 import Input from "common/ui/Input";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
@@ -21,7 +21,6 @@ import { nativeCallback } from "../../utils/native_callback";
 import { getConfig, isTradingEnabled } from "../../utils/functions";
 
 const PersonalDetails1 = (props) => {
-  const productName = getConfig().productName;
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
@@ -35,6 +34,9 @@ const PersonalDetails1 = (props) => {
   }
 
   const { kyc, user, isLoading } = useUserKycHook();
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
 
   useEffect(() => {
     if (!isEmpty(kyc)) {

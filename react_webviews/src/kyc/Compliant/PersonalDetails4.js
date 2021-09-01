@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Container from "../common/Container";
 import { dobFormatTest, formatDate, isEmpty } from "utils/validators";
 import Input from "../../common/ui/Input";
@@ -21,7 +21,6 @@ import { nativeCallback } from "../../utils/native_callback";
 import { getConfig, isTradingEnabled } from "../../utils/functions";
 
 const PersonalDetails4 = (props) => {
-  const productName = getConfig().productName;
   const [isChecked, setIsChecked] = useState(false);
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -34,6 +33,9 @@ const PersonalDetails4 = (props) => {
   }
   const [totalPages, setTotalPages] = useState();
   const { kyc, user, isLoading } = useUserKycHook();
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
 
   useEffect(() => {
     if (!isEmpty(kyc) && !isEmpty(user)) initialize();

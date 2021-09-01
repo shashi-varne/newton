@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Container from "../common/Container";
 import { isEmpty } from "utils/validators";
 import { navigate as navigateFunc, isTradingEnabled } from "utils/functions";
@@ -35,7 +35,9 @@ const KycBankVerify = (props) => {
   const [dl_flow, setDlFlow] = useState(false);
   const {kyc, isLoading, updateKyc} = useUserKycHook();
   const showPageDialog = isNewIframeDesktopLayout();
-  const productName = getConfig().productName;
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
