@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Container from "../common/Container";
 import { isEmpty } from "utils/validators";
 import { navigate as navigateFunc, isTradingEnabled } from "utils/functions";
@@ -29,7 +29,9 @@ const NON_EQUITY_PARTNER_INFO = (
 );
 
 const KycBankVerify = (props) => {
-  const productName = getConfig().productName;
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
   const showPageDialog = isNewIframeDesktopLayout();
   const [count, setCount] = useState(20);
   const [countdownInterval, setCountdownInterval] = useState();
