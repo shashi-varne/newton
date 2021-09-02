@@ -146,12 +146,9 @@ const AddBank = (props) => {
         toast("Congratulations!, new account added succesfully");
         navigate(PATHNAME_MAPPER.bankList);
       } else {
-        const bankMetaUpdateDict = result.meta_update_dict?.bank || {};
         navigate(`${PATHNAME_MAPPER.addBankVerify}${result.bank.bank_id}`, {
           state: {
-            goBackToAddBank: true,
-            isPartnerBank: bankMetaUpdateDict?.is_partner_bank,
-            isPartnerEquityEnabled: bankMetaUpdateDict?.is_partner_equity_enabled
+            goBackToAddBank: true
           }
         });
       }
