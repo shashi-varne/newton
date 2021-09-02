@@ -501,7 +501,7 @@ export function openPremiumOnboardBottomSheet(bottom_sheet_dialog_data_premium) 
 export function handleKycSubmittedOrRejectedState() {
   let { kycJourneyStatusMapperData } = this.state;
   
-  let modalData = Object.assign({}, kycJourneyStatusMapperData);
+  let modalData = Object.assign({key: "kyc"}, kycJourneyStatusMapperData);
   if(!modalData.dualButton) {
     modalData.oneButton = true;
   }
