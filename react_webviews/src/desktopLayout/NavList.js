@@ -152,8 +152,9 @@ const NavList = (props) => {
       return null;
     }
     const kycStatusesToNotShow = ["rejected", "fno_rejected", "esign_pending", "verifying_trading_account"];
-    const conditionToNotShowRegister = (!TRADING_ENABLED && isReadyToInvestBase) || isEquityCompleted() || kycStatusesToNotShow.includes(kycStatus) ||
-      (!TRADING_ENABLED && isMfApplicationSubmitted(kyc)) || isEquityApplSubmittedOrComplete(kyc);
+    const conditionToNotShowRegister = (!TRADING_ENABLED && isReadyToInvestBase) || (TRADING_ENABLED && isEquityCompleted()) ||
+      kycStatusesToNotShow.includes(kycStatus) || (!TRADING_ENABLED && isMfApplicationSubmitted(kyc)) ||
+      (TRADING_ENABLED && isEquityApplSubmittedOrComplete(kyc));
     if (id === 'register' && conditionToNotShowRegister) {
       return null;
     }
