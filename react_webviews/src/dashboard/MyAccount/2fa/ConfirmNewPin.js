@@ -16,7 +16,7 @@ const ConfirmNewPin = (props) => {
   const routeParamsExist = useMemo(() => {
     return !isEmpty(routeParams);
   }, []);
-  const { productName } = getConfig();
+  const { productName, base_url } = getConfig();
   const successText = routeParams.set_flow ? `${productName} security enabled` : `${productName} PIN changed`;
   const comingFrom = useMemo(() => props.match?.params?.coming_from, [props]);
   const kycFlow = useMemo(() => comingFrom === 'kyc-complete', [comingFrom]);
@@ -86,7 +86,7 @@ const ConfirmNewPin = (props) => {
     if (kycFlow) {
       navigate("/invest");
     } else if (comingFrom === 'stocks') {
-      // TODO: redirect to stocks SDK
+      window.location.href = `${base_url}/page/equity/launchapp`;
     } else if (comingFrom === 'ipo') {
       navigate('/market-products');
     } else {
