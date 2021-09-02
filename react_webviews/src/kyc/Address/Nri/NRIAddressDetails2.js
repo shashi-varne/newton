@@ -137,7 +137,7 @@ const NRIAddressDetails2 = (props) => {
 
   if (kyc?.address?.meta_data?.is_nri) {
     if (isEdit) {
-      title = "Edit Foreign address details";
+      title = "Edit foreign address details";
     } else {
       title = "Foreign address details";
     }

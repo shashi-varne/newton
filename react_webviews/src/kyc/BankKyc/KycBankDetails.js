@@ -41,7 +41,9 @@ const KycBankDetails = (props) => {
   const params = props.match.params || {};
   const userType = params.userType || "";
   const isEdit = props.location.state?.isEdit || false;
-  if(isEdit) titleText = "Edit bank account details"
+  if (isEdit) {
+    titleText = "Edit bank account details"
+  }
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const [bankData, setBankData] = useState({
