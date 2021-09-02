@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Container from "../common/Container";
 import Input from "../../common/ui/Input";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
@@ -21,7 +21,6 @@ import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
 import { getConfig } from "../../utils/functions";
 
-const productName = getConfig().productName;
 const PersonalDetails1 = (props) => {
   const navigate = navigateFunc.bind(props);
   const [showLoader, setShowLoader] = useState(false);
@@ -31,6 +30,9 @@ const PersonalDetails1 = (props) => {
   const [totalPages, setTotalPages] = useState();
 
   const { kyc, user, isLoading } = useUserKycHook();
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
 
   let title = "Personal details";
   if (isEdit) {
