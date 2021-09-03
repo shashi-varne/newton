@@ -174,7 +174,7 @@
       manifest.json provides metadata used when your web app is added to the
       homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
     -->
-    <base id="myBaseHref"  />
+    <base id="myBaseHref" href="/webapp/"  />
     <script>
       var browser = window.navigator.userAgent;
       if(browser.indexOf("MSIE") !== -1) {
@@ -187,22 +187,27 @@
 
       var myBaseHref =  document.getElementById('myBaseHref');
       var pathname = window.location.pathname;
+      var myBaseHrefUrl = '';
 
       if(pathname.indexOf('appl/webview') !== -1) {
-        var myBaseHrefUrl = '/appl/webview/' + window.location.pathname.split('/')[3] +'/' ;
-        myBaseHref.href = myBaseHrefUrl;
-        window.localStorage.setItem('base_href', myBaseHrefUrl);
+        myBaseHrefUrl = '/appl/webview/' + window.location.pathname.split('/')[3] +'/' ;
       }
       
       if(pathname.indexOf('plutus-webview') !== -1) {
-        var myBaseHrefUrl = '/plutus-webview' + window.location.pathname.split('/')[2] + '/' ;
-        myBaseHref.href = myBaseHrefUrl;
-        window.localStorage.setItem('base_href', myBaseHrefUrl);
+        myBaseHrefUrl = '/plutus-webview' + window.location.pathname.split('/')[2] + '/' ;
       }
 
       if(pathname.indexOf('webapp') !== -1) {
-        var myBaseHrefUrl = '/webapp/';
-        myBaseHref.href = myBaseHrefUrl;
+        myBaseHrefUrl = '/webapp/';
+      }
+
+      if(myBaseHrefUrl) {
+
+        if(pathname.indexOf('webapp') === -1) { // not adding again for webapp, for others its needed
+          myBaseHref.href = myBaseHrefUrl;
+        }
+        
+        // document.write("<base href="+ myBaseHrefUrl+" />");
         window.localStorage.setItem('base_href', myBaseHrefUrl);
       }
 
