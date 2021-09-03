@@ -72,6 +72,7 @@ class DigiStatus extends Component {
 
   handleClick = () => {
     const {dl_flow, show_note} = this.state;
+    const config = getConfig();
     if (dl_flow && !show_note) {
       this.sendEvents('next');
     } else {
@@ -80,6 +81,10 @@ class DigiStatus extends Component {
     if (this.state.set2faPin) {
       // Handles behaviour for both web as well as native
       openModule('account/setup_2fa', this.props, { routeUrlParams: '/kyc-complete' });
+      if (config.isNative) {
+        nativeCallback({ action: 'exit_web' });
+      }
+      return;
     }
     this.redirectToHome();
   };
