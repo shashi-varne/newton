@@ -17,7 +17,6 @@ function KycModuleEntry(props) {
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const urlParams = getUrlParams(props?.location?.search);
-  console.log(props);
   const { kyc, isLoading } = useUserKycHook();
   const fromState = props?.location?.state?.fromState || "";
   const isReadyToInvestUser = isReadyToInvest();
