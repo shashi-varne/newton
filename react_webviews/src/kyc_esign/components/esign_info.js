@@ -56,7 +56,10 @@ class ESignInfo extends Component {
 
   confirm = () => {
     const navigate = navigateFunc.bind(this.props);
-    const goBackPath = this.props?.location?.state?.goBack;
+    const stateParams = this.props?.location?.state;
+    const { goBack: goBackPath, fromState }  = stateParams || {};
+    const fromWebModuleEntry = fromState === "/kyc/web";
+
     if (!getConfig().Web) {
       if (storageService().get('native') && (goBackPath === "exit")) {
         nativeCallback({ action: "exit_web" })
@@ -64,7 +67,7 @@ class ESignInfo extends Component {
         navigate(PATHNAME_MAPPER.journey);
       }
     } else {
-      if (landingEntryPoints.includes(this.props?.location?.state?.fromState)) {
+      if (landingEntryPoints.includes(fromState) || fromWebModuleEntry) {
         navigate("/")
       } else {
         navigate(PATHNAME_MAPPER.journey);
