@@ -49,6 +49,10 @@ const KycBankVerify = (props) => {
   const navigate = navigateFunc.bind(props);
   const [dl_flow, setDlFlow] = useState(false);
   const {kyc, isLoading, updateKyc} = useUserKycHook();
+  const showPageDialog = isNewIframeDesktopLayout();
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
 
   useEffect(() => {
     if (!isEmpty(kyc)) {

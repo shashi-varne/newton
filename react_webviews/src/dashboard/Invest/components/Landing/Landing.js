@@ -207,7 +207,11 @@ class Landing extends Component {
 
   handleStocksAndIpoRedirection = () => {
     let { modalData, communicationType, contactValue, kycJourneyStatus, config } = this.state;
-    if (modalData.key === "ipo") {
+    if (modalData.key === "kyc") {
+      if (kycJourneyStatus === "fno_rejected") {
+        this.closeKycStatusDialog();
+      }
+    } else if (modalData.key === "ipo") {
       if (!!this.state.contactNotVerified) {
         storageService().set("ipoContactNotVerified", true);
         this.navigate("/secondary-verification", {
