@@ -8,8 +8,7 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from './native_callback';
 
 const genericErrMsg = "Something went wrong";
-const config = getConfig();
-let base_url = config.base_url;
+let base_url = getConfig().base_url;
 
 let is_secure = false;
 
@@ -35,6 +34,7 @@ class Api {
   }
 
   static xhr(route, params, verb) {
+    const config = getConfig();
     if (verb !== 'get') {
       if (params instanceof FormData) {
         is_secure = false;
@@ -42,7 +42,7 @@ class Api {
         is_secure = storageService().get("is_secure");
       }
     }
-    const sdk_capabilities = getConfig().sdk_capabilities;
+    const sdk_capabilities = config.sdk_capabilities;
     if (sdk_capabilities) {
       axios.defaults.headers.common['sdk-capabilities'] = sdk_capabilities;
     }
@@ -65,6 +65,8 @@ class Api {
 
         if (response.data.pfwstatus_code === 416) {
           return nativeCallback({ action: '2fa_expired' });
+        } else if (response.data.pfwstatus_code === 403) {
+          return nativeCallback({ action: 'login_required' });
         }
 
         if (response.config.url.includes("/api/") && response.headers["x-plutus-auth"] && config.isIframe) {

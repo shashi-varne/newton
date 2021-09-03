@@ -452,9 +452,6 @@ export function initilizeKyc() {
       if (!currentUser.active_investment) {
         if (TRADING_ENABLED && userKyc.equity_investment_ready) {
           modalData = kycStatusMapper["kyc_verified"];
-          if (kycJourneyStatus === "fno_rejected") {
-            modalData.subtitle = "You can start your investment journey by investing in your favourite stocks, mutual funds."
-          }
         } else if (!TRADING_ENABLED && !isCompliant) {
           modalData = kycStatusMapper["mf_complete"];
         }
@@ -505,7 +502,7 @@ export function openPremiumOnboardBottomSheet(bottom_sheet_dialog_data_premium) 
 export function handleKycSubmittedOrRejectedState() {
   let { kycJourneyStatusMapperData } = this.state;
   
-  let modalData = Object.assign({}, kycJourneyStatusMapperData);
+  let modalData = Object.assign({key: "kyc"}, kycJourneyStatusMapperData);
   if(!modalData.dualButton) {
     modalData.oneButton = true;
   }

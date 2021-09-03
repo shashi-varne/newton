@@ -363,9 +363,9 @@ export const kycStatusMapper = {
   },
   mf_complete: {
     color: "#ffa60b",
-    title: "Congratulations! KYC verified",
-    subtitle: "You're ready to invest in Mutual Funds",
-    buttonTitle: "START INVESTING",
+    title: "You're investment ready",
+    subtitle: "You can now invest in more than 5000+ mutual funds.",
+    buttonTitle: "OKAY",
     icon: "icn_kyc_completed.svg",
     nextState: "/invest",
   },
@@ -403,7 +403,7 @@ export const kycStatusMapper = {
   kyc_verified: {
     color: "#ffa60b",
     title: "You're investment ready",
-    subtitle: "You can start your investment journey by investing in your favourite stocks, mutual funds, F&O ",
+    subtitle: "You can start your investment journey by investing in your favourite stocks, mutual funds & more",
     buttonTitle: "OKAY",
     oneButton: true,
     icon: "icn_kyc_completed.svg",
@@ -469,7 +469,6 @@ export const kycStatusMapperInvest = {
     icon: "ic_kyc_under_process.svg",
     title: "KYC application",
     subtitle: "IN-PROGRESS",
-    nextState: "/kyc-esign/nsdl",
     addPoint: true,
     subTitleClass: "kyc-submitted",
     subtitleColor: "var(--mustard)"
