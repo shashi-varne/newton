@@ -24,7 +24,6 @@ const ConfirmNewPin = (props) => {
   const [pinError, setPinError] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
-  const [showPageLoader, setShowPageLoader] = useState(false);
   const navigate = navigateFunc.bind(props);
 
   const handleClick = async () => {
@@ -86,7 +85,7 @@ const ConfirmNewPin = (props) => {
     if (kycFlow) {
       navigate("/invest");
     } else if (comingFrom === 'stocks') {
-      setShowPageLoader("page");
+      setIsApiRunning("page");
       window.location.href = `${base_url}/page/equity/launchapp`;
     } else if (comingFrom === 'ipo') {
       navigate('/market-products');
@@ -99,7 +98,7 @@ const ConfirmNewPin = (props) => {
     <Container
       title={routeParams.set_flow  ? "Security settings" : `Reset ${productName} PIN`}
       events={sendEvents("just_set_events")}
-      showLoader={isApiRunning || showPageLoader}
+      showLoader={isApiRunning}
       handleClick={handleClick}
       buttonTitle="Continue"
       disable={mpin?.length !== 4}
