@@ -2,6 +2,7 @@ import { calculateAge, isValidDate, validateEmail, isEmpty, storageService } fro
 import { isTradingEnabled, getConfig } from '../../utils/functions'
 import { nativeCallback, openPdfCall } from '../../utils/native_callback'
 import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS, GENDER_OPTIONS, PATHNAME_MAPPER } from '../constants'
+import { isReadyToInvest } from '../services'
 import { getKyc } from './api'
 
 export const validateFields = (formData, keyToCheck) => {
@@ -375,9 +376,10 @@ export const isKycCompleted = (kyc) => {
 
 export const skipBankDetails = () => {
   const {kyc, user} = getKycUserFromSession();
+  const TRADING_ENABLED = isTradingEnabled(kyc);
 
   return (
-    user.active_investment ||
+    (((!TRADING_ENABLED && isReadyToInvest()) || (TRADING_ENABLED && isEquityCompleted())) && user.active_investment) ||
     (kyc.bank.meta_data_status === "approved" && kyc.bank.meta_data.bank_status === "verified") ||
     kyc.bank.meta_data.bank_status === "doc_submitted"
   );
