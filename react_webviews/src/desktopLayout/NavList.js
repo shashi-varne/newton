@@ -17,7 +17,7 @@ import logout from 'assets/logout_grey.png';
 import { getConfig } from 'utils/functions';
 import { withRouter } from 'react-router-dom';
 import { navigate as navigateFunc } from 'utils/functions';
-import { getKycAppStatus, isMfApplicationSubmitted, isReadyToInvest, setKycProductType } from '../kyc/services';
+import { getKycAppStatus, isMfApplicationSubmitted, isReadyToInvest } from '../kyc/services';
 import ReferDialog from './ReferralDialog';
 
 import './NavList.scss';
