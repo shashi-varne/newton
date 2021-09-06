@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Container from "../common/Container";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
-import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
+import DropDownNew from '../../common/ui/DropDownNew';
 import {
   OCCUPATION_TYPE_OPTIONS,
   INCOME_OPTIONS,
@@ -198,7 +198,7 @@ const PersonalDetails3 = (props) => {
             />
           </div>
           <div className="input" data-aid='kyc-dropdown-withouticon'>
-            <DropdownWithoutIcon
+            <DropDownNew
               error={form_data.income_error ? true : false}
               helperText={form_data.income_error}
               options={INCOME_OPTIONS}
