@@ -307,7 +307,7 @@ const KycUploadDocuments = (props) => {
         <main data-aid='kyc-upload-documents'>
           <div className="doc-title" data-aid='kyc-doc-title'>Select document for verification</div>
           <div className="subtitle" data-aid='kyc-subtitle'>
-            Make sure your name, account number and IFSC code is clearly visible in the document
+            Make sure your name, account number and IFSC code are clearly visible in the document
           </div>
           <div className="kyc-upload-doc-options" data-aid='kyc-upload-doc-options'>
             {VERIFICATION_DOC_OPTIONS.map((data, index) => {
