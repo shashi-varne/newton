@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -17,11 +17,14 @@ import logout from 'assets/logout_grey.png';
 import { getConfig } from 'utils/functions';
 import { withRouter } from 'react-router-dom';
 import { navigate as navigateFunc } from 'utils/functions';
-import { isReadyToInvest } from '../kyc/services';
-import { storageService } from 'utils/validators';
+import { getKycAppStatus, isMfApplicationSubmitted, isReadyToInvest } from '../kyc/services';
 import ReferDialog from './ReferralDialog';
 
 import './NavList.scss';
+import useUserKycHook from '../kyc/common/hooks/userKycHook';
+import { isEmpty } from '../utils/validators';
+import { isEquityApplSubmittedOrComplete, isEquityCompleted } from '../kyc/common/functions';
+import { isTradingEnabled } from '../utils/functions';
 let data = [
   {
     id: 'register',
@@ -99,11 +102,25 @@ const NavList = (props) => {
   const navigate = navigateFunc.bind(props);
   const [referDialog, setReferDialog] = useState(false);
   const [activePath, setActivePath] = useState('');
-  const user = storageService().getObject('user');
+  const [kycStatus, setKycStatus] = useState("");
+  const { kyc, user } = useUserKycHook();
+  const isReadyToInvestBase = isReadyToInvest();
+  const TRADING_ENABLED = useMemo(() => {
+    return isTradingEnabled(kyc);
+  }, [kyc])
 
   useEffect(() => {
+    if (!isEmpty(kyc)) {
+      initialize()
+    }
+  }, [kyc]);
+
+  const initialize = () => {
+    let kycJourneyStatus = getKycAppStatus(kyc).status;
+    setKycStatus(kycJourneyStatus);
+
     filterNavList();
-  }, []);
+  }
   const handleRefferalModal = () => {
     setReferDialog(!referDialog);
   };
@@ -134,7 +151,11 @@ const NavList = (props) => {
     if (id === 'logout' && !isMobileDevice) {
       return null;
     }
-    if (id === 'register' && isReadyToInvestBase) {
+    const kycStatusesToNotShow = ["rejected", "fno_rejected", "esign_pending", "verifying_trading_account"];
+    const conditionToNotShowRegister = (!TRADING_ENABLED && isReadyToInvestBase) || (TRADING_ENABLED && isEquityCompleted()) ||
+      kycStatusesToNotShow.includes(kycStatus) || (!TRADING_ENABLED && isMfApplicationSubmitted(kyc)) ||
+      (TRADING_ENABLED && isEquityApplSubmittedOrComplete(kyc));
+    if (id === 'register' && conditionToNotShowRegister) {
       return null;
     }
     if(id === 'loans' && !partnerLoan) {
@@ -148,7 +169,7 @@ const NavList = (props) => {
     }
     return id;
   };
-  const isReadyToInvestBase = isReadyToInvest();
+  
   return (
     <div className='navlink-container' data-aid='navlink-container'>
       <div>

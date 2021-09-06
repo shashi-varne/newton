@@ -32,6 +32,7 @@ const getEquityChargesData = (equityChargesData={}) => {
   return [
     {
       title: "Fees and charges",
+      id: "fees",
       list: [
         {
           name: "Account opening charges",
@@ -45,31 +46,39 @@ const getEquityChargesData = (equityChargesData={}) => {
           value: `${formatAmountInr(equityChargesData.platform?.charges)}/yr + GST`,
           message: equityChargesData.platform?.actual_charges,
           lineStroke: true,
+        },
+        {
+          name: "Demat AMC",
+          subText: "(Account maintainence charges)",
+          value: `${formatAmountInr(equityChargesData.demat_amc?.charges)}/yr + GST`,
+          message: equityChargesData.demat_amc?.actual_charges,
+          lineStroke: true,
         }
       ]
     },
     {
       title: "Brokerages",
+      id: "brokerage",
       list: [
         {
           name: "Delivery",
-          value: `${equityChargesData.brokerage_delivery?.percentage}% or min ${formatAmountInr(equityChargesData.brokerage_delivery?.rupees)}/-`,
-          subValue: "on transaction value"
+          value: `${formatAmountInr(equityChargesData.brokerage_delivery?.rupees)} or ${equityChargesData.brokerage_delivery?.percentage}% of transaction value`,
+          subValue: "whichever is lower"
         },
         {
           name: "Intraday",
-          value: `${equityChargesData.brokerage_intraday?.percentage}% or min ${formatAmountInr(equityChargesData.brokerage_intraday?.rupees)}/-`,
-          subValue: "on transaction value"
+          value: `${formatAmountInr(equityChargesData.brokerage_intraday?.rupees)} or ${equityChargesData.brokerage_intraday?.percentage}% of transaction value`,
+          subValue: "whichever is lower"
         },
         {
           name: "Futures",
-          value: `Flat ${formatAmountInr(equityChargesData.brokerage_future?.rupees)} per lot`,
-          subValue: "on executed order"
+          value: `Flat ${formatAmountInr(equityChargesData.brokerage_future?.rupees)}`,
+          subValue: "per executed order"
         },
         {
           name: "Options",
-          value: `Flat ${formatAmountInr(equityChargesData.brokerage_options?.rupees)} per lot`,
-          subValue: "on executed order"
+          value: `Flat ${formatAmountInr(equityChargesData.brokerage_options?.rupees)}`,
+          subValue: "per executed order"
         }
       ]
     },
@@ -200,7 +209,7 @@ const TradingInfo = (props) => {
               <AccountAndBrokerageCharges
                 {...data}
                 open={selectedTiles.includes(index)}
-                key={index}
+                key={data.id}
                 onClick={handleTiles(index)}
               />
             );
@@ -298,6 +307,7 @@ const AccountAndBrokerageCharges = ({open, onClick, ...props }) => {
                     textDecorationLine: data.lineStroke
                       ? "line-through"
                       : "none",
+                    color: props.id === "brokerage" ? "var(--dark)" : "var(--steelgrey)"
                   }}
                 >
                   {data.value}
@@ -306,7 +316,7 @@ const AccountAndBrokerageCharges = ({open, onClick, ...props }) => {
                   <div className="kaim-no-fees-text2">{data.message}</div>
                 )}
                 {data.subValue && (
-                  <div className="kaim-fees-info-subtext">{data.subValue}</div>
+                  <div className="kaim-fees-info-subvalue">{data.subValue}</div>
                 )}
               </div>
             </div>
