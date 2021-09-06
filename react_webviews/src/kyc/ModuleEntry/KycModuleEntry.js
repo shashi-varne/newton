@@ -20,7 +20,7 @@ function KycModuleEntry(props) {
   const { kyc, isLoading } = useUserKycHook();
   const fromState = props?.location?.state?.fromState || "";
   const isReadyToInvestUser = isReadyToInvest();
-  const isNative = props?.match?.type === "native";
+  const isNative = props?.location?.pathname === "/kyc/native";
 
   useEffect(() => {
     if (!isEmpty(kyc)) {

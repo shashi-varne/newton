@@ -73,7 +73,7 @@ const Kyc = (props) => {
     <Fragment>
       <Switch>
         <Route exact path={`${url}/journey`} component={Journey} />
-        <Route exact path={`${url}/:type`} component={KycModuleEntry} />
+        <Route exact path={[`${url}/web`, `${url}/native`]} component={KycModuleEntry} />
         <Route
           exact
           path={`${url}/personal-details1`}
