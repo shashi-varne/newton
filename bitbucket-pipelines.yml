@@ -31,7 +31,7 @@ definitions:
             variables:
               KEY_FILE: $KEY_FILE
               PROJECT: 'plutus-admin'
-              BUCKET: 'plutus-webview'
+              BUCKET: 'plutus-webapp'
               SOURCE: '$BITBUCKET_COMMIT'
 
     - step: &master-deploy
@@ -55,7 +55,7 @@ definitions:
             variables:
               KEY_FILE: $KEY_FILE
               PROJECT: 'plutus-admin'
-              BUCKET: 'plutus-webview'
+              BUCKET: 'plutus-webapp'
               SOURCE: $BITBUCKET_BRANCH
 
     - step: &prod-deploy
