@@ -198,10 +198,6 @@ export const bankAccountTypeOptions = (isNri) => {
         name: "Current Account",
       },
       {
-        value: "CC",
-        name: "Cash Credit",
-      },
-      {
         value: "SB",
         name: "Savings Account",
       },
