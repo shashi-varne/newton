@@ -31,7 +31,7 @@ import FeedBack from './feedback';
 import Partner from "./partner"
 import TaxFiling from './tax_filing'
 import Kyc from './kyc';
-import AccountStatements from './AccountStatements';
+import AccountStatements from './account_statements';
 
 const Feature = () => {
   // old # route support added
