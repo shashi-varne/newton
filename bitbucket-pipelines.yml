@@ -102,7 +102,7 @@ pipelines:
     #       <<: *master-deploy
     #       name: Master deploy
 
-    new_master:
+    master:
       - step:
           name: Ready Steady Go....
           script:
