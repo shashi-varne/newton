@@ -100,7 +100,9 @@ function KycModuleEntry(props) {
       navigate(PATHNAME_MAPPER.uploadFnOIncomeProof, data);
     } 
     // this condition will help in redirection from sdk
-    else if ((kycStatus === "verifying_trading_account" && !kyc?.equity_investment_ready) || (kycStatus === "complete" && !kyc?.fno_active)) {
+    else if ((TRADING_ENABLED &&
+      kyc?.kyc_product_type === "equity" &&
+      kycStatus === "verifying_trading_account" && !kyc?.equity_investment_ready) || (kycStatus === "complete" && !kyc?.fno_active)) {
       navigate("/kyc-esign/nsdl", {
         searchParams: `${getConfig().searchParams}&status=success`
       });
