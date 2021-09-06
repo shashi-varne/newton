@@ -49,7 +49,7 @@ const getMuiThemeConfig = () => {
 }
 
 var basename = window.sessionStorage.getItem('base_href') || '';
-if (basename && basename.indexOf('appl/webview') !== -1) {
+if (basename && basename.indexOf('appl/web') !== -1) {
   basename = basename ? basename + 'view/' : '';
 }
 
