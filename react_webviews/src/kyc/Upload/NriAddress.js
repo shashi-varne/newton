@@ -65,11 +65,6 @@ const NRIAddressUpload = (props) => {
             doc_side: doc_side,
             show_loader: true,
           })
-          if (doc_side === 'front') {
-            setFrontDoc(file)
-          } else {
-            setBackDoc(file)
-          }
           switch (file.type) {
             case 'image/jpeg':
             case 'image/jpg':
@@ -117,15 +112,14 @@ const NRIAddressUpload = (props) => {
       toast('Please select image file only')
       return
     }
-    if (type === 'front') {
-      setFrontDoc(uploadedFile)
-    } else {
-      setBackDoc(uploadedFile)
-    }
     mergeDocs(uploadedFile, type);
   }
 
   const mergeDocs = (file, type) => {
+    if (file.size > 1000000) {
+      toast("File size cannot exceeds 1MB");
+      return;
+    }
     if (type === 'front') {
       setFrontDoc(file)
     } else {
