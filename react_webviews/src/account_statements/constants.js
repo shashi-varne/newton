@@ -136,6 +136,7 @@ export const ACCOUNT_STATEMENT_OPTIONS = [
         {
           type: 'date-select',
           dateType: 'date',
+          paramName: 'dt_end',
           title: 'View holdings as of'
         },
       ]
