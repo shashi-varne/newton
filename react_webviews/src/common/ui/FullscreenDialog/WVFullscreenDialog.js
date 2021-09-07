@@ -20,16 +20,21 @@ import { Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/
 import React from 'react';
 import Close from '@material-ui/icons/Close';
 import PropTypes from 'prop-types';
+import WVInPageTitle from '../InPageHeader/WVInPageTitle';
 
 const WVFullscreenDialog = ({
   dataAidSuffix,
   open,
   onClose,
   children,
+  customCloseIcon,
   closeIconPosition, // Sets position of 'close' icon, defaults to 'left'
   title, 
   ...dialogProps
 }) => {
+
+  const CloseIcon = customCloseIcon || Close;
+
   return (
     <Dialog
       data-aid={`wv-fullscreen-dialog-${dataAidSuffix}`}
@@ -42,7 +47,7 @@ const WVFullscreenDialog = ({
     >
       <DialogTitle style={{ padding: '20px' }}>
         <div style={{ textAlign: closeIconPosition }}>
-          <Close
+          <CloseIcon
             data-aid={`wv-fd-close-dialog-${dataAidSuffix}`}
             color="primary"
             onClick={onClose}
