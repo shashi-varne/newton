@@ -16,7 +16,7 @@ Example syntax:
 */
 
 import './WVFullscreenDialog.scss';
-import { Dialog, DialogActions, DialogContent } from '@material-ui/core';
+import { Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core';
 import React from 'react';
 import Close from '@material-ui/icons/Close';
 import PropTypes from 'prop-types';
@@ -27,6 +27,8 @@ const WVFullscreenDialog = ({
   open,
   onClose,
   children,
+  closeIconPosition, // Sets position of 'close' icon, defaults to 'left'
+  title, 
   ...dialogProps
 }) => {
   return (
@@ -39,31 +41,29 @@ const WVFullscreenDialog = ({
       aria-labelledby="fullscreen-dialog"
       {...dialogProps}
     >
+      <DialogTitle style={{ padding: '20px' }}>
+        <div style={{ textAlign: closeIconPosition }}>
+          <Close
+            data-aid={`wv-fd-close-dialog-${dataAidSuffix}`}
+            color="primary"
+            onClick={onClose}
+            classes={{ root: 'wv-fd-close' }}
+          />
+        </div>
+        {title &&
+          <WVInPageTitle style={{ marginTop: '20px' }}>{title}</WVInPageTitle>
+        }
+      </DialogTitle>
       {children}
     </Dialog>
   );
 }
 
 const Content = ({
-  dataAidSuffix,
-  onCloseClick, // Callback function to handle 'close' icon click behaviour
-  closeIconPosition, // Sets position of 'close' icon, defaults to 'left'
-  headerTitle, // Will show up as a sticky title at top of page under 'close' 
   children
 }) => {
   return (
     <DialogContent>
-      <div className="wv-fd-content-header" style={{ textAlign: closeIconPosition }}>
-        <Close
-          data-aid={`wv-fd-close-dialog-${dataAidSuffix}`}
-          color="primary"
-          onClick={onCloseClick}
-          classes={{ root: 'wv-fd-close' }}
-        />
-        {headerTitle &&
-          <WVInPageTitle style={{ marginTop: '20px' }}>{headerTitle}</WVInPageTitle>
-        }
-      </div>
       <div className="wv-fd-content-body">
         {children}
       </div>
@@ -71,15 +71,14 @@ const Content = ({
   );
 }
 
-Content.propTypes = {
-  onCloseClick: PropTypes.func.isRequired,
+WVFullscreenDialog.propTypes = {
   closeIconPosition: PropTypes.oneOf(['left', 'right']),
-  headerTitle: PropTypes.node,
+  title: PropTypes.node,
 }
 
-Content.defaultProps = {
-  closeIconPosition: 'left',
-  headerTitle: ''
+WVFullscreenDialog.defaultProps = {
+  closeIconPosition: 'right',
+  title: ''
 }
 
 WVFullscreenDialog.Content = Content; // Extends custom styling over MUI DialogContent

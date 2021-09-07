@@ -1,5 +1,3 @@
-$wvfd-header-height: 15%;
-
 .wv-fullscreen-dialog {
   .MuiPaper-root {
     margin: 0 !important;
@@ -17,24 +15,7 @@ $wvfd-header-height: 15%;
   }
 }
 
-.wv-fd-content-header {
-  text-align: left;
-  margin-bottom: 40px;
-  position: fixed;
-  background-color: white;
-  width: 100%;
-  z-index: 9999;
-  top: 0;
-  left: 0;
-  padding: 20px;
-  max-height: $wvfd-header-height;
-}
-
 .wv-fd-close {
   cursor: pointer;
-}
-
-.wv-fd-content-body {
-  padding-top: $wvfd-header-height + 10%;
 }
   

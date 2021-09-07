@@ -130,11 +130,10 @@ class DropdownInModalClass extends Component {
           open={this.state.openPopUp}
           onClose={this.handleClose}
           id="dropdown-in-modal-dialog"
+          title={this.props.header_title}
+          closeIconPosition="left"
         >
-          <WVFullscreenDialog.Content
-            onCloseClick={this.handleClose}
-            headerTitle={this.props.header_title}
-          >
+          <WVFullscreenDialog.Content>
             <div className='content' id='alert-dialog-description'>
               {this.props.options.map(this.renderList)}
             </div>
