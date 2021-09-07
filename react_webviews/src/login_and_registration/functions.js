@@ -576,7 +576,6 @@ export const logout = async () => {
 
     if (status === 200) {
       storageService().clear();
-      window.localStorage.clear();
       return result;
     } else {
       throw result.error || result.message || errorMessage;

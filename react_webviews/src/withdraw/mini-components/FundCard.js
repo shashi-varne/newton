@@ -144,7 +144,6 @@ const FundCard = ({ type, expand, data,disabled, calcTotalAmount, checkError, au
             helperText={error && helperText}
             type='text'
             inputMode='numeric'
-            pattern='[0-9]*'
             autoFocus={autoFocus}
           />
         </div>

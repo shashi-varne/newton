@@ -191,7 +191,7 @@ const Journey = (props) => {
             }
 
             if (data === 'bank' && ((kyc[data].meta_data_status === 'init' || kyc[data].meta_data_status === 'rejected') ||
-              (['submitted', 'approved'].includes(kyc[data].meta_data_status) && kyc[data].meta_data.bank_status === 'submitted'))) { // this condition covers users who are not penny verified
+              (['submitted', 'approved'].includes(kyc[data].meta_data_status) && ['pd_triggered', 'submitted'].includes(kyc[data].meta_data.bank_status)))) { // this condition covers users who are not penny verified
               status = 'init'
               break
             }
@@ -604,7 +604,7 @@ const Journey = (props) => {
       dlCondition
     // var customerVerified = journeyStatus === 'ground_premium' ? false : true
     var isKycDone = kyc?.mf_kyc_processed;
-    var kycJourneyData = initJourneyData() || []
+    var kycJourneyData = initJourneyData() || [];
     var headerKey = 
       isKycDone
       ? "kycDone"

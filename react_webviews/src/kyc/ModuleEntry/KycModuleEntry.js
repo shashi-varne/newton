@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { navigate as navigateFunc } from 'utils/functions'
 import { isEmpty, getUrlParams, storageService } from '../../utils/validators'
 import { getKycAppStatus, isReadyToInvest, setKycProductType } from '../services'
@@ -10,19 +10,17 @@ import { getConfig, isTradingEnabled } from '../../utils/functions';
 import { kycStatusMapperInvest } from '../../dashboard/Invest/constants';
 
 
-function KycNative(props) {
-  const config = getConfig();
+function KycModuleEntry(props) {
+  const config = useMemo(() => {
+    return getConfig();
+  }, [])
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const urlParams = getUrlParams(props?.location?.search);
   const { kyc, isLoading } = useUserKycHook();
   const fromState = props?.location?.state?.fromState || "";
   const isReadyToInvestUser = isReadyToInvest();
-
-  if (fromState) {
-    nativeCallback({ action: "exit_web"});
-    return;
-  }
+  const isNative = props?.location?.pathname === "/kyc/native";
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -41,16 +39,28 @@ function KycNative(props) {
       return result;
     } catch (ex) {
       console.log(ex.message);
-      nativeCallback({ action: "exit_web" })
+      if (isNative) {
+        nativeCallback({ action: "exit_web" })
+      } else {
+        navigate("/");
+      }
     } finally {
       setIsApiRunning(false);
     }
   };
 
   const initialize = async () => {
+    if (fromState && isNative) {
+      nativeCallback({ action: "exit_web"});
+      return;
+    }
+
+    if (isNative) {
+      storageService().set("native", true);
+    }
+
     let kycStatus = getKycAppStatus(kyc).status || '';
     let kycStatusData = kycStatusMapperInvest[kycStatus];
-    storageService().set("native", true);
     const TRADING_ENABLED = isTradingEnabled(kyc);
     const data = {
       state: {
@@ -90,7 +100,9 @@ function KycNative(props) {
       navigate(PATHNAME_MAPPER.uploadFnOIncomeProof, data);
     } 
     // this condition will help in redirection from sdk
-    else if (kycStatus === "complete" && kyc?.equity_sign_status === "signed" && (!kyc?.equity_investment_ready || !kyc?.fno_active)) {
+    else if (TRADING_ENABLED &&
+      kyc?.kyc_product_type === "equity" &&
+      ((kycStatus === "verifying_trading_account" && !kyc?.equity_investment_ready) || (kycStatus === "complete" && !kyc?.fno_active))) {
       navigate("/kyc-esign/nsdl", {
         searchParams: `${getConfig().searchParams}&status=success`
       });
@@ -127,4 +139,4 @@ function KycNative(props) {
   );
 }
 
-export default KycNative;
+export default KycModuleEntry;
