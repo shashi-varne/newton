@@ -1,29 +1,34 @@
 export const ACCOUNT_STATEMENT_OPTIONS = [
+  // {
+  //   type: 'contract',
+  //   title: 'Contract notes',
+  //   subtitle: 'View details of your share purchsases',
+  //   withIcon: false,
+  //   withRuler: true,
+  //   pageProps: {
+  //     // subtitle: // Use only if custom subtitle is required,
+  //     fields: [
+  //       {
+  //         type: 'fin-year',
+  //         paramName: 'fiscal_year'
+  //       },
+  //       {
+  //         type: 'date-select',
+  //         title: 'From date',
+  //         dateType: 'from',
+  //         paramName: 'dt_start'
+  //       },
+  //       {
+  //         type: 'date-select',
+  //         title: 'To date',
+  //         dateType: 'to',
+  //         paramName: 'dt_end'
+  //       },
+  //     ]
+  //   }
+  // },
   {
-    type: 'contract',
-    title: 'Contract notes',
-    subtitle: 'View details of your share purchsases',
-    withIcon: false,
-    withRuler: true,
-    pageProps: {
-      // subtitle: // Use only if custom subtitle is required,
-      fields: [
-        { type: 'fin-year' },
-        {
-          type: 'date-select',
-          title: 'From date',
-          dateType: 'from',
-        },
-        {
-          type: 'date-select',
-          title: 'To date',
-          dateType: 'to',
-        },
-      ]
-    }
-  },
-  {
-    type: 'pnl',
+    type: 'profit_loss',
     title: 'P&L statements',
     subtitle: 'Track profit and loss on your trades',
     withIcon: false,
@@ -33,9 +38,10 @@ export const ACCOUNT_STATEMENT_OPTIONS = [
       fields: [
         {
           type: 'radio',
+          paramName: 'segment_type',
           options: [
             {
-              value: 'equity',
+              value: 'cash',
               name: 'Equity',
             }, {
               value: 'fno',
@@ -43,16 +49,21 @@ export const ACCOUNT_STATEMENT_OPTIONS = [
             }
           ],
         },
-        { type: 'fin-year' },
+        {
+          type: 'fin-year',
+          paramName: 'fiscal_year'
+        },
         {
           type: 'date-select',
           title: 'From date',
           dateType: 'from',
+          paramName: 'dt_start'
         },
         {
           type: 'date-select',
           title: 'To date',
           dateType: 'to',
+          paramName: 'dt_end'
         },
       ]
     }
@@ -66,17 +77,21 @@ export const ACCOUNT_STATEMENT_OPTIONS = [
     pageProps: {
       // subtitle: // Use only if custom subtitle is required,
       fields: [
-        { type: 'fin-year' },
+        {
+          type: 'fin-year',
+          paramName: 'fiscal_year'
+        },
         {
           type: 'date-select',
           title: 'From date',
           dateType: 'from',
-
+          paramName: 'dt_start'
         },
         {
           type: 'date-select',
           title: 'To date',
           dateType: 'to',
+          paramName: 'dt_end'
         },
       ]
     }
@@ -90,22 +105,27 @@ export const ACCOUNT_STATEMENT_OPTIONS = [
     pageProps: {
       // subtitle: // Use only if custom subtitle is required,
       fields: [
-        { type: 'fin-year' },
         {
-          type: 'date-select',
-          dateType: 'from',
-          title: 'From date'
+          type: 'fin-year',
+          paramName: 'fiscal_year'
         },
         {
           type: 'date-select',
+          title: 'From date',
+          dateType: 'from',
+          paramName: 'dt_start'
+        },
+        {
+          type: 'date-select',
+          title: 'To date',
           dateType: 'to',
-          title: 'To date'
+          paramName: 'dt_end'
         },
       ]
     }
   },
   {
-    type: 'demat-holdings',
+    type: 'demat_holding',
     title: 'Demat holdings statement',
     subtitle: 'View your stocks and holdings',
     withIcon: false,
@@ -115,13 +135,14 @@ export const ACCOUNT_STATEMENT_OPTIONS = [
       fields: [
         {
           type: 'date-select',
-          dateType: 'date'
+          dateType: 'date',
+          title: 'View holdings as of'
         },
       ]
     }
   },
   {
-    type: 'capital-gains',
+    type: 'capital_gains',
     title: 'Capital gains statement',
     subtitle: 'Track short term & long term gains',
     withIcon: false,
@@ -129,36 +150,27 @@ export const ACCOUNT_STATEMENT_OPTIONS = [
     pageProps: {
       // subtitle: // Use only if custom subtitle is required,
       fields: [
-        { type: 'fin-year' },
+        {
+          type: 'fin-year',
+          paramName: 'fiscal_year'
+        }
       ]
     }
   },
-  {
-    type: 'form-10db',
-    title: 'Form 10DB',
-    subtitle: 'View your STT payments',
-    withIcon: false,
-    withRuler: false,
-    pageProps: {
-      // subtitle: // Use only if custom subtitle is required,
-      fields: [
-        { type: 'fin-year' },
-      ]
-    }
-  },
+  // {
+  //   type: 'form-10db',
+  //   title: 'Form 10DB',
+  //   subtitle: 'View your STT payments',
+  //   withIcon: false,
+  //   withRuler: false,
+  //   pageProps: {
+  //     // subtitle: // Use only if custom subtitle is required,
+  //     fields: [
+  //       {
+  //         type: 'fin-year',
+  //         paramName: 'fiscal_year'
+  //       }
+  //     ]
+  //   }
+  // },
 ];
-
-
-export const FINANCIAL_YEAR_OPTIONS = [{
-  name: '2019-20',
-  value: '2019-20',
-}, {
-  name: '2020-21',
-  value: '2020-21',
-}, {
-  name: '2021-22',
-  value: '2021-22',
-}, {
-  name: '2022-23',
-  value: '2022-23',
-}];

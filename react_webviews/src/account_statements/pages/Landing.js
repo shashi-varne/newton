@@ -4,10 +4,11 @@ import WVListItem from '../../common/ui/ListItem/WVListItem';
 import { navigate as navigateFunc } from '../../utils/functions';
 import Container from '../common/Container';
 import { ACCOUNT_STATEMENT_OPTIONS } from '../constants';
+import cloneDeep from 'lodash/cloneDeep';
 
 export default function Landing(props) {
   const navigate = navigateFunc.bind(props);
-  const STATEMENT_OPTIONS = ACCOUNT_STATEMENT_OPTIONS.slice().map(option => {
+  const STATEMENT_OPTIONS = cloneDeep(ACCOUNT_STATEMENT_OPTIONS).map(option => {
     delete option.pageProps;
     return option;
   });
@@ -28,6 +29,7 @@ export default function Landing(props) {
       {STATEMENT_OPTIONS.map(optionObj => {
         return (
           <WVListItem
+            key={optionObj.type}
             {...optionObj}
             onClick={() => goToPage(optionObj.type)}
           />
