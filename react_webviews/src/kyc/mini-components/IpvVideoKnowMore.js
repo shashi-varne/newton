@@ -10,7 +10,7 @@ const productName = config.productName;
 const KnowMore = ({ isOpen, close }) => {
   return (
     <WVFullscreenDialog onClose={close} open={isOpen}>
-      <WVFullscreenDialog.Content onCloseClick={close}>
+      <WVFullscreenDialog.Content>
         <main
           data-aid="kyc-ipv-videoknowmore"
           className="know-more-dialog-content"
