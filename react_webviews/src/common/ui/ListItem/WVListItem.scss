@@ -1,3 +1,7 @@
+.wv-list-item-container {
+  cursor: pointer;
+}
+
 .wv-list-item-container +.wv-list-item-container {
   margin-top: 20px;
 }
