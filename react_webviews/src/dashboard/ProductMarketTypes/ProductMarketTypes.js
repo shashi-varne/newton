@@ -54,7 +54,6 @@ const ProductMarketTypes = (props) => {
       noFooter={true}
       title='All categories'
       hidePageTitle
-      headerData={{ goBack }}
       showLoader={showLoader}
       headerData={{ goBack }}
     >
