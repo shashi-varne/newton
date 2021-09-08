@@ -35,19 +35,20 @@ class LifeInsuranceEntry extends Component {
 
     nativeCallback({ action: 'take_control_reset' });
 
-    let insuranceProducts = [{
-        key: 'SMART_WALLET',
-        title: 'Wallet Insurance',
-        subtitle: 'Secure digital wallets against frauds',
-        icon: 'ic_wallet',
-      }, 
+    let insuranceProducts = [
+      // {
+      //   key: 'SMART_WALLET',
+      //   title: 'Wallet Insurance',
+      //   subtitle: 'Secure digital wallets against frauds',
+      //   icon: 'ic_wallet',
+      // }, 
       
-      {
-        key: 'PERSONAL_ACCIDENT',
-        title: 'Personal Accident Insurance',
-        subtitle: 'Starts from ₹200/year',
-        icon: 'ic_personal_accident',
-      },
+      // {
+      //   key: 'PERSONAL_ACCIDENT',
+      //   title: 'Personal Accident Insurance',
+      //   subtitle: 'Starts from ₹200/year',
+      //   icon: 'ic_personal_accident',
+      // },
 
       {
         key: 'HOME_INSURANCE',
