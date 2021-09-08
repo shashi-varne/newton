@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { getConfig } from "../../../utils/functions";
 import { Imgc } from "../../../common/ui/Imgc";
 import Container from "../../common/Container";
@@ -34,7 +34,9 @@ const instructionsMapper = {
   },
 };
 const UploadInstructions = (props) => {
-  const productName = getConfig().productName;
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
   const state = props.location.state || {};
   const data = instructionsMapper[state.document] || instructionsMapper["pan"];
   const goBack = () => {
