@@ -80,7 +80,6 @@ const PrimaryMarketProducts = (props) => {
       data-aid="market-products-screen"
       noFooter={true}
       title="IPO, Gold Bonds and more"
-      headerData={{ goBack }}
       showLoader={showLoader}
       headerData={{ goBack }}
     >
