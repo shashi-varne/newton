@@ -20,6 +20,7 @@ import { nativeCallback } from "../../../../utils/native_callback";
 import { getConfig, isTradingEnabled } from "../../../../utils/functions";
 import { PATHNAME_MAPPER } from "../../../../kyc/constants";
 import toast from "../../../../common/ui/Toast"
+import PinSetupDialog from "../../mini-components/PinSetupDialog";
 
 const fromLoginStates = ["/login", "/logout", "/verify-otp"]
 class Landing extends Component {
@@ -36,6 +37,7 @@ class Landing extends Component {
       modalData: {},
       openKycStatusDialog: false,
       openKycPremiumLanding: false,
+      openPinSetupDialog: false,
       verifyDetails: false,
       verifyDetailsType: '',
       verifyDetailsData: {},
@@ -46,6 +48,7 @@ class Landing extends Component {
       isWeb: getConfig().Web,
       stateParams: props.location.state || {},
       tradingEnabled: isTradingEnabled(),
+      clickedCardKey: '',
     };
     this.initialize = initialize.bind(this);
     this.generateOtp = generateOtp.bind(this);
@@ -123,6 +126,12 @@ class Landing extends Component {
     this.setState({
       accountAlreadyExists: false
     })
+  }
+
+  onPinSetupClose = () => {
+    this.setState({
+      openPinSetupDialog: false
+    });
   }
 
   setAccountAlreadyExistsData = (show, data) => {
@@ -679,6 +688,11 @@ class Landing extends Component {
             editDetails={this.editDetailsAccountAlreadyExists}
           ></AccountAlreadyExistDialog>
         )}
+        <PinSetupDialog
+          open={this.state.openPinSetupDialog}
+          onClose={this.onPinSetupClose}
+          comingFrom={this.state.clickedCardKey}
+        />
       </Container>
     );
   }
