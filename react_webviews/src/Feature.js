@@ -12,7 +12,7 @@ import EMandate from './e_mandate';
 import RiskProfiler from './risk_profiler';
 import HNI from './external_portfolio';
 import IsipBIller from './isip';
-import HelpSupport from './help_support';
+import HelpSupport from './help_support_v2';
 import CommonLanding from './common/components/landing';
 import Withdraw from './withdraw';
 import Report from './reports';
@@ -57,7 +57,6 @@ const Feature = () => {
       <ProtectedRoute path='/risk' component={RiskProfiler} />
       <ProtectedRoute path='/hni/' component={HNI} />
       <ProtectedRoute path='/isip' component={IsipBIller} />
-      {/* outside the feature component */}
       <ProtectedRoute path='/help' component={HelpSupport} />
       <ProtectedRoute path='/loan' component={Loan} />
       <ProtectedRoute path='/pg' component={Payment} />
@@ -65,13 +64,12 @@ const Feature = () => {
       <ProtectedRoute path='/whatsapp/' component={Whatsapp} />
       <ProtectedRoute path='/webview/:main_module/:sub_module' component={CommonLanding} />
       <ProtectedRoute path='/webview/:main_module' component={CommonLanding} />
-      {/* <Route path="/common/render-faqs" component={CommonRenderFaqs} /> */}
+      {/* <ProtectedRoute path="/common/render-faqs" component={CommonRenderFaqs} /> */}
       <ProtectedRoute path='/portfolio-rebalancing' component={PortfolioRebalancing} />
       <ProtectedRoute path='/fund-details' component={FundDetails} />
       <ProtectedRoute path='/feedback' component={FeedBack} />
-      <Route path='/partner' component={Partner} />
+      <ProtectedRoute path='/partner' component={Partner} />
       <ProtectedRoute path='/tax-filing' component={TaxFiling} />
-
       <ProtectedRoute path='/withdraw' component={Withdraw} />
       <ProtectedRoute path='/reports' component={Report} />
       <ProtectedRoute path='/kyc' component={Kyc} />

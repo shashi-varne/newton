@@ -12,15 +12,16 @@ import KycUploadContainer from '../mini-components/KycUploadContainer'
 import { nativeCallback } from '../../utils/native_callback'
 import "./commonStyles.scss";
 
-const config = getConfig();
-const { productName, Web: isWeb } = config
 const Sign = (props) => {
   const navigate = navigateFunc.bind(props)
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)
   const [fileToShow, setFileToShow] = useState(null)
-  const fromState = props?.location?.state.fromState;
   const {kyc, isLoading, updateKyc} = useUserKycHook();
+  const goBackPath = props.location?.state?.goBack || "";
+  
+  const config = getConfig();
+  const { productName, Web: isWeb } = config
 
   const onFileSelectComplete = (file, fileBase64) => {
     sendEvents("sign");
@@ -40,29 +41,33 @@ const Sign = (props) => {
       const payload = { manual_upload: isWeb }
       const result = await upload(file, 'sign', payload)
       updateKyc(result.kyc);
-      const dlFlow = isDigilockerFlow(result.kyc);
-      const type = result?.kyc?.kyc_status === "compliant" ? "compliant" : "non-compliant";
-
-      if (fromState === PATHNAME_MAPPER.uploadProgress) {
-        navigate(PATHNAME_MAPPER.uploadProgress);
-      } else if (dlFlow || type === "compliant") {
-        if (!skipBankDetails()) {
-          navigate(`/kyc/${type}/bank-details`);
-        } else {
-          navigate(PATHNAME_MAPPER.journey);
-        }
-      } else {
-        if (props?.location?.state?.backToJourney) {
-          navigate(PATHNAME_MAPPER.journey);
-        } else {
-          navigate(PATHNAME_MAPPER.uploadProgress);
-        }
-      }
+      handleNavigation();
     } catch (err) {
       toast(err?.message)
       console.error(err)
     } finally {
       setIsApiRunning(false)
+    }
+  }
+
+  const handleNavigation = () => {
+    const dlFlow = isDigilockerFlow(kyc);
+    const type = kyc?.kyc_status === "compliant" ? "compliant" : "non-compliant";
+
+    if (goBackPath) {
+      navigate(goBackPath);
+    } else if (dlFlow || type === "compliant") {
+      if (!skipBankDetails()) {
+        navigate(`/kyc/${type}/bank-details`);
+      } else {
+        navigate(PATHNAME_MAPPER.journey);
+      }
+    } else {
+      if (props?.location?.state?.backToJourney) {
+        navigate(PATHNAME_MAPPER.journey);
+      } else {
+        navigate(PATHNAME_MAPPER.uploadProgress);
+      }
     }
   }
 

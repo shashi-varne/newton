@@ -51,7 +51,7 @@ class Container extends Component {
     if(backHandle) {
       return;
     }
-
+    
     if (this.props.headerData && this.props.headerData.goBack) {
       this.props.headerData.goBack();
       return;

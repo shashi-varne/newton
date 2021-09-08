@@ -56,7 +56,10 @@ class ESignInfo extends Component {
 
   confirm = () => {
     const navigate = navigateFunc.bind(this.props);
-    const goBackPath = this.props?.location?.state?.goBack;
+    const stateParams = this.props?.location?.state;
+    const { goBack: goBackPath, fromState }  = stateParams || {};
+    const fromWebModuleEntry = fromState === "/kyc/web";
+
     if (!getConfig().Web) {
       if (storageService().get('native') && (goBackPath === "exit")) {
         nativeCallback({ action: "exit_web" })
@@ -64,7 +67,7 @@ class ESignInfo extends Component {
         navigate(PATHNAME_MAPPER.journey);
       }
     } else {
-      if (landingEntryPoints.includes(this.props?.location?.state?.fromState)) {
+      if (landingEntryPoints.includes(fromState) || fromWebModuleEntry) {
         navigate("/")
       } else {
         navigate(PATHNAME_MAPPER.journey);
@@ -115,6 +118,7 @@ class ESignInfo extends Component {
             back_text: 'You are almost there, do you really want to go back?'
           }
         });
+        this.setState({ show_loader: "page" })
         window.location.href = resultData.esign_link;
       } else {
         if (resultData && resultData.error === "all documents are not submitted") {
@@ -134,9 +138,9 @@ class ESignInfo extends Component {
           toast(resultData.error ||
             resultData.message || 'Something went wrong', 'error');
         }
+        this.setState({ show_loader: false });
       }
 
-      this.setState({ show_loader: false });
     } catch (err) {
       this.setState({
         show_loader: false
@@ -184,7 +188,7 @@ class ESignInfo extends Component {
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={show_loader}
-        title='eSign KYC'
+        title='Complete eSign'
         handleClick={this.goNext}
         buttonTitle='PROCEED'
         headerData={headerData}
@@ -204,7 +208,7 @@ class ESignInfo extends Component {
         <div className="esign-desc" data-aid='esign-desc'>
           eSign is an online electronic signature service by UIDAI to facilitate <strong>Aadhaar holder to digitally sign</strong> documents.
         </div>
-        <div className="esign-subtitle" data-aid='esign-subtitle'>How to eSign documents</div>
+        <div className="esign-subtitle" data-aid='esign-subtitle'>How to eSign</div>
         <div className="esign-steps" data-aid='esign-steps'>
           <div className="step">
             <div className="icon-container">

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Container from '../common/Container'
 import ShowAadharDialog from '../mini-components/ShowAadharDialog'
 import { isEmpty, storageService, getUrlParams } from '../../utils/validators'
+// import { isEmpty } from 'lodash';
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
@@ -22,6 +23,7 @@ import { nativeCallback } from '../../utils/native_callback'
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble'
 import { getJourneyData } from './JourneyFunction';
 import ConfirmBackDialog from '../mini-components/ConfirmBackDialog'
+import { Imgc } from '../../common/ui/Imgc'
 
 const HEADER_MAPPER_DATA = {
   kycDone: {
@@ -189,7 +191,7 @@ const Journey = (props) => {
             }
 
             if (data === 'bank' && ((kyc[data].meta_data_status === 'init' || kyc[data].meta_data_status === 'rejected') ||
-              (kyc[data].meta_data_status === 'approved' && kyc[data].meta_data.bank_status === 'submited'))) { // this condition covers users who are not penny verified
+              (['submitted', 'approved'].includes(kyc[data].meta_data_status) && ['pd_triggered', 'submitted'].includes(kyc[data].meta_data.bank_status)))) { // this condition covers users who are not penny verified
               status = 'init'
               break
             }
@@ -226,11 +228,8 @@ const Journey = (props) => {
               k++
             ) {
               data = journeyData[i].inputsForStatus[j]
-
-              if (
-                isEmpty(kyc[data.name]['meta_data'][data.keys[k]]) ||
-                kyc[data.name]['meta_data'][data.keys[k]].length === 0
-              ) {
+              const value = kyc[data.name]?.['meta_data']?.[data.keys[k]];
+              if (!value || isEmpty(value) || value.length === 0) {
                 if (
                   data.name === 'nomination' &&
                   (kyc.nomination.nominee_optional 
@@ -246,12 +245,16 @@ const Journey = (props) => {
                 }
               } else {
                 if (journeyData[i].key === 'bank') {
+                  const { bank_status } = kyc[data.name].meta_data;
+                  const { meta_data_status } = kyc[data.name];
+
                   // this condition covers users who are not penny verified
-                  const isBankNotPennyVerified = (kyc[data.name].meta_data_status === 'approved' && 
-                    kyc[data.name].meta_data.bank_status !== 'verified') || (kyc[data.name].meta_data_status === 'submitted' && 
-                    kyc[data.name].meta_data.bank_status === 'submitted') || (kyc[data.name].meta_data_status === 'rejected' && 
-                    kyc[data.name].meta_data.bank_status === 'rejected') || (kyc[data.name].meta_data_status === 'submitted' && 
-                    kyc[data.name].meta_data.bank_status === 'pd_triggered')
+                  const isBankNotPennyVerified = (
+                    (meta_data_status === 'approved' && !['verified', 'doc_submitted'].includes(bank_status)) ||
+                    (meta_data_status === 'submitted' && bank_status === 'submitted') ||
+                    (meta_data_status === 'rejected' && ['rejected', 'pd_triggered'].includes(bank_status)) ||
+                    (meta_data_status === 'submitted' && bank_status === 'pd_triggered')
+                  );
 
                   if (isBankNotPennyVerified) {
                     status = 'init';
@@ -260,7 +263,7 @@ const Journey = (props) => {
                 }
 
                 const keysToCheck = ["email_verified", "mobile_number_verified"]
-                if(data.name === "identification" && keysToCheck.includes(data.keys[k]) && !kyc[data.name]['meta_data'][data.keys[k]]) {
+                if(data.name === "identification" && keysToCheck.includes(data.keys[k]) && !value) {
                   status = 'init';
                   break;
                 }
@@ -355,10 +358,6 @@ const Journey = (props) => {
             }
           }
         }
-      }
-
-      if (journeyStatus === 'rejected' && !show_aadhaar) {
-        handleEdit(kycJourneyData[3].key, 3)
       }
 
       if (canSubmit()) {
@@ -522,6 +521,7 @@ const Journey = (props) => {
       }
       nativeCallback({ action: "third_party_redirect", message: redirectData });
     }
+    setIsApiRunning("page")
     window.location.href = updateQueryStringParameter(
       kyc.digilocker_url,
       "redirect_url",
@@ -604,7 +604,7 @@ const Journey = (props) => {
       dlCondition
     // var customerVerified = journeyStatus === 'ground_premium' ? false : true
     var isKycDone = kyc?.mf_kyc_processed;
-    var kycJourneyData = initJourneyData() || []
+    var kycJourneyData = initJourneyData() || [];
     var headerKey = 
       isKycDone
       ? "kycDone"
@@ -767,9 +767,10 @@ const Journey = (props) => {
                 <FastAndSecureDisclaimer options={HEADER_BOTTOM_DATA} />
               )}
             </div>
-            <img
+            <Imgc
               src={require(`assets/${productName}/${headerData.icon}.svg`)}
               alt=""
+              className="kyc-pj-icon"
             />
           </div>
           {!isCompliant && ((show_aadhaar && !isKycDone) || (!show_aadhaar && isKycDone)) && 

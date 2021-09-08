@@ -3,9 +3,9 @@ import { Imgc } from "../../common/ui/Imgc";
 import WVTag from "../../common/ui/Tag/WVTag";
 import "./mini-components.scss";
 
-const MarketProductCard = ({ icon, onClick, key, ...data }) => {
+const MarketProductCard = ({ icon, onClick, ...data }) => {
   return (
-    <div key={key} className="product-category-block" onClick={onClick}>
+    <div className="product-category-block" onClick={onClick}>
       <div className="image-wrapper">
         <Imgc src={icon} alt={data.name} className="catergory-icon" />
       </div>

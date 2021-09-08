@@ -8,6 +8,7 @@ import {
   PATHNAME_MAPPER,
   getIfscCodeError,
   STORAGE_CONSTANTS,
+  BANK_IFSC_CODES,
 } from "../constants";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -59,9 +60,8 @@ const AddBank = (props) => {
     setName(kyc.pan.meta_data.name || "");
     let data = { ...bankData };
     if (bank_id) {
-      data =
-        kyc.additional_approved_banks.find((obj) => obj.bank_id === bank_id) ||
-        {};
+      data = kyc.additional_approved_banks.find((obj) => obj.bank_id === bank_id) || {};
+
       data.c_account_number = data.account_number;
       if (data.user_rejection_attempts === 0) {
         setIsPennyExhausted(true);
@@ -79,10 +79,15 @@ const AddBank = (props) => {
         });
       }
     }
+    const accountTypeOptions = bankAccountTypeOptions(kyc?.address?.meta_data?.is_nri || "");
+    const selectedAccountType = accountTypeOptions.filter(el => el.value === data.account_type);
+    if(isEmpty(selectedAccountType)) {
+      data.account_type = "";
+    }
     setBankData({ ...data });
     setBankIcon(data.ifsc_image || '')
     setAccountTypes([
-      ...bankAccountTypeOptions(kyc?.address?.meta_data?.is_nri || ""),
+      ...accountTypeOptions,
     ]);
   };
 
@@ -197,17 +202,7 @@ const AddBank = (props) => {
     let formData = Object.assign({}, form_data);
     let bank = Object.assign({}, bankData);
     let bankIcon = "";
-    if (
-      (code === "ktb" &&
-        bankData.ifsc_code.toUpperCase().startsWith("KARB")) ||
-      (code === "lvb" &&
-        bankData.ifsc_code.toUpperCase().startsWith("LAVB")) ||
-      (code === "cub" &&
-        bankData.ifsc_code.toUpperCase().startsWith("CIUB")) ||
-      (code !== "ktb" &&
-        code !== "lvb" &&
-        code !== "cub")
-    ) {
+    if (!BANK_IFSC_CODES[code] || bankData.ifsc_code.toUpperCase().startsWith(BANK_IFSC_CODES[code])) {
       setIfscDisabled(true);
       try {
         const result = (await getIFSC(bankData.ifsc_code)) || [];

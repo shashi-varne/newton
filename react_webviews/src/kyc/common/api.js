@@ -38,7 +38,7 @@ export const getUserKycFromSummary = async () => {
     }
     return result;
   } catch (err) {
-    console.log(err)
+    toast(err.message);
   }
 }
 
@@ -142,8 +142,8 @@ export const addAdditionalBank = async (data) => {
 }
 
 export const upload = async (file, type, data = {}) => {
-  const formData = new FormData()
-  formData.set('res', file)
+  const formData = new FormData();
+  formData.set('res', file);
   let doc_type = ''
   if (!isEmpty(data)) {
     switch (type) {
@@ -161,7 +161,9 @@ export const upload = async (file, type, data = {}) => {
         break
       case 'income':
         doc_type = data?.doc_type;
-        formData.append('doc_password', data.doc_password);
+        if (data.doc_password) {
+          formData.append('doc_password', data.doc_password);
+        }
         break;
       case 'identification':
         if (data.kyc_product_type) {
@@ -314,7 +316,35 @@ export const verifyOtp = async (body) => {
 export const sendWhatsappConsent = async (body) => {
   const res = await Api.post(API_CONSTANTS.sendContactConsent, body);
   return handleApi(res);
+}
+
+// ------------------ Gold Related API ----------------- 
+export const verifyGoldOtp = async (body) => {
+  let url = body?.verify_link + '?otp=' + body?.otp;
+  const res = await Api.post(url);
+  return handleApi(res);
+}
+
+export const sendGoldOtp = async (body) => {
+  const res = await Api.post("/api/gold/contact/trigger/otp", body)
+  return handleApi(res);
+}
+
+export const resendGoldOtp = async (body) => {
+  const res = await Api.get(body)
+  return handleApi(res);
+}
+
+export const authCheckApi = async (body, contact_type) => {
+  const res = await Api.get(`${API_CONSTANTS.authCheck}?contact_type=${contact_type}&contact_value=${body[contact_type]}`);
+  return handleApi(res);
 };
+
+export const comfirmVerification = async (provider) => {
+  const res = await Api.get(`${API_CONSTANTS.goldUserInfo}/${provider}`)
+  return handleApi(res);
+};
+// -------------------------------------------------------
 
 export const getContactsFromSummary = async () => {
   const res = await Api.post(API_CONSTANTS.accountSummary, {

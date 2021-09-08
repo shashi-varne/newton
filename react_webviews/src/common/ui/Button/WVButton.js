@@ -8,14 +8,14 @@ const noop = () => {};
 
 const WVButton = ({
   dataAidSuffix,
-  contained,
-  outlined,
-  showLoader,
+  contained, // boolean to set variant="contained"
+  outlined, // boolean to set variant="outlined"
+  showLoader, // boolean to show in-button loader
   onClick,
   children,
-  ...props
+  ...props // remaining button props as per MUI
 }) => {
-  const variant = props.variant || (contained ? 'contained' : outlined ? 'outlined' : '');
+  const variant = props.variant || (contained ? 'contained' : outlined ? 'outlined' : 'text');
 
   if (showLoader) {
     disableBodyTouch(); //disable touch
@@ -45,7 +45,7 @@ const WVButton = ({
 const styles = {
   root: {
     padding: !getConfig().isMobileDevice ? '12px 15px 12px 15px !important' : '16px !important',
-    borderRadius: 6,
+    borderRadius: getConfig().uiElements.button.borderRadius,
     textTransform: 'uppercase',
     fontSize: '12px !important',
     boxShadow: 'none',

@@ -34,8 +34,10 @@ function useUserKycHook() {
     }, []);
 
     const updateKyc = (kycData) => {
-        storageService().setObject("kyc", kycData);
-        setUserKyc(kycData);
+        if (kycData) {
+            storageService().setObject("kyc", kycData);
+            setUserKyc(kycData);
+        }
     };
 
     return {kyc, user, isLoading, updateKyc};

@@ -4,18 +4,13 @@ import { getConfig } from "utils/functions";
 import SdkInvestCard from "../../mini-components/SdkInvestCard";
 import "./SdkLanding.scss";
 import { prepareInvestMaaper } from "../../constants";
-import { isAuthenticatedUser } from "../../../../utils/functions";
 
 class Prepare extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showSkelton: false,
+      showSkelton: true,
     };
-  }
-
-  componentDidMount = () => {
-    isAuthenticatedUser(this.props);
   }
 
   handleCard = (path) => () => {
@@ -35,7 +30,7 @@ class Prepare extends Component {
 
   render() {
     return (
-      <Container skelton={this.state.showSkelton} noFooter={true} title="Hello">
+      <Container skelton={this.state.showSkelton} noFooter={true} title="Hello" noBackIcon={true}>
         <div className="sdk-landing">
           <div className="generic-page-subtitle">
             Let’s make your money work for you!

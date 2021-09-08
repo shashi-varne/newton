@@ -3,7 +3,7 @@ import Container from "../common/Container";
 import { SUPPORTED_IMAGE_TYPES, VERIFICATION_DOC_OPTIONS } from "../constants";
 import { uploadBankDocuments } from "../common/api";
 import { getUrlParams, isEmpty } from "utils/validators";
-import { checkDLPanFetchAndApprovedStatus, getFlow, isDigilockerFlow, isEquityCompleted } from "../common/functions";
+import { checkDLPanFetchAndApprovedStatus, getFlow, isDigilockerFlow } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
 import { getConfig, isTradingEnabled, navigate as navigateFunc, isNewIframeDesktopLayout } from "../../utils/functions";
@@ -70,8 +70,8 @@ const KycUploadDocuments = (props) => {
     const tradeFlow = isTradingEnabled(kyc)
     setTradingEnabled(tradeFlow);
 
-    if ((!tradeFlow && isReadyToInvest()) || (tradeFlow && isEquityCompleted())) {
-      setBottomSheetText("We've added your bank account details. The verification is in progress.")
+    if (isReadyToInvest()) {
+      setBottomSheetText("We’ve added your bank account details. The verification is in progress.")
       setBottomSheetCtaText("OKAY");
     }
   }
@@ -146,7 +146,11 @@ const KycUploadDocuments = (props) => {
       navigate("/kyc/add-bank");
     } else if (userType === "compliant") {
       if (isEdit || kyc.address.meta_data.is_nri) navigate(PATHNAME_MAPPER.journey);
-      else navigate(nextStep)
+      else navigate(nextStep, {
+        state: {
+          goBack: PATHNAME_MAPPER.journey
+        }
+      })
     } else {
       if (dlFlow) {
         const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
@@ -156,7 +160,11 @@ const KycUploadDocuments = (props) => {
           });
         } else {
           if (kyc.equity_sign_status !== 'signed') {
-            navigate(nextStep);
+            navigate(nextStep, {
+              state: {
+                goBack: PATHNAME_MAPPER.journey
+              }
+            });
           } else {
             navigate(PATHNAME_MAPPER.journey);
           }

@@ -1,19 +1,40 @@
+
+/*
+
+Use: A card UI to support document upload on click
+
+Example syntax:
+  <WVFileUploadCard
+    title: 'Bank statement',
+    subtitle: 'Last 6 months',
+    nativePickerMethodName: 'open_file',
+    supportedFormats: "pdf",
+    fileName: "bank-statement"
+    customPickerId="bank-statement-picker"
+    onFileSelectComplete={onFileSelectComplete('bank-statement')}
+    ...
+  />
+
+*/
+
 import './WVFileUploadCard.scss';
 import React, { useEffect, useState } from 'react';
 import { WVFilePickerWrapper } from '../FileUploadWrapper/WVFilePickerWrapper';
 import SVG from 'react-inlinesvg';
 import { isFunction } from 'lodash';
 import PropTypes from 'prop-types';
+import DotDotLoader from '../DotDotLoaderNew';
 
 const WVFileUploadCard = ({
   dataAidSuffix,
   title,
   subtitle,
   file,
-  classes = {},
-  className,
-  ...wrapperProps
+  classes,
+  className, // class name to apply to parent element
+  ...wrapperProps // props for WVFilePickerWrapper (required to support file picking)
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(file);
   const [truncatedFileName, setTruncatedFileName] = useState('');
 
@@ -29,19 +50,36 @@ const WVFileUploadCard = ({
     }
   }, [selectedFile]);
 
-  const onFileSelected = (file, fileBase64) => {
-    setSelectedFile(file);
-    if (isFunction(wrapperProps.onFileSelectComplete)) {
-      wrapperProps.onFileSelectComplete(file, fileBase64);
+  const onFileSelectStart = (...functionParams) => {
+    setIsLoading(true);
+    if (isFunction(wrapperProps?.onFileSelectStart)) {
+      wrapperProps.onFileSelectStart(...functionParams);
     }
   }
+
+  const onFileSelectComplete = (file, ...otherParams) => {
+    setSelectedFile(file);
+    setIsLoading(false);
+    if (isFunction(wrapperProps?.onFileSelectComplete)) {
+      wrapperProps.onFileSelectComplete(file, ...otherParams);
+    }
+  }
+
+  const onFileSelectError = (...functionProps) => {
+    setIsLoading(false);
+    if (isFunction(wrapperProps?.onFileSelectError)) {
+      wrapperProps.onFileSelectError(...functionProps);
+    }
+  };
 
   return (
     <>
       <WVFilePickerWrapper
         {...wrapperProps}
         dataAidSuffix={dataAidSuffix}
-        onFileSelectComplete={onFileSelected}
+        onFileSelectStart={onFileSelectStart}
+        onFileSelectComplete={onFileSelectComplete}
+        onFileSelectError={onFileSelectError}
       >
         <div
           data-aid={`wv-file-upload-card-${dataAidSuffix}`}
@@ -72,15 +110,26 @@ const WVFileUploadCard = ({
               <span>{truncatedFileName}</span>
             }
           </div>
+          {isLoading &&
+            <div className="wv-fuc-loader">
+              <DotDotLoader />
+            </div>
+          }
         </div>
       </WVFilePickerWrapper>
     </>
   );
 }
 
-WVFilePickerWrapper.propTypes = {
+WVFileUploadCard.propTypes = {
   title: PropTypes.node,
   subtitle: PropTypes.node,
+  file: PropTypes.object,
+  classes: PropTypes.object,
+}
+
+WVFileUploadCard.defaultProps = {
+  classes: {},
 }
 
 export default WVFileUploadCard;

@@ -159,7 +159,7 @@ const Recommendations = (props) => {
       `${getBasePath()}/page/callback/${sipOrOneTime}/${investmentObject.amount}${getConfig().searchParams}`
     );
 
-    window.localStorage.setItem("investment", JSON.stringify(investmentObject));
+    storageService().setObject("investment", investmentObject);
 
     let investmentEventData = {};
 
@@ -295,7 +295,6 @@ const Recommendations = (props) => {
 
   const goBack = () => {
     sendEvents('back')
-    //TODO below code to be checked
     const goBackPath = props.location?.state?.goBack || "";
     if(goBackPath) {
       props.history.push({

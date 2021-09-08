@@ -22,7 +22,6 @@ const AmountDialog = ({ open, close, disableBackdropClick,title, id, placeholder
             autoFocus
             helperText={helperText}
             inputMode='numeric'
-            pattern='[0-9]*'
           />
           <div className="flex-between" data-aid='dialog-btn-withdraw'>
             <Button color="primary" onClick={close} className="cancel-btn" data-aid='cancel-btn'>

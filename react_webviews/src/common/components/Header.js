@@ -60,8 +60,8 @@ const Header = ({ classes, title, count, total, current, goBack,
           {
             !noBackIcon &&
             <IconButton className={classes.menuButton} color="inherit" aria-label="Menu"
-              onClick={headerData.goBack ||
-              goBack}
+              onClick={headerData.goBack || goBack} 
+              // Important Note:  whenever adding goBack func in headerData Container prop within component, do add native condition for correct back navigation 
               data-aid='tool-bar-icon-btn'
             >
               {!disableBack && !headerData.hide_icon &&
@@ -84,7 +84,7 @@ const Header = ({ classes, title, count, total, current, goBack,
           {
             headerData.partnerLogo && moneycontrolHeader && isWeb &&
              <div className='sdk-header-partner-logo'>
-                <img src={require(`assets/finity/finity_navlogo.svg`)} alt="partner logo" height={20}/> 
+                <img src={require(`assets/${config.colorLogo}`)} alt="partner logo" height={20}/> 
             </div>
           }
 
@@ -125,7 +125,6 @@ const Header = ({ classes, title, count, total, current, goBack,
 
         {!headerData.progressHeaderData && 
           <>
-            <div>
             {
               !headerData.partnerLogo && 
               <div
@@ -136,7 +135,6 @@ const Header = ({ classes, title, count, total, current, goBack,
                 {title}
               </div>
             }
-            </div>
             {
               !(moneycontrolHeader && headerData.partnerLogo) &&
               <div className='header-right-nav-components'>

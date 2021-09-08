@@ -15,19 +15,19 @@ import { landingEntryPoints } from "../../utils/constants";
 
 const Progress = (props) => {
   const { productName, Web } = getConfig();
-  const { kyc, isLoading } = useUserKycHook();
-  const disableNext = props?.location?.state?.disableNext || false;
-  const fromState = props?.location?.state?.fromState;
-  const goBackPath = props.location?.state?.goBack || "";
   const navigate = navigateFunc.bind(props);
   const [openConfirmBack, setOpenConfirmBack] = useState(false);
+  const { kyc, isLoading } = useUserKycHook();
+  const stateParams = props?.location?.state || {};
+  const { disableNext = false, goBack: goBackPath, fromState } = stateParams;
+  const fromWebModuleEntry = fromState === "/kyc/web";
 
   let documents = [];
   let totalDocs = 0;
   let canGoNext = false;
 
   useEffect(() => {
-    if ((landingEntryPoints.includes(fromState)) || (!Web && storageService().get("native") && (goBackPath === "exit"))) {
+    if ((landingEntryPoints.includes(fromState) || fromWebModuleEntry) || (!Web && storageService().get("native") && goBackPath === "exit")) {
       storageService().set("uploadDocsEntry", "landing");
     }
   },[])
@@ -66,7 +66,9 @@ const Progress = (props) => {
       }/bank-details`,
       sign: PATHNAME_MAPPER.uploadSign,
     };
-    navigate(stateMapper[key]);
+    navigate(stateMapper[key], {
+      state: { goBack: PATHNAME_MAPPER.uploadProgress }
+    });
   };
 
   const goBack = () => {

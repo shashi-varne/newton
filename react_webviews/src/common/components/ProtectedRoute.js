@@ -11,37 +11,44 @@ const config = getConfig();
 const isSdk = config.isSdk;
 const isNative = config.isNative;
 const isIframe = config.isIframe;
+
 const ProtectedRoute = ({ component: Component, ...rest }) => {
   const theme = useContext(ThemeContext)
   let currentUser = storageService().get("currentUser");
-  let user = storageService().get("user") || {};
-  let kyc = storageService().get("kyc") || {};
+  let user = storageService().getObject("user") || {};
+  let kyc = storageService().getObject("kyc") || {};
   let partner = storageService().get("partner") || "";
-  let loader =
-    currentUser && !isEmpty(kyc) && !isEmpty(user) && (isSdk ? !!partner : true )? false : true;
-  const [showLoader, setShowLoader] = useState(loader);
-  const [showComponent, setShowComponent] = useState(!loader);
+
+  const userDataAvailable = currentUser && !isEmpty(kyc) && !isEmpty(user);
+  const sdkCheck = isSdk ? !!partner : true; // same as: !isSdk || (isSdk && partner)
+  const [showLoader, setShowLoader] = useState(!userDataAvailable || !sdkCheck);
+  const [isLoginValid, setIsLoginValid] = useState(userDataAvailable && sdkCheck);
+
   const fetch = async () => {
-    await initData();
-    currentUser = storageService().get("currentUser");
-    user = storageService().get("user") || {};
-    kyc = storageService().get("kyc") || {};
-    let renderComponent =
-      currentUser && !isEmpty(kyc) && !isEmpty(user) ? true : false;
-    setShowComponent(renderComponent);
-    if (!renderComponent) {
-      if (isNative) {
-        nativeCallback({ action: "exit_web" });
-      } else if (isSdk) {
-        nativeCallback({ action: "session_expired" });
-      } else if (isIframe) {
-        let message = JSON.stringify({
-          type: "iframe_close",
-        });
-        window.callbackWeb.sendEvent(message);
+    try {
+      await initData();
+    } catch (e) {
+      console.log(e);
+    } finally {
+      currentUser = storageService().get("currentUser");
+      user = storageService().getObject("user") || {};
+      kyc = storageService().getObject("kyc") || {};
+      const userDataAvailable = currentUser && !isEmpty(kyc) && !isEmpty(user);
+      setIsLoginValid(userDataAvailable);
+      if (!userDataAvailable) {
+        if (isNative) {
+          nativeCallback({ action: "exit_web" });
+        } else if (isSdk) {
+          nativeCallback({ action: "session_expired" });
+        } else if (isIframe) {
+          let message = JSON.stringify({
+            type: "iframe_close",
+          });
+          window.callbackWeb.sendEvent(message);
+        }
       }
+      setShowLoader(false);
     }
-    setShowLoader(false);
   };
 
   useEffect(() => {
@@ -52,6 +59,7 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
     if (showLoader) {
       await fetch();
     }
+    // In order to update app theme based on partner code
     theme.updateTheme();
   }
 
@@ -73,7 +81,7 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
             </div>
           );
         }
-        if (showComponent) {
+        if (isLoginValid) {
           return <Component {...props} />;
         } else if (!isNative && !isSdk && !isIframe) {
           return (

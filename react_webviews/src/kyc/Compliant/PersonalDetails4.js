@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Container from "../common/Container";
 import { dobFormatTest, formatDate, isEmpty } from "utils/validators";
 import Input from "../../common/ui/Input";
@@ -13,14 +13,13 @@ import {
 } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
-import { validateAlphabets } from "../../utils/validators";
+import { validateName } from "../../utils/validators";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 import { nativeCallback } from "../../utils/native_callback";
 import { getConfig, isTradingEnabled } from "../../utils/functions";
 
-const productName = getConfig().productName;
 const PersonalDetails4 = (props) => {
   const [isChecked, setIsChecked] = useState(false);
   const navigate = navigateFunc.bind(props);
@@ -34,6 +33,9 @@ const PersonalDetails4 = (props) => {
   }
   const [totalPages, setTotalPages] = useState();
   const { kyc, user, isLoading } = useUserKycHook();
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
 
   useEffect(() => {
     if (!isEmpty(kyc) && !isEmpty(user)) initialize();
@@ -141,7 +143,7 @@ const PersonalDetails4 = (props) => {
     }
 
     let value = event.target ? event.target.value : event;
-    if (name === "name" && value && !validateAlphabets(value)) return;
+    if (name === "name" && value && !validateName(value)) return;
     let formData = { ...form_data };
     if (name === "dob") {
       if (!dobFormatTest(value)) {
@@ -215,7 +217,6 @@ const PersonalDetails4 = (props) => {
             error={form_data.name_error ? true : false}
             helperText={form_data.name_error || ""}
             onChange={handleChange("name")}
-            maxLength={20}
             type="text"
             disabled={isChecked || isApiRunning}
           />

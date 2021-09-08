@@ -1,4 +1,5 @@
 .wv-file-upload-card {
+  position: relative;
   padding: 16px;
   background: #FFFFFF;
   border: 1px solid #FFFFFF;
@@ -47,6 +48,12 @@
   }
 }
 
-.wv-file-upload-card.wv-fuc-selected {
-
+.wv-fuc-loader {
+  position: absolute;
+  display: flex;
+  width: 91%;
+  justify-content: center;
+  height: 100%;
+  background: #ffffff;
+  opacity: 0.8;
 }

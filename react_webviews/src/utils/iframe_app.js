@@ -39,10 +39,11 @@ export const checkBeforeRedirection = (fromState, toState) => {
   if (getConfig().isLoggedIn) {
     if (
       toState === "/login" ||
-      toState === "/register" ||
-      toState === "/forgot-password" ||
-      toState === "/mobile/verify" || 
+      toState === "/login/verify-otp" ||
       toState?.includes("/partner-authentication")
+      // toState === "/register" ||
+      // toState === "/forgot-password" ||
+      // toState === "/mobile/verify"
     ) {
       if (!fromState) {
         return "/";
@@ -96,7 +97,7 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
 
   // Note: will have to remove "/invest/explore"  from the direct enteries.
   const directEnteries = ["/invest/doityourself/direct/", "/nps", "/advanced-investing/new-fund-offers/info",
-     "/direct/gold", "/invest/instaredeem", "/reports", "/invest/savegoal", "/invest", "/withdraw", "/invest/explore", "/kyc/journey"];
+     "/direct/gold", "/invest/instaredeem", "/reports", "/invest/savegoal", "/invest", "/withdraw", "/invest/explore", "/kyc/journey", "/reports/purchased-transaction"];
 
   const directEntriesWithParams = ["/diy/fundinfo/direct", "/diy/fundlist/direct", "/direct/new-fund-offers"];
 

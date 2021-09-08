@@ -2,7 +2,7 @@ import "./commonStyles.scss";
 import React, { useState } from 'react'
 import Container from '../common/Container'
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
-import { NRI_DOCUMENTS_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
+import { NRI_DOCUMENTS_MAPPER, PATHNAME_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
 import { getConfig, navigate as navigateFunc } from '../../utils/functions'
 import toast from 'common/ui/Toast'
@@ -13,10 +13,9 @@ import KycUploadContainer from '../mini-components/KycUploadContainer'
 import "./commonStyles.scss";
 import { nativeCallback } from '../../utils/native_callback'
 
-const config = getConfig();
-const productName = config.productName
-
 const NRIAddressUpload = (props) => {
+  const config = getConfig();
+  const productName = config.productName
   const navigate = navigateFunc.bind(props)
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [frontDoc, setFrontDoc] = useState(null)
@@ -24,6 +23,7 @@ const NRIAddressUpload = (props) => {
   const [file, setFile] = useState(null)
   const [state, setState] = useState({})
   const {kyc, isLoading, updateKyc} = useUserKycHook();
+  const goBackPath = props.location?.state?.goBack || "";
 
   const onFileSelectComplete = (type) => (file, fileBase64) => {
     sendEvents('get_image', 'gallery', type);
@@ -74,13 +74,21 @@ const NRIAddressUpload = (props) => {
         })
       }
       updateKyc(result.kyc)
-      navigate('/kyc/upload/progress')
+      handleNavigation();
     } catch (err) {
       toast(err?.message)
       console.error(err)
     } finally {
       console.log('uploaded')
       setIsApiRunning(false)
+    }
+  }
+
+  const handleNavigation = () => {
+    if (goBackPath) {
+      navigate(goBackPath);
+    } else {
+      navigate(PATHNAME_MAPPER.uploadProgress)
     }
   }
 
@@ -128,6 +136,7 @@ const NRIAddressUpload = (props) => {
     navigate("/kyc/nri-address-details1", {
       state: {
         backToJourney: true,
+        isEdit: true
       },
     });
   };

@@ -453,7 +453,11 @@ export function isValidMonthYear(input) {
 }
 
 export function validateName(string) {
-  return string.trim().indexOf(' ') !== -1;
+  if (!string) {
+    return false;
+  }
+  // Validate alphabets & space at 0th position
+  return string.match(/^(?![\s])[a-z A-Z]+$/);
 }
 
 export function capitalize(string) {
@@ -1131,7 +1135,7 @@ export function getFinancialYear() {
 export const convertInrAmountToNumber = (value) => {
   let amount = (value.match(/\d+/g) || "").toString();
   if (amount) {
-    amount = amount.replaceAll(",", "");
+    amount = amount.split(",").join("");
   }
   return parseInt(amount, 10);
 }
@@ -1169,3 +1173,18 @@ export function Casesensitivity(str){
 export function sortArrayOfObjectsByTime(array, key){
   return array.sort((a,b) => new Date(b[key]) - new Date(a[key])) //desc
 }
+
+export function formatMobileNumber(value) {  // Example:  0000012345 -> +91 0000 012 345
+  if (isEmpty(value) || value.length < 10) return value;
+  let number = "+91" + value.slice(-10);
+  return number.replace(/(\d{2})(\d{4})(\d{3})(\d{3})/, '$1 $2 $3 $4');
+}
+
+export function splitMobileNumberFromContryCode(mobileNumber) {
+  let numberVal = mobileNumber?.split('|');
+  if (numberVal.length > 1) {
+      return numberVal[1];
+  } else {
+      return [numberVal];
+  }
+};

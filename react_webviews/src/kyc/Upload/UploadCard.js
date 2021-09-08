@@ -1,5 +1,6 @@
 import React from "react";
 import { getConfig } from "utils/functions";
+import { Imgc } from "../../common/ui/Imgc";
 import "./commonStyles.scss";
 
 const UploadCard = (props) => {
@@ -24,7 +25,7 @@ const UploadCard = (props) => {
   return (
     <div className="kyc-upload-card" data-aid='kyc-upload-card' onClick={onClick}>
       <div className="image">
-        <img
+        <Imgc
           src={require(`assets/${productName}/${
             approvedCondition ? approved_image : default_image
           }`)}

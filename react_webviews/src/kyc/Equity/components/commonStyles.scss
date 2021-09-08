@@ -14,50 +14,14 @@
   align-items: center;
 }
 
-.flex-between-center {
-  @include d-flex-space-between();
+@mixin fees-subtext {
+  font-size: 11px;
+  line-height: 18px;
+  color: var(--steelgrey);
 }
 
-.stocks-status-card {
-  padding: 20px 2px 20px 20px;
-  background-size: cover;
-  background-repeat: no-repeat;
-  border-radius: 12px;
-  color: var(--dark);
-  margin-top: 20px;
-
-  .stocks-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-
-    h3 {
-      margin: 0;
-      font-weight: bold;
-      font-size: 17px;
-      line-height: 20px;
-      padding-top: 3px;
-    }
-
-    img {
-      margin-left: 20px;
-    }
-  }
-
-  .stocks-subtitle {
-    font-weight: 400;
-    font-size: 13px;
-    margin: 0;
-    padding: 0 20px 35px 0;
-    width: 80%;
-    line-height: 22px;
-  }
-
-  .stocks-button {
-    width: 180px !important;
-    font-weight: 700;
-    height: 40px;
-  }
+.flex-between-center {
+  @include d-flex-space-between();
 }
 
 .trading-experience {
@@ -82,6 +46,11 @@
 
     .kaih-text {
       padding: 10px 0;
+    }
+
+    .kyc-ai-header-icon {
+      width: 112px !important;
+      min-height: 74px;
     }
   }
 
@@ -111,9 +80,10 @@
         margin-right: 20px;
         color: var(--steelgrey);
 
-        img {
+        .kaim-benefits-icon {
           border-radius: 8px;
-          width: 170px;
+          width: 170px !important;
+          height: 90px !important;
         }
 
         .kaim-benefits-info-text {
@@ -151,15 +121,14 @@
       }
 
       .kaim-fees-info-subtext {
-        font-size: 11px;
-        line-height: 18px;
-        color: var(--steelgrey);
+        @include fees-subtext();
       }
 
       .kaim-no-fees-text1 {
         font-size: 13px;
         line-height: 21px;
         color: var(--steelgrey);
+        text-align: right;
       }
 
       .kaim-no-fees-text2 {
@@ -167,6 +136,11 @@
         font-size: 13px;
         line-height: 21px;
         color: var(--primary);
+        text-align: right;
+      }
+
+      .kaim-fees-info-subvalue {
+        @include fees-subtext();
         text-align: right;
       }
     }
@@ -181,7 +155,7 @@
     }
 
     .kaim-terms {
-      padding: 20px 0 30px;
+      padding-top: 40px;
       display: flex;
       align-items: center;
       font-size: 13px;
@@ -212,9 +186,10 @@
     padding-bottom: 10px;
   }
 
-  img {
+  .spi-img {
     width: 100%;
-    padding-bottom: 20px;
+    min-height: 165px;
+    margin-bottom: 20px !important;
   }
 }
 
@@ -231,6 +206,11 @@
     line-height: 32px;
     color: var(--dark);
     padding-bottom: 20px;
+
+    .kyc-dv-header-icon {
+      width: 110px !important;
+      min-height: 74px;
+    }
   }
 
   .kyc-document-verification-main {

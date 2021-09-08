@@ -29,12 +29,13 @@ export async function getAccountSummary(params = {}) {
   }
   try {
     const response = await Api.post(url, params);
+
     if (
       response.pfwstatus_code !== 200 ||
       !response.pfwresponse ||
       isEmpty(response.pfwresponse)
     ) {
-      throw new Error( response?.pfwmessage || "Something went wrong!");
+      throw new Error(response?.pfwmessage || "Something went wrong!");
     }
     if (response?.pfwresponse?.status_code === 200) {
       return response?.pfwresponse?.result;
@@ -207,7 +208,6 @@ export function getKycAppStatus(kyc) {
       { name: "identification", keys: ["meta_data_status"] },
       { name: "nomination", keys: ["meta_data_status"] },
       { name: "sign", keys: ["doc_status"] },
-      { name: "equity_income", keys: ["doc_status"] }
     ];
   } else {
     fieldsToCheck = [
@@ -215,14 +215,23 @@ export function getKycAppStatus(kyc) {
       { name: "address", keys: ["doc_status", "meta_data_status"] },
       { name: "bank", keys: ["meta_data_status"] },
       { name: "identification", keys: ["doc_status", "meta_data_status"] },
-      { name: "nomination", keys: ["doc_status", "meta_data_status"] },
+      { name: "nomination", keys: ["meta_data_status"] },
       { name: "sign", keys: ["doc_status"] },
       { name: "ipvvideo", keys: ["doc_status"] },
-      { name: "equity_income", keys: ["doc_status"] }
     ];
   }
 
-  if (kyc.address.meta_data.is_nri) {
+  let newFieldsToCheck;
+  if (TRADING_ENABLED) {
+    newFieldsToCheck = [
+      { name: "equity_pan", keys: ["doc_status", "meta_data_status"] },
+      { name: "equity_identification", keys: ["doc_status", "meta_data_status"] },
+    ]
+    fieldsToCheck = [...fieldsToCheck, ...newFieldsToCheck];
+    fieldsToCheck = fieldsToCheck.filter((fieldObj) => !["pan", "identification"].includes(fieldObj.name));
+  }
+
+  if (kyc?.address?.meta_data?.is_nri) {
     var obj = {
       name: "nri_address",
       keys: ["doc_status", "meta_data_status"]
@@ -263,11 +272,7 @@ export function getKycAppStatus(kyc) {
 
   var status;
   if (rejected > 0) {
-    if (rejected === 1 && rejectedItems[0].name === "equity_income") {
-      status = "fno_rejected"
-    } else {
-      status = "rejected";
-    }
+    status = "rejected";
     result.status = status;
     return result;
   } else {
@@ -311,24 +316,40 @@ export function getKycAppStatus(kyc) {
     status = 'incomplete';
   }
 
+  // this condition handles nri compliant bank document pending case 
+  if (kyc.address.meta_data.is_nri && kyc.kyc_status === 'compliant' && !["verified", "doc_submitted"].includes(kyc.bank.meta_data.bank_status)) {
+    status = "incomplete"
+  }
+
   // this condition handles retro kyc submitted users
-  if (kyc.application_status_v2 === "submitted") {
+  if (kyc.kyc_product_type !== "equity" && isMfApplicationSubmitted(kyc)) {
     status = "submitted"
   }
 
   if (!TRADING_ENABLED && kyc.kyc_status !== 'compliant' && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && kyc.sign_status !== 'signed') {
     status = 'incomplete';
   }
-
+  
   // this condition handles equity esign pending case
   if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && kyc.equity_application_status === 'complete' && kyc.equity_sign_status !== "signed") {
     status = 'esign_pending';
   }
 
+  // this condition handles fno doc rejected case
+  if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && kyc.equity_application_status === 'complete' && kyc.equity_sign_status === "signed" &&
+  kyc?.equity_investment_ready && kyc?.equity_income.doc_status === "rejected") {
+    status = 'fno_rejected';
+  }
+
   // this condition handles equity activation pending case
   if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && kyc.equity_application_status === 'complete' && kyc.equity_sign_status === "signed" &&
   !kyc?.equity_investment_ready) {
-    status = 'equity_activation_pending';
+    status = 'verifying_trading_account';
+  }
+
+  // this condition handles compliant retro MF IR users 
+  if (TRADING_ENABLED && kyc.kyc_status === 'compliant' && kyc?.kyc_product_type !== "equity" && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && kyc.bank.meta_data_status === "approved") {
+    status = "complete";
   }
 
   result.status = status;
@@ -350,7 +371,7 @@ export function getDocuments(userKyc) {
       {
         key: "selfie",
         title: "Selfie",
-        doc_status: userKyc.identification.doc_status,
+        doc_status: userKyc.equity_identification.doc_status,
         default_image: 'selfie_default.svg',
         approved_image: "selfie_approved.svg",
       },
@@ -400,7 +421,7 @@ export function getDocuments(userKyc) {
     {
       key: "selfie",
       title: "Selfie",
-      doc_status: userKyc.identification.doc_status,
+      doc_status: userKyc.equity_identification.doc_status,
       default_image: 'selfie_default.svg',
       approved_image: "selfie_approved.svg",
     },
@@ -448,6 +469,15 @@ export function getDocuments(userKyc) {
     documents.splice(3, 1);
   }
 
+  if (!isTradingEnabled(userKyc)) {
+    documents = documents.map((document) => {
+      if (document.key === "selfie") {
+        document.doc_status = userKyc.identification.doc_status
+      }
+      return document;
+    });
+  }
+
   return documents;
 }
 
@@ -491,6 +521,20 @@ export function isReadyToInvest() {
     } else if (kycRTI.friendly_application_status === "complete") {
       return true;
     }
+  }
+
+  return false;
+}
+
+export function isMfApplicationSubmitted(kyc) {
+  if (isEmpty(kyc)) return false;
+  const isCompliantAppSubmitted = kyc.kyc_status === "compliant" && kyc.application_status_v2 === "submitted" &&
+    (kyc.bank.meta_data_status !== "approved" && ["pd_triggered", "doc_submitted"].includes(kyc.bank.meta_data.bank_status));
+  const isNonCompliantAppSubmitted = kyc.kyc_status !== "compliant" && kyc.application_status_v2 === "submitted" &&
+    kyc.sign_status === "signed";
+  
+  if (isCompliantAppSubmitted || isNonCompliantAppSubmitted) {
+    return true;
   }
 
   return false;

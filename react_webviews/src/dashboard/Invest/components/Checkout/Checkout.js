@@ -418,7 +418,6 @@ class Checkout extends Component {
                         helperText={form_data[index].amount_error}
                         onChange={this.handleChange("amount", index)}
                         inputMode="numeric"
-                        pattern="[0-9]*"
                       />
                     </div>
                     {!fund["allow_purchase"][investType] && (

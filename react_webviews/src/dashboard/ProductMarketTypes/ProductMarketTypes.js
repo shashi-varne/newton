@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Container from '../common/Container';
 import WVInPageHeader from '../../common/ui/InPageHeader/WVInPageHeader';
 import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
@@ -7,7 +7,9 @@ import MarketProductCard from '../mini-components/MarketProductCard';
 import { getConfig } from '../../utils/functions';
 
 const ProductMarketTypes = () => {
-  const productName = getConfig().productName;
+  const [showLoader, setShowLoader] = useState(false);
+  const config = getConfig();
+  const productName = config.productName;
   const categoryLists = [
     {
       name: 'IPO',
@@ -36,15 +38,17 @@ const ProductMarketTypes = () => {
     },
   ];
   const handleOnClick = (el) => () => {
-    console.log('the val is', el.name);
+    const type = (el.name).toLowerCase();
+    setShowLoader("page");
+    window.location.href = `${config.base_url}/page/equity/tpp/${type}`;
   };
   return (
     <Container
       data-aid='my-categories-screen'
       noFooter={true}
-      skelton={false}
       title='All categories'
       hidePageTitle
+      showLoader={showLoader}
     >
       <WVInPageHeader style={{ marginBottom: '0px' }}>
         <WVInPageTitle>All categories</WVInPageTitle>

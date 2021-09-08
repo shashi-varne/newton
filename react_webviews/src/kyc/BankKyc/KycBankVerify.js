@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Container from "../common/Container";
 import { isEmpty } from "utils/validators";
 import { navigate as navigateFunc, isTradingEnabled } from "utils/functions";
@@ -19,8 +19,6 @@ import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 import { isNewIframeDesktopLayout } from "../../utils/functions";
 import { storageService } from "../../utils/validators";
 
-const showPageDialog = isNewIframeDesktopLayout();
-const productName = getConfig().productName;
 const KycBankVerify = (props) => {
   const [count, setCount] = useState(20);
   const [countdownInterval, setCountdownInterval] = useState();
@@ -36,6 +34,10 @@ const KycBankVerify = (props) => {
   const navigate = navigateFunc.bind(props);
   const [dl_flow, setDlFlow] = useState(false);
   const {kyc, isLoading, updateKyc} = useUserKycHook();
+  const showPageDialog = isNewIframeDesktopLayout();
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -111,7 +113,7 @@ const KycBankVerify = (props) => {
       twoButton: true,
       status: 'pennyExhausted'
     }
-    internalStorage.setData('handleClickOne', goToJourney);
+    internalStorage.setData('handleClickOne', handleExhausted);
     internalStorage.setData('handleClickTwo', uploadDocuments);
     navigate('/kyc/penny-status',{state:pennyDetails});
   }
@@ -224,7 +226,9 @@ const KycBankVerify = (props) => {
     const nextStep = kyc.show_equity_charges_page ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
     if (userType === "compliant") {
       if (isEdit) goToJourney();
-      else navigate(nextStep)
+      else navigate(nextStep, {
+        state: { goBack: PATHNAME_MAPPER.journey }
+      })
     } else {
       if (dl_flow) {
         const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
@@ -233,7 +237,9 @@ const KycBankVerify = (props) => {
             state: { goBack: PATHNAME_MAPPER.journey }
           });
         } else {
-          navigate(nextStep);
+          navigate(nextStep, {
+            state: { goBack: PATHNAME_MAPPER.journey }
+          });
         }
       } else {
         navigate(PATHNAME_MAPPER.uploadProgress);
@@ -294,8 +300,7 @@ const KycBankVerify = (props) => {
 
   const handleSuccess = () => {
     if (storageService().get("bankEntryPoint") === "uploadDocuments") {
-      storageService().remove("bankEntryPoint")
-      navigate(PATHNAME_MAPPER.uploadProgress);
+      redirectToUploadProgress();
     } else {
       if (isTradingEnabled()) {
         handleOtherPlatformNavigation();
@@ -305,10 +310,25 @@ const KycBankVerify = (props) => {
     }
   };
 
-  const goToJourney = () => {
+  const handleExhausted = () => {
     sendEvents("try_later", "unable_to_add_bank");
+    if (storageService().get("bankEntryPoint") === "uploadDocuments") {
+      redirectToUploadProgress();
+    } else {
+      goToJourney();
+    }
+  };
+
+  const redirectToUploadProgress = () => {
+    storageService().remove("bankEntryPoint");
+    navigate(PATHNAME_MAPPER.uploadProgress);
+  };
+
+  const goToJourney = () => {
     navigate(PATHNAME_MAPPER.journey)
   };
+
+  
 
   const edit = () => () => {
     sendEvents('edit');
@@ -409,10 +429,10 @@ const KycBankVerify = (props) => {
           uploadDocuments={uploadDocuments}
           checkBankDetails={checkBankDetails}
         />
-        <PennySuccessDialog isOpen={isPennySuccess} redirect={handleSuccess} />
+        <PennySuccessDialog isOpen={isPennySuccess} kyc={kyc} redirect={handleSuccess} />
         <PennyExhaustedDialog
           isOpen= {isPennyExhausted}
-          redirect={goToJourney}
+          redirect={handleExhausted}
           uploadDocuments={uploadDocuments}
         />
       </div>
