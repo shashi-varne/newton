@@ -33,14 +33,14 @@ class DiseasesSpecificPlan extends Component {
         icon: 'icn_critical_illness',
         Product_name : 'Critical illness'
       },
-      // {
-      //   key: 'DENGUE',
-      //   title: 'Dengue insurance',
-      //   subtitle: 'Starts from ₹50/year',
-      //   icon: 'icn_dengue',
-      //   Product_name : 'dengue insurance',
-      //   resume_flag : this.props.parent.state.resumeFlagAll  ? this.props.parent.state.resumeFlagAll['DENGUE'] : false
-      // }
+      {
+        key: 'DENGUE',
+        title: 'Dengue insurance',
+        subtitle: 'Starts from ₹50/year',
+        icon: 'icn_dengue',
+        Product_name : 'dengue insurance',
+        resume_flag : this.props.parent.state.resumeFlagAll  ? this.props.parent.state.resumeFlagAll['DENGUE'] : false
+      }
     ];
 
     if (this.state.partner_code === 'hbl') {
