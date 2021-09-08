@@ -28,7 +28,7 @@ const WVFullscreenDialog = ({
   onClose,
   children,
   customCloseIcon,
-  closeIconPosition, // Sets position of 'close' icon, defaults to 'left'
+  closeIconPosition, // Sets position of 'close' icon, defaults to 'right'
   title, 
   ...dialogProps
 }) => {
