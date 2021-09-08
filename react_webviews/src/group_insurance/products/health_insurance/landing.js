@@ -61,7 +61,6 @@ class HealthInsuranceLanding extends Component {
 
     let health_suraksha_icon = this.state.type !== 'fisdom' ? health_suraksha_myway : health_suraksha_fisdom;
     let super_topup_icon = this.state.type !== 'fisdom' ? super_topup_myway : super_topup_fisdom;
-    // eslint-disable-next-line
     let ic_hospicash = this.state.type !== 'fisdom' ? ic_hospicash_finity : ic_hospicash_fisdom;
     let icn_diseases = this.state.type !== 'fisdom' ? icn_diseases_insurance_finity : icn_diseases_insurance_fisdom
 
@@ -89,12 +88,12 @@ class HealthInsuranceLanding extends Component {
         subtitle: 'Boost your existing health insurance',
         icon: super_topup_icon
       },
-      // {
-      //   key: 'HOSPICASH',
-      //   title: 'Hospital Daily Cash',
-      //   subtitle: 'Get guaranteed cash on hospitalisation',
-      //   icon: ic_hospicash
-      // }
+      {
+        key: 'HOSPICASH',
+        title: 'Hospital Daily Cash',
+        subtitle: 'Get guaranteed cash on hospitalisation',
+        icon: ic_hospicash
+      }
     ];
 
 
@@ -232,7 +231,12 @@ class HealthInsuranceLanding extends Component {
         var resultData = res.pfwresponse.result.response;
         let term_insurance = resultData.term_insurance;
         let group_insurance = resultData.group_insurance;
-        let BHARTIAXA = group_insurance && group_insurance.insurance_apps ? group_insurance.insurance_apps.BHARTIAXA : {};
+        let bharti_axa = group_insurance && group_insurance.insurance_apps ? group_insurance.insurance_apps.BHARTIAXA : {};
+        let icici_lombard = group_insurance && group_insurance.insurance_apps ? group_insurance.insurance_apps["icici lombard"] : {};
+        let BHARTIAXA = {
+          ...bharti_axa,
+          ...icici_lombard,
+        };
         let resumeFlagTerm = this.setTermInsData(term_insurance, BHARTIAXA);
 
 

@@ -244,7 +244,7 @@ class ReportDetails extends Component {
         <div className="card">
           <div className="report-detail-header">
             <div className="report-detail-icon">
-              <Imgc src={this.state.policyData.logo} alt="" />
+              <Imgc className={this.state.policyData?.new_provider ? 'baxa-new-logo': ''} src={this.state.policyData?.new_provider ? this.state.policyData?.logo : this.state.policyData?.report_logo} alt="" />
             </div>
             <div>
               <div className="report-detail-ins-name">{this.state.policyData.product_title}</div>
@@ -303,13 +303,13 @@ class ReportDetails extends Component {
             </div>
           </div>
           {this.state.accordionTab && <div className="AccordionDescription">
-            <p>Bharti Axa provides multiple options to intimate the claim to the company. By following ways:</p>
+            <p>ICICI Lombard provides multiple options to intimate the claim to the company. By following ways:</p>
             <ul>
               <li>Call on toll free call centre of the insurance company (24x7) - <span>1800-103-2292</span></li>
               <li>Login to the website of the insurance company and intimate the claim. <span><a href="http://www.bhartiaxagi.co.in/contact-us">http://www.bhartiaxagi.co.in/contact-us</a></span></li>
-              <li>Send an email to the insurance company on <span>customer.service@bharti-axagi.com</span></li>
-              <li>Post/courier to Bharti AXA General Insurance <span>Spectrum Towers, 3rd floor, Malad Link Road, Malad (west), Mumbai- 400064</span></li>
-              <li>Directly contact Bharti AXA office but in writing.</li>
+              <li>Send an email to the insurance company on <span>customersupportba@icicilombard.com</span></li>
+              <li>Post/courier to ICICI Lombard <span> Healthcare, ICICI Bank Tower, Plot No. 12, Financial District, Nanakram Guda, Gachibowli, Hyderabad-500032</span></li>
+              <li>Directly contact ICICI Lombard office but in writing.</li>
             </ul>
             <p>In all the above, the intimations are directed to a central team for prompt and immediate action</p>
           </div>}
