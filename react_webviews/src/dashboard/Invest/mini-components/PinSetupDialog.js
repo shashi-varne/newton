@@ -18,7 +18,7 @@ const PinSetupDialog = ({
 }) => {
   const { productName, base_url } = useMemo(() => getConfig(), []);
   const navigate = navigateFunc.bind(props);
-  const [screen, setScreen] = useState('success');
+  const [screen, setScreen] = useState('set');
   const [pinError, setPinError] = useState(false);
   const [pin1, setPin1] = useState('');
   const [pin2, setPin2] = useState('');
