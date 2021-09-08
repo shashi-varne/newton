@@ -367,6 +367,7 @@ const AddBank = (props) => {
                   name="account_type"
                   onChange={handleChange("account_type")}
                   disabled={isApiRunning}
+                  disableCaseSensitivity={true}
                 />
               </div>
             </main>
