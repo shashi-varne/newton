@@ -38,6 +38,7 @@ export async function initialize() {
   this.handleCampaign = handleCampaign.bind(this);
   this.closeCampaignDialog = closeCampaignDialog.bind(this);
   this.handleStocksAndIpoCards = handleStocksAndIpoCards.bind(this);
+  this.initiatePinSetup = initiatePinSetup.bind(this);
   this.setKycProductTypeAndRedirect = setKycProductTypeAndRedirect.bind(this);
   this.handleIpoCardRedirection = handleIpoCardRedirection.bind(this);
   this.contactVerification = contactVerification.bind(this);
@@ -566,17 +567,24 @@ export async function setKycProductTypeAndRedirect() {
 }
 
 export function handleIpoCardRedirection() {
-  const { userKyc, config = getConfig() } = this.state;
+  const { userKyc } = this.state;
   if (
       userKyc.equity_investment_ready &&
       this.state.currentUser?.pin_status !== 'pin_setup_complete'
   ) {
-    openModule('account/setup_2fa', this.props, { routeUrlParams: '/ipo' });
-    if (config.isNative) {
-      return nativeCallback({ action: 'exit_web' });
-    }
+    this.initiatePinSetup('ipo');
   } else {
     this.navigate("/market-products");
+  }
+}
+
+function initiatePinSetup(key) {
+  const { config } = this.state;
+  if (config.isNative) {
+    openModule('account/setup_2fa', this.props, { routeUrlParams: `/${key}` });
+    nativeCallback({ action: 'exit_web' });
+  } else {
+    this.setState({ openPinSetupDialog: true, clickedCardKey: key });
   }
 }
           
@@ -612,10 +620,7 @@ export function handleStocksAndIpoCards(key) {
       (kycJourneyStatus === "complete" && userKyc.kyc_product_type === 'equity')
     ) {
       if (currentUser?.pin_status !== 'pin_setup_complete') {
-        openModule('account/setup_2fa', this.props, { routeUrlParams: '/stocks' });
-        if (config.isNative) {
-          return nativeCallback({ action: 'exit_web' });
-        }
+        return this.initiatePinSetup(key);
       } else if (kycJourneyStatus !== "fno_rejected") {
         this.setState({ showPageLoader: "page" });
         window.location.href = `${config.base_url}/page/equity/launchapp`;

@@ -21,17 +21,16 @@ import { getKycAppStatus, isMfApplicationSubmitted, isReadyToInvest } from '../k
 import ReferDialog from './ReferralDialog';
 
 import './NavList.scss';
-import useUserKycHook from '../kyc/common/hooks/userKycHook';
-import { isEmpty } from '../utils/validators';
+import { isEmpty, storageService } from '../utils/validators';
 import { isEquityApplSubmittedOrComplete, isEquityCompleted } from '../kyc/common/functions';
 import { isTradingEnabled } from '../utils/functions';
 let data = [
-  {
-    id: 'register',
-    name: 'Register',
-    icon: register,
-    path: '/kyc',
-  },
+  // {
+  //   id: 'register',
+  //   name: 'Register',
+  //   icon: register,
+  //   path: '/kyc',
+  // },
   {
     id: 'notification',
     name: 'Notification',
@@ -103,7 +102,8 @@ const NavList = (props) => {
   const [referDialog, setReferDialog] = useState(false);
   const [activePath, setActivePath] = useState('');
   const [kycStatus, setKycStatus] = useState("");
-  const { kyc, user } = useUserKycHook();
+  const kyc = storageService().getObject("kyc");
+  const user = storageService().getObject("user");
   const isReadyToInvestBase = isReadyToInvest();
   const TRADING_ENABLED = useMemo(() => {
     return isTradingEnabled(kyc);

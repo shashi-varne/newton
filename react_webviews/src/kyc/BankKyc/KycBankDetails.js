@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import { validateNumber, isEmpty } from "utils/validators";
 import Input from "common/ui/Input";
-import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
+import DropDownNew from '../../common/ui/DropDownNew';
 import {
   bankAccountTypeOptions,
   PATHNAME_MAPPER,
@@ -522,7 +522,7 @@ const KycBankDetails = (props) => {
                 }
               />
               <div className="input" data-aid='kyc-dropdown-withouticon'>
-                <DropdownWithoutIcon
+                <DropDownNew
                   error={form_data.account_type_error ? true : false}
                   helperText={form_data.account_type_error}
                   options={accountTypes}
@@ -533,6 +533,7 @@ const KycBankDetails = (props) => {
                   name="account_type"
                   onChange={handleChange("account_type")}
                   disabled={isApiRunning || disableFields.account_type_disabled}
+                  disableCaseSensitivity={true}
                 />
               </div>
             </main>

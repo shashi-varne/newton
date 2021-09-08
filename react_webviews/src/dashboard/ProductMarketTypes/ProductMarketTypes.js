@@ -7,10 +7,10 @@ import MarketProductCard from '../mini-components/MarketProductCard';
 import { getConfig, navigate as navigateFunc } from '../../utils/functions';
 
 const ProductMarketTypes = (props) => {
-  const navigate = navigateFunc.bind(props);
   const [showLoader, setShowLoader] = useState(false);
   const config = getConfig();
   const productName = config.productName;
+  const navigate = navigateFunc.bind(props);
   const categoryLists = [
     {
       name: 'IPO',
@@ -47,7 +47,7 @@ const ProductMarketTypes = (props) => {
   const goBack = () => {
     navigate("/market-products");
   };
-
+  
   return (
     <Container
       data-aid='my-categories-screen'
@@ -56,6 +56,7 @@ const ProductMarketTypes = (props) => {
       hidePageTitle
       headerData={{ goBack }}
       showLoader={showLoader}
+      headerData={{ goBack }}
     >
       <WVInPageHeader style={{ marginBottom: '0px' }}>
         <WVInPageTitle>All categories</WVInPageTitle>

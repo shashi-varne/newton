@@ -82,6 +82,7 @@ const PrimaryMarketProducts = (props) => {
       title="IPO, Gold Bonds and more"
       headerData={{ goBack }}
       showLoader={showLoader}
+      headerData={{ goBack }}
     >
       <div className="primary-market-products">
         <div
