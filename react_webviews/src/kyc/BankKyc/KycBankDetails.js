@@ -533,6 +533,7 @@ const KycBankDetails = (props) => {
                   name="account_type"
                   onChange={handleChange("account_type")}
                   disabled={isApiRunning || disableFields.account_type_disabled}
+                  disableCaseSensitivity={true}
                 />
               </div>
             </main>
