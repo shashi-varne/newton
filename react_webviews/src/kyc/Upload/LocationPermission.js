@@ -170,7 +170,7 @@ const LocationPermission = ({
       <WVFullscreenDialog.Action>
         <WVButton
           fullWidth
-            style={{ display: 'flex', margin: 'auto' }}
+          style={{ display: 'flex', margin: 'auto' }}
           onClick={onCTAClick}
           variant="outlined"
           color="secondary"

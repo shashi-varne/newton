@@ -7,6 +7,7 @@ import WVButton from '../../../common/ui/Button/WVButton';
 import { getKycFromSummary } from "../../../login_and_registration/functions";
 import BackArrow from '@material-ui/icons/ChevronLeft';
 import { withRouter } from 'react-router';
+import WVInPageTitle from '../../../common/ui/InPageHeader/WVInPageTitle';
 
 const PinSetupDialog = ({
   open,
@@ -32,36 +33,42 @@ const PinSetupDialog = ({
   }, [screen]);
 
   const handleClick = async () => {
-    try {
-      setIsApiRunning(true);
-      if (screen === 'set') {
-        await verifyPin({
-          validate_only: true,
-          pin: pin1
-        });
-        setScreen('confirm');
-      } else {
-        if (pin2 !== pin1) {
-          // eslint-disable-next-line no-throw-literal
-          throw "PIN doesn't match, Please try again";
-        } else {
-          await setNewPin({ pin: pin2 });
-          await getKycFromSummary({
-            kyc: ["kyc"],
-            user: ["user"]
+    if (screen !== 'success') {
+      try {
+        setIsApiRunning(true);
+        if (screen === 'set') {
+          await verifyPin({
+            validate_only: true,
+            mpin: pin1
           });
-          if (comingFrom === 'stocks') {
-            window.location.href = `${base_url}/page/equity/launchapp`;
+          setScreen('confirm');
+        } else if (screen === 'confirm') {
+          if (pin2 !== pin1) {
+            // eslint-disable-next-line no-throw-literal
+            throw "PIN doesn't match, Please try again";
           } else {
-            navigate("/market-products");
+            await setNewPin({ mpin: pin2 });
+            await getKycFromSummary({
+              kyc: ["kyc"],
+              user: ["user"]
+            });
+            setScreen('success');
           }
         }
+      } catch (err) {
+        console.log(err);
+        setPinError(err);
+      } finally {
+        setIsApiRunning(false);
       }
-    } catch (err) {
-      console.log(err);
-      setPinError(err);
-    } finally {
-      setIsApiRunning(false);
+    } else {
+      // when pin setup is successful
+      setIsApiRunning(true);
+      if (comingFrom === 'stocks') {
+        window.location.href = `${base_url}/page/equity/launchapp`;
+      } else {
+        navigate("/market-products");
+      }
     }
   }
 
@@ -75,7 +82,7 @@ const PinSetupDialog = ({
   }
 
   const onCloseClicked = () => {
-    if (screen === 'set') {
+    if (screen === 'set' || screen === 'success') {
       onClose();
     } else {
       setScreen('set');
@@ -87,25 +94,29 @@ const PinSetupDialog = ({
       open={open}
       onClose={onCloseClicked}
       closeIconPosition='left'
-      customCloseIcon={screen === 'set' ? '' : BackArrow}
+      customCloseIcon={screen === 'confirm' ? BackArrow : ''}
     >
       <WVFullscreenDialog.Content>
         <div style={{ paddingTop: '60px' }}>
-          <EnterMPin
-            title={`${screen === 'set' ? 'Set' : 'Confirm'} ${productName} PIN`}
-            subtitle="Ensuring maximum security for your investment account"
-            otpProps={{
-              otp: screen === 'set' ? pin1 : pin2,
-              handleOtp: onPinChange,
-              hasError: !!pinError,
-              bottomText: pinError || '',
-            }}
-          />
+          {screen !== 'success' ?
+            <EnterMPin
+              title={`${screen === 'set' ? 'Set' : 'Confirm'} ${productName} PIN`}
+              subtitle="Ensuring maximum security for your investment account"
+              otpProps={{
+                otp: screen === 'set' ? pin1 : pin2,
+                handleOtp: onPinChange,
+                hasError: !!pinError,
+                bottomText: pinError || '',
+              }}
+            /> :
+            <PinSetupSuccess productName={productName} />
+          }
         </div>
       </WVFullscreenDialog.Content>
       <WVFullscreenDialog.Action>
         <WVButton
           contained
+          fullWidth
           color="secondary"
           onClick={handleClick}
           showLoader={isApiRunning}
@@ -115,6 +126,18 @@ const PinSetupDialog = ({
       </WVFullscreenDialog.Action>
     </WVFullscreenDialog>
   );
+}
+
+const PinSetupSuccess = ({ productName }) => {
+  return (
+    <div style={{ textAlign: 'center' }}>
+      <img
+        src={require(`assets/${productName}/ic_process_done.svg`)}
+        alt=""
+      />
+      <WVInPageTitle style={{ marginTop: '40px' }}>{productName} security enabled</WVInPageTitle>
+    </div>
+  )
 }
 
 export default withRouter(PinSetupDialog);
