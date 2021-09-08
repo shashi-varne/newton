@@ -14,7 +14,14 @@
     }
   }
 }
-  
-.wv-fullscreen-dialog-close {
+
+.wv-fd-close {
   cursor: pointer;
+}
+
+.wv-fd-footer {
+  &.wv-fdf-centered {
+    display: flex;
+    justify-content: center;
+  }
 }
