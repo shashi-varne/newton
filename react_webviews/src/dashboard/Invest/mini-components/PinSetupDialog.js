@@ -8,6 +8,7 @@ import { getKycFromSummary } from "../../../login_and_registration/functions";
 import BackArrow from '@material-ui/icons/ChevronLeft';
 import { withRouter } from 'react-router';
 import WVInPageTitle from '../../../common/ui/InPageHeader/WVInPageTitle';
+import { Imgc } from '../../../common/ui/Imgc';
 
 const PinSetupDialog = ({
   open,
@@ -17,7 +18,7 @@ const PinSetupDialog = ({
 }) => {
   const { productName, base_url } = useMemo(() => getConfig(), []);
   const navigate = navigateFunc.bind(props);
-  const [screen, setScreen] = useState('set');
+  const [screen, setScreen] = useState('success');
   const [pinError, setPinError] = useState(false);
   const [pin1, setPin1] = useState('');
   const [pin2, setPin2] = useState('');
@@ -63,8 +64,8 @@ const PinSetupDialog = ({
       }
     } else {
       // when pin setup is successful
-      setIsApiRunning(true);
       if (comingFrom === 'stocks') {
+        setIsApiRunning(true);
         window.location.href = `${base_url}/page/equity/launchapp`;
       } else {
         navigate("/market-products");
@@ -131,9 +132,10 @@ const PinSetupDialog = ({
 const PinSetupSuccess = ({ productName }) => {
   return (
     <div style={{ textAlign: 'center' }}>
-      <img
-        src={require(`assets/${productName}/ic_process_done.svg`)}
-        alt=""
+      <Imgc
+        style={{ width: '90px' }}
+        src={require(`assets/${productName}/pin_changed.svg`)}
+        alt="security-enabled"
       />
       <WVInPageTitle style={{ marginTop: '40px' }}>{productName} security enabled</WVInPageTitle>
     </div>
