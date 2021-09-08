@@ -14,7 +14,7 @@ import { isEmpty } from "lodash";
 import { isDigilockerFlow } from "../../kyc/common/functions";
 import { getBasePath, isTradingEnabled, navigate as navigateFunc } from "../../utils/functions";
 import kycComplete from 'assets/kyc_complete.svg';
-import { openModule, redirectToPath } from "../../utils/native_callback";
+import { openModule } from "../../utils/native_callback";
 
 class DigiStatus extends Component {
   constructor(props) {
@@ -94,7 +94,7 @@ class DigiStatus extends Component {
     if (config.isNative) {
       nativeCallback({ action: 'exit_web' });
     } else {
-      window.location.href = redirectToPath("/invest");
+      this.navigate("/invest");
     }
   }
 

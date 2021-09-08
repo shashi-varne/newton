@@ -1,5 +1,5 @@
 import React, {useEffect, useState, Fragment} from "react";
-import { nativeCallback, redirectToPath } from "../../../utils/native_callback";
+import { nativeCallback } from "../../../utils/native_callback";
 import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import Container from "../../common/Container";
 import WVJourneyShortening from "../../../common/ui/JourneyShortening/JourneyShortening";
@@ -37,7 +37,7 @@ const DocumentVerification = (props) => {
     if(!config.Web && storageService().get("native")) {
       nativeCallback({ action: "exit_web" });
     } else {
-      window.location.href = redirectToPath("/");
+      navigate("/");
     }
   }
 
