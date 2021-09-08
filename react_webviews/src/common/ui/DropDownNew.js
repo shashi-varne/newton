@@ -130,6 +130,7 @@ class SelectDropDown2 extends React.Component {
             <Select
               ref={inst => (this.myRef = inst)}
               blurInputOnSelect={false}
+              isDisabled={this.props.disabled}
               BrandColor={getConfig().styles.primaryColor}
               onBlurResetsInput={true}
               openMenuOnClick={true}
