@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
-import { initialize, handleCampaignNotification, dateValidation } from '../../functions';
+import { initialize, handleCampaignNotification, dateValidation, updateConsent } from '../../functions';
 import { SkeltonRect } from 'common/ui/Skelton';
 import SdkInvestCard from '../../mini-components/SdkInvestCard';
 import { storageService } from 'utils/validators';
@@ -14,6 +14,8 @@ import VerificationFailedDialog from '../../mini-components/VerificationFailedDi
 import KycStatusDialog from '../../mini-components/KycStatusDialog';
 import { nativeCallback } from '../../../../utils/native_callback';
 import { Imgc } from '../../../../common/ui/Imgc';
+import TermsAndConditions from '../../mini-components/TermsAndConditionsDialog';
+import Toast from '../../../../common/ui/Toast';
 
 const PATHNAME_MAPPER = {
   nfo: "/advanced-investing/new-fund-offers/info",
@@ -62,6 +64,10 @@ class SdkLanding extends Component {
     const isBottomSheetDisplayed = storageService().get('is_bottom_sheet_displayed');
     if (!isBottomSheetDisplayed) {
       this.handleCampaignNotification();
+    }
+    const consentRequired = storageService().get("consent_required");
+    if(consentRequired && getConfig().code === "lvb") {
+      this.setState({ showTermsAndConditions: true });
     }
   };
 
@@ -172,6 +178,18 @@ class SdkLanding extends Component {
     }
   };
 
+  handleTermsAndConditions = async () => {
+    try {
+      this.setState({ showTermsAndConditionsLoader: "button" });
+      await updateConsent();
+      storageService().set("consent_required", false);
+    } catch (err) {
+      Toast(err.message);
+    } finally {
+      this.setState({ showTermsAndConditions: false, showTermsAndConditionsLoader: false})
+    }
+  }
+
   render() {
     let {
       isReadyToInvestBase,
@@ -182,7 +200,9 @@ class SdkLanding extends Component {
       kycJourneyStatus,
       verificationFailed,
       openKycStatusDialog,
-      modalData
+      modalData,
+      showTermsAndConditions,
+      showTermsAndConditionsLoader
     } = this.state;
 
     const config = getConfig();
@@ -341,6 +361,11 @@ class SdkLanding extends Component {
             cancel={this.closeKycStatusDialog}
           />
         )}
+        <TermsAndConditions
+          isOpen={showTermsAndConditions}
+          showLoader={showTermsAndConditionsLoader}
+          handleClick={this.handleTermsAndConditions}
+        />
       </Container>
     );
   }
