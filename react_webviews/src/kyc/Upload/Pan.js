@@ -27,7 +27,6 @@ const Pan = (props) => {
   const {kyc, isLoading, updateKyc} = useUserKycHook();
   const [areDocsPending, setDocsPendingStatus] = useState();
   const [tradingEnabled, setTradingEnabled] = useState();
-  const [isPanAvailable, setIsPanAvailable] = useState(false);
   const goBackPath = props.location?.state?.goBack || "";
 
   useEffect(() => {
@@ -43,7 +42,6 @@ const Pan = (props) => {
     const docStatus = await checkDocsPending(kyc);
     setDocsPendingStatus(docStatus);
     setTradingEnabled(isTradingEnabled(kyc))
-    setIsPanAvailable(isDocSubmittedOrApproved("equity_pan"));
   }
 
   const onFileSelectComplete = (newFile, fileBase64) => {
@@ -79,7 +77,7 @@ const Pan = (props) => {
     } else {
       if (dlFlow) {
         if (kyc.equity_sign_status !== 'signed') {
-          if (isPanAvailable && !kyc.show_equity_charges_page) {
+          if (kyc.show_equity_charges_page) {
             navigate(PATHNAME_MAPPER.tradingInfo, {
               state: { goBack: PATHNAME_MAPPER.journey }
             });
