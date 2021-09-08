@@ -25,12 +25,12 @@ import { isEmpty, storageService } from '../utils/validators';
 import { isEquityApplSubmittedOrComplete, isEquityCompleted } from '../kyc/common/functions';
 import { isTradingEnabled } from '../utils/functions';
 let data = [
-  {
-    id: 'register',
-    name: 'Register',
-    icon: register,
-    path: '/kyc',
-  },
+  // {
+  //   id: 'register',
+  //   name: 'Register',
+  //   icon: register,
+  //   path: '/kyc',
+  // },
   {
     id: 'notification',
     name: 'Notification',
