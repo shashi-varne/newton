@@ -50,6 +50,7 @@ class SdkLanding extends Component {
       dotLoader: false,
       openBottomSheet: false,
       bottom_sheet_dialog_data: [],
+      showTermsAndConditions: false
     };
     this.initialize = initialize.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
