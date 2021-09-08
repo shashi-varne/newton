@@ -68,10 +68,22 @@ const Content = ({
 }) => {
   return (
     <DialogContent>
-      <div className="wv-fd-content-body">
+      {children}
+    </DialogContent>
+  );
+}
+
+const Action = ({
+  alignCenter = true,
+  className,
+  children
+}) => {
+  return (
+    <DialogActions>
+      <div className={`wv-fd-footer ${alignCenter && 'wv-fdf-centered'} ${className}`}>
         {children}
       </div>
-    </DialogContent>
+    </DialogActions>
   );
 }
 
@@ -86,6 +98,6 @@ WVFullscreenDialog.defaultProps = {
 }
 
 WVFullscreenDialog.Content = Content; // Extends custom styling over MUI DialogContent
-WVFullscreenDialog.Action = DialogActions; // Reuses MUI DialogActions
+WVFullscreenDialog.Action = Action; // Extends custom styling over MUI DialogActions
 
 export default WVFullscreenDialog;
