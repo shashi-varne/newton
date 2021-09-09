@@ -26,7 +26,7 @@ const config = getConfig();
 
 const TYPES = {
   'info': {
-    icon: config.productName === 'finity' ? 'badge-info-finity' : 'badge-info',
+    icon: config.productName === 'finity' ? 'finity/info_icon' : 'badge-info',
     iconColor: config.styles.primaryColor,
     bgColor: config.styles.highlightColor,
     titleColor: '#6650AB',
