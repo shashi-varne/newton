@@ -19,6 +19,7 @@ import DesktopLayout from './desktopLayout';
 // import CommonRenderFaqs from './common/components/RenderFaqs';
 
 
+import RmLogin from './RmJourney/login';
 import Feature from './Feature';
 import Tooltip from 'common/ui/Tooltip';
 import ComponentTest from './ComponentTest';
@@ -44,7 +45,7 @@ const getMuiThemeConfig = () => {
 }
 
 var basename = window.sessionStorage.getItem('base_href') || '';
-if (basename && basename.indexOf('appl/webview') !== -1) {
+if (basename && basename.indexOf('appl/web') !== -1) {
   basename = basename ? basename + 'view/' : '';
 }
 
@@ -108,11 +109,12 @@ const App = () => {
                 ]}
                 component={LoginContainer}
               />
-              <Route path='/partner-landing' component={FisdomPartnerRedirect} />
+              <UnAuthenticatedRoute path='/rm-login' component={RmLogin} />
               <UnAuthenticatedRoute path="/partner-authentication/:partnerCode" component={PartnerAuthentication} />
+              <UnAuthenticatedRoute path="/prepare" component={Prepare} />
+              <Route path='/partner-landing' component={FisdomPartnerRedirect} />
               <Route path='/logout' component={Logout} />
               <Route path='/component-test' component={ComponentTest} />
-              <UnAuthenticatedRoute path="/prepare" component={Prepare} />
               {
                 isMobileDevice || iframe ?
                 <Route component={Feature}/>:
