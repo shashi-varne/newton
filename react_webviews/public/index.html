@@ -189,12 +189,12 @@
       var pathname = window.location.pathname;
       var myBaseHrefUrl = '';
 
-      if(pathname.indexOf('appl/webview') !== -1) {
-        myBaseHrefUrl = '/appl/webview/' + window.location.pathname.split('/')[3] +'/' ;
+      if(pathname.indexOf('appl/web') !== -1) {
+        var myBaseHrefUrl = '/appl/web/' + window.location.pathname.split('/')[3] +'/' ;
       }
       
-      if(pathname.indexOf('plutus-webview') !== -1) {
-        myBaseHrefUrl = '/plutus-webview' + window.location.pathname.split('/')[2] + '/' ;
+      if(pathname.indexOf('plutus-webapp') !== -1) {
+        var myBaseHrefUrl = '/plutus-webapp' + window.location.pathname.split('/')[2] + '/' ;
       }
 
       if(pathname.indexOf('webapp') !== -1) {

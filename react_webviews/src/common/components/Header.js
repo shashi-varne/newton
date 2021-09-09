@@ -34,6 +34,7 @@ const Header = ({ classes, title, count, total, current, goBack,
     const [mobileViewDrawer, setMobileViewDrawer] = useState(false);
     const campaign = storageService().getObject("campaign");
     const config = getConfig();
+    const isGuestUser = storageService().getBoolean('guestUser');
     const isMobileDevice = config.isMobileDevice;
     const partnerLogo = config.logo;
     const isWeb = config.Web;
@@ -165,7 +166,7 @@ const Header = ({ classes, title, count, total, current, goBack,
                   src={isEmpty(campaign) ? notificationLogo : notificationBadgeLogo}
                 />
                 }
-                {isMobileDevice && isWeb && !hideHamburger && !config.isIframe &&
+                {isMobileDevice && isWeb && !hideHamburger && !config.isIframe && !isGuestUser &&
                   <div className='mobile-navbar-menu'>
                     <IconButton onClick={handleMobileViewDrawer}>
                       <MenuIcon style={{color: new_header && backgroundColor ?  getConfig().styles.secondaryColor : headerData.partnerLogo ? 'white' : getConfig().styles.primaryColor}}/>
