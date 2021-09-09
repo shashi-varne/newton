@@ -137,7 +137,11 @@ export const ACCOUNT_STATEMENT_OPTIONS = [
           type: 'date-select',
           dateType: 'date',
           paramName: 'dt_end',
-          title: 'View holdings as of'
+          title: 'Holdings as of',
+          fieldProps: {
+            disabled: true,
+            helperText: 'Statement will be generated as per current date',
+          }
         },
       ]
     }

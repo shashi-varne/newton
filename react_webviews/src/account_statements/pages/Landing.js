@@ -1,13 +1,18 @@
-import  React from 'react';
+import  React, { useMemo } from 'react';
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble';
 import WVListItem from '../../common/ui/ListItem/WVListItem';
 import { navigate as navigateFunc } from '../../utils/functions';
 import Container from '../common/Container';
 import { ACCOUNT_STATEMENT_OPTIONS } from '../constants';
 import cloneDeep from 'lodash/cloneDeep';
+import WVInPageHeader from "../../common/ui/InPageHeader/WVInPageHeader";
+import WVInPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
+import WVInPageSubtitle from "../../common/ui/InPageHeader/WVInPageSubtitle";
+import { getConfig } from "../../utils/functions";
 
 export default function Landing(props) {
   const navigate = navigateFunc.bind(props);
+  const { productName } = useMemo(() => getConfig(), []);
   const STATEMENT_OPTIONS = cloneDeep(ACCOUNT_STATEMENT_OPTIONS).map(option => {
     delete option.pageProps;
     return option;
@@ -18,11 +23,16 @@ export default function Landing(props) {
   }
 
   return (
-    <Container
-      noFooter
-      title="Statements"
-      smallTitle="Overview of your investments"
-    >
+    <Container noFooter force_hide_inpage_title>
+      <WVInPageHeader
+        withImg
+        imageProps={{
+          src: require(`assets/${productName}/statements.svg`)
+        }}
+      >
+        <WVInPageTitle>Statements</WVInPageTitle>
+        <WVInPageSubtitle>Overview of your investments</WVInPageSubtitle>
+      </WVInPageHeader>
       <WVInfoBubble hasTitle style={{ marginBottom: '30px' }}>
         The statements are not for mutual funds and only reflect your Trading & Demat account transactions
       </WVInfoBubble>

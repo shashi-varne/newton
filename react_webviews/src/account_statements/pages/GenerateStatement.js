@@ -1,5 +1,5 @@
 import "./GenerateStatements.scss";
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { keyBy } from 'lodash';
 import { ACCOUNT_STATEMENT_OPTIONS } from '../constants';
 import Container from '../common/Container';
@@ -13,7 +13,7 @@ import format from 'date-fns/format';
 import { fiscalYearGenerator } from "../functions";
 
 const optionsMap = keyBy(ACCOUNT_STATEMENT_OPTIONS, 'type');
-const FINANCIAL_YEAR_OPTIONS = fiscalYearGenerator(2000);
+const FINANCIAL_YEAR_OPTIONS = fiscalYearGenerator(2002);
 
 export default function GenerateStatement(props) {
   const { pageType = '' } = props?.match?.params || {};
@@ -25,11 +25,12 @@ export default function GenerateStatement(props) {
   const [errorObj, setErrorObj] = useState({});
   
   const [selectedRadioOption, setSelectedRadioOption] = useState('');
-  const radioButtons = useCallback(({ options, title = "", type }) => {
+  const radioButtons = useCallback(({ options, title = "", type, fieldProps = {} }) => {
     return (
       <div className="as-radio-field" key={type}>
         <FieldTitle>{title}</FieldTitle>
         <RadioOptions
+          icon_type="blue_icon"
           error={!!errorObj[type]}
           helperText={errorObj[type]}
           width="40"
@@ -37,6 +38,7 @@ export default function GenerateStatement(props) {
           id="statement-type"
           value={selectedRadioOption}
           onChange={handleRadioChange}
+          {...fieldProps}
         />
       </div>
     );
@@ -52,7 +54,7 @@ export default function GenerateStatement(props) {
   }
 
   const [selectedFinYear, setSelectedFinYear] = useState('');
-  const finYearSelector = useCallback(({ title, buttonTitle, type}) => {
+  const finYearSelector = useCallback(({ title, buttonTitle, type, fieldProps = {} }) => {
     return (
       <div style={{ marginBottom: errorObj[type] ? '30px' : '8px' }} key={type}>
         <FieldTitle>{title || "Select Financial Year"}</FieldTitle>
@@ -67,6 +69,7 @@ export default function GenerateStatement(props) {
           id="fin-year"
           name="fin-year"
           onChange={handleFinYearChange}
+          {...fieldProps}
         />
       </div>
     );
@@ -81,7 +84,7 @@ export default function GenerateStatement(props) {
   }
 
   const [selectedDateMap, setSelectedDateMap] = useState({});
-  const dateSelector = useCallback(({ title, dateType, type }) => {
+  const dateSelector = useCallback(({ title, dateType, type, fieldProps = {} }) => {
     return (
       <div style={{ marginBottom: '30px' }} key={dateType}>
         <FieldTitle>{title || "Select Date"}</FieldTitle>
@@ -95,11 +98,18 @@ export default function GenerateStatement(props) {
           inputMode="numeric"
           type="text"
           id="date"
-          disabled={isApiRunning}
+          {...fieldProps}
         />
       </div>
     );
-  }, [selectedFinYear, errorObj]);
+  }, [selectedDateMap, errorObj]);
+  useEffect(() => {
+    if (pageObj.type === 'demat_holding') {
+      setSelectedDateMap({
+        'date': new Date().toLocaleDateString()
+      });
+    }
+  }, []);
 
   const handleDateChange = type => event => {
     const value = event.target.value;
@@ -119,7 +129,7 @@ export default function GenerateStatement(props) {
       return "Please enter a valid date";
     }
     
-    const formattedDate = new Date(new Date(value).toLocaleDateString('en-GB')); // converts dd/mm/yyyy to mm/dd/yyyy
+    const formattedDate = new Date(new Date(value).toLocaleDateString()); // converts dd/mm/yyyy to mm/dd/yyyy
     
     if (formattedDate > new Date() && pageObj.type === 'demat_holding') {
       return "Date must not exceed today's date";
@@ -129,7 +139,7 @@ export default function GenerateStatement(props) {
       dateType === 'to' &&
       selectedDateMap['from'] &&
       isValidDate(selectedDateMap['from']) &&
-      formattedDate < new Date(new Date(selectedDateMap['from']).toLocaleDateString('en-GB'))
+      formattedDate < new Date(new Date(selectedDateMap['from']).toLocaleDateString())
     ) {
       return "Please enter value greater than From date";
     }
@@ -185,7 +195,7 @@ export default function GenerateStatement(props) {
     const availableFields = pageProps.fields;
     
     let fieldValue;
-    return availableFields.reduce((params, field)  => {
+    let paramsToSend = availableFields.reduce((params, field)  => {
       if (field.type === 'radio') {
         fieldValue = selectedRadioOption;
       } else if (field.type === 'fin-year') {
@@ -196,6 +206,16 @@ export default function GenerateStatement(props) {
       params[field.paramName] = fieldValue;
       return params;
     }, {});
+
+    if (pageObj.type === 'capital_gains') {
+      const [startYear, endYear] = paramsToSend.fiscal_year.split('-');
+      Object.assign(paramsToSend, {
+        dt_start: new Date(startYear, 3).toLocaleDateString(),
+        dt_end: new Date(endYear, 2, 31).toLocaleDateString(),
+      });
+    }
+
+    return paramsToSend;
   }
 
   const handleClick = async () => {
