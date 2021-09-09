@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import register from 'assets/registration_menu_icon.png';
+// import register from 'assets/registration_menu_icon.png';
 import notification from 'assets/notifications_icon.png';
 import invest from 'assets/invest.png';
 import report from 'assets/reports.png';
@@ -102,8 +102,8 @@ const NavList = (props) => {
   const [referDialog, setReferDialog] = useState(false);
   const [activePath, setActivePath] = useState('');
   const [kycStatus, setKycStatus] = useState("");
-  const kyc = storageService().getObject("kyc");
-  const user = storageService().getObject("user");
+  const kyc = storageService().getObject("kyc") || {};
+  const user = storageService().getObject("user") || {};
   const isReadyToInvestBase = isReadyToInvest();
   const TRADING_ENABLED = useMemo(() => {
     return isTradingEnabled(kyc);
@@ -116,7 +116,7 @@ const NavList = (props) => {
   }, [kyc]);
 
   const initialize = () => {
-    let kycJourneyStatus = getKycAppStatus(kyc).status;
+    let kycJourneyStatus = getKycAppStatus(kyc)?.status;
     setKycStatus(kycJourneyStatus);
 
     filterNavList();
