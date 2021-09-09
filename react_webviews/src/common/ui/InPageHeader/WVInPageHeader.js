@@ -13,19 +13,25 @@ import './commonStyles.scss';
 import React from 'react';
 import WVInPageTitle from './WVInPageTitle';
 import WVInPageSubtitle from './WVInPageSubtitle';
+import { Imgc } from '../Imgc';
 
 const WVInPageHeader = ({
   dataAidSuffix,
+  withImg,
+  imageProps,
   children,
   ...props
 }) => {
   return (
     <div
-      className="wv-in-page-header"
+      className={`wv-in-page-header ${withImg && 'wv-iph-with-img'}`}
       data-aid={`wv-in-page-header-${dataAidSuffix}`}
       {...props}
     >
-      {children}
+      <div>
+        {children}
+      </div>
+      {withImg && <Imgc {...imageProps} />}
     </div>
   );
 }
