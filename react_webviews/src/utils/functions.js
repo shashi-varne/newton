@@ -158,7 +158,7 @@ export const getConfig = () => {
   let isProdFisdom = origin.indexOf('app.fisdom.com') >= 0  || origin.indexOf('wv.fisdom.com') >= 0 ;
   let isProdFinity = origin.indexOf('app.mywaywealth.com') >= 0 || origin.indexOf('wv.mywaywealth.com') >= 0;
 
-  let base_href = window.sessionStorage.getItem('base_href') || '';
+  let base_href = window.localStorage.getItem('base_href') || '';
   let base_url_default = '';
   
   const isStaging = origin.indexOf('plutus-web-staging') >= 0;
@@ -529,7 +529,7 @@ export function isIframe() {
   }
 }
 export function getBasePath() {
-  var basename = window.sessionStorage.getItem('base_href') || '';
+  var basename = window.localStorage.getItem('base_href') || '';
   if(basename && basename.indexOf('appl/web') !== -1) {
     basename = basename ? basename + 'view' : '';
   }

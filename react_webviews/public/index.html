@@ -156,13 +156,13 @@
       if(pathname.indexOf('appl/web') !== -1) {
         var myBaseHrefUrl = '/appl/web/' + window.location.pathname.split('/')[3] +'/' ;
         myBaseHref.href = myBaseHrefUrl;
-        window.sessionStorage.setItem('base_href', myBaseHrefUrl);
+        window.localStorage.setItem('base_href', myBaseHrefUrl);
       }
       
       if(pathname.indexOf('plutus-webapp') !== -1) {
         var myBaseHrefUrl = '/plutus-webapp' + window.location.pathname.split('/')[2] + '/' ;
         myBaseHref.href = myBaseHrefUrl;
-        window.sessionStorage.setItem('base_href', myBaseHrefUrl);
+        window.localStorage.setItem('base_href', myBaseHrefUrl);
       }
 
     </script>

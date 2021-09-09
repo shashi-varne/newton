@@ -177,7 +177,7 @@ export function setBaseHref() {
   if(pathname.indexOf('appl/web') !== -1) {
     var myBaseHrefUrl = '/appl/web/' + pathname.split('/')[3] +'/' ;
     myBaseHref.href = myBaseHrefUrl;
-    window.sessionStorage.setItem('base_href', myBaseHrefUrl);
+    window.localStorage.setItem('base_href', myBaseHrefUrl);
   }
 }
 
