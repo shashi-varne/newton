@@ -46,7 +46,6 @@ function useFunnelDataHook() {
   };
 
   const setFunnelData = (data) => {
-    console.log('data', data);
     storageService().setObject('funnelData', data);
     funnelDataSetter(data);
   };
