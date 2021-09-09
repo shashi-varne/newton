@@ -7,7 +7,7 @@ import { FormControl } from "material-ui/Form";
 import DropDownNew from "../../../common/ui/DropDownNew";
 import Attention from "../../../common/ui/Attention";
 import RadioWithoutIcon from "../../../common/ui/RadioWithoutIcon";
-import { capitalizeFirstLetter, timeStampToDate } from "utils/validators";
+import { capitalizeFirstLetter, timeStampToDate, containsSpecialCharactersAndNumbers } from "utils/validators";
 import scrollIntoView from "scroll-into-view-if-needed";
 
 const gender_options = [
@@ -181,13 +181,14 @@ class PersonalDetails extends Component {
     let names = [
       "first_name",
       "last_name",
+      "middle_name",
       "father_first_name",
       "father_last_name",
       "mother_first_name",
       "mother_last_name",
     ];
 
-    if (names.includes(name) && value.includes(" ")) {
+    if ((names.includes(name) && value.includes(" ")) || containsSpecialCharactersAndNumbers(value)) {
       return;
     }
 

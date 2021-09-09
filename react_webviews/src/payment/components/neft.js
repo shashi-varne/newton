@@ -49,7 +49,7 @@ const NEFTModal = (props) => {
                     <div className={props.highlighttnc ? 'active' : ''}>Make sure to use same <b>NEFT number</b> linked to above selected account</div>
                 </div>
                 <div className="upi-button margin-top">
-                    <button className={`${props.checked ? 'active' : ''} ${props.store.partner}`} onClick={() => props.saveNEFT()}>Continue to Pay ₹ {props.store.amount}</button>
+                    <button className={`${props.checked ? 'active' : ''} ${props.store?.partner}`} onClick={() => props.saveNEFT()}>Continue to Pay ₹ {props.store?.amount}</button>
                 </div>
             </div>
         </div>
@@ -89,7 +89,7 @@ class NEFT extends React.Component {
                         back_text: 'Are you sure you want to exit the payment process?'
                     }
                 });
-                window.location.href = this.state.store.neft_callback_url + '&bank_code=' + this.state.bank.bank_code + '&account_number=' + this.state.bank.account_number + '&neft_no=' + neft_number;
+                window.location.href = this.state.store?.neft_callback_url + '&bank_code=' + this.state.bank.bank_code + '&account_number=' + this.state.bank.account_number + '&neft_no=' + neft_number;
             } else {
                 this.setState({ highlighttnc: true });
             }
@@ -123,10 +123,10 @@ class NEFT extends React.Component {
                     <div className="neft-wrapper">
                         <div className="neft-info">
                             <p>
-                                Please transfer <b>Rs.{this.state.store.amount}</b> to the following bank account:<br />
+                                Please transfer <b>Rs.{this.state.store?.amount}</b> to the following bank account:<br />
                             </p>
                             <table className="neft-table">
-                                {this.state.store.partner === "obc" || this.state.store.partner === "ktb" ?
+                                {this.state.store?.partner === "obc" || this.state.store?.partner === "ktb" ?
                                     <tbody>
                                         <tr>
                                             <td>Name</td>
