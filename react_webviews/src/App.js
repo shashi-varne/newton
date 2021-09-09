@@ -101,6 +101,9 @@ const App = () => {
             <Switch>
               <Route path="/iw-dashboard" component={InternalWealthDashboard} />
               <Route path='/w-report' component={WealthReport} />
+              <Route path='/partner-landing' component={FisdomPartnerRedirect} />
+              <Route path='/component-test' component={ComponentTest} />
+              <Route path='/logout' component={Logout} />
               <UnAuthenticatedRoute
                 path={[
                   '/login',
@@ -108,10 +111,7 @@ const App = () => {
                 ]}
                 component={LoginContainer}
               />
-              <Route path='/partner-landing' component={FisdomPartnerRedirect} />
               <UnAuthenticatedRoute path="/partner-authentication/:partnerCode" component={PartnerAuthentication} />
-              <Route path='/logout' component={Logout} />
-              <Route path='/component-test' component={ComponentTest} />
               <UnAuthenticatedRoute path="/prepare" component={Prepare} />
               {
                 isMobileDevice || iframe ?

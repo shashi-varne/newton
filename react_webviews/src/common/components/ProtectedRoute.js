@@ -1,18 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Route, Redirect } from "react-router-dom";
-import { initData } from "../../kyc/services";
+import React, { useContext, useEffect, useMemo, useState } from "react";
+import { Route } from "react-router-dom";
+import { getAccountSummary, setSummaryData } from "../../kyc/services";
 import { storageService } from "utils/validators";
 import isEmpty from "lodash/isEmpty";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
 import UiSkelton from "../ui/Skelton";
 import ThemeContext from "../../utils/ThemeContext";
-const config = getConfig();
-const isSdk = config.isSdk;
-const isNative = config.isNative;
-const isIframe = config.isIframe;
+import isObject from 'lodash/isObject';
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
+  const { isSdk, isIframe, isMobileDevice } = useMemo(() => getConfig(), []);
   const theme = useContext(ThemeContext)
   let currentUser = storageService().get("currentUser");
   let user = storageService().getObject("user") || {};
@@ -26,33 +24,24 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
 
   const fetch = async () => {
     try {
-      await initData();
-    } catch (e) {
-      console.log(e);
-    } finally {
-      currentUser = storageService().get("currentUser");
-      user = storageService().getObject("user") || {};
-      kyc = storageService().getObject("kyc") || {};
-      const userDataAvailable = currentUser && !isEmpty(kyc) && !isEmpty(user);
-      setIsLoginValid(userDataAvailable);
-      if (!userDataAvailable) {
-        if (isNative) {
-          nativeCallback({ action: "exit_web" });
-        } else if (isSdk) {
-          nativeCallback({ action: "session_expired" });
-        } else if (isIframe) {
-          let message = JSON.stringify({
-            type: "iframe_close",
-          });
-          window.callbackWeb.sendEvent(message);
-        }
+      const result = await getAccountSummary();
+      setIsLoginValid(true);
+      await setSummaryData(result);
+    } catch (err) {
+      setIsLoginValid(false);
+      if (isObject(err) && [403, 416].includes(err.pfwstatus_code)) {
+        return;
+      } else {
+        nativeCallback({ action: 'login_required' })
       }
+    } finally {
       setShowLoader(false);
     }
   };
 
   useEffect(() => {
-    initialize()
+    console.log('rest in Protected route', rest);
+    initialize();
   }, []);
 
   const initialize = async () => {
@@ -74,27 +63,14 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
                 isIframe ? "iframeContainerWrapper" : "ContainerWrapper"
               }
             >
-              {(!isIframe || config.isMobileDevice) && (
+              {(!isIframe || isMobileDevice) && (
                 <div style={{ height: "56px" }}></div>
               )}
               <UiSkelton type />
             </div>
           );
-        }
-        if (isLoginValid) {
+        } else if (isLoginValid) {
           return <Component {...props} />;
-        } else if (!isNative && !isSdk && !isIframe) {
-          return (
-            <Redirect
-              to={{
-                pathname: "/login",
-                state: {
-                  from: props.location,
-                },
-                search: getConfig().searchParams,
-              }}
-            />
-          );
         }
       }}
     />

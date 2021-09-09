@@ -35,7 +35,11 @@ export async function getAccountSummary(params = {}) {
       !response.pfwresponse ||
       isEmpty(response.pfwresponse)
     ) {
-      throw new Error(response?.pfwmessage || "Something went wrong!");
+      const errObj = {
+        pfwstatus_code: response?.pfwstatus_code,
+        pfwmessage: response?.pfwmessage
+      };
+      throw errObj; 
     }
     if (response?.pfwresponse?.status_code === 200) {
       return response?.pfwresponse?.result;
@@ -43,7 +47,8 @@ export async function getAccountSummary(params = {}) {
       throw new Error(response?.pfwresponse?.result?.message);
     }
   } catch (err) {
-    toast(err.message || "Something went wrong!");
+    console.log(err);
+    throw(err);
   }
 }
 
@@ -74,8 +79,10 @@ export async function initData() {
         bank_list: ['bank_list'],
         referral: ['subbroker', 'p2p'],
       }
-      const result = await getAccountSummary(queryParams)
-      if(!result) return;
+      const result = await getAccountSummary(queryParams);
+      if(!result) {
+        return toast("Something went wrong!");
+      }
       storageService().set('dataSettedInsideBoot', true)
       setSDKSummaryData(result)
     }
@@ -89,8 +96,10 @@ export async function initData() {
       bank_list: ['bank_list'],
       referral: ['subbroker', 'p2p'],
     }
-    const result = await getAccountSummary(queryParams)
-    if(!result) return;
+    const result = await getAccountSummary(queryParams);
+    if(!result) {
+      return toast("Something went wrong!");
+    }
     storageService().set('dataSettedInsideBoot', true)
     setSummaryData(result)
   }
