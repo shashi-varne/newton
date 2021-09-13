@@ -52,7 +52,7 @@ class WhastappConfirmNumber extends Component {
     let id = this.state.contact_id;
 
     if (!id) {
-      id = await this.getContact();
+      id = await this.getContact(this.state.mobile);
     }
 
     if (id) {

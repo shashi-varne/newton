@@ -117,7 +117,7 @@ class PerfiosStatus extends Component {
         user_action: user_action,
         event_name: "idfc_bank_statement_verification",
         status: this.state.commonMapper.status,
-        employment_type: account_info.employment_type,
+        employment_type: account_info?.employment_type || "",
         cta_value:
           bt_eligible &&
           perfios_state !== "failure" &&
