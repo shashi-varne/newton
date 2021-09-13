@@ -242,9 +242,6 @@ class Landing extends Component {
   }
 
   sendEvents = (userAction, cardClick = "") => {
-    if(cardClick === "ipo") {
-      cardClick = "ipo_gold";
-    }
     if (cardClick === "bottomsheet" || cardClick === "continuebottomsheet") {
       let screen_name = cardClick === "continuebottomsheet" ? "account_already_exists" :
         this.state.verifyDetailsType === "email" ? "verify_email" : "verify_mobile";
@@ -263,7 +260,10 @@ class Landing extends Component {
         });
       }
       return
+    } else if(cardClick === "ipo") {
+      cardClick = "ipo_gold";
     }
+
     let eventObj = {
       event_name: "landing_page",
       properties: {

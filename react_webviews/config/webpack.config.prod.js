@@ -277,6 +277,22 @@ module.exports = {
         minifyURLs: true,
       },
     }),
+    new HtmlWebpackPlugin({
+      inject: false,
+      template: paths.supportHtml,
+      filename: 'support.html',
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeRedundantAttributes: true,
+        useShortDoctype: true,
+        removeEmptyAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        keepClosingSlash: true,
+        minifyCSS: true,
+        minifyURLs: true,
+      }
+    }),
     new InterpolateHtmlPlugin(HtmlWebpackPlugin, env.raw),
     // Makes some environment variables available to the JS code, for example:
     // if (process.env.NODE_ENV === 'production') { ... }. See `./env.js`.

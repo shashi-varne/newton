@@ -52,7 +52,8 @@ function getPartnerConfig(partner_code) {
     origin.indexOf('app.mywaywealth.com') >= 0 || 
     origin.indexOf('wv.mywaywealth.com') >= 0 || 
     origin.indexOf('wv.finity.in') >= 0 || 
-    origin.indexOf('api.mywaywealth.com') >= 0;
+    origin.indexOf('my.preprod.finity.in') >= 0 || 
+    origin.indexOf('app2.finity.in') >= 0;
   const isminvest = search.indexOf('my.barodaminvest.com') >= 0;
   const isStaging = search.indexOf('staging') >= 0;
   let productType = 'fisdom';
@@ -105,7 +106,7 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--gunmetal`, '#161A2E');
   html.style.setProperty(`--linkwater`, '#D3DBE4');
   html.style.setProperty(`--border-radius`, `${config_to_return.uiElements.button.borderRadius}px`);
-
+  
   return config_to_return;
 }
 
@@ -162,6 +163,8 @@ export const getConfig = () => {
   let base_url_default = '';
   
   const isStaging = origin.indexOf('plutus-web-staging') >= 0;
+  const isFisdomStaging = origin.indexOf('my.preprod.fisdom.com') >= 0 || origin.indexOf('app2.fisdom.com') >= 0;
+  const isFinityStaging = origin.indexOf('my.preprod.finity.in') >= 0 || origin.indexOf('app2.finity.in') >= 0;
   const isLocal = origin.indexOf('localhost') >=0;
 
   if(base_href) {
@@ -181,6 +184,14 @@ export const getConfig = () => {
     if (isStaging || isLocal) {
       base_url_default = "https://wdash-dot-plutus-staging.appspot.com";
     }
+
+    if(isFisdomStaging) {
+      base_url_default = 'https://my.preprod.fisdom.com';
+    }
+  
+    if(isFinityStaging) {
+      base_url_default = 'https://my.preprod.finity.in';
+    }
   }
   
 
@@ -194,6 +205,7 @@ export const getConfig = () => {
   let { partner_code } = main_query_params;
   let { app_version } = main_query_params;
   let { pc_urlsafe } = main_query_params;
+  let { diet = false } = main_query_params;
   let project = '';
   let project_child = '';
   if (main_pathname.indexOf('group-insurance') >= 0) {
@@ -310,6 +322,12 @@ export const getConfig = () => {
     }
   }
 
+  if(checkValidString(diet)) {
+    returnConfig.diet = diet;
+    searchParams += getParamsMark(searchParams) + `diet=${diet}`;
+    searchParamsMustAppend +=  getParamsMark(searchParams) + `diet=${diet}`;
+  }
+  
   if( main_pathname === '/webview/help-conversation' ) {
     const { ticket_id } = main_query_params;
     if (checkValidString(ticket_id)) {
@@ -528,12 +546,17 @@ export function isIframe() {
     return false;
   }
 }
+
+export function stripTrailingSlash (str) {
+  return str.endsWith('/') ? str.slice(0, -1) : str;
+};
+
 export function getBasePath() {
   var basename = window.localStorage.getItem('base_href') || '';
   if(basename && basename.indexOf('appl/web') !== -1) {
     basename = basename ? basename + 'view' : '';
   }
-  return window.location.origin + basename;
+  return window.location.origin + stripTrailingSlash(basename);
 }
 
 export function isTradingEnabled(userKyc = {}) {
@@ -740,6 +763,39 @@ export function stringToHexa(str) {
   return arr1.join('')
 }
 
+export const getCssVarObject = () => {
+  const config = getConfig();
+  const cssVarObj = {
+    '--secondary': config.styles.secondaryColor,
+    '--highlight': config.styles.highlightColor,
+    '--skelton-color':  config.styles.skeletonColor,
+    '--primary':  config.styles.primaryColor,
+    '--header-background':  config?.uiElements?.header?.backgroundColor,
+    '--default':  config.styles.default,
+    '--label':  config.uiElements.formLabel.color,
+    '--desktop-width':  "640px",
+    '--tooltip-width':  "540px",
+    '--color-action-disable':  config.uiElements.button.disabledBackgroundColor,
+    '--dark':  '#0A1D32',
+    '--steelgrey':  '#767E86',
+    '--on-focus-background':  config.uiElements.button.focusBackgroundColor,
+    '--on-hover-background':  config.uiElements.button.hoverBackgroundColor || config.styles.secondaryColor,
+    '--on-hover-secondary-background':  config.uiElements.button.hoverSecondaryBackgroundColor || config.styles.secondaryColor,
+    '--secondary-green':  config.styles.secondaryGreen,
+    '--mustard':  '#FFDA2C',
+    '--pink':  '#F16FA0',
+    '--purple':  '#A38CEB',
+    '--lime':  '#7ED321',
+    '--red':  '#D0021B',
+    '--primaryVariant1':  config.styles.primaryVariant1,
+    '--primaryVariant4':  config.styles.primaryVariant4,
+    '--spacing':  '10px',
+    '--gunmetal':  '#161A2E',
+    '--linkwater':  '#D3DBE4',
+    '--border-radius':  `${config.uiElements.button.borderRadius}px`
+  }
+  return cssVarObj;
+}
 export function isAuthenticatedUser(props) {
   const fromState = props.location?.state?.fromState || "";
   const navigation = navigate.bind(props);

@@ -41,6 +41,7 @@ export async function initialize() {
   this.initiatePinSetup = initiatePinSetup.bind(this);
   this.setKycProductTypeAndRedirect = setKycProductTypeAndRedirect.bind(this);
   this.handleIpoCardRedirection = handleIpoCardRedirection.bind(this);
+  this.contactVerification = contactVerification.bind(this);
   this.handleCommonKycRedirections = handleCommonKycRedirections.bind(this);
   this.contactVerification = contactVerification.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
