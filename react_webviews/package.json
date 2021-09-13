@@ -63,7 +63,6 @@
     "jss": "^9.8.1",
     "material-ui": "next",
     "moment": "^2.29.0",
-    "nvm": "0.0.4",
     "object-assign": "4.1.1",
     "postcss-flexbugs-fixes": "3.2.0",
     "postcss-loader": "2.0.8",
