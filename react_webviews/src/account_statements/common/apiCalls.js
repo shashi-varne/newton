@@ -17,9 +17,9 @@ export const getStatement = async (reportType, params) => {
     if (status === 200) {
       return result;
     } else {
-      throw result.error || result.message || Api.genericErrMsg;
+      throw result.error || result.message;
     }
   } catch (e) {
-    throw (e);
+    throw (e || Api.genericErrMsg);
   }
 }

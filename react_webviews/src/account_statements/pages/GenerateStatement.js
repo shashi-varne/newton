@@ -238,7 +238,7 @@ export default function GenerateStatement(props) {
     <Container
       title={pageObj.title}
       smallTitle={pageProps.subtitle || "Choose time period to view statement"}
-      buttonTitle={`Email ${pageObj.title} Statement`}
+      buttonTitle={`Email ${pageObj.title}`}
       handleClick={handleClick}
       showLoader={isApiRunning}
     >
