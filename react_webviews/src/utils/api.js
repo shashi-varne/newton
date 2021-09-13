@@ -74,8 +74,20 @@ class Api {
         if (isEmpty(pfwResponseData)) {
           const errorMsg = response.data?.pfwmessage || genericErrMsg;
           triggerSentryError(verb, response.data, errorMsg);
-        } else if (pfwResponseData.status_code !== 200 && pfwResponseData.status_code !== 400) {
-          const errorMsg = pfwResponseData.result.error || pfwResponseData.result.message || genericErrMsg;
+        } else if (
+          pfwResponseData.status_code !== 200 &&
+          pfwResponseData.status_code !== 400 &&
+          pfwResponseData.status_code !== 403 &&
+          pfwResponseData.status_code !== 402 &&
+          pfwResponseData.status_code !== 401 &&
+          pfwResponseData.status_code !== 405 &&
+          pfwResponseData.status_code !== 414 &&
+          pfwResponseData.status_code !== 408
+        ) {
+          const errorMsg =
+            pfwResponseData.result.error ||
+            pfwResponseData.result.message ||
+            genericErrMsg;
           triggerSentryError(verb, response.data, errorMsg);
         }
 
