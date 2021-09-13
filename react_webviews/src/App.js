@@ -24,6 +24,7 @@ import DesktopLayout from './desktopLayout';
 // import CommonRenderFaqs from './common/components/RenderFaqs';
 
 
+import RmLogin from './RmJourney/login';
 import Feature from './Feature';
 
 import NotFound from './common/components/NotFound';
@@ -48,7 +49,7 @@ const getMuiThemeConfig = () => {
 }
 
 var basename = window.sessionStorage.getItem('base_href') || '';
-if (basename && basename.indexOf('appl/webview') !== -1) {
+if (basename && basename.indexOf('appl/web') !== -1) {
   basename = basename ? basename + 'view/' : '';
 }
 
@@ -105,6 +106,7 @@ const App = () => {
               <Route path="/iw-dashboard" component={InternalWealthDashboard} />
               <Route path='/w-report' component={WealthReport} />
               <Route path='/login' component={Login} />
+              <Route path='/rm-login' component={RmLogin} />
               <Route path='/register' component={Register} />
               <Route path='/mobile/verify' component={Otp} />
               <Route path='/forgot-password' component={ForgotPassword} />
