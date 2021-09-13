@@ -25,6 +25,7 @@ import "@fontsource/roboto/latin-700.css";
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
 import { storageService } from "./utils/validators"
+import isEmpty from 'lodash/isEmpty';
 
 $(document).ready(function () {
   if(isIframe()) {
@@ -112,6 +113,10 @@ if(getConfig().productName === "fisdom" && getConfig().isProdEnv)
       event.tags = event.tags || {};
       event.tags["partner_code"] = getConfig().code;
       event.tags["user_id"] = storageService()?.getObject('user')?.user_id;
+      let values = event?.exception?.values;
+      if(!isEmpty(values) && values[0]?.value === "Network Error"){
+        return null;
+      }
       return event;
     },
     integrations: [new Integrations.BrowserTracing()],
@@ -127,6 +132,10 @@ else if(getConfig().productName === "finity" && getConfig().isProdEnv){
       event.tags = event.tags || {};
       event.tags["partner_code"] = getConfig().code;
       event.tags["user_id"] = storageService()?.getObject('user')?.user_id;
+      let values = event?.exception?.values;
+      if(!isEmpty(values) && values[0]?.value === "Network Error"){
+        return null;
+      }
       return event;
     },
     integrations: [new Integrations.BrowserTracing()],
