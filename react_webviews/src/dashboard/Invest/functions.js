@@ -453,12 +453,11 @@ export function initilizeKyc() {
     }
 
     if (["fno_rejected", "complete"].includes(kycJourneyStatus)) {
-      if (!currentUser.active_investment) {
-        if (TRADING_ENABLED && userKyc.equity_investment_ready) {
-          modalData = kycStatusMapper["kyc_verified"];
-        } else if (!TRADING_ENABLED && !isCompliant) {
-          modalData = kycStatusMapper["mf_complete"];
-        }
+      if (TRADING_ENABLED && userKyc.equity_investment_ready) {
+        // for trading enabled users, the Equity IR bottomsheet will keep on showing on relogin, untill we get more info for user investing in sdk
+        modalData = kycStatusMapper["kyc_verified"];
+      } else if (!TRADING_ENABLED && !isCompliant && !currentUser.active_investment) {
+        modalData = kycStatusMapper["mf_complete"];
       }
     } else {
       modalData = kycStatusMapper[kycJourneyStatus];
