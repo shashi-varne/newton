@@ -115,7 +115,7 @@ if(getConfig().productName === "fisdom" && getConfig().isProdEnv)
       return event;
     },
     integrations: [new Integrations.BrowserTracing()],
-    allowUrls:["app.fisdom.com","wv.fisdom.com"],
+    allowUrls:["app.fisdom.com",
     tracesSampleRate: 1.0,
   });
 }
@@ -129,7 +129,7 @@ else if(getConfig().productName === "finity" && getConfig().isProdEnv){
       return event;
     },
     integrations: [new Integrations.BrowserTracing()],
-    allowUrls:["app.mywaywealth.com","app.finity.in","wv.mywaywealth.com", "wv.finity.in"],
+    allowUrls:["app.mywaywealth.com","app.finity.in","wv.mywaywealth.com"],
     tracesSampleRate: 1.0,
   });
 }
