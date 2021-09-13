@@ -117,12 +117,12 @@ class AddressDetails extends Component {
     }
 
     const res = await Api.get("/relay/api/loan/pincode/get/" + pin);
-      let resultData = res.pfwresponse.result[0] || "";
+    let resultData = res?.pfwresponse?.result[0] || "";
 
       let city, state, country = '';
       if (
-        res.pfwresponse.status_code === 200 &&
-        res.pfwresponse.result.length > 0
+        res?.pfwresponse.status_code === 200 &&
+        res?.pfwresponse.result.length > 0
       ) {
         if (!resultData.idfc_city_name) {
           city =
@@ -312,7 +312,7 @@ class AddressDetails extends Component {
 
     if (pincode.length === 6) {
       const res = await Api.get("/relay/api/loan/pincode/get/" + pincode);
-      let resultData = res.pfwresponse.result[0] || "";
+      let resultData = res?.pfwresponse?.result[0] || "";
 
       let { city, state, country } = form_data;
       let pincode_error = "";
