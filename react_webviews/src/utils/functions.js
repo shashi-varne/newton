@@ -150,7 +150,7 @@ export const getConfig = () => {
   let origin = window.location.origin;
   let generic_callback = true;
 
-  let isProdFisdom = origin.indexOf('app.fisdom.com') >= 0 || origin.indexOf('wv.fisdom.com') >= 0 ;
+  let isProdFisdom = origin.indexOf('app.fisdom.com') >= 0  || origin.indexOf('wv.fisdom.com') >= 0 ;
   let isProdFinity = origin.indexOf('app.mywaywealth.com') >= 0 || origin.indexOf('wv.mywaywealth.com') >= 0;
 
   let base_href = window.sessionStorage.getItem('base_href') || '';
