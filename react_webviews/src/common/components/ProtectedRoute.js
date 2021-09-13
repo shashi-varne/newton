@@ -56,7 +56,9 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={(props) => {
-        if (showLoader) {
+        if (isLoginValid) {
+          return <Component {...props} />;
+        } else {
           return (
             <div
               className={
@@ -69,10 +71,7 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
               <UiSkelton type />
             </div>
           );
-        } else if (isLoginValid) {
-          return <Component {...props} />;
-        }
-      }}
+      }}}
     />
   );
 };
