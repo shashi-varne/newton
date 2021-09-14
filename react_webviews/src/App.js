@@ -140,6 +140,7 @@ const App = () => {
                   pathname: "/login/verify-pin",
                   search: getConfig().searchParams,
                 }}
+                push
               />
             )}
           </MuiThemeProvider>
