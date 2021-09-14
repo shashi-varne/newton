@@ -73,7 +73,7 @@ class Api {
 
         if (isEmpty(pfwResponseData)) {
           const errorMsg = response.data?.pfwmessage || genericErrMsg;
-          if(response?.data?.pfwmessage === "Login Required"){
+          if(response?.data?.pfwstatus_code === 403){
             // We are Neglecting Login Required in Sentry, Which is not Importent Event to capture.
          } else {
            triggerSentryError(verb, response.data, errorMsg);
