@@ -5,12 +5,13 @@ import { ACCOUNT_STATEMENT_OPTIONS } from '../constants';
 import Container from '../common/Container';
 import Toast from '../../common/ui/Toast';
 import RadioOptions from '../../common/ui/RadioOptions';
-import DropdownInModal from "common/ui/DropdownInModal";
 import Input from '../../common/ui/Input';
-import { isEmpty, isValidDate } from "../../utils/validators";
+import { dobFormatTest, formatDate, isEmpty, isValidDate } from "../../utils/validators";
 import { getStatement } from "../common/apiCalls";
 import format from 'date-fns/format';
 import { fiscalYearGenerator } from "../functions";
+import DropDownNew from '../../common/ui/DropDownNew'
+import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 
 const optionsMap = keyBy(ACCOUNT_STATEMENT_OPTIONS, 'type');
 const FINANCIAL_YEAR_OPTIONS = fiscalYearGenerator(2002);
@@ -25,10 +26,9 @@ export default function GenerateStatement(props) {
   const [errorObj, setErrorObj] = useState({});
   
   const [selectedRadioOption, setSelectedRadioOption] = useState('');
-  const radioButtons = useCallback(({ options, title = "", type, fieldProps = {} }) => {
+  const radioButtons = useCallback(({ options, type, fieldProps = {} }) => {
     return (
       <div className="as-radio-field" key={type}>
-        <FieldTitle>{title}</FieldTitle>
         <RadioOptions
           icon_type="blue_icon"
           error={!!errorObj[type]}
@@ -54,50 +54,69 @@ export default function GenerateStatement(props) {
   }
 
   const [selectedFinYear, setSelectedFinYear] = useState('');
-  const finYearSelector = useCallback(({ title, buttonTitle, type, fieldProps = {} }) => {
+  const finYearSelector = useCallback(({ title, type, fieldProps = {} }) => {
     return (
-      <div style={{ marginBottom: errorObj[type] ? '30px' : '8px' }} key={type}>
-        <FieldTitle>{title || "Select Financial Year"}</FieldTitle>
-        <DropdownInModal
-          options={FINANCIAL_YEAR_OPTIONS}
-          header_title={title || "Select Year"}
-          cta_title={buttonTitle || "Confirm"}
-          error={!!errorObj[type]}
-          helperText={errorObj[type]}
-          selectedIndex={1}
+      <div style={{ marginBottom: '20px' }} key={type}>
+        <DropDownNew
+          parent={props}
+          header_title={title || "Select Financial Year"}
+          label={title || "Select Year"}
+          selectedIndex={0}
           value={selectedFinYear}
           id="fin-year"
           name="fin-year"
           onChange={handleFinYearChange}
+          width="140"
+          dataType="AOB"
+          options={FINANCIAL_YEAR_OPTIONS}
+          error={!!errorObj[type]}
+          helperText={errorObj[type]}
           {...fieldProps}
         />
       </div>
     );
   }, [selectedFinYear, errorObj]);
+  useEffect(() => {
+    if (pageProps.fields.find(field => field.type === 'fin-year')) {
+      const startYear = new Date().getFullYear();
+      handleFinYearChange(`${startYear}-${startYear + 1}`)
+    }
+  }, []);
 
-  const handleFinYearChange = (selectedIdx) => {
+  const handleFinYearChange = (selectedValue) => {
     setErrorObj({
       ...errorObj,
       'fin-year': ''
     });
-    setSelectedFinYear(FINANCIAL_YEAR_OPTIONS[selectedIdx].value);
+    
+    setSelectedFinYear(selectedValue);
+    
+    if (pageObj.type === 'capital_gains') {
+      const [startYear, endYear] = selectedValue.split('-');
+      setSelectedDateMap({
+        from: new Date(startYear, 3).toLocaleDateString(),
+        to: new Date(endYear, 2, 31).toLocaleDateString(),
+      });
+    }
   }
 
   const [selectedDateMap, setSelectedDateMap] = useState({});
   const dateSelector = useCallback(({ title, dateType, type, fieldProps = {} }) => {
     return (
       <div style={{ marginBottom: '30px' }} key={dateType}>
-        <FieldTitle>{title || "Select Date"}</FieldTitle>
         <Input
-          class="input"
+          type="text"
+          width="40"
+          class="DOB"
+          label="Enter date"
           value={selectedDateMap[dateType] || ""}
           error={!!errorObj[`${type}-${dateType}`]}
           helperText={errorObj[`${type}-${dateType}`] || ""}
           onChange={handleDateChange(dateType)}
           maxLength={10}
           inputMode="numeric"
-          type="text"
-          id="date"
+          id={`${dateType}-date`}
+          onKeyUp={formatDate}
           {...fieldProps}
         />
       </div>
@@ -113,7 +132,7 @@ export default function GenerateStatement(props) {
 
   const handleDateChange = type => event => {
     const value = event.target.value;
-    if (!value) return;
+    if (!dobFormatTest(value)) return;
     setErrorObj({
       ...errorObj,
       [`date-select-${type}`]: ''
@@ -195,7 +214,7 @@ export default function GenerateStatement(props) {
     const availableFields = pageProps.fields;
     
     let fieldValue;
-    let paramsToSend = availableFields.reduce((params, field)  => {
+    return availableFields.reduce((params, field)  => {
       if (field.type === 'radio') {
         fieldValue = selectedRadioOption;
       } else if (field.type === 'fin-year') {
@@ -206,16 +225,6 @@ export default function GenerateStatement(props) {
       params[field.paramName] = fieldValue;
       return params;
     }, {});
-
-    if (pageObj.type === 'capital_gains') {
-      const [startYear, endYear] = paramsToSend.fiscal_year.split('-');
-      Object.assign(paramsToSend, {
-        dt_start: new Date(startYear, 3).toLocaleDateString(),
-        dt_end: new Date(endYear, 2, 31).toLocaleDateString(),
-      });
-    }
-
-    return paramsToSend;
   }
 
   const handleClick = async () => {
@@ -242,20 +251,17 @@ export default function GenerateStatement(props) {
       handleClick={handleClick}
       showLoader={isApiRunning}
     >
-      <div className="InputField">
+      <div className="InputField" style={{ paddingTop: '20px' }}>
         {pageProps.fields.map(field => {
           if (field.type === 'radio') return radioButtons(field);
           else if (field.type === 'fin-year') return finYearSelector(field);
           else if (field.type === 'date-select') return dateSelector(field);
           return null;
         })}
+        {pageObj.type === 'demat_holding' &&
+          <WVInfoBubble>Statement will be generated as of current date</WVInfoBubble>
+        }
       </div>
     </Container>
-  );
-}
-
-const FieldTitle = ({ children }) => {
-  return (
-    <div className="acc-statements-field-title">{children}</div>
   );
 }
