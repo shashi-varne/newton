@@ -54,8 +54,8 @@ export async function getAccountSummary(params = {}) {
 
 export async function getNPSInvestmentStatus() {
   const url = '/api/nps/invest/status/v2'
-  const response = await Api.get(url)
   try {
+    const response = await Api.get(url);
     if (response?.pfwresponse?.status_code === 200) {
       return response?.pfwresponse?.result;
     } else {

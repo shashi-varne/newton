@@ -156,7 +156,7 @@
   padding: 10px 0;
   padding-left: 20px;
 }
-.AccordionDescription ul li {
+.AccordionDescription ul li, .AccordionDescription span a{
   color: #878787;
   margin-bottom: 10px;
 }
@@ -490,6 +490,16 @@
    font-weight: 500;
    cursor: pointer;
 }
+
+.redirection-journey-logo{
+  width: 78px !important;
+  height: 56px !important;
+}
+.baxa-new-logo{
+  width: 98px !important;
+  height: 28px !important;
+}
+
 .card {
   box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
   border-radius: 5px;
@@ -690,8 +700,6 @@
   padding: 10px;
   border-radius: 3px;
   margin-right: 15px;
-  width: 78px;
-  min-height: 64px !important;
 }
 .report-detail-summary {
   margin-top: 30px;
@@ -2055,4 +2063,11 @@
   place-items: center;
   margin-top: 50px;
   height: 230px;
+}
+
+.download-fisdom-text{
+  font-size: 14px;
+  font-weight: bold;
+  text-align: left;
+  margin-top: 50px;
 }

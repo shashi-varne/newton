@@ -81,7 +81,7 @@ class GroupHealthPlanSelectFloater extends Component {
                         let mem = final_dob_data[i];
                         if (premium_data_nf['floater_type']) {
                             let obj = {
-                                name: numDifferentiation(this.state.sum_assured) + ' for ' + childeNameMapper(mem.key).toLowerCase(),
+                                name: numDifferentiation(sum_assured) + ' for ' + childeNameMapper(mem.key).toLowerCase(),
                                 value: inrFormatDecimal(individual_premiums[mem['backend_key']])
                             };
                             ind_pre_data.push(obj);
@@ -120,7 +120,6 @@ class GroupHealthPlanSelectFloater extends Component {
             let type_of_plan = this.state.premium_data_floater[this.state.selectedIndex].key;
             let selectedPlan = this.state.premium_base[type_of_plan][0]; //first of WF or NF;
             groupHealthPlanData.net_premium_addons = selectedPlan.premium;
-            groupHealthPlanData.selectedIndexSumAssured = this.state.selectedIndex;
             groupHealthPlanData.selectedIndexFloater = this.state.selectedIndex;
 
             groupHealthPlanData.post_body.premium = this.state.premium_data_floater[this.state.selectedIndex].premium
@@ -221,7 +220,7 @@ class GroupHealthPlanSelectFloater extends Component {
                            </div>
                           {this.state.premium_data_nf.total_discount > 0  &&
                            <div className="flex-between di-tile" style={{color: 'var(--primary)'}}>
-                               <div className="di-tile-left">{this.state.premium_data_nf.account_type_discount_percentage}% discount</div>
+                               <div className="di-tile-left">{this.state.premium_data_nf.discount.family[0]}% discount</div>
                                <div className="di-tile-right">-{inrFormatDecimal(this.state.premium_data_nf.total_discount)}</div>
                            </div>}
                            <div className="generic-hr"></div>

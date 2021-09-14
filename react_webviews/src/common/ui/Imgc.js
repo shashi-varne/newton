@@ -38,7 +38,7 @@ class ImgcClass extends Component {
 
             // <SkeltonRect style={props.style} className={props.className} />
             <img id="image" src={props.src}
-                onLoad={() => {
+                onLoad={(event) => {
                     this.setState({
                         loaded: true
                     })
@@ -48,7 +48,7 @@ class ImgcClass extends Component {
                     }
 
                     if(isFunction(this.props.onLoad)) {
-                        this.props.onLoad();
+                        this.props.onLoad(event);
                     }
 
                 }}

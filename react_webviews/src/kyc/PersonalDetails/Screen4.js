@@ -3,7 +3,7 @@ import Container from "../common/Container";
 import { dobFormatTest, formatDate, isEmpty } from "utils/validators";
 import Input from "../../common/ui/Input";
 import Checkbox from "common/ui/Checkbox";
-import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
+import DropDownNew from '../../common/ui/DropDownNew';
 import { RELATIONSHIP_OPTIONS, PATHNAME_MAPPER } from "../constants";
 import {
   validateFields,
@@ -241,7 +241,7 @@ const PersonalDetails4 = (props) => {
             disabled={isChecked || isApiRunning}
           />
           <div className="input" data-aid='kyc-dropdown-withouticon'>
-            <DropdownWithoutIcon
+            <DropDownNew
               error={form_data.relationship_error ? true : false}
               helperText={form_data.relationship_error}
               options={RELATIONSHIP_OPTIONS}

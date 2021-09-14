@@ -84,11 +84,6 @@ const ConfirmNewPin = (props) => {
     clearRouteParams();
     if (kycFlow) {
       navigate("/invest");
-    } else if (comingFrom === 'stocks') {
-      setIsApiRunning("page");
-      window.location.href = `${base_url}/page/equity/launchapp`;
-    } else if (comingFrom === 'ipo') {
-      navigate('/market-products');
     } else {
       navigate('/account/security-settings');
     }

@@ -145,7 +145,7 @@ class CheckHow1 extends Component {
                 </div>
                 <div className="content-tiles">
                     For example, gold has generated a return of <b>24.58%</b> during the financial year <b>2008-09, </b> 
-                    when the Sensex has crashed almost 38%.
+                    when the Sensex has crashed almost 38%
                 </div>
             </div>
        </div>

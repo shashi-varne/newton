@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
-import { Route } from "react-router-dom";
 import { getAccountSummary, setSummaryData } from "../../kyc/services";
-import { storageService } from "utils/validators";
 import isEmpty from "lodash/isEmpty";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
@@ -16,17 +14,22 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   let user = storageService().getObject("user") || {};
   let kyc = storageService().getObject("kyc") || {};
   let partner = storageService().get("partner") || "";
+  const urlParams = getUrlParams();
+  const guestLeadId = storageService().get('guestLeadId') || "" 
+  const guestUser = urlParams?.guestUser || false;
 
-  const userDataAvailable = currentUser && !isEmpty(kyc) && !isEmpty(user);
+  const userDataAvailable = (currentUser && !isEmpty(kyc) && !isEmpty(user)) || guestLeadId || guestUser;
   const sdkCheck = isSdk ? !!partner : true; // same as: !isSdk || (isSdk && partner)
   const [showLoader, setShowLoader] = useState(!userDataAvailable || !sdkCheck);
   const [isLoginValid, setIsLoginValid] = useState(userDataAvailable && sdkCheck);
 
   const fetch = async () => {
     try {
-      const result = await getAccountSummary();
-      setIsLoginValid(true);
-      await setSummaryData(result);
+      if(!guestLeadId && !guestUser){
+        const result = await getAccountSummary();
+        setIsLoginValid(true);
+        await setSummaryData(result);
+      }
     } catch (err) {
       setIsLoginValid(false);
       if (isObject(err) && [403, 416].includes(err.pfwstatus_code)) {
@@ -45,6 +48,16 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   }, []);
 
   const initialize = async () => {
+    if(currentUser && guestLeadId){ // fallback case to remove guestLeadId when user logs in
+      storageService().remove('guestLeadId')
+    }
+    if(guestUser){
+      storageService().setBoolean('guestUser', true);
+    }
+    if(!guestLeadId && urlParams.guestLeadId){
+      storageService().set('guestLeadId', urlParams.guestLeadId);
+    }
+
     if (showLoader) {
       await fetch();
     }

@@ -4,8 +4,8 @@ import * as Sentry from '@sentry/browser'
 import { isEmpty } from 'lodash';
 import { storageService } from './validators';
 import { encrypt, decrypt } from './encryption';
-import { getConfig } from 'utils/functions';
 import { nativeCallback } from './native_callback';
+import { getConfig, getGuestUserRoute } from 'utils/functions';
 
 const genericErrMsg = "Something went wrong";
 let base_url = getConfig().base_url;
@@ -49,6 +49,9 @@ class Api {
     if(route.includes("/api/") && storageService().get("x-plutus-auth") && config.isIframe) {
       axios.defaults.headers.common["X-Plutus-Auth"] = storageService().get("x-plutus-auth")
     }
+    if(route.includes('api/insurance')){  
+      route = getGuestUserRoute(route)
+    }
     let options = Object.assign({
       method: verb,
       url: route,
@@ -78,7 +81,7 @@ class Api {
         if (isEmpty(pfwResponseData)) {
           const errorMsg = response.data?.pfwmessage || genericErrMsg;
           triggerSentryError(verb, response.data, errorMsg);
-        } else if (pfwResponseData.status_code !== 200) {
+        } else if (pfwResponseData.status_code !== 200 && pfwResponseData.status_code !== 400) {
           const errorMsg = pfwResponseData.result.error || pfwResponseData.result.message || genericErrMsg;
           triggerSentryError(verb, response.data, errorMsg);
         }

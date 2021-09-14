@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Container from '../../common/Container';
 import '../../common/Style.css';
-import provider from 'assets/provider.svg';
-import { numDifferentiationInr } from '../../../utils/validators';
+import icici_logo from 'assets/baxa_new_logo.svg';
+import { getUrlParams, numDifferentiationInr, storageService } from '../../../utils/validators';
 
 import Api from 'utils/api';
 import { getConfig, getBasePath } from 'utils/functions';
@@ -11,6 +11,7 @@ import { nativeCallback } from 'utils/native_callback';
 import instant_fisdom from 'assets/instant_fisdom.svg';
 import instant_myway from 'assets/instant_myway.svg';
 import {Imgc} from 'common/ui/Imgc';
+import { isRmJourney, getShortUrl } from 'group_insurance/products/group_health/common_data';
 
 class PlanSummaryClass extends Component {
   constructor(props) {
@@ -21,11 +22,14 @@ class PlanSummaryClass extends Component {
       summaryData: {},
       leadData: this.props.parent.props.location.state ? this.props.parent.props.location.state.lead : '',
       type: getConfig().productName,
-      group_insurance_payment_started: window.sessionStorage.getItem('group_insurance_payment_started') || ''
+      group_insurance_payment_started: window.sessionStorage.getItem('group_insurance_payment_started') || '',
+      isRmJourney: isRmJourney(),
+      isGuestUser : storageService().getBoolean('guestUser') || getUrlParams().guestUser,
+      screen_name: 'plan_summary'
     };
-
+    this.getShortUrl = getShortUrl.bind(this);
     this.handleClickCurrent = this.handleClickCurrent.bind(this);
-
+    
   }
 
   componentWillMount() {
@@ -33,11 +37,13 @@ class PlanSummaryClass extends Component {
     if (this.state.group_insurance_payment_started) {
       window.sessionStorage.setItem('group_insurance_payment_started', '');
     }
-
+    
     let instant_icon = this.state.type !== 'fisdom' ? instant_myway : instant_fisdom;
     let product_title = insuranceProductTitleMapper[this.props.parent ? this.props.parent.state.product_key : ''];
     nativeCallback({ action: 'take_control_reset' });
-    let lead_id = window.sessionStorage.getItem('group_insurance_lead_id_selected');
+    let lead_id = window.sessionStorage.getItem('group_insurance_lead_id_selected') || getUrlParams().leadId;
+    storageService().set('group_insurance_lead_id_selected', lead_id)
+
     this.setState({
       lead_id: lead_id || '',
       instant_icon: instant_icon,
@@ -46,7 +52,7 @@ class PlanSummaryClass extends Component {
 
   }
 
-  setErrorData = (type) => {
+  setErrorData = (type, func) => {
 
     this.setState({
       showError: false
@@ -59,7 +65,7 @@ class PlanSummaryClass extends Component {
           title1: ''
         },
         'submit': {
-          handleClick1: this.handleClickCurrent,
+          handleClick1:  func ? func : this.handleClickCurrent,
           button_text1: 'Retry',
           handleClick2: () => {
             this.setState({
@@ -86,23 +92,38 @@ class PlanSummaryClass extends Component {
     }
 
     var lead = this.state.leadData;
-   
+
     if(!this.state.leadData) {
       this.setState({
         skelton: true
       })
       let error = '';
       let errorType = '';
+      let url = ''
+      let res = {}
+      const summary_url = 'api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id;
+      const urlParams = getUrlParams();
       try {
-        let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)    
-        if (res.pfwresponse.status_code === 200) {
 
+        if(urlParams.guestUser){
+          const guestLeadId = storageService().get('guestLeadId') || urlParams.guestLeadId ||'';
+          url  = `api/guest/user/session/summary/data/fetch?guest_lead_id=${guestLeadId}`
+          const body = {
+            'summary_url':  summary_url
+          }
+          res = await Api.post(url, body)
+          lead = res.pfwresponse.result.insurancev2_result.lead;
+        }else{
+          url  = summary_url
+          res = await Api.get(url)
           lead = res.pfwresponse.result.lead;
+        }
+        
+        
+        if (res.pfwresponse.status_code === 200) {
           this.setState({
             skelton: false
           })
-  
-
         } else {
           error = res.pfwresponse.result.error || res.pfwresponse.result.message
           || true;
@@ -155,8 +176,6 @@ class PlanSummaryClass extends Component {
         parent: this.props.parent || {}
       })
     }
-
-
   }
 
   navigate = (pathname) => {
@@ -176,7 +195,8 @@ class PlanSummaryClass extends Component {
         show_loader: 'button'
       })
       let res2;
-      res2 = await Api.get('api/insurancev2/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id)
+      const url = 'api/insurancev2/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id;
+      res2 = await Api.get(url)
 
       if (res2.pfwresponse.status_code === 200) {
         let basepath = getBasePath();
@@ -250,13 +270,15 @@ class PlanSummaryClass extends Component {
     }
   }
 
-  sendEvents(user_action, insurance_type) {
+  sendEvents = (user_action, insurance_type) => {
     let eventObj = {
       "event_name": 'Group Insurance',
       "properties": {
         "user_action": user_action,
         "screen_name": 'summary',
-        "type": this.props.parent.state.product_key
+        "type": this.props.parent.state.product_key,
+        'rm_payment_link_copied': user_action === 'copy' ? 'yes' : 'no',
+        'guest_user_make_payment': this.state.isGuestUser ? 'yes' : 'no',
       }
     };
 
@@ -266,28 +288,45 @@ class PlanSummaryClass extends Component {
       nativeCallback({ events: eventObj });
     }
   }
+  
+  copyPaymentLink = () =>{
+    this.sendEvents('copy');
+    var productMapper = {
+      'DENGUE': 'dengue', 
+      'HOSPICASH': 'hospicash', 
+      'PERSONAL_ACCIDENT': 'accident',
+      'SMART_WALLET': 'wallet'
+    }
+    
+    var guestLeadId = storageService().get('guestLeadId')
+    var baxaSumaryUrl = `${window.location.origin}/group-insurance/${productMapper[this.props.parent.state.product_key]}/summary${getConfig().searchParams}&leadId=${this.state.lead_id}&guestLeadId=${guestLeadId}&guestUser=true`
+    
+    this.setErrorData('submit', this.copyPaymentLink)
+    this.getShortUrl(baxaSumaryUrl);
+  }
 
   render() {
 
     return (
       <Container
         fullWidthButton={true}
-        buttonTitle='Make Payment'
+        buttonTitle={this.state.isRmJourney ? 'Copy payment link' : 'Make payment'}
         onlyButton={true}
+        noBackIcon={this.state.isGuestUser}
         product_key={this.props.parent ? this.props.parent.state.product_key : ''}
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         skelton={this.state.skelton}
         showError={this.state.showError}
         errorData={this.state.errorData}
-        handleClick={() => this.handleClickCurrent()}
+        handleClick={this.state.isRmJourney ? this.copyPaymentLink : this.handleClickCurrent}
         title="Summary"
         classOverRide="fullHeight"
         classOverRideContainer="plan-summary"
       >
         <div className="plan-summary-heading">
           <div className="plan-summary-heading-text">{this.state.product_title}</div>
-          <Imgc style={{width: '79px', height: '56px'}} src={provider} alt="" />
+          <Imgc className="baxa-new-logo" src={icici_logo} alt="" />
         </div>
         <div className="plan-summary-mid">
           <div className="plan-summary-mid1">

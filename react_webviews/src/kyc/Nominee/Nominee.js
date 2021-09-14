@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Input from "../../common/ui/Input";
-import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
+import DropDownNew from '../../common/ui/DropDownNew';
 import { RELATIONSHIP_OPTIONS, PATHNAME_MAPPER } from "../constants";
 import {
   validateFields,
@@ -168,7 +168,7 @@ const Nominee = (props) => {
               id="dob"
             />
             <div className="input" data-aid='kyc-dropdown-withouticon'>
-              <DropdownWithoutIcon
+              <DropDownNew
                 error={form_data.relationship_error ? true : false}
                 helperText={form_data.relationship_error}
                 options={RELATIONSHIP_OPTIONS}

@@ -689,6 +689,7 @@ class Landing extends Component {
           ></AccountAlreadyExistDialog>
         )}
         <PinSetupDialog
+          key={this.state.openPinSetupDialog}
           open={this.state.openPinSetupDialog}
           onClose={this.onPinSetupClose}
           comingFrom={this.state.clickedCardKey}

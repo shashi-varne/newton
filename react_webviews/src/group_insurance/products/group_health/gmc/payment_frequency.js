@@ -128,7 +128,8 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
                 show_loader: "button"
             });
             try {
-                const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,body);
+                const url = `api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`;
+                const res = await Api.post(url ,body);
                 
                 var resultData = res.pfwresponse.result;
                 if (res.pfwresponse.status_code === 200) {
