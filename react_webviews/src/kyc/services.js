@@ -37,9 +37,9 @@ export async function getAccountSummary(params = {}) {
     ) {
       const errObj = {
         pfwstatus_code: response?.pfwstatus_code,
-        pfwmessage: response?.pfwmessage
+        message: response?.pfwmessage
       };
-      throw errObj; 
+      throw errObj;
     }
     if (response?.pfwresponse?.status_code === 200) {
       return response?.pfwresponse?.result;
@@ -47,7 +47,7 @@ export async function getAccountSummary(params = {}) {
       throw new Error(response?.pfwresponse?.result?.message);
     }
   } catch (err) {
-    console.log(err);
+    toast(err.message);
     throw(err);
   }
 }
@@ -56,8 +56,8 @@ export async function getNPSInvestmentStatus() {
   const url = '/api/nps/invest/status/v2'
   const response = await Api.get(url)
   try {
-    if (response.pfwresponse.status_code === 200) {
-      return response.pfwresponse.result;
+    if (response?.pfwresponse?.status_code === 200) {
+      return response?.pfwresponse?.result;
     } else {
       throw new Error(response?.pfwresponse?.result?.message);
     }
@@ -70,38 +70,35 @@ export async function initData() {
   const currentUser = storageService().get('currentUser')
   const user = storageService().getObject('user')
   const kyc = storageService().getObject('kyc')
-
-  if (currentUser && user && kyc) {
-    if (!storageService().get('referral')) {
+  try {
+    if (currentUser && user && kyc) {
+      if (!storageService().get('referral')) {
+        const queryParams = {
+          campaign: ['user_campaign'],
+          nps: ['nps_user'],
+          bank_list: ['bank_list'],
+          referral: ['subbroker', 'p2p'],
+        }
+        const result = await getAccountSummary(queryParams);
+        storageService().set('dataSettedInsideBoot', true)
+        setSDKSummaryData(result)
+      }
+    } else if (!currentUser || !user || !kyc) {
       const queryParams = {
         campaign: ['user_campaign'],
+        kyc: ['kyc'],
+        user: ['user'],
         nps: ['nps_user'],
+        partner: ['partner'],
         bank_list: ['bank_list'],
         referral: ['subbroker', 'p2p'],
       }
       const result = await getAccountSummary(queryParams);
-      if(!result) {
-        return toast("Something went wrong!");
-      }
       storageService().set('dataSettedInsideBoot', true)
-      setSDKSummaryData(result)
+      setSummaryData(result)
     }
-  } else if (!currentUser || !user || !kyc) {
-    const queryParams = {
-      campaign: ['user_campaign'],
-      kyc: ['kyc'],
-      user: ['user'],
-      nps: ['nps_user'],
-      partner: ['partner'],
-      bank_list: ['bank_list'],
-      referral: ['subbroker', 'p2p'],
-    }
-    const result = await getAccountSummary(queryParams);
-    if(!result) {
-      return toast("Something went wrong!");
-    }
-    storageService().set('dataSettedInsideBoot', true)
-    setSummaryData(result)
+  } catch (err) {
+    console.log(err);
   }
 }
 

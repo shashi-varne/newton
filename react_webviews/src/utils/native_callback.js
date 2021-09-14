@@ -3,6 +3,7 @@ import { getConfig, getBasePath } from './functions';
 import { open_browser_web, renameObjectKeys } from 'utils/validators';
 import Api from 'utils/api';
 import { storageService } from './validators';
+import eventManager from './eventManager';
 
 export const nativeCallback = async ({ action = null, message = null, events = null, action_path = null } = {}) => {
   let newAction = null;
@@ -219,7 +220,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     } else if (action === '2fa_expired') {
       storageService().remove('currentUser');
       storageService().setBoolean('session-timeout', true);
-      window.location.href = redirectToPath('/login/verify-pin');
+      eventManager.emit("redirectToVerifyPin");
     } else {
       return;
     }
