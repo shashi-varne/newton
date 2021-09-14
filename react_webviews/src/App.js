@@ -31,7 +31,6 @@ import PartnerAuthentication from './login_and_registration/pages/Authentication
 import Prepare from './dashboard/Invest/components/SdkLanding/Prepare';
 import { ThemeProvider } from './utils/ThemeContext';
 import UnAuthenticatedRoute from './common/components/UnAuthenticatedRoute.js';
-import eventManager from './utils/eventManager.js';
 import PathRedirection from './common/components/PathRedirection.js';
 
 const generateClassName = createGenerateClassName({
@@ -83,23 +82,17 @@ const App = () => {
   const iframe = config.isIframe;
   const isMobileDevice = config.isMobileDevice;
   const [themeConfiguration, setThemeConfiguration] = useState(getMuiThemeConfig());
-  const [redirectPath, setRedirectPath] = useState(false);
 
   useEffect(() => {
     if(config.isSdk || config.isIframe) {
       storageService().set("entry_path",window.location.pathname);
     }
     clearBottomsheetDisplays();
-    eventManager.add("redirectPath", handleRedirectPath);
   }, []);
 
   const updateTheme = (event) => {
     const theme = getMuiThemeConfig();
     setThemeConfiguration(theme)
-  }
-
-  const handleRedirectPath = (path) => {
-    setRedirectPath(path);
   }
 
     return (
@@ -110,6 +103,7 @@ const App = () => {
             <ScrollToTop />
             <Tooltip />
             <ToastContainer autoClose={3000} />
+            <PathRedirection />
             <Switch>
               <Route path="/iw-dashboard" component={InternalWealthDashboard} />
               <Route path='/w-report' component={WealthReport} />
@@ -134,7 +128,6 @@ const App = () => {
                 </DesktopLayout>
               }
             </Switch>
-            <PathRedirection redirectPath={redirectPath} />
           </MuiThemeProvider>
           </ThemeProvider>
         </JssProvider>

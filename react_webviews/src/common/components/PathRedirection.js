@@ -1,24 +1,28 @@
-import React from "react";
-import { Redirect } from "react-router-dom";
-import { getConfig } from "utils/functions";
+import React, { useEffect, useState } from "react";
+import { withRouter } from "react-router-dom";
+import { navigate as navigateFunc } from "utils/functions";
 import eventManager from "../../utils/eventManager";
 
 const PathRedirection = (props) => {
-  if (props.redirectPath) {
-    return (
-      <>
-        <Redirect
-          to={{
-            pathname: props.redirectPath,
-            search: getConfig().searchParams,
-          }}
-          push
-        />
-        {eventManager.emit("redirectPath", false)}
-      </>
-    );
-  }
+  const [redirectPath, setRedirectPath] = useState(false);
+  const navigate = navigateFunc.bind(props);
+
+  useEffect(() => {
+    eventManager.add("redirectPath", handleRedirectPath);
+  }, []);
+
+  const handleRedirectPath = (path) => {
+    setRedirectPath(path);
+  };
+
+  useEffect(() => {
+    if (redirectPath) {
+      navigate(redirectPath);
+      eventManager.emit("redirectPath", false);
+    }
+  }, [redirectPath]);
+
   return <div></div>;
 };
 
-export default PathRedirection;
+export default withRouter(PathRedirection);
