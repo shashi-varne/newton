@@ -13,7 +13,6 @@ const eventManager = {
   },
 
   emit(event, args) {
-    console.log("event in emit ", event);
     if (!this.eventsMapper.has(event)) {
       return false;
     }
