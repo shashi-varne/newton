@@ -29,10 +29,8 @@ const NON_EQUITY_PARTNER_INFO = (
 );
 
 const KycBankVerify = (props) => {
-  const { productName } = useMemo(() => {
-    return getConfig();
-  }, []);
-  const showPageDialog = isNewIframeDesktopLayout();
+  const { productName } = useMemo(() => getConfig(), []);
+  const showPageDialog = useMemo(() => isNewIframeDesktopLayout(), []);
   const [count, setCount] = useState(20);
   const [countdownInterval, setCountdownInterval] = useState();
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -66,8 +64,6 @@ const KycBankVerify = (props) => {
       setInfoContent(NON_EQUITY_PARTNER_INFO);
     }
   };
-
-  
 
   const handleClick = async () => {
     sendEvents('next')
