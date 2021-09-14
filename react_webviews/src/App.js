@@ -31,7 +31,7 @@ import PartnerAuthentication from './login_and_registration/pages/Authentication
 import Prepare from './dashboard/Invest/components/SdkLanding/Prepare';
 import { ThemeProvider } from './utils/ThemeContext';
 import UnAuthenticatedRoute from './common/components/UnAuthenticatedRoute.js';
-import PathRedirection from './common/components/PathRedirection.js';
+import RedirectPathContainer from './common/components/RedirectPathContainer.js';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -103,7 +103,7 @@ const App = () => {
             <ScrollToTop />
             <Tooltip />
             <ToastContainer autoClose={3000} />
-            <PathRedirection />
+            <RedirectPathContainer />
             <Switch>
               <Route path="/iw-dashboard" component={InternalWealthDashboard} />
               <Route path='/w-report' component={WealthReport} />

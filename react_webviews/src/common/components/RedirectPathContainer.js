@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 import { navigate as navigateFunc } from "utils/functions";
 import eventManager from "../../utils/eventManager";
 
-const PathRedirection = (props) => {
+const RedirectPathContainer = (props) => {
   const [redirectPath, setRedirectPath] = useState(false);
   const navigate = navigateFunc.bind(props);
 
@@ -25,4 +25,4 @@ const PathRedirection = (props) => {
   return <div></div>;
 };
 
-export default withRouter(PathRedirection);
+export default withRouter(RedirectPathContainer);
