@@ -73,7 +73,9 @@ class Api {
 
         if (isEmpty(pfwResponseData)) {
           const errorMsg = response.data?.pfwmessage || genericErrMsg;
-          triggerSentryError(verb, response.data, errorMsg);
+          if(response?.data?.pfwmessage !== "Login Required"){
+            triggerSentryError(verb, response.data, errorMsg);
+          }
         } else if (
           pfwResponseData.status_code !== 200 &&
           pfwResponseData.status_code !== 400 &&
