@@ -9,7 +9,6 @@ import { nativeCallback } from "../../../utils/native_callback";
 import WVButton from '../../../common/ui/Button/WVButton';
 import DotDotLoader from '../../../common/ui/DotDotLoaderNew';
 import { postLoginSetup, redirectAfterLogin } from '../../functions';
-import eventManager from '../../../utils/eventManager';
 
 const pinAttemptsKey = 'pin-attempts'; // key name for session store
 
@@ -30,10 +29,6 @@ const VerifyPin = (props) => {
     setMpin(val);
     setMpinError('');
   }
-
-  useEffect(() => {
-    eventManager.emit("resetRedirectToVerifyPin");
-  }, []);
 
   useEffect(() => {
     if (attemptsCount >= 5) {

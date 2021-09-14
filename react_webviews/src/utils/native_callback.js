@@ -50,8 +50,8 @@ export const nativeCallback = async ({ action = null, message = null, events = n
         return;
       }
       
-      let path = ['iw-dashboard', 'w-report'].includes(config.project) ? `/${config.project}/login` : '/login'; 
-      window.location.href = redirectToPath(path);
+      let path = ['iw-dashboard', 'w-report'].includes(config.project) ? `/${config.project}/login` : '/login';
+      eventManager.emit("redirectPath", path);
     } else {
       nativeCallback({ action: "session_expired" });
     }
@@ -220,7 +220,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     } else if (action === '2fa_expired') {
       storageService().remove('currentUser');
       storageService().setBoolean('session-timeout', true);
-      eventManager.emit("redirectToVerifyPin");
+      eventManager.emit("redirectPath", "/login/verify-pin");
     } else {
       return;
     }

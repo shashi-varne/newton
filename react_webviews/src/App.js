@@ -11,7 +11,7 @@ import JssProvider from 'react-jss/lib/JssProvider';
 import { createGenerateClassName, jssPreset,
   MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { themeConfig } from 'utils/constants';
-import { Redirect, withRouter } from "react-router";
+import { withRouter } from "react-router";
 import { ToastContainer } from 'react-toastify';
 
 import InternalWealthDashboard from './internal_wealth_dashboard';
@@ -32,6 +32,7 @@ import Prepare from './dashboard/Invest/components/SdkLanding/Prepare';
 import { ThemeProvider } from './utils/ThemeContext';
 import UnAuthenticatedRoute from './common/components/UnAuthenticatedRoute.js';
 import eventManager from './utils/eventManager.js';
+import PathRedirection from './common/components/PathRedirection.js';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -82,24 +83,23 @@ const App = () => {
   const iframe = config.isIframe;
   const isMobileDevice = config.isMobileDevice;
   const [themeConfiguration, setThemeConfiguration] = useState(getMuiThemeConfig());
-  const [redirectToVerifyPin, setRedirectToVerifyPin] = useState(false);
+  const [redirectPath, setRedirectPath] = useState(false);
 
   useEffect(() => {
     if(config.isSdk || config.isIframe) {
       storageService().set("entry_path",window.location.pathname);
     }
     clearBottomsheetDisplays();
-    eventManager.add("redirectToVerifyPin", handleVerifyPinRedirection(true));
-    eventManager.add("resetRedirectToVerifyPin", handleVerifyPinRedirection(false));
-  },[]);
+    eventManager.add("redirectPath", handleRedirectPath);
+  }, []);
 
   const updateTheme = (event) => {
     const theme = getMuiThemeConfig();
     setThemeConfiguration(theme)
   }
 
-  const handleVerifyPinRedirection = (value) => () => {
-    setRedirectToVerifyPin(value);
+  const handleRedirectPath = (path) => {
+    setRedirectPath(path);
   }
 
     return (
@@ -134,15 +134,7 @@ const App = () => {
                 </DesktopLayout>
               }
             </Switch>
-            {redirectToVerifyPin && (
-              <Redirect
-                to={{
-                  pathname: "/login/verify-pin",
-                  search: getConfig().searchParams,
-                }}
-                push
-              />
-            )}
+            <PathRedirection redirectPath={redirectPath} />
           </MuiThemeProvider>
           </ThemeProvider>
         </JssProvider>
