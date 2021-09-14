@@ -79,7 +79,7 @@ class Container extends Component {
     const goBackPath = this.props.location?.state?.goBack || "";
 
     if (goBackPath) {
-      if (goBackPath === "exit" && storageService().get("native")) {
+      if (goBackPath === "exit") {
         switch (pathname) {
           case "/kyc/home":
           case "/kyc/add-bank":
@@ -89,10 +89,13 @@ class Container extends Component {
           case "/kyc/trading-info":
           case "/kyc/stocks-status":
           case "/kyc/upload/progress":
-            nativeCallback({ action: "exit_web" });
+            if (storageService().get("native")) {
+              nativeCallback({ action: "exit_web" });
+            } else {
+              this.navigate("/");
+            }
             break;
           default:
-            console.log("Props history goBack...")
             this.props.history.goBack();
         }
         return;

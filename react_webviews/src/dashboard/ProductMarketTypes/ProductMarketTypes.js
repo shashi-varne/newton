@@ -4,12 +4,13 @@ import WVInPageHeader from '../../common/ui/InPageHeader/WVInPageHeader';
 import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
 import WVInPageSubtitle from '../../common/ui/InPageHeader/WVInPageSubtitle';
 import MarketProductCard from '../mini-components/MarketProductCard';
-import { getConfig } from '../../utils/functions';
+import { getConfig, navigate as navigateFunc } from '../../utils/functions';
 
-const ProductMarketTypes = () => {
+const ProductMarketTypes = (props) => {
   const [showLoader, setShowLoader] = useState(false);
   const config = getConfig();
   const productName = config.productName;
+  const navigate = navigateFunc.bind(props);
   const categoryLists = [
     {
       name: 'IPO',
@@ -42,6 +43,10 @@ const ProductMarketTypes = () => {
     setShowLoader("page");
     window.location.href = `${config.base_url}/page/equity/tpp/${type}`;
   };
+
+  const goBack = () => {
+    navigate("/market-products");
+  };
   return (
     <Container
       data-aid='my-categories-screen'
@@ -49,6 +54,7 @@ const ProductMarketTypes = () => {
       title='All categories'
       hidePageTitle
       showLoader={showLoader}
+      headerData={{ goBack }}
     >
       <WVInPageHeader style={{ marginBottom: '0px' }}>
         <WVInPageTitle>All categories</WVInPageTitle>

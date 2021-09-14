@@ -158,7 +158,7 @@ export const getConfig = () => {
   let isProdFisdom = origin.indexOf('app.fisdom.com') >= 0  || origin.indexOf('wv.fisdom.com') >= 0 ;
   let isProdFinity = origin.indexOf('app.mywaywealth.com') >= 0 || origin.indexOf('wv.mywaywealth.com') >= 0;
 
-  let base_href = window.sessionStorage.getItem('base_href') || '';
+  let base_href = window.localStorage.getItem('base_href') || '';
   let base_url_default = '';
   
   const isStaging = origin.indexOf('plutus-web-staging') >= 0;
@@ -300,6 +300,14 @@ export const getConfig = () => {
     returnConfig.pc_urlsafe = pc_urlsafe;
     searchParams += getParamsMark(searchParams) + `pc_urlsafe=${pc_urlsafe}`;
     searchParamsMustAppend += getParamsMark(searchParams) + `pc_urlsafe=${pc_urlsafe}`;
+  }
+  
+  if( main_pathname === '/webview/help-conversation' ) {
+    const { ticket_id } = main_query_params;
+    if (checkValidString(ticket_id)) {
+      searchParams += getParamsMark(searchParams) + `ticket_id=${ticket_id}`;
+      searchParamsMustAppend += getParamsMark(searchParams) + `ticket_id=${ticket_id}`;
+    }
   }
 
   if( main_pathname === '/webview/help-conversation' ) {
@@ -521,8 +529,8 @@ export function isIframe() {
   }
 }
 export function getBasePath() {
-  var basename = window.sessionStorage.getItem('base_href') || '';
-  if(basename && basename.indexOf('appl/webview') !== -1) {
+  var basename = window.localStorage.getItem('base_href') || '';
+  if(basename && basename.indexOf('appl/web') !== -1) {
     basename = basename ? basename + 'view' : '';
   }
   return window.location.origin + basename;
@@ -731,3 +739,38 @@ export function stringToHexa(str) {
   }
   return arr1.join('')
 }
+
+export function isAuthenticatedUser(props) {
+  const fromState = props.location?.state?.fromState || "";
+  const navigation = navigate.bind(props);
+  const data = {
+    state: {
+      goBack: "/"
+    }
+  }
+  if (getConfig().isLoggedIn) {
+    if (!fromState || isUnAuthenticatedPath(fromState)) {
+      navigation("/", data)
+    } else {
+      navigation(fromState, data);
+    }
+    return true;
+  }
+}
+
+export function isUnAuthenticatedPath(path) {
+  const unAuthenticatedPaths = ["/login", "/register", "/forgot-password", "/mobile/verify", "/logout", "/prepare"];
+  const unAuthenticatedPathsWithParams = ["/partner-authentication"];
+  const pathname = unAuthenticatedPathsWithParams.find(el => path.match(el))
+  return unAuthenticatedPaths.includes(path) || !isEmpty(pathname); 
+}
+
+export function getGuestUserRoute(apiUrl){
+  var guest_id = storageService().get('guestLeadId') || getUrlParams().guestLeadId;
+  
+  if(guest_id){ // true only for RM/guest journey
+      var url_char = apiUrl.indexOf('?') >= 0 ? '&' : '?';
+      return apiUrl + `${url_char}guest_lead_id=${guest_id}`
+  }
+  return apiUrl
+}  

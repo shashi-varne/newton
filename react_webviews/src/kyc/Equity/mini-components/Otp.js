@@ -67,7 +67,6 @@ class Otp extends Component {
             align="left"
             onChange={this.props.handleOtp}
             hasErrored={true}
-            placeholder="XXXX"
             value={this.props.otpData.otp}
             isDisabled={this.props.isDisabled || false}
             additionalOtpProps={{ shouldAutoFocus: true }}

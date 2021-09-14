@@ -97,27 +97,27 @@ export const NRI_DOCUMENTS_MAPPER = {
 
 export const INCOME_OPTIONS = [
   {
-    name: "Below 1L",
+    name: "Below 1 lakh",
     value: "BELOW 1L",
   },
   {
-    name: "1-5L",
+    name: "1-5 lakhs",
     value: "1-5L",
   },
   {
-    name: "5-10L",
+    name: "5-10 lakhs",
     value: "5-10L",
   },
   {
-    name: "10-25L",
+    name: "10-25 lakhs",
     value: "10-25L",
   },
   {
-    name: "25-100L",
+    name: "25-100 lakhs",
     value: "25-100L",
   },
   {
-    name: ">100L",
+    name: ">100 lakhs",
     value: ">100L",
   },
 ];
@@ -195,26 +195,22 @@ export const bankAccountTypeOptions = (isNri) => {
     account_types = [
       {
         value: "CA",
-        name: "Current Account",
-      },
-      {
-        value: "CC",
-        name: "Cash Credit",
+        name: "Current account",
       },
       {
         value: "SB",
-        name: "Savings Account",
+        name: "Savings account",
       },
     ];
   } else {
     account_types = [
       {
         value: "SB-NRE",
-        name: "Non Resident External Account (NRE)",
+        name: "Non resident external account (NRE)",
       },
       {
         value: "SB-NRO",
-        name: "Non Resident Ordinary Account (NRO)",
+        name: "Non resident ordinary account (NRO)",
       },
     ];
   }

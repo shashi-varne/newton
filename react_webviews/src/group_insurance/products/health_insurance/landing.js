@@ -180,7 +180,8 @@ class HealthInsuranceLanding extends Component {
     let error = "";
     let errorType = "";
     try {
-      const res = await Api.get(`/api/ins_service/api/insurance/health/journey/started?product_name=${data.Product_name}`);
+      const url = `/api/ins_service/api/insurance/health/journey/started?product_name=${data.Product_name}`;
+      const res = await Api.get(url);
 
       let resultData = res.pfwresponse
       if(res.pfwresponse.status_code === 200){
@@ -223,13 +224,19 @@ class HealthInsuranceLanding extends Component {
     let error = '';
     let errorType = '';
     try {
-      const res = await Api.get('/api/ins_service/api/insurance/application/summary')
+      const url = `/api/ins_service/api/insurance/application/summary`;
+      const res = await Api.get(url)
 
       if (res.pfwresponse.status_code === 200) {
         var resultData = res.pfwresponse.result.response;
         let term_insurance = resultData.term_insurance;
         let group_insurance = resultData.group_insurance;
-        let BHARTIAXA = group_insurance && group_insurance.insurance_apps ? group_insurance.insurance_apps.BHARTIAXA : {};
+        let bharti_axa = group_insurance && group_insurance.insurance_apps ? group_insurance.insurance_apps.BHARTIAXA : {};
+        let icici_lombard = group_insurance && group_insurance.insurance_apps ? group_insurance.insurance_apps["icici lombard"] : {};
+        let BHARTIAXA = {
+          ...bharti_axa,
+          ...icici_lombard,
+        };
         let resumeFlagTerm = this.setTermInsData(term_insurance, BHARTIAXA);
 
 
@@ -290,13 +297,9 @@ class HealthInsuranceLanding extends Component {
         });
 
       } else {
-        error = res.pfwresponse.result.error || res.pfwresponse.result.message
-        || true;
+        error = res.pfwresponse.result.error || res.pfwresponse.result.message || true;
       }
-
-      
-
-    } catch (err) {
+      } catch (err) {
       console.log(err)
       this.setState({
         skelton: false,

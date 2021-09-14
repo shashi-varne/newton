@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import register from 'assets/registration_menu_icon.png';
+// import register from 'assets/registration_menu_icon.png';
 import notification from 'assets/notifications_icon.png';
 import invest from 'assets/invest.png';
 import report from 'assets/reports.png';
@@ -17,21 +17,20 @@ import logout from 'assets/logout_grey.png';
 import { getConfig } from 'utils/functions';
 import { withRouter } from 'react-router-dom';
 import { navigate as navigateFunc } from 'utils/functions';
-import { getKycAppStatus, isMfApplicationSubmitted, isReadyToInvest, setKycProductType } from '../kyc/services';
+import { getKycAppStatus, isMfApplicationSubmitted, isReadyToInvest } from '../kyc/services';
 import ReferDialog from './ReferralDialog';
 
 import './NavList.scss';
-import useUserKycHook from '../kyc/common/hooks/userKycHook';
-import { isEmpty } from '../utils/validators';
+import { isEmpty, storageService } from '../utils/validators';
 import { isEquityApplSubmittedOrComplete, isEquityCompleted } from '../kyc/common/functions';
 import { isTradingEnabled } from '../utils/functions';
 let data = [
-  {
-    id: 'register',
-    name: 'Register',
-    icon: register,
-    path: '/kyc',
-  },
+  // {
+  //   id: 'register',
+  //   name: 'Register',
+  //   icon: register,
+  //   path: '/kyc',
+  // },
   {
     id: 'notification',
     name: 'Notification',
@@ -103,7 +102,8 @@ const NavList = (props) => {
   const [referDialog, setReferDialog] = useState(false);
   const [activePath, setActivePath] = useState('');
   const [kycStatus, setKycStatus] = useState("");
-  const { kyc, user } = useUserKycHook();
+  const kyc = storageService().getObject("kyc") || {};
+  const user = storageService().getObject("user") || {};
   const isReadyToInvestBase = isReadyToInvest();
   const TRADING_ENABLED = useMemo(() => {
     return isTradingEnabled(kyc);
@@ -116,7 +116,7 @@ const NavList = (props) => {
   }, [kyc]);
 
   const initialize = () => {
-    let kycJourneyStatus = getKycAppStatus(kyc).status;
+    let kycJourneyStatus = getKycAppStatus(kyc)?.status;
     setKycStatus(kycJourneyStatus);
 
     filterNavList();
