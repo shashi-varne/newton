@@ -6,6 +6,8 @@ import { nativeCallback } from "utils/native_callback";
 import UiSkelton from "../ui/Skelton";
 import ThemeContext from "../../utils/ThemeContext";
 import isObject from 'lodash/isObject';
+import { Route } from "react-router-dom";
+import { getUrlParams, storageService } from "../../utils/validators";
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
   const { isSdk, isIframe, isMobileDevice } = useMemo(() => getConfig(), []);
