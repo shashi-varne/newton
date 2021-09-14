@@ -43,7 +43,6 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   };
 
   useEffect(() => {
-    console.log('rest in Protected route', rest);
     initialize();
   }, []);
 
