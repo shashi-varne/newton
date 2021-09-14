@@ -188,7 +188,7 @@ class PersonalDetails extends Component {
       "mother_last_name",
     ];
 
-    if ((names.includes(name) && value.includes(" ")) || containsSpecialCharactersAndNumbers(value)) {
+    if ((names.includes(name) && value.includes(" ")) || (names.includes(name) && containsSpecialCharactersAndNumbers(value))) {
       return;
     }
 
