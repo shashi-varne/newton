@@ -38,7 +38,8 @@ const Input = (props) => {
         variant={props.variant}
         onChange={props.onChange}
         inputRef={props.inputRef}
-        onKeyDown={props.onKeyDown}
+        onKeyDown={onKeyDown}
+        onKeyUp={props.onKeyUp}
       />
     );
   } else {
@@ -73,6 +74,7 @@ const Input = (props) => {
         autoFocus={props.autoFocus}
         multiline={props.multiline}
         onKeyDown={onKeyDown}
+        onKeyUp={props.onKeyUp}
         rowsMax="3"
       />
     );
