@@ -309,6 +309,24 @@ module.exports = {
       chunks: "async",
       automaticNameDelimiter: "~",
       cacheGroups: {
+        nivo: {
+          test: /[\\/]node_modules[\\/]@nivo[\\/]/,
+          priority: -5,
+          name: "nivo",
+          chunks: "all", // can be changed to async
+        },
+        mui: {
+          test: /[\\/]node_modules[\\/](@material-ui|material-ui)[\\/]/,
+          priority: -5,
+          name: "mui",
+          chunks: "all",
+        },
+        charts: {
+          test: /[\\/]node_modules[\\/](highcharts|chart.js)[\\/]/,
+          priority: -5,
+          name: "chart",
+          chunks: "async",
+        },
         vendor: {
           test: /[\\/]node_modules[\\/]/,
           priority: -10,
