@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>completed</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="UI/progressindicator/with-link/two-lines/completed" fill-rule="nonzero">
+            <g id="completed">
+                <g>
+                    <circle id="1" stroke="#FFFFFF" fill="#4F2DA7" cx="10" cy="10" r="9.5"></circle>
+                    <path d="M13.4320131,7.22613079 C13.7335209,6.92462307 14.2223615,6.92462307 14.5238692,7.22613079 C14.8253769,7.52763852 14.8253769,8.01647913 14.5238692,8.31798685 L9.89151626,12.9503398 C9.59000854,13.2518475 9.10116793,13.2518475 8.79966021,12.9503398 L6.22613079,10.3768104 C5.92462307,10.0753027 5.92462307,9.58646205 6.22613079,9.28495432 C6.52763852,8.9834466 7.01647913,8.9834466 7.31798685,9.28495432 L9.34558824,11.3125557 L13.4320131,7.22613079 Z" id="checkmark_white" fill="#FFFFFF"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

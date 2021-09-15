@@ -6,7 +6,8 @@ html, body, #root .ReferralContainerWrapper {
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Rubik', sans-serif !important;
+  font-family: 'Rubik', 'Roboto', sans-serif;
+  line-height: 1.5em;
   font-size: 14px;
   -webkit-overflow-scrolling: touch;
   overflow: auto;

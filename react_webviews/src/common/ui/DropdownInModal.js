@@ -22,7 +22,7 @@ class DropdownInModalClass extends Component {
           : '',
       options: this.props.options,
       onChange: this.props.onChange,
-      tick_icon: getConfig().type !== 'fisdom' ? tick_icon_myway : tick_icon_fisdom,
+      tick_icon: getConfig().productName !== 'fisdom' ? tick_icon_myway : tick_icon_fisdom,
       inputToRender: this.props.inputToRender,
       view_scrolled: false,
       value: this.props.value,
@@ -98,6 +98,11 @@ class DropdownInModalClass extends Component {
           <div className='flex-between'>
             <div className={isSelected ? 'content-selected' : ''}>
               <span>{props.name}</span>
+              {this.props.isSelectedText && isSelected && (
+                <span className={this.props.class}>
+                  {this.props.isSelectedText}
+                </span>
+              )}
             </div>
 
             {isSelected && (
@@ -135,9 +140,9 @@ class DropdownInModalClass extends Component {
           aria-describedby='alert-dialog-description'
         >
           <DialogTitle id='dropdown-in-modal-dialog-title'>
-            <div onClick={this.handleClose}>
+            <div onClick={this.handleClose} className='dropdown-in-modal-close'>
               <SVG
-                preProcessor={(code) => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+                preProcessor={(code) => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.primaryColor)}
                 src={close_icn}
               />
             </div>
@@ -216,7 +221,7 @@ class DropdownInModalClass extends Component {
 
             <SVG
               className='text-block-2-img'
-              preProcessor={(code) => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+              preProcessor={(code) => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.primaryColor)}
               src={down_arrow}
             />
           </div>

@@ -1,0 +1,20 @@
+.wv-fullscreen-dialog {
+  .MuiPaper-root {
+    margin: 0 !important;
+  }
+
+  .MuiDialogActions-root {
+    padding: 20px !important;
+    margin: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+
+    .MuiDialogActions-action {
+      margin: 0;
+    }
+  }
+}
+  
+.wv-fullscreen-dialog-close {
+  cursor: pointer;
+}

@@ -16,7 +16,7 @@ class DiseasesSpecificPlan extends Component {
       show_loader: true,
       type: getConfig().productName,
       insuranceProducts: [],
-      partner_code: getConfig().partner_code,
+      partner_code: getConfig().code,
       params: qs.parse(props.parent.props.history.location.search.slice(1))
     }
 

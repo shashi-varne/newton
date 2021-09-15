@@ -9,7 +9,7 @@ import toast from '../../common/ui/Toast';
 import { storageService } from '../../utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from '../../utils/functions';
-const emailDomain = getConfig().email_domain;
+const emailDomain = getConfig().emailDomain;
 
 class EmailNotReceived extends Component {
   constructor(props) {

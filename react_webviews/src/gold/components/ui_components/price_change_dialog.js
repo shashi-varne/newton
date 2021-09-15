@@ -90,7 +90,7 @@ class PriceChangeClass extends Component {
             <DialogContent>
               <div className="gold-dialog" id="alert-dialog-description">
                 {!this.props.parent.state.price_crashed && this.props.parent.state.timeAvailable <=0 && <div>
-                    <div style={{color: '#0A1C32', fontSize:16, fontWeight:800}}>
+                    <div style={{color: '#0A1C32', fontSize:16, fontWeight:700}}>
                     Oops! {mapper[this.props.parent.state.orderType].expired_title} price has changed
                     </div>
                     <div>
@@ -104,7 +104,7 @@ class PriceChangeClass extends Component {
 
                 {this.props.parent.state.price_crashed && 
                     <div>
-                        <div style={{color: '#0A1C32', fontSize:16, fontWeight:800}}>
+                        <div style={{color: '#0A1C32', fontSize:16, fontWeight:700}}>
                         Oops! something went wrong
                         </div>
                         <div style={{color: '#767E86', fontSize:14, fontWeight:400,margin: '20px 0 20px 0', lineHeight: 1.6}}>
@@ -114,7 +114,7 @@ class PriceChangeClass extends Component {
                 }
 
                 {this.props.parent.state.timeAvailable >0 && <div>
-                    <div style={{color: '#0A1C32', fontSize:16, fontWeight:800, margin: '0 0 20px 0', lineHeight: 1.6}}>
+                    <div style={{color: '#0A1C32', fontSize:16, fontWeight:700, margin: '0 0 20px 0', lineHeight: 1.6}}>
                     {mapper[this.props.parent.state.orderType].update_title} price has been updated!
                     </div>
                 </div>}

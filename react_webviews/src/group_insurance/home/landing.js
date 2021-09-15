@@ -12,7 +12,7 @@ import '../common/Style.scss'
 import { isEmpty } from 'utils/validators';
 import {Imgc} from   '../../common/ui/Imgc'
 import Button from 'material-ui/Button';
-import {setReportData, getReportCardsData, getProviderObject, getProviderObject_offline} from '../products/group_health/common_data';
+import {setReportData, getReportCardsData, getProviderObject, getProviderObject_offline, isRmJourney } from '../products/group_health/common_data';
 
 class Landing extends Component {
 
@@ -24,7 +24,8 @@ class Landing extends Component {
       type: getConfig().productName,
       insuranceProducts: [],
       params: qs.parse(props.history.location.search.slice(1)),
-      advisory_button_text: "LET'S FIND OUT" 
+      advisory_button_text: "LET'S FIND OUT" ,
+      isRmJourney: isRmJourney()
     }
 
     this.renderPorducts = this.renderPorducts.bind(this);
@@ -64,10 +65,9 @@ class Landing extends Component {
     let { params } = this.props.location || {}
     let openModuleData = params ? params.openModuleData : {}
 
-    let redirect_url = decodeURIComponent(getConfig().redirect_url);
     if(!isEmpty(openModuleData)){
-      if(!openModuleData.sub_module && redirect_url && redirect_url.includes("exit_web")) {
-        window.location.href = redirect_url;
+      if(!openModuleData.sub_module) {
+        nativeCallback({ action: 'exit_web' })
       }
     }
     this.setState({
@@ -122,7 +122,8 @@ class Landing extends Component {
     let error = ''
     let errorType = ''
     try{
-      var res = await Api.get(`api/insurancev2/api/insurance/advisory/resume/check`);
+      const url = `api/insurancev2/api/insurance/advisory/resume/check`;
+      var res = await Api.get(url);
         var resultData = res.pfwresponse.result;
 
         if (res.pfwresponse.status_code === 200) {
@@ -305,7 +306,9 @@ class Landing extends Component {
         showLoader={this.state.show_loader}
         showError={this.state.showError}
         errorData={this.state.errorData}
-        title="Insurance">
+        title="Insurance"
+        noBackIcon={this.state.isRmJourney}  
+        >
            <div  style={{ marginTop: '30px' }}>
            {/* <div onClick={this.policymove}>
             <img style={{ margin: '-15px 5px 30px 0', width: '100%', cursor: 'pointer' }} src={ require(`../../assets/${this.state.type}/icn_crousal_card_1.svg`)} alt="" />

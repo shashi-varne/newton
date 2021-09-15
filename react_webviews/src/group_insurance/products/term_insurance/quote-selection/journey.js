@@ -82,7 +82,7 @@ class JourneyIntro extends Component {
         <div className="journey-process5">
           <div className={'journey-process6 ' + (props.status === 'pending' ? 'journey-process7-grey' : '')}>{props.title}</div>
           <div className={'journey-process7 ' + (props.status === 'complete' ? 'journey-process7-black' : 'journey-process7-grey')}
-            style={{ color: props.status === 'init' ? getConfig().primary : '' }}
+            style={{ color: props.status === 'init' ? getConfig().styles.primaryColor : '' }}
           >{props.disc}</div>
         </div>
       </div>

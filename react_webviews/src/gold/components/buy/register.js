@@ -506,7 +506,7 @@ class GoldRegister extends Component {
                 <span className="Terms">I agree to the <a
                   style={{
                     textDecoration: 'underline',
-                    color: getConfig().primary
+                    color: getConfig().styles.primaryColor
                   }} onClick={() => this.openTermsAndCondition()}>Terms and Conditions</a></span>
               </Grid>
             </Grid>

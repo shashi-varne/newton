@@ -99,11 +99,7 @@ class InstantKycHome extends Component {
           let app = getConfig().app;
           // eslint-disable-next-line
           pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
-            '&app=' + app + '&back_url=' + back_url;
-          if (getConfig().generic_callback) {
-            pgLink += '&generic_callback=' + getConfig().generic_callback;
-          }
-
+            '&app=' + app + '&back_url=' + back_url + '&generic_callback=' + getConfig().generic_callback;
         
           this.openInTabApp({
             url: pgLink,
@@ -289,7 +285,7 @@ class InstantKycHome extends Component {
               {portalStatus.indexOf(this.state.dmi_loan_status) !== -1 &&
                 <SVG
                   className="right"
-                  preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+                  preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.primaryColor)}
                   src={next_arrow}
                 />}
               {portalStatus.indexOf(this.state.dmi_loan_status) === -1 &&

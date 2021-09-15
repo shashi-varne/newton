@@ -58,7 +58,6 @@ class ReactResponsiveCarousel extends Component {
       margin: "1px 3px",
       borderRadius: "1.5px",
     };
-
     if(this.props.CarouselImg.length === 1) {
       indicatorStyles.display = 'none';
     }
@@ -78,7 +77,7 @@ class ReactResponsiveCarousel extends Component {
               <li
                 style={{
                   ...indicatorStyles,
-                  background:  getConfig().primary,
+                  background:  getConfig().styles.primaryColor,
                   width: "10px",
                 }}
               />

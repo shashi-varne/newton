@@ -1,0 +1,30 @@
+.kyc-file-access-dialog {
+  @media only screen and (min-width: 768px) {
+    .MuiDialog-paper {
+      width: 50%;
+    }
+  }
+
+  .kyc-file-access-dialog-content {
+    color: var(--steelgrey);
+  
+    .kfadc-header {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+  
+    .kfadc-main {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px;
+  
+      .kfadc-info {
+        text-align: center;
+        img {
+          width: 70px;
+          padding: 10px;
+        }
+      }
+    }
+  }
+}

@@ -21,7 +21,7 @@ class PaymentCallbackClass extends Component {
 
   componentWillMount() {
 
-    let lead_id = window.sessionStorage.getItem('group_insurance_lead_id_selected');
+    let lead_id = window.sessionStorage.getItem('group_insurance_lead_id_selected')
     let group_insurance_payment_urlsafe = window.sessionStorage.getItem('group_insurance_payment_urlsafe');
     
     this.setState({
@@ -76,7 +76,8 @@ class PaymentCallbackClass extends Component {
           skelton: true
         })
         let res;
-        res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/confirm/payment/' + this.state.group_insurance_payment_urlsafe)
+        const url = 'api/insurancev2/api/insurance/bhartiaxa/confirm/payment/' + this.state.group_insurance_payment_urlsafe;
+        res = await Api.get(url)
         
         
         if (res.pfwresponse.status_code === 200) {
@@ -121,7 +122,8 @@ class PaymentCallbackClass extends Component {
         show_loader: 'button'
       })
       let res2;
-      res2 = await Api.get('api/insurancev2/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id)
+      let url = 'api/insurancev2/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id;
+      res2 = await Api.get(url)
 
       
       if (res2.pfwresponse.status_code === 200) {
@@ -141,10 +143,7 @@ class PaymentCallbackClass extends Component {
         var back_url = encodeURIComponent(current_url);
         // eslint-disable-next-line
         pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
-          '&app=' + app + '&back_url=' + back_url;
-        if (getConfig().generic_callback) {
-          pgLink += '&generic_callback=' + getConfig().generic_callback;
-        }
+          '&app=' + app + '&back_url=' + back_url + '&generic_callback=' + getConfig().generic_callback;
         this.sendEvents('next');
 
         window.sessionStorage.setItem('group_insurance_payment_url', pgLink);

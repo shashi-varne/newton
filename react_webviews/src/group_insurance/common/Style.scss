@@ -156,7 +156,7 @@
   padding: 10px 0;
   padding-left: 20px;
 }
-.AccordionDescription ul li {
+.AccordionDescription ul li, .AccordionDescription span a{
   color: #878787;
   margin-bottom: 10px;
 }
@@ -490,6 +490,16 @@
    font-weight: 500;
    cursor: pointer;
 }
+
+.redirection-journey-logo{
+  width: 78px !important;
+  height: 56px !important;
+}
+.baxa-new-logo{
+  width: 98px !important;
+  height: 28px !important;
+}
+
 .card {
   box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
   border-radius: 5px;
@@ -690,8 +700,6 @@
   padding: 10px;
   border-radius: 3px;
   margin-right: 15px;
-  width: 78px;
-  min-height: 64px !important;
 }
 .report-detail-summary {
   margin-top: 30px;
@@ -1176,9 +1184,11 @@
   .member-tile {
       display: flex;
       margin: 16px 0;
+      align-items: center;
       .final-summary-tile{
         width: 30px !important;
         height: 30px !important;
+        vertical-align: middle;
       }
       .mt-right {
         margin: 0 0 0 10px;
@@ -1190,7 +1200,7 @@
     .mtr-top {
         color: #0A1D32;
         font-size: 8px;
-        font-weight: 700;
+        font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 1px;
     }
@@ -1361,12 +1371,10 @@
   }
 
   .insurance_plans_logos_small{
-    margin-right:25px !important;
-    width: 40px !important;
-    height: 40px !important;
+    margin : 20px 25px 0px 3px;
+    width: 40px;
+    height: 40px;
     border-radius: 2px;
-    margin-top: 20px;
-    margin-left: 3px;
     padding-left: 3px;
     padding-right: 3px;
   }
@@ -1464,7 +1472,7 @@
 }
 
 .call-back-popup-button:hover{
-  background-color: var(--on-hover);
+  background-color: var(--on-hover-background);
 }
 
 .call-back-popup-button{
@@ -1476,7 +1484,6 @@
   border: none;
   padding: 16px 0;
   border-radius: 5px;
-  font-family: 'Roboto';
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
@@ -1485,7 +1492,6 @@
 }
 .call-back-popup-heading{
   margin-left: 10px;
-  font-family: 'Roboto';
   font-size: 20px;
   font-weight: 700;
   letter-spacing: 0.5px;
@@ -1494,12 +1500,10 @@
 #call-back-mobile-number{
   font-size: 14px;
   padding-left: 32px;
-  font-family: 'Roboto';
 }
 .mobile-number-prefix{
   position: absolute;
   display: inline;
-  font-family: 'Roboto';
   font-size: 14px;
   top: 34.4px;
   left: 2.8px;
@@ -1641,7 +1645,6 @@
   }
   .advisory-landing-title{
     position: absolute;
-    font-family: 'Roboto';
     top: 7%;
     left: 20px;
     font-size: 26px;
@@ -1654,7 +1657,6 @@
       .FiveStepPlan-title{
         padding: 10px 0;
         font-size: 15px;
-        font-family: 'Roboto';
         color:rgb(0, 0, 0)
       }
       .FiveStepPlan-subtitle{
@@ -2061,4 +2063,11 @@
   place-items: center;
   margin-top: 50px;
   height: 230px;
+}
+
+.download-fisdom-text{
+  font-size: 14px;
+  font-weight: bold;
+  text-align: left;
+  margin-top: 50px;
 }

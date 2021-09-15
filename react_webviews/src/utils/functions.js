@@ -1,445 +1,8 @@
 // import colors from '../common/theme/Style.scss';
-import { checkValidString, getUrlParams } from './validators';
+import { checkValidString, getUrlParams, storageService } from './validators';
 import $ from 'jquery';
-
-const partnersConfigBase = {
-  obc: {
-    logo: 'obc.png',
-    primary_color: '#4DB848',
-    code: 'obc',
-    email: 'obc@fisdom.com',
-    mobile: '+91-7829228887',
-    message:
-      "Make smart investments with zero paper work, use OBC m-pay app if you're a registered user on m-pay app or download fisdom http:m.onelink.me/32660e84. Use my referral code ",
-    banner: 'obc_banner.png',
-    back_button: 'back_icon_white.png',
-    close_button: 'close_nav_icon.svg',
-    search_button: 'search.png',
-  },
-  lvb: {
-    logo: 'lvb.png',
-    primary_color: '#CC0E00',
-    code: 'lvb',
-    email: 'lvb@fisdom.com',
-    mobile: '+91-9642596425',
-    message:
-      "Make smart investments with zero paper work, use LVB Mobile app if you're a registered user on lvb app or download fisdom http:m.onelink.me/32660e84. Use my referral code ",
-    banner: 'obc_banner.png',
-    back_button: 'back_icon_white.png',
-    close_button: 'close_nav_icon.svg',
-    search_button: 'search.png',
-  },
-  svc: {
-    logo: 'svc.png',
-    primary_color: '#213B68',
-    code: 'svc',
-    email: 'svc@fisdom.com',
-    mobile: '+91-9642596425',
-    message:
-      "Make smart investments with zero paper work, use SVC app if you're a registered user on svc app or download fisdom http:m.onelink.me/32660e84. Use my referral code ",
-    banner: 'obc_banner.png',
-    back_button: 'back_icon_white.png',
-    close_button: 'close_nav_icon.svg',
-    search_button: 'search.png',
-  },
-  fisdom: {
-    logo: 'logo_white.png',
-    primary_color: '#4f2da7',
-    code: 'fisdom',
-    email: 'ask@fisdom.com',
-    mobile: '+91-9642596425',
-    message: '',
-    banner: 'obc_banner.png',
-    back_button: 'back_icon_white.png',
-    close_button: 'close_nav_icon.svg',
-    search_button: 'search.png',
-    invest_screen_cards: {
-      nps: true,
-      gold: true,
-      insurance: true,
-      risk_profile: true,
-      instaredeem: true,
-      fhc: true,
-    },
-  },
-  finity: {
-    logo: 'finity_white_logo.png',
-    primary_color: '#675AF6',
-    code: 'finity',
-    email: 'ask@finity.in',
-    mobile: '+91-8142381423',
-    message: '',
-    banner: 'obc_banner.png',
-    back_button: 'back_icon_white.png',
-    close_button: 'close_nav_icon.svg',
-    search_button: 'search.png',
-    invest_screen_cards: {
-      nps: true,
-      gold: true,
-      insurance: true,
-      risk_profile: true,
-      instaredeem: true,
-      fhc: true,
-    },
-  },
-  test: {
-    logo: 'logo_white.png',
-    primary_color: '#4f2da7',
-    code: 'fisdom',
-    email: 'ask@fisdom.com',
-    mobile: '+91-9642596425',
-    message: '',
-    banner: 'obc_banner.png',
-    back_button: 'back_icon_white.png',
-    close_button: 'close_nav_icon.svg',
-    search_button: 'search.png',
-    invest_screen_cards: {
-      nps: true,
-      gold: true,
-      insurance: true,
-      risk_profile: true,
-      instaredeem: true,
-      fhc: true,
-    },
-  },
-  bfdlmobile: {
-    logo: 'bfdl_white_sdk_logo.svg',
-    primary_color: '#004164',
-    secondary_color: '#ff5928',
-    cta_disabled_color: '#ffffff',
-    code: 'bfdlmobile',
-    email: 'bajajfinserv@finity.in',
-    mobile: '+91-7829331118',
-    message: '',
-    banner: 'bfdl_banner.png',
-    back_button: 'back_icon_white.png',
-    close_button: 'close_nav_icon.svg',
-    search_button: 'bfdlmobile_search.png',
-    invest_screen_cards: {
-      risk_profile: true,
-    },
-    invest_cards_handling: {
-      our_recommendations: ['100_sip', 'instaredeem', 'buildwealth', 'savetax'],
-    },
-    landing_marketing_banners: [
-      { image: 'mb_4.svg', type: '100_sip' },
-      { image: 'mb_6.svg', type: 'diy' },
-      { image: 'mb_5.svg', type: 'buildwealth' },
-    ],
-    feature_manager: {
-      hide_apply_refferal: true,
-      hide_share_refferal: true,
-    },
-  },
-  alb: {
-    logo: 'alb.png',
-    primary_color: '#2E3192',
-    back_button_color: '#2E3192',
-    notifications_color: '#00aeef',
-    secondary_color: '#00aeef',
-    header_title_color: '#2E3192',
-    code: 'alb',
-    email: 'alb@fisdom.com',
-    mobile: '+91-7829733111',
-    message:
-      "Make smart investments with zero paper work, use emPower app if you're a registered user on emPower app or download emPower app http://onelink.to/uuxsss. Use my referral code ",
-    banner: 'alb_banner.png',
-    back_button: 'alb_back_icon.png',
-    close_button: 'alb_close_nav_icon.svg',
-    search_button: 'alb_search.png',
-    invest_screen_cards: {
-      nps: true,
-    },
-  },
-  tvscredit: {
-    logo: 'tvs.png',
-    primary_color: '#2d2851',
-    code: 'tvscredit',
-    email: 'tvscredit@fisdom.com',
-    mobile: '+91-9642596425',
-    message:
-      "Make smart investments with zero paper work, use Tvs Credit app if you're a registered user on Tvs Credit app or download fisdom http:m.onelink.me/32660e84. Use my referral code ",
-    banner: 'tvs_banner.png',
-    back_button: 'back_icon_white.png',
-    close_button: 'close_nav_icon.svg',
-    search_button: 'search.png',
-    invest_cards_handling: {
-      our_recommendations: ['100_sip', 'instaredeem', 'buildwealth', 'savetax'],
-    },
-  },
-  ktb: {
-    logo: 'logo_white.png',
-    primary_color: '#8C0094',
-    code: 'ktb',
-    email: 'kbl@fisdom.com',
-    mobile: '+91-7829229997',
-    message: '',
-    banner: 'obc_banner.png',
-    back_button: 'back_icon_white.png',
-    close_button: 'close_nav_icon.svg',
-    search_button: 'search.png',
-    feature_manager: {
-      hide_share_refferal: true,
-    },
-  },
-  cub: {
-    logo: 'cub.png',
-    primary_color: '#000180',
-    code: 'cub',
-    mobile: '+91-9642596425',
-    email: 'cub@fisdom.com',
-    message: '',
-    banner: 'bfdl_banner.png',
-    back_button: 'back_icon_white.png',
-    close_button: 'close_nav_icon.svg',
-    search_button: 'search.png',
-  },
-  fpg: {
-    logo: 'text_investments.svg',
-    primary_color: '#EB6024',
-    secondary_color: '#EB6024',
-    cta_disabled_background: '#F1D5C9',
-    cta_disabled_color: '#ffffff',
-    code: 'fpg',
-    mobile: '1800-212-5997',
-    email: 'care.futuremoney@fisdom.com',
-    message: '',
-    banner: 'bfdl_banner.png',
-    back_button: 'back_icon_white.png',
-    close_button: 'close_nav_icon.svg',
-    search_button: 'search.png',
-    landing_marketing_banners: [
-      { image: 'Gold_updated_banner.svg', type: 'gold' },
-      { image: 'fpg_mb_insta.svg', type: 'instaredeem' },
-      { image: 'fpg_mb_100.svg', type: 'buildwealth' },
-    ],
-    feature_manager: {
-      hide_apply_refferal: true,
-      hide_share_refferal: true,
-    },
-    invest_screen_cards: {
-      nps: true,
-      gold: true,
-    },
-    invest_cards_handling: {
-      our_recommendations: ['instaredeem', 'buildwealth', 'gold', 'savetax'],
-      diy: ['diyv2'],
-      bottom_scroll_cards: ['parkmoney', 'savegoal'],
-      bottom_cards: ['nfo'],
-      popular_cards: ['top_equity', 'nps'],
-    },
-    invest_render_cards: [
-      'kyc',
-      'our_recommendations',
-      'popular_cards',
-      'diy',
-      'bottom_scroll_cards',
-      'bottom_cards',
-      'financial_tools',
-    ],
-    entry: {
-      nps: 'inside_sdk',
-    },
-  },
-  hbl: {
-    logo: 'hbl.png',
-    primary_color: '#0066B3',
-    code: 'hbl',
-    mobile: '+91-9642596425',
-    email: 'ask@fisdom.com',
-    message: '',
-    banner: 'bfdl_banner.png',
-    back_button: 'back_icon_white.png',
-    close_button: 'close_nav_icon.svg',
-    search_button: 'search.png',
-    invest_screen_cards: {
-      nps: true,
-      gold: true,
-      insurance: true,
-      risk_profile: true,
-    },
-  },
-  subh: {
-    logo: 'subh.svg',
-    primary_color: '#F5821F',
-    secondary_color: '#F5821F',
-    cta_disabled_color: '#ffffff',
-    code: 'subh',
-    email: 'support@shubhloans.com',
-    mobile: '+91-9019900199',
-    message: '',
-    banner: 'bfdl_banner.png',
-    back_button: 'back_icon_white.png',
-    close_button: 'close_nav_icon.svg',
-    search_button: 'search.png',
-    invest_cards_handling: {
-      our_recommendations: ['100_sip', '300_sip', 'instaredeem'],
-      diy: ['diyv2'],
-    },
-    invest_render_cards: ['kyc', 'our_recommendations', 'diy'],
-  },
-  sbm: {
-    logo: 'sbm.svg',
-    primary_color: '#1e3769',
-    code: 'sbm',
-    mobile: '+91-9642596425',
-    email: 'sbm@fisdom.com',
-    message: '',
-    banner: 'bfdl_banner.png',
-    back_button: 'back_icon_white.png',
-    close_button: 'close_nav_icon.svg',
-    search_button: 'search.png',
-  },
-  flexi: {
-    logo: 'logo_white.png',
-    primary_color: '#4f2da7',
-    code: 'flexi',
-    email: 'ask@fisdom.com',
-    mobile: '+91-9642596425',
-    message: '',
-    banner: 'obc_banner.png',
-    back_button: 'back_icon_white.png',
-    close_button: 'close_nav_icon.svg',
-    search_button: 'search.png',
-    invest_screen_cards: {
-      nps: true,
-      gold: true,
-      insurance: true,
-      risk_profile: true,
-    },
-  },
-  medlife: {
-    logo: 'logo_white.png',
-    primary_color: '#4f2da7',
-    code: 'medlife',
-    email: 'ask@fisdom.com',
-    mobile: '+91-9642596425',
-    message: '',
-    banner: 'obc_banner.png',
-    back_button: 'back_icon_white.png',
-    close_button: 'close_nav_icon.svg',
-    search_button: 'search.png',
-    invest_screen_cards: {
-      nps: true,
-      gold: true,
-      insurance: true,
-      risk_profile: true,
-    },
-  },
-  life99: {
-    logo: 'logo_white.png',
-    primary_color: '#4f2da7',
-    code: 'life99',
-    email: 'ask@fisdom.com',
-    mobile: '+91-9642596425',
-    message: '',
-    banner: 'obc_banner.png',
-    back_button: 'back_icon_white.png',
-    close_button: 'close_nav_icon.svg',
-    search_button: 'search.png',
-  },
-  google: {
-    logo: 'logo_white.png',
-    primary_color: '#4f2da7',
-    code: 'google',
-    email: 'ask@fisdom.com',
-    mobile: '+80-48-093070',
-    message: '',
-    banner: 'obc_banner.png',
-    back_button: 'back_icon_white.png',
-    close_button: 'close_nav_icon.svg',
-    search_button: 'search.png',
-    white_header: true,
-    webAppUrl: 'https://google-dot-plutus-web.appspot.com/#!/'
-  },
-  gpay: {
-    logo: 'logo_white.png',
-    primary_color: '#4f2da7',
-    code: 'gpay',
-    email: 'ask@fisdom.com',
-    mobile: '+80-48-093070',
-    message: '',
-    banner: 'obc_banner.png',
-    back_button: 'back_icon_white.png',
-    close_button: 'close_nav_icon.svg',
-    search_button: 'search.png',
-    white_header: true,
-    webAppUrl: 'https://google-dot-plutus-web.appspot.com/#!/'
-  },
-  indb: {
-    logo: 'logo_white.png',
-    primary_color: '#173883',
-    secondary_color: '#173883',
-    code: 'indb',
-    email: 'ask@fisdom.com',
-    mobile: '+80-48-093070',
-    message: '',
-    banner: 'obc_banner.png',
-    back_button: 'back_icon_white.png',
-    close_button: 'close_nav_icon.svg',
-    search_button: 'search.png',
-  },
-  taxwin: {
-    logo: "logo_white.png",
-    primary_color: "#4f2da7",
-    code: "taxwin",
-    email: "ask@fisdom.com",
-    mobile: "+91-9642596425",
-    message: "",
-    banner: "obc_banner.png",
-    back_button: "back_icon_white.png",
-    close_button: "close_nav_icon.svg",
-    search_button: "search.png"
-  },
-  quesscorp: {
-    logo: 'logo_white.png',
-    primary_color: '#4f2da7',
-    code: 'quesscorp',
-    email: 'ask@fisdom.com',
-    mobile: '+91-9642596425',
-    message: '',
-    banner: 'obc_banner.png',
-    back_button: 'back_icon_white.png',
-    close_button: 'close_nav_icon.svg',
-    search_button: 'search.png'
-  },
-  ippb: {
-    logo: "logo_white.png",
-    primary_color: "#3F1027",
-    code: "ippb",
-    email: "ask@fisdom.com",
-    mobile: "+91-9642596425",
-    message: "",
-    banner: "obc_banner.png",
-    back_button: "back_icon_white.png",
-    close_button: "close_nav_icon.svg",
-    search_button: "search.png"
-  },
-  sahaj: {
-    logo: "logo_white.png",
-    primary_color: "#e5322d",
-    code: "sahaj",
-    email: "ask@fisdom.com",
-    mobile: "+91-9642596425",
-    message: "",
-    banner: "obc_banner.png",
-    back_button: "back_icon_white.png",
-    close_button: "close_nav_icon.svg",
-    search_button: "search.png"
-  },
-  mspl: {
-    logo: "logo_white.png",
-    primary_color: "#252B69",
-    code: "mspl",
-    email: "ask@fisdom.com",
-    mobile: "+91-9642596425",
-    message: "",
-    banner: "obc_banner.png",
-    back_button: "back_icon_white.png",
-    close_button: "close_nav_icon.svg",
-    search_button: "search.png"
-  }
-};
+import {  getPartnerData  } from './partnerConfigs';
+import isEmpty from "lodash/isEmpty";
 
 export const getHost = (pathname) => {
   return window.location.origin + pathname;
@@ -480,190 +43,70 @@ export const isMobile = {
 
 function getPartnerConfig(partner_code) {
   let search = window.location.search;
-  let baseConfig = {
-    fisdom: {
-      primary: '#4f2da7',
-      secondary: '#35cb5d',
-      onHover: '#35cb5d',
-      default: '#4a4a4a',
-      highlight_color: '#f6f2ff',
-      skelton_color: '#E7E7E7',
-      label: '#767E86',
-      type: 'fisdom',
-      // inputFocusedColor: '#4f2da7',
-      colors: {
-        primary1: "#DFD8EF",
-        primary4: "#482998", 
-      },
-      productName: 'fisdom',
-      appLink: 'https://fisdom.onelink.me/CQFA/3e75c8f6',
-      actionUrl: 'https://fis.do/m/module',
-      termsLink: 'https://www.fisdom.com/terms/',
-      schemeLink: 'https://www.fisdom.com/scheme-offer-documents/',
-      askEmail: 'ask@fisdom.com',
-      mobile: '+91-9642596425',
-      configPrimaryColorClass: 'configPrimaryColorClass',
-      configPrimaryBackgroundColorClass: 'fisdomBackColor',
-      webAppUrl: 'https://app.fisdom.com/#!/',
-      email_domain: 'fisdom.com',
-    },
-    finity: {
-      primary: '#675AF6',
-      secondary: '#675AF6',
-      onHover: '#4F47BA',
-      disabled: '#E6E5F4',
-      default: '#4a4a4a',
-      highlight_color: '#EFEEFB',
-      skelton_color: '#E7E7E7',
-      label: '#767E86',
-      type: 'finity',
-      colors: {
-        primary1: "#F0F7FF",
-        primary4: "#68AEFF"
-      },
-      // inputFocusedColor: '#3792fc',
-      productName: 'finity',
-      mobile: '+91-8048039999',
-      appLink: 'https://myway.onelink.me/W4GN/1f539fd2',
-      actionUrl: 'https://w-ay.in/m/module',
-      termsLink: 'https://finity.in/terms/',
-      schemeLink: 'https://finity.in/scheme/',
-      askEmail: 'ask@finity.in',
-      configPrimaryColorClass: 'configPrimaryColorClass',
-      configPrimaryBackgroundColorClass: 'mywayBackColor',
-      webAppUrl: 'https://app.mywaywealth.com/#!/',
-      email_domain: 'finity.in',
-    },
-    minvest: {
-      primary: '#FF5C34',
-      secondary: '#35cb5d',
-      default: '#4a4a4a',
-      highlight_color: '#f6f2ff',
-      label: '#767E86',
-      type: 'minvest',
-      productName: 'minvest',
-      appLink: 'https://fisdom.onelink.me/CQFA/3e75c8f6',
-      actionUrl: '',
-      termsLink: 'https://www.fisdom.com/terms/',
-      schemeLink: 'https://www.fisdom.com/scheme-offer-documents/',
-      askEmail: 'ask@fisdom.com',
-      mobile: '+91-8048093070',
-      configPrimaryColorClass: 'configPrimaryColorClass',
-      configPrimaryBackgroundColorClass: 'fisdomBackColor',
-      webAppUrl: 'https://app.fisdom.com/#!/',
-      email_domain: 'fisdom.com',
-    },
-  };
-
   let origin = window.location.origin;
 
   const ismyway =
     search.indexOf('api.mywaywealth.com') >= 0 ||
     search.indexOf('plutus-finwizard-pro.appspot.com') >= 0 || 
+    origin.indexOf('app.finity.in') >= 0 ||
+    origin.indexOf('app.mywaywealth.com') >= 0 || 
     origin.indexOf('wv.mywaywealth.com') >= 0 || 
     origin.indexOf('wv.finity.in') >= 0 || 
     origin.indexOf('api.mywaywealth.com') >= 0;
   const isminvest = search.indexOf('my.barodaminvest.com') >= 0;
   const isStaging = search.indexOf('staging') >= 0;
   let productType = 'fisdom';
-  if (ismyway || partner_code === 'bfdlmobile' || partner_code === 'finity' || partner_code === 'moneycontrol') {
+  const finityPartners = ["bfdlmobile", "finity", "moneycontrol"]
+  if (ismyway || finityPartners.includes(partner_code)) {
     productType = 'finity';
   }
 
   if (isminvest) {
-    productType = 'minvest';
+    productType = "minvest";
   }
 
-  let config_to_return = baseConfig[productType];
+  // Generating partnerData
+  const partnerData = getPartnerData(productType, partner_code); 
+  let config_to_return = partnerData;
 
   if (isStaging) {
     // config_to_return.webAppUrl = 'https://mayank-dot-plutus-web.appspot.com/#!/';
     // config_to_return.webAppUrl = 'http://localhost:3001/#!/';
-    config_to_return.webAppUrl = window.location.origin + '/appl/web/view#!/';
+    config_to_return.webAppUrl = window.location.origin + "/appl/web/view#!/";
   }
 
   config_to_return.isStaging = isStaging;
 
-  let partnerKeysMapper = {
-    askEmail: 'email',
-    mobile: 'mobile',
-    primary: 'primary_color',
-    secondary: 'secondary_color',
-    cta_disabled_color: 'cta_disabled_color',
-    cta_disabled_background: 'cta_disabled_background',
-    back_button_color: 'back_button_color',
-    notifications_color: 'notifications_color',
-    header_title_color: 'header_title_color',
-    inputFocusedColor: 'inputFocusedColor',
-    white_header: 'white_header',
-    webAppUrl: 'webAppUrl'
-  };
-
-  config_to_return.isFinwiz = true;
-
-  if (
-    checkValidString(partner_code) &&
-    partner_code !== 'fisdom' &&
-    partner_code !== 'finity' &&
-    partner_code !== 'test' 
-  ) {
-    if (partner_code === 'bfdl') {
-      partner_code = 'bfdlmobile';
-    }
-    let partnerData = partnersConfigBase[partner_code] || partnersConfigBase['fisdom'];
-    config_to_return.partner_code = partner_code;
-    config_to_return.isFinwiz = false;
-    for (var key in partnerKeysMapper) {
-      let key_to_copy = partnerKeysMapper[key];
-      if (partnerData[key_to_copy]) {
-        config_to_return[key] = partnerData[key_to_copy];
-      }
-    }
-  }
-
   let html = document.querySelector(`html`);
-  html.style.setProperty(`--secondary`, `${config_to_return.secondary}`);
-  html.style.setProperty(`--highlight`, `${config_to_return.highlight_color}`);
-  html.style.setProperty(`--skelton-color`, `${config_to_return.skelton_color}`);
-  html.style.setProperty(`--primary`, `${config_to_return.primary}`);
-  html.style.setProperty(`--default`, `${config_to_return.default}`);
-  html.style.setProperty(`--label`, `${config_to_return.label}`);
-  html.style.setProperty(`--desktop-width`, '640px');
-  html.style.setProperty(`--tooltip-width`, '540px');
-  html.style.setProperty('--color-action-disable',  `${config_to_return.disabled || '#E8ECF1'}`);
-  html.style.setProperty(`--on-hover`, `${config_to_return.onHover ? config_to_return.onHover : config_to_return.secondary }`);
-
+  html.style.setProperty(`--secondary`,`${config_to_return.styles.secondaryColor}`);
+  html.style.setProperty(`--highlight`,`${config_to_return.styles.highlightColor}`);
+  html.style.setProperty(`--skelton-color`, `${config_to_return.styles.skeletonColor}`);
+  html.style.setProperty(`--primary`, `${config_to_return.styles.primaryColor}`);
+  html.style.setProperty(`--header-background`, `${config_to_return?.uiElements?.header?.backgroundColor}`);
+  html.style.setProperty(`--default`, `${config_to_return.styles.default}`);
+  html.style.setProperty(`--label`, `${config_to_return.uiElements.formLabel.color}`);
+  html.style.setProperty(`--desktop-width`, "640px");
+  html.style.setProperty(`--tooltip-width`, "540px");
+  html.style.setProperty("--color-action-disable", `${config_to_return.uiElements.button.disabledBackgroundColor}`);
+  html.style.setProperty('--dark', '#0A1D32');
+  html.style.setProperty('--steelgrey', '#767E86');
+  html.style.setProperty('--on-focus-background', `${config_to_return.uiElements.button.focusBackgroundColor}`);
+  html.style.setProperty('--on-hover-background', `${config_to_return.uiElements.button.hoverBackgroundColor || config_to_return.styles.secondaryColor}`);
+  html.style.setProperty('--on-hover-secondary-background', `${config_to_return.uiElements.button.hoverSecondaryBackgroundColor || config_to_return.styles.secondaryColor}`);
+  html.style.setProperty('--secondary-green', `${config_to_return.styles.secondaryGreen}`);
   html.style.setProperty(`--mustard`, '#FFDA2C');
   html.style.setProperty(`--pink`, '#F16FA0');
   html.style.setProperty(`--purple`, '#A38CEB');
   html.style.setProperty(`--lime`, '#7ED321');
   html.style.setProperty(`--red`, '#D0021B');
-  html.style.setProperty(`--primaryVariant1`, `${config_to_return.colors.primary1}`);
-  html.style.setProperty(`--primaryVariant4`, `${config_to_return.colors.primary4}`);
-  html.style.setProperty(`--steelgrey`, '#767E86');
+  html.style.setProperty(`--primaryVariant1`, `${config_to_return.styles.primaryVariant1}`);
+  html.style.setProperty(`--primaryVariant4`, `${config_to_return.styles.primaryVariant4}`);
   html.style.setProperty(`--spacing`, '10px');
   html.style.setProperty(`--gunmetal`, '#161A2E');
   html.style.setProperty(`--linkwater`, '#D3DBE4');
-  html.style.setProperty(`--dark`, '#0a1d32');
+  html.style.setProperty(`--border-radius`, `${config_to_return.uiElements.button.borderRadius}px`);
 
   return config_to_return;
-}
-
-export function setWebAppParams(redirect_url) {
-  redirect_url = decodeURIComponent(redirect_url);
-  let redirect_url_data = redirect_url.split('?is_secure=');
-
-  let is_secure = false;
-  if (redirect_url_data.length === 2) {
-    is_secure = redirect_url_data[1];
-  }
-
-  let web_params = '';
-  if (checkValidString(is_secure)) {
-    web_params += 'is_secure=' + is_secure;
-  }
-
-  return web_params;
 }
 
 export const isMobileDevice = () => {
@@ -681,19 +124,36 @@ export function getParamsMark(data) {
   return (data.match(/[?]/g) ? "&": "?");
 }
 
+export const getPlatformConfig = () => {
+  const config = {};
+  if (isMobile.Android() && typeof window.Android !== 'undefined') {
+    config.app = 'android';
+    config.Android = true;
+  } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
+    config.app = 'ios';
+    config.iOS = true;
+  } else {
+    if (storageService().get("is_secure")) {
+      return;
+    }
+    config.app = 'web';
+    config.Web = true;
+  }
+
+  return config;
+}
+
 export const getConfig = () => {
   let main_pathname = window.location.pathname;
   let main_query_params = getUrlParams();
-
-
-  let { base_url = '' } = main_query_params;
-
+  let { base_url = ""  } = main_query_params;
   let origin = window.location.origin;
+  let generic_callback = true;
 
-  let isProdFisdom = origin.indexOf('wv.fisdom.com') >= 0;
-  let isProdFinity = origin.indexOf('wv.mywaywealth.com') >= 0;
+  let isProdFisdom = origin.indexOf('app.fisdom.com') >= 0  || origin.indexOf('wv.fisdom.com') >= 0 ;
+  let isProdFinity = origin.indexOf('app.mywaywealth.com') >= 0 || origin.indexOf('wv.mywaywealth.com') >= 0;
 
-  var base_href = window.sessionStorage.getItem('base_href') || '';
+  let base_href = window.sessionStorage.getItem('base_href') || '';
   let base_url_default = '';
 
   if(base_href) {
@@ -710,15 +170,12 @@ export const getConfig = () => {
     }
   }
   
-
   if(base_url_default) {
     base_url = base_url_default;
   }
 
-
-  let { generic_callback } = main_query_params;
+  let { is_secure = false } = main_query_params;
   let { from_notification } = main_query_params;
-  let { redirect_url } = main_query_params;
   let { sdk_capabilities } = main_query_params;
   let { partner_code } = main_query_params;
   let { app_version } = main_query_params;
@@ -727,7 +184,6 @@ export const getConfig = () => {
   let project_child = '';
   if (main_pathname.indexOf('group-insurance') >= 0) {
     project = 'group-insurance';
-    generic_callback = 'true';
     project_child = 'bhartiaxa';
     if (main_pathname.indexOf('term') >= 0) {
       project_child = 'term';
@@ -742,7 +198,6 @@ export const getConfig = () => {
     project = 'mandate-otm';
   } else if (main_pathname.indexOf('e-mandate') >= 0) {
     project = 'e-mandate';
-    generic_callback = 'true';
   } else if (main_pathname.indexOf('mandate') >= 0) {
     project = 'mandate';
   } else if (main_pathname.indexOf('gold') >= 0) {
@@ -753,7 +208,6 @@ export const getConfig = () => {
     project = 'referral';
   } else if (main_pathname.indexOf('help') >= 0) {
     project = 'help';
-    generic_callback = 'true';
   } else if (main_pathname.indexOf('loan') >= 0) {
     project = 'loan';
   } else if (main_pathname.indexOf('w-report') >= 0) {
@@ -762,24 +216,40 @@ export const getConfig = () => {
     project = 'kyc-esign';
   } else if (main_pathname.indexOf('pg') >= 0) {
     project = 'pg';
-    generic_callback = 'true';
   } else if (main_pathname.indexOf('portfolio-rebalancing') >= 0) {
     project = 'portfolio-rebalancing';
-    generic_callback = 'true';
   } else if (main_pathname.indexOf('iw-dashboard') >= 0) {
     project = 'iw-dashboard';
   } else if (main_pathname.indexOf('tax-filing') >= 0) {
-    generic_callback = true
+    project = 'tax-filing';
+  } else if (main_pathname.indexOf('kyc') >= 0) {
+    project = 'kyc';
+  } else if (main_pathname.indexOf('reports') >= 0) {
+    project = 'reports';
+  } else if (main_pathname.indexOf('withdraw') >= 0) {
+    project = 'withdraw';
+  } else if (main_pathname.indexOf('nps') >= 0) {
+    project = 'nps';
+  } else if (main_pathname.indexOf('diy') >= 0) {
+    project = 'diy';
+  } else if (main_pathname.indexOf('invest') >= 0) {
+    project = 'invest';
   }
 
-  let search = window.location.search;
-  const insurance_v2 = generic_callback === 'true' ? true : search.indexOf('insurance_v2') >= 0;
+  if(!sdk_capabilities) {
+    sdk_capabilities = storageService().get("sdk_capabilities") || "";
+  }
+
+  if(!partner_code) {
+    partner_code = storageService().get("partner") || ""
+  }
+
+  if (is_secure === "true") storageService().set("is_secure", true);
 
   let returnConfig = getPartnerConfig(partner_code);
 
   let searchParams = ``;
   let searchParamsMustAppend = ``;
-
 
   base_url_default = '' // removing as of now, because from backend its getting appended & in plutus_redirect_url, so need atleast one from from webview
   if(!base_url_default) {
@@ -800,17 +270,6 @@ export const getConfig = () => {
     searchParamsMustAppend +=  getParamsMark(searchParams) + `from_notification=${from_notification}`;
   }
 
-  returnConfig.redirect_url = '';
-  if (checkValidString(redirect_url)) {
-    returnConfig.webAppParams = setWebAppParams(redirect_url);
-
-    returnConfig.webAppUrl = decodeURIComponent(redirect_url).split('#')[0] + '#!/';
-    redirect_url = encodeURIComponent(redirect_url);
-    returnConfig.redirect_url = redirect_url;
-    searchParams +=  getParamsMark(searchParams) +  `redirect_url=${redirect_url}`;
-    searchParamsMustAppend += getParamsMark(searchParams) +  `redirect_url=${redirect_url}`;
-  }
-
   if (sdk_capabilities) {
     returnConfig.sdk_capabilities = sdk_capabilities;
     searchParams += getParamsMark(searchParams) +  `sdk_capabilities=${sdk_capabilities}`;
@@ -828,14 +287,29 @@ export const getConfig = () => {
     searchParams += getParamsMark(searchParams) + `pc_urlsafe=${pc_urlsafe}`;
     searchParamsMustAppend += getParamsMark(searchParams) + `pc_urlsafe=${pc_urlsafe}`;
   }
+  
+  if( main_pathname === '/webview/help-conversation' ) {
+    const { ticket_id } = main_query_params;
+    if (checkValidString(ticket_id)) {
+      searchParams += getParamsMark(searchParams) + `ticket_id=${ticket_id}`;
+      searchParamsMustAppend += getParamsMark(searchParams) + `ticket_id=${ticket_id}`;
+    }
+  }
+
+  if( main_pathname === '/webview/help-conversation' ) {
+    const { ticket_id } = main_query_params;
+    if (checkValidString(ticket_id)) {
+      searchParams += getParamsMark(searchParams) + `ticket_id=${ticket_id}`;
+      searchParamsMustAppend += getParamsMark(searchParams) + `ticket_id=${ticket_id}`;
+    }
+  }
 
   if (project === 'insurance' || project_child === 'term') {
-    let insurance_v2 = generic_callback === 'true' ? true : main_query_params.insurance_v2;
     let { insurance_id } = main_query_params;
     let { isJourney } = main_query_params;
 
-    searchParams += getParamsMark(searchParams) + 'insurance_id=' + insurance_id + '&insurance_v2=' + insurance_v2;
-    searchParamsMustAppend += getParamsMark(searchParams) + 'insurance_v2=' + insurance_v2;
+    searchParams += getParamsMark(searchParams) + 'insurance_id=' + insurance_id;
+    searchParamsMustAppend += getParamsMark(searchParams);
 
     if (checkValidString(isJourney)) {
       searchParams += getParamsMark(searchParams) + 'isJourney=' + isJourney;
@@ -853,53 +327,28 @@ export const getConfig = () => {
     searchParams += getParamsMark(searchParams) + 'insurance_allweb=' + insurance_allweb;
   }
 
-  if (isMobile.Android() && typeof window.Android !== 'undefined') {
-    returnConfig.app = 'android';
-    returnConfig.Android = true;
-  } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
-    returnConfig.app = 'ios';
-    returnConfig.iOS = true;
-  } else {
-    returnConfig.app = 'web';
-    returnConfig.Web = true;
+  const platformConfig = getPlatformConfig();
+  if (platformConfig) {
+    returnConfig = {
+      ...returnConfig,
+      ...platformConfig
+    }
   }
 
-  if (insurance_v2) {
-    returnConfig.insurance_v2 = true;
-  }
+  // eslint-disable-next-line
+  returnConfig.html_camera = returnConfig.iOS || returnConfig.Web ? true : false;
 
   if (project === 'mandate-otm') {
     let { key } = main_query_params;
     let { name } = main_query_params;
     let { email } = main_query_params;
-    let campaign_version = generic_callback === 'true' ? 1 : main_query_params.campaign_version;
     let { html_camera } = main_query_params;
     searchParams += getParamsMark(searchParams) + 
-      'key=' + key + '&name=' + name + '&email=' + email + '&campaign_version=' + campaign_version;
+      'key=' + key + '&name=' + name + '&email=' + email;
 
     // eslint-disable-next-line
-    returnConfig.campaign_version = parseInt(campaign_version);
     returnConfig.html_camera =
-      (returnConfig.iOS || returnConfig.Web) && returnConfig.campaign_version ? true : html_camera;
-    if (returnConfig.iOS && !returnConfig.campaign_version) {
-      returnConfig.hide_header = true;
-    }
-  }
-
-  if (project === 'loan') {
-    // eslint-disable-next-line
-    returnConfig.html_camera = returnConfig.iOS || returnConfig.Web ? true : false;
-  }
-
-  if (project === 'isip') {
-    let campaign_version = generic_callback === 'true' ? 1 : main_query_params.campaign_version;
-    searchParams += getParamsMark(searchParams) + 'campaign_version=' + campaign_version;
-
-    // eslint-disable-next-line
-    returnConfig.campaign_version = parseInt(campaign_version);
-    if (returnConfig.iOS && !returnConfig.campaign_version) {
-      returnConfig.hide_header = true;
-    }
+      (returnConfig.iOS || returnConfig.Web) ? true : html_camera;
   }
 
   returnConfig.app_version = '';
@@ -908,21 +357,20 @@ export const getConfig = () => {
     searchParams += getParamsMark(searchParams) + `app_version=${app_version}`;
     searchParamsMustAppend += getParamsMark(searchParams) + `app_version=${app_version}`;
   }
-  let isProdEnv = false;
-  if (
-    base_url.indexOf("my.fisdom.com") >= 0 ||
-    base_url.indexOf("api.mywaywealth.com") >= 0 ||
-    base_url.indexOf("api.finity.in") >= 0
-  ) {
-    isProdEnv = true;
-  }
+  let isProdEnv = isProdFinity || isProdFisdom;
   // should be last
   returnConfig.current_params = main_query_params;
   returnConfig.base_url = base_url;
   returnConfig.searchParams = searchParams;
   returnConfig.searchParamsMustAppend = searchParamsMustAppend;
+
+  returnConfig.isSdk = storageService().get("is_secure");
+  returnConfig.isWebOrSdk = returnConfig.Web || returnConfig.isSdk;
+  returnConfig.isNative = !returnConfig.Web && !returnConfig.isSdk;
+  returnConfig.isIframe = isIframe();
+  returnConfig.platform = !returnConfig.isIframe ? (returnConfig.Web ? "web" : "sdk" ): "iframe";
+  returnConfig.isLoggedIn = storageService().get("currentUser");
   returnConfig.isProdEnv = isProdEnv
-  returnConfig.isWebCode = returnConfig.Web || returnConfig.redirect_url;
 
   return returnConfig;
 };
@@ -996,9 +444,13 @@ export function manageDialog(id, display, aboutScroll) {
 }
 
 export function setHeights(data) {
+  const newIframeDesktopLayout = isNewIframeDesktopLayout();
+  const config = getConfig();
+  const headerClass = 'Header';
+  const containerClass = newIframeDesktopLayout ? 'iframeContainerWrapper' : config.isIframe && config.code === "bfdlmobile" ? 'bfdlContainerWrapper' : 'ContainerWrapper'
   let head =
-    document.getElementsByClassName('Header') && document.getElementsByClassName('Header')[0]
-      ? document.getElementsByClassName('Header')[0].offsetHeight
+    document.getElementsByClassName(headerClass) && document.getElementsByClassName(headerClass)[0]
+      ? document.getElementsByClassName(headerClass)[0].offsetHeight
       : 0;
   let banner = document.getElementsByClassName('Banner')[0];
   let bannerHeight = banner ? banner.offsetHeight : 0;
@@ -1010,18 +462,25 @@ export function setHeights(data) {
       ? document.getElementsByTagName('body')[0].offsetHeight
       : 0;
   let client =
-    document.getElementsByClassName('ContainerWrapper') &&
-    document.getElementsByClassName('ContainerWrapper')[0]
-      ? document.getElementsByClassName('ContainerWrapper')[0].offsetHeight
+    document.getElementsByClassName(containerClass) &&
+    document.getElementsByClassName(containerClass)[0]
+      ? document.getElementsByClassName(containerClass)[0].offsetHeight
       : 0;
   let foot =
     document.getElementsByClassName('Footer') && document.getElementsByClassName('Footer')[0]
       ? document.getElementsByClassName('Footer')[0].offsetHeight
       : 0;
 
+  const navbar =
+      document.getElementsByClassName('NavBar') && document.getElementsByClassName('NavBar')[0]
+        ? document.getElementsByClassName('NavBar')[0].offsetHeight
+        : 0;
+
   let HeaderHeight = bannerHeight + stepHeight + head + 'px';
+  const HeaderTop = head + navbar + 'px';
   if (data.header && document.getElementById('HeaderHeight')) {
     document.getElementById('HeaderHeight').style.height = HeaderHeight;
+    document.getElementById('HeaderHeight').style.top = HeaderTop;
   }
 
   // not using for now
@@ -1057,10 +516,129 @@ export function isIframe() {
 }
 export function getBasePath() {
   var basename = window.sessionStorage.getItem('base_href') || '';
-  if(basename && basename.indexOf('appl/webview') !== -1) {
+  if(basename && basename.indexOf('appl/web') !== -1) {
     basename = basename ? basename + 'view' : '';
   }
   return window.location.origin + basename;
+}
+
+const { checkBeforeRedirection, checkAfterRedirection, backButtonHandler } = require(`./${getConfig().platform}_app`);
+
+export function navigate(pathname, data = {}) {
+  let fromState = this?.location?.pathname || ""
+  let toState = pathname
+  
+  const redirectPath = checkBeforeRedirection(fromState, toState)
+  if (redirectPath) {
+    toState = redirectPath
+  }
+
+  data.state = {
+    ...data?.state,
+    fromState,
+    toState
+  }
+
+  if (data.edit) {
+    this.history.replace({
+      pathname: pathname,
+      search: data.searchParams || getConfig().searchParams,
+      params: data.params || {},
+      state: data.state || {},
+    });
+  } else {
+    this.history.push({
+      pathname: pathname,
+      search: data.searchParams || getConfig().searchParams,
+      params: data.params || {},
+      state: data.state || {},
+    });
+  }
+}
+
+export function isNpsOutsideSdk(fromState, toState) {
+  let config = getConfig();
+  if (config?.landingconfig?.nps === 'inside_sdk') {
+    return false;
+  }
+
+  if (fromState === "/nps" ||
+    ((fromState.indexOf("/nps/amount") !== -1) && toState === "/nps/info") ||
+    ((fromState.indexOf("/nps/payment/callback") !== -1) &&
+      ((toState.indexOf("/nps/amount") !== -1) || toState === "/nps/investments" ||
+        toState === "/nps/performance"))) {
+    return true;
+  }
+}
+
+export function listenPartnerEvents(cb) {
+  window.addEventListener("message", function (e) {
+    if (e.data !== "" && typeof e.data === "string") {
+      /* Parse events */
+      var data = JSON.parse(e.data);
+      /* Match whitelisted domains */
+      if (e.origin !== data.targetOrigin) {
+        return;
+      }
+
+      /* Store event */
+      // setEvent(data);
+      /* return events to callback */
+      cb(data);
+    } else {
+      // setEvent(e.data);
+      cb(e.data);
+    }
+  });
+}
+
+export {
+  checkBeforeRedirection, 
+  checkAfterRedirection, 
+  backButtonHandler
+}
+
+export const popupWindowCenter = (w, h, url) => {
+  let dualScreenLeft =
+    window.screenLeft !== undefined ? window.screenLeft : window.screenX;
+  let dualScreenTop =
+    window.screenTop !== undefined ? window.screenTop : window.screenY;
+  let left = window.screen.width / 2 - w / 2 + dualScreenLeft;
+  let top = window.screen.height / 2 - h / 2 + dualScreenTop;
+  return window.open(
+    url,
+    "_blank",
+    "width=" +
+      w +
+      ",height=" +
+      h +
+      ",resizable,scrollbars,status,top=" +
+      top +
+      ",left=" +
+      left
+  );
+}
+
+export const isNewIframeDesktopLayout = () => {
+  const config = getConfig();
+  return config.code === "moneycontrol" && !config.isMobileDevice && config.isIframe
+}
+
+export const getInvestCards = (keysToCheck=[]) => {
+  const config = getConfig();
+  const investSections = config.investSections || [];
+  const investSubSectionMap = config.investSubSectionMap;
+  const cardsToShow = {};
+  investSections.forEach(section => {
+    if(!isEmpty(investSubSectionMap[section])) {
+      investSubSectionMap[section].forEach(subSections => {
+        if (keysToCheck.includes(subSections)) {
+          cardsToShow[subSections] = true;
+        }
+      })
+    }
+  })
+  return cardsToShow;
 }
 
 export function stringToHexa(str) {
@@ -1071,3 +649,38 @@ export function stringToHexa(str) {
   }
   return arr1.join('')
 }
+
+export function isAuthenticatedUser(props) {
+  const fromState = props.location?.state?.fromState || "";
+  const navigation = navigate.bind(props);
+  const data = {
+    state: {
+      goBack: "/"
+    }
+  }
+  if (getConfig().isLoggedIn) {
+    if (!fromState || isUnAuthenticatedPath(fromState)) {
+      navigation("/", data)
+    } else {
+      navigation(fromState, data);
+    }
+    return true;
+  }
+}
+
+export function isUnAuthenticatedPath(path) {
+  const unAuthenticatedPaths = ["/login", "/register", "/forgot-password", "/mobile/verify", "/logout", "/prepare"];
+  const unAuthenticatedPathsWithParams = ["/partner-authentication"];
+  const pathname = unAuthenticatedPathsWithParams.find(el => path.match(el))
+  return unAuthenticatedPaths.includes(path) || !isEmpty(pathname); 
+}
+
+export function getGuestUserRoute(apiUrl){
+  var guest_id = storageService().get('guestLeadId') || getUrlParams().guestLeadId;
+  
+  if(guest_id){ // true only for RM/guest journey
+      var url_char = apiUrl.indexOf('?') >= 0 ? '&' : '?';
+      return apiUrl + `${url_char}guest_lead_id=${guest_id}`
+  }
+  return apiUrl
+}  

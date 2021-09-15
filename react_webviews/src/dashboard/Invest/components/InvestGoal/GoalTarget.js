@@ -1,0 +1,134 @@
+import './GoalTarget.scss';
+import React, { useState } from 'react';
+import Container from '../../../common/Container';
+import toast from "common/ui/Toast"
+import { numDifferentiationInr } from 'utils/validators';
+import useFunnelDataHook from '../../common/funnelDataHook';
+import { getConfig, navigate as navigateFunc } from '../../../../utils/functions';
+import { get_recommended_funds } from '../../common/api';
+import {
+  SAVE_GOAL_MAPPER,
+  CUSTOM_GOAL_TARGET_MAP,
+  SUBTYPE_NAME_MAP
+} from './constants';
+import { nativeCallback } from '../../../../utils/native_callback';
+import { flowName } from '../../constants';
+
+
+const GoalTarget = (props) => {
+  const riskEnabled = getConfig().riskEnabledFunnels;
+  const navigate = navigateFunc.bind(props);
+  
+  const [loader, setLoader] = useState(false);
+  const {
+    funnelData,
+    funnelGoalData,
+    updateFunnelData
+  } = useFunnelDataHook();
+  const { subtype, year } = props.match?.params || funnelData;
+
+  const fetchRecommendedFunds = async (corpus) => {
+    try {
+      const params = {
+        type: funnelData.investType,
+        subtype: funnelData.subtype,
+        term: funnelData?.term,
+        rp_enabled: riskEnabled,
+      };
+      setLoader(true);
+      const data = await get_recommended_funds(params);
+      setLoader(false);
+
+      if (!data.recommendation) {
+        // RP enabled flow, when user has no risk profile
+        updateFunnelData({ corpus });
+        if (data.msg_code === 0) {
+          navigate(`/invest/${funnelGoalData.id}/risk-select`);
+        } else if (data.msg_code === 1) {
+          navigate(`/invest/${funnelGoalData.id}/risk-select-skippable`);
+        }
+        return;
+      }
+
+      updateFunnelData({ ...data, corpus, userEnteredAmt: 0, amount: 0 });
+
+      navigate(`/invest/savegoal/${subtype}/amount`);
+    } catch (err) {
+      console.log(err);
+      setLoader(false);
+      toast(err)
+    }
+  };
+  
+  const calculateCorpusValue = (amount) => {
+    // eslint-disable-next-line radix
+    return Math.round(amount * Math.pow(1 + 0.05, parseInt(funnelData.term)));
+  };
+
+  const handleInvestedAmount = (type) => () => {
+    sendEvents('next', type.name)
+    const amount = calculateCorpusValue(type.corpus);
+    fetchRecommendedFunds(amount);
+  };
+
+  const setYourTarget = () => {
+    sendEvents('next')
+    updateFunnelData({ corpus: CUSTOM_GOAL_TARGET_MAP[subtype] });
+    navigate(`/invest/savegoal/${subtype}/${year}/target`);
+  };
+
+  const sendEvents = (userAction, type) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "select target type",
+        "flow": flowName['saveforgoal'],
+        "goal_purpose": subtype || "",
+        "target_type": type?.toLowerCase() || ""
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
+  return (
+    <Container
+      events={sendEvents("just_set_events")}
+      data-aid='goal-target-screen'
+      classOverRide='pr-error-container'
+      title='Save for a Goal'
+      noFooter
+      classOverRideContainer='pr-container'
+      skelton={loader}
+    >
+      <section className='invest-goal-save-container' data-aid='invest-goal-save-page'>
+        <div className='invest-goal-save-header' data-aid='invest-goal-save-header'>
+          How much money do you want to save for your {SUBTYPE_NAME_MAP[subtype]}?
+        </div>
+
+        <div className='invest-goal-save-list' data-aid='invest-goal-save-list'>
+          {SAVE_GOAL_MAPPER[subtype]?.map((el, idx) => {
+            return (
+              <div key={idx} className='invest-goal-save-item' onClick={handleInvestedAmount(el)} data-aid={`invest-goal-save-item-${idx+1}`}>
+                <img src={el.icon} alt={el.name} width='80' />
+                <p>{el.name}</p>
+                <div className='invest-goal-save-item-corpus'>
+                  Corpus in {year}:{' '}
+                  <span>{numDifferentiationInr(calculateCorpusValue(el.corpus))}</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div className='invest-goal-set-target' data-aid='invest-goal-set-target' onClick={setYourTarget}>
+          Let me set my target
+        </div>
+      </section>
+    </Container>
+  );
+};
+export default GoalTarget;

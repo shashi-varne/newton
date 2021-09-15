@@ -642,7 +642,7 @@ class AddOnBenefits extends Component {
               <span className="ins-riders-tiles1aa">({props.sub_title})</span>}
           </div>
           <div className="ins-riders-tiles1b"
-            style={{ color: getConfig().primary }}
+            style={{ color: getConfig().styles.primaryColor }}
             onClick={() => this.openPopUpInfo(props.rider_type)}>INFO</div>
         </div>
 

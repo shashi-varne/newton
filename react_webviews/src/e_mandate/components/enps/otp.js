@@ -91,11 +91,10 @@ class eNPSOtpClass extends Component {
         window.sessionStorage.setItem('session_less_enach', true);
         let result = res.pfwresponse.result;
         if (result.message === 'success') {
-          let redirect_url = getConfig().redirect_url;
           let basepath = getBasePath();
           let current_url = basepath + '/e-mandate/enps/redirection' + getConfig().searchParams;
           var pgLink = getConfig().base_url + result.redirect_url;
-          if (!redirect_url) {
+          if (getConfig().isNative) {
             if (getConfig().app === 'ios') {
               nativeCallback({
                 action: 'show_top_bar', message: {

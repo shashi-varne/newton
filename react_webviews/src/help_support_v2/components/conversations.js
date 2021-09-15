@@ -11,6 +11,8 @@ import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
 import { TicketStatus } from "../common/mini_components";
 import SVG from "react-inlinesvg";
+import { getUrlParams } from "../../utils/validators";
+import isEmpty from 'lodash/isEmpty';
 
 const moment = require("moment");
 class TicketConversations extends Component {
@@ -45,23 +47,30 @@ class TicketConversations extends Component {
   }
 
   onload = async () => {
-    let ticket = this.props.location.state.ticket;
-
+    let ticket = this.props.location?.state?.ticket || {};
+    const { ticket_id } = getUrlParams();
+    if( ticket_id ) {
+      ticket['ticket_id'] = ticket_id;
+    }
     this.setState({
       ticket: ticket,
       skelton: true,
     });
 
     let result = await this.getTicketConversations(ticket.ticket_id);
-
-    if (result) {
+    
+    if (!isEmpty(result)) {
+      ticket['status'] = result.status.toLowerCase();
       this.setState({
+        ticket: ticket,
         category: result.category || "",
         sub_category: result.sub_category || "",
         ticket_status: result.status || "",
         old_ticket_reference_id: result.old_ticket_reference_id || ""
       });
       this.sortConversations(result);
+    } else {
+      this.goBack();
     }
   };
 
@@ -267,7 +276,7 @@ class TicketConversations extends Component {
         }}
         title={
           <TicketStatus
-            title={`Ticket ID: ${ticket.ticket_id}`}
+            title={`Ticket ID: ${ticket?.ticket_id || ""}`}
             headerStatus={ticket_status}
           />
         }
@@ -348,7 +357,7 @@ class TicketConversations extends Component {
                 preProcessor={(code) =>
                   code.replace(
                     /stroke=".*?"/g,
-                    "stroke=" + getConfig().secondary
+                    "stroke=" + getConfig().styles.secondaryColor
                   )
                 }
                 src={require(`assets/down_nav.svg`)}

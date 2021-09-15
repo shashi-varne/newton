@@ -13,8 +13,8 @@ class GenericTooltip extends Component {
     render() {
         return (
             <div onClick={this.handleChildClick}> 
-            <Tooltips className="generic-tooltip" classNameArrow="tooltip-arrrow" background={getConfig().highlight_color}
-            backgroundArrow={getConfig().highlight_color}
+            <Tooltips className="generic-tooltip" classNameArrow="tooltip-arrrow" background={getConfig().styles.highlightColor}
+            backgroundArrow={getConfig().styles.highlightColor}
               direction="down-end" content={this.props.content}>
               <Imgc className="generic-tooltip-img" src={require(`assets/${this.props.productName}/info_icon.svg`)} alt="" />
             </Tooltips>

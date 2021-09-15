@@ -134,10 +134,8 @@ class GroupHealthLanding extends Component {
     const provider =  this.state.providerConfig.provider_api
     const body = {"provider": provider};
     try {
-      const res = await Api.post(
-        `api/insurancev2/api/insurance/health/quotation/account_summary`,
-        body
-      );
+      const url = `api/insurancev2/api/insurance/health/quotation/account_summary`;
+      const res = await Api.post(url, body);
         
       let resultData =  res.pfwresponse.result;
       resultData['details_doc'] = res.pfwresponse.result.policy_brochure
@@ -490,7 +488,7 @@ class GroupHealthLanding extends Component {
             />
             <div
               className="accident-plan-read-text"
-              style={{ color: getConfig().primary, marginLeft: '10px' }}
+              style={{ color: getConfig().styles.primaryColor, marginLeft: '10px' }}
             >
               Read full-policy description
             </div>
@@ -516,7 +514,7 @@ class GroupHealthLanding extends Component {
                       this.openPdf(this.state.common.tnc, "tnc")
                     }
                     className="accident-plan-terms-bold"
-                    style={{ color: getConfig().primary, textDecoration: 'underline' }}
+                    style={{ color: getConfig().styles.primaryColor, textDecoration: 'underline' }}
                   >
                     Terms and conditions
                   </span> 

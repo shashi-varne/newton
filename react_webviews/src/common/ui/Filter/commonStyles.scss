@@ -1,0 +1,148 @@
+#filter-dialog {
+  .MuiDialog-paper {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .MuiDialog-paperWidthSm {
+    width: 100%;
+    align-self: flex-end;
+  }
+
+  .wv-filter-bottom-sheet {
+    width: 100%;
+    position: relative;
+    min-height: 465px !important;
+    .wv-heading {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 32px;
+      letter-spacing: 0px;
+      margin: 0px 0px 20px 0px;
+    }
+
+    .wv-filter {
+      display: flex;
+      background-color: #fff;
+      .wv-title {
+        background-color: #e8e8e8;
+        margin-left: -20px;
+        font-size: 15px;
+        flex: 1;
+
+        ul {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          li {
+            padding: 20px;
+            list-style-type: none;
+            text-align: center;
+            font-weight: bold;
+            box-sizing: border-box;
+            background-color: #e8e8e8;
+            &:hover {
+              cursor: pointer;
+            }
+          }
+          .wv-tab {
+            background-color: transparent !important;
+            color: var(--steelgrey);
+          }
+          .tab-option {
+            background-color: #fff !important;
+          }
+        }
+        background-color: transparent !important;
+        background-image: linear-gradient(
+          rgba(223, 223, 223, 0.3),
+          rgba(255, 255, 255, 0)
+        );
+      }
+      .wv-body {
+        flex: 4;
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: 340px;
+        .wv-render-tab-options-container {
+          margin: 0 10px;
+        }
+
+        .MuiFormControlLabel-root {
+          margin-top: 5px;
+          margin-bottom: 5px;
+          margin-left: 0px;
+          .MuiSvgIcon-root {
+            fill: var(--primary);
+          }
+          .MuiCheckbox-root {
+            left: 0;
+          }
+          .wv-tab-option-title {
+            position: relative;
+            line-height: 21px;
+            font-size: 16px;
+            color: var(--dark);
+            width: 100%;
+            margin-left: 5px;
+          }
+
+          .wv-tab-option-subtitle {
+            position: absolute;
+            margin-top: 5px;
+            color: var(--steelgrey);
+            font-size: 13px;
+            line-height: 18px;
+            min-width: 100px;
+          }
+        }
+      }
+    }
+
+    .wv-filter-buttons{
+      display: flex;
+      justify-content: space-around;
+      .MuiButton-outlinedSecondary{
+        border: none;
+      }
+      padding-top: 20px;
+      button {
+        width: 35%;
+        margin-right: 5px;
+      }
+    }
+  }
+}
+
+.wv-filter-btn-title{
+  color: #35CB5D;
+  padding-left: 10px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.wv-filter-with-btn {
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px;
+  margin-left: 300px;
+  max-width: var(--desktop-width);
+  .filter-btn {
+    border: 1px solid rgba(255, 255, 255, 0.5) !important;
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.12), 0px 2px 2px rgba(0, 0, 0, 0.05) !important;
+    min-height: 40px;
+    background-color: white;
+    border-radius: 4px;
+  }
+}
+@media only screen and (min-width: 768px) {
+  #filter-dialog {
+    .MuiDialog-paper {
+      max-width: 100% !important;
+    }
+  }
+}

@@ -255,7 +255,7 @@ class FormCreateProfile extends Component {
                                     value: '1'
                                 }
                             ]}
-                            color={getConfig().primary}
+                            color={getConfig().styles.primaryColor}
                             value={this.state.step1 || ''}
                             onChange={() => { }} />
                     </div>
@@ -271,7 +271,7 @@ class FormCreateProfile extends Component {
                                     value: '1'
                                 }
                             ]}
-                            color={getConfig().primary}
+                            color={getConfig().styles.primaryColor}
                             value={this.state.step2 || ''}
                             onChange={() => { }} />
                     </div>

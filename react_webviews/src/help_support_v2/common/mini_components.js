@@ -11,13 +11,13 @@ export const MyQueries = (props) => {
   return (
     <div className={`${props.search ? props.showButton ? "search-bar-header search-bar-header-w-button" : "search-bar-header" : ""}`}>
       <div className={props.showButton ? "help-header-title help-header-title-w-button" : "help-header-title"}>
-        <div style={{ width: "75%",display:"flex",alignItems:"center" }}>
+        <div style={{ display:"flex",alignItems:"center" }}>
           <IconButton
             color="inherit" aria-label="Menu"
           onClick={props.onBackPress}
           className={props.showButton?"showButton":"hideButton"}>
             <SVG
-              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (getConfig().primary))}
+              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (getConfig().styles.primaryColor))}
               src={back_arrow}
             />
           </IconButton>

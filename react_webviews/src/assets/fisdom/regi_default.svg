@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="70px" height="60px" viewBox="0 0 70 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>70x60_icons/others/register_icon/default</title>
+    <desc>Created with Sketch.</desc>
+    <g id="70x60_icons/others/register_icon/default" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="base" x="0" y="0" width="70" height="60"></rect>
+        <g id="70x60_icons" transform="translate(15.000000, 11.000000)">
+            <g id="register_icn">
+                <polygon id="base" fill="#F6F2FF" points="12 3 40 3 40 33 35 38 12 38"></polygon>
+                <polygon id="Rectangle-path" fill="#EEEEEE" points="13 10 37 10 37 12 13 12"></polygon>
+                <polygon id="Rectangle-path" fill="#EEEEEE" points="17 17 37 17 37 19 17 19"></polygon>
+                <polygon id="Rectangle-path" fill="#EEEEEE" points="17 24 37 24 37 26 17 26"></polygon>
+                <rect id="base" fill="#DFD8EF" x="0" y="0" width="30" height="34"></rect>
+                <polygon id="Rectangle-path" fill="#F0F7FF" points="25 10 27 10 27 12 25 12"></polygon>
+                <polygon id="Rectangle-path" fill="#F0F7FF" points="21 10 23 10 23 12 21 12"></polygon>
+                <polygon id="Rectangle-path" fill="#F0F7FF" points="17 10 19 10 19 12 17 12"></polygon>
+                <path d="M15,4 L3,4 L3,18 L15,18 L15,4 L15,4 Z M13,16 L5,16 L5,6 L13,6 L13,16 Z" id="Shape" fill="#4F2DA7"></path>
+                <polygon id="Rectangle-path" fill="#EEEEEE" points="3 21 27 21 27 23 3 23"></polygon>
+                <polygon id="Rectangle-path" fill="#EEEEEE" points="3 26 23 26 23 28 3 28"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

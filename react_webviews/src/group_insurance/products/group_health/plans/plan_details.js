@@ -202,7 +202,8 @@ class GroupHealthPlanDetails extends Component {
           }
 
           try {
-            const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,body);
+            const url = `api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`;
+            const res = await Api.post(url ,body);
             
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
@@ -408,7 +409,7 @@ class GroupHealthPlanDetails extends Component {
                 <div className="accident-plan-read-text" style={{color: '#767E86'}}>
                   For detailed list of all terms and conditions, please refer
                   <span
-                    style={{ color: getConfig().primary }}
+                    style={{ color: getConfig().styles.primaryColor }}
                     onClick={() =>
                       this.openPdf(
                         this.state.plan_data.policy_prospectus,

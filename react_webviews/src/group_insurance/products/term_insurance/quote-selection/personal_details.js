@@ -271,14 +271,14 @@ class PersonalDetailsIntro extends Component {
             <label style={{ fontSize: 14, color: '#a2a2a2' }}>Gender</label>
             <div >
               <img className="per-det-img"
-                style={{ border: (this.state.gender === 'male' ? '1px solid ' + getConfig().primary : "") }} src={male_icon}
+                style={{ border: (this.state.gender === 'male' ? '1px solid ' + getConfig().styles.primaryColor : "") }} src={male_icon}
                 onClick={() => this.handleGender('male')} alt="Insurance" />
               {this.state.gender === 'male' && <img className="selected-gender" src={completed_step} alt="Insurance" />}
 
               <img className="per-det-img"
                 style={{
                   marginLeft: this.state.gender === 'female' ? 20 : 10,
-                  border: (this.state.gender === 'female' ? '1px solid ' + getConfig().primary : "")
+                  border: (this.state.gender === 'female' ? '1px solid ' + getConfig().styles.primaryColor : "")
                 }} src={female_icon}
                 onClick={() => this.handleGender('female')} alt="Insurance" />
               {this.state.gender === 'female' && <img className="selected-gender" src={completed_step} alt="Insurance" />}

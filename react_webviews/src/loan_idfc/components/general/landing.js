@@ -197,7 +197,7 @@ class Landing extends Component {
               <SVG
                 className="right"
                 preProcessor={(code) =>
-                  code.replace(/fill=".*?"/g, "fill=" + getConfig().primary)
+                  code.replace(/fill=".*?"/g, "fill=" + getConfig().styles.primaryColor)
                 }
                 src={next_arrow}
               />
