@@ -23,7 +23,7 @@
   }
   & + #iwd-profile-short #iwd-profile-icon {
     opacity: 0;
-    transition: opacity 0.3s ease-out 0.2s;
+    transition: opacity 0.3s ease-out;
   }
 }
 .boxEffect-enter-active {
