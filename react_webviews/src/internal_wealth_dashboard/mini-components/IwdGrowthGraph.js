@@ -23,7 +23,7 @@ const IwdGrowthGraph = ({
         (<ResponsiveLine
           data = { data }
           animate = { true }
-          margin = {{ top: 20, right: 40, bottom: 40, left: isMobileView ? 60 : 70 }}
+          margin = {{ top: 20, right: 40, bottom: 40, left: isMobileView ? 60 : 80 }}
           yScale={{
             type: 'linear',
             min: params.min || 'auto',
@@ -40,7 +40,7 @@ const IwdGrowthGraph = ({
           axisLeft={{
             orient: 'left',
             tickValues: 5,
-            format: value => value === 0 ? 0 : numDifferentiationInr(value, 2), //converts 40000 to 40K
+            format: value => value === 0 ? 0 : numDifferentiationInr(value, 2, false, true), //converts 40000 to 40K
             tickPadding: 10,
             tickSize: 0,
           }}
