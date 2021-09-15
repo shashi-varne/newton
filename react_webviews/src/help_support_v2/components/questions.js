@@ -35,7 +35,7 @@ class Questions extends Component {
     let result = await this.getAllfaqs(sub_category_id);
 
     let { faqs } = this.state;
-    faqs[sub_category_id] = result.faqs;
+    faqs[sub_category_id] = result?.faqs || [];
 
     this.setState({
       faqs: faqs,
