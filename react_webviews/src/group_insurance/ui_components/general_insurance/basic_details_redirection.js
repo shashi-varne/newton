@@ -65,7 +65,7 @@ class BasicDetailsRedirectionForm extends Component {
             provider: provider,
             premium_details: premium_details,
             insurance_title: providerLogoMapper[provider] ? providerLogoMapper[provider].insurance_title: '',
-            productTitle: premium_details.productTitle || '',
+            productTitle: premium_details?.productTitle || '',
             buttonTitle: buttonTitle
         });
     }

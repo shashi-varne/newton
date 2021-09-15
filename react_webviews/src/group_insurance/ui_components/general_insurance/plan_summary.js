@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../../common/Container';
 import '../../common/Style.css';
-import provider from 'assets/provider.svg';
+import icici_logo from 'assets/baxa_new_logo.svg';
 import { getUrlParams, numDifferentiationInr, storageService } from '../../../utils/validators';
 
 import Api from 'utils/api';
@@ -270,7 +270,7 @@ class PlanSummaryClass extends Component {
     }
   }
 
-  sendEvents(user_action, insurance_type) {
+  sendEvents = (user_action, insurance_type) => {
     let eventObj = {
       "event_name": 'Group Insurance',
       "properties": {
@@ -326,7 +326,7 @@ class PlanSummaryClass extends Component {
       >
         <div className="plan-summary-heading">
           <div className="plan-summary-heading-text">{this.state.product_title}</div>
-          <Imgc style={{width: '79px', height: '56px'}} src={provider} alt="" />
+          <Imgc className="baxa-new-logo" src={icici_logo} alt="" />
         </div>
         <div className="plan-summary-mid">
           <div className="plan-summary-mid1">

@@ -91,7 +91,7 @@ export async function getSummary() {
       bank_list: ["bank_list"],
       referral: ["subbroker", "p2p"],
     });
-    const { result, status_code: status } = res.pfwresponse;
+    const { result, status_code: status } = res?.pfwresponse;
     if (status === 200) {
       this.setSummaryData(result);
       currentUser = result.data.user.user.data;

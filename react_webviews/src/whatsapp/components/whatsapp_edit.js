@@ -90,7 +90,7 @@ class WnatsappEditNumber extends Component {
     if (canProceed) {
       this.sendEvents("next");
       if (mobile_no === original_no) {
-        let id = await this.getContact();
+        let id = await this.getContact(this.state.mobile_no);
 
         if (id) {
           let body = {
