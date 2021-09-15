@@ -7,6 +7,14 @@ import Slide from '@material-ui/core/Slide';
 import { Imgc } from '../../../common/ui/Imgc';
 
 const CampaignDialog = ({ isOpen, close, handleClick, cancel, data }) => {
+  const handlePrimaryClick = () => {
+    if (data.url) {
+      handleClick();
+    } else {
+      cancel();
+    }
+  }
+  
   return (
     <Dialog
       open={isOpen}
@@ -36,7 +44,7 @@ const CampaignDialog = ({ isOpen, close, handleClick, cancel, data }) => {
             {data?.action_buttons?.buttons[1]?.title || "NOT NOW"}
           </Button>
         )}
-        <Button className='button bg-full' onClick={handleClick} data-aid='dialog-btn'>
+        <Button className='button bg-full' onClick={handlePrimaryClick} data-aid='dialog-btn'>
           {data?.action_buttons?.buttons[0]?.title || ""}
         </Button>
       </DialogActions>
