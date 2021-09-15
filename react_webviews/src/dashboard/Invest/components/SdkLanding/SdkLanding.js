@@ -266,6 +266,9 @@ class SdkLanding extends Component {
             <div className='sdk-landing-cards'>
               {this.state.renderLandingCards.map((el, idx) => {
                 if (el.key === 'kyc') {
+                  if (isReadyToInvestBase) {
+                    return null;
+                  }
                   el.isLoading = kycStatusLoader;
                   el.color = kycJourneyStatusMapperData?.color;
                   const premiumKyc = kycJourneyStatus === 'ground_premium';

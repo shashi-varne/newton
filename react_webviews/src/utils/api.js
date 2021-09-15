@@ -4,7 +4,7 @@ import * as Sentry from '@sentry/browser'
 import { isEmpty } from 'lodash';
 import { storageService } from './validators';
 import { encrypt, decrypt } from './encryption';
-import { getConfig } from 'utils/functions';
+import { getConfig, getGuestUserRoute } from 'utils/functions';
 
 const genericErrMsg = "Something went wrong";
 const config = getConfig();
@@ -48,6 +48,9 @@ class Api {
     if(route.includes("/api/") && storageService().get("x-plutus-auth") && config.isIframe) {
       axios.defaults.headers.common["X-Plutus-Auth"] = storageService().get("x-plutus-auth")
     }
+    if(route.includes('api/insurance')){  
+      route = getGuestUserRoute(route)
+    }
     let options = Object.assign({
       method: verb,
       url: route,
@@ -70,9 +73,25 @@ class Api {
 
         if (isEmpty(pfwResponseData)) {
           const errorMsg = response.data?.pfwmessage || genericErrMsg;
-          triggerSentryError(verb, response.data, errorMsg);
-        } else if (pfwResponseData.status_code !== 200) {
-          const errorMsg = pfwResponseData.result.error || pfwResponseData.result.message || genericErrMsg;
+          if(response?.data?.pfwstatus_code === 403){
+            // We are Neglecting Login Required in Sentry, Which is not Importent Event to capture.
+         } else {
+           triggerSentryError(verb, response.data, errorMsg);
+         }
+        } else if (
+          pfwResponseData.status_code !== 200 &&
+          pfwResponseData.status_code !== 400 &&
+          pfwResponseData.status_code !== 403 &&
+          pfwResponseData.status_code !== 402 &&
+          pfwResponseData.status_code !== 401 &&
+          pfwResponseData.status_code !== 405 &&
+          pfwResponseData.status_code !== 414 &&
+          pfwResponseData.status_code !== 408
+        ) {
+          const errorMsg =
+            pfwResponseData.result.error ||
+            pfwResponseData.result.message ||
+            genericErrMsg;
           triggerSentryError(verb, response.data, errorMsg);
         }
 

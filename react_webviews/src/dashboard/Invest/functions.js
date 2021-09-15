@@ -91,7 +91,7 @@ export async function getSummary() {
       bank_list: ["bank_list"],
       referral: ["subbroker", "p2p"],
     });
-    const { result, status_code: status } = res.pfwresponse;
+    const { result, status_code: status } = res?.pfwresponse;
     if (status === 200) {
       this.setSummaryData(result);
       currentUser = result.data.user.user.data;
@@ -190,7 +190,11 @@ export function clickCard(state, title) {
       });
       break;
     case "top_equity":
-      this.navigate(`/diy/fundlist/Equity/Multi_Cap`);
+      this.navigate(`/diy/fundlist/Equity/Multi_Cap`, {
+        state: {
+          name: "Top equity funds"
+        }
+      });
       break;
     default:
       this.navigate(keyPathMapper[state] || state);

@@ -56,7 +56,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
             if(this.state.provider === 'GMC'){
                 postfix = '/year';
             }
-            this.updateBottomPremium(this.state.premium_data[this.state.selectedIndex].premium, postfix);
+            this.updateBottomPremium(this.state.premium_data[this.state.selectedIndex]?.premium, postfix);
         })
     }
 
@@ -77,7 +77,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
                     "product": this.state.providerConfig.provider_api,
                     "flow": this.state.insured_account_type || '',
                     "screen_name": 'select sum insured',
-                    'sum_assured' : this.state.selectedIndex >= 0 ? this.state.premium_data[this.state.selectedIndex].sum_insured : ''
+                    'sum_assured' : this.state.selectedIndex >= 0 ? this.state.premium_data[this.state.selectedIndex]?.sum_insured : ''
                 }
             };
             
@@ -131,7 +131,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
             var next_state = ''
             let body = {};
 
-            if(provider === 'HDFCERGO' && account_type === 'self'){
+            if(provider === 'HDFCERGO' && (account_type === 'self' || total_member === 1)){
                 next_state = 'cover_period_screen'
                 allowed_post_body_keys.push('city')
                 body['floater_type'] = 'non_floater'
@@ -168,7 +168,8 @@ class GroupHealthPlanSelectSumAssured extends Component {
                 body[key] = post_body[key];
             }
             try {
-                const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,body);
+                const url = `api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`;
+                const res = await Api.post(url ,body);
                 
                 var resultData = res.pfwresponse.result;
                 if (res.pfwresponse.status_code === 200) {
@@ -243,7 +244,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
             if(this.state.provider === 'GMC'){
                 postfix = '/year';
             }
-            this.updateBottomPremium(this.state.premium_data[this.state.selectedIndex].premium, postfix);
+            this.updateBottomPremium(this.state.premium_data[this.state.selectedIndex]?.premium, postfix);
         });
     }
 

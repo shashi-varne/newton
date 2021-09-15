@@ -137,7 +137,8 @@ class GroupHealthPlanStarSumInsured extends Component {
         }
         
         try{
-            const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/star`, body);
+            const url = `api/insurancev2/api/insurance/health/quotation/get_premium/star`;
+            const res = await Api.post(url, body);
 
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
