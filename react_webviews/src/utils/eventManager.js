@@ -1,4 +1,4 @@
-import { isFunction } from "./validators";
+import isFunction from 'lodash/isFunction';
 
 const eventManager = {
   eventsMapper: new Map(),
