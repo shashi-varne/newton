@@ -472,10 +472,7 @@ const Journey = (props) => {
       }&is_secure=${storageService().get("is_secure")}`
     );
     const data = {
-      url: `${basePath}/kyc/journey${
-        config.searchParams
-      }&show_aadhaar=true&is_secure=
-        ${storageService().get("is_secure")}`,
+      url: `${basePath}/kyc/journey${config.searchParams}&show_aadhaar=true&is_secure=${storageService().get("is_secure")}`,
       message: "You are almost there, do you really want to go back?",
     };
     if (!config.Web && storageService().get(STORAGE_CONSTANTS.NATIVE)) {
