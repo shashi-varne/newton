@@ -31,7 +31,7 @@ class ReplaceFund extends Component {
       });
 
       let amount = storageService().get('npsAmount')
-      const data = await this.get_recommended_funds(amount);
+      const data = await this.get_recommended_funds(amount, true);
 
       data.pension_houses.map((el, index) => {
         if (el.name  === data.recommended[0].pension_house.name) {
@@ -84,6 +84,8 @@ class ReplaceFund extends Component {
         showLoader={this.state.show_loader}
         buttonTitle="APPLY"
         handleClick={() => this.handleClick()}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
       >
         <section className="page invest nps" data-aid='nps-fund-replace-page'>
           <div className="container-padding invest-body">
