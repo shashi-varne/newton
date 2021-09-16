@@ -18,7 +18,7 @@ const RedirectPathContainer = (props) => {
   useEffect(() => {
     if (redirectPath) {
       navigate(redirectPath);
-      eventManager.emit("redirectPath", false);
+      setRedirectPath(false);
     }
   }, [redirectPath]);
 
