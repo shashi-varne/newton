@@ -4,23 +4,21 @@ const eventManager = {
   eventsMapper: new Map(),
 
   add(event, callback) {
-    this.eventsMapper.has(event) || this.eventsMapper.set(event, []);
-    this.eventsMapper.get(event).push(callback);
+    this.eventsMapper.set(event, callback);
   },
 
   delete(event) {
     this.eventsMapper.delete(event);
   },
 
-  emit(event, args) {
+  emit(event, ...args) {
     if (!this.eventsMapper.has(event)) {
       return false;
     }
-    this.eventsMapper.get(event).forEach((callback) => {
-      if (isFunction(callback)) {
-        setTimeout(() => callback(args), 0);
-      }
-    });
+    const callback = this.eventsMapper.get(event);
+    if (isFunction(callback)) {
+      callback(...args);
+    }
   },
 };
 
