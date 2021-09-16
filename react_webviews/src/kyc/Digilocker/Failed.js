@@ -102,10 +102,7 @@ const Failed = (props) => {
       )
     }
     const data = {
-      url: `${basePath}/kyc/journey${
-        config.searchParams
-      }&show_aadhaar=true&is_secure=
-        ${storageService().get("is_secure")}`,
+      url: `${basePath}/kyc/journey${config.searchParams}&show_aadhaar=true&is_secure=${storageService().get("is_secure")}`,
       message: "You are almost there, do you really want to go back?",
     };
     if (isMobile.any() && storageService().get(STORAGE_CONSTANTS.NATIVE)) {
