@@ -47,7 +47,6 @@ export async function getAccountSummary(params = {}) {
       throw new Error(response?.pfwresponse?.result?.message);
     }
   } catch (err) {
-    toast(err.message);
     throw(err);
   }
 }
@@ -83,7 +82,7 @@ export async function initData() {
         storageService().set('dataSettedInsideBoot', true)
         setSDKSummaryData(result)
       }
-    } else if (!currentUser || !user || !kyc) {
+    } else {
       const queryParams = {
         campaign: ['user_campaign'],
         kyc: ['kyc'],

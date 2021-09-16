@@ -8,6 +8,7 @@ import ThemeContext from "../../utils/ThemeContext";
 import isObject from 'lodash/isObject';
 import { Route } from "react-router-dom";
 import { getUrlParams, storageService } from "../../utils/validators";
+import Toast from "../ui/Toast";
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
   const { isSdk, isIframe, isMobileDevice } = useMemo(() => getConfig(), []);
@@ -34,6 +35,7 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
       }
     } catch (err) {
       setIsLoginValid(false);
+      Toast(err.message);
       if (isObject(err) && [403, 416].includes(err.pfwstatus_code)) {
         return;
       } else {
