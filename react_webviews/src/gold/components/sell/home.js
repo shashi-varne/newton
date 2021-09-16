@@ -149,26 +149,28 @@ class GoldSellHome extends Component {
       }
 
       let maxWeight;
-      const res3 = await Api.get('/api/gold/user/sell/balance/' + this.state.provider);
+      if (isRegistered) {
+        const res3 = await Api.get('/api/gold/user/sell/balance/' + this.state.provider);
 
-      if (res3.pfwresponse.status_code === 200) {
+        if (res3.pfwresponse.status_code === 200) {
 
-        let result = res3.pfwresponse.result;
-        
-        maxWeight = parseFloat(result.sellable_gold_balance || 0).toFixed(4);
-        maxWeight = parseFloat(maxWeight);
-        this.setState({
-          sellable_gold_balance: result.sellable_gold_balance,
-          maxWeight: maxWeight
-        })
-        this.setMaxWeightAmount();
-       
-      } else {
-        this.setState({
-          error: true,
-          errorMessage: res3.pfwresponse.result.error || res3.pfwresponse.result.message ||
-            'Something went wrong'
-        });
+          let result = res3.pfwresponse.result;
+
+          maxWeight = parseFloat(result.sellable_gold_balance || 0).toFixed(4);
+          maxWeight = parseFloat(maxWeight);
+          this.setState({
+            sellable_gold_balance: result.sellable_gold_balance,
+            maxWeight: maxWeight
+          })
+          this.setMaxWeightAmount();
+
+        } else {
+          this.setState({
+            error: true,
+            errorMessage: res3.pfwresponse.result.error || res3.pfwresponse.result.message ||
+              'Something went wrong'
+          });
+        }
       }
 
       if(!isRegistered || !provider_info.gold_balance || !maxWeight) {

@@ -244,7 +244,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
             if(this.state.provider === 'GMC'){
                 postfix = '/year';
             }
-            this.updateBottomPremium(this.state.premium_data[this.state.selectedIndex].premium, postfix);
+            this.updateBottomPremium(this.state.premium_data[this.state.selectedIndex]?.premium, postfix);
         });
     }
 
