@@ -836,7 +836,7 @@ const Journey = (props) => {
                   </div>
                   
 
-                  {item.status === 'completed' && item.isEditAllowed && (
+                  {item.status === 'completed' && !item.isEditAllowed && (
                     <span
                       data-aid='kyc-edit'
                       className="edit"
