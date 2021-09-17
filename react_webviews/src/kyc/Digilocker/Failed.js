@@ -89,7 +89,7 @@ const Failed = (props) => {
     const redirect_url = encodeURIComponent(
       `${basePath}/digilocker/callback${
         config.searchParams
-      }&is_secure=${storageService().get("is_secure")}`
+      }&is_secure=${config.isSdk}`
     );
 
     if (newIframeDesktopLayout) {
@@ -101,8 +101,11 @@ const Failed = (props) => {
         )
       )
     }
+    const backUrl = encodeURIComponent(
+      `${basePath}/kyc/journey${config.searchParams}&show_aadhaar=true&is_secure=${config.isSdk}`
+    );
     const data = {
-      url: `${basePath}/kyc/journey${config.searchParams}&show_aadhaar=true&is_secure=${storageService().get("is_secure")}`,
+      url: backUrl,
       message: "You are almost there, do you really want to go back?",
     };
     if (isMobile.any() && storageService().get(STORAGE_CONSTANTS.NATIVE)) {
@@ -124,12 +127,7 @@ const Failed = (props) => {
               action_name: "positive",
               action_text: "Yes",
               action_type: "redirect",
-              redirect_url: encodeURIComponent(
-                `${basePath}/kyc/journey${
-                  config.searchParams
-                }&show_aadhaar=true&is_secure=
-                  ${storageService().get("is_secure")}`
-              ),
+              redirect_url: backUrl,
             },
             {
               action_name: "negative",

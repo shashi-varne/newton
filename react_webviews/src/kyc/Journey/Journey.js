@@ -469,10 +469,13 @@ const Journey = (props) => {
     const redirect_url = encodeURIComponent(
       `${basePath}/digilocker/callback${
         config.searchParams
-      }&is_secure=${storageService().get("is_secure")}`
+      }&is_secure=${config.isSdk}`
+    );
+    const backUrl = encodeURIComponent(
+      `${basePath}/kyc/journey${config.searchParams}&show_aadhaar=true&is_secure=${config.isSdk}`
     );
     const data = {
-      url: `${basePath}/kyc/journey${config.searchParams}&show_aadhaar=true&is_secure=${storageService().get("is_secure")}`,
+      url: backUrl,
       message: "You are almost there, do you really want to go back?",
     };
     if (!config.Web && storageService().get(STORAGE_CONSTANTS.NATIVE)) {
@@ -494,12 +497,7 @@ const Journey = (props) => {
               action_name: "positive",
               action_text: "Yes",
               action_type: "redirect",
-              redirect_url: encodeURIComponent(
-                `${basePath}/kyc/journey${
-                  config.searchParams
-                }&show_aadhaar=true&is_secure=
-                  ${storageService().get("is_secure")}`
-              ),
+              redirect_url: backUrl,
             },
             {
               action_name: "negative",
@@ -539,7 +537,7 @@ const Journey = (props) => {
       const redirect_url = encodeURIComponent(
         `${getBasePath()}/digilocker/callback${
           config.searchParams
-        }&is_secure=${storageService().get("is_secure")}`
+        }&is_secure=${config.isSdk}`
       );
       handleIframeKyc(
         updateQueryStringParameter(

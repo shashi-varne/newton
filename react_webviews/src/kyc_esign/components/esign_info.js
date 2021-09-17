@@ -85,7 +85,7 @@ class ESignInfo extends Component {
 
   handleClick = async () => {
     const config = getConfig();
-    
+
     if(this.state.showAadharDialog) {
       this.closeAadharDialog();
     }
@@ -94,7 +94,7 @@ class ESignInfo extends Component {
     const redirectUrl = encodeURIComponent(
       basepath + '/kyc-esign/nsdl' + config.searchParams
     );
-
+    const backUrl = encodeURIComponent(`${basepath}/kyc-esign/info${config.searchParams}&is_secure=${config.isSdk}}`);
     this.setState({ show_loader: "button" });
 
     try {
@@ -106,7 +106,6 @@ class ESignInfo extends Component {
       let res = await Api.get(url, params);
       let resultData = res.pfwresponse.result;
       if (resultData && !resultData.error) {
-        
         if (!config.Web && storageService().get(STORAGE_CONSTANTS.NATIVE)) {
           if (config.app === 'ios') {
             nativeCallback({
@@ -119,7 +118,7 @@ class ESignInfo extends Component {
           nativeCallback({
             action: 'take_back_button_control', 
             message: {
-              url: `${basepath}/kyc-esign/info${config.searchParams}&is_secure=${storageService().get("is_secure")}`,
+              url: backUrl,
               message: 'You are almost there, do you really want to go back?'
             }
           });
@@ -134,7 +133,7 @@ class ESignInfo extends Component {
                   action_name: "positive",
                   action_text: "Yes",
                   action_type: "redirect",
-                  redirect_url: encodeURIComponent(`${basepath}/kyc-esign/info${config.searchParams}&is_secure=${storageService().get("is_secure")}`),
+                  redirect_url: backUrl,
                 },
                 {
                   action_name: "negative",
