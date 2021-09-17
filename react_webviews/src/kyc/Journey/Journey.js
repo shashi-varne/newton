@@ -826,15 +826,14 @@ const Journey = (props) => {
                   }
                 >
                   <div className="flex-center" data-aid='kyc-field-value'>
-                    <div className={item.status === "completed" ? "completed_field_key" : "field_key"}>
+                    <span className={item.status === "completed" ? "completed_field_key" : "field_key"}>
                       {item.title}
                       {item?.value ? ':' : ''}
-                    </div>
+                    </span>
                     {item?.value && (
-                      <div className="field_value">{item?.value}</div>
+                      <span className="field_value">{item?.value}</span>
                     )}
                   </div>
-                  
 
                   {item.status === 'completed' && item.isEditAllowed && (
                     <span
