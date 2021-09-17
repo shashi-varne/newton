@@ -615,3 +615,19 @@ export function closeCampaignDialog() {
   }
   this.setState({ openBottomSheet: false })
 }
+
+export async function updateBank(data) {
+  const response = await Api.post("/api/partner/user/updatebank", data);
+  if (
+    response.pfwstatus_code !== 200 ||
+    isEmpty(response.pfwresponse)
+  ) {
+    throw new Error( response?.pfwmessage || errorMessage);
+  }
+  const { status_code, result } = response.pfwresponse;
+  if (status_code === 200) {
+    return result;
+  } else {
+    throw new Error(result?.message || result?.error || errorMessage);
+  }
+}
