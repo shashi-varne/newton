@@ -5,6 +5,7 @@ import { getUrlParams } from "../../utils/validators";
 
 const StatusCallback = (props) => {
   const status = getUrlParams().status || "";
+  const params = props.match?.params || {};
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -18,6 +19,18 @@ const StatusCallback = (props) => {
       setError("Something went wrong. No status received");
     }
   }, [status])
+
+  useEffect(() => {
+    if (params) {
+      if (params === "success") {
+        nativeCallback({ action: "on_success" });
+      } else if (params === "failed") {
+        nativeCallback({ action: "on_failure" });
+      }
+    } else {
+      setError("Something went wrong. No status received");
+    }
+  }, [params])
 
   return (
     <div>
