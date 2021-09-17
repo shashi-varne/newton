@@ -825,7 +825,7 @@ const Journey = (props) => {
                     idx === stage - 1 ? 'title title__selected' : 'title'
                   }
                 >
-                  <div className="flex-center title-value" data-aid='kyc-field-value'>
+                  <div className="flex-center" data-aid='kyc-field-value'>
                     <div className={item.status === "completed" ? "completed_field_key" : "field_key"}>
                       {item.title}
                       {item?.value ? ':' : ''}
