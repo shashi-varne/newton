@@ -825,13 +825,13 @@ const Journey = (props) => {
                     idx === stage - 1 ? 'title title__selected' : 'title'
                   }
                 >
-                  <div className="title-value" data-aid='kyc-field-value'>
-                    <span className={item.status === "completed" ? "completed_field_key" : "field_key"}>
+                  <div className="flex-center title-value" data-aid='kyc-field-value'>
+                    <div className={item.status === "completed" ? "completed_field_key" : "field_key"}>
                       {item.title}
                       {item?.value ? ':' : ''}
-                    </span>
+                    </div>
                     {item?.value && (
-                      <span className="field_value">{item?.value}</span>
+                      <div className="field_value">{item?.value}</div>
                     )}
                   </div>
                   
