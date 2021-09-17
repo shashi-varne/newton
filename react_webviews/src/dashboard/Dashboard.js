@@ -142,11 +142,11 @@ const Home = (props) => {
           path={`${url}digilocker/callback`}
           component={DigilockerCallback}
         />
-        {/* <Route
+        <Route
           exact
           path={`${url}status/callback/native`}
           component={StatusCallback}
-        /> */}
+        />
         <Route
           exact
           path={`${url}status/callback/native/:status`}
