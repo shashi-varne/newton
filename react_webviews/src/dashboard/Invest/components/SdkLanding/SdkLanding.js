@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
-import { initialize, handleCampaignNotification, dateValidation, updateBank } from '../../functions';
+import { initialize, handleCampaignNotification, dateValidation, updateBank, updateConsent } from '../../functions';
 import { SkeltonRect } from 'common/ui/Skelton';
 import SdkInvestCard from '../../mini-components/SdkInvestCard';
 import { storageService } from 'utils/validators';
@@ -14,6 +14,7 @@ import VerificationFailedDialog from '../../mini-components/VerificationFailedDi
 import KycStatusDialog from '../../mini-components/KycStatusDialog';
 import { nativeCallback } from '../../../../utils/native_callback';
 import { Imgc } from '../../../../common/ui/Imgc';
+import TermsAndConditions from '../../mini-components/TermsAndConditionsDialog';
 import BankListOptions from '../../mini-components/BankListOptions';
 import Toast from '../../../../common/ui/Toast';
 
@@ -50,6 +51,7 @@ class SdkLanding extends Component {
       dotLoader: false,
       openBottomSheet: false,
       bottom_sheet_dialog_data: [],
+      showTermsAndConditions: false,
       showBankList: false,
     };
     this.initialize = initialize.bind(this);
@@ -65,6 +67,10 @@ class SdkLanding extends Component {
     const isBottomSheetDisplayed = storageService().get('is_bottom_sheet_displayed');
     if (!isBottomSheetDisplayed) {
       this.handleCampaignNotification();
+    }
+    const consentRequired = storageService().get("consent_required");
+    if(consentRequired && getConfig().code === "lvb") {
+      this.setState({ showTermsAndConditions: true });
     }
     this.handleBankList();
   };
@@ -176,6 +182,18 @@ class SdkLanding extends Component {
     }
   };
 
+  handleTermsAndConditions = async () => {
+    try {
+      this.setState({ showTermsAndConditionsLoader: "button" });
+      await updateConsent();
+      storageService().set("consent_required", false);
+    } catch (err) {
+      Toast(err.message);
+    } finally {
+      this.setState({ showTermsAndConditions: false, showTermsAndConditionsLoader: false})
+    }
+  }
+  
   handleBankList = () => {
     const bankList = storageService().getObject("banklist");
     if(!isEmpty(bankList)) {
@@ -230,6 +248,8 @@ class SdkLanding extends Component {
       verificationFailed,
       openKycStatusDialog,
       modalData,
+      showTermsAndConditions,
+      showTermsAndConditionsLoader,
       bankListOptions,
       selectedBank,
       showBankList,
@@ -393,6 +413,11 @@ class SdkLanding extends Component {
             cancel={this.closeKycStatusDialog}
           />
         )}
+        <TermsAndConditions
+          isOpen={showTermsAndConditions}
+          showLoader={showTermsAndConditionsLoader}
+          handleClick={this.handleTermsAndConditions}
+        />
         <BankListOptions
           isOpen={showBankList}
           handleChange={this.changeSelectedBank}
