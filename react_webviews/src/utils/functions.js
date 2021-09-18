@@ -167,9 +167,9 @@ export const getConfig = () => {
   const isFinityStaging = origin.indexOf('my.preprod.finity.in') >= 0 || origin.indexOf('app2.finity.in') >= 0;
   const isLocal = origin.indexOf('localhost') >=0;
 
-  if(base_href) {
-    base_url_default = window.location.origin;
-  }
+  // if(base_href) {
+  //   base_url_default = window.location.origin;
+  // }
 
   if(!base_url) {
     if(isProdFisdom) {
