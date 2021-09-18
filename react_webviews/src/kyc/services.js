@@ -288,7 +288,7 @@ export function getKycAppStatus(kyc) {
     status = 'ground';
   }
 
-  if (kyc.kyc_status !== 'compliant' && kyc.application_status_v2 === 'init' && kyc.pan.meta_data.pan_number && kyc.customer_verified === 'UNVERIFIED' && kyc.kyc_type === "init") {
+  if (kyc.kyc_status !== 'compliant' && kyc.application_status_v2 === 'init' && kyc.pan.meta_data.pan_number && kyc.kyc_type === "init") {
     status = 'ground_pan';
   }
 
