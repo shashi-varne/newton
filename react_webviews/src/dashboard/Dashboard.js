@@ -44,6 +44,7 @@ import SecondaryOtpVerification from "../login_and_registration/pages/SecondaryV
 import StatusCallback from "../kyc/Native/StatusCallback";
 import ProductMarketTypes from './ProductMarketTypes';
 import PrimaryMarketProducts from "./PrimaryMarketProducts/PrimaryMarketProducts";
+import PaymentNativeCallback from "./nps/components/paymentCallback";
 
 const Home = (props) => {
   const config = getConfig(); 
@@ -149,8 +150,8 @@ const Home = (props) => {
         />
         <Route
           exact
-          path={`${url}status/callback/native/:status`}
-          component={StatusCallback}
+          path={`${url}payment-status/callback/native/:status`}
+          component={PaymentNativeCallback}
         />
         {/* -----------My Account sub-routes ------------- */}
         <Route exact path={`${url}account/merge/:pan_number`} component={AccountMerge} />
