@@ -150,7 +150,7 @@ const Home = (props) => {
         />
         <Route
           exact
-          path={`${url}payment-status/callback/native/:status`}
+          path={`${url}payment-status/callback/native`}
           component={PaymentNativeCallback}
         />
         {/* -----------My Account sub-routes ------------- */}
