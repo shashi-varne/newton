@@ -218,6 +218,13 @@ export const bankAccountTypeOptions = (isNri) => {
   return account_types;
 };
 
+export const bankAccountTypesNomenclature = {
+  "SB": "Savings",
+  "CA": "Current",
+  "SB-NRE": "Savings NRE",
+  "SB-NRO": "Savings NRO"
+}
+
 export const GENDER_OPTIONS = [
   { name: "Male", value: "MALE" },
   { name: "Female", value: "FEMALE" },

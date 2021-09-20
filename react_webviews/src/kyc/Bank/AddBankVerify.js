@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import { storageService } from "utils/validators";
 import { navigate as navigateFunc } from "utils/functions";
-import { STORAGE_CONSTANTS, PATHNAME_MAPPER } from "../constants";
+import { STORAGE_CONSTANTS, PATHNAME_MAPPER, bankAccountTypesNomenclature } from "../constants";
 import { getFlow } from "../common/functions";
 import {
   saveBankData,
@@ -277,7 +277,7 @@ const AddBankVerify = (props) => {
             </div>
             <div className="item" data-aid='kyc-account-type'>
               <div className="left">Account type</div>
-              <div className="right"> {bankData.account_type} </div>
+              <div className="right"> {bankAccountTypesNomenclature[bankData.account_type]} </div>
             </div>
           </>
         )}
