@@ -47,11 +47,9 @@ class Referral extends Component {
       return;
     }
     this.setState({ isPromoApiRunning: true });
-    let body = {
-      code: form_data.referral_code,
-    };
+    let referral_code = form_data?.referral_code;
     try {
-      const res = await Api.get(`/api/checkpromocode`, body);
+      const res = await Api.get(`/api/referral/apply?code=${referral_code}`);
       const { result, status_code: status } = res.pfwresponse;
       if (status === 200) {
         toast("Success");

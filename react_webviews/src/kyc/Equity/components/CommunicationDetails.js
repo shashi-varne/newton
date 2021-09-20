@@ -132,7 +132,7 @@ const CommunicationDetails = (props) => {
   const initializeGold = async () => {
     const data = { ...formData };
     setShowOtpContainer(false);
-    if (goldUserInfo?.email_verified && goldUserInfo?.mobile_number_verified && stateParams.is_new_gold_user) {
+    if (goldUserInfo?.email_verified && goldUserInfo?.mobile_number_verified && stateParams.is_new_gold_user && !goldUserInfo?.registered_with_another_account) {
       sendEvents("next")
       navigate(stateParams?.goNext)
     }
