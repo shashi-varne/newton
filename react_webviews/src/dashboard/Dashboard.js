@@ -153,6 +153,11 @@ const Home = (props) => {
           path={`${url}payment-status/callback/native/:status`}
           component={PaymentNativeCallback}
         />
+        <Route
+          exact
+          path={`${url}payment-status/callback/native`}
+          component={PaymentNativeCallback}
+        />
         {/* -----------My Account sub-routes ------------- */}
         <Route exact path={`${url}account/merge/:pan_number`} component={AccountMerge} />
         <Route exact path={`${url}account/merge/otp/:pan_number`} component={AccountMergeOtp} />
