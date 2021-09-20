@@ -8,29 +8,23 @@ const PaymentNativeCallback = (props) => {
 
   useEffect(() => {
     if (params) {
-      if (params === "success") {
+      if (params.status === "success") {
         nativeCallback({ action: "on_success" });
-      } else if (params === "failed") {
+      } else if (params.status === "failed") {
         nativeCallback({ action: "on_failure" });
       }
     } else {
       setError("Something went wrong. No status received");
     }
-  }, [params])
+  }, [params]);
 
   return (
     <div>
-      {error ? 
-        <WVInfoBubble
-        type="error"
-        hasTitle
-        customTitle="Error"
-      >
-        {error}
-      </WVInfoBubble>
-      :
-      null
-      }
+      {error ? (
+        <WVInfoBubble type="error" hasTitle customTitle="Error">
+          {error}
+        </WVInfoBubble>
+      ) : null}
     </div>
   );
 };
