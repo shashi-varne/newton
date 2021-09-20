@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Route, Redirect } from "react-router-dom";
 import { initData } from "../../kyc/services";
-import { storageService } from "utils/validators";
+import { storageService, getUrlParams } from "utils/validators";
 import isEmpty from "lodash/isEmpty";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
@@ -18,22 +18,27 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   let user = storageService().getObject("user") || {};
   let kyc = storageService().getObject("kyc") || {};
   let partner = storageService().get("partner") || "";
+  const urlParams = getUrlParams();
+  const guestLeadId = storageService().get('guestLeadId') || "" 
+  const guestUser = urlParams?.guestUser || false;
 
-  const userDataAvailable = currentUser && !isEmpty(kyc) && !isEmpty(user);
+  const userDataAvailable = (currentUser && !isEmpty(kyc) && !isEmpty(user)) || guestLeadId || guestUser;
   const sdkCheck = isSdk ? !!partner : true; // same as: !isSdk || (isSdk && partner)
   const [showLoader, setShowLoader] = useState(!userDataAvailable || !sdkCheck);
   const [isLoginValid, setIsLoginValid] = useState(userDataAvailable && sdkCheck);
 
   const fetch = async () => {
     try {
-      await initData();
+      if(!guestLeadId && !guestUser){
+        await initData();
+      }
     } catch (e) {
       console.log(e);
     } finally {
       currentUser = storageService().get("currentUser");
       user = storageService().getObject("user") || {};
       kyc = storageService().getObject("kyc") || {};
-      const userDataAvailable = currentUser && !isEmpty(kyc) && !isEmpty(user);
+      const userDataAvailable = (currentUser && !isEmpty(kyc) && !isEmpty(user)) || guestLeadId || guestUser;
       setIsLoginValid(userDataAvailable);
       if (!userDataAvailable) {
         if (isNative) {
@@ -56,6 +61,16 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   }, []);
 
   const initialize = async () => {
+    if(currentUser && guestLeadId){ // fallback case to remove guestLeadId when user logs in
+      storageService().remove('guestLeadId')
+    }
+    if(guestUser){
+      storageService().setBoolean('guestUser', true);
+    }
+    if(!guestLeadId && urlParams.guestLeadId){
+      storageService().set('guestLeadId', urlParams.guestLeadId);
+    }
+
     if (showLoader) {
       await fetch();
     }

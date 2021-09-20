@@ -147,9 +147,9 @@ const LocationPermission = ({
   return (
     <WVFullscreenDialog
       open={isOpen}
-      onClose={() => onClose(pageType)}
+      onClose={onCloseIconClick}
     >
-      <WVFullscreenDialog.Content onCloseClick={onCloseIconClick}>
+      <WVFullscreenDialog.Content>
         <div className="kyc-loc-permission">
           <div className="kyc-loc-perm-illustration">
             {pageContent?.imgElem}
@@ -170,7 +170,7 @@ const LocationPermission = ({
       <WVFullscreenDialog.Action>
         <WVButton
           fullWidth
-            style={{ display: 'flex', margin: 'auto' }}
+          style={{ display: 'flex', margin: 'auto' }}
           onClick={onCTAClick}
           variant="outlined"
           color="secondary"

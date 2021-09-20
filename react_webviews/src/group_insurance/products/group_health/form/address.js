@@ -123,7 +123,8 @@ class GroupHealthPlanAddressDetails extends Component {
             let error='';
             let errorType='';
             try {
-                const res = await Api.get((`api/insurancev2/api/insurance/proposal/hdfc_ergo/validate_pincode?pincode=${pincode}&city=${cityName}`));
+                const url = `api/insurancev2/api/insurance/proposal/hdfc_ergo/validate_pincode?pincode=${pincode}&city=${cityName}`;
+                const res = await Api.get(url);
 
                 this.setState({isLoadingCity: false});
                 if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.pincode_match) {
@@ -440,7 +441,8 @@ class GroupHealthPlanAddressDetails extends Component {
             let error = "";
             let errorType = "";
             try {
-                const res = await Api.get((`api/insurancev2/api/insurance/proposal/hdfc_ergo/validate_pincode?pincode=${pincode}&city=${cityName}`));
+                const url = `api/insurancev2/api/insurance/proposal/hdfc_ergo/validate_pincode?pincode=${pincode}&city=${cityName}`;
+                const res = await Api.get(url);
                 this.setState({isLoadingCity: false});
                 if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.pincode_match) {
                     form_data.state = res.pfwresponse.result.state;
@@ -493,7 +495,8 @@ class GroupHealthPlanAddressDetails extends Component {
 
 
         this.setState({isLoadingCity: true});
-        const res = await Api.get((`api/insurancev2/api/insurance/proposal/religare/validate_pincode?pincode=${form_data[name]}`));
+        const url = `api/insurancev2/api/insurance/proposal/religare/validate_pincode?pincode=${form_data[name]}`;
+        const res = await Api.get(url);
         this.setState({isLoadingCity: false});
         let { country } = form_data;
         let pincode_error = '';

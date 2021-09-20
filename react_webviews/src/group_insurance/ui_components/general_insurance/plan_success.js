@@ -12,28 +12,14 @@ import Api from 'utils/api';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {Imgc} from 'common/ui/Imgc';
+import { isRmJourney } from '../../products/group_health/common_data';
 
 const product_config = {
-  'PERSONAL_ACCIDENT': {
-    'top_title1': 'You’re insured against any unfortunate accidental events with',
-    'top_title2': 'Bharti AXA General Insurance.'
-  },
-  'HOSPICASH': {
-    'top_title1': 'You have successfully insured yourself against Hospital expenses with',
-    'top_title2': 'Bharti AXA General Insurance.'
-  },
-  'SMART_WALLET': {
-    'top_title1': 'Your Bank cards & Mobile wallets are insured with',
-    'top_title2': 'Bharti AXA General Insurance.'
-  },
-  'DENGUE': {
-    'top_title1': 'You have successfully insured yourself against vector borne diseases with',
-    'top_title2': 'Bharti AXA General Insurance.'
-  },
-  'CORONA': {
-    'top_title1': 'You’re insured against coronavirus with',
-    'top_title2': 'Bharti AXA General Insurance.'
-  }
+  'PERSONAL_ACCIDENT': 'You’re insured against any unfortunate accidental events with',
+  'HOSPICASH': 'You have successfully insured yourself against Hospital expenses with',
+  'SMART_WALLET': 'Your Bank cards & Mobile wallets are insured with',
+  'DENGUE': 'You have successfully insured yourself against vector borne diseases with',
+  'CORONA': 'You’re insured against coronavirus with',
 }
 
 class PlanSuccessClass extends Component {
@@ -46,10 +32,11 @@ class PlanSuccessClass extends Component {
         nominee: {}
       },
       accordians_data: [],
-      type: getConfig().productName
+      type: getConfig().productName,
+      isGuestUser: storageService().getBoolean('guestUser'),
+      isRmJourney: isRmJourney(),
     };
 
-    this.handleClickCurrent = this.handleClickCurrent.bind(this);
     this.renderAccordions = this.renderAccordions.bind(this);
 
   }
@@ -106,9 +93,8 @@ class PlanSuccessClass extends Component {
     let error = '';
     let errorType = '';
     try {
-
-      let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
-
+      let url = 'api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id
+      let res = await Api.get(url)
       
       if (res.pfwresponse.status_code === 200) {
         this.setState({
@@ -139,10 +125,11 @@ class PlanSuccessClass extends Component {
 
           accordians_data.splice(1, 0, obj);
         }
-
+        const baxa_product_name = lead_data.provider === 'BHARTIAXA' ? 'Bharti AXA General Insurance' : 'ICICI Lombard General Insurance'
         this.setState({
           lead_data: lead_data,
-          accordians_data: accordians_data
+          accordians_data: accordians_data,
+          baxa_product_name
         })
       } else {
         error = res.pfwresponse.result.error || res.pfwresponse.result.message
@@ -174,11 +161,6 @@ class PlanSuccessClass extends Component {
 
   async componentDidMount() {
     this.onload();
-  }
-
-  async handleClickCurrent() {
-
-
   }
 
   navigate = (pathname) => {
@@ -226,12 +208,12 @@ class PlanSuccessClass extends Component {
       return (
         <div className="AccordionBody">
           <ul>
-            <li>Policy: <span>{this.state.lead_data.policy.product_title}</span></li>
-            <li>Issuer: <span>{this.state.lead_data.policy.issuer}</span></li>
-            <li>COI: <span>{this.state.lead_data.policy.master_policy_number}</span></li>
-            <li>Sum assured: <span>{inrFormatDecimal(this.state.lead_data.cover_amount || 0)}</span></li>
-            <li>Cover period: <span>{this.state.lead_data.product_coverage} yr 
-            ({this.state.lead_data.policy.policy_start_date} - {this.state.lead_data.policy.policy_end_date})</span></li>
+            <li>Policy: <span>{this.state.lead_data?.policy?.product_title}</span></li>
+            <li>Issuer: <span>{this.state.lead_data?.policy?.company_name}</span></li>
+            <li>COI: <span>{this.state.lead_data?.policy?.master_policy_number}</span></li>
+            <li>Sum assured: <span>{inrFormatDecimal(this.state.lead_data?.cover_amount || 0)}</span></li>
+            <li>Cover period: <span>{this.state.lead_data?.product_coverage} yr 
+            ({this.state.lead_data?.policy?.policy_start_date} - {this.state.lead_data?.policy?.policy_end_date})</span></li>
             
             {/* <li className="AccordionBodyItem"><span className="AccordionBodyItemBold">Policy</span>: Personal accident</li>
             <li className="AccordionBodyItem"><span className="AccordionBodyItemBold">Issuer</span>: Bharti AXA General Insurances</li>
@@ -318,19 +300,19 @@ class PlanSuccessClass extends Component {
     return '';
   }
 
-  handleClickOne() {
+  handleClickOne = () => {
     this.sendEvents('download_policy');
     this.openInBrowser(this.state.lead_data.policy.coi_blob_key);
   }
 
-  handleClickTwo() {
+  handleClickTwo =() => {
     this.sendEvents('check_details');
     storageService().setObject('backToInsuranceLanding', true);
     let path = '/group-insurance/common/reportdetails/' + this.state.lead_data.bhariaxa_policy_id;
     this.navigate(path);
   }
 
-  sendEvents(user_action, insurance_type) {
+  sendEvents(user_action, insurance_type){
     let eventObj = {
       "event_name": 'Group Insurance',
       "properties": {
@@ -347,18 +329,28 @@ class PlanSuccessClass extends Component {
     }
   }
 
+  downloadApp = () =>{
+    let url = getConfig().appLink;
+    this.openInBrowser(url)
+  }
+
   render() {
     return (
       <Container
-        twoButton={true}
+        twoButton={!this.state.isGuestUser && !this.state.isRmJourney}
+        fullWidthButton={this.state.isGuestUser || this.state.isRmJourney}
+        buttonTitle={this.state.isGuestUser || this.state.isRmJourney ? 'DOWNLOAD NOW' : ''}
+        onlyButton={this.state.isGuestUser || this.state.isRmJourney}
+        noBackIcon={this.state.isGuestUser}
         product_key={this.props.parent ? this.props.parent.state.product_key : ''}
         events={this.sendEvents('just_set_events')}
         buttonOneTitle="Download Policy"
         buttonTwoTitle="Check details"
         showError={this.state.showError}
         errorData={this.state.errorData}
-        handleClickOne={() => this.handleClickOne()}
-        handleClickTwo={() => this.handleClickTwo()}
+        handleClick={this.downloadApp}
+        handleClickOne={this.handleClickOne}
+        handleClickTwo={this.handleClickTwo}
         title="Success"
         disableBack={true}
         classOverRideContainer="plan-success"
@@ -367,12 +359,16 @@ class PlanSuccessClass extends Component {
         <div className="plan-success-heading">
           <div className="plan-success-heading-icon"><Imgc className="plan-success-heading-img" src={this.state.congratulations_icon} alt="" /></div>
           <div className="plan-success-heading-title">Congratulations!</div>
-          <div className="plan-success-heading-subtitle">{product_config[this.getProductKey()].top_title1} <span className="plan-success-heading-subtitle-bold">
-            {product_config[this.getProductKey()].top_title2}</span>
+          <div className="plan-success-heading-subtitle">{product_config[this.getProductKey()]} <span className="plan-success-heading-subtitle-bold">
+            {this.state.lead_data?.policy?.company_name}.</span>
           </div>
         </div>
 
         {this.state.accordians_data.map(this.renderAccordions)}
+
+        {
+          this.state.isGuestUser &&  <p className='download-fisdom-text'>Download {getConfig().productName} app to view all your policy details</p>
+        }
       </Container>
     );
   }

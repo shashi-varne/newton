@@ -97,7 +97,7 @@ const Sign = (props) => {
       handleClick={handleSubmit}
       disable={!file}
       showLoader={isApiRunning}
-      title="Share Signature"
+      title="Share signature"
       iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-signature-screen'
     >

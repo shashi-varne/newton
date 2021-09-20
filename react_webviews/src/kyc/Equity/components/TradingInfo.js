@@ -131,7 +131,7 @@ const TradingInfo = (props) => {
   const handleClick = () => {
     sendEvents("next");
     if(!checkTermsAndConditions) {
-      Toast("Accept T&C to proceed");
+      Toast("Tap on T&C check box to continue");
       return;
     }
     if (kyc?.mf_kyc_processed) {

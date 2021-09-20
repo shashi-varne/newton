@@ -38,6 +38,7 @@ export async function initialize() {
   this.handleCampaign = handleCampaign.bind(this);
   this.closeCampaignDialog = closeCampaignDialog.bind(this);
   this.handleStocksAndIpoCards = handleStocksAndIpoCards.bind(this);
+  this.initiatePinSetup = initiatePinSetup.bind(this);
   this.setKycProductTypeAndRedirect = setKycProductTypeAndRedirect.bind(this);
   this.handleIpoCardRedirection = handleIpoCardRedirection.bind(this);
   this.handleCommonKycRedirections = handleCommonKycRedirections.bind(this);
@@ -207,7 +208,11 @@ export function clickCard(state, title) {
       });
       break;
     case "top_equity":
-      this.navigate(`/diy/fundlist/Equity/Multi_Cap`);
+      this.navigate(`/diy/fundlist/Equity/Multi_Cap`, {
+        state: {
+          name: "Top equity funds"
+        }
+      });
       break;
     default:
       this.navigate(keyPathMapper[state] || state);
@@ -448,12 +453,11 @@ export function initilizeKyc() {
     }
 
     if (["fno_rejected", "complete"].includes(kycJourneyStatus)) {
-      if (!currentUser.active_investment) {
-        if (TRADING_ENABLED && userKyc.equity_investment_ready) {
-          modalData = kycStatusMapper["kyc_verified"];
-        } else if (!TRADING_ENABLED && !isCompliant) {
-          modalData = kycStatusMapper["mf_complete"];
-        }
+      if (TRADING_ENABLED && userKyc.equity_investment_ready) {
+        // for trading enabled users, the Equity IR bottomsheet will keep on showing on relogin, untill we get more info for user investing in sdk
+        modalData = kycStatusMapper["kyc_verified"];
+      } else if (!TRADING_ENABLED && !isCompliant && !currentUser.active_investment) {
+        modalData = kycStatusMapper["mf_complete"];
       }
     } else {
       modalData = kycStatusMapper[kycJourneyStatus];
@@ -565,17 +569,24 @@ export async function setKycProductTypeAndRedirect() {
 }
 
 export function handleIpoCardRedirection() {
-  const { userKyc, config = getConfig() } = this.state;
+  const { userKyc } = this.state;
   if (
       userKyc.equity_investment_ready &&
       this.state.currentUser?.pin_status !== 'pin_setup_complete'
   ) {
-    openModule('account/setup_2fa', this.props, { routeUrlParams: '/ipo' });
-    if (config.isNative) {
-      return nativeCallback({ action: 'exit_web' });
-    }
+    this.initiatePinSetup('ipo');
   } else {
     this.navigate("/market-products");
+  }
+}
+
+function initiatePinSetup(key) {
+  const { config } = this.state;
+  if (config.isNative) {
+    openModule('account/setup_2fa', this.props, { routeUrlParams: `/${key}` });
+    nativeCallback({ action: 'exit_web' });
+  } else {
+    this.setState({ openPinSetupDialog: true, clickedCardKey: key });
   }
 }
           
@@ -611,10 +622,7 @@ export function handleStocksAndIpoCards(key) {
       (kycJourneyStatus === "complete" && userKyc.kyc_product_type === 'equity')
     ) {
       if (currentUser?.pin_status !== 'pin_setup_complete') {
-        openModule('account/setup_2fa', this.props, { routeUrlParams: '/stocks' });
-        if (config.isNative) {
-          return nativeCallback({ action: 'exit_web' });
-        }
+        return this.initiatePinSetup(key);
       } else if (kycJourneyStatus !== "fno_rejected") {
         this.setState({ showPageLoader: "page" });
         window.location.href = `${config.base_url}/page/equity/launchapp`;
