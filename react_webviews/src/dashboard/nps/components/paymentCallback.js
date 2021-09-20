@@ -8,6 +8,7 @@ const PaymentNativeCallback = (props) => {
 
   useEffect(() => {
     if (params) {
+      console.log(params)
       if (params.status === "success") {
         nativeCallback({ action: "on_success" });
       } else if (params.status === "failed") {
