@@ -1,4 +1,4 @@
-.login {
+.rm-login {
     background-color: #ffffff;
     height: 100vh;
     color: #333333;
@@ -86,7 +86,7 @@
   }
   
   @media only screen and (max-width: 1200px) {
-    .login {
+    .rm-login {
       .login-details {
         .left-image {
           margin-right: 20px;
@@ -96,17 +96,21 @@
   }
   
   @media only screen and (max-width: 960px) {
-    .login {
+    .rm-login {
       .login-details {
         .left-image {
           display: none;
+        }
+
+        .login-form {
+          margin: 50px 0 0 0;
         }
       }
     }
   }
   
   @media only screen and (max-width: 767px) {
-    .login {
+    .rm-login {
       .header {
         img {
           height: 20px;
