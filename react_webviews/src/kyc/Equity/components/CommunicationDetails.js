@@ -534,8 +534,8 @@ const CommunicationDetails = (props) => {
       >
         <div>
           <div className="kyc-main-subtitle">
-            {communicationType === "email" ? "Email" : "Mobile"} verification is
-            mandatory for investment as per SEBI
+            As per SEBI, {communicationType} verification is
+            mandatory for investing
           </div>
           {communicationType === "email" ? (
             <>
@@ -611,7 +611,7 @@ const CommunicationDetails = (props) => {
           {!showOtpContainer && (
             <div className="kcd-email-subtext">
               {communicationType === "email"
-                ? "We'll keep you updated on your investments"
+                ? "Investment updates will be sent to this email address"
                 : !formData.mobileNumberVerified
                   ? "We’ll send an OTP to verify your mobile number"
                   : ""}

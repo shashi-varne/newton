@@ -30,7 +30,7 @@ const PersonalDetails4 = (props) => {
   const [oldState, setOldState] = useState({});
   const [totalPages, setTotalPages] = useState();
   const type = props.type || "";
-  let title = "Nominee details";
+  let title = "Nominee details (Optional)";
   if (isEdit) {
     title = "Edit nominee details";
   }

@@ -1,4 +1,4 @@
-import React, {useEffect, useState, Fragment} from "react";
+import React, {useEffect, useState, Fragment, useMemo} from "react";
 import { nativeCallback } from "../../../utils/native_callback";
 import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import Container from "../../common/Container";
@@ -9,10 +9,10 @@ import { getPendingDocuments } from "../../common/functions";
 import "./commonStyles.scss";
 import { Imgc } from "../../../common/ui/Imgc";
 
-const config = getConfig();
-const productName = config.productName;
-
 const DocumentVerification = (props) => {
+  const { productName, Web } = useMemo(() => {
+    return getConfig();
+  }, []);
   const navigate = navigateFunc.bind(props);
   const {kyc, isLoading} = useUserKycHook();
   const [docs, setDocs] = useState([]);
@@ -34,7 +34,7 @@ const DocumentVerification = (props) => {
   }
 
   const goBack = () => {
-    if(!config.Web && storageService().get("native")) {
+    if(!Web && storageService().get("native")) {
       nativeCallback({ action: "exit_web" });
     } else {
       navigate("/");

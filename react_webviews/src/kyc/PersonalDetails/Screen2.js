@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Container from "../common/Container";
 import Input from "../../common/ui/Input";
 import { PATHNAME_MAPPER } from "../constants";
@@ -17,8 +17,10 @@ import useUserKycHook from "../common/hooks/userKycHook";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 
-const productName = getConfig().productName;
 const PersonalDetails2 = (props) => {
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
@@ -27,9 +29,9 @@ const PersonalDetails2 = (props) => {
   const stateParams = props?.location?.state || {};
   const isEdit = stateParams.isEdit || false;
   const isUpgradeFlow = stateParams.flow === "upgradeAccount";
-  let title = "Personal details";
+  let title = "Personal information";
   if (isEdit) {
-    title = "Edit personal details";
+    title = "Edit personal information";
   }
 
   const {kyc, user, isLoading} = useUserKycHook();
