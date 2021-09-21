@@ -218,7 +218,7 @@ export const bankAccountTypeOptions = (isNri) => {
   return account_types;
 };
 
-export const bankAccountTypesNomenclature = {
+export const BANK_ACCOUNT_TYPES_NOMENCLATURE = {
   "SB": "Savings",
   "CA": "Current",
   "SB-NRE": "Savings NRE",
