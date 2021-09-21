@@ -369,7 +369,7 @@ const KycBankVerify = (props) => {
       showLoader={isApiRunning}
       noFooter={isEmpty(bankData)}
       handleClick={handleClick}
-      title="Confirm bank details"
+      title="Verify bank account"
       iframeRightContent={require(`assets/${productName}/add_bank.svg`)}
       data-aid='kyc-verify-bank-accont-screen'
     >
@@ -379,7 +379,7 @@ const KycBankVerify = (props) => {
           hasTitle
           customTitle="Important"
         >
-          We will credit ₹1 to your bank account for verification.
+          We’ll credit ₹1 to verify your bank account.
         </WVInfoBubble>
         {isEmpty(bankData) && (
           <>

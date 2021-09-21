@@ -26,11 +26,11 @@ const PersonalDetails1 = (props) => {
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
   const [oldState, setOldState] = useState({});
-  let title = "Personal details";
+  let title = "Personal information";
   const [isNri, setIsNri] = useState();
   const [totalPages, setTotalPages] = useState();
   if (isEdit) {
-    title = "Edit personal details";
+    title = "Edit personal information";
   }
 
   const { kyc, user, isLoading } = useUserKycHook();
