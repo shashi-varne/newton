@@ -576,7 +576,7 @@ export async function checkMerge(pan_number) {
       if (result.different_login) {
         this.setState({
           openDialog: true,
-          title: "PAN Is already registered",
+          title: "PAN is already registered",
           subtitle: result.error || result.message,
           btn_text: "SIGN OUT",
         });

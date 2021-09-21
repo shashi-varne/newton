@@ -820,7 +820,7 @@ const Journey = (props) => {
                     idx === stage - 1 ? 'title title__selected' : 'title'
                   }
                 >
-                  <div className="flex flex-between" data-aid='kyc-field-value'>
+                  <div className="flex-center" data-aid='kyc-field-value'>
                     <span className={item.status === "completed" ? "completed_field_key" : "field_key"}>
                       {item.title}
                       {item?.value ? ':' : ''}
@@ -829,7 +829,6 @@ const Journey = (props) => {
                       <span className="field_value">{item?.value}</span>
                     )}
                   </div>
-                  
 
                   {item.status === 'completed' && item.isEditAllowed && (
                     <span
