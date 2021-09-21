@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
 import Button from "common/ui/Button";
-import { initialize, handleCampaignNotification } from "../../functions";
+import { initialize, handleCampaignNotification, setDialogsState } from "../../functions";
 import InvestCard from "../../mini-components/InvestCard";
 import SebiRegistrationFooter from "../../../../common/ui/SebiRegistrationFooter/WVSebiRegistrationFooter";
 import VerificationFailedDialog from "../../mini-components/VerificationFailedDialog";
@@ -44,7 +44,7 @@ class Landing extends Component {
       accountAlreadyExists: false,
       accountAlreadyExistsData : {},
       openBottomSheet: false,
-      bottom_sheet_dialog_data: [],
+      bottom_sheet_dialog_data: {},
       isWeb: getConfig().Web,
       stateParams: props.location.state || {},
       tradingEnabled: isTradingEnabled(),
@@ -53,6 +53,7 @@ class Landing extends Component {
     this.initialize = initialize.bind(this);
     this.generateOtp = generateOtp.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
+    this.setDialogsState = setDialogsState.bind(this);
   }
 
   componentWillMount() {
@@ -81,9 +82,17 @@ class Landing extends Component {
     const isBottomSheetDisplayed = storageService().get(
       "is_bottom_sheet_displayed"
     );
-    const { isWeb, verifyDetails, openKycPremiumLanding, openKycStatusDialog } = this.state;
-    if (!isBottomSheetDisplayed && isWeb && !verifyDetails && !openKycPremiumLanding && !openKycStatusDialog) {
+    const campaignsToShowOnPriority = ["trading_restriction_campaign"];
+    const campaignData = storageService().getObject("campaignDialogData");
+    const { isWeb, verifyDetails, openKycPremiumLanding, openKycStatusDialog, tradingEnabled } = this.state;
+    if (!isBottomSheetDisplayed && isWeb &&
+       ((tradingEnabled && campaignsToShowOnPriority.includes(campaignData.campaign_name)) ||
+        (!verifyDetails && !openKycPremiumLanding && !openKycStatusDialog))) {
       this.handleCampaignNotification();
+    }
+
+    if (campaignsToShowOnPriority.includes(campaignData.campaign_name)) {
+      this.setDialogsState("openBottomSheet");
     }
   };
 
@@ -668,16 +677,16 @@ class Landing extends Component {
           data={this.state.bottom_sheet_dialog_data}
           handleClick={this.handleCampaign}
         />
-          {verifyDetails && (
-            <VerifyDetailDialog
-              type={this.state.verifyDetailsType}
-              data={this.state.verifyDetailsData}
-              showAccountAlreadyExist={this.setAccountAlreadyExistsData}
-              isOpen={verifyDetails}
-              onClose={this.closeVerifyDetailsDialog}
-              parent={this}
-            ></VerifyDetailDialog>
-          )}
+        {verifyDetails && (
+          <VerifyDetailDialog
+            type={this.state.verifyDetailsType}
+            data={this.state.verifyDetailsData}
+            showAccountAlreadyExist={this.setAccountAlreadyExistsData}
+            isOpen={verifyDetails}
+            onClose={this.closeVerifyDetailsDialog}
+            parent={this}
+          ></VerifyDetailDialog>
+        )}
         {accountAlreadyExists && (
           <AccountAlreadyExistDialog
             type={this.state.verifyDetailsType}

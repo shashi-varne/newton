@@ -43,6 +43,7 @@ export async function initialize() {
   this.handleIpoCardRedirection = handleIpoCardRedirection.bind(this);
   this.handleCommonKycRedirections = handleCommonKycRedirections.bind(this);
   this.contactVerification = contactVerification.bind(this);
+  this.handleCampaignNotificationData = handleCampaignNotificationData.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
   if (config) {
     this.setState({ config });
@@ -364,7 +365,7 @@ export function navigate(pathname, data = {}) {
   }
 }
 
-export function initilizeKyc() {
+export async function initilizeKyc() {
   const { config = getConfig() } = this.state;
   let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
   const TRADING_ENABLED = isTradingEnabled(userKyc);
@@ -435,7 +436,7 @@ export function initilizeKyc() {
       if ((banklist && banklist.length) || config.code === "moneycontrol") {
         return;
       } else {
-        this.openPremiumOnboardBottomSheet(
+        await this.openPremiumOnboardBottomSheet(
           bottom_sheet_dialog_data_premium,
           userKyc,
           TRADING_ENABLED
@@ -473,10 +474,11 @@ export function initilizeKyc() {
       modalData.oneButton = true;
     this.setState({ modalData, openKycStatusDialog: true });
   }
-  this.contactVerification(userKyc);
+  await this.handleCampaignNotificationData(); // this function sets campaign data
+  await this.contactVerification(userKyc);
 }
 
-export function openPremiumOnboardBottomSheet(bottom_sheet_dialog_data_premium) {
+export async function openPremiumOnboardBottomSheet(bottom_sheet_dialog_data_premium) {
   const { config = getConfig() } = this.state;
   let is_bottom_sheet_displayed_kyc_premium = storageService().get(
     "is_bottom_sheet_displayed_kyc_premium"
@@ -710,7 +712,7 @@ export function handleRenderCard() {
   this.setState({renderLandingCards : cards});
 }
 
-export function handleCampaignNotification () {
+export async function handleCampaignNotificationData () {
   const notifications = storageService().getObject('campaign') || [];
   const bottom_sheet_dialog_data = notifications.reduceRight((acc, data) => {
     const target = data?.notification_visual_data?.target;
@@ -729,10 +731,17 @@ export function handleCampaignNotification () {
   }, {});
 
   if (!isEmpty(bottom_sheet_dialog_data)) {
-    storageService().set('is_bottom_sheet_displayed', true);
-    this.setState({ bottom_sheet_dialog_data, openBottomSheet: true });
+    storageService().setObject("campaignDialogData", bottom_sheet_dialog_data);
+    this.setState({ bottom_sheet_dialog_data });
   }
 };
+
+export function handleCampaignNotification () {
+  if (!isEmpty(this.state.bottom_sheet_dialog_data)) {
+    storageService().set('is_bottom_sheet_displayed', true);
+    this.setState({ openBottomSheet: true });
+  }
+}
 
 export function contactVerification(userKyc) {
   const contactDetails = userKyc?.identification?.meta_data;
@@ -834,8 +843,20 @@ export async function hitFeedbackURL(url) {
 
 export function closeCampaignDialog() {
   const { bottom_sheet_dialog_data = {} } = this.state
-  if(bottom_sheet_dialog_data.campaign_name === "insurance_o2o_campaign"){
+  const campaignsToHitFeedback = ["insurance_o2o_campaign", "trading_restriction_campaign"];
+  if(campaignsToHitFeedback.includes(bottom_sheet_dialog_data.campaign_name)){
     hitFeedbackURL(bottom_sheet_dialog_data.action_buttons?.buttons[0]?.feedback_url)
+    storageService().remove("campaignDialogData");
   }
   this.setState({ openBottomSheet: false })
+}
+
+export function setDialogsState(key) {
+  this.setState({
+    openKycPremiumLanding: false,
+    openBottomSheet: false,
+    openKycStatusDialog: false,
+    verifyDetails: false,
+    [key]: true
+  });
 }

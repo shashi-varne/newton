@@ -365,6 +365,7 @@ export const kycStatusMapper = {
     color: "#ffa60b",
     title: "You're investment ready",
     subtitle: "You can now invest in more than 5000+ mutual funds.",
+    oneButton: true,
     buttonTitle: "OKAY",
     icon: "icn_kyc_completed.svg",
     nextState: "/invest",
