@@ -374,6 +374,10 @@ export function initilizeKyc() {
   let getKycAppStatusData = getKycAppStatus(userKyc);
   let kycJourneyStatus = getKycAppStatusData.status;
   let kycStatusData = kycStatusMapperInvest[kycJourneyStatus];
+  const initialKycStatus = ["init", "ground"];
+  if(initialKycStatus.includes(kycJourneyStatus) && TRADING_ENABLED) {
+    kycStatusData.subtitle = "Set up Trading & Demat A/c. now";
+  } 
   const rejectedItems = getKycAppStatusData.rejectedItems;
   if (isCompliant && !TRADING_ENABLED) {
     if (["init", "incomplete"].indexOf(kycJourneyStatus) !== -1) {

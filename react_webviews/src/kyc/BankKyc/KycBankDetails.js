@@ -31,7 +31,7 @@ import internalStorage from '../common/InternalStorage';
 import { isNewIframeDesktopLayout } from "../../utils/functions"
 import { storageService } from "../../utils/validators";
 
-let titleText = "Enter bank account details";
+let titleText = "Primary bank account details";
 const genericErrorMessage = "Something Went wrong!";
 const KycBankDetails = (props) => {
   const config = getConfig();
@@ -42,7 +42,7 @@ const KycBankDetails = (props) => {
   const userType = params.userType || "";
   const isEdit = props.location.state?.isEdit || false;
   if (isEdit) {
-    titleText = "Edit bank account details"
+    titleText = "Edit primary bank account details";
   }
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
@@ -57,7 +57,7 @@ const KycBankDetails = (props) => {
   const [name, setName] = useState("");
   const [note, setNote] = useState({
     info_text:
-      "As per SEBI, it is mandatory for investors to provide their own bank account details",
+      "This bank account will be the default account for all your investments and withdrawals",
     variant: "info",
   });
   const [disableFields, setDisableFields] = useState({

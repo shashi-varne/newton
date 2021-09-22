@@ -369,6 +369,14 @@ export const kycStatusMapper = {
     icon: "icn_kyc_completed.svg",
     nextState: "/invest",
   },
+  upgraded_incomplete: {
+    title: "Upgrade to trading and demat account",
+    subtitle: "Invest in India's best performing stocks in just a few taps!",
+    button2Title: "Later",
+    buttonTitle: "UPGRADE NOW",
+    icon: "ic_upgrade.svg",
+    nextState: KYC_PATHNAME_MAPPER.journey
+  },
   esign_pending: {
     color: "#ffa60b",
     title: "Documents verified",
@@ -478,6 +486,13 @@ export const kycStatusMapperInvest = {
     title: "You’re ready to invest in mutual funds",
     subtitle: "UPGRAGE ACCOUNT",
     nextState: KYC_PATHNAME_MAPPER.tradingInfo,
+    subTitleClass: "kyc-complete",
+  },
+  upgraded_incomplete: {
+    icon: "ic_kyc_complete.svg",
+    title: "You’re ready to invest in mutual funds",
+    subtitle: "UPGRAGE ACCOUNT",
+    nextState: KYC_PATHNAME_MAPPER.journey,
     subTitleClass: "kyc-complete",
   },
   esign_pending: {

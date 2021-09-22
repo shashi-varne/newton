@@ -27,9 +27,9 @@ const PersonalDetails2 = (props) => {
   const stateParams = props?.location?.state || {};
   const isEdit = stateParams.isEdit || false;
   const isUpgradeFlow = stateParams.flow === "upgradeAccount";
-  let title = "Personal details";
+  let title = "Personal information";
   if (isEdit) {
-    title = "Edit personal details";
+    title = "Edit personal information";
   }
 
   const { kyc, user, isLoading } = useUserKycHook();
