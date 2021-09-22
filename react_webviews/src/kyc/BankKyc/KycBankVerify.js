@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import Container from "../common/Container";
 import { isEmpty } from "utils/validators";
 import { navigate as navigateFunc, isTradingEnabled } from "utils/functions";
-import { PATHNAME_MAPPER } from "../constants";
+import { BANK_ACCOUNT_TYPES_NOMENCLATURE, PATHNAME_MAPPER } from "../constants";
 import { checkDLPanFetchAndApprovedStatus, getFlow, isDigilockerFlow } from "../common/functions";
 import { saveBankData, getBankStatus } from "../common/api";
 import toast from "../../common/ui/Toast";
@@ -19,7 +19,7 @@ import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 import { isNewIframeDesktopLayout } from "../../utils/functions";
 import { storageService } from "../../utils/validators";
 
-const INITIAL_INFO_CONTENT = "We will credit ₹1 to your bank account for verification.";
+const INITIAL_INFO_CONTENT = "We’ll credit ₹1 to verify your bank account.";
 const NON_EQUITY_PARTNER_INFO = (
   <ul className="note-list">
     <li>This bank account belongs to our partner. Equity and Trading account is not available,
@@ -380,7 +380,7 @@ const KycBankVerify = (props) => {
       showLoader={isApiRunning}
       noFooter={isEmpty(bankData)}
       handleClick={handleClick}
-      title="Confirm bank details"
+      title="Verify bank account"
       iframeRightContent={require(`assets/${productName}/add_bank.svg`)}
       data-aid='kyc-verify-bank-accont-screen'
     >
@@ -430,7 +430,7 @@ const KycBankVerify = (props) => {
             </div>
             <div className="item" data-aid='kyc-account-type'>
               <div className="left">Account type</div>
-              <div className="right"> {bankData.account_type} </div>
+              <div className="right"> {BANK_ACCOUNT_TYPES_NOMENCLATURE[bankData.account_type]} </div>
             </div>
           </>
         )}
