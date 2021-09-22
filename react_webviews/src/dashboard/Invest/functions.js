@@ -64,6 +64,9 @@ export async function initialize() {
   if (this.state.screenName === "sdk_landing" && !config.Web) {
     await this.getSummary();
   }
+
+  await this.handleCampaignNotificationData(); // sets campaign data
+
   if (this.onload) this.onload();
   if(this.props?.location?.state?.fromState === "/kyc/registration/success") {
     const _event = {
@@ -478,8 +481,8 @@ export async function initilizeKyc() {
       modalData.oneButton = true;
     this.setState({ modalData, openKycStatusDialog: true });
   }
-  await this.handleCampaignNotificationData(); // this function sets campaign data
-  await this.contactVerification(userKyc);
+  
+  this.contactVerification(userKyc);
 }
 
 export function openPremiumOnboardBottomSheet(bottom_sheet_dialog_data_premium) {
@@ -716,6 +719,7 @@ export function handleRenderCard() {
   this.setState({renderLandingCards : cards});
 }
 
+// this function sets campaign data
 export async function handleCampaignNotificationData () {
   const notifications = storageService().getObject('campaign') || [];
   const bottom_sheet_dialog_data = notifications.reduceRight((acc, data) => {
@@ -855,6 +859,7 @@ export function closeCampaignDialog() {
   this.setState({ openBottomSheet: false })
 }
 
+// sets every other dialog to false, except the one passed as key to be displayed
 export function setDialogsState(key) {
   this.setState({
     openKycPremiumLanding: false,
