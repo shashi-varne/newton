@@ -19,7 +19,7 @@ const ConfirmBackModal = ({ id, open, confirm, cancel, ...props }) => {
           <article
             className="text" data-aid='kyc-esign-text'
           >
-            You are almost there, do you really want to go back?
+            You're almost there! Do you really want to go back?
           </article>
           <footer className="actions">
             <Button data-aid='yes-btn' onClick={confirm}>Yes</Button>

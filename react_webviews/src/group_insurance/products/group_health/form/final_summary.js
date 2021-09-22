@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
-
 import { getConfig, getBasePath, getParamsMark } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import { initialize, updateLead, resetQuote, openMedicalDialog, openPdf } from '../common_data';
+import { initialize, updateLead, resetQuote, openMedicalDialog, openPdf, isRmJourney } from '../common_data';
 import BottomInfo from '../../../../common/ui/BottomInfo';
 import {
     numDifferentiationInr, inrFormatDecimal,
@@ -39,7 +38,9 @@ class GroupHealthPlanFinalSummary extends Component {
             openDialogReset: false,
             quote_id: storageService().get('ghs_ergo_quote_id'),
             screen_name:'final_summary_screen',
-            pgReached: getUrlParams().pgReached ? true : false
+            pgReached: getUrlParams().pgReached ? true : false,
+            isRmJourney: isRmJourney(),
+            isGuestUser: storageService().getBoolean('guestUser') || getUrlParams().guestUser
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
@@ -53,8 +54,9 @@ class GroupHealthPlanFinalSummary extends Component {
         nativeCallback({ action: 'take_control_reset' });
         this.initialize();
     }
-    setErrorData = (type) => {
 
+    setErrorData = (type) => {
+        
         this.setState({
           showError: false
         });
@@ -630,10 +632,10 @@ class GroupHealthPlanFinalSummary extends Component {
             // this.redirectToPayment();
         //     return;
         // }
-        let application_id = storageService().get('health_insurance_application_id');
+        let application_id = storageService().get('health_insurance_application_id')
         try {
-            let res = await Api.get(`api/insurancev2/api/insurance/health/payment/start_payment/${this.state.providerConfig.provider_api}?application_id=${application_id}`);       
-           
+            const url = `api/insurancev2/api/insurance/health/payment/start_payment/${this.state.providerConfig.provider_api}?application_id=${application_id}`;
+            const res = await Api.get(url);       
             var resultData = res.pfwresponse.result;
             this.setState({
                 pg_data: resultData
@@ -755,6 +757,8 @@ class GroupHealthPlanFinalSummary extends Component {
                 'restart_clicked': this.state.restart_clicked ? 'yes' : 'no',
                 'restart_conformation': this.state.restart_conformation ? 'yes' : 'no',
                 'edit_clicked': data.edit_clicked || '',
+                'rm_payment_link_copied': user_action === 'copy' ? 'yes' : 'no',
+                'guest_user_make_payment': this.state.isGuestUser ? 'yes' : 'no',
             }
         };
 
@@ -959,11 +963,20 @@ class GroupHealthPlanFinalSummary extends Component {
         });
     }
 
+    copyPaymentLink = async () =>{
+        this.sendEvents('copy')
+        let application_id = storageService().get('health_insurance_application_id');
+        let guestLeadId = storageService().get('guestLeadId');
+        let finalSummaryScreenUrl = `${window.origin}/group-insurance/group-health/${this.state.provider}/final-summary${getConfig().searchParams}&provider=${this.state.providerConfig.provider_api}&application_id=${application_id}&guestUser=true&guestLeadId=${guestLeadId}`
+        
+        this.getShortUrl(finalSummaryScreenUrl, this.copyPaymentLink);
+    }
     render() {
         return (
             <Container
             provider={this.state.provider}
-            resetpage={true}
+            resetpage={!this.state.isGuestUser}
+            noBackIcon={this.state.isGuestUser}
             handleReset={this.showDialog}
             events={this.sendEvents('just_set_events')}
             showLoader={this.state.show_loader}
@@ -973,8 +986,8 @@ class GroupHealthPlanFinalSummary extends Component {
             title="Summary"
             fullWidthButton={true}
             onlyButton={true}
-            buttonTitle={`MAKE PAYMENT OF ${inrFormatDecimal(this.state.quotation.total_premium)}`}
-            handleClick={() => this.handleClick()}
+            buttonTitle={this.state.isRmJourney ?  'COPY PAYMENT LINK' : `MAKE PAYMENT OF ${inrFormatDecimal(this.state.quotation.total_premium)}`}
+            handleClick={this.state.isRmJourney ? this.copyPaymentLink : this.handleClick}
             pgReached={this.state.pgReached}
         >
 

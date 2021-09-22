@@ -1,5 +1,5 @@
 import InputAdornment from "@material-ui/core/InputAdornment";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Container from "../../common/Container";
 import TextField from "@material-ui/core/TextField";
 import "./commonStyles.scss";
@@ -44,8 +44,10 @@ import AccountAlreadyExistDialog from "../../../login_and_registration/component
 //     <div>Continue with Google</div>
 //   </a>
 // );
-const config = getConfig();
 const CommunicationDetails = (props) => {
+  const config = useMemo(() => {
+    return getConfig();
+  }, []);
   const navigate = navigateFunc.bind(props);
   const stateParams = props.location?.state || {};
   const isNotification = getUrlParams()?.from_notification;
@@ -177,13 +179,16 @@ const CommunicationDetails = (props) => {
     if (name === "whatsappConsent") {
       data[name] = !formData[name];
     } else {
-      const value = event.target ? event.target.value : event;
+      let value = event.target ? event.target.value : event;
       if (
         name === "mobile" &&
         value &&
         (!validateNumber(value) || value.length > 10)
       ) {
         return;
+      }
+      if(name === "email") {
+        value = value.trim();
       }
       data[name] = value;
     }

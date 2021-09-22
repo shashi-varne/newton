@@ -246,7 +246,7 @@ export const partnerConfigs = {
       financialTools: ["risk_profile"],
     },
     landingMarketingBanners: [
-      { image: "nfo.svg", type: "nfo", endDate: '08/24/2021' },
+      { image: "nfo.svg", type: "nfo", endDate: '09/14/2021' },
       { image: "mb_4.svg", type: "100_sip" },
       { image: "mb_6.svg", type: "diy" },
       { image: "mb_5.svg", type: "buildwealth" },
@@ -334,7 +334,7 @@ export const partnerConfigs = {
     mobile: "1800-212-5997",
     email: "care.futuremoney@fisdom.com",
     landingMarketingBanners: [
-      { image: "nfo.svg", type: "nfo", endDate: '08/24/2021' },
+      { image: "nfo.svg", type: "nfo", endDate: '09/14/2021' },
       { image: "fpg_mb_insta.svg", type: "instaredeem" },
       { image: "fpg_mb_100.svg", type: "buildwealth" },
     ],
@@ -532,7 +532,7 @@ export const partnerConfigs = {
   },
   ucomb: {
     code: "ucomb",
-    logo: "ucomb.jpg",
+    logo: "ucomb.svg",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
       ourRecommendations: ["buildwealth", "savetax"],
@@ -546,7 +546,7 @@ export const partnerConfigs = {
     },
     uiElements: {
       header: {
-        backgroundColor : "#FFF112",
+        backgroundColor : "#FFF500",
       }
     },
     features: {
