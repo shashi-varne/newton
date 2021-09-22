@@ -739,7 +739,6 @@ export function handleCampaignNotificationData () {
   }, {});
 
   if (!isEmpty(bottom_sheet_dialog_data)) {
-    storageService().setObject("campaignDialogData", bottom_sheet_dialog_data);
     this.setState({ bottom_sheet_dialog_data });
   }
 };
@@ -854,7 +853,6 @@ export function closeCampaignDialog() {
   const campaignsToHitFeedback = ["insurance_o2o_campaign", "trading_restriction_campaign"];
   if(campaignsToHitFeedback.includes(bottom_sheet_dialog_data.campaign_name)){
     hitFeedbackURL(bottom_sheet_dialog_data.action_buttons?.buttons[0]?.feedback_url)
-    storageService().remove("campaignDialogData");
   }
   this.setState({ openBottomSheet: false })
 }

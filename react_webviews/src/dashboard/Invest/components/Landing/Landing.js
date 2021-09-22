@@ -83,15 +83,14 @@ class Landing extends Component {
       "is_bottom_sheet_displayed"
     );
     const campaignsToShowOnPriority = ["trading_restriction_campaign"];
-    const campaignData = storageService().getObject("campaignDialogData");
-    const { isWeb, verifyDetails, openKycPremiumLanding, openKycStatusDialog, tradingEnabled } = this.state;
+    const { isWeb, verifyDetails, openKycPremiumLanding, openKycStatusDialog, tradingEnabled, bottom_sheet_dialog_data } = this.state;
     if (!isBottomSheetDisplayed && isWeb &&
-       ((tradingEnabled && campaignsToShowOnPriority.includes(campaignData.campaign_name)) ||
+       ((tradingEnabled && campaignsToShowOnPriority.includes(bottom_sheet_dialog_data.campaign_name)) ||
         (!verifyDetails && !openKycPremiumLanding && !openKycStatusDialog))) {
       this.handleCampaignNotification();
     }
 
-    if (campaignsToShowOnPriority.includes(campaignData.campaign_name)) {
+    if (campaignsToShowOnPriority.includes(bottom_sheet_dialog_data.campaign_name)) {
       this.setDialogsState("openBottomSheet");
     }
   };
