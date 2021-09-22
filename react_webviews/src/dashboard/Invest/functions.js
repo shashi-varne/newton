@@ -436,7 +436,7 @@ export async function initilizeKyc() {
       if ((banklist && banklist.length) || config.code === "moneycontrol") {
         return;
       } else {
-        await this.openPremiumOnboardBottomSheet(
+        this.openPremiumOnboardBottomSheet(
           bottom_sheet_dialog_data_premium,
           userKyc,
           TRADING_ENABLED
@@ -478,7 +478,7 @@ export async function initilizeKyc() {
   await this.contactVerification(userKyc);
 }
 
-export async function openPremiumOnboardBottomSheet(bottom_sheet_dialog_data_premium) {
+export function openPremiumOnboardBottomSheet(bottom_sheet_dialog_data_premium) {
   const { config = getConfig() } = this.state;
   let is_bottom_sheet_displayed_kyc_premium = storageService().get(
     "is_bottom_sheet_displayed_kyc_premium"
