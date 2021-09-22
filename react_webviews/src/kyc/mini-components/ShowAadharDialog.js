@@ -1,17 +1,19 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { getConfig } from "utils/functions";
 import "./mini-components.scss";
 import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 
-const productName = getConfig().productName;
 const ShowAadharDialog = ({ open, onClose, redirect }) => {
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
 
   return (
     <WVBottomSheet
       isOpen={open}
       onClose={onClose}
-      title="Aadhaar KYC"
-      subtitle="Link with DigiLocker to complete paperless KYC"
+      title="e-KYC"
+      subtitle="Connect to DigiLocker to complete KYC fast & easy"
       image={require(`assets/${productName}/icn_aadhaar_kyc_small.svg`)}
       button1Props={{
         title: "CONNECT DIGILOCKER",
@@ -27,7 +29,7 @@ const ShowAadharDialog = ({ open, onClose, redirect }) => {
             className="icon"
             alt=""
           />
-          <div className="title">No document asked</div>
+          <div className="title">100% Digital</div>
         </div>
         <div className="info-box" data-aid="info-box-one">
           <img
@@ -35,7 +37,7 @@ const ShowAadharDialog = ({ open, onClose, redirect }) => {
             className="icon"
             alt=""
           />
-          <div className="title">Instant Investment</div>
+          <div className="title">Instant & safe</div>
         </div>
       </main>
     </WVBottomSheet>

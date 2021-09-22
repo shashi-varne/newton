@@ -118,7 +118,7 @@
     .img {
       width: 100%;
       border-radius: 4px;
-      min-height: 110px;
+      min-height: 80px;
     }
 
     .title {
@@ -369,6 +369,7 @@
     background-color: white !important;
     display: flex;
     margin: auto;
+    border-width: 2px;
   }
 }
 

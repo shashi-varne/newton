@@ -23,12 +23,12 @@ const PAGE_TYPE_CONTENT_MAP = {
   'permission-denied': {
     imgElem: locationIcon,
     title: 'Allow location access',
-    subtitle: 'As per SEBI, we need to capture your location while you take the selfie',
+    subtitle: 'As per SEBI, we need to record your location while you take the selfie',
   },
   'verifying-location': {
     imgElem: locationIcon,
     title: 'Verifying location access',
-    subtitle: 'As per SEBI, we need to capture your location while you take the selfie',
+    subtitle: 'As per SEBI, we need to record your location while you take the selfie',
   },
   'invalid-region': {
     imgElem: foreignLocationIcon,
