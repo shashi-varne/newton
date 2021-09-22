@@ -502,9 +502,12 @@ const CommunicationDetails = (props) => {
   }
 
   const handleGoldNavigation = async () => {
+    if (!stateParams?.provider) {
+      return navigate("/gold/buy");
+    }
     try {
-      const result = await comfirmVerification(stateParams?.provider || 'mmtc');
-      const user_info = result.gold_user_info.user_info || {};
+      const result = await comfirmVerification(stateParams?.provider);
+      const user_info = result?.gold_user_info?.user_info || {};
       setGoldUserInfo(user_info)
     } catch (err) {
       console.log(err)
