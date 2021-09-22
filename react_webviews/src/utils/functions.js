@@ -683,4 +683,16 @@ export function getGuestUserRoute(apiUrl){
       return apiUrl + `${url_char}guest_lead_id=${guest_id}`
   }
   return apiUrl
-}  
+}
+
+export function requireAsset(assetName, partner) {
+  try {
+    return require(`assets/${partner ? (partner + '/' + assetName) : assetName}`);
+  } catch (err) {
+    try {
+      return require(`assets/${assetName}`);
+    } catch (err) {
+      console.log('Could not find the asset you are looking for!', err);
+    }
+  }
+}
