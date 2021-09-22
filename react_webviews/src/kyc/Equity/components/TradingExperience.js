@@ -135,7 +135,7 @@ const TradingExperience = (props) => {
       events={sendEvents("just_set_events")}
       buttonTitle="CONTINUE"
       handleClick={handleClick}
-      title="Select trading experience"
+      title="For how long have you been trading?"
       disable={isLoading}
       showLoader={isApiRunning}
       data-aid="select-trading-experience-screen"

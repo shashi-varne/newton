@@ -34,9 +34,9 @@ const PersonalDetails1 = (props) => {
     return getConfig();
   }, []);
 
-  let title = "Personal details";
+  let title = "Personal information";
   if (isEdit) {
-    title = "Edit personal details";
+    title = "Edit personal information";
   }
 
   useEffect(() => {
@@ -191,7 +191,7 @@ const PersonalDetails1 = (props) => {
     >
       <div className="kyc-personal-details" data-aid='kyc-personal-details-page'>
         <div className="kyc-main-subtitle" data-aid='kyc-main-subtitle-text'>
-          Enter the details below for further verification
+          Enter the details to become investment ready
         </div>
         <main data-aid='kyc-personal-details'>
           <Input

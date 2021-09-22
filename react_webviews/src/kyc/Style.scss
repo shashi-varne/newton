@@ -207,7 +207,7 @@
 
 .kyc-approved-bank {
   line-height: 1.5;
-  padding-bottom: 30px;
+  padding-bottom: 100px;
 
   .alert-status-info {
     margin-top: 25px;
@@ -320,4 +320,17 @@
   letter-spacing: 0px;
   color: var(--steelgrey);
   margin-top: 6em;
+}
+
+.kyc-professional-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 0;
+}
+
+@media only screen and (max-width: 767px) {
+  .kyc-professional-details {
+    height: calc(100vh - 220px);
+  }
 }
