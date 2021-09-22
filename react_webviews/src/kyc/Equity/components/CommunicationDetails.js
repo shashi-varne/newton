@@ -198,6 +198,9 @@ const CommunicationDetails = (props) => {
       if (!isEmpty(goldUserInfo)) {
         let result = await resendGoldOtp(goldResendVerificationOtpLink);
         toast(result.message || "Success")
+        setOtpData({
+          otp: "",
+        });
       } else {
         const result = await resendOtp(otpData.otpId);
         toast(result.message || "Success")
