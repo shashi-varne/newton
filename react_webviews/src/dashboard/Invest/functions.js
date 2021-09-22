@@ -65,7 +65,7 @@ export async function initialize() {
     await this.getSummary();
   }
 
-  await this.handleCampaignNotificationData(); // sets campaign data
+  this.handleCampaignNotificationData(); // sets campaign data
 
   if (this.onload) this.onload();
   if(this.props?.location?.state?.fromState === "/kyc/registration/success") {
@@ -720,7 +720,7 @@ export function handleRenderCard() {
 }
 
 // this function sets campaign data
-export async function handleCampaignNotificationData () {
+export function handleCampaignNotificationData () {
   const notifications = storageService().getObject('campaign') || [];
   const bottom_sheet_dialog_data = notifications.reduceRight((acc, data) => {
     const target = data?.notification_visual_data?.target;
