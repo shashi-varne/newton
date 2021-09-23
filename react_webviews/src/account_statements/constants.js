@@ -142,6 +142,7 @@ export const ACCOUNT_STATEMENT_OPTIONS = [
     withRuler: true,
     pageProps: {
       // subtitle: // Use only if custom subtitle is required,
+      infoText: 'Statement will be generated as of current date',
       fields: [
         {
           type: 'date-select',
@@ -163,6 +164,7 @@ export const ACCOUNT_STATEMENT_OPTIONS = [
     withRuler: true,
     pageProps: {
       // subtitle: // Use only if custom subtitle is required,
+      infoText: 'Statement will be generated for selected financial year period',
       fields: [
         {
           type: 'fin-year',

@@ -14,7 +14,7 @@ import DropDownNew from '../../common/ui/DropDownNew'
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 
 const optionsMap = keyBy(ACCOUNT_STATEMENT_OPTIONS, 'type');
-const FINANCIAL_YEAR_OPTIONS = fiscalYearGenerator(2002);
+const FINANCIAL_YEAR_OPTIONS = fiscalYearGenerator(2021);
 
 export default function GenerateStatement(props) {
   const { pageType = '' } = props?.match?.params || {};
@@ -239,6 +239,7 @@ export default function GenerateStatement(props) {
       Toast(response.message);
     } catch (err) {
       setIsApiRunning(false);
+      console.log(err);
       Toast(err);
     }
   }
@@ -258,8 +259,8 @@ export default function GenerateStatement(props) {
           else if (field.type === 'date-select') return dateSelector(field);
           return null;
         })}
-        {pageObj.type === 'demat_holding' &&
-          <WVInfoBubble>Statement will be generated as of current date</WVInfoBubble>
+        {pageProps.infoText &&
+          <WVInfoBubble>{pageProps.infoText}</WVInfoBubble>
         }
       </div>
     </Container>
