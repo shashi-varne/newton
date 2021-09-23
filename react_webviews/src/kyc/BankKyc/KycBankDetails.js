@@ -275,7 +275,13 @@ const KycBankDetails = (props) => {
         (result.kyc.bank.meta_data.bank_status === "doc_submitted" || result.kyc.bank.meta_data.bank_status === "verified")) {
         handleNavigation();
       } else {
-        navigate(`/kyc/${userType}/bank-verify`);
+        const bankMetaUpdateDict = result.meta_update_dict?.bank || {};
+        navigate(`/kyc/${userType}/bank-verify`, {
+          state: {
+            isPartnerBank: bankMetaUpdateDict?.is_partner_bank,
+            isPartnerEquityEnabled: bankMetaUpdateDict?.is_partner_equity_enabled
+          }
+        });
       }
     } catch (err) {
       if ((kyc?.bank.meta_data_status === "submitted" && kyc?.bank.meta_data.bank_status === "pd_triggered") ||
@@ -341,6 +347,8 @@ const KycBankDetails = (props) => {
         if (result && result.length > 0) {
           const data = result[0] || {};
           formData.ifsc_code_error = "";
+          bank.ifsc_details = data;
+          bank.bank_code = data.bank_code;
           bank.branch_name = data.branch;
           bank.bank_name = data.bank;
           bankIcon = data.image || "";

@@ -241,6 +241,15 @@
   line-height: 1.5;
   padding-bottom: 30px;
 
+  .note-list {
+    margin-block-start: 10px;
+    padding-inline-start: 20px;
+    
+    li:not(:last-child) {
+      margin-bottom: 10px;
+    }
+  }
+
   .alert-status-info {
     margin-top: 25px;
   }
