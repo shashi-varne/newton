@@ -57,6 +57,7 @@ export const basePartnerConfig = {
     productName: "fisdom",
     email: "ask@fisdom.com",
     mobile: "+91-9642596425",
+    websiteLink: "https://www.fisdom.com",
     appLink: "https://fisdom.onelink.me/CQFA/3e75c8f6",
     termsLink: "https://www.fisdom.com/terms/",
     schemeLink: "https://www.fisdom.com/scheme-offer-documents/",
@@ -77,6 +78,7 @@ export const basePartnerConfig = {
     productName: "finity",
     email: "ask@finity.in",
     mobile: "+91-8142381423",
+    websiteLink: "https://www.finity.in",
     appLink: "https://myway.onelink.me/W4GN/1f539fd2",
     termsLink: "https://finity.in/terms/",
     schemeLink: "https://finity.in/scheme/",
@@ -239,7 +241,7 @@ export const partnerConfigs = {
       financialTools: ["risk_profile"],
     },
     landingMarketingBanners: [
-      { image: "nfo.svg", type: "nfo", endDate: '09/14/2021' },
+      { image: "nfo.svg", type: "nfo", endDate: '09/30/2021', startDate: '09/17/2021' },
       { image: "mb_4.svg", type: "100_sip" },
       { image: "mb_6.svg", type: "diy" },
       { image: "mb_5.svg", type: "buildwealth" },
@@ -327,7 +329,7 @@ export const partnerConfigs = {
     mobile: "1800-212-5997",
     email: "care.futuremoney@fisdom.com",
     landingMarketingBanners: [
-      { image: "nfo.svg", type: "nfo", endDate: '09/14/2021' },
+      { image: "nfo.svg", type: "nfo", endDate: '09/30/2021', startDate: '09/17/2021' },
       { image: "fpg_mb_insta.svg", type: "instaredeem" },
       { image: "fpg_mb_100.svg", type: "buildwealth" },
     ],
