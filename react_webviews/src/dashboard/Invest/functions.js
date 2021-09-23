@@ -43,6 +43,7 @@ export async function initialize() {
   this.handleIpoCardRedirection = handleIpoCardRedirection.bind(this);
   this.handleCommonKycRedirections = handleCommonKycRedirections.bind(this);
   this.contactVerification = contactVerification.bind(this);
+  this.handleCampaignNotificationData = handleCampaignNotificationData.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
   if (config) {
     this.setState({ config });
@@ -63,6 +64,9 @@ export async function initialize() {
   if (this.state.screenName === "sdk_landing" && !config.Web) {
     await this.getSummary();
   }
+
+  this.handleCampaignNotificationData(); // sets campaign data
+
   if (this.onload) this.onload();
   if(this.props?.location?.state?.fromState === "/kyc/registration/success") {
     const _event = {
@@ -364,7 +368,7 @@ export function navigate(pathname, data = {}) {
   }
 }
 
-export function initilizeKyc() {
+export async function initilizeKyc() {
   const { config = getConfig() } = this.state;
   let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
   const TRADING_ENABLED = isTradingEnabled(userKyc);
@@ -477,6 +481,7 @@ export function initilizeKyc() {
       modalData.oneButton = true;
     this.setState({ modalData, openKycStatusDialog: true });
   }
+  
   this.contactVerification(userKyc);
 }
 
@@ -714,7 +719,8 @@ export function handleRenderCard() {
   this.setState({renderLandingCards : cards});
 }
 
-export function handleCampaignNotification () {
+// this function sets campaign data
+export function handleCampaignNotificationData () {
   const notifications = storageService().getObject('campaign') || [];
   const bottom_sheet_dialog_data = notifications.reduceRight((acc, data) => {
     const target = data?.notification_visual_data?.target;
@@ -733,10 +739,16 @@ export function handleCampaignNotification () {
   }, {});
 
   if (!isEmpty(bottom_sheet_dialog_data)) {
-    storageService().set('is_bottom_sheet_displayed', true);
-    this.setState({ bottom_sheet_dialog_data, openBottomSheet: true });
+    this.setState({ bottom_sheet_dialog_data });
   }
 };
+
+export function handleCampaignNotification () {
+  if (!isEmpty(this.state.bottom_sheet_dialog_data)) {
+    storageService().set('is_bottom_sheet_displayed', true);
+    this.setState({ openBottomSheet: true });
+  }
+}
 
 export function contactVerification(userKyc) {
   const contactDetails = userKyc?.identification?.meta_data;
@@ -838,8 +850,20 @@ export async function hitFeedbackURL(url) {
 
 export function closeCampaignDialog() {
   const { bottom_sheet_dialog_data = {} } = this.state
-  if(bottom_sheet_dialog_data.campaign_name === "insurance_o2o_campaign"){
+  const campaignsToHitFeedback = ["insurance_o2o_campaign", "trading_restriction_campaign"];
+  if(campaignsToHitFeedback.includes(bottom_sheet_dialog_data.campaign_name)){
     hitFeedbackURL(bottom_sheet_dialog_data.action_buttons?.buttons[0]?.feedback_url)
   }
   this.setState({ openBottomSheet: false })
+}
+
+// sets every other dialog to false, except the one passed as key to be displayed
+export function setDialogsState(key) {
+  this.setState({
+    openKycPremiumLanding: false,
+    openBottomSheet: false,
+    openKycStatusDialog: false,
+    verifyDetails: false,
+    [key]: true
+  });
 }
