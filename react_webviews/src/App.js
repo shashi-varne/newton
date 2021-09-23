@@ -29,9 +29,10 @@ import { storageService } from './utils/validators';
 import LoginContainer from './login_and_registration/components/LoginContainer';
 import PartnerAuthentication from './login_and_registration/pages/Authentication';
 import Prepare from './dashboard/Invest/components/SdkLanding/Prepare';
-import { ThemeProvider } from './utils/ThemeContext';
 import UnAuthenticatedRoute from './common/components/UnAuthenticatedRoute.js';
 import RedirectPathContainer from './common/components/RedirectPathContainer.js';
+import eventManager from './utils/eventManager.js';
+import { EVENT_MANAGER_CONSTANTS } from './utils/constants.js';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -88,17 +89,22 @@ const App = () => {
       storageService().set("entry_path",window.location.pathname);
     }
     clearBottomsheetDisplays();
+    eventManager.add(EVENT_MANAGER_CONSTANTS.updateAppTheme, updateAppTheme);
+    eventManager.add(EVENT_MANAGER_CONSTANTS.storePartnerCode, getConfig().code);
   }, []);
 
-  const updateTheme = (event) => {
+  const updateAppTheme = (event) => {
+    const oldPartnerCode = eventManager.get(EVENT_MANAGER_CONSTANTS.storePartnerCode);
+    const newPartnerCode = getConfig().code;
+    if(newPartnerCode === oldPartnerCode) return;
     const theme = getMuiThemeConfig();
-    setThemeConfiguration(theme)
+    setThemeConfiguration(theme);
+    eventManager.add(EVENT_MANAGER_CONSTANTS.storePartnerCode, newPartnerCode);
   }
 
     return (
       <BrowserRouter basename={basename}>
         <JssProvider jss={jss} generateClassName={generateClassName}>
-          <ThemeProvider value={{updateTheme}}>
           <MuiThemeProvider theme={themeConfiguration}>
             <ScrollToTop />
             <Tooltip />
@@ -129,7 +135,6 @@ const App = () => {
               }
             </Switch>
           </MuiThemeProvider>
-          </ThemeProvider>
         </JssProvider>
       </BrowserRouter>
     );
