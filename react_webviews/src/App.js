@@ -30,7 +30,7 @@ import LoginContainer from './login_and_registration/components/LoginContainer';
 import PartnerAuthentication from './login_and_registration/pages/Authentication';
 import Prepare from './dashboard/Invest/components/SdkLanding/Prepare';
 import UnAuthenticatedRoute from './common/components/UnAuthenticatedRoute.js';
-import RedirectPathContainer from './common/components/RedirectPathContainer.js';
+import RedirectToAnyPath from './common/components/RedirectToAnyPath.js';
 import eventManager from './utils/eventManager.js';
 import { EVENT_MANAGER_CONSTANTS } from './utils/constants.js';
 
@@ -109,7 +109,7 @@ const App = () => {
             <ScrollToTop />
             <Tooltip />
             <ToastContainer autoClose={3000} />
-            <RedirectPathContainer />
+            <RedirectToAnyPath />
             <Switch>
               <Route path="/iw-dashboard" component={InternalWealthDashboard} />
               <Route path='/w-report' component={WealthReport} />

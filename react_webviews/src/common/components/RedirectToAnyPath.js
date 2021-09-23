@@ -4,7 +4,7 @@ import { navigate as navigateFunc } from "utils/functions";
 import { EVENT_MANAGER_CONSTANTS } from "../../utils/constants";
 import eventManager from "../../utils/eventManager";
 
-const RedirectPathContainer = (props) => {
+const RedirectToAnyPath = (props) => {
   const [redirectPath, setRedirectPath] = useState(false);
   const navigate = navigateFunc.bind(props);
 
@@ -26,4 +26,4 @@ const RedirectPathContainer = (props) => {
   return <div></div>;
 };
 
-export default withRouter(RedirectPathContainer);
+export default withRouter(RedirectToAnyPath);
