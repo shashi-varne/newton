@@ -117,8 +117,8 @@ export async function setSummaryData(result) {
     result.data.campaign.user_campaign.data
   )
   storageService().setObject('campaign', campaignData)
-  storageService().setObject("npsUser", result.data.nps.nps_user.data);
-  storageService().setObject("banklist", result.data.bank_list.bank_list.data);
+  storageService().setObject("npsUser", result?.data?.nps?.nps_user?.data);
+  storageService().setObject("banklist", result?.data?.bank_list?.bank_list?.data);
   storageService().setObject("referral", result.data.referral);
   let partner = "";
   let consent_required = false;
