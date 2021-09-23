@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { getConfig, isNewIframeDesktopLayout, isTradingEnabled } from "../../../utils/functions";
 import WVBottomSheet from "../../../common/ui/BottomSheet/WVBottomSheet";
 import internalStorage from "../../common/InternalStorage";
 
-const productName = getConfig().productName;
 const uploadStatus = {
   success: {
     icon: "ic_indian_resident.svg",
@@ -21,6 +20,9 @@ const uploadStatus = {
 
 const PanUploadStatus = ({ status, isOpen, kyc, onClose, disableBackdropClick, onCtaClick, navigate }) => {
   if (!status) return '';
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
 
   const data = uploadStatus[status] || {};
   const TRADING_ENABLED = isTradingEnabled(kyc);

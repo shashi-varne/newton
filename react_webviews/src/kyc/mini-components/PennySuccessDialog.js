@@ -14,7 +14,7 @@ const PennySuccessDialog = ({ isOpen, kyc, redirect }) => {
   const fromUploadDocumentsScreen = storageService().get("bankEntryPoint") === "uploadDocuments";
   const isManualFlow = kyc?.kyc_type === "manual";
 
-  let content = "Now, tell us your trading experience in the next step";
+  let content = "Your account setup is almost done! Now let’s find out what you’re about to unlock";
   if (!TRADING_ENABLED || 
     isManualFlow || 
     (isDigilockerFlow(kyc) && isPanFailedAndNotApproved) || 

@@ -357,6 +357,11 @@ export function getKycAppStatus(kyc) {
     status = "complete";
   }
 
+  // this condition handles showing upgrade account to MF IR users until user submits all equity related docs
+  if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && kyc.mf_kyc_processed && isReadyToInvest(kyc) && kyc.equity_application_status === "incomplete") {
+    status = "upgraded_incomplete";
+  }
+
   result.status = status;
 
   return result;
