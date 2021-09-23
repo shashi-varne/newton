@@ -30,7 +30,7 @@ class SecondaryVerification extends Component {
     }
 
     componentWillMount() {
-        const { state } = this.props.location;
+        const { state = {} } = this.props.location;
         let { form_data } = this.state;
         let loginType = state?.communicationType || "mobile";
         let firstTimeLogin = state?.firstTimeLogin || false;
