@@ -131,6 +131,11 @@ export const themeConfig =  () => {
             root: {
                 display: 'block'
             }
+        },
+        MuiModal: {
+            root: {
+              backgroundColor: 'rgba(0,0,0,0.6)'
+            }
         }
     }
   }

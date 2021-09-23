@@ -29,10 +29,10 @@ const PersonalDetails3 = (props) => {
   const [oldState, setOldState] = useState({});
   const isEdit = props.location.state?.isEdit || false;
   const [totalPages, setTotalPages] = useState();
-  let title = "Professional details";
+  let title = "Professional information";
   const productName = getConfig().productName;
   if (isEdit) {
-    title = "Edit professional details";
+    title = "Edit professional information";
   }
   const type = props.type || "";
 
@@ -164,7 +164,7 @@ const PersonalDetails3 = (props) => {
       iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-personal-details-screen-3'
     >
-      <div className="kyc-personal-details" data-aid='kyc-personal-details-page'>
+      <div className="kyc-personal-details kyc-professional-details" data-aid='kyc-personal-details-page'>
         <main  data-aid='kyc-personal-details'>
           <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon
@@ -196,8 +196,7 @@ const PersonalDetails3 = (props) => {
           </div>
         </main>
         <footer data-aid='kyc-footer-text'>
-          By tapping ‘save and continue’ I agree that I am not a PEP (politically
-          exposed person)
+          By tapping SAVE AND CONTINUE, I agree that I am not a politically exposed person (PEP)
         </footer>
       </div>
     </Container>

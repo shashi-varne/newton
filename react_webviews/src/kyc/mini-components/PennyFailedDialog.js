@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { getConfig } from "utils/functions";
 import "./mini-components.scss";
 import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 
-const productName = getConfig().productName;
 const PennyFailedDialog = ({ isOpen, checkBankDetails, uploadDocuments }) => {
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
   return (
     <WVBottomSheet
       isOpen={isOpen}

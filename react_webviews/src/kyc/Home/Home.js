@@ -77,8 +77,8 @@ const Home = (props) => {
     let data = {
       investType: "mutual fund",
       npsDetailsRequired: false,
-      title: "Verify PAN",
-      subtitle: TRADING_ENABLED ? "As per SEBI, valid PAN is mandatory to open a trading & demat account" : "As per SEBI, valid PAN is required to invest in mutual funds",
+      title: "Enter PAN to check KYC status",
+      subtitle: TRADING_ENABLED ? "As per SEBI, KYC is mandatory for investments in stocks & mutual funds" : "As per SEBI, valid PAN is required to invest in mutual funds",
       kycConfirmPanScreen: false,
     };
     if(isEmpty(savedPan)){
@@ -465,7 +465,7 @@ const Home = (props) => {
           <div className="kyc-main-subtitle" data-aid='kyc-main-subtitle'>{homeData.subtitle}</div>
           <main data-aid='kyc-home'>
             <Input
-              label="Enter PAN"
+              label="Enter your PAN"
               class="input"
               value={pan.toUpperCase()}
               error={panError ? true : false}
