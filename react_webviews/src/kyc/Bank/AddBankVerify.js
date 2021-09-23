@@ -53,7 +53,7 @@ const AddBankVerify = (props) => {
     if(!data && kyc.bank.meta_data.bank_id === Number(bank_id)) {
       data = kyc.bank.meta_data;
       data.status = "default";
-    } 
+    }
     setShowLoader(false);
     setBankData({ ...data });
     setUserKyc(kyc);
