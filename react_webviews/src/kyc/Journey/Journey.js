@@ -445,7 +445,7 @@ const Journey = (props) => {
           },
         },
       })
-      if (npsDetailsReq) {
+      if (npsDetailsReq && config.isWebOrSdk) {
         navigate('/nps/identity')
       } else if (isCompliant) {
         navigate('/kyc-esign/nsdl', {
@@ -656,7 +656,7 @@ const Journey = (props) => {
     }
   }
   if (!isEmpty(kyc) && !isEmpty(user)) {
-    if (npsDetailsReq && user.kyc_registration_v2 === 'submitted') {
+    if (npsDetailsReq && user.kyc_registration_v2 === 'submitted' && config.isWebOrSdk ) {
       navigate('/nps/identity', {
         state: { goBack: '/invest' },
       })
