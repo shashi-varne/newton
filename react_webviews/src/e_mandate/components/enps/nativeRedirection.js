@@ -16,7 +16,7 @@ class NativeEsignRedirection extends Component {
   cmponentWillMount() {
     let basepath = getBasePath();
     let current_url =
-      basepath + "/e-mandate/enps/redirection" + getConfig().searchParams;
+      basepath + "/e-mandate/enps/native-redirection" + getConfig().searchParams;
     var pgLink =
       getConfig().base_url + "/page/nps/user/esign/" + this.state.pc_urlsafe;
     if (getConfig().isNative) {
