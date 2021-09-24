@@ -1,22 +1,19 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import { nativeCallback } from "utils/native_callback";
 import { getConfig } from "utils/functions";
 import Api from "utils/api";
 import Container from "../../common/Container";
 import UiSkelton from "common/ui/Skelton";
 
-class NativeEsignCalllback extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      pc_urlsafe: getConfig().pc_urlsafe,
-    };
-  }
+const NativeEsignCalllback = () => {
+  useEffect(() => {
+    getNpsStatus();
+  });
 
-  async componentDidMount() {
+  const getNpsStatus = async () => {
     try {
       const res = await Api.get(
-        "/api/nps/esign/status/" + this.state.pc_urlsafe
+        "/api/nps/esign/status/" + getConfig().pc_urlsafe
       );
 
       if (res.pfwresponse.result && !res.pfwresponse.result.error) {
@@ -32,15 +29,13 @@ class NativeEsignCalllback extends Component {
     } catch (err) {
       nativeCallback({ action: "on_failure" });
     }
-  }
+  };
 
-  render() {
-    return (
-      <Container noFooter={true}>
-        <UiSkelton type="g" />
-      </Container>
-    );
-  }
-}
+  return (
+    <Container noFooter={true}>
+      <UiSkelton type="g" />
+    </Container>
+  );
+};
 
 export default NativeEsignCalllback;

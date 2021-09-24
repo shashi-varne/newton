@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 import { nativeCallback } from "utils/native_callback";
 import { getConfig, getBasePath } from "utils/functions";
@@ -6,13 +6,12 @@ import Container from "../../common/Container";
 import UiSkelton from "common/ui/Skelton";
 
 const NativeEsignRedirection = () => {
-  const [url, setUrl] = useState("");
 
   useEffect(() => {
     let basepath = getBasePath();
     let current_url =
       basepath +
-      "/e-mandate/enps/native-redirection" +
+      "/e-mandate/enps/native-callback" +
       getConfig().searchParams;
     var pgLink =
       getConfig().base_url + "/page/nps/user/esign/" + getConfig().pc_urlsafe;
