@@ -22,6 +22,7 @@ const Sign = (props) => {
   
   const config = getConfig();
   const { productName, Web: isWeb } = config
+  const title = isWeb ? "Share signature" : "Digital signature";
 
   const onFileSelectComplete = (file, fileBase64) => {
     sendEvents("sign");
@@ -97,7 +98,7 @@ const Sign = (props) => {
       handleClick={handleSubmit}
       disable={!file}
       showLoader={isApiRunning}
-      title="Share signature"
+      title={title}
       iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-signature-screen'
     >
@@ -108,7 +109,7 @@ const Sign = (props) => {
             isOpen={true}
             type="info"
           >
-            Signature should be as per your PAN. Invalid signature can lead to investment rejection
+            Sign as per your signature on the PAN card. Any mismatch will lead to KYC rejection
           </WVInfoBubble>
           <KycUploadContainer>
             <div className="kuc-sign-image-container" style={{ height: fileToShow ? 'auto' : '250px' }}>
@@ -130,7 +131,7 @@ const Sign = (props) => {
                 supportedFormats: SUPPORTED_IMAGE_TYPES
               }}
             >
-              {!file ? "SIGN" : "SIGN AGAIN"}
+              {!file ? "TAP TO SIGN" : "TAP TO SIGN AGAIN"}
             </KycUploadContainer.Button>
           </KycUploadContainer>
         </section>

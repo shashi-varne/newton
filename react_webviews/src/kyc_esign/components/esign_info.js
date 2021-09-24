@@ -257,7 +257,7 @@ class ESignInfo extends Component {
               <img src={getConfig().productName !== 'fisdom' ? done_img_finity :done_img_fisdom} alt="Esign Done icon" />
             </div>
             <div className="step-text" data-aid='step-text-3'>
-              3. e-Sign is successfully done
+              3. eSign is complete
                 </div>
           </div>
           <div className="esign-bottom" data-aid='esign-bottom'>

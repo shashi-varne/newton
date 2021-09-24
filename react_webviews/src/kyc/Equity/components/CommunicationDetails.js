@@ -203,6 +203,9 @@ const CommunicationDetails = (props) => {
       if (!isEmpty(goldUserInfo)) {
         let result = await resendGoldOtp(goldResendVerificationOtpLink);
         toast(result.message || "Success")
+        setOtpData({
+          otp: "",
+        });
       } else {
         const result = await resendOtp(otpData.otpId);
         toast(result.message || "Success")
@@ -499,9 +502,12 @@ const CommunicationDetails = (props) => {
   }
 
   const handleGoldNavigation = async () => {
+    if (!stateParams?.provider) {
+      return navigate("/gold/buy");
+    }
     try {
-      const result = await comfirmVerification(stateParams?.provider || 'mmtc');
-      const user_info = result.gold_user_info.user_info || {};
+      const result = await comfirmVerification(stateParams?.provider);
+      const user_info = result?.gold_user_info?.user_info || {};
       setGoldUserInfo(user_info)
     } catch (err) {
       console.log(err)
@@ -534,8 +540,8 @@ const CommunicationDetails = (props) => {
       >
         <div>
           <div className="kyc-main-subtitle">
-            {communicationType === "email" ? "Email" : "Mobile"} verification is
-            mandatory for investment as per SEBI
+            As per SEBI, {communicationType} verification is
+            mandatory for investing
           </div>
           {communicationType === "email" ? (
             <>
@@ -611,7 +617,7 @@ const CommunicationDetails = (props) => {
           {!showOtpContainer && (
             <div className="kcd-email-subtext">
               {communicationType === "email"
-                ? "We'll keep you updated on your investments"
+                ? "Investment updates will be sent to this email address"
                 : !formData.mobileNumberVerified
                   ? "We’ll send an OTP to verify your mobile number"
                   : ""}

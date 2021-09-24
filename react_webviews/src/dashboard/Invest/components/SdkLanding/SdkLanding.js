@@ -48,7 +48,7 @@ class SdkLanding extends Component {
       referral: '',
       dotLoader: false,
       openBottomSheet: false,
-      bottom_sheet_dialog_data: [],
+      bottom_sheet_dialog_data: {},
       tradingEnabled: isTradingEnabled()
     };
     this.initialize = initialize.bind(this);
