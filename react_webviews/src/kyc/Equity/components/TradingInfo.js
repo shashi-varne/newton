@@ -57,18 +57,18 @@ const getEquityChargesData = (equityChargesData={}) => {
       ]
     },
     {
-      title: "Brokerages",
+      title: "Brokerage",
       id: "brokerage",
       list: [
         {
           name: "Delivery",
-          value: `${formatAmountInr(equityChargesData.brokerage_delivery?.rupees)} or ${equityChargesData.brokerage_delivery?.percentage}% of transaction value`,
-          subValue: "whichever is lower"
+          value: `Flat ${formatAmountInr(equityChargesData.brokerage_delivery?.rupees)}`,
+          subValue: "per executed order"
         },
         {
           name: "Intraday",
-          value: `${formatAmountInr(equityChargesData.brokerage_intraday?.rupees)} or ${equityChargesData.brokerage_intraday?.percentage}% of transaction value`,
-          subValue: "whichever is lower"
+          value: `Flat ${formatAmountInr(equityChargesData.brokerage_intraday?.rupees)}`,
+          subValue: "per executed order"
         },
         {
           name: "Futures",
