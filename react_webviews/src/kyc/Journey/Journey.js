@@ -28,7 +28,7 @@ import { Imgc } from '../../common/ui/Imgc'
 const HEADER_MAPPER_DATA = {
   kycDone: {
     icon: "ic_premium_onboarding_mid",
-    title: "Finish account upgrade",
+    title: "Set up Trading & Demat account",
     subtitle: "",
   },
   compliant: {
@@ -38,29 +38,25 @@ const HEADER_MAPPER_DATA = {
   },
   dlFlow: {
     icon: "icn_aadhaar_kyc",
-    title: "Aadhaar KYC",
-    subtitle: (
-      <>
-        <b>DigiLocker is now linked!</b> Complete the remaining steps to start
-        investing
-      </>
-    ),
+    title: "Complete account set up",
+    subtitle:
+      "We’ve got your KYC documents from DigiLocker. Finish the last few steps to start investing",
   },
   default: {
     icon: "kyc_status_icon",
-    title: "Your KYC is incomplete!",
+    title: "Your KYC is incomplete",
     subtitle:
-      "As per Govt norm. you need to do a one-time registration process to complete KYC.",
+      "As per SEBI, you need to complete your KYC to start investing",
   },
 };
 
 const HEADER_BOTTOM_DATA = [
   {
-    title:"Fast & secure",
+    title:"Instant & safe",
     icon:"ic_instant.svg"
   },
   {
-    title:"100% paperless",
+    title:"100% Digital",
     icon:"ic_no_doc.svg"
   }
 ]
@@ -306,7 +302,8 @@ const Journey = (props) => {
       if (
         isCompliant &&
         user.active_investment &&
-        user.kyc_registration_v2 !== 'submitted'
+        user.kyc_registration_v2 !== 'submitted' && 
+        !isKycDone
       ) {
         topTitle = 'Investment pending'
         investmentPending = true
@@ -448,7 +445,7 @@ const Journey = (props) => {
           },
         },
       })
-      if (npsDetailsReq) {
+      if (npsDetailsReq && config.isWebOrSdk) {
         navigate('/nps/identity')
       } else if (isCompliant) {
         navigate('/kyc-esign/nsdl', {
@@ -659,7 +656,7 @@ const Journey = (props) => {
     }
   }
   if (!isEmpty(kyc) && !isEmpty(user)) {
-    if (npsDetailsReq && user.kyc_registration_v2 === 'submitted') {
+    if (npsDetailsReq && user.kyc_registration_v2 === 'submitted' && config.isWebOrSdk ) {
       navigate('/nps/identity', {
         state: { goBack: '/invest' },
       })
@@ -788,7 +785,7 @@ const Journey = (props) => {
           )}
           {isKycDone && (
             <div className="kyc-compliant-subtitle" data-aid="kyc-complete-subtitle">
-              Complete the last few steps to open your trading and demat account
+              Complete the last few steps to set up your trading and demat account
             </div>
           )}
           {isCompliant && !investmentPending && (
@@ -825,7 +822,7 @@ const Journey = (props) => {
                     idx === stage - 1 ? 'title title__selected' : 'title'
                   }
                 >
-                  <div className="flex flex-between" data-aid='kyc-field-value'>
+                  <div className="flex-center" data-aid='kyc-field-value'>
                     <span className={item.status === "completed" ? "completed_field_key" : "field_key"}>
                       {item.title}
                       {item?.value ? ':' : ''}
@@ -834,7 +831,6 @@ const Journey = (props) => {
                       <span className="field_value">{item?.value}</span>
                     )}
                   </div>
-                  
 
                   {item.status === 'completed' && item.isEditAllowed && (
                     <span
