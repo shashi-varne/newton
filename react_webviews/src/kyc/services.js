@@ -49,9 +49,9 @@ export async function getAccountSummary(params = {}) {
 
 export async function getNPSInvestmentStatus() {
   const url = '/api/nps/invest/status/v2'
-  const response = await Api.get(url)
   try {
-    if (response.pfwresponse.status_code === 200) {
+    const response = await Api.get(url);
+    if (response?.pfwresponse?.status_code === 200) {
       return response.pfwresponse.result;
     } else {
       throw new Error(response?.pfwresponse?.result?.message);
@@ -350,6 +350,11 @@ export function getKycAppStatus(kyc) {
   // this condition handles compliant retro MF IR users 
   if (TRADING_ENABLED && kyc.kyc_status === 'compliant' && kyc?.kyc_product_type !== "equity" && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && kyc.bank.meta_data_status === "approved") {
     status = "complete";
+  }
+
+  // this condition handles showing upgrade account to MF IR users until user submits all equity related docs
+  if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && kyc.mf_kyc_processed && isReadyToInvest(kyc) && kyc.equity_application_status === "incomplete") {
+    status = "upgraded_incomplete";
   }
 
   result.status = status;

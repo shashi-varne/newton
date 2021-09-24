@@ -17,8 +17,9 @@ import scrollIntoView from 'scroll-into-view-if-needed';
 import {
   isValidDate, validateAlphabets,
   validateEmail, validateNumber, numberShouldStartWith,
-  validateConsecutiveChar, validateLengthNames, IsFutureDate
+  validateConsecutiveChar, validateLengthNames, IsFutureDate, storageService
 } from 'utils/validators';
+import { isRmJourney } from 'group_insurance/products/group_health/common_data';
 
 import { nativeCallback } from 'utils/native_callback';
 
@@ -35,6 +36,8 @@ class BasicDetailsForm extends Component {
       inputDisabled: {},
       relationshipOptions: [],
       age: 0,
+      isRmJourney: isRmJourney(),
+      isGuestUser : storageService().getBoolean('guestUser')
     };
 
     this.handleClickCurrent = this.handleClickCurrent.bind(this);
@@ -303,8 +306,8 @@ class BasicDetailsForm extends Component {
           skelton: true
         })
         if(!leadData) {
-         
-          let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
+          const url = 'api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id;
+          let res = await Api.get(url)
     
           leadData = res.pfwresponse.result.lead; 
           if (res.pfwresponse.status_code === 200) {
@@ -334,7 +337,8 @@ class BasicDetailsForm extends Component {
         this.setState({
           skelton: true
         })
-        let res = await Api.get('api/ins_service/api/insurance/account/summary?provider=BHARTIAXA')
+        let url = 'api/ins_service/api/insurance/account/summary?provider=BHARTIAXA';
+        let res = await Api.get(url)
 
         
         if (res.pfwresponse.status_code === 200) {
@@ -586,9 +590,12 @@ class BasicDetailsForm extends Component {
         let res2 = {};
         if (this.state.lead_id) {
           final_data.lead_id = this.state.lead_id;
-          res2 = await Api.post('api/insurancev2/api/insurance/bhartiaxa/lead/update', final_data)
+          storageService().setObject('baxaGuestUserData', final_data)
+          const url = 'api/insurancev2/api/insurance/bhartiaxa/lead/update';
+          res2 = await Api.post(url, final_data)
         } else {
-          res2 = await Api.post('api/insurancev2/api/insurance/bhartiaxa/lead/create', final_data)
+          const url2 = 'api/insurancev2/api/insurance/bhartiaxa/lead/create';
+          res2 = await Api.post(url2, final_data)
         }
 
         
@@ -596,7 +603,7 @@ class BasicDetailsForm extends Component {
           var lead_id_updated = this.state.lead_id || res2.pfwresponse.result.lead.id;
           window.sessionStorage.setItem('group_insurance_lead_id_selected', lead_id_updated || '');
           let lead = res2.pfwresponse.result.updated_lead || res2.pfwresponse.result.lead;
-          this.navigate('summary', {lead: lead || {}})
+          this.navigate('summary', {lead: lead || {} })
         } else {
           this.setState({
             show_loader: false,

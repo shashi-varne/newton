@@ -1,16 +1,18 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { getConfig } from "utils/functions";
 import "./mini-components.scss";
 import Button from "../../common/ui/Button";
 import WVFullscreenDialog from "../../common/ui/FullscreenDialog/WVFullscreenDialog";
 import { Imgc } from "../../common/ui/Imgc";
 
-const config = getConfig();
-const productName = config.productName;
 const KnowMore = ({ isOpen, close }) => {
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
+
   return (
     <WVFullscreenDialog onClose={close} open={isOpen}>
-      <WVFullscreenDialog.Content onCloseClick={close}>
+      <WVFullscreenDialog.Content>
         <main
           data-aid="kyc-ipv-videoknowmore"
           className="know-more-dialog-content"

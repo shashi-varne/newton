@@ -134,10 +134,8 @@ class GroupHealthLanding extends Component {
     const provider =  this.state.providerConfig.provider_api
     const body = {"provider": provider};
     try {
-      const res = await Api.post(
-        `api/insurancev2/api/insurance/health/quotation/account_summary`,
-        body
-      );
+      const url = `api/insurancev2/api/insurance/health/quotation/account_summary`;
+      const res = await Api.post(url, body);
         
       let resultData =  res.pfwresponse.result;
       resultData['details_doc'] = res.pfwresponse.result.policy_brochure

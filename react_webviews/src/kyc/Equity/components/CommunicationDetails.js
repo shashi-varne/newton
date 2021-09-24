@@ -1,5 +1,5 @@
 import InputAdornment from "@material-ui/core/InputAdornment";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Container from "../../common/Container";
 import TextField from "@material-ui/core/TextField";
 import "./commonStyles.scss";
@@ -44,8 +44,10 @@ import AccountAlreadyExistDialog from "../../../login_and_registration/component
 //     <div>Continue with Google</div>
 //   </a>
 // );
-const config = getConfig();
 const CommunicationDetails = (props) => {
+  const config = useMemo(() => {
+    return getConfig();
+  }, []);
   const navigate = navigateFunc.bind(props);
   const stateParams = props.location?.state || {};
   const isNotification = getUrlParams()?.from_notification;
@@ -130,7 +132,7 @@ const CommunicationDetails = (props) => {
   const initializeGold = async () => {
     const data = { ...formData };
     setShowOtpContainer(false);
-    if (goldUserInfo?.email_verified && goldUserInfo?.mobile_number_verified && stateParams.is_new_gold_user) {
+    if (goldUserInfo?.email_verified && goldUserInfo?.mobile_number_verified && stateParams.is_new_gold_user && !goldUserInfo?.registered_with_another_account) {
       sendEvents("next")
       navigate(stateParams?.goNext)
     }
@@ -177,13 +179,16 @@ const CommunicationDetails = (props) => {
     if (name === "whatsappConsent") {
       data[name] = !formData[name];
     } else {
-      const value = event.target ? event.target.value : event;
+      let value = event.target ? event.target.value : event;
       if (
         name === "mobile" &&
         value &&
         (!validateNumber(value) || value.length > 10)
       ) {
         return;
+      }
+      if(name === "email") {
+        value = value.trim();
       }
       data[name] = value;
     }
@@ -198,6 +203,9 @@ const CommunicationDetails = (props) => {
       if (!isEmpty(goldUserInfo)) {
         let result = await resendGoldOtp(goldResendVerificationOtpLink);
         toast(result.message || "Success")
+        setOtpData({
+          otp: "",
+        });
       } else {
         const result = await resendOtp(otpData.otpId);
         toast(result.message || "Success")
@@ -494,9 +502,12 @@ const CommunicationDetails = (props) => {
   }
 
   const handleGoldNavigation = async () => {
+    if (!stateParams?.provider) {
+      return navigate("/gold/buy");
+    }
     try {
-      const result = await comfirmVerification(stateParams?.provider || 'mmtc');
-      const user_info = result.gold_user_info.user_info || {};
+      const result = await comfirmVerification(stateParams?.provider);
+      const user_info = result?.gold_user_info?.user_info || {};
       setGoldUserInfo(user_info)
     } catch (err) {
       console.log(err)
@@ -529,8 +540,8 @@ const CommunicationDetails = (props) => {
       >
         <div>
           <div className="kyc-main-subtitle">
-            {communicationType === "email" ? "Email" : "Mobile"} verification is
-            mandatory for investment as per SEBI
+            As per SEBI, {communicationType} verification is
+            mandatory for investing
           </div>
           {communicationType === "email" ? (
             <>
@@ -606,7 +617,7 @@ const CommunicationDetails = (props) => {
           {!showOtpContainer && (
             <div className="kcd-email-subtext">
               {communicationType === "email"
-                ? "We'll keep you updated on your investments"
+                ? "Investment updates will be sent to this email address"
                 : !formData.mobileNumberVerified
                   ? "We’ll send an OTP to verify your mobile number"
                   : ""}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Container from "../common/Container";
 import Input from "../../common/ui/Input";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
@@ -23,8 +23,10 @@ import { getConfig } from "utils/functions";
 import toast from "../../common/ui/Toast";
 import { nativeCallback } from "../../utils/native_callback";
 
-const productName = getConfig().productName;
 const PersonalDetails1 = (props) => {
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
@@ -32,9 +34,9 @@ const PersonalDetails1 = (props) => {
   const [oldState, setOldState] = useState({});
   const [totalPages, setTotalPages] = useState();
 
-  let title = "Personal details";
+  let title = "Personal information";
   if (isEdit) {
-    title = "Edit personal details";
+    title = "Edit personal information";
   }
 
   const { kyc, user, isLoading } = useUserKycHook();

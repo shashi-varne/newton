@@ -1,0 +1,137 @@
+.rm-login {
+    background-color: #ffffff;
+    height: 100vh;
+    color: #333333;
+    overflow: auto;
+  
+    .header {
+      background-color: var(--primary);
+      z-index: 1;
+      position: fixed;
+      width: 100%;
+      left: 0;
+      right: 0;
+      top: 0;
+      min-height: 56px;
+      display: flex;
+      align-items: center;
+  
+      img {
+        height: 30px;
+        margin-left: 26px;
+      }
+    }
+  
+    .login-details {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+      justify-content: center;
+      margin-top: 56px;
+      padding-top: 40px;
+  
+      .left-image {
+        margin-top: 150px;
+        margin-right: 220px;
+        padding: 0 20px;
+      }
+  
+      .login-left-icon {
+        min-width: 480px;
+        min-height: 330px;
+      }
+  
+      .login-form {
+        margin: 150px 0 0 100px;
+        background-color: #ffffff;
+        width: 380px;
+  
+        .header-text {
+          font-weight: 500;
+          font-size: 20px;
+          line-height: 24px;
+          text-align: center;
+          letter-spacing: 3px;
+          padding: 20px 0 30px;
+        }
+  
+        .form {
+          margin-bottom: 20px;
+  
+          .form-field {
+            background-color: #f8f8f8;
+            padding: 8px 0 0 5px;
+            width: 100%;
+            display: flex;
+            align-items: flex-end;
+            margin-bottom: 20px;
+  
+            .country-code {
+              width: fit-content;
+              margin-bottom: -20px;
+            }
+  
+            .input {
+              width: 100%;
+            }
+          }
+        }
+      }
+    }
+  }
+  .logout {
+    padding: 50px 20px;
+    text-align: center;
+    color: #333333;
+  }
+  
+  @media only screen and (max-width: 1200px) {
+    .rm-login {
+      .login-details {
+        .left-image {
+          margin-right: 20px;
+        }
+      }
+    }
+  }
+  
+  @media only screen and (max-width: 960px) {
+    .rm-login {
+      .login-details {
+        .left-image {
+          display: none;
+        }
+      }
+    }
+  }
+  
+  @media only screen and (max-width: 767px) {
+    .rm-login {
+      .header {
+        img {
+          height: 20px;
+          margin-left: 20px;
+        }
+      }
+  
+      .login-details {
+        .login-form {
+          padding: 0 20px;
+  
+          .header-text {
+            text-align: left;
+          }
+  
+          .login-type {
+            justify-content: flex-start;
+  
+            .underline {
+              margin: 5px 0;
+            }
+  
+          }
+        }
+      }
+    }
+  }
+  

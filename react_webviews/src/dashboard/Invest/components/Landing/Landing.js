@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
 import Button from "common/ui/Button";
-import { initialize, handleCampaignNotification } from "../../functions";
+import { initialize, handleCampaignNotification, setDialogsState } from "../../functions";
 import InvestCard from "../../mini-components/InvestCard";
 import SebiRegistrationFooter from "../../../../common/ui/SebiRegistrationFooter/WVSebiRegistrationFooter";
 import VerificationFailedDialog from "../../mini-components/VerificationFailedDialog";
@@ -20,6 +20,7 @@ import { nativeCallback } from "../../../../utils/native_callback";
 import { getConfig, isTradingEnabled } from "../../../../utils/functions";
 import { PATHNAME_MAPPER } from "../../../../kyc/constants";
 import toast from "../../../../common/ui/Toast"
+import PinSetupDialog from "../../mini-components/PinSetupDialog";
 
 const fromLoginStates = ["/login", "/logout", "/verify-otp"]
 class Landing extends Component {
@@ -36,20 +37,23 @@ class Landing extends Component {
       modalData: {},
       openKycStatusDialog: false,
       openKycPremiumLanding: false,
+      openPinSetupDialog: false,
       verifyDetails: false,
       verifyDetailsType: '',
       verifyDetailsData: {},
       accountAlreadyExists: false,
       accountAlreadyExistsData : {},
       openBottomSheet: false,
-      bottom_sheet_dialog_data: [],
+      bottom_sheet_dialog_data: {},
       isWeb: getConfig().Web,
       stateParams: props.location.state || {},
       tradingEnabled: isTradingEnabled(),
+      clickedCardKey: '',
     };
     this.initialize = initialize.bind(this);
     this.generateOtp = generateOtp.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
+    this.setDialogsState = setDialogsState.bind(this);
   }
 
   componentWillMount() {
@@ -78,9 +82,16 @@ class Landing extends Component {
     const isBottomSheetDisplayed = storageService().get(
       "is_bottom_sheet_displayed"
     );
-    const { isWeb, verifyDetails, openKycPremiumLanding, openKycStatusDialog } = this.state;
-    if (!isBottomSheetDisplayed && isWeb && !verifyDetails && !openKycPremiumLanding && !openKycStatusDialog) {
+    const campaignsToShowOnPriority = ["trading_restriction_campaign"];
+    const { isWeb, verifyDetails, openKycPremiumLanding, openKycStatusDialog, tradingEnabled, bottom_sheet_dialog_data } = this.state;
+    if (!isBottomSheetDisplayed && isWeb &&
+       ((tradingEnabled && campaignsToShowOnPriority.includes(bottom_sheet_dialog_data.campaign_name)) ||
+        (!verifyDetails && !openKycPremiumLanding && !openKycStatusDialog))) {
       this.handleCampaignNotification();
+    }
+
+    if (campaignsToShowOnPriority.includes(bottom_sheet_dialog_data.campaign_name)) {
+      this.setDialogsState("openBottomSheet");
     }
   };
 
@@ -123,6 +134,12 @@ class Landing extends Component {
     this.setState({
       accountAlreadyExists: false
     })
+  }
+
+  onPinSetupClose = () => {
+    this.setState({
+      openPinSetupDialog: false
+    });
   }
 
   setAccountAlreadyExistsData = (show, data) => {
@@ -659,16 +676,16 @@ class Landing extends Component {
           data={this.state.bottom_sheet_dialog_data}
           handleClick={this.handleCampaign}
         />
-          {verifyDetails && (
-            <VerifyDetailDialog
-              type={this.state.verifyDetailsType}
-              data={this.state.verifyDetailsData}
-              showAccountAlreadyExist={this.setAccountAlreadyExistsData}
-              isOpen={verifyDetails}
-              onClose={this.closeVerifyDetailsDialog}
-              parent={this}
-            ></VerifyDetailDialog>
-          )}
+        {verifyDetails && (
+          <VerifyDetailDialog
+            type={this.state.verifyDetailsType}
+            data={this.state.verifyDetailsData}
+            showAccountAlreadyExist={this.setAccountAlreadyExistsData}
+            isOpen={verifyDetails}
+            onClose={this.closeVerifyDetailsDialog}
+            parent={this}
+          ></VerifyDetailDialog>
+        )}
         {accountAlreadyExists && (
           <AccountAlreadyExistDialog
             type={this.state.verifyDetailsType}
@@ -679,6 +696,12 @@ class Landing extends Component {
             editDetails={this.editDetailsAccountAlreadyExists}
           ></AccountAlreadyExistDialog>
         )}
+        <PinSetupDialog
+          key={this.state.openPinSetupDialog}
+          open={this.state.openPinSetupDialog}
+          onClose={this.onPinSetupClose}
+          comingFrom={this.state.clickedCardKey}
+        />
       </Container>
     );
   }

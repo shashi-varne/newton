@@ -10,6 +10,7 @@ import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import { isEmpty } from "lodash";
 import WVInfoBubble from "../../../common/ui/InfoBubble/WVInfoBubble";
 import WVBottomSheet from "../../../common/ui/BottomSheet/WVBottomSheet";
+import { capitalize } from "../../../utils/validators";
 
 const ConfirmNewPin = (props) => {
   const { routeParams, clearRouteParams } = usePersistRouteParams();
@@ -17,7 +18,7 @@ const ConfirmNewPin = (props) => {
     return !isEmpty(routeParams);
   }, []);
   const { productName, base_url } = getConfig();
-  const successText = routeParams.set_flow ? `${productName} security enabled` : `${productName} PIN changed`;
+  const successText = routeParams.set_flow ? `${capitalize(productName)} security enabled` : `${capitalize(productName)} PIN changed`;
   const comingFrom = useMemo(() => props.match?.params?.coming_from, [props]);
   const kycFlow = useMemo(() => comingFrom === 'kyc-complete', [comingFrom]);
   const [mpin, setMpin] = useState('');
@@ -84,11 +85,6 @@ const ConfirmNewPin = (props) => {
     clearRouteParams();
     if (kycFlow) {
       navigate("/invest");
-    } else if (comingFrom === 'stocks') {
-      setIsApiRunning("page");
-      window.location.href = `${base_url}/page/equity/launchapp`;
-    } else if (comingFrom === 'ipo') {
-      navigate('/market-products');
     } else {
       navigate('/account/security-settings');
     }

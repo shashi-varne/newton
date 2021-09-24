@@ -1,5 +1,5 @@
 import "./commonStyles.scss";
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import Container from '../common/Container'
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
 import { isEmpty } from '../../utils/validators'
@@ -13,10 +13,10 @@ import KycUploadContainer from '../mini-components/KycUploadContainer'
 import PanUploadStatus from "../Equity/mini-components/PanUploadStatus";
 import { nativeCallback } from '../../utils/native_callback'
 
-const config = getConfig();
-const productName = config.productName;
-
 const Pan = (props) => {
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
   const navigate = navigateFunc.bind(props)
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)
@@ -27,7 +27,6 @@ const Pan = (props) => {
   const {kyc, isLoading, updateKyc} = useUserKycHook();
   const [areDocsPending, setDocsPendingStatus] = useState();
   const [tradingEnabled, setTradingEnabled] = useState();
-  const [isPanAvailable, setIsPanAvailable] = useState(false);
   const goBackPath = props.location?.state?.goBack || "";
 
   useEffect(() => {
@@ -43,7 +42,6 @@ const Pan = (props) => {
     const docStatus = await checkDocsPending(kyc);
     setDocsPendingStatus(docStatus);
     setTradingEnabled(isTradingEnabled(kyc))
-    setIsPanAvailable(isDocSubmittedOrApproved("equity_pan"));
   }
 
   const onFileSelectComplete = (newFile, fileBase64) => {
@@ -79,7 +77,7 @@ const Pan = (props) => {
     } else {
       if (dlFlow) {
         if (kyc.equity_sign_status !== 'signed') {
-          if (isPanAvailable && !kyc.show_equity_charges_page) {
+          if (kyc.show_equity_charges_page) {
             navigate(PATHNAME_MAPPER.tradingInfo, {
               state: { goBack: PATHNAME_MAPPER.journey }
             });
@@ -200,7 +198,7 @@ const Pan = (props) => {
             message={subTitle}
           />} */}
           <KycUploadContainer
-            titleText="Your PAN card should be clearly visible in your pic"
+            titleText="Ensure PAN card details are clearly visible while uploading the image"
           >
             <KycUploadContainer.Image
               fileToShow={fileToShow}
@@ -220,7 +218,7 @@ const Pan = (props) => {
             />
           </KycUploadContainer>
           <div className="doc-upload-note-row" data-aid='doc-upload-note-row'>
-            <div className="upload-note" data-aid='upload-note-text'> How to take picture of your PAN document? </div>
+            <div className="upload-note" data-aid='upload-note-text'>How to take a photo of your PAN card?</div>
             <WVClickableTextElement
               color="secondary"
               className="know-more-button"

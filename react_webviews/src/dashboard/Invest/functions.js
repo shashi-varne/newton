@@ -38,10 +38,12 @@ export async function initialize() {
   this.handleCampaign = handleCampaign.bind(this);
   this.closeCampaignDialog = closeCampaignDialog.bind(this);
   this.handleStocksAndIpoCards = handleStocksAndIpoCards.bind(this);
+  this.initiatePinSetup = initiatePinSetup.bind(this);
   this.setKycProductTypeAndRedirect = setKycProductTypeAndRedirect.bind(this);
   this.handleIpoCardRedirection = handleIpoCardRedirection.bind(this);
   this.handleCommonKycRedirections = handleCommonKycRedirections.bind(this);
   this.contactVerification = contactVerification.bind(this);
+  this.handleCampaignNotificationData = handleCampaignNotificationData.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
   if (config) {
     this.setState({ config });
@@ -62,6 +64,9 @@ export async function initialize() {
   if (this.state.screenName === "sdk_landing" && !config.Web) {
     await this.getSummary();
   }
+
+  this.handleCampaignNotificationData(); // sets campaign data
+
   if (this.onload) this.onload();
   if(this.props?.location?.state?.fromState === "/kyc/registration/success") {
     const _event = {
@@ -207,7 +212,11 @@ export function clickCard(state, title) {
       });
       break;
     case "top_equity":
-      this.navigate(`/diy/fundlist/Equity/Multi_Cap`);
+      this.navigate(`/diy/fundlist/Equity/Multi_Cap`, {
+        state: {
+          name: "Top equity funds"
+        }
+      });
       break;
     default:
       this.navigate(keyPathMapper[state] || state);
@@ -359,7 +368,7 @@ export function navigate(pathname, data = {}) {
   }
 }
 
-export function initilizeKyc() {
+export async function initilizeKyc() {
   const { config = getConfig() } = this.state;
   let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
   const TRADING_ENABLED = isTradingEnabled(userKyc);
@@ -369,6 +378,10 @@ export function initilizeKyc() {
   let getKycAppStatusData = getKycAppStatus(userKyc);
   let kycJourneyStatus = getKycAppStatusData.status;
   let kycStatusData = kycStatusMapperInvest[kycJourneyStatus];
+  const initialKycStatus = ["init", "ground"];
+  if(initialKycStatus.includes(kycJourneyStatus) && TRADING_ENABLED) {
+    kycStatusData.subtitle = "Set up Trading & Demat A/c. now";
+  } 
   const rejectedItems = getKycAppStatusData.rejectedItems;
   if (isCompliant && !TRADING_ENABLED) {
     if (["init", "incomplete"].indexOf(kycJourneyStatus) !== -1) {
@@ -448,12 +461,11 @@ export function initilizeKyc() {
     }
 
     if (["fno_rejected", "complete"].includes(kycJourneyStatus)) {
-      if (!currentUser.active_investment) {
-        if (TRADING_ENABLED && userKyc.equity_investment_ready) {
-          modalData = kycStatusMapper["kyc_verified"];
-        } else if (!TRADING_ENABLED && !isCompliant) {
-          modalData = kycStatusMapper["mf_complete"];
-        }
+      if (TRADING_ENABLED && userKyc.equity_investment_ready) {
+        // for trading enabled users, the Equity IR bottomsheet will keep on showing on relogin, untill we get more info for user investing in sdk
+        modalData = kycStatusMapper["kyc_verified"];
+      } else if (!TRADING_ENABLED && !isCompliant && !currentUser.active_investment) {
+        modalData = kycStatusMapper["mf_complete"];
       }
     } else {
       modalData = kycStatusMapper[kycJourneyStatus];
@@ -469,6 +481,7 @@ export function initilizeKyc() {
       modalData.oneButton = true;
     this.setState({ modalData, openKycStatusDialog: true });
   }
+  
   this.contactVerification(userKyc);
 }
 
@@ -565,17 +578,24 @@ export async function setKycProductTypeAndRedirect() {
 }
 
 export function handleIpoCardRedirection() {
-  const { userKyc, config = getConfig() } = this.state;
+  const { userKyc } = this.state;
   if (
       userKyc.equity_investment_ready &&
       this.state.currentUser?.pin_status !== 'pin_setup_complete'
   ) {
-    openModule('account/setup_2fa', this.props, { routeUrlParams: '/ipo' });
-    if (config.isNative) {
-      return nativeCallback({ action: 'exit_web' });
-    }
+    this.initiatePinSetup('ipo');
   } else {
     this.navigate("/market-products");
+  }
+}
+
+function initiatePinSetup(key) {
+  const { config } = this.state;
+  if (config.isNative) {
+    openModule('account/setup_2fa', this.props, { routeUrlParams: `/${key}` });
+    nativeCallback({ action: 'exit_web' });
+  } else {
+    this.setState({ openPinSetupDialog: true, clickedCardKey: key });
   }
 }
           
@@ -611,10 +631,7 @@ export function handleStocksAndIpoCards(key) {
       (kycJourneyStatus === "complete" && userKyc.kyc_product_type === 'equity')
     ) {
       if (currentUser?.pin_status !== 'pin_setup_complete') {
-        openModule('account/setup_2fa', this.props, { routeUrlParams: '/stocks' });
-        if (config.isNative) {
-          return nativeCallback({ action: 'exit_web' });
-        }
+        return this.initiatePinSetup(key);
       } else if (kycJourneyStatus !== "fno_rejected") {
         this.setState({ showPageLoader: "page" });
         window.location.href = `${config.base_url}/page/equity/launchapp`;
@@ -702,7 +719,8 @@ export function handleRenderCard() {
   this.setState({renderLandingCards : cards});
 }
 
-export function handleCampaignNotification () {
+// this function sets campaign data
+export function handleCampaignNotificationData () {
   const notifications = storageService().getObject('campaign') || [];
   const bottom_sheet_dialog_data = notifications.reduceRight((acc, data) => {
     const target = data?.notification_visual_data?.target;
@@ -721,10 +739,16 @@ export function handleCampaignNotification () {
   }, {});
 
   if (!isEmpty(bottom_sheet_dialog_data)) {
-    storageService().set('is_bottom_sheet_displayed', true);
-    this.setState({ bottom_sheet_dialog_data, openBottomSheet: true });
+    this.setState({ bottom_sheet_dialog_data });
   }
 };
+
+export function handleCampaignNotification () {
+  if (!isEmpty(this.state.bottom_sheet_dialog_data)) {
+    storageService().set('is_bottom_sheet_displayed', true);
+    this.setState({ openBottomSheet: true });
+  }
+}
 
 export function contactVerification(userKyc) {
   const contactDetails = userKyc?.identification?.meta_data;
@@ -826,8 +850,20 @@ export async function hitFeedbackURL(url) {
 
 export function closeCampaignDialog() {
   const { bottom_sheet_dialog_data = {} } = this.state
-  if(bottom_sheet_dialog_data.campaign_name === "insurance_o2o_campaign"){
+  const campaignsToHitFeedback = ["insurance_o2o_campaign", "trading_restriction_campaign"];
+  if(campaignsToHitFeedback.includes(bottom_sheet_dialog_data.campaign_name)){
     hitFeedbackURL(bottom_sheet_dialog_data.action_buttons?.buttons[0]?.feedback_url)
   }
   this.setState({ openBottomSheet: false })
+}
+
+// sets every other dialog to false, except the one passed as key to be displayed
+export function setDialogsState(key) {
+  this.setState({
+    openKycPremiumLanding: false,
+    openBottomSheet: false,
+    openKycStatusDialog: false,
+    verifyDetails: false,
+    [key]: true
+  });
 }
