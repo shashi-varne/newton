@@ -1,24 +1,21 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 
 import { nativeCallback } from "utils/native_callback";
 import { getConfig, getBasePath } from "utils/functions";
 import Container from "../../common/Container";
 import UiSkelton from "common/ui/Skelton";
 
-class NativeEsignRedirection extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      pc_urlsafe: getConfig().pc_urlsafe,
-    };
-  }
+const NativeEsignRedirection = () => {
+  const [url, setUrl] = useState("");
 
-  cmponentWillMount() {
+  useEffect(() => {
     let basepath = getBasePath();
     let current_url =
-      basepath + "/e-mandate/enps/native-redirection" + getConfig().searchParams;
+      basepath +
+      "/e-mandate/enps/native-redirection" +
+      getConfig().searchParams;
     var pgLink =
-      getConfig().base_url + "/page/nps/user/esign/" + this.state.pc_urlsafe;
+      getConfig().base_url + "/page/nps/user/esign/" + getConfig().pc_urlsafe;
     if (getConfig().isNative) {
       if (getConfig().app === "ios") {
         nativeCallback({
@@ -35,18 +32,45 @@ class NativeEsignRedirection extends Component {
           back_text: "You are almost there, do you really want to go back?",
         },
       });
+    } else {
+      let redirectData = {
+        show_toolbar: false,
+        icon: "back",
+        dialog: {
+          message: "Are you sure you want to exit?",
+          action: [
+            {
+              action_name: "positive",
+              action_text: "Yes",
+              action_type: "redirect",
+              redirect_url: current_url,
+            },
+            {
+              action_name: "negative",
+              action_text: "No",
+              action_type: "cancel",
+              redirect_url: "",
+            },
+          ],
+        },
+        data: {
+          type: "webview",
+        },
+      };
+      if (getConfig().app === "ios") {
+        redirectData.show_toolbar = true;
+      }
+      nativeCallback({
+        action: "third_party_redirect",
+        message: redirectData,
+      });
     }
 
+    console.log(pgLink);
     window.location.href = pgLink;
-  }
+  }, []);
 
-  render() {
-    return (
-      <Container noFooter={true}>
-        <UiSkelton type="g" />
-      </Container>
-    );
-  }
-}
+  return <Container noFooter={true}>{<UiSkelton type="g" />}</Container>;
+};
 
 export default NativeEsignRedirection;
