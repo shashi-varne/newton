@@ -9,7 +9,7 @@ import { PATHNAME_MAPPER } from "../../constants";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import Toast from "../../../common/ui/Toast";
 import { nativeCallback } from "../../../utils/native_callback";
-import { formatAmountInr } from "../../../utils/validators";
+import { capitalize, formatAmountInr } from "../../../utils/validators";
 import SVG from 'react-inlinesvg';
 import { Imgc } from "../../../common/ui/Imgc";
 
@@ -93,6 +93,7 @@ const TradingInfo = (props) => {
   const [selectedTiles, setSelectedTiles] = useState([0]);
   const [equityChargesData, setEquityChargesData] = useState([])
   const { kyc, isLoading } = useUserKycHook();
+  const title = `${capitalize(productName)} Trading & Demat account`;
 
   useEffect(() => {
     setEquityChargesData(getEquityChargesData(kyc.equity_account_charges))
@@ -168,7 +169,7 @@ const TradingInfo = (props) => {
     <Container
       events={sendEvents("just_set_events")}
       buttonTitle="CONTINUE"
-      title="Trading & demat account"
+      title={title}
       hidePageTitle
       data-aid='kyc-demate-account-screen'
       handleClick={handleClick}
@@ -176,7 +177,7 @@ const TradingInfo = (props) => {
     >
       <div className="kyc-account-info" data-aid='kyc-account-info'>
         <header className="kyc-account-info-header" data-aid='kyc-account-info-header'>
-          <div className="kaih-text">Trading & demat account</div>
+          <div className="kaih-text">{title}</div>
           <Imgc 
             src={require(`assets/${productName}/ic_upgrade.svg`)} 
             alt=""
@@ -185,7 +186,7 @@ const TradingInfo = (props) => {
         </header>
         <main className="kyc-account-info-main" data-aid='kyc-account-info-main'>
           <div className="kaim-subtitle" data-aid='kyc-subtitle'>
-            Invest in India's best performing stocks in just a few clicks!
+            Invest & trade in India’s valuable companies in a few taps
           </div>
           <div className="kaim-key-benefits" data-aid='key-benefits'>
             <div className="generic-page-title">Key benefits</div>

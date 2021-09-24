@@ -288,7 +288,7 @@ export function getKycAppStatus(kyc) {
     status = 'ground';
   }
 
-  if (kyc.kyc_status !== 'compliant' && kyc.application_status_v2 === 'init' && kyc.pan.meta_data.pan_number && kyc.customer_verified === 'UNVERIFIED' && kyc.kyc_type === "init") {
+  if (kyc.kyc_status !== 'compliant' && kyc.application_status_v2 === 'init' && kyc.pan.meta_data.pan_number && kyc.kyc_type === "init") {
     status = 'ground_pan';
   }
 
@@ -350,6 +350,11 @@ export function getKycAppStatus(kyc) {
   // this condition handles compliant retro MF IR users 
   if (TRADING_ENABLED && kyc.kyc_status === 'compliant' && kyc?.kyc_product_type !== "equity" && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && kyc.bank.meta_data_status === "approved") {
     status = "complete";
+  }
+
+  // this condition handles showing upgrade account to MF IR users until user submits all equity related docs
+  if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && kyc.mf_kyc_processed && isReadyToInvest(kyc) && kyc.equity_application_status === "incomplete") {
+    status = "upgraded_incomplete";
   }
 
   result.status = status;

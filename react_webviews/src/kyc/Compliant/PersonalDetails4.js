@@ -27,7 +27,7 @@ const PersonalDetails4 = (props) => {
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
   const [oldState, setOldState] = useState({});
-  let title = "Nominee details";
+  let title = "Nominee details (Optional)";
   if (isEdit) {
     title = "Edit nominee details";
   }
