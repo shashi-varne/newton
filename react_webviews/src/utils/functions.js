@@ -254,7 +254,7 @@ export const getConfig = () => {
     sdk_capabilities = storageService().get("sdk_capabilities") || "";
   }
 
-  if(!partner_code) {
+  if(storageService().get("partner")) {
     partner_code = storageService().get("partner") || ""
   }
 

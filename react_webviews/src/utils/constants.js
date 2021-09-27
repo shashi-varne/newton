@@ -200,3 +200,9 @@ export const commonBackMapper = {
 }
 
 export const landingEntryPoints = ["/", "/invest", "/landing"];
+
+export const EVENT_MANAGER_CONSTANTS = {
+    redirectPath: "redirectPath",
+    updateAppTheme: "updateAppTheme",
+    storePartnerCode: "storePartnerCode",
+}

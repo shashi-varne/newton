@@ -109,6 +109,9 @@ export async function getSummary() {
       referral: ["subbroker", "p2p"],
       contacts: ["contacts"]
     });
+    if (res.pfwstatus_code !== 200 || isEmpty(res.pfwresponse)) {
+      throw res?.pfwmessage || errorMessage;
+    }
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       this.setSummaryData(result);
@@ -122,7 +125,7 @@ export async function getSummary() {
   } catch (error) {
     console.log(error);
     this.setState({ show_loader: false });
-    toast(errorMessage);
+    toast(error || errorMessage);
   }
 }
 
@@ -395,7 +398,7 @@ export async function initilizeKyc() {
   }
   let isReadyToInvestBase = isReadyToInvest();
   let isEquityCompletedBase = isEquityCompleted();
-  let kycJourneyStatusMapperData = kycJourneyStatus.includes("ground_") ? kycStatusMapper["incomplete"] : kycStatusMapper[kycJourneyStatus];
+  let kycJourneyStatusMapperData = kycJourneyStatus?.includes("ground_") ? kycStatusMapper["incomplete"] : kycStatusMapper[kycJourneyStatus];
 
   this.setState({
     isCompliant,
