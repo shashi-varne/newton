@@ -2,6 +2,8 @@
 /*  Module: callbackWeb
 /*  Apis for sending/receiving `native` callbacks
 /* -----------------------------------------------------------------*/
+import { EVENT_MANAGER_CONSTANTS } from './constants';
+import eventManager from './eventManager';
 import { isMobile } from './functions';
 import { getConfig } from './functions';
 
@@ -352,6 +354,7 @@ import { getConfig } from './functions';
       } else {
         set_session_storage("partner", json_data.partner);
       }
+      eventManager.emit(EVENT_MANAGER_CONSTANTS.updateAppTheme);
     }
 
     if (json_data?.sdk_capabilities) {
@@ -372,6 +375,7 @@ import { getConfig } from './functions';
         } else {
           set_session_storage("partner", partner);
         }
+        eventManager.emit(EVENT_MANAGER_CONSTANTS.updateAppTheme);
       }
     }
   }

@@ -3,6 +3,8 @@ import { getConfig, getBasePath } from './functions';
 import { open_browser_web, renameObjectKeys } from 'utils/validators';
 import Api from 'utils/api';
 import { storageService } from './validators';
+import eventManager from './eventManager';
+import { EVENT_MANAGER_CONSTANTS } from './constants';
 
 export const nativeCallback = async ({ action = null, message = null, events = null, action_path = null } = {}) => {
   let newAction = null;
@@ -49,8 +51,8 @@ export const nativeCallback = async ({ action = null, message = null, events = n
         return;
       }
       
-      let path = ['iw-dashboard', 'w-report'].includes(config.project) ? `/${config.project}/login` : '/login'; 
-      window.location.href = redirectToPath(path);
+      let path = ['iw-dashboard', 'w-report'].includes(config.project) ? `/${config.project}/login` : '/login';
+      eventManager.emit(EVENT_MANAGER_CONSTANTS.redirectPath, path);
     } else {
       nativeCallback({ action: "session_expired" });
     }
@@ -219,7 +221,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     } else if (action === '2fa_expired') {
       storageService().remove('currentUser');
       storageService().setBoolean('session-timeout', true);
-      window.location.href = redirectToPath('/login/verify-pin');
+      eventManager.emit(EVENT_MANAGER_CONSTANTS.redirectPath, "/login/verify-pin");
     } else {
       return;
     }
