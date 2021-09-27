@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { getAccountSummary, setSummaryData } from "../../kyc/services";
 import isEmpty from "lodash/isEmpty";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
 import UiSkelton from "../ui/Skelton";
-import ThemeContext from "../../utils/ThemeContext";
 import isObject from 'lodash/isObject';
 import { Route } from "react-router-dom";
 import { getUrlParams, storageService } from "../../utils/validators";
@@ -12,7 +11,6 @@ import Toast from "../ui/Toast";
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
   const { isSdk, isIframe, isMobileDevice } = useMemo(() => getConfig(), []);
-  const theme = useContext(ThemeContext)
   let currentUser = storageService().get("currentUser");
   let user = storageService().getObject("user") || {};
   let kyc = storageService().getObject("kyc") || {};
@@ -64,8 +62,6 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
     if (showLoader) {
       await fetch();
     }
-    // In order to update app theme based on partner code
-    theme.updateTheme();
   }
 
   return (

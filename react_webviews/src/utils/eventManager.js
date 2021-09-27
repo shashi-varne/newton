@@ -3,8 +3,12 @@ import isFunction from 'lodash/isFunction';
 const eventManager = {
   eventsMapper: new Map(),
 
-  add(event, callback) {
-    this.eventsMapper.set(event, callback);
+  add(event, data) {
+    this.eventsMapper.set(event, data);
+  },
+
+  get(event) {
+    return this.eventsMapper.get(event);
   },
 
   delete(event) {

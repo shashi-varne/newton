@@ -4,6 +4,8 @@ import toast from '../common/ui/Toast'
 import { isTradingEnabled } from '../utils/functions'
 import { kycSubmit } from './common/api'
 import { isDigilockerFlow } from './common/functions'
+import eventManager from '../utils/eventManager'
+import { EVENT_MANAGER_CONSTANTS } from '../utils/constants'
 
 const DOCUMENTS_MAPPER = {
   DL: 'Driving license',
@@ -115,8 +117,8 @@ export async function setSummaryData(result) {
     result.data.campaign.user_campaign.data
   )
   storageService().setObject('campaign', campaignData)
-  storageService().setObject("npsUser", result.data.nps.nps_user.data);
-  storageService().setObject("banklist", result.data.bank_list.bank_list.data);
+  storageService().setObject("npsUser", result?.data?.nps?.nps_user?.data);
+  storageService().setObject("banklist", result?.data?.bank_list?.bank_list?.data);
   storageService().setObject("referral", result.data.referral);
   let partner = "";
   let consent_required = false;
@@ -142,6 +144,7 @@ export async function setSummaryData(result) {
   } else {
     storageService().set("partner", partner);
   }
+  eventManager.emit(EVENT_MANAGER_CONSTANTS.updateAppTheme);
   setNpsData(result)
 }
 

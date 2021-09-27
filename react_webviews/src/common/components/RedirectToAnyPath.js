@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import { navigate as navigateFunc } from "utils/functions";
+import { EVENT_MANAGER_CONSTANTS } from "../../utils/constants";
 import eventManager from "../../utils/eventManager";
 
-const RedirectPathContainer = (props) => {
+const RedirectToAnyPath = (props) => {
   const [redirectPath, setRedirectPath] = useState(false);
   const navigate = navigateFunc.bind(props);
 
   useEffect(() => {
-    eventManager.add("redirectPath", handleRedirectPath);
+    eventManager.add(EVENT_MANAGER_CONSTANTS.redirectPath, handleRedirectPath);
   }, []);
 
   const handleRedirectPath = (path) => {
@@ -25,4 +26,4 @@ const RedirectPathContainer = (props) => {
   return <div></div>;
 };
 
-export default withRouter(RedirectPathContainer);
+export default withRouter(RedirectToAnyPath);
