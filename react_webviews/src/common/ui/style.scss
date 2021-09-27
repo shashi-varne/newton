@@ -1,3 +1,18 @@
+* {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+*::before,
+*::after {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.card {
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
 .Select {
   font-size: 14px !important;
 }
@@ -1420,9 +1435,7 @@ padding-right: 12px !important;
       }
     }
   }
-
 }
-
   
 //Passive Funds List Style :
 .fundlist-data {
@@ -1430,4 +1443,112 @@ padding-right: 12px !important;
   justify-content: space-between;
   align-items: center;
   margin: 10px 0 20px 0;
+}
+
+//Used for Container parent class in almost all modules in Dashboard/Withdraw/Portfolio Rebalancing
+.pr-container {
+  padding-bottom: 100px !important;
+  margin-bottom: 0px !important;
+}
+
+.highlight-text {
+  background: var(--highlight);
+  padding: 15px 15px 20px 15px;
+  border: 1px solid var(--highlight);
+  border-radius: 4px;
+}
+
+.highlight-text12 {
+  font-size: 14px;
+  color: #160d2e;
+  font-weight: 700;
+  margin: 0px 0 0 7px;
+}
+
+.highlight-text1 {
+  display: flex;
+  line-height: 20px;
+  justify-content: start;
+  align-items: center;
+}
+
+.highlight-text11 {
+  width: 14px;
+}
+
+.highlight-text2 {
+  color: var(--dark);
+  font-size: 14px;
+  margin: 4px 0 0 20px;
+}
+
+.success-bottom {
+  margin: 56px 0 20px 0;
+  text-align: center;
+}
+.success-bottom1 {
+  font-size: 11px;
+  color: #767E86;
+  margin-bottom: 14px;
+  font-weight: 500;
+  line-height: 13.04px;
+  letter-spacing: 1px;
+}
+.success-bottom2 {
+  display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.success-bottom2a {
+  font-size: 10px;
+  color: #767E86;
+  font-weight: 700;
+  line-height: 11.72px;
+  letter-spacing: 1px;
+  min-width: fit-content;
+}
+.success-bottom2b {
+  margin: 0 40px 0 40px;
+  color: #767E86;
+}
+
+.report-color-state {
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  
+  .circle {
+    width: 8px;
+    height: 8px;
+    border-radius: 100px;
+    margin-right: 5px;
+  }
+
+  .report-color-state-title {
+    font-size: 10px;
+    letter-spacing: 1.82px;
+    font-weight: 700;
+    text-transform: uppercase;
+    position: relative;
+    top: 1px;
+  }
+}
+
+.red {
+  color: #d26774;
+}
+.red .circle {
+  background: #d26774;
+}
+.green {
+  color: var(--secondary);
+}
+.green .circle {
+  background: var(--secondary);
+}
+.yellow {
+  color: #f7b500;
+}
+.yellow .circle {
+  background: #f7b500; 
 }

@@ -490,50 +490,6 @@
    font-weight: 500;
    cursor: pointer;
 }
-.card {
-  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  padding: 15px;
-  margin-bottom: 20px;
-}
-.report-color-state {
-  margin-bottom: 15px;
-  display: flex;
-  align-items: center;  
-}
-.report-color-state-title {
-  font-size: 10px;
-  letter-spacing: 1.82px;
-  font-weight: 700;
-  text-transform: uppercase;
-  position: relative;
-  top: 1px;
-}
-.report-color-state .circle {
-  width: 8px;
-  height: 8px;
-  border-radius: 100px;
-  margin-right: 5px;
-}
-.red {
-  color: #d26774;
-}
-.red .circle {
-  background: #d26774;
-}
-.green {
-  color: var(--secondary);
-}
-.green .circle {
-  background: var(--secondary);
-}
-.yellow {
-  color: #f7b500;
-}
-.yellow .circle {
-  background: #f7b500; 
-}
-
 
 .group-insurance-report {
   .top-title {
