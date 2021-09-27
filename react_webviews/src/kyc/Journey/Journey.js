@@ -27,7 +27,7 @@ import { Imgc } from '../../common/ui/Imgc'
 
 const HEADER_MAPPER_DATA = {
   kycDone: {
-    icon: "ic_premium_onboarding_mid",
+    icon: "ic_premium_onboarding",
     title: "Set up Trading & Demat account",
     subtitle: "",
   },
