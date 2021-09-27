@@ -94,7 +94,7 @@ class ESignInfo extends Component {
     const redirectUrl = encodeURIComponent(
       basepath + '/kyc-esign/nsdl' + config.searchParams
     );
-    const backUrl = encodeURIComponent(`${basepath}/kyc-esign/info${config.searchParams}&is_secure=${config.isSdk}}`);
+    const backUrl = `${basepath}/kyc-esign/info${config.searchParams}&is_secure=${config.isSdk}}`;
     this.setState({ show_loader: "button" });
 
     try {
@@ -133,7 +133,7 @@ class ESignInfo extends Component {
                   action_name: "positive",
                   action_text: "Yes",
                   action_type: "redirect",
-                  redirect_url: backUrl,
+                  redirect_url: encodeURIComponent(backUrl),
                 },
                 {
                   action_name: "negative",

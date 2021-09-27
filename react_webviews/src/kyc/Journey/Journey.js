@@ -468,9 +468,7 @@ const Journey = (props) => {
         config.searchParams
       }&is_secure=${config.isSdk}`
     );
-    const backUrl = encodeURIComponent(
-      `${basePath}/kyc/journey${config.searchParams}&show_aadhaar=true&is_secure=${config.isSdk}`
-    );
+    const backUrl = `${basePath}/kyc/journey${config.searchParams}&show_aadhaar=true&is_secure=${config.isSdk}`;
     const data = {
       url: backUrl,
       message: "You are almost there, do you really want to go back?",
@@ -494,7 +492,7 @@ const Journey = (props) => {
               action_name: "positive",
               action_text: "Yes",
               action_type: "redirect",
-              redirect_url: backUrl,
+              redirect_url: encodeURIComponent(backUrl),
             },
             {
               action_name: "negative",
