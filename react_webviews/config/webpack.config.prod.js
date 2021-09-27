@@ -217,7 +217,16 @@ module.exports = {
                   name: "static/media/[name].[hash:8].[ext]",
                 },
               },
-              'image-webpack-loader' // required for all the SVG files that get matched by this rule
+              {
+                // required for all the SVG files that get matched by this rule
+                loader: 'image-webpack-loader',
+                options: {
+                  disable: true,
+                  svgo: {
+                    removeViewBox: false, //https://github.com/svg/svgo/issues/1128
+                  }
+                }
+              }
             ],
           },
           // ** STOP ** Are you adding a new loader?
