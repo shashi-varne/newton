@@ -17,6 +17,7 @@ import { ThemeProvider } from "./utils/ThemeContext";
 import { ToastContainer } from "react-toastify";
 import DesktopLayout from "./desktopLayout";
 import ErrorBoundary from "./ErrorBoundary";
+import UiSkelton from "./common/ui/Skelton";
 // import Feature from "./Feature";
 
 const Prepare = lazy(() => import(
@@ -132,7 +133,7 @@ const App = () => {
             <ScrollToTop />
             <ToastContainer autoClose={3000} />
             <ErrorBoundary>
-              <Suspense fallback={<div>Loading</div>}>
+              <Suspense fallback={<UiSkelton type />}>
                 <Tooltip />
                 <Switch>
                   <Route
