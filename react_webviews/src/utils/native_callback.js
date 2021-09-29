@@ -169,7 +169,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
 
   if (getConfig().app !== 'web') {
     let pathname = window.location?.pathname || ""
-    if(pathname.indexOf('appl/webview') !== -1) {
+    if(pathname.indexOf('appl/web') !== -1) {
       pathname = pathname.split("/")[5] || "/";
     }
     

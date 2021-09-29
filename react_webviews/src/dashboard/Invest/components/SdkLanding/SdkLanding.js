@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
-import { initialize, handleCampaignNotification, dateValidation } from '../../functions';
+import { initialize, handleCampaignNotification, dateValidation, updateBank, updateConsent } from '../../functions';
 import { SkeltonRect } from 'common/ui/Skelton';
 import SdkInvestCard from '../../mini-components/SdkInvestCard';
 import { storageService } from 'utils/validators';
@@ -14,6 +14,9 @@ import VerificationFailedDialog from '../../mini-components/VerificationFailedDi
 import KycStatusDialog from '../../mini-components/KycStatusDialog';
 import { nativeCallback } from '../../../../utils/native_callback';
 import { Imgc } from '../../../../common/ui/Imgc';
+import TermsAndConditions from '../../mini-components/TermsAndConditionsDialog';
+import BankListOptions from '../../mini-components/BankListOptions';
+import Toast from '../../../../common/ui/Toast';
 
 const PATHNAME_MAPPER = {
   nfo: "/advanced-investing/new-fund-offers/info",
@@ -48,6 +51,8 @@ class SdkLanding extends Component {
       dotLoader: false,
       openBottomSheet: false,
       bottom_sheet_dialog_data: [],
+      showTermsAndConditions: false,
+      showBankList: false,
     };
     this.initialize = initialize.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
@@ -63,6 +68,11 @@ class SdkLanding extends Component {
     if (!isBottomSheetDisplayed) {
       this.handleCampaignNotification();
     }
+    const consentRequired = storageService().get("consent_required");
+    if(consentRequired && getConfig().code === "lvb") {
+      this.setState({ showTermsAndConditions: true });
+    }
+    this.handleBankList();
   };
 
   handleRefferalInput = (e) => {
@@ -172,6 +182,61 @@ class SdkLanding extends Component {
     }
   };
 
+  handleTermsAndConditions = async () => {
+    try {
+      this.setState({ showTermsAndConditionsLoader: "button" });
+      await updateConsent();
+      storageService().set("consent_required", false);
+    } catch (err) {
+      Toast(err.message);
+    } finally {
+      this.setState({ showTermsAndConditions: false, showTermsAndConditionsLoader: false})
+    }
+  }
+  
+  handleBankList = () => {
+    const bankList = storageService().getObject("banklist");
+    if(!isEmpty(bankList)) {
+      let bankListOptions = [];
+      bankList.forEach((data) => {
+        bankListOptions.push({
+          value: data.account_number,
+          name: data.account_number,
+        })
+      })
+      this.setState({ showBankList: true, bankListOptions, bankList });
+    }
+  }
+
+  changeSelectedBank = (event) => {
+    const value = event.target.value;
+    this.setState({ selectedBank: value, bankListErrorMessage: "" });
+  }
+
+  handleBankListOptions = async () => {
+    let { selectedBank, bankList } = this.state;
+    if(selectedBank) {
+      bankList = bankList.map(data => {
+        if(data.account_number === selectedBank) {
+          data.is_primary = "true";
+        }
+        return data;
+      });
+      this.setState({ showBankListLoader: "button",  });
+      try {
+        const result = await updateBank({ bank_list: bankList })
+        Toast(result.status);
+        storageService().set("banklist", false);
+      } catch (err) {
+        Toast(err.message)
+      } finally {
+        this.setState({ showBankListLoader: false, showBankList: false });
+      }
+    } else {
+      this.setState({ bankListErrorMessage: "Please select bank"});
+    }
+  }
+
   render() {
     let {
       isReadyToInvestBase,
@@ -182,7 +247,14 @@ class SdkLanding extends Component {
       kycJourneyStatus,
       verificationFailed,
       openKycStatusDialog,
-      modalData
+      modalData,
+      showTermsAndConditions,
+      showTermsAndConditionsLoader,
+      bankListOptions,
+      selectedBank,
+      showBankList,
+      bankListErrorMessage,
+      showBankListLoader
     } = this.state;
 
     const config = getConfig();
@@ -266,6 +338,9 @@ class SdkLanding extends Component {
             <div className='sdk-landing-cards'>
               {this.state.renderLandingCards.map((el, idx) => {
                 if (el.key === 'kyc') {
+                  if (isReadyToInvestBase) {
+                    return null;
+                  }
                   el.isLoading = kycStatusLoader;
                   el.color = kycJourneyStatusMapperData?.color;
                   const premiumKyc = kycJourneyStatus === 'ground_premium';
@@ -338,6 +413,20 @@ class SdkLanding extends Component {
             cancel={this.closeKycStatusDialog}
           />
         )}
+        <TermsAndConditions
+          isOpen={showTermsAndConditions}
+          showLoader={showTermsAndConditionsLoader}
+          handleClick={this.handleTermsAndConditions}
+        />
+        <BankListOptions
+          isOpen={showBankList}
+          handleChange={this.changeSelectedBank}
+          options={bankListOptions}
+          selectedValue={selectedBank}
+          handleClick={this.handleBankListOptions}
+          error={bankListErrorMessage}
+          showLoader={showBankListLoader}
+        />
       </Container>
     );
   }

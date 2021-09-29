@@ -49,7 +49,8 @@ class GroupHealthPayment extends Component {
       payment_details : {},
       productName: getConfig().productName,
       force_onload_call: true,
-      screen_name: 'payment_screen'
+      screen_name: 'payment_screen',
+      isGuestUser: storageService().getBoolean('guestUser') || false
     }
 
     this.initialize = initialize.bind(this);
@@ -148,8 +149,8 @@ class GroupHealthPayment extends Component {
         });
   
        let application_id = storageService().get('health_insurance_application_id'); 
-  
-        const res = await Api.get(`api/insurancev2/api/insurance/health/policy/${this.state.provider_api}/check_status?application_id=${application_id}`);
+        const url = `api/insurancev2/api/insurance/health/policy/${this.state.provider_api}/check_status?application_id=${application_id}`;
+        const res = await Api.get(url);
   
         var resultData = res.pfwresponse.result;
         
@@ -257,7 +258,20 @@ class GroupHealthPayment extends Component {
     this.setState({
       openConfirmDialog: false,
     });
+  }
 
+  redirectToApp(url) {
+    nativeCallback({
+      action: 'open_in_browser',
+      message: {
+        url: url
+      }
+    });
+  }
+
+  downloadApp = () =>{
+    let url = getConfig().appLink;
+    this.redirectToApp(url);
   }
 
   render() {
@@ -275,13 +289,14 @@ class GroupHealthPayment extends Component {
         errorData={this.state.errorData}
         noHeader={this.state.show_loader}
         title={this.state.commonMapper['top_title']}
-        handleClick={this.handleClick}
+        handleClick={ this.state.isGuestUser && this.state.status !== 'failure' ? this.downloadApp : this.handleClick}
         edit={this.props.edit}
+        noBackIcon={this.state.isGuestUser}
         fullWidthButton={this.state.paymentSuccess}
         onlyButton={this.state.paymentSuccess}
         withProvider={this.state.paymentFailed}
         buttonData={this.state.bottomButtonData}
-        buttonTitle={this.state.commonMapper.button_title}
+        buttonTitle={this.state.isGuestUser && this.state.status !== 'failure'  ? 'DOWNLOAD NOW' :  this.state.commonMapper.button_title}
         handleClick2={this.handleClick2}
         events={this.sendEvents('just_set_events')}
         headerData={{
@@ -440,8 +455,10 @@ class GroupHealthPayment extends Component {
               </div>
             }
           </div>
+          {
+            this.state.isGuestUser ?  <p className='download-fisdom-text'>Download {getConfig().productName} app to view all your policy details</p> : <ContactUs />
+          }
           
-          <ContactUs />
           <ConfirmDialog parent={this} />
         </div>
       </Container>

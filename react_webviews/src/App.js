@@ -18,7 +18,6 @@ import { ToastContainer } from "react-toastify";
 import DesktopLayout from "./desktopLayout";
 import ErrorBoundary from "./ErrorBoundary";
 import UiSkelton from "./common/ui/Skelton";
-// import Feature from "./Feature";
 
 const Prepare = lazy(() => import(
   /*webpackChunkName: "Prepare"*/ "./dashboard/Invest/components/SdkLanding/Prepare"
@@ -62,6 +61,9 @@ const Logout = lazy(() =>
 const Feature = lazy(() =>
   import(/* webpackChunkName: "Feature" */ "./Feature")
 );
+const RmLogin = lazy(() =>
+  import(/* webpackChunkName: "Feature" */ "./RmJourney/login")
+);
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -75,9 +77,9 @@ const getMuiThemeConfig = () => {
   return createMuiTheme(themeConfig());
 };
 
-var basename = window.sessionStorage.getItem("base_href") || "";
-if (basename && basename.indexOf("appl/webview") !== -1) {
-  basename = basename ? basename + "view/" : "";
+var basename = window.sessionStorage.getItem('base_href') || '';
+if (basename && basename.indexOf('appl/web') !== -1) {
+  basename = basename ? basename + 'view/' : '';
 }
 
 const isBottomSheetDisplayed = storageService().get(
@@ -147,6 +149,10 @@ const App = () => {
                   <Route
                     path="/login"
                     component={Login}
+                  />
+                  <Route
+                    path="/rm-login"
+                    component={RmLogin}
                   />
                   <Route
                     path="/register"

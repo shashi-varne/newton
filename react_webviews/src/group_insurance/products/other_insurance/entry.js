@@ -88,7 +88,12 @@ class LifeInsuranceEntry extends Component {
         var resultData = res.pfwresponse.result.response;
         let term_insurance = resultData.term_insurance;
         let group_insurance = resultData.group_insurance;
-        let BHARTIAXA = group_insurance && group_insurance.insurance_apps ? group_insurance.insurance_apps.BHARTIAXA : {};
+        let bharti_axa = group_insurance && group_insurance.insurance_apps ? group_insurance.insurance_apps.BHARTIAXA : {};
+        let icici_lombard = group_insurance && group_insurance.insurance_apps ? group_insurance.insurance_apps["icici lombard"] : {};
+        let BHARTIAXA = {
+          ...bharti_axa,
+          ...icici_lombard,
+        };
         let resumeFlagTerm = this.setTermInsData(term_insurance, BHARTIAXA);
 
         let resumeFlagAll = {
