@@ -12,7 +12,7 @@ const Logout = (props) => {
   const isRM = isRmJourney();
 
   useEffect(() => {
-    // initialize();
+    initialize();
   }, []);
 
   const initialize = async () => {
