@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import ErrorScreen from "../common/responsive-components/ErrorScreen";
 import { isRmJourney } from "../group_insurance/products/group_health/common_data";
 import { getConfig, navigate as navigateFunc } from "../utils/functions";
 import { nativeCallback } from "../utils/native_callback";
@@ -11,7 +12,7 @@ const Logout = (props) => {
   const isRM = isRmJourney();
 
   useEffect(() => {
-    initialize();
+    // initialize();
   }, []);
 
   const initialize = async () => {
@@ -31,10 +32,10 @@ const Logout = (props) => {
       } catch (err) {
         console.log(err);
       } finally {
-        if(isRM){
+        if(isRM) {
           navigate("/rm-login")  
-        }else{
-          navigate("/login")
+        } else {
+          setTimeout(() => navigate("/login"), 2500);
         }
       }
     } else {
@@ -42,7 +43,13 @@ const Logout = (props) => {
     }
   };
 
-  return <div className="logout" data-aid='logout-text'>Logging out...</div>;
+  return (
+    <ErrorScreen
+      useTemplate
+      templateErrTitle="You have been logged out."
+      templateErrText="Redirecting to login page..."
+    />
+  );
 };
 
 export default Logout;
