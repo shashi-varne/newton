@@ -17,7 +17,7 @@ import { ThemeProvider } from "./utils/ThemeContext";
 import { ToastContainer } from "react-toastify";
 import DesktopLayout from "./desktopLayout";
 import ErrorBoundary from "./ErrorBoundary";
-import UiSkelton from "./common/ui/Skelton";
+import BootSkeleton from "./common/components/BootSkeleton";
 
 const Prepare = lazy(() => import(
   /*webpackChunkName: "Prepare"*/ "./dashboard/Invest/components/SdkLanding/Prepare"
@@ -135,7 +135,7 @@ const App = () => {
             <ScrollToTop />
             <ToastContainer autoClose={3000} />
             <ErrorBoundary>
-              <Suspense fallback={<UiSkelton type />}>
+              <Suspense fallback={<BootSkeleton />}>
                 <Tooltip />
                 <Switch>
                   <Route

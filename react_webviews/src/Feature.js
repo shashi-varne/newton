@@ -3,7 +3,7 @@ import React, { lazy, Suspense } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import ErrorBoundary from './ErrorBoundary';
 import ProtectedRoute from './common/components/ProtectedRoute';
-import UiSkelton from './common/ui/Skelton';
+import BootSkeleton from './common/components/BootSkeleton';
 
 const NotFound = lazy(() => import(
   /*webpackChunkName: "NotFound"*/ './common/components/NotFound'
@@ -72,9 +72,14 @@ const FundDetails = lazy(() => import(
 const Whatsapp = lazy(() => import(
   /*webpackChunkName: "Whatsapp"*/ './whatsapp'
 ));
-const Landing = lazy(() => import(
-  /*webpackChunkName: "Landing"*/ './dashboard'
-));
+const Landing = lazy(() =>
+  new Promise(resolve =>
+    setTimeout(
+      () => resolve(import(/*webpackChunkName: "Landing"*/ './dashboard')),
+      40000
+    )
+  )
+);
 const FeedBack = lazy(() => import(
   /*webpackChunkName: "FeedBack"*/ './feedback'
 ));
@@ -99,7 +104,7 @@ const Feature = () => {
 
   return (
     <ErrorBoundary>
-      <Suspense fallback={<UiSkelton type />}>
+      <Suspense fallback={<BootSkeleton />}>
         <Switch>
           <ProtectedRoute path='/insurance' component={Insurance} />
           <ProtectedRoute path='/group-insurance' component={GroupInsurance} />
