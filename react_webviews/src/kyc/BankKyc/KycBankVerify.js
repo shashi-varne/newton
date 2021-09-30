@@ -60,8 +60,8 @@ const KycBankVerify = (props) => {
       setDlFlow(true);
     }
     setBankData({ ...kyc.bank.meta_data });
-    
-    const TRADING_ENABLED = useMemo(() => isTradingEnabled(kyc));
+
+    const TRADING_ENABLED = isTradingEnabled(kyc);
     setTradingEnabled(TRADING_ENABLED);
     if (TRADING_ENABLED && isPartnerBank && !isPartnerEquityEnabled) {
       setInfoContent(NON_EQUITY_PARTNER_INFO);

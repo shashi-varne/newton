@@ -45,7 +45,7 @@ const PersonalDetails1 = (props) => {
   }, [kyc, user]);
 
   const initialize = async () => {
-    setTradingEnabled(useMemo(() => isTradingEnabled(kyc)));
+    setTradingEnabled(isTradingEnabled(kyc));
     let nri = kyc.address.meta_data.is_nri;
     let selectedIndexResidentialStatus = 0;
     if (nri) {
