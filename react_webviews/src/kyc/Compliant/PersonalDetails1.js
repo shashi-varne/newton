@@ -37,6 +37,7 @@ const PersonalDetails1 = (props) => {
   const { productName } = useMemo(() => {
     return getConfig();
   }, []);
+  const TRADING_ENABLED = useMemo(() => isTradingEnabled(kyc));
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -84,7 +85,7 @@ const PersonalDetails1 = (props) => {
         identification: userkycDetails.identification.meta_data,
       },
     };
-    if(!isNri && kyc.kyc_product_type !== "equity") {
+    if(!isNri && TRADING_ENABLED && kyc.kyc_product_type !== "equity") {
       item.set_kyc_product_type = "equity";
     } else if(isNri && kyc.kyc_product_type === "equity") {
       item.set_kyc_product_type = "mf";
