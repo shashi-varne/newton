@@ -11,6 +11,7 @@ import { getConfig, navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import "./commonStyles.scss";
 import { nativeCallback } from "../../utils/native_callback";
+import { isTradingEnabled } from "../../utils/functions";
 
 const ADDRESS_DOC_SELECTED_MAPPER = {
   "DL": "driving_licence",
