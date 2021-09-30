@@ -72,14 +72,9 @@ const FundDetails = lazy(() => import(
 const Whatsapp = lazy(() => import(
   /*webpackChunkName: "Whatsapp"*/ './whatsapp'
 ));
-const Landing = lazy(() =>
-  new Promise(resolve =>
-    setTimeout(
-      () => resolve(import(/*webpackChunkName: "Landing"*/ './dashboard')),
-      40000
-    )
-  )
-);
+const Landing = lazy(() => import(
+  /*webpackChunkName: "Landing"*/ './dashboard'
+));
 const FeedBack = lazy(() => import(
   /*webpackChunkName: "FeedBack"*/ './feedback'
 ));
