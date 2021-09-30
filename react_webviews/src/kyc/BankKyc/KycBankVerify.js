@@ -47,6 +47,7 @@ const KycBankVerify = (props) => {
   const navigate = navigateFunc.bind(props);
   const [dl_flow, setDlFlow] = useState(false);
   const {kyc, isLoading, updateKyc} = useUserKycHook();
+  const [tradingEnabled, setTradingEnabled] = useState(null);
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -59,8 +60,10 @@ const KycBankVerify = (props) => {
       setDlFlow(true);
     }
     setBankData({ ...kyc.bank.meta_data });
-
-    if (isPartnerBank && !isPartnerEquityEnabled) {
+    
+    const TRADING_ENABLED = useMemo(() => isTradingEnabled(kyc));
+    setTradingEnabled(TRADING_ENABLED);
+    if (TRADING_ENABLED && isPartnerBank && !isPartnerEquityEnabled) {
       setInfoContent(NON_EQUITY_PARTNER_INFO);
     }
   };
@@ -315,7 +318,7 @@ const KycBankVerify = (props) => {
     if (storageService().get("bankEntryPoint") === "uploadDocuments") {
       redirectToUploadProgress();
     } else {
-      if (isTradingEnabled()) {
+      if (tradingEnabled) {
         handleOtherPlatformNavigation();
       } else {
         handleSdkNavigation();
