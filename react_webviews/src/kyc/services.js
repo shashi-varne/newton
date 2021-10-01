@@ -482,7 +482,7 @@ export function getDocuments(userKyc) {
     documents.splice(3, 1);
   }
 
-  if (!isTradingEnabled(userKyc)) {
+  if (!isTradingEnabled(userKyc) || userKyc.kyc_product_type === "mf") {
     documents = documents.map((document) => {
       if (document.key === "selfie") {
         document.doc_status = userKyc.identification.doc_status
