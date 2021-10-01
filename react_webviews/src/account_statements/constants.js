@@ -56,7 +56,7 @@ export const ACCOUNT_STATEMENT_OPTIONS = [
           dateType: 'from',
           paramName: 'dt_start',
           fieldProps: {
-            label: 'Enter date you want statement from'
+            label: 'Enter date you want statement from (DD/MM/YYYY)'
           }
         },
         {
@@ -64,7 +64,7 @@ export const ACCOUNT_STATEMENT_OPTIONS = [
           dateType: 'to',
           paramName: 'dt_end',
           fieldProps: {
-            label: 'Enter date you want statement till'
+            label: 'Enter date you want statement till (DD/MM/YYYY)'
           }
         },
       ]
@@ -88,7 +88,7 @@ export const ACCOUNT_STATEMENT_OPTIONS = [
           dateType: 'from',
           paramName: 'dt_start',
           fieldProps: {
-            label: 'Enter date you want statement from'
+            label: 'Enter date you want statement from (DD/MM/YYYY)'
           }
         },
         {
@@ -96,7 +96,7 @@ export const ACCOUNT_STATEMENT_OPTIONS = [
           dateType: 'to',
           paramName: 'dt_end',
           fieldProps: {
-            label: 'Enter date you want statement till'
+            label: 'Enter date you want statement till (DD/MM/YYYY)'
           }
         },
       ]
@@ -120,7 +120,7 @@ export const ACCOUNT_STATEMENT_OPTIONS = [
           dateType: 'from',
           paramName: 'dt_start',
           fieldProps: {
-            label: 'Enter date you want statement from'
+            label: 'Enter date you want statement from (DD/MM/YYYY)'
           }
         },
         {
@@ -128,7 +128,7 @@ export const ACCOUNT_STATEMENT_OPTIONS = [
           dateType: 'to',
           paramName: 'dt_end',
           fieldProps: {
-            label: 'Enter date you want statement till'
+            label: 'Enter date you want statement till (DD/MM/YYYY)'
           }
         },
       ]
@@ -175,7 +175,7 @@ export const ACCOUNT_STATEMENT_OPTIONS = [
           dateType: 'from',
           paramName: 'dt_start',
           fieldProps: {
-            label: 'Enter date you want statement from',
+            label: 'Enter date you want statement from (DD/MM/YYYY)',
             disabled: true
           }
         },
@@ -184,7 +184,7 @@ export const ACCOUNT_STATEMENT_OPTIONS = [
           dateType: 'to',
           paramName: 'dt_end',
           fieldProps: {
-            label: 'Enter date you want statement till',
+            label: 'Enter date you want statement till (DD/MM/YYYY)',
             disabled: true
           }
         },

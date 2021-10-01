@@ -4,7 +4,7 @@ import isEmpty from "lodash/isEmpty";
 export const getStatement = async (reportType, params) => {
   try {
     const res = await Api.post(
-      `/api/equity/api/eqm/get/broking/reports/${reportType}_statement`,
+      `/api/equity/get/broking/reports/${reportType}_statement`,
       params
     );
 

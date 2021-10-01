@@ -43,6 +43,11 @@ export default function GenerateStatement(props) {
       </div>
     );
   }, [selectedRadioOption, errorObj]);
+  useEffect(() => {
+    if (pageObj.type === 'profit_loss') {
+      setSelectedRadioOption('cash');
+    }
+  }, []);
 
   const handleRadioChange = (event) => {
     if (!event.target.value) return;
@@ -60,7 +65,7 @@ export default function GenerateStatement(props) {
         <DropDownNew
           parent={props}
           header_title={title || "Select Financial Year"}
-          label={title || "Select Year"}
+          label={title || "Select Financial Year"}
           selectedIndex={0}
           value={selectedFinYear}
           id="fin-year"
