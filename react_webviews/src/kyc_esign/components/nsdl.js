@@ -81,7 +81,7 @@ class DigiStatus extends Component {
     if (this.state.set2faPin) {
       // Handles behaviour for both web as well as native
       openModule('account/setup_2fa', this.props, { routeUrlParams: '/kyc-complete' });
-      if (config.isNative) {
+      if (config.isNative && config.app === "android") {
         nativeCallback({ action: 'exit_web' });
       }
       return;
