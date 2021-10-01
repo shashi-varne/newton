@@ -31,7 +31,7 @@ const AddressDetails1 = (props) => {
   const {kyc, isLoading} = useUserKycHook();
   const [title, setTitle] = useState("");
   const [tradingEnabled, setTradingEnabled] = useState(null);
-  const { productName } = useMemo(() => getConfig());
+  const { productName } = useMemo(() => getConfig(), []);
 
   const RESIDENTIAL_OPTIONS = [
     {
