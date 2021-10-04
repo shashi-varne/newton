@@ -11,6 +11,11 @@
 
   .esign-steps .doc {
     margin-bottom: 30px;
+
+    .doc-icon {
+      width: 54px !important;
+      height: 54px !important;
+    }
   }
 
   .esign-steps .doc .doc-name {
@@ -55,12 +60,14 @@
     min-width: 314px;
     max-width: 100%;
     margin: 30px auto 20px auto;
+    min-height: 120px;
   }
 
   .body-text1 {
     font-size: 13px;
     line-height: 22px;
     color: #8d879b;
+    font-weight: 400;
   }
 
   .body-text2 {

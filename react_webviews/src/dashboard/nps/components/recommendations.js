@@ -255,7 +255,7 @@ class Recommendations extends Component {
   };
 
   handleClick = async () => {
-    let { pran, pension_house, recommendations, amount, partnerCode } = this.state;
+    let { pran, pension_house, recommendations, amount, partnerCode, display_summary_only } = this.state;
 
     let data = {
       amount: this.state.amount,
@@ -273,7 +273,8 @@ class Recommendations extends Component {
       data.pran = pran;
     }
 
-    let result = await this.getInvestmentData(data, true);
+    const errorType = display_summary_only ? "onload" : "submit";
+    let result =  await this.getInvestmentData(data, true, errorType);
 
     if (result) {
       if(partnerCode) {

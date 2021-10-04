@@ -3,7 +3,7 @@ import Container from "../common/Container";
 import { SUPPORTED_IMAGE_TYPES, VERIFICATION_DOC_OPTIONS } from "../constants";
 import { uploadBankDocuments } from "../common/api";
 import { getUrlParams, isEmpty } from "utils/validators";
-import { checkDLPanFetchAndApprovedStatus, getFlow, isDigilockerFlow, isEquityCompleted } from "../common/functions";
+import { checkDLPanFetchAndApprovedStatus, getFlow, isDigilockerFlow } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
 import { getConfig, isTradingEnabled, navigate as navigateFunc, isNewIframeDesktopLayout } from "../../utils/functions";
@@ -17,6 +17,7 @@ import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 import { isReadyToInvest } from "../services";
+import { storageService } from "../../utils/validators";
 
 const INIT_BOTTOMSHEET_TEXT = "We've added your bank account details. The verification is in progress, meanwhile you can continue with KYC."
 
@@ -69,8 +70,8 @@ const KycUploadDocuments = (props) => {
     const tradeFlow = isTradingEnabled(kyc)
     setTradingEnabled(tradeFlow);
 
-    if ((!tradeFlow && isReadyToInvest()) || (tradeFlow && isEquityCompleted())) {
-      setBottomSheetText("We've added your bank account details. The verification is in progress.")
+    if (isReadyToInvest()) {
+      setBottomSheetText("We’ve added your bank account details. The verification is in progress.")
       setBottomSheetCtaText("OKAY");
     }
   }
@@ -139,12 +140,17 @@ const KycUploadDocuments = (props) => {
   };
 
   const handleOtherPlatformNavigation = () => {
+    const nextStep = kyc.show_equity_charges_page ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
     sendEvents('next', 'bank_verification_pending');
     if (additional) {
       navigate("/kyc/add-bank");
     } else if (userType === "compliant") {
       if (isEdit || kyc.address.meta_data.is_nri) navigate(PATHNAME_MAPPER.journey);
-      else navigate(PATHNAME_MAPPER.tradingExperience)
+      else navigate(nextStep, {
+        state: {
+          goBack: PATHNAME_MAPPER.journey
+        }
+      })
     } else {
       if (dlFlow) {
         const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
@@ -154,7 +160,11 @@ const KycUploadDocuments = (props) => {
           });
         } else {
           if (kyc.equity_sign_status !== 'signed') {
-            navigate(PATHNAME_MAPPER.tradingExperience);
+            navigate(nextStep, {
+              state: {
+                goBack: PATHNAME_MAPPER.journey
+              }
+            });
           } else {
             navigate(PATHNAME_MAPPER.journey);
           }
@@ -204,10 +214,15 @@ const KycUploadDocuments = (props) => {
   };
 
   const proceed = () => {
-    if (tradingEnabled) {
-      handleOtherPlatformNavigation();
+    if (storageService().get("bankEntryPoint") === "uploadDocuments") {
+      storageService().remove("bankEntryPoint");
+      navigate(PATHNAME_MAPPER.uploadProgress);
     } else {
-      handleSdkNavigation();
+      if (tradingEnabled) {
+        handleOtherPlatformNavigation();
+      } else {
+        handleSdkNavigation();
+      }
     }
   };
 
@@ -216,7 +231,10 @@ const KycUploadDocuments = (props) => {
   };
 
   const goBackToPath = () => {
-    if (goBackPath) {
+    if (storageService().get("bankEntryPoint") === "uploadDocuments") {
+      storageService().remove("bankEntryPoint");
+      navigate(PATHNAME_MAPPER.uploadProgress);
+    } else if (goBackPath) {
       navigate(goBackPath);
     } else if (additional) {
       navigate(PATHNAME_MAPPER.bankList);
@@ -289,7 +307,7 @@ const KycUploadDocuments = (props) => {
         <main data-aid='kyc-upload-documents'>
           <div className="doc-title" data-aid='kyc-doc-title'>Select document for verification</div>
           <div className="subtitle" data-aid='kyc-subtitle'>
-            Make sure your name, account number and IFSC code is clearly visible in the document
+            Make sure your name, account number and IFSC code are clearly visible in the document
           </div>
           <div className="kyc-upload-doc-options" data-aid='kyc-upload-doc-options'>
             {VERIFICATION_DOC_OPTIONS.map((data, index) => {

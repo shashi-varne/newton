@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useMemo } from "react";
+import { getConfig } from "../../../utils/functions";
+import { Imgc } from "../../../common/ui/Imgc";
 import Container from "../../common/Container";
 import "./commonStyles.scss";
 
@@ -32,6 +34,9 @@ const instructionsMapper = {
   },
 };
 const UploadInstructions = (props) => {
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
   const state = props.location.state || {};
   const data = instructionsMapper[state.document] || instructionsMapper["pan"];
   const goBack = () => {
@@ -43,15 +48,15 @@ const UploadInstructions = (props) => {
         return (
           <div key={index} className="stocks-pan-instructions">
             <div className="spi-text" data-aid={`spi-text-${index}`}>{data.text}</div>
-            <img
+            <Imgc
               alt=""
-              className="left-img"
-              src={require(`assets/pan_sample_right.svg`)}
+              src={require(`assets/${productName}/pan_sample_right.svg`)}
+              className="spi-img"
             />
-            <img
+            <Imgc
               alt=""
-              className="left-img"
-              src={require(`assets/${data.wrong_icon}`)}
+              src={require(`assets/${productName}/${data.wrong_icon}`)}
+              className="spi-img"
             />
           </div>
         );

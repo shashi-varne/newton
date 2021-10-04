@@ -2,6 +2,8 @@
 /*  Module: callbackWeb
 /*  Apis for sending/receiving `native` callbacks
 /* -----------------------------------------------------------------*/
+import { EVENT_MANAGER_CONSTANTS } from './constants';
+import eventManager from './eventManager';
 import { isMobile } from './functions';
 import { getConfig } from './functions';
 
@@ -337,14 +339,14 @@ import { getConfig } from './functions';
     var json_data = {};
     if (data_json_str !== "" && typeof data_json_str === "string") {
       json_data = JSON.parse(data_json_str);
-    } else {
+    } else if (typeof data_json_str === "object") {
       json_data = data_json_str;
     }
     set_session_storage("currentUser", true);
     set_session_storage('is_secure', true);
     set_session_storage("dataSettedInsideBoot", true);
 
-    if (json_data.partner) {
+    if (json_data?.partner) {
       if (json_data.partner === "bfdl") {
         set_session_storage("partner", "bfdlmobile");
       } else if (json_data.partner === "obcweb") {
@@ -352,13 +354,14 @@ import { getConfig } from './functions';
       } else {
         set_session_storage("partner", json_data.partner);
       }
+      eventManager.emit(EVENT_MANAGER_CONSTANTS.updateAppTheme);
     }
 
-    if (json_data.sdk_capabilities) {
+    if (json_data?.sdk_capabilities) {
       set_session_storage("sdk_capabilities", json_data.sdk_capabilities);
     }
 
-    if (json_data.user_data) {
+    if (json_data?.user_data) {
       set_session_storage("user", json_data.user_data.user);
       set_session_storage("kyc", json_data.user_data.kyc);
       set_session_storage("banklist", json_data.user_data.bank_list);
@@ -372,6 +375,7 @@ import { getConfig } from './functions';
         } else {
           set_session_storage("partner", partner);
         }
+        eventManager.emit(EVENT_MANAGER_CONSTANTS.updateAppTheme);
       }
     }
   }

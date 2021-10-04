@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Container from "../common/Container";
 import Input from "../../common/ui/Input";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
@@ -7,7 +7,7 @@ import {
   MARITAL_STATUS_OPTIONS,
   PATHNAME_MAPPER,
 } from "../constants";
-import { validateAlphabets, isEmpty} from "utils/validators";
+import { validateName, isEmpty} from "utils/validators";
 import {
   validateFields,
   compareObjects,
@@ -21,7 +21,6 @@ import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
 import { getConfig } from "../../utils/functions";
 
-const productName = getConfig().productName;
 const PersonalDetails1 = (props) => {
   const navigate = navigateFunc.bind(props);
   const [showLoader, setShowLoader] = useState(false);
@@ -31,10 +30,13 @@ const PersonalDetails1 = (props) => {
   const [totalPages, setTotalPages] = useState();
 
   const { kyc, user, isLoading } = useUserKycHook();
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
 
-  let title = "Personal details";
+  let title = "Personal information";
   if (isEdit) {
-    title = "Edit personal details";
+    title = "Edit personal information";
   }
 
   useEffect(() => {
@@ -135,7 +137,7 @@ const PersonalDetails1 = (props) => {
 
   const handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
-    if (value && name.includes("name") && !validateAlphabets(value)) return;
+    if (value && name.includes("name") && !validateName(value)) return;
     let formData = { ...form_data };
     if (name === "marital_status")
       formData[name] = MARITAL_STATUS_OPTIONS[value].value;
@@ -189,7 +191,7 @@ const PersonalDetails1 = (props) => {
     >
       <div className="kyc-personal-details" data-aid='kyc-personal-details-page'>
         <div className="kyc-main-subtitle" data-aid='kyc-main-subtitle-text'>
-          Enter the details below for further verification
+          Enter the details to become investment ready
         </div>
         <main data-aid='kyc-personal-details'>
           <Input
@@ -199,7 +201,6 @@ const PersonalDetails1 = (props) => {
             error={form_data.name_error ? true : false}
             helperText={form_data.name_error || ""}
             onChange={handleChange("name")}
-            maxLength={20}
             type="text"
             disabled={showLoader || !!kyc?.pan?.meta_data.name}
           />
@@ -210,7 +211,6 @@ const PersonalDetails1 = (props) => {
             error={form_data.father_name_error ? true : false}
             helperText={form_data.father_name_error || ""}
             onChange={handleChange("father_name")}
-            maxLength={20}
             type="text"
             disabled={showLoader || (!!kyc?.pan?.meta_data.father_name && kyc?.pan?.meta_data_status === "approved")}
           />

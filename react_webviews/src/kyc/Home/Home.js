@@ -52,7 +52,7 @@ const Home = (props) => {
   const [disableResidentialStatus, setDisableResidentialStatus] = useState();
 
   const isTradingEnabled = (isIndian) => {
-    return !config.isSdk && isIndian
+    return !config.isSdk && kyc.equity_enabled && isIndian
   }
   // const [navigateTo, setNavigateTo] = useState('');
   // const [x,setX] = useState(false);
@@ -71,14 +71,14 @@ const Home = (props) => {
   const initialize = () => {
     setPan(kyc.pan?.meta_data?.pan_number || "");
     setResidentialStatus(!kyc.address?.meta_data?.is_nri);
-    setTradingEnabled(isTradingEnabled(!kyc.address?.meta_data?.is_nri));
+    const TRADING_ENABLED = isTradingEnabled(!kyc.address?.meta_data?.is_nri);
+    setTradingEnabled(TRADING_ENABLED);
     setDisableResidentialStatus(!!kyc.identification.meta_data.tax_status)
     let data = {
       investType: "mutual fund",
       npsDetailsRequired: false,
-      title: "Verify PAN",
-      subtitle:
-        "As per SEBI, valid PAN is mandatory to open a trading & demat account",
+      title: "Enter PAN to check KYC status",
+      subtitle: TRADING_ENABLED ? "As per SEBI, KYC is mandatory for investments in stocks & mutual funds" : "As per SEBI, valid PAN is required to invest in mutual funds",
       kycConfirmPanScreen: false,
     };
     if(isEmpty(savedPan)){
@@ -336,13 +336,23 @@ const Home = (props) => {
 
       let result = await kycSubmit(body);
       if (!result) return;
+      const payload = { kyc: {} };
+      let callKycSubmitApi = false;
+      if (result.kyc.kyc_product_type !== "equity" && result.kyc.equity_enabled && !config.isSdk) {
+        payload.set_kyc_product_type = "equity";
+        callKycSubmitApi = true;
+      }
       if (result?.kyc?.kyc_status === "compliant") {
         setIsUserCompliant(true);
-        if(result?.kyc?.kyc_type !== "init") {
-          result = await kycSubmit({ kyc: {}, set_kyc_type: "init"})
+        if (result?.kyc?.kyc_type !== "init") {
+          payload.set_kyc_type = "init";
+          callKycSubmitApi = true;
         }
       } else {
         setIsUserCompliant(false);
+      }
+      if (callKycSubmitApi) {
+        result = await kycSubmit(payload);
       }
       handleNavigation(is_nri, result.kyc);
     } catch (err) {
@@ -384,7 +394,7 @@ const Home = (props) => {
             });
           }
         } else {
-          if (kycDetails?.application_status_v2 !== "init" && kycDetails?.kyc_type === "manual") {
+          if (kycDetails?.kyc_type === "manual") {
             navigate(`${PATHNAME_MAPPER.journey}`, {
               searchParams: `${config.searchParams}&show_aadhaar=false`,
             });
@@ -455,7 +465,7 @@ const Home = (props) => {
           <div className="kyc-main-subtitle" data-aid='kyc-main-subtitle'>{homeData.subtitle}</div>
           <main data-aid='kyc-home'>
             <Input
-              label="Enter PAN"
+              label="Enter your PAN"
               class="input"
               value={pan.toUpperCase()}
               error={panError ? true : false}

@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Container from "../common/Container";
 import Input from "../../common/ui/Input";
 import { PATHNAME_MAPPER } from "../constants";
-import { isEmpty, validateAlphabets } from "../../utils/validators";
+import { isEmpty, validateName } from "../../utils/validators";
 import {
   validateFields,
   compareObjects,
   getTotalPagesInPersonalDetails,
   getFlow,
+  getUpgradeAccountFlowNextStep,
 } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
@@ -16,17 +17,21 @@ import useUserKycHook from "../common/hooks/userKycHook";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 
-const productName = getConfig().productName;
 const PersonalDetails2 = (props) => {
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
-  const isEdit = props.location.state?.isEdit || false;
   const [oldState, setOldState] = useState({});
   const [totalPages, setTotalPages] = useState();
-  let title = "Personal details";
+  const stateParams = props?.location?.state || {};
+  const isEdit = stateParams.isEdit || false;
+  const isUpgradeFlow = stateParams.flow === "upgradeAccount";
+  let title = "Personal information";
   if (isEdit) {
-    title = "Edit personal details";
+    title = "Edit personal information";
   }
 
   const {kyc, user, isLoading} = useUserKycHook();
@@ -47,6 +52,19 @@ const PersonalDetails2 = (props) => {
     setTotalPages(getTotalPagesInPersonalDetails(isEdit))
   };
 
+  const handleNavigation = () => {
+    if (isUpgradeFlow) {
+      const pathName = getUpgradeAccountFlowNextStep(kyc);
+      navigate(pathName);
+    } else {
+      navigate(PATHNAME_MAPPER.personalDetails3, {
+        state: {
+          isEdit: isEdit,
+        },
+      });
+    }
+  }
+
   const handleClick = () => {
     sendEvents("next");
     let keysToCheck = ["mother_name", "father_name"];
@@ -65,11 +83,7 @@ const PersonalDetails2 = (props) => {
         form_data.spouse_name;
 
     if (compareObjects(keysToCheck, oldState, form_data)) {
-      navigate(PATHNAME_MAPPER.personalDetails3, {
-        state: {
-          isEdit: isEdit,
-        },
-      });
+      handleNavigation();
       return;
     }
     savePersonalDetails2(userkycDetails);
@@ -86,11 +100,7 @@ const PersonalDetails2 = (props) => {
       };
       const submitResult = await kycSubmit(item);
       if (!submitResult) return;
-      navigate(PATHNAME_MAPPER.personalDetails3, {
-        state: {
-          isEdit: isEdit,
-        },
-      });
+      handleNavigation();
     } catch (err) {
       console.log(err);
       toast(err.message);
@@ -101,7 +111,7 @@ const PersonalDetails2 = (props) => {
 
   const handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
-    if (!validateAlphabets(value) && value) return;
+    if (value && !validateName(value)) return;
     let formData = { ...form_data };
     formData[name] = value;
     if (!value) formData[`${name}_error`] = "This is required";
@@ -137,9 +147,9 @@ const PersonalDetails2 = (props) => {
       skelton={isLoading}
       showLoader={isApiRunning}
       title={title}
-      count="2"
+      count={!isUpgradeFlow && 2}
       current="2"
-      total={totalPages}
+      total={!isUpgradeFlow && totalPages}
       iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-personal-details-screen-2'
     >
@@ -152,7 +162,6 @@ const PersonalDetails2 = (props) => {
             error={form_data.father_name_error ? true : false}
             helperText={form_data.father_name_error || ""}
             onChange={handleChange("father_name")}
-            maxLength={20}
             type="text"
             disabled={isApiRunning || (!!kyc?.pan?.meta_data.father_name && kyc?.pan?.meta_data_status === "approved")}
           />

@@ -10,7 +10,7 @@ import {
 } from "../../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../../common/hooks/userKycHook";
-import { isEmpty, validateNumber } from "../../../utils/validators";
+import { isEmpty, validateName, validateNumber } from "../../../utils/validators";
 import { getConfig } from "utils/functions";
 import "../commonStyles.scss";
 import { nativeCallback } from "../../../utils/native_callback";
@@ -114,9 +114,16 @@ const NRIAddressDetails2 = (props) => {
   };
 
   const handleChange = (event) => {
-    const name = event.target.name;
-    const value = event.target.value;
+    const target = event.target;
+    const name = target.name;
+    const value = target.value;
+    const maxLength = target.maxLength;
+    const validateNameFields = ["city", "state", "country"];
+    const validateStartingSpaceFields = ["addressline", "tin_number"]
     if (value && name === "nri_pincode" && !validateNumber(value)) return;
+    if(value && maxLength && value.length > maxLength) return;
+    if(value && validateNameFields.includes(name) && !validateName(value)) return;
+    if(value && validateStartingSpaceFields.includes(name) && value.indexOf(" ") === 0) return;
     let formData = { ...form_data };
     formData[name] = value;
     if (!value && name !== "tin_number") {
@@ -130,7 +137,7 @@ const NRIAddressDetails2 = (props) => {
 
   if (kyc?.address?.meta_data?.is_nri) {
     if (isEdit) {
-      title = "Edit Foreign address details";
+      title = "Edit foreign address details";
     } else {
       title = "Foreign address details";
     }
@@ -211,7 +218,8 @@ const NRIAddressDetails2 = (props) => {
             helperText={form_data.nri_pincode_error || ""}
             error={form_data.nri_pincode_error ? true : false}
             inputProps={{
-              inputMode: "numeric"
+              inputMode: "numeric",
+              maxLength: 10
             }}
           />
           <TextField
@@ -223,6 +231,9 @@ const NRIAddressDetails2 = (props) => {
             onChange={handleChange}
             margin="normal"
             multiline
+            inputProps={{
+              maxLength: 150
+            }}
           />
           <TextField
             label="City"
@@ -232,6 +243,9 @@ const NRIAddressDetails2 = (props) => {
             error={form_data.city_error ? true : false}
             margin="normal"
             onChange={handleChange}
+            inputProps={{
+              maxLength: 30
+            }}
           />
           <TextField
             label="State"
@@ -241,6 +255,9 @@ const NRIAddressDetails2 = (props) => {
             error={form_data.state_error ? true : false}
             margin="normal"
             onChange={handleChange}
+            inputProps={{
+              maxLength: 30
+            }}
           />
           <TextField
             label="Country"
@@ -250,6 +267,9 @@ const NRIAddressDetails2 = (props) => {
             error={form_data.country_error ? true : false}
             margin="normal"
             onChange={handleChange}
+            inputProps={{
+              maxLength: 30
+            }}
           />
           <TextField
             label="Taxpayer Identification Number (optional)"

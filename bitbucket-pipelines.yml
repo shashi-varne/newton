@@ -31,7 +31,7 @@ definitions:
             variables:
               KEY_FILE: $KEY_FILE
               PROJECT: 'plutus-admin'
-              BUCKET: 'plutus-webview'
+              BUCKET: 'plutus-webapp'
               SOURCE: '$BITBUCKET_COMMIT'
 
     - step: &master-deploy
@@ -55,8 +55,39 @@ definitions:
             variables:
               KEY_FILE: $KEY_FILE
               PROJECT: 'plutus-admin'
-              BUCKET: 'plutus-webview'
+              BUCKET: 'plutus-webapp'
               SOURCE: $BITBUCKET_BRANCH
+
+    - step: &prod-deploy
+        name: Production deploy
+        size: 2x
+        # caches:
+        #   - nodemodules
+        script:
+          - export HTTP_ADDR=app.fisdom.com
+          - export HTTP_PORT=3000
+          - echo "127.0.0.1 $HTTP_ADDR" >> /etc/hosts
+          - apt-get update
+          - apt-get install -y curl
+          - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+          - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+          - apt-get install yarn && echo "Y"
+          - yarn set version 1.21.1
+          - npm config set strict-ssl false;
+          - cd react_webviews
+          - yarn
+          - unset CI
+          - yarn build
+          - ls
+          - cd build
+          - pipe: atlassian/google-cloud-storage-deploy:0.4.5
+            variables:
+              KEY_FILE: $KEY_FILE
+              PROJECT: 'plutus-sites'
+              BUCKET: 'plutus-sites-${BITBUCKET_DEPLOYMENT_ENVIRONMENT}-tf-apps'
+              SOURCE: '.'
+              CACHE_CONTROL: 'max-age=0'
+              EXTRA_ARGS: '-Z'
 
 pipelines:
   custom:
@@ -66,12 +97,41 @@ pipelines:
           name: Pipeline-on-demand deploy
 
   branches:
+    # master:
+    #   - step:
+    #       <<: *master-deploy
+    #       name: Master deploy
+
     master:
       - step:
-          <<: *master-deploy
-          name: Master deploy
+          name: Ready Steady Go....
+          script:
+            - echo "Go ahead and deploy now... :)"
+
+      - parallel:
+        - step:
+            <<: *prod-deploy
+            name: Fisdom Production deploy
+            trigger: manual
+            deployment: fisdom-prod
+
+        - step:
+            <<: *prod-deploy
+            name: Finity Production deploy
+            trigger: manual
+            deployment: finity-prod
+      
+      # - step:
+      #     <<: *prod-deploy
+      #     name: Production deploy
+      #     trigger: manual
+      #     deployment: fisdom-preprod
     
     bitbucket-pipeline:
       - step:
           <<: *master-deploy
           name: Master deploy
+
+# definitions:
+#   caches:
+#     nodemodules: react_webviews/node_modules

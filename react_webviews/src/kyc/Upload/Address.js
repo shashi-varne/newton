@@ -13,10 +13,9 @@ import { isEmpty } from 'lodash';
 import "./commonStyles.scss";
 import { nativeCallback } from '../../utils/native_callback'
 
-const config = getConfig();
-const productName = config.productName
-
 const AddressUpload = (props) => {
+  const config = getConfig();
+  const productName = config.productName
   const navigate = navigateFunc.bind(props)
   const stateParams = props?.location?.state || {}
   const isMyAccountFlow = stateParams.flow === "myAccount";
@@ -29,6 +28,7 @@ const AddressUpload = (props) => {
   const [file, setFile] = useState(null)
   const [state, setState] = useState({})
   const {kyc, isLoading, updateKyc} = useUserKycHook();
+  const goBackPath = props.location?.state?.goBack || "";
 
   const onFileSelectComplete = (type) => (file, fileBase64) => {
     sendEvents('get_image', 'gallery', type);
@@ -79,18 +79,26 @@ const AddressUpload = (props) => {
         })
       }
       updateKyc(result.kyc)
-      if(isMyAccountFlow) {
-        toast("Address changed successfully");
-        navigate("/my-account");
-      } else {
-        navigate(PATHNAME_MAPPER.uploadProgress)
-      }
+      handleNavigation();
     } catch (err) {
       console.error(err)
       toast(err?.message)
     } finally {
       console.log('uploaded')
       setIsApiRunning(false)
+    }
+  }
+
+  const handleNavigation = () => {
+    if (goBackPath) {
+      navigate(goBackPath);
+    } else {
+      if(isMyAccountFlow) {
+        toast("Address changed successfully");
+        navigate("/my-account");
+      } else {
+        navigate(PATHNAME_MAPPER.uploadProgress)
+      }
     }
   }
 
@@ -146,6 +154,7 @@ const AddressUpload = (props) => {
     navigate("/kyc/address-details1", {
       state: {
         backToJourney: true,
+        isEdit: true
       },
     });
   };

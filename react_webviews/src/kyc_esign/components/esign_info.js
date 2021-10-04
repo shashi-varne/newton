@@ -15,6 +15,8 @@ import done_img_finity from  'assets/finity/ic_esign_done_finity.svg';
 import otp_img_fisdom from 'assets/fisdom/ic_verify_otp_fisdom.svg';
 import esign_otp_img_fisdom from 'assets/fisdom/ic_esign_otp_fisdom.svg';
 import done_img_fisdom from  'assets/fisdom/ic_esign_done_fisdom.svg';
+import { landingEntryPoints } from '../../utils/constants';
+import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from '../../kyc/constants';
 
 
 
@@ -54,7 +56,23 @@ class ESignInfo extends Component {
 
   confirm = () => {
     const navigate = navigateFunc.bind(this.props);
-    navigate('/kyc/journey');
+    const stateParams = this.props?.location?.state;
+    const { goBack: goBackPath, fromState }  = stateParams || {};
+    const fromWebModuleEntry = fromState === "/kyc/web";
+
+    if (!getConfig().Web) {
+      if (storageService().get('native') && (goBackPath === "exit")) {
+        nativeCallback({ action: "exit_web" })
+      } else {
+        navigate(PATHNAME_MAPPER.journey);
+      }
+    } else {
+      if (landingEntryPoints.includes(fromState) || fromWebModuleEntry) {
+        navigate("/")
+      } else {
+        navigate(PATHNAME_MAPPER.journey);
+      }
+    }
   }
 
   cancel = () => {
@@ -76,7 +94,7 @@ class ESignInfo extends Component {
     const redirectUrl = encodeURIComponent(
       basepath + '/kyc-esign/nsdl' + config.searchParams
     );
-
+    const backUrl = `${basepath}/kyc-esign/info${config.searchParams}&is_secure=${config.isSdk}`;
     this.setState({ show_loader: "button" });
 
     try {
@@ -88,40 +106,67 @@ class ESignInfo extends Component {
       let res = await Api.get(url, params);
       let resultData = res.pfwresponse.result;
       if (resultData && !resultData.error) {
-        if (config.app === 'ios') {
+        if (!config.Web && storageService().get(STORAGE_CONSTANTS.NATIVE)) {
+          if (config.app === 'ios') {
+            nativeCallback({
+              action: 'show_top_bar', 
+              message: {
+                title: 'eSign KYC'
+              }
+            });
+          }
           nativeCallback({
-            action: 'show_top_bar', message: {
-              title: 'eSign KYC'
+            action: 'take_back_button_control', 
+            message: {
+              url: backUrl,
+              message: 'You are almost there, do you really want to go back?'
             }
           });
-        }
-        nativeCallback({
-          action: 'take_back_button_control', message: {
-            back_text: 'You are almost there, do you really want to go back?'
+        } else if (!config.Web) {
+          const redirectData = {
+            show_toolbar: false,
+            icon: "back",
+            dialog: {
+              message: "You are almost there, do you really want to go back?",
+              action: [
+                {
+                  action_name: "positive",
+                  action_text: "Yes",
+                  action_type: "redirect",
+                  redirect_url: encodeURIComponent(backUrl),
+                },
+                {
+                  action_name: "negative",
+                  action_text: "No",
+                  action_type: "cancel",
+                  redirect_url: "",
+                },
+              ],
+            },
+            data: {
+              type: "server",
+            },
+          };
+          if (config.app === 'ios') {
+            redirectData.show_toolbar = true;
           }
-        });
+          nativeCallback({ action: "third_party_redirect", message: redirectData });
+        }
+        this.setState({ show_loader: "page" })
         window.location.href = resultData.esign_link;
       } else {
         if (resultData && resultData.error === "all documents are not submitted") {
           toast("Document pending, redirecting to kyc");
           setTimeout(() => {
-            if (this.state.dl_flow) {
-              this.navigate('/kyc/journey', {
-                state: {
-                  show_aadhaar: true,
-                }
-              });
-            } else {
-              this.navigate('/kyc/journey');
-            }
+            this.navigate('/kyc/journey');
           }, 3000)
         } else {
           toast(resultData.error ||
             resultData.message || 'Something went wrong', 'error');
         }
+        this.setState({ show_loader: false });
       }
 
-      this.setState({ show_loader: false });
     } catch (err) {
       this.setState({
         show_loader: false
@@ -169,7 +214,7 @@ class ESignInfo extends Component {
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={show_loader}
-        title='eSign KYC'
+        title='Complete eSign'
         handleClick={this.goNext}
         buttonTitle='PROCEED'
         headerData={headerData}
@@ -189,7 +234,7 @@ class ESignInfo extends Component {
         <div className="esign-desc" data-aid='esign-desc'>
           eSign is an online electronic signature service by UIDAI to facilitate <strong>Aadhaar holder to digitally sign</strong> documents.
         </div>
-        <div className="esign-subtitle" data-aid='esign-subtitle'>How to eSign documents</div>
+        <div className="esign-subtitle" data-aid='esign-subtitle'>How to eSign</div>
         <div className="esign-steps" data-aid='esign-steps'>
           <div className="step">
             <div className="icon-container">
@@ -212,7 +257,7 @@ class ESignInfo extends Component {
               <img src={getConfig().productName !== 'fisdom' ? done_img_finity :done_img_fisdom} alt="Esign Done icon" />
             </div>
             <div className="step-text" data-aid='step-text-3'>
-              3. e-Sign is successfully done
+              3. eSign is complete
                 </div>
           </div>
           <div className="esign-bottom" data-aid='esign-bottom'>

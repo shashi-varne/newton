@@ -12,7 +12,7 @@ const stepsData = [
   { title: "Stocks & IPO", status: "Under process" },
   { title: "Futures & Options", status: "Under process" }
 ]
-const initialSubtitleText = "Trading & demat A/c will be ready in 2 hours. Till then you can start investing in mutual funds";
+const initialSubtitleText = "Trading & demat A/c will be ready in 24 - 48 hours. Till then you can start investing in mutual funds";
 
 const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
   const [steps, setSteps] = useState(stepsData);
@@ -39,6 +39,15 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
       if (isReadyToInvestUser && kyc?.mf_kyc_processed) {
         setSteps((stepsArr) => stepsArr.filter((step) => step.title !== "Mutual fund"))
         setTradingSubtitleText("Trading & demat A/c will be ready in 2 hours")
+      }
+
+      if (isReadyToInvestUser && kyc.equity_investment_ready) {
+        setSteps((stepsArr) => stepsArr.map((step) => {
+          if (step.title === "Stocks & IPO" || (kyc.fno_active && step.title === "Futures & Options")) {
+            step.status = "Ready to invest"
+          }
+          return step;
+        }));
       }
     }
   }, [kyc]);

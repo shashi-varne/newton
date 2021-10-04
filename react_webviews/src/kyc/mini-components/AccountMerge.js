@@ -26,7 +26,7 @@ const AccountMerge = ({ isOpen, close, data, handleClick }) => {
             className="img"
           />
         </div>
-        <div className="subtitle" data-aid='account-merger-subtitle'>{data.subtitle}</div>
+        <div className="subtitle" data-aid='account-merger-subtitle'>{data.message}</div>
         <div className="action">
           <Button className="button no-bg" onClick={() => close()} data-aid='re-enter-pin-btn'>
             RE-ENTER PAN

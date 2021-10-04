@@ -90,7 +90,8 @@ class GroupHealthPlanPremiumSummary extends Component {
       });
 
       try{
-        let res = await Api.post(`api/insurancev2/api/insurance/health/quotation/upsert_quote/${this.state.providerConfig.provider_api}`, body );
+      const url = `api/insurancev2/api/insurance/health/quotation/upsert_quote/${this.state.providerConfig.provider_api}`;
+      let res = await Api.post(url , body );
       let resultData = res.pfwresponse.result;
       let quote_id = "";
       
@@ -202,7 +203,7 @@ class GroupHealthPlanPremiumSummary extends Component {
 
   async componentDidMount() {
     let groupHealthPlanData = this.state.groupHealthPlanData || {};
-    let group_health_landing = "/group-insurance/group-health/entry";
+    let group_health_landing = "/group-insurance/health/landing";
 
     if (!this.state.get_lead)  {
 	    if (!groupHealthPlanData.post_body) {
@@ -253,10 +254,8 @@ class GroupHealthPlanPremiumSummary extends Component {
           post_body['quotation_id'] = body.quotation_id;
         }
         //application creation
-        const res = await Api.post(
-          `api/insurancev2/api/insurance/proposal/${this.state.providerConfig.provider_api}/create_application`,
-          post_body
-        );
+        const url = `api/insurancev2/api/insurance/proposal/${this.state.providerConfig.provider_api}/create_application`;
+        const res = await Api.post(url, post_body);
 
         var resultData = res.pfwresponse.result;
         

@@ -90,13 +90,13 @@ class Answers extends Component {
 
       if (fromScreen === "categoryList" && Object.keys(this.state.faqs).length === 0) {
         this.setState({
-          sub_category_id: res.faq.cms_sub_category_id,
-          index: res.faq.sequence_no - 1,
+          sub_category_id: res?.faq?.cms_sub_category_id,
+          index: res?.faq?.sequence_no - 1,
         });
 
-        let result = await this.getAllfaqs(res.faq.cms_sub_category_id);
+        let result = await this.getAllfaqs(res?.faq?.cms_sub_category_id);
 
-        faqs[res.faq.cms_sub_category_id] = result.faqs;
+        faqs[res?.faq?.cms_sub_category_id] = result?.faqs || [];
 
         this.setState({
           faqs: faqs,
@@ -129,7 +129,7 @@ class Answers extends Component {
 
     let result = await this.getFaqDescription(faq_id);
 
-    faqDesc[faq_id] = result.faq;
+    faqDesc[faq_id] = result?.faq || [];
 
     this.setState({
       faqDesc: faqDesc,
@@ -160,7 +160,7 @@ class Answers extends Component {
 
     if (!faqDesc[faq_id]) {
       let result = await this.getFaqDescription(faq_id);
-      faqDesc[faq_id] = result.faq;
+      faqDesc[faq_id] = result?.faq || [];
 
       this.setState({
         faqDesc: faqDesc,

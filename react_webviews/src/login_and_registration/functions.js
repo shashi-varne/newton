@@ -6,6 +6,7 @@ import { isEmpty } from "../utils/validators";
 import { nativeCallback } from "../utils/native_callback";
 import Toast from "../common/ui/Toast";
 import { getBasePath } from "../utils/functions";
+import { setSummaryData } from "../kyc/services";
 
 const config = getConfig();
 const errorMessage = "Something went wrong!";
@@ -174,10 +175,10 @@ export function formCheckFields(
 export function setBaseHref() {
   var myBaseHref = document.getElementById('myBaseHref');
   var pathname = window.location.pathname;
-  if (pathname.indexOf('appl/webview') !== -1) {
-    var myBaseHrefUrl = '/appl/webview/' + pathname.split('/')[3] + '/';
+  if(pathname.indexOf('appl/web') !== -1) {
+    var myBaseHrefUrl = '/appl/web/' + pathname.split('/')[3] +'/' ;
     myBaseHref.href = myBaseHrefUrl;
-    window.sessionStorage.setItem('base_href', myBaseHrefUrl);
+    window.localStorage.setItem('base_href', myBaseHrefUrl);
   }
 }
 
@@ -196,6 +197,7 @@ export async function triggerOtpApi(body, loginType, bottomsheet) {
             value: body.mobile ||  body.email,
             otp_id: result?.otp_id,
             communicationType: loginType,
+            firstTimeLogin: this.state.firstTimeLogin || false,
           },
         });
       } else {
@@ -353,21 +355,7 @@ export async function otpLoginVerification(verify_url, body) {
 export const postLoginSetup = async (getKycResult) => {
   try {
     const kycResult = await getKycFromSummary();
-    storageService().set("currentUser", true);
-
-    if (config.Web && kycResult.data.partner.partner.data) {
-      storageService().set(
-        "partner",
-        kycResult.data.partner.partner.data.name
-      );
-    }
-  
-    storageService().set("dataSettedInsideBoot", true);
-    storageService().setObject("referral", kycResult.data.referral);
-    storageService().setObject(
-      "campaign",
-      kycResult.data.campaign.user_campaign.data
-    );
+    setSummaryData(kycResult);
     setBaseHref();
     const eventObj = {
       event_name: "user loggedin",
@@ -400,21 +388,9 @@ export async function otpVerification(body) {
         return;
       }
 
-      if (config.Web && kycResult.data.partner.partner.data) {
-        storageService().set(
-          "partner",
-          kycResult.data.partner.partner.data.name
-        );
-      }
-
+      setSummaryData(kycResult);
       let user = kycResult.data.user.user.data;
       userData.me = user;
-      storageService().set("dataSettedInsideBoot", true);
-      storageService().setObject("referral", kycResult.data.referral);
-      storageService().setObject(
-        "campaign",
-        kycResult.data.campaign.user_campaign.data
-      );
       setBaseHref();
 
       this.setState({
@@ -510,6 +486,7 @@ export async function getKycFromSummary(params = {}) {
       campaign: ["user_campaign"],
       referral: ["subbroker", "p2p"],
       contacts: ["contacts"],
+      nps: ['nps_user'],
     }
   }
   const res = await Api.post(`/api/user/account/summary`, params);
@@ -528,10 +505,14 @@ export async function getKycFromSummary(params = {}) {
 
 export function redirectAfterLogin(data, user, navigateFunc) {
   const kyc = storageService().getObject("kyc");
+  const ipoContactNotVerified = storageService().get("ipoContactNotVerified") || false;
   user = user || storageService().getObject("user");
   const navigate = navigateFunc || this.navigate;
   if (data.firstLogin) {
     navigate("/referral-code", { state: { goBack: "/", communicationType: data?.contacts?.auth_type } });
+  } else if (ipoContactNotVerified){
+    storageService().set("ipoContactNotVerified", false);
+    navigate("/market-products", { state: { goBack: "/invest" } });
   } else if (
     user.kyc_registration_v2 === "incomplete" &&
     user.active_investment
@@ -571,7 +552,6 @@ export const logout = async () => {
 
     if (status === 200) {
       storageService().clear();
-      window.localStorage.clear();
       return result;
     } else {
       throw result.error || result.message || errorMessage;

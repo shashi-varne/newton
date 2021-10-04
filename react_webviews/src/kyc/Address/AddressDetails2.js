@@ -4,7 +4,7 @@ import Toast from "../../common/ui/Toast";
 import { isEmpty } from "utils/validators";
 import { getPinCodeData, submit } from "../common/api";
 import Container from "../common/Container";
-import { DOCUMENTS_MAPPER } from "../constants";
+import { DOCUMENTS_MAPPER, PATHNAME_MAPPER } from "../constants";
 import {
   compareObjects,
   validateFields,
@@ -75,17 +75,14 @@ const AddressDetails2 = (props) => {
           nomination: userKycDetails?.nomination?.meta_data,
         },
       };
-      userKycDetails.nomination.meta_data.nominee_address.state =
-        form_data.state;
-      userKycDetails.nomination.meta_data.nominee_address.city = form_data.city;
-      userKycDetails.nomination.meta_data.nominee_address.pincode =
-        form_data.pincode;
-      userKycDetails.nomination.meta_data.nominee_address.addressline =
-        form_data.addressline;
+      let { nominee_address } = userKycDetails.nomination.meta_data;
+      nominee_address.state = form_data.state;
+      nominee_address.city = form_data.city;
+      nominee_address.pincode = form_data.pincode;
+      nominee_address.addressline = form_data.addressline;
+      item.kyc.nomination.address = nominee_address;
       userKycDetails.nomination.meta_data.country = form_data.country;
-      const nomination_address =
-        userKycDetails.nomination.meta_data.nominee_address;
-      item.kyc.nomination.address = nomination_address;
+
       setIsApiRunning("button");
       await submit(item);
       handleNavigation();
@@ -98,27 +95,28 @@ const AddressDetails2 = (props) => {
 
   const handleNavigation = () => {
     if (backToJourney !== null) {
-      navigate("/kyc/upload/address");
+      navigate(PATHNAME_MAPPER.uploadAddress);
     } else {
       if (kyc?.address?.meta_data?.is_nri) {
-        navigate("/kyc/nri-address-details1", {
-          isEdit,
+        navigate(PATHNAME_MAPPER.nriAddressDetails1, {
+          state: {
+            isEdit,
+          }
         });
       } else {
-        navigate("/kyc/journey");
+        navigate(PATHNAME_MAPPER.journey);
       }
     }
   };
 
   const handleChange = (event) => {
-    const name = event.target.name;
-    const value = event.target.value;
-    if (
-      name === "pincode" &&
-      value &&
-      (value.length > 6 || !validateNumber(value))
-    )
-      return;
+    const target = event.target;
+    const name = target.name;
+    const value = target.value;
+    const maxLength = target.maxLength;
+    if (name === "pincode" && value && !validateNumber(value)) return;
+    if (value && maxLength && value.length > maxLength) return;
+    if(value && name === "addressline" && value.indexOf(" ") === 0) return;
     let formData = { ...form_data };
     formData[name] = value;
     if (!value) {
@@ -232,7 +230,8 @@ const AddressDetails2 = (props) => {
             helperText={form_data.pincode_error || ""}
             error={form_data.pincode_error ? true : false}
             inputProps={{
-              inputMode:"numeric"
+              inputMode:"numeric",
+              maxLength: 6,
             }}
           /> 
           <TextField
@@ -245,6 +244,9 @@ const AddressDetails2 = (props) => {
             onChange={handleChange}
             margin="normal"
             multiline
+            inputProps={{
+              maxLength: 150
+            }}
           />
           <TextField
             label="City"

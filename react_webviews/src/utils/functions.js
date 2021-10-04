@@ -1,6 +1,6 @@
 // import colors from '../common/theme/Style.scss';
 import { checkValidString, getUrlParams, storageService } from './validators';
-import { isArray, isEmpty } from 'lodash';
+import { isArray, isEmpty, isFunction } from 'lodash';
 import $ from 'jquery';
 import {  getPartnerData  } from './partnerConfigs';
 
@@ -126,7 +126,12 @@ export function getParamsMark(data) {
 }
 
 export const getPlatformConfig = () => {
-  const config = {};
+  let config = {
+    Web: false, 
+    Android: false,
+    iOS: false
+  };
+  
   if (isMobile.Android() && typeof window.Android !== 'undefined') {
     config.app = 'android';
     config.Android = true;
@@ -154,7 +159,7 @@ export const getConfig = () => {
   let isProdFisdom = origin.indexOf('app.fisdom.com') >= 0  || origin.indexOf('wv.fisdom.com') >= 0 ;
   let isProdFinity = origin.indexOf('app.mywaywealth.com') >= 0 || origin.indexOf('wv.mywaywealth.com') >= 0;
 
-  let base_href = window.sessionStorage.getItem('base_href') || '';
+  let base_href = window.localStorage.getItem('base_href') || '';
   let base_url_default = '';
   
   const isStaging = origin.indexOf('plutus-web-staging') >= 0;
@@ -175,7 +180,7 @@ export const getConfig = () => {
 
     // change server url here for local and staging url builds (Not commit id one's)
     if (isStaging || isLocal) {
-      base_url_default = "https://anandb-dot-plutus-staging.appspot.com";
+      base_url_default = "https://wdash-dot-plutus-staging.appspot.com";
     }
   }
   
@@ -231,10 +236,26 @@ export const getConfig = () => {
   } else if (main_pathname.indexOf('iw-dashboard') >= 0) {
     project = 'iw-dashboard';
   } else if (main_pathname.indexOf('tax-filing') >= 0) {
-    generic_callback = true
+    project = 'tax-filing';
+  } else if (main_pathname.indexOf('kyc') >= 0) {
+    project = 'kyc';
+  } else if (main_pathname.indexOf('reports') >= 0) {
+    project = 'reports';
+  } else if (main_pathname.indexOf('withdraw') >= 0) {
+    project = 'withdraw';
+  } else if (main_pathname.indexOf('nps') >= 0) {
+    project = 'nps';
+  } else if (main_pathname.indexOf('diy') >= 0) {
+    project = 'diy';
+  } else if (main_pathname.indexOf('invest') >= 0) {
+    project = 'invest';
   }
 
-  if(!partner_code) {
+  if(!sdk_capabilities) {
+    sdk_capabilities = storageService().get("sdk_capabilities") || "";
+  }
+
+  if(storageService().get("partner")) {
     partner_code = storageService().get("partner") || ""
   }
 
@@ -280,6 +301,22 @@ export const getConfig = () => {
     returnConfig.pc_urlsafe = pc_urlsafe;
     searchParams += getParamsMark(searchParams) + `pc_urlsafe=${pc_urlsafe}`;
     searchParamsMustAppend += getParamsMark(searchParams) + `pc_urlsafe=${pc_urlsafe}`;
+  }
+  
+  if( main_pathname === '/webview/help-conversation' ) {
+    const { ticket_id } = main_query_params;
+    if (checkValidString(ticket_id)) {
+      searchParams += getParamsMark(searchParams) + `ticket_id=${ticket_id}`;
+      searchParamsMustAppend += getParamsMark(searchParams) + `ticket_id=${ticket_id}`;
+    }
+  }
+
+  if( main_pathname === '/webview/help-conversation' ) {
+    const { ticket_id } = main_query_params;
+    if (checkValidString(ticket_id)) {
+      searchParams += getParamsMark(searchParams) + `ticket_id=${ticket_id}`;
+      searchParamsMustAppend += getParamsMark(searchParams) + `ticket_id=${ticket_id}`;
+    }
   }
 
   if (project === 'insurance' || project_child === 'term') {
@@ -493,8 +530,8 @@ export function isIframe() {
   }
 }
 export function getBasePath() {
-  var basename = window.sessionStorage.getItem('base_href') || '';
-  if(basename && basename.indexOf('appl/webview') !== -1) {
+  var basename = window.localStorage.getItem('base_href') || '';
+  if(basename && basename.indexOf('appl/web') !== -1) {
     basename = basename ? basename + 'view' : '';
   }
   return window.location.origin + basename;
@@ -502,7 +539,7 @@ export function getBasePath() {
 
 export function isTradingEnabled(userKyc = {}) {
   const kyc = !isEmpty(userKyc) ? userKyc : storageService().getObject("kyc");
-  return !getConfig().isSdk && !kyc?.address?.meta_data.is_nri
+  return !getConfig().isSdk && kyc?.equity_enabled;
 }
 const { checkBeforeRedirection, checkAfterRedirection, backButtonHandler } = require(`./${getConfig().platform}_app`);
 
@@ -594,9 +631,16 @@ export const base64ToBlob = (b64Data, contentType = '', sliceSize = 512) => {
   return blob;
 }
 
-export function openFilePicker (filepickerId, methodName, docName, nativeHandler, fileHandlerParams = {}) {
+export function openFilePicker (
+  filePickerId,
+  methodName,
+  docName,
+  nativeHandler,
+  fileHandlerParams = {},
+  onFilePicked
+) {
   if (getConfig().Web) {
-    const filepicker = document.getElementById(filepickerId);
+    const filepicker = document.getElementById(filePickerId);
 
     if (filepicker) {
       filepicker.value = null; // Required to allow same file to be picked again QA-4238 (https://stackoverflow.com/questions/12030686)
@@ -609,6 +653,16 @@ export function openFilePicker (filepickerId, methodName, docName, nativeHandler
       upload: nativeHandler,
       ...fileHandlerParams // callback from native
     });
+
+    if (isFunction(onFilePicked)) {
+      // This callback is triggered once a user selects a file
+      window.callbackWeb.add_listener({
+        type: "native_receiver_image",
+        show_loader: function () {
+          onFilePicked();
+        },
+      });
+    }
   }
 }
 
@@ -686,3 +740,38 @@ export function stringToHexa(str) {
   }
   return arr1.join('')
 }
+
+export function isAuthenticatedUser(props) {
+  const fromState = props.location?.state?.fromState || "";
+  const navigation = navigate.bind(props);
+  const data = {
+    state: {
+      goBack: "/"
+    }
+  }
+  if (getConfig().isLoggedIn) {
+    if (!fromState || isUnAuthenticatedPath(fromState)) {
+      navigation("/", data)
+    } else {
+      navigation(fromState, data);
+    }
+    return true;
+  }
+}
+
+export function isUnAuthenticatedPath(path) {
+  const unAuthenticatedPaths = ["/login", "/register", "/forgot-password", "/mobile/verify", "/logout", "/prepare"];
+  const unAuthenticatedPathsWithParams = ["/partner-authentication"];
+  const pathname = unAuthenticatedPathsWithParams.find(el => path.match(el))
+  return unAuthenticatedPaths.includes(path) || !isEmpty(pathname); 
+}
+
+export function getGuestUserRoute(apiUrl){
+  var guest_id = storageService().get('guestLeadId') || getUrlParams().guestLeadId;
+  
+  if(guest_id){ // true only for RM/guest journey
+      var url_char = apiUrl.indexOf('?') >= 0 ? '&' : '?';
+      return apiUrl + `${url_char}guest_lead_id=${guest_id}`
+  }
+  return apiUrl
+}  

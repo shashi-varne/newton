@@ -289,34 +289,53 @@ export function inrFormatDecimalWithoutIcon(number) {
   }
 }
 
-export function numDifferentiation(val, withSymbol, decimalPlaces = 2, retainLeadingZeroes = false) {
+export function numDifferentiation(
+  val,
+  withSymbol,
+  decimalPlaces = 2,
+  retainLeadingZeroes = false,
+  shortenPlaceText
+) {
   if (!val) {
     val = '';
   }
-  const isNegativeVal = val < 0;
   
+  const isNegativeVal = val < 0;
+
   function postFix(val){
     return parseFloat(val) < 2
   }
 
   val = Math.abs(val);
-  if (val >= 10000000){ 
-    val = (val / 10000000).toFixed(decimalPlaces) + ' Crore';
-    val = postFix(val) ? val : val + 's' ;
-  }
-  else if (val >= 100000){
-    val = (val / 100000).toFixed(decimalPlaces) + ' Lakh'; 
-    val = postFix(val) ? val : val + 's' ;
-  } 
-  else if (val >= 1000)
-     val = (val / 1000).toFixed(decimalPlaces) + ' K';
-  else if (val) 
-    return inrFormatDecimal(val);
 
-  val = val.toString();
+  if (val < 1000) {
+    return inrFormatDecimal(val);
+  }
+  else if (val >= 10000000) {
+    val = (val / 10000000).toFixed(decimalPlaces);
+    const isPluralVal = postFix(val);
+    if (shortenPlaceText) {
+      val += ' Cr';
+    } else {
+      val += ' Crore' + (isPluralVal ? '' : 's');
+    }
+  }
+  else if (val >= 100000) {
+    val = (val / 100000).toFixed(decimalPlaces);
+    const isPluralVal = postFix(val);
+    if (shortenPlaceText) {
+      val += ' L';
+    } else {
+      val += ' Lakh' + (isPluralVal ? '' : 's');
+    }
+  }
+  else {
+    val = (val / 1000).toFixed(decimalPlaces) + ' K';
+  }
+
   // remove .00
   if (!retainLeadingZeroes) {
-    val = val.replace(/\.0+([^\d])/g, '$1');
+    val = val.toString().replace(/\.0+([^\d])/g, '$1');
   }
 
   if(withSymbol) {
@@ -330,8 +349,8 @@ export function numDifferentiation(val, withSymbol, decimalPlaces = 2, retainLea
 }
 
 
-export function numDifferentiationInr(val, decimalPlaces, retainLeadingZeroes) {
-  return numDifferentiation(val, true, decimalPlaces, retainLeadingZeroes);
+export function numDifferentiationInr(val, ...otherParams) {
+  return numDifferentiation(val, true, ...otherParams);
 }
 
 export function IsFutureDate(idate) {
@@ -453,7 +472,11 @@ export function isValidMonthYear(input) {
 }
 
 export function validateName(string) {
-  return string.trim().indexOf(' ') !== -1;
+  if (!string) {
+    return false;
+  }
+  // Validate alphabets & space at 0th position
+  return string.match(/^(?![\s])[a-z A-Z]+$/);
 }
 
 export function capitalize(string) {
@@ -1131,7 +1154,7 @@ export function getFinancialYear() {
 export const convertInrAmountToNumber = (value) => {
   let amount = (value.match(/\d+/g) || "").toString();
   if (amount) {
-    amount = amount.replaceAll(",", "");
+    amount = amount.split(",").join("");
   }
   return parseInt(amount, 10);
 }
@@ -1175,3 +1198,12 @@ export function formatMobileNumber(value) {  // Example:  0000012345 -> +91 0000
   let number = "+91" + value.slice(-10);
   return number.replace(/(\d{2})(\d{4})(\d{3})(\d{3})/, '$1 $2 $3 $4');
 }
+
+export function splitMobileNumberFromContryCode(mobileNumber) {
+  let numberVal = mobileNumber?.split('|');
+  if (numberVal.length > 1) {
+      return numberVal[1];
+  } else {
+      return [numberVal];
+  }
+};

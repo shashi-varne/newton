@@ -27,10 +27,14 @@ const WVFullscreenDialog = ({
   open,
   onClose,
   children,
-  closeIconPosition, // Sets position of 'close' icon, defaults to 'left'
+  customCloseIcon,
+  closeIconPosition, // Sets position of 'close' icon, defaults to 'right'
   title, 
   ...dialogProps
 }) => {
+
+  const CloseIcon = customCloseIcon || Close;
+
   return (
     <Dialog
       data-aid={`wv-fullscreen-dialog-${dataAidSuffix}`}
@@ -43,7 +47,7 @@ const WVFullscreenDialog = ({
     >
       <DialogTitle style={{ padding: '20px' }}>
         <div style={{ textAlign: closeIconPosition }}>
-          <Close
+          <CloseIcon
             data-aid={`wv-fd-close-dialog-${dataAidSuffix}`}
             color="primary"
             onClick={onClose}
@@ -64,10 +68,22 @@ const Content = ({
 }) => {
   return (
     <DialogContent>
-      <div className="wv-fd-content-body">
+      {children}
+    </DialogContent>
+  );
+}
+
+const Action = ({
+  alignCenter = true,
+  className,
+  children
+}) => {
+  return (
+    <DialogActions>
+      <div className={`wv-fd-footer ${alignCenter && 'wv-fdf-centered'} ${className}`}>
         {children}
       </div>
-    </DialogContent>
+    </DialogActions>
   );
 }
 
@@ -82,6 +98,6 @@ WVFullscreenDialog.defaultProps = {
 }
 
 WVFullscreenDialog.Content = Content; // Extends custom styling over MUI DialogContent
-WVFullscreenDialog.Action = DialogActions; // Reuses MUI DialogActions
+WVFullscreenDialog.Action = Action; // Extends custom styling over MUI DialogActions
 
 export default WVFullscreenDialog;

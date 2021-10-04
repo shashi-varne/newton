@@ -13,7 +13,7 @@ const ConfirmBackDialog = ({ isOpen = false, close, goBack }) => {
     >
       <DialogContent className="kyc-back-confirm-dialog-content">
         <div className="title">
-          You are almost there, do you really want to go back?
+          You're almost there! Do you really want to go back?
         </div>
         <div className="confirm-back-dialog-actions">
           <div

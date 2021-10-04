@@ -12,11 +12,12 @@ import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import {
-  validateNumber, validateLengthDynamic,
+  validateNumber, validateLengthDynamic, storageService
 } from 'utils/validators';
 // validateStreetName, validateEmpty, validateConsecutiveChar, validateMinChar
 import { nativeCallback } from 'utils/native_callback';
 import {Imgc} from 'common/ui/Imgc';
+import { getGuestUserRoute } from '../../../utils/functions';
 
 class PaymentSuccessClass extends Component {
 
@@ -31,7 +32,8 @@ class PaymentSuccessClass extends Component {
       landmark: '',
       city: '',
       state: '',
-      leadData: {}
+      leadData: {},
+      isGuestUser: storageService().getBoolean('guestUser')
     };
 
     this.handleClickCurrent = this.handleClickCurrent.bind(this);
@@ -108,8 +110,8 @@ class PaymentSuccessClass extends Component {
     let error = '';
     let errorType = '';
     try {
-
-      let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
+      let url = 'api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id;
+      let res = await Api.get(url)
 
       if (res.pfwresponse.status_code === 200) {
 
@@ -175,7 +177,8 @@ class PaymentSuccessClass extends Component {
 
     if (pincode.length === 6) {
       try {
-        const res = await Api.get('/api/pincode/' + pincode);
+        const url = getGuestUserRoute('/api/pincode/' + pincode);
+        const res = await Api.get(url);
 
         if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
           address_details_data.city = res.pfwresponse.result[0].taluk || res.pfwresponse.result[0].district_name;
@@ -301,7 +304,8 @@ class PaymentSuccessClass extends Component {
           show_loader: 'button'
         })
         let res2 = {};
-        res2 = await Api.post('api/insurancev2/api/insurance/bhartiaxa/lead/update', final_data)
+        const url = 'api/insurancev2/api/insurance/bhartiaxa/lead/update';
+        res2 = await Api.post(url, final_data)
         this.setState({
           show_loader: false
         })
@@ -374,6 +378,7 @@ class PaymentSuccessClass extends Component {
         events={this.sendEvents('just_set_events')}
         fullWidthButton={true}
         product_key={this.props.parent ? this.props.parent.state.product_key : ''}
+        noBackIcon={this.state.isGuestUser}
         disableBack={!this.state.fromHome}
         showLoader={this.state.show_loader}
         skelton={this.state.skelton}

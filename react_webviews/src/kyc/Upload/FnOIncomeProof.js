@@ -13,17 +13,19 @@ import WVInPageHeader from '../../common/ui/InPageHeader/WVInPageHeader';
 import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
 import { checkDocsPending } from '../common/functions';
 import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet';
+import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 import { storageService } from '../../utils/validators';
 import { getConfig, isNewIframeDesktopLayout, navigate as navigateFunc } from '../../utils/functions';
 import InternalStorage from '../common/InternalStorage';
+import { landingEntryPoints } from '../../utils/constants';
+import { PATHNAME_MAPPER } from '../constants';
 
-const { productName } = getConfig();
 const UPLOAD_OPTIONS_MAP = {
   'bank-statement': {
     title: 'Bank statement',
     subtitle: 'Last 6 months',
     nativePickerMethodName: 'open_file',
-    supportedFormats: "pdf",
+    supportedFormats: ["pdf"],
     fileName: "bank-statement",
     api_doc_type: "bank_statement",
   },
@@ -31,7 +33,7 @@ const UPLOAD_OPTIONS_MAP = {
     title: 'Income tax returns',
     subtitle: 'Any ITR copy within the last 2 years',
     nativePickerMethodName: 'open_file',
-    supportedFormats: "pdf",
+    supportedFormats: ["pdf"],
     fileName: "itr",
     api_doc_type: "itr_acknowledgement",
   },
@@ -39,7 +41,7 @@ const UPLOAD_OPTIONS_MAP = {
     title: 'Salary slips',
     subtitle: 'Last 3 months',
     nativePickerMethodName: 'open_file',
-    supportedFormats: "pdf",
+    supportedFormats: ["pdf"],
     fileName: "salary-slip",
     api_doc_type: "payslips",
   },
@@ -50,14 +52,25 @@ const ORElem = (
   <div className="kyc-fno-OR">OR</div>
 );
 
+const hideSkipOptionPaths = [...landingEntryPoints, "/my-account", "/kyc/web"]
+
 const FnOIncomeProof = (props) => {
   const [selectedFile, setSelectedFile] = useState();
   const [selectedType, setSelectedType] = useState('');
   const [filePassword, setFilePassword] = useState('');
+  const [filePasswordErr, setFilePasswordErr] = useState('');
   const [openBottomSheet, setOpenBottomSheet] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(false);
+  const [goBackModal, setGoBackModal] = useState(false);
   const navigate = navigateFunc.bind(props);
   const { kyc, isLoading, updateKyc } = useUserKycHook();
+  const fromState = props?.location?.state?.fromState;
+  const goBackPath = props.location?.state?.goBack || "";
+  const { productName, Web } = getConfig();
+  const fromNativeLandingOrMyAccounts = storageService().get("native") && goBackPath === "exit";
+  const isFromKycJourney = !(!Web ? fromNativeLandingOrMyAccounts : hideSkipOptionPaths.includes(fromState));
+  const isMyAccountFlow = fromState === "/my-account";
+  const fromWebModuleEntry = fromState === "/kyc/web";
 
   useEffect(() => {
     setFilePassword('');
@@ -75,11 +88,15 @@ const FnOIncomeProof = (props) => {
   const uploadAndGoNext = async () => {
     sendEvents("next");
     try {
+      if (filePassword.match(/\s/)) {
+        setFilePasswordErr('Password cannot have spaces');
+        return;
+      }
       const data = {
-        doc_password: filePassword || undefined,
+        doc_password: filePassword,
         doc_type: UPLOAD_OPTIONS_MAP[selectedType]?.api_doc_type
       };
-      setIsApiRunning("button")
+      setIsApiRunning("button");
       const result = await upload(selectedFile, 'income', data);
       updateKyc(result.kyc);
       if(isNewIframeDesktopLayout()) {
@@ -106,6 +123,21 @@ const FnOIncomeProof = (props) => {
     if(skip) {
       sendEvents("skip");
     }
+    
+    if (!Web) {
+      commonNativeNavigation();
+    } else {
+      if (isMyAccountFlow) {
+        navigate("/my-account");
+      } else if (landingEntryPoints.includes(fromState) || fromWebModuleEntry) {
+        navigate("/");
+      } else {
+        commonRedirection();
+      }
+    }
+  }
+  
+  const commonRedirection = async () => {
     const areDocsPending = await checkDocsPending(kyc);
     if (areDocsPending) {
       navigate('/kyc/document-verification');
@@ -114,7 +146,16 @@ const FnOIncomeProof = (props) => {
     }
   }
 
+  const commonNativeNavigation = () => {
+    if (fromNativeLandingOrMyAccounts) {
+      nativeCallback({ action: "exit_web"});
+    } else {
+      commonRedirection();
+    }
+  }
+
   const onPasswordChange = (event) => {
+    setFilePasswordErr('');
     setFilePassword(event.target.value);
   }
 
@@ -122,7 +163,27 @@ const FnOIncomeProof = (props) => {
     storageService().remove("view_sample_clicked") 
   }
 
+  const closeConfirmBackDialog = () => {
+    setGoBackModal(false);
+  };
 
+  const goBackToPath = () => {
+    if (fromNativeLandingOrMyAccounts) {
+      return nativeCallback({ action: "exit_web"});
+    } 
+
+    if(goBackPath && goBackPath !== "exit") {
+      navigate(goBackPath)
+    } else if (landingEntryPoints.includes(fromState) || fromWebModuleEntry) {
+      navigate("/");
+    } else {
+      navigate(PATHNAME_MAPPER.journey);
+    }
+  };
+
+  const goBack = () => {
+    setGoBackModal(true)
+  }
 
   const sendEvents = (userAction) => {
     let eventObj = {
@@ -147,7 +208,7 @@ const FnOIncomeProof = (props) => {
   return (
     <Container
       events={sendEvents("just_set_events")}
-      canSkip
+      canSkip={isFromKycJourney}
       hidePageTitle
       hideHamburger
       handleClick={uploadAndGoNext}
@@ -157,9 +218,12 @@ const FnOIncomeProof = (props) => {
       disable={!selectedFile}
       showLoader={isApiRunning}
       skelton={isLoading}
+      headerData={{goBack}}
     >
       <WVInPageHeader style={{ marginBottom: '15px' }}>
-        <WVInPageTitle>Provide income proof for F&O trading <span className="kyc-fno-header-optional-text"> (Optional)</span></WVInPageTitle>
+        <WVInPageTitle>Provide income proof for F&O trading 
+          {isFromKycJourney && <span className="kyc-fno-header-optional-text"> (Optional)</span>}
+          </WVInPageTitle>
       </WVInPageHeader>
       <WVInfoBubble>
         In case of multiple files/images, merge them into a single pdf to upload
@@ -168,43 +232,37 @@ const FnOIncomeProof = (props) => {
         <div className="kyc-fip-title">
           Upload any 1 document
         </div>
-        {(!selectedFile || (selectedType === 'bank-statement')) &&
-          <WVFileUploadCard
-            {...UPLOAD_OPTIONS_MAP['bank-statement']}
-            customPickerId="bank-statement-picker"
-            onFileSelectComplete={onFileSelectComplete('bank-statement')}
-            onFileSelectError={onFileSelectError}
-            sizeLimit={10}
-            file={selectedFile}
-          />
-        }
-        {!selectedFile && ORElem}
-        {(!selectedFile || (selectedType === 'itr')) &&
-          <WVFileUploadCard
-            {...UPLOAD_OPTIONS_MAP['itr']}
-            customPickerId="itr-picker"
-            onFileSelectComplete={onFileSelectComplete('itr')}
-            onFileSelectError={onFileSelectError}
-            sizeLimit={10}
-            file={selectedFile}
-          />
-        }
-        {!selectedFile && ORElem}
-        {(!selectedFile || (selectedType === 'salary-slip')) &&
-          <WVFileUploadCard
-            {...UPLOAD_OPTIONS_MAP['salary-slip']}
-            customPickerId="salary-slip-picker"
-            onFileSelectComplete={onFileSelectComplete('salary-slip')}
-            onFileSelectError={onFileSelectError}
-            sizeLimit={10}
-            file={selectedFile}
-          />
-        }
+        {Object
+          .entries(UPLOAD_OPTIONS_MAP)
+          .map((
+            [optionKey, optionObj],
+            idx,
+            arr
+          ) => {
+            if (!selectedFile || selectedType === optionKey) {
+              return (
+                <React.Fragment key={idx}>
+                  <WVFileUploadCard
+                    {...optionObj}
+                    customPickerId={`${optionKey}-picker`}
+                    onFileSelectComplete={onFileSelectComplete(optionKey)}
+                    onFileSelectError={onFileSelectError}
+                    sizeLimit={10}
+                    file={selectedFile}
+                  />
+                  {!selectedFile && (idx !== arr.length - 1) && ORElem}
+                </React.Fragment>
+              );
+            }
+            return null;
+        })}
         {selectedFile &&
           <TextField
             variant="filled"
             label="Enter password (if any)"
             value={filePassword}
+            error={!!filePasswordErr}
+            helperText={filePasswordErr}
             type="password"
             onChange={onPasswordChange}
             classes={{
@@ -235,16 +293,30 @@ const FnOIncomeProof = (props) => {
       </div>
       <WVBottomSheet
         isOpen={openBottomSheet}
+        disableEscapeKeyDown
+        disableBackdropClick
         onClose={() => setOpenBottomSheet(false)}
         title="Income proof uploaded"
-        subtitle="Great, just one more step to go! Now complete eSign to get investment ready"
+        subtitle={
+          isFromKycJourney ?
+          "Great, just one more step to go! Now complete eSign to get investment ready" :
+          "We will update you when verification has been completed"
+        }
         image={require(`assets/${productName}/doc-uploaded.svg`)}
         button1Props={{
-          title: 'Continue',
+          title: isFromKycJourney ? 'Continue' : 'Okay',
           variant: "contained",
           onClick: goNext
         }}
-      />
+        />
+        {goBackModal ?
+          <ConfirmBackDialog
+            isOpen={goBackModal}
+            close={closeConfirmBackDialog}
+            goBack={goBackToPath}
+          />
+          : null
+        }
     </Container>
   );
 }
@@ -287,8 +359,6 @@ const OtherOptions = ({
             onFileSelectComplete={onFileSelectComplete(option)}
             onFileSelectError={onFileSelectError}
             sizeLimit={10}
-            supportedFormats="pdf"
-            fileName={option}
             className="kyc-fi-upload-card"
           />
         ))}
