@@ -28,10 +28,23 @@ const WVInPageHeader = ({
       data-aid={`wv-in-page-header-${dataAidSuffix}`}
       {...props}
     >
-      <div>
+      <div className="wv-iph-children">
         {children}
       </div>
-      {withImg && <Imgc {...imageProps} />}
+      {withImg &&
+        <Imgc
+          style={{
+            maxWidth: '100px',
+            maxHeight: '60px',
+            minHeight: '50px'
+            /*
+              Ideally provide height, width values along with min/max values
+              for each in 'imageProps.style'. Above values act as fallback 
+              to prevent layout from breaking.
+            */
+          }}
+          {...imageProps}
+        />}
     </div>
   );
 }
