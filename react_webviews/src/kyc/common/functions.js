@@ -70,14 +70,14 @@ export const validateFields = (formData, keyToCheck) => {
         case 'father_name':
         case 'mother_name':
         case 'spouse_name':
-          if (value.trim().length < 3) {
+          if (value.length < 3) {
             formData[`${key}_error`] = 'Minimum length is 3'
-            canSubmit = false
-          } else if (value.length === 3 && value.includes(" ")) {
-            formData[`${key}_error`] = 'Minimum 3 characters are required'
             canSubmit = false
           } else if (value.includes("  ")) {
             formData[`${key}_error`] = 'consecutive spaces are not allowed'
+            canSubmit = false
+          } else if (value.split(" ")[0]?.length < 3) {
+            formData[`${key}_error`] = 'First 3 characters cannot contain space'
             canSubmit = false
           }
           break
