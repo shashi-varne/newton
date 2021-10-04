@@ -76,6 +76,9 @@ export const validateFields = (formData, keyToCheck) => {
           } else if (value.length === 3 && value.includes(" ")) {
             formData[`${key}_error`] = 'Minimum 3 characters are required'
             canSubmit = false
+          } else if (value.includes("  ")) {
+            formData[`${key}_error`] = 'consecutive spaces are not allowed'
+            canSubmit = false
           }
           break
         default:
