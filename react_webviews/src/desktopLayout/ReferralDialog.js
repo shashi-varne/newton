@@ -24,6 +24,8 @@ const ReferDialog = ({ isOpen, close }) => {
   const [promoData, setPromoData] = useState({});
   // const [copyText, setCopyText] = useState('');
   const textToCopy = useRef(null);
+  const [isReferralApplied, setIsReferralApplied] = useState(null);
+
   useEffect(() => {
     if (user?.active_investment && isOpen) {
       fetchPromoCode();
@@ -62,9 +64,12 @@ const ReferDialog = ({ isOpen, close }) => {
   const handlePromoCode = async () => {
     try {
       setLoader('button');
-      await applyPromoCode(referralCode);
+      const result = await applyPromoCode(referralCode);
       if (error) {
         setError(false);
+      }
+      if (result.subbroker !== "fisdom" && result.subbroker !== "finity") {
+        setIsReferralApplied(Boolean(result.subbroker));
       }
       setMessage('Congratulations! referral code applied successfully');
     } catch (err) {
@@ -143,6 +148,7 @@ const ReferDialog = ({ isOpen, close }) => {
                 placeholder='Enter Promo Code'
                 helperText={message}
                 error={error}
+                disabled={isReferralApplied}
               />
             </div>
           </div>
@@ -151,14 +157,16 @@ const ReferDialog = ({ isOpen, close }) => {
       {!user?.active_investment && (
         <DialogActions className='dialog-action'>
           <Button dataAid='close-btn' onClick={handleClose} buttonTitle='CLOSE' classes={{ button: 'button no-bg' }} />
-          <Button
-            dataAid='apply-btn'
-            onClick={handlePromoCode}
-            classes={{ button: 'button bg-full' }}
-            buttonDisabled={!referralCode}
-            showLoader={loader}
-            buttonTitle='APPLY'
-          />
+          {!isReferralApplied && (
+            <Button
+              dataAid='apply-btn'
+              onClick={handlePromoCode}
+              classes={{ button: 'button bg-full' }}
+              buttonDisabled={!referralCode}
+              showLoader={loader}
+              buttonTitle='APPLY'
+            />
+          )}
         </DialogActions>
       )}
     </Dialog>
