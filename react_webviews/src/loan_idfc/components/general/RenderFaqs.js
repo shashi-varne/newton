@@ -23,7 +23,7 @@ class CommonRenderFaqs extends Component {
 
     componentWillMount() {
         window.scrollTo(0, 0);
-        let renderData = this.props.location.state.renderData;
+        let renderData = this.props.location.state?.renderData;
         this.setState({
             renderData: renderData,
             show_loader: false,
@@ -72,10 +72,10 @@ class CommonRenderFaqs extends Component {
                 onlyButton={true}
                 showLoader={this.state.show_loader}
                 handleClick={() => this.handleClick()}
-                title={this.state.renderData.header_title}
+                title={this.state.renderData?.header_title}
             >
                 <div className="idfc-faqs">
-                    {this.state.renderData.steps.options.map((option, index) => {
+                    {this.state.renderData?.steps.options.map((option, index) => {
                         let isSelected = this.state.selectedIndex === index;
                         return <div key={index}
                             className={option.is_table && 'render-faqs-table-content'}

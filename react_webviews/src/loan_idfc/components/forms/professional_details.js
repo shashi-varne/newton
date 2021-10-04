@@ -8,6 +8,7 @@ import DropDownNew from "../../../common/ui/DropDownNew";
 import { numDifferentiationInr, formatAmount } from "utils/validators";
 import Autosuggest from "../../../common/ui/SearchBar";
 import Api from "utils/api";
+import toast from '../../../common/ui/Toast';
 
 class ProfessionalDetails extends Component {
   constructor(props) {
@@ -182,23 +183,34 @@ class ProfessionalDetails extends Component {
       this.setState({
         isApiRunning: true
       })
-      const res = await Api.get(
-        "relay/api/loan/idfc/employer/" + form_data.company_name
-      );
-      let resultData = res.pfwresponse.result || "";
+      try {
+        const res = await Api.get(
+          "relay/api/loan/idfc/employer/" + form_data.company_name
+        );
+        let resultData = res?.pfwresponse?.result || "";
 
-      if (res.pfwresponse.status_code === 200) {
-        this.setState({
-          isApiRunning: false
-        })
-        if (resultData.employer_name.length !== 0) {
-          companyOptions = resultData.employer_name.map((element) => {
-            return {
-              name: element,
-              value: element,
-            };
-          });
+        if (res?.pfwresponse?.status_code === 200) {
+          if (resultData?.employer_name?.length !== 0) {
+            companyOptions = resultData.employer_name.map((element) => {
+              return {
+                name: element,
+                value: element,
+              };
+            });
+          }
+        } else {
+          // eslint-disable-next-line
+          throw (
+            resultData?.error || resultData?.message || "Something went wrong."
+          );
         }
+      } catch (err) {
+        console.log(err);
+        toast(err);
+      } finally {
+        this.setState({
+          isApiRunning: false,
+        });
       }
 
       this.setState({

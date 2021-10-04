@@ -227,6 +227,7 @@ class ReportDetails extends Component {
   }
 
   render() {
+    const new_provider = this.state.policyData?.new_provider;
     return (
       <Container
         events={this.sendEvents('just_set_events')}
@@ -303,13 +304,17 @@ class ReportDetails extends Component {
             </div>
           </div>
           {this.state.accordionTab && <div className="AccordionDescription">
-            <p>ICICI Lombard provides multiple options to intimate the claim to the company. By following ways:</p>
+            <p> { new_provider ? 'ICICI Lombard' : 'Bharti Axa' }  provides multiple options to intimate the claim to the company. By following ways:</p>
             <ul>
               <li>Call on toll free call centre of the insurance company (24x7) - <span>1800-103-2292</span></li>
               <li>Login to the website of the insurance company and intimate the claim. <span><a href="http://www.bhartiaxagi.co.in/contact-us">http://www.bhartiaxagi.co.in/contact-us</a></span></li>
-              <li>Send an email to the insurance company on <span>customersupportba@icicilombard.com</span></li>
-              <li>Post/courier to ICICI Lombard <span> Healthcare, ICICI Bank Tower, Plot No. 12, Financial District, Nanakram Guda, Gachibowli, Hyderabad-500032</span></li>
-              <li>Directly contact ICICI Lombard office but in writing.</li>
+              <li>Send an email to the insurance company on <span> {new_provider ? 'customersupportba@icicilombard.com' : 'customer.service@bharti-axagi.com'} </span></li>
+              <li>Post/courier to {new_provider ? 'ICICI Lombard' : 'Bharti AXA General Insurance'}
+                {new_provider ? 
+                  <span> Healthcare, ICICI Bank Tower, Plot No. 12, Financial District, Nanakram Guda, Gachibowli, Hyderabad-500032</span> 
+                  :<span> Spectrum Towers, 3rd floor, Malad Link Road, Malad(west), Mumbai-400064</span>}
+                </li>
+              <li>Directly contact { new_provider ? 'ICICI Lombard' : 'Bharti Axa' } office but in writing.</li>
             </ul>
             <p>In all the above, the intimations are directed to a central team for prompt and immediate action</p>
           </div>}

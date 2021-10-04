@@ -130,7 +130,7 @@ export const getPlatformConfig = () => {
     Android: false,
     iOS: false
   };
-
+  
   if (isMobile.Android() && typeof window.Android !== 'undefined') {
     config.app = 'android';
     config.Android = true;

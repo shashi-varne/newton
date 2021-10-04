@@ -870,3 +870,31 @@ export function setDialogsState(key) {
     [key]: true
   });
 }
+
+export async function updateConsent() {
+  const res = await Api.post("/api/account/user/partnerconsent");
+  if(!res || res?.pfwstatus_code !== 200 || isEmpty(res?.pfwresponse)) {
+    throw new Error(res.pfwmessage || errorMessage)
+  }
+  const { result, status_code: status } = res.pfwresponse;
+  if (status === 200) {
+    return result;
+  }
+  throw new Error(result.message || result.error || errorMessage);
+}
+
+export async function updateBank(data) {
+  const response = await Api.post("/api/partner/user/updatebank", data);
+  if (
+    response.pfwstatus_code !== 200 ||
+    isEmpty(response.pfwresponse)
+  ) {
+    throw new Error( response?.pfwmessage || errorMessage);
+  }
+  const { status_code, result } = response.pfwresponse;
+  if (status_code === 200) {
+    return result;
+  } else {
+    throw new Error(result?.message || result?.error || errorMessage);
+  }
+}
