@@ -144,6 +144,7 @@ const ReferDialog = ({ isOpen, close }) => {
                 onChange={handleRefferalCode}
                 type='text'
                 autoFocus
+                autoComplete="off"
                 variant='standard'
                 placeholder='Enter Promo Code'
                 helperText={message}
