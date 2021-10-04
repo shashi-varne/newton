@@ -38,9 +38,28 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     console.log(events.properties);
   }
 
+  if (action === 'login_required') {
+    if (config.Web) {
+      storageService().clear();
+      if (config.isIframe) {
+        let message = JSON.stringify({
+          type: "iframe_close",
+        });
+        window.callbackWeb.sendEvent(message);
+        return;
+      }
+      
+      let path = ['iw-dashboard', 'w-report'].includes(config.project) ? `/${config.project}/login` : '/login'; 
+      window.location.href = redirectToPath(path);
+    } else {
+      nativeCallback({ action: "session_expired" });
+    }
+    return;
+  }
+
   if (action === 'native_back' || action === 'exit') {
     if (config.isNative) callbackData.action = 'exit_web';
-    else window.location.href = redirectToLanding();
+    else window.location.href = redirectToPath('/');
   }
 
   if (action === 'open_pdf') {
@@ -170,7 +189,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
 
   if (config.app !== 'web') {
     let pathname = window.location?.pathname || ""
-    if(pathname.indexOf('appl/webview') !== -1) {
+    if(pathname.indexOf('appl/web') !== -1) {
       pathname = pathname.split("/")[5] || "/";
     }
     
@@ -182,7 +201,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       (entryPath !== pathname) &&
       (callbackData.action === 'exit_web' || callbackData.action === 'exit_module' || callbackData.action === 'open_module')
     ) {
-        window.location.href = redirectToLanding();
+        window.location.href = redirectToPath('/');
     } else {
       if (config.app === 'android') {
         window.Android.callbackNative(JSON.stringify(callbackData));
@@ -200,7 +219,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     } else if (action === '2fa_expired') {
       storageService().remove('currentUser');
       storageService().setBoolean('session-timeout', true);
-      window.location.href = redirectTo2FA();
+      window.location.href = redirectToPath('/login/verify-pin');
     } else {
       return;
     }
@@ -222,16 +241,15 @@ export function openNativeModule(moduleName) {
   });
 }
 
-export function openModule(moduleName, props) {
-
+export function openModule(moduleName, props, additionalParams) {
+  const config = getConfig();
   if (getConfig().isWebOrSdk) {
-
-    let module_mapper = {
+    const module_mapper = {
       'app/portfolio': '/reports',
       'app/profile': '/my-account',
       'invest/save_tax': '/invest',
       'invest/nps': '/nps/info',
-      'account/setup_2fa': '/account/set-pin/kyc-complete'
+      'account/setup_2fa': `/account/set-pin${additionalParams.routeUrlParams || ''}`
     }
     
     let moduleNameWeb = module_mapper[moduleName] || '/';
@@ -239,7 +257,7 @@ export function openModule(moduleName, props) {
       const navigate = navigateFunc.bind(props);
       navigate(moduleNameWeb)
     } else {
-      let module_url = `${getBasePath()}${moduleNameWeb}${getConfig().searchParams}`;
+      let module_url = `${getBasePath()}${moduleNameWeb}${config.searchParams}`;
       window.location.href = module_url;
     }
 
@@ -288,12 +306,8 @@ export function openPdfCall(data = {}) {
 
 }
 
-export function redirectToLanding() {
-  return `${getBasePath()}/${getConfig().searchParams}`;
-}
-
-export function redirectTo2FA() {
-  return `${getBasePath()}/login/verify-pin${getConfig().searchParams}`;
+export function redirectToPath(path) {
+  return `${getBasePath()}${path}${getConfig().searchParams}`;
 }
 
 export function handleNativeExit(props, data) {

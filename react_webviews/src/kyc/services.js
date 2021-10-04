@@ -3,6 +3,7 @@ import { isEmpty, storageService } from '../utils/validators'
 import toast from '../common/ui/Toast'
 import { isTradingEnabled } from '../utils/functions'
 import { kycSubmit } from './common/api'
+import { isDigilockerFlow } from './common/functions'
 
 const DOCUMENTS_MAPPER = {
   DL: 'Driving license',
@@ -48,9 +49,9 @@ export async function getAccountSummary(params = {}) {
 
 export async function getNPSInvestmentStatus() {
   const url = '/api/nps/invest/status/v2'
-  const response = await Api.get(url)
   try {
-    if (response.pfwresponse.status_code === 200) {
+    const response = await Api.get(url);
+    if (response?.pfwresponse?.status_code === 200) {
       return response.pfwresponse.result;
     } else {
       throw new Error(response?.pfwresponse?.result?.message);
@@ -206,7 +207,7 @@ export function getKycAppStatus(kyc) {
       { name: "bank", keys: ["meta_data_status"] },
       { name: "identification", keys: ["meta_data_status"] },
       { name: "nomination", keys: ["meta_data_status"] },
-      { name: "sign", keys: ["doc_status"] }
+      { name: "sign", keys: ["doc_status"] },
     ];
   } else {
     fieldsToCheck = [
@@ -214,13 +215,23 @@ export function getKycAppStatus(kyc) {
       { name: "address", keys: ["doc_status", "meta_data_status"] },
       { name: "bank", keys: ["meta_data_status"] },
       { name: "identification", keys: ["doc_status", "meta_data_status"] },
-      { name: "nomination", keys: ["doc_status", "meta_data_status"] },
+      { name: "nomination", keys: ["meta_data_status"] },
       { name: "sign", keys: ["doc_status"] },
-      { name: "ipvvideo", keys: ["doc_status"] }
+      { name: "ipvvideo", keys: ["doc_status"] },
     ];
   }
 
-  if (kyc.address?.meta_data?.is_nri) {
+  let newFieldsToCheck;
+  if (TRADING_ENABLED) {
+    newFieldsToCheck = [
+      { name: "equity_pan", keys: ["doc_status", "meta_data_status"] },
+      { name: "equity_identification", keys: ["doc_status", "meta_data_status"] },
+    ]
+    fieldsToCheck = [...fieldsToCheck, ...newFieldsToCheck];
+    fieldsToCheck = fieldsToCheck.filter((fieldObj) => !["pan", "identification"].includes(fieldObj.name));
+  }
+
+  if (kyc?.address?.meta_data?.is_nri) {
     var obj = {
       name: "nri_address",
       keys: ["doc_status", "meta_data_status"]
@@ -261,15 +272,11 @@ export function getKycAppStatus(kyc) {
 
   var status;
   if (rejected > 0) {
-    if (!TRADING_ENABLED) {
-      status = "rejected";
-      result.status = status;
-      return result;
-    } else {
-      status = kyc.equity_application_status;
-    }
+    status = "rejected";
+    result.status = status;
+    return result;
   } else {
-    if (!TRADING_ENABLED || (kyc?.kyc_product_type !== "equity" && isReadyToInvest()) || kyc?.mf_kyc_processed) {
+    if (!TRADING_ENABLED || (kyc?.kyc_product_type !== "equity" && isReadyToInvest())) {
       status = kyc.application_status_v2;
     } else {
       status = kyc.equity_application_status;
@@ -281,7 +288,7 @@ export function getKycAppStatus(kyc) {
     status = 'ground';
   }
 
-  if (kyc.kyc_status !== 'compliant' && kyc.application_status_v2 === 'init' && kyc.pan.meta_data.pan_number && kyc.customer_verified === 'UNVERIFIED' && kyc.kyc_type === "init") {
+  if (kyc.kyc_status !== 'compliant' && kyc.application_status_v2 === 'init' && kyc.pan.meta_data.pan_number && kyc.kyc_type === "init") {
     status = 'ground_pan';
   }
 
@@ -309,12 +316,45 @@ export function getKycAppStatus(kyc) {
     status = 'incomplete';
   }
 
-  if (kyc.kyc_status !== 'compliant' && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && kyc.sign_status !== 'signed') {
-    status = 'incomplete';
+  // this condition handles nri compliant bank document pending case 
+  if (kyc.address.meta_data.is_nri && kyc.kyc_status === 'compliant' && !["verified", "doc_submitted"].includes(kyc.bank.meta_data.bank_status)) {
+    status = "incomplete"
   }
 
-  if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && (kyc.equity_application_status === 'submitted' || kyc.equity_application_status === 'complete') && kyc.equity_sign_status !== "signed") {
+  // this condition handles retro kyc submitted users
+  if (kyc.kyc_product_type !== "equity" && isMfApplicationSubmitted(kyc)) {
+    status = "submitted"
+  }
+
+  if (!TRADING_ENABLED && kyc.kyc_status !== 'compliant' && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && kyc.sign_status !== 'signed') {
     status = 'incomplete';
+  }
+  
+  // this condition handles equity esign pending case
+  if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && kyc.equity_application_status === 'complete' && kyc.equity_sign_status !== "signed") {
+    status = 'esign_pending';
+  }
+
+  // this condition handles fno doc rejected case
+  if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && kyc.equity_application_status === 'complete' && kyc.equity_sign_status === "signed" &&
+  kyc?.equity_investment_ready && kyc?.equity_income.doc_status === "rejected") {
+    status = 'fno_rejected';
+  }
+
+  // this condition handles equity activation pending case
+  if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && kyc.equity_application_status === 'complete' && kyc.equity_sign_status === "signed" &&
+  !kyc?.equity_investment_ready) {
+    status = 'verifying_trading_account';
+  }
+
+  // this condition handles compliant retro MF IR users 
+  if (TRADING_ENABLED && kyc.kyc_status === 'compliant' && kyc?.kyc_product_type !== "equity" && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && kyc.bank.meta_data_status === "approved") {
+    status = "complete";
+  }
+
+  // this condition handles showing upgrade account to MF IR users until user submits all equity related docs
+  if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && kyc.mf_kyc_processed && isReadyToInvest(kyc) && kyc.equity_application_status === "incomplete") {
+    status = "upgraded_incomplete";
   }
 
   result.status = status;
@@ -324,7 +364,29 @@ export function getKycAppStatus(kyc) {
 
 export function getDocuments(userKyc) {
   if(userKyc.kyc_status === 'compliant') {
-    return [
+    let documents = [
+      {
+        key: "pan",
+        title: "PAN card",
+        subtitle: userKyc.pan.meta_data.pan_number,
+        doc_status: userKyc.pan.doc_status,
+        default_image: 'pan_default.svg',
+        approved_image: "pan_approved.svg",
+      },
+      {
+        key: "selfie",
+        title: "Selfie",
+        doc_status: userKyc.equity_identification.doc_status,
+        default_image: 'selfie_default.svg',
+        approved_image: "selfie_approved.svg",
+      },
+      {
+        key: "bank",
+        title: "Bank details",
+        doc_status: userKyc.bank.meta_data_status,
+        default_image: 'default.svg',
+        approved_image: "approved.svg",
+      },
       {
         key: "sign",
         title: "Signature",
@@ -333,6 +395,13 @@ export function getDocuments(userKyc) {
         approved_image: "sign_approved.svg",
       }
     ];
+
+    if (!isTradingEnabled(userKyc)) {
+      // Removing Pan and Selfie
+      documents.splice(0, 2);
+    }
+
+    return documents;
   }
 
   let documents =  [
@@ -357,7 +426,7 @@ export function getDocuments(userKyc) {
     {
       key: "selfie",
       title: "Selfie",
-      doc_status: userKyc.identification.doc_status,
+      doc_status: userKyc.equity_identification.doc_status,
       default_image: 'selfie_default.svg',
       approved_image: "selfie_approved.svg",
     },
@@ -399,6 +468,21 @@ export function getDocuments(userKyc) {
 
     documents.splice(2, 0, data);
   }
+
+  if (isDigilockerFlow(userKyc)) {
+    // removing selfie video (IPV)
+    documents.splice(3, 1);
+  }
+
+  if (!isTradingEnabled(userKyc)) {
+    documents = documents.map((document) => {
+      if (document.key === "selfie") {
+        document.doc_status = userKyc.identification.doc_status
+      }
+      return document;
+    });
+  }
+
   return documents;
 }
 
@@ -442,6 +526,20 @@ export function isReadyToInvest() {
     } else if (kycRTI.friendly_application_status === "complete") {
       return true;
     }
+  }
+
+  return false;
+}
+
+export function isMfApplicationSubmitted(kyc) {
+  if (isEmpty(kyc)) return false;
+  const isCompliantAppSubmitted = kyc.kyc_status === "compliant" && kyc.application_status_v2 === "submitted" &&
+    (kyc.bank.meta_data_status !== "approved" && ["pd_triggered", "doc_submitted"].includes(kyc.bank.meta_data.bank_status));
+  const isNonCompliantAppSubmitted = kyc.kyc_status !== "compliant" && kyc.application_status_v2 === "submitted" &&
+    kyc.sign_status === "signed";
+  
+  if (isCompliantAppSubmitted || isNonCompliantAppSubmitted) {
+    return true;
   }
 
   return false;

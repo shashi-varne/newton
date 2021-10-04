@@ -47,7 +47,7 @@ class DigiStatus extends Component {
       if (
         user.pin_status !== "pin_setup_complete" &&
         kyc.kyc_product_type === 'equity'
-        ) {
+      ) {
         this.setState({ set2faPin: true })
       }
 
@@ -71,8 +71,8 @@ class DigiStatus extends Component {
   };
 
   handleClick = () => {
-    const config = getConfig();
     const {dl_flow, show_note} = this.state;
+    const config = getConfig();
     if (dl_flow && !show_note) {
       this.sendEvents('next');
     } else {
@@ -80,19 +80,23 @@ class DigiStatus extends Component {
     }
     if (this.state.set2faPin) {
       // Handles behaviour for both web as well as native
-      openModule('account/setup_2fa', this.props);
-      if (config.isNative) {
-        return nativeCallback({ action: 'exit_web' });
-        // TODO: Test native behaviour for this code
-      }
-    } else {
+      openModule('account/setup_2fa', this.props, { routeUrlParams: '/kyc-complete' });
       if (config.isNative) {
         nativeCallback({ action: 'exit_web' });
-      } else {
-        this.navigate("/invest");
       }
+      return;
     }
+    this.redirectToHome();
   };
+
+  redirectToHome = () => {
+    const config = getConfig();
+    if (config.isNative) {
+      nativeCallback({ action: 'exit_web' });
+    } else {
+      this.navigate("/invest");
+    }
+  }
 
   navigateToReports = () => {
     this.sendEvents("view_KYC_application");
@@ -201,7 +205,7 @@ class DigiStatus extends Component {
     const { status = "failed" } = this.state.params;
     const headerData = {
       icon: "close",
-      goBack: this.handleClick,
+      goBack: this.redirectToHome,
     };
 
     return (

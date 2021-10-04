@@ -96,7 +96,7 @@ class SelectDropDown2 extends React.Component {
     var options = this.props.options.map((ele, index) => {
       if (ele.name) {
         return ({
-          'value': ele.value, 'name': Casesensitivity(ele.name)
+          'value': ele.value, 'name': this.props.disableCaseSensitivity ? ele.name : Casesensitivity(ele.name)
         })
       } else return ({
         'value': ele, 'name': Casesensitivity(ele)
@@ -130,6 +130,7 @@ class SelectDropDown2 extends React.Component {
             <Select
               ref={inst => (this.myRef = inst)}
               blurInputOnSelect={false}
+              isDisabled={this.props.disabled}
               BrandColor={getConfig().styles.primaryColor}
               onBlurResetsInput={true}
               openMenuOnClick={true}

@@ -4,6 +4,9 @@ import "./common/ui/style.scss";
 import "typeface-source-sans-pro";
 import "typeface-poppins";
 import 'idempotent-babel-polyfill';
+import 'react-app-polyfill/ie11';
+import 'react-app-polyfill/stable';
+import cssVars from 'css-vars-ponyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
@@ -12,7 +15,7 @@ import { isMobile } from 'utils/functions';
 import scrollIntoView from 'scroll-into-view-if-needed';
 import './common/theme/Style.scss';
 import "./common/ui/style.scss";
-import { getConfig, isIframe } from './utils/functions';
+import { getCssVarObject, getConfig, isIframe } from './utils/functions';
 // ----- Rubik font imports -----
 import "@fontsource/rubik/latin.css"; // all weights from 300 to 900, (does not include italics)
 import "@fontsource/rubik/latin-400-italic.css";
@@ -24,8 +27,14 @@ import "@fontsource/roboto/latin-700.css";
 // ------------------------------
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
+import { storageService } from "./utils/validators"
 
 $(document).ready(function () {
+  const cssVarObj = getCssVarObject();
+  cssVars({
+    preserveVars:true,
+    variables: cssVarObj
+  });
   if(isIframe()) {
     let bodyElement =  document.getElementsByTagName('body');
     bodyElement[0].classList.add('IframeBody');
@@ -92,11 +101,36 @@ $(document).ready(function () {
   //   runGoogleAds();
   // }
 });
+if(getConfig().productName === "finity") {
+  document.title = 'Finity';
+  const favIcon = document.getElementById('favicon');
+  favIcon.href="./images/finity_logo_icon.svg";
+} else {
+  const favIcon = document.getElementById('favicon');
+  document.title = 'Fisdom';
+  favIcon.href="./images/fisdom_logo_icon.svg";
+}
+
+if(getConfig().productName === 'finity') {
+  document.title = 'Finity';
+  const favicon = document.getElementById('favicon');
+  favicon.href = './images/finity_icon.svg';
+} else {
+  document.title = 'Fisdom';
+  const favicon = document.getElementById('favicon');
+  favicon.href = './images/fisdom_icon.svg';
+}
 
 if(getConfig().productName === "fisdom" && getConfig().isProdEnv)
 {
   Sentry.init({
     dsn: "https://38815adc8fd842e78c2145a583d26351@o60572.ingest.sentry.io/5726998",
+    beforeSend(event) {
+      event.tags = event.tags || {};
+      event.tags["partner_code"] = getConfig().code;
+      event.tags["user_id"] = storageService()?.getObject('user')?.user_id;
+      return event;
+    },
     integrations: [new Integrations.BrowserTracing()],
     allowUrls:["app.fisdom.com","wv.fisdom.com"],
     tracesSampleRate: 1.0,
@@ -105,6 +139,12 @@ if(getConfig().productName === "fisdom" && getConfig().isProdEnv)
 else if(getConfig().productName === "finity" && getConfig().isProdEnv){
   Sentry.init({
     dsn: "https://84e342a0046748bab6860aafcf7e86da@o60572.ingest.sentry.io/5727007",
+    beforeSend(event) {
+      event.tags = event.tags || {};
+      event.tags["partner_code"] = getConfig().code;
+      event.tags["user_id"] = storageService()?.getObject('user')?.user_id;
+      return event;
+    },
     integrations: [new Integrations.BrowserTracing()],
     allowUrls:["app.mywaywealth.com","app.finity.in","wv.mywaywealth.com", "wv.finity.in"],
     tracesSampleRate: 1.0,

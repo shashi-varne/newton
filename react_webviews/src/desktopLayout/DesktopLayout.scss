@@ -1,6 +1,8 @@
 .main-container {
   height: 100vh;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
   & > header {
     z-index: 1300 !important;
   }
@@ -41,8 +43,9 @@
 
   .right-content {
     width: calc(100% - 640px);
-    display: grid;
-    place-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background: #fafafa;
   }
 }
@@ -71,12 +74,12 @@
   #referral-dialog.MuiModal-root,
   #feedback-campaign-dialog.MuiModal-root,
   #invest-bottom-dialog.MuiModal-root {
-    top: 0px !important;
-    margin-left: 0px !important;
+    top: 60px !important;
+    margin-left: 300px !important;
     position: fixed !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    height: 100% !important;
+    width: calc(100% - 300px) !important;
+    max-width: var(--desktop-width) !important;
+    height: initial !important;
   }
 
   .MuiBackdrop-root {

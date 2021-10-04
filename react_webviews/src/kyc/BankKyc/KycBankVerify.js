@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Container from "../common/Container";
 import { isEmpty } from "utils/validators";
 import { navigate as navigateFunc, isTradingEnabled } from "utils/functions";
-import { PATHNAME_MAPPER } from "../constants";
+import { BANK_ACCOUNT_TYPES_NOMENCLATURE, PATHNAME_MAPPER } from "../constants";
 import { checkDLPanFetchAndApprovedStatus, getFlow, isDigilockerFlow } from "../common/functions";
 import { saveBankData, getBankStatus } from "../common/api";
 import toast from "../../common/ui/Toast";
@@ -17,10 +17,20 @@ import internalStorage from '../common/InternalStorage';
 import { nativeCallback } from "../../utils/native_callback";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 import { isNewIframeDesktopLayout } from "../../utils/functions";
+import { storageService } from "../../utils/validators";
 
-const showPageDialog = isNewIframeDesktopLayout();
-const productName = getConfig().productName;
+const INITIAL_INFO_CONTENT = "We’ll credit ₹1 to verify your bank account.";
+const NON_EQUITY_PARTNER_INFO = (
+  <ul className="note-list">
+    <li>This bank account belongs to our partner. Equity and Trading account is not available,
+      kindly change bank account if you want to avail Trading facility. </li>
+    <li>{INITIAL_INFO_CONTENT}</li>
+  </ul>
+);
+
 const KycBankVerify = (props) => {
+  const { productName } = useMemo(() => getConfig(), []);
+  const showPageDialog = useMemo(() => isNewIframeDesktopLayout(), []);
   const [count, setCount] = useState(20);
   const [countdownInterval, setCountdownInterval] = useState();
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -28,7 +38,9 @@ const KycBankVerify = (props) => {
   const [isPennyFailed, setIsPennyFailed] = useState(false);
   const [isPennySuccess, setIsPennySuccess] = useState(false);
   const [isPennyExhausted, setIsPennyExhausted] = useState(false);
-  const isEdit = props.location.state?.isEdit || false;
+  const [infoContent, setInfoContent] = useState(INITIAL_INFO_CONTENT);
+  const stateParams = props.location.state || {};
+  const { isEdit = false, isPartnerBank = false, isPartnerEquityEnabled = false } = stateParams;
   const params = props.match.params || {};
   const userType = params.userType || "";
   const [bankData, setBankData] = useState({});
@@ -47,6 +59,10 @@ const KycBankVerify = (props) => {
       setDlFlow(true);
     }
     setBankData({ ...kyc.bank.meta_data });
+
+    if (isPartnerBank && !isPartnerEquityEnabled) {
+      setInfoContent(NON_EQUITY_PARTNER_INFO);
+    }
   };
 
   const handleClick = async () => {
@@ -110,7 +126,7 @@ const KycBankVerify = (props) => {
       twoButton: true,
       status: 'pennyExhausted'
     }
-    internalStorage.setData('handleClickOne', goToJourney);
+    internalStorage.setData('handleClickOne', handleExhausted);
     internalStorage.setData('handleClickTwo', uploadDocuments);
     navigate('/kyc/penny-status',{state:pennyDetails});
   }
@@ -220,9 +236,12 @@ const KycBankVerify = (props) => {
   };
 
   const handleOtherPlatformNavigation = () => {
+    const nextStep = kyc.show_equity_charges_page ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
     if (userType === "compliant") {
       if (isEdit) goToJourney();
-      else navigate(PATHNAME_MAPPER.tradingExperience)
+      else navigate(nextStep, {
+        state: { goBack: PATHNAME_MAPPER.journey }
+      })
     } else {
       if (dl_flow) {
         const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
@@ -231,7 +250,9 @@ const KycBankVerify = (props) => {
             state: { goBack: PATHNAME_MAPPER.journey }
           });
         } else {
-          navigate(PATHNAME_MAPPER.tradingExperience);
+          navigate(nextStep, {
+            state: { goBack: PATHNAME_MAPPER.journey }
+          });
         }
       } else {
         navigate(PATHNAME_MAPPER.uploadProgress);
@@ -291,15 +312,32 @@ const KycBankVerify = (props) => {
   };
 
   const handleSuccess = () => {
-    if (isTradingEnabled()) {
-      handleOtherPlatformNavigation();
+    if (storageService().get("bankEntryPoint") === "uploadDocuments") {
+      redirectToUploadProgress();
     } else {
-      handleSdkNavigation();
+      if (isTradingEnabled()) {
+        handleOtherPlatformNavigation();
+      } else {
+        handleSdkNavigation();
+      }
     }
   };
 
-  const goToJourney = () => {
+  const handleExhausted = () => {
     sendEvents("try_later", "unable_to_add_bank");
+    if (storageService().get("bankEntryPoint") === "uploadDocuments") {
+      redirectToUploadProgress();
+    } else {
+      goToJourney();
+    }
+  };
+
+  const redirectToUploadProgress = () => {
+    storageService().remove("bankEntryPoint");
+    navigate(PATHNAME_MAPPER.uploadProgress);
+  };
+
+  const goToJourney = () => {
     navigate(PATHNAME_MAPPER.journey)
   };
 
@@ -342,7 +380,7 @@ const KycBankVerify = (props) => {
       showLoader={isApiRunning}
       noFooter={isEmpty(bankData)}
       handleClick={handleClick}
-      title="Confirm bank details"
+      title="Verify bank account"
       iframeRightContent={require(`assets/${productName}/add_bank.svg`)}
       data-aid='kyc-verify-bank-accont-screen'
     >
@@ -352,7 +390,7 @@ const KycBankVerify = (props) => {
           hasTitle
           customTitle="Important"
         >
-          We will credit ₹1 to your bank account for verification.
+          {infoContent}
         </WVInfoBubble>
         {isEmpty(bankData) && (
           <>
@@ -392,7 +430,7 @@ const KycBankVerify = (props) => {
             </div>
             <div className="item" data-aid='kyc-account-type'>
               <div className="left">Account type</div>
-              <div className="right"> {bankData.account_type} </div>
+              <div className="right"> {BANK_ACCOUNT_TYPES_NOMENCLATURE[bankData.account_type]} </div>
             </div>
           </>
         )}
@@ -402,10 +440,10 @@ const KycBankVerify = (props) => {
           uploadDocuments={uploadDocuments}
           checkBankDetails={checkBankDetails}
         />
-        <PennySuccessDialog isOpen={isPennySuccess} redirect={handleSuccess} />
+        <PennySuccessDialog isOpen={isPennySuccess} kyc={kyc} redirect={handleSuccess} />
         <PennyExhaustedDialog
           isOpen= {isPennyExhausted}
-          redirect={goToJourney}
+          redirect={handleExhausted}
           uploadDocuments={uploadDocuments}
         />
       </div>

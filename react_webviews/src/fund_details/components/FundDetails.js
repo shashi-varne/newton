@@ -65,7 +65,7 @@ const FundDetails = (props) => {
   let currentStatus = type === 'diy' ? EMPTY_CART : '';
   let currentTitle = 'Ok';
 
-  const investment = JSON.parse(window.localStorage.getItem("investment")) || {};
+  const investment = storageService().getObject("investment") || {};
 
   switch (type) {
     case "diy" :
@@ -672,6 +672,7 @@ const FundDetails = (props) => {
               <InvestReferralDialog
                 isOpen={dialogStates.openInvestReferral}
                 goNext={goNext}
+                close={() => handleDialogStates("openInvestReferral", false)}
               />
             )}
           </>

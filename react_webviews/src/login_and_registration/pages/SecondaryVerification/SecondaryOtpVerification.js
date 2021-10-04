@@ -34,13 +34,14 @@ export class SecondaryOtpVerification extends Component {
       this.props.history.goBack();
       return;
     }
-    let { value, otp_id, communicationType } = state;
+    let { value, otp_id, communicationType, firstTimeLogin } = state;
     let rebalancing_redirect_url = state.rebalancing_redirect_url || false;
     this.setState({
       value: value,
       otp_id: otp_id,
       rebalancing_redirect_url: rebalancing_redirect_url,
-      communicationType: communicationType
+      communicationType: communicationType,
+      firstTimeLogin: firstTimeLogin || false,
     });
   }
 
@@ -115,7 +116,7 @@ export class SecondaryOtpVerification extends Component {
     });
   }
   render() {
-    const { isResendOtpApiRunning, communicationType, value, isWrongOtp, otpData } = this.state;
+    const { isResendOtpApiRunning, communicationType, value, isWrongOtp, otpData, firstTimeLogin } = this.state;
     return (
       <Container
         title={`Enter OTP to verify your ${communicationType === "email" ? "email" : "number"}`}
@@ -123,7 +124,7 @@ export class SecondaryOtpVerification extends Component {
         buttonTitle="VERIFY"
         disable={otpData.otp?.length === 4 ? false : true}
         showLoader={this.state.isApiRunning}
-        canSkip={true}
+        canSkip={firstTimeLogin}
         onSkipClick={this.onSkip}
         handleClick={this.handleClick}
       >

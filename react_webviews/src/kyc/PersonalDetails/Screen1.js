@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Container from "../common/Container";
 import Input from "../../common/ui/Input";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
@@ -6,7 +6,7 @@ import { GENDER_OPTIONS, MARITAL_STATUS_OPTIONS, PATHNAME_MAPPER } from "../cons
 import {
   formatDate,
   dobFormatTest,
-  validateAlphabets,
+  validateName,
   isEmpty,
 } from "../../utils/validators";
 import {
@@ -23,8 +23,10 @@ import { getConfig } from "utils/functions";
 import toast from "../../common/ui/Toast";
 import { nativeCallback } from "../../utils/native_callback";
 
-const productName = getConfig().productName;
 const PersonalDetails1 = (props) => {
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
@@ -32,9 +34,9 @@ const PersonalDetails1 = (props) => {
   const [oldState, setOldState] = useState({});
   const [totalPages, setTotalPages] = useState();
 
-  let title = "Personal details";
+  let title = "Personal information";
   if (isEdit) {
-    title = "Edit personal details";
+    title = "Edit personal information";
   }
 
   const { kyc, user, isLoading } = useUserKycHook();
@@ -125,21 +127,27 @@ const PersonalDetails1 = (props) => {
 
   const handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
-    if (value && name === "name" && !validateAlphabets(value)) return;
+    if (value && name === "name" && !validateName(value)) return;
+
     let formData = { ...form_data };
-    if (name === "marital_status")
+    if (name === "marital_status") {
       formData[name] = MARITAL_STATUS_OPTIONS[value].value;
-    else if (name === "gender") formData[name] = GENDER_OPTIONS[value].value;
-    else if (name === "dob") {
+    } else if (name === "gender") {
+      formData[name] = GENDER_OPTIONS[value].value;
+    } else if (name === "dob") {
       if (!dobFormatTest(value)) {
         return;
       }
       let input = document.getElementById("dob");
       input.onkeyup = formatDate;
       formData[name] = value;
-    } else formData[name] = value;
+    } else {
+      formData[name] = value;
+    }
+
     if (!value && value !== 0) formData[`${name}_error`] = "This is required";
     else formData[`${name}_error`] = "";
+
     setFormData({ ...formData });
   };
 
@@ -195,7 +203,6 @@ const PersonalDetails1 = (props) => {
             error={form_data.name_error ? true : false}
             helperText={form_data.name_error || ""}
             onChange={handleChange("name")}
-            maxLength={20}
             type="text"
             disabled={isApiRunning || !!kyc?.pan?.meta_data?.name}
           />

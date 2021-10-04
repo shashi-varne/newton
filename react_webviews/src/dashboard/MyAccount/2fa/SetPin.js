@@ -1,5 +1,5 @@
 import "./commonStyles.scss";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import Container from "../../common/Container";
 import EnterMPin from "../../../2fa/components/EnterMPin";
 import { verifyPin } from '../../../2fa/common/apiCalls';
@@ -11,18 +11,14 @@ import WVPopUpDialog from "../../../common/ui/PopUpDialog/WVPopUpDialog";
 const SetPin = (props) => {
   const { persistRouteParams } = usePersistRouteParams();
   const navigate = navigateFunc.bind(props);
+  const comingFrom = useMemo(() => props.match?.params?.coming_from, [props]);
+  const kycFlow = useMemo(() => comingFrom === 'kyc-complete', [comingFrom]);
   const [mpinError, setMpinError] = useState(false);
   const [mpin, setMpin] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
-  const [kycFlow, setKycFlow] = useState(false);
+  
   const config = getConfig();
-
-  useEffect(() => {
-    if (props.match.params?.coming_from === "kyc-complete") {
-      setKycFlow(true)
-    }
-  }, []);
 
   const handleClick = async () => {
     try {
@@ -33,7 +29,10 @@ const SetPin = (props) => {
       });
       sendEvents("next");
       persistRouteParams({ new_mpin: mpin, set_flow: true });
-      let path = `/account/confirm-pin${kycFlow ? "/kyc-complete" : ""}`;
+      let path = '/account/confirm-pin';
+      if (comingFrom) {
+        path += `/${comingFrom}`;
+      }
       navigate(path);
     } catch (err) {
       console.log(err);
@@ -76,7 +75,7 @@ const SetPin = (props) => {
       title="Security settings"
       events={sendEvents("just_set_events")}
       showLoader={isApiRunning}
-      headerData={kycFlow ? { icon: "close", goBack: () => setOpenDialog(true) } : ""}
+      headerData={comingFrom ? { icon: "close", goBack: () => setOpenDialog(true) } : ""}
       handleClick={handleClick}
       buttonTitle="Continue"
       disable={mpin?.length !== 4}

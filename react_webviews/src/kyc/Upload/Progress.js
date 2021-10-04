@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "../common/Container";
 import UploadCard from "./UploadCard";
 import { getDocuments } from "../services";
@@ -10,17 +10,27 @@ import "./commonStyles.scss";
 import { nativeCallback } from "../../utils/native_callback";
 import { getConfig } from "../../utils/functions";
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
+import { storageService } from "../../utils/validators";
+import { landingEntryPoints } from "../../utils/constants";
 
-const productName = getConfig().productName;
 const Progress = (props) => {
-  const { kyc, isLoading } = useUserKycHook();
-  const disableNext = props.location.state?.disableNext || false;
+  const { productName, Web } = getConfig();
   const navigate = navigateFunc.bind(props);
   const [openConfirmBack, setOpenConfirmBack] = useState(false);
+  const { kyc, isLoading } = useUserKycHook();
+  const stateParams = props?.location?.state || {};
+  const { disableNext = false, goBack: goBackPath, fromState } = stateParams;
+  const fromWebModuleEntry = fromState === "/kyc/web";
 
   let documents = [];
   let totalDocs = 0;
   let canGoNext = false;
+
+  useEffect(() => {
+    if ((landingEntryPoints.includes(fromState) || fromWebModuleEntry) || (!Web && storageService().get("native") && goBackPath === "exit")) {
+      storageService().set("uploadDocsEntry", "landing");
+    }
+  },[])
 
   if (!isEmpty(kyc) && !isLoading) {
     documents = getDocuments(kyc);
@@ -56,7 +66,9 @@ const Progress = (props) => {
       }/bank-details`,
       sign: PATHNAME_MAPPER.uploadSign,
     };
-    navigate(stateMapper[key]);
+    navigate(stateMapper[key], {
+      state: { goBack: PATHNAME_MAPPER.uploadProgress }
+    });
   };
 
   const goBack = () => {
@@ -66,6 +78,24 @@ const Progress = (props) => {
       return;
     }
     setOpenConfirmBack(true);
+  }
+
+  const goBackToPath = () => {
+    if (storageService().get("uploadDocsEntry") === "landing") {
+      storageService().remove("uploadDocsEntry");
+      if (!Web && storageService().get("native")) {
+        nativeCallback({ action: "exit_web"});
+      } else {
+        navigate("/");
+      }
+    } else {
+      navigate(PATHNAME_MAPPER.journey);
+    }
+  };
+
+  const goNext = () => {
+    sendEvents('next');
+    goBackToPath();
   }
 
   const sendEvents = (userAction, docs) => {
@@ -94,10 +124,7 @@ const Progress = (props) => {
       classOverRideContainer="pr-container"
       skelton={isLoading}
       skeltonType="p"
-      handleClick={() => {
-        sendEvents('next');
-        navigate(PATHNAME_MAPPER.journey);
-      }}
+      handleClick={goNext}
       title="Upload documents"
       iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       headerData={{goBack}}
@@ -137,7 +164,7 @@ const Progress = (props) => {
         </footer>
         <ConfirmBackDialog 
           isOpen={openConfirmBack}
-          goBack={() => navigate('/kyc/journey')}
+          goBack={goBackToPath}
           close={() => setOpenConfirmBack(false)}
         />
       </section>

@@ -174,10 +174,15 @@ export function formCheckFields(
 export function setBaseHref() {
   var myBaseHref = document.getElementById('myBaseHref');
   var pathname = window.location.pathname;
-  if (pathname.indexOf('appl/webview') !== -1) {
-    var myBaseHrefUrl = '/appl/webview/' + pathname.split('/')[3] + '/';
+  if(pathname.indexOf('appl/web') !== -1) {
+    var myBaseHrefUrl = '/appl/web/' + pathname.split('/')[3] +'/' ;
     myBaseHref.href = myBaseHrefUrl;
-    window.sessionStorage.setItem('base_href', myBaseHrefUrl);
+    window.localStorage.setItem('base_href', myBaseHrefUrl);
+  }
+  if(pathname.indexOf('webapp') !== -1) {
+    var myBaseHrefUrl = '/webapp/';
+    myBaseHref.href = myBaseHrefUrl;
+    window.localStorage.setItem('base_href', myBaseHrefUrl);
   }
 }
 
@@ -196,6 +201,7 @@ export async function triggerOtpApi(body, loginType, bottomsheet) {
             value: body.mobile ||  body.email,
             otp_id: result?.otp_id,
             communicationType: loginType,
+            firstTimeLogin: this.state.firstTimeLogin || false,
           },
         });
       } else {
@@ -291,6 +297,22 @@ export async function resendVerificationLink() {
   }
 }
 
+export const redirectToLaunchDiet = async () => {
+  const url = '/api/equity/stub/equityvariables?ucc=DEMO100';
+  try {
+    const res = await Api.post(url);
+    const { result, status_code: status } = res.pfwresponse;
+    if (status === 200) {
+      window.location.href = `${config.base_url}/page/equity/launchdiet`;
+    } else {
+      toast(result.message || result.error || errorMessage);
+    }
+  } catch (error) {
+    console.log(error);
+    toast(errorMessage);
+  }
+} 
+
 export async function otpLoginVerification(verify_url, body) {
   let formData = new FormData();
   formData.append("otp", body?.otp);
@@ -334,7 +356,12 @@ export async function otpLoginVerification(verify_url, body) {
           storageService().get("deeplink_url")
         );
       } else {
-        this.redirectAfterLogin(result, user);
+        console.log(config.diet)
+        if(config.diet) {
+          await redirectToLaunchDiet();
+        } else {
+          this.redirectAfterLogin(result, user);
+        }
       }
     } else {
       if (result?.status_code === 439) {
@@ -427,7 +454,11 @@ export async function otpVerification(body) {
           storageService().get("deeplink_url")
         );
       } else {
-        this.redirectAfterLogin(result, user);
+        if(config.diet) {
+          await redirectToLaunchDiet();
+        } else {
+          this.redirectAfterLogin(result, user);
+        }
       }
       toast(result?.error || result.message || errorMessage)
     } else {
@@ -528,10 +559,14 @@ export async function getKycFromSummary(params = {}) {
 
 export function redirectAfterLogin(data, user, navigateFunc) {
   const kyc = storageService().getObject("kyc");
+  const ipoContactNotVerified = storageService().get("ipoContactNotVerified") || false;
   user = user || storageService().getObject("user");
   const navigate = navigateFunc || this.navigate;
   if (data.firstLogin) {
     navigate("/referral-code", { state: { goBack: "/", communicationType: data?.contacts?.auth_type } });
+  } else if (ipoContactNotVerified){
+    storageService().set("ipoContactNotVerified", false);
+    navigate("/market-products", { state: { goBack: "/invest" } });
   } else if (
     user.kyc_registration_v2 === "incomplete" &&
     user.active_investment
@@ -571,7 +606,6 @@ export const logout = async () => {
 
     if (status === 200) {
       storageService().clear();
-      window.localStorage.clear();
       return result;
     } else {
       throw result.error || result.message || errorMessage;

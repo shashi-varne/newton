@@ -3,9 +3,36 @@
 
 <head>
   <style>
-
+    /* default fallback colors for IE support*/
     :root {
     --skelton-boot-background: #E7E7E7;
+    --secondary: #35cb5d;
+    --highlight: #f6f2ff;
+    --skelton-color: #E7E7E7;
+    --primary: #4f2da7;
+    --header-background: undefined;
+    --default: #4a4a4a;
+    --label: #a2a2a2;
+    --desktop-width: 640px;
+    --tooltip-width: 540px;
+    --color-action-disable: #E8ECF1;
+    --dark: #0A1D32;
+    --steelgrey: #767E86;
+    --on-focus-background: #119A4B;
+    --on-hover-background: #35cb5d;
+    --on-hover-secondary-background: #35cb5d;
+    --secondary-green: #7ED321;
+    --mustard: #FFDA2C;
+    --pink: #F16FA0;
+    --purple: #A38CEB;
+    --lime: #7ED321;
+    --red: #D0021B;
+    --primaryVariant1: #DFD8EF;
+    --primaryVariant4: #482998;
+    --spacing: 10px;
+    --gunmetal: #161A2E;
+    --linkwater: #D3DBE4;
+    --border-radius: 4px;
     }
 
 
@@ -147,38 +174,57 @@
       manifest.json provides metadata used when your web app is added to the
       homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
     -->
-    <base id="myBaseHref"  />
-
+    <base id="myBaseHref" href="/webapp/"  />
     <script>
+      var browser = window.navigator.userAgent;
+      if(browser.indexOf("MSIE") !== -1) {
+        window.location.href='./support.html';
+      }
+    </script>
+    <script>
+
+      window.localStorage.setItem('base_href', '');
+
       var myBaseHref =  document.getElementById('myBaseHref');
       var pathname = window.location.pathname;
+      var myBaseHrefUrl = '';
 
-      if(pathname.indexOf('appl/webview') !== -1) {
-        var myBaseHrefUrl = '/appl/webview/' + window.location.pathname.split('/')[3] +'/' ;
-        myBaseHref.href = myBaseHrefUrl;
-        window.sessionStorage.setItem('base_href', myBaseHrefUrl);
+      if(pathname.indexOf('appl/web') !== -1) {
+        var myBaseHrefUrl = '/appl/web/' + window.location.pathname.split('/')[3] +'/' ;
       }
       
-      if(pathname.indexOf('plutus-webview') !== -1) {
-        var myBaseHrefUrl = '/plutus-webview' + window.location.pathname.split('/')[2] + '/' ;
-        myBaseHref.href = myBaseHrefUrl;
-        window.sessionStorage.setItem('base_href', myBaseHrefUrl);
+      if(pathname.indexOf('plutus-webapp') !== -1) {
+        var myBaseHrefUrl = '/plutus-webapp' + window.location.pathname.split('/')[2] + '/' ;
+      }
+
+      if(pathname.indexOf('webapp') !== -1) {
+        myBaseHrefUrl = '/webapp/';
+      }
+
+      if(myBaseHrefUrl) {
+
+        if(pathname.indexOf('webapp') === -1) { // not adding again for webapp, for others its needed
+          myBaseHref.href = myBaseHrefUrl;
+        }
+        
+        // document.write("<base href="+ myBaseHrefUrl+" />");
+        window.localStorage.setItem('base_href', myBaseHrefUrl);
       }
 
     </script>
 
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <link rel="shortcut icon" id="favicon" href="%PUBLIC_URL%/favicon.ico">
   <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
       Only files inside the `public` folder can be referenced from the HTML.
-
+      
       Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-  <title>Fisdom Webview</title>
+  <title>Loading</title>
 </head>
 
 <body>

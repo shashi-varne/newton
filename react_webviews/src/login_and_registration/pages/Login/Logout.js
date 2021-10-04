@@ -3,10 +3,12 @@ import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import { nativeCallback } from "../../../utils/native_callback";
 import { storageService } from "../../../utils/validators";
 import { logout } from "../../functions";
+import { isRmJourney } from "../../../group_insurance/products/group_health/common_data";
 
 const config = getConfig();
 const Logout = (props) => {
   const navigate = navigateFunc.bind(props); 
+  const isRM = isRmJourney();
 
   useEffect(() => {
     initialize();
@@ -23,12 +25,17 @@ const Logout = (props) => {
         return;
       }
       try {
-        window.localStorage.clear();
-        await logout();
+        if(!isRM){
+          await logout();
+        }
       } catch (err) {
         console.log(err);
       } finally {
-        navigate("/login")
+        if(isRM){
+          navigate("/rm-login")  
+        }else{
+          navigate("/login")
+        }
       }
     } else {
       nativeCallback({ action: "session_expired" });

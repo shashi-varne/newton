@@ -1,7 +1,8 @@
 import { calculateAge, isValidDate, validateEmail, isEmpty, storageService } from 'utils/validators'
 import { isTradingEnabled, getConfig } from '../../utils/functions'
 import { nativeCallback, openPdfCall } from '../../utils/native_callback'
-import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS, GENDER_OPTIONS } from '../constants'
+import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS, GENDER_OPTIONS, PATHNAME_MAPPER } from '../constants'
+import { isReadyToInvest } from '../services'
 import { getKyc } from './api'
 
 export const validateFields = (formData, keyToCheck) => {
@@ -62,6 +63,18 @@ export const validateFields = (formData, keyToCheck) => {
         case 'pincode':
           if(value.length !== 6) {
             formData[`${key}_error`] = 'Minimum length is 6'
+            canSubmit = false
+          }
+          break
+        case 'name':
+        case 'father_name':
+        case 'mother_name':
+        case 'spouse_name':
+          if (value.trim().length < 3) {
+            formData[`${key}_error`] = 'Minimum length is 3'
+            canSubmit = false
+          } else if (value.length === 3 && value.includes(" ")) {
+            formData[`${key}_error`] = 'Minimum 3 characters are required'
             canSubmit = false
           }
           break
@@ -314,7 +327,7 @@ export const pollProgress = (timeout, interval, popup_window) => {
 
 export const getFlow = (kycData) => {
   let flow = "";
-  if (kycData.kyc_status === 'compliant') {
+  if (kycData.kyc_status === 'compliant' && !isTradingEnabled(kycData)) {
     flow = 'premium onboarding'
   } else {
     if (isDigilockerFlow(kycData)) {
@@ -340,7 +353,7 @@ export const isEquityCompleted = () => {
   const kyc = storageService().getObject("kyc");
   if (isEmpty(kyc)) return false;
 
-  return (kyc.equity_application_status === "complete" && kyc.equity_sign_status === "signed");
+  return (kyc.equity_application_status === "complete" && kyc.equity_sign_status === "signed" && kyc.equity_investment_ready);
 }
 
 export const isIncompleteEquityApplication = (kyc) => {
@@ -366,9 +379,10 @@ export const isKycCompleted = (kyc) => {
 
 export const skipBankDetails = () => {
   const {kyc, user} = getKycUserFromSession();
+  const TRADING_ENABLED = isTradingEnabled(kyc);
 
   return (
-    user.active_investment ||
+    (((!TRADING_ENABLED && isReadyToInvest()) || (TRADING_ENABLED && isEquityCompleted())) && user.active_investment) ||
     (kyc.bank.meta_data_status === "approved" && kyc.bank.meta_data.bank_status === "verified") ||
     kyc.bank.meta_data.bank_status === "doc_submitted"
   );
@@ -426,5 +440,18 @@ export function openPdf(pdfLink, pdfType){
       });
   } else {
     openInBrowser(pdfLink, pdfType);
+  }
+}
+
+export const getUpgradeAccountFlowNextStep = (kyc) => {
+  const userType = kyc?.kyc_status;
+  if (!isEmailAndMobileVerified()) {
+    return PATHNAME_MAPPER.communicationDetails;
+  } else {
+    if (kyc?.bank?.meta_data_status === "approved" && kyc?.bank?.meta_data?.bank_status !== "verified") {
+      return `/kyc/${userType}/bank-details`;
+    } else {
+      return PATHNAME_MAPPER.tradingExperience;
+    }
   }
 }

@@ -71,10 +71,14 @@ const BanksList = (props) => {
   };
 
   const goBack = () => {
-    navigate("/my-account");
+    if (storageService().get("native")) {
+      nativeCallback({ action: "exit_web" });
+    } else {
+      navigate("/my-account");
+    }
   }
 
-  const showFooter = changeRequest.add_bank_enabled && ((config.Web && !config.isIframe) || !!storageService().get("native"))
+  const showFooter = changeRequest.add_bank_enabled && ((config.Web && !config.isIframe) || config.isSdk || !!storageService().get("native")) && config?.features?.addAnotherBank;
   return (
     <Container
       skelton={showLoader}

@@ -1,5 +1,15 @@
 @import './utils.scss';
 
+* {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+*::before,
+*::after {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+ }
+
 .configPrimaryColorClass {
   color: var(--primary) !important;
 }
@@ -36,6 +46,19 @@ body[data-device="web"] #root {
   /* autoprefixer: off */
   height: 100%;
   background: #f3f4f6;
+}
+.enable-body-touch{
+  overflow: auto !important;
+  touch-action: auto !important;
+  pointer-events: auto !important;
+  touch-action: unset !important;
+  pointer-events: unset !important;
+}
+
+.disable-body-touch{
+  overflow: hidden !important;
+  touch-action: none !important;
+  pointer-events: none !important;
 }
 
 button {
@@ -1393,6 +1416,7 @@ $header-title-font-size: 20px;
   margin-left: auto;
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .main-top-title-new2 {
@@ -1409,10 +1433,7 @@ $header-title-font-size: 20px;
 
 .main-top-title-header {
   @include main-top-title-header-base();
-  // white-space: nowrap;
-  // overflow: hidden;
-  // text-overflow: ellipsis;
-  // max-width: 95%;
+  flex-basis: 100%;
 }
 
 .main-top-title-header-old {

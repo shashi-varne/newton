@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import Logout from './login_and_registration/pages/Login/Logout.js';
 import FisdomPartnerRedirect from './fisdom_partner_redirect';
-import WealthReport from './wealth_report';
+// import WealthReport from './wealth_report';
 
 
 import { create } from 'jss';
@@ -14,11 +14,12 @@ import { themeConfig } from 'utils/constants';
 import { withRouter } from "react-router";
 import { ToastContainer } from 'react-toastify';
 
-import InternalWealthDashboard from './internal_wealth_dashboard';
+// import InternalWealthDashboard from './internal_wealth_dashboard';
 import DesktopLayout from './desktopLayout';
 // import CommonRenderFaqs from './common/components/RenderFaqs';
 
 
+import RmLogin from './RmJourney/login';
 import Feature from './Feature';
 import Tooltip from 'common/ui/Tooltip';
 import ComponentTest from './ComponentTest';
@@ -43,26 +44,22 @@ const getMuiThemeConfig = () => {
   return createMuiTheme(themeConfig());
 }
 
-var basename = window.sessionStorage.getItem('base_href') || '';
-if (basename && basename.indexOf('appl/webview') !== -1) {
+var basename = window.localStorage.getItem('base_href') || '';
+if (basename && basename.indexOf('appl/web') !== -1) {
   basename = basename ? basename + 'view/' : '';
 }
 
-const isBottomSheetDisplayed = storageService().get('is_bottom_sheet_displayed');
-if(isBottomSheetDisplayed) {
-  storageService().set("is_bottom_sheet_displayed", false);
-}
+const clearBottomsheetDisplays = () => {
+  const bottomSheetsArr = [
+    "is_bottom_sheet_displayed", 
+    "verifyDetailsSheetDisplayed", 
+    "is_bottom_sheet_displayed_kyc_premium", 
+    "landingBottomSheetDisplayed"
+  ];
 
-const verifyDetailsSheetDisplayed = storageService().get('verifyDetailsSheetDisplayed');
-if(verifyDetailsSheetDisplayed)
-  storageService().set("verifyDetailsSheetDisplayed", false)
-  
-const isBottomSheetDisplayedKycPremium = storageService().get(
-  "is_bottom_sheet_displayed_kyc_premium"
-);
-
-if(isBottomSheetDisplayedKycPremium) {
-  storageService().set("is_bottom_sheet_displayed_kyc_premium", false);
+  bottomSheetsArr.forEach((bottomSheet) => {
+    storageService().remove(bottomSheet);
+  });
 }
 
 const ScrollToTop = withRouter(
@@ -87,6 +84,7 @@ const App = () => {
     if(config.isSdk || config.isIframe) {
       storageService().set("entry_path",window.location.pathname);
     }
+    clearBottomsheetDisplays();
   },[]);
   const updateTheme = (event) => {
     const theme = getMuiThemeConfig();
@@ -102,8 +100,11 @@ const App = () => {
             <Tooltip />
             <ToastContainer autoClose={3000} />
             <Switch>
-              <Route path="/iw-dashboard" component={InternalWealthDashboard} />
-              <Route path='/w-report' component={WealthReport} />
+              {/* Not working */}
+              {/* <Route path="/iw-dashboard" component={InternalWealthDashboard} /> */}
+              {/* <Route path='/w-report' component={WealthReport} /> */}
+               {/* Not working */}
+              {/* Working category*/}
               <UnAuthenticatedRoute
                 path={[
                   '/login',
@@ -111,11 +112,12 @@ const App = () => {
                 ]}
                 component={LoginContainer}
               />
-              <Route path='/partner-landing' component={FisdomPartnerRedirect} />
+              <UnAuthenticatedRoute path='/rm-login' component={RmLogin} />
               <UnAuthenticatedRoute path="/partner-authentication/:partnerCode" component={PartnerAuthentication} />
+              <UnAuthenticatedRoute path="/prepare" component={Prepare} />
+              <Route path='/partner-landing' component={FisdomPartnerRedirect} />
               <Route path='/logout' component={Logout} />
               <Route path='/component-test' component={ComponentTest} />
-              <UnAuthenticatedRoute path="/prepare" component={Prepare} />
               {
                 isMobileDevice || iframe ?
                 <Route component={Feature}/>:

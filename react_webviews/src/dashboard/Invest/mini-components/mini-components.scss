@@ -339,36 +339,6 @@
       margin: 20px 0;
     }
 
-    .vfdc-bottom-info {
-      display: -ms-flexbox;
-      display: flex;
-      -ms-flex-align: center;
-      align-items: center;
-      -ms-flex-pack: justify;
-      justify-content: space-between;
-      background-color: white;
-
-      .bottom-info-box {
-        display: -ms-flexbox;
-        display: flex;
-        padding: 0 10px 0 10px;
-
-        img {
-          margin: 0 10px 0 0px;
-        }
-
-        .bottom-info-content {
-          color: #767e86;
-          font-size: 13px;
-          font-weight: 400;
-        }
-      }
-
-      .bottom-info-mid {
-        border-left: 1px solid #d3dbe4;
-        height: 12px;
-      }
-    }
 
     .action {
       display: flex;
@@ -400,22 +370,45 @@
       }
     }
   }
+}
 
-  .kyc-premium-content {
-    .title {
-      .text {
-        margin-bottom: 30px;
-      }
+.vfdc-bottom-info {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  background-color: white;
+
+  .bottom-info-box {
+    display: -ms-flexbox;
+    display: flex;
+    padding: 0 10px 0 10px;
+
+    img {
+      margin: 0 10px 0 0px;
     }
 
-    .subtitle {
-      margin: 30px 0 10px 0;
-    }
-
-    .action {
-      margin-top: 30px;
+    .bottom-info-content {
+      color: var(--steelgrey);
+      font-size: 13px;
+      font-weight: 400;
     }
   }
+
+  .bottom-info-mid {
+    border-left: 1px solid #d3dbe4;
+    height: 12px;
+  }
+}
+
+.kyc-pld-right-icon {
+  min-width: 160px;
+}
+
+.kyc-sd-right-icon {
+  min-width: 120px;
 }
 
 //////////////// End of common bottom sheet dialog Landing /////////
@@ -571,15 +564,17 @@
   .dialog-action{
     display: flex;
     align-items: center;
-    padding:0px 15px 15px 15px !important;
+    padding:0px 15px 20px 15px !important;
     margin-left: 0px !important;
     margin-right: 0px !important;
+    margin-bottom: 0px !important;
     width: 100% !important;
 
     .button {
       width: 100%;
       padding: 5px 15px;
       font-size: 14px;
+      height: 47px;
       min-height: 47px;
       font-weight: bold;
       margin: 0px !important;
@@ -617,6 +612,15 @@
     .MuiDialog-paperWidthSm {
       width: 100%;
       align-self: flex-end;
+    }
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  #invest-bottom-dialog, #sdk-campaign-dialog {
+    .MuiDialog-paper {
+      border-bottom-left-radius: 0px !important;
+      border-bottom-right-radius: 0px !important;
     }
   }
 }

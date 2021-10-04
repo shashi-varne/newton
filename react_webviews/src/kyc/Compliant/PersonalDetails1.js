@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Container from "../common/Container";
 import Input from "common/ui/Input";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
@@ -18,23 +18,25 @@ import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { kycSubmit } from "../common/api";
 import { nativeCallback } from "../../utils/native_callback";
-import { getConfig } from "../../utils/functions";
+import { getConfig, isTradingEnabled } from "../../utils/functions";
 
-const productName = getConfig().productName;
 const PersonalDetails1 = (props) => {
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
   const [oldState, setOldState] = useState({});
-  let title = "Personal details";
+  let title = "Personal information";
   const [isNri, setIsNri] = useState();
   const [totalPages, setTotalPages] = useState();
   if (isEdit) {
-    title = "Edit personal details";
+    title = "Edit personal information";
   }
 
   const { kyc, user, isLoading } = useUserKycHook();
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -147,7 +149,7 @@ const PersonalDetails1 = (props) => {
             : form_data?.gender?.toLowerCase()
           : "",
         "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
-        "flow": 'premium onboarding'
+        "flow": !isTradingEnabled(kyc) ? 'premium onboarding' : 'general'
         // "mobile": form_data.mobile ? "yes" : "no",
         // "email": form_data.email_error ? "invalid" : form_data.email ? "yes" : "no",
         // "help": isOpen ? 'yes' : 'no',

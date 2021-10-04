@@ -43,6 +43,7 @@
     "country-telephone-data": "^0.6.2",
     "crypto-js": "^3.1.9-1",
     "css-loader": "0.28.7",
+    "css-vars-ponyfill": "^2.4.6",
     "date-fns": "^2.16.1",
     "dotenv": "4.0.0",
     "dotenv-expand": "4.2.0",
@@ -73,6 +74,7 @@
     "raf": "3.4.0",
     "rc-slider": "^9.3.1",
     "react": "^16.13.1",
+    "react-app-polyfill": "^2.0.0",
     "react-autosuggest": "^9.4.3",
     "react-chartjs-2": "^2.9.0",
     "react-circular-progressbar": "^2.0.3",
@@ -119,7 +121,7 @@
   },
   "scripts": {
     "start": "NODE_PATH=./src node scripts/start.js",
-    "build": "NODE_PATH=./src node --max_old_space_size=2000 scripts/build.js",
+    "build": "NODE_PATH=./src node --max_old_space_size=4096 scripts/build.js",
     "test": "NODE_PATH=./src node scripts/test.js --env=jsdom"
   },
   "jest": {

@@ -131,6 +131,11 @@ export const themeConfig =  () => {
             root: {
                 display: 'block'
             }
+        },
+        MuiModal: {
+            root: {
+              backgroundColor: 'rgba(0,0,0,0.6)'
+            }
         }
     }
   }
@@ -190,4 +195,8 @@ export const commonBackMapper = {
     '/reports/sip/pause-request': '/reports/sip',
     '/reports/sip/details': '/reports/sip',
     '/reports/sip': '/reports',
+    '/kyc/upload/address': '/kyc/upload/progress',
+    '/kyc/upload/address-nri': '/kyc/upload/progress',
 }
+
+export const landingEntryPoints = ["/", "/invest", "/landing"];
