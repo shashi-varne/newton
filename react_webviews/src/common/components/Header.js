@@ -34,6 +34,7 @@ const Header = ({ classes, title, count, total, current, goBack,
     const [mobileViewDrawer, setMobileViewDrawer] = useState(false);
     const campaign = storageService().getObject("campaign");
     const config = getConfig();
+    const isGuestUser = storageService().getBoolean('guestUser');
     const isMobileDevice = config.isMobileDevice;
     const partnerLogo = config.logo;
     const isWeb = config.Web;
@@ -60,8 +61,8 @@ const Header = ({ classes, title, count, total, current, goBack,
           {
             !noBackIcon &&
             <IconButton className={classes.menuButton} color="inherit" aria-label="Menu"
-              onClick={headerData.goBack ||
-              goBack}
+              onClick={headerData.goBack || goBack} 
+              // Important Note:  whenever adding goBack func in headerData Container prop within component, do add native condition for correct back navigation 
               data-aid='tool-bar-icon-btn'
             >
               {!disableBack && !headerData.hide_icon &&
@@ -125,7 +126,6 @@ const Header = ({ classes, title, count, total, current, goBack,
 
         {!headerData.progressHeaderData && 
           <>
-            <div>
             {
               !headerData.partnerLogo && 
               <div
@@ -136,7 +136,6 @@ const Header = ({ classes, title, count, total, current, goBack,
                 {title}
               </div>
             }
-            </div>
             {
               !(moneycontrolHeader && headerData.partnerLogo) &&
               <div className='header-right-nav-components'>
@@ -167,7 +166,7 @@ const Header = ({ classes, title, count, total, current, goBack,
                   src={isEmpty(campaign) ? notificationLogo : notificationBadgeLogo}
                 />
                 }
-                {isMobileDevice && isWeb && !hideHamburger && !config.isIframe &&
+                {isMobileDevice && isWeb && !hideHamburger && !config.isIframe && !isGuestUser &&
                   <div className='mobile-navbar-menu'>
                     <IconButton onClick={handleMobileViewDrawer}>
                       <MenuIcon style={{color: new_header && backgroundColor ?  getConfig().styles.secondaryColor : headerData.partnerLogo ? 'white' : getConfig().styles.primaryColor}}/>

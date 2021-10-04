@@ -13,6 +13,7 @@ import { getBasePath, isMobile } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 import { updateQueryStringParameter } from "../common/functions";
 import { isNewIframeDesktopLayout, popupWindowCenter } from "../../utils/functions";
+import { Imgc } from "../../common/ui/Imgc";
 
 const Failed = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -88,7 +89,7 @@ const Failed = (props) => {
     const redirect_url = encodeURIComponent(
       `${basePath}/digilocker/callback${
         config.searchParams
-      }&is_secure=${storageService().get("is_secure")}`
+      }&is_secure=${config.isSdk}`
     );
 
     if (newIframeDesktopLayout) {
@@ -100,11 +101,9 @@ const Failed = (props) => {
         )
       )
     }
+    const backUrl = `${basePath}/kyc/journey${config.searchParams}&show_aadhaar=true&is_secure=${config.isSdk}`;
     const data = {
-      url: `${basePath}/kyc/journey${
-        config.searchParams
-      }&show_aadhaar=true&is_secure=
-        ${storageService().get("is_secure")}`,
+      url: backUrl,
       message: "You are almost there, do you really want to go back?",
     };
     if (isMobile.any() && storageService().get(STORAGE_CONSTANTS.NATIVE)) {
@@ -126,12 +125,7 @@ const Failed = (props) => {
               action_name: "positive",
               action_text: "Yes",
               action_type: "redirect",
-              redirect_url: encodeURIComponent(
-                `${basePath}/kyc/journey${
-                  config.searchParams
-                }&show_aadhaar=true&is_secure=
-                  ${storageService().get("is_secure")}`
-              ),
+              redirect_url: encodeURIComponent(backUrl),
             },
             {
               action_name: "negative",
@@ -183,7 +177,7 @@ const Failed = (props) => {
       <section id="digilocker-failed"  data-aid='kyc-digilocker-failed'>
         {
           !newIframeDesktopLayout &&
-          <img
+          <Imgc
             className="digi-image"
             alt=""
             src={require(`assets/${productName}/ils_digilocker_failed.svg`)}
@@ -193,7 +187,6 @@ const Failed = (props) => {
           Aadhaar KYC has been failed because we were not able to connect to
           your DigiLocker.
         </div>
-        <div className='body-text2'>Try again to complete KYC.</div>
       </section>
     </Container>
   );

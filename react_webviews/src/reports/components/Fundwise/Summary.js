@@ -17,7 +17,7 @@ import { nativeCallback } from "../../../utils/native_callback";
 const FundswiseSummary = (props) => {
   const navigate = navigateFunc.bind(props);
   const [menuPosition, setMenuPosition] = useState(null);
-  const [funds, setFunds] = useState({});
+  const [funds, setFunds] = useState([]);
   const [selectedFund, setSelectedFund] = useState({});
   const [showSkelton, setShowSkelton] = useState(true);
 

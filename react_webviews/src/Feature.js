@@ -12,7 +12,7 @@ import EMandate from './e_mandate';
 import RiskProfiler from './risk_profiler';
 import HNI from './external_portfolio';
 import IsipBIller from './isip';
-import HelpSupport from './help_support';
+import HelpSupport from './help_support_v2';
 import CommonLanding from './common/components/landing';
 import Withdraw from './withdraw';
 import Report from './reports';
@@ -38,7 +38,7 @@ import 'common/theme/Style.scss';
 const Feature = () => {
   // old # route support added
   // start
-  const history = useHistory()
+  const history = useHistory();
   if (window.location.hash.startsWith('#!/')) {
     history.push(window.location.hash.replace('#!', ''))
   }

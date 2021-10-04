@@ -19,6 +19,7 @@ import DesktopLayout from './desktopLayout';
 // import CommonRenderFaqs from './common/components/RenderFaqs';
 
 
+import RmLogin from './RmJourney/login';
 import Feature from './Feature';
 import Tooltip from 'common/ui/Tooltip';
 import ComponentTest from './ComponentTest';
@@ -28,8 +29,10 @@ import { storageService } from './utils/validators';
 import LoginContainer from './login_and_registration/components/LoginContainer';
 import PartnerAuthentication from './login_and_registration/pages/Authentication';
 import Prepare from './dashboard/Invest/components/SdkLanding/Prepare';
-import { ThemeProvider } from './utils/ThemeContext';
 import UnAuthenticatedRoute from './common/components/UnAuthenticatedRoute.js';
+import RedirectToAnyPath from './common/components/RedirectToAnyPath.js';
+import eventManager from './utils/eventManager.js';
+import { EVENT_MANAGER_CONSTANTS } from './utils/constants.js';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -43,26 +46,22 @@ const getMuiThemeConfig = () => {
   return createMuiTheme(themeConfig());
 }
 
-var basename = window.sessionStorage.getItem('base_href') || '';
-if (basename && basename.indexOf('appl/webview') !== -1) {
+var basename = window.localStorage.getItem('base_href') || '';
+if (basename && basename.indexOf('appl/web') !== -1) {
   basename = basename ? basename + 'view/' : '';
 }
 
-const isBottomSheetDisplayed = storageService().get('is_bottom_sheet_displayed');
-if(isBottomSheetDisplayed) {
-  storageService().set("is_bottom_sheet_displayed", false);
-}
+const clearBottomsheetDisplays = () => {
+  const bottomSheetsArr = [
+    "is_bottom_sheet_displayed", 
+    "verifyDetailsSheetDisplayed", 
+    "is_bottom_sheet_displayed_kyc_premium", 
+    "landingBottomSheetDisplayed"
+  ];
 
-const verifyDetailsSheetDisplayed = storageService().get('verifyDetailsSheetDisplayed');
-if(verifyDetailsSheetDisplayed)
-  storageService().set("verifyDetailsSheetDisplayed", false)
-  
-const isBottomSheetDisplayedKycPremium = storageService().get(
-  "is_bottom_sheet_displayed_kyc_premium"
-);
-
-if(isBottomSheetDisplayedKycPremium) {
-  storageService().set("is_bottom_sheet_displayed_kyc_premium", false);
+  bottomSheetsArr.forEach((bottomSheet) => {
+    storageService().remove(bottomSheet);
+  });
 }
 
 const ScrollToTop = withRouter(
@@ -81,29 +80,42 @@ const ScrollToTop = withRouter(
 
 const App = () => {
   const config = getConfig();
+  const iframe = config.isIframe;
   const isMobileDevice = config.isMobileDevice;
   const [themeConfiguration, setThemeConfiguration] = useState(getMuiThemeConfig());
+
   useEffect(() => {
     if(config.isSdk || config.isIframe) {
       storageService().set("entry_path",window.location.pathname);
     }
-  },[]);
-  const updateTheme = (event) => {
+    clearBottomsheetDisplays();
+    eventManager.add(EVENT_MANAGER_CONSTANTS.updateAppTheme, updateAppTheme);
+    eventManager.add(EVENT_MANAGER_CONSTANTS.storePartnerCode, getConfig().code);
+  }, []);
+
+  const updateAppTheme = (event) => {
+    const oldPartnerCode = eventManager.get(EVENT_MANAGER_CONSTANTS.storePartnerCode);
+    const newPartnerCode = getConfig().code;
+    if(newPartnerCode === oldPartnerCode) return;
     const theme = getMuiThemeConfig();
-    setThemeConfiguration(theme)
+    setThemeConfiguration(theme);
+    eventManager.add(EVENT_MANAGER_CONSTANTS.storePartnerCode, newPartnerCode);
   }
-  const iframe = config.isIframe;
+
     return (
       <BrowserRouter basename={basename}>
         <JssProvider jss={jss} generateClassName={generateClassName}>
-          <ThemeProvider value={{updateTheme}}>
           <MuiThemeProvider theme={themeConfiguration}>
             <ScrollToTop />
             <Tooltip />
             <ToastContainer autoClose={3000} />
+            <RedirectToAnyPath />
             <Switch>
               <Route path="/iw-dashboard" component={InternalWealthDashboard} />
               <Route path='/w-report' component={WealthReport} />
+              <Route path='/partner-landing' component={FisdomPartnerRedirect} />
+              <Route path='/component-test' component={ComponentTest} />
+              <Route path='/logout' component={Logout} />
               <UnAuthenticatedRoute
                 path={[
                   '/login',
@@ -111,10 +123,8 @@ const App = () => {
                 ]}
                 component={LoginContainer}
               />
-              <Route path='/partner-landing' component={FisdomPartnerRedirect} />
+              <UnAuthenticatedRoute path='/rm-login' component={RmLogin} />
               <UnAuthenticatedRoute path="/partner-authentication/:partnerCode" component={PartnerAuthentication} />
-              <Route path='/logout' component={Logout} />
-              <Route path='/component-test' component={ComponentTest} />
               <UnAuthenticatedRoute path="/prepare" component={Prepare} />
               {
                 isMobileDevice || iframe ?
@@ -125,7 +135,6 @@ const App = () => {
               }
             </Switch>
           </MuiThemeProvider>
-          </ThemeProvider>
         </JssProvider>
       </BrowserRouter>
     );

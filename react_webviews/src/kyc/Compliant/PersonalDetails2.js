@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Input from "common/ui/Input";
 import { PATHNAME_MAPPER, MARITAL_STATUS_OPTIONS } from "../constants";
-import { isEmpty, validateAlphabets } from "utils/validators";
+import { isEmpty, validateName } from "utils/validators";
 import {
   validateFields,
   compareObjects,
   getTotalPagesInPersonalDetails,
+  getUpgradeAccountFlowNextStep,
 } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
@@ -14,19 +15,21 @@ import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import toast from "common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
-import { getConfig } from "../../utils/functions";
+import { getConfig, isTradingEnabled } from "../../utils/functions";
 
-const productName = getConfig().productName;
 const PersonalDetails2 = (props) => {
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
-  const isEdit = props.location.state?.isEdit || false;
   const [oldState, setOldState] = useState({});
   const [totalPages, setTotalPages] = useState();
-  let title = "Personal details";
+  const productName = getConfig().productName;
+  const stateParams = props?.location?.state || {};
+  const isEdit = stateParams.isEdit || false;
+  const isUpgradeFlow = stateParams.flow === "upgradeAccount";
+  let title = "Personal information";
   if (isEdit) {
-    title = "Edit personal details";
+    title = "Edit personal information";
   }
 
   const { kyc, user, isLoading } = useUserKycHook();
@@ -47,6 +50,19 @@ const PersonalDetails2 = (props) => {
     setFormData({ ...formData });
     setOldState({ ...formData });
   };
+
+  const handleNavigation = () => {
+    if (isUpgradeFlow) {
+      const pathName = getUpgradeAccountFlowNextStep(kyc);
+      navigate(pathName);
+    } else {
+      navigate(PATHNAME_MAPPER.compliantPersonalDetails3, {
+        state: {
+          isEdit: isEdit,
+        },
+      });
+    }
+  }
 
   const handleClick = () => {
     sendEvents("next")
@@ -72,11 +88,7 @@ const PersonalDetails2 = (props) => {
       },
     };
     if (compareObjects(keysToCheck, oldState, form_data)) {
-      navigate(PATHNAME_MAPPER.compliantPersonalDetails3, {
-        state: {
-          isEdit: isEdit,
-        },
-      });
+      handleNavigation();
       return;
     }
     savePersonalDetails2(item);
@@ -87,11 +99,7 @@ const PersonalDetails2 = (props) => {
       setIsApiRunning("button");
       const submitResult = await kycSubmit(body);
       if (!submitResult) return;
-      navigate(PATHNAME_MAPPER.compliantPersonalDetails3, {
-        state: {
-          isEdit: isEdit,
-        },
-      });
+      handleNavigation();
     } catch (err) {
       console.log(err);
       toast(err.message);
@@ -102,7 +110,7 @@ const PersonalDetails2 = (props) => {
 
   const handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
-    if (name.includes("name") && value && !validateAlphabets(value)) {
+    if (name.includes("name") && value && !validateName(value)) {
       return;
     }
     let formData = { ...form_data };
@@ -125,7 +133,7 @@ const PersonalDetails2 = (props) => {
           : "",
         "mother's_name": form_data.mother_name ? "yes" : "no",
         spouse_name: form_data.spouse_name ? "yes" : "no",
-        "flow": 'premium onboarding'
+        "flow": !isTradingEnabled(kyc) ? 'premium onboarding' : 'general'
       },
     };
     if (userAction === "just_set_events") {
@@ -144,9 +152,9 @@ const PersonalDetails2 = (props) => {
       showLoader={isApiRunning}
       handleClick={handleClick}
       title={title}
-      count={2}
+      count={!isUpgradeFlow && 2}
       current={2}
-      total={totalPages}
+      total={!isUpgradeFlow && totalPages}
       data-aid='kyc-personal-details-screen-2'
       iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
     >

@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import { validateNumber, isEmpty } from "utils/validators";
 import Input from "common/ui/Input";
-import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
+import DropDownNew from '../../common/ui/DropDownNew';
 import {
   bankAccountTypeOptions,
   PATHNAME_MAPPER,
   getIfscCodeError,
+  BANK_IFSC_CODES
 } from "../constants";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -28,19 +29,21 @@ import PennyFailedDialog from "../mini-components/PennyFailedDialog";
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 import internalStorage from '../common/InternalStorage';
 import { isNewIframeDesktopLayout } from "../../utils/functions"
+import { storageService } from "../../utils/validators";
 
-const config = getConfig();
-let titleText = "Enter bank account details";
-
+let titleText = "Primary bank account details";
+const genericErrorMessage = "Something Went wrong!";
 const KycBankDetails = (props) => {
-  const genericErrorMessage = "Something Went wrong!";
+  const config = getConfig();
   const code = config.code;
   const navigate = navigateFunc.bind(props);
   const [isPennyExhausted, setIsPennyExhausted] = useState(false);
   const params = props.match.params || {};
   const userType = params.userType || "";
   const isEdit = props.location.state?.isEdit || false;
-  if(isEdit) titleText = "Edit bank account details"
+  if (isEdit) {
+    titleText = "Edit primary bank account details";
+  }
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const [bankData, setBankData] = useState({
@@ -54,7 +57,7 @@ const KycBankDetails = (props) => {
   const [name, setName] = useState("");
   const [note, setNote] = useState({
     info_text:
-      "As per SEBI, it is mandatory for investors to provide their own bank account details",
+      "This bank account will be the default account for all your investments and withdrawals",
     variant: "info",
   });
   const [disableFields, setDisableFields] = useState({
@@ -70,10 +73,15 @@ const KycBankDetails = (props) => {
   const [goBackModal, setGoBackModal] = useState(false);
   const { kyc, user, isLoading } = useUserKycHook();
   const goBackPath = props.location?.state?.goBack || "";
+  const fromState = props.location?.state?.fromState || "";
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
       initialize();
+
+      if (fromState === PATHNAME_MAPPER.uploadProgress) {
+        storageService().set("bankEntryPoint", "uploadDocuments")
+      }
     }
   }, [kyc, user]);
 
@@ -107,6 +115,11 @@ const KycBankDetails = (props) => {
     setName(kyc.pan.meta_data.name || "");
     let data = kyc.bank.meta_data || {};
     data.c_account_number = data.account_number;
+    const accountTypeOptions = bankAccountTypeOptions(kyc?.address?.meta_data?.is_nri || "");
+    const selectedAccountType = accountTypeOptions.filter(el => el.value === data.account_type);
+    if(isEmpty(selectedAccountType)) {
+      data.account_type = "";
+    }
     if (data.user_rejection_attempts === 0) {
       if(isNewIframeDesktopLayout()) {
         handlePennyExhaust()
@@ -136,7 +149,7 @@ const KycBankDetails = (props) => {
     setBankData({ ...data });
     setBankIcon(data.ifsc_image || "");
     setAccountTypes([
-      ...bankAccountTypeOptions(kyc?.address?.meta_data?.is_nri || ""),
+      ...accountTypeOptions,
     ]);
   };
 
@@ -147,7 +160,16 @@ const KycBankDetails = (props) => {
 
   const redirect = () => {
     sendEvents("check_bank_details", "unable_to_add_bank");
-    navigate(PATHNAME_MAPPER.journey);
+    if (storageService().get("bankEntryPoint") === "uploadDocuments") {
+      redirectToUploadProgress();
+    } else {
+      navigate(PATHNAME_MAPPER.journey);
+    }
+  };
+
+  const redirectToUploadProgress = () => {
+    storageService().remove("bankEntryPoint");
+    navigate(PATHNAME_MAPPER.uploadProgress);
   };
 
   const handleClick = () => {
@@ -186,9 +208,12 @@ const KycBankDetails = (props) => {
   };
 
   const handleOtherPlatformNavigation = () => {
+    const nextStep = kyc.show_equity_charges_page ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
     if (userType === "compliant") {
       if (isEdit) navigate(PATHNAME_MAPPER.journey);
-      else navigate(PATHNAME_MAPPER.tradingExperience)
+      else navigate(nextStep, {
+        state: { goBack: PATHNAME_MAPPER.journey }
+      })
     } else {
       if (dl_flow) {
         const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
@@ -197,7 +222,9 @@ const KycBankDetails = (props) => {
             state: { goBack: PATHNAME_MAPPER.journey }
           });
         } else {
-          navigate(PATHNAME_MAPPER.tradingExperience);
+          navigate(nextStep, {
+            state: { goBack: PATHNAME_MAPPER.journey }
+          });
         }
       } else {
         navigate(PATHNAME_MAPPER.uploadProgress);
@@ -248,7 +275,13 @@ const KycBankDetails = (props) => {
         (result.kyc.bank.meta_data.bank_status === "doc_submitted" || result.kyc.bank.meta_data.bank_status === "verified")) {
         handleNavigation();
       } else {
-        navigate(`/kyc/${userType}/bank-verify`);
+        const bankMetaUpdateDict = result.meta_update_dict?.bank || {};
+        navigate(`/kyc/${userType}/bank-verify`, {
+          state: {
+            isPartnerBank: bankMetaUpdateDict?.is_partner_bank,
+            isPartnerEquityEnabled: bankMetaUpdateDict?.is_partner_equity_enabled
+          }
+        });
       }
     } catch (err) {
       if ((kyc?.bank.meta_data_status === "submitted" && kyc?.bank.meta_data.bank_status === "pd_triggered") ||
@@ -304,20 +337,18 @@ const KycBankDetails = (props) => {
     let formData = Object.assign({}, form_data);
     let bank = Object.assign({}, bankData);
     let bankIcon = "";
-    if (
-      (code === "ktb" && bankData.ifsc_code.toUpperCase().startsWith("KARB")) ||
-      (code === "lvb" && bankData.ifsc_code.toUpperCase().startsWith("LAVB")) ||
-      (code === "cub" && bankData.ifsc_code.toUpperCase().startsWith("CIUB")) ||
-      (code === "ippb" &&
-        bankData.ifsc_code.toUpperCase().startsWith("IPOS")) ||
-      (code !== "ktb" && code !== "lvb" && code !== "cub" && code !== "ippb")
-    ) {
+
+    // the ippb is not kept inside BANK_IFSC_CODES, because we don't validate the IFSC code for ippb in my account flow(AddBank.js)
+    BANK_IFSC_CODES.ippb = 'IPOS';
+    if (!BANK_IFSC_CODES[code] || bankData.ifsc_code.toUpperCase().startsWith(BANK_IFSC_CODES[code])) {
       try {
         setIfscDisabled(true);
         const result = (await getIFSC(bankData.ifsc_code)) || [];
         if (result && result.length > 0) {
           const data = result[0] || {};
           formData.ifsc_code_error = "";
+          bank.ifsc_details = data;
+          bank.bank_code = data.bank_code;
           bank.branch_name = data.branch;
           bank.bank_name = data.bank;
           bankIcon = data.image || "";
@@ -351,7 +382,9 @@ const KycBankDetails = (props) => {
 
   const goBackToPath = () => {
     sendEvents("back");
-    if (goBackPath) {
+    if (fromState === PATHNAME_MAPPER.uploadProgress || (storageService().get("bankEntryPoint") === "uploadProgress")) {
+      redirectToUploadProgress();
+    } else if (goBackPath) {
       navigate(goBackPath);
     } else {
       if (kyc?.kyc_status === "non-compliant" && (kyc?.kyc_type === "manual" || kyc?.address?.meta_data?.is_nri)) {
@@ -497,7 +530,7 @@ const KycBankDetails = (props) => {
                 }
               />
               <div className="input" data-aid='kyc-dropdown-withouticon'>
-                <DropdownWithoutIcon
+                <DropDownNew
                   error={form_data.account_type_error ? true : false}
                   helperText={form_data.account_type_error}
                   options={accountTypes}
@@ -508,6 +541,7 @@ const KycBankDetails = (props) => {
                   name="account_type"
                   onChange={handleChange("account_type")}
                   disabled={isApiRunning || disableFields.account_type_disabled}
+                  disableCaseSensitivity={true}
                 />
               </div>
             </main>

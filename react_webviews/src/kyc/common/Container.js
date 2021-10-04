@@ -48,7 +48,6 @@ class Container extends Component {
       case "/kyc/personal-details4":
       case "/kyc/dl/personal-details3":
       case "/kyc/compliant-personal-details4":
-      case "/kyc/upload/fno-income-proof":
       case "/kyc/digilocker/success":
       case "/kyc/digilocker/failed":
       case "/kyc/trading-experience":
@@ -80,20 +79,23 @@ class Container extends Component {
     const goBackPath = this.props.location?.state?.goBack || "";
 
     if (goBackPath) {
-      if (goBackPath === "exit" && storageService().get("native")) {
+      if (goBackPath === "exit") {
         switch (pathname) {
           case "/kyc/home":
           case "/kyc/add-bank":
           case "/kyc/approved/banks/doc":
           case "/kyc/journey":
           case "/kyc/nri-error":
-          case "/kyc/account-info":
+          case "/kyc/trading-info":
           case "/kyc/stocks-status":
           case "/kyc/upload/progress":
-            nativeCallback({ action: "exit_web" });
+            if (storageService().get("native")) {
+              nativeCallback({ action: "exit_web" });
+            } else {
+              this.navigate("/");
+            }
             break;
           default:
-            console.log("Props history goBack...")
             this.props.history.goBack();
         }
         return;

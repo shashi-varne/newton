@@ -3,6 +3,7 @@ import Container from '../common/Container'
 import { getConfig, navigate as navigateFunc } from '../../utils/functions'
 import { DL_DOCS } from '../constants'
 import "./Digilocker.scss";
+import { Imgc } from '../../common/ui/Imgc';
 
 const Success = (props) => {
   const config = getConfig();
@@ -15,8 +16,8 @@ const Success = (props) => {
   
   return (
     <Container
-      title="Share details"
-      buttonTitle="PROCEED"
+      title="Allow document permission"
+      buttonTitle="ALLOW PERMISSION"
       handleClick={proceed}
       headerData={{ icon: "close" }}
       iframeRightContent={require(`assets/${productName}/digilocker_kyc.svg`)}
@@ -24,12 +25,12 @@ const Success = (props) => {
     >
       <section id="digilocker-success" data-aid='kyc-digilocker-success'>
         <div className="kyc-main-subtitle" data-aid='kyc-page-desc-text'>
-          Tap on proceed to allow {config.code} to access your following documents
+          We need access to the following documents for your KYC
         </div>
         <main className="esign-steps" data-aid='kyc-esign-steps'>
           {DL_DOCS.map(({ name, icon }, idx) => (
             <div className="doc flex-center" key={icon}>
-              <img
+              <Imgc
                 src={require(`assets/${productName}/${icon}.svg`)}
                 className="doc-icon"
                 alt=""

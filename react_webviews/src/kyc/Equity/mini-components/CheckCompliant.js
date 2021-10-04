@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useMemo } from "react";
 import WVLoadingBottomSheet from "../../../common/ui/LoadingBottomSheet/WVLoadingBottomSheet";
 import { getConfig } from "../../../utils/functions";
 
-const { productName } = getConfig();
 const CheckCompliant = ({ isOpen }) => {
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
   return (
     <WVLoadingBottomSheet
       isOpen={isOpen}
       gifSrc={require(`assets/${productName}/kyc_loader.gif`)}
-      title="Checking for PAN compliance"
-      subtitle="Hang on while we check if you’re investment ready"
+      title="Checking your KYC status"
+      subtitle="Please wait, while we check if you’re investment ready"
     />
   );
 };
