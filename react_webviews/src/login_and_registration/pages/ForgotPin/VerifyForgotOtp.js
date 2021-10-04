@@ -118,7 +118,10 @@ const VerifyForgotOtp = (props) => {
       >
         CONTINUE
       </LoginButton>
-      <GoBackToLoginBtn onClick={goBack} />
+      <GoBackToLoginBtn
+        disabled={isApiRunning || isResendApiRunning}
+        onClick={goBack}
+      />
     </OtpContainer>
   );
 }

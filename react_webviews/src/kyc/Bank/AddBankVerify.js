@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import { storageService } from "utils/validators";
 import { navigate as navigateFunc } from "utils/functions";
-import { STORAGE_CONSTANTS, PATHNAME_MAPPER } from "../constants";
+import { STORAGE_CONSTANTS, PATHNAME_MAPPER, BANK_ACCOUNT_TYPES_NOMENCLATURE } from "../constants";
 import { getFlow } from "../common/functions";
 import {
   saveBankData,
@@ -50,6 +50,10 @@ const AddBankVerify = (props) => {
     let data = kyc.additional_approved_banks.find(
       (obj) => obj.bank_id?.toString() === bank_id
     );
+    if(!data && kyc.bank.meta_data.bank_id === Number(bank_id)) {
+      data = kyc.bank.meta_data;
+      data.status = "default";
+    }
     setShowLoader(false);
     setBankData({ ...data });
     setUserKyc(kyc);
@@ -166,7 +170,7 @@ const AddBankVerify = (props) => {
       {
         searchParams: `${
           getConfig().searchParams
-        }&additional=true&bank_id=${bank_id}`,
+        }&additional=true${bankData.status !== "default" ? `&bank_id=${bank_id}` : ""}`,
       }
     );
   };
@@ -192,9 +196,7 @@ const AddBankVerify = (props) => {
         account_number: bankData.account_number ? "yes" : "no",
         ifsc_code: bankData.ifsc_code ? "yes" : "no",
         account_type: bankData.account_type ? "yes" : "no",
-        c_account_number: userKyc.bank?.meta_data?.account_number
-          ? "yes"
-          : "no",
+        c_account_number: bankData.account_number ? "yes" : "no",
         flow: getFlow(userKyc) || "",
       },
     };
@@ -275,7 +277,7 @@ const AddBankVerify = (props) => {
             </div>
             <div className="item" data-aid='kyc-account-type'>
               <div className="left">Account type</div>
-              <div className="right"> {bankData.account_type} </div>
+              <div className="right"> {BANK_ACCOUNT_TYPES_NOMENCLATURE[bankData.account_type]} </div>
             </div>
           </>
         )}
@@ -285,7 +287,7 @@ const AddBankVerify = (props) => {
           uploadDocuments={uploadDocuments}
           checkBankDetails={checkBankDetails}
         />
-        <PennySuccessDialog isOpen={isPennySuccess} redirect={goTobankLists} />
+        <PennySuccessDialog isOpen={isPennySuccess} kyc={userKyc} redirect={goTobankLists} />
         <PennyExhaustedDialog
           isOpen={isPennyExhausted}
           redirect={goTobankLists}

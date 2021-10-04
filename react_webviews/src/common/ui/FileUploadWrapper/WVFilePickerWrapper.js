@@ -16,6 +16,8 @@
       {Any child element for which file picker functionality is required}
     </WVFilePickerWrapper>
 */
+
+/* eslint-disable no-unused-expressions */
 import React, { useState } from 'react';
 import { getConfig } from "utils/functions";
 import { isFunction } from 'lodash';
@@ -59,6 +61,11 @@ export const WVFilePickerWrapper = ({
     (Required when there's more than 1 file pickers in a single page)
   */
   showOptionsDialog, // If true, shows a bottomsheet for camera or gallery options on click of element 
+  onFileSelectStart, /*
+    Callback called once file is picked, before starting file processing
+    Ideally used to trigger loader on file selection
+    **Works only for Native for now**
+  */
   onFileSelectComplete, // Callback for when file selection is successful
   onFileSelectError, // Callback for when file selection fails
   extraValidation, // Function for any extra file validations on selected file besides size and type validations
@@ -100,7 +107,7 @@ export const WVFilePickerWrapper = ({
       }
     } catch(err) {
       if (isFunction(onFileSelectError)) {
-        onFileSelectError(err)
+        onFileSelectError(err);
       } else {
         console.log(err);
         toast(err);
@@ -115,7 +122,8 @@ export const WVFilePickerWrapper = ({
       nativePickerMethodName,
       fileName,
       onFileSelected,
-      fileHandlerParams
+      fileHandlerParams,
+      onFileSelectStart
     ];
     
     if (isFunction(customClickHandler)) {
@@ -126,11 +134,11 @@ export const WVFilePickerWrapper = ({
       openFilePicker(...functionParams);
     }
   }
-
+  
   const handleUploadFromDialog = (type) => {
     setOpenOptionsDialog(false);
     setFilePickerType(type);
-    openFilePicker(customPickerId, type, fileName, onFileSelected, fileHandlerParams);
+    openFilePicker(customPickerId, type, fileName, onFileSelected, fileHandlerParams, onFileSelectStart);
   }
 
   return (

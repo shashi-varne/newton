@@ -6,6 +6,7 @@ import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { nativeCallback } from "../../../utils/native_callback";
 import toast from "common/ui/Toast";
 import Api from "utils/api";
+import { getAccountSummary, setSummaryData } from '../../../kyc/services';
 const errorMessage = "Something went wrong!";
 
 class Referral extends Component {
@@ -33,7 +34,8 @@ class Referral extends Component {
     if (this.state.promo_status === "Valid") {
       this.navigate("/secondary-verification", {
         state: {
-          communicationType: this.state.communicationType === "mobile" ? "email" : "mobile"
+          communicationType: this.state.communicationType === "mobile" ? "email" : "mobile",
+          firstTimeLogin: true,
         }
       })
     };
@@ -46,13 +48,13 @@ class Referral extends Component {
       return;
     }
     this.setState({ isPromoApiRunning: true });
-    let body = {
-      code: form_data.referral_code,
-    };
+    let referral_code = form_data?.referral_code;
     try {
-      const res = await Api.get(`/api/checkpromocode`, body);
+      const res = await Api.get(`/api/referral/apply?code=${referral_code}`);
       const { result, status_code: status } = res.pfwresponse;
       if (status === 200) {
+        const result = await getAccountSummary();
+        setSummaryData(result);
         toast("Success");
         this.sendEvents("next")
         this.setState({
@@ -124,6 +126,7 @@ class Referral extends Component {
             this.navigate("/secondary-verification", {
               state: {
                 communicationType: this.state.communicationType === "mobile" ? "email" : "mobile",
+                firstTimeLogin: true,
               }
             })
           },

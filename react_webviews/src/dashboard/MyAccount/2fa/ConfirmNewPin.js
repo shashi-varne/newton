@@ -1,5 +1,5 @@
 import "./commonStyles.scss";
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import Container from "../../common/Container";
 import EnterMPin from "../../../2fa/components/EnterMPin";
 import { nativeCallback } from "../../../utils/native_callback";
@@ -10,27 +10,22 @@ import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import { isEmpty } from "lodash";
 import WVInfoBubble from "../../../common/ui/InfoBubble/WVInfoBubble";
 import WVBottomSheet from "../../../common/ui/BottomSheet/WVBottomSheet";
+import { capitalize } from "../../../utils/validators";
 
 const ConfirmNewPin = (props) => {
   const { routeParams, clearRouteParams } = usePersistRouteParams();
   const routeParamsExist = useMemo(() => {
     return !isEmpty(routeParams);
   }, []);
-  const { productName } = getConfig();
-  const successText = routeParams.set_flow ? `${productName} security enabled` : `${productName} PIN changed`;
+  const { productName, base_url } = getConfig();
+  const successText = routeParams.set_flow ? `${capitalize(productName)} security enabled` : `${capitalize(productName)} PIN changed`;
+  const comingFrom = useMemo(() => props.match?.params?.coming_from, [props]);
+  const kycFlow = useMemo(() => comingFrom === 'kyc-complete', [comingFrom]);
   const [mpin, setMpin] = useState('');
   const [pinError, setPinError] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
-  const [kycFlow, setKycFlow] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
-
   const navigate = navigateFunc.bind(props);
-
-  useEffect(() => {
-    if (props.match.params?.coming_from === "kyc-complete") {
-      setKycFlow(true)
-    }
-  }, []);
 
   const handleClick = async () => {
     try {

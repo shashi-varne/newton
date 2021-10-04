@@ -12,16 +12,17 @@ import KycUploadContainer from '../mini-components/KycUploadContainer'
 import { nativeCallback } from '../../utils/native_callback'
 import "./commonStyles.scss";
 
-const config = getConfig();
-const { productName, Web: isWeb } = config
 const Sign = (props) => {
   const navigate = navigateFunc.bind(props)
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)
   const [fileToShow, setFileToShow] = useState(null)
-  // const [showLoader, setShowLoader] = useState(false)
-
   const {kyc, isLoading, updateKyc} = useUserKycHook();
+  const goBackPath = props.location?.state?.goBack || "";
+  
+  const config = getConfig();
+  const { productName, Web: isWeb } = config
+  const title = isWeb ? "Share signature" : "Digital signature";
 
   const onFileSelectComplete = (file, fileBase64) => {
     sendEvents("sign");
@@ -41,27 +42,33 @@ const Sign = (props) => {
       const payload = { manual_upload: isWeb }
       const result = await upload(file, 'sign', payload)
       updateKyc(result.kyc);
-      const dlFlow = isDigilockerFlow(result.kyc);
-      const type = result?.kyc?.kyc_status === "compliant" ? "compliant" : "non-compliant";
-
-      if (dlFlow || type === "compliant") {
-        if (!skipBankDetails()) {
-          navigate(`/kyc/${type}/bank-details`);
-        } else {
-          navigate(PATHNAME_MAPPER.journey);
-        }
-      } else {
-        if (props?.location?.state?.backToJourney) {
-          navigate(PATHNAME_MAPPER.journey);
-        } else {
-          navigate(PATHNAME_MAPPER.uploadProgress);
-        }
-      }
+      handleNavigation();
     } catch (err) {
       toast(err?.message)
       console.error(err)
     } finally {
       setIsApiRunning(false)
+    }
+  }
+
+  const handleNavigation = () => {
+    const dlFlow = isDigilockerFlow(kyc);
+    const type = kyc?.kyc_status === "compliant" ? "compliant" : "non-compliant";
+
+    if (goBackPath) {
+      navigate(goBackPath);
+    } else if (dlFlow || type === "compliant") {
+      if (!skipBankDetails()) {
+        navigate(`/kyc/${type}/bank-details`);
+      } else {
+        navigate(PATHNAME_MAPPER.journey);
+      }
+    } else {
+      if (props?.location?.state?.backToJourney) {
+        navigate(PATHNAME_MAPPER.journey);
+      } else {
+        navigate(PATHNAME_MAPPER.uploadProgress);
+      }
     }
   }
 
@@ -91,7 +98,7 @@ const Sign = (props) => {
       handleClick={handleSubmit}
       disable={!file}
       showLoader={isApiRunning}
-      title="Share Signature"
+      title={title}
       iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-signature-screen'
     >
@@ -102,7 +109,7 @@ const Sign = (props) => {
             isOpen={true}
             type="info"
           >
-            Signature should be as per your PAN. Invalid signature can lead to investment rejection
+            Sign as per your signature on the PAN card. Any mismatch will lead to KYC rejection
           </WVInfoBubble>
           <KycUploadContainer>
             <div className="kuc-sign-image-container" style={{ height: fileToShow ? 'auto' : '250px' }}>
@@ -124,7 +131,7 @@ const Sign = (props) => {
                 supportedFormats: SUPPORTED_IMAGE_TYPES
               }}
             >
-              {!file ? "SIGN" : "SIGN AGAIN"}
+              {!file ? "TAP TO SIGN" : "TAP TO SIGN AGAIN"}
             </KycUploadContainer.Button>
           </KycUploadContainer>
         </section>

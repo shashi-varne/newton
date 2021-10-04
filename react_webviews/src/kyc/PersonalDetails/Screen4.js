@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Container from "../common/Container";
 import { dobFormatTest, formatDate, isEmpty } from "utils/validators";
 import Input from "../../common/ui/Input";
 import Checkbox from "common/ui/Checkbox";
-import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
+import DropDownNew from '../../common/ui/DropDownNew';
 import { RELATIONSHIP_OPTIONS, PATHNAME_MAPPER } from "../constants";
 import {
   validateFields,
@@ -14,14 +14,13 @@ import {
 } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
-import { validateAlphabets } from "../../utils/validators";
+import { validateName } from "../../utils/validators";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 
-const productName = getConfig().productName;
 const PersonalDetails4 = (props) => {
   const [isChecked, setIsChecked] = useState(false);
   const navigate = navigateFunc.bind(props);
@@ -31,13 +30,16 @@ const PersonalDetails4 = (props) => {
   const [oldState, setOldState] = useState({});
   const [totalPages, setTotalPages] = useState();
   const type = props.type || "";
-  let title = "Nominee details";
+  let title = "Nominee details (Optional)";
   if (isEdit) {
     title = "Edit nominee details";
   }
   const keysToCheck = ["dob", "name", "relationship"];
 
   const { kyc, user, isLoading } = useUserKycHook();
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
 
   useEffect(() => {
     if (!isEmpty(kyc) && !isEmpty(user)) initialize();
@@ -149,7 +151,7 @@ const PersonalDetails4 = (props) => {
     }
 
     let value = event.target ? event.target.value : event;
-    if (name === "name" && value && !validateAlphabets(value)) return;
+    if (name === "name" && value && !validateName(value)) return;
     let formData = { ...form_data };
     if (name === "dob") {
       if (!dobFormatTest(value)) {
@@ -222,7 +224,6 @@ const PersonalDetails4 = (props) => {
             error={form_data.name_error ? true : false}
             helperText={form_data.name_error || ""}
             onChange={handleChange("name")}
-            maxLength={20}
             type="text"
             disabled={isChecked || isApiRunning}
           />
@@ -240,7 +241,7 @@ const PersonalDetails4 = (props) => {
             disabled={isChecked || isApiRunning}
           />
           <div className="input" data-aid='kyc-dropdown-withouticon'>
-            <DropdownWithoutIcon
+            <DropDownNew
               error={form_data.relationship_error ? true : false}
               helperText={form_data.relationship_error}
               options={RELATIONSHIP_OPTIONS}

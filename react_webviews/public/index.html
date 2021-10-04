@@ -153,22 +153,22 @@
       var myBaseHref =  document.getElementById('myBaseHref');
       var pathname = window.location.pathname;
 
-      if(pathname.indexOf('appl/webview') !== -1) {
-        var myBaseHrefUrl = '/appl/webview/' + window.location.pathname.split('/')[3] +'/' ;
+      if(pathname.indexOf('appl/web') !== -1) {
+        var myBaseHrefUrl = '/appl/web/' + window.location.pathname.split('/')[3] +'/' ;
         myBaseHref.href = myBaseHrefUrl;
-        window.sessionStorage.setItem('base_href', myBaseHrefUrl);
+        window.localStorage.setItem('base_href', myBaseHrefUrl);
       }
       
-      if(pathname.indexOf('plutus-webview') !== -1) {
-        var myBaseHrefUrl = '/plutus-webview' + window.location.pathname.split('/')[2] + '/' ;
+      if(pathname.indexOf('plutus-webapp') !== -1) {
+        var myBaseHrefUrl = '/plutus-webapp' + window.location.pathname.split('/')[2] + '/' ;
         myBaseHref.href = myBaseHrefUrl;
-        window.sessionStorage.setItem('base_href', myBaseHrefUrl);
+        window.localStorage.setItem('base_href', myBaseHrefUrl);
       }
 
     </script>
 
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <link rel="shortcut icon" id="favicon" href="%PUBLIC_URL%/favicon.ico">
   <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -178,7 +178,7 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-  <title>Fisdom Webview</title>
+  <title>Loading</title>
 </head>
 
 <body>

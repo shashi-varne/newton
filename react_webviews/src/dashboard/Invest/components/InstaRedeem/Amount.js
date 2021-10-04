@@ -128,7 +128,6 @@ const InvestAmount = (props) => {
             id="amount"
             type="text"
             inputMode="numeric"
-            pattern="[0-9]*"
             value={amount ? formatAmountInr(amount) : ""}
             error={amountError ? true : false}
             onChange={handleChange("amount")}

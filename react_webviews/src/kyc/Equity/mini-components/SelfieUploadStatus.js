@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { getConfig, isNewIframeDesktopLayout, isTradingEnabled } from "../../../utils/functions";
 import WVBottomSheet from "../../../common/ui/BottomSheet/WVBottomSheet";
 import internalStorage from "../../common/InternalStorage";
 
-const productName = getConfig().productName;
 const uploadStatus = {
   success: {
     icon: "upload_success.svg",
@@ -22,7 +21,10 @@ const uploadStatus = {
 
 const SelfieUploadStatus = ({ status, isOpen, onClose, onCtaClick, kyc, navigate }) => {
   if (!status) return '';
-  
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
+
   const data = uploadStatus[status] || {};
   const TRADING_ENABLED = isTradingEnabled(kyc);
   if (status === "success") {

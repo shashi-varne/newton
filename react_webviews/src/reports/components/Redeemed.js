@@ -10,7 +10,7 @@ import { nativeCallback } from "../../utils/native_callback";
 
 const Redeemed = (props) => {
   const stateParams = props.location?.state || {};
-  const [transactions, setTransactions] = useState({});
+  const [transactions, setTransactions] = useState([]);
   const [openProcess, setOpenProcess] = useState(false);
   const [selectedRedeemed, setSelectedRedeemed] = useState({});
   const [showSkelton, setShowSkelton] = useState(true);
@@ -18,7 +18,7 @@ const Redeemed = (props) => {
   useEffect(() => {
     const transactionsData = storageService().getObject(
       storageConstants.PENDING_REDEMPTION
-    );
+    ) || [];
     if (!isEmpty(transactionsData) && stateParams.fromPath === "reports") {
       setTransactions(transactionsData);
       setShowSkelton(false);
@@ -36,7 +36,7 @@ const Redeemed = (props) => {
     setTransactions(result.report?.pending?.redeemed_transactions || {});
     storageService().setObject(
       storageConstants.PENDING_REDEMPTION,
-      result.report?.pending?.redeemed_transactions || {}
+      result.report?.pending?.redeemed_transactions || []
     );
     setShowSkelton(false);
   };
