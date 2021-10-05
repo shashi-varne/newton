@@ -11,6 +11,8 @@ import { nativeCallback } from "../../../utils/native_callback";
 import Checkbox from "../../../common/ui/Checkbox";
 import { navigate } from "../../../utils/functions";
 import { storageService } from "../../../utils/validators";
+import eventManager from "../../../utils/eventManager";
+import { EVENT_MANAGER_CONSTANTS } from "../../../utils/constants";
 
 const config = getConfig();
 class Login extends Component {
@@ -32,6 +34,7 @@ class Login extends Component {
     let { form_data } = this.state;
     form_data.code = "91";
     this.setState({ form_data: form_data });
+    eventManager.emit(EVENT_MANAGER_CONSTANTS.updateAppTheme);
   }
 
   setLoginType = (loginType) => {
