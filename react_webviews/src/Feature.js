@@ -38,7 +38,7 @@ import 'common/theme/Style.scss';
 const Feature = () => {
   // old # route support added
   // start
-  const history = useHistory()
+  const history = useHistory();
   if (window.location.hash.startsWith('#!/')) {
     history.push(window.location.hash.replace('#!', ''))
   }

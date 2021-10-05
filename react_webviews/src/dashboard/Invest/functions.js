@@ -110,6 +110,9 @@ export async function getSummary() {
       referral: ["subbroker", "p2p"],
       contacts: ["contacts"]
     });
+    if (res.pfwstatus_code !== 200 || isEmpty(res.pfwresponse)) {
+      throw res?.pfwmessage || errorMessage;
+    }
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       this.setSummaryData(result);
@@ -123,7 +126,7 @@ export async function getSummary() {
   } catch (error) {
     console.log(error);
     this.setState({ show_loader: false });
-    toast(errorMessage);
+    toast(error || errorMessage);
   }
 }
 
@@ -396,7 +399,7 @@ export async function initilizeKyc() {
   }
   let isReadyToInvestBase = isReadyToInvest();
   let isEquityCompletedBase = isEquityCompleted();
-  let kycJourneyStatusMapperData = kycJourneyStatus.includes("ground_") ? kycStatusMapper["incomplete"] : kycStatusMapper[kycJourneyStatus];
+  let kycJourneyStatusMapperData = kycJourneyStatus?.includes("ground_") ? kycStatusMapper["incomplete"] : kycStatusMapper[kycJourneyStatus];
 
   this.setState({
     isCompliant,
@@ -867,4 +870,32 @@ export function setDialogsState(key) {
     verifyDetails: false,
     [key]: true
   });
+}
+
+export async function updateConsent() {
+  const res = await Api.post("/api/account/user/partnerconsent");
+  if(!res || res?.pfwstatus_code !== 200 || isEmpty(res?.pfwresponse)) {
+    throw new Error(res.pfwmessage || errorMessage)
+  }
+  const { result, status_code: status } = res.pfwresponse;
+  if (status === 200) {
+    return result;
+  }
+  throw new Error(result.message || result.error || errorMessage);
+}
+
+export async function updateBank(data) {
+  const response = await Api.post("/api/partner/user/updatebank", data);
+  if (
+    response.pfwstatus_code !== 200 ||
+    isEmpty(response.pfwresponse)
+  ) {
+    throw new Error( response?.pfwmessage || errorMessage);
+  }
+  const { status_code, result } = response.pfwresponse;
+  if (status_code === 200) {
+    return result;
+  } else {
+    throw new Error(result?.message || result?.error || errorMessage);
+  }
 }

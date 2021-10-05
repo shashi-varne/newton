@@ -4,6 +4,8 @@ import toast from '../common/ui/Toast'
 import { isTradingEnabled } from '../utils/functions'
 import { kycSubmit } from './common/api'
 import { isDigilockerFlow } from './common/functions'
+import eventManager from '../utils/eventManager'
+import { EVENT_MANAGER_CONSTANTS } from '../utils/constants'
 
 const DOCUMENTS_MAPPER = {
   DL: 'Driving license',
@@ -35,7 +37,11 @@ export async function getAccountSummary(params = {}) {
       !response.pfwresponse ||
       isEmpty(response.pfwresponse)
     ) {
-      throw new Error(response?.pfwmessage || "Something went wrong!");
+      const errObj = {
+        pfwstatus_code: response?.pfwstatus_code,
+        message: response?.pfwmessage
+      };
+      throw errObj;
     }
     if (response?.pfwresponse?.status_code === 200) {
       return response?.pfwresponse?.result;
@@ -43,7 +49,7 @@ export async function getAccountSummary(params = {}) {
       throw new Error(response?.pfwresponse?.result?.message);
     }
   } catch (err) {
-    toast(err.message || "Something went wrong!");
+    throw(err);
   }
 }
 
@@ -52,7 +58,7 @@ export async function getNPSInvestmentStatus() {
   try {
     const response = await Api.get(url);
     if (response?.pfwresponse?.status_code === 200) {
-      return response.pfwresponse.result;
+      return response?.pfwresponse?.result;
     } else {
       throw new Error(response?.pfwresponse?.result?.message);
     }
@@ -65,34 +71,35 @@ export async function initData() {
   const currentUser = storageService().get('currentUser')
   const user = storageService().getObject('user')
   const kyc = storageService().getObject('kyc')
-
-  if (currentUser && user && kyc) {
-    if (!storageService().get('referral')) {
+  try {
+    if (currentUser && user && kyc) {
+      if (!storageService().get('referral')) {
+        const queryParams = {
+          campaign: ['user_campaign'],
+          nps: ['nps_user'],
+          bank_list: ['bank_list'],
+          referral: ['subbroker', 'p2p'],
+        }
+        const result = await getAccountSummary(queryParams);
+        storageService().set('dataSettedInsideBoot', true)
+        setSDKSummaryData(result)
+      }
+    } else {
       const queryParams = {
         campaign: ['user_campaign'],
+        kyc: ['kyc'],
+        user: ['user'],
         nps: ['nps_user'],
+        partner: ['partner'],
         bank_list: ['bank_list'],
         referral: ['subbroker', 'p2p'],
       }
-      const result = await getAccountSummary(queryParams)
-      if(!result) return;
+      const result = await getAccountSummary(queryParams);
       storageService().set('dataSettedInsideBoot', true)
-      setSDKSummaryData(result)
+      setSummaryData(result)
     }
-  } else if (!currentUser || !user || !kyc) {
-    const queryParams = {
-      campaign: ['user_campaign'],
-      kyc: ['kyc'],
-      user: ['user'],
-      nps: ['nps_user'],
-      partner: ['partner'],
-      bank_list: ['bank_list'],
-      referral: ['subbroker', 'p2p'],
-    }
-    const result = await getAccountSummary(queryParams)
-    if(!result) return;
-    storageService().set('dataSettedInsideBoot', true)
-    setSummaryData(result)
+  } catch (err) {
+    console.log(err);
   }
 }
 
@@ -110,8 +117,8 @@ export async function setSummaryData(result) {
     result.data.campaign.user_campaign.data
   )
   storageService().setObject('campaign', campaignData)
-  storageService().setObject("npsUser", result.data.nps.nps_user.data);
-  storageService().setObject("banklist", result.data.bank_list.bank_list.data);
+  storageService().setObject("npsUser", result?.data?.nps?.nps_user?.data);
+  storageService().setObject("banklist", result?.data?.bank_list?.bank_list?.data);
   storageService().setObject("referral", result.data.referral);
   let partner = "";
   let consent_required = false;
@@ -137,6 +144,7 @@ export async function setSummaryData(result) {
   } else {
     storageService().set("partner", partner);
   }
+  eventManager.emit(EVENT_MANAGER_CONSTANTS.updateAppTheme);
   setNpsData(result)
 }
 
@@ -376,7 +384,7 @@ export function getDocuments(userKyc) {
       {
         key: "selfie",
         title: "Selfie",
-        doc_status: userKyc.equity_identification.doc_status,
+        doc_status: userKyc?.equity_identification?.doc_status,
         default_image: 'selfie_default.svg',
         approved_image: "selfie_approved.svg",
       },
@@ -426,7 +434,7 @@ export function getDocuments(userKyc) {
     {
       key: "selfie",
       title: "Selfie",
-      doc_status: userKyc.equity_identification.doc_status,
+      doc_status: userKyc?.equity_identification?.doc_status,
       default_image: 'selfie_default.svg',
       approved_image: "selfie_approved.svg",
     },
@@ -474,7 +482,7 @@ export function getDocuments(userKyc) {
     documents.splice(3, 1);
   }
 
-  if (!isTradingEnabled(userKyc)) {
+  if (!isTradingEnabled(userKyc) || userKyc.kyc_product_type === "mf") {
     documents = documents.map((document) => {
       if (document.key === "selfie") {
         document.doc_status = userKyc.identification.doc_status

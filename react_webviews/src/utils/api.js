@@ -67,9 +67,9 @@ class Api {
         }
 
         if (response.data.pfwstatus_code === 416) {
-          return nativeCallback({ action: '2fa_expired' });
+          nativeCallback({ action: '2fa_expired' });
         } else if (response.data.pfwstatus_code === 403) {
-          return nativeCallback({ action: 'login_required' });
+          nativeCallback({ action: 'login_required' });
         }
 
         if (response.config.url.includes("/api/") && response.headers["x-plutus-auth"] && config.isIframe) {
@@ -80,9 +80,25 @@ class Api {
 
         if (isEmpty(pfwResponseData)) {
           const errorMsg = response.data?.pfwmessage || genericErrMsg;
-          triggerSentryError(verb, response.data, errorMsg);
-        } else if (pfwResponseData.status_code !== 200 && pfwResponseData.status_code !== 400) {
-          const errorMsg = pfwResponseData.result.error || pfwResponseData.result.message || genericErrMsg;
+          if(response?.data?.pfwstatus_code === 403){
+            // We are Neglecting Login Required in Sentry, Which is not Importent Event to capture.
+         } else {
+           triggerSentryError(verb, response.data, errorMsg);
+         }
+        } else if (
+          pfwResponseData.status_code !== 200 &&
+          pfwResponseData.status_code !== 400 &&
+          pfwResponseData.status_code !== 403 &&
+          pfwResponseData.status_code !== 402 &&
+          pfwResponseData.status_code !== 401 &&
+          pfwResponseData.status_code !== 405 &&
+          pfwResponseData.status_code !== 414 &&
+          pfwResponseData.status_code !== 408
+        ) {
+          const errorMsg =
+            pfwResponseData.result.error ||
+            pfwResponseData.result.message ||
+            genericErrMsg;
           triggerSentryError(verb, response.data, errorMsg);
         }
 

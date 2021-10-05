@@ -6,6 +6,7 @@ import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { nativeCallback } from "../../../utils/native_callback";
 import toast from "common/ui/Toast";
 import Api from "utils/api";
+import { getAccountSummary, setSummaryData } from '../../../kyc/services';
 const errorMessage = "Something went wrong!";
 
 class Referral extends Component {
@@ -52,6 +53,8 @@ class Referral extends Component {
       const res = await Api.get(`/api/referral/apply?code=${referral_code}`);
       const { result, status_code: status } = res.pfwresponse;
       if (status === 200) {
+        const result = await getAccountSummary();
+        setSummaryData(result);
         toast("Success");
         this.sendEvents("next")
         this.setState({

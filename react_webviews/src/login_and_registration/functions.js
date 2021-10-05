@@ -6,6 +6,7 @@ import { isEmpty } from "../utils/validators";
 import { nativeCallback } from "../utils/native_callback";
 import Toast from "../common/ui/Toast";
 import { getBasePath } from "../utils/functions";
+import { setSummaryData } from "../kyc/services";
 
 const config = getConfig();
 const errorMessage = "Something went wrong!";
@@ -380,21 +381,7 @@ export async function otpLoginVerification(verify_url, body) {
 export const postLoginSetup = async (getKycResult) => {
   try {
     const kycResult = await getKycFromSummary();
-    storageService().set("currentUser", true);
-
-    if (config.Web && kycResult.data.partner.partner.data) {
-      storageService().set(
-        "partner",
-        kycResult.data.partner.partner.data.name
-      );
-    }
-  
-    storageService().set("dataSettedInsideBoot", true);
-    storageService().setObject("referral", kycResult.data.referral);
-    storageService().setObject(
-      "campaign",
-      kycResult.data.campaign.user_campaign.data
-    );
+    setSummaryData(kycResult);
     setBaseHref();
     const eventObj = {
       event_name: "user loggedin",
@@ -427,21 +414,9 @@ export async function otpVerification(body) {
         return;
       }
 
-      if (config.Web && kycResult.data.partner.partner.data) {
-        storageService().set(
-          "partner",
-          kycResult.data.partner.partner.data.name
-        );
-      }
-
+      setSummaryData(kycResult);
       let user = kycResult.data.user.user.data;
       userData.me = user;
-      storageService().set("dataSettedInsideBoot", true);
-      storageService().setObject("referral", kycResult.data.referral);
-      storageService().setObject(
-        "campaign",
-        kycResult.data.campaign.user_campaign.data
-      );
       setBaseHref();
 
       this.setState({
@@ -541,6 +516,7 @@ export async function getKycFromSummary(params = {}) {
       campaign: ["user_campaign"],
       referral: ["subbroker", "p2p"],
       contacts: ["contacts"],
+      nps: ['nps_user'],
     }
   }
   const res = await Api.post(`/api/user/account/summary`, params);

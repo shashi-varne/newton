@@ -112,7 +112,7 @@ class SipDates extends Component {
       sipBaseData.investment.allocations[index].sip_date = sip.sip_date;
     });
 
-    storageService().setObject("investment", sipBaseData);
+    storageService().setObject("investment", sipBaseData.investment);
 
     this.proceedInvestment({
       userKyc: userKyc,

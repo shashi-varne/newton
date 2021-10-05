@@ -131,7 +131,7 @@ export const getPlatformConfig = () => {
     Android: false,
     iOS: false
   };
-
+  
   if (isMobile.Android() && typeof window.Android !== 'undefined') {
     config.app = 'android';
     config.Android = true;
@@ -266,7 +266,7 @@ export const getConfig = () => {
     sdk_capabilities = storageService().get("sdk_capabilities") || "";
   }
 
-  if(!partner_code) {
+  if(storageService().get("partner")) {
     partner_code = storageService().get("partner") || ""
   }
 

@@ -28,6 +28,7 @@ import "@fontsource/roboto/latin-700.css";
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
 import { storageService } from "./utils/validators"
+import isEmpty from 'lodash/isEmpty';
 
 $(document).ready(function () {
   const cssVarObj = getCssVarObject();
@@ -114,11 +115,11 @@ if(getConfig().productName === "finity") {
 if(getConfig().productName === 'finity') {
   document.title = 'Finity';
   const favicon = document.getElementById('favicon');
-  favicon.href = './images/finity_icon.svg';
+  favicon.href = favicon && './images/finity_icon.svg';
 } else {
   document.title = 'Fisdom';
   const favicon = document.getElementById('favicon');
-  favicon.href = './images/fisdom_icon.svg';
+  favicon.href = favicon && './images/fisdom_icon.svg';
 }
 
 if(getConfig().productName === "fisdom" && getConfig().isProdEnv)
@@ -129,11 +130,16 @@ if(getConfig().productName === "fisdom" && getConfig().isProdEnv)
       event.tags = event.tags || {};
       event.tags["partner_code"] = getConfig().code;
       event.tags["user_id"] = storageService()?.getObject('user')?.user_id;
+      let values = event?.exception?.values;
+      if(!isEmpty(values) && values[0]?.value === "Network Error"){
+        return null;
+      }
       return event;
     },
     integrations: [new Integrations.BrowserTracing()],
-    allowUrls:["app.fisdom.com","wv.fisdom.com"],
-    tracesSampleRate: 1.0,
+    allowUrls:["app.fisdom.com"],
+    tracesSampleRate: 0.5,
+    sampleRate: 0.5,
   });
 }
 else if(getConfig().productName === "finity" && getConfig().isProdEnv){
@@ -143,11 +149,16 @@ else if(getConfig().productName === "finity" && getConfig().isProdEnv){
       event.tags = event.tags || {};
       event.tags["partner_code"] = getConfig().code;
       event.tags["user_id"] = storageService()?.getObject('user')?.user_id;
+      let values = event?.exception?.values;
+      if(!isEmpty(values) && values[0]?.value === "Network Error"){
+        return null;
+      }
       return event;
     },
     integrations: [new Integrations.BrowserTracing()],
-    allowUrls:["app.mywaywealth.com","app.finity.in","wv.mywaywealth.com", "wv.finity.in"],
-    tracesSampleRate: 1.0,
+    allowUrls:["app.mywaywealth.com","app.finity.in"],
+    tracesSampleRate: 0.5,
+    sampleRate: 0.5,
   });
 }
 

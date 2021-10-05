@@ -34,7 +34,9 @@ const Logout = (props) => {
         if(isRM){
           navigate("/rm-login")  
         }else{
-          navigate("/login")
+          navigate("/login", {
+            searchParams: `base_url=${config.base_url}`
+          })
         }
       }
     } else {
