@@ -15,6 +15,8 @@ import { isDigilockerFlow } from "../../kyc/common/functions";
 import { getBasePath, isTradingEnabled, navigate as navigateFunc } from "../../utils/functions";
 import kycComplete from 'assets/kyc_complete.svg';
 import { openModule } from "../../utils/native_callback";
+import EtfConsentModal from "./EtfConsentModal";
+import EtfTermsAndCond from "./EtfTermsAndCond";
 
 class DigiStatus extends Component {
   constructor(props) {
@@ -52,6 +54,13 @@ class DigiStatus extends Component {
       }
 
       if (
+        kyc.etf_consent === 'not given' &&
+        kyc.kyc_product_type === 'equity'
+      ) {
+        this.setState({ getEtfConsent: true })
+      }
+
+      if (
         user.kyc_registration_v2 === "submitted" &&
         // kyc.sign_status === "signed" &&
         kyc.bank.meta_data_status !== "approved"
@@ -71,7 +80,11 @@ class DigiStatus extends Component {
   };
 
   handleClick = () => {
-    const {dl_flow, show_note} = this.state;
+    if (this.state.getEtfConsent) {
+      return this.setState({ openEtfConsentModal: true });
+    }
+
+    const { dl_flow, show_note } = this.state;
     const config = getConfig();
     if (dl_flow && !show_note) {
       this.sendEvents('next');
@@ -181,6 +194,22 @@ class DigiStatus extends Component {
     }
   };
 
+  onEtfModalClose = (openTnC) => {
+    this.setState({ openEtfConsentModal: false, openEtfTermsModal: openTnC });
+  }
+
+  onEtfConsentUpdate = (success) => {
+    this.setState({ getEtfConsent: false }, () => {
+      if (success) {
+        this.handleClick();
+      }
+    });
+  }
+
+  onEtfTermsModalClose = () => {
+    this.setState({ openEtfTermsModal: false });
+  }
+
   sendEvents = (userAction, screenName) => {
     let kyc = this.state.kyc;
       let eventObj = {
@@ -201,12 +230,33 @@ class DigiStatus extends Component {
     }
 
   render() {
-    const { show_loader, skelton, dl_flow, show_note, kyc, set2faPin, productName } = this.state;
-    const { status = "failed" } = this.state.params;
+    const {
+      show_loader,
+      skelton,
+      dl_flow,
+      show_note,
+      kyc,
+      set2faPin,
+      productName,
+      getEtfConsent,
+      openEtfTermsModal,
+      openEtfConsentModal,
+      params: { status = 'failed' }
+    } = this.state;
+
     const headerData = {
       icon: "close",
       goBack: this.redirectToHome,
     };
+
+    let buttonText = 'HOME';
+    if (status !== 'success') {
+      buttonText = 'RETRY E-SIGN';
+    } else if (set2faPin || getEtfConsent) {
+      buttonText = 'CONTINUE';
+    } else if (dl_flow && !show_note) {
+      buttonText = 'START INVESTING';
+    }
 
     return (
       <Container
@@ -215,7 +265,7 @@ class DigiStatus extends Component {
         events={this.sendEvents("just_set_events")}
         title={status === "success" ? "" : "Complete eSign"}
         handleClick={status === "success" ? this.handleClick : this.retry}
-        buttonTitle={status === "success" ? set2faPin ? "CONTINUE" : dl_flow && !show_note ? "START INVESTING" : "HOME" : "RETRY E-SIGN"}
+        buttonTitle={buttonText}
         headerData={headerData}
         skelton={skelton}
         hidePageTitle={status === "success" ? true : false}
@@ -234,6 +284,15 @@ class DigiStatus extends Component {
             <ContactUs />
           </Fragment>
         )}
+        <EtfConsentModal
+          open={openEtfConsentModal}
+          onClose={this.onEtfModalClose}
+          onConsentUpdate={this.onEtfConsentUpdate}
+        />
+        <EtfTermsAndCond
+          open={openEtfTermsModal}
+          onClose={this.onEtfTermsModalClose}
+        />
       </Container>
     );
   }

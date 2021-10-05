@@ -17,6 +17,21 @@ axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.withCredentials = true;
 
 class Api {
+  
+  static handleApiResponse(res) {
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+      throw genericErrMsg;
+    }
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      return result;
+    } else {
+      throw result.error || result.message || genericErrMsg;
+    }
+  }
+
   static get(route, params) {
     return this.xhr(route, params, 'get');
   }
