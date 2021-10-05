@@ -243,7 +243,11 @@ export default function GenerateStatement(props) {
   const handleClick = async () => {
     if (!validateFields()) {
       return;
+    } else {
+      // Clear all errors if all validations pass
+      setErrorObj({});
     }
+
     const params = getParams();
     try {
       setIsApiRunning('button');
