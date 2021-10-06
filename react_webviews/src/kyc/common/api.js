@@ -75,7 +75,7 @@ export const checkMerge = async (pan) => {
     !res.pfwresponse ||
     isEmpty(res.pfwresponse)
   ) {
-    throw new Error( res?.pfwmessage || genericErrorMessage);
+    throw new Error(res?.pfwmessage || genericErrorMessage);
   }
   return res.pfwresponse;
 }
@@ -106,7 +106,7 @@ export const kycSubmit = async (body) => {
         name = 'finity'
       }
       const msg = `The PAN is already associated with another ${name} account. Kindly send mail to ${email} for any clarification`
-      toast(msg)
+      toast(result.message || result.error);
       break
     default:
       throw new Error(result.error || result.message || 'Server error')
