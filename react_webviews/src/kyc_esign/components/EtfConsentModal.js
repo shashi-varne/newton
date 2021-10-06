@@ -51,7 +51,10 @@ const EtfConsentModal = (props) => {
         <span style={{ color: '#767E86' }}>
           Tap CONTINUE to accept the 
           <b
-            style={{ color: config.styles.primaryColor }}
+            style={{
+              color: config.styles.primaryColor,
+              cursor: 'pointer'
+            }}
             onClick={() => props.onClose(true)}
           >
           &nbsp;terms and conditions&nbsp;
