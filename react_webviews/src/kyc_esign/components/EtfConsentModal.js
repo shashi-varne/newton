@@ -20,7 +20,9 @@ const EtfConsentModal = (props) => {
       Toast('ETF units will be credited once your demat account is activated. This could take up to 48 hours');
       props.onConsentUpdate(approve);
     } catch(err) {
-      setIsApiRunning({ [buttonName]: true });
+      Toast(err);
+      setIsApiRunning({ [buttonName]: false });
+      props.onClose();
       console.log(err);
     }
   }
@@ -46,7 +48,7 @@ const EtfConsentModal = (props) => {
           onClick: () => updateEtfConsent(true),
         }}
       >
-        <span style={{ color: '#161A2E' }}>
+        <span style={{ color: '#767E86' }}>
           Tap CONTINUE to accept the 
           <b
             style={{ color: config.styles.primaryColor }}

@@ -12,7 +12,7 @@ export default function EtfTermsAndCond(props) {
       closeIconPosition="left"
     >
       <WVFullscreenDialog.Content>
-        <ol>
+        <ol className="etf-tnc">
           {ETF_TERMS_AND_COND.map((tnc) =>
             <li>
               {tnc}
