@@ -33,7 +33,7 @@ Note: To enable nps, gold or insurance in partner config :
 
 // common config across all partners
 export const commonCardsConfig = {
-  logo: "logo_white.png",
+  logo: "fisdom_white_logo.svg",
   investSections: [
     "kyc",
     "indexFunds",
@@ -195,6 +195,7 @@ export const partnerConfigs = {
     },
   },
   fisdom: {
+    logo: "fisdom_white_logo.svg",
     code: "fisdom",
     investSubSectionMap: {
       ourRecommendations: [
