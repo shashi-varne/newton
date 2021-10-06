@@ -480,7 +480,7 @@ export const partnerConfigs = {
   },
   taxwin: {
     code: "taxwin",
-    logo: "taxwin.png",
+    logo: "taxwin.svg",
     investSections: ["kyc", "ourRecommendations"],
     investSubSectionMap: {
       ourRecommendations: [
