@@ -25,6 +25,8 @@ class DigiStatus extends Component {
       show_loader: false,
       productName: getConfig().productName,
       params: getUrlParams(),
+      openEtfConsentModal: false,
+      openEtfTermsModal: false,
       skelton: true,
     };
 
@@ -207,7 +209,7 @@ class DigiStatus extends Component {
   }
 
   onEtfTermsModalClose = () => {
-    this.setState({ openEtfTermsModal: false });
+    this.setState({ openEtfTermsModal: false, openEtfConsentModal: true });
   }
 
   sendEvents = (userAction, screenName) => {

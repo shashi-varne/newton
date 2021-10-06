@@ -14,7 +14,7 @@ export default function EtfTermsAndCond(props) {
       <WVFullscreenDialog.Content>
         <ol className="etf-tnc">
           {ETF_TERMS_AND_COND.map((tnc) =>
-            <li>
+            <li key={tnc}>
               {tnc}
             </li>
           )}
