@@ -16,6 +16,14 @@ import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 const optionsMap = keyBy(ACCOUNT_STATEMENT_OPTIONS, 'type');
 const FINANCIAL_YEAR_OPTIONS = fiscalYearGenerator(2021);
 
+const getFormattedDate = (value) => {
+  // This function converts a dd/mm/yyyy date to a natively (JS) supported date format
+  if (!value) return '';
+  const [d, m, y] = value.split('/');
+  // m-1 since months are 0-indexed for JS Date()
+  return new Date(y, m-1, d);
+}
+
 export default function GenerateStatement(props) {
   const { pageType = '' } = props?.match?.params || {};
   const [pageObj, pageProps] = useMemo(() => {
@@ -99,14 +107,14 @@ export default function GenerateStatement(props) {
     if (pageObj.type === 'capital_gains') {
       const [startYear, endYear] = selectedValue.split('-');
       setSelectedDateMap({
-        from: new Date(startYear, 3).toLocaleDateString(),
-        to: new Date(endYear, 2, 31).toLocaleDateString(),
+        from: new Date(startYear, 3).toLocaleDateString(), // April 01 of fiscal year start
+        to: new Date(endYear, 2, 31).toLocaleDateString(), // March 31 of fiscal year end
       });
     }
   }
 
   const [selectedDateMap, setSelectedDateMap] = useState({});
-  const dateSelector = useCallback(({ title, dateType, type, fieldProps = {} }) => {
+  const dateSelector = useCallback(({ dateType, type, fieldProps = {} }) => {
     return (
       <div style={{ marginBottom: '30px' }} key={dateType}>
         <Input
@@ -153,30 +161,30 @@ export default function GenerateStatement(props) {
       return "Please enter a valid date";
     }
     
-    const formattedDate = new Date(new Date(value).toLocaleDateString()); // converts dd/mm/yyyy to mm/dd/yyyy
+    const formattedDate = getFormattedDate(value);
     
     if (formattedDate > new Date() && pageObj.type === 'demat_holding') {
       return "Date must not exceed today's date";
     }
-
+    
     if (
       dateType === 'to' &&
       selectedDateMap['from'] &&
       isValidDate(selectedDateMap['from']) &&
-      formattedDate < new Date(new Date(selectedDateMap['from']).toLocaleDateString())
-    ) {
-      return "Please enter value greater than From date";
-    }
-      
-    if (selectedFinYear) {
-      const [startYear, endYear] = selectedFinYear?.split('-');
-      if (
-        dateType === 'from' &&
-        formattedDate < new Date(startYear, 3)
+      formattedDate < getFormattedDate(selectedDateMap['from'])
       ) {
-        return `Please input From date greater than ${format(new Date(startYear, 3), 'PP')}`;
+        return "Please enter value greater than From date";
       }
-      if (
+      
+      if (selectedFinYear) {
+        const [startYear, endYear] = selectedFinYear?.split('-');
+        if (
+          dateType === 'from' &&
+          formattedDate < new Date(startYear, 3)
+          ) {
+            return `Please input From date greater than ${format(new Date(startYear, 3), 'PP')}`;
+          }
+          if (
         dateType === 'to' &&
         formattedDate > new Date(endYear, 2, 31)
       ) {
@@ -235,7 +243,11 @@ export default function GenerateStatement(props) {
   const handleClick = async () => {
     if (!validateFields()) {
       return;
+    } else {
+      // Clear all errors if all validations pass
+      setErrorObj({});
     }
+
     const params = getParams();
     try {
       setIsApiRunning('button');
