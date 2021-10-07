@@ -16,6 +16,7 @@ import toast from '../../common/ui/Toast';
 import Dialog, { DialogContent, DialogActions, DialogTitle } from "material-ui/Dialog";
 import Button from '../../common/ui/Button';
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble';
+import { getBasePath } from '../../utils/functions';
 
 let store = {};
 let intent_supported = false;
@@ -402,13 +403,20 @@ class PaymentOption extends React.Component {
     }
 
   }
+  
 
   componentDidMount = async () => {
     window.PlutusInitState.page = this.props.page;
+    const basepath = getBasePath();
     this.setState({
       skelton: true
     })
-    let url = getConfig().base_url + '/api/equity/api/eqm/eqpayments/pg/payment/options/' + getConfig().pc_urlsafe;
+    const config = getConfig();
+    let url = config.base_url + '/api/equity/api/eqm/eqpayments/pg/payment/options/' + config.pc_urlsafe;
+    if(config.Web) {
+      const redirectUrl = encodeURIComponent(`${basepath}/pg/eq/payment-status` + config.searchParams);
+      url += (url.match(/[\?]/g) ? '&' : '?')+`plutus_redirect_url=${redirectUrl}`;
+    }
     await this.getPaymentOptions(url);
     this.setState({
       skelton: false
