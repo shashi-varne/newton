@@ -367,7 +367,7 @@ export const partnerConfigs = {
     },
   },
   hbl: {
-    logo: "hbl.png",
+    logo: "hbl.svg",
     code: "hbl",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
