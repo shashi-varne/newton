@@ -4,9 +4,10 @@ import { getConfig } from '../../utils/functions';
 import './Style.scss';
 import Container from '../common/Container';
 import ContactUsClass from '../../common/components/contact_us';
+import { getUrlParams } from '../../utils/validators';
 
-const status = 'successs';
 const PaymentStatus = () => {
+  const status = getUrlParams()?.status || '';
   const paymentSuccess = status === 'success';
   const config = getConfig();
   return (
