@@ -209,7 +209,7 @@ const Home = (props) => {
 
   const handleResidentialStatus = (event) => {
     let value = event.target ? event.target.value : event;
-    setTradingEnabled(isTradingEnabled(value !== 1))
+    setTradingEnabled(checkIfTradingEnabled(value !== 1))
     setResidentialStatus(residentialStatusOptions[value].value);
   };
 
