@@ -350,7 +350,6 @@ class PaymentOption extends React.Component {
       upiSupported: false,
       netBankingSupported: false,
       amount: 0,
-      server : 'https://shaik-dot-plutus-staging.appspot.com/'
     };
 
     this.goToBank = this.goToBank.bind(this);
@@ -372,23 +371,22 @@ class PaymentOption extends React.Component {
   componentWillMount() {
     nativeCallback({ action: 'take_control_reset' });
   }
-  // server = 'http://eqm.staging.finwizard.co.in/';
   
-  async startPayment() {
-    const url = this.state.server + 'api/equity/api/eqm/eqpayments/start/payment';
-    const bodyData = {
-      "amount": 7700,
-      "group_id": "1222",
-      "ucc": "DUMMY119743",
-      "product_name": "fisdom",
-      "product_code": "111"
-    }
-    const result = await  Api.post(url,bodyData);
-    return result;
-  }
+  // async startPayment() {
+  //   const url = this.state.server + 'api/equity/api/eqm/eqpayments/start/payment';
+  //   const bodyData = {
+  //     "amount": 7700,
+  //     "group_id": "1222",
+  //     "ucc": "DUMMY119743",
+  //     "product_name": "fisdom",
+  //     "product_code": "111"
+  //   }
+  //   const result = await  Api.post(url,bodyData);
+  //   return result;
+  // }
 
-  getPaymentOptions = async (api) => {
-    const url = this.state.server + 'api/equity/' + api;
+  getPaymentOptions = async (url) => {
+    // const url = this.state.server + 'api/equity/' + api;
     try {
       const result = await  Api.get(url);
       if(result.pfwresponse.status_code === 200) {
@@ -424,10 +422,11 @@ class PaymentOption extends React.Component {
     this.setState({
       skelton: true
     })
-    const paymentData = await this.startPayment();
-    const api = paymentData?.payment_link?.split('in/')[1];
-    console.log("payment dta is",paymentData);
-    await this.getPaymentOptions(api);
+    let url = getConfig().base_url + '/api/eqm/equity/pg/payment/options/' + getConfig().pc_urlsafe;
+    // const paymentData = await this.startPayment();
+    // const api = paymentData?.payment_link?.split('in/')[1];
+    // console.log("payment dta is",paymentData);
+    await this.getPaymentOptions(url);
     this.setState({
       skelton: false
     })
@@ -692,8 +691,7 @@ class PaymentOption extends React.Component {
       pushEvent(eventObj);
       this.setState({ show_loader: 'page' });
       let that = this;
-      const api = this.state.paymentIntentUrl.split('in/')[1];
-      Api.get(this.state.server +'api/equity/'+ api).then(data => {
+      Api.get(this.state.paymentIntentUrl).then(data => {
         if (data.pfwresponse.status_code === 200) {
           let upi_payment_data = data.pfwresponse.result;
           upi_payment_data.package_name = type;
