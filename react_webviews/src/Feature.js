@@ -60,8 +60,8 @@ const Feature = () => {
       <ProtectedRoute path='/isip' component={IsipBIller} />
       <ProtectedRoute path='/help' component={HelpSupport} />
       <ProtectedRoute path='/loan' component={Loan} />
-      <ProtectedRoute path='/pg' component={Payment} />
       <ProtectedRoute path='/pg/equity' component={EquityPayment} />
+      <ProtectedRoute path='/pg' component={Payment} />
       <ProtectedRoute path='/kyc-esign' component={KycEsign} />
       <ProtectedRoute path='/whatsapp/' component={Whatsapp} />
       <ProtectedRoute path='/webview/:main_module/:sub_module' component={CommonLanding} />
