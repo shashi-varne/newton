@@ -22,6 +22,7 @@ import Report from './reports';
 import Fhc from './fhc';
 import Loan from './loan_idfc';
 import Payment from './payment';
+import EquityPayment from './equity_payment';
 import KycEsign from './kyc_esign';
 import PortfolioRebalancing from './portfolio_rebalancing';
 import FundDetails from './fund_details';
@@ -60,6 +61,7 @@ const Feature = () => {
       <ProtectedRoute path='/help' component={HelpSupport} />
       <ProtectedRoute path='/loan' component={Loan} />
       <ProtectedRoute path='/pg' component={Payment} />
+      <ProtectedRoute path='/pg/equity' component={EquityPayment} />
       <ProtectedRoute path='/kyc-esign' component={KycEsign} />
       <ProtectedRoute path='/whatsapp/' component={Whatsapp} />
       <ProtectedRoute path='/webview/:main_module/:sub_module' component={CommonLanding} />
