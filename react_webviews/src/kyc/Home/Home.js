@@ -297,7 +297,7 @@ const Home = (props) => {
           setOpenAccountMerge(true);
         }
       } else {
-        toast(toastMessage);
+        toast(result?.error || result?.message || toastMessage);
       }
     }
   };

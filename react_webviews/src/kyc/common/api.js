@@ -106,7 +106,7 @@ export const kycSubmit = async (body) => {
         name = 'finity'
       }
       const msg = `The PAN is already associated with another ${name} account. Kindly send mail to ${email} for any clarification`
-      toast(result.message || result.error);
+      toast(result.message || result.error || msg);
       break
     default:
       throw new Error(result.error || result.message || 'Server error')
