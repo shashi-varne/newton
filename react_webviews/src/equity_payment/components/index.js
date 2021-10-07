@@ -372,21 +372,7 @@ class PaymentOption extends React.Component {
     nativeCallback({ action: 'take_control_reset' });
   }
   
-  // async startPayment() {
-  //   const url = this.state.server + 'api/equity/api/eqm/eqpayments/start/payment';
-  //   const bodyData = {
-  //     "amount": 7700,
-  //     "group_id": "1222",
-  //     "ucc": "DUMMY119743",
-  //     "product_name": "fisdom",
-  //     "product_code": "111"
-  //   }
-  //   const result = await  Api.post(url,bodyData);
-  //   return result;
-  // }
-
   getPaymentOptions = async (url) => {
-    // const url = this.state.server + 'api/equity/' + api;
     try {
       const result = await  Api.get(url);
       if(result.pfwresponse.status_code === 200) {
@@ -422,45 +408,11 @@ class PaymentOption extends React.Component {
     this.setState({
       skelton: true
     })
-    let url = getConfig().base_url + '/api/eqm/equity/pg/payment/options/' + getConfig().pc_urlsafe;
-    // const paymentData = await this.startPayment();
-    // const api = paymentData?.payment_link?.split('in/')[1];
-    // console.log("payment dta is",paymentData);
+    let url = getConfig().base_url + '/api/equity/api/eqm/eqpayments/pg/payment/options/' + getConfig().pc_urlsafe;
     await this.getPaymentOptions(url);
     this.setState({
       skelton: false
     })
-    // let url = getConfig().base_url + 'api/eqm/equity/pg/payment/options/' + getConfig().pc_urlsafe;
-    // try {
-    //   let res = await Api.get(url);
-    //   let resultData = res.pfwresponse.result;
-    //   const paymentOptions = resultData?.paymentOptions;
-    //   this.setState({paymentOptions, paymentUrl: resultData?.payment_start_url || ''});
-
-    //   this.setState({
-    //     skelton: false,
-    //   })
-    // } catch (err) {
-    //   this.setState({
-    //     skelton: false
-    //   })
-    //   toast("Something went wrong");
-    // }
-
-    // window.PlutusInitState.modalCallback = (bool) => {
-    //   this.setState({ showUpiModal: bool, showNetBankModal: bool });
-    //   window.PlutusInitState.page = 'pg_option';
-    // };
-
-    // window.PlutusInitState.cancelModalCallback = (bool) => {
-    //   this.setState({ showCancelModal: bool });
-    //   window.PlutusInitState.page = 'pg_option';
-    // }
-    // document.addEventListener('click', this.handleClick, false);
-    // document.addEventListener('DOMContentLoaded', function () {
-    //   document.querySelector("input[type=radio]:checked").value = true;
-    // }, false);
-
   }
 
   handleClick(e) {
