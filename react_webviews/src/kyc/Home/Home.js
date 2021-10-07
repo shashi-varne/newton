@@ -336,7 +336,7 @@ const Home = (props) => {
       if (!result) return;
       const payload = { kyc: {} };
       let callKycSubmitApi = false;
-      if (result.kyc.kyc_product_type !== "equity" && result.kyc.equity_enabled && !config.isSdk) {
+      if (result.kyc.kyc_product_type !== "equity" && isTradingEnabled(result.kyc)) {
         payload.set_kyc_product_type = "equity";
         callKycSubmitApi = true;
       }

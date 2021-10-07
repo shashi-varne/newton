@@ -26,9 +26,6 @@ function KycModuleEntry(props) {
     if (isNative) {
       storageService().setBoolean('equityEnabled', urlParams.equityEnabled || false);
     }
-  }, []);
-
-  useEffect(() => {
     if (!isEmpty(kyc)) {
       initialize();
     }
