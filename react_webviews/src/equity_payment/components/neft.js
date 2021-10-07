@@ -1,6 +1,5 @@
 import React from 'react';
 import Container from '../common/Container';
-import "./Style.css";
 import "./Style.scss";
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble';
 import icn_secure_payment from 'assets/icn_secure_payment.svg';

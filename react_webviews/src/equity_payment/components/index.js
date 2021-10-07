@@ -3,7 +3,6 @@ import Container from '../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 import { getImage } from '../constants'
-import "./Style.css";
 import "./Style.scss";
 
 import icn_upi_apps from 'assets/icn_upi_apps.svg';
