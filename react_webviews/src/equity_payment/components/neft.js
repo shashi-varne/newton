@@ -11,7 +11,7 @@ import { formatAmountInr } from '../../utils/validators';
 const NEFT_INFO = [
     {
         title: 'NAME',
-        value: 'Finwiard Technology Private Limited NEFT'
+        value: 'Finwizard Technology Private Limited NEFT'
     },
     {
         title: 'Account number',
