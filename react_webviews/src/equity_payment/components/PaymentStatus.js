@@ -4,10 +4,10 @@ import { getConfig } from '../../utils/functions';
 import './Style.scss';
 import Container from '../common/Container';
 import ContactUsClass from '../../common/components/contact_us';
-import { getUrlParams } from '../../utils/validators';
+import { formatAmountInr, getUrlParams } from '../../utils/validators';
 
 const PaymentStatus = () => {
-  const status = getUrlParams()?.status || '';
+  const {status='', amount=''} = getUrlParams();
   const paymentSuccess = status === 'success';
   const config = getConfig();
   return (
@@ -24,7 +24,7 @@ const PaymentStatus = () => {
               className='img'
             />
             <h4>Funds added</h4>
-            <p>Your trading account has been updated with ₹5000</p>
+            <p>Your trading account has been updated with {formatAmountInr(amount)}</p>
           </div>
         )}
         {!paymentSuccess && (
