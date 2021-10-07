@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet';
 import Toast from '../../common/ui/Toast';
+import { getUserKycFromSummary } from '../../kyc/common/api';
 import { getConfig } from '../../utils/functions';
 import { updateEtfConsentStatus } from '../common/api';
 
@@ -16,14 +17,16 @@ const EtfConsentModal = (props) => {
     try {
       setIsApiRunning({ [buttonName]: true });
       await updateEtfConsentStatus(approve);
-      // TODO: Update KYC after update call
-      Toast('ETF units will be credited once your demat account is activated. This could take up to 48 hours');
-      props.onConsentUpdate(approve);
+      await getUserKycFromSummary();
+      if (approve) {
+        Toast('ETF units will be credited once your demat account is activated. This could take up to 48 hours');
+      }
+      props.onConsentUpdate();
     } catch(err) {
+      console.log(err);
       Toast(err);
       setIsApiRunning({ [buttonName]: false });
       props.onClose();
-      console.log(err);
     }
   }
 

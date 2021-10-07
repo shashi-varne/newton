@@ -197,14 +197,18 @@ class DigiStatus extends Component {
   };
 
   onEtfModalClose = (openTnC) => {
-    this.setState({ openEtfConsentModal: false, openEtfTermsModal: openTnC });
+    this.setState({
+      openEtfConsentModal: false,
+      openEtfTermsModal: openTnC
+    });
   }
 
-  onEtfConsentUpdate = (success) => {
-    this.setState({ getEtfConsent: false }, () => {
-      if (success) {
-        this.handleClick();
-      }
+  onEtfConsentUpdate = () => {
+    this.setState({
+      getEtfConsent: false,
+      openEtfConsentModal: false
+    }, () => {
+      this.handleClick();
     });
   }
 

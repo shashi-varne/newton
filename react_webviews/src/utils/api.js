@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as Sentry from '@sentry/browser'
 
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import { storageService } from './validators';
 import { encrypt, decrypt } from './encryption';
 import { nativeCallback } from './native_callback';
