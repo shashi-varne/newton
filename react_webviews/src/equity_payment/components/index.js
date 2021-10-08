@@ -386,7 +386,7 @@ class PaymentOption extends React.Component {
           bankDetails: paymentData?.bank_details,
           amount: paymentData?.amount,
           paymentUrl: paymentData?.payment_start_url,
-          paymentIntentUrl: paymentData?.payment_start_intent_url,
+          paymentIntentUrl: config.base_url + paymentData?.payment_start_intent_url,
           neftSupported,
           netBankingSupported,
           upiSupported
