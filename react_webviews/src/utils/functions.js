@@ -538,8 +538,10 @@ export function getBasePath() {
 
 export function isTradingEnabled(userKyc = {}) {
   const kyc = !isEmpty(userKyc) ? userKyc : storageService().getObject("kyc");
-  return !getConfig().isSdk && kyc?.equity_enabled;
+  const config = getConfig();
+  return kyc?.equity_enabled && !config.isSdk;
 }
+
 const { checkBeforeRedirection, checkAfterRedirection, backButtonHandler } = require(`./${getConfig().platform}_app`);
 
 export function navigate(pathname, data = {}) {
