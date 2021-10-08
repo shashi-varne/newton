@@ -9,6 +9,7 @@ import WVInPageHeader from "../../common/ui/InPageHeader/WVInPageHeader";
 import WVInPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
 import WVInPageSubtitle from "../../common/ui/InPageHeader/WVInPageSubtitle";
 import { getConfig } from "../../utils/functions";
+import { handleNativeExit } from '../../utils/native_callback';
 
 export default function Landing(props) {
   const navigate = navigateFunc.bind(props);
@@ -22,8 +23,18 @@ export default function Landing(props) {
     navigate(`/statements/${pageType}`);
   }
 
+  const goBack = () => {
+    handleNativeExit(props, { action: "exit" });
+  }
+
   return (
-    <Container noFooter force_hide_inpage_title>
+    <Container
+      noFooter
+      force_hide_inpage_title
+      headerData={{
+        goBack
+      }}
+    >
       <WVInPageHeader
         withImg
         imageProps={{
