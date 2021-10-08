@@ -804,7 +804,7 @@ class PaymentOption extends React.Component {
                     <input type="radio" id="rd2" name="rd" defaultChecked={this.state.isNetbankingSelected} />
                     <label className={`tab-label ${getConfig().productName}`} htmlFor="rd2">
                       <div className="item-header">
-                        <img src={this.state.selectedBank.image} width="20" alt="netbanking" />
+                        <img src={this.state.bankDetails.image} width="20" alt="netbanking" />
                         <div className="bold dark-grey-text">Net Banking</div>
                       </div>
                     </label>
