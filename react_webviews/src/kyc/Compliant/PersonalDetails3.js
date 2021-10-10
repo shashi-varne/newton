@@ -42,18 +42,22 @@ const PersonalDetails3 = (props) => {
   }, [kyc, user]);
 
   const initialize = () => {
-    let formData = {
+    const formData = {
       income: kyc.identification?.meta_data?.gross_annual_income || "",
       occupation: kyc.identification?.meta_data?.occupation || "",
+      politically_exposed: kyc.identification?.meta_data?.politically_exposed || ""
     };
-    setFormData({ ...formData });
     setOldState({ ...formData });
+    setFormData({
+      ...formData,
+      politically_exposed: form_data.politically_exposed || "NOT APPLICABLE"
+    });
     setTotalPages(getTotalPagesInPersonalDetails(isEdit));
   };
 
   const handleClick = () => {
     sendEvents("next")
-    let keysToCheck = ["income", "occupation"];
+    let keysToCheck = ["income", "occupation", "politically_exposed"];
     let result = validateFields(form_data, keysToCheck);
     if (!result.canSubmit) {
       let data = { ...result.formData };
@@ -77,8 +81,8 @@ const PersonalDetails3 = (props) => {
       mobile_number: userkycDetails.identification.meta_data.mobile_number,
       email: userkycDetails.address.meta_data.email,
     };
-    userkycDetails.identification.meta_data.politically_exposed =
-      "NOT APPLICABLE";
+    userkycDetails.identification.meta_data.politically_exposed = form_data.politically_exposed;
+      
     let item = {
       kyc: {
         identification: userkycDetails.identification.meta_data,
