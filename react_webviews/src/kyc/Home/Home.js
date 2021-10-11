@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Container from "../common/Container";
 import { storageService, validatePan } from "utils/validators";
 import Input from "../../common/ui/Input";
@@ -6,7 +6,7 @@ import { checkMerge, getPan, kycSubmit } from "../common/api";
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import toast from "../../common/ui/Toast";
 import AccountMerge from "../mini-components/AccountMerge";
-import { getConfig, isNewIframeDesktopLayout, navigate as navigateFunc } from "../../utils/functions";
+import { getConfig, isNewIframeDesktopLayout, isTradingEnabled, navigate as navigateFunc } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
@@ -29,7 +29,7 @@ const residentialStatusOptions = [
 
 const Home = (props) => {
   const showPageDialog = isNewIframeDesktopLayout();
-  const config = getConfig();
+  const config = useMemo(() => getConfig(), []);
   const navigate = navigateFunc.bind(props);
   const genericErrorMessage = "Something Went wrong!";
   const [showLoader, setShowLoader] = useState(false);
@@ -51,11 +51,9 @@ const Home = (props) => {
   const [tradingEnabled, setTradingEnabled] = useState();
   const [disableResidentialStatus, setDisableResidentialStatus] = useState();
 
-  const isTradingEnabled = (isIndian) => {
-    return !config.isSdk && kyc.equity_enabled && isIndian
+  const checkIfTradingEnabled = (isIndian) => {
+    return isTradingEnabled(kyc) && isIndian;
   }
-  // const [navigateTo, setNavigateTo] = useState('');
-  // const [x,setX] = useState(false);
 
   const savedPan = storageService().get('pan');
   useEffect(() => {
@@ -71,7 +69,7 @@ const Home = (props) => {
   const initialize = () => {
     setPan(kyc.pan?.meta_data?.pan_number || "");
     setResidentialStatus(!kyc.address?.meta_data?.is_nri);
-    const TRADING_ENABLED = isTradingEnabled(!kyc.address?.meta_data?.is_nri);
+    const TRADING_ENABLED = checkIfTradingEnabled(!kyc.address?.meta_data?.is_nri);
     setTradingEnabled(TRADING_ENABLED);
     setDisableResidentialStatus(!!kyc.identification.meta_data.tax_status)
     let data = {
@@ -211,7 +209,7 @@ const Home = (props) => {
 
   const handleResidentialStatus = (event) => {
     let value = event.target ? event.target.value : event;
-    setTradingEnabled(isTradingEnabled(value !== 1))
+    setTradingEnabled(checkIfTradingEnabled(value !== 1))
     setResidentialStatus(residentialStatusOptions[value].value);
   };
 
@@ -299,7 +297,7 @@ const Home = (props) => {
           setOpenAccountMerge(true);
         }
       } else {
-        toast(toastMessage);
+        toast(result?.error || result?.message || toastMessage);
       }
     }
   };
@@ -338,7 +336,7 @@ const Home = (props) => {
       if (!result) return;
       const payload = { kyc: {} };
       let callKycSubmitApi = false;
-      if (result.kyc.kyc_product_type !== "equity" && result.kyc.equity_enabled && !config.isSdk) {
+      if (result.kyc.kyc_product_type !== "equity" && isTradingEnabled(result.kyc)) {
         payload.set_kyc_product_type = "equity";
         callKycSubmitApi = true;
       }
