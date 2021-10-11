@@ -13,6 +13,7 @@ import {
   compareObjects,
   getTotalPagesInPersonalDetails,
   getGenderValue,
+  isEquityAllowed,
 } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
@@ -85,7 +86,7 @@ const PersonalDetails1 = (props) => {
         identification: userkycDetails.identification.meta_data,
       },
     };
-    if(!isNri && tradingEnabled && kyc.kyc_product_type !== "equity") {
+    if (!isNri && isEquityAllowed() && kyc.kyc_product_type !== "equity") {
       item.set_kyc_product_type = "equity";
     } else if(isNri && kyc.kyc_product_type === "equity") {
       item.set_kyc_product_type = "mf";

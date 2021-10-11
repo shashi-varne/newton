@@ -12,7 +12,7 @@ import { nativeCallback } from "../../utils/native_callback";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import { ConfirmPan } from "../Equity/mini-components/ConfirmPan";
 import CheckCompliant from "../Equity/mini-components/CheckCompliant";
-import { isDigilockerFlow, panUiSet } from "../common/functions";
+import { isDigilockerFlow, isEquityAllowed, panUiSet } from "../common/functions";
 import internalStorage from '../common/InternalStorage';
 import isEmpty from 'lodash/isEmpty';
 
@@ -322,7 +322,7 @@ const Home = (props) => {
       };
 
       const addkycType = kyc.kyc_status === "non-compliant" && !isDigilockerFlow(kyc);
-      if(tradingEnabled) {
+      if(isEquityAllowed()) {
         body.set_kyc_product_type = "equity";
         if(addkycType && kyc.kyc_type !== "manual")
           body.set_kyc_type = "manual";
