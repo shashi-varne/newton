@@ -17,7 +17,7 @@ const ConfirmNewPin = (props) => {
   const routeParamsExist = useMemo(() => {
     return !isEmpty(routeParams);
   }, []);
-  const { productName, base_url } = getConfig();
+  const { productName } = getConfig();
   const successText = routeParams.set_flow ? `${capitalize(productName)} security enabled` : `${capitalize(productName)} PIN changed`;
   const comingFrom = useMemo(() => props.match?.params?.coming_from, [props]);
   const kycFlow = useMemo(() => comingFrom === 'kyc-complete', [comingFrom]);
