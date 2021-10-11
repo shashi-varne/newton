@@ -107,8 +107,8 @@ export default function GenerateStatement(props) {
     if (pageObj.type === 'capital_gains') {
       const [startYear, endYear] = selectedValue.split('-');
       setSelectedDateMap({
-        from: new Date(startYear, 3).toLocaleDateString(), // April 01 of fiscal year start
-        to: new Date(endYear, 2, 31).toLocaleDateString(), // March 31 of fiscal year end
+        from: new Date(startYear, 3).toLocaleDateString('en-GB'), // April 01 of fiscal year start
+        to: new Date(endYear, 2, 31).toLocaleDateString('en-GB'), // March 31 of fiscal year end
       });
     }
   }
@@ -138,7 +138,7 @@ export default function GenerateStatement(props) {
   useEffect(() => {
     if (pageObj.type === 'demat_holding') {
       setSelectedDateMap({
-        'date': new Date().toLocaleDateString()
+        'date': new Date().toLocaleDateString('en-GB')
       });
     }
   }, []);
