@@ -16,7 +16,6 @@ const Payment = props => {
   return (
    <Fragment>
         <Switch>
-
           <Route path={`${url}/home`} component={Home} />
           <Route path={`${url}/neft`} component={Neft} />
           <Route path={`${url}/payment-status`} component={PaymentStatus} />

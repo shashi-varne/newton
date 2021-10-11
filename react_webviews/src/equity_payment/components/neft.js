@@ -10,30 +10,38 @@ import { formatAmountInr } from '../../utils/validators';
 const NEFT_INFO = [
     {
         title: 'NAME',
-        value: 'Finwizard Technology Private Limited NEFT'
+        value: 'Finwizard Technology Private Limited'
     },
     {
         title: 'Account number',
-        value: '602860'
+        value: 'FISNSE'
+    },
+    {
+        title: 'Account type',
+        value: 'Current A/C'
     },
     {
         title: 'IFSC code',
-        value: 'YESB0CMSNOC'
-    }
+        value: 'ICIC0000106'
+    },
+    {
+        title: 'BRANCH ADDRESS',
+        value: 'ICICI BANK RPC OFFICE, VIDEOCON  TOWERS, E-1, JHANDEWALAN EXTENSION, NEAR DELHI PRESS, DELHI 110055'
+    },
 ]
 
 class NEFT extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            store: props.location.state.store
+            store: props.location?.state?.store
         };
     }
     render() {
         return (
             <Container
                 title="Payment via NEFT"
-                smallTitle={`Please transfer ${formatAmountInr(this.state.store.amount)} to the following bank account`}
+                smallTitle={`Please transfer ${formatAmountInr(this.state?.store?.amount)} to the following bank account`}
                 header={true}
                 noFooter
                 classOverRideContainer='equity-neft'
@@ -43,7 +51,14 @@ class NEFT extends React.Component {
                     isDismissable={false}
                     type='info'
                     hasTitle={false}>
-                        NEFT OR RTGS only (IMPS not supported)
+                        <ul style={{margin:0}}>
+                            <li style={{fontSize:'11px'}}>
+                                NEFT OR RTGS only (IMPS not supported)
+                            </li>
+                            <li style={{fontSize:'11px'}}>
+                                Use the bank account registered with your Demat account for easy transfers
+                            </li>
+                        </ul>
                     </WVInfoBubble>
                     <div className='neft-info-wrapper'>
                         {
