@@ -201,7 +201,6 @@ export const partnerConfigs = {
     },
   },
   fisdom: {
-    logo: "fisdom_white_logo.svg",
     code: "fisdom",
     investSubSectionMap: {
       stocksAndIpo: ["stocks", "ipo"],
