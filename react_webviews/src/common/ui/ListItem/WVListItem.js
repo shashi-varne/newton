@@ -4,7 +4,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Imgc } from '../Imgc'
 
-function ListItem({
+function WVListItem({
   title,
   subtitle,
   iconSrc,
@@ -87,7 +87,7 @@ function Subtitle({ children, classes, dataAidSuffix }) {
   )
 }
 
-ListItem.propTypes = {
+WVListItem.propTypes = {
   withIcon: PropTypes.bool,
   title: PropTypes.node.isRequired,
   subtitle: PropTypes.node.isRequired,
@@ -101,9 +101,9 @@ ListItem.propTypes = {
   }),
 }
 
-ListItem.defaultProps = {
+WVListItem.defaultProps = {
   withIcon: true,
   withRuler: true,
 }
 
-export default ListItem
+export default WVListItem;

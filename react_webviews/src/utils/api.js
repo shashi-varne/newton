@@ -17,6 +17,10 @@ axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.withCredentials = true;
 
 class Api {
+  constructor() {
+    this.genericErrMsg = 'Something went wrong. Please try again!'
+  }
+
   static get(route, params) {
     return this.xhr(route, params, 'get');
   }
