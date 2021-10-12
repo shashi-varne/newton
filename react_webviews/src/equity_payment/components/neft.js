@@ -51,7 +51,7 @@ class NEFT extends React.Component {
                     isDismissable={false}
                     type='info'
                     hasTitle={false}>
-                        <ul style={{margin:0}}>
+                        <ul style={{margin:0,paddingLeft:'10px'}}>
                             <li style={{fontSize:'11px'}}>
                                 NEFT OR RTGS only (IMPS not supported)
                             </li>
