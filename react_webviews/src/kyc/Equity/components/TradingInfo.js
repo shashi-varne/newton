@@ -237,7 +237,7 @@ const TradingInfo = (props) => {
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={config.termsLink}
+                    href={config.equityAnnexure}
                     className="terms-text"
                   >
                     Equity Annexure
@@ -254,7 +254,7 @@ const TradingInfo = (props) => {
                   and{" "}
                   <span
                     className="terms-text"
-                    onClick={openInBrowser(config.termsLink)}
+                    onClick={openInBrowser(config.equityAnnexure)}
                   >
                     Equity Annexure
                   </span>{" "}
