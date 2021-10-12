@@ -274,7 +274,7 @@ const TradingInfo = (props) => {
                   and{" "}
                   <span
                     className="terms-text"
-                    onClick={openPdf(config.equityAnnexure, "equity_annexure")}
+                    onClick={openPdf(config.equityAnnexure)}
                   >
                     Equity Annexure
                   </span>{" "}
