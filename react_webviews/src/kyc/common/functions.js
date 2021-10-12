@@ -420,6 +420,10 @@ export function openInBrowser(url, type) {
     'download_kra_form' : {
         header_title: 'Download Forms',
         file_name: 'KRA_Form.pdf'
+    },
+    'equity_annexure' : {
+      header_title: 'Equity Annexure',
+      file_name: 'EQUITY_ANNEXURE.pdf'
     }
   }
 

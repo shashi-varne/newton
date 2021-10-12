@@ -4,7 +4,7 @@ import Container from "../../common/Container";
 import Checkbox from "../../../common/ui/Checkbox";
 import "./commonStyles.scss";
 import SebiRegistrationFooter from "../../../common/ui/SebiRegistrationFooter/WVSebiRegistrationFooter";
-import { getUpgradeAccountFlowNextStep } from "../../common/functions";
+import { getUpgradeAccountFlowNextStep, openPdf } from "../../common/functions";
 import { PATHNAME_MAPPER } from "../../constants";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import Toast from "../../../common/ui/Toast";
@@ -254,7 +254,7 @@ const TradingInfo = (props) => {
                   and{" "}
                   <span
                     className="terms-text"
-                    onClick={openInBrowser(config.equityAnnexure)}
+                    onClick={openPdf(config.equityAnnexure, "equity_annexure")}
                   >
                     Equity Annexure
                   </span>{" "}
