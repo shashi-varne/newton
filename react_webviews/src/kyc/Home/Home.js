@@ -322,7 +322,7 @@ const Home = (props) => {
       };
 
       const addkycType = kyc.kyc_status === "non-compliant" && !isDigilockerFlow(kyc);
-      if(isEquityAllowed()) {
+      if (!is_nri && isEquityAllowed()) {
         body.set_kyc_product_type = "equity";
         if(addkycType && kyc.kyc_type !== "manual")
           body.set_kyc_type = "manual";
