@@ -90,6 +90,7 @@ const TradingInfo = (props) => {
   const productName = config.productName;
   const navigate = navigateFunc.bind(props);
   const [checkTermsAndConditions, setCheckTermsAndConditions] = useState(true);
+  const [showSkelton, setShowSkelton] = useState(false);
   const [selectedTiles, setSelectedTiles] = useState([0]);
   const [equityChargesData, setEquityChargesData] = useState([])
   const { kyc, isLoading } = useUserKycHook();
@@ -175,6 +176,7 @@ const TradingInfo = (props) => {
         },
       });
     } else {
+      setShowSkelton(true);
       const data = {
         url: url,
         header_title: "EQUITY ANNEXURE",
@@ -193,7 +195,7 @@ const TradingInfo = (props) => {
       hidePageTitle
       data-aid='kyc-demate-account-screen'
       handleClick={handleClick}
-      skelton={isLoading}
+      skelton={isLoading || showSkelton}
     >
       <div className="kyc-account-info" data-aid='kyc-account-info'>
         <header className="kyc-account-info-header" data-aid='kyc-account-info-header'>
