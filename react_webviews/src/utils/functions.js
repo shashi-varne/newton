@@ -540,7 +540,13 @@ export function getBasePath() {
 export function isTradingEnabled(userKyc = {}) {
   const kyc = !isEmpty(userKyc) ? userKyc : storageService().getObject("kyc");
   const config = getConfig();
-  return kyc?.equity_enabled && !config.isSdk;
+  const equityEnabled = storageService().getBoolean('equityEnabled'); // Used to enable kyc equity flow from native/external side
+  if (config.isSdk) {
+    return false;
+  } else if (config.isNative) {
+    return equityEnabled && kyc?.equity_enabled;
+  }
+  return kyc?.equity_enabled;
 }
 
 const { checkBeforeRedirection, checkAfterRedirection, backButtonHandler } = require(`./${getConfig().platform}_app`);
