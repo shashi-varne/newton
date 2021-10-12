@@ -1,5 +1,15 @@
 .wv-in-page-header {
   margin-bottom: 30px;
+
+  .wv-iph-children {
+    flex: 50% 1 0;
+  }
+}
+
+.wv-iph-with-img {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .wv-ip-title {

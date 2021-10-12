@@ -90,6 +90,7 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty("--color-action-disable", `${config_to_return.uiElements.button.disabledBackgroundColor}`);
   html.style.setProperty('--dark', '#0A1D32');
   html.style.setProperty('--steelgrey', '#767E86');
+  html.style.setProperty('--whitegrey', '#EEEEEE');
   html.style.setProperty('--on-focus-background', `${config_to_return.uiElements.button.focusBackgroundColor}`);
   html.style.setProperty('--on-hover-background', `${config_to_return.uiElements.button.hoverBackgroundColor || config_to_return.styles.secondaryColor}`);
   html.style.setProperty('--on-hover-secondary-background', `${config_to_return.uiElements.button.hoverSecondaryBackgroundColor || config_to_return.styles.secondaryColor}`);
@@ -539,13 +540,7 @@ export function getBasePath() {
 export function isTradingEnabled(userKyc = {}) {
   const kyc = !isEmpty(userKyc) ? userKyc : storageService().getObject("kyc");
   const config = getConfig();
-  const equityEnabled = storageService().getBoolean('equityEnabled'); // Used to enable kyc equity flow from native/external side
-  if (config.isSdk) {
-    return false;
-  } else if (config.isNative) {
-    return equityEnabled && kyc?.equity_enabled;
-  }
-  return kyc?.equity_enabled;
+  return kyc?.equity_enabled && !config.isSdk;
 }
 
 const { checkBeforeRedirection, checkAfterRedirection, backButtonHandler } = require(`./${getConfig().platform}_app`);
