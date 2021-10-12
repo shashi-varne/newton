@@ -4,11 +4,11 @@ import Container from "../../common/Container";
 import Checkbox from "../../../common/ui/Checkbox";
 import "./commonStyles.scss";
 import SebiRegistrationFooter from "../../../common/ui/SebiRegistrationFooter/WVSebiRegistrationFooter";
-import { getUpgradeAccountFlowNextStep, openPdf } from "../../common/functions";
+import { getUpgradeAccountFlowNextStep } from "../../common/functions";
 import { PATHNAME_MAPPER } from "../../constants";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import Toast from "../../../common/ui/Toast";
-import { nativeCallback } from "../../../utils/native_callback";
+import { nativeCallback, openPdfCall } from "../../../utils/native_callback";
 import { capitalize, formatAmountInr } from "../../../utils/validators";
 import SVG from 'react-inlinesvg';
 import { Imgc } from "../../../common/ui/Imgc";
@@ -163,6 +163,26 @@ const TradingInfo = (props) => {
         url: url,
       },
     });
+  };
+
+  const openPdf = (url) => () => {
+    if (config.iOS) {
+      nativeCallback({
+        action: "open_inapp_tab",
+        message: {
+          url: url || "",
+          back_url: "",
+        },
+      });
+    } else {
+      const data = {
+        url: url,
+        header_title: "EQUITY ANNEXURE",
+        icon: "close",
+      };
+
+      openPdfCall(data);
+    }
   };
 
   return (
