@@ -47,6 +47,7 @@ class Api {
       }
     }
     const sdk_capabilities = config.sdk_capabilities;
+    const origin = window.location.origin;
     if (sdk_capabilities) {
       axios.defaults.headers.common['sdk-capabilities'] = sdk_capabilities;
     }
@@ -55,6 +56,9 @@ class Api {
     }
     if(route.includes('api/insurance')){  
       route = getGuestUserRoute(route)
+    }
+    if(origin === 'https://app2.fisdom.com') {
+      axios.defaults.headers.common['plutus-webapp-link'] = true;
     }
     let options = Object.assign({
       method: verb,
