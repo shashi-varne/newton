@@ -1,0 +1,64 @@
+body[data-device="web"] {
+  .wv-full-page-loader {
+    width: 100%;
+    margin: 0 auto;
+    top: 60px;
+  }
+}
+
+.wv-full-page-loader {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99999;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, #FFFFFF 25.91%, #FFFFFF 100%);
+  opacity: 0.96;
+  touch-action: none;
+}
+
+.wv-fpl-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  opacity: 0.96;
+  width: -webkit-fill-available;
+  img {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+.wv-fpl-loading-circle {
+  height: 0;
+  width: 0;
+  padding: 15px;
+  border: 6px solid #ccc;
+  border-right-color: #888;
+  border-radius: 22px;
+  animation: wv-fpl-loading-circle-rotate 1s infinite linear;
+  margin: 0 auto;
+}
+
+.wv-fpl-loading-text {
+  color: var(--steelgrey);
+  font-size: 13px;
+  line-height: 21px;
+  margin: 20px 0 0 0;
+  font-weight: 400;
+  text-align: center;
+  padding: 0px 20px 20px 20px;
+}
+
+@keyframes wv-fpl-loading-circle-rotate {
+  /* 100% keyframe for  clockwise. 
+     use 0% instead for anticlockwise */
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}

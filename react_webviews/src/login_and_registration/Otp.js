@@ -85,7 +85,7 @@ class Otp extends Component {
             )}
             {isMobileView && productName !== "finity" && (
               <div class="logo" data-aid='logo-text'>
-                <img src={require(`assets/logo_highres_f.png`)} alt="fisdom" />
+                <img src={require(`assets/logo_highres_f.svg`)} alt="fisdom" />
                 <h5>Join 1000’s of Smart Investors</h5>
               </div>
             )}
