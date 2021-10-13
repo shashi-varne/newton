@@ -81,6 +81,11 @@ export const themeConfig =  () => {
                 opacity: 0.4
             }
         },
+        MuiTypography: {
+            title: {
+                fontFamily: "'Rubik', 'Roboto', 'sans- serif'",
+            }
+        },
         MuiInputLabel: {
             root: {
                 fontSize: '0.9rem',
