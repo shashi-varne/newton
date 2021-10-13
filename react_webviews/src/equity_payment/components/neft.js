@@ -46,7 +46,7 @@ class NEFT extends React.Component {
                 noFooter
                 classOverRideContainer='equity-neft'
                 >
-                <div style={{marginBottom: '220px'}}>   
+                <div>   
                     <WVInfoBubble 
                     isDismissable={false}
                     type='info'
@@ -72,7 +72,8 @@ class NEFT extends React.Component {
                     </div>
 
                 </div>
-                <div className="encription">
+                <div className="encription eq-encryption">
+                    <div className='eq-neft-note'><span className='eq-note-title'>Note:</span> NEFT/RTGS fund transfers may take upto 4 hours to reflect in your trading account</div>
                     <img src={icn_secure_payment} alt="secure" />
                 </div>
             </Container>
