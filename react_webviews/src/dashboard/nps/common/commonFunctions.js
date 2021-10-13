@@ -253,7 +253,7 @@ export async function kyc_submit(params) {
           this.setState({
             title1: title1,
           });
-          throw typeof result?.error !== 'string' ? "something went wrong" : result?.messsage || result?.error;
+          throw title1 === 'Error' ? "something went wrong" : title1;
       }
     }
   } catch (err) {

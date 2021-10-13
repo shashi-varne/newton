@@ -5,6 +5,18 @@ import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS, 
 import { isReadyToInvest } from '../services'
 import { getKyc } from './api'
 
+export const isEquityAllowed = (config = getConfig()) => {
+  // Function to check if Equity broking/trading is allowed as per frontend checks/rules
+  const equityEnabled = storageService().getBoolean('equityEnabled'); // Used to enable kyc equity flow from native/external side
+  
+  if (config.isSdk) {
+    return false;
+  } else if (config.isNative) {
+    return equityEnabled;
+  }
+  return true;
+}
+
 export const validateFields = (formData, keyToCheck) => {
   let canSubmit = true
   for (let key of keyToCheck) {

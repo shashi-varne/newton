@@ -55,6 +55,9 @@ export const commonCardsConfig = {
 };
 
 export const basePartnerConfig = {
+  common: {
+    equityAnnexure: "https://fisdom.com/images/forms/Equity%20Annexures.pdf"
+  },
   fisdom: {
     productName: "fisdom",
     logo: "fisdom/fisdom_logo_white.svg",
@@ -373,7 +376,7 @@ export const partnerConfigs = {
     },
   },
   hbl: {
-    logo: "hbl.png",
+    logo: "hbl.svg",
     code: "hbl",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
@@ -487,7 +490,7 @@ export const partnerConfigs = {
   },
   taxwin: {
     code: "taxwin",
-    logo: "taxwin.png",
+    logo: "taxwin.svg",
     investSections: ["kyc", "ourRecommendations"],
     investSubSectionMap: {
       ourRecommendations: [
@@ -561,6 +564,7 @@ export const getPartnerData = (productType, partnerCode) => {
   // Appending base config of the productType(fisdom/finity) with the common config accross all partners
   let partnerConfigToReturn = {
     ...commonCardsConfig,
+    ...basePartnerConfig["common"],
     ...basePartnerConfig[productType],
   };
   const partnerData = partnerConfigs[partnerCode] || partnerConfigs[productType] || partnerConfigs["fisdom"];
