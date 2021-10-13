@@ -84,7 +84,7 @@ const SetPin = (props) => {
       <div style={{ paddingTop: '60px' }}>
         <EnterMPin
           title={`Set ${config.productName} PIN`}
-          subtitle="Ensuring maximum security for your investment account"
+          subtitle="Add an extra layer of security"
           otpProps={{
             otp: mpin,
             handleOtp: onPinChange,

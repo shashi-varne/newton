@@ -102,7 +102,7 @@ const PinSetupDialog = ({
           {screen !== 'success' ?
             <EnterMPin
               title={`${screen === 'set' ? 'Set' : 'Confirm'} ${productName} PIN`}
-              subtitle="Ensuring maximum security for your investment account"
+              subtitle="Add an extra layer of security"
               otpProps={{
                 otp: screen === 'set' ? pin1 : pin2,
                 handleOtp: onPinChange,
