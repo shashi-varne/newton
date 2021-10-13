@@ -1,11 +1,7 @@
 import React, { Fragment } from 'react';
 import './style.scss';
-import { disableBodyTouch } from 'utils/validators';
 
 const DotDotLoader = (props) => {
-
-  disableBodyTouch();
-
   const { size = '' } = props;
    // eslint-disable-next-line
   let sizeObj = {};
