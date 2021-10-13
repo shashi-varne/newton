@@ -17,6 +17,9 @@ axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.withCredentials = true;
 
 class Api {
+  constructor() {
+    this.genericErrMsg = 'Something went wrong. Please try again!'
+  }
   
   static handleApiResponse(res) {
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
@@ -31,7 +34,7 @@ class Api {
       throw result.error || result.message || genericErrMsg;
     }
   }
-
+  
   static get(route, params) {
     return this.xhr(route, params, 'get');
   }

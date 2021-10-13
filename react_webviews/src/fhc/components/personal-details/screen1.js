@@ -39,10 +39,6 @@ class PersonalDetails1 extends Component {
         show_loader: false,
         fhc_data,
       });
-
-      var input = document.getElementById('dob');
-      input.onkeyup = formatDate;
-
     } catch (err) {
       this.setState({
         show_loader: false
@@ -169,6 +165,7 @@ class PersonalDetails1 extends Component {
               value={fhc_data.dob}
               placeholder="DD/MM/YYYY"
               maxLength="10"
+              onKeyUp={formatDate}
               onChange={this.handleChange('dob')} />
           </div>
           <div className="InputField">

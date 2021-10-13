@@ -90,6 +90,7 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty("--color-action-disable", `${config_to_return.uiElements.button.disabledBackgroundColor}`);
   html.style.setProperty('--dark', '#0A1D32');
   html.style.setProperty('--steelgrey', '#767E86');
+  html.style.setProperty('--whitegrey', '#EEEEEE');
   html.style.setProperty('--on-focus-background', `${config_to_return.uiElements.button.focusBackgroundColor}`);
   html.style.setProperty('--on-hover-background', `${config_to_return.uiElements.button.hoverBackgroundColor || config_to_return.styles.secondaryColor}`);
   html.style.setProperty('--on-hover-secondary-background', `${config_to_return.uiElements.button.hoverSecondaryBackgroundColor || config_to_return.styles.secondaryColor}`);
@@ -538,8 +539,10 @@ export function getBasePath() {
 
 export function isTradingEnabled(userKyc = {}) {
   const kyc = !isEmpty(userKyc) ? userKyc : storageService().getObject("kyc");
-  return !getConfig().isSdk && kyc?.equity_enabled;
+  const config = getConfig();
+  return kyc?.equity_enabled && !config.isSdk;
 }
+
 const { checkBeforeRedirection, checkAfterRedirection, backButtonHandler } = require(`./${getConfig().platform}_app`);
 
 export function navigate(pathname, data = {}) {

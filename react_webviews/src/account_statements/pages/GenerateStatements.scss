@@ -1,0 +1,19 @@
+.acc-statements-field-title {
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 24px;
+  color: var(--dark);
+  margin-bottom: 10px;
+}
+
+.as-radio-field {
+  margin-bottom: 20px;
+
+  .MuiFormGroup-root {
+    flex-direction: row;
+
+    .MuiFormControlLabel-root + .MuiFormControlLabel-root {
+      margin-left: 80px;
+    }
+  }
+}
