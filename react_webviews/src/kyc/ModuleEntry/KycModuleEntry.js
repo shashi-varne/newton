@@ -23,6 +23,9 @@ function KycModuleEntry(props) {
   const isNative = props?.location?.pathname === "/kyc/native";
 
   useEffect(() => {
+    if (isNative) {
+      storageService().setBoolean('equityEnabled', urlParams.equityEnabled || false);
+    }
     if (!isEmpty(kyc)) {
       initialize();
     }
