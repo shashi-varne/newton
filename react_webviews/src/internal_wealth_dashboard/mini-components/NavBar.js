@@ -40,6 +40,7 @@ const NavBar = (props) => {
         src={open ? fisdom_logo : fisdom_icon}
         alt="fisdom"
         height="40"
+        width={open ? "160" : ""}
         style={{ marginBottom: '50px' }}
       />
       {tabs.map(({label, icon}) =>
