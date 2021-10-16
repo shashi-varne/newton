@@ -33,7 +33,7 @@ Note: To enable nps, gold or insurance in partner config :
 
 // common config across all partners
 export const commonCardsConfig = {
-  logo: "logo_white.png",
+  logo: "fisdom_white_logo.svg",
   investSections: [
     "kyc",
     "indexFunds",
@@ -57,6 +57,7 @@ export const basePartnerConfig = {
     productName: "fisdom",
     email: "ask@fisdom.com",
     mobile: "+91-9642596425",
+    websiteLink: "https://www.fisdom.com",
     appLink: "https://fisdom.onelink.me/CQFA/3e75c8f6",
     termsLink: "https://www.fisdom.com/terms/",
     schemeLink: "https://www.fisdom.com/scheme-offer-documents/",
@@ -77,6 +78,7 @@ export const basePartnerConfig = {
     productName: "finity",
     email: "ask@finity.in",
     mobile: "+91-8142381423",
+    websiteLink: "https://www.finity.in",
     appLink: "https://myway.onelink.me/W4GN/1f539fd2",
     termsLink: "https://finity.in/terms/",
     schemeLink: "https://finity.in/scheme/",
@@ -193,6 +195,7 @@ export const partnerConfigs = {
     },
   },
   fisdom: {
+    logo: "fisdom_white_logo.svg",
     code: "fisdom",
     investSubSectionMap: {
       ourRecommendations: [
@@ -239,7 +242,7 @@ export const partnerConfigs = {
       financialTools: ["risk_profile"],
     },
     landingMarketingBanners: [
-      { image: "nfo.svg", type: "nfo", endDate: '09/14/2021' },
+      { image: "nfo.svg", type: "nfo", endDate: '10/28/2021', startDate: '10/15/2021' },
       { image: "mb_4.svg", type: "100_sip" },
       { image: "mb_6.svg", type: "diy" },
       { image: "mb_5.svg", type: "buildwealth" },
@@ -327,7 +330,7 @@ export const partnerConfigs = {
     mobile: "1800-212-5997",
     email: "care.futuremoney@fisdom.com",
     landingMarketingBanners: [
-      { image: "nfo.svg", type: "nfo", endDate: '09/14/2021' },
+      { image: "nfo.svg", type: "nfo", endDate: '10/28/2021', startDate: '10/15/2021' },
       { image: "fpg_mb_insta.svg", type: "instaredeem" },
       { image: "fpg_mb_100.svg", type: "buildwealth" },
     ],
@@ -364,7 +367,7 @@ export const partnerConfigs = {
     },
   },
   hbl: {
-    logo: "hbl.png",
+    logo: "hbl.svg",
     code: "hbl",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
@@ -478,7 +481,7 @@ export const partnerConfigs = {
   },
   taxwin: {
     code: "taxwin",
-    logo: "taxwin.png",
+    logo: "taxwin.svg",
     investSections: ["kyc", "ourRecommendations"],
     investSubSectionMap: {
       ourRecommendations: [

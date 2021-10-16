@@ -125,7 +125,12 @@ export function getParamsMark(data) {
 }
 
 export const getPlatformConfig = () => {
-  const config = {};
+  let config = {
+    Web: false, 
+    Android: false,
+    iOS: false
+  };
+  
   if (isMobile.Android() && typeof window.Android !== 'undefined') {
     config.app = 'android';
     config.Android = true;
@@ -516,7 +521,7 @@ export function isIframe() {
 }
 export function getBasePath() {
   var basename = window.sessionStorage.getItem('base_href') || '';
-  if(basename && basename.indexOf('appl/webview') !== -1) {
+  if(basename && basename.indexOf('appl/web') !== -1) {
     basename = basename ? basename + 'view' : '';
   }
   return window.location.origin + basename;
