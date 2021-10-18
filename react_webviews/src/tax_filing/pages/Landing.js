@@ -33,6 +33,7 @@ import useBackButtonTracker from '../hooks/useBackButtonTracker'
 import './Landing.scss'
 
 function Landing(props) {
+  const stateParams = props.location.state || {};
   const productName = getConfig().productName
   const navigate = navigateFunc.bind(props)
   const landedFromBackButton = checkIfLandedByBackButton()
@@ -84,6 +85,10 @@ function Landing(props) {
 
   const goBack = () => {
     clearITRSessionStorage()
+    if(stateParams.fromState === "/reports") {
+      navigate("/reports");
+      return;
+    }
     nativeCallback({ action: 'exit', events: sendEvents('back') })
   }
 
