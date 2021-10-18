@@ -17,7 +17,7 @@ const ConfirmNewPin = (props) => {
   const routeParamsExist = useMemo(() => {
     return !isEmpty(routeParams);
   }, []);
-  const { productName, base_url } = getConfig();
+  const { productName } = getConfig();
   const successText = routeParams.set_flow ? `${capitalize(productName)} security enabled` : `${capitalize(productName)} PIN changed`;
   const comingFrom = useMemo(() => props.match?.params?.coming_from, [props]);
   const kycFlow = useMemo(() => comingFrom === 'kyc-complete', [comingFrom]);
@@ -34,7 +34,7 @@ const ConfirmNewPin = (props) => {
       if (new_mpin) {
         if (new_mpin !== mpin) {
           // eslint-disable-next-line no-throw-literal
-          throw "PIN doesn't match, Please try again";
+          throw "PIN doesn't match";
         } else if (routeParams.set_flow) {
           await setPin({ mpin });
         } else {
@@ -102,7 +102,7 @@ const ConfirmNewPin = (props) => {
       <div style={{ paddingTop: '60px' }}>
         <EnterMPin
           title={`Confirm ${productName} PIN`}
-          subtitle={routeParams.set_flow  ? "Ensuring maximum security for your investment account" : "Keep your account safe and secure"}
+          subtitle="Add an extra layer of security"
           otpProps={{
             otp: mpin,
             handleOtp: handlePin,

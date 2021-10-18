@@ -65,7 +65,7 @@ const PersonalDetails3 = (props) => {
       setFormData(data);
       return;
     }
-    if (compareObjects(keysToCheck, oldState, form_data)) {
+    if (compareObjects(keysToCheck, oldState, form_data) && kyc.identification.meta_data.politically_exposed) {
       handleNavigation();
       return;
     }

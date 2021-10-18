@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as Sentry from '@sentry/browser'
 
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import { storageService } from './validators';
 import { encrypt, decrypt } from './encryption';
 import { nativeCallback } from './native_callback';
@@ -20,7 +20,21 @@ class Api {
   constructor() {
     this.genericErrMsg = 'Something went wrong. Please try again!'
   }
+  
+  static handleApiResponse(res) {
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+      throw genericErrMsg;
+    }
 
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      return result;
+    } else {
+      throw result.error || result.message || genericErrMsg;
+    }
+  }
+  
   static get(route, params) {
     return this.xhr(route, params, 'get');
   }

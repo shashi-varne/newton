@@ -45,6 +45,7 @@ const KycPremiumLandingDialog = ({
       classes={{
         image: "kyc-pld-right-icon"
       }}
+      dataAidSuffix="premium-bottomsheet"
     >
       {data.status === "ground_premium" && (
         <div className="vfdc-bottom-info" data-aid="bottom-info">

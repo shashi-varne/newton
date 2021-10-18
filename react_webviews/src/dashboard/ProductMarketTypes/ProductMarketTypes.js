@@ -47,6 +47,7 @@ const ProductMarketTypes = (props) => {
   const goBack = () => {
     navigate("/market-products");
   };
+  
   return (
     <Container
       data-aid='my-categories-screen'

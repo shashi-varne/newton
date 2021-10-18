@@ -180,6 +180,11 @@ export function setBaseHref() {
     myBaseHref.href = myBaseHrefUrl;
     window.localStorage.setItem('base_href', myBaseHrefUrl);
   }
+  if(pathname.indexOf('webapp') !== -1) {
+    var myBaseHrefUrl = '/webapp/';
+    myBaseHref.href = myBaseHrefUrl;
+    window.localStorage.setItem('base_href', myBaseHrefUrl);
+  }
 }
 
 export async function triggerOtpApi(body, loginType, bottomsheet) {
@@ -293,6 +298,22 @@ export async function resendVerificationLink() {
   }
 }
 
+export const redirectToLaunchDiet = async () => {
+  const url = '/api/equity/stub/equityvariables?ucc=DEMO100';
+  try {
+    const res = await Api.post(url);
+    const { result, status_code: status } = res.pfwresponse;
+    if (status === 200) {
+      window.location.href = `${config.base_url}/page/equity/launchdiet`;
+    } else {
+      toast(result.message || result.error || errorMessage);
+    }
+  } catch (error) {
+    console.log(error);
+    toast(errorMessage);
+  }
+} 
+
 export async function otpLoginVerification(verify_url, body) {
   let formData = new FormData();
   formData.append("otp", body?.otp);
@@ -336,7 +357,12 @@ export async function otpLoginVerification(verify_url, body) {
           storageService().get("deeplink_url")
         );
       } else {
-        this.redirectAfterLogin(result, user);
+        console.log(config.diet)
+        if(config.diet) {
+          await redirectToLaunchDiet();
+        } else {
+          this.redirectAfterLogin(result, user);
+        }
       }
     } else {
       if (result?.status_code === 439) {
@@ -403,7 +429,11 @@ export async function otpVerification(body) {
           storageService().get("deeplink_url")
         );
       } else {
-        this.redirectAfterLogin(result, user);
+        if(config.diet) {
+          await redirectToLaunchDiet();
+        } else {
+          this.redirectAfterLogin(result, user);
+        }
       }
       toast(result?.error || result.message || errorMessage)
     } else {

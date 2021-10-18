@@ -1075,13 +1075,17 @@ export function formatAmountToNumber(value){
 
 export function disableBodyTouch(enable) {
   if(!enable) {
-    document.body.style.overflow = 'hidden';
-    document.body.style.touchAction = 'none';
-    document.body.style.pointerEvents = 'none';
+    document.body.classList.add('disable-body-touch');
+    document.body.classList.remove('enable-body-touch');
+    // document.body.style.overflow = 'hidden';
+    // document.body.style.touchAction = 'none';
+    // document.body.style.pointerEvents = 'none';
   } else {
-    document.body.style.overflow = 'auto';
-    document.body.style.touchAction = 'unset';
-    document.body.style.pointerEvents = 'unset';
+    document.body.classList.remove('disable-body-touch');
+    document.body.classList.add('enable-body-touch');
+    // document.body.style.overflow = 'auto';
+    // document.body.style.touchAction = 'auto';
+    // document.body.style.pointerEvents = 'auto';
   }
 }
 
@@ -1096,18 +1100,21 @@ export function disableBodyOverflow(enable) {
 export function disableContainerTouch(enable) {
 
   let Container = document.getElementsByClassName('Container') ? document.getElementsByClassName('Container')[0] : '';
-
   if(!Container) {
     return;
   }
   if(!enable) {
-    Container.style.overflow = 'hidden';
-    Container.style.touchAction = 'none';
-    Container.style.pointerEvents = 'none';
+    Container.classList.add('disable-body-touch');
+    Container.classList.remove('enable-body-touch');
+    // Container.style.overflow = 'hidden';
+    // Container.style.touchAction = 'none';
+    // Container.style.pointerEvents = 'none';
   } else {
-    Container.style.overflow = 'auto';
-    Container.style.touchAction = 'unset';
-    Container.style.pointerEvents = 'unset';
+    Container.classList.remove('disable-body-touch');
+    Container.classList.add('enable-body-touch');
+    // Container.style.overflow = 'auto';
+    // Container.style.touchAction = 'unset';
+    // Container.style.pointerEvents = 'unset';
   }
 }
 

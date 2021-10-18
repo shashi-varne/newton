@@ -1,6 +1,8 @@
 .main-container {
   height: 100vh;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
   & > header {
     z-index: 1300 !important;
   }
@@ -41,8 +43,9 @@
 
   .right-content {
     width: calc(100% - 640px);
-    display: grid;
-    place-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background: #fafafa;
   }
 }

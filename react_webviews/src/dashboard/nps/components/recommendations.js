@@ -401,8 +401,8 @@ class Recommendations extends Component {
               <div className="allocation" data-aid='nps-allocation'>
                 <div className="graph" data-aid='nps-graph'>
                   <PieChart
-                    height={isMobileDevice ? 100 : 180}
-                    width={isMobileDevice ? 100 : 180}
+                    height={isMobileDevice ? 120 : 180}
+                    width={isMobileDevice ? 120 : 180}
                     data={pieChartData || {}}
                   ></PieChart>
                   <div
@@ -518,27 +518,23 @@ class Recommendations extends Component {
 const createPieChartData = (allocData = {}) => {
   return [
     {
-      id: "E",
-      label: "E",
-      value: allocData?.e_allocation,
+      name: "Class E",
+      y: allocData?.e_allocation,
       color: classColorMap['E'],
     },
     {
-      id: "G",
-      label: "G",
-      value: allocData?.g_allocation,
+      name: "Class G",
+      y: allocData?.g_allocation,
       color: classColorMap['G'],
     },
     {
-      id: "C",
-      label: "C",
-      value: allocData?.c_allocation,
+      name: "Class C",
+      y: allocData?.c_allocation,
       color: classColorMap['C'],
     },
     {
-      id: "A",
-      label: "A",
-      value: allocData?.a_allocation,
+      name: "Class A",
+      y: allocData?.a_allocation,
       color: classColorMap['A'],
     },
   ]
