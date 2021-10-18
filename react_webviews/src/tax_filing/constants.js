@@ -135,7 +135,7 @@ export const TAX_FILING_ADVANTAGES = [
 
 export const WHY_EFILE_REASONS = [
   {
-    icon: 'calculator',
+    icon: 'secure_safe',
     stats: 'Secure and safe', 
   },
   {
@@ -143,7 +143,7 @@ export const WHY_EFILE_REASONS = [
     stats: 'Maximum tax saving',
   },
   {
-    icon: 'secure_safe',
+    icon: 'calculator',
     stats: '100% accuracy',
   },
 ]

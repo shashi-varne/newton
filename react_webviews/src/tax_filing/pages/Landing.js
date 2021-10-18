@@ -224,7 +224,7 @@ function Landing(props) {
         <div className="m-top-3x flex space-between">
           {WHY_EFILE_REASONS.map(({ icon, stats }, idx) => (
             <FeatureItem
-              classes={{ container: `bg-whitegrey`, divider: `tax-filing-whyefile-divider` }}
+              classes={{ container: `tax-filing-whyefile-icon-bg`, divider: `tax-filing-whyefile-divider` }}
               imgSrc={icon}
               title={stats}
               key={icon}
