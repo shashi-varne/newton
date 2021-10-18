@@ -1,11 +1,8 @@
-import './Landing.scss'
-
 import React, { useEffect, useState } from 'react'
 import { getConfig } from 'utils/functions'
 import Container from '../common/Container'
 import WVTag from 'common/ui/Tag/WVTag'
-import Carousal from '../mini-components/Carousal'
-import FeatureListItem from '../mini-components/FeatureListItem'
+import FeatureItem from '../mini-components/FeatureItem'
 import WVCard from 'common/ui/Card/WVCard'
 import { Imgc } from 'common/ui/Imgc'
 import ListItem from 'common/ui/ListItem/WVListItem'
@@ -15,13 +12,13 @@ import { nativeCallback } from 'utils/native_callback'
 
 import {
   TAX_FILING_OPTIONS,
+  WHY_EFILE_REASONS,
   USER_SUMMARY_KEY,
   USER_DETAILS,
 } from '../constants'
 import {
   checkIfLandedByBackButton,
   clearITRSessionStorage,
-  getTaxFilingFeatureLists,
   navigate as navigateFunc,
   setITRJourneyType,
   untrackBackButtonPress,
@@ -33,8 +30,9 @@ import { storageService } from '../../utils/validators'
 import useResetTakeControl from '../hooks/useResetTakeControl'
 import useBackButtonTracker from '../hooks/useBackButtonTracker'
 
+import './Landing.scss'
+
 function Landing(props) {
-  const stateParams = props.location.state || {};
   const productName = getConfig().productName
   const navigate = navigateFunc.bind(props)
   const landedFromBackButton = checkIfLandedByBackButton()
@@ -85,11 +83,7 @@ function Landing(props) {
   }
 
   const goBack = () => {
-    clearITRSessionStorage();
-    if(stateParams.fromState === "/reports") {
-      navigate("/reports");
-      return;
-    }
+    clearITRSessionStorage()
     nativeCallback({ action: 'exit', events: sendEvents('back') })
   }
 
@@ -158,11 +152,9 @@ function Landing(props) {
       noFooter
     >
       <div className="tax-filing-landing">
-        <Carousal
-          title="Taxation made simple!"
-          subtitle="File ITR easily, quickly and with maximum tax savings"
-          dataAidSuffix="tax-filing-itr-carousel"
-        />
+        <div className="body-text2">
+          File ITR easily, quickly and with maximum tax savings
+        </div>
         {user?.has_itr && (
           <WVCard
             classes={{
@@ -180,51 +172,66 @@ function Landing(props) {
             </>
           </WVCard>
         )}
-
-        <div className="heading2 m-top-3x">Get started</div>
         {TAX_FILING_OPTIONS.map(({ title, subtitle, icon, type }, idx) => {
           if (type === 'free') {
             return (
-              <ListItem
-                key={title}
-                iconSrc={require(`assets/${productName}/${icon}.svg`)}
-                title={<CustomTitle title={title} />}
-                subtitle={subtitle}
+              <WVCard
+                key={type}
                 onClick={handleITRJourneyNavigation(type)}
-                classes={{ container: 'pointer m-top-2x' }}
-                dataAidSuffix={`tax-filing-option-${idx}`}
-              />
+                classes={{
+                  container: 'pointer m-top-2x tax-filing-option-card',
+                }}
+                dataAidSuffix={`tax-filing-option-card-${title}`}
+              >
+                <ListItem
+                  iconSrc={require(`assets/${productName}/${icon}.svg`)}
+                  title={<CustomTitle title={title} />}
+                  subtitle={subtitle}
+                  classes={{ container: 'pointer row-reverse' }}
+                  dataAidSuffix={`tax-filing-option-${type}`}
+                  withRuler={false}
+                />
+              </WVCard>
             )
           } else {
             return (
-              <ListItem
-                key={title}
-                iconSrc={require(`assets/${productName}/${icon}.svg`)}
-                title={title}
-                subtitle={subtitle}
+              <WVCard
+                key={type}
                 onClick={handleITRJourneyNavigation(type)}
                 classes={{
-                  container: 'm-top-2x pointer',
+                  container: 'pointer m-top-2x tax-filing-option-card',
                 }}
-                withRuler={idx < TAX_FILING_OPTIONS.length - 1}
-                dataAidSuffix={`tax-filing-option-${idx}`}
-              />
+                dataAidSuffix={`tax-filing-option-card-${title}`}
+              >
+                <ListItem
+                  key={title}
+                  iconSrc={require(`assets/${productName}/${icon}.svg`)}
+                  title={title}
+                  subtitle={subtitle}
+                  classes={{
+                    container: 'pointer row-reverse',
+                  }}
+                  withRuler={false}
+                  dataAidSuffix={`tax-filing-option-${type}`}
+                />
+              </WVCard>
             )
           }
         })}
         <div className="heading2 tax-filing-landing-features">
           Why eFile with us?
         </div>
-        {getTaxFilingFeatureLists().map((item, idx) => (
-          <FeatureListItem
-            imgSrc={item.frontImage}
-            bgImgSrc={item.bgImage}
-            title={item.title}
-            subtitle={item.subtitle}
-            classes={{ container: 'm-top-3x' }}
-            key={item.title}
-          />
-        ))}
+        <div className="m-top-3x flex space-between">
+          {WHY_EFILE_REASONS.map(({ icon, stats }, idx) => (
+            <FeatureItem
+              classes={{ container: `bg-whitegrey`, divider: `tax-filing-whyefile-divider` }}
+              imgSrc={icon}
+              title={stats}
+              key={icon}
+              lastItem={idx === WHY_EFILE_REASONS.length - 1}
+            />
+          ))}
+        </div>
         <div
           className="pointer m-top-4x flex align-center pointer tax-filing-faq-section"
           onClick={handleFAQNavigation}

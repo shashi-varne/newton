@@ -132,3 +132,18 @@ export const TAX_FILING_ADVANTAGES = [
   { icon: 'icn_service_ratings', stats: '4.7', group: 'Service ratings' },
   { icon: 'icn_online_support', stats: '24 x 7', group: 'Online Support' },
 ]
+
+export const WHY_EFILE_REASONS = [
+  {
+    icon: 'calculator',
+    stats: 'Secure and safe', 
+  },
+  {
+    icon: 'hand',
+    stats: 'Maximum tax saving',
+  },
+  {
+    icon: 'secure_safe',
+    stats: '100% accuracy',
+  },
+]
