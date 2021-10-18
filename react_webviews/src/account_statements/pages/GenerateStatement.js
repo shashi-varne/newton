@@ -118,7 +118,6 @@ export default function GenerateStatement(props) {
   const [selectedDateMap, setSelectedDateMap] = useState({});
   const [calendarDefaultDate, setCalendarDefaultDate] = useState({});
   const dateSelector = useCallback(({ dateType, type, title, fieldProps = {} }) => {
-    console.log(calendarDefaultDate);
     return (
       <div className="as-date-picker" key={dateType}>
         <InputLabel>
