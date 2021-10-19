@@ -18,7 +18,7 @@
   margin-bottom: 30px;
 
   .react-select__menu {
-    z-index: 2;
+    z-index: 8;
   }
 }
 
@@ -44,25 +44,39 @@
   .rs-picker-toggle-placeholder {
     color: var(--steelgrey) !important;
   }
+
+  .rs-picker-toggle {
+    &.active, &:hover {
+      border-color: var(--primary) !important;
+    }
+  }
   
   .rs-picker-toggle.rs-btn-lg {
-    z-index: 1;
-    padding-top: 14px;
-    padding-bottom: 14px;
-    font-size: 13px;
+    z-index: 1 !important;
+    padding-top: 14px !important;
+    padding-bottom: 14px !important;
+    font-size: 13px !important;
     
     .rs-picker-toggle-clean {
-      right: 45px;
-      font-size: 16px;
+      right: 45px !important;
+      font-size: 16px !important;
       top: 12px !important;
     }
     
     .rs-picker-toggle-value {
       color: var(--dark) !important;
     }
-
+    
     .rs-picker-toggle-caret {
       color: var(--primary) !important;
+      top: 13px !important;
     }
+  }
+}
+
+.rs-picker-menu {
+  .rs-calendar-table-cell-selected .rs-calendar-table-cell-content {
+    border-color: var(--primary);
+    background-color: var(--primary);
   }
 }

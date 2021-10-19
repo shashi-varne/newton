@@ -63,6 +63,8 @@
     "jest": "20.0.4",
     "jquery": "^3.3.1",
     "jss": "^9.8.1",
+    "less": "^3.5.0",
+    "less-loader": "7.0.0",
     "material-ui": "next",
     "moment": "^2.29.0",
     "object-assign": "4.1.1",

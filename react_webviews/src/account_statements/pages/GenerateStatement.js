@@ -10,7 +10,9 @@ import { getStatement } from "../common/apiCalls";
 import { fiscalYearGenerator } from "../functions";
 import DropDownNew from '../../common/ui/DropDownNew'
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
-import { DatePicker } from 'rsuite';
+// TODO: Remove less and less-loader loader when rsuite is removed from app
+import DatePicker from 'rsuite/lib/DatePicker';
+import 'rsuite/lib/DatePicker/styles';
 import { format, isAfter, isBefore, startOfDay } from "date-fns";
 import { getConfig } from "../../utils/functions";
 import { InputLabel } from "material-ui";
@@ -323,7 +325,7 @@ export default function GenerateStatement(props) {
       handleClick={handleClick}
       showLoader={isApiRunning}
     >
-      <div className="InputField">
+      <div className="InputField" style={{ paddingTop: '20px' }}>
         {pageProps.fields.map(field => {
           if (field.type === 'radio') return radioButtons(field);
           else if (field.type === 'fin-year') return finYearSelector(field);
