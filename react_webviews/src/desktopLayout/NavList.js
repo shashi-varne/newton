@@ -41,12 +41,12 @@ let data = [
     icon: invest,
     path: '/invest',
   },
-  {
-    id: 'loans',
-    name: 'Loans',
-    icon: loans,
-    path: '/loan/home',
-  },
+  // {
+  //   id: 'loans',
+  //   name: 'Loans',
+  //   icon: loans,
+  //   path: '/loan/home',
+  // },
   {
     id: 'reports',
     name: 'Reports',
