@@ -1572,3 +1572,36 @@ padding-right: 12px !important;
     background-color: var(--on-hover-background);
   }
 }
+
+.gold-dialog {
+  .hr {
+    width: 100%;
+    height: 1px;
+    background-color: #ededed;
+  }
+  
+  .content-points {
+    color: #0a1d32;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0 15px 0;
+  }
+  
+  .content2-points {
+    color: #0a1d32;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0 15px 0;
+    font-weight: 600;
+  }
+  .content2-points-inside-heading {
+    margin: 0 0 -10px 0;
+    font-size: 11px;
+    color: #372e2e;
+  }
+  .mid-buttons {
+    margin: 0 0 20px 0;
+  }
+}
