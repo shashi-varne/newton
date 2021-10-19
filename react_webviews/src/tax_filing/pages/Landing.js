@@ -177,51 +177,28 @@ function Landing(props) {
             </>
           </WVCard>
         )}
-        {TAX_FILING_OPTIONS.map(({ title, subtitle, icon, type }, idx) => {
-          if (type === 'free') {
-            return (
-              <WVCard
-                key={type}
-                onClick={handleITRJourneyNavigation(type)}
-                classes={{
-                  container: 'pointer m-top-2x tax-filing-option-card',
-                }}
-                dataAidSuffix={`tax-filing-option-card-${title}`}
-              >
-                <ListItem
-                  iconSrc={require(`assets/${productName}/${icon}.svg`)}
-                  title={<CustomTitle title={title} />}
-                  subtitle={subtitle}
-                  classes={{ container: 'pointer row-reverse' }}
-                  dataAidSuffix={`tax-filing-option-${type}`}
-                  withRuler={false}
-                />
-              </WVCard>
-            )
-          } else {
-            return (
-              <WVCard
-                key={type}
-                onClick={handleITRJourneyNavigation(type)}
-                classes={{
-                  container: 'pointer m-top-2x tax-filing-option-card',
-                }}
-                dataAidSuffix={`tax-filing-option-card-${title}`}
-              >
-                <ListItem
-                  key={title}
-                  iconSrc={require(`assets/${productName}/${icon}.svg`)}
-                  title={title}
-                  subtitle={subtitle}
-                  classes={{
-                    container: 'pointer row-reverse',
-                  }}
-                  withRuler={false}
-                  dataAidSuffix={`tax-filing-option-${type}`}
-                />
-              </WVCard>
-            )
-          }
+        {TAX_FILING_OPTIONS.map(({ title, subtitle, icon, type }) => {
+          return (
+            <WVCard
+              key={type}
+              onClick={handleITRJourneyNavigation(type)}
+              classes={{
+                container: "pointer m-top-2x tax-filing-option-card",
+              }}
+              dataAidSuffix={`tax-filing-option-card-${title}`}
+            >
+              <ListItem
+                iconSrc={require(`assets/${productName}/${icon}.svg`)}
+                title={
+                  type === "free" ? <CustomTitle title={title} /> : title
+                }
+                subtitle={subtitle}
+                classes={{ container: "pointer row-reverse" }}
+                dataAidSuffix={`tax-filing-option-${type}`}
+                withRuler={false}
+              />
+            </WVCard>
+          );
         })}
         <div className="heading2 tax-filing-landing-features">
           Why eFile with us?
