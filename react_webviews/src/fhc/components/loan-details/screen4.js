@@ -128,7 +128,7 @@ class LoanDetails4 extends Component {
           type="text"
           width="40"
           label="Monthly EMI"
-          class="Income"
+          className="Income"
           id="monthly-emi"
           name="education_loan"
           value={formatAmount(fhc_data.education_loan || '')}
@@ -160,7 +160,7 @@ class LoanDetails4 extends Component {
               helperText={fhc_data.has_education_loan_error}
               width="40"
               label="Do you have education loan?"
-              class="MaritalStatus"
+              className="MaritalStatus"
               options={yesOrNoOptions}
               id="education-loan"
               value={fhc_data.has_education_loan}

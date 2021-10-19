@@ -142,7 +142,7 @@ class InsuranceDetails1 extends Component {
             type="text"
             width="40"
             label="Annual premium"
-            class="Income"
+            className="Income"
             id="annual-premium"
             name="annual_premuim"
             value={formatAmount(annual_premuim || '')}
@@ -156,7 +156,7 @@ class InsuranceDetails1 extends Component {
             type="text"
             width="40"
             label="Cover amount"
-            class="Income"
+            className="Income"
             id="cover-value"
             name="cover_value"
             value={formatAmount(cover_value || '')}
@@ -189,7 +189,7 @@ class InsuranceDetails1 extends Component {
               helperText={fhc_data.life_is_present_error}
               width="40"
               label="Do you have life insurance?"
-              class="MaritalStatus"
+              className="MaritalStatus"
               options={yesOrNoOptions}
               id="life-insurance"
               value={is_present}

@@ -134,7 +134,7 @@ class InvestmentDetails1 extends Component {
               helperText={this.state.has_investment_error}
               width="40"
               label="Have you ever invested your money?"
-              class="MaritalStatus"
+              className="MaritalStatus"
               options={yesOrNoOptions}
               id="investment"
               value={this.state.has_investment}

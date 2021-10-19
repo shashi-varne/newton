@@ -144,7 +144,7 @@ class InvestmentDetails4 extends Component {
             type="text"
             width="40"
             label="Investment under Sec 80C ?"
-            class="Income"
+            className="Income"
             id="invest-80C"
             name="tax_saving_80C"
             value={formatAmount(tax_saving_80C || '')}
@@ -158,7 +158,7 @@ class InvestmentDetails4 extends Component {
             type="text"
             width="40"
             label="Invested in NPS under Sec 80CCD ?"
-            class="Income"
+            className="Income"
             id="invest-80CCD"
             name="tax_saving_80CCD"
             value={formatAmount(tax_saving_80CCD || '')}
@@ -191,7 +191,7 @@ class InvestmentDetails4 extends Component {
               helperText={fhc_data.tax_is_present_error}
               width="40"
               label="Have you invested under 80C or others?"
-              class="MaritalStatus"
+              className="MaritalStatus"
               options={yesOrNoOptions}
               id="tax-saving"
               value={is_present}
