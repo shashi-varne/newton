@@ -415,7 +415,8 @@ class PaymentOption extends React.Component {
     let url = config.base_url + '/api/equity/api/eqm/eqpayments/pg/payment/options/' + config.pc_urlsafe;
     if(config.Web) {
       const redirectUrl = encodeURIComponent(`${basepath}/pg/eq/payment-status` + config.searchParams);
-      url += (url.match(/[?]/g) ? '&' : '?')+`plutus_redirect_url=${redirectUrl}`;
+      // eslint-disable-next-line no-useless-escape
+      url += (url.match(/[\?]/g) ? '&' : '?')+`plutus_redirect_url=${redirectUrl}`;
     }
     await this.getPaymentOptions(url);
     this.setState({
