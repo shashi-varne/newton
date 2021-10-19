@@ -33,7 +33,7 @@ Note: To enable nps, gold or insurance in partner config :
 
 // common config across all partners
 export const commonCardsConfig = {
-  logo: "logo_white.png",
+  logo: "fisdom_white_logo.svg",
   investSections: [
     "kyc",
     "indexFunds",
@@ -195,6 +195,7 @@ export const partnerConfigs = {
     },
   },
   fisdom: {
+    logo: "fisdom_white_logo.svg",
     code: "fisdom",
     investSubSectionMap: {
       ourRecommendations: [
@@ -241,7 +242,7 @@ export const partnerConfigs = {
       financialTools: ["risk_profile"],
     },
     landingMarketingBanners: [
-      { image: "nfo.svg", type: "nfo", endDate: '10/10/2021' },
+      { image: "nfo.svg", type: "nfo", endDate: '10/21/2021' },
       { image: "mb_4.svg", type: "100_sip" },
       { image: "mb_6.svg", type: "diy" },
       { image: "mb_5.svg", type: "buildwealth" },
@@ -329,7 +330,7 @@ export const partnerConfigs = {
     mobile: "1800-212-5997",
     email: "care.futuremoney@fisdom.com",
     landingMarketingBanners: [
-      { image: "nfo.svg", type: "nfo", endDate: '10/10/2021' },
+      { image: "nfo.svg", type: "nfo", endDate: '10/21/2021' },
       { image: "fpg_mb_insta.svg", type: "instaredeem" },
       { image: "fpg_mb_100.svg", type: "buildwealth" },
     ],
@@ -366,7 +367,7 @@ export const partnerConfigs = {
     },
   },
   hbl: {
-    logo: "hbl.png",
+    logo: "hbl.svg",
     code: "hbl",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
@@ -480,7 +481,7 @@ export const partnerConfigs = {
   },
   taxwin: {
     code: "taxwin",
-    logo: "taxwin.png",
+    logo: "taxwin.svg",
     investSections: ["kyc", "ourRecommendations"],
     investSubSectionMap: {
       ourRecommendations: [

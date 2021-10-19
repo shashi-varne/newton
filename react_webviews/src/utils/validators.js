@@ -1069,8 +1069,8 @@ export function formatAmountToNumber(value){
   }
 }
 
-export function disableBodyTouch(enable) {
-  if(!enable) {
+export function disableBodyTouch(disableTouch) {
+  if(disableTouch) {
     document.body.style.overflow = 'hidden';
     document.body.style.touchAction = 'none';
     document.body.style.pointerEvents = 'none';

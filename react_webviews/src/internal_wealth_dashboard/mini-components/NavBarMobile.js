@@ -105,7 +105,7 @@ const NavBarMobile = (props) => {
             onClick={() => setExpanded(false)}
             style={{ marginRight: 'auto' }}
           >
-            <img src={fisdom_logo} id="iwd-nmh-fisdom-logo" alt="fisdom" />
+            <img src={fisdom_logo} id="iwd-nmh-fisdom-logo" width="96px" alt="fisdom" />
           </Link>
           <Button className="iwd-nmh-menu" onClick={() => setExpanded(true)}>
             <MenuIcon fontSize="inherit" />
