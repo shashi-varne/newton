@@ -10,7 +10,7 @@ import Toast from '../../common/ui/Toast'
 import useUserKycHook from '../common/hooks/userKycHook'
 import WVLiveCamera from "../../common/ui/LiveCamera/WVLiveCamera";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
-import LocationPermDummy from "./LocationPermDummy";
+// import LocationPermDummy from "./LocationPermDummy";
 import LocationPermission from "./LocationPermission";
 import KycUploadContainer from "../mini-components/KycUploadContainer";
 import SelfieUploadStatus from "../Equity/mini-components/SelfieUploadStatus";
