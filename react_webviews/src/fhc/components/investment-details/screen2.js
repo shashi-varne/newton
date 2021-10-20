@@ -18,7 +18,7 @@ class InvestmentDetails2 extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      show_loader: 'button',
       investmentOpts: [],
       investment_error: '',
       fhc_data: new FHC(),

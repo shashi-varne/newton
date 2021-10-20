@@ -330,12 +330,24 @@ export function didupdate() {
     setHeights({ 'header': true, 'container': false });
 }
 
-export function navigate(pathname) {
-    this.props.history.push({
-        pathname: pathname,
-        search: this.props.location.search
-    });
-};
+export function navigate(pathname, params, replace) {
+    if (!replace) {
+        this.props.history.push({
+            pathname: pathname,
+            search: this.props.location.search,
+            params,
+        });
+    } else {
+        /* Required for screens that don't require to be considered in
+          the history sequence when moving back through history using
+          history.goBack() */
+        this.props.history.replace({
+            pathname: pathname,
+            search: this.props.location.search,
+            params,
+        });
+    }
+}
 
 export function check_hide_header_title() {
     let force_hide_inpage_title;
