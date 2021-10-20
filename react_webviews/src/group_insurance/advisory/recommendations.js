@@ -228,7 +228,6 @@ class AdivsoryRecommendations extends Component {
                 showLoader={this.state.show_loader}
                 loaderData= {
                     {
-                        'loaderClass': 'Loader-Dialog',
                         'loadingText': 'Always plan ahead. It wasn’t raining when Noah built the ark.'
                     }
                 }
