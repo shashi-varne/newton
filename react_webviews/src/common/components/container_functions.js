@@ -585,13 +585,17 @@ export function renderGenericError() {
 
 
 export function renderPageLoader() {
+    // let quotes_data = [
+    //     'Risk comes from not knowing what you are doing.',
+    //     'Money is a terrible master but an excellent servant.',
+    //     'Wealth is the ability to fully experience life.',
+    //     'I’d like to live as a poor man with lots of money.',
+    //     'Don’t stay in bed, unless you can make money in bed.',
+    //     'It takes as much energy to wish as it does to plan.',
+    //     'The best thing money can buy is financial freedom.'
+    // ]
+
     let quotes_data = [
-        'Risk comes from not knowing what you are doing.',
-        'Money is a terrible master but an excellent servant.',
-        'Wealth is the ability to fully experience life.',
-        'I’d like to live as a poor man with lots of money.',
-        'Don’t stay in bed, unless you can make money in bed.',
-        'It takes as much energy to wish as it does to plan.',
         'The best thing money can buy is financial freedom.'
     ]
 
