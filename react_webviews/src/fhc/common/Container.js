@@ -6,7 +6,6 @@ import '../../utils/native_listener';
 import { getConfig } from 'utils/functions';
 import { storageService } from '../../utils/validators';
 import { uploadFHCData } from '../common/ApiCalls';
-import toast from '../../common/ui/Toast';
 import { navigate } from './commonFunctions';
 
 import {didMount ,commonRender} from '../../common/components/container_functions';
@@ -29,7 +28,7 @@ class Container extends Component {
     this.didMount = didMount.bind(this);
     this.commonRender =  commonRender.bind(this);
   }
-
+  
   componentDidMount() {
     this.didMount();
   }

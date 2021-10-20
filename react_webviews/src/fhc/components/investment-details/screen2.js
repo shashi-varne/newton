@@ -152,7 +152,7 @@ class InvestmentDetails2 extends Component {
               value="checked"
               name="checked"
               onChange={this.handleChange(option.type, idx)}
-              className="Checkbox" />
+            />
           </Grid>
           <Grid item xs={11}>
             <div className="checkbox-text">{option.name}</div>

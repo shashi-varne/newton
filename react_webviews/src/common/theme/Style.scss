@@ -427,6 +427,7 @@ body[data-device="web"] {
   .FlexItem1-withProvider-footer {
     flex: inherit;
     cursor: pointer;
+    margin-right: 20px;
   }
 
   .FlexItem2-withProvider-footer {
@@ -570,11 +571,6 @@ body[data-device="web"] .Container {
 
 .TextCenter {
   text-align: center;
-}
-
-.Checkbox {
-  width: auto;
-  height: auto;
 }
 
 .SameAddress {

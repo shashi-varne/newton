@@ -160,10 +160,6 @@ body[data-device="web"] #bottom-popup .MuiDialog-paper {
 .TextCenter {
   text-align: center;
 }
-.Checkbox {
-  width: auto;
-  height: auto;
-}
 .SameAddress {
   color: #444;
   font-size: 14px;
