@@ -6,7 +6,7 @@ import register from 'assets/registration_menu_icon.png';
 import notification from 'assets/notifications_icon.png';
 import invest from 'assets/invest.png';
 import report from 'assets/reports.png';
-import loans from 'assets/ic_loan_sdk2.png';
+// import loans from 'assets/ic_loan_sdk2.png';
 import fhc from 'assets/fhc.png';
 import myAccount from 'assets/myaccount.png';
 import refer from 'assets/promo_code.png';
