@@ -18,6 +18,8 @@ import { ToastContainer } from "react-toastify";
 import DesktopLayout from "./desktopLayout";
 import ErrorBoundary from "./ErrorBoundary";
 import BootSkeleton from "./common/components/BootSkeleton";
+import Login from "./login_and_registration/Login";
+import Logout from "./login_and_registration/Logout";
 
 const Prepare = lazy(() => import(
   /*webpackChunkName: "Prepare"*/ "./dashboard/Invest/components/SdkLanding/Prepare"
@@ -31,9 +33,9 @@ const NotFound = lazy(() => import(
 const InternalWealthDashboard = lazy(() => import(
   /*webpackChunkName: "InternalWealthDashboard"*/ "./internal_wealth_dashboard"
 ));
-const Login = lazy(() => import(
-  /*webpackChunkName: "Login"*/ "./login_and_registration/Login"
-));
+// const Login = lazy(() => import(
+//   /*webpackChunkName: "Login"*/ "./login_and_registration/Login"
+// ));
 const Registration = lazy(() => import(
   /*webpackChunkName: "Registration"*/ "./login_and_registration/Register")
 );
@@ -55,9 +57,9 @@ const FisdomPartnerRedirect = lazy(() => import(
 const PartnerAuthentication = lazy(() => import(
   /* webpackChunkName: "Authentication" */ "./login_and_registration/Authentication")
 );
-const Logout = lazy(() =>
-  import(/* webpackChunkName: "Logout" */ "./login_and_registration/Logout")
-);
+// const Logout = lazy(() =>
+//   import(/* webpackChunkName: "Logout" */ "./login_and_registration/Logout")
+// );
 const Feature = lazy(() =>
   import(/* webpackChunkName: "Feature" */ "./Feature")
 );
