@@ -18,7 +18,7 @@ class InsuranceDetails1 extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      show_loader: 'button',
       fhc_data: new FHC(),
       type: getConfig().productName
     };
