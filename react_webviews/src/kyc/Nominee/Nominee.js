@@ -52,21 +52,41 @@ const Nominee = (props) => {
     setOldState({ ...formData });
   };
 
+  const checkNameValidity = () => {
+    const applicantName = (kyc?.pan?.meta_data?.name)?.replace(/\s/g, '');
+    const nomineeName = form_data.name?.replace(/\s/g, '');
+
+    // Matches for https://fisdom.atlassian.net/browse/QA-1247
+    if (nomineeName.match(new RegExp('^' + applicantName + '$', "i"))) {
+      return "Nominee name cannot be same as your name";
+    }
+  }
+
   const handleClick = () => {
-    let keysToCheck = ["dob", "name", "relationship"];
-    let result = validateFields(form_data, keysToCheck);
-    sendEvents('next')
+    const keysToCheck = ["dob", "name", "relationship"];
+    const result = validateFields(form_data, keysToCheck);
     if (!result.canSubmit) {
       let data = { ...result.formData };
       setFormData(data);
       return;
     }
+    const nameError = checkNameValidity();
+    if (nameError) {
+      setFormData({
+        ...form_data,
+        'name_error': nameError
+      });
+      return;
+    }
+
     let userkycDetails = { ...kyc };
     userkycDetails.nomination.meta_data.dob = form_data.dob;
     userkycDetails.nomination.meta_data.name = form_data.name;
     userkycDetails.nomination.meta_data.relationship = form_data.relationship;
     let body = { ...finalSubmissionData };
     body.kyc.nomination = userkycDetails.nomination.meta_data;
+    
+    sendEvents('next');
     if (compareObjects(keysToCheck, oldState, form_data)) {
       navigate(PATHNAME_MAPPER.kycReport);
       return;
