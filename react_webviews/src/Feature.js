@@ -20,7 +20,7 @@ import Report from './reports';
 // import CommonRenderFaqs from './common/components/RenderFaqs';
 
 import Fhc from './fhc';
-import Loan from './loan_idfc';
+// import Loan from './loan_idfc';
 import Payment from './payment';
 import KycEsign from './kyc_esign';
 import PortfolioRebalancing from './portfolio_rebalancing';
@@ -63,7 +63,7 @@ const Feature = () => {
         <ProtectedRoute path='/isip' component={IsipBIller} />
         {/* outside the feature component */}
         <ProtectedRoute path='/help' component={HelpSupport} />
-        <ProtectedRoute path='/loan' component={Loan} />
+        {/* <ProtectedRoute path='/loan' component={Loan} /> */}
         <ProtectedRoute path='/pg' component={Payment} />
         <ProtectedRoute path='/kyc-esign' component={KycEsign} />
         <ProtectedRoute path='/whatsapp/' component={Whatsapp} />
