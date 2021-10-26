@@ -55,16 +55,18 @@ export const ACCOUNT_STATEMENT_OPTIONS = [
           type: 'date-select',
           dateType: 'from',
           paramName: 'dt_start',
+          title: 'From date',
           fieldProps: {
-            label: 'Enter date you want statement from (DD/MM/YYYY)'
+            placeholder: 'Select date you want statement from'
           }
         },
         {
           type: 'date-select',
           dateType: 'to',
           paramName: 'dt_end',
+          title: 'To date',
           fieldProps: {
-            label: 'Enter date you want statement till (DD/MM/YYYY)'
+            placeholder: 'Select date you want statement till'
           }
         },
       ]
@@ -87,16 +89,18 @@ export const ACCOUNT_STATEMENT_OPTIONS = [
           type: 'date-select',
           dateType: 'from',
           paramName: 'dt_start',
+          title: 'From date',
           fieldProps: {
-            label: 'Enter date you want statement from (DD/MM/YYYY)'
+            placeholder: 'Select date you want statement from'
           }
         },
         {
           type: 'date-select',
           dateType: 'to',
           paramName: 'dt_end',
+          title: 'To date',
           fieldProps: {
-            label: 'Enter date you want statement till (DD/MM/YYYY)'
+            placeholder: 'Select date you want statement till'
           }
         },
       ]
@@ -119,16 +123,18 @@ export const ACCOUNT_STATEMENT_OPTIONS = [
           type: 'date-select',
           dateType: 'from',
           paramName: 'dt_start',
+          title: 'From date',
           fieldProps: {
-            label: 'Enter date you want statement from (DD/MM/YYYY)'
+            placeholder: 'Select date you want statement from'
           }
         },
         {
           type: 'date-select',
           dateType: 'to',
           paramName: 'dt_end',
+          title: 'To date',
           fieldProps: {
-            label: 'Enter date you want statement till (DD/MM/YYYY)'
+            placeholder: 'Select date you want statement till'
           }
         },
       ]
@@ -148,9 +154,10 @@ export const ACCOUNT_STATEMENT_OPTIONS = [
           type: 'date-select',
           dateType: 'date',
           paramName: 'dt_end',
+          title: 'Holdings as of',
           fieldProps: {
             disabled: true,
-            label: 'Holdings as of',
+            placeholder: 'Holdings as of',
           }
         },
       ]
@@ -174,8 +181,9 @@ export const ACCOUNT_STATEMENT_OPTIONS = [
           type: 'date-select',
           dateType: 'from',
           paramName: 'dt_start',
+          title: 'From date',
           fieldProps: {
-            label: 'Enter date you want statement from (DD/MM/YYYY)',
+            placeholder: 'Select date you want statement from',
             disabled: true
           }
         },
@@ -183,8 +191,9 @@ export const ACCOUNT_STATEMENT_OPTIONS = [
           type: 'date-select',
           dateType: 'to',
           paramName: 'dt_end',
+          title: 'To date',
           fieldProps: {
-            label: 'Enter date you want statement till (DD/MM/YYYY)',
+            placeholder: 'Select date you want statement till',
             disabled: true
           }
         },

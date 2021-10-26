@@ -28,7 +28,7 @@ const ConfirmNewPin = (props) => {
   const validatePin = () => {
     if (routeParams?.newPin !== pin) {
       // eslint-disable-next-line no-throw-literal
-      throw "PIN doesn’t match, Please try again";
+      throw "PIN doesn’t match";
     }
     return true;
   }
@@ -71,7 +71,7 @@ const ConfirmNewPin = (props) => {
     <>
       <EnterMPin
         title={`Confirm ${productName} PIN`}
-        subtitle="Keep your account safe and secure"
+        subtitle="Add an extra layer of security"
         otpProps={{
           otp: pin,
           handleOtp: handlePin,

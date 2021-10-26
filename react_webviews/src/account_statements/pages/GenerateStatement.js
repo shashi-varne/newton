@@ -1,28 +1,24 @@
 import "./GenerateStatements.scss";
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { keyBy } from 'lodash';
+import keyBy from 'lodash/keyBy';
+import isEmpty from 'lodash/isEmpty';
 import { ACCOUNT_STATEMENT_OPTIONS } from '../constants';
 import Container from '../common/Container';
 import Toast from '../../common/ui/Toast';
 import RadioOptions from '../../common/ui/RadioOptions';
-import Input from '../../common/ui/Input';
-import { dobFormatTest, formatDate, isEmpty, isValidDate } from "../../utils/validators";
 import { getStatement } from "../common/apiCalls";
-import format from 'date-fns/format';
 import { fiscalYearGenerator } from "../functions";
 import DropDownNew from '../../common/ui/DropDownNew'
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
+// TODO: Remove less and less-loader loader when rsuite is removed from app
+import DatePicker from 'rsuite/lib/DatePicker';
+import 'rsuite/lib/DatePicker/styles';
+import { format, isAfter, isBefore, startOfDay } from "date-fns";
+import { getConfig } from "../../utils/functions";
+import { InputLabel } from "material-ui";
 
 const optionsMap = keyBy(ACCOUNT_STATEMENT_OPTIONS, 'type');
 const FINANCIAL_YEAR_OPTIONS = fiscalYearGenerator(2021);
-
-const getFormattedDate = (value) => {
-  // This function converts a dd/mm/yyyy date to a natively (JS) supported date format
-  if (!value) return '';
-  const [d, m, y] = value.split('/');
-  // m-1 since months are 0-indexed for JS Date()
-  return new Date(y, m-1, d);
-}
 
 export default function GenerateStatement(props) {
   const { pageType = '' } = props?.match?.params || {};
@@ -32,7 +28,9 @@ export default function GenerateStatement(props) {
   }, [pageType]);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [errorObj, setErrorObj] = useState({});
+  const { Web: isWeb } = useMemo(() => getConfig(), []);
   
+  // ---------------- RADIO FIELD -----------------------
   const [selectedRadioOption, setSelectedRadioOption] = useState('');
   const radioButtons = useCallback(({ options, type, fieldProps = {} }) => {
     return (
@@ -66,13 +64,14 @@ export default function GenerateStatement(props) {
     setSelectedRadioOption(event.target.value);
   }
 
+
+  // ---------------- FINANCIAL YEAR FIELD -----------------------
   const [selectedFinYear, setSelectedFinYear] = useState('');
   const finYearSelector = useCallback(({ title, type, fieldProps = {} }) => {
     return (
-      <div style={{ marginBottom: '20px' }} key={type}>
+      <div className="as-fy-picker" key={type}>
         <DropDownNew
           parent={props}
-          header_title={title || "Select Financial Year"}
           label={title || "Select Financial Year"}
           selectedIndex={0}
           value={selectedFinYear}
@@ -97,55 +96,69 @@ export default function GenerateStatement(props) {
   }, []);
 
   const handleFinYearChange = (selectedValue) => {
-    setErrorObj({
-      ...errorObj,
-      'fin-year': ''
-    });
-    
+    const [startYear, endYear] = selectedValue.split('-');
+
+    if (selectedValue !== selectedFinYear) {
+      // Reset all errors and date selections if financial year is changed
+      setErrorObj({});
+      setSelectedDateMap({});
+    }
+
     setSelectedFinYear(selectedValue);
+    setCalendarDefaultDate(new Date(startYear, 3, 1));
     
     if (pageObj.type === 'capital_gains') {
-      const [startYear, endYear] = selectedValue.split('-');
       setSelectedDateMap({
-        from: new Date(startYear, 3).toLocaleDateString('en-GB'), // April 01 of fiscal year start
-        to: new Date(endYear, 2, 31).toLocaleDateString('en-GB'), // March 31 of fiscal year end
+        from: new Date(startYear, 3), // April 01 of fiscal year start
+        to: new Date(endYear, 2, 31), // March 31 of fiscal year end
       });
     }
   }
 
+
+  // ---------------- DATE FIELD -----------------------
   const [selectedDateMap, setSelectedDateMap] = useState({});
-  const dateSelector = useCallback(({ dateType, type, fieldProps = {} }) => {
+  const [calendarDefaultDate, setCalendarDefaultDate] = useState({});
+  const dateSelector = useCallback(({ dateType, type, title, fieldProps = {} }) => {
     return (
-      <div style={{ marginBottom: '30px' }} key={dateType}>
-        <Input
-          type="text"
-          width="40"
-          class="DOB"
-          label="Enter date"
+      <div className="as-date-picker" key={dateType}>
+        <InputLabel>
+          {title || "Select Date"}
+        </InputLabel>
+        <DatePicker
+          key={calendarDefaultDate}
+          block
+          oneTap
+          isoWeek
+          preventOverflow
+          size="lg"
+          format="DD/MM/YYYY"
+          calendarDefaultDate={calendarDefaultDate}
+          limitEndYear={1}
+          disabledDate={disableDate(dateType)}
+          placement={isWeb ? "autoVerticalStart" : "auto"}
+          style={{ width: 'auto' }}
+          ranges={[]}
           value={selectedDateMap[dateType] || ""}
-          error={!!errorObj[`${type}-${dateType}`]}
-          helperText={errorObj[`${type}-${dateType}`] || ""}
           onChange={handleDateChange(dateType)}
-          maxLength={10}
-          inputMode="numeric"
           id={`${dateType}-date`}
-          onKeyUp={formatDate}
           {...fieldProps}
         />
+        <div className="error-radiogrp">
+          {errorObj[`${type}-${dateType}`]}
+        </div>
       </div>
     );
-  }, [selectedDateMap, errorObj]);
+  }, [calendarDefaultDate, selectedDateMap, errorObj]);
   useEffect(() => {
     if (pageObj.type === 'demat_holding') {
       setSelectedDateMap({
-        'date': new Date().toLocaleDateString('en-GB')
+        'date': new Date()
       });
     }
   }, []);
 
-  const handleDateChange = type => event => {
-    const value = event.target.value;
-    if (!dobFormatTest(value)) return;
+  const handleDateChange = type => value => {
     setErrorObj({
       ...errorObj,
       [`date-select-${type}`]: ''
@@ -156,37 +169,79 @@ export default function GenerateStatement(props) {
     });
   }
 
+  const disableDate = type => date => {
+    /*
+      Note: All dates have been set to startOfDay to prevent
+      time difference from interfering with comparisons.
+      Only dates will be compared now, without considering time.
+    */
+    date = startOfDay(date);
+
+    // Restrict dates max upto current date
+    if (isAfter(date, startOfDay(new Date()))) {
+      return true;
+    }
+
+    // Restrict 'From' dates max upto selected 'To' date
+    if (
+      type === 'from' &&
+      isAfter(date, startOfDay(selectedDateMap['to']))
+    ) {
+      return true;
+    }
+
+    // Restrict 'To' dates max upto selected 'From' date
+    if (
+      type === 'to' &&
+      isBefore(date, startOfDay(selectedDateMap['from']))
+    ) {
+      return true;
+    }
+
+    if (selectedFinYear) {
+      const [startYear, endYear] = selectedFinYear?.split('-');
+      
+      // Restrict date selection within financial year
+      if (
+        isBefore(date, startOfDay(new Date(startYear, 3))) ||
+        isAfter(date, startOfDay(new Date(endYear, 2, 31)))
+      ) {
+        return true;
+      }
+    }
+  }
+
+
+  // ---------------- HELPER AND OTHER FUNCTIONS  -----------------------
   const validateDate = (value, dateType) => {
-    if (!value || !isValidDate(value)) {
+    if (!value) {
       return "Please enter a valid date";
     }
     
-    const formattedDate = getFormattedDate(value);
-    
-    if (formattedDate > new Date() && pageObj.type === 'demat_holding') {
+    value = startOfDay(value);
+
+    if (pageObj.type === 'demat_holding' && isAfter(value, startOfDay(new Date()))) {
       return "Date must not exceed today's date";
     }
     
     if (
       dateType === 'to' &&
-      selectedDateMap['from'] &&
-      isValidDate(selectedDateMap['from']) &&
-      formattedDate < getFormattedDate(selectedDateMap['from'])
-      ) {
-        return "Please enter value greater than From date";
-      }
+      isBefore(value, startOfDay(selectedDateMap['from']))
+    ) {
+      return "Please enter value greater than From date";
+    }
       
-      if (selectedFinYear) {
-        const [startYear, endYear] = selectedFinYear?.split('-');
-        if (
-          dateType === 'from' &&
-          formattedDate < new Date(startYear, 3)
-          ) {
-            return `Please input From date greater than ${format(new Date(startYear, 3), 'PP')}`;
-          }
-          if (
+    if (selectedFinYear) {
+      const [startYear, endYear] = selectedFinYear?.split('-');
+      if (
+        dateType === 'from' &&
+        isBefore(value, startOfDay(new Date(startYear, 3)))
+      ) {
+        return `Please input From date greater than ${format(new Date(startYear, 3), 'PP')}`;
+      }
+      if (
         dateType === 'to' &&
-        formattedDate > new Date(endYear, 2, 31)
+        isAfter(value, startOfDay(new Date(endYear, 2, 31)))
       ) {
         return `Please input To Date within ${format(new Date(endYear, 2, 31), 'PP')}`;
       }
@@ -233,7 +288,7 @@ export default function GenerateStatement(props) {
       } else if (field.type === 'fin-year') {
         fieldValue = selectedFinYear;
       } else if (field.type === 'date-select') {
-        fieldValue = selectedDateMap[field.dateType];
+        fieldValue = selectedDateMap[field.dateType].toLocaleDateString('en-GB'); // Convert Date object to 'DD/MM/YYYY' string
       }
       params[field.paramName] = fieldValue;
       return params;
@@ -263,6 +318,7 @@ export default function GenerateStatement(props) {
 
   return (
     <Container
+      classOverRideContainer="account-statement"
       title={pageObj.title}
       smallTitle={pageProps.subtitle || "Choose time period to view statement"}
       buttonTitle={`Email ${pageObj.title}`}

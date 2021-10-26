@@ -2,7 +2,7 @@ import React from 'react';
 import ReactHighcharts from "react-highcharts";
 
 const PieChart = (props) => {
-  const { width = 120, height = 120, ...otherProps } = props;
+  const { width = 120, height = 120 } = props;
   const config = {
     chart: {
       plotBackgroundColor: null,

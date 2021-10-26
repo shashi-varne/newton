@@ -8,7 +8,7 @@ import { getUpgradeAccountFlowNextStep } from "../../common/functions";
 import { PATHNAME_MAPPER } from "../../constants";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import Toast from "../../../common/ui/Toast";
-import { nativeCallback } from "../../../utils/native_callback";
+import { nativeCallback, openPdfCall } from "../../../utils/native_callback";
 import { capitalize, formatAmountInr } from "../../../utils/validators";
 import SVG from 'react-inlinesvg';
 import { Imgc } from "../../../common/ui/Imgc";
@@ -90,6 +90,7 @@ const TradingInfo = (props) => {
   const productName = config.productName;
   const navigate = navigateFunc.bind(props);
   const [checkTermsAndConditions, setCheckTermsAndConditions] = useState(true);
+  const [showSkelton, setShowSkelton] = useState(false);
   const [selectedTiles, setSelectedTiles] = useState([0]);
   const [equityChargesData, setEquityChargesData] = useState([])
   const { kyc, isLoading } = useUserKycHook();
@@ -165,6 +166,27 @@ const TradingInfo = (props) => {
     });
   };
 
+  const openPdf = (url) => () => {
+    if (config.iOS) {
+      nativeCallback({
+        action: "open_inapp_tab",
+        message: {
+          url: url || "",
+          back_url: "",
+        },
+      });
+    } else {
+      setShowSkelton(true);
+      const data = {
+        url: url,
+        header_title: "EQUITY ANNEXURE",
+        icon: "close",
+      };
+
+      openPdfCall(data);
+    }
+  };
+
   return (
     <Container
       events={sendEvents("just_set_events")}
@@ -173,7 +195,7 @@ const TradingInfo = (props) => {
       hidePageTitle
       data-aid='kyc-demate-account-screen'
       handleClick={handleClick}
-      skelton={isLoading}
+      skelton={isLoading || showSkelton}
     >
       <div className="kyc-account-info" data-aid='kyc-account-info'>
         <header className="kyc-account-info-header" data-aid='kyc-account-info-header'>
@@ -237,7 +259,7 @@ const TradingInfo = (props) => {
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={config.termsLink}
+                    href={config.equityAnnexure}
                     className="terms-text"
                   >
                     Equity Annexure
@@ -254,7 +276,7 @@ const TradingInfo = (props) => {
                   and{" "}
                   <span
                     className="terms-text"
-                    onClick={openInBrowser(config.termsLink)}
+                    onClick={openPdf(config.equityAnnexure)}
                   >
                     Equity Annexure
                   </span>{" "}
