@@ -76,6 +76,9 @@ const LocationPermission = ({
   const fetchCountryFromResults = (results) => {
     const addressObjs = results[0]?.address_components;
     const countryAddressObj = addressObjs.find(obj => obj.types.includes("country"));
+    sendEvents('location_fetched', 'allow_location_access', {
+      locationObj: countryAddressObj
+    });
     return countryAddressObj.long_name;
   }
   
@@ -128,6 +131,7 @@ const LocationPermission = ({
 
   const onCTAClick = () => {
     if (pageType === 'invalid-region') {
+      sendEvents('back', 'allow_location_access');
       onClose(pageType);
     } else {
       sendEvents('next', 'allow_location_access');
