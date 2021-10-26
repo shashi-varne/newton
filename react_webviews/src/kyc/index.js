@@ -29,7 +29,6 @@ import RtaCompliantPersonalDetails from "./RtaCompliant";
 import RegistrationSuccess from "./Success/RegistrationSuccess";
 
 import Home from "./Home/Home";
-import Nominee from "./Nominee/Nominee";
 import Report from "./Report/KycReport";
 import PersonalDetails1 from "./PersonalDetails/Screen1";
 import PersonalDetails2 from "./PersonalDetails/Screen2";
@@ -190,11 +189,6 @@ const Kyc = (props) => {
                  `${url}/:userType/bank-status`,
                ]}
           component={DialogAsPage}
-        />
-        <Route
-          exact
-          path={`${url}/:userType/nominee-details`}
-          component={Nominee}
         />
         <Route 
           exact 
