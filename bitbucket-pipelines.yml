@@ -112,13 +112,13 @@ pipelines:
         - step:
             <<: *prod-deploy
             name: Fisdom Production deploy
-            trigger: manual
+            # trigger: manual
             deployment: fisdom-prod
 
         - step:
             <<: *prod-deploy
             name: Finity Production deploy
-            trigger: manual
+            # trigger: manual
             deployment: finity-prod
       
       # - step:
