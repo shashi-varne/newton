@@ -10,7 +10,7 @@ import Toast from '../../common/ui/Toast'
 import useUserKycHook from '../common/hooks/userKycHook'
 import WVLiveCamera from "../../common/ui/LiveCamera/WVLiveCamera";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
-import LocationPermDummy from "./LocationPermDummy";
+// import LocationPermDummy from "./LocationPermDummy";
 import LocationPermission from "./LocationPermission";
 import KycUploadContainer from "../mini-components/KycUploadContainer";
 import SelfieUploadStatus from "../Equity/mini-components/SelfieUploadStatus";
@@ -216,12 +216,13 @@ const Selfie = (props) => {
     setIsLocnPermOpen(false);
   }
 
-  const sendEvents = (userAction, screenName) => {
+  const sendEvents = (userAction, screenName, additionalProps = {}) => {
     let eventObj = {
       event_name: isTradingFlow ? "trading_onboarding" : "kyc_registration",
       properties: {
         user_action: userAction || "",
         screen_name: screenName || "take_a_selfie",
+        ...additionalProps
       },
     };
     if (userAction === "just_set_events") {
