@@ -94,7 +94,7 @@ export const investCardsBase = {
     },
     gold: {
       title: "Buy & sell 24K Gold",
-      subtitle: "Starting from Rs. 1000, doorstep delivery",
+      subtitle: "Starting from Rs. 100, doorstep delivery",
       button_text: "BUY NOW",
       icon: "ic_invest_gold.svg",
     },
@@ -108,7 +108,7 @@ export const investCardsBase = {
     },
     gold: {
       title: "Buy & sell 24K Gold",
-      subtitle: "Starting from Rs. 1000, doorstep delivery",
+      subtitle: "Starting from Rs. 100, doorstep delivery",
       button_text: "BUY NOW",
       icon: "ic_invest_gold.svg",
     },

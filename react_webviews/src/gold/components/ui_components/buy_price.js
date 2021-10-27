@@ -93,7 +93,6 @@ class BuyPriceClass extends Component {
             showLoader={this.state.show_loader}
             loaderData= {
                 {
-                    'loaderClass': 'Loader-Dialog',
                     'loadingText': 'Wait for a moment...'
                 }
             }

@@ -2,7 +2,6 @@ import React from 'react';
 import { Button, withStyles } from '@material-ui/core';
 import { getConfig } from '../../../utils/functions';
 import DotDotLoaderNew from '../DotDotLoaderNew';
-import { disableBodyTouch } from '../../../utils/validators';
 
 const noop = () => {};
 
@@ -16,12 +15,6 @@ const WVButton = ({
   ...props // remaining button props as per MUI
 }) => {
   const variant = props.variant || (contained ? 'contained' : outlined ? 'outlined' : 'text');
-
-  if (showLoader) {
-    disableBodyTouch(); //disable touch
-  } else {
-    disableBodyTouch(true); //touch enabled
-  }
 
   return (
     <Button
