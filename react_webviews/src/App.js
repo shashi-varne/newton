@@ -1,3 +1,4 @@
+import "common/theme/Style.scss";
 import React, { Component, useState, useEffect, lazy, Suspense } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -9,11 +10,9 @@ import {
 } from "@material-ui/core/styles";
 import { create } from "jss";
 import { withRouter } from "react-router";
-import "common/theme/Style.scss";
 import { themeConfig } from "utils/constants";
 import { getConfig } from "./utils/functions";
 import { storageService } from "./utils/validators";
-import { ThemeProvider } from "./utils/ThemeContext";
 import { ToastContainer } from "react-toastify";
 import DesktopLayout from "./desktopLayout";
 import ErrorBoundary from "./ErrorBoundary";
@@ -22,8 +21,8 @@ import UnAuthenticatedRoute from './common/components/UnAuthenticatedRoute.js';
 import RedirectToAnyPath from './common/components/RedirectToAnyPath.js';
 import eventManager from './utils/eventManager.js';
 import { EVENT_MANAGER_CONSTANTS } from './utils/constants.js';
-import Login from "./login_and_registration/Login";
-import Logout from "./login_and_registration/Logout";
+import LoginContainer from './login_and_registration/components/LoginContainer';
+import Logout from "./login_and_registration/pages/Logout/Logout";
 
 const Prepare = lazy(() => import(
   /*webpackChunkName: "Prepare"*/ "./dashboard/Invest/components/SdkLanding/Prepare"
@@ -34,36 +33,12 @@ const Tooltip = lazy(() => import(
 const NotFound = lazy(() => import(
   /*webpackChunkName: "NotFound"*/ "./common/components/NotFound"
 ));
-const InternalWealthDashboard = lazy(() => import(
-  /*webpackChunkName: "InternalWealthDashboard"*/ "./internal_wealth_dashboard"
-));
-// const Login = lazy(() => import(
-//   /*webpackChunkName: "Login"*/ "./login_and_registration/Login"
-// ));
-const Registration = lazy(() => import(
-  /*webpackChunkName: "Registration"*/ "./login_and_registration/Register")
-);
-const Otp = lazy(() => import(
-  /*webpackChunkName: "Otp"*/ "./login_and_registration/Otp")
-);
-const ForgotPassword = lazy(() => import(
-  /*webpackChunkName: "ForgotPassword"*/ "./login_and_registration/ForgotPassword")
-);
-const WealthReport = lazy(() => import(
-  /* webpackChunkName: "WealthReport" */ "./wealth_report")
-);
-const SocialCallback = lazy(() => import(
-  /* webpackChunkName: "SocialCallback" */ "./login_and_registration/SocialCallback")
-);
 const FisdomPartnerRedirect = lazy(() => import(
   /* webpackChunkName: "FisdomPartnerRedirect" */ "./fisdom_partner_redirect")
 );
 const PartnerAuthentication = lazy(() => import(
-  /* webpackChunkName: "Authentication" */ "./login_and_registration/Authentication")
+  /* webpackChunkName: "Authentication" */ "./login_and_registration/pages/Authentication")
 );
-// const Logout = lazy(() =>
-//   import(/* webpackChunkName: "Logout" */ "./login_and_registration/Logout")
-// );
 const Feature = lazy(() =>
   import(/* webpackChunkName: "Feature" */ "./Feature")
 );
@@ -193,7 +168,7 @@ const App = () => {
                     <Feature />
                   </DesktopLayout>
                 )}
-                <Route path='/component-test' component={ComponentTest} />
+                {/* <Route path='/component-test' component={ComponentTest} /> */}
                 <Route component={NotFound} />
               </Switch>
             </Suspense>

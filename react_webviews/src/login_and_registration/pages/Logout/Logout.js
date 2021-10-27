@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
-import ErrorScreen from "../common/responsive-components/ErrorScreen";
-import { isRmJourney } from "../group_insurance/products/group_health/common_data";
-import { getConfig, navigate as navigateFunc } from "../utils/functions";
-import { nativeCallback } from "../utils/native_callback";
-import { storageService } from "../utils/validators";
-import { logout } from "./function";
+import ErrorScreen from "../../../common/responsive-components/ErrorScreen";
+import { isRmJourney } from "../../../group_insurance/products/group_health/common_data";
+import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
+import { nativeCallback } from "../../../utils/native_callback";
+import { storageService } from "../../../utils/validators";
+import { logout } from "../../functions";
 
 const config = getConfig();
 const Logout = (props) => {
