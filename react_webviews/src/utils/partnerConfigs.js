@@ -210,6 +210,10 @@ export const partnerConfigs = {
       bottomCards: ["nfo"],
       financialTools: ["fhc", "risk_profile"],
     },
+    referralConfig: {
+      applyRefferal: true,
+      shareRefferal: false,
+    },
     features: {
       loan: true,
       taxFiling: true,
