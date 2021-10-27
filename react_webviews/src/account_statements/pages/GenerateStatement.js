@@ -11,7 +11,7 @@ import { fiscalYearGenerator } from "../functions";
 import DropDownNew from '../../common/ui/DropDownNew'
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 // TODO: Remove less and less-loader loader when rsuite is removed from app
-import DatePicker from 'rsuite/lib/DatePicker';
+import { DatePicker } from 'rsuite';
 import 'rsuite/lib/DatePicker/styles';
 import { format, isAfter, isBefore, startOfDay } from "date-fns";
 import { getConfig } from "../../utils/functions";
