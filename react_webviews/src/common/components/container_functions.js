@@ -584,23 +584,16 @@ export function renderGenericError() {
 
 export function renderPageLoader() {
     const { loaderData = {} } = this.props;
-    const { loadingText, loaderClass } = loaderData;
+    const { loadingText = '', loaderClass = '' } = loaderData;
 
     if (this.props.showLoader === true) {
         return (
-            <div className={`Loader ${loaderClass || ''}`}>
-                <div className="LoaderOverlay">
-                    <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
-                    {loadingText &&
-                        <div className="LoaderOverlayText">{loadingText}</div>
-                    }
-                </div>
-            </div>
+            <WVFullPageLoader classes={{ container: loaderClass }} loadingText={loadingText} showQuote/>
         );
     } else if (this.props.showLoader === 'page') {
         disableBodyTouch(true);
         return (
-            <WVFullPageLoader loadingText={loadingText} classes={loaderClass} />
+            <WVFullPageLoader classes={{ container: loaderClass }} showQuote/>
         );
     } else {
         disableBodyTouch(false);
