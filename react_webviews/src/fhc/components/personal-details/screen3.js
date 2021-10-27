@@ -16,7 +16,7 @@ class PersonalDetails3 extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      show_loader: 'button',
       fhc_data: new FHC(),
       type: getConfig().productName
     };
@@ -120,7 +120,7 @@ class PersonalDetails3 extends Component {
               helperText={fhc_data['dependent-parents_error']}
               width="40"
               label="Are your parents dependent on you?"
-              class="MaritalStatus"
+              className="MaritalStatus"
               options={yesOrNoOptions}
               id="parental-dependence"
               value={fhc_data.family_status['dependent-parents']}
@@ -132,7 +132,7 @@ class PersonalDetails3 extends Component {
               helperText={fhc_data['other-dependents_error']}
               width="40"
               label="Do you have other dependence?"
-              class="MaritalStatus"
+              className="MaritalStatus"
               options={yesOrNoOptions}
               id="other-dependence"
               value={fhc_data.family_status['other-dependents']}

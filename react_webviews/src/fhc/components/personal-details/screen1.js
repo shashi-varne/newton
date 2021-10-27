@@ -19,7 +19,7 @@ class PersonalDetails1 extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      show_loader: 'button',
       fhc_data: new FHC(),
       type: getConfig().productName
     };
@@ -143,7 +143,7 @@ class PersonalDetails1 extends Component {
               width="40"
               icon={name}
               label="Full Name *"
-              class="FullName"
+              className="FullName"
               id="name"
               name="name"
               value={fhc_data.name}
@@ -158,7 +158,7 @@ class PersonalDetails1 extends Component {
               width="40"
               label="Date of birth *"
               icon={dob}
-              class="DOB"
+              className="DOB"
               id="dob"
               name="dob"
               max={currentDate}
@@ -177,7 +177,7 @@ class PersonalDetails1 extends Component {
               icon={email}
               width="40"
               label="Email address *"
-              class="Email"
+              className="Email"
               id="email"
               name="email"
               value={fhc_data.email}

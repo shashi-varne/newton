@@ -1073,13 +1073,11 @@ export function formatAmountToNumber(value){
   }
 }
 
-export function disableBodyTouch(enable) {
-  if(!enable) {
-    document.body.classList.add('disable-body-touch');
-    document.body.classList.remove('enable-body-touch');
-    // document.body.style.overflow = 'hidden';
-    // document.body.style.touchAction = 'none';
-    // document.body.style.pointerEvents = 'none';
+export function disableBodyTouch(disableTouch) {
+  if(disableTouch) {
+    document.body.style.overflow = 'hidden';
+    document.body.style.touchAction = 'none';
+    document.body.style.pointerEvents = 'none';
   } else {
     document.body.classList.remove('disable-body-touch');
     document.body.classList.add('enable-body-touch');
