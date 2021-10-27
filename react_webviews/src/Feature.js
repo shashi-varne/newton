@@ -103,44 +103,48 @@ const Feature = () => {
   }
   // end
 
-  return (
-    <ErrorBoundary>
-      <Suspense fallback={<BootSkeleton />}>
-        <Switch>
-          <ProtectedRoute path='/insurance' component={Insurance} />
-          <ProtectedRoute path='/group-insurance' component={GroupInsurance} />
-          <ProtectedRoute path='/referral' component={Referral} />
-          <ProtectedRoute path={['/gold','/direct/gold']} component={Gold} />
-          <ProtectedRoute path='/fhc' component={Fhc} />
-          <ProtectedRoute path='/mandate' component={Mandate} />
-          <ProtectedRoute path='/mandate-otm' component={Mandate_OTM} />
-          <ProtectedRoute path='/e-mandate' component={EMandate} />
-          <ProtectedRoute path='/risk' component={RiskProfiler} />
-          <ProtectedRoute path='/hni/' component={HNI} />
-          <ProtectedRoute path='/isip' component={IsipBIller} />
-          <ProtectedRoute path='/help' component={HelpSupport} />
-          <ProtectedRoute path='/loan' component={Loan} />
-          <ProtectedRoute path='/pg' component={Payment} />
-          <ProtectedRoute path='/kyc-esign' component={KycEsign} />
-          <ProtectedRoute path='/whatsapp/' component={Whatsapp} />
-          <ProtectedRoute path='/webview/:main_module/:sub_module' component={CommonLanding} />
-          <ProtectedRoute path='/webview/:main_module' component={CommonLanding} />
-          <ProtectedRoute path='/portfolio-rebalancing' component={PortfolioRebalancing} />
-          <ProtectedRoute path='/fund-details' component={FundDetails} />
-          <ProtectedRoute path='/feedback' component={FeedBack} />
-          <ProtectedRoute path='/tax-filing' component={TaxFiling} />
-          <Route path='/pg/eq' component={EquityPayment} />
-          <ProtectedRoute path='/partner' component={Partner} />
-          <ProtectedRoute path='/statements' component={AccountStatements} />
-          <ProtectedRoute path='/withdraw' component={Withdraw} />
-          <ProtectedRoute path='/reports' component={Report} />
-          <ProtectedRoute path='/kyc' component={Kyc} />
-          <ProtectedRoute path='/' component={Landing} />
-          <Route component={NotFound} />
-        </Switch>
-      </Suspense>
-    </ErrorBoundary>
-  );
+  if (window.location.pathname === '/prepare') {
+    return null;
+  } else {
+    return (
+      <ErrorBoundary>
+        <Suspense fallback={<BootSkeleton />}>
+          <Switch>
+            <ProtectedRoute path='/insurance' component={Insurance} />
+            <ProtectedRoute path='/group-insurance' component={GroupInsurance} />
+            <ProtectedRoute path='/referral' component={Referral} />
+            <ProtectedRoute path={['/gold','/direct/gold']} component={Gold} />
+            <ProtectedRoute path='/fhc' component={Fhc} />
+            <ProtectedRoute path='/mandate' component={Mandate} />
+            <ProtectedRoute path='/mandate-otm' component={Mandate_OTM} />
+            <ProtectedRoute path='/e-mandate' component={EMandate} />
+            <ProtectedRoute path='/risk' component={RiskProfiler} />
+            <ProtectedRoute path='/hni/' component={HNI} />
+            <ProtectedRoute path='/isip' component={IsipBIller} />
+            <ProtectedRoute path='/help' component={HelpSupport} />
+            <ProtectedRoute path='/loan' component={Loan} />
+            <ProtectedRoute path='/pg' component={Payment} />
+            <ProtectedRoute path='/kyc-esign' component={KycEsign} />
+            <ProtectedRoute path='/whatsapp/' component={Whatsapp} />
+            <ProtectedRoute path='/webview/:main_module/:sub_module' component={CommonLanding} />
+            <ProtectedRoute path='/webview/:main_module' component={CommonLanding} />
+            <ProtectedRoute path='/portfolio-rebalancing' component={PortfolioRebalancing} />
+            <ProtectedRoute path='/fund-details' component={FundDetails} />
+            <ProtectedRoute path='/feedback' component={FeedBack} />
+            <ProtectedRoute path='/tax-filing' component={TaxFiling} />
+            <Route path='/pg/eq' component={EquityPayment} />
+            <ProtectedRoute path='/partner' component={Partner} />
+            <ProtectedRoute path='/statements' component={AccountStatements} />
+            <ProtectedRoute path='/withdraw' component={Withdraw} />
+            <ProtectedRoute path='/reports' component={Report} />
+            <ProtectedRoute path='/kyc' component={Kyc} />
+            <ProtectedRoute path='/' component={Landing} />
+            <Route component={NotFound} />
+          </Switch>
+        </Suspense>
+      </ErrorBoundary>
+    );
+  }
 };
 
 export default Feature;

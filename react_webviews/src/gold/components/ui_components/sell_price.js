@@ -96,7 +96,6 @@ class SellPriceClass extends Component {
             noFooter={true}
             loaderData= {
                 {
-                    'loaderClass': 'Loader-Dialog',
                     'loadingText': 'Wait for a moment...'
                 }
             }

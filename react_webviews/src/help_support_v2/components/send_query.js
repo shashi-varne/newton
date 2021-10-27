@@ -6,6 +6,7 @@ import Slide from "@material-ui/core/Slide";
 import RenderAttachment from "./attachments";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
+import { categories } from "../constants";
 
 const Transition = (props) => {
   return <Slide direction="up" {...props} />;
@@ -84,7 +85,7 @@ class SendQuery extends Component {
     let body_data = new FormData();
     body_data.set("subject", this.state.sub_category);
     body_data.set("description", this.state.value);
-    body_data.set("cf_product", this.state.category);
+    body_data.set("product", categories[this.state.category].product);
     body_data.set("cf_category", this.state.category);
     body_data.set("cf_subcategory", this.state.sub_category);
     this.state.documents.forEach((item) => {
