@@ -10,7 +10,8 @@ import {
   compareObjects,
   getTotalPagesInPersonalDetails,
   getFlow,
-  isDocSubmittedOrApproved
+  isDocSubmittedOrApproved,
+  checkNomineeNameValidity
 } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
@@ -68,44 +69,51 @@ const PersonalDetails4 = (props) => {
   };
 
   const handleClick = () => {
-    if (!isChecked) {
-      let result = validateFields(form_data, keysToCheck);
-      if (!result.canSubmit) {
-        let data = { ...result.formData };
-        setFormData(data);
-        sendEvents("next");
-        return;
-      }
-    }
-    sendEvents("next");
     if (isChecked) {
       if (kyc.nomination.nominee_optional) {
         handleNavigation();
         return;
       }
     } else {
+      let result = validateFields(form_data, keysToCheck);
+      if (!result.canSubmit) {
+        let data = { ...result.formData };
+        setFormData(data);
+        return;
+      }
+      const nameError = checkNomineeNameValidity(kyc, form_data.name);
+      if (nameError) {
+        setFormData({
+          ...form_data,
+          'name_error': nameError
+        });
+        return;
+      }
+
       if (!kyc.nomination.nominee_optional && compareObjects(keysToCheck, oldState, form_data)) {
         handleNavigation();
         return;
       }
     }
 
-    let userkycDetails = { ...kyc };
-    let body = { kyc: {} };
+
+    let body = {
+      kyc: {
+        nomination: {}
+      }
+    };
     if (isChecked) {
-      userkycDetails.nomination.nominee_optional = true;
-      body.kyc = {
-        nomination: userkycDetails.nomination,
+      body.kyc.nomination = {
+        ...kyc.nomination,
+        nominee_optional: true
       };
     } else {
-      userkycDetails.nomination.meta_data.dob = form_data.dob;
-      userkycDetails.nomination.meta_data.name = form_data.name;
-      userkycDetails.nomination.meta_data.relationship = form_data.relationship;
-      body.kyc = {
-        nomination: {
-          ...userkycDetails.nomination.meta_data,
-          nominee_optional: false
-        }
+      body.kyc.nomination = {
+        ...kyc.nomination.meta_data,
+        dob: form_data.dob,
+        name: form_data.name,
+        relationship: form_data.relationship,
+        nominee_optional: false
       };
     }
     savePersonalDetails4(body);
@@ -126,6 +134,7 @@ const PersonalDetails4 = (props) => {
   };
 
   const handleNavigation = () => {
+    sendEvents('next');
     if (type === "digilocker") {
       if(!isDocSubmittedOrApproved("sign")) {
         navigate(PATHNAME_MAPPER.uploadSign);

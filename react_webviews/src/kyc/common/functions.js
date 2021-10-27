@@ -470,3 +470,14 @@ export const getUpgradeAccountFlowNextStep = (kyc) => {
     }
   }
 }
+
+export const checkNomineeNameValidity = (kyc, nomineeName) => {
+  const applicantName = (kyc?.pan?.meta_data?.name)?.replace(/\s/g, '');
+  nomineeName = nomineeName?.replace(/\s/g, '');
+
+  // Matches for https://fisdom.atlassian.net/browse/QA-1247
+  if (nomineeName.match(new RegExp('^' + applicantName + '$', "i"))) {
+    return "Nominee name cannot be same as your name";
+  }
+  return '';
+}
