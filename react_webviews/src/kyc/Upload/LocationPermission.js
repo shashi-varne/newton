@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble';
 import { getConfig } from '../../utils/functions';
-import { isFunction } from 'lodash';
+import isFunction from 'lodash/isFunction';
 import useScript from '../../common/customHooks/useScript';
 import WVButton from '../../common/ui/Button/WVButton';
 import WVFullscreenDialog from '../../common/ui/FullscreenDialog/WVFullscreenDialog';
@@ -77,9 +77,9 @@ const LocationPermission = ({
     const addressObjs = results[0]?.address_components;
     const countryAddressObj = addressObjs.find(obj => obj.types.includes("country"));
     sendEvents('location_fetched', 'allow_location_access', {
-      locationObj: countryAddressObj
+      location_obj: JSON.stringify(countryAddressObj || '')
     });
-    return countryAddressObj.long_name;
+    return countryAddressObj?.long_name;
   }
   
   const locationCallbackSuccess = async (data) => {
