@@ -10,6 +10,7 @@ import {
   compareObjects,
   getTotalPagesInPersonalDetails,
   isDocSubmittedOrApproved,
+  checkNomineeNameValidity,
 } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
@@ -21,6 +22,7 @@ import { nativeCallback } from "../../utils/native_callback";
 import { getConfig, isTradingEnabled } from "../../utils/functions";
 
 const PersonalDetails4 = (props) => {
+  const keysToCheck = ["dob", "name", "relationship"];
   const [isChecked, setIsChecked] = useState(false);
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -64,45 +66,50 @@ const PersonalDetails4 = (props) => {
   };
 
   const handleClick = () => {
-    let keysToCheck = ["dob", "name", "relationship"];
-    sendEvents('next')
-    if (!isChecked) {
-      let result = validateFields(form_data, keysToCheck);
-      if (!result.canSubmit) {
-        let data = { ...result.formData };
-        setFormData(data);
-        return;
-      }
-    }
-
     if (isChecked) {
       if (kyc.nomination.nominee_optional) {
         handleNavigation();
         return;
       }
     } else {
+      const result = validateFields(form_data, keysToCheck);
+      if (!result.canSubmit) {
+        const data = { ...result.formData };
+        setFormData(data);
+        return;
+      }
+      const nameError = checkNomineeNameValidity(kyc, form_data.name);
+      if (nameError) {
+        setFormData({
+          ...form_data,
+          'name_error': nameError
+        });
+        return;
+      }
+    
       if (!kyc.nomination.nominee_optional && compareObjects(keysToCheck, oldState, form_data)) {
         handleNavigation();
         return;
       }
     }
 
-    let userkycDetails = { ...kyc };
-    let body = { kyc: {} };
+    let body = {
+      kyc: {
+        nomination: {}
+      }
+    };
     if (isChecked) {
-      userkycDetails.nomination.nominee_optional = true;
-      body.kyc = {
-        nomination: userkycDetails.nomination,
+      body.kyc.nomination = {
+        ...kyc.nomination,
+        nominee_optional: true
       };
     } else {
-      userkycDetails.nomination.meta_data.dob = form_data.dob;
-      userkycDetails.nomination.meta_data.name = form_data.name;
-      userkycDetails.nomination.meta_data.relationship = form_data.relationship;
-      body.kyc = {
-        nomination: {
-          ...userkycDetails.nomination.meta_data,
-          nominee_optional: false
-        }
+      body.kyc.nomination = {
+        ...kyc.nomination.meta_data,
+        dob: form_data.dob,
+        name: form_data.name,
+        relationship: form_data.relationship,
+        nominee_optional: false
       };
     }
     saveCompliantPersonalDetails2(body);
@@ -123,12 +130,7 @@ const PersonalDetails4 = (props) => {
   };
 
   const handleNavigation = () => {
-    // if (isChecked) {
-    //   if (isEdit) navigate(PATHNAME_MAPPER.journey);
-    //   else navigate("/kyc/compliant/bank-details");
-    // } else {
-    //   navigate(PATHNAME_MAPPER.journey);
-    // }
+    sendEvents('next');
     if (!isDocSubmittedOrApproved("sign")) {
       navigate(PATHNAME_MAPPER.uploadSign);
     } else {
@@ -139,6 +141,13 @@ const PersonalDetails4 = (props) => {
   const handleChange = (name) => (event) => {
     if (name === "checkbox") {
       setIsChecked(!isChecked);
+      let formData = { ...form_data };
+      keysToCheck.forEach((element) => {
+        formData[`${element}_error`] = "";
+      });
+      setFormData({
+        ...formData,
+      });
       return;
     }
 

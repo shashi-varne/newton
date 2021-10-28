@@ -8,6 +8,7 @@ import GenericTooltip from '../../../../common/ui/GenericTooltip'
 import {Imgc} from '../../../../common/ui/Imgc'
 import Button from '../../../../common/ui/Button'
 import {formatAmount, isEmpty, compareObjects} from '../../../../utils/validators';
+import WVDisableBodyTouch from '../../../../common/ui/DisableBodyTouch/WVDisableBodyTouch';
 
 class GroupHealthPlanList extends Component {
 
@@ -172,7 +173,10 @@ class GroupHealthPlanList extends Component {
                 </div>
 
                 <div className="plan-list-cta">
-                <Button multipleCTA={true} showLoader={(this.state.selectedPlanIndex === index && this.state.show_loader === 'button') ? 'button' : false } buttonTitle={`STARTS AT ₹ ${formatAmount(props.starts_at_value)}/YEAR`}/>
+                <Button
+                    showLoader={(this.state.selectedPlanIndex === index && this.state.show_loader === 'button') ? 'button' : false }
+                    buttonTitle={`STARTS AT ₹ ${formatAmount(props.starts_at_value)}/YEAR`}
+                />
                 </div>
             </div>
         );
@@ -195,6 +199,7 @@ class GroupHealthPlanList extends Component {
                     <div className="tiles">
                         {this.state.plan_data.plans && this.state.plan_data.plans.map(this.renderPlans)}
                     </div>
+                    <WVDisableBodyTouch disableTouch={this.state.show_loader === 'button'} />
                 </div>
             </Container>
         );

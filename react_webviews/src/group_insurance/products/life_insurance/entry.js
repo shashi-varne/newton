@@ -25,13 +25,6 @@ class LifeInsuranceEntry extends Component {
 
     let insuranceProducts = [
       {
-        key: 'term',
-        title: 'Term Insurance',
-        subtitle: 'Get comprehensive life coverage',
-        icon: 'ic_term_insurance',
-        disabled: false
-      },
-      {
         key: 'savings plan',
         title: 'Insurance Savings plan',
         subtitle: 'Enjoy wealth creation cum life coverage',

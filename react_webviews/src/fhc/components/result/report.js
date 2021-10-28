@@ -104,7 +104,7 @@ class Report extends Component {
           [
             'investing',
             'tax',
-            'life_insurance',
+            // 'life_insurance',
             'mediclaim',
             'dependents',
             'savings'
