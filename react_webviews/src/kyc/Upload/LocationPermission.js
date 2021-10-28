@@ -79,7 +79,7 @@ const LocationPermission = ({
     sendEvents('location_fetched', 'allow_location_access', {
       location_obj: JSON.stringify(countryAddressObj || '')
     });
-    return countryAddressObj?.long_name;
+    return countryAddressObj?.short_name || '';
   }
   
   const locationCallbackSuccess = async (data) => {
@@ -99,9 +99,9 @@ const LocationPermission = ({
           }
         }, (results, status) => {
           if (status === 'OK') {
-            const country = fetchCountryFromResults(results);
+            const countryCode = fetchCountryFromResults(results);
             setIsApiRunning(false);
-            if (country !== 'India') {
+            if (countryCode?.toUpperCase() !== 'IN') {
               setPageType("invalid-region");
             } else {
               onLocationFetchSuccess(data.location);
