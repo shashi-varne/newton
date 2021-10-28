@@ -1,6 +1,5 @@
 import React from 'react';
 import Drawer from '@material-ui/core/Drawer';
-import Toolbar from '@material-ui/core/Toolbar';
 import { getConfig } from 'utils/functions';
 import NavList from './NavList';
 import './Drawer.scss';

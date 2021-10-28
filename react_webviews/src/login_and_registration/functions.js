@@ -175,13 +175,14 @@ export function formCheckFields(
 export function setBaseHref() {
   var myBaseHref = document.getElementById('myBaseHref');
   var pathname = window.location.pathname;
+  var myBaseHrefUrl;
   if(pathname.indexOf('appl/web') !== -1) {
-    var myBaseHrefUrl = '/appl/web/' + pathname.split('/')[3] +'/' ;
+    myBaseHrefUrl = '/appl/web/' + pathname.split('/')[3] +'/' ;
     myBaseHref.href = myBaseHrefUrl;
     window.localStorage.setItem('base_href', myBaseHrefUrl);
   }
   if(pathname.indexOf('webapp') !== -1) {
-    var myBaseHrefUrl = '/webapp/';
+    myBaseHrefUrl = '/webapp/';
     myBaseHref.href = myBaseHrefUrl;
     window.localStorage.setItem('base_href', myBaseHrefUrl);
   }

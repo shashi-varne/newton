@@ -157,15 +157,15 @@ export const getConfig = () => {
   let origin = window.location.origin;
   let generic_callback = true;
 
-  let isProdFisdom = origin.indexOf('app.fisdom.com') >= 0  || origin.indexOf('wv.fisdom.com') >= 0 ;
-  let isProdFinity = origin.indexOf('app.mywaywealth.com') >= 0 || origin.indexOf('wv.mywaywealth.com') >= 0;
+  let isProdFisdom = origin.indexOf('app.fisdom.com') >= 0  || origin.indexOf('wv.fisdom.com') >= 0 || origin.indexOf('my.preprod.fisdom.com') >= 0 || origin.indexOf('app2.fisdom.com') >= 0;
+  let isProdFinity = origin.indexOf('app.mywaywealth.com') >= 0 || origin.indexOf('wv.mywaywealth.com') >= 0 || origin.indexOf('my.preprod.finity.in') >= 0  || origin.indexOf('app2.finity.in') >= 0;
 
-  let base_href = window.localStorage.getItem('base_href') || '';
+  // let base_href = window.localStorage.getItem('base_href') || '';
   let base_url_default = '';
   
   const isStaging = origin.indexOf('plutus-web-staging') >= 0;
-  const isFisdomStaging = origin.indexOf('my.preprod.fisdom.com') >= 0 || origin.indexOf('app2.fisdom.com') >= 0;
-  const isFinityStaging = origin.indexOf('my.preprod.finity.in') >= 0 || origin.indexOf('app2.finity.in') >= 0;
+  // const isFisdomStaging = origin.indexOf('my.preprod.fisdom.com') >= 0 || origin.indexOf('app2.fisdom.com') >= 0;
+  // const isFinityStaging = origin.indexOf('my.preprod.finity.in') >= 0 || origin.indexOf('app2.finity.in') >= 0;
   const isLocal = origin.indexOf('localhost') >=0;
 
   // if(base_href) {
@@ -186,13 +186,13 @@ export const getConfig = () => {
       base_url_default = "https://wdash-dot-plutus-staging.appspot.com";
     }
 
-    if(isFisdomStaging) {
-      base_url_default = 'https://my.preprod.fisdom.com';
-    }
+    // if(isFisdomStaging) {
+    //   base_url_default = 'https://my.preprod.fisdom.com';
+    // }
   
-    if(isFinityStaging) {
-      base_url_default = 'https://my.preprod.finity.in';
-    }
+    // if(isFinityStaging) {
+    //   base_url_default = 'https://my.preprod.finity.in';
+    // }
   }
   
 
@@ -563,7 +563,13 @@ export function getBasePath() {
 export function isTradingEnabled(userKyc = {}) {
   const kyc = !isEmpty(userKyc) ? userKyc : storageService().getObject("kyc");
   const config = getConfig();
-  return kyc?.equity_enabled && !config.isSdk;
+  const equityEnabled = storageService().getBoolean('equityEnabled'); // Used to enable kyc equity flow from native/external side
+  if (config.isSdk) {
+    return false;
+  } else if (config.isNative) {
+    return equityEnabled && kyc?.equity_enabled;
+  }
+  return kyc?.equity_enabled;
 }
 
 const { checkBeforeRedirection, checkAfterRedirection, backButtonHandler } = require(`./${getConfig().platform}_app`);

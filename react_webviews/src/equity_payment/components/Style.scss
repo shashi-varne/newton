@@ -1107,3 +1107,24 @@ body[data-device="web"] {
     }
 }
 
+.eq-encryption {
+  margin-top: 50px !important;
+  display: flex;
+  flex-direction: column;
+}
+
+.eq-note-title {
+  font-size: 13px;
+  font-weight: bold;
+  color: #0A1C32;
+}
+
+.eq-neft-note {
+  margin-bottom: 20px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 21px;
+  letter-spacing: 0px;
+  text-align: left;
+  color: #767E86;
+}
