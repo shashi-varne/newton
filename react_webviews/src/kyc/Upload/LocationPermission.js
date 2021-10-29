@@ -41,7 +41,7 @@ const PAGE_TYPE_CONTENT_MAP = {
     subtitle: 'As per SEBI, we need to record your location while you take the selfie'
   }
 };
-const GEOCODER = "https://maps.googleapis.com/maps/api/js?key=AIzaSyDWYwMM4AaZj3zE4sEcMH1nenEs3dOYZ14&libraries=&v=weekly"
+const GEOCODER = "https://maps.googleapis.com/maps/api/js?key=AIzaSyDWYwMM4AaZj3zE4sEcMH1nenEs3dOYZ14&libraries=&v=weekly&language=en"
 
 const LocationPermission = ({
   isOpen,
@@ -79,7 +79,7 @@ const LocationPermission = ({
     sendEvents('location_fetched', 'allow_location_access', {
       location_obj: JSON.stringify(countryAddressObj || '')
     });
-    return countryAddressObj?.short_name || '';
+    return countryAddressObj || {};
   }
   
   const locationCallbackSuccess = async (data) => {
@@ -99,12 +99,15 @@ const LocationPermission = ({
           }
         }, (results, status) => {
           if (status === 'OK') {
-            const countryCode = fetchCountryFromResults(results);
+            const country = fetchCountryFromResults(results);
             setIsApiRunning(false);
-            if (countryCode?.toUpperCase() !== 'IN') {
-              setPageType("invalid-region");
-            } else {
+            if (
+              country.long_name?.toUpperCase() === 'INDIA' ||
+              country.short_name?.toUpperCase() === 'IN'
+            ) {
               onLocationFetchSuccess(data.location);
+            } else {
+              setPageType("invalid-region");
             }
           } else {
             throw(status);
