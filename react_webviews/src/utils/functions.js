@@ -160,7 +160,7 @@ export const getConfig = () => {
   let isProdFisdom = origin.indexOf('app.fisdom.com') >= 0  || origin.indexOf('wv.fisdom.com') >= 0 || origin.indexOf('my.preprod.fisdom.com') >= 0 || origin.indexOf('app2.fisdom.com') >= 0;
   let isProdFinity = origin.indexOf('app.mywaywealth.com') >= 0 || origin.indexOf('wv.mywaywealth.com') >= 0 || origin.indexOf('my.preprod.finity.in') >= 0  || origin.indexOf('app2.finity.in') >= 0;
 
-  // let base_href = window.localStorage.getItem('base_href') || '';
+  let base_href = window.localStorage.getItem('base_href') || '';
   let base_url_default = '';
   
   const isStaging = origin.indexOf('plutus-web-staging') >= 0;
@@ -168,9 +168,9 @@ export const getConfig = () => {
   // const isFinityStaging = origin.indexOf('my.preprod.finity.in') >= 0 || origin.indexOf('app2.finity.in') >= 0;
   const isLocal = origin.indexOf('localhost') >=0;
 
-  // if(base_href) {
-  //   base_url_default = window.location.origin;
-  // }
+  if(base_href) {
+    base_url_default = window.location.origin;
+  }
 
   if(!base_url) {
     if(isProdFisdom) {
