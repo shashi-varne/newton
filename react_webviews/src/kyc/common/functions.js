@@ -230,6 +230,17 @@ export async function checkDocsPending(kyc = {}) {
   return false;
 }
 
+export async function isEquityEsignReady(kyc) {
+  kyc = kyc || getKycUserFromSession().kyc;
+  if (isEmpty(kyc)) return false;
+  
+  return (
+    kyc.kyc_product_type === 'equity' &&
+    kyc.equity_application_status === 'complete' &&
+    kyc.equity_sign_status !== 'signed'
+  );
+}
+
 export async function pendingDocsList(kyc = {}) {
   if (isEmpty(kyc)) return false;
   let docsToCheck = ["equity_pan", "equity_identification", "address", "bank", "ipvvideo", "sign"];
@@ -374,9 +385,11 @@ export const isEquityCompleted = () => {
 export const isIncompleteEquityApplication = (kyc) => {
   if (isEmpty(kyc)) return false;
 
-  return ((kyc.application_status_v2 !== "submitted" && kyc.application_status_v2 !== "complete") ||
-  (kyc.equity_application_status !== "submitted" && kyc.equity_application_status !== "complete") ||
-  (isEquityApplSubmittedOrComplete(kyc) && kyc.equity_sign_status !== "signed"));
+  return (
+    (kyc.application_status_v2 !== "submitted" && kyc.application_status_v2 !== "complete") ||
+    (kyc.equity_application_status !== "submitted" && kyc.equity_application_status !== "complete") ||
+    (isEquityApplSubmittedOrComplete(kyc) && kyc.equity_sign_status !== "signed")
+  );
 }
 
 export const isKycCompleted = (kyc) => {

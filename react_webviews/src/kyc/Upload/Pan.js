@@ -7,7 +7,7 @@ import { PATHNAME_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
 import { getConfig, isTradingEnabled, navigate as navigateFunc } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
-import { checkDocsPending, isDigilockerFlow, isDocSubmittedOrApproved } from '../common/functions'
+import { isDigilockerFlow, isDocSubmittedOrApproved, isEquityEsignReady } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 import PanUploadStatus from "../Equity/mini-components/PanUploadStatus";
@@ -25,7 +25,6 @@ const Pan = (props) => {
   const [dlFlow, setDlFlow] = useState(false);
   const [bottomSheetType, setBottomSheetType] = useState('');
   const {kyc, isLoading, updateKyc} = useUserKycHook();
-  const [areDocsPending, setDocsPendingStatus] = useState();
   const [tradingEnabled, setTradingEnabled] = useState();
   const goBackPath = props.location?.state?.goBack || "";
 
@@ -39,8 +38,7 @@ const Pan = (props) => {
     if (isDigilockerFlow(kyc)) {
       setDlFlow(true);
     }
-    const docStatus = await checkDocsPending(kyc);
-    setDocsPendingStatus(docStatus);
+
     setTradingEnabled(isTradingEnabled(kyc))
   }
 
@@ -62,10 +60,10 @@ const Pan = (props) => {
       if (!isDocSubmittedOrApproved("equity_income")) {
         navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
       } else {
-        if (areDocsPending) {
-          navigate(PATHNAME_MAPPER.documentVerification);
-        } else {
+        if (isEquityEsignReady(kyc)) {
           navigate(PATHNAME_MAPPER.kycEsign);
+        } else {
+          navigate(PATHNAME_MAPPER.documentVerification);
         }
       }
     }
