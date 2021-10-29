@@ -50,7 +50,7 @@ function Redirection(props) {
         redirectionUrl + `&ru=${stringToHexa(fisdomReturnUrl)}`
     }, 2000)
     return () => {
-      clearInterval(timerHandle)
+      clearTimeout(timerHandle)
       clearITRSessionStorage()
     }
   }, [])
