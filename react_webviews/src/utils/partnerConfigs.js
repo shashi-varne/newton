@@ -55,7 +55,7 @@ export const commonCardsConfig = {
       type: "mf",
       image: "mf.svg",
       endDate: "11/05/2021",
-      startDate: "10/01/2021",
+      startDate: "11/01/2021",
     },
   ],
 };
