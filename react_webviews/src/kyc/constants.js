@@ -331,3 +331,5 @@ export const eqkycDocsGroupMapper = {
     doc: ""
   }
 };
+
+export const PINCODE_LENGTH = 6;
