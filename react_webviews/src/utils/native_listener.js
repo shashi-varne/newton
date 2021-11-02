@@ -247,8 +247,7 @@ import isEmpty from 'lodash/isEmpty';
         window.callbackWeb.send_device_data(data);
       };
 
-      const onLocationFetchFailure = (error) => {
-        console.log('Location permission error', error);
+      const onLocationFetchFailure = () => {
         let data = {
           location_permission_denied: true
         }
