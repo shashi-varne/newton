@@ -83,7 +83,7 @@ const App = () => {
   const iframe = config.isIframe;
   const isMobileDevice = config.isMobileDevice;
   const [themeConfiguration, setThemeConfiguration] = useState(getMuiThemeConfig());
-
+  const equityPayment = window.location.pathname.includes('pg/eq');
   useEffect(() => {
     if(config.isSdk || config.isIframe) {
       storageService().set("entry_path",window.location.pathname);
@@ -130,7 +130,7 @@ const App = () => {
               <UnAuthenticatedRoute path="/partner-authentication/:partnerCode" component={PartnerAuthentication} />
               <UnAuthenticatedRoute path="/prepare" component={Prepare} />
               {
-                isMobileDevice || iframe ?
+                isMobileDevice || iframe || equityPayment ?
                 <Route component={Feature}/>:
                 <DesktopLayout>
                   <Feature />
