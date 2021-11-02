@@ -206,7 +206,7 @@ export const partnerConfigs = {
   fisdom: {
     code: "fisdom",
     investSubSectionMap: {
-      stocksAndIpo: ["stocks", "ipo"],
+      stocksAndIpo: ["ipo"],
       ourRecommendations: [
         "instaredeem",
         "buildwealth",
@@ -230,7 +230,6 @@ export const partnerConfigs = {
     mobile: "+91-9916149111",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
-      stocksAndIpo: ["stocks", "ipo"],
       indexFunds : ["passiveIndexFunds"],
       ourRecommendations: ["instaredeem", "buildwealth", "savetax"],
       financialTools: ["fhc", "risk_profile"],
