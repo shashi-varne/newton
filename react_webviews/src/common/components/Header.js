@@ -42,6 +42,7 @@ const Header = ({ classes, title, count, total, current, goBack,
     const backButtonColor = (!isWeb || config.isIframe) ? config.styles?.backButtonColor : '';
     const notificationsColor = !isWeb || config.isSdk ? config?.styles.notificationsColor : '';
     const moneycontrolHeader = isMobileDevice && config.code === 'moneycontrol';
+    const equityPayment = window.location.pathname.includes('pg/eq');
 
     const handleMobileViewDrawer = () => {
       setMobileViewDrawer(!mobileViewDrawer);
@@ -166,7 +167,7 @@ const Header = ({ classes, title, count, total, current, goBack,
                   src={isEmpty(campaign) ? notificationLogo : notificationBadgeLogo}
                 />
                 }
-                {isMobileDevice && isWeb && !hideHamburger && !config.isIframe && !isGuestUser &&
+                {isMobileDevice && isWeb && !hideHamburger && !config.isIframe && !isGuestUser && !equityPayment &&
                   <div className='mobile-navbar-menu'>
                     <IconButton onClick={handleMobileViewDrawer}>
                       <MenuIcon style={{color: new_header && backgroundColor ?  getConfig().styles.secondaryColor : headerData.partnerLogo ? 'white' : getConfig().styles.primaryColor}}/>
