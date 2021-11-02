@@ -249,11 +249,11 @@ export async function kyc_submit(params) {
           this.accountMerge();
           break;
         default: 
-          let title1 = typeof result?.error !== 'string' ? "Error" : result?.messsage || result?.error;
+          let errorTitle = typeof result?.error !== 'string' ? "Error" : result?.messsage || result?.error;
           this.setState({
-            title1: title1,
+            title1: errorTitle,
           });
-          throw typeof result?.error !== 'string' ? "something went wrong" : result?.messsage || result?.error;
+          throw errorTitle;
       }
     }
   } catch (err) {
@@ -411,6 +411,8 @@ export async function getInvestmentData(params, pageError = false, type) {
     this.setState({
       skelton: false,
     });
+
+    this.setErrorData(type);
     error = true;
     errorType = "crash";
   }
