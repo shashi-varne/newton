@@ -187,7 +187,7 @@ export function isNumberKey(evt) {
 
 export function validatePan(string) {
   // eslint-disable-next-line
-  let rule = /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/;
+  let rule = /^[a-zA-Z]{3}P[a-zA-Z][\d]{4}[a-zA-Z]$/;
   return rule.test(string);
 }
 
