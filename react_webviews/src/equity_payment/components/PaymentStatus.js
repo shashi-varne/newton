@@ -12,8 +12,9 @@ const PaymentStatus = () => {
   const config = getConfig();
   return (
     <Container
-      buttonTitle={paymentSuccess ? 'CONTINUE' : 'OK'}
+      noFooter
       title={paymentSuccess ? 'Payment successful' : 'Payment failed'}
+      noBackIcon
     >
       <section className='equity-payment-status-wrappper'>
         {paymentSuccess && (
