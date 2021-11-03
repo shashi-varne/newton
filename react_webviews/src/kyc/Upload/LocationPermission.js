@@ -41,7 +41,7 @@ const PAGE_TYPE_CONTENT_MAP = {
     subtitle: 'As per SEBI, we need to record your location while you take the selfie'
   }
 };
-const GEOCODER = "https://maps.googleapis.com/maps/api/js?key=AIzaSyDWYwMM4AaZj3zE4sEcMH1nenEs3dOYZ14&libraries=&v=weekly&language=en"
+const GEOCODER = "https://maps.googleapis.com/maps/api/js?key=AIzaSyDWYwMM4AaZj3zE4sEcMH1nenEs3dOYZ14&libraries=&v=weekly&language=en&result_type=country"
 
 const LocationPermission = ({
   isOpen,
@@ -73,11 +73,11 @@ const LocationPermission = ({
     setPageContent(PAGE_TYPE_CONTENT_MAP[pageType]);
   }, [pageType]);
 
-  const fetchCountryFromResults = (results) => {
-    const addressObjs = results[0]?.address_components;
-    const countryAddressObj = addressObjs.find(obj => obj.types.includes("country"));
+  const fetchCountryFromResults = (results = []) => {
+    const addressObjs = results.find(obj => obj.types.includes("country"))?.address_components;
+    const countryAddressObj = addressObjs?.find(obj => obj.types.includes("country"));
     sendEvents('location_fetched', 'allow_location_access', {
-      location_obj: JSON.stringify(countryAddressObj || '')
+      location_obj: JSON.stringify(countryAddressObj || 'N/A')
     });
     return countryAddressObj || {};
   }
