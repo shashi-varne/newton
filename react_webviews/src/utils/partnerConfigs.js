@@ -52,6 +52,14 @@ export const commonCardsConfig = {
     bottomScrollCards: ["parkmoney", "savegoal"],
     bottomCards: ["nfo"],
   },
+  landingMarketingBanners: [
+    {
+      type: "mf",
+      image: "mf.svg",
+      endDate: "11/05/2021",
+      startDate: "11/01/2021",
+    },
+  ],
 };
 
 export const basePartnerConfig = {
@@ -78,7 +86,7 @@ export const basePartnerConfig = {
     riskEnabledFunnels: false,
     referralConfig: {
       applyRefferal: true, // same as hide_apply_referral but with opposite value
-      shareRefferal: true, // same as hide_share_referral but with opposite value
+      shareRefferal: false, // same as hide_share_referral but with opposite value
     },
   },
   finity: {
@@ -206,7 +214,7 @@ export const partnerConfigs = {
   fisdom: {
     code: "fisdom",
     investSubSectionMap: {
-      stocksAndIpo: ["stocks", "ipo"],
+      stocksAndIpo: ["ipo"],
       ourRecommendations: [
         "instaredeem",
         "buildwealth",
@@ -230,7 +238,6 @@ export const partnerConfigs = {
     mobile: "+91-9916149111",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
-      stocksAndIpo: ["stocks", "ipo"],
       indexFunds : ["passiveIndexFunds"],
       ourRecommendations: ["instaredeem", "buildwealth", "savetax"],
       financialTools: ["fhc", "risk_profile"],
@@ -251,6 +258,7 @@ export const partnerConfigs = {
       financialTools: ["risk_profile"],
     },
     landingMarketingBanners: [
+      ...commonCardsConfig.landingMarketingBanners,
       { image: "nfo.svg", type: "nfo", endDate: '10/28/2021' },
       { image: "mb_4.svg", type: "100_sip" },
       { image: "mb_6.svg", type: "diy" },
@@ -339,6 +347,7 @@ export const partnerConfigs = {
     mobile: "1800-212-5997",
     email: "care.futuremoney@fisdom.com",
     landingMarketingBanners: [
+      ...commonCardsConfig.landingMarketingBanners,
       { image: "nfo.svg", type: "nfo", endDate: '10/28/2021' },
       { image: "fpg_mb_insta.svg", type: "instaredeem" },
       { image: "fpg_mb_100.svg", type: "buildwealth" },

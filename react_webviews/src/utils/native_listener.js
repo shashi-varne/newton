@@ -6,6 +6,7 @@ import { EVENT_MANAGER_CONSTANTS } from './constants';
 import eventManager from './eventManager';
 import { isMobile } from './functions';
 import { getConfig } from './functions';
+import isEmpty from 'lodash/isEmpty';
 
 
 (function (exports) {
@@ -237,43 +238,47 @@ import { getConfig } from './functions';
     } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
       window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
     } else {
-      navigator.permissions.query({
-        name: 'geolocation'
-      }).then(function(result) {
-          
-        const onLocationFetchSuccess = (position) => {
-          let data = {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            location_permission_denied: false
-          }
-          window.callbackWeb.send_device_data(data);
-        };
-
-        const onLocationFetchFailure = () => {
-          let data = {
-            location_permission_denied: true
-          }
-          window.callbackWeb.send_device_data(data);
-        };
-
-        navigator.geolocation.getCurrentPosition(onLocationFetchSuccess, onLocationFetchFailure);
-  
-        if (result.state === 'denied') {
-          onLocationFetchFailure();
+      const onLocationFetchSuccess = (position) => {
+        let data = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          location_permission_denied: false
         }
+        window.callbackWeb.send_device_data(data);
+      };
 
-        /*
-          onchange does not currently work in Mozilla due to a bug in Mozilla itself.
-          The same behaviour is now also handled using onLocationFetchFailure passed into
-          geolocation.getCurrentPosition's error callback param
-        */
-        result.onchange = function() {
+      const onLocationFetchFailure = () => {
+        let data = {
+          location_permission_denied: true
+        }
+        window.callbackWeb.send_device_data(data);
+      };
+
+      if(!isEmpty(navigator.permissions)) {
+        navigator.permissions.query({
+          name: 'geolocation'
+        }).then(function(result) {
+            
+          navigator.geolocation.getCurrentPosition(onLocationFetchSuccess, onLocationFetchFailure);
+    
           if (result.state === 'denied') {
             onLocationFetchFailure();
           }
-        }
-      })
+  
+          /*
+            onchange does not currently work in Mozilla due to a bug in Mozilla itself.
+            The same behaviour is now also handled using onLocationFetchFailure passed into
+            geolocation.getCurrentPosition's error callback param
+          */
+          result.onchange = function() {
+            if (result.state === 'denied') {
+              onLocationFetchFailure();
+            }
+          }
+        })
+      } else {
+        navigator.geolocation.getCurrentPosition(onLocationFetchSuccess, onLocationFetchFailure);
+      }
     }
 
     // for testing added
