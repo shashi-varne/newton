@@ -7,7 +7,7 @@ import ContactUsClass from '../../common/components/contact_us';
 import { formatAmountInr, getUrlParams } from '../../utils/validators';
 
 const PaymentStatus = () => {
-  const {status='', amount=''} = getUrlParams();
+  const { status = '', amount = '', message='' } = getUrlParams();
   const paymentSuccess = status === 'success';
   const config = getConfig();
   return (
@@ -25,7 +25,12 @@ const PaymentStatus = () => {
               className='img'
             />
             <h4>Funds added</h4>
-            <p>Your trading account has been updated with {formatAmountInr(amount)}</p>
+            <p>
+              {message ||
+                `Your trading account has been updated with ${formatAmountInr(
+                  amount
+                )}`}
+            </p>
           </div>
         )}
         {!paymentSuccess && (
@@ -36,9 +41,8 @@ const PaymentStatus = () => {
               className='img'
             />
             <p>
-              We could not process your payment due to an unknown error. In
-              case, any amount has been debited, it will be credited back to
-              your account in 5-7 days
+              {message ||
+                'We could not process your payment due to an unknown error. In case, any amount has been debited, it will be credited back to your account in 5-7 days'}
             </p>
           </div>
         )}
