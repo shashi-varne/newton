@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble';
 import { getConfig } from '../../utils/functions';
 import isFunction from 'lodash/isFunction';
+import isEmpty from 'lodash/isEmpty';
 import useScript from '../../common/customHooks/useScript';
 import WVButton from '../../common/ui/Button/WVButton';
 import WVFullscreenDialog from '../../common/ui/FullscreenDialog/WVFullscreenDialog';
@@ -76,12 +77,20 @@ const LocationPermission = ({
   const fetchCountryFromResults = (results = []) => {
     const addressObjs = results.find(obj => obj.types.includes("country"))?.address_components;
     const countryAddressObj = addressObjs?.find(obj => obj.types.includes("country"));
-    sendEvents('location_fetched', 'allow_location_access', {
-      location_obj: JSON.stringify(countryAddressObj || 'N/A')
-    });
     return countryAddressObj || {};
   }
   
+  const sendLocationFetchedEvent = (countryObj, coordinates) => {
+    sendEvents(
+      'location_fetched',
+      'allow_location_access',
+      {
+        location_obj: JSON.stringify(isEmpty(countryObj) ? 'N/A' : countryObj),
+        location_coords: JSON.stringify(coordinates)
+      }
+    );
+  }
+
   const locationCallbackSuccess = async (data) => {
     if (data.location_permission_denied) {
       setPageType('permission-denied');
@@ -92,14 +101,17 @@ const LocationPermission = ({
       try {
         setIsApiRunning(true);        
         const geocoderService = new window.google.maps.Geocoder();
+        const coordinates = {
+          lat: data.location.lat,
+          lng: data.location.lng,
+        };
+
         geocoderService.geocode({
-          location: {
-            lat: data.location.lat,
-            lng: data.location.lng,
-          }
+          location: coordinates
         }, (results, status) => {
           if (status === 'OK') {
             const country = fetchCountryFromResults(results);
+            sendLocationFetchedEvent(country, coordinates);
             setIsApiRunning(false);
             if (
               country.long_name?.toUpperCase() === 'INDIA' ||
