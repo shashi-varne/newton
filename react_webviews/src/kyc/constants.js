@@ -238,9 +238,10 @@ export const MARITAL_STATUS_OPTIONS = [
 
 export const OCCUPATION_TYPE_OPTIONS = [
   { name: "Salaried", value: "SALARIED" },
-  { name: "Self employed", value: "SELF EMPLOYED" },
+  { name: "Public Sector", value: "PUBLIC SECTOR" },
+  { name: "Housewife", value: "HOUSEWIFE" },
+  { name: "Student", value: "STUDENT" },
   { name: "Business", value: "BUSINESS" },
-  { name: "Agriculturist", value: "AGRICULTURIST" },
   { name: "Professional", value: "PROFESSIONAL" },
   { name: "Private sector", value: "PRIVATE SECTOR" },
   { name: "Others", value: "OTHERS" },
