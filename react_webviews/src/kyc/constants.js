@@ -210,7 +210,6 @@ export const GENDER_OPTIONS = [
 export const MARITAL_STATUS_OPTIONS = [
   { name: "Single", value: "SINGLE" },
   { name: "Married", value: "MARRIED" },
-  { name: "Unmarried", value: "UNMARRIED" },
 ];
 
 export const OCCUPATION_TYPE_OPTIONS = [
