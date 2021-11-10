@@ -41,8 +41,6 @@ class RadioButtonsGroup extends Component {
       selectedValue: null,
       options: this.props.options
     };
-
-    this.inputref = React.createRef();
   }
 
   componentDidUpdate(prevState) {
