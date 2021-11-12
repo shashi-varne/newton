@@ -230,7 +230,7 @@ export async function checkDocsPending(kyc = {}) {
   return false;
 }
 
-export async function isEquityEsignReady(kyc) {
+export function isEquityEsignReady(kyc) {
   kyc = kyc || getKycUserFromSession().kyc;
   if (isEmpty(kyc)) return false;
   
