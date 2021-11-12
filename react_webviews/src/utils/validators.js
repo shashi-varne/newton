@@ -1075,15 +1075,11 @@ export function formatAmountToNumber(value){
 
 export function disableBodyTouch(disableTouch) {
   if(disableTouch) {
-    document.body.style.overflow = 'hidden';
-    document.body.style.touchAction = 'none';
-    document.body.style.pointerEvents = 'none';
+    document.body.classList.add('disable-body-touch');
+    document.body.classList.remove('enable-body-touch');
   } else {
     document.body.classList.remove('disable-body-touch');
     document.body.classList.add('enable-body-touch');
-    // document.body.style.overflow = 'auto';
-    // document.body.style.touchAction = 'auto';
-    // document.body.style.pointerEvents = 'auto';
   }
 }
 
