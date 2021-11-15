@@ -382,7 +382,7 @@ export async function getInvestmentData(params, pageError = false, type) {
     this.setState({
       skelton: type === 'onload',
       showError: false,
-      show_loader: type === 'onload' ? true : "button",
+      show_loader: "button",
     });
     this.setErrorData(type);
 

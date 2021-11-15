@@ -279,7 +279,7 @@ class Recommendations extends Component {
         ? recommendations.pension_house.pension_house_id
         : "";
       data.risk = this.state.risk;
-    } else {
+    } else if (pran) {
       data.pran = pran;
     }
 
