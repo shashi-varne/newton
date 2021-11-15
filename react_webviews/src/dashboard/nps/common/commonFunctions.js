@@ -249,7 +249,7 @@ export async function kyc_submit(params) {
           this.accountMerge();
           break;
         default: 
-          let errorTitle = typeof result?.error !== 'string' ? "Error" : result?.messsage || result?.error;
+          let errorTitle = result?.error || result?.message || 'Error';
           this.setState({
             title1: errorTitle,
           });
