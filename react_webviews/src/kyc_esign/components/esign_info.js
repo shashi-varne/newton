@@ -161,7 +161,10 @@ class ESignInfo extends Component {
           this.navigate("/kyc-esign/nsdl", {
             searchParams: `${getConfig().searchParams}&status=success`
           });
-        } else if (resultData?.error_code === 'kyc_40002') {
+        } else if (
+          resultData?.error_code === 'kyc_40002' ||
+          resultData?.error === "all documents are not submitted"
+        ) {
           toast("Document pending, redirecting to kyc");
           setTimeout(() => {
             this.navigate('/kyc/journey');
