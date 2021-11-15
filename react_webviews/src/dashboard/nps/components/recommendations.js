@@ -42,7 +42,8 @@ class Recommendations extends Component {
       pran: '',
       alternativeRiskOptsMap: {},
       partnerCode: getConfig().code,
-      isMobileDevice: getConfig().isMobileDevice
+      isMobileDevice: getConfig().isMobileDevice,
+      pranAlreadyRegistered: false
     };
     this.initialize = initialize.bind(this);
 ;  }
@@ -52,6 +53,11 @@ class Recommendations extends Component {
   }
 
   onload = () => {
+    if (this.state.pranAlreadyRegistered) {
+      this.navigate("/nps/pan", { state: { pranAlreadyRegistered: true } });
+      return
+    }
+
     let currentUser = storageService().getObject("user");
     let { display_summary_only, pran } = this.state;
 
@@ -84,11 +90,10 @@ class Recommendations extends Component {
     });
 
     let amount = storageService().get("npsAmount");
-    let { pran } = this.state;
 
     const res = await this.get_recommended_funds(amount, true);
     let data = res;
-    if (data && !pran) {
+    if (data && !isEmpty(data.recommended)) {
       const [recommendations] = data.recommended;
       const altRiskOptsMap = keyBy([...data.alternatives, ...data.recommended], 'risk');
       const assetAlloc = altRiskOptsMap[recommendations?.risk || this.state.risk]
@@ -298,6 +303,7 @@ class Recommendations extends Component {
           url: pgLink,
           skelton: false,
           openInvestmentSummary: true,
+          pran: result.pran
         });
       } else {
         window.location.href = pgLink;

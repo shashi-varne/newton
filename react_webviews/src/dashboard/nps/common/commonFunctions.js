@@ -72,7 +72,7 @@ export function setErrorData(type) {
       onload: {
         handleClick1: this.onload,
         title1: this.state.title1,
-        button_text1: "Retry",
+        button_text1: this.state.button_text1 || "Retry",
       },
       upldateFeedback: {
         handleClick1: () => {
@@ -400,8 +400,11 @@ export async function getInvestmentData(params, pageError = false, type) {
       return result;
     } else {
       let title1 = result.error || result.message || "Something went wrong!";
+      let button_text1 = status === 306 ? 'go back' : 'retry';
       this.setState({
         title1: title1,
+        button_text1: button_text1,
+        pranAlreadyRegistered: status === 306
       });
 
       throw error;
