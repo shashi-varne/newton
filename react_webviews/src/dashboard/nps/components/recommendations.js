@@ -62,7 +62,9 @@ class Recommendations extends Component {
     let { display_summary_only, pran } = this.state;
 
     display_summary_only = currentUser.nps_investment || false;
-    pran = storageService().get("nps_pran_number");
+    let nps = storageService().getObject("npsUser");
+    pran = storageService().get("nps_pran_number") || nps.pran;
+
     if (pran) {
       display_summary_only = true;
     }
@@ -272,7 +274,7 @@ class Recommendations extends Component {
       order_type: "one_time",
     };
 
-    if (!pran && !isEmpty(recommendations)) {
+    if (!isEmpty(recommendations)) {
       data.pension_house_id = !isEmpty(pension_house)
         ? pension_house.pension_house_id
         : recommendations.pension_house
