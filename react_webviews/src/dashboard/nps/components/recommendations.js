@@ -260,14 +260,19 @@ class Recommendations extends Component {
   };
 
   handleClick = async () => {
-    let { pran, pension_house, recommendations, amount, partnerCode, display_summary_only } = this.state;
+    let { pran, pension_house, recommendations, amount, partnerCode, display_summary_only, pranAlreadyRegistered } = this.state;
+
+    if (pranAlreadyRegistered) {
+      this.navigate("/nps/pan", { state: { pranAlreadyRegistered: true } });
+      return
+    }
 
     let data = {
       amount: this.state.amount,
       order_type: "one_time",
     };
 
-    if (!pran) {
+    if (!pran && !isEmpty(recommendations)) {
       data.pension_house_id = !isEmpty(pension_house)
         ? pension_house.pension_house_id
         : recommendations.pension_house

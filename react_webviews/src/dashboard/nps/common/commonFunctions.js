@@ -85,7 +85,7 @@ export function setErrorData(type) {
       },
       submit: {
         handleClick1: this.handleClick,
-        button_text1: "Retry",
+        button_text1: this.state.button_text1 || "Retry",
         title1: this.state.title1,
         handleClick2: () => {
           this.setState({
@@ -376,12 +376,13 @@ export async function updateMeta(params, next_state) {
 
 export async function getInvestmentData(params, pageError = false, type) {
   let error = "";
-  let errorType = "";
+  let errorType = '';
 
   try {
     this.setState({
-      skelton: true,
+      skelton: type === 'onload',
       showError: false,
+      show_loader: type === 'onload' ? true : "button",
     });
     this.setErrorData(type);
 
