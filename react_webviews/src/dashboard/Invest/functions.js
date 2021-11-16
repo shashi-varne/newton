@@ -556,7 +556,7 @@ export async function handleCommonKycRedirections() {
   } else if (kycStatusData.nextState) {
     this.navigate(kycStatusData.nextState);
   } else {
-    navigate(PATHNAME_MAPPER.journey, data);
+    navigate(PATHNAME_MAPPER.journey);
   }
 }
 
