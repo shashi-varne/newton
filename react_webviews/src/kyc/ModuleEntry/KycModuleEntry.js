@@ -54,7 +54,9 @@ function KycModuleEntry(props) {
 
   const isKycCompleted = (TRADING_ENABLED, kyc, kycStatus) => {
     if(TRADING_ENABLED) {
-      return kyc?.kyc_product_type === "equity" && ((kycStatus === "verifying_trading_account" && !kyc?.equity_investment_ready) || (kycStatus === "complete" && !kyc?.fno_active))
+      const fnoActivationPending = kycStatus === "complete" && !kyc?.fno_active;
+      const equityInvestmentPending = kycStatus === "verifying_trading_account";
+      return kyc?.kyc_product_type === "equity" && (equityInvestmentPending || fnoActivationPending)
     } else {
       return kycStatus === "complete"
     }
