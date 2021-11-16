@@ -548,7 +548,7 @@ export async function handleCommonKycRedirections() {
       },
     });
   } else if (!tradingEnabled && kycJourneyStatus === "complete") {
-    navigate("/kyc-esign/nsdl", {
+    navigate(PATHNAME_MAPPER.kycEsignNsdl, {
       searchParams: `${getConfig().searchParams}&status=success`
     });
   } else if (tradingEnabled && userKyc?.kyc_product_type !== "equity") {

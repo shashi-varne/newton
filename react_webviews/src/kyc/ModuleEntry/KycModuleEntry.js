@@ -99,7 +99,7 @@ function KycModuleEntry(props) {
       if (TRADING_ENABLED) {
         navigate(PATHNAME_MAPPER.documentVerification)
       } else {
-        navigate("/kyc-esign/nsdl", {
+        navigate(PATHNAME_MAPPER.kycEsignNsdl, {
           searchParams: `${getConfig().searchParams}&status=success`
         });
       }
@@ -112,14 +112,14 @@ function KycModuleEntry(props) {
     } 
     // this condition will help in redirection from sdk
     else if (isKycCompleted(TRADING_ENABLED, kyc, kycStatus)) {
-      navigate("/kyc-esign/nsdl", {
+      navigate(PATHNAME_MAPPER.kycEsignNsdl, {
         searchParams: `${getConfig().searchParams}&status=success`
       });
     } else if (kycStatus === "rejected") {
       navigate(PATHNAME_MAPPER.uploadProgress, data);
     } else if (kycStatus === "fno_rejected") {
       navigate(PATHNAME_MAPPER.uploadFnOIncomeProof, data);
-    } else if ((TRADING_ENABLED && kyc?.kyc_product_type !== "equity")) {
+    } else if (TRADING_ENABLED && kyc?.kyc_product_type !== "equity") {
       let result;
       if (!kyc?.mf_kyc_processed) {
         result = await setProductType();

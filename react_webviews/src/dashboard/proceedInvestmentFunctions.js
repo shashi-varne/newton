@@ -1,4 +1,5 @@
 import toast from "../common/ui/Toast";
+import { PATHNAME_MAPPER } from "../kyc/constants";
 import { getKycAppStatus } from "../kyc/services";
 import Api from "../utils/api";
 import { getConfig, popupWindowCenter, isTradingEnabled } from "../utils/functions";
@@ -156,7 +157,7 @@ export function redirectToKyc(userKyc, kycJourneyStatus, navigate) {
       state: { show_aadhaar: (userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual") ? false : true } 
     });
   } else if (!isTradingEnabled(userKyc) && kycJourneyStatus === "complete") {
-    navigate("/kyc-esign/nsdl", {
+    navigate(PATHNAME_MAPPER.kycEsignNsdl, {
       searchParams: `${getConfig().searchParams}&status=success`
     });
   } else if (kycStatusData?.nextState) {
