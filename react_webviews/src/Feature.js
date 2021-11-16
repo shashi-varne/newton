@@ -1,6 +1,8 @@
 import React from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 
+import 'common/theme/Style.scss';
+
 import NotFound from './common/components/NotFound';
 import Insurance from './insurance';
 import GroupInsurance from './group_insurance';
@@ -16,12 +18,10 @@ import HelpSupport from './help_support_v2';
 import CommonLanding from './common/components/landing';
 import Withdraw from './withdraw';
 import Report from './reports';
-
-// import CommonRenderFaqs from './common/components/RenderFaqs';
-
 import Fhc from './fhc';
 // import Loan from './loan_idfc';
 import Payment from './payment';
+import EquityPayment from './equity_payment';
 import KycEsign from './kyc_esign';
 import PortfolioRebalancing from './portfolio_rebalancing';
 import FundDetails from './fund_details';
@@ -31,21 +31,19 @@ import ProtectedRoute from './common/components/ProtectedRoute';
 import FeedBack from './feedback';
 import Partner from "./partner"
 import TaxFiling from './tax_filing'
-
 import Kyc from './kyc';
-import 'common/theme/Style.scss';
+import AccountStatements from './account_statements';
 
 const Feature = () => {
   // old # route support added
   // start
-  const history = useHistory()
+  const history = useHistory();
   if (window.location.hash.startsWith('#!/')) {
     history.push(window.location.hash.replace('#!', ''))
   }
   // end
 
-  // temp fix for handling hash routing
-  if(window.location.pathname === '/prepare') {
+  if (window.location.pathname === '/prepare') {
     return null;
   } else {
     return (
@@ -61,23 +59,22 @@ const Feature = () => {
         <ProtectedRoute path='/risk' component={RiskProfiler} />
         <ProtectedRoute path='/hni/' component={HNI} />
         <ProtectedRoute path='/isip' component={IsipBIller} />
-        {/* outside the feature component */}
         <ProtectedRoute path='/help' component={HelpSupport} />
         {/* <ProtectedRoute path='/loan' component={Loan} /> */}
+        <Route path='/pg/eq' component={EquityPayment} />
         <ProtectedRoute path='/pg' component={Payment} />
         <ProtectedRoute path='/kyc-esign' component={KycEsign} />
         <ProtectedRoute path='/whatsapp/' component={Whatsapp} />
         <ProtectedRoute path='/webview/:main_module/:sub_module' component={CommonLanding} />
         <ProtectedRoute path='/webview/:main_module' component={CommonLanding} />
-        {/* <Route path="/common/render-faqs" component={CommonRenderFaqs} /> */}
         <ProtectedRoute path='/portfolio-rebalancing' component={PortfolioRebalancing} />
         <ProtectedRoute path='/fund-details' component={FundDetails} />
         <ProtectedRoute path='/feedback' component={FeedBack} />
-        <Route path='/partner' component={Partner} />
+        <ProtectedRoute path='/partner' component={Partner} />
         <ProtectedRoute path='/tax-filing' component={TaxFiling} />
-
         <ProtectedRoute path='/withdraw' component={Withdraw} />
         <ProtectedRoute path='/reports' component={Report} />
+        <ProtectedRoute path='/statements' component={AccountStatements} />
         <ProtectedRoute path='/kyc' component={Kyc} />
         <ProtectedRoute path='/' component={Landing} />
         <Route component={NotFound} />

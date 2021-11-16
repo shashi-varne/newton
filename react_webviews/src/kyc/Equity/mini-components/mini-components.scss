@@ -1,0 +1,77 @@
+.kyc-selfie-upload-status {
+  .kyc-selfie-upload-status-content {
+    .kyc-selfie-upload-status-info {
+      display: flex;
+      column-gap: 20px;
+      justify-content: space-between;
+      align-items: flex-start;
+
+      .sus-info-title {
+        padding: 10px 0;
+        font-weight: bold;
+        font-size: 20px;
+        line-height: 32px;
+        width: 95%;
+        color: #161a2e;
+      }
+
+      .sus-info-subtitle {
+        font-size: 13px;
+        line-height: 21px;
+        width: 95%;
+        color: var(--steelgrey);;
+        padding-bottom: 35px;
+      }
+    }
+
+    .sus-button {
+      width: 100%;
+      min-height: 45px;
+    }
+  }
+}
+
+.kyc-confirm-pan-text {
+  color: var(--primary);
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 14px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-top: 5px;
+}
+
+.communication-details-otp-container {
+  margin-top: 15px;
+  
+  .otp-error-style {
+    border-bottom: 1px solid var(--red) !important;
+  }
+  .invalid-otp{
+    color: var(--red);
+    margin-bottom: 25px;
+    font-size: 11px;
+    line-height: 18px;
+    margin-top: 5px;
+  }
+  .cd-otp-time-text {
+    color: var(--steelgrey);
+    font-size: 13px;
+    line-height: 21px;
+    margin: 30px 0 12px;
+  }
+
+  .cd-otp-resend-text {
+    margin: 20px 0 0 0;
+    color: var(--secondary);
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 14px;
+    letter-spacing: 1px;
+
+    .cd-resend-loader {
+      margin-left: 20px;
+    }
+  }
+}

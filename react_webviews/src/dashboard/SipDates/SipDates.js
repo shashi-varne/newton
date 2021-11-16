@@ -84,6 +84,8 @@ class SipDates extends Component {
       }`
     );
 
+    const kyc = storageService().getObject("kyc");
+
     this.setState({
       form_data: form_data,
       sips: finalPurchases,
@@ -93,6 +95,7 @@ class SipDates extends Component {
       sipBaseData: sipBaseData,
       paymentRedirectUrl: paymentRedirectUrl,
       props: this.props,
+      userKyc: kyc
     });
   };
 
@@ -117,9 +120,9 @@ class SipDates extends Component {
       body: sipBaseData,
       paymentRedirectUrl: paymentRedirectUrl,
       isSipDatesScreen: isSipDatesScreen,
-      history: this.props.history,
       handleApiRunning: this.handleApiRunning,
       handleDialogStates: this.handleDialogStates,
+      navigate: this.navigate,
     });
   };
 

@@ -1,56 +1,21 @@
-import React, { useState, useEffect, useRef } from 'react'
+import "./commonStyles.scss";
+import React, { useState } from 'react'
 import Container from '../common/Container'
-import Alert from '../mini-components/Alert'
-import { isEmpty } from '../../utils/validators'
-import { DOCUMENTS_MAPPER } from '../constants'
+import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
+import { DOCUMENTS_MAPPER, SUPPORTED_IMAGE_TYPES, PATHNAME_MAPPER } from '../constants'
 import { upload } from '../common/api'
-import { getBase64, getConfig, navigate as navigateFunc } from '../../utils/functions'
+import { getConfig, navigate as navigateFunc } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
 import { combinedDocBlob } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
+import KycUploadContainer from '../mini-components/KycUploadContainer'
+import { isEmpty } from 'lodash';
 import "./commonStyles.scss";
 import { nativeCallback } from '../../utils/native_callback'
 
-const isWeb = getConfig().Web
-const getTitleList = ({ kyc, myAccountFlow }) => {
-  let titleList = [
-    'Photo of address card should have your signature',
-    'Photo of address should be clear and it should not have the exposure of flash light',
-  ]
-  if (
-    kyc?.kyc_status !== 'compliant' &&
-    kyc?.dl_docs_status !== '' &&
-    kyc?.dl_docs_status !== 'init' &&
-    kyc?.dl_docs_status !== null && 
-    !myAccountFlow
-  ) {
-    if (
-      kyc.all_dl_doc_statuses.pan_fetch_status === null ||
-      kyc.all_dl_doc_statuses.pan_fetch_status === '' ||
-      kyc.all_dl_doc_statuses.pan_fetch_status === 'failed'
-    ) {
-      titleList[0] =
-        'Oops! seems like Digilocker is down, please upload your address to proceed further'
-    }
-  }
-  return titleList
-}
-
-const MessageComponent = (kyc, myAccountFlow) => {
-  const [titleList] = useState(getTitleList(kyc, myAccountFlow))
-  return (
-    <section className="pan-alert" data-aid='kyc-pan-alert'>
-      {titleList.map((title, idx) => (
-        <div className="row" key={idx} data-aid={`row-${idx + 1}`}>
-          <div className="order" data-aid={`order-${idx + 1}`}>{idx + 1}.</div>
-          <div className="value" data-aid={`value-${idx + 1}`}>{title}</div>
-        </div>
-      ))}
-    </section>
-  )
-}
-
 const AddressUpload = (props) => {
+  const config = getConfig();
+  const productName = config.productName
   const navigate = navigateFunc.bind(props)
   const stateParams = props?.location?.state || {}
   const isMyAccountFlow = stateParams.flow === "myAccount";
@@ -59,131 +24,35 @@ const AddressUpload = (props) => {
   }
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [frontDoc, setFrontDoc] = useState(null)
-  const [showLoader, setShowLoader] = useState(false)
   const [backDoc, setBackDoc] = useState(null)
-
   const [file, setFile] = useState(null)
-
   const [state, setState] = useState({})
-  const {kyc: kycData, isLoading, updateKyc} = useUserKycHook();
-  const [kyc, setKyc] = useState(
-    kycData
-  )
-  const productName = getConfig().productName;
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
+  const goBackPath = props.location?.state?.goBack || "";
 
-  useEffect(() => {
-    setKyc(kycData)
-  }, [kycData])
-
-  const frontDocRef = useRef(null)
-  const backDocRef = useRef(null)
-
-  const native_call_handler = (method_name, doc_type, doc_name, doc_side) => {
-    window.callbackWeb[method_name]({
-      type: 'doc',
-      doc_type: doc_type,
-      doc_name: doc_name,
-      doc_side: doc_side,
-      // callbacks from native
-      upload: function upload(file) {
-        try {
-          setState({
-            ...state,
-            docType: doc_type,
-            docName: doc_name,
-            doc_side: doc_side,
-            show_loader: true,
-          })
-          switch (file.type) {
-            case 'image/jpeg':
-            case 'image/jpg':
-            case 'image/png':
-            case 'image/bmp':
-              mergeDocs(file, doc_side);
-              setTimeout(
-                function () {
-                  setShowLoader(false);
-                },
-                1000
-              );
-              break
-            default:
-              toast('Please select image file')
-              setState({
-                ...state,
-                docType: doc_type,
-                show_loader: false,
-              })
-          }
-        } catch (e) {
-          //
-        }
-      },
-    })
-
-    window.callbackWeb.add_listener({
-      type: 'native_receiver_image',
-      show_loader: function (show_loader) {
-        setState({
-          ...state,
-          show_loader: true,
-        })
-      },
-    })
-  }
-
-  const handleChange = (type,openType) => (event) => {
-    sendEvents("get_image",openType, type)
-    const uploadedFile = event.target.files[0]
-    let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
-
-    if (acceptedType.indexOf(uploadedFile.type) === -1) {
-      toast('Please select image file only')
-      return
-    }
-    mergeDocs(uploadedFile, type);
-  }
-
-  const mergeDocs = (file, type) => {
-    if (file.size > 1000000) {
-      toast("File size cannot exceeds 1MB");
-      return;
-    }
+  const onFileSelectComplete = (type) => (file, fileBase64) => {
+    sendEvents('get_image', 'gallery', type);
     if (type === 'front') {
-      setFrontDoc(file)
+      setFrontDoc(file);
+      setState({
+        ...state,
+        frontFileShow: fileBase64,
+      });
     } else {
-      setBackDoc(file)
-    }
-
-    getBase64(file, function (img) {
-      if (type === 'front') {
-        setState({
-          ...state,
-          frontFileShow: img,
-        })
-      } else {
-        setState({
-          ...state,
-          backFileShow: img,
-        })
-      }
-    })
-  }
-
-  const handleUpload = (method_name, type) => () => {
-    if(isWeb){
-      if (type === 'front') {
-        frontDocRef.current.click()
-      } else {
-        backDocRef.current.click()
-      }
-    }   
-    else {
-      native_call_handler(method_name, `address_${type}`, `address_${type}.jpg`, type)
+      setBackDoc(file);
+      setState({
+        ...state,
+        backFileShow: fileBase64,
+      });
     }
   }
 
-  const handleImageLoad = (event) => {
+  const onFileSelectError = (type) => () => {
+    sendEvents('get_image', 'gallery', type);
+    return toast('Please select image file only');
+  }
+
+  const handleImageLoad = () => {
     const fr = new Image()
     const bc = new Image()
     if (state.frontFileShow && state.backFileShow) {
@@ -199,34 +68,37 @@ const AddressUpload = (props) => {
     sendEvents('next')
     try {
       setIsApiRunning("button")
-      let result, response
+      let result;
       if (onlyFrontDocRequired) {
-        response = await upload(frontDoc, 'address', {
+        result = await upload(frontDoc, 'address', {
           addressProofKey: addressProofKey,
         })
       } else {
-        response = await upload(file, 'address', {
+        result = await upload(file, 'address', {
           addressProofKey: addressProofKey,
         })
       }
-      if(response.status_code === 200) {
-        result = response.result;
-        updateKyc(result.kyc)
-        if(isMyAccountFlow) {
-          toast("Address changed successfully")
-          navigate('/my-account');
-        } else {
-          navigate('/kyc/upload/progress');
-        }
-      } else {
-        throw new Error(response?.result?.error || response?.result?.message || "Something went wrong!")
-      }
+      updateKyc(result.kyc)
+      handleNavigation();
     } catch (err) {
       console.error(err)
       toast(err?.message)
     } finally {
       console.log('uploaded')
       setIsApiRunning(false)
+    }
+  }
+
+  const handleNavigation = () => {
+    if (goBackPath) {
+      navigate(goBackPath);
+    } else {
+      if(isMyAccountFlow) {
+        toast("Address changed successfully");
+        navigate("/my-account");
+      } else {
+        navigate(PATHNAME_MAPPER.uploadProgress)
+      }
     }
   }
 
@@ -271,7 +143,7 @@ const AddressUpload = (props) => {
     }
 
     if (kyc?.address?.meta_data?.pincode) {
-      addressFull += setComma(kyc?.address?.meta_data?.pincode)
+      addressFull += kyc?.address?.meta_data?.pincode
     }
 
     return addressFull
@@ -282,38 +154,46 @@ const AddressUpload = (props) => {
     navigate("/kyc/address-details1", {
       state: {
         backToJourney: true,
+        isEdit: true
       },
     });
+  };
+
+  const onKnowMoreClick = () => {
+    sendEvents('know_more');
+    navigate("/kyc/upload-instructions", {
+      state: { document: "address" }
+    });
+  };
+
+  const sendEvents = (userAction, type, docSide) => {
+    // callbackWeb.eventCallback to be added
+    let eventObj = {
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "upload_address_proof",
+        type: type || "",
+        doc_side: docSide || "",
+        doc_type: addressProofKey,
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
   };
   
   const title =
     isMyAccountFlow && kyc?.address?.meta_data?.is_nri
       ? "Upload Indian Address Proof"
       : "Upload address proof";
-
-  const sendEvents = (userAction, type, docSide) => {
-    let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "address_doc",
-        "type": type || "",
-        "doc_side": docSide || "",
-        "doc_type": addressProofKey
-      }
-    };
-    if (userAction === 'just_set_events') {
-      return eventObj;
-    } else {
-      nativeCallback({ events: eventObj });
-    }
-  }
-
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
+      skelton={isLoading}
       events={sendEvents("just_set_events")}
-      skelton={isLoading || showLoader}
       handleClick={handleSubmit}
       disable={!frontDoc || (!onlyFrontDocRequired && !backDoc)}
       showLoader={isApiRunning}
@@ -323,276 +203,78 @@ const AddressUpload = (props) => {
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-address" data-aid='kyc-upload-address'>
-          {!isMyAccountFlow && (
-            <div className="sub-title">
-              {getFullAddress()}
-              {getFullAddress() && (
-                <div className="edit"  data-aid='kyc-edit' onClick={editAddress}>
-                  EDIT
-                </div>
-              )}
-            </div>
-          )}
-          <Alert
-            variant="attention"
-            title="Note"
-            renderMessage={() => (
-              <MessageComponent kyc={kyc} myAccountFlow={isMyAccountFlow} />
+          <div className="sub-title" data-aid='kyc-sub-title'>
+            <span data-aid='kyc-address-proof'>{addressProof}</span>
+            {addressProof && (
+              <div className="edit" data-aid='kyc-edit' onClick={editAddress}>
+                EDIT
+              </div>
             )}
-            dataAid="kyc-upload-address-alert"
-          />
-          {!isWeb && (
-            <div className="kyc-doc-upload-container" data-aid="kyc-doc-upload-container">
-              {frontDoc && state.frontFileShow && (
-                <img
-                  src={state.frontFileShow}
+          </div>
+          <div className="address-detail" data-aid='kyc-address-detail'>{getFullAddress()}</div>
+          <KycUploadContainer.TitleText alignLeft>
+            <span data-aid='kyc-address-proof-front-side'><b>Front side</b></span> of your {addressProof}
+          </KycUploadContainer.TitleText>
+          <KycUploadContainer>
+            <KycUploadContainer.Image
+              fileToShow={frontDoc && state.frontFileShow}
+              illustration={require(`assets/${productName}/address_proof_front.svg`)}
+              onLoad={handleImageLoad}
+              alt="Address Proof Front"
+            />
+            <KycUploadContainer.Button
+              withPicker
+              filePickerProps={{
+                showOptionsDialog: true,
+                shouldCompress: true,
+                nativePickerMethodName: "open_gallery",
+                fileName: "address_proof_front",
+                customPickerId: "wv-input-front",
+                onFileSelectComplete: onFileSelectComplete('front'),
+                onFileSelectError: onFileSelectError,
+                supportedFormats: SUPPORTED_IMAGE_TYPES
+              }}
+            />
+          </KycUploadContainer>
+
+          {!onlyFrontDocRequired &&
+            <>
+              <KycUploadContainer.TitleText alignLeft>
+                <span data-aid='kyc-address-proof-back-side'><b>Back side</b></span> of your {addressProof}
+              </KycUploadContainer.TitleText>
+              <KycUploadContainer>
+                <KycUploadContainer.Image
+                  fileToShow={backDoc && state.backFileShow}
+                  illustration={require(`assets/${productName}/address_proof_rear.svg`)}
                   onLoad={handleImageLoad}
-                  className="preview"
-                  alt=""
+                  alt="Address Proof Rear"
                 />
-              )}
-              {!frontDoc && (
-                <div className="caption">
-                  Upload front side of {addressProof}
-                </div>
-              )}
-              <div className="kyc-upload-doc-actions">
-                <div className="mobile-actions">
-                  <div className="open-camera">
-                    <input
-                      ref={frontDocRef}
-                      type="file"
-                      className="kyc-upload"
-                      onChange={handleChange('front','open-camera')}
-                      accept="image/*"
-                      capture
-                    />
-                    <button
-                      data-click-type="camera-front"
-                      onClick={handleUpload('open_camera','front')}
-                      data-aid="front-doc-camera-button"
-                      className="kyc-upload-button"
-                    >
-                      {!frontDoc && (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                        >
-                          <g transform="translate(0 3)">
-                            <path d="M17.03125,2.79581152 L16.4375,0.534031414 C16.34375,0.219895288 16.0625,0 15.71875,0 L8.28125,0 C7.9375,0 7.65625,0.219895288 7.5625,0.534031414 L6.96875,2.79581152 L2.8125,2.79581152 C1.25,2.79581152 0,4.05235602 0,5.62303665 L0,15.1727749 C0,16.7434555 1.25,18 2.8125,18 L21.1875,18 C22.75,18 24,16.7434555 24,15.1727749 L24,5.62303665 C24,4.05235602 22.75,2.79581152 21.1875,2.79581152 L17.03125,2.79581152 Z M23,5.79400749 L23,14.9026217 C23,16.071161 22.0631868,17 20.8846154,17 L3.11538462,17 C1.93681319,17 1,16.071161 1,14.9026217 L1,5.79400749 C1,4.62546816 1.93681319,3.69662921 3.11538462,3.69662921 L7.34615385,3.69662921 C7.49725275,3.69662921 7.61813187,3.60674157 7.64835165,3.48689139 L8.28296703,1.08988764 C8.28296703,1.05992509 8.34340659,1 8.37362637,1 L15.5961538,1 C15.6565934,1 15.6868132,1.02996255 15.6868132,1.08988764 L16.3214286,3.48689139 C16.3516484,3.60674157 16.4725275,3.69662921 16.6236264,3.69662921 L20.8543956,3.69662921 C22.0631868,3.69662921 23,4.62546816 23,5.79400749 Z" />
-                            <path d="M12,15 C9.23076923,15 7,12.7692308 7,10 C7,7.23076923 9.23076923,5 12,5 C14.7692308,5 17,7.23076923 17,10 C17,12.7692308 14.7692308,15 12,15 Z M12,14 C14.216946,14 16,12.216946 16,10 C16,7.78305398 14.216946,6 12,6 C9.78305398,6 8,7.78305398 8,10 C8,12.216946 9.78305398,14 12,14 Z" />
-                          </g>
-                        </svg>
-                      )}
-                      <div className="upload-action" data-aid="front-doc-camera-text" >open camera</div>
-                    </button>
-                  </div>
-                  <div className="open-gallery">
-                    <input
-                      ref={frontDocRef}
-                      type="file"
-                      className="kyc-upload"
-                      onChange={handleChange('front','gallery')}
-                    />
-                    <button
-                      onClick={handleUpload('open_gallery','front')}
-                      data-aid="front-doc-gallery-button"
-                      className="kyc-upload-button"
-                    >
-                      {!frontDoc && (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                        >
-                          <g transform="translate(0 3)">
-                            <path d="M21.4883721,0 L2.51162791,0 C1.12449412,0 0,1.11584416 0,2.49230769 L0,15.5076923 C0,16.8841558 1.12449412,18 2.51162791,18 L21.4883721,18 C22.8755059,18 24,16.8841558 24,15.5076923 L24,2.49230769 C24,1.11584416 22.8755059,0 21.4883721,0 Z M21.1219512,17 L2.87804878,17 C1.84083108,17 1,16.1078831 1,15.0074011 L1,13.1372047 L7.12780488,7 L13,13 L18,9 L23,13.8516937 L23,15.0074011 C23,16.1078831 22.1591689,17 21.1219512,17 Z M23,13 C19.7357846,9.6105021 18.0691179,7.94383544 18,8 L13,12 C9.068603,7.93471236 7.068603,5.93471236 7,6 L1,12 L1,2.92714951 C1,1.86281423 1.84083108,1 2.87804878,1 L21.1219512,1 C22.1591689,1 23,1.86281423 23,2.92714951 L23,13 Z" />
-                            <path d="M13.5,2 C12.1192881,2 11,3.11928813 11,4.5 C11,5.88071187 12.1192881,7 13.5,7 C14.8807119,7 16,5.88071187 16,4.5 C16,3.11928813 14.8807119,2 13.5,2 Z M13.5,3 C14.3284271,3 15,3.67157288 15,4.5 C15,5.32842712 14.3284271,6 13.5,6 C12.6715729,6 12,5.32842712 12,4.5 C12,3.67157288 12.6715729,3 13.5,3 Z" />
-                          </g>
-                        </svg>
-                      )}
-                      <div className="upload-action" data-aid="front-doc-gallery-text">Open Gallery</div>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-          {isWeb && (
-            <div className="kyc-doc-upload-container">
-              {frontDoc && state.frontFileShow && (
-                <img
-                  src={state.frontFileShow}
-                  className="preview"
-                  alt="Uploaded PAN Card"
-                  onLoad={handleImageLoad}
+                <KycUploadContainer.Button
+                  withPicker
+                  filePickerProps={{
+                    showOptionsDialog: true,
+                    shouldCompress: true,
+                    nativePickerMethodName: "open_gallery",
+                    fileName: "address_proof_rear",
+                    customPickerId: "wv-input-back",
+                    onFileSelectComplete: onFileSelectComplete('back'),
+                    onFileSelectError: onFileSelectError,
+                    supportedFormats: SUPPORTED_IMAGE_TYPES
+                  }}
                 />
-              )}
-              {!frontDoc && (
-                <div className="caption">
-                  Upload front side of {addressProof}
-                </div>
-              )}
-              <div className="kyc-upload-doc-actions">
-                <input
-                  ref={frontDocRef}
-                  type="file"
-                  className="kyc-upload"
-                  onChange={handleChange('front','gallery')}
-                />
-                <button
-                  onClick={handleUpload('open_gallery','front')}
-                  className="kyc-upload-button"
-                  data-aid="front-doc-gallery-button"
-                >
-                  {!frontDoc && (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                    >
-                      <g transform="translate(0 3)">
-                        <path d="M21.4883721,0 L2.51162791,0 C1.12449412,0 0,1.11584416 0,2.49230769 L0,15.5076923 C0,16.8841558 1.12449412,18 2.51162791,18 L21.4883721,18 C22.8755059,18 24,16.8841558 24,15.5076923 L24,2.49230769 C24,1.11584416 22.8755059,0 21.4883721,0 Z M21.1219512,17 L2.87804878,17 C1.84083108,17 1,16.1078831 1,15.0074011 L1,13.1372047 L7.12780488,7 L13,13 L18,9 L23,13.8516937 L23,15.0074011 C23,16.1078831 22.1591689,17 21.1219512,17 Z M23,13 C19.7357846,9.6105021 18.0691179,7.94383544 18,8 L13,12 C9.068603,7.93471236 7.068603,5.93471236 7,6 L1,12 L1,2.92714951 C1,1.86281423 1.84083108,1 2.87804878,1 L21.1219512,1 C22.1591689,1 23,1.86281423 23,2.92714951 L23,13 Z" />
-                        <path d="M13.5,2 C12.1192881,2 11,3.11928813 11,4.5 C11,5.88071187 12.1192881,7 13.5,7 C14.8807119,7 16,5.88071187 16,4.5 C16,3.11928813 14.8807119,2 13.5,2 Z M13.5,3 C14.3284271,3 15,3.67157288 15,4.5 C15,5.32842712 14.3284271,6 13.5,6 C12.6715729,6 12,5.32842712 12,4.5 C12,3.67157288 12.6715729,3 13.5,3 Z" />
-                      </g>
-                    </svg>
-                  )}
-                  <div className="upload-action" data-aid="front-doc-gallery-text">Open Gallery</div>
-                </button>
-              </div>
-            </div>
-          )}
-          {!isWeb && !onlyFrontDocRequired && (
-            <div className="kyc-doc-upload-container">
-              {backDoc && state.backFileShow && (
-                <img
-                  src={state.backFileShow}
-                  className="preview"
-                  alt="Uploaded PAN Card"
-                  onLoad={handleImageLoad}
-                />
-              )}
-              {!backDoc && (
-                <div className="caption">
-                  Upload back side of {addressProof}
-                </div>
-              )}
-              <div className="kyc-upload-doc-actions">
-                <div className="mobile-actions">
-                  <div className="open-camera">
-                    <input
-                      ref={backDocRef}
-                      type="file"
-                      className="kyc-upload"
-                      onChange={handleChange('back','open-camera')}
-                      accept="image/*"
-                      capture
-                    />
-                    <button
-                      data-click-type="camera-front"
-                      onClick={handleUpload('open_camera','back')}
-                      className="kyc-upload-button"
-                      data-aid="back-doc-camera-button"
-                    >
-                      {!backDoc && (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                        >
-                          <g transform="translate(0 3)">
-                            <path d="M17.03125,2.79581152 L16.4375,0.534031414 C16.34375,0.219895288 16.0625,0 15.71875,0 L8.28125,0 C7.9375,0 7.65625,0.219895288 7.5625,0.534031414 L6.96875,2.79581152 L2.8125,2.79581152 C1.25,2.79581152 0,4.05235602 0,5.62303665 L0,15.1727749 C0,16.7434555 1.25,18 2.8125,18 L21.1875,18 C22.75,18 24,16.7434555 24,15.1727749 L24,5.62303665 C24,4.05235602 22.75,2.79581152 21.1875,2.79581152 L17.03125,2.79581152 Z M23,5.79400749 L23,14.9026217 C23,16.071161 22.0631868,17 20.8846154,17 L3.11538462,17 C1.93681319,17 1,16.071161 1,14.9026217 L1,5.79400749 C1,4.62546816 1.93681319,3.69662921 3.11538462,3.69662921 L7.34615385,3.69662921 C7.49725275,3.69662921 7.61813187,3.60674157 7.64835165,3.48689139 L8.28296703,1.08988764 C8.28296703,1.05992509 8.34340659,1 8.37362637,1 L15.5961538,1 C15.6565934,1 15.6868132,1.02996255 15.6868132,1.08988764 L16.3214286,3.48689139 C16.3516484,3.60674157 16.4725275,3.69662921 16.6236264,3.69662921 L20.8543956,3.69662921 C22.0631868,3.69662921 23,4.62546816 23,5.79400749 Z" />
-                            <path d="M12,15 C9.23076923,15 7,12.7692308 7,10 C7,7.23076923 9.23076923,5 12,5 C14.7692308,5 17,7.23076923 17,10 C17,12.7692308 14.7692308,15 12,15 Z M12,14 C14.216946,14 16,12.216946 16,10 C16,7.78305398 14.216946,6 12,6 C9.78305398,6 8,7.78305398 8,10 C8,12.216946 9.78305398,14 12,14 Z" />
-                          </g>
-                        </svg>
-                      )}
-                      <div className="upload-action" data-aid="back-doc-camera-text">open camera</div>
-                    </button>
-                  </div>
-                  <div className="open-gallery">
-                    <input
-                      ref={backDocRef}
-                      type="file"
-                      className="kyc-upload"
-                      onChange={handleChange('back','gallery')}
-                      data-aid="back-open-gallery-input"
-                    />
-                    <button
-                      onClick={handleUpload('open_gallery','back')}
-                      data-aid="back-doc-gallery-button"
-                      className="kyc-upload-button"
-                    >
-                      {!backDoc && (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                        >
-                          <g transform="translate(0 3)">
-                            <path d="M21.4883721,0 L2.51162791,0 C1.12449412,0 0,1.11584416 0,2.49230769 L0,15.5076923 C0,16.8841558 1.12449412,18 2.51162791,18 L21.4883721,18 C22.8755059,18 24,16.8841558 24,15.5076923 L24,2.49230769 C24,1.11584416 22.8755059,0 21.4883721,0 Z M21.1219512,17 L2.87804878,17 C1.84083108,17 1,16.1078831 1,15.0074011 L1,13.1372047 L7.12780488,7 L13,13 L18,9 L23,13.8516937 L23,15.0074011 C23,16.1078831 22.1591689,17 21.1219512,17 Z M23,13 C19.7357846,9.6105021 18.0691179,7.94383544 18,8 L13,12 C9.068603,7.93471236 7.068603,5.93471236 7,6 L1,12 L1,2.92714951 C1,1.86281423 1.84083108,1 2.87804878,1 L21.1219512,1 C22.1591689,1 23,1.86281423 23,2.92714951 L23,13 Z" />
-                            <path d="M13.5,2 C12.1192881,2 11,3.11928813 11,4.5 C11,5.88071187 12.1192881,7 13.5,7 C14.8807119,7 16,5.88071187 16,4.5 C16,3.11928813 14.8807119,2 13.5,2 Z M13.5,3 C14.3284271,3 15,3.67157288 15,4.5 C15,5.32842712 14.3284271,6 13.5,6 C12.6715729,6 12,5.32842712 12,4.5 C12,3.67157288 12.6715729,3 13.5,3 Z" />
-                          </g>
-                        </svg>
-                      )}
-                      <div className="upload-action" data-aid="back-doc-gallery-text">Open Gallery</div>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-          {isWeb && !onlyFrontDocRequired && (
-            <div className="kyc-doc-upload-container">
-              {backDoc && state.backFileShow && (
-                <img
-                  src={state.backFileShow}
-                  className="preview"
-                  alt="Uploaded Addres  s Document"
-                  onLoad={handleImageLoad}
-                />
-              )}
-              {!backDoc && (
-                <div className="caption">
-                  Upload back side of {addressProof}
-                </div>
-              )}
-              <div className="kyc-upload-doc-actions">
-                <input
-                  ref={backDocRef}
-                  type="file"
-                  className="kyc-upload"
-                  onChange={handleChange('back','gallery')}
-                  data-aid="web-back-open-gallery-input"
-                />
-                <button
-                  onClick={handleUpload('open_gallery','back')}
-                  className="kyc-upload-button"
-                  data-aid="back-doc-gallery-button"
-                >
-                  {!backDoc && (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                    >
-                      <g transform="translate(0 3)">
-                        <path d="M21.4883721,0 L2.51162791,0 C1.12449412,0 0,1.11584416 0,2.49230769 L0,15.5076923 C0,16.8841558 1.12449412,18 2.51162791,18 L21.4883721,18 C22.8755059,18 24,16.8841558 24,15.5076923 L24,2.49230769 C24,1.11584416 22.8755059,0 21.4883721,0 Z M21.1219512,17 L2.87804878,17 C1.84083108,17 1,16.1078831 1,15.0074011 L1,13.1372047 L7.12780488,7 L13,13 L18,9 L23,13.8516937 L23,15.0074011 C23,16.1078831 22.1591689,17 21.1219512,17 Z M23,13 C19.7357846,9.6105021 18.0691179,7.94383544 18,8 L13,12 C9.068603,7.93471236 7.068603,5.93471236 7,6 L1,12 L1,2.92714951 C1,1.86281423 1.84083108,1 2.87804878,1 L21.1219512,1 C22.1591689,1 23,1.86281423 23,2.92714951 L23,13 Z" />
-                        <path d="M13.5,2 C12.1192881,2 11,3.11928813 11,4.5 C11,5.88071187 12.1192881,7 13.5,7 C14.8807119,7 16,5.88071187 16,4.5 C16,3.11928813 14.8807119,2 13.5,2 Z M13.5,3 C14.3284271,3 15,3.67157288 15,4.5 C15,5.32842712 14.3284271,6 13.5,6 C12.6715729,6 12,5.32842712 12,4.5 C12,3.67157288 12.6715729,3 13.5,3 Z" />
-                      </g>
-                    </svg>
-                  )}
-                  <div className="upload-action" data-aid="back-doc-gallery-text">Open Gallery</div>
-                </button>
-              </div>
-            </div>
-          )}
+              </KycUploadContainer>
+            </>
+          }
+          <div className="doc-upload-note-row" data-aid='doc-upload-note-row'>
+            <div className="upload-note" data-aid='upload-note-text'> How to take picture of your address proof? </div>
+            <WVClickableTextElement
+              color="secondary"
+              className="know-more-button"
+              onClick={onKnowMoreClick}
+            >
+              KNOW MORE
+            </WVClickableTextElement>
+          </div>
         </section>
       )}
     </Container>

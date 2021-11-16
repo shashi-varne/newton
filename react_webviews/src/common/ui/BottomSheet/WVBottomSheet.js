@@ -26,7 +26,7 @@ Example syntax:
 */
 
 import './WVBottomSheet.scss';
-import React from 'react';
+import React, { useCallback } from 'react';
 import 'react-circular-progressbar/dist/styles.css';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -48,14 +48,26 @@ const WVBottomSheet = ({
   children, // Allows for addition of any kind of content within the BottomSheet DialogContent box
   image, // Image to show on top right corner (Use require('path'))
   classes,
+  disableEscapeKeyDown, // MUI Dialog deprecated this flag, so created a custom one
+  disableBackdropClick, // MUI Dialog deprecated this flag, so created a custom one
   ...props // Any other props to be sent to Dialog
 }) => {
+
+  const handleOnClose = useCallback((event, reason) => {
+    if (reason === 'escapeKeyDown' && disableEscapeKeyDown) {
+      return;
+    } else if (reason === 'backdropClick' && disableBackdropClick) {
+      return;
+    }
+    return onClose(event, reason);
+  }, [onClose, disableEscapeKeyDown, disableBackdropClick]);
+
   return (
     <Dialog
       data-aid={`wv-bottomsheet-${dataAidSuffix}`}
       id="wv-bottomsheet"
       open={isOpen}
-      onClose={onClose}
+      onClose={handleOnClose}
       className={`wv-bottomsheet ${classes.container}`}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
@@ -78,15 +90,15 @@ const WVBottomSheet = ({
               </Subtitle>
             }
           </div>
-          <div className="wv-bc-right">
-            {image &&
+          {image &&
+            <div className="wv-bc-right">
               <Imgc
                 className={`wv-bcr-image ${classes.image}`}
                 alt=""
                 src={image}
               />
-            }
-          </div>
+            </div>
+          }
         </div>
         {children &&
           <div className="wv-bottomsheet-child-content">
@@ -104,23 +116,18 @@ const WVBottomSheet = ({
             Placed on top in a 'stacked'/'stackedOR' layout,
             left in a 'horizontal' layout
           */}
-          <WVButtonLayout.Button
-            title={button1Props.title}
-            type={button1Props.type}
-            {...button1Props}
-          />
+          <WVButtonLayout.Button {...button1Props} dataAidSuffix={dataAidSuffix}>
+            {button1Props.title}
+          </WVButtonLayout.Button>
           {buttonLayout === 'stackedOR' && <WVButtonLayout.ORDivider />}
           {/*
             Placed at the bottom in a 'stacked'/'stackedOR' layout,
             right in a 'horizontal' layout
           */}
           {!isEmpty(button2Props) &&
-            <WVButtonLayout.Button
-              dataAidSuffix={dataAidSuffix}
-              title={button2Props.title}
-              type={button2Props.type}
-              {...button2Props}
-            />
+            <WVButtonLayout.Button {...button2Props} dataAidSuffix={dataAidSuffix}>
+              {button2Props.title}
+            </WVButtonLayout.Button>
           }
         </WVButtonLayout>
       </DialogActions>
@@ -138,14 +145,18 @@ const Subtitle = ({ children, className, dataAidSuffix }) => {
 
 WVBottomSheet.propTypes = {
   isOpen: PropTypes.bool.isRequired,
+  disableEscapeKeyDown: PropTypes.bool.isRequired,
+  disableBackdropClick: PropTypes.bool.isRequired,
   onClose: PropTypes.func,
   buttonLayout: PropTypes.oneOf(['stacked', 'stackedOR', 'horizontal']),
   title: PropTypes.node,
   subtitle: PropTypes.node,
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 WVBottomSheet.defaultProps = {
+  disableEscapeKeyDown: false,
+  disableBackdropClick: false,
   onClose: () => {},
   buttonLayout: 'horizontal',
   button1Props: {

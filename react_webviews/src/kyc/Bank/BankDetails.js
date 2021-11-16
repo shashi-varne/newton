@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Container from "../common/Container";
 import { formatAmountInr, storageService, isEmpty } from "utils/validators";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
-import { STORAGE_CONSTANTS } from "../constants";
+import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import { getMyAccount } from "../common/api";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
@@ -19,18 +19,25 @@ const BankDetails = (props) => {
     props.history.goBack();
   }
   const [bank, setBank] = useState({});
+  const [buttonTitle, setButtonTitle] = useState("");
   const navigate = navigateFunc.bind(props);
 
   const handleClick = () => {
     sendEvents("next")
-    if (bank.status === "default") {
-      navigate(`/kyc/${kyc.kyc_status}/upload-documents`);
+    if(bank.bank_status === "submitted") {
+      navigate(`${PATHNAME_MAPPER.addBankVerify}${bank.bank_id}`);
     } else {
-      navigate(`/kyc/${kyc.kyc_status}/upload-documents`, {
-        searchParams: `${
-          getConfig().searchParams
-        }&additional=true&bank_id=${bank_id}`,
-      });
+      if (bank.status === "default") {
+        navigate(`/kyc/${kyc.kyc_status}/upload-documents`, {
+          state: { goBack: PATHNAME_MAPPER.bankList }
+        });
+      } else {
+        navigate(`/kyc/${kyc.kyc_status}/upload-documents`, {
+          searchParams: `${
+            getConfig().searchParams
+          }&additional=true&bank_id=${bank_id}`,
+        });
+      }
     }
   };
 
@@ -65,33 +72,40 @@ const BankDetails = (props) => {
     const bankData =
       banksInfo.find((obj) => obj.bank_id?.toString() === bank_id) || {};
     setBank(bankData);
+    const title =
+      bankData.bank_status === "rejected"
+        ? "RE-UPLOAD DOCUMENT"
+        : bankData.bank_status === "submitted"
+        ? "VERIFY BANK"
+        : "";
+    setButtonTitle(title);
     setShowLoader(false);
   };
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'my_account',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "add bank/mandate",
-        "primary_account": banks[0]?.bank_name || ""
-      }
+      event_name: "my_account",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "add bank/mandate",
+        primary_account: banks[0]?.bank_name || "",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container
       showSkelton={showLoader || isLoading}
       events={sendEvents("just_set_events")}
       hideInPageTitle
-      buttonTitle="RE-UPLOAD DOCUMENT"
+      buttonTitle={buttonTitle}
       handleClick={handleClick}
-      noFooter={bank.bank_status !== "rejected"}
+      noFooter={!buttonTitle}
       title="Bank accounts"
       data-aid='kyc-bank-details-screen'
     >

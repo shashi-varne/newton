@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import Input from "common/ui/Input";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
-import { PATHNAME_MAPPER } from "../../constants";
+import { NRI_ADDRESS_PROOF_OPTIONS, PATHNAME_MAPPER } from "../../constants";
 import { isEmpty, validateNumber } from "utils/validators";
 import {
   validateFields,
@@ -29,13 +29,7 @@ const NriAddressDetails1 = (props) => {
     title = "Edit foreign address details";
   }
 
-  const {kyc, isLoading} = useUserKycHook();
-
-  const ADDRESS_PROOF_OPTIONS = [
-    { name: "Driving license", value: "DL" },
-    { name: "Gas receipt", value: "UTILITY_BILL" },
-    { name: "Passbook", value: "LAT_BANK_PB" },
-  ];
+  const { kyc, isLoading } = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();
@@ -51,14 +45,14 @@ const NriAddressDetails1 = (props) => {
     let formData = {
       mobile_number: mobile_number,
       country_code: country_code,
-      address_doc_type: kyc.address_doc_type || "",
+      address_doc_type: kyc.nri_address_doc_type || "",
     };
     setFormData({ ...formData });
     setOldState({ ...formData });
   };
 
   const handleClick = () => {
-    sendEvents("next")
+    sendEvents("next");
     let keysToCheck = ["mobile_number", "address_doc_type"];
     let result = validateFields(form_data, keysToCheck);
     if (!result.canSubmit) {
@@ -81,7 +75,7 @@ const NriAddressDetails1 = (props) => {
     }
     let userkycDetails = { ...kyc };
     userkycDetails.nri_address.meta_data.mobile_number = mobile_number;
-    userkycDetails.nri_address.meta_data.address_doc_type =
+    userkycDetails.nri_address.meta_data.nri_address_doc_type =
       form_data.address_doc_type;
     saveNriAddressDetails1(userkycDetails);
   };
@@ -115,7 +109,7 @@ const NriAddressDetails1 = (props) => {
     if (name === "mobile_number" && value && !validateNumber(value)) return;
     let formData = { ...form_data };
     if (name === "address_doc_type")
-      formData[name] = ADDRESS_PROOF_OPTIONS[value].value;
+      formData[name] = NRI_ADDRESS_PROOF_OPTIONS[value].value;
     else formData[name] = value;
     if (!value && value !== 0) formData[`${name}_error`] = "This is required";
     else formData[`${name}_error`] = "";
@@ -123,21 +117,26 @@ const NriAddressDetails1 = (props) => {
   };
 
   const sendEvents = (userAction) => {
+    const addressProofMapper = {
+      'DL': 'driving_licence',
+      'UTILITY_BILL': 'utility_bill',
+      'LAT_BANK_PB': 'passbook'
+    }
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "nri_address_details_1",
-        "address_proof": form_data.address_doc_type,
-        "mobile_number": kyc.nri_address.meta_data.mobile_number ? "Indian" : "NRI"
-      }
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "nri_address_details_1",
+        doc_selected: form_data.address_doc_type ? addressProofMapper[form_data.address_doc_type] : "",
+        residential_status: kyc?.address?.meta_data?.is_nri ? "nri" : "indian",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container
@@ -165,6 +164,7 @@ const NriAddressDetails1 = (props) => {
             onChange={handleChange("mobile_number")}
             type="text"
             disabled={isApiRunning}
+            inputMode="numeric"
           />
           <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon
@@ -173,7 +173,7 @@ const NriAddressDetails1 = (props) => {
               width="40"
               label="Foreign Address proof:"
               class="address_doc_type"
-              options={ADDRESS_PROOF_OPTIONS}
+              options={NRI_ADDRESS_PROOF_OPTIONS}
               id="account_type"
               value={form_data.address_doc_type || ""}
               onChange={handleChange("address_doc_type")}

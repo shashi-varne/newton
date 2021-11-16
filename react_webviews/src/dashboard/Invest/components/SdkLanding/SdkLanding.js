@@ -14,6 +14,7 @@ import VerificationFailedDialog from '../../mini-components/VerificationFailedDi
 import KycStatusDialog from '../../mini-components/KycStatusDialog';
 import { nativeCallback } from '../../../../utils/native_callback';
 import { Imgc } from '../../../../common/ui/Imgc';
+import { isTradingEnabled } from '../../../../utils/functions';
 import TermsAndConditions from '../../mini-components/TermsAndConditionsDialog';
 import BankListOptions from '../../mini-components/BankListOptions';
 import Toast from '../../../../common/ui/Toast';
@@ -51,7 +52,8 @@ class SdkLanding extends Component {
       referral: '',
       dotLoader: false,
       openBottomSheet: false,
-      bottom_sheet_dialog_data: [],
+      bottom_sheet_dialog_data: {},
+      tradingEnabled: isTradingEnabled(),
       showTermsAndConditions: false,
       showBankList: false,
     };
@@ -119,7 +121,9 @@ class SdkLanding extends Component {
 
   addBank = () => {
     const userKyc = this.state.userKyc || {};
-    this.navigate(`/kyc/${userKyc.kyc_status}/bank-details`);
+    this.navigate(`/kyc/${userKyc.kyc_status}/bank-details`, {
+      state: { goBack: "/invest" }
+    });
   };
 
   updateDocument = () => {
@@ -137,15 +141,11 @@ class SdkLanding extends Component {
 
   handleKycStatus = () => {
     this.sendEvents("next", "kyc_bottom_sheet");
-    let { kycJourneyStatus } = this.state;
-    if (kycJourneyStatus === "submitted") {
-      this.closeKycStatusDialog();
-    } else if (kycJourneyStatus === "rejected") {
-      this.navigate("/kyc/upload/progress", {
-        state: {
-          fromState: "/",
-        },
-      });
+    let { modalData } = this.state;
+    if (modalData.nextState) {
+      this.navigate(modalData.nextState);
+    } else {
+      this.closeKycStatusDialog()
     }
   };
 
@@ -249,6 +249,7 @@ class SdkLanding extends Component {
       verificationFailed,
       openKycStatusDialog,
       modalData,
+      tradingEnabled,
       showTermsAndConditions,
       showTermsAndConditionsLoader,
       bankListOptions,
@@ -348,24 +349,26 @@ class SdkLanding extends Component {
                   }
                   el.isLoading = kycStatusLoader;
                   el.color = kycJourneyStatusMapperData?.color;
-                  const premiumKyc = kycJourneyStatus === 'ground_premium';
+                  const premiumKyc = kycJourneyStatus === 'ground_premium' && !tradingEnabled;
                   const kycDefaultSubTitle =
                     !kycJourneyStatusMapperData || kycJourneyStatus === 'ground_premium'
                       ? 'Create investment profile'
                       : '';
                   const kycSubTitle =
                     !isEmpty(kycJourneyStatusMapperData) && kycJourneyStatus !== 'ground_premium'
-                      ? kycJourneyStatusMapperData?.landing_text
+                      ? kycJourneyStatusMapperData?.landingText
                       : '';
                   if (premiumKyc) {
-                    el.title = 'KYC PREMIUM';
+                    el.title = "KYC PREMIUM";
                   }
                   if (kycDefaultSubTitle) {
                     el.subtitle = kycDefaultSubTitle;
                   }
                   if (kycSubTitle) {
                     el.subtitle = kycSubTitle;
-                    el.dot = true;
+                    if (el.color) {
+                      el.dot = true;
+                    }
                   }
                 }
 

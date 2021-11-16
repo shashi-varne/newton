@@ -7,14 +7,96 @@
     padding-bottom: 20px;
     background: #f1f1f1;
 
+    .my-acct-details{
+      padding: 20px;
+      background-color: white;
+      color: var(--dark);
+      .my-acct-user-name{
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 24px;
+        margin-bottom: 10px;
+      }
+      .my-acct-user-auth{
+        font-weight: 500;
+        margin-bottom: 5px;
+        font-size: 13px;
+        line-height: 21px;
+      }
+      .my-acct-user-details{
+        color: var(--steelgrey);
+        margin-bottom: 5px;
+      }
+
+      .my-acct-tag{
+        color: var(--secondary-green);
+        background-color: white;
+        float: right;
+        margin-right: 15px;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 15px;
+        cursor: pointer;
+      }
+
+      .my-acct-verified-tag{
+        background-color: var(--secondary-green);
+        color: white;
+        border-radius: 100px;
+        height: 16px;
+        font-size: 10px;
+        font-weight: 500;
+        width: 70px;
+        text-align: center;
+        padding: 1px;
+      }
+    }
+
     .account {
       background-color: white;
 
       .account-head-title {
         padding: 20px 10px 10px 20px;
         font-weight: 600;
-        color: var(--default);
+        color: var(--gunmetal);
         font-size: 16px;
+      }
+
+      .ma-kir-title {
+        font-size: 10px;
+        letter-spacing: 1px;
+        padding-top: 0;
+      }
+
+      .my-account-investment-card {
+        display: flex;
+        align-items: center;
+        padding: 0 20px 20px 20px;
+
+        .maic-content {
+          margin-right: 30px;
+          min-width: 120px;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+
+          .maic-title {
+            color: var(--gunmetal);
+            line-height: 21px;
+            font-size: 13px;
+            font-weight: 500;
+          }
+
+          .maic-title-disable {
+            color: var(--steelgrey);
+          }
+
+          .maic-subtitle {
+            color: var(--steelgrey);
+            line-height: 8px;
+            font-size: 8px;
+          }
+        }
       }
 
       .account-options {
@@ -24,10 +106,19 @@
         cursor: pointer;
         display: flex;
         align-items: center;
-        color: #333333;
-        img {
-          width: 25px;
-          margin-right: 15px;
+        color: var(--default);
+        // img {
+        //   width: 25px;
+        //   margin-right: 15px;
+        // }
+        .alert-icn {
+          width: 30px !important;
+          border: 1px solid red;
+        }
+        .my-imgc {
+          width: 25px !important;
+          min-height: 30px;
+          margin-right: 15px !important;
           margin-top: -3px;
         }
         .pending {

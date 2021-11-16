@@ -2,6 +2,7 @@ import React from 'react'
 import { nativeCallback } from '../../utils/native_callback';
 import { getConfig, navigate as navigateFunc } from 'utils/functions'
 import Container from '../common/Container'
+import { Imgc } from '../../common/ui/Imgc';
 
 import "./commonStyles.scss";
 
@@ -18,18 +19,18 @@ const Intro = (props) => {
   
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "upload_docs_intro"
-      }
+      event_name: "KYC_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "upload_docs_intro",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container
@@ -42,7 +43,7 @@ const Intro = (props) => {
     >
       <section id="kyc-upload-intro" data-aid='kyc-upload-intro'>
         <div className="banner" data-aid='kyc-banner'>
-          <img src={require(`assets/${productName}/upload_doc_banner.svg`)} alt="" />
+          <Imgc src={require(`assets/${productName}/upload_doc_banner.svg`)} className="kyc-ui-icon" alt="" />
         </div>
         <div className="intro" data-aid='kyc-intro'>
           Securely upload required documents to verify personal and address

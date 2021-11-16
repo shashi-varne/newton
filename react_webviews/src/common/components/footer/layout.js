@@ -4,8 +4,8 @@ import Button from '../../../common/ui/Button';
 import {
   inrFormatDecimal, isFunction
 } from '../../../utils/validators';
+import { isEmpty } from 'lodash';
 import DotDotLoader from '../../../common/ui/DotDotLoader';
-
 import down_arrow from 'assets/down_arrow.svg';
 import up_arrow from 'assets/up_arrow.svg';
 import SVG from 'react-inlinesvg';
@@ -249,7 +249,6 @@ export class FooterLayoutBase extends Component {
     );
   };
 
-
   WithProviderLayoutGold = (props) => {
     const leftArrowMapper = {
       'up': up_arrow,
@@ -299,12 +298,16 @@ export class FooterLayoutBase extends Component {
     }
     return(
       <WVButtonLayout layout="stacked">
-        <WVButtonLayout.Button
-          {...buttonOneProps}
-        />
-        <WVButtonLayout.Button
-          {...buttonTwoProps}
-        />
+        {!isEmpty(buttonOneProps) &&
+          <WVButtonLayout.Button {...buttonOneProps}>
+            {buttonOneProps.title}
+          </WVButtonLayout.Button>
+        }
+        {!isEmpty(buttonTwoProps) &&
+          <WVButtonLayout.Button {...buttonTwoProps}>
+            {buttonTwoProps.title}
+          </WVButtonLayout.Button>
+        }
       </WVButtonLayout>
     )
   }

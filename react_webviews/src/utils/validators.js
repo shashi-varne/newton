@@ -187,7 +187,7 @@ export function isNumberKey(evt) {
 
 export function validatePan(string) {
   // eslint-disable-next-line
-  let rule = /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/;
+  let rule = /^[a-zA-Z]{3}P[a-zA-Z][\d]{4}[a-zA-Z]$/;
   return rule.test(string);
 }
 
@@ -472,7 +472,11 @@ export function isValidMonthYear(input) {
 }
 
 export function validateName(string) {
-  return string.trim().indexOf(' ') !== -1;
+  if (!string) {
+    return false;
+  }
+  // Validate alphabets & space at 0th position
+  return string.match(/^(?![\s])[a-z A-Z]+$/);
 }
 
 export function capitalize(string) {
@@ -1071,13 +1075,11 @@ export function formatAmountToNumber(value){
 
 export function disableBodyTouch(disableTouch) {
   if(disableTouch) {
-    document.body.style.overflow = 'hidden';
-    document.body.style.touchAction = 'none';
-    document.body.style.pointerEvents = 'none';
+    document.body.classList.add('disable-body-touch');
+    document.body.classList.remove('enable-body-touch');
   } else {
-    document.body.style.overflow = 'auto';
-    document.body.style.touchAction = 'unset';
-    document.body.style.pointerEvents = 'unset';
+    document.body.classList.remove('disable-body-touch');
+    document.body.classList.add('enable-body-touch');
   }
 }
 
@@ -1092,18 +1094,21 @@ export function disableBodyOverflow(enable) {
 export function disableContainerTouch(enable) {
 
   let Container = document.getElementsByClassName('Container') ? document.getElementsByClassName('Container')[0] : '';
-
   if(!Container) {
     return;
   }
   if(!enable) {
-    Container.style.overflow = 'hidden';
-    Container.style.touchAction = 'none';
-    Container.style.pointerEvents = 'none';
+    Container.classList.add('disable-body-touch');
+    Container.classList.remove('enable-body-touch');
+    // Container.style.overflow = 'hidden';
+    // Container.style.touchAction = 'none';
+    // Container.style.pointerEvents = 'none';
   } else {
-    Container.style.overflow = 'auto';
-    Container.style.touchAction = 'unset';
-    Container.style.pointerEvents = 'unset';
+    Container.classList.remove('disable-body-touch');
+    Container.classList.add('enable-body-touch');
+    // Container.style.overflow = 'auto';
+    // Container.style.touchAction = 'unset';
+    // Container.style.pointerEvents = 'unset';
   }
 }
 
@@ -1188,3 +1193,18 @@ export function Casesensitivity(str){
 export function sortArrayOfObjectsByTime(array, key){
   return array.sort((a,b) => new Date(b[key]) - new Date(a[key])) //desc
 }
+
+export function formatMobileNumber(value) {  // Example:  0000012345 -> +91 0000 012 345
+  if (isEmpty(value) || value.length < 10) return value;
+  let number = "+91" + value.slice(-10);
+  return number.replace(/(\d{2})(\d{4})(\d{3})(\d{3})/, '$1 $2 $3 $4');
+}
+
+export function splitMobileNumberFromContryCode(mobileNumber) {
+  let numberVal = mobileNumber?.split('|');
+  if (numberVal.length > 1) {
+      return numberVal[1];
+  } else {
+      return [numberVal];
+  }
+};

@@ -1,0 +1,43 @@
+<svg width="110" height="84" viewBox="0 0 110 84" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="kyc">
+<g id="kyc_icn">
+<mask id="mask0" mask-type="alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="110" height="84">
+<rect id="Mask" width="110" height="84" fill="white"/>
+</mask>
+<g mask="url(#mask0)">
+<g id="kyc_icn_2">
+<g id="kyc_icn_3">
+<path id="Oval" opacity="0.253023" d="M53.3326 -1.00008C42.3326 -1.00008 23.3326 -1.00008 19.3326 9.99992C15.3326 20.9999 48.5907 20.3548 56.3326 28.0967C64.0746 35.8386 76.5575 34.9999 88.3327 34.9999C100.108 34.9999 97.8765 47.978 107.333 45.9999C116.789 44.0218 108.333 34.1094 111.333 28.0967C111.333 22.4916 111.333 -1.00008 111.333 -1.00008C111.333 -1.00008 71.8326 -1.00008 53.3326 -1.00008Z" fill="#7F66BF"/>
+<path id="Oval_2" opacity="0.22926" d="M56.7141 70.5669C17.4504 56.6065 -8.39233e-05 88.0174 -8.39233e-05 70.5669C-8.39233e-05 53.1164 20.9405 44.3911 31.4108 33.9208C41.8811 23.4505 37.299 6 53.224 6C69.1489 6 61.1258 15.7821 78.5272 23.4505C95.9286 31.1189 113.428 11.2352 113.428 33.9208C113.428 56.6065 95.9777 84.5273 56.7141 70.5669Z" fill="#7F66BF"/>
+</g>
+<g id="file">
+<path id="base" opacity="0.23" fill-rule="evenodd" clip-rule="evenodd" d="M40.813 17.8108H79.8464V66.4584H40.813V17.8108Z" fill="#5F40AF"/>
+<g id="base_2" filter="url(#filter0_d)">
+<rect x="40" y="17" width="39.0334" height="48.6476" fill="white"/>
+</g>
+<path id="base_3" fill-rule="evenodd" clip-rule="evenodd" d="M62.7695 59.891C62.7695 59.6671 62.951 59.4856 63.1749 59.4856H72.9357C73.1596 59.4856 73.3411 59.6671 73.3411 59.891C73.3411 60.1149 73.1596 60.2964 72.9357 60.2964H63.1749C62.951 60.2964 62.7695 60.1149 62.7695 59.891Z" fill="#E8E0FF"/>
+<rect id="base_4" x="53.8242" y="59.4856" width="7.31876" height="0.810793" rx="0.405397" fill="#E8E0FF"/>
+<rect id="base_5" x="45.6924" y="59.4856" width="6.50556" height="0.810793" rx="0.405397" fill="#E8E0FF"/>
+<rect id="base_6" x="55.4507" y="55.4316" width="19.5167" height="0.810793" rx="0.405397" fill="#E8E0FF"/>
+<rect id="base_7" x="45.6924" y="55.4316" width="6.50556" height="0.810793" rx="0.405397" fill="#E8E0FF"/>
+<g id="Group">
+<path id="Oval 2" d="M70.0593 48C70.0593 42.4772 65.5688 38 60.0296 38C54.4904 38 50 42.4772 50 48" stroke="#7F66BF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Oval 2_2" fill-rule="evenodd" clip-rule="evenodd" d="M60.0119 33C62.2275 33 64.0237 31.2091 64.0237 29C64.0237 26.7909 62.2275 25 60.0119 25C57.7962 25 56 26.7909 56 29C56 31.2091 57.7962 33 60.0119 33Z" stroke="#7F66BF" stroke-width="2"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<filter id="filter0_d" x="39" y="17" width="41.0334" height="50.6476" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="1"/>
+<feGaussianBlur stdDeviation="0.5"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0440444 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+</filter>
+</defs>
+</svg>

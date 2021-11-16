@@ -181,23 +181,18 @@ const ChangeAddressDetails2 = (props) => {
     : addressDocType
     try {
       setIsApiRunning('button')
-      let result, response
+      let result;
       if (onlyFrontDocRequired) {
-        response = await upload(frontDoc, type, {
+        result = await upload(frontDoc, type, {
           addressProofKey: addressKey,
         })
       } else {
-        response = await upload(file, type, {
+        result = await upload(file, type, {
           addressProofKey: addressKey,
         })
       }
-      if(response.status_code === 200) {
-        result = response.result;
-        updateKyc(result.kyc)
-        navigate('/my-account')
-      } else {
-        throw new Error(response?.result?.error || response?.result?.message || "Something went wrong!")
-      }
+      updateKyc(result.kyc)
+      navigate('/my-account')
     } catch (err) {
       toast(err?.message)
     } finally {
@@ -221,21 +216,21 @@ const ChangeAddressDetails2 = (props) => {
 
   const sendEvents = (userAction, source, docSide) => {
     let eventObj = {
-      "event_name": 'my_account',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "upload address proof",
-        "picture": source || "",
-        "doc_side": docSide || "",
-        "doc_type": addressProof || ""
-      }
+      event_name: "my_account",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "upload address proof",
+        picture: source || "",
+        doc_side: docSide || "",
+        doc_type: addressProof || "",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container

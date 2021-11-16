@@ -9,6 +9,14 @@ export const API_CONSTANTS = {
   getBankStatus: '/api/account/penny-verification-status-check',
   getCVL: '/api/kyc/updatecvl/mine',
   getMerge: '/api/user/account/merge?pan_number=',
+  getKRAForm: '/api/kyc/formfiller2/kraformfiller/get_kraform',
+  sendOtp: '/api/communication/send/otp',
+  resendOtp: '/api/communication/resend/otp',
+  verifyOtp: '/api/communication/verify/otp',
+  socialAuth: '/api/communication',
+  sendContactConsent: '/api/communication/contact/consent',
+  authCheck: '/api/iam/auth/check',
+  goldUserInfo: '/api/gold/user/account',
 }
 
 export const PATHNAME_MAPPER = {
@@ -53,6 +61,14 @@ export const PATHNAME_MAPPER = {
   uploadNriAddress: '/kyc/upload/address-nri',
   uploadSelfie: '/kyc/upload/selfie',
   uploadSelfieVideo: '/kyc/upload/selfie_video',
+  uploadFnOIncomeProof: '/kyc/upload/fno-income-proof',
+  tradingExperience: '/kyc/trading-experience',
+  nriError: '/kyc/nri-error',
+  communicationDetails: '/kyc/communication-details',
+  selfieSteps: '/kyc/upload/selfie-steps',
+  stocksStatus: '/kyc/stocks-status',
+  tradingInfo: '/kyc/trading-info',
+  documentVerification: '/kyc/document-verification',
 }
 
 export const STORAGE_CONSTANTS = {
@@ -81,27 +97,27 @@ export const NRI_DOCUMENTS_MAPPER = {
 
 export const INCOME_OPTIONS = [
   {
-    name: "Below 1L",
+    name: "Below 1 lakh",
     value: "BELOW 1L",
   },
   {
-    name: "1-5L",
+    name: "1-5 lakhs",
     value: "1-5L",
   },
   {
-    name: "5-10L",
+    name: "5-10 lakhs",
     value: "5-10L",
   },
   {
-    name: "10-25L",
+    name: "10-25 lakhs",
     value: "10-25L",
   },
   {
-    name: "25-100L",
+    name: "25-100 lakhs",
     value: "25-100L",
   },
   {
-    name: ">100L",
+    name: ">100 lakhs",
     value: ">100L",
   },
 ];
@@ -112,8 +128,8 @@ export const RESIDENTIAL_OPTIONS = [
     value: 'INDIAN',
   },
   {
-    name: 'Non indian',
-    value: 'NON INDIAN',
+    name: 'NRI',
+    value: 'NRI',
   },
 ];
 
@@ -143,17 +159,22 @@ export const RELATIONSHIP_OPTIONS = [
 export const REPORT_CARD_DETAILS = [
   {
     key: "personal",
-    title: "Personal",
+    title: "Personal details",
+    click_image: "plus_icon.svg",
+  },
+  {
+    key: "professional",
+    title: "Professional details",
     click_image: "plus_icon.svg",
   },
   {
     key: "address",
-    title: "Address",
+    title: "Address details",
     click_image: "plus_icon.svg",
   },
   {
     key: "nominee",
-    title: "Nominee",
+    title: "Nominee details",
     click_image: "plus_icon.svg",
   },
   {
@@ -174,26 +195,22 @@ export const bankAccountTypeOptions = (isNri) => {
     account_types = [
       {
         value: "CA",
-        name: "Current Account",
-      },
-      {
-        value: "CC",
-        name: "Cash Credit",
+        name: "Current account",
       },
       {
         value: "SB",
-        name: "Savings Account",
+        name: "Savings account",
       },
     ];
   } else {
     account_types = [
       {
         value: "SB-NRE",
-        name: "Non Resident External Account (NRE)",
+        name: "Non resident external account (NRE)",
       },
       {
         value: "SB-NRO",
-        name: "Non Resident Ordinary Account (NRO)",
+        name: "Non resident ordinary account (NRO)",
       },
     ];
   }
@@ -201,10 +218,17 @@ export const bankAccountTypeOptions = (isNri) => {
   return account_types;
 };
 
+export const BANK_ACCOUNT_TYPES_NOMENCLATURE = {
+  "SB": "Savings",
+  "CA": "Current",
+  "SB-NRE": "Savings NRE",
+  "SB-NRO": "Savings NRO"
+}
+
 export const GENDER_OPTIONS = [
   { name: "Male", value: "MALE" },
   { name: "Female", value: "FEMALE" },
-  { name: "Transgender", value: "TRANSGENDER" },
+  { name: "Other", value: "TRANSGENDER" },
 ];
 
 export const MARITAL_STATUS_OPTIONS = [
@@ -214,10 +238,12 @@ export const MARITAL_STATUS_OPTIONS = [
 
 export const OCCUPATION_TYPE_OPTIONS = [
   { name: "Salaried", value: "SALARIED" },
-  { name: "Self employed", value: "SELF EMPLOYED" },
+  { name: "Public Sector", value: "PUBLIC SECTOR" },
+  { name: "Housewife", value: "HOUSEWIFE" },
+  { name: "Student", value: "STUDENT" },
   { name: "Business", value: "BUSINESS" },
-  { name: "Agriculturist", value: "AGRICULTURIST" },
   { name: "Professional", value: "PROFESSIONAL" },
+  { name: "Private sector", value: "PRIVATE SECTOR" },
   { name: "Others", value: "OTHERS" },
 ];
 
@@ -259,14 +285,52 @@ export const ADDRESS_PROOF_OPTIONS = [
 
 export const NRI_ADDRESS_PROOF_OPTIONS = [
   { name: "Driving license", value: "DL" },
-  { name: "Passport", value: "PASSPORT" },
-  { name: "Passport", value: "PASSPORT" } 
+  { name: "Gas receipt", value: "UTILITY_BILL" },
+  { name: "Passbook", value: "LAT_BANK_PB" } 
 ]
 
 export const DL_DOCS = [
-  {name: 'Aadhaar Card', icon: 'ic_aadhaar_card'},
-  {name: 'Pan Card', icon: 'ic_pan_card'},
-  {name: 'Address Details', icon: 'ic_address_details'}
+  {name: 'Aadhaar card', icon: 'ic_aadhaar_card'},
+  {name: 'PAN card', icon: 'ic_pan_card'},
+  {name: 'Address details', icon: 'ic_address_details'}
 ]
 
+export const companyDetails = {
+  NAME: "Finwizard technology Private Ltd.",
+  ADDRESS: "Queens Paradise, No. 16/1, 1st Floor, Curve Rd, Shivaji Nagar, Bengaluru, Karnataka 560051"
+}
+
 export const SUPPORTED_IMAGE_TYPES = ['jpeg', 'jpg', 'png', 'bmp'];
+
+export const eqkycDocsGroupMapper = {
+  "equity_pan": {
+    title: "PAN details",
+    doc: "PAN card"
+  },
+  "sign": {
+    title: "Signature",
+    doc: "Signature"
+  },
+  "equity_identification": {
+    title: "Personal details",
+    doc: "Selfie"
+  },
+  "address": {
+    title: "Address details",
+    doc: ""
+  },
+  "ipvvideo": {
+    title: "IPV video",
+    doc: "IPV video"
+  },
+  "bank": {
+    title: "Bank account",
+    doc: ""
+  },
+  "nri_address": {
+    title: "NRI Address Details",
+    doc: ""
+  }
+};
+
+export const PINCODE_LENGTH = 6;

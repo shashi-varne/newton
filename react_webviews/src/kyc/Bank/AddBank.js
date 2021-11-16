@@ -2,30 +2,35 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import { validateNumber, isEmpty } from "utils/validators";
 import Input from "common/ui/Input";
-import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
+import DropDownNew from '../../common/ui/DropDownNew';
 import {
   bankAccountTypeOptions,
   PATHNAME_MAPPER,
   getIfscCodeError,
+  STORAGE_CONSTANTS,
   BANK_IFSC_CODES,
 } from "../constants";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import Alert from "../mini-components/Alert";
 import { validateFields } from "../common/functions";
 import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
+import PennyFailedDialog from "../mini-components/PennyFailedDialog";
 import { getIFSC, addAdditionalBank } from "../common/api";
 import toast from "../../common/ui/Toast";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
+import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
+import { storageService } from "../../utils/validators";
 
 const AddBank = (props) => {
   const genericErrorMessage = "Something Went wrong!";
   const code = getConfig().code;
   const navigate = navigateFunc.bind(props);
   const [isPennyExhausted, setIsPennyExhausted] = useState(false);
-  const bank_id = props.location.state?.bank_id || "";
+  const [isPennyFailed, setIsPennyFailed] = useState(false);
+  const stateParams = props.location.state || {};
+  const bank_id = stateParams.bank_id || "";
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const [bankData, setBankData] = useState({
@@ -38,11 +43,11 @@ const AddBank = (props) => {
   const [accountTypes, setAccountTypes] = useState([]);
   const [name, setName] = useState("");
   const [note, setNote] = useState({
-    info_text:
+    message:
       "As per SEBI, it is mandatory for mutual fund investors to provide their own bank account details.",
     variant: "info",
   });
-
+  const [ifscDisabled, setIfscDisabled] = useState(false);
   const {kyc, isLoading} = useUserKycHook();
 
   useEffect(() => {
@@ -55,30 +60,34 @@ const AddBank = (props) => {
     setName(kyc.pan.meta_data.name || "");
     let data = { ...bankData };
     if (bank_id) {
-      data =
-        kyc.additional_approved_banks.find((obj) => obj.bank_id === bank_id) ||
-        {};
+      data = kyc.additional_approved_banks.find((obj) => obj.bank_id === bank_id) || {};
+
       data.c_account_number = data.account_number;
       if (data.user_rejection_attempts === 0) {
         setIsPennyExhausted(true);
       } else if (data.user_rejection_attempts === 2) {
         setNote({
-          info_text:
+          message:
             "2 more attempts remaining! Please enter your correct account details to proceed",
-          variant: "attention",
+          variant: "error",
         });
       } else if (data.user_rejection_attempts === 1) {
         setNote({
-          info_text:
+          message:
             "Just 1 attempt is remaining! Please enter your correct account details to proceed",
-          variant: "attention",
+          variant: "error",
         });
       }
+    }
+    const accountTypeOptions = bankAccountTypeOptions(kyc?.address?.meta_data?.is_nri || "");
+    const selectedAccountType = accountTypeOptions.filter(el => el.value === data.account_type);
+    if(isEmpty(selectedAccountType)) {
+      data.account_type = "";
     }
     setBankData({ ...data });
     setBankIcon(data.ifsc_image || '')
     setAccountTypes([
-      ...bankAccountTypeOptions(kyc?.address?.meta_data?.is_nri || ""),
+      ...accountTypeOptions,
     ]);
   };
 
@@ -137,10 +146,19 @@ const AddBank = (props) => {
         toast("Congratulations!, new account added succesfully");
         navigate(PATHNAME_MAPPER.bankList);
       } else {
-        navigate(`${PATHNAME_MAPPER.addBankVerify}${result.bank.bank_id}`);
+        navigate(`${PATHNAME_MAPPER.addBankVerify}${result.bank.bank_id}`, {
+          state: {
+            goBackToAddBank: true
+          }
+        });
       }
     } catch (err) {
-      toast(err.message || genericErrorMessage);
+      if ((kyc?.bank.meta_data_status === "submitted" && kyc?.bank.meta_data.bank_status === "pd_triggered") ||
+        (kyc?.bank.meta_data_status === "rejected" && kyc?.bank.meta_data.bank_status === "rejected")) {
+          setIsPennyFailed(true);
+      } else {
+        toast(err.message || genericErrorMessage);
+      }
     } finally {
       setIsApiRunning(false);
     }
@@ -151,11 +169,14 @@ const AddBank = (props) => {
 
     if (name === "ifsc_code" && value && value.length > 11) return;
 
-    if (name.includes("account_number") && value && !validateNumber(value))
+    if (name.includes("account_number") && value && (!validateNumber(value) || value.length > 16))
       return;
 
     let formData = Object.assign({}, form_data);
     let bank = Object.assign({}, bankData);
+    if(name === "ifsc_code") {
+      value = value.toUpperCase();
+    }
     bank[name] = value;
     if (!value) {
       formData[`${name}_error`] = "This is required";
@@ -182,12 +203,14 @@ const AddBank = (props) => {
     let bank = Object.assign({}, bankData);
     let bankIcon = "";
     if (!BANK_IFSC_CODES[code] || bankData.ifsc_code.toUpperCase().startsWith(BANK_IFSC_CODES[code])) {
-      setIsApiRunning("button");
+      setIfscDisabled(true);
       try {
         const result = (await getIFSC(bankData.ifsc_code)) || [];
         if (result && result.length > 0) {
           const data = result[0] || {};
           formData.ifsc_code_error = "";
+          bank.ifsc_details = data;
+          bank.bank_code = data.bank_code;
           bank.branch_name = data.branch;
           bank.bank_name = data.bank;
           bankIcon = data.image || "";
@@ -200,7 +223,7 @@ const AddBank = (props) => {
       } catch (err) {
         console.log(err);
       } finally {
-        setIsApiRunning(false);
+        setIfscDisabled(false);
       }
     } else {
       bank.branch_name = "";
@@ -212,16 +235,28 @@ const AddBank = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'my_account',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "new bank details",
-      }
+      event_name: "my_account",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "new bank details",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
+    }
+  };
+
+  const checkBankDetails = () => {
+    setIsPennyFailed(false);
+  };
+
+  const goBack = () => {
+    if(stateParams.goBack === "exit" && storageService().getBoolean(STORAGE_CONSTANTS.NATIVE)) {
+      nativeCallback({ action: "exit_web"})
+    } else {
+      navigate(PATHNAME_MAPPER.bankList)
     }
   }
 
@@ -235,19 +270,22 @@ const AddBank = (props) => {
       handleClick={handleClick}
       title="Enter bank account details"
       data-aid='kyc-add-bank-screen'
+      headerData={{ goBack }}
     >
       <div className="kyc-approved-bank" data-aid='kyc-approved-bank-page'>
         {!isLoading && (
           <>
-            <Alert
-              variant={note.variant}
-              title="Note"
-              message={note.info_text}
+            <WVInfoBubble
+              type={note.variant}
+              hasTitle
+              customTitle="Note"
               dataAid='kyc-addbank-alertbox'
-            />
+            >
+              {note.message}
+            </WVInfoBubble>
             <main data-aid='kyc-approved-bank'>
               <Input
-                label="Account Holder name"
+                label="Account holder name"
                 class="input"
                 value={name || ""}
                 error={form_data.name_error ? true : false}
@@ -258,7 +296,7 @@ const AddBank = (props) => {
                 id="name"
               />
               <TextField
-                label="IFSC Code"
+                label="IFSC code"
                 id="ifsc_code"
                 className="input"
                 value={bankData.ifsc_code}
@@ -279,10 +317,10 @@ const AddBank = (props) => {
                     </>
                   ),
                 }}
-                disabled={isApiRunning}
+                disabled={isApiRunning || ifscDisabled}
               />
               <Input
-                label="Account Number"
+                label="Account number"
                 class="input"
                 value={bankData.account_number}
                 error={form_data.account_number_error ? true : false}
@@ -294,31 +332,44 @@ const AddBank = (props) => {
                 id="account_number"
                 disabled={isApiRunning}
               />
-              <Input
-                label="Confirm Account Number"
-                class="input"
+              <TextField
+                label="Re-enter account number"
+                className="input"
                 value={bankData.c_account_number}
                 error={form_data.c_account_number_error ? true : false}
                 helperText={form_data.c_account_number_error || ""}
                 onChange={handleChange("c_account_number")}
-                maxLength={16}
-                inputMode="numeric"
-                type="text"
-                id="c_account_number"
+                type="number"
+                InputProps={{
+                  endAdornment: (
+                    <>
+                      {bankData.account_number && bankData.account_number === bankData.c_account_number && (
+                        <InputAdornment position="end">
+                          <img className="kbd-can-check-icon" alt="" src={require(`assets/completed_step.svg`)} />
+                        </InputAdornment>
+                      )}
+                    </>
+                  ),
+                }}
+                // eslint-disable-next-line
+                inputProps={{
+                  inputMode: "numeric"
+                }}
                 disabled={isApiRunning}
               />
               <div className="input" data-aid='kyc-dropdown-withouticon'>
-                <DropdownWithoutIcon
+                <DropDownNew
                   error={form_data.account_type_error ? true : false}
                   helperText={form_data.account_type_error}
                   options={accountTypes}
                   id="account_type"
-                  label="Account Type"
+                  label="Account type"
                   isAOB={true}
                   value={bankData.account_type || ""}
                   name="account_type"
                   onChange={handleChange("account_type")}
                   disabled={isApiRunning}
+                  disableCaseSensitivity={true}
                 />
               </div>
             </main>
@@ -329,6 +380,13 @@ const AddBank = (props) => {
             isOpen={isPennyExhausted}
             redirect={redirect}
             uploadDocuments={uploadDocuments}
+          />
+        )}
+        {isPennyFailed && (
+          <PennyFailedDialog
+          isOpen={isPennyFailed}
+          uploadDocuments={uploadDocuments}
+          checkBankDetails={checkBankDetails}
           />
         )}
       </div>

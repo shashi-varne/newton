@@ -34,6 +34,7 @@ body[data-device="web"] .Header {
 }
 body[data-device="web"] .Footer {
   max-width: fit-content;
+  max-width: -moz-fit-content;
   position: relative !important;
   margin: 0 auto;
   margin-bottom: 20px;

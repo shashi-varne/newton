@@ -4,7 +4,7 @@ import Toast from "../../common/ui/Toast";
 import { isEmpty } from "utils/validators";
 import { getPinCodeData, submit } from "../common/api";
 import Container from "../common/Container";
-import { DOCUMENTS_MAPPER } from "../constants";
+import { DOCUMENTS_MAPPER, PATHNAME_MAPPER, PINCODE_LENGTH } from "../constants";
 import {
   compareObjects,
   validateFields,
@@ -75,17 +75,14 @@ const AddressDetails2 = (props) => {
           nomination: userKycDetails?.nomination?.meta_data,
         },
       };
-      userKycDetails.nomination.meta_data.nominee_address.state =
-        form_data.state;
-      userKycDetails.nomination.meta_data.nominee_address.city = form_data.city;
-      userKycDetails.nomination.meta_data.nominee_address.pincode =
-        form_data.pincode;
-      userKycDetails.nomination.meta_data.nominee_address.addressline =
-        form_data.addressline;
+      let { nominee_address } = userKycDetails.nomination.meta_data;
+      nominee_address.state = form_data.state;
+      nominee_address.city = form_data.city;
+      nominee_address.pincode = form_data.pincode;
+      nominee_address.addressline = form_data.addressline;
+      item.kyc.nomination.address = nominee_address;
       userKycDetails.nomination.meta_data.country = form_data.country;
-      const nomination_address =
-        userKycDetails.nomination.meta_data.nominee_address;
-      item.kyc.nomination.address = nomination_address;
+
       setIsApiRunning("button");
       await submit(item);
       handleNavigation();
@@ -98,27 +95,28 @@ const AddressDetails2 = (props) => {
 
   const handleNavigation = () => {
     if (backToJourney !== null) {
-      navigate("/kyc/upload/address");
+      navigate(PATHNAME_MAPPER.uploadAddress);
     } else {
       if (kyc?.address?.meta_data?.is_nri) {
-        navigate("/kyc/nri-address-details1", {
-          isEdit,
+        navigate(PATHNAME_MAPPER.nriAddressDetails1, {
+          state: {
+            isEdit,
+          }
         });
       } else {
-        navigate("/kyc/journey");
+        navigate(PATHNAME_MAPPER.journey);
       }
     }
   };
 
   const handleChange = (event) => {
-    const name = event.target.name;
-    const value = event.target.value;
-    if (
-      name === "pincode" &&
-      value &&
-      (value.length > 6 || !validateNumber(value))
-    )
-      return;
+    const target = event.target;
+    const name = target.name;
+    const value = target.value;
+    const maxLength = target.maxLength;
+    if (name === "pincode" && value && !validateNumber(value)) return;
+    if (value && maxLength && value.length > maxLength) return;
+    if(value && name === "addressline" && value.indexOf(" ") === 0) return;
     let formData = { ...form_data };
     formData[name] = value;
     if (!value) {
@@ -146,7 +144,7 @@ const AddressDetails2 = (props) => {
   };
 
   useEffect(() => {
-    if (form_data.pincode.length === 6) {
+    if (form_data.pincode.length === PINCODE_LENGTH) {
       fetchPincodeData();
     }
   }, [form_data.pincode]);
@@ -184,22 +182,27 @@ const AddressDetails2 = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "address_details_2",
-        "pincode_entered":  form_data.pincode ? "yes" : "no",
-        "address_entered":  form_data.addressline ? "yes" : "no",
-        "nominee_pincode_entered":  form_data.pincode ? "yes" : "no",
-        "nominee_address_entered":  form_data.addressline ? "yes" : "no"
-        }
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "address_details_2",
+        pincode_entered: form_data.pincode ? "yes" : "no",
+        address_entered: form_data.addressline ? "yes" : "no",
+        nominee_pincode_entered: kyc?.nomination?.meta_data?.pincode
+          ? "yes"
+          : "no",
+        nominee_address_entered: kyc?.nomination?.meta_data?.addressline
+          ? "yes"
+          : "no",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
+  
   return (
     <Container
       events={sendEvents("just_set_events")}
@@ -224,8 +227,15 @@ const AddressDetails2 = (props) => {
             value={form_data.pincode}
             onChange={handleChange}
             margin="normal"
-            helperText={form_data.pincode_error || ""}
+            helperText={
+              form_data.pincode_error ||
+              `Please enter your ${PINCODE_LENGTH}-digit pincode`
+            }
             error={form_data.pincode_error ? true : false}
+            inputProps={{
+              inputMode:"numeric",
+              maxLength: PINCODE_LENGTH,
+            }}
           /> 
           <TextField
             label="Address"
@@ -237,6 +247,9 @@ const AddressDetails2 = (props) => {
             onChange={handleChange}
             margin="normal"
             multiline
+            inputProps={{
+              maxLength: 150
+            }}
           />
           <TextField
             label="City"

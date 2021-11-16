@@ -23,14 +23,12 @@ import CompliantPersonalDetails3 from "./Compliant/PersonalDetails3";
 import CompliantPersonalDetails4 from "./Compliant/PersonalDetails4";
 import ConfirmPan from "./Compliant/ConfirmPan";
 import KycComplete from "./Compliant/Complete";
-import CompliantReport from "./Compliant/Report";
-import Verify from "./Compliant/Verify";
+import KycVerified from "./Compliant/KycVerified";
 import RtaCompliantPersonalDetails from "./RtaCompliant";
 
 import RegistrationSuccess from "./Success/RegistrationSuccess";
 
 import Home from "./Home/Home";
-import Nominee from "./Nominee/Nominee";
 import Report from "./Report/KycReport";
 import PersonalDetails1 from "./PersonalDetails/Screen1";
 import PersonalDetails2 from "./PersonalDetails/Screen2";
@@ -51,8 +49,22 @@ import Selfie from "./Upload/Selfie";
 import IpvVideo from "./Upload/IpvVideo";
 import NRIAddressUpload from "./Upload/NriAddress";
 import ChangeAddressDetails2 from "./Address/ChangeAddress/ChangeAddressDetails2";
+import KycModuleEntry from "./ModuleEntry/KycModuleEntry";
+import LocationPermission from "./Upload/LocationPermission";
+import SelfieSteps from "./Upload/SelfieSteps";
+import FnOIncomeProof from "./Upload/FnOIncomeProof";
+
+// Equity Components
+import TradingExperience from "./Equity/components/TradingExperience";
+import NriError from "./Equity/components/NriError";
+import TradingInfo from "./Equity/components/TradingInfo";
+import UploadInstructions from "./Equity/components/UploadInstructions";
+import DocumentVerification from "./Equity/components/DocumentVerification";
+import ManualSignature from "./Equity/components/ManualSignature";
+import CommunicationDetails from "./Equity/components/CommunicationDetails";
+import CommunicationCallback from "./Equity/components/CommunicationCallback";
+import FnOSampleDocuments from "./Upload/FnOSampleDocuments";
 import DialogAsPage from './mini_components/DialogAsPage';
-import Native from "./Native/Native";
 
 const Kyc = (props) => {
   const { url } = props.match;
@@ -60,7 +72,7 @@ const Kyc = (props) => {
     <Fragment>
       <Switch>
         <Route exact path={`${url}/journey`} component={Journey} />
-        <Route exact path={`${url}/native`} component={Native} />
+        <Route exact path={[`${url}/web`, `${url}/native`]} component={KycModuleEntry} />
         <Route
           exact
           path={`${url}/personal-details1`}
@@ -123,8 +135,18 @@ const Kyc = (props) => {
         />
         <Route 
           exact 
+          path={`${url}/upload/selfie-location/:type?`} 
+          component={LocationPermission}
+        />
+        <Route 
+          exact 
+          path={`${url}/upload/selfie-steps`} 
+          component={SelfieSteps}
+        />
+        <Route 
+          exact 
           path={`${url}/upload/selfie`} 
-          component={Selfie} 
+          component={Selfie}
         />
         <Route 
           exact 
@@ -141,6 +163,16 @@ const Kyc = (props) => {
           path={`${url}/upload/address-nri`}
           component={NRIAddressUpload}
         />
+        <Route
+          exact
+          path={`${url}/upload/fno-income-proof`}
+          component={FnOIncomeProof}
+        />
+        <Route
+          exact
+          path={`${url}/upload/fno-sample-documents`}
+          component={FnOSampleDocuments}
+        />
         <Route 
           exact 
           path={`${url}/home`} 
@@ -150,15 +182,13 @@ const Kyc = (props) => {
           exact
           path={[`${url}/penny-status`,
                  `${url}/pan-status`,
-                 `${url}/residence-status`,
-                 `${url}/:userType/bank-status`
+                 `${url}/selfie-status`,
+                 `${url}/fno-income-proof-status`,
+                 `${url}/upload-pan-status`,
+                 `${url}/confirm-pan`,
+                 `${url}/:userType/bank-status`,
                ]}
           component={DialogAsPage}
-        />
-        <Route
-          exact
-          path={`${url}/:userType/nominee-details`}
-          component={Nominee}
         />
         <Route 
           exact 
@@ -198,12 +228,12 @@ const Kyc = (props) => {
         <Route
           exact
           path={`${url}/compliant-report-details`}
-          component={CompliantReport}
+          render={(props) => <Report {...props} type="compliant" />}
         />
         <Route
           exact
           path={`${url}/compliant-report-verified`}
-          component={Verify}
+          component={KycVerified}
         />
         <Route
           exact
@@ -294,6 +324,51 @@ const Kyc = (props) => {
           exact
           path={`${url}/nri-address-details2`}
           component={NRIAddressDetails2}
+        />
+        <Route 
+          exact 
+          path={`${url}/trading-experience`} 
+          component={TradingExperience} 
+        />
+        <Route 
+          exact 
+          path={`${url}/nri-error`} 
+          component={NriError} 
+        />
+        <Route 
+          exact 
+          path={`${url}/trading-info`} 
+          component={TradingInfo} 
+        />
+        <Route 
+          exact 
+          path={`${url}/upload-instructions`} 
+          component={UploadInstructions} 
+        />
+        <Route 
+          exact 
+          path={`${url}/document-verification`} 
+          component={DocumentVerification} 
+        />
+        <Route 
+          exact 
+          path={`${url}/manual-signature`} 
+          component={ManualSignature} 
+        />
+        <Route 
+          exact 
+          path={`${url}/fno-sample-documents`} 
+          component={FnOSampleDocuments} 
+        />
+        <Route 
+          exact 
+          path={`${url}/communication-details`} 
+          component={CommunicationDetails} 
+        />
+        <Route
+          exact
+          path={`${url}/communication-details/callback`}
+          component={CommunicationCallback}
         />
         <Route component={NotFound} />
       </Switch>

@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Input from "common/ui/Input";
 import { PATHNAME_MAPPER, MARITAL_STATUS_OPTIONS } from "../constants";
-import { isEmpty, validateAlphabets } from "utils/validators";
+import { isEmpty, validateName } from "utils/validators";
 import {
   validateFields,
   compareObjects,
+  getTotalPagesInPersonalDetails,
+  getUpgradeAccountFlowNextStep,
 } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
@@ -13,29 +15,33 @@ import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import toast from "common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
-import { getConfig } from "../../utils/functions";
+import { getConfig, isTradingEnabled } from "../../utils/functions";
 
-const productName = getConfig().productName;
 const PersonalDetails2 = (props) => {
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
-  const isEdit = props.location.state?.isEdit || false;
   const [oldState, setOldState] = useState({});
-  let title = "Personal details";
+  const [totalPages, setTotalPages] = useState();
+  const productName = getConfig().productName;
+  const stateParams = props?.location?.state || {};
+  const isEdit = stateParams.isEdit || false;
+  const isUpgradeFlow = stateParams.flow === "upgradeAccount";
+  let title = "Personal information";
   if (isEdit) {
-    title = "Edit personal details";
+    title = "Edit personal information";
   }
 
-  const {kyc, isLoading} = useUserKycHook();
+  const { kyc, user, isLoading } = useUserKycHook();
 
   useEffect(() => {
-    if (!isEmpty(kyc)) {
+    if (!isEmpty(kyc) && !isEmpty(user)) {
       initialize();
     }
-  }, [kyc]);
+  }, [kyc, user]);
 
   const initialize = () => {
+    setTotalPages(getTotalPagesInPersonalDetails(isEdit))
     let formData = {
       mother_name: kyc.pan?.meta_data?.mother_name || "",
       marital_status: kyc.identification.meta_data.marital_status || "",
@@ -44,6 +50,19 @@ const PersonalDetails2 = (props) => {
     setFormData({ ...formData });
     setOldState({ ...formData });
   };
+
+  const handleNavigation = () => {
+    if (isUpgradeFlow) {
+      const pathName = getUpgradeAccountFlowNextStep(kyc);
+      navigate(pathName);
+    } else {
+      navigate(PATHNAME_MAPPER.compliantPersonalDetails3, {
+        state: {
+          isEdit: isEdit,
+        },
+      });
+    }
+  }
 
   const handleClick = () => {
     sendEvents("next")
@@ -69,11 +88,7 @@ const PersonalDetails2 = (props) => {
       },
     };
     if (compareObjects(keysToCheck, oldState, form_data)) {
-      navigate(PATHNAME_MAPPER.compliantPersonalDetails3, {
-        state: {
-          isEdit: isEdit,
-        },
-      });
+      handleNavigation();
       return;
     }
     savePersonalDetails2(item);
@@ -84,11 +99,7 @@ const PersonalDetails2 = (props) => {
       setIsApiRunning("button");
       const submitResult = await kycSubmit(body);
       if (!submitResult) return;
-      navigate(PATHNAME_MAPPER.compliantPersonalDetails3, {
-        state: {
-          isEdit: isEdit,
-        },
-      });
+      handleNavigation();
     } catch (err) {
       console.log(err);
       toast(err.message);
@@ -99,7 +110,7 @@ const PersonalDetails2 = (props) => {
 
   const handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
-    if (name.includes("name") && value && !validateAlphabets(value)) {
+    if (name.includes("name") && value && !validateName(value)) {
       return;
     }
     let formData = { ...form_data };
@@ -113,21 +124,24 @@ const PersonalDetails2 = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "personal_details_2",
-        "marital_status": form_data.marital_status,
-        "mother_name": form_data.mother_name ? "yes" : "no",
-        "spouse_name": form_data.spouse_name ? "yes" : "no",
-        "flow": 'premium onboarding'      }
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "personal_details_2",
+        marital_status: form_data.marital_status
+          ? form_data.marital_status.toLowerCase()
+          : "",
+        "mother's_name": form_data.mother_name ? "yes" : "no",
+        spouse_name: form_data.spouse_name ? "yes" : "no",
+        "flow": !isTradingEnabled(kyc) ? 'premium onboarding' : 'general'
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container
@@ -138,9 +152,9 @@ const PersonalDetails2 = (props) => {
       showLoader={isApiRunning}
       handleClick={handleClick}
       title={title}
-      count={2}
+      count={!isUpgradeFlow && 2}
       current={2}
-      total={3}
+      total={!isUpgradeFlow && totalPages}
       data-aid='kyc-personal-details-screen-2'
       iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
     >
@@ -152,8 +166,7 @@ const PersonalDetails2 = (props) => {
                 error={form_data.marital_status_error ? true : false}
                 helperText={form_data.marital_status_error}
                 width="40"
-                label="Marital status:"
-                class="marital_status"
+                label="Marital status"
                 options={MARITAL_STATUS_OPTIONS}
                 id="account_type"
                 value={form_data.marital_status || ""}
@@ -169,11 +182,11 @@ const PersonalDetails2 = (props) => {
               helperText={form_data.mother_name_error || ""}
               onChange={handleChange("mother_name")}
               type="text"
-              disabled={isApiRunning}
+              disabled={isApiRunning || (!!kyc?.pan?.meta_data.mother_name && kyc?.pan?.meta_data_status === "approved")}
             />
             {form_data.marital_status === "MARRIED" && (
               <Input
-                label="Spouse"
+                label="Spouse's name"
                 class="input"
                 value={form_data.spouse_name || ""}
                 error={form_data.spouse_name_error ? true : false}

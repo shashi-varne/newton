@@ -1,57 +1,57 @@
-import React from "react";
-import Dialog, { DialogActions, DialogContent } from "material-ui/Dialog";
+import React, { useMemo } from "react";
 import { getConfig } from "utils/functions";
-import SVG from "react-inlinesvg";
-import Button from "common/ui/Button";
 import "./mini-components.scss";
+import Button from "../../common/ui/Button";
+import WVFullscreenDialog from "../../common/ui/FullscreenDialog/WVFullscreenDialog";
+import { Imgc } from "../../common/ui/Imgc";
 
 const KnowMore = ({ isOpen, close }) => {
-  const config = getConfig();
-  const productName = config.productName;
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
 
   return (
-    <Dialog
-      open={isOpen}
-      aria-labelledby="ipv-know-dialog"
-      aria-describedby="ipv-know-more-dialog"
-      className="ipv-know-more-dialog"
-      fullScreen={config.isMobileDevice}
-      data-aid='ipv-know-more-dialog'
-    >
-      <DialogContent className="know-more-dialog-content">
-        <header onClick={close}>
-          <SVG
-            preProcessor={(code) => code.replace(/fill=".*?"/g, "fill=#8c9ba5")}
-            src={require(`assets/close_white_icon.svg`)}
-            className="close-icon"
-          />
-        </header>
-        <main data-aid='kyc-ipv-videoknowmore'>
-          <div className="title" data-aid='kyc-title'>How to make a selfie Video?</div>
-          <div className="content">
-            <div className="text" data-aid='kyc-content-step-1'> 
-              <b>Step 1 - </b> Hold your PAN card and start recording.
-            </div>
-            <img
-              alt="start-recording"
-              src={require(`assets/${productName}/start_recording.svg`)}
-            />
+    <WVFullscreenDialog onClose={close} open={isOpen}>
+      <WVFullscreenDialog.Content>
+        <main
+          data-aid="kyc-ipv-videoknowmore"
+          className="know-more-dialog-content"
+        >
+          <div className="title" data-aid="kyc-title">
+            How to make a selfie video?
           </div>
           <div className="content">
-            <div className="text" data-aid='kyc-content-step-2'>
-              <b>Step 2 - </b> Say your Name and stop recording video
+            <div className="text" data-aid="kyc-content-step-1">
+              Before recording ensure you are in a quiet place and your full
+              face is visible. Once ready start recording.
             </div>
-            <img
+            <Imgc
+              alt="start-recording"
+              src={require(`assets/${productName}/start_recording.svg`)}
+              className="kyc-kmdc-img"
+            />
+          </div>
+          <div className="content second-step-content">
+            <div className="text" data-aid="kyc-content-step-2">
+              Say the verification code and stop recording
+            </div>
+            <Imgc
               alt="start-recording"
               src={require(`assets/${productName}/state_ipv_number.svg`)}
+              className="kyc-kmdc-img"
             />
           </div>
         </main>
-      </DialogContent>
-      <DialogActions className="action">
-        <Button classes={{button: "ipv-km-button"}} data-aid='got-it-btn' onClick={close} buttonTitle="GOT IT!" />
-      </DialogActions>
-    </Dialog>
+      </WVFullscreenDialog.Content>
+      <WVFullscreenDialog.Action>
+        <Button
+          data-aid="ipv-video-button"
+          buttonTitle="OKAY"
+          classes={{ button: "kipv-knowmore-button" }}
+          onClick={close}
+        />
+      </WVFullscreenDialog.Action>
+    </WVFullscreenDialog>
   );
 };
 

@@ -595,7 +595,7 @@ const Login = (props) => {
           <div style={{ flex: 1, paddingLeft: '7%'  }}>
             <div id="wr-login-right-panel">
               <img
-                src={require('assets/fisdom/fisdom_logo_coloured.svg')}
+                src={require('assets/fisdom/fisdom_logo.svg')}
                 style={{ cursor: 'pointer' }}
                 alt="fisdom" width={130}
                 onClick={() => goBack()}

@@ -1,10 +1,11 @@
 import './WVLiveCamera.scss';
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { isEmpty, isFunction } from 'lodash';
 import useScript from '../../customHooks/useScript';
 import Api from '../../../utils/api';
 import { storageService } from '../../../utils/validators';
 import { base64ToBlob } from '../../../utils/functions';
+import WVFullPageLoader from '../FullPageLoader/WVFullPageLoader';
 
 const SCRIPT_SRC = "https://hv-camera-web-sg.s3-ap-southeast-1.amazonaws.com/hyperverge-web-sdk@latest/src/sdk.min.js";
 
@@ -18,6 +19,7 @@ const WVLiveCamera = ({
   children
 }) => {
   const { scriptLoaded } = useScript(SCRIPT_SRC);
+  const [isLoading, setIsLoading] = useState(false);
 
   const isHVTokenValid = (HVToken) => {
     if (isEmpty(HVToken)) return false;
@@ -31,37 +33,48 @@ const WVLiveCamera = ({
     return true;
   }
 
+  const fetchNewHVToken = async () => {
+    const res = await Api.get('api/kyc/hyperverge/token/fetch');
+    if (res.pfwstatus_code !== 200 || isEmpty(res.pfwresponse)) {
+      // eslint-disable-next-line no-throw-literal
+      throw 'Something went wrong!';
+    }
+
+    const { result, status_code: status } = res.pfwresponse;
+    if (status === 200) {
+      const HVToken = {
+        token: result.hyperverge_token,
+        timestamp: Date.now()
+      };
+      storageService().setObject('HVToken', HVToken);
+      return HVToken;
+    } else {
+      throw (result.error || result.message || 'Something went wrong!');
+    }
+
+  }
+
   const initHVCamera = async () => {
     try {
       let HVToken = storageService().getObject('HVToken');
       if (!isHVTokenValid(HVToken)) {
-        const res = await Api.get('api/kyc/hyperverge/token/fetch');
-        if (res.pfwstatus_code !== 200 || isEmpty(res.pfwresponse)) {
-          // eslint-disable-next-line no-throw-literal
-          throw 'Something went wrong!';
-        }
-  
-        const { result, status_code: status } = res.pfwresponse;
-        if (status === 200) {
-          HVToken = {
-            token: result.hyperverge_token,
-            timestamp: Date.now()
-          };
-          storageService().setObject('HVToken', HVToken);
-        } else {
-          throw (result.error || result.message || 'Something went wrong!');
-        }
+        HVToken = await fetchNewHVToken();
       }
       window.HyperSnapSDK.init(HVToken.token, window.HyperSnapParams.Region.India, false, true);
       window.HyperSnapSDK.startUserSession();
       onCameraInit(true);
     } catch (err) {
       onCameraInit(false);
-      console.log('Error fetching HV token: ', err);
+      console.log('Error on HVcamera init: ', err);
     }
   }
 
   const openHVCamera = async () => {
+    setIsLoading(true);
+    let HVToken = storageService().getObject('HVToken');
+    if (!isHVTokenValid(HVToken)) {
+      await initHVCamera();
+    }
     const hvFaceConfig = new window.HVFaceConfig();
     hvFaceConfig.setShouldShowInstructionPage(true);
     hvFaceConfig.setLivenessAPIParameters({
@@ -70,6 +83,7 @@ const WVLiveCamera = ({
       allowMultipleFaces: 'no',
     });
     hvFaceConfig.faceTextConfig.setFaceCaptureTitle(title);
+    setIsLoading(false);
     window.HVFaceModule.start(hvFaceConfig, callback);
   }
 
@@ -80,14 +94,24 @@ const WVLiveCamera = ({
       } else if (isFunction(onCaptureFailure)) {
         onCaptureFailure(HVError);
       }
-    } else if (isFunction(onCaptureSuccess)) {
-      const fileBlob = base64ToBlob(HVResponse.imgBase64.split(",")[1], 'image/jpeg');
+    } else {
+      const livenessResult = HVResponse?.response?.result;
+      if (livenessResult?.error && isFunction(onCaptureFailure)) {
+        return onCaptureFailure({
+          errorCode: 'liveness-error',
+          errorMsg: livenessResult.error
+        });
+      }
 
-      onCaptureSuccess({
-        ...HVResponse.response.result,
-        fileBlob,
-        imgBase64: HVResponse.imgBase64
-      });
+      if (isFunction(onCaptureSuccess)) {
+        const fileBlob = base64ToBlob(HVResponse.imgBase64.split(",")[1], 'image/jpeg');
+  
+        onCaptureSuccess({
+          ...livenessResult,
+          fileBlob,
+          imgBase64: HVResponse.imgBase64
+        });
+      }
     }
   };
 
@@ -102,6 +126,13 @@ const WVLiveCamera = ({
       initHVCamera();
     }
   }, [scriptLoaded]);
+
+  if (isLoading) {
+    return <WVFullPageLoader
+      classes={{ container: "wv-live-cam-fp-loader" }}
+      loadingText="Setting up camera ..."
+    />
+  }
 
   return children || '';
 }

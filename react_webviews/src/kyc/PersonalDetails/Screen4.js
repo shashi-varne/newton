@@ -1,20 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Container from "../common/Container";
 import { dobFormatTest, formatDate, isEmpty } from "utils/validators";
 import Input from "../../common/ui/Input";
 import Checkbox from "common/ui/Checkbox";
-import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
+import DropDownNew from '../../common/ui/DropDownNew';
 import { RELATIONSHIP_OPTIONS, PATHNAME_MAPPER } from "../constants";
 import {
   validateFields,
   compareObjects,
-  getFlow
+  getTotalPagesInPersonalDetails,
+  getFlow,
+  isDocSubmittedOrApproved,
+  checkNomineeNameValidity
 } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
-import { validateAlphabets } from "../../utils/validators";
+import { validateName } from "../../utils/validators";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
+import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 
@@ -25,22 +29,22 @@ const PersonalDetails4 = (props) => {
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
   const [oldState, setOldState] = useState({});
-  const productName = getConfig().productName;
+  const [totalPages, setTotalPages] = useState();
   const type = props.type || "";
-  let title = "Nominee detail";
-  if(type === "digilocker") {
-    title = "Add nominee";
-  }
+  let title = "Nominee details (Optional)";
   if (isEdit) {
-    title = "Edit nominee detail";
+    title = "Edit nominee details";
   }
   const keysToCheck = ["dob", "name", "relationship"];
 
-  const { kyc, isLoading } = useUserKycHook();
+  const { kyc, user, isLoading } = useUserKycHook();
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
 
   useEffect(() => {
-    if (!isEmpty(kyc)) initialize();
-  }, [kyc]);
+    if (!isEmpty(kyc) && !isEmpty(user)) initialize();
+  }, [kyc, user]);
 
   const initialize = async () => {
     let is_checked = false;
@@ -61,42 +65,55 @@ const PersonalDetails4 = (props) => {
     };
     setFormData({ ...formData });
     setOldState({ ...formData });
+    setTotalPages(getTotalPagesInPersonalDetails(isEdit));
   };
 
   const handleClick = () => {
-    if (!isChecked) {
-      let result = validateFields(form_data, keysToCheck);
-      if (!result.canSubmit) {
-        let data = { ...result.formData };
-        setFormData(data);
-        sendEvents("next")
-        return;
-      }
-    }
-    sendEvents("next")
     if (isChecked) {
       if (kyc.nomination.nominee_optional) {
         handleNavigation();
         return;
       }
-    } else if (compareObjects(keysToCheck, oldState, form_data)) {
-      handleNavigation();
-      return;
+    } else {
+      let result = validateFields(form_data, keysToCheck);
+      if (!result.canSubmit) {
+        let data = { ...result.formData };
+        setFormData(data);
+        return;
+      }
+      const nameError = checkNomineeNameValidity(kyc, form_data.name);
+      if (nameError) {
+        setFormData({
+          ...form_data,
+          'name_error': nameError
+        });
+        return;
+      }
+
+      if (!kyc.nomination.nominee_optional && compareObjects(keysToCheck, oldState, form_data)) {
+        handleNavigation();
+        return;
+      }
     }
 
-    let userkycDetails = { ...kyc };
-    let body = { kyc: {} };
+
+    let body = {
+      kyc: {
+        nomination: {}
+      }
+    };
     if (isChecked) {
-      userkycDetails.nomination.nominee_optional = true;
-      body.kyc = {
-        nomination: userkycDetails.nomination,
+      body.kyc.nomination = {
+        ...kyc.nomination,
+        nominee_optional: true
       };
     } else {
-      userkycDetails.nomination.meta_data.dob = form_data.dob;
-      userkycDetails.nomination.meta_data.name = form_data.name;
-      userkycDetails.nomination.meta_data.relationship = form_data.relationship;
-      body.kyc = {
-        nomination: userkycDetails.nomination.meta_data,
+      body.kyc.nomination = {
+        ...kyc.nomination.meta_data,
+        dob: form_data.dob,
+        name: form_data.name,
+        relationship: form_data.relationship,
+        nominee_optional: false
       };
     }
     savePersonalDetails4(body);
@@ -117,8 +134,13 @@ const PersonalDetails4 = (props) => {
   };
 
   const handleNavigation = () => {
+    sendEvents('next');
     if (type === "digilocker") {
-      navigate(PATHNAME_MAPPER.uploadSign);
+      if(!isDocSubmittedOrApproved("sign")) {
+        navigate(PATHNAME_MAPPER.uploadSign);
+      } else {
+        navigate(PATHNAME_MAPPER.journey);
+      }
     } else {
       navigate(PATHNAME_MAPPER.journey);
     }
@@ -138,7 +160,7 @@ const PersonalDetails4 = (props) => {
     }
 
     let value = event.target ? event.target.value : event;
-    if (name === "name" && value && !validateAlphabets(value)) return;
+    if (name === "name" && value && !validateName(value)) return;
     let formData = { ...form_data };
     if (name === "dob") {
       if (!dobFormatTest(value)) {
@@ -155,24 +177,21 @@ const PersonalDetails4 = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "nominee details",
-        "name": form_data.name ? "yes" : "no",
-        "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
-        "relationship": form_data.relationship ? "yes" : "no",
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "nominee_details",
+        add_nominee: isChecked ? "no" : "yes",
         "flow": getFlow(kyc) || "",
-        "add_nominee":isChecked ? "no":"yes",
-        "initial_kyc_status" : kyc.kyc_status || ""
-      }
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
+
   return (
     <Container
       events={sendEvents("just_set_events")}
@@ -183,14 +202,17 @@ const PersonalDetails4 = (props) => {
       skelton={isLoading}
       showLoader={isApiRunning}
       title={title}
-      count={type === "digilocker" ? 3 : 4}
-      current={type === "digilocker" ? 3 : 4}
+      count={totalPages}
+      current={totalPages}
+      total={totalPages}
       iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
-      total={type === "digilocker" ? 3 : 4}
       data-aid='kyc-personal-details-screen-4'
     >
       <div className="kyc-nominee">
         <main data-aid='kyc-nominee-details'>
+          <WVInfoBubble type="info">
+            Nominee details will be applicable for mutual fund investments only
+          </WVInfoBubble>
           <div className="nominee-checkbox" data-aid='kyc-nominee-checkbox'>
             <Checkbox
               defaultChecked
@@ -201,7 +223,7 @@ const PersonalDetails4 = (props) => {
               class="checkbox"
             />
             <span>
-              I do not wish to add a <b>nominee</b>
+              I do not wish to add a nominee
             </span>
           </div>
           <Input
@@ -211,12 +233,11 @@ const PersonalDetails4 = (props) => {
             error={form_data.name_error ? true : false}
             helperText={form_data.name_error || ""}
             onChange={handleChange("name")}
-            maxLength={20}
             type="text"
             disabled={isChecked || isApiRunning}
           />
           <Input
-            label="Date of birth(DD/MM/YYYY)"
+            label="Date of birth (DD/MM/YYYY)"
             class="input"
             value={form_data.dob || ""}
             error={form_data.dob_error ? true : false}
@@ -229,7 +250,7 @@ const PersonalDetails4 = (props) => {
             disabled={isChecked || isApiRunning}
           />
           <div className="input" data-aid='kyc-dropdown-withouticon'>
-            <DropdownWithoutIcon
+            <DropDownNew
               error={form_data.relationship_error ? true : false}
               helperText={form_data.relationship_error}
               options={RELATIONSHIP_OPTIONS}

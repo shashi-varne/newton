@@ -4,6 +4,9 @@ import "./common/ui/style.scss";
 import "typeface-source-sans-pro";
 import "typeface-poppins";
 import 'idempotent-babel-polyfill';
+import 'react-app-polyfill/ie11';
+import 'react-app-polyfill/stable';
+import cssVars from 'css-vars-ponyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
@@ -12,7 +15,7 @@ import { isMobile } from 'utils/functions';
 import scrollIntoView from 'scroll-into-view-if-needed';
 import './common/theme/Style.scss';
 import "./common/ui/style.scss";
-import { getConfig, isIframe } from './utils/functions';
+import { getCssVarObject, getConfig, isIframe } from './utils/functions';
 // ----- Rubik font imports -----
 import "@fontsource/rubik/latin.css"; // all weights from 300 to 900, (does not include italics)
 import "@fontsource/rubik/latin-400-italic.css";
@@ -28,6 +31,11 @@ import { storageService } from "./utils/validators"
 import isEmpty from 'lodash/isEmpty';
 
 $(document).ready(function () {
+  const cssVarObj = getCssVarObject();
+  cssVars({
+    preserveVars:true,
+    variables: cssVarObj
+  });
   if(isIframe()) {
     let bodyElement =  document.getElementsByTagName('body');
     bodyElement[0].classList.add('IframeBody');
@@ -94,15 +102,24 @@ $(document).ready(function () {
   //   runGoogleAds();
   // }
 });
+if(getConfig().productName === "finity") {
+  document.title = 'Finity';
+  const favIcon = document.getElementById('favicon');
+  favIcon.href="./images/finity_logo_icon.svg";
+} else {
+  const favIcon = document.getElementById('favicon');
+  document.title = 'Fisdom';
+  favIcon.href="./images/fisdom_logo_icon.svg";
+}
 
 if(getConfig().productName === 'finity') {
   document.title = 'Finity';
   const favicon = document.getElementById('favicon');
-  favicon.href = './images/finity_icon.svg';
+  favicon.href = favicon && './images/finity_icon.svg';
 } else {
   document.title = 'Fisdom';
   const favicon = document.getElementById('favicon');
-  favicon.href = './images/fisdom_icon.svg';
+  favicon.href = favicon && './images/fisdom_icon.svg';
 }
 
 if(getConfig().productName === "fisdom" && getConfig().isProdEnv)

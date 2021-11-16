@@ -3,7 +3,7 @@ import { getKycAppStatus } from "../kyc/services";
 import Api from "../utils/api";
 import { getConfig, popupWindowCenter } from "../utils/functions";
 import { storageService } from "../utils/validators";
-import { apiConstants } from "./Invest/constants";
+import { apiConstants, kycStatusMapperInvest } from "./Invest/constants";
 /* eslint-disable */
 export function isInvestRefferalRequired(partner_code) {
   if (partner_code === "ktb") {
@@ -23,9 +23,9 @@ export async function proceedInvestment(data) {
     investmentEventData,
     body,
     paymentRedirectUrl,
-    history,
     handleApiRunning,
     handleDialogStates,
+    navigate
   } = data;
 
   let isKycNeeded = false;
@@ -38,13 +38,13 @@ export async function proceedInvestment(data) {
   }
 
   if (isKycNeeded) {
-    redirectToKyc(kycJourneyStatus, history);
+    redirectToKyc(userKyc, kycJourneyStatus, navigate);
     return;
   }
 
   if (sipOrOnetime === "sip" && !isSipDatesScreen) {
     storageService().setObject("investmentObjSipDates", body);
-    navigation(history, "/sipdates");
+    navigate("/sipdates");
   } else {
     if (!investmentEventData) {
       investmentEventData = storageService().getObject("mf_invest_data") || {};
@@ -71,14 +71,14 @@ export async function proceedInvestment(data) {
         }
         if (config.Web) {
           if (config.isIframe) {
-            handleIframeInvest(pgLink, result, history, handleApiRunning);
+            handleIframeInvest(pgLink, result, navigate, handleApiRunning);
           } else {
             handleApiRunning("page");
             window.location.href = pgLink;
           }
         } else {
           if (result.rta_enabled) {
-            navigation(history, "/payment/options", {
+            navigate("/payment/options", {
               state: {
                 pg_options: result.pg_options,
                 consent_bank: result.consent_bank,
@@ -89,7 +89,9 @@ export async function proceedInvestment(data) {
               },
             });
           } else {
-            navigation(history, "/kyc/journey");
+            navigate("/kyc/journey", {
+              state: { show_aadhaar: (userKyc.address.meta_data.nri || userKyc.kyc_type === "manual") ? false : true } 
+            });
           }
           handleApiRunning(false);
         }
@@ -98,10 +100,10 @@ export async function proceedInvestment(data) {
         storageService().setObject("is_debit_enabled", result.is_debit_enabled);
         switch (status) {
           case 301:
-            redirectToKyc(kycJourneyStatus, history);
+            redirectToKyc(userKyc, kycJourneyStatus, navigate);
             break;
           case 302:
-            redirectToKyc(kycJourneyStatus, history);
+            redirectToKyc(userKyc, kycJourneyStatus, navigate);
             break;
           case 305:
             handleDialogStates("openPennyVerificationPending", true);
@@ -127,7 +129,7 @@ export function canDoInvestment(kyc) {
   return false;
 }
 
-export function redirectToKyc(kycJourneyStatus, history) {
+export function redirectToKyc(userKyc, kycJourneyStatus, navigate) {
   const config = getConfig();
   let _event = {
     event_name: "journey_details",
@@ -147,22 +149,20 @@ export function redirectToKyc(kycJourneyStatus, history) {
     var message = JSON.stringify(_event);
     window.callbackWeb.sendEvent(_event);
   }
-  if (kycJourneyStatus === "ground") {
-    navigation(history, "/kyc/home");
+
+  const kycStatusData = kycStatusMapperInvest[kycJourneyStatus];
+  if (kycJourneyStatus === "ground_pan") {
+    navigate("/kyc/journey", {
+      state: { show_aadhaar: (userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual") ? false : true } 
+    });
+  } else if (kycStatusData?.nextState) {
+    navigate(kycStatusData.nextState);
   } else {
-    navigation(history, "/kyc/journey");
+    navigate("/kyc/journey");
   }
 }
 
-function navigation(history, pathname, data = {}) {
-  history.push({
-    pathname: pathname,
-    search: getConfig().searchParams,
-    state: data.state,
-  });
-}
-
-export function handleIframeInvest(pgLink, result, history, handleApiRunning) {
+export function handleIframeInvest(pgLink, result, navigate, handleApiRunning) {
   let popup_window = popupWindowCenter(900, 580, pgLink);
   handleApiRunning("page")
   pollProgress(600000, 5000, result.investments[0].id, popup_window).then(
@@ -170,8 +170,7 @@ export function handleIframeInvest(pgLink, result, history, handleApiRunning) {
       popup_window.close();
       if (poll_data.status === "success") {
         // Success
-        navigation(
-          history,
+        navigate(
           `/page/callback/${result.investments[0].order_type}/${result.investments[0].amount}/success/success`
         );
       } else if (poll_data.status === "failed") {

@@ -9,7 +9,6 @@ import {
   formatDate,
   isValidDate,
   IsFutureDate,
-  validateEmail,
   validatePan,
 } from "utils/validators";
 import { storageService } from "utils/validators";
@@ -44,7 +43,7 @@ class PanDetails extends Component {
       title: "",
       subtitle: "",
       isKycApproved: false,
-      isKycIdentificationApproved: false,
+      isMobileVerified: false,
     };
     this.initialize = initialize.bind(this);
   }
@@ -56,14 +55,13 @@ class PanDetails extends Component {
   onload = () => {
     let currentUser = storageService().getObject("user");
     let userKyc = storageService().getObject("kyc");
-    let { form_data, isKycApproved, is_nps_contributed, isKycIdentificationApproved } = this.state;
+    let { form_data, isKycApproved, is_nps_contributed, isMobileVerified } = this.state;
 
     isKycApproved = userKyc.pan.meta_data_status === 'approved';
-    isKycIdentificationApproved = userKyc.identification?.meta_data_status === 'approved';
+    isMobileVerified = !!userKyc.identification?.meta_data?.mobile_number && userKyc.identification?.meta_data?.mobile_number_verified;
     form_data.dob = userKyc.pan.meta_data.dob || "";
     form_data.pan = userKyc.pan.meta_data.pan_number || "";
 
-    form_data.email = userKyc.address.meta_data.email || "";
     let mobile_number = userKyc.identification?.meta_data?.mobile_number || "";
     let country_code = "";
     if (mobile_number && !isNaN(mobile_number.toString().split("|")[1])) {
@@ -84,7 +82,7 @@ class PanDetails extends Component {
       userKyc: userKyc,
       form_data: form_data,
       is_nps_contributed,
-      isKycIdentificationApproved
+      isMobileVerified,
     });
   };
 
@@ -168,10 +166,6 @@ class PanDetails extends Component {
       canSubmit = false;
     }
 
-    if (!currentUser.email && !validateEmail(form_data.email)) {
-      form_data.email_error = "invalid email";
-      canSubmit = false;
-    }
 
     if (IsFutureDate(form_data.dob)) {
       form_data.dob_error = "future date not allowed";
@@ -191,7 +185,7 @@ class PanDetails extends Component {
     });
 
     if (canSubmit) {
-      let { pan, address, identification } = userKyc;
+      let { pan, identification } = userKyc;
 
       if (is_nps_contributed) {
         storageService().set("nps_pran_number", form_data.pran);
@@ -201,7 +195,6 @@ class PanDetails extends Component {
       pan.meta_data.dob = form_data.dob;
       pan.meta_data.pan_number = form_data.pan;
 
-      address.meta_data.email = form_data.email;
 
       let mobile_number = form_data.mobile_number?.toString();
       if (form_data.country_code) {
@@ -212,7 +205,6 @@ class PanDetails extends Component {
       let data = {
         kyc: {
           pan: pan.meta_data,
-          address: address.meta_data,
           identification: identification.meta_data,
         },
       };
@@ -292,7 +284,7 @@ class PanDetails extends Component {
   }
 
   render() {
-    const { form_data, is_nps_contributed, currentUser, isKycApproved, isKycIdentificationApproved } = this.state;
+    const { form_data, is_nps_contributed, currentUser, isKycApproved, isMobileVerified } = this.state;
     return (
       <Container
         data-aid='nps-pan-details-screen'
@@ -389,27 +381,11 @@ class PanDetails extends Component {
                   helperText={form_data.mobile_number_error}
                   value={form_data.mobile_number || ""}
                   onChange={this.handleChange("mobile_number")}
-                  disabled={isKycIdentificationApproved}
+                  disabled={isMobileVerified}
                 />
               </div>
             )}
 
-            {currentUser.email === null && (
-              <div className="InputField">
-                <Input
-                  width="30"
-                  type="email"
-                  id="email"
-                  name="email"
-                  label="Your Email"
-                  error={!!form_data.email_error}
-                  helperText={form_data.email_error}
-                  value={form_data.email || ""}
-                  onChange={this.handleChange("email")}
-                  disabled={isKycIdentificationApproved}
-                />
-              </div>
-            )}
           </FormControl>
           {this.renderDialog()}
         </div>
