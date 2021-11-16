@@ -44,11 +44,21 @@ class PanDetails extends Component {
       subtitle: "",
       isKycApproved: false,
       isMobileVerified: false,
+      isKycIdentificationApproved: false,
+      disableNoOption: false
     };
     this.initialize = initialize.bind(this);
   }
 
   componentWillMount() {
+    const { state = {} } = this.props.location;
+    const { fromState = '', pranAlreadyRegistered = '' } = state;
+    if (fromState === "/nps/recommendation/one-time" && pranAlreadyRegistered) {
+      this.setState({
+        disableNoOption: true,
+        is_nps_contributed: true
+      })
+    }
     this.initialize();
   }
 
@@ -330,6 +340,7 @@ class PanDetails extends Component {
                 helperText={this.state.is_nps_contributed_error}
                 value={this.state.is_nps_contributed}
                 onChange={this.handleChangeRadio}
+                disabled={this.state.disableNoOption}
               />
             </div>
 
