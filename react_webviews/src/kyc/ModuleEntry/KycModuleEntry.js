@@ -52,6 +52,14 @@ function KycModuleEntry(props) {
     }
   };
 
+  const isKycCompleted = (TRADING_ENABLED, kyc, kycStatus) => {
+    if(TRADING_ENABLED) {
+      return kyc?.kyc_product_type === "equity" && ((kycStatus === "verifying_trading_account" && !kyc?.equity_investment_ready) || (kycStatus === "complete" && !kyc?.fno_active))
+    } else {
+      return kycStatus === "complete"
+    }
+  }
+
   const initialize = async () => {
     if (fromState && isNative) {
       nativeCallback({ action: "exit_web"});
@@ -103,9 +111,7 @@ function KycModuleEntry(props) {
       navigate(PATHNAME_MAPPER.uploadFnOIncomeProof, data);
     } 
     // this condition will help in redirection from sdk
-    else if (TRADING_ENABLED &&
-      kyc?.kyc_product_type === "equity" &&
-      ((kycStatus === "verifying_trading_account" && !kyc?.equity_investment_ready) || (kycStatus === "complete" && !kyc?.fno_active))) {
+    else if (isKycCompleted(TRADING_ENABLED, kyc, kycStatus)) {
       navigate("/kyc-esign/nsdl", {
         searchParams: `${getConfig().searchParams}&status=success`
       });
@@ -132,8 +138,10 @@ function KycModuleEntry(props) {
           navigate(PATHNAME_MAPPER.journey)
         }
       }
-    } else {
+    } else if (kycStatusData.nextState) {
       navigate(kycStatusData.nextState, data);
+    } else {
+      navigate(PATHNAME_MAPPER.journey, data);
     }
   }
 
