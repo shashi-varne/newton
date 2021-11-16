@@ -748,6 +748,7 @@ class PaymentOption extends React.Component {
         page="pg_option"
         title="Payment modes"
         buttonTitle='Continue'
+        noBackIcon={getConfig().Web}
       >
           <div>
             {/* <div className="block-padding bold payment-option-sub">Payable amount: ₹ {store.amount.toLocaleString()}</div> */}

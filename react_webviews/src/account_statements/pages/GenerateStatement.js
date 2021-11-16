@@ -16,6 +16,8 @@ import 'rsuite/lib/DatePicker/styles';
 import { format, isAfter, isBefore, startOfDay } from "date-fns";
 import { getConfig } from "../../utils/functions";
 import { InputLabel } from "material-ui";
+import addDays from "date-fns/addDays";
+import subDays from "date-fns/subDays";
 
 const optionsMap = keyBy(ACCOUNT_STATEMENT_OPTIONS, 'type');
 const FINANCIAL_YEAR_OPTIONS = fiscalYearGenerator(2021);
@@ -169,7 +171,7 @@ export default function GenerateStatement(props) {
     });
   }
 
-  const disableDate = type => date => {
+  const disableDate = useCallback(type => date => {
     /*
       Note: All dates have been set to startOfDay to prevent
       time difference from interfering with comparisons.
@@ -198,6 +200,23 @@ export default function GenerateStatement(props) {
       return true;
     }
 
+    if (pageObj.type === 'contract_note') {
+      // Restrict from and to dates to a period 31 days between each other
+      if (
+        type === 'from' &&
+        isBefore(date, subDays(selectedDateMap['to'], 30))
+      ) {
+        return true;
+      }
+
+      if (
+        type === 'to' &&
+        isAfter(date, addDays(selectedDateMap['from'], 30))
+      ) {
+        return true;
+      }
+    }
+
     if (selectedFinYear) {
       const [startYear, endYear] = selectedFinYear?.split('-');
       
@@ -209,7 +228,7 @@ export default function GenerateStatement(props) {
         return true;
       }
     }
-  }
+  }, [selectedDateMap, selectedFinYear]);
 
 
   // ---------------- HELPER AND OTHER FUNCTIONS  -----------------------

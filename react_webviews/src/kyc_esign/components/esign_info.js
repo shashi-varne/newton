@@ -105,6 +105,7 @@ class ESignInfo extends Component {
       const url = `/api/kyc/formfiller2/kraformfiller/upload_n_esignlink?kyc_platform=app&redirect_url=${redirectUrl}`;
       let res = await Api.get(url, params);
       let resultData = res.pfwresponse.result;
+
       if (resultData && !resultData.error) {
         if (!config.Web && storageService().get(STORAGE_CONSTANTS.NATIVE)) {
           if (config.app === 'ios') {
@@ -155,7 +156,15 @@ class ESignInfo extends Component {
         this.setState({ show_loader: "page" })
         window.location.href = resultData.esign_link;
       } else {
-        if (resultData && resultData.error === "all documents are not submitted") {
+        if (resultData?.error_code === 'kyc_40001') {
+          toast("Esign already completed");
+          this.navigate("/kyc-esign/nsdl", {
+            searchParams: `${getConfig().searchParams}&status=success`
+          });
+        } else if (
+          resultData?.error_code === 'kyc_40002' ||
+          resultData?.error === "all documents are not submitted"
+        ) {
           toast("Document pending, redirecting to kyc");
           setTimeout(() => {
             this.navigate('/kyc/journey');

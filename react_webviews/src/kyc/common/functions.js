@@ -1,7 +1,7 @@
 import { calculateAge, isValidDate, validateEmail, isEmpty, storageService } from 'utils/validators'
 import { isTradingEnabled, getConfig } from '../../utils/functions'
 import { nativeCallback, openPdfCall } from '../../utils/native_callback'
-import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS, GENDER_OPTIONS, PATHNAME_MAPPER } from '../constants'
+import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS, GENDER_OPTIONS, PATHNAME_MAPPER, PINCODE_LENGTH } from '../constants'
 import { isReadyToInvest } from '../services'
 import { getKyc } from './api'
 
@@ -73,8 +73,8 @@ export const validateFields = (formData, keyToCheck) => {
           }
           break
         case 'pincode':
-          if(value.length !== 6) {
-            formData[`${key}_error`] = 'Minimum length is 6'
+          if (value.length !== PINCODE_LENGTH) {
+            formData[`${key}_error`] = `Minimum length is ${PINCODE_LENGTH}`
             canSubmit = false
           }
           break
@@ -82,14 +82,8 @@ export const validateFields = (formData, keyToCheck) => {
         case 'father_name':
         case 'mother_name':
         case 'spouse_name':
-          if (value.length < 3) {
-            formData[`${key}_error`] = 'Minimum length is 3'
-            canSubmit = false
-          } else if (value.includes("  ")) {
+          if (value.includes("  ")) {
             formData[`${key}_error`] = 'consecutive spaces are not allowed'
-            canSubmit = false
-          } else if (value.split(" ")[0]?.length < 3) {
-            formData[`${key}_error`] = 'First 3 characters cannot contain space'
             canSubmit = false
           }
           break

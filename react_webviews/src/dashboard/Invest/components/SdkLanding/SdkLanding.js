@@ -24,6 +24,7 @@ const PATHNAME_MAPPER = {
   diy: "/invest/explore",
   buildwealth: "/invest/buildwealth",
   instaredeem: "/invest/instaredeem",
+  mf: "/invest",
 }
 
 const cardNameMapper = {
@@ -293,21 +294,25 @@ class SdkLanding extends Component {
           {!isEmpty(landingMarketingBanners) && (
             <div className='landing-marketing-banners' data-aid='landing-marketing-banners'>
               {landingMarketingBanners?.length === 1 ? (
-                <div className='single-marketing-banner'>
+                <>
                   {dateValidation(
                     landingMarketingBanners[0]?.endDate,
                     landingMarketingBanners[0]?.startDate
                   ) && (
-                    <Imgc
-                      src={require(`assets/${landingMarketingBanners[0].image}`)}
-                      alt=""
-                      style={{ width: "100%", minHeight: "120px" }}
+                    <div
+                      className="single-marketing-banner"
                       onClick={this.handleMarketingBanner(
                         landingMarketingBanners[0]?.type
                       )}
-                    />
+                    >
+                      <Imgc
+                        src={require(`assets/${landingMarketingBanners[0].image}`)}
+                        alt=""
+                        style={{ width: "100%", minHeight: "120px" }}
+                      />
+                    </div>
                   )}
-                </div>
+                </>
               ) : (
                 <div className='marketing-banners-list' data-aid='marketing-banners-list'>
                   {landingMarketingBanners?.map((el, idx) => {
