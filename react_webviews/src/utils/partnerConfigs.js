@@ -58,6 +58,24 @@ export const commonCardsConfig = {
       startDate: "11/01/2021",
     },
   ],
+  nfoBanners: [
+    {
+      image: "nfo.svg",
+      type: "nfo",
+      endDate: "11/30/2021",
+      startDate: "11/17/2021",
+    },
+    { image: "nfo1.svg", type: "nfo", endDate: "11/25/2021" },
+    { image: "nfo2.svg", type: "nfo", endDate: "11/24/2021" },
+    { image: "nfo3.svg", type: "nfo", endDate: "11/28/2021" },
+    { image: "nfo4.svg", type: "nfo", endDate: "11/25/2021" },
+    {
+      image: "nfo5.svg",
+      type: "nfo",
+      endDate: "12/09/2021",
+      startDate: "11/26/2021",
+    },
+  ],
 };
 
 export const basePartnerConfig = {
@@ -251,7 +269,7 @@ export const partnerConfigs = {
     },
     landingMarketingBanners: [
       ...commonCardsConfig.landingMarketingBanners,
-      { image: "nfo.svg", type: "nfo", endDate: '10/28/2021' },
+      ...commonCardsConfig.nfoBanners,
       { image: "mb_4.svg", type: "100_sip" },
       { image: "mb_6.svg", type: "diy" },
       { image: "mb_5.svg", type: "buildwealth" },
@@ -340,7 +358,7 @@ export const partnerConfigs = {
     email: "care.futuremoney@fisdom.com",
     landingMarketingBanners: [
       ...commonCardsConfig.landingMarketingBanners,
-      { image: "nfo.svg", type: "nfo", endDate: '10/28/2021' },
+      ...commonCardsConfig.nfoBanners,
       { image: "fpg_mb_insta.svg", type: "instaredeem" },
       { image: "fpg_mb_100.svg", type: "buildwealth" },
     ],
