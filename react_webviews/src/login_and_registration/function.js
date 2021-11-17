@@ -528,14 +528,17 @@ export async function getKycFromSummary() {
     partner: ["partner"],
     campaign: ["user_campaign"],
     referral: ["subbroker", "p2p"],
+    nps: ["nps_user"]
   });
   if (!res || !res.pfwresponse) throw errorMessage;
   const { result, status_code: status } = res.pfwresponse;
   if (status === 200) {
     let user = result.data.user.user.data;
     let kyc = result.data.kyc.kyc.data;
+    let nps = result.data.nps.nps_user.data;
     storageService().setObject("kyc", kyc);
     storageService().setObject("user", user);
+    storageService().setObject("npsUser", nps);
     return result;
   } else {
     throw result.message || result.error || errorMessage;
