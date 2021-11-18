@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import { kycSubmit } from "../../common/api";
 import useUserKycHook from "../../common/hooks/userKycHook";
-import { checkDLPanFetchAndApprovedStatus, checkDocsPending, isDigilockerFlow, isDocSubmittedOrApproved } from "../../common/functions"
+import { checkDLPanFetchAndApprovedStatus, isDigilockerFlow, isDocSubmittedOrApproved, isEquityEsignReady } from "../../common/functions"
 import toast from "../../../common/ui/Toast";
 import { isEmpty } from "../../../utils/validators";
 import { PATHNAME_MAPPER } from "../../constants";
@@ -36,7 +36,6 @@ const TradingExperience = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const navigate = navigateFunc.bind(props);
   const {kyc, isLoading} = useUserKycHook();
-  const [areDocsPending, setDocsPendingStatus] = useState();
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -47,8 +46,6 @@ const TradingExperience = (props) => {
   const initialize = async () => {
     setExperience(kyc?.equity_data?.meta_data?.trading_experience || "0-1");
     setOldState(kyc?.equity_data?.meta_data?.trading_experience || "")
-    const docStatus = await checkDocsPending(kyc);
-    setDocsPendingStatus(docStatus)
   }
 
   const handleClick = () => {
@@ -95,10 +92,10 @@ const TradingExperience = (props) => {
       if (!isDocSubmittedOrApproved("equity_income")) {
         navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
       } else {
-        if (areDocsPending) {
-          navigate(PATHNAME_MAPPER.documentVerification)
-        } else {
+        if (isEquityEsignReady(kyc)) {
           navigate(PATHNAME_MAPPER.kycEsign)
+        } else {
+          navigate(PATHNAME_MAPPER.documentVerification)
         }
       } 
     }
