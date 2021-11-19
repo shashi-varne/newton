@@ -4,7 +4,7 @@ import Container from '../common/Container'
 import { isEmpty } from '../../utils/validators'
 import { PATHNAME_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
-import { checkDocsPending, isDocSubmittedOrApproved } from '../common/functions'
+import { isDocSubmittedOrApproved, isEquityEsignReady } from '../common/functions'
 import { getConfig, isTradingEnabled, navigate as navigateFunc } from 'utils/functions'
 import Toast from '../../common/ui/Toast'
 import useUserKycHook from '../common/hooks/userKycHook'
@@ -34,7 +34,6 @@ const Selfie = (props) => {
   const { kyc, isLoading, updateKyc } = useUserKycHook();
   const [isCamLoading, setIsCamLoading] = useState(true);
   const [isTradingFlow, setIsTradingFlow] = useState(false);
-  const [areDocsPending, setDocsPendingStatus] = useState();
   const [fileHandlerParams, setFileHandlerParams] = useState();
   const [goBackModal, setGoBackModal] = useState(false);
   const navigate = navigateFunc.bind(props);
@@ -50,8 +49,6 @@ const Selfie = (props) => {
   }, [kyc])
 
   const initialize = async () => {
-    const docStatus = await checkDocsPending(kyc);
-    setDocsPendingStatus(docStatus)
     const tradingFlow = isTradingEnabled(kyc);
     setIsTradingFlow(tradingFlow);
   }
@@ -60,10 +57,10 @@ const Selfie = (props) => {
     if (!isDocSubmittedOrApproved("equity_income")) {
       navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
     } else {
-      if (areDocsPending) {
-        navigate(PATHNAME_MAPPER.documentVerification);
-      } else {
+      if (isEquityEsignReady(kyc)) {
         navigate(PATHNAME_MAPPER.kycEsign);
+      } else {
+        navigate(PATHNAME_MAPPER.documentVerification);
       }
     }
   }

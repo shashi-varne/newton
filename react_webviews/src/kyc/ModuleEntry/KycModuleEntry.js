@@ -52,16 +52,6 @@ function KycModuleEntry(props) {
     }
   };
 
-  const isKycCompleted = (TRADING_ENABLED, kyc, kycStatus) => {
-    if(TRADING_ENABLED) {
-      const fnoActivationPending = kycStatus === "complete" && !kyc?.fno_active;
-      const equityInvestmentPending = kycStatus === "verifying_trading_account";
-      return kyc?.kyc_product_type === "equity" && (equityInvestmentPending || fnoActivationPending)
-    } else {
-      return kycStatus === "complete"
-    }
-  }
-
   const initialize = async () => {
     if (fromState && isNative) {
       nativeCallback({ action: "exit_web"});
@@ -107,16 +97,6 @@ function KycModuleEntry(props) {
       }
     } else if (kycStatus === "esign_pending") {
       navigate(PATHNAME_MAPPER.kycEsign, data);
-    } 
-    // Todo: remove this condition after audit
-    else if (kycStatus === "complete" && kyc?.equity_sign_status === "signed" && kyc?.equity_income.doc_status === "init") {
-      navigate(PATHNAME_MAPPER.uploadFnOIncomeProof, data);
-    } 
-    // this condition will help in redirection from sdk
-    else if (isKycCompleted(TRADING_ENABLED, kyc, kycStatus)) {
-      navigate(PATHNAME_MAPPER.kycEsignNsdl, {
-        searchParams: `${getConfig().searchParams}&status=success`
-      });
     } else if (kycStatus === "rejected") {
       navigate(PATHNAME_MAPPER.uploadProgress, data);
     } else if (kycStatus === "fno_rejected") {
@@ -140,6 +120,11 @@ function KycModuleEntry(props) {
           navigate(PATHNAME_MAPPER.journey)
         }
       }
+    } else if (['verifying_trading_account', 'complete'].includes(kycStatus)) {
+      // this condition also helps with redirection from IPO sdk
+      navigate(PATHNAME_MAPPER.kycEsignNsdl, {
+        searchParams: `${getConfig().searchParams}&status=success`
+      });
     } else if (kycStatusData.nextState) {
       navigate(kycStatusData.nextState, data);
     } else {
