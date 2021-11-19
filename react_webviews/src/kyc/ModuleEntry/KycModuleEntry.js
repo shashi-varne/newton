@@ -91,29 +91,17 @@ function KycModuleEntry(props) {
       if (TRADING_ENABLED) {
         navigate(PATHNAME_MAPPER.documentVerification)
       } else {
-        navigate("/kyc-esign/nsdl", {
+        navigate(PATHNAME_MAPPER.kycEsignNsdl, {
           searchParams: `${getConfig().searchParams}&status=success`
         });
       }
     } else if (kycStatus === "esign_pending") {
       navigate(PATHNAME_MAPPER.kycEsign, data);
-    } 
-    // Todo: remove this condition after audit
-    else if (kycStatus === "complete" && kyc?.equity_sign_status === "signed" && kyc?.equity_income.doc_status === "init") {
-      navigate(PATHNAME_MAPPER.uploadFnOIncomeProof, data);
-    } 
-    // this condition will help in redirection from sdk
-    else if (TRADING_ENABLED &&
-      kyc?.kyc_product_type === "equity" &&
-      ((kycStatus === "verifying_trading_account" && !kyc?.equity_investment_ready) || (kycStatus === "complete" && !kyc?.fno_active))) {
-      navigate("/kyc-esign/nsdl", {
-        searchParams: `${getConfig().searchParams}&status=success`
-      });
     } else if (kycStatus === "rejected") {
       navigate(PATHNAME_MAPPER.uploadProgress, data);
     } else if (kycStatus === "fno_rejected") {
       navigate(PATHNAME_MAPPER.uploadFnOIncomeProof, data);
-    } else if ((TRADING_ENABLED && kyc?.kyc_product_type !== "equity")) {
+    } else if (TRADING_ENABLED && kyc?.kyc_product_type !== "equity") {
       let result;
       if (!kyc?.mf_kyc_processed) {
         result = await setProductType();
@@ -132,8 +120,15 @@ function KycModuleEntry(props) {
           navigate(PATHNAME_MAPPER.journey)
         }
       }
-    } else {
+    } else if (['verifying_trading_account', 'complete'].includes(kycStatus)) {
+      // this condition also helps with redirection from IPO sdk
+      navigate(PATHNAME_MAPPER.kycEsignNsdl, {
+        searchParams: `${getConfig().searchParams}&status=success`
+      });
+    } else if (kycStatusData.nextState) {
       navigate(kycStatusData.nextState, data);
+    } else {
+      navigate(PATHNAME_MAPPER.journey, data);
     }
   }
 

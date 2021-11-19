@@ -547,10 +547,16 @@ export async function handleCommonKycRedirections() {
         show_aadhaar: !(userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual") ? true : false,
       },
     });
-  } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity")) {
+  } else if (!tradingEnabled && kycJourneyStatus === "complete") {
+    navigate(PATHNAME_MAPPER.kycEsignNsdl, {
+      searchParams: `${getConfig().searchParams}&status=success`
+    });
+  } else if (tradingEnabled && userKyc?.kyc_product_type !== "equity") {
     await this.setKycProductTypeAndRedirect();
   } else if (kycStatusData.nextState) {
     this.navigate(kycStatusData.nextState);
+  } else {
+    navigate(PATHNAME_MAPPER.journey);
   }
 }
 

@@ -69,6 +69,7 @@ export const PATHNAME_MAPPER = {
   stocksStatus: '/kyc/stocks-status',
   tradingInfo: '/kyc/trading-info',
   documentVerification: '/kyc/document-verification',
+  kycEsignNsdl: '/kyc-esign/nsdl',
 }
 
 export const STORAGE_CONSTANTS = {
