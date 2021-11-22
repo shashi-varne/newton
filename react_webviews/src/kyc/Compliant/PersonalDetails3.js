@@ -55,7 +55,7 @@ const PersonalDetails3 = (props) => {
       return;
     }
 
-    if (compareObjects(keysToCheck, oldState, form_data)) {
+    if (compareObjects(keysToCheck, oldState, form_data) && kyc.identification.meta_data.politically_exposed) {
       handleNavigation(kyc.address.meta_data.is_nri);
       return;
     }

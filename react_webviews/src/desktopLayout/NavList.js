@@ -6,7 +6,7 @@ import register from 'assets/registration_menu_icon.png';
 import notification from 'assets/notifications_icon.png';
 import invest from 'assets/invest.png';
 import report from 'assets/reports.png';
-import loans from 'assets/ic_loan_sdk2.png';
+// import loans from 'assets/ic_loan_sdk2.png';
 import fhc from 'assets/fhc.png';
 import myAccount from 'assets/myaccount.png';
 import refer from 'assets/promo_code.png';
@@ -41,12 +41,12 @@ let data = [
     icon: invest,
     path: '/invest',
   },
-  {
-    id: 'loans',
-    name: 'Loans',
-    icon: loans,
-    path: '/loan/home',
-  },
+  // {
+  //   id: 'loans',
+  //   name: 'Loans',
+  //   icon: loans,
+  //   path: '/loan/home',
+  // },
   {
     id: 'reports',
     name: 'Reports',
@@ -95,7 +95,7 @@ const NavList = (props) => {
   const productName = config.productName;
   const isMobileDevice = config.isMobileDevice;
   const partnerLoan = config?.features?.loan;
-  const showReferral = !config?.referralConfig?.shareRefferal;
+  const showReferral = config?.referralConfig?.shareRefferal;
   const navigate = navigateFunc.bind(props);
   const [referDialog, setReferDialog] = useState(false);
   const [activePath, setActivePath] = useState('');

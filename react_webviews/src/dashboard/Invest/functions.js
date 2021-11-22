@@ -516,6 +516,7 @@ export function handleRenderCard() {
     } else if(el.key === 'refer') {
       if(referralCode){
         el.referralCode = true;
+        el.title = "Referral code"
         el.path = "";
         return referralCode;
       } else {
