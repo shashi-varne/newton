@@ -86,7 +86,7 @@ function Landing(props) {
 
   const goBack = () => {
     clearITRSessionStorage();
-    if(stateParams.fromState === "/reports") {
+    if (getConfig().isWebOrSdk) {
       navigate("/reports");
       return;
     }
