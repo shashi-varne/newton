@@ -16,15 +16,16 @@ export function AccountAlreadyExistDialog({
   const secondaryDetail = useMemo(() => type === 'email' ? mobile : email, [type, mobile, email]);
   const [subtitleText, setSubtitleText] = useState('');
   const [loading, setLoading] = useState(false);
-  const [secondaryDetailExists, setSecondaryDetailExists] = useState(isEmpty(secondaryDetail));
+  const [secondaryDetailExists, setSecondaryDetailExists] = useState(!isEmpty(secondaryDetail));
 
   useEffect(() => {
-    const detailExists = isEmpty(secondaryDetail);
+    const detailExists = !isEmpty(secondaryDetail);
     setSecondaryDetailExists(detailExists);
+
     if (detailExists) {
       setSubtitleText(`
-        Your ${type === "email" ? "email address" : "mobile number"} is already
-        registered with {secondaryDetailExists && <span>some other account</span>
+        Your ${type === "email" ? "email address" : "mobile number"} 
+        is already registered with some other account
       `);
     } else {
       setSubtitleText('Your account is already registered with us');
@@ -64,16 +65,16 @@ export function AccountAlreadyExistDialog({
         <div
           style={{
             display: "flex",
-            alignItems: "center",
-            justifyContent: "space-around",
           }}
         >
           <div className="details">
-            <img
-              src={require(`../../assets/bottom_sheet_icon_${type}.svg`)}
-              alt=""
-              style={{ paddingRight: "10px" }}
-            />
+            {type &&
+              <img
+                src={require(`../../assets/bottom_sheet_icon_${type}.svg`)}
+                alt=""
+                style={{ paddingRight: "10px" }}
+              />
+            }
             <span className="text">
               {secondaryDetailExists ? secondaryDetail : 'Not found'}
             </span>
