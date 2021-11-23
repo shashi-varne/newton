@@ -1,10 +1,10 @@
-import React, { Component, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 import { getConfig } from "utils/functions";
 import { isEmpty } from "lodash";
 import "./commonStyles.scss";
+import { requireAsset } from "../../utils/functions";
 
-const product = getConfig().productName;
 export function AccountAlreadyExistDialog({
   data = {},
   isOpen,
@@ -12,6 +12,7 @@ export function AccountAlreadyExistDialog({
   type,
   ...props
 }) {
+  const { productName: product } = useMemo(() => getConfig(), []);
   const { mobile, email, pan_number } = useMemo(() => isEmpty(data) ? {} : data, [data]);
   const secondaryDetail = useMemo(() => type === 'email' ? mobile : email, [type, mobile, email]);
   const [subtitleText, setSubtitleText] = useState('');
@@ -37,7 +38,7 @@ export function AccountAlreadyExistDialog({
       isOpen={isOpen}
       onClose={onClose}
       title="Account already exists!"
-      image={require(`assets/${product}/bottomsheet_account_exist.svg`)}
+      image={requireAsset('bottomsheet_account_exist', product)}
       button1Props={{
         color: "secondary",
         variant: "outlined",
@@ -70,7 +71,7 @@ export function AccountAlreadyExistDialog({
           <div className="details">
             {type &&
               <img
-                src={require(`../../assets/bottom_sheet_icon_${type}.svg`)}
+                src={requireAsset(`bottom_sheet_icon_${type === 'email' ? 'mobile' : 'email'}`)}
                 alt=""
                 style={{ paddingRight: "10px" }}
               />
