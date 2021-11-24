@@ -286,7 +286,7 @@ class SecondaryVerification extends Component {
                     next={this.continueAccountAlreadyExists}
                     editDetails={this.editDetailsAccountAlreadyExists}
                 ></AccountAlreadyExistDialog>
-            </Container >
+            </Container>
         )
     }
 }

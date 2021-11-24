@@ -840,9 +840,9 @@ export function getGuestUserRoute(apiUrl){
   return apiUrl
 }
 
-export function requireAsset(assetName, partner) {
+export function requireAsset(assetName, partner, extension = 'svg') {
   try {
-    return require(`assets/${partner ? (partner + '/' + assetName) : assetName}`);
+    return require(`assets/${partner ? (partner + '/' + assetName) : assetName}.${extension}`);
   } catch (err) {
     try {
       return require(`assets/${assetName}`);
