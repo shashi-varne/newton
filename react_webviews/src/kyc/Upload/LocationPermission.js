@@ -82,15 +82,57 @@ const LocationPermission = ({
     return countryAddressObj || {};
   }
   
-  const sendLocationFetchedEvent = (countryObj, coordinates) => {
+  const sendLocationFetchEvent = (userAction, additionalProps = {}) => {
     sendEvents(
-      'location_fetched',
+      userAction,
       'allow_location_access',
-      {
-        location_obj: JSON.stringify(isEmpty(countryObj) ? 'N/A' : countryObj),
-        location_coords: JSON.stringify(coordinates)
-      }
+      additionalProps
     );
+  }
+
+  const verifyLocationRegion = async (data = {}) => {
+    const coordinates = {
+      lat: data.location?.lat,
+      lng: data.location?.lng,
+    };
+
+    try {
+      setIsApiRunning(true);
+      const geocoderService = new window.google.maps.Geocoder();
+
+      const { results } = await geocoderService.geocode({ location: coordinates });
+      const country = fetchCountryFromResults(results);
+      setIsApiRunning(false);
+      sendLocationFetchEvent(
+        'location_fetch_success',
+        {
+          location_obj: JSON.stringify(isEmpty(country) ? 'N/A' : country),
+          location_coords: JSON.stringify(coordinates)
+        }
+      );
+      if (
+        country.long_name?.toUpperCase() === 'INDIA' ||
+        country.short_name?.toUpperCase() === 'IN'
+      ) {
+        onLocationFetchSuccess(data.location);
+      } else {
+        setPageType("invalid-region");
+      }
+    } catch (err) {
+      console.log(err);
+      setIsApiRunning(false);
+      sendLocationFetchEvent(
+        'location_fetch_err',
+        {
+          error: JSON.stringify(err?.message || err),
+          location_coords: JSON.stringify(coordinates)
+        }
+      );
+      setPageType('location-fetch-failed');
+      if (isFunction(onLocationFetchFailure)) {
+        onLocationFetchFailure();
+      }
+    }
   }
 
   const locationCallbackSuccess = async (data) => {
@@ -100,47 +142,7 @@ const LocationPermission = ({
       setIsApiRunning(false);
     } else {
       setPermissionWarning(false);
-      const coordinates = {
-        lat: data.location.lat,
-        lng: data.location.lng,
-      };
-      try {
-        setIsApiRunning(true);        
-        const geocoderService = new window.google.maps.Geocoder();
-
-        const {results, status } = await geocoderService.geocode({ location: coordinates })
-        
-        if (status === 'OK') {
-          const country = fetchCountryFromResults(results);
-          sendLocationFetchedEvent(country, coordinates);
-          setIsApiRunning(false);
-          if (
-            country.long_name?.toUpperCase() === 'INDIA' ||
-            country.short_name?.toUpperCase() === 'IN'
-          ) {
-            onLocationFetchSuccess(data.location);
-          } else {
-            setPageType("invalid-region");
-          }
-        } else {
-          throw(status);
-        }
-      } catch (err) {
-        console.log(err);
-        setIsApiRunning(false);
-        sendEvents(
-          'location_fetch_err',
-          'allow_location_access',
-          {
-            error: JSON.stringify(err),
-            location_coords: JSON.stringify(coordinates)
-          }
-        );
-        setPageType('location-fetch-failed');
-        if (isFunction(onLocationFetchFailure)) {
-          onLocationFetchFailure();
-        }
-      }
+      verifyLocationRegion(data);
     }
   }
 
