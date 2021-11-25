@@ -34,7 +34,6 @@ import useResetTakeControl from '../hooks/useResetTakeControl'
 import useBackButtonTracker from '../hooks/useBackButtonTracker'
 
 function Landing(props) {
-  const stateParams = props.location.state || {};
   const productName = getConfig().productName
   const navigate = navigateFunc.bind(props)
   const landedFromBackButton = checkIfLandedByBackButton()
