@@ -172,7 +172,7 @@ export const getConfig = () => {
   //   base_url_default = window.location.origin;
   // }
 
-  // default base urls for commit id build
+  // default base url for commit id build
   if(main_pathname.includes('/appl/web/') || main_pathname.includes('/appl/webview/')) {
     base_url_default = window.location.origin;
   }
