@@ -153,8 +153,7 @@ const AddBank = (props) => {
         });
       }
     } catch (err) {
-      if ((kyc?.bank.meta_data_status === "submitted" && kyc?.bank.meta_data.bank_status === "pd_triggered") ||
-        (kyc?.bank.meta_data_status === "rejected" && kyc?.bank.meta_data.bank_status === "rejected")) {
+      if (bankData.bank_status === "pd_triggered" || bankData.bank_status === "rejected") {
           setIsPennyFailed(true);
       } else {
         toast(err.message || genericErrorMessage);

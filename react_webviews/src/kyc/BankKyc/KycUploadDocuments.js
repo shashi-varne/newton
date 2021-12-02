@@ -130,6 +130,14 @@ const KycUploadDocuments = (props) => {
 
   const handleEdit = () => {
     sendEvents('edit');
+    if(additional) {
+      navigate(PATHNAME_MAPPER.addBank, {
+        state: {
+          bank_id: bankData.bank_id,
+        },
+      });
+      return
+    }
     navigate(`/kyc/${userType}/bank-details`, {
       state: { isEdit: true }
     });
