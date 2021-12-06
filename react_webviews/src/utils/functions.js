@@ -107,7 +107,8 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--gunmetal`, '#161A2E');
   html.style.setProperty(`--linkwater`, '#D3DBE4');
   html.style.setProperty(`--border-radius`, `${config_to_return.uiElements.button.borderRadius}px`);
-  
+  html.style.setProperty(`--whitegrey`, '#EEEEEE');
+
   return config_to_return;
 }
 
