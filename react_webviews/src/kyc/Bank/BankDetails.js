@@ -29,7 +29,8 @@ const BankDetails = (props) => {
     } else {
       if (bank.status === "default") {
         navigate(`/kyc/${kyc.kyc_status}/upload-documents`, {
-          state: { goBack: PATHNAME_MAPPER.bankList }
+          state: { goBack: PATHNAME_MAPPER.bankList },
+          searchParams: `${getConfig().searchParams}&additional=true`,
         });
       } else {
         navigate(`/kyc/${kyc.kyc_status}/upload-documents`, {

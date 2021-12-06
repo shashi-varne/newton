@@ -70,7 +70,7 @@ const KycUploadDocuments = (props) => {
     const tradeFlow = isTradingEnabled(kyc)
     setTradingEnabled(tradeFlow);
 
-    if (isReadyToInvest()) {
+    if (isReadyToInvest() || additional) {
       setBottomSheetText("We’ve added your bank account details. The verification is in progress.")
       setBottomSheetCtaText("OKAY");
     }
