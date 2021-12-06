@@ -33,6 +33,7 @@ import useBackButtonTracker from '../hooks/useBackButtonTracker'
 import './Landing.scss'
 
 function Landing(props) {
+  const stateParams = props.location.state || {}
   const productName = getConfig().productName
   const navigate = navigateFunc.bind(props)
   const landedFromBackButton = checkIfLandedByBackButton()
@@ -186,7 +187,7 @@ function Landing(props) {
               }}
               dataAidSuffix={`tax-filing-option-card-${title}`}
             >
-              <ListItem
+              <WVListItem
                 iconSrc={require(`assets/${productName}/${icon}.svg`)}
                 title={
                   type === "free" ? <CustomTitle title={title} /> : title
