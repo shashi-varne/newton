@@ -27,30 +27,6 @@ export function navigate(pathname, params, replace = false) {
   }
 }
 
-export const getTaxFilingFeatureLists = () => {
-  const productName = getConfig().productName
-  return [
-    {
-      frontImage: require('assets/icn_secure_safe.svg'),
-      bgImage: require(`assets/${productName}/bg_why_icons.svg`),
-      title: 'Secure & safe',
-      subtitle: 'Income tax department authorized platform',
-    },
-    {
-      frontImage: require('assets/icn_tax_savings.svg'),
-      bgImage: require(`assets/${productName}/bg_why_icons.svg`),
-      title: 'Maximum tax savings',
-      subtitle: 'Get every tax deduction you are eligible for',
-    },
-    {
-      frontImage: require('assets/icn_calculator.svg'),
-      bgImage: require(`assets/${productName}/bg_why_icons.svg`),
-      title: '100% accuracy',
-      subtitle: 'Precise calculations to avoid overpaying of taxes',
-    },
-  ]
-}
-
 export const trackBackButtonPress = (pathname) => {
   const allowedPaths = [
     '/tax-filing/steps',
