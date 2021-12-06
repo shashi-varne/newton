@@ -46,7 +46,7 @@ export default function Landing(props) {
         <WVInPageSubtitle>Overview of your investments</WVInPageSubtitle>
       </WVInPageHeader>
       <WVInfoBubble hasTitle style={{ marginBottom: '30px' }}>
-        The statements are not for mutual funds and only reflect your Trading & Demat account transactions
+        These statements are not for mutual funds and only reflect your Trading & Demat account transactions
       </WVInfoBubble>
       {STATEMENT_OPTIONS.map(optionObj => {
         return (
