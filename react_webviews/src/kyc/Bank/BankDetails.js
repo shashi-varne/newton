@@ -27,17 +27,12 @@ const BankDetails = (props) => {
     if(bank.bank_status === "submitted") {
       navigate(`${PATHNAME_MAPPER.addBankVerify}${bank.bank_id}`);
     } else {
-      if (bank.status === "default") {
-        navigate(`/kyc/${kyc.kyc_status}/upload-documents`, {
-          state: { goBack: PATHNAME_MAPPER.bankList }
-        });
-      } else {
-        navigate(`/kyc/${kyc.kyc_status}/upload-documents`, {
-          searchParams: `${
-            getConfig().searchParams
-          }&additional=true&bank_id=${bank_id}`,
-        });
-      }
+      navigate(`/kyc/${kyc.kyc_status}/upload-documents`, {
+        state: { goBack: PATHNAME_MAPPER.bankList },
+        searchParams: `${
+          getConfig().searchParams
+        }&additional=true${bank.status !== "default" ? `&bank_id=${bank_id}` : ""}`,
+      });
     }
   };
 
