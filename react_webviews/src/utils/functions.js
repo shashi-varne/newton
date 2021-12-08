@@ -159,7 +159,8 @@ export const getConfig = () => {
   let generic_callback = true;
 
   let isProdFisdom = origin.indexOf('app.fisdom.com') >= 0  || origin.indexOf('wv.fisdom.com') >= 0 || origin.indexOf('my.preprod.fisdom.com') >= 0 || origin.indexOf('app2.fisdom.com') >= 0;
-  let isProdFinity = origin.indexOf('app.mywaywealth.com') >= 0 || origin.indexOf('wv.mywaywealth.com') >= 0 || origin.indexOf('my.preprod.finity.in') >= 0  || origin.indexOf('app2.finity.in') >= 0;
+  let isProdMyway = origin.indexOf('app.mywaywealth.com') >= 0 || origin.indexOf('wv.mywaywealth.com') >= 0;
+  let isProdFinity = origin.indexOf('my.preprod.finity.in') >= 0  || origin.indexOf('app.finity.in') >= 0 || origin.indexOf('app2.finity.in') >= 0 || origin.indexOf('wv.finity.in') >= 0;
 
   // let base_href = window.localStorage.getItem('base_href') || '';
   let base_url_default = '';
@@ -184,6 +185,10 @@ export const getConfig = () => {
     }
   
     if(isProdFinity) {
+      base_url_default = 'https://api.finity.in';
+    }
+
+    if(isProdMyway) {
       base_url_default = 'https://api.mywaywealth.com';
     }
 
@@ -396,7 +401,7 @@ export const getConfig = () => {
     searchParams += getParamsMark(searchParams) + `app_version=${app_version}`;
     searchParamsMustAppend += getParamsMark(searchParams) + `app_version=${app_version}`;
   }
-  let isProdEnv = isProdFinity || isProdFisdom;
+  let isProdEnv = isProdFinity || isProdFisdom || isProdMyway;
   // should be last
   returnConfig.current_params = main_query_params;
   returnConfig.base_url = base_url;
