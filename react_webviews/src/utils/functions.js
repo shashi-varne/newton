@@ -166,8 +166,8 @@ export const getConfig = () => {
   let base_url_default = '';
   
   const isStaging = origin.indexOf('plutus-web-staging') >= 0;
-  // const isFisdomStaging = origin.indexOf('my.preprod.fisdom.com') >= 0 || origin.indexOf('app2.fisdom.com') >= 0;
-  // const isFinityStaging = origin.indexOf('my.preprod.finity.in') >= 0 || origin.indexOf('app2.finity.in') >= 0;
+  const isFisdomStaging = origin.indexOf('fisdom.equityappuat.finwizard.co.in') >= 0 || origin.indexOf('fisdomapp.staging.finwizard.co.in') >= 0;
+  const isFinityStaging = origin.indexOf('finity.equityappuat.finwizard.co.in') >= 0 || origin.indexOf('finityapp.staging.finwizard.co.in') >= 0;
   const isLocal = origin.indexOf('localhost') >=0;
 
   // if(base_href) {
@@ -197,13 +197,13 @@ export const getConfig = () => {
       base_url_default = "https://wdash-dot-plutus-staging.appspot.com";
     }
 
-    // if(isFisdomStaging) {
-    //   base_url_default = 'https://my.preprod.fisdom.com';
-    // }
+    if(isFisdomStaging) {
+      base_url_default = 'https://fisdomapp.staging.finwizard.co.in';
+    }
   
-    // if(isFinityStaging) {
-    //   base_url_default = 'https://my.preprod.finity.in';
-    // }
+    if(isFinityStaging) {
+      base_url_default = 'https://finityapp.staging.finwizard.co.in';
+    }
   }
   
 
