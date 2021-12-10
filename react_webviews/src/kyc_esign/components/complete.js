@@ -75,7 +75,7 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
         {!tradingEnabled && (
           <div className="text" data-aid='kyc-header-text'>
             <img src={require(`assets/eta_icon.svg`)} alt="" />
-            Approves in one working day
+            It usually takes 1 working day for the documents to be verified and approved
           </div>
         )}
         {showAccountStatus && (
