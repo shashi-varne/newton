@@ -79,19 +79,19 @@
 
     .status {
       font-size: 11px;
-      color: #160d2e;
+      color: var(--mustard);
     }
 
     .approved {
-      color: #35cb5d;
+      color: var(--secondary-green);
     }
 
     .rejected {
-      color: #d0021b;
+      color: var(--red);
     }
 
     .in_progress {
-      color: #ffd01f;
+      color: var(--mustard);
     }
   }
 
