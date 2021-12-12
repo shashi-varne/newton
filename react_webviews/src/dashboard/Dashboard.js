@@ -42,6 +42,7 @@ import Referral from "../login_and_registration/pages/Referral/Referral.js";
 import SecondaryVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryVerification"
 import SecondaryOtpVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryOtpVerification"
 import StatusCallback from "../kyc/Native/StatusCallback";
+import NativeRedirection from "../kyc/Native/NativeRedirection";
 import ProductMarketTypes from './ProductMarketTypes';
 import PrimaryMarketProducts from "./PrimaryMarketProducts/PrimaryMarketProducts";
 
@@ -146,6 +147,11 @@ const Home = (props) => {
           exact
           path={`${url}status/callback/native`}
           component={StatusCallback}
+        />
+        <Route
+          exact
+          path={`${url}status/redirection/native`}
+          component={NativeRedirection}
         />
         {/* -----------My Account sub-routes ------------- */}
         <Route exact path={`${url}account/merge/:pan_number`} component={AccountMerge} />
