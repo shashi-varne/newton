@@ -16,7 +16,7 @@ const StatusCallback = (props) => {
       }
     } else {
       setError("Something went wrong. No status received");
-      nativeCallback({ action: "on_cancel" });
+      nativeCallback({ action: "on_cancelled" });
     }
   }, [status])
 
