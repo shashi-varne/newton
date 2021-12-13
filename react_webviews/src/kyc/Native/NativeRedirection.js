@@ -7,9 +7,10 @@ const StatusCallback = (props) => {
   const urlParams = getUrlParams() || "";
 
   useEffect(() => {
-    const { dl_url } = urlParams;
-    console.log(dl_url);
-    redirect(dl_url);
+    const { dl_url, esign_url } = urlParams;
+
+    const url = dl_url || esign_url;
+    redirect(url);
   }, [urlParams]);
 
   const redirect = (url) => {
