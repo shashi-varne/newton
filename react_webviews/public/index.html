@@ -215,7 +215,9 @@
 
 
       //#TODO, temproray fix due to common code for web main equity
-      if(window.location.href.indexOf('app.fisdom.com') !== -1) {
+      if(window.location.href.indexOf('app.fisdom.com') !== -1 || 
+      window.location.href.indexOf('app.mywaywealth.com') !== -1 || 
+      window.location.href.indexOf('app.finity.in') !== -1) {
         myBaseHref.href = '';
       }
 
