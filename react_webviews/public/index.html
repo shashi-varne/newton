@@ -201,6 +201,8 @@
         myBaseHrefUrl = '/webapp/';
       }
 
+      
+
       if(myBaseHrefUrl) {
 
         if(pathname.indexOf('webapp') === -1) { // not adding again for webapp, for others its needed
@@ -209,6 +211,12 @@
         
         // document.write("<base href="+ myBaseHrefUrl+" />");
         window.localStorage.setItem('base_href', myBaseHrefUrl);
+      }
+
+
+      //#TODO, temproray fix due to common code for web main equity
+      if(window.location.href.indexOf('app.fisdom.com') !== -1) {
+        myBaseHref.href = '';
       }
 
     </script>
