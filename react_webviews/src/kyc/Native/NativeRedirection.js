@@ -7,9 +7,13 @@ const StatusCallback = (props) => {
   const urlParams = getUrlParams() || "";
 
   useEffect(() => {
-    const { dl_url, esign_url } = urlParams;
-
-    const url = dl_url || esign_url;
+    const { dl_url, esign_url, state } = urlParams;
+    let url = "";
+    if (dl_url) {
+      url = dl_url;
+    } else if (esign_url) {
+      url = esign_url + '&state=' + state;
+    }
     redirect(url);
   }, [urlParams]);
 
@@ -17,7 +21,6 @@ const StatusCallback = (props) => {
     let basepath = getBasePath();
     let current_url =
       basepath + "/status/callback/native" + getConfig().searchParams;
-    var pgLink = url;
 
     if (getConfig().isNative) {
       nativeCallback({
@@ -30,7 +33,7 @@ const StatusCallback = (props) => {
     }
 
     if (url) {
-      window.location.href = pgLink;
+      window.location.href = url;
     }
   };
 
