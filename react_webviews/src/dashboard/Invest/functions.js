@@ -45,6 +45,8 @@ export async function initialize() {
   this.handleCommonKycRedirections = handleCommonKycRedirections.bind(this);
   this.contactVerification = contactVerification.bind(this);
   this.handleCampaignNotificationData = handleCampaignNotificationData.bind(this);
+  this.openBfdlBanner = openBfdlBanner.bind(this);
+  this.closeBfdlBanner = closeBfdlBanner.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
   if (config) {
     this.setState({ config });
@@ -905,4 +907,17 @@ export async function updateBank(data) {
   } else {
     throw new Error(result?.message || result?.error || errorMessage);
   }
+}
+
+export function openBfdlBanner() {
+  const partnerCode = getConfig().code;
+  const isBfdlBannerDisplayed = storageService().getBoolean("bfdlBannerDisplayed");
+  if(partnerCode === 'bfdlmobile' && !isBfdlBannerDisplayed) {
+    this.setState({ openBfdlBanner: true });
+    storageService().setBoolean("bfdlBannerDisplayed", true);
+  }
+}
+
+export function closeBfdlBanner() {
+  this.setState({ openBfdlBanner: false });
 }
