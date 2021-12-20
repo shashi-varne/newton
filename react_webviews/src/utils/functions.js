@@ -862,3 +862,8 @@ export function requireAsset(assetName, partner, extension = 'svg') {
     }
   }
 }
+
+export function isDietProduct() {
+  const {diet = ''} = getUrlParams();
+  return diet.toLowerCase() === 'true';
+}
