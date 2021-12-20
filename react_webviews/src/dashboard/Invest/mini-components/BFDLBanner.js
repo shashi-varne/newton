@@ -34,7 +34,7 @@ const BFDLBanner = ({ isOpen, close }) => {
       open={isOpen}
       title={title}
       closeIconPosition="left"
-      wvClasses={{
+      classes={{
         container: "bfdl-announcement-dialog",
         dialogTitle: {
           root: "bfdl-announcement-dialog-title",
