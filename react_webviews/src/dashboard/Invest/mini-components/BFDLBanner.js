@@ -23,7 +23,7 @@ const BFDLBanner = ({ isOpen, close }) => {
   };
 
   const title = (
-    <div style={{ margin: "0 auto", width: "100%" }}>
+    <div className="bfdla-logo-container" >
       <Imgc src={require(`assets/${colorLogo}`)} className="partner-logo" />
     </div>
   );
@@ -61,9 +61,7 @@ const BFDLBanner = ({ isOpen, close }) => {
         <div onClick={openFinityApp} className="bfdla-action-bar">
           <Imgc
             src={require("assets/bfdl_announcement_button.svg")}
-            style={{
-              width: "100%",
-            }}
+            className="footer-image"
           />
         </div>
       </WVFullscreenDialog.Action>
