@@ -809,7 +809,7 @@ export function contactVerification(userKyc) {
 }
 
 export function handleCampaignRedirection (url, showRedirectUrl) {
-  const { config = getConfig() } = this.state;
+  const config = getConfig()
   let campLink = url;
   let plutusRedirectUrl = `${getBasePath()}/?is_secure=${config.isSdk}&partner_code=${config.code}`;
   // Adding redirect url for testing
