@@ -60,11 +60,12 @@ export async function initialize() {
     this.handleRenderCard();
   }
 
-  if ((this.state.screenName === "invest_landing" &&  config.Web &&
-      !dataSettedInsideBoot)) {
+  const isBfdlConfig = config.code === 'bfdlmobile' && (config.isIframe || config.isSdk)
+
+  if (!isBfdlConfig && this.state.screenName === "invest_landing" &&  config.Web &&  !dataSettedInsideBoot) {
     await this.getSummary();
   }
-  if (this.state.screenName === "sdk_landing" && !config.Web) {
+  if (!isBfdlConfig && this.state.screenName === "sdk_landing" && !config.Web) {
     await this.getSummary();
   }
 
@@ -910,14 +911,25 @@ export async function updateBank(data) {
 }
 
 export function openBfdlBanner() {
-  const partnerCode = getConfig().code;
-  const isBfdlBannerDisplayed = storageService().getBoolean("bfdlBannerDisplayed");
-  if(partnerCode === 'bfdlmobile' && !isBfdlBannerDisplayed) {
+  const config = getConfig();
+  if(config.code === 'bfdlmobile' && (config.isIframe || config.isSdk)) {
     this.setState({ openBfdlBanner: true });
-    storageService().setBoolean("bfdlBannerDisplayed", true);
   }
 }
 
 export function closeBfdlBanner() {
-  this.setState({ openBfdlBanner: false });
+  const config = getConfig();
+  if (config.Web) {
+    if (config.isIframe) {
+      let message = JSON.stringify({
+        type: "iframe_close",
+      });
+      window.callbackWeb.sendEvent(message);
+      storageService().clear();
+    } else {
+      this.setState({ openBfdlBanner: false });
+    }
+  } else {
+    nativeCallback({ action: "exit_web" });
+  }
 }

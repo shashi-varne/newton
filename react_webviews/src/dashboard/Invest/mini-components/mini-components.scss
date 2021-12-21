@@ -30,8 +30,8 @@
 
     .partner-logo {
       margin-left: -50px;
-      width: 100px;
-      min-height: 40;
+      width: 100px !important;
+      min-height: 40px;
       margin-top: -20px;
     }
 
@@ -49,7 +49,8 @@
 
   .bfdla-logo-container {
     width: 100%;
-    margin:  0 auto;
+    display: flex;
+    justify-content: center;
   }
 
   .bfdla-content {

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { getConfig } from "../../../utils/functions";
 import "./mini-components.scss";
 import WVFullscreenDialog from "../../../common/ui/FullscreenDialog/WVFullscreenDialog";
@@ -11,7 +11,7 @@ const PRODUCT_NAME_MAPPER = {
 };
 
 const BFDLBanner = ({ isOpen, close }) => {
-  const { productName, colorLogo, appLink } = useMemo(getConfig, []);
+  const { productName, colorLogo, appLink } = getConfig();
 
   const openFinityApp = () => {
     nativeCallback({
