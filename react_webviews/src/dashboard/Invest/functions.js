@@ -45,6 +45,8 @@ export async function initialize() {
   this.handleCommonKycRedirections = handleCommonKycRedirections.bind(this);
   this.contactVerification = contactVerification.bind(this);
   this.handleCampaignNotificationData = handleCampaignNotificationData.bind(this);
+  this.openBfdlBanner = openBfdlBanner.bind(this);
+  this.closeBfdlBanner = closeBfdlBanner.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
   if (config) {
     this.setState({ config });
@@ -58,11 +60,12 @@ export async function initialize() {
     this.handleRenderCard();
   }
 
-  if ((this.state.screenName === "invest_landing" &&  config.Web &&
-      !dataSettedInsideBoot)) {
+  const isBfdlConfig = config.code === 'bfdlmobile' && (config.isIframe || config.isSdk)
+
+  if (!isBfdlConfig && this.state.screenName === "invest_landing" &&  config.Web &&  !dataSettedInsideBoot) {
     await this.getSummary();
   }
-  if (this.state.screenName === "sdk_landing" && !config.Web) {
+  if (!isBfdlConfig && this.state.screenName === "sdk_landing" && !config.Web) {
     await this.getSummary();
   }
 
@@ -904,5 +907,29 @@ export async function updateBank(data) {
     return result;
   } else {
     throw new Error(result?.message || result?.error || errorMessage);
+  }
+}
+
+export function openBfdlBanner() {
+  const config = getConfig();
+  if(config.code === 'bfdlmobile' && (config.isIframe || config.isSdk)) {
+    this.setState({ openBfdlBanner: true });
+  }
+}
+
+export function closeBfdlBanner() {
+  const config = getConfig();
+  if (config.Web) {
+    if (config.isIframe) {
+      let message = JSON.stringify({
+        type: "iframe_close",
+      });
+      window.callbackWeb.sendEvent(message);
+      storageService().clear();
+    } else {
+      this.setState({ openBfdlBanner: false });
+    }
+  } else {
+    nativeCallback({ action: "exit_web" });
   }
 }

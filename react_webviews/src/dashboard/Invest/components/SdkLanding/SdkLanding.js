@@ -18,6 +18,7 @@ import { isTradingEnabled } from '../../../../utils/functions';
 import TermsAndConditions from '../../mini-components/TermsAndConditionsDialog';
 import BankListOptions from '../../mini-components/BankListOptions';
 import Toast from '../../../../common/ui/Toast';
+import BFDLBanner from '../../mini-components/BFDLBanner';
 
 const PATHNAME_MAPPER = {
   nfo: "/advanced-investing/new-fund-offers/info",
@@ -56,6 +57,7 @@ class SdkLanding extends Component {
       tradingEnabled: isTradingEnabled(),
       showTermsAndConditions: false,
       showBankList: false,
+      openBfdlBanner: false,
     };
     this.initialize = initialize.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
@@ -76,6 +78,7 @@ class SdkLanding extends Component {
       this.setState({ showTermsAndConditions: true });
     }
     this.handleBankList();
+    this.openBfdlBanner();
   };
 
   handleRefferalInput = (e) => {
@@ -256,7 +259,8 @@ class SdkLanding extends Component {
       selectedBank,
       showBankList,
       bankListErrorMessage,
-      showBankListLoader
+      showBankListLoader,
+      openBfdlBanner,
     } = this.state;
 
     const config = getConfig();
@@ -434,6 +438,10 @@ class SdkLanding extends Component {
           handleClick={this.handleBankListOptions}
           error={bankListErrorMessage}
           showLoader={showBankListLoader}
+        />
+        <BFDLBanner
+          isOpen={openBfdlBanner}
+          close={this.closeBfdlBanner}
         />
       </Container>
     );

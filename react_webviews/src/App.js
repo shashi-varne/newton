@@ -56,7 +56,7 @@ const clearBottomsheetDisplays = () => {
     "is_bottom_sheet_displayed", 
     "verifyDetailsSheetDisplayed", 
     "is_bottom_sheet_displayed_kyc_premium", 
-    "landingBottomSheetDisplayed"
+    "landingBottomSheetDisplayed",
   ];
 
   bottomSheetsArr.forEach((bottomSheet) => {
