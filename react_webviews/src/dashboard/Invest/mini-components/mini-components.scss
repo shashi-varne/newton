@@ -19,7 +19,15 @@
 }
 
 .bfdl-announcement-dialog {
+  .MuiPaper-root {
+    background-color: var(--darkblue);
+  }
+
   .bfdl-announcement-dialog-title {
+    .wv-fd-close {
+      color: #fff !important;
+    }
+
     .partner-logo {
       margin-left: -50px;
       width: 100px;
@@ -46,7 +54,7 @@
 
   .bfdla-content {
     text-align: center;
-    color: var(--gunmetal);
+    color: #fff;
   }
 
   .bfdla-icon {
