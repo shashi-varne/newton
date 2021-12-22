@@ -60,10 +60,13 @@ export async function initialize() {
     this.handleRenderCard();
   }
 
-  if (this.state.screenName === "invest_landing" &&  config.Web &&  !dataSettedInsideBoot) {
+  const isBfdlBannerDisplayed = storageService().getBoolean("bfdlBannerDisplayed");
+  const isBfdlConfig = !isBfdlBannerDisplayed && config.code === 'bfdlmobile' && (config.isIframe || config.isSdk)
+
+  if (!isBfdlConfig && this.state.screenName === "invest_landing" &&  config.Web &&  !dataSettedInsideBoot) {
     await this.getSummary();
   }
-  if (this.state.screenName === "sdk_landing" && !config.Web) {
+  if (!isBfdlConfig && this.state.screenName === "sdk_landing" && !config.Web) {
     await this.getSummary();
   }
 
