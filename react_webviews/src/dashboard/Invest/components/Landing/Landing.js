@@ -47,6 +47,7 @@ class Landing extends Component {
       openBottomSheet: false,
       bottom_sheet_dialog_data: {},
       isWeb: getConfig().Web,
+      isIframe: getConfig().isIframe,
       stateParams: props.location.state || {},
       tradingEnabled: isTradingEnabled(),
       clickedCardKey: '',
@@ -706,7 +707,7 @@ class Landing extends Component {
           onClose={this.onPinSetupClose}
           comingFrom={this.state.clickedCardKey}
         />
-        { config.isIframe && (
+        { this.state.isIframe && (
         <BFDLBanner
           isOpen={openBfdlBanner}
           close={this.closeBfdlBanner}
