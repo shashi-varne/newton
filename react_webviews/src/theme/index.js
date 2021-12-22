@@ -1,7 +1,7 @@
 import { createTheme } from '@mui/material';
 import { buttonStyleOverRides, buttonVariantsConfig, } from './button';
 import color from './colors';
-import baseTypographyConfig, { calcVariantFontWeight } from './typography';
+import baseTypographyConfig, { customTypographyVariantProps } from './typography';
 const theme = createTheme({
   palette: {
     primary: {
@@ -14,7 +14,7 @@ const theme = createTheme({
   typography: baseTypographyConfig,
   components: {
     MuiTypography: {
-      variants: calcVariantFontWeight(),
+      variants: customTypographyVariantProps(),
     },
     MuiButton: {
       variants: buttonVariantsConfig(),

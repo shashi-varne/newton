@@ -93,7 +93,7 @@ const baseTypographyConfig = {
 
 export default baseTypographyConfig;
 
-export const calcVariantFontWeight = () => {
+export const customTypographyVariantProps = () => {
   const mapper = [];
   // eslint-disable-next-line no-unused-expressions
   headerVariants?.forEach((header) => {
