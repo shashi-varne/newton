@@ -21,6 +21,7 @@ import { getConfig, isTradingEnabled } from "../../../../utils/functions";
 import { PATHNAME_MAPPER } from "../../../../kyc/constants";
 import toast from "../../../../common/ui/Toast"
 import PinSetupDialog from "../../mini-components/PinSetupDialog";
+import BFDLBanner from "../../mini-components/BFDLBanner";
 
 const fromLoginStates = ["/login", "/logout", "/verify-otp"]
 class Landing extends Component {
@@ -49,6 +50,7 @@ class Landing extends Component {
       stateParams: props.location.state || {},
       tradingEnabled: isTradingEnabled(),
       clickedCardKey: '',
+      openBfdlBanner: false,
     };
     this.initialize = initialize.bind(this);
     this.generateOtp = generateOtp.bind(this);
@@ -93,6 +95,7 @@ class Landing extends Component {
     if (campaignsToShowOnPriority.includes(bottom_sheet_dialog_data.campaign_name)) {
       this.setDialogsState("openBottomSheet");
     }
+    this.openBfdlBanner();
   };
 
   addBank = () => {
@@ -315,7 +318,8 @@ class Landing extends Component {
       tradingEnabled,
       kycButtonLoader,
       stocksButtonLoader,
-      kycJourneyStatus
+      kycJourneyStatus,
+      openBfdlBanner
     } = this.state;
     const {
       indexFunds,
@@ -701,6 +705,10 @@ class Landing extends Component {
           open={this.state.openPinSetupDialog}
           onClose={this.onPinSetupClose}
           comingFrom={this.state.clickedCardKey}
+        />
+        <BFDLBanner
+          isOpen={openBfdlBanner}
+          close={this.closeBfdlBanner}
         />
       </Container>
     );

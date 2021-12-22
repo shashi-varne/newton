@@ -30,6 +30,7 @@ const WVFullscreenDialog = ({
   customCloseIcon,
   closeIconPosition, // Sets position of 'close' icon, defaults to 'right'
   title, 
+  classes = {},
   ...dialogProps
 }) => {
 
@@ -41,11 +42,11 @@ const WVFullscreenDialog = ({
       fullScreen
       open={open}
       onClose={onClose}
-      className="wv-fullscreen-dialog"
+      className={`wv-fullscreen-dialog ${classes.container}`}
       aria-labelledby="fullscreen-dialog"
       {...dialogProps}
     >
-      <DialogTitle style={{ padding: '20px' }}>
+      <DialogTitle style={{ padding: '20px' }} classes={classes.dialogTitle}>
         <div style={{ textAlign: closeIconPosition }}>
           <CloseIcon
             data-aid={`wv-fd-close-dialog-${dataAidSuffix}`}
@@ -55,7 +56,7 @@ const WVFullscreenDialog = ({
           />
         </div>
         {title &&
-          <WVInPageTitle style={{ marginTop: '20px' }}>{title}</WVInPageTitle>
+          <WVInPageTitle style={{ marginTop: '20px' }} className={classes.wvTitle} >{title}</WVInPageTitle>
         }
       </DialogTitle>
       {children}
