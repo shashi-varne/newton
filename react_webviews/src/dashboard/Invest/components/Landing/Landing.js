@@ -706,10 +706,12 @@ class Landing extends Component {
           onClose={this.onPinSetupClose}
           comingFrom={this.state.clickedCardKey}
         />
+        { config.isIframe && (
         <BFDLBanner
           isOpen={openBfdlBanner}
           close={this.closeBfdlBanner}
         />
+        )}
       </Container>
     );
   }
