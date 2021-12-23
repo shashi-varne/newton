@@ -1,0 +1,19 @@
+.atom-status {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  .as-circle {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 4px;
+  }
+
+  .as-title {
+    line-height: 19px;
+    font-weight: 500;
+    font-size: 12px;
+    text-transform: uppercase;
+  }
+}
