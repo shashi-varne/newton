@@ -36,6 +36,18 @@ const theme = createTheme({
           backgroundColor: color.supporting.athensGrey,
         }
       }
+    },
+    MuiRadio: {
+      styleOverrides: {
+        root: {
+          color: color.primary.brand,
+          padding: 4,
+          '&.Mui-disabled': {
+            color: color.supporting.athensGrey,
+          },
+          '& .MuiSvgIcon-root': { fontSize: 16 },
+        }
+      }
     }
   },
 });
