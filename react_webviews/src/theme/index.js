@@ -36,6 +36,16 @@ const theme = createTheme({
           backgroundColor: color.supporting.athensGrey,
         }
       }
+    },
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          color: color.primary.brand,
+          '&.Mui-disabled': {
+            color: color.supporting.athensGrey,
+          },
+        },
+      }
     }
   },
 });
