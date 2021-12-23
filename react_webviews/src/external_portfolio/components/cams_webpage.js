@@ -72,7 +72,7 @@ export default class CamsWebpageSwipe extends Component {
         <div style={{ height: 'auto', margin: '-15px' }}>
           <iframe
             className="cams-iframe"
-            src="https://new.camsonline.com/Investors/Statements/Consolidated-Account-Statement/"
+            src="https://www.camsonline.com/Investors/Statements/Consolidated-Account-Statement"
             title="fisdom"
             frameBorder="0"
             wmode="Opaque"

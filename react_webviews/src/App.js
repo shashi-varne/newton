@@ -57,7 +57,6 @@ const clearBottomsheetDisplays = () => {
     "verifyDetailsSheetDisplayed", 
     "is_bottom_sheet_displayed_kyc_premium", 
     "landingBottomSheetDisplayed",
-    "bfdlBannerDisplayed",
   ];
 
   bottomSheetsArr.forEach((bottomSheet) => {
