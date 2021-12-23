@@ -41,9 +41,10 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           color: color.primary.brand,
-          '&.Mui-disabled': {
+          '& .Mui-disabled': {
             color: color.supporting.athensGrey,
           },
+          '& .MuiSvgIcon-root': { fontSize: 16 },
         },
       }
     }
