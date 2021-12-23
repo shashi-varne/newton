@@ -1,19 +1,29 @@
 import React from "react";
-import { Box } from "@mui/material";
-import color from "../../../../theme/colors";
+import { Divider } from "@mui/material";
+
+export const DIVIDER_VARIANTS = {
+  FULL_WIDTH: "fullWidth",
+  INSET: "inset",
+  MIDDLE: "middle",
+};
 
 const Separator = (props) => {
-  const { className, dataAidSuffix: dataAid } = props;
-
+  const {
+    className,
+    variant = DIVIDER_VARIANTS.FULL_WIDTH,
+    dataAid,
+    children,
+    ...restProps
+  } = props;
   return (
-    <Box
+    <Divider
       className={`atom-separator ${className}`}
-      sx={{
-        backgroundColor: color.supporting.athensGrey,
-        height: "1px",
-      }}
       data-aid={`atom-separator-${dataAid}`}
-    />
+      variant={variant}
+      {...restProps}
+    >
+      {children}
+    </Divider>
   );
 };
 
