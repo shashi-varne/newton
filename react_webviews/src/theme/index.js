@@ -36,6 +36,19 @@ const theme = createTheme({
           backgroundColor: color.supporting.athensGrey,
         }
       }
+    },
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          padding: 8,
+          fontSize: 14,
+          maxWidth: 350,
+          fontWeight: 400,
+          lineHeight: "22px",
+          textAlign: "center",
+          backgroundColor: color.content.primary,
+        }
+      }
     }
   },
 });
