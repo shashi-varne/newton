@@ -41,7 +41,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: color.supporting.white,
-          minHeight: 38
+          minHeight: 36
         },
         flexContainer: {
           display: 'block !important'
