@@ -43,7 +43,7 @@ const theme = createTheme({
           backgroundColor: color.supporting.athensGrey,
         },
         inset: {
-          marginLeft: 16,
+          marginRight: 16,
         },
         middle: {
           margin: "0 16px"

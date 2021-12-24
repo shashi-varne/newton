@@ -1,5 +1,6 @@
 import React from "react";
 import { Divider } from "@mui/material";
+import PropTypes from "prop-types";
 
 export const DIVIDER_VARIANTS = {
   FULL_WIDTH: "fullWidth",
@@ -28,3 +29,9 @@ const Separator = (props) => {
 };
 
 export default Separator;
+
+Separator.propTypes = {
+  className: PropTypes.string,
+  dataAid: PropTypes.string,
+  variant: PropTypes.oneOf(Object.values(DIVIDER_VARIANTS)),
+};
