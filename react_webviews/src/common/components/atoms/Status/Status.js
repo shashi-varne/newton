@@ -47,9 +47,5 @@ const Status = (props) => {
 export default Status;
 
 Status.propTypes = {
-  variant: PropTypes.oneOfType([
-    STATUS_VARIANTS.POSITIVE,
-    STATUS_VARIANTS.ATTENTION,
-    STATUS_VARIANTS.WARNING,
-  ]),
+  variant: PropTypes.oneOf(Object.values(STATUS_VARIANTS)),
 };
