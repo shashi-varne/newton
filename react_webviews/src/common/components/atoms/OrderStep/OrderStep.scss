@@ -1,0 +1,19 @@
+.atom-order-step {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  .aos-circle {
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    margin-right: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .aos-step-content {
+      color: #ffffff;
+    }
+  }
+}
