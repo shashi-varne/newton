@@ -1,6 +1,7 @@
 import React, { Children } from 'react';
 import LibTabs from '@mui/material/Tabs';
 import LibTab from '@mui/material/Tab';
+import PropTypes from 'prop-types';
 
 export const Tabs = ({
   value,
@@ -35,6 +36,7 @@ Tabs.defaultProps = {
   variant: 'scrollable',
   scrollButtons: 'auto',
   allowScrollButtonsMobile: true,
+  children: PropTypes.instanceOf(Array).isRequired
 };
 
 export const Tab = ({
