@@ -1,7 +1,7 @@
 import { createTheme } from '@mui/material';
 import { buttonStyleOverRides, buttonVariantsConfig, } from './button';
 import color from './colors';
-import { tabsStyleOverRides, tabStyleOverRides } from './tabs/index.js';
+import { tabsStyleOverRides, tabStyleOverRides, tabsVariantsConfig, tabVariantsConfig } from './tabs/index.js';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
 const theme = createTheme({
   palette: {
@@ -39,9 +39,11 @@ const theme = createTheme({
       }
     },
     MuiTabs: {
+      variants:tabsVariantsConfig(),
       styleOverrides: tabsStyleOverRides()
     },
     MuiTab: {
+      variants:tabVariantsConfig(),
       styleOverrides: tabStyleOverRides()
     },
     
