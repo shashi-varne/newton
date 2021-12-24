@@ -1,7 +1,8 @@
 import React from "react";
 import { Box } from "@mui/material";
-import "./BarMeter.scss";
 import color from "../../../../theme/colors";
+import PropTypes from "prop-types";
+import "./BarMeter.scss";
 
 const BarMeter = (props) => {
   const { classes = {}, dataAid, numberOfBars = 5, activeIndex } = props;
@@ -35,3 +36,10 @@ const Bar = ({ isActive = false, className, dataAid }) => {
 };
 
 export default BarMeter;
+
+BarMeter.propTypes = {
+  activeIndex: PropTypes.number,
+  numberOfBars: PropTypes.number,
+  classes: PropTypes.object,
+  dataAid: PropTypes.string,
+};
