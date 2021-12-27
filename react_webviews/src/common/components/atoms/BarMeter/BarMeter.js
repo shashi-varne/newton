@@ -9,13 +9,12 @@ const BarMeter = (props) => {
   return (
     <Box
       className={`atom-bar-meter ${classes.container}`}
-      data-aid={`atom-bar-meter-${dataAid}`}
+      data-aid={`barMeter_${dataAid}`}
     >
       {Array.from(Array(numberOfBars).keys()).map((element) => (
         <Bar
           key={element}
           className={classes.bar}
-          dataAid={dataAid}
           isActive={element === activeIndex}
         />
       ))}
@@ -23,14 +22,13 @@ const BarMeter = (props) => {
   );
 };
 
-const Bar = ({ isActive = false, className, dataAid }) => {
+const Bar = ({ isActive = false, className }) => {
   return (
     <Box
       className={`atom-bar ${className}`}
       sx={{
         backgroundColor: isActive ? color.primary.brand : color.primary[200],
       }}
-      data-aid={`atom-bar-${dataAid}`}
     />
   );
 };
