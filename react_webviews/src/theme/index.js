@@ -1,6 +1,7 @@
 import { createTheme } from '@mui/material';
 import { buttonStyleOverRides, buttonVariantsConfig, } from './button';
 import color from './colors';
+import { radioButtonStyleOverRides } from './radioButton';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
 const theme = createTheme({
   palette: {
@@ -38,16 +39,7 @@ const theme = createTheme({
       }
     },
     MuiRadio: {
-      styleOverrides: {
-        root: {
-          color: color.primary.brand,
-          padding: 4,
-          '&.Mui-disabled': {
-            color: color.supporting.athensGrey,
-          },
-          '& .MuiSvgIcon-root': { fontSize: 16 },
-        }
-      }
+      styleOverrides: radioButtonStyleOverRides(),
     }
   },
 });
