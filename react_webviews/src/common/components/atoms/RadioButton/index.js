@@ -16,7 +16,7 @@ const RadioButton = (props) => {
       disabled={isDisabled}
       checked={isSelected}
       onChange={onChange}
-      data-aid={`atom-radio-button-${dataAid}`}
+      data-aid={`radioButton_${dataAid}`}
       {...restProps}
     />
   );
