@@ -2,6 +2,7 @@ import { createTheme } from '@mui/material';
 import { buttonStyleOverRides, buttonVariantsConfig, } from './button';
 import color from './colors';
 import { tabsStyleOverRides, tabStyleOverRides } from './tabs/index.js';
+import { switchStyleOverRides } from './switch';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
 const theme = createTheme({
   palette: {
@@ -22,21 +23,7 @@ const theme = createTheme({
       styleOverrides: buttonStyleOverRides(),
     },
     MuiSwitch: {
-      styleOverrides: {
-        switchBase: {
-          color: color.supporting.athensGrey,
-          '& + .MuiSwitch-track': {
-            opacity: 1,
-          },
-        },
-        thumb: {
-          border: `2px solid ${color.supporting.white}`,
-          boxShadow: 'none',
-        },
-        track: {
-          backgroundColor: color.supporting.athensGrey,
-        }
-      }
+      styleOverrides: switchStyleOverRides()
     },
     MuiTabs: {
       styleOverrides: tabsStyleOverRides()
@@ -44,7 +31,6 @@ const theme = createTheme({
     MuiTab: {
       styleOverrides: tabStyleOverRides()
     },
-    
   },
 });
 
