@@ -1,6 +1,7 @@
 import { createTheme } from '@mui/material';
 import { buttonStyleOverRides, buttonVariantsConfig, } from './button';
 import color from './colors';
+import { switchStyleOverRides } from './switch';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
 const theme = createTheme({
   palette: {
@@ -21,24 +22,7 @@ const theme = createTheme({
       styleOverrides: buttonStyleOverRides(),
     },
     MuiSwitch: {
-      styleOverrides: {
-        switchBase: {
-          color: color.supporting.athensGrey,
-          '& + .MuiSwitch-track': {
-            opacity: 1,
-          },
-          '&.Mui-disabled& + .MuiSwitch-track': {
-            opacity: 1,
-          },
-        },
-        thumb: {
-          border: `2px solid ${color.supporting.white}`,
-          boxShadow: '0px 0px 2px rgba(0, 0, 0, 0.16)',
-        },
-        track: {
-          backgroundColor: color.supporting.athensGrey,
-        }
-      }
+      styleOverrides: switchStyleOverRides()
     }
   },
 });
