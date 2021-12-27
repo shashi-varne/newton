@@ -31,7 +31,7 @@ const OrderStep = (props) => {
   return (
     <Box
       className={`atom-order-step ${className}`}
-      data-aid={`atom-order-step-${dataAid}`}
+      data-aid={`orderStep_${dataAid}`}
     >
       <Box
         className="aos-circle"
