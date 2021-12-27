@@ -128,12 +128,13 @@ const ManualSignature = (props) => {
       skelton={isLoading}
       disable={isApiRunning}
       showLoader={showLoader}
+      iframeRightContent={require(`assets/${config.productName}/kyc_illust.svg`)}
     >
       <section id="manual-signature" data-aid='manual-signature'>
         <div className="generic-page-subtitle manual-signature-subtile" data-aid='generic-page-subtitle'>
           Send us your signed documents through courier by following the steps below
         </div>
-        <div class="page-content" data-aid='page-content'>
+        <div className="page-content" data-aid='page-content'>
           {stepsToRender?.length && stepsToRender.map((step, index) => (
             <WVSteps
               stepNum={step.id}

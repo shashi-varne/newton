@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useMemo } from 'react'
+import { getConfig } from '../../utils/functions';
 import Container from '../common/Container'
 import SampleDocuments from '../mini-components/SampleDocuments'
 
@@ -11,12 +12,19 @@ const documents = [
 ]
 
 const FnOSampleDocuments = (props) => {
+  const { productName } = useMemo(getConfig, []);
   const handleCTAClick = () => {
     props.history.goBack();
   }
 
   return (
-    <Container title="Sample documents" buttonTitle="OKAY" handleClick={handleCTAClick} data-aid='kyc-sample-doc-screen'>
+    <Container 
+      title="Sample documents" 
+      buttonTitle="OKAY" 
+      handleClick={handleCTAClick} 
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
+      data-aid='kyc-sample-doc-screen'
+    >
       <SampleDocuments description={description} documents={documents} />
     </Container>
   )
