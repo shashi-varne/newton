@@ -9,7 +9,7 @@ const EMandateTrustIcon = (props) => {
   return (
     <div
       className={`atom-e-mandate-trust-icon ${className}`}
-      data-aid={`atom-e-mandate-trust-icon-${dataAid}`}
+      data-aid={`eMandateTrustIcon-${dataAid}`}
     >
       <Typography variant="body5" color={color.content.secondary}>
         e-mandate powered by
