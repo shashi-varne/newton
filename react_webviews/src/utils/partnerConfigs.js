@@ -583,7 +583,11 @@ export const partnerConfigs = {
     },
     features: {
       addAnotherBank: true
-    }
+    },
+    referralConfig: {
+      applyRefferal: true,
+      shareRefferal: true,
+    },
   },
 };
 
