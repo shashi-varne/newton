@@ -19,7 +19,7 @@ const Separator = (props) => {
   return (
     <Divider
       className={`atom-separator ${className}`}
-      data-aid={`atom-separator-${dataAid}`}
+      data-aid={`separator_${dataAid}`}
       variant={variant}
       {...restProps}
     >
