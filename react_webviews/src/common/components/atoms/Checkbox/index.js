@@ -16,7 +16,7 @@ const CheckBox = (props) => {
       disabled={isDisabled}
       checked={isSelected}
       onChange={onChange}
-      data-aid={`atom-checkbox-${dataAid}`}
+      data-aid={`checkbox_${dataAid}`}
       {...restProps}
     />
   );

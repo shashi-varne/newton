@@ -1,5 +1,6 @@
 import { createTheme } from '@mui/material';
 import { buttonStyleOverRides, buttonVariantsConfig, } from './button';
+import { checkboxStyleOverRides } from './checkbox';
 import color from './colors';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
 const theme = createTheme({
@@ -38,16 +39,7 @@ const theme = createTheme({
       }
     },
     MuiCheckbox: {
-      styleOverrides: {
-        root: {
-          color: color.primary.brand,
-          padding: 4,
-          '&.Mui-disabled': {
-            color: color.supporting.athensGrey,
-          },
-          '& .MuiSvgIcon-root': { fontSize: 16 },
-        },
-      }
+      styleOverrides: checkboxStyleOverRides(),
     }
   },
 });
