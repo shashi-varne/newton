@@ -1,6 +1,7 @@
 import { createTheme } from '@mui/material';
 import { buttonStyleOverRides, buttonVariantsConfig, } from './button';
 import color from './colors';
+import { tooltipStyleOverRides } from './tooltip';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
 const theme = createTheme({
   palette: {
@@ -38,18 +39,8 @@ const theme = createTheme({
       }
     },
     MuiTooltip: {
-      styleOverrides: {
-        tooltip: {
-          padding: 8,
-          fontSize: 14,
-          maxWidth: 350,
-          fontWeight: 400,
-          lineHeight: "22px",
-          textAlign: "center",
-          backgroundColor: color.content.primary,
-        }
-      }
-    }
+      styleOverrides: tooltipStyleOverRides(),
+    },
   },
 });
 
