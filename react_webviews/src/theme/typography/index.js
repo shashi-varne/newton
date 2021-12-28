@@ -1,5 +1,9 @@
-import colorConfig, { partnerConfig } from '../colors';
+import getPartnerThemeData from '../utils';
 const calcLineHeight = (fontSize, factor) => `${fontSize * factor}px`;
+
+const partnerThemeData = getPartnerThemeData();
+const partnerConfig = partnerThemeData?.partnerConfig;
+const colorConfig = partnerThemeData?.colors;
 
 const headerVariants = [
   'heading1',
@@ -14,7 +18,6 @@ const headerVariants = [
   'body6',
   'body7',
 ];
-console.log("partnerConfig is",partnerConfig);
 export const FONT_WEIGHT = {
   Bold: 700,
   Medium: 500,

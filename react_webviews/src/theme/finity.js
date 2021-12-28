@@ -1,4 +1,4 @@
-const FinityTheme = {
+const FinityTheme = () => ({
   colors: {
     primary: {
       brand: '#675AF6',
@@ -58,6 +58,6 @@ const FinityTheme = {
       white: '#FFFFFF',
     },
   },
-};
+});
 
 export default FinityTheme;
