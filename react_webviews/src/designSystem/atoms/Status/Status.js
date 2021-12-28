@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Box } from "@mui/material";
-import color from "../../../../theme/colors";
+import color from "../../../theme/colors";
 import "./Status.scss";
 
 const secondaryColors = color.secondary;
@@ -19,10 +19,10 @@ const VARIANT_COLOR_MAPPER = {
 };
 
 const Status = (props) => {
-  const { title = "", className, children, variant } = props;
+  const { title = "", className, children, variant, dataAid, } = props;
 
   return (
-    <Box className={`atom-status ${className}`}>
+    <Box className={`atom-status ${className}`} data-aid={`status_${dataAid}`} >
       <Box
         className="as-circle"
         sx={{
