@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '@mui/material/Button';
+import LibButton from '@mui/material/Button';
 import DotDotLoaderNew from 'common/ui/DotDotLoaderNew';
 
 const VARIANTS = {
@@ -13,7 +13,7 @@ const SIZES = {
   large: 'large',
 };
 
-const RButton = (props) => {
+const Button = (props) => {
   const {
     size,
     isLoading,
@@ -25,7 +25,7 @@ const RButton = (props) => {
   } = props;
   return (
     <div>
-      <Button
+      <LibButton
         isloading={isLoading}
         variant={VARIANTS[variant] || VARIANTS['primary']}
         size={SIZES[size] || SIZES['large']}
@@ -35,19 +35,19 @@ const RButton = (props) => {
         {...restProps}
       >
         {isLoading ? <DotDotLoaderNew /> : title}
-      </Button>
+      </LibButton>
     </div>
   );
 };
 
-export default RButton;
+export default Button;
 
-RButton.defaultProps = {
+Button.defaultProps = {
   variant: 'primary',
   size: 'large'
 }
 
-RButton.propTypes = {
+Button.propTypes = {
   variant: (props) => validateVariantType(props),
   size: (props) => validateSizeType(props),
 };
