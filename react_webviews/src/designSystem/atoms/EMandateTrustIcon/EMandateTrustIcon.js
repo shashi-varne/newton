@@ -1,7 +1,7 @@
 import React from "react";
 import { Typography } from "@mui/material";
-import { Imgc } from "../../../ui/Imgc";
-import color from "../../../../theme/colors";
+import { Imgc } from "../../../common/ui/Imgc";
+import color from "../../../theme/colors";
 import "./EMandateTrustIcon.scss";
 
 const EMandateTrustIcon = (props) => {
