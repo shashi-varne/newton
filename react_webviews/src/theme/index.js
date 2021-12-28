@@ -1,5 +1,6 @@
 import { createTheme } from '@mui/material';
 import { buttonStyleOverRides, buttonVariantsConfig, } from './button';
+import { checkboxStyleOverRides } from './checkbox';
 import color from './colors';
 import { switchStyleOverRides } from './switch';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
@@ -23,7 +24,10 @@ const theme = createTheme({
     },
     MuiSwitch: {
       styleOverrides: switchStyleOverRides()
-    }
+    },
+    MuiCheckbox: {
+      styleOverrides: checkboxStyleOverRides(),
+    },
   },
 });
 
