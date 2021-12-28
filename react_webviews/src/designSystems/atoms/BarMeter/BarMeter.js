@@ -1,6 +1,6 @@
 import React from "react";
 import { Box } from "@mui/material";
-import color from "../../../../theme/colors";
+import color from "../../../theme/colors";
 import PropTypes from "prop-types";
 import "./BarMeter.scss";
 
