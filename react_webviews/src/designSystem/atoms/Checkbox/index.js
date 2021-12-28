@@ -1,9 +1,9 @@
 import React from "react";
-import Checkbox from "@mui/material/Checkbox";
+import MuiCheckbox from "@mui/material/Checkbox";
 import { noop } from "lodash";
 import PropTypes from "prop-types";
 
-const CheckBox = (props) => {
+const Checkbox = (props) => {
   const {
     isSelected = false,
     isDisabled = false,
@@ -12,7 +12,7 @@ const CheckBox = (props) => {
     ...restProps
   } = props;
   return (
-    <Checkbox
+    <MuiCheckbox
       disabled={isDisabled}
       checked={isSelected}
       onChange={onChange}
@@ -22,9 +22,9 @@ const CheckBox = (props) => {
   );
 };
 
-export default CheckBox;
+export default Checkbox;
 
-CheckBox.propTypes = {
+Checkbox.propTypes = {
   isSelected: PropTypes.bool,
   isDisabled: PropTypes.bool,
   onChange: PropTypes.func,
