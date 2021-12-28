@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Box, Typography } from "@mui/material";
-import color from "../../../../theme/colors";
+import color from "../../../theme/colors";
 import { isEmpty } from "lodash";
 import "./OrderStep.scss";
 
