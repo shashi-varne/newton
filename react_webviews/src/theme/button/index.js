@@ -1,5 +1,9 @@
-import colors, { partnerConfig } from '../colors';
 import { FONT_WEIGHT } from '../typography';
+import getPartnerThemeData from '../utils';
+
+const partnerThemeData = getPartnerThemeData();
+const partnerConfig = partnerThemeData?.partnerConfig;
+const colors = partnerThemeData?.colors;
 
 export const buttonVariantsConfig = () => [
   {
