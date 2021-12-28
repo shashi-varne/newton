@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Box } from "@mui/material";
-import color from "../../../../theme/colors";
+import color from "../../../theme/colors";
 import "./Timeline.scss";
 
 const activeStyles = {
@@ -17,12 +17,13 @@ const inActiveStyles = {
 };
 
 const Timeline = (props) => {
-  const { text = "", className, isActive = false } = props;
+  const { text = "", className, isActive = false, dataAid } = props;
 
   return (
     <Box
       className={`atom-timeline ${className}`}
       sx={isActive ? activeStyles : inActiveStyles}
+      data-aid={`timeline_${dataAid}`}
     >
       {text}
     </Box>
