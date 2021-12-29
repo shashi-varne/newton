@@ -2,8 +2,11 @@
 /*  Module: callbackWeb
 /*  Apis for sending/receiving `native` callbacks
 /* -----------------------------------------------------------------*/
+import { EVENT_MANAGER_CONSTANTS } from './constants';
+import eventManager from './eventManager';
 import { isMobile } from './functions';
 import { getConfig } from './functions';
+import isEmpty from 'lodash/isEmpty';
 
 
 (function (exports) {
@@ -56,9 +59,10 @@ import { getConfig } from './functions';
     for (let i = 0; i < listeners.length; i++) {
       let l = listeners[i];
       if (l.type === 'doc' && (l.doc_type === d.file_name || l.doc_type === d.doc_type)) {
-        let file = b64toBlob(d.blobBase64, d.mime_type || d.file_type, '');
+        const { blobBase64, mime_type, file_type, ...otherProps } = d;
+        let file = b64toBlob(blobBase64, mime_type || file_type, '');
         file.file_name = d.file_name_local;
-        l.upload(file);
+        l.upload(file, otherProps);
         listeners.splice(i, 1);
         i--;
       }
@@ -91,7 +95,10 @@ import { getConfig } from './functions';
     listeners.push(listener);
     let callbackData = {};
     callbackData.action = 'take_picture';
-    callbackData.action_data = { file_name: listener.doc_type };
+    callbackData.action_data = {
+      file_name: listener.doc_type,
+      check_liveness: listener.check_liveness
+    };
     if (typeof window.Android !== 'undefined') {
       window.Android.callbackNative(JSON.stringify(callbackData));
     } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
@@ -227,39 +234,51 @@ import { getConfig } from './functions';
     let callbackData = {};
     callbackData.action = 'get_device_data';
     if (typeof window.Android !== 'undefined') {
-      console.log("android")
       window.Android.callbackNative(JSON.stringify(callbackData));
     } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
       window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
     } else {
-      navigator.permissions.query({
-        name: 'geolocation'
-      }).then(function(result) {
-          navigator.geolocation.getCurrentPosition(position => {
-            let data = {
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-              location_permission_denied: false
-            }
-            window.callbackWeb.send_device_data(data);
-          })
-  
+      const onLocationFetchSuccess = (position) => {
+        let data = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          location_permission_denied: false
+        }
+        window.callbackWeb.send_device_data(data);
+      };
+
+      const onLocationFetchFailure = () => {
+        let data = {
+          location_permission_denied: true
+        }
+        window.callbackWeb.send_device_data(data);
+      };
+
+      if(!isEmpty(navigator.permissions)) {
+        navigator.permissions.query({
+          name: 'geolocation'
+        }).then(function(result) {
+            
+          navigator.geolocation.getCurrentPosition(onLocationFetchSuccess, onLocationFetchFailure);
+    
           if (result.state === 'denied') {
-            let data = {
-              location_permission_denied: true
-            }
-            window.callbackWeb.send_device_data(data);
+            onLocationFetchFailure();
           }
   
+          /*
+            onchange does not currently work in Mozilla due to a bug in Mozilla itself.
+            The same behaviour is now also handled using onLocationFetchFailure passed into
+            geolocation.getCurrentPosition's error callback param
+          */
           result.onchange = function() {
             if (result.state === 'denied') {
-              let data = {
-                location_permission_denied: true
-              }
-              window.callbackWeb.send_device_data(data);
+              onLocationFetchFailure();
             }
           }
-      })
+        })
+      } else {
+        navigator.geolocation.getCurrentPosition(onLocationFetchSuccess, onLocationFetchFailure);
+      }
     }
 
     // for testing added
@@ -340,6 +359,7 @@ import { getConfig } from './functions';
       } else {
         set_session_storage("partner", json_data.partner);
       }
+      eventManager.emit(EVENT_MANAGER_CONSTANTS.updateAppTheme);
     }
 
     if (json_data?.sdk_capabilities) {
@@ -360,6 +380,7 @@ import { getConfig } from './functions';
         } else {
           set_session_storage("partner", partner);
         }
+        eventManager.emit(EVENT_MANAGER_CONSTANTS.updateAppTheme);
       }
     }
   }

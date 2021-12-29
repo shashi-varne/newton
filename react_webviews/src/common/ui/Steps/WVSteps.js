@@ -32,7 +32,7 @@ const WVSteps = ({
           data-aid='wv-sh-number'
           className={`wv-sh-number-${stepType} ${classes.stepNumber}`}
         >
-          {/* If type is 'completed, default content is a success badge */}
+          {/* If type is 'completed', default content is a success badge */}
           {stepType === 'completed' ?
             (stepNum || checkImg) :
             stepNum
@@ -48,7 +48,7 @@ const WVSteps = ({
 }
 
 const checkImg = (
-  <img src={require('assets/badge-success.svg')} alt="" />
+  <img src={require('assets/badge-success.svg')} alt="" width="100%" />
 );
 
 WVSteps.propTypes = {

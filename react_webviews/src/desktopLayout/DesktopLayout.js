@@ -4,7 +4,7 @@ import Drawer from './Drawer';
 import RightContent from './InvestInfo';
 import 'common/theme/Style.scss';
 import './DesktopLayout.scss';
-const Feature = (props) => {
+const DesktopLayout = (props) => {
   return (
     <div className='main-container' data-aid='desktop-layout-main-container'>
       <NavBar />
@@ -19,4 +19,4 @@ const Feature = (props) => {
   );
 };
 
-export default Feature;
+export default DesktopLayout;

@@ -1,8 +1,8 @@
 // import colors from '../common/theme/Style.scss';
 import { checkValidString, getUrlParams, storageService } from './validators';
+import { isArray, isEmpty, isFunction } from 'lodash';
 import $ from 'jquery';
 import {  getPartnerData  } from './partnerConfigs';
-import isEmpty from "lodash/isEmpty";
 
 export const getHost = (pathname) => {
   return window.location.origin + pathname;
@@ -52,7 +52,8 @@ function getPartnerConfig(partner_code) {
     origin.indexOf('app.mywaywealth.com') >= 0 || 
     origin.indexOf('wv.mywaywealth.com') >= 0 || 
     origin.indexOf('wv.finity.in') >= 0 || 
-    origin.indexOf('api.mywaywealth.com') >= 0;
+    origin.indexOf('my.preprod.finity.in') >= 0 || 
+    origin.indexOf('app2.finity.in') >= 0;
   const isminvest = search.indexOf('my.barodaminvest.com') >= 0;
   const isStaging = search.indexOf('staging') >= 0;
   let productType = 'fisdom';
@@ -90,6 +91,7 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty("--color-action-disable", `${config_to_return.uiElements.button.disabledBackgroundColor}`);
   html.style.setProperty('--dark', '#0A1D32');
   html.style.setProperty('--steelgrey', '#767E86');
+  html.style.setProperty('--whitegrey', '#EEEEEE');
   html.style.setProperty('--on-focus-background', `${config_to_return.uiElements.button.focusBackgroundColor}`);
   html.style.setProperty('--on-hover-background', `${config_to_return.uiElements.button.hoverBackgroundColor || config_to_return.styles.secondaryColor}`);
   html.style.setProperty('--on-hover-secondary-background', `${config_to_return.uiElements.button.hoverSecondaryBackgroundColor || config_to_return.styles.secondaryColor}`);
@@ -103,8 +105,10 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--primaryVariant4`, `${config_to_return.styles.primaryVariant4}`);
   html.style.setProperty(`--spacing`, '10px');
   html.style.setProperty(`--gunmetal`, '#161A2E');
+  html.style.setProperty(`--darkblue`, '#132056');
   html.style.setProperty(`--linkwater`, '#D3DBE4');
   html.style.setProperty(`--border-radius`, `${config_to_return.uiElements.button.borderRadius}px`);
+  html.style.setProperty(`--whitegrey`, '#EEEEEE');
 
   return config_to_return;
 }
@@ -125,7 +129,12 @@ export function getParamsMark(data) {
 }
 
 export const getPlatformConfig = () => {
-  const config = {};
+  let config = {
+    Web: false, 
+    Android: false,
+    iOS: false
+  };
+  
   if (isMobile.Android() && typeof window.Android !== 'undefined') {
     config.app = 'android';
     config.Android = true;
@@ -150,13 +159,24 @@ export const getConfig = () => {
   let origin = window.location.origin;
   let generic_callback = true;
 
-  let isProdFisdom = origin.indexOf('app.fisdom.com') >= 0  || origin.indexOf('wv.fisdom.com') >= 0 ;
-  let isProdFinity = origin.indexOf('app.mywaywealth.com') >= 0 || origin.indexOf('wv.mywaywealth.com') >= 0;
+  let isProdFisdom = origin.indexOf('app.fisdom.com') >= 0  || origin.indexOf('wv.fisdom.com') >= 0 || origin.indexOf('my.preprod.fisdom.com') >= 0 || origin.indexOf('app2.fisdom.com') >= 0;
+  let isProdMyway = origin.indexOf('app.mywaywealth.com') >= 0 || origin.indexOf('wv.mywaywealth.com') >= 0;
+  let isProdFinity = origin.indexOf('my.preprod.finity.in') >= 0  || origin.indexOf('app.finity.in') >= 0 || origin.indexOf('app2.finity.in') >= 0 || origin.indexOf('wv.finity.in') >= 0;
 
-  let base_href = window.sessionStorage.getItem('base_href') || '';
+  // let base_href = window.localStorage.getItem('base_href') || '';
   let base_url_default = '';
+  
+  const isStaging = origin.indexOf('plutus-web-staging') >= 0;
+  const isFisdomStaging = origin.indexOf('fisdom.equityappuat.finwizard.co.in') >= 0 || origin.indexOf('fisdomapp.staging.finwizard.co.in') >= 0;
+  const isFinityStaging = origin.indexOf('finity.equityappuat.finwizard.co.in') >= 0 || origin.indexOf('finityapp.staging.finwizard.co.in') >= 0;
+  const isLocal = origin.indexOf('localhost') >=0;
 
-  if(base_href) {
+  // if(base_href) {
+  //   base_url_default = window.location.origin;
+  // }
+
+  // default base url for commit id build
+  if(main_pathname.includes('/appl/web/') || main_pathname.includes('/appl/webview/')) {
     base_url_default = window.location.origin;
   }
 
@@ -166,10 +186,28 @@ export const getConfig = () => {
     }
   
     if(isProdFinity) {
+      base_url_default = 'https://api.finity.in';
+    }
+
+    if(isProdMyway) {
       base_url_default = 'https://api.mywaywealth.com';
+    }
+
+    // change server url here for local and staging url builds (Not commit id one's)
+    if (isStaging || isLocal) {
+      base_url_default = "https://wdash-dot-plutus-staging.appspot.com";
+    }
+
+    if(isFisdomStaging) {
+      base_url_default = 'https://fisdomapp.staging.finwizard.co.in';
+    }
+  
+    if(isFinityStaging) {
+      base_url_default = 'https://finityapp.staging.finwizard.co.in';
     }
   }
   
+
   if(base_url_default) {
     base_url = base_url_default;
   }
@@ -180,6 +218,7 @@ export const getConfig = () => {
   let { partner_code } = main_query_params;
   let { app_version } = main_query_params;
   let { pc_urlsafe } = main_query_params;
+  let { diet = false } = main_query_params;
   let project = '';
   let project_child = '';
   if (main_pathname.indexOf('group-insurance') >= 0) {
@@ -240,7 +279,7 @@ export const getConfig = () => {
     sdk_capabilities = storageService().get("sdk_capabilities") || "";
   }
 
-  if(!partner_code) {
+  if(storageService().get("partner")) {
     partner_code = storageService().get("partner") || ""
   }
 
@@ -296,6 +335,12 @@ export const getConfig = () => {
     }
   }
 
+  if(checkValidString(diet)) {
+    returnConfig.diet = diet;
+    searchParams += getParamsMark(searchParams) + `diet=${diet}`;
+    searchParamsMustAppend +=  getParamsMark(searchParams) + `diet=${diet}`;
+  }
+  
   if( main_pathname === '/webview/help-conversation' ) {
     const { ticket_id } = main_query_params;
     if (checkValidString(ticket_id)) {
@@ -357,7 +402,7 @@ export const getConfig = () => {
     searchParams += getParamsMark(searchParams) + `app_version=${app_version}`;
     searchParamsMustAppend += getParamsMark(searchParams) + `app_version=${app_version}`;
   }
-  let isProdEnv = isProdFinity || isProdFisdom;
+  let isProdEnv = isProdFinity || isProdFisdom || isProdMyway;
   // should be last
   returnConfig.current_params = main_query_params;
   returnConfig.base_url = base_url;
@@ -514,12 +559,29 @@ export function isIframe() {
     return false;
   }
 }
+
+export function stripTrailingSlash (str) {
+  return str.endsWith('/') ? str.slice(0, -1) : str;
+};
+
 export function getBasePath() {
-  var basename = window.sessionStorage.getItem('base_href') || '';
+  var basename = window.localStorage.getItem('base_href') || '';
   if(basename && basename.indexOf('appl/web') !== -1) {
     basename = basename ? basename + 'view' : '';
   }
-  return window.location.origin + basename;
+  return window.location.origin + stripTrailingSlash(basename);
+}
+
+export function isTradingEnabled(userKyc = {}) {
+  const kyc = !isEmpty(userKyc) ? userKyc : storageService().getObject("kyc");
+  const config = getConfig();
+  const equityEnabled = storageService().getBoolean('equityEnabled'); // Used to enable kyc equity flow from native/external side
+  if (config.isSdk) {
+    return false;
+  } else if (config.isNative) {
+    return equityEnabled && kyc?.equity_enabled;
+  }
+  return kyc?.equity_enabled;
 }
 
 const { checkBeforeRedirection, checkAfterRedirection, backButtonHandler } = require(`./${getConfig().platform}_app`);
@@ -592,6 +654,78 @@ export function listenPartnerEvents(cb) {
   });
 }
 
+export const base64ToBlob = (b64Data, contentType = '', sliceSize = 512) => {
+  const byteCharacters = atob(b64Data);
+  const byteArrays = [];
+
+  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+    const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+    const byteNumbers = new Array(slice.length);
+    for (let i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+    byteArrays.push(byteArray);
+  }
+
+  const blob = new Blob(byteArrays, { type: contentType });
+  return blob;
+}
+
+export function openFilePicker (
+  filePickerId,
+  methodName,
+  docName,
+  nativeHandler,
+  fileHandlerParams = {},
+  onFilePicked
+) {
+  if (getConfig().Web) {
+    const filepicker = document.getElementById(filePickerId);
+
+    if (filepicker) {
+      filepicker.value = null; // Required to allow same file to be picked again QA-4238 (https://stackoverflow.com/questions/12030686)
+      filepicker.click();
+    }
+  } else {
+    window.callbackWeb[methodName]({
+      type: 'doc',
+      doc_type: docName,
+      upload: nativeHandler,
+      ...fileHandlerParams // callback from native
+    });
+
+    if (isFunction(onFilePicked)) {
+      // This callback is triggered once a user selects a file
+      window.callbackWeb.add_listener({
+        type: "native_receiver_image",
+        show_loader: function () {
+          onFilePicked();
+        },
+      });
+    }
+  }
+}
+
+export function validateFileTypeAndSize (file, supportedTypes, sizeLimit) {
+  const fileType = file.type.split("/")[1];
+  const sizeInBytes = sizeLimit * 1000 * 1000;
+
+  if (!isArray(supportedTypes)) {
+    supportedTypes = [supportedTypes];
+  }
+
+  if (!supportedTypes.includes(fileType)) {
+    return "File type not supported";
+  } else if (file.size > sizeInBytes) {
+    return `File size cannot exceed ${sizeLimit}MB`;
+  }
+
+  return "";
+}
+
 export {
   checkBeforeRedirection, 
   checkAfterRedirection, 
@@ -650,6 +784,39 @@ export function stringToHexa(str) {
   return arr1.join('')
 }
 
+export const getCssVarObject = () => {
+  const config = getConfig();
+  const cssVarObj = {
+    '--secondary': config.styles.secondaryColor,
+    '--highlight': config.styles.highlightColor,
+    '--skelton-color':  config.styles.skeletonColor,
+    '--primary':  config.styles.primaryColor,
+    '--header-background':  config?.uiElements?.header?.backgroundColor,
+    '--default':  config.styles.default,
+    '--label':  config.uiElements.formLabel.color,
+    '--desktop-width':  "640px",
+    '--tooltip-width':  "540px",
+    '--color-action-disable':  config.uiElements.button.disabledBackgroundColor,
+    '--dark':  '#0A1D32',
+    '--steelgrey':  '#767E86',
+    '--on-focus-background':  config.uiElements.button.focusBackgroundColor,
+    '--on-hover-background':  config.uiElements.button.hoverBackgroundColor || config.styles.secondaryColor,
+    '--on-hover-secondary-background':  config.uiElements.button.hoverSecondaryBackgroundColor || config.styles.secondaryColor,
+    '--secondary-green':  config.styles.secondaryGreen,
+    '--mustard':  '#FFDA2C',
+    '--pink':  '#F16FA0',
+    '--purple':  '#A38CEB',
+    '--lime':  '#7ED321',
+    '--red':  '#D0021B',
+    '--primaryVariant1':  config.styles.primaryVariant1,
+    '--primaryVariant4':  config.styles.primaryVariant4,
+    '--spacing':  '10px',
+    '--gunmetal':  '#161A2E',
+    '--linkwater':  '#D3DBE4',
+    '--border-radius':  `${config.uiElements.button.borderRadius}px`
+  }
+  return cssVarObj;
+}
 export function isAuthenticatedUser(props) {
   const fromState = props.location?.state?.fromState || "";
   const navigation = navigate.bind(props);
@@ -683,4 +850,21 @@ export function getGuestUserRoute(apiUrl){
       return apiUrl + `${url_char}guest_lead_id=${guest_id}`
   }
   return apiUrl
-}  
+}
+
+export function requireAsset(assetName, partner, extension = 'svg') {
+  try {
+    return require(`assets/${partner ? (partner + '/' + assetName) : assetName}.${extension}`);
+  } catch (err) {
+    try {
+      return require(`assets/${assetName}`);
+    } catch (err) {
+      console.log('Could not find the asset you are looking for!', err);
+    }
+  }
+}
+
+export function isDietProduct() {
+  const {diet = ''} = getUrlParams();
+  return diet.toLowerCase() === 'true';
+}

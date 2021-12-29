@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom'
 import { getConfig } from 'utils/functions'
 import Container from '../common/Container'
 import WVJourneyCard from 'common/ui/JourneyCard/WVJourneyCard'
-import { Imgc } from 'common/ui/Imgc'
+import FeatureItem from '../mini-components/FeatureItem'
 
 import {
   TAX_FILING_STEPS,
@@ -196,26 +196,20 @@ function Steps(props) {
           <div className="m-top-3x flex space-between">
             {TAX_FILING_ADVANTAGES.map(({ icon, stats, group }, idx) => (
               <Fragment key={idx}>
-                <div className="flex-column align-center">
-                  <div
-                    className="tax-filing-advantages-icon flex justify-center align-center"
-                    style={{
-                      backgroundColor:
-                        productName === 'finity' ? '#FAFCFF' : '',
-                    }}
-                  >
-                    <Imgc src={require(`assets/${productName}/${icon}.svg`)} />
-                  </div>
-                  <div className="center body-text2 text-secondary m-top-1x">
-                    {stats}
-                  </div>
-                  <div className="center body-text2 text-secondary">
-                    {group}
-                  </div>
-                </div>
-                {idx !== TAX_FILING_ADVANTAGES.length - 1 && (
-                  <div className="divider"></div>
-                )}
+                <FeatureItem
+                  classes={{
+                    container:
+                      productName === 'fisdom'
+                        ? `tax-filing-advantages-icon`
+                        : `tax-filing-advantages-icon__finity`,
+                    divider: `tax-filing-advantages-divider`,
+                  }}
+                  imgSrc={`${productName}/${icon}`}
+                  title={stats}
+                  subtitle={group}
+                  key={icon}
+                  lastItem={idx === TAX_FILING_ADVANTAGES.length - 1}
+                />
               </Fragment>
             ))}
           </div>

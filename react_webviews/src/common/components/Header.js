@@ -27,8 +27,8 @@ const headerIconMapper = {
 }
 const Header = ({ classes, title, count, total, current, goBack, 
   edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
-  inPageTitle, force_hide_inpage_title, topIcon, handleTopIcon, customBackButtonColor,
-  className ,style, headerData={}, new_header, notification, handleNotification, noBackIcon}) => {
+  inPageTitle, hideHamburger, force_hide_inpage_title, topIcon, handleTopIcon, canSkip, onSkipClick,
+  className ,style, headerData={}, new_header, notification, handleNotification, noBackIcon, customBackButtonColor}) => {
     const rightIcon = headerIconMapper[topIcon];
     const [referDialog, setReferDialog] = useState(false);
     const [mobileViewDrawer, setMobileViewDrawer] = useState(false);
@@ -42,6 +42,7 @@ const Header = ({ classes, title, count, total, current, goBack,
     const backButtonColor = (!isWeb || config.isIframe) ? config.styles?.backButtonColor : '';
     const notificationsColor = !isWeb || config.isSdk ? config?.styles.notificationsColor : '';
     const moneycontrolHeader = isMobileDevice && config.code === 'moneycontrol';
+    const equityPayment = window.location.pathname.includes('pg/eq');
 
     const handleMobileViewDrawer = () => {
       setMobileViewDrawer(!mobileViewDrawer);
@@ -60,9 +61,11 @@ const Header = ({ classes, title, count, total, current, goBack,
         <Toolbar>
           {
             !noBackIcon &&
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" data-aid='tool-bar-icon-btn'
-              onClick={headerData.goBack ||
-              goBack}>
+            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu"
+              onClick={headerData.goBack || goBack} 
+              // Important Note:  whenever adding goBack func in headerData Container prop within component, do add native condition for correct back navigation 
+              data-aid='tool-bar-icon-btn'
+            >
               {!disableBack && !headerData.hide_icon &&
               <SVG
               preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (customBackButtonColor ? customBackButtonColor : backButtonColor ?  backButtonColor : !headerData.partnerLogo ? getConfig().styles.primaryColor : 'white'))}
@@ -83,7 +86,7 @@ const Header = ({ classes, title, count, total, current, goBack,
           {
             headerData.partnerLogo && moneycontrolHeader && isWeb &&
              <div className='sdk-header-partner-logo'>
-                <img src={require(`assets/finity/finity_navlogo.svg`)} alt="partner logo" height={20}/> 
+                <img src={require(`assets/${config.colorLogo}`)} alt="partner logo" height={20}/> 
             </div>
           }
 
@@ -145,6 +148,9 @@ const Header = ({ classes, title, count, total, current, goBack,
                   src={restart}
                 />
                 }
+                {canSkip &&
+                <span className="header-skip-text" onClick={onSkipClick}>SKIP</span>
+                }
                 {topIcon &&
                   <SVG
                   style={{marginLeft: '20px', width:25, cursor:'pointer'}}
@@ -161,7 +167,7 @@ const Header = ({ classes, title, count, total, current, goBack,
                   src={isEmpty(campaign) ? notificationLogo : notificationBadgeLogo}
                 />
                 }
-                {isMobileDevice && isWeb && !config.isIframe && !isGuestUser &&
+                {isMobileDevice && isWeb && !hideHamburger && !config.isIframe && !isGuestUser && !equityPayment &&
                   <div className='mobile-navbar-menu'>
                     <IconButton onClick={handleMobileViewDrawer}>
                       <MenuIcon style={{color: new_header && backgroundColor ?  getConfig().styles.secondaryColor : headerData.partnerLogo ? 'white' : getConfig().styles.primaryColor}}/>
@@ -180,7 +186,7 @@ const Header = ({ classes, title, count, total, current, goBack,
           isMobileDevice &&
           <ReferDialog isOpen={referDialog} close={handleReferModal} />
         }
-      </AppBar >
+      </AppBar>
     )
   };
 

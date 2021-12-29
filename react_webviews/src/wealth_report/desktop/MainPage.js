@@ -163,7 +163,7 @@ const MainPage = (props) => {
 
           {/* will be hidden for mobile view and visible for desktop view */}
           <div className="wr-fisdom" onClick={() => navigate(props, 'main/overview')}>
-            <img src={require('assets/fisdom/fisdom_logo.png')} alt="fisdom" />
+            <img src={require('assets/fisdom/fisdom_logo_white.svg')} alt="fisdom" />
             <span className='wr-vertical-divider'></span>
             <span className="wr-report">Portfolio Report</span>
           </div>

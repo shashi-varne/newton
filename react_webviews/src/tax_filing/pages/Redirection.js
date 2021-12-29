@@ -50,13 +50,13 @@ function Redirection(props) {
         redirectionUrl + `&ru=${stringToHexa(fisdomReturnUrl)}`
     }, 2000)
     return () => {
-      clearInterval(timerHandle)
+      clearTimeout(timerHandle)
       clearITRSessionStorage()
     }
   }, [])
 
   return (
-    <Container noFooter headerData={{ hide_icon: true }}>
+    <Container noFooter headerData={{ hide_icon: true }} classOverRideContainer="tax-filing-redirection-container">
       <div className="tax-filing-redirection flex-column justify-center align-center relative">
         <div className="centered tax-filing-redirection-loader"></div>
         <div className="body-text2 secondary center m-top-2x">

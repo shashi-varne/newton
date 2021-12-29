@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
-import Alert from "../mini-components/Alert";
 import { storageService } from "utils/validators";
 import { navigate as navigateFunc } from "utils/functions";
-import { STORAGE_CONSTANTS, PATHNAME_MAPPER } from "../constants";
+import { STORAGE_CONSTANTS, PATHNAME_MAPPER, BANK_ACCOUNT_TYPES_NOMENCLATURE } from "../constants";
 import { getFlow } from "../common/functions";
 import {
   saveBankData,
@@ -18,6 +17,8 @@ import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { SkeltonRect } from "common/ui/Skelton";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
+import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
+import useUserKycHook from "../common/hooks/userKycHook";
 
 const AddBankVerify = (props) => {
   const [count, setCount] = useState(20);
@@ -35,6 +36,8 @@ const AddBankVerify = (props) => {
   }
   const [bankData, setBankData] = useState({});
   const navigate = navigateFunc.bind(props);
+  const { isLoading, updateKyc } = useUserKycHook();
+  const stateParams = props.location?.state || {};
 
   useEffect(() => {
     initialize();
@@ -43,9 +46,14 @@ const AddBankVerify = (props) => {
   const initialize = async () => {
     await getUserKycFromSummary();
     let kyc = storageService().getObject(STORAGE_CONSTANTS.KYC) || {};
+    updateKyc(kyc);
     let data = kyc.additional_approved_banks.find(
       (obj) => obj.bank_id?.toString() === bank_id
     );
+    if(!data && kyc.bank.meta_data.bank_id === Number(bank_id)) {
+      data = kyc.bank.meta_data;
+      data.status = "default";
+    }
     setShowLoader(false);
     setBankData({ ...data });
     setUserKyc(kyc);
@@ -56,7 +64,7 @@ const AddBankVerify = (props) => {
     try {
       setIsApiRunning("button");
       const result = await saveBankData({ bank_id: bank_id });
-      if (!result) return;
+      if (!result) throw new Error("No result. Something went wrong");
       if (result.code === "ERROR") {
         toast(result.message);
       } else if (userKyc.address.meta_data.is_nri) {
@@ -65,7 +73,8 @@ const AddBankVerify = (props) => {
         pennyLoader();
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
+      toast(err.message);
     } finally {
       setIsApiRunning(false);
     }
@@ -95,6 +104,9 @@ const AddBankVerify = (props) => {
     try {
       const result = await getBankStatus({ bank_id: bank_id });
       if (!result) return;
+      if (result.code === "ERROR") {
+        throw new Error(result.message);
+      }
       if (result.records.PBI_record.bank_status === "verified") {
         clearInterval(countdownInterval);
         setCountdownInterval(null);
@@ -110,8 +122,13 @@ const AddBankVerify = (props) => {
           setIsPennyFailed(true);
         }
       }
+      updateKyc(result.kyc);
     } catch (err) {
       console.log(err);
+      clearInterval(countdownInterval);
+      setCountdownInterval(null);
+      setIsPennyOpen(false);
+      setIsPennyFailed(true);
     }
   };
 
@@ -120,6 +137,9 @@ const AddBankVerify = (props) => {
       const result = await getBankStatus({ bank_id: bank_id });
       setIsPennyOpen(false);
       if (!result) return;
+      if (result.code === "ERROR") {
+        throw new Error(result.message);
+      }
       if (result.records.PBI_record.bank_status === "verified") {
         setIsPennySuccess(true);
       } else if (result.records.PBI_record.user_rejection_attempts === 0) {
@@ -127,8 +147,10 @@ const AddBankVerify = (props) => {
       } else {
         setIsPennyFailed(true);
       }
+      updateKyc(result.kyc);
     } catch (err) {
       console.log(err);
+      setIsPennyFailed(true);
     }
   };
 
@@ -148,7 +170,7 @@ const AddBankVerify = (props) => {
       {
         searchParams: `${
           getConfig().searchParams
-        }&additional=true&bank_id=${bank_id}`,
+        }&additional=true${bankData.status !== "default" ? `&bank_id=${bank_id}` : ""}`,
       }
     );
   };
@@ -167,21 +189,33 @@ const AddBankVerify = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "bank_details",
-        "account_number": bankData.account_number ? "yes" : "no",
-        "ifsc_code": bankData.ifsc_code ? "yes" : "no",
-        "account_type": bankData.account_type ? "yes" : "no",
-        "c_account_number": userKyc.bank?.meta_data?.account_number ? "yes" : "no",
-        "flow": getFlow(userKyc) || ""
-      }
+      event_name: "KYC_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "bank_details",
+        account_number: bankData.account_number ? "yes" : "no",
+        ifsc_code: bankData.ifsc_code ? "yes" : "no",
+        account_type: bankData.account_type ? "yes" : "no",
+        c_account_number: bankData.account_number ? "yes" : "no",
+        flow: getFlow(userKyc) || "",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
+    }
+  };
+
+  const goBack = () => {
+    if(stateParams.goBackToAddBank) {
+      navigate(PATHNAME_MAPPER.addBank, {
+        state: {
+          bank_id: bankData.bank_id
+        }
+      })
+    } else {
+      props.history.goBack();
     }
   }
 
@@ -190,18 +224,21 @@ const AddBankVerify = (props) => {
       buttonTitle="VERIFY BANK ACCOUNT"
       events={sendEvents("just_set_events")}
       showLoader={isApiRunning}
-      noFooter={showLoader}
+      noFooter={showLoader || isLoading}
       handleClick={handleClick}
       title="Verify your bank account"
       data-aid='kyc-approved-bank-verify-screen'
+      headerData={{ goBack }}
     >
       <div className="kyc-approved-bank-verify" data-aid='kyc-approved-bank-verify'>
-        <Alert
-          dataAid='kyc-verification-alertbox'
-          variant="info"
-          title="Important"
-          message="We will credit ₹1 to your bank account for verification."
-        />
+        <WVInfoBubble
+          type="info"
+          hasTitle
+          customTitle="Important"
+          dataAid='kyc-verification-wvinfo'
+        >
+          We will credit ₹1 to your bank account for verification.
+        </WVInfoBubble>
         {showLoader && (
           <>
             <SkeltonRect className="verify-skelton" />
@@ -240,7 +277,7 @@ const AddBankVerify = (props) => {
             </div>
             <div className="item" data-aid='kyc-account-type'>
               <div className="left">Account type</div>
-              <div className="right"> {bankData.account_type} </div>
+              <div className="right"> {BANK_ACCOUNT_TYPES_NOMENCLATURE[bankData.account_type]} </div>
             </div>
           </>
         )}
@@ -250,7 +287,7 @@ const AddBankVerify = (props) => {
           uploadDocuments={uploadDocuments}
           checkBankDetails={checkBankDetails}
         />
-        <PennySuccessDialog isOpen={isPennySuccess} redirect={goTobankLists} />
+        <PennySuccessDialog isOpen={isPennySuccess} kyc={userKyc} redirect={goTobankLists} />
         <PennyExhaustedDialog
           isOpen={isPennyExhausted}
           redirect={goTobankLists}

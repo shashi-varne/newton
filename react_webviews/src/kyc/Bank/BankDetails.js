@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import Container from "../common/Container";
 import { formatAmountInr, storageService, isEmpty } from "utils/validators";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
-import { STORAGE_CONSTANTS } from "../constants";
+import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import { getMyAccount } from "../common/api";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
 import "./BankDetails.scss";
 import { nativeCallback } from "../../utils/native_callback";
+import { isBankVerified } from '../common/functions';
 
 const BankDetails = (props) => {
   const [showLoader, setShowLoader] = useState(true);
@@ -19,17 +20,19 @@ const BankDetails = (props) => {
     props.history.goBack();
   }
   const [bank, setBank] = useState({});
+  const [buttonTitle, setButtonTitle] = useState("");
   const navigate = navigateFunc.bind(props);
 
   const handleClick = () => {
     sendEvents("next")
-    if (bank.status === "default") {
-      navigate(`/kyc/${kyc.kyc_status}/upload-documents`);
+    if(bank.bank_status === "submitted") {
+      navigate(`${PATHNAME_MAPPER.addBankVerify}${bank.bank_id}`);
     } else {
       navigate(`/kyc/${kyc.kyc_status}/upload-documents`, {
+        state: { goBack: PATHNAME_MAPPER.bankList },
         searchParams: `${
           getConfig().searchParams
-        }&additional=true&bank_id=${bank_id}`,
+        }&additional=true${bank.status !== "default" ? `&bank_id=${bank_id}` : ""}`,
       });
     }
   };
@@ -65,33 +68,40 @@ const BankDetails = (props) => {
     const bankData =
       banksInfo.find((obj) => obj.bank_id?.toString() === bank_id) || {};
     setBank(bankData);
+    const title =
+      bankData.bank_status === "rejected"
+        ? "RE-UPLOAD DOCUMENT"
+        : bankData.bank_status === "submitted"
+        ? "VERIFY BANK"
+        : "";
+    setButtonTitle(title);
     setShowLoader(false);
   };
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'my_account',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "add bank/mandate",
-        "primary_account": banks[0]?.bank_name || ""
-      }
+      event_name: "my_account",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "add bank/mandate",
+        primary_account: banks[0]?.bank_name || "",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container
       showSkelton={showLoader || isLoading}
       events={sendEvents("just_set_events")}
       hideInPageTitle
-      buttonTitle="RE-UPLOAD DOCUMENT"
+      buttonTitle={buttonTitle}
       handleClick={handleClick}
-      noFooter={bank.bank_status !== "rejected"}
+      noFooter={!buttonTitle}
       title="Bank accounts"
       data-aid='kyc-bank-details-screen'
     >
@@ -136,8 +146,8 @@ const BankDetails = (props) => {
               <div className="left">Status</div>
               <div
                 className={`status ${
-                  bank.bank_status === "rejected" && "failed"
-                } ${bank.bank_status === "verified" && "verified"}`}
+                  bank.bank_status === "rejected" && "rejected"
+                } ${isBankVerified(bank, kyc) && "approved"}`}
                 data-aid={`mapped-bank-status`}
               >
                 {bank.mapped_bank_status}
@@ -164,11 +174,7 @@ const BankDetails = (props) => {
                         <div className="item" data-aid='kyc-status'>
                           <div className="left">Status</div>
                           <div
-                            className={`status ${
-                              mandate.status === "rejected" && "failed"
-                            } ${mandate.status === "verified" && "verified"} ${
-                              mandate.status === "init" && "underprocess"
-                            }`}
+                            className={`status ${mandate.f_status_code}`}
                             data-aid='kyc-mapped-mandate-status'
                           >
                             {mandate.friendly_status_V2}

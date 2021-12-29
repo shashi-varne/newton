@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Container from "../common/Container";
 import Input from "../../common/ui/Input";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
@@ -6,13 +6,15 @@ import { GENDER_OPTIONS, MARITAL_STATUS_OPTIONS, PATHNAME_MAPPER } from "../cons
 import {
   formatDate,
   dobFormatTest,
-  validateNumber,
-  validateAlphabets,
+  validateName,
   isEmpty,
 } from "../../utils/validators";
 import {
   validateFields,
   compareObjects,
+  getTotalPagesInPersonalDetails,
+  getGenderValue,
+  getFlow,
 } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
@@ -21,26 +23,29 @@ import { getConfig } from "utils/functions";
 import toast from "../../common/ui/Toast";
 import { nativeCallback } from "../../utils/native_callback";
 
-const productName = getConfig().productName;
 const PersonalDetails1 = (props) => {
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
   const [oldState, setOldState] = useState({});
+  const [totalPages, setTotalPages] = useState();
 
-  let title = "Personal details";
+  let title = "Personal information";
   if (isEdit) {
-    title = "Edit personal details";
+    title = "Edit personal information";
   }
 
-  const {kyc, user, isLoading} = useUserKycHook();
+  const { kyc, user, isLoading } = useUserKycHook();
 
   useEffect(() => {
-    if (!isEmpty(kyc)) {
+    if (!isEmpty(kyc) && !isEmpty(user)) {
       initialize();
     }
-  }, [kyc]);
+  }, [kyc, user]);
 
   const initialize = async () => {
     let mobile_number = kyc.identification?.meta_data?.mobile_number || "";
@@ -55,19 +60,18 @@ const PersonalDetails1 = (props) => {
       email: kyc.identification?.meta_data?.email || "",
       mobile: mobile_number,
       country_code: country_code,
-      gender: kyc.identification?.meta_data?.gender || "",
+      gender: getGenderValue(kyc.identification?.meta_data?.gender) || "",
       marital_status: kyc.identification?.meta_data?.marital_status || "",
     };
     setFormData({ ...formData });
     setOldState({ ...formData });
+    setTotalPages(getTotalPagesInPersonalDetails(isEdit))
   };
 
   const handleClick = () => {
     let keysToCheck = ["name", "dob", "gender", "marital_status"];
-    if (user.email === null) keysToCheck.push("email");
-    if (user.mobile === null) keysToCheck.push("mobile");
     let result = validateFields(form_data, keysToCheck);
-    sendEvents("next")
+    sendEvents("next");
     if (!result.canSubmit) {
       let data = { ...result.formData };
       setFormData(data);
@@ -123,46 +127,55 @@ const PersonalDetails1 = (props) => {
 
   const handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
-    if (value && name === "name" && !validateAlphabets(value)) return;
-    if (name === "mobile" && value && !validateNumber(value)) return;
+    if (value && name === "name" && !validateName(value)) return;
+
     let formData = { ...form_data };
-    if (name === "marital_status")
+    if (name === "marital_status") {
       formData[name] = MARITAL_STATUS_OPTIONS[value].value;
-    else if (name === "gender") formData[name] = GENDER_OPTIONS[value].value;
-    else if (name === "dob") {
+    } else if (name === "gender") {
+      formData[name] = GENDER_OPTIONS[value].value;
+    } else if (name === "dob") {
       if (!dobFormatTest(value)) {
         return;
       }
       let input = document.getElementById("dob");
       input.onkeyup = formatDate;
       formData[name] = value;
-    } else formData[name] = value;
+    } else {
+      formData[name] = value;
+    }
+
     if (!value && value !== 0) formData[`${name}_error`] = "This is required";
     else formData[`${name}_error`] = "";
+
     setFormData({ ...formData });
   };
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "" ,
-        "screen_name": "personal_details_1",
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "personal_details_1",
+        gender: form_data.gender
+          ? form_data.gender === "OTHER"
+            ? "others"
+            : form_data?.gender?.toLowerCase()
+          : "",
+        marital_status: form_data.marital_status
+          ? form_data.marital_status.toLowerCase()
+          : "",
         "name": form_data.name ? "yes" : "no",
-        "mobile": form_data.mobile_number ? "yes" : "no",
         "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
-        "gender": form_data.gender,
-        "marital_status": form_data.marital_status,
-        "email": form_data.email_error ? "invalid" : form_data.email ? "yes" : "no",
-        "flow": 'general'
-      }
+        "flow": getFlow(kyc) || ""
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container
@@ -174,7 +187,7 @@ const PersonalDetails1 = (props) => {
       title={title}
       count="1"
       current="1"
-      total="4"
+      total={totalPages}
       iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-personal-details-screen-1'
     >
@@ -190,12 +203,11 @@ const PersonalDetails1 = (props) => {
             error={form_data.name_error ? true : false}
             helperText={form_data.name_error || ""}
             onChange={handleChange("name")}
-            maxLength={20}
             type="text"
-            disabled={isApiRunning || !!kyc.pan.meta_data.name}
+            disabled={isApiRunning || !!kyc?.pan?.meta_data?.name}
           />
           <Input
-            label="Date of birth(DD/MM/YYYY)"
+            label="Date of birth (DD/MM/YYYY)"
             class="input"
             value={form_data.dob || ""}
             error={form_data.dob_error ? true : false}
@@ -205,40 +217,14 @@ const PersonalDetails1 = (props) => {
             inputMode="numeric"
             type="text"
             id="dob"
-            disabled={isApiRunning}
+            disabled={isApiRunning || (!!kyc?.pan?.meta_data.dob && kyc?.pan?.meta_data_status === "approved")}
           />
-          {user.email === null && (
-            <Input
-              label="Email"
-              class="input"
-              value={form_data.email || ""}
-              error={form_data.email_error ? true : false}
-              helperText={form_data.email_error || ""}
-              onChange={handleChange("email")}
-              type="text"
-              disabled={isApiRunning}
-            />
-          )}
-          {user.mobile === null && (
-            <Input
-              label="Mobile number"
-              class="input"
-              value={form_data.mobile || ""}
-              error={form_data.mobile_error ? true : false}
-              helperText={form_data.mobile_error || ""}
-              onChange={handleChange("mobile")}
-              maxLength={10}
-              type="text"
-              inputMode="numeric"
-              disabled={isApiRunning}
-            />
-          )}
           <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon
               error={form_data.gender_error ? true : false}
               helperText={form_data.gender_error}
               width="40"
-              label="Gender:"
+              label="Gender"
               options={GENDER_OPTIONS}
               id="account_type"
               value={form_data.gender || ""}
@@ -251,7 +237,7 @@ const PersonalDetails1 = (props) => {
               error={form_data.marital_status_error ? true : false}
               helperText={form_data.marital_status_error}
               width="40"
-              label="Marital status:"
+              label="Marital status"
               options={MARITAL_STATUS_OPTIONS}
               id="account_type"
               value={form_data.marital_status || ""}

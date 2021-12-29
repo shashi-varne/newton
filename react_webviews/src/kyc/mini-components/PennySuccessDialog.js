@@ -1,38 +1,47 @@
 import React from "react";
-import Dialog, { DialogContent } from "material-ui/Dialog";
-import { getConfig } from "utils/functions";
-import Button from "@material-ui/core/Button";
+import { getConfig, isTradingEnabled } from "utils/functions";
 import "./mini-components.scss";
+import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
+import { checkDLPanFetchAndApprovedStatus, isDigilockerFlow, isEquityCompleted } from "../common/functions";
+import { storageService } from "../../utils/validators";
 
-const PennySuccessDialog = ({ isOpen, redirect }) => {
-  const productName = getConfig().productName;
+const PennySuccessDialog = ({ isOpen, kyc, redirect }) => {
+  const config = getConfig();
+  const productName = config.productName;
+  const TRADING_ENABLED = isTradingEnabled(kyc);
+  const isEquityCompletedBase = isEquityCompleted();
+  const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
+  const fromUploadDocumentsScreen = storageService().get("bankEntryPoint") === "uploadDocuments";
+  const isManualFlow = kyc?.kyc_type === "manual";
+
+  let content = "Your account setup is almost done! Now let’s find out what you’re about to unlock";
+  if (!TRADING_ENABLED || 
+    isManualFlow || 
+    (isDigilockerFlow(kyc) && isPanFailedAndNotApproved) || 
+    fromUploadDocumentsScreen || 
+    isEquityCompletedBase
+  ) {
+    content = "Hurrah! Your bank account is added. Invest securely and safely with us."
+  }
+
   return (
-    <Dialog
-      open={isOpen}
-      aria-labelledby="kyc-dialog"
-      keepMounted
-      aria-describedby="kyc-dialog"
-      className="kyc-penny-failed-dialog"
-      id="kyc-bottom-dialog"
-      data-aid='kyc-bottom-dialog'
+    <WVBottomSheet
+      isOpen={isOpen}
+      title="Bank added successfully"
+      image={require(`assets/${productName}/ic_bank_verified.svg`)}
+      button1Props={{
+        title: "CONTINUE",
+        onClick: redirect,
+        variant: "contained",
+      }}
+      classes={{
+        content: "penny-bank-verification-dialog-content",
+      }}
     >
-      <DialogContent className="penny-failed-dialog-content" data-aid='kyc-penny-failed-dialog-content'>
-        <div className="title" data-aid='kyc-title'>
-          <div className="text">Bank is added!</div>
-          <img
-            src={require(`assets/${productName}/ic_bank_added.svg`)}
-            alt=""
-            className="img"
-          />
-        </div>
-        <div className="subtitle" data-aid='kyc-subtitle'>
-          Hurrah! Your bank account is added. Invest securely and safely with us.
-        </div>
-        <Button className="button bg-full" onClick={() => redirect()} data-aid='continue-btn'>
-          CONTINUE
-        </Button>
-      </DialogContent>
-    </Dialog>
+      <div className="generic-page-subtitle penny-bank-verification-dialog-subtitle">
+        {content}
+      </div>
+    </WVBottomSheet>
   );
 };
 

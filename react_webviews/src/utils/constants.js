@@ -81,6 +81,11 @@ export const themeConfig =  () => {
                 opacity: 0.4
             }
         },
+        MuiTypography: {
+            title: {
+                fontFamily: "'Rubik', 'Roboto', 'sans- serif'",
+            }
+        },
         MuiInputLabel: {
             root: {
                 fontSize: '0.9rem',
@@ -130,6 +135,11 @@ export const themeConfig =  () => {
         MuiDialogActions: {
             root: {
                 display: 'block'
+            }
+        },
+        MuiModal: {
+            root: {
+              backgroundColor: 'rgba(0,0,0,0.6)'
             }
         }
     }
@@ -190,4 +200,14 @@ export const commonBackMapper = {
     '/reports/sip/pause-request': '/reports/sip',
     '/reports/sip/details': '/reports/sip',
     '/reports/sip': '/reports',
+    '/kyc/upload/address': '/kyc/upload/progress',
+    '/kyc/upload/address-nri': '/kyc/upload/progress',
+}
+
+export const landingEntryPoints = ["/", "/invest", "/landing"];
+
+export const EVENT_MANAGER_CONSTANTS = {
+    redirectPath: "redirectPath",
+    updateAppTheme: "updateAppTheme",
+    storePartnerCode: "storePartnerCode",
 }

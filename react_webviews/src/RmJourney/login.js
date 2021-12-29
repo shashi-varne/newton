@@ -120,7 +120,7 @@ const RmLogin = (props) => {
     <div>
     {
       isApiRunning ?  <UiSkelton type="g"/> : 
-      <div className="login" data-aid='login'>       
+      <div className="rm-login" data-aid='login'>       
       <div className="header">
         <img src={require(`assets/${config.logo}`)} alt="logo" />
       </div>

@@ -187,7 +187,7 @@ export function isNumberKey(evt) {
 
 export function validatePan(string) {
   // eslint-disable-next-line
-  let rule = /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/;
+  let rule = /^[a-zA-Z]{3}P[a-zA-Z][\d]{4}[a-zA-Z]$/;
   return rule.test(string);
 }
 
@@ -289,34 +289,53 @@ export function inrFormatDecimalWithoutIcon(number) {
   }
 }
 
-export function numDifferentiation(val, withSymbol, decimalPlaces = 2, retainLeadingZeroes = false) {
+export function numDifferentiation(
+  val,
+  withSymbol,
+  decimalPlaces = 2,
+  retainLeadingZeroes = false,
+  shortenPlaceText
+) {
   if (!val) {
     val = '';
   }
-  const isNegativeVal = val < 0;
   
+  const isNegativeVal = val < 0;
+
   function postFix(val){
     return parseFloat(val) < 2
   }
 
   val = Math.abs(val);
-  if (val >= 10000000){ 
-    val = (val / 10000000).toFixed(decimalPlaces) + ' Crore';
-    val = postFix(val) ? val : val + 's' ;
-  }
-  else if (val >= 100000){
-    val = (val / 100000).toFixed(decimalPlaces) + ' Lakh'; 
-    val = postFix(val) ? val : val + 's' ;
-  } 
-  else if (val >= 1000)
-     val = (val / 1000).toFixed(decimalPlaces) + ' K';
-  else if (val) 
-    return inrFormatDecimal(val);
 
-  val = val.toString();
+  if (val < 1000) {
+    return inrFormatDecimal(val);
+  }
+  else if (val >= 10000000) {
+    val = (val / 10000000).toFixed(decimalPlaces);
+    const isPluralVal = postFix(val);
+    if (shortenPlaceText) {
+      val += ' Cr';
+    } else {
+      val += ' Crore' + (isPluralVal ? '' : 's');
+    }
+  }
+  else if (val >= 100000) {
+    val = (val / 100000).toFixed(decimalPlaces);
+    const isPluralVal = postFix(val);
+    if (shortenPlaceText) {
+      val += ' L';
+    } else {
+      val += ' Lakh' + (isPluralVal ? '' : 's');
+    }
+  }
+  else {
+    val = (val / 1000).toFixed(decimalPlaces) + ' K';
+  }
+
   // remove .00
   if (!retainLeadingZeroes) {
-    val = val.replace(/\.0+([^\d])/g, '$1');
+    val = val.toString().replace(/\.0+([^\d])/g, '$1');
   }
 
   if(withSymbol) {
@@ -330,8 +349,8 @@ export function numDifferentiation(val, withSymbol, decimalPlaces = 2, retainLea
 }
 
 
-export function numDifferentiationInr(val, decimalPlaces, retainLeadingZeroes) {
-  return numDifferentiation(val, true, decimalPlaces, retainLeadingZeroes);
+export function numDifferentiationInr(val, ...otherParams) {
+  return numDifferentiation(val, true, ...otherParams);
 }
 
 export function IsFutureDate(idate) {
@@ -453,7 +472,11 @@ export function isValidMonthYear(input) {
 }
 
 export function validateName(string) {
-  return string.trim().indexOf(' ') !== -1;
+  if (!string) {
+    return false;
+  }
+  // Validate alphabets & space at 0th position
+  return string.match(/^(?![\s])[a-z A-Z]+$/);
 }
 
 export function capitalize(string) {
@@ -1050,15 +1073,13 @@ export function formatAmountToNumber(value){
   }
 }
 
-export function disableBodyTouch(enable) {
-  if(!enable) {
-    document.body.style.overflow = 'hidden';
-    document.body.style.touchAction = 'none';
-    document.body.style.pointerEvents = 'none';
+export function disableBodyTouch(disableTouch) {
+  if(disableTouch) {
+    document.body.classList.add('disable-body-touch');
+    document.body.classList.remove('enable-body-touch');
   } else {
-    document.body.style.overflow = 'auto';
-    document.body.style.touchAction = 'unset';
-    document.body.style.pointerEvents = 'unset';
+    document.body.classList.remove('disable-body-touch');
+    document.body.classList.add('enable-body-touch');
   }
 }
 
@@ -1073,18 +1094,21 @@ export function disableBodyOverflow(enable) {
 export function disableContainerTouch(enable) {
 
   let Container = document.getElementsByClassName('Container') ? document.getElementsByClassName('Container')[0] : '';
-
   if(!Container) {
     return;
   }
   if(!enable) {
-    Container.style.overflow = 'hidden';
-    Container.style.touchAction = 'none';
-    Container.style.pointerEvents = 'none';
+    Container.classList.add('disable-body-touch');
+    Container.classList.remove('enable-body-touch');
+    // Container.style.overflow = 'hidden';
+    // Container.style.touchAction = 'none';
+    // Container.style.pointerEvents = 'none';
   } else {
-    Container.style.overflow = 'auto';
-    Container.style.touchAction = 'unset';
-    Container.style.pointerEvents = 'unset';
+    Container.classList.remove('disable-body-touch');
+    Container.classList.add('enable-body-touch');
+    // Container.style.overflow = 'auto';
+    // Container.style.touchAction = 'unset';
+    // Container.style.pointerEvents = 'unset';
   }
 }
 
@@ -1169,3 +1193,18 @@ export function Casesensitivity(str){
 export function sortArrayOfObjectsByTime(array, key){
   return array.sort((a,b) => new Date(b[key]) - new Date(a[key])) //desc
 }
+
+export function formatMobileNumber(value) {  // Example:  0000012345 -> +91 0000 012 345
+  if (isEmpty(value) || value.length < 10) return value;
+  let number = "+91" + value.slice(-10);
+  return number.replace(/(\d{2})(\d{4})(\d{3})(\d{3})/, '$1 $2 $3 $4');
+}
+
+export function splitMobileNumberFromContryCode(mobileNumber) {
+  let numberVal = mobileNumber?.split('|');
+  if (numberVal.length > 1) {
+      return numberVal[1];
+  } else {
+      return [numberVal];
+  }
+};

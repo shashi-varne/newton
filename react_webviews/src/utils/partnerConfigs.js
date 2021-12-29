@@ -2,6 +2,7 @@
 Exhaustive list of property values:
 - investSections: [
     'kyc',
+    'stocks',
     'ourRecommendations',
     'diy',
     'bottomScrollCards',
@@ -33,10 +34,11 @@ Note: To enable nps, gold or insurance in partner config :
 
 // common config across all partners
 export const commonCardsConfig = {
-  logo: "logo_white.png",
   investSections: [
     "kyc",
+    "stocks",
     "indexFunds",
+    "stocksAndIpo",
     "ourRecommendations",
     "diy",
     "bottomScrollCards",
@@ -50,13 +52,45 @@ export const commonCardsConfig = {
     bottomScrollCards: ["parkmoney", "savegoal"],
     bottomCards: ["nfo"],
   },
+  landingMarketingBanners: [
+    {
+      type: "mf",
+      image: "mf.svg",
+      endDate: "11/05/2021",
+      startDate: "11/01/2021",
+    },
+  ],
+  nfoBanners: [
+    {
+      image: "nfo.svg",
+      type: "nfo",
+      endDate: "11/30/2021",
+      startDate: "11/17/2021",
+    },
+    { image: "nfo1.svg", type: "nfo", endDate: "11/25/2021" },
+    { image: "nfo2.svg", type: "nfo", endDate: "11/24/2021" },
+    { image: "nfo3.svg", type: "nfo", endDate: "11/28/2021" },
+    { image: "nfo4.svg", type: "nfo", endDate: "11/25/2021" },
+    {
+      image: "nfo5.svg",
+      type: "nfo",
+      endDate: "12/09/2021",
+      startDate: "11/26/2021",
+    },
+  ],
 };
 
 export const basePartnerConfig = {
+  common: {
+    equityAnnexure: "https://fisdom.com/images/forms/Equity%20Annexures.pdf"
+  },
   fisdom: {
     productName: "fisdom",
+    logo: "fisdom/fisdom_logo_white.svg",
+    colorLogo: "fisdom/fisdom_logo.svg",
     email: "ask@fisdom.com",
     mobile: "+91-9642596425",
+    websiteLink: "https://www.fisdom.com",
     appLink: "https://fisdom.onelink.me/CQFA/3e75c8f6",
     termsLink: "https://www.fisdom.com/terms/",
     schemeLink: "https://www.fisdom.com/scheme-offer-documents/",
@@ -70,13 +104,16 @@ export const basePartnerConfig = {
     riskEnabledFunnels: false,
     referralConfig: {
       applyRefferal: true, // same as hide_apply_referral but with opposite value
-      shareRefferal: true, // same as hide_share_referral but with opposite value
+      shareRefferal: false, // same as hide_share_referral but with opposite value
     },
   },
   finity: {
     productName: "finity",
+    logo: "finity/finity_logo_white.svg",
+    colorLogo: "finity/finity_logo.svg",
     email: "ask@finity.in",
     mobile: "+91-8142381423",
+    websiteLink: "https://www.finity.in",
     appLink: "https://myway.onelink.me/W4GN/1f539fd2",
     termsLink: "https://finity.in/terms/",
     schemeLink: "https://finity.in/scheme/",
@@ -195,6 +232,7 @@ export const partnerConfigs = {
   fisdom: {
     code: "fisdom",
     investSubSectionMap: {
+      stocksAndIpo: ["ipo"],
       ourRecommendations: [
         "instaredeem",
         "buildwealth",
@@ -214,7 +252,6 @@ export const partnerConfigs = {
     }
   },
   finity: {
-    logo: "finity_white_logo.svg",
     code: "finity",
     mobile: "+91-9916149111",
     investSubSectionMap: {
@@ -239,7 +276,8 @@ export const partnerConfigs = {
       financialTools: ["risk_profile"],
     },
     landingMarketingBanners: [
-      { image: "nfo.svg", type: "nfo", endDate: '09/14/2021' },
+      ...commonCardsConfig.landingMarketingBanners,
+      ...commonCardsConfig.nfoBanners,
       { image: "mb_4.svg", type: "100_sip" },
       { image: "mb_6.svg", type: "diy" },
       { image: "mb_5.svg", type: "buildwealth" },
@@ -327,7 +365,8 @@ export const partnerConfigs = {
     mobile: "1800-212-5997",
     email: "care.futuremoney@fisdom.com",
     landingMarketingBanners: [
-      { image: "nfo.svg", type: "nfo", endDate: '09/14/2021' },
+      ...commonCardsConfig.landingMarketingBanners,
+      ...commonCardsConfig.nfoBanners,
       { image: "fpg_mb_insta.svg", type: "instaredeem" },
       { image: "fpg_mb_100.svg", type: "buildwealth" },
     ],
@@ -364,7 +403,7 @@ export const partnerConfigs = {
     },
   },
   hbl: {
-    logo: "hbl.png",
+    logo: "hbl.svg",
     code: "hbl",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
@@ -478,7 +517,7 @@ export const partnerConfigs = {
   },
   taxwin: {
     code: "taxwin",
-    logo: "taxwin.png",
+    logo: "taxwin.svg",
     investSections: ["kyc", "ourRecommendations"],
     investSubSectionMap: {
       ourRecommendations: [
@@ -544,7 +583,11 @@ export const partnerConfigs = {
     },
     features: {
       addAnotherBank: true
-    }
+    },
+    referralConfig: {
+      applyRefferal: true,
+      shareRefferal: true,
+    },
   },
 };
 
@@ -552,6 +595,7 @@ export const getPartnerData = (productType, partnerCode) => {
   // Appending base config of the productType(fisdom/finity) with the common config accross all partners
   let partnerConfigToReturn = {
     ...commonCardsConfig,
+    ...basePartnerConfig["common"],
     ...basePartnerConfig[productType],
   };
   const partnerData = partnerConfigs[partnerCode] || partnerConfigs[productType] || partnerConfigs["fisdom"];

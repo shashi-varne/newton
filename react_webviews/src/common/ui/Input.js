@@ -1,8 +1,20 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import TextField from 'material-ui/TextField';
 import './style.scss';
 
 const Input = (props) => {
+  const onKeyDownCapture = (event) => {
+    const code = event.keyCode;
+    if (code === 13) {
+      // eslint-disable-next-line no-unused-expressions
+      props.onEnterPressed?.(event);
+    }
+  }
+  
+  const onKeyDown = useMemo(() => {
+    return props.onKeyDown || onKeyDownCapture;
+  }, [props.onKeyDown]);
+
   if (props.type === 'date' || props.shrink) {
     return (
       <TextField
@@ -25,12 +37,14 @@ const Input = (props) => {
         name={props.name}
         variant={props.variant}
         onChange={props.onChange}
+        inputRef={props.inputRef}
+        onKeyDown={props.onKeyDown}
       />
     );
   } else {
     return (
       <TextField
-        inputref={props.inputref}
+        inputRef={props.inputRef}
         error={props.error}
         rows={props.rows}
         disabled={props.disabled}
@@ -58,6 +72,8 @@ const Input = (props) => {
         autoComplete={props.autoComplete}
         autoFocus={props.autoFocus}
         multiline={props.multiline}
+        onKeyDown={onKeyDown}
+        onKeyUp={props.onKeyUp}
         rowsMax="3"
       />
     );

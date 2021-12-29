@@ -22,6 +22,7 @@ import { disableBodyTouch } from 'utils/validators';
 import { checkAfterRedirection, backButtonHandler } from "utils/functions";
 import { isFunction } from 'lodash';
 import { isNewIframeDesktopLayout } from '../../utils/functions';
+import WVFullPageLoader from '../ui/FullPageLoader/WVFullPageLoader';
 
 let start_time = '';
 export function didMount() {
@@ -208,7 +209,10 @@ export function commonRender(props_base) {
                         hideBack={this.props.hideBack}
                         notification={this.props.notification}
                         handleNotification={this.props.handleNotification}  
-                        noBackIcon={this.props.noBackIcon}        
+                        noBackIcon={this.props.noBackIcon}
+                        canSkip={this.props.canSkip}
+                        hideHamburger={this.props.hideHamburger}
+                        onSkipClick={this.props.onSkipClick}        
                         customBackButtonColor={this.props.customBackButtonColor}
                     />
                 )}
@@ -277,7 +281,7 @@ export function commonRender(props_base) {
                         handleReset={this.props.handleReset}
                         onlyButton={this.props.onlyButton}
                         noFooter={this.props.noFooter}
-                        showLoader={this.props.showLoader}
+                        showLoader={this.props.showLoader === 'button'}
                         fullWidthButton={this.props.fullWidthButton}
                         logo={this.props.logo}
                         provider={this.props.provider}
@@ -582,60 +586,20 @@ export function renderGenericError() {
 
 
 export function renderPageLoader() {
-    let quotes_data = [
-        'Risk comes from not knowing what you are doing.',
-        'Money is a terrible master but an excellent servant.',
-        'Wealth is the ability to fully experience life.',
-        'I’d like to live as a poor man with lots of money.',
-        'Don’t stay in bed, unless you can make money in bed.',
-        'It takes as much energy to wish as it does to plan.',
-        'The best thing money can buy is financial freedom.'
-    ]
-
-    // let quotes_data_insurance = [
-    //     'Life insurance will protect your family’s financial future.',
-    //     'If there’s anyone dependent on you - you need insurance.',
-    //     'Did you know insurance is good investment?',
-    //     'Insurance is a combination of care, commitment and common sense.',
-    //     'Think future, think insurance.',
-    //     'You’re future-proof when insured!',
-    //     'How do you ensure your loved ones are safe after you? Insure!',
-    //     'Insurance is sound planning for life.',
-    //     'It’s OK to prepare now for tomorrow.',
-    //     'Secure your loved ones that depend on you.',
-    // ]
-
-    
-    var quote = quotes_data[Math.floor(Math.random() * quotes_data.length)];
-
-    let loaderData = this.props.loaderData || {};
-    let loadingText = loaderData.loadingText;
+    const { loaderData = {} } = this.props;
+    const { loadingText = '', loaderClass = '' } = loaderData;
 
     if (this.props.showLoader === true) {
         return (
-            <div className={`Loader ${loaderData ? loaderData.loaderClass : ''}`}>
-                <div className="LoaderOverlay">
-                    <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
-                    {loadingText &&
-                        <div className="LoaderOverlayText">{loadingText}</div>
-                    }
-                </div>
-            </div>
+            <WVFullPageLoader classes={{ container: loaderClass }} loadingText={loadingText} showQuote/>
         );
     } else if (this.props.showLoader === 'page') {
-        disableBodyTouch();
+        disableBodyTouch(true);
         return (
-            <div className={`generic-page-loader ${loaderData ? loaderData.loaderClass : ''}`}>
-                <div className="LoaderOverlay">
-
-                    {/* <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" /> */}
-                    <div className="generic-circle-loader-component"></div>
-                    <div className="LoaderOverlayText">{loadingText || quote}</div>
-                </div>
-            </div>
+            <WVFullPageLoader classes={{ container: loaderClass }} showQuote/>
         );
     } else {
-        disableBodyTouch(true);
+        disableBodyTouch(false);
         return null;
     }
 }
@@ -663,7 +627,9 @@ export function new_header_scroll() {
         <Fragment>
             <div id="header-title-page"
                 style={this.props.styleHeader}
-                className={`header-title-page  ${this.props.classHeader}`}>
+                className={`header-title-page  ${this.props.classHeader}`}
+                data-aid='header-title-page'
+            >
                 <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{ width: this.props.count ? '75%' : '100%' }} data-aid='header-title-page-text'>
                     {this.props.title}
                 </div>
@@ -672,7 +638,8 @@ export function new_header_scroll() {
                     <span color="inherit"
                         className={`header-title-page-count-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`}>
                         <span style={{ fontWeight: 600 }}>{this.props.current}</span>/<span>{this.props.total}</span>
-                    </span>}
+                    </span>
+                }
             </div>
             {this?.props?.smallTitle && (
                 <div className={`body-text2 text-secondary m-top-1x pd-left-2x ${this.props?.classSmallTitle}`}>

@@ -2,17 +2,27 @@ import React from 'react';
 import { Button, withStyles } from '@material-ui/core';
 import { getConfig } from '../../../utils/functions';
 import DotDotLoaderNew from '../DotDotLoaderNew';
-import { disableBodyTouch } from '../../../utils/validators';
 
-const WVButton = ({ showLoader, children, dataAidSuffix, ...props }) => {
-  if (showLoader) {
-    disableBodyTouch(); //disable touch
-  } else {
-    disableBodyTouch(true); //touch enabled
-  }
+const noop = () => {};
+
+const WVButton = ({
+  dataAidSuffix,
+  contained, // boolean to set variant="contained"
+  outlined, // boolean to set variant="outlined"
+  showLoader, // boolean to show in-button loader
+  onClick,
+  children,
+  ...props // remaining button props as per MUI
+}) => {
+  const variant = props.variant || (contained ? 'contained' : outlined ? 'outlined' : 'text');
 
   return (
-    <Button {...props} data-aid={`wv-button-${dataAidSuffix}`}>
+    <Button
+      {...props}
+      variant={variant}
+      onClick={showLoader ? noop : onClick}
+      data-aid={`wv-button-${dataAidSuffix}`}
+    >
       {showLoader ?
         <DotDotLoaderNew
           styleBounce={{
@@ -28,7 +38,7 @@ const WVButton = ({ showLoader, children, dataAidSuffix, ...props }) => {
 const styles = {
   root: {
     padding: !getConfig().isMobileDevice ? '12px 15px 12px 15px !important' : '16px !important',
-    borderRadius: 6,
+    borderRadius: getConfig().uiElements.button.borderRadius,
     textTransform: 'uppercase',
     fontSize: '12px !important',
     boxShadow: 'none',

@@ -1,5 +1,15 @@
 @import './utils.scss';
 
+* {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+*::before,
+*::after {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+ }
+
 .configPrimaryColorClass {
   color: var(--primary) !important;
 }
@@ -36,6 +46,19 @@ body[data-device="web"] #root {
   /* autoprefixer: off */
   height: 100%;
   background: #f3f4f6;
+}
+.enable-body-touch{
+  overflow: auto !important;
+  touch-action: auto !important;
+  pointer-events: auto !important;
+  touch-action: unset !important;
+  pointer-events: unset !important;
+}
+
+.disable-body-touch{
+  overflow: hidden !important;
+  touch-action: none !important;
+  pointer-events: none !important;
 }
 
 button {
@@ -84,6 +107,7 @@ body[data-device="web"] {
   
   .Footer {
     max-width: fit-content;
+    max-width: -moz-fit-content;
     position: relative !important;
     margin: 0 auto;
     margin-bottom: 20px;
@@ -1175,11 +1199,6 @@ input#pan {
   }
 }
 
-.Loader-Dialog {
-  opacity: 0.9;
-  z-index: 999999;
-}
-
 .LoaderOverlayText {
   color: #0a1d32;
   font-size: 14px;
@@ -1397,19 +1416,18 @@ $header-title-font-size: 20px;
 
 .main-top-title-new2 {
   font-size: 20px !important;
-  color: #160d2e !important;
+  color: var(--dark) !important;
   font-weight: 400 !important;
 }
 
 @mixin main-top-title-header-base {
   font-size: 16px !important;
-  color: #160d2e;
+  color: var(--dark);
   font-weight: 400 !important;
 }
 
 .main-top-title-header {
   @include main-top-title-header-base();
-  color: #160d2e;
   flex-basis: 100%;
 }
 
@@ -1796,7 +1814,6 @@ $header-title-font-size: 20px;
     margin: 0;
   }  
 }
-// TODO: Move this into WVBottomSheet.scss
 
 // TODO: Move this into WVBottomSheet.scss
 #bottom-popup .MuiDialog-paper {
@@ -2092,6 +2109,22 @@ $header-title-font-size: 20px;
       border: 1px solid var(--primary);
     }
   }
+}
+
+.header-skip-text {
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 14px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--steelgrey);
+  display: inline-block;
+  margin-right: 12px;
+  cursor: pointer;
+}
+
+.mobile-navbar-menu{
+  margin-left: auto;
 }
   
 .OTP-title{

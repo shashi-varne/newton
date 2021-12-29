@@ -1,41 +1,57 @@
+import "./Digilocker.scss";
 import React, { useState } from "react";
 import Container from "../common/Container";
 import { pollProgress } from "../common/functions";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
-import AadhaarDialog from "../mini-components/AadhaarDialog";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { setKycType } from "../common/api";
 import toast from "../../common/ui/Toast";
 import "./Digilocker.scss";
-import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
+import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
+import { storageService } from "../../utils/validators";
+import { getBasePath, isMobile } from "../../utils/functions";
+import { nativeCallback } from "../../utils/native_callback";
+import { updateQueryStringParameter } from "../common/functions";
 import { isNewIframeDesktopLayout, popupWindowCenter } from "../../utils/functions";
+import { Imgc } from "../../common/ui/Imgc";
 
 const Failed = (props) => {
-  const [open, setOpen] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(false);
-  const [isBackDialogOpen, setBackDialogOpen] = useState(false);
   const config = getConfig();
   const navigate = navigateFunc.bind(props);
-
-  const close = () => {
-    setOpen(false);
-  };
-
-  const retry = () => {
-    setOpen(true);
-  };
-
+  const {kyc, isLoading} = useUserKycHook();
+  
+  const productName = config.productName;
+  const basePath = getBasePath();
+  const newIframeDesktopLayout = isNewIframeDesktopLayout();
+  
   const manual = async () => {
+    sendEvents('upload_manually')
     try {
       setIsApiRunning(true);
       await setKycType("manual");
-      navigate("/kyc/journey", { state: { fromState: 'digilocker-failed' }});
+      navigate(PATHNAME_MAPPER.journey);
     } catch (err) {
       toast(err.message);
     } finally {
       setIsApiRunning(false);
     }
   };
+
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "aadhar_kyc_failed",
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   const handleIframeKyc = (url) => {
     let popup_window = popupWindowCenter(900, 580, url);
@@ -68,50 +84,100 @@ const Failed = (props) => {
     );
   };
 
+  const handleProceed = () => {
+    sendEvents('retry');
+    const redirect_url = encodeURIComponent(
+      `${basePath}/digilocker/callback${
+        config.searchParams
+      }&is_secure=${config.isSdk}`
+    );
 
-  const goBack = () => {
-    if (config.isSdk) {
-      setBackDialogOpen(true);
-    } else {
-      navigate("/kyc/journey", {
-        state: { show_aadhaar: true },
-      });
+    if (newIframeDesktopLayout) {
+      handleIframeKyc(
+        updateQueryStringParameter(
+          kyc.digilocker_url,
+          "redirect_url",
+          redirect_url
+        )
+      )
     }
+    const backUrl = `${basePath}/kyc/journey${config.searchParams}&show_aadhaar=true&is_secure=${config.isSdk}`;
+    const data = {
+      url: backUrl,
+      message: "You are almost there, do you really want to go back?",
+    };
+    if (isMobile.any() && storageService().get(STORAGE_CONSTANTS.NATIVE)) {
+      if (isMobile.iOS()) {
+        nativeCallback({
+          action: "show_top_bar",
+          message: { title: "Aadhaar KYC" },
+        });
+      }
+      nativeCallback({ action: "take_back_button_control", message: data });
+    } else if (!isMobile.any()) {
+      const redirectData = {
+        show_toolbar: false,
+        icon: "back",
+        dialog: {
+          message: "You are almost there, do you really want to go back?",
+          action: [
+            {
+              action_name: "positive",
+              action_text: "Yes",
+              action_type: "redirect",
+              redirect_url: encodeURIComponent(backUrl),
+            },
+            {
+              action_name: "negative",
+              action_text: "No",
+              action_type: "cancel",
+              redirect_url: "",
+            },
+          ],
+        },
+        data: {
+          type: "server",
+        },
+      };
+      if (isMobile.iOS()) {
+        redirectData.show_toolbar = true;
+      }
+      nativeCallback({ action: "third_party_redirect", message: redirectData });
+    }
+    window.location.href = updateQueryStringParameter(
+      kyc.digilocker_url,
+      "redirect_url",
+      redirect_url
+    );
   };
 
-  const {kyc, isLoading} = useUserKycHook();
-
-  const productName = config.productName;
   return (
     <Container
+      events={sendEvents("just_set_events")}
       title="Aadhaar KYC Failed!"
       data-aid='kyc-aadhaar-kyc-failed-screen'
       twoButtonVertical={true}
       button1Props={{
-        type: 'primary',
-        order: "1",
+        variant: "contained",
         title: "RETRY",
-        onClick: retry,
-        classes: { root: 'digilocker-failed-button'}
+        onClick: handleProceed,
       }}
       button2Props={{
-        type: 'secondary',
-        order: "2",
+        variant: "outlined",
         title: "UPLOAD DOCUMENTS MANUALLY",
         onClick: manual,
-        classes: { root: 'digilocker-failed-button'},
         showLoader: isApiRunning
       }}
       skelton={isLoading}
-      headerData={{goBack}}
+      headerData={{ icon: "close" }}
       loaderData={{ loadingText: " " }}
       iframeRightContent={require(`assets/${productName}/digilocker_failed.svg`)}
       showLoader={isApiRunning === "page" ? isApiRunning : false}
     >
       <section id="digilocker-failed"  data-aid='kyc-digilocker-failed'>
         {
-          !isNewIframeDesktopLayout() &&
-          <img
+          !newIframeDesktopLayout &&
+          <Imgc
             className="digi-image"
             alt=""
             src={require(`assets/${productName}/ils_digilocker_failed.svg`)}
@@ -121,20 +187,7 @@ const Failed = (props) => {
           Aadhaar KYC has been failed because we were not able to connect to
           your DigiLocker.
         </div>
-        <div className='body-text2'>Try again to complete KYC.</div>
       </section>
-      <AadhaarDialog
-        open={open}
-        id="kyc-aadhaar-dialog"
-        close={close}
-        kyc={kyc}
-        handleIframeKyc={handleIframeKyc}
-      />
-      <ConfirmBackDialog
-        isOpen={isBackDialogOpen}
-        close={() => setBackDialogOpen(false)}
-        goBack={() => navigate("/kyc/journey", { state: { fromState: 'digilocker-failed' }})}
-      />
     </Container>
   );
 };

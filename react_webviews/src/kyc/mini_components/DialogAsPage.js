@@ -8,7 +8,7 @@ import isEmpty from 'lodash/isEmpty';
 
 const DialogAsPage = (props) => {
   const [showLoader, setShowLoader] = useState('');
-  let src = 'kyc_illust';
+  let src = 'kyc_illust.svg';
   const {state} = props.location;
   const handleClickOne = internalStorage.getData('handleClickOne');
   const handleClickTwo = internalStorage.getData('handleClickTwo');
@@ -47,17 +47,20 @@ const DialogAsPage = (props) => {
   switch(state?.status){
     case 'linkAccount':
     case 'signOut':
-      src = 'kyc_error';
+      src = 'kyc_error.svg';
       break;
     case 'pennyFailed':
     case 'pennyExhausted':
-      src = 'bank_add_failed';
+      src = 'bank_add_failed.svg';
       break;
     case 'bankVerificationPending':
-      src = 'bank_verify_pending';
+      src = 'bank_verify_pending.svg';
       break;
+    case 'confirmPan':
+      src = 'kyc_status_icon.svg';
+    break;
     default:
-      src = 'kyc_illust'
+      src = state.image || 'kyc_illust.svg'
   }
 
   return (
@@ -71,7 +74,7 @@ const DialogAsPage = (props) => {
       buttonTitle={state?.buttonTitle}
       handleClick={handleButtonClick}
       title={state?.title}
-      iframeRightContent={require(`assets/${productName}/${src}.svg`)}
+      iframeRightContent={require(`assets/${productName}/${src}`)}
       showLoader={showLoader}
       dualbuttonwithouticon={state?.twoButton}
     >

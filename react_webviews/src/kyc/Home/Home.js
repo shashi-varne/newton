@@ -1,31 +1,42 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Container from "../common/Container";
 import { storageService, validatePan } from "utils/validators";
 import Input from "../../common/ui/Input";
 import { checkMerge, getPan, kycSubmit } from "../common/api";
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import toast from "../../common/ui/Toast";
-import ResidentDialog from "../mini-components/residentDialog";
-import Alert from "../mini-components/Alert";
 import AccountMerge from "../mini-components/AccountMerge";
-import { getConfig, isNewIframeDesktopLayout, navigate as navigateFunc } from "../../utils/functions";
+import { getConfig, isNewIframeDesktopLayout, isTradingEnabled, navigate as navigateFunc } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
+import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
+import { ConfirmPan } from "../Equity/mini-components/ConfirmPan";
+import CheckCompliant from "../Equity/mini-components/CheckCompliant";
+import { isDigilockerFlow, isEquityAllowed, panUiSet } from "../common/functions";
 import internalStorage from '../common/InternalStorage';
 import isEmpty from 'lodash/isEmpty';
 
+const residentialStatusOptions = [
+  {
+    value: true,
+    name: "Yes",
+  },
+  {
+    value: false,
+    name: "No",
+  },
+];
+
 const Home = (props) => {
   const showPageDialog = isNewIframeDesktopLayout();
-  const config = getConfig();
+  const config = useMemo(() => getConfig(), []);
   const navigate = navigateFunc.bind(props);
   const genericErrorMessage = "Something Went wrong!";
   const [showLoader, setShowLoader] = useState(false);
-  const [buttonTitle, setButtonTitle] = useState("CHECK STATUS");
   const [isStartKyc, setIsStartKyc] = useState(false);
   const [isUserCompliant, setIsUserCompliant] = useState();
   const [pan, setPan] = useState("");
   const [panError, setPanError] = useState("");
-  const [openResident, setOpenResident] = useState(false);
   const [openAccountMerge, setOpenAccountMerge] = useState(false);
   const [homeData, setHomeData] = useState({});
   const [accountMergeData, setAccountMergeData] = useState({});
@@ -33,9 +44,16 @@ const Home = (props) => {
   const stateParams = props.match.state || {};
   const isPremiumFlow = stateParams.isPremiumFlow || false;
   const { kyc, user, isLoading } = useUserKycHook();
-  const [userName, setUserName] = useState('');
-  // const [navigateTo, setNavigateTo] = useState('');
-  // const [x,setX] = useState(false);
+  const [openConfirmPan, setOpenConfirmPan] = useState(false);
+  const [openCheckCompliant, setOpenCheckCompliant] = useState(false);
+  const [residentialStatus, setResidentialStatus] = useState(true);
+  const [userName, setUserName] = useState("");
+  const [tradingEnabled, setTradingEnabled] = useState();
+  const [disableResidentialStatus, setDisableResidentialStatus] = useState();
+
+  const checkIfTradingEnabled = (isIndian) => {
+    return isTradingEnabled(kyc) && isIndian;
+  }
 
   const savedPan = storageService().get('pan');
   useEffect(() => {
@@ -49,18 +67,23 @@ const Home = (props) => {
   }, [kyc, user]);
 
   const initialize = () => {
+    setPan(kyc.pan?.meta_data?.pan_number || "");
+    setResidentialStatus(!kyc.address?.meta_data?.is_nri);
+    const TRADING_ENABLED = checkIfTradingEnabled(!kyc.address?.meta_data?.is_nri);
+    setTradingEnabled(TRADING_ENABLED);
+    setDisableResidentialStatus(!!kyc.identification.meta_data.tax_status)
+    let data = {
+      investType: "mutual fund",
+      npsDetailsRequired: false,
+      title: "Enter PAN to check KYC status",
+      subtitle: TRADING_ENABLED ? "As per SEBI, KYC is mandatory for investments in stocks & mutual funds" : "As per SEBI, valid PAN is required to invest in mutual funds",
+      kycConfirmPanScreen: false,
+    };
     if(isEmpty(savedPan)){
       setPan(kyc.pan?.meta_data?.pan_number || "");
     } else{
       storageService().remove('pan');
     }
-    let data = {
-      investType: "mutual fund",
-      npsDetailsRequired: false,
-      title: "Check if you’re investment ready",
-      subtitle: "PAN is mandatory for investing in Mutual Funds",
-      kycConfirmPanScreen: false,
-    };
     if (
       user.nps_investment &&
       storageService().get("nps_additional_details_required")
@@ -86,20 +109,7 @@ const Home = (props) => {
     setHomeData({ ...data });
   };
 
-  const renderData = {
-    incomplete: {
-      title: "KYC is incomplete!",
-      subtitle:
-        "As per Govt norm. you need to do a one-time registration process to complete KYC.",
-    },
-    success: {
-      title: `Hey ${userName},`,
-      subtitle: "You’re investment ready and eligible for premium onboarding.",
-    },
-  };
-
   const handleClick = async () => {
-    
     try {
       if (pan.length !== 10) {
         setPanError("Minimum length is 10");
@@ -115,78 +125,66 @@ const Home = (props) => {
         setPanError("Invalid PAN number");
         return;
       }
-
       const skipApiCall = pan === kyc?.pan?.meta_data?.pan_number;
-      if (!isStartKyc) {
-        sendEvents("next")
-        if (skipApiCall) {
-          setIsStartKyc(true);
-          setUserName(kyc?.pan?.meta_data?.name)
-          if (kyc?.kyc_status === "compliant") {
-            setIsUserCompliant(true);
-            setButtonTitle("CONTINUE");
-          } else {
-            setButtonTitle("START KYC");
-            setIsUserCompliant(false);
-          }
-          return;
-        }
-        await checkCompliant();
-      } else if (!isUserCompliant) {
-        if(showPageDialog) {
-          const residentData = {
-            title: "Residence Status",
-            message: 'Are you an Indian resident?',
-            buttonOneTitle: 'NO',
-            buttonTwoTitle: 'YES',
-            twoButton: true
-          }
-          internalStorage.setData('isApiCall', true);
-          internalStorage.setData('handleClickOne', cancel);
-          internalStorage.setData('handleClickTwo', aadharKyc);
-          navigate('residence-status',{state:residentData});
+      sendEvents("next");
+      if (skipApiCall || isStartKyc) {
+        setIsStartKyc(true);
+        setUserName(kyc?.pan?.meta_data?.name);
+        if (kyc?.kyc_status === "compliant") {
+          setIsUserCompliant(true);
         } else {
-          setOpenResident(true);
+          setIsUserCompliant(false);
         }
+        handleShowConfirmPan();
+        return;
       }
-      else {
-        if (skipApiCall) {
-          handleNavigation(
-            kyc.address?.meta_data?.is_nri || false,
-            kyc?.kyc_status
-          );
-        }
-        savePan(kyc.address?.meta_data?.is_nri || false);
-      }
+      setShowLoader("button");
+      await checkPanValidity(true);
     } catch (err) {
       toast(err.message || genericErrorMessage);
     }
   };
 
-  const checkCompliant = async () => {
-    setShowLoader("button");
-    try {
-      let result = await getPan(
-        {
-          kyc: {
-            pan_number: pan.toUpperCase(),
-          },
-        },
-        accountMerge
-      );
-      if (isEmpty(result)) return;
-        setUserName(result.kyc.name);
-        setIsStartKyc(true);
-      if (result?.kyc?.status) {
-        setIsUserCompliant(true);
-        setButtonTitle("CONTINUE");
-      } else {
-        setButtonTitle("START KYC");
-        setIsUserCompliant(false);
+  const handleShowConfirmPan = () => {
+    if(showPageDialog) {
+      const newData = {
+        title: 'Confirm PAN',
+        buttonOneTitle: 'EDIT PAN',
+        buttonTwoTitle: 'CONFIRM PAN',
+        twoButton: true,
+        message: `Hi${userName && ` ${userName}`}, please confirm that this PAN belongs to you: ${panUiSet(pan)}`,
+        status: 'confirmPan'
       }
+      storageService().set('pan',pan);
+      internalStorage.setData('handleClickOne', reEnterPan);
+      internalStorage.setData('handleClickTwo', handleConfirmPan);
+      internalStorage.setData('isApiCall', true);
+      navigate('/kyc/confirm-pan',{state:{...newData}});
+    } else {
+      setOpenConfirmPan(true)
+    }
+  }
+
+  const checkPanValidity = async (showConfirmPan = false) => {
+    let body = {
+      kyc: {
+        pan_number: pan.toUpperCase(),
+      }
+    };
+
+    if(tradingEnabled) {
+      body.kyc_product_type = "equity"
+    };
+
+    try {
+      let result = await getPan(body, accountMerge);
+      if (isEmpty(result)) return;
+      setUserName(result.kyc.name);
+      setIsStartKyc(true);
+      if (showConfirmPan) handleShowConfirmPan();
     } catch (err) {
       console.log(err);
-      throw new Error(err.message);
+      toast(err.message);
     } finally {
       setShowLoader(false);
     }
@@ -197,39 +195,31 @@ const Home = (props) => {
     let value = target ? target.value.trim() : event;
     let limit = target?.maxLength;
 
-    // added event listener to remove the character after limit is reached
     if (value.length > limit) {
-      return
-    }  
-     
+      return;
+    }
+
     setPan(value);
     if (value) setPanError("");
     else setPanError("This is required");
     if (isStartKyc) {
       setIsStartKyc(false);
-      setButtonTitle("CHECK STATUS");
     }
   };
 
-  const closeResident = () => {
-    setOpenResident(false);
-  };
-
-  const cancel = () => {
-    setOpenResident(false);
-    savePan(true);
-  };
-
-  const aadharKyc = () => {
-    setOpenResident(false);
-    savePan(false);
+  const handleResidentialStatus = (event) => {
+    let value = event.target ? event.target.value : event;
+    setTradingEnabled(checkIfTradingEnabled(value !== 1))
+    setResidentialStatus(residentialStatusOptions[value].value);
   };
 
   const closeAccountMerge = () => {
+    sendEvents("re-enter_pan", "pan_aleady_exists");
     setOpenAccountMerge(false);
   };
 
   const handleMerge = async (step) => {
+    sendEvents("link_account", "pan_aleady_exists");
     if (step === "STEP1") {
       if(!isEmpty(authIds))
         storageService().setObject(STORAGE_CONSTANTS.AUTH_IDS, authIds);
@@ -244,7 +234,7 @@ const Home = (props) => {
   };
 
   const reEnterPan = () => {
-    navigate('home');
+    navigate('/kyc/home');
   }
 
   const accountMerge = async () => {
@@ -258,7 +248,7 @@ const Home = (props) => {
       let response = await checkMerge(pan.toUpperCase());
       if (!response) return;
       let { result, status_code } = response;
-      let { different_login, auth_ids} = result;
+      let { different_login, auth_ids } = result;
       if (status_code === 200) {
         const accountDetail = {
           title: "PAN already exists",
@@ -307,15 +297,13 @@ const Home = (props) => {
           setOpenAccountMerge(true);
         }
       } else {
-        toast(toastMessage);
+        toast(result?.error || result?.message || toastMessage);
       }
     }
   };
 
   const savePan = async (is_nri) => {
-    // sendEvents(`${is_nri ? "no" : "yes"}`,'resident popup')
     try {
-      setShowLoader("button");
       if (is_nri) {
         kyc.address.meta_data.is_nri = true;
       } else {
@@ -332,65 +320,138 @@ const Home = (props) => {
           address: kyc.address.meta_data,
         },
       };
+
+      const addkycType = kyc.kyc_status === "non-compliant" && !isDigilockerFlow(kyc);
+      if (!is_nri && isEquityAllowed()) {
+        body.set_kyc_product_type = "equity";
+        if(addkycType && kyc.kyc_type !== "manual")
+          body.set_kyc_type = "manual";
+      } else {
+        body.set_kyc_product_type = "mf";
+        if(addkycType && kyc.kyc_type !== "init")
+          body.set_kyc_type = "init";
+      }
+
       let result = await kycSubmit(body);
       if (!result) return;
-      handleNavigation(is_nri, result.kyc.kyc_status);
+      const payload = { kyc: {} };
+      let callKycSubmitApi = false;
+      if (result.kyc.kyc_product_type !== "equity" && isTradingEnabled(result.kyc)) {
+        payload.set_kyc_product_type = "equity";
+        callKycSubmitApi = true;
+      }
+      if (result?.kyc?.kyc_status === "compliant") {
+        setIsUserCompliant(true);
+        if (result?.kyc?.kyc_type !== "init") {
+          payload.set_kyc_type = "init";
+          callKycSubmitApi = true;
+        }
+      } else {
+        setIsUserCompliant(false);
+      }
+      if (callKycSubmitApi) {
+        result = await kycSubmit(payload);
+      }
+      handleNavigation(is_nri, result.kyc);
     } catch (err) {
       console.log(err);
       toast(err.message || genericErrorMessage);
     } finally {
-      setShowLoader(false);
+      setOpenCheckCompliant(false);
     }
   };
 
-  const handleNavigation = (is_nri, kyc_status) => {
+  const handleNavigation = (is_nri, kycDetails) => {
     if (
-      (isUserCompliant || kyc_status === "compliant") &&
+      (isUserCompliant || kycDetails.kyc_status === "compliant") &&
       (homeData.kycConfirmPanScreen || isPremiumFlow)
     ) {
       sendEvents("next", "pan_entry")
       navigate(PATHNAME_MAPPER.compliantPersonalDetails1);
     } else {
-      if (isUserCompliant || kyc_status === "compliant") {
-        sendEvents("next", "pan_entry")
-        navigate(PATHNAME_MAPPER.journey);
-      } else {
-        sendEvents(`${is_nri ? "no" : "yes"}`,'resident popup')
+      const kycProductType = storageService().get("kycStartPoint");
+      if (isUserCompliant || kycDetails.kyc_status === "compliant") {
         if (is_nri) {
-          navigate(`${PATHNAME_MAPPER.journey}`, {
-            searchParams: `${config.searchParams}&show_aadhaar=false`,
-          });
+          if (!tradingEnabled && kycProductType === "stocks") {
+            navigate(PATHNAME_MAPPER.nriError);
+          } else {
+            navigate(PATHNAME_MAPPER.journey);
+          }
         } else {
-          navigate(`${PATHNAME_MAPPER.journey}`, {
-            searchParams: `${config.searchParams}&show_aadhaar=true`,
-          });
+          navigate(PATHNAME_MAPPER.journey);
+        }
+        sendEvents("next", "pan_entry")
+      } else {
+        // sendEvents(`${is_nri ? "no" : "yes"}`, "resident popup");
+        if (is_nri) {
+          if (!tradingEnabled && kycProductType === "stocks") {
+            navigate(PATHNAME_MAPPER.nriError);
+          } else {
+            navigate(`${PATHNAME_MAPPER.journey}`, {
+              searchParams: `${config.searchParams}&show_aadhaar=false`,
+            });
+          }
+        } else {
+          if (kycDetails?.kyc_type === "manual") {
+            navigate(`${PATHNAME_MAPPER.journey}`, {
+              searchParams: `${config.searchParams}&show_aadhaar=false`,
+            });
+          } else {
+            navigate(`${PATHNAME_MAPPER.journey}`, {
+              searchParams: `${config.searchParams}&show_aadhaar=true`,
+            });
+          }
         }
       }
     }
   };
 
+  const handleConfirmPan = async () => {
+    sendEvents("next", "confirm_pan");
+    const skipApiCall = 
+      pan === kyc?.pan?.meta_data?.pan_number &&
+      kyc.address?.meta_data?.is_nri === !residentialStatus;
+    setOpenConfirmPan(false);
+    if (skipApiCall) {
+      handleNavigation(
+        kyc.address?.meta_data?.is_nri || false,
+        kyc
+      );
+    } else {
+      setOpenCheckCompliant(true);
+      await savePan(!residentialStatus);
+    }
+  };
+
   const sendEvents = (userAction, screenName) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction,
-        "screen_name": screenName || "pan_check",
-        "pan": pan ? "yes" : "no",
-        "initial_kyc_status": kyc?.initial_kyc_status || ""
-      }
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction,
+        screen_name: screenName || "pan_entry",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (eventObj.properties.screen_name === "pan_entry") {
+      eventObj.properties.resident_indian = residentialStatus ? "yes" : "no";
+    }
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
   }
+
+  const handleClose = () => {
+    sendEvents("edit_pan", "confirm_pan");
+    setOpenConfirmPan(false);
+  };
+
   return (
     <Container
       events={sendEvents("just_set_events")}
       skelton={isLoading}
       id="kyc-home"
-      buttonTitle={buttonTitle}
+      buttonTitle="CONTINUE"
       showLoader={showLoader}
       handleClick={handleClick}
       title={homeData.title}
@@ -402,7 +463,7 @@ const Home = (props) => {
           <div className="kyc-main-subtitle" data-aid='kyc-main-subtitle'>{homeData.subtitle}</div>
           <main data-aid='kyc-home'>
             <Input
-              label="Enter PAN"
+              label="Enter your PAN"
               class="input"
               value={pan.toUpperCase()}
               error={panError ? true : false}
@@ -414,40 +475,26 @@ const Home = (props) => {
               disabled={!!showLoader}
               autoFocus
             />
-            {isStartKyc && isUserCompliant && (
-              <Alert
-                variant="success"
-                message={renderData.success.subtitle}
-                title={renderData.success.title}
+            <div className={`input ${showLoader && `disabled`}`}>
+              <RadioWithoutIcon
+                width="40"
+                label="Are you an Indian resident?"
+                options={residentialStatusOptions}
+                value={residentialStatus}
+                onChange={handleResidentialStatus}
+                disabled={showLoader || disableResidentialStatus}
+                disabledWithValue={disableResidentialStatus}
               />
-            )}
-            {isStartKyc && !isUserCompliant && (
-              <Alert
-                variant="danger"
-                message={renderData.incomplete.subtitle}
-                title={renderData.incomplete.title}
-              />
-            )}
+            </div>
           </main>
-          <ResidentDialog
-            open={openResident}
-            close={closeResident}
-            cancel={cancel}
-            aadhaarKyc={aadharKyc}
+          <ConfirmPan
+            isOpen={openConfirmPan}
+            name={userName}
+            pan={pan}
+            close={handleClose}
+            handleClick={handleConfirmPan}
           />
-          {/* {
-            (x || openAccountMerge)  &&
-            <DialogPageContainer 
-              isOpen={openAccountMerge}
-              close={closeAccountMerge}
-              data={accountMergeData}
-              handleClick={handleMerge}
-              component={AccountMerge}
-              isDialog={isDialog}
-              navigateTo={navigateTo}
-              {...props}
-            />
-          } */}
+          <CheckCompliant isOpen={openCheckCompliant} />
           <AccountMerge
             isOpen={openAccountMerge}
             close={closeAccountMerge}

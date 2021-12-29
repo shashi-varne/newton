@@ -1,28 +1,35 @@
+/*
+
+  Use: Generic component to support file picker methods and behaviour
+    for native/web/sdk
+
+  Example syntax:
+    <WVFilePickerWrapper
+      nativePickerMethodName="open_gallery"
+      customPickerId="my-file-picker"
+      onFileSelectComplete={functionName}
+      onFileSelectError={functionName}
+      sizeLimit={4}
+      supportedFormats={['jpeg', 'png']}
+      fileName="new file"
+    >
+      {Any child element for which file picker functionality is required}
+    </WVFilePickerWrapper>
+*/
+
+/* eslint-disable no-unused-expressions */
 import React, { useState } from 'react';
 import { getConfig } from "utils/functions";
-import { isArray, isFunction } from 'lodash';
+import { isFunction } from 'lodash';
 import toast from '../Toast';
 import FileAccessDialog from './FileAccessDialog';
+import { openFilePicker, validateFileTypeAndSize } from '../../../utils/functions';
+import Compressor from 'compressorjs';
+import PropTypes from 'prop-types';
 
 const isWeb = getConfig().Web;
 
-const openFileHandler = (filepickerId, methodName, docName, nativeHandler, fileHandlerParams = {}) => {
-  if (isWeb) {
-    const filepicker = document.getElementById(filepickerId);
-    if (filepicker){
-      filepicker.click();
-    }
-  } else {
-    window.callbackWeb[methodName]({
-      type: 'doc',
-      doc_type: docName,
-      upload: nativeHandler,
-      ...fileHandlerParams // callback from native
-    });
-  }
-}
-
-function getBase64(file) {
+export function promisableGetBase64(file) {
   const reader = new FileReader();
   return new Promise(resolve => {
     reader.onload = ev => {
@@ -32,41 +39,48 @@ function getBase64(file) {
   })
 }
 
-const validateFileTypeAndSize = (file, supportedTypes, sizeLimit) => {
-  const fileType = file.type.split("/")[1];
-  const sizeInBytes = sizeLimit * 1000 * 1000;
-  
-  if (!isArray(supportedTypes)) {
-    supportedTypes = [supportedTypes];
-  }
-  
-  if (!supportedTypes.includes(fileType)) {
-    return "File type not supported";
-  } else if (file.size > sizeInBytes) {
-    return `File size cannot exceed ${sizeLimit}MB`;
-  }
-  
-  return "";
+const compressImage = async (file) => {
+  return new Promise((resolve, reject) => {
+    new Compressor(file, {
+      quality: 0.7, // can go above but ideally not below 0.6
+      success(compressed) {
+        resolve(compressed);
+      },
+      error(err) {
+        reject(err.message);
+      },
+    })
+  })
 }
 
 export const WVFilePickerWrapper = ({
   dataAidSuffix,
-  nativePickerMethodName = '',
-  customPickerId = 'wv-file-input',
-  showOptionsDialog,
-  onFileSelectComplete,
-  onFileSelectError,
-  extraValidation,
-  sizeLimit = 100,
-  supportedFormats,
-  fileName,
-  fileHandlerParams,
-  children
+  nativePickerMethodName, // Method name for native file handler (open_gallery, open_canvas, etc.) 
+  customPickerId, /*
+    To uniquely identify the internal <input /> element
+    (Required when there's more than 1 file pickers in a single page)
+  */
+  showOptionsDialog, // If true, shows a bottomsheet for camera or gallery options on click of element 
+  onFileSelectStart, /*
+    Callback called once file is picked, before starting file processing
+    Ideally used to trigger loader on file selection
+    **Works only for Native for now**
+  */
+  onFileSelectComplete, // Callback for when file selection is successful
+  onFileSelectError, // Callback for when file selection fails
+  extraValidation, // Function for any extra file validations on selected file besides size and type validations
+  sizeLimit, // Number value for file size limit (in MB)
+  supportedFormats, // Accepts an array of file types for file type validation
+  fileName, // Name for selected file
+  fileHandlerParams, // Object containing any additional params for native file handler (check functions.js > openFilePicker())
+  customClickHandler, // To override <input> click handler (Not usually required, only for absolute edge cases)
+  shouldCompress, // If true, image files will be compressed to make them smaller in size
+  children // Any child element for which file picker functionality is required
 }) => {
   const [openOptionsDialog, setOpenOptionsDialog] = useState(false);
   const [filePickerType, setFilePickerType] = useState(nativePickerMethodName);
 
-  const onFileSelected = async (file) => {
+  const onFileSelected = async (file, otherParams = {}) => {
     try {
       // Basic size and file type validations
       const errMsg = validateFileTypeAndSize(file, supportedFormats, sizeLimit);
@@ -81,15 +95,19 @@ export const WVFilePickerWrapper = ({
       let fileBase64 = '';
 
       if (file.type.split("/")[0] === 'image') {
-        fileBase64 = await getBase64(file);
+        if (shouldCompress) {
+          const compressedBlob = await compressImage(file);
+          file = new File([compressedBlob], file.name || "file");
+        }
+        fileBase64 = await promisableGetBase64(file);
       }
 
       if (isFunction(onFileSelectComplete)) {
-        onFileSelectComplete(file, fileBase64);
+        onFileSelectComplete(file, fileBase64, otherParams);
       }
     } catch(err) {
       if (isFunction(onFileSelectError)) {
-        onFileSelectError(err)
+        onFileSelectError(err);
       } else {
         console.log(err);
         toast(err);
@@ -98,17 +116,29 @@ export const WVFilePickerWrapper = ({
   };
 
   const onElementClick = () => {
-    if (!isWeb && showOptionsDialog) {
+    // Note: Order of params in array matters
+    const functionParams = [
+      customPickerId,
+      nativePickerMethodName,
+      fileName,
+      onFileSelected,
+      fileHandlerParams,
+      onFileSelectStart
+    ];
+    
+    if (isFunction(customClickHandler)) {
+      customClickHandler(...functionParams);
+    } else if (!isWeb && showOptionsDialog) {
       setOpenOptionsDialog(true);
     } else {
-      openFileHandler(customPickerId, nativePickerMethodName, fileName, onFileSelected, fileHandlerParams);
+      openFilePicker(...functionParams);
     }
   }
-
+  
   const handleUploadFromDialog = (type) => {
     setOpenOptionsDialog(false);
     setFilePickerType(type);
-    openFileHandler(customPickerId, type, fileName, onFileSelected, fileHandlerParams);
+    openFilePicker(customPickerId, type, fileName, onFileSelected, fileHandlerParams, onFileSelectStart);
   }
 
   return (
@@ -144,3 +174,36 @@ const ClickWrappedChild = ({ childElem, onClickFunc }) => (
   })
 );
 
+WVFilePickerWrapper.propTypes = {
+  nativePickerMethodName: PropTypes.oneOf([
+    'open_gallery',
+    'open_canvas',
+    'open_camera',
+    'open_file'
+  ]).isRequired,
+  customPickerId: PropTypes.string,
+  showOptionsDialog: PropTypes.bool, 
+  onFileSelectComplete: PropTypes.func.isRequired,
+  onFileSelectError: PropTypes.func,
+  extraValidation: PropTypes.func,
+  sizeLimit: PropTypes.number,
+  supportedFormats: PropTypes.array,
+  fileName: PropTypes.string,
+  fileHandlerParams: PropTypes.object,
+  customClickHandler: PropTypes.func,
+  shouldCompress: PropTypes.bool,
+  children: PropTypes.any
+}
+
+WVFilePickerWrapper.defaultProps = {
+  customPickerId: 'wv-file-input',
+  showOptionsDialog: false,
+  onFileSelectError: null,
+  extraValidation: null,
+  sizeLimit: 100,
+  supportedFormats: [],
+  fileName: 'file',
+  fileHandlerParams: null,
+  customClickHandler: null,
+  shouldCompress: false,
+}
