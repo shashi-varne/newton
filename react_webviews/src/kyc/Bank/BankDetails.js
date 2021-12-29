@@ -8,6 +8,7 @@ import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
 import "./BankDetails.scss";
 import { nativeCallback } from "../../utils/native_callback";
+import { isBankVerified } from '../common/functions';
 
 const BankDetails = (props) => {
   const [showLoader, setShowLoader] = useState(true);
@@ -145,8 +146,8 @@ const BankDetails = (props) => {
               <div className="left">Status</div>
               <div
                 className={`status ${
-                  bank.bank_status === "rejected" && "failed"
-                } ${bank.bank_status === "verified" && "verified"}`}
+                  bank.bank_status === "rejected" && "rejected"
+                } ${isBankVerified(bank, kyc) && "approved"}`}
                 data-aid={`mapped-bank-status`}
               >
                 {bank.mapped_bank_status}
@@ -173,11 +174,7 @@ const BankDetails = (props) => {
                         <div className="item" data-aid='kyc-status'>
                           <div className="left">Status</div>
                           <div
-                            className={`status ${
-                              mandate.status === "rejected" && "failed"
-                            } ${mandate.status === "verified" && "verified"} ${
-                              mandate.status === "init" && "underprocess"
-                            }`}
+                            className={`status ${mandate.f_status_code}`}
                             data-aid='kyc-mapped-mandate-status'
                           >
                             {mandate.friendly_status_V2}

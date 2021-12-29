@@ -488,3 +488,10 @@ export const checkNomineeNameValidity = (kyc, nomineeName) => {
   }
   return '';
 }
+
+export const isBankVerified = (bank = {}, kyc = {}) => {
+  return (
+    bank.bank_status === "verified" ||
+    (bank.status === "default" && kyc.bank?.meta_data_status === "approved")
+  );
+};
