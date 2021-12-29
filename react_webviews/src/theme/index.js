@@ -3,6 +3,7 @@ import { switchStyleOverRides } from './switch';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
 import getPartnerThemeData from './utils';
 import { createTheme } from '@mui/material';
+import { filledTextFieldStyleOverRides, inputAdornmentStyleOverRides, inputLabelStyleOverRides } from './textfield';
 
 const getTheme = () => {
   const partnerThemeData = getPartnerThemeData();
@@ -30,6 +31,18 @@ const getTheme = () => {
       MuiSwitch: {
         styleOverrides: switchStyleOverRides(),
       },
+      MuiFilledInput:{
+        defaultProps: {
+          disableUnderline: true
+        },
+        styleOverrides:filledTextFieldStyleOverRides(colors)
+      },
+      MuiInputLabel: {
+        styleOverrides: inputLabelStyleOverRides(colors)
+      },
+      MuiInputAdornment: {
+        styleOverrides: inputAdornmentStyleOverRides(colors)
+      }
     },
   };
   return createTheme(theme);
