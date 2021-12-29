@@ -105,6 +105,7 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--primaryVariant4`, `${config_to_return.styles.primaryVariant4}`);
   html.style.setProperty(`--spacing`, '10px');
   html.style.setProperty(`--gunmetal`, '#161A2E');
+  html.style.setProperty(`--darkblue`, '#132056');
   html.style.setProperty(`--linkwater`, '#D3DBE4');
   html.style.setProperty(`--border-radius`, `${config_to_return.uiElements.button.borderRadius}px`);
   html.style.setProperty(`--whitegrey`, '#EEEEEE');
@@ -861,4 +862,9 @@ export function requireAsset(assetName, partner, extension = 'svg') {
       console.log('Could not find the asset you are looking for!', err);
     }
   }
+}
+
+export function isDietProduct() {
+  const {diet = ''} = getUrlParams();
+  return diet.toLowerCase() === 'true';
 }
