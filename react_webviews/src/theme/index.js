@@ -1,34 +1,42 @@
-import { createTheme } from '@mui/material';
 import { buttonStyleOverRides, buttonVariantsConfig, } from './button';
-import color from './colors';
 import { tooltipStyleOverRides } from './tooltip';
 import { switchStyleOverRides } from './switch';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: color.primary.brand,
-    },
-    secondary: {
-      main: color.action.brand,
-    },
-  },
-  typography: baseTypographyConfig,
-  components: {
-    MuiTypography: {
-      variants: customTypographyVariantProps(),
-    },
-    MuiButton: {
-      variants: buttonVariantsConfig(),
-      styleOverrides: buttonStyleOverRides(),
-    },
-    MuiSwitch: {
-      styleOverrides: switchStyleOverRides()
-    },
-    MuiTooltip: {
-      styleOverrides: tooltipStyleOverRides(),
-    },
-  },
-});
+import getPartnerThemeData from './utils';
+import { createTheme } from '@mui/material';
 
-export default theme;
+const getTheme = () => {
+  const partnerThemeData = getPartnerThemeData();
+  const colors = partnerThemeData?.colors;
+  
+  const theme = {
+    palette: {
+      primary: {
+        main: colors.primary.brand,
+      },
+      secondary: {
+        main: colors.action.brand,
+      },
+      foundationColors: colors,
+    },
+    typography: baseTypographyConfig(colors,partnerThemeData),
+    components: {
+      MuiTypography: {
+        variants: customTypographyVariantProps(),
+      },
+      MuiButton: {
+        variants: buttonVariantsConfig(colors),
+        styleOverrides: buttonStyleOverRides(colors,partnerThemeData),
+      },
+      MuiSwitch: {
+        styleOverrides: switchStyleOverRides(colors),
+      },
+      MuiTooltip: {
+        styleOverrides: tooltipStyleOverRides(colors),
+      },
+    },
+  };
+  return createTheme(theme);
+};
+
+export default getTheme;

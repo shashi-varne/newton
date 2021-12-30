@@ -1,3 +1,6 @@
+// example for font family support is added in the hbl config.
+// uncomment the code to test it.
+
 const obc = {
   colors: {
     primary: {
@@ -84,6 +87,9 @@ const hbl = {
       brand: '#0066B3',
     },
   },
+  // uncomment below code and add the font family as an array,
+  // also add the font link in index.html file.
+  // fontFamily: ['The Nautigal', 'cursive']
 };
 
 const subh = {
