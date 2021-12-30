@@ -1,8 +1,20 @@
 import React from "react";
-import { storiesOf } from "@storybook/react";
 import Checkbox from "./Checkbox";
-import { action } from "@storybook/addon-actions";
 
-storiesOf("Atoms/checkbox", module).add("default", () => (
-  <Checkbox isSelected onChange={action("checkbox-clicked")} />
-));
+export default {
+  component: Checkbox,
+  title: "Atoms/Checkbox",
+  argTypes: {
+    isSelected: {
+      defaultValue: true,
+    },
+    isDisabled: {
+      defaultValue: false,
+    },
+    onChange: {
+      action: "checkbox-clicked",
+    },
+  },
+};
+
+export const Default = (args) => <Checkbox {...args} />;
