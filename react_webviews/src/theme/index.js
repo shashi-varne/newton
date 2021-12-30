@@ -1,34 +1,42 @@
-import { createTheme } from '@mui/material';
 import { buttonStyleOverRides, buttonVariantsConfig, } from './button';
 import { checkboxStyleOverRides } from './checkbox';
-import color from './colors';
 import { switchStyleOverRides } from './switch';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: color.primary.brand,
-    },
-    secondary: {
-      main: color.action.brand,
-    },
-  },
-  typography: baseTypographyConfig,
-  components: {
-    MuiTypography: {
-      variants: customTypographyVariantProps(),
-    },
-    MuiButton: {
-      variants: buttonVariantsConfig(),
-      styleOverrides: buttonStyleOverRides(),
-    },
-    MuiSwitch: {
-      styleOverrides: switchStyleOverRides()
-    },
-    MuiCheckbox: {
-      styleOverrides: checkboxStyleOverRides(),
-    },
-  },
-});
+import getPartnerThemeData from './utils';
+import { createTheme } from '@mui/material';
 
-export default theme;
+const getTheme = () => {
+  const partnerThemeData = getPartnerThemeData();
+  const colors = partnerThemeData?.colors;
+  
+  const theme = {
+    palette: {
+      primary: {
+        main: colors.primary.brand,
+      },
+      secondary: {
+        main: colors.action.brand,
+      },
+      foundationColors: colors,
+    },
+    typography: baseTypographyConfig,
+    components: {
+      MuiTypography: {
+        variants: customTypographyVariantProps(),
+      },
+      MuiButton: {
+        variants: buttonVariantsConfig(),
+        styleOverrides: buttonStyleOverRides(),
+      },
+      MuiSwitch: {
+        styleOverrides: switchStyleOverRides(),
+      },
+      MuiCheckbox: {
+        styleOverrides: checkboxStyleOverRides(),
+      },
+    },
+  };
+  return createTheme(theme);
+};
+
+export default getTheme;
