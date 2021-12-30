@@ -5,7 +5,7 @@ import icon from '../assets/no_internet_connection_icon.png';
 
 class NoInternet extends Component {
   handleClick = () => {
-    window.location.reload(false);
+    window.location.reload();
   }
 
   render() {

@@ -67,7 +67,7 @@ class CommonLanding extends Component {
     }
 
     handleClick = () => {
-        window.location.reload(false);
+        window.location.reload();
     }
 
     navigate = (pathname, search, params) => {
