@@ -1,6 +1,4 @@
-import colors from '../colors';
-
-export const switchStyleOverRides = () => {
+export const switchStyleOverRides = (colors) => {
   return {
     switchBase: {
       color: colors.supporting.athensGrey,
