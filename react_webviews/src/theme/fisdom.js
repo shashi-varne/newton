@@ -1,4 +1,4 @@
-const FisdomTheme = () => ({
+const FisdomTheme = {
   colors: {
     primary: {
       brand: '#4F2DA7',
@@ -59,6 +59,6 @@ const FisdomTheme = () => ({
   button: {
     disableHoverEffect : true
   }
-});
+};
 
 export default FisdomTheme;

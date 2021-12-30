@@ -4,15 +4,15 @@ import partners from './partners';
 import { merge } from 'lodash';
 import { getConfig } from '../utils/functions';
 
+const productNames = {
+  finity: Finitycolors,
+  fisdom: Fisdomcolors,
+};
 const getPartnerThemeData = () => {
-  const productNames = {
-    finity: Finitycolors(),
-    fisdom: Fisdomcolors(),
-  };
   const config = getConfig();
   const partnerCode = config.code;
   const productName = config.productName;
-  const mergedPartnerData = merge(productNames[productName], partners[partnerCode]);
+  const mergedPartnerData = merge({}, productNames[productName], partners[partnerCode]);
   const {colors,...partnerConfig} = mergedPartnerData;
   return {
     colors,
