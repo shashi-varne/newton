@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Box, Typography } from "@mui/material";
-import color from "../../../theme/colors";
 import { isEmpty } from "lodash";
 import "./OrderStep.scss";
 
@@ -12,9 +11,9 @@ export const ORDER_STEP_VARIANTS = {
 };
 
 const VARIANT_COLOR_MAPPER = {
-  DEFAULT: color.supporting.gainsboro,
-  PROCESSING: color.secondary.mango[400],
-  SUCCESSFUL: color.secondary.profitGreen[400],
+  DEFAULT: "foundationColors.supporting.gainsboro",
+  PROCESSING: "foundationColors.secondary.mango.400",
+  SUCCESSFUL: "foundationColors.secondary.profitGreen.400",
 };
 
 const OrderStep = (props) => {
@@ -36,7 +35,9 @@ const OrderStep = (props) => {
       <Box
         className="aos-circle"
         sx={{
-          backgroundColor: VARIANT_COLOR_MAPPER[variant],
+          backgroundColor:
+            VARIANT_COLOR_MAPPER[variant] ||
+            VARIANT_COLOR_MAPPER[ORDER_STEP_VARIANTS.DEFAULT],
         }}
       >
         <Typography variant="body1" className="aos-step-content">
@@ -53,7 +54,7 @@ const OrderStep = (props) => {
           <Typography
             variant="body2"
             className="aos-subtitle"
-            color={color.content.secondary}
+            color="foundationColors.content.secondary"
           >
             {subtitle}
           </Typography>
