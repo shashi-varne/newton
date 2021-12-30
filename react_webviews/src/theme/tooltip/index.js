@@ -1,6 +1,4 @@
-import colors from "../colors";
-
-export const tooltipStyleOverRides = () => {
+export const tooltipStyleOverRides = (colors) => {
   return {
     tooltip: {
       padding: 8,
@@ -10,6 +8,9 @@ export const tooltipStyleOverRides = () => {
       lineHeight: "22px",
       textAlign: "center",
       backgroundColor: colors.content.primary,
+    },
+    arrow: {
+      color: colors.content.primary,
     },
   };
 };
