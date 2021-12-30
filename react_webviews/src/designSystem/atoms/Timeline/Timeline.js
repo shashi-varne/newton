@@ -1,19 +1,18 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Box } from "@mui/material";
-import color from "../../../theme/colors";
 import "./Timeline.scss";
 
 const activeStyles = {
   width: 40,
   height: 40,
   borderRadius: "50%",
-  backgroundColor: color.primary.brand,
-  color: color.supporting.white,
+  backgroundColor: "foundationColors.primary.brand",
+  color: "foundationColors.supporting.white",
 };
 
 const inActiveStyles = {
-  color: color.content.tertiary,
+  color: "foundationColors.content.tertiary",
 };
 
 const Timeline = (props) => {
