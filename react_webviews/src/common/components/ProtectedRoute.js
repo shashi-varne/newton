@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { getAccountSummary, setSummaryData } from "../../kyc/services";
+import { initData } from "../../kyc/services";
 import isEmpty from "lodash/isEmpty";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
@@ -15,21 +15,21 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   let user = storageService().getObject("user") || {};
   let kyc = storageService().getObject("kyc") || {};
   let partner = storageService().get("partner") || "";
+  const referral = storageService().getObject('referral') || {};
   const urlParams = getUrlParams();
   const guestLeadId = storageService().get('guestLeadId') || "" 
   const guestUser = urlParams?.guestUser || false;
 
-  const userDataAvailable = (currentUser && !isEmpty(kyc) && !isEmpty(user)) || guestLeadId || guestUser;
-  const sdkCheck = isSdk ? !!partner : true; // same as: !isSdk || (isSdk && partner)
-  const [showLoader, setShowLoader] = useState(!userDataAvailable || !sdkCheck);
-  const [isLoginValid, setIsLoginValid] = useState(userDataAvailable && sdkCheck);
+  const userDataAvailable = (currentUser && !isEmpty(kyc) && !isEmpty(user) && !isEmpty(referral)) || guestLeadId || guestUser;
+  const isSdkPartnerDataAvailable = isSdk ? !!partner : true; // same as: !isSdk || (isSdk && partner)
+  const [showLoader, setShowLoader] = useState(!userDataAvailable || !isSdkPartnerDataAvailable);
+  const [isLoginValid, setIsLoginValid] = useState(userDataAvailable && isSdkPartnerDataAvailable);
 
   const fetch = async () => {
     try {
       if(!guestLeadId && !guestUser){
-        const result = await getAccountSummary();
+        await initData();
         setIsLoginValid(true);
-        await setSummaryData(result);
       }
     } catch (err) {
       setIsLoginValid(false);
