@@ -1,18 +1,55 @@
 import { Box, Typography } from '@mui/material';
-import React from 'react';
+import format from 'date-fns/format';
+import React, { Children } from 'react';
 import { Imgc } from '../../../common/ui/Imgc';
 import './LandingHeader.scss';
 
-const LandingHeader = () => {
+const LandingHeader = ({ variant, children, date, imageSrc, imageProps = {} }) => {
+  const variantClass = variant === 'center' ? 'center-align' : '';
   return (
-    <Box className='landing-header-wrapper'>
-      <Imgc src={require(`assets/dummy_landing_header.svg`)} style={{width:'140px', height:'120px'}}/>
-      <Typography variant='heading1'>Title</Typography>
-      <Typography variant='body2' color='foundationColors.content.secondary'>
-        These funds essentially invest in stocks of various two line text, limit
-        - 99 characters or 17 words
-      </Typography>
+    <Box className={`landing-header-wrapper ${variantClass}`}>
+      <Imgc
+        src={imageSrc}
+        style={{ width: '140px', height: '120px' }}
+        {...imageProps}
+      />
+      {Children.map(children, (el) => {
+          return React.cloneElement(el, {
+            variant,
+            date
+          });
+        }
+      )}
     </Box>
+  );
+};
+
+LandingHeader.Title = ({ children }) => {
+  return <Typography variant='heading1'>{children}</Typography>;
+};
+
+LandingHeader.Subtitle = ({ children, date, variant }) => {
+  let formattedData;
+  if(variant === 'date') {
+    date = date ? date : new Date();
+    formattedData = format(date, 'MMM d, yyyy, h:mma');
+  }
+  return (
+    <div>
+      {date && (
+        <Typography className='lh-date-wrapper' variant='body2' color='foundationColors.content.secondary'>
+          {formattedData}
+        </Typography>
+      )}
+
+      <Typography
+        className='lh-subtitle'
+        variant='body2'
+        color='foundationColors.content.secondary'
+      >
+        {children}
+      </Typography>
+    </div>
   );
 };
 
