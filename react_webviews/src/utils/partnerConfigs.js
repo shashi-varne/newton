@@ -355,6 +355,9 @@ export const partnerConfigs = {
       ourRecommendations: ["buildwealth", "savetax", "nps"],
       diy: ["diyv2","gold"],
     },
+    features: {
+      taxFiling: true
+    },
     styles: {
       primaryColor: "#000180",
     },
