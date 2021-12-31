@@ -1,6 +1,4 @@
-import colors from "../colors";
-
-export const checkboxStyleOverRides = () => {
+export const checkboxStyleOverRides = (colors) => {
   return {
     root: {
       color: colors.primary.brand,
