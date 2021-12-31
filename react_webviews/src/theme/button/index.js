@@ -1,7 +1,6 @@
-import colors, { partnerConfig } from '../colors';
 import { FONT_WEIGHT } from '../typography';
 
-export const buttonVariantsConfig = () => [
+export const buttonVariantsConfig = (colors) => [
   {
     props: { size: 'small' },
     style: {
@@ -57,7 +56,7 @@ export const buttonVariantsConfig = () => [
   },
 ];
 
-export const buttonStyleOverRides = () => {
+export const buttonStyleOverRides = (colors, partnerConfig) => {
   return {
     contained: {
       color: colors.supporting.white,
