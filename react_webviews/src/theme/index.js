@@ -19,17 +19,20 @@ const getTheme = () => {
       },
       foundationColors: colors,
     },
-    typography: baseTypographyConfig,
+    typography: baseTypographyConfig(colors,partnerThemeData),
     components: {
       MuiTypography: {
         variants: customTypographyVariantProps(),
       },
       MuiButton: {
-        variants: buttonVariantsConfig(),
-        styleOverrides: buttonStyleOverRides(),
+        variants: buttonVariantsConfig(colors),
+        styleOverrides: buttonStyleOverRides(colors,partnerThemeData),
       },
       MuiSwitch: {
-        styleOverrides: switchStyleOverRides(),
+        styleOverrides: switchStyleOverRides(colors)
+      },
+      MuiCheckbox: {
+        styleOverrides: checkboxStyleOverRides(colors),
       },
       MuiCheckbox: {
         styleOverrides: checkboxStyleOverRides(),

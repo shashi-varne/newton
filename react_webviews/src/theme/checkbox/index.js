@@ -1,7 +1,4 @@
-import getPartnerThemeData from "../utils";
-
-export const checkboxStyleOverRides = () => {
-  const { colors  } = getPartnerThemeData();
+export const checkboxStyleOverRides = (colors) => {
   return {
     root: {
       color: colors.primary.brand,
