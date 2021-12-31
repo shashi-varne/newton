@@ -3,6 +3,7 @@ import { switchStyleOverRides } from './switch';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
 import getPartnerThemeData from './utils';
 import { createTheme } from '@mui/material';
+import { separatorStyleOverRides } from './separator';
 
 const getTheme = () => {
   const partnerThemeData = getPartnerThemeData();
@@ -31,17 +32,7 @@ const getTheme = () => {
         styleOverrides: switchStyleOverRides(colors),
       },
       MuiDivider: {
-        styleOverrides: {
-          root: {
-            backgroundColor: color.supporting.athensGrey,
-          },
-          inset: {
-            marginRight: 16,
-          },
-          middle: {
-            margin: "0 16px"
-          }
-        }
+        styleOverrides: separatorStyleOverRides(colors)
       },
     },
   };
