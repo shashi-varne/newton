@@ -372,7 +372,7 @@ import isEmpty from 'lodash/isEmpty';
       set_session_storage("banklist", json_data.user_data.bank_list);
       set_session_storage("firstlogin", json_data.user_data.user.firstlogin);
       if (json_data.user_data.partner.partner_code) {
-        var partner = json_data.user_data.partner.partner_code;
+        const partner = json_data.user_data.partner.partner_code;
         if (partner === "bfdl") {
           set_session_storage("partner", "bfdlmobile");
         } else if (partner === "obcweb") {

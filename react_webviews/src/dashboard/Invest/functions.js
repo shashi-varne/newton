@@ -63,10 +63,7 @@ export async function initialize() {
   const isBfdlBannerDisplayed = storageService().getBoolean("bfdlBannerDisplayed");
   const isBfdlConfig = !isBfdlBannerDisplayed && config.code === 'bfdlmobile' && (config.isIframe || config.isSdk)
 
-  if (!isBfdlConfig && this.state.screenName === "invest_landing" &&  config.Web &&  !dataSettedInsideBoot) {
-    await this.getSummary();
-  }
-  if (!isBfdlConfig && this.state.screenName === "sdk_landing" && !config.Web) {
+  if (!isBfdlConfig && ["invest_landing", "sdk_landing"].includes(this.state.screenName) && !dataSettedInsideBoot) {
     await this.getSummary();
   }
 
