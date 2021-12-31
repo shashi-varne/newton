@@ -1,6 +1,4 @@
-import colors from "../colors";
-
-export const radioButtonStyleOverRides = () => {
+export const radioButtonStyleOverRides = (colors) => {
   return {
     root: {
       color: colors.primary.brand,

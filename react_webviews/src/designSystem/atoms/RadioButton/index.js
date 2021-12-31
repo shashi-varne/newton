@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 
 const RadioButton = (props) => {
   const {
-    isSelected = false,
+    isChecked = false,
     isDisabled = false,
     onChange = noop,
     dataAid = "",
@@ -14,7 +14,7 @@ const RadioButton = (props) => {
   return (
     <Radio
       disabled={isDisabled}
-      checked={isSelected}
+      checked={isChecked}
       onChange={onChange}
       data-aid={`radioButton_${dataAid}`}
       {...restProps}
@@ -25,7 +25,7 @@ const RadioButton = (props) => {
 export default RadioButton;
 
 RadioButton.propTypes = {
-  isSelected: PropTypes.bool,
+  isChecked: PropTypes.bool,
   isDisabled: PropTypes.bool,
   onChange: PropTypes.func,
 }
