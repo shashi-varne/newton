@@ -1,7 +1,6 @@
 import React from "react";
 import { Typography } from "@mui/material";
 import { Imgc } from "../../../common/ui/Imgc";
-import color from "../../../theme/colors";
 import "./EMandateTrustIcon.scss";
 
 const EMandateTrustIcon = (props) => {
@@ -11,7 +10,7 @@ const EMandateTrustIcon = (props) => {
       className={`atom-e-mandate-trust-icon ${className}`}
       data-aid={`eMandateTrustIcon-${dataAid}`}
     >
-      <Typography variant="body5" color={color.content.secondary}>
+      <Typography variant="body5" color="foundationColors.content.secondary">
         e-mandate powered by
       </Typography>
       <Imgc
