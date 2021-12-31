@@ -10,20 +10,18 @@ import { getUrlParams, storageService } from "../../utils/validators";
 import Toast from "../ui/Toast";
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
-  const { isSdk, isIframe, isMobileDevice } = useMemo(() => getConfig(), []);
+  const { isIframe, isMobileDevice } = useMemo(getConfig, []);
   let currentUser = storageService().get("currentUser");
   let user = storageService().getObject("user") || {};
   let kyc = storageService().getObject("kyc") || {};
-  let partner = storageService().get("partner") || "";
   const referral = storageService().getObject('referral') || {};
   const urlParams = getUrlParams();
   const guestLeadId = storageService().get('guestLeadId') || "" 
   const guestUser = urlParams?.guestUser || false;
 
   const userDataAvailable = (currentUser && !isEmpty(kyc) && !isEmpty(user) && !isEmpty(referral)) || guestLeadId || guestUser;
-  const isSdkPartnerDataAvailable = isSdk ? !!partner : true; // same as: !isSdk || (isSdk && partner)
-  const [showLoader, setShowLoader] = useState(!userDataAvailable || !isSdkPartnerDataAvailable);
-  const [isLoginValid, setIsLoginValid] = useState(userDataAvailable && isSdkPartnerDataAvailable);
+  const [showLoader, setShowLoader] = useState(!userDataAvailable);
+  const [isLoginValid, setIsLoginValid] = useState(userDataAvailable);
 
   const fetch = async () => {
     try {
