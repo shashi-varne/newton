@@ -64,7 +64,7 @@ class Api {
     if (sdk_capabilities) {
       axios.defaults.headers.common['sdk-capabilities'] = sdk_capabilities;
     }
-    if(route.includes("/api/") && getXPlutusAuth() && !config.isIframe) {
+    if(route.includes("/api/") && getXPlutusAuth() && config.isIframe) {
       axios.defaults.headers.common["X-Plutus-Auth"] = getXPlutusAuth();
     }
     if(route.includes('api/insurance')){  
@@ -90,7 +90,7 @@ class Api {
           nativeCallback({ action: 'login_required' });
         }
 
-        if (response.config.url.includes("/api/") && response.headers["x-plutus-auth"] && !config.isIframe) {
+        if (response.config.url.includes("/api/") && response.headers["x-plutus-auth"] && config.isIframe) {
           setXPlutusData(response.headers["x-plutus-auth"]);
         } 
 
