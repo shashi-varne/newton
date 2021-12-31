@@ -5,17 +5,19 @@ import PropTypes from "prop-types";
 
 const Checkbox = (props) => {
   const {
-    isSelected = false,
-    isDisabled = false,
+    checked = false,
+    disabled = false,
     onChange = noop,
-    dataAid, 
+    value = "",
+    dataAid,
     ...restProps
   } = props;
   return (
     <MuiCheckbox
-      disabled={isDisabled}
-      checked={isSelected}
+      disabled={disabled}
+      checked={checked}
       onChange={onChange}
+      value={value}
       data-aid={`checkbox_${dataAid}`}
       {...restProps}
     />
@@ -25,7 +27,8 @@ const Checkbox = (props) => {
 export default Checkbox;
 
 Checkbox.propTypes = {
-  isSelected: PropTypes.bool,
-  isDisabled: PropTypes.bool,
+  checked: PropTypes.bool,
+  disabled: PropTypes.bool,
   onChange: PropTypes.func,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };

@@ -5,15 +5,20 @@ export default {
   component: Checkbox,
   title: "Atoms/Checkbox",
   argTypes: {
-    isSelected: {
+    checked: {
       defaultValue: true,
     },
-    isDisabled: {
+    disabled: {
       defaultValue: false,
     },
     onChange: {
       action: "checkbox-clicked",
     },
+    value: {
+      control: {
+        type: "text"
+      }
+    }
   },
 };
 
