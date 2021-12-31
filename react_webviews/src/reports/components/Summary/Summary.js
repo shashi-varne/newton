@@ -34,7 +34,7 @@ const Summary = (props) => {
   const [isYearSliderUsed, setIsYearSliderUsed] = useState(false);
   const { user: currentUser, isLoading } = useUserKycHook();
   const investCards = getInvestCards(["nps", "insurance", "gold"]);
-  const taxFiling_enable =  (window.sessionStorage.getItem('callback_version') >= 3 && !config.Web) || config.Web;
+  const taxFiling_enable =  (storageService().get('callback_version') >= 3 && !config.Web) || config.Web;
 
   useEffect(() => {
     initialize();
