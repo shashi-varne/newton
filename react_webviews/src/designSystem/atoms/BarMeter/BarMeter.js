@@ -1,6 +1,5 @@
 import React from "react";
 import { Box } from "@mui/material";
-import color from "../../../theme/colors";
 import PropTypes from "prop-types";
 import "./BarMeter.scss";
 
@@ -27,7 +26,7 @@ const Bar = ({ isActive = false, className }) => {
     <Box
       className={`atom-bar ${className}`}
       sx={{
-        backgroundColor: isActive ? color.primary.brand : color.primary[200],
+        backgroundColor: isActive ? "foundationColors.primary.brand" : "foundationColors.primary.200",
       }}
     />
   );
