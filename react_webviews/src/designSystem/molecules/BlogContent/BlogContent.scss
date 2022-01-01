@@ -1,0 +1,11 @@
+.bc-wrapper {
+  padding: 0px 16px;
+  display: flex;
+  flex-direction: row;
+
+  .bc-text-wrapper {
+    margin-left: 16px;
+    display: flex;
+    flex-direction: column;
+  }
+}
