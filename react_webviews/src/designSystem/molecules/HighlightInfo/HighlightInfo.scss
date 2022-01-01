@@ -1,0 +1,12 @@
+.hi-wrapper {
+    padding: 16px 10.5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background: linear-gradient(180deg, rgba(51, 207, 144, 0.2) 27.54%, rgba(130, 121, 248, 0.13) 100%);
+    border-radius: 4px;
+
+    .hi-img-wrapper {
+        margin-left: 10px;
+    }
+}
