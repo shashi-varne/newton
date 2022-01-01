@@ -1,0 +1,16 @@
+.cv-wrapper {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    max-width: max-content;
+    background-color: white;
+}
+
+.cv-elevation {
+    box-shadow: 0px 6px 12px -6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.2);
+    border: none;
+}
+
+.cv-mt-4 {
+    margin-top: 4px;
+}
