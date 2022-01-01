@@ -1,7 +1,7 @@
 .c-wrapper {
     background-color: white;
     border-radius: 12px;
-    
+
     .c-label-wrapper {
         background-color: white;
         border-radius: 12px;
@@ -10,6 +10,10 @@
         justify-content: space-between;
         align-items: center;
         padding: 24px 16px;
+    }
+
+    .c-icon-wrapper {
+        margin-left: 8px;
     }
     
     .c-child-wrapper {

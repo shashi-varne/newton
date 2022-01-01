@@ -18,7 +18,7 @@ const Collapse = ({
     <div className='c-wrapper'>
       <div className='c-label-wrapper' onClick={onClick}>
         <Typography variant='heading3' {...labelProps}>{label}</Typography>
-        <div>{isOpen ? expandedIcon : collapsedIcon}</div>
+        <div className='c-icon-wrapper'>{isOpen ? expandedIcon : collapsedIcon}</div>
       </div>
       <CollapseLib in={isOpen}>
         <div className={`c-child-wrapper ${childWrapperClass}`}>{children}</div>
