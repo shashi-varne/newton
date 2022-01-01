@@ -1,0 +1,18 @@
+.c-wrapper {
+    background-color: white;
+    border-radius: 12px;
+    
+    .c-label-wrapper {
+        background-color: white;
+        border-radius: 12px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 16px;
+    }
+    
+    .c-child-wrapper {
+        padding: 0px 16px;
+    }
+}
