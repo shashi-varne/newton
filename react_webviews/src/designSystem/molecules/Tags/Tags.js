@@ -1,11 +1,11 @@
 /*
   Below are the props description.
   Note: by default it will return large rating variant(large MorningStar logo)
-  smallRating: a variant which will give smaller Tag(small MorningStar logo).
-  label: a variant to show label.
+  smallRating(bool): a variant which will give smaller Tag(small MorningStar logo).
+  label(string): a variant to show label.
   labelBackgroundColor, labelColor: It is strongly recommended to use Foundation colors to change the color of this props.
   Example: labelColor: foundationColors.secondary.mango.200;
-  rating: A number which displays the rating.
+  rating(number): A number which displays the rating.
 
   Usage as per Variants:
   1. large Variant => <Tags rating={4.7}/>
