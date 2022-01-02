@@ -1,9 +1,4 @@
-import getPartnerThemeData from '../utils';
 const calcLineHeight = (fontSize, factor) => `${fontSize * factor}px`;
-
-const partnerThemeData = getPartnerThemeData();
-const partnerConfig = partnerThemeData?.partnerConfig;
-const colorConfig = partnerThemeData?.colors;
 
 const headerVariants = [
   'heading1',
@@ -27,86 +22,86 @@ const headingTextFactor = 1.3;
 const bodyTextFactor = 1.6;
 
 // for custom variants, we are passing the fontFamily with the variant config itself.
-const baseTypographyConfig = {
+const baseTypographyConfig = (colors, partnerConfig) => ({
   heading1: {
     fontSize: 28,
-    color: colorConfig?.content?.primary,
+    color: colors?.content?.primary,
     fontWeight: FONT_WEIGHT.Bold,
     lineHeight: calcLineHeight(28, headingTextFactor),
     fontFamily: partnerConfig?.fontFamily?.join(','),
   },
   heading2: {
     fontSize: 22,
-    color: colorConfig?.content?.primary,
+    color: colors?.content?.primary,
     fontWeight: FONT_WEIGHT.Medium,
     lineHeight: calcLineHeight(22, headingTextFactor),
     fontFamily: partnerConfig?.fontFamily?.join(','),
   },
   heading3: {
     fontSize: 18,
-    color: colorConfig?.content?.primary,
+    color: colors?.content?.primary,
     fontWeight: FONT_WEIGHT.Medium,
     lineHeight: calcLineHeight(18, headingTextFactor),
     fontFamily: partnerConfig?.fontFamily?.join(','),
   },
   heading4: {
     fontSize: 16,
-    color: colorConfig?.content?.primary,
+    color: colors?.content?.primary,
     fontWeight: FONT_WEIGHT.Medium,
     lineHeight: calcLineHeight(16, headingTextFactor),
     fontFamily: partnerConfig?.fontFamily?.join(','),
   },
   body1: {
     fontSize: 14,
-    color: colorConfig?.content?.primary,
+    color: colors?.content?.primary,
     fontWeight: FONT_WEIGHT.Medium,
     lineHeight: calcLineHeight(14, bodyTextFactor),
     fontFamily: partnerConfig?.fontFamily?.join(','),
   },
   body2: {
     fontSize: 14,
-    color: colorConfig?.content?.primary,
+    color: colors?.content?.primary,
     fontWeight: FONT_WEIGHT.Regular,
     lineHeight: calcLineHeight(14, bodyTextFactor),
   },
   body3: {
     fontSize: 12,
-    color: colorConfig?.content?.primary,
+    color: colors?.content?.primary,
     fontWeight: FONT_WEIGHT.Bold,
     lineHeight: calcLineHeight(12, bodyTextFactor),
     fontFamily: partnerConfig?.fontFamily?.join(','),
   },
   body4: {
     fontSize: 12,
-    color: colorConfig?.content?.primary,
+    color: colors?.content?.primary,
     fontWeight: FONT_WEIGHT.Medium,
     lineHeight: calcLineHeight(12, bodyTextFactor),
     fontFamily: partnerConfig?.fontFamily?.join(','),
   },
   body5: {
     fontSize: 12,
-    color: colorConfig?.content?.primary,
+    color: colors?.content?.primary,
     fontWeight: FONT_WEIGHT.Regular,
     lineHeight: calcLineHeight(12, bodyTextFactor),
     fontFamily: partnerConfig?.fontFamily?.join(','),
   },
   body6: {
     fontSize: 10,
-    color: colorConfig?.content?.primary,
+    color: colors?.content?.primary,
     fontWeight: FONT_WEIGHT.Medium,
     lineHeight: calcLineHeight(10, bodyTextFactor),
     fontFamily: partnerConfig?.fontFamily?.join(','),
   },
   body7: {
     fontSize: 10,
-    color: colorConfig?.content?.primary,
+    color: colors?.content?.primary,
     fontWeight: FONT_WEIGHT.Regular,
     lineHeight: calcLineHeight(10, bodyTextFactor),
     fontFamily: partnerConfig?.fontFamily?.join(','),
   },
   // the below font family is for the MUI components.
   fontFamily: partnerConfig?.fontFamily?.join(','),
-};
+});
 
 export default baseTypographyConfig;
 
