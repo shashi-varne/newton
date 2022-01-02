@@ -1,44 +1,52 @@
+/*
+  prop types:
+  titleColor, subtitleColor, descriptionColor: stringly recommended to use only foundation colors.
+  Example: 
+  titleColor: 'foundationColors.secondary.mango.300'
+  elevation(bool): this will enable the box shadow and will remove border from the card. 
+  onCardClick(function): control the behaviour of the card when clicked.
+*/
+
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 import { Imgc } from '../../../common/ui/Imgc';
+import PropTypes from 'prop-types';
 
 import './CardVertical.scss';
 
 const CardVertical = ({
-  ImgcSrc,
+  imgcSrc,
   title,
-  titleProps,
-  subTitle,
-  subTitleProps,
+  titleColor,
+  subtitle,
+  subtitleColor,
   description,
-  descriptionProps,
-  variant = 'default',
+  descriptionColor,
+  elevation,
   onCardClick,
+  imgProps
 }) => {
-  const elevation = variant === 'elevation';
   return (
     <Box
       onClick={onCardClick}
       className={`cv-wrapper ${elevation && 'cv-elevation'}`}
       sx={cvSxStyle}
     >
-      <Imgc src={ImgcSrc} style={{ width: '32px', height: '32px' }} />
-      <Typography className='cv-mt-4' variant='body1' {...titleProps}>
+      <Imgc src={imgcSrc} style={{ width: '32px', height: '32px' }} {...imgProps}/>
+      <Typography className='cv-mt-4' variant='body1' color={titleColor}>
         {title}
       </Typography>
       <Typography
         variant='body2'
         className='cv-mt-4'
-        color='foundationColors.content.secondary'
-        {...subTitleProps}
+        color={subtitleColor}
       >
-        {subTitle}
+        {subtitle}
       </Typography>
       <Typography
         variant='body2'
         className='cv-mt-4'
-        color='foundationColors.content.tertiary'
-        {...descriptionProps}
+        color={descriptionColor}
       >
         {description}
       </Typography>
@@ -53,3 +61,14 @@ const cvSxStyle = {
   borderColor: 'foundationColors.supporting.athensGrey',
   borderRadius: '12px',
 };
+
+CardVertical.propTypes = {
+  elevation: PropTypes.bool,
+  onCardClick: PropTypes.func,
+}
+
+CardVertical.defaultProps = {
+  subtitleColor: 'foundationColors.content.secondary',
+  descriptionColor: 'foundationColors.content.tertiary',
+  imgProps: {}
+}
