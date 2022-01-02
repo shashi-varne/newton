@@ -16,9 +16,9 @@ import { Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import './InfoCard.scss';
 
-const InfoCard = ({ imgSrc, imgProps = {}, title, titleColor, subtitle, subtitleColor }) => {
+const InfoCard = ({ imgSrc, imgProps = {}, title, titleColor, subtitle, subtitleColor, onClick }) => {
   return (
-    <Box sx={infoCardWrapperSxStyle}>
+    <Box sx={infoCardWrapperSxStyle} onClick={onClick}>
       <Imgc
         src={imgSrc}
         style={{ height: '32px', width: '32px' }}
@@ -29,7 +29,7 @@ const InfoCard = ({ imgSrc, imgProps = {}, title, titleColor, subtitle, subtitle
         <Typography
           className='ic-subtitle-text'
           variant='body2'
-          color={subtitleColor ? subtitleColor :'foundationColors.content.secondary'}
+          color={subtitleColor}
         >
           {subtitle}
         </Typography>
@@ -51,6 +51,11 @@ const infoCardWrapperSxStyle = {
 };
 
 InfoCard.defaultProps = {
+  subtitleColor: 'foundationColors.content.secondary'
+}
+
+InfoCard.propTypes = {
   title: PropTypes.string,
-  subtitle: PropTypes.string
+  subtitle: PropTypes.string,
+  onClick: PropTypes.func
 }
