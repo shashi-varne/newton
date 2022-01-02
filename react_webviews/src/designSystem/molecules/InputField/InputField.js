@@ -24,6 +24,11 @@ const InputField = (props) => {
     fullWidth=true,
     ...restProps
   } = props;
+
+  /*
+    this will dynamically change the position of suffix.
+    if type is string, it will palce it in right-bottom, else it will be placed at right-center.
+  */
   const applySuffixStringTypeStyle = typeof suffix === 'string';
 
   const suffixStyle = () => {
