@@ -8,8 +8,8 @@ const InputField = (props) => {
     helperText,
     error,
     inputProps = {},
-    inputPrefix='',
-    inputSuffix,
+    prefix='',
+    suffix,
     classes,
     className,
     disabled,
@@ -24,7 +24,8 @@ const InputField = (props) => {
     fullWidth=true,
     ...restProps
   } = props;
-  const applySuffixStringTypeStyle = typeof inputSuffix === 'string';
+  const applySuffixStringTypeStyle = typeof suffix === 'string';
+
   const suffixStyle = () => {
       if(applySuffixStringTypeStyle) {
           return {root: 'inputSuffix-string'}
@@ -33,15 +34,15 @@ const InputField = (props) => {
   }
 
   const InputPrefix = () => {
-    if(inputPrefix) {
-        return <InputAdornment disableTypography={disabled} disablePointerEvents={disabled} position='start'>{inputPrefix}</InputAdornment>
+    if(prefix) {
+        return <InputAdornment disableTypography={disabled} disablePointerEvents={disabled} position='start'>{prefix}</InputAdornment>
     } else {
         return null;
     }
   }
   const InputSuffix = () => {
-      if(inputSuffix) {
-          return <InputAdornment disableTypography={disabled} disablePointerEvents={disabled} classes={suffixStyle()} position='end'>{inputSuffix}</InputAdornment>
+      if(suffix) {
+          return <InputAdornment disableTypography={disabled} disablePointerEvents={disabled} classes={suffixStyle()} position='end'>{suffix}</InputAdornment>
       } else {
           return null;
       }
