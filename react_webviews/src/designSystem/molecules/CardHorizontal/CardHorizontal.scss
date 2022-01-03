@@ -1,0 +1,40 @@
+.ch-wrapper {
+  background: #ffffff;
+  box-shadow: 0px 6px 12px -6px rgba(0, 0, 0, 0.04),
+    0px 0px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ch-hero-wrapper {
+  padding-bottom: 24px;
+  padding-top: 24px;
+  box-shadow: none;
+  background: linear-gradient(
+    107.83deg,
+    #4f44d0 0%,
+    #675af6 52.2%,
+    #8279f8 97.81%
+  );
+}
+
+.btn-text {
+  max-width: max-content !important;
+  width: max-content !important;
+  min-width: 20px !important;
+  font-size: 16px !important;
+  padding: 0px !important;
+  height: auto !important;
+}
+
+.mt-4 {
+  margin-top: 4px;
+}
+
+.btn-primary {
+  margin-top: 24px;
+}
