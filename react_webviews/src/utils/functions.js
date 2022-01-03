@@ -102,6 +102,7 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--lime`, '#7ED321');
   html.style.setProperty(`--red`, '#D0021B');
   html.style.setProperty(`--primaryVariant1`, `${config_to_return.styles.primaryVariant1}`);
+  html.style.setProperty(`--primaryVariant2`, `${config_to_return.styles.primaryVariant2}`);
   html.style.setProperty(`--primaryVariant4`, `${config_to_return.styles.primaryVariant4}`);
   html.style.setProperty(`--spacing`, '10px');
   html.style.setProperty(`--gunmetal`, '#161A2E');
