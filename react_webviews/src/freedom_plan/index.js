@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 
-import Landing from "./components/Landing";
+import Landing from "./pages/Landing";
 import NotFound from "../common/components/NotFound";
 import "./commonStyles.scss";
 
