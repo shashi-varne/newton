@@ -79,6 +79,10 @@ class SdkLanding extends Component {
     }
     this.handleBankList();
     this.openBfdlBanner();
+    const config = getConfig();
+    if (config.isSdk && config.Android) {
+      nativeCallback({ action: 'get_data' });
+    }
   };
 
   handleRefferalInput = (e) => {
