@@ -209,7 +209,10 @@ export function commonRender(props_base) {
                         hideBack={this.props.hideBack}
                         notification={this.props.notification}
                         handleNotification={this.props.handleNotification}  
-                        noBackIcon={this.props.noBackIcon}        
+                        noBackIcon={this.props.noBackIcon}
+                        canSkip={this.props.canSkip}
+                        hideHamburger={this.props.hideHamburger}
+                        onSkipClick={this.props.onSkipClick}        
                         customBackButtonColor={this.props.customBackButtonColor}
                     />
                 )}
@@ -624,7 +627,9 @@ export function new_header_scroll() {
         <Fragment>
             <div id="header-title-page"
                 style={this.props.styleHeader}
-                className={`header-title-page  ${this.props.classHeader}`}>
+                className={`header-title-page  ${this.props.classHeader}`}
+                data-aid='header-title-page'
+            >
                 <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{ width: this.props.count ? '75%' : '100%' }} data-aid='header-title-page-text'>
                     {this.props.title}
                 </div>
@@ -633,7 +638,8 @@ export function new_header_scroll() {
                     <span color="inherit"
                         className={`header-title-page-count-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`}>
                         <span style={{ fontWeight: 600 }}>{this.props.current}</span>/<span>{this.props.total}</span>
-                    </span>}
+                    </span>
+                }
             </div>
             {this?.props?.smallTitle && (
                 <div className={`body-text2 text-secondary m-top-1x pd-left-2x ${this.props?.classSmallTitle}`}>

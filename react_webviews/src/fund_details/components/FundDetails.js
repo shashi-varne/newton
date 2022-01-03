@@ -302,10 +302,10 @@ const FundDetails = (props) => {
       body: body,
       paymentRedirectUrl: paymentRedirectUrl,
       isSipDatesScreen: false,
-      history: history,
       userKyc: kyc,
       handleApiRunning: handleApiRunning,
       handleDialogStates: handleDialogStates,
+      navigate: navigate,
     });
   };
 

@@ -6,8 +6,7 @@
 
     .address-label {
       color: #8d879b;
-      font-size: 16px;
-      font-weight: 500;
+      font-size: 13px;
     }
 
     .address-proof {
@@ -52,4 +51,8 @@
       }
     }
   }
+}
+
+.kyc-nri-address-details {
+  padding-bottom: 40px;
 }

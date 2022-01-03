@@ -1,0 +1,376 @@
+@mixin d-flex {
+  display: flex;
+}
+
+@mixin d-flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin d-flex-space-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@mixin fees-subtext {
+  font-size: 11px;
+  line-height: 18px;
+  color: var(--steelgrey);
+}
+
+.flex-between-center {
+  @include d-flex-space-between();
+}
+
+.trading-experience {
+  .te-subtitle {
+    margin: -10px 0 40px;
+  }
+}
+
+.kyc-account-info {
+  padding-bottom: 40px;
+
+  .kyc-account-info-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    column-gap: 35px;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 32px;
+    color: var(--dark);
+    padding-bottom: 20px;
+
+    .kaih-text {
+      padding: 10px 0;
+    }
+
+    .kyc-ai-header-icon {
+      width: 112px !important;
+      min-height: 74px;
+    }
+  }
+
+  .kyc-account-info-main {
+    .kaim-subtitle {
+      color: var(--steelgrey);
+      font-size: 15px;
+      font-weight: 400;
+      padding: 0 0 30px 0;
+      line-height: 24px;
+    }
+
+    .kaim-key-benefits {
+      margin-right: -20px;
+      padding-bottom: 40px;
+    }
+
+    .kaim-benefits {
+      display: flex;
+      width: 100%;
+      overflow-x: auto;
+
+      .kaim-benefits-info {
+        padding: 20px 0 10px 0;
+        font-size: 13px;
+        line-height: 21px;
+        margin-right: 20px;
+        color: var(--steelgrey);
+
+        .kaim-benefits-icon {
+          border-radius: 8px;
+          width: 170px !important;
+          height: 90px !important;
+        }
+
+        .kaim-benefits-info-text {
+          width: 85%;
+        }
+      }
+
+      .kaim-benefits-info:last-child {
+        padding-right: 20px;
+      }
+    }
+
+    .account-and-brokerage-charges {
+      border-top: 1px solid #D6D6D6;
+      padding: 15px 0;
+      cursor: pointer;
+
+      .aabc-title {
+        font-size: 13px;
+        color: var(--gunmetal);
+        font-weight: 500;
+      }
+    }
+
+    .kaim-fees-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 10px 0;
+
+      .kaim-fees-info-text {
+        font-size: 13px;
+        line-height: 21px;
+        color: var(--dark);
+      }
+
+      .kaim-fees-info-subtext {
+        @include fees-subtext();
+      }
+
+      .kaim-no-fees-text1 {
+        font-size: 13px;
+        line-height: 21px;
+        color: var(--steelgrey);
+        text-align: right;
+      }
+
+      .kaim-no-fees-text2 {
+        font-weight: 600;
+        font-size: 13px;
+        line-height: 21px;
+        color: var(--primary);
+        text-align: right;
+      }
+
+      .kaim-fees-info-subvalue {
+        @include fees-subtext();
+        text-align: right;
+      }
+    }
+
+    .line-divider {
+      height: 1px;
+      background: #D6D6D6;
+    }
+
+    .bottom-line-divider {
+      margin: 40px -20px 20px;
+    }
+
+    .kaim-terms {
+      padding-top: 40px;
+      display: flex;
+      align-items: center;
+      font-size: 13px;
+      line-height: 21px;
+      color: var(--steelgrey);
+
+      .kaim-terms-info {
+        margin-left: 10px;
+
+        .terms-text {
+          color: var(--primary);
+          font-weight: 600;
+          cursor: pointer;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+}
+
+.stocks-pan-instructions {
+  padding-bottom: 15px;
+
+  .spi-text {
+    font-size: 13px;
+    line-height: 21px;
+    color: var(--dark);
+    padding-bottom: 10px;
+  }
+
+  .spi-img {
+    width: 100%;
+    min-height: 165px;
+    margin-bottom: 20px !important;
+  }
+}
+
+.kyc-document-verification {
+  margin-bottom: 50px;
+  
+  .kyc-document-verification-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    column-gap: 35px;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 32px;
+    color: var(--dark);
+    padding-bottom: 20px;
+
+    .kyc-dv-header-icon {
+      width: 110px !important;
+      min-height: 74px;
+    }
+  }
+
+  .kyc-document-verification-main {
+    .kdvm-subtitle {
+      font-size: 13px;
+      line-height: 21px;
+      color: var(--steelgrey);
+      padding-bottom: 20px;
+    }
+
+    .kdvm-title {
+      font-size: 15px;
+      line-height: 24px;
+      color: var(--dark);
+      font-weight: 600;
+    }
+  }
+}
+
+#manual-signature {
+  .manual-signature-subtile {
+    margin-top: -10px;
+  }
+
+  .form-download-btn {
+    justify-content: space-between;
+
+    img {
+      margin-left: 20px;
+    }
+  }
+
+  .page-content {
+    margin-top: 25px;
+    margin-bottom: 30px;
+    font-size: 13px;
+
+    .step {
+      .step-content {
+        .step-note {
+          color: var(--steelgrey);
+          line-height: 21px;
+          
+          div:nth-child(1) {
+            font-weight: 500;
+          }
+        }
+      }
+    }
+
+    .page-note {
+      margin-top: 30px;
+      line-height: 21px;
+      color: var(--steelgrey);
+    }
+  }
+}
+
+.kyc-communication-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .kyc-main-subtitle {
+    margin-bottom: 30px;
+  }
+
+  .kcd-google-button {
+    width: 100%;
+    padding: 15px !important;
+
+    .kcd-google-text {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--default);
+      font-weight: normal;
+      font-size: 13px;
+      text-transform: initial;
+      text-decoration: none;
+      width: 100%;
+
+      img {
+        width: 18px;
+        margin-right: 10px;
+      }
+    }
+  }
+
+  .kcd-or-divider {
+    margin: 40px 0;
+    width: 100%;
+  }
+
+  .kcd-input-field {
+    .kcd-input-edit {
+      color: var(--secondary);
+      font-weight: bold;
+      font-size: 12px;
+      line-height: 14px;
+      letter-spacing: 1px;
+      cursor: pointer;
+    }
+  }
+
+  .kcd-email-subtext {
+    font-size: 11px;
+    line-height: 18px;
+    color: var(--steelgrey);
+    padding-top: 5px;
+  }
+
+  .kcd-otp-container {
+    display: flex;
+    flex-direction: column;
+    margin: 30px 0;
+
+    .kcd-otp-content {
+      display: flex;
+    }
+  }
+
+  .kcd-whatsapp-consent {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    line-height: 21px;
+    color: var(--steelgrey);
+    margin-top: 40px;
+
+    .kcd-whatsapp-consent-checkbox {
+      margin-left: -12px;
+    }
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .kyc-communication-details-mobile{
+    height: calc(100vh - 220px);
+  }
+}
+.status-info {
+  text-align: center;
+
+  .status-info-img {
+    width: 100%;
+    min-height: 90px;
+  }
+
+  .status-info-title {
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 32px;
+    margin: 30px 0 10px 0;
+  }
+
+  .status-info-subtitle {
+    color: var(--steelgrey);
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 21px;
+  }
+}

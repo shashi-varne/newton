@@ -1,17 +1,17 @@
 /*
 
-Use:
-  To provide a quick visual callback of the next step in a long journey
-  (Used mainly in KYC Journey) 
+  Use:
+    To provide a quick visual callback of the next step in a long journey
+    (Used mainly in KYC Journey) 
 
-Example syntax:
-  <WVJourneyShortening
-    title="Next step" ***required***
-    stepName="Complete esign and verify docs" ***required***
-    stepActionText="Continue" ***required***
-    stepActionType="completed" ('completed'/'pending')
-    onStepActionClick={any function to execute on click of the "step-action" element}
-  />
+  Example syntax:
+    <WVJourneyShortening
+      title="Next step" ***required***
+      stepName="Complete esign and verify docs" ***required***
+      stepActionText="Continue" ***required***
+      stepActionType="completed" ('completed'/'pending')
+      onStepActionClick={any function to execute on click of the "step-action" element}
+    />
 */
 
 import './JourneyShortening.scss';
@@ -42,22 +42,25 @@ const WVJourneyShortening = ({
           {stepName}
         </div>
       </div>
-      <div className="wv-js-step-action" data-aid={`wv-js-step-action-${dataAidSuffix}`}>
-        <WVClickableTextElement
-          onClick={onStepActionClick}
-          color={STEP_ACTION_COLOR_MAP[stepActionType]}
-        >
-          {stepActionText}
-        </WVClickableTextElement>
-      </div>
+      {
+        stepActionText &&
+        <div className="wv-js-step-action" data-aid={`wv-js-step-action-${dataAidSuffix}`}>
+          <WVClickableTextElement
+            onClick={onStepActionClick}
+            color={STEP_ACTION_COLOR_MAP[stepActionType]}
+          >
+            {stepActionText}
+          </WVClickableTextElement>
+        </div>
+      }
     </div>
   );
 }
 
 WVJourneyShortening.propTypes = {
-  title: PropTypes.string.isRequired,
-  stepName: PropTypes.string.isRequired,
-  stepActionText: PropTypes.string.isRequired,
+  title: PropTypes.node.isRequired,
+  stepName: PropTypes.node.isRequired,
+  stepActionText: PropTypes.string,
   stepActionType: PropTypes.oneOf(['pending', 'completed']),
   onStepActionClick: PropTypes.func
 }

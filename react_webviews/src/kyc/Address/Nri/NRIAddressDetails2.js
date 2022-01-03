@@ -3,27 +3,35 @@ import React, { useState, useEffect } from "react";
 import Toast from "../../../common/ui/Toast";
 import { submit } from "../../common/api";
 import Container from "../../common/Container";
-import { NRI_DOCUMENTS_MAPPER } from "../../constants";
+import { NRI_DOCUMENTS_MAPPER, PATHNAME_MAPPER } from "../../constants";
 import {
   compareObjects,
   validateFields,
 } from "../../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../../common/hooks/userKycHook";
-import { isEmpty, validateNumber } from "../../../utils/validators";
+import { isEmpty, validateName, validateNumber } from "../../../utils/validators";
 import { getConfig } from "utils/functions";
 import "../commonStyles.scss";
 import { nativeCallback } from "../../../utils/native_callback";
+import ConfirmBackDialog from "../../mini-components/ConfirmBackDialog";
 
 const NRIAddressDetails2 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
-  const {kyc, isLoading} = useUserKycHook();
+  const { kyc, isLoading } = useUserKycHook();
   const [form_data, setFormData] = useState({
     nri_pincode: "",
   });
   const [oldState, setOldState] = useState({});
+  const [openConfirmBack, setOpenConfirmBack] = useState(false);
   const navigate = navigateFunc.bind(props);
   const productName = getConfig().productName;
+
+  const closeConfirmBack = () => {
+    setOpenConfirmBack(false);
+  }
+
+  const goToJourney = () => navigate(PATHNAME_MAPPER.journey);
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();
@@ -36,6 +44,8 @@ const NRIAddressDetails2 = (props) => {
     formData.state = kyc?.nri_address?.meta_data?.state || "";
     formData.city = kyc?.nri_address?.meta_data?.city || "";
     formData.country = kyc?.nri_address?.meta_data?.country || "";
+    formData.tin_number = kyc.nri_address?.tin_number || "";
+
     setFormData({ ...formData });
     setOldState({ ...formData });
   };
@@ -43,7 +53,7 @@ const NRIAddressDetails2 = (props) => {
   const stateParams = props?.location?.state;
 
   const handleSubmit = async () => {
-    sendEvents("next")
+    sendEvents("next");
     let keysToCheck = [
       "nri_pincode",
       "addressline",
@@ -62,17 +72,19 @@ const NRIAddressDetails2 = (props) => {
       return;
     }
 
+    keysToCheck.push("tin_number");
     if (compareObjects(keysToCheck, oldState, form_data)) {
       handleNavigation();
       return;
     }
 
-    let userKycDetails = {...kyc};
+    let userKycDetails = { ...kyc };
     userKycDetails.nri_address.meta_data.city = form_data.city;
     userKycDetails.nri_address.meta_data.state = form_data.state;
     userKycDetails.nri_address.meta_data.country = form_data.country;
     userKycDetails.nri_address.meta_data.pincode = form_data.nri_pincode;
     userKycDetails.nri_address.meta_data.addressline = form_data.addressline;
+    userKycDetails.nri_address.meta_data.tin_number = form_data.tin_number;
 
     try {
       let item = {
@@ -91,22 +103,30 @@ const NRIAddressDetails2 = (props) => {
   };
 
   const handleNavigation = () => {
+    const data = { state: { isEdit } };
     if (stateParams?.backToJourney) {
-      navigate("/kyc/upload/address-nri");
+      navigate("/kyc/upload/address-nri", data);
     } else if (stateParams?.userType === "compliant") {
-      navigate("/kyc/compliant-personal-details4");
+      navigate("/kyc/compliant-personal-details4", data);
     } else {
       navigate("/kyc/journey");
     }
   };
 
   const handleChange = (event) => {
-    const name = event.target.name;
-    const value = event.target.value;
-    if (name === "nri_pincode" && !validateNumber(value)) return;
+    const target = event.target;
+    const name = target.name;
+    const value = target.value;
+    const maxLength = target.maxLength;
+    const validateNameFields = ["city", "state", "country"];
+    const validateStartingSpaceFields = ["addressline", "tin_number"]
+    if (value && name === "nri_pincode" && !validateNumber(value)) return;
+    if(value && maxLength && value.length > maxLength) return;
+    if(value && validateNameFields.includes(name) && !validateName(value)) return;
+    if(value && validateStartingSpaceFields.includes(name) && value.indexOf(" ") === 0) return;
     let formData = { ...form_data };
     formData[name] = value;
-    if (!value) {
+    if (!value && name !== "tin_number") {
       formData[`${name}_error`] = "This is required";
     } else formData[`${name}_error`] = "";
     setFormData({ ...formData });
@@ -117,7 +137,7 @@ const NRIAddressDetails2 = (props) => {
 
   if (kyc?.address?.meta_data?.is_nri) {
     if (isEdit) {
-      title = "Edit Foreign address details";
+      title = "Edit foreign address details";
     } else {
       title = "Foreign address details";
     }
@@ -129,22 +149,41 @@ const NRIAddressDetails2 = (props) => {
     }
   }
 
-  const address_proof = NRI_DOCUMENTS_MAPPER[kyc?.address_doc_type] || "Passport";
+  let addressProof = NRI_DOCUMENTS_MAPPER[kyc?.nri_address_doc_type] || "";
+
+  const getPageDetails = (userKyc) => {
+    let pageDetails = {}
+    const isCompliant = userKyc.kyc_status === "compliant";
+    pageDetails.total = isCompliant ? (isEdit ? 5 : 6) : 4 ;
+    pageDetails.current = isCompliant && !isEdit ? 5 : 4;
+    return pageDetails;
+  }
+
+  const pageDetails = getPageDetails(kyc);
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "nri_address_details_2",
-        "pincode_entered": form_data.nri_pincode ? "yes" : "no",
-        "address_entered": form_data.addressline ? "yes" : "no"
-      }
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "nri_address_details_2",
+        country: form_data.country || "",
+        pincode_entered: form_data.nri_pincode ? "yes" : "no",
+        address_entered: form_data.addressline ? "yes" : "no",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
+    }
+  }
+
+  const goBack = () => {
+    if(stateParams?.userType === "compliant") {
+      setOpenConfirmBack(true)
+    } else {
+      props.history.goBack();
     }
   }
 
@@ -156,14 +195,19 @@ const NRIAddressDetails2 = (props) => {
       handleClick={handleSubmit}
       showLoader={isApiRunning}
       title={title}
-      current={4}
-      count={4}
-      total={4}
+      current={pageDetails.current}
+      count={pageDetails.current}
+      total={pageDetails.total}
       iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-nri-address-details-screen-2'
+      headerData={{ goBack }}
     >
-      <section data-aid='kyc-address-details-2'>
-        <div className="kyc-main-subtitle" data-aid='kyc-sub-title'>Address as per {address_proof}</div>
+      <section className="kyc-nri-address-details" data-aid='kyc-address-details-2'>
+        <div className="kyc-main-subtitle" data-aid="kyc-sub-title">
+          {kyc.kyc_status === "compliant"
+            ? "Enter address details"
+            : `Address as per ${addressProof}`}
+        </div>
         <form className="form-container" data-aid='kyc-form-container'>
           <TextField
             label="Pincode"
@@ -173,37 +217,47 @@ const NRIAddressDetails2 = (props) => {
             margin="normal"
             helperText={form_data.nri_pincode_error || ""}
             error={form_data.nri_pincode_error ? true : false}
+            inputProps={{
+              inputMode: "numeric",
+              maxLength: 10
+            }}
           />
           <TextField
             label="Address"
             name="addressline"
-            className=""
             value={form_data.addressline}
             helperText={form_data.addressline_error || ""}
             error={form_data.addressline_error ? true : false}
             onChange={handleChange}
             margin="normal"
             multiline
+            inputProps={{
+              maxLength: 150
+            }}
           />
           <TextField
             label="City"
             name="city"
-            className=""
             value={form_data.city}
             helperText={form_data.city_error || ""}
             error={form_data.city_error ? true : false}
             margin="normal"
             onChange={handleChange}
+            inputProps={{
+              maxLength: 30
+            }}
           />
           <TextField
             label="State"
             name="state"
-            className=""
             value={form_data.state}
             helperText={form_data.state_error || ""}
             error={form_data.state_error ? true : false}
             margin="normal"
             onChange={handleChange}
+            inputProps={{
+              maxLength: 30
+            }}
           />
           <TextField
             label="Country"
@@ -213,9 +267,31 @@ const NRIAddressDetails2 = (props) => {
             error={form_data.country_error ? true : false}
             margin="normal"
             onChange={handleChange}
+            inputProps={{
+              maxLength: 30
+            }}
+          />
+          <TextField
+            label="Taxpayer Identification Number (optional)"
+            value={form_data.tin_number || ""}
+            error={form_data.tin_number_error ? true : false}
+            helperText={form_data.tin_number_error || ""}
+            onChange={handleChange}
+            name="tin_number"
+            margin="normal"
+            type="text"
+            disabled={isApiRunning}
+            inputProps={{
+              maxLength: 20,
+            }}
           />
         </form>
       </section>
+      <ConfirmBackDialog
+        isOpen={openConfirmBack}
+        goBack={goToJourney}
+        close={closeConfirmBack}
+      />
     </Container>
   );
 };

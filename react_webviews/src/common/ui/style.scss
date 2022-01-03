@@ -1078,7 +1078,15 @@ body[data-device="mobile"] {
   }
 }
 
+.input-skeleton {
+  width: 100% !important;
+  height: 50px !important;
+  border-radius: 6px;
+}
 
+.input-skeleton + .input-skeleton {
+  margin-top: 40px !important;
+}
 
 /**
  * ==============================================
@@ -1087,6 +1095,7 @@ body[data-device="mobile"] {
  */
 
  .dot-flashing-parent {
+  height: 22px;
   min-height: 22px;
   display: flex;
   align-items: center;
@@ -1238,7 +1247,7 @@ body[data-device="mobile"] {
   flex-direction: row !important;
 }
 .react-select__value-container{
-  margin-top: 8px;
+  margin-top: 18px;
   font-size: 13px;
   line-height: 21px;
   font-weight: normal;

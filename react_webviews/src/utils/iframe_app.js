@@ -39,10 +39,11 @@ export const checkBeforeRedirection = (fromState, toState) => {
   if (getConfig().isLoggedIn) {
     if (
       toState === "/login" ||
-      toState === "/register" ||
-      toState === "/forgot-password" ||
-      toState === "/mobile/verify" || 
+      toState === "/login/verify-otp" ||
       toState?.includes("/partner-authentication")
+      // toState === "/register" ||
+      // toState === "/forgot-password" ||
+      // toState === "/mobile/verify"
     ) {
       if (!fromState) {
         return "/";

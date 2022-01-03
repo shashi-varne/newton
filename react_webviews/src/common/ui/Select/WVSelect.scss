@@ -12,6 +12,10 @@
 
   &.selected {
     background: linear-gradient(to right, #f4f4f4, white);
+
+    .wv-select-item-title {
+      color: var(--dark);
+    }
   }
   
   .wv-select-item-content {
@@ -20,7 +24,7 @@
   }
 
   .wv-select-item-title {
-    color: var(--dark);
+    color: var(--steelgrey);
     font-weight: 500;
     font-size: 15px;
     line-height: 24px;

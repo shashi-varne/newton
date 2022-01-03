@@ -2,6 +2,7 @@
 Exhaustive list of property values:
 - investSections: [
     'kyc',
+    'stocks',
     'ourRecommendations',
     'diy',
     'bottomScrollCards',
@@ -33,10 +34,11 @@ Note: To enable nps, gold or insurance in partner config :
 
 // common config across all partners
 export const commonCardsConfig = {
-  logo: "fisdom_white_logo.svg",
   investSections: [
     "kyc",
+    "stocks",
     "indexFunds",
+    "stocksAndIpo",
     "ourRecommendations",
     "diy",
     "bottomScrollCards",
@@ -79,8 +81,13 @@ export const commonCardsConfig = {
 };
 
 export const basePartnerConfig = {
+  common: {
+    equityAnnexure: "https://fisdom.com/images/forms/Equity%20Annexures.pdf"
+  },
   fisdom: {
     productName: "fisdom",
+    logo: "fisdom/fisdom_logo_white.svg",
+    colorLogo: "fisdom/fisdom_logo.svg",
     email: "ask@fisdom.com",
     mobile: "+91-9642596425",
     websiteLink: "https://www.fisdom.com",
@@ -102,6 +109,8 @@ export const basePartnerConfig = {
   },
   finity: {
     productName: "finity",
+    logo: "finity/finity_logo_white.svg",
+    colorLogo: "finity/finity_logo.svg",
     email: "ask@finity.in",
     mobile: "+91-8142381423",
     websiteLink: "https://www.finity.in",
@@ -221,9 +230,9 @@ export const partnerConfigs = {
     },
   },
   fisdom: {
-    logo: "fisdom_white_logo.svg",
     code: "fisdom",
     investSubSectionMap: {
+      stocksAndIpo: ["ipo"],
       ourRecommendations: [
         "instaredeem",
         "buildwealth",
@@ -243,7 +252,6 @@ export const partnerConfigs = {
     }
   },
   finity: {
-    logo: "finity_white_logo.svg",
     code: "finity",
     mobile: "+91-9916149111",
     investSubSectionMap: {
@@ -346,6 +354,9 @@ export const partnerConfigs = {
       ...commonCardsConfig.investSubSectionMap,
       ourRecommendations: ["buildwealth", "savetax", "nps"],
       diy: ["diyv2","gold"],
+    },
+    features: {
+      taxFiling: true
     },
     styles: {
       primaryColor: "#000180",
@@ -575,7 +586,11 @@ export const partnerConfigs = {
     },
     features: {
       addAnotherBank: true
-    }
+    },
+    referralConfig: {
+      applyRefferal: true,
+      shareRefferal: true,
+    },
   },
 };
 
@@ -583,6 +598,7 @@ export const getPartnerData = (productType, partnerCode) => {
   // Appending base config of the productType(fisdom/finity) with the common config accross all partners
   let partnerConfigToReturn = {
     ...commonCardsConfig,
+    ...basePartnerConfig["common"],
     ...basePartnerConfig[productType],
   };
   const partnerData = partnerConfigs[partnerCode] || partnerConfigs[productType] || partnerConfigs["fisdom"];

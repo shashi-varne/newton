@@ -53,7 +53,7 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
   
   // Note: will have to remove "/invest/explore"  from the direct enteries.
   const directEnteries = ["/invest/doityourself/direct/", "/nps", "/advanced-investing/new-fund-offers/info",
-     "/direct/gold", "/invest/instaredeem", "/reports", "/invest/savegoal", "/invest", "/withdraw", "/invest/explore", "/kyc/journey", "/reports/purchased-transaction"];
+     "/direct/gold", "/invest/instaredeem", "/reports", "/invest/savegoal", "/invest", "/withdraw", "/invest/explore", "/reports/purchased-transaction"];
 
   const directEntriesWithParams = ["/diy/fundinfo/direct", "/diy/fundlist/direct", "/direct/new-fund-offers"];
 
@@ -81,14 +81,6 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
     case "/payment/options":
       if (fromState === "/add/bank") {
         navigate("/");
-        return true;
-      }
-      break;
-    case "/kyc/add-bank":
-      if (storageService().get('native')) {
-        nativeCallback({ action: "exit_web" });
-      } else {
-        navigate("/my-account");
         return true;
       }
       break;

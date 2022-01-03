@@ -71,19 +71,19 @@ const ChangeAddressDetails1 = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'my_account',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "change address",
-        "address_proof": form_data.address_doc_type 
-      }
+      event_name: "my_account",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "change address",
+        address_proof: form_data.address_doc_type,
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container

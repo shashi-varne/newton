@@ -1,9 +1,12 @@
 body[data-device="web"]{
   .wv-bottomsheet{
     .MuiDialog-paper {
+      position: relative;
       position: unset;
       width: 100%;
+      bottom: auto;
       bottom: unset;
+      left: auto;
       left: unset;
       border-radius: 8px;
     }
@@ -34,8 +37,6 @@ body[data-device="web"]{
   justify-content: space-between;
 
   .wv-bc-left {
-    flex: 0 1 52%;
-
     .wv-bcl-title {
       font-weight: bold;
       font-size: 20px;
@@ -43,10 +44,6 @@ body[data-device="web"]{
       color: var(--dark);
       margin-top: 10px;
       word-break: break-word;
-    }
-
-    .wv-bcl-title::first-letter {
-      text-transform: capitalize;
     }
     
     .wv-bcl-subtitle {

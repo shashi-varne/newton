@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Container from "../common/Container";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
-import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
+import DropDownNew from '../../common/ui/DropDownNew';
 import {
   OCCUPATION_TYPE_OPTIONS,
   INCOME_OPTIONS,
@@ -11,43 +11,53 @@ import { isEmpty } from "utils/validators";
 import {
   validateFields,
   compareObjects,
+  getTotalPagesInPersonalDetails,
+  isEmailAndMobileVerified,
 } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit, getCVL } from "../common/api";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
-import { getConfig } from "../../utils/functions";
+import { getConfig, isTradingEnabled } from "../../utils/functions";
 
-const productName = getConfig().productName;
 const PersonalDetails3 = (props) => {
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
-  const {kyc, isLoading} = useUserKycHook();
+  const { kyc, user, isLoading } = useUserKycHook();
   const [oldState, setOldState] = useState({});
-  let title = "Professional details";
+  const [totalPages, setTotalPages] = useState();
+  let title = "Professional information";
   if (isEdit) {
-    title = "Edit professional details";
+    title = "Edit professional information";
   }
-
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
+  
   useEffect(() => {
-    if (!isEmpty(kyc)) initialize();
-  }, [kyc]);
+    if (!isEmpty(kyc) && !isEmpty(user)) initialize();
+  }, [kyc, user]);
 
   const initialize = () => {
-    let formData = {
+    const formData = {
       income: kyc.identification?.meta_data?.gross_annual_income || "",
       occupation: kyc.identification?.meta_data?.occupation || "",
+      politically_exposed: kyc.identification?.meta_data?.politically_exposed || ""
     };
-    setFormData({ ...formData });
     setOldState({ ...formData });
+    setFormData({
+      ...formData,
+      politically_exposed: form_data.politically_exposed || "NOT APPLICABLE"
+    });
+    setTotalPages(getTotalPagesInPersonalDetails(isEdit));
   };
 
   const handleClick = () => {
     sendEvents("next")
-    let keysToCheck = ["income", "occupation"];
+    let keysToCheck = ["income", "occupation", "politically_exposed"];
     let result = validateFields(form_data, keysToCheck);
     if (!result.canSubmit) {
       let data = { ...result.formData };
@@ -71,8 +81,8 @@ const PersonalDetails3 = (props) => {
       mobile_number: userkycDetails.identification.meta_data.mobile_number,
       email: userkycDetails.address.meta_data.email,
     };
-    userkycDetails.identification.meta_data.politically_exposed =
-      "NOT APPLICABLE";
+    userkycDetails.identification.meta_data.politically_exposed = form_data.politically_exposed;
+      
     let item = {
       kyc: {
         identification: userkycDetails.identification.meta_data,
@@ -101,22 +111,22 @@ const PersonalDetails3 = (props) => {
     }
   };
 
-  const handleNavigation = (is_nri) => {
-    if (is_nri) {
-      navigate(PATHNAME_MAPPER.nriAddressDetails2, {
-        state: {
-          isEdit: isEdit,
-          userType: "compliant",
-        },
-      });
-    } else {
-      navigate(PATHNAME_MAPPER.compliantPersonalDetails4, {
-        state: {
-          isEdit: isEdit,
-          userType: "compliant",
-        },
-      });
+  const handleNavigation = (isNri) => {
+    const data = {
+      state: {
+        isEdit: isEdit,
+        userType: "compliant",
+      },
+    };
+    if (isEmailAndMobileVerified()) {
+      if (isNri) {
+        navigate(PATHNAME_MAPPER.nriAddressDetails2, data);
+      } else {
+        navigate(PATHNAME_MAPPER.compliantPersonalDetails4, data);
+      }
+      return;
     }
+    navigate(PATHNAME_MAPPER.communicationDetails, data);
   };
 
   const handleChange = (name) => (event) => {
@@ -131,19 +141,34 @@ const PersonalDetails3 = (props) => {
   };
 
   const sendEvents = (userAction) => {
-    let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "professional_details",
-        "flow": 'premium onboarding'      }
+    let incomeMapper = {
+      "BELOW 1L": "below_1",
+      "1-5L": "1_to_5",
+      "5-10L": "5_to_10",
+      "10-25L": "10_to_25",
+      "25-100L": "25_to_100",
+      ">100L": "above_100",
     };
-    if (userAction === 'just_set_events') {
+    let eventObj = {
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "professional_details",
+        occupation_details: form_data.occupation
+          ? form_data.occupation === "SELF EMPLOYED"
+            ? "self_employed"
+            : form_data.occupation.toLowerCase()
+          : "",
+        income_range: form_data.income ? incomeMapper[form_data.income] : "",
+        "flow": !isTradingEnabled(kyc) ? 'premium onboarding' : 'general'
+      },
+    };
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container
@@ -156,18 +181,18 @@ const PersonalDetails3 = (props) => {
       title={title}
       count={3}
       current={3}
-      total={3}
+      total={totalPages}
       data-aid='kyc-personal-details-screen-3'
       iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
     >
-      <div className="kyc-personal-details" data-aid='kyc-personal-details-page'>
+      <div className="kyc-personal-details kyc-professional-details" data-aid='kyc-personal-details-page'>
         <main data-aid='kyc-personal-details'>
           <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon
               error={form_data.occupation_error ? true : false}
               helperText={form_data.occupation_error}
               width="40"
-              label="Occupation detail:"
+              label="Occupation detail"
               class="occupation"
               options={OCCUPATION_TYPE_OPTIONS}
               id="account_type"
@@ -177,7 +202,7 @@ const PersonalDetails3 = (props) => {
             />
           </div>
           <div className="input" data-aid='kyc-dropdown-withouticon'>
-            <DropdownWithoutIcon
+            <DropDownNew
               error={form_data.income_error ? true : false}
               helperText={form_data.income_error}
               options={INCOME_OPTIONS}
@@ -192,8 +217,7 @@ const PersonalDetails3 = (props) => {
           </div>
         </main>
         <footer data-aid='kyc-footer'>
-          By tapping ‘save and continue’ I agree that I am not a PEP(politically
-          exposed person)
+          By tapping SAVE AND CONTINUE, I agree that I am not a politically exposed person (PEP)
         </footer>
       </div>
     </Container>

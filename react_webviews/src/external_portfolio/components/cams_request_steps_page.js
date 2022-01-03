@@ -39,7 +39,7 @@ class CamsRequestStepsPage extends Component {
     nativeCallback({
       action: 'open_in_browser',
       message: {
-        url: 'https://new.camsonline.com/Investors/Statements/Consolidated-Account-Statement/',
+        url: 'https://www.camsonline.com/Investors/Statements/Consolidated-Account-Statement',
       },
     });
   };

@@ -16,17 +16,19 @@ Example syntax:
 */
 
 import './WVInfoBubble.scss';
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-// import { getConfig } from 'utils/functions';
+import { getConfig } from 'utils/functions';
 import Fade from '@material-ui/core/Fade';
-import SVG from 'react-inlinesvg';
+import { Imgc } from '../Imgc';
+
+const config = getConfig();
 
 const TYPES = {
   'info': {
-    icon: 'badge-info',
-    iconColor: '#6650AB', // getConfig().styles.primaryColor
-    bgColor: '#E8E0FF',
+    icon: `${config.productName}/badge-info`,
+    iconColor: config.styles.primaryColor,
+    bgColor: config.styles.highlightColor,
     titleColor: '#6650AB',
     title: 'Note',
   },
@@ -61,16 +63,26 @@ const WVInfoBubble = ({
   hasTitle, // Sets this to use the default title value from 'TYPES'
   customTitle, // Overrirdes default title value
   type, // Sets bubble type - values: info/warning/error/success [default='info']
-  children // Info bubble content
+  children, // Info bubble content
+  ...props // Other props that are spread into the container div
 }) => {
   const typeConfig = TYPES[type] || {};
-
+  const extraProps = useMemo(() => {
+    return props || {};
+  }, [props]);
+  
   return (
     <Fade in={isOpen} timeout={350}>
-      <div className='wv-info-bubble' style={{ backgroundColor: typeConfig.bgColor }} data-aid={`wv-info-bubble-${dataAidSuffix}`}>
+      <div
+        {...extraProps}
+        className='wv-info-bubble'
+        style={{ backgroundColor: typeConfig.bgColor, ...extraProps.style }}
+        data-aid={`wv-info-bubble-${dataAidSuffix}`}
+      >
         {typeConfig.icon &&
-          <SVG
+          <Imgc
             className='wv-ib-icon'
+            style={{ height: '14px', width: '14px' }}
             // preProcessor={code => code.replace(/fill='.*?'/g, 'fill=' + typeConfig.iconColor)}
             src={require(`assets/${typeConfig.icon}.svg`)}
           />
@@ -108,7 +120,7 @@ WVInfoBubble.propTypes = {
   hasTitle: PropTypes.bool,
   customTitle: PropTypes.string,
   type: PropTypes.oneOf(Object.keys(TYPES)),
-  children: PropTypes.string.isRequired
+  children: PropTypes.node
 };
 
 WVInfoBubble.defaultProps = {

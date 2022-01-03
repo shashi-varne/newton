@@ -1,4 +1,4 @@
-import fisdomLogo from 'assets/fisdom/fisdom_logo_coloured.svg';
+import fisdomLogo from 'assets/fisdom/fisdom_logo.svg';
 
 import React, { useEffect, useState } from 'react';
 import { getConfig } from "utils/functions";

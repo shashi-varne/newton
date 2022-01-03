@@ -228,8 +228,8 @@ export async function goNext(investReferralData, isReferralGiven) {
     investmentEventData: investmentEventData,
     paymentRedirectUrl: paymentRedirectUrl,
     isSipDatesScreen: isSipDatesScreen,
-    history: this.props.history,
     handleDialogStates: this.handleDialogStates,
     handleApiRunning: this.handleApiRunning,
+    navigate: this.navigate,
   });
 }

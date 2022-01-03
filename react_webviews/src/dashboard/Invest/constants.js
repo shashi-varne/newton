@@ -1,3 +1,5 @@
+import { PATHNAME_MAPPER as KYC_PATHNAME_MAPPER } from "../../kyc/constants";
+
 export const apiConstants = {
   accountSummary: "/api/user/account/summary",
   npsInvestStatus: "/api/nps/invest/status/v2",
@@ -10,6 +12,20 @@ export const apiConstants = {
 };
 
 export const investCardsBase = {
+  stocksAndIpo: {
+    stocks: {
+      title: "Stocks, Futures & Options",
+      subtitle: "Invest in your favourite companies",
+      button_text: "INVEST",
+      icon: "ic_stocks.svg",
+    },
+    ipo: {
+      title: "IPO, Gold Bonds and more",
+      subtitle: "Primary market products",
+      button_text: "INVEST",
+      icon: "ic_ipo.svg",
+    },
+  },
   popularCards: {
     top_equity: {
       title: "Top equity funds",
@@ -263,7 +279,7 @@ export const nfoData = {
     {
       title: "Dividend",
       subtitle:
-        "The fund to pay out fractions of your gains in form of periodic dividends",
+        "The fund to pay out fractions of your gains in the form of periodic dividends",
       icon: "dividend_icon.png",
       value: "dividend",
     },
@@ -287,130 +303,247 @@ export const nfoData = {
 };
 
 export const kycStatusMapper = {
-  init: "",
+  init: {
+    title: "Are you investment ready?",
+    subtitle:
+      "To invest in stocks, primary market products, F&O you need to verify your KYC",
+    buttonTitle: "Start KYC",
+    button2Title: "Later",
+    landingText: "Check your KYC status",
+    icon: "icn_kyc_incomplete.svg",
+    nextState: KYC_PATHNAME_MAPPER.journey
+  },
+  ground: {
+    title: "Are you investment ready?",
+    subtitle:
+      "To invest in stocks, primary market products, F&O you need to verify your KYC",
+    buttonTitle: "Start KYC",
+    button2Title: "Later",
+    landingText: "Check your KYC status",
+    icon: "icn_kyc_incomplete.svg",
+    nextState: KYC_PATHNAME_MAPPER.homeKyc
+  },
   submitted: {
     color: "#3792fc",
-    popup_header: "KYC verification is under process",
-    popup_message:
-      "Our team is working on your KYC application, we will notify by email and sms once it's done",
-    button_text: "OK",
+    title: "Verifying KYC",
+    subtitle:
+      "Our team is working on your KYC application. We will notify you once it’s done. This may take upto 48 hours",
+    buttonTitle: "OKAY",
     oneButton: true,
-    landing_text: "UNDER PROCESS",
-    icon: "ic_popup_kyc_underprocess.svg",
+    landingText: "UNDER PROCESS",
+    icon: "icn_kyc_doc_verification.svg",
   },
   rejected: {
     color: "#d0021b",
-    popup_header: "Sorry, Your KYC is still pending",
-    popup_message: "KYC document rejected",
-    button_text: "Update KYC",
-    landing_text: "PENDING",
-    icon: "ic_popup_kyc_pending.svg",
-    next_state: "/kyc/upload/progress",
+    title: "KYC application rejected ",
+    subtitle: "We were unable to process your KYC. Please tap 'Update KYC' to check and submit the correct documents",
+    buttonTitle: "Update KYC",
+    landingText: "PENDING",
+    button2Title: "Later",
+    icon: "icn_kyc_doc_rejected.svg",
+    nextState: KYC_PATHNAME_MAPPER.uploadProgress
   },
   incomplete: {
     color: "#ffa60b",
-    popup_header: "",
-    popup_message: "",
-    button_text: "",
-    landing_text: "INCOMPLETE",
-    icon: "ic_popup_kyc_pending.svg",
+    title: "Complete KYC",
+    subtitle: "KYC is a mandatory process to invest in stocks, primary market products, F&O",
+    button2Title: "Later",
+    buttonTitle: "COMPLETE NOW",
+    landingText: "INCOMPLETE",
+    icon: "icn_kyc_incomplete.svg",
+    nextState: KYC_PATHNAME_MAPPER.journey
   },
   complete: {
     color: "#ffa60b",
-    popup_header: "Congratulations! KYC verified",
-    popup_message: "You're ready to invest in Mutual Funds",
-    button_text: "START INVESTING",
-    icon: "ic_popup_kyc_verified.svg",
-    next_state: "/invest",
+    title: "Upgrade to trading and demat account",
+    subtitle: "Invest in India's best performing stocks in just a few taps!",
+    button2Title: "Later",
+    buttonTitle: "UPGRADE NOW",
+    icon: "ic_upgrade.svg",
   },
+  mf_complete: {
+    color: "#ffa60b",
+    title: "You're investment ready",
+    subtitle: "You can now invest in more than 5000+ mutual funds.",
+    oneButton: true,
+    buttonTitle: "OKAY",
+    icon: "icn_kyc_completed.svg",
+    nextState: "/invest",
+  },
+  upgraded_incomplete: {
+    title: "Upgrade to trading and demat account",
+    subtitle: "Invest in India's best performing stocks in just a few taps!",
+    button2Title: "Later",
+    buttonTitle: "UPGRADE NOW",
+    icon: "ic_upgrade.svg",
+    nextState: KYC_PATHNAME_MAPPER.journey
+  },
+  esign_pending: {
+    color: "#ffa60b",
+    title: "Documents verified",
+    subtitle: "Great, just one more step to go! Now complete eSign to get investment ready",
+    button2Title: "NOT NOW",
+    buttonTitle: "Complete esign",
+    landingText: "INCOMPLETE",
+    icon: "icn_kyc_completed.svg",
+    oneButton: true,
+    nextState: KYC_PATHNAME_MAPPER.kycEsign,
+  },
+  fno_rejected: {
+    color: "#d0021b",
+    title: "Income proof rejected",
+    subtitle: "Couldn't process your F&O application as the wrong income proof document was submitted. Please upload the correct file",
+    button2Title: "Later",
+    buttonTitle: "Update document",
+    landingText: "INCOMPLETE",
+    icon: "icn_kyc_doc_rejected.svg",
+    nextState: KYC_PATHNAME_MAPPER.uploadFnOIncomeProof,
+    dualButton: true,
+  },
+  verifying_trading_account: {
+    color: "#3792fc",
+    title: "Trading & Demat account setup in progress",
+    subtitle: "Meanwhile, you can invest in more than 5000+ mutual funds",
+    buttonTitle: "OK",
+    oneButton: true,
+    landingText: "UNDER PROCESS",
+    icon: "icn_kyc_doc_verification.svg",
+  },
+  kyc_verified: {
+    color: "#ffa60b",
+    title: "You're investment ready",
+    subtitle: "You can start your investment journey by investing in your favourite stocks, mutual funds & more",
+    buttonTitle: "OKAY",
+    oneButton: true,
+    icon: "icn_kyc_completed.svg",
+  }
 };
 
 export const kycStatusMapperInvest = {
   init: {
-    icon: "ic_card_kyc_default.svg",
+    icon: "ic_kyc_incomplete.svg",
     title: "Are you investment ready?",
     subtitle: "Check your KYC status",
-    button_text: "CREATE NOW",
-    next_state: "/kyc/journey",
+    nextState: KYC_PATHNAME_MAPPER.journey,
   },
   ground: {
-    icon: "ic_card_kyc_default.svg",
+    icon: "ic_kyc_incomplete.svg",
     title: "Are you investment ready?",
     subtitle: "Check your KYC status",
-    button_text: "CREATE NOW",
-    next_state: "/kyc/home",
+    nextState: KYC_PATHNAME_MAPPER.homeKyc,
   },
   ground_premium: {
-    icon: "ic_card_kyc_default.svg",
+    icon: "ic_kyc_incomplete.svg",
     title: "Premium onboarding",
     subtitle: "No documentation  |  Instant investment",
-    button_text: "COMPLETE NOW",
-    next_state: "/kyc/journey",
+    nextState: KYC_PATHNAME_MAPPER.journey,
   },
   ground_pan: {
-    icon: "ic_card_kyc_default.svg",
+    icon: "ic_kyc_incomplete.svg",
     title: "Complete your KYC",
-    subtitle: "Don’t miss out good returns by Delaying",
-    button_text: "COMPLETE NOW",
-    next_state: "/kyc/journey"
+    subtitle: "You’re just a few steps away!",
+    nextState: KYC_PATHNAME_MAPPER.journey
   },
   ground_aadhaar: {
-    icon: "ic_card_kyc_default.svg",
+    icon: "ic_kyc_incomplete.svg",
     title: "Complete your KYC",
-    subtitle: "Don’t miss out good returns by Delaying",
-    button_text: "COMPLETE NOW",
-    next_state: "/kyc/journey",
+    subtitle: "You’re just a few steps away!",
+    nextState: KYC_PATHNAME_MAPPER.journey,
   },
   incomplete: {
-    icon: "ic_card_kyc_default.svg",
+    icon: "ic_kyc_incomplete.svg",
     title: "Complete your KYC",
-    subtitle: "Don’t miss out good returns by Delaying",
-    button_text: "COMPLETE NOW",
-    next_state: "/kyc/journey",
+    subtitle: "You’re just a few steps away!",
+    nextState: KYC_PATHNAME_MAPPER.journey,
   },
   rejected: {
-    icon: "ic_card_kyc_pending.svg",
-    title: "KYC still pending",
-    subtitle: "KYC document rejected",
-    button_text: "UPDATE KYC",
-    next_state: "/kyc/upload/progress",
+    icon: "ic_kyc_rejected.svg",
+    title: "KYC application",
+    subtitle: "REJECTED",
+    nextState: KYC_PATHNAME_MAPPER.uploadProgress,
+    addPoint: true,
+    subTitleClass: "kyc-rejected",
+    subtitleColor: "var(--red)"
+  },
+  fno_rejected: {
+    icon: "ic_kyc_rejected.svg",
+    title: "F&O verification",
+    subtitle: "DOCUMENT REJECTED",
+    nextState: KYC_PATHNAME_MAPPER.uploadFnOIncomeProof,
+    addPoint: true,
+    subTitleClass: "kyc-rejected",
+    subtitleColor: "var(--red)"
   },
   submitted: {
-    icon: "ic_card_kyc_underprocess.svg",
-    title: "KYC application submitted",
-    subtitle: "Verification in-progress",
-    button_text: "CHECK STATUS",
-    next_state: "/kyc/upload/progress",
+    icon: "ic_kyc_under_process.svg",
+    title: "KYC application",
+    subtitle: "IN-PROGRESS",
+    addPoint: true,
+    subTitleClass: "kyc-submitted",
+    subtitleColor: "var(--mustard)"
   },
+  complete: {
+    icon: "ic_kyc_complete.svg",
+    title: "You’re ready to invest in mutual funds",
+    subtitle: "UPGRAGE ACCOUNT",
+    nextState: KYC_PATHNAME_MAPPER.tradingInfo,
+    subTitleClass: "kyc-complete",
+  },
+  upgraded_incomplete: {
+    icon: "ic_kyc_complete.svg",
+    title: "You’re ready to invest in mutual funds",
+    subtitle: "UPGRAGE ACCOUNT",
+    nextState: KYC_PATHNAME_MAPPER.journey,
+    subTitleClass: "kyc-complete",
+  },
+  esign_pending: {
+    icon: "ic_kyc_complete.svg",
+    title: "KYC application",
+    subtitle: "COMPLETE ESIGN",
+    nextState: KYC_PATHNAME_MAPPER.kycEsign,
+    subTitleClass: "kyc-complete",
+  },
+  verifying_trading_account: {
+    icon: "ic_kyc_under_process.svg",
+    title: "You’re ready to invest in mutual funds",
+    subtitle: "VERIFYING TRADING A/C",
+    addPoint: true,
+    subTitleClass: "kyc-submitted",
+    subtitleColor: "var(--mustard)"
+  }
 };
 
 export const premiumBottomSheetMapper = {
   ground_premium: {
-    popup_header: `Premium Onboarding`,
-    title: "Premium Onboarding",
-    bold_text: "Congratulations!",
-    popup_message: `You have been selected for Premium onboarding. Fast track your investment journey.`,
-    button_text: "CONTINUE",
+    title: `Premium Onboarding`,
+    boldText: "Congratulations!",
+    subtitle: `You have been selected for Premium onboarding. Fast track your investment journey.`,
+    buttonTitle: "CONTINUE",
     oneButton: true,
-    next_state: "/kyc/journey",
+    nextState: KYC_PATHNAME_MAPPER.journey,
     icon: "ic_premium_onboarding_small.svg",
   },
   init: {
-    popup_header: "Premium Onboarding",
     title: "Premium Onboarding",
-    popup_message: "Fast track your investment with Premium onboarding!",
-    button_text: "COMPLETE NOW",
-    next_state: "/kyc/journey",
+    subtitle: "Fast track your investment with Premium onboarding!",
+    buttonTitle: "COMPLETE NOW",
+    nextState: KYC_PATHNAME_MAPPER.journey,
     icon: "ic_popup_premium_onboarding_big.svg",
   },
   incomplete: {
-    popup_header: `Premium Onboarding`,
-    title: "Premium Onboarding",
-    popup_message: "Fast track your investment with Premium onboarding!",
-    button_text: "COMPLETE NOW",
-    next_state: "/kyc/journey",
+    title: `Premium Onboarding`,
+    subtitle: "Fast track your investment with Premium onboarding!",
+    buttonTitle: "COMPLETE NOW",
+    nextState: KYC_PATHNAME_MAPPER.journey,
     icon: "ic_popup_premium_onboarding_big.svg",
   },
+  complete: {
+    title: `Congratulations! KYC verified`,
+    subtitle: "You're ready to invest in Mutual Funds",
+    buttonTitle: "START INVESTING",
+    nextState: "/invest",
+    icon: "ic_popup_kyc_verified.svg",
+  }
 };
 
 export const riskProfiles = [{

@@ -1,6 +1,5 @@
 import React from 'react';
 import Drawer from '@material-ui/core/Drawer';
-import Toolbar from '@material-ui/core/Toolbar';
 import { getConfig } from 'utils/functions';
 import NavList from './NavList';
 import './Drawer.scss';
@@ -24,7 +23,7 @@ const Slider = ({ mobileViewDrawer, handleMobileViewDrawer, handleReferModal }) 
     return (
       <nav className='drawer'>
         <Drawer anchor='left' elevation={4} variant='permanent'>
-          <Toolbar />
+          <div style={{height: '64px'}}/>
           <NavList handleClick={handleMobileViewDrawer} handleModal={handleReferModal} />
         </Drawer>
       </nav>

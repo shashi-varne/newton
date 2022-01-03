@@ -46,6 +46,7 @@
           vertical-align: middle;
           box-sizing: border-box;
           cursor: pointer;
+          margin-left: 5px;
         }
       }
 
@@ -78,19 +79,19 @@
 
     .status {
       font-size: 11px;
-      color: #160d2e;
+      color: var(--mustard);
     }
 
-    .verified {
-      color: #35cb5d;
+    .approved {
+      color: var(--secondary-green);
     }
 
-    .failed {
-      color: #d0021b;
+    .rejected {
+      color: var(--red);
     }
 
-    .underprocess {
-      color: #ffd01f;
+    .in_progress {
+      color: var(--mustard);
     }
   }
 

@@ -17,10 +17,15 @@ const NavBar = (props) => {
   }
 
   return (
-    <AppBar position="sticky" className="navbar NavBar" data-aid='navbar'>
+    <AppBar position="sticky" className="navbar NavBar"  data-aid='navbar'>
       <Toolbar className='navbar-container'>
         <div className='header-partner-logo'>
-          <img src={require(`assets/${logo}`)} alt={code} />
+          <img
+            src={require(`assets/${logo}`)}
+            alt={code}
+            style={{ cursor: 'pointer' }}
+            onClick={() => navigate('/invest')}
+          />
         </div>
         <div className='navbar-right-container'>
             <div className='user-profile-data' data-aid='user-profile-data'>

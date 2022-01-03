@@ -4,7 +4,7 @@ import "react-placeholder/lib/reactPlaceholder.css";
 import './style.scss';
 import { SkeltonRect } from './Skelton';
 // import SVG from 'react-inlinesvg';
-
+import { isFunction } from '../../utils/validators';
 class ImgcClass extends Component {
     constructor(props) {
         super(props);
@@ -38,7 +38,7 @@ class ImgcClass extends Component {
 
             // <SkeltonRect style={props.style} className={props.className} />
             <img id="image" src={props.src}
-                onLoad={() => {
+                onLoad={(event) => {
                     this.setState({
                         loaded: true
                     })
@@ -47,6 +47,9 @@ class ImgcClass extends Component {
                         this.props.callbackImgc(this.props.type);
                     }
 
+                    if(isFunction(this.props.onLoad)) {
+                        this.props.onLoad(event);
+                    }
 
                 }}
                 onError={() => {

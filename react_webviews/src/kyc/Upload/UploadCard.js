@@ -1,11 +1,14 @@
 import React from "react";
 import { getConfig } from "utils/functions";
+import { Imgc } from "../../common/ui/Imgc";
 import "./commonStyles.scss";
 
 const UploadCard = (props) => {
   const productName = getConfig().productName;
   const {
+    kyc,
     default_image,
+    docKey,
     title,
     onClick,
     subtitle,
@@ -13,12 +16,18 @@ const UploadCard = (props) => {
     approved_image,
     index,
   } = props;
+  const approvedCondition = (docKey !== "bank" && doc_status === "approved") ||
+  (docKey === "bank" && doc_status === "approved" &&
+  (kyc?.bank?.meta_data?.bank_status === "doc_submitted" || kyc?.bank?.meta_data?.bank_status === "verified"));
+  const submittedCondition = (docKey !== "bank" && doc_status === "submitted") ||
+  (docKey === "bank" && doc_status === "submitted" &&
+  (kyc?.bank?.meta_data?.bank_status === "doc_submitted" || kyc?.bank?.meta_data?.bank_status === "verified"));
   return (
     <div className="kyc-upload-card" data-aid='kyc-upload-card' onClick={onClick}>
       <div className="image">
-        <img
+        <Imgc
           src={require(`assets/${productName}/${
-            doc_status === "approved" ? approved_image : default_image
+            approvedCondition ? approved_image : default_image
           }`)}
           alt={title}
           className="icon"
@@ -27,17 +36,9 @@ const UploadCard = (props) => {
         {doc_status === "rejected" && (
           <img
             src={require(`assets/attention_icon.svg`)}
-            alt=""
+            alt="rejected"
             className="check-icon"
             id={`check-icon-rejected_${index+1}`}
-          />
-        )}
-        {doc_status === "submitted" && (
-          <img
-            src={require(`assets/success_icon.svg`)}
-            alt=""
-            className="check-icon"
-            id={`check-icon-submitted_${index+1}`}
           />
         )}
       </div>
@@ -45,6 +46,14 @@ const UploadCard = (props) => {
         <div className="title" id={`title_${index+1}`} data-aid={`title_${index+1}`}>{title}</div>
         {subtitle && <div className="subtitle" id={`subtitle_${index+1}`} data-aid={`subtitle_${index+1}`}>{subtitle}</div>}
       </div>
+      {(approvedCondition || submittedCondition) &&
+        <img
+          src={require(`assets/badge-success.svg`)}
+          alt="submitted"
+          style={{ marginLeft: 'auto' }}
+          id={`check-icon-submitted_${index + 1}`}
+        />
+      }
     </div>
   );
 };

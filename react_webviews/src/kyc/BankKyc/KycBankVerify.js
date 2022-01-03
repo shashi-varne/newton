@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Container from "../common/Container";
-import Alert from "../mini-components/Alert";
 import { isEmpty } from "utils/validators";
-import { navigate as navigateFunc } from "utils/functions";
-import { PATHNAME_MAPPER } from "../constants";
-import { getFlow } from "../common/functions";
+import { navigate as navigateFunc, isTradingEnabled } from "utils/functions";
+import { BANK_ACCOUNT_TYPES_NOMENCLATURE, PATHNAME_MAPPER } from "../constants";
+import { checkDLPanFetchAndApprovedStatus, getFlow, isDigilockerFlow } from "../common/functions";
 import { saveBankData, getBankStatus } from "../common/api";
 import toast from "../../common/ui/Toast";
 import PennyDialog from "../mini-components/PennyDialog";
@@ -16,11 +15,22 @@ import useUserKycHook from "../common/hooks/userKycHook";
 import { getConfig } from "utils/functions";
 import internalStorage from '../common/InternalStorage';
 import { nativeCallback } from "../../utils/native_callback";
+import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 import { isNewIframeDesktopLayout } from "../../utils/functions";
+import { storageService } from "../../utils/validators";
 
-const showPageDialog = isNewIframeDesktopLayout();
-const productName = getConfig().productName;
+const INITIAL_INFO_CONTENT = "We’ll credit ₹1 to verify your bank account.";
+const NON_EQUITY_PARTNER_INFO = (
+  <ul className="note-list">
+    <li>This bank account belongs to our partner. Equity and Trading account is not available,
+      kindly change bank account if you want to avail Trading facility. </li>
+    <li>{INITIAL_INFO_CONTENT}</li>
+  </ul>
+);
+
 const KycBankVerify = (props) => {
+  const { productName } = useMemo(() => getConfig(), []);
+  const showPageDialog = useMemo(() => isNewIframeDesktopLayout(), []);
   const [count, setCount] = useState(20);
   const [countdownInterval, setCountdownInterval] = useState();
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -28,13 +38,16 @@ const KycBankVerify = (props) => {
   const [isPennyFailed, setIsPennyFailed] = useState(false);
   const [isPennySuccess, setIsPennySuccess] = useState(false);
   const [isPennyExhausted, setIsPennyExhausted] = useState(false);
-  const isEdit = props.location.state?.isEdit || false;
+  const [infoContent, setInfoContent] = useState(INITIAL_INFO_CONTENT);
+  const stateParams = props.location.state || {};
+  const { isEdit = false, isPartnerBank = false, isPartnerEquityEnabled = false } = stateParams;
   const params = props.match.params || {};
   const userType = params.userType || "";
   const [bankData, setBankData] = useState({});
   const navigate = navigateFunc.bind(props);
   const [dl_flow, setDlFlow] = useState(false);
-  const {kyc} = useUserKycHook();
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
+  const [tradingEnabled, setTradingEnabled] = useState(null);
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -43,24 +56,24 @@ const KycBankVerify = (props) => {
   }, [kyc]);
 
   const initialize = async () => {
-    if (
-      kyc.kyc_status !== "compliant" &&
-      !kyc.address.meta_data.is_nri &&
-      kyc.dl_docs_status !== "" &&
-      kyc.dl_docs_status !== "init" &&
-      kyc.dl_docs_status !== null
-    ) {
+    if (isDigilockerFlow(kyc)) {
       setDlFlow(true);
     }
     setBankData({ ...kyc.bank.meta_data });
+
+    const TRADING_ENABLED = isTradingEnabled(kyc);
+    setTradingEnabled(TRADING_ENABLED);
+    if (TRADING_ENABLED && isPartnerBank && !isPartnerEquityEnabled) {
+      setInfoContent(NON_EQUITY_PARTNER_INFO);
+    }
   };
 
   const handleClick = async () => {
-    sendEvents('next')// to be verified
+    sendEvents('next')
     try {
       setIsApiRunning("button");
       const result = await saveBankData({ bank_id: bankData.bank_id });
-      if (!result) return;
+      if (!result) throw new Error("No result. Something went wrong");
       if (result.code === "ERROR") {
         toast(result.message);
       } else if (kyc.address.meta_data.is_nri) {
@@ -70,6 +83,7 @@ const KycBankVerify = (props) => {
       }
     } catch (err) {
       console.log(err);
+      toast(err.message);
     } finally {
       setIsApiRunning(false);
     }
@@ -115,7 +129,7 @@ const KycBankVerify = (props) => {
       twoButton: true,
       status: 'pennyExhausted'
     }
-    internalStorage.setData('handleClickOne', goToJourney);
+    internalStorage.setData('handleClickOne', handleExhausted);
     internalStorage.setData('handleClickTwo', uploadDocuments);
     navigate('/kyc/penny-status',{state:pennyDetails});
   }
@@ -137,7 +151,10 @@ const KycBankVerify = (props) => {
   const checkBankStatusStep1 = async () => {
     try {
       const result = await getBankStatus({ bank_id: bankData.bank_id });
-      if (!result) return;
+      if (!result) throw new Error("No result. Something went wrong");
+      if (result.code === "ERROR") {
+        throw new Error(result.message);
+      }
       if (result.records.PBI_record.bank_status === "verified") {
         clearInterval(countdownInterval);
         setCountdownInterval(null);
@@ -165,8 +182,13 @@ const KycBankVerify = (props) => {
             }
           }
       }
+      updateKyc(result.kyc);
     } catch (err) {
       console.log(err);
+      clearInterval(countdownInterval);
+      setCountdownInterval(null);
+      setIsPennyOpen(false);
+      setIsPennyFailed(true);
     }
   };
 
@@ -174,7 +196,10 @@ const KycBankVerify = (props) => {
     try {
       const result = await getBankStatus({ bank_id: bankData.bank_id });
       setIsPennyOpen(false);
-      if (!result) return;
+      if (!result) throw new Error("No result. Something went wrong");
+      if (result.code === "ERROR") {
+        throw new Error(result.message);
+      }
       if (result.records.PBI_record.bank_status === "verified") {
         if(showPageDialog) {
           handlePennySuccess();
@@ -194,104 +219,182 @@ const KycBankVerify = (props) => {
           setIsPennyFailed(true);
         }
       }
+      updateKyc(result.kyc);
     } catch (err) {
       console.log(err);
+      setIsPennyFailed(true);
     }
   };
 
   const checkBankDetails = () => {
-    sendEvents("check bank details", "bottom_sheet");
-    navigate(`/kyc/${userType}/bank-details`);
+    sendEvents("check_bank_details", "unable_to_add_bank");
+    navigate(`/kyc/${userType}/bank-details`, {
+      state: { isEdit: true }
+    });
   };
 
   const uploadDocuments = () => {
-    sendEvents("upload documents", "bottom_sheet");
+    sendEvents("upload_documents", "unable_to_add_bank");
     navigate(`/kyc/${userType}/upload-documents`);
   };
 
-  const handleSuccess = () => {
+  const handleOtherPlatformNavigation = () => {
+    const nextStep = kyc.show_equity_charges_page ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
     if (userType === "compliant") {
       if (isEdit) goToJourney();
-      else {
-        if (kyc.sign.doc_status !== "submitted" && kyc.sign.doc_status !== "approved") {
-          navigate(PATHNAME_MAPPER.uploadSign, {
-            state: {
-              backToJourney: true,
-            },
-          });
-        } else goToJourney();
-      }
+      else navigate(nextStep, {
+        state: { goBack: PATHNAME_MAPPER.journey }
+      })
     } else {
       if (dl_flow) {
-        if (
-          (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
-          kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
-          kyc.all_dl_doc_statuses.pan_fetch_status === "failed") &&
-          kyc.pan.doc_status !== "approved"
-        ) {
-          navigate(PATHNAME_MAPPER.uploadPan);
+        const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
+        if (isPanFailedAndNotApproved) {
+          navigate(PATHNAME_MAPPER.uploadPan, {
+            state: { goBack: PATHNAME_MAPPER.journey }
+          });
+        } else {
+          navigate(nextStep, {
+            state: { goBack: PATHNAME_MAPPER.journey }
+          });
+        }
+      } else {
+        navigate(PATHNAME_MAPPER.uploadProgress);
+      }
+    }
+  };
+
+  // const handleSuccess = () => {
+  //   if (userType === "compliant") {
+  //     if (isEdit) goToJourney();
+  //     else {
+  //       if (kyc.sign.doc_status !== "submitted" && kyc.sign.doc_status !== "approved") {
+  //         navigate(PATHNAME_MAPPER.uploadSign, {
+  //           state: {
+  //             backToJourney: true,
+  //           },
+  //         });
+  //       } else goToJourney();
+  //     }
+  //   } else {
+  //     if (dl_flow) {
+  //       if (
+  //         (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
+  //         kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
+  //         kyc.all_dl_doc_statuses.pan_fetch_status === "failed") &&
+  //         kyc.pan.doc_status !== "approved"
+  //       ) {
+  //         navigate(PATHNAME_MAPPER.uploadPan);
+  //       } else navigate(PATHNAME_MAPPER.kycEsign);
+  //     } else navigate(PATHNAME_MAPPER.uploadProgress);
+  //   }
+  // };
+
+  const handleSdkNavigation = () => {
+    if (userType === "compliant") {
+      goToJourney();
+      // if (isEdit) goToJourney();
+      // else {
+      //   if (kyc.sign.doc_status !== "submitted" && kyc.sign.doc_status !== "approved") {
+      //     navigate(PATHNAME_MAPPER.uploadSign, {
+      //       state: {
+      //         backToJourney: true,
+      //       },
+      //     });
+      //   } else goToJourney();
+      // }
+    } else {
+      if (dl_flow) {
+        const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
+        if (isPanFailedAndNotApproved) {
+          navigate(PATHNAME_MAPPER.uploadPan, {
+            state: { goBack: PATHNAME_MAPPER.journey }
+          });
         } else navigate(PATHNAME_MAPPER.kycEsign);
       } else navigate(PATHNAME_MAPPER.uploadProgress);
     }
   };
 
+  const handleSuccess = () => {
+    if (storageService().get("bankEntryPoint") === "uploadDocuments") {
+      redirectToUploadProgress();
+    } else {
+      if (tradingEnabled) {
+        handleOtherPlatformNavigation();
+      } else {
+        handleSdkNavigation();
+      }
+    }
+  };
+
+  const handleExhausted = () => {
+    sendEvents("try_later", "unable_to_add_bank");
+    if (storageService().get("bankEntryPoint") === "uploadDocuments") {
+      redirectToUploadProgress();
+    } else {
+      goToJourney();
+    }
+  };
+
+  const redirectToUploadProgress = () => {
+    storageService().remove("bankEntryPoint");
+    navigate(PATHNAME_MAPPER.uploadProgress);
+  };
+
   const goToJourney = () => {
-    sendEvents("next", "bottom_sheet");
     navigate(PATHNAME_MAPPER.journey)
   };
 
   const edit = () => () => {
     sendEvents('edit');
-    navigate(`/kyc/${userType}/bank-details`);
+    navigate(`/kyc/${userType}/bank-details`, {
+      state: { isEdit: true }
+    });
   };
 
   const sendEvents = (userAction, screen_name) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": screen_name || "verify_bank_account",
-        "initial_kyc_status": kyc.initial_kyc_status,
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: screen_name || "verify_bank_account",
         "flow": getFlow(kyc) || ""
-      }
+        // "initial_kyc_status": kyc.initial_kyc_status,
+      },
     };
-    if(screen_name === 'bottom_sheet') {
-        if(isPennySuccess)
-          eventObj.properties.status = 'bank added';
-        else if(isPennyFailed)
-          eventObj.properties.status = 'bank not added';          
-        //  else  if() // to be checked for error
-        //   eventObj.properties.status = 'error screen';         
-        else  if(isPennyExhausted)
-          eventObj.properties.status = 'unable to add bank attempts exhausted';         
-        else
-          eventObj.properties.status = '';
+    if (screen_name === "unable_to_add_bank") {
+      if (isPennySuccess) eventObj.properties.status = "bank added";
+      else if (isPennyFailed) eventObj.properties.status = "bank not added";
+      else if (isPennyExhausted)
+        eventObj.properties.status = "unable to add bank attempts exhausted";
+      else eventObj.properties.status = "";
     }
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container
       buttonTitle="Verify Bank Account"
       events={sendEvents("just_set_events")}
+      skelton={isLoading}
       showLoader={isApiRunning}
       noFooter={isEmpty(bankData)}
       handleClick={handleClick}
-      title="Confirm bank details"
+      title="Verify bank account"
       iframeRightContent={require(`assets/${productName}/add_bank.svg`)}
       data-aid='kyc-verify-bank-accont-screen'
     >
       <div className="kyc-approved-bank-verify" data-aid='kyc-approved-bank-verify'>
-        <Alert
-          variant="info"
-          title="Important"
-          message="We will credit ₹1 to verify your bank account."
-          dataAid='kyc-bankverify-alertbox'
-        />
+        <WVInfoBubble
+          type="info"
+          hasTitle
+          customTitle="Important"
+        >
+          {infoContent}
+        </WVInfoBubble>
         {isEmpty(bankData) && (
           <>
             <SkeltonRect className="verify-skelton" />
@@ -330,7 +433,7 @@ const KycBankVerify = (props) => {
             </div>
             <div className="item" data-aid='kyc-account-type'>
               <div className="left">Account type</div>
-              <div className="right"> {bankData.account_type} </div>
+              <div className="right"> {BANK_ACCOUNT_TYPES_NOMENCLATURE[bankData.account_type]} </div>
             </div>
           </>
         )}
@@ -340,10 +443,10 @@ const KycBankVerify = (props) => {
           uploadDocuments={uploadDocuments}
           checkBankDetails={checkBankDetails}
         />
-        <PennySuccessDialog isOpen={isPennySuccess} redirect={handleSuccess} />
+        <PennySuccessDialog isOpen={isPennySuccess} kyc={kyc} redirect={handleSuccess} />
         <PennyExhaustedDialog
           isOpen= {isPennyExhausted}
-          redirect={goToJourney}
+          redirect={handleExhausted}
           uploadDocuments={uploadDocuments}
         />
       </div>
