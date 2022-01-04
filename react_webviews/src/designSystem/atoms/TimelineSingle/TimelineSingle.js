@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Typography } from "@mui/material";
-import "./Timeline.scss";
+import "./TimelineSingle.scss";
 
 const activeStyles = {
   borderRadius: "50%",
@@ -13,14 +13,14 @@ const inactiveStyles = {
   color: "foundationColors.content.tertiary",
 };
 
-const Timeline = (props) => {
+const TimelineSingle = (props) => {
   const { text = "", className, isActive = false, dataAid } = props;
 
   return (
     <Typography
-      className={`atom-timeline ${className}`}
+      className={`atom-timeline-single ${className}`}
       sx={isActive ? activeStyles : inactiveStyles}
-      data-aid={`timeline_${dataAid}`}
+      data-aid={`timelineSingle_${dataAid}`}
       variant={isActive ? "body3" : "body5"}
     >
       {text}
@@ -28,9 +28,9 @@ const Timeline = (props) => {
   );
 };
 
-export default Timeline;
+export default TimelineSingle;
 
-Timeline.propTypes = {
+TimelineSingle.propTypes = {
   isActive: PropTypes.bool,
   className: PropTypes.string,
 };
