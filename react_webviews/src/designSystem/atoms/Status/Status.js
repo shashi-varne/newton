@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import "./Status.scss";
 
 export const STATUS_VARIANTS = {
@@ -16,10 +16,21 @@ const VARIANT_COLOR_MAPPER = {
 };
 
 const Status = (props) => {
-  const { title = "", className, children, variant, dataAid, } = props;
+  const {
+    title = "",
+    className,
+    children,
+    variant,
+    dataAid,
+    ...restProps
+  } = props;
 
   return (
-    <Box className={`atom-status ${className}`} data-aid={`status_${dataAid}`} >
+    <Box
+      className={`atom-status ${className}`}
+      data-aid={`status_${dataAid}`}
+      {...restProps}
+    >
       <Box
         className="as-circle"
         sx={{
@@ -27,14 +38,13 @@ const Status = (props) => {
         }}
       />
       <Box className="as-content">
-        <Box
-          className="as-title"
-          sx={{
-            color: VARIANT_COLOR_MAPPER[variant],
-          }}
+        <Typography
+          variant="body4"
+          color={VARIANT_COLOR_MAPPER[variant]}
+          allcaps
         >
           {title}
-        </Box>
+        </Typography>
         {children}
       </Box>
     </Box>
