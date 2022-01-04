@@ -3,15 +3,13 @@ import { Box } from "@mui/material";
 import PropTypes from "prop-types";
 import "./BarMeter.scss";
 
-const getBarMeterData = ({ numberOfBars }) => () => {
+const getBarMeterData = (numberOfBars) => () => {
   return Array.from(Array(numberOfBars).keys());
 };
 
 const BarMeter = (props) => {
   const { classes = {}, dataAid, numberOfBars = 5, activeIndex } = props;
-  const barMeterData = useMemo(getBarMeterData({ numberOfBars }), [
-    numberOfBars,
-  ]);
+  const barMeterData = useMemo(getBarMeterData(numberOfBars), [numberOfBars]);
 
   return (
     <Box
