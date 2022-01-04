@@ -11,13 +11,13 @@ export const getPlanReviewData = ({ amount, gstAmount, totalAmount }) => () => {
       title: "GST (18%)",
       amount: inrFormatDecimal(gstAmount, 2),
       amountClassName: "fprs-amount",
+      showBottomDivider: true,
     },
     {
       title: "Amount payable",
       amount: inrFormatDecimal(totalAmount, 2),
       amountClassName: "fprs-text fprs-total-amount",
       titleClassName: "fprs-text",
-      showTopDivider: true,
     },
   ];
 };

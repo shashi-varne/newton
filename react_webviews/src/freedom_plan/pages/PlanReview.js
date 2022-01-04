@@ -5,6 +5,7 @@ import { navigate as navigateFunc } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import { getPlanReviewData } from "../common/constants";
+import Tile from "../mini-components/Tile";
 import "./PlanReview.scss";
 
 const data = {
@@ -70,8 +71,8 @@ const PlanReview = (props) => {
           </div>
         </main>
         <footer>
-          By tapping ‘PAY NOW’ you agree to the{" "}
-          <span>Terms & Conditions of Use</span> for the Freedom plan
+          By tapping ‘PAY NOW’ you agree to the <span>Terms & Conditions</span>{" "}
+          of Use for the Freedom plan
         </footer>
       </div>
     </Container>
@@ -79,21 +80,3 @@ const PlanReview = (props) => {
 };
 
 export default PlanReview;
-
-const Tile = ({
-  showTopDivider,
-  title,
-  amount,
-  amountClassName,
-  titleClassName,
-}) => {
-  return (
-    <>
-      {showTopDivider && <hr className="generic-hr" />}
-      <div className="flex-between-center">
-        <div className={titleClassName}>{title}</div>
-        <div className={amountClassName}>{amount}</div>
-      </div>
-    </>
-  );
-};
