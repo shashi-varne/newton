@@ -4,9 +4,14 @@ import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { Imgc } from "../../common/ui/Imgc";
 import WVPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
 import WVPageSubtitle from "../../common/ui/InPageHeader/WVInPageSubtitle";
-import { getPaymentSummaryData } from "../common/constants";
+import {
+  getPaymentSummaryData,
+  PAYMENT_STATUS_DATA,
+} from "../common/constants";
 import { nativeCallback } from "../../utils/native_callback";
 import Tile from "../mini-components/Tile";
+import { getUrlParams } from "../../utils/validators";
+import "./PaymentStatus.scss";
 
 const data = {
   amount: 5999,
@@ -18,6 +23,8 @@ const data = {
 const PaymentSuccess = (props) => {
   const navigate = navigateFunc.bind(props);
   const { productName } = useMemo(getConfig, []);
+  const { status } = getUrlParams();
+  const paymentStatusData = PAYMENT_STATUS_DATA[status] || PAYMENT_STATUS_DATA["failed"];
   const paymentDetails = useMemo(getPaymentSummaryData(data), [data]);
 
   const sendEvents = (userAction) => {
@@ -25,7 +32,7 @@ const PaymentSuccess = (props) => {
       event_name: "freedom_plan",
       properties: {
         user_action: userAction,
-        screen_name: "payment_success",
+        screen_name: paymentStatusData.screenName,
       },
     };
     if (userAction === "just_set_events") {
@@ -45,26 +52,27 @@ const PaymentSuccess = (props) => {
         icon: "close",
       }}
       hidePageTitle
-      buttonTitle="OKAY"
-      title="Payment successful"
+      buttonTitle={paymentStatusData.buttonTitle}
+      title={paymentStatusData.title}
       events={sendEvents("just_set_events")}
       handleClick={handleClick}
-      data-aid="freedom-plan-payment-success"
+      data-aid="freedom-plan-payment-status"
     >
-      <div className="freedom-plan-payment-success">
+      <div className="freedom-plan-payment-status">
         <Imgc
-          src={require(`assets/${productName}/pg_success.svg`)}
+          src={require(`assets/${productName}/${paymentStatusData.icon}`)}
           className="fpps-icon"
         />
-        <WVPageTitle>Payment successful</WVPageTitle>
-        <WVPageSubtitle>
-          Your freedom plan will be activated in 24 hours. Till then, standard
-          brokerage shall apply
-        </WVPageSubtitle>
-        <div className="fpps-title">Payment summary</div>
-        {paymentDetails.map((data, index) => (
-          <Tile key={index} {...data} />
-        ))}
+        <WVPageTitle>{paymentStatusData.title}</WVPageTitle>
+        <WVPageSubtitle>{paymentStatusData.subtitle}</WVPageSubtitle>
+        {paymentStatusData.isSuccess && (
+          <>
+            <div className="fpps-title">Payment summary</div>
+            {paymentDetails.map((data, index) => (
+              <Tile key={index} {...data} />
+            ))}
+          </>
+        )}
       </div>
     </Container>
   );
