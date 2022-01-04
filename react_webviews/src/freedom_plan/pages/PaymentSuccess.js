@@ -6,6 +6,7 @@ import WVPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
 import WVPageSubtitle from "../../common/ui/InPageHeader/WVInPageSubtitle";
 import { getPaymentSummaryData } from "../common/constants";
 import { nativeCallback } from "../../utils/native_callback";
+import Tile from "../mini-components/Tile";
 
 const data = {
   amount: 5999,
@@ -70,15 +71,3 @@ const PaymentSuccess = (props) => {
 };
 
 export default PaymentSuccess;
-
-const Tile = ({ title, amount, showBottomDivider, className = "" }) => {
-  return (
-    <>
-      <div className={`flex-between-center fpps-tile ${className}`}>
-        <div className="fpps-tile-text">{title}</div>
-        <div>{amount}</div>
-      </div>
-      {showBottomDivider && <div className="generic-hr m-top-1x" />}
-    </>
-  );
-};
