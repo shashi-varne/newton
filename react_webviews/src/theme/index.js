@@ -34,9 +34,6 @@ const getTheme = () => {
       MuiCheckbox: {
         styleOverrides: checkboxStyleOverRides(colors),
       },
-      MuiCheckbox: {
-        styleOverrides: checkboxStyleOverRides(colors),
-      },
     },
   };
   return createTheme(theme);
