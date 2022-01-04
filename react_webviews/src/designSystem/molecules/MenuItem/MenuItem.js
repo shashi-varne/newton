@@ -7,8 +7,8 @@
     titleColor: 'foundationColors.secondary.mango.300'
 */
 
-import { Typography } from '@mui/material';
 import React from 'react';
+import { Typography } from '@mui/material';
 import { Imgc } from '../../../common/ui/Imgc';
 import PropTypes from 'prop-types';
 
