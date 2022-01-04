@@ -4,11 +4,12 @@ import { Imgc } from "../../../common/ui/Imgc";
 import "./EMandateTrustIcon.scss";
 
 const EMandateTrustIcon = (props) => {
-  const { className = "", dataAid = "" } = props;
+  const { className = "", dataAid = "", ...restProps } = props;
   return (
     <div
       className={`atom-e-mandate-trust-icon ${className}`}
       data-aid={`eMandateTrustIcon-${dataAid}`}
+      {...restProps}
     >
       <Typography variant="body5" color="foundationColors.content.secondary">
         e-mandate powered by
