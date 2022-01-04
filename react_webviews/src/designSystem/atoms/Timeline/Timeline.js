@@ -1,17 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Box } from "@mui/material";
+import { Typography } from "@mui/material";
 import "./Timeline.scss";
 
 const activeStyles = {
-  width: 40,
-  height: 40,
   borderRadius: "50%",
   backgroundColor: "foundationColors.primary.brand",
   color: "foundationColors.supporting.white",
 };
 
-const inActiveStyles = {
+const inactiveStyles = {
   color: "foundationColors.content.tertiary",
 };
 
@@ -19,13 +17,14 @@ const Timeline = (props) => {
   const { text = "", className, isActive = false, dataAid } = props;
 
   return (
-    <Box
+    <Typography
       className={`atom-timeline ${className}`}
-      sx={isActive ? activeStyles : inActiveStyles}
+      sx={isActive ? activeStyles : inactiveStyles}
       data-aid={`timeline_${dataAid}`}
+      variant={isActive ? "body3" : "body5"}
     >
       {text}
-    </Box>
+    </Typography>
   );
 };
 
