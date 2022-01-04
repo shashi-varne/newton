@@ -1,16 +1,24 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Box } from "@mui/material";
 import PropTypes from "prop-types";
 import "./BarMeter.scss";
 
+const getBarMeterData = ({ numberOfBars }) => () => {
+  return Array.from(Array(numberOfBars).keys());
+};
+
 const BarMeter = (props) => {
   const { classes = {}, dataAid, numberOfBars = 5, activeIndex } = props;
+  const barMeterData = useMemo(getBarMeterData({ numberOfBars }), [
+    numberOfBars,
+  ]);
+
   return (
     <Box
       className={`atom-bar-meter ${classes.container}`}
       data-aid={`barMeter_${dataAid}`}
     >
-      {Array.from(Array(numberOfBars).keys()).map((element) => (
+      {barMeterData.map((element) => (
         <Bar
           key={element}
           className={classes.bar}
