@@ -40,7 +40,11 @@ const OrderStep = (props) => {
             VARIANT_COLOR_MAPPER[ORDER_STEP_VARIANTS.DEFAULT],
         }}
       >
-        <Typography variant="body1" className="aos-step-content">
+        <Typography
+          variant="body1"
+          className="aos-step-content"
+          color="foundationColors.supporting.white"
+        >
           {stepContent}
         </Typography>
       </Box>
