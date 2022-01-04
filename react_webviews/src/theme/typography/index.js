@@ -22,7 +22,7 @@ const headingTextFactor = 1.3;
 const bodyTextFactor = 1.6;
 
 // for custom variants, we are passing the fontFamily with the variant config itself.
-const baseTypographyConfig = (colors, partnerConfig) => ({
+const baseTypographyConfig = (colors={}, partnerConfig={}) => ({
   heading1: {
     fontSize: 28,
     color: colors?.content?.primary,
@@ -63,6 +63,7 @@ const baseTypographyConfig = (colors, partnerConfig) => ({
     color: colors?.content?.primary,
     fontWeight: FONT_WEIGHT.Regular,
     lineHeight: calcLineHeight(14, bodyTextFactor),
+    fontFamily: partnerConfig?.fontFamily?.join(','),
   },
   body3: {
     fontSize: 12,
