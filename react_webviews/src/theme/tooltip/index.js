@@ -1,12 +1,13 @@
-export const tooltipStyleOverRides = (colors) => {
+import baseTypographyConfig from "../typography";
+
+export const tooltipStyleOverRides = (colors, partnerConfig) => {
   return {
     tooltip: {
+      ...baseTypographyConfig(colors, partnerConfig)["body2"],
       padding: 8,
-      fontSize: 14,
       maxWidth: 350,
-      fontWeight: 400,
-      lineHeight: "22px",
       textAlign: "center",
+      color: colors.supporting.white,
       backgroundColor: colors.content.primary,
     },
     arrow: {
