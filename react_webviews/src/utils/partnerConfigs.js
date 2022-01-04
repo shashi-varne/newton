@@ -52,30 +52,12 @@ export const commonCardsConfig = {
     bottomScrollCards: ["parkmoney", "savegoal"],
     bottomCards: ["nfo"],
   },
-  landingMarketingBanners: [
-    {
-      type: "mf",
-      image: "mf.svg",
-      endDate: "11/05/2021",
-      startDate: "11/01/2021",
-    },
-  ],
+  landingMarketingBanners: [],
   nfoBanners: [
     {
       image: "nfo.svg",
       type: "nfo",
-      endDate: "11/30/2021",
-      startDate: "11/17/2021",
-    },
-    { image: "nfo1.svg", type: "nfo", endDate: "11/25/2021" },
-    { image: "nfo2.svg", type: "nfo", endDate: "11/24/2021" },
-    { image: "nfo3.svg", type: "nfo", endDate: "11/28/2021" },
-    { image: "nfo4.svg", type: "nfo", endDate: "11/25/2021" },
-    {
-      image: "nfo5.svg",
-      type: "nfo",
-      endDate: "12/09/2021",
-      startDate: "11/26/2021",
+      endDate: "01/14/2022",
     },
   ],
 };
