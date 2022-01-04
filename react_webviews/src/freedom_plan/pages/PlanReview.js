@@ -48,7 +48,7 @@ const PlanReview = (props) => {
     sendEvents("next", "yes");
   };
 
-  const onKycStatusClick = () => {
+  const handleKycStatusBottomsheet = () => {
     sendEvents("next");
   };
 
@@ -90,7 +90,7 @@ const PlanReview = (props) => {
         button1Props={{
           title: kycStatusData.buttonTitle,
           variant: "contained",
-          onClick: onKycStatusClick,
+          onClick: handleKycStatusBottomsheet,
         }}
       />
     </Container>
