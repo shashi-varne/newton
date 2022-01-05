@@ -4,6 +4,9 @@
   box-shadow: 0px 6px 12px -6px rgba(0, 0, 0, 0.04),
     0px 0px 1px rgba(0, 0, 0, 0.2);
   border-radius: 12px;
+  min-width: 344px;
+  width: max-content;
+  cursor: pointer;
 
   .fc-divider {
     margin-left: -16px;

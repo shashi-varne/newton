@@ -16,9 +16,10 @@ const FeatureCard = ({
   aumSubtitle,
   investorTitle,
   investorSubtitle,
+  onCardClick
 }) => {
   return (
-    <div className='fc-wrapper'>
+    <div className='fc-wrapper' onClick={onCardClick}>
       <div className='fc-first-row-wrapper'>
         <Imgc
           src={imgSrc}
