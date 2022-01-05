@@ -18,6 +18,7 @@ import "./Landing.scss";
 import { handleNativeExit, nativeCallback } from "../../utils/native_callback";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import SelectFreedomPlan from "../mini-components/SelectFreedomPlan";
+import useFreedomDataHook from "../common/freedomPlanHook";
 
 const Landing = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -31,9 +32,8 @@ const Landing = (props) => {
     getStandardVsFreedomPlanDetails(kyc.equity_account_charges),
     [kyc]
   );
-
+  const { freedomPlanData } = useFreedomDataHook();
   const [openSelectPlan, setOpenSelectPlan] = useState(false);
-  const [plan, setPlan] = useState(6);
 
   const handleClick = () => {
     sendEvents("next");
@@ -50,7 +50,7 @@ const Landing = (props) => {
     };
     if (isSelectPlan) {
       eventObj.properties.screen_name = "select_plan";
-      eventObj.properties.plan_selected = `${plan}_months`;
+      eventObj.properties.plan_selected = `${freedomPlanData.duration}_months`;
     }
     if (userAction === "just_set_events") {
       return eventObj;
@@ -63,14 +63,13 @@ const Landing = (props) => {
     handleNativeExit(props, { action: "exit" });
   };
 
-  const closeSelectFreedomPlan =  () => {
+  const closeSelectFreedomPlan = () => {
     sendEvents("back", true);
     setOpenSelectPlan(false);
   };
 
-  const handleSelectPlan = (value) => {
+  const handleSelectPlan = () => {
     sendEvents("next", true);
-    setPlan(value);
     navigate(PATHNAME_MAPPER.review);
   };
 
@@ -122,7 +121,6 @@ const Landing = (props) => {
         </div>
       </div>
       <SelectFreedomPlan
-        selectedPlan={plan}
         isOpen={openSelectPlan}
         onClose={closeSelectFreedomPlan}
         onClick={handleSelectPlan}

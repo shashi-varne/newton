@@ -23,7 +23,7 @@ const TermsAndConditions = ({ isOpen = false, close = noop }) => {
     >
       <WVFullscreenDialog.Content>
         {freedomPlanTermsAndConditions.map((text, index) => (
-          <div className="freedom-plan-terms-n-conditions flex">
+          <div className="freedom-plan-terms-n-conditions flex" key={index}>
             <div className="fp-tnc-left">{index + 1}.</div>
             <div>{text}</div>
           </div>

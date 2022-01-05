@@ -4,10 +4,14 @@ import { PATHNAME_MAPPER as KYC_PATHNAME_MAPPER } from "../../kyc/constants";
 export const MINIMUM_FREEDOM_PLAN_PRICE = 2499;
 
 export const PATHNAME_MAPPER = {
-  landing: '/freedom-plan',
-  review: '/freedom-plan/review',
-  paymentStatus: '/freedom-plan/payment/status',
-}
+  landing: "/freedom-plan",
+  review: "/freedom-plan/review",
+  paymentStatus: "/freedom-plan/payment/status",
+};
+
+export const API_CONSTANTS = {
+  getPlanDetails: "/api/eqm/subscriptions/create/plan",
+};
 
 export const FREEDOM_PLAN_BENEFITS_DATA = {
   title: "One plan, Unlimited benefits",
@@ -154,7 +158,11 @@ export const KYC_STATUS_MAPPER = {
   },
 };
 
-export const getPlanReviewData = ({ amount, gstAmount, totalAmount }) => () => {
+export const getPlanReviewData = ({
+  amount,
+  gst_amount,
+  total_amount,
+}) => () => {
   return [
     {
       title: "Freedom plan",
@@ -163,13 +171,13 @@ export const getPlanReviewData = ({ amount, gstAmount, totalAmount }) => () => {
     },
     {
       title: "GST (18%)",
-      amount: inrFormatDecimal(gstAmount, 2),
+      amount: inrFormatDecimal(gst_amount, 2),
       amountClassName: "fprs-amount",
       showBottomDivider: true,
     },
     {
       title: "Amount payable",
-      amount: inrFormatDecimal(totalAmount, 2),
+      amount: inrFormatDecimal(total_amount, 2),
       amountClassName: "fprs-text fprs-total-amount",
       titleClassName: "fprs-text",
     },
@@ -178,8 +186,8 @@ export const getPlanReviewData = ({ amount, gstAmount, totalAmount }) => () => {
 
 export const getPaymentSummaryData = ({
   amount,
-  gstAmount,
-  totalAmount,
+  gst_amount,
+  total_amount,
 }) => () => {
   return [
     {
@@ -188,12 +196,12 @@ export const getPaymentSummaryData = ({
     },
     {
       title: "GST",
-      amount: inrFormatDecimal(gstAmount, 2),
+      amount: inrFormatDecimal(gst_amount, 2),
       showBottomDivider: true,
     },
     {
       title: "Total",
-      amount: inrFormatDecimal(totalAmount, 2),
+      amount: inrFormatDecimal(total_amount, 2),
       className: "fpps-total-amount",
       showBottomDivider: true,
     },
@@ -223,19 +231,19 @@ export const PAYMENT_STATUS_DATA = {
 
 export const FREEDOM_PLANS = [
   {
-    value: 2,
+    duration: 2,
     amount: 2499,
     name: "2 MONTHS",
     isPopular: false,
   },
   {
-    value: 6,
+    duration: 6,
     amount: 5999,
     name: "6 MONTHS",
     isPopular: false,
   },
   {
-    value: 12,
+    duration: 12,
     amount: 9999,
     name: "1 YEAR",
     isPopular: true,

@@ -6,21 +6,34 @@ import { formatAmountInr } from "../../utils/validators";
 import { FREEDOM_PLANS } from "../common/constants";
 import "./mini-components.scss";
 import noop from "lodash/noop";
+import useFreedomDataHook from "../common/freedomPlanHook";
 
 const SelectFreedomPlan = ({
   isOpen = false,
-  selectedPlan,
   onClick = noop,
   onClose = noop,
 }) => {
-  const [plan, setPlan] = useState(selectedPlan);
+  const {
+    showLoader,
+    getFreedomPlanData,
+    freedomPlanData,
+  } = useFreedomDataHook();
 
+  const [plan, setPlan] = useState(freedomPlanData);
   const handlePlanChange = (value) => () => {
     setPlan(value);
   };
 
-  const handleClick = () => {
-    onClick(plan);
+  const handleClick = async () => {
+    if (plan.isDefault || plan.duration !== freedomPlanData.duration) {
+      await getFreedomPlanData(
+        {
+          amount: plan.amount,
+          duration: plan.duration,
+        },
+        onClick
+      );
+    }
   };
 
   return (
@@ -33,6 +46,7 @@ const SelectFreedomPlan = ({
         title: "BUY NOW",
         variant: "contained",
         onClick: handleClick,
+        showLoader: showLoader,
       }}
     >
       <div className="select-freedom-plan">
@@ -41,8 +55,8 @@ const SelectFreedomPlan = ({
             <Plan
               key={index}
               {...data}
-              handlePlanChange={handlePlanChange(data.value)}
-              isSelected={data.value === plan}
+              handlePlanChange={handlePlanChange(data)}
+              isSelected={data.duration === plan.duration}
             />
           ))}
         </div>

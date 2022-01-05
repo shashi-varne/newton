@@ -12,6 +12,7 @@ class Container extends Component {
     super(props);
     this.state = {
       inPageTitle: true,
+      openDialog: false,
       force_hide_inpage_title: this.props.hidePageTitle,
       new_header: true,
       project: "freedom-plan", //to use in common functions

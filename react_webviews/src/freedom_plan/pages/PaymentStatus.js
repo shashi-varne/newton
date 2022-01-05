@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import Container from "../common/Container";
-import { getConfig, navigate as navigateFunc } from "../../utils/functions";
+import { getConfig } from "../../utils/functions";
 import { Imgc } from "../../common/ui/Imgc";
 import WVPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
 import WVPageSubtitle from "../../common/ui/InPageHeader/WVInPageSubtitle";
@@ -8,24 +8,20 @@ import {
   getPaymentSummaryData,
   PAYMENT_STATUS_DATA,
 } from "../common/constants";
-import { nativeCallback } from "../../utils/native_callback";
+import { handleNativeExit, nativeCallback } from "../../utils/native_callback";
 import Tile from "../mini-components/Tile";
 import { getUrlParams } from "../../utils/validators";
+import useFreedomDataHook from "../common/freedomPlanHook";
 import "./PaymentStatus.scss";
 
-const data = {
-  amount: 5999,
-  gstAmount: 1079.82,
-  totalAmount: 7078.82,
-  months: 6,
-};
-
-const PaymentSuccess = (props) => {
-  const navigate = navigateFunc.bind(props);
+const PaymentStatus = (props) => {
   const { productName } = useMemo(getConfig, []);
   const { status } = getUrlParams();
   const paymentStatusData = PAYMENT_STATUS_DATA[status] || PAYMENT_STATUS_DATA["failed"];
-  const paymentDetails = useMemo(getPaymentSummaryData(data), [data]);
+  const { freedomPlanData } = useFreedomDataHook();
+  const paymentDetails = useMemo(getPaymentSummaryData(freedomPlanData), [
+    freedomPlanData,
+  ]);
 
   const sendEvents = (userAction) => {
     let eventObj = {
@@ -43,13 +39,27 @@ const PaymentSuccess = (props) => {
   };
 
   const handleClick = () => {
-    sendEvents("next");
+    if (paymentStatusData.isSuccess || !freedomPlanData.plan_id) {
+      sendEvents("next");
+      redirectToHome();
+    } else {
+      retryPayment();
+    }
+  };
+
+  const retryPayment = () => {
+    sendEvents("retry");
+  };
+
+  const redirectToHome = () => {
+    handleNativeExit(props, { action: "exit" });
   };
 
   return (
     <Container
       headerData={{
         icon: "close",
+        goBack: redirectToHome,
       }}
       hidePageTitle
       buttonTitle={paymentStatusData.buttonTitle}
@@ -78,4 +88,4 @@ const PaymentSuccess = (props) => {
   );
 };
 
-export default PaymentSuccess;
+export default PaymentStatus;

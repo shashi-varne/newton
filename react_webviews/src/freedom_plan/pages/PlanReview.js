@@ -1,7 +1,11 @@
 import React, { useMemo, useState } from "react";
 import Container from "../common/Container";
 import ClickableText from "../../common/ui/ClickableTextElement/WVClickableTextElement";
-import { getConfig, navigate as navigateFunc } from "../../utils/functions";
+import {
+  getConfig,
+  isTradingEnabled,
+  navigate as navigateFunc,
+} from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import Tile from "../mini-components/Tile";
@@ -10,24 +14,55 @@ import "./PlanReview.scss";
 import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 import SelectFreedomPlan from "../mini-components/SelectFreedomPlan";
 import TermsAndConditions from "../mini-components/TermsAndConditions";
-
-const data = {
-  amount: 5999,
-  gstAmount: 1079.82,
-  totalAmount: 7078.82,
-  months: 6,
-};
+import useFreedomDataHook from "../common/freedomPlanHook";
+import { getKycAppStatus } from "../../kyc/services";
+import { isEquityCompleted } from "../../kyc/common/functions";
+import isEmpty from "lodash/isEmpty";
 
 const PlanReview = (props) => {
-  const planDetails = useMemo(getPlanReviewData(data), [data]);
-  const { productName } = useMemo(getConfig, []);
-  const [isOpen, setIsOpen] = useState(false);
-  const kycStatusData = KYC_STATUS_MAPPER["init"];
+  const { productName, isNative } = useMemo(getConfig, []);
+  const [openKycStatusBottomsheet, setOpenKycBottomsheet] = useState(false);
   const { kyc, isLoading } = useUserKycHook();
   const navigate = navigateFunc.bind(props);
   const [openSelectPlan, setOpenSelectPlan] = useState(false);
   const [openTermsAndConditions, setOpenTermsAnsConditions] = useState(false);
-  const [plan, setPlan] = useState(6);
+  const { freedomPlanData } = useFreedomDataHook();
+  const planDetails = useMemo(getPlanReviewData(freedomPlanData), [
+    freedomPlanData,
+  ]);
+
+  const initializeKycData = () => {
+    if (!isEmpty(kyc)) {
+      let kycStatus = getKycAppStatus(kyc).status;
+      const kycInitStatus = ["ground"];
+      const kycIncompleteStatus = [
+        "ground_pan",
+        "ground_premium",
+        "ground_aadhaar",
+        "upgraded_incomplete",
+      ];
+      const kycInProgressStatus = ["submitted", "verifying_trading_account"];
+      if (kycInitStatus.includes(kycInitStatus)) {
+        kycStatus = "init";
+      } else if (
+        kycIncompleteStatus.includes(kycStatus) ||
+        (kycStatus === "complete" &&
+          isTradingEnabled(kyc) &&
+          kyc.kyc_product_type !== "equity") // retro user condition
+      ) {
+        kycStatus = "incomplete";
+      } else if (kycInProgressStatus.includes(kycStatus)) {
+        kycStatus = "in_progress";
+      }
+      return {
+        kycStatusData: KYC_STATUS_MAPPER[kycStatus] || {},
+        isEquityReady: isEquityCompleted(),
+      };
+    }
+    return {};
+  };
+
+  const { kycStatusData, isEquityReady } = useMemo(initializeKycData, [kyc]);
 
   const sendEvents = (userAction, isSelectPlan, changePlan = "no") => {
     let eventObj = {
@@ -35,13 +70,13 @@ const PlanReview = (props) => {
       properties: {
         user_action: userAction,
         screen_name: "review_plan",
-        plan_selected: `${data.months}_months`,
-        change_plan_clicked: changePlan,
+        plan_selected: `${freedomPlanData.duration}_months`,
       },
     };
     if (isSelectPlan) {
       eventObj.properties.screen_name = "select_plan";
-      eventObj.properties.plan_selected = `${plan}_months`;
+    } else {
+      eventObj.properties.change_plan_clicked = changePlan;
     }
     if (userAction === "just_set_events") {
       return eventObj;
@@ -52,25 +87,32 @@ const PlanReview = (props) => {
 
   const handleClick = () => {
     sendEvents("next");
+    if (isEquityReady) {
+      triggerPayment();
+      return;
+    }
+    if (!isEmpty(kycStatusData)) {
+      setOpenKycBottomsheet(true);
+    } else {
+      redirectToKyc();
+    }
   };
+
+  const redirectToKyc = () => {
+    const pathname = isNative ? "/kyc/native" : "/kyc/web";
+    navigate(pathname);
+  };
+
+  const triggerPayment = () => {};
 
   const changePlan = () => {
     sendEvents("next", false, "yes");
     setOpenSelectPlan(true);
   };
 
-  const handleKycStatusBottomsheet = () => {
-    sendEvents("next");
-  };
-
-  const closeSelectFreedomPlan = () => {
-    sendEvents("back", true);
-    setOpenSelectPlan(false);
-  };
-
-  const handleSelectPlan = (value) => {
-    setPlan(value);
-    sendEvents("next", true);
+  const handleSelectPlan = (closeSelectPlan) => () => {
+    const userAction = closeSelectPlan ? "back" : "next";
+    sendEvents(userAction, true);
     setOpenSelectPlan(false);
   };
 
@@ -92,7 +134,9 @@ const PlanReview = (props) => {
           <div className="fpr-details flex-between-center">
             <div>
               <div className="fprd-title">Freedom plan</div>
-              <div className="fprd-subtitle">{data.months} months</div>
+              <div className="fprd-subtitle">
+                {freedomPlanData.duration} months
+              </div>
             </div>
             <ClickableText onClick={changePlan}>CHANGE PLAN</ClickableText>
           </div>
@@ -111,22 +155,23 @@ const PlanReview = (props) => {
           of Use for the Freedom plan
         </footer>
       </div>
-      <WVBottomSheet
-        isOpen={isOpen}
-        title={kycStatusData.title}
-        subtitle={kycStatusData.subtitle}
-        image={require(`assets/${productName}/${kycStatusData.icon}`)}
-        button1Props={{
-          title: kycStatusData.buttonTitle,
-          variant: "contained",
-          onClick: handleKycStatusBottomsheet,
-        }}
-      />
+      {!isEmpty(kycStatusData) && (
+        <WVBottomSheet
+          isOpen={openKycStatusBottomsheet}
+          title={kycStatusData.title}
+          subtitle={kycStatusData.subtitle}
+          image={require(`assets/${productName}/${kycStatusData.icon}`)}
+          button1Props={{
+            title: kycStatusData.buttonTitle,
+            variant: "contained",
+            onClick: redirectToKyc,
+          }}
+        />
+      )}
       <SelectFreedomPlan
-        selectedPlan={plan}
         isOpen={openSelectPlan}
-        onClose={closeSelectFreedomPlan}
-        onClick={handleSelectPlan}
+        onClose={handleSelectPlan(true)}
+        onClick={handleSelectPlan(false)}
       />
       <TermsAndConditions
         isOpen={openTermsAndConditions}
