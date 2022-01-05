@@ -99,6 +99,7 @@ $dark_indigo: #0a1d32;
 
 .info-box-copy-icon {
   cursor: pointer;
+  margin-left: 20px;
 }
 
 .resync-btn {
@@ -407,6 +408,19 @@ $dark_indigo: #0a1d32;
 
   & ~.statement-request-step {
     margin-top: 20px;
+  }
+}
+
+.action-status {
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+  line-height: 16px;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+
+  img {
+    margin-right: 10px;
   }
 }
 @media only screen and (max-width: 332px) {
