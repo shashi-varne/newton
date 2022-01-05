@@ -38,7 +38,7 @@ export default function Landing(props) {
       <WVInPageHeader
         withImg
         imageProps={{
-          src: require(`assets/${productName}/statements.svg`),
+          src: require(`assets/${productName}/statements_briefcase.svg`),
           style: { width: '95px', height: '52px' }
         }}
       >
