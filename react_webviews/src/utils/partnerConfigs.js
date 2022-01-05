@@ -165,6 +165,7 @@ export const baseStylesConfig = {
     highlightColor: "#f6f2ff",
     secondaryGreen: "#7ED321",
     primaryVariant1: "#DFD8EF",
+    primaryVariant2: "#A998D2",
     primaryVariant4: "#482998"
   },
   finity: {
@@ -174,6 +175,7 @@ export const baseStylesConfig = {
     highlightColor: "#EFEEFB",
     secondaryGreen: "#33CF90",
     primaryVariant1: "#C6C2F9",
+    primaryVariant2: "#B9B3F9",
     primaryVariant4: "#8279F8"
   },
 };
