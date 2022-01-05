@@ -1,0 +1,33 @@
+.fc-wrapper {
+  padding: 16px;
+  background-color: white;
+  box-shadow: 0px 6px 12px -6px rgba(0, 0, 0, 0.04),
+    0px 0px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+
+  .fc-divider {
+    margin-left: -16px;
+    margin-right: -16px;
+  }
+
+  .fc-first-row-wrapper {
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 8px;
+    align-items: center;
+    .fc-heading-text {
+      margin-left: 16px;
+    }
+  }
+
+  .fc-description-list {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 8px;
+    .fc-description-item {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
