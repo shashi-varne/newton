@@ -370,6 +370,45 @@ $dark_indigo: #0a1d32;
   }
 }
 
+.statement-request-step {
+  border: 1px solid var(--primary);
+  border-radius: 6px;
+  padding: 20px 20px 20px 30px;
+  margin-left: 14px;
+  position: relative;
+
+  .statement-request-step-number {
+    height: 28px;
+    width: 28px;
+    border: 1px solid var(--primary);
+    border-radius: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    left: 0;
+    top: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+  }
+
+  .statement-request-step-title {
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 24px;
+    color: var(--dark);
+  }
+
+  .statement-request-step-content {
+    font-size: 13px;
+    line-height: 21px;
+    color: var(--steelgrey);
+  }
+
+  & ~.statement-request-step {
+    margin-top: 20px;
+  }
+}
 @media only screen and (max-width: 332px) {
   /* Since text wraps into 3 lines in container for this 
   screen width, need to increase container height to show all elements*/
