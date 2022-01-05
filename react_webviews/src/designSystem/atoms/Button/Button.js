@@ -24,19 +24,17 @@ const Button = (props) => {
     ...restProps
   } = props;
   return (
-    <div>
-      <LibButton
-        isloading={isLoading}
-        variant={VARIANTS[variant] || VARIANTS['primary']}
-        size={SIZES[size] || SIZES['large']}
-        color='secondary'
-        disabled={disabled}
-        onClick={onClick}
-        {...restProps}
-      >
-        {isLoading ? <DotDotLoaderNew /> : title}
-      </LibButton>
-    </div>
+    <LibButton
+      isloading={isLoading}
+      variant={VARIANTS[variant] || VARIANTS['primary']}
+      size={SIZES[size] || SIZES['large']}
+      color='secondary'
+      disabled={disabled}
+      onClick={onClick}
+      {...restProps}
+    >
+      {isLoading ? <DotDotLoaderNew /> : title}
+    </LibButton>
   );
 };
 
