@@ -38,7 +38,7 @@ export const tabStyleOverRides = (colors={}) => {
 export const tabsVariantsConfig = () => {
   return [
     {
-      props: { type: 'pills' },
+      props: { type: 'pill' },
       style: {
         minHeight: 38,
       },
@@ -49,7 +49,7 @@ export const tabsVariantsConfig = () => {
 export const tabVariantsConfig = (colors={}) => {
   return [
     {
-      props: { type: 'pills' },
+      props: { type: 'pill' },
       style: {
         zIndex: 2,
         ...baseTypographyConfig()?.body2,
@@ -68,5 +68,22 @@ export const tabVariantsConfig = (colors={}) => {
         },
       },
     },
+    {
+      props: {type: 'navigationPill'},
+      style: {
+        ...baseTypographyConfig()?.body1,
+        color: colors.supporting.white,
+        backgroundColor: colors.primary.brand,
+        borderRadius: 100,
+        opacity: 1,
+        padding: '8px 16px',
+        minWidth: 'max-content',
+        '&.Mui-disabled': {
+          ...baseTypographyConfig()?.body1,
+          color: colors.supporting.white,
+          backgroundColor: colors.supporting.athensGrey,
+        },
+      }
+    }
   ];
 };

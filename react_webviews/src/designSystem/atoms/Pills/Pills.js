@@ -31,7 +31,7 @@ export const Pills = ({
       {...props}
     >
       {Children.map(children, (el) => {
-        return React.cloneElement(el,{type: 'pills'});
+        return React.cloneElement(el,{type: 'pill'});
       })}
     </LibTabs>
   );
