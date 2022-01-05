@@ -1,5 +1,4 @@
-import { formatAmountInr } from "../../utils/validators";
-import { inrFormatDecimal } from "../../utils/validators";
+import { formatAmountInr, inrFormatDecimal } from "../../utils/validators";
 import { PATHNAME_MAPPER as KYC_PATHNAME_MAPPER } from "../../kyc/constants";
 
 export const MINIMUM_FREEDOM_PLAN_PRICE = 2499;
