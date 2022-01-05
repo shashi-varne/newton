@@ -1,12 +1,13 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import Container from "../common/Container";
 import ClickableText from "../../common/ui/ClickableTextElement/WVClickableTextElement";
-import { navigate as navigateFunc } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
-import { getPlanReviewData } from "../common/constants";
 import Tile from "../mini-components/Tile";
+import { getPlanReviewData, KYC_STATUS_MAPPER } from "../common/constants";
 import "./PlanReview.scss";
+import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 
 const data = {
   amount: 5999,
@@ -17,6 +18,9 @@ const data = {
 
 const PlanReview = (props) => {
   const planDetails = useMemo(getPlanReviewData(data), [data]);
+  const { productName } = useMemo(getConfig, []);
+  const [isOpen, setIsOpen] = useState(false);
+  const kycStatusData = KYC_STATUS_MAPPER["init"];
   const { kyc, isLoading } = useUserKycHook();
   const navigate = navigateFunc.bind(props);
 
@@ -43,6 +47,10 @@ const PlanReview = (props) => {
 
   const changePlan = () => {
     sendEvents("next", "yes");
+  };
+
+  const handleKycStatusBottomsheet = () => {
+    sendEvents("next");
   };
 
   return (
@@ -75,6 +83,17 @@ const PlanReview = (props) => {
           of Use for the Freedom plan
         </footer>
       </div>
+      <WVBottomSheet
+        isOpen={isOpen}
+        title={kycStatusData.title}
+        subtitle={kycStatusData.subtitle}
+        image={require(`assets/${productName}/${kycStatusData.icon}`)}
+        button1Props={{
+          title: kycStatusData.buttonTitle,
+          variant: "contained",
+          onClick: handleKycStatusBottomsheet,
+        }}
+      />
     </Container>
   );
 };
