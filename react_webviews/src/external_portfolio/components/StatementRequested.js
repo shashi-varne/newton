@@ -13,7 +13,7 @@ import InfoBox from '../mini-components/InfoBox';
 import toast from '../../common/ui/Toast';
 import StatementRequestStep from '../mini-components/StatementRequestStep';
 import { regenTimeLimit } from '../constants';
-import { navigate as navigateFunc, setPlatformAndUser } from '../common/commonFunctions';
+import { setPlatformAndUser } from '../common/commonFunctions';
 
 const { productName, emailDomain } = getConfig();
 
@@ -107,7 +107,7 @@ export default function StatementRequested(props) {
         performed_by: storageService().get('hni-platform') === 'rmapp' ? 'RM' : 'user',
         email_look_clicked: params.comingFrom === 'email_example_view',
         entry_point: state.entry_point || null,
-        status: state.showFooterBtn ? 'mail not recieved in 30 min' : 'before tracker setup',
+        status: state.showFooterBtn ? 'mail not recieved in 1 hr' : 'before tracker setup',
       }
     };
 
@@ -119,13 +119,25 @@ export default function StatementRequested(props) {
   }
 
 
-  const generateStatement = () => {
+  const generateStatement = async () => {
     sendEvents('regenerate_stat');
-    setState({ popupOpen: true });
-  }
-
-  const onPopupClose = () => {
-    setState({ popupOpen: false });
+    try {
+      setState({ show_loader: 'button' });
+      const email_detail = storageService().getObject('email_detail_hni');
+      await requestStatement({
+        email: email_detail.email,
+        statement_id: email_detail.latest_statement.statement_id,
+        retrigger: 'true',
+      });
+      this.navigate(`statement_request/${email_detail.email}`, {
+        exitToApp: true,
+        fromRegenerate: true,
+      });
+    } catch (err) {
+      setState({ show_loader: false });
+      console.log(err);
+      toast(err);
+    }
   }
 
   const onInfoCtrlClick = () => {
@@ -143,9 +155,9 @@ export default function StatementRequested(props) {
   }
 
   const goNext = () => {
-    sendEvents('generate_statement');
-    // const params = this.props.location.params || {};
-    
+    navigate('email_not_received', {
+      statementSource: state?.email_detail?.latest_statement?.statement_source
+    });
   }
 
   const goBack = (params) => {
