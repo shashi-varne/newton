@@ -1,4 +1,5 @@
 import { formatAmountInr } from "../../utils/validators";
+import { inrFormatDecimal } from "../../utils/validators";
 
 export const MINIMUM_FREEDOM_PLAN_PRICE = 2499;
 
@@ -102,6 +103,28 @@ export const getFreedomPlanFaqs = (productName) => () => {
     {
       title: `How to cancel my subscription plan?`,
       subtitle: `At present, we do not support/allow plan cancellation post activation of your Freedom plan.`,
+    },
+  ];
+};
+
+export const getPlanReviewData = ({ amount, gstAmount, totalAmount }) => () => {
+  return [
+    {
+      title: "Freedom plan",
+      amount: inrFormatDecimal(amount, 2),
+      amountClassName: "fprs-amount",
+    },
+    {
+      title: "GST (18%)",
+      amount: inrFormatDecimal(gstAmount, 2),
+      amountClassName: "fprs-amount",
+      showBottomDivider: true,
+    },
+    {
+      title: "Amount payable",
+      amount: inrFormatDecimal(totalAmount, 2),
+      amountClassName: "fprs-text fprs-total-amount",
+      titleClassName: "fprs-text",
     },
   ];
 };
