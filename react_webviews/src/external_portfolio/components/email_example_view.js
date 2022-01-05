@@ -2,10 +2,7 @@ import React, { Component } from 'react';
 import EmailTemplate from '../mini-components/email_template';
 import { nativeCallback } from 'utils/native_callback';
 import { navigate } from '../common/commonFunctions';
-import { getConfig } from '../../utils/functions';
 import { storageService } from '../../utils/validators';
-
-const { emailDomain } = getConfig();
 
 class EmailExampleView extends Component {
   constructor(props) {
@@ -19,7 +16,7 @@ class EmailExampleView extends Component {
       "event_name": 'portfolio_tracker',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'cas email ',
+        "screen_name": 'cas email',
         performed_by: storageService().get('hni-platform') === 'rmapp' ? 'RM' : 'user',
       }
     };
@@ -46,11 +43,9 @@ class EmailExampleView extends Component {
   }
 
   render() {
-    const subtitleText = (<span>Please ensure that the correct email is forwarded to <span id="cas-email-highlight">cas@{emailDomain}</span></span>);
     return (
       <EmailTemplate
-        title="How to find the CAS email?"
-        subtitle={subtitleText}
+        title="Email looks like this"
         handleClick={this.goBack}
         buttonTitle="Okay"
         events={this.sendEvents('just_set_events')}
