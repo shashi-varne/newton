@@ -109,9 +109,9 @@ export default class EmailExpand extends Component {
           parent={parent}
           emailDetail={email}
           emailForwardedHandler={this.props.emailForwardedHandler}
-          showRegenerateBtn={true}
           emailLinkClick={() => parent.navigate('email_example_view', {
             comingFrom: 'settings',
+            statementSource: email.latest_statement?.statement_source
           })}
           boxStyle={{ background: getConfig().productName === 'fisdom' ? '#DFD8EF' : '#D6ECFF' }}
         />

@@ -3,11 +3,11 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import StepContent from '@material-ui/core/StepContent';
-import Button from '@material-ui/core/Button';
 import InfoBox from './InfoBox';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import { isFunction, storageService } from '../../utils/validators';
 import { getConfig } from '../../utils/functions';
+import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement';
 const { emailDomain, productName } = getConfig();
 
 const theme = createMuiTheme({
@@ -62,7 +62,7 @@ const theme = createMuiTheme({
 });
 
 function getSteps() {
-  return ['Generate statement and forward to us', 'View portfolio instantly'];
+  return ['Portfolio statement requested', 'View portfolio instantly'];
 }
 
 export default class EmailRequestSteps extends Component {
@@ -87,10 +87,11 @@ export default class EmailRequestSteps extends Component {
     } = this.props;
 
     return (<Fragment>
-      <p style={{ margin: '0 0 -15px'}}>
-        Visit CAMS website and generate a CAS (Consolidated Account statement).
+      <p>
+        You will recieve an email with your consolidated portfolio statement
       </p>
-      {showRegenerateBtn &&
+      <p>STATEMENT PASSWORD - <span>{`${productName}123`}</span></p>
+      {/* {showRegenerateBtn &&
         <Button
           variant="outlined" color="secondary" fullWidth={true}
           classes={{
@@ -102,27 +103,21 @@ export default class EmailRequestSteps extends Component {
         >
           Generate Statement
         </Button>
-      }
-      <p>
-        It takes upto 30 mins to receive a CAS email. Forward the exact same email to our email ID.
-      </p>
-
+      } */}
+      <div>Please forward the email to</div>
       <InfoBox
         classes={{ root: `info-box-cut-out ${classes.emailBox}` }}
         isCopiable={true}
         textToCopy={`cas@${emailDomain}`}
-        boxStyle={boxStyle}
+        boxStyle={{ marginTop: '10px', border: '2px dashed var(--steelgrey)'}}
       >
         <span className="info-box-body-text">
           cas@{emailDomain}
         </span>
       </InfoBox>
-      <div
-        className="email_example_link"
-        onClick={emailLinkClick}
-      >
-        The email looks like this
-      </div>
+      <WVClickableTextElement style={{ marginTop: '20px', display: 'inline-block' }} onClick={emailLinkClick}>
+        View email sample
+      </WVClickableTextElement>
     </Fragment>);
   }
 
