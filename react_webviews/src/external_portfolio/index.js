@@ -16,6 +16,7 @@ import PANSelector from './components/select_PAN';
 import CamsRequestStepsPage from './components/cams_request_steps_page';
 import CamsWebpage from './components/cams_webpage';
 import Redirect from './components/redirect';
+import StatementRequested from './components/StatementRequested';
 
 function external_portfolio(props) {
   const { url } = props.match;
@@ -25,6 +26,7 @@ function external_portfolio(props) {
           <Route path={`${url}/email_entry`} component={EmailEntry} />
           <Route path={`${url}/statement_request/:email`} component={StatementRequestPage} />
           <Route path={`${url}/statement_request`} component={StatementRequestPage} />
+          <Route path={`${url}/statement_requested/:email?`} component={StatementRequested} />
           <Route path={`${url}/cams_request_steps`} component={CamsRequestStepsPage} />
           <Route path={`${url}/cams_webpage`} component={CamsWebpage} />
           <Route path={`${url}/email_not_received`} component={EmailNotReceived} />

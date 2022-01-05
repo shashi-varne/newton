@@ -378,3 +378,40 @@ $light_periwinkle: #d3dbe4;
     }
   }
 }
+
+#ext-pf-statement-requested {
+  #epsr-statement-pwd {
+    font-size: 10px;
+    line-height: 16px;
+    letter-spacing: 1px;
+    margin-top: 6px;
+
+    span {
+      font-weight: 500;
+    }
+  }
+  #epsr-forward-email {
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 24px;
+    color: var(--secondary);
+  }
+  #epsr-check-inbox-text {
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 21px;
+    margin-top: 16px;
+    color: var(--steelgrey);
+  }
+}
+
+.statement-requested-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+
+  img {
+    margin-left: 40px;
+  }
+}
