@@ -1,10 +1,9 @@
-import colorConfig from '../colors';
 import { FONT_WEIGHT } from '../typography';
 
-export const tabsStyleOverRides = () => {
+export const tabsStyleOverRides = (colors={}) => {
   return {
     root: {
-      backgroundColor: colorConfig.supporting.white,
+      backgroundColor: colors?.supporting?.white,
       minHeight: 36,
     },
     flexContainer: {
@@ -18,15 +17,15 @@ export const tabsStyleOverRides = () => {
   };
 };
 
-export const tabStyleOverRides = () => {
+export const tabStyleOverRides = (colors={}) => {
   return {
     root: {
-      color: colorConfig.content.primary,
-      textTransform: 'none',
+      color: colors?.content?.primary,
       fontSize: 14,
-      fontWeight: FONT_WEIGHT['Regular'],
+      textTransform: 'none',
       '&.Mui-disabled': {
-        color: colorConfig.supporting.athensGrey,
+        fontWeight: FONT_WEIGHT['Regular'],
+        color: colors?.supporting?.athensGrey,
       },
       '&.Mui-selected': {
         fontWeight: FONT_WEIGHT['Medium'],
@@ -47,24 +46,24 @@ export const tabsVariantsConfig = () => {
   ];
 };
 
-export const tabVariantsConfig = () => {
+export const tabVariantsConfig = (colors={}) => {
   return [
     {
       props: { type: 'pills' },
       style: {
         zIndex: 2,
-        color: colorConfig.primary.brand,
+        color: colors.primary.brand,
         fontSize: 14,
         fontWeight: FONT_WEIGHT['Regular'],
         minWidth: 76,
         padding: '8px 16px',
         '&.Mui-selected': {
-          color: colorConfig.supporting.white,
+          color: colors.supporting.white,
           fontWeight: FONT_WEIGHT['Medium'],
         },
         '&.Mui-disabled': {
-          color: colorConfig.supporting.white,
-          backgroundColor: colorConfig.supporting.athensGrey,
+          color: colors.supporting.white,
+          backgroundColor: colors.supporting.athensGrey,
           borderRadius: 100,
         },
       },

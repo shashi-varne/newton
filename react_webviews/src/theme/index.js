@@ -32,11 +32,11 @@ const getTheme = () => {
       },
       MuiTabs: {
         variants:tabsVariantsConfig(),
-        styleOverrides: tabsStyleOverRides()
+        styleOverrides: tabsStyleOverRides(colors)
       },
       MuiTab: {
-        variants:tabVariantsConfig(),
-        styleOverrides: tabStyleOverRides()
+        variants:tabVariantsConfig(colors),
+        styleOverrides: tabStyleOverRides(colors)
       },
     },
   };
