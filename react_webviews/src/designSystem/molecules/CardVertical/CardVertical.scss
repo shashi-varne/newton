@@ -2,8 +2,10 @@
     padding: 16px;
     display: flex;
     flex-direction: column;
-    max-width: max-content;
+    min-width: 168px;
+    width: max-content;
     background-color: white;
+    cursor: pointer;
 }
 
 .cv-elevation {
