@@ -68,5 +68,22 @@ export const tabVariantsConfig = (colors={}) => {
         },
       },
     },
+    {
+      props: {type: 'navigationPill'},
+      style: {
+        ...baseTypographyConfig()?.body1,
+        color: colors.supporting.white,
+        backgroundColor: colors.primary.brand,
+        borderRadius: 100,
+        opacity: 1,
+        padding: '8px 16px',
+        minWidth: 'max-content',
+        '&.Mui-disabled': {
+          ...baseTypographyConfig()?.body1,
+          color: colors.supporting.white,
+          backgroundColor: colors.supporting.athensGrey,
+        },
+      }
+    }
   ];
 };
