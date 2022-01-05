@@ -1,4 +1,4 @@
-import { buttonStyleOverRides, buttonVariantsConfig, } from './button';
+import { buttonStyleOverRides, buttonVariantsConfig } from './button';
 import { checkboxStyleOverRides } from './checkbox';
 import { switchStyleOverRides } from './switch';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
