@@ -35,7 +35,7 @@ const getTheme = () => {
         styleOverrides: tabsStyleOverRides(colors)
       },
       MuiTab: {
-        variants:tabVariantsConfig(colors),
+        variants:tabVariantsConfig(colors, partnerConfig),
         styleOverrides: tabStyleOverRides(colors, partnerConfig)
       },
     },

@@ -47,32 +47,33 @@ export const tabsVariantsConfig = () => {
   ];
 };
 
-export const tabVariantsConfig = (colors={}) => {
+export const tabVariantsConfig = (colors={},partnerConfig={}) => {
+  const typographyVariants = baseTypographyConfig(colors,partnerConfig);
   return [
     {
       props: { type: 'pill' },
       style: {
         zIndex: 2,
-        ...baseTypographyConfig()?.body2,
+        ...typographyVariants?.body2,
         color: colors.primary.brand,
         minWidth: 76,
         padding: '8px 16px',
         '&.Mui-selected': {
-          ...baseTypographyConfig()?.body1,
+          ...typographyVariants?.body1,
           color: colors.supporting.white,
         },
         '&.Mui-disabled': {
-          ...baseTypographyConfig()?.body1,
+          ...typographyVariants?.body1,
           color: colors.supporting.white,
           backgroundColor: colors.supporting.athensGrey,
-          borderRadius: 100,
         },
+        borderRadius: 100,
       },
     },
     {
       props: {type: 'navigationPill'},
       style: {
-        ...baseTypographyConfig()?.body1,
+        ...typographyVariants?.body1,
         color: colors.supporting.white,
         backgroundColor: colors.primary.brand,
         borderRadius: 100,
@@ -80,7 +81,7 @@ export const tabVariantsConfig = (colors={}) => {
         padding: '8px 16px',
         minWidth: 'max-content',
         '&.Mui-disabled': {
-          ...baseTypographyConfig()?.body1,
+          ...typographyVariants?.body1,
           color: colors.supporting.white,
           backgroundColor: colors.supporting.athensGrey,
         },
