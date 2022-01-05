@@ -1,6 +1,6 @@
 import { FONT_WEIGHT } from '../typography';
 
-export const buttonVariantsConfig = (colors) => [
+export const buttonVariantsConfig = (colors={}) => [
   {
     props: { size: 'small' },
     style: {
@@ -23,10 +23,10 @@ export const buttonVariantsConfig = (colors) => [
       fontSize: 16,
       minWidth: 'max-content',
       width: 'max-content',
-      color: colors.action.brand,
+      color: colors?.action?.brand,
       fontWeight: FONT_WEIGHT['Regular'],
       '&:hover': {
-        color: colors.primary.action,
+        color: colors?.primary?.action,
         backgroundColor: 'transparent',
       },
     },
@@ -56,23 +56,23 @@ export const buttonVariantsConfig = (colors) => [
   },
 ];
 
-export const buttonStyleOverRides = (colors, partnerConfig) => {
+export const buttonStyleOverRides = (colors={}, partnerConfig={}) => {
   return {
     contained: {
-      color: colors.supporting.white,
+      color: colors?.supporting?.white,
       fontSize: 16,
       fontWeight: FONT_WEIGHT['Medium'],
       borderRadius: 10,
       '&:hover': {
         backgroundColor: partnerConfig?.button?.disableHoverEffect
-          ? colors.action.brand
-          : colors.action['600'],
+          ? colors?.action?.brand
+          : colors?.action['600'],
       },
     },
     root: {
       '&.Mui-disabled': {
-        backgroundColor: colors.supporting.athensGrey,
-        color: colors.supporting.white,
+        backgroundColor: colors?.supporting?.athensGrey,
+        color: colors?.supporting?.white,
       },
     },
   };
