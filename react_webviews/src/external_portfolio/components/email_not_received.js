@@ -65,26 +65,16 @@ class EmailNotReceived extends Component {
   }
 
   render() {
-    const subtitleText = (<span>Please ensure that the correct email is forwarded to <span id="cas-email-highlight">cas@{emailDomain}</span></span>);
+    const subtitleText = (<span>It usually takes 1 hour to get the statement in your email</span>);
     return (
       <EmailTemplate
-        title="CAS email not received"
+        title="Did not recieve email"
         subtitle={subtitleText}
         showLoader={this.state.show_loader}
         noFooter={true}
         noHeader={this.state.show_loader}
         goBack={this.goBack}
       >
-        <InfoBox classes={{root: 'm-t-40'}}>
-          <div className="flex-info-container">
-            <InfoIcon color="primary" id="info-container-icon"/>
-            <span id="info-container-text">
-              If you have not recieved an email from CAMS within 24hrs,
-              try creating a fresh request again for the statement
-              by clicking below
-            </span>
-          </div>
-        </InfoBox>
         <Button
           variant="outlined" color="secondary" fullWidth={true}
           classes={{
