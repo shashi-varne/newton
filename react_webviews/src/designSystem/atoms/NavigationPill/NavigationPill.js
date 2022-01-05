@@ -7,23 +7,32 @@
 
 import { Tab } from '@mui/material';
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const NavigationPill = ({ label, onClick, disabled, labelColor, backgroundColor }) => {
+const NavigationPill = ({
+  label,
+  onClick,
+  disabled,
+  labelColor,
+  backgroundColor,
+}) => {
   const navigationSxStyle = {
     color: labelColor,
-    backgroundColor
+    backgroundColor,
   };
   return (
-    <div>
-      <Tab
-        label={label}
-        disabled={disabled}
-        type='navigationPill'
-        onClick={onClick}
-        sx={navigationSxStyle}
-      />
-    </div>
+    <Tab
+      label={label}
+      disabled={disabled}
+      type='navigationPill'
+      onClick={onClick}
+      sx={navigationSxStyle}
+    />
   );
 };
+
+NavigationPill.propTypes = {
+  label: PropTypes.string.isRequired
+}
 
 export default NavigationPill;
