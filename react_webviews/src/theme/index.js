@@ -1,6 +1,6 @@
 import { createTheme } from '@mui/material';
 import { buttonStyleOverRides, buttonVariantsConfig, } from './button';
-import { tabsStyleOverRides, tabStyleOverRides, tabsVariantsConfig, tabVariantsConfig } from './tabs/index.js';
+import { tabsStyleOverRides, tabStyleOverRides, tabsVariantsConfig, tabVariantsConfig } from './tabs';
 import { switchStyleOverRides } from './switch';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
 import getPartnerThemeData from './utils';
@@ -35,8 +35,8 @@ const getTheme = () => {
         styleOverrides: tabsStyleOverRides(colors)
       },
       MuiTab: {
-        variants:tabVariantsConfig(colors),
-        styleOverrides: tabStyleOverRides(colors)
+        variants:tabVariantsConfig(colors, partnerConfig),
+        styleOverrides: tabStyleOverRides(colors, partnerConfig)
       },
     },
   };
