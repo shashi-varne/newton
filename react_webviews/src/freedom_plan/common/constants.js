@@ -11,6 +11,12 @@ export const PATHNAME_MAPPER = {
 
 export const API_CONSTANTS = {
   getPlanDetails: "/api/eqm/subscriptions/create/plan",
+  triggerPayment: "/api/equity/api/eqm/eqpayments/subscription/start/payment",
+};
+
+export const DEFAULT_ERROR_DATA = {
+  showError: false,
+  title2: "",
 };
 
 export const FREEDOM_PLAN_BENEFITS_DATA = {

@@ -24,3 +24,8 @@ export const getPlanDetails = async (data) => {
   const res = await Api.post(API_CONSTANTS.getPlanDetails, data);
   return handleApi(res);
 };
+
+export const triggerPayment = async (data) => {
+  const res = await Api.post(API_CONSTANTS.triggerPayment, data);
+  return handleApi(res);
+};

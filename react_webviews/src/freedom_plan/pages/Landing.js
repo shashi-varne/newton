@@ -6,6 +6,7 @@ import WVInPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
 import WVInPageSubtitle from "../../common/ui/InPageHeader/WVInPageSubtitle";
 import HowToSteps from "../../common/ui/HowToSteps";
 import {
+  DEFAULT_ERROR_DATA,
   FREEDOM_PLAN_BENEFITS_DATA,
   getFreedomPlanFaqs,
   getStandardVsFreedomPlanDetails,
@@ -34,11 +35,7 @@ const Landing = (props) => {
   );
   const { freedomPlanData } = useFreedomDataHook();
   const [openSelectPlan, setOpenSelectPlan] = useState(false);
-
-  const handleClick = () => {
-    sendEvents("next");
-    setOpenSelectPlan(true);
-  };
+  const [errorData, setErrorData] = useState(DEFAULT_ERROR_DATA);
 
   const sendEvents = (userAction, isSelectPlan) => {
     let eventObj = {
@@ -59,6 +56,12 @@ const Landing = (props) => {
     }
   };
 
+  const handleClick = () => {
+    setErrorData(DEFAULT_ERROR_DATA);
+    sendEvents("next");
+    setOpenSelectPlan(true);
+  };
+
   const goBack = () => {
     handleNativeExit(props, { action: "exit" });
   };
@@ -73,11 +76,23 @@ const Landing = (props) => {
     navigate(PATHNAME_MAPPER.review);
   };
 
+  const handleError = (message) => {
+    setErrorData({
+      ...errorData,
+      title2: message,
+      showError: true,
+      handleClick1: handleClick,
+    });
+    setOpenSelectPlan(false);
+  };
+
   return (
     <Container
       noPadding
       hidePageTitle
       skelton={isLoading}
+      errorData={errorData}
+      showError={errorData.showError}
       title="Freedom plan"
       buttonTitle="Select Plan"
       handleClick={handleClick}
@@ -124,6 +139,7 @@ const Landing = (props) => {
         isOpen={openSelectPlan}
         onClose={closeSelectFreedomPlan}
         onClick={handleSelectPlan}
+        handleError={handleError}
       />
     </Container>
   );

@@ -7,32 +7,39 @@ import { FREEDOM_PLANS } from "../common/constants";
 import "./mini-components.scss";
 import noop from "lodash/noop";
 import useFreedomDataHook from "../common/freedomPlanHook";
+import { getPlanDetails } from "../common/api";
 
 const SelectFreedomPlan = ({
   isOpen = false,
   onClick = noop,
   onClose = noop,
+  handleError = noop,
 }) => {
-  const {
-    showLoader,
-    getFreedomPlanData,
-    freedomPlanData,
-  } = useFreedomDataHook();
+  const { freedomPlanData, setFreedomPlanDetails } = useFreedomDataHook();
 
   const [plan, setPlan] = useState(freedomPlanData);
+  const [showLoader, setShowLoader] = useState(false);
   const handlePlanChange = (value) => () => {
     setPlan(value);
   };
 
   const handleClick = async () => {
     if (plan.isDefault || plan.duration !== freedomPlanData.duration) {
-      await getFreedomPlanData(
-        {
-          amount: plan.amount,
+      try {
+        setShowLoader("button");
+        const result = await getPlanDetails({
           duration: plan.duration,
-        },
-        onClick
-      );
+          amount: plan.amount,
+        });
+        setFreedomPlanDetails(result.plan_details);
+        onClick();
+      } catch (err) {
+        handleError(err.message);
+      } finally {
+        setShowLoader(false);
+      }
+    } else {
+      onClick();
     }
   };
 
