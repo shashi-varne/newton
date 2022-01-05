@@ -1,12 +1,12 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Button from '../../common/ui/Button';
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement';
 import WVInPageSubtitle from '../../common/ui/InPageHeader/WVInPageSubtitle';
 import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
-import { getConfig } from '../../utils/functions';
+import { getConfig, navigate as navigateFunc } from '../../utils/functions';
 import { nativeCallback } from '../../utils/native_callback';
 import { getUrlParams, storageService } from '../../utils/validators';
-import { fetchEmails } from '../common/ApiCalls';
+import { fetchEmails, requestStatement } from '../common/ApiCalls';
 import Container from '../common/Container';
 import ActionStatus from '../mini-components/ActionStatus';
 import InfoBox from '../mini-components/InfoBox';
@@ -37,7 +37,10 @@ export default function StatementRequested(props) {
     return trueVals.includes(params.fromApp) || trueVals.includes(urlParams.fromApp);
   }
 
-  const navigate = useMemo(() => navigateFunc.bind(props), []);
+  const navigate = useCallback((path, ...params) => {
+    const navigator = navigateFunc.bind(props);
+    return navigator(`/hni/${path}`, ...params);
+  }, []);
 
   const [state, setState] = useState({
     popupOpen: false,
@@ -65,14 +68,14 @@ export default function StatementRequested(props) {
       try {
         const [email] = await fetchEmails({ email_id: emailParam });
         if (email) {
-          let showRegenerateBtn = false;
+          let showFooterBtn = false;
           if (email.latest_statement) {
-            showRegenerateBtn =
+            showFooterBtn =
               (new Date() - new Date(email.latest_statement.dt_updated)) / 60000 >= regenTimeLimit;
           }
           setState({
             email_detail: email || {},
-            showRegenerateBtn,
+            showFooterBtn,
           });
           storageService().setObject('email_detail_hni', email);
         }
@@ -104,7 +107,7 @@ export default function StatementRequested(props) {
         performed_by: storageService().get('hni-platform') === 'rmapp' ? 'RM' : 'user',
         email_look_clicked: params.comingFrom === 'email_example_view',
         entry_point: state.entry_point || null,
-        status: state.showRegenerateBtn ? 'mail not recieved in 30 min' : 'before tracker setup',
+        status: state.showFooterBtn ? 'mail not recieved in 30 min' : 'before tracker setup',
       }
     };
 
@@ -179,6 +182,7 @@ export default function StatementRequested(props) {
       loaderData={{
         loadingText: state.loadingText,
       }}
+      noFooter={!state.showFooterBtn}
       buttonTitle="did not recieve email"
       headerData={{ icon: showBack ? 'back' : 'close' }}
       handleClick={goNext}
