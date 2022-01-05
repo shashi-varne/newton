@@ -31,10 +31,10 @@ const getTheme = () => {
         styleOverrides: switchStyleOverRides(colors),
       },
       MuiTabs: {
-        styleOverrides: tabsStyleOverRides()
+        styleOverrides: tabsStyleOverRides(colors)
       },
       MuiTab: {
-        styleOverrides: tabStyleOverRides()
+        styleOverrides: tabStyleOverRides(colors)
       },
     },
   };

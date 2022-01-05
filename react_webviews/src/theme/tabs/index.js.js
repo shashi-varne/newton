@@ -1,10 +1,9 @@
-import colorConfig from '../colors';
 import { FONT_WEIGHT } from '../typography';
 
-export const tabsStyleOverRides = () => {
+export const tabsStyleOverRides = (colors={}) => {
   return {
     root: {
-      backgroundColor: colorConfig.supporting.white,
+      backgroundColor: colors?.supporting?.white,
       minHeight: 36,
     },
     flexContainer: {
@@ -18,14 +17,15 @@ export const tabsStyleOverRides = () => {
   };
 };
 
-export const tabStyleOverRides = () => {
+export const tabStyleOverRides = (colors={}) => {
   return {
     root: {
-      color: colorConfig.content.primary,
+      color: colors?.content?.primary,
       fontSize: 14,
+      textTransform: 'none',
       '&.Mui-disabled': {
         fontWeight: FONT_WEIGHT['Regular'],
-        color: colorConfig.supporting.athensGrey,
+        color: colors?.supporting?.athensGrey,
       },
       minHeight: 36,
     },
