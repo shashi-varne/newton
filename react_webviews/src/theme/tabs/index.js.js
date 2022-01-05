@@ -30,9 +30,6 @@ export const tabStyleOverRides = (colors={}) => {
         fontWeight: FONT_WEIGHT['Regular'],
         color: colors?.supporting?.athensGrey,
       },
-      '&.Mui-selected': {
-        fontWeight: FONT_WEIGHT['Medium'],
-      },
       minHeight: 36,
     },
   };
@@ -55,16 +52,16 @@ export const tabVariantsConfig = (colors={}) => {
       props: { type: 'pills' },
       style: {
         zIndex: 2,
+        ...baseTypographyConfig()?.body2,
         color: colors.primary.brand,
-        fontSize: 14,
-        fontWeight: FONT_WEIGHT['Regular'],
         minWidth: 76,
         padding: '8px 16px',
         '&.Mui-selected': {
+          ...baseTypographyConfig()?.body1,
           color: colors.supporting.white,
-          fontWeight: FONT_WEIGHT['Medium'],
         },
         '&.Mui-disabled': {
+          ...baseTypographyConfig()?.body1,
           color: colors.supporting.white,
           backgroundColor: colors.supporting.athensGrey,
           borderRadius: 100,
