@@ -9,8 +9,8 @@ import { navigate, setLoader } from '../common/commonFunctions';
 import { requestStatement } from '../common/ApiCalls';
 import toast from '../../common/ui/Toast';
 import { storageService } from '../../utils/validators';
-const productType = getConfig().productName;
-const emailDomain = getConfig().emailDomain;
+
+const { produtName: productType, emailDomain } = getConfig();
 
 class StatementNotReceived extends Component {
   constructor(props) {

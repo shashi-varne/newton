@@ -9,7 +9,8 @@ import toast from '../../common/ui/Toast';
 import { storageService } from '../../utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from '../../utils/functions';
-const emailDomain = getConfig().emailDomain;
+
+const { emailDomain } = getConfig();
 
 class EmailNotReceived extends Component {
   constructor(props) {

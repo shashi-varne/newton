@@ -4,7 +4,8 @@ import { nativeCallback } from 'utils/native_callback';
 import { navigate } from '../common/commonFunctions';
 import { getConfig } from '../../utils/functions';
 import { storageService } from '../../utils/validators';
-const emailDomain = getConfig().emailDomain;
+
+const { emailDomain } = getConfig();
 
 class EmailExampleView extends Component {
   constructor(props) {
