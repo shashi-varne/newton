@@ -17,6 +17,7 @@ const CardHorizontal = ({
   descriptionColor,
   actionLink,
   status,
+  onCardClick,
   variant = 'product',
 }) => {
   const heroCardVariant = variant === 'heroCard';
@@ -32,7 +33,7 @@ const CardHorizontal = ({
     }
   },[]);
   return (
-    <Box className={`ch-wrapper ${heroCardVariant && 'ch-hero-wrapper'}`}>
+    <Box className={`ch-wrapper ${heroCardVariant && 'ch-hero-wrapper'}`} onClick={onCardClick}>
       <div>
         {!heroCardVariant && (
           <Imgc
