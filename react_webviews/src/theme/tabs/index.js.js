@@ -1,4 +1,4 @@
-import { FONT_WEIGHT } from '../typography';
+import baseTypographyConfig, { FONT_WEIGHT } from '../typography';
 
 export const tabsStyleOverRides = (colors={}) => {
   return {
@@ -20,9 +20,12 @@ export const tabsStyleOverRides = (colors={}) => {
 export const tabStyleOverRides = (colors={}) => {
   return {
     root: {
-      color: colors?.content?.primary,
-      fontSize: 14,
+      ...baseTypographyConfig()?.body2,
       textTransform: 'none',
+      '&.Mui-selected': {
+        ...baseTypographyConfig()?.body1,
+        color: colors?.primary?.brand,
+      },
       '&.Mui-disabled': {
         fontWeight: FONT_WEIGHT['Regular'],
         color: colors?.supporting?.athensGrey,
