@@ -17,13 +17,14 @@ export const tabsStyleOverRides = (colors={}) => {
   };
 };
 
-export const tabStyleOverRides = (colors={}) => {
+export const tabStyleOverRides = (colors={},partnerConfig={}) => {
+  const typographyVariants = baseTypographyConfig(colors,partnerConfig);
   return {
     root: {
-      ...baseTypographyConfig()?.body2,
+      ...typographyVariants?.body2,
       textTransform: 'none',
       '&.Mui-selected': {
-        ...baseTypographyConfig()?.body1,
+        ...typographyVariants?.body1,
         color: colors?.primary?.brand,
       },
       '&.Mui-disabled': {
