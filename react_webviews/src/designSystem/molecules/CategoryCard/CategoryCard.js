@@ -23,12 +23,13 @@ const CategoryCard = ({
   titleColor,
   subtitle,
   subtitleColor,
+  onCardClick
 }) => {
   const largeVariant = variant === 'large';
   const variantData = largeVariant ? LARGE_CARD_VARIANT : SMALL_CARD_VARIANT;
 
   return (
-    <div className={`cc-wrapper ${largeVariant && 'cc-wrapper-large-variant'}`}>
+    <div className={`cc-wrapper ${largeVariant && 'cc-wrapper-large-variant'}`} onClick={onCardClick}>
       <Imgc src={imgSrc} style={variantData.imgStyle} {...imgProps}/>
       <Typography
         variant={variantData.titleVariant}
@@ -66,16 +67,12 @@ const SMALL_VARIANT_IMAGE_STYLE = {
   width: '52px',
   height: '52px',
   marginBottom: '4px',
-  paddingLeft: '25.5px',
-  paddingRight: '25.5px',
 };
 
 const LARGE_VARIANT_IMAGE_STYLE = {
   width: '88px',
   height: '88px',
   marginBottom: '8px',
-  paddingLeft: '35.5px',
-  paddingRight: '35.5px',
 };
 
 const LARGE_CARD_VARIANT = {
