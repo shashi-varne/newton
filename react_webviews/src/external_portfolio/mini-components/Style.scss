@@ -32,7 +32,6 @@ $dark_indigo: #0a1d32;
   justify-content: space-between;
   box-sizing: border-box;
   border-radius: 6px;
-  background: var(--highlight);
 
   #info-box-img {
     height: 20px;
@@ -88,7 +87,7 @@ $dark_indigo: #0a1d32;
 .info-box-cut-out {
   padding: 20px !important;
   margin-top: 20px;
-  border: 1px dashed #e3e3e3;
+  border: 3px dashed var(--highlight);
 }
 
 .info-box-body-text {
@@ -96,6 +95,10 @@ $dark_indigo: #0a1d32;
   font-weight: bold;
   line-height: 20px;
   color: var(--primary);
+}
+
+.info-box-copy-icon {
+  cursor: pointer;
 }
 
 .resync-btn {
@@ -270,7 +273,7 @@ $dark_indigo: #0a1d32;
     letter-spacing: 0;
     margin-bottom: 6px;
     
-    #top-holding-name, {
+    #top-holding-name {
       font-weight: 500;
       text-transform: uppercase;
       color: $dark_indigo;
