@@ -1,8 +1,9 @@
-import { buttonStyleOverRides, buttonVariantsConfig } from './button';
+import { createTheme } from '@mui/material';
+import { buttonStyleOverRides, buttonVariantsConfig, } from './button';
+import { tabsStyleOverRides, tabStyleOverRides, tabsVariantsConfig, tabVariantsConfig } from './tabs/index.js';
 import { switchStyleOverRides } from './switch';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
 import getPartnerThemeData from './utils';
-import { createTheme } from '@mui/material';
 
 const getTheme = () => {
   const {colors, partnerConfig} = getPartnerThemeData();
@@ -28,6 +29,14 @@ const getTheme = () => {
       },
       MuiSwitch: {
         styleOverrides: switchStyleOverRides(colors),
+      },
+      MuiTabs: {
+        variants:tabsVariantsConfig(),
+        styleOverrides: tabsStyleOverRides()
+      },
+      MuiTab: {
+        variants:tabVariantsConfig(),
+        styleOverrides: tabStyleOverRides()
       },
     },
   };
