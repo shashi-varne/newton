@@ -3,6 +3,12 @@ import { PATHNAME_MAPPER as KYC_PATHNAME_MAPPER } from "../../kyc/constants";
 
 export const MINIMUM_FREEDOM_PLAN_PRICE = 2499;
 
+export const PATHNAME_MAPPER = {
+  landing: '/freedom-plan',
+  review: '/freedom-plan/review',
+  paymentStatus: '/freedom-plan/payment/status',
+}
+
 export const FREEDOM_PLAN_BENEFITS_DATA = {
   title: "One plan, Unlimited benefits",
   options: [

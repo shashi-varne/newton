@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 import { Imgc } from "../../common/ui/Imgc";
 import { getConfig } from "../../utils/functions";
@@ -10,18 +10,29 @@ import noop from "lodash/noop";
 const SelectFreedomPlan = ({
   isOpen = false,
   selectedPlan,
-  onChange = noop,
   onClick = noop,
+  onClose = noop,
 }) => {
+  const [plan, setPlan] = useState(selectedPlan);
+
+  const handlePlanChange = (value) => () => {
+    setPlan(value);
+  };
+
+  const handleClick = () => {
+    onClick(plan);
+  };
+
   return (
     <WVBottomSheet
       isOpen={isOpen}
+      onClose={onClose}
       title="Select a plan that’s right for you"
       subtitle="Enjoy brokerage free unlimited trading"
       button1Props={{
         title: "BUY NOW",
         variant: "contained",
-        onClick: onClick,
+        onClick: handleClick,
       }}
     >
       <div className="select-freedom-plan">
@@ -30,8 +41,8 @@ const SelectFreedomPlan = ({
             <Plan
               key={index}
               {...data}
-              onChange={onChange}
-              isSelected={data.value === selectedPlan}
+              handlePlanChange={handlePlanChange(data.value)}
+              isSelected={data.value === plan}
             />
           ))}
         </div>
@@ -41,12 +52,12 @@ const SelectFreedomPlan = ({
   );
 };
 
-const Plan = ({ name, amount, isSelected, isPopular, onChange }) => {
+const Plan = ({ name, amount, isSelected, isPopular, handlePlanChange }) => {
   const { productName } = useMemo(getConfig, []);
   return (
     <div
       className={`freedom-plan-option ${isSelected && `selected-plan`}`}
-      onClick={onChange}
+      onClick={handlePlanChange}
     >
       {isSelected && (
         <Imgc

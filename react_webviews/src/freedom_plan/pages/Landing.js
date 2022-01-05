@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import Container from "../common/Container";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import WVInPageHeader from "../../common/ui/InPageHeader/WVInPageHeader";
@@ -10,12 +10,14 @@ import {
   getFreedomPlanFaqs,
   getStandardVsFreedomPlanDetails,
   MINIMUM_FREEDOM_PLAN_PRICE,
+  PATHNAME_MAPPER,
 } from "../common/constants";
 import { capitalizeFirstLetter, formatAmountInr } from "../../utils/validators";
 import Faqs from "../../common/ui/Faqs";
 import "./Landing.scss";
-import { nativeCallback } from "../../utils/native_callback";
+import { handleNativeExit, nativeCallback } from "../../utils/native_callback";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
+import SelectFreedomPlan from "../mini-components/SelectFreedomPlan";
 
 const Landing = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -30,11 +32,15 @@ const Landing = (props) => {
     [kyc]
   );
 
+  const [openSelectPlan, setOpenSelectPlan] = useState(false);
+  const [plan, setPlan] = useState(6);
+
   const handleClick = () => {
     sendEvents("next");
+    setOpenSelectPlan(true);
   };
 
-  const sendEvents = (userAction) => {
+  const sendEvents = (userAction, isSelectPlan) => {
     let eventObj = {
       event_name: "freedom_plan",
       properties: {
@@ -42,11 +48,30 @@ const Landing = (props) => {
         screen_name: "freedom_plan_details",
       },
     };
+    if (isSelectPlan) {
+      eventObj.properties.screen_name = "select_plan";
+      eventObj.properties.plan_selected = `${plan}_months`;
+    }
     if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
+  };
+
+  const goBack = () => {
+    handleNativeExit(props, { action: "exit" });
+  };
+
+  const closeSelectFreedomPlan =  () => {
+    sendEvents("back", true);
+    setOpenSelectPlan(false);
+  };
+
+  const handleSelectPlan = (value) => {
+    sendEvents("next", true);
+    setPlan(value);
+    navigate(PATHNAME_MAPPER.review);
   };
 
   return (
@@ -57,6 +82,7 @@ const Landing = (props) => {
       title="Freedom plan"
       buttonTitle="Select Plan"
       handleClick={handleClick}
+      headerData={{ goBack }}
       events={sendEvents("just_set_events")}
       customBackButtonColor="white"
       data-aid="freedom-plan-landing"
@@ -95,6 +121,12 @@ const Landing = (props) => {
           <Faqs options={FREEDOM_PLAN_FAQS} />
         </div>
       </div>
+      <SelectFreedomPlan
+        selectedPlan={plan}
+        isOpen={openSelectPlan}
+        onClose={closeSelectFreedomPlan}
+        onClick={handleSelectPlan}
+      />
     </Container>
   );
 };

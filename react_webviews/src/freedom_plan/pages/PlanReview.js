@@ -8,6 +8,8 @@ import Tile from "../mini-components/Tile";
 import { getPlanReviewData, KYC_STATUS_MAPPER } from "../common/constants";
 import "./PlanReview.scss";
 import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
+import SelectFreedomPlan from "../mini-components/SelectFreedomPlan";
+import TermsAndConditions from "../mini-components/TermsAndConditions";
 
 const data = {
   amount: 5999,
@@ -23,8 +25,11 @@ const PlanReview = (props) => {
   const kycStatusData = KYC_STATUS_MAPPER["init"];
   const { kyc, isLoading } = useUserKycHook();
   const navigate = navigateFunc.bind(props);
+  const [openSelectPlan, setOpenSelectPlan] = useState(false);
+  const [openTermsAndConditions, setOpenTermsAnsConditions] = useState(false);
+  const [plan, setPlan] = useState(6);
 
-  const sendEvents = (userAction, changePlan = "no") => {
+  const sendEvents = (userAction, isSelectPlan, changePlan = "no") => {
     let eventObj = {
       event_name: "freedom_plan",
       properties: {
@@ -34,6 +39,10 @@ const PlanReview = (props) => {
         change_plan_clicked: changePlan,
       },
     };
+    if (isSelectPlan) {
+      eventObj.properties.screen_name = "select_plan";
+      eventObj.properties.plan_selected = `${plan}_months`;
+    }
     if (userAction === "just_set_events") {
       return eventObj;
     } else {
@@ -46,11 +55,27 @@ const PlanReview = (props) => {
   };
 
   const changePlan = () => {
-    sendEvents("next", "yes");
+    sendEvents("next", false, "yes");
+    setOpenSelectPlan(true);
   };
 
   const handleKycStatusBottomsheet = () => {
     sendEvents("next");
+  };
+
+  const closeSelectFreedomPlan = () => {
+    sendEvents("back", true);
+    setOpenSelectPlan(false);
+  };
+
+  const handleSelectPlan = (value) => {
+    setPlan(value);
+    sendEvents("next", true);
+    setOpenSelectPlan(false);
+  };
+
+  const handleTermsAndConditions = (value) => () => {
+    setOpenTermsAnsConditions(value);
   };
 
   return (
@@ -79,7 +104,10 @@ const PlanReview = (props) => {
           </div>
         </main>
         <footer>
-          By tapping ‘PAY NOW’ you agree to the <span>Terms & Conditions</span>{" "}
+          By tapping ‘PAY NOW’ you agree to the{" "}
+          <span onClick={handleTermsAndConditions(true)}>
+            Terms & Conditions
+          </span>{" "}
           of Use for the Freedom plan
         </footer>
       </div>
@@ -93,6 +121,16 @@ const PlanReview = (props) => {
           variant: "contained",
           onClick: handleKycStatusBottomsheet,
         }}
+      />
+      <SelectFreedomPlan
+        selectedPlan={plan}
+        isOpen={openSelectPlan}
+        onClose={closeSelectFreedomPlan}
+        onClick={handleSelectPlan}
+      />
+      <TermsAndConditions
+        isOpen={openTermsAndConditions}
+        close={handleTermsAndConditions(false)}
       />
     </Container>
   );
