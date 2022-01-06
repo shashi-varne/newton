@@ -23,19 +23,21 @@ const CategoryCard = ({
   titleColor,
   subtitle,
   subtitleColor,
-  onCardClick
+  onCardClick,
+  dataAid
 }) => {
   const largeVariant = variant === 'large';
   const variantData = largeVariant ? LARGE_CARD_VARIANT : SMALL_CARD_VARIANT;
 
   return (
-    <div className={`cc-wrapper ${largeVariant && 'cc-wrapper-large-variant'}`} onClick={onCardClick}>
-      <Imgc src={imgSrc} style={variantData.imgStyle} {...imgProps}/>
+    <div className={`cc-wrapper ${largeVariant && 'cc-wrapper-large-variant'}`} onClick={onCardClick} data-aid={`categoryCard_${dataAid}`}>
+      <Imgc src={imgSrc} style={variantData.imgStyle} {...imgProps} dataAid='top'/>
       <Typography
         variant={variantData.titleVariant}
         className={variantData.titleClass}
         align='center'
         color={titleColor}
+        data-aid='tv_title'
       >
         {title}
       </Typography>
@@ -44,6 +46,7 @@ const CategoryCard = ({
         color={subtitleColor ? subtitleColor : variantData.subtitleColor}
         className={variantData.subtitleClass}
         align='center'
+        data-aid='tv_subtitle'
       >
         {subtitle}
       </Typography>
