@@ -16,13 +16,15 @@ const FeatureCard = ({
   aumSubtitle,
   investorTitle,
   investorSubtitle,
-  onCardClick
+  onCardClick,
+  dataAid
 }) => {
   return (
-    <div className='fc-wrapper' onClick={onCardClick}>
+    <div className='fc-wrapper' onClick={onCardClick} data-aid={`featureCard_${dataAid}`}>
       <div className='fc-first-row-wrapper'>
         <Imgc
           src={imgSrc}
+          data-aid='left'
           style={{ width: '32px', height: '32px' }}
           {...imgProps}
         />
@@ -30,11 +32,12 @@ const FeatureCard = ({
           variant='body1'
           className='fc-heading-text'
           color={headingColor}
+          data-aid='tv_title'
         >
           {heading}
         </Typography>
       </div>
-      <Divider className='fc-divider'/>
+      <Divider data-aid='seperator' className='fc-divider'/>
       <div className='fc-description-list'>
         <div className='fc-description-item'>
           <Typography
