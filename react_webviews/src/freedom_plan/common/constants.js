@@ -154,11 +154,7 @@ export const KYC_STATUS_MAPPER = {
   },
 };
 
-export const getPlanReviewData = ({
-  amount,
-  gst,
-  total_amount,
-}) => () => {
+export const getPlanReviewData = ({ amount, gst, total_amount }) => () => {
   return [
     {
       title: "Freedom plan",
@@ -180,11 +176,7 @@ export const getPlanReviewData = ({
   ];
 };
 
-export const getPaymentSummaryData = ({
-  amount,
-  gst,
-  total_amount,
-}) => () => {
+export const getPaymentSummaryData = ({ amount, gst, total_amount }) => () => {
   return [
     {
       title: "Price",
