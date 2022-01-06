@@ -32,6 +32,7 @@ const LandingHeader = ({ variant, children, imageSrc, imageProps = {} }) => {
         src={imageSrc}
         style={{ width: '140px', height: '120px' }}
         {...imageProps}
+        dataAid='top'
       />
       {Children.map(children, (el) => {
           return React.cloneElement(el, {
@@ -49,7 +50,7 @@ LandingHeader.propTypes = {
 };
 
 LandingHeader.Title = ({ children, titleColor }) => {
-  return <Typography variant='heading1' color={titleColor}>{children}</Typography>;
+  return <Typography variant='heading1' color={titleColor} data-aid='tv_title'>{children}</Typography>;
 };
 
 LandingHeader.Subtitle = ({ children, date, variant, subtitleColor, dateColor }) => {
@@ -61,7 +62,7 @@ LandingHeader.Subtitle = ({ children, date, variant, subtitleColor, dateColor })
   return (
     <div>
       {variant === 'date' && (
-        <Typography className='lh-date-wrapper' variant='body2' color={dateColor}>
+        <Typography className='lh-date-wrapper' variant='body2' color={dateColor} data-aid='tv_subtitle'>
           {formattedData}
         </Typography>
       )}
