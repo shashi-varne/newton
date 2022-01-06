@@ -34,7 +34,7 @@ const CardVertical = ({
       sx={cvSxStyle}
       data-aid={`cardVertical_${dataAid}`}
     >
-      <Imgc src={imgcSrc} style={{ width: '32px', height: '32px' }} data-aid='top' {...imgProps}/>
+      <Imgc src={imgcSrc} style={{ width: '32px', height: '32px' }} dataAid='top' {...imgProps}/>
       <Typography className='cv-mt-4' variant='body1' color={titleColor} data-aid='tv_title'>
         {title}
       </Typography>
