@@ -24,22 +24,25 @@ const CardVertical = ({
   descriptionColor,
   elevation,
   onCardClick,
-  imgProps
+  imgProps,
+  dataAid
 }) => {
   return (
     <Box
       onClick={onCardClick}
       className={`cv-wrapper ${elevation && 'cv-elevation'}`}
       sx={cvSxStyle}
+      data-aid={`cardVertical_${dataAid}`}
     >
-      <Imgc src={imgcSrc} style={{ width: '32px', height: '32px' }} {...imgProps}/>
-      <Typography className='cv-mt-4' variant='body1' color={titleColor}>
+      <Imgc src={imgcSrc} style={{ width: '32px', height: '32px' }} data-aid='top' {...imgProps}/>
+      <Typography className='cv-mt-4' variant='body1' color={titleColor} data-aid='tv_title'>
         {title}
       </Typography>
       <Typography
         variant='body2'
         className='cv-mt-4'
         color={subtitleColor}
+        data-aid='tv_subtitle'
       >
         {subtitle}
       </Typography>
@@ -47,6 +50,7 @@ const CardVertical = ({
         variant='body2'
         className='cv-mt-4'
         color={descriptionColor}
+        data-aid='tv_description'
       >
         {description}
       </Typography>
