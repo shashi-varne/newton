@@ -33,12 +33,12 @@ const alb = {
     action: {
       brand: '#00aeef',
     },
-    header: {
-      notificationsColor: '#00aeef',
-      backButtonColor: '#2E3192',
-      backgroundColor: '#E8FD00',
-      titleColor: '#2E3192',
-    },
+  },
+  header: {
+    notificationsColor: '#00aeef',
+    backButtonColor: '#2E3192',
+    backgroundColor: '#E8FD00',
+    titleColor: '#2E3192',
   },
 };
 
@@ -74,10 +74,10 @@ const fpg = {
     action: {
       brand: '#EB6024',
     },
-    button: {
-      borderRadius: 25,
-      disabledBackgroundColor: '#F1D5C9',
-    },
+  },
+  button: {
+    borderRadius: 25,
+    disabledBackgroundColor: '#F1D5C9',
   },
 };
 
@@ -165,11 +165,11 @@ const ucomb = {
     action: {
       brand: '#002759',
     },
-    header: {
-      backButtonColor: '#002759',
-      notificationsColor: '#002759',
-      backgroundColor: '#FFF500',
-    },
+  },
+  header: {
+    backButtonColor: '#002759',
+    notificationsColor: '#002759',
+    backgroundColor: '#FFF500',
   },
 };
 
