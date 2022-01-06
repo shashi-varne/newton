@@ -39,13 +39,6 @@ class HealthInsuranceEntry extends Component {
         icon: hdfc_logo
       },
       {
-        key: 'RELIGARE',
-        title: 'Care Health',
-        subtitle: 'Care',
-        Product_name : 'Care',
-        icon: religare_logo
-      },
-      {
         key: 'STAR',
         title: 'Star',
         subtitle: 'Family health optima',
