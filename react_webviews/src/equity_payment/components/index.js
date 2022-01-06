@@ -17,6 +17,7 @@ import Dialog, { DialogContent, DialogActions, DialogTitle } from "material-ui/D
 import Button from '../../common/ui/Button';
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble';
 import { getBasePath } from '../../utils/functions';
+import isEmpty from 'lodash/isEmpty';
 
 let store = {};
 let intent_supported = false;
@@ -412,11 +413,14 @@ class PaymentOption extends React.Component {
       skelton: true
     })
     const config = getConfig();
+    let { redirect_url = "" } = config.current_params;
     let url = config.base_url + '/api/equity/api/eqm/eqpayments/pg/payment/options/' + config.pc_urlsafe;
-    if(config.Web) {
-      const redirectUrl = encodeURIComponent(`${basepath}/pg/eq/payment-status` + config.searchParams);
+    if(config.Web && !isEmpty(redirect_url)) {
+      redirect_url = encodeURIComponent(`${basepath}/pg/eq/payment-status` + config.searchParams);
+    }
+    if(!isEmpty(redirect_url)) {
       // eslint-disable-next-line no-useless-escape
-      url += (url.match(/[\?]/g) ? '&' : '?')+`plutus_redirect_url=${redirectUrl}`;
+      url += (url.match(/[\?]/g) ? '&' : '?')+`plutus_redirect_url=${redirect_url}`;
     }
     await this.getPaymentOptions(url);
     this.setState({
