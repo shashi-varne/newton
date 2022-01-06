@@ -24,7 +24,7 @@ const FeatureCard = ({
       <div className='fc-first-row-wrapper'>
         <Imgc
           src={imgSrc}
-          data-aid='left'
+          dataAid='left'
           style={{ width: '32px', height: '32px' }}
           {...imgProps}
         />
