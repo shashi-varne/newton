@@ -41,7 +41,7 @@ const CardHorizontal = ({
             src={iconSrc}
             style={{ width: '32px', height: '32px' }}
             {...iconProps}
-            data-aid='top'
+            dataAid='top'
           />
         )}
         {title && (
@@ -77,7 +77,7 @@ const CardHorizontal = ({
         src={ilstSrc}
         style={{ width: '110px', height: '110px', marginLeft: '4px' }}
         {...ilstProps}
-        data-aid='right'
+        dataAid='right'
       />
     </Box>
   );
