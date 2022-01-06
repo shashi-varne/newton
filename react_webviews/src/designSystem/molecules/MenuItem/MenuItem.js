@@ -28,11 +28,15 @@ const MenuItem = ({
   return (
     <div className='mi-wrapper' onClick={onItemClick}>
       <div className='mi-left-wrapper'>
-        <Imgc
-          src={leftImgSrc}
-          style={{ width: '54px', height: '54px' }}
-          {...leftImgProps}
-        />
+        {
+          leftImgSrc &&
+            <Imgc
+              src={leftImgSrc}
+              style={{ width: '54px', height: '54px' }}
+              className='mi-left-img'
+              {...leftImgProps}
+            />
+        }
         <div className='mi-text-wrapper'>
           <Typography variant='heading4' color={titleColor}>
             {title}
@@ -42,11 +46,14 @@ const MenuItem = ({
           </Typography>
         </div>
       </div>
-      <Imgc
-        src={rightImgSrc}
-        style={{ width: '24px', height: '24px' }}
-        {...rightImgProps}
-      />
+      {
+        rightImgSrc &&
+          <Imgc
+            src={rightImgSrc}
+            style={{ width: '24px', height: '24px' }}
+            {...rightImgProps}
+          />
+      }
     </div>
   );
 };

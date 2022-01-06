@@ -4,6 +4,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  cursor: pointer;
 
   .mi-left-wrapper {
     display: flex;
@@ -12,10 +13,13 @@
     align-items: center;
   }
 
+  .mi-left-img {
+    margin-right: 24px;
+  }
+
   .mi-text-wrapper {
     display: flex;
     flex-direction: column;
-    margin-left: 24px;
     margin-right: 24px;
   }
 }
