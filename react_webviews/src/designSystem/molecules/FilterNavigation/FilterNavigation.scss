@@ -1,0 +1,28 @@
+.filter-nav-wrapper {
+  padding: 13px 24px;
+  background-color: white;
+  box-shadow: 0px 6px 12px -6px rgba(0, 0, 0, 0.04),
+    0px 0px 1px rgba(0, 0, 0, 0.2);
+
+  .filter-nav-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    .filter-nav-item {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-right: 24px;
+        cursor: pointer;
+        &:last-child{
+            margin-right: 0px;
+        }
+    }
+
+    .filter-nav-badge-wrapper {
+        margin-left: 16px;
+    }
+  }
+}
