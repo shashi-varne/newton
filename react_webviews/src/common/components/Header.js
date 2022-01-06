@@ -28,7 +28,7 @@ const headerIconMapper = {
 const Header = ({ classes, title, count, total, current, goBack, 
   edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
   inPageTitle, hideHamburger, force_hide_inpage_title, topIcon, handleTopIcon, canSkip, onSkipClick,
-  className ,style, headerData={}, new_header, notification, handleNotification, noBackIcon, customBackButtonColor}) => {
+  className ,style, headerData={}, new_header, notification, handleNotification, noBackIcon, customIconColor}) => {
     const rightIcon = headerIconMapper[topIcon];
     const [referDialog, setReferDialog] = useState(false);
     const [mobileViewDrawer, setMobileViewDrawer] = useState(false);
@@ -68,7 +68,7 @@ const Header = ({ classes, title, count, total, current, goBack,
             >
               {!disableBack && !headerData.hide_icon &&
               <SVG
-              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (customBackButtonColor ? customBackButtonColor : backButtonColor ?  backButtonColor : !headerData.partnerLogo ? getConfig().styles.primaryColor : 'white'))}
+              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (customIconColor ? customIconColor : backButtonColor ?  backButtonColor : !headerData.partnerLogo ? getConfig().styles.primaryColor : 'white'))}
               src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
               />
               }
@@ -170,7 +170,7 @@ const Header = ({ classes, title, count, total, current, goBack,
                 {isMobileDevice && isWeb && !hideHamburger && !config.isIframe && !isGuestUser && !equityPayment &&
                   <div className='mobile-navbar-menu'>
                     <IconButton onClick={handleMobileViewDrawer}>
-                      <MenuIcon style={{color: new_header && backgroundColor ?  getConfig().styles.secondaryColor : headerData.partnerLogo ? 'white' : getConfig().styles.primaryColor}}/>
+                      <MenuIcon style={{color: customIconColor ? customIconColor : new_header && backgroundColor ?  getConfig().styles.secondaryColor : headerData.partnerLogo ? 'white' : getConfig().styles.primaryColor}}/>
                     </IconButton>
                     <Drawer mobileViewDrawer={mobileViewDrawer} handleMobileViewDrawer={handleMobileViewDrawer} handleReferModal={handleReferModal} />
                   </div>

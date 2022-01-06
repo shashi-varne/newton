@@ -96,7 +96,7 @@ const Landing = (props) => {
       handleClick={handleClick}
       headerData={{ goBack }}
       events={sendEvents("just_set_events")}
-      customBackButtonColor="white"
+      customIconColor="white"
       data-aid="freedom-plan-landing"
       classHeader="freedom-plan-landing-header-color"
       classOverRide="freedom-plan-landing-container"
