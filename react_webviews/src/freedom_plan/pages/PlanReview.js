@@ -6,7 +6,7 @@ import {
   isTradingEnabled,
   navigate as navigateFunc,
 } from "../../utils/functions";
-import { nativeCallback } from "../../utils/native_callback";
+import { handleNativeExit, nativeCallback } from "../../utils/native_callback";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import Tile from "../mini-components/Tile";
 import { getPlanReviewData, KYC_STATUS_MAPPER } from "../common/constants";
@@ -20,10 +20,10 @@ import { isEquityCompleted } from "../../kyc/common/functions";
 import isEmpty from "lodash/isEmpty";
 
 const PlanReview = (props) => {
-  const { productName, isNative } = useMemo(getConfig, []);
-  const [openKycStatusBottomsheet, setOpenKycBottomsheet] = useState(false);
-  const { kyc, isLoading } = useUserKycHook();
   const navigate = navigateFunc.bind(props);
+  const { productName, isNative } = useMemo(getConfig, []);
+  const { kyc, isLoading } = useUserKycHook();
+  const [openKycStatusBottomsheet, setOpenKycBottomsheet] = useState(false);
   const [openSelectPlan, setOpenSelectPlan] = useState(false);
   const [openTermsAndConditions, setOpenTermsAnsConditions] = useState(false);
   const {
@@ -69,12 +69,16 @@ const PlanReview = (props) => {
       return {
         kycStatusData: KYC_STATUS_MAPPER[kycStatus] || {},
         isEquityReady: isEquityCompleted(),
+        kycStatus,
       };
     }
     return {};
   };
 
-  const { kycStatusData, isEquityReady } = useMemo(initializeKycData, [kyc]);
+  const { kycStatusData, isEquityReady, kycStatus } = useMemo(
+    initializeKycData,
+    [kyc]
+  );
 
   const sendEvents = (userAction, isSelectPlan, changePlan = "no") => {
     let eventObj = {
@@ -119,6 +123,10 @@ const PlanReview = (props) => {
   };
 
   const redirectToKyc = () => {
+    if (kycStatus === "in_progress") {
+      handleNativeExit(props, { action: "exit" });
+      return;
+    }
     const pathname = isNative ? "/kyc/native" : "/kyc/web";
     navigate(pathname);
   };

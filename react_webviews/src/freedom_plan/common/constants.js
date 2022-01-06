@@ -9,7 +9,7 @@ export const PATHNAME_MAPPER = {
 };
 
 export const API_CONSTANTS = {
-  getPlanDetails: "/api/eqm/subscriptions/create/plan",
+  getPlanDetails: "/api/equity/api/eqm/subscriptions/create/plan",
   triggerPayment: "/api/equity/api/eqm/eqpayments/subscription/start/payment",
 };
 
@@ -76,7 +76,7 @@ export const getStandardVsFreedomPlanDetails = (
   ];
 };
 
-export const getFreedomPlanFaqs = (productName) => () => {
+export const getFreedomPlanFaqs = (productName) => {
   return [
     {
       title: `What is the Freedom plan?`,

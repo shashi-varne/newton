@@ -22,30 +22,37 @@ import useFreedomDataHook from "../common/freedomPlanHook";
 
 const Landing = (props) => {
   const navigate = navigateFunc.bind(props);
-  const { productName } = useMemo(getConfig, []);
-  const FREEDOM_PLAN_FAQS = useMemo(
-    getFreedomPlanFaqs(capitalizeFirstLetter(productName)),
-    [productName]
-  );
+  const [openSelectPlan, setOpenSelectPlan] = useState(false);
+
+  const initialize = () => {
+    const config = getConfig();
+    return {
+      ...config,
+      freedomPlanFaqs: getFreedomPlanFaqs(
+        capitalizeFirstLetter(config.productName)
+      ),
+    };
+  };
+
+  const { productName, freedomPlanFaqs = [] } = useMemo(initialize, []);
   const { kyc, isLoading } = useUserKycHook();
   const standardVsFreedomPlanDetails = useMemo(
     getStandardVsFreedomPlanDetails(kyc.equity_account_charges),
     [kyc]
   );
   const {
-    freedomPlanData,
-    getFreedomPlanData,
     errorData,
     showLoader,
+    freedomPlanData,
+    getFreedomPlanData,
   } = useFreedomDataHook();
-  const [openSelectPlan, setOpenSelectPlan] = useState(false);
 
   useEffect(() => {
     if (errorData.showError && openSelectPlan) {
       closeSelectFreedomPlan();
     }
   }, [errorData.showError]);
-  
+
   const sendEvents = (userAction, isSelectPlan) => {
     let eventObj = {
       event_name: "freedom_plan",
@@ -130,7 +137,7 @@ const Landing = (props) => {
         </div>
         <div className="fpl-layout fpl-faqs">
           <div className="fpl-title">FAQs</div>
-          <Faqs options={FREEDOM_PLAN_FAQS} />
+          <Faqs options={freedomPlanFaqs} />
         </div>
       </div>
       <SelectFreedomPlan

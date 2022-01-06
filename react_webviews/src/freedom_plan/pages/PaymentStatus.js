@@ -16,12 +16,16 @@ import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import "./PaymentStatus.scss";
 
 const PaymentStatus = (props) => {
-  const { productName } = useMemo(getConfig, []);
-  const { status } = getUrlParams();
-  const paymentStatusData = useMemo(
-    () => PAYMENT_STATUS_DATA[status] || PAYMENT_STATUS_DATA["failed"],
-    []
-  );
+  const initialize = () => {
+    const { status } = getUrlParams();
+    return {
+      ...getConfig(),
+      paymentStatusData: PAYMENT_STATUS_DATA[status] || PAYMENT_STATUS_DATA["failed"],
+    };
+  };
+
+  const { productName, paymentStatusData } = useMemo(initialize, []);
+
   const { isLoading, kyc } = useUserKycHook();
   const {
     errorData,
@@ -29,6 +33,7 @@ const PaymentStatus = (props) => {
     freedomPlanData,
     initiatePayment,
   } = useFreedomDataHook();
+
   const paymentDetails = useMemo(getPaymentSummaryData(freedomPlanData), [
     freedomPlanData,
   ]);
