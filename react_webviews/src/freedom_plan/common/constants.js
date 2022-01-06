@@ -156,7 +156,7 @@ export const KYC_STATUS_MAPPER = {
 
 export const getPlanReviewData = ({
   amount,
-  gst_amount,
+  gst,
   total_amount,
 }) => () => {
   return [
@@ -167,7 +167,7 @@ export const getPlanReviewData = ({
     },
     {
       title: "GST (18%)",
-      amount: inrFormatDecimal(gst_amount, 2),
+      amount: inrFormatDecimal(gst, 2),
       amountClassName: "fprs-amount",
       showBottomDivider: true,
     },
@@ -182,7 +182,7 @@ export const getPlanReviewData = ({
 
 export const getPaymentSummaryData = ({
   amount,
-  gst_amount,
+  gst,
   total_amount,
 }) => () => {
   return [
@@ -192,7 +192,7 @@ export const getPaymentSummaryData = ({
     },
     {
       title: "GST",
-      amount: inrFormatDecimal(gst_amount, 2),
+      amount: inrFormatDecimal(gst, 2),
       showBottomDivider: true,
     },
     {

@@ -62,7 +62,7 @@ const PaymentStatus = (props) => {
     initiatePayment({
       ucc: kyc.ucc,
       amount: freedomPlanData.amount,
-      gst: freedomPlanData.gst_amount,
+      gst: freedomPlanData.gst,
       total_amount: freedomPlanData.total_amount,
       plan_id: freedomPlanData.plan_id,
     });
