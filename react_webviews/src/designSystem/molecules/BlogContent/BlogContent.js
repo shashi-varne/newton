@@ -20,9 +20,10 @@ const BlogContent = ({
   titleColor,
   subtitle,
   subtitleColor,
+  onBlogClick
 }) => {
   return (
-    <div className='bc-wrapper'>
+    <div className='bc-wrapper' onClick={onBlogClick}>
       <Imgc
         src={imgSrc}
         style={{ height: '62px', width: '92px', padding: '4px' }}
