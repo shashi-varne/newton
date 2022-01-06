@@ -383,6 +383,10 @@ import isEmpty from 'lodash/isEmpty';
         eventManager.emit(EVENT_MANAGER_CONSTANTS.updateAppTheme);
       }
     }
+
+    if (json_data?.callback_version) {
+      set_session_storage("callback_version", json_data.callback_version);
+    }
   }
   
 })(window.callbackWeb ? window.callbackWeb : (window.callbackWeb = {}));

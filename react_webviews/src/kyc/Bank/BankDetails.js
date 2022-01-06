@@ -165,7 +165,7 @@ const BankDetails = (props) => {
                           <div className="right">{mandate.id} </div>
                         </div>
                         <div className="item" data-aid='kyc-account-type'>
-                          <div className="left">Account type</div>
+                          <div className="left">Amount</div>
                           <div className="right">
                             {" "}
                             {formatAmountInr(mandate.amount)}{" "}
