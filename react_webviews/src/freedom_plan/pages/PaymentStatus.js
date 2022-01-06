@@ -20,7 +20,7 @@ const data = {
   months: 6,
 };
 
-const PaymentSuccess = (props) => {
+const PaymentStatus = (props) => {
   const navigate = navigateFunc.bind(props);
   const { productName } = useMemo(getConfig, []);
   const { status } = getUrlParams();
@@ -78,4 +78,4 @@ const PaymentSuccess = (props) => {
   );
 };
 
-export default PaymentSuccess;
+export default PaymentStatus;
