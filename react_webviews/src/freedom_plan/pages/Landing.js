@@ -44,7 +44,7 @@ const Landing = (props) => {
     errorData,
     showLoader,
     freedomPlanData,
-    getFreedomPlanData,
+    updateFreedomPlan,
   } = useFreedomDataHook();
 
   useEffect(() => {
@@ -86,7 +86,8 @@ const Landing = (props) => {
     setOpenSelectPlan(false);
   };
 
-  const handleSelectPlan = () => {
+  const handleSelectPlan = (plan) => {
+    updateFreedomPlan(plan);
     sendEvents("next", true);
     navigate(PATHNAME_MAPPER.review);
   };
@@ -146,7 +147,6 @@ const Landing = (props) => {
         showLoader={showLoader}
         onClose={closeSelectFreedomPlan}
         onClick={handleSelectPlan}
-        getFreedomPlanData={getFreedomPlanData}
       />
     </Container>
   );

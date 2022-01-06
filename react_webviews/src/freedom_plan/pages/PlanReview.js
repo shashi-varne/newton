@@ -9,7 +9,11 @@ import {
 import { handleNativeExit, nativeCallback } from "../../utils/native_callback";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import Tile from "../mini-components/Tile";
-import { getPlanReviewData, KYC_STATUS_MAPPER } from "../common/constants";
+import {
+  getPlanReviewData,
+  KYC_STATUS_MAPPER,
+  PATHNAME_MAPPER,
+} from "../common/constants";
 import "./PlanReview.scss";
 import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 import SelectFreedomPlan from "../mini-components/SelectFreedomPlan";
@@ -30,12 +34,18 @@ const PlanReview = (props) => {
     freedomPlanData,
     showLoader,
     errorData,
-    getFreedomPlanData,
     initiatePayment,
+    updateFreedomPlan,
   } = useFreedomDataHook();
   const planDetails = useMemo(getPlanReviewData(freedomPlanData), [
     freedomPlanData,
   ]);
+
+  useEffect(() => {
+    if (isEmpty(freedomPlanData)) {
+      navigate(PATHNAME_MAPPER.landing);
+    }
+  }, []);
 
   useEffect(() => {
     if (errorData.showError && openSelectPlan) {
@@ -136,8 +146,11 @@ const PlanReview = (props) => {
     setOpenSelectPlan(true);
   };
 
-  const handleSelectPlan = (closeSelectPlan) => () => {
+  const handleSelectPlan = (closeSelectPlan) => (plan) => {
     const userAction = closeSelectPlan ? "back" : "next";
+    if (!closeSelectPlan) {
+      updateFreedomPlan(plan);
+    }
     sendEvents(userAction, true);
     setOpenSelectPlan(false);
   };
@@ -163,9 +176,7 @@ const PlanReview = (props) => {
           <div className="fpr-details flex-between-center">
             <div>
               <div className="fprd-title">Freedom plan</div>
-              <div className="fprd-subtitle">
-                {freedomPlanData.duration} months
-              </div>
+              <div className="fprd-subtitle">{freedomPlanData.name}</div>
             </div>
             <ClickableText onClick={changePlan}>CHANGE PLAN</ClickableText>
           </div>
@@ -203,7 +214,6 @@ const PlanReview = (props) => {
         onClick={handleSelectPlan(false)}
         freedomPlanData={freedomPlanData}
         showLoader={showLoader}
-        getFreedomPlanData={getFreedomPlanData}
       />
       <TermsAndConditions
         isOpen={openTermsAndConditions}

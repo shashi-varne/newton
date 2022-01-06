@@ -20,8 +20,8 @@ export const handleApi = (res) => {
   }
 };
 
-export const getPlanDetails = async (data) => {
-  const res = await Api.post(API_CONSTANTS.getPlanDetails, data);
+export const getAllPlans = async (data) => {
+  const res = await Api.post(API_CONSTANTS.getAllPlans, data);
   return handleApi(res);
 };
 

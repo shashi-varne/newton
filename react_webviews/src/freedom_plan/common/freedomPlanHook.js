@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { storageService } from "../../utils/validators";
-import { getPlanDetails, triggerPayment } from "./api";
-import isFunction from "lodash/isFunction";
-import noop from "lodash/noop";
+import { getAllPlans, triggerPayment } from "./api";
+import isEmpty from "lodash/isEmpty";
 import { getBasePath, getConfig } from "../../utils/functions";
 import { getDefaultPlan, PATHNAME_MAPPER } from "./constants";
 
@@ -13,24 +12,45 @@ const DEFAULT_ERROR_DATA = {
 
 function useFreedomDataHook() {
   const planData = storageService().getObject("freedomPlanData") || getDefaultPlan();
+  const planList = storageService().getObject("freedomPlanList") || [];
 
   const [freedomPlanData, setFreedomPlanData] = useState(planData);
+  const [freedomPlanList, setFreedomPlanList] = useState(planList);
   const [showLoader, setShowLoader] = useState(false);
   const [errorData, setErrorData] = useState(DEFAULT_ERROR_DATA);
 
-  const getFreedomPlanData = async (data, callback = noop) => {
+  useEffect(() => {
+    initialize();
+  }, []);
+
+  useEffect(() => {
+    setDefaultPlan();
+  }, [freedomPlanList]);
+
+  const initialize = () => {
+    if (isEmpty(freedomPlanList)) {
+      getFreedomPlanList();
+    }
+  };
+
+  const setDefaultPlan = () => {
+    if (isEmpty(freedomPlanData)) {
+      const defaultPlan = freedomPlanList.find((data) => data.is_default) || {};
+      setFreedomPlanData(defaultPlan);
+    }
+  };
+
+  const getFreedomPlanList = async () => {
     try {
-      setShowLoader("button");
-      const result = await getPlanDetails(data);
-      setFreedomPlanDetails(result.plan_details);
-      if (isFunction(callback)) {
-        callback();
-      }
+      resetErrorData();
+      setShowLoader(true);
+      const result = await getAllPlans();
+      setFreedomPlanList(result.plan_details);
     } catch (err) {
       setErrorData({
         showError: true,
         title2: err.message,
-        handleClick1: resetErrorData,
+        handleClick1: getFreedomPlanList,
       });
     } finally {
       setShowLoader(false);
@@ -65,7 +85,7 @@ function useFreedomDataHook() {
     setErrorData(DEFAULT_ERROR_DATA);
   };
 
-  const setFreedomPlanDetails = (data) => {
+  const updateFreedomPlan = (data) => {
     storageService().setObject("freedomPlanData", data);
     setFreedomPlanData(data);
   };
@@ -74,10 +94,11 @@ function useFreedomDataHook() {
     showLoader,
     freedomPlanData,
     errorData,
+    freedomPlanList,
     setErrorData,
     initiatePayment,
-    getFreedomPlanData,
     resetErrorData,
+    updateFreedomPlan,
   };
 }
 
