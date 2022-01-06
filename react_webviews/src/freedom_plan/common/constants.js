@@ -219,20 +219,20 @@ export const PAYMENT_STATUS_DATA = {
 
 export const FREEDOM_PLANS = [
   {
-    duration: 2,
+    duration: 60,
     amount: 2499,
     name: "2 MONTHS",
     isPopular: false,
   },
   {
-    duration: 6,
+    duration: 180,
     amount: 5999,
     name: "6 MONTHS",
     isPopular: false,
     isDefault: true,
   },
   {
-    duration: 12,
+    duration: 360,
     amount: 9999,
     name: "1 YEAR",
     isPopular: true,
