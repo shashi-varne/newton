@@ -214,7 +214,7 @@ export const partnerConfigs = {
   fisdom: {
     code: "fisdom",
     investSubSectionMap: {
-      stocksAndIpo: ["ipo", "stocks"],
+      stocksAndIpo: ["stocks", "ipo"],
       ourRecommendations: [
         "instaredeem",
         "buildwealth",
