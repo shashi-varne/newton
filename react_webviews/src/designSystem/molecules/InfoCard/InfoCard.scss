@@ -1,14 +1,15 @@
-.ic-text-wrapper {
+.info-card-wrapper {
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+  padding: 16px;
+  .ic-text-wrapper {
     display: flex;
     flex-direction: column;
     margin-left: 16px;
-}
 
-.ic-img {
-    width: 32px;
-    height: 32px;
-}
-
-.ic-subtitle-text {
-    margin-top: 4px;
+    .ic-subtitle-text {
+      margin-top: 4px;
+    }
+  }
 }

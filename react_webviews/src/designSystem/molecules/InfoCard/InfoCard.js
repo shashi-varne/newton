@@ -18,7 +18,7 @@ import './InfoCard.scss';
 
 const InfoCard = ({ imgSrc, imgProps = {}, title, titleColor, subtitle, subtitleColor, onClick }) => {
   return (
-    <Box sx={infoCardWrapperSxStyle} onClick={onClick}>
+    <Box sx={infoCardWrapperSxStyle} className='info-card-wrapper' onClick={onClick}>
       <Imgc
         src={imgSrc}
         style={{ height: '32px', width: '32px' }}
@@ -44,10 +44,7 @@ const infoCardWrapperSxStyle = {
   backgroundColor: 'foundationColors.supporting.white',
   border: '1px solid',
   borderColor: 'foundationColors.supporting.athensGrey',
-  padding: '16px',
   borderRadius: '12px',
-  display: 'flex',
-  flexDirection: 'row',
 };
 
 InfoCard.defaultProps = {
