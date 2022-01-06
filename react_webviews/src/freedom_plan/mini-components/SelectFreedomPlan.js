@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 import { Imgc } from "../../common/ui/Imgc";
 import { getConfig } from "../../utils/functions";
@@ -6,40 +6,37 @@ import { formatAmountInr } from "../../utils/validators";
 import { FREEDOM_PLANS } from "../common/constants";
 import "./mini-components.scss";
 import noop from "lodash/noop";
-import useFreedomDataHook from "../common/freedomPlanHook";
-import { getPlanDetails } from "../common/api";
 
 const SelectFreedomPlan = ({
   isOpen = false,
+  showLoader = false,
+  freedomPlanData = {},
   onClick = noop,
   onClose = noop,
-  handleError = noop,
+  getFreedomPlanData = noop,
 }) => {
-  const { freedomPlanData, setFreedomPlanDetails } = useFreedomDataHook();
-
   const [plan, setPlan] = useState(freedomPlanData);
-  const [showLoader, setShowLoader] = useState(false);
   const handlePlanChange = (value) => () => {
     setPlan(value);
   };
 
-  const handleClick = async () => {
-    if (plan.isDefault || plan.duration !== freedomPlanData.duration) {
-      try {
-        setShowLoader("button");
-        const result = await getPlanDetails({
-          duration: plan.duration,
-          amount: plan.amount,
-        });
-        setFreedomPlanDetails(result.plan_details);
-        onClick();
-      } catch (err) {
-        handleError(err.message);
-      } finally {
-        setShowLoader(false);
-      }
-    } else {
+  useEffect(() => {
+    if (isOpen) {
+      setPlan(freedomPlanData);
+    }
+  }, [isOpen]);
+
+  const handleClick = () => {
+    if (plan.duration === freedomPlanData.duration && freedomPlanData.plan_id) {
       onClick();
+    } else {
+      getFreedomPlanData(
+        {
+          amount: plan.amount,
+          duration: plan.duration,
+        },
+        onClick
+      );
     }
   };
 

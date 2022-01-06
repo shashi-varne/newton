@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Container from "../common/Container";
 import ClickableText from "../../common/ui/ClickableTextElement/WVClickableTextElement";
 import {
@@ -26,10 +26,22 @@ const PlanReview = (props) => {
   const navigate = navigateFunc.bind(props);
   const [openSelectPlan, setOpenSelectPlan] = useState(false);
   const [openTermsAndConditions, setOpenTermsAnsConditions] = useState(false);
-  const { freedomPlanData } = useFreedomDataHook();
+  const {
+    freedomPlanData,
+    showLoader,
+    errorData,
+    getFreedomPlanData,
+    initiatePayment,
+  } = useFreedomDataHook();
   const planDetails = useMemo(getPlanReviewData(freedomPlanData), [
     freedomPlanData,
   ]);
+
+  useEffect(() => {
+    if (errorData.showError && openSelectPlan) {
+      handleSelectPlan(false)();
+    }
+  }, [errorData.showError]);
 
   const initializeKycData = () => {
     if (!isEmpty(kyc)) {
@@ -77,6 +89,8 @@ const PlanReview = (props) => {
       eventObj.properties.screen_name = "select_plan";
     } else {
       eventObj.properties.change_plan_clicked = changePlan;
+      const kycCompleted = isEquityReady ? "yes" : "no";
+      eventObj.properties.kyc_completed = kycCompleted;
     }
     if (userAction === "just_set_events") {
       return eventObj;
@@ -88,7 +102,13 @@ const PlanReview = (props) => {
   const handleClick = () => {
     sendEvents("next");
     if (isEquityReady) {
-      triggerPayment();
+      initiatePayment({
+        ucc: kyc.ucc,
+        amount: freedomPlanData.amount,
+        gst: freedomPlanData.gst_amount,
+        total_amount: freedomPlanData.total_amount,
+        plan_id: freedomPlanData.plan_id,
+      });
       return;
     }
     if (!isEmpty(kycStatusData)) {
@@ -102,8 +122,6 @@ const PlanReview = (props) => {
     const pathname = isNative ? "/kyc/native" : "/kyc/web";
     navigate(pathname);
   };
-
-  const triggerPayment = () => {};
 
   const changePlan = () => {
     sendEvents("next", false, "yes");
@@ -124,6 +142,9 @@ const PlanReview = (props) => {
     <Container
       buttonTitle="PAY NOW"
       skelton={isLoading}
+      showLoader={showLoader}
+      errorData={errorData}
+      showError={errorData.showError}
       title="Review you plan details"
       handleClick={handleClick}
       data-aid="freedom-plan-landing"
@@ -172,6 +193,9 @@ const PlanReview = (props) => {
         isOpen={openSelectPlan}
         onClose={handleSelectPlan(true)}
         onClick={handleSelectPlan(false)}
+        freedomPlanData={freedomPlanData}
+        showLoader={showLoader}
+        getFreedomPlanData={getFreedomPlanData}
       />
       <TermsAndConditions
         isOpen={openTermsAndConditions}

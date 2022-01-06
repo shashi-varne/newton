@@ -12,13 +12,23 @@ import { handleNativeExit, nativeCallback } from "../../utils/native_callback";
 import Tile from "../mini-components/Tile";
 import { getUrlParams } from "../../utils/validators";
 import useFreedomDataHook from "../common/freedomPlanHook";
+import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import "./PaymentStatus.scss";
 
 const PaymentStatus = (props) => {
   const { productName } = useMemo(getConfig, []);
   const { status } = getUrlParams();
-  const paymentStatusData = PAYMENT_STATUS_DATA[status] || PAYMENT_STATUS_DATA["failed"];
-  const { freedomPlanData } = useFreedomDataHook();
+  const paymentStatusData = useMemo(
+    () => PAYMENT_STATUS_DATA[status] || PAYMENT_STATUS_DATA["failed"],
+    []
+  );
+  const { isLoading, kyc } = useUserKycHook();
+  const {
+    errorData,
+    showLoader,
+    freedomPlanData,
+    initiatePayment,
+  } = useFreedomDataHook();
   const paymentDetails = useMemo(getPaymentSummaryData(freedomPlanData), [
     freedomPlanData,
   ]);
@@ -49,6 +59,13 @@ const PaymentStatus = (props) => {
 
   const retryPayment = () => {
     sendEvents("retry");
+    initiatePayment({
+      ucc: kyc.ucc,
+      amount: freedomPlanData.amount,
+      gst: freedomPlanData.gst_amount,
+      total_amount: freedomPlanData.total_amount,
+      plan_id: freedomPlanData.plan_id,
+    });
   };
 
   const redirectToHome = () => {
@@ -62,6 +79,10 @@ const PaymentStatus = (props) => {
         goBack: redirectToHome,
       }}
       hidePageTitle
+      skelton={isLoading}
+      showLoader={showLoader}
+      errorData={errorData}
+      showError={errorData.showError}
       buttonTitle={paymentStatusData.buttonTitle}
       title={paymentStatusData.title}
       events={sendEvents("just_set_events")}

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Container from "../common/Container";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import WVInPageHeader from "../../common/ui/InPageHeader/WVInPageHeader";
@@ -6,7 +6,6 @@ import WVInPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
 import WVInPageSubtitle from "../../common/ui/InPageHeader/WVInPageSubtitle";
 import HowToSteps from "../../common/ui/HowToSteps";
 import {
-  DEFAULT_ERROR_DATA,
   FREEDOM_PLAN_BENEFITS_DATA,
   getFreedomPlanFaqs,
   getStandardVsFreedomPlanDetails,
@@ -33,10 +32,20 @@ const Landing = (props) => {
     getStandardVsFreedomPlanDetails(kyc.equity_account_charges),
     [kyc]
   );
-  const { freedomPlanData } = useFreedomDataHook();
+  const {
+    freedomPlanData,
+    getFreedomPlanData,
+    errorData,
+    showLoader,
+  } = useFreedomDataHook();
   const [openSelectPlan, setOpenSelectPlan] = useState(false);
-  const [errorData, setErrorData] = useState(DEFAULT_ERROR_DATA);
 
+  useEffect(() => {
+    if (errorData.showError && openSelectPlan) {
+      closeSelectFreedomPlan();
+    }
+  }, [errorData.showError]);
+  
   const sendEvents = (userAction, isSelectPlan) => {
     let eventObj = {
       event_name: "freedom_plan",
@@ -57,7 +66,6 @@ const Landing = (props) => {
   };
 
   const handleClick = () => {
-    setErrorData(DEFAULT_ERROR_DATA);
     sendEvents("next");
     setOpenSelectPlan(true);
   };
@@ -74,16 +82,6 @@ const Landing = (props) => {
   const handleSelectPlan = () => {
     sendEvents("next", true);
     navigate(PATHNAME_MAPPER.review);
-  };
-
-  const handleError = (message) => {
-    setErrorData({
-      ...errorData,
-      title2: message,
-      showError: true,
-      handleClick1: handleClick,
-    });
-    setOpenSelectPlan(false);
   };
 
   return (
@@ -137,9 +135,11 @@ const Landing = (props) => {
       </div>
       <SelectFreedomPlan
         isOpen={openSelectPlan}
+        freedomPlanData={freedomPlanData}
+        showLoader={showLoader}
         onClose={closeSelectFreedomPlan}
         onClick={handleSelectPlan}
-        handleError={handleError}
+        getFreedomPlanData={getFreedomPlanData}
       />
     </Container>
   );

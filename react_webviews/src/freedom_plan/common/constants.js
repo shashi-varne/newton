@@ -1,5 +1,4 @@
 import { formatAmountInr, inrFormatDecimal } from "../../utils/validators";
-import { PATHNAME_MAPPER as KYC_PATHNAME_MAPPER } from "../../kyc/constants";
 
 export const MINIMUM_FREEDOM_PLAN_PRICE = 2499;
 
@@ -12,11 +11,6 @@ export const PATHNAME_MAPPER = {
 export const API_CONSTANTS = {
   getPlanDetails: "/api/eqm/subscriptions/create/plan",
   triggerPayment: "/api/equity/api/eqm/eqpayments/subscription/start/payment",
-};
-
-export const DEFAULT_ERROR_DATA = {
-  showError: false,
-  title2: "",
 };
 
 export const FREEDOM_PLAN_BENEFITS_DATA = {
@@ -130,7 +124,6 @@ export const KYC_STATUS_MAPPER = {
       "To opt for the Freedom plan you must have an active Trading & Demat account",
     icon: "icn_kyc_incomplete.svg",
     buttonTitle: "Open now",
-    nextState: KYC_PATHNAME_MAPPER.homeKyc,
   },
   incomplete: {
     title: "Trading & Demat A/c set up not complete",
@@ -138,7 +131,6 @@ export const KYC_STATUS_MAPPER = {
       "To opt for the Freedom plan you must have an active Trading & Demat account",
     icon: "icn_kyc_incomplete.svg",
     buttonTitle: "Complete SET UP",
-    nextState: KYC_PATHNAME_MAPPER.journey,
   },
   in_progress: {
     title: "Account opening is in progress",
@@ -153,14 +145,12 @@ export const KYC_STATUS_MAPPER = {
       "Documents submitted for account opening is rejected. Please re-submit documents to proceed",
     icon: "icn_kyc_doc_rejected.svg",
     buttonTitle: "Submit now",
-    nextState: KYC_PATHNAME_MAPPER.uploadProgress,
   },
   esign_pending: {
     title: "eSign pending",
     subtitle: "Complete eSign to get started with your Freedom plan",
     icon: "icn_kyc_completed.svg",
     buttonTitle: "esign NOW",
-    nextState: KYC_PATHNAME_MAPPER.kycEsign,
   },
 };
 
@@ -247,6 +237,7 @@ export const FREEDOM_PLANS = [
     amount: 5999,
     name: "6 MONTHS",
     isPopular: false,
+    isDefault: true,
   },
   {
     duration: 12,
@@ -255,6 +246,10 @@ export const FREEDOM_PLANS = [
     isPopular: true,
   },
 ];
+
+export const getDefaultPlan = () => {
+  return FREEDOM_PLANS.find((data) => data.isDefault);
+};
 
 export const getFreedomPlanTermsAndConditions = (websiteLink) => () => {
   return [

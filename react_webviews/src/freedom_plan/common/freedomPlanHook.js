@@ -4,13 +4,7 @@ import { getPlanDetails, triggerPayment } from "./api";
 import isFunction from "lodash/isFunction";
 import noop from "lodash/noop";
 import { getBasePath, getConfig } from "../../utils/functions";
-import { PATHNAME_MAPPER } from "./constants";
-
-const DEFAULT_PLAN = {
-  duration: 6,
-  amount: 5999,
-  isDefault: true,
-};
+import { getDefaultPlan, PATHNAME_MAPPER } from "./constants";
 
 const DEFAULT_ERROR_DATA = {
   showError: false,
@@ -18,7 +12,7 @@ const DEFAULT_ERROR_DATA = {
 };
 
 function useFreedomDataHook() {
-  const planData = storageService().getObject("freedomPlanData") || DEFAULT_PLAN;
+  const planData = storageService().getObject("freedomPlanData") || getDefaultPlan();
 
   const [freedomPlanData, setFreedomPlanData] = useState(planData);
   const [showLoader, setShowLoader] = useState(false);
@@ -26,9 +20,6 @@ function useFreedomDataHook() {
 
   const getFreedomPlanData = async (data, callback = noop) => {
     try {
-      if (errorData.showError) {
-        resetErrorData();
-      }
       setShowLoader("button");
       const result = await getPlanDetails(data);
       setFreedomPlanDetails(result.plan_details);
@@ -37,7 +28,6 @@ function useFreedomDataHook() {
       }
     } catch (err) {
       setErrorData({
-        ...errorData,
         showError: true,
         title2: err.message,
         handleClick1: resetErrorData,
@@ -49,7 +39,6 @@ function useFreedomDataHook() {
 
   const initiatePayment = async (data) => {
     try {
-      resetErrorData();
       setShowLoader("button");
       const result = await triggerPayment(data);
       setShowLoader("page");
@@ -64,21 +53,16 @@ function useFreedomDataHook() {
       window.location.href = paymentLink;
     } catch (err) {
       setErrorData({
-        ...errorData,
         showError: true,
         title2: err.message,
-        handleClick2: resetErrorData,
+        handleClick1: resetErrorData,
       });
       setShowLoader(false);
     }
   };
 
   const resetErrorData = () => {
-    console.log("reset error dat 1", errorData);
-    setErrorData({
-      ...errorData,
-      ...DEFAULT_ERROR_DATA,
-    });
+    setErrorData(DEFAULT_ERROR_DATA);
   };
 
   const setFreedomPlanDetails = (data) => {
