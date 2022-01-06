@@ -24,10 +24,10 @@ import format from 'date-fns/format';
 import PropTypes from 'prop-types';
 import './LandingHeader.scss';
 
-const LandingHeader = ({ variant, children, imageSrc, imageProps = {} }) => {
+const LandingHeader = ({ variant, children, imageSrc, imageProps = {}, dataAid }) => {
   const variantClass = variant === 'center' ? 'center-align' : '';
   return (
-    <Box className={`landing-header-wrapper ${variantClass}`}>
+    <Box className={`landing-header-wrapper ${variantClass}`} data-aid={`landingHeader_${dataAid}`}>
       <Imgc
         src={imageSrc}
         style={{ width: '140px', height: '120px' }}
