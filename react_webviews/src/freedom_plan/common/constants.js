@@ -239,10 +239,6 @@ export const FREEDOM_PLANS = [
   },
 ];
 
-export const getDefaultPlan = () => {
-  return FREEDOM_PLANS.find((data) => data.isDefault);
-};
-
 export const getFreedomPlanTermsAndConditions = (websiteLink) => () => {
   return [
     `Freedom Plan subscription is applicable only to Resident individuals. `,

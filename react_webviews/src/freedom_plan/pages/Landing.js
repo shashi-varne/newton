@@ -44,6 +44,7 @@ const Landing = (props) => {
     errorData,
     showLoader,
     freedomPlanData,
+    freedomPlanList,
     updateFreedomPlan,
   } = useFreedomDataHook();
 
@@ -63,7 +64,7 @@ const Landing = (props) => {
     };
     if (isSelectPlan) {
       eventObj.properties.screen_name = "select_plan";
-      eventObj.properties.plan_selected = `${freedomPlanData.duration}_months`;
+      eventObj.properties.plan_selected = `${freedomPlanData.duration/30}_months`;
     }
     if (userAction === "just_set_events") {
       return eventObj;
@@ -142,9 +143,10 @@ const Landing = (props) => {
         </div>
       </div>
       <SelectFreedomPlan
+        showLoader={showLoader}
         isOpen={openSelectPlan}
         freedomPlanData={freedomPlanData}
-        showLoader={showLoader}
+        freedomPlanList={freedomPlanList}
         onClose={closeSelectFreedomPlan}
         onClick={handleSelectPlan}
       />

@@ -3,15 +3,17 @@ import { storageService } from "../../utils/validators";
 import { getAllPlans, triggerPayment } from "./api";
 import isEmpty from "lodash/isEmpty";
 import { getBasePath, getConfig } from "../../utils/functions";
-import { getDefaultPlan, PATHNAME_MAPPER } from "./constants";
+import { PATHNAME_MAPPER } from "./constants";
+import { getActivePlans, getDefaultPlan } from "./functions";
 
 const DEFAULT_ERROR_DATA = {
   showError: false,
   title2: "",
 };
 
+/* eslint-disable */
 function useFreedomDataHook() {
-  const planData = storageService().getObject("freedomPlanData") || getDefaultPlan();
+  const planData = storageService().getObject("freedomPlanData") || {};
   const planList = storageService().getObject("freedomPlanList") || [];
 
   const [freedomPlanData, setFreedomPlanData] = useState(planData);
@@ -35,8 +37,7 @@ function useFreedomDataHook() {
 
   const setDefaultPlan = () => {
     if (isEmpty(freedomPlanData)) {
-      const defaultPlan = freedomPlanList.find((data) => data.is_default) || {};
-      setFreedomPlanData(defaultPlan);
+      setFreedomPlanData(getDefaultPlan(freedomPlanList));
     }
   };
 
@@ -45,7 +46,8 @@ function useFreedomDataHook() {
       resetErrorData();
       setShowLoader(true);
       const result = await getAllPlans();
-      setFreedomPlanList(result.plan_details);
+      const activePlans = getActivePlans(result.plan_details);
+      setFreedomPlanList(activePlans);
     } catch (err) {
       setErrorData({
         showError: true,

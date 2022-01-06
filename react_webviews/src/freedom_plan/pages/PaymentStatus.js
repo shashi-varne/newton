@@ -54,7 +54,7 @@ const PaymentStatus = (props) => {
   };
 
   const handleClick = () => {
-    if (paymentStatusData.isSuccess || !freedomPlanData.plan_id) {
+    if (paymentStatusData.isSuccess || !freedomPlanData.id) {
       sendEvents("next");
       redirectToHome();
     } else {
@@ -69,7 +69,7 @@ const PaymentStatus = (props) => {
       amount: freedomPlanData.amount,
       gst: freedomPlanData.gst,
       total_amount: freedomPlanData.total_amount,
-      plan_id: freedomPlanData.plan_id,
+      plan_id: freedomPlanData.id,
     });
   };
 

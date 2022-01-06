@@ -3,30 +3,40 @@ import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 import { Imgc } from "../../common/ui/Imgc";
 import { getConfig } from "../../utils/functions";
 import { formatAmountInr } from "../../utils/validators";
-import { FREEDOM_PLANS } from "../common/constants";
 import { SkeltonRect } from "../../common/ui/Skelton";
-import "./mini-components.scss";
+import isEmpty from "lodash/isEmpty";
 import noop from "lodash/noop";
+import "./mini-components.scss";
 
 const SelectFreedomPlan = ({
   isOpen = false,
   showLoader = true,
   freedomPlanData = {},
+  freedomPlanList = [],
   onClick = noop,
   onClose = noop,
 }) => {
   const [plan, setPlan] = useState(freedomPlanData);
+  const [errorMessage, setErrorMessage] = useState("");
   const handlePlanChange = (value) => () => {
+    if (!isEmpty(errorMessage)) {
+      setErrorMessage("");
+    }
     setPlan(value);
   };
 
   useEffect(() => {
     if (isOpen) {
       setPlan(freedomPlanData);
+      setErrorMessage("");
     }
   }, [isOpen]);
 
   const handleClick = () => {
+    if (isEmpty(plan)) {
+      setErrorMessage("please choose a plan");
+      return;
+    }
     onClick(plan);
   };
 
@@ -45,14 +55,14 @@ const SelectFreedomPlan = ({
     >
       <div className="select-freedom-plan">
         <div className="select-freedom-plan-container">
-          {showLoader ? (
+          {showLoader || isEmpty(freedomPlanList) ? (
             <>
               <SkeltonRect className="sfpc-loader" />
               <SkeltonRect className="sfpc-loader" />
               <SkeltonRect className="sfpc-loader" />
             </>
           ) : (
-            FREEDOM_PLANS.map((data, index) => (
+            freedomPlanList.map((data, index) => (
               <Plan
                 key={index}
                 {...data}
@@ -62,6 +72,9 @@ const SelectFreedomPlan = ({
             ))
           )}
         </div>
+        {errorMessage && (
+          <div className="helper-text error-message">{errorMessage}</div>
+        )}
         <div className="helper-note">*GST at 18% would apply</div>
       </div>
     </WVBottomSheet>

@@ -31,9 +31,10 @@ const PlanReview = (props) => {
   const [openSelectPlan, setOpenSelectPlan] = useState(false);
   const [openTermsAndConditions, setOpenTermsAnsConditions] = useState(false);
   const {
-    freedomPlanData,
     showLoader,
     errorData,
+    freedomPlanData,
+    freedomPlanList,
     initiatePayment,
     updateFreedomPlan,
   } = useFreedomDataHook();
@@ -96,7 +97,7 @@ const PlanReview = (props) => {
       properties: {
         user_action: userAction,
         screen_name: "review_plan",
-        plan_selected: `${freedomPlanData.duration}_months`,
+        plan_selected: `${freedomPlanData.duration/30}_months`,
       },
     };
     if (isSelectPlan) {
@@ -121,7 +122,7 @@ const PlanReview = (props) => {
         amount: freedomPlanData.amount,
         gst: freedomPlanData.gst,
         total_amount: freedomPlanData.total_amount,
-        plan_id: freedomPlanData.plan_id,
+        plan_id: freedomPlanData.id,
       });
       return;
     }
@@ -213,6 +214,7 @@ const PlanReview = (props) => {
         onClose={handleSelectPlan(true)}
         onClick={handleSelectPlan(false)}
         freedomPlanData={freedomPlanData}
+        freedomPlanList={freedomPlanList}
         showLoader={showLoader}
       />
       <TermsAndConditions
