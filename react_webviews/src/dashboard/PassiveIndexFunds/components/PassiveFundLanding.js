@@ -93,7 +93,7 @@ class Landing extends Component {
         showError={this.state.showError}
         errorData={this.state.errorData}
         classHeader="passive-index-header-color"
-        customBackButtonColor="white"
+        customIconColor="white"
         data-aid={"passive-fund-landing-screen"}
         noPadding
       >
