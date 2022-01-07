@@ -81,7 +81,7 @@ const SelectFreedomPlan = ({
   );
 };
 
-const Plan = ({ name, amount, isSelected, isPopular, handlePlanChange }) => {
+const Plan = ({ name, amount, isSelected, is_popular, handlePlanChange }) => {
   const { productName } = useMemo(getConfig, []);
   return (
     <div
@@ -95,7 +95,7 @@ const Plan = ({ name, amount, isSelected, isPopular, handlePlanChange }) => {
           className="selected-icon"
         />
       )}
-      {isPopular && <div className="fpo-popular">MOST POPULAR</div>}
+      {is_popular && <div className="fpo-popular">MOST POPULAR</div>}
       <div>{name}</div>
       <div className="fpo-amount">{formatAmountInr(amount)}</div>
     </div>
