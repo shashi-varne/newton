@@ -2,7 +2,7 @@ import React from 'react';
 import Container from '../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
-import { getImage } from '../constants'
+import { API_CONSTANST, getImage } from '../constants'
 import "./Style.scss";
 
 import icn_upi_apps from 'assets/icn_upi_apps.svg';
@@ -414,7 +414,9 @@ class PaymentOption extends React.Component {
     })
     const config = getConfig();
     let { redirect_url = "" } = config.current_params;
-    let url = config.base_url + '/api/equity/api/eqm/eqpayments/pg/payment/options/' + config.pc_urlsafe;
+    const flow = this.props.match?.params?.flow || "";
+    const apiRoute = API_CONSTANST[flow] || API_CONSTANST.default;
+    let url = config.base_url + apiRoute + config.pc_urlsafe;
     if(config.Web && isEmpty(redirect_url)) {
       redirect_url = encodeURIComponent(`${basepath}/pg/eq/payment-status` + config.searchParams);
     }
