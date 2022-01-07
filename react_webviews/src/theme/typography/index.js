@@ -118,7 +118,7 @@ const baseTypographyConfig = (colors={}, partnerConfig={}) => ({
     fontSize: 16,
     color: colors?.content?.primary,
     fontWeight: FONT_WEIGHT.Medium,
-    lineHeight: calcLineHeight(16, bodyTextFactor),
+    lineHeight: '21px',
     fontFamily: partnerConfig?.fontFamily?.join(','),
     textTransform: 'uppercase'
   },
