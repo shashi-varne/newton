@@ -1,6 +1,7 @@
 import React from 'react';
 import LibButton from '@mui/material/Button';
 import DotDotLoaderNew from 'common/ui/DotDotLoaderNew';
+import PropTypes from 'prop-types';
 
 const VARIANTS = {
   primary: 'contained',
@@ -25,7 +26,7 @@ const Button = (props) => {
   } = props;
   return (
     <LibButton
-      isloading={isLoading}
+      isloading={isLoading ? 1 : 0}
       variant={VARIANTS[variant] || VARIANTS['primary']}
       size={SIZES[size] || SIZES['large']}
       color='secondary'
@@ -48,6 +49,9 @@ Button.defaultProps = {
 Button.propTypes = {
   variant: (props) => validateVariantType(props),
   size: (props) => validateSizeType(props),
+  title: PropTypes.string.isRequired,
+  disabled: PropTypes.bool,
+  isLoading: PropTypes.bool,
 };
 
 const validateVariantType = (props) => {
