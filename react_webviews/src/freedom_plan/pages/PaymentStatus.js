@@ -27,11 +27,13 @@ const PaymentStatus = (props) => {
   const { productName, paymentStatusData } = useMemo(initialize, []);
 
   const { isLoading, kyc } = useUserKycHook();
+  
   const {
     errorData,
     showLoader,
     freedomPlanData,
     initiatePayment,
+    resetFreedomPlan,
   } = useFreedomDataHook();
 
   const paymentDetails = useMemo(getPaymentSummaryData(freedomPlanData), [
@@ -56,7 +58,7 @@ const PaymentStatus = (props) => {
   const handleClick = () => {
     if (paymentStatusData.isSuccess || !freedomPlanData.id) {
       sendEvents("next");
-      redirectToHome();
+      redirectToHome(true);
     } else {
       retryPayment();
     }
@@ -73,7 +75,11 @@ const PaymentStatus = (props) => {
     });
   };
 
-  const redirectToHome = () => {
+  const redirectToHome = (isNext = false) => {
+    if (!isNext) {
+      sendEvents("back");
+    }
+    resetFreedomPlan();
     handleNativeExit(props, { action: "exit" });
   };
 

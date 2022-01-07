@@ -96,7 +96,7 @@ const Plan = ({ name, amount, isSelected, is_popular, handlePlanChange }) => {
         />
       )}
       {is_popular && <div className="fpo-popular">MOST POPULAR</div>}
-      <div>{name}</div>
+      <div className="fpo-name">{name}</div>
       <div className="fpo-amount">{formatAmountInr(amount)}</div>
     </div>
   );

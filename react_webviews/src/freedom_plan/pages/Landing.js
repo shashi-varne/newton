@@ -45,6 +45,7 @@ const Landing = (props) => {
     showLoader,
     freedomPlanData,
     freedomPlanList,
+    resetFreedomPlan,
     updateFreedomPlan,
   } = useFreedomDataHook();
 
@@ -79,6 +80,8 @@ const Landing = (props) => {
   };
 
   const goBack = () => {
+    sendEvents("back");
+    resetFreedomPlan();
     handleNativeExit(props, { action: "exit" });
   };
 

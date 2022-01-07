@@ -10,7 +10,7 @@ export const PATHNAME_MAPPER = {
 
 export const API_CONSTANTS = {
   getAllPlans: "/api/equity/api/eqm/subscriptions/get/all_plans",
-  triggerPayment: "/api/equity/api/eqm/eqpayments/subscription/start/payment",
+  triggerPayment: "api/equity/api/eqm/subscription/start/payment",
 };
 
 export const FREEDOM_PLAN_BENEFITS_DATA = {

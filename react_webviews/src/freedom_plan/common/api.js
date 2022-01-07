@@ -21,7 +21,7 @@ export const handleApi = (res) => {
 };
 
 export const getAllPlans = async (data) => {
-  const res = await Api.post(API_CONSTANTS.getAllPlans, data);
+  const res = await Api.get(API_CONSTANTS.getAllPlans, data);
   return handleApi(res);
 };
 
