@@ -635,7 +635,7 @@ class PaymentOption extends React.Component {
       window.location.href = `${this.state.paymentUrl}?payment_method=netbanking`;
     } else if (type === "neft") {
       this.props.history.push(
-        { pathname: 'neft', search: getConfig().searchParams },
+        { pathname: '/pg/eq/neft', search: getConfig().searchParams },
         { store: {bankDetails:this.state.bankDetails,amount:this.state.amount} }
       );
     } else if (type === "upi") {
