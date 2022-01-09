@@ -16,20 +16,23 @@ import { Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import './InfoCard.scss';
 
-const InfoCard = ({ imgSrc, imgProps = {}, title, titleColor, subtitle, subtitleColor, onClick }) => {
+const InfoCard = ({ imgSrc, imgProps = {}, title, titleColor, subtitle, subtitleColor, onCardClick, dataAid }) => {
   return (
-    <Box sx={infoCardWrapperSxStyle} className='info-card-wrapper' onClick={onClick}>
+    <Box sx={infoCardWrapperSxStyle} className='info-card-wrapper' onClick={onCardClick} data-aid={`infoCard_${dataAid}`}>
       <Imgc
         src={imgSrc}
         style={{ height: '32px', width: '32px' }}
         {...imgProps}
+        dataAid='left'
       />
       <div className='ic-text-wrapper'>
-        <Typography variant='heading4' color={titleColor}>{title}</Typography>
+        <Typography variant='heading4' color={titleColor} component='div' data-aid='tv_title'>{title}</Typography>
         <Typography
           className='ic-subtitle-text'
           variant='body2'
           color={subtitleColor}
+          component='div'
+          data-aid='tv_subtitle'
         >
           {subtitle}
         </Typography>
@@ -52,7 +55,9 @@ InfoCard.defaultProps = {
 }
 
 InfoCard.propTypes = {
-  title: PropTypes.string,
-  subtitle: PropTypes.string,
-  onClick: PropTypes.func
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  titleColor: PropTypes.string,
+  subtitleColor: PropTypes.string,
+  onCardClick: PropTypes.func
 }
