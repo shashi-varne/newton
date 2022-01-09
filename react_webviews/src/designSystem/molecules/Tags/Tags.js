@@ -17,7 +17,7 @@ import { Box, Typography } from '@mui/material';
 import React from 'react';
 import { Imgc } from '../../../common/ui/Imgc';
 import isEmpty from 'lodash/isEmpty';
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 import './Tags.scss';
 
 const Tags = (props) => {
@@ -26,9 +26,8 @@ const Tags = (props) => {
     label,
     labelBackgroundColor,
     labelColor,
-    labelClassName,
-    tagClassName,
-    rating
+    rating,
+    dataAid,
   } = props;
   const morningStarLogo = smallRating
     ? 'small_morning_star'
@@ -40,23 +39,24 @@ const Tags = (props) => {
         label={label}
         labelBackgroundColor={labelBackgroundColor}
         labelColor={labelColor}
-        labelClassName={labelClassName}
+        dataAid={dataAid}
       />
     );
   }
 
   return (
-    <div className={`${tagClassName} tags-wrapper`}>
+    <div className='tags-wrapper' data-aid={`tags_${dataAid}`}>
       <Imgc
         style={{ marginRight: '8px', width: '14px', height: '14px' }}
         src={require(`assets/tags_star.svg`)}
-        alt=''
+        dataAid='logo'
       />
-      <Typography variant='body5'>{rating}</Typography>
+      <Typography variant='body5' data-aid='tv_title'>{rating}</Typography>
       <Imgc
         style={{ marginLeft: '8px' }}
         src={require(`assets/${morningStarLogo}.svg`)}
         alt=''
+        dataAid='star'
       />
     </div>
   );
@@ -64,30 +64,31 @@ const Tags = (props) => {
 
 export default Tags;
 
-const LabelTag = ({
-  label,
-  labelBackgroundColor,
-  labelColor,
-  labelClassName,
-}) => {
+const LabelTag = ({ label, labelBackgroundColor, labelColor, dataAid }) => {
   return (
     <Box
-      className={`${labelClassName} label-tag-wrapper`}
+      className='label-tag-wrapper'
       sx={{
-        backgroundColor: labelBackgroundColor
-          ? labelBackgroundColor
-          : 'foundationColors.secondary.blue.200',
+        backgroundColor: labelBackgroundColor,
       }}
+      data-aid={`tags_${dataAid}`}
     >
-      <Typography variant='body5' color={labelColor}>
+      <Typography variant='body5' color={labelColor} data-aid='tv_title'>
         {label}
       </Typography>
     </Box>
   );
 };
 
+Tags.defaultProps = {
+  labelBackgroundColor: 'foundationColors.secondary.blue.200'
+}
+
 Tags.propTypes = {
   label: PropTypes.string,
-  rating: PropTypes.number,
-  smallRating: PropTypes.bool
+  labelColor: PropTypes.string,
+  labelBackgroundColor: PropTypes.string,
+  rating: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  smallRating: PropTypes.bool,
+  dataAid: PropTypes.string,
 };
