@@ -1,11 +1,27 @@
 .ht-wrapper {
     display: flex;
-}
+    .ht-child-wrapper {
+        display: flex;
+        flex-direction: column;
+        margin-left: 8px;
+    }
 
-.ht-text-wrapper {
-    display: flex;
-    flex-direction: column;
-    margin-left: 8px;
+    .ht-subtitle-labels {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-top: 4px;
+        .ht-subtitle-label {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .ht-label-separator {
+            margin-left: 8px;
+            margin-right: 8px;
+        }
+    }
 }
 
 .ht-subtitle {
