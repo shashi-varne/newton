@@ -84,7 +84,7 @@ const cvSxStyle = {
 };
 
 CardVertical.propTypes = {
-  title: PropTypes.string,
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   titleColor: PropTypes.string,
   subtitleColor: PropTypes.string,
