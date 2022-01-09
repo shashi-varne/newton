@@ -14,13 +14,14 @@ import PropTypes from 'prop-types';
 
 import './HeaderTitle.scss';
 
-const HeaderTitle = ({ ImgSrc, children, imgProps, subTitleLabels }) => {
+const HeaderTitle = ({ ImgSrc, children, imgProps, subTitleLabels, dataAid }) => {
   return (
-    <div className='ht-wrapper'>
+    <div className='ht-wrapper' data-aid={`headerTitle_${dataAid}`}>
       <Imgc
         src={ImgSrc}
         style={{ width: '40px', height: '40px' }}
         {...imgProps}
+        dataAid='left'
       />
       <div className='ht-child-wrapper'>
         {children}
@@ -34,7 +35,7 @@ const HeaderTitle = ({ ImgSrc, children, imgProps, subTitleLabels }) => {
 
 HeaderTitle.Title = ({ children, titleColor }) => {
   return (
-    <Typography variant='heading2' color={titleColor}>
+    <Typography variant='heading2' color={titleColor} data-aid='tv_title'>
       {children}
     </Typography>
   );
@@ -42,7 +43,7 @@ HeaderTitle.Title = ({ children, titleColor }) => {
 
 HeaderTitle.Subtitle = ({ children, subtitleColor }) => {
   return (
-    <Typography className='ht-subtitle' variant='body2' color={subtitleColor}>
+    <Typography className='ht-subtitle' variant='body2' color={subtitleColor} data-aid='tv_subtitle'>
       {children}
     </Typography>
   );
@@ -84,6 +85,7 @@ HeaderTitle.propTypes = {
       color: PropTypes.string,
     })
   ),
+  dataAid: PropTypes.string,
 };
 
 HeaderTitle.defaultProps = {
