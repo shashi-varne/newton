@@ -17,9 +17,9 @@ import { Typography, Collapse as CollapseLib } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import PropTypes from 'prop-types';
-import './Collapse.scss';
+import './CollapsibleSection.scss';
 
-const Collapse = ({
+const CollapsibleSection = ({
   isOpen,
   label,
   onClick,
@@ -27,13 +27,14 @@ const Collapse = ({
   expandedIcon,
   collapsedIcon,
   labelColor,
-  childWrapperClass
+  childWrapperClass,
+  dataAid
 }) => {
   return (
-    <div className='c-wrapper'>
+    <div className='c-wrapper' data-aid={`collapsibleSection_${dataAid}`}>
       <div className='c-label-wrapper' onClick={onClick}>
-        <Typography variant='heading3' color={labelColor}>{label}</Typography>
-        <div className='c-icon-wrapper'>{isOpen ? expandedIcon : collapsedIcon}</div>
+        <Typography variant='heading3' color={labelColor} data-aid='tv_title'>{label}</Typography>
+        <div className='c-icon-wrapper' data-aid={`iv_${isOpen ? 'expanded': 'collapsed'}`}>{isOpen ? expandedIcon : collapsedIcon}</div>
       </div>
       <CollapseLib in={isOpen}>
         <div className={`c-child-wrapper ${childWrapperClass}`}>{children}</div>
@@ -42,16 +43,16 @@ const Collapse = ({
   );
 };
 
-Collapse.propTypes = {
+CollapsibleSection.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   label: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
 }
 
-Collapse.defaultProps = {
+CollapsibleSection.defaultProps = {
   expandedIcon: <KeyboardArrowUpIcon />,
   collapsedIcon: <KeyboardArrowDownIcon />,
 };
 
-export default Collapse;
+export default CollapsibleSection;
