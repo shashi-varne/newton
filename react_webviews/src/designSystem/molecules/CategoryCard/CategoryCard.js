@@ -18,7 +18,7 @@ import './CategoryCard.scss';
 const CategoryCard = ({
   variant,
   imgSrc,
-  imgProps={},
+  imgProps,
   title,
   titleColor,
   subtitle,
@@ -38,6 +38,7 @@ const CategoryCard = ({
         align='center'
         color={titleColor}
         data-aid='tv_title'
+        component='div'
       >
         {title}
       </Typography>
@@ -47,6 +48,7 @@ const CategoryCard = ({
         className={variantData.subtitleClass}
         align='center'
         data-aid='tv_subtitle'
+        component='div'
       >
         {subtitle}
       </Typography>
@@ -58,12 +60,17 @@ export default CategoryCard;
 
 CategoryCard.defaultProps = {
   variant: 'small',
+  imgProps: {},
 };
 
 CategoryCard.propTypes = {
-  title: PropTypes.string,
-  subtitle: PropTypes.string,
-  variant: PropTypes.oneOf(['small', 'large'])
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  titleColor: PropTypes.string,
+  subtitleColor: PropTypes.string,
+  variant: PropTypes.oneOf(['small', 'large']),
+  onCardClick: PropTypes.func,
+  dataAid: PropTypes.string
 };
 
 const SMALL_VARIANT_IMAGE_STYLE = {
