@@ -15,27 +15,31 @@ import './BlogContent.scss';
 
 const BlogContent = ({
   imgSrc,
-  imgProps = {},
+  imgProps,
   title,
   titleColor,
   subtitle,
   subtitleColor,
-  onBlogClick
+  onBlogClick,
+  dataAid
 }) => {
   return (
-    <div className='bc-wrapper' onClick={onBlogClick}>
+    <div className='bc-wrapper' onClick={onBlogClick} data-aid={`blogContent_${dataAid}`}>
       <Imgc
         src={imgSrc}
         style={{ height: '62px', width: '92px', padding: '4px' }}
         {...imgProps}
+        dataAid='left'
       />
       <div className='bc-text-wrapper'>
-        <Typography variant='body1' color={titleColor}>
+        <Typography variant='body1' color={titleColor} component='div' data-aid='tv_title'>
           {title}
         </Typography>
         <Typography
           variant='body5'
           color={subtitleColor}
+          data-aid='tv_subtitle'
+          component='div'
         >
           {subtitle}
         </Typography>
@@ -45,12 +49,17 @@ const BlogContent = ({
 };
 
 BlogContent.defaultProps = {
-  subtitleColor: 'foundationColors.content.secondary'
+  subtitleColor: 'foundationColors.content.secondary',
+  imgProps: {}
 };
 
 BlogContent.propTypes = {
-  title: PropTypes.string,
-  subtitle: PropTypes.string,
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  titleColor: PropTypes.string,
+  subtitleColor: PropTypes.string,
+  onBlogClick: PropTypes.func,
+  dataAid: PropTypes.string
 };
 
 export default BlogContent;
