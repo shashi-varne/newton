@@ -1,5 +1,7 @@
 import { InputAdornment, TextField } from '@mui/material';
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import './InputField.scss';
 
 const InputField = (props) => {
@@ -10,8 +12,6 @@ const InputField = (props) => {
     inputProps = {},
     prefix='',
     suffix,
-    classes,
-    className,
     disabled,
     onChange,
     defaultValue,
@@ -59,8 +59,6 @@ const InputField = (props) => {
         variant='filled'
         helperText={helperText}
         error={error}
-        classes={classes}
-        className={className}
         disabled={disabled}
         onChange={onChange}
         value={value}
@@ -83,3 +81,18 @@ const InputField = (props) => {
 };
 
 export default InputField;
+
+InputField.defaultProps = {
+  type: 'text'
+}
+
+InputField.propTypes = {
+  label: PropTypes.string.isRequired,
+  helperText: PropTypes.string,
+  error: PropTypes.bool,
+  inputProps: PropTypes.object,
+  prefix: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  suffix: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  disabled: PropTypes.bool,
+  onChange: PropTypes.func,
+}
