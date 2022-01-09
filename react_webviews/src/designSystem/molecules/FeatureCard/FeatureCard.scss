@@ -1,10 +1,16 @@
+@mixin flex-space-btwn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .fc-wrapper {
   padding: 16px;
   background-color: white;
   box-shadow: 0px 6px 12px -6px rgba(0, 0, 0, 0.04),
     0px 0px 1px rgba(0, 0, 0, 0.2);
   border-radius: 12px;
-  cursor: pointer;
+  cursor: pointer !important;
 
   .fc-divider {
     margin-left: -16px;
@@ -23,13 +29,20 @@
   }
 
   .fc-description-list {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    @include flex-space-btwn();
     padding-top: 8px;
     .fc-description-item {
       display: flex;
       flex-direction: column;
+    }
+  }
+
+  .fc-tag-wrapper {
+    @include flex-space-btwn();
+    padding-top: 8px;
+    .tags-wrapper,
+    .label-tag-wrapper {
+      cursor: pointer;
     }
   }
 }
