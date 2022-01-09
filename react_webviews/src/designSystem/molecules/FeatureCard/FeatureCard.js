@@ -25,12 +25,12 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
 import Tags from '../Tags';
+import Separator from '../../atoms/Separator'
 import { Imgc } from '../../../common/ui/Imgc';
 import isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
 
 import './FeatureCard.scss';
-import { Divider } from '@mui/material';
 
 const FeatureCard = ({
   imgSrc,
@@ -71,7 +71,7 @@ const FeatureCard = ({
           {heading}
         </Typography>
       </div>
-      <Divider data-aid='seperator' className='fc-divider' />
+      <Separator className='fc-divider' />
       {isDescriptionVariant && (
         <Description
           leftDescription={leftDescription}

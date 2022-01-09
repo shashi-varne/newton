@@ -2,6 +2,7 @@ export const separatorStyleOverRides = (colors) => {
   return {
     root: {
       backgroundColor: colors.supporting.athensGrey,
+      borderColor: colors.supporting.athensGrey
     },
     inset: {
       marginRight: 16,
