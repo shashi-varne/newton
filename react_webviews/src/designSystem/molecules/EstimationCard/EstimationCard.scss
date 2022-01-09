@@ -1,10 +1,14 @@
-.ec-kw-title-wrapper {
+.ec-wrapper {
+  cursor: pointer;
+
+  .ec-kw-title-wrapper {
     display: flex;
     flex-direction: row;
     align-items: center;
-}
+  }
 
-.ec_info_icon {
+  .ec_info_icon {
     margin-left: 8px;
     cursor: pointer;
+  }
 }

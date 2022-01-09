@@ -1,55 +1,65 @@
+/*
+  prop description:
+   titleOne, subtitleOne, titleTwo, subtitleTwo => string/node(use node, only if part of the text has some style change in it.)
+   titleOneColor, subtitleOneColor, titleTwoColor, subtitleTwoColor => strongly recommended to use only foundation colors.
+   Example: 
+    titleOneColor: 'foundationColors.secondary.mango.300'
+   onInfoClick: will show the info icon with clickable functionality.
+   onCardClick: will tigger the event if card container is clicked.
+*/
+
+
 import React from 'react';
 import { Box, Typography } from '@mui/material';
-import './EstimationCard.scss';
 import { Imgc } from '../../../common/ui/Imgc';
+import PropTypes from 'prop-types';
+import './EstimationCard.scss';
 
 const EstimationCard = ({
-  keyTitle,
-  keyTitleProps,
-  keySubTitle,
-  keySubTitleProps,
-  valueTitle,
-  valueTitleProps,
-  valueSubTitle,
-  valueSubTitleProps,
+  titleOne,
+  titleOneColor,
+  subtitleOne,
+  subtitleOneColor,
+  titleTwo,
+  titleTwoColor,
+  subtitleTwo,
+  subtitleTwoColor,
   onInfoClick,
   onCardClick,
+  dataAid
 }) => {
+  const onIconClick = (e) => {
+    e.stopPropagation();
+    onInfoClick(e)
+  }
   return (
-    <Box sx={esSxStyle} onClick={onCardClick}>
+    <Box className='ec-wrapper' sx={esSxStyle} onClick={onCardClick} data-aid={`estimationCard_${dataAid}`}>
       <div className='ec-key-wrapper'>
         <div className='ec-kw-title-wrapper'>
-          <Typography variant='body1' {...keyTitleProps}>
-            {keyTitle}
+          <Typography variant='body1' color={titleOneColor} component='div' data-aid='tv_title_1'>
+            {titleOne}
           </Typography>
-          {onInfoClick && (
-            <div onClick={onInfoClick}>
+          {titleOne && onInfoClick && (
+            <div onClick={onIconClick}>
               <Imgc
                 src={require('assets/ec_info.svg')}
                 className='ec_info_icon'
                 alt='info_icon'
+                dataAid='info'
               />
             </div>
           )}
         </div>
-        <Typography
-          variant='body5'
-          color='foundationColors.content.secondary'
-          {...keySubTitleProps}
-        >
-          {keySubTitle}
+        <Typography variant='body5' color={subtitleOneColor} component='div' data-aid='tv_subtitle_1'>
+          {subtitleOne}
         </Typography>
       </div>
       <div className='ec-value-wrapper'>
-        <Typography variant='body2' {...valueTitleProps}>
-          {valueTitle}
+        <Typography variant='body2' color={titleTwoColor} component='div' data-aid='tv_title_2'>
+          {titleTwo}
         </Typography>
-        <Typography
-          variant='body4'
-          color='foundationColors.content.secondary'
-          {...valueSubTitleProps}
-        >
-          {valueSubTitle}
+        <Typography variant='body4' color={subtitleTwoColor} component='div' data-aid='tv_subtitle_2'>
+          {subtitleTwo}
         </Typography>
       </div>
     </Box>
@@ -57,6 +67,25 @@ const EstimationCard = ({
 };
 
 export default EstimationCard;
+
+EstimationCard.propTypes = {
+  titleOne: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  titleOneColor: PropTypes.string,
+  subtitleOne: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  subtitleOneColor: PropTypes.string,
+  titleTwo: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  titleTwoColor: PropTypes.string,
+  subtitleTwo: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  subtitleTwoColor: PropTypes.string,
+  onInfoClick: PropTypes.func,
+  onCardClick: PropTypes.func,
+  dataAid: PropTypes.string
+};
+
+EstimationCard.defaultProps = {
+  subtitleOneColor: 'foundationColors.content.secondary',
+  subtitleTwoColor: 'foundationColors.content.secondary',
+};
 
 const esSxStyle = {
   display: 'flex',
