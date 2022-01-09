@@ -114,6 +114,14 @@ const baseTypographyConfig = (colors={}, partnerConfig={}) => ({
     lineHeight: calcLineHeight(12, bodyTextFactor),
     fontFamily: partnerConfig?.fontFamily?.join(','),
   },
+  actionText: {
+    fontSize: 16,
+    color: colors?.content?.primary,
+    fontWeight: FONT_WEIGHT.Medium,
+    lineHeight: '21px',
+    fontFamily: partnerConfig?.fontFamily?.join(','),
+    textTransform: 'uppercase'
+  },
   // the below font family is for the MUI components.
   fontFamily: partnerConfig?.fontFamily?.join(','),
 });
