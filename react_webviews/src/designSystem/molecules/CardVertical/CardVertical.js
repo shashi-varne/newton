@@ -25,7 +25,7 @@ const CardVertical = ({
   elevation,
   onCardClick,
   imgProps,
-  dataAid
+  dataAid,
 }) => {
   return (
     <Box
@@ -34,26 +34,43 @@ const CardVertical = ({
       sx={cvSxStyle}
       data-aid={`cardVertical_${dataAid}`}
     >
-      <Imgc src={imgcSrc} style={{ width: '32px', height: '32px' }} dataAid='top' {...imgProps}/>
-      <Typography className='cv-mt-4' variant='body1' color={titleColor} data-aid='tv_title'>
+      <Imgc
+        src={imgcSrc}
+        style={{ width: '32px', height: '32px' }}
+        {...imgProps}
+        dataAid='top'
+      />
+      <Typography
+        className='cv-mt-4'
+        variant='body1'
+        color={titleColor}
+        data-aid='tv_title'
+        component='div'
+      >
         {title}
       </Typography>
-      <Typography
-        variant='body2'
-        className='cv-mt-4'
-        color={subtitleColor}
-        data-aid='tv_subtitle'
-      >
-        {subtitle}
-      </Typography>
-      <Typography
-        variant='body2'
-        className='cv-mt-4'
-        color={descriptionColor}
-        data-aid='tv_description'
-      >
-        {description}
-      </Typography>
+      {subtitle && (
+        <Typography
+          variant='body2'
+          className='cv-mt-4'
+          color={subtitleColor}
+          data-aid='tv_subtitle'
+          component='div'
+        >
+          {subtitle}
+        </Typography>
+      )}
+      {description && (
+        <Typography
+          variant='body2'
+          className='cv-mt-4'
+          color={descriptionColor}
+          data-aid='tv_description'
+          component='div'
+        >
+          {description}
+        </Typography>
+      )}
     </Box>
   );
 };
@@ -67,12 +84,18 @@ const cvSxStyle = {
 };
 
 CardVertical.propTypes = {
+  title: PropTypes.string,
+  subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  titleColor: PropTypes.string,
+  subtitleColor: PropTypes.string,
+  description: PropTypes.string,
+  descriptionColor: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   elevation: PropTypes.bool,
   onCardClick: PropTypes.func,
-}
+};
 
 CardVertical.defaultProps = {
   subtitleColor: 'foundationColors.content.secondary',
   descriptionColor: 'foundationColors.content.tertiary',
-  imgProps: {}
-}
+  imgProps: {},
+};
