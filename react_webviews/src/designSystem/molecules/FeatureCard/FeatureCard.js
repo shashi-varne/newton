@@ -10,17 +10,18 @@ const FeatureCard = ({
   imgProps,
   heading,
   headingColor,
-  returnTitle,
-  returnSubtitle,
-  aumTitle,
-  aumSubtitle,
-  investorTitle,
-  investorSubtitle,
+  leftDescription = {},
+  middleDescription = {},
+  rightDescription = {},
   onCardClick,
-  dataAid
+  dataAid,
 }) => {
   return (
-    <div className='fc-wrapper' onClick={onCardClick} data-aid={`featureCard_${dataAid}`}>
+    <div
+      className='fc-wrapper'
+      onClick={onCardClick}
+      data-aid={`featureCard_${dataAid}`}
+    >
       <div className='fc-first-row-wrapper'>
         <Imgc
           src={imgSrc}
@@ -37,51 +38,51 @@ const FeatureCard = ({
           {heading}
         </Typography>
       </div>
-      <Divider data-aid='seperator' className='fc-divider'/>
-      <div className='fc-description-list'>
-        <div className='fc-description-item'>
-          <Typography
-            variant='body5'
-            color='foundationColors.content.secondary'
-          >
-            {returnTitle}
-          </Typography>
-          <Typography
-            variant='body2'
-            color='foundationColors.secondary.profitGreen.400'
-          >
-            {returnSubtitle}
-          </Typography>
-        </div>
-        <div className='fc-description-item'>
-          <Typography
-            variant='body5'
-            color='foundationColors.content.secondary'
-            align='center'
-          >
-            {aumTitle}
-          </Typography>
-          <Typography variant='body2' align='center'>{aumSubtitle}</Typography>
-        </div>
-        <div className='fc-description-item'>
-          <Typography
-            variant='body5'
-            color='foundationColors.content.secondary'
-            align='right'
-          >
-            {investorTitle}
-          </Typography>
-          <Typography
-            variant='body2'
-            align='right'
-            color='foundationColors.secondary.coralOrange.400'
-          >
-            {investorSubtitle}
-          </Typography>
-        </div>
-      </div>
+      <Divider data-aid='seperator' className='fc-divider' />
+      <Description
+        leftDescription={leftDescription}
+        middleDescription={middleDescription}
+        rightDescription={rightDescription}
+      />
     </div>
   );
 };
 
 export default FeatureCard;
+
+const Description = (props) => {
+  let { leftDescription, middleDescription, rightDescription } = props;
+  leftDescription.align = 'left';
+  middleDescription.align = 'center';
+  rightDescription.align = 'right';
+  const allDescriptions = [
+    leftDescription,
+    middleDescription,
+    rightDescription,
+  ];
+  return (
+    <div className='fc-description-list'>
+      {allDescriptions?.map((description, idx) => {
+        const {
+          title = '',
+          subtitle = '',
+          titleColor = '',
+          subtitleColor = '',
+          align= 'left'
+        } = description;
+        return (
+          <div className='fc-description-item' key={idx}>
+            <Typography variant='body5' color={titleColor} align={align}>
+              {title}
+            </Typography>
+            {subtitle && (
+              <Typography variant='body2' color={subtitleColor} align={align}>
+                {subtitle}
+              </Typography>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
