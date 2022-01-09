@@ -1,68 +1,84 @@
-import { FONT_WEIGHT } from '../typography';
+import baseTypographyConfig from '../typography';
 
-export const buttonVariantsConfig = (colors={}) => [
-  {
-    props: { size: 'small' },
-    style: {
-      minWidth: 140,
-      height: 40,
-    },
-  },
-  {
-    props: { size: 'large' },
-    style: {
-      width: '100%',
-      minWidth: 343,
-      height: 48,
-    },
-  },
-  {
-    props: { variant: 'link' },
-    style: {
-      height: 21,
-      fontSize: 16,
-      minWidth: 'max-content',
-      width: 'max-content',
-      color: colors?.action?.brand,
-      fontWeight: FONT_WEIGHT['Regular'],
-      '&:hover': {
-        color: colors?.primary?.action,
-        backgroundColor: 'transparent',
+export const buttonVariantsConfig = (colors={}, partnerConfig={}) => {
+  const typographyVariants = baseTypographyConfig(colors, partnerConfig);
+  return [
+    {
+      props: { size: 'small' },
+      style: {
+        padding: '8px 16px',
+        width: 'max-content',
+        minWidth: '120px',
+        height: '37px',
       },
     },
-  },
-  {
-    props: { variant: 'text' },
-    style: {
-      height: 48,
-      minWidth: 343,
-      fontSize: 16,
-      fontWeight: FONT_WEIGHT['Medium'],
-      borderRadius: 10,
+    {
+      props: { size: 'large' },
+      style: {
+        width: '100%',
+      },
     },
-  },
-  {
-    props: { variant: 'text', size: 'small' },
-    style: {
-      height: 40,
-      minWidth: 140,
+    {
+      props: { variant: 'link' },
+      style: {
+        ...typographyVariants.body8,
+        padding:0,
+        margin:0,
+        width:'max-content',
+        color: colors?.action?.brand,
+        textTransform: 'none',
+        '&:hover': {
+          color: colors?.primary?.action,
+          backgroundColor: 'transparent',
+        },
+      },
     },
-  },
-  {
-    props: { isloading: true },
-    style: {
-      pointerEvents: 'none',
+    {
+      props: { variant: 'text' },
+      style: {
+        ...typographyVariants.actionText,
+        color: colors?.action?.brand,
+        width: '100%',
+        borderRadius: partnerConfig?.button?.borderRadius || 10,
+        paddingTop: '13.5px',
+        paddingBottom: '13.5px',
+      },
     },
-  },
-];
+    {
+      props: { variant: 'text', size: 'small' },
+      style: {
+        padding: '8px 16px',
+        width: 'max-content'
+      },
+    },
+    {
+      props: { variant: 'link', size: 'small' },
+      style: {
+        padding:0,
+        margin:0,
+        minWidth: 'max-content',
+        height: 'auto',
+      },
+    },
+    {
+      props: { isloading: 1 },
+      style: {
+        pointerEvents: 'none',
+      },
+    },
+  ];
+}
 
 export const buttonStyleOverRides = (colors={}, partnerConfig={}) => {
+  const typographyVariants = baseTypographyConfig(colors, partnerConfig);
   return {
     contained: {
+      ...typographyVariants.actionText,
       color: colors?.supporting?.white,
-      fontSize: 16,
-      fontWeight: FONT_WEIGHT['Medium'],
-      borderRadius: 10,
+      borderRadius: partnerConfig?.button?.borderRadius || 10,
+      paddingTop: '13.5px',
+      paddingBottom: '13.5px',
+      height: '48px',
       '&:hover': {
         backgroundColor: partnerConfig?.button?.disableHoverEffect
           ? colors?.action?.brand
@@ -71,7 +87,7 @@ export const buttonStyleOverRides = (colors={}, partnerConfig={}) => {
     },
     root: {
       '&.Mui-disabled': {
-        backgroundColor: colors?.supporting?.athensGrey,
+        backgroundColor: partnerConfig?.button?.disabledBackgroundColor || colors?.supporting?.athensGrey,
         color: colors?.supporting?.white,
       },
     },
