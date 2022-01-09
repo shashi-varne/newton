@@ -12,7 +12,6 @@ import myAccount from 'assets/myaccount.png';
 import refer from 'assets/promo_code.png';
 import WriteToUs from 'assets/refer_earn_menu_icon.png';
 import withdraw from 'assets/withdraw.png';
-import ListItemText from '@material-ui/core/ListItemText';
 import logout from 'assets/logout_grey.png';
 import { getConfig } from 'utils/functions';
 import { withRouter } from 'react-router-dom';
