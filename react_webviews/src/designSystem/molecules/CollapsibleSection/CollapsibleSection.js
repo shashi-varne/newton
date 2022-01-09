@@ -48,6 +48,7 @@ CollapsibleSection.propTypes = {
   label: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
+  dataAid: PropTypes.string
 }
 
 CollapsibleSection.defaultProps = {
