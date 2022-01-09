@@ -1,0 +1,30 @@
+.nav-header-wrapper {
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  background-color: white;
+
+  .nav-header-left {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+
+    .nav-left-icn-btn {
+        margin: -8px;
+        margin-right: 4px;
+    }
+
+    .nav-hl-icon-wrapper {
+        cursor: pointer;
+    }
+  }
+
+  .nav-header-right {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+  }
+}
