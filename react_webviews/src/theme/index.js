@@ -31,7 +31,7 @@ const getTheme = () => {
         styleOverrides: switchStyleOverRides(colors),
       },
       MuiTabs: {
-        styleOverrides: tabsStyleOverRides(colors)
+        styleOverrides: tabsStyleOverRides()
       },
       MuiTab: {
         styleOverrides: tabStyleOverRides(colors, partnerConfig)

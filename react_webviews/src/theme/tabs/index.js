@@ -1,18 +1,13 @@
 import baseTypographyConfig, { FONT_WEIGHT } from '../typography';
 
-export const tabsStyleOverRides = (colors={}) => {
+export const tabsStyleOverRides = () => {
   return {
     root: {
-      backgroundColor: colors?.supporting?.white,
+      backgroundColor: 'transparent',
       minHeight: 36,
     },
     flexContainer: {
       display: 'block !important',
-    },
-    scrollButtons: {
-      '&.Mui-disabled': {
-        display: 'none',
-      },
     },
   };
 };
