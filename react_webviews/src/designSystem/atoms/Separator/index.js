@@ -11,15 +11,17 @@ export const DIVIDER_VARIANTS = {
 const Separator = (props) => {
   const {
     className,
-    variant = DIVIDER_VARIANTS.FULL_WIDTH,
+    variant = DIVIDER_VARIANTS.INSET,
+    marginTop,
+    marginBottom,
     dataAid,
     children,
     ...restProps
   } = props;
   return (
     <Divider
-      className={`atom-separator ${className}`}
       data-aid={`separator_${dataAid}`}
+      sx={{ marginTop, marginBottom }}
       variant={variant}
       {...restProps}
     >
