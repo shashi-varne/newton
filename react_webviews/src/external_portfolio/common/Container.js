@@ -62,10 +62,10 @@ class Container extends Component {
   // }
 
   render() {
-    // const propsBase = {
-    //   classOverRide: 'hni-container'
-    // };
-    return <Fragment>{this.commonRender()}</Fragment>
+    const propsBase = {
+      classOverRideContainer: 'hni-container'
+    };
+    return <Fragment>{this.commonRender(propsBase)}</Fragment>
   }
 }
 
