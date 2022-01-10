@@ -15,9 +15,11 @@ const DEFAULT_ERROR_DATA = {
 function useFreedomDataHook() {
   const planData = storageService().getObject("freedomPlanData") || {};
   const planList = storageService().getObject("freedomPlanList") || [];
+  const planCharges = storageService().getObject("freedomPlanCharges") || {};
 
   const [freedomPlanData, setFreedomPlanData] = useState(planData);
   const [freedomPlanList, setFreedomPlanList] = useState(planList);
+  const [freedomPlanCharges, setFreedomPlanCharges] = useState(planCharges);
   const [showLoader, setShowLoader] = useState(false);
   const [errorData, setErrorData] = useState(DEFAULT_ERROR_DATA);
 
@@ -30,7 +32,7 @@ function useFreedomDataHook() {
   }, [freedomPlanList]);
 
   const initialize = () => {
-    if (isEmpty(freedomPlanList)) {
+    if (isEmpty(freedomPlanList) || isEmpty(freedomPlanCharges)) {
       getFreedomPlanList();
     }
   };
@@ -48,6 +50,7 @@ function useFreedomDataHook() {
       const result = await getAllPlans();
       const activePlans = getActivePlans(result.plan_details);
       updateFreedomPlanList(activePlans);
+      updateFreedomPlanCharges(result.equity_account_charges);
     } catch (err) {
       setErrorData({
         showError: true,
@@ -97,16 +100,23 @@ function useFreedomDataHook() {
     setFreedomPlanList(data);
   };
 
+  const updateFreedomPlanCharges = (data) => {
+    storageService().setObject("freedomPlanCharges", data);
+    setFreedomPlanCharges(data);
+  };
+
   const resetFreedomPlan = () => {
     updateFreedomPlan({});
     updateFreedomPlanList([]);
-  }
+    updateFreedomPlanCharges({});
+  };
 
   return {
     showLoader,
     freedomPlanData,
     errorData,
     freedomPlanList,
+    freedomPlanCharges,
     setErrorData,
     initiatePayment,
     resetErrorData,
