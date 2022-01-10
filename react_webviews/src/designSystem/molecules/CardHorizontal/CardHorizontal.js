@@ -1,6 +1,7 @@
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import React, { useMemo } from 'react';
 import { Imgc } from '../../../common/ui/Imgc';
+import Button from '../../atoms/Button';
 
 import './CardHorizontal.scss';
 
@@ -24,17 +25,21 @@ const CardHorizontal = ({
   const heroCardVariant = variant === 'heroCard';
   const titleVariant = heroCardVariant ? 'heading3' : 'body1';
   const heroCardStyle = useMemo(() => {
-    if(heroCardVariant) {
-        titleColor = 'foundationColors.supporting.white';
-        subtitleColor = 'foundationColors.primary.200';
-        return {
-            titleColor,
-            subtitleColor
-        }
+    if (heroCardVariant) {
+      titleColor = 'foundationColors.supporting.white';
+      subtitleColor = 'foundationColors.primary.200';
+      return {
+        titleColor,
+        subtitleColor,
+      };
     }
-  },[]);
+  }, []);
   return (
-    <Box className={`ch-wrapper ${heroCardVariant && 'ch-hero-wrapper'}`} onClick={onCardClick} data-aid={`cardHorizontal_${dataAid}`}>
+    <Box
+      className={`ch-wrapper ${heroCardVariant && 'ch-hero-wrapper'}`}
+      onClick={onCardClick}
+      data-aid={`cardHorizontal_${dataAid}`}
+    >
       <div>
         {!heroCardVariant && (
           <Imgc
@@ -56,22 +61,34 @@ const CardHorizontal = ({
         )}
         {status && <div className='mt-4'>{status}</div>}
         {subtitle && (
-          <Typography className='mt-4' variant='body2' color={heroCardStyle?.subtitleColor || subtitleColor} data-aid='tv_subtitle'>
+          <Typography
+            className='mt-4'
+            variant='body2'
+            color={heroCardStyle?.subtitleColor || subtitleColor}
+            data-aid='tv_subtitle'
+          >
             {subtitle}
           </Typography>
         )}
         {description && (
-          <Typography className='mt-4' variant='body2' color={descriptionColor} data-aid='tv_description'>
+          <Typography
+            className='mt-4'
+            variant='body2'
+            color={descriptionColor}
+            data-aid='tv_description'
+          >
             {description}
           </Typography>
         )}
-        <Button
-          className={`mt-4 btn-text ${heroCardVariant && 'btn-primary'}`}
-          variant='text'
-          data-aid='button_link'
-        >
-          {actionLink}
-        </Button>
+        {actionLink && (
+          <Button
+            variant={heroCardVariant ? 'primary' : 'link'}
+            className={heroCardVariant ? 'ch-action-btn' : 'ch-action-link-btn'}
+            title={actionLink}
+            isInverted
+            size='small'
+          />
+        )}
       </div>
       <Imgc
         src={ilstSrc}
