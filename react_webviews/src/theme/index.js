@@ -6,8 +6,7 @@ import getPartnerThemeData from './utils';
 import { createTheme } from '@mui/material';
 
 const getTheme = () => {
-  const partnerThemeData = getPartnerThemeData();
-  const colors = partnerThemeData?.colors;
+  const {colors, partnerConfig} = getPartnerThemeData();
   
   const theme = {
     palette: {
@@ -19,14 +18,14 @@ const getTheme = () => {
       },
       foundationColors: colors,
     },
-    typography: baseTypographyConfig(colors,partnerThemeData),
+    typography: baseTypographyConfig(colors, partnerConfig),
     components: {
       MuiTypography: {
         variants: customTypographyVariantProps(),
       },
       MuiButton: {
-        variants: buttonVariantsConfig(colors),
-        styleOverrides: buttonStyleOverRides(colors,partnerThemeData),
+        variants: buttonVariantsConfig(colors, partnerConfig),
+        styleOverrides: buttonStyleOverRides(colors, partnerConfig),
       },
       MuiSwitch: {
         styleOverrides: switchStyleOverRides(colors),
