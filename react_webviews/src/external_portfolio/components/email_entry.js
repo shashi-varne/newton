@@ -178,7 +178,6 @@ class EmailEntry extends Component {
           button1Props={{
             title: 'Okay',
             contained: true,
-            color: 'primary',
             onClick: this.redirectToStepsScreen
           }}
         >
