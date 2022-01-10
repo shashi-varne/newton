@@ -71,7 +71,7 @@ const LandingHeader = ({
 LandingHeader.propTypes = {
   children: PropTypes.node,
   variant: PropTypes.oneOf(['side', 'center', 'date']),
-  dataAid: PropTypes.string
+  dataAid: PropTypes.string,
 };
 
 LandingHeader.Title = ({ children, titleColor }) => {
@@ -89,11 +89,12 @@ LandingHeader.Subtitle = ({
   subtitleColor,
   dateColor,
 }) => {
-  let formattedData;
+  let formattedDate = {};
   const isDateVariant = variant === 'date';
   if (isDateVariant) {
     date = date ? date : new Date();
-    formattedData = format(date, 'MMM d, yyyy, h:mma');
+    formattedDate.date = format(date, 'MMM d, yyyy ');
+    formattedDate.time = format(date, ' h:mma');
   }
   return (
     <div>
@@ -104,7 +105,9 @@ LandingHeader.Subtitle = ({
           color={dateColor}
           data-aid='tv_date'
         >
-          {formattedData}
+          {formattedDate?.date}
+          <span>{'\u2022'}</span>
+          {formattedDate?.time}
         </Typography>
       )}
 
@@ -145,7 +148,7 @@ LandingHeader.Title.propTypes = {
 LandingHeader.Subtitle.propTypes = {
   children: PropTypes.node,
   subtitleColor: PropTypes.string,
-  dateColor: PropTypes.string
+  dateColor: PropTypes.string,
 };
 
 LandingHeader.Description.propTypes = {
