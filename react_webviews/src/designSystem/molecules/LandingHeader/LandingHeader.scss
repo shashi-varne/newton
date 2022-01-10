@@ -1,18 +1,26 @@
-.landing-header-wrapper{
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-}
-
-.center-align {
+.landing-header-wrapper {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  &.center-align {
     align-items: center;
-}
-
-.lh-subtitle {
+  }
+  
+  .lh-subtitle {
     max-width: 99ch;
     margin-top: 8px;
-}
-
-.lh-date-wrapper {
+  }
+  
+  .lh-date-wrapper {
     margin-top: 4px;
+  }
+  
+  .lh-description-list {
+      margin: 0px;
+      padding-left: 20px;
+      margin-top: 8px;
+  }
+  .lh-description-item {
+      margin-bottom: 8px;
+  }
 }
