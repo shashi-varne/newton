@@ -7,6 +7,7 @@ import { storageService } from '../../utils/validators';
 class EmailExampleView extends Component {
   constructor(props) {
     super(props);
+    this.params = this.props.location.params || {};
     this.state = {};
     this.navigate = navigate.bind(this);
   }
@@ -15,8 +16,9 @@ class EmailExampleView extends Component {
     let eventObj = {
       "event_name": 'portfolio_tracker',
       "properties": {
-        "user_action": user_action,
-        "screen_name": 'cas email',
+        user_action: user_action,
+        screen_name: 'cas email',
+        source: this.params.statementSource,
         performed_by: storageService().get('hni-platform') === 'rmapp' ? 'RM' : 'user',
       }
     };
@@ -29,13 +31,13 @@ class EmailExampleView extends Component {
   }
 
   goBack = () => {
-    const params = this.props.location.params || {};
+    const params = this.params;
 
     this.sendEvents('back');
     if (params.comingFrom === 'statement_request') {
       this.navigate(
         `statement_request/${params.email}`,
-        Object.assign(params, { comingFrom: 'email_example_view'})
+        Object.assign(params, { comingFrom: 'email_example_view' })
       );
     } else {
       this.props.history.goBack();
@@ -50,6 +52,7 @@ class EmailExampleView extends Component {
         buttonTitle="Okay"
         events={this.sendEvents('just_set_events')}
         goBack={this.goBack}
+        statementSource={this.params.statementSource}
       >
       </EmailTemplate>
     );
