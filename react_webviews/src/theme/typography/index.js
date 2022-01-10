@@ -123,7 +123,7 @@ export const customTypographyVariantProps = () => {
   });
 
   const additionalVariants = [{
-    props: {allCaps: true},
+    props: {allcaps: true},
     style: {
       textTransform: 'uppercase'
     }
