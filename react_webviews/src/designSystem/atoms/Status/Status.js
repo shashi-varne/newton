@@ -41,7 +41,7 @@ const Status = (props) => {
         <Typography
           variant="body4"
           color={VARIANT_COLOR_MAPPER[variant]}
-          allCaps
+          allcaps
         >
           {title}
         </Typography>
