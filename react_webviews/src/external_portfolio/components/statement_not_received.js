@@ -43,7 +43,7 @@ class StatementNotReceived extends Component {
   regenerateStatement = async () => {
     this.sendEvents('regenerate_stat');
     try {
-      this.setLoader(true);
+      this.setLoader('page');
       const { email_detail } = this.state;
       await requestStatement({
         email: email_detail.email,
@@ -74,14 +74,16 @@ class StatementNotReceived extends Component {
     return (
       <Container
         title={
-          status === 'requested' ?
-          "We haven't received any CAS email" : "Error while processing CAS email"
+          status === 'requested'
+            ? "We haven't received any CAS email"
+            : "Error while processing CAS email"
         }
         showLoader={show_loader}
-        headerData={{ icon: 'close' }}
+        headerData={{
+          icon: 'close',
+          goBack: this.goBack
+        }}
         noFooter={true}
-        noHeader={show_loader}
-        goBack={this.goBack}
       >
         <img
           src={require(`assets/${productType}/cas_not_received.svg`)}

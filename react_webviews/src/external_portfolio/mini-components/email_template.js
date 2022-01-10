@@ -15,7 +15,9 @@ class EmailTemplate extends Component {
       <Container
         title={this.props.title}
         subtitle={this.props.subtitle}
-        goBack={this.props.goBack}
+        headerData={{
+          goBack: this.props.goBack
+        }}
         {...this.props}
       >
         <div>

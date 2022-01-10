@@ -58,7 +58,7 @@ export default class EmailExpand extends Component {
     const { email, parent } = this.props;
     parent.sendEvents('resync');
     try {
-      parent.setLoader(true);
+      parent.setLoader('page');
       await requestStatement({
         email: email.email,
         resync: 'true',

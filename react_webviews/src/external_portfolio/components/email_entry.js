@@ -119,15 +119,15 @@ class EmailEntry extends Component {
     const { email_error, show_loader } = this.state;
     return (
       <Container
-        hideInPageTitle={true}
+        force_hide_inpage_title
         events={this.sendEvents('just_set_events')}
-        fullWidthButton={true}
-        noHeader={show_loader}
         classHeader={'bg-highlight'}
         handleClick={this.goNext}
         buttonTitle="Continue"
         showLoader={show_loader}
-        goBack={this.goBack}
+        headerData={{
+          goBack: this.goBack
+        }}
       >
         <div
           className={`

@@ -1,16 +1,11 @@
 import React, { Component } from 'react';
 import EmailTemplate from '../mini-components/email_template';
 import { Button } from 'material-ui';
-import InfoIcon from '@material-ui/icons/Info';
-import InfoBox from '../mini-components/InfoBox';
 import { navigate, setLoader } from '../common/commonFunctions';
 import { requestStatement } from '../common/ApiCalls';
 import toast from '../../common/ui/Toast';
 import { storageService } from '../../utils/validators';
 import { nativeCallback } from 'utils/native_callback';
-import { getConfig } from '../../utils/functions';
-
-const { emailDomain } = getConfig();
 
 class EmailNotReceived extends Component {
   constructor(props) {
@@ -39,7 +34,7 @@ class EmailNotReceived extends Component {
 
   goNext = async () => {
     try {
-      this.setLoader(true);
+      this.setLoader('button');
       this.sendEvents('regenerate_stat');
       const email_detail = storageService().getObject('email_detail_hni');
       await requestStatement({ 
@@ -72,7 +67,6 @@ class EmailNotReceived extends Component {
         subtitle={subtitleText}
         showLoader={this.state.show_loader}
         noFooter={true}
-        noHeader={this.state.show_loader}
         goBack={this.goBack}
       >
         <Button

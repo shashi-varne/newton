@@ -35,7 +35,7 @@ class PANSelector extends Component {
 
     async componentDidMount() {
         try {
-            this.setLoader(true);
+            this.setLoader('page');
             let pans = await fetchAllPANs();
             const selectedPan = storageService().getObject('user_pan') || {};
             let selectedIndex = pans.find(pan => pan.pan === selectedPan.pan);
