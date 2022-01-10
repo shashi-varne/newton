@@ -1,4 +1,5 @@
-import { buttonStyleOverRides, buttonVariantsConfig } from './button';
+import { buttonStyleOverRides, buttonVariantsConfig, } from './button';
+import { tooltipStyleOverRides } from './tooltip';
 import { switchStyleOverRides } from './switch';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
 import getPartnerThemeData from './utils';
@@ -33,7 +34,10 @@ const getTheme = () => {
       MuiDialog: {
         defaultProps: dialogDefaultProps(),
         styleOverrides:dialogStylesOverride()
-      }
+      },
+      MuiTooltip: {
+        styleOverrides: tooltipStyleOverRides(colors),
+      },
     },
   };
   return createTheme(theme);
