@@ -31,7 +31,7 @@ const getTheme = () => {
         styleOverrides: switchStyleOverRides(colors),
       },
       MuiTooltip: {
-        styleOverrides: tooltipStyleOverRides(colors, partnerThemeData),
+        styleOverrides: tooltipStyleOverRides(colors),
       },
     },
   };
