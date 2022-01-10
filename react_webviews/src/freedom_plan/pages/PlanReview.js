@@ -6,7 +6,7 @@ import {
   isTradingEnabled,
   navigate as navigateFunc,
 } from "../../utils/functions";
-import { handleNativeExit, nativeCallback } from "../../utils/native_callback";
+import { nativeCallback } from "../../utils/native_callback";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import Tile from "../mini-components/Tile";
 import {
@@ -22,10 +22,11 @@ import useFreedomDataHook from "../common/freedomPlanHook";
 import { getKycAppStatus } from "../../kyc/services";
 import { isEquityCompleted } from "../../kyc/common/functions";
 import isEmpty from "lodash/isEmpty";
+import { handleExit, isNative } from "../common/functions";
 
 const PlanReview = (props) => {
   const navigate = navigateFunc.bind(props);
-  const { productName, isNative } = useMemo(getConfig, []);
+  const { productName } = useMemo(getConfig, []);
   const { kyc, isLoading } = useUserKycHook();
   const [openKycStatusBottomsheet, setOpenKycBottomsheet] = useState(false);
   const [openSelectPlan, setOpenSelectPlan] = useState(false);
@@ -97,7 +98,7 @@ const PlanReview = (props) => {
       properties: {
         user_action: userAction,
         screen_name: "review_plan",
-        plan_selected: `${freedomPlanData.duration/30}_months`,
+        plan_selected: `${freedomPlanData.duration / 30}_months`,
       },
     };
     if (isSelectPlan) {
@@ -135,10 +136,10 @@ const PlanReview = (props) => {
 
   const redirectToKyc = () => {
     if (kycStatus === "in_progress") {
-      handleNativeExit(props, { action: "exit" });
+      handleExit(props);
       return;
     }
-    const pathname = isNative ? "/kyc/native" : "/kyc/web";
+    const pathname = isNative() ? "/kyc/native" : "/kyc/web";
     navigate(pathname);
   };
 

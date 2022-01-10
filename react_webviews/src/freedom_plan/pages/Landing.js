@@ -15,10 +15,11 @@ import {
 import { capitalizeFirstLetter, formatAmountInr } from "../../utils/validators";
 import Faqs from "../../common/ui/Faqs";
 import "./Landing.scss";
-import { handleNativeExit, nativeCallback } from "../../utils/native_callback";
+import { nativeCallback } from "../../utils/native_callback";
 import SelectFreedomPlan from "../mini-components/SelectFreedomPlan";
 import useFreedomDataHook from "../common/freedomPlanHook";
 import { SkeltonRect } from "../../common/ui/Skelton";
+import { handleExit } from "../common/functions";
 
 const Landing = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -85,7 +86,7 @@ const Landing = (props) => {
   const goBack = () => {
     sendEvents("back");
     resetFreedomPlan();
-    handleNativeExit(props, { action: "exit" });
+    handleExit(props);
   };
 
   const closeSelectFreedomPlan = () => {

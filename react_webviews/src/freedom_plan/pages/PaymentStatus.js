@@ -8,12 +8,13 @@ import {
   getPaymentSummaryData,
   PAYMENT_STATUS_DATA,
 } from "../common/constants";
-import { handleNativeExit, nativeCallback } from "../../utils/native_callback";
+import { nativeCallback } from "../../utils/native_callback";
 import Tile from "../mini-components/Tile";
 import { getUrlParams } from "../../utils/validators";
 import useFreedomDataHook from "../common/freedomPlanHook";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import "./PaymentStatus.scss";
+import { handleExit } from "../common/functions";
 
 const PaymentStatus = (props) => {
   const initialize = () => {
@@ -27,7 +28,7 @@ const PaymentStatus = (props) => {
   const { productName, paymentStatusData } = useMemo(initialize, []);
 
   const { isLoading, kyc } = useUserKycHook();
-  
+
   const {
     errorData,
     showLoader,
@@ -80,7 +81,7 @@ const PaymentStatus = (props) => {
       sendEvents("back");
     }
     resetFreedomPlan();
-    handleNativeExit(props, { action: "exit" });
+    handleExit(props);
   };
 
   return (
