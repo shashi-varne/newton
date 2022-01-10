@@ -32,7 +32,7 @@ export const FREEDOM_PLAN_BENEFITS_DATA = {
 };
 
 export const getStandardVsFreedomPlanDetails = (
-  equityChargesData = {}
+  freedomPlanCharges = {}
 ) => () => {
   return [
     {
@@ -44,34 +44,42 @@ export const getStandardVsFreedomPlanDetails = (
     {
       type: "Delivery",
       standardPlan: `${formatAmountInr(
-        equityChargesData.brokerage_delivery?.rupees
+        freedomPlanCharges?.brokerage_delivery?.rupees
       )}/-`,
       standardPlanSubtext: "on transaction value",
-      freedomPlan: " ₹0/-",
+      freedomPlan: `${formatAmountInr(
+        freedomPlanCharges?.brokerage_delivery?.freedom_charges
+      )}/-`,
     },
     {
       type: "Intraday",
       standardPlan: ` ${formatAmountInr(
-        equityChargesData.brokerage_intraday?.rupees
+        freedomPlanCharges?.brokerage_intraday?.rupees
       )}/-`,
       standardPlanSubtext: "on transaction value",
-      freedomPlan: " ₹0/-",
+      freedomPlan: `${formatAmountInr(
+        freedomPlanCharges?.brokerage_intraday?.freedom_charges
+      )}/-`,
     },
     {
       type: "Futures",
       standardPlan: ` ${formatAmountInr(
-        equityChargesData.brokerage_future?.rupees
+        freedomPlanCharges?.brokerage_future?.rupees
       )} per lot`,
       standardPlanSubtext: "on executed order",
-      freedomPlan: " ₹0/-",
+      freedomPlan: `${formatAmountInr(
+        freedomPlanCharges?.brokerage_future?.freedom_charges
+      )}/-`,
     },
     {
       type: "Options",
       standardPlan: ` ${formatAmountInr(
-        equityChargesData.brokerage_options?.rupees
+        freedomPlanCharges?.brokerage_options?.rupees
       )} per lot`,
       standardPlanSubtext: "on executed order",
-      freedomPlan: " ₹0/-",
+      freedomPlan: `${formatAmountInr(
+        freedomPlanCharges?.brokerage_options?.freedom_charges
+      )}/-`,
     },
   ];
 };

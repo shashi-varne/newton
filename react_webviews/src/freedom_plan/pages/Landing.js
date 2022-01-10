@@ -16,9 +16,9 @@ import { capitalizeFirstLetter, formatAmountInr } from "../../utils/validators";
 import Faqs from "../../common/ui/Faqs";
 import "./Landing.scss";
 import { handleNativeExit, nativeCallback } from "../../utils/native_callback";
-import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import SelectFreedomPlan from "../mini-components/SelectFreedomPlan";
 import useFreedomDataHook from "../common/freedomPlanHook";
+import { SkeltonRect } from "../../common/ui/Skelton";
 
 const Landing = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -35,19 +35,20 @@ const Landing = (props) => {
   };
 
   const { productName, freedomPlanFaqs = [] } = useMemo(initialize, []);
-  const { kyc, isLoading } = useUserKycHook();
-  const standardVsFreedomPlanDetails = useMemo(
-    getStandardVsFreedomPlanDetails(kyc.equity_account_charges),
-    [kyc]
-  );
   const {
     errorData,
     showLoader,
     freedomPlanData,
     freedomPlanList,
+    freedomPlanCharges,
     resetFreedomPlan,
     updateFreedomPlan,
   } = useFreedomDataHook();
+
+  const standardVsFreedomPlanDetails = useMemo(
+    getStandardVsFreedomPlanDetails(freedomPlanCharges),
+    [freedomPlanCharges]
+  );
 
   useEffect(() => {
     if (errorData.showError && openSelectPlan) {
@@ -65,7 +66,9 @@ const Landing = (props) => {
     };
     if (isSelectPlan) {
       eventObj.properties.screen_name = "select_plan";
-      eventObj.properties.plan_selected = `${freedomPlanData.duration/30}_months`;
+      eventObj.properties.plan_selected = `${
+        freedomPlanData.duration / 30
+      }_months`;
     }
     if (userAction === "just_set_events") {
       return eventObj;
@@ -100,7 +103,6 @@ const Landing = (props) => {
     <Container
       noPadding
       hidePageTitle
-      skelton={isLoading}
       errorData={errorData}
       showError={errorData.showError}
       title="Freedom plan"
@@ -138,7 +140,10 @@ const Landing = (props) => {
         </div>
         <div className="fpl-table">
           <div className="fpl-title">Standard vs Freedom plan</div>
-          <StandardVsFreedomPlan data={standardVsFreedomPlanDetails} />
+          <StandardVsFreedomPlan
+            data={standardVsFreedomPlanDetails}
+            showLoader={showLoader}
+          />
         </div>
         <div className="fpl-layout fpl-faqs">
           <div className="fpl-title">FAQs</div>
@@ -168,18 +173,31 @@ const getTableData = (data) => () => {
   };
 };
 
-const TableRow = ({ data = {}, columnReverse = false }) => (
+const TableRow = ({ data = {}, columnReverse = false, showLoader = false }) => (
   <tr>
     <td className="fpl-tc-type">{data.type}</td>
-    <td className={`fpl-tc-standard ${columnReverse && `column-reverse`}`}>
-      {data.standardPlan}
-      <div className="fpl-tc-subtext">{data.standardPlanSubtext}</div>
-    </td>
-    <td className="fpl-tc-freedom">{data.freedomPlan}</td>
+    {showLoader ? (
+      <>
+        <td className="fpl-tc-standard">
+          <SkeltonRect />
+        </td>
+        <td className="fpl-tc-freedom">
+          <SkeltonRect />
+        </td>
+      </>
+    ) : (
+      <>
+        <td className={`fpl-tc-standard ${columnReverse && `column-reverse`}`}>
+          {data.standardPlan}
+          <div className="fpl-tc-subtext">{data.standardPlanSubtext}</div>
+        </td>
+        <td className="fpl-tc-freedom">{data.freedomPlan}</td>
+      </>
+    )}
   </tr>
 );
 
-const StandardVsFreedomPlan = ({ data = [] }) => {
+const StandardVsFreedomPlan = ({ data = [], showLoader = false }) => {
   const { tableBodyData, tableHeaderData } = useMemo(getTableData(data), [
     data,
   ]);
@@ -190,7 +208,7 @@ const StandardVsFreedomPlan = ({ data = [] }) => {
       </thead>
       <tbody>
         {tableBodyData.map((data, index) => {
-          return <TableRow key={index} data={data} />;
+          return <TableRow key={index} data={data} showLoader={showLoader} />;
         })}
       </tbody>
     </table>
