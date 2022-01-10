@@ -62,7 +62,7 @@ export const buttonStyleOverRides = (colors={}, partnerConfig={}) => {
       color: colors?.supporting?.white,
       fontSize: 16,
       fontWeight: FONT_WEIGHT['Medium'],
-      borderRadius: 10,
+      borderRadius: partnerConfig?.button?.borderRadius || 10,
       '&:hover': {
         backgroundColor: partnerConfig?.button?.disableHoverEffect
           ? colors?.action?.brand
@@ -71,7 +71,7 @@ export const buttonStyleOverRides = (colors={}, partnerConfig={}) => {
     },
     root: {
       '&.Mui-disabled': {
-        backgroundColor: colors?.supporting?.athensGrey,
+        backgroundColor: partnerConfig?.button?.disabledBackgroundColor || colors?.supporting?.athensGrey,
         color: colors?.supporting?.white,
       },
     },
