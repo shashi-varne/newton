@@ -8,8 +8,9 @@ import { validateEmail, storageService } from '../../utils/validators.js';
 import { navigate, setLoader, setPlatformAndUser } from '../common/commonFunctions.js';
 import { requestStatement, fetchEmails } from '../common/ApiCalls.js';
 import PopUp from '../common/PopUp.js';
+import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet.js';
 
-const productType = getConfig().productName;
+const { productName: productType, emailDomain } = getConfig();
 
 class EmailEntry extends Component {
   constructor(props) {
@@ -18,7 +19,8 @@ class EmailEntry extends Component {
     this.state = {
       email: params.email || '',
       email_error: '',
-      openPopup: false,
+      openDuplicateEmailPopup: false,
+      openSuccessModal: false
     };
     this.navigate = navigate.bind(this);
     this.setLoader = setLoader.bind(this);
@@ -50,7 +52,7 @@ class EmailEntry extends Component {
   }
 
   handleClose = () => {
-    this.setState({ openPopup: false });
+    this.setState({ openDuplicateEmailPopup: false });
   }
 
   goNext = async () => {
@@ -60,24 +62,15 @@ class EmailEntry extends Component {
       this.setState({ email_error: 'Please enter a valid email' });
     } else {
       try {
-        this.setLoader(true);
+        this.setLoader('button');
         const emails = await fetchEmails({ email_id: email });
         if (emails.length) {
           this.setLoader(false);
-          this.setState({ openPopup: true });
+          this.setState({ openDuplicateEmailPopup: true });
         } else {
           await requestStatement({ email });
-          const params = this.props.location.params || { exitToApp: true };
-          const moveToParam = params.comingFrom === 'statement_request' ?
-            params.navigateBackTo : params.comingFrom;
-          this.navigate(
-            `statement_request/${email}`,
-            {
-              exitToApp: params.exitToApp,
-              navigateBackTo: params.exitToApp ? null : moveToParam,
-            },
-            true
-          );
+          this.setLoader(false);
+          this.setState({ openSuccessModal: true });
         }
       } catch(err) {
         console.log(err);
@@ -85,6 +78,20 @@ class EmailEntry extends Component {
         this.setLoader(false);
       }
     }
+  }
+
+  redirectToStepsScreen = () => {
+    const params = this.props.location.params || { exitToApp: true };
+    const moveToParam = params.comingFrom === 'statement_request' ?
+      params.navigateBackTo : params.comingFrom;
+    this.navigate(
+      `statement_request/${this.state.email}`,
+      {
+        exitToApp: params.exitToApp,
+        navigateBackTo: params.exitToApp ? null : moveToParam,
+      },
+      true
+    );
   }
 
   goBack = (params) => {
@@ -154,13 +161,29 @@ class EmailEntry extends Component {
             onChange={this.handleChange('email')} />
         </div>
         <PopUp
-          openPopup={this.state.openPopup}
+          openPopup={this.state.openDuplicateEmailPopup}
           handleNo={this.handleClose}
           onlyExit={true}
           handleClose={this.handleClose}
         >
           This email has already been added. Please resync from the settings page to update portfolio
         </PopUp>
+        <WVBottomSheet
+          disableBackdropClick
+          disableEscapeKeyDown
+          title="Portfolio statement generated"
+          subtitle="You'll get an email with your portfolio statement in around 1 hour. Forward the email as received to"
+          isOpen={this.state.openSuccessModal}
+          image={require(`assets/${productType}/statements_briefcase.svg`)}
+          button1Props={{
+            title: 'Okay',
+            contained: true,
+            color: 'primary',
+            onClick: this.redirectToStepsScreen
+          }}
+        >
+          <span className='portfolio-generated-email'>cas@{emailDomain}</span>
+        </WVBottomSheet>
       </Container>
     );
   }
