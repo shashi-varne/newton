@@ -11,9 +11,11 @@ export const DIVIDER_VARIANTS = {
 const Separator = (props) => {
   const {
     className,
-    variant = DIVIDER_VARIANTS.INSET,
+    variant = DIVIDER_VARIANTS.FULL_WIDTH,
     marginTop,
     marginBottom,
+    marginLeft,
+    marginRight,
     dataAid,
     children,
     ...restProps
@@ -21,7 +23,7 @@ const Separator = (props) => {
   return (
     <Divider
       data-aid={`separator_${dataAid}`}
-      sx={{ marginTop, marginBottom }}
+      sx={{ marginTop, marginBottom, marginLeft, marginRight }}
       variant={variant}
       {...restProps}
     >

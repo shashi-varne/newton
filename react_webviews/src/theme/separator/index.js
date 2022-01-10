@@ -5,10 +5,10 @@ export const separatorStyleOverRides = (colors) => {
       borderBottomWidth: "1px"
     },
     inset: {
-      marginRight: 16,
+      marginRight: "16px",
     },
     middle: {
-      margin: "0 16px",
+      margin: "0px 16px",
     },
   };
 };
