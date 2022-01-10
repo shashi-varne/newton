@@ -18,17 +18,22 @@ import restart from 'assets/restart_nav_icn.svg';
 import Drawer from '../../desktopLayout/Drawer';
 import MenuIcon from "@material-ui/icons/Menu";
 import ReferDialog from '../../desktopLayout/ReferralDialog';
+import SettingsWithBadge from 'assets/ic_setting_active.svg';
 
 const headerIconMapper = {
   back: back_arrow,
   close: close_icn,
   search: search,
-  restart: restart
+  restart: restart,
+  settings: SettingsWithBadge,
 }
-const Header = ({ classes, title, count, total, current, goBack, 
-  edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
-  inPageTitle, hideHamburger, force_hide_inpage_title, topIcon, handleTopIcon, canSkip, onSkipClick,
-  className ,style, headerData={}, new_header, notification, handleNotification, noBackIcon, customBackButtonColor}) => {
+const Header = ({
+  classes, title, count, total, current, goBack, edit, type, resetpage, handleReset,
+  smallTitle, disableBack, provider, inPageTitle, hideHamburger, force_hide_inpage_title,
+  topIcon, handleTopIcon, canSkip, onSkipClick, className, style, headerData = {}, new_header,
+  notification, handleNotification, noBackIcon, customTopIconColor, customBackButtonColor,
+  noTopIconColor
+}) => {
     const rightIcon = headerIconMapper[topIcon];
     const [referDialog, setReferDialog] = useState(false);
     const [mobileViewDrawer, setMobileViewDrawer] = useState(false);
@@ -68,8 +73,8 @@ const Header = ({ classes, title, count, total, current, goBack,
             >
               {!disableBack && !headerData.hide_icon &&
               <SVG
-              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (customBackButtonColor ? customBackButtonColor : backButtonColor ?  backButtonColor : !headerData.partnerLogo ? getConfig().styles.primaryColor : 'white'))}
-              src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
+                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (customBackButtonColor ? customBackButtonColor : backButtonColor ?  backButtonColor : !headerData.partnerLogo ? getConfig().styles.primaryColor : 'white'))}
+                src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
               />
               }
               {(disableBack === true || disableBack === 'summary') && !headerData.hide_icon &&
@@ -155,7 +160,10 @@ const Header = ({ classes, title, count, total, current, goBack,
                   <SVG
                   style={{marginLeft: '20px', width:25, cursor:'pointer'}}
                   onClick={handleTopIcon}
-                  preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header && backgroundColor ?  getConfig().styles.secondaryColor : getConfig().styles.primaryColor))}
+                  preProcessor={!noTopIconColor
+                    ? code => code.replace(/fill=".*?"/g, 'fill=' + (customTopIconColor || (new_header && backgroundColor ?  getConfig().styles.secondaryColor : getConfig().styles.primaryColor)))
+                    : undefined
+                  }
                   src={rightIcon}
                 />
                 }
