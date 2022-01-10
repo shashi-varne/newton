@@ -1,8 +1,9 @@
-import { buttonStyleOverRides, buttonVariantsConfig } from './button';
+import { createTheme } from '@mui/material';
+import { buttonStyleOverRides, buttonVariantsConfig, } from './button';
+import { tabsStyleOverRides, tabStyleOverRides, tabsVariantsConfig, tabVariantsConfig } from './tabs';
 import { switchStyleOverRides } from './switch';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
 import getPartnerThemeData from './utils';
-import { createTheme } from '@mui/material';
 import { filledTextFieldStyleOverRides, inputAdornmentStyleOverRides, inputLabelStyleOverRides } from './textfield';
 import { separatorStyleOverRides } from './separator';
 
@@ -45,6 +46,14 @@ const getTheme = () => {
       },
       MuiDivider: {
         styleOverrides: separatorStyleOverRides(colors)
+      },
+      MuiTabs: {
+        variants:tabsVariantsConfig(),
+        styleOverrides: tabsStyleOverRides(colors)
+      },
+      MuiTab: {
+        variants:tabVariantsConfig(colors, partnerConfig),
+        styleOverrides: tabStyleOverRides(colors, partnerConfig)
       },
     },
   };
