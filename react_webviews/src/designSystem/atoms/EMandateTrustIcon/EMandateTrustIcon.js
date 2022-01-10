@@ -1,17 +1,22 @@
 import React from "react";
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Imgc } from "../../../common/ui/Imgc";
 import "./EMandateTrustIcon.scss";
 
 const EMandateTrustIcon = (props) => {
-  const { className = "", dataAid = "", ...restProps } = props;
+  const { className = "", opacity, margin, dataAid = "", ...restProps } = props;
   return (
-    <div
+    <Box
       className={`atom-e-mandate-trust-icon ${className}`}
-      data-aid={`eMandateTrustIcon-${dataAid}`}
+      data-aid={`eMandateTrustIcon_${dataAid}`}
+      sx={{ opacity, margin }}
       {...restProps}
     >
-      <Typography variant="body5" color="foundationColors.content.secondary">
+      <Typography
+        variant="body5"
+        color="foundationColors.content.secondary"
+        data-aid="tv_title"
+      >
         e-mandate powered by
       </Typography>
       <Imgc
@@ -19,7 +24,7 @@ const EMandateTrustIcon = (props) => {
         src={require("assets/trust_icons_emandate.svg")}
         alt="NACH"
       />
-    </div>
+    </Box>
   );
 };
 
