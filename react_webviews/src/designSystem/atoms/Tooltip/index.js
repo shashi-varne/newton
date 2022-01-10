@@ -29,7 +29,7 @@ const tooltipStyles = {
   padding: "0px 8px",
 };
 
-const tooltipDescription = ({ title, description }) => {
+const TooltipDescription = ({ title, description }) => {
   const styles = useMemo(
     () => (!isEmpty(title) && !isEmpty(description) ? tooltipStyles : {}),
     [title, description]
@@ -70,7 +70,7 @@ const Tooltip = (props) => {
   } = props;
   return (
     <MuiTooltip
-      title={tooltipDescription({ title, description })}
+      title={TooltipDescription({ title, description })}
       arrow={arrow}
       placement={placement}
       data-aid={`tooltip_${dataAid}`}
