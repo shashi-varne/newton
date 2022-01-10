@@ -1,18 +1,13 @@
 import baseTypographyConfig, { FONT_WEIGHT } from '../typography';
 
-export const tabsStyleOverRides = (colors={}) => {
+export const tabsStyleOverRides = () => {
   return {
     root: {
-      backgroundColor: colors?.supporting?.white,
+      backgroundColor: 'transparent',
       minHeight: 36,
     },
     flexContainer: {
       display: 'block !important',
-    },
-    scrollButtons: {
-      '&.Mui-disabled': {
-        display: 'none',
-      },
     },
   };
 };
@@ -56,7 +51,7 @@ export const tabVariantsConfig = (colors={},partnerConfig={}) => {
         zIndex: 2,
         ...typographyVariants?.body2,
         color: colors.primary.brand,
-        minWidth: 76,
+        minWidth: 'fit-content',
         padding: '8px 16px',
         '&.Mui-selected': {
           ...typographyVariants?.body1,

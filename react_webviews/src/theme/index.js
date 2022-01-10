@@ -24,7 +24,7 @@ const getTheme = () => {
         variants: customTypographyVariantProps(),
       },
       MuiButton: {
-        variants: buttonVariantsConfig(colors),
+        variants: buttonVariantsConfig(colors, partnerConfig),
         styleOverrides: buttonStyleOverRides(colors, partnerConfig),
       },
       MuiSwitch: {
@@ -32,7 +32,7 @@ const getTheme = () => {
       },
       MuiTabs: {
         variants:tabsVariantsConfig(),
-        styleOverrides: tabsStyleOverRides(colors)
+        styleOverrides: tabsStyleOverRides()
       },
       MuiTab: {
         variants:tabVariantsConfig(colors, partnerConfig),
