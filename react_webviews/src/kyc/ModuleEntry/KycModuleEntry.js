@@ -78,6 +78,14 @@ function KycModuleEntry(props) {
     } else if (urlParams?.type === 'fno') {
       navigate(PATHNAME_MAPPER.uploadFnOIncomeProof, data);
     } else if (urlParams?.type === 'freedomPlan') {
+      if (config.Android) {
+        nativeCallback({
+          action: "get_content_data",
+          message: {
+            content_module: "[upi_apps]",
+          },
+        });
+      }
       navigate("/freedom-plan", data);
     } else if (kycStatus === 'ground') {
        navigate('/kyc/home', data);

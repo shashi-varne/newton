@@ -4,7 +4,7 @@ import { getAllPlans, triggerPayment } from "./api";
 import isEmpty from "lodash/isEmpty";
 import { getBasePath, getConfig } from "../../utils/functions";
 import { PATHNAME_MAPPER } from "./constants";
-import { getActivePlans, getDefaultPlan } from "./functions";
+import { getActivePlans, getDefaultPlan, isNative } from "./functions";
 
 const DEFAULT_ERROR_DATA = {
   showError: false,
@@ -75,6 +75,17 @@ function useFreedomDataHook() {
       paymentLink = `${paymentLink}${
         paymentLink.match(/[\?]/g) ? "&" : "?"
       }redirect_url=${redirectUrl}`;
+      if (isNative()) {
+        const upiApps = storageService().getObject("upiApps") || {};
+        let nativeData = {
+          intent_supported: true,
+        };
+        if (config.Android) {
+          nativeData.upi_apps = upiApps;
+        }
+        nativeData = JSON.stringify(nativeData);
+        paymentLink = `${paymentLink}&payment_data=${encodeURI(nativeData)}`;
+      }
       window.location.href = paymentLink;
     } catch (err) {
       setErrorData({
