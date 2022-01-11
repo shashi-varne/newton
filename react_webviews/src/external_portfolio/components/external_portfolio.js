@@ -13,7 +13,6 @@ import { capitalize } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from '../../utils/functions';
 import { storageService, formatAmountInr, isEmpty } from '../../utils/validators';
-import SettingsWithBadge from 'assets/ic_setting_active.svg';
 
 const productType = getConfig().productName;
 

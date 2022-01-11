@@ -21,7 +21,6 @@ export default class InfoBox extends Component {
   }
 
   render() {
-    const { copyText } = this.state;
     const {
       image,
       imageAltText,

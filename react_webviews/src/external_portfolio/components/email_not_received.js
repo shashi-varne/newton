@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import EmailTemplate from '../mini-components/email_template';
-import { Button } from 'material-ui';
+// import { Button } from 'material-ui';
 import { navigate, setLoader } from '../common/commonFunctions';
-import { requestStatement } from '../common/ApiCalls';
-import toast from '../../common/ui/Toast';
+// import { requestStatement } from '../common/ApiCalls';
+// import toast from '../../common/ui/Toast';
 import { storageService } from '../../utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 
@@ -78,16 +78,6 @@ class EmailNotReceived extends Component {
         handleClickTwo={this.goNext}
         dualbuttonwithouticon
       >
-        {/* <Button
-          variant="outlined" color="secondary" fullWidth={true}
-          classes={{
-            root: 'gen-statement-btn',
-            label: 'gen-statement-btn-label'
-          }}
-          onClick={this.goNext}
-        >
-          Regenerate Statement
-        </Button> */}
       </EmailTemplate>
     );
   }
