@@ -65,7 +65,7 @@ class CamsRequestStepsPage extends Component {
     const { show_loader } = this.state;
     return (
       <Container
-        hideInPageTitle={true}
+        force_hide_inpage_title={true}
         events={this.sendEvents('just_set_events')}
         fullWidthButton={true}
         noHeader={show_loader}

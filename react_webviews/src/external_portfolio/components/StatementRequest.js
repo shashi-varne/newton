@@ -42,7 +42,6 @@ export default function StatementRequested(props) {
   const [state, setState] = useState({
     popupOpen: false,
     show_loader: false,
-    loadingText: '',
     email_detail: '',
     selectedEmail: emailParam,
     exitToApp: params.exitToApp || cameFromApp,
@@ -132,6 +131,8 @@ export default function StatementRequested(props) {
     } else if (params.navigateBackTo) { // available when coming from email_entry
       nativeCallback({ events: sendEvents('back') });
       navigate(params.navigateBackTo);
+    } else {
+      props.history.goBack();
     }
   }
 
@@ -273,15 +274,14 @@ export default function StatementRequested(props) {
 
   return (
     <Container
-      hideInPageTitle={true}
-      goBack={goBack}
+      force_hide_inpage_title
       showLoader={state.show_loader}
-      loaderData={{
-        loadingText: state.loadingText,
-      }}
       noFooter={!state.showFooterBtn}
       buttonTitle="did not recieve email"
-      headerData={{ icon: showBack ? 'back' : 'close' }}
+      headerData={{
+        icon: showBack ? 'back' : 'close',
+        goBack
+      }}
       handleClick={goNext}
     >
       <div className="statement-requested-header">

@@ -64,7 +64,7 @@ export default class CamsWebpageSwipe extends Component {
 
     return (
       <Container
-        hideInPageTitle={true}
+        force_hide_inpage_title={true}
         events={this.sendEvents('just_set_events')}
         noFooter={true}
         goBack={this.goBack}

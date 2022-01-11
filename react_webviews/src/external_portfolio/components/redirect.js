@@ -16,7 +16,7 @@ export default class Redirect extends Component {
 
   async componentDidMount() {
     try {
-      this.setLoader(true);
+      this.setLoader('page');
       let body = {
         "external_portfolio": [
           "portfolio_status"

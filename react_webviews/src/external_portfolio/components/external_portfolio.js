@@ -76,7 +76,7 @@ export default class ExternalPortfolio extends Component {
 
   async componentDidMount() {
     try {
-      this.setLoader(true);
+      this.setLoader('page');
       let selectedPan = storageService().getObject('user_pan') || {};
       if (isEmpty(selectedPan)) {
         /* For whatever reason, if there is no selected PAN in LS, force External Portfolio 
@@ -168,18 +168,19 @@ export default class ExternalPortfolio extends Component {
     return (
       <Container
         title="External portfolio"
-        noFooter={true}
-        noHeader={show_loader}
-        rightIcon={SettingsWithBadge}
-        handleRightIconClick={this.settingsClicked}
-        hideInPageTitle={true}
+        noFooter
+        topIcon='settings'
+        handleTopIcon={this.settingsClicked}
+        noTopIconColor
+        hideHamburger
+        force_hide_inpage_title
         headerData={{
           leftIconColor: 'white',
+          goBack: this.goBack,
         }}
         styleHeader={{
           background: 'black !important',
         }}
-        goBack={this.goBack}
         showLoader={show_loader}
         classHeader={`
           ext-pf-inPageHeader 
