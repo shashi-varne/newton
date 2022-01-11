@@ -3,6 +3,7 @@ import { switchStyleOverRides } from './switch';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
 import getPartnerThemeData from './utils';
 import { createTheme } from '@mui/material';
+import { dialogDefaultProps, dialogStylesOverride } from './dialog';
 
 const getTheme = () => {
   const {colors, partnerConfig} = getPartnerThemeData();
@@ -29,6 +30,10 @@ const getTheme = () => {
       MuiSwitch: {
         styleOverrides: switchStyleOverRides(colors),
       },
+      MuiDialog: {
+        defaultProps: dialogDefaultProps(),
+        styleOverrides:dialogStylesOverride()
+      }
     },
   };
   return createTheme(theme);
