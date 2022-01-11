@@ -151,7 +151,6 @@ const Purchase = (props) => {
               "",
               "",
               selectedPurchase.nfo_recommendation,
-              selectedPurchase.tran_date
             )}
             type="purchase"
             state={selectedPurchase.plutus_state}

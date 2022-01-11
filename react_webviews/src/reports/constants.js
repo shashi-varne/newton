@@ -70,8 +70,7 @@ export const storageConstants = {
 export const getPurchaseProcessData = (
   dt_created = "",
   expected_credit_date = "",
-  nfo_recommendation = false,
-  transaction_date = ""
+  nfo_recommendation = false
 ) => {
   const productName = getConfig().productName;
   return {
@@ -79,7 +78,7 @@ export const getPurchaseProcessData = (
       {
         title: "Payment successful",
         desc: "",
-        time: transaction_date,
+        time: "Immediate",
       },
       {
         title: "Order placed",
