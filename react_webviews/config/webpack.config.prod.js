@@ -19,7 +19,12 @@ const TerserPlugin = require('terser-webpack-plugin');
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
 console.log("PIPELINE_ENV :" + (process.env.PIPELINE_ENV ? process.env.PIPELINE_ENV : '') )
-const publicPath = process.env.PIPELINE_ENV == 'webapp' ? '/webapp/' : process.env.PIPELINE_ENV == true ? '' : paths.servedPath;
+
+let PIPELINE_ENV_PATH_MAPPER = {
+  [true]: '',
+  'webapp': '/webapp'
+}
+const publicPath = process.env.PIPELINE_ENV ? PIPELINE_ENV_PATH_MAPPER[process.env.PIPELINE_ENV] || '' : paths.servedPath;
 console.log("publicPath : ", publicPath)
 // Some apps do not use client-side routing with pushState.
 // For these, "homepage" can be set to "." to enable relative asset paths.
