@@ -105,21 +105,21 @@ $(document).ready(function () {
 if(getConfig().productName === "finity") {
   document.title = 'Finity';
   const favIcon = document.getElementById('favicon');
-  favIcon.href="./images/finity_logo_icon.svg";
+  favIcon.href="images/finity_logo_icon.svg";
 } else {
   const favIcon = document.getElementById('favicon');
   document.title = 'Fisdom';
-  favIcon.href="./images/fisdom_logo_icon.svg";
+  favIcon.href="images/fisdom_logo_icon.svg";
 }
 
 if(getConfig().productName === 'finity') {
   document.title = 'Finity';
   const favicon = document.getElementById('favicon');
-  favicon.href = favicon && './images/finity_icon.svg';
+  favicon.href = favicon && 'images/finity_icon.svg';
 } else {
   document.title = 'Fisdom';
   const favicon = document.getElementById('favicon');
-  favicon.href = favicon && './images/fisdom_icon.svg';
+  favicon.href = favicon && 'images/fisdom_icon.svg';
 }
 
 if(getConfig().productName === "fisdom" && getConfig().isProdEnv)
