@@ -55,6 +55,11 @@ export const commonCardsConfig = {
   landingMarketingBanners: [],
   nfoBanners: [
     {
+      image: "nfo1.svg",
+      type: "nfo",
+      endDate: "01/23/2022",
+    },
+    {
       image: "nfo.svg",
       type: "nfo",
       endDate: "01/14/2022",
@@ -468,7 +473,7 @@ export const partnerConfigs = {
     },
     referralConfig: {
       applyRefferal: true,
-      shareRefferal: false, // same as hide_share_referral but with opposite value
+      shareRefferal: true, // same as hide_share_referral but with opposite value
     },
     styles: {
       primaryColor: "#173883",
