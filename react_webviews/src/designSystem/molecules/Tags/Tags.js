@@ -13,7 +13,8 @@
   3. label Variant => <Tags label='Label'/>
 */
 
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
+import Typography from '../../atoms/Typography';
 import React from 'react';
 import { Imgc } from '../../../common/ui/Imgc';
 import isEmpty from 'lodash/isEmpty';
