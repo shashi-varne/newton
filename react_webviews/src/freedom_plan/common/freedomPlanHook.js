@@ -4,7 +4,7 @@ import { getAllPlans, triggerPayment } from "./api";
 import isEmpty from "lodash/isEmpty";
 import { getBasePath, getConfig } from "../../utils/functions";
 import { PATHNAME_MAPPER } from "./constants";
-import { getActivePlans, getDefaultPlan, isNative, sortPlans } from "./functions";
+import { getActivePlans, getDefaultPlan, isNative } from "./functions";
 
 const DEFAULT_ERROR_DATA = {
   showError: false,
@@ -51,8 +51,7 @@ function useFreedomDataHook(initializeData) {
       setShowLoader(true);
       const result = await getAllPlans();
       const activePlans = getActivePlans(result.plan_details);
-      const sortedList = sortPlans(activePlans, "amount");
-      updateFreedomPlanList(sortedList);
+      updateFreedomPlanList(activePlans);
       updateFreedomPlanCharges(result.equity_account_charges);
     } catch (err) {
       setErrorData({

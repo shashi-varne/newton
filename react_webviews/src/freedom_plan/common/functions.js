@@ -10,10 +10,6 @@ export const getActivePlans = (plans = []) => {
   return plans.filter((data) => data.is_active) || {};
 };
 
-export const sortPlans = (plans = [], keyName = "") => {
-  return plans.sort((plan1, plan2) => plan1[keyName] - plan2[keyName])
-}
-
 export const isNative = () => storageService().getBoolean("native");
 
 export const handleExit = (props) => {

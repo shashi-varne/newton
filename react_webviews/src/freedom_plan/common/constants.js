@@ -9,7 +9,7 @@ export const PATHNAME_MAPPER = {
 };
 
 export const API_CONSTANTS = {
-  getAllPlans: "/api/equity/api/eqm/subscriptions/get/all_plans",
+  getAllPlans: "/api/equity/api/eqm/subscriptions/get/all_plans?order_by_price=asc",
   triggerPayment: "api/equity/api/eqm/subscription/start/payment",
 };
 
