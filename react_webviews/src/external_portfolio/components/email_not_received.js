@@ -86,7 +86,7 @@ class EmailNotReceived extends Component {
           onClick: this.goNext
         }}
       >
-        <EmailTemplate />
+        <EmailTemplate containerStyle={{ paddingBottom: '100px' }}/>
       </Container>
     );
   }
