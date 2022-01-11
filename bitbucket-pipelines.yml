@@ -24,7 +24,7 @@ definitions:
           - cd react_webviews
           - yarn
           - unset CI
-          - IS_PIPELINE=true yarn build
+          - PIPELINE_ENV=true yarn build
           - ls
           - mv build $BITBUCKET_COMMIT
           - pipe: atlassian/google-cloud-storage-deploy:0.4.5
@@ -48,7 +48,7 @@ definitions:
           - cd react_webviews
           - yarn
           - unset CI
-          - IS_PIPELINE=true yarn build
+          - PIPELINE_ENV=true yarn build
           - ls
           - mv build $BITBUCKET_BRANCH
           - pipe: atlassian/google-cloud-storage-deploy:0.4.5
@@ -76,7 +76,7 @@ definitions:
           - cd react_webviews
           - yarn
           - unset CI
-          - yarn build
+          - PIPELINE_ENV=$PIPELINE_ENV yarn build
           - ls
           - cd build
           - pipe: atlassian/google-cloud-storage-deploy:0.4.5
@@ -116,15 +116,15 @@ pipelines:
         
         - step:
             <<: *prod-deploy
-            name: Fisdom-Equity Production deploy
-            trigger: manual
-            deployment: fisdom-webapp-prod
-
-        - step:
-            <<: *prod-deploy
             name: Finity Production deploy
             trigger: manual
             deployment: finity-prod
+        
+        - step:
+            <<: *prod-deploy
+            name: Fisdom-Equity Production deploy
+            trigger: manual
+            deployment: fisdom-webapp-prod
 
         - step:
             <<: *prod-deploy
