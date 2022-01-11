@@ -18,6 +18,7 @@ const Button = (props) => {
   const {
     size,
     isLoading,
+    isInverted,
     variant,
     title,
     disabled,
@@ -27,6 +28,7 @@ const Button = (props) => {
   return (
     <LibButton
       isloading={isLoading ? 1 : 0}
+      isinverted={isInverted ? 1 : 0}
       variant={VARIANTS[variant] || VARIANTS['primary']}
       size={SIZES[size] || SIZES['large']}
       color='secondary'
