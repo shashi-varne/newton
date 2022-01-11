@@ -16,7 +16,7 @@
 */
 
 import React, { useMemo } from 'react';
-import Typography from '@mui/material/Typography';
+import Typography from '../../atoms/Typography';
 import Box from '@mui/material/Box';
 import { Imgc } from '../../../common/ui/Imgc';
 import PropTypes from 'prop-types';
