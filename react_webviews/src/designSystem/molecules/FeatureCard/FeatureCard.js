@@ -23,7 +23,7 @@
 */
 
 import React from 'react';
-import Typography from '@mui/material/Typography';
+import Typography from '../../atoms/Typography';
 import Tags from '../Tags';
 import Separator from '../../atoms/Separator'
 import { Imgc } from '../../../common/ui/Imgc';
