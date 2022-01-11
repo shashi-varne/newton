@@ -11,8 +11,8 @@
 
 import React from 'react';
 import { Imgc } from '../../../common/ui/Imgc';
-import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
+import Typography from '../../atoms/Typography';
 import './CategoryCard.scss';
 
 const CategoryCard = ({
