@@ -6,6 +6,7 @@ import { navigate, setLoader } from '../common/commonFunctions';
 // import toast from '../../common/ui/Toast';
 import { storageService } from '../../utils/validators';
 import { nativeCallback } from 'utils/native_callback';
+import Container from '../common/Container';
 
 class EmailNotReceived extends Component {
   constructor(props) {
@@ -65,20 +66,28 @@ class EmailNotReceived extends Component {
   render() {
     const subtitleText = "It usually takes 1 hour to get the statement in your email";
     return (
-      <EmailTemplate
+      <Container
+        headerData={{
+          goBack: this.props.goBack
+        }}
         title="Did not recieve email"
         smallTitle={subtitleText}
         imageTitle="The email looks like this"
         showLoader={this.state.show_loader}
-        goBack={this.goBack}
-        twoButton={true}
-        buttonOneTitle="Wait"
-        buttonTwoTitle="Regenerate statement"
-        handleClickOne={this.goBack}
-        handleClickTwo={this.goNext}
-        dualbuttonwithouticon
+        twoButtonVertical
+        button1Props={{
+          title: 'wait',
+          outlined: true,
+          onClick: this.goBack
+        }}
+        button2Props={{
+          title: 'Regenerate statement',
+          contained: true,
+          onClick: this.goNext
+        }}
       >
-      </EmailTemplate>
+        <EmailTemplate />
+      </Container>
     );
   }
 }

@@ -3,6 +3,7 @@ import EmailTemplate from '../mini-components/email_template';
 import { nativeCallback } from 'utils/native_callback';
 import { navigate } from '../common/commonFunctions';
 import { storageService } from '../../utils/validators';
+import Container from '../common/Container';
 
 class EmailExampleView extends Component {
   constructor(props) {
@@ -46,15 +47,20 @@ class EmailExampleView extends Component {
 
   render() {
     return (
-      <EmailTemplate
+      <Container
+        headerData={{
+          goBack: this.props.goBack
+        }}
         title="Email looks like this"
         handleClick={this.goBack}
         buttonTitle="Okay"
         events={this.sendEvents('just_set_events')}
         goBack={this.goBack}
-        statementSource={this.params.statementSource}
       >
-      </EmailTemplate>
+        <EmailTemplate
+          statementSource={this.params.statementSource}
+        />
+      </Container>
     );
   }
 }
