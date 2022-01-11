@@ -76,7 +76,7 @@ definitions:
           - cd react_webviews
           - yarn
           - unset CI
-          - PIPELINE_ENV=$PIPELINE_ENV yarn build
+          - PIPELINE_ENV=${PIPELINE_ENV} yarn build
           - ls
           - cd build
           - pipe: atlassian/google-cloud-storage-deploy:0.4.5
