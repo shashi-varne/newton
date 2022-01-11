@@ -4,6 +4,7 @@ import { tabsStyleOverRides, tabStyleOverRides } from './tabs/index.js';
 import { switchStyleOverRides } from './switch';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
 import getPartnerThemeData from './utils';
+import { dialogDefaultProps, dialogStylesOverride } from './dialog';
 
 const getTheme = () => {
   const {colors, partnerConfig} = getPartnerThemeData();
@@ -36,6 +37,10 @@ const getTheme = () => {
       MuiTab: {
         styleOverrides: tabStyleOverRides(colors, partnerConfig)
       },
+      MuiDialog: {
+        defaultProps: dialogDefaultProps(),
+        styleOverrides:dialogStylesOverride()
+      }
     },
   };
   return createTheme(theme);
