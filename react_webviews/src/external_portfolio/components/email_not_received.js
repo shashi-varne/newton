@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import EmailTemplate from '../mini-components/email_template';
-// import { Button } from 'material-ui';
 import { navigate, setLoader } from '../common/commonFunctions';
-// import { requestStatement } from '../common/ApiCalls';
-// import toast from '../../common/ui/Toast';
+import toast from '../../common/ui/Toast';
 import { storageService } from '../../utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import Container from '../common/Container';
+import { requestStatement } from '../common/ApiCalls';
+import isEmpty from 'lodash/isEmpty';
 
 class EmailNotReceived extends Component {
   constructor(props) {
@@ -34,27 +34,26 @@ class EmailNotReceived extends Component {
   }
 
   goNext = async () => {
-    // try {
-    //   this.setLoader('button');
-    //   this.sendEvents('regenerate_stat');
-    //   const email_detail = storageService().getObject('email_detail_hni');
-    //   await requestStatement({ 
-    //     email: email_detail.email,
-    //     statement_id: email_detail.latest_statement.statement_id,
-    //     retrigger: 'true',
-    //   });
-    //   this.navigate(`statement_request/${email_detail.email}`, {
-    //     exitToApp: true,
-    //     fromRegenerate: true,
-    //   });
-    // } catch (err) {
-    //   this.setLoader(false);
-    //   console.log(err);
-    //   toast(err);
-    // }
-    this.navigate('email_entry', {
-      comingFrom: 'email_not_received',
-    });
+    try {
+      this.setLoader('button');
+      this.sendEvents('regenerate_stat');
+      const email_detail = storageService().getObject('email_detail_hni');
+      if (!isEmpty(email_detail)) {
+        await requestStatement({ 
+          email: email_detail.email,
+          statement_id: email_detail.latest_statement.statement_id,
+          retrigger: 'true',
+        });
+        this.navigate(`statement_request/${email_detail.email}`, {
+          exitToApp: true,
+          fromRegenerate: true,
+        });
+      }
+    } catch (err) {
+      this.setLoader(false);
+      console.log(err);
+      toast(err);
+    }
   }
 
   goBack = () => {
@@ -82,6 +81,7 @@ class EmailNotReceived extends Component {
         }}
         button2Props={{
           title: 'Regenerate statement',
+          showLoader: this.state.show_loader,
           contained: true,
           onClick: this.goNext
         }}
