@@ -49,7 +49,7 @@ export default class Settings extends Component {
     }
   }
 
-  async componentDidMount() {
+  getEmailsList = async () => {
     try {
       this.setLoader(true);
       let emails = await fetchEmails();
@@ -58,11 +58,15 @@ export default class Settings extends Component {
         emails,
         show_loader: false, // same as this.setLoader(false);
       });
-    } catch(err) {
+    } catch (err) {
       this.setLoader(false);
       console.log(err);
       toast(err);
     }
+  }
+
+  componentDidMount() {
+    this.getEmailsList();
   }
 
   openRemoveConfirm = (email) => {
@@ -141,6 +145,10 @@ export default class Settings extends Component {
     this.setState({ emails });
   }
 
+  onEmailUpdate = async () => {
+    this.getEmailsList();
+  }
+
   addNewEmail = () => {
     this.sendEvents('next');
     this.navigate('email_entry', {
@@ -167,13 +175,14 @@ export default class Settings extends Component {
         <div style={{ marginBottom: '20px' }}>
           {emails.map(email => (
             <EmailExpand
-              key={email.email}
+              key={email.dt_updated}
               allowRemove={hideRemoveEmail ? false : email.allowRemove} // Hide "Remove Email" option when webview is opened through RM App
               parent={this}
               comingFrom="settings"
               emailForwardedHandler={() => this.emailForwardedHandler(email.email)}
               clickRemoveEmail={() => this.openRemoveConfirm(email)}
               email={email}
+              onEmailUpdate={this.onEmailUpdate}
             />
           ))}
         </div>
