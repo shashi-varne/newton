@@ -46,9 +46,9 @@
 
 */
 
-import { Typography } from '@mui/material';
 import React from 'react';
 import { Imgc } from '../../../common/ui/Imgc';
+import Typography from '../../atoms/Typography';
 import Separator from '../../atoms/Separator';
 import { Pill, Pills } from '../../atoms/Pills';
 import InputField from '../InputField';
