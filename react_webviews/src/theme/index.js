@@ -4,6 +4,7 @@ import baseTypographyConfig, { customTypographyVariantProps } from './typography
 import getPartnerThemeData from './utils';
 import { createTheme } from '@mui/material';
 import { filledTextFieldStyleOverRides, inputAdornmentStyleOverRides, inputLabelStyleOverRides } from './textfield';
+import { dialogDefaultProps, dialogStylesOverride } from './dialog';
 
 const getTheme = () => {
   const {colors, partnerConfig} = getPartnerThemeData();
@@ -41,6 +42,10 @@ const getTheme = () => {
       },
       MuiInputAdornment: {
         styleOverrides: inputAdornmentStyleOverRides(colors)
+      },
+      MuiDialog: {
+        defaultProps: dialogDefaultProps(),
+        styleOverrides:dialogStylesOverride()
       }
     },
   };
