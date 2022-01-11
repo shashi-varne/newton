@@ -84,17 +84,17 @@ export default class EmailRequestSteps extends Component {
       <p>
         You will recieve an email with your consolidated portfolio statement
       </p>
-      {this.state.showRegenerateBtn &&
-        <WVButton
-          fullWidth
-          contained
-          showLoader={this.state.show_loader}
-          style={{ marginBottom: '10px' }}
-          onClick={this.regenerateStatement}
-        >
-          Regenerate Statement
-        </WVButton>
-      }
+      <WVButton
+        contained
+        fullWidth
+        disabled={!this.state.showRegenerateBtn}
+        color="secondary"
+        showLoader={this.state.show_loader}
+        style={{ marginBottom: '10px' }}
+        onClick={this.regenerateStatement}
+      >
+        Regenerate Statement
+      </WVButton>
       <div>
         You'll get an email with your portfolio statement in around 1 hour. Forward the email as received to
       </div>
