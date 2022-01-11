@@ -14,6 +14,9 @@ import toast from '../../common/ui/Toast';
 import StatementRequestStep from '../mini-components/StatementRequestStep';
 import { regenTimeLimit } from '../constants';
 import { getStatementStatus, setPlatformAndUser } from '../common/commonFunctions';
+import WVButton from '../../common/ui/Button/WVButton';
+import WVDisableBodyTouch from '../../common/ui/DisableBodyTouch/WVDisableBodyTouch';
+import StatementTriggeredPopUp from '../mini-components/StatementTriggeredPopUp';
 
 const { productName, emailDomain } = getConfig();
 
@@ -41,7 +44,7 @@ export default function StatementRequested(props) {
 
   const [state, setState] = useState({
     popupOpen: false,
-    show_loader: false,
+    showLoader: false,
     email_detail: '',
     selectedEmail: emailParam,
     exitToApp: params.exitToApp || cameFromApp,
@@ -66,7 +69,7 @@ export default function StatementRequested(props) {
     setEntryPoint();
 
     if (emailParam) {
-      updateState({ selectedEmail: emailParam });
+      updateState({ selectedEmail: emailParam, showLoader: 'page' });
       try {
         const [email] = await fetchEmails({ email_id: emailParam });
         if (email) {
@@ -78,11 +81,13 @@ export default function StatementRequested(props) {
           updateState({
             email_detail: email || {},
             showFooterBtn,
+            showLoader: false
           });
           storageService().setObject('email_detail_hni', email);
         }
       } catch (err) {
         console.log(err);
+        updateState({ showLoader: false });
         toast(err);
       }
     }
@@ -209,21 +214,23 @@ export default function StatementRequested(props) {
     const generateStatement = async () => {
       sendEvents('regenerate_stat');
       try {
-        updateState({ show_loader: 'button' });
+        updateState({ showLoader: 'button' });
         await requestStatement({
           email: email_detail.email,
           statement_id: email_detail.latest_statement.statement_id,
           retrigger: 'true',
         });
-        this.navigate(`statement_request/${email_detail.email}`, {
-          exitToApp: true,
-          fromRegenerate: true,
-        });
+        updateState({ openPopup: true });
       } catch (err) {
-        updateState({ show_loader: false });
+        updateState({ showLoader: false });
         console.log(err);
         toast(err);
       }
+    }
+
+    const onPopupClose = () => {
+      updateState({ openPopup: false });
+      initialisePageData();
     }
 
     const statementStatus = getStatementStatus(email_detail?.latest_statement?.statement_status);
@@ -241,13 +248,20 @@ export default function StatementRequested(props) {
             The email you sent could not be processed. Please ensure you forward the email as received to
             <span id="epsr-forward-email">&nbsp;cas@{emailDomain}</span>
           </StatementRequestStep.Content>
-          <Button
-            variant="outlined"
-            buttonTitle="Regenerate statement"
-            color="primary"
+          <WVButton
             fullWidth
+            contained
+            color="secondary"
+            showLoader={state.showLoader}
             style={{ marginTop: '10px' }}
             onClick={generateStatement}
+          >
+            Regenerate statement
+          </WVButton>
+          <WVDisableBodyTouch disableTouch={state.showLoader} />
+          <StatementTriggeredPopUp
+            isOpen={state.openPopup}
+            onCtaClick={onPopupClose}
           />
         </StatementRequestStep>
       );
@@ -278,7 +292,7 @@ export default function StatementRequested(props) {
   return (
     <Container
       force_hide_inpage_title
-      showLoader={state.show_loader}
+      showLoader={state.showLoader}
       noFooter={!state.showFooterBtn}
       buttonTitle="did not recieve email"
       headerData={{
