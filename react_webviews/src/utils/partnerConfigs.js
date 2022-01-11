@@ -52,30 +52,17 @@ export const commonCardsConfig = {
     bottomScrollCards: ["parkmoney", "savegoal"],
     bottomCards: ["nfo"],
   },
-  landingMarketingBanners: [
-    {
-      type: "mf",
-      image: "mf.svg",
-      endDate: "11/05/2021",
-      startDate: "11/01/2021",
-    },
-  ],
+  landingMarketingBanners: [],
   nfoBanners: [
+    {
+      image: "nfo1.svg",
+      type: "nfo",
+      endDate: "01/23/2022",
+    },
     {
       image: "nfo.svg",
       type: "nfo",
-      endDate: "11/30/2021",
-      startDate: "11/17/2021",
-    },
-    { image: "nfo1.svg", type: "nfo", endDate: "11/25/2021" },
-    { image: "nfo2.svg", type: "nfo", endDate: "11/24/2021" },
-    { image: "nfo3.svg", type: "nfo", endDate: "11/28/2021" },
-    { image: "nfo4.svg", type: "nfo", endDate: "11/25/2021" },
-    {
-      image: "nfo5.svg",
-      type: "nfo",
-      endDate: "12/09/2021",
-      startDate: "11/26/2021",
+      endDate: "01/14/2022",
     },
   ],
 };
@@ -232,7 +219,7 @@ export const partnerConfigs = {
   fisdom: {
     code: "fisdom",
     investSubSectionMap: {
-      stocksAndIpo: ["ipo"],
+      stocksAndIpo: ["stocks", "ipo"],
       ourRecommendations: [
         "instaredeem",
         "buildwealth",
@@ -354,6 +341,9 @@ export const partnerConfigs = {
       ...commonCardsConfig.investSubSectionMap,
       ourRecommendations: ["buildwealth", "savetax", "nps"],
       diy: ["diyv2","gold"],
+    },
+    features: {
+      taxFiling: true
     },
     styles: {
       primaryColor: "#000180",
@@ -483,7 +473,7 @@ export const partnerConfigs = {
     },
     referralConfig: {
       applyRefferal: true,
-      shareRefferal: false, // same as hide_share_referral but with opposite value
+      shareRefferal: true, // same as hide_share_referral but with opposite value
     },
     styles: {
       primaryColor: "#173883",
