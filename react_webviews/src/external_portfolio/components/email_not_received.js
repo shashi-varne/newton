@@ -33,24 +33,27 @@ class EmailNotReceived extends Component {
   }
 
   goNext = async () => {
-    try {
-      this.setLoader('button');
-      this.sendEvents('regenerate_stat');
-      const email_detail = storageService().getObject('email_detail_hni');
-      await requestStatement({ 
-        email: email_detail.email,
-        statement_id: email_detail.latest_statement.statement_id,
-        retrigger: 'true',
-      });
-      this.navigate(`statement_request/${email_detail.email}`, {
-        exitToApp: true,
-        fromRegenerate: true,
-      });
-    } catch (err) {
-      this.setLoader(false);
-      console.log(err);
-      toast(err);
-    }
+    // try {
+    //   this.setLoader('button');
+    //   this.sendEvents('regenerate_stat');
+    //   const email_detail = storageService().getObject('email_detail_hni');
+    //   await requestStatement({ 
+    //     email: email_detail.email,
+    //     statement_id: email_detail.latest_statement.statement_id,
+    //     retrigger: 'true',
+    //   });
+    //   this.navigate(`statement_request/${email_detail.email}`, {
+    //     exitToApp: true,
+    //     fromRegenerate: true,
+    //   });
+    // } catch (err) {
+    //   this.setLoader(false);
+    //   console.log(err);
+    //   toast(err);
+    // }
+    this.navigate('email_entry', {
+      comingFrom: 'email_not_received',
+    });
   }
 
   goBack = () => {
@@ -60,16 +63,22 @@ class EmailNotReceived extends Component {
   }
 
   render() {
-    const subtitleText = (<span>It usually takes 1 hour to get the statement in your email</span>);
+    const subtitleText = "It usually takes 1 hour to get the statement in your email";
     return (
       <EmailTemplate
         title="Did not recieve email"
-        subtitle={subtitleText}
+        smallTitle={subtitleText}
+        imageTitle="The email looks like this"
         showLoader={this.state.show_loader}
-        noFooter={true}
         goBack={this.goBack}
+        twoButton={true}
+        buttonOneTitle="Wait"
+        buttonTwoTitle="Regenerate statement"
+        handleClickOne={this.goBack}
+        handleClickTwo={this.goNext}
+        dualbuttonwithouticon
       >
-        <Button
+        {/* <Button
           variant="outlined" color="secondary" fullWidth={true}
           classes={{
             root: 'gen-statement-btn',
@@ -78,7 +87,7 @@ class EmailNotReceived extends Component {
           onClick={this.goNext}
         >
           Regenerate Statement
-        </Button>
+        </Button> */}
       </EmailTemplate>
     );
   }
