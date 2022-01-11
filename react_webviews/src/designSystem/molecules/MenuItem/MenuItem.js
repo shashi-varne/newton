@@ -8,7 +8,7 @@
 */
 
 import React from 'react';
-import { Typography } from '@mui/material';
+import Typography from '../../atoms/Typography';
 import { Imgc } from '../../../common/ui/Imgc';
 import PropTypes from 'prop-types';
 
