@@ -161,16 +161,15 @@ $light_periwinkle: #d3dbe4;
   margin-top: 40px;
 }
 
-.gen-statement-btn, .gen-statement-btn-transparent, .gen-statement-btn-filled {
+.gen-statement-btn, .gen-statement-btn-filled {
   border: 1.5px solid var(--secondary) !important;
-  margin-top: 30px !important;
   padding: 18px 35px !important;
   background-color: white !important;
   border-radius: 4px !important;
 }
 
-.gen-statement-btn-transparent {
-  background-color: transparent !important;
+.gen-statement-btn {
+  margin-top: 30px !important;
 }
 
 .gen-statement-btn-filled {
@@ -178,6 +177,7 @@ $light_periwinkle: #d3dbe4;
 }
 
 .gen-statement-btn-label, .gen-statement-btn-label-filled {
+  font-family: 'Rubik', 'Roboto', 'sans-serif';
   text-transform: uppercase !important;
   font-weight: bold;
   font-size: 12px;

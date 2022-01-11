@@ -8,6 +8,7 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import { isFunction, storageService } from '../../utils/validators';
 import { getConfig } from '../../utils/functions';
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement';
+import { Button } from '@material-ui/core';
 const { emailDomain, productName } = getConfig();
 
 const theme = createMuiTheme({
@@ -81,8 +82,8 @@ export default class EmailRequestSteps extends Component {
   renderStep1 = () => {
     const {
       showRegenerateBtn,
+      onRegenerateBtnClick,
       classes = {},
-      boxStyle = {},
       emailLinkClick,
     } = this.props;
 
@@ -90,33 +91,38 @@ export default class EmailRequestSteps extends Component {
       <p>
         You will recieve an email with your consolidated portfolio statement
       </p>
-      <p>STATEMENT PASSWORD - <span>{`${productName}123`}</span></p>
-      {/* {showRegenerateBtn &&
+      {showRegenerateBtn &&
         <Button
-          variant="outlined" color="secondary" fullWidth={true}
+          color="secondary" fullWidth={true}
           classes={{
-            root: 'gen-statement-btn-transparent',
-            label: 'gen-statement-btn-label'
+            root: 'gen-statement-btn-filled',
+            label: 'gen-statement-btn-label-filled'
           }}
           style={{ marginBottom: '10px' }}
-          onClick={this.generateStatement}
+          onClick={onRegenerateBtnClick}
         >
-          Generate Statement
+          Regenerate Statement
         </Button>
-      } */}
-      <div>Please forward the email to</div>
+      }
+      <div>
+        You'll get an email with your portfolio statement in around 1 hour. Forward the email as received to
+      </div>
       <InfoBox
         classes={{ root: `info-box-cut-out ${classes.emailBox}` }}
         isCopiable={true}
         textToCopy={`cas@${emailDomain}`}
-        boxStyle={{ marginTop: '10px', border: '2px dashed var(--steelgrey)'}}
+        boxStyle={{
+          marginTop: '20px',
+          border: 'none',
+          backgroundColor: '#E6E5F4'
+        }}
       >
         <span className="info-box-body-text">
           cas@{emailDomain}
         </span>
       </InfoBox>
       <WVClickableTextElement style={{ marginTop: '20px', display: 'inline-block' }} onClick={emailLinkClick}>
-        View email sample
+        The email looks like this
       </WVClickableTextElement>
     </Fragment>);
   }
@@ -136,28 +142,6 @@ export default class EmailRequestSteps extends Component {
       default:
         return 'Unknown step';
     }
-  }
-
-  generateStatement = () => {
-    const { parent, emailDetail } = this.props;
-    if (parent) {
-      parent.sendEvents('generate_stat');
-    }
-
-    /* Store email detail in LS here so email_not_received and 
-    statement_not_received screens can use this data */
-    storageService().setObject('email_detail_hni', emailDetail);
-    // if (getConfig().app === 'android') {
-    //   parent.setState({
-    //     show_loader: true,
-    //     loadingText: <CAMSLoader />,
-    //   });
-    //   setTimeout(() => {
-    //     parent.navigate('cams_webpage');
-    //   }, 2000);
-    // } else {
-    parent.navigate('cams_request_steps');
-    // }
   }
 
   onPopupClose = () => {
