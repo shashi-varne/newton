@@ -13,9 +13,10 @@
 
 
 import React from 'react';
-import { Typography, Collapse as CollapseLib } from '@mui/material';
+import { Collapse as CollapseLib } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import Typography from '../../atoms/Typography';
 import PropTypes from 'prop-types';
 import './CollapsibleSection.scss';
 
