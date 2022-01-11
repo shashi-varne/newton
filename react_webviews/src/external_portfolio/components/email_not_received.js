@@ -11,7 +11,9 @@ import isEmpty from 'lodash/isEmpty';
 class EmailNotReceived extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      emailDetail: storageService().getObject('email_detail_hni')
+    };
     this.navigate = navigate.bind(this);
     this.setLoader = setLoader.bind(this);
   }
@@ -37,14 +39,14 @@ class EmailNotReceived extends Component {
     try {
       this.setLoader('button');
       this.sendEvents('regenerate_stat');
-      const email_detail = storageService().getObject('email_detail_hni');
-      if (!isEmpty(email_detail)) {
+      const { emailDetail } = this.state;
+      if (!isEmpty(emailDetail)) {
         await requestStatement({ 
-          email: email_detail.email,
-          statement_id: email_detail.latest_statement.statement_id,
+          email: emailDetail.email,
+          statement_id: emailDetail.latest_statement.statement_id,
           retrigger: 'true',
         });
-        this.navigate(`statement_request/${email_detail.email}`, {
+        this.navigate(`statement_request/${emailDetail.email}`, {
           exitToApp: true,
           fromRegenerate: true,
         });
@@ -86,7 +88,10 @@ class EmailNotReceived extends Component {
           onClick: this.goNext
         }}
       >
-        <EmailTemplate containerStyle={{ paddingBottom: '100px' }}/>
+        <EmailTemplate
+          containerStyle={{ paddingBottom: '100px' }}
+          statementSource={this.state.emailDetail?.latest_statement?.statement_source}
+        />
       </Container>
     );
   }
