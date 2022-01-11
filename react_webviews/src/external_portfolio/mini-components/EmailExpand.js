@@ -3,7 +3,6 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import { Button } from 'material-ui';
 import { getConfig } from '../../utils/functions';
 import toast from '../../common/ui/Toast';
@@ -17,44 +16,9 @@ import WVDisableBodyTouch from '../../common/ui/DisableBodyTouch/WVDisableBodyTo
 
 const { emailDomain } = getConfig();
 
-const theme = createMuiTheme({
-  overrides: {
-    MuiExpansionPanel: {
-      root: {
-        boxShadow: 'none',
-      },
-      expanded: {
-        boxShadow: 'none',
-      }
-    },
-    MuiExpansionPanelSummary: {
-      root: {
-        border: '1px solid #0000000a !important',
-        boxShadow: '0px 2px 4px 0px #0000000a !important',
-        borderRadius: '4px !important',
-        padding: '0 8px 0 20px !important',
-      },
-      content: {
-        margin: '18px 0',
-        display: 'block',
-      },
-    },
-    MuiExpansionPanelDetails: {
-      root: {
-        padding: '20px',
-        background: 'var(--highlight)',
-        border: 'none',
-        display: 'block',
-        borderRadius: '4px',
-      }
-    }
-  }
-});
-
 export default class EmailExpand extends Component {
   constructor(props) {
     super(props);
-    console.log('RECREATED', props.email.latest_statement.dt_updated)
     this.state = {
       friendlyStatementStatus: getStatementStatus(
         props?.email?.latest_statement.statement_status
@@ -186,26 +150,24 @@ export default class EmailExpand extends Component {
       'other': this.renderStatementPending,
     }
     return (
-      <MuiThemeProvider theme={theme}>
-        <div className="email-expand-container">
-          <ExpansionPanel>
-            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <div id="email-expand-title">
-                email ID
-              </div>
-              <div className="info-box-body-text">
-                {email.email}
-              </div>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              {renderFuncMap[this.state.friendlyStatementStatus]()}
-              {allowRemove && 
-                <div id="remove-email" onClick={clickRemoveEmail}>Remove email</div>
-              }
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-        </div>
-      </MuiThemeProvider>
+      <div className="email-expand-container">
+        <ExpansionPanel>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+            <div id="email-expand-title">
+              email ID
+            </div>
+            <div className="info-box-body-text">
+              {email.email}
+            </div>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            {renderFuncMap[this.state.friendlyStatementStatus]()}
+            {allowRemove && 
+              <div id="remove-email" onClick={clickRemoveEmail}>Remove email</div>
+            }
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+      </div>
     );
   }
 }

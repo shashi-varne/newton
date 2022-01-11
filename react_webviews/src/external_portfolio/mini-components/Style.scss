@@ -1,7 +1,7 @@
 $steel_grey: #767e86;
 $dark_indigo: #0a1d32;
 
-#hni-stepper{
+#hni-stepper {
   background-color: transparent;
   span {
     border: none !important;
@@ -15,7 +15,7 @@ $dark_indigo: #0a1d32;
     font-weight: 500;
   }
   .MuiStepLabel-completed, .MuiStepLabel-disabled {
-    color: '#767e86';
+    color: #767e86;
   }
   .MuiStepLabel-active {
     color: inherit !important;
@@ -33,7 +33,7 @@ $dark_indigo: #0a1d32;
     color: #767e86;
     font-size: 13px;
     line-height: 19px;
-    border-left: 'none';
+    border-left: none;
   }
 }
 
@@ -318,6 +318,10 @@ $dark_indigo: #0a1d32;
 
 .email-expand-container {
   margin-top: 30px;
+
+  &:first-child {
+    margin-top: 10px;
+  }
   
   #email-expand-title {
     font-size: 13px;
@@ -338,6 +342,30 @@ $dark_indigo: #0a1d32;
     text-transform: uppercase;
     color: $steel_grey;
     margin-top: 40px;
+  }
+
+  .MuiExpansionPanel-root, .MuiExpansionPanel-expanded {
+    box-shadow: none;
+  }
+
+  .MuiExpansionPanelSummary-root {
+    border: 1px solid #0000000a !important;
+    box-shadow: 0px 2px 4px 0px #0000000a !important;
+    border-radius: 4px !important;
+    padding: 0 8px 0 20px !important;
+  }
+
+  .MuiExpansionPanelSummary-content {
+    margin: 18px 0;
+    display: block;
+  }
+
+  .MuiExpansionPanelDetails-root {
+    padding: 20px;
+    background: var(--highlight);
+    border: none;
+    display: block;
+    border-radius: 4px;
   }
 }
 

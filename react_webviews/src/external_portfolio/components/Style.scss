@@ -130,6 +130,10 @@ $light_periwinkle: #d3dbe4;
 
 .ext-pf-subheader {
   margin: 40px 0 0 0;
+
+  &:first-child {
+    margin: 10px 0 0 0;
+  }
   
   h4 {
     font-size: 17px;
@@ -140,16 +144,6 @@ $light_periwinkle: #d3dbe4;
 
   .gen-statement-btn {
     margin-top: 10px !important;
-  }
-}
-
-.Container {
-  .ext-pf-subheader:first-child {
-    margin: 10px 0 0 0;
-  }
-
-  .email-expand-container:first-child {
-    margin-top: 10px;
   }
 }
 
