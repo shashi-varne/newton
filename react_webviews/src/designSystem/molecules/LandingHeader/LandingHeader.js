@@ -76,7 +76,7 @@ LandingHeader.propTypes = {
 
 LandingHeader.Title = ({ children, titleColor }) => {
   return (
-    <Typography variant='heading1' color={titleColor} data-aid='tv_title'>
+    <Typography variant='heading1' color={titleColor} data-aid='tv_title' component='div'>
       {children}
     </Typography>
   );
@@ -104,6 +104,7 @@ LandingHeader.Subtitle = ({
           variant='body2'
           color={dateColor}
           data-aid='tv_date'
+          component='div'
         >
           {formattedDate?.date}
           <span>{'\u2022'}</span>
@@ -116,6 +117,7 @@ LandingHeader.Subtitle = ({
         variant='body2'
         color={subtitleColor}
         data-aid='tv_subtitle'
+        component='div'
       >
         {children}
       </Typography>
