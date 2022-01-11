@@ -22,7 +22,7 @@ console.log("PIPELINE_ENV :" + (process.env.PIPELINE_ENV ? process.env.PIPELINE_
 
 let PIPELINE_ENV_PATH_MAPPER = {
   [true]: '',
-  'webapp': '/webapp'
+  'webapp': '/webapp/'
 }
 const publicPath = process.env.PIPELINE_ENV ? PIPELINE_ENV_PATH_MAPPER[process.env.PIPELINE_ENV] || '' : paths.servedPath;
 console.log("publicPath : ", publicPath)
@@ -36,7 +36,7 @@ const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 // Omit trailing slash as %PUBLIC_URL%/xyz looks better than %PUBLIC_URL%xyz.
 const publicUrl = publicPath.slice(0, -1);
 // Get environment variables to inject into our app.
-const env = getClientEnvironment(publicUrl);
+const env = getClientEnvironment(publicUrl, publicPath);
 
 // Assert this just to be safe.
 // Development builds of React are slow and not intended for production.
