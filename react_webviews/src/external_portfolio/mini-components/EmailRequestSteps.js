@@ -135,21 +135,7 @@ export default class EmailRequestSteps extends Component {
       case 1:
         return this.renderStep2();
       default:
-        return 'Unknown step';
-    }
-  }
-
-  onPopupClose = () => {
-    this.setState({ popupOpen: false });
-  }
-
-  notReceivedHandler = () => {
-    const { notReceivedClick, parent } = this.props;
-
-    if (isFunction(notReceivedClick)) {
-      notReceivedClick();
-    } else {
-      parent.navigate('email_not_received');
+        return '';
     }
   }
 
