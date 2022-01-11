@@ -12,7 +12,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import { Imgc } from 'common/ui/Imgc';
-import { Typography } from '@mui/material';
+import Typography from '../../atoms/Typography';
 import PropTypes from 'prop-types';
 import './InfoCard.scss';
 
