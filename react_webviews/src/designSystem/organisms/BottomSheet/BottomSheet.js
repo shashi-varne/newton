@@ -20,7 +20,8 @@
     />
 */
 
-import { Dialog, Typography, Box } from '@mui/material';
+import { Dialog, Box } from '@mui/material';
+import Typography from '../../atoms/Typography';
 import React, { useCallback } from 'react';
 import { Imgc } from '../../../common/ui/Imgc';
 import Button from '../../atoms/Button';
