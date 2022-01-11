@@ -66,6 +66,18 @@ export const buttonVariantsConfig = (colors={}, partnerConfig={}) => {
         pointerEvents: 'none',
       },
     },
+    {
+      props: { isinverted: 1, variant: 'contained'},
+      style: {
+        backgroundColor: colors.supporting.white,
+        color: colors.primary.brand,
+        '&:hover': {
+          backgroundColor: partnerConfig?.button?.disableHoverEffect
+            ? colors?.action?.brand
+            : colors?.action['100'],
+        },
+      },
+    },
   ];
 }
 
