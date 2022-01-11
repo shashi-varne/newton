@@ -66,7 +66,6 @@ definitions:
         script:
           - export HTTP_PORT=3000
           - echo "127.0.0.1 $HTTP_ADDR" >> /etc/hosts
-          - echo "127.0.0.1 $HTTP_ADDR/webapp" >> /etc/hosts
           - cat /etc/hosts
           - apt-get update
           - apt-get install -y curl
