@@ -473,7 +473,7 @@ export const partnerConfigs = {
     },
     referralConfig: {
       applyRefferal: true,
-      shareRefferal: false, // same as hide_share_referral but with opposite value
+      shareRefferal: true, // same as hide_share_referral but with opposite value
     },
     styles: {
       primaryColor: "#173883",
