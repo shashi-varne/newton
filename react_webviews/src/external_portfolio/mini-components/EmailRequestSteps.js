@@ -4,63 +4,13 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import StepContent from '@material-ui/core/StepContent';
 import InfoBox from './InfoBox';
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import { isFunction, storageService } from '../../utils/validators';
 import { getConfig } from '../../utils/functions';
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement';
 import { Button } from '@material-ui/core';
 const { emailDomain, productName } = getConfig();
 
-const theme = createMuiTheme({
-  overrides: {
-    MuiStepper: {
-      root: {
-        padding: 0,
-        background: 'transparent',
-      },
-    },
-    MuiStepLabel: {
-      label: {
-        fontSize: '15px',
-        fontWeight: 500,
-      },
-      completed: {
-        color: '#767e86',
-      },
-      disabled: {
-        color: '#767e86',
-      },
-      active: {
-        color: 'inherit !important',
-      },
-      iconContainer: {
-        
-      }
-    },
-    MuiStepIcon: {
-      root: {
-        width: '20px',
-        height: '20px',
-        fontSize: '12px',
-        fontWeight: 'bold',
-      },
-      active: {
-        color: 'var(--primary) !important',
-      },
-      completed: {
-        color: 'var(--primary) !important',
-      },
-    },
-    MuiStepContent: {
-      root: {
-        color: '#767e86',
-        fontSize: '13px',
-        lineHeight: '19px',
-        borderLeft: 'none',
-      },
-    },
-  },
-});
+const { emailDomain } = getConfig();
 
 function getSteps() {
   return ['Portfolio statement requested', 'View portfolio instantly'];
@@ -163,32 +113,24 @@ export default class EmailRequestSteps extends Component {
     const { activeStep } = this.state;
     // const { emailForwardedHandler } = this.props;
     return (
-      <MuiThemeProvider theme={theme}>
-        <div id="hni-stepper">
-          <Stepper
-            activeStep={activeStep}
-            orientation="vertical">
-            {steps.map((label, index) => (
-              <Step
-                key={label}
-                active={true}
-                disabled={[0, 1].includes(index)}
-              >
-                <StepLabel icon={customStepIcon(index)}>{label}</StepLabel>
-                <StepContent>
-                  {this.getStepContent(index)}
-                </StepContent>
-              </Step>
-            ))}
-          </Stepper>
-          {/* <RegenerateOptsPopup
-            emailForwardedHandler={() => { this.onPopupClose(); emailForwardedHandler(); }}
-            notReceivedClick={this.notReceivedHandler}
-            onPopupClose={this.onPopupClose}
-            open={this.state.popupOpen}
-          /> */}
-        </div>
-      </MuiThemeProvider>
+      <div id="hni-stepper">
+        <Stepper
+          activeStep={activeStep}
+          orientation="vertical">
+          {steps.map((label, index) => (
+            <Step
+              key={label}
+              active={true}
+              disabled={[0, 1].includes(index)}
+            >
+              <StepLabel icon={customStepIcon(index)}>{label}</StepLabel>
+              <StepContent>
+                {this.getStepContent(index)}
+              </StepContent>
+            </Step>
+          ))}
+        </Stepper>
+      </div>
     );
   }
 }

@@ -6,6 +6,35 @@ $dark_indigo: #0a1d32;
   span {
     border: none !important;
   }
+  .MuiStepper-root {
+    padding: 0;
+    background: transparent;
+  }
+  .MuiStepLabel-label {
+    font-size: 15px;
+    font-weight: 500;
+  }
+  .MuiStepLabel-completed, .MuiStepLabel-disabled {
+    color: '#767e86';
+  }
+  .MuiStepLabel-active {
+    color: inherit !important;
+  }
+  .MuiStepIcon-root {
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    font-weight: bold;
+  }
+  .MuiStepIcon-active, .MuiStepIcon-completed {
+    color: var(--primary) !important;
+  }
+  .MuiStepContent-root {
+    color: #767e86;
+    font-size: 13px;
+    line-height: 19px;
+    border-left: 'none';
+  }
 }
 
 #CAMS-loader {
