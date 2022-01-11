@@ -12,8 +12,9 @@
 */
 
 
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import React, { useMemo } from 'react';
+import Typography from '../../atoms/Typography';
 import { Imgc } from '../../../common/ui/Imgc';
 import Button from '../../atoms/Button';
 import Status from '../../atoms/Status';
