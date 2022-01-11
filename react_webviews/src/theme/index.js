@@ -3,10 +3,10 @@ import { switchStyleOverRides } from './switch';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
 import getPartnerThemeData from './utils';
 import { createTheme } from '@mui/material';
+import { dialogDefaultProps, dialogStylesOverride } from './dialog';
 
 const getTheme = () => {
-  const partnerThemeData = getPartnerThemeData();
-  const colors = partnerThemeData?.colors;
+  const {colors, partnerConfig} = getPartnerThemeData();
   
   const theme = {
     palette: {
@@ -18,18 +18,22 @@ const getTheme = () => {
       },
       foundationColors: colors,
     },
-    typography: baseTypographyConfig(colors,partnerThemeData),
+    typography: baseTypographyConfig(colors, partnerConfig),
     components: {
       MuiTypography: {
         variants: customTypographyVariantProps(),
       },
       MuiButton: {
-        variants: buttonVariantsConfig(colors),
-        styleOverrides: buttonStyleOverRides(colors,partnerThemeData),
+        variants: buttonVariantsConfig(colors, partnerConfig),
+        styleOverrides: buttonStyleOverRides(colors, partnerConfig),
       },
       MuiSwitch: {
         styleOverrides: switchStyleOverRides(colors),
       },
+      MuiDialog: {
+        defaultProps: dialogDefaultProps(),
+        styleOverrides:dialogStylesOverride()
+      }
     },
   };
   return createTheme(theme);
