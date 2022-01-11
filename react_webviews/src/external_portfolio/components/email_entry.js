@@ -8,9 +8,9 @@ import { validateEmail, storageService } from '../../utils/validators.js';
 import { navigate, setLoader, setPlatformAndUser } from '../common/commonFunctions.js';
 import { requestStatement, fetchEmails } from '../common/ApiCalls.js';
 import PopUp from '../common/PopUp.js';
-import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet.js';
+import StatementTriggeredPopUp from '../mini-components/StatementTriggeredPopUp.js';
 
-const { productName: productType, emailDomain } = getConfig();
+const { productName: productType } = getConfig();
 
 class EmailEntry extends Component {
   constructor(props) {
@@ -168,21 +168,10 @@ class EmailEntry extends Component {
         >
           This email has already been added. Please resync from the settings page to update portfolio
         </PopUp>
-        <WVBottomSheet
-          disableBackdropClick
-          disableEscapeKeyDown
-          title="Portfolio statement generated"
-          subtitle="You'll get an email with your portfolio statement in around 1 hour. Forward the email as received to"
+        <StatementTriggeredPopUp
           isOpen={this.state.openSuccessModal}
-          image={require(`assets/${productType}/statements_briefcase.svg`)}
-          button1Props={{
-            title: 'Okay',
-            contained: true,
-            onClick: this.redirectToStepsScreen
-          }}
-        >
-          <span className='portfolio-generated-email'>cas@{emailDomain}</span>
-        </WVBottomSheet>
+          onCtaClick={this.redirectToStepsScreen}
+        />
       </Container>
     );
   }
