@@ -13,7 +13,7 @@ import InfoBox from '../mini-components/InfoBox';
 import toast from '../../common/ui/Toast';
 import StatementRequestStep from '../mini-components/StatementRequestStep';
 import { regenTimeLimit } from '../constants';
-import { setPlatformAndUser } from '../common/commonFunctions';
+import { getStatementStatus, setPlatformAndUser } from '../common/commonFunctions';
 
 const { productName, emailDomain } = getConfig();
 
@@ -204,11 +204,12 @@ export default function StatementRequested(props) {
   }, [state, cameFromApp]);
 
   const RenderStep3 = useMemo(() => {
+    const { email_detail } = state;
+
     const generateStatement = async () => {
       sendEvents('regenerate_stat');
       try {
         updateState({ show_loader: 'button' });
-        const email_detail = storageService().getObject('email_detail_hni');
         await requestStatement({
           email: email_detail.email,
           statement_id: email_detail.latest_statement.statement_id,
@@ -225,49 +226,51 @@ export default function StatementRequested(props) {
       }
     }
 
-    if (true) {
+    const statementStatus = getStatementStatus(email_detail?.latest_statement?.statement_status);
+
+    if (statementStatus === 'failure') {
       return (
         <StatementRequestStep stepNumber={3}>
-          <ActionStatus type="warning">
-            PENDING ON YOU
+          <ActionStatus type="error">
+            INVALID CAS
           </ActionStatus>
           <StatementRequestStep.Title>
-            Forward email to
+            Forward CAS
           </StatementRequestStep.Title>
-          <InfoBox
-            classes={{ root: `info-box-cut-out` }}
-            isCopiable={true}
-            textToCopy={`cas@${emailDomain}`}
-          >
-            <span className="info-box-body-text">
-              cas@{emailDomain}
-            </span>
-          </InfoBox>
-          <div id="epsr-check-inbox-text">Check your inbox for the email</div>
+          <StatementRequestStep.Content>
+            The email you sent could not be processed. Please ensure you forward the email as received to
+            <span id="epsr-forward-email">&nbsp;cas@{emailDomain}</span>
+          </StatementRequestStep.Content>
+          <Button
+            variant="outlined"
+            buttonTitle="Regenerate statement"
+            color="primary"
+            fullWidth
+            style={{ marginTop: '10px' }}
+            onClick={generateStatement}
+          />
         </StatementRequestStep>
       );
     }
 
     return (
       <StatementRequestStep stepNumber={3}>
-        <ActionStatus type="error">
-          INVALID CAS
+        <ActionStatus type="warning">
+          PENDING ON YOU
         </ActionStatus>
         <StatementRequestStep.Title>
-          Forward CAS
+          Forward email to
         </StatementRequestStep.Title>
-        <StatementRequestStep.Content>
-          The email you sent could not be processed. Please ensure you forward the email as received to
-          <span id="epsr-forward-email">&nbsp;cas@{emailDomain}</span>
-        </StatementRequestStep.Content>
-        <Button
-          variant="outlined"
-          buttonTitle="Regenerate statement"
-          color="primary"
-          fullWidth
-          style={{ marginTop: '10px' }}
-          onClick={generateStatement}
-        />
+        <InfoBox
+          classes={{ root: `info-box-cut-out` }}
+          isCopiable={true}
+          textToCopy={`cas@${emailDomain}`}
+        >
+          <span className="info-box-body-text">
+            cas@{emailDomain}
+          </span>
+        </InfoBox>
+        <div id="epsr-check-inbox-text">Check your inbox for the email</div>
       </StatementRequestStep>
     );
   }, [state]);
