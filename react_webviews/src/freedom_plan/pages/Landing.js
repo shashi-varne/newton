@@ -44,7 +44,7 @@ const Landing = (props) => {
     freedomPlanCharges,
     resetFreedomPlan,
     updateFreedomPlanData,
-  } = useFreedomDataHook();
+  } = useFreedomDataHook(true);
 
   const standardVsFreedomPlanDetails = useMemo(
     getStandardVsFreedomPlanDetails(freedomPlanCharges),

@@ -12,7 +12,7 @@ const DEFAULT_ERROR_DATA = {
 };
 
 /* eslint-disable */
-function useFreedomDataHook() {
+function useFreedomDataHook(initializeData) {
   const planData = storageService().getObject("freedomPlanData") || {};
   const planList = storageService().getObject("freedomPlanList") || [];
   const planCharges = storageService().getObject("freedomPlanCharges") || {};
@@ -24,7 +24,9 @@ function useFreedomDataHook() {
   const [errorData, setErrorData] = useState(DEFAULT_ERROR_DATA);
 
   useEffect(() => {
-    initialize();
+    if(initializeData) {
+      initialize();
+    }
   }, []);
 
   useEffect(() => {

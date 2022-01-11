@@ -1,11 +1,12 @@
 import React, { useMemo } from "react";
 import Container from "../common/Container";
-import { getConfig } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { Imgc } from "../../common/ui/Imgc";
 import WVPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
 import WVPageSubtitle from "../../common/ui/InPageHeader/WVInPageSubtitle";
 import {
   getPaymentSummaryData,
+  PATHNAME_MAPPER,
   PAYMENT_STATUS_DATA,
 } from "../common/constants";
 import { nativeCallback } from "../../utils/native_callback";
@@ -17,6 +18,7 @@ import "./PaymentStatus.scss";
 import { handleExit } from "../common/functions";
 
 const PaymentStatus = (props) => {
+  const navigate = navigateFunc.bind(props);
   const initialize = () => {
     const { status } = getUrlParams();
     return {
@@ -57,7 +59,7 @@ const PaymentStatus = (props) => {
   };
 
   const handleClick = () => {
-    if (paymentStatusData.isSuccess || !freedomPlanData.id) {
+    if (paymentStatusData.isSuccess) {
       sendEvents("next");
       redirectToHome(true);
     } else {
@@ -67,6 +69,10 @@ const PaymentStatus = (props) => {
 
   const retryPayment = () => {
     sendEvents("retry");
+    if (!freedomPlanData.id) {
+      navigate(PATHNAME_MAPPER.landing);
+      return;
+    }
     initiatePayment({
       ucc: kyc.ucc,
       amount: freedomPlanData.amount,
