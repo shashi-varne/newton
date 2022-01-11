@@ -58,7 +58,7 @@ const SubtitleLabels = ({ subTitleLabels }) => {
         const showSeparator = subTitleLabels[idx + 1]?.name;
         return (
           <div key={idx} className='ht-subtitle-label'>
-            <Typography variant='body9' color={label.color || labelColor} allcaps>
+            <Typography variant='body9' color={label.color || labelColor} allCaps>
               {label.name}
             </Typography>
             {showSeparator && (
