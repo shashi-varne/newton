@@ -15,7 +15,7 @@ import ActionStatus from './ActionStatus';
 import WVButton from '../../common/ui/Button/WVButton';
 import WVDisableBodyTouch from '../../common/ui/DisableBodyTouch/WVDisableBodyTouch';
 
-const { productName, emailDomain } = getConfig();
+const { emailDomain } = getConfig();
 
 const theme = createMuiTheme({
   overrides: {
@@ -54,6 +54,7 @@ const theme = createMuiTheme({
 export default class EmailExpand extends Component {
   constructor(props) {
     super(props);
+    console.log('RECREATED', props.email.latest_statement.dt_updated)
     this.state = {
       friendlyStatementStatus: getStatementStatus(
         props?.email?.latest_statement.statement_status
@@ -130,8 +131,8 @@ export default class EmailExpand extends Component {
   }
 
   renderStatementPending = () => {
-    const { email, parent } = this.props;
-    // const showRegenerateBtn = (new Date() - new Date(email.latest_statement.dt_updated)) / 60000 >= regenTimeLimit;
+    const { email, parent, onEmailUpdate } = this.props;
+
     return (
       <div className="ext-pf-subheader">
         <h4>Statement request sent</h4>
@@ -143,7 +144,7 @@ export default class EmailExpand extends Component {
             comingFrom: 'settings',
             statementSource: email.latest_statement?.statement_source
           })}
-          boxStyle={{ background: productName === 'fisdom' ? '#DFD8EF' : '#D6ECFF' }}
+          onRegenerateComplete={onEmailUpdate}
         />
       </div>
     );

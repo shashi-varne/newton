@@ -146,7 +146,7 @@ export default class Settings extends Component {
   }
 
   onEmailUpdate = async () => {
-    this.getEmailsList();
+    await this.getEmailsList();
   }
 
   addNewEmail = () => {
@@ -178,7 +178,7 @@ export default class Settings extends Component {
         <div style={{ marginBottom: '20px' }}>
           {emails.map(email => (
             <EmailExpand
-              key={email.dt_updated}
+              key={email?.latest_statement?.dt_updated}
               allowRemove={hideRemoveEmail ? false : email.allowRemove} // Hide "Remove Email" option when webview is opened through RM App
               parent={this}
               comingFrom="settings"

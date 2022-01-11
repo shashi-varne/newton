@@ -7,8 +7,12 @@ import InfoBox from './InfoBox';
 import { isFunction, storageService } from '../../utils/validators';
 import { getConfig } from '../../utils/functions';
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement';
-import { Button } from '@material-ui/core';
-const { emailDomain, productName } = getConfig();
+import { regenTimeLimit } from '../constants';
+import WVButton from '../../common/ui/Button/WVButton';
+import { requestStatement } from '../common/ApiCalls';
+import { setLoader } from '../common/commonFunctions';
+import toast from '../../common/ui/Toast';
+import StatementTriggeredPopUp from './StatementTriggeredPopUp';
 
 const { emailDomain } = getConfig();
 
@@ -23,16 +27,55 @@ export default class EmailRequestSteps extends Component {
       activeStep: 1,
       popupOpen: false,
     };
+    this.setLoader = setLoader.bind(this);
+  }
+
+  componentDidMount() {
+    let showRegenerateBtn = false;
+    const { emailDetail } = this.props;
+    if (emailDetail.latest_statement) {
+      showRegenerateBtn =
+        (new Date() - new Date(emailDetail.latest_statement.dt_updated)) / 60000 >= regenTimeLimit;
+    }
+
+    this.setState({ showRegenerateBtn });
   }
 
   setActiveStep = (step) => {
     this.setState({ activeStep: step });
   }
 
+  regenerateStatement = async () => {
+    const { emailDetail, parent } = this.props;
+
+    try {
+      this.setLoader('button');
+      parent.sendEvents('regenerate_stat');
+
+      await requestStatement({
+        email: emailDetail.email,
+        statement_id: emailDetail.latest_statement.statement_id,
+        retrigger: 'true',
+      });
+      this.setLoader(false);
+      this.setState({
+        openPopup: true
+      });
+    } catch (err) {
+      this.setLoader(false);
+      console.log(err);
+      toast(err);
+    }
+  }
+
+  regenerateComplete = () => {
+    this.setState({ openPopup: false });
+    storageService().remove('hni-emails');
+    this.props.onRegenerateComplete();
+  }
+
   renderStep1 = () => {
     const {
-      showRegenerateBtn,
-      onRegenerateBtnClick,
       classes = {},
       emailLinkClick,
     } = this.props;
@@ -41,18 +84,16 @@ export default class EmailRequestSteps extends Component {
       <p>
         You will recieve an email with your consolidated portfolio statement
       </p>
-      {showRegenerateBtn &&
-        <Button
-          color="secondary" fullWidth={true}
-          classes={{
-            root: 'gen-statement-btn-filled',
-            label: 'gen-statement-btn-label-filled'
-          }}
+      {this.state.showRegenerateBtn &&
+        <WVButton
+          fullWidth
+          contained
+          showLoader={this.state.show_loader}
           style={{ marginBottom: '10px' }}
-          onClick={onRegenerateBtnClick}
+          onClick={this.regenerateStatement}
         >
           Regenerate Statement
-        </Button>
+        </WVButton>
       }
       <div>
         You'll get an email with your portfolio statement in around 1 hour. Forward the email as received to
@@ -74,6 +115,10 @@ export default class EmailRequestSteps extends Component {
       <WVClickableTextElement style={{ marginTop: '20px', display: 'inline-block' }} onClick={emailLinkClick}>
         The email looks like this
       </WVClickableTextElement>
+      <StatementTriggeredPopUp
+        isOpen={this.state.openPopup}
+        onCtaClick={this.regenerateComplete}
+      />
     </Fragment>);
   }
 
@@ -111,7 +156,7 @@ export default class EmailRequestSteps extends Component {
   render() {
     const steps = getSteps();
     const { activeStep } = this.state;
-    // const { emailForwardedHandler } = this.props;
+    
     return (
       <div id="hni-stepper">
         <Stepper
