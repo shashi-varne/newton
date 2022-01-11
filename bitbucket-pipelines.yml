@@ -64,7 +64,6 @@ definitions:
         # caches:
         #   - nodemodules
         script:
-          - export HTTP_ADDR=app.fisdom.com
           - export HTTP_PORT=3000
           - echo "127.0.0.1 $HTTP_ADDR" >> /etc/hosts
           - apt-get update
@@ -114,12 +113,24 @@ pipelines:
             name: Fisdom Production deploy
             trigger: manual
             deployment: fisdom-prod
+        
+        - step:
+            <<: *prod-deploy
+            name: Fisdom-Equity Production deploy
+            trigger: manual
+            deployment: fisdom-webapp-prod
 
         - step:
             <<: *prod-deploy
             name: Finity Production deploy
             trigger: manual
             deployment: finity-prod
+
+        - step:
+            <<: *prod-deploy
+            name: Finity-Equity Production deploy
+            trigger: manual
+            deployment: finity-webapp-prod
       
       # - step:
       #     <<: *prod-deploy
