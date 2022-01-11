@@ -34,10 +34,11 @@
 */
 
 import React, { Children } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import { Imgc } from '../../../common/ui/Imgc';
 import format from 'date-fns/format';
 import PropTypes from 'prop-types';
+import Typography from '../../atoms/Typography';
 import './LandingHeader.scss';
 
 const LandingHeader = ({
