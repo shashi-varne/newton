@@ -76,8 +76,8 @@ const PaymentStatus = (props) => {
     });
   };
 
-  const redirectToHome = (isNext = false) => {
-    if (!isNext) {
+  const redirectToHome = (sendEvents = false) => {
+    if (!sendEvents) {
       sendEvents("back");
     }
     resetFreedomPlan();

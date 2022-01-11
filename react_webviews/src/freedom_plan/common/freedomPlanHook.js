@@ -90,7 +90,7 @@ function useFreedomDataHook() {
     setErrorData(DEFAULT_ERROR_DATA);
   };
 
-  const updateFreedomPlan = (data) => {
+  const updateFreedomPlanData = (data) => {
     storageService().setObject("freedomPlanData", data);
     setFreedomPlanData(data);
   };
@@ -106,7 +106,7 @@ function useFreedomDataHook() {
   };
 
   const resetFreedomPlan = () => {
-    updateFreedomPlan({});
+    updateFreedomPlanData({});
     updateFreedomPlanList([]);
     updateFreedomPlanCharges({});
   };
@@ -118,10 +118,10 @@ function useFreedomDataHook() {
     freedomPlanList,
     freedomPlanCharges,
     setErrorData,
-    initiatePayment,
     resetErrorData,
-    updateFreedomPlan,
+    initiatePayment,
     resetFreedomPlan,
+    updateFreedomPlanData,
   };
 }
 

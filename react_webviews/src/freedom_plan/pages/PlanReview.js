@@ -37,7 +37,7 @@ const PlanReview = (props) => {
     freedomPlanData,
     freedomPlanList,
     initiatePayment,
-    updateFreedomPlan,
+    updateFreedomPlanData,
   } = useFreedomDataHook();
   const planDetails = useMemo(getPlanReviewData(freedomPlanData), [
     freedomPlanData,
@@ -151,7 +151,7 @@ const PlanReview = (props) => {
   const handleSelectPlan = (closeSelectPlan) => (plan) => {
     const userAction = closeSelectPlan ? "back" : "next";
     if (!closeSelectPlan) {
-      updateFreedomPlan(plan);
+      updateFreedomPlanData(plan);
     }
     sendEvents(userAction, true);
     setOpenSelectPlan(false);

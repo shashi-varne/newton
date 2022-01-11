@@ -43,7 +43,7 @@ const Landing = (props) => {
     freedomPlanList,
     freedomPlanCharges,
     resetFreedomPlan,
-    updateFreedomPlan,
+    updateFreedomPlanData,
   } = useFreedomDataHook();
 
   const standardVsFreedomPlanDetails = useMemo(
@@ -95,7 +95,7 @@ const Landing = (props) => {
   };
 
   const handleSelectPlan = (plan) => {
-    updateFreedomPlan(plan);
+    updateFreedomPlanData(plan);
     sendEvents("next", true);
     navigate(PATHNAME_MAPPER.review);
   };
