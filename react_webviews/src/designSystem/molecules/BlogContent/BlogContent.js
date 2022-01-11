@@ -9,7 +9,7 @@
 
 import React from 'react';
 import { Imgc } from '../../../common/ui/Imgc';
-import Typography from '@mui/material/Typography';
+import Typography from '../../atoms/Typography';
 import PropTypes from 'prop-types';
 import './BlogContent.scss';
 
