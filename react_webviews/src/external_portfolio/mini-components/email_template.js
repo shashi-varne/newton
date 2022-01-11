@@ -13,8 +13,6 @@ class EmailTemplate extends Component {
   render() {
     return (
       <Container
-        title={this.props.title}
-        subtitle={this.props.subtitle}
         headerData={{
           goBack: this.props.goBack
         }}
@@ -22,7 +20,7 @@ class EmailTemplate extends Component {
       >
         <div>
           <div className="ext-pf-subheader">
-            <h4>The email looks like this</h4>
+            <h4>{this.props.imageTitle}</h4>
             <img
               src={require(`assets/${this.props.statementSource === 'cams' ? 'cas' : 'karvy'}_email.png`)}
               alt="Email"

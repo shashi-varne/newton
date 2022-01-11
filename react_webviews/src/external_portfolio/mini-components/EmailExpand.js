@@ -7,11 +7,15 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import { Button } from 'material-ui';
 import { getConfig } from '../../utils/functions';
 import toast from '../../common/ui/Toast';
-import { navigate } from '../common/commonFunctions';
+import { getStatementStatus, navigate, setLoader } from '../common/commonFunctions';
 import EmailRequestSteps from './EmailRequestSteps';
 import { requestStatement } from '../common/ApiCalls';
 import { formattedDate } from '../../utils/validators';
-// import { regenTimeLimit } from '../constants';
+import ActionStatus from './ActionStatus';
+import WVButton from '../../common/ui/Button/WVButton';
+import WVDisableBodyTouch from '../../common/ui/DisableBodyTouch/WVDisableBodyTouch';
+
+const { productName, emailDomain } = getConfig();
 
 const theme = createMuiTheme({
   overrides: {
@@ -50,8 +54,13 @@ const theme = createMuiTheme({
 export default class EmailExpand extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      friendlyStatementStatus: getStatementStatus(
+        props?.email?.latest_statement.statement_status
+      ),
+    };
     this.navigate = navigate.bind(this);
+    this.setLoader = setLoader.bind(this);
   }
 
   resync = async () => {
@@ -70,6 +79,27 @@ export default class EmailExpand extends Component {
       });
     } catch (err) {
       parent.setLoader(false);
+      console.log(err);
+      toast(err);
+    }
+  }
+
+  regenerateStatement = async () => {
+    const { email, parent } = this.props;
+
+    try {
+      this.setLoader('button');
+      parent.sendEvents('regenerate_stat');
+      const email_detail = email;
+      await requestStatement({
+        email: email_detail.email,
+        statement_id: email_detail.latest_statement.statement_id,
+        retrigger: 'true',
+      });
+      this.setLoader(false);
+      this.props.onEmailUpdate();
+    } catch (err) {
+      this.setLoader(false);
       console.log(err);
       toast(err);
     }
@@ -113,14 +143,47 @@ export default class EmailExpand extends Component {
             comingFrom: 'settings',
             statementSource: email.latest_statement?.statement_source
           })}
-          boxStyle={{ background: getConfig().productName === 'fisdom' ? '#DFD8EF' : '#D6ECFF' }}
+          boxStyle={{ background: productName === 'fisdom' ? '#DFD8EF' : '#D6ECFF' }}
         />
+      </div>
+    );
+  }
+
+  renderInvalidStatement = () => {
+    return (
+      <div className="ext-pf-subheader">
+        <ActionStatus type="error">
+          INVALID CAS
+        </ActionStatus>
+        <h4 style={{ marginBottom: '10px' }}>
+          Forward CAS
+        </h4>
+        <p>
+          The email you sent could not be processed. Please ensure you forward the email as received to
+          <span id="epsr-forward-email">&nbsp;cas@{emailDomain}</span>
+        </p>
+        <WVButton
+          color="primary"
+          contained
+          fullWidth
+          showLoader={this.state.show_loader}
+          style={{ marginTop: '10px' }}
+          onClick={this.regenerateStatement}
+        >
+          Regenerate statement
+        </WVButton>
+        <WVDisableBodyTouch disableTouch={this.state.show_loader} />
       </div>
     );
   }
 
   render() {
     const { email, clickRemoveEmail, allowRemove } = this.props;
+    const renderFuncMap = {
+      'failure': this.renderInvalidStatement,
+      'success': this.renderResync,
+      'other': this.renderStatementPending,
+    }
     return (
       <MuiThemeProvider theme={theme}>
         <div className="email-expand-container">
@@ -134,9 +197,7 @@ export default class EmailExpand extends Component {
               </div>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
-              {email.latest_statement.statement_status === 'success' ?
-                this.renderResync() : this.renderStatementPending()
-              }
+              {renderFuncMap[this.state.friendlyStatementStatus]()}
               {allowRemove && 
                 <div id="remove-email" onClick={clickRemoveEmail}>Remove email</div>
               }
