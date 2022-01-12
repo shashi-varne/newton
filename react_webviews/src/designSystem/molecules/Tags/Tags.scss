@@ -3,15 +3,31 @@
   flex-direction: row;
   align-items: center;
   width: max-content;
-  padding: 3.5px 8px;
+  padding: 1px 8px;
   cursor: default;
-  height: 21px;
+
+  &.tags-small-wrapper {
+    padding: 0px;
+  }
+
+  .tags-left-image {
+    margin-right: 8px;
+    &.tags-left-image-small {
+      margin-right: 4px;
+    }
+  }
+
+  .tags-right-image {
+    margin-left: 8px;
+    &.tags-right-image-small {
+      margin-left: 4px;
+    }
+  }
 }
 
 .label-tag-wrapper {
   max-width: max-content;
   border-radius: 4px;
-  height: 21px;
   padding: 1px 8px;
   cursor: default;
 }

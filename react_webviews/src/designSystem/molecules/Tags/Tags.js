@@ -29,10 +29,10 @@ const Tags = (props) => {
     labelColor,
     rating,
     dataAid,
+    className,
   } = props;
-  const morningStarLogo = smallRating
-    ? 'small_morning_star'
-    : 'large_morning_star';
+  const smallVariantProps = getSmallRatingProps(smallRating);
+  const morningStarLogo = smallRating ? 'small_morning_star' : 'large_morning_star';
 
   if (!isEmpty(label)) {
     return (
@@ -41,23 +41,25 @@ const Tags = (props) => {
         labelBackgroundColor={labelBackgroundColor}
         labelColor={labelColor}
         dataAid={dataAid}
+        className={className}
       />
     );
   }
 
   return (
-    <div className='tags-wrapper' data-aid={`tags_${dataAid}`}>
+    <div className={`tags-wrapper ${smallVariantProps?.wrapperClass} ${className}`} data-aid={`tags_${dataAid}`}>
       <Imgc
-        style={{ marginRight: '8px', width: '14px', height: '14px' }}
+        style={{ width: '14px', height: '14px' }}
         src={require(`assets/tags_star.svg`)}
-        dataAid='logo'
+        dataAid='left'
+        className={`tags-left-image ${smallVariantProps?.leftImageClass}`}
       />
       <Typography variant='body5' data-aid='tv_title'>{rating}</Typography>
       <Imgc
-        style={{ marginLeft: '8px' }}
         src={require(`assets/${morningStarLogo}.svg`)}
         alt=''
-        dataAid='star'
+        dataAid='logo'
+        className={`tags-right-image ${smallVariantProps?.rightImageClass}`}
       />
     </div>
   );
@@ -65,10 +67,10 @@ const Tags = (props) => {
 
 export default Tags;
 
-const LabelTag = ({ label, labelBackgroundColor, labelColor, dataAid }) => {
+const LabelTag = ({ label, labelBackgroundColor, labelColor, dataAid, className }) => {
   return (
     <Box
-      className='label-tag-wrapper'
+      className={`label-tag-wrapper ${className}`}
       sx={{
         backgroundColor: labelBackgroundColor,
       }}
@@ -80,6 +82,16 @@ const LabelTag = ({ label, labelBackgroundColor, labelColor, dataAid }) => {
     </Box>
   );
 };
+
+const getSmallRatingProps = (isSmallRating = false) => {
+  if(isSmallRating) {
+    return {
+      wrapperClass: 'tags-small-wrapper',
+      leftImageClass: 'tags-left-image-small',
+      rightImageClass: 'tags-right-image-small'
+    };
+  }
+}
 
 Tags.defaultProps = {
   labelBackgroundColor: 'foundationColors.secondary.blue.200'
