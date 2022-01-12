@@ -200,7 +200,7 @@ export default function StatementRequested(props) {
         <StatementRequestStep.Content>
           You will recieve an email with your consolidated portfolio statement
         </StatementRequestStep.Content>
-        <div id='epsr-statement-pwd'>STATEMENT PASSWORD - <span>{`${productName}123`}</span></div>
+        <div id='epsr-statement-pwd'>STATEMENT PASSWORD - <span>{`${productName}1234`}</span></div>
         <WVClickableTextElement style={{ marginTop: '12px' }} onClick={emailLinkClick}>
           View Email Sample
         </WVClickableTextElement>
