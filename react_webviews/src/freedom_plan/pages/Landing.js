@@ -115,21 +115,23 @@ const Landing = (props) => {
       data-aid="freedom-plan-landing"
       classHeader="freedom-plan-landing-header-color"
       classOverRide="freedom-plan-landing-container"
+      data-aid="freedomPlanLanding"
     >
-      <div className="freedom-plan-landing">
+      <div className="freedom-plan-landing" data-aid="freedomPlan">
         <WVInPageHeader
           withImg
           imageProps={{
             src: require(`assets/${productName}/freedom.svg`),
             className: "fpl-header-icon",
           }}
+          dataAidSuffix="freedomPlan"
         >
           <WVInPageTitle>Freedom plan</WVInPageTitle>
           <WVInPageSubtitle>
             Your ultimate pass for brokerage free trading
           </WVInPageSubtitle>
         </WVInPageHeader>
-        <div className="fpl-layout fpl-benefits">
+        <div className="fpl-layout fpl-benefits" data-aid="grp_freedomBenefits">
           <HowToSteps
             baseData={FREEDOM_PLAN_BENEFITS_DATA}
             classNameIcon="fpl-benefits-icon"
@@ -139,15 +141,15 @@ const Landing = (props) => {
             {formatAmountInr(MINIMUM_FREEDOM_PLAN_PRICE)}
           </div>
         </div>
-        <div className="fpl-table">
-          <div className="fpl-title">Standard vs Freedom plan</div>
+        <div className="fpl-table" data-aid="grp_comparision">
+          <div className="fpl-title" data-aid="tv_title">Standard vs Freedom plan</div>
           <StandardVsFreedomPlan
             data={standardVsFreedomPlanDetails}
             showLoader={showLoader}
           />
         </div>
-        <div className="fpl-layout fpl-faqs">
-          <div className="fpl-title">FAQs</div>
+        <div className="fpl-layout fpl-faqs" data-aid="grp_faqs">
+          <div className="fpl-title" data-aid="tv_title">FAQs</div>
           <Faqs options={freedomPlanFaqs} />
         </div>
       </div>
@@ -174,9 +176,9 @@ const getTableData = (data) => () => {
   };
 };
 
-const TableRow = ({ data = {}, columnReverse = false, showLoader = false }) => (
+const TableRow = ({ data = {}, columnReverse = false, showLoader = false, index }) => (
   <tr>
-    <td className="fpl-tc-type">{data.type}</td>
+    <td className="fpl-tc-type" data-aid={`tv_title${index}`}>{data.type}</td>
     {showLoader ? (
       <>
         <td className="fpl-tc-standard">
@@ -188,11 +190,11 @@ const TableRow = ({ data = {}, columnReverse = false, showLoader = false }) => (
       </>
     ) : (
       <>
-        <td className={`fpl-tc-standard ${columnReverse && `column-reverse`}`}>
+        <td className={`fpl-tc-standard ${columnReverse && `column-reverse`}`} data-aid={`tv_standardDescription${index}`}>
           {data.standardPlan}
           <div className="fpl-tc-subtext">{data.standardPlanSubtext}</div>
         </td>
-        <td className="fpl-tc-freedom">{data.freedomPlan}</td>
+        <td className="fpl-tc-freedom" data-aid={`tv_freedomDescription${index}`}>{data.freedomPlan}</td>
       </>
     )}
   </tr>
@@ -203,13 +205,13 @@ const StandardVsFreedomPlan = ({ data = [], showLoader = false }) => {
     data,
   ]);
   return (
-    <table className="fpl-table-content render-faqs-table" cellSpacing="0">
+    <table className="fpl-table-content render-faqs-table" cellSpacing="0" data-aid="grp_standardFreedom">
       <thead>
-        <TableRow data={tableHeaderData} columnReverse />
+        <TableRow data={tableHeaderData} columnReverse index={0} />
       </thead>
       <tbody>
         {tableBodyData.map((data, index) => {
-          return <TableRow key={index} data={data} showLoader={showLoader} />;
+          return <TableRow key={index} data={data} showLoader={showLoader} index={index+1} />;
         })}
       </tbody>
     </table>

@@ -56,9 +56,10 @@ const SelectFreedomPlan = ({
         onClick: handleClick,
         disabled: showLoader,
       }}
+      dataAidSuffix="planSelection"
     >
-      <div className="select-freedom-plan">
-        <div className="select-freedom-plan-container">
+      <div className="select-freedom-plan" data-aid="plan_selection">
+        <div className="select-freedom-plan-container" data-aid="grp_pricing">
           {showLoader || isEmpty(freedomPlanList) ? (
             <>
               <SkeltonRect className="sfpc-loader" />
@@ -85,23 +86,37 @@ const SelectFreedomPlan = ({
   );
 };
 
+const getPlanId = (name) => {
+  return `grp_${name.split(" ").join("")}`;
+};
+
 const Plan = ({ name, amount, isSelected, is_popular, handlePlanChange }) => {
   const { productName } = useMemo(getConfig, []);
   return (
     <div
       className={`freedom-plan-option ${isSelected && `selected-plan`}`}
       onClick={handlePlanChange}
+      data-aid={getPlanId(name)}
     >
       {isSelected && (
         <Imgc
           src={require(`assets/${productName}/completed.svg`)}
           alt="completed"
           className="selected-icon"
+          data-aid="iv_selected"
         />
       )}
-      {is_popular && <div className="fpo-popular">MOST POPULAR</div>}
-      <div className="fpo-name">{name}</div>
-      <div className="fpo-amount">{formatAmountInr(amount)}</div>
+      {is_popular && (
+        <div className="fpo-popular" data-aid="grp_mostPopular">
+          MOST POPULAR
+        </div>
+      )}
+      <div className="fpo-name" data-aid="tv_title">
+        {name}
+      </div>
+      <div className="fpo-amount" data-aid="tv_description">
+        {formatAmountInr(amount)}
+      </div>
     </div>
   );
 };
