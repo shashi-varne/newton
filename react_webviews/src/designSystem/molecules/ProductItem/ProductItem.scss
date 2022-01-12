@@ -1,0 +1,27 @@
+.product-item-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+
+    .pi-right-wrapper{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        flex: 1;
+        .pi-left-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .pi-ls-bottom-section {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+    }
+}
