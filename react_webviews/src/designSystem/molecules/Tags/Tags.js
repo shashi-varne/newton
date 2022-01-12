@@ -49,7 +49,7 @@ const Tags = (props) => {
   return (
     <div className={`tags-wrapper ${smallVariantProps?.wrapperClass} ${className}`} data-aid={`tags_${dataAid}`}>
       <Imgc
-        style={{ width: '14px', height: '14px' }}
+        style={{ width: '16px', height: '16px' }}
         src={require(`assets/tags_star.svg`)}
         dataAid='left'
         className={`tags-left-image ${smallVariantProps?.leftImageClass}`}
