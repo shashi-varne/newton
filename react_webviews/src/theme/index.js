@@ -4,6 +4,7 @@ import baseTypographyConfig, { customTypographyVariantProps } from './typography
 import getPartnerThemeData from './utils';
 import { createTheme } from '@mui/material';
 import { dialogDefaultProps, dialogStylesOverride } from './dialog';
+import { separatorStyleOverRides } from './separator';
 
 const getTheme = () => {
   const {colors, partnerConfig} = getPartnerThemeData();
@@ -33,7 +34,10 @@ const getTheme = () => {
       MuiDialog: {
         defaultProps: dialogDefaultProps(),
         styleOverrides:dialogStylesOverride()
-      }
+      },
+      MuiDivider: {
+        styleOverrides: separatorStyleOverRides(colors)
+      },
     },
   };
   return createTheme(theme);
