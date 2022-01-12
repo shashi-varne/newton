@@ -20,10 +20,11 @@ const TermsAndConditions = ({ isOpen = false, close = noop }) => {
       classes={{
         wvTitle: "fp-tnc-title",
       }}
+      dataAidSuffix="freedomPlanTermsAndCond"
     >
       <WVFullscreenDialog.Content>
         {freedomPlanTermsAndConditions.map((text, index) => (
-          <div className="freedom-plan-terms-n-conditions flex" key={index}>
+          <div className="freedom-plan-terms-n-conditions flex" key={index} data-aid={`tv_description${index+1}`} >
             <div className="fp-tnc-left">{index + 1}.</div>
             <div>{text}</div>
           </div>

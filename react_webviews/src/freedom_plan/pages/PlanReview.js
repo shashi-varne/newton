@@ -208,9 +208,9 @@ const PlanReview = (props) => {
             ))}
           </div>
         </main>
-        <footer className="tv_description">
+        <footer>
           By tapping ‘PAY NOW’ you agree to the{" "}
-          <span onClick={handleTermsAndConditions(true)}>
+          <span data-aid="tv_termsAndConditions" onClick={handleTermsAndConditions(true)}>
             Terms & Conditions
           </span>{" "}
           of Use for the Freedom plan
@@ -227,6 +227,7 @@ const PlanReview = (props) => {
             variant: "contained",
             onClick: redirectToKyc,
           }}
+          dataAidSuffix="freedomPlanKycStatus"
         />
       )}
       <SelectFreedomPlan

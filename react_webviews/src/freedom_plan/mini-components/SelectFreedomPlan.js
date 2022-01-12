@@ -86,7 +86,7 @@ const SelectFreedomPlan = ({
   );
 };
 
-const getPlanId = (name) => {
+const getPlanDataAid = (name) => {
   return `grp_${name.split(" ").join("")}`;
 };
 
@@ -96,7 +96,7 @@ const Plan = ({ name, amount, isSelected, is_popular, handlePlanChange }) => {
     <div
       className={`freedom-plan-option ${isSelected && `selected-plan`}`}
       onClick={handlePlanChange}
-      data-aid={getPlanId(name)}
+      data-aid={getPlanDataAid(name)}
     >
       {isSelected && (
         <Imgc
