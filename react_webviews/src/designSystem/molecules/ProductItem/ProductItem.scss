@@ -2,14 +2,16 @@
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    align-items: center;
 
     .pi-right-wrapper{
+        flex: 1;
+    }
+
+    .pi-child-wrapper{
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
-        flex: 1;
         .pi-left-section {
             display: flex;
             flex-direction: column;
@@ -21,6 +23,16 @@
             flex-direction: row;
             align-items: center;
             justify-content: space-between;
+            margin-top: 8px;
+            .pi-left-tag, .p-right-tag {
+                margin-right: 16px;
+            }
+            
+        }
+
+        .pi-right-section {
+            margin-left: 10px;
+            align-self: baseline;
         }
 
     }
