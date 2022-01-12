@@ -52,8 +52,8 @@ class Checkout extends Component {
     let {
       form_data,
       renderData,
-      ctc_title,
       partner_code,
+      ctc_title,
       type,
       investType,
     } = this.state;
