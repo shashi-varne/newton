@@ -396,7 +396,9 @@ import isEmpty from 'lodash/isEmpty';
     } else if (typeof data === "object") {
       contentData = data;
     }
-    set_session_storage("upiApps", contentData?.upi_apps);
+    if(!isEmpty(contentData?.upi_apps)) {
+      set_session_storage("upiApps", contentData.upi_apps);
+    }
   }
 
 })(window.callbackWeb ? window.callbackWeb : (window.callbackWeb = {}));
