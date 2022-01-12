@@ -41,7 +41,7 @@ function useFreedomDataHook(initializeData) {
 
   const setDefaultPlan = () => {
     if (isEmpty(freedomPlanData)) {
-      setFreedomPlanData(getDefaultPlan(freedomPlanList));
+      updateFreedomPlanData(getDefaultPlan(freedomPlanList));
     }
   };
 

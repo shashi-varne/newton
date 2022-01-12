@@ -34,6 +34,12 @@ class Container extends Component {
     if (this.getEvents("back")) {
       nativeCallback({ events: this.getEvents("back") });
     }
+
+    if (this.props.headerData && this.props.headerData.goBack) {
+      this.props.headerData.goBack();
+      return;
+    }
+    
     this.props.history.goBack();
   };
 

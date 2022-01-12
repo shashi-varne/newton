@@ -26,7 +26,7 @@ import { handleExit, isNative } from "../common/functions";
 
 const PlanReview = (props) => {
   const navigate = navigateFunc.bind(props);
-  const { productName } = useMemo(getConfig, []);
+  const { productName, searchParams } = useMemo(getConfig, []);
   const { kyc, isLoading } = useUserKycHook();
   const [openKycStatusBottomsheet, setOpenKycBottomsheet] = useState(false);
   const [openSelectPlan, setOpenSelectPlan] = useState(false);
@@ -58,6 +58,7 @@ const PlanReview = (props) => {
   const initializeKycData = () => {
     if (!isEmpty(kyc)) {
       let kycStatus = getKycAppStatus(kyc).status;
+      const equityEnabled = isTradingEnabled(kyc);
       const kycInitStatus = ["ground"];
       const kycIncompleteStatus = [
         "ground_pan",
@@ -71,7 +72,7 @@ const PlanReview = (props) => {
       } else if (
         kycIncompleteStatus.includes(kycStatus) ||
         (kycStatus === "complete" &&
-          isTradingEnabled(kyc) &&
+          equityEnabled &&
           kyc.kyc_product_type !== "equity") // retro user condition
       ) {
         kycStatus = "incomplete";
@@ -81,16 +82,19 @@ const PlanReview = (props) => {
       return {
         kycStatusData: KYC_STATUS_MAPPER[kycStatus] || {},
         isEquityReady: isEquityCompleted(),
+        isEquityEnabled: equityEnabled,
         kycStatus,
       };
     }
     return {};
   };
 
-  const { kycStatusData, isEquityReady, kycStatus } = useMemo(
-    initializeKycData,
-    [kyc]
-  );
+  const {
+    kycStatusData,
+    isEquityReady,
+    kycStatus,
+    isEquityEnabled,
+  } = useMemo(initializeKycData, [kyc]);
 
   const sendEvents = (userAction, isSelectPlan, changePlan = "no") => {
     let eventObj = {
@@ -139,8 +143,12 @@ const PlanReview = (props) => {
       handleExit(props);
       return;
     }
-    const pathname = isNative() ? "/kyc/native" : "/kyc/web";
-    navigate(pathname);
+    const isNativeFlow = isNative();
+    const pathname = isNativeFlow ? "/kyc/native" : "/kyc/web";
+    const searchData = `${searchParams}${
+      isNativeFlow && isEquityEnabled ? `&equityEnabled=true` : ``
+    }`;
+    navigate(pathname, { searchParams: searchData });
   };
 
   const changePlan = () => {

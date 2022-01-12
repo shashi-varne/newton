@@ -16,14 +16,19 @@ import useFreedomDataHook from "../common/freedomPlanHook";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import "./PaymentStatus.scss";
 import { handleExit } from "../common/functions";
+import isEmpty from "lodash/isEmpty";
 
 const PaymentStatus = (props) => {
   const navigate = navigateFunc.bind(props);
   const initialize = () => {
-    const { status } = getUrlParams();
+    const { status, message = "" } = getUrlParams();
+    let paymentStatusData = PAYMENT_STATUS_DATA[status] || PAYMENT_STATUS_DATA["failed"];
+    if(!paymentStatusData.isSuccess && !isEmpty(message)) {
+      paymentStatusData.subtitle = decodeURIComponent(message);
+    }
     return {
       ...getConfig(),
-      paymentStatusData: PAYMENT_STATUS_DATA[status] || PAYMENT_STATUS_DATA["failed"],
+      paymentStatusData,
     };
   };
 

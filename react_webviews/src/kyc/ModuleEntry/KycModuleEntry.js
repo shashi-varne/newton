@@ -53,7 +53,7 @@ function KycModuleEntry(props) {
   };
 
   const initialize = async () => {
-    if (fromState && isNative) {
+    if (fromState && fromState !== "/freedom-plan/review" && isNative) {
       nativeCallback({ action: "exit_web"});
       return;
     }
@@ -82,7 +82,7 @@ function KycModuleEntry(props) {
         nativeCallback({
           action: "get_content_data",
           message: {
-            content_module: "[upi_apps]",
+            content_module: ["upi_apps"],
           },
         });
       }

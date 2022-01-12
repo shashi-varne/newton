@@ -26,6 +26,10 @@ const SelectFreedomPlan = ({
   };
 
   useEffect(() => {
+    setPlan(freedomPlanData);
+  }, [freedomPlanData]);
+
+  useEffect(() => {
     if (isOpen) {
       setPlan(freedomPlanData);
       setErrorMessage("");
