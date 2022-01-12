@@ -659,7 +659,7 @@ class PaymentOption extends React.Component {
       this.setState({ show_loader: 'page' });
       let that = this;
       Api.get(this.state.paymentIntentUrl).then(data => {
-        if (data.pfwresponse.status_code === 200) {
+        if (data?.pfwresponse?.status_code === 200) {
           let upi_payment_data = data.pfwresponse.result;
           upi_payment_data.package_name = type;
           nativeCallback({
