@@ -52,7 +52,6 @@ class Checkout extends Component {
     let {
       form_data,
       renderData,
-      partner_code,
       ctc_title,
       type,
       investType,
@@ -65,6 +64,7 @@ class Checkout extends Component {
       storageService().setObject("diystore_fundInfo",fundDataIsin);
       storageService().setObject(CART, []);
     }
+    const partner_code = getConfig().code;
     if (type === "nfo") {
       let fund = storageService().getObject("nfo_detail_fund");
       if (fund) {
@@ -74,7 +74,7 @@ class Checkout extends Component {
           return { ...data, allow_purchase: { sip: false, onetime: false } };
         });
         this.setState(
-          { fundsData: fundsData, form_data: form_data, ctc_title },
+          { fundsData: fundsData, form_data: form_data, ctc_title, partner_code },
           () => this.getPurchaseLimit(fund.isin)
         );
       } else {
@@ -112,6 +112,7 @@ class Checkout extends Component {
           form_data: form_data,
           renderData: renderData,
           ctc_title: ctc_title,
+          partner_code
         },
         () => this.getPurchaseLimit(isins)
       );
