@@ -168,18 +168,21 @@ export const getPlanReviewData = ({ amount, gst, total_amount }) => () => {
       title: "Freedom plan",
       amount: inrFormatDecimal(amount, 2),
       amountClassName: "fprs-amount",
+      dataAid: "amount"
     },
     {
       title: "GST (18%)",
       amount: inrFormatDecimal(gst, 2),
       amountClassName: "fprs-amount",
       showBottomDivider: true,
+      dataAid: "gst"
     },
     {
       title: "Amount payable",
       amount: inrFormatDecimal(total_amount, 2),
       amountClassName: "fprs-text fprs-total-amount",
       titleClassName: "fprs-text",
+      dataAid: "totalAmount"
     },
   ];
 };
@@ -189,17 +192,20 @@ export const getPaymentSummaryData = ({ amount, gst, total_amount }) => () => {
     {
       title: "Price",
       amount: inrFormatDecimal(amount, 2),
+      dataAid: "price"
     },
     {
       title: "GST",
       amount: inrFormatDecimal(gst, 2),
       showBottomDivider: true,
+      dataAid: "gst"
     },
     {
       title: "Total",
       amount: inrFormatDecimal(total_amount, 2),
       className: "fpps-total-amount",
       showBottomDivider: true,
+      dataAid: "totalAmount"
     },
   ];
 };
@@ -213,6 +219,7 @@ export const PAYMENT_STATUS_DATA = {
     icon: "pg_success.svg",
     screenName: "payment_success",
     isSuccess: true,
+    id: "success",
   },
   failed: {
     title: "Payment failed",
@@ -222,6 +229,7 @@ export const PAYMENT_STATUS_DATA = {
     icon: "error_illustration.svg",
     screenName: "payment_failed",
     isSuccess: false,
+    id: "fail",
   },
 };
 

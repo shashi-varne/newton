@@ -7,12 +7,20 @@ const Tile = ({
   titleClassName = "",
   amountClassName = "",
   className = "",
+  dataAid,
 }) => {
   return (
     <>
-      <div className={`flex-between-center  fpps-tile ${className}`}>
-        <div className={titleClassName}>{title}</div>
-        <div className={amountClassName}>{amount}</div>
+      <div
+        data-aid={`grp_${dataAid}`}
+        className={`flex-between-center  fpps-tile ${className}`}
+      >
+        <div className={titleClassName} data-aid="tv_title">
+          {title}
+        </div>
+        <div className={amountClassName} data-aid="tv_description">
+          {amount}
+        </div>
       </div>
       {showBottomDivider && <div className="generic-hr" />}
     </>

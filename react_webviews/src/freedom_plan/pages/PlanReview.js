@@ -178,26 +178,37 @@ const PlanReview = (props) => {
       showError={errorData.showError}
       title="Review you plan details"
       handleClick={handleClick}
-      data-aid="freedom-plan-landing"
+      data-aid="freedomPlanReview"
       events={sendEvents("just_set_events")}
     >
-      <div className="freedom-plan-review">
+      <div className="freedom-plan-review" data-aid="freedom_plan_review">
         <main>
-          <div className="fpr-details flex-between-center">
+          <div
+            className="fpr-details flex-between-center"
+            data-aid="grp_planDetails"
+          >
             <div>
-              <div className="fprd-title">Freedom plan</div>
-              <div className="fprd-subtitle">{freedomPlanData.name}</div>
+              <div data-aid="tv_title" className="fprd-title">
+                Freedom plan
+              </div>
+              <div data-aid="tv_description" className="fprd-subtitle">
+                {freedomPlanData.name}
+              </div>
             </div>
-            <ClickableText onClick={changePlan}>CHANGE PLAN</ClickableText>
+            <ClickableText dataAidSuffix="changePlan" onClick={changePlan}>
+              CHANGE PLAN
+            </ClickableText>
           </div>
-          <div className="fpr-summary">
-            <div className="fpr-title">Price break-up</div>
+          <div className="fpr-summary" data-aid="grp_total">
+            <div className="fpr-title" data-aid="tv_title">
+              Price break-up
+            </div>
             {planDetails.map((details, index) => (
               <Tile key={index} {...details} />
             ))}
           </div>
         </main>
-        <footer>
+        <footer className="tv_description">
           By tapping ‘PAY NOW’ you agree to the{" "}
           <span onClick={handleTermsAndConditions(true)}>
             Terms & Conditions

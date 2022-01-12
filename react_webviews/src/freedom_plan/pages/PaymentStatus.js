@@ -110,9 +110,9 @@ const PaymentStatus = (props) => {
       title={paymentStatusData.title}
       events={sendEvents("just_set_events")}
       handleClick={handleClick}
-      data-aid="freedom-plan-payment-status"
+      data-aid="freedomPlanPaymentStatus"
     >
-      <div className="freedom-plan-payment-status">
+      <div className="freedom-plan-payment-status" data-aid={`pg_${paymentStatusData.id}`} >
         <Imgc
           src={require(`assets/${productName}/${paymentStatusData.icon}`)}
           className="fpps-icon"
@@ -121,7 +121,7 @@ const PaymentStatus = (props) => {
         <WVPageSubtitle>{paymentStatusData.subtitle}</WVPageSubtitle>
         {paymentStatusData.isSuccess && (
           <>
-            <div className="fpps-title">Payment summary</div>
+            <div className="fpps-title" data-aid="grp_paymentSummary" >Payment summary</div>
             {paymentDetails.map((data, index) => (
               <Tile key={index} {...data} />
             ))}
