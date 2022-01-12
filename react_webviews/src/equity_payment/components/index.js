@@ -414,10 +414,10 @@ class PaymentOption extends React.Component {
     })
     const config = getConfig();
     let { redirect_url = "" } = config.current_params;
-    const flow = this.props.match?.params?.flow || "";
+    const flow = this.props.match?.params?.flow || "default";
     const apiRoute = API_CONSTANST[flow] || API_CONSTANST.default;
     let url = config.base_url + apiRoute + config.pc_urlsafe;
-    if(config.Web && isEmpty(redirect_url)) {
+    if(config.Web && flow === "default") {
       redirect_url = encodeURIComponent(`${basepath}/pg/eq/payment-status` + config.searchParams);
     }
     if(!isEmpty(redirect_url)) {
@@ -671,8 +671,8 @@ class PaymentOption extends React.Component {
           nativeCallback({ action: 'initiate_upi_payment', message: upi_payment_data });
         } else {
           that.setState({ show_loader: false });
-          if (data.pfwresponse.result.error === 'failure') {
-            toast(data.pfwresponse.result.message);
+          if (data?.pfwresponse?.result?.error === 'failure') {
+            toast(data?.pfwresponse?.result?.message);
           }
         }
       })
