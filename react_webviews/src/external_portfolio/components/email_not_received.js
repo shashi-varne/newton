@@ -7,6 +7,7 @@ import { nativeCallback } from 'utils/native_callback';
 import Container from '../common/Container';
 import { requestStatement } from '../common/ApiCalls';
 import isEmpty from 'lodash/isEmpty';
+import StatementTriggeredPopUp from '../mini-components/StatementTriggeredPopUp';
 
 class EmailNotReceived extends Component {
   constructor(props) {
@@ -35,7 +36,7 @@ class EmailNotReceived extends Component {
     }
   }
 
-  goNext = async () => {
+  regenerateStatement = async () => {
     try {
       this.setLoader('button');
       this.sendEvents('regenerate_stat');
@@ -46,16 +47,21 @@ class EmailNotReceived extends Component {
           statement_id: emailDetail.latest_statement.statement_id,
           retrigger: 'true',
         });
-        this.navigate(`statement_request/${emailDetail.email}`, {
-          exitToApp: true,
-          fromRegenerate: true,
-        });
+        this.setState({ openPopup: true });
       }
+      this.setLoader(false);
     } catch (err) {
       this.setLoader(false);
       console.log(err);
       toast(err);
     }
+  }
+
+  goNext = () => {
+    this.navigate(`statement_request/${this.state.emailDetail.email}`, {
+      exitToApp: true,
+      fromRegenerate: true,
+    });
   }
 
   goBack = () => {
@@ -85,12 +91,16 @@ class EmailNotReceived extends Component {
           title: 'Regenerate statement',
           showLoader: this.state.show_loader,
           contained: true,
-          onClick: this.goNext
+          onClick: this.regenerateStatement
         }}
       >
         <EmailTemplate
           containerStyle={{ paddingBottom: '100px' }}
           statementSource={this.state.emailDetail?.latest_statement?.statement_source}
+        />
+        <StatementTriggeredPopUp
+          isOpen={this.state.openPopup}
+          onCtaClick={this.goNext}
         />
       </Container>
     );
