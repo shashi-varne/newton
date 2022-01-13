@@ -29,7 +29,9 @@ const customSxStyle = (elevation, noBorder) => {
   if (elevation) {
     return { 
       boxShadow: elevation.toString(),
-      cursor: 'pointer'
+      cursor: 'pointer',
+      borderRadius: '12px',
+      backgroundColor: 'foundationColors.supporting.white',
     };
   } else if (noBorder) {
     return {
@@ -41,6 +43,8 @@ const customSxStyle = (elevation, noBorder) => {
       border: '1px solid',
       borderColor: 'foundationColors.supporting.athensGrey',
       pointerEvents: 'none',
+      borderRadius: '12px',
+      backgroundColor: 'foundationColors.supporting.white',
     };
   }
 };
