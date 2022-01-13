@@ -69,7 +69,6 @@ export const commonCardsConfig = {
 
 export const basePartnerConfig = {
   common: {
-    equityAnnexure: "https://fisdom.com/images/forms/Equity%20Annexures.pdf"
   },
   fisdom: {
     productName: "fisdom",
@@ -85,6 +84,7 @@ export const basePartnerConfig = {
     refundLink: "https://www.fisdom.com/refund/",
     disclaimerLink: "https://www.fisdom.com/disclaimer/",
     webAppUrl: "https://app.fisdom.com/#!/",
+    equityAnnexure: "https://fisdom.com/images/forms/Equity%20Annexures.pdf",
     configPrimaryColorClass: 'configPrimaryColorClass',
     configPrimaryBackgroundColorClass: 'fisdomBackColor',
     emailDomain: "fisdom.com",
@@ -108,6 +108,7 @@ export const basePartnerConfig = {
     refundLink: "https://www.finity.in/refund/",
     disclaimerLink: "https://www.finity.in/disclaimer/",
     webAppUrl: "https://app.mywaywealth.com/#!/",
+    equityAnnexure: "https://fisdom.com/images/forms/Equity_Annexures_Finity.pdf",
     configPrimaryColorClass: 'configPrimaryColorClass',
     configPrimaryBackgroundColorClass: 'fisdomBackColor',
     emailDomain: "finity.in",
