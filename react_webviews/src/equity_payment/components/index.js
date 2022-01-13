@@ -671,9 +671,7 @@ class PaymentOption extends React.Component {
           nativeCallback({ action: 'initiate_upi_payment', message: upi_payment_data });
         } else {
           that.setState({ show_loader: false });
-          if (data?.pfwresponse?.result?.error === 'failure') {
-            toast(data?.pfwresponse?.result?.message);
-          }
+          toast(data?.pfwresponse?.result?.message || data?.pfwresponse?.result?.error || "Something went wrong!");
         }
       })
     }
