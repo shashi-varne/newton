@@ -22,7 +22,7 @@ const ProductItem = (props) => {
     separator,
   } = merge({}, defaultValues, props);
   return (
-    <div>
+    <div className='product-item-parent'>
       <div className='product-item-wrapper'>
         {leftImgProps?.src && (
           <Imgc
@@ -32,6 +32,7 @@ const ProductItem = (props) => {
               height: '40px',
               marginRight: '8px',
             }}
+            dataAid='left'
             {...leftImgProps}
           />
         )}
