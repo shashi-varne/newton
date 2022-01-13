@@ -24,17 +24,18 @@ function useFreedomDataHook(initializeData) {
   const [errorData, setErrorData] = useState(DEFAULT_ERROR_DATA);
 
   useEffect(() => {
-    if(initializeData) {
-      initialize();
-    }
+    initialize();
   }, []);
 
   useEffect(() => {
-    setDefaultPlan();
+    setDefaultPlan(isEmpty);
   }, [freedomPlanList]);
 
   const initialize = () => {
-    if (isEmpty(freedomPlanList) || isEmpty(freedomPlanCharges)) {
+    if (
+      initializeData &&
+      (isEmpty(freedomPlanList) || isEmpty(freedomPlanCharges))
+    ) {
       getFreedomPlanList();
     }
   };
