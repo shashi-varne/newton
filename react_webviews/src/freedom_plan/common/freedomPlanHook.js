@@ -85,6 +85,8 @@ function useFreedomDataHook(initializeData) {
         };
         if (config.Android) {
           nativeData.upi_apps = upiApps;
+        } else if(config.iOS) {
+          nativeData.upi_others = true;
         }
         nativeData = JSON.stringify(nativeData);
         paymentLink = `${paymentLink}&payment_data=${encodeURI(nativeData)}`;
