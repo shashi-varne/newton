@@ -1,4 +1,13 @@
 .custom-textfield-helper-text{
     text-align: right;
     margin-right: 0px;
+    margin-left: 0px;
+}
+
+.custom-helper-text-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 0px;
+    margin-right: 0px;    
 }
