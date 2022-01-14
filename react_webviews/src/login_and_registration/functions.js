@@ -26,7 +26,6 @@ export function initialize() {
   this.navigate = navigateFunc.bind(this.props);
   this.getKycFromSummary = getKycFromSummary.bind(this);
   this.redirectAfterLogin = redirectAfterLogin.bind(this);
-  this.setUserAgent = setUserAgent.bind(this);
   let main_query_params = getUrlParams();
   let { referrer = "" } = main_query_params;
 
@@ -52,43 +51,14 @@ export function initialize() {
       redirectUrl = deeplinkUrl;
     }
   }
-  const rebalancingRedirectUrl = main_query_params.redirect_url
-    ? `?redirect_url=${main_query_params.redirect_url}`
-    : "";
 
-  let socialRedirectUrl = encodeURIComponent(
-    basePath + "/social/callback" + rebalancingRedirectUrl
-  );
 
-  this.setUserAgent();
 
-  let facebookUrl =
-    config.base_url +
-    "/auth/facebook?redirect_url=" +
-    socialRedirectUrl +
-    "&referrer=" +
-    referrer;
-  let googleUrl =
-    config.base_url +
-    "/auth/google?redirect_url=" +
-    socialRedirectUrl +
-    "&referrer=" +
-    referrer;
   this.setState({
     referrer: referrer,
-    facebookUrl: facebookUrl,
-    googleUrl: googleUrl,
     redirectUrl: redirectUrl,
     rebalancingRedirectUrl: main_query_params.redirect_url,
   });
-}
-
-export function setUserAgent() {
-  nativeCallback({
-    action: "set_user_agent", message: {
-      user_agent: "Mozilla/5.0 AppleWebKit/537.36 Chrome/65.0.3325.181 Mobile Safari/537.36"
-    }
-  })
 }
 
 export function formCheckFields(
@@ -214,18 +184,6 @@ export async function triggerOtpApi(body, loginType, bottomsheet) {
             communicationType: loginType,
           },
         });
-      } if (this.state.referrer) {
-        let item = {
-          promo_code: this.state.referrer,
-        };
-        storageService().setObject("user_promo", item);
-      }
-
-      if (this.state.isPromoSuccess && this.state.form_data.referral_code !== "") {
-        let item = {
-          promo_code: this.state.form_data.referral_code,
-        };
-        storageService().setObject("user_promo", item);
       }
       toast(result?.message || "Success");
     } else throw result?.error || result?.message || errorMessage;
@@ -243,6 +201,13 @@ export async function initiateOtpApi(body, loginType) {
   formData.append("auth_value", body.auth_value);
   formData.append("Content-Type", "application/x-www-form-urlencoded")   // [ "multipart/form-data" ]
   formData.append("user_whatsapp_consent", body?.user_whatsapp_consent);
+  const referrer = this.state.referrer;
+  if(referrer) {
+    const item = {
+      promo_code: referrer,
+    };
+    storageService().setObject("user_promo", item);
+  }
   try {
     const res = await Api.post(`/api/user/login/v4/initiate`, formData)
     const { result, status_code: status } = res.pfwresponse;
@@ -317,6 +282,10 @@ export const redirectToLaunchDiet = async () => {
 
 export async function otpLoginVerification(verify_url, body) {
   let formData = new FormData();
+  const userPromo = storageService().getObject("user_promo");
+  if(userPromo?.promo_code) {
+    formData.append("referrer_code", userPromo?.promo_code);
+  }
   formData.append("otp", body?.otp);
   formData.append("user_whatsapp_consent", body?.user_whatsapp_consent);
   formData.append("Content-Type", "application/x-www-form-urlencoded"); //   [ "multipart/form-data" ]
@@ -326,7 +295,6 @@ export async function otpLoginVerification(verify_url, body) {
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       this.sendEvents("next")
-      applyCode(result.user);
       storageService().setObject("user", result.user);
 
       // Redirect to PIN Verification
@@ -448,24 +416,6 @@ export async function otpVerification(body) {
     toast(error);
   } finally {
     this.setState({ isApiRunning: false });
-  }
-}
-
-
-export async function applyCode(user) {
-  var userPromo = storageService().getObject("user_promo");
-  if (userPromo && user.user_id) {
-    try {
-      const res = await Api.post(`/api/referral/apply`, {
-        code: userPromo.promo_code,
-      });
-      const { status_code: status } = res.pfwresponse;
-      if (status === 200) {
-        storageService().remove("user_promo");
-      }
-    } catch (error) {
-      console.log(error);
-    }
   }
 }
 
