@@ -352,6 +352,7 @@ class PaymentOption extends React.Component {
       upiSupported: false,
       netBankingSupported: false,
       amount: 0,
+      flow: "",
     };
 
     this.goToBank = this.goToBank.bind(this);
@@ -426,7 +427,8 @@ class PaymentOption extends React.Component {
     }
     await this.getPaymentOptions(url);
     this.setState({
-      skelton: false
+      skelton: false,
+      flow,
     })
   }
 
@@ -636,7 +638,7 @@ class PaymentOption extends React.Component {
     } else if (type === "neft") {
       this.props.history.push(
         { pathname: '/pg/eq/neft', search: getConfig().searchParams },
-        { store: {bankDetails:this.state.bankDetails,amount:this.state.amount} }
+        { store: {bankDetails:this.state.bankDetails,amount:this.state.amount, flow: this.state.flow} }
       );
     } else if (type === "upi") {
       this.setState({ show_loader: 'page' });
