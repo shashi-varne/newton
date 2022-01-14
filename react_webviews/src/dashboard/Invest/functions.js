@@ -608,6 +608,11 @@ function initiatePinSetup(key) {
   if (config.isNative) {
     openModule('account/setup_2fa', this.props, { routeUrlParams: `/${key}` });
     nativeCallback({ action: 'exit_web' });
+  } else if (config.isSdk) {
+    nativeCallback({
+      action: "2fa_module",
+      message: { operation: "setup_pin" },
+    });
   } else {
     this.setState({ openPinSetupDialog: true, clickedCardKey: key });
   }

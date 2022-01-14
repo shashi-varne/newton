@@ -94,6 +94,13 @@ class DigiStatus extends Component {
       this.sendEvents('home');
     }
     if (this.state.set2faPin) {
+      if (config.isSdk) {
+        nativeCallback({
+          action: "2fa_module",
+          message: { operation: "setup_pin" },
+        });
+        return;
+      }
       // Handles behaviour for both web as well as native
       openModule('account/setup_2fa', this.props, { routeUrlParams: '/kyc-complete' });
       if (config.isNative && config.app === "android") {

@@ -36,6 +36,14 @@ const SecuritySettings = (props) => {
     };
 
     const onClick = () => {
+        if (config.isSdk) {
+            const operation = isPinSet ? "reset_pin" : "setup_pin";
+            nativeCallback({
+              action: "2fa_module",
+              message: { operation },
+            });
+            return;
+          }
         navigate(navigatePath);
         sendEvents("next");
     }
