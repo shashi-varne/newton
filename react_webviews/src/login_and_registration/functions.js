@@ -317,6 +317,10 @@ export const redirectToLaunchDiet = async () => {
 
 export async function otpLoginVerification(verify_url, body) {
   let formData = new FormData();
+  const userPromo = storageService().getObject("user_promo");
+  if(userPromo?.promo_code) {
+    formData.append("referrer_code", userPromo?.promo_code);
+  }
   formData.append("otp", body?.otp);
   formData.append("user_whatsapp_consent", body?.user_whatsapp_consent);
   formData.append("Content-Type", "application/x-www-form-urlencoded"); //   [ "multipart/form-data" ]
