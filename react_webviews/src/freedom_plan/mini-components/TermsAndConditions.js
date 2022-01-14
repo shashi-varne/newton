@@ -30,7 +30,7 @@ const TermsAndConditions = ({ isOpen = false, close = noop }) => {
         ))}
       </WVFullscreenDialog.Content>
       <WVFullscreenDialog.Action>
-        <Button buttonTitle="OKAY" onClick={close} />
+        <Button buttonTitle="CLOSE" onClick={close} />
       </WVFullscreenDialog.Action>
     </WVFullscreenDialog>
   );
