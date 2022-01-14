@@ -169,6 +169,11 @@ const PlanReview = (props) => {
     setOpenTermsAnsConditions(value);
   };
 
+  const goBack = () => {
+    sendEvents("back");
+    navigate(PATHNAME_MAPPER.landing);
+  }
+
   return (
     <Container
       buttonTitle="PAY NOW"
@@ -180,6 +185,7 @@ const PlanReview = (props) => {
       handleClick={handleClick}
       data-aid="freedom-plan-landing"
       events={sendEvents("just_set_events")}
+      headerData={{ goBack }}
     >
       <div className="freedom-plan-review">
         <main>
