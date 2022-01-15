@@ -9,18 +9,19 @@ const InputField = (props) => {
     label,
     helperText,
     error,
-    inputProps = {},
-    prefix='',
+    inputProps,
+    prefix,
     suffix,
     disabled,
     onChange,
     defaultValue,
     value,
-    autoComplete,
     autoFocus,
     placeholder,
     required,
+    variant,
     type,
+    size,
     fullWidth=true,
     ...restProps
   } = props;
@@ -53,46 +54,50 @@ const InputField = (props) => {
       }
   }
   return (
-    <div>
-      <TextField
-        label={label}
-        variant='filled'
-        helperText={helperText}
-        error={error}
-        disabled={disabled}
-        onChange={onChange}
-        value={value}
-        defaultValue={defaultValue}
-        autoComplete={autoComplete}
-        autoFocus={autoFocus}
-        fullWidth={fullWidth}
-        placeholder={placeholder}
-        required={required}
-        type={type}
-        InputProps={{
-          startAdornment: InputPrefix(),
-          endAdornment: InputSuffix(),
-          ...inputProps,
-        }}
-        {...restProps}
-      />
-    </div>
+    <TextField
+      label={label}
+      variant={variant}
+      helperText={helperText}
+      error={error}
+      disabled={disabled}
+      onChange={onChange}
+      value={value}
+      defaultValue={defaultValue}
+      autoFocus={autoFocus}
+      fullWidth={fullWidth}
+      placeholder={placeholder}
+      size={size}
+      required={required}
+      type={type}
+      InputProps={{
+        startAdornment: InputPrefix(),
+        endAdornment: InputSuffix(),
+        ...inputProps,
+      }}
+      {...restProps}
+    />
   );
 };
 
 export default InputField;
 
 InputField.defaultProps = {
-  type: 'text'
+  type: 'text',
+  variant: 'filled',
+  inputProps: {},
 }
 
 InputField.propTypes = {
-  label: PropTypes.string.isRequired,
-  helperText: PropTypes.string,
+  label: PropTypes.string,
+  helperText: PropTypes.node,
   error: PropTypes.bool,
   inputProps: PropTypes.object,
-  prefix: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  suffix: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  prefix: PropTypes.node,
+  suffix: PropTypes.node,
   disabled: PropTypes.bool,
   onChange: PropTypes.func,
+  size: PropTypes.oneOf(['medium', 'small']),
+  required: PropTypes.bool,
+  placeholder: PropTypes.string,
+  type: PropTypes.string,
 }

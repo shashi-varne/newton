@@ -1,12 +1,12 @@
 import baseTypographyConfig from '../typography';
 
-export const filledTextFieldStyleOverRides = (colors={}, partnerConfig={}) => {
+export const filledTextFieldStyleOverRides = (colors = {}, partnerConfig = {}) => {
   return {
     ...textFieldCommonStyle(colors, partnerConfig),
   };
 };
 
-export const outlinedTextFieldStyleOverRides = (colors={}, partnerConfig={}) => {
+export const outlinedTextFieldStyleOverRides = (colors = {}, partnerConfig = {}) => {
   return {
     ...textFieldCommonStyle(colors, partnerConfig),
     notchedOutline: {
@@ -15,18 +15,18 @@ export const outlinedTextFieldStyleOverRides = (colors={}, partnerConfig={}) => 
   };
 };
 
-export const inputLabelStyleOverRides = (colors={}, partnerConfig={}) => {
+export const inputLabelStyleOverRides = (colors = {}, partnerConfig = {}) => {
   const typographyVariants = baseTypographyConfig(colors, partnerConfig);
   return {
     root: {
       ...typographyVariants.body2,
-      color: colors.content.secondary,
+      color: colors?.content?.secondary,
       fontSize: '14px !important',
       '&.Mui-focused, &.Mui-error': {
-        color: colors.content.secondary,
+        color: colors?.content?.secondary,
       },
       '&.Mui-disabled': {
-        color: colors.supporting.athensGrey,
+        color: colors?.supporting?.athensGrey,
       },
     },
     shrink: {
@@ -37,17 +37,17 @@ export const inputLabelStyleOverRides = (colors={}, partnerConfig={}) => {
   };
 };
 
-export const helperTextStyleOverRides = (colors={}, partnerConfig={}) => {
+export const helperTextStyleOverRides = (colors = {}, partnerConfig = {}) => {
   const typographyVariants = baseTypographyConfig(colors, partnerConfig);
   return {
     root: {
       ...typographyVariants.body5,
       color: 'foundationColors.content.secondary',
       '&.Mui-error': {
-        color: colors.secondary.lossRed['400']
-      }
-     }
-  }
+        color: colors?.secondary?.lossRed['400'],
+      },
+    },
+  };
 };
 
 export const inputAdornmentStyleOverRides = (colors) => {
@@ -56,26 +56,48 @@ export const inputAdornmentStyleOverRides = (colors) => {
       marginRight: 1,
     },
     disablePointerEvents: {
-      color: colors.supporting.athensGrey,
+      color: colors?.supporting?.athensGrey,
     },
   };
 };
 
-const textFieldCommonStyle = (colors={}, partnerConfig={}) => {
+const textFieldCommonStyle = (colors = {}, partnerConfig = {}) => {
   const typographyVariants = baseTypographyConfig(colors, partnerConfig);
   return {
     root: {
       ...typographyVariants.body2,
-      backgroundColor: `${colors.supporting.white} !important`,
-      border: `1px solid ${colors.supporting.athensGrey}`,
+      backgroundColor: `${colors?.supporting?.white} !important`,
+      border: `1px solid ${colors?.supporting?.athensGrey}`,
       borderRadius: 8,
     },
     input: {
+      sizeSmall: {
+        padding: '8px',
+      },
       '&.Mui-disabled': {
-        color: colors.supporting.athensGrey,
+        color: colors?.supporting?.athensGrey,
         cursor: 'default',
-        WebkitTextFillColor: colors.supporting.athensGrey,
+        WebkitTextFillColor: colors?.supporting?.athensGrey,
       },
     },
   };
+};
+
+export const customVariantsFilledInput = (colors = {}) => {
+  return customCommonVariants(colors);
+};
+
+export const customVariantsOutlinedInput = (colors = {}) => {
+  return customCommonVariants(colors);
+};
+
+const customCommonVariants = (colors={}) => {
+  return [
+    {
+      props: { size: 'small' },
+      style: {
+        color: colors?.content?.secondary,
+      },
+    },
+  ];
 };

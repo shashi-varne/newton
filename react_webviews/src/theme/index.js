@@ -5,6 +5,8 @@ import baseTypographyConfig, { customTypographyVariantProps } from './typography
 import getPartnerThemeData from './utils';
 import { createTheme } from '@mui/material';
 import {
+  customVariantsFilledInput,
+  customVariantsOutlinedInput,
   filledTextFieldStyleOverRides,
   helperTextStyleOverRides,
   inputAdornmentStyleOverRides,
@@ -45,9 +47,11 @@ const getTheme = () => {
         defaultProps: {
           disableUnderline: true,
         },
+        variants: customVariantsFilledInput(colors),
         styleOverrides: filledTextFieldStyleOverRides(colors, partnerConfig),
       },
       MuiOutlinedInput: {
+        variants: customVariantsOutlinedInput(colors),
         styleOverrides: outlinedTextFieldStyleOverRides(colors, partnerConfig),
       },
       MuiInputLabel: {
