@@ -49,6 +49,7 @@ export const tabsVariantsConfig = () => {
       props: { type: 'pill' },
       style: {
         minHeight: 38,
+        height: 38,
       },
     },
   ];
@@ -75,6 +76,8 @@ export const tabVariantsConfig = (colors={},partnerConfig={}) => {
           backgroundColor: colors.supporting.athensGrey,
         },
         borderRadius: 100,
+        minHeight: 38,
+        height: 38,
       },
     },
     {
