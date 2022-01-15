@@ -100,4 +100,5 @@ InputField.propTypes = {
   required: PropTypes.bool,
   placeholder: PropTypes.string,
   type: PropTypes.string,
+  variant: PropTypes.oneOf(['filled', 'outlined'])
 }
