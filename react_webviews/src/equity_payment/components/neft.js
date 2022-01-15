@@ -30,21 +30,66 @@ const NEFT_INFO = [
     },
 ]
 
+const SUBSCRIPTION_NEFT_INFO = [
+    {
+        title: 'NAME',
+        value: 'Finwizard Technology Pvt Ltd Client Bank Account'
+    },
+    {
+        title: 'Account number',
+        value: '000205033532'
+    },
+    {
+        title: 'Account type',
+        value: 'Current A/C'
+    },
+    {
+        title: 'IFSC code',
+        value: 'ICIC0000002'
+    },
+    {
+        title: 'Account Branch',
+        value: 'MG Road, Bangalore'
+    },
+    {
+        title: 'BRANCH ADDRESS',
+        value: '1, Shobha Pearl, Commissariat Road, Off MG Road, Ground Floor, Bangalore- 560025 - Karnataka'
+    },
+]
+
+const NEFT_DETAILS = {
+    subscription: SUBSCRIPTION_NEFT_INFO,
+    default: NEFT_INFO,
+}
+const getNeftDetails = (flow) => {
+    return NEFT_DETAILS[flow] || NEFT_DETAILS.default
+}
+
 class NEFT extends React.Component {
     constructor(props) {
         super(props);
+        const store = props.location?.state?.store
         this.state = {
-            store: props.location?.state?.store
+            store: store,
+            neftInfo: getNeftDetails(store?.flow),
+            showFooter: store.flow === "subscription"
         };
     }
+
+    handleClick = () => {
+        this.props.history.goBack()
+    }
+
     render() {
         return (
             <Container
                 title="Payment via NEFT"
                 smallTitle={`Please transfer ${formatAmountInr(this.state?.store?.amount)} to the following bank account`}
                 header={true}
-                noFooter
+                noFooter={!this.state.showFooter}
                 classOverRideContainer='equity-neft'
+                handleClick={this.handleClick}
+                buttonTitle="BACK"
                 >
                 <div>   
                     <WVInfoBubble 
@@ -62,7 +107,7 @@ class NEFT extends React.Component {
                     </WVInfoBubble>
                     <div className='neft-info-wrapper'>
                         {
-                            NEFT_INFO.map((el,idx) => (
+                            this.state.neftInfo.map((el,idx) => (
                                 <div key={idx} className='neft-info'>
                                     <div className='neft-title'>{el.title}</div>
                                     <div className='neft-value'>{el.value}</div>
