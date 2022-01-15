@@ -17,7 +17,7 @@ export const Tabs = ({
 }) => {
   return (
     <LibTabs
-      data-aid={dataAid}
+      data-aid={`tabs_${dataAid}`}
       value={value}
       onChange={onChange}
       variant={variant}

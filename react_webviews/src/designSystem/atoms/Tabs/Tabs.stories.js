@@ -6,15 +6,16 @@ export default {
   component: Tabs,
   title: 'Molecules/Tabs',
   argTypes: {
+    value: {type: 'number', defaultValue: 0},
     numberOfTabOnlyForStories: { type: 'number', defaultValue: 4 },
     width: { type: 'number', defaultValue: 343 },
   },
 };
 
-export const Default = ({ numberOfTabOnlyForStories, width, ...args }) => {
+export const Default = ({ numberOfTabOnlyForStories, width,value, ...args }) => {
   return (
     <Box sx={{width: `${width}px`}}>
-      <Tabs {...args}>
+      <Tabs {...args} value={value}>
         {[...Array(numberOfTabOnlyForStories).keys()].map((el, idx) => {
           return <Tab label={`Label ${idx + 1}`} />;
         })}
