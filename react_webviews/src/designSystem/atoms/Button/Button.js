@@ -36,7 +36,7 @@ const Button = (props) => {
       onClick={onClick}
       {...restProps}
     >
-      {isLoading ? <DotDotLoaderNew /> : title}
+      {isLoading && variant === 'primary' ? <DotDotLoaderNew /> : title}
     </LibButton>
   );
 };
