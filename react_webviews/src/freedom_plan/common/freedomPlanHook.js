@@ -28,7 +28,7 @@ function useFreedomDataHook(initializeData) {
   }, []);
 
   useEffect(() => {
-    setDefaultPlan(isEmpty);
+    setDefaultPlan();
   }, [freedomPlanList]);
 
   const initialize = () => {
