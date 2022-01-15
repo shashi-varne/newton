@@ -6,8 +6,10 @@ Currently we have only two elevation variation => [0,1]. => 0 means no elevation
 */
 
 export const customShadows = () => {
-  return {
-    0: 'none',
-    1: '0px 6px 12px -6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.2)',
-  };
+  return SHADOWS;
+};
+
+export const SHADOWS = {
+  0: 'none',
+  1: '0px 6px 12px -6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.2)',
 };

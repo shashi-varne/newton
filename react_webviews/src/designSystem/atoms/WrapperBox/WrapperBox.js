@@ -1,9 +1,6 @@
 /*
     The Purpose of introducing a new Wrapper component was to give support of:
-     - elevation, noBorder and with Border style as per the elevation in foundation.
-     - elevation => The component is clickable.
-     - border => The component is not clickable.
-     - noBorder => component which does not have Surface/Container will be clickable.
+     - elevation, border(default)
 
      Currently we have only two elevation variation => [0,1]. => 0 means no elevation.
      NOTE: 1. here the number does not represent the depth of the elevation,
@@ -15,38 +12,39 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
+import { SHADOWS } from '../../../theme/shadows';
+import isFunction from 'lodash/isFunction';
 
-const WrapperBox = ({ elevation, children, noBorder, sx = {}, ...restProps }) => {
-  const sxStyle = customSxStyle(elevation, noBorder);
+const WrapperBox = ({ elevation, children, sx = {}, onClick, ...restProps }) => {
+  const sxStyle = customSxStyle(elevation, onClick);
   return (
-    <Box sx={{ ...sxStyle, ...sx }} component='div' {...restProps}>
+    <Box sx={{ ...sxStyle, ...sx }} component='div' onClick={onClick} {...restProps}>
       {children}
     </Box>
   );
 };
 
-const customSxStyle = (elevation, noBorder) => {
-  if (elevation) {
-    return { 
-      boxShadow: elevation.toString(),
-      cursor: 'pointer',
-      borderRadius: '12px',
-      backgroundColor: 'foundationColors.supporting.white',
-    };
-  } else if (noBorder) {
+const customSxStyle = (elevation, onClick) => {
+  if (elevation > 0 && SHADOWS[elevation]) {
     return {
-      border: 'none',
-      cursor: 'pointer'
+      boxShadow: elevation.toString(),
+      ...COMMON_WRAPPER_STYLE(onClick),
     };
   } else {
     return {
-      border: '1px solid',
+      border: `1px solid `,
       borderColor: 'foundationColors.supporting.athensGrey',
-      pointerEvents: 'none',
-      borderRadius: '12px',
-      backgroundColor: 'foundationColors.supporting.white',
+      ...COMMON_WRAPPER_STYLE(onClick),
     };
   }
+};
+
+const COMMON_WRAPPER_STYLE = (onClick) => {
+  return {
+    borderRadius: '12px',
+    backgroundColor: 'foundationColors.supporting.white',
+    cursor: isFunction(onClick) ? 'pointer' : 'default',
+  };
 };
 
 WrapperBox.defaultProps = {
@@ -55,8 +53,8 @@ WrapperBox.defaultProps = {
 
 WrapperBox.propTypes = {
   elevation: PropTypes.oneOf([0, 1]),
-  noBorder: PropTypes.bool,
-  sx: PropTypes.object
+  sx: PropTypes.object,
+  onClick: PropTypes.func,
 };
 
 export default WrapperBox;
