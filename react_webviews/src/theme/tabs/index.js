@@ -4,10 +4,15 @@ export const tabsStyleOverRides = () => {
   return {
     root: {
       backgroundColor: 'transparent',
+      height: 36,
       minHeight: 36,
     },
     flexContainer: {
-      display: 'block !important',
+      flex: 1,
+      justifyContent: 'space-between !important'
+    },
+    scroller: {
+      display: 'flex'
     },
   };
 };
@@ -27,6 +32,13 @@ export const tabStyleOverRides = (colors={},partnerConfig={}) => {
         color: colors?.supporting?.athensGrey,
       },
       minHeight: 36,
+      height: 36,
+      padding: '0px 0px 12px 0px',
+      minWidth: 'fit-content',
+      marginRight: '24px',
+      ':last-child': {
+        marginRight: '0px'
+      }
     },
   };
 };
