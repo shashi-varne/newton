@@ -72,7 +72,7 @@ class NEFT extends React.Component {
         this.state = {
             store: store,
             neftInfo: getNeftDetails(store?.flow),
-            showFooter: store.flow === "subscription"
+            isSubscriptionFlow: store.flow === "subscription"
         };
     }
 
@@ -86,7 +86,7 @@ class NEFT extends React.Component {
                 title="Payment via NEFT"
                 smallTitle={`Please transfer ${formatAmountInr(this.state?.store?.amount)} to the following bank account`}
                 header={true}
-                noFooter={!this.state.showFooter}
+                noFooter={!this.state.isSubscriptionFlow}
                 classOverRideContainer='equity-neft'
                 handleClick={this.handleClick}
                 buttonTitle="BACK"
@@ -117,10 +117,12 @@ class NEFT extends React.Component {
                     </div>
 
                 </div>
-                <div className="encription eq-encryption">
-                    <div className='eq-neft-note'><span className='eq-note-title'>Note:</span> NEFT/RTGS fund transfers may take upto 4 hours to reflect in your trading account.</div>
-                    <img src={icn_secure_payment} alt="secure" />
-                </div>
+                {!this.state.isSubscriptionFlow && (
+                    <div className="encription eq-encryption">
+                        <div className='eq-neft-note'><span className='eq-note-title'>Note:</span> NEFT/RTGS fund transfers may take upto 4 hours to reflect in your trading account.</div>
+                        <img src={icn_secure_payment} alt="secure" />
+                    </div>
+                )}
             </Container>
         );
     }
