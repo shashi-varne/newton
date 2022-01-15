@@ -23,6 +23,7 @@ const Button = (props) => {
     title,
     disabled,
     onClick,
+    dataAid,
     ...restProps
   } = props;
   return (
@@ -34,9 +35,10 @@ const Button = (props) => {
       color='secondary'
       disabled={disabled}
       onClick={onClick}
+      data-aid={`button_${dataAid}`}
       {...restProps}
     >
-      {isLoading && variant === 'primary' ? <DotDotLoaderNew /> : title}
+      {isLoading && variant === 'primary' ? <DotDotLoaderNew /> : <div data-aid='tv_title'>{title}</div>}
     </LibButton>
   );
 };
