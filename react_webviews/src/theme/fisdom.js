@@ -11,10 +11,10 @@ const FisdomTheme = {
     },
     action: {
       brand: '#35CB5D',
-      200: '#C1FFD2',
-      300: '#96FFB2',
-      400: '#53EA7B',
-      500: '#119A4B',
+      300: '#C1FFD2',
+      400: '#96FFB2',
+      500: '#53EA7B',
+      600: '#119A4B',
     },
     secondary: {
       profitGreen: {
@@ -56,9 +56,6 @@ const FisdomTheme = {
       white: '#FFFFFF',
     },
   },
-  button: {
-    disableHoverEffect : true
-  }
 };
 
 export default FisdomTheme;
