@@ -54,6 +54,8 @@ Button.propTypes = {
   title: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
   isLoading: PropTypes.bool,
+  isInverted: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 const validateVariantType = (props) => {
