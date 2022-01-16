@@ -10,7 +10,7 @@ export const buttonVariantsConfig = (colors={}, partnerConfig={}) => {
         color: colors?.action?.brand,
         width: '100%',
         height: '48px',
-        borderRadius: partnerConfig?.button?.borderRadius || 10,
+        borderRadius: partnerConfig?.button?.borderRadius || 12,
         '&:hover': {
           backgroundColor: 'transparent',
         },
@@ -95,7 +95,7 @@ export const buttonStyleOverRides = (colors={}, partnerConfig={}) => {
     contained: {
       ...typographyVariants.actionText,
       color: colors?.supporting?.white,
-      borderRadius: partnerConfig?.button?.borderRadius || 10,
+      borderRadius: partnerConfig?.button?.borderRadius || 12,
       height: '48px',
       '&:hover': {
         backgroundColor: partnerConfig?.button?.disableHoverEffect
