@@ -4,7 +4,7 @@ import { Tab, Tabs } from './Tabs';
 
 export default {
   component: Tabs,
-  title: 'Molecules/Tabs',
+  title: 'Atoms/Tabs',
   argTypes: {
     value: {type: 'number', defaultValue: 0},
     numberOfTabOnlyForStories: { type: 'number', defaultValue: 4 },
