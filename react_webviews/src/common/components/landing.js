@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router';
+import { withRouter } from 'react-router-dom';
 
 import qs from 'qs';
 import { storageService} from 'utils/validators';
@@ -67,7 +67,7 @@ class CommonLanding extends Component {
     }
 
     handleClick = () => {
-        window.location.reload(false);
+        window.location.reload();
     }
 
     navigate = (pathname, search, params) => {
