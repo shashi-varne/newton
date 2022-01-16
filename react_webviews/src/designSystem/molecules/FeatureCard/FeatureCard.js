@@ -27,7 +27,6 @@ import Typography from '../../atoms/Typography';
 import Tag from '../Tag';
 import Separator from '../../atoms/Separator';
 import { Imgc } from '../../../common/ui/Imgc';
-import isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
 
 import './FeatureCard.scss';
@@ -59,7 +58,7 @@ const FeatureCard = ({
           variant='body1'
           className='fc-heading-text'
           color={headingColor}
-          data-aid='tv_title'
+          dataAid='title'
         >
           {heading}
         </Typography>
@@ -148,7 +147,7 @@ const Description = (props) => {
               color={titleColor}
               align={align}
               component='div'
-              data-aid={`tv_key${idx + 1}`}
+              dataAid={`key${idx + 1}`}
             >
               {title}
             </Typography>
@@ -159,7 +158,7 @@ const Description = (props) => {
                     src={imgProps?.src}
                     className='fc-description-subtitle-img'
                     {...imgProps}
-                    dataAid={`iv_left${idx + 1}`}
+                    dataAid={`left${idx + 1}`}
                   />
                 )}
                 <Typography
@@ -167,7 +166,7 @@ const Description = (props) => {
                   color={subtitleColor}
                   align={align}
                   component='div'
-                  data-aid={`tv_value${idx + 1}`}
+                  dataAid={`value${idx + 1}`}
                 >
                   {subtitle}
                 </Typography>
