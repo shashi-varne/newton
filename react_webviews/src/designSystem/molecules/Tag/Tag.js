@@ -13,7 +13,6 @@ import { Box } from '@mui/material';
 import Typography from '../../atoms/Typography';
 import React, { useMemo } from 'react';
 import { Imgc } from '../../../common/ui/Imgc';
-import isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
 import './Tag.scss';
 
@@ -30,7 +29,7 @@ const Tag = (props) => {
   const morningStarData = useMemo(() => getMorningStarData(morningStarVariant),[morningStarVariant]);
   const leftImageData = leftImgProps?.src ? leftImgProps : morningStarData;
 
-  if (!isEmpty(label) && !leftImgProps?.src) {
+  if (label && !leftImgProps?.src) {
     return (
       <LabelTag
         label={label}
@@ -55,7 +54,7 @@ const Tag = (props) => {
           {...leftImgProps}
         />
       )}
-      <Typography variant='body5' data-aid='tv_title' color={labelColor}>
+      <Typography variant='body5' dataAid='title' color={labelColor}>
         {label}
       </Typography>
       {morningStarData?.morningLogo && !leftImgProps?.src  && (
@@ -81,7 +80,7 @@ const LabelTag = ({ label, labelBackgroundColor, labelColor, dataAid, className 
       }}
       data-aid={`tag_${dataAid}`}
     >
-      <Typography variant='body5' color={labelColor} data-aid='tv_title'>
+      <Typography variant='body5' color={labelColor} dataAid='title'>
         {label}
       </Typography>
     </Box>
