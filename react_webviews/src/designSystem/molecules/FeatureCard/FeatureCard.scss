@@ -22,24 +22,48 @@
     flex-direction: row;
     padding-bottom: 8px;
     align-items: center;
+
     .fc-heading-text {
-      margin-left: 16px;
       width: 26ch;
     }
+    .fc-left-img {
+      width: 32px;
+      height: 32px;
+      margin-right: 16px;
+    }
   }
-
   .fc-description-list {
     @include flex-space-btwn();
     padding-top: 8px;
     .fc-description-item {
       display: flex;
       flex-direction: column;
+      margin-right: 16px;
+      &:last-child {
+        margin-right: 0px;
+      }
+      .fc-subtitle-wrapper {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        .fc-description-subtitle-img{
+          height: 16px;
+          width: 16px;
+          margin-right: 4px;
+        }
+      }
     }
   }
 
   .fc-tag-wrapper {
     @include flex-space-btwn();
     padding-top: 8px;
+    .fc-tag-item {
+      margin-right: 16px;
+      &:last-child {
+        margin-right: 0px;
+      }
+    }
     .tags-wrapper,
     .label-tag-wrapper {
       cursor: pointer;
