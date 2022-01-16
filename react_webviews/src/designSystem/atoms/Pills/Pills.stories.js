@@ -4,7 +4,7 @@ import { Pill, Pills } from './Pills';
 
 export default {
   component: Pills,
-  title: 'Molecules/Pills',
+  title: 'Atoms/Pills',
   argTypes: {
     value: {type: 'number', defaultValue: 0},
     numberOfPillOnlyForStories: { type: 'number', defaultValue: 4 },
