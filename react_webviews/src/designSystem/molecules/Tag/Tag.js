@@ -15,6 +15,7 @@ import React, { useMemo } from 'react';
 import { Imgc } from '../../../common/ui/Imgc';
 import PropTypes from 'prop-types';
 import './Tag.scss';
+import isEmpty from 'lodash/isEmpty';
 
 const Tag = (props) => {
   const {
@@ -29,7 +30,7 @@ const Tag = (props) => {
   const morningStarData = useMemo(() => getMorningStarData(morningStarVariant),[morningStarVariant]);
   const leftImageData = leftImgProps?.src ? leftImgProps : morningStarData;
 
-  if (label && !leftImgProps?.src) {
+  if (label && !leftImgProps?.src && isEmpty(morningStarData)) {
     return (
       <LabelTag
         label={label}
