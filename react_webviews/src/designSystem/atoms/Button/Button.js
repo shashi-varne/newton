@@ -51,27 +51,11 @@ Button.defaultProps = {
 }
 
 Button.propTypes = {
-  variant: (props) => validateVariantType(props),
-  size: (props) => validateSizeType(props),
+  variant: PropTypes.oneOf(['primary', 'secondary', 'link']),
+  size: PropTypes.oneOf(['small', 'large']),
   title: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
   isLoading: PropTypes.bool,
   isInverted: PropTypes.bool,
   onClick: PropTypes.func,
-};
-
-const validateVariantType = (props) => {
-  if (props?.variant && !VARIANTS[props.variant]) {
-    console.warn(
-      `passed variant: '${props.variant}'\nexpected variants: 'primary', 'secondary', 'link' \n Using 'primary' as default variant`
-    );
-  }
-};
-
-const validateSizeType = (props) => {
-  if (props?.size && !SIZES[props.size]) {
-    console.warn(
-      `passed size: '${props.size}'\nexpected size: 'small', 'large'\n Using 'large' as default size`
-    );
-  }
 };
