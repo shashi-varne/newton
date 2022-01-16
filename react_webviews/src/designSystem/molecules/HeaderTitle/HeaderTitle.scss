@@ -1,29 +1,33 @@
 .ht-wrapper {
+  display: flex;
+  .ht-left-image {
+    width: 40px;
+    height: 40px;
+    margin-right: 8px;
+  }
+  .ht-child-wrapper {
     display: flex;
-    .ht-child-wrapper {
-        display: flex;
-        flex-direction: column;
-        margin-left: 8px;
+    flex-direction: column;
+  }
+
+  .ht-subtitle-labels {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 4px;
+    .ht-subtitle-label {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
     }
 
-    .ht-subtitle-labels {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        margin-top: 4px;
-        .ht-subtitle-label {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-        }
-
-        .ht-label-separator {
-            margin-left: 8px;
-            margin-right: 8px;
-        }
+    .ht-label-separator {
+      margin-left: 8px;
+      margin-right: 8px;
     }
+  }
 }
 
 .ht-subtitle {
-    margin-top: 4px;
+  margin-top: 4px;
 }

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 const Typography = ({ allCaps, children, dataAid, ...restProps }) => {
   return (
-    <LibTypography allcaps={allCaps ? 1 : 0} {...restProps} data-aid={`tv_${dataAid}`}>
+    <LibTypography allcaps={allCaps ? 1 : 0} data-aid={`tv_${dataAid}`} {...restProps}>
       {children}
     </LibTypography>
   );

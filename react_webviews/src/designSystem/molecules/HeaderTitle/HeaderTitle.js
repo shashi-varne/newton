@@ -2,7 +2,13 @@
   Props description:
   titleColor, subtitleColor => strongly recommended to use only foundation colors.
   subTitleLabels: it is an array of Objects for label and its color.
-  subTitleLabels structure is: [{name: 'Some Name', color : 'foundationColors.secondary.profitGreen.300'}]
+  subTitleLabels structure is: 
+  [
+    {
+      name: 'Some Name',
+      color : 'foundationColors.secondary.profitGreen.300'
+    }
+  ]
   Example: 
   titleColor: 'foundationColors.secondary.mango.300'
 */
@@ -14,20 +20,20 @@ import PropTypes from 'prop-types';
 
 import './HeaderTitle.scss';
 
-const HeaderTitle = ({ ImgSrc, children, imgProps, subTitleLabels, dataAid }) => {
+const HeaderTitle = ({ children, imgProps, subTitleLabels, dataAid }) => {
   return (
     <div className='ht-wrapper' data-aid={`headerTitle_${dataAid}`}>
-      <Imgc
-        src={ImgSrc}
-        style={{ width: '40px', height: '40px' }}
-        {...imgProps}
-        dataAid='left'
-      />
+      {imgProps?.src && (
+        <Imgc
+          src={imgProps?.src}
+          className='ht-left-image'
+          {...imgProps}
+          dataAid='left'
+        />
+      )}
       <div className='ht-child-wrapper'>
         {children}
-        {Array.isArray(subTitleLabels) && (
-          <SubtitleLabels subTitleLabels={subTitleLabels} />
-        )}
+        {Array.isArray(subTitleLabels) && <SubtitleLabels subTitleLabels={subTitleLabels} />}
       </div>
     </div>
   );
@@ -35,7 +41,7 @@ const HeaderTitle = ({ ImgSrc, children, imgProps, subTitleLabels, dataAid }) =>
 
 HeaderTitle.Title = ({ children, titleColor }) => {
   return (
-    <Typography variant='heading2' color={titleColor} data-aid='tv_title'>
+    <Typography variant='heading2' color={titleColor} dataAid='title'>
       {children}
     </Typography>
   );
@@ -43,7 +49,12 @@ HeaderTitle.Title = ({ children, titleColor }) => {
 
 HeaderTitle.Subtitle = ({ children, subtitleColor }) => {
   return (
-    <Typography className='ht-subtitle' variant='body2' color={subtitleColor} data-aid='tv_subtitle'>
+    <Typography
+      className='ht-subtitle'
+      variant='body2'
+      color={subtitleColor}
+      dataAid='subtitle'
+    >
       {children}
     </Typography>
   );
@@ -58,7 +69,7 @@ const SubtitleLabels = ({ subTitleLabels }) => {
         const showSeparator = subTitleLabels[idx + 1]?.name;
         return (
           <div key={idx} className='ht-subtitle-label'>
-            <Typography variant='body9' color={label.color || labelColor} allCaps>
+            <Typography variant='body9' color={label.color || labelColor} allCaps dataAid={`label${idx+1}`}>
               {label.name}
             </Typography>
             {showSeparator && (
@@ -66,6 +77,7 @@ const SubtitleLabels = ({ subTitleLabels }) => {
                 variant='body6'
                 color='foundationColors.supporting.cadetBlue'
                 className='ht-label-separator'
+                data-aid={`divider_${idx+1}`}
               >
                 |
               </Typography>
@@ -80,7 +92,7 @@ const SubtitleLabels = ({ subTitleLabels }) => {
 HeaderTitle.propTypes = {
   children: PropTypes.node,
   subTitleLabels: PropTypes.arrayOf(
-    PropTypes.shape({
+    PropTypes.exact({
       name: PropTypes.string,
       color: PropTypes.string,
     })
