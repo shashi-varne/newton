@@ -49,11 +49,10 @@ const Tag = (props) => {
     >
       {leftImageData?.src && (
         <Imgc
-        style={{ width: '16px', height: '16px' }}
-        dataAid='left'
-        className={`tag-left-image ${leftImageData?.leftImageClass}`}
-        src={leftImageData?.src}
-        {...leftImgProps}
+          dataAid='left'
+          className={`tag-left-image ${leftImageData?.leftImageClass}`}
+          src={leftImageData?.src}
+          {...leftImgProps}
         />
       )}
       <Typography variant='body5' data-aid='tv_title' color={labelColor}>
