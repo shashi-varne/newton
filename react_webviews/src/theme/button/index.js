@@ -4,12 +4,40 @@ export const buttonVariantsConfig = (colors={}, partnerConfig={}) => {
   const typographyVariants = baseTypographyConfig(colors, partnerConfig);
   return [
     {
+      props: { variant: 'text' },
+      style: {
+        ...typographyVariants.actionText,
+        color: colors?.action?.brand,
+        width: '100%',
+        height: '48px',
+        borderRadius: partnerConfig?.button?.borderRadius || 10,
+        '&:hover': {
+          backgroundColor: 'transparent',
+        },
+        '.MuiTouchRipple-root': {
+          color: colors?.supporting?.white
+        },
+        '&.Mui-disabled': {
+          backgroundColor: 'transparent',
+          opacity: '0.5',
+          color: colors?.action?.brand,
+        },
+      },
+    },
+    {
+      props: { isloading: 1 },
+      style: {
+        pointerEvents: 'none',
+      },
+    },
+    {
       props: { size: 'small' },
       style: {
-        padding: '8px 16px',
+        height: '37px',
         width: 'max-content',
         minWidth: '120px',
-        height: '37px',
+        paddingLeft: '16px',
+        paddingRight: '16px'
       },
     },
     {
@@ -24,57 +52,37 @@ export const buttonVariantsConfig = (colors={}, partnerConfig={}) => {
         ...typographyVariants.body8,
         padding:0,
         margin:0,
+        height: 'auto',
         width:'max-content',
+        minWidth: 'max-content',
         color: colors?.action?.brand,
         textTransform: 'none',
         '&:hover': {
-          color: colors?.primary?.action,
+          color: colors?.action?.brand,
           backgroundColor: 'transparent',
+        },
+        '.MuiTouchRipple-root': {
+          color: 'transparent',
+          padding:0,
+          margin:0,
+        },
+        '&.Mui-disabled': {
+          backgroundColor: 'transparent',
+          opacity: '0.5',
+          color: colors?.action?.brand,
         },
       },
     },
     {
-      props: { variant: 'text' },
+      props: { isinverted: 1},
       style: {
-        ...typographyVariants.actionText,
+        backgroundColor: colors?.supporting?.white,
         color: colors?.action?.brand,
-        width: '100%',
-        borderRadius: partnerConfig?.button?.borderRadius || 10,
-        paddingTop: '13.5px',
-        paddingBottom: '13.5px',
-      },
-    },
-    {
-      props: { variant: 'text', size: 'small' },
-      style: {
-        padding: '8px 16px',
-        width: 'max-content'
-      },
-    },
-    {
-      props: { variant: 'link', size: 'small' },
-      style: {
-        padding:0,
-        margin:0,
-        minWidth: 'max-content',
-        height: 'auto',
-      },
-    },
-    {
-      props: { isloading: 1 },
-      style: {
-        pointerEvents: 'none',
-      },
-    },
-    {
-      props: { isinverted: 1, variant: 'contained'},
-      style: {
-        backgroundColor: colors.supporting.white,
-        color: colors.primary.brand,
         '&:hover': {
-          backgroundColor: partnerConfig?.button?.disableHoverEffect
-            ? colors?.action?.brand
-            : colors?.action['100'],
+          backgroundColor: colors?.supporting?.grey,
+        },
+        '.MuiTouchRipple-root': {
+          color: colors?.supporting?.white
         },
       },
     },
@@ -88,8 +96,6 @@ export const buttonStyleOverRides = (colors={}, partnerConfig={}) => {
       ...typographyVariants.actionText,
       color: colors?.supporting?.white,
       borderRadius: partnerConfig?.button?.borderRadius || 10,
-      paddingTop: '13.5px',
-      paddingBottom: '13.5px',
       height: '48px',
       '&:hover': {
         backgroundColor: partnerConfig?.button?.disableHoverEffect
