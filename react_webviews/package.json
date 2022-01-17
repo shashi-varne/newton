@@ -126,7 +126,9 @@
   "scripts": {
     "start": "NODE_PATH=./src node scripts/start.js",
     "build": "NODE_PATH=./src node --max_old_space_size=4096 scripts/build.js",
-    "test": "NODE_PATH=./src node scripts/test.js --env=jsdom"
+    "test": "NODE_PATH=./src node scripts/test.js --env=jsdom",
+    "storybook": "NODE_PATH=./src start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "jest": {
     "collectCoverageFrom": [
@@ -171,11 +173,22 @@
       "@babel/react"
     ],
     "plugins": [
-      "@babel/plugin-proposal-class-properties"
+      [
+        "@babel/plugin-proposal-class-properties",
+        {
+          "loose": true
+        }
+      ]
     ]
   },
   "homepage": "https://app.fisdom.com",
   "devDependencies": {
+    "@babel/plugin-syntax-decorators": "^7.16.5",
+    "@storybook/addon-actions": "^6.4.9",
+    "@storybook/addon-essentials": "^6.4.9",
+    "@storybook/addon-links": "^6.4.9",
+    "@storybook/preset-scss": "^1.0.3",
+    "@storybook/react": "^6.4.9",
     "babel-eslint": "^8.2.6",
     "babel-loader": "^8.0.0-beta.6",
     "babel-polyfill": "^6.26.0",
