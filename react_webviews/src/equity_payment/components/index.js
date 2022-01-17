@@ -553,21 +553,6 @@ class PaymentOption extends React.Component {
   }
 
   selectptype(type) {
-    let eventObj = {
-      "event_name": "pg_payment_option",
-      "properties": {
-        "user_action": "next",
-        "amount": store.amount,
-        "channel": store.partner,
-        "pg_mode": type,
-        "flow": store.flow,
-        "investor": store.investor,
-        "initial_kyc_status": store.initial_kyc_status,
-        "add_bank_drop": (this.state.netbank.isSelected) ? "yes" : "no"
-      }
-    };
-
-    pushEvent(eventObj);
     if (type === "debit") {
       this.setState({ isDebitSelected: true, isNetbankingSelected: false, isUpiSelected: false, isNEFTSelected: false, isOpen: true }, () => {
       });
@@ -627,6 +612,21 @@ class PaymentOption extends React.Component {
   }
 
   async goToPayment(type) {
+    let eventObj = {
+      "event_name": "pg_payment_option",
+      "properties": {
+        "user_action": "next",
+        "amount": store.amount,
+        "channel": store.partner,
+        "pg_mode": type,
+        "flow": store.flow,
+        "investor": store.investor,
+        "initial_kyc_status": store.initial_kyc_status,
+        "add_bank_drop": (this.state.netbank.isSelected) ? "yes" : "no"
+      }
+    };
+
+    pushEvent(eventObj);
     if (type === "netbanking") {
       this.setState({ show_loader: 'page' });
       nativeCallback({
