@@ -1,166 +1,191 @@
 /*
   Prop description:
   LandingHeader:
-    variant: one of type => 'center', 'slide', 'date'
+    variant: one of type => 'center', 'side'
+    children: this will only accept 'LandingHeaderTitle', 'LandingHeaderSubtitle', 'LandingHeaderPoints', 'LandingHeaderImage'.
+    dataAid: unique id.
 
-  LandingHeader.Title:
-    titleColor: strongly recommended to only use foundation colors.
+  LandingHeaderTitle:
+    color: color which will be used for the child.
+    children: text for the title.
     
-  LandingHeader.Subtitle:
-    variant: will inherit the variant from the parent.
-    date: if variant is date then bydefault the current date will be picked, but this value can be overriden.
-    subtitleColor, dateColor: strongly recommended to only use foundation colors.
+  LandingHeaderSubtitle:
+    children: It will only accept Typography component, which can be a single <Typography/> component,
+              or a list of Typography component.
+              - dataAid for single Typography will be tv_subtitle.
+              - dataAid for list Typography will be tv_subtitle{idx}.
+    color: This color will be passed to all the Typography component, you can also override this color by
+           passing color to individual Typography item.
 
-  LandingHeader.Description:
-    - This will show a list of text, and the list depends upon the direct descendant elements passed.
-    - we can change the color of the Typography by passing our own color(color should be from foundation colors)
-    NOTE: USE TYPOGRAPHY COMPONENT AS CHILDS INSIDE THIS.
+  LandingHeaderPoints:
+    This component will convert the Typography child components into list with bullet points.
+    children: It will only accept Typography component, which can be a single <Typography/> component,
+              or a list of Typography component.
+              - dataAid for single Typography will be tv_subtitle.
+              - dataAid for list Typography will be tv_subtitle{idx}.
+    color: This color will be passed to all the Typography component, you can also override this color by
+           passing color to individual Typography item.
   
   Usage of the component:
-   <LandingHeader variant='date'>
-      <LandingHeader.Title>Title</LandingHeader.Title>
-      <LandingHeader.Subtitle>
-        These funds essentially invest in stocks. I am the subtitle
-      </LandingHeader.Subtitle>
-      <LandingHeader.Description>
-        <Typography>One line text, limit - 46 characters or 9 words 46 characters or 9 words 9 words 46 characters or 9 words</Typography>
+   <LandingHeader variant='center'>
+      <LandingHeaderImage imgProps={{ src: require('assets/amazon_pay.svg') }} />
+      <LandingHeaderTitle>Title</LandingHeaderTitle>
+      <LandingHeaderSubtitle color='foundationColors.secondary.mango.300'>
+        <Typography>
+            These funds essentially {format(new Date(), 'MMM d, yyyy ')} invest in stocks of
+            various two line text, limit - 99 characters or 17 words
+        </Typography>
+        <Typography>
+          These funds essentially
+          <Typography
+            color='foundationColors.secondary.profitGreen.300'
+            component='span'
+            variant='heading4'
+          >of various</Typography>
+          two line text, limit - 99 characters or 17 words Hello World
+        </Typography>
+      </LandingHeaderSubtitle>
+      <LandingHeaderPoints>
+        <Typography>One line text, limit - 46 characters or 9 words</Typography>
         <Typography>One line text, limit - 46 characters or 9 words</Typography>
         <Typography color='foundationColors.secondary.profitGreen.300'>One line text, limit - 46 characters or 9 words</Typography>
-      </LandingHeader.Description>
+      </LandingHeaderPoints>
     </LandingHeader>
 
+  NOTE: STRONGLY RECOMMENDED TO ONLY USE FOUNDATION COLORS.
   Example to pass color:
-    titleColor: 'foundationColors.secondary.mango.300'
+    color: 'foundationColors.secondary.mango.300'
 */
 
 import React, { Children } from 'react';
 import { Box } from '@mui/material';
 import { Imgc } from '../../../common/ui/Imgc';
-import format from 'date-fns/format';
 import PropTypes from 'prop-types';
 import Typography from '../../atoms/Typography';
+import isString from 'lodash/isString';
 import './LandingHeader.scss';
 
-const LandingHeader = ({
-  variant,
-  children,
-  imageSrc,
-  imageProps = {},
-  dataAid,
-}) => {
-  const variantClass = variant === 'center' ? 'center-align' : '';
+const LANDING_HEADER_CHILDS = [
+  'LandingHeaderTitle',
+  'LandingHeaderSubtitle',
+  'LandingHeaderPoints',
+  'LandingHeaderImage',
+];
+
+export const LandingHeader = ({ variant, children, dataAid }) => {
+  const variantClass = variant === 'center' ? 'landing-header-center-align' : '';
   return (
-    <Box
-      className={`landing-header-wrapper ${variantClass}`}
-      data-aid={`landingHeader_${dataAid}`}
-    >
-      <Imgc
-        src={imageSrc}
-        style={{ width: '140px', height: '120px' }}
-        {...imageProps}
-        dataAid='top'
-      />
-      {Children.map(children, (el) => {
-        return React.cloneElement(el, {
-          variant,
-        });
+    <Box className={`landing-header-wrapper ${variantClass}`} data-aid={`landingHeader_${dataAid}`}>
+      {Children.map(children, (child) => {
+        const componentType = isString(child?.type) ? child?.type : child?.type?.name;
+        if (LANDING_HEADER_CHILDS.indexOf(componentType) !== -1) {
+          return React.cloneElement(child);
+        } else {
+          console.error(
+            `child passed is ${componentType}, expected childs are 
+            'LandingHeaderTitle','LandingHeaderSubtitle','LandingHeaderPoints', 'LandingHeaderImage`
+          );
+          return null;
+        }
       })}
     </Box>
   );
 };
 
-LandingHeader.propTypes = {
-  children: PropTypes.node,
-  variant: PropTypes.oneOf(['side', 'center', 'date']),
-  dataAid: PropTypes.string,
+export const LandingHeaderImage = ({ imgProps }) => {
+  return (
+    <Imgc
+      src={imgProps?.src}
+      style={{ width: '140px', height: '120px' }}
+      {...imgProps}
+      dataAid='top'
+    />
+  );
 };
 
-LandingHeader.Title = ({ children, titleColor }) => {
+export const LandingHeaderTitle = ({ children, color }) => {
   return (
-    <Typography variant='heading1' color={titleColor} data-aid='tv_title' component='div'>
+    <Typography variant='heading1' color={color} dataAid='title'>
       {children}
     </Typography>
   );
 };
 
-LandingHeader.Subtitle = ({
-  children,
-  date,
-  variant,
-  subtitleColor,
-  dateColor,
-}) => {
-  let formattedDate = {};
-  const isDateVariant = variant === 'date';
-  if (isDateVariant) {
-    date = date ? date : new Date();
-    formattedDate.date = format(date, 'MMM d, yyyy ');
-    formattedDate.time = format(date, ' h:mma');
-  }
+export const LandingHeaderSubtitle = ({ children , color}) => {
   return (
-    <div>
-      {isDateVariant && (
-        <Typography
-          className='lh-date-wrapper'
-          variant='body2'
-          color={dateColor}
-          data-aid='tv_date'
-          component='div'
-        >
-          {formattedDate?.date}
-          <span>{'\u2022'}</span>
-          {formattedDate?.time}
-        </Typography>
-      )}
-
-      <Typography
-        className='lh-subtitle'
-        variant='body2'
-        color={subtitleColor}
-        data-aid='tv_subtitle'
-        component='div'
-      >
-        {children}
-      </Typography>
+    <div className='lh-subtitle-wrapper'>
+      {Children?.map(children, (child, idx) => {
+        const childrenLength = children?.length;
+        const subtitleId = childrenLength > 1 ? idx + 1 : '';
+        if (child?.type?.name !== 'Typography') {
+          const componentType = child?.type || child?.type?.name;
+          console.error(`Only supported child is Typography, passed type is ${componentType}`);
+          return null;
+        } else {
+          return (
+            <div key={idx} className='lh-subtitle'>
+              {React.cloneElement(child, {
+                variant: child?.props?.variant || 'body2',
+                color: child?.props?.color || color || 'foundationColors.content.secondary',
+                dataAid: `subtitle${subtitleId}`,
+                align: 'left',
+              })}
+            </div>
+          );
+        }
+      })}
     </div>
   );
 };
 
-LandingHeader.Description = ({ children }) => {
+export const LandingHeaderPoints = ({ children, color }) => {
   return (
     <ul className='lh-description-list'>
-      {Children.map(children, (el, idx) => {
-        return (
-          <li key={idx} className='lh-description-item'>
-            {React.cloneElement(el, {
-              variant: 'body2',
-              color: el?.props?.color || 'foundationColors.content.secondary',
-              'data-aid': `tv_point_${idx + 1}`,
-            })}
-          </li>
-        );
+      {Children.map(children, (child, idx) => {
+        const childrenLength = children?.length;
+        const pointId = childrenLength > 1 ? idx + 1 : '';
+        if (child?.type?.name !== 'Typography') {
+          const componentType = child?.type || child?.type?.name;
+          console.error(`Only supported child is Typography, passed type is ${componentType}`);
+          return null;
+        } else {
+          return (
+            <li key={idx} className='lh-description-item'>
+              {React.cloneElement(child, {
+                variant: child?.props?.variant || 'body2',
+                color: child?.props?.color || color || 'foundationColors.content.secondary',
+                dataAid: `point${pointId}`,
+                align: 'left',
+              })}
+            </li>
+          );
+        }
       })}
     </ul>
   );
 };
 
-LandingHeader.Title.propTypes = {
+LandingHeader.defaultProps = {
+  variant: 'side',
+}
+
+LandingHeader.propTypes = {
   children: PropTypes.node,
+  variant: PropTypes.oneOf(['side', 'center']),
+  dataAid: PropTypes.string,
 };
 
-LandingHeader.Subtitle.propTypes = {
+LandingHeaderTitle.propTypes = {
   children: PropTypes.node,
-  subtitleColor: PropTypes.string,
-  dateColor: PropTypes.string,
+  color: PropTypes.string,
 };
 
-LandingHeader.Description.propTypes = {
+LandingHeaderSubtitle.propTypes = {
   children: PropTypes.node,
+  color: PropTypes.string,
 };
 
-LandingHeader.Subtitle.defaultProps = {
-  subtitleColor: 'foundationColors.content.secondary',
-  dateColor: 'foundationColors.content.secondary',
+LandingHeaderPoints.propTypes = {
+  children: PropTypes.node,
+  color: PropTypes.string,
 };
-
-export default LandingHeader;
