@@ -13,7 +13,7 @@ import { getSummaryV2 } from "../../common/api";
 import useUserKycHook from "../../../kyc/common/hooks/userKycHook";
 import "./commonStyles.scss";
 import CheckInvestment from "../mini-components/CheckInvestment";
-import { getInvestCards } from "../../../utils/functions";
+import { getInvestCards, isTradingEnabled } from "../../../utils/functions";
 import { Imgc } from "../../../common/ui/Imgc";
 
 const Summary = (props) => {
@@ -32,13 +32,18 @@ const Summary = (props) => {
   const [showSkelton, setShowSkelton] = useState(true);
   const [isAmountSliderUsed, setIsAmountSliderUsed] = useState(false);
   const [isYearSliderUsed, setIsYearSliderUsed] = useState(false);
-  const { user: currentUser, isLoading } = useUserKycHook();
+  const { user: currentUser, isLoading, kyc } = useUserKycHook();
+  const [isEquityEnabled, setIsEquityEnabled] = useState(isTradingEnabled(kyc));
   const investCards = getInvestCards(["nps", "insurance", "gold"]);
   const taxFiling_enable =  (storageService().get('callback_version') >= 3 && !config.Web) || config.Web;
 
   useEffect(() => {
     initialize();
   }, []);
+
+  useEffect(() => {
+    setIsEquityEnabled(isTradingEnabled(kyc))
+  }, [kyc])
 
   const initialize = async () => {
     const result = await getSummaryV2();
@@ -136,6 +141,15 @@ const Summary = (props) => {
       default:
         sendEvents("next");
         break;
+    }
+    if (name === "equity") {
+      nativeCallback({
+        action: "open_equity",
+        message: {
+          module: "portfolio",
+        },
+      });
+      return;
     }
     navigate(getPathname[name], { state: { fromPath: "reports" } });
   };
@@ -362,6 +376,18 @@ const Summary = (props) => {
                   </div>
                   <div className="rtf-know-more">KNOW MORE</div>
                 </div>
+              )}
+              {config.isSdk && isEquityEnabled && (
+                <SummaryCard
+                  dataAid="equity"
+                  goNext={() => flowOptions("equity")}
+                  icon={`growth.svg`}
+                  title="Stocks, F&O, and more"
+                  subtitle="Track your holdings and positions"
+                  iconClassName={
+                    productName === "finity" && "reports-finity-icon"
+                  }
+                />
               )}
               {currentUser.nps_investment ||
               data.showTrackGoals ||
