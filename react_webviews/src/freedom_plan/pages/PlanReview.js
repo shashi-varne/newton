@@ -96,13 +96,14 @@ const PlanReview = (props) => {
     isEquityEnabled,
   } = useMemo(initializeKycData, [kyc]);
 
-  const sendEvents = (userAction, isSelectPlan, changePlan = "no") => {
+  const sendEvents = (userAction, isSelectPlan, changePlan = "no", duration) => {
+    const months = (duration || freedomPlanData.duration)/30;
     let eventObj = {
       event_name: "freedom_plan",
       properties: {
         user_action: userAction,
         screen_name: "review_plan",
-        plan_selected: `${freedomPlanData.duration / 30}_months`,
+        plan_selected: `${months}_months`,
       },
     };
     if (isSelectPlan) {
@@ -161,7 +162,7 @@ const PlanReview = (props) => {
     if (!closeSelectPlan) {
       updateFreedomPlanData(plan);
     }
-    sendEvents(userAction, true);
+    sendEvents(userAction, true, "no", plan?.duration);
     setOpenSelectPlan(false);
   };
 
