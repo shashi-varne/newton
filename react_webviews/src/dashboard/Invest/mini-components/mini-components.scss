@@ -320,6 +320,13 @@
       background-size: contain;
       background-repeat: no-repeat;
       text-align: left;
+
+      .wv-tag {
+        padding: 0 5px;
+        font-size: 8px;
+        font-weight: 700;
+      }
+
       .title{
         font-size: 20px;
         font-weight: bold;

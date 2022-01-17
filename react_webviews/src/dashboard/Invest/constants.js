@@ -18,12 +18,14 @@ export const investCardsBase = {
       subtitle: "Invest in your favourite companies",
       button_text: "INVEST",
       icon: "ic_stocks.svg",
+      tagTitle: "NEW"
     },
     ipo: {
       title: "IPO, Gold Bonds and more",
       subtitle: "Primary market products",
       button_text: "INVEST",
       icon: "ic_ipo.svg",
+      tagTitle: "NEW"
     },
   },
   popularCards: {

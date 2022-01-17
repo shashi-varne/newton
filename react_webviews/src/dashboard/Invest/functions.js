@@ -707,11 +707,11 @@ export const resetRiskProfileJourney = () => {
   return;
 };
 
-function handleInvestSubtitle (kyc)  {
+function handleInvestSubtitle (isEquityEnabled)  {
   const investCards = getInvestCards(["nps", "gold"]);
   let investCardSubtitle = 'Mutual funds';
 
-  if (isTradingEnabled(kyc)) {
+  if (isEquityEnabled) {
     investCardSubtitle = 'Stocks, F&O, IPOs, Mutual funds';
   }
 
@@ -737,6 +737,7 @@ export function handleRenderCard() {
   const referralCode = !currentUser.active_investment && !isWeb && config?.referralConfig?.applyRefferal;
   const myAccount = isReadyToInvestBase || userKyc?.bank?.doc_status === 'rejected';
   const kyc = !isReadyToInvestBase;
+  const isEquityEnabled = isTradingEnabled(userKyc);
   const cards = sdkInvestCardMapper.filter(el => {
     if(el.key === 'kyc') {
       return kyc;
@@ -753,7 +754,8 @@ export function handleRenderCard() {
       }
     } else {
       if(el.key === 'invest') {
-        el.subtitle = handleInvestSubtitle(userKyc)
+        el.subtitle = handleInvestSubtitle(isEquityEnabled);
+        el.tagTitle = isEquityEnabled ? 'NEW' : '';
       }
       return true;
     }
