@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import Button from '../../common/ui/Button';
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement';
 import WVInPageSubtitle from '../../common/ui/InPageHeader/WVInPageSubtitle';
 import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
