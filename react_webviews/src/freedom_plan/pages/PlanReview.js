@@ -67,7 +67,7 @@ const PlanReview = (props) => {
         "upgraded_incomplete",
       ];
       const kycInProgressStatus = ["submitted", "verifying_trading_account"];
-      if (kycInitStatus.includes(kycInitStatus)) {
+      if (kycInitStatus.includes(kycStatus)) {
         kycStatus = "init";
       } else if (
         kycIncompleteStatus.includes(kycStatus) ||
@@ -95,6 +95,7 @@ const PlanReview = (props) => {
     kycStatus,
     isEquityEnabled,
   } = useMemo(initializeKycData, [kyc]);
+console.log("status ", kycStatus);
 
   const sendEvents = (userAction, isSelectPlan, changePlan = "no") => {
     let eventObj = {
