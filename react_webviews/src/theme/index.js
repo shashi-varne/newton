@@ -1,9 +1,11 @@
 import { buttonStyleOverRides, buttonVariantsConfig } from './button';
+import { checkboxStyleOverRides } from './checkbox';
 import { switchStyleOverRides } from './switch';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
 import getPartnerThemeData from './utils';
 import { createTheme } from '@mui/material';
 import { separatorStyleOverRides } from './separator';
+import { dialogDefaultProps, dialogStylesOverride } from './dialog';
 
 const getTheme = () => {
   const {colors, partnerConfig} = getPartnerThemeData();
@@ -28,11 +30,18 @@ const getTheme = () => {
         styleOverrides: buttonStyleOverRides(colors, partnerConfig),
       },
       MuiSwitch: {
-        styleOverrides: switchStyleOverRides(colors),
+        styleOverrides: switchStyleOverRides(colors)
       },
       MuiDivider: {
         styleOverrides: separatorStyleOverRides(colors)
       },
+      MuiCheckbox: {
+        styleOverrides: checkboxStyleOverRides(colors),
+      },
+      MuiDialog: {
+        defaultProps: dialogDefaultProps(),
+        styleOverrides:dialogStylesOverride()
+      }
     },
   };
   return createTheme(theme);
