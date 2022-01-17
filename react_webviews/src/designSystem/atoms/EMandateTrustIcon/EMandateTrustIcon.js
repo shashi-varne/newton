@@ -1,7 +1,8 @@
 import React from "react";
+import { Box } from "@mui/material";
+import Typography from '../Typography';
 import { Imgc } from "../../../common/ui/Imgc";
 import "./EMandateTrustIcon.scss";
-import Typography from '../Typography';
 
 const EMandateTrustIcon = (props) => {
   const { className = "", opacity, margin, dataAid = "", ...restProps } = props;
