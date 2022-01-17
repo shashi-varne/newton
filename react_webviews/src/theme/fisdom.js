@@ -56,6 +56,9 @@ const FisdomTheme = {
       white: '#FFFFFF',
     },
   },
+  button: {
+    borderRadius: 12
+  }
 };
 
 export default FisdomTheme;
