@@ -93,6 +93,7 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
       if (params?.status === "success") {
         if (storageService().get('native')) {
           nativeCallback({ action: "exit_web" });
+          return true;
         } else {
           navigate("/invest");
           return true;
@@ -108,8 +109,8 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
         return true;
       } else {
         nativeCallback({ action: "exit_web" });
+        return true;
       }
-      break;
     default:
       const landingScreenPaths = ["/", "/invest", "/landing", "/invest/explore"]
       if(landingScreenPaths.includes(currentState) && getConfig().code === 'moneycontrol') {
@@ -118,6 +119,7 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
       }
       if (currentState === "/" || isNpsOutsideSdk(fromState, currentState)) {
         nativeCallback({ action: "exit_web" });
+        return true;
       } else {
         if (window.history.length > 1) {
           if (backMapper(currentState)) {
@@ -128,6 +130,7 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
           }
         } else {
           nativeCallback({ action: "exit_web" });
+          return true;
         }
       }
   }

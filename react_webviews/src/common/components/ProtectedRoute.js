@@ -28,8 +28,8 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
     try {
       if(!guestLeadId && !guestUser){
         const result = await getAccountSummary();
-        setIsLoginValid(true);
         await setSummaryData(result);
+        setIsLoginValid(true);
       }
     } catch (err) {
       setIsLoginValid(false);

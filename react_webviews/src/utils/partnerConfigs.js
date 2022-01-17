@@ -55,21 +55,37 @@ export const commonCardsConfig = {
   landingMarketingBanners: [],
   nfoBanners: [
     {
+      image: "nfo5.svg",
+      type: "nfo",
+      startDate: "01/17/2022",
+      endDate: "01/30/2022",
+    },
+    {
+      image: "nfo2.svg",
+      type: "nfo",
+      endDate: "01/26/2022",
+    },
+    {
+      image: "nfo3.svg",
+      type: "nfo",
+      endDate: "01/26/2022",
+    },
+    {
+      image: "nfo4.svg",
+      type: "nfo",
+      startDate: "01/21/2022",
+      endDate: "02/03/2022",
+    },
+    {
       image: "nfo1.svg",
       type: "nfo",
       endDate: "01/23/2022",
-    },
-    {
-      image: "nfo.svg",
-      type: "nfo",
-      endDate: "01/14/2022",
     },
   ],
 };
 
 export const basePartnerConfig = {
   common: {
-    equityAnnexure: "https://fisdom.com/images/forms/Equity%20Annexures.pdf"
   },
   fisdom: {
     productName: "fisdom",
@@ -85,6 +101,7 @@ export const basePartnerConfig = {
     refundLink: "https://www.fisdom.com/refund/",
     disclaimerLink: "https://www.fisdom.com/disclaimer/",
     webAppUrl: "https://app.fisdom.com/#!/",
+    equityAnnexure: "https://fisdom.com/images/forms/Equity%20Annexures.pdf",
     configPrimaryColorClass: 'configPrimaryColorClass',
     configPrimaryBackgroundColorClass: 'fisdomBackColor',
     emailDomain: "fisdom.com",
@@ -108,6 +125,7 @@ export const basePartnerConfig = {
     refundLink: "https://www.finity.in/refund/",
     disclaimerLink: "https://www.finity.in/disclaimer/",
     webAppUrl: "https://app.mywaywealth.com/#!/",
+    equityAnnexure: "https://fisdom.com/images/forms/Equity_Annexures_Finity.pdf",
     configPrimaryColorClass: 'configPrimaryColorClass',
     configPrimaryBackgroundColorClass: 'fisdomBackColor',
     emailDomain: "finity.in",
