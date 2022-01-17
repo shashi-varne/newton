@@ -57,7 +57,8 @@ const Landing = (props) => {
     }
   }, [errorData.showError]);
 
-  const sendEvents = (userAction, isSelectPlan) => {
+  const sendEvents = (userAction, isSelectPlan, duration) => {
+    const months = (duration || freedomPlanData.duration)/30
     let eventObj = {
       event_name: "freedom_plan",
       properties: {
@@ -67,9 +68,7 @@ const Landing = (props) => {
     };
     if (isSelectPlan) {
       eventObj.properties.screen_name = "select_plan";
-      eventObj.properties.plan_selected = `${
-        freedomPlanData.duration / 30
-      }_months`;
+      eventObj.properties.plan_selected = `${months}_months`;
     }
     if (userAction === "just_set_events") {
       return eventObj;
@@ -96,7 +95,7 @@ const Landing = (props) => {
 
   const handleSelectPlan = (plan) => {
     updateFreedomPlanData(plan);
-    sendEvents("next", true);
+    sendEvents("next", true, plan?.duration);
     navigate(PATHNAME_MAPPER.review);
   };
 
