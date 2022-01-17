@@ -7,7 +7,7 @@ import React, { memo, useState } from 'react';
 import { Button } from 'material-ui';
 import { formattedDate } from 'utils/validators.js';
 import HoldingDetail from './HoldingDetail';
-import { withRouter } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import IwdCard from '../mini-components/IwdCard';
 import RatingStar from '../../fund_details/common/RatingStar';
 import { formatNumVal } from '../common/commonFunctions';

@@ -1,7 +1,7 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
 import { Imgc } from "../../../common/ui/Imgc";
 import "./EMandateTrustIcon.scss";
+import Typography from '../Typography';
 
 const EMandateTrustIcon = (props) => {
   const { className = "", opacity, margin, dataAid = "", ...restProps } = props;
@@ -15,7 +15,7 @@ const EMandateTrustIcon = (props) => {
       <Typography
         variant="body5"
         color="foundationColors.content.secondary"
-        data-aid="tv_title"
+        dataAid="title"
       >
         e-mandate powered by
       </Typography>
