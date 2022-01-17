@@ -380,6 +380,7 @@ class PaymentOption extends React.Component {
       const result = await  Api.get(url);
       if(result.pfwresponse.status_code === 200) {
         let paymentData = result.pfwresponse.result;
+        store = paymentData;
         const neftSupported = paymentData?.payment_options.indexOf('neft') !== -1;
         const netBankingSupported = paymentData?.payment_options.indexOf('netbanking') !== -1;
         const upiSupported = paymentData?.payment_options.indexOf('upi') !== -1;
@@ -552,21 +553,6 @@ class PaymentOption extends React.Component {
   }
 
   selectptype(type) {
-    let eventObj = {
-      "event_name": "pg_payment_option",
-      "properties": {
-        "user_action": "next",
-        "amount": store.amount,
-        "channel": store.partner,
-        "pg_mode": type,
-        "flow": store.flow,
-        "investor": store.investor,
-        "initial_kyc_status": store.initial_kyc_status,
-        "add_bank_drop": (this.state.netbank.isSelected) ? "yes" : "no"
-      }
-    };
-
-    pushEvent(eventObj);
     if (type === "debit") {
       this.setState({ isDebitSelected: true, isNetbankingSelected: false, isUpiSelected: false, isNEFTSelected: false, isOpen: true }, () => {
       });
@@ -626,6 +612,21 @@ class PaymentOption extends React.Component {
   }
 
   async goToPayment(type) {
+    let eventObj = {
+      "event_name": "pg_payment_option",
+      "properties": {
+        "user_action": "next",
+        "amount": store.amount,
+        "channel": store.partner,
+        "pg_mode": type,
+        "flow": store.flow,
+        "investor": store.investor,
+        "initial_kyc_status": store.initial_kyc_status,
+        "add_bank_drop": (this.state.netbank.isSelected) ? "yes" : "no"
+      }
+    };
+
+    pushEvent(eventObj);
     if (type === "netbanking") {
       this.setState({ show_loader: 'page' });
       nativeCallback({
@@ -784,9 +785,9 @@ class PaymentOption extends React.Component {
               {/* upi */}
               {
                 this.state.upiSupported &&
-                <div className="paymentcard upi tab" onClick={() => this.selectptype('upi')}>
+                <div className="paymentcard upi tab">
                   <input type="radio" id="rd1" name="rd" defaultChecked={this.state.isUpiSelected} />
-                  <label className={`tab-label ${getConfig().productName}`} htmlFor="rd1">
+                  <label onClick={() => this.selectptype('upi')}className={`tab-label ${getConfig().productName}`} htmlFor="rd1">
                     <div className="item-header">
                       <img src={icn_upi_apps} width="20" alt="upi" />
                       <div className="bold dark-grey-text">UPI APPs</div>
@@ -808,9 +809,9 @@ class PaymentOption extends React.Component {
                 {/* netbanking */}
                 {
                   this.state.netBankingSupported &&
-                  <div className="paymentcard tab" onClick={() => this.selectptype('netbanking')}>
+                  <div className="paymentcard tab" >
                     <input type="radio" id="rd2" name="rd" defaultChecked={this.state.isNetbankingSelected} />
-                    <label className={`tab-label ${getConfig().productName}`} htmlFor="rd2">
+                    <label onClick={() => this.selectptype('netbanking')} className={`tab-label ${getConfig().productName}`} htmlFor="rd2">
                       <div className="item-header">
                         <img src={this.state.bankDetails.image} width="20" alt="netbanking" />
                         <div className="bold dark-grey-text">Net Banking</div>
@@ -826,9 +827,9 @@ class PaymentOption extends React.Component {
                 {/* neft */}
                 {
                   this.state.neftSupported &&
-                  <div className="paymentcard tab" onClick={() => this.selectptype('neft')}>
+                  <div className="paymentcard tab" >
                     <input type="radio" id="rd4" name="rd" defaultChecked={this.state.isNEFTSelected} />
-                    <label className={`tab-label ${getConfig().productName}`} htmlFor="rd4">
+                    <label onClick={() => this.selectptype('neft')} className={`tab-label ${getConfig().productName}`} htmlFor="rd4" >
                       <div className="item-header">
                         <img src={this.state.bankDetails.image} width="20" alt="neft" />
                         <div className="bold dark-grey-text">NEFT/RTGS</div>
