@@ -1,12 +1,20 @@
 /*
   Below are the props description.
-  Note: by default it will return large rating variant(large MorningStar logo)
   largeMorningRating(bool): a variant which will give smaller Tag(small MorningStar logo).
   smallMorningRating(bool): a variant which will give smaller Tag(large MorningStar logo).
   label(string): a variant to show label.
   labelBackgroundColor: only applicable for variant which has label without Icon.
   labelBackgroundColor, labelColor: It is strongly recommended to use Foundation colors to change the color.
   Example: labelColor: foundationColors.secondary.mango.200;
+
+  Usage:
+  <Tag label='Equity'/> => will return label with background color.
+  <Tag morningStarVariant='small' label={4.6}/> => will return morning star variant.
+  <Tag leftImgProps={{
+          src: require('assets/amazon_pay.svg')
+        }}
+        label='Equity'
+  /> => This will return label with icon.
 */
 
 import { Box } from '@mui/material';
