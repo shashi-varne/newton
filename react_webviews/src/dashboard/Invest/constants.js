@@ -593,13 +593,6 @@ export const sdkInvestCardMapper = [
     path: '/my-account'
   },
   {
-    key: 'kyc',
-    title: 'KYC',
-    subtitle: 'Create investment profile',
-    img: 'ic_db_kyc.svg',
-    path: '/kyc'
-  },
-  {
     key: 'refer',
     title: 'Refer & Earn',
     subtitle: 'Refer to your friends & earn rewards',

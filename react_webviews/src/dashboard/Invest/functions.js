@@ -736,12 +736,13 @@ export function handleRenderCard() {
   const hideReferral = currentUser.active_investment && !isWeb && config?.referralConfig?.shareRefferal;
   const referralCode = !currentUser.active_investment && !isWeb && config?.referralConfig?.applyRefferal;
   const myAccount = isReadyToInvestBase || userKyc?.bank?.doc_status === 'rejected';
-  const kyc = !isReadyToInvestBase;
+  // const kyc = !isReadyToInvestBase;
   const isEquityEnabled = isTradingEnabled(userKyc);
   const cards = sdkInvestCardMapper.filter(el => {
-    if(el.key === 'kyc') {
-      return kyc;
-    } else if(el.key === 'account') {
+    // if(el.key === 'kyc') {
+    //   return kyc;
+    // } else 
+    if(el.key === 'account') {
       return myAccount;
     } else if(el.key === 'refer') {
       if(referralCode){
