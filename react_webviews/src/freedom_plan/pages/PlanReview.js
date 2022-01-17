@@ -95,7 +95,6 @@ const PlanReview = (props) => {
     kycStatus,
     isEquityEnabled,
   } = useMemo(initializeKycData, [kyc]);
-console.log("status ", kycStatus);
 
   const sendEvents = (userAction, isSelectPlan, changePlan = "no", duration) => {
     const months = (duration || freedomPlanData.duration)/30;
