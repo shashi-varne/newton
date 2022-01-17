@@ -1,4 +1,5 @@
 import React from 'react';
+import Typography from '../../atoms/Typography';
 import HeaderTitle from './HeaderTitle';
 
 export default {
@@ -20,6 +21,10 @@ const Template = ({withImage, ...args}) => {
     <HeaderTitle {...args}>
       <HeaderTitle.Title>{args?.title}</HeaderTitle.Title>
       <HeaderTitle.Subtitle>{args?.subtitle}</HeaderTitle.Subtitle>
+      <HeaderTitle.SubtitleLabels>
+        <Typography>Equity</Typography>
+        <Typography>Hybrid</Typography>
+      </HeaderTitle.SubtitleLabels>
     </HeaderTitle>
   );
 };
@@ -28,15 +33,6 @@ export const Default = Template.bind({});
 Default.args = {
   title: 'I am heading',
   subtitle: 'I am subtitle',
-  subTitleLabels: [
-    {
-      name: 'Equity',
-      color: 'foundationColors.secondary.profitGreen.300',
-    },
-    {
-      name: 'Hybrid',
-    },
-  ],
   imgProps: {
       src: require('assets/amazon_pay.svg')
   }
