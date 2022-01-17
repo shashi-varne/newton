@@ -95,7 +95,7 @@ const Landing = (props) => {
 
   const handleSelectPlan = (plan) => {
     updateFreedomPlanData(plan);
-    sendEvents("next", true, plan.duration);
+    sendEvents("next", true, plan?.duration);
     navigate(PATHNAME_MAPPER.review);
   };
 
