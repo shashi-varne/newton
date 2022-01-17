@@ -47,6 +47,7 @@ export async function initialize() {
   this.handleCampaignNotificationData = handleCampaignNotificationData.bind(this);
   this.openBfdlBanner = openBfdlBanner.bind(this);
   this.closeBfdlBanner = closeBfdlBanner.bind(this);
+  this.handleStocksRedirection = handleStocksRedirection.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
   if (config) {
     this.setState({ config });
@@ -659,12 +660,28 @@ export function handleStocksAndIpoCards(key) {
     }
   }
   if(key === "stocks" && !modalData.dualButton) {
-    modalData.oneButton = true
+    const kycInprogressStates = ["submitted", "verifying_trading_account"];
+    if (config.isSdk && kycInprogressStates.includes(kycJourneyStatus)) {
+      modalData.buttonTitle = "CONTINUE";
+      modalData.handleClick = this.handleStocksRedirection;
+    }
+    if (config.isSdk && !modalData.oneButton) {
+      modalData.dualButton = true;
+    } else {
+      modalData.oneButton = true
+    }
   }
 
   if (!isEmpty(modalData) && (kycJourneyStatus !== "complete" || (kycJourneyStatus === "complete" && userKyc.kyc_product_type !== "equity"))) {
     this.setState({ modalData, openKycStatusDialog: true });
   }
+}
+
+function handleStocksRedirection() {
+  nativeCallback({
+    action: "open_equity"
+  })
+  this.closeKycStatusDialog()
 }
 
 async function setProductType() {
