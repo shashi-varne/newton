@@ -707,9 +707,14 @@ export const resetRiskProfileJourney = () => {
   return;
 };
 
-function handleInvestSubtitle ()  {
+function handleInvestSubtitle (kyc)  {
   const investCards = getInvestCards(["nps", "gold"]);
   let investCardSubtitle = 'Mutual funds';
+
+  if (isTradingEnabled(kyc)) {
+    investCardSubtitle = 'Stocks, F&O, IPOs, Mutual funds';
+  }
+
   if (investCards?.gold) {
     investCardSubtitle = investCardSubtitle += ', Gold, Save tax';
   } else {
@@ -748,7 +753,7 @@ export function handleRenderCard() {
       }
     } else {
       if(el.key === 'invest') {
-        el.subtitle = handleInvestSubtitle()
+        el.subtitle = handleInvestSubtitle(userKyc)
       }
       return true;
     }
