@@ -123,7 +123,7 @@ class EmailEntry extends Component {
         events={this.sendEvents('just_set_events')}
         classHeader={'bg-highlight'}
         handleClick={this.goNext}
-        buttonTitle="Continue"
+        buttonTitle="Generate STATEMENT"
         showLoader={show_loader}
         headerData={{
           goBack: this.goBack
@@ -139,11 +139,11 @@ class EmailEntry extends Component {
             Portfolio tracker
           </div>
           <span className="header-subtitle-text-hni">
-            Get a consolidated view of all <br /> your external investments
+            Now manage all your investments in one place
           </span>
         </div>
         <div className="ext-pf-email-label">
-          Enter your primary investment email
+          Enter the email linked to your investments
         </div>
         <div className="InputField">
           <Input
@@ -152,7 +152,7 @@ class EmailEntry extends Component {
             helperText={email_error}
             type="email"
             width="40"
-            label="Email"
+            label="Email ID"
             class="Email address"
             id="email"
             name="email"
