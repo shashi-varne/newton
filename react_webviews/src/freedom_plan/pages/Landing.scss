@@ -119,10 +119,8 @@ $tableBorder: 1px solid var(--primaryVariant2);
       letter-spacing: 1px;
       text-transform: uppercase;
       color: var(--highlight);
-    }
-
-    thead tr td {
       border-bottom: $tableBorder;
+      padding: 15px 10px;
     }
 
     .fpl-tc-type {
