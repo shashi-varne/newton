@@ -1,13 +1,11 @@
 /*
   Props description:
-  title(string),
-  subtitle(string),
-  variant: it should be one of 'small', 'large'.
+  title,subtitle => can accept string/node
+  variant: There are two variants as 'small', 'large'.
   titleColor, subtitleColor: strongly recommended to use foundation colors.
   Example:
   titleColor: 'foundationColors.secondary.mango.300'
 */
-
 
 import React from 'react';
 import { Imgc } from '../../../common/ui/Imgc';
@@ -23,35 +21,43 @@ const CategoryCard = ({
   titleColor,
   subtitle,
   subtitleColor,
-  onCardClick,
-  dataAid
+  onClick,
+  dataAid,
 }) => {
   const largeVariant = variant === 'large';
   const variantData = largeVariant ? LARGE_CARD_VARIANT : SMALL_CARD_VARIANT;
 
   return (
-    <div className={`cc-wrapper ${largeVariant && 'cc-wrapper-large-variant'}`} onClick={onCardClick} data-aid={`categoryCard_${dataAid}`}>
-      <Imgc src={imgSrc} style={variantData.imgStyle} {...imgProps} dataAid='top'/>
-      <Typography
-        variant={variantData.titleVariant}
-        className={variantData.titleClass}
-        align='center'
-        color={titleColor}
-        data-aid='tv_title'
-        component='div'
-      >
-        {title}
-      </Typography>
-      <Typography
-        variant={variantData.subtitleVariant}
-        color={subtitleColor ? subtitleColor : variantData.subtitleColor}
-        className={variantData.subtitleClass}
-        align='center'
-        data-aid='tv_subtitle'
-        component='div'
-      >
-        {subtitle}
-      </Typography>
+    <div
+      className={`cc-wrapper ${largeVariant && 'cc-wrapper-large-variant'}`}
+      onClick={onClick}
+      data-aid={`categoryCard_${dataAid}`}
+    >
+      <Imgc src={imgSrc} style={variantData.imgStyle} dataAid='top' {...imgProps} />
+      {title && (
+        <Typography
+          variant={variantData.titleVariant}
+          className={variantData.titleClass}
+          align='center'
+          color={titleColor}
+          dataAid='title'
+          component='div'
+        >
+          {title}
+        </Typography>
+      )}
+      {subtitle && (
+        <Typography
+          variant={variantData.subtitleVariant}
+          color={subtitleColor ? subtitleColor : variantData.subtitleColor}
+          className={variantData.subtitleClass}
+          align='center'
+          dataAid='subtitle'
+          component='div'
+        >
+          {subtitle}
+        </Typography>
+      )}
     </div>
   );
 };
@@ -64,13 +70,13 @@ CategoryCard.defaultProps = {
 };
 
 CategoryCard.propTypes = {
-  title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  title: PropTypes.node,
+  subtitle: PropTypes.node,
   titleColor: PropTypes.string,
   subtitleColor: PropTypes.string,
   variant: PropTypes.oneOf(['small', 'large']),
-  onCardClick: PropTypes.func,
-  dataAid: PropTypes.string
+  onClick: PropTypes.func,
+  dataAid: PropTypes.string,
 };
 
 const SMALL_VARIANT_IMAGE_STYLE = {

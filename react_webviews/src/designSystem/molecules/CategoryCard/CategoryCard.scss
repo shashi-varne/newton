@@ -1,14 +1,14 @@
 .cc-wrapper {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    width: 103px;
+    min-width: 103px;
     cursor: pointer;
 }
 
 .cc-wrapper-large-variant {
-    width: 159px;
+    min-width: 159px;
 }
 
 .cc-lg-subtitle {
