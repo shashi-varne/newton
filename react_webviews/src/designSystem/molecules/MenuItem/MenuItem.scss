@@ -1,10 +1,22 @@
-.mi-wrapper {
+.menu-item-wrapper {
   padding: 16px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
+
+  .menu-item-left-img {
+    width: 54px;
+    height: 54px;
+    margin-right: 24px;
+  }
+
+  .menu-item-right-img {
+    width: 24px;
+    height: 24px;
+    margin-left: 24px;
+  }
 
   .mi-right-wrapper {
     display: flex;
@@ -17,6 +29,5 @@
   .mi-text-wrapper {
     display: flex;
     flex-direction: column;
-    margin-right: 24px;
   }
 }

@@ -23,42 +23,42 @@ const MenuItem = ({
   titleColor,
   subtitle,
   subtitleColor,
-  onItemClick,
+  onClick,
   dataAid,
-  separator,
+  showSeparator,
+  className,
 }) => {
   return (
     <div>
-      <div className='mi-wrapper' onClick={onItemClick} data-aid={`menuItem_${dataAid}`}>
+      <div
+        className={`menu-item-wrapper ${className}`}
+        onClick={onClick}
+        data-aid={`menuItem_${dataAid}`}
+      >
         {leftImgSrc && (
-          <Imgc
-            src={leftImgSrc}
-            style={{ width: '54px', height: '54px', marginRight: '24px' }}
-            {...leftImgProps}
-            dataAid='left'
-          />
+          <Imgc src={leftImgSrc} className='menu-item-left-img' dataAid='left' {...leftImgProps} />
         )}
 
         <div className='mi-right-wrapper'>
           <div className='mi-text-wrapper'>
-            <Typography variant='heading4' color={titleColor} component='div' data-aid='tv_title'>
+            <Typography variant='heading4' color={titleColor} component='div' dataAid='title'>
               {title}
             </Typography>
-            <Typography variant='body2' color={subtitleColor} component='div' data-aid='tv_subtitle'>
+            <Typography variant='body2' color={subtitleColor} component='div' dataAid='subtitle'>
               {subtitle}
             </Typography>
           </div>
           {rightImgSrc && (
             <Imgc
               src={rightImgSrc}
-              style={{ width: '24px', height: '24px' }}
-              {...rightImgProps}
+              className='menu-item-right-img'
               dataAid='right'
+              {...rightImgProps}
             />
           )}
         </div>
       </div>
-      {separator && <Separator marginLeft={leftImgSrc ? '94px' : '16px'} />}
+      {showSeparator && <Separator marginLeft={leftImgSrc ? '94px' : '16px'} />}
     </div>
   );
 };
@@ -70,14 +70,15 @@ MenuItem.defaultProps = {
 };
 
 MenuItem.propTypes = {
-  title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  title: PropTypes.node,
   titleColor: PropTypes.string,
+  subtitle: PropTypes.node,
   subtitleColor: PropTypes.string,
   dataAid: PropTypes.string,
   leftImgProps: PropTypes.object,
   rightImgProps: PropTypes.object,
-  onItemClick: PropTypes.func,
+  onClick: PropTypes.func,
+  showSeparator: PropTypes.bool,
 };
 
 export default MenuItem;
