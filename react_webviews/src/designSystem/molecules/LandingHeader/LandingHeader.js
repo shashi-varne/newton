@@ -29,26 +29,30 @@
   Usage of the component:
    <LandingHeader variant='center'>
       <LandingHeaderImage imgProps={{ src: require('assets/amazon_pay.svg') }} />
-      <LandingHeaderTitle>Title</LandingHeaderTitle>
+      <LandingHeaderTitle color='foundationColors.secondary.mango.300'>Title Color</LandingHeaderTitle>
       <LandingHeaderSubtitle color='foundationColors.secondary.mango.300'>
-        <Typography>
-            These funds essentially {format(new Date(), 'MMM d, yyyy ')} invest in stocks of
-            various two line text, limit - 99 characters or 17 words
+        <Typography color='foundationColors.secondary.lossRed.300'>
+          These funds essentially {format(new Date(), 'MMM d, yyyy ')} invest in stocks of
+          various two line text, limit - 99 characters or 17 words
         </Typography>
         <Typography>
-          These funds essentially
-          <Typography
-            color='foundationColors.secondary.profitGreen.300'
+          These funds essentially{' '}
+          <Box
+          sx={{
+            color:'foundationColors.secondary.profitGreen.300'
+          }}
             component='span'
-            variant='heading4'
-          >of various</Typography>
-          two line text, limit - 99 characters or 17 words Hello World
+          > of various
+          </Box>two line text, limit - 99 characters or 17 words Hello World
         </Typography>
       </LandingHeaderSubtitle>
-      <LandingHeaderPoints>
+      <LandingHeaderPoints color='foundationColors.secondary.profitGreen.300'>
         <Typography>One line text, limit - 46 characters or 9 words</Typography>
         <Typography>One line text, limit - 46 characters or 9 words</Typography>
-        <Typography color='foundationColors.secondary.profitGreen.300'>One line text, limit - 46 characters or 9 words</Typography>
+        <Typography>One line text, limit - 46 characters or 9 words</Typography>
+        <Typography variant='heading2'>
+          One line text, limit - 46 characters or 9 words
+        </Typography>
       </LandingHeaderPoints>
     </LandingHeader>
 
@@ -126,7 +130,7 @@ export const LandingHeaderSubtitle = ({ children , color}) => {
             <div key={idx} className='lh-subtitle'>
               {React.cloneElement(child, {
                 variant: child?.props?.variant || 'body2',
-                color: child?.props?.color || color || 'foundationColors.content.secondary',
+                color: child?.props?.color || color,
                 dataAid: `subtitle${subtitleId}`,
                 align: 'left',
               })}
@@ -153,7 +157,7 @@ export const LandingHeaderPoints = ({ children, color }) => {
             <li key={idx} className='lh-description-item'>
               {React.cloneElement(child, {
                 variant: child?.props?.variant || 'body2',
-                color: child?.props?.color || color || 'foundationColors.content.secondary',
+                color: child?.props?.color || color,
                 dataAid: `point${pointId}`,
                 align: 'left',
               })}
@@ -185,7 +189,15 @@ LandingHeaderSubtitle.propTypes = {
   color: PropTypes.string,
 };
 
+LandingHeaderSubtitle.defaultProps = {
+  color: 'foundationColors.content.secondary'
+}
+
 LandingHeaderPoints.propTypes = {
   children: PropTypes.node,
   color: PropTypes.string,
 };
+
+LandingHeaderPoints.defaultProps = {
+  color: 'foundationColors.content.secondary'
+}
