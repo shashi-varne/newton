@@ -1,43 +1,39 @@
 /*
     This component is divided into four section => header, pills, input field and footer.
-    the structure of each section is an object which will have all the content related data.
-     Sections are => pillsSection, inputFieldSection and footerSection
+    Each section is a subcomponent, and the allowed child to this component are:
+      'InvestmentCardHeaderRow', 'InvestmentCardPillsRow', 'InvestmentCardInputRow', 'InvestmentCardBottomRow',
         1. Each section has an property of 'hide'(by default value is false), changing this value will give a collapsible animation.
-        
     
     Usage: 
-    <InvestmentCard
-        headerTitle='Heading subtitle one or two lines'
-        pillsSection={{
-        leftLabel: 'Investment Type',
-        value,
-        onChange:handleChange,
-        pillsChild: [
-            {
+    <InvestmentCard>
+      <InvestmentCardHeaderRow title='Heading subtitle one or two lines' imgSrc={require('assets/amazon_pay.svg')}/>
+      <InvestmentCardPillsRow
+        title='Investment Type'
+        pillsProps={{
+          value,
+          onChange: handleTabs,
+        }}
+        pillsChild={[
+          {
             label: 'SIP',
-            },
-            {
+          },
+          {
             label: 'Lumpsum',
-            },
-        ],
+          },
+        ]}
+      />
+      <InvestmentCardInputRow hide={value === 0} title='Sip Amount' subtitle='Rs. 100 min' />
+      <InvestmentCardBottomRow
+        hide={value === 0}
+        leftTitle='Monthly SIP data'
+        leftSubtitle='Subtitle'
+        rightTitle='15th every month'
+        onRightSectionClick={() => {
+          console.log('hello');
         }}
-        inputFieldSection={{
-        leftTitle: 'Sip Amount',
-        leftSubtitle: 'Rs. 100 min',
-        inputFieldProps: {
-            label: 'Enter amount',
-        },
-        }}
-        footerSection={{
-        hide: value === 1,
-        leftTitle: 'Monthly SIP date',
-        leftSubtitle: 'Subtitle',
-        rightTitle: '15th every month',
-        onFooterRightSectionClick: () => {
-            console.log('footer right side clicked');
-        },
-        }}
-    />
+        rightImgSrc={require('assets/amazon_pay.svg')}
+      />
+    </InvestmentCard>
 
     Note:
         1. InputFields, Pill, Pills => for more info regarding the props, please look into their molecule.
@@ -46,7 +42,7 @@
 
 */
 
-import React from 'react';
+import React, { Children } from 'react';
 import { Imgc } from '../../../common/ui/Imgc';
 import Typography from '../../atoms/Typography';
 import Separator from '../../atoms/Separator';
@@ -55,172 +51,209 @@ import InputField from '../InputField';
 import isFunction from 'lodash/isFunction';
 import PropTypes from 'prop-types';
 import Collapse from '@mui/material/Collapse';
+import isString from 'lodash/isString';
 import './InvestmentCard.scss';
 
-const InvestmentCard = ({
-  imgHeaderSrc,
-  imgHeaderProps,
-  headerTitle,
-  headerTitleColor,
-  pillsSection = {},
-  inputFieldSection = {},
-  footerSection = {},
-}) => {
-  const isFooterRightSectionClickable = isFunction(
-    footerSection?.onFooterRightSectionClick
-  );
+const INVESTMENT_CARD_CHILDS = [
+  'InvestmentCardHeaderRow',
+  'InvestmentCardPillsRow',
+  'InvestmentCardInputRow',
+  'InvestmentCardBottomRow',
+];
+
+export const InvestmentCard = ({ children, dataAid }) => {
   return (
-    <div className='invest-card-wrapper'>
-      <div className='ic-header-wrapper'>
-        <Imgc
-          src={imgHeaderSrc}
-          style={{ width: '32px', height: '32px', marginRight: '16px' }}
-          className='ic-header-img'
-          {...imgHeaderProps}
-        />
-        <Typography variant='body1' color={headerTitleColor} component='div'>
-          {headerTitle}
-        </Typography>
-      </div>
-
-      <Collapse in={!pillsSection?.hide}>
-        <div>
-          <Separator />
-          <div className='ic-pills-wrapper'>
-            <Typography
-              variant='body1'
-              component='div'
-              className='ic-pill-left-label'
-              color={pillsSection?.leftLabelColor}
-            >
-              {pillsSection?.leftLabel}
-            </Typography>
-            <Pills
-              value={pillsSection?.value}
-              onChange={pillsSection?.onChange}
-              allowScrollButtonsMobile={false}
-              {...pillsSection?.pillsProps}
-            >
-              {pillsSection?.pillsChild?.map((pillProps, idx) => {
-                return <Pill {...pillProps} key={idx} />;
-              })}
-            </Pills>
-          </div>
-        </div>
-      </Collapse>
-
-      <Collapse in={!inputFieldSection?.hide}>
-        <div>
-          <Separator />
-          <div className='ic-input-field-section'>
-            <div className='ic-left-section'>
-              <Typography
-                variant='body1'
-                color={inputFieldSection?.leftTitleColor}
-                component='div'
-              >
-                {inputFieldSection?.leftTitle}
-              </Typography>
-              <Typography
-                variant='body5'
-                color={inputFieldSection?.leftSubtitleColor}
-                component='div'
-              >
-                {inputFieldSection?.leftSubtitle}
-              </Typography>
-            </div>
-            <div className='ic-right-section'>
-              <InputField {...inputFieldSection?.inputFieldProps} />
-            </div>
-          </div>
-        </div>
-      </Collapse>
-
-      <Collapse in={!footerSection?.hide}>
-        <div>
-          <Separator />
-          <div className='ic-footer-section'>
-            <div className='ic-left-section'>
-              <Typography
-                variant='body1'
-                color={footerSection?.leftTitleColor}
-                component='div'
-              >
-                {footerSection?.leftTitle}
-              </Typography>
-              <Typography
-                variant='body5'
-                color={footerSection?.leftSubtitleColor}
-                component='div'
-              >
-                {footerSection?.leftSubtitle}
-              </Typography>
-            </div>
-            <div
-              className={`ic-right-section ${
-                isFooterRightSectionClickable && 'cursor-pointer'
-              }`}
-              onClick={footerSection?.onFooterRightSectionClick}
-            >
-              <Typography
-                variant='body2'
-                color={footerSection?.rightTitleColor}
-                component='div'
-              >
-                {footerSection?.rightTitle}
-              </Typography>
-              <Imgc
-                src={footerSection?.imgSrc}
-                style={{ width: '24px', height: '24px', marginLeft: '8px' }}
-                {...footerSection?.imgProps}
-              />
-            </div>
-          </div>
-        </div>
-      </Collapse>
+    <div className='invest-card-wrapper' data-aid={`investmentCard_${dataAid}`}>
+      {Children.map(children, (child) => {
+        const componentType = isString(child?.type) ? child?.type : child?.type?.name;
+        if (INVESTMENT_CARD_CHILDS.indexOf(componentType) !== -1) {
+          return React.cloneElement(child);
+        } else {
+          console.error(
+            `child passed is ${componentType}, expected childs are 
+            'InvestmentCardHeaderRow','InvestmentCardPillsRow','InvestmentCardInputRow','InvestmentCardBottomRow'`
+          );
+          return null;
+        }
+      })}
     </div>
   );
 };
 
-InvestmentCard.defaultProps = {
-  inputSectionSubtitleColor: 'foundationColors.content.secondary',
-  footerSectionSubtitleColor: 'foundationColors.content.secondary',
-  pillsSection: {},
-  inputFieldSection: {},
-  footerSection: {},
+export const InvestmentCardHeaderRow = ({ imgSrc, imgProps = {}, title, titleColor }) => {
+  return (
+    <div className='ic-header-wrapper'>
+      {imgSrc && <Imgc src={imgSrc} className='ic-header-left-img' dataAid='left' {...imgProps} />}
+      <Typography variant='body1' color={titleColor} component='div' dataAid='title1'>
+        {title}
+      </Typography>
+    </div>
+  );
+};
+
+export const InvestmentCardPillsRow = ({ hide, title, titleColor, pillsProps, pillsChild }) => {
+  return (
+    <Collapse in={!hide}>
+      <div>
+        <Separator dataAid='1' />
+        <div className='ic-pills-wrapper'>
+          <Typography
+            variant='body1'
+            component='div'
+            className='ic-pill-left-label'
+            color={titleColor}
+            dataAid='title2'
+          >
+            {title}
+          </Typography>
+          <Pills
+            value={pillsProps?.value}
+            onChange={pillsProps?.onChange}
+            allowScrollButtonsMobile={false}
+            {...pillsProps}
+          >
+            {pillsChild?.map((pillProps, idx) => {
+              return <Pill {...pillProps} key={idx} />;
+            })}
+          </Pills>
+        </div>
+      </div>
+    </Collapse>
+  );
+};
+
+export const InvestmentCardInputRow = ({
+  hide,
+  title,
+  titleColor,
+  subtitle,
+  subtitleColor,
+  inputFieldProps = {},
+}) => {
+  return (
+    <Collapse in={!hide}>
+      <div>
+        <Separator dataAid='2' />
+        <div className='ic-input-field-section'>
+          <div className='ic-left-section'>
+            <Typography variant='body1' color={titleColor} component='div' dataAid='title3'>
+              {title}
+            </Typography>
+            <Typography variant='body5' color={subtitleColor} component='div' dataAid='subtitle1'>
+              {subtitle}
+            </Typography>
+          </div>
+          <div className='ic-right-section'>
+            <InputField
+              variant='outlined'
+              size='small'
+              placeholder='Enter amount'
+              {...inputFieldProps}
+            />
+          </div>
+        </div>
+      </div>
+    </Collapse>
+  );
+};
+
+export const InvestmentCardBottomRow = ({
+  hide,
+  leftTitle,
+  leftTitleColor,
+  leftSubtitle,
+  leftSubtitleColor,
+  onRightSectionClick,
+  rightTitle,
+  rightTitleColor,
+  rightImgSrc,
+  rightImgProps = {},
+}) => {
+  const isRightSectionClickable = isFunction(onRightSectionClick);
+  return (
+    <Collapse in={!hide}>
+      <div>
+        <Separator dataAid='3' />
+        <div className='ic-footer-section'>
+          <div className='ic-left-section'>
+            <Typography variant='body1' color={leftTitleColor} component='div' dataAid='title4'>
+              {leftTitle}
+            </Typography>
+            <Typography
+              variant='body5'
+              color={leftSubtitleColor}
+              component='div'
+              dataAid='subtitle2'
+            >
+              {leftSubtitle}
+            </Typography>
+          </div>
+          <div
+            className={`ic-right-section ${isRightSectionClickable && 'fc-cursor-pointer'}`}
+            onClick={onRightSectionClick}
+          >
+            <Typography variant='body2' color={rightTitleColor} component='div' dataAid='title5'>
+              {rightTitle}
+            </Typography>
+            {rightImgSrc && (
+              <Imgc
+                src={rightImgSrc}
+                className='fc-bottom-right-img'
+                dataAid='right'
+                {...rightImgProps}
+              />
+            )}
+          </div>
+        </div>
+      </div>
+    </Collapse>
+  );
+};
+
+InvestmentCardInputRow.defaultProps = {
+  subtitleColor: 'foundationColors.content.secondary',
+};
+
+InvestmentCardBottomRow.defaultProps = {
+  leftSubtitleColor: 'foundationColors.content.secondary',
 };
 
 InvestmentCard.propTypes = {
-  imgHeaderProps: PropTypes.object,
-  headerTitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  headerTitleColor: PropTypes.string,
-  pillsSection: PropTypes.shape({
-    leftLabel: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-    leftLabelColor: PropTypes.string,
-    pillsChild: PropTypes.arrayOf(PropTypes.object),
-    onChange: PropTypes.func,
-    pillsProps: PropTypes.object,
-    hide: PropTypes.bool,
-  }),
-  inputFieldSection: PropTypes.shape({
-    leftTitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-    leftTitleColor: PropTypes.string,
-    leftSubtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-    leftSubtitleColor: PropTypes.string,
-    inputFieldProps: PropTypes.object,
-    hide: PropTypes.bool,
-  }),
-  footerSection: PropTypes.shape({
-    leftTitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-    leftSubtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-    rightTitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-    leftTitleColor: PropTypes.string,
-    leftSubtitleColor: PropTypes.string,
-    rightTitleColor: PropTypes.string,
-    onFooterRightSectionClick: PropTypes.func,
-    imgProps: PropTypes.object,
-    hide: PropTypes.bool,
-  }),
+  children: PropTypes.node,
+  dataAid: PropTypes.string,
 };
 
-export default InvestmentCard;
+InvestmentCardHeaderRow.propTypes = {
+  imgProps: PropTypes.object,
+  title: PropTypes.node,
+  titleColor: PropTypes.string,
+};
+
+InvestmentCardPillsRow.propTypes = {
+  hide: PropTypes.bool,
+  title: PropTypes.node,
+  titleColor: PropTypes.string,
+  pillsProps: PropTypes.object,
+  pillsChild: PropTypes.arrayOf(PropTypes.object),
+};
+
+InvestmentCardInputRow.propTypes = {
+  hide: PropTypes.bool,
+  title: PropTypes.node,
+  titleColor: PropTypes.string,
+  subtitle: PropTypes.node,
+  subtitleColor: PropTypes.string,
+  inputFieldProps: PropTypes.object,
+};
+
+InvestmentCardBottomRow.propTypes = {
+  hide: PropTypes.bool,
+  leftTitle: PropTypes.node,
+  leftTitleColor: PropTypes.string,
+  leftSubtitle: PropTypes.node,
+  leftSubtitleColor: PropTypes.string,
+  onRightSectionClick: PropTypes.func,
+  rightTitle: PropTypes.node,
+  rightTitleColor: PropTypes.string,
+  rightImgProps: PropTypes.object,
+};

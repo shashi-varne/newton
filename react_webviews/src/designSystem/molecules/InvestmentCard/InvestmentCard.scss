@@ -10,6 +10,12 @@
     flex-direction: row;
     align-items: center;
     padding-bottom: 16px;
+
+    .ic-header-left-img {
+      width: 32px;
+      height: 32px;
+      margin-right: 16px;
+    }
   }
   .ic-input-field-section,
   .ic-footer-section,
@@ -42,7 +48,13 @@
         align-items: center;
         justify-content: flex-end;
 
-        &.cursor-pointer {
+        .fc-bottom-right-img {
+          width: 24px;
+          height: 24px;
+          margin-left: 8px;
+        }
+
+        &.fc-cursor-pointer {
             cursor: pointer;
         }
     }
