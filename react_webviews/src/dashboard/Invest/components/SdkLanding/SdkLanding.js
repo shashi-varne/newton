@@ -348,35 +348,6 @@ class SdkLanding extends Component {
           {!isEmpty(this.state.renderLandingCards) && (
             <div className='sdk-landing-cards'>
               {this.state.renderLandingCards.map((el, idx) => {
-                // if (el.key === 'kyc') {
-                //   if (isReadyToInvestBase) {
-                //     return null;
-                //   }
-                //   el.isLoading = kycStatusLoader;
-                //   el.color = kycJourneyStatusMapperData?.color;
-                //   const premiumKyc = kycJourneyStatus === 'ground_premium' && !tradingEnabled;
-                //   const kycDefaultSubTitle =
-                //     !kycJourneyStatusMapperData || kycJourneyStatus === 'ground_premium'
-                //       ? 'Create investment profile'
-                //       : '';
-                //   const kycSubTitle =
-                //     !isEmpty(kycJourneyStatusMapperData) && kycJourneyStatus !== 'ground_premium'
-                //       ? kycJourneyStatusMapperData?.landingText
-                //       : '';
-                //   if (premiumKyc) {
-                //     el.title = "KYC PREMIUM";
-                //   }
-                //   if (kycDefaultSubTitle) {
-                //     el.subtitle = kycDefaultSubTitle;
-                //   }
-                //   if (kycSubTitle) {
-                //     el.subtitle = kycSubTitle;
-                //     if (el.color) {
-                //       el.dot = true;
-                //     }
-                //   }
-                // }
-
                 return (
                   <SdkInvestCard
                     key={idx}

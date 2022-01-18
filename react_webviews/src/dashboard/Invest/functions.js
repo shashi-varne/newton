@@ -730,21 +730,12 @@ function handleInvestSubtitle (isEquityEnabled)  {
 export function handleRenderCard() {
   let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
   let currentUser = this.state.currentUser || storageService().getObject("user") || {};
-  // let isReadyToInvestBase = isReadyToInvest();
   const { config = getConfig() } = this.state;
   const isWeb = config.Web;
   const hideReferral = currentUser.active_investment && !isWeb && config?.referralConfig?.shareRefferal;
   const referralCode = !currentUser.active_investment && !isWeb && config?.referralConfig?.applyRefferal;
-  // const myAccount = isReadyToInvestBase || userKyc?.bank?.doc_status === 'rejected';
-  // const kyc = !isReadyToInvestBase;
   const isEquityEnabled = isTradingEnabled(userKyc);
   const cards = sdkInvestCardMapper.filter(el => {
-    // if(el.key === 'kyc') {
-    //   return kyc;
-    // } else 
-    // if(el.key === 'account') {
-    //   return myAccount;
-    // } else 
     if(el.key === 'refer') {
       if(referralCode){
         el.referralCode = true;
