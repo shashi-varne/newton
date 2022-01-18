@@ -1,87 +1,109 @@
 /*
   Prop description:
-  HeaderTitle:
-    children: Please use HeaderTitleHeading, HeaderTitleSubtitle and HeaderTitleSubtitleLabels.
-    dataAid: unique id
-    imgProps: all the image property of Imgc component.
+  LandingHeader:
+    variant: one of type => 'center', 'side'
+    children: this will only accept 'LandingHeaderTitle', 'LandingHeaderSubtitle', 'LandingHeaderPoints', 'LandingHeaderImage'.
+    dataAid: unique id.
 
-  HeaderTitleHeading:
+  LandingHeaderTitle:
+    color: color which will be used for the child.
     children: text for the title.
-    color: color which will be used for the child.
 
-  HeaderTitleSubtitle:
-    children: text for the subtitle.
-    color: color which will be used for the child.
+  LandingHeaderSubtitle:
+    children: It will only accept Typography component, which can be a single <Typography/> component,
+              or a list of Typography component.
+              - dataAid for single Typography will be tv_subtitle.
+              - dataAid for list Typography will be tv_subtitle{idx}.
+    color: This color will be passed to all the Typography component, you can also override this color by
+           passing color to individual Typography item.
 
-  HeaderTitleSubtitleLabels:
-    This component will only accept Typography component and  will add a vertical divider between two labels.
-    children: Typography component or a list of Typography component.
-    color: color which will be used for all the child.
-    - Each component can also accept a color prop which will override the parent color prop.
+  LandingHeaderPoints:
+    This component will convert the Typography child components into list with bullet points.
+    children: It will only accept Typography component, which can be a single <Typography/> component,
+              or a list of Typography component.
+              - dataAid for single Typography will be tv_subtitle.
+              - dataAid for list Typography will be tv_subtitle{idx}.
+    color: This color will be passed to all the Typography component, you can also override this color by
+           passing color to individual Typography item.
 
   Usage of the component:
-   <HeaderTitle imgProps={{ src: require('assets/amazon_pay.svg') }}>
-      <HeaderTitleHeading>Heading subtitle one or two lines</HeaderTitleHeading>
-      <HeaderTitleSubtitle>
-        I am the subtitle{' '}
-        <Box component='span' sx={{ color: 'foundationColors.secondary.profitGreen.300' }}>
-          Bold
-        </Box>
-      </HeaderTitleSubtitle>
-      <HeaderTitleSubtitleLabels>
-        <Typography>Equity</Typography>
-        <Typography color='foundationColors.secondary.mango.300'>Hybrid</Typography>
-        <Typography>Equity</Typography>
-        <Typography color='foundationColors.secondary.mango.300'>Hybrid</Typography>
-        <Typography>Equity</Typography>
-        <Typography color='foundationColors.secondary.mango.300'>Hybrid</Typography>
-      </HeaderTitleSubtitleLabels>
-    </HeaderTitle>
+
+   <LandingHeader variant='center'>
+
+      <LandingHeaderImage imgProps={{ src: require('assets/amazon_pay.svg') }} />
+
+      <LandingHeaderTitle>Title</LandingHeaderTitle>
+
+      <LandingHeaderSubtitle color='foundationColors.secondary.mango.300'>
+
+        <Typography>
+
+            These funds essentially {format(new Date(), 'MMM d, yyyy ')} invest in stocks of
+
+            various two line text, limit - 99 characters or 17 words
+
+        </Typography>
+
+        <Typography>
+
+          These funds essentially
+
+          <Typography
+
+            color='foundationColors.secondary.profitGreen.300'
+
+            component='span'
+
+            variant='heading4'
+
+          >of various</Typography>
+
+          two line text, limit - 99 characters or 17 words Hello World
+
+        </Typography>
+
+      </LandingHeaderSubtitle>
+
+      <LandingHeaderPoints>
+
+        <Typography>One line text, limit - 46 characters or 9 words</Typography>
+
+        <Typography>One line text, limit - 46 characters or 9 words</Typography>
+
+        <Typography color='foundationColors.secondary.profitGreen.300'>One line text, limit - 46 characters or 9 words</Typography>
+
+      </LandingHeaderPoints>
+
+    </LandingHeader>
+
 
   NOTE: STRONGLY RECOMMENDED TO ONLY USE FOUNDATION COLORS.
+
   Example to pass color:
+
     color: 'foundationColors.secondary.mango.300'
+
 */
 
 import React, { Children } from 'react';
 import Typography from '../../atoms/Typography';
 import { Imgc } from '../../../common/ui/Imgc';
 import PropTypes from 'prop-types';
-import isString from 'lodash/isString';
 
 import './HeaderTitle.scss';
 
-const HEADER_TITLE_CHILDS = [
-  'HeaderTitleHeading',
-  'HeaderTitleSubtitle',
-  'HeaderTitleSubtitleLabels',
-];
-
-export const HeaderTitle = ({ children, imgProps, dataAid }) => {
+const HeaderTitle = ({ children, imgProps, dataAid }) => {
   return (
     <div className='ht-wrapper' data-aid={`headerTitle_${dataAid}`}>
       {imgProps?.src && (
         <Imgc src={imgProps?.src} className='ht-left-image' {...imgProps} dataAid='left' />
       )}
-      <div className='ht-child-wrapper'>
-        {Children.map(children, (child) => {
-          const componentType = isString(child?.type) ? child?.type : child?.type?.name;
-          if (HEADER_TITLE_CHILDS.indexOf(componentType) !== -1) {
-            return React.cloneElement(child);
-          } else {
-            console.error(
-              `child passed is ${componentType}, expected childs are 
-              'HeaderTitleHeading','HeaderTitleSubtitle','HeaderTitleSubtitleLabels'`
-            );
-            return null;
-          }
-        })}
-      </div>
+      <div className='ht-child-wrapper'>{children}</div>
     </div>
   );
 };
 
-export const HeaderTitleHeading = ({ children, color }) => {
+HeaderTitle.Title = ({ children, color }) => {
   return (
     <Typography variant='heading2' color={color} dataAid='title'>
       {children}
@@ -89,7 +111,7 @@ export const HeaderTitleHeading = ({ children, color }) => {
   );
 };
 
-export const HeaderTitleSubtitle = ({ children, color }) => {
+HeaderTitle.Subtitle = ({ children, color }) => {
   return (
     <Typography className='ht-subtitle' variant='body2' color={color} dataAid='subtitle'>
       {children}
@@ -97,7 +119,7 @@ export const HeaderTitleSubtitle = ({ children, color }) => {
   );
 };
 
-export const HeaderTitleSubtitleLabels = ({ children, color }) => {
+HeaderTitle.SubtitleLabels = ({ children, color }) => {
   return (
     <div className='ht-subtitle-labels'>
       {Children?.map(children, (child, idx) => {
@@ -145,25 +167,27 @@ HeaderTitle.defaultProps = {
   imgProps: {},
 };
 
-HeaderTitleHeading.propTypes = {
+HeaderTitle.Title.propTypes = {
   children: PropTypes.node,
   color: PropTypes.string,
 };
 
-HeaderTitleSubtitle.propTypes = {
+HeaderTitle.Subtitle.propTypes = {
   children: PropTypes.node,
   color: PropTypes.string,
 };
 
-HeaderTitleSubtitle.defaultProps = {
+HeaderTitle.Subtitle.defaultProps = {
   color: 'foundationColors.content.secondary',
 };
 
-HeaderTitleSubtitleLabels.propTypes = {
+HeaderTitle.SubtitleLabels.propTypes = {
   children: PropTypes.node,
   color: PropTypes.string,
 };
 
-HeaderTitleSubtitleLabels.defaultProps = {
+HeaderTitle.SubtitleLabels.defaultProps = {
   color: 'foundationColors.content.secondary',
 };
+
+export default HeaderTitle;
