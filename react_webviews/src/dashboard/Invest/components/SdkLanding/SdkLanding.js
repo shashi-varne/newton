@@ -249,15 +249,11 @@ class SdkLanding extends Component {
   render() {
     let {
       isReadyToInvestBase,
-      kycStatusLoader,
       dotLoader,
       referral,
-      kycJourneyStatusMapperData,
-      kycJourneyStatus,
       verificationFailed,
       openKycStatusDialog,
       modalData,
-      tradingEnabled,
       showTermsAndConditions,
       showTermsAndConditionsLoader,
       bankListOptions,
