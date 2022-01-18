@@ -1,1 +1,6 @@
-export {default} from './HeaderTitle';
+export {
+  HeaderTitle,
+  HeaderTitleHeading,
+  HeaderTitleSubtitle,
+  HeaderTitleSubtitleLabels,
+} from './HeaderTitle';
