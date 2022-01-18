@@ -22,7 +22,7 @@ export const FREEDOM_PLAN_BENEFITS_DATA = {
     },
     {
       img: require("assets/ic_trade_unlimited.svg"),
-      title: `Trade unlimited in Intraday, Delivery, F&O, Currency Derivatives`,
+      title: `Trade unlimited in Delivery, Intraday, F&O, Currency Derivatives`,
     },
     {
       img: require("assets/ic_dealer_support.svg"),
@@ -38,7 +38,6 @@ export const getStandardVsFreedomPlanDetails = (
     {
       type: "Brokerage type",
       standardPlan: "Standard plan",
-      standardPlanSubtext: "Current plan",
       freedomPlan: "Freedom Plan",
     },
     {
@@ -46,7 +45,7 @@ export const getStandardVsFreedomPlanDetails = (
       standardPlan: `${formatAmountInr(
         freedomPlanCharges?.brokerage_delivery?.rupees
       )}/-`,
-      standardPlanSubtext: "on transaction value",
+      standardPlanSubtext: "on executed order",
       freedomPlan: `${formatAmountInr(
         freedomPlanCharges?.brokerage_delivery?.freedom_charges
       )}/-`,
@@ -56,7 +55,7 @@ export const getStandardVsFreedomPlanDetails = (
       standardPlan: ` ${formatAmountInr(
         freedomPlanCharges?.brokerage_intraday?.rupees
       )}/-`,
-      standardPlanSubtext: "on transaction value",
+      standardPlanSubtext: "on executed order",
       freedomPlan: `${formatAmountInr(
         freedomPlanCharges?.brokerage_intraday?.freedom_charges
       )}/-`,
@@ -65,7 +64,7 @@ export const getStandardVsFreedomPlanDetails = (
       type: "Futures",
       standardPlan: ` ${formatAmountInr(
         freedomPlanCharges?.brokerage_future?.rupees
-      )} per lot`,
+      )}/-`,
       standardPlanSubtext: "on executed order",
       freedomPlan: `${formatAmountInr(
         freedomPlanCharges?.brokerage_future?.freedom_charges
@@ -75,7 +74,7 @@ export const getStandardVsFreedomPlanDetails = (
       type: "Options",
       standardPlan: ` ${formatAmountInr(
         freedomPlanCharges?.brokerage_options?.rupees
-      )} per lot`,
+      )}/-`,
       standardPlanSubtext: "on executed order",
       freedomPlan: `${formatAmountInr(
         freedomPlanCharges?.brokerage_options?.freedom_charges
@@ -214,7 +213,7 @@ export const PAYMENT_STATUS_DATA = {
   success: {
     title: "Payment successful",
     subtitle:
-      "Your freedom plan will be activated in 24 hours. Till then, standard brokerage shall apply",
+      "Your freedom plan will be activated in 24 hours. Till then, Brokerage rate shall apply",
     buttonTitle: "OKAY",
     icon: "pg_success.svg",
     screenName: "payment_success",
