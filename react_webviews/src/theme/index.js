@@ -5,13 +5,21 @@ import { checkboxStyleOverRides } from './checkbox';
 import { switchStyleOverRides } from './switch';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
 import getPartnerThemeData from './utils';
-import { filledTextFieldStyleOverRides, inputAdornmentStyleOverRides, inputLabelStyleOverRides } from './textfield';
 import { separatorStyleOverRides } from './separator';
+import {
+  customVariantsFilledInput,
+  customVariantsOutlinedInput,
+  filledTextFieldStyleOverRides,
+  helperTextStyleOverRides,
+  inputAdornmentStyleOverRides,
+  inputLabelStyleOverRides,
+  outlinedTextFieldStyleOverRides,
+} from './textfield';
 import { dialogDefaultProps, dialogStylesOverride } from './dialog';
 
 const getTheme = () => {
-  const {colors, partnerConfig} = getPartnerThemeData();
-  
+  const { colors, partnerConfig } = getPartnerThemeData();
+
   const theme = {
     palette: {
       primary: {
@@ -37,14 +45,19 @@ const getTheme = () => {
       MuiCheckbox: {
         styleOverrides: checkboxStyleOverRides(colors),
       },
-      MuiFilledInput:{
+      MuiFilledInput: {
         defaultProps: {
-          disableUnderline: true
+          disableUnderline: true,
         },
-        styleOverrides:filledTextFieldStyleOverRides(colors)
+        variants: customVariantsFilledInput(colors),
+        styleOverrides: filledTextFieldStyleOverRides(colors, partnerConfig),
+      },
+      MuiOutlinedInput: {
+        variants: customVariantsOutlinedInput(colors),
+        styleOverrides: outlinedTextFieldStyleOverRides(colors, partnerConfig),
       },
       MuiInputLabel: {
-        styleOverrides: inputLabelStyleOverRides(colors)
+        styleOverrides: inputLabelStyleOverRides(colors, partnerConfig),
       },
       MuiInputAdornment: {
         styleOverrides: inputAdornmentStyleOverRides(colors)
@@ -63,7 +76,10 @@ const getTheme = () => {
       MuiDialog: {
         defaultProps: dialogDefaultProps(),
         styleOverrides:dialogStylesOverride()
-      }
+      },
+      MuiFormHelperText: {
+        styleOverrides: helperTextStyleOverRides(colors, partnerConfig),
+      },
     },
   };
   return createTheme(theme);
