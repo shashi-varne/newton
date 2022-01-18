@@ -1,4 +1,5 @@
 import { buttonStyleOverRides, buttonVariantsConfig } from './button';
+import { checkboxStyleOverRides } from './checkbox';
 import { switchStyleOverRides } from './switch';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
 import getPartnerThemeData from './utils';
@@ -28,7 +29,10 @@ const getTheme = () => {
         styleOverrides: buttonStyleOverRides(colors, partnerConfig),
       },
       MuiSwitch: {
-        styleOverrides: switchStyleOverRides(colors),
+        styleOverrides: switchStyleOverRides(colors)
+      },
+      MuiCheckbox: {
+        styleOverrides: checkboxStyleOverRides(colors),
       },
       MuiDialog: {
         defaultProps: dialogDefaultProps(),
