@@ -52,37 +52,40 @@ export const commonCardsConfig = {
     bottomScrollCards: ["parkmoney", "savegoal"],
     bottomCards: ["nfo"],
   },
-  landingMarketingBanners: [
-    {
-      type: "mf",
-      image: "mf.svg",
-      endDate: "11/05/2021",
-      startDate: "11/01/2021",
-    },
-  ],
+  landingMarketingBanners: [],
   nfoBanners: [
-    {
-      image: "nfo.svg",
-      type: "nfo",
-      endDate: "11/30/2021",
-      startDate: "11/17/2021",
-    },
-    { image: "nfo1.svg", type: "nfo", endDate: "11/25/2021" },
-    { image: "nfo2.svg", type: "nfo", endDate: "11/24/2021" },
-    { image: "nfo3.svg", type: "nfo", endDate: "11/28/2021" },
-    { image: "nfo4.svg", type: "nfo", endDate: "11/25/2021" },
     {
       image: "nfo5.svg",
       type: "nfo",
-      endDate: "12/09/2021",
-      startDate: "11/26/2021",
+      startDate: "01/17/2022",
+      endDate: "01/30/2022",
+    },
+    {
+      image: "nfo2.svg",
+      type: "nfo",
+      endDate: "01/26/2022",
+    },
+    {
+      image: "nfo3.svg",
+      type: "nfo",
+      endDate: "01/26/2022",
+    },
+    {
+      image: "nfo4.svg",
+      type: "nfo",
+      startDate: "01/21/2022",
+      endDate: "02/03/2022",
+    },
+    {
+      image: "nfo1.svg",
+      type: "nfo",
+      endDate: "01/23/2022",
     },
   ],
 };
 
 export const basePartnerConfig = {
   common: {
-    equityAnnexure: "https://fisdom.com/images/forms/Equity%20Annexures.pdf"
   },
   fisdom: {
     productName: "fisdom",
@@ -98,6 +101,7 @@ export const basePartnerConfig = {
     refundLink: "https://www.fisdom.com/refund/",
     disclaimerLink: "https://www.fisdom.com/disclaimer/",
     webAppUrl: "https://app.fisdom.com/#!/",
+    equityAnnexure: "https://fisdom.com/images/forms/Equity%20Annexures.pdf",
     configPrimaryColorClass: 'configPrimaryColorClass',
     configPrimaryBackgroundColorClass: 'fisdomBackColor',
     emailDomain: "fisdom.com",
@@ -121,6 +125,7 @@ export const basePartnerConfig = {
     refundLink: "https://www.finity.in/refund/",
     disclaimerLink: "https://www.finity.in/disclaimer/",
     webAppUrl: "https://app.mywaywealth.com/#!/",
+    equityAnnexure: "https://fisdom.com/images/forms/Equity_Annexures_Finity.pdf",
     configPrimaryColorClass: 'configPrimaryColorClass',
     configPrimaryBackgroundColorClass: 'fisdomBackColor',
     emailDomain: "finity.in",
@@ -236,7 +241,7 @@ export const partnerConfigs = {
   fisdom: {
     code: "fisdom",
     investSubSectionMap: {
-      stocksAndIpo: ["ipo"],
+      stocksAndIpo: ["stocks", "ipo"],
       ourRecommendations: [
         "instaredeem",
         "buildwealth",
@@ -490,7 +495,7 @@ export const partnerConfigs = {
     },
     referralConfig: {
       applyRefferal: true,
-      shareRefferal: false, // same as hide_share_referral but with opposite value
+      shareRefferal: true, // same as hide_share_referral but with opposite value
     },
     styles: {
       primaryColor: "#173883",
