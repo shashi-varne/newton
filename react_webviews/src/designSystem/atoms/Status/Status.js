@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Box } from "@mui/material";
-import Typography from '../Typography';
+import Typography from "../Typography";
 import "./Status.scss";
 
 export const STATUS_VARIANTS = {
