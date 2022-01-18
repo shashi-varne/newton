@@ -56,8 +56,11 @@ const SelectFreedomPlan = ({
         onClick: handleClick,
         disabled: showLoader,
       }}
+      classes={{
+        container: "select-freedom-plan"
+      }}
     >
-      <div className="select-freedom-plan">
+      <>
         <div className="select-freedom-plan-container">
           {showLoader || isEmpty(freedomPlanList) ? (
             <>
@@ -80,7 +83,7 @@ const SelectFreedomPlan = ({
           <div className="helper-text error-message">{errorMessage}</div>
         )}
         <div className="helper-note">*GST at 18% would apply</div>
-      </div>
+      </>
     </WVBottomSheet>
   );
 };
@@ -89,7 +92,7 @@ const Plan = ({ name, amount, isSelected, is_popular, handlePlanChange }) => {
   const { productName } = useMemo(getConfig, []);
   return (
     <div
-      className={`freedom-plan-option ${isSelected && `selected-plan`}`}
+      className={`freedom-plan-option ${isSelected && `selected-plan`} ${is_popular && `popular-plan`}`}
       onClick={handlePlanChange}
     >
       {isSelected && (
