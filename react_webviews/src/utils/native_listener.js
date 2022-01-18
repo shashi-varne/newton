@@ -7,6 +7,7 @@ import eventManager from './eventManager';
 import { isMobile } from './functions';
 import { getConfig } from './functions';
 import isEmpty from 'lodash/isEmpty';
+import { redirectToPath } from './native_callback';
 
 
 (function (exports) {
@@ -388,5 +389,15 @@ import isEmpty from 'lodash/isEmpty';
       set_session_storage("callback_version", json_data.callback_version);
     }
   }
+
+  exports.set_module = function (module) {
+    const MODULE_MAPPER = {
+      kyc: '/kyc/web',
+      my_account: '/my-account',
+      account_statement: '/statements',
+    }
+    const modulePath = MODULE_MAPPER[module] || "/"
+    window.location.origin = redirectToPath(modulePath);
+  };
   
 })(window.callbackWeb ? window.callbackWeb : (window.callbackWeb = {}));
