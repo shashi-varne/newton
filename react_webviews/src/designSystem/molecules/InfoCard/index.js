@@ -1,1 +1,1 @@
-export {default} from './InfoCard';
+export {InfoCard, InfoCardTitle, InfoCardSubtitle} from './InfoCard';
