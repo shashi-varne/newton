@@ -246,6 +246,16 @@ class Landing extends Component {
       this.handleIpoCardRedirection();
     } else {
       if (config.isSdk) {
+        if (!!this.state.contactNotVerified) {
+          storageService().set("sdkStocksRedirection", true);
+          this.navigate("/secondary-verification", {
+            state : {
+              communicationType,
+              contactValue,
+            }
+          })
+          return;
+        }
         this.handleStocksRedirection();
         return;
       } else if (kycJourneyStatus === "fno_rejected") {
