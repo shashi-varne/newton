@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { withRouter } from 'react-router';
+import { withRouter } from 'react-router-dom';
 
 import Header from '../../common/components/Header';
 import Footer from '../../common/components/footer';
@@ -280,7 +280,7 @@ export default withRouter(Container);
 //////////////   NEW CONTAINER      ////////////////////////
 
 // import React, { Component, Fragment } from "react";
-// import { withRouter } from "react-router";
+// import { withRouter } from "react-router-dom";
 // import {
 //   didMount,
 //   commonRender,
