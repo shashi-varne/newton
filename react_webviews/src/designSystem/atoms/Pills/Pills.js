@@ -16,10 +16,12 @@ export const Pills = ({
   children,
   classes,
   sx,
+  dataAid,
   ...props
 }) => {
   return (
     <LibTabs
+      data-aid={`pills_${dataAid}`}
       value={value}
       onChange={onChange}
       variant={variant}
@@ -30,8 +32,8 @@ export const Pills = ({
       sx={sx}
       {...props}
     >
-      {Children.map(children, (el) => {
-        return React.cloneElement(el,{type: 'pill'});
+      {Children.map(children, (el, idx) => {
+        return React.cloneElement(el,{type: 'pill', idx});
       })}
     </LibTabs>
   );
@@ -41,8 +43,16 @@ Pills.defaultProps = {
   variant: 'scrollable',
   scrollButtons: 'auto',
   allowScrollButtonsMobile: true,
-  children: PropTypes.instanceOf(Array).isRequired,
 };
+
+Pills.propTypes = {
+  variant: PropTypes.oneOf(['fullWidth','scrollable','standard']),
+  scrollButtons: PropTypes.oneOf(['auto',false, true]),
+  children: PropTypes.instanceOf(Array).isRequired,
+  onChange: PropTypes.func,
+  allowScrollButtonsMobile: PropTypes.bool,
+  dataAid: PropTypes.string
+}
 
 export const Pill = ({
   value,
@@ -53,10 +63,14 @@ export const Pill = ({
   classes,
   sx,
   wrapper,
+  idx,
+  dataAid,
   ...props
 }) => {
+  const dataAidValue = dataAid || idx;
   return (
     <LibTab
+      data-aid={`pill_${dataAidValue}`}
       value={value}
       disabled={disabled}
       icon={icon}
