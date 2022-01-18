@@ -209,7 +209,7 @@ const PlanReview = (props) => {
           <span onClick={handleTermsAndConditions(true)}>
             Terms & Conditions
           </span>{" "}
-          of Use for the Freedom plan
+          of use for the Freedom plan
         </footer>
       </div>
       {!isEmpty(kycStatusData) && (
