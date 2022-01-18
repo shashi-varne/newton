@@ -16,17 +16,28 @@ import Typography from '../../atoms/Typography';
 import PropTypes from 'prop-types';
 import './InfoCard.scss';
 
-const InfoCard = ({ imgSrc, imgProps = {}, title, titleColor, subtitle, subtitleColor, onCardClick, dataAid }) => {
+const InfoCard = ({
+  imgSrc,
+  imgProps = {},
+  title,
+  titleColor,
+  subtitle,
+  subtitleColor,
+  onClick,
+  dataAid,
+}) => {
   return (
-    <Box sx={infoCardWrapperSxStyle} className='info-card-wrapper' onClick={onCardClick} data-aid={`infoCard_${dataAid}`}>
-      <Imgc
-        src={imgSrc}
-        style={{ height: '32px', width: '32px' }}
-        {...imgProps}
-        dataAid='left'
-      />
+    <Box
+      sx={infoCardWrapperSxStyle}
+      className='info-card-wrapper'
+      onClick={onClick}
+      data-aid={`infoCard_${dataAid}`}
+    >
+      {imgSrc && <Imgc src={imgSrc} className='info-card-left-img' dataAid='left' {...imgProps} />}
       <div className='ic-text-wrapper'>
-        <Typography variant='heading4' color={titleColor} component='div' data-aid='tv_title'>{title}</Typography>
+        <Typography variant='heading4' color={titleColor} component='div' data-aid='tv_title'>
+          {title}
+        </Typography>
         <Typography
           className='ic-subtitle-text'
           variant='body2'
@@ -45,19 +56,18 @@ export default InfoCard;
 
 const infoCardWrapperSxStyle = {
   backgroundColor: 'foundationColors.supporting.white',
-  border: '1px solid',
-  borderColor: 'foundationColors.supporting.athensGrey',
   borderRadius: '12px',
 };
 
 InfoCard.defaultProps = {
-  subtitleColor: 'foundationColors.content.secondary'
-}
+  subtitleColor: 'foundationColors.content.secondary',
+};
 
 InfoCard.propTypes = {
-  title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  title: PropTypes.node,
+  subtitle: PropTypes.node,
   titleColor: PropTypes.string,
   subtitleColor: PropTypes.string,
-  onCardClick: PropTypes.func
-}
+  onClick: PropTypes.func,
+  imgProps: PropTypes.object
+};
