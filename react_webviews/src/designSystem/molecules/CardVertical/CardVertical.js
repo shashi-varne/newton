@@ -1,102 +1,153 @@
 /*
-  prop types:
-  titleColor, subtitleColor, descriptionColor: stringly recommended to use only foundation colors.
-  Example: 
-  titleColor: 'foundationColors.secondary.mango.300'
-  elevation(bool): this will enable the box shadow and will remove border from the card. 
-  onCardClick(function): control the behaviour of the card when clicked.
+
+  Prop description:
+  CardVertical:
+    children: this will only accept 'CardVerticalImage','CardVerticalTitle','CardVerticalSubtitle', 'CardVerticalDescription'.
+    dataAid: unique id.
+  
+  CardVerticalImage
+    imgProps: pass the image props for Imgc component.
+  
+  CardVerticalTitle, CardVerticalSubtitle, CardVerticalDescription:
+    children: text for the title.
+    color: color which will be used for the child.
+
+  Usage of the component:
+   <CardVertical>
+      <CardVerticalImage imgProps={{src: require('assets/amazon_pay.svg')}} />
+      <CardVerticalTitle color='foundationColors.secondary.profitGreen.300'>Title</CardVerticalTitle>
+      <CardVerticalSubtitle>Subtitle</CardVerticalSubtitle>
+      <CardVerticalDescription>Description</CardVerticalDescription>
+    </CardVertical>
+
+  NOTE: STRONGLY RECOMMENDED TO ONLY USE FOUNDATION COLORS.
+  Example to pass color:
+    color: 'foundationColors.secondary.mango.300'
+
 */
 
-import React from 'react';
+import React, { Children } from 'react';
 import { Box } from '@mui/material';
 import Typography from '../../atoms/Typography';
 import { Imgc } from '../../../common/ui/Imgc';
+import isString from 'lodash/isString';
 import PropTypes from 'prop-types';
 
 import './CardVertical.scss';
 
-const CardVertical = ({
-  imgcSrc,
-  title,
-  titleColor,
-  subtitle,
-  subtitleColor,
-  description,
-  descriptionColor,
-  elevation,
-  onCardClick,
-  imgProps,
-  dataAid,
-}) => {
+const CARD_VERTICAL_CHILDS = [
+  'CardVerticalImage',
+  'CardVerticalTitle',
+  'CardVerticalSubtitle',
+  'CardVerticalDescription',
+];
+
+export const CardVertical = ({ onClick, children, dataAid, className, sx }) => {
   return (
     <Box
-      onClick={onCardClick}
-      className={`cv-wrapper ${elevation && 'cv-elevation'}`}
-      sx={cvSxStyle}
+      onClick={onClick}
+      className={`cv-wrapper ${className}`}
       data-aid={`cardVertical_${dataAid}`}
+      sx={sx}
     >
-      <Imgc
-        src={imgcSrc}
-        style={{ width: '32px', height: '32px' }}
-        {...imgProps}
-        dataAid='top'
-      />
-      <Typography
-        className='cv-mt-4'
-        variant='body1'
-        color={titleColor}
-        data-aid='tv_title'
-        component='div'
-      >
-        {title}
-      </Typography>
-      {subtitle && (
-        <Typography
-          variant='body2'
-          className='cv-mt-4'
-          color={subtitleColor}
-          data-aid='tv_subtitle'
-          component='div'
-        >
-          {subtitle}
-        </Typography>
-      )}
-      {description && (
-        <Typography
-          variant='body2'
-          className='cv-mt-4'
-          color={descriptionColor}
-          data-aid='tv_description'
-          component='div'
-        >
-          {description}
-        </Typography>
-      )}
+      {Children.map(children, (child) => {
+        const componentType = isString(child?.type) ? child?.type : child?.type?.name;
+        if (CARD_VERTICAL_CHILDS.indexOf(componentType) !== -1) {
+          return React.cloneElement(child);
+        } else {
+          console.error(
+            `child passed is ${componentType}, expected childs are 
+            'CardVerticalImage','CardVerticalTitle','CardVerticalSubtitle', 'CardVerticalDescription'`
+          );
+          return null;
+        }
+      })}
     </Box>
   );
 };
 
-export default CardVertical;
+export const CardVerticalImage = ({ imgProps = {} }) => {
+  return (
+    <Imgc
+      src={imgProps?.src}
+      style={{ }}
+      dataAid='top'
+      className='cv-img-top'
+      {...imgProps}
+    />
+  );
+};
 
-const cvSxStyle = {
-  border: '1px solid',
-  borderColor: 'foundationColors.supporting.athensGrey',
-  borderRadius: '12px',
+export const CardVerticalTitle = ({ children, color }) => {
+  return (
+    <Typography
+      variant='body1'
+      color={color}
+      dataAid='title'
+      component='div'
+    >
+      {children}
+    </Typography>
+  );
+};
+
+export const CardVerticalSubtitle = ({ children, color }) => {
+  return (
+    <Typography
+      variant='body2'
+      className='cv-mt-4'
+      color={color}
+      dataAid='subtitle'
+      component='div'
+    >
+      {children}
+    </Typography>
+  );
+};
+
+export const CardVerticalDescription = ({ children, color }) => {
+  return (
+    <Typography
+      variant='body2'
+      className='cv-mt-4'
+      color={color}
+      dataAid='description'
+      component='div'
+    >
+      {children}
+    </Typography>
+  );
+};
+
+CardVerticalImage.propTypes = {
+  imgProps: PropTypes.object,
+};
+
+CardVerticalTitle.propTypes = {
+  children: PropTypes.node,
+  color: PropTypes.string,
+};
+
+CardVerticalSubtitle.propTypes = {
+  children: PropTypes.node,
+  color: PropTypes.string,
+};
+
+CardVerticalSubtitle.defaultProps = {
+  color: 'foundationColors.content.secondary',
+};
+
+CardVerticalDescription.propTypes = {
+  children: PropTypes.node,
+  color: PropTypes.string,
+};
+
+CardVerticalSubtitle.defaultProps = {
+  color: 'foundationColors.content.tertiary',
 };
 
 CardVertical.propTypes = {
-  title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  titleColor: PropTypes.string,
-  subtitleColor: PropTypes.string,
-  description: PropTypes.string,
-  descriptionColor: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  elevation: PropTypes.bool,
-  onCardClick: PropTypes.func,
-};
-
-CardVertical.defaultProps = {
-  subtitleColor: 'foundationColors.content.secondary',
-  descriptionColor: 'foundationColors.content.tertiary',
-  imgProps: {},
+  children: PropTypes.node,
+  onClick: PropTypes.func,
+  dataAid: PropTypes.string,
 };

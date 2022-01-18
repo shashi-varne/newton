@@ -1,1 +1,7 @@
-export {default} from './CardVertical';
+export {
+  CardVertical,
+  CardVerticalTitle,
+  CardVerticalImage,
+  CardVerticalDescription,
+  CardVerticalSubtitle,
+} from './CardVertical';
