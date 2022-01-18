@@ -1,8 +1,8 @@
 /*
   props description:
   label(string),
-  isOpen(bool),
-  onClick(function): controls the dropdown,
+  isOpen(bool), => use this to control the opening and closing of component.
+  onClick(function),
   expandedIcon: Icon which will be shown when the component is expanded
   collapsedIcon: Icon which will be shown when the component is collapsed
   childWrapperClass: add styling to the child component.
@@ -11,12 +11,10 @@
   labelColor: 'foundationColors.secondary.mango.300'
 */
 
-
 import React from 'react';
 import { Collapse as CollapseLib } from '@mui/material';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Typography from '../../atoms/Typography';
+import { Imgc } from '../../../common/ui/Imgc';
 import PropTypes from 'prop-types';
 import './CollapsibleSection.scss';
 
@@ -29,13 +27,15 @@ const CollapsibleSection = ({
   collapsedIcon,
   labelColor,
   childWrapperClass,
-  dataAid
+  dataAid,
 }) => {
   return (
     <div className='c-wrapper' data-aid={`collapsibleSection_${dataAid}`}>
       <div className='c-label-wrapper' onClick={onClick}>
-        <Typography variant='heading3' color={labelColor} data-aid='tv_title'>{label}</Typography>
-        <div className='c-icon-wrapper' data-aid={`iv_${isOpen ? 'expanded': 'collapsed'}`}>{isOpen ? expandedIcon : collapsedIcon}</div>
+        <Typography variant='heading3' color={labelColor} dataAid='title'>
+          {label}
+        </Typography>
+        <Imgc src={isOpen ? expandedIcon : collapsedIcon} className='c-icon-wrapper' />
       </div>
       <CollapseLib in={isOpen}>
         <div className={`c-child-wrapper ${childWrapperClass}`}>{children}</div>
@@ -47,14 +47,16 @@ const CollapsibleSection = ({
 CollapsibleSection.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   label: PropTypes.string.isRequired,
+  labelColor: PropTypes.string,
   onClick: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
-  dataAid: PropTypes.string
-}
+  childWrapperClass: PropTypes.string,
+  dataAid: PropTypes.string,
+};
 
 CollapsibleSection.defaultProps = {
-  expandedIcon: <KeyboardArrowUpIcon />,
-  collapsedIcon: <KeyboardArrowDownIcon />,
+  expandedIcon: require('assets/arrow_up_new.svg'),
+  collapsedIcon: require('assets/arrow_down_new.svg'),
 };
 
 export default CollapsibleSection;
