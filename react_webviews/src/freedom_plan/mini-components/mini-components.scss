@@ -3,13 +3,13 @@
     display: flex;
     overflow: auto;
     width: 100%;
-    height: 130px;
+    height: 110px;
     align-items: center;
 
     .sfpc-loader {
       width: 110px !important;
       height: 88px !important;
-      margin: 0 15px 15px 0 !important;
+      margin: 0 15px 5px 0 !important;
     }
 
     .freedom-plan-option {
@@ -26,7 +26,7 @@
       justify-content: center;
       padding: 10px;
       position: relative;
-      margin: 0 15px 15px 0;
+      margin: 0 15px 0px 0;
       cursor: pointer;
 
       .selected-icon {
@@ -69,7 +69,6 @@
 
   .helper-note {
     font-size: 11px;
-    line-height: 18px;
     color: var(--steelgrey);
   }
 
