@@ -9,95 +9,55 @@
   titleColor: foundationColors.secondary.mango.300
 */
 
-import React, { Children } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import { Imgc } from 'common/ui/Imgc';
 import Typography from '../../atoms/Typography';
 import PropTypes from 'prop-types';
-import isString from 'lodash/isString';
-
 import './InfoCard.scss';
 
-const INFO_CARD_CHILDS = ['InfoCardTitle', 'InfoCardSubtitle'];
-
-export const InfoCard = ({ imgProps = {}, onClick, dataAid, children, className, sx }) => {
+const InfoCard = ({ imgSrc, imgProps = {}, title, titleColor, subtitle, subtitleColor, onCardClick, dataAid }) => {
   return (
-    <Box
-      sx={{...infoCardWrapperSxStyle, ...sx}}
-      className={`info-card-wrapper ${className}`}
-      onClick={onClick}
-      data-aid={`infoCard_${dataAid}`}
-    >
-      {imgProps?.src && (
-        <Imgc
-          src={imgProps?.src}
-          className='info-card-left-img'
-          dataAid='left'
-          {...imgProps}
-        />
-      )}
+    <Box sx={infoCardWrapperSxStyle} className='info-card-wrapper' onClick={onCardClick} data-aid={`infoCard_${dataAid}`}>
+      <Imgc
+        src={imgSrc}
+        style={{ height: '32px', width: '32px' }}
+        {...imgProps}
+        dataAid='left'
+      />
       <div className='ic-text-wrapper'>
-        {Children.map(children, (child) => {
-          const componentType = isString(child?.type) ? child?.type : child?.type?.name;
-          if (INFO_CARD_CHILDS.indexOf(componentType) !== -1) {
-            return React.cloneElement(child);
-          } else {
-            console.error(
-              `child passed is ${componentType}, expected childs are 
-              'InfoCardTitle','InfoCardSubtitle'`
-            );
-            return null;
-          }
-        })}
+        <Typography variant='heading4' color={titleColor} component='div' data-aid='tv_title'>{title}</Typography>
+        <Typography
+          className='ic-subtitle-text'
+          variant='body2'
+          color={subtitleColor}
+          component='div'
+          data-aid='tv_subtitle'
+        >
+          {subtitle}
+        </Typography>
       </div>
     </Box>
   );
 };
 
-export const InfoCardTitle = ({ children, color }) => {
-  return (
-    <Typography variant='heading4' color={color} component='div' dataAid='title'>
-      {children}
-    </Typography>
-  );
-};
-
-export const InfoCardSubtitle = ({ children, color }) => {
-  return (
-    <Typography
-      className='ic-subtitle-text'
-      variant='body2'
-      color={color}
-      component='div'
-      dataAid='subtitle'
-    >
-      {children}
-    </Typography>
-  );
-};
+export default InfoCard;
 
 const infoCardWrapperSxStyle = {
   backgroundColor: 'foundationColors.supporting.white',
+  border: '1px solid',
+  borderColor: 'foundationColors.supporting.athensGrey',
   borderRadius: '12px',
 };
 
+InfoCard.defaultProps = {
+  subtitleColor: 'foundationColors.content.secondary'
+}
+
 InfoCard.propTypes = {
-  onClick: PropTypes.func,
-  dataAid: PropTypes.string,
-  children: PropTypes.node,
-  imgProps: PropTypes.object,
-};
-
-InfoCardTitle.propTypes = {
-  children: PropTypes.node,
-  color: PropTypes.string,
-};
-
-InfoCardSubtitle.defaultProps = {
-  color: 'foundationColors.content.secondary',
-};
-
-InfoCardSubtitle.propTypes = {
-  children: PropTypes.node,
-  color: PropTypes.string,
-};
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  titleColor: PropTypes.string,
+  subtitleColor: PropTypes.string,
+  onCardClick: PropTypes.func
+}
