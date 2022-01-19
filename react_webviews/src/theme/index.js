@@ -34,14 +34,14 @@ const getTheme = () => {
       },
       MuiCheckbox: {
         styleOverrides: checkboxStyleOverRides(colors),
+      MuiTooltip: {
+        styleOverrides: tooltipStyleOverRides(colors),
       },
       MuiDialog: {
         defaultProps: dialogDefaultProps(),
         styleOverrides:dialogStylesOverride()
       },
-      MuiTooltip: {
-        styleOverrides: tooltipStyleOverRides(colors),
-      },
+      }
     },
   };
   return createTheme(theme);
