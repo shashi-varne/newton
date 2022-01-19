@@ -97,7 +97,10 @@ const PaymentStatus = (props) => {
 
   if (getConfig().isNative) {
     navigate(`/status/callback/native`, {
-      state: { status: paymentStatusData.isSuccess ? "success" : "failed" },
+      state: { 
+        status: paymentStatusData.isSuccess ? "success" : "failed",
+        message: paymentStatusData?.subtitle || ''
+      },
     });
   }
 
