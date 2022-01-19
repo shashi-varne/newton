@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
 import React from 'react';
-import { Redirect, Route } from 'react-router';
+import { Redirect, Route } from 'react-router-dom';
 import { getConfig } from '../../utils/functions';
 
 export default function UnAuthenticatedRoute({ children, component, ...rest }) {
