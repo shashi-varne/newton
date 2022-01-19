@@ -1,0 +1,18 @@
+.blog-content-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex: 1;  
+  align-items: flex-start;
+  cursor: pointer;
+
+  .content-left-img {
+    margin-right: 16px;
+    width: 100px;
+    height: 70px;
+  }
+
+  .bc-text-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+}
