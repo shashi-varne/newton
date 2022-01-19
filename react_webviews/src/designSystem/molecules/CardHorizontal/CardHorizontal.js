@@ -12,7 +12,7 @@
 */
 
 import { Box } from '@mui/material';
-import React, { useMemo } from 'react';
+import React from 'react';
 import Typography from '../../atoms/Typography';
 import { Imgc } from '../../../common/ui/Imgc';
 import Button from '../../atoms/Button';
@@ -42,6 +42,8 @@ const CardHorizontal = ({
   footerText,
   footerTextColor,
   footerBackground,
+  className,
+  sx,
   variant = 'product',
 }) => {
   const isHeroCardVariant = variant === 'heroCard';
@@ -58,7 +60,12 @@ const CardHorizontal = ({
     }
   };
   return (
-    <Box className={wrapperClassNames} onClick={onClick} data-aid={`cardHorizontal_${dataAid}`}>
+    <Box
+      className={`${wrapperClassNames} ${className}`}
+      sx={{sx}}
+      onClick={onClick}
+      data-aid={`cardHorizontal_${dataAid}`}
+    >
       <Box className='ch-top-section-wrapper'>
         <div>
           {leftImgSrc && (
@@ -149,7 +156,7 @@ const getVariantStyle = (isHeroCardVariant = false, footerText = '') => {
       showFooter: false,
       titleColor: '',
       subtitleColor: 'foundationColors.content.secondary',
-      btnDataAid: 'link'
+      btnDataAid: 'link',
     };
   }
 };
