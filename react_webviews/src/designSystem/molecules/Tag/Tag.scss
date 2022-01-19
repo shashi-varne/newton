@@ -1,25 +1,27 @@
-.tags-wrapper {
+.tag-wrapper {
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: max-content;
+  width: fit-content;
   padding: 1px 8px;
   cursor: default;
 
-  &.tags-small-wrapper {
+  &.tag-small-wrapper {
     padding: 0px;
   }
 
-  .tags-left-image {
+  .tag-left-image {
     margin-right: 8px;
-    &.tags-left-image-small {
+    height: 16px;
+    width: 16px;
+    &.tag-left-image-small {
       margin-right: 4px;
     }
   }
 
-  .tags-right-image {
+  .tag-right-image {
     margin-left: 8px;
-    &.tags-right-image-small {
+    &.tag-right-image-small {
       margin-left: 4px;
     }
   }
