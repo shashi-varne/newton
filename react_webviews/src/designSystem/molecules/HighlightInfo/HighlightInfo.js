@@ -8,60 +8,48 @@
 */
 
 import React from 'react';
-import { Box } from '@mui/material';
+import Box from '@mui/material/Box';
 import Typography from '../../atoms/Typography';
 import { Imgc } from '../../../common/ui/Imgc';
-import isFunction from 'lodash/isFunction';
 import PropTypes from 'prop-types';
 import './HighlightInfo.scss';
 
 const HighlightInfo = ({
-  highlightText,
-  highlightTextColor,
-  imgcSrc,
+  title,
+  titleColor,
+  imgSrc,
   imgProps,
   background,
-  onIconClick,
   onClick,
   dataAid,
+  className,
+  sx,
 }) => {
-  const onRightIconClick = (e) => {
-    if (isFunction(onIconClick)) {
-      e.stopPropagation();
-      onIconClick(e);
-    }
-  };
   return (
-    <Box sx={{ background }} className='hi-wrapper' onClick={onClick} data-aid={`highlightInfo_${dataAid}`}>
-      <Typography variant='body5' color={highlightTextColor} comoponent='div' data-aid='tv_title'>
-        {highlightText}
+    <Box
+      sx={{ background, ...sx }}
+      className={`hi-wrapper ${className}`}
+      onClick={onClick}
+      data-aid={`highlightInfo_${dataAid}`}
+    >
+      <Typography variant='body5' color={titleColor} comoponent='div' dataAid='title'>
+        {title}
       </Typography>
-      {imgcSrc && (
-        <div className='hi-img-wrapper' onClick={onRightIconClick}>
-          <Imgc
-            src={imgcSrc}
-            style={{ width: '24px', height: '24px' }}
-            {...imgProps}
-            dataAid='right'
-          />
-        </div>
-      )}
+      {imgSrc && <Imgc src={imgSrc} className='hi-img-wrapper' dataAid='right' {...imgProps} />}
     </Box>
   );
 };
 
 HighlightInfo.defaultProps = {
-  background:
-    'linear-gradient(180deg, rgba(51, 207, 144, 0.2) 27.54%, rgba(130, 121, 248, 0.13) 100%)',
-  highlightTextColor: 'foundationColors.supporting.white',
+  background: 'linear-gradient(107.83deg, #4F44D0 0%, #8279F8 97.81%)',
+  titleColor: 'foundationColors.supporting.white',
   imgProps: {},
 };
 
 HighlightInfo.propTypes = {
-  highlightText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  highlightTextColor: PropTypes.string,
+  title: PropTypes.node,
+  titleColor: PropTypes.string,
   background: PropTypes.string,
-  onIconClick: PropTypes.func,
   onClick: PropTypes.func,
   imgProps: PropTypes.object,
   dataAid: PropTypes.string,
