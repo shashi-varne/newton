@@ -6,11 +6,10 @@
     - these accepts all the foundation colors.
     Example :
       footerTextColor: 'foundationColors.secondary.mango.300'
-  onActionClick: will trigger the event when action button is clicked.
-  onCardClick: will trigger the event when card is clicked.
+  onButtonClick: will trigger the event when action button is clicked.
+  onClick: will trigger the event when card is clicked.
   variat: you can seleect either two of them => 'product' or 'herocard'
 */
-
 
 import { Box } from '@mui/material';
 import React, { useMemo } from 'react';
@@ -24,10 +23,10 @@ import PropTypes from 'prop-types';
 import './CardHorizontal.scss';
 
 const CardHorizontal = ({
-  iconSrc,
-  iconProps,
-  ilstSrc,
-  ilstProps,
+  leftImgSrc,
+  leftImgProps,
+  rightImgSrc,
+  rightImgProps,
   title,
   titleColor,
   subtitle,
@@ -35,10 +34,10 @@ const CardHorizontal = ({
   description,
   descriptionColor,
   actionLink,
-  onActionClick,
+  onButtonClick,
   status,
   statusTitle,
-  onCardClick,
+  onClick,
   dataAid,
   footerText,
   footerTextColor,
@@ -46,67 +45,47 @@ const CardHorizontal = ({
   variant = 'product',
 }) => {
   const isHeroCardVariant = variant === 'heroCard';
-  const titleVariant = isHeroCardVariant ? 'heading3' : 'body1';
-  const actionBtnVariant = isHeroCardVariant ? 'primary' : 'link';
-  const actionBtnClassName = isHeroCardVariant ? 'ch-action-btn' : 'ch-action-link-btn';
-  const showFooter = isHeroCardVariant && footerText;
+  const variantStyle = getVariantStyle(isHeroCardVariant, footerText);
 
-  const wrapperClassNames = `ch-wrapper ${
-    isHeroCardVariant && 'ch-hero-wrapper'
-  } ${isFunction(onActionClick) && 'default-pointer'}`;
+  const wrapperClassNames = `ch-wrapper ${isHeroCardVariant && 'ch-hero-wrapper'} ${
+    isFunction(onButtonClick) && 'fc-default-pointer'
+  }`;
 
-  const heroCardStyle = useMemo(() => {
-    if (isHeroCardVariant) {
-      titleColor = 'foundationColors.supporting.white';
-      subtitleColor = 'foundationColors.primary.200';
-      return {
-        titleColor,
-        subtitleColor,
-      };
-    }
-  }, []);
-
-  const onActionLinkClick = (e) => {
-    if (isFunction(onActionClick)) {
+  const onActionClick = (e) => {
+    if (isFunction(onButtonClick)) {
       e.stopPropagation();
-      onActionClick(e);
+      onButtonClick(e);
     }
   };
   return (
-    <Box
-      className={wrapperClassNames}
-      onClick={onCardClick}
-      data-aid={`cardHorizontal_${dataAid}`}
-    >
+    <Box className={wrapperClassNames} onClick={onClick} data-aid={`cardHorizontal_${dataAid}`}>
       <Box className='ch-top-section-wrapper'>
         <div>
-          {iconSrc && (
+          {leftImgSrc && (
             <Imgc
-              src={iconSrc}
+              src={leftImgSrc}
               style={{ width: '32px', height: '32px' }}
-              {...iconProps}
+              {...leftImgProps}
               dataAid='top'
             />
           )}
           {title && (
             <Typography
               className='mt-4'
-              variant={titleVariant}
-              color={heroCardStyle?.titleColor || titleColor}
-              data-aid='tv_title'
+              variant={variantStyle?.titleVariant}
+              color={titleColor || variantStyle?.titleColor}
+              dataAid='title'
             >
               {title}
             </Typography>
           )}
-          {statusTitle && status && (
-            <Status variant={status} title={statusTitle} />
-          )}
+          {statusTitle && status && <Status variant={status} title={statusTitle} />}
           {subtitle && (
             <Typography
               className='mt-4'
               variant='body2'
-              color={heroCardStyle?.subtitleColor || subtitleColor}
-              data-aid='tv_subtitle'
+              color={subtitleColor || variantStyle?.subtitleColor}
+              dataAid='subtitle'
             >
               {subtitle}
             </Typography>
@@ -116,32 +95,33 @@ const CardHorizontal = ({
               className='mt-4'
               variant='body2'
               color={descriptionColor}
-              data-aid='tv_description'
+              dataAid='description'
             >
               {description}
             </Typography>
           )}
           {actionLink && (
             <Button
-              variant={actionBtnVariant}
-              className={actionBtnClassName}
+              variant={variantStyle?.actionBtnVariant}
+              className={variantStyle?.actionBtnClassName}
               title={actionLink}
               isInverted
               size='small'
-              onClick={onActionLinkClick}
+              onClick={onActionClick}
+              dataAid={variantStyle?.btnDataAid}
             />
           )}
         </div>
         <Imgc
-          src={ilstSrc}
+          src={rightImgSrc}
           style={{ width: '110px', height: '110px', marginLeft: '4px' }}
-          {...ilstProps}
+          {...rightImgProps}
           dataAid='right'
         />
       </Box>
-      {showFooter && (
-        <Box className='ch-bottom-section-wrapper' sx={{background: footerBackground}}>
-          <Typography variant='body5' color={footerTextColor}>
+      {variantStyle?.showFooter && (
+        <Box className='ch-bottom-section-wrapper' sx={{ background: footerBackground }}>
+          <Typography variant='body5' color={footerTextColor} dataAid='information'>
             {footerText}
           </Typography>
         </Box>
@@ -150,9 +130,33 @@ const CardHorizontal = ({
   );
 };
 
+const getVariantStyle = (isHeroCardVariant = false, footerText = '') => {
+  if (isHeroCardVariant) {
+    return {
+      titleVariant: 'heading3',
+      actionBtnVariant: 'primary',
+      actionBtnClassName: 'ch-action-btn',
+      showFooter: footerText,
+      titleColor: 'foundationColors.supporting.white',
+      subtitleColor: 'foundationColors.primary.200',
+      btnDataAid: 'smallWhite',
+    };
+  } else {
+    return {
+      titleVariant: 'body1',
+      actionBtnVariant: 'link',
+      actionBtnClassName: 'ch-action-link-btn',
+      showFooter: false,
+      titleColor: '',
+      subtitleColor: 'foundationColors.content.secondary',
+      btnDataAid: 'link'
+    };
+  }
+};
+
 CardHorizontal.propTypes = {
-  iconProps: PropTypes.object,
-  ilstProps: PropTypes.object,
+  leftImgProps: PropTypes.object,
+  rightImgProps: PropTypes.object,
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   titleColor: PropTypes.string,
   subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
@@ -160,25 +164,25 @@ CardHorizontal.propTypes = {
   description: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   descriptionColor: PropTypes.string,
   actionLink: PropTypes.string,
-  onActionClick: PropTypes.func,
+  onButtonClick: PropTypes.func,
   status: PropTypes.string,
   statusTitle: PropTypes.string,
-  onCardClick: PropTypes.func,
+  onClick: PropTypes.func,
   dataAid: PropTypes.string,
   footerText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   footerTextColor: PropTypes.string,
   footerBackground: PropTypes.string,
   variant: PropTypes.oneOf(['product', 'heroCard']),
-}
+};
 
 CardHorizontal.defaultProps = {
   variant: 'product',
-  iconProps: {},
-  ilstProps: {},
-  subtitleColor: 'foundationColors.content.secondary',
+  leftImgProps: {},
+  rightImgProps: {},
   descriptionColor: 'foundationColors.content.tertiary',
   footerTextColor: 'foundationColors.supporting.white',
-  footerBackground: 'linear-gradient(180deg, rgba(51, 207, 144, 0.2) 27.54%, rgba(130, 121, 248, 0.13) 100%)'
+  footerBackground:
+    'linear-gradient(180deg, rgba(51, 207, 144, 0.2) 27.54%, rgba(130, 121, 248, 0.13) 100%)',
 };
 
 export default CardHorizontal;

@@ -1,13 +1,13 @@
 .ch-wrapper {
   background: #ffffff;
-  box-shadow: 0px 6px 12px -6px rgba(0, 0, 0, 0.04),
-    0px 0px 1px rgba(0, 0, 0, 0.2);
   border-radius: 12px;
   padding: 16px;
   display: flex;
   flex-direction: column;
+  min-width: 320px;
+  flex: 1;
   cursor: pointer;
-  &.default-pointer {
+  &.fc-default-pointer {
     cursor: default;
   }
 
@@ -28,7 +28,6 @@
 .ch-hero-wrapper {
   padding-bottom: 24px;
   padding-top: 24px;
-  box-shadow: none;
   background: linear-gradient(
     107.83deg,
     #4f44d0 0%,
