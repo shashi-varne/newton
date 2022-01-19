@@ -1,5 +1,6 @@
 /*
     prop description:
+    imgSrc => sorce of the image.
     imgProps => all the <Imgc /> props can be passed through this.
     title(string/node) => this is text shown at the left.
     titleColor => strongly remommended to use foundation colors for this.
@@ -9,7 +10,7 @@
 */
 
 import React from 'react';
-import { Box } from '@mui/material';
+import Box from '@mui/material/Box';
 import Typography from '../../atoms/Typography';
 import Button from '../../atoms/Button';
 import PropTypes from 'prop-types';
@@ -17,21 +18,23 @@ import { Imgc } from '../../../common/ui/Imgc';
 
 import './ConfirmAction.scss';
 
-const ConfirmAction = ({ imgProps = {}, title, titleColor, buttonTitle, onClick }) => {
+const ConfirmAction = ({
+  imgSrc,
+  imgProps,
+  title,
+  titleColor,
+  className,
+  buttonTitle,
+  onClick,
+  sx,
+}) => {
   return (
     <Box
-      className='confirm-action-wrapper'
-      sx={{
-        backgroundColor: 'foundationColors.action.brand',
-      }}
+      className={`confirm-action-wrapper ${className}`}
+      sx={{backgroundColor: 'foundationColors.action.brand',...sx,}}
     >
-      {imgProps?.src && (
-        <Imgc
-          src={imgProps?.src}
-          className='confirm-action-left-img'
-          dataAid='left'
-          {...imgProps}
-        />
+      {imgSrc && (
+        <Imgc src={imgSrc} className='confirm-action-left-img' dataAid='left' {...imgProps} />
       )}
       <div className='confirm-action-right-wrapper'>
         {title && (
@@ -54,6 +57,7 @@ const ConfirmAction = ({ imgProps = {}, title, titleColor, buttonTitle, onClick 
 };
 
 ConfirmAction.defaultProps = {
+  imgProps: {},
   titleColor: 'foundationColors.supporting.white',
 };
 
@@ -62,6 +66,7 @@ ConfirmAction.propTypes = {
   title: PropTypes.node,
   titleColor: PropTypes.string,
   buttonTitle: PropTypes.string,
+  className: PropTypes.string,
   onClick: PropTypes.func,
 };
 
