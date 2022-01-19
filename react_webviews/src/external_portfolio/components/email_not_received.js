@@ -94,6 +94,7 @@ class EmailNotReceived extends Component {
           onClick: this.regenerateStatement
         }}
       >
+        <h3>The email looks like this</h3>
         <EmailTemplate
           containerStyle={{ paddingBottom: '100px' }}
           statementSource={this.state.emailDetail?.latest_statement?.statement_source}
