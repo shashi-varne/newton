@@ -142,24 +142,21 @@ const Summary = (props) => {
         sendEvents("next");
         break;
     }
-    if (name === "equity" && config.isSdk) {
-      if (kyc.equity_investment_ready && currentUser?.pin_status !== 'pin_setup_complete') {
-        nativeCallback({
-          action: "2fa_module",
-          message: { operation: "setup_pin" },
-        });
-      } else {
-        nativeCallback({
-          action: "open_equity",
-          message: {
-            module: "portfolio",
-          },
-        });
-      }
-      return;
-    }
     navigate(getPathname[name], { state: { fromPath: "reports" } });
   };
+
+  const handleStocks = () => {
+    if (kyc.equity_investment_ready) {
+      nativeCallback({
+        action: "open_equity",
+        message: {
+          module: "portfolio",
+        },
+      });
+    } else {
+      navigate(getPathname.kycStatus);
+    }
+  }
 
   const redirectWithdraw = () => {
     sendEvents("next", "Withdraw");
@@ -386,9 +383,9 @@ const Summary = (props) => {
               )}
               {config.isSdk && isEquityEnabled && (
                 <SummaryCard
-                  dataAid="equity"
-                  goNext={() => flowOptions("equity")}
-                  icon={`growth.svg`}
+                  dataAid="stocks"
+                  goNext={handleStocks}
+                  icon='growth.svg'
                   title="Stocks, F&O, and more"
                   subtitle="Track your holdings and positions"
                   iconClassName="reports-finity-icon"
