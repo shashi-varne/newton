@@ -32,6 +32,15 @@ export default function StatementRequested(props) {
     const queryParams = getUrlParams();
     return matchParams.email || queryParams.email;
   }, []);
+  const [state, setState] = useState({
+    popupOpen: false,
+    showLoader: false,
+    emailDetail: '',
+    selectedEmail: emailParam,
+    exitToApp: params.exitToApp || cameFromApp,
+    entry_point: '',
+    statementStatus: ''
+  });
 
 
   const navigate = useCallback((path, params) => {
@@ -41,14 +50,6 @@ export default function StatementRequested(props) {
     });
   }, []);
 
-  const [state, setState] = useState({
-    popupOpen: false,
-    showLoader: false,
-    emailDetail: '',
-    selectedEmail: emailParam,
-    exitToApp: params.exitToApp || cameFromApp,
-    entry_point: ''
-  });
 
   const updateState = useCallback((newValues = {}) => {
     setState({
@@ -73,14 +74,18 @@ export default function StatementRequested(props) {
         const [email] = await fetchEmails({ email_id: emailParam });
         if (email) {
           let showFooterBtn = false;
+          let statementStatus;
           if (email.latest_statement) {
+            statementStatus = getStatementStatus(email.latest_statement.statement_status);
             showFooterBtn =
+              statementStatus !== 'failure' &&
               (new Date() - new Date(email.latest_statement.dt_updated)) / 60000 >= regenTimeLimit;
           }
           updateState({
             emailDetail: email || {},
             showFooterBtn,
-            showLoader: false
+            showLoader: false,
+            statementStatus
           });
           storageService().setObject('email_detail_hni', email);
         }
@@ -237,7 +242,7 @@ export default function StatementRequested(props) {
       initialisePageData();
     }
 
-    const statementStatus = getStatementStatus(emailDetail?.latest_statement?.statement_status);
+    const { statementStatus } = state;
 
     if (statementStatus === 'failure') {
       return (
