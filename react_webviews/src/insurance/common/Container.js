@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { withRouter } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import { getConfig } from 'utils/functions';
 // import Header from './Header';
 // import Footer from './footer';
