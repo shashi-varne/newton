@@ -246,8 +246,8 @@ class Landing extends Component {
       this.handleIpoCardRedirection();
     } else {
       if (config.isSdk) {
-        if (!!this.state.contactNotVerified) {
-          storageService().set("sdkStocksRedirection", true);
+        if (this.state.contactNotVerified) {
+          storageService().setBoolean("sdkStocksRedirection", true);
           this.navigate("/secondary-verification", {
             state : {
               communicationType,
