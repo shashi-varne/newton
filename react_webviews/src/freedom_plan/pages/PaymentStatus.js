@@ -95,6 +95,12 @@ const PaymentStatus = (props) => {
     handleExit(props);
   };
 
+  if (getConfig().isNative) {
+    navigate(`/status/callback/native`, {
+      state: { status: paymentStatusData.isSuccess ? "success" : "failed" },
+    });
+  }
+
   return (
     <Container
       headerData={{

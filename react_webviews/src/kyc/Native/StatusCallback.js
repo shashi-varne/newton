@@ -4,7 +4,7 @@ import { nativeCallback } from "../../utils/native_callback";
 import { getUrlParams } from "../../utils/validators";
 
 const StatusCallback = (props) => {
-  const status = getUrlParams().status || "";
+  const status = getUrlParams().status || props.location.state.status || "";
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -13,6 +13,8 @@ const StatusCallback = (props) => {
         nativeCallback({ action: "on_success" });
       } else if (status === "failed") {
         nativeCallback({ action: "on_failure" });
+      } else if (status === "cancelled") {
+        nativeCallback({ action: "on_cancel" });
       }
     } else {
       setError("Something went wrong. No status received");
