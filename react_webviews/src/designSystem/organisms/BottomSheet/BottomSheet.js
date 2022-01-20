@@ -15,8 +15,8 @@
         title='Title placeholder'
         label='Label'
         subtitle='Subtitle text one, two or three lines. Subtitle text one, two or three lines.'
-        primaryTitle='Primary'
-        secondaryTitle='Secondary'
+        primaryBtnTitle='Primary'
+        secondaryBtnTitle='Secondary'
     />
 */
 
@@ -41,15 +41,15 @@ const BottomSheet = ({
   imageLabelSrcProps,
   subtitle,
   subtitleColor,
-  primaryTitle,
-  secondaryTitle,
+  primaryBtnTitle,
+  secondaryBtnTitle,
   disableEscapeKeyDown,
   onBackdropClick,
   disableBackdropClick,
   onPrimaryClick,
   onSecondaryClick,
   primaryBtnProps,
-  secondaryBtnProps
+  secondaryBtnProps,
 }) => {
   const handleOnClose = useCallback(
     (event, reason) => {
@@ -83,7 +83,7 @@ const BottomSheet = ({
                 {...imageTitleSrcProps}
               />
             )}
-            <Typography variant='heading3' color={titleColor} component='div'>
+            <Typography variant='heading3' color={titleColor} component='div' dataAid='title'>
               {title}
             </Typography>
           </div>
@@ -98,7 +98,7 @@ const BottomSheet = ({
                 {...imageLabelSrcProps}
               />
             )}
-            <Typography variant='body1' color={labelColor} component='div'>
+            <Typography variant='body1' color={labelColor} component='div' dataAid='label'>
               {label}
             </Typography>
           </div>
@@ -110,20 +110,29 @@ const BottomSheet = ({
             variant='body2'
             color={subtitleColor}
             component='div'
+            dataAid='subtitle'
           >
             {subtitle}
           </Typography>
         )}
 
-        {(primaryTitle || secondaryTitle) && (
+        {(primaryBtnTitle || secondaryBtnTitle) && (
           <div className='btm-sheet-cta-wrapper'>
-            {primaryTitle && <Button title={primaryTitle} onClick={onPrimaryClick} {...primaryBtnProps}/>}
-            {secondaryTitle && (
+            {primaryBtnTitle && (
+              <Button
+                title={primaryBtnTitle}
+                onClick={onPrimaryClick}
+                dataAid='primary'
+                {...primaryBtnProps}
+              />
+            )}
+            {secondaryBtnTitle && (
               <Button
                 className='btm-sheet-secondary-btn'
-                title={secondaryTitle}
+                title={secondaryBtnTitle}
                 variant='secondary'
                 onClick={onSecondaryClick}
+                dataAid='secondary'
                 {...secondaryBtnProps}
               />
             )}
@@ -153,13 +162,13 @@ BottomSheet.propTypes = {
   labelColor: PropTypes.string,
   subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   subtitleColor: PropTypes.string,
-  primaryTitle: PropTypes.string,
-  secondaryTitle: PropTypes.string,
+  primaryBtnTitle: PropTypes.string,
+  secondaryBtnTitle: PropTypes.string,
   disableEscapeKeyDown: PropTypes.bool,
   onBackdropClick: PropTypes.func,
   disableBackdropClick: PropTypes.bool,
   onPrimaryClick: PropTypes.func,
-  onSecondaryClick: PropTypes.func
+  onSecondaryClick: PropTypes.func,
 };
 
 export default BottomSheet;
