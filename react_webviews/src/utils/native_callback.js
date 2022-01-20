@@ -268,7 +268,7 @@ export function openModule(moduleName, props, additionalParams) {
   }
 }
 
-export function openPdfCall(data = {}) {
+export function openPdfCall(data = {}, useOpenPdfAction = false) {
   let url = data.url || '';
   if (!url) {
     return;
@@ -280,7 +280,7 @@ export function openPdfCall(data = {}) {
     data.back_url = current_url;
   }
 
-  if (getConfig().isWebOrSdk) {
+  if (getConfig().isWebOrSdk && !useOpenPdfAction) {
       nativeCallback({
           action: 'open_in_browser',
           message: {

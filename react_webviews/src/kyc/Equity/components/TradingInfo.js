@@ -177,14 +177,16 @@ const TradingInfo = (props) => {
         },
       });
     } else {
-      setShowSkelton(true);
+      if (!config.isSdk) {
+        setShowSkelton(true);
+      }
       const data = {
         url: url,
         header_title: "EQUITY ANNEXURE",
         icon: "close",
       };
 
-      openPdfCall(data);
+      openPdfCall(data, config.isSdk);
     }
   };
 
