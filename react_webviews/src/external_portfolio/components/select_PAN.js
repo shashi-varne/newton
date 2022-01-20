@@ -127,7 +127,7 @@ class PANSelector extends Component {
                 fullWidthButton={true}
                 onlyButton={true}
                 buttonTitle="CONTINUE"
-                goBack={this.goBack}
+                headerData={{ goBack: this.goBack }}
                 events={this.sendEvents('just_set_events')}
             >   
                 { this.state.pans.length ?

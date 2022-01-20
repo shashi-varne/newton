@@ -17,7 +17,6 @@ const EmailTemplate = ({
   return (
     <div style={{...containerStyle}}>
       <div className="ext-pf-subheader">
-        <h4>{imageTitle}</h4>
         <img
           src={require(`assets/${statementSource === 'cams' ? 'cas' : 'karvy'}_email.png`)}
           alt="Email"

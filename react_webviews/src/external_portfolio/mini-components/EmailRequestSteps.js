@@ -4,7 +4,7 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import StepContent from '@material-ui/core/StepContent';
 import InfoBox from './InfoBox';
-import { isFunction, storageService } from '../../utils/validators';
+import { storageService } from '../../utils/validators';
 import { getConfig } from '../../utils/functions';
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement';
 import { regenTimeLimit } from '../constants';
