@@ -5,6 +5,8 @@ import baseTypographyConfig, { customTypographyVariantProps } from './typography
 import getPartnerThemeData from './utils';
 import { createTheme } from '@mui/material';
 import { dialogDefaultProps, dialogStylesOverride } from './dialog';
+import { backDropStylesOverride } from './backdrop';
+const defaultTheme = createTheme();
 
 const getTheme = () => {
   const {colors, partnerConfig} = getPartnerThemeData();
@@ -37,7 +39,10 @@ const getTheme = () => {
       MuiDialog: {
         defaultProps: dialogDefaultProps(),
         styleOverrides:dialogStylesOverride()
-      }
+      },
+      MuiBackdrop: {
+        styleOverrides:backDropStylesOverride(defaultTheme)
+      },
     },
   };
   return createTheme(theme);
