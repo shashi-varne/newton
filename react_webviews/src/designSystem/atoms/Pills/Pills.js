@@ -80,6 +80,8 @@ export const Pill = ({
       sx={sx}
       wrapper={wrapper}
       disableRipple
+      disableFocusRipple
+      disableTouchRipple
       {...props}
     />
   );
