@@ -196,7 +196,7 @@ export function commonRender(props_base) {
                         resetpage={this.props.resetpage}
                         handleReset={this.props.handleReset}
                         topIcon={this.props.topIcon || this.props.rightIcon}
-                        handleTopIcon={this.handleTopIcon}
+                        handleTopIcon={this.handleTopIcon || this.props.handleTopIcon}
                         inPageTitle={this.state.inPageTitle}
                         force_hide_inpage_title={this.state.force_hide_inpage_title}
                         style={this.props.styleHeader}
@@ -214,6 +214,7 @@ export function commonRender(props_base) {
                         hideHamburger={this.props.hideHamburger}
                         onSkipClick={this.props.onSkipClick}        
                         customTopIconColor={this.props.customTopIconColor}
+                        noTopIconColor={this.props.noTopIconColor}
                     />
                 )}
             
