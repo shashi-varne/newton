@@ -1,5 +1,14 @@
-// example for font family support is added in the hbl config.
-// uncomment the code to test it.
+/*
+  example for font family support is added in the hbl config.
+  uncomment the code to test it.
+
+  NOTE:
+    - Any partner, which has action color, should also has a property of disableHoverEffect as true.
+      Reason => this will avoid overiding the background color of current partner with product hover background button color.
+      Example product(fisdom) hover backgroundColor => #119A4B(green)
+              alb => backgroundColor => #00aeef, so onHover this color will change to product hover color.
+              So, to avoid this, we are adding disableHoverEffect property.
+*/
 
 const obc = {
   colors: {
@@ -40,6 +49,9 @@ const alb = {
     backgroundColor: '#E8FD00',
     titleColor: '#2E3192',
   },
+  button: {
+    disableHoverEffect : true
+  }
 };
 
 const tvscredit = {
@@ -78,6 +90,7 @@ const fpg = {
   button: {
     borderRadius: 25,
     disabledBackgroundColor: '#F1D5C9',
+    disableHoverEffect : true
   },
 };
 
@@ -101,6 +114,9 @@ const subh = {
       brand: '#F5821F',
     },
   },
+  button: {
+    disableHoverEffect: true,
+  }
 };
 
 const sbm = {
@@ -120,6 +136,9 @@ const indb = {
       brand: '#173883',
     },
   },
+  button: {
+    disableHoverEffect: true,
+  }
 };
 
 const finshell = {
@@ -131,6 +150,9 @@ const finshell = {
       brand: '#007AFF',
     },
   },
+  button: {
+    disableHoverEffect: true,
+  }
 };
 
 const ippb = {
@@ -171,6 +193,9 @@ const ucomb = {
     notificationsColor: '#002759',
     backgroundColor: '#FFF500',
   },
+  button: {
+    disableHoverEffect: true,
+  }
 };
 
 export default {
