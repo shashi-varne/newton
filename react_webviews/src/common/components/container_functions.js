@@ -213,7 +213,7 @@ export function commonRender(props_base) {
                         canSkip={this.props.canSkip}
                         hideHamburger={this.props.hideHamburger}
                         onSkipClick={this.props.onSkipClick}        
-                        customBackButtonColor={this.props.customBackButtonColor}
+                        customTopIconColor={this.props.customTopIconColor}
                     />
                 )}
             
