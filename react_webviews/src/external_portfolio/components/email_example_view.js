@@ -49,13 +49,12 @@ class EmailExampleView extends Component {
     return (
       <Container
         headerData={{
-          goBack: this.props.goBack
+          goBack: this.goBack
         }}
         title="Email looks like this"
         handleClick={this.goBack}
         buttonTitle="Okay"
         events={this.sendEvents('just_set_events')}
-        goBack={this.goBack}
       >
         <EmailTemplate
           statementSource={this.params.statementSource}

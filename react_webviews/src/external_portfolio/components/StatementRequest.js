@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import Button from '../../common/ui/Button';
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement';
 import WVInPageSubtitle from '../../common/ui/InPageHeader/WVInPageSubtitle';
 import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
@@ -33,6 +32,15 @@ export default function StatementRequested(props) {
     const queryParams = getUrlParams();
     return matchParams.email || queryParams.email;
   }, []);
+  const [state, setState] = useState({
+    popupOpen: false,
+    showLoader: false,
+    emailDetail: '',
+    selectedEmail: emailParam,
+    exitToApp: params.exitToApp || cameFromApp,
+    entry_point: '',
+    statementStatus: ''
+  });
 
 
   const navigate = useCallback((path, params) => {
@@ -42,14 +50,6 @@ export default function StatementRequested(props) {
     });
   }, []);
 
-  const [state, setState] = useState({
-    popupOpen: false,
-    showLoader: false,
-    email_detail: '',
-    selectedEmail: emailParam,
-    exitToApp: params.exitToApp || cameFromApp,
-    entry_point: ''
-  });
 
   const updateState = useCallback((newValues = {}) => {
     setState({
@@ -74,14 +74,18 @@ export default function StatementRequested(props) {
         const [email] = await fetchEmails({ email_id: emailParam });
         if (email) {
           let showFooterBtn = false;
+          let statementStatus;
           if (email.latest_statement) {
+            statementStatus = getStatementStatus(email.latest_statement.statement_status);
             showFooterBtn =
+              statementStatus !== 'failure' &&
               (new Date() - new Date(email.latest_statement.dt_updated)) / 60000 >= regenTimeLimit;
           }
           updateState({
-            email_detail: email || {},
+            emailDetail: email || {},
             showFooterBtn,
-            showLoader: false
+            showLoader: false,
+            statementStatus
           });
           storageService().setObject('email_detail_hni', email);
         }
@@ -125,7 +129,7 @@ export default function StatementRequested(props) {
 
   const goNext = () => {
     navigate('email_not_received', {
-      statementSource: state?.email_detail?.latest_statement?.statement_source
+      statementSource: state?.emailDetail?.latest_statement?.statement_source
     });
   }
 
@@ -188,7 +192,7 @@ export default function StatementRequested(props) {
         noEmailChange: params.noEmailChange,
         fromApp: cameFromApp,
         email: state.selectedEmail,
-        statementSource: state?.email_detail?.latest_statement?.statement_source
+        statementSource: state?.emailDetail?.latest_statement?.statement_source
       });
     };
 
@@ -200,7 +204,12 @@ export default function StatementRequested(props) {
         <StatementRequestStep.Content>
           You will recieve an email with your consolidated portfolio statement
         </StatementRequestStep.Content>
-        <div id='epsr-statement-pwd'>STATEMENT PASSWORD - <span>{`${productName}1234`}</span></div>
+        <div id='epsr-statement-pwd'>
+          STATEMENT PASSWORD -
+          <span>
+            &nbsp;{state.emailDetail?.latest_statement?.password}
+          </span>
+        </div>
         <WVClickableTextElement style={{ marginTop: '12px' }} onClick={emailLinkClick}>
           View Email Sample
         </WVClickableTextElement>
@@ -209,15 +218,15 @@ export default function StatementRequested(props) {
   }, [state, cameFromApp]);
 
   const RenderStep3 = useMemo(() => {
-    const { email_detail } = state;
+    const { emailDetail } = state;
 
     const generateStatement = async () => {
       sendEvents('regenerate_stat');
       try {
         updateState({ showLoader: 'button' });
         await requestStatement({
-          email: email_detail.email,
-          statement_id: email_detail.latest_statement.statement_id,
+          email: emailDetail.email,
+          statement_id: emailDetail.latest_statement.statement_id,
           retrigger: 'true',
         });
         updateState({ openPopup: true });
@@ -233,7 +242,7 @@ export default function StatementRequested(props) {
       initialisePageData();
     }
 
-    const statementStatus = getStatementStatus(email_detail?.latest_statement?.statement_status);
+    const { statementStatus } = state;
 
     if (statementStatus === 'failure') {
       return (
