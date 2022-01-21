@@ -27,33 +27,28 @@ import Typography from '../../atoms/Typography';
 import Tag from '../Tag';
 import Separator from '../../atoms/Separator';
 import { Imgc } from '../../../common/ui/Imgc';
+import isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
 
 import './FeatureCard.scss';
 
 const FeatureCard = ({
-  imgProps,
+  topLeftImgSrc,
+  topLeftImgProps,
   heading,
   headingColor,
-  leftDescription = {},
-  middleDescription = {},
-  rightDescription = {},
   onCardClick,
   dataAid,
-  leftTagProps = {}, // refer Tag molecules for the available props
-  middleTagProps = {}, // refer Tag molecules for the available props
-  rightTagProps = {},
-  variant,
+  leftSlotProps = {},
+  middleSlotProps = {},
+  rightSlotProps = {},
 }) => {
-  const isDescriptionVariant = variant === 'description';
-  const isTagVariant = variant === 'tags';
   return (
-    <div className='fc-wrapper' onClick={onCardClick} data-aid={`featureCard_${dataAid}`}>
+    <div className='feature-card-wrapper' onClick={onCardClick} data-aid={`featureCard_${dataAid}`}>
       <div className='fc-first-row-wrapper'>
-        {
-          imgProps?.src &&
-          <Imgc src={imgProps?.src} className='fc-left-img' {...imgProps} dataAid='left' />
-        }
+        {topLeftImgSrc && (
+          <Imgc src={topLeftImgSrc} className='fc-left-img' {...topLeftImgProps} dataAid='left' />
+        )}
         <Typography
           variant='body1'
           className='fc-heading-text'
@@ -64,134 +59,158 @@ const FeatureCard = ({
         </Typography>
       </div>
       <Separator className='fc-divider' />
-      {isDescriptionVariant && (
-        <Description
-          leftDescription={leftDescription}
-          middleDescription={middleDescription}
-          rightDescription={rightDescription}
-        />
-      )}
-      {isTagVariant && (
-        <TagVariant
-          leftTagProps={leftTagProps}
-          middleTagProps={middleTagProps}
-          rightTagProps={rightTagProps}
-        />
+      <div className='feature-card-slot-wrapper'>
+        <div className='fc-left-slot'>
+          <LeftSlot {...leftSlotProps} />
+        </div>
+        <div className='fc-middle-slot'>
+          <MiddleSlot {...middleSlotProps} />
+        </div>
+        <div className='fc-right-slot'>
+          <RightSlot {...rightSlotProps} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const LeftSlot = ({ description = {}, tag = {}, title }) => {
+  description.align = 'left';
+
+  if (title) {
+    return (
+      <Typography variant='body2' align='left'>
+        {title}
+      </Typography>
+    );
+  }
+
+  if (!isEmpty(tag)) {
+    return <Tag {...tag} />;
+  }
+  if (!isEmpty(description)) {
+    return <Description description={description} />;
+  }
+};
+
+export const RightSlot = ({ description = {}, tag = {}, title }) => {
+  description.align = 'right';
+
+  if (title) {
+    return (
+      <Typography variant='body2' align='right'>
+        {title}
+      </Typography>
+    );
+  }
+
+  if (!isEmpty(tag)) {
+    return <Tag {...tag} />;
+  }
+  if (!isEmpty(description)) {
+    return <Description description={description} />;
+  }
+};
+
+export const MiddleSlot = ({ description = {}, tag = {}, title }) => {
+  description.align = 'center';
+
+  if (title) {
+    return (
+      <Typography variant='body2' align='center'>
+        {title}
+      </Typography>
+    );
+  }
+  if (!isEmpty(tag)) {
+    return <Tag {...tag} />;
+  }
+  if (!isEmpty(description)) {
+    return <Description description={description} />;
+  }
+};
+
+const Description = ({ description, dataAid }) => {
+  const {
+    title = '',
+    subtitle = '',
+    titleColor = '',
+    subtitleColor = '',
+    align = 'left',
+    imgSrc,
+    imgProps = {},
+  } = description;
+  return (
+    <div className='fc-description-variant'>
+      <Typography
+        variant='body5'
+        color={titleColor}
+        align={align}
+        component='div'
+        dataAid={`key${dataAid}`}
+      >
+        {title}
+      </Typography>
+      {subtitle && (
+        <div className='fc-subtitle-wrapper'>
+          {imgSrc && (
+            <Imgc
+              src={imgSrc}
+              className='fc-description-subtitle-img'
+              {...imgProps}
+              dataAid={`left${dataAid}`}
+            />
+          )}
+          <Typography
+            variant='body2'
+            color={subtitleColor}
+            align={align}
+            component='div'
+            dataAid={`value${dataAid}`}
+          >
+            {subtitle}
+          </Typography>
+        </div>
       )}
     </div>
   );
 };
 
 FeatureCard.defaultProps = {
-  variant: 'description',
-  leftDescription: {},
-  middleDescription: {},
-  rightDescription: {},
-  leftTagProps: {},
-  middleTagProps: {},
+  leftSlotProps: {},
+  rightSlotProps: {},
+  middleSlotProps: {},
+  topLeftImgProps: {},
+};
+
+const DEFAULT_STRUCTURE = {
+  title: PropTypes.node,
+  titleColor: PropTypes.string,
+  subtitle: PropTypes.node,
+  subtitleColor: PropTypes.string,
 };
 
 FeatureCard.propTypes = {
-  heading: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.node.isRequired]),
+  heading: PropTypes.node.isRequired,
   headingColor: PropTypes.string,
-  variant: PropTypes.oneOf(['description', 'tags']),
-  leftDescription: PropTypes.shape({
-    title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-    titleColor: PropTypes.string,
-    subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-    subtitleColor: PropTypes.string,
-  }),
-  middleDescription: PropTypes.shape({
-    title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-    titleColor: PropTypes.string,
-    subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-    subtitleColor: PropTypes.string,
-  }),
-  rightDescription: PropTypes.shape({
-    title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-    titleColor: PropTypes.string,
-    subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-    subtitleColor: PropTypes.string,
-  }),
-  leftTagProps: PropTypes.object,
-  middleTagProps: PropTypes.object,
-  imgProps: PropTypes.object,
+  topLeftImgProps: PropTypes.object,
   onCardClick: PropTypes.func,
-  rightText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   dataAid: PropTypes.string,
+  leftSlotProps: PropTypes.exact({
+    description: PropTypes.shape(DEFAULT_STRUCTURE),
+    tag: PropTypes.object,
+    title: PropTypes.node,
+  }),
+  middleSlotProps: PropTypes.exact({
+    description: PropTypes.shape(DEFAULT_STRUCTURE),
+    tag: PropTypes.object,
+    title: PropTypes.node,
+  }),
+  rightSlotProps: PropTypes.exact({
+    description: PropTypes.shape(DEFAULT_STRUCTURE),
+    tag: PropTypes.object,
+    title: PropTypes.node,
+  }),
 };
 
 export default FeatureCard;
-
-const Description = (props) => {
-  let { leftDescription, middleDescription, rightDescription } = props;
-  leftDescription.align = 'left';
-  middleDescription.align = 'center';
-  rightDescription.align = 'right';
-  const allDescriptions = [leftDescription, middleDescription, rightDescription];
-  return (
-    <div className='fc-description-list'>
-      {allDescriptions?.map((description, idx) => {
-        const {
-          title = '',
-          subtitle = '',
-          titleColor = '',
-          subtitleColor = '',
-          align = 'left',
-          imgProps,
-        } = description;
-        return (
-          <div className='fc-description-item' key={idx}>
-            <Typography
-              variant='body5'
-              color={titleColor}
-              align={align}
-              component='div'
-              dataAid={`key${idx + 1}`}
-            >
-              {title}
-            </Typography>
-            {subtitle && (
-              <div className='fc-subtitle-wrapper'>
-                {imgProps?.src && (
-                  <Imgc
-                    src={imgProps?.src}
-                    className='fc-description-subtitle-img'
-                    {...imgProps}
-                    dataAid={`left${idx + 1}`}
-                  />
-                )}
-                <Typography
-                  variant='body2'
-                  color={subtitleColor}
-                  align={align}
-                  component='div'
-                  dataAid={`value${idx + 1}`}
-                >
-                  {subtitle}
-                </Typography>
-              </div>
-            )}
-          </div>
-        );
-      })}
-    </div>
-  );
-};
-
-const TagVariant = (props) => {
-  const { leftTagProps = {}, middleTagProps = {}, rightTagProps = {} } = props;
-  const allTags = [leftTagProps, middleTagProps, rightTagProps];
-  return (
-    <div className='fc-tag-wrapper'>
-      {allTags?.map((tag, idx) => {
-        if (!tag?.label) return;
-        return (
-          <div key={idx} className='fc-tag-item'>
-            <Tag {...tag} dataAid={`label${idx}`} />
-          </div>
-        );
-      })}
-    </div>
-  );
-};

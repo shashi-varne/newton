@@ -4,12 +4,12 @@
   align-items: center;
 }
 
-.fc-wrapper {
+.feature-card-wrapper {
   padding: 16px;
   background-color: white;
-  box-shadow: 0px 6px 12px -6px rgba(0, 0, 0, 0.04),
-    0px 0px 1px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 6px 12px -6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.2);
   border-radius: 12px;
+  flex: 1;
   cursor: pointer !important;
 
   .fc-divider {
@@ -32,41 +32,47 @@
       margin-right: 16px;
     }
   }
-  .fc-description-list {
-    @include flex-space-btwn();
-    padding-top: 8px;
-    .fc-description-item {
+
+  .fc-description-variant {
+    display: flex;
+    flex-direction: column;
+    margin-right: 16px;
+    &:last-child {
+      margin-right: 0px;
+    }
+    .fc-subtitle-wrapper {
       display: flex;
-      flex-direction: column;
-      margin-right: 16px;
-      &:last-child {
-        margin-right: 0px;
-      }
-      .fc-subtitle-wrapper {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        .fc-description-subtitle-img{
-          height: 16px;
-          width: 16px;
-          margin-right: 4px;
-        }
+      flex-direction: row;
+      align-items: center;
+      .fc-description-subtitle-img {
+        height: 16px;
+        width: 16px;
+        margin-right: 4px;
       }
     }
   }
 
-  .fc-tag-wrapper {
-    @include flex-space-btwn();
+  .feature-card-slot-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
     padding-top: 8px;
-    .fc-tag-item {
-      margin-right: 16px;
-      &:last-child {
-        margin-right: 0px;
-      }
+    > div {
+      flex: 1 1 100%;
     }
-    .tags-wrapper,
-    .label-tag-wrapper {
-      cursor: pointer;
+
+    .fc-left-slot {
+      display: flex;
+      justify-content: flex-start;
+    }
+    .fc-middle-slot {
+      display: flex;
+      justify-content: center;
+    }
+    .fc-right-slot {
+      display: flex;
+      justify-content: flex-end;
     }
   }
 }
