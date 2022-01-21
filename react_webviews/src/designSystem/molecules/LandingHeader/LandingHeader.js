@@ -27,32 +27,24 @@
            passing color to individual Typography item.
   
   Usage of the component:
-   <LandingHeader variant='center'>
-      <LandingHeaderImage imgProps={{ src: require('assets/amazon_pay.svg') }} />
-      <LandingHeaderTitle color='foundationColors.secondary.mango.300'>Title Color</LandingHeaderTitle>
-      <LandingHeaderSubtitle color='foundationColors.secondary.mango.300'>
-        <Typography color='foundationColors.secondary.lossRed.300'>
-          These funds essentially {format(new Date(), 'MMM d, yyyy ')} invest in stocks of
-          various two line text, limit - 99 characters or 17 words
-        </Typography>
-        <Typography>
-          These funds essentially{' '}
-          <Box
-          sx={{
-            color:'foundationColors.secondary.profitGreen.300'
-          }}
-            component='span'
-          > of various
-          </Box>two line text, limit - 99 characters or 17 words Hello World
+   <LandingHeader>
+      <LandingHeaderImage imgSrc={require('assets/amazon_pay.svg')} />
+      <LandingHeaderTitle>I am title</LandingHeaderTitle>
+      <LandingHeaderSubtitle dataIdx={1}>
+        <Typography variant='inherit' color='inherit' component='span' className='custom-text-elipsis'>
+          These funds essentially invest in stocks of various two line text, limit - 99
+          characters or 17 words
         </Typography>
       </LandingHeaderSubtitle>
-      <LandingHeaderPoints color='foundationColors.secondary.profitGreen.300'>
-        <Typography>One line text, limit - 46 characters or 9 words</Typography>
-        <Typography>One line text, limit - 46 characters or 9 words</Typography>
-        <Typography>One line text, limit - 46 characters or 9 words</Typography>
-        <Typography variant='heading2'>
-          One line text, limit - 46 characters or 9 words
-        </Typography>
+      <LandingHeaderPoints dataIdx={1}>
+        One line text, limit - 46 characters or 9 words
+      </LandingHeaderPoints>
+      <LandingHeaderSubtitle dataIdx={2}>
+        These funds essentially invest in stocks of various two line text, limit - 99 characters
+        or 17 words
+      </LandingHeaderSubtitle>
+      <LandingHeaderPoints dataIdx={2}>
+        One line text, limit - 46 characters or 9 words
       </LandingHeaderPoints>
     </LandingHeader>
 
@@ -61,117 +53,60 @@
     color: 'foundationColors.secondary.mango.300'
 */
 
-import React, { Children } from 'react';
+import React from 'react';
 import { Box } from '@mui/material';
 import { Imgc } from '../../../common/ui/Imgc';
 import PropTypes from 'prop-types';
 import Typography from '../../atoms/Typography';
-import isString from 'lodash/isString';
-import './LandingHeader.scss';
 
-const LANDING_HEADER_CHILDS = [
-  'LandingHeaderTitle',
-  'LandingHeaderSubtitle',
-  'LandingHeaderPoints',
-  'LandingHeaderImage',
-];
+import './LandingHeader.scss';
 
 export const LandingHeader = ({ variant, children, dataAid }) => {
   const variantClass = variant === 'center' ? 'landing-header-center-align' : '';
   return (
     <Box className={`landing-header-wrapper ${variantClass}`} data-aid={`landingHeader_${dataAid}`}>
-      {Children.map(children, (child) => {
-        const componentType = isString(child?.type) ? child?.type : child?.type?.name;
-        if (LANDING_HEADER_CHILDS.indexOf(componentType) !== -1) {
-          return React.cloneElement(child);
-        } else {
-          console.error(
-            `child passed is ${componentType}, expected childs are 
-            'LandingHeaderTitle','LandingHeaderSubtitle','LandingHeaderPoints', 'LandingHeaderImage`
-          );
-          return null;
-        }
-      })}
+      {children}
     </Box>
   );
 };
 
-export const LandingHeaderImage = ({ imgProps }) => {
+export const LandingHeaderImage = ({ imgSrc, imgProps = {} }) => {
   return (
-    <Imgc
-      src={imgProps?.src}
-      style={{ width: '140px', height: '120px' }}
-      {...imgProps}
-      dataAid='top'
-    />
+    <Imgc src={imgSrc} style={{ width: '140px', height: '120px' }} {...imgProps} dataAid='top' />
   );
 };
 
 export const LandingHeaderTitle = ({ children, color }) => {
   return (
-    <Typography variant='heading1' color={color} dataAid='title'>
+    <Typography variant='heading1' color={color} dataAid='title' component='div'>
       {children}
     </Typography>
   );
 };
 
-export const LandingHeaderSubtitle = ({ children , color}) => {
+export const LandingHeaderSubtitle = ({ children, color, dataIdx }) => {
   return (
-    <div className='lh-subtitle-wrapper'>
-      {Children?.map(children, (child, idx) => {
-        const childrenLength = children?.length;
-        const subtitleId = childrenLength > 1 ? idx + 1 : '';
-        if (child?.type?.name !== 'Typography') {
-          const componentType = child?.type || child?.type?.name;
-          console.error(`Only supported child is Typography, passed type is ${componentType}`);
-          return null;
-        } else {
-          return (
-            <div key={idx} className='lh-subtitle'>
-              {React.cloneElement(child, {
-                variant: child?.props?.variant || 'body2',
-                color: child?.props?.color || color,
-                dataAid: `subtitle${subtitleId}`,
-                align: 'left',
-              })}
-            </div>
-          );
-        }
-      })}
-    </div>
+    <Typography className='lh-subtitle' dataAid={`subtitle${dataIdx}`} variant='body2' color={color} align='left' component='div'>
+      {children}
+    </Typography>
   );
 };
 
-export const LandingHeaderPoints = ({ children, color }) => {
+export const LandingHeaderPoints = ({ children, color, dataIdx }) => {
   return (
     <ul className='lh-description-list'>
-      {Children.map(children, (child, idx) => {
-        const childrenLength = children?.length;
-        const pointId = childrenLength > 1 ? idx + 1 : '';
-        if (child?.type?.name !== 'Typography') {
-          const componentType = child?.type || child?.type?.name;
-          console.error(`Only supported child is Typography, passed type is ${componentType}`);
-          return null;
-        } else {
-          return (
-            <li key={idx} className='lh-description-item'>
-              {React.cloneElement(child, {
-                variant: child?.props?.variant || 'body2',
-                color: child?.props?.color || color,
-                dataAid: `point${pointId}`,
-                align: 'left',
-              })}
-            </li>
-          );
-        }
-      })}
+      <li className='lh-description-item'>
+        <Typography variant='body2' color={color} align='left' dataAid={`point${dataIdx}`} component='div'>
+          {children}
+        </Typography>
+      </li>
     </ul>
   );
 };
 
 LandingHeader.defaultProps = {
   variant: 'side',
-}
+};
 
 LandingHeader.propTypes = {
   children: PropTypes.node,
@@ -187,17 +122,20 @@ LandingHeaderTitle.propTypes = {
 LandingHeaderSubtitle.propTypes = {
   children: PropTypes.node,
   color: PropTypes.string,
+  dataIdx: PropTypes.number.isRequired,
 };
 
 LandingHeaderSubtitle.defaultProps = {
-  color: 'foundationColors.content.secondary'
-}
-
+  color: 'foundationColors.content.secondary',
+};
 LandingHeaderPoints.propTypes = {
   children: PropTypes.node,
   color: PropTypes.string,
+  dataIdx: PropTypes.number.isRequired,
 };
 
 LandingHeaderPoints.defaultProps = {
-  color: 'foundationColors.content.secondary'
-}
+  color: 'foundationColors.content.secondary',
+};
+
+

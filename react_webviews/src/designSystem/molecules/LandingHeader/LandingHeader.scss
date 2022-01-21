@@ -6,21 +6,14 @@
     align-items: center;
   }
 
-  .lh-subtitle-wrapper { 
-    width: 100%;
-    .lh-subtitle {
-      max-width: 99ch;
-      margin-top: 8px;
-    }
+  .lh-subtitle {
+    margin-top: 8px;
   }
-  
+
   .lh-description-list {
-      margin: 0px;
-      padding-left: 20px;
-      margin-top: 8px;
-      width: 100%;
-  }
-  .lh-description-item {
-      margin-bottom: 8px;
+    margin: 0px;
+    padding-left: 20px;
+    margin-top: 8px;
+    width: 100%;
   }
 }
