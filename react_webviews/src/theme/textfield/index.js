@@ -66,7 +66,6 @@ const textFieldCommonStyle = (colors = {}, partnerConfig = {}) => {
   return {
     root: {
       ...typographyVariants.body2,
-      backgroundColor: `${colors?.supporting?.white} !important`,
       border: `1px solid ${colors?.supporting?.athensGrey}`,
       borderRadius: 8,
     },
@@ -99,5 +98,21 @@ const customCommonVariants = (colors={}) => {
         color: colors?.content?.secondary,
       },
     },
+    {
+      props: {customvariant: 'searchBar'},
+      style: {
+        borderRadius: '24px',
+        backgroundColor: colors?.supporting?.grey,
+        border: 'none',
+        '& .MuiOutlinedInput-input': {
+          padding: '0px 8px',
+          borderRadius: '24px',
+          height: '40px',
+        },
+        '& .MuiOutlinedInput-notchedOutline': {
+          border: 'none !important',
+        }
+      }
+    }
   ];
 };
