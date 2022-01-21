@@ -52,6 +52,13 @@ export const tabsVariantsConfig = () => {
         height: 38,
       },
     },
+    {
+      props: { type: 'timeline' },
+      style: {
+        minHeight: 40,
+        height: 40,
+      },
+    },
   ];
 };
 
@@ -96,6 +103,35 @@ export const tabVariantsConfig = (colors={},partnerConfig={}) => {
           backgroundColor: colors.supporting.athensGrey,
         },
       }
+    },
+    {
+      props: { type: 'timeline' },
+      style: {
+        zIndex: 2,
+        ...baseTypographyConfig(colors, partnerConfig)?.body5,
+        color: colors?.content?.tertiary,
+        backgroundColor: 'transparent',
+        minWidth: '40px',
+        height:'40px',
+        width: '40px',
+        padding: '0px 0px',
+        borderRadius: '100%',
+        '&.Mui-selected': {
+          ...baseTypographyConfig(colors, partnerConfig)?.body3,
+          color: colors.supporting.white,
+          backgroundColor: 'transparent'
+        },
+        '&.Mui-disabled': {
+          ...baseTypographyConfig(colors, partnerConfig)?.body1,
+          color: colors.supporting.white,
+          backgroundColor: colors.supporting.athensGrey,
+        },
+        minHeight:'40px',
+        marginRight: '16px',
+        ':last-child': {
+          marginRight: '0px'
+        }
+      },
     }
   ];
 };
