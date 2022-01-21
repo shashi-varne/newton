@@ -1,5 +1,6 @@
-import { InputAdornment, TextField, Typography } from '@mui/material';
+import { InputAdornment, TextField } from '@mui/material';
 import React from 'react';
+import Typography from '../../atoms/Typography';
 import PropTypes from 'prop-types';
 
 import './InputField.scss';
