@@ -64,6 +64,8 @@ class ImgcClass extends Component {
                     display: skeltonFlag ? 'none' : ''
                 }}
                 className={`${props.className}`}
+                onClick={props?.onClick}
+                data-aid={`iv_${props?.dataAid}`}
             />
 
         )
