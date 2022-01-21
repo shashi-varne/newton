@@ -1,0 +1,33 @@
+.freedom-plan-card {
+  padding: 0px;
+
+  .fpc-content {
+    padding: 25px 0 25px 20px;
+
+    .fpc-title {
+      color: var(--primaryVariant5);
+      font-weight: 500;
+      font-size: 26px;
+      line-height: 28px;
+      padding-top: 25px;
+    }
+
+    .fpc-subtitle {
+      color: var(--steelgrey);
+      font-size: 10px;
+      line-height: 12px;
+      font-weight: bold;
+    }
+
+    .fpc-button-arrow {
+      width: 16px !important;
+      height: 16px !important;
+      margin-left: 14px !important;
+    }
+  }
+
+  .fpc-icon {
+    min-height: 180px;
+    min-width: 196px;
+  }
+}

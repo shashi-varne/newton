@@ -22,6 +22,7 @@ import { PATHNAME_MAPPER } from "../../../../kyc/constants";
 import toast from "../../../../common/ui/Toast"
 import PinSetupDialog from "../../mini-components/PinSetupDialog";
 import BFDLBanner from "../../mini-components/BFDLBanner";
+import FreedomPlanCard from "../../mini-components/FreedomPlanCard";
 
 const fromLoginStates = ["/login", "/logout", "/verify-otp"]
 class Landing extends Component {
@@ -463,6 +464,7 @@ class Landing extends Component {
                           <div className="invest-main-top-title" data-aid='recommendations-title'>
                             Stocks & IPOs
                           </div>
+                          <FreedomPlanCard />
                           {stocksAndIpo.map((item, index) => {
                             if (kycStatusLoader) {
                               return (
