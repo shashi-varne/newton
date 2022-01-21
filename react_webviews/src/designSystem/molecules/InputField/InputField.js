@@ -1,4 +1,4 @@
-import { InputAdornment, TextField } from '@mui/material';
+import { InputAdornment, TextField, Typography } from '@mui/material';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -20,9 +20,11 @@ const InputField = (props) => {
     placeholder,
     required,
     variant,
+    onPrefixClick,
+    onSuffixClick,
     type,
     size,
-    fullWidth=true,
+    fullWidth,
     ...restProps
   } = props;
 
@@ -33,32 +35,60 @@ const InputField = (props) => {
   const applySuffixStringTypeStyle = typeof suffix === 'string';
 
   const suffixStyle = () => {
-      if(applySuffixStringTypeStyle) {
-          return {root: 'inputSuffix-string'}
-      } 
-      return {};
-  }
+    if (applySuffixStringTypeStyle) {
+      return { root: 'inputSuffix-string' };
+    }
+    return {};
+  };
 
   const InputPrefix = () => {
-    if(prefix) {
-        return <InputAdornment disableTypography={disabled} disablePointerEvents={disabled} position='start'>{prefix}</InputAdornment>
+    if (prefix) {
+      return (
+        <div
+          className={`input-field-prefix-wrapper ${onPrefixClick && 'if-prefix-clickable'}`}
+          onClick={onPrefixClick}
+        >
+          <InputAdornment
+            disableTypography={disabled}
+            disablePointerEvents={disabled}
+            position='start'
+          >
+            {prefix}
+          </InputAdornment>
+        </div>
+      );
     } else {
-        return null;
+      return null;
     }
-  }
+  };
   const InputSuffix = () => {
-      if(suffix) {
-          return <InputAdornment disableTypography={disabled} disablePointerEvents={disabled} classes={suffixStyle()} position='end'>{suffix}</InputAdornment>
-      } else {
-          return null;
-      }
-  }
+    if (suffix) {
+      return (
+        <div
+          className={`input-field-suffix-wrapper ${onSuffixClick && 'if-suffix-clickable'}`}
+          onClick={onSuffixClick}
+        >
+          <InputAdornment
+            disableTypography={disabled}
+            disablePointerEvents={disabled}
+            classes={suffixStyle()}
+            position='end'
+          >
+            {applySuffixStringTypeStyle ? <Typography variant='body2'>{suffix}</Typography> : suffix}
+          </InputAdornment>
+        </div>
+      );
+    } else {
+      return null;
+    }
+  };
   return (
     <TextField
       label={label}
       variant={variant}
       helperText={helperText}
       error={error}
+      className='input-field-wrapper'
       disabled={disabled}
       onChange={onChange}
       value={value}
@@ -85,7 +115,8 @@ InputField.defaultProps = {
   type: 'text',
   variant: 'filled',
   inputProps: {},
-}
+  fullWidth: true,
+};
 
 InputField.propTypes = {
   label: PropTypes.string,
@@ -100,5 +131,5 @@ InputField.propTypes = {
   required: PropTypes.bool,
   placeholder: PropTypes.string,
   type: PropTypes.string,
-  variant: PropTypes.oneOf(['filled', 'outlined'])
-}
+  variant: PropTypes.oneOf(['filled', 'outlined']),
+};
