@@ -55,14 +55,31 @@ export const commonCardsConfig = {
   landingMarketingBanners: [],
   nfoBanners: [
     {
+      image: "nfo5.svg",
+      type: "nfo",
+      startDate: "01/17/2022",
+      endDate: "01/30/2022",
+    },
+    {
+      image: "nfo2.svg",
+      type: "nfo",
+      endDate: "01/26/2022",
+    },
+    {
+      image: "nfo3.svg",
+      type: "nfo",
+      endDate: "01/26/2022",
+    },
+    {
+      image: "nfo4.svg",
+      type: "nfo",
+      startDate: "01/21/2022",
+      endDate: "02/03/2022",
+    },
+    {
       image: "nfo1.svg",
       type: "nfo",
       endDate: "01/23/2022",
-    },
-    {
-      image: "nfo.svg",
-      type: "nfo",
-      endDate: "01/14/2022",
     },
   ],
 };
@@ -153,7 +170,9 @@ export const baseStylesConfig = {
     highlightColor: "#f6f2ff",
     secondaryGreen: "#7ED321",
     primaryVariant1: "#DFD8EF",
-    primaryVariant4: "#482998"
+    primaryVariant2: "#A998D2",
+    primaryVariant4: "#482998",
+    primaryVariant5: "#24154C",
   },
   finity: {
     default: "#4a4a4a",
@@ -162,7 +181,9 @@ export const baseStylesConfig = {
     highlightColor: "#EFEEFB",
     secondaryGreen: "#33CF90",
     primaryVariant1: "#C6C2F9",
-    primaryVariant4: "#8279F8"
+    primaryVariant2: "#B9B3F9",
+    primaryVariant4: "#482998",
+    primaryVariant5: "#4F44D0",
   },
 };
 

@@ -133,7 +133,7 @@ class MyAccount extends Component {
       kycStatusData.push({ ...MF_AND_STOCKS_STATUS_MAPPER[stocksStatus], status: stocksStatus, key: "stocks", title: "Stocks & IPO" });
       kycStatusData.push({ ...FNO_STATUS_MAPPER[fnoStatus], status: fnoStatus, key: "fno", title: "Futures & Options" });
     }
-    this.setState({ kycStatusData });
+    this.setState({ kycStatusData, tradingEnabled });
   }
 
   handleInvestmentCard = (data) => () => {
@@ -321,6 +321,7 @@ class MyAccount extends Component {
       contactInfo,
       verifyDetails,
       accountAlreadyExists,
+      tradingEnabled
     } = this.state;
     let bank = userKyc.bank || {};
     return (
@@ -451,20 +452,23 @@ class MyAccount extends Component {
                 />
                 <div>Upload Mandate</div>
               </div>
-              <div
-                data-aid='security-setting'
-                className="account-options"
-                onClick={() => {
-                  this.sendEvents("settings_clicked", "");
-                  this.handleClick("/account/security-settings");
-                }}
-              >
-                <Imgc className="my-imgc"
-                  src={require(`assets/security.svg`)}
-                  alt=""
-                />
-                <div>Security settings</div>
-              </div>
+              {tradingEnabled && (
+                <div
+                  data-aid="security-setting"
+                  className="account-options"
+                  onClick={() => {
+                    this.sendEvents("settings_clicked", "");
+                    this.handleClick("/account/security-settings");
+                  }}
+                >
+                  <Imgc
+                    className="my-imgc"
+                    src={require(`assets/security.svg`)}
+                    alt=""
+                  />
+                  <div>Security settings</div>
+                </div>
+              )}
             </div>
             {(mandate.prompt ||
               pendingMandate.show_status ||
