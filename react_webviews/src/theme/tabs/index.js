@@ -137,7 +137,7 @@ export const tabVariantsConfig = (colors={},partnerConfig={}) => {
           backgroundColor: colors.supporting.athensGrey,
         },
         minHeight:'40px',
-        marginRight: '16px',
+        marginRight: '12px',
         ':last-child': {
           marginRight: '0px'
         }

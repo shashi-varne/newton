@@ -7,7 +7,7 @@ const indicatorStyles = {
   height: '40px',
   borderRadius: '100%',
 };
-export const TimelineList = ({
+export const Timelines = ({
   value,
   onChange,
   variant,
@@ -21,7 +21,7 @@ export const TimelineList = ({
 }) => {
   return (
     <LibTabs
-      data-aid={`timelineList_${dataAid}`}
+      data-aid={`timelines_${dataAid}`}
       value={value}
       onChange={onChange}
       variant={variant}
@@ -40,13 +40,13 @@ export const TimelineList = ({
   );
 };
 
-TimelineList.defaultProps = {
+Timelines.defaultProps = {
   variant: 'scrollable',
   scrollButtons: 'auto',
   allowScrollButtonsMobile: true,
 };
 
-TimelineList.propTypes = {
+Timelines.propTypes = {
   variant: PropTypes.oneOf(['fullWidth', 'scrollable', 'standard']),
   scrollButtons: PropTypes.oneOf(['auto', false, true]),
   children: PropTypes.instanceOf(Array).isRequired,
@@ -55,7 +55,7 @@ TimelineList.propTypes = {
   dataAid: PropTypes.string,
 };
 
-export const TimeLineItem = ({
+export const TimeLine = ({
   value,
   icon,
   disabled,
@@ -71,7 +71,7 @@ export const TimeLineItem = ({
   const dataAidValue = dataAid || idx + 1;
   return (
     <LibTab
-      data-aid={`timelineItem_${dataAidValue}`}
+      data-aid={`timeline_${dataAidValue}`}
       value={value}
       disabled={disabled}
       icon={icon}
