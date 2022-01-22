@@ -54,6 +54,7 @@ const FeatureCard = ({
           className='fc-heading-text'
           color={headingColor}
           dataAid='title'
+          component='div'
         >
           {heading}
         </Typography>
@@ -74,56 +75,56 @@ const FeatureCard = ({
   );
 };
 
-export const LeftSlot = ({ description = {}, tag = {}, title }) => {
+export const LeftSlot = ({ description = {}, tag = {}, title, titleColor }) => {
   description.align = 'left';
 
   if (title) {
     return (
-      <Typography variant='body2' align='left'>
+      <Typography variant='body2' align='left' color={titleColor} component='div' dataAid='label'>
         {title}
       </Typography>
     );
   }
 
   if (!isEmpty(tag)) {
-    return <Tag {...tag} />;
+    return <Tag {...tag} dataAid='label1'/>;
   }
   if (!isEmpty(description)) {
     return <Description description={description} />;
   }
 };
 
-export const RightSlot = ({ description = {}, tag = {}, title }) => {
+export const RightSlot = ({ description = {}, tag = {}, title, titleColor }) => {
   description.align = 'right';
 
   if (title) {
     return (
-      <Typography variant='body2' align='right'>
+      <Typography variant='body2' align='right' color={titleColor} component='div' dataAid='label'>
         {title}
       </Typography>
     );
   }
 
   if (!isEmpty(tag)) {
-    return <Tag {...tag} />;
+    return <Tag {...tag} dataAid='label3'/>;
   }
   if (!isEmpty(description)) {
     return <Description description={description} />;
   }
 };
 
-export const MiddleSlot = ({ description = {}, tag = {}, title }) => {
+export const MiddleSlot = ({ description = {}, tag = {}, title, titleColor }) => {
   description.align = 'center';
 
   if (title) {
     return (
-      <Typography variant='body2' align='center'>
+      <Typography variant='body2' align='center' color={titleColor} component='div' dataAid='label'>
         {title}
       </Typography>
     );
   }
   if (!isEmpty(tag)) {
-    return <Tag {...tag} />;
+    return <Tag {...tag} dataAid='label2'/>;
   }
   if (!isEmpty(description)) {
     return <Description description={description} />;
@@ -137,8 +138,8 @@ const Description = ({ description, dataAid }) => {
     titleColor = '',
     subtitleColor = '',
     align = 'left',
-    imgSrc,
-    imgProps = {},
+    leftImgSrc,
+    leftImgProps = {},
   } = description;
   return (
     <div className='fc-description-variant'>
@@ -153,11 +154,11 @@ const Description = ({ description, dataAid }) => {
       </Typography>
       {subtitle && (
         <div className='fc-subtitle-wrapper'>
-          {imgSrc && (
+          {leftImgSrc && (
             <Imgc
-              src={imgSrc}
+              src={leftImgSrc}
               className='fc-description-subtitle-img'
-              {...imgProps}
+              {...leftImgProps}
               dataAid={`left${dataAid}`}
             />
           )}
@@ -188,6 +189,7 @@ const DEFAULT_STRUCTURE = {
   titleColor: PropTypes.string,
   subtitle: PropTypes.node,
   subtitleColor: PropTypes.string,
+  leftImgProps: PropTypes.object
 };
 
 FeatureCard.propTypes = {
