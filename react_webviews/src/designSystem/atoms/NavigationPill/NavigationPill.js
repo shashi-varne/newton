@@ -1,5 +1,6 @@
 /*
   Props Description: 
+  label: this is a required prop.
   labelColor, backgroundColor => strongly recommended to use foundation colors only for these props.
   Example:
   labelColor: 'foundationColors.secondary.mango.300'
@@ -32,7 +33,10 @@ const NavigationPill = ({
 };
 
 NavigationPill.propTypes = {
-  label: PropTypes.string.isRequired
+  label: PropTypes.string.isRequired,
+  disabled: PropTypes.bool,
+  labelColor: PropTypes.string,
+  backgroundColor: PropTypes.string,
 }
 
 export default NavigationPill;
