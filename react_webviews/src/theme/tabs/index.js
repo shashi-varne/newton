@@ -7,7 +7,7 @@ export const tabsStyleOverRides = () => {
       height: 36,
       minHeight: 36,
       '& .MuiTabScrollButton-root': {
-        ':first-child': {
+        ':first-of-type': {
           display: 'none',
         },
         '&.Mui-disabled': {
@@ -87,6 +87,7 @@ export const tabVariantsConfig = (colors={},partnerConfig={}) => {
         borderRadius: 100,
         minHeight: 38,
         height: 38,
+        marginRight: '0px',
       },
     },
     {
