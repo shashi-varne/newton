@@ -108,7 +108,7 @@ const customCommonVariants = (colors={}) => {
       props: {customvariant: 'searchBar'},
       style: {
         borderRadius: '24px',
-        backgroundColor: colors?.supporting?.grey,
+        backgroundColor: `${colors?.supporting?.grey} !important`,
         border: 'none',
         '& .MuiOutlinedInput-input': {
           padding: '0px 8px',
