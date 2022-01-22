@@ -62,7 +62,7 @@ export const Tab = ({
   dataAid,
   ...props
 }) => {
-  const dataAidValue = dataAid || idx;
+  const dataAidValue = dataAid || idx + 1;
   return (
     <LibTab
       data-aid={`tab_${dataAidValue}`}

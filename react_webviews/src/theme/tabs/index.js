@@ -6,19 +6,27 @@ export const tabsStyleOverRides = () => {
       backgroundColor: 'transparent',
       height: 36,
       minHeight: 36,
+      '& .MuiTabScrollButton-root': {
+        ':first-child': {
+          display: 'none',
+        },
+        '&.Mui-disabled': {
+          opacity: '0.4',
+        },
+      },
     },
     flexContainer: {
       flex: 1,
-      justifyContent: 'space-between !important'
+      justifyContent: 'space-between !important',
     },
     scroller: {
-      display: 'flex'
+      display: 'flex',
     },
   };
 };
 
-export const tabStyleOverRides = (colors={},partnerConfig={}) => {
-  const typographyVariants = baseTypographyConfig(colors,partnerConfig);
+export const tabStyleOverRides = (colors = {}, partnerConfig = {}) => {
+  const typographyVariants = baseTypographyConfig(colors, partnerConfig);
   return {
     root: {
       ...typographyVariants?.body2,
@@ -35,10 +43,11 @@ export const tabStyleOverRides = (colors={},partnerConfig={}) => {
       height: 36,
       padding: '0px 0px 12px 0px',
       minWidth: 'fit-content',
+      maxWidth: 'fit-content',
       marginRight: '24px',
       ':last-child': {
-        marginRight: '0px'
-      }
+        marginRight: '0px',
+      },
     },
   };
 };
