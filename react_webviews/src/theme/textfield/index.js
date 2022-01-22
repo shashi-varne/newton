@@ -66,6 +66,7 @@ const textFieldCommonStyle = (colors = {}, partnerConfig = {}) => {
   return {
     root: {
       ...typographyVariants.body2,
+      backgroundColor: 'transparent !important',
       border: `1px solid ${colors?.supporting?.athensGrey}`,
       borderRadius: 8,
       '&.Mui-disabled': {
