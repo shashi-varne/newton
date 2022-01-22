@@ -45,18 +45,18 @@ const InputField = (props) => {
   const InputPrefix = () => {
     if (prefix) {
       return (
-        <div
-          className={`input-field-prefix-wrapper ${onPrefixClick && 'if-prefix-clickable'}`}
-          onClick={onPrefixClick}
+        <InputAdornment
+          disableTypography={disabled}
+          disablePointerEvents={disabled}
+          position='start'
         >
-          <InputAdornment
-            disableTypography={disabled}
-            disablePointerEvents={disabled}
-            position='start'
+          <div
+            className={`input-field-prefix-wrapper ${onPrefixClick && 'if-prefix-clickable'}`}
+            onClick={onPrefixClick}
           >
             {prefix}
-          </InputAdornment>
-        </div>
+          </div>
+        </InputAdornment>
       );
     } else {
       return null;
@@ -65,19 +65,23 @@ const InputField = (props) => {
   const InputSuffix = () => {
     if (suffix) {
       return (
-        <div
-          className={`input-field-suffix-wrapper ${onSuffixClick && 'if-suffix-clickable'}`}
-          onClick={onSuffixClick}
+        <InputAdornment
+          disableTypography={disabled}
+          disablePointerEvents={disabled}
+          classes={suffixStyle()}
+          position='end'
         >
-          <InputAdornment
-            disableTypography={disabled}
-            disablePointerEvents={disabled}
-            classes={suffixStyle()}
-            position='end'
+          <div
+            className={`input-field-suffix-wrapper ${onSuffixClick && 'if-suffix-clickable'}`}
+            onClick={onSuffixClick}
           >
-            {applySuffixStringTypeStyle ? <Typography variant='body2'>{suffix}</Typography> : suffix}
-          </InputAdornment>
-        </div>
+            {applySuffixStringTypeStyle ? (
+              <Typography variant='body2'>{suffix}</Typography>
+            ) : (
+              suffix
+            )}
+          </div>
+        </InputAdornment>
       );
     } else {
       return null;
