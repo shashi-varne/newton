@@ -1,11 +1,12 @@
 import React from 'react';
 import { Box, InputAdornment, TextField } from '@mui/material';
+import PropTypes from 'prop-types';
 
 import './SearchBar.scss';
 import { Imgc } from '../../../common/ui/Imgc';
 
 const SearchBar = ({
-  inputProps={},
+  inputProps,
   disabled,
   value,
   onChange,
@@ -62,6 +63,7 @@ const SearchBar = ({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        disabled={disabled}
         InputProps={{
           startAdornment: InputPrefix(),
           endAdornment: InputSuffix(),
@@ -81,4 +83,15 @@ const DefaultPrefix = () => (
 );
 SearchBar.defaultProps = {
   prefix: <DefaultPrefix />,
+  inputProps: {},
+};
+
+SearchBar.propTypes = {
+  inputProps: PropTypes.object,
+  disabled: PropTypes.bool,
+  prefix: PropTypes.node,
+  suffix: PropTypes.node,
+  onPrefixClick: PropTypes.func,
+  onSuffixClick: PropTypes.func,
+  placeholder: PropTypes.string,
 };
