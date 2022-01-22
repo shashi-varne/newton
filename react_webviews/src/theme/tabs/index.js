@@ -4,16 +4,29 @@ export const tabsStyleOverRides = () => {
   return {
     root: {
       backgroundColor: 'transparent',
+      height: 36,
       minHeight: 36,
+      '& .MuiTabScrollButton-root': {
+        ':first-of-type': {
+          display: 'none',
+        },
+        '&.Mui-disabled': {
+          opacity: '0.4',
+        },
+      },
     },
     flexContainer: {
-      display: 'block !important',
+      flex: 1,
+      justifyContent: 'space-between !important',
+    },
+    scroller: {
+      display: 'flex',
     },
   };
 };
 
-export const tabStyleOverRides = (colors={},partnerConfig={}) => {
-  const typographyVariants = baseTypographyConfig(colors,partnerConfig);
+export const tabStyleOverRides = (colors = {}, partnerConfig = {}) => {
+  const typographyVariants = baseTypographyConfig(colors, partnerConfig);
   return {
     root: {
       ...typographyVariants?.body2,
@@ -27,6 +40,14 @@ export const tabStyleOverRides = (colors={},partnerConfig={}) => {
         color: colors?.supporting?.athensGrey,
       },
       minHeight: 36,
+      height: 36,
+      padding: '0px 0px 12px 0px',
+      minWidth: 'fit-content',
+      maxWidth: 'fit-content',
+      marginRight: '24px',
+      ':last-child': {
+        marginRight: '0px',
+      },
     },
   };
 };
@@ -37,6 +58,7 @@ export const tabsVariantsConfig = () => {
       props: { type: 'pill' },
       style: {
         minHeight: 38,
+        height: 38,
       },
     },
   ];
@@ -63,6 +85,9 @@ export const tabVariantsConfig = (colors={},partnerConfig={}) => {
           backgroundColor: colors.supporting.athensGrey,
         },
         borderRadius: 100,
+        minHeight: 38,
+        height: 38,
+        marginRight: '0px',
       },
     },
     {

@@ -12,10 +12,12 @@ export const Tabs = ({
   children,
   classes,
   sx,
+  dataAid,
   ...props
 }) => {
   return (
     <LibTabs
+      data-aid={`tabs_${dataAid}`}
       value={value}
       onChange={onChange}
       variant={variant}
@@ -25,8 +27,8 @@ export const Tabs = ({
       sx={sx}
       {...props}
     >
-      {Children.map(children, (el) => {
-        return React.cloneElement(el);
+      {Children.map(children, (el, idx) => {
+        return React.cloneElement(el,{idx});
       })}
     </LibTabs>
   );
@@ -36,8 +38,16 @@ Tabs.defaultProps = {
   variant: 'scrollable',
   scrollButtons: 'auto',
   allowScrollButtonsMobile: true,
-  children: PropTypes.instanceOf(Array).isRequired
 };
+
+Tabs.propTypes = {
+  variant: PropTypes.oneOf(['fullWidth','scrollable','standard']),
+  scrollButtons: PropTypes.oneOf(['auto',false, true]),
+  children: PropTypes.instanceOf(Array).isRequired,
+  onChange: PropTypes.func,
+  allowScrollButtonsMobile: PropTypes.bool,
+  dataAid: PropTypes.string
+}
 
 export const Tab = ({
   value,
@@ -48,10 +58,14 @@ export const Tab = ({
   classes,
   sx,
   wrapper,
+  idx,
+  dataAid,
   ...props
 }) => {
+  const dataAidValue = dataAid || idx + 1;
   return (
     <LibTab
+      data-aid={`tab_${dataAidValue}`}
       value={value}
       disabled={disabled}
       icon={icon}
