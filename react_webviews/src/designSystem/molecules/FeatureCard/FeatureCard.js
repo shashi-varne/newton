@@ -1,25 +1,42 @@
 /*
   Prop description
-  variant: available variants => description, tags.(select any one of the variant).
-  heading(string/node): Sometime can be used as a node if part of the text is having different style. 
+  heading(string/node),
   headerColor(string),
-  leftDescription, middleDescription and rightDescription:
-    - The structure of the above props should be in:
-      {
-        title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-        titleColor: PropTypes.string,
-        subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-        subtitleColor: PropTypes.string,
-      }
-  leftTagProps, middleTagProps:
-    - this support all the Tag props(Check Tag molecule for more info).
+  topLeftImgSrc: Pass source of image to this prop
+  leftSlotProps, middleSlotProps, rightSlotProps =>
+    - These three props accept either one of the following : tag, description or title(text).
+    - The slot by themselve will align the children accordingly.
   onCardClick: onClick functionality on the outer container.
   rightText(string)
 
   Note: 
     1. It is strongly recommended to only pass foundation colors for any of the color prop.
         Example : headerColor: 'foundationColors.secondary.mango.300'
-    2. PropTypes.oneOfType([PropTypes.string, PropTypes.node]) => use node, only if part of the text is having different style.
+  Usage: 
+  <FeatureCard
+    topLeftImgSrc={require('assets/amazon_pay.svg')}
+    heading='I am heading'
+    leftSlotProps={{
+      tag: {
+        label: 'Equity',
+        labelColor: 'foundationColors.secondary.profitGreen.400',
+        labelBackgroundColor: 'foundationColors.secondary.profitGreen.200',
+      },
+    }}
+    middleSlotProps={{
+      description: {
+        title: 'Title',
+        titleColor: 'foundationColors.content.primary',
+        subtitle: 'Subtitle',
+        subtitleColor: 'foundationColors.content.secondary',
+        leftImgSrc: require('assets/amazon_pay.svg'),
+      },
+    }}
+    rightSlotProps={{
+      title: 'left title',
+      titleColor: 'foundationColors.secondary.coralOrange.400',
+    }}
+  />
 */
 
 import React from 'react';
@@ -39,9 +56,9 @@ const FeatureCard = ({
   headingColor,
   onCardClick,
   dataAid,
-  leftSlotProps = {},
-  middleSlotProps = {},
-  rightSlotProps = {},
+  leftSlotProps,
+  middleSlotProps,
+  rightSlotProps,
 }) => {
   return (
     <div className='feature-card-wrapper' onClick={onCardClick} data-aid={`featureCard_${dataAid}`}>
