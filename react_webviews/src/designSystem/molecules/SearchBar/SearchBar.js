@@ -15,6 +15,7 @@ const SearchBar = ({
   onSuffixClick,
   placeholder,
   onPrefixClick,
+  dataAid,
   ...props
 }) => {
   const InputPrefix = () => {
@@ -64,6 +65,7 @@ const SearchBar = ({
         value={value}
         onChange={onChange}
         disabled={disabled}
+        dataAid={`searchBar_${dataAid}`}
         InputProps={{
           startAdornment: InputPrefix(),
           endAdornment: InputSuffix(),
@@ -94,4 +96,5 @@ SearchBar.propTypes = {
   onPrefixClick: PropTypes.func,
   onSuffixClick: PropTypes.func,
   placeholder: PropTypes.string,
+  dataAid: PropTypes.string,
 };
