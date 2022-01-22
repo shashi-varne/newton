@@ -56,6 +56,9 @@ const FinityTheme = {
       white: '#FFFFFF',
     },
   },
+  button: {
+    borderRadius: 12
+  }
 };
 
 export default FinityTheme;
