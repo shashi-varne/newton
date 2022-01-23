@@ -17,10 +17,10 @@
 
 import React from 'react';
 import Typography from '../../atoms/Typography';
-import { Imgc } from '../../../common/ui/Imgc';
 import PropTypes from 'prop-types';
 
 import './HeaderTitle.scss';
+import Icon from '../../atoms/Icon';
 
 const HeaderTitle = ({
   imgSrc,
@@ -34,7 +34,7 @@ const HeaderTitle = ({
 }) => {
   return (
     <div className='ht-wrapper' data-aid={`headerTitle_${dataAid}`}>
-      {imgSrc && <Imgc src={imgSrc} className='ht-left-image' dataAid='left' {...imgProps} />}
+      {imgSrc && <Icon src={imgSrc} size='40px' className='ht-left-image' dataAid='left' {...imgProps} />}
       <div className='ht-child-wrapper'>
         <Typography variant='heading2' color={titleColor} dataAid='title'>
           {title}

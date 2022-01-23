@@ -1,41 +1,39 @@
 import React from 'react';
-import Typography from '../../atoms/Typography';
 import HeaderTitle from './HeaderTitle';
 
 export default {
   component: HeaderTitle,
   title: 'Molecules/HeaderTitle',
   argTypes: {
-    withImage: {
-      defaultValue: true,
-    },
+    imgProps: {
+      control:{
+        disable: true
+      }
+    }
+
   },
 };
 
-const Template = ({withImage, ...args}) => {
-    if(!withImage) {
-        args.imgProps = {}
-        // args.imgProps?.src = require('assets/amazon_pay.svg');
-    }
-  return (
-    <HeaderTitle {...args}>
-      <HeaderTitle.Title>{args?.title}</HeaderTitle.Title>
-      <HeaderTitle.Subtitle>{args?.subtitle}</HeaderTitle.Subtitle>
-      <HeaderTitle.SubtitleLabels>
-        <Typography>Equity</Typography>
-        <Typography>Hybrid</Typography>
-      </HeaderTitle.SubtitleLabels>
-    </HeaderTitle>
-  );
-};
+const Template = args =>  <HeaderTitle {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
   title: 'I am heading',
   subtitle: 'I am subtitle',
-  imgProps: {
-      src: require('assets/amazon_pay.svg')
-  }
+  imgSrc: require('assets/amazon_pay.svg'),
+  subTitleLabels: [
+    {
+      name: 'Equity',
+      color: 'foundationColors.secondary.profitGreen.300'
+    },
+    {
+      name: 'Hybrid',
+      color: 'foundationColors.secondary.lossRed.300'
+    },
+    {
+      name: 'Debt'
+    }
+  ]
 };
 
 Default.argTypes = {
