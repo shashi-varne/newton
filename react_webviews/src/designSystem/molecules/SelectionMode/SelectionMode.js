@@ -1,20 +1,51 @@
+/*
+  Prop Description:
+  className: can pass custom className
+  sx: support Mui sx props,
+  title: Title to be displayed.
+  variant: 'default' and 'radio'
+    - by default => 'default' variant is selected (component name used below => DefaultSelectionMode)
+
+  RadioSelectionMode Props description:
+    selectedValue => pass default selected value
+    handleChange => use this function to change the selected value.
+    options => this is an array of object.
+      structure : [
+        {
+          value: <any value>,
+          ...restProps of DefaultSelectionMode
+        },
+        {
+          value: <any value>,
+          ...restProps of DefaultSelectionMode
+        }
+      ]
+*/
+
 import { Box, FormControl, FormControlLabel, RadioGroup } from '@mui/material';
 import React from 'react';
-import { Imgc } from '../../../common/ui/Imgc';
 import Typography from '../../atoms/Typography';
 import PropTypes from 'prop-types';
 
 import './SelectionMode.scss';
 import RadioButton from '../../atoms/RadioButton';
+import Icon from '../../atoms/Icon';
 
-const RenderSelection = ({
+const SelectionMode = ({ variant, dataAid, ...props }) => {
+  return (
+    <div className='selection-mode-wrapper' data-aid={`selectionMode_${dataAid}`}>
+      {variant === 'radio' && <RadioSelectionMode {...props} />}
+      {variant === 'default' && <DefaultSelectionMode {...props} />}
+    </div>
+  );
+};
+
+const DefaultSelectionMode = ({
   className,
   sx,
   title,
   titleColor,
   titleVariant,
-  subtitle,
-  subtitleColor,
   leftImgProps,
   leftImgSrc,
   rightImgSrc,
@@ -23,7 +54,8 @@ const RenderSelection = ({
   return (
     <Box className={`selection-mode-wrapper ${className}`} sx={sx}>
       {leftImgSrc && (
-        <Imgc
+        <Icon
+          size='32px'
           src={leftImgSrc}
           dataAid='left'
           className='selection-mode-left-img'
@@ -37,14 +69,10 @@ const RenderSelection = ({
               {title}
             </Typography>
           )}
-          {subtitle && (
-            <Typography variant='body5' color={subtitleColor} component='div' dataAid='subtitle'>
-              {subtitle}
-            </Typography>
-          )}
         </div>
         {rightImgSrc && (
-          <Imgc
+          <Icon
+            size='24px'
             src={rightImgSrc}
             dataAid='right'
             className='selection-mode-right-img'
@@ -56,11 +84,17 @@ const RenderSelection = ({
   );
 };
 
-export const SelectionModeRadio = ({ options, selectedValue, handleChange }) => {
+const RadioSelectionMode = ({ options, selectedValue, handleChange }) => {
   return (
     <FormControl component='fieldset' className='selection-mode-form-wrapper'>
-      <RadioGroup className='sm-radio-wrapper' value={selectedValue} name='alternateFund' onChange={handleChange}>
+      <RadioGroup
+        className='sm-radio-wrapper'
+        value={selectedValue}
+        name='alternateFund'
+        onChange={handleChange}
+      >
         {options?.map((el, idx) => {
+          delete el?.rightImgSrc;
           return (
             <FormControlLabel
               key={idx}
@@ -68,7 +102,7 @@ export const SelectionModeRadio = ({ options, selectedValue, handleChange }) => 
               disabled={el?.disabled}
               labelPlacement='start'
               control={<RadioButton isChecked={el?.value === selectedValue} />}
-              label={<RenderSelection {...el} />}
+              label={<DefaultSelectionMode {...el} />}
             />
           );
         })}
@@ -77,21 +111,24 @@ export const SelectionModeRadio = ({ options, selectedValue, handleChange }) => 
   );
 };
 
-const SelectionMode = ({ variant, ...props }) => {
-  if (variant === 'radio') {
-    return <SelectionModeRadio {...props} />;
-  } else {
-    return <RenderSelection {...props} />;
-  }
+SelectionMode.propTypes = {
+  variant: PropTypes.oneOf(['default', 'radio']),
 };
 
-RenderSelection.defaultProps = {
-  subtitleColor: 'foundationColors.content.secondary',
-  titleVariant: 'body1'
+SelectionMode.defaultProps = {
+  variant: 'default',
 };
 
-RenderSelection.propTypes = {
-    titleVariant: PropTypes.oneOf(['body1', 'body2'])
-}
+DefaultSelectionMode.defaultProps = {
+  titleVariant: 'body1',
+};
+
+DefaultSelectionMode.propTypes = {
+  title: PropTypes.node,
+  titleColor: PropTypes.string,
+  leftImgProps: PropTypes.object,
+  rightImgProps: PropTypes.object,
+  titleVariant: PropTypes.oneOf(['body1', 'body2']),
+};
 
 export default SelectionMode;

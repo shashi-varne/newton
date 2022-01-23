@@ -6,8 +6,6 @@
   flex: 1;
 
   .selection-mode-left-img {
-    width: 32px;
-    height: 32px;
     margin-right: 16px;
   }
 
@@ -25,8 +23,7 @@
     }
 
     .selection-mode-right-img {
-      width: 24px;
-      height: 24px;
+      margin-left: 10px;
     }
   }
 }
@@ -43,6 +40,10 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 16px;
+      flex: 1;
+      .MuiTypography-root {
+        flex: 1;
+      }
 
       &:last-child {
         margin-bottom: 0px;
