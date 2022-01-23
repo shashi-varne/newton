@@ -4,14 +4,18 @@
   flex-direction: column;
   background-color: white;
   border-radius: 12px;
+  flex: 1;
   cursor: pointer;
 
-  .cv-img-top {
-    width: 32px;
-    height: 32px;
-    margin-bottom: 4px;
+  .cv-img-top + .card-vertical-title {
+    margin-top: 4px;
   }
-  .cv-mt-4 {
+
+  * + .card-vertical-subtitle {
+    margin-top: 4px;
+  }
+
+  * + .card-vertical-description {
     margin-top: 4px;
   }
 }

@@ -11,14 +11,14 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 
-import { Imgc } from '../../../common/ui/Imgc';
 import PropTypes from 'prop-types';
 
 import './CardVertical.scss';
 import Typography from '../../atoms/Typography';
+import Icon from '../../atoms/Icon';
 
 const CardVertical = ({
-  imgcSrc,
+  imgSrc,
   title,
   titleColor,
   subtitle,
@@ -38,10 +38,10 @@ const CardVertical = ({
       sx={sx}
       data-aid={`cardVertical_${dataAid}`}
     >
-      {imgcSrc && <Imgc src={imgcSrc} className='cv-img-top' dataAid='top' {...imgProps} />}
+      {imgSrc && <Icon src={imgSrc} size='32px' className='cv-img-top' dataAid='top' {...imgProps} />}
       {title && (
         <Typography
-          className='cv-mt-4'
+          className='card-vertical-title'
           variant='body1'
           color={titleColor}
           dataAid='title'
@@ -53,7 +53,7 @@ const CardVertical = ({
       {subtitle && (
         <Typography
           variant='body2'
-          className='cv-mt-4'
+          className='card-vertical-subtitle'
           color={subtitleColor}
           dataAid='subtitle'
           component='div'
@@ -64,7 +64,7 @@ const CardVertical = ({
       {description && (
         <Typography
           variant='body2'
-          className='cv-mt-4'
+          className='card-vertical-description'
           color={descriptionColor}
           dataAid='description'
           component='div'
