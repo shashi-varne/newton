@@ -32,7 +32,7 @@ const Image = (props) => {
   };
 
   return (
-    <div>
+    <>
       {!loaded && (
         <Skeleton
           className={className}
@@ -58,7 +58,7 @@ const Image = (props) => {
         onError={onError}
         data-aid={`iv_${dataAid}`}
       />
-    </div>
+    </>
   );
 };
 
