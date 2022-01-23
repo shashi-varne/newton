@@ -10,9 +10,9 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '../../atoms/Typography';
-import { Imgc } from '../../../common/ui/Imgc';
 import PropTypes from 'prop-types';
 import './HighlightInfo.scss';
+import Icon from '../../atoms/Icon';
 
 const HighlightInfo = ({
   title,
@@ -35,7 +35,7 @@ const HighlightInfo = ({
       <Typography variant='body5' color={titleColor} comoponent='div' dataAid='title'>
         {title}
       </Typography>
-      {imgSrc && <Imgc src={imgSrc} className='hi-img-wrapper' dataAid='right' {...imgProps} />}
+      {imgSrc && <Icon size='24px' src={imgSrc} className='hi-img-wrapper' dataAid='right' {...imgProps} />}
     </Box>
   );
 };
