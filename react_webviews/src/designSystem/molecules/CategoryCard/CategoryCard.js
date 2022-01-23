@@ -8,10 +8,10 @@
 */
 
 import React from 'react';
-import { Imgc } from '../../../common/ui/Imgc';
 import PropTypes from 'prop-types';
 import Typography from '../../atoms/Typography';
 import './CategoryCard.scss';
+import Icon from '../../atoms/Icon';
 
 const CategoryCard = ({
   variant,
@@ -33,7 +33,7 @@ const CategoryCard = ({
       onClick={onClick}
       data-aid={`categoryCard_${dataAid}`}
     >
-      <Imgc src={imgSrc} style={variantData.imgStyle} dataAid='top' {...imgProps} />
+      <Icon src={imgSrc} style={variantData.imgStyle} dataAid='top' {...imgProps} />
       {title && (
         <Typography
           variant={variantData.titleVariant}
