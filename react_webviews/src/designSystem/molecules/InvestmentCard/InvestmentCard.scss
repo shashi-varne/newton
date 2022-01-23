@@ -3,6 +3,7 @@
   padding-bottom: 0px;
   border-radius: 12px;
   background-color: white;
+  flex: 1;
   cursor: default;
 
   .ic-header-wrapper {
@@ -12,8 +13,6 @@
     padding-bottom: 16px;
 
     .ic-header-left-img {
-      width: 32px;
-      height: 32px;
       margin-right: 16px;
     }
   }
@@ -49,8 +48,6 @@
         justify-content: flex-end;
 
         .fc-bottom-right-img {
-          width: 24px;
-          height: 24px;
           margin-left: 8px;
         }
 

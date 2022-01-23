@@ -43,7 +43,6 @@
 */
 
 import React, { Children } from 'react';
-import { Imgc } from '../../../common/ui/Imgc';
 import Typography from '../../atoms/Typography';
 import Separator from '../../atoms/Separator';
 import { Pill, Pills } from '../../atoms/Pills';
@@ -53,6 +52,7 @@ import PropTypes from 'prop-types';
 import Collapse from '@mui/material/Collapse';
 import isString from 'lodash/isString';
 import './InvestmentCard.scss';
+import Icon from '../../atoms/Icon';
 
 const INVESTMENT_CARD_CHILDS = [
   'InvestmentCardHeaderRow',
@@ -83,7 +83,7 @@ export const InvestmentCard = ({ children, dataAid }) => {
 export const InvestmentCardHeaderRow = ({ imgSrc, imgProps = {}, title, titleColor }) => {
   return (
     <div className='ic-header-wrapper'>
-      {imgSrc && <Imgc src={imgSrc} className='ic-header-left-img' dataAid='left' {...imgProps} />}
+      {imgSrc && <Icon src={imgSrc} size='32px' className='ic-header-left-img' dataAid='left' {...imgProps} />}
       <Typography variant='body1' color={titleColor} component='div' dataAid='title1'>
         {title}
       </Typography>
@@ -196,7 +196,8 @@ export const InvestmentCardBottomRow = ({
               {rightTitle}
             </Typography>
             {rightImgSrc && (
-              <Imgc
+              <Icon
+                size='24px'
                 src={rightImgSrc}
                 className='fc-bottom-right-img'
                 dataAid='right'
