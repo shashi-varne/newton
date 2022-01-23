@@ -15,7 +15,7 @@ export const parameters = {
     viewports: INITIAL_VIEWPORTS,
     defaultViewport: 'iphone6',
   },
-  layout: "centered",
+  layout: "padded",
 };
 
 const withThemeProvider = (Story, context) => {
