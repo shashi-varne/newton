@@ -11,10 +11,10 @@
 
 import React from 'react';
 import Box from '@mui/material/Box';
-import { Imgc } from 'common/ui/Imgc';
 import Typography from '../../atoms/Typography';
 import PropTypes from 'prop-types';
 import './InfoCard.scss';
+import Icon from '../../atoms/Icon';
 
 const InfoCard = ({
   imgSrc,
@@ -33,9 +33,9 @@ const InfoCard = ({
       onClick={onClick}
       data-aid={`infoCard_${dataAid}`}
     >
-      {imgSrc && <Imgc src={imgSrc} className='info-card-left-img' dataAid='left' {...imgProps} />}
+      {imgSrc && <Icon size='32px' src={imgSrc} className='info-card-left-img' dataAid='left' {...imgProps} />}
       <div className='ic-text-wrapper'>
-        <Typography variant='heading4' color={titleColor} component='div' data-aid='tv_title'>
+        <Typography variant='heading4' color={titleColor} component='div' dataAid='title'>
           {title}
         </Typography>
         <Typography
@@ -43,7 +43,7 @@ const InfoCard = ({
           variant='body2'
           color={subtitleColor}
           component='div'
-          data-aid='tv_subtitle'
+          dataAid='subtitle'
         >
           {subtitle}
         </Typography>
@@ -56,7 +56,6 @@ export default InfoCard;
 
 const infoCardWrapperSxStyle = {
   backgroundColor: 'foundationColors.supporting.white',
-  borderRadius: '12px',
 };
 
 InfoCard.defaultProps = {

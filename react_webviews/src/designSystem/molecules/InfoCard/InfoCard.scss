@@ -1,12 +1,11 @@
 .info-card-wrapper {
   display: flex;
   flex-direction: row;
+  border-radius: 12px;
   cursor: pointer;
   padding: 16px;
 
   .info-card-left-img {
-    height: 32px;
-    width: 32px;
     margin-right: 16px;
   }
 
