@@ -55,11 +55,11 @@
 
 import React from 'react';
 import { Box } from '@mui/material';
-import { Imgc } from '../../../common/ui/Imgc';
 import PropTypes from 'prop-types';
 import Typography from '../../atoms/Typography';
 
 import './LandingHeader.scss';
+import Icon from '../../atoms/Icon';
 
 export const LandingHeader = ({ variant, children, dataAid }) => {
   const variantClass = variant === 'center' ? 'landing-header-center-align' : '';
@@ -72,7 +72,7 @@ export const LandingHeader = ({ variant, children, dataAid }) => {
 
 export const LandingHeaderImage = ({ imgSrc, imgProps = {} }) => {
   return (
-    <Imgc src={imgSrc} style={{ width: '140px', height: '120px' }} {...imgProps} dataAid='top' />
+    <Icon src={imgSrc} width='140px' height='120px' {...imgProps} dataAid='top' />
   );
 };
 
