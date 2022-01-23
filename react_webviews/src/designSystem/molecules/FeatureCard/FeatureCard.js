@@ -219,16 +219,19 @@ FeatureCard.propTypes = {
     description: PropTypes.shape(DEFAULT_STRUCTURE),
     tag: PropTypes.object,
     title: PropTypes.node,
+    titleColor: PropTypes.string,
   }),
   middleSlotProps: PropTypes.exact({
     description: PropTypes.shape(DEFAULT_STRUCTURE),
     tag: PropTypes.object,
     title: PropTypes.node,
+    titleColor: PropTypes.string,
   }),
   rightSlotProps: PropTypes.exact({
     description: PropTypes.shape(DEFAULT_STRUCTURE),
     tag: PropTypes.object,
     title: PropTypes.node,
+    titleColor: PropTypes.string,
   }),
 };
 
