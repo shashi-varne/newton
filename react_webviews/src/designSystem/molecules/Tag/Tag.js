@@ -20,7 +20,7 @@
 import { Box } from '@mui/material';
 import Typography from '../../atoms/Typography';
 import React, { useMemo } from 'react';
-import { Imgc } from '../../../common/ui/Imgc';
+import Icon from '../../atoms/Icon'
 import PropTypes from 'prop-types';
 import './Tag.scss';
 import isEmpty from 'lodash/isEmpty';
@@ -56,7 +56,8 @@ const Tag = (props) => {
       data-aid={`tag_${dataAid}`}
     >
       {leftImageData?.src && (
-        <Imgc
+        <Icon
+          size='16px'
           dataAid='left'
           className={`tag-left-image ${leftImageData?.leftImageClass}`}
           src={leftImageData?.src}
@@ -67,7 +68,7 @@ const Tag = (props) => {
         {label}
       </Typography>
       {morningStarData?.morningLogo && !leftImgProps?.src  && (
-        <Imgc
+        <Icon
           src={require(`assets/${morningStarData?.morningLogo}.svg`)}
           alt=''
           dataAid='logo'
