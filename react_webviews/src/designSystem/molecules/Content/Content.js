@@ -7,11 +7,11 @@
 */
 
 import React from 'react';
-import { Imgc } from '../../../common/ui/Imgc';
 import Typography from '../../atoms/Typography';
 import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import './Content.scss';
+import Image from '../../atoms/Image';
 
 const BlogContent = ({
   imgSrc,
@@ -33,9 +33,11 @@ const BlogContent = ({
       sx={sx}
     >
       {imgSrc && (
-        <Imgc
+        <Image
           src={imgSrc}
           className='content-left-img'
+          width='100px'
+          height='70px'
           dataAid='left'
           {...imgProps}
         />
