@@ -1,5 +1,6 @@
 /*
     Props Description:
+    leftImgSrc, rightImgSrc: path of the Image src.
     title(string),
     subtitle(string),
     titleColor, subtitleColor : strongly recommended to use foundation Colors.
@@ -9,10 +10,10 @@
 
 import React from 'react';
 import Typography from '../../atoms/Typography';
-import { Imgc } from '../../../common/ui/Imgc';
 import PropTypes from 'prop-types';
 import Separator from '../../atoms/Separator';
 import './MenuItem.scss';
+import Icon from '../../atoms/Icon';
 
 const MenuItem = ({
   leftImgSrc,
@@ -36,7 +37,7 @@ const MenuItem = ({
         data-aid={`menuItem_${dataAid}`}
       >
         {leftImgSrc && (
-          <Imgc src={leftImgSrc} className='menu-item-left-img' dataAid='left' {...leftImgProps} />
+          <Icon src={leftImgSrc} size='54px' className='menu-item-left-img' dataAid='left' {...leftImgProps} />
         )}
 
         <div className='mi-right-wrapper'>
@@ -49,8 +50,9 @@ const MenuItem = ({
             </Typography>
           </div>
           {rightImgSrc && (
-            <Imgc
+            <Icon
               src={rightImgSrc}
+              size='24px'
               className='menu-item-right-img'
               dataAid='right'
               {...rightImgProps}
