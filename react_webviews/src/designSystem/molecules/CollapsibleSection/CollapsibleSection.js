@@ -14,9 +14,9 @@
 import React from 'react';
 import { Collapse as CollapseLib } from '@mui/material';
 import Typography from '../../atoms/Typography';
-import { Imgc } from '../../../common/ui/Imgc';
 import PropTypes from 'prop-types';
 import './CollapsibleSection.scss';
+import Icon from '../../atoms/Icon';
 
 const CollapsibleSection = ({
   isOpen,
@@ -35,7 +35,7 @@ const CollapsibleSection = ({
         <Typography variant='heading3' color={labelColor} dataAid='title'>
           {label}
         </Typography>
-        <Imgc src={isOpen ? expandedIcon : collapsedIcon} className='c-icon-wrapper' />
+        <Icon size='24px' src={isOpen ? expandedIcon : collapsedIcon} className='c-icon-wrapper' />
       </div>
       <CollapseLib in={isOpen}>
         <div className={`c-child-wrapper ${childWrapperClass}`}>{children}</div>
@@ -45,7 +45,7 @@ const CollapsibleSection = ({
 };
 
 CollapsibleSection.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
+  isOpen: PropTypes.bool,
   label: PropTypes.string.isRequired,
   labelColor: PropTypes.string,
   onClick: PropTypes.func.isRequired,
