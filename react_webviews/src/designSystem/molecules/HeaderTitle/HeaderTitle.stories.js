@@ -6,15 +6,24 @@ export default {
   title: 'Molecules/HeaderTitle',
   argTypes: {
     imgProps: {
-      control:{
-        disable: true
-      }
-    }
-
+      control: {
+        disable: true,
+      },
+    },
+    title: {
+      control: {
+        type: 'text',
+      },
+    },
+    subtitle: {
+      control: {
+        type: 'text',
+      },
+    },
   },
 };
 
-const Template = args =>  <HeaderTitle {...args} />;
+const Template = (args) => <HeaderTitle {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
@@ -24,16 +33,16 @@ Default.args = {
   subTitleLabels: [
     {
       name: 'Equity',
-      color: 'foundationColors.secondary.profitGreen.300'
+      color: 'foundationColors.secondary.profitGreen.300',
     },
     {
       name: 'Hybrid',
-      color: 'foundationColors.secondary.lossRed.300'
+      color: 'foundationColors.secondary.lossRed.300',
     },
     {
-      name: 'Debt'
-    }
-  ]
+      name: 'Debt',
+    },
+  ],
 };
 
 Default.argTypes = {
