@@ -14,13 +14,13 @@
 import { Box } from '@mui/material';
 import React from 'react';
 import Typography from '../../atoms/Typography';
-import { Imgc } from '../../../common/ui/Imgc';
 import Button from '../../atoms/Button';
 import Status from '../../atoms/Status';
 import isFunction from 'lodash/isFunction';
 import PropTypes from 'prop-types';
 
 import './CardHorizontal.scss';
+import Icon from '../../atoms/Icon';
 
 const CardHorizontal = ({
   leftImgSrc,
@@ -35,7 +35,7 @@ const CardHorizontal = ({
   descriptionColor,
   actionLink,
   onButtonClick,
-  status,
+  statusVariant,
   statusTitle,
   onClick,
   dataAid,
@@ -62,20 +62,13 @@ const CardHorizontal = ({
   return (
     <Box
       className={`${wrapperClassNames} ${className}`}
-      sx={{sx}}
+      sx={{ sx }}
       onClick={onClick}
       data-aid={`cardHorizontal_${dataAid}`}
     >
       <Box className='ch-top-section-wrapper'>
         <div>
-          {leftImgSrc && (
-            <Imgc
-              src={leftImgSrc}
-              style={{ width: '32px', height: '32px' }}
-              {...leftImgProps}
-              dataAid='top'
-            />
-          )}
+          {leftImgSrc && <Icon size='32px' src={leftImgSrc} {...leftImgProps} dataAid='top' />}
           {title && (
             <Typography
               className='mt-4'
@@ -86,7 +79,7 @@ const CardHorizontal = ({
               {title}
             </Typography>
           )}
-          {statusTitle && status && <Status variant={status} title={statusTitle} />}
+          {statusTitle && statusVariant && <Status variant={statusVariant} title={statusTitle} />}
           {subtitle && (
             <Typography
               className='mt-4'
@@ -119,9 +112,10 @@ const CardHorizontal = ({
             />
           )}
         </div>
-        <Imgc
+        <Icon
+          size='110px'
           src={rightImgSrc}
-          style={{ width: '110px', height: '110px', marginLeft: '4px' }}
+          style={{ marginLeft: '4px' }}
           {...rightImgProps}
           dataAid='right'
         />
@@ -143,7 +137,7 @@ const getVariantStyle = (isHeroCardVariant = false, footerText = '') => {
       titleVariant: 'heading3',
       actionBtnVariant: 'primary',
       actionBtnClassName: 'ch-action-btn',
-      showFooter: footerText,
+      showFooter: footerText ? true : false,
       titleColor: 'foundationColors.supporting.white',
       subtitleColor: 'foundationColors.primary.200',
       btnDataAid: 'smallWhite',
@@ -164,19 +158,19 @@ const getVariantStyle = (isHeroCardVariant = false, footerText = '') => {
 CardHorizontal.propTypes = {
   leftImgProps: PropTypes.object,
   rightImgProps: PropTypes.object,
-  title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  title: PropTypes.node,
   titleColor: PropTypes.string,
-  subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  subtitle: PropTypes.node,
   subtitleColor: PropTypes.string,
-  description: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  description: PropTypes.node,
   descriptionColor: PropTypes.string,
   actionLink: PropTypes.string,
   onButtonClick: PropTypes.func,
-  status: PropTypes.string,
+  statusVariant: PropTypes.string,
   statusTitle: PropTypes.string,
   onClick: PropTypes.func,
   dataAid: PropTypes.string,
-  footerText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  footerText: PropTypes.node,
   footerTextColor: PropTypes.string,
   footerBackground: PropTypes.string,
   variant: PropTypes.oneOf(['product', 'heroCard']),
