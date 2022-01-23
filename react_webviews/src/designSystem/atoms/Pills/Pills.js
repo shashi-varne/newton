@@ -67,7 +67,7 @@ export const Pill = ({
   dataAid,
   ...props
 }) => {
-  const dataAidValue = dataAid || idx+1;
+  const dataAidValue = dataAid || idx + 1;
   return (
     <LibTab
       data-aid={`pill_${dataAidValue}`}
@@ -80,6 +80,8 @@ export const Pill = ({
       sx={sx}
       wrapper={wrapper}
       disableRipple
+      disableFocusRipple
+      disableTouchRipple
       {...props}
     />
   );
