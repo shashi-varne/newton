@@ -19,6 +19,21 @@ export default {
       options: ['small', 'medium'],
       control: { type: 'radio' },
     },
+    helperText: {
+      control: {
+        type: 'text',
+      },
+    },
+    prefix: {
+      control: {
+        type: 'text',
+      },
+    },
+    suffix: {
+      control: {
+        type: 'text',
+      },
+    },
   },
 };
 
