@@ -13,6 +13,16 @@ export default {
     isOpen: {
       defaultValue: false,
     },
+    children: {
+      control: {
+        disable: true,
+      },
+    },
+    childWrapperClass: {
+      control: {
+        disable: true,
+      },
+    },
   },
 };
 
