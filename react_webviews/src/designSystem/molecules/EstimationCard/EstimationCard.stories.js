@@ -5,7 +5,6 @@ export default {
   component: EstimationCard,
   title: 'Molecules/EstimationCard',
   parameters: {
-    layout: 'padded',
     backgrounds: {
       default: 'dark',
     },
