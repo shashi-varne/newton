@@ -11,9 +11,9 @@ import Typography from '../../atoms/Typography';
 import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import './Content.scss';
-import Image from '../../atoms/Image';
+import Icon from '../../atoms/Icon';
 
-const BlogContent = ({
+const Content = ({
   imgSrc,
   imgProps,
   title,
@@ -29,11 +29,11 @@ const BlogContent = ({
     <Box
       className={`blog-content-wrapper ${className}`}
       onClick={onClick}
-      data-aid={`blogContent_${dataAid}`}
+      data-aid={`content_${dataAid}`}
       sx={sx}
     >
       {imgSrc && (
-        <Image
+        <Icon
           src={imgSrc}
           className='content-left-img'
           width='100px'
@@ -58,12 +58,12 @@ const BlogContent = ({
   );
 };
 
-BlogContent.defaultProps = {
+Content.defaultProps = {
   subtitleColor: 'foundationColors.content.secondary',
   imgProps: {},
 };
 
-BlogContent.propTypes = {
+Content.propTypes = {
   title: PropTypes.node,
   titleColor: PropTypes.string,
   subtitle: PropTypes.node,
@@ -73,4 +73,4 @@ BlogContent.propTypes = {
   imgProps: PropTypes.object,
 };
 
-export default BlogContent;
+export default Content;
