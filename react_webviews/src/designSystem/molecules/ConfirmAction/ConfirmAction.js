@@ -14,9 +14,9 @@ import Box from '@mui/material/Box';
 import Typography from '../../atoms/Typography';
 import Button from '../../atoms/Button';
 import PropTypes from 'prop-types';
-import { Imgc } from '../../../common/ui/Imgc';
 
 import './ConfirmAction.scss';
+import Icon from '../../atoms/Icon';
 
 const ConfirmAction = ({
   imgSrc,
@@ -34,7 +34,7 @@ const ConfirmAction = ({
       sx={{backgroundColor: 'foundationColors.action.brand',...sx,}}
     >
       {imgSrc && (
-        <Imgc src={imgSrc} className='confirm-action-left-img' dataAid='left' {...imgProps} />
+        <Icon src={imgSrc} size='24px' className='confirm-action-left-img' dataAid='left' {...imgProps} />
       )}
       <div className='confirm-action-right-wrapper'>
         {title && (

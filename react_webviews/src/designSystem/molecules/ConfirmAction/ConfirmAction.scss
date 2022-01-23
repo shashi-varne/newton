@@ -5,13 +5,11 @@
   align-items: center;
   padding-left: 16px;
   padding-right: 16px;
-  width: 100%;
+  flex: 1;
   height: 53px;
   border-radius: 8px;
   cursor: default;
   .confirm-action-left-img {
-    width: 24px;
-    height: 24px;
     margin-right: 8px;
   }
 
