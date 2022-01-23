@@ -13,7 +13,7 @@
 */
 
 import { Skeleton } from '@mui/material';
-import React, { useState, memo } from 'react';
+import React, { useState, memo, useEffect } from 'react';
 
 const Image = (props) => {
   const { height, width, fallBackImageSrc, size, className, style, src, alt, onClick, dataAid } = props;
@@ -24,6 +24,9 @@ const Image = (props) => {
   const onLoadImage = () => {
     setLoaded(true);
   };
+  useEffect(() => {
+    updateSrc(src);
+  }, [src]);
   const onError = () => {
     updateSrc(fallBackImageSrc);
   };
@@ -62,5 +65,5 @@ const Image = (props) => {
 export default memo(Image);
 
 Image.defaultProps = {
-  fallBackImageSrc: require('assets/fallback_icon.svg')
-}
+  fallBackImageSrc: require('assets/fallback_icon.svg'),
+};
