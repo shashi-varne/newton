@@ -3,7 +3,7 @@ import { Box, InputAdornment, TextField } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import './SearchBar.scss';
-import { Imgc } from '../../../common/ui/Imgc';
+import Icon from '../../atoms/Icon';
 
 const SearchBar = ({
   inputProps,
@@ -81,7 +81,7 @@ const SearchBar = ({
 export default SearchBar;
 
 const DefaultPrefix = () => (
-  <Imgc src={require('assets/search_icon.svg')} style={{ height: '16px', width: '16px' }} />
+  <Icon src={require('assets/search_icon.svg')} size='16px' />
 );
 SearchBar.defaultProps = {
   prefix: <DefaultPrefix />,
