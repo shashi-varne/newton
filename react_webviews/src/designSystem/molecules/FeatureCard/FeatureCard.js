@@ -43,11 +43,11 @@ import React from 'react';
 import Typography from '../../atoms/Typography';
 import Tag from '../Tag';
 import Separator from '../../atoms/Separator';
-import { Imgc } from '../../../common/ui/Imgc';
 import isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
 
 import './FeatureCard.scss';
+import Icon from '../../atoms/Icon';
 
 const FeatureCard = ({
   topLeftImgSrc,
@@ -64,7 +64,7 @@ const FeatureCard = ({
     <div className='feature-card-wrapper' onClick={onCardClick} data-aid={`featureCard_${dataAid}`}>
       <div className='fc-first-row-wrapper'>
         {topLeftImgSrc && (
-          <Imgc src={topLeftImgSrc} className='fc-left-img' {...topLeftImgProps} dataAid='left' />
+          <Icon src={topLeftImgSrc} size='32px' className='fc-left-img' {...topLeftImgProps} dataAid='left' />
         )}
         <Typography
           variant='body1'
@@ -172,8 +172,9 @@ const Description = ({ description, dataAid }) => {
       {subtitle && (
         <div className='fc-subtitle-wrapper'>
           {leftImgSrc && (
-            <Imgc
+            <Icon
               src={leftImgSrc}
+              size='16px'
               className='fc-description-subtitle-img'
               {...leftImgProps}
               dataAid={`left${dataAid}`}
