@@ -35,7 +35,6 @@ export const buttonVariantsConfig = (colors={}, partnerConfig={}) => {
       style: {
         height: '37px',
         width: 'max-content',
-        minWidth: '120px',
         paddingLeft: '16px',
         paddingRight: '16px'
       },
