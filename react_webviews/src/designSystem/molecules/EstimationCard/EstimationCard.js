@@ -4,18 +4,19 @@
    leftTitleColor, leftSubtitleColor, rightTitleColor, rightSubtitleColor => strongly recommended to use only foundation colors.
    Example: 
     leftTitleColor: 'foundationColors.secondary.mango.300'
-   onInfoClick: will show the info icon with clickable functionality.
+   toolTipText: will show the info icon with clickable functionality.
    onClick: will tigger the event if card container is clicked.
 */
 
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
-import { Imgc } from '../../../common/ui/Imgc';
 import PropTypes from 'prop-types';
 import Typography from '../../atoms/Typography';
 import Tooltip from '../../atoms/Tooltip';
 import './EstimationCard.scss';
 import { ClickAwayListener } from '@mui/material';
+import isFunction from 'lodash/isFunction';
+import Icon from '../../atoms/Icon';
 
 const EstimationCard = ({
   leftTitle,
@@ -26,7 +27,8 @@ const EstimationCard = ({
   rightTitleColor,
   rightSubtitle,
   rightSubtitleColor,
-  onInfoClick,
+  iconSrc,
+  onIconClick,
   className,
   onClick,
   dataAid,
@@ -46,7 +48,7 @@ const EstimationCard = ({
             <Typography variant='body1' color={leftTitleColor} component='div' dataAid='title1'>
               {leftTitle}
             </Typography>
-            {onInfoClick && <InfoTooltip toolTipText={toolTipText} onInfoClick={onInfoClick} />}
+            {(iconSrc || toolTipText ) && <InfoTooltip toolTipText={toolTipText} onIconClick={onIconClick} iconSrc={iconSrc}/>}
           </div>
         )}
         {leftSubtitle && (
@@ -90,16 +92,21 @@ const EstimationCard = ({
 
 export default EstimationCard;
 
-const InfoTooltip = ({ toolTipText, onInfoClick }) => {
+const InfoTooltip = ({ toolTipText, onIconClick, iconSrc }) => {
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
 
   const handleTooltipClose = () => {
     setIsTooltipOpen(false);
   };
-  const onIconClick = (e) => {
-    e.stopPropagation();
-    setIsTooltipOpen(true);
-    onInfoClick(e);
+  const handleIconClick = (e) => {
+    if(toolTipText) {
+      e.stopPropagation();
+      setIsTooltipOpen(true);
+    } 
+    if(isFunction(onIconClick)) {
+      e.stopPropagation();
+      onIconClick(e);
+    }
   };
   return (
     <ClickAwayListener onClickAway={handleTooltipClose}>
@@ -114,9 +121,10 @@ const InfoTooltip = ({ toolTipText, onInfoClick }) => {
           open={isTooltipOpen}
           title={toolTipText}
         >
-          <div onClick={onIconClick}>
-            <Imgc
-              src={require('assets/ec_info.svg')}
+          <div onClick={handleIconClick}>
+            <Icon
+              src={iconSrc}
+              size='16px'
               className='ec_info_icon'
               alt='info_icon'
               dataAid='right'
@@ -137,7 +145,7 @@ EstimationCard.propTypes = {
   rightTitleColor: PropTypes.string,
   rightSubtitle: PropTypes.node,
   rightSubtitleColor: PropTypes.string,
-  onInfoClick: PropTypes.func,
+  onIconClick: PropTypes.func,
   onClick: PropTypes.func,
   dataAid: PropTypes.string,
 };
@@ -146,6 +154,10 @@ EstimationCard.defaultProps = {
   leftSubtitleColor: 'foundationColors.content.secondary',
   rightSubtitleColor: 'foundationColors.content.secondary',
 };
+
+InfoTooltip.defaultProps = {
+  iconSrc: require('assets/ec_info.svg'),
+}
 
 const esSxStyle = {
   backgroundColor: 'foundationColors.supporting.white',
