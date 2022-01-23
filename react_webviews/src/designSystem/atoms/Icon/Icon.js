@@ -36,7 +36,7 @@ const Image = (props) => {
       {!loaded && (
         <Skeleton
           className={className}
-          style={style}
+          style={{...customSkeletonStyle,...style}}
           variant='rectangular'
           width={imgWidth || '16px'}
           height={imgHeight || '16px'}
@@ -63,6 +63,10 @@ const Image = (props) => {
 };
 
 export default memo(Image);
+
+const customSkeletonStyle = {
+  borderRadius: '8px'
+}
 
 Image.defaultProps = {
   fallBackImageSrc: require('assets/fallback_icon.svg'),
