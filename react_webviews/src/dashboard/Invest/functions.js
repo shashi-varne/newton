@@ -412,7 +412,7 @@ export async function initilizeKyc() {
   let isReadyToInvestBase = isReadyToInvest();
   let isEquityCompletedBase = isEquityCompleted();
   let kycJourneyStatusMapperData = kycJourneyStatus?.includes("ground_") ? kycStatusMapper["incomplete"] : kycStatusMapper[kycJourneyStatus];
-
+  const isKycCompleted = (TRADING_ENABLED && isEquityCompletedBase) || (!TRADING_ENABLED && isReadyToInvestBase);
   this.setState({
     isCompliant,
     kycStatusData,
@@ -425,6 +425,7 @@ export async function initilizeKyc() {
     getKycAppStatusData,
     rejectedItems,
     tradingEnabled: TRADING_ENABLED,
+    isKycCompleted
   });
   let bottom_sheet_dialog_data_premium = {};
   let premium_onb_status = "";

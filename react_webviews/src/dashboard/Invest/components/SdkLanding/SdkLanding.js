@@ -248,7 +248,6 @@ class SdkLanding extends Component {
 
   render() {
     let {
-      isReadyToInvestBase,
       dotLoader,
       referral,
       verificationFailed,
@@ -262,6 +261,7 @@ class SdkLanding extends Component {
       bankListErrorMessage,
       showBankListLoader,
       openBfdlBanner,
+      isKycCompleted,
     } = this.state;
 
     const config = getConfig();
@@ -285,7 +285,7 @@ class SdkLanding extends Component {
         <div className='sdk-landing' data-aid='sdk-landing'>
           {!this.state.kycStatusLoader ? (
             <div className='generic-page-subtitle' data-aid='generic-page-subtitle'>
-              {isReadyToInvestBase
+              {isKycCompleted
                 ? ' Your KYC is verified, You’re ready to invest'
                 : 'Let’s make your money work for you!'}
             </div>
