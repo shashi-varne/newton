@@ -23,10 +23,10 @@
 import { Dialog, Box } from '@mui/material';
 import Typography from '../../atoms/Typography';
 import React, { useCallback } from 'react';
-import { Imgc } from '../../../common/ui/Imgc';
 import Button from '../../atoms/Button';
 import PropTypes from 'prop-types';
 import './BottomSheet.scss';
+import Icon from '../../atoms/Icon';
 
 const BottomSheet = ({
   isOpen,
@@ -77,9 +77,10 @@ const BottomSheet = ({
         {title && (
           <div className='btm-sheet-header-wrapper'>
             {imageTitleSrc && (
-              <Imgc
+              <Icon
+                size='16px'
                 src={imageTitleSrc}
-                style={{ width: '16px', height: '16px', marginRight: '8px' }}
+                className='btn-sheet-header-img'
                 {...imageTitleSrcProps}
               />
             )}
@@ -92,9 +93,10 @@ const BottomSheet = ({
         {label && (
           <div className='btm-sheet-label-wrapper'>
             {imageLabelSrc && (
-              <Imgc
+              <Icon
+                size='32px'
                 src={imageLabelSrc}
-                style={{ width: '32px', height: '32px', marginRight: '16px' }}
+                className='btn-sheet-label-img'
                 {...imageLabelSrcProps}
               />
             )}

@@ -10,10 +10,16 @@
 
   .btm-sheet-header-wrapper {
     @include flex-row();
+    .btn-sheet-header-img {
+      margin-right: 8px
+    }
   }
 
   .btm-sheet-label-wrapper {
     @include flex-row();
+    .btn-sheet-label-img {
+      margin-right: 16px;
+    }
     margin-top: 8px;
   }
 
