@@ -400,4 +400,16 @@ import { redirectToPath } from './native_callback';
     window.location.origin = redirectToPath(modulePath);
   };
   
+  exports.set_content_data = function (data) {
+    let contentData = {};
+    if (data !== "" && typeof data === "string") {
+      contentData = JSON.parse(data);
+    } else if (typeof data === "object") {
+      contentData = data;
+    }
+    if(!isEmpty(contentData?.upi_apps)) {
+      set_session_storage("upiApps", contentData.upi_apps);
+    }
+  }
+
 })(window.callbackWeb ? window.callbackWeb : (window.callbackWeb = {}));

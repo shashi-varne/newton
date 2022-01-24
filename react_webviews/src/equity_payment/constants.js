@@ -34,3 +34,8 @@ export function getImage(type) {
         return upi_apps_list['upi_apps'];
     }
 }
+
+export const API_CONSTANST = {
+    default: "/api/equity/api/eqm/eqpayments/pg/payment/options/",
+    subscription: "/api/equity/api/eqm/subscription/pg/payment/options/",
+};

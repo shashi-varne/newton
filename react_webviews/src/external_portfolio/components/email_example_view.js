@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import EmailTemplate from '../mini-components/email_template';
 import { nativeCallback } from 'utils/native_callback';
 import { navigate } from '../common/commonFunctions';
-import { getConfig } from '../../utils/functions';
 import { storageService } from '../../utils/validators';
-const emailDomain = getConfig().emailDomain;
+import Container from '../common/Container';
 
 class EmailExampleView extends Component {
   constructor(props) {
     super(props);
+    this.params = this.props.location.params || {};
     this.state = {};
     this.navigate = navigate.bind(this);
   }
@@ -17,8 +17,9 @@ class EmailExampleView extends Component {
     let eventObj = {
       "event_name": 'portfolio_tracker',
       "properties": {
-        "user_action": user_action,
-        "screen_name": 'cas email ',
+        user_action: user_action,
+        screen_name: 'cas email',
+        source: this.params.statementSource,
         performed_by: storageService().get('hni-platform') === 'rmapp' ? 'RM' : 'user',
       }
     };
@@ -31,13 +32,13 @@ class EmailExampleView extends Component {
   }
 
   goBack = () => {
-    const params = this.props.location.params || {};
+    const params = this.params;
 
     this.sendEvents('back');
     if (params.comingFrom === 'statement_request') {
       this.navigate(
         `statement_request/${params.email}`,
-        Object.assign(params, { comingFrom: 'email_example_view'})
+        Object.assign(params, { comingFrom: 'email_example_view' })
       );
     } else {
       this.props.history.goBack();
@@ -45,17 +46,20 @@ class EmailExampleView extends Component {
   }
 
   render() {
-    const subtitleText = (<span>Please ensure that the correct email is forwarded to <span id="cas-email-highlight">cas@{emailDomain}</span></span>);
     return (
-      <EmailTemplate
-        title="How to find the CAS email?"
-        subtitle={subtitleText}
+      <Container
+        headerData={{
+          goBack: this.goBack
+        }}
+        title="Email looks like this"
         handleClick={this.goBack}
         buttonTitle="Okay"
         events={this.sendEvents('just_set_events')}
-        goBack={this.goBack}
       >
-      </EmailTemplate>
+        <EmailTemplate
+          statementSource={this.params.statementSource}
+        />
+      </Container>
     );
   }
 }

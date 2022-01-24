@@ -170,7 +170,9 @@ export const baseStylesConfig = {
     highlightColor: "#f6f2ff",
     secondaryGreen: "#7ED321",
     primaryVariant1: "#DFD8EF",
-    primaryVariant4: "#482998"
+    primaryVariant2: "#A998D2",
+    primaryVariant4: "#482998",
+    primaryVariant5: "#24154C",
   },
   finity: {
     default: "#4a4a4a",
@@ -179,7 +181,9 @@ export const baseStylesConfig = {
     highlightColor: "#EFEEFB",
     secondaryGreen: "#33CF90",
     primaryVariant1: "#C6C2F9",
-    primaryVariant4: "#8279F8"
+    primaryVariant2: "#B9B3F9",
+    primaryVariant4: "#482998",
+    primaryVariant5: "#4F44D0",
   },
 };
 
@@ -596,6 +600,17 @@ export const partnerConfigs = {
       applyRefferal: true,
       shareRefferal: true,
     },
+  },
+  bom: {
+    code: "bom",
+    logo: "bom.png",
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      ourRecommendations: ["instaredeem", "buildwealth", "savetax"],
+    },
+    styles: {
+      primaryColor: "#378ECF",
+    }
   },
 };
 

@@ -21,7 +21,7 @@ export const investCardsBase = {
       tagTitle: "NEW"
     },
     ipo: {
-      title: "IPO, Gold Bonds and more",
+      title: "IPO, SGB, NCD & more",
       subtitle: "Primary market products",
       button_text: "INVEST",
       icon: "ic_ipo.svg",

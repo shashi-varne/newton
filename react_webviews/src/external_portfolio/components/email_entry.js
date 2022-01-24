@@ -8,8 +8,9 @@ import { validateEmail, storageService } from '../../utils/validators.js';
 import { navigate, setLoader, setPlatformAndUser } from '../common/commonFunctions.js';
 import { requestStatement, fetchEmails } from '../common/ApiCalls.js';
 import PopUp from '../common/PopUp.js';
+import StatementTriggeredPopUp from '../mini-components/StatementTriggeredPopUp.js';
 
-const productType = getConfig().productName;
+const { productName: productType } = getConfig();
 
 class EmailEntry extends Component {
   constructor(props) {
@@ -18,7 +19,8 @@ class EmailEntry extends Component {
     this.state = {
       email: params.email || '',
       email_error: '',
-      openPopup: false,
+      openDuplicateEmailPopup: false,
+      openSuccessModal: false
     };
     this.navigate = navigate.bind(this);
     this.setLoader = setLoader.bind(this);
@@ -50,7 +52,7 @@ class EmailEntry extends Component {
   }
 
   handleClose = () => {
-    this.setState({ openPopup: false });
+    this.setState({ openDuplicateEmailPopup: false });
   }
 
   goNext = async () => {
@@ -60,24 +62,15 @@ class EmailEntry extends Component {
       this.setState({ email_error: 'Please enter a valid email' });
     } else {
       try {
-        this.setLoader(true);
+        this.setLoader('button');
         const emails = await fetchEmails({ email_id: email });
         if (emails.length) {
           this.setLoader(false);
-          this.setState({ openPopup: true });
+          this.setState({ openDuplicateEmailPopup: true });
         } else {
           await requestStatement({ email });
-          const params = this.props.location.params || { exitToApp: true };
-          const moveToParam = params.comingFrom === 'statement_request' ?
-            params.navigateBackTo : params.comingFrom;
-          this.navigate(
-            `statement_request/${email}`,
-            {
-              exitToApp: params.exitToApp,
-              navigateBackTo: params.exitToApp ? null : moveToParam,
-            },
-            true
-          );
+          this.setLoader(false);
+          this.setState({ openSuccessModal: true });
         }
       } catch(err) {
         console.log(err);
@@ -85,6 +78,20 @@ class EmailEntry extends Component {
         this.setLoader(false);
       }
     }
+  }
+
+  redirectToStepsScreen = () => {
+    const params = this.props.location.params || { exitToApp: true };
+    const moveToParam = params.comingFrom === 'statement_request' ?
+      params.navigateBackTo : params.comingFrom;
+    this.navigate(
+      `statement_request/${this.state.email}`,
+      {
+        exitToApp: params.exitToApp,
+        navigateBackTo: params.exitToApp ? null : moveToParam,
+      },
+      true
+    );
   }
 
   goBack = (params) => {
@@ -112,15 +119,15 @@ class EmailEntry extends Component {
     const { email_error, show_loader } = this.state;
     return (
       <Container
-        hideInPageTitle={true}
+        force_hide_inpage_title
         events={this.sendEvents('just_set_events')}
-        fullWidthButton={true}
-        noHeader={show_loader}
         classHeader={'bg-highlight'}
         handleClick={this.goNext}
-        buttonTitle="Continue"
+        buttonTitle="Generate STATEMENT"
         showLoader={show_loader}
-        goBack={this.goBack}
+        headerData={{
+          goBack: this.goBack
+        }}
       >
         <div
           className={`
@@ -132,11 +139,11 @@ class EmailEntry extends Component {
             Portfolio tracker
           </div>
           <span className="header-subtitle-text-hni">
-            Get a consolidated view of all <br /> your external investments
+            Now manage all your investments in one place
           </span>
         </div>
         <div className="ext-pf-email-label">
-          Enter your primary investment email
+          Enter the email linked to your investments
         </div>
         <div className="InputField">
           <Input
@@ -145,7 +152,7 @@ class EmailEntry extends Component {
             helperText={email_error}
             type="email"
             width="40"
-            label="Email"
+            label="Email ID"
             class="Email address"
             id="email"
             name="email"
@@ -154,13 +161,17 @@ class EmailEntry extends Component {
             onChange={this.handleChange('email')} />
         </div>
         <PopUp
-          openPopup={this.state.openPopup}
+          openPopup={this.state.openDuplicateEmailPopup}
           handleNo={this.handleClose}
           onlyExit={true}
           handleClose={this.handleClose}
         >
           This email has already been added. Please resync from the settings page to update portfolio
         </PopUp>
+        <StatementTriggeredPopUp
+          isOpen={this.state.openSuccessModal}
+          onCtaClick={this.redirectToStepsScreen}
+        />
       </Container>
     );
   }

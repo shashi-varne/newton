@@ -98,6 +98,10 @@ class Container extends Component {
     this.setState({
       openPopup: false
     });
+    if(this.props.match?.params?.flow === "subscription") {
+      this.props.history.push('/freedom-plan/review');
+      return;
+    }
     nativeCallback({ action: this.state.callbackType });
 
   }
