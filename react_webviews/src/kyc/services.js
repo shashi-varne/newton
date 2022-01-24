@@ -27,6 +27,7 @@ export async function getAccountSummary(params = {}) {
       partner: ['partner'],
       bank_list: ['bank_list'],
       referral: ['subbroker', 'p2p'],
+      equity: ['subscription_status']
     }
   }
   try {
@@ -106,6 +107,7 @@ export async function initData() {
 export async function setSummaryData(result) {
   const currentUser = result.data.user.user.data
   const userKyc = result.data.kyc.kyc.data
+  const subscriptionStatus = result.data.equity.subscription_status.data || {};
   if (userKyc.firstlogin) {
     storageService().set('firstlogin', true)
   }
@@ -120,6 +122,9 @@ export async function setSummaryData(result) {
   storageService().setObject("npsUser", result?.data?.nps?.nps_user?.data);
   storageService().setObject("banklist", result?.data?.bank_list?.bank_list?.data);
   storageService().setObject("referral", result.data.referral);
+  if(!isEmpty(subscriptionStatus)) {
+    storageService().setObject("subscriptionStatus", subscriptionStatus);
+  }
   let partner = "";
   let consent_required = false;
   if (result.data.partner.partner.data) {

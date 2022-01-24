@@ -18,6 +18,7 @@ import { isTradingEnabled } from "../../utils/functions";
 import { getKycAppStatus } from "../../kyc/services";
 import "./MyAccount.scss";
 import { PATHNAME_MAPPER as KYC_PATHNAME_MAPPER } from "../../kyc/constants";
+import { storageService } from "../../utils/validators";
 
 const MF_AND_STOCKS_STATUS_MAPPER = {
   init: {
@@ -60,6 +61,36 @@ const FNO_STATUS_MAPPER = {
     icon: "badge-error.svg",
   }
 }
+
+const getFreedomPlanData = (data) => {
+  const { daysLeft, status } = data;
+  const daysLeftMessage = `${daysLeft} DAY${daysLeft !== 1 ? `S` : ``} LEFT`;
+  const FREEDOM_PLAN_DATA_MAPPER = {
+    STANDARD: {
+      title: 'Standard',
+      buttonText: 'UPGRADE PLAN',
+    },
+    INIT: {
+      title: 'Freedom',
+      subtitle: 'in-progress',
+      icon: require(`assets/badge-warning.svg`)
+    },
+    ACTIVE: {
+      title: 'Freedom',
+      buttonText: 'Active',
+      className: 'ma-fp-active',
+      subtitle: daysLeftMessage,
+    },
+    RENEWAL: {
+      title: 'Freedom',
+      buttonText: 'RENEW PLAN',
+      className: 'ma-fp-renewal',
+      subtitle: daysLeftMessage,
+    },
+  }
+  return FREEDOM_PLAN_DATA_MAPPER[status] || {};
+}
+
 class MyAccount extends Component {
   constructor(props) {
     super(props);
@@ -73,6 +104,7 @@ class MyAccount extends Component {
       kycStatusData: [],
       verifyDetails: false,
       accountAlreadyExists: false,
+      freedomPlanData: {},
     };
     this.initializeComponentFunctions = initializeComponentFunctions.bind(this);
   }
@@ -84,7 +116,26 @@ class MyAccount extends Component {
   onload = () => {
     this.getMyAccount();
     this.setKycStatusData();
+    this.setFreedomPlanData();
   };
+
+  setFreedomPlanData = () => {
+    const subscriptionStatus = storageService().getObject("subscriptionStatus") || {};
+    let status = subscriptionStatus.subscription_status;
+    if(subscriptionStatus.renewal_cta) {
+      status = "RENEWAL";
+    }
+    let freedomPlanData = getFreedomPlanData({status, daysLeft: subscriptionStatus.days_left});
+    freedomPlanData.status = status;
+    this.setState({ freedomPlanData, subscriptionStatus });
+  }
+
+  handleFreedomPlan = () => {
+    const subscriptionStatus = this.state.subscriptionStatus;
+    if(subscriptionStatus.renewal_cta || subscriptionStatus.freedom_cta) {
+      this.navigate('/freedom-plan');
+    }
+  }
 
   setKycStatusData = () => {
     const tradingEnabled = isTradingEnabled();
@@ -321,7 +372,8 @@ class MyAccount extends Component {
       contactInfo,
       verifyDetails,
       accountAlreadyExists,
-      tradingEnabled
+      tradingEnabled,
+      freedomPlanData
     } = this.state;
     let bank = userKyc.bank || {};
     return (
@@ -363,6 +415,45 @@ class MyAccount extends Component {
               })}
             </div>
           </div>
+          {tradingEnabled && (
+            <div
+              className="my-account-content"
+              data-aid="myAccount_freedomPlan"
+            >
+              <div className="account ma-freedom-plan">
+                <div
+                  className="account-head-title ma-kir-title"
+                  data-aid="account-head-title"
+                >
+                  Equity Brokerage Plan
+                </div>
+                <div
+                  className={`flex-between-center ma-fp-content ${freedomPlanData.className}`}
+                >
+                  <div>
+                    <div className="ma-fp-title">{freedomPlanData.title}</div>
+                    {freedomPlanData.subtitle && (
+                      <div className="ma-fp-subtitle">
+                        {freedomPlanData.subtitle}
+                      </div>
+                    )}
+                  </div>
+                  {freedomPlanData.buttonText && (
+                    <WVClickableTextElement
+                      className={`name`}
+                      dataAidSuffix="description"
+                      onClick={this.handleFreedomPlan}
+                    >
+                      {freedomPlanData.buttonText}
+                    </WVClickableTextElement>
+                  )}
+                  {freedomPlanData.icon && (
+                    <Imgc src={freedomPlanData.icon} className="ma-fp-icon" />
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
           <div className="my-account-content">
             <div className="account">
               <div className="account-head-title" data-aid='account-head-title'>Account options</div>
