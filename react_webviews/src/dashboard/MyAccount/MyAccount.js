@@ -63,8 +63,11 @@ const FNO_STATUS_MAPPER = {
 class MyAccount extends Component {
   constructor(props) {
     super(props);
+    const config = getConfig();
     this.state = {
-      productName: getConfig().productName,
+      productName: config.productName,
+      isSdk: config.isSdk,
+      currentUser: {},
       showLoader: false,
       mandate: {},
       pendingMandate: {},
@@ -321,7 +324,8 @@ class MyAccount extends Component {
       contactInfo,
       verifyDetails,
       accountAlreadyExists,
-      tradingEnabled
+      tradingEnabled,
+      isSdk,
     } = this.state;
     let bank = userKyc.bank || {};
     return (
@@ -452,7 +456,7 @@ class MyAccount extends Component {
                 />
                 <div>Upload Mandate</div>
               </div>
-              {tradingEnabled && (
+              {(tradingEnabled && (!isSdk || currentUser.pin_status === 'pin_setup_complete')) && (
                 <div
                   data-aid="security-setting"
                   className="account-options"

@@ -49,6 +49,13 @@ export async function initialize() {
   this.closeBfdlBanner = closeBfdlBanner.bind(this);
   this.handleStocksRedirection = handleStocksRedirection.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
+  const openEquityCallback = storageService().getBoolean("openEquityCallback");
+  if (openEquityCallback) {
+    storageService().setBoolean("openEquityCallback", false);
+    nativeCallback({
+      action: "open_equity"
+    })
+  }
   if (config) {
     this.setState({ config });
   }
@@ -610,9 +617,16 @@ function initiatePinSetup(key) {
     openModule('account/setup_2fa', this.props, { routeUrlParams: `/${key}` });
     nativeCallback({ action: 'exit_web' });
   } else if (config.isSdk) {
-    nativeCallback({
-      action: "2fa_module",
-      message: { operation: "setup_pin" },
+    let that = this;
+    window.callbackWeb["open_2fa_module"]({
+      operation: "setup_pin",
+      request_code: "REQ_SETUP_2FA",
+      callback: async function (data) {
+        if (data.status === "success") {
+          await that.getSummary();
+          that.handleStocksRedirection(true);
+        }
+      },
     });
   } else {
     this.setState({ openPinSetupDialog: true, clickedCardKey: key });
@@ -653,10 +667,14 @@ export function handleStocksAndIpoCards(key) {
       if (currentUser?.pin_status !== 'pin_setup_complete') {
         return this.initiatePinSetup(key);
       } else if (kycJourneyStatus !== "fno_rejected") {
-        this.setState({ showPageLoader: "page" });
-        window.location.href = `${config.base_url}/page/equity/launchapp`;
+        if(config.isSdk) {
+          this.handleStocksRedirection(true);
+        } else {
+          this.setState({ showPageLoader: "page" });
+          window.location.href = `${config.base_url}/page/equity/launchapp`;
+        }
         return;
-      }
+      } 
     }
   }
   if(key === "stocks" && !modalData.dualButton) {
@@ -677,11 +695,13 @@ export function handleStocksAndIpoCards(key) {
   }
 }
 
-function handleStocksRedirection() {
+function handleStocksRedirection(skip = false) {
   nativeCallback({
     action: "open_equity"
   })
-  this.closeKycStatusDialog()
+  if (!skip) {
+    this.closeKycStatusDialog()
+  }
 }
 
 async function setProductType() {

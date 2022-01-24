@@ -496,11 +496,10 @@ export function redirectAfterLogin(data, user, navigateFunc) {
   const navigate = navigateFunc || this.navigate;
   if (data.firstLogin) {
     navigate("/referral-code", { state: { goBack: "/", communicationType: data?.contacts?.auth_type } });
-  } else if (sdkStocksRedirection){
+  } else if (sdkStocksRedirection) {
     storageService().setBoolean("sdkStocksRedirection", false);
-    nativeCallback({
-      action: "open_equity"
-    })
+    storageService().setBoolean("openEquityCallback", true);
+    navigate("/", { edit: true, state: { goBack: "/" } });
   } else if (ipoContactNotVerified){
     storageService().set("ipoContactNotVerified", false);
     navigate("/market-products", { state: { goBack: "/invest" } });
