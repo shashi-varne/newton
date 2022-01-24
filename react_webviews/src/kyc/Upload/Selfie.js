@@ -172,7 +172,7 @@ const Selfie = (props) => {
   const onLocationFetchSuccess = (data) => {
     setLocationData(data);
     closeLocnPermDialog();
-    if (!isNative) {
+    if (!isNative && !isSdkEquityEnabled) {
       setIsLiveCamOpen(true);
     } else if (fileHandlerParams.length) {
       openFilePicker(...fileHandlerParams);
