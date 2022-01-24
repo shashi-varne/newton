@@ -168,7 +168,7 @@ export const getConfig = () => {
   // let base_href = window.localStorage.getItem('base_href') || '';
   let base_url_default = '';
   
-  const isStaging = origin.indexOf('plutus-web-staging') >= 0;
+  const isStaging = origin.indexOf('plutus-web-staging') >= 0 || origin.indexOf('plutus-web') >= 0;
   const isFisdomStaging = origin.indexOf('fisdom.equityappuat.finwizard.co.in') >= 0 || origin.indexOf('fisdomapp.staging.finwizard.co.in') >= 0;
   const isFinityStaging = origin.indexOf('finity.equityappuat.finwizard.co.in') >= 0 || origin.indexOf('finityapp.staging.finwizard.co.in') >= 0;
   const isLocal = origin.indexOf('localhost') >=0;
