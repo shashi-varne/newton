@@ -95,9 +95,15 @@ class DigiStatus extends Component {
     }
     if (this.state.set2faPin) {
       if (config.isSdk) {
-        nativeCallback({
-          action: "2fa_module",
-          message: { operation: "setup_pin" },
+        let that = this;
+        window.callbackWeb["open_2fa_module"]({
+          operation: "setup_pin",
+          request_code: "REQ_SETUP_2FA",
+          callback: function (data) {
+            if (data.status === "success") {
+              that.redirectToHome();
+            }
+          },
         });
         return;
       }
