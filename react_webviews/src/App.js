@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, withRouter } from 'react-router-dom';
 
 import Logout from './login_and_registration/pages/Login/Logout.js';
 import FisdomPartnerRedirect from './fisdom_partner_redirect';
@@ -11,7 +11,6 @@ import JssProvider from 'react-jss/lib/JssProvider';
 import { createGenerateClassName, jssPreset,
   MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { themeConfig } from 'utils/constants';
-import { withRouter } from "react-router";
 import { ToastContainer } from 'react-toastify';
 
 // import InternalWealthDashboard from './internal_wealth_dashboard';
