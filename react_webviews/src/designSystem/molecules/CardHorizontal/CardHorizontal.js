@@ -66,7 +66,7 @@ const CardHorizontal = ({
       onClick={onClick}
       data-aid={`cardHorizontal_${dataAid}`}
     >
-      <Box className='ch-top-section-wrapper'>
+      <section className={`ch-top-section-wrapper ${isHeroCardVariant && 'ch-hero-top-section-wrapper'}`}>
         <div>
           {leftImgSrc && <Icon size='32px' src={leftImgSrc} {...leftImgProps} dataAid='top' />}
           {title && (
@@ -119,7 +119,7 @@ const CardHorizontal = ({
           {...rightImgProps}
           dataAid='right'
         />
-      </Box>
+      </section>
       {variantStyle?.showFooter && (
         <Box className='ch-bottom-section-wrapper' sx={{ background: footerBackground }}>
           <Typography variant='body5' color={footerTextColor} dataAid='information'>

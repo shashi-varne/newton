@@ -15,6 +15,9 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    &.ch-hero-top-section-wrapper {
+      align-items: flex-start;
+    }
   }
 
   .ch-bottom-section-wrapper {

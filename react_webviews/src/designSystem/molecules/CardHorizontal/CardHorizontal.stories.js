@@ -23,7 +23,6 @@ export default {
     statusVariant: {
       options: ['POSITIVE', 'ATTENTION', 'WARNING'],
       control: 'radio',
-      defaultValue: 0,
     },
     footerText: {
       control: {
@@ -71,6 +70,7 @@ ProductVariant.argTypes = {
 };
 
 ProductVariant.args = {
+  leftImgSrc: require('assets/amazon_pay.svg'),
   title: 'I am the title',
   subtitle: 'I am the subtitle',
   description: 'I am the description',
