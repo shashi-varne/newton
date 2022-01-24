@@ -397,7 +397,7 @@ import { redirectToPath } from './native_callback';
       account_statement: '/statements',
     }
     const modulePath = MODULE_MAPPER[module] || "/"
-    window.location.origin = redirectToPath(modulePath);
+    window.location.href = redirectToPath(modulePath);
   };
   
   exports.set_content_data = function (data) {
