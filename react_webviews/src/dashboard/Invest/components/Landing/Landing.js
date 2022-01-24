@@ -28,6 +28,7 @@ const fromLoginStates = ["/login", "/logout", "/verify-otp"]
 class Landing extends Component {
   constructor(props) {
     super(props);
+    const subscriptionStatus = storageService().getObject("subscriptionStatus") || {};
     this.state = {
       show_loader: false,
       kycStatusLoader: false,
@@ -53,6 +54,7 @@ class Landing extends Component {
       tradingEnabled: isTradingEnabled(),
       clickedCardKey: '',
       openBfdlBanner: false,
+      subscriptionStatus: subscriptionStatus,
     };
     this.initialize = initialize.bind(this);
     this.generateOtp = generateOtp.bind(this);
@@ -254,6 +256,10 @@ class Landing extends Component {
     }
   }
 
+  handleFreedomCard = () => {
+    this.navigate('/freedom-plan');
+  }
+
   sendEvents = (userAction, cardClick = "") => {
     if (cardClick === "bottomsheet" || cardClick === "continuebottomsheet") {
       let screen_name = cardClick === "continuebottomsheet" ? "account_already_exists" :
@@ -321,7 +327,8 @@ class Landing extends Component {
       kycButtonLoader,
       stocksButtonLoader,
       kycJourneyStatus,
-      openBfdlBanner
+      openBfdlBanner,
+      subscriptionStatus,
     } = this.state;
     const {
       indexFunds,
@@ -464,7 +471,16 @@ class Landing extends Component {
                           <div className="invest-main-top-title" data-aid='recommendations-title'>
                             Stocks & IPOs
                           </div>
-                          <FreedomPlanCard />
+                          {(subscriptionStatus.freedom_cta ||
+                            subscriptionStatus.renewal_cta) && (
+                            <>
+                              {kycStatusLoader ? (
+                                <SkeltonRect className="invest-fp-loader" />
+                              ) : (
+                                <FreedomPlanCard onClick={this.handleFreedomCard} />
+                              )}
+                            </>
+                          )}
                           {stocksAndIpo.map((item, index) => {
                             if (kycStatusLoader) {
                               return (

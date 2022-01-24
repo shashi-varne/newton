@@ -107,7 +107,7 @@ export async function initData() {
 export async function setSummaryData(result) {
   const currentUser = result.data.user.user.data
   const userKyc = result.data.kyc.kyc.data
-  const subscriptionStatus = result.data.equity.subscription_status.data || {};
+  const subscriptionStatus = result?.data?.equity?.subscription_status?.data || {};
   if (userKyc.firstlogin) {
     storageService().set('firstlogin', true)
   }

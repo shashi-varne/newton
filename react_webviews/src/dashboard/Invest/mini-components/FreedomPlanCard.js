@@ -3,13 +3,15 @@ import { getConfig } from "../../../utils/functions";
 import WVButton from "../../../common/ui/Button/WVButton";
 import { Imgc } from "../../../common/ui/Imgc";
 import SVG from "react-inlinesvg";
+import noop from 'lodash/noop'
 import "./FreedomPlanCard.scss";
 
 const FreedomPlanCard = (props) => {
+  const { onClick = noop } = props;
   const { productName, styles } = useMemo(getConfig, []);
   return (
     <>
-      <div className="card flex-between freedom-plan-card">
+      <div className="card flex-between freedom-plan-card" onClick={onClick}>
         <div className="fpc-content">
           <div className="fpc-title">Introducing freedom plan</div>
           <div className="fpc-subtitle">
