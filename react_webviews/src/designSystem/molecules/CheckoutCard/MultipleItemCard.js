@@ -4,6 +4,7 @@ import Typography from '../../atoms/Typography';
 import { Imgc } from '../../../common/ui/Imgc';
 import { Collapse } from '@mui/material';
 import { BottomSection, FooterSection, Row } from './CommonComponent';
+import Icon from '../../atoms/Icon';
 
 const MultipleItemCard = ({
   title,
@@ -24,10 +25,13 @@ const MultipleItemCard = ({
   const onIconClick = (e) => {
     if (isFunction(handleIconClick)) {
       handleIconClick(e);
-    } else if (toggleTopSection) {
-      setShowTopSection(!showTopSection);
-    } else if (toggleBottomSection) {
-      setShowBottomSection(!showBottomSection);
+    } else {
+      if (toggleTopSection) {
+        setShowTopSection(!showTopSection);
+      }
+      if (toggleBottomSection) {
+        setShowBottomSection(!showBottomSection);
+      }
     }
   };
   return (
@@ -38,7 +42,8 @@ const MultipleItemCard = ({
             {title}
           </Typography>
           {rightImgSrc && (
-            <Imgc
+            <Icon
+              size='24px'
               src={rightImgSrc}
               className={`cc-multi-top-image ${isIconClickable && 'cc-clickable-img'}`}
               dataAid='right'

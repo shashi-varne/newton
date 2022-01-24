@@ -107,6 +107,7 @@ CheckoutCard.propTypes = {
     rightTitle: PropTypes.node,
     rightTitleColor: PropTypes.string,
     backgroundColor: PropTypes.string,
+    dataIndex: PropTypes.number,
   }),
   toggleTopSection: PropTypes.bool,
   toggleBottomSection: PropTypes.bool,

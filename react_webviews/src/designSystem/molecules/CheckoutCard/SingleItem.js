@@ -1,5 +1,6 @@
 import React from 'react';
 import { Imgc } from '../../../common/ui/Imgc';
+import Icon from '../../atoms/Icon';
 import Typography from '../../atoms/Typography';
 import { BottomSection, FooterSection } from './CommonComponent';
 
@@ -17,7 +18,8 @@ const SingleItem = ({
       {title && (
         <div className='checkout-card-single-top-wrapper'>
           {leftImgSrc && (
-            <Imgc
+            <Icon
+              size='32px'
               src={leftImgSrc}
               className='cc-single-top-image'
               dataAid='left'
