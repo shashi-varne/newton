@@ -40,7 +40,7 @@ const SecuritySettings = (props) => {
             const operation = isPinSet ? "reset_pin" : "setup_pin";
             window.callbackWeb["open_2fa_module"]({ operation });
             return;
-          }
+        }
         navigate(navigatePath);
         sendEvents("next");
     }
