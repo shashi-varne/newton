@@ -601,6 +601,17 @@ export const partnerConfigs = {
       shareRefferal: true,
     },
   },
+  bom: {
+    code: "bom",
+    logo: "bom.png",
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      ourRecommendations: ["instaredeem", "buildwealth", "savetax"],
+    },
+    styles: {
+      primaryColor: "#378ECF",
+    }
+  },
 };
 
 export const getPartnerData = (productType, partnerCode) => {
