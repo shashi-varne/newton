@@ -1,5 +1,4 @@
 import React from 'react';
-import { Imgc } from '../../../common/ui/Imgc';
 import Typography from '../../atoms/Typography';
 import Tag from '../Tag';
 import Separator from '../../atoms/Separator';
@@ -10,6 +9,7 @@ import PropTypes from 'prop-types';
 
 import './ProductItem.scss';
 import Button from '../../atoms/Button';
+import Icon from '../../atoms/Icon';
 
 const ProductItem = (props) => {
   let {
@@ -19,14 +19,14 @@ const ProductItem = (props) => {
     headerTitleColor,
     showSeparator,
     onClick,
-    bottomSection = {},
-    rightSection = {},
+    bottomSectionData = {},
+    rightSectionData = {},
     dataAid,
   } = merge({}, defaultValues, props);
   return (
     <div className='product-item-wrapper' onClick={onClick} data-aid={`productItem_${dataAid}`}>
       {leftImgSrc && (
-        <Imgc src={leftImgSrc} className='product-item-left-img' dataAid='left' {...leftImgProps} />
+        <Icon size='40px' src={leftImgSrc} className='product-item-left-img' dataAid='left' {...leftImgProps} />
       )}
       <div className='pi-right-wrapper'>
         <div className='pi-child-wrapper'>
@@ -34,11 +34,11 @@ const ProductItem = (props) => {
             <Typography variant='body2' color={headerTitleColor} component='div'>
               {headerTitle}
             </Typography>
-            <BottomSection {...bottomSection} />
+            <BottomSection {...bottomSectionData} />
           </div>
-          {(!isEmpty(rightSection?.description) || !isEmpty(rightSection?.btnProps)) && (
+          {(!isEmpty(rightSectionData?.description) || !isEmpty(rightSectionData?.btnProps)) && (
             <div className='pi-right-section'>
-              <RightSection {...rightSection} />
+              <RightSection {...rightSectionData} />
             </div>
           )}
         </div>
@@ -101,13 +101,13 @@ const Description = ({ title, titleColor, subtitle, subtitleColor }) => {
 
 const defaultValues = {
   leftImgProps: {},
-  rightSection: {
+  rightSectionData: {
     description: {
       subtitleColor: 'foundationColors.content.tertiary',
     },
     btnProps: {},
   },
-  bottomSection: {
+  bottomSectionData: {
     tagOne: {},
     tagTwo: {},
     titleOneColor: 'foundationColors.content.tertiary',
@@ -119,13 +119,13 @@ ProductItem.propTypes = {
   headerTitle: PropTypes.node,
   headerTitleColor: PropTypes.string,
   showSeparator: PropTypes.bool,
-  bottomSection: PropTypes.exact({
+  bottomSectionData: PropTypes.exact({
     tagOne: PropTypes.object,
     tagTwo: PropTypes.object,
     titleOne: PropTypes.node,
     titleOneColor: PropTypes.string,
   }),
-  rightSection: PropTypes.exact({
+  rightSectionData: PropTypes.exact({
     btnProps: PropTypes.object,
     description: PropTypes.exact({
       title: PropTypes.node,
