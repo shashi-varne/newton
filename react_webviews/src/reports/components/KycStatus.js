@@ -1,13 +1,14 @@
 import React, { useMemo } from "react";
 import Container from "../common/Container";
 import { Imgc } from "../../common/ui/Imgc";
-import { getConfig } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 
 const KycStatus = (props) => {
   const { productName } = useMemo(getConfig, []);
+  const navigate = navigateFunc.bind(props);
 
   const handleClick = () => {
-    props.history.goBack();
+    navigate("/invest")  
   };
 
   return (
