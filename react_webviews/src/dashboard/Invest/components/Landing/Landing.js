@@ -257,6 +257,14 @@ class Landing extends Component {
   }
 
   handleFreedomCard = () => {
+    const eventObj = {
+      event_name: "home_screen",
+      properties: {
+        screen_name: "home_screen",
+        banner_clicked: 'freedom_plan_explore_now',
+      },
+    };
+    nativeCallback({ events: eventObj });
     this.navigate('/freedom-plan');
   }
 
