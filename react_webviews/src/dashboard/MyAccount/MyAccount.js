@@ -341,7 +341,7 @@ class MyAccount extends Component {
             <UserDetails
               pan_no={userKyc?.pan?.meta_data?.pan_number}
               contactInfo={contactInfo}
-              name={currentUser?.name}
+              name={currentUser?.name || userKyc?.pan?.meta_data?.name}
               handleClick={(path, state) => this.navigate(path, state)}
               showLoader={this.showLoader}
               sendEvents={this.sendEvents}
