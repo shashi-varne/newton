@@ -63,6 +63,8 @@ class ESignInfo extends Component {
     if (!getConfig().Web) {
       if (storageService().get('native') && (goBackPath === "exit")) {
         nativeCallback({ action: "exit_web" })
+      } else if (landingEntryPoints.includes(fromState) || fromWebModuleEntry) {
+        navigate("/invest")
       } else {
         navigate(PATHNAME_MAPPER.journey);
       }
