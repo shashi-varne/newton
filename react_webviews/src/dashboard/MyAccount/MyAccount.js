@@ -551,7 +551,7 @@ const InvestmentCard = ({ title, subtitle, icon, disable, buttonText, onClick })
         <div className={`maic-title ${disable && "maic-title-disable"}`}>{title}</div>
         <div className="maic-subtitle">{subtitle}</div>
       </div>
-      <div className="maic-content">
+      <div className="maic-content maic-progress">
         {icon && !disable && <img src={require(`assets/${icon}`)} alt="icon" />}
         {buttonText && (
           <WVClickableTextElement onClick={onClick}>{buttonText}</WVClickableTextElement>
