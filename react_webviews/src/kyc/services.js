@@ -6,6 +6,7 @@ import { kycSubmit } from './common/api'
 import { isDigilockerFlow } from './common/functions'
 import eventManager from '../utils/eventManager'
 import { EVENT_MANAGER_CONSTANTS } from '../utils/constants'
+import { FREEDOM_PLAN_STORAGE_CONSTANTS } from '../freedom_plan/common/constants'
 
 const DOCUMENTS_MAPPER = {
   DL: 'Driving license',
@@ -123,7 +124,7 @@ export async function setSummaryData(result) {
   storageService().setObject("banklist", result?.data?.bank_list?.bank_list?.data);
   storageService().setObject("referral", result.data.referral);
   if(!isEmpty(subscriptionStatus)) {
-    storageService().setObject("subscriptionStatus", subscriptionStatus);
+    storageService().setObject(FREEDOM_PLAN_STORAGE_CONSTANTS.subscriptionStatus, subscriptionStatus);
   }
   let partner = "";
   let consent_required = false;
