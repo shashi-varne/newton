@@ -141,6 +141,7 @@ class MyAccount extends Component {
   handleFreedomPlan = () => {
     const subscriptionStatus = this.state.subscriptionStatus;
     if(subscriptionStatus.renewal_cta || subscriptionStatus.freedom_cta) {
+      storageService().setBoolean("subscriptionFromMyaccount", true);
       this.sendEvents("next", "", "yes")
       this.navigate('/freedom-plan');
     }
