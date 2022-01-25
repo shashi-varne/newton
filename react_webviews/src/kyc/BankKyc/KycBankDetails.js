@@ -41,9 +41,6 @@ const KycBankDetails = (props) => {
   const params = props.match.params || {};
   const userType = params.userType || "";
   const isEdit = props.location.state?.isEdit || false;
-  if (isEdit) {
-    titleText = "Edit primary bank account details";
-  }
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const [bankData, setBankData] = useState({
@@ -60,6 +57,7 @@ const KycBankDetails = (props) => {
       "This bank account will be the default account for all your investments and withdrawals",
     variant: "info",
   });
+  const [screenTitle, setScreenTitle] = useState(titleText);
   const [disableFields, setDisableFields] = useState({
     skip_api_call: false,
     account_number_disabled: false,
@@ -100,6 +98,9 @@ const KycBankDetails = (props) => {
   }
 
   let initialize = async () => {
+    if (isEdit) {
+      setScreenTitle("Edit primary bank account details");
+    }
     let disableData = { ...disableFields };
     if (skipBankDetails()) {
       disableData.skip_api_call = true;
@@ -434,7 +435,7 @@ const KycBankDetails = (props) => {
       showLoader={isApiRunning}
       skelton={isLoading}
       handleClick={handleClick}
-      title={titleText}
+      title={screenTitle}
       headerData={{goBack}}
       iframeRightContent={require(`assets/${config.productName}/add_bank.svg`)}
       data-aid='kyc-enter-bank-account-details-screen'
