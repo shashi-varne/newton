@@ -17,6 +17,12 @@ export const handleExit = (props) => {
     nativeCallback({ action: "exit_web" });
   } else {
     const navigate = navigateFunc.bind(props);
-    navigate("/");
+    const fromMyAccountFlow = storageService().getBoolean("subscriptionFromMyAccount");
+    if (fromMyAccountFlow) {
+      storageService().setBoolean("subscriptionFromMyAccount", false);
+      navigate("/my-account");
+    } else {
+      navigate("/");
+    }
   }
 };

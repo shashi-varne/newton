@@ -141,6 +141,7 @@ class MyAccount extends Component {
   handleFreedomPlan = () => {
     const subscriptionStatus = this.state.subscriptionStatus;
     if(subscriptionStatus.renewal_cta || subscriptionStatus.freedom_cta) {
+      storageService().setBoolean("subscriptionFromMyAccount", true);
       this.sendEvents("next", "", "yes")
       this.navigate('/freedom-plan');
     }
@@ -438,7 +439,7 @@ class MyAccount extends Component {
                   className="account-head-title ma-kir-title"
                   data-aid="account-head-title"
                 >
-                  Equity Brokerage Plan
+                  EQUITY BROKERAGE PLAN
                 </div>
                 <div
                   className={`flex-between-center ma-fp-content ${freedomPlanData.className}`}
