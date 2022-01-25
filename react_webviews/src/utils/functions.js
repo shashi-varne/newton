@@ -107,7 +107,7 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--primaryVariant5`, `${config_to_return.styles.primaryVariant5}`);
   html.style.setProperty(`--spacing`, '10px');
   html.style.setProperty(`--gunmetal`, '#161A2E');
-  html.style.setProperty(`--darkblue`, '#132056');
+  html.style.setProperty(`--darkBackground`, `${config_to_return.styles.darkBackground}`);
   html.style.setProperty(`--linkwater`, '#D3DBE4');
   html.style.setProperty(`--border-radius`, `${config_to_return.uiElements.button.borderRadius}px`);
   html.style.setProperty(`--whitegrey`, '#EEEEEE');

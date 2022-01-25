@@ -77,7 +77,7 @@ function useFreedomDataHook(initializeData) {
       let paymentLink = result.payment_link;
       paymentLink = `${paymentLink}${
         paymentLink.match(/[\?]/g) ? "&" : "?"
-      }redirect_url=${redirectUrl}`;
+      }redirect_url=${redirectUrl}&partner_code=${config.code}`;
       if (isNative()) {
         const upiApps = storageService().getObject("upiApps") || {};
         let nativeData = {

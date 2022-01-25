@@ -6,6 +6,15 @@
     padding-bottom: 15px;
   }
 
+  .fp-ps-loader {
+    min-height: 45px;
+    margin-bottom: 20px;
+  }
+
+  .fp-ps-loader:first-child {
+    margin-top: 20px;
+  }
+
   .fpps-title {
     text-align: left;
     font-weight: 500;

@@ -468,6 +468,7 @@ export async function getKycFromSummary(params = {}) {
       referral: ["subbroker", "p2p"],
       contacts: ["contacts"],
       nps: ['nps_user'],
+      equity: ['subscription_status']
     }
   }
   const res = await Api.post(`/api/user/account/summary`, params);
