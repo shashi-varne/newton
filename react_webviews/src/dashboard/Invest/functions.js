@@ -618,7 +618,7 @@ function initiatePinSetup(key) {
     openModule('account/setup_2fa', this.props, { routeUrlParams: `/${key}` });
     nativeCallback({ action: 'exit_web' });
   } else if (config.isSdk) {
-    let that = this;
+    const that = this;
     window.callbackWeb["open_2fa_module"]({
       operation: "setup_pin",
       request_code: "REQ_SETUP_2FA",

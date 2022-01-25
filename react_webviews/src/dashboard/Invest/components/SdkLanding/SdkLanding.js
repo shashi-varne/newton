@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
-import { initialize, handleCampaignNotification, dateValidation, updateBank, updateConsent } from '../../functions';
+import { initialize, handleCampaignNotification, dateValidation, updateBank, updateConsent, setDialogsState } from '../../functions';
 import { SkeltonRect } from 'common/ui/Skelton';
 import SdkInvestCard from '../../mini-components/SdkInvestCard';
 import { storageService } from 'utils/validators';
@@ -62,6 +62,7 @@ class SdkLanding extends Component {
     };
     this.initialize = initialize.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
+    this.setDialogsState = setDialogsState.bind(this);
   }
 
   componentWillMount() {
@@ -70,9 +71,22 @@ class SdkLanding extends Component {
 
   onload = () => {
     this.initilizeKyc();
-    const isBottomSheetDisplayed = storageService().get('is_bottom_sheet_displayed');
-    if (!isBottomSheetDisplayed) {
+    const isBottomSheetDisplayed = storageService().getBoolean('is_bottom_sheet_displayed');
+    const campaignsToShowOnPriority = ["trading_restriction_campaign"];
+    const {
+      openKycStatusDialog,
+      tradingEnabled,
+      bottom_sheet_dialog_data,
+    } = this.state;
+    const isPriorityCampaign = campaignsToShowOnPriority.includes(bottom_sheet_dialog_data.campaign_name);
+    if (
+      !isBottomSheetDisplayed &&
+      ((tradingEnabled && isPriorityCampaign) || !openKycStatusDialog)
+    ) {
       this.handleCampaignNotification();
+    }
+    if (isPriorityCampaign) {
+      this.setDialogsState("openBottomSheet");
     }
     const consentRequired = storageService().get("consent_required");
     if(consentRequired && getConfig().code === "lvb") {
