@@ -1,10 +1,16 @@
 .nav-header-wrapper {
-  padding: 16px;
   display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-  align-items: center;
+  flex-direction: column;
   background-color: white;
+  flex: 1;
+  
+  .nav-header-top-section {
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+  }
 
   .nav-header-left {
     display: flex;
@@ -13,18 +19,40 @@
     align-items: center;
 
     .nav-left-icn-btn {
-        margin: -8px;
-        margin-right: 4px;
+      margin: -8px;
+      margin-right: 4px;
     }
 
     .nav-hl-icon-wrapper {
-        cursor: pointer;
+      cursor: pointer;
     }
   }
 
   .nav-header-right {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .nav-bar-title-wrapper {
+    padding: 0px 16px;
+  }
+
+  .nav-bar-tabs-wrapper {
+    margin-top: 24px;
+    padding: 0px 16px;
+  }
+
+  .nav-bar-subtitle-wrapper {
+    padding: 0px 16px;
+    .lh-subtitle {
+      margin-top: 8px;
+    }
+    .lh-description-list {
+      margin: 0px;
+      padding-left: 20px;
+      margin-top: 8px;
+      width: 100%;
+    }
   }
 }

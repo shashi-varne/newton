@@ -1,42 +1,104 @@
-import { Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Button from '../../atoms/Button';
 import React from 'react';
+import Typography from '../../atoms/Typography';
 import { Imgc } from '../../../common/ui/Imgc';
 import nav_back from 'assets/nav_back.svg';
+import { Tab, Tabs } from '../../atoms/Tabs';
 
 import './NavigationHeader.scss';
 
-const NavigationHeader = ({ headerTitle, showClose, hideLeftIcon, actionText }) => {
+const NavigationHeader = ({
+  headerTitle,
+  showClose,
+  hideLeftIcon,
+  actionText,
+  children,
+  selectedTab,
+  onTabChange,
+}) => {
   const leftIcon = showClose ? '' : nav_back;
   return (
     <div className='nav-header-wrapper'>
-      <div className='nav-header-left'>
-        {!hideLeftIcon && (
-          <IconButton
-            classes={{ root: 'nav-left-icn-btn' }}
-            className='nav-hl-icon-wrapper'
+      <section className='nav-header-top-section'>
+        <div className='nav-header-left'>
+          {!hideLeftIcon && (
+            <IconButton classes={{ root: 'nav-left-icn-btn' }} className='nav-hl-icon-wrapper'>
+              <Imgc src={leftIcon} style={{ width: '24px', height: '24px' }} className='nhl-icon' />
+            </IconButton>
+          )}
+          <Typography
+            className={`nav-header-title ${hideLeftIcon && 'nav-header-lm'}`}
+            variant='heading3'
           >
-            <Imgc
-              src={leftIcon}
-              style={{ width: '24px', height: '24px' }}
-              className='nhl-icon'
-            />
-          </IconButton>
-        )}
-        <Typography
-          className={`nav-header-title ${hideLeftIcon && 'nav-header-lm'}`}
-          variant='heading3'
-        >
-          {headerTitle}
-        </Typography>
+            {headerTitle}
+          </Typography>
+        </div>
+        <div className='nav-header-right'>
+          <Imgc src={''} style={{ width: '24px', height: '24px' }} />
+          {actionText && <Button variant='link' title={actionText} />}
+        </div>
+      </section>
+      <div className='nav-bar-title-wrapper'>
+        <Typography variant='heading2'>{headerTitle}</Typography>
       </div>
-      <div className='nav-header-right'>
-        <Imgc src={''} style={{ width: '24px', height: '24px' }} />
-        {actionText && <Button variant='link' title={actionText} />}
-      </div>
+      <section className='nav-bar-subtitle-wrapper'>{children}</section>
+      <section className='nav-bar-tabs-wrapper'>
+        <Tabs value={selectedTab} onChange={onTabChange}>
+          <Tab label='label 1' />
+          <Tab label='label 1' />
+          <Tab label='label 1' />
+          <Tab label='label 1' />
+          <Tab label='label 1' />
+          <Tab label='label 1' />
+          <Tab label='label 1' />
+          <Tab label='label 1' />
+          <Tab label='label 1' />
+        </Tabs>
+      </section>
     </div>
   );
+};
+
+export const NavigationHeaderSubtitle = ({ children, color, dataIdx }) => {
+  return (
+    <Typography
+      className='lh-subtitle'
+      dataAid={`subtitle${dataIdx}`}
+      variant='body2'
+      color={color}
+      align='left'
+      component='div'
+    >
+      {children}
+    </Typography>
+  );
+};
+
+export const NavigationHeaderPoints = ({ children, color, dataIdx }) => {
+  return (
+    <ul className='lh-description-list'>
+      <li className='lh-description-item'>
+        <Typography
+          variant='body2'
+          color={color}
+          align='left'
+          dataAid={`point${dataIdx}`}
+          component='div'
+        >
+          {children}
+        </Typography>
+      </li>
+    </ul>
+  );
+};
+
+NavigationHeaderSubtitle.defaultProps = {
+  color: 'foundationColors.content.secondary',
+};
+
+NavigationHeaderPoints.defaultProps = {
+  color: 'foundationColors.content.secondary',
 };
 
 export default NavigationHeader;
