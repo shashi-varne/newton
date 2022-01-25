@@ -57,7 +57,6 @@ const PaymentStatus = (props) => {
       const result = await getAccountSummary({
         equity: ["subscription_status"],
       });
-      console.log("result ", result);
       const subscriptionStatus = result?.data?.equity?.subscription_status?.data || {};
       if (!isEmpty(subscriptionStatus)) {
         storageService().setObject("subscriptionStatus", subscriptionStatus);
