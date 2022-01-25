@@ -1,25 +1,29 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Container from "../common/Container";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { Imgc } from "../../common/ui/Imgc";
 import WVPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
 import WVPageSubtitle from "../../common/ui/InPageHeader/WVInPageSubtitle";
 import {
+  FREEDOM_PLAN_STORAGE_CONSTANTS,
   getPaymentSummaryData,
   PATHNAME_MAPPER,
   PAYMENT_STATUS_DATA,
 } from "../common/constants";
 import { nativeCallback } from "../../utils/native_callback";
 import Tile from "../mini-components/Tile";
-import { getUrlParams } from "../../utils/validators";
+import { getUrlParams, storageService } from "../../utils/validators";
 import useFreedomDataHook from "../common/freedomPlanHook";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import "./PaymentStatus.scss";
 import { handleExit } from "../common/functions";
 import isEmpty from "lodash/isEmpty";
+import Toast from "../../common/ui/Toast";
+import { getAccountSummary } from "../../kyc/services";
 
 const PaymentStatus = (props) => {
   const navigate = navigateFunc.bind(props);
+  const [showSkelton, setShowSkelton] = useState(false);
   const initialize = () => {
     const { status, message = "" } = getUrlParams();
     let paymentStatusData = PAYMENT_STATUS_DATA[status] || PAYMENT_STATUS_DATA["failed"];
@@ -47,6 +51,29 @@ const PaymentStatus = (props) => {
   const paymentDetails = useMemo(getPaymentSummaryData(freedomPlanData), [
     freedomPlanData,
   ]);
+
+  const fetchSubscriptionStatus = async () => {
+    try {
+      setShowSkelton(true);
+      const result = await getAccountSummary({
+        equity: ["subscription_status"],
+      });
+      const subscriptionStatus = result?.data?.equity?.subscription_status?.data || {};
+      if (!isEmpty(subscriptionStatus)) {
+        storageService().setObject(FREEDOM_PLAN_STORAGE_CONSTANTS.subscriptionStatus, subscriptionStatus);
+      }
+    } catch (err) {
+      Toast(err.message);
+    } finally {
+      setShowSkelton(false)
+    }
+  };
+
+  useEffect(() => {
+    if(paymentStatusData.isSuccess) {
+      fetchSubscriptionStatus();
+    }
+  }, [])
 
   const sendEvents = (userAction) => {
     let eventObj = {
@@ -102,7 +129,7 @@ const PaymentStatus = (props) => {
         goBack: redirectToHome,
       }}
       hidePageTitle
-      skelton={isLoading}
+      skelton={isLoading || showSkelton}
       showLoader={showLoader}
       errorData={errorData}
       showError={errorData.showError}

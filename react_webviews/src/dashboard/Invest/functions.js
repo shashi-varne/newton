@@ -120,7 +120,8 @@ export async function getSummary() {
       partner: ["partner"],
       bank_list: ["bank_list"],
       referral: ["subbroker", "p2p"],
-      contacts: ["contacts"]
+      contacts: ["contacts"],
+      equity: ["subscription_status"]
     });
     if (res.pfwstatus_code !== 200 || isEmpty(res.pfwresponse)) {
       throw res?.pfwmessage || errorMessage;
@@ -130,7 +131,8 @@ export async function getSummary() {
       this.setSummaryData(result);
       currentUser = result.data.user.user.data;
       userKyc = result.data.kyc.kyc.data;
-      this.setState({ show_loader: false, kycStatusLoader : false, userKyc, currentUser });
+      const subscriptionStatus = result?.data?.equity?.subscription_status?.data || {};
+      this.setState({ show_loader: false, kycStatusLoader : false, userKyc, currentUser, subscriptionStatus });
     } else {
       this.setState({ show_loader: false, kycStatusLoader : false });
       toast(result.message || result.error || errorMessage);

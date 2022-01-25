@@ -22,11 +22,14 @@ import { PATHNAME_MAPPER } from "../../../../kyc/constants";
 import toast from "../../../../common/ui/Toast"
 import PinSetupDialog from "../../mini-components/PinSetupDialog";
 import BFDLBanner from "../../mini-components/BFDLBanner";
+import FreedomPlanCard from "../../mini-components/FreedomPlanCard";
+import { FREEDOM_PLAN_STORAGE_CONSTANTS } from "../../../../freedom_plan/common/constants";
 
 const fromLoginStates = ["/login", "/logout", "/verify-otp"]
 class Landing extends Component {
   constructor(props) {
     super(props);
+    const subscriptionStatus = storageService().getObject(FREEDOM_PLAN_STORAGE_CONSTANTS.subscriptionStatus) || {};
     this.state = {
       show_loader: false,
       kycStatusLoader: false,
@@ -52,6 +55,7 @@ class Landing extends Component {
       tradingEnabled: isTradingEnabled(),
       clickedCardKey: '',
       openBfdlBanner: false,
+      subscriptionStatus: subscriptionStatus,
     };
     this.initialize = initialize.bind(this);
     this.generateOtp = generateOtp.bind(this);
@@ -266,6 +270,18 @@ class Landing extends Component {
     }
   }
 
+  handleFreedomCard = () => {
+    const eventObj = {
+      event_name: "home_screen",
+      properties: {
+        screen_name: "home_screen",
+        banner_clicked: 'freedom_plan_explore_now',
+      },
+    };
+    nativeCallback({ events: eventObj });
+    this.navigate('/freedom-plan');
+  }
+
   sendEvents = (userAction, cardClick = "") => {
     if (cardClick === "bottomsheet" || cardClick === "continuebottomsheet") {
       let screen_name = cardClick === "continuebottomsheet" ? "account_already_exists" :
@@ -333,7 +349,8 @@ class Landing extends Component {
       kycButtonLoader,
       stocksButtonLoader,
       kycJourneyStatus,
-      openBfdlBanner
+      openBfdlBanner,
+      subscriptionStatus,
     } = this.state;
     const {
       indexFunds,
@@ -476,6 +493,16 @@ class Landing extends Component {
                           <div className="invest-main-top-title" data-aid='recommendations-title'>
                             Stocks & IPOs
                           </div>
+                          {(subscriptionStatus.freedom_cta ||
+                            subscriptionStatus.renewal_cta) && (
+                            <>
+                              {kycStatusLoader ? (
+                                <SkeltonRect className="invest-fp-loader" />
+                              ) : (
+                                <FreedomPlanCard onClick={this.handleFreedomCard} />
+                              )}
+                            </>
+                          )}
                           {stocksAndIpo.map((item, index) => {
                             if (kycStatusLoader) {
                               return (
