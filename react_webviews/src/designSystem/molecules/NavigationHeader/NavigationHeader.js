@@ -1,6 +1,6 @@
 import IconButton from '@mui/material/IconButton';
 import Button from '../../atoms/Button';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Typography from '../../atoms/Typography';
 import { Imgc } from '../../../common/ui/Imgc';
 import nav_back from 'assets/nav_back.svg';
@@ -16,10 +16,42 @@ const NavigationHeader = ({
   children,
   selectedTab,
   onTabChange,
+  anchorOrigin,
 }) => {
+  const headerRef = useRef();
+  const subtitleRef = useRef();
+  const headerTitleRef = useRef();
+  useEffect(() => {
+    if (anchorOrigin.current) {
+      anchorOrigin.current.addEventListener('scroll', onScroll);
+    }
+  }, []);
+  const onScroll = (e) => {
+    const el = headerRef.current;
+    const navHeaderTitle = document.getElementsByClassName('nav-header-title')[0];
+
+    const totalHeight =
+      headerTitleRef?.current?.getBoundingClientRect()?.height +
+      subtitleRef?.current?.getBoundingClientRect()?.height;
+    if (e?.target?.scrollTop >= totalHeight) {
+      el.classList.add('nav-header-fixed');
+      navHeaderTitle.style.opacity = '1';
+      let defaultHeight = 60;
+      if (window.innerWidth < 500) {
+        defaultHeight = 0;
+      }
+      el.style.top = `${defaultHeight - totalHeight}px`;
+      e['target']['style']['paddingTop'] = `${el?.getBoundingClientRect()?.height}px`;
+    } else {
+      navHeaderTitle.style.opacity = '0';
+      el.classList.remove('nav-header-fixed');
+      el.style.top = '0px';
+      e['target']['style']['paddingTop'] = '0px';
+    }
+  };
   const leftIcon = showClose ? '' : nav_back;
   return (
-    <div className='nav-header-wrapper'>
+    <div className='nav-header-wrapper' ref={headerRef}>
       <section className='nav-header-top-section'>
         <div className='nav-header-left'>
           {!hideLeftIcon && (
@@ -39,10 +71,12 @@ const NavigationHeader = ({
           {actionText && <Button variant='link' title={actionText} />}
         </div>
       </section>
-      <div className='nav-bar-title-wrapper'>
+      <div className='nav-bar-title-wrapper' ref={headerTitleRef}>
         <Typography variant='heading2'>{headerTitle}</Typography>
       </div>
-      <section className='nav-bar-subtitle-wrapper'>{children}</section>
+      <section className='nav-bar-subtitle-wrapper' ref={subtitleRef}>
+        {children}
+      </section>
       <section className='nav-bar-tabs-wrapper'>
         <Tabs value={selectedTab} onChange={onTabChange}>
           <Tab label='label 1' />
