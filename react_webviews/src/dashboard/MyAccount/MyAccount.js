@@ -425,7 +425,7 @@ class MyAccount extends Component {
                   className="account-head-title ma-kir-title"
                   data-aid="account-head-title"
                 >
-                  Equity Brokerage Plan
+                  EQUITY BROKERAGE PLAN
                 </div>
                 <div
                   className={`flex-between-center ma-fp-content ${freedomPlanData.className}`}

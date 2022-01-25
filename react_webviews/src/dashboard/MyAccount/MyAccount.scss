@@ -149,10 +149,12 @@
       }
 
       .ma-fp-active, .ma-fp-renewal {
-        color: #D04954;
-        font-size: 10px;
-        letter-spacing: 1px;
-        text-transform: uppercase;
+        .ma-fp-subtitle {
+          color: #D04954;
+          font-size: 10px;
+          letter-spacing: 1px;
+          text-transform: uppercase;
+        }
       }
 
       .ma-fp-active {
