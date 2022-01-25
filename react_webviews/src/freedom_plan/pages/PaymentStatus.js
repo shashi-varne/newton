@@ -5,6 +5,7 @@ import { Imgc } from "../../common/ui/Imgc";
 import WVPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
 import WVPageSubtitle from "../../common/ui/InPageHeader/WVInPageSubtitle";
 import {
+  FREEDOM_PLAN_STORAGE_CONSTANTS,
   getPaymentSummaryData,
   PATHNAME_MAPPER,
   PAYMENT_STATUS_DATA,
@@ -59,7 +60,7 @@ const PaymentStatus = (props) => {
       });
       const subscriptionStatus = result?.data?.equity?.subscription_status?.data || {};
       if (!isEmpty(subscriptionStatus)) {
-        storageService().setObject("subscriptionStatus", subscriptionStatus);
+        storageService().setObject(FREEDOM_PLAN_STORAGE_CONSTANTS.subscriptionStatus, subscriptionStatus);
       }
     } catch (err) {
       Toast(err.message);

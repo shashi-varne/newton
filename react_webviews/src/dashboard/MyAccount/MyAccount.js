@@ -19,6 +19,7 @@ import { getKycAppStatus } from "../../kyc/services";
 import "./MyAccount.scss";
 import { PATHNAME_MAPPER as KYC_PATHNAME_MAPPER } from "../../kyc/constants";
 import { storageService } from "../../utils/validators";
+import { FREEDOM_PLAN_STORAGE_CONSTANTS } from "../../freedom_plan/common/constants";
 
 const MF_AND_STOCKS_STATUS_MAPPER = {
   init: {
@@ -128,7 +129,7 @@ class MyAccount extends Component {
   };
 
   setFreedomPlanData = () => {
-    const subscriptionStatus = storageService().getObject("subscriptionStatus") || {};
+    const subscriptionStatus = storageService().getObject(FREEDOM_PLAN_STORAGE_CONSTANTS.subscriptionStatus) || {};
     let status = subscriptionStatus.subscription_status;
     if(subscriptionStatus.renewal_cta) {
       status = "RENEWAL";
@@ -141,7 +142,7 @@ class MyAccount extends Component {
   handleFreedomPlan = () => {
     const subscriptionStatus = this.state.subscriptionStatus;
     if(subscriptionStatus.renewal_cta || subscriptionStatus.freedom_cta) {
-      storageService().setBoolean("subscriptionFromMyAccount", true);
+      storageService().setBoolean(FREEDOM_PLAN_STORAGE_CONSTANTS.subscriptionFromMyAccount, true);
       this.sendEvents("next", "", "yes")
       this.navigate('/freedom-plan');
     }

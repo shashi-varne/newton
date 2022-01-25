@@ -23,12 +23,13 @@ import toast from "../../../../common/ui/Toast"
 import PinSetupDialog from "../../mini-components/PinSetupDialog";
 import BFDLBanner from "../../mini-components/BFDLBanner";
 import FreedomPlanCard from "../../mini-components/FreedomPlanCard";
+import { FREEDOM_PLAN_STORAGE_CONSTANTS } from "../../../../freedom_plan/common/constants";
 
 const fromLoginStates = ["/login", "/logout", "/verify-otp"]
 class Landing extends Component {
   constructor(props) {
     super(props);
-    const subscriptionStatus = storageService().getObject("subscriptionStatus") || {};
+    const subscriptionStatus = storageService().getObject(FREEDOM_PLAN_STORAGE_CONSTANTS.subscriptionStatus) || {};
     this.state = {
       show_loader: false,
       kycStatusLoader: false,

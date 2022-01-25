@@ -1,6 +1,7 @@
 import { storageService } from "../../utils/validators";
 import { navigate as navigateFunc } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
+import { FREEDOM_PLAN_STORAGE_CONSTANTS } from "./constants";
 
 export const getDefaultPlan = (plans = []) => {
   return plans.find((data) => data.is_default) || {};
@@ -17,9 +18,10 @@ export const handleExit = (props) => {
     nativeCallback({ action: "exit_web" });
   } else {
     const navigate = navigateFunc.bind(props);
-    const fromMyAccountFlow = storageService().getBoolean("subscriptionFromMyAccount");
+    const storageKey = FREEDOM_PLAN_STORAGE_CONSTANTS.subscriptionFromMyAccount
+    const fromMyAccountFlow = storageService().getBoolean(storageKey);
     if (fromMyAccountFlow) {
-      storageService().setBoolean("subscriptionFromMyAccount", false);
+      storageService().setBoolean(storageKey, false);
       navigate("/my-account");
     } else {
       navigate("/");
