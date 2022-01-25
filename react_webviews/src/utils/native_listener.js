@@ -426,7 +426,7 @@ import isFunction from 'lodash/isFunction';
       account_statement: '/statements',
     }
     const modulePath = MODULE_MAPPER[module] || "/"
-    window.location.href = redirectToPath(modulePath);
+    eventManager.emit(EVENT_MANAGER_CONSTANTS.redirectPath, modulePath);
   };
   
   exports.set_content_data = function (data) {
