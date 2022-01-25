@@ -69,23 +69,31 @@ const getFreedomPlanData = (data) => {
     STANDARD: {
       title: 'Standard',
       buttonText: 'UPGRADE PLAN',
+      eventStatus: 'NA',
+      brokeragePlan: 'standard'
     },
     INIT: {
       title: 'Freedom',
       subtitle: 'in-progress',
-      icon: require(`assets/badge-warning.svg`)
+      icon: require(`assets/badge-warning.svg`),
+      eventStatus: 'in_progress',
+      brokeragePlan: 'standard'
     },
     ACTIVE: {
       title: 'Freedom',
       buttonText: 'Active',
       className: 'ma-fp-active',
       subtitle: daysLeftMessage,
+      eventStatus: 'active',
+      brokeragePlan: 'freedom'
     },
     RENEWAL: {
       title: 'Freedom',
       buttonText: 'RENEW PLAN',
       className: 'ma-fp-renewal',
       subtitle: daysLeftMessage,
+      eventStatus: 'active',
+      brokeragePlan: 'freedom'
     },
   }
   return FREEDOM_PLAN_DATA_MAPPER[status] || {};
@@ -133,6 +141,7 @@ class MyAccount extends Component {
   handleFreedomPlan = () => {
     const subscriptionStatus = this.state.subscriptionStatus;
     if(subscriptionStatus.renewal_cta || subscriptionStatus.freedom_cta) {
+      this.sendEvents("next", "", "yes")
       this.navigate('/freedom-plan');
     }
   }
@@ -314,7 +323,7 @@ class MyAccount extends Component {
     });
   };
 
-  sendEvents = (userAction, screenName) => {
+  sendEvents = (userAction, screenName, upgradePlanClicked = "no") => {
     if (screenName === "continuebottomsheet") {
       let eventObj = {
         "event_name": 'verification_bottom_sheet',
@@ -332,12 +341,16 @@ class MyAccount extends Component {
       }
       return;
     }
+    const freedomPlanData = this.state.freedomPlanData;
     let eventObj = {
       event_name: "my_account",
       properties: {
         account_options:
           (userAction === "just_set_events" ? "back" : userAction) || "",
         screen_name: screenName || "my_account",
+        brokerage_plan: freedomPlanData.brokeragePlan,
+        upgrade_plan_clicked: upgradePlanClicked,
+        freedom_plan_status : freedomPlanData.eventStatus,
       },
     };
     if (screenName === "export transaction history" || screenName === "") {
