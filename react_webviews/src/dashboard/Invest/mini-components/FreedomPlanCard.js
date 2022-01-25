@@ -17,7 +17,7 @@ const FreedomPlanCard = (props) => {
           <div className="fpc-subtitle">
             UNLIMITED TRADING <span>|</span> ZERO BROKERAGE
           </div>
-          <WVButton variant="outlined" color="secondary" className="fpc-button">
+          <WVButton variant="text" color="secondary" className="fpc-button">
             <div>Explore now</div>
             <SVG
               preProcessor={(code) =>
