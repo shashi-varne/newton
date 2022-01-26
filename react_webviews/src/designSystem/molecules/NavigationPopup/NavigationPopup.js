@@ -1,53 +1,68 @@
 import * as React from 'react';
-import Popover from '@mui/material/Popover';
-import Typography from '../../atoms/Typography';
-import Button from '../../atoms/Button';
-
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import './NavigationPopup.scss';
-import { Menu, MenuItem } from '@mui/material';
+import { ClickAwayListener, Zoom } from '@mui/material';
 
-const Labels = ['Label 1', 'Label 2', 'Label 3', 'Label 4', 'Label 5'];
-
-export default function BasicPopover({ anchorEl, setAnchorEl, onClose }) {
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
+export default function BasicMenu() {
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  const handleMenuItemClick = (event, index) => {
-    setSelectedIndex(index);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
     setAnchorEl(null);
   };
 
   return (
-    <Menu
-      id='lock-menu'
-      anchorEl={anchorEl}
-      open={open}
-      onClose={onClose}
-      MenuListProps={{
-        'aria-labelledby': 'lock-button',
-        role: 'listbox',
-      }}
-      anchorOrigin={{
-        vertical: 'center',
-        horizontal: 'center',
-      }}
-      transformOrigin={{
-        vertical: 'center',
-        horizontal: 'center',
-      }}
-    >
-      {Labels.map((label, index) => (
-        <MenuItem
-          key={index}
-          selected={index === selectedIndex}
-          onClick={(event) => handleMenuItemClick(event, index)}
-        >
-          {index === selectedIndex ? (
-            <Typography variant='heading4'>{label}</Typography>
-          ) : (
-            <Typography variant='body5'>{label}</Typography>
-          )}
-        </MenuItem>
-      ))}
-    </Menu>
+    <div className='navigation-popup-wrapper'>
+      <ClickAwayListener onClickAway={handleClose}>
+        <div className='nav-popup-child'>
+          <Button
+            id='basic-button'
+            aria-controls={open ? 'basic-menu' : undefined}
+            aria-haspopup='true'
+            aria-expanded={open ? 'true' : undefined}
+            onClick={handleClick}
+          >
+            Dashboard
+          </Button>
+
+          <Menu
+            disablePortal
+            id='basic-menu'
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'center',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'center',
+            }}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+            PaperProps={{
+              sx: paperSxStyle,
+              className: 'nav-popup-paper',
+            }}
+            TransitionComponent={Zoom}
+          >
+            <MenuItem onClick={handleClose}>Profile</MenuItem>
+            <MenuItem onClick={handleClose}>My account My account My account</MenuItem>
+            <MenuItem onClick={handleClose}>Logout</MenuItem>
+          </Menu>
+        </div>
+      </ClickAwayListener>
+    </div>
   );
 }
+
+const paperSxStyle = {
+  boxShadow: '0px 6px 12px -6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.2) !important',
+  borderRadius: '12px',
+};

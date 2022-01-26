@@ -1,15 +1,38 @@
-.navigation-popover-wrapper {
-    border-radius: 12px;
-    .navigation-popover-list {
-        padding: 24px;
-        display: flex;
-        flex-direction: column;
+.navigation-popup-wrapper {
+  .nav-popup-child {
+    position: relative;
+  }
 
-        .navigation-popover-item{
-            margin-bottom: 16px;
-            &:last-child {
-                margin-bottom: 0px;
-            }
-        }
+  .MuiModal-root {
+    // background-color: rgba(0, 0, 0, 0.6);
+    position: initial;
+  }
+  .nav-popup-paper {
+    position: absolute !important;
+    top: 0px !important;
+    left: 0px !important;
+    transform: translateX(-50%) 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important;
+  }
+
+  .MuiBackdrop-root {
+    background-color: rgba(0, 0, 0, 0.6);
+    top: 60px;
+    margin-left: 300px;
+    position: fixed !important;
+    width: calc(100% - 300px);
+    max-width: var(--desktop-width);
+    height: initial;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .navigation-popup-wrapper {
+    .MuiBackdrop-root {
+      top: 0px;
+      margin-left: 0px;
+      max-width: 100%;
+      width: 100%;
+      height: 100%;
     }
+  }
 }
