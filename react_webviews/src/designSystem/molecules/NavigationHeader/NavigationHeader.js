@@ -28,22 +28,28 @@ const NavigationHeader = ({
   }, []);
   const onScroll = (e) => {
     const el = headerRef.current;
+    const anchorScrollToTopPosition = e?.target?.scrollTop;
     const navHeaderTitle = document.getElementsByClassName('nav-header-title')[0];
+    const headerTitleHeight = headerTitleRef?.current?.getBoundingClientRect()?.height;
+    const subtitleHeight = subtitleRef?.current?.getBoundingClientRect()?.height;
+    const headerTitleSubtitleHeight = headerTitleHeight + subtitleHeight;
 
-    const totalHeight =
-      headerTitleRef?.current?.getBoundingClientRect()?.height +
-      subtitleRef?.current?.getBoundingClientRect()?.height;
-    if (e?.target?.scrollTop >= totalHeight) {
-      el.classList.add('nav-header-fixed');
+    subtitleRef.current.style.opacity = 1 - anchorScrollToTopPosition / subtitleHeight;
+    let defaultHeight = 56;
+    if (window.innerWidth < 500) {
+      defaultHeight = 0;
+    }
+    navHeaderTitle.style.transition = 'opacity 350ms';
+    if (anchorScrollToTopPosition > headerTitleHeight) {
       navHeaderTitle.style.opacity = '1';
-      let defaultHeight = 60;
-      if (window.innerWidth < 500) {
-        defaultHeight = 0;
-      }
-      el.style.top = `${defaultHeight - totalHeight}px`;
-      e['target']['style']['paddingTop'] = `${el?.getBoundingClientRect()?.height}px`;
     } else {
       navHeaderTitle.style.opacity = '0';
+    }
+    if (anchorScrollToTopPosition >= headerTitleSubtitleHeight) {
+      el.classList.add('nav-header-fixed');
+      el.style.top = `${defaultHeight - headerTitleSubtitleHeight}px`;
+      e['target']['style']['paddingTop'] = `${el?.getBoundingClientRect()?.height}px`;
+    } else {
       el.classList.remove('nav-header-fixed');
       el.style.top = '0px';
       e['target']['style']['paddingTop'] = '0px';
