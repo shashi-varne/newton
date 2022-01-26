@@ -16,12 +16,12 @@
 
 import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import React, { memo, useState } from 'react';
-import Separator from '../Separator';
-import Typography from '../Typography';
+import Separator from '../../atoms/Separator';
+import Typography from '../../atoms/Typography';
 import subIcon from 'assets/sub_icon.svg';
 import addIcon from 'assets/add_icon.svg';
 import PropTypes from 'prop-types';
-import Icon from '../Icon';
+import Icon from '../../atoms/Icon';
 
 import './Faq.scss';
 
