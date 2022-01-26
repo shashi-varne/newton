@@ -1,3 +1,19 @@
+/*
+    Prop Description:
+    options: => this is an array of Objects, and the structure of the object is:
+        {
+            title: PropTypes.string,
+            titleColor: PropTypes.string,
+            subtitle: PropTypes.node,
+            subtitleColor: PropTypes.string,
+            selectedValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]), 
+            => the value which will be selected at render.
+            value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]), 
+            => if value is not provided, then by default 0,1,2... will be used as value for faq items.
+            disabled: PropTypes.bool,
+        }  
+*/
+
 import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import React, { memo, useState } from 'react';
 import Separator from '../Separator';
@@ -19,22 +35,25 @@ const Faq = ({ options, selectedValue, expandedIcon, collapsedIcon, dataAid }) =
       setIsExpanded(val);
     }
   };
+  if(!Array.isArray(options)) return null;
 
   return (
     <div className='faq-accordian-wrapper' data-aid={`FAQ_${dataAid}`}>
       {options?.map((el, idx) => {
         const subtitleColor = el?.subtitleColor || 'foundationColors.content.secondary';
+        const value = el?.value || idx;
+        const isFaqExpanded = value === isExpanded;
         return (
           <div
             key={idx}
-            data-aid={`FAQ_${el?.value === isExpanded ? 'expand' : `collapsed${idx+1}`}`}
+            data-aid={`FAQ_${isFaqExpanded ? 'expand' : `collapsed${idx+1}`}`}
             className={`faq-accordian-item ${el?.disabled && 'faq-acc-disabled'}`}
           >
             <Accordion
               sx={accordianSxStyle}
               disabled={el?.disabled}
-              expanded={el?.value === isExpanded}
-              onChange={() => handleFaqs(el?.value)}
+              expanded={isFaqExpanded}
+              onChange={() => handleFaqs(value || idx)}
               square
             >
               <AccordionSummary sx={summaryAccordianSxStyle}>
@@ -47,7 +66,7 @@ const Faq = ({ options, selectedValue, expandedIcon, collapsedIcon, dataAid }) =
                   >
                     {el?.title}
                   </Typography>
-                  <Icon src={el?.value === isExpanded ? expandedIcon : collapsedIcon} size='24px' />
+                  <Icon src={isFaqExpanded ? expandedIcon : collapsedIcon} size='24px' />
                 </div>
               </AccordionSummary>
               <AccordionDetails sx={detailsAccordianSxStyle}>
