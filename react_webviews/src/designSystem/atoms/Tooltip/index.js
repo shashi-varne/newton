@@ -1,7 +1,8 @@
 import React, { useMemo } from "react";
 import MuiTooltip from "@mui/material/Tooltip";
 import PropTypes from "prop-types";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
+import Typography from "../Typography";
 import isEmpty from "lodash/isEmpty";
 
 export const TOOLTIP_PLACEMENTS = {
