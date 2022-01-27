@@ -177,9 +177,7 @@ const TradingInfo = (props) => {
         },
       });
     } else {
-      if (!config.isSdk) {
-        setShowSkelton(true);
-      }
+      setShowSkelton(true);
       const data = {
         url: url,
         header_title: "EQUITY ANNEXURE",
