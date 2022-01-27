@@ -7,6 +7,7 @@ import getPartnerThemeData from './utils';
 import { createTheme } from '@mui/material';
 import { separatorStyleOverRides } from './separator';
 import { dialogDefaultProps, dialogStylesOverride } from './dialog';
+import { badgeStyleOverRides } from './badge';
 
 const getTheme = () => {
   const {colors, partnerConfig} = getPartnerThemeData();
@@ -45,6 +46,9 @@ const getTheme = () => {
       MuiDialog: {
         defaultProps: dialogDefaultProps(),
         styleOverrides:dialogStylesOverride()
+      },
+      MuiBadge: {
+        styleOverrides: badgeStyleOverRides(colors, partnerConfig),
       }
     },
   };
