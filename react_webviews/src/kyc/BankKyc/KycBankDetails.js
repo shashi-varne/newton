@@ -31,7 +31,7 @@ import internalStorage from '../common/InternalStorage';
 import { isNewIframeDesktopLayout } from "../../utils/functions"
 import { storageService } from "../../utils/validators";
 
-let titleText = "Primary bank account details";
+const defaultTitle = "Primary bank account details";
 const genericErrorMessage = "Something Went wrong!";
 const KycBankDetails = (props) => {
   const config = getConfig();
@@ -57,7 +57,7 @@ const KycBankDetails = (props) => {
       "This bank account will be the default account for all your investments and withdrawals",
     variant: "info",
   });
-  const [screenTitle, setScreenTitle] = useState(titleText);
+  const [screenTitle, setScreenTitle] = useState(defaultTitle);
   const [disableFields, setDisableFields] = useState({
     skip_api_call: false,
     account_number_disabled: false,
