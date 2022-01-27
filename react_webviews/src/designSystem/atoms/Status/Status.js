@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
+import Typography from "../Typography";
 import "./Status.scss";
 
 export const STATUS_VARIANTS = {
@@ -41,7 +42,7 @@ const Status = (props) => {
         <Typography
           variant="body4"
           color={VARIANT_COLOR_MAPPER[variant]}
-          allcaps
+          allCaps
         >
           {title}
         </Typography>
