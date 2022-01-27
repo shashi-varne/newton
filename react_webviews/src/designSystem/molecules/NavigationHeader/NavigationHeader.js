@@ -2,27 +2,33 @@ import IconButton from '@mui/material/IconButton';
 import Button from '../../atoms/Button';
 import React, { useEffect, useRef } from 'react';
 import Typography from '../../atoms/Typography';
-import { Imgc } from '../../../common/ui/Imgc';
-import nav_back from 'assets/nav_back.svg';
+import backIcon from 'assets/nav_back.svg';
 import { Tab, Tabs } from '../../atoms/Tabs';
 
 import './NavigationHeader.scss';
+import isEmpty from 'lodash/isEmpty';
+import Icon from '../../atoms/Icon';
 
 const NavigationHeader = ({
   headerTitle,
-  showClose,
+  hideInPageTitle,
+  hideHeaderTitle,
+  leftIconSrc,
   hideLeftIcon,
+  showCloseIcon,
   actionText,
+  actionTextProps = {},
   children,
-  selectedTab,
-  onTabChange,
   anchorOrigin,
+  rightIconSrc,
+  onRightIconClick,
+  tabsProps = {},
 }) => {
   const headerRef = useRef();
   const subtitleRef = useRef();
   const headerTitleRef = useRef();
   useEffect(() => {
-    if (anchorOrigin.current) {
+    if (anchorOrigin?.current) {
       anchorOrigin.current.addEventListener('scroll', onScroll);
     }
   }, []);
@@ -30,20 +36,17 @@ const NavigationHeader = ({
     const el = headerRef.current;
     const anchorScrollToTopPosition = e?.target?.scrollTop;
     const navHeaderTitle = document.getElementsByClassName('nav-header-title')[0];
-    const headerTitleHeight = headerTitleRef?.current?.getBoundingClientRect()?.height;
-    const subtitleHeight = subtitleRef?.current?.getBoundingClientRect()?.height;
+    const headerTitleHeight = headerTitleRef?.current?.getBoundingClientRect()?.height || 0;
+    const subtitleHeight = subtitleRef?.current?.getBoundingClientRect()?.height || 0;
     const headerTitleSubtitleHeight = headerTitleHeight + subtitleHeight;
-
-    subtitleRef.current.style.opacity = 1 - anchorScrollToTopPosition / subtitleHeight;
-    let defaultHeight = 56;
+    const opacityValue = 1 - anchorScrollToTopPosition / subtitleHeight;
+    subtitleRef.current.style.opacity = opacityValue > 0 ? opacityValue : 0;
+    let defaultHeight = el.style.paddingTop || 60;
     if (window.innerWidth < 500) {
       defaultHeight = 0;
     }
-    navHeaderTitle.style.transition = 'opacity 350ms';
-    if (anchorScrollToTopPosition > headerTitleHeight) {
-      navHeaderTitle.style.opacity = '1';
-    } else {
-      navHeaderTitle.style.opacity = '0';
+    if (headerTitleRef?.current) {
+      headerTitleRef.current.style.transition = 'transform 350ms';
     }
     if (anchorScrollToTopPosition >= headerTitleSubtitleHeight) {
       el.classList.add('nav-header-fixed');
@@ -54,48 +57,53 @@ const NavigationHeader = ({
       el.style.top = '0px';
       e['target']['style']['paddingTop'] = '0px';
     }
+    if (!navHeaderTitle || hideInPageTitle) return;
+    navHeaderTitle.style.transition = 'opacity 350ms';
+    if (anchorScrollToTopPosition > headerTitleHeight) {
+      navHeaderTitle.style.opacity = '1';
+    } else {
+      navHeaderTitle.style.opacity = '0';
+    }
   };
-  const leftIcon = showClose ? '' : nav_back;
+  const leftIcon = leftIconSrc ? leftIconSrc : showCloseIcon ? '' : backIcon;
   return (
     <div className='nav-header-wrapper' ref={headerRef}>
       <section className='nav-header-top-section'>
         <div className='nav-header-left'>
           {!hideLeftIcon && (
             <IconButton classes={{ root: 'nav-left-icn-btn' }} className='nav-hl-icon-wrapper'>
-              <Imgc src={leftIcon} style={{ width: '24px', height: '24px' }} className='nhl-icon' />
+              <Icon src={leftIcon} size='24px' />
             </IconButton>
           )}
-          <Typography
-            className={`nav-header-title ${hideLeftIcon && 'nav-header-lm'}`}
-            variant='heading3'
-          >
-            {headerTitle}
-          </Typography>
+          {!hideHeaderTitle && (
+            <Typography
+              className={`nav-header-title ${hideLeftIcon && 'nav-header-lm'} ${
+                hideInPageTitle && 'show-nav-title'
+              }`}
+              variant='heading3'
+            >
+              {headerTitle}
+            </Typography>
+          )}
         </div>
         <div className='nav-header-right'>
-          <Imgc src={''} style={{ width: '24px', height: '24px' }} />
-          {actionText && <Button variant='link' title={actionText} />}
+          {rightIconSrc && <Icon src={rightIconSrc} size='24px' onClick={onRightIconClick} />}
+          {actionText && <Button variant='link' title={actionText} {...actionTextProps} />}
         </div>
       </section>
-      <div className='nav-bar-title-wrapper' ref={headerTitleRef}>
-        <Typography variant='heading2'>{headerTitle}</Typography>
-      </div>
+      {!(hideInPageTitle || hideHeaderTitle) && (
+        <div className='nav-bar-title-wrapper' ref={headerTitleRef}>
+          <Typography variant='heading2'>{headerTitle}</Typography>
+        </div>
+      )}
       <section className='nav-bar-subtitle-wrapper' ref={subtitleRef}>
         {children}
       </section>
-      <section className='nav-bar-tabs-wrapper'>
-        <Tabs value={selectedTab} onChange={onTabChange}>
-          <Tab label='label 1' />
-          <Tab label='label 1' />
-          <Tab label='label 1' />
-          <Tab label='label 1' />
-          <Tab label='label 1' />
-          <Tab label='label 1' />
-          <Tab label='label 1' />
-          <Tab label='label 1' />
-          <Tab label='label 1' />
-        </Tabs>
-      </section>
+      {!isEmpty(tabsProps) && (
+        <section className='nav-bar-tabs-wrapper'>
+          <TabsSection tabs={tabsProps?.tabs} tabChild={tabsProps?.tabChild} />
+        </section>
+      )}
     </div>
   );
 };
@@ -130,6 +138,18 @@ export const NavigationHeaderPoints = ({ children, color, dataIdx }) => {
         </Typography>
       </li>
     </ul>
+  );
+};
+
+const TabsSection = ({ tabs, tabChild }) => {
+  const { selectedTab = 0, onTabChange, ...restTabs } = tabs;
+  return (
+    <Tabs value={selectedTab} onChange={onTabChange} {...restTabs}>
+      {tabChild?.map((el, idx) => {
+        const value = el?.value || idx;
+        return <Tab key={idx} label={el?.label} value={value} {...el} />;
+      })}
+    </Tabs>
   );
 };
 
