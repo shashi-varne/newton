@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Box } from "@mui/material";
-import Typography from '../Typography';
+import Typography from "../Typography";
 import { isEmpty } from "lodash";
 import "./OrderStep.scss";
 
@@ -45,13 +45,14 @@ const OrderStep = (props) => {
           variant="body1"
           className="aos-step-content"
           color="foundationColors.supporting.white"
+          dataAid="number"
         >
           {stepContent}
         </Typography>
       </Box>
       <Box>
         {!isEmpty(title) && (
-          <Typography variant="body1" className="aos-title">
+          <Typography variant="body1" className="aos-title" dataAid="title">
             {title}
           </Typography>
         )}
@@ -60,6 +61,7 @@ const OrderStep = (props) => {
             variant="body2"
             className="aos-subtitle"
             color="foundationColors.content.secondary"
+            dataAid="subtitle"
           >
             {subtitle}
           </Typography>
