@@ -7,7 +7,6 @@ import eventManager from './eventManager';
 import { isMobile } from './functions';
 import { getConfig } from './functions';
 import isEmpty from 'lodash/isEmpty';
-import { redirectToPath } from './native_callback';
 import isFunction from 'lodash/isFunction';
 
 
