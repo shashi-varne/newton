@@ -6,7 +6,7 @@ import { getConfig, navigate as navigateFunc } from '../../../utils/functions';
 import WVButton from '../../../common/ui/Button/WVButton';
 import { getKycFromSummary } from "../../../login_and_registration/functions";
 import BackArrow from '@material-ui/icons/ChevronLeft';
-import { withRouter } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import WVInPageTitle from '../../../common/ui/InPageHeader/WVInPageTitle';
 import { Imgc } from '../../../common/ui/Imgc';
 
