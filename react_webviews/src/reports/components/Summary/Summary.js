@@ -42,7 +42,8 @@ const Summary = (props) => {
   }, []);
 
   useEffect(() => {
-    setIsEquityEnabled(isTradingEnabled(kyc))
+    const tradingEnabled = isTradingEnabled(kyc)
+    setIsEquityEnabled(tradingEnabled);
   }, [kyc])
 
   const initialize = async () => {
