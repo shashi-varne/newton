@@ -1,6 +1,6 @@
 import { createTheme } from '@mui/material';
 import { buttonStyleOverRides, buttonVariantsConfig, } from './button';
-import { tabsStyleOverRides, tabStyleOverRides } from './tabs/index.js';
+import { tabsStyleOverRides, tabStyleOverRides, tabsVariantsConfig, tabVariantsConfig } from './tabs';
 import { radioButtonStyleOverRides } from './radioButton';
 import { checkboxStyleOverRides } from './checkbox';
 import { switchStyleOverRides } from './switch';
@@ -44,9 +44,11 @@ const getTheme = () => {
         styleOverrides: checkboxStyleOverRides(colors),
       },
       MuiTabs: {
+        variants:tabsVariantsConfig(),
         styleOverrides: tabsStyleOverRides()
       },
       MuiTab: {
+        variants:tabVariantsConfig(colors, partnerConfig),
         styleOverrides: tabStyleOverRides(colors, partnerConfig)
       },
       MuiDialog: {
