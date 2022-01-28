@@ -105,32 +105,52 @@ pipelines:
       - step:
           name: Ready Steady Go....
           script:
-            - echo "Go ahead and deploy now... :)"
+            - echo "Go ahead and Deploy now... :)"
 
       - parallel:
         - step:
             <<: *prod-deploy
-            name: Fisdom Production deploy
+            name: Fisdom Production Deploy
             trigger: manual
             deployment: fisdom-prod
         
         - step:
             <<: *prod-deploy
-            name: Finity Production deploy
+            name: Finity Production Deploy
             trigger: manual
             deployment: finity-prod
         
         - step:
             <<: *prod-deploy
-            name: Fisdom-Equity Production deploy
+            name: Fisdom-Equity Production Deploy
             trigger: manual
             deployment: fisdom-webapp-prod
 
         - step:
             <<: *prod-deploy
-            name: Finity-Equity Production deploy
+            name: Finity-Equity Production Deploy
             trigger: manual
             deployment: finity-webapp-prod
+
+    uat:
+      - step:
+          name: Ready Steady Go....
+          script:
+            - echo "Go ahead and Deploy now... :)"
+
+      - parallel:
+        - step:
+            <<: *prod-deploy
+            name: Fisdom Equity UAT Deploy
+            trigger: manual
+            deployment: fisdom-webapp-uat
+        
+        - step:
+            <<: *prod-deploy
+            name: Finity Equity Pre-Prod Deploy
+            trigger: manual
+            deployment: fisdom-webapp-preprod
+        
       
       # - step:
       #     <<: *prod-deploy
