@@ -434,7 +434,7 @@ class MyAccount extends Component {
               })}
             </div>
           </div>
-          {tradingEnabled && (
+          {tradingEnabled && !isSdk && (
             <div
               className="my-account-content"
               data-aid="myAccount_freedomPlan"
