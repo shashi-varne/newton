@@ -132,7 +132,7 @@ pipelines:
             trigger: manual
             deployment: finity-webapp-prod
 
-    uat:
+    equity-uat:
       - step:
           name: Ready Steady Go....
           script:
@@ -147,9 +147,28 @@ pipelines:
         
         - step:
             <<: *prod-deploy
-            name: Finity Equity Pre-Prod Deploy
+            name: Finity Equity UAT Deploy
+            trigger: manual
+            deployment: finity-webapp-uat
+
+    equity-preprod:
+      - step:
+          name: Ready Steady Go....
+          script:
+            - echo "Go ahead and Deploy now... :)"
+
+      - parallel:
+        - step:
+            <<: *prod-deploy
+            name: Fisdom Equity Pre-Prod Deploy
             trigger: manual
             deployment: fisdom-webapp-preprod
+        
+        - step:
+            <<: *prod-deploy
+            name: Finity Equity Pre-Prod Deploy
+            trigger: manual
+            deployment: finity-webapp-preprod
         
       
       # - step:
