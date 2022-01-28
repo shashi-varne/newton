@@ -198,6 +198,7 @@ const TradingInfo = (props) => {
       handleClick={handleClick}
       skelton={isLoading || showSkelton}
       iframeRightContent={require(`assets/${productName}/ic_upgrade.svg`)}
+      noBackIcon={showSkelton}
     >
       <div className="kyc-account-info" data-aid='kyc-account-info'>
         <header className="kyc-account-info-header" data-aid='kyc-account-info-header'>
