@@ -22,8 +22,11 @@ const Button = (props) => {
     variant,
     title,
     disabled,
+    color,
+    backgroundColor,
     onClick,
     dataAid,
+    onHoverStyle,
     ...restProps
   } = props;
   return (
@@ -36,6 +39,7 @@ const Button = (props) => {
       disabled={disabled}
       onClick={onClick}
       data-aid={`button_${dataAid}`}
+      sx={{color, backgroundColor,':hover': onHoverStyle}}
       {...restProps}
     >
       {isLoading && variant === 'primary' ? <DotDotLoaderNew /> : <div data-aid='tv_title'>{title}</div>}
@@ -47,7 +51,8 @@ export default Button;
 
 Button.defaultProps = {
   variant: 'primary',
-  size: 'large'
+  size: 'large',
+  onHoverStyle: {}
 }
 
 Button.propTypes = {
