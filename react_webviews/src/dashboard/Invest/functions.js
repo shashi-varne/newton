@@ -683,8 +683,11 @@ export function handleStocksAndIpoCards(key) {
   if(key === "stocks" && !modalData.dualButton) {
     const kycInprogressStates = ["submitted", "verifying_trading_account"];
     if (config.isSdk && kycInprogressStates.includes(kycJourneyStatus)) {
+      const handleClick = () => {
+        this.handleStocksRedirection(false);
+      }
       modalData.buttonTitle = "CONTINUE";
-      modalData.handleClick = this.handleStocksRedirection;
+      modalData.handleClick = handleClick
     }
     if (config.isSdk && !modalData.oneButton) {
       modalData.dualButton = true;
