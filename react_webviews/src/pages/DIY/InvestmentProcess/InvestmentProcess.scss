@@ -1,0 +1,21 @@
+.investment-process-wrapper {
+  .ip-points-wrapper {
+    margin-top: 24px;
+    .ip-points-list {
+      margin: 0px;
+      padding-left: 20px;
+      margin-top: 8px;
+      width: 100%;
+      .ip-points-item {
+        margin-bottom: 16px;
+        &:last-child {
+          margin-bottom: 0px;
+        }
+      }
+    }
+  }
+
+  .ip-trust-icon-wrapper {
+      margin-top: 50px;
+  }
+}
