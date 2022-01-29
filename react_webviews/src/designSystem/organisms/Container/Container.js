@@ -1,12 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import Box from '@mui/material/Box';
 import NavigationHeader from '../../molecules/NavigationHeader';
-import {
-  NavigationHeaderPoints,
-  NavigationHeaderSubtitle,
-} from '../../molecules/NavigationHeader/NavigationHeader';
+import { NavigationHeaderPoints, NavigationHeaderSubtitle, } from '../../molecules/NavigationHeader/NavigationHeader';
 import isArray from 'lodash/isArray';
-import Footer from './Footer';
+import Footer from '../../molecules/Footer';
 
 import './Container.scss';
 
@@ -16,7 +13,6 @@ const Container = ({ headerProps = {}, children, className, footer = {} }) => {
   const { headerTitle, subtitle, points = [], ...restHeaderProps } = headerProps;
   useEffect(() => {
     if (footerWrapperRef?.current && containerRef.current) {
-      console.log("eight",footerWrapperRef?.current?.getBoundingClientRect());
       containerRef.current.style.paddingBottom = `${footerWrapperRef?.current?.getBoundingClientRect()?.height}px`;
     }
   }, [footer?.direction, footerWrapperRef?.current]);
@@ -34,9 +30,9 @@ const Container = ({ headerProps = {}, children, className, footer = {} }) => {
           })}
       </NavigationHeader>
       <main className='container-content-wrapper'>{children}</main>
-      <div className='container-footer-wrapper' ref={footerWrapperRef}>
+      <footer className='container-footer-wrapper' ref={footerWrapperRef}>
         <Footer {...footer} />
-      </div>
+      </footer>
     </Box>
   );
 };

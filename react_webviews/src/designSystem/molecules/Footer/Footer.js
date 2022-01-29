@@ -4,9 +4,15 @@ import Stack from '@mui/material/Stack';
 
 import './Footer.scss';
 
-const Footer = ({ direction = 'row', button1Props, button2Props, renderTopChild, renderBottomChild }) => {
+const Footer = ({
+  direction = 'row',
+  button1Props,
+  button2Props,
+  renderTopChild,
+  renderBottomChild,
+}) => {
   return (
-    <footer className='footer-wrapper'>
+    <div className='footer-wrapper'>
       {renderTopChild}
       <Stack direction={direction} className='footer-stack-wrapper'>
         {button1Props?.title && (
@@ -17,7 +23,7 @@ const Footer = ({ direction = 'row', button1Props, button2Props, renderTopChild,
         )}
       </Stack>
       {renderBottomChild}
-    </footer>
+    </div>
   );
 };
 
