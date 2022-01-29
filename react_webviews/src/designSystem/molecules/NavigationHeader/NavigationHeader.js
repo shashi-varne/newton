@@ -65,7 +65,7 @@ const NavigationHeader = ({
   };
   const leftIcon = leftIconSrc ? leftIconSrc : showCloseIcon ? closeIcon : backIcon;
   return (
-    <div className='nav-header-wrapper' ref={navHeaderWrapperRef}>
+    <header className='nav-header-wrapper' ref={navHeaderWrapperRef}>
       <section className='nav-header-top-section'>
         <div className='nav-header-left'>
           {!hideLeftIcon && (
@@ -108,7 +108,7 @@ const NavigationHeader = ({
           <TabsSection tabs={tabsProps} tabChilds={tabChilds} />
         </section>
       )}
-    </div>
+    </header>
   );
 };
 
