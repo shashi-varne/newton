@@ -9,7 +9,7 @@ import { Tab, Tabs } from '../../atoms/Tabs';
 import isEmpty from 'lodash/isEmpty';
 import isFunction from 'lodash/isFunction';
 import Icon from '../../atoms/Icon';
-import { onScroll } from './helperFunctions';
+import { onScroll, setTabPadding } from './helperFunctions';
 import PropTypes from 'prop-types';
 
 import './NavigationHeader.scss';
@@ -33,14 +33,28 @@ const NavigationHeader = ({
   const navHeaderWrapperRef = useRef();
   const subtitleRef = useRef();
   const inPageTitleRef = useRef();
+  const tabWrapperRef = useRef();
   const history = useHistory();
   useEffect(() => {
     if (anchorOrigin?.current) {
       anchorOrigin.current.addEventListener('scroll', handleOnScroll);
     }
+    const tabWrapperEl = tabWrapperRef?.current;
+    const navHeaderWrapperEl = navHeaderWrapperRef.current;
+    const subtitleEl = subtitleRef?.current;
+    if (tabWrapperEl && navHeaderWrapperEl && subtitleEl) {
+      setTabPadding(tabWrapperEl, navHeaderWrapperEl, subtitleEl);
+    }
   }, []);
   const handleOnScroll = (anchorOriginEl) => {
-    onScroll(anchorOriginEl, navHeaderWrapperRef, subtitleRef, inPageTitleRef, hideInPageTitle);
+    onScroll(
+      anchorOriginEl,
+      navHeaderWrapperRef,
+      subtitleRef,
+      inPageTitleRef,
+      hideInPageTitle,
+      tabWrapperRef
+    );
   };
 
   const handleLeftIconClick = (e) => {
@@ -90,7 +104,7 @@ const NavigationHeader = ({
         {children}
       </section>
       {!isEmpty(tabsProps) && !isEmpty(tabChilds) && (
-        <section className='nav-bar-tabs-wrapper'>
+        <section className='nav-bar-tabs-wrapper' ref={tabWrapperRef}>
           <TabsSection tabs={tabsProps} tabChilds={tabChilds} />
         </section>
       )}
@@ -160,13 +174,13 @@ NavigationHeader.propTypes = {
 NavigationHeaderSubtitle.propTypes = {
   children: PropTypes.node,
   color: PropTypes.string,
-  dataIdx: PropTypes.number.isRequired
+  dataIdx: PropTypes.number.isRequired,
 };
 
 NavigationHeaderPoints.propTypes = {
   children: PropTypes.node,
   color: PropTypes.string,
-  dataIdx: PropTypes.number.isRequired
+  dataIdx: PropTypes.number.isRequired,
 };
 
 NavigationHeaderSubtitle.defaultProps = {
