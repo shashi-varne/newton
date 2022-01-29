@@ -1,0 +1,121 @@
+.nav-header-wrapper {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  flex: 1;
+  position: relative;
+  padding-top: 56px;
+
+  .nav-header-top-section {
+    padding: 16px;
+    padding-left: 8px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    position: fixed;
+    top: 60px;
+    width: var(--desktop-width);
+    z-index: 100;
+    background-color: white;
+    cursor: default;
+  }
+
+  .nav-header-title {
+    opacity: 0;
+    &.show-nav-title {
+      opacity: 1;
+    }
+    &.nav-header-lm {
+      margin-left: 8px;
+    }
+  }
+
+  .nav-header-left {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+
+    .nav-left-icn-btn {
+      margin: -8px;
+      margin-right: 4px;
+    }
+
+    .nav-hl-icon-wrapper {
+      cursor: pointer;
+    }
+  }
+
+  .nav-header-right {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .nav-bar-title-wrapper {
+    padding: 0px 16px;
+  }
+
+  .nav-bar-tabs-wrapper {
+    padding: 0px 16px;
+    background-color: white;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    &.tab-position-change {
+      position: fixed;
+      width: var(--desktop-width);
+      left: unset;
+      bottom: unset;
+      padding-right: 26px;
+    }
+  }
+
+  .nav-bar-title-wrapper + .nav-bar-subtitle-wrapper {
+    &:empty {
+      padding-top: 0px;
+    }
+  }
+
+  .nav-bar-subtitle-wrapper {
+    padding: 0px 16px 16px 16px;
+    &:empty {
+      padding-bottom: 16px;
+    }
+    .lh-subtitle {
+      margin-top: 8px;
+    }
+    .lh-description-list {
+      margin: 0px;
+      padding-left: 20px;
+      margin-top: 8px;
+      width: 100%;
+    }
+  }
+
+  .nav-header-top-section + .nav-bar-subtitle-wrapper {
+    &:empty {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .nav-header-wrapper {
+    .nav-bar-tabs-wrapper {
+      &.tab-position-change {
+        position: fixed;
+        width: 100%;
+        padding-right: 16px;
+      }
+    }
+    .nav-header-top-section {
+      top: 0px;
+      width: 100%;
+    }
+  }
+}
