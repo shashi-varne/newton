@@ -38,7 +38,7 @@ const ConfirmAction = ({
       )}
       <div className='confirm-action-right-wrapper'>
         {title && (
-          <Typography variant='body5' dataAid='title' color={titleColor}>
+          <Typography variant='body5' dataAid='title' sx={{mr:'10px'}} color={titleColor}>
             {title}
           </Typography>
         )}
