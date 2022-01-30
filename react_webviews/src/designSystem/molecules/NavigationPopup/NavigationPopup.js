@@ -1,68 +1,98 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import './NavigationPopup.scss';
-import { ClickAwayListener, Zoom } from '@mui/material';
+import React, { useMemo } from "react";
+import Popover from "@mui/material/Popover";
+import Typography from "../../atoms/Typography";
+import PropTypes from "prop-types";
+import noop from "lodash/noop";
+import isObject from "lodash/isObject";
+import "./NavigationPopup.scss";
+import { Box } from "@mui/material";
 
-export default function BasicMenu() {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
+const NavigationPopup = (props) => {
+  const {
+    anchorEl,
+    onClose = noop,
+    options = [],
+    dataAid,
+    handleClick = noop,
+    displayKey = "name",
+    activeIndex,
+    anchorOriginVertical = "bottom",
+    anchorOriginHorizontal = "center",
+    transformOriginVertical = "bottom",
+    transformOriginHorizontal = "center",
+  } = props;
+
+  const onLabelClick = (index) => () => {
+    handleClick(index);
   };
 
   return (
-    <div className='navigation-popup-wrapper'>
-      <ClickAwayListener onClickAway={handleClose}>
-        <div className='nav-popup-child'>
-          <Button
-            id='basic-button'
-            aria-controls={open ? 'basic-menu' : undefined}
-            aria-haspopup='true'
-            aria-expanded={open ? 'true' : undefined}
-            onClick={handleClick}
-          >
-            Dashboard
-          </Button>
-
-          <Menu
-            disablePortal
-            id='basic-menu'
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'center',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'center',
-            }}
-            MenuListProps={{
-              'aria-labelledby': 'basic-button',
-            }}
-            PaperProps={{
-              sx: paperSxStyle,
-              className: 'nav-popup-paper',
-            }}
-            TransitionComponent={Zoom}
-          >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem onClick={handleClose}>My account My account My account</MenuItem>
-            <MenuItem onClick={handleClose}>Logout</MenuItem>
-          </Menu>
-        </div>
-      </ClickAwayListener>
-    </div>
+    <Popover
+      open={Boolean(anchorEl)}
+      anchorEl={anchorEl}
+      onClose={onClose}
+      anchorOrigin={{
+        vertical: anchorOriginVertical,
+        horizontal: anchorOriginHorizontal,
+      }}
+      transformOrigin={{
+        vertical: transformOriginVertical,
+        horizontal: transformOriginHorizontal,
+      }}
+      data-aid={`navigationPopup_${dataAid}`}
+      className="molecule-navigation-popup"
+    >
+      {options.map((data, index) => (
+        <Label
+          key={index}
+          index={index + 1}
+          onClick={onLabelClick(index)}
+          isActive={index === activeIndex}
+          data={data}
+          displayKey={displayKey}
+        />
+      ))}
+    </Popover>
   );
-}
+};
 
-const paperSxStyle = {
-  boxShadow: '0px 6px 12px -6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.2) !important',
-  borderRadius: '12px',
+const getLabelName = (data, displayKey) => () => {
+  return isObject(data) ? data[displayKey] : data;
+};
+
+const Label = ({ index, onClick, data, isActive, displayKey }) => {
+  const labelName = useMemo(getLabelName(data, displayKey), [data]);
+  return (
+    <Box className="np-label-wrapper">
+      {isActive && (
+        <Box
+          className="np-lw-dot"
+          sx={{ backgroundColor: "foundationColors.content.primary" }}
+        />
+      )}
+      <Typography
+        dataAid={`label${index}`}
+        variant={isActive ? "heading4" : "body8"}
+        component="div"
+        color="foundationColors.content.primary"
+        onClick={onClick}
+      >
+        {labelName}
+      </Typography>
+    </Box>
+  );
+};
+
+export default NavigationPopup;
+
+NavigationPopup.propTypes = {
+  onClose: PropTypes.func,
+  options: PropTypes.array.isRequired,
+  activeIndex: PropTypes.number,
+  displayKey: PropTypes.string,
+  anchorOriginVertical: PropTypes.string,
+  anchorOriginHorizontal: PropTypes.string,
+  transformOriginVertical: PropTypes.string,
+  transformOriginHorizontal: PropTypes.string,
+  dataAid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
