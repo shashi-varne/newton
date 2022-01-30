@@ -1,6 +1,8 @@
 .footer-wrapper {
   .footer-stack-wrapper {
     button {
+      flex-basis: 100%;
+      min-width: fit-content;
       &:only-child {
         max-width: fit-content;
         margin: 0px auto;
