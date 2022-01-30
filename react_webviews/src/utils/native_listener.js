@@ -418,16 +418,6 @@ import isFunction from 'lodash/isFunction';
     }
   }
 
-  exports.set_module = function (module) {
-    const MODULE_MAPPER = {
-      kyc: '/kyc/web',
-      my_account: '/my-account',
-      account_statement: '/statements',
-    }
-    const modulePath = MODULE_MAPPER[module] || "/"
-    eventManager.emit(EVENT_MANAGER_CONSTANTS.redirectPath, modulePath);
-  };
-  
   exports.set_content_data = function (data) {
     let contentData = {};
     if (data !== "" && typeof data === "string") {
