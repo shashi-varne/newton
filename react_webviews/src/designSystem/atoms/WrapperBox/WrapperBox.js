@@ -15,10 +15,16 @@ import PropTypes from 'prop-types';
 import { SHADOWS } from '../../../theme/shadows';
 import isFunction from 'lodash/isFunction';
 
-const WrapperBox = ({ elevation, children, sx = {}, onClick, ...restProps }) => {
+const WrapperBox = ({ elevation, children, sx = {}, className, onClick, ...restProps }) => {
   const sxStyle = customSxStyle(elevation, onClick);
   return (
-    <Box sx={{ ...sxStyle, ...sx }} component='div' onClick={onClick} {...restProps}>
+    <Box
+      sx={{ ...sxStyle, ...sx }}
+      className={className}
+      component='div'
+      onClick={onClick}
+      {...restProps}
+    >
       {children}
     </Box>
   );
