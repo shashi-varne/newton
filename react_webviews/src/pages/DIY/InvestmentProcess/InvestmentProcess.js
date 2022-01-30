@@ -6,7 +6,7 @@ import {
   LandingHeaderSubtitle,
   LandingHeaderTitle,
 } from '../../../designSystem/molecules/LandingHeader';
-import { DIY } from '../../../common/strings/diy';
+import { DIY } from 'businessLogic/strings/diy';
 import Typography from '../../../designSystem/atoms/Typography';
 import EMandateTrustIcon from '../../../designSystem/atoms/EMandateTrustIcon/EMandateTrustIcon';
 import { getConfig } from '../../../utils/functions';
@@ -17,9 +17,6 @@ const InvestmentProcess = () => {
   const { productName } = useMemo(getConfig, []);
   return (
     <Container
-      headerProps={{
-        hideHeaderTitle: true,
-      }}
       footer={{
         button1Props: {
           title: 'Continue',
@@ -29,8 +26,8 @@ const InvestmentProcess = () => {
     >
       <LandingHeader variant='side'>
         <LandingHeaderImage imgSrc={require(`assets/${productName}/invest_process.svg`)} />
-        <LandingHeaderTitle>{DIY.InvestmentProcess}</LandingHeaderTitle>
-        <LandingHeaderSubtitle dataIdx={1}>{DIY.InvestmentProcessSubtitle}</LandingHeaderSubtitle>
+        <LandingHeaderTitle>{DIY.investmentProcessTitle}</LandingHeaderTitle>
+        <LandingHeaderSubtitle dataIdx={1}>{DIY.investmentProcessSubtitle}</LandingHeaderSubtitle>
       </LandingHeader>
       <section className='ip-points-wrapper'>
         <ul className='ip-points-list'>
@@ -57,11 +54,6 @@ const InvestmentProcess = () => {
   );
 };
 
-const INVESTMENT_POINTS = [
-  'You select a fund & make payment',
-  'Amount is debited from your bank account',
-  'Bombay Stock Exchange receives the amount & sends it to AMC',
-  'AMC allots units on the next working day',
-];
+const INVESTMENT_POINTS = [DIY.makePayment, DIY.amountDebited, DIY.bombayStock, DIY.amountDebited];
 
 export default InvestmentProcess;

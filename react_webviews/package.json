@@ -121,7 +121,8 @@
     "webpack-cli": "^3.0.8",
     "webpack-dev-server": "^3.1.4",
     "webpack-manifest-plugin": "^3.0.0-rc.0",
-    "whatwg-fetch": "2.0.3"
+    "whatwg-fetch": "2.0.3",
+    "businessLogic": "git+https://fdamitsingh:EafwBATbn2DqxeV7KhsN@bitbucket.org/finwizardtech/businesslogic.git#feature/RN-684-common-business-logic---diy"
   },
   "scripts": {
     "start": "NODE_PATH=./src node scripts/start.js",
