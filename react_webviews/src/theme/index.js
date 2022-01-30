@@ -8,6 +8,7 @@ import baseTypographyConfig, { customTypographyVariantProps } from './typography
 import getPartnerThemeData from './utils';
 import { separatorStyleOverRides } from './separator';
 import { dialogDefaultProps, dialogStylesOverride } from './dialog';
+import { customShadows } from './shadows';
 
 const getTheme = () => {
   const {colors, partnerConfig} = getPartnerThemeData();
@@ -54,9 +55,10 @@ const getTheme = () => {
       MuiDialog: {
         defaultProps: dialogDefaultProps(),
         styleOverrides:dialogStylesOverride()
-      }
+      },
     },
-  };
+    shadows: customShadows()
+  }
   return createTheme(theme);
 };
 
