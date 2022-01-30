@@ -10,140 +10,146 @@ import investment_focused from 'assets/investment_focused.svg';
 
 export const TRENDING_CARDS = [
   {
-    leftDescription: {
-      title: '3 Year Return',
-      titleColor: 'foundationColors.content.secondary',
-      subtitle: '+23.94%',
-      subtitleColor: 'foundationColors.secondary.profitGreen.400'
+    leftSlotProps: {
+      description: {
+        title: '3 Year Return',
+        titleColor: 'foundationColors.content.secondary',
+        subtitle: '+23.94%',
+        subtitleColor: 'foundationColors.secondary.profitGreen.400',
+      },
     },
-    rightDescription:{
-      title: 'Total AUM',
-      titleColor: 'foundationColors.content.secondary',
-      subtitle: '₹2.664 Cr',
-      subtitleColor: 'foundationColors.secondary.coralOrange.400'
+    rightSlotProps: {
+      description: {
+        title: 'Total AUM',
+        titleColor: 'foundationColors.content.secondary',
+        subtitle: '₹2.664 Cr',
+        subtitleColor: 'foundationColors.secondary.coralOrange.400',
+      },
     },
-    middleDescription: {
-      title: 'Invested by',
-      titleColor: 'foundationColors.content.secondary',
-      subtitle: '6% users',
+    middleSlotProps: {
+      description: {
+        title: 'Invested by',
+        titleColor: 'foundationColors.content.secondary',
+        subtitle: '6% users',
+      },
     },
-    imgSrc: icicIcon,
+    topLeftImgSrc: icicIcon,
     heading: 'ICICI Prudential Technology Direct Plan Growth',
   },
   {
-    leftDescription: {
-      title: '3 Year Return',
-      titleColor: 'foundationColors.content.secondary',
-      subtitle: '+23.94%',
-      subtitleColor: 'foundationColors.secondary.profitGreen.400'
+    leftSlotProps: {
+      description: {
+        title: '3 Year Return',
+        titleColor: 'foundationColors.content.secondary',
+        subtitle: '+23.94%',
+        subtitleColor: 'foundationColors.secondary.profitGreen.400',
+      },
     },
-    rightDescription:{
-      title: 'Total AUM',
-      titleColor: 'foundationColors.content.secondary',
-      subtitle: '₹2.664 Cr',
-      subtitleColor: 'foundationColors.secondary.coralOrange.400'
+    rightSlotProps: {
+      description: {
+        title: 'Total AUM',
+        titleColor: 'foundationColors.content.secondary',
+        subtitle: '₹2.664 Cr',
+        subtitleColor: 'foundationColors.secondary.coralOrange.400',
+      },
     },
-    middleDescription: {
-      title: 'Invested by',
-      titleColor: 'foundationColors.content.secondary',
-      subtitle: '6% users',
+    middleSlotProps: {
+      description: {
+        title: 'Invested by',
+        titleColor: 'foundationColors.content.secondary',
+        subtitle: '6% users',
+      },
     },
-    imgSrc: icicIcon,
+    topLeftImgSrc: icicIcon,
     heading: 'ICICI Prudential Technology Direct Plan Growth',
   },
   {
-    leftDescription: {
-      title: '3 Year Return',
-      titleColor: 'foundationColors.content.secondary',
-      subtitle: '+23.94%',
-      subtitleColor: 'foundationColors.secondary.profitGreen.400'
+    leftSlotProps: {
+      description: {
+        title: '3 Year Return',
+        titleColor: 'foundationColors.content.secondary',
+        subtitle: '+23.94%',
+        subtitleColor: 'foundationColors.secondary.profitGreen.400',
+      },
     },
-    rightDescription:{
-      title: 'Total AUM',
-      titleColor: 'foundationColors.content.secondary',
-      subtitle: '₹2.664 Cr',
-      subtitleColor: 'foundationColors.secondary.coralOrange.400'
+    rightSlotProps: {
+      description: {
+        title: 'Total AUM',
+        titleColor: 'foundationColors.content.secondary',
+        subtitle: '₹2.664 Cr',
+        subtitleColor: 'foundationColors.secondary.coralOrange.400',
+      },
     },
-    middleDescription: {
-      title: 'Invested by',
-      titleColor: 'foundationColors.content.secondary',
-      subtitle: '6% users',
+    middleSlotProps: {
+      description: {
+        title: 'Invested by',
+        titleColor: 'foundationColors.content.secondary',
+        subtitle: '6% users',
+      },
     },
-    imgSrc: icicIcon,
+    topLeftImgSrc: icicIcon,
     heading: 'ICICI Prudential Technology Direct Plan Growth',
   },
 ];
 
 export const CATEGORY_CARDS = [
   {
-    elevation: true,
-    imgcSrc: large_cap,
+    imgSrc: large_cap,
     title: 'Large Cap',
     subtitle: 'Long term capital growth',
   },
   {
-    elevation: true,
-    imgcSrc: multi_cap,
+    imgSrc: multi_cap,
     title: 'Multi Cap',
     subtitle: 'Long term capital growth',
   },
   {
-    elevation: true,
-    imgcSrc: small_cap,
+    imgSrc: small_cap,
     title: 'Small Cap',
     subtitle: 'Long term capital growth',
   },
   {
-    elevation: true,
-    imgcSrc: large_mid_cap,
+    imgSrc: large_mid_cap,
     title: 'Large & mid Cap',
     subtitle: 'Long term capital growth',
   },
   {
-    elevation: true,
-    imgcSrc: small_cap,
+    imgSrc: small_cap,
     title: 'Small Cap',
     subtitle: 'Long term capital growth',
   },
   {
-    elevation: true,
-    imgcSrc: large_mid_cap,
+    imgSrc: large_mid_cap,
     title: 'Large & mid Cap',
     subtitle: 'Long term capital growth',
   },
   {
-    elevation: true,
-    imgcSrc: small_cap,
+    imgSrc: small_cap,
     title: 'Small Cap',
     subtitle: 'Long term capital growth',
   },
   {
-    elevation: true,
-    imgcSrc: large_mid_cap,
+    imgSrc: large_mid_cap,
     title: 'Large & mid Cap',
     subtitle: 'Long term capital growth',
   },
   {
-    elevation: true,
-    imgcSrc: small_cap,
+    imgSrc: small_cap,
     title: 'Small Cap',
     subtitle: 'Long term capital growth',
   },
   {
-    elevation: true,
-    imgcSrc: large_mid_cap,
+    imgSrc: large_mid_cap,
     title: 'Large & mid Cap',
     subtitle: 'Long term capital growth',
   },
   {
-    elevation: true,
-    imgcSrc: small_cap,
+    imgSrc: small_cap,
     title: 'Small Cap',
     subtitle: 'Long term capital growth',
   },
   {
-    elevation: true,
-    imgcSrc: large_mid_cap,
+    imgSrc: large_mid_cap,
     title: 'Large & mid Cap',
     subtitle: 'Long term capital growth',
   },
@@ -189,26 +195,22 @@ export const SECTORS = [
 
 export const INVEST_STYLES = [
   {
-    elevation: true,
-    imgcSrc: investment_contra,
+    imgSrc: investment_contra,
     title: 'Value/Contra',
     subtitle: 'Best for long term goals',
   },
   {
-    elevation: true,
-    imgcSrc: investment_focused,
+    imgSrc: investment_focused,
     title: 'Focused',
     subtitle: 'Invest in industry specific stocks',
   },
   {
-    elevation: true,
-    imgcSrc: investment_contra,
+    imgSrc: investment_contra,
     title: 'Value/Contra',
     subtitle: 'Best for long term goals',
   },
   {
-    elevation: true,
-    imgcSrc: investment_focused,
+    imgSrc: investment_focused,
     title: 'Focused',
     subtitle: 'Invest in industry specific stocks',
   },

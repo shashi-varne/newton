@@ -16,126 +16,156 @@ import SwiperCore, { Pagination } from 'swiper';
 import 'swiper/swiper-bundle.css';
 import { CATEGORY_CARDS, INVEST_STYLES, SECTORS, TRENDING_CARDS } from './constants';
 import CustomSwiper from '../../../designSystem/molecules/CustomSwiper';
-import './CommonCategoryLanding.scss';
 import { getConfig } from '../../../utils/functions';
+import Container from '../../../designSystem/organisms/Container/Container';
+
+import './CommonCategoryLanding.scss';
 
 SwiperCore.use([Pagination]);
 const CommonCategoryLanding = () => {
   const config = getConfig();
   const isMobileDevice = config.isMobileDevice;
   return (
-    <div className='equity-screen-wrapper'>
-      <LandingHeader variant='center' dataAid='equity'>
-        <LandingHeaderImage imgSrc={require('assets/finity/diy_equity.svg')} />
-        <LandingHeaderTitle>Equity</LandingHeaderTitle>
-        <LandingHeaderSubtitle>
-          These funds invest in stocks of various companies across sectors and market cap sizes to
-          yield high returns
-        </LandingHeaderSubtitle>
-      </LandingHeader>
+    <Container>
+      <div className='diy-category-landing-wrapper'>
+        <LandingHeader variant='center' dataAid='equity'>
+          <LandingHeaderImage imgSrc={require('assets/finity/diy_equity.svg')} />
+          <LandingHeaderTitle>Equity</LandingHeaderTitle>
+          <LandingHeaderSubtitle>
+            These funds invest in stocks of various companies across sectors and market cap sizes to
+            yield high returns
+          </LandingHeaderSubtitle>
+        </LandingHeader>
 
-      <div className='eq-trending-wrapper'>
-        <Typography variant='heading4'>Trending</Typography>
-        <CustomSwiper slidesPerView={isMobileDevice ? 1 : 2} slidesPerColumn={1} slidesPerGroup={1}>
-          {TRENDING_CARDS?.map((fund, idx) => (
-            <SwiperSlide key={idx}>
-              <div className='eq-trending-item'>
-                <FeatureCard {...fund} dataAid={idx} />
-              </div>
-            </SwiperSlide>
-          ))}
-        </CustomSwiper>
-      </div>
-
-      <div className='eq-category-wrapper'>
-        <div className='eq-c-titleWrapper'>
-          <Typography variant='heading4'>Market Cap</Typography>
-          <Typography variant='specialBody' color='secondary'>
-            See all
-          </Typography>
-        </div>
-        <div>
+        <div className='diy-c-trending-wrapper'>
+          <Typography variant='heading4'>Trending</Typography>
           <CustomSwiper
-            slidesPerView={2}
-            slidesPerColumn={2}
-            slidesPerGroup={2}
-            slidesPerColumnFill={'row'}
+            slidesPerView={isMobileDevice ? 1 : 2}
+            slidesPerColumn={1}
+            slidesPerGroup={1}
           >
-            {CATEGORY_CARDS?.map((category, idx) => {
+            {TRENDING_CARDS?.map((fund, idx) => (
+              <SwiperSlide key={idx}>
+                <div className='diy-c-trending-item'>
+                  <FeatureCard {...fund} dataAid={idx} />
+                </div>
+              </SwiperSlide>
+            ))}
+          </CustomSwiper>
+        </div>
+
+        <div className='diy-c-category-wrapper'>
+          <div className='diy-c-titleWrapper'>
+            <Typography variant='heading4'>Market Cap</Typography>
+            <Typography variant='specialBody' color='secondary'>
+              See all
+            </Typography>
+          </div>
+          <div>
+            <CustomSwiper
+              slidesPerView={2}
+              slidesPerColumn={2}
+              slidesPerGroup={2}
+              slidesPerColumnFill={'row'}
+            >
+              {CATEGORY_CARDS?.map((category, idx) => {
+                return (
+                  <SwiperSlide key={idx}>
+                    <CardVertical {...category} />
+                  </SwiperSlide>
+                );
+              })}
+            </CustomSwiper>
+          </div>
+        </div>
+
+        <div className='diy-c-tax-saving-wrapper'>
+          <Typography className='diy-c-tax-title' variant='heading4'>
+            Tax Saving
+          </Typography>
+          <div className='diy-c-card-horz-wrapper'>
+            <CardHorizontal
+              // iconSrc={tax_save}
+              // ilstSrc={tax_save_large}
+              title={'ELSS'}
+              subtitle={'Save tax up to ₹46,800 p.a.'}
+              dataAid='elss'
+            />
+          </div>
+        </div>
+
+        <div className='diy-c-sector-theme'>
+          <div className='diy-c-titleWrapper'>
+            <Typography variant='heading4'>Sector and themes</Typography>
+            <Typography variant='body8' color='secondary'>
+              See all
+            </Typography>
+          </div>
+          <CustomSwiper
+            spaceBetween={16}
+            breakpoints={{
+              320: {
+                slidesPerView: 2,
+                slidesPerGroup: 1,
+              },
+              // when window width is >= 480px
+              480: {
+                slidesPerView: 3,
+                slidesPerGroup: 1,
+              },
+              // when window width is >= 640px
+              640: {
+                slidesPerView: 3,
+                slidesPerGroup: 1,
+              },
+            }}
+            slidesOffsetAfter={40}
+            freeMode
+          >
+            {SECTORS.map((sector, idx) => (
+              <SwiperSlide key={idx}>
+                <CategoryCard {...sector} />
+              </SwiperSlide>
+            ))}
+          </CustomSwiper>
+        </div>
+
+        <div className='diy-c-investment-style-wrapper'>
+          <Typography className='diy-c-investment-title' variant='heading4'>
+            Investment styles
+          </Typography>
+          <CustomSwiper
+            spaceBetween={8}
+            breakpoints={{
+              320: {
+                slidesPerView: 2,
+                slidesPerGroup: 1,
+              },
+              // when window width is >= 480px
+              480: {
+                slidesPerView: 3,
+                slidesPerGroup: 1,
+              },
+              // when window width is >= 640px
+              640: {
+                slidesPerView: 3,
+                slidesPerGroup: 1,
+              },
+            }}
+            slidesOffsetAfter={40}
+            freeMode
+          >
+            {INVEST_STYLES?.map((investStyle, idx) => {
               return (
                 <SwiperSlide key={idx}>
-                  <CardVertical {...category} />
+                  <CardVertical {...investStyle} />
                 </SwiperSlide>
               );
             })}
           </CustomSwiper>
         </div>
       </div>
-
-      <div className='eq-tax-saving-wrapper'>
-        <Typography className='eq-tax-title' variant='heading4'>
-          Tax Saving
-        </Typography>
-        <div className='eq-card-horx-wrapper'>
-          <CardHorizontal
-            // iconSrc={tax_save}
-            // ilstSrc={tax_save_large}
-            title={'ELSS'}
-            subtitle={'Save tax up to ₹46,800 p.a.'}
-            dataAid='elss'
-          />
-        </div>
-      </div>
-
-      <div className='eq-sector-theme'>
-        <div className='eq-c-titleWrapper'>
-          <Typography variant='heading4'>Sector and themes</Typography>
-          <Typography variant='body8' color='secondary'>
-            See all
-          </Typography>
-        </div>
-        <CustomSwiper
-          spaceBetween={16}
-          breakpoints={{
-            320: {
-              slidesPerView: 2,
-              slidesPerGroup: 1,
-            },
-            // when window width is >= 480px
-            480: {
-              slidesPerView: 3,
-              slidesPerGroup: 1,
-            },
-            // when window width is >= 640px
-            640: {
-              slidesPerView: 3,
-              slidesPerGroup: 1,
-            },
-          }}
-          slidesOffsetAfter={40}
-          freeMode
-        >
-          {SECTORS.map((sector, idx) => (
-            <SwiperSlide key={idx}>
-              <CategoryCard {...sector} />
-            </SwiperSlide>
-          ))}
-        </CustomSwiper>
-      </div>
-
-      <div className='eq-investment-style-wrapper'>
-        <Typography className='eq-investment-title' variant='heading4'>
-          Investment styles
-        </Typography>
-        <div className='eq-investment-list'>
-          {INVEST_STYLES.map((investStyle, idx) => (
-            <div className='eq-investment-item' key={idx}>
-              <CardVertical {...investStyle} />
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
+    </Container>
   );
 };
 
