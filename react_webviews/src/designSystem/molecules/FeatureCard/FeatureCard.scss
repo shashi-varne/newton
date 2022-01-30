@@ -1,0 +1,78 @@
+@mixin flex-space-btwn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.feature-card-wrapper {
+  padding: 16px;
+  background-color: white;
+  box-shadow: 0px 6px 12px -6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  flex: 1;
+  cursor: pointer;
+
+  .label-tag-wrapper,.tag-wrapper {
+    cursor: pointer;
+  }
+
+  .fc-divider {
+    margin-left: -16px;
+    margin-right: -16px;
+  }
+
+  .fc-first-row-wrapper {
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 8px;
+    align-items: center;
+
+    .fc-heading-text {
+      width: 26ch;
+    }
+    .fc-left-img {
+      margin-right: 16px;
+    }
+  }
+
+  .fc-description-variant {
+    display: flex;
+    flex-direction: column;
+    margin-right: 16px;
+    &:last-child {
+      margin-right: 0px;
+    }
+    .fc-subtitle-wrapper {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      .fc-description-subtitle-img {
+        margin-right: 4px;
+      }
+    }
+  }
+
+  .feature-card-slot-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 8px;
+    > div {
+      flex: 1 1 100%;
+    }
+
+    .fc-left-slot {
+      display: flex;
+      justify-content: flex-start;
+    }
+    .fc-middle-slot {
+      display: flex;
+      justify-content: center;
+    }
+    .fc-right-slot {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+}
