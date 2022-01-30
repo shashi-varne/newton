@@ -1,16 +1,24 @@
 .atom-bar-meter {
   display: flex;
-  align-items: center;
   justify-content: center;
 
-  .atom-bar {
-    border-radius: 100px;
-    height: 12px;
-    margin-right: 4px;
+  .atom-bar-content {
     width: 100%;
+    margin-right: 4px;
+    text-align: center;
+
+    .atom-bar {
+      border-radius: 100px;
+      height: 12px;
+      width: 100%;
+    }
+
+    .atom-bar-label {
+      padding-top: 8px;
+    }
   }
 
-  .atom-bar:last-child {
+  .atom-bar-content:last-child {
     margin-right: 0;
   }
 }
