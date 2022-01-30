@@ -1,19 +1,25 @@
 import React, { useEffect, useRef } from 'react';
 import Box from '@mui/material/Box';
 import NavigationHeader from '../../molecules/NavigationHeader';
-import { NavigationHeaderPoints, NavigationHeaderSubtitle, } from '../../molecules/NavigationHeader/NavigationHeader';
+import {
+  NavigationHeaderPoints,
+  NavigationHeaderSubtitle,
+} from '../../molecules/NavigationHeader/NavigationHeader';
 import isArray from 'lodash/isArray';
+import isEmpty from 'lodash/isEmpty';
 import Footer from '../../molecules/Footer';
 
 import './Container.scss';
 
-const Container = ({ headerProps = {}, children, className, footer = {} }) => {
+const Container = ({ headerProps = {}, children, className, footer = {}, noFooter }) => {
   const containerRef = useRef();
   const footerWrapperRef = useRef();
   const { headerTitle, subtitle, points = [], ...restHeaderProps } = headerProps;
   useEffect(() => {
     if (footerWrapperRef?.current && containerRef.current) {
-      containerRef.current.style.paddingBottom = `${footerWrapperRef?.current?.getBoundingClientRect()?.height}px`;
+      containerRef.current.style.paddingBottom = `${
+        footerWrapperRef?.current?.getBoundingClientRect()?.height
+      }px`;
     }
   }, [footer?.direction, footerWrapperRef?.current]);
   return (
@@ -30,9 +36,11 @@ const Container = ({ headerProps = {}, children, className, footer = {} }) => {
           })}
       </NavigationHeader>
       <main className='container-content-wrapper'>{children}</main>
-      <footer className='container-footer-wrapper' ref={footerWrapperRef}>
-        <Footer {...footer} />
-      </footer>
+      {!isEmpty(footer) && !noFooter && (
+        <footer className='container-footer-wrapper' ref={footerWrapperRef}>
+          <Footer {...footer} />
+        </footer>
+      )}
     </Box>
   );
 };
