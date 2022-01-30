@@ -1,0 +1,170 @@
+.equity-screen-wrapper {
+    background-color: rgb(224, 223, 223);
+    padding: 24px 16px 60px 16px;
+  
+    .eq-trending-wrapper {
+      padding-top: 32px;
+      padding-bottom: 44px;
+    }
+  
+  }
+  .swiper-custom-pagination{
+      margin-top: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .swiper-pagination-bullet {
+        width: 4px;
+        height: 4px;
+        margin-right: 4px;
+        &:last-child {
+          margin-right: 0px;
+        }
+  
+        &.swiper-pagination-bullet-active {
+          width: 8px;
+          // background: var(--primary);
+        }
+      }
+  }
+  .eq-trending-wrapper {
+    .eq-trending-lists {
+      overflow-y: auto;
+      display: flex;
+      flex-direction: row;
+      margin-left: -16px;
+      margin-right: -16px;
+  
+      .eq-trending-item {
+        padding: 16px 10px 1px 0px;
+        &:first-child {
+          padding-left: 16px;
+        }
+        &:last-child {
+          padding-right: 16px;
+      }
+      }
+    }
+  }
+  
+  .eq-trending-lists::-webkit-scrollbar {
+    display: none;
+  }
+  .eq-trending-lists {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .eq-category-wrapper {
+    background-color: #f6f6f6;
+    padding-top: 24px;
+    padding-bottom: 44px; 
+    margin-left: -16px;
+    margin-right: -16px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .eq-c-titleWrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  
+  .eq-c-category-list {
+    display: flex;
+    overflow-x: auto;
+    flex-direction: column;
+    gap: 8px;
+    padding-bottom: 10px;
+    margin-left: -16px;
+    margin-right: -16px;
+  }
+  
+  .eq-c-category-item-first,.eq-c-category-item-second {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    flex: 1 1 0px;
+    padding-top: 1px;
+  }
+  .eq-c-category-item {
+    flex: 1 1 0px;
+    &:first-child{
+      padding-left: 16px;
+    }
+    &:last-child{
+      padding-right: 16px;
+    }
+  }
+  
+  .eq-tax-saving-wrapper {
+    padding-top: 24px;
+    padding-bottom: 16px;
+    .eq-card-horx-wrapper {
+      margin-top: 16px;
+    }
+  }
+  
+  .eq-sector-theme {
+    padding-top: 16px;
+    padding-bottom: 20px;
+    .eq-sector-list {
+      display: flex;
+      flex-direction: row;
+      overflow-x: auto;
+      margin-left: -16px;
+      margin-right: -16px;
+  
+      .eq-sector-item {
+        margin-right: 16px;
+        &:first-child{
+          padding-left: 16px;
+        }
+        &:last-child{
+          padding-right: 16px;
+        }
+      }
+    }
+  }
+  
+  .eq-sector-list::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .eq-sector-list {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .eq-investment-style-wrapper {
+    padding-top: 32px;
+    padding-bottom: 32px;
+    .eq-investment-list {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: row;
+      overflow-x: auto;
+      margin-left: -16px;
+      margin-right: -16px;
+      .eq-investment-item {
+        padding: 16px 8px 16px 0px;
+        &:first-child {
+          padding-left: 16px;
+        }
+        &:last-child {
+            padding-right: 16px;
+        }
+      }
+    }
+  }
+  .eq-investment-list::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .eq-investment-list {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  

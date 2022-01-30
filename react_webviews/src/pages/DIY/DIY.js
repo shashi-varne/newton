@@ -1,6 +1,7 @@
 import { StyledEngineProvider, ThemeProvider } from '@mui/material';
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import CommonCategoryLanding from './CommonCategoryLanding';
 import getTheme from '../../theme';
 
 const DIY = (props) => {
@@ -10,6 +11,7 @@ const DIY = (props) => {
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
         <Switch>
+          <Route path={`${url}/equity`} component={CommonCategoryLanding} />
         </Switch>
       </ThemeProvider>
     </StyledEngineProvider>
