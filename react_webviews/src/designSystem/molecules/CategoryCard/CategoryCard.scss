@@ -1,0 +1,20 @@
+.cc-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    min-width: 103px;
+    cursor: pointer;
+}
+
+.cc-wrapper-large-variant {
+    min-width: 159px;
+}
+
+.cc-lg-subtitle {
+    margin-top: 8px;
+}
+
+.cc-sm-subtitle {
+    margin-top: 4px;
+}
