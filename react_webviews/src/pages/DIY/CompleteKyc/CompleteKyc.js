@@ -10,7 +10,7 @@ import Typography from '../../../designSystem/atoms/Typography';
 import EMandateTrustIcon from '../../../designSystem/atoms/EMandateTrustIcon/EMandateTrustIcon';
 import { getConfig } from '../../../utils/functions';
 import checkedIcon from 'assets/checked.svg';
-import { DIY } from '../../../common/strings/diy';
+import { DIY } from 'businessLogic/strings/diy';
 import Icon from '../../../designSystem/atoms/Icon';
 
 import './CompleteKyc.scss';
@@ -31,8 +31,8 @@ const CompleteKyc = () => {
     >
       <LandingHeader variant='side'>
         <LandingHeaderImage imgSrc={require(`assets/${productName}/complete_kyc.svg`)} />
-        <LandingHeaderTitle>{DIY.CompleteKyc}</LandingHeaderTitle>
-        <LandingHeaderSubtitle dataIdx={1}>{DIY.CompleteKycSubtitle}</LandingHeaderSubtitle>
+        <LandingHeaderTitle>{DIY.completeKycTitle}</LandingHeaderTitle>
+        <LandingHeaderSubtitle dataIdx={1}>{DIY.completeKycSubtitle}</LandingHeaderSubtitle>
       </LandingHeader>
       <section className='ck-points-wrapper'>
         <div className='ck-points-list'>
@@ -61,10 +61,10 @@ const CompleteKyc = () => {
 };
 
 const COMPLETE_KYC_POINTS = [
-  'Single KYC for mutual funds & stocks',
-  '100% Digital, Aadhaar based KYC ',
-  'Convenient DigiLocker integration',
-  'One-time, instant, safe and easy ',
+  DIY.singleKyc,
+  DIY.digitalKyc,
+  DIY.digilockerIntegeration,
+  DIY.instantSafe,
 ];
 
 export default CompleteKyc;
