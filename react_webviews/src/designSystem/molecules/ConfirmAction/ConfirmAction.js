@@ -17,6 +17,7 @@ import PropTypes from 'prop-types';
 
 import './ConfirmAction.scss';
 import Icon from '../../atoms/Icon';
+import Badge from '../../atoms/Badge/Badge';
 
 const ConfirmAction = ({
   imgSrc,
@@ -26,6 +27,9 @@ const ConfirmAction = ({
   className,
   buttonTitle,
   onClick,
+  badgeContent,
+  badgeVariant,
+  badgeProps,
   sx,
 }) => {
   return (
@@ -34,7 +38,9 @@ const ConfirmAction = ({
       sx={{backgroundColor: 'foundationColors.action.brand',...sx,}}
     >
       {imgSrc && (
-        <Icon src={imgSrc} size='24px' className='confirm-action-left-img' dataAid='left' {...imgProps} />
+        <Badge className='confirm-action-badge' badgeContent={badgeContent} variant={badgeVariant} {...badgeProps}>
+          <Icon src={imgSrc} size='24px' className='confirm-action-left-img' dataAid='left' {...imgProps} />
+        </Badge>
       )}
       <div className='confirm-action-right-wrapper'>
         {title && (

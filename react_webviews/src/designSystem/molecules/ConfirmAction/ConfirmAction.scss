@@ -9,9 +9,6 @@
   height: 53px;
   border-radius: 8px;
   cursor: default;
-  .confirm-action-left-img {
-    margin-right: 8px;
-  }
 
   .confirm-action-right-wrapper {
     display: flex;
@@ -19,5 +16,9 @@
     justify-content: space-between;
     align-items: center;
     flex: 1;
+  }
+
+  .confirm-action-badge + .confirm-action-right-wrapper {
+    margin-left: 12px;
   }
 }
