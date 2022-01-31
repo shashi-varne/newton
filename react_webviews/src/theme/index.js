@@ -9,6 +9,7 @@ import getPartnerThemeData from './utils';
 import { separatorStyleOverRides } from './separator';
 import { dialogDefaultProps, dialogStylesOverride } from './dialog';
 import { badgeStyleOverRides } from './badge';
+import { customShadows } from './shadows';
 
 const getTheme = () => {
   const {colors, partnerConfig} = getPartnerThemeData();
@@ -60,7 +61,8 @@ const getTheme = () => {
         styleOverrides: badgeStyleOverRides(colors, partnerConfig),
       }
     },
-  };
+    shadows: customShadows()
+  }
   return createTheme(theme);
 };
 
