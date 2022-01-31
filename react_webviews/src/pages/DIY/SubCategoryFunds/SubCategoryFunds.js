@@ -23,8 +23,6 @@ const SubCategoryFunds = ({
     }
   };
 
-  console.log('fundCategoryList', fundCategoryList);
-
   return (
     <Container
       headerProps={{
@@ -37,7 +35,6 @@ const SubCategoryFunds = ({
           title: `${cartCount} item saved in your cart`,
           badgeContent: cartCount,
           onClick: onCartClick,
-          imgSrc: require('assets/cart_icon.svg'),
         },
       }}
       noFooter={hideFooter}
