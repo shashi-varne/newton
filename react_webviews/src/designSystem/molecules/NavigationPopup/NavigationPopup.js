@@ -1,11 +1,11 @@
 import React, { useMemo } from "react";
 import Popover from "@mui/material/Popover";
+import Box from "@mui/material/Box";
 import Typography from "../../atoms/Typography";
 import PropTypes from "prop-types";
 import noop from "lodash/noop";
 import isObject from "lodash/isObject";
 import "./NavigationPopup.scss";
-import { Box } from "@mui/material";
 
 const NavigationPopup = (props) => {
   const {
@@ -68,13 +68,13 @@ const Label = ({ index, onClick, data, isActive, displayKey }) => {
         <Box
           className="np-lw-dot"
           sx={{ backgroundColor: "foundationColors.content.primary" }}
+          dataAid={`dot${index}`}
         />
       )}
       <Typography
         dataAid={`label${index}`}
         variant={isActive ? "heading4" : "body8"}
         component="div"
-        color="foundationColors.content.primary"
         onClick={onClick}
       >
         {labelName}
