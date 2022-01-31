@@ -7,7 +7,7 @@
     padding: 0px 16px 20px 16px;
   }
 
-  .container-footer-wrapper {
+  .container-footer-cta {
     padding: 0px 16px;
   }
 }
@@ -15,12 +15,14 @@
 @media (max-width: 600px) {
   .container-wrapper {
     .container-footer-wrapper {
-      display: block;
       position: fixed;
-      padding: 8px 16px 16px 16px;
-      bottom: 0px;
       left: 0;
+      bottom: 0px;
       right: 0;
+      display: block;
+    }
+    .container-footer-cta {
+      padding: 8px 16px 16px 16px;
     }
   }
 }
