@@ -7,6 +7,7 @@ import { isDigilockerFlow } from './common/functions'
 import eventManager from '../utils/eventManager'
 import { EVENT_MANAGER_CONSTANTS } from '../utils/constants'
 import { isEmpty } from "lodash"
+import { FREEDOM_PLAN_STORAGE_CONSTANTS } from '../freedom_plan/common/constants'
 
 const DOCUMENTS_MAPPER = {
   DL: 'Driving license',
@@ -28,6 +29,7 @@ export async function getAccountSummary(params = {}) {
       partner: ['partner'],
       bank_list: ['bank_list'],
       referral: ['subbroker', 'p2p'],
+      equity: ['subscription_status']
     }
   }
   try {
@@ -109,6 +111,7 @@ export async function initData() {
 export async function setSummaryData(result) {
   const currentUser = result.data.user.user.data
   const userKyc = result.data.kyc.kyc.data
+  const subscriptionStatus = result?.data?.equity?.subscription_status?.data || {};
   if (userKyc.firstlogin) {
     storageService().set('firstlogin', true)
   }
@@ -123,6 +126,9 @@ export async function setSummaryData(result) {
   storageService().setObject("npsUser", result?.data?.nps?.nps_user?.data);
   storageService().setObject("banklist", result?.data?.bank_list?.bank_list?.data);
   storageService().setObject("referral", result.data.referral);
+  if(!isEmpty(subscriptionStatus)) {
+    storageService().setObject(FREEDOM_PLAN_STORAGE_CONSTANTS.subscriptionStatus, subscriptionStatus);
+  }
   let partner = "";
   let consent_required = false;
   if (result.data.partner.partner.data) {

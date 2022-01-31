@@ -1,0 +1,94 @@
+.select-freedom-plan {
+  .select-freedom-plan-container {
+    display: flex;
+    overflow: auto;
+    width: 100%;
+    height: 110px;
+    align-items: center;
+
+    .sfpc-loader {
+      width: 110px !important;
+      height: 88px !important;
+      margin: 0 15px 5px 0 !important;
+    }
+
+    .freedom-plan-option {
+      border: 1px solid #dcdee6;
+      border-radius: 12px;
+      font-weight: 500;
+      font-size: 12px;
+      line-height: 19px;
+      color: var(--gunmetal);
+      min-width: 110px;
+      min-height: 88px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 10px;
+      position: relative;
+      margin: 0 15px 0px 0;
+      cursor: pointer;
+
+      .selected-icon {
+        position: absolute;
+        width: 22px !important;
+        height: 22px !important;
+        top: -9px;
+        right: -9px;
+      }
+
+      .fpo-name {
+        text-transform: uppercase;
+      }
+
+      .fpo-amount {
+        font-size: 16px;
+        line-height: 21px;
+        color: var(--primary);
+        padding-top: 10px;
+      }
+
+      .fpo-popular {
+        position: absolute;
+        top: -11px;
+        left: 18px;
+        background: #ffe0ec;
+        border-radius: 10px;
+        font-weight: bold;
+        font-size: 8px;
+        color: #ba3366;
+        width: 72px;
+        text-align: center;
+      }
+    }
+
+    .selected-plan {
+      border: 2px solid var(--primary);
+    }
+  }
+
+  .helper-note {
+    font-size: 11px;
+    color: var(--steelgrey);
+  }
+
+  .error-message {
+    color: var(--red);
+  }
+}
+
+.freedom-plan-terms-n-conditions {
+  color: var(--steelgrey);
+  font-size: 11px;
+  line-height: 18px;
+
+  .fp-tnc-left {
+    min-width: 15px;
+    margin-right: 5px;
+    text-align: right;
+  }
+}
+
+.fp-tnc-title {
+  font-size: 17px;
+}
