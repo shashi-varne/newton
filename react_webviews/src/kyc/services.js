@@ -83,22 +83,14 @@ export async function initData() {
           nps: ['nps_user'],
           bank_list: ['bank_list'],
           referral: ['subbroker', 'p2p'],
+          equity: ['subscription_status']
         }
         const result = await getAccountSummary(queryParams);
         storageService().set('dataSettedInsideBoot', true)
         setSDKSummaryData(result)
       }
     } else {
-      const queryParams = {
-        campaign: ['user_campaign'],
-        kyc: ['kyc'],
-        user: ['user'],
-        nps: ['nps_user'],
-        partner: ['partner'],
-        bank_list: ['bank_list'],
-        referral: ['subbroker', 'p2p'],
-      }
-      const result = await getAccountSummary(queryParams);
+      const result = await getAccountSummary();
       storageService().set('dataSettedInsideBoot', true)
       setSummaryData(result)
     }
@@ -180,6 +172,10 @@ export function getCampaignBySection(notifications, sections) {
 }
 
 function setSDKSummaryData(result) {
+  const subscriptionStatus = result?.data?.equity?.subscription_status?.data || {};
+  if(!isEmpty(subscriptionStatus)) {
+    storageService().setObject(FREEDOM_PLAN_STORAGE_CONSTANTS.subscriptionStatus, subscriptionStatus);
+  }
   const campaignData = getCampaignBySection(
     result.data.campaign.user_campaign.data
   )
