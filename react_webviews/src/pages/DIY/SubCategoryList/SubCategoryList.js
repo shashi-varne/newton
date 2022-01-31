@@ -2,32 +2,43 @@ import React, { useMemo } from 'react';
 import CardVertical from '../../../designSystem/molecules/CardVertical';
 import WrapperBox from '../../../designSystem/atoms/WrapperBox';
 import Container from '../../../designSystem/organisms/Container';
-import { CATEGORY_LISTS } from './constants';
+import isFunction from 'lodash/isFunction';
+import isArray from 'lodash/isArray';
+import { getConfig } from '../../../utils/functions';
+import PropTypes from 'prop-types';
 
 import './SubCategoryList.scss';
-import { getConfig } from '../../../utils/functions';
 
-const SubCategoryList = () => {
+const SubCategoryList = ({headerTitle, categoryList, cartCount, onCartClick, onCardClick}) => {
   const { productName } = useMemo(getConfig, []);
+  const hideFooter = productName === 'finity' || cartCount <= 0;
+
+  const handleCardClick = (item) => () => {
+    if(isFunction(onCardClick)) {
+      onCardClick(item);
+    }
+  }
   return (
     <Container
       headerProps={{
-        headerTitle: 'Market cap',
+        headerTitle,
       }}
       className='diy-sub-category-cv-wrapper'
       footer={{
         confirmActionProps: {
           buttonTitle: 'View Cart',
-          title: '2 item saved in your cart',
-          imgSrc: require('assets/amazon_pay.svg'),
+          title: `${cartCount} item saved in your cart`,
+          badgeContent: cartCount,
+          onClick: onCartClick,
+          imgSrc: require('assets/cart_icon.svg'),
         },
       }}
-      noFooter={productName === 'finity'}
+      noFooter={hideFooter}
     >
       <div className='diy-sc-cv-lists'>
-        {CATEGORY_LISTS?.map((category, idx) => {
+        {isArray(categoryList) && categoryList?.map((category, idx) => {
           return (
-            <WrapperBox elevation={1} className='diy-sc-cv-item' key={idx}>
+            <WrapperBox elevation={1} className='diy-sc-cv-item' key={idx} onClick={handleCardClick(category)}>
               <CardVertical {...category} />
             </WrapperBox>
           );
@@ -38,3 +49,11 @@ const SubCategoryList = () => {
 };
 
 export default SubCategoryList;
+
+SubCategoryList.propTypes = {
+  headerTitle: PropTypes.string,
+  categoryList: PropTypes.arrayOf(PropTypes.object),
+  cartCount: PropTypes.number,
+  onCartClick: PropTypes.func,
+  onCardClick: PropTypes.func
+}
