@@ -14,6 +14,7 @@ import Box from '@mui/material/Box';
 import Typography from '../../atoms/Typography';
 import Button from '../../atoms/Button';
 import PropTypes from 'prop-types';
+import CartIcon from 'assets/cart_icon.svg';
 
 import './ConfirmAction.scss';
 import Icon from '../../atoms/Icon';
@@ -63,6 +64,7 @@ const ConfirmAction = ({
 };
 
 ConfirmAction.defaultProps = {
+  imgSrc: CartIcon,
   imgProps: {},
   titleColor: 'foundationColors.supporting.white',
 };
