@@ -7,15 +7,16 @@ import {
   LandingHeaderTitle,
 } from '../../../designSystem/molecules/LandingHeader';
 import Typography from '../../../designSystem/atoms/Typography';
-import EMandateTrustIcon from '../../../designSystem/atoms/EMandateTrustIcon/EMandateTrustIcon';
+import TrustIcon from '../../../designSystem/atoms/TrustIcon';
 import { getConfig } from '../../../utils/functions';
 import checkedIcon from 'assets/checked.svg';
 import { DIY } from 'businessLogic/strings/diy';
 import Icon from '../../../designSystem/atoms/Icon';
+import PropTypes from 'prop-types';
 
 import './CompleteKyc.scss';
 
-const CompleteKyc = () => {
+const CompleteKyc = ({ onCtaClick }) => {
   const { productName } = useMemo(getConfig, []);
   return (
     <Container
@@ -25,6 +26,7 @@ const CompleteKyc = () => {
       footer={{
         button1Props: {
           title: 'Continue',
+          onClick: onCtaClick,
         },
       }}
       className='complete-kyc-wrapper'
@@ -54,7 +56,7 @@ const CompleteKyc = () => {
         </div>
       </section>
       <div className='ck-trust-icon-wrapper'>
-        <EMandateTrustIcon opacity='0.6' />
+        <TrustIcon variant='secure' opacity='0.6' />
       </div>
     </Container>
   );
@@ -66,5 +68,9 @@ const COMPLETE_KYC_POINTS = [
   DIY.digilockerIntegeration,
   DIY.instantSafe,
 ];
+
+CompleteKyc.propTypes = {
+  onCtaClick: PropTypes.func.isRequired
+}
 
 export default CompleteKyc;
