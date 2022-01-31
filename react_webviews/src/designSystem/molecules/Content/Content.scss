@@ -3,7 +3,10 @@
   flex-direction: row;
   flex: 1;  
   align-items: flex-start;
-  cursor: pointer;
+  cursor: default;
+  &.content-cursor {
+    cursor: pointer;
+  }
 
   .content-left-img {
     margin-right: 16px;

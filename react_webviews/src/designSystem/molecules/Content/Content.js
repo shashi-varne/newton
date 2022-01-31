@@ -10,8 +10,10 @@ import React from 'react';
 import Typography from '../../atoms/Typography';
 import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
-import './Content.scss';
 import Icon from '../../atoms/Icon';
+import isFunction from 'lodash/isFunction';
+
+import './Content.scss';
 
 const Content = ({
   imgSrc,
@@ -27,7 +29,7 @@ const Content = ({
 }) => {
   return (
     <Box
-      className={`blog-content-wrapper ${className}`}
+      className={`blog-content-wrapper ${className} ${isFunction(onClick) && 'content-cursor'}`}
       onClick={onClick}
       data-aid={`content_${dataAid}`}
       sx={sx}
