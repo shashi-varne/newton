@@ -21,7 +21,7 @@ const Container = ({ headerProps = {}, children, className, footer = {}, noFoote
         footerWrapperRef?.current?.getBoundingClientRect()?.height
       }px`;
     }
-  }, [footer?.direction, footerWrapperRef?.current]);
+  }, [footer?.direction, footerWrapperRef?.current, noFooter]);
   return (
     <Box ref={containerRef} className={`container-wrapper ${className}`}>
       <NavigationHeader headerTitle={headerTitle} anchorOrigin={containerRef} {...restHeaderProps}>
