@@ -1,0 +1,19 @@
+.landing-header-wrapper {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  &.landing-header-center-align {
+    align-items: center;
+  }
+
+  .lh-subtitle {
+    margin-top: 8px;
+  }
+
+  .lh-description-list {
+    margin: 0px;
+    padding-left: 20px;
+    margin-top: 8px;
+    width: 100%;
+  }
+}
