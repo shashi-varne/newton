@@ -18,6 +18,8 @@ const Container = ({
   footer = {},
   noFooter,
   footerElevation,
+  footerTopComponent,
+  containerSx
 }) => {
   const containerRef = useRef();
   const footerWrapperRef = useRef();
@@ -30,7 +32,7 @@ const Container = ({
     }
   }, [footer?.direction, footerWrapperRef?.current, noFooter]);
   return (
-    <Box ref={containerRef} className={`container-wrapper ${className}`}>
+    <Box ref={containerRef} sx={containerSx} className={`container-wrapper ${className}`}>
       <NavigationHeader headerTitle={headerTitle} anchorOrigin={containerRef} {...restHeaderProps}>
         {subtitle && <NavigationHeaderSubtitle dataIdx={1}>{subtitle}</NavigationHeaderSubtitle>}
         {isArray(points) &&
@@ -44,14 +46,17 @@ const Container = ({
       </NavigationHeader>
       <main className='container-content-wrapper'>{children}</main>
       {!isEmpty(footer) && !noFooter && (
-        <Box
-          sx={footerElevation && footerSxStyle}
-          component='footer'
-          className='container-footer-wrapper'
-          ref={footerWrapperRef}
-        >
-          <Footer {...footer} />
-        </Box>
+        <div className='container-footer-wrapper'>
+          {footerTopComponent}
+          <Box
+            sx={footerElevation && footerSxStyle}
+            component='footer'
+            className='container-footer-cta'
+            ref={footerWrapperRef}
+          >
+            <Footer {...footer} />
+          </Box>
+        </div>
       )}
     </Box>
   );
