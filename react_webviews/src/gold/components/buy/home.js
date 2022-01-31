@@ -80,6 +80,7 @@ class GoldBuyHome extends Component {
   }
 
   componentWillMount() {
+    this.navigate('/gold/landing');  // to disable gold
     nativeCallback({ action: 'take_control_reset' });
   }
 
