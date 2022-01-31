@@ -2,6 +2,7 @@ import { Box } from '@mui/material';
 import React, { useState } from 'react';
 import Typography from '../../../designSystem/atoms/Typography';
 import Container from '../../../designSystem/organisms/Container';
+import ProductItem from '../../../designSystem/molecules/ProductItem';
 import SwipeableViews from 'react-swipeable-views';
 import { largeCap, midCap, multiCap, smallCap } from './constants';
 
@@ -24,6 +25,15 @@ const tabChilds = [
   },
 ];
 
+const returnField = [
+  'one_month_return',
+  'three_month_return',
+  'six_month_return',
+  'one_year_return',
+  'three_year_return',
+  'five_year_return',
+];
+
 const SubCategoryLanding = () => {
   const [tabValue, setTabValue] = useState(0);
   const handleTabChange = (e, value) => {
@@ -32,7 +42,7 @@ const SubCategoryLanding = () => {
   const handleChangeIndex = (index) => {
     setTabValue(index);
   };
-
+  console.log('hello');
   return (
     <Container
       headerProps={{
@@ -56,14 +66,43 @@ const SubCategoryLanding = () => {
         onChangeIndex={handleChangeIndex}
         style={{
           minHeight: '100vh',
-          background: 'red',
         }}
       >
         {tabChilds?.map((el, idx) => {
           return (
             <TabPanel key={idx} value={tabValue} index={idx}>
               {el?.data?.slice(0, 20)?.map((fund, idx) => {
-                return <Typography key={idx} sx={{mb:'20px'}}>{fund?.legal_name}</Typography>;
+                return (
+                  <ProductItem
+                    sx={{ mb: '16px' }}
+                    key={idx}
+                    leftImgSrc={fund?.amc_logo_big}
+                    headerTitle={fund?.legal_name}
+                    showSeparator
+                    bottomSectionData={{
+                      tagOne: {
+                        label: fund?.is_fisdom_recommended ? 'Recommended' : '',
+                      },
+                      tagTwo: {
+                        morningStarVariant: 'large',
+                        label: fund?.morning_star_rating,
+                        labelColor: 'foundationColors.content.secondary',
+                      },
+                    }}
+                    rightSectionData={{
+                      description: {
+                        title:
+                          fund?.three_year_return > 0
+                            ? `+${fund?.three_year_return}`
+                            : `-${fund?.three_year_return}`,
+                        titleColor:
+                          fund?.three_year_return > 0
+                            ? 'foundationColors.secondary.profitGreen.400'
+                            : 'foundationColors.secondary.lossRed.400',
+                      },
+                    }}
+                  />
+                );
               })}
             </TabPanel>
           );
@@ -85,7 +124,7 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ pt: '16px' }}>
           <Typography component='div'>{children}</Typography>
         </Box>
       )}
