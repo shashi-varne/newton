@@ -175,11 +175,11 @@ class GoldSummary extends Component {
       title: `I want to`,
       img_alt:"Gold",
       options: [
-        {
-          icon: "ic_buy_gold",
-          title: "Buy gold",
-          next_state: '/gold/buy'
-        },
+        // {
+        //   icon: "ic_buy_gold",
+        //   title: "Buy gold",
+        //   next_state: '/gold/buy'
+        // },
         {
           icon: "ic_sell_gold",
           title: "Sell gold",
