@@ -161,9 +161,16 @@ export const getConfig = () => {
   let origin = window.location.origin;
   let generic_callback = true;
 
-  let isProdFisdom = origin.indexOf('app.fisdom.com') >= 0  || origin.indexOf('wv.fisdom.com') >= 0 || origin.indexOf('my.preprod.fisdom.com') >= 0 || origin.indexOf('app2.fisdom.com') >= 0;
-  let isProdMyway = origin.indexOf('app.mywaywealth.com') >= 0 || origin.indexOf('wv.mywaywealth.com') >= 0;
-  let isProdFinity = origin.indexOf('my.preprod.finity.in') >= 0  || origin.indexOf('app.finity.in') >= 0 || origin.indexOf('app2.finity.in') >= 0 || origin.indexOf('wv.finity.in') >= 0;
+  let isProdFisdom = origin.indexOf('app.fisdom.com') >= 0  || origin.indexOf('wv.fisdom.com') >= 0 || 
+        origin.indexOf('app2.fisdom.com') >= 0 || 
+        origin.indexOf('fisdom.equityapppreprod.finwizard.co.in') >= 0;
+
+  let isProdMyway = origin.indexOf('app.mywaywealth.com') >= 0 || 
+                origin.indexOf('wv.mywaywealth.com') >= 0;
+
+  let isProdFinity = origin.indexOf('app.finity.in') >= 0 || 
+             origin.indexOf('app2.finity.in') >= 0 || origin.indexOf('wv.finity.in') >= 0 ||
+             origin.indexOf('finity.equityapppreprod.finwizard.co.in') >= 0;
 
   // let base_href = window.localStorage.getItem('base_href') || '';
   let base_url_default = '';
