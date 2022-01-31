@@ -93,7 +93,7 @@ let data = [
     id: 'diy',
     name: 'DIY',
     icon: logout,
-    path: '/diy/complete-kyc',
+    path: '/diy/invest-process',
   },
 ];
 
