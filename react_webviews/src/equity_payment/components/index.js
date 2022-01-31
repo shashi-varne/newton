@@ -390,6 +390,7 @@ class PaymentOption extends React.Component {
           amount: paymentData?.amount,
           paymentUrl: paymentData?.payment_start_url,
           paymentIntentUrl: config.base_url + paymentData?.payment_start_intent_url,
+          paymentNeftUrl: config.base_url + paymentData?.payment_start_neft_url,
           neftSupported,
           netBankingSupported,
           upiSupported
@@ -637,6 +638,32 @@ class PaymentOption extends React.Component {
       });
       window.location.href = `${this.state.paymentUrl}?payment_method=netbanking`;
     } else if (type === "neft") {
+      if (this.state.flow === "subscription") {
+        this.setState({ skelton: true });
+        const that = this;
+        Api.get(this.state.paymentNeftUrl).then((data) => {
+          if (data?.pfwresponse?.status_code === 200) {
+            that.props.history.push(
+              { pathname: "/pg/eq/neft", search: getConfig().searchParams },
+              {
+                store: {
+                  bankDetails: that.state.bankDetails,
+                  amount: that.state.amount,
+                  flow: that.state.flow,
+                },
+              }
+            );
+          } else {
+            that.setState({ skelton: false });
+            toast(
+              data?.pfwresponse?.result?.message ||
+                data?.pfwresponse?.result?.error ||
+                "Something went wrong!"
+            );
+          }
+        });
+        return;
+      }
       this.props.history.push(
         { pathname: '/pg/eq/neft', search: getConfig().searchParams },
         { store: {bankDetails:this.state.bankDetails,amount:this.state.amount, flow: this.state.flow} }
