@@ -8,18 +8,20 @@ import {
 } from '../../../designSystem/molecules/LandingHeader';
 import { DIY } from 'businessLogic/strings/diy';
 import Typography from '../../../designSystem/atoms/Typography';
-import EMandateTrustIcon from '../../../designSystem/atoms/EMandateTrustIcon/EMandateTrustIcon';
+import TrustIcon from '../../../designSystem/atoms/TrustIcon';
 import { getConfig } from '../../../utils/functions';
+import PropTypes from 'prop-types';
 
 import './InvestmentProcess.scss';
 
-const InvestmentProcess = () => {
+const InvestmentProcess = ({ onCtaClick }) => {
   const { productName } = useMemo(getConfig, []);
   return (
     <Container
       footer={{
         button1Props: {
           title: 'Continue',
+          onClick: onCtaClick,
         },
       }}
       className='investment-process-wrapper'
@@ -48,10 +50,14 @@ const InvestmentProcess = () => {
         </ul>
       </section>
       <div className='ip-trust-icon-wrapper'>
-        <EMandateTrustIcon opacity='0.6' />
+        <TrustIcon variant='secure' opacity='0.6' />
       </div>
     </Container>
   );
+};
+
+InvestmentProcess.propTypes = {
+  onCtaClick: PropTypes.func.isRequired,
 };
 
 const INVESTMENT_POINTS = [DIY.makePayment, DIY.amountDebited, DIY.bombayStock, DIY.amountDebited];
