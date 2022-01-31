@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import Container from '../../../designSystem/organisms/Container';
+import Stack from '@mui/material/Stack';
 import {
   LandingHeader,
   LandingHeaderImage,
@@ -37,23 +38,22 @@ const CompleteKyc = ({ onCtaClick }) => {
         <LandingHeaderSubtitle dataIdx={1}>{DIY.completeKycSubtitle}</LandingHeaderSubtitle>
       </LandingHeader>
       <section className='ck-points-wrapper'>
-        <div className='ck-points-list'>
+        <Stack spacing={2}>
           {COMPLETE_KYC_POINTS?.map((point, idx) => {
             return (
-              <div className='ck-points-item' key={idx}>
+              <Stack key={idx} direction='row' spacing={2} alignItems='center'>
                 <Icon src={checkedIcon} size='24px' />
                 <Typography
                   variant='body2'
                   align='left'
-                  dataAid={`point${idx + 1}`}
                   component='div'
                 >
                   {point}
                 </Typography>
-              </div>
+              </Stack>
             );
           })}
-        </div>
+        </Stack>
       </section>
       <div className='ck-trust-icon-wrapper'>
         <TrustIcon variant='secure' opacity='0.6' />
@@ -70,7 +70,7 @@ const COMPLETE_KYC_POINTS = [
 ];
 
 CompleteKyc.propTypes = {
-  onCtaClick: PropTypes.func.isRequired
-}
+  onCtaClick: PropTypes.func.isRequired,
+};
 
 export default CompleteKyc;

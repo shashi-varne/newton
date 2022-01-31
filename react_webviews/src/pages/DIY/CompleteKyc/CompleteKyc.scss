@@ -1,22 +1,6 @@
 .complete-kyc-wrapper {
   .ck-points-wrapper {
     margin-top: 32px;
-    .ck-points-list {
-      display: flex;
-      flex-direction: column;
-      .ck-points-item {
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        > img {
-          margin-right: 16px;
-        }
-        margin-bottom: 16px;
-        &:last-child {
-          margin-bottom: 0px;
-        }
-      }
-    }
   }
 
   .ck-trust-icon-wrapper {
