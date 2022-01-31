@@ -10,7 +10,11 @@ export async function initializeComponentFunctions() {
   this.navigate = navigateFunc.bind(this.props);
   this.authenticate = authenticate.bind(this);
   this.exportTransactions = exportTransactions.bind(this);
-  await initData();
+  try {
+    await initData();
+  } catch(err) {
+    toast(err.message)
+  }
   const currentUser = storageService().getObject("user") || {};
   const userKyc = storageService().getObject("kyc") || {};
   this.setState({ currentUser, userKyc });

@@ -1,11 +1,12 @@
 import Api from '../utils/api'
-import { isEmpty, storageService } from '../utils/validators'
+import { storageService } from '../utils/validators'
 import toast from '../common/ui/Toast'
 import { isTradingEnabled } from '../utils/functions'
 import { kycSubmit } from './common/api'
 import { isDigilockerFlow } from './common/functions'
 import eventManager from '../utils/eventManager'
 import { EVENT_MANAGER_CONSTANTS } from '../utils/constants'
+import { isEmpty } from "lodash"
 import { FREEDOM_PLAN_STORAGE_CONSTANTS } from '../freedom_plan/common/constants'
 
 const DOCUMENTS_MAPPER = {
@@ -74,8 +75,9 @@ export async function initData() {
   const user = storageService().getObject('user')
   const kyc = storageService().getObject('kyc')
   try {
-    if (currentUser && user && kyc) {
-      if (!storageService().get('referral')) {
+    if (currentUser && !isEmpty(user) && !isEmpty(kyc)) {
+      const referral = storageService().getObject('referral');
+      if (isEmpty(referral)) {
         const queryParams = {
           campaign: ['user_campaign'],
           nps: ['nps_user'],
@@ -102,6 +104,7 @@ export async function initData() {
     }
   } catch (err) {
     console.log(err);
+    throw err;
   }
 }
 
