@@ -11,7 +11,14 @@ import Footer from '../../molecules/Footer';
 
 import './Container.scss';
 
-const Container = ({ headerProps = {}, children, className, footer = {}, noFooter }) => {
+const Container = ({
+  headerProps = {},
+  children,
+  className,
+  footer = {},
+  noFooter,
+  footerElevation,
+}) => {
   const containerRef = useRef();
   const footerWrapperRef = useRef();
   const { headerTitle, subtitle, points = [], ...restHeaderProps } = headerProps;
@@ -37,12 +44,26 @@ const Container = ({ headerProps = {}, children, className, footer = {}, noFoote
       </NavigationHeader>
       <main className='container-content-wrapper'>{children}</main>
       {!isEmpty(footer) && !noFooter && (
-        <footer className='container-footer-wrapper' ref={footerWrapperRef}>
+        <Box
+          sx={footerElevation && footerSxStyle}
+          component='footer'
+          className='container-footer-wrapper'
+          ref={footerWrapperRef}
+        >
           <Footer {...footer} />
-        </footer>
+        </Box>
       )}
     </Box>
   );
+};
+
+const footerSxStyle = (theme) => {
+  return {
+    [theme.breakpoints.down('sm')]: {
+      backgroundColor: 'foundationColors.supporting.white',
+      boxShadow: '1',
+    },
+  };
 };
 
 export default Container;
