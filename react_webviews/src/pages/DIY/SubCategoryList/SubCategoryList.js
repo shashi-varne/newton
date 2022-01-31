@@ -50,6 +50,10 @@ const SubCategoryList = ({headerTitle, categoryList, cartCount, onCartClick, onC
 
 export default SubCategoryList;
 
+SubCategoryList.defaultProps = {
+  cartCount: 0
+}
+
 SubCategoryList.propTypes = {
   headerTitle: PropTypes.string,
   categoryList: PropTypes.arrayOf(PropTypes.object),
