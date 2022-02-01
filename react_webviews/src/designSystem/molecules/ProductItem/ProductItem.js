@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import Typography from '../../atoms/Typography';
 import Tag from '../Tag';
 import Separator from '../../atoms/Separator';
@@ -10,6 +10,8 @@ import PropTypes from 'prop-types';
 import './ProductItem.scss';
 import Button from '../../atoms/Button';
 import Icon from '../../atoms/Icon';
+import { Box } from '@mui/material';
+import isEqual from 'lodash/isEqual';
 
 const ProductItem = (props) => {
   let {
@@ -21,10 +23,11 @@ const ProductItem = (props) => {
     onClick,
     bottomSectionData = {},
     rightSectionData = {},
+    sx,
     dataAid,
   } = merge({}, defaultValues, props);
   return (
-    <div className='product-item-wrapper' onClick={onClick} data-aid={`productItem_${dataAid}`}>
+    <Box sx={sx} className='product-item-wrapper' onClick={onClick} data-aid={`productItem_${dataAid}`}>
       {leftImgSrc && (
         <Icon size='40px' src={leftImgSrc} className='product-item-left-img' dataAid='left' {...leftImgProps} />
       )}
@@ -44,15 +47,15 @@ const ProductItem = (props) => {
         </div>
         {showSeparator && <Separator marginTop='16px' />}
       </div>
-    </div>
+    </Box>
   );
 };
 
 const BottomSection = ({ tagOne = {}, tagTwo = {}, titleOne, titleOneColor }) => {
   return (
     <div className='pi-ls-bottom-section'>
-      {!isEmpty(tagOne) && <Tag {...tagOne} className='pi-ls-bottom-item' />}
-      {!isEmpty(tagTwo) && <Tag {...tagTwo} className='pi-ls-bottom-item' />}
+      {tagOne?.label && <Tag {...tagOne} className='pi-ls-bottom-item' />}
+      {tagTwo?.label && <Tag {...tagTwo} className='pi-ls-bottom-item' />}
       {titleOne && (
         <Typography
           className='pi-ls-bottom-item'
@@ -136,4 +139,4 @@ ProductItem.propTypes = {
   }),
 };
 
-export default ProductItem;
+export default memo(ProductItem, isEqual);
