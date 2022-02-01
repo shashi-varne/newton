@@ -48,6 +48,7 @@ WithCta.args = {
   rightSectionData: {
     btnProps: {
         title: 'Cta',
+        onClick: () => {}
     }
   },
 };

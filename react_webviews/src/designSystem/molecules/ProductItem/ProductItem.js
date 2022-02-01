@@ -73,7 +73,7 @@ const BottomSection = ({ tagOne = {}, tagTwo = {}, titleOne, titleOneColor }) =>
 
 const RightSection = (props) => {
   const { btnProps = {}, description = {} } = props;
-  if (!isEmpty(btnProps)) {
+  if (btnProps?.title && btnProps?.onClick) {
     const handleClick = (e) => {
       if (isFunction(btnProps?.onClick)) {
         e.stopPropagation();
@@ -81,7 +81,7 @@ const RightSection = (props) => {
       }
     };
     return (
-      <Button title={btnProps?.title} variant='secondary' {...btnProps} onClick={handleClick} />
+      <Button title={btnProps?.title} variant='secondary' size='small' {...btnProps} onClick={handleClick} />
     );
   } else if (!isEmpty(description)) {
     return <Description {...description} />;

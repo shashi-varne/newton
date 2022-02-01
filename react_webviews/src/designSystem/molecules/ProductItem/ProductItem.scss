@@ -35,12 +35,16 @@
       }
       .pi-ls-bottom-item {
         margin-right: 8px;
+        &:last-child {
+          margin-right: 0px;
+        }
       }
     }
 
     .pi-right-section {
       margin-left: 10px;
       align-self: baseline;
+      min-width: fit-content;
     }
   }
 }
