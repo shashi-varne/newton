@@ -6,7 +6,7 @@ import { kycSubmit } from './common/api'
 import { isDigilockerFlow } from './common/functions'
 import eventManager from '../utils/eventManager'
 import { EVENT_MANAGER_CONSTANTS } from '../utils/constants'
-import { isEmpty } from "lodash"
+import isEmpty from "lodash/isEmpty"
 import { FREEDOM_PLAN_STORAGE_CONSTANTS } from '../freedom_plan/common/constants'
 
 const DOCUMENTS_MAPPER = {
