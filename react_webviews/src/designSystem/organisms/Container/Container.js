@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import Box from '@mui/material/Box';
 import NavigationHeader from '../../molecules/NavigationHeader';
 import {
@@ -8,6 +8,7 @@ import {
 import isArray from 'lodash/isArray';
 import isEmpty from 'lodash/isEmpty';
 import Footer from '../../molecules/Footer';
+import { getConfig } from 'utils/functions';
 
 import './Container.scss';
 
@@ -17,13 +18,16 @@ const Container = ({
   className,
   footer = {},
   noFooter,
+  renderComponentAboveFooter,
+  containerSx,
+  fixedFooter,
   footerElevation,
-  footerTopComponent,
-  containerSx
 }) => {
   const containerRef = useRef();
   const footerWrapperRef = useRef();
+  const { isMobileDevice } = useMemo(getConfig, []);
   const { headerTitle, subtitle, points = [], ...restHeaderProps } = headerProps;
+  fixedFooter = isMobileDevice ? true : fixedFooter;
   useEffect(() => {
     if (footerWrapperRef?.current && containerRef.current) {
       containerRef.current.style.paddingBottom = `${
@@ -32,7 +36,11 @@ const Container = ({
     }
   }, [footer?.direction, footerWrapperRef?.current, noFooter]);
   return (
-    <Box ref={containerRef} sx={containerSx} className={`container-wrapper ${className}`}>
+    <Box
+      ref={containerRef}
+      sx={{ ...containerWrapperSx, ...containerSx }}
+      className={`container-wrapper ${className}`}
+    >
       <NavigationHeader headerTitle={headerTitle} anchorOrigin={containerRef} {...restHeaderProps}>
         {subtitle && <NavigationHeaderSubtitle dataIdx={1}>{subtitle}</NavigationHeaderSubtitle>}
         {isArray(points) &&
@@ -45,19 +53,27 @@ const Container = ({
           })}
       </NavigationHeader>
       <main className='container-content-wrapper'>{children}</main>
-      {!isEmpty(footer) && !noFooter && (
-        <div className='container-footer-wrapper'>
-          {footerTopComponent}
-          <Box
-            sx={footerElevation && footerSxStyle}
-            component='footer'
-            className='container-footer-cta'
-            ref={footerWrapperRef}
-          >
-            <Footer {...footer} />
-          </Box>
+      <div
+        ref={footerWrapperRef}
+        className={`container-footer-wrapper ${fixedFooter && 'container-fixed-footer'}`}
+      >
+        {renderComponentAboveFooter}
+        <div className='container-footer-child-wrapper'>
+          {!isEmpty(footer) && !noFooter && (
+            <Box
+              sx={footerElevation ? footerSxStyle : {}}
+              component='footer'
+              className='container-footer-cta'
+            >
+              <Footer
+                wrapperClassName='footer-wrapper'
+                stackWrapperClassName='footer-stack-wrapper'
+                {...footer}
+              />
+            </Box>
+          )}
         </div>
-      )}
+      </div>
     </Box>
   );
 };
@@ -69,6 +85,10 @@ const footerSxStyle = (theme) => {
       boxShadow: '1',
     },
   };
+};
+
+const containerWrapperSx = {
+  backgroundColor: 'foundationColors.supporting.grey',
 };
 
 export default Container;
