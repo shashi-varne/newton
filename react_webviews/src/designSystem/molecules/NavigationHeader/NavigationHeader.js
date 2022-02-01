@@ -95,7 +95,7 @@ const NavigationHeader = ({
           )}
         </div>
       </section>
-      {!(hideInPageTitle || hideHeaderTitle) && (
+      {!(hideInPageTitle || hideHeaderTitle) && headerTitle && (
         <div className='nav-bar-title-wrapper' ref={inPageTitleRef}>
           <Typography variant='heading2'>{headerTitle}</Typography>
         </div>
