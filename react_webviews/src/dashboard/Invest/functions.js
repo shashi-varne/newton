@@ -3,7 +3,6 @@ import { storageService, isEmpty, splitMobileNumberFromContryCode } from "utils/
 import toast from "../../common/ui/Toast";
 import { getConfig, navigate as navigateFunc, getBasePath, isTradingEnabled, getInvestCards } from "utils/functions";
 import {
-  apiConstants,
   investCardsBase,
   keyPathMapper,
   kycStatusMapper,
@@ -11,7 +10,7 @@ import {
   premiumBottomSheetMapper,
   sdkInvestCardMapper
 } from "./constants";
-import { getKycAppStatus, isReadyToInvest, setKycProductType, setSummaryData } from "../../kyc/services";
+import { getAccountSummary, getKycAppStatus, isReadyToInvest, setKycProductType, setSummaryData } from "../../kyc/services";
 import { get_recommended_funds } from "./common/api";
 import { PATHNAME_MAPPER } from "../../kyc/constants";
 import { isEquityCompleted } from "../../kyc/common/functions";
@@ -62,8 +61,10 @@ export async function initialize() {
 
   const isBfdlBannerDisplayed = storageService().getBoolean("bfdlBannerDisplayed");
   const isBfdlConfig = !isBfdlBannerDisplayed && config.code === 'bfdlmobile' && (config.isIframe || config.isSdk)
+  const isWebConfig = config.Web && this.state.screenName === "invest_landing";
+  const isSdkConfig = config.isSdk && this.state.screenName === "sdk_landing";
 
-  if (!isBfdlConfig && ["invest_landing", "sdk_landing"].includes(this.state.screenName) && !dataSettedInsideBoot) {
+  if (!isBfdlConfig && (isWebConfig || isSdkConfig) && !dataSettedInsideBoot) {
     await this.getSummary();
   }
 
@@ -101,35 +102,16 @@ export async function getSummary() {
     this.setState({ show_loader: false,  kycStatusLoader : true });
   }
   try {
-    const res = await Api.post(apiConstants.accountSummary, {
-      campaign: ["user_campaign"],
-      kyc: ["kyc"],
-      user: ["user"],
-      nps: ["nps_user"],
-      partner: ["partner"],
-      bank_list: ["bank_list"],
-      referral: ["subbroker", "p2p"],
-      contacts: ["contacts"],
-      equity: ["subscription_status"]
-    });
-    if (res.pfwstatus_code !== 200 || isEmpty(res.pfwresponse)) {
-      throw res?.pfwmessage || errorMessage;
-    }
-    const { result, status_code: status } = res.pfwresponse;
-    if (status === 200) {
-      this.setSummaryData(result);
-      currentUser = result.data.user.user.data;
-      userKyc = result.data.kyc.kyc.data;
-      const subscriptionStatus = result?.data?.equity?.subscription_status?.data || {};
-      this.setState({ show_loader: false, kycStatusLoader : false, userKyc, currentUser, subscriptionStatus });
-    } else {
-      this.setState({ show_loader: false, kycStatusLoader : false });
-      toast(result.message || result.error || errorMessage);
-    }
+    const result = await getAccountSummary();
+    this.setSummaryData(result);
+    currentUser = result.data.user.user.data;
+    userKyc = result.data.kyc.kyc.data;
+    const subscriptionStatus = result?.data?.equity?.subscription_status?.data || {};
+    this.setState({ show_loader: false, kycStatusLoader : false, userKyc, currentUser, subscriptionStatus });
   } catch (error) {
     console.log(error);
-    this.setState({ show_loader: false });
-    toast(error || errorMessage);
+    this.setState({ show_loader: false, kycStatusLoader : false });
+    toast(error.message || errorMessage);
   }
 }
 
