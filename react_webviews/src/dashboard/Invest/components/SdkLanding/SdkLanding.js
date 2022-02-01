@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
-import { initialize, handleCampaignNotification, dateValidation, updateBank, updateConsent } from '../../functions';
+import { initialize, handleCampaignNotification, dateValidation, updateBank, updateConsent, setDialogsState } from '../../functions';
 import { SkeltonRect } from 'common/ui/Skelton';
 import SdkInvestCard from '../../mini-components/SdkInvestCard';
 import { storageService } from 'utils/validators';
@@ -19,6 +19,7 @@ import TermsAndConditions from '../../mini-components/TermsAndConditionsDialog';
 import BankListOptions from '../../mini-components/BankListOptions';
 import Toast from '../../../../common/ui/Toast';
 import BFDLBanner from '../../mini-components/BFDLBanner';
+import SebiRegistrationFooter from "../../../../common/ui/SebiRegistrationFooter/WVSebiRegistrationFooter";
 
 const PATHNAME_MAPPER = {
   nfo: "/advanced-investing/new-fund-offers/info",
@@ -61,6 +62,7 @@ class SdkLanding extends Component {
     };
     this.initialize = initialize.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
+    this.setDialogsState = setDialogsState.bind(this);
   }
 
   componentWillMount() {
@@ -69,9 +71,22 @@ class SdkLanding extends Component {
 
   onload = () => {
     this.initilizeKyc();
-    const isBottomSheetDisplayed = storageService().get('is_bottom_sheet_displayed');
-    if (!isBottomSheetDisplayed) {
+    const isBottomSheetDisplayed = storageService().getBoolean('is_bottom_sheet_displayed');
+    const campaignsToShowOnPriority = ["trading_restriction_campaign"];
+    const {
+      openKycStatusDialog,
+      tradingEnabled,
+      bottom_sheet_dialog_data,
+    } = this.state;
+    const isPriorityCampaign = campaignsToShowOnPriority.includes(bottom_sheet_dialog_data.campaign_name);
+    if (
+      !isBottomSheetDisplayed &&
+      ((tradingEnabled && isPriorityCampaign) || !openKycStatusDialog)
+    ) {
       this.handleCampaignNotification();
+    }
+    if (isPriorityCampaign) {
+      this.setDialogsState("openBottomSheet");
     }
     const consentRequired = storageService().get("consent_required");
     if(consentRequired && getConfig().code === "lvb") {
@@ -247,16 +262,11 @@ class SdkLanding extends Component {
 
   render() {
     let {
-      isReadyToInvestBase,
-      kycStatusLoader,
       dotLoader,
       referral,
-      kycJourneyStatusMapperData,
-      kycJourneyStatus,
       verificationFailed,
       openKycStatusDialog,
       modalData,
-      tradingEnabled,
       showTermsAndConditions,
       showTermsAndConditionsLoader,
       bankListOptions,
@@ -265,6 +275,7 @@ class SdkLanding extends Component {
       bankListErrorMessage,
       showBankListLoader,
       openBfdlBanner,
+      isKycCompleted,
     } = this.state;
 
     const config = getConfig();
@@ -288,7 +299,7 @@ class SdkLanding extends Component {
         <div className='sdk-landing' data-aid='sdk-landing'>
           {!this.state.kycStatusLoader ? (
             <div className='generic-page-subtitle' data-aid='generic-page-subtitle'>
-              {isReadyToInvestBase
+              {isKycCompleted
                 ? ' Your KYC is verified, You’re ready to invest'
                 : 'Let’s make your money work for you!'}
             </div>
@@ -351,35 +362,6 @@ class SdkLanding extends Component {
           {!isEmpty(this.state.renderLandingCards) && (
             <div className='sdk-landing-cards'>
               {this.state.renderLandingCards.map((el, idx) => {
-                if (el.key === 'kyc') {
-                  if (isReadyToInvestBase) {
-                    return null;
-                  }
-                  el.isLoading = kycStatusLoader;
-                  el.color = kycJourneyStatusMapperData?.color;
-                  const premiumKyc = kycJourneyStatus === 'ground_premium' && !tradingEnabled;
-                  const kycDefaultSubTitle =
-                    !kycJourneyStatusMapperData || kycJourneyStatus === 'ground_premium'
-                      ? 'Create investment profile'
-                      : '';
-                  const kycSubTitle =
-                    !isEmpty(kycJourneyStatusMapperData) && kycJourneyStatus !== 'ground_premium'
-                      ? kycJourneyStatusMapperData?.landingText
-                      : '';
-                  if (premiumKyc) {
-                    el.title = "KYC PREMIUM";
-                  }
-                  if (kycDefaultSubTitle) {
-                    el.subtitle = kycDefaultSubTitle;
-                  }
-                  if (kycSubTitle) {
-                    el.subtitle = kycSubTitle;
-                    if (el.color) {
-                      el.dot = true;
-                    }
-                  }
-                }
-
                 return (
                   <SdkInvestCard
                     key={idx}
@@ -394,16 +376,8 @@ class SdkLanding extends Component {
               })}
             </div>
           )}
-          {!["fisdom", "finity", "ktb"].includes(config.code) && (
-              <div className="invest-contact-us" data-aid='invest-contact-us'>
-                In partnership with
-                <span>
-                  {config.productName === "finity"
-                    ? " Finity"
-                    : " Fisdom"}
-                </span>
-              </div>
-          )}
+          <div className="generic-hr" />
+          <SebiRegistrationFooter className="sebi-registration-disclaimer" />
         </div>
         <CampaignDialog
           isOpen={this.state.openBottomSheet}

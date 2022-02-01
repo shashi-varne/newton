@@ -46,7 +46,15 @@ export async function initialize() {
   this.handleCampaignNotificationData = handleCampaignNotificationData.bind(this);
   this.openBfdlBanner = openBfdlBanner.bind(this);
   this.closeBfdlBanner = closeBfdlBanner.bind(this);
+  this.handleStocksRedirection = handleStocksRedirection.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
+  const openEquityCallback = storageService().getBoolean("openEquityCallback");
+  if (openEquityCallback) {
+    storageService().setBoolean("openEquityCallback", false);
+    nativeCallback({
+      action: "open_equity"
+    })
+  }
   if (config) {
     this.setState({ config });
   }
@@ -385,7 +393,7 @@ export async function initilizeKyc() {
   let isReadyToInvestBase = isReadyToInvest();
   let isEquityCompletedBase = isEquityCompleted();
   let kycJourneyStatusMapperData = kycJourneyStatus?.includes("ground_") ? kycStatusMapper["incomplete"] : kycStatusMapper[kycJourneyStatus];
-
+  const isKycCompleted = (TRADING_ENABLED && isEquityCompletedBase) || (!TRADING_ENABLED && isReadyToInvestBase);
   this.setState({
     isCompliant,
     kycStatusData,
@@ -398,6 +406,7 @@ export async function initilizeKyc() {
     getKycAppStatusData,
     rejectedItems,
     tradingEnabled: TRADING_ENABLED,
+    isKycCompleted
   });
   let bottom_sheet_dialog_data_premium = {};
   let premium_onb_status = "";
@@ -589,6 +598,18 @@ function initiatePinSetup(key) {
   if (config.isNative) {
     openModule('account/setup_2fa', this.props, { routeUrlParams: `/${key}` });
     nativeCallback({ action: 'exit_web' });
+  } else if (config.isSdk) {
+    const that = this;
+    window.callbackWeb["open_2fa_module"]({
+      operation: "setup_pin",
+      request_code: "REQ_SETUP_2FA",
+      callback: async function (data) {
+        if (data.status === "success") {
+          await that.getSummary();
+          that.handleStocksRedirection(true);
+        }
+      },
+    });
   } else {
     this.setState({ openPinSetupDialog: true, clickedCardKey: key });
   }
@@ -628,18 +649,43 @@ export function handleStocksAndIpoCards(key) {
       if (currentUser?.pin_status !== 'pin_setup_complete') {
         return this.initiatePinSetup(key);
       } else if (kycJourneyStatus !== "fno_rejected") {
-        this.setState({ showPageLoader: "page" });
-        window.location.href = `${config.base_url}/page/equity/launchapp`;
+        if(config.isSdk) {
+          this.handleStocksRedirection(true);
+        } else {
+          this.setState({ showPageLoader: "page" });
+          window.location.href = `${config.base_url}/page/equity/launchapp`;
+        }
         return;
-      }
+      } 
     }
   }
   if(key === "stocks" && !modalData.dualButton) {
-    modalData.oneButton = true
+    const kycInprogressStates = ["submitted", "verifying_trading_account"];
+    if (config.isSdk && kycInprogressStates.includes(kycJourneyStatus)) {
+      const handleClick = () => {
+        this.handleStocksRedirection(false);
+      }
+      modalData.buttonTitle = "CONTINUE";
+      modalData.handleClick = handleClick
+    }
+    if (config.isSdk && !modalData.oneButton) {
+      modalData.dualButton = true;
+    } else {
+      modalData.oneButton = true
+    }
   }
 
   if (!isEmpty(modalData) && (kycJourneyStatus !== "complete" || (kycJourneyStatus === "complete" && userKyc.kyc_product_type !== "equity"))) {
     this.setState({ modalData, openKycStatusDialog: true });
+  }
+}
+
+function handleStocksRedirection(skip = false) {
+  nativeCallback({
+    action: "open_equity"
+  })
+  if (!skip) {
+    this.closeKycStatusDialog()
   }
 }
 
@@ -666,9 +712,14 @@ export const resetRiskProfileJourney = () => {
   return;
 };
 
-function handleInvestSubtitle ()  {
+function handleInvestSubtitle (isEquityEnabled)  {
   const investCards = getInvestCards(["nps", "gold"]);
   let investCardSubtitle = 'Mutual funds';
+
+  if (isEquityEnabled) {
+    investCardSubtitle = 'Stocks, F&O, IPOs, Mutual funds';
+  }
+
   if (investCards?.gold) {
     investCardSubtitle = investCardSubtitle += ', Gold, Save tax';
   } else {
@@ -684,19 +735,13 @@ function handleInvestSubtitle ()  {
 export function handleRenderCard() {
   let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
   let currentUser = this.state.currentUser || storageService().getObject("user") || {};
-  let isReadyToInvestBase = isReadyToInvest();
   const { config = getConfig() } = this.state;
   const isWeb = config.Web;
   const hideReferral = currentUser.active_investment && !isWeb && config?.referralConfig?.shareRefferal;
   const referralCode = !currentUser.active_investment && !isWeb && config?.referralConfig?.applyRefferal;
-  const myAccount = isReadyToInvestBase || userKyc?.bank?.doc_status === 'rejected';
-  const kyc = !isReadyToInvestBase;
+  const isEquityEnabled = isTradingEnabled(userKyc);
   const cards = sdkInvestCardMapper.filter(el => {
-    if(el.key === 'kyc') {
-      return kyc;
-    } else if(el.key === 'account') {
-      return myAccount;
-    } else if(el.key === 'refer') {
+    if(el.key === 'refer') {
       if(referralCode){
         el.referralCode = true;
         el.title = "Referral code"
@@ -707,7 +752,8 @@ export function handleRenderCard() {
       }
     } else {
       if(el.key === 'invest') {
-        el.subtitle = handleInvestSubtitle()
+        el.subtitle = handleInvestSubtitle(isEquityEnabled);
+        el.tagTitle = isEquityEnabled ? 'NEW' : '';
       }
       return true;
     }

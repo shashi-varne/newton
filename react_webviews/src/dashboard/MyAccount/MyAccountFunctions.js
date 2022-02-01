@@ -143,7 +143,7 @@ export async function getMyAccount() {
         npsUpload: npsUpload,
         investment80C: investment80C,
         Capitalgain: Capitalgain,
-        user: result?.user,
+        currentUser: result?.user,
         contactInfo: result?.kyc?.identification?.meta_data,
         isReadyToInvestBase,
       });

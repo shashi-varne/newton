@@ -103,8 +103,11 @@ const getFreedomPlanData = (data) => {
 class MyAccount extends Component {
   constructor(props) {
     super(props);
+    const config = getConfig();
     this.state = {
-      productName: getConfig().productName,
+      productName: config.productName,
+      isSdk: config.isSdk,
+      currentUser: {},
       showLoader: false,
       mandate: {},
       pendingMandate: {},
@@ -388,6 +391,7 @@ class MyAccount extends Component {
       verifyDetails,
       accountAlreadyExists,
       tradingEnabled,
+      isSdk,
       freedomPlanData
     } = this.state;
     let bank = userKyc.bank || {};
@@ -404,7 +408,7 @@ class MyAccount extends Component {
             <UserDetails
               pan_no={userKyc?.pan?.meta_data?.pan_number}
               contactInfo={contactInfo}
-              name={currentUser?.name}
+              name={currentUser?.name || userKyc?.pan?.meta_data?.name}
               handleClick={(path, state) => this.navigate(path, state)}
               showLoader={this.showLoader}
               sendEvents={this.sendEvents}
@@ -430,7 +434,7 @@ class MyAccount extends Component {
               })}
             </div>
           </div>
-          {tradingEnabled && (
+          {tradingEnabled && !isSdk && (
             <div
               className="my-account-content"
               data-aid="myAccount_freedomPlan"
@@ -558,7 +562,7 @@ class MyAccount extends Component {
                 />
                 <div>Upload Mandate</div>
               </div>
-              {tradingEnabled && (
+              {(tradingEnabled && (!isSdk || currentUser.pin_status === 'pin_setup_complete')) && (
                 <div
                   data-aid="security-setting"
                   className="account-options"
@@ -653,7 +657,7 @@ const InvestmentCard = ({ title, subtitle, icon, disable, buttonText, onClick })
         <div className={`maic-title ${disable && "maic-title-disable"}`}>{title}</div>
         <div className="maic-subtitle">{subtitle}</div>
       </div>
-      <div className="maic-content">
+      <div className="maic-content maic-progress">
         {icon && !disable && <img src={require(`assets/${icon}`)} alt="icon" />}
         {buttonText && (
           <WVClickableTextElement onClick={onClick}>{buttonText}</WVClickableTextElement>

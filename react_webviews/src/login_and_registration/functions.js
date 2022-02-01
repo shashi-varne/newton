@@ -492,10 +492,15 @@ export async function getKycFromSummary(params = {}) {
 export function redirectAfterLogin(data, user, navigateFunc) {
   const kyc = storageService().getObject("kyc");
   const ipoContactNotVerified = storageService().get("ipoContactNotVerified") || false;
+  const sdkStocksRedirection = storageService().getBoolean("sdkStocksRedirection");
   user = user || storageService().getObject("user");
   const navigate = navigateFunc || this.navigate;
   if (data.firstLogin) {
     navigate("/referral-code", { state: { goBack: "/", communicationType: data?.contacts?.auth_type } });
+  } else if (sdkStocksRedirection) {
+    storageService().setBoolean("sdkStocksRedirection", false);
+    storageService().setBoolean("openEquityCallback", true);
+    navigate("/", { edit: true, state: { goBack: "/" } });
   } else if (ipoContactNotVerified){
     storageService().set("ipoContactNotVerified", false);
     navigate("/market-products", { state: { goBack: "/invest" } });

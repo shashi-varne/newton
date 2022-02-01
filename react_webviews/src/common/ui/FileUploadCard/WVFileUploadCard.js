@@ -40,9 +40,9 @@ const WVFileUploadCard = ({
 
   useEffect(() => {
     if (selectedFile) {
-      const fileName = selectedFile.name || selectedFile.file_name;
+      const fileName = selectedFile.name || selectedFile.file_name || "";
       const fileType = selectedFile.type.split("/")[1];
-      if (fileName.length > 8) {
+      if (fileName?.length > 8) {
         setTruncatedFileName(fileName.slice(0, 8) + '....' + fileType);
       } else {
         setTruncatedFileName(fileName);

@@ -8,13 +8,14 @@ const WVSebiRegistrationFooter = ({
   alignCenter = true, // Center aligns component [default=true]
   className = "",
 }) => {
-  const { colorLogo } = getConfig();
+  const { colorLogo, isSdk } = getConfig();
   return (
     <div
       style={{ margin: alignCenter ? "auto" : "" }}
       className={`wv-sebi-registration-footer ${className}`}
       data-aid={`wv-sebi-registration-footer-${dataAidSuffix}`}
     >
+      {isSdk && <div className="wv-srd-partner-text">In partnership with</div>}
       <div className="flex-between-center">
         <Imgc 
         src={require(`assets/${colorLogo}`)} 

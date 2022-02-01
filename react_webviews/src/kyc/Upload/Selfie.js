@@ -36,6 +36,7 @@ const Selfie = (props) => {
   const [isTradingFlow, setIsTradingFlow] = useState(false);
   const [fileHandlerParams, setFileHandlerParams] = useState();
   const [goBackModal, setGoBackModal] = useState(false);
+  const [isSdkEquityEnabled, setIsSdkEquityEnabled] = useState(false);
   const navigate = navigateFunc.bind(props);
   const goBackPath = props.location?.state?.goBack || "";
 
@@ -51,6 +52,8 @@ const Selfie = (props) => {
   const initialize = async () => {
     const tradingFlow = isTradingEnabled(kyc);
     setIsTradingFlow(tradingFlow);
+    const sdkEquityEnabled = isSdk && tradingFlow;
+    setIsSdkEquityEnabled(sdkEquityEnabled);
   }
 
   const commonNavigation = () => {
@@ -169,7 +172,7 @@ const Selfie = (props) => {
   const onLocationFetchSuccess = (data) => {
     setLocationData(data);
     closeLocnPermDialog();
-    if (!isNative) {
+    if (!isNative && !isSdkEquityEnabled) {
       setIsLiveCamOpen(true);
     } else if (fileHandlerParams.length) {
       openFilePicker(...fileHandlerParams);
@@ -290,8 +293,8 @@ const Selfie = (props) => {
                   supportedFormats: SUPPORTED_IMAGE_TYPES,
                   onFileSelectComplete: onCaptureSuccess,
                   onFileSelectError: onCaptureFailure,
-                  fileHandlerParams: isNative ? { check_liveness: true } : {},
-                  customClickHandler: isNative ? onOpenCameraClick : ''
+                  fileHandlerParams: (isNative || isSdkEquityEnabled) ? { check_liveness: true } : {},
+                  customClickHandler: (isNative || isSdkEquityEnabled) ? onOpenCameraClick : ''
                 }}
               >
                 {file ? "Retake" : "Open Camera"}
@@ -313,7 +316,7 @@ const Selfie = (props) => {
               onCaptureSuccess={onCaptureSuccess}
             />
           }
-          {!isSdk &&
+          {(!isSdk || isSdkEquityEnabled) &&
             <LocationPermission
               isOpen={isLocnPermOpen}
               onInit={onLocationInit}

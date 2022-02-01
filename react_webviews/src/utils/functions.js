@@ -168,7 +168,7 @@ export const getConfig = () => {
   // let base_href = window.localStorage.getItem('base_href') || '';
   let base_url_default = '';
   
-  const isStaging = origin.indexOf('plutus-web-staging') >= 0;
+  const isStaging = origin.indexOf('plutus-web-staging') >= 0 || origin.indexOf('plutus-web') >= 0;
   const isFisdomStaging = origin.indexOf('fisdom.equityappuat.finwizard.co.in') >= 0 || origin.indexOf('fisdomapp.staging.finwizard.co.in') >= 0;
   const isFinityStaging = origin.indexOf('finity.equityappuat.finwizard.co.in') >= 0 || origin.indexOf('finityapp.staging.finwizard.co.in') >= 0;
   const isLocal = origin.indexOf('localhost') >=0;
@@ -197,7 +197,7 @@ export const getConfig = () => {
 
     // change server url here for local and staging url builds (Not commit id one's)
     if (isStaging || isLocal) {
-      base_url_default = "https://wdash-dot-plutus-staging.appspot.com";
+      base_url_default = "https://eqt-feature-dot-plutus-staging.appspot.com";
     }
 
     if(isFisdomStaging) {
@@ -578,9 +578,7 @@ export function isTradingEnabled(userKyc = {}) {
   const kyc = !isEmpty(userKyc) ? userKyc : storageService().getObject("kyc");
   const config = getConfig();
   const equityEnabled = storageService().getBoolean('equityEnabled'); // Used to enable kyc equity flow from native/external side
-  if (config.isSdk) {
-    return false;
-  } else if (config.isNative) {
+  if (config.isNative) {
     return equityEnabled && kyc?.equity_enabled;
   }
   return kyc?.equity_enabled;

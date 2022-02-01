@@ -7,6 +7,7 @@ import eventManager from './eventManager';
 import { isMobile } from './functions';
 import { getConfig } from './functions';
 import isEmpty from 'lodash/isEmpty';
+import isFunction from 'lodash/isFunction';
 
 
 (function (exports) {
@@ -90,6 +91,34 @@ import isEmpty from 'lodash/isEmpty';
       window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
     }
   };
+
+  exports.open_2fa_module = function (listener) {
+    listeners.push(listener);
+    const { operation, request_code, show_intro = false } = listener;
+    let callbackData = {};
+    callbackData.action = "2fa_module";
+    callbackData.action_data = { operation, request_code, show_intro };
+    if (typeof window.Android !== "undefined") {
+      window.Android.callbackNative(JSON.stringify(callbackData));
+    } else if (isMobile.iOS() && typeof window.webkit !== "undefined") {
+      window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+    }
+  };
+
+  exports.on_native_result = function (data_json_str) {
+    let json_data = {};
+    if (data_json_str !== "" && typeof data_json_str === "string") {
+      json_data = JSON.parse(data_json_str);
+    } else if (typeof data_json_str === "object") {
+      json_data = data_json_str;
+    }
+    for (let lis of listeners) {
+      if (lis.request_code === "REQ_SETUP_2FA" && isFunction(lis.callback)) {
+        lis.callback(json_data);
+        break;
+      }
+    }
+  }
 
   exports.open_camera = function (listener) {
     listeners.push(listener);
@@ -388,7 +417,7 @@ import isEmpty from 'lodash/isEmpty';
       set_session_storage("callback_version", json_data.callback_version);
     }
   }
-  
+
   exports.set_content_data = function (data) {
     let contentData = {};
     if (data !== "" && typeof data === "string") {
