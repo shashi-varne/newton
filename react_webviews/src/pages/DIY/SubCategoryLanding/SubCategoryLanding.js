@@ -1,10 +1,14 @@
 import { Box } from '@mui/material';
-import React, { useState } from 'react';
+import React, { memo, useEffect, useRef, useState } from 'react';
 import Typography from '../../../designSystem/atoms/Typography';
 import Container from '../../../designSystem/organisms/Container';
 import ProductItem from '../../../designSystem/molecules/ProductItem';
 import SwipeableViews from 'react-swipeable-views';
 import { largeCap, midCap, multiCap, smallCap } from './constants';
+import Button from '../../../designSystem/atoms/Button';
+import isEqual from 'lodash/isEqual';
+
+import './SubCategoryLanding.scss';
 
 const tabChilds = [
   {
@@ -36,13 +40,15 @@ const returnField = [
 
 const SubCategoryLanding = () => {
   const [tabValue, setTabValue] = useState(0);
+  const swipeableViewsRef = useRef();
   const handleTabChange = (e, value) => {
     setTabValue(value);
   };
+
   const handleChangeIndex = (index) => {
     setTabValue(index);
   };
-  console.log('hello');
+
   return (
     <Container
       headerProps={{
@@ -59,77 +65,101 @@ const SubCategoryLanding = () => {
         },
         tabChilds,
       }}
+      className='sub-category-landing-wrapper'
     >
-      <SwipeableViews
-        // axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-        index={tabValue}
-        onChangeIndex={handleChangeIndex}
-        style={{
-          minHeight: '100vh',
-        }}
-      >
-        {tabChilds?.map((el, idx) => {
-          return (
-            <TabPanel key={idx} value={tabValue} index={idx}>
-              {el?.data?.slice(0, 20)?.map((fund, idx) => {
-                return (
-                  <ProductItem
-                    sx={{ mb: '16px' }}
-                    key={idx}
-                    leftImgSrc={fund?.amc_logo_big}
-                    headerTitle={fund?.legal_name}
-                    showSeparator
-                    bottomSectionData={{
-                      tagOne: {
-                        label: fund?.is_fisdom_recommended ? 'Recommended' : '',
-                      },
-                      tagTwo: {
-                        morningStarVariant: 'large',
-                        label: fund?.morning_star_rating,
-                        labelColor: 'foundationColors.content.secondary',
-                      },
-                    }}
-                    rightSectionData={{
-                      description: {
-                        title:
-                          fund?.three_year_return > 0
-                            ? `+${fund?.three_year_return}`
-                            : `-${fund?.three_year_return}`,
-                        titleColor:
-                          fund?.three_year_return > 0
-                            ? 'foundationColors.secondary.profitGreen.400'
-                            : 'foundationColors.secondary.lossRed.400',
-                      },
-                    }}
-                  />
-                );
-              })}
-            </TabPanel>
-          );
-        })}
-      </SwipeableViews>
+      <div className='sub-category-swipper-wrapper'>
+        <SwipeableViews
+          // axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+          index={tabValue}
+          onChangeIndex={handleChangeIndex}
+          animateHeight
+          ref={swipeableViewsRef}
+        >
+          {tabChilds?.map((el, idx) => {
+            return (
+              <TabPanel
+                key={idx}
+                value={tabValue}
+                index={idx}
+                data={el?.data}
+                swipeableViewsRef={swipeableViewsRef}
+              />
+            );
+          })}
+        </SwipeableViews>
+      </div>
     </Container>
   );
 };
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
+const TabPanel = (props) => {
+  const { data, swipeableViewsRef } = props;
+  const [maxContent, setMaxContent] = useState(10);
+  const handleMoreContent = () => {
+    setMaxContent((prev) => prev + 10);
+  };
+
+  useEffect(() => {
+    if (swipeableViewsRef.current) {
+      swipeableViewsRef.current.updateHeight();
+    }
+  }, [swipeableViewsRef.current, maxContent]);
 
   return (
     <div
-      role='tabpanel'
-      hidden={value !== index}
-      id={`full-width-tabpanel-${index}`}
-      aria-labelledby={`full-width-tab-${index}`}
-      {...other}
+    // role='tabpanel'
+    // hidden={value !== index}
+    // id={`full-width-tabpanel-${index}`}
+    // aria-labelledby={`full-width-tab-${index}`}
     >
-      {value === index && (
-        <Box sx={{ pt: '16px' }}>
-          <Typography component='div'>{children}</Typography>
-        </Box>
-      )}
+      {/* {value === index && ( */}
+      <Box sx={{ pt: '16px' }}>
+        <Typography component='div'>
+          {data?.slice(0, maxContent)?.map((fund, idx) => {
+            return (
+              <ProductItem
+                sx={{ mb: '16px' }}
+                key={idx}
+                leftImgSrc={fund?.amc_logo_big}
+                headerTitle={fund?.legal_name}
+                showSeparator
+                bottomSectionData={{
+                  tagOne: {
+                    label: fund?.is_fisdom_recommended ? 'Recommended' : '',
+                    labelBackgroundColor: 'foundationColors.supporting.grey',
+                    labelColor: 'foundationColors.content.secondary',
+                  },
+                  tagTwo: {
+                    morningStarVariant: 'large',
+                    label: fund?.morning_star_rating,
+                    labelColor: 'foundationColors.content.secondary',
+                  },
+                }}
+                rightSectionData={{
+                  description: {
+                    title:
+                      fund?.three_year_return > 0
+                        ? `+${fund?.three_year_return}`
+                        : `-${fund?.three_year_return}`,
+                    titleColor:
+                      fund?.three_year_return > 0
+                        ? 'foundationColors.secondary.profitGreen.400'
+                        : 'foundationColors.secondary.lossRed.400',
+                  },
+                }}
+              />
+            );
+          })}
+        </Typography>
+        {maxContent !== data.length && (
+          <Box sx={{ mt: '12px', textAlign:'center' }}>
+            <Button title='See all results' variant='link' onClick={handleMoreContent} />
+          </Box>
+        )}
+      </Box>
+      {/* )} */}
     </div>
   );
-}
+};
 
 export default SubCategoryLanding;
