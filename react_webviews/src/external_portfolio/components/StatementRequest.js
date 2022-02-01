@@ -133,7 +133,7 @@ export default function StatementRequested(props) {
     });
   }
 
-  const goBack = (params) => {
+  const goBack = () => {
     storageService().remove('email_detail_hni');
     if (!params || state.exitToApp) {
       nativeCallback({ action: 'exit', events: sendEvents('back') });
