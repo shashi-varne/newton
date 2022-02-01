@@ -20,6 +20,8 @@ const NavigationPopup = (props) => {
     anchorOriginHorizontal = "center",
     transformOriginVertical = "bottom",
     transformOriginHorizontal = "center",
+    labelColor,
+    dotColor,
   } = props;
 
   const onLabelClick = (index) => () => {
@@ -50,6 +52,8 @@ const NavigationPopup = (props) => {
           isActive={index === activeIndex}
           data={data}
           displayKey={displayKey}
+          labelColor={labelColor}
+          dotColor={dotColor}
         />
       ))}
     </Popover>
@@ -60,14 +64,22 @@ const getLabelName = (data, displayKey) => () => {
   return isObject(data) ? data[displayKey] : data;
 };
 
-const Label = ({ index, onClick, data, isActive, displayKey }) => {
+const Label = ({
+  index,
+  onClick,
+  data,
+  isActive,
+  displayKey,
+  labelColor,
+  dotColor = "foundationColors.content.primary",
+}) => {
   const labelName = useMemo(getLabelName(data, displayKey), [data]);
   return (
     <Box className="np-label-wrapper">
       {isActive && (
         <Box
           className="np-lw-dot"
-          sx={{ backgroundColor: "foundationColors.content.primary" }}
+          sx={{ backgroundColor: dotColor }}
           dataAid={`dot${index}`}
         />
       )}
@@ -76,6 +88,7 @@ const Label = ({ index, onClick, data, isActive, displayKey }) => {
         variant={isActive ? "heading4" : "body8"}
         component="div"
         onClick={onClick}
+        color={labelColor}
       >
         {labelName}
       </Typography>
@@ -87,9 +100,11 @@ export default NavigationPopup;
 
 NavigationPopup.propTypes = {
   onClose: PropTypes.func,
-  options: PropTypes.array.isRequired,
-  activeIndex: PropTypes.number,
+  dotColor: PropTypes.string,
+  labelColor: PropTypes.string,
   displayKey: PropTypes.string,
+  activeIndex: PropTypes.number,
+  options: PropTypes.array.isRequired,
   anchorOriginVertical: PropTypes.string,
   anchorOriginHorizontal: PropTypes.string,
   transformOriginVertical: PropTypes.string,

@@ -8,6 +8,15 @@ export default {
     activeIndex: {
       defaultValue: 1,
     },
+    dotColor: {
+      defaultValue: "foundationColors.content.primary",
+    },
+    labelColor: {
+      defaultValue: "foundationColors.content.primary",
+    },
+    displayKey: {
+      defaultValue: "name",
+    },
     anchorOriginVertical: {
       options: ["top", "center", "bottom"],
       control: "radio",
