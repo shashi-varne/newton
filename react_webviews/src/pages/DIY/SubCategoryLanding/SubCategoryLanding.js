@@ -1,5 +1,5 @@
-import { Box } from '@mui/material';
-import React, { memo, useEffect, useRef, useState } from 'react';
+import { Box, Stack } from '@mui/material';
+import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
 import Typography from '../../../designSystem/atoms/Typography';
 import Container from '../../../designSystem/organisms/Container';
 import ProductItem from '../../../designSystem/molecules/ProductItem';
@@ -9,6 +9,10 @@ import Button from '../../../designSystem/atoms/Button';
 import isEqual from 'lodash/isEqual';
 
 import './SubCategoryLanding.scss';
+import ConfirmAction from '../../../designSystem/molecules/ConfirmAction';
+import FilterNavigation from '../../../featureComponent/DIY/Filters/FilterNavigation';
+import Footer from '../../../designSystem/molecules/Footer';
+import { getConfig } from '../../../utils/functions';
 
 const tabChilds = [
   {
@@ -38,8 +42,9 @@ const returnField = [
   'five_year_return',
 ];
 
-const SubCategoryLanding = () => {
+const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
   const [tabValue, setTabValue] = useState(0);
+  const { productName } = useMemo(getConfig, []);
   const swipeableViewsRef = useRef();
   const handleTabChange = (e, value) => {
     setTabValue(value);
@@ -65,6 +70,10 @@ const SubCategoryLanding = () => {
         },
         tabChilds,
       }}
+      fixedFooter
+      renderComponentAboveFooter={
+        <CustomFooter productName={productName} cartCount={cartCount} onCartClick={onCartClick} />
+      }
       className='sub-category-landing-wrapper'
     >
       <div className='sub-category-swipper-wrapper'>
@@ -103,8 +112,8 @@ const TabPanel = (props) => {
     if (swipeableViewsRef.current) {
       swipeableViewsRef.current.updateHeight();
     }
-  }, [swipeableViewsRef.current, maxContent]);
-
+  }, [swipeableViewsRef.current, maxContent,data.length]);
+  console.log(`data is ${maxContent} ${data.length}`);
   return (
     <div
     // role='tabpanel'
@@ -136,15 +145,22 @@ const TabPanel = (props) => {
                   },
                 }}
                 rightSectionData={{
-                  description: {
-                    title:
-                      fund?.three_year_return > 0
-                        ? `+${fund?.three_year_return}`
-                        : `-${fund?.three_year_return}`,
-                    titleColor:
-                      fund?.three_year_return > 0
-                        ? 'foundationColors.secondary.profitGreen.400'
-                        : 'foundationColors.secondary.lossRed.400',
+                  // description: {
+                  //   title:
+                  //     fund?.three_year_return > 0
+                  //       ? `+${fund?.three_year_return}%`
+                  //       : `-${fund?.three_year_return}%`,
+                  //   titleColor:
+                  //     fund?.three_year_return > 0
+                  //       ? 'foundationColors.secondary.profitGreen.400'
+                  //       : 'foundationColors.secondary.lossRed.400',
+                  // },
+                  btnProps: {
+                    title: 'Remove',
+                    size: 'small',
+                    onClick: () => {
+                      console.log('cart added');
+                    },
                   },
                 }}
               />
@@ -152,13 +168,31 @@ const TabPanel = (props) => {
           })}
         </Typography>
         {maxContent !== data.length && (
-          <Box sx={{ mt: '12px', textAlign:'center' }}>
+          <Box sx={{ mt: '12px', textAlign: 'center' }}>
             <Button title='See all results' variant='link' onClick={handleMoreContent} />
           </Box>
         )}
       </Box>
       {/* )} */}
     </div>
+  );
+};
+
+const CustomFooter = ({ productName, cartCount, onCartClick }) => {
+  return (
+    <Stack spacing={2} className='sub-category-custom-footer'>
+      {cartCount > 0 && productName === 'fisdom' && (
+        <div className='sc-confirmation-btn-wrapper'>
+          <ConfirmAction
+            title={`${cartCount} items in the cart`}
+            buttonTitle='View Cart'
+            badgeContent={cartCount}
+            onClick={onCartClick}
+          />
+        </div>
+      )}
+      <FilterNavigation />
+    </Stack>
   );
 };
 
