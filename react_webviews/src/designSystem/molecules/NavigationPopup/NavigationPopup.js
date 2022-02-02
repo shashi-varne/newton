@@ -81,13 +81,11 @@ const Label = ({
           className="np-lw-dot"
           sx={{ backgroundColor: dotColor }}
           dataAid={`dot${index}`}
-          component="span"
         />
       )}
       <Typography
         dataAid={`label${index}`}
         variant={isActive ? "heading4" : "body8"}
-        component="span"
         onClick={onClick}
         color={labelColor}
       >
