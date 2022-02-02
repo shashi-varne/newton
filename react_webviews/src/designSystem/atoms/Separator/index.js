@@ -10,7 +10,6 @@ export const DIVIDER_VARIANTS = {
 
 const Separator = (props) => {
   const {
-    className,
     variant = DIVIDER_VARIANTS.FULL_WIDTH,
     marginTop,
     marginBottom,
@@ -35,7 +34,6 @@ const Separator = (props) => {
 export default Separator;
 
 Separator.propTypes = {
-  className: PropTypes.string,
-  dataAid: PropTypes.string,
+  dataAid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   variant: PropTypes.oneOf(Object.values(DIVIDER_VARIANTS)),
 };
