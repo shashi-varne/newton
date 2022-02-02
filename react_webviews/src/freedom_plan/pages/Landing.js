@@ -35,7 +35,19 @@ const Landing = (props) => {
     };
   };
 
-  const { productName, freedomPlanFaqs = [] } = useMemo(initialize, []);
+  const { productName, isSdk, Android, freedomPlanFaqs = [] } = useMemo(initialize, []);
+
+  useEffect(() => {
+    if (isSdk && Android) {
+      nativeCallback({
+        action: "get_content_data",
+        message: {
+          content_module: ["upi_apps"],
+        },
+      });
+    }
+  }, [])
+
   const {
     errorData,
     showLoader,

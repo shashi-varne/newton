@@ -1,11 +1,12 @@
 import Api from '../utils/api'
-import { isEmpty, storageService } from '../utils/validators'
+import { storageService } from '../utils/validators'
 import toast from '../common/ui/Toast'
 import { isTradingEnabled } from '../utils/functions'
 import { kycSubmit } from './common/api'
 import { isDigilockerFlow } from './common/functions'
 import eventManager from '../utils/eventManager'
 import { EVENT_MANAGER_CONSTANTS } from '../utils/constants'
+import isEmpty from "lodash/isEmpty"
 import { FREEDOM_PLAN_STORAGE_CONSTANTS } from '../freedom_plan/common/constants'
 
 const DOCUMENTS_MAPPER = {
@@ -74,34 +75,28 @@ export async function initData() {
   const user = storageService().getObject('user')
   const kyc = storageService().getObject('kyc')
   try {
-    if (currentUser && user && kyc) {
-      if (!storageService().get('referral')) {
+    if (currentUser && !isEmpty(user) && !isEmpty(kyc)) {
+      const referral = storageService().getObject('referral');
+      if (isEmpty(referral)) {
         const queryParams = {
           campaign: ['user_campaign'],
           nps: ['nps_user'],
           bank_list: ['bank_list'],
           referral: ['subbroker', 'p2p'],
+          equity: ['subscription_status']
         }
         const result = await getAccountSummary(queryParams);
         storageService().set('dataSettedInsideBoot', true)
         setSDKSummaryData(result)
       }
     } else {
-      const queryParams = {
-        campaign: ['user_campaign'],
-        kyc: ['kyc'],
-        user: ['user'],
-        nps: ['nps_user'],
-        partner: ['partner'],
-        bank_list: ['bank_list'],
-        referral: ['subbroker', 'p2p'],
-      }
-      const result = await getAccountSummary(queryParams);
+      const result = await getAccountSummary();
       storageService().set('dataSettedInsideBoot', true)
       setSummaryData(result)
     }
   } catch (err) {
     console.log(err);
+    throw err;
   }
 }
 
@@ -177,6 +172,10 @@ export function getCampaignBySection(notifications, sections) {
 }
 
 function setSDKSummaryData(result) {
+  const subscriptionStatus = result?.data?.equity?.subscription_status?.data || {};
+  if(!isEmpty(subscriptionStatus)) {
+    storageService().setObject(FREEDOM_PLAN_STORAGE_CONSTANTS.subscriptionStatus, subscriptionStatus);
+  }
   const campaignData = getCampaignBySection(
     result.data.campaign.user_campaign.data
   )

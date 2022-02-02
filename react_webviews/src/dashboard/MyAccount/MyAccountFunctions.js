@@ -2,7 +2,7 @@ import Api from "utils/api";
 import { storageService, isEmpty } from "utils/validators";
 import toast from "../../common/ui/Toast";
 import { navigate as navigateFunc } from "utils/functions";
-import { isReadyToInvest, initData } from "../../kyc/services";
+import { isReadyToInvest } from "../../kyc/services";
 
 const genericErrorMessage = "Something went wrong!";
 export async function initializeComponentFunctions() {
@@ -10,7 +10,6 @@ export async function initializeComponentFunctions() {
   this.navigate = navigateFunc.bind(this.props);
   this.authenticate = authenticate.bind(this);
   this.exportTransactions = exportTransactions.bind(this);
-  await initData();
   const currentUser = storageService().getObject("user") || {};
   const userKyc = storageService().getObject("kyc") || {};
   this.setState({ currentUser, userKyc });
@@ -31,6 +30,10 @@ export async function getMyAccount() {
       storageService().setObject("elss", result.tax_statement.elss);
       storageService().setObject("bank_mandates", result.bank_mandates.banks);
       storageService().setObject("change_requests", result.change_requests);
+      const kyc = result.kyc;
+      const user = result.user;
+      storageService().setObject("kyc", kyc);
+      storageService().setObject("user", user);
       let mandate = result.mandate_source;
       let Capitalgain = "";
       if (
@@ -133,13 +136,14 @@ export async function getMyAccount() {
 
       let isReadyToInvestBase = isReadyToInvest();
       this.setState({
+        userKyc: kyc,
+        currentUser: user,
         pendingMandate: pendingMandate,
         mandate: mandate,
         mandateRequired: mandateRequired,
         npsUpload: npsUpload,
         investment80C: investment80C,
         Capitalgain: Capitalgain,
-        currentUser: result?.user,
         contactInfo: result?.kyc?.identification?.meta_data,
         isReadyToInvestBase,
       });

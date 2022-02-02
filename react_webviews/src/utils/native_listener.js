@@ -378,7 +378,6 @@ import isFunction from 'lodash/isFunction';
     }
     set_session_storage("currentUser", true);
     set_session_storage('is_secure', true);
-    set_session_storage("dataSettedInsideBoot", true);
 
     if (json_data?.partner) {
       if (json_data.partner === "bfdl") {
@@ -396,12 +395,13 @@ import isFunction from 'lodash/isFunction';
     }
 
     if (json_data?.user_data) {
+      set_session_storage("dataSettedInsideBoot", true);
       set_session_storage("user", json_data.user_data.user);
       set_session_storage("kyc", json_data.user_data.kyc);
       set_session_storage("banklist", json_data.user_data.bank_list);
       set_session_storage("firstlogin", json_data.user_data.user.firstlogin);
       if (json_data.user_data.partner.partner_code) {
-        var partner = json_data.user_data.partner.partner_code;
+        const partner = json_data.user_data.partner.partner_code;
         if (partner === "bfdl") {
           set_session_storage("partner", "bfdlmobile");
         } else if (partner === "obcweb") {
