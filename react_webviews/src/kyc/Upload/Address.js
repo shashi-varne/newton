@@ -53,13 +53,12 @@ const AddressUpload = (props) => {
   }
 
   const handleImageLoad = () => {
-    const fr = new Image()
-    const bc = new Image()
     if (state.frontFileShow && state.backFileShow) {
+      const fr = new Image(1280, 720);
+      const bc = new Image(1280, 720);
       fr.src = state.frontFileShow
       bc.src = state.backFileShow
       const blob = combinedDocBlob(fr, bc, 'address')
-      console.log(blob)
       setFile(blob)
     }
   }
