@@ -168,7 +168,8 @@ export const getConfig = () => {
   // let base_href = window.localStorage.getItem('base_href') || '';
   let base_url_default = '';
   
-  const isStaging = origin.indexOf('plutus-web-staging') >= 0 || origin.indexOf('plutus-web') >= 0;
+  const isStaging = origin.indexOf('plutus-web-staging') >= 0;
+  const isSDKStaging = origin.indexOf('sdk-dot-plutus-web.appspot.com') >= 0;
   const isFisdomStaging = origin.indexOf('fisdom.equityappuat.finwizard.co.in') >= 0 || origin.indexOf('fisdomapp.staging.finwizard.co.in') >= 0;
   const isFinityStaging = origin.indexOf('finity.equityappuat.finwizard.co.in') >= 0 || origin.indexOf('finityapp.staging.finwizard.co.in') >= 0;
   const isLocal = origin.indexOf('localhost') >=0;
@@ -197,6 +198,10 @@ export const getConfig = () => {
 
     // change server url here for local and staging url builds (Not commit id one's)
     if (isStaging || isLocal) {
+      base_url_default = "https://eqt-feature-dot-plutus-staging.appspot.com";
+    }
+
+    if(isSDKStaging) {
       base_url_default = "https://sdk-dot-plutus-staging.appspot.com";
     }
 
