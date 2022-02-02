@@ -576,10 +576,16 @@ export function getBasePath() {
 
 export function isTradingEnabled(userKyc = {}) {
   const kyc = !isEmpty(userKyc) ? userKyc : storageService().getObject("kyc");
+  const androidSdkVersionCode = storageService().get("android_sdk_version_code");
+  const iosSdkVersionCode = storageService().get("android_ios_sdk_version_codesdk_version_code");
   const config = getConfig();
   const equityEnabled = storageService().getBoolean('equityEnabled'); // Used to enable kyc equity flow from native/external side
   if (config.isNative) {
     return equityEnabled && kyc?.equity_enabled;
+  }
+  if(config.isSdk) {
+    // eslint-disable-next-line
+    return kyc?.equity_enabled && (parseInt(androidSdkVersionCode) >= 21 || parseInt(iosSdkVersionCode) >= 999)
   }
   return kyc?.equity_enabled;
 }

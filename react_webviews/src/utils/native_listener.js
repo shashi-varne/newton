@@ -416,6 +416,14 @@ import isFunction from 'lodash/isFunction';
     if (json_data?.callback_version) {
       set_session_storage("callback_version", json_data.callback_version);
     }
+
+    if (json_data?.android_sdk_version_code) {
+      set_session_storage("android_sdk_version_code", json_data.android_sdk_version_code);
+    }
+  
+    if (json_data?.ios_sdk_version_code) {
+      set_session_storage("ios_sdk_version_code", json_data.ios_sdk_version_code);
+    }
   }
 
   exports.set_content_data = function (data) {
