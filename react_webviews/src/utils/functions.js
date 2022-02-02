@@ -197,7 +197,7 @@ export const getConfig = () => {
 
     // change server url here for local and staging url builds (Not commit id one's)
     if (isStaging || isLocal) {
-      base_url_default = "https://eqt-feature-dot-plutus-staging.appspot.com";
+      base_url_default = "https://sdk-dot-plutus-staging.appspot.com";
     }
 
     if(isFisdomStaging) {
