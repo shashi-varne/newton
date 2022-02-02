@@ -20,6 +20,7 @@ import "./MyAccount.scss";
 import { PATHNAME_MAPPER as KYC_PATHNAME_MAPPER } from "../../kyc/constants";
 import { storageService } from "../../utils/validators";
 import { FREEDOM_PLAN_STORAGE_CONSTANTS } from "../../freedom_plan/common/constants";
+import isEmpty from "lodash/isEmpty";
 
 const MF_AND_STOCKS_STATUS_MAPPER = {
   init: {
@@ -434,7 +435,7 @@ class MyAccount extends Component {
               })}
             </div>
           </div>
-          {tradingEnabled && !isSdk && (
+          {tradingEnabled && !isEmpty(freedomPlanData) && (
             <div
               className="my-account-content"
               data-aid="myAccount_freedomPlan"
