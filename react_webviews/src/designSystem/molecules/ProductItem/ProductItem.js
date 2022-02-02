@@ -1,94 +1,91 @@
-import React, { memo } from 'react';
+/*
+  Layout Description.
+  ProductItem => Parent Component which has image, children and separator as childs.
+    -The childrens are basically divided into two sections => LeftSection, RightSection
+  
+  LeftSection => This component will accept children which has to be ProductItem.Title and ProductItem.LeftBottomSection.
+  ProductItem.Title => This component is used to render the title.
+  ProductItem.LeftBottomSection => this will align the child items in flex row direction and will mantain 8px gap.
+
+  ProductItem.RightSection => This component will keep its child at the right position, and by default will place
+                              the child in flex column direction.
+  
+  Check story for the usage of component.
+*/
+
+import React from 'react';
 import Typography from '../../atoms/Typography';
-import Tag from '../Tag';
 import Separator from '../../atoms/Separator';
 import isEmpty from 'lodash/isEmpty';
-import merge from 'lodash/merge';
 import isFunction from 'lodash/isFunction';
 import PropTypes from 'prop-types';
+import { Stack } from '@mui/material';
+import Icon from '../../atoms/Icon';
 
 import './ProductItem.scss';
-import Button from '../../atoms/Button';
-import Icon from '../../atoms/Icon';
-import { Box } from '@mui/material';
-import isEqual from 'lodash/isEqual';
 
-const ProductItem = (props) => {
-  let {
-    leftImgSrc,
-    leftImgProps,
-    headerTitle,
-    headerTitleColor,
-    showSeparator,
-    onClick,
-    bottomSectionData = {},
-    rightSectionData = {},
-    sx,
-    dataAid,
-  } = merge({}, defaultValues, props);
+const ProductItem = ({ children, imgSrc, imgProps, dataAid, sx, showSeparator, onClick }) => {
   return (
-    <Box sx={sx} className='product-item-wrapper' onClick={onClick} data-aid={`productItem_${dataAid}`}>
-      {leftImgSrc && (
-        <Icon size='40px' src={leftImgSrc} className='product-item-left-img' dataAid='left' {...leftImgProps} />
+    <Stack
+      spacing='8px'
+      direction='row'
+      sx={sx}
+      className='product-item-wrapper'
+      data-aid={`productItem_${dataAid}`}
+      onClick={onClick}
+    >
+      {imgSrc && (
+        <Icon
+          size='40px'
+          src={imgSrc}
+          className='product-item-left-img'
+          dataAid='left'
+          {...imgProps}
+        />
       )}
-      <div className='pi-right-wrapper'>
-        <div className='pi-child-wrapper'>
-          <div className='pi-left-section'>
-            <Typography variant='body2' color={headerTitleColor} component='div'>
-              {headerTitle}
-            </Typography>
-            <BottomSection {...bottomSectionData} />
-          </div>
-          {(!isEmpty(rightSectionData?.description) || !isEmpty(rightSectionData?.btnProps)) && (
-            <div className='pi-right-section'>
-              <RightSection {...rightSectionData} />
-            </div>
-          )}
-        </div>
-        {showSeparator && <Separator marginTop='16px' />}
+      <div>
+        <Stack alignItems='flex-start' className='product-item-child-wrapper'>
+          {children}
+        </Stack>
+        {showSeparator && <Separator marginTop='16px' className='product-item-separator' />}
       </div>
-    </Box>
+    </Stack>
   );
 };
 
-const BottomSection = ({ tagOne = {}, tagTwo = {}, titleOne, titleOneColor }) => {
+ProductItem.LeftSection = ({ children, direction = 'column', spacing = 1 }) => {
   return (
-    <div className='pi-ls-bottom-section'>
-      {tagOne?.label && <Tag {...tagOne} className='pi-ls-bottom-item' />}
-      {tagTwo?.label && <Tag {...tagTwo} className='pi-ls-bottom-item' />}
-      {titleOne && (
-        <Typography
-          className='pi-ls-bottom-item'
-          color={titleOneColor}
-          variant='body2'
-          align='right'
-          component='div'
-        >
-          {titleOne}
-        </Typography>
-      )}
-    </div>
+    <Stack spacing={spacing} direction={direction}>
+      {children}
+    </Stack>
   );
 };
 
-const RightSection = (props) => {
-  const { btnProps = {}, description = {} } = props;
-  if (btnProps?.title && btnProps?.onClick) {
-    const handleClick = (e) => {
-      if (isFunction(btnProps?.onClick)) {
-        e.stopPropagation();
-        return btnProps?.onClick(e);
-      }
-    };
-    return (
-      <Button title={btnProps?.title} variant='secondary' size='small' {...btnProps} onClick={handleClick} />
-    );
-  } else if (!isEmpty(description)) {
-    return <Description {...description} />;
-  }
+ProductItem.LeftBottomSection = ({ children, direction = 'row', spacing = 1 }) => {
+  return (
+    <Stack spacing={spacing} direction={direction}>
+      {children}
+    </Stack>
+  );
 };
 
-const Description = ({ title, titleColor, subtitle, subtitleColor }) => {
+ProductItem.RightSection = ({ children, direction = 'column', spacing }) => {
+  return (
+    <Stack direction={direction} spacing={spacing} className='pi-right-section'>
+      {children}
+    </Stack>
+  );
+};
+
+ProductItem.Title = ({ children, color }) => {
+  return (
+    <Typography variant='body2' color={color}>
+      {children}
+    </Typography>
+  );
+};
+
+ProductItem.Description = ({ title, titleColor, subtitle, subtitleColor }) => {
   if (!title && !subtitle) return null;
   return (
     <div className='pi-right-text-wrapper'>
@@ -102,41 +99,57 @@ const Description = ({ title, titleColor, subtitle, subtitleColor }) => {
   );
 };
 
-const defaultValues = {
-  leftImgProps: {},
-  rightSectionData: {
-    description: {
-      subtitleColor: 'foundationColors.content.tertiary',
-    },
-    btnProps: {},
-  },
-  bottomSectionData: {
-    tagOne: {},
-    tagTwo: {},
-    titleOneColor: 'foundationColors.content.tertiary',
+ProductItem.LeftBottomSection.propTypes = {
+  children: function (props, propName, componentName) {
+    const supportedElements = ['Tag', 'Typography'];
+    // eslint-disable-next-line no-unused-expressions
+    props?.children?.map((el) => {
+      if (supportedElements.indexOf(el?.type?.displayName) === -1) {
+        console.error(
+          `Invalid component ${
+            el?.type || el?.type?.displayName
+          } passed, supported Components are 'Tag' and 'Typography' inside LeftBottomSection`
+        );
+      }
+    });
   },
 };
 
-ProductItem.propTypes = {
-  leftImgProps: PropTypes.object,
-  headerTitle: PropTypes.node,
-  headerTitleColor: PropTypes.string,
-  showSeparator: PropTypes.bool,
-  bottomSectionData: PropTypes.exact({
-    tagOne: PropTypes.object,
-    tagTwo: PropTypes.object,
-    titleOne: PropTypes.node,
-    titleOneColor: PropTypes.string,
-  }),
-  rightSectionData: PropTypes.exact({
-    btnProps: PropTypes.object,
-    description: PropTypes.exact({
-      title: PropTypes.node,
-      titleColor: PropTypes.string,
-      subtitle: PropTypes.node,
-      subtitleColor: PropTypes.string,
-    }),
-  }),
-};
+// const defaultValues = {
+//   leftImgProps: {},
+//   rightSectionData: {
+//     description: {
+//       subtitleColor: 'foundationColors.content.tertiary',
+//     },
+//     btnProps: {},
+//   },
+//   bottomSectionData: {
+//     tagOne: {},
+//     tagTwo: {},
+//     titleOneColor: 'foundationColors.content.tertiary',
+//   },
+// };
 
-export default memo(ProductItem, isEqual);
+// ProductItem.propTypes = {
+//   leftImgProps: PropTypes.object,
+//   headerTitle: PropTypes.node,
+//   headerTitleColor: PropTypes.string,
+//   showSeparator: PropTypes.bool,
+//   bottomSectionData: PropTypes.exact({
+//     tagOne: PropTypes.object,
+//     tagTwo: PropTypes.object,
+//     titleOne: PropTypes.node,
+//     titleOneColor: PropTypes.string,
+//   }),
+//   rightSectionData: PropTypes.exact({
+//     btnProps: PropTypes.object,
+//     description: PropTypes.exact({
+//       title: PropTypes.node,
+//       titleColor: PropTypes.string,
+//       subtitle: PropTypes.node,
+//       subtitleColor: PropTypes.string,
+//     }),
+//   }),
+// };
+
+export default ProductItem;
