@@ -43,12 +43,12 @@ const ProductItem = ({ children, imgSrc, imgProps, dataAid, sx, showSeparator, o
           {...imgProps}
         />
       )}
-      <div>
+      <Stack flex={1} direction='column'>
         <Stack alignItems='flex-start' className='product-item-child-wrapper'>
           {children}
         </Stack>
         {showSeparator && <Separator marginTop='16px' className='product-item-separator' />}
-      </div>
+      </Stack>
     </Stack>
   );
 };
@@ -99,21 +99,21 @@ ProductItem.Description = ({ title, titleColor, subtitle, subtitleColor }) => {
   );
 };
 
-ProductItem.LeftBottomSection.propTypes = {
-  children: function (props, propName, componentName) {
-    const supportedElements = ['Tag', 'Typography'];
-    // eslint-disable-next-line no-unused-expressions
-    props?.children?.map((el) => {
-      if (supportedElements.indexOf(el?.type?.displayName) === -1) {
-        console.error(
-          `Invalid component ${
-            el?.type || el?.type?.displayName
-          } passed, supported Components are 'Tag' and 'Typography' inside LeftBottomSection`
-        );
-      }
-    });
-  },
-};
+// ProductItem.LeftBottomSection.propTypes = {
+//   children: function (props, propName, componentName) {
+//     const supportedElements = ['Tag', 'Typography'];
+//     // eslint-disable-next-line no-unused-expressions
+//     props?.children?.map((el) => {
+//       if (supportedElements.indexOf(el?.type?.displayName) === -1) {
+//         console.error(
+//           `Invalid component ${
+//             el?.type || el?.type?.displayName
+//           } passed, supported Components are 'Tag' and 'Typography' inside LeftBottomSection`
+//         );
+//       }
+//     });
+//   },
+// };
 
 // const defaultValues = {
 //   leftImgProps: {},
