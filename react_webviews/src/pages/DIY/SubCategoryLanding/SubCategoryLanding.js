@@ -1,5 +1,5 @@
 import { Box, Stack } from '@mui/material';
-import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Typography from '../../../designSystem/atoms/Typography';
 import Container from '../../../designSystem/organisms/Container';
 import ProductItem from '../../../designSystem/molecules/ProductItem';
@@ -13,6 +13,7 @@ import ConfirmAction from '../../../designSystem/molecules/ConfirmAction';
 import FilterNavigation from '../../../featureComponent/DIY/Filters/FilterNavigation';
 import Footer from '../../../designSystem/molecules/Footer';
 import { getConfig } from '../../../utils/functions';
+import Tag from '../../../designSystem/molecules/Tag';
 
 const tabChilds = [
   {
@@ -101,82 +102,90 @@ const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
   );
 };
 
-const TabPanel = (props) => {
-  const { data, swipeableViewsRef } = props;
+const TabPanel = memo((props) => {
+  const { data, swipeableViewsRef, value, index, ...other } = props;
   const [maxContent, setMaxContent] = useState(10);
   const handleMoreContent = () => {
     setMaxContent((prev) => prev + 10);
   };
+  const handleClick = useCallback(() => {
+    console.log('card clicked');
+  }, []);
 
   useEffect(() => {
     if (swipeableViewsRef.current) {
       swipeableViewsRef.current.updateHeight();
     }
-  }, [swipeableViewsRef.current, maxContent,data.length]);
+  }, [swipeableViewsRef.current, maxContent, data.length]);
   console.log(`data is ${maxContent} ${data.length}`);
   return (
     <div
-    // role='tabpanel'
-    // hidden={value !== index}
-    // id={`full-width-tabpanel-${index}`}
-    // aria-labelledby={`full-width-tab-${index}`}
+      // role='tabpanel'
+      // hidden={value !== index}
+      // id={`full-width-tabpanel-${index}`}
+      // aria-labelledby={`full-width-tab-${index}`}
+      // {...other}
     >
       {/* {value === index && ( */}
-      <Box sx={{ pt: '16px' }}>
-        <Typography component='div'>
-          {data?.slice(0, maxContent)?.map((fund, idx) => {
-            return (
-              <ProductItem
-                sx={{ mb: '16px' }}
-                key={idx}
-                leftImgSrc={fund?.amc_logo_big}
-                headerTitle={fund?.legal_name}
-                showSeparator
-                bottomSectionData={{
-                  tagOne: {
-                    label: fund?.is_fisdom_recommended ? 'Recommended' : '',
-                    labelBackgroundColor: 'foundationColors.supporting.grey',
-                    labelColor: 'foundationColors.content.secondary',
-                  },
-                  tagTwo: {
-                    morningStarVariant: 'large',
-                    label: fund?.morning_star_rating,
-                    labelColor: 'foundationColors.content.secondary',
-                  },
-                }}
-                rightSectionData={{
-                  // description: {
-                  //   title:
-                  //     fund?.three_year_return > 0
-                  //       ? `+${fund?.three_year_return}%`
-                  //       : `-${fund?.three_year_return}%`,
-                  //   titleColor:
-                  //     fund?.three_year_return > 0
-                  //       ? 'foundationColors.secondary.profitGreen.400'
-                  //       : 'foundationColors.secondary.lossRed.400',
-                  // },
-                  btnProps: {
-                    title: 'Remove',
-                    size: 'small',
-                    onClick: () => {
-                      console.log('cart added');
-                    },
-                  },
-                }}
-              />
-            );
-          })}
-        </Typography>
-        {maxContent !== data.length && (
-          <Box sx={{ mt: '12px', textAlign: 'center' }}>
-            <Button title='See all results' variant='link' onClick={handleMoreContent} />
-          </Box>
-        )}
-      </Box>
+        <Box sx={{ pt: '16px', pl: '16px', pr: '16px' }}>
+          <Typography component='div'>
+            {data?.slice(0, maxContent)?.map((fund, idx) => {
+              return (
+                <ProductItem
+                  // sx={{ mb: '16px' }}
+                  key={idx}
+                  imgSrc={fund?.amc_logo_big}
+                  showSeparator
+                  // onClick={handleClick}
+                >
+                  <ProductItem.LeftSection>
+                    <ProductItem.Title>{fund?.legal_name}</ProductItem.Title>
+                    <ProductItem.LeftBottomSection>
+                      {fund?.is_fisdom_recommended && (
+                        <Tag
+                          label='Recommendation'
+                          labelColor='foundationColors.content.secondary'
+                          labelBackgroundColor='foundationColors.secondary.profitGreen.200'
+                        />
+                      )}
+                      <Tag
+                        morningStarVariant='small'
+                        label={fund?.morning_star_rating}
+                        labelColor='foundationColors.content.secondary'
+                      />
+                    </ProductItem.LeftBottomSection>
+                  </ProductItem.LeftSection>
+                  <ProductItem.RightSection spacing={2}>
+                    <ProductItem.Description
+                      title={
+                        fund?.three_year_return > 0
+                          ? `+${fund?.three_year_return}%`
+                          : `-${fund?.three_year_return}%`
+                      }
+                    />
+                    <Button
+                      title='+ADD'
+                      variant='link'
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        console.log('hello');
+                      }}
+                    />
+                  </ProductItem.RightSection>
+                </ProductItem>
+              );
+            })}
+          </Typography>
+          {maxContent < data.length && (
+            <Box sx={{ mt: '12px', textAlign: 'center' }}>
+              <Button title='See all results' variant='link' onClick={handleMoreContent} />
+            </Box>
+          )}
+        </Box>
       {/* )} */}
     </div>
   );
-};
+}, isEqual);
 
 const CustomFooter = ({ productName, cartCount, onCartClick }) => {
   return (
