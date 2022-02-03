@@ -22,7 +22,7 @@ const StatusCallback = (props) => {
           rnData: { status: "failure", message: message },
         });
       } else if (status === "cancelled") {
-        nativeCallback({ action: "on_cancel" });
+        nativeCallback({ action: "on_cancelled" });
       }
     } else {
       setError("Something went wrong. No status received");

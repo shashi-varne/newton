@@ -7,6 +7,8 @@ import { nativeCallback } from "utils/native_callback";
 import '../../utils/native_listener';
 import { checkStringInString } from 'utils/validators';
 import { goBackMap } from '../constants';
+import { getConfig } from "../../utils/functions";
+// import { getConfig } from "../../utils/functions";
 
 class Container extends Component {
   constructor(props) {
@@ -98,7 +100,8 @@ class Container extends Component {
     this.setState({
       openPopup: false
     });
-    if(this.props.match?.params?.flow === "subscription") {
+
+    if(this.props.match?.params?.flow === "subscription" && !getConfig().Android) {
       this.props.history.push('/freedom-plan/review');
       return;
     }
@@ -121,3 +124,4 @@ class Container extends Component {
 }
 
 export default withRouter(Container);
+
