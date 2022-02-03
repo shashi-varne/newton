@@ -146,19 +146,15 @@ export function formCheckFields(
 
 export function verifyRecaptchaAndInitiateOtp(body, loginType) {
   const config = getConfig();
-  if(config.isProdEnv) {
-    const apiKey = config.apiKey;
-    const action = "login"; 
-    window.grecaptcha.enterprise.ready(() => {
-      window.grecaptcha.enterprise.execute(apiKey, { action }).then(async token => {
-        body.recaptcha_token = token;
-        body.recaptcha_action = action;
-        this.initiateOtpApi(body, loginType)
-      });
+  const apiKey = config.apiKey;
+  const action = "login"; 
+  window.grecaptcha.enterprise.ready(() => {
+    window.grecaptcha.enterprise.execute(apiKey, { action }).then(token => {
+      body.recaptcha_token = token;
+      body.recaptcha_action = action;
+      this.initiateOtpApi(body, loginType)
     });
-  } else {
-    this.initiateOtpApi(body, loginType)
-  }
+  });
 }
 
 export function setBaseHref() {
