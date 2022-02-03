@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { getConfig } from "utils/functions";
 import { countries } from "../../constants";
 import Input from "common/ui/Input";
-import { initialize, loadScriptInBody, getCaptchaToken } from "../../functions";
+import { initialize, loadScriptInBody } from "../../functions";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import { validateNumber } from "utils/validators";
 import Button from "../../../common/ui/Button";

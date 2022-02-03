@@ -7,7 +7,7 @@ import { nativeCallback } from "../utils/native_callback";
 import Toast from "../common/ui/Toast";
 import { getBasePath } from "../utils/functions";
 import { setSummaryData } from "../kyc/services";
-import { isFunction } from 'lodash';
+import isFunction from 'lodash/isFunction';
 
 const config = getConfig();
 const errorMessage = "Something went wrong!";
@@ -147,11 +147,12 @@ export function formCheckFields(
 export function verifyRecaptchaAndInitiateOtp(body, loginType) {
   const config = getConfig();
   if(config.isProdEnv) {
-    const apiKey = config.apiKey; 
+    const apiKey = config.apiKey;
+    const action = "login"; 
     window.grecaptcha.enterprise.ready(() => {
-      window.grecaptcha.enterprise.execute(apiKey, { action: 'login' }).then(async token => {
+      window.grecaptcha.enterprise.execute(apiKey, { action }).then(async token => {
         body.recaptcha_token = token;
-        body.recaptcha_action = "login";
+        body.recaptcha_action = action;
         this.initiateOtpApi(body, loginType)
       });
     });
