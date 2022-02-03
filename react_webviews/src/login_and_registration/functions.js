@@ -136,7 +136,7 @@ export function formCheckFields(
     } else { 
       // eslint-disable-next-line
       body.auth_type = 'mobile',
-      body.auth_value = `${form_data["code"]}${form_data["mobile"]}`,
+      body.auth_value = `${form_data["code"]}|${form_data["mobile"]}`,
       body.need_key_hash = true,
       body.user_whatsapp_consent = form_data["whatsapp_consent"],
       this.verifyRecaptchaAndInitiateOtp(body, loginType);
