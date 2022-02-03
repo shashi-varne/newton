@@ -113,7 +113,6 @@ export default function GenerateStatement(props) {
     }
 
     setSelectedFinYear(selectedValue);
-    setCalendarDefaultDate(new Date(startYear, 3, 1));
     
     if (pageObj.type === 'capital_gains') {
       setSelectedDateMap({
@@ -126,7 +125,6 @@ export default function GenerateStatement(props) {
 
   // ---------------- DATE FIELD -----------------------
   const [selectedDateMap, setSelectedDateMap] = useState({});
-  const [calendarDefaultDate, setCalendarDefaultDate] = useState({});
   const dateSelector = useCallback(({ dateType, type, title, fieldProps = {} }) => {
     return (
       <div className="as-date-picker" key={dateType}>
@@ -134,20 +132,19 @@ export default function GenerateStatement(props) {
           {title || "Select Date"}
         </InputLabel>
         <DatePicker
-          key={calendarDefaultDate}
+          key={dateType}
           block
           oneTap
           isoWeek
           preventOverflow
           size="lg"
           format="DD/MM/YYYY"
-          calendarDefaultDate={calendarDefaultDate}
           limitEndYear={1}
           disabledDate={disableDate(dateType)}
           placement={isWeb ? "autoVerticalStart" : "auto"}
           style={{ width: 'auto' }}
           ranges={[]}
-          value={selectedDateMap[dateType] || ""}
+          value={selectedDateMap[dateType]}
           onChange={handleDateChange(dateType)}
           id={`${dateType}-date`}
           {...fieldProps}
@@ -157,7 +154,7 @@ export default function GenerateStatement(props) {
         </div>
       </div>
     );
-  }, [calendarDefaultDate, selectedDateMap, errorObj]);
+  }, [selectedDateMap, errorObj]);
   useEffect(() => {
     if (pageObj.type === 'demat_holding') {
       setSelectedDateMap({
