@@ -56,11 +56,9 @@ const SelectFreedomPlan = ({
         onClick: handleClick,
         disabled: showLoader,
       }}
-      classes={{
-        container: "select-freedom-plan"
-      }}
+      dataAidSuffix="planSelection"
     >
-      <>
+      <div className="select-freedom-plan" data-aid="plan_selection">
         <div className="select-freedom-plan-container" data-aid="grp_pricing">
           {showLoader || isEmpty(freedomPlanList) ? (
             <>
@@ -83,7 +81,7 @@ const SelectFreedomPlan = ({
           <div className="helper-text error-message">{errorMessage}</div>
         )}
         <div className="helper-note">*GST at 18% would apply</div>
-      </>
+      </div>
     </WVBottomSheet>
   );
 };
@@ -96,7 +94,7 @@ const Plan = ({ name, amount, isSelected, is_popular, handlePlanChange }) => {
   const { productName } = useMemo(getConfig, []);
   return (
     <div
-      className={`freedom-plan-option ${isSelected && `selected-plan`} ${is_popular && `popular-plan`}`}
+      className={`freedom-plan-option ${isSelected && `selected-plan`}`}
       onClick={handlePlanChange}
       data-aid={getPlanDataAid(name)}
     >
