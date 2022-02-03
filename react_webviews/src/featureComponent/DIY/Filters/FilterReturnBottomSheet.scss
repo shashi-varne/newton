@@ -1,0 +1,38 @@
+.filter-return-wrapper {
+  .fr-title-wrapper {
+    position: relative;
+    > img {
+      position: absolute;
+    }
+    > p {
+      flex: 1;
+    }
+  }
+}
+
+@media (min-width: 600px) {
+  .filter-return-wrapper {
+    .MuiModal-root {
+      bottom: 0;
+      top: unset;
+      left: 300px;
+      right: unset;
+      width: var(--desktop-width);
+      background-color: transparent;
+
+      .MuiBackdrop-root {
+        position: fixed !important;
+        top: 60px;
+        left: 300px;
+        width: var(--desktop-width);
+      }
+
+      .MuiDialog-container {
+        .MuiDialog-paper {
+          margin: 0px !important;
+          max-width: var(--desktop-width);
+        }
+      }
+    }
+  }
+}
