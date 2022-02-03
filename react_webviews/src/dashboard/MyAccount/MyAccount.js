@@ -18,6 +18,8 @@ import { isTradingEnabled } from "../../utils/functions";
 import { getKycAppStatus } from "../../kyc/services";
 import "./MyAccount.scss";
 import { PATHNAME_MAPPER as KYC_PATHNAME_MAPPER } from "../../kyc/constants";
+import { storageService } from "../../utils/validators";
+import { FREEDOM_PLAN_STORAGE_CONSTANTS } from "../../freedom_plan/common/constants";
 
 const MF_AND_STOCKS_STATUS_MAPPER = {
   init: {
@@ -60,6 +62,44 @@ const FNO_STATUS_MAPPER = {
     icon: "badge-error.svg",
   }
 }
+
+const getFreedomPlanData = (data) => {
+  const { daysLeft, status } = data;
+  const daysLeftMessage = `${daysLeft} DAY${daysLeft !== 1 ? `S` : ``} LEFT`;
+  const FREEDOM_PLAN_DATA_MAPPER = {
+    STANDARD: {
+      title: 'Standard',
+      buttonText: 'UPGRADE PLAN',
+      eventStatus: 'NA',
+      brokeragePlan: 'standard'
+    },
+    INIT: {
+      title: 'Freedom',
+      subtitle: 'in-progress',
+      icon: require(`assets/badge-warning.svg`),
+      eventStatus: 'in_progress',
+      brokeragePlan: 'standard'
+    },
+    ACTIVE: {
+      title: 'Freedom',
+      buttonText: 'Active',
+      className: 'ma-fp-active',
+      subtitle: daysLeftMessage,
+      eventStatus: 'active',
+      brokeragePlan: 'freedom'
+    },
+    RENEWAL: {
+      title: 'Freedom',
+      buttonText: 'RENEW PLAN',
+      className: 'ma-fp-renewal',
+      subtitle: daysLeftMessage,
+      eventStatus: 'active',
+      brokeragePlan: 'freedom'
+    },
+  }
+  return FREEDOM_PLAN_DATA_MAPPER[status] || {};
+}
+
 class MyAccount extends Component {
   constructor(props) {
     super(props);
@@ -73,6 +113,7 @@ class MyAccount extends Component {
       kycStatusData: [],
       verifyDetails: false,
       accountAlreadyExists: false,
+      freedomPlanData: {},
     };
     this.initializeComponentFunctions = initializeComponentFunctions.bind(this);
   }
@@ -84,7 +125,28 @@ class MyAccount extends Component {
   onload = () => {
     this.getMyAccount();
     this.setKycStatusData();
+    this.setFreedomPlanData();
   };
+
+  setFreedomPlanData = () => {
+    const subscriptionStatus = storageService().getObject(FREEDOM_PLAN_STORAGE_CONSTANTS.subscriptionStatus) || {};
+    let status = subscriptionStatus.subscription_status;
+    if(subscriptionStatus.renewal_cta) {
+      status = "RENEWAL";
+    }
+    let freedomPlanData = getFreedomPlanData({status, daysLeft: subscriptionStatus.days_left});
+    freedomPlanData.status = status;
+    this.setState({ freedomPlanData, subscriptionStatus });
+  }
+
+  handleFreedomPlan = () => {
+    const subscriptionStatus = this.state.subscriptionStatus;
+    if(subscriptionStatus.renewal_cta || subscriptionStatus.freedom_cta) {
+      storageService().setBoolean(FREEDOM_PLAN_STORAGE_CONSTANTS.subscriptionFromMyAccount, true);
+      this.sendEvents("next", "", "yes")
+      this.navigate('/freedom-plan');
+    }
+  }
 
   setKycStatusData = () => {
     const tradingEnabled = isTradingEnabled();
@@ -133,7 +195,7 @@ class MyAccount extends Component {
       kycStatusData.push({ ...MF_AND_STOCKS_STATUS_MAPPER[stocksStatus], status: stocksStatus, key: "stocks", title: "Stocks & IPO" });
       kycStatusData.push({ ...FNO_STATUS_MAPPER[fnoStatus], status: fnoStatus, key: "fno", title: "Futures & Options" });
     }
-    this.setState({ kycStatusData });
+    this.setState({ kycStatusData, tradingEnabled });
   }
 
   handleInvestmentCard = (data) => () => {
@@ -263,7 +325,7 @@ class MyAccount extends Component {
     });
   };
 
-  sendEvents = (userAction, screenName) => {
+  sendEvents = (userAction, screenName, upgradePlanClicked = "no") => {
     if (screenName === "continuebottomsheet") {
       let eventObj = {
         "event_name": 'verification_bottom_sheet',
@@ -281,12 +343,16 @@ class MyAccount extends Component {
       }
       return;
     }
+    const freedomPlanData = this.state.freedomPlanData;
     let eventObj = {
       event_name: "my_account",
       properties: {
         account_options:
           (userAction === "just_set_events" ? "back" : userAction) || "",
         screen_name: screenName || "my_account",
+        brokerage_plan: freedomPlanData.brokeragePlan,
+        upgrade_plan_clicked: upgradePlanClicked,
+        freedom_plan_status : freedomPlanData.eventStatus,
       },
     };
     if (screenName === "export transaction history" || screenName === "") {
@@ -321,6 +387,8 @@ class MyAccount extends Component {
       contactInfo,
       verifyDetails,
       accountAlreadyExists,
+      tradingEnabled,
+      freedomPlanData
     } = this.state;
     let bank = userKyc.bank || {};
     return (
@@ -362,6 +430,45 @@ class MyAccount extends Component {
               })}
             </div>
           </div>
+          {tradingEnabled && (
+            <div
+              className="my-account-content"
+              data-aid="myAccount_freedomPlan"
+            >
+              <div className="account ma-freedom-plan">
+                <div
+                  className="account-head-title ma-kir-title"
+                  data-aid="account-head-title"
+                >
+                  EQUITY BROKERAGE PLAN
+                </div>
+                <div
+                  className={`flex-between-center ma-fp-content ${freedomPlanData.className}`}
+                >
+                  <div>
+                    <div className="ma-fp-title">{freedomPlanData.title}</div>
+                    {freedomPlanData.subtitle && (
+                      <div className="ma-fp-subtitle">
+                        {freedomPlanData.subtitle}
+                      </div>
+                    )}
+                  </div>
+                  {freedomPlanData.buttonText && (
+                    <WVClickableTextElement
+                      className={`name`}
+                      dataAidSuffix="description"
+                      onClick={this.handleFreedomPlan}
+                    >
+                      {freedomPlanData.buttonText}
+                    </WVClickableTextElement>
+                  )}
+                  {freedomPlanData.icon && (
+                    <Imgc src={freedomPlanData.icon} className="ma-fp-icon" />
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
           <div className="my-account-content">
             <div className="account">
               <div className="account-head-title" data-aid='account-head-title'>Account options</div>
@@ -451,20 +558,23 @@ class MyAccount extends Component {
                 />
                 <div>Upload Mandate</div>
               </div>
-              <div
-                data-aid='security-setting'
-                className="account-options"
-                onClick={() => {
-                  this.sendEvents("settings_clicked", "");
-                  this.handleClick("/account/security-settings");
-                }}
-              >
-                <Imgc className="my-imgc"
-                  src={require(`assets/security.svg`)}
-                  alt=""
-                />
-                <div>Security settings</div>
-              </div>
+              {tradingEnabled && (
+                <div
+                  data-aid="security-setting"
+                  className="account-options"
+                  onClick={() => {
+                    this.sendEvents("settings_clicked", "");
+                    this.handleClick("/account/security-settings");
+                  }}
+                >
+                  <Imgc
+                    className="my-imgc"
+                    src={require(`assets/security.svg`)}
+                    alt=""
+                  />
+                  <div>Security settings</div>
+                </div>
+              )}
             </div>
             {(mandate.prompt ||
               pendingMandate.show_status ||

@@ -13,6 +13,11 @@ export const API_CONSTANTS = {
   triggerPayment: "api/equity/api/eqm/subscription/start/payment",
 };
 
+export const FREEDOM_PLAN_STORAGE_CONSTANTS = {
+  subscriptionStatus: "subscriptionStatus",
+  subscriptionFromMyAccount: "subscriptionFromMyAccount",
+};
+
 export const FREEDOM_PLAN_BENEFITS_DATA = {
   title: "One plan, Unlimited benefits",
   options: [

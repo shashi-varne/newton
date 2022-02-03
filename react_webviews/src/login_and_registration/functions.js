@@ -468,6 +468,7 @@ export async function getKycFromSummary(params = {}) {
       referral: ["subbroker", "p2p"],
       contacts: ["contacts"],
       nps: ['nps_user'],
+      equity: ['subscription_status']
     }
   }
   const res = await Api.post(`/api/user/account/summary`, params);
@@ -476,10 +477,12 @@ export async function getKycFromSummary(params = {}) {
   if (status === 200) {
     let user = result.data.user.user.data;
     let kyc = result.data.kyc.kyc.data;
-    let nps = result.data.nps.nps_user.data;
+    let nps = result.data?.nps?.nps_user?.data;
     storageService().setObject("kyc", kyc);
     storageService().setObject("user", user);
-    storageService().setObject("npsUser", nps);
+    if (!isEmpty(nps)) {
+      storageService().setObject("npsUser", nps);
+    }
     return result;
   } else {
     throw result.error || result.message || errorMessage;
