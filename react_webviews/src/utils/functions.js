@@ -170,6 +170,7 @@ export const getConfig = () => {
   
   const isStaging = origin.indexOf('plutus-web-staging') >= 0;
   const isSDKStaging = origin.indexOf('sdk-dot-plutus-web.appspot.com') >= 0;
+  const isIosSdkStaging = origin.indexOf('app.gaeuat.finwizard.co.in') >= 0;
   const isFisdomStaging = origin.indexOf('fisdom.equityappuat.finwizard.co.in') >= 0 || origin.indexOf('fisdomapp.staging.finwizard.co.in') >= 0;
   const isFinityStaging = origin.indexOf('finity.equityappuat.finwizard.co.in') >= 0 || origin.indexOf('finityapp.staging.finwizard.co.in') >= 0;
   const isLocal = origin.indexOf('localhost') >=0;
@@ -201,8 +202,12 @@ export const getConfig = () => {
       base_url_default = "https://eqt-feature-dot-plutus-staging.appspot.com";
     }
 
-    if(isSDKStaging) {
+    if (isSDKStaging) {
       base_url_default = "https://sdk-dot-plutus-staging.appspot.com";
+    }
+
+    if (isIosSdkStaging) {
+      base_url_default = "https://my.gaeuat.finwizard.co.in";
     }
 
     if(isFisdomStaging) {
