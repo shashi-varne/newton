@@ -36,10 +36,7 @@ class Login extends Component {
     this.setState({ form_data: form_data });
     eventManager.emit(EVENT_MANAGER_CONSTANTS.updateAppTheme);
     const apiKey = config.apiKey; 
-    const recaptchaCallback = () => {
-      console.log('captcha script is loaded')
-    }
-    loadScriptInBody("recaptcha-id", `https://www.google.com/recaptcha/enterprise.js?render=${apiKey}`, recaptchaCallback);
+    loadScriptInBody("recaptcha-id", `https://www.google.com/recaptcha/enterprise.js?render=${apiKey}`);
   }
 
   setLoginType = (loginType) => {
