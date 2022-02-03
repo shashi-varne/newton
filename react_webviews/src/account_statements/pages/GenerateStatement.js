@@ -92,8 +92,14 @@ export default function GenerateStatement(props) {
   }, [selectedFinYear, errorObj]);
   useEffect(() => {
     if (pageProps.fields.find(field => field.type === 'fin-year')) {
-      const startYear = new Date().getFullYear();
-      handleFinYearChange(`${startYear}-${startYear + 1}`)
+      const currentDate = new Date();
+      const startYear = currentDate.getFullYear();
+      const currentMonth = currentDate.getMonth();
+      if (currentMonth > 2) {
+        handleFinYearChange(`${startYear}-${startYear + 1}`)
+      } else {
+        handleFinYearChange(`${startYear - 1}-${startYear}`)
+      }
     }
   }, []);
 
