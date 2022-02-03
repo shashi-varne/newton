@@ -168,7 +168,7 @@ export const getConfig = () => {
   if(isProdFisdom) {
     apiKey = '6LcUeDweAAAAAJ7gWP6OkmCuO1WXN54Qju-fJPLg';
   }
-  if(isProdFinity) {
+  if(isProdFinity || isProdMyway) {
     apiKey = '6LdSjzweAAAAAHSGjqfOVjy_vVQ_n8iBWe9xCSrL';
   }
   // let base_href = window.localStorage.getItem('base_href') || '';
