@@ -7,6 +7,7 @@ import { nativeCallback } from "../utils/native_callback";
 import Toast from "../common/ui/Toast";
 import { getBasePath } from "../utils/functions";
 import { setSummaryData } from "../kyc/services";
+import { isFunction } from 'lodash';
 
 const config = getConfig();
 const errorMessage = "Something went wrong!";
@@ -209,7 +210,7 @@ export async function initiateOtpApi(body, loginType) {
     storageService().setObject("user_promo", item);
   }
   try {
-    const res = await Api.post(`/api/user/login/v4/initiate`, formData)
+    const res = await Api.post(`/api/user/login/v5/initiate`, formData)
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       this.setState({ isApiRunning: false });
@@ -623,4 +624,34 @@ export const partnerAuthentication = async (data) => {
   } else {
     throw new Error(result.error || result.message || errorMessage);
   }
-} 
+}
+
+// todo will make login as functional component, this is temp fix
+export const loadScriptInBody = (id, url, callback) => {
+
+  const isScriptLoaded = document.getElementById(id);
+
+  if (!isScriptLoaded) {
+
+    const script = document.createElement("script");
+
+    script.type = "text/javascript";
+
+    script.src = url;
+
+    script.id = id;
+
+    script.onload = function () {
+
+      if (isFunction(callback)) callback();
+
+    };
+
+    document.body.appendChild(script);
+
+  }
+
+  // currently callback is for just checking whether the script is loaded or not.
+
+  if (isScriptLoaded && isFunction(callback)) callback();
+}

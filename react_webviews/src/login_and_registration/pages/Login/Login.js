@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { getConfig } from "utils/functions";
 import { countries } from "../../constants";
 import Input from "common/ui/Input";
-import { initialize } from "../../functions";
+import { initialize, loadScriptInBody, getCaptchaToken } from "../../functions";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import { validateNumber } from "utils/validators";
 import Button from "../../../common/ui/Button";
@@ -35,6 +35,11 @@ class Login extends Component {
     form_data.code = "91";
     this.setState({ form_data: form_data });
     eventManager.emit(EVENT_MANAGER_CONSTANTS.updateAppTheme);
+    const apiKey = config.apiKey; 
+    const recaptchaCallback = () => {
+      console.log('captcha script is loaded')
+    }
+    loadScriptInBody("recaptcha-id", `https://www.google.com/recaptcha/enterprise.js?render=${apiKey}`, recaptchaCallback);
   }
 
   setLoginType = (loginType) => {
