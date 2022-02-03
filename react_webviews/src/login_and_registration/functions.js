@@ -7,7 +7,6 @@ import { nativeCallback } from "../utils/native_callback";
 import Toast from "../common/ui/Toast";
 import { getBasePath } from "../utils/functions";
 import { setSummaryData } from "../kyc/services";
-import isFunction from 'lodash/isFunction';
 
 const config = getConfig();
 const errorMessage = "Something went wrong!";
@@ -650,19 +649,13 @@ export const partnerAuthentication = async (data) => {
 }
 
 // todo will make login as functional component, this is temp fix
-export const loadScriptInBody = (id, url, callback) => {
+export const loadScriptInBody = (id, url) => {
   const isScriptLoaded = document.getElementById(id);
   if (!isScriptLoaded) {
     const script = document.createElement("script");
     script.type = "text/javascript";
     script.src = url;
     script.id = id;
-    script.onload = function () {
-      if (isFunction(callback)) callback();
-    };
     document.body.appendChild(script);
   }
-
-  // currently callback is for just checking whether the script is loaded or not.
-  if (isScriptLoaded && isFunction(callback)) callback();
 }
