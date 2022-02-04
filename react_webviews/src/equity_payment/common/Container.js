@@ -7,8 +7,6 @@ import { nativeCallback } from "utils/native_callback";
 import '../../utils/native_listener';
 import { checkStringInString } from 'utils/validators';
 import { goBackMap } from '../constants';
-import { getConfig } from "../../utils/functions";
-// import { getConfig } from "../../utils/functions";
 
 class Container extends Component {
   constructor(props) {
@@ -101,7 +99,7 @@ class Container extends Component {
       openPopup: false
     });
 
-    if(this.props.match?.params?.flow === "subscription" && !getConfig().Android) {
+    if(this.props.match?.params?.flow === "subscription") {
       this.props.history.push('/freedom-plan/review');
       return;
     }
