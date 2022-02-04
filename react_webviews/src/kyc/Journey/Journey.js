@@ -757,11 +757,13 @@ const Journey = (props) => {
                 <FastAndSecureDisclaimer options={HEADER_BOTTOM_DATA} />
               )}
             </div>
-            <Imgc
-              src={require(`assets/${productName}/${headerData.icon}.svg`)}
-              alt=""
-              className="kyc-pj-icon"
-            />
+            {!newIframeDesktopLayout && (
+              <Imgc
+                src={require(`assets/${productName}/${headerData.icon}.svg`)}
+                alt=""
+                className="kyc-pj-icon"
+              />
+            )}
           </div>
           {!isCompliant && ((show_aadhaar && !isKycDone) || (!show_aadhaar && isKycDone)) && 
           (

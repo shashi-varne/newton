@@ -1,0 +1,47 @@
+.freedom-plan-payment-status {
+  text-align: center;
+
+  .fpps-icon {
+    min-height: 100px;
+    padding-bottom: 15px;
+  }
+
+  .fp-ps-loader {
+    min-height: 45px;
+    margin-bottom: 20px;
+  }
+
+  .fp-ps-loader:first-child {
+    margin-top: 20px;
+  }
+
+  .fpps-title {
+    text-align: left;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 21px;
+    color: var(--dark);
+    padding: 20px 0 15px;
+  }
+
+  .fpps-tile {
+    font-size: 14px;
+    line-height: 22px;
+    color: var(--gunmetal);
+    padding-top: 15px;
+
+    .fpps-tile-text {
+      font-weight: 500;
+    }
+  }
+
+  .generic-hr {
+    margin-top: 10px;
+  }
+
+  .fpps-total-amount {
+    font-weight: 500;
+    font-size: 16px;
+    padding: 15px 0 5px;
+  }
+}

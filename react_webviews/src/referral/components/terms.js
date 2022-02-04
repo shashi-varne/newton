@@ -13,6 +13,7 @@ class Terms extends Component {
       params: qs.parse(props.history.location.search.slice(1)),
       type: getConfig().productName,
       link: getConfig().appLink,
+      message: getConfig().productName === 'fisdom' ? 'You will be eligible to receive the referral money only if your referred friend makes an investment for a minimum of ₹1000 for SIP and ₹5,000 for a one-time investment either in equity or balanced fund.' : 'You will be eligible to receive the referral money only if your referred friend makes an investment for a minimum of ₹500 for SIP and ₹1,000 for a one-time investment.'
     }
   }
 
@@ -35,7 +36,7 @@ class Terms extends Component {
           <div className="List">
             <div className="Number">2.</div>
             <div className="Text">
-              You will be eligible to receive the referral money only if your referred friend makes an investment for a minimum of ₹500 for SIP and ₹1,000 for a one-time investment.
+              {this.state.message}
             </div>
           </div>
           <div className="List">
@@ -46,14 +47,14 @@ class Terms extends Component {
           </div>
           <div className="List">
             <div className="Number">4.</div>
-            <div className="Text">
-              You will not receive the referral amount if your referred friend doesn’t enter your referral code upon app installation.
+            <div className="Text"> 
+              You will not receive the referral amount if your referred friend doesn’t enter your referral code before investment.
             </div>
           </div>
           <div className="List">
             <div className="Number">5.</div>
             <div className="Text">
-              Your referred friends will not receive any reward amount upon making their first investment on {capitalize(this.state.type)}.
+              Your referred friends will not receive any reward amount upon making their investment.
             </div>
           </div>
           <div className="List">

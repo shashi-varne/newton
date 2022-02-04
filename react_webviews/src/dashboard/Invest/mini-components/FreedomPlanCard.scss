@@ -1,0 +1,58 @@
+.freedom-plan-card {
+  padding: 0px;
+  background-color: var(--highlight);
+  position: relative;
+  cursor: pointer;
+  margin-top: 20px;
+
+  .fpc-content {
+    padding: 25px 0 25px 20px;
+
+    .fpc-title {
+      color: var(--gunmetal);
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 22px;
+      width: 90%;
+    }
+
+    .fpc-subtitle {
+      color: var(--steelgrey);
+      font-size: 10px;
+      line-height: 12px;
+      font-weight: bold;
+      margin: 7px 0px 17px;
+
+      span {
+        margin: 0px 5px;
+      }
+    }
+
+    .fpc-button {
+      background-color: #ffffff;
+      width: 155px;
+      padding: 11px 15px !important;
+    }
+
+    .fpc-button-arrow {
+      margin-left: 14px !important;
+    }
+  }
+
+  .fpc-icon {
+    height: 170px !important;
+    width: 165px !important;
+    position: absolute;
+    right: 0;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .freedom-plan-card {
+    .fpc-icon {
+      bottom: 0;
+      width: 130px !important;
+      height: unset !important;
+    }
+  }
+}
