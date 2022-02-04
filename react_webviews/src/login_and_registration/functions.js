@@ -26,6 +26,7 @@ export function initialize() {
   this.navigate = navigateFunc.bind(this.props);
   this.getKycFromSummary = getKycFromSummary.bind(this);
   this.redirectAfterLogin = redirectAfterLogin.bind(this);
+  this.verifyRecaptchaAndInitiateOtp = verifyRecaptchaAndInitiateOtp.bind(this);
   let main_query_params = getUrlParams();
   let { referrer = "" } = main_query_params;
 
@@ -122,7 +123,7 @@ export function formCheckFields(
     } else {
       body.auth_type = loginType;
       body.auth_value = form_data["email"];
-      this.initiateOtpApi(body, loginType);
+      this.verifyRecaptchaAndInitiateOtp(body, loginType);
     }
   } else {
     if (secondaryVerification) {     // body.redirect_url = redirectUrl;
@@ -134,12 +135,25 @@ export function formCheckFields(
     } else { 
       // eslint-disable-next-line
       body.auth_type = 'mobile',
-      body.auth_value = `${form_data["code"]}${form_data["mobile"]}`,
+      body.auth_value = `${form_data["code"]}|${form_data["mobile"]}`,
       body.need_key_hash = true,
       body.user_whatsapp_consent = form_data["whatsapp_consent"],
-      this.initiateOtpApi(body, loginType);
+      this.verifyRecaptchaAndInitiateOtp(body, loginType);
     }
   }
+}
+
+export function verifyRecaptchaAndInitiateOtp(body, loginType) {
+  const config = getConfig();
+  const apiKey = config.apiKey;
+  const action = "login"; 
+  window.grecaptcha.enterprise.ready(() => {
+    window.grecaptcha.enterprise.execute(apiKey, { action }).then(token => {
+      body.recaptcha_token = token;
+      body.recaptcha_action = action;
+      this.initiateOtpApi(body, loginType)
+    });
+  });
 }
 
 export function setBaseHref() {
@@ -201,6 +215,8 @@ export async function initiateOtpApi(body, loginType) {
   formData.append("auth_value", body.auth_value);
   formData.append("Content-Type", "application/x-www-form-urlencoded")   // [ "multipart/form-data" ]
   formData.append("user_whatsapp_consent", body?.user_whatsapp_consent);
+  formData.append("recaptcha_token", body.recaptcha_token);
+  formData.append("recaptcha_action", body.recaptcha_action);
   const referrer = this.state.referrer;
   if(referrer) {
     const item = {
@@ -209,7 +225,14 @@ export async function initiateOtpApi(body, loginType) {
     storageService().setObject("user_promo", item);
   }
   try {
-    const res = await Api.post(`/api/user/login/v4/initiate`, formData)
+    const res = await Api.post(`/api/user/login/v5/initiate`, formData);
+    if (
+      res.pfwstatus_code !== 200 ||
+      !res.pfwresponse ||
+      isEmpty(res.pfwresponse)
+    ) {
+      throw res?.pfwmessage || errorMessage;
+    }
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       this.setState({ isApiRunning: false });
@@ -623,4 +646,16 @@ export const partnerAuthentication = async (data) => {
   } else {
     throw new Error(result.error || result.message || errorMessage);
   }
-} 
+}
+
+// todo will make login as functional component, this is temp fix
+export const loadScriptInBody = (id, url) => {
+  const isScriptLoaded = document.getElementById(id);
+  if (!isScriptLoaded) {
+    const script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = url;
+    script.id = id;
+    document.body.appendChild(script);
+  }
+}
