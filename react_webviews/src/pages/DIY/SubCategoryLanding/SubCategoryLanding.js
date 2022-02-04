@@ -16,8 +16,11 @@ import FilterNavigation from '../../../featureComponent/DIY/Filters/FilterNaviga
 import Footer from '../../../designSystem/molecules/Footer';
 import { getConfig } from '../../../utils/functions';
 import Tag from '../../../designSystem/molecules/Tag';
+import sortBy from 'lodash/sortBy';
 import FilterReturnBottomSheet, {
   FilterType,
+  ReturnsDataList,
+  SortsDataList,
 } from '../../../featureComponent/DIY/Filters/FilterReturnBottomSheet';
 
 const tabChilds = [
@@ -39,20 +42,11 @@ const tabChilds = [
   },
 ];
 
-const returnField = [
-  'one_month_return',
-  'three_month_return',
-  'six_month_return',
-  'one_year_return',
-  'three_year_return',
-  'five_year_return',
-];
-
 const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
   const [tabValue, setTabValue] = useState(0);
   const [selectedFilterValue, setSelectedFilterValue] = useState({
-    [FilterType.returns]: '3M',
-    [FilterType.sort]: 'fundSizeHTL',
+    [FilterType.returns]: ReturnsDataList[2],
+    [FilterType.sort]: SortsDataList[1],
   });
   const [isFilterSheetOpen, setIsFilterSheetOpen] = useState({
     [FilterType.returns]: false,
@@ -64,7 +58,7 @@ const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
     setTabValue(value);
   };
 
-  const handleReturnSheet = (filterType) => () => {
+  const handleFiltterSheetClose = (filterType) => () => {
     setIsFilterSheetOpen({
       ...isFilterSheetOpen,
       [filterType]: false,
@@ -75,8 +69,8 @@ const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
   //   setTabValue(index);
   // };
 
-  const handleFilterSelect = (filterType, item) => {
-    setSelectedFilterValue({ ...selectedFilterValue, [filterType]: item?.value });
+  const handleFilterSelect = (filterType, selectedItem) => {
+    setSelectedFilterValue({ ...selectedFilterValue, [filterType]: selectedItem });
   };
 
   const handleFilterClick = (filterType) => () => {
@@ -107,6 +101,7 @@ const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
           productName={productName}
           cartCount={cartCount}
           onCartClick={onCartClick}
+          returnLabel={selectedFilterValue[FilterType.returns]?.returnLabel}
         />
       }
       className='sub-category-landing-wrapper'
@@ -136,9 +131,12 @@ const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
         <Swiper slidesPerView={1} autoHeight>
           {tabChilds?.map((el, idx) => {
             return (
-              <SwiperSlide>
+              <SwiperSlide key={idx}>
                 <TabPanel
+                  returnPeriod={selectedFilterValue[FilterType.returns]?.value}
+                  sortFundsBy={selectedFilterValue[FilterType.sort]?.value}
                   key={idx}
+                  selectedFilterValue={selectedFilterValue}
                   // value={tabValue}
                   // index={idx}
                   data={el?.data}
@@ -150,17 +148,17 @@ const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
       </div>
 
       <FilterReturnBottomSheet
-        onSelect={(item) => handleFilterSelect(FilterType.returns, item)}
+        applyFilter={(selectedItem) => handleFilterSelect(FilterType.returns, selectedItem)}
         variant={FilterType.returns}
         selectedValue={selectedFilterValue[FilterType.returns]}
-        handleClose={handleReturnSheet(FilterType.returns)}
+        handleClose={handleFiltterSheetClose(FilterType.returns)}
         isOpen={isFilterSheetOpen[FilterType.returns]}
       />
       <FilterReturnBottomSheet
-        onSelect={(item) => handleFilterSelect(FilterType.sort, item)}
+        applyFilter={(selectedItem) => handleFilterSelect(FilterType.sort, selectedItem)}
         variant={FilterType.sort}
         selectedValue={selectedFilterValue[FilterType.sort]}
-        handleClose={handleReturnSheet(FilterType.sort)}
+        handleClose={handleFiltterSheetClose(FilterType.sort)}
         isOpen={isFilterSheetOpen[FilterType.sort]}
       />
     </Container>
@@ -168,10 +166,16 @@ const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
 };
 
 const TabPanel = memo((props) => {
-  const { data } = props;
-  const handleClick = useCallback(() => {
-    console.log('card clicked');
-  }, []);
+  const { data = [], returnPeriod, sortFundsBy } = props;
+
+  console.log('return period', returnPeriod);
+
+  const [funds, setFunds] = useState(data);
+
+  // useEffect(() => {
+  //   const filteredFunds = sortBy(data,[sortFundsBy]);
+  //   setFunds(filteredFunds);
+  // },[sortFundsBy])
 
   return (
     <div
@@ -184,7 +188,7 @@ const TabPanel = memo((props) => {
       {/* {value === index && ( */}
       <Box sx={{ pt: '16px', pl: '16px', pr: '16px' }}>
         <Typography component='div'>
-          {data?.map((fund, idx) => {
+          {funds?.slice(0, 10)?.map((fund, idx) => {
             return (
               <ProductItem
                 // sx={{ mb: '16px' }}
@@ -203,19 +207,24 @@ const TabPanel = memo((props) => {
                         labelBackgroundColor='foundationColors.secondary.profitGreen.200'
                       />
                     )}
-                    <Tag
-                      morningStarVariant='small'
-                      label={fund?.morning_star_rating}
-                      labelColor='foundationColors.content.secondary'
-                    />
+                    {fund?.morning_star_rating && (
+                      <Tag
+                        morningStarVariant='small'
+                        label={fund?.morning_star_rating}
+                        labelColor='foundationColors.content.secondary'
+                      />
+                    )}
                   </ProductItem.LeftBottomSection>
                 </ProductItem.LeftSection>
                 <ProductItem.RightSection spacing={2}>
                   <ProductItem.Description
                     title={
-                      fund?.three_year_return > 0
-                        ? `+${fund?.three_year_return}%`
-                        : `-${fund?.three_year_return}%`
+                      fund[returnPeriod] > 0 ? `+${fund[returnPeriod]}%` : `${fund[returnPeriod]}%`
+                    }
+                    titleColor={
+                      fund[returnPeriod] > 0
+                        ? 'foundationColors.secondary.profitGreen.300'
+                        : 'foundationColors.secondary.lossRed.300'
                     }
                   />
                   <Button
@@ -243,6 +252,7 @@ const CustomFooter = ({
   onCartClick,
   handleSortClick,
   handleReturnClick,
+  returnLabel,
 }) => {
   return (
     <Stack spacing={2} className='sub-category-custom-footer'>
@@ -256,7 +266,11 @@ const CustomFooter = ({
           />
         </div>
       )}
-      <FilterNavigation handleSortClick={handleSortClick} handleReturnClick={handleReturnClick} />
+      <FilterNavigation
+        returnLabel={returnLabel}
+        handleSortClick={handleSortClick}
+        handleReturnClick={handleReturnClick}
+      />
     </Stack>
   );
 };

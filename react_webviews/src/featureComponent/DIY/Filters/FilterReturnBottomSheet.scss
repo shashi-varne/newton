@@ -19,6 +19,7 @@
       right: unset;
       width: var(--desktop-width);
       background-color: transparent;
+      border-radius: 12px;
 
       .MuiBackdrop-root {
         position: fixed !important;
@@ -31,6 +32,8 @@
         .MuiDialog-paper {
           margin: 0px !important;
           max-width: var(--desktop-width);
+          border-top-left-radius: 12px;
+          border-top-right-radius: 12px;
         }
       }
     }
