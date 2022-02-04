@@ -58,7 +58,8 @@ const FisdomTheme = {
   },
   button: {
     borderRadius: 12
-  }
+  },
+  fontFamily: ['Rubik', 'Roboto', 'sans-serif']
 };
 
 export default FisdomTheme;
