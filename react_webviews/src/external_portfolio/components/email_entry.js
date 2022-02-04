@@ -9,6 +9,7 @@ import { navigate, setLoader, setPlatformAndUser } from '../common/commonFunctio
 import { requestStatement, fetchEmails } from '../common/ApiCalls.js';
 import PopUp from '../common/PopUp.js';
 import StatementTriggeredPopUp from '../mini-components/StatementTriggeredPopUp.js';
+import isEmpty from 'lodash/isEmpty';
 
 const { productName: productType } = getConfig();
 
@@ -94,8 +95,10 @@ class EmailEntry extends Component {
     );
   }
 
-  goBack = (params) => {
-    if (params) {
+  goBack = () => {
+    const params = this.props.location.params;
+
+    if (!isEmpty(params)) {
       nativeCallback({ events: this.sendEvents('back') });
       if (params.comingFrom === 'statement_request') {
         this.navigate(

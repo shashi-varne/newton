@@ -1,14 +1,14 @@
 version: '3'
 
 services:
-  webview:
-    container_name: webview
+  web:
+    container_name: web
     build: .
     ports:
       - "3000:3000"
     volumes:
       - ./:/app
-      - /webview/react_webviews/node_modules
+      - /web/react_webviews/node_modules
     restart: always
     networks:
       - sbmf-net
