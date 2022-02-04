@@ -5,7 +5,7 @@ import Api from 'utils/api';
 import { storageService } from './validators';
 import eventManager from './eventManager';
 import { EVENT_MANAGER_CONSTANTS } from './constants';
-import { isEmpty } from 'lodash';
+import isEmpty from "lodash/isEmpty";
 
 export const nativeCallback = async ({ action = null, message = null, events = null, action_path = null, rnData = {} } = {}) => {
   let newAction = null;

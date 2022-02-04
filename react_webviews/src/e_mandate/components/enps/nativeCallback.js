@@ -18,7 +18,7 @@ const NativeEsignCalllback = () => {
 
       if (res.pfwresponse.result && !res.pfwresponse.result.error) {
         let result = res.pfwresponse.result;
-        if (result.esign === true) {
+        if (result.esign) {
           nativeCallback({ action: "on_success" });
         } else {
           nativeCallback({ action: "on_failure" });

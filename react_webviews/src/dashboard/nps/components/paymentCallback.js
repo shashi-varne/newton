@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import WVInfoBubble from "common/ui/InfoBubble/WVInfoBubble";
 import { nativeCallback } from "utils/native_callback";
+import isEmpty from "lodash/isEmpty";
 
 const PaymentNativeCallback = (props) => {
   const params = props.match?.params || {};
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (params) {
-      console.log(params)
+    if (!isEmpty(params)) {
       if (params.status === "success") {
         nativeCallback({ action: "on_success" });
       } else if (params.status === "failed") {

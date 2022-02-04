@@ -8,12 +8,12 @@ import UiSkelton from "common/ui/Skelton";
 const NativeEsignRedirection = () => {
 
   useEffect(() => {
-    let basepath = getBasePath();
-    let current_url =
+    const basepath = getBasePath();
+    const current_url =
       basepath +
       "/e-mandate/enps/native-callback" +
       getConfig().searchParams;
-    var pgLink =
+    const pgLink =
       getConfig().base_url + "/page/nps/user/esign/" + getConfig().pc_urlsafe;
     if (getConfig().isNative) {
       if (getConfig().app === "ios") {
@@ -65,7 +65,6 @@ const NativeEsignRedirection = () => {
       });
     }
 
-    console.log(pgLink);
     window.location.href = pgLink;
   }, []);
 

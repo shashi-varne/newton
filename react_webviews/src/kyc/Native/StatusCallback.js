@@ -1,4 +1,4 @@
-import { isEmpty } from "lodash";
+import isEmpty from "lodash/isEmpty";
 import React, { useEffect, useState } from "react";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 import { nativeCallback } from "../../utils/native_callback";
