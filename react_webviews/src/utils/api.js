@@ -64,6 +64,11 @@ class Api {
     if (sdk_capabilities) {
       axios.defaults.headers.common['sdk-capabilities'] = sdk_capabilities;
     }
+
+    if(route.includes("/api/user/login/v5/initiate")) {
+      axios.defaults.headers.common["X-Platform"] = "web";
+    }
+
     // if(route.includes("/api/") && storageService().get("x-plutus-auth") && config.isIframe) {
     //   axios.defaults.headers.common["X-Plutus-Auth"] = storageService().get("x-plutus-auth")
     // }
