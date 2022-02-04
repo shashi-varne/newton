@@ -118,17 +118,17 @@ const Return = ({ selectedItem, handleSelection }) => {
 };
 
 export const ReturnsDataList = [
-  { id: 1, label: '1 Month', value: 'one_month_return', returnLabel:'1M' },
-  { id: 2, label: '3 Months', value: 'three_month_return', returnLabel:'3M' },
-  { id: 3, label: '6 Months', value: 'six_month_return', returnLabel:'6M' },
-  { id: 4, label: '1 Year', value: 'one_year_return', returnLabel:'1Y' },
-  { id: 5, label: '3 Years', value: 'three_year_return', returnLabel:'3Y' },
-  { id: 6, label: '5 Years', value: 'five_year_return', returnLabel:'5Y' },
+  { label: '1 Month', value: 'one_month_return', returnLabel: '1M' },
+  { label: '3 Months', value: 'three_month_return', returnLabel: '3M' },
+  { label: '6 Months', value: 'six_month_return', returnLabel: '6M' },
+  { label: '1 Year', value: 'one_year_return', returnLabel: '1Y' },
+  { label: '3 Years', value: 'three_year_return', returnLabel: '3Y' },
+  { label: '5 Years', value: 'five_year_return', returnLabel: '5Y' },
 ];
 
 export const SortsDataList = [
-  { id: 1, label1: 'Returns', label2: 'High to low', value: 'returnsHTL' },
-  { id: 2, label1: 'Fund size (AUM)', label2: 'High to low', value: 'fundSizeHTL' },
-  { id: 3, label1: 'Expense ratio', label2: 'Low to high', value: 'expenseRatioLTH' },
-  { id: 4, label1: 'Rating', label2: 'High to low', value: 'ratingHTL' },
+  { label1: 'Returns', label2: 'High to low', value: 'returns', order: 'desc' },
+  { label1: 'Fund size (AUM)', label2: 'High to low', value: 'aum', order: 'desc' },
+  { label1: 'Expense ratio', label2: 'Low to high', value: 'expense_ratio', order: 'asc' },
+  { label1: 'Rating', label2: 'High to low', value: 'morning_star_rating', order: 'desc' },
 ];

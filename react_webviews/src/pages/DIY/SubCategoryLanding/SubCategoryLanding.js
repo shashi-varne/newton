@@ -16,7 +16,7 @@ import FilterNavigation from '../../../featureComponent/DIY/Filters/FilterNaviga
 import Footer from '../../../designSystem/molecules/Footer';
 import { getConfig } from '../../../utils/functions';
 import Tag from '../../../designSystem/molecules/Tag';
-import sortBy from 'lodash/sortBy';
+import orderBy from 'lodash/orderBy';
 import FilterReturnBottomSheet, {
   FilterType,
   ReturnsDataList,
@@ -135,6 +135,7 @@ const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
                 <TabPanel
                   returnPeriod={selectedFilterValue[FilterType.returns]?.value}
                   sortFundsBy={selectedFilterValue[FilterType.sort]?.value}
+                  sortingOrder={selectedFilterValue[FilterType.sort]?.order}
                   key={idx}
                   selectedFilterValue={selectedFilterValue}
                   // value={tabValue}
@@ -166,16 +167,25 @@ const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
 };
 
 const TabPanel = memo((props) => {
-  const { data = [], returnPeriod, sortFundsBy } = props;
+  const { data = [], returnPeriod, sortFundsBy, sortingOrder } = props;
 
-  console.log('return period', returnPeriod);
+  console.log('sortFundsBy', sortFundsBy);
 
   const [funds, setFunds] = useState(data);
 
-  // useEffect(() => {
-  //   const filteredFunds = sortBy(data,[sortFundsBy]);
-  //   setFunds(filteredFunds);
-  // },[sortFundsBy])
+  const sortFundsOrder = (fundList) => {
+    if (sortFundsBy === 'returns') {
+      return fundList[returnPeriod] || '';
+    } else {
+      return fundList[sortFundsBy] || '';
+    }
+  };
+
+  useEffect(() => {
+    const filteredFunds = orderBy(data, sortFundsOrder, [sortingOrder]);
+    console.log('new filters', filteredFunds);
+    setFunds(filteredFunds);
+  }, [sortFundsBy]);
 
   return (
     <div
@@ -189,54 +199,59 @@ const TabPanel = memo((props) => {
       <Box sx={{ pt: '16px', pl: '16px', pr: '16px' }}>
         <Typography component='div'>
           {funds?.slice(0, 10)?.map((fund, idx) => {
+            const returnValue = fund[returnPeriod];
+            const returnData = !returnValue
+              ? 'N/A'
+              : fund[returnPeriod] > 0
+              ? `+${fund[returnPeriod]}%`
+              : `${fund[returnPeriod]}%`;
+            const returnColor = !returnValue
+              ? 'foundationColors.content.secondary'
+              : fund[returnPeriod] > 0
+              ? 'foundationColors.secondary.profitGreen.300'
+              : 'foundationColors.secondary.lossRed.300';
             return (
-              <ProductItem
-                // sx={{ mb: '16px' }}
-                key={idx}
-                imgSrc={fund?.amc_logo_big}
-                showSeparator
-                // onClick={handleClick}
-              >
-                <ProductItem.LeftSection>
-                  <ProductItem.Title>{fund?.legal_name}</ProductItem.Title>
-                  <ProductItem.LeftBottomSection>
-                    {fund?.is_fisdom_recommended && (
-                      <Tag
-                        label='Recommendation'
-                        labelColor='foundationColors.content.secondary'
-                        labelBackgroundColor='foundationColors.secondary.profitGreen.200'
-                      />
-                    )}
-                    {fund?.morning_star_rating && (
-                      <Tag
-                        morningStarVariant='small'
-                        label={fund?.morning_star_rating}
-                        labelColor='foundationColors.content.secondary'
-                      />
-                    )}
-                  </ProductItem.LeftBottomSection>
-                </ProductItem.LeftSection>
-                <ProductItem.RightSection spacing={2}>
-                  <ProductItem.Description
-                    title={
-                      fund[returnPeriod] > 0 ? `+${fund[returnPeriod]}%` : `${fund[returnPeriod]}%`
-                    }
-                    titleColor={
-                      fund[returnPeriod] > 0
-                        ? 'foundationColors.secondary.profitGreen.300'
-                        : 'foundationColors.secondary.lossRed.300'
-                    }
-                  />
-                  <Button
-                    title='+ADD'
-                    variant='link'
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      console.log('hello');
-                    }}
-                  />
-                </ProductItem.RightSection>
-              </ProductItem>
+              <>
+                <Typography>{fund[sortFundsBy]}</Typography>
+                <ProductItem
+                  // sx={{ mb: '16px' }}
+                  key={idx}
+                  imgSrc={fund?.amc_logo_big}
+                  showSeparator
+                  // onClick={handleClick}
+                >
+                  <ProductItem.LeftSection>
+                    <ProductItem.Title>{fund?.legal_name}</ProductItem.Title>
+                    <ProductItem.LeftBottomSection>
+                      {fund?.is_fisdom_recommended && (
+                        <Tag
+                          label='Recommendation'
+                          labelColor='foundationColors.content.secondary'
+                          labelBackgroundColor='foundationColors.secondary.profitGreen.200'
+                        />
+                      )}
+                      {fund?.morning_star_rating && (
+                        <Tag
+                          morningStarVariant='small'
+                          label={fund?.morning_star_rating}
+                          labelColor='foundationColors.content.secondary'
+                        />
+                      )}
+                    </ProductItem.LeftBottomSection>
+                  </ProductItem.LeftSection>
+                  <ProductItem.RightSection spacing={2}>
+                    <ProductItem.Description title={returnData} titleColor={returnColor} />
+                    <Button
+                      title='+ADD'
+                      variant='link'
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        console.log('hello');
+                      }}
+                    />
+                  </ProductItem.RightSection>
+                </ProductItem>
+              </>
             );
           })}
         </Typography>
