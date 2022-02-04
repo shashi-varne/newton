@@ -86,14 +86,7 @@ function KycModuleEntry(props) {
           },
         });
       }
-
-      if (!config.Web) {
-        navigate(`/status/callback/native`, {
-          state: { status: 'cancelled' },
-        });
-      } else {
-        navigate("/freedom-plan", data);
-      }
+      navigate("/freedom-plan", data);
       
     } else if (kycStatus === 'ground') {
        navigate('/kyc/home', data);
