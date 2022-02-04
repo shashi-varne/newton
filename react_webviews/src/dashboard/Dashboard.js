@@ -45,6 +45,7 @@ import StatusCallback from "../kyc/Native/StatusCallback";
 import NativeRedirection from "../kyc/Native/NativeRedirection";
 import ProductMarketTypes from './ProductMarketTypes';
 import PrimaryMarketProducts from "./PrimaryMarketProducts/PrimaryMarketProducts";
+import PaymentNativeCallback from "./nps/components/paymentCallback";
 
 const Home = (props) => {
   const config = getConfig(); 
@@ -152,6 +153,16 @@ const Home = (props) => {
           exact
           path={`${url}status/redirection/native`}
           component={NativeRedirection}
+        />
+        <Route
+          exact
+          path={`${url}payment-status/callback/native/:status`}
+          component={PaymentNativeCallback}
+        />
+        <Route
+          exact
+          path={`${url}payment-status/callback/native/:status/:message`}
+          component={PaymentNativeCallback}
         />
         {/* -----------My Account sub-routes ------------- */}
         <Route exact path={`${url}account/merge/:pan_number`} component={AccountMerge} />

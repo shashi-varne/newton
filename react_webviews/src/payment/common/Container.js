@@ -57,6 +57,7 @@ class Container extends Component {
     }
 
     if (goBackMap(pathname)) {
+      nativeCallback({ action: "on_cancelled" });
       this.navigate(goBackMap(pathname));
       return;
     }
