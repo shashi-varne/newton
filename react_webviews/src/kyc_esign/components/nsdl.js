@@ -34,6 +34,10 @@ class DigiStatus extends Component {
   }
 
   componentDidMount = () => {
+    const config = getConfig();
+    if (config.app === "ios") {
+      nativeCallback({ action: 'hide_top_bar' });
+    }
     this.initialize();
   };
   

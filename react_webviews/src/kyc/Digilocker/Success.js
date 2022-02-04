@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Container from '../common/Container'
 import { getConfig, navigate as navigateFunc } from '../../utils/functions'
 import { DL_DOCS } from '../constants'
 import "./Digilocker.scss";
 import { Imgc } from '../../common/ui/Imgc';
+import { nativeCallback } from '../../utils/native_callback';
 
 const Success = (props) => {
   const config = getConfig();
@@ -14,6 +15,12 @@ const Success = (props) => {
     navigate('/kyc/journey')
   }
   
+  useEffect(() => {
+    if (config.app === "ios") {
+      nativeCallback({ action: 'hide_top_bar' });
+    }
+  }, [])
+
   return (
     <Container
       title="Allow document permission"
