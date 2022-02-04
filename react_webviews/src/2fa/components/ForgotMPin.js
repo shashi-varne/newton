@@ -77,7 +77,7 @@ const ForgotMPin = ({
                             </span>
                             {panError &&
                                 <WVInfoBubble type="error" style={{ marginTop: '40px' }}>
-                                    Entered details do not match with any of our accounts
+                                    We do not have an account registered with the above PAN
                                 </WVInfoBubble>
                             }
                         </>

@@ -94,9 +94,9 @@ export async function initialize() {
   nativeCallback({ action: 'take_control_rest' });
 }
 
-export async function getContact() {
+export async function getContact(mobile_number) {
   // let user_id = storageService().get('user_id');
-  let mobile = storageService().get('mobile');
+  let mobile = mobile_number?.length >= 10 ? mobile_number : storageService().get('mobile');
 
   try {
     this.setState({

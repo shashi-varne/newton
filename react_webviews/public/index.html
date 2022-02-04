@@ -174,7 +174,7 @@
       manifest.json provides metadata used when your web app is added to the
       homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
     -->
-    <base id="myBaseHref"  />
+    <base id="myBaseHref" href="/webapp/"  />
     <script>
       var browser = window.navigator.userAgent;
       if(browser.indexOf("MSIE") !== -1) {
@@ -187,30 +187,45 @@
 
       var myBaseHref =  document.getElementById('myBaseHref');
       var pathname = window.location.pathname;
+      var myBaseHrefUrl = '';
 
-      if(pathname.indexOf('appl/webview') !== -1) {
-        var myBaseHrefUrl = '/appl/webview/' + window.location.pathname.split('/')[3] +'/' ;
-        myBaseHref.href = myBaseHrefUrl;
-        window.localStorage.setItem('base_href', myBaseHrefUrl);
+      if(pathname.indexOf('appl/web') !== -1) {
+        var myBaseHrefUrl = '/appl/web/' + window.location.pathname.split('/')[3] +'/' ;
       }
       
-      if(pathname.indexOf('plutus-webview') !== -1) {
-        var myBaseHrefUrl = '/plutus-webview' + window.location.pathname.split('/')[2] + '/' ;
-        myBaseHref.href = myBaseHrefUrl;
-        window.localStorage.setItem('base_href', myBaseHrefUrl);
+      if(pathname.indexOf('plutus-webapp') !== -1) {
+        var myBaseHrefUrl = '/plutus-webapp' + window.location.pathname.split('/')[2] + '/' ;
       }
 
       if(pathname.indexOf('webapp') !== -1) {
-        var myBaseHrefUrl = '/webapp/';
-        myBaseHref.href = myBaseHrefUrl;
+        myBaseHrefUrl = '/webapp/';
+      }
+
+      
+
+      if(myBaseHrefUrl) {
+
+        if(pathname.indexOf('webapp') === -1) { // not adding again for webapp, for others its needed
+          myBaseHref.href = myBaseHrefUrl;
+        }
+        
+        // document.write("<base href="+ myBaseHrefUrl+" />");
         window.localStorage.setItem('base_href', myBaseHrefUrl);
+      }
+
+
+      //#TODO, temproray fix due to common code for web main equity
+      if(window.location.href.indexOf('app.fisdom.com') !== -1 || 
+      window.location.href.indexOf('app.mywaywealth.com') !== -1 || 
+      window.location.href.indexOf('app.finity.in') !== -1) {
+        myBaseHref.href = '';
       }
 
     </script>
 
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-    <!--
+    <link rel="shortcut icon" id="favicon" href="%PUBLIC_URL%/favicon.ico">
+  <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
       Only files inside the `public` folder can be referenced from the HTML.
@@ -219,7 +234,7 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-  <title>Fisdom Webview</title>
+  <title>Loading</title>
 </head>
 
 <body>

@@ -8,7 +8,7 @@ export const get_recommended_funds = async (params) => {
   try {
     const res = await Api.get(`/api/invest/recommendv2`,params);
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
-      throw genericErrMsg;
+      throw res?.pfwmessage || genericErrMsg;
     }
     const { result, status_code: status } = res.pfwresponse;
 
@@ -27,7 +27,7 @@ export const getTrendingFunds = async () => {
   try {
     const res = await Api.get('/api/persona/trends/gettrendingfunds');
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
-      throw genericErrMsg;
+      throw res?.pfwmessage || genericErrMsg;
     }
     const { result, status_code: status } = res.pfwresponse;
 
@@ -46,7 +46,7 @@ export const getSubCategories = async () => {
   try {
     const res = await Api.get('/api/funds/category/subcategories');
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
-      throw genericErrMsg;
+      throw res?.pfwmessage || genericErrMsg;
     }
     const { result, status_code: status } = res.pfwresponse;
 
@@ -65,7 +65,7 @@ export const getTerms = async (docType) => {
   try {
     const res = await Api.get(`api/cms/page/${docType}`);
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
-      throw genericErrMsg;
+      throw res?.pfwmessage || genericErrMsg;
     }
     const { result, status_code: status } = res.pfwresponse;
 
@@ -89,7 +89,7 @@ export const querySearch = async (name) => {
       !res.pfwresponse ||
       isEmpty(res.pfwresponse)
     ) {
-      throw genericErrMsg;
+      throw res?.pfwmessage || genericErrMsg;
     }
     const { result, status_code: status } = res.pfwresponse;
 
@@ -112,7 +112,7 @@ export const getCampaign = async () => {
     !res.pfwresponse ||
     isEmpty(res.pfwresponse)
   ) {
-    throw genericErrMsg
+    throw res?.pfwmessage || genericErrMsg
   }
   const { result, status_code: status } = res.pfwresponse
   switch (status) {
@@ -130,7 +130,7 @@ export const getbankInvestment = async (data) => {
     !res.pfwresponse ||
     isEmpty(res.pfwresponse)
   ) {
-    throw genericErrMsg
+    throw res?.pfwmessage || genericErrMsg
   }
   const { result, status_code: status } = res.pfwresponse
   switch (status) {
@@ -148,7 +148,7 @@ export const verifyCode = async (data) => {
     !res.pfwresponse ||
     isEmpty(res.pfwresponse)
   ) {
-    throw genericErrMsg
+    throw res?.pfwmessage || genericErrMsg
   }
   const { result, status_code: status } = res.pfwresponse
   switch (status) {
@@ -166,7 +166,7 @@ export const applyReferralCode = async (code) => {
     !res.pfwresponse ||
     isEmpty(res.pfwresponse)
   ) {
-    throw genericErrMsg
+    throw res?.pfwmessage || genericErrMsg
   }
   const { result, status_code: status } = res.pfwresponse
   switch (status) {
@@ -220,7 +220,7 @@ export const getdiyGraphDataWithISIN = async (isin) => {
   try {
     const res = await Api.get(`/api/funds/moreinfoonfund/${isin}`);
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
-      throw genericErrMsg;
+      throw res?.pfwmessage || genericErrMsg;
     }
     const { result, status_code: status } = res.pfwresponse;
 
@@ -239,7 +239,7 @@ export const getNfoFundInfo = async (isin) => {
   try {
     const res = await Api.get(`/api/invest/nfo/byisin?isin=${isin}`);
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
-      throw genericErrMsg;
+      throw res?.pfwmessage || genericErrMsg;
     }
     const { result, status_code: status } = res.pfwresponse;
 

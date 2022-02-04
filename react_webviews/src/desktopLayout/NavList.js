@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import register from 'assets/registration_menu_icon.png';
+// import register from 'assets/registration_menu_icon.png';
 import notification from 'assets/notifications_icon.png';
 import invest from 'assets/invest.png';
 import report from 'assets/reports.png';
-import loans from 'assets/ic_loan_sdk2.png';
+// import loans from 'assets/ic_loan_sdk2.png';
 import fhc from 'assets/fhc.png';
 import myAccount from 'assets/myaccount.png';
 import refer from 'assets/promo_code.png';
@@ -17,18 +17,20 @@ import logout from 'assets/logout_grey.png';
 import { getConfig } from 'utils/functions';
 import { withRouter } from 'react-router-dom';
 import { navigate as navigateFunc } from 'utils/functions';
-import { isReadyToInvest } from '../kyc/services';
-import { storageService } from 'utils/validators';
+import { getKycAppStatus, isMfApplicationSubmitted, isReadyToInvest } from '../kyc/services';
 import ReferDialog from './ReferralDialog';
 
 import './NavList.scss';
+import { isEmpty, storageService } from '../utils/validators';
+import { isEquityApplSubmittedOrComplete, isEquityCompleted } from '../kyc/common/functions';
+import { isTradingEnabled } from '../utils/functions';
 let data = [
-  {
-    id: 'register',
-    name: 'Register',
-    icon: register,
-    path: '/kyc',
-  },
+  // {
+  //   id: 'register',
+  //   name: 'Register',
+  //   icon: register,
+  //   path: '/kyc',
+  // },
   {
     id: 'notification',
     name: 'Notification',
@@ -41,12 +43,12 @@ let data = [
     icon: invest,
     path: '/invest',
   },
-  {
-    id: 'loans',
-    name: 'Loans',
-    icon: loans,
-    path: '/loan/home',
-  },
+  // {
+  //   id: 'loans',
+  //   name: 'Loans',
+  //   icon: loans,
+  //   path: '/loan/home',
+  // },
   {
     id: 'reports',
     name: 'Reports',
@@ -95,15 +97,30 @@ const NavList = (props) => {
   const productName = config.productName;
   const isMobileDevice = config.isMobileDevice;
   const partnerLoan = config?.features?.loan;
-  const showReferral = !config?.referralConfig?.shareRefferal;
+  const showReferral = config?.referralConfig?.shareRefferal;
   const navigate = navigateFunc.bind(props);
   const [referDialog, setReferDialog] = useState(false);
   const [activePath, setActivePath] = useState('');
-  const user = storageService().getObject('user');
+  const [kycStatus, setKycStatus] = useState("");
+  const kyc = storageService().getObject("kyc") || {};
+  const user = storageService().getObject("user") || {};
+  const isReadyToInvestBase = isReadyToInvest();
+  const TRADING_ENABLED = useMemo(() => {
+    return isTradingEnabled(kyc);
+  }, [kyc])
 
   useEffect(() => {
+    if (!isEmpty(kyc)) {
+      initialize()
+    }
+  }, [kyc]);
+
+  const initialize = () => {
+    let kycJourneyStatus = getKycAppStatus(kyc)?.status;
+    setKycStatus(kycJourneyStatus);
+
     filterNavList();
-  }, []);
+  }
   const handleRefferalModal = () => {
     setReferDialog(!referDialog);
   };
@@ -134,7 +151,11 @@ const NavList = (props) => {
     if (id === 'logout' && !isMobileDevice) {
       return null;
     }
-    if (id === 'register' && isReadyToInvestBase) {
+    const kycStatusesToNotShow = ["rejected", "fno_rejected", "esign_pending", "verifying_trading_account"];
+    const conditionToNotShowRegister = (!TRADING_ENABLED && isReadyToInvestBase) || (TRADING_ENABLED && isEquityCompleted()) ||
+      kycStatusesToNotShow.includes(kycStatus) || (!TRADING_ENABLED && isMfApplicationSubmitted(kyc)) ||
+      (TRADING_ENABLED && isEquityApplSubmittedOrComplete(kyc));
+    if (id === 'register' && conditionToNotShowRegister) {
       return null;
     }
     if(id === 'loans' && !partnerLoan) {
@@ -148,7 +169,7 @@ const NavList = (props) => {
     }
     return id;
   };
-  const isReadyToInvestBase = isReadyToInvest();
+  
   return (
     <div className='navlink-container' data-aid='navlink-container'>
       <div>

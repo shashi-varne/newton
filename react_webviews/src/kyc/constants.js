@@ -69,6 +69,7 @@ export const PATHNAME_MAPPER = {
   stocksStatus: '/kyc/stocks-status',
   tradingInfo: '/kyc/trading-info',
   documentVerification: '/kyc/document-verification',
+  kycEsignNsdl: '/kyc-esign/nsdl',
 }
 
 export const STORAGE_CONSTANTS = {
@@ -97,27 +98,27 @@ export const NRI_DOCUMENTS_MAPPER = {
 
 export const INCOME_OPTIONS = [
   {
-    name: "Below 1L",
+    name: "Below 1 lakh",
     value: "BELOW 1L",
   },
   {
-    name: "1-5L",
+    name: "1-5 lakhs",
     value: "1-5L",
   },
   {
-    name: "5-10L",
+    name: "5-10 lakhs",
     value: "5-10L",
   },
   {
-    name: "10-25L",
+    name: "10-25 lakhs",
     value: "10-25L",
   },
   {
-    name: "25-100L",
+    name: "25-100 lakhs",
     value: "25-100L",
   },
   {
-    name: ">100L",
+    name: ">100 lakhs",
     value: ">100L",
   },
 ];
@@ -195,32 +196,35 @@ export const bankAccountTypeOptions = (isNri) => {
     account_types = [
       {
         value: "CA",
-        name: "Current Account",
-      },
-      {
-        value: "CC",
-        name: "Cash Credit",
+        name: "Current account",
       },
       {
         value: "SB",
-        name: "Savings Account",
+        name: "Savings account",
       },
     ];
   } else {
     account_types = [
       {
         value: "SB-NRE",
-        name: "Non Resident External Account (NRE)",
+        name: "Non resident external account (NRE)",
       },
       {
         value: "SB-NRO",
-        name: "Non Resident Ordinary Account (NRO)",
+        name: "Non resident ordinary account (NRO)",
       },
     ];
   }
 
   return account_types;
 };
+
+export const BANK_ACCOUNT_TYPES_NOMENCLATURE = {
+  "SB": "Savings",
+  "CA": "Current",
+  "SB-NRE": "Savings NRE",
+  "SB-NRO": "Savings NRO"
+}
 
 export const GENDER_OPTIONS = [
   { name: "Male", value: "MALE" },
@@ -231,15 +235,14 @@ export const GENDER_OPTIONS = [
 export const MARITAL_STATUS_OPTIONS = [
   { name: "Single", value: "SINGLE" },
   { name: "Married", value: "MARRIED" },
-  { name: "Divorced", value: "DIVORCED" },
-  { name: "Widow", value: "WIDOW" },
 ];
 
 export const OCCUPATION_TYPE_OPTIONS = [
   { name: "Salaried", value: "SALARIED" },
-  { name: "Self employed", value: "SELF EMPLOYED" },
+  { name: "Public Sector", value: "PUBLIC SECTOR" },
+  { name: "Housewife", value: "HOUSEWIFE" },
+  { name: "Student", value: "STUDENT" },
   { name: "Business", value: "BUSINESS" },
-  { name: "Agriculturist", value: "AGRICULTURIST" },
   { name: "Professional", value: "PROFESSIONAL" },
   { name: "Private sector", value: "PRIVATE SECTOR" },
   { name: "Others", value: "OTHERS" },
@@ -253,9 +256,18 @@ export const getIfscCodeError = (code) => {
       return "Please enter a valid ifsc code of City Union Bank";
     case "ippb":
       return "Please enter a valid ifsc code of India Post Payments Bank";
+    case "ucomb":
+      return "Please enter a valid ifsc code of United Commercial Bank";
     default:
       return "Please enter a valid ifsc code";
   }
+}
+
+export const BANK_IFSC_CODES = {
+  'ktb': 'KARB',
+  'lvb': 'LAVB',
+  'cub': 'CIUB',
+  'ucomb': 'UCBA',
 }
 
 export const VERIFICATION_DOC_OPTIONS = [
@@ -321,3 +333,5 @@ export const eqkycDocsGroupMapper = {
     doc: ""
   }
 };
+
+export const PINCODE_LENGTH = 6;

@@ -38,11 +38,15 @@ export async function initialize() {
   this.handleCampaign = handleCampaign.bind(this);
   this.closeCampaignDialog = closeCampaignDialog.bind(this);
   this.handleStocksAndIpoCards = handleStocksAndIpoCards.bind(this);
+  this.initiatePinSetup = initiatePinSetup.bind(this);
   this.setKycProductTypeAndRedirect = setKycProductTypeAndRedirect.bind(this);
   this.handleIpoCardRedirection = handleIpoCardRedirection.bind(this);
   this.contactVerification = contactVerification.bind(this);
   this.handleCommonKycRedirections = handleCommonKycRedirections.bind(this);
   this.contactVerification = contactVerification.bind(this);
+  this.handleCampaignNotificationData = handleCampaignNotificationData.bind(this);
+  this.openBfdlBanner = openBfdlBanner.bind(this);
+  this.closeBfdlBanner = closeBfdlBanner.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
   if (config) {
     this.setState({ config });
@@ -56,13 +60,18 @@ export async function initialize() {
     this.handleRenderCard();
   }
 
-  if ((this.state.screenName === "invest_landing" &&  config.Web &&
-      !dataSettedInsideBoot)) {
+  const isBfdlBannerDisplayed = storageService().getBoolean("bfdlBannerDisplayed");
+  const isBfdlConfig = !isBfdlBannerDisplayed && config.code === 'bfdlmobile' && (config.isIframe || config.isSdk)
+
+  if (!isBfdlConfig && this.state.screenName === "invest_landing" &&  config.Web &&  !dataSettedInsideBoot) {
     await this.getSummary();
   }
-  if (this.state.screenName === "sdk_landing" && !config.Web) {
+  if (!isBfdlConfig && this.state.screenName === "sdk_landing" && !config.Web) {
     await this.getSummary();
   }
+
+  this.handleCampaignNotificationData(); // sets campaign data
+
   if (this.onload) this.onload();
   if(this.props?.location?.state?.fromState === "/kyc/registration/success") {
     const _event = {
@@ -103,14 +112,19 @@ export async function getSummary() {
       partner: ["partner"],
       bank_list: ["bank_list"],
       referral: ["subbroker", "p2p"],
-      contacts: ["contacts"]
+      contacts: ["contacts"],
+      equity: ["subscription_status"]
     });
+    if (res.pfwstatus_code !== 200 || isEmpty(res.pfwresponse)) {
+      throw res?.pfwmessage || errorMessage;
+    }
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       this.setSummaryData(result);
       currentUser = result.data.user.user.data;
       userKyc = result.data.kyc.kyc.data;
-      this.setState({ show_loader: false, kycStatusLoader : false, userKyc, currentUser });
+      const subscriptionStatus = result?.data?.equity?.subscription_status?.data || {};
+      this.setState({ show_loader: false, kycStatusLoader : false, userKyc, currentUser, subscriptionStatus });
     } else {
       this.setState({ show_loader: false, kycStatusLoader : false });
       toast(result.message || result.error || errorMessage);
@@ -118,7 +132,7 @@ export async function getSummary() {
   } catch (error) {
     console.log(error);
     this.setState({ show_loader: false });
-    toast(errorMessage);
+    toast(error || errorMessage);
   }
 }
 
@@ -135,8 +149,8 @@ export function setInvestCardsData() {
       "sbm",
       "cub",
     ],
-    nps: ["cccb", "sury", "obc", "svcho", "ktb", "sbm", "cub"],
-    gold: ["apna", "cccb", "sury", "obc", "svcho", "alb", "ktb", "cub"],
+    nps: ["cccb", "sury", "obc", "svcho", "ktb", "sbm"],
+    gold: ["apna", "cccb", "sury", "obc", "svcho", "alb", "ktb"],
   };
 
   const referralData = storageService().getObject("referral") || {};
@@ -208,7 +222,11 @@ export function clickCard(state, title) {
       });
       break;
     case "top_equity":
-      this.navigate(`/diy/fundlist/Equity/Multi_Cap`);
+      this.navigate(`/diy/fundlist/Equity/Multi_Cap`, {
+        state: {
+          name: "Top equity funds"
+        }
+      });
       break;
     default:
       this.navigate(keyPathMapper[state] || state);
@@ -360,7 +378,7 @@ export function navigate(pathname, data = {}) {
   }
 }
 
-export function initilizeKyc() {
+export async function initilizeKyc() {
   const { config = getConfig() } = this.state;
   let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
   const TRADING_ENABLED = isTradingEnabled(userKyc);
@@ -370,6 +388,10 @@ export function initilizeKyc() {
   let getKycAppStatusData = getKycAppStatus(userKyc);
   let kycJourneyStatus = getKycAppStatusData.status;
   let kycStatusData = kycStatusMapperInvest[kycJourneyStatus];
+  const initialKycStatus = ["init", "ground"];
+  if(initialKycStatus.includes(kycJourneyStatus) && TRADING_ENABLED) {
+    kycStatusData.subtitle = "Set up Trading & Demat A/c. now";
+  } 
   const rejectedItems = getKycAppStatusData.rejectedItems;
   if (isCompliant && !TRADING_ENABLED) {
     if (["init", "incomplete"].indexOf(kycJourneyStatus) !== -1) {
@@ -383,7 +405,7 @@ export function initilizeKyc() {
   }
   let isReadyToInvestBase = isReadyToInvest();
   let isEquityCompletedBase = isEquityCompleted();
-  let kycJourneyStatusMapperData = kycJourneyStatus.includes("ground_") ? kycStatusMapper["incomplete"] : kycStatusMapper[kycJourneyStatus];
+  let kycJourneyStatusMapperData = kycJourneyStatus?.includes("ground_") ? kycStatusMapper["incomplete"] : kycStatusMapper[kycJourneyStatus];
 
   this.setState({
     isCompliant,
@@ -449,15 +471,11 @@ export function initilizeKyc() {
     }
 
     if (["fno_rejected", "complete"].includes(kycJourneyStatus)) {
-      if (!currentUser.active_investment) {
-        if (TRADING_ENABLED && userKyc.equity_investment_ready) {
-          modalData = kycStatusMapper["kyc_verified"];
-          if (kycJourneyStatus === "fno_rejected") {
-            modalData.subtitle = "You can start your investment journey by investing in your favourite stocks, mutual funds."
-          }
-        } else if (!TRADING_ENABLED && !isCompliant) {
-          modalData = kycStatusMapper["mf_complete"];
-        }
+      if (TRADING_ENABLED && userKyc.equity_investment_ready) {
+        // for trading enabled users, the Equity IR bottomsheet will keep on showing on relogin, untill we get more info for user investing in sdk
+        modalData = kycStatusMapper["kyc_verified"];
+      } else if (!TRADING_ENABLED && !isCompliant && !currentUser.active_investment) {
+        modalData = kycStatusMapper["mf_complete"];
       }
     } else {
       modalData = kycStatusMapper[kycJourneyStatus];
@@ -473,14 +491,11 @@ export function initilizeKyc() {
       modalData.oneButton = true;
     this.setState({ modalData, openKycStatusDialog: true });
   }
+  
   this.contactVerification(userKyc);
 }
 
-export function openPremiumOnboardBottomSheet(
-  bottom_sheet_dialog_data_premium,
-  userKyc,
-  TRADING_ENABLED
-) {
+export function openPremiumOnboardBottomSheet(bottom_sheet_dialog_data_premium) {
   const { config = getConfig() } = this.state;
   let is_bottom_sheet_displayed_kyc_premium = storageService().get(
     "is_bottom_sheet_displayed_kyc_premium"
@@ -494,7 +509,7 @@ export function openPremiumOnboardBottomSheet(
     return;
   }
 
-  if (!config.Web && this.state.screenName !== "landing") {
+  if (!config.Web && this.state.screenName !== "sdk_landing") {
     return;
   }
 
@@ -509,7 +524,7 @@ export function openPremiumOnboardBottomSheet(
 export function handleKycSubmittedOrRejectedState() {
   let { kycJourneyStatusMapperData } = this.state;
   
-  let modalData = Object.assign({}, kycJourneyStatusMapperData);
+  let modalData = Object.assign({key: "kyc"}, kycJourneyStatusMapperData);
   if(!modalData.dualButton) {
     modalData.oneButton = true;
   }
@@ -538,10 +553,16 @@ export async function handleCommonKycRedirections() {
         show_aadhaar: !(userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual") ? true : false,
       },
     });
-  } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity")) {
+  } else if (!tradingEnabled && kycJourneyStatus === "complete") {
+    navigate(PATHNAME_MAPPER.kycEsignNsdl, {
+      searchParams: `${getConfig().searchParams}&status=success`
+    });
+  } else if (tradingEnabled && userKyc?.kyc_product_type !== "equity") {
     await this.setKycProductTypeAndRedirect();
   } else if (kycStatusData.nextState) {
     this.navigate(kycStatusData.nextState);
+  } else {
+    navigate(PATHNAME_MAPPER.journey);
   }
 }
 
@@ -573,23 +594,29 @@ export async function setKycProductTypeAndRedirect() {
 }
 
 export function handleIpoCardRedirection() {
-  const { userKyc, config = getConfig() } = this.state;
+  const { userKyc } = this.state;
   if (
       userKyc.equity_investment_ready &&
       this.state.currentUser?.pin_status !== 'pin_setup_complete'
   ) {
-    openModule('account/setup_2fa', this.props, { routeUrlParams: '/ipo' });
-    if (config.isNative) {
-      return nativeCallback({ action: 'exit_web' });
-      // TODO: Test native behaviour for this code
-    }
+    this.initiatePinSetup('ipo');
   } else {
     this.navigate("/market-products");
   }
 }
+
+function initiatePinSetup(key) {
+  const { config } = this.state;
+  if (config.isNative) {
+    openModule('account/setup_2fa', this.props, { routeUrlParams: `/${key}` });
+    nativeCallback({ action: 'exit_web' });
+  } else {
+    this.setState({ openPinSetupDialog: true, clickedCardKey: key });
+  }
+}
           
 export function handleStocksAndIpoCards(key) {
-  const { kycJourneyStatusMapperData, kycJourneyStatus, userKyc, currentUser, config } = this.state;
+  let { kycJourneyStatusMapperData, kycJourneyStatus, userKyc, currentUser, config = getConfig() } = this.state;
   let modalData = Object.assign({key}, kycJourneyStatusMapperData);
 
   if (key === "ipo") {
@@ -620,14 +647,11 @@ export function handleStocksAndIpoCards(key) {
       (kycJourneyStatus === "complete" && userKyc.kyc_product_type === 'equity')
     ) {
       if (currentUser?.pin_status !== 'pin_setup_complete') {
-        openModule('account/setup_2fa', this.props, { routeUrlParams: '/stocks' });
-        const { config = getConfig() } = this.state;
-        if (config.isNative) {
-          return nativeCallback({ action: 'exit_web' });
-          // TODO: Test native behaviour for this code
-        }
-      } else {
-        window.location.href = `${config.base_url}/page/equity/launchapp`
+        return this.initiatePinSetup(key);
+      } else if (kycJourneyStatus !== "fno_rejected") {
+        this.setState({ showPageLoader: "page" });
+        window.location.href = `${config.base_url}/page/equity/launchapp`;
+        return;
       }
     }
   }
@@ -696,6 +720,7 @@ export function handleRenderCard() {
     } else if(el.key === 'refer') {
       if(referralCode){
         el.referralCode = true;
+        el.title = "Referral code"
         el.path = "";
         return referralCode;
       } else {
@@ -711,7 +736,8 @@ export function handleRenderCard() {
   this.setState({renderLandingCards : cards});
 }
 
-export function handleCampaignNotification () {
+// this function sets campaign data
+export function handleCampaignNotificationData () {
   const notifications = storageService().getObject('campaign') || [];
   const bottom_sheet_dialog_data = notifications.reduceRight((acc, data) => {
     const target = data?.notification_visual_data?.target;
@@ -730,10 +756,16 @@ export function handleCampaignNotification () {
   }, {});
 
   if (!isEmpty(bottom_sheet_dialog_data)) {
-    storageService().set('is_bottom_sheet_displayed', true);
-    this.setState({ bottom_sheet_dialog_data, openBottomSheet: true });
+    this.setState({ bottom_sheet_dialog_data });
   }
 };
+
+export function handleCampaignNotification () {
+  if (!isEmpty(this.state.bottom_sheet_dialog_data)) {
+    storageService().set('is_bottom_sheet_displayed', true);
+    this.setState({ openBottomSheet: true });
+  }
+}
 
 export function contactVerification(userKyc) {
   const contactDetails = userKyc?.identification?.meta_data;
@@ -744,12 +776,6 @@ export function contactVerification(userKyc) {
       this.setState({
         communicationType: "mobile",
         contactValue,
-        contactNotVerified: true,
-      })
-    } else if (contactDetails.email_verified === false) {
-      this.setState({
-        communicationType: "email",
-        contactValue: contactDetails?.email || "",
         contactNotVerified: true,
       })
     }
@@ -787,7 +813,7 @@ export function contactVerification(userKyc) {
 }
 
 export function handleCampaignRedirection (url, showRedirectUrl) {
-  const { config = getConfig() } = this.state;
+  const config = getConfig()
   let campLink = url;
   let plutusRedirectUrl = `${getBasePath()}/?is_secure=${config.isSdk}&partner_code=${config.code}`;
   // Adding redirect url for testing
@@ -841,8 +867,61 @@ export async function hitFeedbackURL(url) {
 
 export function closeCampaignDialog() {
   const { bottom_sheet_dialog_data = {} } = this.state
-  if(bottom_sheet_dialog_data.campaign_name === "insurance_o2o_campaign"){
+  const campaignsToHitFeedback = ["insurance_o2o_campaign", "trading_restriction_campaign"];
+  if(campaignsToHitFeedback.includes(bottom_sheet_dialog_data.campaign_name)){
     hitFeedbackURL(bottom_sheet_dialog_data.action_buttons?.buttons[0]?.feedback_url)
   }
   this.setState({ openBottomSheet: false })
+}
+
+// sets every other dialog to false, except the one passed as key to be displayed
+export function setDialogsState(key) {
+  this.setState({
+    openKycPremiumLanding: false,
+    openBottomSheet: false,
+    openKycStatusDialog: false,
+    verifyDetails: false,
+    [key]: true
+  });
+}
+
+export async function updateConsent() {
+  const res = await Api.post("/api/account/user/partnerconsent");
+  if(!res || res?.pfwstatus_code !== 200 || isEmpty(res?.pfwresponse)) {
+    throw new Error(res.pfwmessage || errorMessage)
+  }
+  const { result, status_code: status } = res.pfwresponse;
+  if (status === 200) {
+    return result;
+  }
+  throw new Error(result.message || result.error || errorMessage);
+}
+
+export async function updateBank(data) {
+  const response = await Api.post("/api/partner/user/updatebank", data);
+  if (
+    response.pfwstatus_code !== 200 ||
+    isEmpty(response.pfwresponse)
+  ) {
+    throw new Error( response?.pfwmessage || errorMessage);
+  }
+  const { status_code, result } = response.pfwresponse;
+  if (status_code === 200) {
+    return result;
+  } else {
+    throw new Error(result?.message || result?.error || errorMessage);
+  }
+}
+
+export function openBfdlBanner() {
+  const config = getConfig();
+  const isBfdlBannerDisplayed = storageService().getBoolean("bfdlBannerDisplayed");
+  if(!isBfdlBannerDisplayed && config.code === 'bfdlmobile' && (config.isIframe || config.isSdk)) {
+    storageService().setBoolean("bfdlBannerDisplayed", true);
+    this.setState({ openBfdlBanner: true });
+  }
+}
+
+export function closeBfdlBanner() {
+  this.setState({ openBfdlBanner: false });
 }

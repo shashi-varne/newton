@@ -11,6 +11,8 @@ import { nativeCallback } from "../../../utils/native_callback";
 import Checkbox from "../../../common/ui/Checkbox";
 import { navigate } from "../../../utils/functions";
 import { storageService } from "../../../utils/validators";
+import eventManager from "../../../utils/eventManager";
+import { EVENT_MANAGER_CONSTANTS } from "../../../utils/constants";
 
 const config = getConfig();
 class Login extends Component {
@@ -32,6 +34,7 @@ class Login extends Component {
     let { form_data } = this.state;
     form_data.code = "91";
     this.setState({ form_data: form_data });
+    eventManager.emit(EVENT_MANAGER_CONSTANTS.updateAppTheme);
   }
 
   setLoginType = (loginType) => {
@@ -45,6 +48,9 @@ class Login extends Component {
     let { form_data } = this.state;
     if (name === "mobile" && value && !validateNumber(value)) return;
     if (name === "mobile" && form_data.code === "91" & value.length > 10) return;
+    if (name === "email") {
+      value = value.trim();
+    }
     form_data[name] = value;
     if (name === "whatsapp_consent") form_data[name] = !form_data?.whatsapp_consent;
     form_data[`${name}_error`] = "";
@@ -56,7 +62,6 @@ class Login extends Component {
     let keys_to_check = ["mobile", "code"];
     if (loginType === "email") keys_to_check = ["email"];
     this.formCheckFields(keys_to_check, form_data, "LOGIN", loginType);
-    event.preventDefault()
   };
 
   sendEvents = (userAction) => {
@@ -149,6 +154,7 @@ class Login extends Component {
                 inputMode="numeric"
                 onChange={this.handleChange("mobile")}
                 autoFocus
+                onEnterPressed={this.handleClick}
               />
             </div>
           )}
@@ -180,6 +186,7 @@ class Login extends Component {
                   name="email"
                   onChange={this.handleChange("email")}
                   autoFocus
+                  onEnterPressed={this.handleClick}
                 />
               </div>
             </>

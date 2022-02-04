@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Container from "../../common/Container";
 import { kycSubmit } from "../../common/api";
 import useUserKycHook from "../../common/hooks/userKycHook";
-import { checkDLPanFetchAndApprovedStatus, checkDocsPending, isDigilockerFlow, isDocSubmittedOrApproved } from "../../common/functions"
+import { checkDLPanFetchAndApprovedStatus, isDigilockerFlow, isDocSubmittedOrApproved, isEquityEsignReady } from "../../common/functions"
 import toast from "../../../common/ui/Toast";
 import { isEmpty } from "../../../utils/validators";
 import { PATHNAME_MAPPER } from "../../constants";
 import "./commonStyles.scss";
 import { nativeCallback } from "../../../utils/native_callback";
 import WVSelect from "../../../common/ui/Select/WVSelect";
-import { navigate as navigateFunc, } from "../../../utils/functions";
+import { getConfig, navigate as navigateFunc, } from "../../../utils/functions";
 
 const TRADING_EXPERIENCE_VALUES = [
   {
@@ -36,7 +36,7 @@ const TradingExperience = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const navigate = navigateFunc.bind(props);
   const {kyc, isLoading} = useUserKycHook();
-  const [areDocsPending, setDocsPendingStatus] = useState();
+  const { productName } = useMemo(getConfig, []);
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -47,8 +47,6 @@ const TradingExperience = (props) => {
   const initialize = async () => {
     setExperience(kyc?.equity_data?.meta_data?.trading_experience || "0-1");
     setOldState(kyc?.equity_data?.meta_data?.trading_experience || "")
-    const docStatus = await checkDocsPending(kyc);
-    setDocsPendingStatus(docStatus)
   }
 
   const handleClick = () => {
@@ -95,10 +93,10 @@ const TradingExperience = (props) => {
       if (!isDocSubmittedOrApproved("equity_income")) {
         navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
       } else {
-        if (areDocsPending) {
-          navigate(PATHNAME_MAPPER.documentVerification)
-        } else {
+        if (isEquityEsignReady(kyc)) {
           navigate(PATHNAME_MAPPER.kycEsign)
+        } else {
+          navigate(PATHNAME_MAPPER.documentVerification)
         }
       } 
     }
@@ -135,10 +133,11 @@ const TradingExperience = (props) => {
       events={sendEvents("just_set_events")}
       buttonTitle="CONTINUE"
       handleClick={handleClick}
-      title="Select trading experience"
+      title="For how long have you been trading?"
       disable={isLoading}
       showLoader={isApiRunning}
       data-aid="select-trading-experience-screen"
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)} 
     >
       <div className="trading-experience" data-aid="trading-experience">
         <div

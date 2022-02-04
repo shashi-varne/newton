@@ -18,22 +18,27 @@ import restart from 'assets/restart_nav_icn.svg';
 import Drawer from '../../desktopLayout/Drawer';
 import MenuIcon from "@material-ui/icons/Menu";
 import ReferDialog from '../../desktopLayout/ReferralDialog';
+import SettingsWithBadge from 'assets/ic_setting_active.svg';
 
 const headerIconMapper = {
   back: back_arrow,
   close: close_icn,
   search: search,
-  restart: restart
+  restart: restart,
+  settings: SettingsWithBadge,
 }
-const Header = ({ classes, title, count, total, current, goBack, 
-  edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
-  inPageTitle, hideHamburger, force_hide_inpage_title, topIcon, handleTopIcon, canSkip, onSkipClick,
-  className ,style, headerData={}, new_header, notification, handleNotification, noBackIcon, customBackButtonColor}) => {
+const Header = ({
+  classes, title, count, total, current, goBack, edit, type, resetpage, handleReset,
+  smallTitle, disableBack, provider, inPageTitle, hideHamburger, force_hide_inpage_title,
+  topIcon, handleTopIcon, canSkip, onSkipClick, className, style, headerData = {}, new_header,
+  notification, handleNotification, noBackIcon, customTopIconColor, noTopIconColor
+}) => {
     const rightIcon = headerIconMapper[topIcon];
     const [referDialog, setReferDialog] = useState(false);
     const [mobileViewDrawer, setMobileViewDrawer] = useState(false);
     const campaign = storageService().getObject("campaign");
     const config = getConfig();
+    const isGuestUser = storageService().getBoolean('guestUser');
     const isMobileDevice = config.isMobileDevice;
     const partnerLogo = config.logo;
     const isWeb = config.Web;
@@ -41,6 +46,7 @@ const Header = ({ classes, title, count, total, current, goBack,
     const backButtonColor = (!isWeb || config.isIframe) ? config.styles?.backButtonColor : '';
     const notificationsColor = !isWeb || config.isSdk ? config?.styles.notificationsColor : '';
     const moneycontrolHeader = isMobileDevice && config.code === 'moneycontrol';
+    const equityPayment = window.location.pathname.includes('pg/eq');
 
     const handleMobileViewDrawer = () => {
       setMobileViewDrawer(!mobileViewDrawer);
@@ -66,8 +72,8 @@ const Header = ({ classes, title, count, total, current, goBack,
             >
               {!disableBack && !headerData.hide_icon &&
               <SVG
-              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (customBackButtonColor ? customBackButtonColor : backButtonColor ?  backButtonColor : !headerData.partnerLogo ? getConfig().styles.primaryColor : 'white'))}
-              src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
+                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (customTopIconColor ? customTopIconColor : backButtonColor ?  backButtonColor : !headerData.partnerLogo ? getConfig().styles.primaryColor : 'white'))}
+                src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
               />
               }
               {(disableBack === true || disableBack === 'summary') && !headerData.hide_icon &&
@@ -125,7 +131,6 @@ const Header = ({ classes, title, count, total, current, goBack,
 
         {!headerData.progressHeaderData && 
           <>
-            <div>
             {
               !headerData.partnerLogo && 
               <div
@@ -136,7 +141,6 @@ const Header = ({ classes, title, count, total, current, goBack,
                 {title}
               </div>
             }
-            </div>
             {
               !(moneycontrolHeader && headerData.partnerLogo) &&
               <div className='header-right-nav-components'>
@@ -155,7 +159,10 @@ const Header = ({ classes, title, count, total, current, goBack,
                   <SVG
                   style={{marginLeft: '20px', width:25, cursor:'pointer'}}
                   onClick={handleTopIcon}
-                  preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header && backgroundColor ?  getConfig().styles.secondaryColor : getConfig().styles.primaryColor))}
+                  preProcessor={!noTopIconColor
+                    ? code => code.replace(/fill=".*?"/g, 'fill=' + (customTopIconColor || (new_header && backgroundColor ?  getConfig().styles.secondaryColor : getConfig().styles.primaryColor)))
+                    : undefined
+                  }
                   src={rightIcon}
                 />
                 }
@@ -167,10 +174,10 @@ const Header = ({ classes, title, count, total, current, goBack,
                   src={isEmpty(campaign) ? notificationLogo : notificationBadgeLogo}
                 />
                 }
-                {isMobileDevice && isWeb && !hideHamburger && !config.isIframe &&
+                {isMobileDevice && isWeb && !hideHamburger && !config.isIframe && !isGuestUser && !equityPayment &&
                   <div className='mobile-navbar-menu'>
                     <IconButton onClick={handleMobileViewDrawer}>
-                      <MenuIcon style={{color: new_header && backgroundColor ?  getConfig().styles.secondaryColor : headerData.partnerLogo ? 'white' : getConfig().styles.primaryColor}}/>
+                      <MenuIcon style={{color: customTopIconColor ? customTopIconColor : new_header && backgroundColor ?  getConfig().styles.secondaryColor : headerData.partnerLogo ? 'white' : getConfig().styles.primaryColor}}/>
                     </IconButton>
                     <Drawer mobileViewDrawer={mobileViewDrawer} handleMobileViewDrawer={handleMobileViewDrawer} handleReferModal={handleReferModal} />
                   </div>

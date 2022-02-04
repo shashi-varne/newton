@@ -106,7 +106,7 @@ const VerifyPin = (props) => {
           style={{ height: '20px', width: '20px', marginBottom: '10px' }}
         />
         <EnterMPin.Title className="lvp-title">
-          Welcome back,
+          Welcome back
         </EnterMPin.Title>
         <EnterMPin.Subtitle className="lvp-username">
           {name}

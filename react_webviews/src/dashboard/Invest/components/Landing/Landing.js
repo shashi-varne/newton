@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
 import Button from "common/ui/Button";
-import { initialize, handleCampaignNotification } from "../../functions";
+import { initialize, handleCampaignNotification, setDialogsState } from "../../functions";
 import InvestCard from "../../mini-components/InvestCard";
 import SebiRegistrationFooter from "../../../../common/ui/SebiRegistrationFooter/WVSebiRegistrationFooter";
 import VerificationFailedDialog from "../../mini-components/VerificationFailedDialog";
@@ -20,11 +20,16 @@ import { nativeCallback } from "../../../../utils/native_callback";
 import { getConfig, isTradingEnabled } from "../../../../utils/functions";
 import { PATHNAME_MAPPER } from "../../../../kyc/constants";
 import toast from "../../../../common/ui/Toast"
+import PinSetupDialog from "../../mini-components/PinSetupDialog";
+import BFDLBanner from "../../mini-components/BFDLBanner";
+import FreedomPlanCard from "../../mini-components/FreedomPlanCard";
+import { FREEDOM_PLAN_STORAGE_CONSTANTS } from "../../../../freedom_plan/common/constants";
 
 const fromLoginStates = ["/login", "/logout", "/verify-otp"]
 class Landing extends Component {
   constructor(props) {
     super(props);
+    const subscriptionStatus = storageService().getObject(FREEDOM_PLAN_STORAGE_CONSTANTS.subscriptionStatus) || {};
     this.state = {
       show_loader: false,
       kycStatusLoader: false,
@@ -36,20 +41,26 @@ class Landing extends Component {
       modalData: {},
       openKycStatusDialog: false,
       openKycPremiumLanding: false,
+      openPinSetupDialog: false,
       verifyDetails: false,
       verifyDetailsType: '',
       verifyDetailsData: {},
       accountAlreadyExists: false,
       accountAlreadyExistsData : {},
       openBottomSheet: false,
-      bottom_sheet_dialog_data: [],
+      bottom_sheet_dialog_data: {},
       isWeb: getConfig().Web,
+      isIframe: getConfig().isIframe,
       stateParams: props.location.state || {},
       tradingEnabled: isTradingEnabled(),
+      clickedCardKey: '',
+      openBfdlBanner: false,
+      subscriptionStatus: subscriptionStatus,
     };
     this.initialize = initialize.bind(this);
     this.generateOtp = generateOtp.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
+    this.setDialogsState = setDialogsState.bind(this);
   }
 
   componentWillMount() {
@@ -78,9 +89,18 @@ class Landing extends Component {
     const isBottomSheetDisplayed = storageService().get(
       "is_bottom_sheet_displayed"
     );
-    if (!isBottomSheetDisplayed && this.state.isWeb && !this.state.verifyDetails) {
+    const campaignsToShowOnPriority = ["trading_restriction_campaign"];
+    const { isWeb, verifyDetails, openKycPremiumLanding, openKycStatusDialog, tradingEnabled, bottom_sheet_dialog_data } = this.state;
+    if (!isBottomSheetDisplayed && isWeb &&
+       ((tradingEnabled && campaignsToShowOnPriority.includes(bottom_sheet_dialog_data.campaign_name)) ||
+        (!verifyDetails && !openKycPremiumLanding && !openKycStatusDialog))) {
       this.handleCampaignNotification();
     }
+
+    if (campaignsToShowOnPriority.includes(bottom_sheet_dialog_data.campaign_name)) {
+      this.setDialogsState("openBottomSheet");
+    }
+    this.openBfdlBanner();
   };
 
   addBank = () => {
@@ -122,6 +142,12 @@ class Landing extends Component {
     this.setState({
       accountAlreadyExists: false
     })
+  }
+
+  onPinSetupClose = () => {
+    this.setState({
+      openPinSetupDialog: false
+    });
   }
 
   setAccountAlreadyExistsData = (show, data) => {
@@ -205,9 +231,13 @@ class Landing extends Component {
   };
 
   handleStocksAndIpoRedirection = () => {
-    let { modalData, communicationType, contactValue } = this.state;
-    if(modalData.key === "ipo") {
-      if(!!this.state.contactNotVerified){
+    let { modalData, communicationType, contactValue, kycJourneyStatus, config } = this.state;
+    if (modalData.key === "kyc") {
+      if (kycJourneyStatus === "fno_rejected") {
+        this.closeKycStatusDialog();
+      }
+    } else if (modalData.key === "ipo") {
+      if (!!this.state.contactNotVerified) {
         storageService().set("ipoContactNotVerified", true);
         this.navigate("/secondary-verification", {
           state : {
@@ -219,9 +249,24 @@ class Landing extends Component {
       } // Email/mobile if Not Verified!
       this.handleIpoCardRedirection();
     } else {
-      // To do: redirect to stocks sdk page for fno_rejected status
+      if (kycJourneyStatus === "fno_rejected") {
+        this.setState({ showPageLoader: "page" });
+        window.location.href = `${config.base_url}/page/equity/launchapp`;
+      }
       this.closeKycStatusDialog();
     }
+  }
+
+  handleFreedomCard = () => {
+    const eventObj = {
+      event_name: "home_screen",
+      properties: {
+        screen_name: "home_screen",
+        banner_clicked: 'freedom_plan_explore_now',
+      },
+    };
+    nativeCallback({ events: eventObj });
+    this.navigate('/freedom-plan');
   }
 
   sendEvents = (userAction, cardClick = "") => {
@@ -290,7 +335,9 @@ class Landing extends Component {
       tradingEnabled,
       kycButtonLoader,
       stocksButtonLoader,
-      kycJourneyStatus
+      kycJourneyStatus,
+      openBfdlBanner,
+      subscriptionStatus,
     } = this.state;
     const {
       indexFunds,
@@ -333,7 +380,7 @@ class Landing extends Component {
             !kycStatusLoader &&
             <div className="generic-page-subtitle" data-aid='generic-page-subtitle'>
               {((!tradingEnabled && isReadyToInvestBase) ||
--                (tradingEnabled && isEquityCompletedBase)) 
+                (tradingEnabled && isEquityCompletedBase)) 
                 ? " Your KYC is verified, You’re ready to invest"
                 : "Invest in your future"}
             </div>
@@ -433,6 +480,16 @@ class Landing extends Component {
                           <div className="invest-main-top-title" data-aid='recommendations-title'>
                             Stocks & IPOs
                           </div>
+                          {(subscriptionStatus.freedom_cta ||
+                            subscriptionStatus.renewal_cta) && (
+                            <>
+                              {kycStatusLoader ? (
+                                <SkeltonRect className="invest-fp-loader" />
+                              ) : (
+                                <FreedomPlanCard onClick={this.handleFreedomCard} />
+                              )}
+                            </>
+                          )}
                           {stocksAndIpo.map((item, index) => {
                             if (kycStatusLoader) {
                               return (
@@ -651,16 +708,16 @@ class Landing extends Component {
           data={this.state.bottom_sheet_dialog_data}
           handleClick={this.handleCampaign}
         />
-          {verifyDetails && (
-            <VerifyDetailDialog
-              type={this.state.verifyDetailsType}
-              data={this.state.verifyDetailsData}
-              showAccountAlreadyExist={this.setAccountAlreadyExistsData}
-              isOpen={verifyDetails}
-              onClose={this.closeVerifyDetailsDialog}
-              parent={this}
-            ></VerifyDetailDialog>
-          )}
+        {verifyDetails && (
+          <VerifyDetailDialog
+            type={this.state.verifyDetailsType}
+            data={this.state.verifyDetailsData}
+            showAccountAlreadyExist={this.setAccountAlreadyExistsData}
+            isOpen={verifyDetails}
+            onClose={this.closeVerifyDetailsDialog}
+            parent={this}
+          ></VerifyDetailDialog>
+        )}
         {accountAlreadyExists && (
           <AccountAlreadyExistDialog
             type={this.state.verifyDetailsType}
@@ -670,6 +727,18 @@ class Landing extends Component {
             next={this.continueAccountAlreadyExists}
             editDetails={this.editDetailsAccountAlreadyExists}
           ></AccountAlreadyExistDialog>
+        )}
+        <PinSetupDialog
+          key={this.state.openPinSetupDialog}
+          open={this.state.openPinSetupDialog}
+          onClose={this.onPinSetupClose}
+          comingFrom={this.state.clickedCardKey}
+        />
+        { this.state.isIframe && (
+        <BFDLBanner
+          isOpen={openBfdlBanner}
+          close={this.closeBfdlBanner}
+        />
         )}
       </Container>
     );

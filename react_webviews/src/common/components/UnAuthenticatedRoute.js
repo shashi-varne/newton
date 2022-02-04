@@ -13,7 +13,8 @@ export default function UnAuthenticatedRoute({ children, component, ...rest }) {
       "/forgot-pin",
       "/logout",
       "/prepare",
-      "/partner-authentication"
+      "/partner-authentication",
+      "/rm-login"
     ];
     const pathname = unAuthenticatedPaths.find(el => path.includes(el));
     return !!pathname;

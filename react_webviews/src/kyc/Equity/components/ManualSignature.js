@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { nativeCallback } from '../../../utils/native_callback';
 import Container from '../../common/Container'
 import useUserKycHook from "../../common/hooks/userKycHook";
@@ -13,8 +13,10 @@ import { getConfig, navigate as navigateFunc } from '../../../utils/functions';
 import Toast from '../../../common/ui/Toast';
 import { openPdf } from '../../common/functions';
 
-const config = getConfig();
 const ManualSignature = (props) => {
+  const config = useMemo(() => {
+    return getConfig();
+  }, []);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
   const {kyc, isLoading} = useUserKycHook();
@@ -126,12 +128,13 @@ const ManualSignature = (props) => {
       skelton={isLoading}
       disable={isApiRunning}
       showLoader={showLoader}
+      iframeRightContent={require(`assets/${config.productName}/kyc_illust.svg`)}
     >
       <section id="manual-signature" data-aid='manual-signature'>
         <div className="generic-page-subtitle manual-signature-subtile" data-aid='generic-page-subtitle'>
           Send us your signed documents through courier by following the steps below
         </div>
-        <div class="page-content" data-aid='page-content'>
+        <div className="page-content" data-aid='page-content'>
           {stepsToRender?.length && stepsToRender.map((step, index) => (
             <WVSteps
               stepNum={step.id}

@@ -3,8 +3,11 @@ import { getConfig, getBasePath } from './functions';
 import { open_browser_web, renameObjectKeys } from 'utils/validators';
 import Api from 'utils/api';
 import { storageService } from './validators';
+import eventManager from './eventManager';
+import { EVENT_MANAGER_CONSTANTS } from './constants';
+import { isEmpty } from 'lodash';
 
-export const nativeCallback = async ({ action = null, message = null, events = null, action_path = null } = {}) => {
+export const nativeCallback = async ({ action = null, message = null, events = null, action_path = null, rnData = {} } = {}) => {
   let newAction = null;
   let callbackData = {};
   const config = getConfig();
@@ -34,13 +37,36 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     callbackData.action = newAction || action;
   }
 
+  if(!isEmpty(rnData)) {
+    callbackData.rnData = rnData;
+  }
+
   if(events && events.properties) {
     console.log(events.properties);
   }
 
+  if (action === 'login_required') {
+    if (config.Web) {
+      storageService().clear();
+      if (config.isIframe) {
+        let message = JSON.stringify({
+          type: "iframe_close",
+        });
+        window.callbackWeb.sendEvent(message);
+        return;
+      }
+      
+      let path = ['iw-dashboard', 'w-report'].includes(config.project) ? `/${config.project}/login` : '/login';
+      eventManager.emit(EVENT_MANAGER_CONSTANTS.redirectPath, path);
+    } else {
+      nativeCallback({ action: "session_expired" });
+    }
+    return;
+  }
+
   if (action === 'native_back' || action === 'exit') {
     if (config.isNative) callbackData.action = 'exit_web';
-    else window.location.href = redirectToLanding();
+    else window.location.href = redirectToPath('/');
   }
 
   if (action === 'open_pdf') {
@@ -170,7 +196,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
 
   if (config.app !== 'web') {
     let pathname = window.location?.pathname || ""
-    if(pathname.indexOf('appl/webview') !== -1) {
+    if(pathname.indexOf('appl/web') !== -1) {
       pathname = pathname.split("/")[5] || "/";
     }
     
@@ -182,7 +208,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       (entryPath !== pathname) &&
       (callbackData.action === 'exit_web' || callbackData.action === 'exit_module' || callbackData.action === 'open_module')
     ) {
-        window.location.href = redirectToLanding();
+        window.location.href = redirectToPath('/');
     } else {
       if (config.app === 'android') {
         window.Android.callbackNative(JSON.stringify(callbackData));
@@ -200,7 +226,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     } else if (action === '2fa_expired') {
       storageService().remove('currentUser');
       storageService().setBoolean('session-timeout', true);
-      window.location.href = redirectTo2FA();
+      eventManager.emit(EVENT_MANAGER_CONSTANTS.redirectPath, "/login/verify-pin");
     } else {
       return;
     }
@@ -223,7 +249,7 @@ export function openNativeModule(moduleName) {
 }
 
 export function openModule(moduleName, props, additionalParams) {
-
+  const config = getConfig();
   if (getConfig().isWebOrSdk) {
     const module_mapper = {
       'app/portfolio': '/reports',
@@ -238,7 +264,7 @@ export function openModule(moduleName, props, additionalParams) {
       const navigate = navigateFunc.bind(props);
       navigate(moduleNameWeb)
     } else {
-      let module_url = `${getBasePath()}${moduleNameWeb}${getConfig().searchParams}`;
+      let module_url = `${getBasePath()}${moduleNameWeb}${config.searchParams}`;
       window.location.href = module_url;
     }
 
@@ -287,12 +313,8 @@ export function openPdfCall(data = {}) {
 
 }
 
-export function redirectToLanding() {
-  return `${getBasePath()}/${getConfig().searchParams}`;
-}
-
-export function redirectTo2FA() {
-  return `${getBasePath()}/login/verify-pin${getConfig().searchParams}`;
+export function redirectToPath(path) {
+  return `${getBasePath()}${path}${getConfig().searchParams}`;
 }
 
 export function handleNativeExit(props, data) {

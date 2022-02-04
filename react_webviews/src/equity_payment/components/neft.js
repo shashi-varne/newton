@@ -1,0 +1,131 @@
+import React from 'react';
+import Container from '../common/Container';
+import "./Style.scss";
+import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble';
+import icn_secure_payment from 'assets/icn_secure_payment.svg';
+import { formatAmountInr } from '../../utils/validators';
+
+
+
+const NEFT_INFO = [
+    {
+        title: 'NAME',
+        value: 'Finwizard Technology Private Limited'
+    },
+    {
+        title: 'Account number',
+        value: 'FISNSE'
+    },
+    {
+        title: 'Account type',
+        value: 'Current A/C'
+    },
+    {
+        title: 'IFSC code',
+        value: 'ICIC0000106'
+    },
+    {
+        title: 'BRANCH ADDRESS',
+        value: 'ICICI BANK RPC OFFICE, VIDEOCON  TOWERS, E-1, JHANDEWALAN EXTENSION, NEAR DELHI PRESS, DELHI 110055'
+    },
+]
+
+const SUBSCRIPTION_NEFT_INFO = [
+    {
+        title: 'NAME',
+        value: 'Finwizard Technology Pvt Ltd Client Bank Account'
+    },
+    {
+        title: 'Account number',
+        value: '000205033532'
+    },
+    {
+        title: 'Account type',
+        value: 'Current A/C'
+    },
+    {
+        title: 'IFSC code',
+        value: 'ICIC0000002'
+    },
+    {
+        title: 'Account Branch',
+        value: 'MG Road, Bangalore'
+    },
+    {
+        title: 'BRANCH ADDRESS',
+        value: '1, Shobha Pearl, Commissariat Road, Off MG Road, Ground Floor, Bangalore- 560025 - Karnataka'
+    },
+]
+
+const NEFT_DETAILS = {
+    subscription: SUBSCRIPTION_NEFT_INFO,
+    default: NEFT_INFO,
+}
+const getNeftDetails = (flow) => {
+    return NEFT_DETAILS[flow] || NEFT_DETAILS.default
+}
+
+class NEFT extends React.Component {
+    constructor(props) {
+        super(props);
+        const store = props.location?.state?.store
+        this.state = {
+            store: store,
+            neftInfo: getNeftDetails(store?.flow),
+            isSubscriptionFlow: store.flow === "subscription"
+        };
+    }
+
+    handleClick = () => {
+        this.props.history.goBack()
+    }
+
+    render() {
+        return (
+            <Container
+                title="Payment via NEFT"
+                smallTitle={`Please transfer ${formatAmountInr(this.state?.store?.amount)} to the following bank account`}
+                header={true}
+                noFooter={!this.state.isSubscriptionFlow}
+                classOverRideContainer='equity-neft'
+                handleClick={this.handleClick}
+                buttonTitle="BACK"
+                >
+                <div>   
+                    <WVInfoBubble 
+                    isDismissable={false}
+                    type='info'
+                    hasTitle={false}>
+                        <ul style={{margin:0,paddingLeft:'10px'}}>
+                            <li style={{fontSize:'11px'}}>
+                                NEFT OR RTGS only (IMPS not supported)
+                            </li>
+                            <li style={{fontSize:'11px'}}>
+                                Use the bank account registered with your Demat account for easy transfers
+                            </li>
+                        </ul>
+                    </WVInfoBubble>
+                    <div className='neft-info-wrapper'>
+                        {
+                            this.state.neftInfo.map((el,idx) => (
+                                <div key={idx} className='neft-info'>
+                                    <div className='neft-title'>{el.title}</div>
+                                    <div className='neft-value'>{el.value}</div>
+                                </div>
+                            ))
+                        }
+                    </div>
+
+                </div>
+                {!this.state.isSubscriptionFlow && (
+                    <div className="encription eq-encryption">
+                        <div className='eq-neft-note'><span className='eq-note-title'>Note:</span> NEFT/RTGS fund transfers may take upto 4 hours to reflect in your trading account.</div>
+                        <img src={icn_secure_payment} alt="secure" />
+                    </div>
+                )}
+            </Container>
+        );
+    }
+}
+
+export default NEFT;

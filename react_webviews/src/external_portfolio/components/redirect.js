@@ -16,7 +16,7 @@ export default class Redirect extends Component {
 
   async componentDidMount() {
     try {
-      this.setLoader(true);
+      this.setLoader('page');
       let body = {
         "external_portfolio": [
           "portfolio_status"
@@ -47,10 +47,14 @@ export default class Redirect extends Component {
     }
   }
 
+  goBack = () => nativeCallback({ action: 'exit' });
+
   render() {
     return (
       <Container
-        goBack={() => nativeCallback({ action: 'exit' })}
+        headerData={{
+          goBack: this.goBack
+        }}
         showLoader={this.state.show_loader}
       ></Container>
     );

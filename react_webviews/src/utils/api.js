@@ -1,15 +1,14 @@
 import axios from 'axios';
 import * as Sentry from '@sentry/browser'
 
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import { storageService } from './validators';
 import { encrypt, decrypt } from './encryption';
-import { getConfig } from 'utils/functions';
 import { nativeCallback } from './native_callback';
+import { getConfig, getGuestUserRoute } from 'utils/functions';
 
 const genericErrMsg = "Something went wrong";
-const config = getConfig();
-let base_url = config.base_url;
+let base_url = getConfig().base_url;
 
 let is_secure = false;
 
@@ -18,6 +17,24 @@ axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.withCredentials = true;
 
 class Api {
+  constructor() {
+    this.genericErrMsg = 'Something went wrong. Please try again!'
+  }
+  
+  static handleApiResponse(res) {
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+      throw genericErrMsg;
+    }
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      return result;
+    } else {
+      throw result.error || result.message || genericErrMsg;
+    }
+  }
+  
   static get(route, params) {
     return this.xhr(route, params, 'get');
   }
@@ -35,6 +52,7 @@ class Api {
   }
 
   static xhr(route, params, verb) {
+    const config = getConfig();
     if (verb !== 'get') {
       if (params instanceof FormData) {
         is_secure = false;
@@ -42,12 +60,15 @@ class Api {
         is_secure = storageService().get("is_secure");
       }
     }
-    const sdk_capabilities = getConfig().sdk_capabilities;
+    const sdk_capabilities = config.sdk_capabilities;
     if (sdk_capabilities) {
       axios.defaults.headers.common['sdk-capabilities'] = sdk_capabilities;
     }
-    if(route.includes("/api/") && storageService().get("x-plutus-auth") && config.isIframe) {
-      axios.defaults.headers.common["X-Plutus-Auth"] = storageService().get("x-plutus-auth")
+    // if(route.includes("/api/") && storageService().get("x-plutus-auth") && config.isIframe) {
+    //   axios.defaults.headers.common["X-Plutus-Auth"] = storageService().get("x-plutus-auth")
+    // }
+    if(route.includes('api/insurance')){  
+      route = getGuestUserRoute(route)
     }
     let options = Object.assign({
       method: verb,
@@ -64,20 +85,38 @@ class Api {
         }
 
         if (response.data.pfwstatus_code === 416) {
-          return nativeCallback({ action: '2fa_expired' });
+          nativeCallback({ action: '2fa_expired' });
+        } else if (response.data.pfwstatus_code === 403) {
+          nativeCallback({ action: 'login_required' });
         }
 
-        if (response.config.url.includes("/api/") && response.headers["x-plutus-auth"] && config.isIframe) {
-          storageService().set("x-plutus-auth", response.headers["x-plutus-auth"])
-        }
+        // if (response.config.url.includes("/api/") && response.headers["x-plutus-auth"] && config.isIframe) {
+        //   storageService().set("x-plutus-auth", response.headers["x-plutus-auth"])
+        // }
 
         const pfwResponseData = response?.data?.pfwresponse;
 
         if (isEmpty(pfwResponseData)) {
           const errorMsg = response.data?.pfwmessage || genericErrMsg;
-          triggerSentryError(verb, response.data, errorMsg);
-        } else if (pfwResponseData.status_code !== 200) {
-          const errorMsg = pfwResponseData.result.error || pfwResponseData.result.message || genericErrMsg;
+          if(response?.data?.pfwstatus_code === 403){
+            // We are Neglecting Login Required in Sentry, Which is not Importent Event to capture.
+         } else {
+           triggerSentryError(verb, response.data, errorMsg);
+         }
+        } else if (
+          pfwResponseData.status_code !== 200 &&
+          pfwResponseData.status_code !== 400 &&
+          pfwResponseData.status_code !== 403 &&
+          pfwResponseData.status_code !== 402 &&
+          pfwResponseData.status_code !== 401 &&
+          pfwResponseData.status_code !== 405 &&
+          pfwResponseData.status_code !== 414 &&
+          pfwResponseData.status_code !== 408
+        ) {
+          const errorMsg =
+            pfwResponseData.result.error ||
+            pfwResponseData.result.message ||
+            genericErrMsg;
           triggerSentryError(verb, response.data, errorMsg);
         }
 

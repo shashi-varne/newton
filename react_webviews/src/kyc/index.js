@@ -29,7 +29,6 @@ import RtaCompliantPersonalDetails from "./RtaCompliant";
 import RegistrationSuccess from "./Success/RegistrationSuccess";
 
 import Home from "./Home/Home";
-import Nominee from "./Nominee/Nominee";
 import Report from "./Report/KycReport";
 import PersonalDetails1 from "./PersonalDetails/Screen1";
 import PersonalDetails2 from "./PersonalDetails/Screen2";
@@ -50,7 +49,7 @@ import Selfie from "./Upload/Selfie";
 import IpvVideo from "./Upload/IpvVideo";
 import NRIAddressUpload from "./Upload/NriAddress";
 import ChangeAddressDetails2 from "./Address/ChangeAddress/ChangeAddressDetails2";
-import KycNative from "./Native/KycNative";
+import KycModuleEntry from "./ModuleEntry/KycModuleEntry";
 import LocationPermission from "./Upload/LocationPermission";
 import SelfieSteps from "./Upload/SelfieSteps";
 import FnOIncomeProof from "./Upload/FnOIncomeProof";
@@ -73,7 +72,7 @@ const Kyc = (props) => {
     <Fragment>
       <Switch>
         <Route exact path={`${url}/journey`} component={Journey} />
-        <Route exact path={`${url}/native`} component={KycNative} />
+        <Route exact path={[`${url}/web`, `${url}/native`]} component={KycModuleEntry} />
         <Route
           exact
           path={`${url}/personal-details1`}
@@ -190,11 +189,6 @@ const Kyc = (props) => {
                  `${url}/:userType/bank-status`,
                ]}
           component={DialogAsPage}
-        />
-        <Route
-          exact
-          path={`${url}/:userType/nominee-details`}
-          component={Nominee}
         />
         <Route 
           exact 

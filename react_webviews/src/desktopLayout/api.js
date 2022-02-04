@@ -13,22 +13,7 @@ export const applyPromoCode = async (code) => {
     if (status === 200) {
       return result;
     } else {
-      let response;
-      switch (res.pfwresponse.status_code) {
-        case 403:
-          response = "Invalid referral code";
-          break;
-        case 401:
-          response = "Already accepted a referral code";
-          break;
-        case 402:
-          response = "Can not accept own referral code";
-          break;
-        default:
-          response = "Can not accept referral code now";
-          break;
-      }
-      throw response;
+      throw result.error;
     }
   } catch (err) {
     throw err;

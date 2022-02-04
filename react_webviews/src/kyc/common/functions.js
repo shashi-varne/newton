@@ -1,8 +1,21 @@
 import { calculateAge, isValidDate, validateEmail, isEmpty, storageService } from 'utils/validators'
 import { isTradingEnabled, getConfig } from '../../utils/functions'
 import { nativeCallback, openPdfCall } from '../../utils/native_callback'
-import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS, GENDER_OPTIONS } from '../constants'
+import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS, GENDER_OPTIONS, PATHNAME_MAPPER, PINCODE_LENGTH } from '../constants'
+import { isReadyToInvest } from '../services'
 import { getKyc } from './api'
+
+export const isEquityAllowed = (config = getConfig()) => {
+  // Function to check if Equity broking/trading is allowed as per frontend checks/rules
+  const equityEnabled = storageService().getBoolean('equityEnabled'); // Used to enable kyc equity flow from native/external side
+  
+  if (config.isSdk) {
+    return false;
+  } else if (config.isNative) {
+    return equityEnabled;
+  }
+  return true;
+}
 
 export const validateFields = (formData, keyToCheck) => {
   let canSubmit = true
@@ -60,8 +73,8 @@ export const validateFields = (formData, keyToCheck) => {
           }
           break
         case 'pincode':
-          if(value.length !== 6) {
-            formData[`${key}_error`] = 'Minimum length is 6'
+          if (value.length !== PINCODE_LENGTH) {
+            formData[`${key}_error`] = `Minimum length is ${PINCODE_LENGTH}`
             canSubmit = false
           }
           break
@@ -69,8 +82,8 @@ export const validateFields = (formData, keyToCheck) => {
         case 'father_name':
         case 'mother_name':
         case 'spouse_name':
-          if (value.length < 3) {
-            formData[`${key}_error`] = 'Minimum length is 3'
+          if (value.includes("  ")) {
+            formData[`${key}_error`] = 'consecutive spaces are not allowed'
             canSubmit = false
           }
           break
@@ -209,6 +222,17 @@ export async function checkDocsPending(kyc = {}) {
   }
 
   return false;
+}
+
+export function isEquityEsignReady(kyc) {
+  kyc = kyc || getKycUserFromSession().kyc;
+  if (isEmpty(kyc)) return false;
+  
+  return (
+    kyc.kyc_product_type === 'equity' &&
+    kyc.equity_application_status === 'complete' &&
+    kyc.equity_sign_status !== 'signed'
+  );
 }
 
 export async function pendingDocsList(kyc = {}) {
@@ -355,9 +379,11 @@ export const isEquityCompleted = () => {
 export const isIncompleteEquityApplication = (kyc) => {
   if (isEmpty(kyc)) return false;
 
-  return ((kyc.application_status_v2 !== "submitted" && kyc.application_status_v2 !== "complete") ||
-  (kyc.equity_application_status !== "submitted" && kyc.equity_application_status !== "complete") ||
-  (isEquityApplSubmittedOrComplete(kyc) && kyc.equity_sign_status !== "signed"));
+  return (
+    (kyc.application_status_v2 !== "submitted" && kyc.application_status_v2 !== "complete") ||
+    (kyc.equity_application_status !== "submitted" && kyc.equity_application_status !== "complete") ||
+    (isEquityApplSubmittedOrComplete(kyc) && kyc.equity_sign_status !== "signed")
+  );
 }
 
 export const isKycCompleted = (kyc) => {
@@ -375,9 +401,10 @@ export const isKycCompleted = (kyc) => {
 
 export const skipBankDetails = () => {
   const {kyc, user} = getKycUserFromSession();
+  const TRADING_ENABLED = isTradingEnabled(kyc);
 
   return (
-    user.active_investment ||
+    (((!TRADING_ENABLED && isReadyToInvest()) || (TRADING_ENABLED && isEquityCompleted())) && user.active_investment) ||
     (kyc.bank.meta_data_status === "approved" && kyc.bank.meta_data.bank_status === "verified") ||
     kyc.bank.meta_data.bank_status === "doc_submitted"
   );
@@ -437,3 +464,34 @@ export function openPdf(pdfLink, pdfType){
     openInBrowser(pdfLink, pdfType);
   }
 }
+
+export const getUpgradeAccountFlowNextStep = (kyc) => {
+  const userType = kyc?.kyc_status;
+  if (!isEmailAndMobileVerified()) {
+    return PATHNAME_MAPPER.communicationDetails;
+  } else {
+    if (kyc?.bank?.meta_data_status === "approved" && kyc?.bank?.meta_data?.bank_status !== "verified") {
+      return `/kyc/${userType}/bank-details`;
+    } else {
+      return PATHNAME_MAPPER.tradingExperience;
+    }
+  }
+}
+
+export const checkNomineeNameValidity = (kyc, nomineeName) => {
+  const applicantName = (kyc?.pan?.meta_data?.name)?.replace(/\s/g, '');
+  nomineeName = nomineeName?.replace(/\s/g, '');
+
+  // Matches for https://fisdom.atlassian.net/browse/QA-1247
+  if (nomineeName.match(new RegExp('^' + applicantName + '$', "i"))) {
+    return "Nominee name cannot be same as your name";
+  }
+  return '';
+}
+
+export const isBankVerified = (bank = {}, kyc = {}) => {
+  return (
+    bank.bank_status === "verified" ||
+    (bank.status === "default" && kyc.bank?.meta_data_status === "approved")
+  );
+};

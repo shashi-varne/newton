@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Container from "../common/Container";
 import { Imgc } from "../../common/ui/Imgc";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
@@ -52,13 +52,16 @@ export const KEY_INSIGHTS_CAROUSEL = [
 ];
 
 const PrimaryMarketProducts = (props) => {
-  const config = getConfig();
+  const [showLoader, setShowLoader] = useState(false);
   const navigate = navigateFunc.bind(props);
-  const productName = getConfig().productName;
+  const config = getConfig();
+  const productName = config.productName;
+
   const handleOnClick = (el = {}) => () => {
     if (el.nextState) {
       navigate(el.nextState);
     } else {
+      setShowLoader("page");
       const type = el.key;
       window.location.href = `${config.base_url}/page/equity/tpp/${type}`;
     }
@@ -77,6 +80,7 @@ const PrimaryMarketProducts = (props) => {
       data-aid="market-products-screen"
       noFooter={true}
       title="IPO, Gold Bonds and more"
+      showLoader={showLoader}
       headerData={{ goBack }}
     >
       <div className="primary-market-products">
@@ -104,7 +108,6 @@ const PrimaryMarketProducts = (props) => {
         <div className="pmp-catergories-title">Freshly open</div>
         {CARTEGORY_LISTS?.map((el, idx) => (
           <MarketProductCard
-            key={idx}
             onClick={handleOnClick(el)}
             {...el}
             icon={require(`assets/${productName}/${el.icon}`)}

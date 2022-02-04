@@ -20,7 +20,7 @@ export const investCardsBase = {
       icon: "ic_stocks.svg",
     },
     ipo: {
-      title: "IPO, Gold Bonds and more",
+      title: "IPO, SGB, NCD & more",
       subtitle: "Primary market products",
       button_text: "INVEST",
       icon: "ic_ipo.svg",
@@ -94,7 +94,7 @@ export const investCardsBase = {
     },
     gold: {
       title: "Buy & sell 24K Gold",
-      subtitle: "Starting from Rs. 1000, doorstep delivery",
+      subtitle: "Starting from Rs. 100, doorstep delivery",
       button_text: "BUY NOW",
       icon: "ic_invest_gold.svg",
     },
@@ -108,7 +108,7 @@ export const investCardsBase = {
     },
     gold: {
       title: "Buy & sell 24K Gold",
-      subtitle: "Starting from Rs. 1000, doorstep delivery",
+      subtitle: "Starting from Rs. 100, doorstep delivery",
       button_text: "BUY NOW",
       icon: "ic_invest_gold.svg",
     },
@@ -363,11 +363,20 @@ export const kycStatusMapper = {
   },
   mf_complete: {
     color: "#ffa60b",
-    title: "Congratulations! KYC verified",
-    subtitle: "You're ready to invest in Mutual Funds",
-    buttonTitle: "START INVESTING",
+    title: "You're investment ready",
+    subtitle: "You can now invest in more than 5000+ mutual funds.",
+    oneButton: true,
+    buttonTitle: "OKAY",
     icon: "icn_kyc_completed.svg",
     nextState: "/invest",
+  },
+  upgraded_incomplete: {
+    title: "Upgrade to trading and demat account",
+    subtitle: "Invest in India's best performing stocks in just a few taps!",
+    button2Title: "Later",
+    buttonTitle: "UPGRADE NOW",
+    icon: "ic_upgrade.svg",
+    nextState: KYC_PATHNAME_MAPPER.journey
   },
   esign_pending: {
     color: "#ffa60b",
@@ -403,7 +412,7 @@ export const kycStatusMapper = {
   kyc_verified: {
     color: "#ffa60b",
     title: "You're investment ready",
-    subtitle: "You can start your investment journey by investing in your favourite stocks, mutual funds, F&O ",
+    subtitle: "You can start your investment journey by investing in your favourite stocks, mutual funds & more",
     buttonTitle: "OKAY",
     oneButton: true,
     icon: "icn_kyc_completed.svg",
@@ -469,7 +478,6 @@ export const kycStatusMapperInvest = {
     icon: "ic_kyc_under_process.svg",
     title: "KYC application",
     subtitle: "IN-PROGRESS",
-    nextState: "/kyc-esign/nsdl",
     addPoint: true,
     subTitleClass: "kyc-submitted",
     subtitleColor: "var(--mustard)"
@@ -479,6 +487,13 @@ export const kycStatusMapperInvest = {
     title: "You’re ready to invest in mutual funds",
     subtitle: "UPGRAGE ACCOUNT",
     nextState: KYC_PATHNAME_MAPPER.tradingInfo,
+    subTitleClass: "kyc-complete",
+  },
+  upgraded_incomplete: {
+    icon: "ic_kyc_complete.svg",
+    title: "You’re ready to invest in mutual funds",
+    subtitle: "UPGRAGE ACCOUNT",
+    nextState: KYC_PATHNAME_MAPPER.journey,
     subTitleClass: "kyc-complete",
   },
   esign_pending: {
@@ -641,11 +656,5 @@ export const prepareInvestMaaper = [
     subtitle: "Refer to your friends & earn rewards",
     img: "ic_db_refer.svg",
     path:"/refer"
-  },
-  {
-    key: "refer",
-    referralCode: true,
-    title: "Referral Code",
-    img: "ic_db_refer.svg",
   },
 ];

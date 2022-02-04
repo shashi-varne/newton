@@ -37,12 +37,14 @@ const Input = (props) => {
         name={props.name}
         variant={props.variant}
         onChange={props.onChange}
+        inputRef={props.inputRef}
+        onKeyDown={props.onKeyDown}
       />
     );
   } else {
     return (
       <TextField
-        inputref={props.inputref}
+        inputRef={props.inputRef}
         error={props.error}
         rows={props.rows}
         disabled={props.disabled}
@@ -71,6 +73,7 @@ const Input = (props) => {
         autoFocus={props.autoFocus}
         multiline={props.multiline}
         onKeyDown={onKeyDown}
+        onKeyUp={props.onKeyUp}
         rowsMax="3"
       />
     );

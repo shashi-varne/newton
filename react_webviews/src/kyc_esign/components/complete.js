@@ -12,7 +12,7 @@ const stepsData = [
   { title: "Stocks & IPO", status: "Under process" },
   { title: "Futures & Options", status: "Under process" }
 ]
-const initialSubtitleText = "Trading & demat A/c will be ready in 2 hours. Till then you can start investing in mutual funds";
+const initialSubtitleText = "Trading & demat A/c will be ready in 24 - 48 hours. Till then you can start investing in mutual funds";
 
 const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
   const [steps, setSteps] = useState(stepsData);
@@ -75,7 +75,7 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
         {!tradingEnabled && (
           <div className="text" data-aid='kyc-header-text'>
             <img src={require(`assets/eta_icon.svg`)} alt="" />
-            Approves in one working day
+            It usually takes 1 working day for the documents to be verified and approved
           </div>
         )}
         {showAccountStatus && (

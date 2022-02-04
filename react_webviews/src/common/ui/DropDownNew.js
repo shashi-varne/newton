@@ -8,6 +8,7 @@ import { getConfig } from 'utils/functions';
 import './style.scss';
 import SVG from 'react-inlinesvg';
 import check_icon from 'assets/check_icon.svg'
+import { isNewIframeDesktopLayout } from '../../utils/functions';
 class SelectDropDown2 extends React.Component {
   constructor(props) {
     super(props);
@@ -18,6 +19,7 @@ class SelectDropDown2 extends React.Component {
       value: this.props.value,
       dropUp: false,
       productName: getConfig().productName,
+      newIframeDesktopLayout: isNewIframeDesktopLayout()
     };
     this.myRef = React.createRef();
     this.determineDropUp = this.determineDropUp.bind(this);
@@ -31,14 +33,15 @@ class SelectDropDown2 extends React.Component {
     const windowHeight = window.innerHeight;
     const menuHeight = Math.min(MAX_MENU_HEIGHT, (options.length * AVG_OPTION_HEIGHT));
     const instOffsetWithMenu = node.getBoundingClientRect().bottom + menuHeight;
+    const containerClass = this.state.newIframeDesktopLayout ? 'IframeContainer' : 'Container';
     this.setState({
       dropUp: instOffsetWithMenu >= windowHeight,
       shrink: true,
-      containerHeight: document.getElementsByClassName("Container")[0].offsetHeight,
+      containerHeight: document.getElementsByClassName(containerClass)[0].offsetHeight,
     }, () =>  { 
       if(!this.state.dropUp && open ){
         if((this.state.containerHeight  - instOffsetWithMenu) <= 0 ) {
-          document.getElementsByClassName("Container")[0].style.setProperty('height',((document.getElementsByClassName("Container")[0].offsetHeight)  + 246) + 'px', 'important');
+          document.getElementsByClassName(containerClass)[0].style.setProperty('height',((document.getElementsByClassName(containerClass)[0].offsetHeight)  + 246) + 'px', 'important');
         }
       }
     });
@@ -49,7 +52,8 @@ class SelectDropDown2 extends React.Component {
     window.removeEventListener('resize', this.determineDropUp);
     window.removeEventListener('scroll', this.determineDropUp);
     this.myRef.select.blur()
-    document.getElementsByClassName("Container")[0].style.setProperty('height', 'auto', 'important');
+    const containerClass = this.state.newIframeDesktopLayout ? 'IframeContainer' : 'Container';
+    document.getElementsByClassName(containerClass)[0].style.setProperty('height', 'auto', 'important');
   };
 
   onMenuOpen = () => {
@@ -96,7 +100,7 @@ class SelectDropDown2 extends React.Component {
     var options = this.props.options.map((ele, index) => {
       if (ele.name) {
         return ({
-          'value': ele.value, 'name': Casesensitivity(ele.name)
+          'value': ele.value, 'name': this.props.disableCaseSensitivity ? ele.name : Casesensitivity(ele.name)
         })
       } else return ({
         'value': ele, 'name': Casesensitivity(ele)
@@ -130,6 +134,7 @@ class SelectDropDown2 extends React.Component {
             <Select
               ref={inst => (this.myRef = inst)}
               blurInputOnSelect={false}
+              isDisabled={this.props.disabled}
               BrandColor={getConfig().styles.primaryColor}
               onBlurResetsInput={true}
               openMenuOnClick={true}

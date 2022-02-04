@@ -36,7 +36,7 @@ const UploadCard = (props) => {
         {doc_status === "rejected" && (
           <img
             src={require(`assets/attention_icon.svg`)}
-            alt=""
+            alt="rejected"
             className="check-icon"
             id={`check-icon-rejected_${index+1}`}
           />

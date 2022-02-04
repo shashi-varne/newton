@@ -111,7 +111,6 @@ class Permissions extends Component {
         buttonTitle="I AGREE"
         loaderData={
           {
-            // 'loaderClass': 'Loader-Dialog',
             'loadingText': this.state.loadingText || ''
           }
         }

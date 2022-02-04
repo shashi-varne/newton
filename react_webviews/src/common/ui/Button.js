@@ -8,7 +8,6 @@ import './style.scss';
 import { getConfig } from 'utils/functions';
 
 import DotDotLoaderNew from './DotDotLoaderNew';
-import { disableBodyTouch } from 'utils/validators';
 
 const typeToClass = {
   'outlined' : 'generic-button-outlined',
@@ -19,14 +18,7 @@ class CustomButton extends Component {
   render() {
     let props = this.props;
     let showLoader = props.showLoader;
-    showLoader = showLoader === 'button' ? true : false;
-
-    if(props.multipleCTA && showLoader){
-      disableBodyTouch(); //disable touch
-    }else if((!showLoader || !props.showError) && !props.multipleCTA){
-      disableBodyTouch(true); //touch enabled
-    }
-
+    
     if(props.showError){
       // disableBodyOverflow();
     }

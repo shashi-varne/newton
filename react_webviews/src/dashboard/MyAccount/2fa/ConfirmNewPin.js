@@ -10,6 +10,7 @@ import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import { isEmpty } from "lodash";
 import WVInfoBubble from "../../../common/ui/InfoBubble/WVInfoBubble";
 import WVBottomSheet from "../../../common/ui/BottomSheet/WVBottomSheet";
+import { capitalize } from "../../../utils/validators";
 
 const ConfirmNewPin = (props) => {
   const { routeParams, clearRouteParams } = usePersistRouteParams();
@@ -17,14 +18,13 @@ const ConfirmNewPin = (props) => {
     return !isEmpty(routeParams);
   }, []);
   const { productName } = getConfig();
-  const successText = routeParams.set_flow ? `${productName} security enabled` : `${productName} PIN changed`;
+  const successText = routeParams.set_flow ? `${capitalize(productName)} security enabled` : `${capitalize(productName)} PIN changed`;
   const comingFrom = useMemo(() => props.match?.params?.coming_from, [props]);
   const kycFlow = useMemo(() => comingFrom === 'kyc-complete', [comingFrom]);
   const [mpin, setMpin] = useState('');
   const [pinError, setPinError] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
-
   const navigate = navigateFunc.bind(props);
 
   const handleClick = async () => {
@@ -34,7 +34,7 @@ const ConfirmNewPin = (props) => {
       if (new_mpin) {
         if (new_mpin !== mpin) {
           // eslint-disable-next-line no-throw-literal
-          throw "PIN doesn't match, Please try again";
+          throw "PIN doesn't match";
         } else if (routeParams.set_flow) {
           await setPin({ mpin });
         } else {
@@ -85,10 +85,6 @@ const ConfirmNewPin = (props) => {
     clearRouteParams();
     if (kycFlow) {
       navigate("/invest");
-    } else if (comingFrom === 'stocks') {
-      // TODO: redirect to stocks SDK
-    } else if (comingFrom === 'ipo') {
-      navigate('/market-products');
     } else {
       navigate('/account/security-settings');
     }
@@ -106,7 +102,7 @@ const ConfirmNewPin = (props) => {
       <div style={{ paddingTop: '60px' }}>
         <EnterMPin
           title={`Confirm ${productName} PIN`}
-          subtitle={routeParams.set_flow  ? "Ensuring maximum security for your investment account" : "Keep your account safe and secure"}
+          subtitle="Add an extra layer of security"
           otpProps={{
             otp: mpin,
             handleOtp: handlePin,

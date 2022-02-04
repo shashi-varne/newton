@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Container from "../common/Container";
 import { dobFormatTest, formatDate, isEmpty } from "utils/validators";
 import Input from "../../common/ui/Input";
 import Checkbox from "common/ui/Checkbox";
-import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
+import DropDownNew from '../../common/ui/DropDownNew';
 import { RELATIONSHIP_OPTIONS, PATHNAME_MAPPER } from "../constants";
 import {
   validateFields,
   compareObjects,
   getTotalPagesInPersonalDetails,
   getFlow,
-  isDocSubmittedOrApproved
+  isDocSubmittedOrApproved,
+  checkNomineeNameValidity
 } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
@@ -21,7 +22,6 @@ import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 
-const productName = getConfig().productName;
 const PersonalDetails4 = (props) => {
   const [isChecked, setIsChecked] = useState(false);
   const navigate = navigateFunc.bind(props);
@@ -31,13 +31,16 @@ const PersonalDetails4 = (props) => {
   const [oldState, setOldState] = useState({});
   const [totalPages, setTotalPages] = useState();
   const type = props.type || "";
-  let title = "Nominee details";
+  let title = "Nominee details (Optional)";
   if (isEdit) {
     title = "Edit nominee details";
   }
   const keysToCheck = ["dob", "name", "relationship"];
 
   const { kyc, user, isLoading } = useUserKycHook();
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
 
   useEffect(() => {
     if (!isEmpty(kyc) && !isEmpty(user)) initialize();
@@ -66,44 +69,51 @@ const PersonalDetails4 = (props) => {
   };
 
   const handleClick = () => {
-    if (!isChecked) {
-      let result = validateFields(form_data, keysToCheck);
-      if (!result.canSubmit) {
-        let data = { ...result.formData };
-        setFormData(data);
-        sendEvents("next");
-        return;
-      }
-    }
-    sendEvents("next");
     if (isChecked) {
       if (kyc.nomination.nominee_optional) {
         handleNavigation();
         return;
       }
     } else {
+      let result = validateFields(form_data, keysToCheck);
+      if (!result.canSubmit) {
+        let data = { ...result.formData };
+        setFormData(data);
+        return;
+      }
+      const nameError = checkNomineeNameValidity(kyc, form_data.name);
+      if (nameError) {
+        setFormData({
+          ...form_data,
+          'name_error': nameError
+        });
+        return;
+      }
+
       if (!kyc.nomination.nominee_optional && compareObjects(keysToCheck, oldState, form_data)) {
         handleNavigation();
         return;
       }
     }
 
-    let userkycDetails = { ...kyc };
-    let body = { kyc: {} };
+
+    let body = {
+      kyc: {
+        nomination: {}
+      }
+    };
     if (isChecked) {
-      userkycDetails.nomination.nominee_optional = true;
-      body.kyc = {
-        nomination: userkycDetails.nomination,
+      body.kyc.nomination = {
+        ...kyc.nomination,
+        nominee_optional: true
       };
     } else {
-      userkycDetails.nomination.meta_data.dob = form_data.dob;
-      userkycDetails.nomination.meta_data.name = form_data.name;
-      userkycDetails.nomination.meta_data.relationship = form_data.relationship;
-      body.kyc = {
-        nomination: {
-          ...userkycDetails.nomination.meta_data,
-          nominee_optional: false
-        }
+      body.kyc.nomination = {
+        ...kyc.nomination.meta_data,
+        dob: form_data.dob,
+        name: form_data.name,
+        relationship: form_data.relationship,
+        nominee_optional: false
       };
     }
     savePersonalDetails4(body);
@@ -124,6 +134,7 @@ const PersonalDetails4 = (props) => {
   };
 
   const handleNavigation = () => {
+    sendEvents('next');
     if (type === "digilocker") {
       if(!isDocSubmittedOrApproved("sign")) {
         navigate(PATHNAME_MAPPER.uploadSign);
@@ -222,7 +233,6 @@ const PersonalDetails4 = (props) => {
             error={form_data.name_error ? true : false}
             helperText={form_data.name_error || ""}
             onChange={handleChange("name")}
-            maxLength={20}
             type="text"
             disabled={isChecked || isApiRunning}
           />
@@ -240,7 +250,7 @@ const PersonalDetails4 = (props) => {
             disabled={isChecked || isApiRunning}
           />
           <div className="input" data-aid='kyc-dropdown-withouticon'>
-            <DropdownWithoutIcon
+            <DropDownNew
               error={form_data.relationship_error ? true : false}
               helperText={form_data.relationship_error}
               options={RELATIONSHIP_OPTIONS}

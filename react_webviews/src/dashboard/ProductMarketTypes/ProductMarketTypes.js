@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Container from '../common/Container';
 import WVInPageHeader from '../../common/ui/InPageHeader/WVInPageHeader';
 import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
 import WVInPageSubtitle from '../../common/ui/InPageHeader/WVInPageSubtitle';
 import MarketProductCard from '../mini-components/MarketProductCard';
-import { getConfig, navigate as navigateFunc } from '../../utils/functions';
+import { getConfig, isDietProduct, navigate as navigateFunc } from '../../utils/functions';
 
 const ProductMarketTypes = (props) => {
+  const [showLoader, setShowLoader] = useState(false);
   const config = getConfig();
   const productName = config.productName;
   const navigate = navigateFunc.bind(props);
+  const isDietEnabled = isDietProduct();
   const categoryLists = [
     {
       name: 'IPO',
@@ -38,21 +40,23 @@ const ProductMarketTypes = (props) => {
     },
   ];
   const handleOnClick = (el) => () => {
-    let type = (el.name).toLowerCase();
+    const type = (el.name).toLowerCase();
+    setShowLoader("page");
     window.location.href = `${config.base_url}/page/equity/tpp/${type}`;
   };
 
   const goBack = () => {
     navigate("/market-products");
   };
-
+  
   return (
     <Container
       data-aid='my-categories-screen'
       noFooter={true}
-      skelton={false}
       title='All categories'
       hidePageTitle
+      showLoader={showLoader}
+      noBackIcon={isDietEnabled}
       headerData={{ goBack }}
     >
       <WVInPageHeader style={{ marginBottom: '0px' }}>

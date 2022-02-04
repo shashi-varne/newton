@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Container from "../common/Container";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
-import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
+import DropDownNew from '../../common/ui/DropDownNew';
 import {
   OCCUPATION_TYPE_OPTIONS,
   INCOME_OPTIONS,
@@ -21,7 +21,6 @@ import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
 import { getConfig, isTradingEnabled } from "../../utils/functions";
 
-const productName = getConfig().productName;
 const PersonalDetails3 = (props) => {
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -30,28 +29,35 @@ const PersonalDetails3 = (props) => {
   const { kyc, user, isLoading } = useUserKycHook();
   const [oldState, setOldState] = useState({});
   const [totalPages, setTotalPages] = useState();
-  let title = "Professional details";
+  let title = "Professional information";
   if (isEdit) {
-    title = "Edit professional details";
+    title = "Edit professional information";
   }
-
+  const { productName } = useMemo(() => {
+    return getConfig();
+  }, []);
+  
   useEffect(() => {
     if (!isEmpty(kyc) && !isEmpty(user)) initialize();
   }, [kyc, user]);
 
   const initialize = () => {
-    let formData = {
+    const formData = {
       income: kyc.identification?.meta_data?.gross_annual_income || "",
       occupation: kyc.identification?.meta_data?.occupation || "",
+      politically_exposed: kyc.identification?.meta_data?.politically_exposed || ""
     };
-    setFormData({ ...formData });
     setOldState({ ...formData });
+    setFormData({
+      ...formData,
+      politically_exposed: form_data.politically_exposed || "NOT APPLICABLE"
+    });
     setTotalPages(getTotalPagesInPersonalDetails(isEdit));
   };
 
   const handleClick = () => {
     sendEvents("next")
-    let keysToCheck = ["income", "occupation"];
+    let keysToCheck = ["income", "occupation", "politically_exposed"];
     let result = validateFields(form_data, keysToCheck);
     if (!result.canSubmit) {
       let data = { ...result.formData };
@@ -59,7 +65,7 @@ const PersonalDetails3 = (props) => {
       return;
     }
 
-    if (compareObjects(keysToCheck, oldState, form_data)) {
+    if (compareObjects(keysToCheck, oldState, form_data) && kyc.identification.meta_data.politically_exposed) {
       handleNavigation(kyc.address.meta_data.is_nri);
       return;
     }
@@ -75,8 +81,8 @@ const PersonalDetails3 = (props) => {
       mobile_number: userkycDetails.identification.meta_data.mobile_number,
       email: userkycDetails.address.meta_data.email,
     };
-    userkycDetails.identification.meta_data.politically_exposed =
-      "NOT APPLICABLE";
+    userkycDetails.identification.meta_data.politically_exposed = form_data.politically_exposed;
+      
     let item = {
       kyc: {
         identification: userkycDetails.identification.meta_data,
@@ -179,7 +185,7 @@ const PersonalDetails3 = (props) => {
       data-aid='kyc-personal-details-screen-3'
       iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
     >
-      <div className="kyc-personal-details" data-aid='kyc-personal-details-page'>
+      <div className="kyc-personal-details kyc-professional-details" data-aid='kyc-personal-details-page'>
         <main data-aid='kyc-personal-details'>
           <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon
@@ -196,7 +202,7 @@ const PersonalDetails3 = (props) => {
             />
           </div>
           <div className="input" data-aid='kyc-dropdown-withouticon'>
-            <DropdownWithoutIcon
+            <DropDownNew
               error={form_data.income_error ? true : false}
               helperText={form_data.income_error}
               options={INCOME_OPTIONS}
@@ -211,8 +217,7 @@ const PersonalDetails3 = (props) => {
           </div>
         </main>
         <footer data-aid='kyc-footer'>
-          By tapping ‘save and continue’ I agree that I am not a PEP (politically
-          exposed person)
+          By tapping SAVE AND CONTINUE, I agree that I am not a politically exposed person (PEP)
         </footer>
       </div>
     </Container>

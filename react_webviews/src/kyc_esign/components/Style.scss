@@ -136,15 +136,16 @@ $text-color1: var(--steelgrey);
 
     .text {
       @include d-flex-center();
+      align-items: flex-start;
       font-size: 14px;
       line-height: 19px;
+      text-align: left;
       color: $text-color1;
       margin-top: 10px;
-      column-gap: 5px;
 
       img {
         width: 24px;
-        margin: 0;
+        margin: 0 10px 0 0;
       }
     }
 
@@ -196,4 +197,12 @@ $text-color1: var(--steelgrey);
       text-transform: initial;
     }
   }
+}
+
+.etf-tnc {
+  padding-left: 20px;
+  font-size: 11px;
+  line-height: 18px;
+  margin: 0;
+  color: var(--steelgrey);
 }

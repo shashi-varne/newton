@@ -30,14 +30,15 @@ class SecondaryVerification extends Component {
     }
 
     componentWillMount() {
-        const { state } = this.props.location;
+        const { state = {} } = this.props.location;
         let { form_data } = this.state;
         let loginType = state?.communicationType || "mobile";
+        let firstTimeLogin = state?.firstTimeLogin || false;
         if (state.edit) {
             form_data[state?.communicationType] = state?.contactValue;
             this.setState({ isEdit: true })
         }
-        this.setState({ loginType, form_data })
+        this.setState({ loginType, form_data, firstTimeLogin })
         countries.map((item) => {
             return item.name = `+${item.value}`
         })
@@ -187,7 +188,7 @@ class SecondaryVerification extends Component {
 
 
     render() {
-        const { loginType, form_data, isEdit } = this.state;
+        const { loginType, form_data, isEdit, firstTimeLogin } = this.state;
 
         return (
             <Container
@@ -196,7 +197,7 @@ class SecondaryVerification extends Component {
                 onlyButton={true}
                 buttonTitle="CONTINUE"
                 handleClick={this.handleClick}
-                canSkip={true}
+                canSkip={firstTimeLogin}
                 onSkipClick={() => {
                     this.navigate("/");
                     this.sendEvents("skip");
@@ -285,7 +286,7 @@ class SecondaryVerification extends Component {
                     next={this.continueAccountAlreadyExists}
                     editDetails={this.editDetailsAccountAlreadyExists}
                 ></AccountAlreadyExistDialog>
-            </Container >
+            </Container>
         )
     }
 }

@@ -4,7 +4,7 @@ import Toast from "../../common/ui/Toast";
 import { isEmpty } from "utils/validators";
 import { getPinCodeData, submit } from "../common/api";
 import Container from "../common/Container";
-import { DOCUMENTS_MAPPER, PATHNAME_MAPPER } from "../constants";
+import { DOCUMENTS_MAPPER, PATHNAME_MAPPER, PINCODE_LENGTH } from "../constants";
 import {
   compareObjects,
   validateFields,
@@ -144,7 +144,7 @@ const AddressDetails2 = (props) => {
   };
 
   useEffect(() => {
-    if (form_data.pincode.length === 6) {
+    if (form_data.pincode.length === PINCODE_LENGTH) {
       fetchPincodeData();
     }
   }, [form_data.pincode]);
@@ -227,11 +227,14 @@ const AddressDetails2 = (props) => {
             value={form_data.pincode}
             onChange={handleChange}
             margin="normal"
-            helperText={form_data.pincode_error || ""}
+            helperText={
+              form_data.pincode_error ||
+              `Please enter your ${PINCODE_LENGTH}-digit pincode`
+            }
             error={form_data.pincode_error ? true : false}
             inputProps={{
               inputMode:"numeric",
-              maxLength: 6,
+              maxLength: PINCODE_LENGTH,
             }}
           /> 
           <TextField

@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import { validateNumber, isEmpty } from "utils/validators";
 import Input from "common/ui/Input";
-import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
+import DropDownNew from '../../common/ui/DropDownNew';
 import {
   bankAccountTypeOptions,
   PATHNAME_MAPPER,
   getIfscCodeError,
   STORAGE_CONSTANTS,
+  BANK_IFSC_CODES,
 } from "../constants";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -59,8 +60,12 @@ const AddBank = (props) => {
     setName(kyc.pan.meta_data.name || "");
     let data = { ...bankData };
     if (bank_id) {
-      data = kyc.additional_approved_banks.find((obj) => obj.bank_id === bank_id) || {};
-
+      if(bank_id === kyc.bank.meta_data.bank_id) {
+        data = kyc.bank.meta_data;
+        data.status = "default";
+      } else {
+        data = kyc.additional_approved_banks.find((obj) => obj.bank_id === bank_id) || {};
+      }
       data.c_account_number = data.account_number;
       if (data.user_rejection_attempts === 0) {
         setIsPennyExhausted(true);
@@ -94,7 +99,7 @@ const AddBank = (props) => {
     navigate(`/kyc/${kyc.kyc_status}/upload-documents`, {
       searchParams: `${
         getConfig().searchParams
-      }&additional=true&bank_id=${bank_id}`,
+      }&additional=true${bankData.status !== "default" ? `&bank_id=${bank_id}` : ""}`,
     });
   };
 
@@ -152,8 +157,7 @@ const AddBank = (props) => {
         });
       }
     } catch (err) {
-      if ((kyc?.bank.meta_data_status === "submitted" && kyc?.bank.meta_data.bank_status === "pd_triggered") ||
-        (kyc?.bank.meta_data_status === "rejected" && kyc?.bank.meta_data.bank_status === "rejected")) {
+      if (bankData.bank_status === "pd_triggered" || bankData.bank_status === "rejected") {
           setIsPennyFailed(true);
       } else {
         toast(err.message || genericErrorMessage);
@@ -201,23 +205,15 @@ const AddBank = (props) => {
     let formData = Object.assign({}, form_data);
     let bank = Object.assign({}, bankData);
     let bankIcon = "";
-    if (
-      (code === "ktb" &&
-        bankData.ifsc_code.toUpperCase().startsWith("KARB")) ||
-      (code === "lvb" &&
-        bankData.ifsc_code.toUpperCase().startsWith("LAVB")) ||
-      (code === "cub" &&
-        bankData.ifsc_code.toUpperCase().startsWith("CIUB")) ||
-      (code !== "ktb" &&
-        code !== "lvb" &&
-        code !== "cub")
-    ) {
+    if (!BANK_IFSC_CODES[code] || bankData.ifsc_code.toUpperCase().startsWith(BANK_IFSC_CODES[code])) {
       setIfscDisabled(true);
       try {
         const result = (await getIFSC(bankData.ifsc_code)) || [];
         if (result && result.length > 0) {
           const data = result[0] || {};
           formData.ifsc_code_error = "";
+          bank.ifsc_details = data;
+          bank.bank_code = data.bank_code;
           bank.branch_name = data.branch;
           bank.bank_name = data.bank;
           bankIcon = data.image || "";
@@ -365,7 +361,7 @@ const AddBank = (props) => {
                 disabled={isApiRunning}
               />
               <div className="input" data-aid='kyc-dropdown-withouticon'>
-                <DropdownWithoutIcon
+                <DropDownNew
                   error={form_data.account_type_error ? true : false}
                   helperText={form_data.account_type_error}
                   options={accountTypes}
@@ -376,6 +372,7 @@ const AddBank = (props) => {
                   name="account_type"
                   onChange={handleChange("account_type")}
                   disabled={isApiRunning}
+                  disableCaseSensitivity={true}
                 />
               </div>
             </main>

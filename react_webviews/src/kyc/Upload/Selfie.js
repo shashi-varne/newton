@@ -4,13 +4,13 @@ import Container from '../common/Container'
 import { isEmpty } from '../../utils/validators'
 import { PATHNAME_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
-import { checkDocsPending, isDocSubmittedOrApproved } from '../common/functions'
+import { isDocSubmittedOrApproved, isEquityEsignReady } from '../common/functions'
 import { getConfig, isTradingEnabled, navigate as navigateFunc } from 'utils/functions'
 import Toast from '../../common/ui/Toast'
 import useUserKycHook from '../common/hooks/userKycHook'
 import WVLiveCamera from "../../common/ui/LiveCamera/WVLiveCamera";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
-import LocationPermDummy from "./LocationPermDummy";
+// import LocationPermDummy from "./LocationPermDummy";
 import LocationPermission from "./LocationPermission";
 import KycUploadContainer from "../mini-components/KycUploadContainer";
 import SelfieUploadStatus from "../Equity/mini-components/SelfieUploadStatus";
@@ -34,7 +34,6 @@ const Selfie = (props) => {
   const { kyc, isLoading, updateKyc } = useUserKycHook();
   const [isCamLoading, setIsCamLoading] = useState(true);
   const [isTradingFlow, setIsTradingFlow] = useState(false);
-  const [areDocsPending, setDocsPendingStatus] = useState();
   const [fileHandlerParams, setFileHandlerParams] = useState();
   const [goBackModal, setGoBackModal] = useState(false);
   const navigate = navigateFunc.bind(props);
@@ -50,8 +49,6 @@ const Selfie = (props) => {
   }, [kyc])
 
   const initialize = async () => {
-    const docStatus = await checkDocsPending(kyc);
-    setDocsPendingStatus(docStatus)
     const tradingFlow = isTradingEnabled(kyc);
     setIsTradingFlow(tradingFlow);
   }
@@ -60,10 +57,10 @@ const Selfie = (props) => {
     if (!isDocSubmittedOrApproved("equity_income")) {
       navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
     } else {
-      if (areDocsPending) {
-        navigate(PATHNAME_MAPPER.documentVerification);
-      } else {
+      if (isEquityEsignReady(kyc)) {
         navigate(PATHNAME_MAPPER.kycEsign);
+      } else {
+        navigate(PATHNAME_MAPPER.documentVerification);
       }
     }
   }
@@ -216,12 +213,13 @@ const Selfie = (props) => {
     setIsLocnPermOpen(false);
   }
 
-  const sendEvents = (userAction, screenName) => {
+  const sendEvents = (userAction, screenName, additionalProps = {}) => {
     let eventObj = {
       event_name: isTradingFlow ? "trading_onboarding" : "kyc_registration",
       properties: {
         user_action: userAction || "",
         screen_name: screenName || "take_a_selfie",
+        ...additionalProps
       },
     };
     if (userAction === "just_set_events") {

@@ -11,7 +11,7 @@ import { upload } from '../common/api';
 import { nativeCallback } from '../../utils/native_callback';
 import WVInPageHeader from '../../common/ui/InPageHeader/WVInPageHeader';
 import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
-import { checkDocsPending } from '../common/functions';
+import { isEquityEsignReady } from '../common/functions';
 import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet';
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 import { storageService } from '../../utils/validators';
@@ -52,24 +52,25 @@ const ORElem = (
   <div className="kyc-fno-OR">OR</div>
 );
 
-const hideSkipOptionPaths = [...landingEntryPoints, "/my-account"]
+const hideSkipOptionPaths = [...landingEntryPoints, "/my-account", "/kyc/web"]
 
 const FnOIncomeProof = (props) => {
   const [selectedFile, setSelectedFile] = useState();
   const [selectedType, setSelectedType] = useState('');
   const [filePassword, setFilePassword] = useState('');
+  const [filePasswordErr, setFilePasswordErr] = useState('');
   const [openBottomSheet, setOpenBottomSheet] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [goBackModal, setGoBackModal] = useState(false);
   const navigate = navigateFunc.bind(props);
   const { kyc, isLoading, updateKyc } = useUserKycHook();
-  
   const fromState = props?.location?.state?.fromState;
   const goBackPath = props.location?.state?.goBack || "";
   const { productName, Web } = getConfig();
   const fromNativeLandingOrMyAccounts = storageService().get("native") && goBackPath === "exit";
   const isFromKycJourney = !(!Web ? fromNativeLandingOrMyAccounts : hideSkipOptionPaths.includes(fromState));
   const isMyAccountFlow = fromState === "/my-account";
+  const fromWebModuleEntry = fromState === "/kyc/web";
 
   useEffect(() => {
     setFilePassword('');
@@ -87,8 +88,12 @@ const FnOIncomeProof = (props) => {
   const uploadAndGoNext = async () => {
     sendEvents("next");
     try {
+      if (filePassword.match(/\s/)) {
+        setFilePasswordErr('Password cannot have spaces');
+        return;
+      }
       const data = {
-        doc_password: filePassword || undefined,
+        doc_password: filePassword,
         doc_type: UPLOAD_OPTIONS_MAP[selectedType]?.api_doc_type
       };
       setIsApiRunning("button");
@@ -124,7 +129,7 @@ const FnOIncomeProof = (props) => {
     } else {
       if (isMyAccountFlow) {
         navigate("/my-account");
-      } else if (landingEntryPoints.includes(fromState)) {
+      } else if (landingEntryPoints.includes(fromState) || fromWebModuleEntry) {
         navigate("/");
       } else {
         commonRedirection();
@@ -133,11 +138,10 @@ const FnOIncomeProof = (props) => {
   }
   
   const commonRedirection = async () => {
-    const areDocsPending = await checkDocsPending(kyc);
-    if (areDocsPending) {
-      navigate('/kyc/document-verification');
+    if (isEquityEsignReady(kyc)) {
+      navigate(PATHNAME_MAPPER.kycEsign);
     } else {
-      navigate('/kyc-esign/info');
+      navigate(PATHNAME_MAPPER.documentVerification);
     }
   }
 
@@ -150,6 +154,7 @@ const FnOIncomeProof = (props) => {
   }
 
   const onPasswordChange = (event) => {
+    setFilePasswordErr('');
     setFilePassword(event.target.value);
   }
 
@@ -168,7 +173,7 @@ const FnOIncomeProof = (props) => {
 
     if(goBackPath && goBackPath !== "exit") {
       navigate(goBackPath)
-    } else if (landingEntryPoints.includes(fromState)) {
+    } else if (landingEntryPoints.includes(fromState) || fromWebModuleEntry) {
       navigate("/");
     } else {
       navigate(PATHNAME_MAPPER.journey);
@@ -213,6 +218,7 @@ const FnOIncomeProof = (props) => {
       showLoader={isApiRunning}
       skelton={isLoading}
       headerData={{goBack}}
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
     >
       <WVInPageHeader style={{ marginBottom: '15px' }}>
         <WVInPageTitle>Provide income proof for F&O trading 
@@ -255,6 +261,8 @@ const FnOIncomeProof = (props) => {
             variant="filled"
             label="Enter password (if any)"
             value={filePassword}
+            error={!!filePasswordErr}
+            helperText={filePasswordErr}
             type="password"
             onChange={onPasswordChange}
             classes={{
@@ -285,6 +293,8 @@ const FnOIncomeProof = (props) => {
       </div>
       <WVBottomSheet
         isOpen={openBottomSheet}
+        disableEscapeKeyDown
+        disableBackdropClick
         onClose={() => setOpenBottomSheet(false)}
         title="Income proof uploaded"
         subtitle={

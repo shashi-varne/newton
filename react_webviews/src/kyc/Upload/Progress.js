@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Container from "../common/Container";
 import UploadCard from "./UploadCard";
 import { getDocuments } from "../services";
@@ -8,26 +8,28 @@ import { PATHNAME_MAPPER } from "../constants";
 import useUserKycHook from "../common/hooks/userKycHook";
 import "./commonStyles.scss";
 import { nativeCallback } from "../../utils/native_callback";
-import { getConfig } from "../../utils/functions";
+import { getConfig, isNewIframeDesktopLayout } from "../../utils/functions";
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 import { storageService } from "../../utils/validators";
 import { landingEntryPoints } from "../../utils/constants";
+import { Imgc } from "../../common/ui/Imgc";
 
 const Progress = (props) => {
   const { productName, Web } = getConfig();
-  const { kyc, isLoading } = useUserKycHook();
-  const disableNext = props?.location?.state?.disableNext || false;
-  const fromState = props?.location?.state?.fromState;
-  const goBackPath = props.location?.state?.goBack || "";
   const navigate = navigateFunc.bind(props);
   const [openConfirmBack, setOpenConfirmBack] = useState(false);
+  const { kyc, isLoading } = useUserKycHook();
+  const stateParams = props?.location?.state || {};
+  const { disableNext = false, goBack: goBackPath, fromState } = stateParams;
+  const fromWebModuleEntry = fromState === "/kyc/web";
+  const newIframeDesktopLayout = useMemo(isNewIframeDesktopLayout, []);
 
   let documents = [];
   let totalDocs = 0;
   let canGoNext = false;
 
   useEffect(() => {
-    if ((landingEntryPoints.includes(fromState)) || (!Web && storageService().get("native") && (goBackPath === "exit"))) {
+    if ((landingEntryPoints.includes(fromState) || fromWebModuleEntry) || (!Web && storageService().get("native") && goBackPath === "exit")) {
       storageService().set("uploadDocsEntry", "landing");
     }
   },[])
@@ -126,7 +128,7 @@ const Progress = (props) => {
       skeltonType="p"
       handleClick={goNext}
       title="Upload documents"
-      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
+      iframeRightContent={require(`assets/${productName}/upload_documents.svg`)}
       headerData={{goBack}}
       data-aid='kyc-progress-screen'
       hidePageTitle
@@ -137,7 +139,13 @@ const Progress = (props) => {
             <div className="generic-page-title">Upload documents</div>
             <div className="generic-page-subtitle">Attach required documents to verify your personal and address details</div>
           </div>
-          <img alt="" src={require(`assets/${productName}/upload_documents.svg`)} />
+          {!newIframeDesktopLayout && (
+            <Imgc
+              alt=""
+              src={require(`assets/${productName}/upload_documents.svg`)}
+              className="kup-top-image"
+            />
+          )}
         </header>
         <main className="documents" data-aid='kyc-progress-screen-documents'>
           {documents.map((document, index) => (

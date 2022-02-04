@@ -14,6 +14,12 @@
   align-items: center;
 }
 
+@mixin fees-subtext {
+  font-size: 11px;
+  line-height: 18px;
+  color: var(--steelgrey);
+}
+
 .flex-between-center {
   @include d-flex-space-between();
 }
@@ -115,15 +121,14 @@
       }
 
       .kaim-fees-info-subtext {
-        font-size: 11px;
-        line-height: 18px;
-        color: var(--steelgrey);
+        @include fees-subtext();
       }
 
       .kaim-no-fees-text1 {
         font-size: 13px;
         line-height: 21px;
         color: var(--steelgrey);
+        text-align: right;
       }
 
       .kaim-no-fees-text2 {
@@ -131,6 +136,11 @@
         font-size: 13px;
         line-height: 21px;
         color: var(--primary);
+        text-align: right;
+      }
+
+      .kaim-fees-info-subvalue {
+        @include fees-subtext();
         text-align: right;
       }
     }

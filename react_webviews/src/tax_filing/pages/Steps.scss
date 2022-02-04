@@ -1,18 +1,19 @@
 .tax-filing-advantages-icon {
-  background-color: var(--primaryVariant1);
-  height: 60px;
-  width: 60px;
-  border-radius: 100%;
+  background-color: transparentize(#DFD8EF, 0.5);
+}
+
+.tax-filing-advantages-icon__finity {
+  background-color: #FAFCFF;
 }
 
 .tax-filing-advantages {
   padding-bottom: 30%;
 }
 
-.tax-filing-advantages .divider {
+.tax-filing-advantages-divider {
   height: 8px;
   width: 1px;
   background: var(--primaryVariant4);
   position: relative;
-  top: 52px
+  top: 52px;
 }

@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import './style.scss';
 
 const DotDotLoader = (props) => {
-
   const { size = '' } = props;
    // eslint-disable-next-line
   let sizeObj = {};

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Container from "../common/Container";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import { PATHNAME_MAPPER, ADDRESS_PROOF_OPTIONS } from "../constants";
 import { isEmpty } from "utils/validators";
-import { validateFields } from "../common/functions";
+import { isEquityAllowed, validateFields } from "../common/functions";
 import { kycSubmit } from "../common/api";
 import toast from "../../common/ui/Toast";
 import SVG from "react-inlinesvg";
@@ -29,7 +29,7 @@ const AddressDetails1 = (props) => {
   const isEdit = state.isEdit || false;
   const {kyc, isLoading} = useUserKycHook();
   const [title, setTitle] = useState("");
-  const productName = getConfig().productName;
+  const { productName } = useMemo(() => getConfig(), []);
 
   const RESIDENTIAL_OPTIONS = [
     {
@@ -104,7 +104,7 @@ const AddressDetails1 = (props) => {
       kyc: {}
     };
     if(isNri !== kyc.address.meta_data.is_nri) {
-      if(!isNri && kyc.kyc_product_type !== "equity") {
+      if (!isNri && isEquityAllowed() && kyc.kyc_product_type !== "equity") {
         body.set_kyc_product_type = "equity";
         if(kyc.kyc_status !== "compliant")
           body.set_kyc_type = "manual";

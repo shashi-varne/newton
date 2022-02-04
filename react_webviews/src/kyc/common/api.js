@@ -38,7 +38,7 @@ export const getUserKycFromSummary = async () => {
     }
     return result;
   } catch (err) {
-    console.log(err)
+    toast(err.message);
   }
 }
 
@@ -75,7 +75,7 @@ export const checkMerge = async (pan) => {
     !res.pfwresponse ||
     isEmpty(res.pfwresponse)
   ) {
-    throw new Error( res?.pfwmessage || genericErrorMessage);
+    throw new Error(res?.pfwmessage || genericErrorMessage);
   }
   return res.pfwresponse;
 }
@@ -106,7 +106,7 @@ export const kycSubmit = async (body) => {
         name = 'finity'
       }
       const msg = `The PAN is already associated with another ${name} account. Kindly send mail to ${email} for any clarification`
-      toast(msg)
+      toast(result.message || result.error || msg);
       break
     default:
       throw new Error(result.error || result.message || 'Server error')
@@ -142,8 +142,8 @@ export const addAdditionalBank = async (data) => {
 }
 
 export const upload = async (file, type, data = {}) => {
-  const formData = new FormData()
-  formData.set('res', file)
+  const formData = new FormData();
+  formData.set('res', file);
   let doc_type = ''
   if (!isEmpty(data)) {
     switch (type) {
@@ -161,7 +161,9 @@ export const upload = async (file, type, data = {}) => {
         break
       case 'income':
         doc_type = data?.doc_type;
-        formData.append('doc_password', data.doc_password);
+        if (data.doc_password) {
+          formData.append('doc_password', data.doc_password);
+        }
         break;
       case 'identification':
         if (data.kyc_product_type) {

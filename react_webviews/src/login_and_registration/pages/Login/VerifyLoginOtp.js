@@ -46,11 +46,12 @@ class VerifyLoginOtp extends Component {
     this.initialize();
   }
 
-  handleClick = () => {
+  handleClick = (event) => {
     let body = {
       otp: this.state.otpData["otp"],
     }
     this.otpLoginVerification(this.state.verify_url, body);
+    event.preventDefault()
   };
 
   handleOtp = (otp) => {
@@ -100,30 +101,33 @@ class VerifyLoginOtp extends Component {
     let { value, isApiRunning, otpData, isWrongOtp, communicationType, isResendOtpApiRunning } = this.state;
     let disabled = otpData.otp?.length !== 4;
     return (
-      <OtpContainer
-        title={`Enter OTP to verify your ${communicationType === "email" ? "email" : "number"}`}
-        otpData={this.state.otpData}
-        showDotLoader={isResendOtpApiRunning}
-        handleOtp={this.handleOtp}
-        resendOtp={this.handleResendOtp}
-        isWrongOtp={isWrongOtp}
-        value={communicationType !== "email" ? formatMobileNumber(value) : value}
-        classes={{
-          subtitle: "login-subtitle"
-        }}
-      >
-        <LoginButton
-          onClick={this.handleClick}
-          disabled={disabled}
-          showLoader={isApiRunning}
+      <form onSubmit={this.handleClick}>
+        <OtpContainer
+          title={`Enter OTP to verify your ${communicationType === "email" ? "email" : "number"}`}
+          otpData={this.state.otpData}
+          showDotLoader={isResendOtpApiRunning}
+          handleOtp={this.handleOtp}
+          resendOtp={this.handleResendOtp}
+          isWrongOtp={isWrongOtp}
+          value={communicationType !== "email" ? formatMobileNumber(value) : value}
+          classes={{
+            subtitle: "login-subtitle"
+          }}
         >
-          CONTINUE
-        </LoginButton>
-        <GoBackToLoginBtn
-          onClick={this.goBackToLogin}
-          disabled={isApiRunning || isResendOtpApiRunning}
-        />
-      </OtpContainer>
+          <LoginButton
+            onClick={this.handleClick}
+            disabled={disabled}
+            showLoader={isApiRunning}
+            type="submit"
+          >
+            CONTINUE
+          </LoginButton>
+          <GoBackToLoginBtn
+            onClick={this.goBackToLogin}
+            disabled={isApiRunning || isResendOtpApiRunning}
+          />
+        </OtpContainer>
+      </form>
     );
   }
 }

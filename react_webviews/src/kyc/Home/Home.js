@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Container from "../common/Container";
 import { storageService, validatePan } from "utils/validators";
 import Input from "../../common/ui/Input";
@@ -6,13 +6,13 @@ import { checkMerge, getPan, kycSubmit } from "../common/api";
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import toast from "../../common/ui/Toast";
 import AccountMerge from "../mini-components/AccountMerge";
-import { getConfig, isNewIframeDesktopLayout, navigate as navigateFunc } from "../../utils/functions";
+import { getConfig, isNewIframeDesktopLayout, isTradingEnabled, navigate as navigateFunc } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import { ConfirmPan } from "../Equity/mini-components/ConfirmPan";
 import CheckCompliant from "../Equity/mini-components/CheckCompliant";
-import { isDigilockerFlow, panUiSet } from "../common/functions";
+import { isDigilockerFlow, isEquityAllowed, panUiSet } from "../common/functions";
 import internalStorage from '../common/InternalStorage';
 import isEmpty from 'lodash/isEmpty';
 
@@ -29,7 +29,7 @@ const residentialStatusOptions = [
 
 const Home = (props) => {
   const showPageDialog = isNewIframeDesktopLayout();
-  const config = getConfig();
+  const config = useMemo(() => getConfig(), []);
   const navigate = navigateFunc.bind(props);
   const genericErrorMessage = "Something Went wrong!";
   const [showLoader, setShowLoader] = useState(false);
@@ -51,11 +51,9 @@ const Home = (props) => {
   const [tradingEnabled, setTradingEnabled] = useState();
   const [disableResidentialStatus, setDisableResidentialStatus] = useState();
 
-  const isTradingEnabled = (isIndian) => {
-    return !config.isSdk && kyc.equity_enabled && isIndian
+  const checkIfTradingEnabled = (isIndian) => {
+    return isTradingEnabled(kyc) && isIndian;
   }
-  // const [navigateTo, setNavigateTo] = useState('');
-  // const [x,setX] = useState(false);
 
   const savedPan = storageService().get('pan');
   useEffect(() => {
@@ -71,15 +69,14 @@ const Home = (props) => {
   const initialize = () => {
     setPan(kyc.pan?.meta_data?.pan_number || "");
     setResidentialStatus(!kyc.address?.meta_data?.is_nri);
-    const TRADING_ENABLED = isTradingEnabled(!kyc.address?.meta_data?.is_nri);
+    const TRADING_ENABLED = checkIfTradingEnabled(!kyc.address?.meta_data?.is_nri);
     setTradingEnabled(TRADING_ENABLED);
     setDisableResidentialStatus(!!kyc.identification.meta_data.tax_status)
     let data = {
       investType: "mutual fund",
       npsDetailsRequired: false,
-      title: "Verify PAN",
-      subtitle: TRADING_ENABLED ? "As per SEBI, valid PAN is mandatory to open a trading & demat account" : "As per SEBI, valid PAN is required to invest in mutual funds",
-        
+      title: "Enter PAN to check KYC status",
+      subtitle: TRADING_ENABLED ? "As per SEBI, KYC is mandatory for investments in stocks & mutual funds" : "As per SEBI, valid PAN is required to invest in mutual funds",
       kycConfirmPanScreen: false,
     };
     if(isEmpty(savedPan)){
@@ -212,7 +209,7 @@ const Home = (props) => {
 
   const handleResidentialStatus = (event) => {
     let value = event.target ? event.target.value : event;
-    setTradingEnabled(isTradingEnabled(value !== 1))
+    setTradingEnabled(checkIfTradingEnabled(value !== 1))
     setResidentialStatus(residentialStatusOptions[value].value);
   };
 
@@ -300,7 +297,7 @@ const Home = (props) => {
           setOpenAccountMerge(true);
         }
       } else {
-        toast(toastMessage);
+        toast(result?.error || result?.message || toastMessage);
       }
     }
   };
@@ -325,7 +322,7 @@ const Home = (props) => {
       };
 
       const addkycType = kyc.kyc_status === "non-compliant" && !isDigilockerFlow(kyc);
-      if(tradingEnabled) {
+      if (!is_nri && isEquityAllowed()) {
         body.set_kyc_product_type = "equity";
         if(addkycType && kyc.kyc_type !== "manual")
           body.set_kyc_type = "manual";
@@ -337,13 +334,23 @@ const Home = (props) => {
 
       let result = await kycSubmit(body);
       if (!result) return;
+      const payload = { kyc: {} };
+      let callKycSubmitApi = false;
+      if (result.kyc.kyc_product_type !== "equity" && isTradingEnabled(result.kyc)) {
+        payload.set_kyc_product_type = "equity";
+        callKycSubmitApi = true;
+      }
       if (result?.kyc?.kyc_status === "compliant") {
         setIsUserCompliant(true);
-        if(result?.kyc?.kyc_type !== "init") {
-          result = await kycSubmit({ kyc: {}, set_kyc_type: "init"})
+        if (result?.kyc?.kyc_type !== "init") {
+          payload.set_kyc_type = "init";
+          callKycSubmitApi = true;
         }
       } else {
         setIsUserCompliant(false);
+      }
+      if (callKycSubmitApi) {
+        result = await kycSubmit(payload);
       }
       handleNavigation(is_nri, result.kyc);
     } catch (err) {
@@ -456,7 +463,7 @@ const Home = (props) => {
           <div className="kyc-main-subtitle" data-aid='kyc-main-subtitle'>{homeData.subtitle}</div>
           <main data-aid='kyc-home'>
             <Input
-              label="Enter PAN"
+              label="Enter your PAN"
               class="input"
               value={pan.toUpperCase()}
               error={panError ? true : false}

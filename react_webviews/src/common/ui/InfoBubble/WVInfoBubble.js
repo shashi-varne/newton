@@ -20,13 +20,13 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { getConfig } from 'utils/functions';
 import Fade from '@material-ui/core/Fade';
-import SVG from 'react-inlinesvg';
+import { Imgc } from '../Imgc';
 
 const config = getConfig();
 
 const TYPES = {
   'info': {
-    icon: config.productName === 'finity' ? 'badge-info-finity' : 'badge-info',
+    icon: `${config.productName}/badge-info`,
     iconColor: config.styles.primaryColor,
     bgColor: config.styles.highlightColor,
     titleColor: '#6650AB',
@@ -80,8 +80,9 @@ const WVInfoBubble = ({
         data-aid={`wv-info-bubble-${dataAidSuffix}`}
       >
         {typeConfig.icon &&
-          <SVG
+          <Imgc
             className='wv-ib-icon'
+            style={{ height: '14px', width: '14px' }}
             // preProcessor={code => code.replace(/fill='.*?'/g, 'fill=' + typeConfig.iconColor)}
             src={require(`assets/${typeConfig.icon}.svg`)}
           />
