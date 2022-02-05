@@ -41,7 +41,7 @@ const Container = ({
       sx={{ ...containerWrapperSx, ...containerSx }}
       className={`container-wrapper ${className}`}
     >
-      <NavigationHeader headerTitle={headerTitle} anchorOrigin={containerRef} {...restHeaderProps}>
+      <NavigationHeader className='container-nav-header' headerTitle={headerTitle} anchorOrigin={containerRef} {...restHeaderProps}>
         {subtitle && <NavigationHeaderSubtitle dataIdx={1}>{subtitle}</NavigationHeaderSubtitle>}
         {isArray(points) &&
           points?.map((point, idx) => {

@@ -2,11 +2,24 @@
   height: 100%;
   overflow: auto;
   position: relative;
+
+  .container-nav-header{
+    padding-top: 56px;
+    flex: 1;
+
+    .nav-header-top-section {
+      position: fixed;
+      top: 60px;
+      width: var(--desktop-width);
+    }
+  }
+
   .container-content-wrapper {
     padding: 0px 16px 20px 16px;
   }
 
   .container-footer-wrapper {
+    z-index: 100;
     .container-footer-child-wrapper {
       padding: 0px 16px;
       .footer-wrapper {
@@ -40,6 +53,15 @@
 
 @media (max-width: 600px) {
   .container-wrapper {
+
+    .container-nav-header{
+      .nav-header-top-section {
+        top: 0px;
+        width: 100%;
+      }
+    }
+
+
     .container-footer-wrapper {
       &.container-fixed-footer {
         position: fixed;
