@@ -22,6 +22,7 @@ import FilterReturnBottomSheet, {
   ReturnsDataList,
   SortsDataList,
 } from '../../../featureComponent/DIY/Filters/FilterReturnBottomSheet';
+import Filter from '../../../featureComponent/DIY/Filters/Filter';
 
 const tabChilds = [
   {
@@ -51,6 +52,7 @@ const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
   const [isFilterSheetOpen, setIsFilterSheetOpen] = useState({
     [FilterType.returns]: false,
     [FilterType.sort]: false,
+    filter: false
   });
   const { productName } = useMemo(getConfig, []);
   const swipeableViewsRef = useRef();
@@ -98,6 +100,7 @@ const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
         <CustomFooter
           handleSortClick={handleFilterClick(FilterType.sort)}
           handleReturnClick={handleFilterClick(FilterType.returns)}
+          handleFilterClick={handleFilterClick('filter')}
           productName={productName}
           cartCount={cartCount}
           onCartClick={onCartClick}
@@ -162,6 +165,7 @@ const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
         handleClose={handleFiltterSheetClose(FilterType.sort)}
         isOpen={isFilterSheetOpen[FilterType.sort]}
       />
+      <Filter isOpen={isFilterSheetOpen.filter} handleFilterClose={handleFiltterSheetClose('filter')}/>
     </Container>
   );
 };
@@ -169,7 +173,6 @@ const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
 const TabPanel = memo((props) => {
   const { data = [], returnPeriod, sortFundsBy, sortingOrder } = props;
 
-  console.log('sortFundsBy', sortFundsBy);
 
   const [funds, setFunds] = useState(data);
 
@@ -183,7 +186,6 @@ const TabPanel = memo((props) => {
 
   useEffect(() => {
     const filteredFunds = orderBy(data, sortFundsOrder, [sortingOrder]);
-    console.log('new filters', filteredFunds);
     setFunds(filteredFunds);
   }, [sortFundsBy]);
 
@@ -266,6 +268,7 @@ const CustomFooter = ({
   cartCount,
   onCartClick,
   handleSortClick,
+  handleFilterClick,
   handleReturnClick,
   returnLabel,
 }) => {
@@ -285,6 +288,7 @@ const CustomFooter = ({
         returnLabel={returnLabel}
         handleSortClick={handleSortClick}
         handleReturnClick={handleReturnClick}
+        handleFilterClick={handleFilterClick}
       />
     </Stack>
   );
