@@ -65,7 +65,7 @@ const SearchBar = ({
         value={value}
         onChange={onChange}
         disabled={disabled}
-        dataAid={`searchBar_${dataAid}`}
+        data-aid={`searchBar_${dataAid}`}
         InputProps={{
           startAdornment: InputPrefix(),
           endAdornment: InputSuffix(),

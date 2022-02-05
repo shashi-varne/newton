@@ -23,23 +23,48 @@ import FilterReturnBottomSheet, {
   SortsDataList,
 } from '../../../featureComponent/DIY/Filters/FilterReturnBottomSheet';
 import Filter from '../../../featureComponent/DIY/Filters/Filter';
+import Icon from '../../../designSystem/atoms/Icon';
 
 const tabChilds = [
   {
     label: 'Large cap',
     data: largeCap,
+    headerTitle:'Large cap',
+    subtitle: 'These funds invest 80% of their assets in top 100 blue-chip companies of India with a market cap of over ₹30,000 cr',
+    points: [
+      'Offers stability & multi-sector diversification',
+      'Ideal for long-term investors seeking stability',
+    ]
   },
   {
     label: 'Multi cap',
     data: multiCap,
+    headerTitle:'Multi cap',
+    subtitle: 'These funds invest 65% of their total assets in equity shares of large, mid & small-cap companies ',
+    points: [
+      'Offers better returns than large-cap funds',
+      'Ideal for investors with a long-term goal',
+    ]
   },
   {
     label: 'Mid cap',
     data: midCap,
+    headerTitle:'Mid cap',
+    subtitle: 'These funds invest 65% to 90% of their total assets in equity shares of mid-cap companies with a market cap of ₹10,000 cr',
+    points: [
+      'Offers potential to earn market-beating returns',
+      'Ideal for investors willing to take higher risks',
+    ]
   },
   {
     label: 'Small cap',
     data: smallCap,
+    headerTitle:'Small cap',
+    subtitle: 'These funds invest 65% of their assets in equity shares of small-cap companies with a market cap of less than ₹5,000 cr',
+    points: [
+      'Higher risk compared to mid or large-cap funds',
+      'Ideal for investors with a high-risk tolerance',
+    ]
   },
 ];
 
@@ -82,13 +107,9 @@ const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
   return (
     <Container
       headerProps={{
-        headerTitle: 'Large cap',
-        subtitle:
-          'These funds invest 80% of their assets in top 100 blue-chip companies of India with a market cap of over ₹30,000 cr',
-        points: [
-          'Offers stability & multi-sector diversification',
-          'Ideal for long-term investors seeking stability See less',
-        ],
+        headerTitle: tabChilds[tabValue]?.headerTitle,
+        subtitle:tabChilds[tabValue]?.subtitle,
+        points: tabChilds[tabValue]?.points,
         tabsProps: {
           selectedTab: tabValue,
           onTabChange: handleTabChange,
@@ -141,6 +162,7 @@ const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
                   sortingOrder={selectedFilterValue[FilterType.sort]?.order}
                   key={idx}
                   selectedFilterValue={selectedFilterValue}
+                  productName={productName}
                   // value={tabValue}
                   // index={idx}
                   data={el?.data}
@@ -171,7 +193,7 @@ const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
 };
 
 const TabPanel = memo((props) => {
-  const { data = [], returnPeriod, sortFundsBy, sortingOrder } = props;
+  const { data = [], returnPeriod, sortFundsBy, sortingOrder, productName } = props;
 
 
   const [funds, setFunds] = useState(data);
@@ -243,14 +265,7 @@ const TabPanel = memo((props) => {
                   </ProductItem.LeftSection>
                   <ProductItem.RightSection spacing={2}>
                     <ProductItem.Description title={returnData} titleColor={returnColor} />
-                    <Button
-                      title='+ADD'
-                      variant='link'
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        console.log('hello');
-                      }}
-                    />
+                    <Icon size='32px' src={require(`assets/${productName}/add_icon.svg`)}/>
                   </ProductItem.RightSection>
                 </ProductItem>
               </div>

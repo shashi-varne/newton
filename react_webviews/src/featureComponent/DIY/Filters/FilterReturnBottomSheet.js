@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Dialog, Stack } from '@mui/material';
+import { Dialog, IconButton, Stack } from '@mui/material';
 import Typography from '../../../designSystem/atoms/Typography';
 import Icon from '../../../designSystem/atoms/Icon';
 import Button from '../../../designSystem/atoms/Button';
@@ -41,9 +41,11 @@ const FilterReturnBottomSheet = ({ variant, isOpen, handleClose, applyFilter, se
         variant='bottomsheet'
       >
         <Stack sx={{ p: 2 }}>
-          <Stack direction='row' className='fr-title-wrapper'>
-            <Icon size='24px' src={require('assets/amazon_pay.svg')} />
-            <Typography sx={{ height: '' }} align='center'>
+          <Stack direction='row' justifyContent='center' className='fr-title-wrapper'>
+            <IconButton onClick={handleClose}>
+              <Icon size='24px' src={require('assets/close_small.svg')} />
+            </IconButton>
+            <Typography variant='heading3' align='center'>
               {title}
             </Typography>
           </Stack>
@@ -79,7 +81,7 @@ const Sorting = ({ selectedItem, handleSelection }) => {
                 {item.label2}
               </Typography>
               {selectedItem?.value === item?.value && (
-                <Icon size='24px' src={require('assets/amazon_pay.svg')} />
+                <Icon size='24px' src={require('assets/checked.svg')} />
               )}
             </Stack>
           </Stack>
@@ -108,7 +110,7 @@ const Return = ({ selectedItem, handleSelection }) => {
               {item.label}
             </Typography>
             {selectedItem?.value === item?.value && (
-              <Icon size='24px' src={require('assets/amazon_pay.svg')} />
+              <Icon size='24px' src={require('assets/checked.svg')} />
             )}
           </Stack>
         );

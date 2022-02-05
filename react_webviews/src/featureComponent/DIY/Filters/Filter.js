@@ -47,7 +47,7 @@ const Filter = ({ isOpen, handleFilterClose }) => {
             <RightPanel selectedTab={selectedTab} />
           </Stack>
           <div className='diy-filter-footer-btn-wrapper'>
-            <Button title='Appy' />
+            <Button title='Apply' />
           </div>
         </Stack>
       </Drawer>
@@ -57,7 +57,11 @@ const Filter = ({ isOpen, handleFilterClose }) => {
 
 const LeftPanel = ({ selectedTab, handleSelection }) => {
   return (
-    <Stack direction='column' flexBasis='30%' sx={{backgroundColor: 'foundationColors.supporting.grey'}}>
+    <Stack
+      direction='column'
+      flexBasis='30%'
+      sx={{ backgroundColor: 'foundationColors.supporting.grey', cursor: 'pointer' }}
+    >
       {filterOptions?.map((el, idx) => {
         const selectedValue = selectedTab === idx;
         const selectedColor = selectedValue
@@ -84,17 +88,17 @@ const RightPanel = ({ selectedTab }) => {
     <TransitionGroup className='right-panel-wrapper'>
       <Stack flexBasis='70%'>
         {selectedTab === 0 && (
-          <CSSTransition in={true} timeout={225} classNames='right-panel-transition'>
+          <CSSTransition in={selectedTab === 0} timeout={225} classNames='right-panel-transition'>
             <FundHouses />
           </CSSTransition>
         )}
         {selectedTab === 1 && (
-          <CSSTransition in={true} timeout={225} classNames='right-panel-transition'>
+          <CSSTransition in={selectedTab === 1} timeout={225} classNames='right-panel-transition'>
             <FundOptions />
           </CSSTransition>
         )}
         {selectedTab === 2 && (
-          <CSSTransition in={true} timeout={225} classNames='right-panel-transition'>
+          <CSSTransition in={selectedTab === 2} timeout={225} classNames='right-panel-transition'>
             <MinimumInvestment />
           </CSSTransition>
         )}
@@ -102,7 +106,6 @@ const RightPanel = ({ selectedTab }) => {
     </TransitionGroup>
   );
 };
-
 
 const MinimumInvestment = () => {
   return <Typography variant='heading2'>MinimumInvestment</Typography>;
