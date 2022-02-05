@@ -213,7 +213,7 @@ const TabPanel = memo((props) => {
               ? 'foundationColors.secondary.profitGreen.300'
               : 'foundationColors.secondary.lossRed.300';
             return (
-              <>
+              <div key={idx}>
                 <Typography>{fund[sortFundsBy]}</Typography>
                 <ProductItem
                   // sx={{ mb: '16px' }}
@@ -253,7 +253,7 @@ const TabPanel = memo((props) => {
                     />
                   </ProductItem.RightSection>
                 </ProductItem>
-              </>
+              </div>
             );
           })}
         </Typography>

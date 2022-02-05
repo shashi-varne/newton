@@ -16,6 +16,7 @@
     left: 300px;
     width: var(--desktop-width);
     background-color: transparent;
+    overflow: hidden;
   }
 
   .MuiDrawer-paper {
@@ -25,6 +26,7 @@
     right: unset;
     width: var(--desktop-width);
     background-color: white;
+    overflow: hidden;
 
     .MuiDialog-container {
       .MuiDialog-paper {
@@ -38,6 +40,10 @@
 
   .diy-filter-footer-btn-wrapper {
     padding: 16px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
   }
 
   .right-panel-transition-enter {
@@ -48,7 +54,7 @@
   .right-panel-transition-enter-active {
     opacity: 1;
     transform: translate(0, 0);
-    transition: all 350ms ease-in;
+    transition: all 225ms ease-in;
   }
 
   .right-panel-wrapper {
@@ -114,6 +120,10 @@
       right: unset;
       width: 100%;
       background-color: white;
+    }
+    
+    .diy-filter-footer-btn-wrapper {
+      position: fixed;
     }
   }
 }
