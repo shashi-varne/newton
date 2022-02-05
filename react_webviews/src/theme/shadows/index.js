@@ -5,8 +5,12 @@ Currently we have only two elevation variation => [0,1]. => 0 means no elevation
               Currently, only a single version is there, which will be represented by 1.
 */
 
+import { createTheme } from '@mui/material';
+
+const theme = createTheme();
+
 export const customShadows = () => {
-  return SHADOWS;
+  return {...theme.shadows,...SHADOWS};
 };
 
 export const SHADOWS = {

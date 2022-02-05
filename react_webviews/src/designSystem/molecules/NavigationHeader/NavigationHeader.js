@@ -29,6 +29,7 @@ const NavigationHeader = ({
   onRightIconClick,
   tabsProps = {},
   tabChilds = [],
+  className,
 }) => {
   const navHeaderWrapperRef = useRef();
   const subtitleRef = useRef();
@@ -65,7 +66,7 @@ const NavigationHeader = ({
   };
   const leftIcon = leftIconSrc ? leftIconSrc : showCloseIcon ? closeIcon : backIcon;
   return (
-    <header className='nav-header-wrapper' ref={navHeaderWrapperRef}>
+    <header className={`nav-header-wrapper ${className}`} ref={navHeaderWrapperRef}>
       <section className='nav-header-top-section'>
         <div className='nav-header-left'>
           {!hideLeftIcon && (
