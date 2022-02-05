@@ -29,47 +29,52 @@ const tabChilds = [
   {
     label: 'Large cap',
     data: largeCap,
-    headerTitle:'Large cap',
-    subtitle: 'These funds invest 80% of their assets in top 100 blue-chip companies of India with a market cap of over ₹30,000 cr',
+    headerTitle: 'Large cap',
+    subtitle:
+      'These funds invest 80% of their assets in top 100 blue-chip companies of India with a market cap of over ₹30,000 cr',
     points: [
       'Offers stability & multi-sector diversification',
       'Ideal for long-term investors seeking stability',
-    ]
+    ],
   },
   {
     label: 'Multi cap',
     data: multiCap,
-    headerTitle:'Multi cap',
-    subtitle: 'These funds invest 65% of their total assets in equity shares of large, mid & small-cap companies ',
+    headerTitle: 'Multi cap',
+    subtitle:
+      'These funds invest 65% of their total assets in equity shares of large, mid & small-cap companies ',
     points: [
       'Offers better returns than large-cap funds',
       'Ideal for investors with a long-term goal',
-    ]
+    ],
   },
   {
     label: 'Mid cap',
     data: midCap,
-    headerTitle:'Mid cap',
-    subtitle: 'These funds invest 65% to 90% of their total assets in equity shares of mid-cap companies with a market cap of ₹10,000 cr',
+    headerTitle: 'Mid cap',
+    subtitle:
+      'These funds invest 65% to 90% of their total assets in equity shares of mid-cap companies with a market cap of ₹10,000 cr',
     points: [
       'Offers potential to earn market-beating returns',
       'Ideal for investors willing to take higher risks',
-    ]
+    ],
   },
   {
     label: 'Small cap',
     data: smallCap,
-    headerTitle:'Small cap',
-    subtitle: 'These funds invest 65% of their assets in equity shares of small-cap companies with a market cap of less than ₹5,000 cr',
+    headerTitle: 'Small cap',
+    subtitle:
+      'These funds invest 65% of their assets in equity shares of small-cap companies with a market cap of less than ₹5,000 cr',
     points: [
       'Higher risk compared to mid or large-cap funds',
       'Ideal for investors with a high-risk tolerance',
-    ]
+    ],
   },
 ];
 
 const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
   const [tabValue, setTabValue] = useState(0);
+  const dataRef = useRef(0);
   const [selectedFilterValue, setSelectedFilterValue] = useState({
     [FilterType.returns]: ReturnsDataList[2],
     [FilterType.sort]: SortsDataList[1],
@@ -77,12 +82,23 @@ const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
   const [isFilterSheetOpen, setIsFilterSheetOpen] = useState({
     [FilterType.returns]: false,
     [FilterType.sort]: false,
-    filter: false
+    filter: false,
   });
+  console.log("count of render is",dataRef.current++);
+  const [swiper, setSwiper] = useState(null);
   const { productName } = useMemo(getConfig, []);
   const swipeableViewsRef = useRef();
   const handleTabChange = (e, value) => {
     setTabValue(value);
+    if (swiper) {
+      swiper.slideTo(value);
+    }
+  };
+
+  const handleSlideChange = (swiper) => {
+    console.log('swiper is', swiper['$wrapperEl'][0].height);
+    // swiper.updateSize()
+    setTabValue(swiper?.activeIndex);
   };
 
   const handleFiltterSheetClose = (filterType) => () => {
@@ -108,7 +124,7 @@ const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
     <Container
       headerProps={{
         headerTitle: tabChilds[tabValue]?.headerTitle,
-        subtitle:tabChilds[tabValue]?.subtitle,
+        subtitle: tabChilds[tabValue]?.subtitle,
         points: tabChilds[tabValue]?.points,
         tabsProps: {
           selectedTab: tabValue,
@@ -152,7 +168,7 @@ const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
         </SwipeableViews>
       </div> */}
       <div className='sub-category-swipper-wrapper'>
-        <Swiper slidesPerView={1} autoHeight>
+        <Swiper slidesPerView={1} onSwiper={setSwiper} onSlideChange={handleSlideChange}>
           {tabChilds?.map((el, idx) => {
             return (
               <SwiperSlide key={idx}>
@@ -187,7 +203,10 @@ const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
         handleClose={handleFiltterSheetClose(FilterType.sort)}
         isOpen={isFilterSheetOpen[FilterType.sort]}
       />
-      <Filter isOpen={isFilterSheetOpen.filter} handleFilterClose={handleFiltterSheetClose('filter')}/>
+      <Filter
+        isOpen={isFilterSheetOpen.filter}
+        handleFilterClose={handleFiltterSheetClose('filter')}
+      />
     </Container>
   );
 };
@@ -195,9 +214,20 @@ const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
 const TabPanel = memo((props) => {
   const { data = [], returnPeriod, sortFundsBy, sortingOrder, productName } = props;
 
-
   const [funds, setFunds] = useState(data);
+  const [NumOfItems, setNumOfItems] = useState(10);
+  const observer = useRef();
+  const lastProductItem = useCallback((node) => {
+    if(observer.current) observer.current.disconnect();
+    observer.current = new IntersectionObserver(enteries => {
+      if(enteries[0].isIntersecting) {
+        setNumOfItems(NumOfItems => NumOfItems + 10);
+      }
+      
+    })
 
+    if(node) observer.current.observe(node);
+  });
   const sortFundsOrder = (fundList) => {
     if (sortFundsBy === 'returns') {
       return fundList[returnPeriod] || '';
@@ -222,7 +252,7 @@ const TabPanel = memo((props) => {
       {/* {value === index && ( */}
       <Box sx={{ pt: '16px', pl: '16px', pr: '16px' }}>
         <Typography component='div'>
-          {funds?.slice(0, 10)?.map((fund, idx) => {
+          {funds?.slice(0, NumOfItems)?.map((fund, idx) => {
             const returnValue = fund[returnPeriod];
             const returnData = !returnValue
               ? 'N/A'
@@ -234,8 +264,13 @@ const TabPanel = memo((props) => {
               : fund[returnPeriod] > 0
               ? 'foundationColors.secondary.profitGreen.300'
               : 'foundationColors.secondary.lossRed.300';
+            const setRef = NumOfItems - 4 === idx + 1;
+            let refData = {};
+            if (setRef) {
+              refData.ref = lastProductItem;
+            }
             return (
-              <div key={idx}>
+              <div key={idx} {...refData}>
                 <Typography>{fund[sortFundsBy]}</Typography>
                 <ProductItem
                   // sx={{ mb: '16px' }}
@@ -265,7 +300,7 @@ const TabPanel = memo((props) => {
                   </ProductItem.LeftSection>
                   <ProductItem.RightSection spacing={2}>
                     <ProductItem.Description title={returnData} titleColor={returnColor} />
-                    <Icon size='32px' src={require(`assets/${productName}/add_icon.svg`)}/>
+                    <Icon size='32px' src={require(`assets/fisdom/add_icon.svg`)} />
                   </ProductItem.RightSection>
                 </ProductItem>
               </div>
