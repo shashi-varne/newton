@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Box } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import Typography from "../Typography";
 import { isEmpty } from "lodash";
 import "./OrderStep.scss";
@@ -21,15 +21,22 @@ const OrderStep = (props) => {
   const {
     className,
     title = "",
+    titleColor,
     subtitle = "",
-    stepContent = "",
+    subtitleColor,
+    stepCount = "",
+    stepCountColor,
     dataAid,
     children,
     variant = ORDER_STEP_VARIANTS.DEFAULT,
   } = props;
 
   return (
-    <Box
+    <Stack
+      direction='row'
+      alignItems='flex-start'
+      justifyContent='flex-start'
+      spacing='12px'
       className={`atom-order-step ${className}`}
       data-aid={`orderStep_${dataAid}`}
     >
@@ -44,15 +51,15 @@ const OrderStep = (props) => {
         <Typography
           variant="body1"
           className="aos-step-content"
-          color="foundationColors.supporting.white"
+          color={stepCountColor}
           dataAid="number"
         >
-          {stepContent}
+          {stepCount}
         </Typography>
       </Box>
       <Box>
         {!isEmpty(title) && (
-          <Typography variant="body1" className="aos-title" dataAid="title">
+          <Typography variant="body1" color={titleColor} className="aos-title" dataAid="title">
             {title}
           </Typography>
         )}
@@ -60,7 +67,7 @@ const OrderStep = (props) => {
           <Typography
             variant="body2"
             className="aos-subtitle"
-            color="foundationColors.content.secondary"
+            color={subtitleColor}
             dataAid="subtitle"
           >
             {subtitle}
@@ -68,15 +75,20 @@ const OrderStep = (props) => {
         )}
         {children}
       </Box>
-    </Box>
+    </Stack>
   );
 };
 
 export default OrderStep;
 
+OrderStep.defaultProps = {
+  stepCountColor: 'foundationColors.supporting.white',
+  subtitleColor: 'foundationColors.content.secondary',
+}
+
 OrderStep.propTypes = {
   variant: PropTypes.oneOf(Object.values(ORDER_STEP_VARIANTS)),
   dataAid: PropTypes.string,
   className: PropTypes.string,
-  stepContent: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  stepCount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
