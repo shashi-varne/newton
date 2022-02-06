@@ -60,6 +60,8 @@ TwoCta.args = {
   imageTitleSrc: require('assets/amazon_pay.svg'),
   title: 'Easy Sip',
   subtitle: 'I am supposed to be a subtitle.',
+  imageLabelSrc:require('assets/amazon_pay.svg'),
+  label: 'I am the label',
   primaryBtnTitle: 'Primary',
   secondaryBtnTitle: 'Secondary',
 };

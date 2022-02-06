@@ -20,7 +20,7 @@
     />
 */
 
-import { Dialog, Box } from '@mui/material';
+import { Dialog, Box, Stack } from '@mui/material';
 import Typography from '../../atoms/Typography';
 import React, { useCallback } from 'react';
 import Button from '../../atoms/Button';
@@ -69,57 +69,54 @@ const BottomSheet = ({
       disableEscapeKeyDown={disableEscapeKeyDown}
       onBackdropClick={onBackdropClick}
     >
-      <div className='bottom-sheet-wrapper'>
-        <div className='btm-sheet-indicator'>
-          <Box component='span' sx={{ backgroundColor: 'foundationColors.supporting.athensGrey' }}/>
-        </div>
-        
-        {title && (
-          <div className='btm-sheet-header-wrapper'>
-            {imageTitleSrc && (
-              <Icon
-                size='16px'
-                src={imageTitleSrc}
-                className='btn-sheet-header-img'
-                {...imageTitleSrcProps}
-              />
-            )}
+      <Stack direction='column' spacing={1} className='bottom-sheet-wrapper'>
+        <Stack justifyContent='center' alignItems='center' className='btm-sheet-indicator'>
+          <Box
+            component='span'
+            sx={{ backgroundColor: 'foundationColors.supporting.athensGrey' }}
+          />
+        </Stack>
+
+        <Stack direction='row' alignItems='center' spacing={1}>
+          {imageTitleSrc && (
+            <Icon
+              size='16px'
+              src={imageTitleSrc}
+              className='btn-sheet-header-img'
+              {...imageTitleSrcProps}
+            />
+          )}
+          {title && (
             <Typography variant='heading3' color={titleColor} component='div' dataAid='title'>
               {title}
             </Typography>
-          </div>
-        )}
+          )}
+        </Stack>
 
-        {label && (
-          <div className='btm-sheet-label-wrapper'>
-            {imageLabelSrc && (
-              <Icon
-                size='32px'
-                src={imageLabelSrc}
-                className='btn-sheet-label-img'
-                {...imageLabelSrcProps}
-              />
-            )}
+        <Stack direction='row' spacing={2} alignItems='center'>
+          {imageLabelSrc && (
+            <Icon
+              size='32px'
+              src={imageLabelSrc}
+              className='btn-sheet-label-img'
+              {...imageLabelSrcProps}
+            />
+          )}
+          {label && (
             <Typography variant='body1' color={labelColor} component='div' dataAid='label'>
               {label}
             </Typography>
-          </div>
-        )}
+          )}
+        </Stack>
 
         {subtitle && (
-          <Typography
-            className='btm-sheet-subtitle'
-            variant='body2'
-            color={subtitleColor}
-            component='div'
-            dataAid='subtitle'
-          >
+          <Typography variant='body2' color={subtitleColor} component='div' dataAid='subtitle'>
             {subtitle}
           </Typography>
         )}
 
         {(primaryBtnTitle || secondaryBtnTitle) && (
-          <div className='btm-sheet-cta-wrapper'>
+          <Stack flexDirection='column' spacing={1} className='btm-sheet-cta-wrapper'>
             {primaryBtnTitle && (
               <Button
                 title={primaryBtnTitle}
@@ -130,7 +127,6 @@ const BottomSheet = ({
             )}
             {secondaryBtnTitle && (
               <Button
-                className='btm-sheet-secondary-btn'
                 title={secondaryBtnTitle}
                 variant='secondary'
                 onClick={onSecondaryClick}
@@ -138,9 +134,9 @@ const BottomSheet = ({
                 {...secondaryBtnProps}
               />
             )}
-          </div>
+          </Stack>
         )}
-      </div>
+      </Stack>
     </Dialog>
   );
 };
