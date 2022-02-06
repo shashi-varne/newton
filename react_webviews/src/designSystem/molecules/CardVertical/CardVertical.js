@@ -9,13 +9,13 @@
 */
 
 import React from 'react';
-import Box from '@mui/material/Box';
-
 import PropTypes from 'prop-types';
-
-import './CardVertical.scss';
 import Typography from '../../atoms/Typography';
 import Icon from '../../atoms/Icon';
+
+import Stack from '@mui/material/Stack';
+
+import './CardVertical.scss';
 
 const CardVertical = ({
   imgSrc,
@@ -32,16 +32,17 @@ const CardVertical = ({
   sx,
 }) => {
   return (
-    <Box
+    <Stack
+      direction='column'
+      spacing='4px'
       onClick={onClick}
       className={`cv-wrapper ${className}`}
       sx={sx}
       data-aid={`cardVertical_${dataAid}`}
     >
-      {imgSrc && <Icon src={imgSrc} size='32px' className='cv-img-top' dataAid='top' {...imgProps} />}
+      {imgSrc && <Icon src={imgSrc} size='32px' dataAid='top' {...imgProps} />}
       {title && (
         <Typography
-          className='card-vertical-title'
           variant='body1'
           color={titleColor}
           dataAid='title'
@@ -53,7 +54,6 @@ const CardVertical = ({
       {subtitle && (
         <Typography
           variant='body2'
-          className='card-vertical-subtitle'
           color={subtitleColor}
           dataAid='subtitle'
           component='div'
@@ -64,7 +64,6 @@ const CardVertical = ({
       {description && (
         <Typography
           variant='body2'
-          className='card-vertical-description'
           color={descriptionColor}
           dataAid='description'
           component='div'
@@ -72,7 +71,7 @@ const CardVertical = ({
           {description}
         </Typography>
       )}
-    </Box>
+    </Stack>
   );
 };
 
@@ -88,7 +87,7 @@ CardVertical.propTypes = {
   onClick: PropTypes.func,
   imgProps: PropTypes.object,
   className: PropTypes.string,
-  dataAid: PropTypes.string,
+  dataAid: PropTypes.string.isRequired,
 };
 
 CardVertical.defaultProps = {
