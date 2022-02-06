@@ -15,10 +15,11 @@
 
 import React from "react";
 import Typography from "../../atoms/Typography";
-import { Imgc } from "../../../common/ui/Imgc";
 import Badge from "../../atoms/Badge";
 import PropTypes from "prop-types";
 import noop from "lodash/noop";
+import Icon from '../../atoms/Icon';
+import Stack from "@mui/material/Stack";
 
 import "./Filter.scss";
 
@@ -29,20 +30,26 @@ const Filter = ({
   title,
   titleColor,
   dataAid,
-  count,
+  filterCount,
   className,
   onClick = noop,
+  sx,
 }) => {
   return (
-    <div
+    <Stack
+      direction='row'
+      alignItems='center'
+      justifyContent='center'
+      spacing={1}
       className={`filter-wrapper ${className}`}
       onClick={onClick}
       data-aid={`filter_${dataAid}`}
+      sx={sx}
     >
       {imgSrc && (
-        <Imgc
+        <Icon
           src={imgSrc}
-          style={{ width: "16px", height: "16px", marginRight: "8px" }}
+          size='16px'
           dataAid="left"
           {...imgProps}
         />
@@ -55,15 +62,15 @@ const Filter = ({
       >
         {title}
       </Typography>
-      {count && (
+      {filterCount && (
         <Badge
-          badgeContent={count}
+          badgeContent={filterCount}
           dataAid="number"
           className="filter-nav-badge"
           {...badgeProps}
         />
       )}
-    </div>
+    </Stack>
   );
 };
 
