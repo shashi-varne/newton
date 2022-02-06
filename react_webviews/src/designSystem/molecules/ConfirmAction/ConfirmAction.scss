@@ -1,24 +1,8 @@
 .confirm-action-wrapper {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
   padding-left: 16px;
   padding-right: 16px;
   flex: 1;
   height: 53px;
   border-radius: 8px;
   cursor: default;
-
-  .confirm-action-right-wrapper {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    flex: 1;
-  }
-
-  .confirm-action-badge + .confirm-action-right-wrapper {
-    margin-left: 12px;
-  }
 }
