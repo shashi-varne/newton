@@ -1,38 +1,37 @@
-import React, { useMemo } from "react";
-import { Box } from "@mui/material";
-import PropTypes from "prop-types";
-import Typography from "../Typography";
-import isObject from "lodash/isObject";
-import "./BarMeter.scss";
+import React, { useMemo } from 'react';
+import { Box, Stack } from '@mui/material';
+import PropTypes from 'prop-types';
+import Typography from '../Typography';
+import isObject from 'lodash/isObject';
+import './BarMeter.scss';
 
-const getBarData = ({ isActive, data, displayKey }) => () => {
-  let backgroundColor, labelColor;
-  if (isActive) {
-    backgroundColor = "foundationColors.primary.brand";
-    labelColor = "foundationColors.primary.brand";
-  } else {
-    backgroundColor = "foundationColors.primary.200";
-    labelColor = "foundationColors.primary.300";
-  }
-  const labelName = isObject(data) ? data[displayKey] : data;
-  return {
-    labelName,
-    labelColor,
-    backgroundColor,
+const getBarData =
+  ({ isActive, data, displayKey }) =>
+  () => {
+    let backgroundColor, labelColor;
+    if (isActive) {
+      backgroundColor = 'foundationColors.primary.brand';
+      labelColor = 'foundationColors.primary.brand';
+    } else {
+      backgroundColor = 'foundationColors.primary.200';
+      labelColor = 'foundationColors.primary.300';
+    }
+    const labelName = isObject(data) ? data[displayKey] : data;
+    return {
+      labelName,
+      labelColor,
+      backgroundColor,
+    };
   };
-};
 
 const BarMeter = (props) => {
-  const {
-    dataAid,
-    classes = {},
-    activeIndex,
-    barMeterData = [],
-    displayKey = "name",
-  } = props;
+  const { dataAid, classes = {}, activeIndex, barMeterData = [], displayKey = 'name' } = props;
 
   return (
-    <Box
+    <Stack
+      direction='row'
+      justifyContent='center'
+      spacing='4px'
       className={`atom-bar-meter ${classes.container}`}
       data-aid={`barMeter_${dataAid}`}
     >
@@ -45,24 +44,24 @@ const BarMeter = (props) => {
           index={index + 1}
         />
       ))}
-    </Box>
+    </Stack>
   );
 };
 
 const Bar = ({ isActive = false, displayKey, data, index }) => {
-  const barData = useMemo(getBarData({ isActive, data, displayKey }));
+  const barData = useMemo(getBarData({ isActive, data, displayKey }),[]);
   return (
-    <Box className="atom-bar-content">
+    <Box className='atom-bar-content'>
       <Box
-        className="atom-bar"
+        className='atom-bar'
         sx={{
           backgroundColor: barData.backgroundColor,
         }}
         data-aid={`iv_bar${index}`}
       />
       <Typography
-        variant="body1"
-        className="atom-bar-label"
+        variant='body1'
+        className='atom-bar-label'
         color={barData.labelColor}
         dataAid={`label${index}`}
       >

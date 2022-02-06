@@ -30,15 +30,13 @@ WithObjectData.args = {
       value: 1,
     },
     {
-      name: "below avg",
       value: 2,
     },
     {
-      name: "avg",
       value: 3,
     },
     {
-      name: "above avg",
+      name: "above avg data is here",
       value: 4,
     },
     {
