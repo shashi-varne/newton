@@ -2,19 +2,12 @@
   background: #ffffff;
   border-radius: 12px;
   padding: 16px;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
   cursor: pointer;
   &.fc-default-pointer {
     cursor: default;
   }
 
   .ch-top-section-wrapper {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
     &.ch-hero-top-section-wrapper {
       align-items: flex-start;
     }
@@ -36,16 +29,8 @@
     #675af6 52.2%,
     #8279f8 97.81%
   );
-}
 
-.mt-4 {
-  margin-top: 4px;
-}
-
-.ch-action-btn {
-  margin-top: 24px;
-}
-
-.ch-action-link-btn {
-  margin-top: 13.5px;
+  .ch-action-btn {
+    margin-top: 24px;
+  }
 }
