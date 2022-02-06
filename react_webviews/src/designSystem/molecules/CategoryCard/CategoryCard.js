@@ -10,8 +10,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Typography from '../../atoms/Typography';
-import './CategoryCard.scss';
+import Stack from '@mui/material/Stack';
 import Icon from '../../atoms/Icon';
+
+import './CategoryCard.scss';
 
 const CategoryCard = ({
   variant,
@@ -28,16 +30,18 @@ const CategoryCard = ({
   const variantData = largeVariant ? LARGE_CARD_VARIANT : SMALL_CARD_VARIANT;
 
   return (
-    <div
+    <Stack
+      direction='column'
+      justifyContent='flex-start'
+      alignItems='center'
       className={`cc-wrapper ${largeVariant && 'cc-wrapper-large-variant'}`}
       onClick={onClick}
       data-aid={`categoryCard_${dataAid}`}
     >
-      <Icon src={imgSrc} style={variantData.imgStyle} dataAid='top' {...imgProps} />
+      <Icon src={imgSrc} size={variantData.size} dataAid='top' {...imgProps} />
       {title && (
         <Typography
           variant={variantData.titleVariant}
-          className={variantData.titleClass}
           align='center'
           color={titleColor}
           dataAid='title'
@@ -48,9 +52,8 @@ const CategoryCard = ({
       )}
       {subtitle && (
         <Typography
-          variant={variantData.subtitleVariant}
+          variant='body2'
           color={subtitleColor ? subtitleColor : variantData.subtitleColor}
-          className={variantData.subtitleClass}
           align='center'
           dataAid='subtitle'
           component='div'
@@ -58,7 +61,7 @@ const CategoryCard = ({
           {subtitle}
         </Typography>
       )}
-    </div>
+    </Stack>
   );
 };
 
@@ -67,6 +70,7 @@ export default CategoryCard;
 CategoryCard.defaultProps = {
   variant: 'small',
   imgProps: {},
+  subtitleColor: 'foundationColors.content.secondary',
 };
 
 CategoryCard.propTypes = {
@@ -79,32 +83,12 @@ CategoryCard.propTypes = {
   dataAid: PropTypes.string,
 };
 
-const SMALL_VARIANT_IMAGE_STYLE = {
-  width: '52px',
-  height: '52px',
-  marginBottom: '4px',
-};
-
-const LARGE_VARIANT_IMAGE_STYLE = {
-  width: '88px',
-  height: '88px',
-  marginBottom: '8px',
-};
-
 const LARGE_CARD_VARIANT = {
   titleVariant: 'heading4',
-  subtitleVariant: 'body2',
-  subtitleColor: 'foundationColors.content.secondary',
-  imgStyle: LARGE_VARIANT_IMAGE_STYLE,
-  titleClass: 'cc-lg-title',
-  subtitleClass: 'cc-lg-subtitle',
+  size: '88px',
 };
 
 const SMALL_CARD_VARIANT = {
+  size: '52px',
   titleVariant: 'body2',
-  subtitleVariant: 'body2',
-  subtitleColor: 'foundationColors.content.secondary',
-  imgStyle: SMALL_VARIANT_IMAGE_STYLE,
-  titleClass: 'cc-sm-title',
-  subtitleClass: 'cc-sm-subtitle',
 };
