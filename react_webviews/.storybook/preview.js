@@ -1,5 +1,5 @@
 import React from "react";
-import { ThemeProvider } from "@mui/material";
+import { StyledEngineProvider, ThemeProvider } from "@mui/material";
 import getTheme from "../src/theme";
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 
@@ -20,9 +20,11 @@ export const parameters = {
 
 const withThemeProvider = (Story, context) => {
   return (
-    <ThemeProvider theme={getTheme()}>
-      <Story {...context} />
-    </ThemeProvider>
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={getTheme()}>
+        <Story {...context} />
+      </ThemeProvider>
+    </StyledEngineProvider>
   );
 };
 
