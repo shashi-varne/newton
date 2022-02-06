@@ -31,4 +31,6 @@ Default.args = {
   titleColor: 'foundationColors.content.primary',
   subtitle: 'I am the subtitle',
   subtitleColor: 'foundationColors.content.secondary',
+  description: 'I am the description',
+  descriptionColor: 'foundationColors.content.secondary',
 };

@@ -8,12 +8,13 @@
 
 import React from 'react';
 import Typography from '../../atoms/Typography';
-import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import Icon from '../../atoms/Icon';
 import isFunction from 'lodash/isFunction';
+import Stack from '@mui/material/Stack';
 
 import './Content.scss';
+import '../../utils/style.scss';
 
 const Content = ({
   imgSrc,
@@ -22,17 +23,21 @@ const Content = ({
   titleColor,
   subtitle,
   subtitleColor,
+  description,
+  descriptionColor,
   onClick,
   className,
   dataAid,
   sx,
 }) => {
   return (
-    <Box
+    <Stack
+      direction='row'
       className={`blog-content-wrapper ${className} ${isFunction(onClick) && 'content-cursor'}`}
       onClick={onClick}
       data-aid={`content_${dataAid}`}
       sx={sx}
+      spacing={2}
     >
       {imgSrc && (
         <Icon
@@ -44,24 +49,35 @@ const Content = ({
           {...imgProps}
         />
       )}
-      <div className='bc-text-wrapper'>
+      <Stack direction='column'>
         {title && (
           <Typography variant='body1' color={titleColor} component='div' dataAid='title'>
             {title}
           </Typography>
         )}
         {subtitle && (
-          <Typography variant='body5' color={subtitleColor} dataAid='subtitle' component='div'>
+          <Typography variant='body2' color={subtitleColor} dataAid='subtitle' component='div'>
             {subtitle}
           </Typography>
         )}
-      </div>
-    </Box>
+        {description && (
+          <Typography
+            variant='body5'
+            color={descriptionColor}
+            dataAid='description'
+            component='div'
+          >
+            {description}
+          </Typography>
+        )}
+      </Stack>
+    </Stack>
   );
 };
 
 Content.defaultProps = {
   subtitleColor: 'foundationColors.content.secondary',
+  descriptionColor: 'foundationColors.content.secondary',
   imgProps: {},
 };
 
