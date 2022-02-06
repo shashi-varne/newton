@@ -21,7 +21,7 @@ const Status = (props) => {
     title = "",
     className,
     children,
-    variant,
+    variant = STATUS_VARIANTS.WARNING,
     dataAid,
     ...restProps
   } = props;
@@ -42,6 +42,7 @@ const Status = (props) => {
         <Typography
           variant="body4"
           color={VARIANT_COLOR_MAPPER[variant]}
+          dataAid={variant?.toLowerCase()}
           allCaps
         >
           {title}

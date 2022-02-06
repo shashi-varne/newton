@@ -27,7 +27,7 @@ export default {
 
 const Template = (args) => (
   <div style={{width: '343px'}}>
-    <Button {...args} />;
+    <Button {...args} />
   </div>
 );
 
