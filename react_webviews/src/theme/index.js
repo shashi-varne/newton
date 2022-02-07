@@ -46,6 +46,9 @@ const getTheme = () => {
       MuiSwitch: {
         styleOverrides: switchStyleOverRides(colors)
       },
+      MuiTooltip: {
+        styleOverrides: tooltipStyleOverRides(colors),
+      },
       MuiDivider: {
         styleOverrides: separatorStyleOverRides(colors)
       },
