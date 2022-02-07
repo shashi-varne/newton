@@ -132,6 +132,7 @@ export const InvestmentCardInputRow = ({
               variant='outlined'
               size='small'
               placeholder='Enter amount'
+              className='ic-input-field'
               {...inputFieldProps}
             />
           </div>
