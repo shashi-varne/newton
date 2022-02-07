@@ -20,19 +20,30 @@
   .ic-footer-section,
   .ic-pills-wrapper {
     padding: 16px 0px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    > div {
+      flex-basis: 50%;
+    }
+  }
+
+  .ic-pills-wrapper {
+    .ic-pill-left-label {
+      flex-basis: 40%;
+    }
+    .ic-pill {
+      flex: 1;
+      .MuiTabs-flexContainer {
+        justify-content: flex-end !important;
+      }
+    }
   }
 
   .ic-left-section {
-    flex: 1 1 60%;
+    flex: 1 1 50%;
     display: flex;
     flex-direction: column;
   }
   .ic-right-section {
-    flex: 1 1 40%;
+    flex: 1 1 50%;
   }
 
   .ic-footer-section {
