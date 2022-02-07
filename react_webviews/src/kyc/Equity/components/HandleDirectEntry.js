@@ -3,6 +3,7 @@ import isEmpty from 'lodash/isEmpty';
 import { isKycCompleted } from '../../common/functions';
 import { getConfig, navigate as navigateFunc } from '../../../utils/functions';
 import useUserKycHook from '../../common/hooks/userKycHook';
+import { nativeCallback } from "../../../utils/native_callback";
 
 const HandleDirectEntry = (props) => {
   const { kyc } = useUserKycHook();
@@ -26,7 +27,13 @@ const HandleDirectEntry = (props) => {
     const isUserAuthenticated = mobile_number_verified && email_verified;
     if (isKycDone && isUserAuthenticated) {
       if (type === 'equity') {
-        window.location.href = `${config.base_url}/page/equity/launchapp`;
+        if (config.isSdk) {
+          nativeCallback({
+            action: "open_equity"
+          })
+        } else {
+          window.location.href = `${config.base_url}/page/equity/launchapp`;
+        }
       } else {
         navigate('/');
       }
