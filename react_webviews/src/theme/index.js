@@ -2,6 +2,7 @@ import { createTheme } from '@mui/material';
 import { buttonStyleOverRides, buttonVariantsConfig, } from './button';
 import { tabsStyleOverRides, tabStyleOverRides, tabsVariantsConfig, tabVariantsConfig } from './tabs';
 import { radioButtonStyleOverRides } from './radioButton';
+import { tooltipStyleOverRides } from './tooltip';
 import { checkboxStyleOverRides } from './checkbox';
 import { switchStyleOverRides } from './switch';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
@@ -53,6 +54,8 @@ const getTheme = () => {
       },
       MuiCheckbox: {
         styleOverrides: checkboxStyleOverRides(colors),
+      MuiTooltip: {
+        styleOverrides: tooltipStyleOverRides(colors),
       },
       MuiFilledInput: {
         defaultProps: {
@@ -92,6 +95,7 @@ const getTheme = () => {
       MuiFormHelperText: {
         styleOverrides: helperTextStyleOverRides(colors, partnerConfig),
       },
+      }
     },
     shadows: customShadows()
   }
