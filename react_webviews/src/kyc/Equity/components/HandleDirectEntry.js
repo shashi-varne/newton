@@ -18,7 +18,7 @@ const HandleDirectEntry = (props) => {
 
   const validateUser = (kycData) => {
     if (type === 'tpp') {
-      navigate('/market-products');
+      navigate('/product-types');
       return;
     }
     const { mobile_number_verified, email_verified } = kycData?.identification?.meta_data;
