@@ -171,8 +171,15 @@ export const getConfig = () => {
   let isProdFinity = origin.indexOf('app.finity.in') >= 0 || 
              origin.indexOf('app2.finity.in') >= 0 || origin.indexOf('wv.finity.in') >= 0 ||
              origin.indexOf('finity.equityapppreprod.finwizard.co.in') >= 0;
+  let apiKey = '6Ldah04eAAAAAM7-gR7PWL35nSMvNZRMsngMgObG';
+  if(isProdFisdom) {
+    apiKey = '6LcUeDweAAAAAJ7gWP6OkmCuO1WXN54Qju-fJPLg';
+  }
 
-  // let base_href = window.localStorage.getItem('base_href') || '';
+  if(isProdFinity || isProdMyway) {
+    apiKey = '6LdSjzweAAAAAHSGjqfOVjy_vVQ_n8iBWe9xCSrL';
+  }
+
   let base_url_default = '';
   
   const isStaging = origin.indexOf('plutus-web-staging') >= 0;
@@ -374,6 +381,7 @@ export const getConfig = () => {
   returnConfig.project = project;
   returnConfig.project_child = project_child;
   returnConfig.isMobileDevice = isMobileDevice();
+  returnConfig.apiKey = apiKey;
 
   let { insurance_allweb } = main_query_params;
   if (insurance_allweb) {
