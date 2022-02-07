@@ -42,7 +42,7 @@
 
 */
 
-import React, { Children } from 'react';
+import React from 'react';
 import Typography from '../../atoms/Typography';
 import Separator from '../../atoms/Separator';
 import { Pill, Pills } from '../../atoms/Pills';
@@ -50,32 +50,14 @@ import InputField from '../InputField';
 import isFunction from 'lodash/isFunction';
 import PropTypes from 'prop-types';
 import Collapse from '@mui/material/Collapse';
-import isString from 'lodash/isString';
 import './InvestmentCard.scss';
 import Icon from '../../atoms/Icon';
-
-const INVESTMENT_CARD_CHILDS = [
-  'InvestmentCardHeaderRow',
-  'InvestmentCardPillsRow',
-  'InvestmentCardInputRow',
-  'InvestmentCardBottomRow',
-];
+import { Stack } from '@mui/material';
 
 export const InvestmentCard = ({ children, dataAid }) => {
   return (
     <div className='invest-card-wrapper' data-aid={`investmentCard_${dataAid}`}>
-      {Children.map(children, (child) => {
-        const componentType = isString(child?.type) ? child?.type : child?.type?.name;
-        if (INVESTMENT_CARD_CHILDS.indexOf(componentType) !== -1) {
-          return React.cloneElement(child);
-        } else {
-          console.error(
-            `child passed is ${componentType}, expected childs are 
-            'InvestmentCardHeaderRow','InvestmentCardPillsRow','InvestmentCardInputRow','InvestmentCardBottomRow'`
-          );
-          return null;
-        }
-      })}
+      {children}
     </div>
   );
 };
@@ -96,7 +78,7 @@ export const InvestmentCardPillsRow = ({ hide, title, titleColor, pillsProps, pi
     <Collapse in={!hide}>
       <div>
         <Separator dataAid='1' />
-        <div className='ic-pills-wrapper'>
+        <Stack direction='row' alignItems='center' justifyContent='space-between' className='ic-pills-wrapper'>
           <Typography
             variant='body1'
             component='div'
@@ -109,14 +91,16 @@ export const InvestmentCardPillsRow = ({ hide, title, titleColor, pillsProps, pi
           <Pills
             value={pillsProps?.value}
             onChange={pillsProps?.onChange}
+            variant={pillsProps?.variant}
             allowScrollButtonsMobile={false}
+            className='ic-pill'
             {...pillsProps}
           >
             {pillsChild?.map((pillProps, idx) => {
               return <Pill {...pillProps} key={idx} />;
             })}
           </Pills>
-        </div>
+        </Stack>
       </div>
     </Collapse>
   );
@@ -134,7 +118,7 @@ export const InvestmentCardInputRow = ({
     <Collapse in={!hide}>
       <div>
         <Separator dataAid='2' />
-        <div className='ic-input-field-section'>
+        <Stack direction='row' alignItems='center' justifyContent='space-between' className='ic-input-field-section'>
           <div className='ic-left-section'>
             <Typography variant='body1' color={titleColor} component='div' dataAid='title3'>
               {title}
@@ -151,7 +135,7 @@ export const InvestmentCardInputRow = ({
               {...inputFieldProps}
             />
           </div>
-        </div>
+        </Stack>
       </div>
     </Collapse>
   );
@@ -174,7 +158,7 @@ export const InvestmentCardBottomRow = ({
     <Collapse in={!hide}>
       <div>
         <Separator dataAid='3' />
-        <div className='ic-footer-section'>
+        <Stack direction='row' alignItems='center' justifyContent='space-between' className='ic-footer-section'>
           <div className='ic-left-section'>
             <Typography variant='body1' color={leftTitleColor} component='div' dataAid='title4'>
               {leftTitle}
@@ -205,7 +189,7 @@ export const InvestmentCardBottomRow = ({
               />
             )}
           </div>
-        </div>
+        </Stack>
       </div>
     </Collapse>
   );
