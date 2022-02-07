@@ -9,10 +9,11 @@ import {
 } from '../../../designSystem/molecules/InvestmentCard/InvestmentCard';
 import WrapperBox from '../../../designSystem/atoms/WrapperBox';
 import Container from '../../../designSystem/organisms/Container';
-
 import Icon from '../../../designSystem/atoms/Icon';
 import { dateOrdinal, formatAmountInr } from '../../../utils/validators';
 import EstimationCard from '../../../designSystem/molecules/EstimationCard';
+import BottomSheet from '../../../designSystem/organisms/BottomSheet';
+
 import './MfOrder.scss';
 
 const investmentAmountTile = {
@@ -22,10 +23,29 @@ const investmentAmountTile = {
 
 const MfOrder = () => {
   const [investmentType, setInvestmentType] = useState('sip');
+  const [selectedFundToDelete, setSelectedFundToDelete] = useState('');
+  const [orders, setOrders] = useState(MF_ORDERS);
+  const [isOpen, setIsOpen] = useState(false);
 
+  const handleSheetClose = () => {
+    setIsOpen(false);
+  };
   const handleInvestmentType = (e, value) => {
     setInvestmentType(value);
   };
+
+  const handleInvestmentCard = (index) => () => {
+    setSelectedFundToDelete(index);
+    setIsOpen(true);
+  };
+
+  const removeFund = () => {
+    const remainingFunds = orders?.filter((el) => el.id !== selectedFundToDelete);
+    console.log('reaminaing funds', remainingFunds);
+    setOrders(remainingFunds);
+    handleSheetClose();
+  };
+
   return (
     <Container
       headerProps={{
@@ -33,12 +53,12 @@ const MfOrder = () => {
         hideInPageTitle: true,
       }}
     >
-      <section className='mf-order-wrapper'>
+      <Stack direction='column' spacing={2} component='section' className='mf-order-wrapper'>
         <Stack spacing='25px' className='mf-order-list'>
-          {MF_ORDERS?.map((fund, idx) => {
+          {orders?.map((fund, idx) => {
             return (
               <WrapperBox key={idx} elevation={1} className='mf-investment-card-wrapper'>
-                <IconButton className='mf-ic-close'>
+                <IconButton className='mf-ic-close' onClick={handleInvestmentCard(idx)}>
                   <Icon src={require('assets/close_grey.svg')} size='24px' />
                 </IconButton>
                 <InvestmentCard>
@@ -79,14 +99,29 @@ const MfOrder = () => {
             );
           })}
         </Stack>
-        <EstimationCard
-          leftTitle='Value after 10 years'
-          leftSubtitle='Return %'
-          rightTitle={`${formatAmountInr(110000)}`}
-          rightSubtitle='+116.06%'
-          toolTipText='Hello I am the tooltup'
-        />
-      </section>
+        <WrapperBox elevation={1}>
+          <EstimationCard
+            leftTitle='Value after 10 years'
+            leftSubtitle='Return %'
+            rightTitle={`${formatAmountInr(110000)}`}
+            rightSubtitle='+116.06%'
+            toolTipText='Hello I am the tooltup'
+          />
+        </WrapperBox>
+      </Stack>
+      <BottomSheet
+        isOpen={isOpen}
+        onClose={handleSheetClose}
+        title='Delete fund'
+        imageLabelSrc={require('assets/amazon_pay.svg')}
+        label='ICICI Prudential Digital Fund Direct Plan Growth'
+        subtitle='Are you sure, want to delete this fund from your cart,
+        you can also add anytime'
+        primaryBtnTitle='Cancel'
+        secondaryBtnTitle='yes'
+        onPrimaryClick={handleSheetClose}
+        onSecondaryClick={removeFund}
+      />
     </Container>
   );
 };
@@ -95,37 +130,43 @@ export default MfOrder;
 
 const MF_ORDERS = [
   {
-    title: 'ICICI Prudential Technology Direct Plan Growth',
+    id: 0,
+    title: 'ICICI Prudential Technology Direct Plan Growth 0',
     imgSrc: require('assets/amazon_pay.svg'),
     minAmount: 100,
     sipDate: 15,
   },
   {
-    title: 'ICICI Prudential Technology Direct Plan Growth',
+    id: 1,
+    title: 'ICICI Prudential Technology Direct Plan Growth 1',
     imgSrc: require('assets/amazon_pay.svg'),
     minAmount: 100,
     sipDate: 10,
   },
   {
-    title: 'ICICI Prudential Technology Direct Plan Growth',
+    id: 2,
+    title: 'ICICI Prudential Technology Direct Plan Growth 2',
     imgSrc: require('assets/amazon_pay.svg'),
     minAmount: 100,
     sipDate: 12,
   },
   {
-    title: 'ICICI Prudential Technology Direct Plan Growth',
+    id: 3,
+    title: 'ICICI Prudential Technology Direct Plan Growth 3',
     imgSrc: require('assets/amazon_pay.svg'),
     minAmount: 100,
     sipDate: 21,
   },
   {
-    title: 'ICICI Prudential Technology Direct Plan Growth',
+    id: 4,
+    title: 'ICICI Prudential Technology Direct Plan Growth 4',
     imgSrc: require('assets/amazon_pay.svg'),
     minAmount: 100,
     sipDate: 8,
   },
   {
-    title: 'ICICI Prudential Technology Direct Plan Growth',
+    id: 5,
+    title: 'ICICI Prudential Technology Direct Plan Growth 5',
     imgSrc: require('assets/amazon_pay.svg'),
     minAmount: 100,
     sipDate: 15,

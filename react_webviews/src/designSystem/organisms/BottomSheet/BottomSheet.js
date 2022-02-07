@@ -103,7 +103,7 @@ const BottomSheet = ({
             />
           )}
           {label && (
-            <Typography variant='body1' color={labelColor} component='div' dataAid='label'>
+            <Typography variant='body2' color={labelColor} component='div' dataAid='label'>
               {label}
             </Typography>
           )}
@@ -143,6 +143,7 @@ const BottomSheet = ({
 
 BottomSheet.defaultProps = {
   subtitleColor: 'foundationColors.content.secondary',
+  labelColor: 'foundationColors.content.secondary',
   imageLabelSrcProps: {},
   imageTitleSrcProps: {},
   primaryBtnProps: {},
