@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 
 import { nativeCallback } from "utils/native_callback";
 import { getConfig, getBasePath } from "utils/functions";
@@ -6,17 +6,18 @@ import Container from "../../common/Container";
 import UiSkelton from "common/ui/Skelton";
 
 const NativeEsignRedirection = () => {
-
   useEffect(() => {
+    triggerUrl();
+  }, []);
+
+  const config = useMemo(getConfig, []);
+
+  const triggerUrl = () => {
     const basepath = getBasePath();
-    const current_url =
-      basepath +
-      "/e-mandate/enps/native-callback" +
-      getConfig().searchParams;
-    const pgLink =
-      getConfig().base_url + "/page/nps/user/esign/" + getConfig().pc_urlsafe;
-    if (getConfig().isNative) {
-      if (getConfig().app === "ios") {
+    const current_url = `${basepath}/e-mandate/enps/native-callback${config.searchParams}`
+    const pgLink = `${config.base_url}/page/nps/user/esign/${config.pc_urlsafe}`
+    if (config.isNative) {
+      if (config.app === "ios") {
         nativeCallback({
           action: "show_top_bar",
           message: {
@@ -56,7 +57,7 @@ const NativeEsignRedirection = () => {
           type: "webview",
         },
       };
-      if (getConfig().app === "ios") {
+      if (config.app === "ios") {
         redirectData.show_toolbar = true;
       }
       nativeCallback({
@@ -66,7 +67,7 @@ const NativeEsignRedirection = () => {
     }
 
     window.location.href = pgLink;
-  }, []);
+  };
 
   return <Container noFooter={true}>{<UiSkelton type="g" />}</Container>;
 };

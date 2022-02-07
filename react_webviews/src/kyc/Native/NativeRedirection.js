@@ -7,8 +7,8 @@ import { updateQueryStringParameter } from "../common/functions";
 let basepath = getBasePath();
 let back_url = basepath + "/status/callback/native" + getConfig().searchParams;
 
-const StatusCallback = (props) => {
-  const urlParams = getUrlParams() || "";
+const NativeRedirection = (props) => {
+  const urlParams = getUrlParams() || {};
 
   useEffect(() => {
     const { dl_url, esign_url, state } = urlParams;
@@ -16,7 +16,7 @@ const StatusCallback = (props) => {
     if (dl_url) {
       url = updateQueryStringParameter(dl_url, "redirect_url", back_url);
     } else if (esign_url) {
-      url = esign_url + "&state=" + state;
+      url = `${esign_url}&state=${state}`
     }
     redirect(url);
   }, [urlParams]);
@@ -40,4 +40,4 @@ const StatusCallback = (props) => {
   return <div></div>;
 };
 
-export default StatusCallback;
+export default NativeRedirection;

@@ -8,16 +8,16 @@ import UiSkelton from "common/ui/Skelton";
 const NativeEsignCalllback = () => {
   useEffect(() => {
     getNpsStatus();
-  });
+  }, []);
 
   const getNpsStatus = async () => {
     try {
       const res = await Api.get(
         "/api/nps/esign/status/" + getConfig().pc_urlsafe
       );
+      let result = res.pfwresponse.result;
 
-      if (res.pfwresponse.result && !res.pfwresponse.result.error) {
-        let result = res.pfwresponse.result;
+      if (result && !result?.error) {
         if (result.esign) {
           nativeCallback({ action: "on_success" });
         } else {

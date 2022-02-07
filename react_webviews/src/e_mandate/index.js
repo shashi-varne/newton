@@ -28,8 +28,8 @@ import EnpsConsentSuccess from './components/enps/success';
 import EnpsConsentFailure from './components/enps/failure';
 import EnpsRedirection from './components/enps/redirection';
 import EnpsConsentOtp from './components/enps/otp';
-import NativeEsignRedirection from './components/enps/nativeRedirection';
-import NativeEsignCalllback from './components/enps/nativeCallback';
+import NativeEsignRedirection from './components/enps/NativeEsignRedirection';
+import NativeEsignCalllback from './components/enps/NativeEsignCalllback';
 
 const Mandate_OTM = (props) => {
   const { url } = props.match;
