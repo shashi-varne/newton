@@ -9,6 +9,7 @@ import baseTypographyConfig, { customTypographyVariantProps } from './typography
 import getPartnerThemeData from './utils';
 import { separatorStyleOverRides } from './separator';
 import { dialogDefaultProps, dialogStylesOverride } from './dialog';
+import { backDropStylesOverride } from './backdrop';
 import { badgeStyleOverRides } from './badge';
 import { customShadows } from './shadows';
 import {
@@ -20,6 +21,7 @@ import {
   inputLabelStyleOverRides,
   outlinedTextFieldStyleOverRides,
 } from './textfield';
+const defaultTheme = createTheme();
 
 const getTheme = () => {
   const { colors, partnerConfig } = getPartnerThemeData();
@@ -89,6 +91,9 @@ const getTheme = () => {
       MuiDialog: {
         defaultProps: dialogDefaultProps(),
         styleOverrides:dialogStylesOverride()
+      },
+      MuiBackdrop: {
+        styleOverrides:backDropStylesOverride(defaultTheme)
       },
       MuiBadge: {
         styleOverrides: badgeStyleOverRides(colors, partnerConfig),
