@@ -23,7 +23,7 @@ let store = {};
 let intent_supported = false;
 let upi_others = true;
 let upi_apps = {};
-let nativeData;
+let nativeData = {};
 const config = getConfig();
 function getAllUrlParams(url) {
 
@@ -756,6 +756,7 @@ class PaymentOption extends React.Component {
         title="Payment modes"
         buttonTitle='Continue'
         noBackIcon={getConfig().Web}
+        isReactNative={nativeData?.isReactNative}
       >
           <div>
             {/* <div className="block-padding bold payment-option-sub">Payable amount: ₹ {store.amount.toLocaleString()}</div> */}
