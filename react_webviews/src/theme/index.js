@@ -57,8 +57,6 @@ const getTheme = () => {
       },
       MuiCheckbox: {
         styleOverrides: checkboxStyleOverRides(colors),
-      MuiTooltip: {
-        styleOverrides: tooltipStyleOverRides(colors),
       },
       MuiFilledInput: {
         defaultProps: {
@@ -98,10 +96,9 @@ const getTheme = () => {
       MuiFormHelperText: {
         styleOverrides: helperTextStyleOverRides(colors, partnerConfig),
       },
-      }
     },
     shadows: customShadows()
-  }
+  };
   return createTheme(theme);
 };
 
