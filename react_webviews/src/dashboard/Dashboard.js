@@ -44,6 +44,7 @@ import SecondaryOtpVerification from "../login_and_registration/pages/SecondaryV
 import StatusCallback from "../kyc/Native/StatusCallback";
 import ProductMarketTypes from './ProductMarketTypes';
 import PrimaryMarketProducts from "./PrimaryMarketProducts/PrimaryMarketProducts";
+import HandleDirectEntry from "../kyc/Equity/components/HandleDirectEntry";
 
 const Home = (props) => {
   const config = getConfig(); 
@@ -51,6 +52,7 @@ const Home = (props) => {
   return (
     <Fragment>
       <Switch>
+        <Route exact path={`${url}direct/:type`} component={HandleDirectEntry} />
         <Route exact path={`${url}secondary-verification`} component={SecondaryVerification} />
         <Route exact path={`${url}secondary-otp-verification`} component={SecondaryOtpVerification} />
         <Route path={`${url}referral-code`} component={Referral} />
