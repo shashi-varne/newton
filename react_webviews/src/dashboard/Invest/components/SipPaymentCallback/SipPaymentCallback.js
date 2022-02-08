@@ -128,10 +128,10 @@ const SipPaymentCallback = (props) => {
             auto_debit_campaign_url = `${auto_debit_campaign_url}${auto_debit_campaign_url.match(/[\?]/g) ? "&" : "?"}generic_callback=true&plutus_redirect_url=${encodeURIComponent(`${basePath}/?is_secure=${storageService().get("is_secure")}&partner_code=${config.code}`)}`
             window.location.href = auto_debit_campaign_url;
           } else if (
-            campaign.campaign.name !== "auto_debit_campaign" ||
-            campaign.campaign.name !== "enach_mandate_campaign" ||
-            campaign.campaign.name !== "indb_mandate_campaign" ||
-            campaign.campaign.name !== "ucomb_mandate_campaign" ||
+            campaign.campaign.name !== "auto_debit_campaign" &&
+            campaign.campaign.name !== "enach_mandate_campaign" &&
+            campaign.campaign.name !== "indb_mandate_campaign" &&
+            campaign.campaign.name !== "ucomb_mandate_campaign" &&
             campaign.campaign.name !== "tmb_mandate_campaign"
           ) {
             setIsApiRunning("page");
