@@ -132,7 +132,7 @@ const SipPaymentCallback = (props) => {
             campaign.campaign.name !== "enach_mandate_campaign" ||
             campaign.campaign.name !== "indb_mandate_campaign" ||
             campaign.campaign.name !== "ucomb_mandate_campaign" ||
-            campaign.campaign.name === "tmb_mandate_campaign"
+            campaign.campaign.name !== "tmb_mandate_campaign"
           ) {
             setIsApiRunning("page");
             let url = campaign.notification_visual_data.target[0].url;
