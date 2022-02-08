@@ -11,7 +11,7 @@
   variat: you can seleect either two of them => 'product' or 'herocard'
 */
 
-import { Box } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import React from 'react';
 import Typography from '../../atoms/Typography';
 import Button from '../../atoms/Button';
@@ -60,14 +60,21 @@ const CardHorizontal = ({
     }
   };
   return (
-    <Box
+    <Stack
+      direction='column'
       className={`${wrapperClassNames} ${className}`}
       sx={{ sx }}
       onClick={onClick}
       data-aid={`cardHorizontal_${dataAid}`}
     >
-      <section className={`ch-top-section-wrapper ${isHeroCardVariant && 'ch-hero-top-section-wrapper'}`}>
-        <div>
+      <Stack
+        component='section'
+        direction='row'
+        justifyContent='space-between'
+        alignItems='center'
+        className={`ch-top-section-wrapper ${isHeroCardVariant && 'ch-hero-top-section-wrapper'}`}
+      >
+        <Stack direction='column' spacing='4px'>
           {leftImgSrc && <Icon size='32px' src={leftImgSrc} {...leftImgProps} dataAid='top' />}
           {title && (
             <Typography
@@ -111,7 +118,7 @@ const CardHorizontal = ({
               dataAid={variantStyle?.btnDataAid}
             />
           )}
-        </div>
+        </Stack>
         <Icon
           size='110px'
           src={rightImgSrc}
@@ -119,7 +126,7 @@ const CardHorizontal = ({
           {...rightImgProps}
           dataAid='right'
         />
-      </section>
+      </Stack>
       {variantStyle?.showFooter && (
         <Box className='ch-bottom-section-wrapper' sx={{ background: footerBackground }}>
           <Typography variant='body5' color={footerTextColor} dataAid='information'>
@@ -127,7 +134,7 @@ const CardHorizontal = ({
           </Typography>
         </Box>
       )}
-    </Box>
+    </Stack>
   );
 };
 
