@@ -2,27 +2,91 @@
   height: 100%;
   overflow: auto;
   position: relative;
-  background-color: white;
+
+  .container-nav-header{
+    padding-top: 56px;
+    flex: 1;
+
+    .nav-header-top-section {
+      position: fixed;
+      top: 60px;
+      width: var(--desktop-width);
+    }
+  }
+
   .container-content-wrapper {
     padding: 0px 16px 20px 16px;
   }
 
   .container-footer-wrapper {
-    margin-top: 40px;
-    padding: 0px 16px;
+    z-index: 100;
+    .container-footer-child-wrapper {
+      padding: 0px 16px;
+      .footer-wrapper {
+        .footer-stack-wrapper {
+          > button {
+            flex-basis: 100%;
+            min-width: fit-content;
+            &:only-child {
+              max-width: fit-content;
+              margin: 0px auto;
+            }
+          }
+          .confirm-action-wrapper {
+            max-width: fit-content;
+            margin: 0px auto;
+          }
+        }
+      }
+    }
+    &.container-fixed-footer {
+      position: fixed;
+      bottom: 0px;
+      width: calc(var(--desktop-width) - 10px);
+    }
+    .container-footer-cta {
+      padding: 8px 16px 16px 16px;
+      margin: 0px -16px;
+    }
   }
 }
 
 @media (max-width: 600px) {
   .container-wrapper {
+
+    .container-nav-header{
+      .nav-header-top-section {
+        top: 0px;
+        width: 100%;
+      }
+    }
+
+
     .container-footer-wrapper {
-      display: block;
-      position: fixed;
-      background-color: white;
-      padding: 8px 16px 16px 16px;
-      bottom: 0px;
-      left: 0;
-      right: 0;
+      &.container-fixed-footer {
+        position: fixed;
+        left: 0;
+        bottom: 0px;
+        right: 0;
+        width: 100%;
+        display: block;
+      }
+
+      .container-footer-child-wrapper {
+        .footer-wrapper {
+          .footer-stack-wrapper {
+            button {
+              &:only-child {
+                max-width: 100%;
+              }
+            }
+            .confirm-action-wrapper {
+              max-width: 100%;
+              margin: unset;
+            }
+          }
+        }
+      }
     }
   }
 }
