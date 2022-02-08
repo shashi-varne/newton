@@ -128,31 +128,31 @@ export const CATEGORY_CARDS = [
     title: 'Small Cap',
     subtitle: 'Long term capital growth',
   },
-  {
-    imgSrc: large_mid_cap,
-    title: 'Large & mid Cap',
-    subtitle: 'Long term capital growth',
-  },
-  {
-    imgSrc: small_cap,
-    title: 'Small Cap',
-    subtitle: 'Long term capital growth',
-  },
-  {
-    imgSrc: large_mid_cap,
-    title: 'Large & mid Cap',
-    subtitle: 'Long term capital growth',
-  },
-  {
-    imgSrc: small_cap,
-    title: 'Small Cap',
-    subtitle: 'Long term capital growth',
-  },
-  {
-    imgSrc: large_mid_cap,
-    title: 'Large & mid Cap',
-    subtitle: 'Long term capital growth',
-  },
+  // {
+  //   imgSrc: large_mid_cap,
+  //   title: 'Large & mid Cap',
+  //   subtitle: 'Long term capital growth',
+  // },
+  // {
+  //   imgSrc: small_cap,
+  //   title: 'Small Cap',
+  //   subtitle: 'Long term capital growth',
+  // },
+  // {
+  //   imgSrc: large_mid_cap,
+  //   title: 'Large & mid Cap',
+  //   subtitle: 'Long term capital growth',
+  // },
+  // {
+  //   imgSrc: small_cap,
+  //   title: 'Small Cap',
+  //   subtitle: 'Long term capital growth',
+  // },
+  // {
+  //   imgSrc: large_mid_cap,
+  //   title: 'Large & mid Cap',
+  //   subtitle: 'Long term capital growth',
+  // },
 ];
 
 export const SECTORS = [

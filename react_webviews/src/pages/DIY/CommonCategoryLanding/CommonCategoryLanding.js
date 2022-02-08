@@ -1,8 +1,9 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import React from 'react';
 import {
   LandingHeader,
   LandingHeaderImage,
+  LandingHeaderPoints,
   LandingHeaderSubtitle,
   LandingHeaderTitle,
 } from '../../../designSystem/molecules/LandingHeader';
@@ -20,6 +21,8 @@ import { getConfig } from '../../../utils/functions';
 import Container from '../../../designSystem/organisms/Container/Container';
 
 import './CommonCategoryLanding.scss';
+import Button from '../../../designSystem/atoms/Button';
+import Icon from '../../../designSystem/atoms/Icon';
 
 SwiperCore.use([Pagination]);
 const CommonCategoryLanding = () => {
@@ -35,14 +38,17 @@ const CommonCategoryLanding = () => {
             These funds invest in stocks of various companies across sectors and market cap sizes to
             yield high returns
           </LandingHeaderSubtitle>
+          <LandingHeaderPoints>Higher level of risk compared to Debt & Hybrid</LandingHeaderPoints>
+          <LandingHeaderPoints>Ideal for investors with a min goal of 5 years</LandingHeaderPoints>
         </LandingHeader>
 
-        <div className='diy-c-trending-wrapper'>
-          <Typography variant='heading4'>Trending</Typography>
+        <Stack direction='column' spacing={2} className='diy-c-trending-wrapper'>
+          <SectionHeader productName={config.productName} title='Trending' />
           <CustomSwiper
             slidesPerView={isMobileDevice ? 1 : 2}
             slidesPerColumn={1}
             slidesPerGroup={1}
+            spaceBetween={10}
           >
             {TRENDING_CARDS?.map((fund, idx) => (
               <SwiperSlide key={idx}>
@@ -52,21 +58,17 @@ const CommonCategoryLanding = () => {
               </SwiperSlide>
             ))}
           </CustomSwiper>
-        </div>
+        </Stack>
 
-        <div className='diy-c-category-wrapper'>
-          <div className='diy-c-titleWrapper'>
-            <Typography variant='heading4'>Market Cap</Typography>
-            <Typography variant='specialBody' color='secondary'>
-              See all
-            </Typography>
-          </div>
+        <Stack direction='column' spacing={2} className='diy-c-category-wrapper'>
+          <SectionHeader productName={config.productName} title='Market Cap' />
           <div>
             <CustomSwiper
               slidesPerView={2}
               slidesPerColumn={2}
               slidesPerGroup={2}
               slidesPerColumnFill={'row'}
+              spaceBetween={10}
             >
               {CATEGORY_CARDS?.map((category, idx) => {
                 return (
@@ -77,12 +79,10 @@ const CommonCategoryLanding = () => {
               })}
             </CustomSwiper>
           </div>
-        </div>
+        </Stack>
 
-        <div className='diy-c-tax-saving-wrapper'>
-          <Typography className='diy-c-tax-title' variant='heading4'>
-            Tax Saving
-          </Typography>
+        <Stack direction='column' spacing={2} className='diy-c-tax-saving-wrapper'>
+          <SectionHeader productName={config.productName} title='Tax Saving' />
           <div className='diy-c-card-horz-wrapper'>
             <CardHorizontal
               // iconSrc={tax_save}
@@ -92,15 +92,10 @@ const CommonCategoryLanding = () => {
               dataAid='elss'
             />
           </div>
-        </div>
+        </Stack>
 
-        <div className='diy-c-sector-theme'>
-          <div className='diy-c-titleWrapper'>
-            <Typography variant='heading4'>Sector and themes</Typography>
-            <Typography variant='body8' color='secondary'>
-              See all
-            </Typography>
-          </div>
+        <Stack direction='column' spacing={2} className='diy-c-sector-theme'>
+          <SectionHeader productName={config.productName} title='Sector and themes' />
           <CustomSwiper
             spaceBetween={16}
             breakpoints={{
@@ -119,7 +114,6 @@ const CommonCategoryLanding = () => {
                 slidesPerGroup: 1,
               },
             }}
-            slidesOffsetAfter={40}
             freeMode
           >
             {SECTORS.map((sector, idx) => (
@@ -128,12 +122,10 @@ const CommonCategoryLanding = () => {
               </SwiperSlide>
             ))}
           </CustomSwiper>
-        </div>
+        </Stack>
 
-        <div className='diy-c-investment-style-wrapper'>
-          <Typography className='diy-c-investment-title' variant='heading4'>
-            Investment styles
-          </Typography>
+        <Stack direction='column' spacing={2} className='diy-c-investment-style-wrapper'>
+          <SectionHeader productName={config.productName} title='Investment styles' />
           <CustomSwiper
             spaceBetween={8}
             breakpoints={{
@@ -152,7 +144,6 @@ const CommonCategoryLanding = () => {
                 slidesPerGroup: 1,
               },
             }}
-            slidesOffsetAfter={40}
             freeMode
           >
             {INVEST_STYLES?.map((investStyle, idx) => {
@@ -163,7 +154,7 @@ const CommonCategoryLanding = () => {
               );
             })}
           </CustomSwiper>
-        </div>
+        </Stack>
       </div>
     </Container>
   );
@@ -190,6 +181,17 @@ const customSx = {
   },
 };
 
-const CustomPagination = React.forwardRef((props, ref) => {
-  return <Box component='div' sx={customSx} ref={ref} {...props}></Box>;
-});
+const SectionHeader = ({ title, productName, buttonTitle, onClick }) => {
+  const handleSvg = (code) => {
+    console.log('code is', code);
+  };
+  return (
+    <Stack sx={{ pl: 2, pr: 2 }} direction='row' alignItems='center' justifyContent='space-between'>
+      <Typography variant='heading4'>{title}</Typography>
+      <Stack direction='row' alignItems='center' spacing='4px'>
+        <Button title='See all' variant='link' />
+        <Icon src={require(`assets/${productName}/right_arrow_small.svg`)} size='16px' />
+      </Stack>
+    </Stack>
+  );
+};

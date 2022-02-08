@@ -57,7 +57,6 @@ export const CustomSwiper = ({
 };
 
 CustomSwiper.defaultProps = {
-  spaceBetween: 10,
   slidesPerView: 'auto',
   slidesPerColumn: 'auto',
   slidesPerColumnFill: 'row',
