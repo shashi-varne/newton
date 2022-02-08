@@ -23,7 +23,7 @@ import RmLogin from './RmJourney/login';
 import Feature from './Feature';
 import Tooltip from 'common/ui/Tooltip';
 import ComponentTest from './ComponentTest';
-import {getConfig} from './utils/functions';
+import {getConfig, isDietProduct} from './utils/functions';
 import 'common/theme/Style.scss';
 import { storageService } from './utils/validators';
 import LoginContainer from './login_and_registration/components/LoginContainer';
@@ -56,7 +56,7 @@ const clearBottomsheetDisplays = () => {
     "is_bottom_sheet_displayed", 
     "verifyDetailsSheetDisplayed", 
     "is_bottom_sheet_displayed_kyc_premium", 
-    "landingBottomSheetDisplayed"
+    "landingBottomSheetDisplayed",
   ];
 
   bottomSheetsArr.forEach((bottomSheet) => {
@@ -82,8 +82,9 @@ const App = () => {
   const config = getConfig();
   const iframe = config.isIframe;
   const isMobileDevice = config.isMobileDevice;
+  const isDietEnabled = isDietProduct();
   const [themeConfiguration, setThemeConfiguration] = useState(getMuiThemeConfig());
-  const isWithoutDesktopLayout = isMobileDevice || iframe || window.location.pathname.includes('pg/eq');
+  const isWithoutDesktopLayout = isMobileDevice || iframe || window.location.pathname.includes('pg/eq') || isDietEnabled;
   useEffect(() => {
     if(config.isSdk || config.isIframe) {
       storageService().set("entry_path",window.location.pathname);

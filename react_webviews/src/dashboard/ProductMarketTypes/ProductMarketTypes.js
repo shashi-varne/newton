@@ -4,13 +4,14 @@ import WVInPageHeader from '../../common/ui/InPageHeader/WVInPageHeader';
 import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
 import WVInPageSubtitle from '../../common/ui/InPageHeader/WVInPageSubtitle';
 import MarketProductCard from '../mini-components/MarketProductCard';
-import { getConfig, navigate as navigateFunc } from '../../utils/functions';
+import { getConfig, isDietProduct, navigate as navigateFunc } from '../../utils/functions';
 
 const ProductMarketTypes = (props) => {
   const [showLoader, setShowLoader] = useState(false);
   const config = getConfig();
   const productName = config.productName;
   const navigate = navigateFunc.bind(props);
+  const isDietEnabled = isDietProduct();
   const categoryLists = [
     {
       name: 'IPO',
@@ -55,6 +56,7 @@ const ProductMarketTypes = (props) => {
       title='All categories'
       hidePageTitle
       showLoader={showLoader}
+      noBackIcon={isDietEnabled}
       headerData={{ goBack }}
     >
       <WVInPageHeader style={{ marginBottom: '0px' }}>

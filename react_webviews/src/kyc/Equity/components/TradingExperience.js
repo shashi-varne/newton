@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Container from "../../common/Container";
 import { kycSubmit } from "../../common/api";
 import useUserKycHook from "../../common/hooks/userKycHook";
@@ -9,7 +9,7 @@ import { PATHNAME_MAPPER } from "../../constants";
 import "./commonStyles.scss";
 import { nativeCallback } from "../../../utils/native_callback";
 import WVSelect from "../../../common/ui/Select/WVSelect";
-import { navigate as navigateFunc, } from "../../../utils/functions";
+import { getConfig, navigate as navigateFunc, } from "../../../utils/functions";
 
 const TRADING_EXPERIENCE_VALUES = [
   {
@@ -36,6 +36,7 @@ const TradingExperience = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const navigate = navigateFunc.bind(props);
   const {kyc, isLoading} = useUserKycHook();
+  const { productName } = useMemo(getConfig, []);
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -136,6 +137,7 @@ const TradingExperience = (props) => {
       disable={isLoading}
       showLoader={isApiRunning}
       data-aid="select-trading-experience-screen"
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)} 
     >
       <div className="trading-experience" data-aid="trading-experience">
         <div

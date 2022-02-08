@@ -2,7 +2,7 @@ import React from 'react';
 import Container from '../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
-import { getImage } from '../constants'
+import { API_CONSTANST, getImage } from '../constants'
 import "./Style.scss";
 
 import icn_upi_apps from 'assets/icn_upi_apps.svg';
@@ -17,12 +17,13 @@ import Dialog, { DialogContent, DialogActions, DialogTitle } from "material-ui/D
 import Button from '../../common/ui/Button';
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble';
 import { getBasePath } from '../../utils/functions';
+import isEmpty from 'lodash/isEmpty';
 
 let store = {};
 let intent_supported = false;
 let upi_others = true;
 let upi_apps = {};
-let nativeData;
+let nativeData = {};
 const config = getConfig();
 function getAllUrlParams(url) {
 
@@ -351,6 +352,7 @@ class PaymentOption extends React.Component {
       upiSupported: false,
       netBankingSupported: false,
       amount: 0,
+      flow: "",
     };
 
     this.goToBank = this.goToBank.bind(this);
@@ -378,6 +380,7 @@ class PaymentOption extends React.Component {
       const result = await  Api.get(url);
       if(result.pfwresponse.status_code === 200) {
         let paymentData = result.pfwresponse.result;
+        store = paymentData;
         const neftSupported = paymentData?.payment_options.indexOf('neft') !== -1;
         const netBankingSupported = paymentData?.payment_options.indexOf('netbanking') !== -1;
         const upiSupported = paymentData?.payment_options.indexOf('upi') !== -1;
@@ -412,15 +415,21 @@ class PaymentOption extends React.Component {
       skelton: true
     })
     const config = getConfig();
-    let url = config.base_url + '/api/equity/api/eqm/eqpayments/pg/payment/options/' + config.pc_urlsafe;
-    if(config.Web) {
-      const redirectUrl = encodeURIComponent(`${basepath}/pg/eq/payment-status` + config.searchParams);
+    let { redirect_url = "" } = config.current_params;
+    const flow = this.props.match?.params?.flow || "default";
+    const apiRoute = API_CONSTANST[flow] || API_CONSTANST.default;
+    let url = config.base_url + apiRoute + config.pc_urlsafe;
+    if(config.Web && flow === "default") {
+      redirect_url = encodeURIComponent(`${basepath}/pg/eq/payment-status` + config.searchParams);
+    }
+    if(!isEmpty(redirect_url)) {
       // eslint-disable-next-line no-useless-escape
-      url += (url.match(/[\?]/g) ? '&' : '?')+`plutus_redirect_url=${redirectUrl}`;
+      url += (url.match(/[\?]/g) ? '&' : '?')+`plutus_redirect_url=${redirect_url}`;
     }
     await this.getPaymentOptions(url);
     this.setState({
-      skelton: false
+      skelton: false,
+      flow,
     })
   }
 
@@ -544,21 +553,6 @@ class PaymentOption extends React.Component {
   }
 
   selectptype(type) {
-    let eventObj = {
-      "event_name": "pg_payment_option",
-      "properties": {
-        "user_action": "next",
-        "amount": store.amount,
-        "channel": store.partner,
-        "pg_mode": type,
-        "flow": store.flow,
-        "investor": store.investor,
-        "initial_kyc_status": store.initial_kyc_status,
-        "add_bank_drop": (this.state.netbank.isSelected) ? "yes" : "no"
-      }
-    };
-
-    pushEvent(eventObj);
     if (type === "debit") {
       this.setState({ isDebitSelected: true, isNetbankingSelected: false, isUpiSelected: false, isNEFTSelected: false, isOpen: true }, () => {
       });
@@ -618,6 +612,21 @@ class PaymentOption extends React.Component {
   }
 
   async goToPayment(type) {
+    let eventObj = {
+      "event_name": "pg_payment_option",
+      "properties": {
+        "user_action": "next",
+        "amount": store.amount,
+        "channel": store.partner,
+        "pg_mode": type,
+        "flow": store.flow,
+        "investor": store.investor,
+        "initial_kyc_status": store.initial_kyc_status,
+        "add_bank_drop": (this.state.netbank.isSelected) ? "yes" : "no"
+      }
+    };
+
+    pushEvent(eventObj);
     if (type === "netbanking") {
       this.setState({ show_loader: 'page' });
       nativeCallback({
@@ -629,8 +638,8 @@ class PaymentOption extends React.Component {
       window.location.href = `${this.state.paymentUrl}?payment_method=netbanking`;
     } else if (type === "neft") {
       this.props.history.push(
-        { pathname: 'neft', search: getConfig().searchParams },
-        { store: {bankDetails:this.state.bankDetails,amount:this.state.amount} }
+        { pathname: '/pg/eq/neft', search: getConfig().searchParams },
+        { store: {bankDetails:this.state.bankDetails,amount:this.state.amount, flow: this.state.flow} }
       );
     } else if (type === "upi") {
       this.setState({ show_loader: 'page' });
@@ -653,7 +662,7 @@ class PaymentOption extends React.Component {
       this.setState({ show_loader: 'page' });
       let that = this;
       Api.get(this.state.paymentIntentUrl).then(data => {
-        if (data.pfwresponse.status_code === 200) {
+        if (data?.pfwresponse?.status_code === 200) {
           let upi_payment_data = data.pfwresponse.result;
           upi_payment_data.package_name = type;
           nativeCallback({
@@ -665,9 +674,7 @@ class PaymentOption extends React.Component {
           nativeCallback({ action: 'initiate_upi_payment', message: upi_payment_data });
         } else {
           that.setState({ show_loader: false });
-          if (data.pfwresponse.result.error === 'failure') {
-            toast(data.pfwresponse.result.message);
-          }
+          toast(data?.pfwresponse?.result?.message || data?.pfwresponse?.result?.error || "Something went wrong!");
         }
       })
     }
@@ -749,6 +756,7 @@ class PaymentOption extends React.Component {
         title="Payment modes"
         buttonTitle='Continue'
         noBackIcon={getConfig().Web}
+        isReactNative={nativeData?.isReactNative}
       >
           <div>
             {/* <div className="block-padding bold payment-option-sub">Payable amount: ₹ {store.amount.toLocaleString()}</div> */}
@@ -778,9 +786,9 @@ class PaymentOption extends React.Component {
               {/* upi */}
               {
                 this.state.upiSupported &&
-                <div className="paymentcard upi tab" onClick={() => this.selectptype('upi')}>
+                <div className="paymentcard upi tab">
                   <input type="radio" id="rd1" name="rd" defaultChecked={this.state.isUpiSelected} />
-                  <label className={`tab-label ${getConfig().productName}`} htmlFor="rd1">
+                  <label onClick={() => this.selectptype('upi')}className={`tab-label ${getConfig().productName}`} htmlFor="rd1">
                     <div className="item-header">
                       <img src={icn_upi_apps} width="20" alt="upi" />
                       <div className="bold dark-grey-text">UPI APPs</div>
@@ -802,9 +810,9 @@ class PaymentOption extends React.Component {
                 {/* netbanking */}
                 {
                   this.state.netBankingSupported &&
-                  <div className="paymentcard tab" onClick={() => this.selectptype('netbanking')}>
+                  <div className="paymentcard tab" >
                     <input type="radio" id="rd2" name="rd" defaultChecked={this.state.isNetbankingSelected} />
-                    <label className={`tab-label ${getConfig().productName}`} htmlFor="rd2">
+                    <label onClick={() => this.selectptype('netbanking')} className={`tab-label ${getConfig().productName}`} htmlFor="rd2">
                       <div className="item-header">
                         <img src={this.state.bankDetails.image} width="20" alt="netbanking" />
                         <div className="bold dark-grey-text">Net Banking</div>
@@ -820,9 +828,9 @@ class PaymentOption extends React.Component {
                 {/* neft */}
                 {
                   this.state.neftSupported &&
-                  <div className="paymentcard tab" onClick={() => this.selectptype('neft')}>
+                  <div className="paymentcard tab" >
                     <input type="radio" id="rd4" name="rd" defaultChecked={this.state.isNEFTSelected} />
-                    <label className={`tab-label ${getConfig().productName}`} htmlFor="rd4">
+                    <label onClick={() => this.selectptype('neft')} className={`tab-label ${getConfig().productName}`} htmlFor="rd4" >
                       <div className="item-header">
                         <img src={this.state.bankDetails.image} width="20" alt="neft" />
                         <div className="bold dark-grey-text">NEFT/RTGS</div>

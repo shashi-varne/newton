@@ -60,8 +60,12 @@ const AddBank = (props) => {
     setName(kyc.pan.meta_data.name || "");
     let data = { ...bankData };
     if (bank_id) {
-      data = kyc.additional_approved_banks.find((obj) => obj.bank_id === bank_id) || {};
-
+      if(bank_id === kyc.bank.meta_data.bank_id) {
+        data = kyc.bank.meta_data;
+        data.status = "default";
+      } else {
+        data = kyc.additional_approved_banks.find((obj) => obj.bank_id === bank_id) || {};
+      }
       data.c_account_number = data.account_number;
       if (data.user_rejection_attempts === 0) {
         setIsPennyExhausted(true);
@@ -95,7 +99,7 @@ const AddBank = (props) => {
     navigate(`/kyc/${kyc.kyc_status}/upload-documents`, {
       searchParams: `${
         getConfig().searchParams
-      }&additional=true&bank_id=${bank_id}`,
+      }&additional=true${bankData.status !== "default" ? `&bank_id=${bank_id}` : ""}`,
     });
   };
 
@@ -153,8 +157,7 @@ const AddBank = (props) => {
         });
       }
     } catch (err) {
-      if ((kyc?.bank.meta_data_status === "submitted" && kyc?.bank.meta_data.bank_status === "pd_triggered") ||
-        (kyc?.bank.meta_data_status === "rejected" && kyc?.bank.meta_data.bank_status === "rejected")) {
+      if (bankData.bank_status === "pd_triggered" || bankData.bank_status === "rejected") {
           setIsPennyFailed(true);
       } else {
         toast(err.message || genericErrorMessage);

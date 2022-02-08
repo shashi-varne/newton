@@ -1,48 +1,43 @@
-import React, { Component } from 'react';
-import Container from '../common/Container';
+import React from 'react';
+import { useMemo } from 'react';
 import InfoBox from './InfoBox';
 
-class EmailTemplate extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
+const EmailTemplate = ({
+  statementSource,
+  containerStyle = {},
+  imageTitle
+}) => {
+  const copyText = useMemo(() =>
+    `Consolidated Account Statement - ${statementSource === 'cams'
+      ? 'CAMS'
+      : 'KFINTECH'
+    } Mailback Request`
+  , []);
 
-  render() {
-    return (
-      <Container
-        title={this.props.title}
-        subtitle={this.props.subtitle}
-        goBack={this.props.goBack}
-        {...this.props}
-      >
-        <div>
-          <div className="ext-pf-subheader">
-            <h4>Search your email under</h4>
-            <InfoBox
-              classes={{ root: 'info-box-cut-out'}}
-              isCopiable={true}
-              textToCopy="Consolidated Account Statement - CAMS Mailback Request"
-            >
-              <span className="info-box-body-text">
-                Consolidated Account Statement - CAMS Mailback Request
-              </span>
-            </InfoBox>
-          </div>
-          <div className="ext-pf-subheader">
-            <h4>Email looks like this</h4>
-            <img
-              src={require('assets/cas_email.jpg')}
-              alt="Email"
-              className="email_img"
-              width="100" height="200"
-            />
-          </div>
-          {this.props.children}
-        </div>
-      </Container>
-    );
-  }
+  return (
+    <div style={{...containerStyle}}>
+      <div className="ext-pf-subheader">
+        <img
+          src={require(`assets/${statementSource === 'cams' ? 'cas' : 'karvy'}_email.png`)}
+          alt="Email"
+          className="email_img"
+          width="100" height="200"
+        />
+      </div>
+      <div className="ext-pf-subheader">
+        <h4>Search your email under</h4>
+        <InfoBox
+          classes={{ root: 'info-box-cut-out' }}
+          isCopiable={true}
+          textToCopy={copyText}
+        >
+          <span className="info-box-body-text">
+            {copyText}
+          </span>
+        </InfoBox>
+      </div>
+    </div>
+  );
 }
 
 export default EmailTemplate;

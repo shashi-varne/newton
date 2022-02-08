@@ -30,6 +30,7 @@ export default function Landing(props) {
   return (
     <Container
       noFooter
+      title="Statements"
       force_hide_inpage_title
       headerData={{
         goBack
@@ -38,7 +39,7 @@ export default function Landing(props) {
       <WVInPageHeader
         withImg
         imageProps={{
-          src: require(`assets/${productName}/statements.svg`),
+          src: require(`assets/${productName}/statements_briefcase.svg`),
           style: { width: '95px', height: '52px' }
         }}
       >
@@ -46,7 +47,7 @@ export default function Landing(props) {
         <WVInPageSubtitle>Overview of your investments</WVInPageSubtitle>
       </WVInPageHeader>
       <WVInfoBubble hasTitle style={{ marginBottom: '30px' }}>
-        The statements are not for mutual funds and only reflect your Trading & Demat account transactions
+        These statements are not for mutual funds and only reflect your Trading & Demat account transactions
       </WVInfoBubble>
       {STATEMENT_OPTIONS.map(optionObj => {
         return (
