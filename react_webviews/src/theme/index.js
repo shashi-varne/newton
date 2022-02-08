@@ -77,9 +77,6 @@ const getTheme = () => {
       MuiInputAdornment: {
         styleOverrides: inputAdornmentStyleOverRides(colors)
       },
-      MuiDivider: {
-        styleOverrides: separatorStyleOverRides(colors)
-      },
       MuiTabs: {
         variants:tabsVariantsConfig(),
         styleOverrides: tabsStyleOverRides()
