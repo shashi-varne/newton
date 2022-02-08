@@ -94,6 +94,28 @@ pipelines:
       - step:
           <<: *pod-deploy
           name: Pipeline-on-demand deploy
+    
+    deploy-prod-all:
+      - parallel:
+        - step:
+            <<: *prod-deploy
+            name: Fisdom Production deploy
+            deployment: fisdom-prod
+        
+        - step:
+            <<: *prod-deploy
+            name: Finity Production deploy
+            deployment: finity-prod
+        
+        - step:
+            <<: *prod-deploy
+            name: Fisdom-Equity Production deploy
+            deployment: fisdom-webapp-prod
+
+        - step:
+            <<: *prod-deploy
+            name: Finity-Equity Production deploy
+            deployment: finity-webapp-prod
 
   branches:
     # master:
