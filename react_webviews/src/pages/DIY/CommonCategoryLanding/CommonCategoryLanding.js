@@ -49,6 +49,8 @@ const CommonCategoryLanding = () => {
             slidesPerColumn={1}
             slidesPerGroup={1}
             spaceBetween={10}
+            freeMode
+            speed={500}
           >
             {TRENDING_CARDS?.map((fund, idx) => (
               <SwiperSlide key={idx}>
@@ -98,6 +100,7 @@ const CommonCategoryLanding = () => {
           <SectionHeader productName={config.productName} title='Sector and themes' />
           <CustomSwiper
             spaceBetween={16}
+            speed={500}
             breakpoints={{
               320: {
                 slidesPerView: 2,
@@ -128,6 +131,7 @@ const CommonCategoryLanding = () => {
           <SectionHeader productName={config.productName} title='Investment styles' />
           <CustomSwiper
             spaceBetween={8}
+            speed={500}
             breakpoints={{
               320: {
                 slidesPerView: 2,

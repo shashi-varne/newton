@@ -96,7 +96,7 @@ export const CATEGORY_CARDS = [
   {
     imgSrc: large_cap,
     title: 'Large Cap',
-    subtitle: 'Long term capital growth',
+    subtitle: 'Long term capital growth Long term capital growth Long term capital growth',
   },
   {
     imgSrc: multi_cap,
@@ -106,7 +106,7 @@ export const CATEGORY_CARDS = [
   {
     imgSrc: small_cap,
     title: 'Small Cap',
-    subtitle: 'Long term capital growth',
+    subtitle: 'Long term capital growth Long term capital growth',
   },
   {
     imgSrc: large_mid_cap,
@@ -128,16 +128,16 @@ export const CATEGORY_CARDS = [
     title: 'Small Cap',
     subtitle: 'Long term capital growth',
   },
-  // {
-  //   imgSrc: large_mid_cap,
-  //   title: 'Large & mid Cap',
-  //   subtitle: 'Long term capital growth',
-  // },
-  // {
-  //   imgSrc: small_cap,
-  //   title: 'Small Cap',
-  //   subtitle: 'Long term capital growth',
-  // },
+  {
+    imgSrc: large_mid_cap,
+    title: 'Large & mid Cap',
+    subtitle: 'Long term capital growth',
+  },
+  {
+    imgSrc: small_cap,
+    title: 'Small Cap',
+    subtitle: 'Long term capital growth',
+  },
   // {
   //   imgSrc: large_mid_cap,
   //   title: 'Large & mid Cap',
@@ -202,7 +202,7 @@ export const INVEST_STYLES = [
   {
     imgSrc: investment_focused,
     title: 'Focused',
-    subtitle: 'Invest in industry specific stocks',
+    subtitle: 'Invest in industry specific stocks Invest in industry specific stocks',
   },
   {
     imgSrc: investment_contra,
