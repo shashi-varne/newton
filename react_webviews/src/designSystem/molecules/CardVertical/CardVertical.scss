@@ -1,21 +1,6 @@
 .cv-wrapper {
   padding: 16px;
-  display: flex;
-  flex-direction: column;
   background-color: white;
   border-radius: 12px;
-  flex: 1;
-  cursor: pointer;
-
-  .cv-img-top + .card-vertical-title {
-    margin-top: 4px;
-  }
-
-  * + .card-vertical-subtitle {
-    margin-top: 4px;
-  }
-
-  * + .card-vertical-description {
-    margin-top: 4px;
-  }
+  cursor: default;
 }
