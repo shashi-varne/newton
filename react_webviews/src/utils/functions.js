@@ -173,11 +173,11 @@ export const getConfig = () => {
   let isPreprodFinity = origin.indexOf('finity.equityapppreprod.finwizard.co.in') >= 0;
 
   let apiKey = '6Ldah04eAAAAAM7-gR7PWL35nSMvNZRMsngMgObG';
-  if(isProdFisdom) {
+  if(isProdFisdom || isPreprodFisdom) {
     apiKey = '6LcUeDweAAAAAJ7gWP6OkmCuO1WXN54Qju-fJPLg';
   }
 
-  if(isProdFinity || isProdMyway) {
+  if(isProdFinity || isProdMyway || isPreprodFinity) {
     apiKey = '6LdSjzweAAAAAHSGjqfOVjy_vVQ_n8iBWe9xCSrL';
   }
 
