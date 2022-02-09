@@ -16,7 +16,7 @@ class InvestmentDetails1 extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      show_loader: 'button',
       fhc_data: new FHC(),
       has_investment: false,
       has_investment_error: '',
@@ -134,7 +134,7 @@ class InvestmentDetails1 extends Component {
               helperText={this.state.has_investment_error}
               width="40"
               label="Have you ever invested your money?"
-              class="MaritalStatus"
+              className="MaritalStatus"
               options={yesOrNoOptions}
               id="investment"
               value={this.state.has_investment}

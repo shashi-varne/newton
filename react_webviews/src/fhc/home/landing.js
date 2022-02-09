@@ -5,11 +5,12 @@ import { fetchFHCData } from '../common/ApiCalls';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import toast from '../../common/ui/Toast';
+import { Imgc } from '../../common/ui/Imgc';
 class Landing extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            show_loader: true,
+            show_loader: 'button',
             productName: getConfig().productName,
         };
         this.navigate = navigate.bind(this);
@@ -67,13 +68,15 @@ class Landing extends Component {
                 onlyButton={true}
             >
                 <div className="landing-container">
-                    <img
+                    <Imgc
                         src={require(`assets/fhc_landing.svg`)}
                         className="landing-img"
-                        alt="Health Check Banner" />
+                        alt="Health Check Banner"
+                        style={{ height: '225px', width: '257px' }}
+                    />
                     <div className="landing-text">
                         Managing your finances is<br />as important as your health.
-                        </div>
+                    </div>
                 </div>
             </Container>
         );

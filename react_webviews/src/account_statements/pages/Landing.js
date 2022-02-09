@@ -30,6 +30,7 @@ export default function Landing(props) {
   return (
     <Container
       noFooter
+      title="Statements"
       force_hide_inpage_title
       headerData={{
         goBack
@@ -38,7 +39,7 @@ export default function Landing(props) {
       <WVInPageHeader
         withImg
         imageProps={{
-          src: require(`assets/${productName}/statements.svg`),
+          src: require(`assets/${productName}/statements_briefcase.svg`),
           style: { width: '95px', height: '52px' }
         }}
       >

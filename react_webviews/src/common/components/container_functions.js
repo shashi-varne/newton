@@ -196,7 +196,7 @@ export function commonRender(props_base) {
                         resetpage={this.props.resetpage}
                         handleReset={this.props.handleReset}
                         topIcon={this.props.topIcon || this.props.rightIcon}
-                        handleTopIcon={this.handleTopIcon}
+                        handleTopIcon={this.handleTopIcon || this.props.handleTopIcon}
                         inPageTitle={this.state.inPageTitle}
                         force_hide_inpage_title={this.state.force_hide_inpage_title}
                         style={this.props.styleHeader}
@@ -213,7 +213,8 @@ export function commonRender(props_base) {
                         canSkip={this.props.canSkip}
                         hideHamburger={this.props.hideHamburger}
                         onSkipClick={this.props.onSkipClick}        
-                        customBackButtonColor={this.props.customBackButtonColor}
+                        customTopIconColor={this.props.customTopIconColor}
+                        noTopIconColor={this.props.noTopIconColor}
                     />
                 )}
             
@@ -333,12 +334,24 @@ export function didupdate() {
     setHeights({ 'header': true, 'container': false });
 }
 
-export function navigate(pathname) {
-    this.props.history.push({
-        pathname: pathname,
-        search: this.props.location.search
-    });
-};
+export function navigate(pathname, params, replace) {
+    if (!replace) {
+        this.props.history.push({
+            pathname: pathname,
+            search: this.props.location.search,
+            params,
+        });
+    } else {
+        /* Required for screens that don't require to be considered in
+          the history sequence when moving back through history using
+          history.goBack() */
+        this.props.history.replace({
+            pathname: pathname,
+            search: this.props.location.search,
+            params,
+        });
+    }
+}
 
 export function check_hide_header_title() {
     let force_hide_inpage_title;

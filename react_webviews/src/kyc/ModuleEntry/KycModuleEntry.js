@@ -53,7 +53,7 @@ function KycModuleEntry(props) {
   };
 
   const initialize = async () => {
-    if (fromState && isNative) {
+    if (fromState && fromState !== "/freedom-plan/review" && isNative) {
       nativeCallback({ action: "exit_web"});
       return;
     }
@@ -77,6 +77,17 @@ function KycModuleEntry(props) {
        navigate('/kyc/add-bank', data);
     } else if (urlParams?.type === 'fno') {
       navigate(PATHNAME_MAPPER.uploadFnOIncomeProof, data);
+    } else if (urlParams?.type === 'freedomPlan') {
+      if (config.Android) {
+        nativeCallback({
+          action: "get_content_data",
+          message: {
+            content_module: ["upi_apps"],
+          },
+        });
+      }
+      navigate("/freedom-plan", data);
+      
     } else if (kycStatus === 'ground') {
        navigate('/kyc/home', data);
     } else if (kycStatus === "ground_pan") {

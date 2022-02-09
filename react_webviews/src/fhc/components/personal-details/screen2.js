@@ -18,7 +18,7 @@ class PersonalDetails2 extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      show_loader: 'button',
       fhc_data: new FHC(),
       has_kids: '',
       has_kids_error: '',
@@ -158,7 +158,7 @@ class PersonalDetails2 extends Component {
               icon={marital}
               width="40"
               label="Are you married?"
-              class="MaritalStatus"
+              className="MaritalStatus"
               options={yesOrNoOptions}
               id="marital-status"
               value={fhc_data.is_married}
@@ -171,7 +171,7 @@ class PersonalDetails2 extends Component {
               icon={marital}
               width="40"
               label="Do you have kids?"
-              class="MaritalStatus"
+              className="MaritalStatus"
               options={yesOrNoOptions}
               id="has-kids"
               value={has_kids}

@@ -3,66 +3,21 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import StepContent from '@material-ui/core/StepContent';
-import Button from '@material-ui/core/Button';
 import InfoBox from './InfoBox';
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
-import { isFunction, storageService } from '../../utils/validators';
+import { storageService } from '../../utils/validators';
 import { getConfig } from '../../utils/functions';
-const emailDomain = getConfig().emailDomain;
+import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement';
+import { regenTimeLimit } from '../constants';
+import WVButton from '../../common/ui/Button/WVButton';
+import { requestStatement } from '../common/ApiCalls';
+import { setLoader } from '../common/commonFunctions';
+import toast from '../../common/ui/Toast';
+import StatementTriggeredPopUp from './StatementTriggeredPopUp';
 
-const theme = createMuiTheme({
-  overrides: {
-    MuiStepper: {
-      root: {
-        padding: 0,
-        background: 'transparent',
-      },
-    },
-    MuiStepLabel: {
-      label: {
-        fontSize: '15px',
-        fontWeight: 500,
-      },
-      completed: {
-        color: '#767e86',
-      },
-      disabled: {
-        color: '#767e86',
-      },
-      active: {
-        color: 'inherit !important',
-      },
-      iconContainer: {
-        
-      }
-    },
-    MuiStepIcon: {
-      root: {
-        width: '20px',
-        height: '20px',
-        fontSize: '12px',
-        fontWeight: 'bold',
-      },
-      active: {
-        color: 'var(--primary) !important',
-      },
-      completed: {
-        color: 'var(--primary) !important',
-      },
-    },
-    MuiStepContent: {
-      root: {
-        color: '#767e86',
-        fontSize: '13px',
-        lineHeight: '19px',
-        borderLeft: 'none',
-      },
-    },
-  },
-});
+const { emailDomain } = getConfig();
 
 function getSteps() {
-  return ['Generate statement and forward to us', 'View portfolio instantly'];
+  return ['Portfolio statement requested', 'View portfolio instantly'];
 }
 
 export default class EmailRequestSteps extends Component {
@@ -72,57 +27,98 @@ export default class EmailRequestSteps extends Component {
       activeStep: 1,
       popupOpen: false,
     };
+    this.setLoader = setLoader.bind(this);
+  }
+
+  componentDidMount() {
+    let showRegenerateBtn = false;
+    const { emailDetail } = this.props;
+    if (emailDetail.latest_statement) {
+      showRegenerateBtn =
+        (new Date() - new Date(emailDetail.latest_statement.dt_updated)) / 60000 >= regenTimeLimit;
+    }
+
+    this.setState({ showRegenerateBtn });
   }
 
   setActiveStep = (step) => {
     this.setState({ activeStep: step });
   }
 
+  regenerateStatement = async () => {
+    const { emailDetail, parent } = this.props;
+
+    try {
+      this.setLoader('button');
+      parent.sendEvents('regenerate_stat');
+
+      await requestStatement({
+        email: emailDetail.email,
+        statement_id: emailDetail.latest_statement.statement_id,
+        retrigger: 'true',
+      });
+      this.setLoader(false);
+      this.setState({
+        openPopup: true
+      });
+    } catch (err) {
+      this.setLoader(false);
+      console.log(err);
+      toast(err);
+    }
+  }
+
+  regenerateComplete = () => {
+    this.setState({ openPopup: false });
+    storageService().remove('hni-emails');
+    this.props.onRegenerateComplete();
+  }
+
   renderStep1 = () => {
     const {
-      showRegenerateBtn,
       classes = {},
-      boxStyle = {},
       emailLinkClick,
     } = this.props;
 
     return (<Fragment>
-      <p style={{ margin: '0 0 -15px'}}>
-        Visit CAMS website and generate a CAS (Consolidated Account statement).
-      </p>
-      {showRegenerateBtn &&
-        <Button
-          variant="outlined" color="secondary" fullWidth={true}
-          classes={{
-            root: 'gen-statement-btn-transparent',
-            label: 'gen-statement-btn-label'
-          }}
-          style={{ marginBottom: '10px' }}
-          onClick={this.generateStatement}
-        >
-          Generate Statement
-        </Button>
-      }
       <p>
-        It takes upto 30 mins to receive a CAS email. Forward the exact same email to our email ID.
+        You will recieve an email with your consolidated portfolio statement
       </p>
-
+      <WVButton
+        contained
+        fullWidth
+        disabled={!this.state.showRegenerateBtn}
+        color="secondary"
+        showLoader={this.state.show_loader}
+        style={{ marginBottom: '10px' }}
+        onClick={this.regenerateStatement}
+      >
+        Regenerate Statement
+      </WVButton>
+      <div>
+        You'll get an email with your portfolio statement in around 1 hour. Forward the email as received to
+      </div>
       <InfoBox
         classes={{ root: `info-box-cut-out ${classes.emailBox}` }}
         isCopiable={true}
         textToCopy={`cas@${emailDomain}`}
-        boxStyle={boxStyle}
+        boxStyle={{
+          marginTop: '20px',
+          border: 'none',
+          backgroundColor: '#E6E5F4'
+        }}
       >
         <span className="info-box-body-text">
           cas@{emailDomain}
         </span>
       </InfoBox>
-      <div
-        className="email_example_link"
-        onClick={emailLinkClick}
-      >
+      <WVClickableTextElement style={{ marginTop: '20px', display: 'inline-block' }} onClick={emailLinkClick}>
         The email looks like this
-      </div>
+      </WVClickableTextElement>
+      <StatementTriggeredPopUp
+        isOpen={this.state.openPopup}
+        onCtaClick={this.regenerateComplete}
+      />
     </Fragment>);
   }
 
@@ -139,77 +135,33 @@ export default class EmailRequestSteps extends Component {
       case 1:
         return this.renderStep2();
       default:
-        return 'Unknown step';
-    }
-  }
-
-  generateStatement = () => {
-    const { parent, emailDetail } = this.props;
-    if (parent) {
-      parent.sendEvents('generate_stat');
-    }
-
-    /* Store email detail in LS here so email_not_received and 
-    statement_not_received screens can use this data */
-    storageService().setObject('email_detail_hni', emailDetail);
-    // if (getConfig().app === 'android') {
-    //   parent.setState({
-    //     show_loader: true,
-    //     loadingText: <CAMSLoader />,
-    //   });
-    //   setTimeout(() => {
-    //     parent.navigate('cams_webpage');
-    //   }, 2000);
-    // } else {
-    parent.navigate('cams_request_steps');
-    // }
-  }
-
-  onPopupClose = () => {
-    this.setState({ popupOpen: false });
-  }
-
-  notReceivedHandler = () => {
-    const { notReceivedClick, parent } = this.props;
-
-    if (isFunction(notReceivedClick)) {
-      notReceivedClick();
-    } else {
-      parent.navigate('email_not_received');
+        return '';
     }
   }
 
   render() {
     const steps = getSteps();
     const { activeStep } = this.state;
-    // const { emailForwardedHandler } = this.props;
+    
     return (
-      <MuiThemeProvider theme={theme}>
-        <div id="hni-stepper">
-          <Stepper
-            activeStep={activeStep}
-            orientation="vertical">
-            {steps.map((label, index) => (
-              <Step
-                key={label}
-                active={true}
-                disabled={[0, 1].includes(index)}
-              >
-                <StepLabel icon={customStepIcon(index)}>{label}</StepLabel>
-                <StepContent>
-                  {this.getStepContent(index)}
-                </StepContent>
-              </Step>
-            ))}
-          </Stepper>
-          {/* <RegenerateOptsPopup
-            emailForwardedHandler={() => { this.onPopupClose(); emailForwardedHandler(); }}
-            notReceivedClick={this.notReceivedHandler}
-            onPopupClose={this.onPopupClose}
-            open={this.state.popupOpen}
-          /> */}
-        </div>
-      </MuiThemeProvider>
+      <div id="hni-stepper">
+        <Stepper
+          activeStep={activeStep}
+          orientation="vertical">
+          {steps.map((label, index) => (
+            <Step
+              key={label}
+              active={true}
+              disabled={[0, 1].includes(index)}
+            >
+              <StepLabel icon={customStepIcon(index)}>{label}</StepLabel>
+              <StepContent>
+                {this.getStepContent(index)}
+              </StepContent>
+            </Step>
+          ))}
+        </Stepper>
+      </div>
     );
   }
 }

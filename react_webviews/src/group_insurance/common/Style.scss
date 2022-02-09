@@ -491,60 +491,6 @@
    cursor: pointer;
 }
 
-.redirection-journey-logo{
-  width: 78px !important;
-  height: 56px !important;
-}
-.baxa-new-logo{
-  width: 98px !important;
-  height: 28px !important;
-}
-
-.card {
-  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  padding: 15px;
-  margin-bottom: 20px;
-}
-.report-color-state {
-  margin-bottom: 15px;
-  display: flex;
-  align-items: center;  
-}
-.report-color-state-title {
-  font-size: 10px;
-  letter-spacing: 1.82px;
-  font-weight: 700;
-  text-transform: uppercase;
-  position: relative;
-  top: 1px;
-}
-.report-color-state .circle {
-  width: 8px;
-  height: 8px;
-  border-radius: 100px;
-  margin-right: 5px;
-}
-.red {
-  color: #d26774;
-}
-.red .circle {
-  background: #d26774;
-}
-.green {
-  color: var(--secondary);
-}
-.green .circle {
-  background: var(--secondary);
-}
-.yellow {
-  color: #f7b500;
-}
-.yellow .circle {
-  background: #f7b500; 
-}
-
-
 .group-insurance-report {
   .top-title {
     color: #0A1D32;
@@ -1471,25 +1417,6 @@
   opacity: 0.4;
 }
 
-.call-back-popup-button:hover{
-  background-color: var(--on-hover-background);
-}
-
-.call-back-popup-button{
-  padding: 10px 0;
-  width: 100%;
-  margin-bottom: -5px;
-  background-color: var(--secondary);
-  color: white;
-  border: none;
-  padding: 16px 0;
-  border-radius: 5px;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
-  letter-spacing: 0.1px;
-  text-transform: uppercase;
-}
 .call-back-popup-heading{
   margin-left: 10px;
   font-size: 20px;
