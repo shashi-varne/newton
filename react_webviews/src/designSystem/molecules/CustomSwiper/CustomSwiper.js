@@ -25,6 +25,7 @@ export const CustomSwiper = ({
   slidesPerColumn,
   slidesPerColumnFill,
   grabCursor,
+  hidePagination,
   ...restProps
 }) => {
   const useSwiperRef = () => {
@@ -55,7 +56,9 @@ export const CustomSwiper = ({
       >
         {children}
       </Swiper>
-      <CustomPagination ref={paginationRef} />
+      {
+        !hidePagination && <CustomPagination ref={paginationRef} />
+      }
     </div>
   );
 };
@@ -67,6 +70,7 @@ CustomSwiper.defaultProps = {
   slidesPerColumnFill: 'row',
   grabCursor: true,
   onSlideChange: noop,
+  hidePagination: false
 };
 
 const customSx = {
