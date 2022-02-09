@@ -7,13 +7,22 @@ import { switchStyleOverRides } from './switch';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
 import getPartnerThemeData from './utils';
 import { separatorStyleOverRides } from './separator';
+import {
+  customVariantsFilledInput,
+  customVariantsOutlinedInput,
+  filledTextFieldStyleOverRides,
+  helperTextStyleOverRides,
+  inputAdornmentStyleOverRides,
+  inputLabelStyleOverRides,
+  outlinedTextFieldStyleOverRides,
+} from './textfield';
 import { dialogDefaultProps, dialogStylesOverride } from './dialog';
 import { badgeStyleOverRides } from './badge';
 import { customShadows } from './shadows';
 
 const getTheme = () => {
-  const {colors, partnerConfig} = getPartnerThemeData();
-  
+  const { colors, partnerConfig } = getPartnerThemeData();
+
   const theme = {
     palette: {
       primary: {
@@ -59,7 +68,27 @@ const getTheme = () => {
       },
       MuiBadge: {
         styleOverrides: badgeStyleOverRides(colors, partnerConfig),
-      }
+      },
+      MuiFilledInput: {
+        defaultProps: {
+          disableUnderline: true,
+        },
+        variants: customVariantsFilledInput(colors),
+        styleOverrides: filledTextFieldStyleOverRides(colors, partnerConfig),
+      },
+      MuiOutlinedInput: {
+        variants: customVariantsOutlinedInput(colors),
+        styleOverrides: outlinedTextFieldStyleOverRides(colors, partnerConfig),
+      },
+      MuiInputLabel: {
+        styleOverrides: inputLabelStyleOverRides(colors, partnerConfig),
+      },
+      MuiInputAdornment: {
+        styleOverrides: inputAdornmentStyleOverRides(colors),
+      },
+      MuiFormHelperText: {
+        styleOverrides: helperTextStyleOverRides(colors, partnerConfig),
+      },
     },
     shadows: customShadows()
   }
