@@ -23,8 +23,6 @@ import "@fontsource/roboto/latin-400.css";
 import "@fontsource/roboto/latin-500.css";
 import "@fontsource/roboto/latin-700.css";
 // ------------------------------
-import * as Sentry from "@sentry/react";
-import { Integrations } from "@sentry/tracing";
 import { storageService } from "./utils/validators"
 import isEmpty from 'lodash/isEmpty';
 
@@ -122,41 +120,53 @@ if(getConfig().productName === 'finity') {
 
 if(getConfig().productName === "fisdom" && getConfig().isProdEnv)
 {
-  Sentry.init({
-    dsn: "https://38815adc8fd842e78c2145a583d26351@o60572.ingest.sentry.io/5726998",
-    beforeSend(event) {
-      event.tags = event.tags || {};
-      event.tags["partner_code"] = getConfig().code;
-      event.tags["user_id"] = storageService()?.getObject('user')?.user_id;
-      let values = event?.exception?.values;
-      if(!isEmpty(values) && values[0]?.value === "Network Error"){
-        return null;
-      }
-      return event;
-    },
-    integrations: [new Integrations.BrowserTracing()],
-    allowUrls:["app.fisdom.com"],
-    tracesSampleRate: 0.5,
-    sampleRate: 0.5,
+  Promise.all([
+    import("@sentry/react"),
+    import("@sentry/tracing")
+  ])
+  .then(([Sentry, { Integrations }]) => {
+    Sentry.init({
+      dsn: "https://38815adc8fd842e78c2145a583d26351@o60572.ingest.sentry.io/5726998",
+      beforeSend(event) {
+        event.tags = event.tags || {};
+        event.tags["partner_code"] = getConfig().code;
+        event.tags["user_id"] = storageService()?.getObject('user')?.user_id;
+        let values = event?.exception?.values;
+        if(!isEmpty(values) && values[0]?.value === "Network Error"){
+          return null;
+        }
+        return event;
+      },
+      integrations: [new Integrations.BrowserTracing()],
+      allowUrls:["app.fisdom.com"],
+      tracesSampleRate: 0.5,
+      sampleRate: 0.5,
+    });
   });
 }
 else if(getConfig().productName === "finity" && getConfig().isProdEnv){
-  Sentry.init({
-    dsn: "https://84e342a0046748bab6860aafcf7e86da@o60572.ingest.sentry.io/5727007",
-    beforeSend(event) {
-      event.tags = event.tags || {};
-      event.tags["partner_code"] = getConfig().code;
-      event.tags["user_id"] = storageService()?.getObject('user')?.user_id;
-      let values = event?.exception?.values;
-      if(!isEmpty(values) && values[0]?.value === "Network Error"){
-        return null;
-      }
-      return event;
-    },
-    integrations: [new Integrations.BrowserTracing()],
-    allowUrls:["app.mywaywealth.com","app.finity.in"],
-    tracesSampleRate: 0.5,
-    sampleRate: 0.5,
+  Promise.all([
+    import("@sentry/react"),
+    import("@sentry/tracing")
+  ])
+  .then(([Sentry, { Integrations }]) => {
+    Sentry.init({
+      dsn: "https://84e342a0046748bab6860aafcf7e86da@o60572.ingest.sentry.io/5727007",
+      beforeSend(event) {
+        event.tags = event.tags || {};
+        event.tags["partner_code"] = getConfig().code;
+        event.tags["user_id"] = storageService()?.getObject('user')?.user_id;
+        let values = event?.exception?.values;
+        if(!isEmpty(values) && values[0]?.value === "Network Error"){
+          return null;
+        }
+        return event;
+      },
+      integrations: [new Integrations.BrowserTracing()],
+      allowUrls:["app.mywaywealth.com","app.finity.in"],
+      tracesSampleRate: 0.5,
+      sampleRate: 0.5,
+    });
   });
 }
 
