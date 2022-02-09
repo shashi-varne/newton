@@ -171,6 +171,9 @@ export const getConfig = () => {
   let isProdFinity = origin.indexOf('app.finity.in') >= 0 || 
              origin.indexOf('app2.finity.in') >= 0 || origin.indexOf('wv.finity.in') >= 0 ||
              origin.indexOf('finity.equityapppreprod.finwizard.co.in') >= 0;
+  let isPreprodFisdom = origin.indexOf('fisdom.equityapppreprod.finwizard.co.in') >= 0;
+  let isPreprodFinity = origin.indexOf('finity.equityapppreprod.finwizard.co.in') >= 0;
+
   let apiKey = '6Ldah04eAAAAAM7-gR7PWL35nSMvNZRMsngMgObG';
   if(isProdFisdom) {
     apiKey = '6LcUeDweAAAAAJ7gWP6OkmCuO1WXN54Qju-fJPLg';
@@ -207,6 +210,14 @@ export const getConfig = () => {
 
     if(isProdMyway) {
       base_url_default = 'https://api.mywaywealth.com';
+    }
+
+    if(isPreprodFisdom) {
+      base_url_default = 'https://my.preprod.fisdom.com';
+    }
+
+    if(isPreprodFinity) {
+      base_url_default = 'https://my.preprod.finity.in';
     }
 
     // change server url here for local and staging url builds (Not commit id one's)
