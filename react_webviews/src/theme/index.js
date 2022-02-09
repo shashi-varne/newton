@@ -3,6 +3,7 @@ import { buttonStyleOverRides, buttonVariantsConfig, } from './button';
 import { tabsStyleOverRides, tabStyleOverRides, tabsVariantsConfig, tabVariantsConfig } from './tabs';
 import { radioButtonStyleOverRides } from './radioButton';
 import { checkboxStyleOverRides } from './checkbox';
+import { tooltipStyleOverRides } from './tooltip';
 import { switchStyleOverRides } from './switch';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
 import getPartnerThemeData from './utils';
@@ -44,6 +45,9 @@ const getTheme = () => {
       },
       MuiSwitch: {
         styleOverrides: switchStyleOverRides(colors)
+      },
+      MuiTooltip: {
+        styleOverrides: tooltipStyleOverRides(colors),
       },
       MuiDivider: {
         styleOverrides: separatorStyleOverRides(colors)
@@ -91,7 +95,7 @@ const getTheme = () => {
       },
     },
     shadows: customShadows()
-  }
+  };
   return createTheme(theme);
 };
 
