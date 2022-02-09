@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble';
 import { getConfig } from '../../utils/functions';
 import isFunction from 'lodash/isFunction';
-import isEmpty from 'lodash/isEmpty';
-import useScript from '../../common/customHooks/useScript';
 import WVButton from '../../common/ui/Button/WVButton';
 import WVFullscreenDialog from '../../common/ui/FullscreenDialog/WVFullscreenDialog';
+import { validateLocation } from '../services';
 
 const { productName } = getConfig();
 const locationIcon = (
@@ -44,7 +43,6 @@ const PAGE_TYPE_CONTENT_MAP = {
     buttonText: 'Okay'
   },
 };
-const GEOCODER = "https://maps.googleapis.com/maps/api/js?key=AIzaSyDWYwMM4AaZj3zE4sEcMH1nenEs3dOYZ14&libraries=&v=weekly&language=en&result_type=country"
 
 const LocationPermission = ({
   isOpen,
@@ -58,37 +56,18 @@ const LocationPermission = ({
   const [pageContent, setPageContent] = useState({});
   const [permissionWarning, setPermissionWarning] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(true);
-  const { isLoaded } = useScript(GEOCODER);
+
+  useEffect(onInit, []);
 
   useEffect(() => {
     if (isOpen) {
       requestLocnPermission();
     }
   }, [isOpen]);
-
-  useEffect(() => {
-    if (isLoaded) {
-      onInit();
-    }
-  }, [isLoaded]);
   
   useEffect(() => {
     setPageContent(PAGE_TYPE_CONTENT_MAP[pageType]);
   }, [pageType]);
-
-  const fetchCountryFromResults = (results = []) => {
-    const addressObjs = results.find(obj => obj.types.includes("country"))?.address_components;
-    const countryAddressObj = addressObjs?.find(obj => obj.types.includes("country"));
-    return countryAddressObj || {};
-  }
-  
-  const sendLocationFetchEvent = (userAction, additionalProps = {}) => {
-    sendEvents(
-      userAction,
-      'allow_location_access',
-      additionalProps
-    );
-  }
 
   const verifyLocationRegion = async (data = {}) => {
     const coordinates = {
@@ -98,36 +77,18 @@ const LocationPermission = ({
 
     try {
       setIsApiRunning(true);
-      const geocoderService = new window.google.maps.Geocoder();
 
-      const { results } = await geocoderService.geocode({ location: coordinates });
-      const country = fetchCountryFromResults(results);
+      const result = await validateLocation(coordinates);
       setIsApiRunning(false);
-      sendLocationFetchEvent(
-        'location_fetch_success',
-        {
-          location_obj: JSON.stringify(isEmpty(country) ? 'N/A' : country),
-          location_coords: JSON.stringify(coordinates)
-        }
-      );
-      if (
-        country.long_name?.toUpperCase() === 'INDIA' ||
-        country.short_name?.toUpperCase() === 'IN'
-      ) {
-        onLocationFetchSuccess(data.location);
+      
+      if (result.location_verified) {
+        onLocationFetchSuccess();
       } else {
         setPageType("invalid-region");
       }
     } catch (err) {
       console.log(err);
       setIsApiRunning(false);
-      sendLocationFetchEvent(
-        'location_fetch_err',
-        {
-          error: JSON.stringify(err?.message || err),
-          location_coords: JSON.stringify(coordinates)
-        }
-      );
       setPageType('location-fetch-failed');
       if (isFunction(onLocationFetchFailure)) {
         onLocationFetchFailure();

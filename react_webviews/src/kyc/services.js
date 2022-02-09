@@ -566,3 +566,15 @@ export async function setKycProductType(data) {
     toast(err.message || "Something went wrong");
   } 
 }
+
+export async function validateLocation({ lat, lng }) {
+  try {
+    const res = await Api.get('/api/kyc/location/validation', {
+      latlon: `${lat}, ${lng}`
+    })
+
+    return Api.handleApiResponse(res);
+  } catch (err) {
+    throw (err)
+  }
+}
