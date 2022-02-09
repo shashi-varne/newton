@@ -992,7 +992,7 @@ export function isEmpty(value) {
 }
 
 export function nonRoundingToFixed(val, decimalPlaces) {
-  if (!val) return '';
+  if (!val && val !== 0) return '';
   return (Math.floor(100 * val) / 100).toFixed(decimalPlaces);
 }
 
