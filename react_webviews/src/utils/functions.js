@@ -162,15 +162,13 @@ export const getConfig = () => {
   let generic_callback = true;
 
   let isProdFisdom = origin.indexOf('app.fisdom.com') >= 0  || origin.indexOf('wv.fisdom.com') >= 0 || 
-        origin.indexOf('app2.fisdom.com') >= 0 || 
-        origin.indexOf('fisdom.equityapppreprod.finwizard.co.in') >= 0;
+        origin.indexOf('app2.fisdom.com') >= 0;
 
   let isProdMyway = origin.indexOf('app.mywaywealth.com') >= 0 || 
                 origin.indexOf('wv.mywaywealth.com') >= 0;
 
   let isProdFinity = origin.indexOf('app.finity.in') >= 0 || 
-             origin.indexOf('app2.finity.in') >= 0 || origin.indexOf('wv.finity.in') >= 0 ||
-             origin.indexOf('finity.equityapppreprod.finwizard.co.in') >= 0;
+             origin.indexOf('app2.finity.in') >= 0 || origin.indexOf('wv.finity.in') >= 0;
   let isPreprodFisdom = origin.indexOf('fisdom.equityapppreprod.finwizard.co.in') >= 0;
   let isPreprodFinity = origin.indexOf('finity.equityapppreprod.finwizard.co.in') >= 0;
 
