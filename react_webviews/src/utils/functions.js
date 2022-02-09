@@ -164,7 +164,13 @@ export const getConfig = () => {
   let isProdFisdom = origin.indexOf('app.fisdom.com') >= 0  || origin.indexOf('wv.fisdom.com') >= 0 || origin.indexOf('my.preprod.fisdom.com') >= 0 || origin.indexOf('app2.fisdom.com') >= 0;
   let isProdMyway = origin.indexOf('app.mywaywealth.com') >= 0 || origin.indexOf('wv.mywaywealth.com') >= 0;
   let isProdFinity = origin.indexOf('my.preprod.finity.in') >= 0  || origin.indexOf('app.finity.in') >= 0 || origin.indexOf('app2.finity.in') >= 0 || origin.indexOf('wv.finity.in') >= 0;
-
+  let apiKey = '6Ldah04eAAAAAM7-gR7PWL35nSMvNZRMsngMgObG';
+  if(isProdFisdom) {
+    apiKey = '6LcUeDweAAAAAJ7gWP6OkmCuO1WXN54Qju-fJPLg';
+  }
+  if(isProdFinity || isProdMyway) {
+    apiKey = '6LdSjzweAAAAAHSGjqfOVjy_vVQ_n8iBWe9xCSrL';
+  }
   // let base_href = window.localStorage.getItem('base_href') || '';
   let base_url_default = '';
   
@@ -377,6 +383,7 @@ export const getConfig = () => {
   returnConfig.project = project;
   returnConfig.project_child = project_child;
   returnConfig.isMobileDevice = isMobileDevice();
+  returnConfig.apiKey = apiKey;
 
   let { insurance_allweb } = main_query_params;
   if (insurance_allweb) {

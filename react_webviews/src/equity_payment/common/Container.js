@@ -98,7 +98,7 @@ class Container extends Component {
     this.setState({
       openPopup: false
     });
-    if(this.props.match?.params?.flow === "subscription") {
+    if(this.props.match?.params?.flow === "subscription" && !this.props.isReactNative) {
       this.props.history.push('/freedom-plan/review');
       return;
     }

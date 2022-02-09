@@ -614,6 +614,36 @@ export const partnerConfigs = {
       primaryColor: "#378ECF",
     }
   },
+  sbnri: {
+    code: "sbnri",
+    logo: "sbnri.svg",
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      ourRecommendations: ["instaredeem", "buildwealth", "savetax"],
+    },
+    styles: {
+      primaryColor: "#3E89FA",
+    }
+  },
+  tmb: {
+    code: "tmb",
+    logo: "tmb.png",
+    styles: {
+      primaryColor: "#2D4191",
+      secondaryColor:  "#2D4191",
+      backButtonColor: "#2D4191",
+      notificationsColor: "#2D4191",
+    },
+    uiElements: {
+      header: {
+        backgroundColor : "#FFFFFF",
+      }
+    },
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      ourRecommendations: ["instaredeem", "buildwealth", "savetax"],
+    }
+  }
 };
 
 export const getPartnerData = (productType, partnerCode) => {

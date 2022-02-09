@@ -34,6 +34,7 @@ export default function Landing(props) {
   return (
     <Container
       noFooter
+      title="Statements"
       force_hide_inpage_title
       headerData={{
         goBack

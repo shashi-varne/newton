@@ -28,6 +28,8 @@ import EnpsConsentSuccess from './components/enps/success';
 import EnpsConsentFailure from './components/enps/failure';
 import EnpsRedirection from './components/enps/redirection';
 import EnpsConsentOtp from './components/enps/otp';
+import NativeEsignRedirection from './components/enps/NativeEsignRedirection';
+import NativeEsignCalllback from './components/enps/NativeEsignCalllback';
 
 const Mandate_OTM = (props) => {
   const { url } = props.match;
@@ -53,6 +55,8 @@ const Mandate_OTM = (props) => {
         <Route path={`${url}/enps/failure`} component={EnpsConsentFailure} />
         <Route path={`${url}/enps/success`} component={EnpsConsentSuccess} />
         <Route path={`${url}/enps/otp`} component={EnpsConsentOtp} />
+        <Route path={`${url}/enps/native-redirection`} component={NativeEsignRedirection} />
+        <Route path={`${url}/enps/native-callback`} component={NativeEsignCalllback} />
 
 
         <Route component={NotFound} />
