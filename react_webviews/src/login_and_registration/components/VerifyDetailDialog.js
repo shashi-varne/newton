@@ -21,7 +21,9 @@ class VerifyDetailDialog extends Component {
 
   handleClick = async () => {
     const { data, type } = this.props;
-    this.props.parent.sendEvents("next", "bottomsheet")
+    if(this.props?.parent?.sendEvents) {
+      this.props.parent.sendEvents("next", "bottomsheet")
+    }
     if (isEmpty(data)) {
       this.props.parent.navigate("/secondary-verification", {
         state: {
@@ -58,7 +60,9 @@ class VerifyDetailDialog extends Component {
   };
 
   editDetails = () => {
-    this.props.parent.sendEvents("edit", "bottomsheet");
+    if(this.props?.parent?.sendEvents) {
+      this.props.parent.sendEvents("edit", "bottomsheet");
+    }
     this.props.parent.navigate("/secondary-verification", {
       state: {
         communicationType: this.props?.type,
@@ -85,6 +89,7 @@ class VerifyDetailDialog extends Component {
           variant: "contained",
           onClick: this.handleClick,
           showLoader: this.state.loading,
+          disabled: !data?.contact_value
         }}
         classes={{
           container: "verify-details-container",
@@ -97,11 +102,11 @@ class VerifyDetailDialog extends Component {
                 src={require(`../../assets/bottom_sheet_icon_${type}.svg`)}
                 alt=""
               />
-              <span className="text">{isNaN(data?.contact_value) ? data?.contact_value : `+91 - ${data?.contact_value}`}</span>
+              <span className="text">{type === "email" ? data?.contact_value || '-' : `+91 - ${data?.contact_value || ''}`}</span>
             </div>
-            <WVClickableTextElement onClick={this.editDetails}>
-              EDIT
-            </WVClickableTextElement>
+              <WVClickableTextElement onClick={this.editDetails}>
+                EDIT
+              </WVClickableTextElement>
           </div>
         )}
       </WVBottomSheet>
