@@ -49,20 +49,24 @@ export default class Settings extends Component {
     }
   }
 
-  async componentDidMount() {
+  getEmailsList = async () => {
     try {
-      this.setLoader(true);
+      this.setLoader('page');
       let emails = await fetchEmails();
       emails = this.setEmailRemove(emails);
       this.setState({
         emails,
         show_loader: false, // same as this.setLoader(false);
       });
-    } catch(err) {
+    } catch (err) {
       this.setLoader(false);
       console.log(err);
       toast(err);
     }
+  }
+
+  componentDidMount() {
+    this.getEmailsList();
   }
 
   openRemoveConfirm = (email) => {
@@ -113,7 +117,7 @@ export default class Settings extends Component {
   removeEmail = async () => {
     this.setState({ openPopup: false, removeClicked: true });
     try {
-      this.setLoader(true);
+      this.setLoader('page');
       await deleteEmail({ email_id: this.state.email_to_remove.email });
       this.removeAndUpdateEmailList();
       this.setLoader(false);
@@ -141,6 +145,10 @@ export default class Settings extends Component {
     this.setState({ emails });
   }
 
+  onEmailUpdate = async () => {
+    await this.getEmailsList();
+  }
+
   addNewEmail = () => {
     this.sendEvents('next');
     this.navigate('email_entry', {
@@ -148,8 +156,13 @@ export default class Settings extends Component {
     });
   }
 
+  goBack = () => {
+    this.sendEvents('back');
+    this.navigate('external_portfolio');
+  }
+
   render() {
-    const { emails, show_loader, loadingText, hideRemoveEmail } = this.state;
+    const { emails, show_loader, hideRemoveEmail } = this.state;
 
     return (
       <Container
@@ -158,22 +171,21 @@ export default class Settings extends Component {
         subtitle="Resync to track the recent transactions in your portfolio"
         buttonTitle="Add new email"
         showLoader={show_loader}
-        loaderData={{
-          loadingText,
+        headerData={{
+          goBack: this.goBack
         }}
-        goBack={() => { this.sendEvents('back'); this.navigate('external_portfolio');}}
-        noHeader={show_loader}
       >
         <div style={{ marginBottom: '20px' }}>
           {emails.map(email => (
             <EmailExpand
-              key={email.email}
+              key={email?.latest_statement?.dt_updated}
               allowRemove={hideRemoveEmail ? false : email.allowRemove} // Hide "Remove Email" option when webview is opened through RM App
               parent={this}
               comingFrom="settings"
               emailForwardedHandler={() => this.emailForwardedHandler(email.email)}
               clickRemoveEmail={() => this.openRemoveConfirm(email)}
               email={email}
+              onEmailUpdate={this.onEmailUpdate}
             />
           ))}
         </div>

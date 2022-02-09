@@ -8,12 +8,15 @@ import toast from "../../common/ui/Toast";
 import { initData } from "../services";
 import "./BanksList.scss";
 import { nativeCallback } from "../../utils/native_callback";
+import useUserKycHook from "../common/hooks/userKycHook";
+import { isBankVerified } from "../common/functions";
 
 const BanksList = (props) => {
   const [showLoader, setShowLoader] = useState(true);
   const [changeRequest, setChangerequest] = useState({});
   const navigate = navigateFunc.bind(props);
   const [banks, setBanks] = useState([]);
+  const { updateKyc, kyc } = useUserKycHook();
   const config = getConfig();
   const productName = config.productName;
 
@@ -27,6 +30,7 @@ const BanksList = (props) => {
       if (!result) return;
       setBanks(result.bank_mandates.banks || []);
       setChangerequest(result.change_requests || {});
+      updateKyc(result.kyc);
       setShowLoader(false);
       await initData();
       storageService().setObject(
@@ -123,7 +127,7 @@ const BanksList = (props) => {
                   <div
                     className={`status  ${
                       bank.bank_status === "rejected" && "failed"
-                    } ${bank.bank_status === "verified" && "verified"}`}
+                    } ${isBankVerified(bank, kyc) && "verified"}`}
                     data-aid={`mapped-bank-status`}
                   >
                     {bank.mapped_bank_status}

@@ -218,6 +218,7 @@ const FnOIncomeProof = (props) => {
       showLoader={isApiRunning}
       skelton={isLoading}
       headerData={{goBack}}
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
     >
       <WVInPageHeader style={{ marginBottom: '15px' }}>
         <WVInPageTitle>Provide income proof for F&O trading 

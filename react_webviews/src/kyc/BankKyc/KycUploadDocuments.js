@@ -70,7 +70,7 @@ const KycUploadDocuments = (props) => {
     const tradeFlow = isTradingEnabled(kyc)
     setTradingEnabled(tradeFlow);
 
-    if (isReadyToInvest()) {
+    if (isReadyToInvest() || additional) {
       setBottomSheetText("We’ve added your bank account details. The verification is in progress.")
       setBottomSheetCtaText("OKAY");
     }
@@ -130,6 +130,14 @@ const KycUploadDocuments = (props) => {
 
   const handleEdit = () => {
     sendEvents('edit');
+    if(additional) {
+      navigate(PATHNAME_MAPPER.addBank, {
+        state: {
+          bank_id: bankData.bank_id,
+        },
+      });
+      return
+    }
     navigate(`/kyc/${userType}/bank-details`, {
       state: { isEdit: true }
     });

@@ -34,6 +34,7 @@ const Summary = (props) => {
   const [isYearSliderUsed, setIsYearSliderUsed] = useState(false);
   const { user: currentUser, isLoading } = useUserKycHook();
   const investCards = getInvestCards(["nps", "insurance", "gold"]);
+  const taxFiling_enable =  (storageService().get('callback_version') >= 3 && !config.Web) || config.Web;
 
   useEffect(() => {
     initialize();
@@ -341,7 +342,7 @@ const Summary = (props) => {
                   <img src={require(`assets/plant.svg`)} alt="" />
                 </div>
               )}
-              {config.features?.taxFiling && (
+              {config.features?.taxFiling && taxFiling_enable && (
                 <div
                   className="reports-tax-filing-card card"
                   onClick={() => flowOptions("taxFiling")}

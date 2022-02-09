@@ -35,7 +35,7 @@ const EtfConsentModal = (props) => {
       <WVBottomSheet
         isOpen={props.open}
         onClose={() => props.onClose()}
-        title="Free gold ETFs for you"
+        title="Free ETFs for you"
         subtitle="Get free ETFs as a welcome gift & give a solid start to your investment journey"
         image={require(`assets/${config.productName}/free_gold_etf.svg`)}
         button1Props={{

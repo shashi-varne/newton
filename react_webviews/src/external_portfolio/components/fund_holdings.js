@@ -42,7 +42,7 @@ class FundHoldings extends Component {
 
   async componentDidMount() {
     try {
-      this.setLoader(true);
+      this.setLoader('page');
       const selectedPan = storageService().getObject('user_pan');
       if (isEmpty(selectedPan)) {
         // eslint-disable-next-line

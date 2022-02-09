@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
 import EmailTemplate from '../mini-components/email_template';
-import { Button } from 'material-ui';
-import InfoIcon from '@material-ui/icons/Info';
-import InfoBox from '../mini-components/InfoBox';
 import { navigate, setLoader } from '../common/commonFunctions';
-import { requestStatement } from '../common/ApiCalls';
 import toast from '../../common/ui/Toast';
 import { storageService } from '../../utils/validators';
 import { nativeCallback } from 'utils/native_callback';
-import { getConfig } from '../../utils/functions';
-const emailDomain = getConfig().emailDomain;
+import Container from '../common/Container';
+import { requestStatement } from '../common/ApiCalls';
+import isEmpty from 'lodash/isEmpty';
+import StatementTriggeredPopUp from '../mini-components/StatementTriggeredPopUp';
 
 class EmailNotReceived extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      emailDetail: storageService().getObject('email_detail_hni')
+    };
     this.navigate = navigate.bind(this);
     this.setLoader = setLoader.bind(this);
   }
@@ -36,25 +36,32 @@ class EmailNotReceived extends Component {
     }
   }
 
-  goNext = async () => {
+  regenerateStatement = async () => {
     try {
-      this.setLoader(true);
+      this.setLoader('button');
       this.sendEvents('regenerate_stat');
-      const email_detail = storageService().getObject('email_detail_hni');
-      await requestStatement({ 
-        email: email_detail.email,
-        statement_id: email_detail.latest_statement.statement_id,
-        retrigger: 'true',
-      });
-      this.navigate(`statement_request/${email_detail.email}`, {
-        exitToApp: true,
-        fromRegenerate: true,
-      });
+      const { emailDetail } = this.state;
+      if (!isEmpty(emailDetail)) {
+        await requestStatement({ 
+          email: emailDetail.email,
+          statement_id: emailDetail.latest_statement.statement_id,
+          retrigger: 'true',
+        });
+        this.setState({ openPopup: true });
+      }
+      this.setLoader(false);
     } catch (err) {
       this.setLoader(false);
       console.log(err);
       toast(err);
     }
+  }
+
+  goNext = () => {
+    this.navigate(`statement_request/${this.state.emailDetail.email}`, {
+      exitToApp: true,
+      fromRegenerate: true,
+    });
   }
 
   goBack = () => {
@@ -64,37 +71,39 @@ class EmailNotReceived extends Component {
   }
 
   render() {
-    const subtitleText = (<span>Please ensure that the correct email is forwarded to <span id="cas-email-highlight">cas@{emailDomain}</span></span>);
+    const subtitleText = "It usually takes 1 hour to get the statement in your email";
     return (
-      <EmailTemplate
-        title="CAS email not received"
-        subtitle={subtitleText}
+      <Container
+        headerData={{
+          goBack: this.props.goBack
+        }}
+        title="Did not recieve email"
+        smallTitle={subtitleText}
+        imageTitle="The email looks like this"
         showLoader={this.state.show_loader}
-        noFooter={true}
-        noHeader={this.state.show_loader}
-        goBack={this.goBack}
+        twoButtonVertical
+        button1Props={{
+          title: 'wait',
+          outlined: true,
+          onClick: this.goBack
+        }}
+        button2Props={{
+          title: 'Regenerate statement',
+          showLoader: this.state.show_loader,
+          contained: true,
+          onClick: this.regenerateStatement
+        }}
       >
-        <InfoBox classes={{root: 'm-t-40'}}>
-          <div className="flex-info-container">
-            <InfoIcon color="primary" id="info-container-icon"/>
-            <span id="info-container-text">
-              If you have not recieved an email from CAMS within 24hrs,
-              try creating a fresh request again for the statement
-              by clicking below
-            </span>
-          </div>
-        </InfoBox>
-        <Button
-          variant="outlined" color="secondary" fullWidth={true}
-          classes={{
-            root: 'gen-statement-btn',
-            label: 'gen-statement-btn-label'
-          }}
-          onClick={this.goNext}
-        >
-          Regenerate Statement
-        </Button>
-      </EmailTemplate>
+        <h3>The email looks like this</h3>
+        <EmailTemplate
+          containerStyle={{ paddingBottom: '100px' }}
+          statementSource={this.state.emailDetail?.latest_statement?.statement_source}
+        />
+        <StatementTriggeredPopUp
+          isOpen={this.state.openPopup}
+          onCtaClick={this.goNext}
+        />
+      </Container>
     );
   }
 }

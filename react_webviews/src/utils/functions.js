@@ -102,12 +102,16 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--lime`, '#7ED321');
   html.style.setProperty(`--red`, '#D0021B');
   html.style.setProperty(`--primaryVariant1`, `${config_to_return.styles.primaryVariant1}`);
+  html.style.setProperty(`--primaryVariant2`, `${config_to_return.styles.primaryVariant2}`);
   html.style.setProperty(`--primaryVariant4`, `${config_to_return.styles.primaryVariant4}`);
+  html.style.setProperty(`--primaryVariant5`, `${config_to_return.styles.primaryVariant5}`);
   html.style.setProperty(`--spacing`, '10px');
   html.style.setProperty(`--gunmetal`, '#161A2E');
+  html.style.setProperty(`--darkBackground`, `${config_to_return.styles.darkBackground}`);
   html.style.setProperty(`--linkwater`, '#D3DBE4');
   html.style.setProperty(`--border-radius`, `${config_to_return.uiElements.button.borderRadius}px`);
-  
+  html.style.setProperty(`--whitegrey`, '#EEEEEE');
+
   return config_to_return;
 }
 
@@ -158,19 +162,31 @@ export const getConfig = () => {
   let generic_callback = true;
 
   let isProdFisdom = origin.indexOf('app.fisdom.com') >= 0  || origin.indexOf('wv.fisdom.com') >= 0 || origin.indexOf('my.preprod.fisdom.com') >= 0 || origin.indexOf('app2.fisdom.com') >= 0;
-  let isProdFinity = origin.indexOf('app.mywaywealth.com') >= 0 || origin.indexOf('wv.mywaywealth.com') >= 0 || origin.indexOf('my.preprod.finity.in') >= 0  || origin.indexOf('app2.finity.in') >= 0;
-
+  let isProdMyway = origin.indexOf('app.mywaywealth.com') >= 0 || origin.indexOf('wv.mywaywealth.com') >= 0;
+  let isProdFinity = origin.indexOf('my.preprod.finity.in') >= 0  || origin.indexOf('app.finity.in') >= 0 || origin.indexOf('app2.finity.in') >= 0 || origin.indexOf('wv.finity.in') >= 0;
+  let apiKey = '6Ldah04eAAAAAM7-gR7PWL35nSMvNZRMsngMgObG';
+  if(isProdFisdom) {
+    apiKey = '6LcUeDweAAAAAJ7gWP6OkmCuO1WXN54Qju-fJPLg';
+  }
+  if(isProdFinity || isProdMyway) {
+    apiKey = '6LdSjzweAAAAAHSGjqfOVjy_vVQ_n8iBWe9xCSrL';
+  }
   // let base_href = window.localStorage.getItem('base_href') || '';
   let base_url_default = '';
   
   const isStaging = origin.indexOf('plutus-web-staging') >= 0;
-  // const isFisdomStaging = origin.indexOf('my.preprod.fisdom.com') >= 0 || origin.indexOf('app2.fisdom.com') >= 0;
-  // const isFinityStaging = origin.indexOf('my.preprod.finity.in') >= 0 || origin.indexOf('app2.finity.in') >= 0;
+  const isFisdomStaging = origin.indexOf('fisdom.equityappuat.finwizard.co.in') >= 0 || origin.indexOf('fisdomapp.staging.finwizard.co.in') >= 0;
+  const isFinityStaging = origin.indexOf('finity.equityappuat.finwizard.co.in') >= 0 || origin.indexOf('finityapp.staging.finwizard.co.in') >= 0;
   const isLocal = origin.indexOf('localhost') >=0;
 
   // if(base_href) {
   //   base_url_default = window.location.origin;
   // }
+
+  // default base url for commit id build
+  if(main_pathname.includes('/appl/web/') || main_pathname.includes('/appl/webview/')) {
+    base_url_default = window.location.origin;
+  }
 
   if(!base_url) {
     if(isProdFisdom) {
@@ -178,6 +194,10 @@ export const getConfig = () => {
     }
   
     if(isProdFinity) {
+      base_url_default = 'https://api.finity.in';
+    }
+
+    if(isProdMyway) {
       base_url_default = 'https://api.mywaywealth.com';
     }
 
@@ -186,13 +206,13 @@ export const getConfig = () => {
       base_url_default = "https://wdash-dot-plutus-staging.appspot.com";
     }
 
-    // if(isFisdomStaging) {
-    //   base_url_default = 'https://my.preprod.fisdom.com';
-    // }
+    if(isFisdomStaging) {
+      base_url_default = 'https://fisdomapp.staging.finwizard.co.in';
+    }
   
-    // if(isFinityStaging) {
-    //   base_url_default = 'https://my.preprod.finity.in';
-    // }
+    if(isFinityStaging) {
+      base_url_default = 'https://finityapp.staging.finwizard.co.in';
+    }
   }
   
 
@@ -353,6 +373,7 @@ export const getConfig = () => {
   returnConfig.project = project;
   returnConfig.project_child = project_child;
   returnConfig.isMobileDevice = isMobileDevice();
+  returnConfig.apiKey = apiKey;
 
   let { insurance_allweb } = main_query_params;
   if (insurance_allweb) {
@@ -390,7 +411,7 @@ export const getConfig = () => {
     searchParams += getParamsMark(searchParams) + `app_version=${app_version}`;
     searchParamsMustAppend += getParamsMark(searchParams) + `app_version=${app_version}`;
   }
-  let isProdEnv = isProdFinity || isProdFisdom;
+  let isProdEnv = isProdFinity || isProdFisdom || isProdMyway;
   // should be last
   returnConfig.current_params = main_query_params;
   returnConfig.base_url = base_url;
@@ -850,4 +871,9 @@ export function requireAsset(assetName, partner, extension = 'svg') {
       console.log('Could not find the asset you are looking for!', err);
     }
   }
+}
+
+export function isDietProduct() {
+  const {diet = ''} = getUrlParams();
+  return diet.toLowerCase() === 'true';
 }

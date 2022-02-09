@@ -1,0 +1,181 @@
+$tableBorder: 1px solid var(--primaryVariant2);
+
+.freedom-plan-landing-header-color {
+  background-color: var(--darkBackground) !important;
+  color: white !important;
+}
+
+.freedom-plan-landing {
+  background-color: var(--darkBackground);
+  .wv-iph-with-img {
+    justify-content: flex-end;
+    align-items: flex-end;
+    overflow: hidden;
+    padding-top: 20px;
+    padding-left: 20px;
+    margin-bottom: 0;
+  }
+
+  .wv-iph-children {
+    position: absolute;
+    left: 0;
+  }
+
+  .wv-ip-title,
+  .wv-ip-subtitle {
+    padding-left: 20px;
+    color: white;
+  }
+
+  .wv-ip-title {
+    font-size: 28px;
+  }
+
+  .wv-ip-subtitle {
+    font-size: 16px;
+    padding-bottom: 65px;
+    padding-right: 150px;
+  }
+
+  .fpl-header-icon {
+    max-width: 196px !important;
+    max-height: 141px !important;
+    min-height: 121px !important;
+    margin-right: -36px;
+  }
+
+  .fpl-layout {
+    background-color: white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 20px 15px 20px 20px;
+  }
+
+  .fpl-benefits {
+    position: relative;
+    z-index: 3;
+    margin-top: -10px;
+
+    .fpl-benefits-icon {
+      width: 56px !important;
+      min-height: 56px;
+    }
+
+    .fplb-plan-message {
+      font-size: 17px;
+      line-height: 18px;
+      color: var(--primary);
+      text-align: center;
+      padding-bottom: 20px;
+    }
+  }
+
+  .common-how-steps {
+    margin-top: 0px;
+    margin-bottom: 0px;
+
+    .top-tile b {
+      font-weight: 500;
+      font-size: 18px;
+      line-height: 24px;
+      color: var(--gunmetal);
+    }
+
+    .content-title {
+      font-weight: 400 !important;
+    }
+  }
+
+  .fpl-title {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 29px;
+    padding-bottom: 20px;
+    color: var(--dark);
+  }
+
+  .fpl-table {
+    color: white;
+    padding: 30px 20px 40px;
+
+    .fpl-title {
+      color: white;
+    }
+  }
+
+  .fpl-table-content {
+    color: white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    width: 100%;
+    border: $tableBorder;
+    border-radius: 10px;
+    border-collapse: separate;
+
+    thead tr td {
+      font-weight: bold;
+      font-size: 12px;
+      line-height: 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--highlight);
+      border-bottom: $tableBorder;
+      padding: 15px 10px;
+    }
+
+    .fpl-tc-type {
+      text-align: left;
+      border-right: $tableBorder;
+    }
+
+    .fpl-tc-standard {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      border-right: $tableBorder;
+    }
+
+    .column-reverse {
+      flex-direction: column-reverse;
+    }
+
+    .fpl-tc-subtext {
+      font-size: 8px;
+      line-height: 18px;
+      color: var(--primaryVariant1);
+      font-weight: normal;
+    }
+
+    .fpl-tc-freedom:first-child {
+      border-top-right-radius: 10px;
+    }
+
+    thead > tr:last-child .fpl-tc-freedom {
+      border-top-right-radius: 10px;
+    }
+
+    tbody > tr:last-child .fpl-tc-freedom {
+      border-bottom-right-radius: 10px;
+    }
+
+    .fpl-tc-freedom {
+      background-color: var(--primary);
+      text-align: right;
+    }
+
+    tr td {
+      padding: 5px 10px;
+    }
+  }
+
+  .fpl-faqs {
+    .top-tile {
+      color: var(--dark);
+    }
+
+    .common-faqs-tile:last-child {
+      border-bottom: none;
+      margin-bottom: 20px;
+    }
+  }
+}

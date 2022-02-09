@@ -35,7 +35,7 @@ class PANSelector extends Component {
 
     async componentDidMount() {
         try {
-            this.setLoader(true);
+            this.setLoader('page');
             let pans = await fetchAllPANs();
             const selectedPan = storageService().getObject('user_pan') || {};
             let selectedIndex = pans.find(pan => pan.pan === selectedPan.pan);
@@ -127,7 +127,7 @@ class PANSelector extends Component {
                 fullWidthButton={true}
                 onlyButton={true}
                 buttonTitle="CONTINUE"
-                goBack={this.goBack}
+                headerData={{ goBack: this.goBack }}
                 events={this.sendEvents('just_set_events')}
             >   
                 { this.state.pans.length ?

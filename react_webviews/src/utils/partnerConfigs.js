@@ -52,37 +52,40 @@ export const commonCardsConfig = {
     bottomScrollCards: ["parkmoney", "savegoal"],
     bottomCards: ["nfo"],
   },
-  landingMarketingBanners: [
-    {
-      type: "mf",
-      image: "mf.svg",
-      endDate: "11/05/2021",
-      startDate: "11/01/2021",
-    },
-  ],
+  landingMarketingBanners: [],
   nfoBanners: [
-    {
-      image: "nfo.svg",
-      type: "nfo",
-      endDate: "11/30/2021",
-      startDate: "11/17/2021",
-    },
-    { image: "nfo1.svg", type: "nfo", endDate: "11/25/2021" },
-    { image: "nfo2.svg", type: "nfo", endDate: "11/24/2021" },
-    { image: "nfo3.svg", type: "nfo", endDate: "11/28/2021" },
-    { image: "nfo4.svg", type: "nfo", endDate: "11/25/2021" },
     {
       image: "nfo5.svg",
       type: "nfo",
-      endDate: "12/09/2021",
-      startDate: "11/26/2021",
+      startDate: "01/17/2022",
+      endDate: "01/30/2022",
+    },
+    {
+      image: "nfo2.svg",
+      type: "nfo",
+      endDate: "01/26/2022",
+    },
+    {
+      image: "nfo3.svg",
+      type: "nfo",
+      endDate: "01/26/2022",
+    },
+    {
+      image: "nfo4.svg",
+      type: "nfo",
+      startDate: "01/21/2022",
+      endDate: "02/03/2022",
+    },
+    {
+      image: "nfo1.svg",
+      type: "nfo",
+      endDate: "01/23/2022",
     },
   ],
 };
 
 export const basePartnerConfig = {
   common: {
-    equityAnnexure: "https://fisdom.com/images/forms/Equity%20Annexures.pdf"
   },
   fisdom: {
     productName: "fisdom",
@@ -98,6 +101,7 @@ export const basePartnerConfig = {
     refundLink: "https://www.fisdom.com/refund/",
     disclaimerLink: "https://www.fisdom.com/disclaimer/",
     webAppUrl: "https://app.fisdom.com/#!/",
+    equityAnnexure: "https://fisdom.com/images/forms/Equity%20Annexures.pdf",
     configPrimaryColorClass: 'configPrimaryColorClass',
     configPrimaryBackgroundColorClass: 'fisdomBackColor',
     emailDomain: "fisdom.com",
@@ -121,6 +125,7 @@ export const basePartnerConfig = {
     refundLink: "https://www.finity.in/refund/",
     disclaimerLink: "https://www.finity.in/disclaimer/",
     webAppUrl: "https://app.mywaywealth.com/#!/",
+    equityAnnexure: "https://fisdom.com/images/forms/Equity_Annexures_Finity.pdf",
     configPrimaryColorClass: 'configPrimaryColorClass',
     configPrimaryBackgroundColorClass: 'fisdomBackColor',
     emailDomain: "finity.in",
@@ -165,7 +170,10 @@ export const baseStylesConfig = {
     highlightColor: "#f6f2ff",
     secondaryGreen: "#7ED321",
     primaryVariant1: "#DFD8EF",
-    primaryVariant4: "#482998"
+    primaryVariant2: "#A998D2",
+    primaryVariant4: "#482998",
+    primaryVariant5: "#24154C",
+    darkBackground: "#24154C",
   },
   finity: {
     default: "#4a4a4a",
@@ -174,7 +182,10 @@ export const baseStylesConfig = {
     highlightColor: "#EFEEFB",
     secondaryGreen: "#33CF90",
     primaryVariant1: "#C6C2F9",
-    primaryVariant4: "#8279F8"
+    primaryVariant2: "#B9B3F9",
+    primaryVariant4: "#482998",
+    primaryVariant5: "#4F44D0",
+    darkBackground: "#132056",
   },
 };
 
@@ -232,7 +243,7 @@ export const partnerConfigs = {
   fisdom: {
     code: "fisdom",
     investSubSectionMap: {
-      stocksAndIpo: ["ipo"],
+      stocksAndIpo: ["stocks", "ipo"],
       ourRecommendations: [
         "instaredeem",
         "buildwealth",
@@ -354,6 +365,9 @@ export const partnerConfigs = {
       ...commonCardsConfig.investSubSectionMap,
       ourRecommendations: ["buildwealth", "savetax", "nps"],
       diy: ["diyv2","gold"],
+    },
+    features: {
+      taxFiling: true
     },
     styles: {
       primaryColor: "#000180",
@@ -483,7 +497,7 @@ export const partnerConfigs = {
     },
     referralConfig: {
       applyRefferal: true,
-      shareRefferal: false, // same as hide_share_referral but with opposite value
+      shareRefferal: true, // same as hide_share_referral but with opposite value
     },
     styles: {
       primaryColor: "#173883",
@@ -583,8 +597,53 @@ export const partnerConfigs = {
     },
     features: {
       addAnotherBank: true
+    },
+    referralConfig: {
+      applyRefferal: true,
+      shareRefferal: true,
+    },
+  },
+  bom: {
+    code: "bom",
+    logo: "bom.png",
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      ourRecommendations: ["instaredeem", "buildwealth", "savetax"],
+    },
+    styles: {
+      primaryColor: "#378ECF",
     }
   },
+  sbnri: {
+    code: "sbnri",
+    logo: "sbnri.svg",
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      ourRecommendations: ["instaredeem", "buildwealth", "savetax"],
+    },
+    styles: {
+      primaryColor: "#3E89FA",
+    }
+  },
+  tmb: {
+    code: "tmb",
+    logo: "tmb.png",
+    styles: {
+      primaryColor: "#2D4191",
+      secondaryColor:  "#2D4191",
+      backButtonColor: "#2D4191",
+      notificationsColor: "#2D4191",
+    },
+    uiElements: {
+      header: {
+        backgroundColor : "#FFFFFF",
+      }
+    },
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      ourRecommendations: ["instaredeem", "buildwealth", "savetax"],
+    }
+  }
 };
 
 export const getPartnerData = (productType, partnerCode) => {
