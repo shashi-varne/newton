@@ -87,6 +87,7 @@ function KycModuleEntry(props) {
         });
       }
       navigate("/freedom-plan", data);
+      
     } else if (kycStatus === 'ground') {
        navigate('/kyc/home', data);
     } else if (kycStatus === "ground_pan") {
