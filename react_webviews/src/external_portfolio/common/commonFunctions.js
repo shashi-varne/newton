@@ -67,3 +67,12 @@ export function setPlatformAndUser() {
     storageService().set('hni-platform', platform);
   }
 }
+
+export function getStatementStatus(status) {
+  const failureStates = ['parsing_failed', 'failed', 'invalid_statement_uploaded', 'cas_trigger_failed'];
+  const successStates = ['success'];
+  
+  if (failureStates.includes(status)) return 'failure';
+  else if ((successStates).includes(status)) return 'success';
+  return 'other';
+}

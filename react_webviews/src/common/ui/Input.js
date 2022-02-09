@@ -38,8 +38,7 @@ const Input = (props) => {
         variant={props.variant}
         onChange={props.onChange}
         inputRef={props.inputRef}
-        onKeyDown={onKeyDown}
-        onKeyUp={props.onKeyUp}
+        onKeyDown={props.onKeyDown}
       />
     );
   } else {

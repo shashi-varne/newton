@@ -18,12 +18,14 @@ import { isTradingEnabled } from '../../../../utils/functions';
 import TermsAndConditions from '../../mini-components/TermsAndConditionsDialog';
 import BankListOptions from '../../mini-components/BankListOptions';
 import Toast from '../../../../common/ui/Toast';
+import BFDLBanner from '../../mini-components/BFDLBanner';
 
 const PATHNAME_MAPPER = {
   nfo: "/advanced-investing/new-fund-offers/info",
   diy: "/invest/explore",
   buildwealth: "/invest/buildwealth",
   instaredeem: "/invest/instaredeem",
+  mf: "/invest",
 }
 
 const cardNameMapper = {
@@ -55,6 +57,7 @@ class SdkLanding extends Component {
       tradingEnabled: isTradingEnabled(),
       showTermsAndConditions: false,
       showBankList: false,
+      openBfdlBanner: false,
     };
     this.initialize = initialize.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
@@ -75,6 +78,11 @@ class SdkLanding extends Component {
       this.setState({ showTermsAndConditions: true });
     }
     this.handleBankList();
+    this.openBfdlBanner();
+    const config = getConfig();
+    if (config.isSdk && config.Android) {
+      nativeCallback({ action: 'get_data' });
+    }
   };
 
   handleRefferalInput = (e) => {
@@ -255,7 +263,8 @@ class SdkLanding extends Component {
       selectedBank,
       showBankList,
       bankListErrorMessage,
-      showBankListLoader
+      showBankListLoader,
+      openBfdlBanner,
     } = this.state;
 
     const config = getConfig();
@@ -293,21 +302,25 @@ class SdkLanding extends Component {
           {!isEmpty(landingMarketingBanners) && (
             <div className='landing-marketing-banners' data-aid='landing-marketing-banners'>
               {landingMarketingBanners?.length === 1 ? (
-                <div className='single-marketing-banner'>
+                <>
                   {dateValidation(
                     landingMarketingBanners[0]?.endDate,
                     landingMarketingBanners[0]?.startDate
                   ) && (
-                    <Imgc
-                      src={require(`assets/${landingMarketingBanners[0].image}`)}
-                      alt=""
-                      style={{ width: "100%", minHeight: "120px" }}
+                    <div
+                      className="single-marketing-banner"
                       onClick={this.handleMarketingBanner(
                         landingMarketingBanners[0]?.type
                       )}
-                    />
+                    >
+                      <Imgc
+                        src={require(`assets/${landingMarketingBanners[0].image}`)}
+                        alt=""
+                        style={{ width: "100%", minHeight: "120px" }}
+                      />
+                    </div>
                   )}
-                </div>
+                </>
               ) : (
                 <div className='marketing-banners-list' data-aid='marketing-banners-list'>
                   {landingMarketingBanners?.map((el, idx) => {
@@ -429,6 +442,10 @@ class SdkLanding extends Component {
           handleClick={this.handleBankListOptions}
           error={bankListErrorMessage}
           showLoader={showBankListLoader}
+        />
+        <BFDLBanner
+          isOpen={openBfdlBanner}
+          close={this.closeBfdlBanner}
         />
       </Container>
     );

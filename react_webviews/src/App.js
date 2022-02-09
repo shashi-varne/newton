@@ -11,12 +11,13 @@ import {
 import { create } from "jss";
 import { withRouter } from "react-router";
 import { themeConfig } from "utils/constants";
-import { getConfig } from "./utils/functions";
+import { getConfig, isDietProduct } from './utils/functions';
 import { storageService } from "./utils/validators";
 import { ToastContainer } from "react-toastify";
 import DesktopLayout from "./desktopLayout";
 import ErrorBoundary from "./ErrorBoundary";
 import BootSkeleton from "./common/components/BootSkeleton";
+import ComponentTest from './ComponentTest';
 import UnAuthenticatedRoute from './common/components/UnAuthenticatedRoute.js';
 import RedirectToAnyPath from './common/components/RedirectToAnyPath.js';
 import eventManager from './utils/eventManager.js';
@@ -68,7 +69,7 @@ const clearBottomsheetDisplays = () => {
     "is_bottom_sheet_displayed", 
     "verifyDetailsSheetDisplayed", 
     "is_bottom_sheet_displayed_kyc_premium", 
-    "landingBottomSheetDisplayed"
+    "landingBottomSheetDisplayed",
   ];
 
   bottomSheetsArr.forEach((bottomSheet) => {
@@ -94,9 +95,9 @@ const App = () => {
   const config = getConfig();
   const iframe = config.isIframe;
   const isMobileDevice = config.isMobileDevice;
-  const [themeConfiguration, setThemeConfiguration] = useState(
-    getMuiThemeConfig()
-  );
+  const isDietEnabled = isDietProduct();
+  const [themeConfiguration, setThemeConfiguration] = useState(getMuiThemeConfig());
+  const isWithoutDesktopLayout = isMobileDevice || iframe || window.location.pathname.includes('pg/eq') || isDietEnabled;
   useEffect(() => {
     if (config.isSdk || config.isIframe) {
       storageService().set("entry_path", window.location.pathname);
@@ -161,14 +162,14 @@ const App = () => {
                   path="/prepare"
                   component={Prepare}
                 />
-                {isMobileDevice || iframe ? (
-                  <Route component={Feature} />
-                ) : (
-                  <DesktopLayout>
-                    <Feature />
-                  </DesktopLayout>
-                )}
-                {/* <Route path='/component-test' component={ComponentTest} /> */}
+                {
+                  isWithoutDesktopLayout
+                    ? <Route component={Feature} />
+                    : <DesktopLayout>
+                        <Feature />
+                      </DesktopLayout>
+                }
+                <Route path='/component-test' component={ComponentTest} />
                 <Route component={NotFound} />
               </Switch>
             </Suspense>

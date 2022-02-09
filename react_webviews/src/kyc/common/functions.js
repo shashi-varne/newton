@@ -1,7 +1,7 @@
 import { calculateAge, isValidDate, validateEmail, isEmpty, storageService } from 'utils/validators'
 import { isTradingEnabled, getConfig } from '../../utils/functions'
 import { nativeCallback, openPdfCall } from '../../utils/native_callback'
-import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS, GENDER_OPTIONS, PATHNAME_MAPPER } from '../constants'
+import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS, GENDER_OPTIONS, PATHNAME_MAPPER, PINCODE_LENGTH } from '../constants'
 import { isReadyToInvest } from '../services'
 import { getKyc } from './api'
 
@@ -73,8 +73,8 @@ export const validateFields = (formData, keyToCheck) => {
           }
           break
         case 'pincode':
-          if(value.length !== 6) {
-            formData[`${key}_error`] = 'Minimum length is 6'
+          if (value.length !== PINCODE_LENGTH) {
+            formData[`${key}_error`] = `Minimum length is ${PINCODE_LENGTH}`
             canSubmit = false
           }
           break
@@ -82,14 +82,8 @@ export const validateFields = (formData, keyToCheck) => {
         case 'father_name':
         case 'mother_name':
         case 'spouse_name':
-          if (value.length < 3) {
-            formData[`${key}_error`] = 'Minimum length is 3'
-            canSubmit = false
-          } else if (value.includes("  ")) {
+          if (value.includes("  ")) {
             formData[`${key}_error`] = 'consecutive spaces are not allowed'
-            canSubmit = false
-          } else if (value.split(" ")[0]?.length < 3) {
-            formData[`${key}_error`] = 'First 3 characters cannot contain space'
             canSubmit = false
           }
           break
@@ -228,6 +222,17 @@ export async function checkDocsPending(kyc = {}) {
   }
 
   return false;
+}
+
+export function isEquityEsignReady(kyc) {
+  kyc = kyc || getKycUserFromSession().kyc;
+  if (isEmpty(kyc)) return false;
+  
+  return (
+    kyc.kyc_product_type === 'equity' &&
+    kyc.equity_application_status === 'complete' &&
+    kyc.equity_sign_status !== 'signed'
+  );
 }
 
 export async function pendingDocsList(kyc = {}) {
@@ -374,9 +379,11 @@ export const isEquityCompleted = () => {
 export const isIncompleteEquityApplication = (kyc) => {
   if (isEmpty(kyc)) return false;
 
-  return ((kyc.application_status_v2 !== "submitted" && kyc.application_status_v2 !== "complete") ||
-  (kyc.equity_application_status !== "submitted" && kyc.equity_application_status !== "complete") ||
-  (isEquityApplSubmittedOrComplete(kyc) && kyc.equity_sign_status !== "signed"));
+  return (
+    (kyc.application_status_v2 !== "submitted" && kyc.application_status_v2 !== "complete") ||
+    (kyc.equity_application_status !== "submitted" && kyc.equity_application_status !== "complete") ||
+    (isEquityApplSubmittedOrComplete(kyc) && kyc.equity_sign_status !== "signed")
+  );
 }
 
 export const isKycCompleted = (kyc) => {
@@ -481,3 +488,10 @@ export const checkNomineeNameValidity = (kyc, nomineeName) => {
   }
   return '';
 }
+
+export const isBankVerified = (bank = {}, kyc = {}) => {
+  return (
+    bank.bank_status === "verified" ||
+    (bank.status === "default" && kyc.bank?.meta_data_status === "approved")
+  );
+};

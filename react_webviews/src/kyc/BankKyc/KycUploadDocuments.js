@@ -70,7 +70,7 @@ const KycUploadDocuments = (props) => {
     const tradeFlow = isTradingEnabled(kyc)
     setTradingEnabled(tradeFlow);
 
-    if (isReadyToInvest()) {
+    if (isReadyToInvest() || additional) {
       setBottomSheetText("We’ve added your bank account details. The verification is in progress.")
       setBottomSheetCtaText("OKAY");
     }
@@ -130,6 +130,14 @@ const KycUploadDocuments = (props) => {
 
   const handleEdit = () => {
     sendEvents('edit');
+    if(additional) {
+      navigate(PATHNAME_MAPPER.addBank, {
+        state: {
+          bank_id: bankData.bank_id,
+        },
+      });
+      return
+    }
     navigate(`/kyc/${userType}/bank-details`, {
       state: { isEdit: true }
     });
@@ -143,7 +151,7 @@ const KycUploadDocuments = (props) => {
     const nextStep = kyc.show_equity_charges_page ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
     sendEvents('next', 'bank_verification_pending');
     if (additional) {
-      navigate("/kyc/add-bank");
+      navigate(PATHNAME_MAPPER.bankList);
     } else if (userType === "compliant") {
       if (isEdit || kyc.address.meta_data.is_nri) navigate(PATHNAME_MAPPER.journey);
       else navigate(nextStep, {
@@ -177,7 +185,7 @@ const KycUploadDocuments = (props) => {
 
   const handleSdkNavigation = () => {
     if (additional) {
-      navigate("/kyc/add-bank");
+      navigate(PATHNAME_MAPPER.bankList);
     } else {
       if (userType === "compliant") {
         navigate(PATHNAME_MAPPER.journey);
@@ -196,18 +204,18 @@ const KycUploadDocuments = (props) => {
         if (dlFlow) {
           const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
           if (isPanFailedAndNotApproved) {
-            navigate("/kyc/upload/pan", {
+            navigate(PATHNAME_MAPPER.uploadPan, {
               state: { goBack: PATHNAME_MAPPER.journey }
             });
           } else {
             if (kyc.sign_status !== 'signed') {
-              navigate("/kyc-esign/info");
+              navigate(PATHNAME_MAPPER.kycEsign);
             } else {
-              navigate("/kyc/journey");
+              navigate(PATHNAME_MAPPER.journey);
             }
           }
         } else {
-          navigate("/kyc/upload/progress");
+          navigate(PATHNAME_MAPPER.uploadProgress);
         }
       }
     } 

@@ -1,30 +1,31 @@
 export const ACCOUNT_STATEMENT_OPTIONS = [
-  // {
-  //   type: 'contract',
-  //   title: 'Contract notes',
-  //   subtitle: 'View details of your share purchsases',
-  //   withIcon: false,
-  //   withRuler: true,
-  //   pageProps: {
-  //     // subtitle: // Use only if custom subtitle is required,
-  //     fields: [
-  //       {
-  //         type: 'fin-year',
-  //         paramName: 'fiscal_year'
-  //       },
-  //       {
-  //         type: 'date-select',
-  //         dateType: 'from',
-  //         paramName: 'dt_start'
-  //       },
-  //       {
-  //         type: 'date-select',
-  //         dateType: 'to',
-  //         paramName: 'dt_end'
-  //       },
-  //     ]
-  //   }
-  // },
+  {
+    type: 'contract_note',
+    title: 'Contract notes',
+    subtitle: 'View details of your share purchsases',
+    withIcon: false,
+    withRuler: true,
+    pageProps: {
+      // subtitle: // Use only if custom subtitle is required,
+      infoText: 'Contract notes can only be generated for a 31-day period per request',
+      fields: [
+        {
+          type: 'fin-year',
+          paramName: 'fiscal_year'
+        },
+        {
+          type: 'date-select',
+          dateType: 'from',
+          paramName: 'dt_start'
+        },
+        {
+          type: 'date-select',
+          dateType: 'to',
+          paramName: 'dt_end'
+        },
+      ]
+    }
+  },
   {
     type: 'profit_loss',
     title: 'P&L statements',

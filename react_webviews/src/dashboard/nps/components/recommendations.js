@@ -42,7 +42,8 @@ class Recommendations extends Component {
       pran: '',
       alternativeRiskOptsMap: {},
       partnerCode: getConfig().code,
-      isMobileDevice: getConfig().isMobileDevice
+      isMobileDevice: getConfig().isMobileDevice,
+      pranAlreadyRegistered: false
     };
     this.initialize = initialize.bind(this);
 ;  }
@@ -52,11 +53,18 @@ class Recommendations extends Component {
   }
 
   onload = () => {
+    if (this.state.pranAlreadyRegistered) {
+      this.navigate("/nps/pan", { state: { pranAlreadyRegistered: true } });
+      return
+    }
+
     let currentUser = storageService().getObject("user");
     let { display_summary_only, pran } = this.state;
 
     display_summary_only = currentUser.nps_investment || false;
-    pran = storageService().get("nps_pran_number");
+    let nps = storageService().getObject("npsUser");
+    pran = storageService().get("nps_pran_number") || nps.pran;
+
     if (pran) {
       display_summary_only = true;
     }
@@ -84,11 +92,10 @@ class Recommendations extends Component {
     });
 
     let amount = storageService().get("npsAmount");
-    let { pran } = this.state;
 
     const res = await this.get_recommended_funds(amount, true);
     let data = res;
-    if (data && !pran) {
+    if (data && !isEmpty(data.recommended)) {
       const [recommendations] = data.recommended;
       const altRiskOptsMap = keyBy([...data.alternatives, ...data.recommended], 'risk');
       const assetAlloc = altRiskOptsMap[recommendations?.risk || this.state.risk]
@@ -255,21 +262,26 @@ class Recommendations extends Component {
   };
 
   handleClick = async () => {
-    let { pran, pension_house, recommendations, amount, partnerCode, display_summary_only } = this.state;
+    let { pran, pension_house, recommendations, amount, partnerCode, display_summary_only, pranAlreadyRegistered } = this.state;
+
+    if (pranAlreadyRegistered) {
+      this.navigate("/nps/pan", { state: { pranAlreadyRegistered: true } });
+      return
+    }
 
     let data = {
       amount: this.state.amount,
       order_type: "one_time",
     };
 
-    if (!pran) {
+    if (!isEmpty(recommendations)) {
       data.pension_house_id = !isEmpty(pension_house)
         ? pension_house.pension_house_id
         : recommendations.pension_house
         ? recommendations.pension_house.pension_house_id
         : "";
       data.risk = this.state.risk;
-    } else {
+    } else if (pran) {
       data.pran = pran;
     }
 
@@ -298,6 +310,7 @@ class Recommendations extends Component {
           url: pgLink,
           skelton: false,
           openInvestmentSummary: true,
+          pran: result.pran
         });
       } else {
         window.location.href = pgLink;

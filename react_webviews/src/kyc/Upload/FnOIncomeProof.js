@@ -11,7 +11,7 @@ import { upload } from '../common/api';
 import { nativeCallback } from '../../utils/native_callback';
 import WVInPageHeader from '../../common/ui/InPageHeader/WVInPageHeader';
 import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
-import { checkDocsPending } from '../common/functions';
+import { isEquityEsignReady } from '../common/functions';
 import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet';
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 import { storageService } from '../../utils/validators';
@@ -138,11 +138,10 @@ const FnOIncomeProof = (props) => {
   }
   
   const commonRedirection = async () => {
-    const areDocsPending = await checkDocsPending(kyc);
-    if (areDocsPending) {
-      navigate('/kyc/document-verification');
+    if (isEquityEsignReady(kyc)) {
+      navigate(PATHNAME_MAPPER.kycEsign);
     } else {
-      navigate('/kyc-esign/info');
+      navigate(PATHNAME_MAPPER.documentVerification);
     }
   }
 
@@ -219,6 +218,7 @@ const FnOIncomeProof = (props) => {
       showLoader={isApiRunning}
       skelton={isLoading}
       headerData={{goBack}}
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
     >
       <WVInPageHeader style={{ marginBottom: '15px' }}>
         <WVInPageTitle>Provide income proof for F&O trading 

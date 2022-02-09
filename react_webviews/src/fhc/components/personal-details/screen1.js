@@ -165,7 +165,7 @@ class PersonalDetails1 extends Component {
               value={fhc_data.dob}
               placeholder="DD/MM/YYYY"
               maxLength="10"
-              onKeyUp={formatDate}
+              onKeyDown={formatDate}
               onChange={this.handleChange('dob')} />
           </div>
           <div className="InputField">

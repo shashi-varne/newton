@@ -1,0 +1,78 @@
+.freedom-plan-review {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .fpr-details {
+    background-color: var(--highlight);
+    border-radius: 6px;
+    padding: 20px;
+
+    .fprd-title {
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 17px;
+      color: var(--gunmetal);
+    }
+
+    .fprd-subtitle {
+      font-size: 14px;
+      line-height: 17px;
+      color: var(--steelgrey);
+      padding-top: 10px;
+      text-transform: lowercase;
+    }
+  }
+
+  .fpr-summary {
+    padding-top: 30px;
+
+    div {
+      font-size: 13px;
+      line-height: 15px;
+      color: var(--steelgrey);
+      padding-bottom: 10px;
+    }
+
+    .fpr-title {
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 19px;
+      color: var(--dark);
+      padding-bottom: 15px;
+    }
+
+    .fprs-amount {
+      color: var(--gunmetal);
+    }
+
+    .fprs-text {
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 19px;
+      color: var(--dark);
+      padding-top: 20px;
+    }
+
+    .fprs-total-amount {
+      font-size: 16px;
+    }
+  }
+
+  footer {
+    font-size: 11px;
+    line-height: 18px;
+    color: var(--steelgrey);
+
+    span {
+      color: var(--primary);
+      cursor: pointer;
+    }
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .freedom-plan-review {
+    height: calc(100vh - 220px);
+  }
+}

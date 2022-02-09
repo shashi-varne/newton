@@ -10,6 +10,7 @@ const SelfieSteps = (props) => {
       title="How to take a selfie?"
       buttonTitle="Okay"
       handleClick={() => props.history.goBack()}
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
     >
       <div className="selfie-step">
         <div className="selfie-step-desc">

@@ -69,6 +69,7 @@ export const PATHNAME_MAPPER = {
   stocksStatus: '/kyc/stocks-status',
   tradingInfo: '/kyc/trading-info',
   documentVerification: '/kyc/document-verification',
+  kycEsignNsdl: '/kyc-esign/nsdl',
 }
 
 export const STORAGE_CONSTANTS = {
@@ -234,15 +235,14 @@ export const GENDER_OPTIONS = [
 export const MARITAL_STATUS_OPTIONS = [
   { name: "Single", value: "SINGLE" },
   { name: "Married", value: "MARRIED" },
-  { name: "Divorced", value: "DIVORCED" },
-  { name: "Widow", value: "WIDOW" },
 ];
 
 export const OCCUPATION_TYPE_OPTIONS = [
   { name: "Salaried", value: "SALARIED" },
-  { name: "Self employed", value: "SELF EMPLOYED" },
+  { name: "Public Sector", value: "PUBLIC SECTOR" },
+  { name: "Housewife", value: "HOUSEWIFE" },
+  { name: "Student", value: "STUDENT" },
   { name: "Business", value: "BUSINESS" },
-  { name: "Agriculturist", value: "AGRICULTURIST" },
   { name: "Professional", value: "PROFESSIONAL" },
   { name: "Private sector", value: "PRIVATE SECTOR" },
   { name: "Others", value: "OTHERS" },
@@ -258,6 +258,8 @@ export const getIfscCodeError = (code) => {
       return "Please enter a valid ifsc code of India Post Payments Bank";
     case "ucomb":
       return "Please enter a valid ifsc code of United Commercial Bank";
+    case "tmb":
+      return "Please enter a valid ifsc code of TamilNad Mercantile Bank";
     default:
       return "Please enter a valid ifsc code";
   }
@@ -268,6 +270,7 @@ export const BANK_IFSC_CODES = {
   'lvb': 'LAVB',
   'cub': 'CIUB',
   'ucomb': 'UCBA',
+  'tmb': 'TMBL',
 }
 
 export const VERIFICATION_DOC_OPTIONS = [
@@ -333,3 +336,5 @@ export const eqkycDocsGroupMapper = {
     doc: ""
   }
 };
+
+export const PINCODE_LENGTH = 6;

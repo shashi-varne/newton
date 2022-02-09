@@ -8,6 +8,7 @@ import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
 import "./BankDetails.scss";
 import { nativeCallback } from "../../utils/native_callback";
+import { isBankVerified } from '../common/functions';
 
 const BankDetails = (props) => {
   const [showLoader, setShowLoader] = useState(true);
@@ -27,17 +28,12 @@ const BankDetails = (props) => {
     if(bank.bank_status === "submitted") {
       navigate(`${PATHNAME_MAPPER.addBankVerify}${bank.bank_id}`);
     } else {
-      if (bank.status === "default") {
-        navigate(`/kyc/${kyc.kyc_status}/upload-documents`, {
-          state: { goBack: PATHNAME_MAPPER.bankList }
-        });
-      } else {
-        navigate(`/kyc/${kyc.kyc_status}/upload-documents`, {
-          searchParams: `${
-            getConfig().searchParams
-          }&additional=true&bank_id=${bank_id}`,
-        });
-      }
+      navigate(`/kyc/${kyc.kyc_status}/upload-documents`, {
+        state: { goBack: PATHNAME_MAPPER.bankList },
+        searchParams: `${
+          getConfig().searchParams
+        }&additional=true${bank.status !== "default" ? `&bank_id=${bank_id}` : ""}`,
+      });
     }
   };
 
@@ -150,8 +146,8 @@ const BankDetails = (props) => {
               <div className="left">Status</div>
               <div
                 className={`status ${
-                  bank.bank_status === "rejected" && "failed"
-                } ${bank.bank_status === "verified" && "verified"}`}
+                  bank.bank_status === "rejected" && "rejected"
+                } ${isBankVerified(bank, kyc) && "approved"}`}
                 data-aid={`mapped-bank-status`}
               >
                 {bank.mapped_bank_status}
@@ -169,7 +165,7 @@ const BankDetails = (props) => {
                           <div className="right">{mandate.id} </div>
                         </div>
                         <div className="item" data-aid='kyc-account-type'>
-                          <div className="left">Account type</div>
+                          <div className="left">Amount</div>
                           <div className="right">
                             {" "}
                             {formatAmountInr(mandate.amount)}{" "}
@@ -178,11 +174,7 @@ const BankDetails = (props) => {
                         <div className="item" data-aid='kyc-status'>
                           <div className="left">Status</div>
                           <div
-                            className={`status ${
-                              mandate.status === "rejected" && "failed"
-                            } ${mandate.status === "verified" && "verified"} ${
-                              mandate.status === "init" && "underprocess"
-                            }`}
+                            className={`status ${mandate.f_status_code}`}
                             data-aid='kyc-mapped-mandate-status'
                           >
                             {mandate.friendly_status_V2}

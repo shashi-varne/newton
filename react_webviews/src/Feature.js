@@ -4,10 +4,8 @@ import { Route, Switch, useHistory } from 'react-router-dom';
 import ErrorBoundary from './ErrorBoundary';
 import ProtectedRoute from './common/components/ProtectedRoute';
 import BootSkeleton from './common/components/BootSkeleton';
+import NotFound from './common/components/NotFound';
 
-const NotFound = lazy(() => import(
-  /*webpackChunkName: "NotFound"*/ './common/components/NotFound'
-));
 const Insurance = lazy(() => import(
   /*webpackChunkName: "Insurance"*/ './insurance'
 ));
@@ -50,13 +48,12 @@ const Withdraw = lazy(() => import(
 const Report = lazy(() => import(
   /*webpackChunkName: "Report"*/ './reports'
 ));
-
 const Fhc = lazy(() => import(
   /*webpackChunkName: "Fhc"*/ './fhc'
 ));
-const Loan = lazy(() => import(
-  /*webpackChunkName: "Loan"*/ './loan_idfc'
-));
+// const Loan = lazy(() => import(
+//   /*webpackChunkName: "Loan"*/ './loan_idfc'
+// ));
 const Payment = lazy(() => import(
   /*webpackChunkName: "Payment"*/ './payment'
 ));
@@ -93,6 +90,9 @@ const AccountStatements = lazy(() => import(
 const EquityPayment = lazy(() => import(
   /*webpackChunkName: "EquityPayment"*/ './equity_payment'
 ));
+const FreedomPlan = lazy(() => import(
+  /*webpackChunkName: "FreedomPlan"*/ './freedom_plan'
+));
 
 const Feature = () => {
   // old # route support added
@@ -122,7 +122,8 @@ const Feature = () => {
             <ProtectedRoute path='/hni/' component={HNI} />
             <ProtectedRoute path='/isip' component={IsipBIller} />
             <ProtectedRoute path='/help' component={HelpSupport} />
-            <ProtectedRoute path='/loan' component={Loan} />
+            {/* <ProtectedRoute path='/loan' component={Loan} /> */}
+            <Route path='/pg/eq' component={EquityPayment} />
             <ProtectedRoute path='/pg' component={Payment} />
             <ProtectedRoute path='/kyc-esign' component={KycEsign} />
             <ProtectedRoute path='/whatsapp/' component={Whatsapp} />
@@ -132,12 +133,12 @@ const Feature = () => {
             <ProtectedRoute path='/fund-details' component={FundDetails} />
             <ProtectedRoute path='/feedback' component={FeedBack} />
             <ProtectedRoute path='/tax-filing' component={TaxFiling} />
-            <Route path='/pg/eq' component={EquityPayment} />
             <ProtectedRoute path='/partner' component={Partner} />
             <ProtectedRoute path='/statements' component={AccountStatements} />
             <ProtectedRoute path='/withdraw' component={Withdraw} />
             <ProtectedRoute path='/reports' component={Report} />
             <ProtectedRoute path='/kyc' component={Kyc} />
+            <ProtectedRoute path='/freedom-plan' component={FreedomPlan} />
             <ProtectedRoute path='/' component={Landing} />
             <Route component={NotFound} />
           </Switch>
