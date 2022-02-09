@@ -5,8 +5,9 @@ import Api from 'utils/api';
 import { storageService } from './validators';
 import eventManager from './eventManager';
 import { EVENT_MANAGER_CONSTANTS } from './constants';
+import isEmpty from "lodash/isEmpty";
 
-export const nativeCallback = async ({ action = null, message = null, events = null, action_path = null } = {}) => {
+export const nativeCallback = async ({ action = null, message = null, events = null, action_path = null, rnData = {} } = {}) => {
   let newAction = null;
   let callbackData = {};
   const config = getConfig();
@@ -34,6 +35,10 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   if (action) {
     newAction = oldToNewMethodsMapper[action];
     callbackData.action = newAction || action;
+  }
+
+  if(!isEmpty(rnData)) {
+    callbackData.rnData = rnData;
   }
 
   if(events && events.properties) {
