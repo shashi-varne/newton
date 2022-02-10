@@ -1,5 +1,5 @@
 import { Box, Stack, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   LandingHeader,
   LandingHeaderImage,
@@ -24,11 +24,28 @@ import WrapperBox from '../../../designSystem/atoms/WrapperBox';
 import './CommonCategoryLanding.scss';
 import Button from '../../../designSystem/atoms/Button';
 import Icon from '../../../designSystem/atoms/Icon';
+import isEmpty from 'lodash/isEmpty';
+import { getTrendingFunds } from '../../../dashboard/Invest/common/api';
+import {
+  LeftSlot,
+  MiddleSlot,
+  RightSlot,
+} from '../../../designSystem/molecules/FeatureCard/FeatureCard';
 
 SwiperCore.use([Pagination]);
 const CommonCategoryLanding = () => {
   const config = getConfig();
   const isMobileDevice = config.isMobileDevice;
+  const [trendingFunds, setTrendingFunds] = useState([]);
+
+  const fetchTrendingFunds = async () => {
+    const trendingFundsData = await getTrendingFunds();
+    setTrendingFunds(trendingFundsData?.trends?.equity);
+  };
+
+  useEffect(() => {
+    fetchTrendingFunds();
+  }, []);
   return (
     <Container>
       <div className='diy-category-landing-wrapper'>
@@ -56,10 +73,38 @@ const CommonCategoryLanding = () => {
             spaceBetween={10}
             speed={500}
           >
-            {TRENDING_CARDS?.map((fund, idx) => (
+            {trendingFunds?.map((fund, idx) => (
               <SwiperSlide key={idx} style={{ padding: '1px 0px' }}>
                 <WrapperBox elevation={1}>
-                  <FeatureCard {...fund} dataAid={idx} />
+                  <FeatureCard
+                    dataAid={idx}
+                    topLeftImgSrc={require('assets/amazon_pay.svg')}
+                    heading='ICICI Prudential Technology Direct Plan Growth'
+                  >
+                    <LeftSlot
+                      description={{
+                        title: '3 Year Return',
+                        titleColor: 'foundationColors.content.secondary',
+                        subtitle: '+23.94%',
+                        subtitleColor: 'foundationColors.secondary.profitGreen.400',
+                      }}
+                    />
+                    <MiddleSlot
+                      description={{
+                        title: 'Total AUM',
+                        titleColor: 'foundationColors.content.secondary',
+                        subtitle: '₹2.664 Cr',
+                        subtitleColor: 'foundationColors.secondary.coralOrange.400',
+                      }}
+                    />
+                    <RightSlot
+                      description={{
+                        title: 'Invested by',
+                        titleColor: 'foundationColors.content.secondary',
+                        subtitle: '6% users',
+                      }}
+                    />
+                  </FeatureCard>
                 </WrapperBox>
               </SwiperSlide>
             ))}
