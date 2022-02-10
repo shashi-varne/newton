@@ -87,7 +87,7 @@ CardVertical.propTypes = {
   onClick: PropTypes.func,
   imgProps: PropTypes.object,
   className: PropTypes.string,
-  dataAid: PropTypes.string.isRequired,
+  dataAid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 };
 
 CardVertical.defaultProps = {

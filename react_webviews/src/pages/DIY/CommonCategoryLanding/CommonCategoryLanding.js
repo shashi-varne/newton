@@ -18,7 +18,8 @@ import 'swiper/swiper-bundle.css';
 import { CATEGORY_CARDS, INVEST_STYLES, SECTORS, TRENDING_CARDS } from './constants';
 import CustomSwiper from '../../../designSystem/molecules/CustomSwiper';
 import { getConfig } from '../../../utils/functions';
-import Container from '../../../designSystem/organisms/Container/Container';
+import Container from '../../../designSystem/organisms/Container';
+import WrapperBox from '../../../designSystem/atoms/WrapperBox';
 
 import './CommonCategoryLanding.scss';
 import Button from '../../../designSystem/atoms/Button';
@@ -34,36 +35,43 @@ const CommonCategoryLanding = () => {
         <LandingHeader variant='center' dataAid='equity'>
           <LandingHeaderImage imgSrc={require('assets/finity/diy_equity.svg')} />
           <LandingHeaderTitle>Equity</LandingHeaderTitle>
-          <LandingHeaderSubtitle>
+          <LandingHeaderSubtitle dataIdx={1}>
             These funds invest in stocks of various companies across sectors and market cap sizes to
             yield high returns
           </LandingHeaderSubtitle>
-          <LandingHeaderPoints>Higher level of risk compared to Debt & Hybrid</LandingHeaderPoints>
-          <LandingHeaderPoints>Ideal for investors with a min goal of 5 years</LandingHeaderPoints>
+          <LandingHeaderPoints dataIdx={1}>
+            Higher level of risk compared to Debt & Hybrid
+          </LandingHeaderPoints>
+          <LandingHeaderPoints dataIdx={2}>
+            Ideal for investors with a min goal of 5 years
+          </LandingHeaderPoints>
         </LandingHeader>
 
         <Stack direction='column' spacing={2} className='diy-c-trending-wrapper'>
-          <SectionHeader productName={config.productName} title='Trending' />
+          <SectionHeader sx={{ pl: 2, pr: 2 }} productName={config.productName} title='Trending' />
           <CustomSwiper
             slidesPerView={isMobileDevice ? 1 : 2}
             slidesPerColumn={1}
             slidesPerGroup={1}
             spaceBetween={10}
-            freeMode
             speed={500}
           >
             {TRENDING_CARDS?.map((fund, idx) => (
-              <SwiperSlide key={idx}>
-                <div className='diy-c-trending-item'>
+              <SwiperSlide key={idx} style={{ padding: '1px 0px' }}>
+                <WrapperBox elevation={1}>
                   <FeatureCard {...fund} dataAid={idx} />
-                </div>
+                </WrapperBox>
               </SwiperSlide>
             ))}
           </CustomSwiper>
         </Stack>
 
         <Stack direction='column' spacing={2} className='diy-c-category-wrapper'>
-          <SectionHeader productName={config.productName} title='Market Cap' />
+          <SectionHeader
+            sx={{ pl: 2, pr: 2 }}
+            productName={config.productName}
+            title='Market Cap'
+          />
           <div>
             <CustomSwiper
               slidesPerView={2}
@@ -74,8 +82,10 @@ const CommonCategoryLanding = () => {
             >
               {CATEGORY_CARDS?.map((category, idx) => {
                 return (
-                  <SwiperSlide key={idx}>
-                    <CardVertical {...category} />
+                  <SwiperSlide key={idx} style={{ padding: '1px 0px' }}>
+                    <WrapperBox elevation={1} sx={{ height: '100%' }}>
+                      <CardVertical {...category} dataAid={idx} />
+                    </WrapperBox>
                   </SwiperSlide>
                 );
               })}
@@ -97,10 +107,15 @@ const CommonCategoryLanding = () => {
         </Stack>
 
         <Stack direction='column' spacing={2} className='diy-c-sector-theme'>
-          <SectionHeader productName={config.productName} title='Sector and themes' />
+          <SectionHeader
+            sx={{ pl: 2, pr: 2 }}
+            productName={config.productName}
+            title='Sector and themes'
+          />
           <CustomSwiper
             spaceBetween={16}
             speed={500}
+            cssMode={config?.isMobileDevice}
             breakpoints={{
               320: {
                 slidesPerView: 2,
@@ -128,7 +143,11 @@ const CommonCategoryLanding = () => {
         </Stack>
 
         <Stack direction='column' spacing={2} className='diy-c-investment-style-wrapper'>
-          <SectionHeader productName={config.productName} title='Investment styles' />
+          <SectionHeader
+            sx={{ pl: 2, pr: 2 }}
+            productName={config.productName}
+            title='Investment styles'
+          />
           <CustomSwiper
             spaceBetween={8}
             speed={500}
@@ -148,12 +167,13 @@ const CommonCategoryLanding = () => {
                 slidesPerGroup: 1,
               },
             }}
-            freeMode
           >
             {INVEST_STYLES?.map((investStyle, idx) => {
               return (
-                <SwiperSlide key={idx}>
-                  <CardVertical {...investStyle} />
+                <SwiperSlide key={idx} style={{ padding: '1px 0px' }}>
+                  <WrapperBox elevation={1} sx={{ height: '100%' }}>
+                    <CardVertical {...investStyle} dataAid={idx} />
+                  </WrapperBox>
                 </SwiperSlide>
               );
             })}
@@ -185,16 +205,16 @@ const customSx = {
   },
 };
 
-const SectionHeader = ({ title, productName, buttonTitle, onClick }) => {
+const SectionHeader = ({ sx, title, productName, buttonTitle, onClick }) => {
   const handleSvg = (code) => {
     console.log('code is', code);
   };
   return (
-    <Stack sx={{ pl: 2, pr: 2 }} direction='row' alignItems='center' justifyContent='space-between'>
+    <Stack sx={sx} direction='row' alignItems='center' justifyContent='space-between'>
       <Typography variant='heading4'>{title}</Typography>
       <Stack direction='row' alignItems='center' spacing='4px'>
         <Button title='See all' variant='link' />
-        <Icon src={require(`assets/${productName}/right_arrow_small.svg`)} size='16px' />
+        {/* <Icon src={require(`assets/${productName}/right_arrow_small.svg`)} size='16px' /> */}
       </Stack>
     </Stack>
   );

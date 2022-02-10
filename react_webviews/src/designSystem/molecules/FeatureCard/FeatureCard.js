@@ -215,7 +215,7 @@ FeatureCard.propTypes = {
   headingColor: PropTypes.string,
   topLeftImgProps: PropTypes.object,
   onCardClick: PropTypes.func,
-  dataAid: PropTypes.string,
+  dataAid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   leftSlotProps: PropTypes.exact({
     description: PropTypes.shape(DEFAULT_STRUCTURE),
     tag: PropTypes.object,
