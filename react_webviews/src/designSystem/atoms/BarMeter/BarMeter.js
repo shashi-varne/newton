@@ -59,7 +59,9 @@ const Bar = ({ isActive = false, displayKey, data, index }) => {
         }}
         data-aid={`iv_bar${index}`}
       />
-      <Typography
+      {
+        !data?.hide &&
+         <Typography
         variant='body1'
         className='atom-bar-label'
         color={barData.labelColor}
@@ -67,6 +69,7 @@ const Bar = ({ isActive = false, displayKey, data, index }) => {
       >
         {barData.labelName}
       </Typography>
+      }
     </Box>
   );
 };

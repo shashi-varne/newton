@@ -1,18 +1,16 @@
 .fund-details-wrapper {
-    background-color: lightcoral;
-
-    .MuiTabs-root {
-        .MuiTabs-flexContainer {
-            justify-content: flex-start !important;
-        }
+  .MuiTabs-root {
+    .MuiTabs-flexContainer {
+      justify-content: flex-start !important;
     }
+  }
 
-    .fund-details-asset-section {
-        .fund-asset-perc {
-            margin-left: auto;
-            margin-right: auto;
-            height: 4px;
-            border-radius: 100px;
-        }
+  .fund-details-asset-section {
+    .fund-asset-perc {
+      margin-left: auto;
+      margin-right: auto;
+      height: 4px;
+      border-radius: 100px;
     }
+  }
 }
