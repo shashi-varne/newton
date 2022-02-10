@@ -31,6 +31,7 @@ import {
   MiddleSlot,
   RightSlot,
 } from '../../../designSystem/molecules/FeatureCard/FeatureCard';
+import { formatAmountInr } from '../../../utils/validators';
 
 SwiperCore.use([Pagination]);
 const CommonCategoryLanding = () => {
@@ -40,6 +41,7 @@ const CommonCategoryLanding = () => {
 
   const fetchTrendingFunds = async () => {
     const trendingFundsData = await getTrendingFunds();
+    console.log('trending', trendingFundsData?.trends?.equity);
     setTrendingFunds(trendingFundsData?.trends?.equity);
   };
 
@@ -73,35 +75,47 @@ const CommonCategoryLanding = () => {
             spaceBetween={10}
             speed={500}
           >
-            {trendingFunds?.map((fund, idx) => (
+            {trendingFunds?.map((trendingFund, idx) => (
               <SwiperSlide key={idx} style={{ padding: '1px 0px' }}>
                 <WrapperBox elevation={1}>
                   <FeatureCard
                     dataAid={idx}
-                    topLeftImgSrc={require('assets/amazon_pay.svg')}
-                    heading='ICICI Prudential Technology Direct Plan Growth'
+                    topLeftImgSrc={trendingFund?.amc_logo_big}
+                    heading={trendingFund?.legal_name}
                   >
                     <LeftSlot
                       description={{
                         title: '3 Year Return',
                         titleColor: 'foundationColors.content.secondary',
-                        subtitle: '+23.94%',
-                        subtitleColor: 'foundationColors.secondary.profitGreen.400',
+                        subtitle: !trendingFund?.three_month_return
+                          ? 'N/A'
+                          : trendingFund?.three_month_return > 0
+                          ? `+ ${trendingFund?.three_month_return}%`
+                          : `- ${trendingFund?.three_month_return}%`,
+                        subtitleColor: !trendingFund?.three_month_return
+                          ? 'foundationColors.content.secondary'
+                          : 'foundationColors.secondary.profitGreen.400',
                       }}
                     />
                     <MiddleSlot
                       description={{
                         title: 'Total AUM',
                         titleColor: 'foundationColors.content.secondary',
-                        subtitle: '₹2.664 Cr',
-                        subtitleColor: 'foundationColors.secondary.coralOrange.400',
+                        subtitle: trendingFund?.aum ? formatAmountInr(trendingFund?.aum) : 'N/A',
+                        subtitleColor: !trendingFund?.aum && 'foundationColors.content.secondary',
                       }}
                     />
                     <RightSlot
                       description={{
                         title: 'Invested by',
                         titleColor: 'foundationColors.content.secondary',
-                        subtitle: '6% users',
+                        leftImgSrc: require('assets/small_heart.svg'),
+                        subtitle: trendingFund?.purchase_percent
+                          ? `${trendingFund?.purchase_percent}% users`
+                          : 'N/A',
+                        subtitleColor: trendingFund?.purchase_percent
+                          ? 'foundationColors.secondary.coralOrange.400'
+                          : 'foundationColors.content.secondary',
                       }}
                     />
                   </FeatureCard>
