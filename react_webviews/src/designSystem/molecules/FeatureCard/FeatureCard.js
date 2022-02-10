@@ -43,6 +43,7 @@ import PropTypes from 'prop-types';
 
 import './FeatureCard.scss';
 import Icon from '../../atoms/Icon';
+import { Stack } from '@mui/material';
 
 const FeatureCard = ({
   topLeftImgSrc,
@@ -82,7 +83,6 @@ const FeatureCard = ({
 };
 
 export const LeftSlot = ({ description = {}, tag = {}, title, titleColor }) => {
-  description.align = 'left';
   return (
     <div className='fc-left-slot'>
       {title && (
@@ -91,7 +91,7 @@ export const LeftSlot = ({ description = {}, tag = {}, title, titleColor }) => {
         </Typography>
       )}
       {!isEmpty(tag) && <Tag {...tag} dataAid='label1' />}
-      {!isEmpty(description) && <Description description={description} />}
+      {!isEmpty(description) && <Description description={description} align='left'/>}
     </div>
   );
 };
@@ -112,13 +112,12 @@ export const RightSlot = ({ description = {}, tag = {}, title, titleColor }) => 
         </Typography>
       )}
       {!isEmpty(tag) && <Tag {...tag} dataAid='label3' />}
-      {!isEmpty(description) && <Description description={description} />}
+      {!isEmpty(description) && <Description description={description} align='right'/>}
     </div>
   );
 };
 
 export const MiddleSlot = ({ description = {}, tag = {}, title, titleColor }) => {
-  description.align = 'center';
   return (
     <div className='fc-middle-slot'>
       {title && (
@@ -133,21 +132,25 @@ export const MiddleSlot = ({ description = {}, tag = {}, title, titleColor }) =>
         </Typography>
       )}
       {!isEmpty(tag) && <Tag {...tag} dataAid='label2' />}
-      {!isEmpty(description) && <Description description={description} />}
+      {!isEmpty(description) && <Description description={description} align='center' />}
     </div>
   );
 };
 
-const Description = ({ description, dataAid }) => {
+const Description = ({ description, dataAid, align }) => {
   const {
     title = '',
     subtitle = '',
     titleColor = '',
     subtitleColor = '',
-    align = 'left',
     leftImgSrc,
     leftImgProps = {},
   } = description;
+  const justifyContent = {
+    left: 'flex-start',
+    center: 'center',
+    right: 'flex-end'
+  }
   return (
     <div className='fc-description-variant'>
       <Typography
@@ -160,7 +163,7 @@ const Description = ({ description, dataAid }) => {
         {title}
       </Typography>
       {subtitle && (
-        <div className='fc-subtitle-wrapper'>
+        <Stack direction='row' alignItems='center' justifyContent={justifyContent[align]} className='fc-subtitle-wrapper'>
           {leftImgSrc && (
             <Icon
               src={leftImgSrc}
@@ -179,7 +182,7 @@ const Description = ({ description, dataAid }) => {
           >
             {subtitle}
           </Typography>
-        </div>
+        </Stack>
       )}
     </div>
   );
