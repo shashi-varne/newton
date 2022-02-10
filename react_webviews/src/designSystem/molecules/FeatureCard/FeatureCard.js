@@ -14,29 +14,24 @@
         Example : headerColor: 'foundationColors.secondary.mango.300'
   Usage: 
   <FeatureCard
-    topLeftImgSrc={require('assets/amazon_pay.svg')}
-    heading='I am heading'
-    leftSlotProps={{
-      tag: {
-        label: 'Equity',
-        labelColor: 'foundationColors.secondary.profitGreen.400',
-        labelBackgroundColor: 'foundationColors.secondary.profitGreen.200',
-      },
-    }}
-    middleSlotProps={{
-      description: {
-        title: 'Title',
-        titleColor: 'foundationColors.content.primary',
-        subtitle: 'Subtitle',
-        subtitleColor: 'foundationColors.content.secondary',
-        leftImgSrc: require('assets/amazon_pay.svg'),
-      },
-    }}
-    rightSlotProps={{
-      title: 'left title',
-      titleColor: 'foundationColors.secondary.coralOrange.400',
-    }}
-  />
+      {...args}
+      topLeftImgSrc={require('assets/amazon_pay.svg')}
+      heading='I am heading'
+    >
+      <LeftSlot
+        tag={{
+          label: 'Equity',
+        }}
+      />
+
+      <MiddleSlot
+        description={{
+          title: 'Title',
+          subtitle: 'Subtitle',
+        }}
+      />
+      <RightSlot title='right title' />
+    </FeatureCard>
 */
 
 import React from 'react';
@@ -56,15 +51,19 @@ const FeatureCard = ({
   headingColor,
   onCardClick,
   dataAid,
-  leftSlotProps,
-  middleSlotProps,
-  rightSlotProps,
+  children,
 }) => {
   return (
     <div className='feature-card-wrapper' onClick={onCardClick} data-aid={`featureCard_${dataAid}`}>
       <div className='fc-first-row-wrapper'>
         {topLeftImgSrc && (
-          <Icon src={topLeftImgSrc} size='32px' className='fc-left-img' {...topLeftImgProps} dataAid='left' />
+          <Icon
+            src={topLeftImgSrc}
+            size='32px'
+            className='fc-left-img'
+            {...topLeftImgProps}
+            dataAid='left'
+          />
         )}
         <Typography
           variant='body1'
@@ -77,75 +76,66 @@ const FeatureCard = ({
         </Typography>
       </div>
       <Separator className='fc-divider' />
-      <div className='feature-card-slot-wrapper'>
-        <div className='fc-left-slot'>
-          <LeftSlot {...leftSlotProps} />
-        </div>
-        <div className='fc-middle-slot'>
-          <MiddleSlot {...middleSlotProps} />
-        </div>
-        <div className='fc-right-slot'>
-          <RightSlot {...rightSlotProps} />
-        </div>
-      </div>
+      <div className='feature-card-slot-wrapper'>{children}</div>
     </div>
   );
 };
 
 export const LeftSlot = ({ description = {}, tag = {}, title, titleColor }) => {
   description.align = 'left';
-
-  if (title) {
-    return (
-      <Typography variant='body2' align='left' color={titleColor} component='div' dataAid='label'>
-        {title}
-      </Typography>
-    );
-  }
-
-  if (!isEmpty(tag)) {
-    return <Tag {...tag} dataAid='label1'/>;
-  }
-  if (!isEmpty(description)) {
-    return <Description description={description} />;
-  }
+  return (
+    <div className='fc-left-slot'>
+      {title && (
+        <Typography variant='body2' align='left' color={titleColor} component='div' dataAid='label'>
+          {title}
+        </Typography>
+      )}
+      {!isEmpty(tag) && <Tag {...tag} dataAid='label1' />}
+      {!isEmpty(description) && <Description description={description} />}
+    </div>
+  );
 };
 
 export const RightSlot = ({ description = {}, tag = {}, title, titleColor }) => {
   description.align = 'right';
-
-  if (title) {
-    return (
-      <Typography variant='body2' align='right' color={titleColor} component='div' dataAid='label'>
-        {title}
-      </Typography>
-    );
-  }
-
-  if (!isEmpty(tag)) {
-    return <Tag {...tag} dataAid='label3'/>;
-  }
-  if (!isEmpty(description)) {
-    return <Description description={description} />;
-  }
+  return (
+    <div className='fc-right-slot'>
+      {title && (
+        <Typography
+          variant='body2'
+          align='right'
+          color={titleColor}
+          component='div'
+          dataAid='label'
+        >
+          {title}
+        </Typography>
+      )}
+      {!isEmpty(tag) && <Tag {...tag} dataAid='label3' />}
+      {!isEmpty(description) && <Description description={description} />}
+    </div>
+  );
 };
 
 export const MiddleSlot = ({ description = {}, tag = {}, title, titleColor }) => {
   description.align = 'center';
-
-  if (title) {
-    return (
-      <Typography variant='body2' align='center' color={titleColor} component='div' dataAid='label'>
-        {title}
-      </Typography>
-    );
-  }
-  if (!isEmpty(tag)) {
-    return <Tag {...tag} dataAid='label2'/>;
-  }
-  if (!isEmpty(description)) {
-    return <Description description={description} />;
-  }
+  return (
+    <div className='fc-middle-slot'>
+      {title && (
+        <Typography
+          variant='body2'
+          align='center'
+          color={titleColor}
+          component='div'
+          dataAid='label'
+        >
+          {title}
+        </Typography>
+      )}
+      {!isEmpty(tag) && <Tag {...tag} dataAid='label2' />}
+      {!isEmpty(description) && <Description description={description} />}
+    </div>
+  );
 };
 
 const Description = ({ description, dataAid }) => {
@@ -207,7 +197,7 @@ const DEFAULT_STRUCTURE = {
   titleColor: PropTypes.string,
   subtitle: PropTypes.node,
   subtitleColor: PropTypes.string,
-  leftImgProps: PropTypes.object
+  leftImgProps: PropTypes.object,
 };
 
 FeatureCard.propTypes = {
