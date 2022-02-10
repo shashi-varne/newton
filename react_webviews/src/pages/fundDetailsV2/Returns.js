@@ -70,7 +70,7 @@ const RollingReturn = ({ returns = [] }) => {
 
   const minimun = minBy(returns, 'value')?.value;
   const maximum = maxBy(returns, 'value')?.value;
-  const average = nonRoundingToFixed(meanBy(returns, 'value'),2);
+  const average = nonRoundingToFixed(meanBy(returns, 'value'), 2);
   const NET_ASSET_VALUE = [
     {
       name: 'Minimum',
@@ -92,7 +92,7 @@ const RollingReturn = ({ returns = [] }) => {
   return (
     <Box sx={{ mt: 3, mb: 3 }}>
       <Stack>
-        <Typography>Investment period</Typography>
+        <Typography variant='heading4' color='foundationColors.content.secondary'>Investment period</Typography>
         <Box sx={{ mt: 4, maxWidth: 'fit-content' }}>
           <Timelines value={investmentYear} onChange={handleInvestmentYear}>
             <TimeLine label='1Y' />
@@ -118,7 +118,7 @@ const RollingReturn = ({ returns = [] }) => {
                     {net_asset?.value > 0 ? `+ ${net_asset?.value}` : `- ${net_asset?.value}`}%
                   </Typography>
                 </Stack>
-                <Separator />
+                {NET_ASSET_VALUE?.length !== idx + 1 && <Separator />}
               </Stack>
             );
           })}

@@ -62,14 +62,14 @@ const RiskDetails = ({ fundData }) => {
         <Box>
           <Stack direction='column' spacing={3}>
             <Stack direction='column' spacing={3}>
-              <Typography>Risk vs Category</Typography>
+              <Typography variant='heading4'>Risk vs Category</Typography>
               <BarMeter
                 barMeterData={barMeterData(fundData?.risk?.risk_vs_category)}
                 activeIndex={getBarIndex(fundData?.risk?.risk_vs_category)}
               />
             </Stack>
             <Stack direction='column' spacing={3}>
-              <Typography>Return vs Category</Typography>
+              <Typography variant='heading4'>Return vs Category</Typography>
               <BarMeter
                 barMeterData={barMeterData(fundData?.risk?.return_vs_category)}
                 activeIndex={getBarIndex(fundData?.risk?.return_vs_category)}
@@ -90,7 +90,7 @@ const RiskDetails = ({ fundData }) => {
                       + {riskMeasure?.value}%
                     </Typography>
                   </Stack>
-                  <Separator />
+                  {fundData?.risk?.risk_measures?.length !== idx + 1 && <Separator />}
                 </Stack>
               );
             })}

@@ -39,9 +39,9 @@ const AssetAllocation = ({ fundData = {} }) => {
           <Stack direction='row' justifyContent='space-between'>
             {fundData?.portfolio?.asset_allocation?.map((assetData, idx) => {
               return (
-                <Stack key={idx} direction='column' spacing='4px'>
+                <Stack sx={{ml:'-3px', mr: '-3px'}} key={idx} direction='column' spacing='4px'>
                   <Typography variant='body8' color='foundationColors.content.secondary'>
-                    {assetData?.name} • {assetData?.value || 0}%
+                    {assetData?.name}•{Math.round(assetData?.value) || 0}%
                   </Typography>
                   <Box
                     sx={{
