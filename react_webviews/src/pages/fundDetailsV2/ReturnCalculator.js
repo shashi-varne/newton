@@ -13,29 +13,30 @@ import Icon from '../../designSystem/atoms/Icon';
 
 const ReturnCalculator = ({ fundData }) => {
   const [pillValue, setPillValue] = useState('sip');
-  const [amountToBeInvested, setAmountToBeInvested] = useState(1000);
-  const [investmentYear, setInvestmentYear] = useState(3);
+  const [amountToBeInvested, setAmountToBeInvested] = useState({sip: 1000, lumpsum: 10000});
+  const [investmentYear, setInvestmentYear] = useState(5);
   const [isReturnCalcOpen, setIsReturnCalcOpen] = useState(false);
   const [investedAmount, setInvestedAmount] = useState('');
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
-  const [expecedAmount, setExpectedAmount] = useState('');
+  const [expectedAmount, setExpectedAmount] = useState('');
   const equityValue = useMemo(
     () => fundData?.portfolio?.asset_allocation?.find((el) => el.name.toLowerCase() === 'equity'),
     [fundData]
   );
   const isRecurring = useMemo(() => pillValue === 'sip', [pillValue]);
+
   useEffect(() => {
-    const investedValue = getInvestedValue(investmentYear, amountToBeInvested, isRecurring);
+    const investedValue = getInvestedValue(investmentYear, amountToBeInvested[pillValue], isRecurring);
     const expectedValue = getPotentialValue(
       Math.ceil(equityValue?.value),
-      Number(amountToBeInvested),
+      Number(amountToBeInvested[pillValue]),
       isRecurring,
       investmentYear
     );
     console.log('expected val', expectedValue);
     setExpectedAmount(expectedValue);
     setInvestedAmount(investedValue);
-  }, [amountToBeInvested, investmentYear, isRecurring, equityValue?.value]);
+  }, [amountToBeInvested[pillValue], investmentYear, isRecurring, equityValue?.value]);
 
   const handleReturnCalcSection = () => {
     setIsReturnCalcOpen(!isReturnCalcOpen);
@@ -48,7 +49,7 @@ const ReturnCalculator = ({ fundData }) => {
   };
 
   const handleAmountChange = (e) => {
-    setAmountToBeInvested(e.target.value);
+    setAmountToBeInvested({...amountToBeInvested,[pillValue]: e.target.value});
   };
 
   const handleTooltipClosure = () => {
@@ -76,7 +77,7 @@ const ReturnCalculator = ({ fundData }) => {
           <InputField
             label='Amount'
             prefix='₹'
-            value={amountToBeInvested}
+            value={amountToBeInvested[pillValue]}
             onChange={handleAmountChange}
           />
           <Stack direction='column' spacing={2}>
@@ -106,7 +107,7 @@ const ReturnCalculator = ({ fundData }) => {
             <Stack direction='column'>
               <Stack direction='row' spacing='4px' alignItems='flex-end' justifyContent='flex-end'>
                 <Typography variant='heading2' color='primary' align='right'>
-                  {formatAmountInr(123213)}
+                  {formatAmountInr(expectedAmount)}
                 </Typography>
                 <ClickAwayListener onClickAway={handleTooltipClosure}>
                   <div>
