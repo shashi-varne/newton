@@ -17,7 +17,7 @@ class ImgcClass extends Component {
 
 
     isCached = (src) => {
-        if(!src || src === undefined) {
+        if(!src) {
             return false;
         }
         var img = new Image();
