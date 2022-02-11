@@ -114,15 +114,19 @@ $(document).ready(function () {
 //   favIcon.href="images/fisdom_logo_icon.svg";
 // }
 
-if(getConfig().productName === 'finity') {
-  document.title = 'Finity';
-  const favicon = document.getElementById('favicon');
-  favicon.href = 'images/finity_icon.svg';
-} else {
-  document.title = 'Fisdom';
-  const favicon = document.getElementById('favicon');
-  favicon.href = 'images/fisdom_icon.svg';
+
+const favicon = document.getElementById('favicon');
+
+if(favicon) {
+  if(getConfig().productName === 'finity') {
+    document.title = 'Finity';
+    favicon.href = 'images/finity_icon.svg';
+  } else {
+    document.title = 'Fisdom';
+    favicon.href = 'images/fisdom_icon.svg';
+  }
 }
+
 
 try {
   if(getConfig().productName === "fisdom" && getConfig().isProdEnv)
