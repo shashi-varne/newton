@@ -47,6 +47,7 @@ import ProductMarketTypes from './ProductMarketTypes';
 import PrimaryMarketProducts from "./PrimaryMarketProducts/PrimaryMarketProducts";
 import HandleDirectEntry from "../kyc/Equity/components/HandleDirectEntry";
 import PaymentNativeCallback from "./nps/components/paymentCallback";
+import Landing from "./Invest/components/DemoLanding/Landing";
 
 const Home = (props) => {
   const config = getConfig(); 
@@ -68,6 +69,7 @@ const Home = (props) => {
         <Route exact path={`${url}refer`} component={Refer} />
         <Route path={`${url}invest`} component={Invest} />
         <Route path={`${url}landing`} component={Invest} />
+        <Route path={`${url}demo-landing`} component={Landing} />
         <Route path={`${url}mf`} component={SdkLanding} />
         <Route path={`${url}diy`} component={DIY} />
         <Route path={`${url}invest-journey`} component={InvestJourney} />

@@ -165,6 +165,9 @@ export const keyPathMapper = {
   diyv2: "invest/explore",
   parkmoney: "invest/parkmoney",
   savegoal: "invest/savegoal",
+  insurance: "/group-insurance",
+  gold: "/gold/my-gold",
+  fhc: "/fhc",
 };
 
 export const investRedeemData = {

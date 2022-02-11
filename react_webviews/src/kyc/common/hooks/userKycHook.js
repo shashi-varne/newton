@@ -43,7 +43,14 @@ function useUserKycHook() {
         }
     };
 
-    return {kyc, user, isLoading, updateKyc};
+    const updateUser = (userData) => {
+        if (userData) {
+            storageService().setObject("user", userData);
+            setUser(userData);
+        }
+    };
+
+    return { kyc, user, isLoading, updateKyc, updateUser };
 }
 
 export default useUserKycHook

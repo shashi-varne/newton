@@ -688,12 +688,12 @@ class Landing extends Component {
               }
             })}
           <SebiRegistrationFooter className="invest-sebi-registration-disclaimer" />
-          <VerificationFailedDialog
+          {/* <VerificationFailedDialog
             isOpen={verificationFailed}
             close={this.closeVerificationFailed}
             addBank={this.addBank}
             updateDocument={this.updateDocument}
-          />
+          /> */}
           {openKycStatusDialog && (
             <KycStatusDialog
               isOpen={openKycStatusDialog}
