@@ -33,16 +33,9 @@ const barData = [
 
 const barMeterData = (riskValue) => {
   // eslint-disable-next-line no-unused-expressions
-  const newBarData = barData?.map((el, idx) => {
-    if (idx === 0 || idx === barData?.length - 1) return el;
-    if (el.name.toLowerCase() === riskValue.toLowerCase()) {
-      el.hide = false;
-      return el;
-    } else {
-      el.hide = true;
-      return el;
-    }
-  });
+  const newBarData = barData?.map((el, idx) => el);
+  const activeIndex = getBarIndex(riskValue);
+  newBarData[activeIndex].hide = false;
   return newBarData;
 };
 
@@ -80,6 +73,7 @@ const RiskDetails = ({ fundData }) => {
           <Stack sx={{ mt: 4, mb: 2 }} direction='column' spacing={3}>
             <Typography variant='heading4'>Risk measures</Typography>
             {fundData?.risk?.risk_measures?.map((riskMeasure, idx) => {
+              if(!riskMeasure?.name.match(/Alpha|Beta|squared/i)) return;
               return (
                 <Stack key={idx} direction='column' spacing={2}>
                   <Stack direction='row' justifyContent='space-between'>
@@ -90,7 +84,7 @@ const RiskDetails = ({ fundData }) => {
                       + {riskMeasure?.value}%
                     </Typography>
                   </Stack>
-                  {fundData?.risk?.risk_measures?.length !== idx + 1 && <Separator />}
+                  { idx < 2 && <Separator />}
                 </Stack>
               );
             })}

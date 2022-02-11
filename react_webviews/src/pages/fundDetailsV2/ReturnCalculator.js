@@ -10,10 +10,11 @@ import InputField from '../../designSystem/molecules/InputField';
 import { formatAmountInr } from '../../utils/validators';
 import Tooltip from '../../designSystem/atoms/Tooltip';
 import Icon from '../../designSystem/atoms/Icon';
+import { getProjectedValue } from '../../reports/common/functions';
 
 const ReturnCalculator = ({ fundData }) => {
   const [pillValue, setPillValue] = useState('sip');
-  const [amountToBeInvested, setAmountToBeInvested] = useState({sip: 1000, lumpsum: 10000});
+  const [amountToBeInvested, setAmountToBeInvested] = useState({ sip: 1000, lumpsum: 10000 });
   const [investmentYear, setInvestmentYear] = useState(5);
   const [isReturnCalcOpen, setIsReturnCalcOpen] = useState(false);
   const [investedAmount, setInvestedAmount] = useState('');
@@ -26,12 +27,15 @@ const ReturnCalculator = ({ fundData }) => {
   const isRecurring = useMemo(() => pillValue === 'sip', [pillValue]);
 
   useEffect(() => {
-    const investedValue = getInvestedValue(investmentYear, amountToBeInvested[pillValue], isRecurring);
-    const expectedValue = getPotentialValue(
-      Math.ceil(equityValue?.value),
-      Number(amountToBeInvested[pillValue]),
-      isRecurring,
-      investmentYear
+    const investedValue = getInvestedValue(
+      investmentYear,
+      amountToBeInvested[pillValue],
+      isRecurring
+    );
+    const expectedValue = getProjectedValue(
+      amountToBeInvested[pillValue],
+      investmentYear,
+      pillValue
     );
     console.log('expected val', expectedValue);
     setExpectedAmount(expectedValue);
@@ -49,7 +53,7 @@ const ReturnCalculator = ({ fundData }) => {
   };
 
   const handleAmountChange = (e) => {
-    setAmountToBeInvested({...amountToBeInvested,[pillValue]: e.target.value});
+    setAmountToBeInvested({ ...amountToBeInvested, [pillValue]: e.target.value });
   };
 
   const handleTooltipClosure = () => {
@@ -113,15 +117,18 @@ const ReturnCalculator = ({ fundData }) => {
                   <div>
                     <Tooltip
                       open={isTooltipOpen}
-                      title={`Estimated based on the fund's last ${investmentYear} years returns`}
+                      title={`Estimated based on the fund's last ${
+                        investmentYear <= 5 ? investmentYear : 5
+                      } years returns`}
                     >
-                      <div onClick={handleTooltip}>
+                      <div>
                         <Icon
-                          src={require('assets/amazon_pay.svg')}
+                          src={require('assets/info_icon_ds.svg')}
                           size='16px'
                           className='ec_info_icon'
                           alt='info_icon'
                           dataAid='right'
+                          onClick={handleTooltip}
                         />
                       </div>
                     </Tooltip>
