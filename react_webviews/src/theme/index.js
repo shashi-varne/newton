@@ -7,8 +7,8 @@ import { tooltipStyleOverRides } from './tooltip';
 import { switchStyleOverRides } from './switch';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
 import getPartnerThemeData from './utils';
-import { separatorStyleOverRides } from './separator';
 import { dialogDefaultProps, dialogStylesOverride } from './dialog';
+import { separatorStyleOverRides } from './separator';
 import { badgeStyleOverRides } from './badge';
 import { customShadows } from './shadows';
 
