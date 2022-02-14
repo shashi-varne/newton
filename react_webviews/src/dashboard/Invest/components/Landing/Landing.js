@@ -34,7 +34,7 @@ class Landing extends Component {
       show_loader: false,
       kycStatusLoader: false,
       productName: getConfig().productName,
-      screenName: "invest_landing",
+      screenName: "investLanding",
       investCardsData: {},
       investSections: [],
       verificationFailed: false,
@@ -47,7 +47,7 @@ class Landing extends Component {
       verifyDetailsData: {},
       accountAlreadyExists: false,
       accountAlreadyExistsData : {},
-      openBottomSheet: false,
+      openCampaignDialog: false,
       bottom_sheet_dialog_data: {},
       isWeb: getConfig().Web,
       isIframe: getConfig().isIframe,
@@ -98,7 +98,7 @@ class Landing extends Component {
     }
 
     if (campaignsToShowOnPriority.includes(bottom_sheet_dialog_data.campaign_name)) {
-      this.setDialogsState("openBottomSheet");
+      this.setDialogsState("openCampaignDialog");
     }
     this.openBfdlBanner();
   };
@@ -198,7 +198,7 @@ class Landing extends Component {
 
   handleKycPremiumLanding = () => {
     if (
-      this.state.screenName === "invest_landing" &&
+      this.state.screenName === "investLanding" &&
       this.state.bottom_sheet_dialog_data_premium.nextState === "/invest"
     ) {
       this.closeKycPremiumLandingDialog();
@@ -715,7 +715,7 @@ class Landing extends Component {
           )}
         </div>
         <CampaignDialog
-          isOpen={this.state.openBottomSheet}
+          isOpen={this.state.openCampaignDialog}
           close={this.closeCampaignDialog}
           cancel={this.closeCampaignDialog}
           data={this.state.bottom_sheet_dialog_data}

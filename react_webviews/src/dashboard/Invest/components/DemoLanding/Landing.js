@@ -1,7 +1,21 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Container from "../../../common/Container";
-import { getConfig, navigate as navigateFunc } from "utils/functions";
-import { isEmpty } from "lodash";
+import InvestCard from "../../mini-components/InvestCard";
+import SebiRegistrationFooter from "../../../../common/ui/SebiRegistrationFooter/WVSebiRegistrationFooter";
+import PopularCards from "../Landing/PopularCards";
+import BotomScrollCards from "../Landing/BottomScrollCards";
+import StocksAndIpoCards from "../Landing/StocksAndIpoCards";
+import LandingBottomSheets from "../../mini-components/LandingBottomSheets";
+import VerifyDetailDialog from "../../../../login_and_registration/components/VerifyDetailDialog";
+import AccountAlreadyExistDialog from "../../../../login_and_registration/components/AccountAlreadyExistDialog";
+import KycCard from "../Landing/KycCard";
+import FinancialTools from "../Landing/FinancialTools";
+import PinSetupDialog from "../../mini-components/PinSetupDialog";
+import {
+  getConfig,
+  navigate as navigateFunc,
+} from "../../../../utils/functions";
+import isEmpty from "lodash/isEmpty";
 import { nativeCallback } from "../../../../utils/native_callback";
 import {
   getInvestCardsData,
@@ -9,21 +23,25 @@ import {
   initialize,
   initializeKyc,
   openKyc,
+  handleCampaign,
+  handleKycPremiumLanding,
+  getCampaignData,
+  closeCampaignDialog,
+  setKycProductTypeAndRedirect,
+  handleIpoCardRedirection,
+  getRecommendationsAndNavigate,
 } from "../../functions";
-import InvestCard from "../../mini-components/InvestCard";
-import SebiRegistrationFooter from "../../../../common/ui/SebiRegistrationFooter/WVSebiRegistrationFooter";
+import { generateOtp } from "../../../../login_and_registration/functions";
+import toast from "../../../../common/ui/Toast";
 import useUserKycHook from "../../../../kyc/common/hooks/userKycHook";
-import "./Landing.scss";
-import { keyPathMapper } from "../../constants";
-import KycCard from "../Landing/KycCard";
-import FinancialTools from "../Landing/FinancialTools";
 import useFreedomDataHook from "../../../../freedom_plan/common/freedomPlanHook";
-import PopularCards from "../Landing/PopularCards";
-import BotomScrollCards from "../Landing/BottomScrollCards";
-import StocksAndIpoCards from "../Landing/StocksAndIpoCards";
+import { PATHNAME_MAPPER as KYC_PATHNAME_MAPPER } from "../../../../kyc/constants";
+import { storageService } from "../../../../utils/validators";
+import { keyPathMapper } from "../../constants";
+import "./Landing.scss";
 
 const fromLoginStates = ["/login", "/logout", "/verify-otp"];
-const screenName = "invest_landing";
+const screenName = "investLanding";
 const SECTION_TITLE_MAPPER = {
   ourRecommendations: "Our recommendations",
   popularCards: "More investment options",
@@ -32,15 +50,10 @@ const SECTION_TITLE_MAPPER = {
   diy: "Do it yourself",
 };
 const Landing = (props) => {
-  const {
-    code: partnerCode,
-    productName,
-    isSdk,
-    isIframe,
-    isMobileDevice,
-  } = getConfig();
-  const stateParams = props.location.state || {};
   const navigate = navigateFunc.bind(props);
+  const stateParams = useMemo(() => props.location.state || {}, [
+    props.location.state,
+  ]);
   const isFromLoginStates = fromLoginStates.includes(stateParams.fromState);
   const [loaderData, setLoaderData] = useState({
     skelton: false,
@@ -48,42 +61,117 @@ const Landing = (props) => {
     kycStatusLoader: false,
   });
   const [modalData, setModalData] = useState({});
+  const [baseConfig, setBaseConfig] = useState(getConfig());
+  const [campaignData, setCampaignData] = useState({});
+  const [dialogStates, setDialogStates] = useState({
+    openCampaignDialog: false,
+    openKycStatusDialog: false,
+    openKycPremiumLanding: false,
+    openBfdlBanner: false,
+    openPinSetupDialog: false,
+    accountAlreadyExists: false,
+    verifyDetails: false,
+  });
+  const [accountAlreadyExistsData, setAccountAlreadyExistsData] = useState({});
   const { user, kyc, updateKyc, updateUser } = useUserKycHook();
   const { subscriptionStatus, updateSubscriptionStatus } = useFreedomDataHook();
 
   const handleDialogStates = (dialogStatus, dialogData) => {
-    setDialogStates(dialogStatus);
+    setDialogStates({ ...dialogStates, ...dialogStatus });
     setModalData(dialogData);
   };
 
   const { kycData, contactDetails } = useMemo(
-    initializeKyc({ kyc, user, partnerCode, screenName, handleDialogStates }),
+    initializeKyc({
+      kyc,
+      user,
+      partnerCode: baseConfig.code,
+      screenName,
+      handleDialogStates,
+    }),
     [kyc, user]
   );
+
   const [investCardsData, setInvestCardsData] = useState({
     investSections: [],
     cardsData: {},
   });
-  const [dialogStates, setDialogStates] = useState({});
-  const {
-    showKycCard,
-    kycStatusData,
-    tradingEnabled,
-    isKycCompleted,
-    kycJourneyStatus,
-  } = kycData;
-
-  const verifyDetailsType = {};
-  useEffect(() => {}, []);
 
   useEffect(() => {
-    initialize({ screenName, handleSummaryData, handleLoader });
+    onLoad();
+  }, []);
+
+  const onLoad = async () => {
     const data = getInvestCardsData();
     setInvestCardsData(data);
-  }, []);
+    await initialize({ screenName, handleSummaryData, handleLoader });
+    const campaignBottomSheetData = getCampaignData();
+    setCampaignData(campaignBottomSheetData);
+    const config = getConfig();
+    setBaseConfig(config);
+  };
 
   const handleLoader = (data) => {
     setLoaderData({ ...loaderData, ...data });
+  };
+
+  const closeBottomSheet = (bottomSheetKey, eventName) => () => {
+    if (!isEmpty(eventName)) {
+      sendEvents("back", eventName);
+    }
+    handleLoader({
+      [bottomSheetKey]: false,
+    });
+  };
+
+  const closeKycStatusDialog = () => {
+    sendEvents("dismiss", "kyc_bottom_sheet");
+    handleLoader({
+      openKycStatusDialog: false,
+    });
+  };
+
+  const showAccountAlreadyExist = (show, data) => {
+    handleLoader({
+      verifyDetails: false,
+      accountAlreadyExists: show,
+    });
+    setAccountAlreadyExistsData(data);
+  };
+
+  const continueAccountAlreadyExists = async (type, data) => {
+    sendEvents("next", "continuebottomsheet");
+    let body = {};
+    if (type === "email") {
+      body.email = data?.data?.contact_value;
+    } else {
+      body.mobile = data?.data?.contact_value;
+      body.whatsapp_consent = true;
+    }
+    const otpResponse = await generateOtp(body);
+    if (otpResponse) {
+      let result = otpResponse.pfwresponse.result;
+      toast(result.message || "Success");
+      navigate("secondary-otp-verification", {
+        state: {
+          value: data?.data?.contact_value,
+          otp_id: otpResponse.pfwresponse.result.otp_id,
+          communicationType: type,
+        },
+      });
+    }
+  };
+
+  const editDetailsAccountAlreadyExists = () => {
+    sendEvents("edit", "continuebottomsheet");
+    navigate("/secondary-verification", {
+      state: {
+        page: "landing",
+        edit: true,
+        communicationType: accountAlreadyExistsData?.data?.contact_type,
+        contactValue: accountAlreadyExistsData?.data?.contact_value,
+      },
+    });
   };
 
   const handleSummaryData = (data) => {
@@ -104,12 +192,105 @@ const Landing = (props) => {
     navigate("/freedom-plan");
   };
 
+  const handleKycStatus = async () => {
+    sendEvents("next", "kyc_bottom_sheet");
+    const { kycJourneyStatus, tradingEnabled, isReadyToInvestBase } = kycData;
+    if (
+      ["submitted", "verifying_trading_account"].includes(kycJourneyStatus) ||
+      (kycJourneyStatus === "complete" && kyc.mf_kyc_processed)
+    ) {
+      closeKycStatusDialog();
+    } else if (kycJourneyStatus === "rejected") {
+      navigate(KYC_PATHNAME_MAPPER.uploadProgress);
+    } else if (tradingEnabled && kyc?.kyc_product_type !== "equity") {
+      closeKycStatusDialog();
+      await setKycProductTypeAndRedirect({
+        userKyc: kyc,
+        kycJourneyStatus,
+        isReadyToInvestBase,
+        handleLoader,
+        navigate,
+        updateKyc,
+      });
+    } else if (kycJourneyStatus === "ground_pan") {
+      navigate("/kyc/journey", {
+        state: {
+          show_aadhaar: !(
+            kyc.address.meta_data.is_nri || kyc.kyc_type === "manual"
+          ),
+        },
+      });
+    } else if (modalData.nextState && modalData.nextState !== "/invest") {
+      navigate(modalData.nextState);
+    } else {
+      closeKycStatusDialog();
+    }
+  };
+
+  const handleKycStatusRedirection = () => {
+    let { kycJourneyStatus } = kycData;
+    const {
+      contactValue,
+      communicationType,
+      contactNotVerified,
+    } = contactDetails;
+    if (modalData.key === "kyc") {
+      if (kycJourneyStatus === "fno_rejected") {
+        closeKycStatusDialog();
+      }
+    } else if (modalData.key === "ipo") {
+      if (contactNotVerified) {
+        storageService().set("ipoContactNotVerified", true);
+        navigate("/secondary-verification", {
+          state: {
+            communicationType,
+            contactValue,
+          },
+        });
+        return;
+      }
+      handleIpoCardRedirection(
+        {
+          userKyc: kyc,
+          currentUser: user,
+          navigate,
+          handleLoader,
+          handleSummaryData,
+          handleDialogStates,
+        },
+        props
+      );
+    } else {
+      if (baseConfig.isSdk) {
+        if (contactNotVerified) {
+          storageService().setBoolean("sdkStocksRedirection", true);
+          navigate("/secondary-verification", {
+            state: {
+              communicationType,
+              contactValue,
+            },
+          });
+          return;
+        }
+        nativeCallback({
+          action: "open_equity",
+        });
+        closeKycStatusDialog();
+        return;
+      } else if (kycJourneyStatus === "fno_rejected") {
+        handleLoader({ pageLoader: "page" });
+        window.location.href = `${baseConfig.base_url}/page/equity/launchapp`;
+      }
+      closeKycStatusDialog();
+    }
+  };
+
   const sendEvents = (userAction, cardClick = "") => {
     if (cardClick === "bottomsheet" || cardClick === "continuebottomsheet") {
       let screen_name =
         cardClick === "continuebottomsheet"
           ? "account_already_exists"
-          : verifyDetailsType === "email"
+          : contactDetails.verifyDetailsType === "email"
           ? "verify_email"
           : "verify_mobile";
       let eventObj = {
@@ -140,7 +321,7 @@ const Landing = (props) => {
         card_click: cardClick,
         channel: getConfig().code,
         user_investment_status: user?.active_investment,
-        kyc_status: kycJourneyStatus,
+        kyc_status: kycData.kycJourneyStatus,
       },
     };
     if (cardClick === "kyc_bottom_sheet") {
@@ -180,10 +361,10 @@ const Landing = (props) => {
     }
     switch (state) {
       case "100_sip":
-        // this.getRecommendationApi(100);
+        getRecommendationsAndNavigate({ amount: 100, handleLoader, navigate})
         break;
       case "300_sip":
-        // this.getRecommendationApi(300);
+        getRecommendationsAndNavigate({ amount: 300, handleLoader, navigate})
         break;
       case "kyc":
         openKyc({
@@ -203,6 +384,7 @@ const Landing = (props) => {
             handleLoader,
             handleDialogStates,
             handleSummaryData,
+            closeKycStatusDialog,
           },
           props
         );
@@ -232,15 +414,19 @@ const Landing = (props) => {
       title="Start Investing"
       data-aid="start-investing-screen"
       showLoader={loaderData.pageLoader}
-      noBackIcon={!isSdk || isIframe}
+      noBackIcon={!baseConfig.isSdk || baseConfig.isIframe}
       background={
-        isMobileDevice && isFromLoginStates && "invest-landing-background"
+        baseConfig.isMobileDevice &&
+        isFromLoginStates &&
+        "invest-landing-background"
       }
       classHeader={
-        isMobileDevice && isFromLoginStates && "invest-landing-header"
+        baseConfig.isMobileDevice &&
+        isFromLoginStates &&
+        "invest-landing-header"
       }
       headerData={{
-        partnerLogo: !isSdk && isMobileDevice,
+        partnerLogo: !baseConfig.isSdk && baseConfig.isMobileDevice,
       }}
       events={sendEvents("just_set_events")}
     >
@@ -250,7 +436,7 @@ const Landing = (props) => {
             className="generic-page-subtitle"
             data-aid="generic-page-subtitle"
           >
-            {isKycCompleted
+            {kycData.isKycCompleted
               ? " Your KYC is verified, You’re ready to invest"
               : "Invest in your future"}
           </div>
@@ -261,7 +447,7 @@ const Landing = (props) => {
               <React.Fragment key={idx}>
                 {(!isEmpty(investCardsData.cardsData[element]) ||
                   element === "kyc") &&
-                  (element !== "stocksAndIpo" || tradingEnabled) && (
+                  (element !== "stocksAndIpo" || kycData.tradingEnabled) && (
                     <>
                       {SECTION_TITLE_MAPPER[element] ? (
                         <div
@@ -273,15 +459,16 @@ const Landing = (props) => {
                       ) : null}
                       {element === "kyc" ? (
                         <>
-                          {!isEmpty(kycStatusData) && showKycCard ? (
+                          {!isEmpty(kycData.kycStatusData) &&
+                          kycData.showKycCard ? (
                             <KycCard
-                              data={kycStatusData}
+                              data={kycData.kycStatusData}
                               showLoader={loaderData.kycStatusLoader}
                               handleClick={clickCard(
                                 element,
-                                kycStatusData.title
+                                kycData.kycStatusData.title
                               )}
-                              productName={productName}
+                              productName={baseConfig.productName}
                             />
                           ) : null}
                         </>
@@ -298,7 +485,7 @@ const Landing = (props) => {
                           element,
                           investCardsData.cardsData[element],
                           clickCard,
-                          productName
+                          baseConfig.productName
                         )
                       )}
                     </>
@@ -308,6 +495,58 @@ const Landing = (props) => {
           })}
         <SebiRegistrationFooter className="invest-sebi-registration-disclaimer" />
       </div>
+      <LandingBottomSheets
+        modalData={modalData}
+        dialogStates={dialogStates}
+        campaignData={campaignData}
+        closeBottomSheet={closeBottomSheet}
+        closeCampaignDialog={closeCampaignDialog({
+          campaignData,
+          handleDialogStates,
+        })}
+        handleCampaign={handleCampaign({
+          campaignData,
+          handleDialogStates,
+          handleLoader,
+        })}
+        handleKycStatus={handleKycStatus}
+        closeKycStatusDialog={closeKycStatusDialog}
+        handleKycPremiumLanding={handleKycPremiumLanding({
+          screenName,
+          modalData,
+          navigate,
+          handleDialogStates,
+        })}
+        handleKycStatusRedirection={handleKycStatusRedirection}
+      />
+      {dialogStates.verifyDetails && (
+        <VerifyDetailDialog
+          data={contactDetails}
+          parent={{ sendEvents, navigate }}
+          type={contactDetails.verifyDetailsType}
+          showAccountAlreadyExist={showAccountAlreadyExist}
+          isOpen={dialogStates.verifyDetails}
+          onClose={closeBottomSheet("verifyDetails", "bottomsheet")}
+        />
+      )}
+      {dialogStates.accountAlreadyExists && (
+        <AccountAlreadyExistDialog
+          type={contactDetails.verifyDetailsType}
+          isOpen={dialogStates.accountAlreadyExists}
+          data={accountAlreadyExistsData}
+          onClose={closeBottomSheet(
+            "accountAlreadyExists",
+            "continuebottomsheet"
+          )}
+          next={continueAccountAlreadyExists}
+          editDetails={editDetailsAccountAlreadyExists}
+        />
+      )}
+      <PinSetupDialog
+        open={dialogStates.openPinSetupDialog}
+        onClose={closeBottomSheet("openPinSetupDialog")}
+        comingFrom={modalData.key}
+      />
     </Container>
   );
 };

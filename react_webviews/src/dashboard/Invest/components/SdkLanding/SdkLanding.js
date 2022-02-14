@@ -53,7 +53,7 @@ class SdkLanding extends Component {
       openKycPremiumLanding: false,
       referral: '',
       dotLoader: false,
-      openBottomSheet: false,
+      openCampaignDialog: false,
       bottom_sheet_dialog_data: {},
       tradingEnabled: isTradingEnabled(),
       showTermsAndConditions: false,
@@ -86,7 +86,7 @@ class SdkLanding extends Component {
       this.handleCampaignNotification();
     }
     if (isPriorityCampaign) {
-      this.setDialogsState("openBottomSheet");
+      this.setDialogsState("openCampaignDialog");
     }
     const consentRequired = storageService().get("consent_required");
     if(consentRequired && getConfig().code === "lvb") {
@@ -380,7 +380,7 @@ class SdkLanding extends Component {
           <SebiRegistrationFooter className="sebi-registration-disclaimer" />
         </div>
         <CampaignDialog
-          isOpen={this.state.openBottomSheet}
+          isOpen={this.state.openCampaignDialog}
           close={this.closeCampaignDialog}
           cancel={this.closeCampaignDialog}
           data={this.state.bottom_sheet_dialog_data}
