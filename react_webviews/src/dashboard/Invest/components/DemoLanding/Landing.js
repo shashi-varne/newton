@@ -30,6 +30,8 @@ import {
   setKycProductTypeAndRedirect,
   handleIpoCardRedirection,
   getRecommendationsAndNavigate,
+  handleCampaignNotification,
+  openBfdlBanner,
 } from "../../functions";
 import { generateOtp } from "../../../../login_and_registration/functions";
 import toast from "../../../../common/ui/Toast";
@@ -39,6 +41,7 @@ import { PATHNAME_MAPPER as KYC_PATHNAME_MAPPER } from "../../../../kyc/constant
 import { storageService } from "../../../../utils/validators";
 import { keyPathMapper } from "../../constants";
 import "./Landing.scss";
+import { SkeltonRect } from "../../../../common/ui/Skelton";
 
 const fromLoginStates = ["/login", "/logout", "/verify-otp"];
 const screenName = "investLanding";
@@ -61,6 +64,8 @@ const Landing = (props) => {
     kycStatusLoader: false,
   });
   const [modalData, setModalData] = useState({});
+  const [kycData, setKycData] = useState({});
+  const [contactDetails, setContactDetails] = useState({});
   const [baseConfig, setBaseConfig] = useState(getConfig());
   const [campaignData, setCampaignData] = useState({});
   const [dialogStates, setDialogStates] = useState({
@@ -72,43 +77,79 @@ const Landing = (props) => {
     accountAlreadyExists: false,
     verifyDetails: false,
   });
-  const [accountAlreadyExistsData, setAccountAlreadyExistsData] = useState({});
-  const { user, kyc, updateKyc, updateUser } = useUserKycHook();
-  const { subscriptionStatus, updateSubscriptionStatus } = useFreedomDataHook();
-
-  const handleDialogStates = (dialogStatus, dialogData) => {
-    setDialogStates({ ...dialogStates, ...dialogStatus });
-    setModalData(dialogData);
-  };
-
-  const { kycData, contactDetails } = useMemo(
-    initializeKyc({
-      kyc,
-      user,
-      partnerCode: baseConfig.code,
-      screenName,
-      handleDialogStates,
-    }),
-    [kyc, user]
-  );
-
   const [investCardsData, setInvestCardsData] = useState({
     investSections: [],
     cardsData: {},
   });
+  const [accountAlreadyExistsData, setAccountAlreadyExistsData] = useState({});
+  const { user, kyc, updateKyc, updateUser } = useUserKycHook();
+  const { subscriptionStatus, updateSubscriptionStatus } = useFreedomDataHook();
 
   useEffect(() => {
     onLoad();
   }, []);
 
+  const handleDialogStates = (dialogStatus, dialogData) => {
+    setDialogStates({ ...dialogStates, ...dialogStatus });
+    if (!isEmpty(dialogData)) {
+      setModalData(dialogData);
+    }
+  };
+
   const onLoad = async () => {
     const data = getInvestCardsData();
     setInvestCardsData(data);
-    await initialize({ screenName, handleSummaryData, handleLoader });
-    const campaignBottomSheetData = getCampaignData();
-    setCampaignData(campaignBottomSheetData);
+    const { kyc: userKyc, user: userData } = await initialize({
+      screenName,
+      handleSummaryData,
+      handleLoader,
+    });
     const config = getConfig();
     setBaseConfig(config);
+    handleKycAndCampaign({ userKyc, userData });
+    openBfdlBanner(handleDialogStates);
+  };
+
+  const handleKycAndCampaign = ({ userKyc, userData }) => {
+    const { kycData: kycDetails, contactDetails: contactData } = initializeKyc({
+      kyc: userKyc || kyc,
+      user: userData || user,
+      partnerCode: baseConfig.code,
+      screenName,
+      handleDialogStates,
+    });
+
+    setKycData(kycDetails);
+    setContactDetails(contactData);
+    const {
+      tradingEnabled,
+      isKycStatusDialogDisplayed,
+      isPremiumBottomsheetDisplayed,
+    } = kycDetails;
+
+    const campaignBottomSheetData = getCampaignData();
+    setCampaignData(campaignBottomSheetData);
+    const isCampaignDialogDisplayed = storageService().get(
+      "isCampaignDialogDisplayed"
+    );
+    const campaignsToShowOnPriority = ["trading_restriction_campaign"];
+    const isPriorityCampaign = campaignsToShowOnPriority.includes(
+      campaignBottomSheetData.campaign_name
+    );
+    const isActiveBottomSheet =
+      contactData.isVerifyDetailsSheetDisplayed ||
+      isPremiumBottomsheetDisplayed ||
+      isKycStatusDialogDisplayed;
+    if (
+      !isCampaignDialogDisplayed &&
+      baseConfig.Web &&
+      ((tradingEnabled && isPriorityCampaign) || !isActiveBottomSheet)
+    ) {
+      handleCampaignNotification({
+        campaignData: campaignBottomSheetData,
+        handleDialogStates,
+      });
+    }
   };
 
   const handleLoader = (data) => {
@@ -119,20 +160,20 @@ const Landing = (props) => {
     if (!isEmpty(eventName)) {
       sendEvents("back", eventName);
     }
-    handleLoader({
+    handleDialogStates({
       [bottomSheetKey]: false,
     });
   };
 
   const closeKycStatusDialog = () => {
     sendEvents("dismiss", "kyc_bottom_sheet");
-    handleLoader({
+    handleDialogStates({
       openKycStatusDialog: false,
     });
   };
 
   const showAccountAlreadyExist = (show, data) => {
-    handleLoader({
+    handleDialogStates({
       verifyDetails: false,
       accountAlreadyExists: show,
     });
@@ -290,7 +331,7 @@ const Landing = (props) => {
       let screen_name =
         cardClick === "continuebottomsheet"
           ? "account_already_exists"
-          : contactDetails.verifyDetailsType === "email"
+          : contactDetails.contact_type === "email"
           ? "verify_email"
           : "verify_mobile";
       let eventObj = {
@@ -361,14 +402,16 @@ const Landing = (props) => {
     }
     switch (state) {
       case "100_sip":
-        getRecommendationsAndNavigate({ amount: 100, handleLoader, navigate})
+        getRecommendationsAndNavigate({ amount: 100, handleLoader, navigate });
         break;
       case "300_sip":
-        getRecommendationsAndNavigate({ amount: 300, handleLoader, navigate})
+        getRecommendationsAndNavigate({ amount: 300, handleLoader, navigate });
         break;
       case "kyc":
         openKyc({
           ...kycData,
+          userKyc: kyc,
+          currentUser: user,
           navigate,
           handleLoader,
           handleDialogStates,
@@ -381,6 +424,9 @@ const Landing = (props) => {
           {
             key: state,
             ...kycData,
+            userKyc: kyc,
+            currentUser: user,
+            navigate,
             handleLoader,
             handleDialogStates,
             handleSummaryData,
@@ -431,7 +477,7 @@ const Landing = (props) => {
       events={sendEvents("just_set_events")}
     >
       <div className="invest-landing" data-aid="invest-landing">
-        {!loaderData.kycStatusLoader && (
+        {!loaderData.kycStatusLoader ? (
           <div
             className="generic-page-subtitle"
             data-aid="generic-page-subtitle"
@@ -440,6 +486,8 @@ const Landing = (props) => {
               ? " Your KYC is verified, You’re ready to invest"
               : "Invest in your future"}
           </div>
+        ) : (
+          <SkeltonRect />
         )}
         {!isEmpty(investCardsData.investSections) &&
           investCardsData.investSections.map((element, idx) => {
@@ -519,11 +567,11 @@ const Landing = (props) => {
         })}
         handleKycStatusRedirection={handleKycStatusRedirection}
       />
-      {dialogStates.verifyDetails && (
+      {!isEmpty(contactDetails) && (
         <VerifyDetailDialog
           data={contactDetails}
           parent={{ sendEvents, navigate }}
-          type={contactDetails.verifyDetailsType}
+          type={contactDetails.contact_type}
           showAccountAlreadyExist={showAccountAlreadyExist}
           isOpen={dialogStates.verifyDetails}
           onClose={closeBottomSheet("verifyDetails", "bottomsheet")}
@@ -531,7 +579,7 @@ const Landing = (props) => {
       )}
       {dialogStates.accountAlreadyExists && (
         <AccountAlreadyExistDialog
-          type={contactDetails.verifyDetailsType}
+          type={contactDetails.contact_type}
           isOpen={dialogStates.accountAlreadyExists}
           data={accountAlreadyExistsData}
           onClose={closeBottomSheet(

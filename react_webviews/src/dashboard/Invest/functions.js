@@ -18,7 +18,7 @@ import { isEmpty, isFunction } from "lodash";
 import { getCorpusValue } from "./common/commonFunctions";
 
 let errorMessage = "Something went wrong!";
-export async function initialize({screenName, handleLoader, handleSummaryData, callback}) {
+export async function initialize({screenName, handleLoader, handleSummaryData}) {
   const config = getConfig();
   // this.getSummary = getSummary.bind(this);
   // this.setSummaryData = setSummaryData.bind(this);
@@ -71,13 +71,11 @@ export async function initialize({screenName, handleLoader, handleSummaryData, c
   const isWebConfig = config.Web && screenName === "investLanding";
   const isSdkConfig = config.isSdk && screenName === "sdk_landing";
 
+  let data = {}
   if (!isBfdlConfig && (isWebConfig || isSdkConfig) && !dataSettedInsideBoot) {
-    await getSummary({ handleLoader, handleSummaryData });
+    data = await getSummary({ handleLoader, handleSummaryData });
   }
-
-  getCampaignData(); // sets campaign data
-
-  if (isFunction(callback)) callback();
+  return data;
 }
 
 export async function getSummary({ handleLoader, handleSummaryData }) {
@@ -101,6 +99,7 @@ export async function getSummary({ handleLoader, handleSummaryData }) {
   } finally {
     handleLoader({ skelton: false, kycStatusLoader: false });
   }
+  return { kyc, user }
 }
 
 export function getInvestCardsData() {
@@ -261,7 +260,7 @@ export function navigate(pathname, data = {}) {
   }
 }
 
-export const initializeKyc = ({ user, kyc, partnerCode, screenName, handleDialogStates }) => () => {
+export const initializeKyc = ({ user, kyc, partnerCode, screenName, handleDialogStates }) => {
   let userKyc = kyc || storageService().getObject("kyc") || {};
   const TRADING_ENABLED = isTradingEnabled(userKyc);
   let currentUser = user || storageService().getObject("user") || {};
@@ -287,7 +286,7 @@ export const initializeKyc = ({ user, kyc, partnerCode, screenName, handleDialog
   let kycJourneyStatusMapperData = kycJourneyStatus?.includes("ground_") ? kycStatusMapper["incomplete"] : kycStatusMapper[kycJourneyStatus];
   const isKycCompleted = (TRADING_ENABLED && isEquityCompletedBase) || (!TRADING_ENABLED && isReadyToInvestBase);
   const showKycCard = !isKycCompleted || (TRADING_ENABLED && isEquityCompletedBase && kycJourneyStatus === "fno_rejected")
-  const kycData = {
+  let kycData = {
     isCompliant,
     kycStatusData,
     kycJourneyStatusMapperData,
@@ -298,8 +297,14 @@ export const initializeKyc = ({ user, kyc, partnerCode, screenName, handleDialog
     isEquityCompletedBase,
     tradingEnabled: TRADING_ENABLED,
     isKycCompleted,
-    showKycCard
+    showKycCard,
+    isKycStatusDialogDisplayed: false,
+    isPremiumBottomsheetDisplayed: false,
   };
+  const contactDetails = contactVerification(userKyc, handleDialogStates);
+  if (contactDetails.isVerifyDetailsSheetDisplayed) {
+    return { kycData, contactDetails };
+  }
   let premiumDialogData = {};
   let premiumOnboardingStatus = "";
   if (isCompliant && !TRADING_ENABLED) {
@@ -323,46 +328,49 @@ export const initializeKyc = ({ user, kyc, partnerCode, screenName, handleDialog
     if (premiumOnboardingStatus && !isEmpty(premiumDialogData)) {
       let banklist = storageService().getObject("banklist");
       if (isEmpty(banklist) || partnerCode === "moneycontrol") {
-        return;
+        return { kycData, contactDetails };
       } else {
-        openPremiumOnboardBottomSheet({
+        const isPremiumBottomsheetDisplayed = openPremiumOnboardBottomSheet({
           premiumDialogData,
           screenName,
           handleDialogStates
         });
+        kycData.isPremiumBottomsheetDisplayed = isPremiumBottomsheetDisplayed;
       }
     }
-  }
-
-  let modalData = {}
-  const kycStatusesToShowDialog = ["verifying_trading_account", "complete", "fno_rejected", "esign_pending"];
-  let isLandingBottomSheetDisplayed = storageService().get("landingBottomSheetDisplayed");
-  if (kycStatusesToShowDialog.includes(kycJourneyStatus)) {
-    if (isLandingBottomSheetDisplayed) {
-      return;
-    }
-
-    if (["fno_rejected", "complete"].includes(kycJourneyStatus)) {
-      if (TRADING_ENABLED && userKyc.equity_investment_ready && currentUser.equity_status === "init") {
-        modalData = kycStatusMapper["kyc_verified"];
-      } else if (!TRADING_ENABLED && !isCompliant && !currentUser.active_investment) {
-        modalData = kycStatusMapper["mf_complete"];
-      }
-    } else {
-      modalData = kycStatusMapper[kycJourneyStatus];
-    }
-  }
-  
-  if (!isEmpty(modalData)) {
+  } else {
+    let modalData = {}
+    const kycStatusesToShowDialog = ["verifying_trading_account", "complete", "fno_rejected", "esign_pending"];
+    let isLandingBottomSheetDisplayed = storageService().get("landingBottomSheetDisplayed");
     if (kycStatusesToShowDialog.includes(kycJourneyStatus)) {
-      storageService().set("landingBottomSheetDisplayed", true);
+      if (isLandingBottomSheetDisplayed) {
+        return { kycData, contactDetails };
+      }
+  
+      if (["fno_rejected", "complete"].includes(kycJourneyStatus)) {
+        if (TRADING_ENABLED && userKyc.equity_investment_ready && currentUser.equity_status === "init") {
+          modalData = kycStatusMapper["kyc_verified"];
+        } else if (!TRADING_ENABLED && !isCompliant && !currentUser.active_investment) {
+          modalData = kycStatusMapper["mf_complete"];
+        }
+      } else {
+        modalData = kycStatusMapper[kycJourneyStatus];
+      }
     }
-
-    if(!modalData.dualButton)
-      modalData.oneButton = true;
-    handleDialogStates({openKycStatusDialog: true}, modalData)
+    
+    if (!isEmpty(modalData)) {
+      if (kycStatusesToShowDialog.includes(kycJourneyStatus)) {
+        storageService().set("landingBottomSheetDisplayed", true);
+      }
+  
+      if (!modalData.dualButton) {
+        modalData.oneButton = true;
+      }
+      kycData.isKycStatusDialogDisplayed = true
+      handleDialogStates({ openKycStatusDialog: true }, modalData)
+    }
   }
-  const contactDetails = contactVerification(userKyc);
+
   return { kycData, contactDetails }
 }
 
@@ -372,36 +380,58 @@ export function openPremiumOnboardBottomSheet({premiumDialogData, screenName, ha
     "is_bottom_sheet_displayed_kyc_premium"
   );
 
-  if (is_bottom_sheet_displayed_kyc_premium) {
-    return "";
-  }
-
-  if (config.Web && screenName !== "investLanding") {
-    return;
-  }
-
-  if (!config.Web && screenName !== "sdk_landing") {
-    return;
+  if (is_bottom_sheet_displayed_kyc_premium || 
+      (config.Web && screenName !== "investLanding") || 
+      (!config.Web && screenName !== "sdk_landing")) {
+    return false;
   }
 
   storageService().set("is_bottom_sheet_displayed_kyc_premium", true);
   handleDialogStates({ openKycPremiumLanding: true }, premiumDialogData)
+  return true;
 }
 
-export function handleKycSubmittedOrRejectedState({kycJourneyStatusMapperData, handleDialogStates}) {
-  let modalData = Object.assign({key: "kyc"}, kycJourneyStatusMapperData);
+export function handleKycSubmittedOrRejectedState({ kycJourneyStatusMapperData, handleDialogStates }) {
+  let modalData = Object.assign({ key: "kyc" }, kycJourneyStatusMapperData);
   if(!modalData.dualButton) {
     modalData.oneButton = true;
   }
   handleDialogStates({ openKycStatusDialog: true }, modalData);
 }
 
-export async function openKyc({kycJourneyStatus, kycJourneyStatusMapperData, userKyc, tradingEnabled, kycStatusData, handleDialogStates, handleLoader, navigate, updateKyc}) {
-  const kycStatusesToShowDialog = ["submitted", "rejected", "fno_rejected", "esign_pending", "verifying_trading_account"];
+export async function openKyc({
+  kycJourneyStatus,
+  kycJourneyStatusMapperData,
+  userKyc,
+  tradingEnabled,
+  kycStatusData,
+  handleDialogStates,
+  handleLoader,
+  navigate,
+  updateKyc,
+}) {
+  const kycStatusesToShowDialog = [
+    "submitted",
+    "rejected",
+    "fno_rejected",
+    "esign_pending",
+    "verifying_trading_account",
+  ];
   if (kycStatusesToShowDialog.includes(kycJourneyStatus)) {
-    handleKycSubmittedOrRejectedState({kycJourneyStatusMapperData, handleDialogStates});
+    handleKycSubmittedOrRejectedState({
+      kycJourneyStatusMapperData,
+      handleDialogStates,
+    });
   } else {
-    handleCommonKycRedirections({ userKyc, kycJourneyStatus, tradingEnabled, kycStatusData, handleLoader, navigate, updateKyc });
+    handleCommonKycRedirections({
+      userKyc,
+      kycJourneyStatus,
+      tradingEnabled,
+      kycStatusData,
+      handleLoader,
+      navigate,
+      updateKyc,
+    });
   }
 }
 
@@ -665,17 +695,23 @@ export function getCampaignData () {
     }
     return acc;
   }, {});
-
-  if (!isEmpty(campaignData)) {
-    this.setState({ bottom_sheet_dialog_data: campaignData });
-  }
   return campaignData;
 };
 
-export function handleCampaignNotification () {
-  if (!isEmpty(this.state.bottom_sheet_dialog_data)) {
-    storageService().set('is_bottom_sheet_displayed', true);
-    this.setState({ openCampaignDialog: true });
+export function handleCampaignNotification ({ campaignData, handleDialogStates }) {
+  if (!isEmpty(campaignData)) {
+    storageService().set('isCampaignDialogDisplayed', true);
+    const campaignsToShowOnPriority = ["trading_restriction_campaign"];
+    let dialogStates = { openCampaignDialog: true } 
+    if (campaignsToShowOnPriority.includes(campaignData.campaign_name)) {
+      dialogStates = {
+        openCampaignDialog: true,
+        openKycPremiumLanding: false,
+        openKycStatusDialog: false,
+        verifyDetails: false,
+      }
+    }
+    handleDialogStates(dialogStates);
   }
 }
 
@@ -718,11 +754,9 @@ export function contactVerification(userKyc, handleDialogStates) {
           });
           contactData = {
             ...contactData,
-            verifyDetailsData: {
-              contact_type,
-              contact_value,
-            },
-            verifyDetailsType: contact_type,
+            contact_type,
+            contact_value,
+            isVerifyDetailsSheetDisplayed: true,
           };
           storageService().set("verifyDetailsSheetDisplayed", true);
       }
@@ -831,12 +865,12 @@ export async function updateBank(data) {
   }
 }
 
-export function openBfdlBanner() {
+export function openBfdlBanner(handleDialogStates) {
   const config = getConfig();
   const isBfdlBannerDisplayed = storageService().getBoolean("bfdlBannerDisplayed");
   if(!isBfdlBannerDisplayed && config.code === 'bfdlmobile' && (config.isIframe || config.isSdk)) {
     storageService().setBoolean("bfdlBannerDisplayed", true);
-    this.setState({ openBfdlBanner: true });
+    handleDialogStates({ openBfdlBanner: true });
   }
 }
 

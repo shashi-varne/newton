@@ -71,7 +71,7 @@ class SdkLanding extends Component {
 
   onload = () => {
     this.initilizeKyc();
-    const isBottomSheetDisplayed = storageService().getBoolean('is_bottom_sheet_displayed');
+    const isBottomSheetDisplayed = storageService().getBoolean('isCampaignDialogDisplayed');
     const campaignsToShowOnPriority = ["trading_restriction_campaign"];
     const {
       openKycStatusDialog,

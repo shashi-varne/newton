@@ -87,7 +87,7 @@ class Landing extends Component {
   onload = async () => {
     await this.initilizeKyc();
     const isBottomSheetDisplayed = storageService().get(
-      "is_bottom_sheet_displayed"
+      "isCampaignDialogDisplayed"
     );
     const campaignsToShowOnPriority = ["trading_restriction_campaign"];
     const { isWeb, verifyDetails, openKycPremiumLanding, openKycStatusDialog, tradingEnabled, bottom_sheet_dialog_data } = this.state;
