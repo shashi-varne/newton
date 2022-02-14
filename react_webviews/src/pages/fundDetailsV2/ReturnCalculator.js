@@ -1,6 +1,6 @@
-import { Box, ClickAwayListener, Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import React, { useEffect, useMemo, useState } from 'react';
-import { getInvestedValue, getPotentialValue } from '../../dashboard/Invest/common/commonFunctions';
+import { getInvestedValue } from '../../dashboard/Invest/common/commonFunctions';
 import { Pill, Pills } from '../../designSystem/atoms/Pills/Pills';
 import Separator from '../../designSystem/atoms/Separator';
 import { TimeLine, Timelines } from '../../designSystem/atoms/TimelineList';
@@ -11,47 +11,67 @@ import { formatAmountInr } from '../../utils/validators';
 import Tooltip from '../../designSystem/atoms/Tooltip';
 import Icon from '../../designSystem/atoms/Icon';
 import { getProjectedValue } from '../../reports/common/functions';
+import {useDispatch, useSelector} from 'react-redux';
+import { setAmount, setExpectedAmount, setExpectedReturnPerc, setInvestedAmount, setInvestmentPeriod, setInvestmentType } from '../../dataLayer/store/dataStore/reducers/fundDetails';
 
 const ReturnCalculator = ({ fundData }) => {
-  const [pillValue, setPillValue] = useState('sip');
-  const [amountToBeInvested, setAmountToBeInvested] = useState({ sip: 1000, lumpsum: 10000 });
-  const [investmentYear, setInvestmentYear] = useState(5);
   const [isReturnCalcOpen, setIsReturnCalcOpen] = useState(false);
-  const [investedAmount, setInvestedAmount] = useState('');
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
-  const [expectedAmount, setExpectedAmount] = useState('');
-  const isRecurring = useMemo(() => pillValue === 'sip', [pillValue]);
+  const dispatch = useDispatch();
+  const investmentType = useSelector(state => state?.fundDetails?.investmentType);
+  const investmentPeriod = useSelector(state => state?.fundDetails?.investmentPeriod);
+  const isRecurring = useMemo(() => investmentType === 'sip', [investmentType]);
+  const amountToBeInvested = useSelector(state => state?.fundDetails[investmentType]);
+  const investedAmount = useSelector(state => state?.fundDetails?.investedAmount);
+  const expectedAmount = useSelector(state => state?.fundDetails?.expectedAmount);
+  const expectedReturnPerc = useSelector(state => state?.fundDetails?.expectedReturnPerc);
+  const returns = useMemo(() => {
+    const yearReturns = {};
+    // eslint-disable-next-line no-unused-expressions
+    fundData?.performance?.returns?.forEach(el => {
+      if(el.name.match(/year/)) {
+        const year = el.name.match(/\d+/g).join('');
+        yearReturns[year] = el.value;
+      }
+    });
+    return yearReturns;
+  },[fundData]);
+
+  useEffect(() => {
+    dispatch(setExpectedReturnPerc(returns[investmentPeriod]));
+  },[fundData]);
 
   useEffect(() => {
     const investedValue = getInvestedValue(
-      investmentYear,
-      amountToBeInvested[pillValue],
+      investmentPeriod,
+      amountToBeInvested,
       isRecurring
     );
     const expectedValue = getProjectedValue(
-      amountToBeInvested[pillValue],
-      investmentYear,
-      pillValue
+      amountToBeInvested,
+      investmentPeriod,
+      investmentType
     );
-    console.log('expected val', expectedValue);
-    setExpectedAmount(expectedValue);
-    setInvestedAmount(investedValue);
-  }, [amountToBeInvested,pillValue, investmentYear, isRecurring]);
+    dispatch(setExpectedAmount(expectedValue));
+    dispatch(setInvestedAmount(investedValue));
+  }, [amountToBeInvested,investmentType, investmentPeriod, isRecurring]);
 
   const handleReturnCalcSection = () => {
     setIsReturnCalcOpen(!isReturnCalcOpen);
   };
   const onPillChange = (e, value) => {
-    setPillValue(value);
+    dispatch(setInvestmentType(value));
   };
-  const handleInvestmentYear = (e, value) => {
-    setInvestmentYear(value);
+  const handleInvestmentYear = (e, val) => {
+    dispatch(setInvestmentPeriod(val));
+    val = val < 5 ? val : 5;
+    dispatch(setExpectedReturnPerc(returns[val]));
   };
 
   const handleAmountChange = (e) => {
     if(isNaN(e.target.value)) return;
     const amountValue = Number(e.target.value);
-    setAmountToBeInvested({ ...amountToBeInvested, [pillValue]: amountValue });
+    dispatch(setAmount(amountValue));
   };
 
   const handleTooltip = () => {
@@ -66,7 +86,7 @@ const ReturnCalculator = ({ fundData }) => {
       >
         <Stack direction='column' spacing={3} sx={{ pb: 3 }}>
           <Box sx={{ maxWidth: 'fit-content' }}>
-            <Pills value={pillValue} onChange={onPillChange}>
+            <Pills value={investmentType} onChange={onPillChange}>
               <Pill label='SIP' value='sip' />
               <Pill label='Lumpsum' value='lumpsum' />
             </Pills>
@@ -75,7 +95,7 @@ const ReturnCalculator = ({ fundData }) => {
           <InputField
             label='Amount'
             prefix='₹'
-            value={amountToBeInvested[pillValue]}
+            value={amountToBeInvested}
             onChange={handleAmountChange}
           />
           <Stack direction='column' spacing={2}>
@@ -83,7 +103,7 @@ const ReturnCalculator = ({ fundData }) => {
               Investment period
             </Typography>
             <Box sx={{ mt: 4, maxWidth: 'fit-content' }}>
-              <Timelines value={investmentYear} onChange={handleInvestmentYear}>
+              <Timelines value={investmentPeriod} onChange={handleInvestmentYear}>
                 <TimeLine label='1Y' value={1} />
                 <TimeLine label='3Y' value={3} />
                 <TimeLine label='5Y' value={5} />
@@ -111,7 +131,7 @@ const ReturnCalculator = ({ fundData }) => {
                     <Tooltip
                       open={isTooltipOpen}
                       title={`Estimated based on the fund's last ${
-                        investmentYear <= 5 ? investmentYear : 5
+                        investmentPeriod <= 5 ? investmentPeriod : 5
                       } years returns`}
                     >
                       <div>
@@ -128,7 +148,7 @@ const ReturnCalculator = ({ fundData }) => {
                   </div>
               </Stack>
               <Typography variant='body1' color='foundationColors.content.secondary' align='right'>
-                Estimated return (+16.7%)
+                Estimated return ({expectedReturnPerc}%)
               </Typography>
             </Stack>
           </Stack>

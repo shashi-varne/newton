@@ -1,12 +1,18 @@
 import { Box, Stack } from '@mui/material';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import Typography from '../../designSystem/atoms/Typography';
 import WrapperBox from '../../designSystem/atoms/WrapperBox';
 import CollapsibleSection from '../../designSystem/molecules/CollapsibleSection';
 import EstimationCard from '../../designSystem/molecules/EstimationCard';
+import { formatAmountInr } from '../../utils/validators';
 
 const ReturnComparison = () => {
   const [isRetunCompOpen, setIsRetunCompOpen] = useState(false);
+  const investedAmount = useSelector(state => state?.fundDetails?.investedAmount);
+  const expectedAmount = useSelector(state => state?.fundDetails?.expectedAmount);
+  const investmentPeriod = useSelector(state => state?.fundDetails?.investmentPeriod);
+  const expectedReturnPerc = useSelector(state => state?.fundDetails?.expectedReturnPerc);
   const handleReturnCompSection = () => {
     setIsRetunCompOpen(!isRetunCompOpen);
   };
@@ -23,7 +29,7 @@ const ReturnComparison = () => {
               <Typography variant='body2' color='foundationColors.content.secondary'>
                 Investment amount:
               </Typography>
-              <Typography variant='heading4'>₹10,51,220</Typography>
+              <Typography variant='heading4'>{formatAmountInr(investedAmount)}</Typography>
             </Stack>
             <Box
               sx={{
@@ -43,10 +49,10 @@ const ReturnComparison = () => {
             <Stack direction='column' spacing={2} sx={{ pb: 3 }}>
               <WrapperBox elevation={1}>
                 <EstimationCard
-                  leftTitle='Estimated return'
+                  leftTitle={`Estimated return in ${investmentPeriod}Y`}
                   leftSubtitle='Return %'
-                  rightTitle='₹11,60,600.00'
-                  rightSubtitle='+116.06%'
+                  rightTitle={`${formatAmountInr(expectedAmount)}`}
+                  rightSubtitle={`${expectedReturnPerc > 0 ? '+':'-'}${expectedReturnPerc}%`}
                   rightSubtitleColor='foundationColors.secondary.profitGreen.400'
                 />
               </WrapperBox>
