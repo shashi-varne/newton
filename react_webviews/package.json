@@ -39,6 +39,8 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react-app": "^9.1.2",
     "babel-runtime": "^6.26.0",
+    "businessLogic": "git+https://fdamitsingh:EafwBATbn2DqxeV7KhsN@bitbucket.org/finwizardtech/businesslogic.git#feature/RN-684-common-business-logic---diy",
+    "businesslogic": "git+https://fdamitsingh:EafwBATbn2DqxeV7KhsN@bitbucket.org/finwizardtech/businesslogic.git#feature/RN-684-common-business-logic---diy",
     "case-sensitive-paths-webpack-plugin": "2.1.1",
     "chalk": "1.1.3",
     "chart.js": "^2.9.3",
@@ -122,8 +124,7 @@
     "webpack-cli": "^3.0.8",
     "webpack-dev-server": "^3.1.4",
     "webpack-manifest-plugin": "^3.0.0-rc.0",
-    "whatwg-fetch": "2.0.3",
-    "businessLogic": "git+https://fdamitsingh:EafwBATbn2DqxeV7KhsN@bitbucket.org/finwizardtech/businesslogic.git#feature/RN-684-common-business-logic---diy"
+    "whatwg-fetch": "2.0.3"
   },
   "scripts": {
     "start": "NODE_PATH=./src node scripts/start.js",

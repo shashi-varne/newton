@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Container from '../../designSystem/organisms/Container';
 import HeaderTitle from '../../designSystem/molecules/HeaderTitle';
 import Box from '@mui/material/Box';
-import { fetch_fund_details } from '../../fund_details/common/ApiCalls';
 import isEmpty from 'lodash/isEmpty';
 import ReturnCalculator from './ReturnCalculator';
 import AssetAllocation from './AssetAllocation';
@@ -11,7 +10,9 @@ import RiskDetails from './RiskDetails';
 import ReturnComparison from './ReturnComparison';
 import FundStats from './FundStats';
 import FundGraph from './FundGraph';
+import Api from '../../utils/api';
 import FundPerformance from './FundPerformance';
+import {fetch_fund_details} from 'businesslogic/apis/fundDetails';
 
 import './fundDetailsV2.scss';
 
@@ -19,7 +20,7 @@ const FundDetailsV2 = () => {
   const [fundData, setFundData] = useState({});
 
   const fetchFundData = async () => {
-    const fund = await fetch_fund_details('INF109K01480');
+    const fund = await fetch_fund_details(Api, 'INF109K01480');
     const data = fund?.text_report[0];
     console.log(data);
     setFundData(data);
