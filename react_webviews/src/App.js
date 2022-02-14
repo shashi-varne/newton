@@ -55,7 +55,7 @@ const clearBottomsheetDisplays = () => {
   const bottomSheetsArr = [
     "isCampaignDialogDisplayed", 
     "verifyDetailsSheetDisplayed", 
-    "is_bottom_sheet_displayed_kyc_premium", 
+    "isKycPremiumBottomSheetDisplayed", 
     "landingBottomSheetDisplayed",
   ];
 

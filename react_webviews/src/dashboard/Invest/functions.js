@@ -376,17 +376,17 @@ export const initializeKyc = ({ user, kyc, partnerCode, screenName, handleDialog
 
 export function openPremiumOnboardBottomSheet({premiumDialogData, screenName, handleDialogStates}) {
   const config = getConfig()
-  let is_bottom_sheet_displayed_kyc_premium = storageService().get(
-    "is_bottom_sheet_displayed_kyc_premium"
+  let isKycPremiumBottomSheetDisplayed = storageService().getBoolean(
+    "isKycPremiumBottomSheetDisplayed"
   );
 
-  if (is_bottom_sheet_displayed_kyc_premium || 
+  if (isKycPremiumBottomSheetDisplayed || 
       (config.Web && screenName !== "investLanding") || 
       (!config.Web && screenName !== "sdk_landing")) {
     return false;
   }
 
-  storageService().set("is_bottom_sheet_displayed_kyc_premium", true);
+  storageService().setBoolean("isKycPremiumBottomSheetDisplayed", true);
   handleDialogStates({ openKycPremiumLanding: true }, premiumDialogData)
   return true;
 }
