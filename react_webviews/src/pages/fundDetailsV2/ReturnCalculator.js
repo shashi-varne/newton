@@ -40,7 +40,7 @@ const ReturnCalculator = ({ fundData }) => {
     console.log('expected val', expectedValue);
     setExpectedAmount(expectedValue);
     setInvestedAmount(investedValue);
-  }, [amountToBeInvested[pillValue], investmentYear, isRecurring, equityValue?.value]);
+  }, [amountToBeInvested,pillValue, investmentYear, isRecurring, equityValue?.value]);
 
   const handleReturnCalcSection = () => {
     setIsReturnCalcOpen(!isReturnCalcOpen);
