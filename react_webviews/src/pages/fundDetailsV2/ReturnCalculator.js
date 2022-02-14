@@ -20,10 +20,6 @@ const ReturnCalculator = ({ fundData }) => {
   const [investedAmount, setInvestedAmount] = useState('');
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [expectedAmount, setExpectedAmount] = useState('');
-  const equityValue = useMemo(
-    () => fundData?.portfolio?.asset_allocation?.find((el) => el.name.toLowerCase() === 'equity'),
-    [fundData]
-  );
   const isRecurring = useMemo(() => pillValue === 'sip', [pillValue]);
 
   useEffect(() => {
@@ -40,7 +36,7 @@ const ReturnCalculator = ({ fundData }) => {
     console.log('expected val', expectedValue);
     setExpectedAmount(expectedValue);
     setInvestedAmount(investedValue);
-  }, [amountToBeInvested,pillValue, investmentYear, isRecurring, equityValue?.value]);
+  }, [amountToBeInvested,pillValue, investmentYear, isRecurring]);
 
   const handleReturnCalcSection = () => {
     setIsReturnCalcOpen(!isReturnCalcOpen);
@@ -53,15 +49,13 @@ const ReturnCalculator = ({ fundData }) => {
   };
 
   const handleAmountChange = (e) => {
-    setAmountToBeInvested({ ...amountToBeInvested, [pillValue]: e.target.value });
-  };
-
-  const handleTooltipClosure = () => {
-    setIsTooltipOpen(false);
+    if(isNaN(e.target.value)) return;
+    const amountValue = Number(e.target.value);
+    setAmountToBeInvested({ ...amountToBeInvested, [pillValue]: amountValue });
   };
 
   const handleTooltip = () => {
-    setIsTooltipOpen(true);
+    setIsTooltipOpen(!isTooltipOpen);
   };
   return (
     <div>
@@ -113,7 +107,6 @@ const ReturnCalculator = ({ fundData }) => {
                 <Typography variant='heading2' color='primary' align='right'>
                   {formatAmountInr(expectedAmount)}
                 </Typography>
-                <ClickAwayListener onClickAway={handleTooltipClosure}>
                   <div>
                     <Tooltip
                       open={isTooltipOpen}
@@ -133,7 +126,6 @@ const ReturnCalculator = ({ fundData }) => {
                       </div>
                     </Tooltip>
                   </div>
-                </ClickAwayListener>
               </Stack>
               <Typography variant='body1' color='foundationColors.content.secondary' align='right'>
                 Estimated return (+16.7%)

@@ -53,13 +53,10 @@ const FundStats = ({ fundData = {} }) => {
     'MMM d, yyyy'
   );
 
-  const handleTooltipClosure = (anchor) => () => {
-    setIsTooltipOpen({ ...isTooltipOpen, [anchor]: false });
+  const handleTooltip = (anchor) => () => {
+    setIsTooltipOpen({ ...isTooltipOpen, [anchor]: !isTooltipOpen[anchor] });
   };
 
-  const handleTooltip = (anchor) => () => {
-    setIsTooltipOpen({ ...isTooltipOpen, [anchor]: true });
-  };
   return (
     <Stack sx={{ mt: 4, mb: 3 }} spacing={3}>
       <Typography variant='heading3'>Fund stats</Typography>
@@ -96,7 +93,6 @@ const FundStats = ({ fundData = {} }) => {
             <Typography allCaps variant='body9' color='foundationColors.content.secondary'>
               Expense ratio
             </Typography>
-            <ClickAwayListener onClickAway={handleTooltipClosure('er')}>
               <Box sx={{ height: '16px', width: '16px' }}>
                 <Tooltip
                   open={isTooltipOpen['er']}
@@ -114,7 +110,6 @@ const FundStats = ({ fundData = {} }) => {
                   </div>
                 </Tooltip>
               </Box>
-            </ClickAwayListener>
           </Stack>
           <Typography variant='heading4'>{`${fundData?.portfolio?.expense_ratio}%`}</Typography>
         </Stack>
@@ -138,7 +133,6 @@ const FundStats = ({ fundData = {} }) => {
           <Typography variant='body9' allCaps color='foundationColors.content.secondary'>
             Exit load
           </Typography>
-          <ClickAwayListener onClickAway={handleTooltipClosure('el')}>
             <Box sx={{ height: '16px', width: '16px' }}>
               <Tooltip
                 open={isTooltipOpen['el']}
@@ -156,7 +150,6 @@ const FundStats = ({ fundData = {} }) => {
                 </div>
               </Tooltip>
             </Box>
-          </ClickAwayListener>
         </Stack>
         {fundData?.additional_info?.exit_load?.map((exitLoadData, idx) => {
           return (
