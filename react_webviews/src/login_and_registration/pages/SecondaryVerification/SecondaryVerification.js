@@ -188,7 +188,7 @@ class SecondaryVerification extends Component {
 
     goBack = () => {
         if (this.props.location?.state?.fromDirectEntry) {
-            this.navigate('/')
+            this.navigate('/invest')
         } else {
             this.props.history.goBack();
         }

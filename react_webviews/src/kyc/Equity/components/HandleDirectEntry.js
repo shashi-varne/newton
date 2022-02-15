@@ -1,134 +1,120 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import isEmpty from 'lodash/isEmpty';
-import { isKycCompleted } from '../../common/functions';
-import { getConfig, navigate as navigateFunc } from '../../../utils/functions';
-import useUserKycHook from '../../common/hooks/userKycHook';
-import { nativeCallback } from '../../../utils/native_callback';
-import { getKycAppStatus } from '../../services';
-import VerifyDetailDialog from '../../../login_and_registration/components/VerifyDetailDialog';
-import { storageService } from '../../../utils/validators';
-import Container from '../../common/Container';
+import React, { useEffect, useState } from "react";
+import isEmpty from "lodash/isEmpty";
+import noop from "lodash/noop";
+import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
+import useUserKycHook from "../../common/hooks/userKycHook";
+import Container from "../../common/Container";
+import KycStatusDialog from "../../../dashboard/Invest/mini-components/KycStatusDialog";
+import {
+  contactVerification,
+  getKycData,
+  handleKycStatus,
+  handleStocksAndIpoCards,
+  handleKycStatusRedirection,
+} from "../../../dashboard/Invest/functions";
 
 const HandleDirectEntry = (props) => {
-  const { kyc, user } = useUserKycHook();
-  const [isOpen, setIsOpen] = useState(false);
-  const [contactType, setContactType] = useState('');
-  const [contactData, setContactData] = useState('');
-  const config = useMemo(getConfig, []);
+  const { kyc, user, updateKyc, updateUser } = useUserKycHook();
+  const [baseConfig, setBaseConfig] = useState(getConfig());
   const type = props.match?.params?.type;
   const navigate = navigateFunc.bind(props);
-  const parent = {
-    navigate,
+  const [dialogStates, setDialogStates] = useState({
+    openKycStatusDialog: false,
+  });
+
+  const [modalData, setModalData] = useState({});
+  const [contactDetails, setContactDetails] = useState({});
+  const [kycData, setKycData] = useState(getKycData(kyc, user));
+
+  const handleDialogStates = (dialogStatus, dialogData) => {
+    setDialogStates({ ...dialogStates, ...dialogStatus });
+    if (!isEmpty(dialogData)) {
+      setModalData(dialogData);
+    }
+  };
+
+  const handleSummaryData = (data) => {
+    updateKyc(data.kyc);
+    updateUser(data.user);
+  };
+
+  const closeKycStatusDialog = () => {
+    handleDialogStates({
+      openKycStatusDialog: false,
+    });
+    navigate("/invest");
   };
 
   useEffect(() => {
     if (!isEmpty(kyc) && !isEmpty(user)) {
-      validateUser(kyc, user);
+      switch (type) {
+        case "tpp":
+          navigate("/product-types");
+          break;
+        case "equity":
+          const kycDetails = getKycData(kyc, user);
+          const contactData = contactVerification(kyc);
+          const config = getConfig();
+          setBaseConfig(config);
+          setKycData(kycDetails);
+          setContactDetails(contactData);
+          handleStocksAndIpoCards(
+            {
+              ...kycDetails,
+              key: "stocks",
+              kyc,
+              user,
+              navigate,
+              handleLoader: noop,
+              handleDialogStates,
+              handleSummaryData,
+              closeKycStatusDialog,
+            },
+            props
+          );
+          break;
+        default:
+          navigate("/invest");
+          break;
+      }
     }
   }, [kyc, user]);
 
-  const initiatePinSetup = () => {
-    if (config?.isSdk) {
-      window.callbackWeb['open_2fa_module']({
-        operation: 'setup_pin',
-        request_code: 'REQ_SETUP_2FA',
-        callback: function (data) {
-          if (data.status === 'success') {
-            navigate('/');
-          }
-        },
-      });
-    } else {
-      // currently keeping it as a fallback for web, if direct entry is accessed from web.
-      navigate('/');
-    }
-  };
-
-  const handleStockRedirection = (stateData) => {
-    const { kycData, kycJourneyStatus, currentUser } = stateData;
-    const isKycDone = isKycCompleted(kycData);
-    if (
-      kycData.equity_investment_ready ||
-      (kycJourneyStatus === 'complete' && kycData.kyc_product_type === 'equity')
-    ) {
-      if (currentUser?.pin_status !== 'pin_setup_complete') {
-        initiatePinSetup('stocks');
-        return;
-      } else if (kycJourneyStatus !== 'fno_rejected') {
-        if (config.isSdk) {
-          nativeCallback({
-            action: 'open_equity',
-          });
-        } else {
-          window.location.href = `${config.base_url}/page/equity/launchapp`;
-        }
-        return;
-      } else {
-        navigate('/');
-      }
-    } else if (isKycDone) {
-      navigate('/');
-    } else {
-      navigate('/kyc/journey');
-    }
-  };
-
-  const validateUser = (kycData, currentUser) => {
-    if (type === 'tpp') {
-      navigate('/product-types');
-      return;
-    }
-    const kycJourneyStatus = getKycAppStatus(kycData)?.status;
-    const { mobile_number_verified, email_verified } = kycData?.identification?.meta_data;
-    const isUserAuthenticated = mobile_number_verified && email_verified;
-    const data = {
-      kycData,
-      currentUser,
-      kycJourneyStatus,
-    };
-    if (!isUserAuthenticated) {
-      
-      // this bool val will help in redirecting to landing page, once the otp is verified.
-      storageService().setBoolean('sdkStocksRedirection', true);
-
-      if(!currentUser?.mobile || !currentUser?.email) {
-        navigate('/secondary-verification',{
-          state: {
-            fromDirectEntry: true
-          }
-        });
-        return;
-      }
-      if (!mobile_number_verified) {
-        setContactType('mobile');
-        setContactData(currentUser?.mobile);
-      } else {
-        setContactType('email');
-        setContactData(currentUser?.email);
-      }
-      setIsOpen(true);
-    } else {
-      if (type === 'equity') {
-        handleStockRedirection(data);
-      } else {
-        navigate('/');
-      }
-    }
-  };
-
-  if (!user) return null;
   return (
     <Container skelton={true} noBackIcon>
-      <div>
-        {contactType && (
-          <VerifyDetailDialog
-            type={contactType}
-            data={{ contact_value: contactData }}
-            isOpen={isOpen}
-            parent={parent}
-          />
-        )}
-      </div>
+      {!isEmpty(modalData) && (
+        <KycStatusDialog
+          isOpen={dialogStates.openKycStatusDialog}
+          data={modalData}
+          close={closeKycStatusDialog}
+          handleClick={handleKycStatus({
+            kyc,
+            kycData,
+            modalData,
+            navigate,
+            updateKyc,
+            closeKycStatusDialog,
+            handleLoader: noop,
+          })}
+          handleClick2={handleKycStatusRedirection(
+            {
+              kyc,
+              user,
+              kycData,
+              modalData,
+              navigate,
+              baseConfig,
+              contactDetails,
+              closeKycStatusDialog,
+              handleLoader: noop,
+              handleSummaryData,
+              handleDialogStates,
+            },
+            props
+          )}
+          cancel={closeKycStatusDialog}
+        />
+      )}
     </Container>
   );
 };
