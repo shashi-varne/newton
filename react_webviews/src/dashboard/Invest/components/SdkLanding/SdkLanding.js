@@ -76,7 +76,7 @@ const SdkLanding = (props) => {
   const [bankData, setBankData] = useState({});
   const [landingCardsData, setLandingCardsData] = useState([]);
   const { user, kyc, updateKyc, updateUser } = useUserKycHook();
-  const [kycData, setKycData] = useState(getKycData({ kyc, user }));
+  const [kycData, setKycData] = useState(getKycData(kyc, user));
 
   useEffect(() => {
     onLoad();

@@ -208,7 +208,7 @@ export async function getRecommendations({amount, investType, term, equity, debt
   }
 }
 
-export const getKycData = ({ kyc, user }) => {
+export const getKycData = (kyc, user) => {
   kyc = kyc || storageService().getObject("kyc") || {};
   const TRADING_ENABLED = isTradingEnabled(kyc);
   user = user || storageService().getObject("user") || {};
@@ -253,7 +253,7 @@ export const getKycData = ({ kyc, user }) => {
 }
 
 export const initializeKyc = ({ user, kyc, partnerCode, screenName, handleDialogStates }) => {
-  let kycData = getKycData({ kyc, user });
+  let kycData = getKycData(kyc, user);
   const { 
     isCompliant,
     kycJourneyStatus,

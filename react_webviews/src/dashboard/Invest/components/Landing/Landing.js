@@ -82,7 +82,7 @@ const Landing = (props) => {
   const [accountAlreadyExistsData, setAccountAlreadyExistsData] = useState({});
   const { user, kyc, updateKyc, updateUser } = useUserKycHook();
   const { subscriptionStatus, updateSubscriptionStatus } = useFreedomDataHook();
-  const [kycData, setKycData] = useState(getKycData({ kyc, user }));
+  const [kycData, setKycData] = useState(getKycData(kyc, user));
 
   useEffect(() => {
     onLoad();
