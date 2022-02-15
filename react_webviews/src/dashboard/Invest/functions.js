@@ -57,7 +57,9 @@ export async function getSummary({ handleLoader, handleSummaryData }) {
     user = result.data.user.user.data;
     kyc = result.data.kyc.kyc.data;
     const subscriptionStatus = result?.data?.equity?.subscription_status?.data || {};
-    handleSummaryData({ kyc, user, subscriptionStatus })
+    if(isFunction(handleSummaryData)) {
+      handleSummaryData({ kyc, user, subscriptionStatus })
+    }
   } catch (error) {
     console.log(error);
     toast(error.message || errorMessage);
