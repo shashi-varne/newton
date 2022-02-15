@@ -13,7 +13,7 @@ import minBy from 'lodash/minBy';
 import maxBy from 'lodash/maxBy';
 import Separator from '../../designSystem/atoms/Separator';
 import { useSelector } from 'react-redux';
-import { getFundData } from '../../dataLayer/store/dataStore/reducers/fundDetails';
+import { getFundData } from 'businesslogic/dataStore/reducers/fundDetailsReducer';
 
 const Returns = () => {
   const [isReturn, setIsReturn] = useState(false);

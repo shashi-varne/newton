@@ -1,4 +1,4 @@
-import { Box, ClickAwayListener, Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import React, { useState } from 'react';
 import Typography from '../../designSystem/atoms/Typography';
 import intervalToDuration from 'date-fns/intervalToDuration';
@@ -8,7 +8,7 @@ import { nonRoundingToFixed } from '../../utils/validators';
 import Tooltip from '../../designSystem/atoms/Tooltip';
 import Icon from '../../designSystem/atoms/Icon';
 import { useSelector } from 'react-redux';
-import { getFundData } from '../../dataLayer/store/dataStore/reducers/fundDetails';
+import { getFundData } from 'businesslogic/dataStore/reducers/fundDetailsReducer';
 
 function calculateFullAge(dob) {
   const startDate = parse(dob, 'dd/MM/yyyy', new Date());

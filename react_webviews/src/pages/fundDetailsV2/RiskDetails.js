@@ -1,7 +1,7 @@
 import { Box, Stack } from '@mui/material';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getFundData } from '../../dataLayer/store/dataStore/reducers/fundDetails';
+import { getFundData } from 'businesslogic/dataStore/reducers/fundDetailsReducer';
 import BarMeter from '../../designSystem/atoms/BarMeter';
 import Separator from '../../designSystem/atoms/Separator';
 import Typography from '../../designSystem/atoms/Typography';

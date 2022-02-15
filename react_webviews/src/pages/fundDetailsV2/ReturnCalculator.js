@@ -11,51 +11,51 @@ import { formatAmountInr } from '../../utils/validators';
 import Tooltip from '../../designSystem/atoms/Tooltip';
 import Icon from '../../designSystem/atoms/Icon';
 import { getProjectedValue } from '../../reports/common/functions';
-import {useDispatch, useSelector} from 'react-redux';
-import { getFundData, setAmount, setExpectedAmount, setExpectedReturnPerc, setInvestedAmount, setInvestmentPeriod, setInvestmentType } from '../../dataLayer/store/dataStore/reducers/fundDetails';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  getFundData,
+  setAmount,
+  setExpectedAmount,
+  setExpectedReturnPerc,
+  setInvestedAmount,
+  setInvestmentPeriod,
+  setInvestmentType,
+} from 'businesslogic/dataStore/reducers/fundDetailsReducer';
 
 const ReturnCalculator = () => {
   const [isReturnCalcOpen, setIsReturnCalcOpen] = useState(false);
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const dispatch = useDispatch();
   const fundData = useSelector(getFundData);
-  const investmentType = useSelector(state => state?.fundDetails?.investmentType);
-  const investmentPeriod = useSelector(state => state?.fundDetails?.investmentPeriod);
+  const investmentType = useSelector((state) => state?.fundDetails?.investmentType);
+  const investmentPeriod = useSelector((state) => state?.fundDetails?.investmentPeriod);
   const isRecurring = useMemo(() => investmentType === 'sip', [investmentType]);
-  const amountToBeInvested = useSelector(state => state?.fundDetails[investmentType]);
-  const investedAmount = useSelector(state => state?.fundDetails?.investedAmount);
-  const expectedAmount = useSelector(state => state?.fundDetails?.expectedAmount);
-  const expectedReturnPerc = useSelector(state => state?.fundDetails?.expectedReturnPerc);
+  const amountToBeInvested = useSelector((state) => state?.fundDetails[investmentType]);
+  const investedAmount = useSelector((state) => state?.fundDetails?.investedAmount);
+  const expectedAmount = useSelector((state) => state?.fundDetails?.expectedAmount);
+  const expectedReturnPerc = useSelector((state) => state?.fundDetails?.expectedReturnPerc);
   const returns = useMemo(() => {
     const yearReturns = {};
     // eslint-disable-next-line no-unused-expressions
-    fundData?.performance?.returns?.forEach(el => {
-      if(el.name.match(/year/)) {
+    fundData?.performance?.returns?.forEach((el) => {
+      if (el.name.match(/year/)) {
         const year = el.name.match(/\d+/g).join('');
         yearReturns[year] = el.value;
       }
     });
     return yearReturns;
-  },[fundData]);
+  }, [fundData]);
 
   useEffect(() => {
     dispatch(setExpectedReturnPerc(returns[investmentPeriod]));
-  },[fundData]);
+  }, [fundData]);
 
   useEffect(() => {
-    const investedValue = getInvestedValue(
-      investmentPeriod,
-      amountToBeInvested,
-      isRecurring
-    );
-    const expectedValue = getProjectedValue(
-      amountToBeInvested,
-      investmentPeriod,
-      investmentType
-    );
+    const investedValue = getInvestedValue(investmentPeriod, amountToBeInvested, isRecurring);
+    const expectedValue = getProjectedValue(amountToBeInvested, investmentPeriod, investmentType);
     dispatch(setExpectedAmount(expectedValue));
     dispatch(setInvestedAmount(investedValue));
-  }, [amountToBeInvested,investmentType, investmentPeriod, isRecurring]);
+  }, [amountToBeInvested, investmentType, investmentPeriod, isRecurring]);
 
   const handleReturnCalcSection = () => {
     setIsReturnCalcOpen(!isReturnCalcOpen);
@@ -70,7 +70,7 @@ const ReturnCalculator = () => {
   };
 
   const handleAmountChange = (e) => {
-    if(isNaN(e.target.value)) return;
+    if (isNaN(e.target.value)) return;
     const amountValue = Number(e.target.value);
     dispatch(setAmount(amountValue));
   };
@@ -128,25 +128,25 @@ const ReturnCalculator = () => {
                 <Typography variant='heading2' color='primary' align='right'>
                   {formatAmountInr(expectedAmount)}
                 </Typography>
-                  <div>
-                    <Tooltip
-                      open={isTooltipOpen}
-                      title={`Estimated based on the fund's last ${
-                        investmentPeriod <= 5 ? investmentPeriod : 5
-                      } years returns`}
-                    >
-                      <div>
-                        <Icon
-                          src={require('assets/info_icon_ds.svg')}
-                          size='16px'
-                          className='ec_info_icon'
-                          alt='info_icon'
-                          dataAid='right'
-                          onClick={handleTooltip}
-                        />
-                      </div>
-                    </Tooltip>
-                  </div>
+                <div>
+                  <Tooltip
+                    open={isTooltipOpen}
+                    title={`Estimated based on the fund's last ${
+                      investmentPeriod <= 5 ? investmentPeriod : 5
+                    } years returns`}
+                  >
+                    <div>
+                      <Icon
+                        src={require('assets/info_icon_ds.svg')}
+                        size='16px'
+                        className='ec_info_icon'
+                        alt='info_icon'
+                        dataAid='right'
+                        onClick={handleTooltip}
+                      />
+                    </div>
+                  </Tooltip>
+                </div>
               </Stack>
               <Typography variant='body1' color='foundationColors.content.secondary' align='right'>
                 Estimated return ({expectedReturnPerc}%)
