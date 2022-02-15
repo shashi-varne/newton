@@ -32,6 +32,7 @@ import {
   getRecommendationsAndNavigate,
   handleCampaignNotification,
   openBfdlBanner,
+  getKycData,
 } from "../../functions";
 import { generateOtp } from "../../../../login_and_registration/functions";
 import toast from "../../../../common/ui/Toast";
@@ -64,7 +65,6 @@ const Landing = (props) => {
     kycStatusLoader: false,
   });
   const [modalData, setModalData] = useState({});
-  const [kycData, setKycData] = useState({});
   const [contactDetails, setContactDetails] = useState({});
   const [baseConfig, setBaseConfig] = useState(getConfig());
   const [campaignData, setCampaignData] = useState({});
@@ -84,6 +84,7 @@ const Landing = (props) => {
   const [accountAlreadyExistsData, setAccountAlreadyExistsData] = useState({});
   const { user, kyc, updateKyc, updateUser } = useUserKycHook();
   const { subscriptionStatus, updateSubscriptionStatus } = useFreedomDataHook();
+  const [kycData, setKycData] = useState(getKycData({ kyc, user }));
 
   useEffect(() => {
     onLoad();
@@ -97,23 +98,25 @@ const Landing = (props) => {
   };
 
   const onLoad = async () => {
-    const data = getInvestCardsData();
-    setInvestCardsData(data);
-    const { kyc: userKyc, user: userData } = await initialize({
+    const investCardsData = getInvestCardsData();
+    setInvestCardsData(investCardsData);
+    const data = await initialize({
       screenName,
+      kyc,
+      user,
       handleSummaryData,
       handleLoader,
     });
     const config = getConfig();
     setBaseConfig(config);
-    handleKycAndCampaign({ userKyc, userData });
+    handleKycAndCampaign(data);
     openBfdlBanner(handleDialogStates);
   };
 
-  const handleKycAndCampaign = ({ userKyc, userData }) => {
+  const handleKycAndCampaign = (data) => {
     const { kycData: kycDetails, contactDetails: contactData } = initializeKyc({
-      kyc: userKyc || kyc,
-      user: userData || user,
+      kyc: data.kyc,
+      user: data.user,
       partnerCode: baseConfig.code,
       screenName,
       handleDialogStates,
@@ -422,8 +425,8 @@ const Landing = (props) => {
       case "ipo":
         handleStocksAndIpoCards(
           {
-            key: state,
             ...kycData,
+            key: state,
             userKyc: kyc,
             currentUser: user,
             navigate,
@@ -487,7 +490,7 @@ const Landing = (props) => {
               : "Invest in your future"}
           </div>
         ) : (
-          <SkeltonRect />
+          <SkeltonRect className="il-subtitle-skelton" />
         )}
         {!isEmpty(investCardsData.investSections) &&
           investCardsData.investSections.map((element, idx) => {

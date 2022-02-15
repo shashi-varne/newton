@@ -1,10 +1,14 @@
 .invest-landing {
     padding-bottom: 20px;
   
-    .generic-page-subtitle {
-      margin: -10px 0 20px 0;
+    .generic-page-subtitle, .il-subtitle-skelton {
+      margin: -10px 0 20px 0 !important;
     }
   
+    .il-subtitle-skelton {
+      width: 75% !important;
+    }
+    
     .invest-fp-loader {
       min-height: 170px;
       margin-bottom: 15px !important;

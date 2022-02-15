@@ -18,7 +18,7 @@ import { isEmpty, isFunction } from "lodash";
 import { getCorpusValue } from "./common/commonFunctions";
 
 let errorMessage = "Something went wrong!";
-export async function initialize({screenName, handleLoader, handleSummaryData}) {
+export async function initialize({screenName, kyc, user, handleLoader, handleSummaryData}) {
   const config = getConfig();
   // this.getSummary = getSummary.bind(this);
   // this.setSummaryData = setSummaryData.bind(this);
@@ -71,7 +71,7 @@ export async function initialize({screenName, handleLoader, handleSummaryData}) 
   const isWebConfig = config.Web && screenName === "investLanding";
   const isSdkConfig = config.isSdk && screenName === "sdk_landing";
 
-  let data = {}
+  let data = { kyc, user }
   if (!isBfdlConfig && (isWebConfig || isSdkConfig) && !dataSettedInsideBoot) {
     data = await getSummary({ handleLoader, handleSummaryData });
   }
@@ -84,7 +84,7 @@ export async function getSummary({ handleLoader, handleSummaryData }) {
   if(isEmpty(user) || isEmpty(kyc)) {
     handleLoader({ skelton: true });
   } else {
-    handleLoader({kycStatusLoader: true});
+    handleLoader({ kycStatusLoader: true });
   }
   try {
     const result = await getAccountSummary();
@@ -260,7 +260,7 @@ export function navigate(pathname, data = {}) {
   }
 }
 
-export const initializeKyc = ({ user, kyc, partnerCode, screenName, handleDialogStates }) => {
+export const getKycData = ({ kyc, user }) => {
   let userKyc = kyc || storageService().getObject("kyc") || {};
   const TRADING_ENABLED = isTradingEnabled(userKyc);
   let currentUser = user || storageService().getObject("user") || {};
@@ -286,7 +286,7 @@ export const initializeKyc = ({ user, kyc, partnerCode, screenName, handleDialog
   let kycJourneyStatusMapperData = kycJourneyStatus?.includes("ground_") ? kycStatusMapper["incomplete"] : kycStatusMapper[kycJourneyStatus];
   const isKycCompleted = (TRADING_ENABLED && isEquityCompletedBase) || (!TRADING_ENABLED && isReadyToInvestBase);
   const showKycCard = !isKycCompleted || (TRADING_ENABLED && isEquityCompletedBase && kycJourneyStatus === "fno_rejected")
-  let kycData = {
+  const kycData = {
     isCompliant,
     kycStatusData,
     kycJourneyStatusMapperData,
@@ -301,6 +301,11 @@ export const initializeKyc = ({ user, kyc, partnerCode, screenName, handleDialog
     isKycStatusDialogDisplayed: false,
     isPremiumBottomsheetDisplayed: false,
   };
+  return kycData;
+}
+
+export const initializeKyc = ({ user, kyc, partnerCode, screenName, handleDialogStates }) => {
+  let kycData = getKycData({ kyc, user });
   const contactDetails = contactVerification(userKyc, handleDialogStates);
   if (contactDetails.isVerifyDetailsSheetDisplayed) {
     return { kycData, contactDetails };
