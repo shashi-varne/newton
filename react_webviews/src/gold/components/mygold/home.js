@@ -23,6 +23,7 @@ const GoldHomeClosure = (props) => {
     } else {
       props.history.push({
         pathname: "/invest",
+        search: props.location.search
       });
     }
   };
