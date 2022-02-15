@@ -11,7 +11,7 @@ import {
 } from "./constants";
 import { getAccountSummary, getKycAppStatus, isReadyToInvest, setKycProductType, setSummaryData } from "../../kyc/services";
 import { get_recommended_funds } from "./common/api";
-import { PATHNAME_MAPPER } from "../../kyc/constants";
+import { PATHNAME_MAPPER as KYC_PATHNAME_MAPPER } from "../../kyc/constants";
 import { isEquityCompleted } from "../../kyc/common/functions";
 import { nativeCallback, openModule } from "../../utils/native_callback";
 import { isEmpty, isFunction } from "lodash";
@@ -449,7 +449,7 @@ export async function handleCommonKycRedirections({ kyc, kycJourneyStatus, tradi
       },
     });
   } else if (!tradingEnabled && kycJourneyStatus === "complete") {
-    navigate(PATHNAME_MAPPER.kycEsignNsdl, {
+    navigate(KYC_PATHNAME_MAPPER.kycEsignNsdl, {
       searchParams: `${getConfig().searchParams}&status=success`
     });
   } else if (tradingEnabled && kyc?.kyc_product_type !== "equity") {
@@ -457,7 +457,7 @@ export async function handleCommonKycRedirections({ kyc, kycJourneyStatus, tradi
   } else if (kycStatusData.nextState) {
     navigate(kycStatusData.nextState);
   } else {
-    navigate(PATHNAME_MAPPER.journey);
+    navigate(KYC_PATHNAME_MAPPER.journey);
   }
 }
 
@@ -471,17 +471,17 @@ export async function setKycProductTypeAndRedirect({ kyc, kycJourneyStatus, isRe
   
   // already kyc done users
   if (isReadyToInvestBase && (result?.kyc?.mf_kyc_processed || kyc?.mf_kyc_processed)) {
-    navigate(PATHNAME_MAPPER.tradingInfo)
+    navigate(KYC_PATHNAME_MAPPER.tradingInfo)
   } else if (kycJourneyStatus === "ground") {
     navigate("/kyc/home");
   } else {
     const showAadhaar = !(result?.kyc?.address.meta_data.is_nri || result?.kyc?.kyc_type === "manual");
     if (result?.kyc?.kyc_status !== "compliant") {
-      navigate(PATHNAME_MAPPER.journey, {
+      navigate(KYC_PATHNAME_MAPPER.journey, {
         searchParams: `${config.searchParams}&show_aadhaar=${showAadhaar}`
       });
     } else {
-      navigate(PATHNAME_MAPPER.journey)
+      navigate(KYC_PATHNAME_MAPPER.journey)
     }
   }
 }
@@ -607,6 +607,103 @@ export const handleKycPremiumLanding = ({
     return;
   }
   navigate(modalData.nextState);
+};
+
+export const handleKycStatus = ({ kyc, kycData, modalData, closeKycStatusDialog, navigate, handleLoader, updateKyc, sendEvents }) => async () => {
+  if (isFunction(sendEvents)) {
+    sendEvents("next", "kyc_bottom_sheet");
+  }
+  const { kycJourneyStatus, tradingEnabled, isReadyToInvestBase } = kycData;
+  if (
+    ["submitted", "verifying_trading_account"].includes(kycJourneyStatus) ||
+    (kycJourneyStatus === "complete" && kyc.mf_kyc_processed)
+  ) {
+    closeKycStatusDialog();
+  } else if (kycJourneyStatus === "rejected") {
+    navigate(KYC_PATHNAME_MAPPER.uploadProgress);
+  } else if (tradingEnabled && kyc?.kyc_product_type !== "equity") {
+    closeKycStatusDialog();
+    await setKycProductTypeAndRedirect({
+      kyc,
+      kycJourneyStatus,
+      isReadyToInvestBase,
+      handleLoader,
+      navigate,
+      updateKyc,
+    });
+  } else if (kycJourneyStatus === "ground_pan") {
+    navigate("/kyc/journey", {
+      state: {
+        show_aadhaar: !(
+          kyc.address.meta_data.is_nri || kyc.kyc_type === "manual"
+        ),
+      },
+    });
+  } else if (modalData.nextState && modalData.nextState !== "/invest") {
+    navigate(modalData.nextState);
+  } else {
+    closeKycStatusDialog();
+  }
+};
+
+export const handleKycStatusRedirection = ({ kycData, baseConfig, kyc, user, contactDetails, modalData, closeKycStatusDialog, navigate, handleLoader, handleSummaryData, handleDialogStates }, props) => () => {
+  let { kycJourneyStatus } = kycData;
+  const {
+    contactValue,
+    communicationType,
+    contactNotVerified,
+  } = contactDetails;
+  if (modalData.key === "kyc") {
+    if (kycJourneyStatus === "fno_rejected") {
+      closeKycStatusDialog();
+    }
+  } else if (modalData.key === "ipo") {
+    if (contactNotVerified) {
+      storageService().set("ipoContactNotVerified", true);
+      navigate("/secondary-verification", {
+        state: {
+          communicationType,
+          contactValue,
+          fromDirectEntry: true
+        },
+      });
+      return;
+    }
+    handleIpoCardRedirection(
+      {
+        kyc,
+        user,
+        navigate,
+        handleLoader,
+        handleSummaryData,
+        handleDialogStates,
+      },
+      props
+    );
+  } else {
+    if (baseConfig.isSdk) {
+      if (contactNotVerified) {
+        storageService().setBoolean("sdkStocksRedirection", true);
+        navigate("/secondary-verification", {
+          state: {
+            communicationType,
+            contactValue,
+            fromDirectEntry: true
+          },
+        });
+        return;
+      }
+      nativeCallback({
+        action: "open_equity",
+      });
+      closeKycStatusDialog();
+      return;
+    } else if (kycJourneyStatus === "fno_rejected") {
+      handleLoader({ pageLoader: "page" });
+      window.location.href = `${baseConfig.base_url}/page/equity/launchapp`;
+    }
+    closeKycStatusDialog();
+  }
 };
 
 async function setProductType(handleLoader) {

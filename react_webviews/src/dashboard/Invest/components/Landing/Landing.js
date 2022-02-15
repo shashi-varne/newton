@@ -25,8 +25,8 @@ import {
   handleCampaign,
   handleKycPremiumLanding,
   closeCampaignDialog,
-  setKycProductTypeAndRedirect,
-  handleIpoCardRedirection,
+  handleKycStatus,
+  handleKycStatusRedirection,
   getRecommendationsAndNavigate,
   openBfdlBanner,
   getKycData,
@@ -37,8 +37,6 @@ import toast from "../../../../common/ui/Toast";
 import { SkeltonRect } from "../../../../common/ui/Skelton";
 import useUserKycHook from "../../../../kyc/common/hooks/userKycHook";
 import useFreedomDataHook from "../../../../freedom_plan/common/freedomPlanHook";
-import { PATHNAME_MAPPER as KYC_PATHNAME_MAPPER } from "../../../../kyc/constants";
-import { storageService } from "../../../../utils/validators";
 import { keyPathMapper } from "../../constants";
 import "./Landing.scss";
 
@@ -200,99 +198,6 @@ const Landing = (props) => {
     };
     nativeCallback({ events: eventObj });
     navigate("/freedom-plan");
-  };
-
-  const handleKycStatus = async () => {
-    sendEvents("next", "kyc_bottom_sheet");
-    const { kycJourneyStatus, tradingEnabled, isReadyToInvestBase } = kycData;
-    if (
-      ["submitted", "verifying_trading_account"].includes(kycJourneyStatus) ||
-      (kycJourneyStatus === "complete" && kyc.mf_kyc_processed)
-    ) {
-      closeKycStatusDialog();
-    } else if (kycJourneyStatus === "rejected") {
-      navigate(KYC_PATHNAME_MAPPER.uploadProgress);
-    } else if (tradingEnabled && kyc?.kyc_product_type !== "equity") {
-      closeKycStatusDialog();
-      await setKycProductTypeAndRedirect({
-        kyc,
-        kycJourneyStatus,
-        isReadyToInvestBase,
-        handleLoader,
-        navigate,
-        updateKyc,
-      });
-    } else if (kycJourneyStatus === "ground_pan") {
-      navigate("/kyc/journey", {
-        state: {
-          show_aadhaar: !(
-            kyc.address.meta_data.is_nri || kyc.kyc_type === "manual"
-          ),
-        },
-      });
-    } else if (modalData.nextState && modalData.nextState !== "/invest") {
-      navigate(modalData.nextState);
-    } else {
-      closeKycStatusDialog();
-    }
-  };
-
-  const handleKycStatusRedirection = () => {
-    let { kycJourneyStatus } = kycData;
-    const {
-      contactValue,
-      communicationType,
-      contactNotVerified,
-    } = contactDetails;
-    if (modalData.key === "kyc") {
-      if (kycJourneyStatus === "fno_rejected") {
-        closeKycStatusDialog();
-      }
-    } else if (modalData.key === "ipo") {
-      if (contactNotVerified) {
-        storageService().set("ipoContactNotVerified", true);
-        navigate("/secondary-verification", {
-          state: {
-            communicationType,
-            contactValue,
-          },
-        });
-        return;
-      }
-      handleIpoCardRedirection(
-        {
-          kyc,
-          user,
-          navigate,
-          handleLoader,
-          handleSummaryData,
-          handleDialogStates,
-        },
-        props
-      );
-    } else {
-      if (baseConfig.isSdk) {
-        if (contactNotVerified) {
-          storageService().setBoolean("sdkStocksRedirection", true);
-          navigate("/secondary-verification", {
-            state: {
-              communicationType,
-              contactValue,
-            },
-          });
-          return;
-        }
-        nativeCallback({
-          action: "open_equity",
-        });
-        closeKycStatusDialog();
-        return;
-      } else if (kycJourneyStatus === "fno_rejected") {
-        handleLoader({ pageLoader: "page" });
-        window.location.href = `${baseConfig.base_url}/page/equity/launchapp`;
-      }
-      closeKycStatusDialog();
-    }
   };
 
   const sendEvents = (userAction, cardClick = "") => {
@@ -526,7 +431,15 @@ const Landing = (props) => {
           handleDialogStates,
           handleLoader,
         })}
-        handleKycStatus={handleKycStatus}
+        handleKycStatus={handleKycStatus({
+          kyc,
+          kycData,
+          modalData,
+          navigate,
+          updateKyc,
+          closeKycStatusDialog,
+          handleLoader,
+        })}
         closeKycStatusDialog={closeKycStatusDialog}
         handleKycPremiumLanding={handleKycPremiumLanding({
           screenName,
@@ -534,7 +447,22 @@ const Landing = (props) => {
           navigate,
           handleDialogStates,
         })}
-        handleKycStatusRedirection={handleKycStatusRedirection}
+        handleKycStatusRedirection={handleKycStatusRedirection(
+          {
+            kyc,
+            user,
+            kycData,
+            modalData,
+            baseConfig,
+            contactDetails,
+            navigate,
+            handleLoader,
+            handleSummaryData,
+            handleDialogStates,
+            closeKycStatusDialog,
+          },
+          props
+        )}
       />
       {!isEmpty(contactDetails) && (
         <VerifyDetailDialog
