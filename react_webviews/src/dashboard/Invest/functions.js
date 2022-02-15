@@ -114,7 +114,7 @@ export function getInvestCardsData() {
         let cardData = investCardsBase[section][subSection];
         if (!isEmpty(cardData)) {
           cardData.key = subSection;
-          investCardsData[section].push(cardData);
+          cardsData[section].push(cardData);
         }
       }
     }
@@ -169,7 +169,17 @@ export async function getRecommendationsAndNavigate({ amount, handleLoader, navi
   }
 }
 
-export async function getRecommendations({amount, investType, term, equity, debt, investName, investTypeDisplay, navigate, handleLoader }) {
+export async function getRecommendations({
+  amount,
+  investType,
+  term,
+  equity,
+  debt,
+  investName,
+  investTypeDisplay,
+  navigate,
+  handleLoader,
+}) {
   const config = getConfig();
   try {
     const result = await get_recommended_funds({
@@ -336,8 +346,18 @@ export const initializeKyc = ({ user, kyc, partnerCode, screenName, handleDialog
   return { kycData, contactDetails }
 }
 
-export const handleKycAndCampaign = ({ kyc, user, screenName, isWeb, partnerCode, handleDialogStates, setKycData, setContactDetails, setCampaignData }) => {
-  const { kycData: kycDetails, contactDetails: contactData  } = initializeKyc({
+export const handleKycAndCampaign = ({
+  kyc,
+  user,
+  screenName,
+  isWeb,
+  partnerCode,
+  handleDialogStates,
+  setKycData,
+  setContactDetails,
+  setCampaignData,
+}) => {
+  const { kycData: kycDetails, contactDetails: contactData } = initializeKyc({
     kyc,
     user,
     partnerCode,
@@ -380,7 +400,7 @@ export const handleKycAndCampaign = ({ kyc, user, screenName, isWeb, partnerCode
   }
 };
 
-export function openPremiumOnboardBottomSheet({premiumDialogData, screenName, handleDialogStates}) {
+export function openPremiumOnboardBottomSheet({ premiumDialogData, screenName, handleDialogStates }) {
   const config = getConfig()
   let isKycPremiumBottomSheetDisplayed = storageService().getBoolean(
     "isKycPremiumBottomSheetDisplayed"
@@ -406,9 +426,9 @@ export function handleKycSubmittedOrRejectedState({ kycJourneyStatusMapperData, 
 }
 
 export async function openKyc({
+  kyc,
   kycJourneyStatus,
   kycJourneyStatusMapperData,
-  kyc,
   tradingEnabled,
   kycStatusData,
   handleDialogStates,
@@ -441,7 +461,16 @@ export async function openKyc({
   }
 }
 
-export async function handleCommonKycRedirections({ kyc, kycJourneyStatus, tradingEnabled, kycStatusData, isReadyToInvestBase, navigate, handleLoader, updateKyc }) {
+export async function handleCommonKycRedirections({
+  kyc,
+  kycJourneyStatus,
+  tradingEnabled,
+  kycStatusData,
+  isReadyToInvestBase,
+  navigate,
+  handleLoader,
+  updateKyc,
+}) {
   if (kycJourneyStatus === "ground") {
     navigate("/kyc/home");
   } else if (kycJourneyStatus === "ground_pan") {
@@ -521,8 +550,22 @@ function initiatePinSetup({ key, handleLoader, handleSummaryData, handleDialogSt
     handleDialogStates({ openPinSetupDialog: true, cardKey: key })
   }
 }
-          
-export function handleStocksAndIpoCards({ key, kycJourneyStatusMapperData, kycJourneyStatus, kyc, user, handleDialogStates, handleSummaryData, navigate, handleLoader, closeKycStatusDialog }, props) {
+
+export function handleStocksAndIpoCards(
+  {
+    key,
+    kycJourneyStatusMapperData,
+    kycJourneyStatus,
+    kyc,
+    user,
+    handleDialogStates,
+    handleSummaryData,
+    navigate,
+    handleLoader,
+    closeKycStatusDialog,
+  },
+  props
+) {
   const config = getConfig();
   let modalData = Object.assign({key}, kycJourneyStatusMapperData);
 
@@ -611,7 +654,16 @@ export const handleKycPremiumLanding = ({
   navigate(modalData.nextState);
 };
 
-export const handleKycStatus = ({ kyc, kycData, modalData, closeKycStatusDialog, navigate, handleLoader, updateKyc, sendEvents }) => async () => {
+export const handleKycStatus = ({
+  kyc,
+  kycData,
+  modalData,
+  closeKycStatusDialog,
+  navigate,
+  handleLoader,
+  updateKyc,
+  sendEvents,
+}) => async () => {
   if (isFunction(sendEvents)) {
     sendEvents("next", "kyc_bottom_sheet");
   }
@@ -648,7 +700,22 @@ export const handleKycStatus = ({ kyc, kycData, modalData, closeKycStatusDialog,
   }
 };
 
-export const handleKycStatusRedirection = ({ kycData, baseConfig, kyc, user, contactDetails, modalData, closeKycStatusDialog, navigate, handleLoader, handleSummaryData, handleDialogStates }, props) => () => {
+export const handleKycStatusRedirection = (
+  {
+    kyc,
+    user,
+    kycData,
+    modalData,
+    baseConfig,
+    contactDetails,
+    closeKycStatusDialog,
+    navigate,
+    handleLoader,
+    handleSummaryData,
+    handleDialogStates,
+  },
+  props
+) => () => {
   let { kycJourneyStatus } = kycData;
   const {
     contactValue,
