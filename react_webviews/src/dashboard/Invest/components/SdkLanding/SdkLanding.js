@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import Container from "../../../common/Container";
 import SebiRegistrationFooter from "../../../../common/ui/SebiRegistrationFooter/WVSebiRegistrationFooter";
 import LandingBottomSheets from "../../mini-components/LandingBottomSheets";
@@ -288,15 +288,15 @@ const SdkLanding = (props) => {
 
   return (
     <Container
-      skelton={loaderData.skelton}
-      noFooter={true}
-      showLoader={loaderData.pageLoader}
-      noBackIcon={!baseConfig.isSdk || baseConfig.isIframe}
-      events={sendEvents("just_set_events")}
       title="Hello"
       notification
-      handleNotification={handleCard("/notification", "notification")}
+      noFooter={true}
       background="sdk-background"
+      data-aid="sdk-landing-screen"
+      skelton={loaderData.skelton}
+      showLoader={loaderData.pageLoader}
+      events={sendEvents("just_set_events")}
+      handleNotification={handleCard("/notification", "notification")}
       classHeader={
         baseConfig.uiElements?.header?.backgroundColor
           ? "sdk-partner-header"
@@ -306,7 +306,6 @@ const SdkLanding = (props) => {
         goBack,
         partnerLogo: true,
       }}
-      data-aid="sdk-landing-screen"
     >
       <div className="sdk-landing" data-aid="sdk-landing">
         {!loaderData.kycStatusLoader ? (
@@ -335,60 +334,39 @@ const SdkLanding = (props) => {
             className="landing-marketing-banners"
             data-aid="landing-marketing-banners"
           >
-            {baseConfig.landingMarketingBanners?.length === 1 ? (
-              <>
-                {dateValidation(
-                  baseConfig.landingMarketingBanners[0]?.endDate,
-                  baseConfig.landingMarketingBanners[0]?.startDate
-                ) && (
-                  <div
-                    className="single-marketing-banner"
-                    onClick={handleMarketingBanner(
-                      baseConfig.landingMarketingBanners[0]?.type
+            <div
+              className={`marketing-banners-list ${
+                baseConfig.landingMarketingBanners.length === 1 &&
+                `single-marketing-banner`
+              }`}
+              data-aid="marketing-banners-list"
+            >
+              {baseConfig.landingMarketingBanners?.map((el, idx) => {
+                return (
+                  <Fragment key={idx}>
+                    {dateValidation(el?.endDate, el?.startDate) && (
+                      <div
+                        className="marketing-banner-icon-wrapper"
+                        onClick={handleMarketingBanner(el?.type)}
+                      >
+                        <Imgc
+                          src={require(`assets/${el.image}`)}
+                          alt=""
+                          style={{ width: "100%" }}
+                        />
+                      </div>
                     )}
-                  >
-                    <Imgc
-                      src={require(`assets/${baseConfig.landingMarketingBanners[0].image}`)}
-                      alt=""
-                      style={{ width: "100%", minHeight: "120px" }}
-                    />
-                  </div>
-                )}
-              </>
-            ) : (
-              <div
-                className="marketing-banners-list"
-                data-aid="marketing-banners-list"
-              >
-                {baseConfig.landingMarketingBanners?.map((el, idx) => {
-                  return (
-                    <>
-                      {dateValidation(el?.endDate, el?.startDate) && (
-                        <div
-                          className="marketing-banner-icon-wrapper"
-                          key={idx}
-                          onClick={handleMarketingBanner(el?.type)}
-                        >
-                          <Imgc
-                            src={require(`assets/${el.image}`)}
-                            alt=""
-                            style={{ width: "100%" }}
-                          />
-                        </div>
-                      )}
-                    </>
-                  );
-                })}
-              </div>
-            )}
+                  </Fragment>
+                );
+              })}
+            </div>
           </div>
         )}
         {!isEmpty(landingCardsData) && (
           <div className="sdk-landing-cards">
-            {landingCardsData.map((el, idx) => {
+            {landingCardsData.map((el) => {
               return (
                 <SdkInvestCard
-                  key={idx}
                   referral={referral}
                   handleReferral={handleReferral}
                   handleRefferalInput={handleRefferalInput}
