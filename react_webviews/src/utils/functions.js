@@ -161,17 +161,26 @@ export const getConfig = () => {
   let origin = window.location.origin;
   let generic_callback = true;
 
-  let isProdFisdom = origin.indexOf('app.fisdom.com') >= 0  || origin.indexOf('wv.fisdom.com') >= 0 || origin.indexOf('my.preprod.fisdom.com') >= 0 || origin.indexOf('app2.fisdom.com') >= 0;
-  let isProdMyway = origin.indexOf('app.mywaywealth.com') >= 0 || origin.indexOf('wv.mywaywealth.com') >= 0;
-  let isProdFinity = origin.indexOf('my.preprod.finity.in') >= 0  || origin.indexOf('app.finity.in') >= 0 || origin.indexOf('app2.finity.in') >= 0 || origin.indexOf('wv.finity.in') >= 0;
+  let isProdFisdom = origin.indexOf('app.fisdom.com') >= 0  || origin.indexOf('wv.fisdom.com') >= 0 || 
+        origin.indexOf('app2.fisdom.com') >= 0;
+
+  let isProdMyway = origin.indexOf('app.mywaywealth.com') >= 0 || 
+                origin.indexOf('wv.mywaywealth.com') >= 0;
+
+  let isProdFinity = origin.indexOf('app.finity.in') >= 0 || 
+             origin.indexOf('app2.finity.in') >= 0 || origin.indexOf('wv.finity.in') >= 0;
+  let isPreprodFisdom = origin.indexOf('fisdom.equityapppreprod.finwizard.co.in') >= 0;
+  let isPreprodFinity = origin.indexOf('finity.equityapppreprod.finwizard.co.in') >= 0;
+
   let apiKey = '6Ldah04eAAAAAM7-gR7PWL35nSMvNZRMsngMgObG';
-  if(isProdFisdom) {
+  if(isProdFisdom || isPreprodFisdom) {
     apiKey = '6LcUeDweAAAAAJ7gWP6OkmCuO1WXN54Qju-fJPLg';
   }
-  if(isProdFinity || isProdMyway) {
+
+  if(isProdFinity || isProdMyway || isPreprodFinity) {
     apiKey = '6LdSjzweAAAAAHSGjqfOVjy_vVQ_n8iBWe9xCSrL';
   }
-  // let base_href = window.localStorage.getItem('base_href') || '';
+
   let base_url_default = '';
   
   const isStaging = origin.indexOf('plutus-web-staging') >= 0;
@@ -201,6 +210,14 @@ export const getConfig = () => {
 
     if(isProdMyway) {
       base_url_default = 'https://api.mywaywealth.com';
+    }
+
+    if(isPreprodFisdom) {
+      base_url_default = 'https://my.preprod.fisdom.com';
+    }
+
+    if(isPreprodFinity) {
+      base_url_default = 'https://my.preprod.finity.in';
     }
 
     // change server url here for local and staging url builds (Not commit id one's)
