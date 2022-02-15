@@ -562,7 +562,7 @@ const Landing = (props) => {
       <PinSetupDialog
         open={dialogStates.openPinSetupDialog}
         onClose={closeBottomSheet("openPinSetupDialog")}
-        comingFrom={modalData.key}
+        comingFrom={dialogStates.cardKey}
       />
     </Container>
   );

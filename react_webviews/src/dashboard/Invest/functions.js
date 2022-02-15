@@ -516,7 +516,7 @@ function initiatePinSetup({ key, handleLoader, handleSummaryData, handleDialogSt
       },
     });
   } else {
-    handleDialogStates({ openPinSetupDialog: true }, { clickedCardKey: key })
+    handleDialogStates({ openPinSetupDialog: true, cardKey: key })
   }
 }
           
@@ -555,7 +555,7 @@ export function handleStocksAndIpoCards({ key, kycJourneyStatusMapperData, kycJo
       (kycJourneyStatus === "complete" && kyc.kyc_product_type === 'equity')
     ) {
       if (user?.pin_status !== 'pin_setup_complete') {
-        return initiatePinSetup({ key, handleSummaryData, handleLoader }, props);
+        return initiatePinSetup({ key, handleSummaryData, handleLoader, handleDialogStates }, props);
       } else if (kycJourneyStatus !== "fno_rejected") {
         if(config.isSdk) {
           nativeCallback({
