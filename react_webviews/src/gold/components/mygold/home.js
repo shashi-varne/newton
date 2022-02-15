@@ -69,7 +69,7 @@ const GoldHome = (props) => {
           Click on the link below to login and access your digital gold account.
         </div>
 
-        <div>
+        <div style={{marginBottom: '5px'}}>
           MMTC-PAMP :{" "}
           <span className="link" onClick={() => openInBrowser(mmtcLink)}>
             {mmtcLink}
