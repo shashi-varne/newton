@@ -7014,7 +7014,7 @@ builtin-status-codes@^3.0.0:
 
 "businesslogic@git+https://fdamitsingh:EafwBATbn2DqxeV7KhsN@bitbucket.org/finwizardtech/businesslogic.git#business-logic-webpack":
   version "1.0.0"
-  resolved "git+https://fdamitsingh:EafwBATbn2DqxeV7KhsN@bitbucket.org/finwizardtech/businesslogic.git#d6e6866b9a9a9ad6358cd2c41395d8314e5ddc06"
+  resolved "git+https://fdamitsingh:EafwBATbn2DqxeV7KhsN@bitbucket.org/finwizardtech/businesslogic.git#5087e2a505023eff4e890079368cc336dda9858a"
   dependencies:
     "@reduxjs/toolkit" "^1.7.2"
     lodash-es "^4.17.21"
