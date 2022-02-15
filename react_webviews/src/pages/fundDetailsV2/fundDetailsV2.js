@@ -12,21 +12,30 @@ import FundStats from './FundStats';
 import FundGraph from './FundGraph';
 import Api from '../../utils/api';
 import FundPerformance from './FundPerformance';
-import {fetch_fund_details} from 'businesslogic/apis/fundDetails';
+import {fetchFundDetails, getFundData} from '../../dataLayer/store/dataStore/reducers/fundDetails';
+import {useDispatch, useSelector} from 'react-redux';
 
 import './fundDetailsV2.scss';
 
 const FundDetailsV2 = () => {
-  const [fundData, setFundData] = useState({});
+  // const [fundData, setFundData] = useState({});
 
-  const fetchFundData = async () => {
-    const fund = await fetch_fund_details(Api, 'INF109K01480');
-    const data = fund?.text_report[0];
-    console.log(data);
-    setFundData(data);
-  };
+  const dispatch = useDispatch();
+  const fundData = useSelector(getFundData);
+
+  // const fetchFundData = async () => {
+  //   const fund = await fetch_fund_details(Api, 'INF109K01480');
+  //   const data = fund?.text_report[0];
+  //   console.log(data);
+  //   setFundData(data);
+  // };
   useEffect(() => {
-    fetchFundData();
+    // fetchFundData();
+    const payload = {
+      isins: 'INF109K01480',
+      Api
+    }
+    dispatch(fetchFundDetails(payload))
   }, []);
 
   if (isEmpty(fundData)) return <h1>Loading...!!</h1>;
@@ -44,13 +53,13 @@ const FundDetailsV2 = () => {
           ]}
         />
       </Box>
-      <FundPerformance fundData={fundData} />
+      <FundPerformance />
       <FundGraph />
-      <FundStats fundData={fundData} />
-      <ReturnCalculator fundData={fundData} />
-      <AssetAllocation fundData={fundData} />
-      <Returns fundData={fundData} />
-      <RiskDetails fundData={fundData} />
+      <FundStats />
+      <ReturnCalculator />
+      <AssetAllocation />
+      <Returns />
+      <RiskDetails />
       <ReturnComparison />
     </Container>
   );

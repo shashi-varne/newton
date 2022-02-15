@@ -7,16 +7,19 @@ import { TimeLine, Timelines } from '../../designSystem/atoms/TimelineList';
 import Typography from '../../designSystem/atoms/Typography';
 import CollapsibleSection from '../../designSystem/molecules/CollapsibleSection';
 import CustomSwiper from '../../designSystem/molecules/CustomSwiper';
-import { inrFormatDecimal, nonRoundingToFixed } from '../../utils/validators';
+import {  nonRoundingToFixed } from '../../utils/validators';
 import meanBy from 'lodash/meanBy';
 import minBy from 'lodash/minBy';
 import maxBy from 'lodash/maxBy';
 import Separator from '../../designSystem/atoms/Separator';
+import { useSelector } from 'react-redux';
+import { getFundData } from '../../dataLayer/store/dataStore/reducers/fundDetails';
 
-const Returns = ({ fundData }) => {
+const Returns = () => {
   const [isReturn, setIsReturn] = useState(false);
   const [pillReturnValue, setPillReturnValue] = useState(0);
   const [swiper, setSwiper] = useState('');
+  const fundData = useSelector(getFundData);
 
   const handleReturnSection = () => {
     setIsReturn(!isReturn);

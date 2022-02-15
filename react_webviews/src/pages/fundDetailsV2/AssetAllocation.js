@@ -1,5 +1,7 @@
 import { Box, Stack } from '@mui/material';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { getFundData } from '../../dataLayer/store/dataStore/reducers/fundDetails';
 import Button from '../../designSystem/atoms/Button';
 import Separator from '../../designSystem/atoms/Separator';
 import Typography from '../../designSystem/atoms/Typography';
@@ -11,11 +13,11 @@ const AssetColors = {
   Others: 'foundationColors.secondary.coralOrange.400',
 };
 
-const AssetAllocation = ({ fundData = {} }) => {
+const AssetAllocation = () => {
   const [isAssetOpen, setIsAssetOpen] = useState(false);
   const [viewMoreHolding, setViewMoreHolding] = useState(3);
   const [viewMoreSector, setViewMoreSector] = useState(3);
-
+  const fundData = useSelector(getFundData);
   const handleAssetSection = () => {
     setIsAssetOpen(!isAssetOpen);
   };

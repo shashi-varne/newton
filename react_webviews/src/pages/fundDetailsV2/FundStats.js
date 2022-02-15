@@ -7,6 +7,8 @@ import format from 'date-fns/format';
 import { nonRoundingToFixed } from '../../utils/validators';
 import Tooltip from '../../designSystem/atoms/Tooltip';
 import Icon from '../../designSystem/atoms/Icon';
+import { useSelector } from 'react-redux';
+import { getFundData } from '../../dataLayer/store/dataStore/reducers/fundDetails';
 
 function calculateFullAge(dob) {
   const startDate = parse(dob, 'dd/MM/yyyy', new Date());
@@ -41,11 +43,12 @@ const calculateFundAge = (fundAge) => {
   }
 };
 
-const FundStats = ({ fundData = {} }) => {
+const FundStats = () => {
   const [isTooltipOpen, setIsTooltipOpen] = useState({
     er: false,
     el: false,
   });
+  const fundData = useSelector(getFundData);
   const fullAgeData = calculateFullAge(fundData?.additional_info?.launch_date);
   const fundAge = calculateFundAge(fullAgeData);
   const launchDate = format(

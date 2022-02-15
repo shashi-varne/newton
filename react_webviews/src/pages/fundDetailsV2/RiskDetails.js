@@ -1,5 +1,7 @@
 import { Box, Stack } from '@mui/material';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { getFundData } from '../../dataLayer/store/dataStore/reducers/fundDetails';
 import BarMeter from '../../designSystem/atoms/BarMeter';
 import Separator from '../../designSystem/atoms/Separator';
 import Typography from '../../designSystem/atoms/Typography';
@@ -44,8 +46,9 @@ const getBarIndex = (riskValue) => {
   return riskIndex;
 };
 
-const RiskDetails = ({ fundData }) => {
+const RiskDetails = () => {
   const [isRiskOpen, setIsRiskOpen] = useState(false);
+  const fundData = useSelector(getFundData);
   const handleRiskAction = () => {
     setIsRiskOpen(!isRiskOpen);
   };

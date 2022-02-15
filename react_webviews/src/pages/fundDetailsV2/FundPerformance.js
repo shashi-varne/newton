@@ -7,8 +7,11 @@ import parse from 'date-fns/parse';
 import isEqual from 'lodash/isEqual';
 import Typography from '../../designSystem/atoms/Typography';
 import Icon from '../../designSystem/atoms/Icon';
+import { useSelector } from 'react-redux';
+import { getFundData } from '../../dataLayer/store/dataStore/reducers/fundDetails';
 
-const FundPerformance = ({ fundData }) => {
+const FundPerformance = () => {
+  const fundData = useSelector(getFundData);
   const minimumInvestment = orderBy(
     fundData?.additional_info?.minimum_investment,
     ['value'],

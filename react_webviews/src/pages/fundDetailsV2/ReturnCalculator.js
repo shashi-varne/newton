@@ -12,12 +12,13 @@ import Tooltip from '../../designSystem/atoms/Tooltip';
 import Icon from '../../designSystem/atoms/Icon';
 import { getProjectedValue } from '../../reports/common/functions';
 import {useDispatch, useSelector} from 'react-redux';
-import { setAmount, setExpectedAmount, setExpectedReturnPerc, setInvestedAmount, setInvestmentPeriod, setInvestmentType } from '../../dataLayer/store/dataStore/reducers/fundDetails';
+import { getFundData, setAmount, setExpectedAmount, setExpectedReturnPerc, setInvestedAmount, setInvestmentPeriod, setInvestmentType } from '../../dataLayer/store/dataStore/reducers/fundDetails';
 
-const ReturnCalculator = ({ fundData }) => {
+const ReturnCalculator = () => {
   const [isReturnCalcOpen, setIsReturnCalcOpen] = useState(false);
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const dispatch = useDispatch();
+  const fundData = useSelector(getFundData);
   const investmentType = useSelector(state => state?.fundDetails?.investmentType);
   const investmentPeriod = useSelector(state => state?.fundDetails?.investmentPeriod);
   const isRecurring = useMemo(() => investmentType === 'sip', [investmentType]);
