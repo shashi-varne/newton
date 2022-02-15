@@ -10,7 +10,6 @@ import InputField from '../../designSystem/molecules/InputField';
 import { formatAmountInr } from '../../utils/validators';
 import Tooltip from '../../designSystem/atoms/Tooltip';
 import Icon from '../../designSystem/atoms/Icon';
-import { getProjectedValue } from '../../reports/common/functions';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getFundData,
@@ -21,6 +20,7 @@ import {
   setInvestmentPeriod,
   setInvestmentType,
 } from 'businesslogic/dataStore/reducers/fundDetailsReducer';
+import { getExpectedReturn } from './helperFunctions';
 
 const ReturnCalculator = () => {
   const [isReturnCalcOpen, setIsReturnCalcOpen] = useState(false);
@@ -52,10 +52,10 @@ const ReturnCalculator = () => {
 
   useEffect(() => {
     const investedValue = getInvestedValue(investmentPeriod, amountToBeInvested, isRecurring);
-    const expectedValue = getProjectedValue(amountToBeInvested, investmentPeriod, investmentType);
+    const expectedValue = getExpectedReturn(amountToBeInvested, investmentPeriod, investmentType, expectedReturnPerc);
     dispatch(setExpectedAmount(expectedValue));
     dispatch(setInvestedAmount(investedValue));
-  }, [amountToBeInvested, investmentType, investmentPeriod, isRecurring]);
+  }, [amountToBeInvested, investmentType, investmentPeriod, isRecurring, expectedReturnPerc]);
 
   const handleReturnCalcSection = () => {
     setIsReturnCalcOpen(!isReturnCalcOpen);
