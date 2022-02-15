@@ -6,7 +6,7 @@ import Container from "../../common/Container";
 const mmtcLink = "https://dgsweb.mmtcpamp.com/";
 const safeGoldLink = "https://www.safegold.com/";
 
-const GoldHome = (props) => {
+const GoldHomeClosure = (props) => {
   const openInBrowser = (url) => {
     nativeCallback({
       action: "open_in_browser",
@@ -18,7 +18,7 @@ const GoldHome = (props) => {
 
   const redirectToHome = () => {
     const config = getConfig();
-    if (config.isNative) {
+    if (config.isNative || config.isSdk) {
       nativeCallback({ action: "exit_web" });
     } else {
       props.history.push({
@@ -35,7 +35,7 @@ const GoldHome = (props) => {
   return (
     <Container
       title="Discontinuation of Digital Gold product"
-      buttonTitle="HOME"
+      buttonTitle="OKAY"
       handleClick={redirectToHome}
       headerData={headerData}
     >
@@ -93,4 +93,4 @@ const GoldHome = (props) => {
   );
 };
 
-export default GoldHome;
+export default GoldHomeClosure;
