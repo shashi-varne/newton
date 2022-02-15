@@ -17,6 +17,9 @@ class ImgcClass extends Component {
 
 
     isCached = (src) => {
+        if(!src) {
+            return false;
+        }
         var img = new Image();
         img.src = src;
         var complete = img.complete;
