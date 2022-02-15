@@ -1586,3 +1586,27 @@ img.gold-offer-slide-img {
 .gold-check-how-container {
   height: -webkit-fill-available;
 }
+
+.gold-home {
+  margin-bottom: 50px;
+  .subtext {
+    font-size: 14px;
+    margin-bottom: 12px;
+    line-height: 21px;
+  }
+
+  .link {
+    cursor: pointer;
+    color: var(--primary);
+    text-decoration: underline;
+  }
+
+  .contact {
+    margin-top: 15px;
+    font-size: 13px;
+  }
+
+  .email {
+    font-weight: 600;
+  }
+}
