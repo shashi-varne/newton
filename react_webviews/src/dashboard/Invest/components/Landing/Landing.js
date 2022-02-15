@@ -21,18 +21,16 @@ import {
   getInvestCardsData,
   handleStocksAndIpoCards,
   initialize,
-  initializeKyc,
   openKyc,
   handleCampaign,
   handleKycPremiumLanding,
-  getCampaignData,
   closeCampaignDialog,
   setKycProductTypeAndRedirect,
   handleIpoCardRedirection,
   getRecommendationsAndNavigate,
-  handleCampaignNotification,
   openBfdlBanner,
   getKycData,
+  handleKycAndCampaign,
 } from "../../functions";
 import { generateOtp } from "../../../../login_and_registration/functions";
 import toast from "../../../../common/ui/Toast";
@@ -109,50 +107,18 @@ const Landing = (props) => {
     });
     const config = getConfig();
     setBaseConfig(config);
-    handleKycAndCampaign(data);
-    openBfdlBanner(handleDialogStates);
-  };
-
-  const handleKycAndCampaign = (data) => {
-    const { kycData: kycDetails, contactDetails: contactData } = initializeKyc({
+    handleKycAndCampaign({
+      screenName,
       kyc: data.kyc,
       user: data.user,
-      partnerCode: baseConfig.code,
-      screenName,
+      isWeb: config.Web,
+      partnerCode: config.code,
+      setKycData,
+      setCampaignData,
+      setContactDetails,
       handleDialogStates,
     });
-
-    setKycData(kycDetails);
-    setContactDetails(contactData);
-    const {
-      tradingEnabled,
-      isKycStatusDialogDisplayed,
-      isPremiumBottomsheetDisplayed,
-    } = kycDetails;
-
-    const campaignBottomSheetData = getCampaignData();
-    setCampaignData(campaignBottomSheetData);
-    const isCampaignDialogDisplayed = storageService().get(
-      "isCampaignDialogDisplayed"
-    );
-    const campaignsToShowOnPriority = ["trading_restriction_campaign"];
-    const isPriorityCampaign = campaignsToShowOnPriority.includes(
-      campaignBottomSheetData.campaign_name
-    );
-    const isActiveBottomSheet =
-      contactData.isVerifyDetailsSheetDisplayed ||
-      isPremiumBottomsheetDisplayed ||
-      isKycStatusDialogDisplayed;
-    if (
-      !isCampaignDialogDisplayed &&
-      baseConfig.Web &&
-      ((tradingEnabled && isPriorityCampaign) || !isActiveBottomSheet)
-    ) {
-      handleCampaignNotification({
-        campaignData: campaignBottomSheetData,
-        handleDialogStates,
-      });
-    }
+    openBfdlBanner(handleDialogStates);
   };
 
   const handleLoader = (data) => {

@@ -1,7 +1,7 @@
 import Api from "utils/api";
 import { storageService, splitMobileNumberFromContryCode } from "../../utils/validators";
 import toast from "../../common/ui/Toast";
-import { getConfig, navigate as navigateFunc, getBasePath, isTradingEnabled, getInvestCards } from "../../utils/functions";
+import { getConfig, getBasePath, isTradingEnabled, getInvestCards } from "../../utils/functions";
 import {
   investCardsBase,
   kycStatusMapper,
@@ -18,34 +18,8 @@ import { isEmpty, isFunction } from "lodash";
 import { getCorpusValue } from "./common/commonFunctions";
 
 let errorMessage = "Something went wrong!";
-export async function initialize({screenName, kyc, user, handleLoader, handleSummaryData}) {
+export async function initialize({ screenName, kyc, user, handleLoader, handleSummaryData }) {
   const config = getConfig();
-  // this.getSummary = getSummary.bind(this);
-  // this.setSummaryData = setSummaryData.bind(this);
-  // this.setInvestCardsData = setInvestCardsData.bind(this);
-  // this.handleRenderCard = handleRenderCard.bind(this);
-  // this.getRecommendationApi = getRecommendationApi.bind(this);
-  // this.getRecommendations = getRecommendations.bind(this);
-  // this.navigate = navigateFunc.bind(this.props);
-  // this.clickCard = clickCard.bind(this);
-  // this.initilizeKyc = initilizeKyc.bind(this);
-  // this.openKyc = openKyc.bind(this);
-  // this.setProductType = setProductType.bind(this);
-  // this.openPremiumOnboardBottomSheet = openPremiumOnboardBottomSheet.bind(this);
-  // this.handleKycSubmittedOrRejectedState = handleKycSubmittedOrRejectedState.bind(this);
-  // this.handleCampaign = handleCampaign.bind(this);
-  // this.closeCampaignDialog = closeCampaignDialog.bind(this);
-  // this.handleStocksAndIpoCards = handleStocksAndIpoCards.bind(this);
-  // this.initiatePinSetup = initiatePinSetup.bind(this);
-  // this.setKycProductTypeAndRedirect = setKycProductTypeAndRedirect.bind(this);
-  // this.handleIpoCardRedirection = handleIpoCardRedirection.bind(this);
-  // this.contactVerification = contactVerification.bind(this);
-  // this.handleCommonKycRedirections = handleCommonKycRedirections.bind(this);
-  // this.contactVerification = contactVerification.bind(this);
-  // this.handleCampaignNotificationData = handleCampaignNotificationData.bind(this);
-  // this.openBfdlBanner = openBfdlBanner.bind(this);
-  // this.closeBfdlBanner = closeBfdlBanner.bind(this);
-  // this.handleStocksRedirection = handleStocksRedirection.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
   const openEquityCallback = storageService().getBoolean("openEquityCallback");
   if (openEquityCallback) {
@@ -54,18 +28,9 @@ export async function initialize({screenName, kyc, user, handleLoader, handleSum
       action: "open_equity"
     })
   }
-  // if (config) {
-  //   this.setState({ config });
-  // }
   if ((screenName === "investLanding" || screenName === "sdk_landing" ) && dataSettedInsideBoot) {
     storageService().set("dataSettedInsideBoot", false);
   }
-  // if(screenName === "investLanding"){
-  //   this.setInvestCardsData();
-  // } else if(screenName === "sdk_landing") {
-  //   this.handleRenderCard();
-  // }
-
   const isBfdlBannerDisplayed = storageService().getBoolean("bfdlBannerDisplayed");
   const isBfdlConfig = !isBfdlBannerDisplayed && config.code === 'bfdlmobile' && (config.isIframe || config.isSdk)
   const isWebConfig = config.Web && screenName === "investLanding";
@@ -243,23 +208,6 @@ export async function getRecommendations({amount, investType, term, equity, debt
   }
 }
 
-export function navigate(pathname, data = {}) {
-  const { config = getConfig() } = this.state;
-  if (this.props.edit || data.edit) {
-    this.props.history.replace({
-      pathname: pathname,
-      search: config.searchParams,
-    });
-  } else {
-    this.props.history.push({
-      pathname: pathname,
-      search: data.searchParams || config.searchParams,
-      params: data.params || {},
-      state: data.state || {},
-    });
-  }
-}
-
 export const getKycData = ({ kyc, user }) => {
   kyc = kyc || storageService().getObject("kyc") || {};
   const TRADING_ENABLED = isTradingEnabled(kyc);
@@ -311,7 +259,7 @@ export const initializeKyc = ({ user, kyc, partnerCode, screenName, handleDialog
     kycJourneyStatus,
     tradingEnabled,
   } = kycData;
-  const contactDetails = contactVerification(kyc, handleDialogStates);
+  const contactDetails = contactVerification(kyc, handleDialogStates, screenName);
   if (contactDetails.isVerifyDetailsSheetDisplayed) {
     return { kycData, contactDetails };
   }
@@ -383,6 +331,50 @@ export const initializeKyc = ({ user, kyc, partnerCode, screenName, handleDialog
 
   return { kycData, contactDetails }
 }
+
+export const handleKycAndCampaign = ({ kyc, user, screenName, isWeb, partnerCode, handleDialogStates, setKycData, setContactDetails, setCampaignData }) => {
+  const { kycData: kycDetails, contactDetails: contactData  } = initializeKyc({
+    kyc,
+    user,
+    partnerCode,
+    screenName,
+    handleDialogStates,
+  });
+
+  setKycData(kycDetails);
+  if (isFunction(setContactDetails)) {
+    setContactDetails(contactData);
+  }
+  const {
+    tradingEnabled,
+    isKycStatusDialogDisplayed,
+    isPremiumBottomsheetDisplayed,
+  } = kycDetails;
+
+  const campaignBottomSheetData = getCampaignData();
+  setCampaignData(campaignBottomSheetData);
+  const isCampaignDialogDisplayed = storageService().get(
+    "isCampaignDialogDisplayed"
+  );
+  const campaignsToShowOnPriority = ["trading_restriction_campaign"];
+  const isPriorityCampaign = campaignsToShowOnPriority.includes(
+    campaignBottomSheetData.campaign_name
+  );
+  const isActiveBottomSheet =
+    contactData.isVerifyDetailsSheetDisplayed ||
+    isPremiumBottomsheetDisplayed ||
+    isKycStatusDialogDisplayed;
+  if (
+    !isCampaignDialogDisplayed &&
+    isWeb &&
+    ((tradingEnabled && isPriorityCampaign) || !isActiveBottomSheet)
+  ) {
+    handleCampaignNotification({
+      campaignData: campaignBottomSheetData,
+      handleDialogStates,
+    });
+  }
+};
 
 export function openPremiumOnboardBottomSheet({premiumDialogData, screenName, handleDialogStates}) {
   const config = getConfig()
@@ -658,10 +650,10 @@ function handleInvestSubtitle (isEquityEnabled)  {
   return investCardSubtitle;
 };
 
-export function handleRenderCard() {
-  let kyc = this.state.kyc || storageService().getObject("kyc") || {};
-  let user = this.state.user || storageService().getObject("user") || {};
-  const { config = getConfig() } = this.state;
+export function getSdkLandingCardsData({ kyc, user }) {
+  kyc = kyc || storageService().getObject("kyc") || {};
+  user = user || storageService().getObject("user") || {};
+  const config = getConfig();
   const isWeb = config.Web;
   const hideReferral = user.active_investment && !isWeb && config?.referralConfig?.shareRefferal;
   const referralCode = !user.active_investment && !isWeb && config?.referralConfig?.applyRefferal;
@@ -684,7 +676,7 @@ export function handleRenderCard() {
       return true;
     }
   })
-  this.setState({renderLandingCards : cards});
+  return cards;
 }
 
 // this function sets campaign data
@@ -725,7 +717,7 @@ export function handleCampaignNotification ({ campaignData, handleDialogStates }
   }
 }
 
-export function contactVerification(kyc, handleDialogStates) {
+export function contactVerification(kyc, handleDialogStates, screenName) {
   let contactData = {}
   const contactDetails = kyc?.identification?.meta_data;
   // ---------------- IPO Contact Verification Setting state for BottomSheet---------------//
@@ -741,7 +733,7 @@ export function contactVerification(kyc, handleDialogStates) {
   }
   // ---------------- Above Condition For IPO Contact Verification---------------//
   const isVerifyDetailsSheetDisplayed = storageService().get("verifyDetailsSheetDisplayed");
-  if (!isVerifyDetailsSheetDisplayed) {
+  if (!isVerifyDetailsSheetDisplayed && screenName === "investLanding") {
     if (!isEmpty(contactDetails)) {
       let contact_type, contact_value, isVerified = true;
       if (!isEmpty(contactDetails.mobile_number) && contactDetails.mobile_number_verified === false) {
@@ -836,17 +828,6 @@ export const closeCampaignDialog = ({ campaignData, handleDialogStates }) => () 
   handleDialogStates({ openCampaignDialog: false })
 }
 
-// sets every other dialog to false, except the one passed as key to be displayed
-export function setDialogsState(key) {
-  this.setState({
-    openKycPremiumLanding: false,
-    openCampaignDialog: false,
-    openKycStatusDialog: false,
-    verifyDetails: false,
-    [key]: true
-  });
-}
-
 export async function updateConsent() {
   const res = await Api.post("/api/account/user/partnerconsent");
   if(!res || res?.pfwstatus_code !== 200 || isEmpty(res?.pfwresponse)) {
@@ -882,8 +863,4 @@ export function openBfdlBanner(handleDialogStates) {
     storageService().setBoolean("bfdlBannerDisplayed", true);
     handleDialogStates({ openBfdlBanner: true });
   }
-}
-
-export function closeBfdlBanner() {
-  this.setState({ openBfdlBanner: false });
 }
