@@ -261,11 +261,11 @@ export function navigate(pathname, data = {}) {
 }
 
 export const getKycData = ({ kyc, user }) => {
-  let userKyc = kyc || storageService().getObject("kyc") || {};
-  const TRADING_ENABLED = isTradingEnabled(userKyc);
-  let currentUser = user || storageService().getObject("user") || {};
-  const isCompliant = userKyc.kyc_status === "compliant";
-  const kycJourneyStatus = getKycAppStatus(userKyc)?.status || "";
+  kyc = kyc || storageService().getObject("kyc") || {};
+  const TRADING_ENABLED = isTradingEnabled(kyc);
+  user = user || storageService().getObject("user") || {};
+  const isCompliant = kyc.kyc_status === "compliant";
+  const kycJourneyStatus = getKycAppStatus(kyc)?.status || "";
   let kycStatusData = kycStatusMapperInvest[kycJourneyStatus];
   const initialKycStatus = ["init", "ground"];
   if(initialKycStatus.includes(kycJourneyStatus) && TRADING_ENABLED) {
@@ -290,8 +290,8 @@ export const getKycData = ({ kyc, user }) => {
     isCompliant,
     kycStatusData,
     kycJourneyStatusMapperData,
-    userKyc,
-    currentUser,
+    kyc,
+    user,
     kycJourneyStatus,
     isReadyToInvestBase,
     isEquityCompletedBase,
@@ -306,25 +306,30 @@ export const getKycData = ({ kyc, user }) => {
 
 export const initializeKyc = ({ user, kyc, partnerCode, screenName, handleDialogStates }) => {
   let kycData = getKycData({ kyc, user });
-  const contactDetails = contactVerification(userKyc, handleDialogStates);
+  const { 
+    isCompliant,
+    kycJourneyStatus,
+    tradingEnabled,
+  } = kycData;
+  const contactDetails = contactVerification(kyc, handleDialogStates);
   if (contactDetails.isVerifyDetailsSheetDisplayed) {
     return { kycData, contactDetails };
   }
   let premiumDialogData = {};
   let premiumOnboardingStatus = "";
-  if (isCompliant && !TRADING_ENABLED) {
+  if (isCompliant && !tradingEnabled) {
     premiumOnboardingStatus = kycJourneyStatus;
     if (
-      ["ground_premium", "init", "incomplete"].indexOf(kycJourneyStatus) !== -1
+      ["ground_premium", "init", "incomplete"].includes(kycJourneyStatus)
     ) {
       premiumDialogData = premiumBottomSheetMapper[premiumOnboardingStatus];
       premiumDialogData.status = premiumOnboardingStatus;
     }
 
     if (
-      ["submitted", "complete"].indexOf(kycJourneyStatus) !== -1 &&
-      !currentUser.active_investment &&
-      userKyc.bank.meta_data_status === "approved"
+      ["submitted", "complete"].includes(kycJourneyStatus) &&
+      !user.active_investment &&
+      kyc.bank.meta_data_status === "approved"
     ) {
       premiumDialogData = kycStatusMapper["mf_complete"];
       premiumDialogData.status = premiumOnboardingStatus;
@@ -353,9 +358,9 @@ export const initializeKyc = ({ user, kyc, partnerCode, screenName, handleDialog
       }
   
       if (["fno_rejected", "complete"].includes(kycJourneyStatus)) {
-        if (TRADING_ENABLED && userKyc.equity_investment_ready && currentUser.equity_status === "init") {
+        if (tradingEnabled && kyc.equity_investment_ready && user.equity_status === "init") {
           modalData = kycStatusMapper["kyc_verified"];
-        } else if (!TRADING_ENABLED && !isCompliant && !currentUser.active_investment) {
+        } else if (!tradingEnabled && !isCompliant && !user.active_investment) {
           modalData = kycStatusMapper["mf_complete"];
         }
       } else {
@@ -407,7 +412,7 @@ export function handleKycSubmittedOrRejectedState({ kycJourneyStatusMapperData, 
 export async function openKyc({
   kycJourneyStatus,
   kycJourneyStatusMapperData,
-  userKyc,
+  kyc,
   tradingEnabled,
   kycStatusData,
   handleDialogStates,
@@ -429,7 +434,7 @@ export async function openKyc({
     });
   } else {
     handleCommonKycRedirections({
-      userKyc,
+      kyc,
       kycJourneyStatus,
       tradingEnabled,
       kycStatusData,
@@ -440,21 +445,21 @@ export async function openKyc({
   }
 }
 
-export async function handleCommonKycRedirections({ userKyc, kycJourneyStatus, tradingEnabled, kycStatusData, isReadyToInvestBase, navigate, handleLoader, updateKyc }) {
+export async function handleCommonKycRedirections({ kyc, kycJourneyStatus, tradingEnabled, kycStatusData, isReadyToInvestBase, navigate, handleLoader, updateKyc }) {
   if (kycJourneyStatus === "ground") {
     navigate("/kyc/home");
   } else if (kycJourneyStatus === "ground_pan") {
     navigate("/kyc/journey", {
       state: {
-        show_aadhaar: !(userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual") ? true : false,
+        show_aadhaar: !(kyc.address.meta_data.is_nri || kyc.kyc_type === "manual") ? true : false,
       },
     });
   } else if (!tradingEnabled && kycJourneyStatus === "complete") {
     navigate(PATHNAME_MAPPER.kycEsignNsdl, {
       searchParams: `${getConfig().searchParams}&status=success`
     });
-  } else if (tradingEnabled && userKyc?.kyc_product_type !== "equity") {
-    await setKycProductTypeAndRedirect({ userKyc, kycJourneyStatus, isReadyToInvestBase, handleLoader, navigate, updateKyc });
+  } else if (tradingEnabled && kyc?.kyc_product_type !== "equity") {
+    await setKycProductTypeAndRedirect({ kyc, kycJourneyStatus, isReadyToInvestBase, handleLoader, navigate, updateKyc });
   } else if (kycStatusData.nextState) {
     navigate(kycStatusData.nextState);
   } else {
@@ -462,16 +467,16 @@ export async function handleCommonKycRedirections({ userKyc, kycJourneyStatus, t
   }
 }
 
-export async function setKycProductTypeAndRedirect({ userKyc, kycJourneyStatus, isReadyToInvestBase, handleLoader, navigate, updateKyc }) {
+export async function setKycProductTypeAndRedirect({ kyc, kycJourneyStatus, isReadyToInvestBase, handleLoader, navigate, updateKyc }) {
   const config = getConfig();
   let result;
-  if (!userKyc?.mf_kyc_processed) {
+  if (!kyc?.mf_kyc_processed) {
     result = await setProductType(handleLoader);
     updateKyc(result.kyc);
   }
   
   // already kyc done users
-  if (isReadyToInvestBase && (result?.kyc?.mf_kyc_processed || userKyc?.mf_kyc_processed)) {
+  if (isReadyToInvestBase && (result?.kyc?.mf_kyc_processed || kyc?.mf_kyc_processed)) {
     navigate(PATHNAME_MAPPER.tradingInfo)
   } else if (kycJourneyStatus === "ground") {
     navigate("/kyc/home");
@@ -487,10 +492,10 @@ export async function setKycProductTypeAndRedirect({ userKyc, kycJourneyStatus, 
   }
 }
 
-export function handleIpoCardRedirection({ userKyc, currentUser, navigate, handleLoader, handleSummaryData, handleDialogStates }, props) {
+export function handleIpoCardRedirection({ kyc, user, navigate, handleLoader, handleSummaryData, handleDialogStates }, props) {
   if (
-      userKyc.equity_investment_ready &&
-      currentUser?.pin_status !== 'pin_setup_complete'
+      kyc.equity_investment_ready &&
+      user?.pin_status !== 'pin_setup_complete'
   ) {
     initiatePinSetup({ key: "ipo", handleLoader, handleSummaryData, handleDialogStates }, props);
   } else {
@@ -521,13 +526,13 @@ function initiatePinSetup({ key, handleLoader, handleSummaryData, handleDialogSt
   }
 }
           
-export function handleStocksAndIpoCards({ key, kycJourneyStatusMapperData, kycJourneyStatus, userKyc, currentUser, handleDialogStates, handleSummaryData, navigate, handleLoader, closeKycStatusDialog }, props) {
+export function handleStocksAndIpoCards({ key, kycJourneyStatusMapperData, kycJourneyStatus, kyc, user, handleDialogStates, handleSummaryData, navigate, handleLoader, closeKycStatusDialog }, props) {
   const config = getConfig();
   let modalData = Object.assign({key}, kycJourneyStatusMapperData);
 
   if (key === "ipo") {
     const handleClick = () => {
-      handleIpoCardRedirection({ userKyc, currentUser, navigate, handleLoader, handleSummaryData, handleDialogStates }, props)
+      handleIpoCardRedirection({ kyc, user, navigate, handleLoader, handleSummaryData, handleDialogStates }, props)
     }
     if (kycJourneyStatus === "verifying_trading_account") {
       modalData = {
@@ -543,19 +548,19 @@ export function handleStocksAndIpoCards({ key, kycJourneyStatusMapperData, kycJo
         handleClick: handleClick
       }
     } else if (
-      userKyc.equity_investment_ready ||
-      (kycJourneyStatus === "complete" && userKyc.kyc_product_type === 'equity') ||
+      kyc.equity_investment_ready ||
+      (kycJourneyStatus === "complete" && kyc.kyc_product_type === 'equity') ||
       kycJourneyStatus === "fno_rejected"
     ) {
-      handleIpoCardRedirection({ userKyc, currentUser, navigate, handleLoader, handleSummaryData, handleDialogStates }, props);
+      handleIpoCardRedirection({ kyc, user, navigate, handleLoader, handleSummaryData, handleDialogStates }, props);
       return
     }
   } else if (key === "stocks") {
     if (
-      userKyc.equity_investment_ready ||
-      (kycJourneyStatus === "complete" && userKyc.kyc_product_type === 'equity')
+      kyc.equity_investment_ready ||
+      (kycJourneyStatus === "complete" && kyc.kyc_product_type === 'equity')
     ) {
-      if (currentUser?.pin_status !== 'pin_setup_complete') {
+      if (user?.pin_status !== 'pin_setup_complete') {
         return initiatePinSetup({ key, handleSummaryData, handleLoader }, props);
       } else if (kycJourneyStatus !== "fno_rejected") {
         if(config.isSdk) {
@@ -589,7 +594,7 @@ export function handleStocksAndIpoCards({ key, kycJourneyStatusMapperData, kycJo
     }
   }
 
-  if (!isEmpty(modalData) && (kycJourneyStatus !== "complete" || (kycJourneyStatus === "complete" && userKyc.kyc_product_type !== "equity"))) {
+  if (!isEmpty(modalData) && (kycJourneyStatus !== "complete" || (kycJourneyStatus === "complete" && kyc.kyc_product_type !== "equity"))) {
     handleDialogStates({ openKycStatusDialog: true }, modalData)
   }
 }
@@ -654,13 +659,13 @@ function handleInvestSubtitle (isEquityEnabled)  {
 };
 
 export function handleRenderCard() {
-  let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
-  let currentUser = this.state.currentUser || storageService().getObject("user") || {};
+  let kyc = this.state.kyc || storageService().getObject("kyc") || {};
+  let user = this.state.user || storageService().getObject("user") || {};
   const { config = getConfig() } = this.state;
   const isWeb = config.Web;
-  const hideReferral = currentUser.active_investment && !isWeb && config?.referralConfig?.shareRefferal;
-  const referralCode = !currentUser.active_investment && !isWeb && config?.referralConfig?.applyRefferal;
-  const isEquityEnabled = isTradingEnabled(userKyc);
+  const hideReferral = user.active_investment && !isWeb && config?.referralConfig?.shareRefferal;
+  const referralCode = !user.active_investment && !isWeb && config?.referralConfig?.applyRefferal;
+  const isEquityEnabled = isTradingEnabled(kyc);
   const cards = sdkInvestCardMapper.filter(el => {
     if(el.key === 'refer') {
       if(referralCode){
@@ -720,9 +725,9 @@ export function handleCampaignNotification ({ campaignData, handleDialogStates }
   }
 }
 
-export function contactVerification(userKyc, handleDialogStates) {
+export function contactVerification(kyc, handleDialogStates) {
   let contactData = {}
-  const contactDetails = userKyc?.identification?.meta_data;
+  const contactDetails = kyc?.identification?.meta_data;
   // ---------------- IPO Contact Verification Setting state for BottomSheet---------------//
   if (!isEmpty(contactDetails)) {
     if (contactDetails.mobile_number_verified === false) {
