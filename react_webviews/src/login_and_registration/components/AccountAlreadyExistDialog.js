@@ -33,6 +33,12 @@ export function AccountAlreadyExistDialog({
     }
   }, [secondaryDetail]);
 
+  const handleClick = async () => {
+    setLoading(true);
+    await props.next(type, data);
+    setLoading(false);
+  }
+
   return (
     <WVBottomSheet
       isOpen={isOpen}
@@ -50,10 +56,7 @@ export function AccountAlreadyExistDialog({
         variant: "contained",
         title: "CONTINUE",
         showLoader: loading,
-        onClick: () => {
-          props.next(type, data)
-          setLoading(true);
-        }
+        onClick: handleClick
       }}
       classes={{
         container: "account-already-exists-container",

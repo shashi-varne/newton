@@ -40,6 +40,9 @@ class VerifyDetailDialog extends Component {
           body.mobile = data.contact_value;
           body.whatsapp_consent = true;
         }
+        this.setState({
+          loading: true,
+        });
         const otpResponse = await this.generateOtp(body);
         if (otpResponse) {
           let result = otpResponse.pfwresponse.result;
@@ -52,6 +55,9 @@ class VerifyDetailDialog extends Component {
             },
           });
         }
+        this.setState({
+          loading: false,
+        });
       } else if (result?.is_user === true) { 
         result.user.data = data;
         this.props.showAccountAlreadyExist(true, result.user);
