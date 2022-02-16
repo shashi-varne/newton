@@ -28,7 +28,7 @@ export async function initialize({ screenName, kyc, user, handleLoader, handleSu
       action: "open_equity"
     })
   }
-  if ((screenName === "investLanding" || screenName === "sdkLanding" ) && dataSettedInsideBoot) {
+  if (["investLanding", "sdkLanding"].includes(screenName) && dataSettedInsideBoot) {
     storageService().set("dataSettedInsideBoot", false);
   }
   const isBfdlBannerDisplayed = storageService().getBoolean("bfdlBannerDisplayed");
