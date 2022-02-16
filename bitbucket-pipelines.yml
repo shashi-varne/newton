@@ -24,7 +24,7 @@ definitions:
           - cd react_webviews
           - yarn
           - unset CI
-          - IS_PIPELINE=true yarn build
+          - yarn build-pipeline
           - ls
           - mv build $BITBUCKET_COMMIT
           - pipe: atlassian/google-cloud-storage-deploy:0.4.5
@@ -48,7 +48,7 @@ definitions:
           - cd react_webviews
           - yarn
           - unset CI
-          - IS_PIPELINE=true yarn build
+          - yarn build-pipeline
           - ls
           - mv build $BITBUCKET_BRANCH
           - pipe: atlassian/google-cloud-storage-deploy:0.4.5
@@ -64,7 +64,6 @@ definitions:
         # caches:
         #   - nodemodules
         script:
-          - export HTTP_ADDR=app.fisdom.com
           - export HTTP_PORT=3000
           - echo "127.0.0.1 $HTTP_ADDR" >> /etc/hosts
           - apt-get update
@@ -77,7 +76,7 @@ definitions:
           - cd react_webviews
           - yarn
           - unset CI
-          - yarn build
+          - yarn ${BUILD_COMMAND}
           - ls
           - cd build
           - pipe: atlassian/google-cloud-storage-deploy:0.4.5
@@ -95,6 +94,52 @@ pipelines:
       - step:
           <<: *pod-deploy
           name: Pipeline-on-demand deploy
+    
+    deploy-prod-all:
+      - parallel:
+        - step:
+            <<: *prod-deploy
+            name: Fisdom Production deploy
+            deployment: fisdom-prod
+        
+        - step:
+            <<: *prod-deploy
+            name: Finity Production deploy
+            deployment: finity-prod
+        
+        - step:
+            <<: *prod-deploy
+            name: Fisdom-Equity Production deploy
+            deployment: fisdom-webapp-prod
+
+        - step:
+            <<: *prod-deploy
+            name: Finity-Equity Production deploy
+            deployment: finity-webapp-prod
+    
+    deploy-prod-fisdom-finity:
+      - parallel:
+        - step:
+            <<: *prod-deploy
+            name: Fisdom Production deploy
+            deployment: fisdom-prod
+        
+        - step:
+            <<: *prod-deploy
+            name: Finity Production deploy
+            deployment: finity-prod
+        
+    deploy-prod-app2-equity:
+      - parallel:
+        - step:
+            <<: *prod-deploy
+            name: Fisdom-Equity Production deploy
+            deployment: fisdom-webapp-prod
+
+        - step:
+            <<: *prod-deploy
+            name: Finity-Equity Production deploy
+            deployment: finity-webapp-prod
 
   branches:
     # master:
@@ -106,20 +151,71 @@ pipelines:
       - step:
           name: Ready Steady Go....
           script:
-            - echo "Go ahead and deploy now... :)"
+            - echo "Go ahead and Deploy now... :)"
 
       - parallel:
         - step:
             <<: *prod-deploy
-            name: Fisdom Production deploy
+            name: Fisdom Production Deploy
             trigger: manual
             deployment: fisdom-prod
+        
+        - step:
+            <<: *prod-deploy
+            name: Finity Production Deploy
+            trigger: manual
+            deployment: finity-prod
+        
+        - step:
+            <<: *prod-deploy
+            name: Fisdom-Equity Production Deploy
+            trigger: manual
+            deployment: fisdom-webapp-prod
 
         - step:
             <<: *prod-deploy
-            name: Finity Production deploy
+            name: Finity-Equity Production Deploy
             trigger: manual
-            deployment: finity-prod
+            deployment: finity-webapp-prod
+
+    equity-uat:
+      - step:
+          name: Ready Steady Go....
+          script:
+            - echo "Go ahead and Deploy now... :)"
+
+      - parallel:
+        - step:
+            <<: *prod-deploy
+            name: Fisdom Equity UAT Deploy
+            trigger: manual
+            deployment: fisdom-webapp-uat
+        
+        - step:
+            <<: *prod-deploy
+            name: Finity Equity UAT Deploy
+            trigger: manual
+            deployment: finity-webapp-uat
+
+    equity-preprod:
+      - step:
+          name: Ready Steady Go....
+          script:
+            - echo "Go ahead and Deploy now... :)"
+
+      - parallel:
+        - step:
+            <<: *prod-deploy
+            name: Fisdom Equity Pre-Prod Deploy
+            trigger: manual
+            deployment: fisdom-webapp-preprod
+        
+        - step:
+            <<: *prod-deploy
+            name: Finity Equity Pre-Prod Deploy
+            trigger: manual
+            deployment: finity-webapp-preprod
+        
       
       # - step:
       #     <<: *prod-deploy

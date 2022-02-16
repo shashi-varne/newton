@@ -490,7 +490,7 @@ const Summary = (props) => {
                   title="Insurance"
                 />
               )}
-              {data.gold_active_investment && investCards.gold && (
+              {/* {data.gold_active_investment && investCards.gold && (
                 <SummaryCard
                   dataAid='gold'
                   goNext={() => {
@@ -501,7 +501,7 @@ const Summary = (props) => {
                   title="Gold"
                   subtitle={`${data?.gold_details?.total_balance || 0} gm`}
                 />
-              )}
+              )} */}
             </main>
           </>
         )}
