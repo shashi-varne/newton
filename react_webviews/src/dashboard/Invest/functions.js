@@ -28,13 +28,13 @@ export async function initialize({ screenName, kyc, user, handleLoader, handleSu
       action: "open_equity"
     })
   }
-  if ((screenName === "investLanding" || screenName === "sdk_landing" ) && dataSettedInsideBoot) {
+  if ((screenName === "investLanding" || screenName === "sdkLanding" ) && dataSettedInsideBoot) {
     storageService().set("dataSettedInsideBoot", false);
   }
   const isBfdlBannerDisplayed = storageService().getBoolean("bfdlBannerDisplayed");
   const isBfdlConfig = !isBfdlBannerDisplayed && config.code === 'bfdlmobile' && (config.isIframe || config.isSdk)
   const isWebConfig = config.Web && screenName === "investLanding";
-  const isSdkConfig = config.isSdk && screenName === "sdk_landing";
+  const isSdkConfig = config.isSdk && screenName === "sdkLanding";
 
   let data = { kyc, user }
   if (!isBfdlConfig && (isWebConfig || isSdkConfig) && !dataSettedInsideBoot) {
@@ -408,7 +408,7 @@ export function openPremiumOnboardBottomSheet({ premiumDialogData, screenName, h
 
   if (isKycPremiumBottomSheetDisplayed || 
       (config.Web && screenName !== "investLanding") || 
-      (!config.Web && screenName !== "sdk_landing")) {
+      (!config.Web && screenName !== "sdkLanding")) {
     return false;
   }
 
