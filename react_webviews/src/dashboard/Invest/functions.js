@@ -682,7 +682,7 @@ export const handleKycStatus = ({
   } else if (kycJourneyStatus === "rejected") {
     navigate(KYC_PATHNAME_MAPPER.uploadProgress);
   } else if (tradingEnabled && kyc?.kyc_product_type !== "equity") {
-    closeKycStatusDialog();
+    closeKycStatusDialog(true);
     await setKycProductTypeAndRedirect({
       kyc,
       kycJourneyStatus,

@@ -38,11 +38,13 @@ const StocksAndIpoDirectEntry = (props) => {
     updateUser(data.user);
   };
 
-  const closeKycStatusDialog = () => {
+  const closeKycStatusDialog = (skipNavigation = false) => {
     handleDialogStates({
       openKycStatusDialog: false,
     });
-    navigate("/invest");
+    if (!skipNavigation) {
+      navigate("/invest");
+    }
   };
 
   useEffect(() => {
