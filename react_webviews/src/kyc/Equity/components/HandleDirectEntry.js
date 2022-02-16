@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import isEmpty from "lodash/isEmpty";
 import noop from "lodash/noop";
 import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
@@ -16,7 +16,7 @@ import {
 const HandleDirectEntry = (props) => {
   const { kyc, user, updateKyc, updateUser } = useUserKycHook();
   const [baseConfig, setBaseConfig] = useState(getConfig());
-  const type = props.match?.params?.type;
+  const type = useMemo(() => props.match?.params?.type, [props.match?.params]);
   const navigate = navigateFunc.bind(props);
   const [dialogStates, setDialogStates] = useState({
     openKycStatusDialog: false,
