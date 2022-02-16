@@ -615,7 +615,7 @@ export function handleStocksAndIpoCards(
     const kycInprogressStates = ["submitted", "verifying_trading_account"];
     if (config.isSdk && kycInprogressStates.includes(kycJourneyStatus)) {
       const handleClick = () => {
-        closeKycStatusDialog()
+        closeKycStatusDialog(true)
         handleStocksRedirection({ isDirectEntry, navigate });
       }
       modalData.buttonTitle = "CONTINUE";
@@ -770,7 +770,7 @@ export const handleKycStatusRedirection = (
         });
         return;
       }
-      closeKycStatusDialog();
+      closeKycStatusDialog(true);
       handleStocksRedirection({ isDirectEntry, navigate })
       return;
     } else if (kycJourneyStatus === "fno_rejected") {
