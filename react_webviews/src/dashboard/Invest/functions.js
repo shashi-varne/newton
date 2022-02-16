@@ -691,12 +691,12 @@ export const resetRiskProfileJourney = () => {
 
 function handleInvestSubtitle ()  {
   const investCards = getInvestCards(["nps", "gold"]);
-  let investCardSubtitle = 'Mutual funds';
-  if (investCards?.gold) {
-    investCardSubtitle = investCardSubtitle += ', Gold, Save tax';
-  } else {
-   investCardSubtitle = 'Mutual funds, Save tax';
-  }
+  let investCardSubtitle = 'Mutual funds, Save tax';
+  // if (investCards?.gold) {
+  //   investCardSubtitle = investCardSubtitle += ', Gold, Save tax';
+  // } else {
+  //  investCardSubtitle = 'Mutual funds, Save tax';
+  // }
 
   if (investCards?.nps) {
     investCardSubtitle = investCardSubtitle += ', NPS';
