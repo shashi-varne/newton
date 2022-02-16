@@ -35,7 +35,6 @@ const LandingBottomSheets = ({
             close={closeKycStatusDialog}
             handleClick={handleKycStatus}
             handleClick2={handleKycStatusRedirection}
-            cancel={closeKycStatusDialog}
           />
           <KycPremiumLandingDialog
             isOpen={dialogStates.openKycPremiumLanding}

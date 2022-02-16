@@ -47,6 +47,10 @@ const StocksAndIpoDirectEntry = (props) => {
     }
   };
 
+  const close = () => {
+    closeKycStatusDialog(false);
+  }
+
   useEffect(() => {
     if (!isEmpty(kyc) && !isEmpty(user)) {
       switch (type) {
@@ -84,12 +88,12 @@ const StocksAndIpoDirectEntry = (props) => {
   }, [kyc, user]);
 
   return (
-    <Container skelton={true} noBackIcon>
+    <Container skelton={true} noBackIcon hideInPageTitle >
       {!isEmpty(modalData) && (
         <KycStatusDialog
           isOpen={dialogStates.openKycStatusDialog}
           data={modalData}
-          close={closeKycStatusDialog}
+          close={close}
           handleClick={handleKycStatus({
             kyc,
             kycData,
@@ -117,7 +121,6 @@ const StocksAndIpoDirectEntry = (props) => {
             },
             props
           )}
-          cancel={closeKycStatusDialog}
         />
       )}
     </Container>
