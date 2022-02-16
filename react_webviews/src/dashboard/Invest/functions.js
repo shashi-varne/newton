@@ -517,18 +517,18 @@ export async function setKycProductTypeAndRedirect({ kyc, kycJourneyStatus, isRe
   }
 }
 
-export function handleIpoCardRedirection({ kyc, user, navigate, handleLoader, handleSummaryData, handleDialogStates }, props) {
+export function handleIpoCardRedirection({ kyc, user, isDirectEntry, navigate, handleLoader, handleSummaryData, handleDialogStates }, props) {
   if (
       kyc.equity_investment_ready &&
       user?.pin_status !== 'pin_setup_complete'
   ) {
-    initiatePinSetup({ key: "ipo", handleLoader, handleSummaryData, handleDialogStates }, props);
+    initiatePinSetup({ key: "ipo", isDirectEntry, navigate, handleLoader, handleSummaryData, handleDialogStates }, props);
   } else {
     navigate("/market-products");
   }
 }
 
-function initiatePinSetup({ key, handleLoader, handleSummaryData, handleDialogStates }, props) {
+function initiatePinSetup({ key, isDirectEntry, navigate, handleLoader, handleSummaryData, handleDialogStates }, props) {
   const config  = getConfig();
   if (config.isNative) {
     openModule('account/setup_2fa', props, { routeUrlParams: `/${key}` });
@@ -540,9 +540,7 @@ function initiatePinSetup({ key, handleLoader, handleSummaryData, handleDialogSt
       callback: async function (data) {
         if (data.status === "success") {
           await getSummary({ handleLoader, handleSummaryData });
-          nativeCallback({
-            action: "open_equity"
-          })
+          handleStocksRedirection({ isDirectEntry, navigate });
         }
       },
     });
@@ -556,6 +554,7 @@ export function handleStocksAndIpoCards(
     key,
     kycJourneyStatusMapperData,
     kycJourneyStatus,
+    isDirectEntry = false,
     kyc,
     user,
     handleDialogStates,
@@ -571,7 +570,7 @@ export function handleStocksAndIpoCards(
 
   if (key === "ipo") {
     const handleClick = () => {
-      handleIpoCardRedirection({ kyc, user, navigate, handleLoader, handleSummaryData, handleDialogStates }, props)
+      handleIpoCardRedirection({ kyc, user, isDirectEntry, navigate, handleLoader, handleSummaryData, handleDialogStates }, props)
     }
     if (kycJourneyStatus === "verifying_trading_account") {
       modalData = {
@@ -591,7 +590,7 @@ export function handleStocksAndIpoCards(
       (kycJourneyStatus === "complete" && kyc.kyc_product_type === 'equity') ||
       kycJourneyStatus === "fno_rejected"
     ) {
-      handleIpoCardRedirection({ kyc, user, navigate, handleLoader, handleSummaryData, handleDialogStates }, props);
+      handleIpoCardRedirection({ kyc, user, isDirectEntry, navigate, handleLoader, handleSummaryData, handleDialogStates }, props);
       return
     }
   } else if (key === "stocks") {
@@ -600,12 +599,10 @@ export function handleStocksAndIpoCards(
       (kycJourneyStatus === "complete" && kyc.kyc_product_type === 'equity')
     ) {
       if (user?.pin_status !== 'pin_setup_complete') {
-        return initiatePinSetup({ key, handleSummaryData, handleLoader, handleDialogStates }, props);
+        return initiatePinSetup({ key, isDirectEntry, navigate, handleSummaryData, handleLoader, handleDialogStates }, props);
       } else if (kycJourneyStatus !== "fno_rejected") {
         if(config.isSdk) {
-          nativeCallback({
-            action: "open_equity"
-          })
+          handleStocksRedirection({ isDirectEntry, navigate })
         } else {
           handleLoader({ pageLoader: "page" })
           window.location.href = `${config.base_url}/page/equity/launchapp`;
@@ -618,10 +615,8 @@ export function handleStocksAndIpoCards(
     const kycInprogressStates = ["submitted", "verifying_trading_account"];
     if (config.isSdk && kycInprogressStates.includes(kycJourneyStatus)) {
       const handleClick = () => {
-        nativeCallback({
-          action: "open_equity"
-        })
         closeKycStatusDialog()
+        handleStocksRedirection({ isDirectEntry, navigate });
       }
       modalData.buttonTitle = "CONTINUE";
       modalData.handleClick = handleClick
@@ -635,6 +630,17 @@ export function handleStocksAndIpoCards(
 
   if (!isEmpty(modalData) && (kycJourneyStatus !== "complete" || (kycJourneyStatus === "complete" && kyc.kyc_product_type !== "equity"))) {
     handleDialogStates({ openKycStatusDialog: true }, modalData)
+  }
+}
+
+export const handleStocksRedirection = ({ isDirectEntry = false, navigate }) => {
+  if (isDirectEntry) {
+    storageService().setBoolean("openEquityCallback", true);
+    navigate("/invest")
+  } else {
+    nativeCallback({
+      action: "open_equity"
+    })
   }
 }
 
@@ -708,6 +714,7 @@ export const handleKycStatusRedirection = (
     modalData,
     baseConfig,
     contactDetails,
+    isDirectEntry = false,
     closeKycStatusDialog,
     navigate,
     handleLoader,
@@ -733,7 +740,7 @@ export const handleKycStatusRedirection = (
         state: {
           communicationType,
           contactValue,
-          fromDirectEntry: true
+          isDirectEntry
         },
       });
       return;
@@ -742,6 +749,7 @@ export const handleKycStatusRedirection = (
       {
         kyc,
         user,
+        isDirectEntry,
         navigate,
         handleLoader,
         handleSummaryData,
@@ -757,15 +765,13 @@ export const handleKycStatusRedirection = (
           state: {
             communicationType,
             contactValue,
-            fromDirectEntry: true
+            isDirectEntry
           },
         });
         return;
       }
-      nativeCallback({
-        action: "open_equity",
-      });
       closeKycStatusDialog();
+      handleStocksRedirection({ isDirectEntry, navigate })
       return;
     } else if (kycJourneyStatus === "fno_rejected") {
       handleLoader({ pageLoader: "page" });
