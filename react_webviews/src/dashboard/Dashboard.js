@@ -45,7 +45,7 @@ import StatusCallback from "../kyc/Native/StatusCallback";
 import NativeRedirection from "../kyc/Native/NativeRedirection";
 import ProductMarketTypes from './ProductMarketTypes';
 import PrimaryMarketProducts from "./PrimaryMarketProducts/PrimaryMarketProducts";
-import HandleDirectEntry from "../kyc/Equity/components/HandleDirectEntry";
+import StocksAndIpoDirectEntry from "./DirectEntry/StocksAndIpoDirectEntry";
 import PaymentNativeCallback from "./nps/components/paymentCallback";
 
 const Home = (props) => {
@@ -54,7 +54,7 @@ const Home = (props) => {
   return (
     <Fragment>
       <Switch>
-        <Route exact path={`${url}direct/:type`} component={HandleDirectEntry} />
+        <Route exact path={`${url}direct/:type`} component={StocksAndIpoDirectEntry} />
         <Route exact path={`${url}secondary-verification`} component={SecondaryVerification} />
         <Route exact path={`${url}secondary-otp-verification`} component={SecondaryOtpVerification} />
         <Route path={`${url}referral-code`} component={Referral} />
