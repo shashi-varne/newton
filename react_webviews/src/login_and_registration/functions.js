@@ -523,7 +523,7 @@ export function redirectAfterLogin(data, user, navigateFunc) {
   } else if (sdkStocksRedirection) {
     storageService().setBoolean("sdkStocksRedirection", false);
     storageService().setBoolean("openEquityCallback", true);
-    navigate("/", { edit: true, state: { goBack: "/" } });
+    navigate("/invest", { edit: true, state: { goBack: "/" } });
   } else if (ipoContactNotVerified){
     storageService().set("ipoContactNotVerified", false);
     navigate("/market-products", { state: { goBack: "/invest" } });

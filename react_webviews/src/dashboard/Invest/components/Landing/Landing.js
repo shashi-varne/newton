@@ -464,7 +464,7 @@ const Landing = (props) => {
           props
         )}
       />
-      {!isEmpty(contactDetails) && (
+      {!isEmpty(contactDetails) && dialogStates.verifyDetails && (
         <VerifyDetailDialog
           data={contactDetails}
           parent={{ sendEvents, navigate }}
