@@ -25,6 +25,8 @@ import FilterReturnBottomSheet, {
 import Filter from '../../../featureComponent/DIY/Filters/Filter';
 import Icon from '../../../designSystem/atoms/Icon';
 
+const CART_LIMIT = 24;
+
 const tabChilds = [
   {
     label: 'Large cap',
@@ -72,7 +74,7 @@ const tabChilds = [
   },
 ];
 
-const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
+const SubCategoryLanding = ({ onCartClick }) => {
   const [tabValue, setTabValue] = useState(0);
   const dataRef = useRef(0);
   const [selectedFilterValue, setSelectedFilterValue] = useState({
@@ -86,6 +88,8 @@ const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
   });
   console.log("count of render is",dataRef.current++);
   const [swiper, setSwiper] = useState(null);
+  const [numberOfFunds, setNumberOfFunds] = useState("");
+  const [selectedFunds, setSelectedFunds] = useState([]);
   const { productName } = useMemo(getConfig, []);
   const swipeableViewsRef = useRef();
   const handleTabChange = (e, value) => {
@@ -139,7 +143,7 @@ const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
           handleReturnClick={handleFilterClick(FilterType.returns)}
           handleFilterClick={handleFilterClick('filter')}
           productName={productName}
-          cartCount={cartCount}
+          cartCount={selectedFunds.length}
           onCartClick={onCartClick}
           returnLabel={selectedFilterValue[FilterType.returns]?.returnLabel}
         />
@@ -168,6 +172,24 @@ const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
         </SwipeableViews>
       </div> */}
       <div className='sub-category-swipper-wrapper'>
+        <Stack
+          justifyContent="space-between"
+          direction="row"
+          className="sub-category-filter-info"
+        >
+          <Typography
+            variant="body5"
+            color="foundationColors.content.secondary"
+          >
+            {numberOfFunds} funds
+          </Typography>
+          <Typography
+            variant="body5"
+            color="foundationColors.content.secondary"
+          >
+            {selectedFilterValue[FilterType.returns]?.returnLabel} returns
+          </Typography>
+        </Stack>
         <Swiper slidesPerView={1} onSwiper={setSwiper} onSlideChange={handleSlideChange}>
           {tabChilds?.map((el, idx) => {
             return (
@@ -182,6 +204,9 @@ const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
                   // value={tabValue}
                   // index={idx}
                   data={el?.data}
+                  setNumberOfFunds={setNumberOfFunds}
+                  setSelectedFunds={setSelectedFunds}
+                  selectedFunds={selectedFunds}
                 />
               </SwiperSlide>
             );
@@ -212,9 +237,10 @@ const SubCategoryLanding = ({ cartCount = 1, onCartClick }) => {
 };
 
 const TabPanel = memo((props) => {
-  const { data = [], returnPeriod, sortFundsBy, sortingOrder, productName } = props;
+  const { data = [], returnPeriod, sortFundsBy, sortingOrder, setNumberOfFunds, selectedFunds, setSelectedFunds } = props;
 
   const [funds, setFunds] = useState(data);
+  const [selectedFundsIsins] = useState(selectedFunds.map(({ isin }) => isin))
   const [NumOfItems, setNumOfItems] = useState(10);
   const observer = useRef();
   const lastProductItem = useCallback((node) => {
@@ -239,7 +265,19 @@ const TabPanel = memo((props) => {
   useEffect(() => {
     const filteredFunds = orderBy(data, sortFundsOrder, [sortingOrder]);
     setFunds(filteredFunds);
-  }, [sortFundsBy]);
+    setNumberOfFunds(filteredFunds.length);
+  }, [sortFundsBy, returnPeriod]);
+
+  const handleAddToCart = (fund, isFundAddedToCart) => () => {
+    if (isFundAddedToCart) {
+      const filteredFunds = selectedFunds.filter(({ isin }) => isin !== fund.isin)
+      setSelectedFunds(filteredFunds);
+    } else {
+      if(selectedFunds.length < CART_LIMIT) {
+        setSelectedFunds([...selectedFunds, fund]);
+      }
+    }
+  }
 
   return (
     <div
@@ -250,7 +288,7 @@ const TabPanel = memo((props) => {
     // {...other}
     >
       {/* {value === index && ( */}
-      <Box sx={{ pt: '16px', pl: '16px', pr: '16px' }}>
+      <Box sx={{ pt: '16px', pl: '16px', pr: '16px', backgroundColor: "white" }}>
         <Typography component='div'>
           {funds?.slice(0, NumOfItems)?.map((fund, idx) => {
             const returnValue = fund[returnPeriod];
@@ -269,9 +307,10 @@ const TabPanel = memo((props) => {
             if (setRef) {
               refData.ref = lastProductItem;
             }
+            const isFundAddedToCart = selectedFundsIsins.includes(fund.isin);
+
             return (
               <div key={idx} {...refData}>
-                <Typography>{fund[sortFundsBy]}</Typography>
                 <ProductItem
                   // sx={{ mb: '16px' }}
                   key={idx}
@@ -286,7 +325,7 @@ const TabPanel = memo((props) => {
                         <Tag
                           label='Recommendation'
                           labelColor='foundationColors.content.secondary'
-                          labelBackgroundColor='foundationColors.secondary.profitGreen.200'
+                          labelBackgroundColor='foundationColors.secondary.blue.200'
                         />
                       )}
                       {fund?.morning_star_rating && (
@@ -300,7 +339,7 @@ const TabPanel = memo((props) => {
                   </ProductItem.LeftSection>
                   <ProductItem.RightSection spacing={2}>
                     <ProductItem.Description title={returnData} titleColor={returnColor} />
-                    <Icon size='32px' src={require(`assets/fisdom/add_icon.svg`)} />
+                    <Icon size='32px' src={require(`assets/${isFundAddedToCart ? `minus` : `add_icon`}.svg`)} onClick={handleAddToCart(fund, isFundAddedToCart)} />
                   </ProductItem.RightSection>
                 </ProductItem>
               </div>

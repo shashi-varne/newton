@@ -66,7 +66,7 @@ export default FilterReturnBottomSheet;
 
 const Sorting = ({ selectedItem, handleSelection }) => {
   return (
-    <Stack sx={{ mt: 2 }} spacing={2}>
+    <Stack sx={{ mt: 2 }} spacing={2} className="pointer">
       {SortsDataList?.map((item, idx) => {
         return (
           <Stack spacing='4px' direction='column' key={idx} onClick={() => handleSelection(item)}>
@@ -102,6 +102,7 @@ const Return = ({ selectedItem, handleSelection }) => {
             onClick={() => handleSelection(item)}
             justifyContent='space-between'
             alignItems='center'
+            className="pointer"
           >
             <Typography
               variant={selectedItem?.value === item?.value ? 'heading4' : 'body8'}
