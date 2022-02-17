@@ -6,13 +6,13 @@ import { getFunds, getFundDetailsForSwitch } from "../../common/api";
 import {
   getAmountInInr,
 } from "../../common/functions";
-import { navigate as navigateFunc } from "utils/functions";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import FundSummaryMenu from "../mini-components/FundSummaryMenu";
 import toast from "common/ui/Toast";
 import "./commonStyles.scss";
 import { storageService } from "../../../utils/validators";
 import { nativeCallback } from "../../../utils/native_callback";
+import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 
 const FundswiseSummary = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -35,16 +35,18 @@ const FundswiseSummary = (props) => {
     setShowSkelton(false);
   };
 
-  const getFundDetails = (fund, index) => {
-    sendEvents('next', fund)
-    storageService().setObject(
-      storageConstants.REPORTS_SELECTED_FUND,
-      funds[index]
-    );
-    navigate(`${getPathname.reportsFundswiseDetails}${index}`);
+  const goToFundDetails = (fund) => () => {
+    sendEvents('next', fund, "", "yes");
+    navigate(
+      `/fund-details`,
+      {
+        searchParams: `${getConfig().searchParams}&isins=${fund.mf.isin}`,
+      },
+    )
   };
 
-  const handleMenuClick = (event, fund) => {
+  const handleMenuClick = (fund, index) => (event) => {
+    fund.index = index;
     setSelectedFund(fund);
     setMenuPosition(event.currentTarget);
   };
@@ -80,7 +82,16 @@ const FundswiseSummary = (props) => {
     navigate(`${getPathname.reportsFundswiseTransactions}${amfi}`);
   };
 
-  const sendEvents = (userAction, data, flow) => {
+  const handleTransactionSummary = () => {
+    sendEvents('next', selectedFund, "transaction_summary")
+    storageService().setObject(
+      storageConstants.REPORTS_SELECTED_FUND,
+      selectedFund
+    );
+    navigate(`${getPathname.reportsFundswiseDetails}${selectedFund.index}`);
+  }
+
+  const sendEvents = (userAction, data, flow, fundClicked = "no") => {
     let eventObj = {
       event_name: "my_portfolio",
       properties: {
@@ -88,6 +99,7 @@ const FundswiseSummary = (props) => {
         screen_name: "Track Fund Performance",
         fund: data?.current_invested || data?.invested_amount || "",
         over_flow_menu: flow || "",
+        fund_clicked: fundClicked,
       },
     };
     if (userAction === "just_set_events") {
@@ -105,17 +117,17 @@ const FundswiseSummary = (props) => {
             return (
               <div className="summary-fund-content" key={index} data-aid='summary-fund-content'>
                 <h5>
-                  <div className="text" onClick={() => getFundDetails(fund, index)}>
+                  <div className="text" onClick={goToFundDetails(fund)}>
                     {fund.mf.friendly_name}
                   </div>
                   <div className="right-info">
                     <MoreVertIcon
                       className="icon"
-                      onClick={(e) => handleMenuClick(e, fund)}
+                      onClick={handleMenuClick(fund, index)}
                     />
                   </div>
                 </h5>
-                <div onClick={() => getFundDetails(fund, index)}>
+                <div onClick={goToFundDetails(fund)}>
                   <div className="head">
                     <span>Units: {fund.units.toFixed(4)}</span>
                     <span className="margin-left">
@@ -167,8 +179,9 @@ const FundswiseSummary = (props) => {
         <FundSummaryMenu
           handleMenuClose={handleMenuClose}
           menuPosition={menuPosition}
-          handleSwitch={() => handleSwitch()}
-          handleTransactions={() => handleTransactions()}
+          handleSwitch={handleSwitch}
+          handleTransactions={handleTransactions}
+          handleTransactionSummary={handleTransactionSummary}
         />
       </div>
     </Container>
