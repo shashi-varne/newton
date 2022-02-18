@@ -45,7 +45,7 @@ const TitleText = ({ children, className, alignLeft, dataAidSuffix }) => {
   return (
     <div
       className={`kuc-caption ${className}`}
-      dataAidSuffix={`kuc-caption-${dataAidSuffix}`}
+      data-aid={`kuc-caption-${dataAidSuffix}`}
       style={{ textAlign: alignLeft ? 'left' : 'center' }}
     >
       {children}
@@ -71,7 +71,6 @@ KycUploadContainer.Image = Image;
 
 const Button = ({
   withPicker,
-  dataAidSuffix,
   children,
   filePickerProps = {}, // Check WVFilePickerWrapper for props list
   showLoader,
@@ -110,7 +109,6 @@ const Button = ({
       >
         <WVButton
           outlined
-          dataAidSuffix={dataAidSuffix}
           color="secondary"
           classes={{ root: 'kuc-action-btn' }}
           showLoader={fileLoading || showLoader}
@@ -124,7 +122,6 @@ const Button = ({
   return (
     <WVButton
       outlined
-      dataAid={dataAidSuffix}
       color="secondary"
       classes={{ root: 'kuc-action-btn' }}
       {...buttonProps}
