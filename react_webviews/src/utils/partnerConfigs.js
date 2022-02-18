@@ -55,6 +55,11 @@ export const commonCardsConfig = {
   landingMarketingBanners: [],
   nfoBanners: [
     {
+      image: "nfo3.svg",
+      type: "nfo",
+      endDate: "02/23/2022",
+    },
+    {
       image: "nfo1.svg",
       type: "nfo",
       endDate: "02/17/2022",
