@@ -569,6 +569,7 @@ export const partnerConfigs = {
     logo: "ucomb.svg",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
+      stocksAndIpo: ["stocks", "ipo"],
       ourRecommendations: ["buildwealth", "savetax"],
       diy: ["diyv2"],
     },
