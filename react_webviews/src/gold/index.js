@@ -44,6 +44,7 @@ import GoldDeliveryProducts from "./components/delivery/products";
 
 import CommonRenderBenefits from './components/common/RenderBenefits';
 import CommonRenderFaqs from './components/common/RenderFaqs';
+import GoldHomeClosure from "./components/mygold/home";
 
 const Gold = props => {
   const { url } = props.match;
@@ -52,7 +53,10 @@ const Gold = props => {
      <Fragment>
         <Switch>
 
-          <Route exact path={`${url}`} component={GoldLanding} />
+          {/* REMOVING EXACT PROPS TO SHOW CLOSURE PAGE FOR EVERY ROUTE */}
+          {/* <Route exact path={`${url}`} component={GoldLanding} /> */}
+          <Route path={`${url}`} component={GoldHomeClosure} />
+
 
           {/* general */}
           <Route path={`${url}/landing`} component={GoldLanding} />

@@ -102,64 +102,74 @@ $(document).ready(function () {
   //   runGoogleAds();
   // }
 });
-if(getConfig().productName === "finity") {
-  document.title = 'Finity';
-  const favIcon = document.getElementById('favicon');
-  favIcon.href="images/finity_logo_icon.svg";
-} else {
-  const favIcon = document.getElementById('favicon');
-  document.title = 'Fisdom';
-  favIcon.href="images/fisdom_logo_icon.svg";
+
+
+// if(getConfig().productName === "finity") {
+//   document.title = 'Finity';
+//   const favIcon = document.getElementById('favicon');
+//   favIcon.href="images/finity_logo_icon.svg";
+// } else {
+//   const favIcon = document.getElementById('favicon');
+//   document.title = 'Fisdom';
+//   favIcon.href="images/fisdom_logo_icon.svg";
+// }
+
+
+const favicon = document.getElementById('favicon');
+
+if(favicon) {
+  if(getConfig().productName === 'finity') {
+    document.title = 'Finity';
+    favicon.href = 'images/finity_icon.svg';
+  } else {
+    document.title = 'Fisdom';
+    favicon.href = 'images/fisdom_icon.svg';
+  }
 }
 
-if(getConfig().productName === 'finity') {
-  document.title = 'Finity';
-  const favicon = document.getElementById('favicon');
-  favicon.href = favicon && 'images/finity_icon.svg';
-} else {
-  document.title = 'Fisdom';
-  const favicon = document.getElementById('favicon');
-  favicon.href = favicon && 'images/fisdom_icon.svg';
-}
 
-if(getConfig().productName === "fisdom" && getConfig().isProdEnv)
-{
-  Sentry.init({
-    dsn: "https://38815adc8fd842e78c2145a583d26351@o60572.ingest.sentry.io/5726998",
-    beforeSend(event) {
-      event.tags = event.tags || {};
-      event.tags["partner_code"] = getConfig().code;
-      event.tags["user_id"] = storageService()?.getObject('user')?.user_id;
-      let values = event?.exception?.values;
-      if(!isEmpty(values) && values[0]?.value === "Network Error"){
-        return null;
-      }
-      return event;
-    },
-    integrations: [new Integrations.BrowserTracing()],
-    allowUrls:["app.fisdom.com"],
-    tracesSampleRate: 0.5,
-    sampleRate: 0.5,
-  });
-}
-else if(getConfig().productName === "finity" && getConfig().isProdEnv){
-  Sentry.init({
-    dsn: "https://84e342a0046748bab6860aafcf7e86da@o60572.ingest.sentry.io/5727007",
-    beforeSend(event) {
-      event.tags = event.tags || {};
-      event.tags["partner_code"] = getConfig().code;
-      event.tags["user_id"] = storageService()?.getObject('user')?.user_id;
-      let values = event?.exception?.values;
-      if(!isEmpty(values) && values[0]?.value === "Network Error"){
-        return null;
-      }
-      return event;
-    },
-    integrations: [new Integrations.BrowserTracing()],
-    allowUrls:["app.mywaywealth.com","app.finity.in"],
-    tracesSampleRate: 0.5,
-    sampleRate: 0.5,
-  });
+try {
+  if(getConfig().productName === "fisdom" && getConfig().isProdEnv)
+  {
+    Sentry.init({
+      dsn: "https://38815adc8fd842e78c2145a583d26351@o60572.ingest.sentry.io/5726998",
+      beforeSend(event) {
+        event.tags = event.tags || {};
+        event.tags["partner_code"] = getConfig().code;
+        event.tags["user_id"] = storageService()?.getObject('user')?.user_id;
+        let values = event?.exception?.values;
+        if(!isEmpty(values) && values[0]?.value === "Network Error"){
+          return null;
+        }
+        return event;
+      },
+      integrations: [new Integrations.BrowserTracing()],
+      allowUrls:["app.fisdom.com", "app2.fisdom.com"],
+      tracesSampleRate: 0.1,
+      sampleRate: 0.5,
+    });
+  }
+  else if(getConfig().productName === "finity" && getConfig().isProdEnv){
+    Sentry.init({
+      dsn: "https://84e342a0046748bab6860aafcf7e86da@o60572.ingest.sentry.io/5727007",
+      beforeSend(event) {
+        event.tags = event.tags || {};
+        event.tags["partner_code"] = getConfig().code;
+        event.tags["user_id"] = storageService()?.getObject('user')?.user_id;
+        let values = event?.exception?.values;
+        if(!isEmpty(values) && values[0]?.value === "Network Error"){
+          return null;
+        }
+        return event;
+      },
+      integrations: [new Integrations.BrowserTracing()],
+      allowUrls:["app.mywaywealth.com","app.finity.in", "app2.finity.in"],
+      tracesSampleRate: 0.1,
+      sampleRate: 0.5,
+    });
+  }
+} catch(err) {
+  console.log(err)
 }
 
 ReactDOM.render(<App />, document.getElementById('root'));

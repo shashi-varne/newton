@@ -166,8 +166,10 @@ export function setInvestCardsData() {
           continue;
         }
         let cardData = investCardsBase[section][subSection];
-        cardData.key = subSection;
-        investCardsData[section].push(cardData);
+        if (!isEmpty(cardData)) {
+          cardData.key = subSection;
+          investCardsData[section].push(cardData);
+        }
       }
     }
     this.setState({ investCardsData, investSections });
