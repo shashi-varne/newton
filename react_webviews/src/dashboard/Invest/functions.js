@@ -806,17 +806,17 @@ export const resetRiskProfileJourney = () => {
 
 function handleInvestSubtitle (isEquityEnabled)  {
   const investCards = getInvestCards(["nps", "gold"]);
-  let investCardSubtitle = 'Mutual funds';
+  let investCardSubtitle = 'Mutual funds, Save tax';
 
   if (isEquityEnabled) {
-    investCardSubtitle = 'Stocks, F&O, IPOs, Mutual funds';
+    investCardSubtitle = 'Stocks, F&O, IPOs, Mutual funds, Save tax';
   }
 
-  if (investCards?.gold) {
-    investCardSubtitle = investCardSubtitle += ', Gold, Save tax';
-  } else {
-   investCardSubtitle = 'Mutual funds, Save tax';
-  }
+  // if (investCards?.gold) {
+  //   investCardSubtitle = investCardSubtitle += ', Gold, Save tax';
+  // } else {
+  //  investCardSubtitle = 'Mutual funds, Save tax';
+  // }
 
   if (investCards?.nps) {
     investCardSubtitle = investCardSubtitle += ', NPS';
