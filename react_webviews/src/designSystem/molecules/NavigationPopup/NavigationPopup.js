@@ -77,11 +77,7 @@ const Label = ({
   return (
     <Box className="np-label-wrapper">
       {isActive && (
-        <Box
-          className="np-lw-dot"
-          sx={{ backgroundColor: dotColor }}
-          dataAid={`dot${index}`}
-        />
+        <Typography variant='body3' sx={{mr:'4px'}} color={dotColor}>{'\u2022'}</Typography>
       )}
       <Typography
         dataAid={`label${index}`}
