@@ -32,6 +32,8 @@ import UnAuthenticatedRoute from './common/components/UnAuthenticatedRoute.js';
 import RedirectToAnyPath from './common/components/RedirectToAnyPath.js';
 import eventManager from './utils/eventManager.js';
 import { EVENT_MANAGER_CONSTANTS } from './utils/constants.js';
+import {Provider} from 'react-redux';
+import { store } from './dataLayer/store/index.js';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -104,6 +106,7 @@ const App = () => {
   }
 
     return (
+      <Provider store={store}>
       <BrowserRouter basename={basename}>
         <JssProvider jss={jss} generateClassName={generateClassName}>
           <MuiThemeProvider theme={themeConfiguration}>
@@ -141,6 +144,7 @@ const App = () => {
           </MuiThemeProvider>
         </JssProvider>
       </BrowserRouter>
+      </Provider>
     );
 }
 

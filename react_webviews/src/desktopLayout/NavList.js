@@ -93,7 +93,7 @@ let data = [
     id: 'diy',
     name: 'DIY',
     icon: logout,
-    path: '/diy/mf-orders',
+    path: '/diy_v2/mf-orders',
   },
 ];
 
