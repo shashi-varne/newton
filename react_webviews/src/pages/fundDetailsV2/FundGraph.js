@@ -1,25 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { renderToStaticMarkup } from 'react-dom/server';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { fetch_fund_graph } from '../../fund_details/common/ApiCalls';
 import { TimeLine, Timelines } from '../../designSystem/atoms/TimelineList';
-import moment from 'moment';
-import './FundGraph.scss';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 // import { setFundTimePeriod } from 'businesslogic/dataStore/reducers/fundDetailsReducer';
 import isEmpty from 'lodash/isEmpty';
-import { Box, Stack } from '@mui/material';
-import WrapperBox from '../../designSystem/atoms/WrapperBox';
-import Typography from '../../designSystem/atoms/Typography';
+import { Skeleton } from '@mui/material';
+import format from 'date-fns/format';
+import getTheme from '../../theme';
+
+import './FundGraph.scss';
 
 const getTimeInMs = (time) => time * 60 * 60 * 24 * 1000;
 const FundGraph = () => {
   const [graphData, setGraphData] = useState([]);
-  // const fundTimePeriod = useSelector(state => {console.log("state is",state)});
   const [fundTimePeriod, setFundTimePeriod] = useState('5Y');
   const [periodWiseData, setPeriodWiseData] = useState({});
   const dispatch = useDispatch();
+  const theme = getTheme();
+  Highcharts.setOptions({
+    lang: {
+      rangeSelectorZoom: '',
+    },
+    colors: [theme?.palette?.foundationColors?.primary?.brand, '#ffffff'],
+  });
+
   const getGraphData = async () => {
     const graph_data = await fetch_fund_graph('INF109K01480');
     const amfi_data = graph_data.graph_report[0].graph_data_for_amfi;
@@ -73,6 +79,9 @@ const FundGraph = () => {
     setGraphData(periodWiseData[value]);
   };
   const options = {
+    title: {
+      text: undefined,
+    },
     yAxis: {
       opposite: false,
       crosshair: false,
@@ -94,21 +103,12 @@ const FundGraph = () => {
       shape: 'square',
       useHTML: true,
       formatter: function () {
-        console.log('this is', this);
-        return renderToStaticMarkup(
-          <WrapperBox elevation={1}>
-            <Stack sx={{ p: '16px 8px' }} direction='column'>
-              <Typography variant='body5' color='foundationColors.content.secondary'>
-                {moment(this.key).format('DD MMM YYYY').toUpperCase()}
-              </Typography>
-              <Typography variant='body5'>NAV: ₹{this.y.toFixed(2)}</Typography>
-            </Stack>
-          </WrapperBox>
-          // '<div class="tooltip-container"><p class="date"><b>' +
-          // moment(this.key).format("DD MMM YYYY").toUpperCase() +
-          // '</b></p><div class="next-line-container"><div><p class="dot"></p></div><p class="content">NAV: ₹</p><p class="content">' +
-          // this.y.toFixed(2) +
-          // "</p></div></div>"
+        return (
+          '<div class="tooltip-container"><div class="tooltip-date">' +
+          format(this.key, 'MMM d yyyy') +
+          '</div><div class="tooltip-nav-amount">₹' +
+          this.y.toFixed(2) +
+          ' NAV</div></div>'
         );
       },
     },
@@ -122,7 +122,7 @@ const FundGraph = () => {
             [1, Highcharts.color(Highcharts.getOptions().colors[1]).setOpacity(0).get('rgba')],
           ],
         },
-        lineColor: '#7ED321',
+        lineColor: theme?.foundationColors?.primary?.brand,
         lineWidth: 1.2,
         marker: {
           enabled: false,
@@ -169,7 +169,7 @@ const FundGraph = () => {
       crosshair: {
         color: 'white',
         width: 2,
-        zIndex: 3,
+        zIndex: 1,
       },
       tickPositioner: function () {
         var positions = [];
@@ -183,48 +183,17 @@ const FundGraph = () => {
       labels: {
         formatter: function () {
           if (this.isFirst)
-            return '<p class="xaxis-label">' + moment(this.pos).format('DD MMM YYYY') + '</p>';
+            return '<p class="xaxis-label">' + format(this.pos, 'd MMM yyyy') + '</p>';
           if (this.isLast) return '<p class="xaxis-label">TODAY</p>';
-          if (fundTimePeriod === '3Y' || fundTimePeriod === '5Y')
-            return '<p class="xaxis-label">' + moment(this.pos).format('YYYY') + '</p>';
+          if (fundTimePeriod === '3Y' || fundTimePeriod === '1Y' || fundTimePeriod === '5Y')
+            return '<p class="xaxis-label">' + format(this.pos, 'yyyy') + '</p>';
           if (fundTimePeriod === '3M' || fundTimePeriod === '6M' || fundTimePeriod === '1M')
-            return '<p class="xaxis-label">' + moment(this.pos).format('DD MMM') + '</p>';
+            return '<p class="xaxis-label">' + format(this.pos, 'd MMM') + '</p>';
         },
       },
       tickColor: '',
       tickLength: 0,
       tickWidth: 0,
-    },
-    rangeSelector: {
-      verticalAlign: 'bottom',
-      x: 0,
-      y: 0,
-      enabled: false,
-      selected: 0,
-      inputEnabled: false,
-      buttonPosition: {
-        align: 'center',
-        x: -50,
-        y: 10,
-      },
-      buttonTheme: {
-        fill: '#F0F7FF',
-        stroke: 'none',
-        r: 4,
-        width: 35,
-        style: {
-          color: '#767E86',
-        },
-        states: {
-          hover: {},
-          select: {
-            fill: '#3792FC',
-            style: {
-              color: 'white',
-            },
-          },
-        },
-      },
     },
     series: [
       {
@@ -232,7 +201,15 @@ const FundGraph = () => {
       },
     ],
   };
-  if (isEmpty(graphData)) return null;
+  if (isEmpty(graphData))
+    return (
+      <Skeleton
+        variant='rectangular'
+        height='290px'
+        width='100%'
+        sx={{ mt: 3, borderRadius: 1, backgroundColor: 'foundationColors.primary.200' }}
+      />
+    );
   return (
     <div className='fund-graph-wrapper'>
       <HighchartsReact highcharts={Highcharts} options={options} />
