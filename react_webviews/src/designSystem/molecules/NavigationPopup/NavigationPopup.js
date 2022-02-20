@@ -75,14 +75,13 @@ const Label = ({
 }) => {
   const labelName = useMemo(getLabelName(data, displayKey), [data]);
   return (
-    <Box className="np-label-wrapper">
+    <Box className="np-label-wrapper" onClick={onClick}>
       {isActive && (
         <Typography variant='body3' sx={{mr:'4px'}} color={dotColor}>{'\u2022'}</Typography>
       )}
       <Typography
         dataAid={`label${index}`}
         variant={isActive ? "heading4" : "body8"}
-        onClick={onClick}
         color={labelColor}
       >
         {labelName}

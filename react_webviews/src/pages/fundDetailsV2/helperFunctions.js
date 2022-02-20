@@ -11,5 +11,5 @@ export const getExpectedReturn = (amount, year, invest_type, rateOfInterest) => 
       principal += currInterest;
     }
   }
-  return projectedValue.toFixed(0);
+  return Number(projectedValue.toFixed(0));
 };
