@@ -1,5 +1,5 @@
 import { IconButton, Stack } from '@mui/material';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   InvestmentCard,
   InvestmentCardBottomRow,
@@ -16,8 +16,8 @@ import BottomSheet from '../../../designSystem/organisms/BottomSheet';
 import SipDateSelector from '../../../designSystem/molecules/SipDateSelector';
 import HeaderTitle from '../../../designSystem/molecules/HeaderTitle';
 import { useDispatch, useSelector } from 'react-redux';
+import Toast from '../../../designSystem/atoms/ToastMessage';
 
-import './MfOrder.scss';
 import Api from '../../../utils/api';
 import {
   filterMfOrders,
@@ -32,6 +32,9 @@ import Typography from '../../../designSystem/atoms/Typography';
 import { Pill, Pills } from '../../../designSystem/atoms/Pills/Pills';
 import { getConfig } from '../../../utils/functions';
 import values from 'lodash/values';
+import scrollIntoView from 'scroll-into-view-if-needed';
+
+import './MfOrder.scss';
 
 const investmentAmountTile = {
   sip: 'SIP amount',
@@ -106,8 +109,36 @@ const MfOrder = () => {
   };
 
   const handlePlaceOrders = () => {
-    const isValid = values(isInvestmentValid);
-    console.log("is valid", isValid);
+    let amountInputError = false;
+    let amountValidationError = false;
+    const validateErrors = values(isInvestmentValid);
+    validateErrors.some((el) => {
+      if (el?.amountError) {
+        amountInputError = true;
+        scrollIntoView(el?.orderItemRef, {
+          behavior: 'smooth',
+          block: 'center',
+        });
+        return true;
+      }
+      if (el?.validationError) {
+        amountValidationError = true;
+        scrollIntoView(el?.orderItemRef, {
+          behavior: 'smooth',
+          block: 'center',
+        });
+        return true;
+      }
+    });
+    if (amountInputError) {
+      Toast('Please enter the amount');
+      return;
+    }
+
+    if (amountValidationError) {
+      Toast('Please enter the correct amount');
+      return;
+    }
   };
 
   return (
@@ -125,7 +156,7 @@ const MfOrder = () => {
     >
       <Stack direction='column' spacing={2} component='section' className='mf-order-wrapper'>
         {productName === 'fisdom' && (
-          <Stack direction='row' alignItems='center' justifyContent='space-between'>
+          <Stack sx={{ mb: 1 }} direction='row' alignItems='center' justifyContent='space-between'>
             <Typography variant='heading4'>Investment type</Typography>
             <Pills value={parentInvestmentType} onChange={handleInvestmentType}>
               <Pill label='SIP' value='sip' />
@@ -183,7 +214,7 @@ const FundOrderItem = ({
   productName,
   handleInvestmentCard,
   parentInvestmentType,
-  setIsInvestmentValid
+  setIsInvestmentValid,
 }) => {
   const [investmentType, setInvestmentType] = useState(parentInvestmentType);
   const [selectedDate, setSelectedDate] = useState(fundDetails.addl_purchase?.sip?.default_date);
@@ -194,16 +225,19 @@ const FundOrderItem = ({
   const maxAmount = fundDetails?.addl_purchase[investmentType]?.max;
   const multiple = fundDetails?.addl_purchase[investmentType]?.mul;
   const { message, showError } = validateMfOrderFunds(amount, minAmount, maxAmount, multiple);
+  const fundOrderItemRef = useRef();
   useEffect(() => {
-    const isError = showError || !amount;
-    console.log("amount", amount);
-    setIsInvestmentValid(prevState => {
+    setIsInvestmentValid((prevState) => {
       return {
         ...prevState,
-        [fundDetails?.isin]: !isError
-      }
+        [fundDetails?.isin]: {
+          validationError: showError,
+          amountError: !amount,
+          orderItemRef: fundOrderItemRef.current,
+        },
+      };
     });
-  },[showError]);
+  }, [showError]);
   useEffect(() => {
     setInvestmentType(parentInvestmentType);
   }, [parentInvestmentType]);
@@ -222,7 +256,6 @@ const FundOrderItem = ({
     const order = {
       [fundDetails.mfid]: orderData,
     };
-    console.log('order is', order);
     dispatch(setMfOrders(order));
   }, [investmentType, amount, selectedDate]);
 
@@ -246,7 +279,7 @@ const FundOrderItem = ({
   };
 
   return (
-    <div>
+    <div ref={fundOrderItemRef}>
       {productName === 'finity' && (
         <HeaderTitle sx={{ mb: 2 }} title={fundDetails.mfname} imgSrc={fundDetails.amc_logo_big} />
       )}
