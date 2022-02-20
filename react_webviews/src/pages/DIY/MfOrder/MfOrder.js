@@ -1,5 +1,5 @@
 import { IconButton, Stack } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   InvestmentCard,
   InvestmentCardBottomRow,
@@ -14,6 +14,7 @@ import { dateOrdinal, formatAmountInr, storageService } from '../../../utils/val
 import EstimationCard from '../../../designSystem/molecules/EstimationCard';
 import BottomSheet from '../../../designSystem/organisms/BottomSheet';
 import SipDateSelector from '../../../designSystem/molecules/SipDateSelector';
+import HeaderTitle from '../../../designSystem/molecules/HeaderTitle';
 import { useDispatch, useSelector } from 'react-redux';
 
 import './MfOrder.scss';
@@ -27,6 +28,10 @@ import {
 import { CART } from '../../../dashboard/DIY/constants';
 import isEmpty from 'lodash/isEmpty';
 import { validateMfOrderFunds } from './helperFunction';
+import Typography from '../../../designSystem/atoms/Typography';
+import { Pill, Pills } from '../../../designSystem/atoms/Pills/Pills';
+import { getConfig } from '../../../utils/functions';
+import values from 'lodash/values';
 
 const investmentAmountTile = {
   sip: 'SIP amount',
@@ -41,9 +46,16 @@ const getIsins = (fundsData) => {
 const MfOrder = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [fundTobeRemoved, setFundTobeRemoved] = useState({});
+  const [parentInvestmentType, setParentInvestmentType] = useState('sip');
+  const [isInvestmentValid, setIsInvestmentValid] = useState({});
   const dispatch = useDispatch();
   const fundOrderDetails = useSelector((state) => state?.diy?.fundOrderDetails);
   const mfOrders = useSelector((state) => state?.diy?.mfOrders);
+  const { productName } = useMemo(getConfig, []);
+
+  const handleInvestmentType = (e, val) => {
+    setParentInvestmentType(val);
+  };
 
   useEffect(() => {
     let fundsData = [];
@@ -93,7 +105,10 @@ const MfOrder = () => {
     handleSheetClose();
   };
 
-  const handlePlaceOrders = () => {};
+  const handlePlaceOrders = () => {
+    const isValid = values(isInvestmentValid);
+    console.log("is valid", isValid);
+  };
 
   return (
     <Container
@@ -109,6 +124,15 @@ const MfOrder = () => {
       }}
     >
       <Stack direction='column' spacing={2} component='section' className='mf-order-wrapper'>
+        {productName === 'fisdom' && (
+          <Stack direction='row' alignItems='center' justifyContent='space-between'>
+            <Typography variant='heading4'>Investment type</Typography>
+            <Pills value={parentInvestmentType} onChange={handleInvestmentType}>
+              <Pill label='SIP' value='sip' />
+              <Pill label='Lumpsum' value='lumpsum' />
+            </Pills>
+          </Stack>
+        )}
         <Stack spacing='25px' className='mf-order-list'>
           {fundOrderDetails?.map((fundDetails, idx) => {
             return (
@@ -116,19 +140,24 @@ const MfOrder = () => {
                 key={idx}
                 fundDetails={fundDetails}
                 handleInvestmentCard={handleInvestmentCard}
+                parentInvestmentType={parentInvestmentType}
+                productName={productName}
+                setIsInvestmentValid={setIsInvestmentValid}
               />
             );
           })}
         </Stack>
-        <WrapperBox elevation={1}>
-          <EstimationCard
-            leftTitle='Value after 10 years'
-            leftSubtitle='Return %'
-            rightTitle={`${formatAmountInr(110000)}`}
-            rightSubtitle='+116.06%'
-            toolTipText='Hello I am the tooltup'
-          />
-        </WrapperBox>
+        {productName === 'finity' && (
+          <WrapperBox elevation={1}>
+            <EstimationCard
+              leftTitle='Value after 10 years'
+              leftSubtitle='Return %'
+              rightTitle={`${formatAmountInr(110000)}`}
+              rightSubtitle='+116.06%'
+              toolTipText='Hello I am the tooltup'
+            />
+          </WrapperBox>
+        )}
       </Stack>
       <BottomSheet
         isOpen={isOpen}
@@ -149,8 +178,14 @@ const MfOrder = () => {
 
 export default MfOrder;
 
-const FundOrderItem = ({ fundDetails, handleInvestmentCard }) => {
-  const [investmentType, setInvestmentType] = useState('sip');
+const FundOrderItem = ({
+  fundDetails,
+  productName,
+  handleInvestmentCard,
+  parentInvestmentType,
+  setIsInvestmentValid
+}) => {
+  const [investmentType, setInvestmentType] = useState(parentInvestmentType);
   const [selectedDate, setSelectedDate] = useState(fundDetails.addl_purchase?.sip?.default_date);
   const [isSipSelectorOpen, setIsSipSelectorOpen] = useState(false);
   const [amount, setAmount] = useState('');
@@ -159,6 +194,19 @@ const FundOrderItem = ({ fundDetails, handleInvestmentCard }) => {
   const maxAmount = fundDetails?.addl_purchase[investmentType]?.max;
   const multiple = fundDetails?.addl_purchase[investmentType]?.mul;
   const { message, showError } = validateMfOrderFunds(amount, minAmount, maxAmount, multiple);
+  useEffect(() => {
+    const isError = showError || !amount;
+    console.log("amount", amount);
+    setIsInvestmentValid(prevState => {
+      return {
+        ...prevState,
+        [fundDetails?.isin]: !isError
+      }
+    });
+  },[showError]);
+  useEffect(() => {
+    setInvestmentType(parentInvestmentType);
+  }, [parentInvestmentType]);
 
   useEffect(() => {
     const orderData = {
@@ -174,13 +222,14 @@ const FundOrderItem = ({ fundDetails, handleInvestmentCard }) => {
     const order = {
       [fundDetails.mfid]: orderData,
     };
+    console.log('order is', order);
     dispatch(setMfOrders(order));
   }, [investmentType, amount, selectedDate]);
 
   const handleAmountValue = (e) => {
     setAmount(e.target.value);
   };
-  
+
   const closeSipDateSheet = () => {
     setIsSipSelectorOpen(false);
   };
@@ -197,62 +246,70 @@ const FundOrderItem = ({ fundDetails, handleInvestmentCard }) => {
   };
 
   return (
-    <WrapperBox elevation={1} className='mf-investment-card-wrapper'>
-      <IconButton className='mf-ic-close' onClick={handleInvestmentCard(fundDetails)}>
-        <Icon src={require('assets/close_grey.svg')} size='24px' />
-      </IconButton>
-      <InvestmentCard>
-        <InvestmentCardHeaderRow
-          title={fundDetails.mfname}
-          imgSrc={require('assets/amazon_pay.svg')}
+    <div>
+      {productName === 'finity' && (
+        <HeaderTitle sx={{ mb: 2 }} title={fundDetails.mfname} imgSrc={fundDetails.amc_logo_big} />
+      )}
+      <WrapperBox elevation={1} className='mf-investment-card-wrapper'>
+        {productName !== 'finity' && (
+          <IconButton className='mf-ic-close' onClick={handleInvestmentCard(fundDetails)}>
+            <Icon src={require('assets/close_grey.svg')} size='24px' />
+          </IconButton>
+        )}
+        <InvestmentCard>
+          {productName !== 'finity' && (
+            <InvestmentCardHeaderRow title={fundDetails.mfname} imgSrc={fundDetails.amc_logo_big} />
+          )}
+          <InvestmentCardPillsRow
+            title='Investment Type'
+            hideSeparator={productName === 'finity'}
+            hide={productName === 'fisdom'}
+            pillsProps={{
+              value: investmentType,
+              onChange: handleInvestmentType,
+            }}
+            pillsChild={[
+              {
+                label: 'SIP',
+                value: 'sip',
+              },
+              {
+                label: 'Lumpsum',
+                value: 'lumpsum',
+              },
+            ]}
+          />
+          <InvestmentCardInputRow
+            title={investmentAmountTile[investmentType]}
+            subtitle={message}
+            subtitleColor={
+              showError
+                ? 'foundationColors.secondary.lossRed.400'
+                : 'foundationColors.content.tertiary'
+            }
+            inputFieldProps={{
+              prefix: '₹',
+              value: amount,
+              onChange: handleAmountValue,
+            }}
+          />
+          <InvestmentCardBottomRow
+            hide={parentInvestmentType === 'lumpsum' || investmentType === 'lumpsum'}
+            leftTitle='Monthly SIP date'
+            rightTitle={`${dateOrdinal(selectedDate)} every month`}
+            onRightSectionClick={openSipSelectorSheet}
+            rightImgSrc={require('assets/arrw_down.svg')}
+          />
+        </InvestmentCard>
+        <SipDateSelector
+          sipDates={fundDetails.addl_purchase?.sip?.sip_dates}
+          selectedDate={selectedDate}
+          isOpen={isSipSelectorOpen}
+          onClose={closeSipDateSheet}
+          handleSelectedDate={handleSelectedDate}
         />
-        <InvestmentCardPillsRow
-          title='Investment Type'
-          pillsProps={{
-            value: investmentType,
-            onChange: handleInvestmentType,
-          }}
-          pillsChild={[
-            {
-              label: 'SIP',
-              value: 'sip',
-            },
-            {
-              label: 'Lumpsum',
-              value: 'lumpsum',
-            },
-          ]}
-        />
-        <InvestmentCardInputRow
-          title={investmentAmountTile[investmentType]}
-          subtitle={message}
-          subtitleColor={
-            showError
-              ? 'foundationColors.secondary.lossRed.400'
-              : 'foundationColors.content.tertiary'
-          }
-          inputFieldProps={{
-            prefix: '₹',
-            value: amount,
-            onChange: handleAmountValue,
-          }}
-        />
-        <InvestmentCardBottomRow
-          hide={investmentType === 'lumpsum'}
-          leftTitle='Monthly SIP date'
-          rightTitle={`${dateOrdinal(selectedDate)} every month`}
-          onRightSectionClick={openSipSelectorSheet}
-          rightImgSrc={require('assets/arrw_down.svg')}
-        />
-      </InvestmentCard>
-      <SipDateSelector
-        sipDates={fundDetails.addl_purchase?.sip?.sip_dates}
-        selectedDate={selectedDate}
-        isOpen={isSipSelectorOpen}
-        onClose={closeSipDateSheet}
-        handleSelectedDate={handleSelectedDate}
-      />
-    </WrapperBox>
+      </WrapperBox>
+    </div>
   );
 };
 const sipDates = [1, 4, 15, 10, 12, 21, 8, 23, 66, 32];

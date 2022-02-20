@@ -73,11 +73,11 @@ export const InvestmentCardHeaderRow = ({ imgSrc, imgProps = {}, title, titleCol
   );
 };
 
-export const InvestmentCardPillsRow = ({ hide, title, titleColor, pillsProps, pillsChild }) => {
+export const InvestmentCardPillsRow = ({ hide, title, titleColor, pillsProps, pillsChild, hideSeparator = false }) => {
   return (
     <Collapse in={!hide}>
       <div>
-        <Separator dataAid='1' />
+        { !hideSeparator && <Separator dataAid='1' marginBottom='16px'/> }
         <Stack direction='row' alignItems='center' justifyContent='space-between' className='ic-pills-wrapper'>
           <Typography
             variant='body1'
@@ -112,13 +112,14 @@ export const InvestmentCardInputRow = ({
   titleColor,
   subtitle,
   subtitleColor,
+  hideSeparator=false,
   inputFieldProps = {},
 }) => {
   return (
     <Collapse in={!hide}>
       <div>
-        <Separator dataAid='2' />
-        <Stack direction='row' alignItems='center' justifyContent='space-between' className='ic-input-field-section'>
+        { !hideSeparator && <Separator dataAid='2' marginBottom='16px'/> }
+        <Stack direction='row' spacing={1} alignItems='center' justifyContent='space-between' className='ic-input-field-section'>
           <div className='ic-left-section'>
             <Typography variant='body1' color={titleColor} component='div' dataAid='title3'>
               {title}
@@ -153,12 +154,13 @@ export const InvestmentCardBottomRow = ({
   rightTitleColor,
   rightImgSrc,
   rightImgProps = {},
+  hideSeparator = false
 }) => {
   const isRightSectionClickable = isFunction(onRightSectionClick);
   return (
     <Collapse in={!hide}>
       <div>
-        <Separator dataAid='3' />
+        { !hideSeparator && <Separator dataAid='3' marginBottom='16px'/> }
         <Stack direction='row' alignItems='center' justifyContent='space-between' className='ic-footer-section'>
           <div className='ic-left-section'>
             <Typography variant='body1' color={leftTitleColor} component='div' dataAid='title4'>
