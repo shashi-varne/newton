@@ -9,7 +9,6 @@ import baseTypographyConfig, { customTypographyVariantProps } from './typography
 import getPartnerThemeData from './utils';
 import { separatorStyleOverRides } from './separator';
 import { dialogDefaultProps, dialogStylesOverride } from './dialog';
-import { backDropStylesOverride } from './backdrop';
 import { badgeStyleOverRides } from './badge';
 import { customShadows } from './shadows';
 import {
@@ -89,8 +88,17 @@ const getTheme = () => {
         defaultProps: dialogDefaultProps(),
         styleOverrides:dialogStylesOverride()
       },
-      MuiBackdrop: {
-        styleOverrides:backDropStylesOverride(defaultTheme)
+      MuiModal: {
+        styleOverrides : {
+          root:{
+            [defaultTheme.breakpoints.up('sm')]: {
+              left: '300px !important',
+              right: 'unset !important',
+              width: 'var(--desktop-width) !important',
+              top: '60px !important'
+            }
+          }
+        }
       },
       MuiBadge: {
         styleOverrides: badgeStyleOverRides(colors, partnerConfig),
