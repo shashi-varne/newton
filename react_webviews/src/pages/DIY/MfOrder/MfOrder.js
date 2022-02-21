@@ -1,4 +1,4 @@
-import { IconButton, Stack } from '@mui/material';
+import { Grow, IconButton, Stack } from '@mui/material';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   InvestmentCard,
@@ -17,6 +17,7 @@ import SipDateSelector from '../../../designSystem/molecules/SipDateSelector';
 import HeaderTitle from '../../../designSystem/molecules/HeaderTitle';
 import { useDispatch, useSelector } from 'react-redux';
 import Toast from '../../../designSystem/atoms/ToastMessage';
+import TrusIcon from '../../../designSystem/atoms/TrustIcon';
 
 import Api from '../../../utils/api';
 import {
@@ -55,6 +56,7 @@ const MfOrder = () => {
   const fundOrderDetails = useSelector((state) => state?.diy?.fundOrderDetails);
   const mfOrders = useSelector((state) => state?.diy?.mfOrders);
   const { productName } = useMemo(getConfig, []);
+  const isProductFisdom = productName === 'fisdom';
 
   const handleInvestmentType = (e, val) => {
     setParentInvestmentType(val);
@@ -149,60 +151,77 @@ const MfOrder = () => {
       }}
       footer={{
         button1Props: {
-          title: 'Continue',
+          title: isEmpty(fundOrderDetails) ? 'Invest Now' : 'Continue',
           onClick: handlePlaceOrders,
         },
       }}
     >
-      <Stack direction='column' spacing={2} component='section' className='mf-order-wrapper'>
-        {productName === 'fisdom' && (
-          <Stack sx={{ mb: 1 }} direction='row' alignItems='center' justifyContent='space-between'>
-            <Typography variant='heading4'>Investment type</Typography>
-            <Pills value={parentInvestmentType} onChange={handleInvestmentType}>
-              <Pill label='SIP' value='sip' />
-              <Pill label='Lumpsum' value='lumpsum' />
-            </Pills>
+      {isEmpty(fundOrderDetails) ? (
+        <NoMfOrders showNoOrders={isEmpty(fundOrderDetails)} />
+      ) : (
+        <>
+          <Stack direction='column' spacing={2} component='section' className='mf-order-wrapper'>
+            {isProductFisdom && (
+              <Stack
+                sx={{ mb: 1 }}
+                direction='row'
+                alignItems='center'
+                justifyContent='space-between'
+              >
+                <Typography variant='heading4'>Investment type</Typography>
+                <Pills value={parentInvestmentType} onChange={handleInvestmentType}>
+                  <Pill label='SIP' value='sip' />
+                  <Pill label='Lumpsum' value='lumpsum' />
+                </Pills>
+              </Stack>
+            )}
+            <Stack spacing='25px' className='mf-order-list'>
+              {fundOrderDetails?.map((fundDetails, idx) => {
+                return (
+                  <FundOrderItem
+                    key={idx}
+                    fundDetails={fundDetails}
+                    handleInvestmentCard={handleInvestmentCard}
+                    parentInvestmentType={parentInvestmentType}
+                    isProductFisdom={isProductFisdom}
+                    setIsInvestmentValid={setIsInvestmentValid}
+                  />
+                );
+              })}
+            </Stack>
+            {!isProductFisdom && (
+              <WrapperBox elevation={1}>
+                <EstimationCard
+                  leftTitle='Value after 10 years'
+                  leftSubtitle='Return %'
+                  rightTitle={`${formatAmountInr(110000)}`}
+                  rightSubtitle='+116.06%'
+                  toolTipText='Hello I am the tooltup'
+                />
+              </WrapperBox>
+            )}
+            {isProductFisdom ? (
+              <Typography variant='body5' color='foundationColors.content.tertiary'>
+                By continue, I agree that I have read the terms & conditions
+              </Typography>
+            ) : (
+              <TrusIcon variant='secure' opacity='0.6' />
+            )}
           </Stack>
-        )}
-        <Stack spacing='25px' className='mf-order-list'>
-          {fundOrderDetails?.map((fundDetails, idx) => {
-            return (
-              <FundOrderItem
-                key={idx}
-                fundDetails={fundDetails}
-                handleInvestmentCard={handleInvestmentCard}
-                parentInvestmentType={parentInvestmentType}
-                productName={productName}
-                setIsInvestmentValid={setIsInvestmentValid}
-              />
-            );
-          })}
-        </Stack>
-        {productName === 'finity' && (
-          <WrapperBox elevation={1}>
-            <EstimationCard
-              leftTitle='Value after 10 years'
-              leftSubtitle='Return %'
-              rightTitle={`${formatAmountInr(110000)}`}
-              rightSubtitle='+116.06%'
-              toolTipText='Hello I am the tooltup'
-            />
-          </WrapperBox>
-        )}
-      </Stack>
-      <BottomSheet
-        isOpen={isOpen}
-        onClose={handleSheetClose}
-        title='Delete fund'
-        imageLabelSrc={require('assets/amazon_pay.svg')}
-        label={fundTobeRemoved?.mfname}
-        subtitle='Are you sure, want to delete this fund from your cart,
-        you can also add anytime'
-        primaryBtnTitle='Cancel'
-        secondaryBtnTitle='yes'
-        onPrimaryClick={handleSheetClose}
-        onSecondaryClick={removeFund}
-      />
+          <BottomSheet
+            isOpen={isOpen}
+            onClose={handleSheetClose}
+            title='Delete fund'
+            imageLabelSrc={require('assets/amazon_pay.svg')}
+            label={fundTobeRemoved?.mfname}
+            subtitle='Are you sure, want to delete this fund from your cart, you can also add anytime'
+            primaryBtnTitle='Cancel'
+            secondaryBtnTitle='yes'
+            onPrimaryClick={handleSheetClose}
+            onSecondaryClick={removeFund}
+          />
+        </>
+      )}
     </Container>
   );
 };
@@ -211,7 +230,7 @@ export default MfOrder;
 
 const FundOrderItem = ({
   fundDetails,
-  productName,
+  isProductFisdom,
   handleInvestmentCard,
   parentInvestmentType,
   setIsInvestmentValid,
@@ -225,6 +244,16 @@ const FundOrderItem = ({
   const maxAmount = fundDetails?.addl_purchase[investmentType]?.max;
   const multiple = fundDetails?.addl_purchase[investmentType]?.mul;
   const { message, showError } = validateMfOrderFunds(amount, minAmount, maxAmount, multiple);
+  const isInvestmentAllowed = {
+    sip: {
+      allowed: fundDetails?.sip,
+      errorMessage: fundDetails?.sip ? '' : 'Sip investment not allowed',
+    },
+    lumpsum: {
+      allowed: fundDetails?.onetime,
+      errorMessage: fundDetails?.onetime ? '' : 'Lumpsum investment not allowed',
+    },
+  };
   const fundOrderItemRef = useRef();
   useEffect(() => {
     setIsInvestmentValid((prevState) => {
@@ -280,23 +309,23 @@ const FundOrderItem = ({
 
   return (
     <div ref={fundOrderItemRef}>
-      {productName === 'finity' && (
+      {!isProductFisdom && (
         <HeaderTitle sx={{ mb: 2 }} title={fundDetails.mfname} imgSrc={fundDetails.amc_logo_big} />
       )}
       <WrapperBox elevation={1} className='mf-investment-card-wrapper'>
-        {productName !== 'finity' && (
+        {isProductFisdom && (
           <IconButton className='mf-ic-close' onClick={handleInvestmentCard(fundDetails)}>
             <Icon src={require('assets/close_grey.svg')} size='24px' />
           </IconButton>
         )}
         <InvestmentCard>
-          {productName !== 'finity' && (
+          {isProductFisdom && (
             <InvestmentCardHeaderRow title={fundDetails.mfname} imgSrc={fundDetails.amc_logo_big} />
           )}
           <InvestmentCardPillsRow
             title='Investment Type'
-            hideSeparator={productName === 'finity'}
-            hide={productName === 'fisdom'}
+            hideSeparator={!isProductFisdom}
+            hide={isProductFisdom}
             pillsProps={{
               value: investmentType,
               onChange: handleInvestmentType,
@@ -314,9 +343,9 @@ const FundOrderItem = ({
           />
           <InvestmentCardInputRow
             title={investmentAmountTile[investmentType]}
-            subtitle={message}
+            subtitle={isInvestmentAllowed[investmentType].errorMessage || message}
             subtitleColor={
-              showError
+              !isInvestmentAllowed[investmentType].allowed || showError
                 ? 'foundationColors.secondary.lossRed.400'
                 : 'foundationColors.content.tertiary'
             }
@@ -324,6 +353,7 @@ const FundOrderItem = ({
               prefix: '₹',
               value: amount,
               onChange: handleAmountValue,
+              disabled: !isInvestmentAllowed[investmentType].allowed,
             }}
           />
           <InvestmentCardBottomRow
@@ -345,48 +375,14 @@ const FundOrderItem = ({
     </div>
   );
 };
-const sipDates = [1, 4, 15, 10, 12, 21, 8, 23, 66, 32];
-const MF_ORDERS = [
-  {
-    id: 0,
-    title: 'ICICI Prudential Technology Direct Plan Growth 0',
-    imgSrc: require('assets/amazon_pay.svg'),
-    minAmount: 100,
-    sipDate: 15,
-  },
-  {
-    id: 1,
-    title: 'ICICI Prudential Technology Direct Plan Growth 1',
-    imgSrc: require('assets/amazon_pay.svg'),
-    minAmount: 100,
-    sipDate: 10,
-  },
-  // {
-  //   id: 2,
-  //   title: 'ICICI Prudential Technology Direct Plan Growth 2',
-  //   imgSrc: require('assets/amazon_pay.svg'),
-  //   minAmount: 100,
-  //   sipDate: 12,
-  // },
-  // {
-  //   id: 3,
-  //   title: 'ICICI Prudential Technology Direct Plan Growth 3',
-  //   imgSrc: require('assets/amazon_pay.svg'),
-  //   minAmount: 100,
-  //   sipDate: 21,
-  // },
-  // {
-  //   id: 4,
-  //   title: 'ICICI Prudential Technology Direct Plan Growth 4',
-  //   imgSrc: require('assets/amazon_pay.svg'),
-  //   minAmount: 100,
-  //   sipDate: 8,
-  // },
-  // {
-  //   id: 5,
-  //   title: 'ICICI Prudential Technology Direct Plan Growth 5',
-  //   imgSrc: require('assets/amazon_pay.svg'),
-  //   minAmount: 100,
-  //   sipDate: 15,
-  // },
-];
+
+const NoMfOrders = ({ showNoOrders }) => {
+  return (
+    <Grow in={showNoOrders} timeout={450}>
+      <Stack sx={{ height: '70vh' }} spacing='12px' alignItems='center' justifyContent='center'>
+        <Icon src={require('assets/no_mf_orders.svg')} width='140px' height='120px' />
+        <Typography align='center'>Please add at least one fund to make an investment</Typography>
+      </Stack>
+    </Grow>
+  );
+};
