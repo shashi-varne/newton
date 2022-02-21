@@ -560,7 +560,7 @@ export const partnerConfigs = {
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
       stocksAndIpo: ["stocks", "ipo"],
-      ourRecommendations: ["buildwealth", "savetax"],
+      ourRecommendations: ["buildwealth", "savetax", "nps"],
       diy: ["diyv2"],
     },
     styles: {
@@ -575,7 +575,8 @@ export const partnerConfigs = {
       }
     },
     features: {
-      addAnotherBank: true
+      addAnotherBank: true,
+      taxFiling: true,
     },
     referralConfig: {
       applyRefferal: true,
