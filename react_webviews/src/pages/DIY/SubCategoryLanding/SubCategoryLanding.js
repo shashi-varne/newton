@@ -7,6 +7,7 @@ import SwipeableViews from 'react-swipeable-views';
 import { largeCap, midCap, multiCap, smallCap } from './constants';
 import Button from '../../../designSystem/atoms/Button';
 import isEqual from 'lodash/isEqual';
+import isEmpty from 'lodash/isEmpty';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
 
@@ -90,7 +91,14 @@ const SubCategoryLanding = ({ onCartClick }) => {
   const [swiper, setSwiper] = useState(null);
   const [numberOfFunds, setNumberOfFunds] = useState("");
   const [selectedFunds, setSelectedFunds] = useState([]);
+  const [activeFundList, setActiveFundList] = useState([]);
+  const [selectedFundHouses, setSelectedFundHouses] = useState([]);
+  const [selectedFundOption, setSelectedFundOption] = useState('growth');
   const { productName } = useMemo(getConfig, []);
+
+  useEffect(() => {
+    setActiveFundList(tabChilds[tabValue].data)
+  }, [tabValue])
   const swipeableViewsRef = useRef();
   const handleTabChange = (e, value) => {
     setTabValue(value);
@@ -146,6 +154,10 @@ const SubCategoryLanding = ({ onCartClick }) => {
           cartCount={selectedFunds.length}
           onCartClick={onCartClick}
           returnLabel={selectedFilterValue[FilterType.returns]?.returnLabel}
+          selectedFundHouses={selectedFundHouses}
+          setSelectedFundHouses={setSelectedFundHouses}
+          selectedFundOption={selectedFundOption}
+          setSelectedFundOption={setSelectedFundOption}
         />
       }
       className='sub-category-landing-wrapper'
@@ -207,6 +219,8 @@ const SubCategoryLanding = ({ onCartClick }) => {
                   setNumberOfFunds={setNumberOfFunds}
                   setSelectedFunds={setSelectedFunds}
                   selectedFunds={selectedFunds}
+                  selectedFundHouses={selectedFundHouses}
+                  selectedFundOption={selectedFundOption}
                 />
               </SwiperSlide>
             );
@@ -231,13 +245,18 @@ const SubCategoryLanding = ({ onCartClick }) => {
       <Filter
         isOpen={isFilterSheetOpen.filter}
         handleFilterClose={handleFiltterSheetClose('filter')}
+        setSelectedFundHouses={setSelectedFundHouses}
+        selectedFundHouses={selectedFundHouses}
+        setSelectedFundOption={setSelectedFundOption}
+        selectedFundOption={selectedFundOption}
+        // applyFilter={}
       />
     </Container>
   );
 };
 
 const TabPanel = memo((props) => {
-  const { data = [], returnPeriod, sortFundsBy, sortingOrder, setNumberOfFunds, selectedFunds, setSelectedFunds } = props;
+  const { data = [], returnPeriod, sortFundsBy, sortingOrder, setNumberOfFunds, selectedFunds, setSelectedFunds, selectedFundHouses, selectedFundOption } = props;
 
   const [funds, setFunds] = useState(data);
   const [selectedFundsIsins] = useState(selectedFunds.map(({ isin }) => isin))
@@ -263,10 +282,17 @@ const TabPanel = memo((props) => {
   };
 
   useEffect(() => {
-    const filteredFunds = orderBy(data, sortFundsOrder, [sortingOrder]);
+    let fil = data;
+    if (!isEmpty(selectedFundHouses)) {
+      fil = data.filter((el) => selectedFundHouses.includes(el.fund_house))
+    }
+    if (selectedFundOption) {
+      fil = fil.filter((el => el.growth_or_dividend === selectedFundOption))
+    }
+    const filteredFunds = orderBy(fil, sortFundsOrder, [sortingOrder]);
     setFunds(filteredFunds);
     setNumberOfFunds(filteredFunds.length);
-  }, [sortFundsBy, returnPeriod]);
+  }, [sortFundsBy, returnPeriod, selectedFundHouses, selectedFundOption]);
 
   const handleAddToCart = (fund, isFundAddedToCart) => () => {
     if (isFundAddedToCart) {
@@ -360,6 +386,10 @@ const CustomFooter = ({
   handleFilterClick,
   handleReturnClick,
   returnLabel,
+  selectedFundHouses,
+  setSelectedFundHouses,
+  setSelectedFundOption,
+  selectedFundOption,
 }) => {
   return (
     <Stack spacing={2} className='sub-category-custom-footer'>
@@ -378,6 +408,10 @@ const CustomFooter = ({
         handleSortClick={handleSortClick}
         handleReturnClick={handleReturnClick}
         handleFilterClick={handleFilterClick}
+        selectedFundHouses={selectedFundHouses}
+        setSelectedFundHouses={setSelectedFundHouses}
+        selectedFundOption={selectedFundOption}
+        setSelectedFundOption={setSelectedFundOption}
       />
     </Stack>
   );

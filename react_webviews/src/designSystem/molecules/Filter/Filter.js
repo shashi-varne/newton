@@ -55,7 +55,7 @@ const Filter = ({
       >
         {title}
       </Typography>
-      {count && (
+      {(count || count === 0) && (
         <Badge
           badgeContent={count}
           dataAid="number"

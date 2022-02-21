@@ -7,20 +7,18 @@ import isEmpty from 'lodash/isEmpty';
 import './FundHouses.scss';
 import Typography from '../../../designSystem/atoms/Typography';
 
-const FundHouses = () => {
-  const selectedFundHouses = useRef(null);
-  const [selectedFunds, setSelectedFunds] = useState([]);
+const FundHouses = ({ activeFundHouses, setActiveFundHouses }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [fundHouseList, setFundHouseList] = useState(FundHouseOptions);
-  selectedFundHouses.current = [];
 
   const handleChange = (option) => () => {
-    const isFundAdded = selectedFundHouses.current.filter((el) => el.id === option.id);
-    if (isEmpty(isFundAdded)) {
-      setSelectedFunds([...selectedFunds, isFundAdded]);
+    const isFundAdded = activeFundHouses.includes(option.label);
+    if (!isFundAdded) {
+      setActiveFundHouses([...activeFundHouses, option.label]);
     } else {
-      selectedFunds.splice(isFundAdded.id, 1);
-      setSelectedFunds(selectedFunds);
+      const filteredFundHouses =  activeFundHouses.filter((el) => el !== option.label)
+      // selectedFunds.splice(isFundAdded.label, 1);
+      setActiveFundHouses(filteredFundHouses);
     }
   };
 
@@ -43,7 +41,7 @@ const FundHouses = () => {
         )}
         <Stack direction='column' spacing={2} sx={{ ml: 2 }}>
           {fundHouseList?.map((option, idx) => {
-            const selectedValue = selectedFunds?.includes(option.id);
+            const selectedValue = activeFundHouses?.includes(option.label);
             const selectedColor = selectedValue
               ? 'foundationColors.primary.content'
               : 'foundationColors.content.secondary';
@@ -65,7 +63,7 @@ const FundHouses = () => {
 const FundHouseOptions = [
   {
     id: 0,
-    label: 'Hdfc',
+    label: 'HDFC',
     value: 'hdfc',
   },
   {

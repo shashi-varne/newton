@@ -22,7 +22,7 @@ const FundOptions = ({ fundOption, setFundOption }) => {
           onChange={handleChange}
         >
           <Stack direction='column' spacing={2}>
-            {FUND_OPTIONS?.map((option, idx) => {
+            {MINIMUM_INVESTMENT_OPTIONS?.map((option, idx) => {
               const selectedValue = option.value === fundOption;
               const selectedColor = selectedValue
                 ? 'foundationColors.primary.content'
@@ -47,10 +47,10 @@ const FundOptions = ({ fundOption, setFundOption }) => {
   );
 };
 
-const FUND_OPTIONS = [
+const MINIMUM_INVESTMENT_OPTIONS = [
   {
-    label: 'Growth',
-    value: 'growth',
+    label: `Below ${formatAmountInr(500)}`,
+    value: '500',
   },
   {
     label: 'Dividend',
