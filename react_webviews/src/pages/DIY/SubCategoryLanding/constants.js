@@ -29,6 +29,14 @@ export const smallCap = [
     tracking_error: null,
     growth_or_dividend: 'dividend',
     isin: 'INF966L01036',
+    "investment_data": {
+      "default_date": 10,
+      "sip_dates": "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28",
+      "min": 1000.0,
+      "max": 199999.0,
+      "mul": 100.0
+  },
+    min_value: 600,
   },
   {
     three_year_return: 40.5,
@@ -60,6 +68,13 @@ export const smallCap = [
     tracking_error: null,
     growth_or_dividend: 'dividend',
     isin: 'INF966L01044',
+    min_value: 300,"investment_data": {
+      "default_date": 10,
+      "sip_dates": "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28",
+      "min": 1200.0,
+      "max": 199999.0,
+      "mul": 100.0
+  },
   },
   {
     three_year_return: 40.42,
@@ -91,6 +106,13 @@ export const smallCap = [
     tracking_error: null,
     growth_or_dividend: 'growth',
     isin: 'INF966L01AA0',
+    min_value: 1100,"investment_data": {
+      "default_date": 10,
+      "sip_dates": "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28",
+      "min": 300.0,
+      "max": 199999.0,
+      "mul": 100.0
+  },
   },
   {
     three_year_return: 39.26,
@@ -1088,6 +1110,14 @@ export const smallCap = [
     tracking_error: null,
     growth_or_dividend: 'growth',
     isin: 'INF397L01JW3',
+    min_value: 1000,
+    "investment_data": {
+      "default_date": 10,
+      "sip_dates": "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28",
+      "min": 1000.0,
+      "max": 199999.0,
+      "mul": 100.0
+  },
   },
   {
     three_year_return: 25.31,
@@ -1119,6 +1149,13 @@ export const smallCap = [
     aaa_rated_allocation: 100.0,
     tracking_error: null,
     growth_or_dividend: 'dividend',
+    min_value: 900,"investment_data": {
+      "default_date": 10,
+      "sip_dates": "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28",
+      "min": 7000.0,
+      "max": 199999.0,
+      "mul": 100.0
+  },
     isin: 'INF903J01454',
   },
   {
@@ -1152,6 +1189,14 @@ export const smallCap = [
     tracking_error: null,
     growth_or_dividend: 'dividend',
     isin: 'INF903J01462',
+    min_value: 500,
+    "investment_data": {
+      "default_date": 10,
+      "sip_dates": "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28",
+      "min": 3000.0,
+      "max": 199999.0,
+      "mul": 100.0
+  },
   },
   {
     three_year_return: 25.19,
@@ -1183,6 +1228,14 @@ export const smallCap = [
     tracking_error: null,
     growth_or_dividend: 'growth',
     isin: 'INF917K01QC7',
+    min_value: 800,
+    "investment_data": {
+      "default_date": 10,
+      "sip_dates": "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28",
+      "min": 6000.0,
+      "max": 199999.0,
+      "mul": 100.0
+  },
   },
   {
     three_year_return: 24.77,
@@ -1214,6 +1267,14 @@ export const smallCap = [
     tracking_error: null,
     growth_or_dividend: 'growth',
     isin: 'INF336L01AV2',
+    min_value: 1200,
+    "investment_data": {
+      "default_date": 10,
+      "sip_dates": "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28",
+      "min": 500.0,
+      "max": 199999.0,
+      "mul": 100.0
+  },
   },
   {
     three_year_return: 24.59,
@@ -1244,6 +1305,7 @@ export const smallCap = [
     aaa_rated_allocation: null,
     tracking_error: null,
     growth_or_dividend: 'dividend',
+    min_value: 800,
     isin: 'INF917K01QB9',
   },
   {
@@ -1275,6 +1337,7 @@ export const smallCap = [
     aaa_rated_allocation: null,
     tracking_error: null,
     growth_or_dividend: 'dividend',
+    min_value: 1100,
     isin: 'INF917K01XQ3',
   },
   {
@@ -1306,6 +1369,7 @@ export const smallCap = [
     aaa_rated_allocation: null,
     tracking_error: null,
     growth_or_dividend: 'dividend',
+    min_value: 600,
     isin: 'INF336L01AT6',
   },
   {
@@ -1338,6 +1402,7 @@ export const smallCap = [
     tracking_error: null,
     growth_or_dividend: 'dividend',
     isin: 'INF336L01AU4',
+    min_value: 300,
   },
   {
     three_year_return: 22.51,
@@ -1369,6 +1434,7 @@ export const smallCap = [
     tracking_error: null,
     growth_or_dividend: 'growth',
     isin: 'INF179KA1RZ8',
+    min_value: 200,
   },
   {
     three_year_return: 22.01,
@@ -2147,6 +2213,14 @@ export const largeCap = [
     tracking_error: null,
     growth_or_dividend: 'growth',
     isin: 'INF760K01AR3',
+    min_value: 300,
+    "investment_data": {
+      "default_date": 10,
+      "sip_dates": "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28",
+      "min": 300.0,
+      "max": 199999.0,
+      "mul": 100.0
+  },
   },
   {
     three_year_return: 20.42,
@@ -2178,6 +2252,14 @@ export const largeCap = [
     tracking_error: null,
     growth_or_dividend: 'growth',
     isin: 'INF397L01869',
+    min_value: 600,
+    "investment_data": {
+      "default_date": 10,
+      "sip_dates": "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28",
+      "min": 600.0,
+      "max": 199999.0,
+      "mul": 100.0
+  },
   },
   {
     three_year_return: 19.82,
@@ -2209,6 +2291,14 @@ export const largeCap = [
     tracking_error: null,
     growth_or_dividend: 'growth',
     isin: 'INF174K01153',
+    min_value: 1300,
+    "investment_data": {
+      "default_date": 10,
+      "sip_dates": "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28",
+      "min": 1300.0,
+      "max": 199999.0,
+      "mul": 100.0
+  },
   },
   {
     three_year_return: 19.68,
@@ -2240,6 +2330,14 @@ export const largeCap = [
     tracking_error: null,
     growth_or_dividend: 'dividend',
     isin: 'INF397L01836',
+    min_value: 500,
+    "investment_data": {
+      "default_date": 10,
+      "sip_dates": "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28",
+      "min": 500.0,
+      "max": 199999.0,
+      "mul": 100.0
+  },
   },
   {
     three_year_return: 19.68,
@@ -2271,6 +2369,14 @@ export const largeCap = [
     tracking_error: null,
     growth_or_dividend: 'dividend',
     isin: 'INF397L01844',
+    min_value: 1300,
+    "investment_data": {
+      "default_date": 10,
+      "sip_dates": "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28",
+      "min": 400.0,
+      "max": 199999.0,
+      "mul": 100.0
+  },
   },
   {
     three_year_return: 19.46,
@@ -2302,6 +2408,7 @@ export const largeCap = [
     tracking_error: null,
     growth_or_dividend: 'dividend',
     isin: 'INF174K01161',
+    min_value: 800,
   },
   {
     three_year_return: 19.46,
