@@ -5,6 +5,7 @@ import Typography from '../../designSystem/atoms/Typography';
 import WrapperBox from '../../designSystem/atoms/WrapperBox';
 import CollapsibleSection from '../../designSystem/molecules/CollapsibleSection';
 import EstimationCard from '../../designSystem/molecules/EstimationCard';
+import ComparisonChart from './ComparisonChart';
 import { formatAmountInr } from '../../utils/validators';
 
 const ReturnComparison = () => {
@@ -31,13 +32,9 @@ const ReturnComparison = () => {
               </Typography>
               <Typography variant='heading4'>{formatAmountInr(investedAmount)}</Typography>
             </Stack>
-            <Box
-              sx={{
-                width: '100%',
-                height: '153px',
-                backgroundColor: 'foundationColors.primary.200',
-              }}
-            />
+            <div>
+              <ComparisonChart />
+            </div>
             <Stack direction='row' spacing={2}>
               <Typography variant='body5' color='foundationColors.content.secondary'>
                 Principal invested
