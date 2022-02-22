@@ -55,32 +55,10 @@ export const commonCardsConfig = {
   landingMarketingBanners: [],
   nfoBanners: [
     {
-      image: "nfo5.svg",
+      image: "nfo.svg",
       type: "nfo",
-      startDate: "01/17/2022",
-      endDate: "01/30/2022",
-    },
-    {
-      image: "nfo2.svg",
-      type: "nfo",
-      endDate: "01/26/2022",
-    },
-    {
-      image: "nfo3.svg",
-      type: "nfo",
-      endDate: "01/26/2022",
-    },
-    {
-      image: "nfo4.svg",
-      type: "nfo",
-      startDate: "01/21/2022",
-      endDate: "02/03/2022",
-    },
-    {
-      image: "nfo1.svg",
-      type: "nfo",
-      endDate: "01/23/2022",
-    },
+      endDate: "02/23/2022",
+    }
   ],
 };
 
@@ -614,6 +592,36 @@ export const partnerConfigs = {
       primaryColor: "#378ECF",
     }
   },
+  sbnri: {
+    code: "sbnri",
+    logo: "sbnri.svg",
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      ourRecommendations: ["instaredeem", "buildwealth", "savetax"],
+    },
+    styles: {
+      primaryColor: "#3E89FA",
+    }
+  },
+  tmb: {
+    code: "tmb",
+    logo: "tmb.png",
+    styles: {
+      primaryColor: "#2D4191",
+      secondaryColor:  "#2D4191",
+      backButtonColor: "#2D4191",
+      notificationsColor: "#2D4191",
+    },
+    uiElements: {
+      header: {
+        backgroundColor : "#FFFFFF",
+      }
+    },
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      ourRecommendations: ["instaredeem", "buildwealth", "savetax"],
+    }
+  }
 };
 
 export const getPartnerData = (productType, partnerCode) => {

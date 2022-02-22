@@ -258,6 +258,8 @@ export const getIfscCodeError = (code) => {
       return "Please enter a valid ifsc code of India Post Payments Bank";
     case "ucomb":
       return "Please enter a valid ifsc code of United Commercial Bank";
+    case "tmb":
+      return "Please enter a valid ifsc code of TamilNad Mercantile Bank";
     default:
       return "Please enter a valid ifsc code";
   }
@@ -268,6 +270,7 @@ export const BANK_IFSC_CODES = {
   'lvb': 'LAVB',
   'cub': 'CIUB',
   'ucomb': 'UCBA',
+  'tmb': 'TMBL',
 }
 
 export const VERIFICATION_DOC_OPTIONS = [
