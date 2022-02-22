@@ -6,11 +6,10 @@
     titleColor => strongly remommended to use foundation colors for this.
         Example: titleColor: 'foundationColors.secondary.mango.300'
     buttonTitle => title of the button.
-    onClick => this is a click function for the button.
+    onButtonClick => this is a click function for the button.
 */
 
 import React from 'react';
-import Box from '@mui/material/Box';
 import Typography from '../../atoms/Typography';
 import Button from '../../atoms/Button';
 import PropTypes from 'prop-types';
@@ -19,6 +18,7 @@ import CartIcon from 'assets/cart_icon.svg';
 import './ConfirmAction.scss';
 import Icon from '../../atoms/Icon';
 import Badge from '../../atoms/Badge/Badge';
+import Stack from '@mui/material/Stack';
 
 const ConfirmAction = ({
   imgSrc,
@@ -27,39 +27,54 @@ const ConfirmAction = ({
   titleColor,
   className,
   buttonTitle,
-  onClick,
+  onButtonClick,
   badgeContent,
-  badgeVariant,
   badgeProps,
   sx,
+  dataAid,
 }) => {
   return (
-    <Box
+    <Stack
+      direction='row'
+      alignItems='center'
+      justifyContent='space-between'
       className={`confirm-action-wrapper ${className}`}
-      sx={{backgroundColor: 'foundationColors.action.brand',...sx,}}
+      sx={{ backgroundColor: 'foundationColors.action.brand', ...sx }}
+      spacing={1}
+      data-aid={`confirmAction_${dataAid}`}
     >
-      {imgSrc && (
-        <Badge className='confirm-action-badge' badgeContent={badgeContent} variant={badgeVariant} {...badgeProps}>
-          <Icon src={imgSrc} size='24px' className='confirm-action-left-img' dataAid='left' {...imgProps} />
-        </Badge>
-      )}
-      <div className='confirm-action-right-wrapper'>
+      <Stack direction='row' alignItems='center' spacing='12px'>
+        {imgSrc && (
+          <Badge
+            className='confirm-action-badge'
+            badgeContent={badgeContent}
+            {...badgeProps}
+          >
+            <Icon
+              src={imgSrc}
+              size='24px'
+              className='confirm-action-left-img'
+              dataAid='left'
+              {...imgProps}
+            />
+          </Badge>
+        )}
         {title && (
-          <Typography variant='body5' dataAid='title' sx={{mr:'10px'}} color={titleColor}>
+          <Typography variant='body5' dataAid='title' color={titleColor}>
             {title}
           </Typography>
         )}
-        {buttonTitle && (
-          <Button
-            isInverted
-            title={buttonTitle}
-            size='small'
-            onClick={onClick}
-            dataAid='smallWhite'
-          />
-        )}
-      </div>
-    </Box>
+      </Stack>
+      {buttonTitle && (
+        <Button
+          isInverted
+          title={buttonTitle}
+          size='small'
+          onClick={onButtonClick}
+          dataAid='smallWhite'
+        />
+      )}
+    </Stack>
   );
 };
 
@@ -75,7 +90,8 @@ ConfirmAction.propTypes = {
   titleColor: PropTypes.string,
   buttonTitle: PropTypes.string,
   className: PropTypes.string,
-  onClick: PropTypes.func,
+  onButtonClick: PropTypes.func,
+  dataAid: PropTypes.string.isRequired,
 };
 
 export default ConfirmAction;

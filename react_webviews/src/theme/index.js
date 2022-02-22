@@ -18,6 +18,7 @@ import {
   outlinedTextFieldStyleOverRides,
 } from './textfield';
 import { dialogDefaultProps, dialogStylesOverride } from './dialog';
+import { separatorStyleOverRides } from './separator';
 import { badgeStyleOverRides } from './badge';
 import { customShadows } from './shadows';
 
