@@ -1,5 +1,5 @@
 import { Box, Stack } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getFundData } from 'businesslogic/dataStore/reducers/fundDetailsReducer';
 import BarMeter from '../../designSystem/atoms/BarMeter';
@@ -15,31 +15,20 @@ const barData = [
   {
     name: 'Below Average',
     value: 2,
-    hide: true,
   },
   {
     name: 'Medium',
     value: 3,
-    hide: true,
   },
   {
     name: 'Above Average',
     value: 4,
-    hide: true,
   },
   {
     name: 'High',
     value: 5,
   },
 ];
-
-const barMeterData = (riskValue) => {
-  // eslint-disable-next-line no-unused-expressions
-  const newBarData = barData?.map((el, idx) => el);
-  const activeIndex = getBarIndex(riskValue);
-  newBarData[activeIndex].hide = false;
-  return newBarData;
-};
 
 const getBarIndex = (riskValue) => {
   const riskIndex = barData?.findIndex((el) => el.name.toLowerCase() === riskValue.toLowerCase());
@@ -49,6 +38,17 @@ const getBarIndex = (riskValue) => {
 const RiskDetails = () => {
   const [isRiskOpen, setIsRiskOpen] = useState(false);
   const fundData = useSelector(getFundData);
+  const { riskVsCategoryActiveIndex, returnVsCategoryActiveIndex } =
+    useMemo(() => {
+      return {
+        riskVsCategoryActiveIndex: getBarIndex(
+          fundData?.risk?.risk_vs_category
+        ),
+        returnVsCategoryActiveIndex: getBarIndex(
+          fundData?.risk?.return_vs_category
+        ),
+      };
+    }, [fundData?.risk?.risk_vs_category, fundData?.risk?.return_vs_category]);
   const handleRiskAction = () => {
     setIsRiskOpen(!isRiskOpen);
   };
@@ -60,15 +60,15 @@ const RiskDetails = () => {
             <Stack direction='column' spacing={3}>
               <Typography variant='heading4'>Risk vs Category</Typography>
               <BarMeter
-                barMeterData={barMeterData(fundData?.risk?.risk_vs_category)}
-                activeIndex={getBarIndex(fundData?.risk?.risk_vs_category)}
+                barMeterData={barData}
+                activeIndex={riskVsCategoryActiveIndex}
               />
             </Stack>
             <Stack direction='column' spacing={3}>
               <Typography variant='heading4'>Return vs Category</Typography>
               <BarMeter
-                barMeterData={barMeterData(fundData?.risk?.return_vs_category)}
-                activeIndex={getBarIndex(fundData?.risk?.return_vs_category)}
+                barMeterData={barData}
+                activeIndex={returnVsCategoryActiveIndex}
               />
             </Stack>
           </Stack>
