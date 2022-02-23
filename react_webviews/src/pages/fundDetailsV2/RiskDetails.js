@@ -40,6 +40,7 @@ const TOOLTIP_MEASURES = {
 };
 
 const getBarIndex = (riskValue) => {
+  if(!riskValue) return;
   const riskIndex = barData?.findIndex((el) => el.name.toLowerCase() === riskValue.toLowerCase());
   return riskIndex;
 };
