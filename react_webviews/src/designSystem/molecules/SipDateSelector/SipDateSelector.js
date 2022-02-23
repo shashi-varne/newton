@@ -1,14 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Dialog, Box, Stack } from '@mui/material';
+import { Dialog, Stack } from '@mui/material';
 import Typography from '../../atoms/Typography';
 import scrollIntoView from 'scroll-into-view-if-needed';
 
 import './SipDateSelector.scss';
 import Button from '../../atoms/Button';
 
-const SipDates = [1, 2, 3, 4, 1, 5, 56, 235, 34, 52];
-
-const SipDateSelector = ({ isOpen,sipDates, onClose, selectedDate, handleSelectedDate }) => {
+const SipDateSelector = ({ isOpen, sipDates, onClose, selectedDate, handleSelectedDate }) => {
   const [selectedData, setSelectedDate] = useState(selectedDate);
   const itemRef = useRef();
 
@@ -19,7 +17,7 @@ const SipDateSelector = ({ isOpen,sipDates, onClose, selectedDate, handleSelecte
   const handleClose = () => {
     setSelectedDate(selectedDate);
     onClose();
-  }
+  };
 
   useEffect(() => {
     if (itemRef.current) {
@@ -35,7 +33,7 @@ const SipDateSelector = ({ isOpen,sipDates, onClose, selectedDate, handleSelecte
   const handleSetDate = () => {
     handleSelectedDate(selectedData);
     onClose();
-  }
+  };
 
   return (
     <Dialog
@@ -80,7 +78,7 @@ const SipDateSelector = ({ isOpen,sipDates, onClose, selectedDate, handleSelecte
             );
           })}
         </Stack>
-        <Button sx={{ mt: 4 }} title='Select Date' onClick={handleSetDate}/>
+        <Button sx={{ mt: 4 }} title='Select Date' onClick={handleSetDate} />
       </Stack>
     </Dialog>
   );

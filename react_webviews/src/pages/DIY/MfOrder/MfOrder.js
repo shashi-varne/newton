@@ -113,6 +113,7 @@ const MfOrder = () => {
     let amountInputError = false;
     let amountValidationError = false;
     const validateErrors = values(isInvestmentValid);
+    // eslint-disable-next-line array-callback-return
     validateErrors.some((el) => {
       if (el?.amountError) {
         amountInputError = true;
