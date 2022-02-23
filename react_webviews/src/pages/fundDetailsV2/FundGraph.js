@@ -3,7 +3,6 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { fetch_fund_graph } from '../../fund_details/common/ApiCalls';
 import { TimeLine, Timelines } from '../../designSystem/atoms/TimelineList';
-import { useDispatch } from 'react-redux';
 // import { setFundTimePeriod } from 'businesslogic/dataStore/reducers/fundDetailsReducer';
 import isEmpty from 'lodash/isEmpty';
 import { Skeleton } from '@mui/material';
@@ -17,7 +16,6 @@ const FundGraph = () => {
   const [graphData, setGraphData] = useState([]);
   const [fundTimePeriod, setFundTimePeriod] = useState('5Y');
   const [periodWiseData, setPeriodWiseData] = useState({});
-  const dispatch = useDispatch();
   const theme = getTheme();
   Highcharts.setOptions({
     lang: {
