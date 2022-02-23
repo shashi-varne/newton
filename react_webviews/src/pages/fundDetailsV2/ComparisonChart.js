@@ -1,9 +1,12 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { getExpectedReturn } from './helperFunctions';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import getTheme from '../../theme';
+import { formatAmountInr } from '../../utils/validators';
+
+import './ComparisonChart.scss';
 
 const ComparisonChart = () => {
   const investmentType = useSelector((state) => state?.fundDetails?.investmentType);
@@ -29,10 +32,6 @@ const ComparisonChart = () => {
     chart: {
       type: 'column',
       height: '230px',
-      panning: false,
-      pinchType: false,
-      zoomType: '',
-      zoomKey: '',
     },
     title: {
       text: undefined,
@@ -41,119 +40,68 @@ const ComparisonChart = () => {
       categories: ['Savings account', 'Fixed deposit', 'This fund'],
     },
     yAxis: {
-      min: 0,
       title: {
         text: undefined,
       },
       stackLabels: {
-        enabled: false,
+        enabled: true,
+        formatter: function () {
+          const investedAmountGraphData = Number(this.points[0][0]);
+          const cumulativeAmountGraphData = Number(this.points[0][1]);
+          const expectedReturnAmount = cumulativeAmountGraphData - investedAmountGraphData;
+          return (
+            '<div class="comparison-chart-values">' +
+            formatAmountInr(expectedReturnAmount) +
+            '</div>'
+          );
+        },
       },
     },
-    legend: {
-      align: 'right',
-      x: -30,
-      verticalAlign: 'top',
-      y: 25,
-      floating: true,
-      backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || 'white',
-      borderColor: '#CCC',
-      borderWidth: 1,
-      shadow: false,
-    },
     tooltip: {
-      headerFormat: '<b>{point.x}</b><br/>',
-      pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}',
+      enabled: false,
+    },
+    legend: {
+      align: 'left',
     },
     plotOptions: {
       column: {
         stacking: 'normal',
         dataLabels: {
-          enabled: true,
-        },
-      },
-    },
-    series: [
-      {
-        name: 'Returns gained',
-        data: [savingsExpectedAmount, fdExpectedAmount, expectedAmount],
-      },
-      {
-        name: 'Principal invested',
-        data: [investedAmount, investedAmount, investedAmount],
-      },
-    ],
-  };
-
-  const getChartData = useCallback(
-    (exAmount, savAmount, fdAmount) => {
-      console.log('expectedAmount', exAmount);
-      console.log('savingsExpectedAmount', savAmount);
-      console.log('fdExpectedAmount', fdAmount);
-      return;
-    },
-    [expectedAmount, savingsExpectedAmount, fdExpectedAmount]
-  );
-  const options = {
-    chart: {
-      type: 'column',
-      height: 150,
-    },
-    legend: {
-      margin: 5,
-      itemDistance: 10,
-      enabled: false,
-    },
-    xAxis: {
-      visible: true,
-    },
-    yAxis: {
-      stackLabels: {
-        enabled: false,
-        align: 'center',
-      },
-      visible: false,
-      title: { enabled: false, text: 'Count' },
-    },
-    plotOptions: {
-      column: {
-        dataLabels: {
-          enabled: true,
-          inside: false,
+          enabled: false,
         },
       },
       series: {
-        stacking: 'normal',
+        states: {
+          inactive: {
+            opacity: 1,
+          },
+          hover: {
+            enabled: false,
+          },
+        },
       },
     },
     series: [
       {
-        data: [savingsExpectedAmount, fdExpectedAmount, expectedAmount],
         name: 'Returns gained',
-        minPointLength: 5,
+        data: [savingsExpectedAmount, fdExpectedAmount, expectedAmount],
         color: theme?.palette?.foundationColors?.primary['400'],
       },
       {
-        data: [investedAmount, investedAmount, investedAmount],
         name: 'Principal invested',
-        minPointLength: 10,
+        data: [investedAmount, investedAmount, investedAmount],
         color: theme?.palette?.foundationColors?.primary['200'],
       },
     ],
   };
-  const [chartData, setChartData] = useState(chartConfig);
-
-  useEffect(() => {
-    setChartData({ ...options });
-  }, [expectedAmount, savingsExpectedAmount, fdExpectedAmount]);
-  console.log('chart daya is', chartData);
   return (
-    <div>
+    <div className='comparison-chart-wrapper'>
       <HighchartsReact
         allowChartUpdate={true}
         immutable={false}
         updateArgs={[true, true, true]}
         highcharts={Highcharts}
-        options={chartData}
+        options={chartConfig}
       />
     </div>
   );
