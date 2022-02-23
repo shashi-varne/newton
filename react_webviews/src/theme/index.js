@@ -76,11 +76,12 @@ const getTheme = () => {
           root:{
             [defaultTheme.breakpoints.up('sm')]: {
               left: '300px !important',
-              right: 'unset !important',
-              width: 'var(--desktop-width) !important',
-              top: '60px !important'
+              maxWidth: 'var(--desktop-width) !important',
+              "& .MuiPaper-root": {
+                left: '185px !important',
+              },
             }
-          }
+          },
         }
       },
       MuiBadge: {
