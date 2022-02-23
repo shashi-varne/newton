@@ -75,20 +75,24 @@ const RiskDetails = () => {
       <CollapsibleSection label='Risk details' isOpen={isRiskOpen} onClick={handleRiskAction}>
         <Box>
           <Stack direction='column' spacing={3}>
-            <Stack direction='column' spacing={3}>
-              <Typography variant='heading4'>Risk vs Category</Typography>
-              <BarMeter
-                barMeterData={barMeterData(fundData?.risk?.risk_vs_category)}
-                activeIndex={getBarIndex(fundData?.risk?.risk_vs_category)}
-              />
-            </Stack>
-            <Stack direction='column' spacing={3}>
-              <Typography variant='heading4'>Return vs Category</Typography>
-              <BarMeter
-                barMeterData={barMeterData(fundData?.risk?.return_vs_category)}
-                activeIndex={getBarIndex(fundData?.risk?.return_vs_category)}
-              />
-            </Stack>
+            {fundData?.risk?.risk_vs_category && (
+              <Stack direction='column' spacing={3}>
+                <Typography variant='heading4'>Risk vs Category</Typography>
+                <BarMeter
+                  barMeterData={barMeterData(fundData?.risk?.risk_vs_category)}
+                  activeIndex={getBarIndex(fundData?.risk?.risk_vs_category)}
+                />
+              </Stack>
+            )}
+            {fundData?.risk?.return_vs_category && (
+              <Stack direction='column' spacing={3}>
+                <Typography variant='heading4'>Return vs Category</Typography>
+                <BarMeter
+                  barMeterData={barMeterData(fundData?.risk?.return_vs_category)}
+                  activeIndex={getBarIndex(fundData?.risk?.return_vs_category)}
+                />
+              </Stack>
+            )}
           </Stack>
 
           <Stack sx={{ mt: 4, mb: 2 }} direction='column' spacing={3}>
