@@ -34,6 +34,6 @@ const Separator = (props) => {
 export default Separator;
 
 Separator.propTypes = {
-  dataAid: PropTypes.string,
+  dataAid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   variant: PropTypes.oneOf(Object.values(DIVIDER_VARIANTS)),
 };
