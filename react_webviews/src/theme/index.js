@@ -60,7 +60,7 @@ const getTheme = () => {
       },
       MuiDialog: {
         defaultProps: dialogDefaultProps(),
-        styleOverrides:dialogStylesOverride()
+        styleOverrides:dialogStylesOverride(),
       },
       MuiModal: {
         styleOverrides : {
