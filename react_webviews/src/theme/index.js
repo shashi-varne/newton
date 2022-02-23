@@ -11,10 +11,11 @@ import { dialogDefaultProps, dialogStylesOverride } from './dialog';
 import { separatorStyleOverRides } from './separator';
 import { badgeStyleOverRides } from './badge';
 import { customShadows } from './shadows';
+const defaultTheme = createTheme();
 
 const getTheme = () => {
-  const {colors, partnerConfig} = getPartnerThemeData();
-  
+  const { colors, partnerConfig } = getPartnerThemeData();
+
   const theme = {
     palette: {
       primary: {
@@ -61,9 +62,21 @@ const getTheme = () => {
         defaultProps: dialogDefaultProps(),
         styleOverrides:dialogStylesOverride(),
       },
+      MuiModal: {
+        styleOverrides : {
+          root:{
+            [defaultTheme.breakpoints.up('sm')]: {
+              left: '300px !important',
+              right: 'unset !important',
+              width: 'var(--desktop-width) !important',
+              top: '60px !important'
+            }
+          }
+        }
+      },
       MuiBadge: {
         styleOverrides: badgeStyleOverRides(colors, partnerConfig),
-      }
+      },
     },
     shadows: customShadows()
   };
