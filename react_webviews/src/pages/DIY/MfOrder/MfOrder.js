@@ -53,8 +53,7 @@ const MfOrder = () => {
   const [parentInvestmentType, setParentInvestmentType] = useState('sip');
   const [isInvestmentValid, setIsInvestmentValid] = useState({});
   const dispatch = useDispatch();
-  const fundOrderDetails = useSelector((state) => state?.diy?.fundOrderDetails);
-  const mfOrders = useSelector((state) => state?.diy?.mfOrders);
+  const { fundOrderDetails, mfOrders } = useSelector((state) => state?.mfOrdersReducer);
   const { productName } = useMemo(getConfig, []);
   const isProductFisdom = productName === 'fisdom';
 
