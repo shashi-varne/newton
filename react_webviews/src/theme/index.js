@@ -20,6 +20,7 @@ import {
 import { dialogDefaultProps, dialogStylesOverride } from './dialog';
 import { badgeStyleOverRides } from './badge';
 import { customShadows } from './shadows';
+const defaultTheme = createTheme();
 
 const getTheme = () => {
   const { colors, partnerConfig } = getPartnerThemeData();
@@ -69,6 +70,19 @@ const getTheme = () => {
       MuiDialog: {
         defaultProps: dialogDefaultProps(),
         styleOverrides:dialogStylesOverride()
+      },
+      MuiModal: {
+        styleOverrides : {
+          root:{
+            [defaultTheme.breakpoints.up('sm')]: {
+              left: '300px !important',
+              maxWidth: 'var(--desktop-width) !important',
+              "& .MuiPaper-root": {
+                left: '185px !important',
+              },
+            }
+          },
+        }
       },
       MuiBadge: {
         styleOverrides: badgeStyleOverRides(colors, partnerConfig),

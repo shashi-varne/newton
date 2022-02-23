@@ -1,5 +1,5 @@
 import { Box, Stack } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getFundData } from 'businesslogic/dataStore/reducers/fundDetailsReducer';
 import BarMeter from '../../designSystem/atoms/BarMeter';
@@ -8,6 +8,7 @@ import Typography from '../../designSystem/atoms/Typography';
 import CollapsibleSection from '../../designSystem/molecules/CollapsibleSection';
 import Tooltip from '../../designSystem/atoms/Tooltip';
 import Icon from '../../designSystem/atoms/Icon';
+import { isEmpty } from '../../utils/validators';
 
 const barData = [
   {
@@ -17,17 +18,14 @@ const barData = [
   {
     name: 'Below Average',
     value: 2,
-    hide: true,
   },
   {
     name: 'Medium',
     value: 3,
-    hide: true,
   },
   {
     name: 'Above Average',
     value: 4,
-    hide: true,
   },
   {
     name: 'High',
@@ -39,14 +37,6 @@ const TOOLTIP_MEASURES = {
   Alpha: 'Excess return generated over the benchmark',
   Beta: 'Degree of sensitivity to benchmark',
   squared: 'The deviation of the performance from the average over a period',
-};
-
-const barMeterData = (riskValue) => {
-  // eslint-disable-next-line no-unused-expressions
-  const newBarData = barData?.map((el, idx) => el);
-  const activeIndex = getBarIndex(riskValue);
-  newBarData[activeIndex].hide = false;
-  return newBarData;
 };
 
 const getBarIndex = (riskValue) => {
@@ -62,6 +52,17 @@ const RiskDetails = () => {
     squared: false,
   });
   const fundData = useSelector(getFundData);
+  const { riskVsCategoryActiveIndex, returnVsCategoryActiveIndex } =
+    useMemo(() => {
+      return {
+        riskVsCategoryActiveIndex: getBarIndex(
+          fundData?.risk?.risk_vs_category
+        ),
+        returnVsCategoryActiveIndex: getBarIndex(
+          fundData?.risk?.return_vs_category
+        ),
+      };
+    }, [fundData?.risk?.risk_vs_category, fundData?.risk?.return_vs_category]);
   const handleRiskAction = () => {
     setIsRiskOpen(!isRiskOpen);
   };
@@ -75,21 +76,21 @@ const RiskDetails = () => {
       <CollapsibleSection label='Risk details' isOpen={isRiskOpen} onClick={handleRiskAction}>
         <Box>
           <Stack direction='column' spacing={3}>
-            {fundData?.risk?.risk_vs_category && (
-              <Stack direction='column' spacing={3}>
-                <Typography variant='heading4'>Risk vs Category</Typography>
+            {!isEmpty(fundData?.risk?.risk_vs_category) && (
+              <Stack direction="column" spacing={3}>
+                <Typography variant="heading4">Risk vs Category</Typography>
                 <BarMeter
-                  barMeterData={barMeterData(fundData?.risk?.risk_vs_category)}
-                  activeIndex={getBarIndex(fundData?.risk?.risk_vs_category)}
+                  barMeterData={barData}
+                  activeIndex={riskVsCategoryActiveIndex}
                 />
               </Stack>
             )}
-            {fundData?.risk?.return_vs_category && (
-              <Stack direction='column' spacing={3}>
-                <Typography variant='heading4'>Return vs Category</Typography>
+            {!isEmpty(fundData?.risk?.return_vs_category) && (
+              <Stack direction="column" spacing={3}>
+                <Typography variant="heading4">Return vs Category</Typography>
                 <BarMeter
-                  barMeterData={barMeterData(fundData?.risk?.return_vs_category)}
-                  activeIndex={getBarIndex(fundData?.risk?.return_vs_category)}
+                  barMeterData={barData}
+                  activeIndex={returnVsCategoryActiveIndex}
                 />
               </Stack>
             )}
