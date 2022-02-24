@@ -21,28 +21,33 @@ import scrollIntoView from 'scroll-into-view-if-needed';
 import './fundDetailsV2.scss';
 import { Stack } from '@mui/material';
 import { getConfig } from '../../utils/functions';
+import { getUrlParams } from '../../utils/validators';
+import { getPageLoading } from 'businesslogic/dataStore/reducers/loaderReducer';
 
+
+const screen = 'fundDetailsV2';
 const FundDetailsV2 = () => {
   const dispatch = useDispatch();
   const fundData = useSelector(getFundData);
+  let { isins } = getUrlParams();
+  const isPageLoading = useSelector(state => getPageLoading(state, screen));
   const fundStatRef = useRef();
   const returnCalcRef = useRef();
   const assetAllocRef = useRef();
   const returnsRef = useRef();
   const riskDetailsRef = useRef();
   const returnCompRef = useRef();
-  const {productName} = useMemo(getConfig,[]);
+  const { productName } = useMemo(getConfig, []);
   const ctaText = productName === 'fisdom' ? 'ADD TO CART' : 'INVEST NOW';
   const cartCount = 0;
   useEffect(() => {
     const payload = {
-      isins: 'INF109K01480',
+      isins,
       Api,
+      screen,
     };
     dispatch(fetchFundDetails(payload));
   }, []);
-
-  if (isEmpty(fundData)) return <h1>Loading...!!</h1>;
 
   return (
     <Container
@@ -52,8 +57,9 @@ const FundDetailsV2 = () => {
           title: ctaText,
         },
         hideButton1: cartCount > 0,
-        hideConfirmAction: cartCount <= 0
+        hideConfirmAction: cartCount <= 0,
       }}
+      isPageLoading={isPageLoading || isEmpty(fundData)}
       renderComponentAboveFooter={
         <CustomJumpTo
           fundStatRef={fundStatRef}
@@ -138,7 +144,6 @@ const CustomJumpTo = ({
   ];
 
   const handleSectionNavigation = (index) => {
-    console.log('text is', options[index]);
     setActiveSection(index);
     scrollIntoView(SectionRefs[index].current, {
       behavior: 'smooth',
@@ -148,7 +153,11 @@ const CustomJumpTo = ({
 
   return (
     <Stack alignItems='center' justifyContent='center'>
-      <NavigationPill backgroundColor='foundationColors.content.primary' label='Jump To' onClick={handleClick} />
+      <NavigationPill
+        backgroundColor='foundationColors.content.primary'
+        label='Jump To'
+        onClick={handleClick}
+      />
       <NavigationPopup
         activeIndex={activeSection}
         options={options}
