@@ -3,18 +3,20 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { fetch_fund_graph } from '../../fund_details/common/ApiCalls';
 import { TimeLine, Timelines } from '../../designSystem/atoms/TimelineList';
-// import { setFundTimePeriod } from 'businesslogic/dataStore/reducers/fundDetailsReducer';
+import { setFundTimePeriod } from 'businesslogic/dataStore/reducers/fundDetailsReducer';
 import isEmpty from 'lodash/isEmpty';
 import { Skeleton } from '@mui/material';
 import format from 'date-fns/format';
 import getTheme from '../../theme';
 
 import './FundGraph.scss';
+import { useDispatch, useSelector } from 'react-redux';
 
 const getTimeInMs = (time) => time * 60 * 60 * 24 * 1000;
 const FundGraph = () => {
   const [graphData, setGraphData] = useState([]);
-  const [fundTimePeriod, setFundTimePeriod] = useState('5Y');
+  const fundTimePeriod = useSelector(state => state?.fundDetails?.fundTimePeriod);
+  const disptach = useDispatch();
   const [periodWiseData, setPeriodWiseData] = useState({});
   const theme = getTheme();
   Highcharts.setOptions({
@@ -73,7 +75,7 @@ const FundGraph = () => {
   }, []);
 
   const handleTimePeriodChange = (e, value) => {
-    setFundTimePeriod(value);
+    disptach(setFundTimePeriod(value));
     setGraphData(periodWiseData[value]);
   };
   const options = {

@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 import format from 'date-fns/format';
 import { Stack } from '@mui/material';
 import { formatAmountInr } from '../../utils/validators';
@@ -10,27 +10,49 @@ import Icon from '../../designSystem/atoms/Icon';
 import { useSelector } from 'react-redux';
 import { getFundData } from 'businesslogic/dataStore/reducers/fundDetailsReducer';
 
+const fetchReturns = (fundData) => {
+  const returns = {};
+    // eslint-disable-next-line no-unused-expressions
+  fundData?.performance?.returns?.forEach((el) => {
+    let [value, timePeriod] = el?.name?.split(' ');
+    if (timePeriod.match(/month/)) {
+      timePeriod = 'M';
+    } else if (timePeriod.match(/year/)) {
+      timePeriod = 'Y';
+    }
+    timePeriod = `${value}${timePeriod}`;
+    returns[timePeriod] = el?.value;
+  });
+
+  return returns;
+}
 const FundPerformance = () => {
   const fundData = useSelector(getFundData);
+  const fundTimePeriod = useSelector((state) => state?.fundDetails?.fundTimePeriod);
+  const fundReturns = useMemo(() => fetchReturns(fundData),[]);
+  
   const minimumInvestment = orderBy(
     fundData?.additional_info?.minimum_investment,
     ['value'],
     ['asc']
   );
 
-  const NavDate = format(parse(fundData?.performance?.nav_update_date,'dd/MM/yyyy', new Date()), 'MMM d');
+  const NavDate = format(
+    parse(fundData?.performance?.nav_update_date, 'dd/MM/yyyy', new Date()),
+    'MMM d'
+  );
   return (
     <Stack component='section' spacing={3}>
       <RowData
         leftTitle={`NAV as on ${NavDate}`}
         leftTitleColor='foundationColors.content.secondary'
         leftSubtitle={formatAmountInr(fundData?.performance?.current_nav)}
-        rightTitle={`Returns (${fundData?.performance?.primary_return_duration})`}
+        rightTitle={`Returns (${fundTimePeriod})`}
         rightTitleColor='foundationColors.content.secondary'
-        rightSubtitle={`${fundData?.performance?.primary_return}%`}
-        rightSubtitleColor='foundationColors.secondary.profitGreen.400'
+        rightSubtitle={`${fundReturns[fundTimePeriod]}%`}
+        rightSubtitleColor={`foundationColors.secondary.${fundReturns[fundTimePeriod] > 0 ? 'profitGreen' : 'lossRed'}.400`}
         imgSrc={require(`assets/${
-          fundData?.performance?.primary_return > 0 ? 'positive_return' : 'negative_return'
+          fundReturns[fundTimePeriod] > 0 ? 'positive_return' : 'negative_return'
         }.svg`)}
       />
       <RowData
