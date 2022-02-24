@@ -11,7 +11,6 @@ import Typography from "../../../designSystem/atoms/Typography";
 import Container from "../../../designSystem/organisms/Container";
 import ProductItem from "../../../designSystem/molecules/ProductItem";
 import SwipeableViews from "react-swipeable-views";
-import { largeCap, midCap, multiCap, smallCap } from "./constants";
 import Button from "../../../designSystem/atoms/Button";
 import isEqual from "lodash/isEqual";
 import isEmpty from "lodash/isEmpty";
@@ -25,7 +24,6 @@ import FilterNavigation from "../../../featureComponent/DIY/Filters/FilterNaviga
 import Footer from "../../../designSystem/molecules/Footer";
 import { getConfig } from "../../../utils/functions";
 import Tag from "../../../designSystem/molecules/Tag";
-import orderBy from "lodash/orderBy";
 import FilterReturnBottomSheet, {
   FilterType,
   ReturnsDataList,
@@ -34,56 +32,55 @@ import FilterReturnBottomSheet, {
 import Filter from "../../../featureComponent/DIY/Filters/Filter";
 import Icon from "../../../designSystem/atoms/Icon";
 
+import Api from "../../../utils/api";
+import {
+  fetchDiyCategories,
+  fetchFundList,
+  getDiySubcategoryOptions,
+  setFilteredFundList,
+  getFundsBySubcategory,
+  getFundsList,
+  getFilteredFundsByCategory,
+  getFilterOptions,
+} from "businesslogic/dataStore/reducers/diy";
+import { getError } from "businesslogic/dataStore/reducers/error";
+import { getPageLoading } from "businesslogic/dataStore/reducers/loader";
+import { useDispatch, useSelector } from "react-redux";
+
 const CART_LIMIT = 24;
 
-const tabChilds = [
-  {
-    label: "Large cap",
-    data: largeCap,
-    headerTitle: "Large cap",
-    subtitle:
-      "These funds invest 80% of their assets in top 100 blue-chip companies of India with a market cap of over ₹30,000 cr",
-    points: [
-      "Offers stability & multi-sector diversification",
-      "Ideal for long-term investors seeking stability",
-    ],
-  },
-  {
-    label: "Multi cap",
-    data: multiCap,
-    headerTitle: "Multi cap",
-    subtitle:
-      "These funds invest 65% of their total assets in equity shares of large, mid & small-cap companies ",
-    points: [
-      "Offers better returns than large-cap funds",
-      "Ideal for investors with a long-term goal",
-    ],
-  },
-  {
-    label: "Mid cap",
-    data: midCap,
-    headerTitle: "Mid cap",
-    subtitle:
-      "These funds invest 65% to 90% of their total assets in equity shares of mid-cap companies with a market cap of ₹10,000 cr",
-    points: [
-      "Offers potential to earn market-beating returns",
-      "Ideal for investors willing to take higher risks",
-    ],
-  },
-  {
-    label: "Small cap",
-    data: smallCap,
-    headerTitle: "Small cap",
-    subtitle:
-      "These funds invest 65% of their assets in equity shares of small-cap companies with a market cap of less than ₹5,000 cr",
-    points: [
-      "Higher risk compared to mid or large-cap funds",
-      "Ideal for investors with a high-risk tolerance",
-    ],
-  },
-];
-
+const screen = "diyFundList";
+const diyType = "Equity";
+const subcategoryOption = "Large_Cap";
 const SubCategoryLanding = ({ onCartClick }) => {
+  const dispatch = useDispatch();
+  const filteredFunds = useSelector((state) =>
+    getFilteredFundsByCategory(state, diyType)
+  );
+  const fundsListData = useSelector(getFundsList);
+  const filterOptions = useSelector(getFilterOptions);
+  const funds = useSelector((state) =>
+    getFundsBySubcategory(state, diyType, subcategoryOption)
+  );
+  const subcategoryOptions = useSelector((state) =>
+    getDiySubcategoryOptions(state, diyType, "Market_Cap")
+  );
+  const errorData = useSelector((state) => getError(state, screen));
+  const isPageLoading = useSelector((state) => getPageLoading(state, screen));
+  useEffect(() => {
+    const payload = {
+      isins: "INF109K01480",
+      Api,
+      screen,
+      diyType,
+      subcategoryOption,
+    };
+    dispatch(fetchDiyCategories(payload));
+    dispatch(fetchFundList(payload));
+  }, []);
+  // useEffect(() => {
+  //   dispatch(setFilteredFundList({diyType, subcategoryOption}))
+  // }, [fundsLis])
   const [tabValue, setTabValue] = useState(0);
   const dataRef = useRef(0);
   const [selectedFilterValue, setSelectedFilterValue] = useState({
@@ -98,15 +95,35 @@ const SubCategoryLanding = ({ onCartClick }) => {
   console.log("count of render is", dataRef.current++);
   const [swiper, setSwiper] = useState(null);
   const [selectedFunds, setSelectedFunds] = useState([]);
-  const [activeFundList, setActiveFundList] = useState([]);
   const [selectedFundHouses, setSelectedFundHouses] = useState([]);
   const [selectedFundOption, setSelectedFundOption] = useState("growth");
   const [selectedMinInvestment, setSelectedMinInvestment] = useState({});
   const { productName } = useMemo(getConfig, []);
 
   useEffect(() => {
-    setActiveFundList(tabChilds[tabValue].data);
-  }, [tabValue]);
+    dispatch(
+      setFilteredFundList({
+        diyType,
+        subcategoryOption,
+        filterOptions: {
+          sortFundsBy: selectedFilterValue[FilterType.sort]?.value,
+          returnPeriod: selectedFilterValue[FilterType.returns]?.value,
+          sortingOrder: selectedFilterValue[FilterType.sort]?.order,
+          fundHouse: selectedFundHouses,
+          fundOption: selectedFundOption,
+          minInvestment: selectedMinInvestment,
+        },
+      })
+    );
+  }, [
+    selectedFilterValue[FilterType.sort]?.value,
+    selectedFilterValue[FilterType.sort]?.order,
+    selectedFilterValue[FilterType.returns]?.value,
+    selectedFundHouses,
+    selectedFundOption,
+    selectedMinInvestment,
+  ]);
+
   const swipeableViewsRef = useRef();
   const handleTabChange = (e, value) => {
     setTabValue(value);
@@ -146,14 +163,15 @@ const SubCategoryLanding = ({ onCartClick }) => {
   return (
     <Container
       headerProps={{
-        headerTitle: tabChilds[tabValue]?.headerTitle,
-        subtitle: tabChilds[tabValue]?.subtitle,
-        points: tabChilds[tabValue]?.points,
+        headerTitle: subcategoryOptions[tabValue]?.name,
+        subtitle: subcategoryOptions[tabValue]?.subtitle,
+        points: subcategoryOptions[tabValue]?.points,
         tabsProps: {
           selectedTab: tabValue,
           onTabChange: handleTabChange,
+          labelName: "name",
         },
-        tabChilds,
+        tabChilds: subcategoryOptions,
       }}
       fixedFooter
       renderComponentAboveFooter={
@@ -169,6 +187,7 @@ const SubCategoryLanding = ({ onCartClick }) => {
         />
       }
       className="sub-category-landing-wrapper"
+      isPageLoading={isPageLoading}
     >
       {/* <div className='sub-category-swipper-wrapper'>
         <SwipeableViews
@@ -215,7 +234,7 @@ const SubCategoryLanding = ({ onCartClick }) => {
           onSwiper={setSwiper}
           onSlideChange={handleSlideChange}
         >
-          {tabChilds?.map((el, idx) => {
+          {subcategoryOptions?.map((el, idx) => {
             return (
               <SwiperSlide key={idx}>
                 <TabPanel
@@ -228,9 +247,7 @@ const SubCategoryLanding = ({ onCartClick }) => {
                   key={idx}
                   selectedFilterValue={selectedFilterValue}
                   productName={productName}
-                  // value={tabValue}
-                  // index={idx}
-                  data={el?.data}
+                  data={filteredFunds[el.key]}
                   setSelectedFunds={setSelectedFunds}
                   selectedFunds={selectedFunds}
                   selectedFundHouses={selectedFundHouses}
@@ -276,16 +293,9 @@ const TabPanel = memo((props) => {
     data = [],
     returnPeriod,
     returnLabel,
-    sortFundsBy,
-    sortingOrder,
     selectedFunds,
     setSelectedFunds,
-    selectedFundHouses,
-    selectedFundOption,
-    selectedMinInvestment,
   } = props;
-
-  const [funds, setFunds] = useState(data);
   const [selectedFundsIsins] = useState(selectedFunds.map(({ isin }) => isin));
   const [NumOfItems, setNumOfItems] = useState(10);
   const observer = useRef();
@@ -299,57 +309,6 @@ const TabPanel = memo((props) => {
 
     if (node) observer.current.observe(node);
   });
-  const sortFundsOrder = (fundList) => {
-    if (sortFundsBy === "returns") {
-      return fundList[returnPeriod] || "";
-    } else {
-      return fundList[sortFundsBy] || "";
-    }
-  };
-
-  useEffect(() => {
-    let filteredFunds = data;
-    if (!isEmpty(selectedFundHouses)) {
-      filteredFunds = filteredFunds.filter((el) =>
-        selectedFundHouses.includes(el.fund_house)
-      );
-    }
-    if (selectedFundOption) {
-      filteredFunds = filteredFunds.filter(
-        (el) => el.growth_or_dividend === selectedFundOption
-      );
-    }
-    if (!isEmpty(selectedMinInvestment)) {
-      filteredFunds = filteredFunds.filter((el) => {
-        const fundMinValue = get(el, "investment_data.min", "");
-        const lowerLimit = get(selectedMinInvestment, "value.lowerLimit", "");
-        const upperLimit = get(selectedMinInvestment, "value.upperLimit", "");
-        if (lowerLimit && !upperLimit && lowerLimit < fundMinValue) {
-          return true;
-        }
-        if (!lowerLimit && upperLimit && upperLimit >= fundMinValue) {
-          return true;
-        }
-        if (
-          lowerLimit &&
-          upperLimit &&
-          upperLimit >= fundMinValue &&
-          lowerLimit < fundMinValue
-        ) {
-          return true;
-        }
-        return false;
-      });
-    }
-    const sortedFunds = orderBy(filteredFunds, sortFundsOrder, [sortingOrder]);
-    setFunds(sortedFunds);
-  }, [
-    sortFundsBy,
-    returnPeriod,
-    selectedFundHouses,
-    selectedFundOption,
-    selectedMinInvestment,
-  ]);
 
   const handleAddToCart = (fund, isFundAddedToCart) => () => {
     if (isFundAddedToCart) {
@@ -385,7 +344,7 @@ const TabPanel = memo((props) => {
             variant="body5"
             color="foundationColors.content.secondary"
           >
-            {funds.length} funds
+            {data.length} funds
           </Typography>
           <Typography
             variant="body5"
@@ -395,7 +354,7 @@ const TabPanel = memo((props) => {
           </Typography>
         </Stack>
         <Typography component="div" sx={{ p: "0px 16px" }}>
-          {funds?.slice(0, NumOfItems)?.map((fund, idx) => {
+          {data?.slice(0, NumOfItems)?.map((fund, idx) => {
             const returnValue = fund[returnPeriod];
             const returnData = !returnValue
               ? "N/A"
