@@ -1,14 +1,12 @@
 import { Skeleton, Stack } from '@mui/material';
 import React from 'react';
 import Button from '../../../designSystem/atoms/Button';
+import Icon from '../../../designSystem/atoms/Icon';
 import Typography from '../../../designSystem/atoms/Typography';
 import { getConfig } from '../../../utils/functions';
 
-const SectionHeader = ({ sx, isPageLoading, title, buttonTitle='See all', onClick }) => {
+const SectionHeader = ({ sx, isPageLoading, title, buttonTitle = 'See all', onClick }) => {
   const { productName } = getConfig();
-  const handleSvg = (code) => {
-    console.log('code is', code);
-  };
   return (
     <Stack
       sx={sx}
@@ -20,16 +18,18 @@ const SectionHeader = ({ sx, isPageLoading, title, buttonTitle='See all', onClic
       <Typography sx={{ width: '100%' }} variant='heading4'>
         {isPageLoading ? <Skeleton width='140px' /> : title}
       </Typography>
-      <Stack direction='row' alignItems='center' spacing='4px'>
-        {isPageLoading ? (
-          <Typography variant='actionText' sx={{ width: '100%' }}>
-            <Skeleton width='50px' />
-          </Typography>
-        ) : (
-          onClick && <Button title={buttonTitle} variant='link' onClick={onClick} />
-        )}
-        {/* <Icon src={require(`assets/${productName}/right_arrow_small.svg`)} size='16px' /> */}
-      </Stack>
+      {isPageLoading ? (
+        <Typography variant='actionText' sx={{ width: '100%' }}>
+          <Skeleton width='50px' sx={{ ml: 'auto' }} />
+        </Typography>
+      ) : (
+        onClick && (
+          <Stack direction='row' alignItems='center' spacing='4px' onClick={onClick}>
+            <Button title={buttonTitle} variant='link' />
+            <Icon src={require(`assets/${productName}/right_arrow_small.svg`)} size='16px' />
+          </Stack>
+        )
+      )}
     </Stack>
   );
 };
