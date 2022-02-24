@@ -11,10 +11,13 @@ import Footer from '../../molecules/Footer';
 import { getConfig } from 'utils/functions';
 
 import './Container.scss';
+import UiSkelton from '../../../common/ui/Skelton';
 
 const Container = ({
   headerProps = {},
   children,
+  isPageLoading,
+  skeltonType = 'g',
   className,
   footer = {},
   noFooter,
@@ -38,7 +41,7 @@ const Container = ({
   return (
     <Box
       ref={containerRef}
-      sx={{ ...containerWrapperSx, ...containerSx }}
+      sx={{ ...containerWrapperSx(isPageLoading), ...containerSx }}
       className={`container-wrapper ${className}`}
     >
       <NavigationHeader className='container-nav-header' headerTitle={headerTitle} anchorOrigin={containerRef} {...restHeaderProps}>
@@ -52,7 +55,9 @@ const Container = ({
             );
           })}
       </NavigationHeader>
-      <main className='container-content-wrapper'>{children}</main>
+      <main className="container-content-wrapper">
+        {isPageLoading ? <UiSkelton type={skeltonType} /> : children}
+      </main>
       <div
         ref={footerWrapperRef}
         className={`container-footer-wrapper ${fixedFooter && 'container-fixed-footer'}`}
@@ -87,8 +92,10 @@ const footerSxStyle = (theme) => {
   };
 };
 
-const containerWrapperSx = {
-  backgroundColor: 'foundationColors.supporting.grey',
+const containerWrapperSx = (isPageLoading) => {
+  return {
+    backgroundColor: isPageLoading ? 'foundationColors.supporting.white' : 'foundationColors.supporting.grey',
+  }
 };
 
 export default Container;

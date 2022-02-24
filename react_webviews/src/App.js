@@ -33,6 +33,9 @@ import RedirectToAnyPath from './common/components/RedirectToAnyPath.js';
 import eventManager from './utils/eventManager.js';
 import { EVENT_MANAGER_CONSTANTS } from './utils/constants.js';
 
+import { store } from './dataLayer/store';
+import { Provider } from 'react-redux';
+
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
   productionPrefix: 'f',
@@ -105,6 +108,7 @@ const App = () => {
 
     return (
       <BrowserRouter basename={basename}>
+       <Provider store={store}>
         <JssProvider jss={jss} generateClassName={generateClassName}>
           <MuiThemeProvider theme={themeConfiguration}>
             <ScrollToTop />
@@ -140,6 +144,7 @@ const App = () => {
             </Switch>
           </MuiThemeProvider>
         </JssProvider>
+       </Provider>
       </BrowserRouter>
     );
 }

@@ -1,7 +1,7 @@
-import { configureStore } from '@reduxjs/toolkit';
-import createSagaMiddleware from 'redux-saga';
-import sagas from '../sagas';
-import combinedReducers from './dataStore/reducers';
+import { configureStore } from "@reduxjs/toolkit";
+import createSagaMiddleware from "redux-saga";
+import sagas from "businesslogic/dataStore/sagas";
+import combinedReducers from "businesslogic/dataStore/reducers";
 
 const sagaMiddleware = createSagaMiddleware();
 
