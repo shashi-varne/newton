@@ -11,7 +11,7 @@ const DIY = (props) => {
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
         <Switch>
-          <Route path={`${url}/equity`} component={CommonCategoryLanding} />
+          <Route path={`${url}/:diyType`} component={CommonCategoryLanding} />
         </Switch>
       </ThemeProvider>
     </StyledEngineProvider>

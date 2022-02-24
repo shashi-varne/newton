@@ -22,13 +22,22 @@ import './Explore.scss';
 import { nativeCallback } from '../../../../utils/native_callback'
 import { flowName } from '../../constants'
 import { isNewIframeDesktopLayout } from '../../../../utils/functions'
+import Api from '../../../../utils/api';
+import { useDispatch } from 'react-redux'
+import { fetchDiyCategoriesAndTrendingFunds } from 'businesslogic/dataStore/reducers/diy'
 
+const screen = 'diyLanding';
 const InvestExplore = (props) => {
   const [loader, setLoader] = useState(true)
   const config = getConfig();
   const iframe = config.isIframe;
   const isMobileDevice = config.isMobileDevice;
   const partnerCode = config.code;
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchDiyCategoriesAndTrendingFunds({Api, screen}));
+  },[])
   const newIframeDesktopLayout = isNewIframeDesktopLayout() || (partnerCode === 'moneycontrol' && !isMobileDevice);
 
   const exploreMFMappings = [
@@ -85,7 +94,7 @@ const InvestExplore = (props) => {
   const navigate = navigateFunc.bind(props)
   const goNext = (title) => () => {
     sendEvents('next', title)
-    navigate(`/invest/explore/${title}`)
+    navigate(`/diyv2/${title}`)
   }
 
   const handleRightIconClick = () => {

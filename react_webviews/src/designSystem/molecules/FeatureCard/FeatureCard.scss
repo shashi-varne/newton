@@ -12,7 +12,8 @@
   flex: 1;
   cursor: pointer;
 
-  .label-tag-wrapper,.tag-wrapper {
+  .label-tag-wrapper,
+  .tag-wrapper {
     cursor: pointer;
   }
 
@@ -29,6 +30,10 @@
 
     .fc-heading-text {
       width: 26ch;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
     .fc-left-img {
       margin-right: 16px;
