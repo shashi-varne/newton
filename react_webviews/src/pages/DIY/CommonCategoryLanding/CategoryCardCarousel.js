@@ -8,6 +8,7 @@ import SectionHeader from './SectionHeader';
 import Icon from '../../../designSystem/atoms/Icon';
 import Typography from '../../../designSystem/atoms/Typography';
 import { getPageLoading } from 'businesslogic/dataStore/reducers/loader';
+import isEmpty from 'lodash/isEmpty';
 
 const screen = 'diyLanding';
 const CategoryCardCarousel = ({ diyType, config }) => {
@@ -17,9 +18,17 @@ const CategoryCardCarousel = ({ diyType, config }) => {
   const categoryOptions = categoriesNew?.find((el) => {
     return el.category.toLowerCase() === diyType;
   });
+
+  const handleCardClick = (item) => () => {
+    console.log("item is",item);
+  }
+  
   const imageCaurosel = categoryOptions?.sub_categories?.find(
     (el) => el.viewType === 'imageCaurosel'
   );
+  if (!isPageLoading && isEmpty(imageCaurosel)) {
+    return null;
+  }
   return (
     <Stack direction='column' spacing={2} className='diy-c-sector-theme'>
       <SectionHeader
@@ -63,6 +72,7 @@ const CategoryCardCarousel = ({ diyType, config }) => {
                   imgSrc={require('assets/tech_fund.svg')}
                   title={sector?.name}
                   variant='large'
+                  onClick={handleCardClick(sector)}
                 />
               </SwiperSlide>
             ))}

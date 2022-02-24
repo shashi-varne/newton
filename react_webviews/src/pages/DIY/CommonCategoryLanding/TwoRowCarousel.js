@@ -22,6 +22,15 @@ const TwoRowCarousel = ({ diyType }) => {
   const twoImageCarousel = categoryOptions?.sub_categories?.find((el) => {
     return el.viewType === 'twoRowsImageCaurosel';
   });
+
+  const handleCardClick = (item) => () => {
+    console.log("item is",item);
+  }
+
+
+  if (!isPageLoading && isEmpty(twoImageCarousel)) {
+    return null;
+  }
   return (
     <Stack direction='column' spacing={2} className='diy-c-category-wrapper'>
       <SectionHeader
@@ -48,7 +57,7 @@ const TwoRowCarousel = ({ diyType }) => {
             : twoImageCarousel?.options?.slice(0, 6).map((category, idx) => {
                 return (
                   <SwiperSlide key={idx} style={{ padding: '1px 0px' }}>
-                    <WrapperBox elevation={1} sx={{ height: '100%' }}>
+                    <WrapperBox elevation={1} sx={{ height: '100%' }} onClick={handleCardClick(category)}>
                       <CardVertical
                         imgSrc={require('assets/large_cap.svg')}
                         title={category?.name}

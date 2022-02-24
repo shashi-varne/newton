@@ -7,6 +7,7 @@ import Typography from '../../../designSystem/atoms/Typography';
 import WrapperBox from '../../../designSystem/atoms/WrapperBox';
 import CardHorizontal from '../../../designSystem/molecules/CardHorizontal';
 import SectionHeader from './SectionHeader';
+import isEmpty from 'lodash/isEmpty';
 
 const screen = 'diyLanding';
 const SingleCategory = ({ diyType }) => {
@@ -17,6 +18,14 @@ const SingleCategory = ({ diyType }) => {
     return el.category.toLowerCase() === diyType;
   });
   const singleCard = categoryOptions?.sub_categories?.find((el) => el.viewType === 'singleCard');
+
+  const handleCardClick = (item) => () => {
+    console.log("item is",item);
+  }
+
+  if (!isPageLoading && isEmpty(singleCard)) {
+    return null;
+  }
   return (
     <Stack direction='column' spacing={2} className='diy-c-tax-saving-wrapper'>
       <SectionHeader isPageLoading={isPageLoading} title={singleCard?.name} />
@@ -26,7 +35,7 @@ const SingleCategory = ({ diyType }) => {
         <div className='diy-c-card-horz-wrapper'>
           {singleCard?.options?.map((el, idx) => {
             return (
-              <CardHorizontal key={idx} title={el?.name} subtitle={el?.trivia} dataAid={el?.key} />
+              <CardHorizontal onClick={handleCardClick(el)} key={idx} title={el?.name} subtitle={el?.trivia} dataAid={el?.key} />
             );
           })}
         </div>

@@ -22,6 +22,10 @@ const CardVerticalCarousel = ({ diyType }) => {
     (el) => el.viewType === 'cardHorizontalImageCaurosel'
   );
 
+  const handleCardClick = (item) => () => {
+    console.log('item is', item);
+  };
+
   if (!isPageLoading && isEmpty(cardHorizontalImageCaurosel)) {
     return null;
   }
@@ -63,7 +67,11 @@ const CardVerticalCarousel = ({ diyType }) => {
           : cardHorizontalImageCaurosel?.options?.map((investStyle, idx) => {
               return (
                 <SwiperSlide key={idx} style={{ padding: '1px 0px' }}>
-                  <WrapperBox elevation={1} sx={{ height: '100%' }}>
+                  <WrapperBox
+                    elevation={1}
+                    sx={{ height: '100%' }}
+                    onClick={handleCardClick(investStyle)}
+                  >
                     <CardVertical
                       imgSrc={require('assets/investment_contra.svg')}
                       title={investStyle?.name}
