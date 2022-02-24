@@ -1,0 +1,10 @@
+.filter-wrapper {
+  padding: 16px 24px;
+  background-color: white;
+  cursor: pointer;
+  min-width: fit-content;
+
+  .filter-nav-badge {
+    margin-left: 10px;
+  }
+}
