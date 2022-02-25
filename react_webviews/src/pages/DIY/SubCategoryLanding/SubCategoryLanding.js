@@ -51,14 +51,17 @@ import {
 import { SkeltonRect } from "../../../common/ui/Skelton";
 
 const screen = "diyFundList";
+const category = "Equity";
+const subcategory = "Market_Cap";
+const subcategoryOption = "Large_Cap";
 const SubCategoryLanding = ({ onCartClick }) => {
   const dispatch = useDispatch();
   const diyTypeData = useSelector(getDiyTypeData);
-  const {
-    category = "Equity",
-    subcategory = "Market_Cap",
-    subcategoryOption = "Large_Cap",
-  } = useMemo(() => diyTypeData, [diyTypeData]);
+  // const {
+  //   category = "Equity",
+  //   subcategory = "Market_Cap",
+  //   subcategoryOption = "Large_Cap",
+  // } = useMemo(() => diyTypeData, [diyTypeData]);
   const filteredFunds = useSelector((state) =>
     getFilteredFundsByCategory(state, category)
   );
@@ -77,6 +80,7 @@ const SubCategoryLanding = ({ onCartClick }) => {
       Api,
       screen,
       diyType: category,
+      subcategory,
       subcategoryOption: tabOption,
     };
     dispatch(fetchDiyCategories(payload));

@@ -1,4 +1,4 @@
-import { FormControl, FormControlLabel, RadioGroup, Radio, Stack } from '@mui/material';
+import { FormControl, FormControlLabel, RadioGroup, Stack } from '@mui/material';
 import React from 'react';
 import RadioButton from '../../../designSystem/atoms/RadioButton';
 import Typography from '../../../designSystem/atoms/Typography';

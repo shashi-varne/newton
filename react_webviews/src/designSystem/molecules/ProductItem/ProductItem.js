@@ -16,9 +16,6 @@
 import React from 'react';
 import Typography from '../../atoms/Typography';
 import Separator from '../../atoms/Separator';
-import isEmpty from 'lodash/isEmpty';
-import isFunction from 'lodash/isFunction';
-import PropTypes from 'prop-types';
 import { Stack } from '@mui/material';
 import Icon from '../../atoms/Icon';
 
