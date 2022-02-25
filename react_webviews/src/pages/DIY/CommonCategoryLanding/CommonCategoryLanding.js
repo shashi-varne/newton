@@ -19,13 +19,14 @@ import TwoRowCarousel from './TwoRowCarousel';
 import SingleCategory from './SingleCategory';
 import CategoryCardCarousel from './CategoryCardCarousel';
 import CardVerticalCarousel from './CardVerticalCarousel';
+import Lottie from 'lottie-react';
 import './CommonCategoryLanding.scss';
 
 const screen = 'diyLanding';
 const CommonCategoryLanding = (props) => {
   const config = getConfig();
   const dispatch = useDispatch();
-
+  const productName = config.productName;
   let { diyType } = props.match.params;
   diyType = diyType.toLowerCase();
 
@@ -34,20 +35,29 @@ const CommonCategoryLanding = (props) => {
 
   useEffect(() => {
     if (isEmpty(trendingFunds) || isEmpty(categoriesNew)) {
-      dispatch(fetchDiyCategoriesAndTrendingFunds({ Api,screen }));
+      dispatch(fetchDiyCategoriesAndTrendingFunds({ Api, screen }));
     }
   }, []);
   return (
     <Container>
       <div className='diy-category-landing-wrapper'>
         <LandingHeader variant='center' dataAid='equity'>
-          <LandingHeaderImage imgSrc={require('assets/finity/diy_equity.svg')} />
+          <Lottie
+            animationData={require(`assets/${productName}/lottie/${diyType}.json`)}
+            autoPlay
+            loop
+            className='diy-landing-lottie-anim'
+          />
           <LandingHeaderTitle>{DIY_TYPE[diyType.toUpperCase()]}</LandingHeaderTitle>
           <LandingHeaderSubtitle dataIdx={1}>
             {DescriptionMapper[diyType.toUpperCase()].desc}
           </LandingHeaderSubtitle>
           {DescriptionMapper[diyType.toUpperCase()].points?.map((el, idx) => {
-            return <LandingHeaderPoints key={idx} dataIdx={idx + 1}>{el}</LandingHeaderPoints>;
+            return (
+              <LandingHeaderPoints key={idx} dataIdx={idx + 1}>
+                {el}
+              </LandingHeaderPoints>
+            );
           })}
         </LandingHeader>
         <TrendingFunds diyType={diyType} config={config} />

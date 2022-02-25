@@ -69,6 +69,7 @@
     "jss": "^9.8.1",
     "less": "^3.5.0",
     "less-loader": "7.0.0",
+    "lottie-react": "^2.2.1",
     "material-ui": "next",
     "moment": "^2.29.0",
     "object-assign": "4.1.1",
