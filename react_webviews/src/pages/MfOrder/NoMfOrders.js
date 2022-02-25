@@ -1,9 +1,9 @@
 import { Stack } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
-import { getConfig } from '../../../utils/functions';
+import Typography from '../../designSystem/atoms/Typography';
 import Lottie from 'lottie-react';
-import Typography from '../../../designSystem/atoms/Typography';
+import { getConfig } from '../../utils/functions';
 
 const NoMfOrders = () => {
   const { productName } = getConfig();

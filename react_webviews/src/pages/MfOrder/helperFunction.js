@@ -1,4 +1,4 @@
-import { formatAmountInr } from '../../../utils/validators';
+import { formatAmountInr } from "../../utils/validators";
 
 export const validateMfOrderFunds = (amount, min, max, multiple) => {
   if (!amount) {

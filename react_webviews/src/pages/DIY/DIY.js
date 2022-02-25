@@ -2,7 +2,7 @@ import { StyledEngineProvider, ThemeProvider } from '@mui/material';
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import getTheme from '../../theme';
-import MfOrder from './MfOrder';
+import MfOrder from '../MfOrder/MfOrder';
 
 const DIY = (props) => {
   const theme = getTheme();

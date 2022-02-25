@@ -2,18 +2,18 @@ import { IconButton } from '@mui/material';
 import { setMfOrders } from 'businesslogic/dataStore/reducers/mfOrders';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import Icon from '../../../designSystem/atoms/Icon';
-import WrapperBox from '../../../designSystem/atoms/WrapperBox';
-import HeaderTitle from '../../../designSystem/molecules/HeaderTitle';
+import Icon from '../../designSystem/atoms/Icon';
+import WrapperBox from '../../designSystem/atoms/WrapperBox';
+import HeaderTitle from '../../designSystem/molecules/HeaderTitle';
 import {
   InvestmentCard,
   InvestmentCardBottomRow,
   InvestmentCardHeaderRow,
   InvestmentCardInputRow,
   InvestmentCardPillsRow,
-} from '../../../designSystem/molecules/InvestmentCard/InvestmentCard';
-import SipDateSelector from '../../../designSystem/molecules/SipDateSelector';
-import { dateOrdinal } from '../../../utils/validators';
+} from '../../designSystem/molecules/InvestmentCard/InvestmentCard';
+import SipDateSelector from '../../designSystem/molecules/SipDateSelector';
+import { dateOrdinal } from '../../utils/validators';
 import { validateMfOrderFunds } from './helperFunction';
 import { investmentAmountTile } from './MfOrder';
 
