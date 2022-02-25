@@ -32,7 +32,6 @@ import UnAuthenticatedRoute from './common/components/UnAuthenticatedRoute.js';
 import RedirectToAnyPath from './common/components/RedirectToAnyPath.js';
 import eventManager from './utils/eventManager.js';
 import { EVENT_MANAGER_CONSTANTS } from './utils/constants.js';
-
 import { store } from './dataLayer/store';
 import { Provider } from 'react-redux';
 
@@ -108,43 +107,43 @@ const App = () => {
 
     return (
       <BrowserRouter basename={basename}>
-       <Provider store={store}>
-        <JssProvider jss={jss} generateClassName={generateClassName}>
-          <MuiThemeProvider theme={themeConfiguration}>
-            <ScrollToTop />
-            <Tooltip />
-            <ToastContainer autoClose={3000} />
-            <RedirectToAnyPath />
-            <Switch>
-              {/* Not working */}
-              {/* <Route path="/iw-dashboard" component={InternalWealthDashboard} /> */}
-              {/* <Route path='/w-report' component={WealthReport} /> */}
-               {/* Not working */}
-              {/* Working category*/}
-              <Route path='/partner-landing' component={FisdomPartnerRedirect} />
-              <Route path='/component-test' component={ComponentTest} />
-              <Route path='/logout' component={Logout} />
-              <UnAuthenticatedRoute
-                path={[
-                  '/login',
-                  '/forgot-pin'
-                ]}
-                component={LoginContainer}
-              />
-              <UnAuthenticatedRoute path='/rm-login' component={RmLogin} />
-              <UnAuthenticatedRoute path="/partner-authentication/:partnerCode" component={PartnerAuthentication} />
-              <UnAuthenticatedRoute path="/prepare" component={Prepare} />
-              {
-                isWithoutDesktopLayout ?
-                <Route component={Feature}/>:
-                <DesktopLayout>
-                  <Feature />
-                </DesktopLayout>
-              }
-            </Switch>
-          </MuiThemeProvider>
-        </JssProvider>
-       </Provider>
+        <Provider store={store}>
+          <JssProvider jss={jss} generateClassName={generateClassName}>
+            <MuiThemeProvider theme={themeConfiguration}>
+              <ScrollToTop />
+              <Tooltip />
+              <ToastContainer autoClose={3000} />
+              <RedirectToAnyPath />
+              <Switch>
+                {/* Not working */}
+                {/* <Route path="/iw-dashboard" component={InternalWealthDashboard} /> */}
+                {/* <Route path='/w-report' component={WealthReport} /> */}
+                {/* Not working */}
+                {/* Working category*/}
+                <Route path='/partner-landing' component={FisdomPartnerRedirect} />
+                <Route path='/component-test' component={ComponentTest} />
+                <Route path='/logout' component={Logout} />
+                <UnAuthenticatedRoute
+                  path={[
+                    '/login',
+                    '/forgot-pin'
+                  ]}
+                  component={LoginContainer}
+                />
+                <UnAuthenticatedRoute path='/rm-login' component={RmLogin} />
+                <UnAuthenticatedRoute path="/partner-authentication/:partnerCode" component={PartnerAuthentication} />
+                <UnAuthenticatedRoute path="/prepare" component={Prepare} />
+                {
+                  isWithoutDesktopLayout ?
+                  <Route component={Feature}/>:
+                  <DesktopLayout>
+                    <Feature />
+                  </DesktopLayout>
+                }
+              </Switch>
+            </MuiThemeProvider>
+          </JssProvider>
+        </Provider>
       </BrowserRouter>
     );
 }

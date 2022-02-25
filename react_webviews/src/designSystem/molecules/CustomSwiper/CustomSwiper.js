@@ -1,6 +1,10 @@
 /*
   Prop Description:
-
+  children: the children should be an array and each item should be wrapped around SwiperSlide.
+  spaceBetween: The space between the items.
+  slidesPerView: (number/auto) => Number of slides per view  
+  slidesPerColumn: (number/auto) =>Number of slides per view 
+  link for full props info for swiper => https://swiperjs.com/swiper-api#methods-and-properties
 */
 
 import React, { useEffect, useRef, useState } from 'react';
@@ -17,10 +21,11 @@ export const CustomSwiper = ({
   spaceBetween,
   slidesPerView,
   onSlideChange,
-  onSwiper, // gives swiper as an parameter to a function
+  onSwiper, // gives swiper object as an parameter to a function
   slidesPerColumn,
   slidesPerColumnFill,
   grabCursor,
+  hidePagination,
   ...restProps
 }) => {
   const useSwiperRef = () => {
@@ -51,17 +56,21 @@ export const CustomSwiper = ({
       >
         {children}
       </Swiper>
-      <CustomPagination ref={paginationRef} />
+      {
+        !hidePagination && <CustomPagination ref={paginationRef} />
+      }
     </div>
   );
 };
 
 CustomSwiper.defaultProps = {
-  slidesPerView: 'auto',
-  slidesPerColumn: 'auto',
+  spaceBetween: 10,
+  slidesPerView: 1,
+  slidesPerColumn: 1,
   slidesPerColumnFill: 'row',
   grabCursor: true,
   onSlideChange: noop,
+  hidePagination: false
 };
 
 const customSx = {

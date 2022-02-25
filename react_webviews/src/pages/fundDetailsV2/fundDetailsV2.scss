@@ -1,0 +1,14 @@
+.fund-details-wrapper {
+  .MuiTabs-root {
+    .MuiTabs-flexContainer {
+      justify-content: flex-start !important;
+    }
+  }
+
+  .fund-details-asset-section {
+    .fund-asset-perc {
+      height: 4px;
+      border-radius: 100px;
+    }
+  }
+}
