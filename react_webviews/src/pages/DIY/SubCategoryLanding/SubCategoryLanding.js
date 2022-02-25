@@ -50,9 +50,10 @@ import {
   getMinimumInvestmentData,
   getReturnData,
   getSortData,
-  checkFundPresentInCart
+  checkFundPresentInCart,
 } from "businesslogic/utils/diy/functions";
 import { SkeltonRect } from "../../../common/ui/Skelton";
+import ToastMessage from "../../../designSystem/atoms/ToastMessage";
 
 const screen = "diyFundList";
 // const category = "Equity";
@@ -80,7 +81,7 @@ const SubCategoryLanding = ({ onCartClick }) => {
 
   const errorData = useSelector((state) => getError(state, screen));
   const isPageLoading = useSelector((state) => getPageLoading(state, screen));
-  
+
   const [tabValue, setTabValue] = useState(0);
   const dataRef = useRef(0);
   const [selectedFilterValue, setSelectedFilterValue] = useState({
@@ -120,8 +121,8 @@ const SubCategoryLanding = ({ onCartClick }) => {
   }, [tabValue]);
 
   useEffect(() => {
-    if (errorData?.isFetchFailed && !isEmpty(errorData?.errorrMessage)) {
-      // add toast
+    if (errorData?.isFetchFailed && !isEmpty(errorData?.message)) {
+      ToastMessage(errorData.message);
     }
   }, [errorData?.isFetchFailed]);
 
@@ -187,7 +188,7 @@ const SubCategoryLanding = ({ onCartClick }) => {
   };
 
   const handleAddToCart = (fund) => () => {
-    dispatch(setCartItem(fund))
+    dispatch(setCartItem(fund));
   };
 
   return (
@@ -313,7 +314,7 @@ const TabPanel = memo((props) => {
     activeTab,
     isPageLoading,
     handleAddToCart,
-    diyCartData
+    diyCartData,
   } = props;
   const [NumOfItems, setNumOfItems] = useState(10);
   const observer = useRef();
