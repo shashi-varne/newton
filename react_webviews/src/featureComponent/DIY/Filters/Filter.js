@@ -12,7 +12,7 @@ import FundOptions from "./FundOptions";
 import FundHouses from "./FundHouses";
 import MinimumInvestment from "./MinimumInvestment";
 import {
-  FILTER_OPTIONS,
+  FILTER_TAB_OPTIONS,
   DEFAULT_FILTER_DATA,
 } from "businesslogic/constants/diy";
 
@@ -123,7 +123,7 @@ const LeftPanel = ({ selectedTab, handleSelection }) => {
         cursor: "pointer",
       }}
     >
-      {FILTER_OPTIONS?.map((el, idx) => {
+      {FILTER_TAB_OPTIONS?.map((el, idx) => {
         const selectedValue = selectedTab === idx;
         const { selectedColor, selectedBackgroundColor } = selectedValue
           ? {
@@ -143,7 +143,7 @@ const LeftPanel = ({ selectedTab, handleSelection }) => {
             onClick={handleSelection(idx)}
             backgroundColor={selectedBackgroundColor}
           >
-            {el}
+            {el.label}
           </Typography>
         );
       })}
