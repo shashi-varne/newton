@@ -8,7 +8,7 @@ const BotomScrollCards = ({ handleClick, bottomScrollCards, productName }) => {
       className="bottom-scroll-cards"
       data-aid="bottomScrollCards-title"
     >
-      <div className="list" data-aid="bottomScrollCards-list">
+      <div className="bsc-list" data-aid="bottomScrollCards-list">
         {!isEmpty(bottomScrollCards) &&
           bottomScrollCards.map((item, index) => {
             return (

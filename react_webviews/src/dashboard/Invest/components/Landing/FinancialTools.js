@@ -5,7 +5,7 @@ import { Imgc } from "../../../../common/ui/Imgc";
 const FinancialTools = ({ handleClick, financialTools, productName }) => {
   return (
     <div className="bottom-scroll-cards">
-      <div className="list" data-aid="financial-tools-list">
+      <div className="bsc-list" data-aid="financial-tools-list">
         {financialTools.map((data, index) => {
           return (
             <div

@@ -3,7 +3,7 @@ import React from "react";
 const PopularCards = ({ clickCard, data, productName }) => {
   return (
     <div className="bottom-scroll-cards">
-      <div className="list" data-aid="popularCards-tools-list">
+      <div className="bsc-list" data-aid="popularCards-tools-list">
         {data.map((item, index) => {
           return (
             <div
