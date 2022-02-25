@@ -3,6 +3,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import CommonCategoryLanding from './CommonCategoryLanding';
 import getTheme from '../../theme';
+import SubCategoryList from './SubCategoryList';
 
 const DIY = (props) => {
   const theme = getTheme();
@@ -12,6 +13,7 @@ const DIY = (props) => {
       <ThemeProvider theme={theme}>
         <Switch>
           <Route path={`${url}/:diyType`} component={CommonCategoryLanding} />
+          <Route path={`${url}/sub-category`} component={SubCategoryList} />
         </Switch>
       </ThemeProvider>
     </StyledEngineProvider>

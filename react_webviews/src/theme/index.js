@@ -9,8 +9,8 @@ import baseTypographyConfig, { customTypographyVariantProps } from './typography
 import getPartnerThemeData from './utils';
 import { separatorStyleOverRides } from './separator';
 import { dialogDefaultProps, dialogStylesOverride } from './dialog';
-import { badgeStyleOverRides } from './badge';
 import { customShadows } from './shadows';
+import { badgeStyleOverRides } from './badge';
 
 const getTheme = () => {
   const {colors, partnerConfig} = getPartnerThemeData();
