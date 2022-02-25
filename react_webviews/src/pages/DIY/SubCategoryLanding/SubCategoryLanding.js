@@ -36,7 +36,8 @@ import {
   setFilteredFundList,
   getFilteredFundsByCategory,
   getFilterOptions,
-  getFundsList,
+  getFundsByCategory,
+  getDiyTypeData,
 } from "businesslogic/dataStore/reducers/diy";
 import { getError } from "businesslogic/dataStore/reducers/error";
 import { getPageLoading } from "businesslogic/dataStore/reducers/loader";
@@ -47,36 +48,35 @@ import {
   getReturnData,
   getSortData,
 } from "businesslogic/utils/diy/functions";
+import { SkeltonRect } from "../../../common/ui/Skelton";
 
 const screen = "diyFundList";
-const diyType = "Equity";
-const subcategoryOption = "Large_Cap";
 const SubCategoryLanding = ({ onCartClick }) => {
   const dispatch = useDispatch();
+  const diyTypeData = useSelector(getDiyTypeData);
+  const {
+    category = "Equity",
+    subcategory = "Market_Cap",
+    subcategoryOption = "Large_Cap",
+  } = useMemo(() => diyTypeData, [diyTypeData]);
   const filteredFunds = useSelector((state) =>
-    getFilteredFundsByCategory(state, diyType)
+    getFilteredFundsByCategory(state, category)
+  );
+  const categoryFunds = useSelector((state) =>
+    getFundsByCategory(state, category)
   );
   const filterOptions = useSelector(getFilterOptions);
-  console.log("filteredFunds ", filteredFunds);
-  const subcategoryOptions = useSelector((state) =>
-    getDiySubcategoryOptions(state, diyType, "Market_Cap")
+  const subcategoryOptionsData = useSelector((state) =>
+    getDiySubcategoryOptions(state, category, subcategory)
   );
-  const filCat = useSelector((state) =>
-    getFilteredFundsByCategory(state, diyType, "Market_Cap")
-  );
-  getFilteredFundsByCategory;
 
-  const fundLists = useSelector(getFundsList);
-  console.log("funds lists ", fundLists);
-  console.log(" filCat ", filCat);
   const errorData = useSelector((state) => getError(state, screen));
   const isPageLoading = useSelector((state) => getPageLoading(state, screen));
   useEffect(() => {
     const payload = {
-      isins: "INF109K01480",
       Api,
       screen,
-      diyType,
+      diyType: category,
       subcategoryOption: tabOption,
     };
     dispatch(fetchDiyCategories(payload));
@@ -107,24 +107,31 @@ const SubCategoryLanding = ({ onCartClick }) => {
   );
   const { productName } = useMemo(getConfig, []);
   useEffect(() => {
-    if (!isEmpty(subcategoryOptions)) {
-      const option = subcategoryOptions[tabValue].key;
+    if (!isEmpty(subcategoryOptionsData)) {
+      const option = subcategoryOptionsData[tabValue].key;
       setTabOption(option);
-      const payload = {
-        Api,
-        screen,
-        diyType,
-        subcategoryOption: option,
-      };
-      dispatch(fetchFundList(payload));
-      // dispatch(setFilteredFundList({diyType, subcategoryOption: option}))
+      if (isEmpty(categoryFunds[option])) {
+        const payload = {
+          Api,
+          screen,
+          diyType: category,
+          subcategoryOption: option,
+        };
+        dispatch(fetchFundList(payload));
+      }
     }
   }, [tabValue]);
 
   useEffect(() => {
+    if (errorData?.isFetchFailed && !isEmpty(errorData?.errorrMessage)) {
+      // add toast
+    }
+  }, [errorData?.isFetchFailed]);
+
+  useEffect(() => {
     dispatch(
       setFilteredFundList({
-        diyType,
+        diyType: category,
         subcategoryOption: tabOption,
         filterOptions: {
           sortFundsBy: selectedFilterValue[FILTER_TYPES.sort]?.value,
@@ -184,15 +191,15 @@ const SubCategoryLanding = ({ onCartClick }) => {
   return (
     <Container
       headerProps={{
-        headerTitle: subcategoryOptions[tabValue]?.name,
-        subtitle: subcategoryOptions[tabValue]?.subtitle,
-        points: subcategoryOptions[tabValue]?.points,
+        headerTitle: subcategoryOptionsData[tabValue]?.name,
+        subtitle: subcategoryOptionsData[tabValue]?.subtitle,
+        points: subcategoryOptionsData[tabValue]?.points,
         tabsProps: {
           selectedTab: tabValue,
           onTabChange: handleTabChange,
           labelName: "name",
         },
-        tabChilds: subcategoryOptions,
+        tabChilds: subcategoryOptionsData,
       }}
       fixedFooter
       renderComponentAboveFooter={
@@ -208,7 +215,6 @@ const SubCategoryLanding = ({ onCartClick }) => {
         />
       }
       className="sub-category-landing-wrapper"
-      isPageLoading={isPageLoading}
     >
       {/* <div className='sub-category-swipper-wrapper'>
         <SwipeableViews
@@ -237,7 +243,7 @@ const SubCategoryLanding = ({ onCartClick }) => {
           onSwiper={setSwiper}
           onSlideChange={handleSlideChange}
         >
-          {subcategoryOptions?.map((el, idx) => {
+          {subcategoryOptionsData?.map((el, idx) => {
             return (
               <SwiperSlide key={idx}>
                 <TabPanel
@@ -250,6 +256,7 @@ const SubCategoryLanding = ({ onCartClick }) => {
                   sortFundsBy={selectedFilterValue[FILTER_TYPES.sort]?.value}
                   sortingOrder={selectedFilterValue[FILTER_TYPES.sort]?.order}
                   key={idx}
+                  value={idx}
                   selectedFilterValue={selectedFilterValue}
                   productName={productName}
                   data={filteredFunds[el.key]}
@@ -258,6 +265,8 @@ const SubCategoryLanding = ({ onCartClick }) => {
                   selectedFundHouses={selectedFundHouses}
                   selectedFundOption={selectedFundOption}
                   selectedMinInvestment={selectedMinInvestment}
+                  activeTab={tabValue}
+                  isPageLoading={isPageLoading}
                 />
               </SwiperSlide>
             );
@@ -300,6 +309,9 @@ const TabPanel = memo((props) => {
     returnLabel,
     selectedFunds,
     setSelectedFunds,
+    value,
+    activeTab,
+    isPageLoading,
   } = props;
   const [selectedFundsIsins] = useState(selectedFunds.map(({ isin }) => isin));
   const [NumOfItems, setNumOfItems] = useState(10);
@@ -327,6 +339,19 @@ const TabPanel = memo((props) => {
       }
     }
   };
+
+  if (value === activeTab && isPageLoading) {
+    return (
+      <>
+        <SkeltonRect className="scl-skelton" />
+        <SkeltonRect className="scl-skelton" />
+        <SkeltonRect className="scl-skelton" />
+        <SkeltonRect className="scl-skelton" />
+        <SkeltonRect className="scl-skelton" />
+        <SkeltonRect className="scl-skelton" />
+      </>
+    );
+  }
 
   return (
     <div
