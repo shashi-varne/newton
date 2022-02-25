@@ -24,11 +24,7 @@ import FilterNavigation from "../../../featureComponent/DIY/Filters/FilterNaviga
 import Footer from "../../../designSystem/molecules/Footer";
 import { getConfig } from "../../../utils/functions";
 import Tag from "../../../designSystem/molecules/Tag";
-import FilterReturnBottomSheet, {
-  FilterType,
-  ReturnsDataList,
-  SortsDataList,
-} from "../../../featureComponent/DIY/Filters/FilterReturnBottomSheet";
+import FilterReturnBottomSheet from "../../../featureComponent/DIY/Filters/FilterReturnBottomSheet";
 import Filter from "../../../featureComponent/DIY/Filters/Filter";
 import Icon from "../../../designSystem/atoms/Icon";
 
@@ -38,16 +34,19 @@ import {
   fetchFundList,
   getDiySubcategoryOptions,
   setFilteredFundList,
-  getFundsBySubcategory,
-  getFundsList,
   getFilteredFundsByCategory,
   getFilterOptions,
+  getFundsList,
 } from "businesslogic/dataStore/reducers/diy";
 import { getError } from "businesslogic/dataStore/reducers/error";
 import { getPageLoading } from "businesslogic/dataStore/reducers/loader";
 import { useDispatch, useSelector } from "react-redux";
-
-const CART_LIMIT = 24;
+import { CART_LIMIT, FILTER_TYPES } from "businesslogic/constants/diy";
+import {
+  getMinimumInvestmentData,
+  getReturnData,
+  getSortData,
+} from "businesslogic/utils/diy/functions";
 
 const screen = "diyFundList";
 const diyType = "Equity";
@@ -57,14 +56,19 @@ const SubCategoryLanding = ({ onCartClick }) => {
   const filteredFunds = useSelector((state) =>
     getFilteredFundsByCategory(state, diyType)
   );
-  const fundsListData = useSelector(getFundsList);
   const filterOptions = useSelector(getFilterOptions);
-  const funds = useSelector((state) =>
-    getFundsBySubcategory(state, diyType, subcategoryOption)
-  );
+  console.log("filteredFunds ", filteredFunds);
   const subcategoryOptions = useSelector((state) =>
     getDiySubcategoryOptions(state, diyType, "Market_Cap")
   );
+  const filCat = useSelector((state) =>
+    getFilteredFundsByCategory(state, diyType, "Market_Cap")
+  );
+  getFilteredFundsByCategory;
+
+  const fundLists = useSelector(getFundsList);
+  console.log("funds lists ", fundLists);
+  console.log(" filCat ", filCat);
   const errorData = useSelector((state) => getError(state, screen));
   const isPageLoading = useSelector((state) => getPageLoading(state, screen));
   useEffect(() => {
@@ -73,42 +77,59 @@ const SubCategoryLanding = ({ onCartClick }) => {
       Api,
       screen,
       diyType,
-      subcategoryOption,
+      subcategoryOption: tabOption,
     };
     dispatch(fetchDiyCategories(payload));
     dispatch(fetchFundList(payload));
   }, []);
-  // useEffect(() => {
-  //   dispatch(setFilteredFundList({diyType, subcategoryOption}))
-  // }, [fundsLis])
+
   const [tabValue, setTabValue] = useState(0);
+  const [tabOption, setTabOption] = useState(subcategoryOption);
   const dataRef = useRef(0);
   const [selectedFilterValue, setSelectedFilterValue] = useState({
-    [FilterType.returns]: ReturnsDataList[2],
-    [FilterType.sort]: SortsDataList[1],
+    [FILTER_TYPES.returns]: getReturnData(filterOptions.returnPeriod),
+    [FILTER_TYPES.sort]: getSortData(filterOptions.sortFundsBy),
   });
   const [isFilterSheetOpen, setIsFilterSheetOpen] = useState({
-    [FilterType.returns]: false,
-    [FilterType.sort]: false,
+    [FILTER_TYPES.returns]: false,
+    [FILTER_TYPES.sort]: false,
     filter: false,
   });
   console.log("count of render is", dataRef.current++);
   const [swiper, setSwiper] = useState(null);
   const [selectedFunds, setSelectedFunds] = useState([]);
   const [selectedFundHouses, setSelectedFundHouses] = useState([]);
-  const [selectedFundOption, setSelectedFundOption] = useState("growth");
-  const [selectedMinInvestment, setSelectedMinInvestment] = useState({});
+  const [selectedFundOption, setSelectedFundOption] = useState(
+    filterOptions.fundOption
+  );
+  const [selectedMinInvestment, setSelectedMinInvestment] = useState(
+    getMinimumInvestmentData(filterOptions.minInvestment)
+  );
   const { productName } = useMemo(getConfig, []);
+  useEffect(() => {
+    if (!isEmpty(subcategoryOptions)) {
+      const option = subcategoryOptions[tabValue].key;
+      setTabOption(option);
+      const payload = {
+        Api,
+        screen,
+        diyType,
+        subcategoryOption: option,
+      };
+      dispatch(fetchFundList(payload));
+      // dispatch(setFilteredFundList({diyType, subcategoryOption: option}))
+    }
+  }, [tabValue]);
 
   useEffect(() => {
     dispatch(
       setFilteredFundList({
         diyType,
-        subcategoryOption,
+        subcategoryOption: tabOption,
         filterOptions: {
-          sortFundsBy: selectedFilterValue[FilterType.sort]?.value,
-          returnPeriod: selectedFilterValue[FilterType.returns]?.value,
-          sortingOrder: selectedFilterValue[FilterType.sort]?.order,
+          sortFundsBy: selectedFilterValue[FILTER_TYPES.sort]?.value,
+          returnPeriod: selectedFilterValue[FILTER_TYPES.returns]?.value,
+          sortingOrder: selectedFilterValue[FILTER_TYPES.sort]?.order,
           fundHouse: selectedFundHouses,
           fundOption: selectedFundOption,
           minInvestment: selectedMinInvestment,
@@ -116,9 +137,9 @@ const SubCategoryLanding = ({ onCartClick }) => {
       })
     );
   }, [
-    selectedFilterValue[FilterType.sort]?.value,
-    selectedFilterValue[FilterType.sort]?.order,
-    selectedFilterValue[FilterType.returns]?.value,
+    selectedFilterValue[FILTER_TYPES.sort]?.value,
+    selectedFilterValue[FILTER_TYPES.sort]?.order,
+    selectedFilterValue[FILTER_TYPES.returns]?.value,
     selectedFundHouses,
     selectedFundOption,
     selectedMinInvestment,
@@ -176,13 +197,13 @@ const SubCategoryLanding = ({ onCartClick }) => {
       fixedFooter
       renderComponentAboveFooter={
         <CustomFooter
-          handleSortClick={handleFilterClick(FilterType.sort)}
-          handleReturnClick={handleFilterClick(FilterType.returns)}
+          handleSortClick={handleFilterClick(FILTER_TYPES.sort)}
+          handleReturnClick={handleFilterClick(FILTER_TYPES.returns)}
           handleFilterClick={handleFilterClick("filter")}
           productName={productName}
           cartCount={selectedFunds.length}
           onCartClick={onCartClick}
-          returnLabel={selectedFilterValue[FilterType.returns]?.returnLabel}
+          returnLabel={selectedFilterValue[FILTER_TYPES.returns]?.returnLabel}
           filterCount={selectedFundHouses.length}
         />
       }
@@ -211,24 +232,6 @@ const SubCategoryLanding = ({ onCartClick }) => {
         </SwipeableViews>
       </div> */}
       <div className="sub-category-swipper-wrapper">
-        {/* <Stack
-          justifyContent="space-between"
-          direction="row"
-          className="sub-category-filter-info"
-        >
-          <Typography
-            variant="body5"
-            color="foundationColors.content.secondary"
-          >
-            {numberOfFunds} funds
-          </Typography>
-          <Typography
-            variant="body5"
-            color="foundationColors.content.secondary"
-          >
-            {selectedFilterValue[FilterType.returns]?.returnLabel} returns
-          </Typography>
-        </Stack> */}
         <Swiper
           slidesPerView={1}
           onSwiper={setSwiper}
@@ -238,12 +241,14 @@ const SubCategoryLanding = ({ onCartClick }) => {
             return (
               <SwiperSlide key={idx}>
                 <TabPanel
-                  returnPeriod={selectedFilterValue[FilterType.returns]?.value}
-                  returnLabel={
-                    selectedFilterValue[FilterType.returns]?.returnLabel
+                  returnPeriod={
+                    selectedFilterValue[FILTER_TYPES.returns]?.value
                   }
-                  sortFundsBy={selectedFilterValue[FilterType.sort]?.value}
-                  sortingOrder={selectedFilterValue[FilterType.sort]?.order}
+                  returnLabel={
+                    selectedFilterValue[FILTER_TYPES.returns]?.returnLabel
+                  }
+                  sortFundsBy={selectedFilterValue[FILTER_TYPES.sort]?.value}
+                  sortingOrder={selectedFilterValue[FILTER_TYPES.sort]?.order}
                   key={idx}
                   selectedFilterValue={selectedFilterValue}
                   productName={productName}
@@ -261,18 +266,18 @@ const SubCategoryLanding = ({ onCartClick }) => {
       </div>
 
       <FilterReturnBottomSheet
-        applyFilter={handleFilterSelect(FilterType.returns)}
-        variant={FilterType.returns}
-        selectedValue={selectedFilterValue[FilterType.returns]}
-        handleClose={handleFiltterSheetClose(FilterType.returns)}
-        isOpen={isFilterSheetOpen[FilterType.returns]}
+        applyFilter={handleFilterSelect(FILTER_TYPES.returns)}
+        variant={FILTER_TYPES.returns}
+        selectedValue={selectedFilterValue[FILTER_TYPES.returns]}
+        handleClose={handleFiltterSheetClose(FILTER_TYPES.returns)}
+        isOpen={isFilterSheetOpen[FILTER_TYPES.returns]}
       />
       <FilterReturnBottomSheet
-        applyFilter={handleFilterSelect(FilterType.sort)}
-        variant={FilterType.sort}
-        selectedValue={selectedFilterValue[FilterType.sort]}
-        handleClose={handleFiltterSheetClose(FilterType.sort)}
-        isOpen={isFilterSheetOpen[FilterType.sort]}
+        applyFilter={handleFilterSelect(FILTER_TYPES.sort)}
+        variant={FILTER_TYPES.sort}
+        selectedValue={selectedFilterValue[FILTER_TYPES.sort]}
+        handleClose={handleFiltterSheetClose(FILTER_TYPES.sort)}
+        isOpen={isFilterSheetOpen[FILTER_TYPES.sort]}
       />
       <Filter
         isOpen={isFilterSheetOpen.filter}

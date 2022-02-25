@@ -2,6 +2,7 @@ import { FormControl, FormControlLabel, RadioGroup, Radio, Stack } from '@mui/ma
 import React from 'react';
 import RadioButton from '../../../designSystem/atoms/RadioButton';
 import Typography from '../../../designSystem/atoms/Typography';
+import { FUND_OPTIONS } from "businesslogic/constants/diy";
 
 import './FundOptions.scss';
 
@@ -46,16 +47,5 @@ const FundOptions = ({ fundOption, setFundOption }) => {
     </div>
   );
 };
-
-const FUND_OPTIONS = [
-  {
-    label: 'Growth',
-    value: 'growth',
-  },
-  {
-    label: 'Dividend',
-    value: 'dividend',
-  },
-];
 
 export default FundOptions;

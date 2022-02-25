@@ -11,9 +11,12 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 import FundOptions from "./FundOptions";
 import FundHouses from "./FundHouses";
 import MinimumInvestment from "./MinimumInvestment";
+import {
+  FILTER_OPTIONS,
+  DEFAULT_FILTER_DATA,
+} from "businesslogic/constants/diy";
 
-const filterOptions = ["Fund houses", "Fund options", "Minimum investment"];
-const DEFAULT_FUND_OPTION = "growth";
+const DEFAULT_FUND_OPTION = DEFAULT_FILTER_DATA.fundOption;
 
 const Filter = ({
   isOpen,
@@ -120,7 +123,7 @@ const LeftPanel = ({ selectedTab, handleSelection }) => {
         cursor: "pointer",
       }}
     >
-      {filterOptions?.map((el, idx) => {
+      {FILTER_OPTIONS?.map((el, idx) => {
         const selectedValue = selectedTab === idx;
         const { selectedColor, selectedBackgroundColor } = selectedValue
           ? {

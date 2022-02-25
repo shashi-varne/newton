@@ -7,7 +7,7 @@ import {
 import React from "react";
 import RadioButton from "../../../designSystem/atoms/RadioButton";
 import Typography from "../../../designSystem/atoms/Typography";
-import { formatAmountInr } from "../../../utils/validators";
+import { MINIMUM_INVESTMENT_OPTIONS } from "businesslogic/constants/diy";
 
 import "./FundOptions.scss";
 
@@ -59,31 +59,5 @@ const MinimumInvestment = ({
     </div>
   );
 };
-
-const MINIMUM_INVESTMENT_OPTIONS = [
-  {
-    label: `Below ${formatAmountInr(500)}`,
-    id: "<500",
-    value: {
-      lowerLimit: 0,
-      upperLimit: 500,
-    },
-  },
-  {
-    label: `${formatAmountInr(500)} - ${formatAmountInr(1000)}`,
-    id: "500-1000",
-    value: {
-      lowerLimit: 500,
-      upperLimit: 1000,
-    },
-  },
-  {
-    label: `Above ${formatAmountInr(1000)}`,
-    id: ">1000",
-    value: {
-      lowerLimit: 1000,
-    },
-  },
-];
 
 export default MinimumInvestment;

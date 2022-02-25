@@ -5,15 +5,11 @@ import Icon from '../../../designSystem/atoms/Icon';
 import Button from '../../../designSystem/atoms/Button';
 
 import './FilterReturnBottomSheet.scss';
-
-export const FilterType = {
-  returns: 'returns',
-  sort: 'sort',
-};
+import { FILTER_TYPES, RETURNS_DATA_LIST, SORT_DATA_LIST } from "businesslogic/constants/diy";
 
 const FilterReturnBottomSheet = ({ variant, isOpen, handleClose, applyFilter, selectedValue }) => {
   const [selectedItem, setSelectedItem] = useState(selectedValue);
-  const isReturn = FilterType?.returns === variant;
+  const isReturn = FILTER_TYPES?.returns === variant;
   const title = isReturn ? 'Returns' : 'Sort';
 
   const handleSelection = (item) => {
@@ -67,7 +63,7 @@ export default FilterReturnBottomSheet;
 const Sorting = ({ selectedItem, handleSelection }) => {
   return (
     <Stack sx={{ mt: 2 }} spacing={2} className="pointer">
-      {SortsDataList?.map((item, idx) => {
+      {SORT_DATA_LIST?.map((item, idx) => {
         return (
           <Stack spacing='4px' direction='column' key={idx} onClick={() => handleSelection(item)}>
             <Typography variant='body2' color='foundationColors.content.tertiary'>
@@ -94,7 +90,7 @@ const Sorting = ({ selectedItem, handleSelection }) => {
 const Return = ({ selectedItem, handleSelection }) => {
   return (
     <Stack sx={{ mt: 2 }} spacing={3}>
-      {ReturnsDataList?.map((item, idx) => {
+      {RETURNS_DATA_LIST?.map((item, idx) => {
         return (
           <Stack
             direction='row'
@@ -119,19 +115,3 @@ const Return = ({ selectedItem, handleSelection }) => {
     </Stack>
   );
 };
-
-export const ReturnsDataList = [
-  { label: '1 Month', value: 'one_month_return', returnLabel: '1M' },
-  { label: '3 Months', value: 'three_month_return', returnLabel: '3M' },
-  { label: '6 Months', value: 'six_month_return', returnLabel: '6M' },
-  { label: '1 Year', value: 'one_year_return', returnLabel: '1Y' },
-  { label: '3 Years', value: 'three_year_return', returnLabel: '3Y' },
-  { label: '5 Years', value: 'five_year_return', returnLabel: '5Y' },
-];
-
-export const SortsDataList = [
-  { label1: 'Returns', label2: 'High to low', value: 'returns', order: 'desc' },
-  { label1: 'Fund size (AUM)', label2: 'High to low', value: 'aum', order: 'desc' },
-  { label1: 'Expense ratio', label2: 'Low to high', value: 'expense_ratio', order: 'asc' },
-  { label1: 'Rating', label2: 'High to low', value: 'morning_star_rating', order: 'desc' },
-];
