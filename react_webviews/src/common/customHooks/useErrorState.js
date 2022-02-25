@@ -25,7 +25,7 @@ const useErrorState = (currentScreen) => {
     shallowEqual
   );
 
-  const errorStateMessage = useSelector(
+  const errorMessage = useSelector(
     (state) => getErrorMessage(state, currentScreen),
     shallowEqual
   );
@@ -59,7 +59,7 @@ const useErrorState = (currentScreen) => {
     );
   };
 
-  return { isFetchFailed, isUpdateFailed, errorStateMessage };
+  return { isFetchFailed, isUpdateFailed, errorMessage };
 };
 
 export default useErrorState;
