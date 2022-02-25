@@ -27,6 +27,8 @@ import Tag from "../../../designSystem/molecules/Tag";
 import FilterReturnBottomSheet from "../../../featureComponent/DIY/Filters/FilterReturnBottomSheet";
 import Filter from "../../../featureComponent/DIY/Filters/Filter";
 import Icon from "../../../designSystem/atoms/Icon";
+import useErrorState from "../../../common/customHooks/useErrorState";
+import useLoadingState from "../../../common/customHooks/useLoadingState";
 
 import Api from "../../../utils/api";
 import {
@@ -42,8 +44,6 @@ import {
   getDiyCartCount,
   getDiyCart,
 } from "businesslogic/dataStore/reducers/diy";
-import { getError } from "businesslogic/dataStore/reducers/error";
-import { getPageLoading } from "businesslogic/dataStore/reducers/loader";
 import { useDispatch, useSelector } from "react-redux";
 import { CART_LIMIT, FILTER_TYPES } from "businesslogic/constants/diy";
 import {
@@ -79,8 +79,8 @@ const SubCategoryLanding = ({ onCartClick }) => {
     getDiySubcategoryOptions(state, category, subcategory)
   );
 
-  const errorData = useSelector((state) => getError(state, screen));
-  const isPageLoading = useSelector((state) => getPageLoading(state, screen));
+  const { isFetchFailed, errorMessage } = useErrorState(screen);
+  const { isPageLoading } = useLoadingState(screen);
 
   const [tabValue, setTabValue] = useState(0);
   const dataRef = useRef(0);
@@ -121,10 +121,10 @@ const SubCategoryLanding = ({ onCartClick }) => {
   }, [tabValue]);
 
   useEffect(() => {
-    if (errorData?.isFetchFailed && !isEmpty(errorData?.message)) {
-      ToastMessage(errorData.message);
+    if (isFetchFailed && !isEmpty(errorMessage)) {
+      ToastMessage(errorMessage);
     }
-  }, [errorData?.isFetchFailed]);
+  }, [isFetchFailed]);
 
   useEffect(() => {
     dispatch(
