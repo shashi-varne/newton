@@ -35,6 +35,9 @@ import { EVENT_MANAGER_CONSTANTS } from './utils/constants.js';
 import {Provider} from 'react-redux';
 import { store } from './dataLayer/store/index.js';
 
+import { store } from './dataLayer/store';
+import { Provider } from 'react-redux';
+
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
   productionPrefix: 'f',
@@ -108,6 +111,7 @@ const App = () => {
     return (
       <Provider store={store}>
       <BrowserRouter basename={basename}>
+       <Provider store={store}>
         <JssProvider jss={jss} generateClassName={generateClassName}>
           <MuiThemeProvider theme={themeConfiguration}>
             <ScrollToTop />
@@ -143,6 +147,7 @@ const App = () => {
             </Switch>
           </MuiThemeProvider>
         </JssProvider>
+       </Provider>
       </BrowserRouter>
       </Provider>
     );
