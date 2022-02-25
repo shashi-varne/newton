@@ -9,12 +9,14 @@ import Icon from '../../../designSystem/atoms/Icon';
 import Typography from '../../../designSystem/atoms/Typography';
 import { getPageLoading } from 'businesslogic/dataStore/reducers/loader';
 import isEmpty from 'lodash/isEmpty';
+import { navigate as navigateFunc } from '../../../utils/functions';
+import { withRouter } from 'react-router-dom';
 
 const screen = 'diyLanding';
-const CategoryCardCarousel = ({ diyType, config }) => {
+const CategoryCardCarousel = ({ diyType, config, ...restProps }) => {
   const categoriesNew = useSelector((state) => state?.diy?.categories);
   const isPageLoading = useSelector((state) => getPageLoading(state, screen));
-
+  const navigate = navigateFunc.bind(restProps);
   const categoryOptions = categoriesNew?.find((el) => {
     return el.category.toLowerCase() === diyType;
   });
@@ -24,8 +26,14 @@ const CategoryCardCarousel = ({ diyType, config }) => {
   }
 
   const seeAllCategories = () => {
-    console.log("all categories");
-  }
+    console.log('all categories');
+    navigate('sub-category-funds', {
+      state: {
+        headerTitle: imageCaurosel?.name,
+        fundCategoryList: imageCaurosel?.options,
+      },
+    });
+  };
   
   const imageCaurosel = categoryOptions?.sub_categories?.find(
     (el) => el.viewType === 'imageCaurosel'
@@ -86,7 +94,7 @@ const CategoryCardCarousel = ({ diyType, config }) => {
   );
 };
 
-export default CategoryCardCarousel;
+export default withRouter(CategoryCardCarousel);
 
 const CategoryCardCarouselSkeleton = () => {
   return (

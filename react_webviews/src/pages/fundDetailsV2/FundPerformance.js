@@ -8,7 +8,7 @@ import isEqual from 'lodash/isEqual';
 import Typography from '../../designSystem/atoms/Typography';
 import Icon from '../../designSystem/atoms/Icon';
 import { useSelector } from 'react-redux';
-import { getFundData } from 'businesslogic/dataStore/reducers/fundDetailsReducer';
+import { getFundData } from 'businesslogic/dataStore/reducers/fundDetails';
 
 const fetchReturns = (fundData) => {
   const returns = {};

@@ -9,14 +9,16 @@ import SectionHeader from './SectionHeader';
 import { getPageLoading } from 'businesslogic/dataStore/reducers/loader';
 import Icon from '../../../designSystem/atoms/Icon';
 import isEmpty from 'lodash/isEmpty';
+import { navigate as navigateFunc } from '../../../utils/functions';
+import { useHistory, withRouter } from 'react-router-dom';
 
 const screen = 'diyLanding';
-const TwoRowCarousel = ({ diyType }) => {
+const TwoRowCarousel = (props) => {
   const categoriesNew = useSelector((state) => state?.diy?.categories);
   const isPageLoading = useSelector((state) => getPageLoading(state, screen));
-
+  const navigate = navigateFunc.bind(props);
   const categoryOptions = categoriesNew?.find((el) => {
-    return el.category.toLowerCase() === diyType;
+    return el.category.toLowerCase() === props.diyType;
   });
 
   const twoImageCarousel = categoryOptions?.sub_categories?.find((el) => {
@@ -24,13 +26,18 @@ const TwoRowCarousel = ({ diyType }) => {
   });
 
   const handleCardClick = (item) => () => {
-    console.log("item is",item);
-  }
+    console.log('item is', item);
+  };
 
   const seeAllCategories = () => {
-    console.log("all categories");
-  }
-
+    console.log('all categories');
+    navigate('sub-category', {
+      state: {
+        headerTitle: twoImageCarousel?.name,
+        categoryList: twoImageCarousel?.options,
+      },
+    });
+  };
 
   if (!isPageLoading && isEmpty(twoImageCarousel)) {
     return null;
@@ -62,7 +69,11 @@ const TwoRowCarousel = ({ diyType }) => {
             : twoImageCarousel?.options?.map((category, idx) => {
                 return (
                   <SwiperSlide key={idx} style={{ padding: '1px 0px' }}>
-                    <WrapperBox elevation={1} sx={{ height: '100%' }} onClick={handleCardClick(category)}>
+                    <WrapperBox
+                      elevation={1}
+                      sx={{ height: '100%' }}
+                      onClick={handleCardClick(category)}
+                    >
                       <CardVertical
                         imgSrc={require('assets/large_cap.svg')}
                         title={category?.name}
@@ -91,4 +102,4 @@ const TwoRowCarouselSkeleton = () => {
   );
 };
 
-export default TwoRowCarousel;
+export default withRouter(TwoRowCarousel);

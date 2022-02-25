@@ -13,13 +13,14 @@ import Icon from '../../designSystem/atoms/Icon';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getFundData,
+  resetReturnCalculatorData,
   setAmount,
   setExpectedAmount,
   setExpectedReturnPerc,
   setInvestedAmount,
   setInvestmentPeriod,
   setInvestmentType,
-} from 'businesslogic/dataStore/reducers/fundDetailsReducer';
+} from 'businesslogic/dataStore/reducers/fundDetails';
 import { getExpectedReturn } from './helperFunctions';
 
 const ReturnCalculator = () => {
@@ -48,11 +49,20 @@ const ReturnCalculator = () => {
 
   useEffect(() => {
     dispatch(setExpectedReturnPerc(returns[investmentPeriod]));
+
+    return () => {
+      dispatch(resetReturnCalculatorData());
+    };
   }, [fundData]);
 
   useEffect(() => {
     const investedValue = getInvestedValue(investmentPeriod, amountToBeInvested, isRecurring);
-    const expectedValue = getExpectedReturn(amountToBeInvested, investmentPeriod, investmentType, expectedReturnPerc);
+    const expectedValue = getExpectedReturn(
+      amountToBeInvested,
+      investmentPeriod,
+      investmentType,
+      expectedReturnPerc
+    );
     dispatch(setExpectedAmount(expectedValue));
     dispatch(setInvestedAmount(investedValue));
   }, [amountToBeInvested, investmentType, investmentPeriod, isRecurring, expectedReturnPerc]);
@@ -149,7 +159,10 @@ const ReturnCalculator = () => {
                 </div>
               </Stack>
               <Typography variant='body1' color='foundationColors.content.secondary' align='right'>
-                Estimated return <Typography component='span' variant='inherit' color='primary'>({expectedReturnPerc}%)</Typography>
+                Estimated return{' '}
+                <Typography component='span' variant='inherit' color='primary'>
+                  ({expectedReturnPerc}%)
+                </Typography>
               </Typography>
             </Stack>
           </Stack>

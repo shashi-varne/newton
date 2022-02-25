@@ -8,7 +8,7 @@ import { nonRoundingToFixed } from '../../utils/validators';
 import Tooltip from '../../designSystem/atoms/Tooltip';
 import Icon from '../../designSystem/atoms/Icon';
 import { useSelector } from 'react-redux';
-import { getFundData } from 'businesslogic/dataStore/reducers/fundDetailsReducer';
+import { getFundData } from 'businesslogic/dataStore/reducers/fundDetails';
 
 function calculateFullAge(dob) {
   const startDate = parse(dob, 'dd/MM/yyyy', new Date());

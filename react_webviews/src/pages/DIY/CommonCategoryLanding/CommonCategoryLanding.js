@@ -10,7 +10,7 @@ import Container from '../../../designSystem/organisms/Container';
 
 import isEmpty from 'lodash/isEmpty';
 import { fetchDiyCategoriesAndTrendingFunds } from 'businesslogic/dataStore/reducers/diy';
-import { DescriptionMapper, DIY_TYPE } from 'businesslogic/strings/constants/diy';
+import { DescriptionMapper, DIY_TYPE } from 'businesslogic/constants/diy';
 import { useDispatch, useSelector } from 'react-redux';
 import Api from '../../../utils/api';
 import TrendingFunds from './TrendingFunds';

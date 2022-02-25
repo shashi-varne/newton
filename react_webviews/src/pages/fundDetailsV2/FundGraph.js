@@ -1,21 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import { fetch_fund_graph } from '../../fund_details/common/ApiCalls';
 import { TimeLine, Timelines } from '../../designSystem/atoms/TimelineList';
-import { setFundTimePeriod } from 'businesslogic/dataStore/reducers/fundDetailsReducer';
+import {
+  fetchFundGraphData,
+  getFundData,
+  setFundTimePeriod,
+} from 'businesslogic/dataStore/reducers/fundDetails';
 import isEmpty from 'lodash/isEmpty';
 import { Skeleton } from '@mui/material';
 import format from 'date-fns/format';
 import getTheme from '../../theme';
+import Api from '../../utils/api';
 
 import './FundGraph.scss';
 import { useDispatch, useSelector } from 'react-redux';
+import { getUrlParams } from '../../utils/validators';
+
+const screen = 'FundGraphData';
 
 const getTimeInMs = (time) => time * 60 * 60 * 24 * 1000;
 const FundGraph = () => {
+  let { isins } = getUrlParams();
   const [graphData, setGraphData] = useState([]);
-  const fundTimePeriod = useSelector(state => state?.fundDetails?.fundTimePeriod);
+  const fundData = useSelector(getFundData);
+  const fundTimePeriod = useSelector((state) => state?.fundDetails?.fundTimePeriod);
+  const fundGraphData = useSelector((state) => state?.fundDetails?.fundGraphData);
   const disptach = useDispatch();
   const [periodWiseData, setPeriodWiseData] = useState({});
   const theme = getTheme();
@@ -26,9 +36,35 @@ const FundGraph = () => {
     colors: [theme?.palette?.foundationColors?.primary?.brand, '#ffffff'],
   });
 
-  const getGraphData = async () => {
-    const graph_data = await fetch_fund_graph('INF109K01480');
-    const amfi_data = graph_data.graph_report[0].graph_data_for_amfi;
+  useEffect(() => {
+    return () => {
+      disptach(setFundTimePeriod('5Y'));
+    };
+  }, []);
+
+  const getGraphData = async (dataGraph) => {
+    if (isEmpty(dataGraph)) {
+      dataGraph = {};
+    }
+    let graph_data = {};
+    const payload = {
+      isin: isins,
+      Api,
+      screen,
+    };
+    const fundGraphDataIsin = dataGraph?.graph_report?.[0]?.isin;
+    if (isins !== fundData?.isin && fundGraphDataIsin !== isins) {
+      disptach(fetchFundGraphData(payload));
+    } else {
+      if (isEmpty(dataGraph)) {
+        disptach(fetchFundGraphData(payload));
+      } else {
+        graph_data = { ...dataGraph };
+      }
+    }
+    if (isEmpty(dataGraph)) return null;
+
+    const amfi_data = [...graph_data.graph_report?.[0].graph_data_for_amfi];
     const maxi = amfi_data[amfi_data.length - 1][0];
     const one_month_minimum = maxi - getTimeInMs(30);
     const three_month_minimum = maxi - getTimeInMs(90);
@@ -71,12 +107,13 @@ const FundGraph = () => {
     setGraphData(amfi_data);
   };
   useEffect(() => {
-    getGraphData();
-  }, []);
+    getGraphData(fundGraphData);
+  }, [fundGraphData]);
 
   const handleTimePeriodChange = (e, value) => {
     disptach(setFundTimePeriod(value));
-    setGraphData(periodWiseData[value]);
+    const newData = [...periodWiseData[value]];
+    setGraphData(newData);
   };
   const options = {
     title: {

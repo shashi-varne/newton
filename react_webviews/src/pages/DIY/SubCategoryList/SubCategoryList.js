@@ -6,18 +6,25 @@ import isFunction from 'lodash/isFunction';
 import isArray from 'lodash/isArray';
 import { getConfig } from '../../../utils/functions';
 import PropTypes from 'prop-types';
+import { useLocation } from 'react-router-dom';
 
 import './SubCategoryList.scss';
 
-const SubCategoryList = ({headerTitle, categoryList, cartCount, onCartClick, onCardClick}) => {
+const SubCategoryList = () => {
+  let location = useLocation();
+  const { headerTitle, categoryList } = location.state;
+  const cartCount = 1;
+  const onCartClick = () => {};
+  const onCardClick = () => {};
   const { productName } = useMemo(getConfig, []);
   const hideFooter = productName === 'finity' || cartCount <= 0;
 
   const handleCardClick = (item) => () => {
-    if(isFunction(onCardClick)) {
+    console.log("item is", item);
+    if (isFunction(onCardClick)) {
       onCardClick(item);
     }
-  }
+  };
   return (
     <Container
       headerProps={{
@@ -33,16 +40,28 @@ const SubCategoryList = ({headerTitle, categoryList, cartCount, onCartClick, onC
           imgSrc: require('assets/cart_icon.svg'),
         },
       }}
+      fixedFooter
       noFooter={hideFooter}
     >
       <div className='diy-sc-cv-lists'>
-        {isArray(categoryList) && categoryList?.map((category, idx) => {
-          return (
-            <WrapperBox elevation={1} className='diy-sc-cv-item' key={idx} onClick={handleCardClick(category)}>
-              <CardVertical {...category} />
-            </WrapperBox>
-          );
-        })}
+        {isArray(categoryList) &&
+          categoryList?.map((category, idx) => {
+            return (
+              <WrapperBox
+                elevation={1}
+                className='diy-sc-cv-item'
+                key={idx}
+                onClick={handleCardClick(category)}
+              >
+                <CardVertical
+                  imgSrc={require('assets/large_cap.svg')}
+                  title={category?.name}
+                  subtitle={category?.trivia}
+                  dataAid={category?.key}
+                />
+              </WrapperBox>
+            );
+          })}
       </div>
     </Container>
   );
@@ -51,13 +70,13 @@ const SubCategoryList = ({headerTitle, categoryList, cartCount, onCartClick, onC
 export default SubCategoryList;
 
 SubCategoryList.defaultProps = {
-  cartCount: 0
-}
+  cartCount: 0,
+};
 
 SubCategoryList.propTypes = {
   headerTitle: PropTypes.string,
   categoryList: PropTypes.arrayOf(PropTypes.object),
   cartCount: PropTypes.number,
   onCartClick: PropTypes.func,
-  onCardClick: PropTypes.func
-}
+  onCardClick: PropTypes.func,
+};

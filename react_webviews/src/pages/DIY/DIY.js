@@ -14,10 +14,10 @@ const DIY = (props) => {
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
         <Switch>
-          <Route path={`${url}/:diyType`} component={CommonCategoryLanding} />
           <Route path={`${url}/sub-category`} component={SubCategoryList} />
           <Route path={`${url}/sub-category-funds`} component={SubCategoryFunds} />
           <Route path={`${url}/fund-details`} component={FundDetails} />
+          <Route path={`${url}/:diyType`} component={CommonCategoryLanding} />
         </Switch>
       </ThemeProvider>
     </StyledEngineProvider>

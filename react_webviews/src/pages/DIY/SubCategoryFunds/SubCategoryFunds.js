@@ -6,16 +6,15 @@ import isArray from 'lodash/isArray';
 import { getConfig } from '../../../utils/functions';
 import PropTypes from 'prop-types';
 import './SubCategoryFunds.scss';
+import { useLocation } from 'react-router-dom';
 
-const SubCategoryFunds = ({
-  CCvariant,
-  headerTitle,
-  fundCategoryList,
-  cartCount,
-  onCartClick,
-  onCardClick,
-}) => {
+const SubCategoryFunds = () => {
   const { productName } = useMemo(getConfig, []);
+  let location = useLocation();
+  const { headerTitle, fundCategoryList } = location.state;
+  const cartCount = 1;
+  const onCartClick = () => {};
+  const onCardClick = () => {};
   const hideFooter = productName === 'finity' || cartCount <= 0;
   const handleCardClick = (item) => () => {
     if (isFunction(onCardClick)) {
@@ -37,6 +36,7 @@ const SubCategoryFunds = ({
           onClick: onCartClick,
         },
       }}
+      fixedFooter
       noFooter={hideFooter}
     >
       <div className='diy-scf-cc-lists'>
@@ -44,7 +44,12 @@ const SubCategoryFunds = ({
           fundCategoryList?.map((fundCategory, idx) => {
             return (
               <div className='diy-sc-cv-item' key={idx} onClick={handleCardClick(fundCategory)}>
-                <CategoryCard variant={CCvariant} {...fundCategory} />
+                <CategoryCard
+                  variant='large'
+                  imgSrc={require('assets/tech_fund.svg')}
+                  title={fundCategory?.name}
+                  onClick={handleCardClick(fundCategory)}
+                />
               </div>
             );
           })}
@@ -57,7 +62,7 @@ export default SubCategoryFunds;
 
 SubCategoryFunds.defaultProps = {
   CCvariant: 'large',
-  cartCount: 0
+  cartCount: 0,
 };
 
 SubCategoryFunds.propTypes = {
