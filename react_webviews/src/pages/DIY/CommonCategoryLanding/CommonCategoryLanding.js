@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import {
   LandingHeader,
-  LandingHeaderImage,
   LandingHeaderPoints,
   LandingHeaderSubtitle,
   LandingHeaderTitle,
