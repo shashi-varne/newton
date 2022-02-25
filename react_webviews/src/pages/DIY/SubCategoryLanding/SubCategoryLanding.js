@@ -74,17 +74,7 @@ const SubCategoryLanding = ({ onCartClick }) => {
 
   const errorData = useSelector((state) => getError(state, screen));
   const isPageLoading = useSelector((state) => getPageLoading(state, screen));
-  useEffect(() => {
-    const payload = {
-      Api,
-      screen,
-      category,
-      subcategory,
-      subcategoryOption,
-    };
-    dispatch(fetchFundList(payload));
-  }, []);
-
+  
   const [tabValue, setTabValue] = useState(0);
   const dataRef = useRef(0);
   const [selectedFilterValue, setSelectedFilterValue] = useState({
