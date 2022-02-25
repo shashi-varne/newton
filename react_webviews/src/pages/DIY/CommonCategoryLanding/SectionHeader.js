@@ -24,7 +24,7 @@ const SectionHeader = ({ sx, isPageLoading, title, buttonTitle = 'See all', onCl
         </Typography>
       ) : (
         onClick && (
-          <Stack direction='row' alignItems='center' spacing='4px' onClick={onClick}>
+          <Stack direction='row' sx={{cursor: 'pointer'}} alignItems='center' spacing='4px' onClick={onClick}>
             <Button title={buttonTitle} variant='link' />
             <Icon src={require(`assets/${productName}/right_arrow_small.svg`)} size='16px' />
           </Stack>

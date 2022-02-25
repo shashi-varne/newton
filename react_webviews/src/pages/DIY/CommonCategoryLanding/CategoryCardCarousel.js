@@ -22,6 +22,10 @@ const CategoryCardCarousel = ({ diyType, config }) => {
   const handleCardClick = (item) => () => {
     console.log("item is",item);
   }
+
+  const seeAllCategories = () => {
+    console.log("all categories");
+  }
   
   const imageCaurosel = categoryOptions?.sub_categories?.find(
     (el) => el.viewType === 'imageCaurosel'
@@ -35,6 +39,7 @@ const CategoryCardCarousel = ({ diyType, config }) => {
         isPageLoading={isPageLoading}
         sx={{ pl: 2, pr: 2 }}
         title={imageCaurosel?.name}
+        onClick={seeAllCategories}
       />
       <CustomSwiper
         spaceBetween={16}

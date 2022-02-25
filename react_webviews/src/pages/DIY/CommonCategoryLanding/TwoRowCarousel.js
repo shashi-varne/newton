@@ -27,6 +27,10 @@ const TwoRowCarousel = ({ diyType }) => {
     console.log("item is",item);
   }
 
+  const seeAllCategories = () => {
+    console.log("all categories");
+  }
+
 
   if (!isPageLoading && isEmpty(twoImageCarousel)) {
     return null;
@@ -37,6 +41,7 @@ const TwoRowCarousel = ({ diyType }) => {
         isPageLoading={isPageLoading}
         sx={{ pl: 2, pr: 2 }}
         title={twoImageCarousel?.name}
+        onClick={seeAllCategories}
       />
       <div>
         <CustomSwiper
@@ -54,7 +59,7 @@ const TwoRowCarousel = ({ diyType }) => {
                   </SwiperSlide>
                 );
               })
-            : twoImageCarousel?.options?.slice(0, 6).map((category, idx) => {
+            : twoImageCarousel?.options?.map((category, idx) => {
                 return (
                   <SwiperSlide key={idx} style={{ padding: '1px 0px' }}>
                     <WrapperBox elevation={1} sx={{ height: '100%' }} onClick={handleCardClick(category)}>
