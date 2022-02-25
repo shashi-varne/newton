@@ -30,7 +30,6 @@ import Icon from "../../../designSystem/atoms/Icon";
 
 import Api from "../../../utils/api";
 import {
-  fetchDiyCategories,
   fetchFundList,
   getDiySubcategoryOptions,
   setFilteredFundList,
@@ -38,6 +37,7 @@ import {
   getFilterOptions,
   getFundsByCategory,
   getDiyTypeData,
+  setDiyTypeData,
 } from "businesslogic/dataStore/reducers/diy";
 import { getError } from "businesslogic/dataStore/reducers/error";
 import { getPageLoading } from "businesslogic/dataStore/reducers/loader";
@@ -51,17 +51,16 @@ import {
 import { SkeltonRect } from "../../../common/ui/Skelton";
 
 const screen = "diyFundList";
-const category = "Equity";
-const subcategory = "Market_Cap";
-const subcategoryOption = "Large_Cap";
+// const category = "Equity";
+// const subcategory = "Market_Cap";
+// const subcategoryOption = "Large_Cap";
 const SubCategoryLanding = ({ onCartClick }) => {
   const dispatch = useDispatch();
   const diyTypeData = useSelector(getDiyTypeData);
-  // const {
-  //   category = "Equity",
-  //   subcategory = "Market_Cap",
-  //   subcategoryOption = "Large_Cap",
-  // } = useMemo(() => diyTypeData, [diyTypeData]);
+  const { category, subcategory, subcategoryOption } = useMemo(
+    () => diyTypeData,
+    [diyTypeData]
+  );
   const filteredFunds = useSelector((state) =>
     getFilteredFundsByCategory(state, category)
   );
@@ -79,16 +78,14 @@ const SubCategoryLanding = ({ onCartClick }) => {
     const payload = {
       Api,
       screen,
-      diyType: category,
+      category,
       subcategory,
-      subcategoryOption: tabOption,
+      subcategoryOption,
     };
-    dispatch(fetchDiyCategories(payload));
     dispatch(fetchFundList(payload));
   }, []);
 
   const [tabValue, setTabValue] = useState(0);
-  const [tabOption, setTabOption] = useState(subcategoryOption);
   const dataRef = useRef(0);
   const [selectedFilterValue, setSelectedFilterValue] = useState({
     [FILTER_TYPES.returns]: getReturnData(filterOptions.returnPeriod),
@@ -113,12 +110,13 @@ const SubCategoryLanding = ({ onCartClick }) => {
   useEffect(() => {
     if (!isEmpty(subcategoryOptionsData)) {
       const option = subcategoryOptionsData[tabValue].key;
-      setTabOption(option);
+      dispatch(setDiyTypeData({ subcategoryOption: option }));
       if (isEmpty(categoryFunds[option])) {
         const payload = {
           Api,
           screen,
-          diyType: category,
+          category,
+          subcategory,
           subcategoryOption: option,
         };
         dispatch(fetchFundList(payload));
@@ -135,8 +133,9 @@ const SubCategoryLanding = ({ onCartClick }) => {
   useEffect(() => {
     dispatch(
       setFilteredFundList({
-        diyType: category,
-        subcategoryOption: tabOption,
+        category,
+        subcategory,
+        subcategoryOption,
         filterOptions: {
           sortFundsBy: selectedFilterValue[FILTER_TYPES.sort]?.value,
           returnPeriod: selectedFilterValue[FILTER_TYPES.returns]?.value,
