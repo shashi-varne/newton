@@ -14,7 +14,8 @@ import { get_recommended_funds } from "./common/api";
 import { PATHNAME_MAPPER as KYC_PATHNAME_MAPPER } from "../../kyc/constants";
 import { isEquityCompleted } from "../../kyc/common/functions";
 import { nativeCallback, openModule } from "../../utils/native_callback";
-import { isEmpty, isFunction } from "lodash";
+import isEmpty from "lodash/isEmpty";
+import isFunction from "lodash/isFunction";
 import { getCorpusValue } from "./common/commonFunctions";
 
 let errorMessage = "Something went wrong!";
