@@ -38,6 +38,9 @@ import {
   getFundsByCategory,
   getDiyTypeData,
   setDiyTypeData,
+  setCartItem,
+  getDiyCartCount,
+  getDiyCart,
 } from "businesslogic/dataStore/reducers/diy";
 import { getError } from "businesslogic/dataStore/reducers/error";
 import { getPageLoading } from "businesslogic/dataStore/reducers/loader";
@@ -47,6 +50,7 @@ import {
   getMinimumInvestmentData,
   getReturnData,
   getSortData,
+  checkFundPresentInCart
 } from "businesslogic/utils/diy/functions";
 import { SkeltonRect } from "../../../common/ui/Skelton";
 
@@ -57,6 +61,8 @@ const screen = "diyFundList";
 const SubCategoryLanding = ({ onCartClick }) => {
   const dispatch = useDispatch();
   const diyTypeData = useSelector(getDiyTypeData);
+  const diyCartData = useSelector(getDiyCart);
+  const diyCartCount = useSelector(getDiyCartCount);
   const { category, subcategory, subcategoryOption } = useMemo(
     () => diyTypeData,
     [diyTypeData]
@@ -88,7 +94,6 @@ const SubCategoryLanding = ({ onCartClick }) => {
   });
   console.log("count of render is", dataRef.current++);
   const [swiper, setSwiper] = useState(null);
-  const [selectedFunds, setSelectedFunds] = useState([]);
   const [selectedFundHouses, setSelectedFundHouses] = useState([]);
   const [selectedFundOption, setSelectedFundOption] = useState(
     filterOptions.fundOption
@@ -181,6 +186,10 @@ const SubCategoryLanding = ({ onCartClick }) => {
     setIsFilterSheetOpen({ ...isFilterSheetOpen, [filterType]: true });
   };
 
+  const handleAddToCart = (fund) => () => {
+    dispatch(setCartItem(fund))
+  };
+
   return (
     <Container
       headerProps={{
@@ -201,7 +210,7 @@ const SubCategoryLanding = ({ onCartClick }) => {
           handleReturnClick={handleFilterClick(FILTER_TYPES.returns)}
           handleFilterClick={handleFilterClick("filter")}
           productName={productName}
-          cartCount={selectedFunds.length}
+          cartCount={diyCartCount}
           onCartClick={onCartClick}
           returnLabel={selectedFilterValue[FILTER_TYPES.returns]?.returnLabel}
           filterCount={selectedFundHouses.length}
@@ -253,13 +262,13 @@ const SubCategoryLanding = ({ onCartClick }) => {
                   selectedFilterValue={selectedFilterValue}
                   productName={productName}
                   data={filteredFunds[el.key]}
-                  setSelectedFunds={setSelectedFunds}
-                  selectedFunds={selectedFunds}
                   selectedFundHouses={selectedFundHouses}
                   selectedFundOption={selectedFundOption}
                   selectedMinInvestment={selectedMinInvestment}
                   activeTab={tabValue}
                   isPageLoading={isPageLoading}
+                  handleAddToCart={handleAddToCart}
+                  diyCartData={diyCartData}
                 />
               </SwiperSlide>
             );
@@ -300,13 +309,12 @@ const TabPanel = memo((props) => {
     data = [],
     returnPeriod,
     returnLabel,
-    selectedFunds,
-    setSelectedFunds,
     value,
     activeTab,
     isPageLoading,
+    handleAddToCart,
+    diyCartData
   } = props;
-  const [selectedFundsIsins] = useState(selectedFunds.map(({ isin }) => isin));
   const [NumOfItems, setNumOfItems] = useState(10);
   const observer = useRef();
   const lastProductItem = useCallback((node) => {
@@ -319,19 +327,6 @@ const TabPanel = memo((props) => {
 
     if (node) observer.current.observe(node);
   });
-
-  const handleAddToCart = (fund, isFundAddedToCart) => () => {
-    if (isFundAddedToCart) {
-      const filteredFunds = selectedFunds.filter(
-        ({ isin }) => isin !== fund.isin
-      );
-      setSelectedFunds(filteredFunds);
-    } else {
-      if (selectedFunds.length < CART_LIMIT) {
-        setSelectedFunds([...selectedFunds, fund]);
-      }
-    }
-  };
 
   if (value === activeTab && isPageLoading) {
     return (
@@ -394,8 +389,7 @@ const TabPanel = memo((props) => {
             if (setRef) {
               refData.ref = lastProductItem;
             }
-            const isFundAddedToCart = selectedFundsIsins.includes(fund.isin);
-
+            const isFundAddedToCart = checkFundPresentInCart(diyCartData, fund);
             return (
               <div key={idx} {...refData}>
                 <ProductItem
@@ -434,7 +428,7 @@ const TabPanel = memo((props) => {
                       src={require(`assets/${
                         isFundAddedToCart ? `minus` : `add_icon`
                       }.svg`)}
-                      onClick={handleAddToCart(fund, isFundAddedToCart)}
+                      onClick={handleAddToCart(fund)}
                     />
                   </ProductItem.RightSection>
                 </ProductItem>
