@@ -49,46 +49,48 @@ const StocksAndIpoDirectEntry = (props) => {
 
   const close = () => {
     closeKycStatusDialog(false);
-  }
+  };
+
+  const onLoad = () => {
+    switch (type) {
+      case "tpp":
+        navigate("/product-types");
+        break;
+      case "equity":
+        const kycDetails = getKycData(kyc, user);
+        const contactData = contactVerification(kyc);
+        const config = getConfig();
+        setBaseConfig(config);
+        setKycData(kycDetails);
+        setContactDetails(contactData);
+        const data = {
+          ...kycDetails,
+          key: "stocks",
+          isDirectEntry: true,
+          kyc,
+          user,
+          navigate,
+          handleLoader: noop,
+          handleDialogStates,
+          handleSummaryData,
+          closeKycStatusDialog,
+        };
+        handleStocksAndIpoCards(data, props);
+        break;
+      default:
+        navigate("/invest");
+        break;
+    }
+  };
 
   useEffect(() => {
     if (!isEmpty(kyc) && !isEmpty(user)) {
-      switch (type) {
-        case "tpp":
-          navigate("/product-types");
-          break;
-        case "equity":
-          const kycDetails = getKycData(kyc, user);
-          const contactData = contactVerification(kyc);
-          const config = getConfig();
-          setBaseConfig(config);
-          setKycData(kycDetails);
-          setContactDetails(contactData);
-          handleStocksAndIpoCards(
-            {
-              ...kycDetails,
-              key: "stocks",
-              isDirectEntry: true,
-              kyc,
-              user,
-              navigate,
-              handleLoader: noop,
-              handleDialogStates,
-              handleSummaryData,
-              closeKycStatusDialog,
-            },
-            props
-          );
-          break;
-        default:
-          navigate("/invest");
-          break;
-      }
+      onLoad();
     }
   }, [kyc, user]);
 
   return (
-    <Container skelton={true} noBackIcon hideInPageTitle >
+    <Container skelton={true} noBackIcon hideInPageTitle>
       {!isEmpty(modalData) && (
         <KycStatusDialog
           isOpen={dialogStates.openKycStatusDialog}
