@@ -35,9 +35,6 @@ import { EVENT_MANAGER_CONSTANTS } from './utils/constants.js';
 import {Provider} from 'react-redux';
 import { store } from './dataLayer/store/index.js';
 
-import { store } from './dataLayer/store';
-import { Provider } from 'react-redux';
-
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
   productionPrefix: 'f',
