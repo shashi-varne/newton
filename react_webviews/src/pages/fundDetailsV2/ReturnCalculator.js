@@ -95,7 +95,7 @@ const ReturnCalculator = () => {
       <CollapsibleSection
         isOpen={isReturnCalcOpen}
         onClick={handleReturnCalcSection}
-        label={`Return calculator ${isReturnAvailable && '(N/A)'}`}
+        label={`Return calculator ${isReturnAvailable ? '(N/A)' : ''}`}
         disabled={isReturnAvailable}
       >
         <Stack direction='column' spacing={3} sx={{ pb: 3 }}>

@@ -76,7 +76,7 @@ const RiskDetails = () => {
     <Box sx={{ mt: 4 }}>
       <CollapsibleSection
         disabled={isRiskDetailsAvailable}
-        label={`Risk details ${isRiskDetailsAvailable && '(N/A)'}`}
+        label={`Risk details ${isRiskDetailsAvailable ? '(N/A)' : ''}`}
         isOpen={isRiskOpen}
         onClick={handleRiskAction}
       >

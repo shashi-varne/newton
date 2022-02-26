@@ -7,6 +7,8 @@ import Separator from '../../designSystem/atoms/Separator';
 import Typography from '../../designSystem/atoms/Typography';
 import CollapsibleSection from '../../designSystem/molecules/CollapsibleSection';
 import isNull from 'lodash/isNull';
+import isEmpty from 'lodash/isEmpty';
+import { isValidValue } from './helperFunctions';
 
 const AssetColors = {
   Equity: 'foundationColors.secondary.profitGreen.400',
@@ -19,6 +21,8 @@ const AssetAllocation = () => {
   const [viewMoreHolding, setViewMoreHolding] = useState(3);
   const [viewMoreSector, setViewMoreSector] = useState(3);
   const fundData = useSelector(getFundData);
+  const isTopHoldingsAvailable = isEmpty(fundData?.portfolio?.top_ten_holdings);
+  const isSectorsAvailable = isEmpty(fundData?.portfolio?.sector_allocation);
   const handleAssetSection = () => {
     setIsAssetOpen(!isAssetOpen);
   };
@@ -48,7 +52,7 @@ const AssetAllocation = () => {
                       {assetData?.name}
                     </Typography>
                     <Typography variant='body8' color='foundationColors.content.secondary'>
-                      { isNull(assetData?.value) ? 'N/A' : `${assetData?.value}%`}
+                      {isValidValue(assetData?.value, `${assetData?.value}%`)}
                     </Typography>
                   </Stack>
                   <Box
@@ -62,48 +66,57 @@ const AssetAllocation = () => {
               );
             })}
           </Stack>
-          <Separator marginTop='16px' />
+          {!isTopHoldingsAvailable && (
+            <>
+              <Separator marginTop='16px' />
+              <Stack sx={{ pt: 3 }} spacing={2}>
+                <Typography variant='heading4'>Top Holdings</Typography>
+                {fundData?.portfolio?.top_ten_holdings
+                  ?.slice(0, viewMoreHolding)
+                  .map((holding, idx) => {
+                    return (
+                      <Stack key={idx} direction='row' justifyContent='space-between'>
+                        <Typography variant='body8' color='foundationColors.content.secondary'>
+                          {holding?.name}
+                        </Typography>
+                        <Typography variant='heading4' color='foundationColors.content.secondary'>
+                          {holding?.weighting}%
+                        </Typography>
+                      </Stack>
+                    );
+                  })}
+                {fundData?.portfolio?.top_ten_holdings?.length > viewMoreHolding && (
+                  <Button title='View all holdings' variant='link' onClick={handleMoreHolding} />
+                )}
+              </Stack>
+            </>
+          )}
+          {!isSectorsAvailable && (
+            <>
+              <Separator marginTop='16px' />
 
-          <Stack sx={{ pt: 3 }} spacing={2}>
-            <Typography variant='heading4'>Top Holdings</Typography>
-            {fundData?.portfolio?.top_ten_holdings
-              ?.slice(0, viewMoreHolding)
-              .map((holding, idx) => {
-                return (
-                  <Stack key={idx} direction='row' justifyContent='space-between'>
-                    <Typography variant='body8' color='foundationColors.content.secondary'>
-                      {holding?.name}
-                    </Typography>
-                    <Typography variant='heading4' color='foundationColors.content.secondary'>
-                      {holding?.weighting}%
-                    </Typography>
-                  </Stack>
-                );
-              })}
-            {fundData?.portfolio?.top_ten_holdings?.length > viewMoreHolding && (
-              <Button title='View all holdings' variant='link' onClick={handleMoreHolding} />
-            )}
-          </Stack>
-          <Separator marginTop='16px' />
-
-          <Stack sx={{ pt: 3, pb: 2 }} spacing={2}>
-            <Typography variant='heading4'>Top sectors</Typography>
-            {fundData?.portfolio?.sector_allocation?.slice(0, viewMoreSector).map((sector, idx) => {
-              return (
-                <Stack key={idx} direction='row' justifyContent='space-between'>
-                  <Typography variant='body8' color='foundationColors.content.secondary'>
-                    {sector?.name}
-                  </Typography>
-                  <Typography variant='heading4' color='foundationColors.content.secondary'>
-                    {sector?.value}%
-                  </Typography>
-                </Stack>
-              );
-            })}
-            {fundData?.portfolio?.sector_allocation.length > viewMoreSector && (
-              <Button title='View all sectors' variant='link' onClick={handleMoreSector} />
-            )}
-          </Stack>
+              <Stack sx={{ pt: 3, pb: 2 }} spacing={2}>
+                <Typography variant='heading4'>Top sectors</Typography>
+                {fundData?.portfolio?.sector_allocation
+                  ?.slice(0, viewMoreSector)
+                  .map((sector, idx) => {
+                    return (
+                      <Stack key={idx} direction='row' justifyContent='space-between'>
+                        <Typography variant='body8' color='foundationColors.content.secondary'>
+                          {sector?.name}
+                        </Typography>
+                        <Typography variant='heading4' color='foundationColors.content.secondary'>
+                          {sector?.value}%
+                        </Typography>
+                      </Stack>
+                    );
+                  })}
+                {fundData?.portfolio?.sector_allocation.length > viewMoreSector && (
+                  <Button title='View all sectors' variant='link' onClick={handleMoreSector} />
+                )}
+              </Stack>
+            </>
+          )}
         </Stack>
       </CollapsibleSection>
     </Box>

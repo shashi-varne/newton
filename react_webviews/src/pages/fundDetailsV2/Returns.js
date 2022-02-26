@@ -15,6 +15,9 @@ import Separator from '../../designSystem/atoms/Separator';
 import { useSelector } from 'react-redux';
 import { getFundData } from 'businesslogic/dataStore/reducers/fundDetails';
 import isEmpty from 'lodash/isEmpty';
+import { isValidValue } from './helperFunctions';
+
+const secondaryColor = 'foundationColors.content.secondary';
 
 const Returns = () => {
   const [isReturn, setIsReturn] = useState(false);
@@ -43,7 +46,7 @@ const Returns = () => {
         disabled={isReturnAvailable}
         isOpen={isReturn}
         onClick={handleReturnSection}
-        label={`Returns ${isReturnAvailable && '(N/A)'}`}
+        label={`Returns ${isReturnAvailable ? '(N/A)' : ''}`}
       >
         <Stack direction='column'>
           <Box>
@@ -102,7 +105,7 @@ const RollingReturn = ({ returns = [] }) => {
   return (
     <Box sx={{ mt: 3, mb: 3 }}>
       <Stack>
-        <Typography variant='heading4' color='foundationColors.content.secondary'>
+        <Typography variant='heading4' color={secondaryColor}>
           Investment period
         </Typography>
         <Box sx={{ mt: 4, maxWidth: 'fit-content' }}>
@@ -116,17 +119,17 @@ const RollingReturn = ({ returns = [] }) => {
           </Timelines>
         </Box>
         <Stack sx={{ mt: 4, mb: 2 }} direction='column' spacing={3}>
-          <Typography variant='heading4' color='foundationColors.content.secondary'>
+          <Typography variant='heading4' color={secondaryColor}>
             Net asset value
           </Typography>
           {NET_ASSET_VALUE?.map((net_asset, idx) => {
             return (
               <Stack key={idx} direction='column' spacing={2}>
                 <Stack direction='row' justifyContent='space-between'>
-                  <Typography variant='body8' color='foundationColors.content.secondary'>
+                  <Typography variant='body8' color={secondaryColor}>
                     {net_asset?.name}
                   </Typography>
-                  <Typography variant='heading4' color='foundationColors.content.secondary'>
+                  <Typography variant='heading4' color={secondaryColor}>
                     {net_asset?.value > 0 ? `+ ${net_asset?.value}` : `- ${net_asset?.value}`}%
                   </Typography>
                 </Stack>
@@ -154,11 +157,11 @@ const ReturnView = ({ returns = [] }) => {
         {returns?.map((returnData, idx) => {
           return (
             <Stack key={idx} direction='row' justifyContent='space-between'>
-              <Typography variant='body8' color='foundationColors.content.secondary'>
+              <Typography variant='body8' color={secondaryColor}>
                 Last {returnData?.name}
               </Typography>
-              <Typography variant='heading4' color='foundationColors.content.secondary'>
-                {returnData?.value}%
+              <Typography variant='heading4' color={secondaryColor}>
+                {isValidValue(returnData?.value, `${returnData?.value}%`)}
               </Typography>
             </Stack>
           );
