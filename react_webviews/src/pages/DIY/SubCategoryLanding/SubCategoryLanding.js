@@ -54,13 +54,15 @@ import {
 } from "businesslogic/utils/diy/functions";
 import { SkeltonRect } from "../../../common/ui/Skelton";
 import ToastMessage from "../../../designSystem/atoms/ToastMessage";
+import { navigate as navigateFunc } from "../../../utils/functions";
 
 const screen = "diyFundList";
 // const category = "Equity";
 // const subcategory = "Market_Cap";
 // const subcategoryOption = "Large_Cap";
-const SubCategoryLanding = ({ onCartClick }) => {
+const SubCategoryLanding = (props) => {
   const dispatch = useDispatch();
+  const navigate = navigateFunc.bind(props);
   const diyTypeData = useSelector(getDiyTypeData);
   const diyCartData = useSelector(getDiyCart);
   const diyCartCount = useSelector(getDiyCartCount);
@@ -78,6 +80,12 @@ const SubCategoryLanding = ({ onCartClick }) => {
   const subcategoryOptionsData = useSelector((state) =>
     getDiySubcategoryOptions(state, category, subcategory)
   );
+
+  useEffect(() => {
+    if(isEmpty(subcategoryOptionsData)) {
+      navigate("/diy/landing");
+    }
+  }, [])
 
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const { isPageLoading } = useLoadingState(screen);
@@ -190,6 +198,10 @@ const SubCategoryLanding = ({ onCartClick }) => {
   const handleAddToCart = (fund) => () => {
     dispatch(setCartItem(fund));
   };
+
+  const onCartClick = () => {
+
+  }
 
   return (
     <Container
