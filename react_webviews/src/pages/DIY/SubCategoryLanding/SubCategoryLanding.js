@@ -317,6 +317,7 @@ const TabPanel = memo((props) => {
     diyCartData,
   } = props;
   const [NumOfItems, setNumOfItems] = useState(10);
+  const [showLoader, setShowLoader] = useState(false);
   const observer = useRef();
   const lastProductItem = useCallback((node) => {
     if (observer.current) observer.current.disconnect();
@@ -329,7 +330,12 @@ const TabPanel = memo((props) => {
     if (node) observer.current.observe(node);
   });
 
-  if (value === activeTab && isPageLoading) {
+  useEffect(() => {
+    const loader = value === activeTab && isPageLoading;
+    setShowLoader(loader);
+  }, [activeTab, isPageLoading])
+
+  if (showLoader) {
     return (
       <>
         <SkeltonRect className="scl-skelton" />
