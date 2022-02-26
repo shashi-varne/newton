@@ -24,6 +24,7 @@ const SingleCategory = ({ handleCardClick, isPageLoading, data = {} }) => {
                 elevation={1}
                 sx={{ height: "100%" }}
                 onClick={handleCardClick(data.key, el.key)}
+                key={idx}
               >
                 <CardHorizontal
                   key={idx}
