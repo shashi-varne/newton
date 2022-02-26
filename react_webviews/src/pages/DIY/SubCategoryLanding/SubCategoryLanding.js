@@ -55,11 +55,9 @@ import {
 import { SkeltonRect } from "../../../common/ui/Skelton";
 import ToastMessage from "../../../designSystem/atoms/ToastMessage";
 import { navigate as navigateFunc } from "../../../utils/functions";
+import { DIY_PATHNAME_MAPPER } from "../constants";
 
 const screen = "diyFundList";
-// const category = "Equity";
-// const subcategory = "Market_Cap";
-// const subcategoryOption = "Large_Cap";
 const SubCategoryLanding = (props) => {
   const dispatch = useDispatch();
   const navigate = navigateFunc.bind(props);
@@ -82,15 +80,22 @@ const SubCategoryLanding = (props) => {
   );
 
   useEffect(() => {
-    if(isEmpty(subcategoryOptionsData)) {
-      navigate("/diy/landing");
+    if (isEmpty(subcategoryOptionsData)) {
+      navigate(DIY_PATHNAME_MAPPER.diyInvestLanding);
     }
-  }, [])
+  }, []);
 
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const { isPageLoading } = useLoadingState(screen);
 
-  const [tabValue, setTabValue] = useState(0);
+  const getSubcategoryOptionIndex = () => {
+    const index = subcategoryOptionsData.findIndex(
+      (el) => el.key === subcategoryOption
+    );
+    return index === -1 ? 0 : index;
+  };
+
+  const [tabValue, setTabValue] = useState(getSubcategoryOptionIndex());
   const dataRef = useRef(0);
   const [selectedFilterValue, setSelectedFilterValue] = useState({
     [FILTER_TYPES.returns]: getReturnData(filterOptions.returnPeriod),
@@ -111,10 +116,13 @@ const SubCategoryLanding = (props) => {
     getMinimumInvestmentData(filterOptions.minInvestment)
   );
   const { productName } = useMemo(getConfig, []);
-  useEffect(() => {
+
+  const fetchDiyFundList = () => {
     if (!isEmpty(subcategoryOptionsData)) {
       const option = subcategoryOptionsData[tabValue].key;
-      dispatch(setDiyTypeData({ subcategoryOption: option }));
+      if (option !== subcategoryOption) {
+        dispatch(setDiyTypeData({ subcategoryOption: option }));
+      }
       if (isEmpty(categoryFunds[option])) {
         const payload = {
           Api,
@@ -126,6 +134,10 @@ const SubCategoryLanding = (props) => {
         dispatch(fetchFundList(payload));
       }
     }
+  };
+
+  useEffect(() => {
+    fetchDiyFundList();
   }, [tabValue]);
 
   useEffect(() => {
@@ -199,9 +211,7 @@ const SubCategoryLanding = (props) => {
     dispatch(setCartItem(fund));
   };
 
-  const onCartClick = () => {
-
-  }
+  const onCartClick = () => {};
 
   return (
     <Container
@@ -345,7 +355,7 @@ const TabPanel = memo((props) => {
   useEffect(() => {
     const loader = value === activeTab && isPageLoading;
     setShowLoader(loader);
-  }, [activeTab, isPageLoading])
+  }, [activeTab, isPageLoading]);
 
   if (showLoader) {
     return (
