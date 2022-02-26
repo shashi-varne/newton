@@ -28,7 +28,8 @@ import {
   getDiyTypeData,
   getTrendingFundsByCategory,
   getDiySubcategoryDataByViewType,
-  getDiyCartCount
+  getDiyCartCount,
+  fetchDiyCategories
 } from "businesslogic/dataStore/reducers/diy";
 import { DIY_PATHNAME_MAPPER } from '../common/constants';
 import { hideDiyCartFooter } from "businesslogic/utils/diy/functions";
@@ -41,7 +42,7 @@ const CommonCategoryLanding = (props) => {
   const dispatch = useDispatch();
   const productName = config.productName;
   let { diyType = "" } = props.match.params;
-
+  console.log("diytype is", diyType);
   const diyTypeData = useSelector(getDiyTypeData);
   const cartCount = useSelector(getDiyCartCount);
   const categoryData = useSelector((state) => getDiyCategoryData(state, diyType));
@@ -54,8 +55,8 @@ const CommonCategoryLanding = (props) => {
   const hideFooter = useMemo(hideDiyCartFooter(productName, cartCount), [productName, cartCount]);
   
   useEffect(() => {
-    if (isEmpty(trendingFunds) || isEmpty(categoryData)) {
-      dispatch(fetchDiyCategoriesAndTrendingFunds({ Api, screen }));
+    if (isEmpty(categoryData)) {
+      dispatch(fetchDiyCategories({ Api, screen }));
       dispatch(
         setDiyTypeData({
           category: diyType,
@@ -128,8 +129,8 @@ const CommonCategoryLanding = (props) => {
         <TrendingFunds
           trendingFunds={trendingFunds}
           handleFundDetails={handleFundDetails}
-          isPageLoading={isPageLoading}
           config={config}
+          diyType={diyType}
         />
         <TwoRowCarousel
           data={twoRowsImageCarouselData}

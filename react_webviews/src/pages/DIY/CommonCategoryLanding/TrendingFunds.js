@@ -1,6 +1,6 @@
 import { Skeleton, Stack } from '@mui/material';
 import { Box } from '@mui/system';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SwiperSlide } from 'swiper/react';
 import Separator from '../../../designSystem/atoms/Separator';
 import WrapperBox from '../../../designSystem/atoms/WrapperBox';
@@ -16,10 +16,22 @@ import isEmpty from 'lodash/isEmpty';
 import SectionHeader from './SectionHeader';
 import Icon from '../../../designSystem/atoms/Icon';
 import { withRouter } from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux';
+import { fetchTrendingFunds, getTrendingFundsByCategory } from 'businesslogic/dataStore/reducers/diy';
+import Api from 'utils/api';
+import useLoadingState from '../../../common/customHooks/useLoadingState';
+const screen = 'trendingFunds';
 
-const TrendingFunds = ({ config, trendingFunds, isPageLoading, handleFundDetails }) => {
+const TrendingFunds = ({ config, handleFundDetails, diyType }) => {
   const isMobileDevice = config.isMobileDevice;
-  // const trendingFunds = TF;
+  const trendingFunds = useSelector((state) => getTrendingFundsByCategory(state, diyType));
+  const dispatch = useDispatch();
+  const { isPageLoading } = useLoadingState(screen);
+  useEffect(() => {
+    if (isEmpty(trendingFunds)) {
+      dispatch(fetchTrendingFunds({ Api, screen }));
+    }
+  }, []);
 
   if (!isPageLoading && isEmpty(trendingFunds)) {
     return null;

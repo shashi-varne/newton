@@ -230,7 +230,7 @@ const SubCategoryLanding = (props) => {
           onTabChange: handleTabChange,
           labelName: "name",
         },
-        tabChilds: subcategoryOptionsData,
+        tabChilds: subcategoryOptionsData?.length > 1 ? subcategoryOptionsData : [],
       }}
       fixedFooter
       renderComponentAboveFooter={
