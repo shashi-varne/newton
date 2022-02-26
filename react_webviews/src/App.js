@@ -36,9 +36,6 @@ import { Provider } from 'react-redux';
 import store, { persistor } from './dataLayer/store/index.js';
 import { PersistGate } from 'redux-persist/integration/react';
 
-import { store } from './dataLayer/store';
-import { Provider } from 'react-redux';
-
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
   productionPrefix: 'f',
