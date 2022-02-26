@@ -22,16 +22,10 @@ import './CommonCategoryLanding.scss';
 import { navigate as navigateFunc } from '../../../utils/functions';
 
 import {
-  getAllCategories,
-  getTrendingFunds,
-  fetchTrendingFunds,
   getDiyCategoryData,
-  getDiySubcategories,
   fetchDiyCategoriesAndTrendingFunds,
   setDiyTypeData,
   getDiyTypeData,
-  getDiySubcategoryOptions,
-  getDiySubcategoryData,
   getTrendingFundsByCategory,
   getDiySubcategoryDataByViewType
 } from "businesslogic/dataStore/reducers/diy";
@@ -44,12 +38,11 @@ const CommonCategoryLanding = (props) => {
   const config = getConfig();
   const dispatch = useDispatch();
   const productName = config.productName;
-  let { diyType } = props.match.params;
-  diyType = diyType.toLowerCase();
+  let { diyType = "" } = props.match.params;
 
   const diyTypeData = useSelector(getDiyTypeData);
-  const categoryData = useSelector((state) => getDiyCategoryData(state, props.match.params.diyType));
-  const trendingFunds = useSelector((state) => getTrendingFundsByCategory(state, props.match.params.diyType));
+  const categoryData = useSelector((state) => getDiyCategoryData(state, diyType));
+  const trendingFunds = useSelector((state) => getTrendingFundsByCategory(state, diyType));
   const twoRowsImageCarouselData = useSelector((state) => getDiySubcategoryDataByViewType(state, diyTypeData.category, VIEW_TYPE_MAPPER.twoRowsImageCaurosel));
   const singleCategoryData = useSelector((state) => getDiySubcategoryDataByViewType(state, diyTypeData.category, VIEW_TYPE_MAPPER.singleCard));
   const horizontalCauroselData = useSelector((state) => getDiySubcategoryDataByViewType(state, diyTypeData.category, VIEW_TYPE_MAPPER.cardHorizontalImageCaurosel));
@@ -61,7 +54,7 @@ const CommonCategoryLanding = (props) => {
       dispatch(fetchDiyCategoriesAndTrendingFunds({ Api, screen }));
       dispatch(
         setDiyTypeData({
-          category: props.match.params.diyType,
+          category: diyType,
         })
       );
     }
@@ -97,7 +90,7 @@ const CommonCategoryLanding = (props) => {
       <div className='diy-category-landing-wrapper'>
         <LandingHeader variant='center' dataAid='equity'>
           <Lottie
-            animationData={require(`assets/${productName}/lottie/${diyType}.json`)}
+            animationData={require(`assets/${productName}/lottie/${diyType.toLowerCase()}.json`)}
             autoPlay
             loop
             className='diy-landing-lottie-anim'
