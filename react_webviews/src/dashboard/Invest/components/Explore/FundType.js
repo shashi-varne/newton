@@ -22,7 +22,7 @@ const TrendingCard = ({ cart, setCart, type, parentProps, ...props }) => {
     dataCopy.diy_type = type;
     storageService().setObject("diystore_fundInfo", dataCopy);
     navigate(
-      `/fund-details`,
+      `/diyv2/fund-details`,
       { searchParams: `${parentProps.location.search}&isins=${props.isin}&type=diy` }
     )
   }

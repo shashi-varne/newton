@@ -11,7 +11,7 @@ import NfoFundDetail from "./Invest/components/NFO/FundDetail";
 import NfoCheckout from "./Invest/components/Checkout/Checkout";
 import SipDates from "./SipDates/SipDates";
 import InvestJourney from "./InvestJourney";
-// import DIY from "./DIY";
+import DIY from "./DIY";
 
 import MyAccount from "./MyAccount";
 import Notification from "./Notification";
@@ -44,7 +44,7 @@ import SecondaryOtpVerification from "../login_and_registration/pages/SecondaryV
 import StatusCallback from "../kyc/Native/StatusCallback";
 import ProductMarketTypes from './ProductMarketTypes';
 import PrimaryMarketProducts from "./PrimaryMarketProducts/PrimaryMarketProducts";
-import DIY from "../pages/DIY";
+import DIYV2 from "../pages/DIY";
 
 const Home = (props) => {
   const config = getConfig(); 
@@ -67,6 +67,7 @@ const Home = (props) => {
         <Route path={`${url}landing`} component={Invest} />
         <Route path={`${url}mf`} component={SdkLanding} />
         <Route path={`${url}diy`} component={DIY} />
+        <Route path={`${url}diyv2`} component={DIYV2} />
         <Route path={`${url}invest-journey`} component={InvestJourney} />
         <Route path={`${url}nps`} component={NPS} />
         <Route path={`${url}passive-index-funds`} component={PassiveIndexFunds} />
