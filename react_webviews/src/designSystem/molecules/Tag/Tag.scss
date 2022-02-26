@@ -4,7 +4,6 @@
   align-items: center;
   width: fit-content;
   padding: 1px 8px;
-  cursor: default;
 
   &.tag-small-wrapper {
     padding: 0px;
@@ -12,8 +11,6 @@
 
   .tag-left-image {
     margin-right: 8px;
-    height: 16px;
-    width: 16px;
     &.tag-left-image-small {
       margin-right: 4px;
     }
@@ -31,5 +28,4 @@
   max-width: max-content;
   border-radius: 4px;
   padding: 1px 8px;
-  cursor: default;
 }
