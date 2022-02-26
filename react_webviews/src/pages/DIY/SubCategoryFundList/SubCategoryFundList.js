@@ -1,4 +1,4 @@
-import { Box, Stack } from "@mui/material";
+import { Box, Skeleton, Stack } from "@mui/material";
 import React, {
   memo,
   useCallback,
@@ -56,6 +56,7 @@ import { SkeltonRect } from "../../../common/ui/Skelton";
 import ToastMessage from "../../../designSystem/atoms/ToastMessage";
 import { navigate as navigateFunc } from "../../../utils/functions";
 import { DIY_PATHNAME_MAPPER } from "../constants";
+import Separator from "../../../designSystem/atoms/Separator";
 
 const screen = "diyFundList";
 const SubCategoryLanding = (props) => {
@@ -273,12 +274,8 @@ const SubCategoryLanding = (props) => {
             return (
               <SwiperSlide key={idx}>
                 <TabPanel
-                  returnPeriod={
-                    selectedFilterValue[FILTER_TYPES.returns]?.value
-                  }
-                  returnLabel={
-                    selectedFilterValue[FILTER_TYPES.returns]?.returnLabel
-                  }
+                  returnPeriod={selectedFilterValue[FILTER_TYPES.returns]?.value}
+                  returnLabel={selectedFilterValue[FILTER_TYPES.returns]?.returnLabel}
                   sortFundsBy={selectedFilterValue[FILTER_TYPES.sort]?.value}
                   sortingOrder={selectedFilterValue[FILTER_TYPES.sort]?.order}
                   key={idx}
@@ -358,19 +355,6 @@ const TabPanel = memo((props) => {
     setShowLoader(loader);
   }, [activeTab, isPageLoading]);
 
-  if (showLoader) {
-    return (
-      <>
-        <SkeltonRect className="scl-skelton" />
-        <SkeltonRect className="scl-skelton" />
-        <SkeltonRect className="scl-skelton" />
-        <SkeltonRect className="scl-skelton" />
-        <SkeltonRect className="scl-skelton" />
-        <SkeltonRect className="scl-skelton" />
-      </>
-    );
-  }
-
   return (
     <div
     // role='tabpanel'
@@ -380,92 +364,105 @@ const TabPanel = memo((props) => {
     // {...other}
     >
       {/* {value === index && ( */}
-      <Box sx={{ backgroundColor: "foundationColors.supporting.white" }}>
+      <Box sx={{ backgroundColor: 'foundationColors.supporting.white' }}>
         <Stack
-          justifyContent="space-between"
-          direction="row"
-          className="sub-category-filter-info"
-          backgroundColor="foundationColors.supporting.grey"
-          sx={{ mb: "16px", padding: "8px 16px" }}
+          justifyContent='space-between'
+          direction='row'
+          className='sub-category-filter-info'
+          backgroundColor='foundationColors.supporting.grey'
+          sx={{ mb: '16px', padding: '8px 16px' }}
         >
           <Typography
-            variant="body5"
-            color="foundationColors.content.secondary"
+            variant='body5'
+            color='foundationColors.content.secondary'
+            sx={{ display: 'flex', alignItems: 'center' }}
           >
-            {data.length} funds
+            {showLoader ? <Skeleton type='text' width='12px' /> : data.length}
+            <Typography component='span' variant='inherit' color='inherit' sx={{ ml: 0.5 }}>
+              funds
+            </Typography>
           </Typography>
           <Typography
-            variant="body5"
-            color="foundationColors.content.secondary"
+            variant='body5'
+            color='foundationColors.content.secondary'
+            sx={{ display: 'flex', alignItems: 'center' }}
           >
-            {returnLabel} returns
+            {showLoader ? <Skeleton type='text' width='12px' /> : returnLabel}
+            <Typography component='span' variant='inherit' color='inherit' sx={{ ml: 0.5 }}>
+              returns
+            </Typography>
           </Typography>
         </Stack>
-        <Typography component="div" sx={{ p: "0px 16px" }}>
-          {data?.slice(0, NumOfItems)?.map((fund, idx) => {
-            const returnValue = fund[returnPeriod];
-            const returnData = !returnValue
-              ? "N/A"
-              : fund[returnPeriod] > 0
-              ? `+${fund[returnPeriod]}%`
-              : `${fund[returnPeriod]}%`;
-            const returnColor = !returnValue
-              ? "foundationColors.content.secondary"
-              : fund[returnPeriod] > 0
-              ? "foundationColors.secondary.profitGreen.300"
-              : "foundationColors.secondary.lossRed.300";
-            const setRef = NumOfItems - 4 === idx + 1;
-            let refData = {};
-            if (setRef) {
-              refData.ref = lastProductItem;
-            }
-            const isFundAddedToCart = checkFundPresentInCart(diyCartData, fund);
-            return (
-              <div key={idx} {...refData}>
-                <ProductItem
-                  // sx={{ mb: '16px' }}
-                  key={idx}
-                  imgSrc={fund?.amc_logo_big}
-                  showSeparator
-                  // onClick={handleClick}
-                >
-                  <ProductItem.LeftSection>
-                    <ProductItem.Title>{fund?.legal_name}</ProductItem.Title>
-                    <ProductItem.LeftBottomSection>
-                      {fund?.is_fisdom_recommended && (
-                        <Tag
-                          label="Recommendation"
-                          labelColor="foundationColors.content.secondary"
-                          labelBackgroundColor="foundationColors.secondary.blue.200"
-                        />
-                      )}
-                      {fund?.morning_star_rating && (
-                        <Tag
-                          morningStarVariant="small"
-                          label={fund?.morning_star_rating}
-                          labelColor="foundationColors.content.secondary"
-                        />
-                      )}
-                    </ProductItem.LeftBottomSection>
-                  </ProductItem.LeftSection>
-                  <ProductItem.RightSection spacing={2}>
-                    <ProductItem.Description
-                      title={returnData}
-                      titleColor={returnColor}
-                    />
-                    <Icon
-                      size="32px"
-                      src={require(`assets/${
-                        isFundAddedToCart ? `minus` : `add_icon`
-                      }.svg`)}
-                      onClick={handleAddToCart(fund)}
-                    />
-                  </ProductItem.RightSection>
-                </ProductItem>
-              </div>
-            );
-          })}
-        </Typography>
+        {showLoader ? (
+          <Stack direction='column' spacing={2} sx={{ px: 2, mb: 2 }}>
+            <FundItemSkeletonLoader />
+            <FundItemSkeletonLoader />
+            <FundItemSkeletonLoader />
+            <FundItemSkeletonLoader />
+            <FundItemSkeletonLoader />
+          </Stack>
+        ) : (
+          <Typography component='div' sx={{ p: '0px 16px' }}>
+            {data?.slice(0, NumOfItems)?.map((fund, idx) => {
+              const returnValue = fund[returnPeriod];
+              const returnData = !returnValue
+                ? 'N/A'
+                : fund[returnPeriod] > 0
+                ? `+${fund[returnPeriod]}%`
+                : `${fund[returnPeriod]}%`;
+              const returnColor = !returnValue
+                ? 'foundationColors.content.secondary'
+                : fund[returnPeriod] > 0
+                ? 'foundationColors.secondary.profitGreen.300'
+                : 'foundationColors.secondary.lossRed.300';
+              const setRef = NumOfItems - 4 === idx + 1;
+              let refData = {};
+              if (setRef) {
+                refData.ref = lastProductItem;
+              }
+              const isFundAddedToCart = checkFundPresentInCart(diyCartData, fund);
+              return (
+                <div key={idx} {...refData}>
+                  <ProductItem
+                    // sx={{ mb: '16px' }}
+                    key={idx}
+                    imgSrc={fund?.amc_logo_big}
+                    showSeparator
+                    // onClick={handleClick}
+                  >
+                    <ProductItem.LeftSection>
+                      <ProductItem.Title>{fund?.legal_name}</ProductItem.Title>
+                      <ProductItem.LeftBottomSection>
+                        {fund?.is_fisdom_recommended && (
+                          <Tag
+                            label='Recommendation'
+                            labelColor='foundationColors.content.secondary'
+                            labelBackgroundColor='foundationColors.secondary.blue.200'
+                          />
+                        )}
+                        {fund?.morning_star_rating && (
+                          <Tag
+                            morningStarVariant='small'
+                            label={fund?.morning_star_rating}
+                            labelColor='foundationColors.content.secondary'
+                          />
+                        )}
+                      </ProductItem.LeftBottomSection>
+                    </ProductItem.LeftSection>
+                    <ProductItem.RightSection spacing={2}>
+                      <ProductItem.Description title={returnData} titleColor={returnColor} />
+                      <Icon
+                        size='32px'
+                        src={require(`assets/${isFundAddedToCart ? `minus` : `add_icon`}.svg`)}
+                        onClick={handleAddToCart(fund)}
+                      />
+                    </ProductItem.RightSection>
+                  </ProductItem>
+                </div>
+              );
+            })}
+          </Typography>
+        )}
       </Box>
       {/* )} */}
     </div>
@@ -483,12 +480,12 @@ const CustomFooter = ({
   filterCount,
 }) => {
   return (
-    <Stack spacing={2} className="sub-category-custom-footer">
-      {cartCount > 0 && productName === "fisdom" && (
-        <div className="sc-confirmation-btn-wrapper">
+    <Stack spacing={2} className='sub-category-custom-footer'>
+      {cartCount > 0 && productName === 'fisdom' && (
+        <div className='sc-confirmation-btn-wrapper'>
           <ConfirmAction
             title={`${cartCount} items in the cart`}
-            buttonTitle="View Cart"
+            buttonTitle='View Cart'
             badgeContent={cartCount}
             onClick={onCartClick}
           />
@@ -501,6 +498,30 @@ const CustomFooter = ({
         handleFilterClick={handleFilterClick}
         count={filterCount}
       />
+    </Stack>
+  );
+};
+
+const FundItemSkeletonLoader = () => {
+  return (
+    <Stack direction='column'>
+      <Stack direction='row' justifyContent='space-between'>
+        <Stack flex={1} direction='row' spacing={1} alignItems='end' justifyContent='flex-start'>
+          <Icon size='40px' />
+          <Stack direction='column' spacing={1} flex={1}>
+            <Skeleton type='text' width='70%' />
+            <Stack direction='row' spacing={1} alignItems='center' justifyContent='flex-start'>
+              <Skeleton type='text' width='100px' />
+              <Skeleton type='text' width='100px' />
+            </Stack>
+          </Stack>
+        </Stack>
+        <Stack spacing={2} direction='column'>
+          <Skeleton type='text' width='50px' />
+          <Icon size='32px' />
+        </Stack>
+      </Stack>
+      <Separator marginLeft='46px' marginTop='8px' />
     </Stack>
   );
 };
