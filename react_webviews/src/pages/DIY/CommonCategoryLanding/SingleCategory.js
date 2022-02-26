@@ -20,14 +20,19 @@ const SingleCategory = ({ handleCardClick, isPageLoading, data = {} }) => {
         <div className="diy-c-card-horz-wrapper">
           {data?.options?.map((el, idx) => {
             return (
-              <CardHorizontal
+              <WrapperBox
+                elevation={1}
+                sx={{ height: "100%" }}
                 onClick={handleCardClick(data.key, el.key)}
-                key={idx}
-                title={el?.name}
-                subtitle={el?.trivia}
-                dataAid={el?.key}
-                className="pointer"
-              />
+              >
+                <CardHorizontal
+                  key={idx}
+                  title={el?.name}
+                  subtitle={el?.trivia}
+                  dataAid={el?.key}
+                  className="pointer"
+                />
+              </WrapperBox>
             );
           })}
         </div>
