@@ -2,33 +2,45 @@ import React, { useMemo } from 'react';
 import CardVertical from '../../../designSystem/molecules/CardVertical';
 import WrapperBox from '../../../designSystem/atoms/WrapperBox';
 import Container from '../../../designSystem/organisms/Container';
-import isFunction from 'lodash/isFunction';
 import isArray from 'lodash/isArray';
 import { getConfig } from '../../../utils/functions';
 import PropTypes from 'prop-types';
-import { useLocation } from 'react-router-dom';
 
+import {
+  setDiyTypeData,
+  getDiyTypeData,
+  getDiySubcategoryData,
+  getDiyCartCount
+} from "businesslogic/dataStore/reducers/diy";
+import { useDispatch, useSelector } from "react-redux";
+import { navigate as navigateFunc } from "../../../utils/functions";
 import './SubCategoryList.scss';
+import { DIY_PATHNAME_MAPPER } from '../constants';
 
-const SubCategoryList = () => {
-  let location = useLocation();
-  const { headerTitle, categoryList } = location.state;
-  const cartCount = 1;
-  const onCartClick = () => {};
-  const onCardClick = () => {};
+const SubCategoryList = (props) => {
+  const navigate = navigateFunc.bind(props);
+  const dispatch = useDispatch();
+  const diyTypeData = useSelector(getDiyTypeData);
+  const cartCount = useSelector(getDiyCartCount);
+  const subcategoryData = useSelector((state) => getDiySubcategoryData(state, diyTypeData.category, diyTypeData.subcategory));
   const { productName } = useMemo(getConfig, []);
   const hideFooter = productName === 'finity' || cartCount <= 0;
+  
+  const onCartClick = () => {};
 
-  const handleCardClick = (item) => () => {
-    console.log("item is", item);
-    if (isFunction(onCardClick)) {
-      onCardClick(item);
-    }
+  const handleCardClick = (subcategoryOption) => () => {
+    dispatch(
+      setDiyTypeData({
+        subcategoryOption,
+      })
+    );
+    navigate(DIY_PATHNAME_MAPPER.subcategoryFundsList);
   };
+
   return (
     <Container
       headerProps={{
-        headerTitle,
+        headerTitle: subcategoryData.name,
       }}
       className='diy-sub-category-cv-wrapper'
       footer={{
@@ -44,20 +56,20 @@ const SubCategoryList = () => {
       noFooter={hideFooter}
     >
       <div className='diy-sc-cv-lists'>
-        {isArray(categoryList) &&
-          categoryList?.map((category, idx) => {
+        {isArray(subcategoryData.options) &&
+          subcategoryData.options?.map((data, idx) => {
             return (
               <WrapperBox
                 elevation={1}
                 className='diy-sc-cv-item'
                 key={idx}
-                onClick={handleCardClick(category)}
+                onClick={handleCardClick(data.key)}
               >
                 <CardVertical
                   imgSrc={require('assets/large_cap.svg')}
-                  title={category?.name}
-                  subtitle={category?.trivia}
-                  dataAid={category?.key}
+                  title={data?.name}
+                  subtitle={data?.trivia}
+                  dataAid={data?.key}
                 />
               </WrapperBox>
             );
