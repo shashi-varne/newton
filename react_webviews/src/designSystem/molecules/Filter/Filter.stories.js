@@ -8,7 +8,7 @@ export default {
     imgSrc: {
       defaultValue: require(`assets/cub.png`),
     },
-    count: {
+    filterCount: {
       defaultValue: 1,
     },
     title: {

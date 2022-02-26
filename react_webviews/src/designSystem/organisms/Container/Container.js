@@ -58,27 +58,31 @@ const Container = ({
       <main className="container-content-wrapper">
         {isPageLoading ? <UiSkelton type={skeltonType} /> : children}
       </main>
-      <div
-        ref={footerWrapperRef}
-        className={`container-footer-wrapper ${fixedFooter && 'container-fixed-footer'}`}
-      >
-        {renderComponentAboveFooter}
-        <div className='container-footer-child-wrapper'>
-          {!isEmpty(footer) && !noFooter && (
-            <Box
-              sx={footerElevation ? footerSxStyle : {}}
-              component='footer'
-              className='container-footer-cta'
-            >
-              <Footer
-                wrapperClassName='footer-wrapper'
-                stackWrapperClassName='footer-stack-wrapper'
-                {...footer}
-              />
-            </Box>
-          )}
+      {!isPageLoading && (
+        <div
+          ref={footerWrapperRef}
+          className={`container-footer-wrapper ${
+            fixedFooter && "container-fixed-footer"
+          }`}
+        >
+          {renderComponentAboveFooter}
+          <div className="container-footer-child-wrapper">
+            {!isEmpty(footer) && !noFooter && (
+              <Box
+                sx={footerElevation ? footerSxStyle : {}}
+                component="footer"
+                className="container-footer-cta"
+              >
+                <Footer
+                  wrapperClassName="footer-wrapper"
+                  stackWrapperClassName="footer-stack-wrapper"
+                  {...footer}
+                />
+              </Box>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </Box>
   );
 };
