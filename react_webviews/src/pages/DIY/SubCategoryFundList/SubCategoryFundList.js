@@ -55,7 +55,7 @@ import {
 } from "businesslogic/utils/diy/functions";
 import ToastMessage from "../../../designSystem/atoms/ToastMessage";
 import { navigate as navigateFunc } from "../../../utils/functions";
-import { DIY_PATHNAME_MAPPER } from "../constants";
+import { DIY_PATHNAME_MAPPER } from "../common/constants";
 import Separator from "../../../designSystem/atoms/Separator";
 
 const screen = "diyFundList";

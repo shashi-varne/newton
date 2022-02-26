@@ -30,7 +30,7 @@ import {
   getDiySubcategoryDataByViewType,
   getDiyCartCount
 } from "businesslogic/dataStore/reducers/diy";
-import { DIY_PATHNAME_MAPPER } from '../constants';
+import { DIY_PATHNAME_MAPPER } from '../common/constants';
 import { hideDiyCartFooter } from "businesslogic/utils/diy/functions";
 import useLoadingState from '../../../common/customHooks/useLoadingState';
 

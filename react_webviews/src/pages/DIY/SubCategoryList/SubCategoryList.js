@@ -15,7 +15,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { navigate as navigateFunc } from "../../../utils/functions";
 import './SubCategoryList.scss';
-import { DIY_PATHNAME_MAPPER } from '../constants';
+import { DIY_PATHNAME_MAPPER } from '../common/constants';
 import { hideDiyCartFooter } from "businesslogic/utils/diy/functions";
 
 const SubCategoryList = (props) => {
