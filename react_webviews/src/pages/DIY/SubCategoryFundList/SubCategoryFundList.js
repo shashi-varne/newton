@@ -267,6 +267,7 @@ const SubCategoryLanding = (props) => {
           slidesPerView={1}
           onSwiper={setSwiper}
           onSlideChange={handleSlideChange}
+          initialSlide={tabValue}
         >
           {subcategoryOptionsData?.map((el, idx) => {
             return (
