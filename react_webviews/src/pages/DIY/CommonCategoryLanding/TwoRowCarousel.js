@@ -50,6 +50,7 @@ const TwoRowCarousel = ({ isPageLoading, handleCardClick, seeAllCategories, data
                         title={el?.name}
                         subtitle={el?.trivia}
                         dataAid={el?.key}
+                        className="pointer"
                       />
                     </WrapperBox>
                   </SwiperSlide>

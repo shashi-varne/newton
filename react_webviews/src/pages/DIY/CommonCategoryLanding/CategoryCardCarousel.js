@@ -58,6 +58,7 @@ const CategoryCardCarousel = ({ handleCardClick, isPageLoading, data = {}, seeAl
                   title={el?.name}
                   variant='large'
                   onClick={handleCardClick(data.key, el.key)}
+                  className="pointer"
                 />
               </SwiperSlide>
             ))}

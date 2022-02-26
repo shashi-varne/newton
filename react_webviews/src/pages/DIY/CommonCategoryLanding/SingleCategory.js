@@ -17,10 +17,17 @@ const SingleCategory = ({ handleCardClick, isPageLoading, data = {} }) => {
       {isPageLoading ? (
         <SingleCategorySkeleton />
       ) : (
-        <div className='diy-c-card-horz-wrapper'>
+        <div className="diy-c-card-horz-wrapper">
           {data?.options?.map((el, idx) => {
             return (
-              <CardHorizontal onClick={handleCardClick(data.key, el.key)} key={idx} title={el?.name} subtitle={el?.trivia} dataAid={el?.key} />
+              <CardHorizontal
+                onClick={handleCardClick(data.key, el.key)}
+                key={idx}
+                title={el?.name}
+                subtitle={el?.trivia}
+                dataAid={el?.key}
+                className="pointer"
+              />
             );
           })}
         </div>

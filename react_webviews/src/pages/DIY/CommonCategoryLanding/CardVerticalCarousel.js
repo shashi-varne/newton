@@ -60,6 +60,7 @@ const CardVerticalCarousel = ({ handleCardClick, isPageLoading, data = {} }) => 
                       title={el?.name}
                       subtitle={el?.trivia}
                       dataAid={idx}
+                      className="pointer"
                     />
                   </WrapperBox>
                 </SwiperSlide>
