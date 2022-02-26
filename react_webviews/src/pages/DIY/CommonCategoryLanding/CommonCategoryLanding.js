@@ -42,7 +42,6 @@ const CommonCategoryLanding = (props) => {
   const dispatch = useDispatch();
   const productName = config.productName;
   let { diyType = "" } = props.match.params;
-  console.log("diytype is", diyType);
   const diyTypeData = useSelector(getDiyTypeData);
   const cartCount = useSelector(getDiyCartCount);
   const categoryData = useSelector((state) => getDiyCategoryData(state, diyType));
@@ -57,12 +56,12 @@ const CommonCategoryLanding = (props) => {
   useEffect(() => {
     if (isEmpty(categoryData)) {
       dispatch(fetchDiyCategories({ Api, screen }));
+    }
       dispatch(
         setDiyTypeData({
           category: diyType,
         })
       );
-    }
   }, []);
 
   const handleCardClick = (subcategory, subcategoryOption) => () => {
