@@ -61,7 +61,7 @@ const FundDetailsV2 = () => {
         hideButton1: cartCount > 0,
         hideConfirmAction: cartCount <= 0,
       }}
-      isPageLoading={isPageLoading || isEmpty(fundData)}
+      isPageLoading={isPageLoading}
       renderComponentAboveFooter={
         <CustomJumpTo
           fundStatRef={fundStatRef}
