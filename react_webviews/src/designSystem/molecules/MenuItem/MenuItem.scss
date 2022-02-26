@@ -1,0 +1,29 @@
+.menu-item-wrapper {
+  padding: 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+
+  .menu-item-left-img {
+    margin-right: 24px;
+  }
+
+  .menu-item-right-img {
+    margin-left: 24px;
+  }
+
+  .mi-right-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1 1 100%;
+  }
+
+  .mi-text-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+}
