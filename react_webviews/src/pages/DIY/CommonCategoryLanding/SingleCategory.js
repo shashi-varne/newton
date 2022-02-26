@@ -6,7 +6,6 @@ import WrapperBox from '../../../designSystem/atoms/WrapperBox';
 import CardHorizontal from '../../../designSystem/molecules/CardHorizontal';
 import SectionHeader from './SectionHeader';
 import isEmpty from 'lodash/isEmpty';
-import { withRouter } from 'react-router-dom';
 
 const SingleCategory = ({ handleCardClick, isPageLoading, data = {} }) => {
   if (!isPageLoading && isEmpty(data)) {
@@ -30,7 +29,7 @@ const SingleCategory = ({ handleCardClick, isPageLoading, data = {} }) => {
   );
 };
 
-export default withRouter(SingleCategory);
+export default SingleCategory;
 
 const SingleCategorySkeleton = () => {
   return (
