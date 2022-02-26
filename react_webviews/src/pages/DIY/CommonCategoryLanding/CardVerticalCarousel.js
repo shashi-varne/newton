@@ -1,32 +1,15 @@
 import { Skeleton, Stack } from '@mui/material';
 import React from 'react';
-import { useSelector } from 'react-redux';
 import CustomSwiper from '../../../designSystem/molecules/CustomSwiper';
 import { SwiperSlide } from 'swiper/react';
 import WrapperBox from '../../../designSystem/atoms/WrapperBox';
 import CardVertical from '../../../designSystem/molecules/CardVertical';
 import SectionHeader from './SectionHeader';
-import { getPageLoading } from 'businesslogic/dataStore/reducers/loader';
 import Icon from '../../../designSystem/atoms/Icon';
 import isEmpty from 'lodash/isEmpty';
 
-const screen = 'diyLanding';
-const CardVerticalCarousel = ({ diyType }) => {
-  const categoriesNew = useSelector((state) => state?.diy?.categories);
-  const isPageLoading = useSelector((state) => getPageLoading(state, screen));
-
-  const categoryOptions = categoriesNew?.find((el) => {
-    return el.category.toLowerCase() === diyType;
-  });
-  const cardHorizontalImageCaurosel = categoryOptions?.sub_categories?.find(
-    (el) => el.viewType === 'cardHorizontalImageCaurosel'
-  );
-
-  const handleCardClick = (item) => () => {
-    console.log('item is', item);
-  };
-
-  if (!isPageLoading && isEmpty(cardHorizontalImageCaurosel)) {
+const CardVerticalCarousel = ({ handleCardClick, isPageLoading, data = {} }) => {
+  if (!isPageLoading && isEmpty(data)) {
     return null;
   }
   return (
@@ -34,7 +17,7 @@ const CardVerticalCarousel = ({ diyType }) => {
       <SectionHeader
         isPageLoading={isPageLoading}
         sx={{ pl: 2, pr: 2 }}
-        title={cardHorizontalImageCaurosel?.name}
+        title={data?.name}
       />
       <CustomSwiper
         spaceBetween={8}
@@ -64,18 +47,18 @@ const CardVerticalCarousel = ({ diyType }) => {
                 </SwiperSlide>
               );
             })
-          : cardHorizontalImageCaurosel?.options?.map((investStyle, idx) => {
+          : data?.options?.map((el, idx) => {
               return (
                 <SwiperSlide key={idx} style={{ padding: '1px 0px' }}>
                   <WrapperBox
                     elevation={1}
                     sx={{ height: '100%' }}
-                    onClick={handleCardClick(investStyle)}
+                    onClick={handleCardClick(data.key, el.key)}
                   >
                     <CardVertical
                       imgSrc={require('assets/investment_contra.svg')}
-                      title={investStyle?.name}
-                      subtitle={investStyle?.trivia}
+                      title={el?.name}
+                      subtitle={el?.trivia}
                       dataAid={idx}
                     />
                   </WrapperBox>

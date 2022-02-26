@@ -1,7 +1,6 @@
 import { Skeleton, Stack } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { SwiperSlide } from 'swiper/react';
 import Separator from '../../../designSystem/atoms/Separator';
 import WrapperBox from '../../../designSystem/atoms/WrapperBox';
@@ -15,29 +14,14 @@ import {
 import { formatAmountInr } from '../../../utils/validators';
 import isEmpty from 'lodash/isEmpty';
 import SectionHeader from './SectionHeader';
-import { getPageLoading } from 'businesslogic/dataStore/reducers/loader';
 import Icon from '../../../designSystem/atoms/Icon';
-import { useLocation, useParams, useRouteMatch, withRouter } from 'react-router-dom';
-import { navigate as navigateFunc } from '../../../utils/functions';
+import { withRouter } from 'react-router-dom';
 
-const screen = 'diyLanding';
-const TrendingFunds = ({ diyType, config, ...restProps }) => {
+const TrendingFunds = ({ config, trendingFunds, isPageLoading, handleFundDetails }) => {
   const isMobileDevice = config.isMobileDevice;
-  // const trendingFunds = useSelector((state) => state?.diy?.trendingFunds);
-  const isPageLoading = useSelector((state) => getPageLoading(state, screen));
-  const navigate = navigateFunc.bind(restProps);
+  // const trendingFunds = TF;
 
-  const location = useLocation();
-
-  const handleFundDetails = (fundData) => () => {
-    navigate('fund-details', {
-      searchParams: `${location?.search}&isins=${fundData?.isin}`,
-    });
-  };
-
-  const trendingFunds = TF;
-
-  if (!isPageLoading && isEmpty(trendingFunds[diyType])) {
+  if (!isPageLoading && isEmpty(trendingFunds)) {
     return null;
   }
 
@@ -61,7 +45,7 @@ const TrendingFunds = ({ diyType, config, ...restProps }) => {
                 </SwiperSlide>
               );
             })
-          : trendingFunds[diyType]?.map((trendingFund, idx) => (
+          : trendingFunds?.map((trendingFund, idx) => (
               <SwiperSlide key={idx} style={{ padding: '1px 0px' }}>
                 <WrapperBox elevation={1} onClick={handleFundDetails(trendingFund)}>
                   <FeatureCard

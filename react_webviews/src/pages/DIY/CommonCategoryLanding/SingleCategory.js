@@ -1,41 +1,27 @@
 import { Skeleton, Stack } from '@mui/material';
-import { getPageLoading } from 'businesslogic/dataStore/reducers/loader';
 import React from 'react';
-import { useSelector } from 'react-redux';
 import Icon from '../../../designSystem/atoms/Icon';
 import Typography from '../../../designSystem/atoms/Typography';
 import WrapperBox from '../../../designSystem/atoms/WrapperBox';
 import CardHorizontal from '../../../designSystem/molecules/CardHorizontal';
 import SectionHeader from './SectionHeader';
 import isEmpty from 'lodash/isEmpty';
+import { withRouter } from 'react-router-dom';
 
-const screen = 'diyLanding';
-const SingleCategory = ({ diyType }) => {
-  const categoriesNew = useSelector((state) => state?.diy?.categories);
-  const isPageLoading = useSelector((state) => getPageLoading(state, screen));
-
-  const categoryOptions = categoriesNew?.find((el) => {
-    return el.category.toLowerCase() === diyType;
-  });
-  const singleCard = categoryOptions?.sub_categories?.find((el) => el.viewType === 'singleCard');
-
-  const handleCardClick = (item) => () => {
-    console.log("item is",item);
-  }
-
-  if (!isPageLoading && isEmpty(singleCard)) {
+const SingleCategory = ({ handleCardClick, isPageLoading, data = {} }) => {
+  if (!isPageLoading && isEmpty(data)) {
     return null;
   }
   return (
     <Stack direction='column' spacing={2} className='diy-c-tax-saving-wrapper'>
-      <SectionHeader isPageLoading={isPageLoading} title={singleCard?.name} />
+      <SectionHeader isPageLoading={isPageLoading} title={data?.name} />
       {isPageLoading ? (
         <SingleCategorySkeleton />
       ) : (
         <div className='diy-c-card-horz-wrapper'>
-          {singleCard?.options?.map((el, idx) => {
+          {data?.options?.map((el, idx) => {
             return (
-              <CardHorizontal onClick={handleCardClick(el)} key={idx} title={el?.name} subtitle={el?.trivia} dataAid={el?.key} />
+              <CardHorizontal onClick={handleCardClick(data.key, el.key)} key={idx} title={el?.name} subtitle={el?.trivia} dataAid={el?.key} />
             );
           })}
         </div>
@@ -44,7 +30,7 @@ const SingleCategory = ({ diyType }) => {
   );
 };
 
-export default SingleCategory;
+export default withRouter(SingleCategory);
 
 const SingleCategorySkeleton = () => {
   return (
