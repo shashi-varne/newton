@@ -1,4 +1,4 @@
-import { Box, Stack } from "@mui/material";
+import { Box, Skeleton, Stack } from "@mui/material";
 import React, {
   memo,
   useCallback,
@@ -18,7 +18,7 @@ import get from "lodash/get";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
 
-import "./SubCategoryLanding.scss";
+import "./SubCategoryFundList.scss";
 import ConfirmAction from "../../../designSystem/molecules/ConfirmAction";
 import FilterNavigation from "../../../featureComponent/DIY/Filters/FilterNavigation";
 import Footer from "../../../designSystem/molecules/Footer";
@@ -51,15 +51,15 @@ import {
   getReturnData,
   getSortData,
   checkFundPresentInCart,
+  hideDiyCartFooter,
+  hideDiyCartButton
 } from "businesslogic/utils/diy/functions";
-import { SkeltonRect } from "../../../common/ui/Skelton";
 import ToastMessage from "../../../designSystem/atoms/ToastMessage";
 import { navigate as navigateFunc } from "../../../utils/functions";
+import { DIY_PATHNAME_MAPPER } from "../common/constants";
+import Separator from "../../../designSystem/atoms/Separator";
 
 const screen = "diyFundList";
-// const category = "Equity";
-// const subcategory = "Market_Cap";
-// const subcategoryOption = "Large_Cap";
 const SubCategoryLanding = (props) => {
   const dispatch = useDispatch();
   const navigate = navigateFunc.bind(props);
@@ -80,17 +80,27 @@ const SubCategoryLanding = (props) => {
   const subcategoryOptionsData = useSelector((state) =>
     getDiySubcategoryOptions(state, category, subcategory)
   );
+  const { productName } = useMemo(getConfig, []);
+  const hideCartFooter = useMemo(hideDiyCartFooter(productName, diyCartCount), [productName, diyCartCount]);
+  const hideCartButton = useMemo(hideDiyCartButton(productName), [productName]);
 
   useEffect(() => {
-    if(isEmpty(subcategoryOptionsData)) {
-      navigate("/diy/landing");
+    if (isEmpty(subcategoryOptionsData)) {
+      navigate(DIY_PATHNAME_MAPPER.diyInvestLanding);
     }
-  }, [])
+  }, []);
 
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const { isPageLoading } = useLoadingState(screen);
 
-  const [tabValue, setTabValue] = useState(0);
+  const getSubcategoryOptionIndex = () => {
+    const index = subcategoryOptionsData.findIndex(
+      (el) => el.key === subcategoryOption
+    );
+    return index === -1 ? 0 : index;
+  };
+
+  const [tabValue, setTabValue] = useState(getSubcategoryOptionIndex());
   const dataRef = useRef(0);
   const [selectedFilterValue, setSelectedFilterValue] = useState({
     [FILTER_TYPES.returns]: getReturnData(filterOptions.returnPeriod),
@@ -110,11 +120,13 @@ const SubCategoryLanding = (props) => {
   const [selectedMinInvestment, setSelectedMinInvestment] = useState(
     getMinimumInvestmentData(filterOptions.minInvestment)
   );
-  const { productName } = useMemo(getConfig, []);
-  useEffect(() => {
+
+  const fetchDiyFundList = () => {
     if (!isEmpty(subcategoryOptionsData)) {
       const option = subcategoryOptionsData[tabValue].key;
-      dispatch(setDiyTypeData({ subcategoryOption: option }));
+      if (option !== subcategoryOption) {
+        dispatch(setDiyTypeData({ subcategoryOption: option }));
+      }
       if (isEmpty(categoryFunds[option])) {
         const payload = {
           Api,
@@ -126,6 +138,10 @@ const SubCategoryLanding = (props) => {
         dispatch(fetchFundList(payload));
       }
     }
+  };
+
+  useEffect(() => {
+    fetchDiyFundList();
   }, [tabValue]);
 
   useEffect(() => {
@@ -199,9 +215,7 @@ const SubCategoryLanding = (props) => {
     dispatch(setCartItem(fund));
   };
 
-  const onCartClick = () => {
-
-  }
+  const onCartClick = () => {};
 
   return (
     <Container
@@ -222,11 +236,11 @@ const SubCategoryLanding = (props) => {
           handleSortClick={handleFilterClick(FILTER_TYPES.sort)}
           handleReturnClick={handleFilterClick(FILTER_TYPES.returns)}
           handleFilterClick={handleFilterClick("filter")}
-          productName={productName}
           cartCount={diyCartCount}
           onCartClick={onCartClick}
           returnLabel={selectedFilterValue[FILTER_TYPES.returns]?.returnLabel}
           filterCount={selectedFundHouses.length}
+          hideCartFooter={hideCartFooter}
         />
       }
       className="sub-category-landing-wrapper"
@@ -257,31 +271,22 @@ const SubCategoryLanding = (props) => {
           slidesPerView={1}
           onSwiper={setSwiper}
           onSlideChange={handleSlideChange}
+          initialSlide={tabValue}
         >
           {subcategoryOptionsData?.map((el, idx) => {
             return (
               <SwiperSlide key={idx}>
                 <TabPanel
-                  returnPeriod={
-                    selectedFilterValue[FILTER_TYPES.returns]?.value
-                  }
-                  returnLabel={
-                    selectedFilterValue[FILTER_TYPES.returns]?.returnLabel
-                  }
-                  sortFundsBy={selectedFilterValue[FILTER_TYPES.sort]?.value}
-                  sortingOrder={selectedFilterValue[FILTER_TYPES.sort]?.order}
+                  returnPeriod={selectedFilterValue[FILTER_TYPES.returns]?.value}
+                  returnLabel={selectedFilterValue[FILTER_TYPES.returns]?.returnLabel}
                   key={idx}
                   value={idx}
-                  selectedFilterValue={selectedFilterValue}
-                  productName={productName}
                   data={filteredFunds[el.key]}
-                  selectedFundHouses={selectedFundHouses}
-                  selectedFundOption={selectedFundOption}
-                  selectedMinInvestment={selectedMinInvestment}
                   activeTab={tabValue}
                   isPageLoading={isPageLoading}
                   handleAddToCart={handleAddToCart}
                   diyCartData={diyCartData}
+                  hideCartButton={hideCartButton}
                 />
               </SwiperSlide>
             );
@@ -327,6 +332,7 @@ const TabPanel = memo((props) => {
     isPageLoading,
     handleAddToCart,
     diyCartData,
+    hideCartButton
   } = props;
   const [NumOfItems, setNumOfItems] = useState(10);
   const [showLoader, setShowLoader] = useState(false);
@@ -345,20 +351,7 @@ const TabPanel = memo((props) => {
   useEffect(() => {
     const loader = value === activeTab && isPageLoading;
     setShowLoader(loader);
-  }, [activeTab, isPageLoading])
-
-  if (showLoader) {
-    return (
-      <>
-        <SkeltonRect className="scl-skelton" />
-        <SkeltonRect className="scl-skelton" />
-        <SkeltonRect className="scl-skelton" />
-        <SkeltonRect className="scl-skelton" />
-        <SkeltonRect className="scl-skelton" />
-        <SkeltonRect className="scl-skelton" />
-      </>
-    );
-  }
+  }, [activeTab, isPageLoading]);
 
   return (
     <div
@@ -369,92 +362,107 @@ const TabPanel = memo((props) => {
     // {...other}
     >
       {/* {value === index && ( */}
-      <Box sx={{ backgroundColor: "foundationColors.supporting.white" }}>
+      <Box sx={{ backgroundColor: 'foundationColors.supporting.white' }}>
         <Stack
-          justifyContent="space-between"
-          direction="row"
-          className="sub-category-filter-info"
-          backgroundColor="foundationColors.supporting.grey"
-          sx={{ mb: "16px", padding: "8px 16px" }}
+          justifyContent='space-between'
+          direction='row'
+          className='sub-category-filter-info'
+          backgroundColor='foundationColors.supporting.grey'
+          sx={{ mb: '16px', padding: '8px 16px' }}
         >
           <Typography
-            variant="body5"
-            color="foundationColors.content.secondary"
+            variant='body5'
+            color='foundationColors.content.secondary'
+            sx={{ display: 'flex', alignItems: 'center' }}
           >
-            {data.length} funds
+            {showLoader ? <Skeleton type='text' width='12px' /> : data.length}
+            <Typography component='span' variant='inherit' color='inherit' sx={{ ml: 0.5 }}>
+              funds
+            </Typography>
           </Typography>
           <Typography
-            variant="body5"
-            color="foundationColors.content.secondary"
+            variant='body5'
+            color='foundationColors.content.secondary'
+            sx={{ display: 'flex', alignItems: 'center' }}
           >
-            {returnLabel} returns
+            {showLoader ? <Skeleton type='text' width='12px' /> : returnLabel}
+            <Typography component='span' variant='inherit' color='inherit' sx={{ ml: 0.5 }}>
+              returns
+            </Typography>
           </Typography>
         </Stack>
-        <Typography component="div" sx={{ p: "0px 16px" }}>
-          {data?.slice(0, NumOfItems)?.map((fund, idx) => {
-            const returnValue = fund[returnPeriod];
-            const returnData = !returnValue
-              ? "N/A"
-              : fund[returnPeriod] > 0
-              ? `+${fund[returnPeriod]}%`
-              : `${fund[returnPeriod]}%`;
-            const returnColor = !returnValue
-              ? "foundationColors.content.secondary"
-              : fund[returnPeriod] > 0
-              ? "foundationColors.secondary.profitGreen.300"
-              : "foundationColors.secondary.lossRed.300";
-            const setRef = NumOfItems - 4 === idx + 1;
-            let refData = {};
-            if (setRef) {
-              refData.ref = lastProductItem;
-            }
-            const isFundAddedToCart = checkFundPresentInCart(diyCartData, fund);
-            return (
-              <div key={idx} {...refData}>
-                <ProductItem
-                  // sx={{ mb: '16px' }}
-                  key={idx}
-                  imgSrc={fund?.amc_logo_big}
-                  showSeparator
-                  // onClick={handleClick}
-                >
-                  <ProductItem.LeftSection>
-                    <ProductItem.Title>{fund?.legal_name}</ProductItem.Title>
-                    <ProductItem.LeftBottomSection>
-                      {fund?.is_fisdom_recommended && (
-                        <Tag
-                          label="Recommendation"
-                          labelColor="foundationColors.content.secondary"
-                          labelBackgroundColor="foundationColors.secondary.blue.200"
+        {showLoader ? (
+          <Stack direction='column' spacing={2} sx={{ px: 2, mb: 2 }}>
+            <FundItemSkeletonLoader />
+            <FundItemSkeletonLoader />
+            <FundItemSkeletonLoader />
+            <FundItemSkeletonLoader />
+            <FundItemSkeletonLoader />
+          </Stack>
+        ) : (
+          <Typography component='div' sx={{ p: '0px 16px' }}>
+            {data?.slice(0, NumOfItems)?.map((fund, idx) => {
+              const returnValue = fund[returnPeriod];
+              const returnData = !returnValue
+                ? 'N/A'
+                : fund[returnPeriod] > 0
+                ? `+${fund[returnPeriod]}%`
+                : `${fund[returnPeriod]}%`;
+              const returnColor = !returnValue
+                ? 'foundationColors.content.secondary'
+                : fund[returnPeriod] > 0
+                ? 'foundationColors.secondary.profitGreen.300'
+                : 'foundationColors.secondary.lossRed.300';
+              const setRef = NumOfItems - 4 === idx + 1;
+              let refData = {};
+              if (setRef) {
+                refData.ref = lastProductItem;
+              }
+              const isFundAddedToCart = checkFundPresentInCart(diyCartData, fund);
+              return (
+                <div key={idx} {...refData}>
+                  <ProductItem
+                    // sx={{ mb: '16px' }}
+                    key={idx}
+                    imgSrc={fund?.amc_logo_big}
+                    showSeparator
+                    // onClick={handleClick}
+                  >
+                    <ProductItem.LeftSection>
+                      <ProductItem.Title>{fund?.legal_name}</ProductItem.Title>
+                      <ProductItem.LeftBottomSection>
+                        {fund?.is_fisdom_recommended && (
+                          <Tag
+                            label='Recommendation'
+                            labelColor='foundationColors.content.secondary'
+                            labelBackgroundColor='foundationColors.secondary.blue.200'
+                          />
+                        )}
+                        {fund?.morning_star_rating && (
+                          <Tag
+                            morningStarVariant='small'
+                            label={fund?.morning_star_rating}
+                            labelColor='foundationColors.content.secondary'
+                          />
+                        )}
+                      </ProductItem.LeftBottomSection>
+                    </ProductItem.LeftSection>
+                    <ProductItem.RightSection spacing={2}>
+                      <ProductItem.Description title={returnData} titleColor={returnColor} />
+                      {!hideCartButton && (
+                        <Icon
+                          size='32px'
+                          src={require(`assets/${isFundAddedToCart ? `minus` : `add_icon`}.svg`)}
+                          onClick={handleAddToCart(fund)}
                         />
                       )}
-                      {fund?.morning_star_rating && (
-                        <Tag
-                          morningStarVariant="small"
-                          label={fund?.morning_star_rating}
-                          labelColor="foundationColors.content.secondary"
-                        />
-                      )}
-                    </ProductItem.LeftBottomSection>
-                  </ProductItem.LeftSection>
-                  <ProductItem.RightSection spacing={2}>
-                    <ProductItem.Description
-                      title={returnData}
-                      titleColor={returnColor}
-                    />
-                    <Icon
-                      size="32px"
-                      src={require(`assets/${
-                        isFundAddedToCart ? `minus` : `add_icon`
-                      }.svg`)}
-                      onClick={handleAddToCart(fund)}
-                    />
-                  </ProductItem.RightSection>
-                </ProductItem>
-              </div>
-            );
-          })}
-        </Typography>
+                    </ProductItem.RightSection>
+                  </ProductItem>
+                </div>
+              );
+            })}
+          </Typography>
+        )}
       </Box>
       {/* )} */}
     </div>
@@ -462,7 +470,6 @@ const TabPanel = memo((props) => {
 }, isEqual);
 
 const CustomFooter = ({
-  productName,
   cartCount,
   onCartClick,
   handleSortClick,
@@ -470,14 +477,15 @@ const CustomFooter = ({
   handleReturnClick,
   returnLabel,
   filterCount,
+  hideCartFooter
 }) => {
   return (
-    <Stack spacing={2} className="sub-category-custom-footer">
-      {cartCount > 0 && productName === "fisdom" && (
-        <div className="sc-confirmation-btn-wrapper">
+    <Stack spacing={2} className='sub-category-custom-footer'>
+      {!hideCartFooter && (
+        <div className='sc-confirmation-btn-wrapper'>
           <ConfirmAction
             title={`${cartCount} items in the cart`}
-            buttonTitle="View Cart"
+            buttonTitle='View Cart'
             badgeContent={cartCount}
             onClick={onCartClick}
           />
@@ -490,6 +498,30 @@ const CustomFooter = ({
         handleFilterClick={handleFilterClick}
         count={filterCount}
       />
+    </Stack>
+  );
+};
+
+const FundItemSkeletonLoader = () => {
+  return (
+    <Stack direction='column'>
+      <Stack direction='row' justifyContent='space-between'>
+        <Stack flex={1} direction='row' spacing={1} alignItems='end' justifyContent='flex-start'>
+          <Icon size='40px' />
+          <Stack direction='column' spacing={1} flex={1}>
+            <Skeleton type='text' width='70%' />
+            <Stack direction='row' spacing={1} alignItems='center' justifyContent='flex-start'>
+              <Skeleton type='text' width='100px' />
+              <Skeleton type='text' width='100px' />
+            </Stack>
+          </Stack>
+        </Stack>
+        <Stack spacing={2} direction='column'>
+          <Skeleton type='text' width='50px' />
+          <Icon size='32px' />
+        </Stack>
+      </Stack>
+      <Separator marginLeft='46px' marginTop='8px' />
     </Stack>
   );
 };

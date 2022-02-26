@@ -2,7 +2,7 @@ import { StyledEngineProvider, ThemeProvider } from '@mui/material';
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import getTheme from '../../theme';
-import SubCategoryLanding from './SubCategoryLanding';
+import SubCategoryFundList from './SubCategoryFundList';
 
 const DIY = (props) => {
   const theme = getTheme();
@@ -11,7 +11,7 @@ const DIY = (props) => {
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
         <Switch>
-          <Route path={`${url}/sub-category`} component={SubCategoryLanding} />
+          <Route path={`${url}/sub-category/fund-list`} component={SubCategoryFundList} />
         </Switch>
       </ThemeProvider>
     </StyledEngineProvider>
