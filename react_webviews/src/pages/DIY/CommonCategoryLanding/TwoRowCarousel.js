@@ -10,7 +10,7 @@ import { getPageLoading } from 'businesslogic/dataStore/reducers/loader';
 import Icon from '../../../designSystem/atoms/Icon';
 import isEmpty from 'lodash/isEmpty';
 import { navigate as navigateFunc } from '../../../utils/functions';
-import { useHistory, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 const screen = 'diyLanding';
 const TwoRowCarousel = (props) => {

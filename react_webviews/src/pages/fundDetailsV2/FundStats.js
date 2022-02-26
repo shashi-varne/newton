@@ -9,7 +9,6 @@ import Tooltip from '../../designSystem/atoms/Tooltip';
 import Icon from '../../designSystem/atoms/Icon';
 import { useSelector } from 'react-redux';
 import { getFundData } from 'businesslogic/dataStore/reducers/fundDetails';
-import { formatAmountInr } from 'utils/validators';
 import { isValidValue } from './helperFunctions';
 
 function calculateFullAge(dob) {

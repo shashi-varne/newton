@@ -6,7 +6,6 @@ import Button from '../../designSystem/atoms/Button';
 import Separator from '../../designSystem/atoms/Separator';
 import Typography from '../../designSystem/atoms/Typography';
 import CollapsibleSection from '../../designSystem/molecules/CollapsibleSection';
-import isNull from 'lodash/isNull';
 import isEmpty from 'lodash/isEmpty';
 import { isValidValue } from './helperFunctions';
 

@@ -17,7 +17,7 @@ import isEmpty from 'lodash/isEmpty';
 import SectionHeader from './SectionHeader';
 import { getPageLoading } from 'businesslogic/dataStore/reducers/loader';
 import Icon from '../../../designSystem/atoms/Icon';
-import { useLocation, useParams, useRouteMatch, withRouter } from 'react-router-dom';
+import { useLocation, withRouter } from 'react-router-dom';
 import { navigate as navigateFunc } from '../../../utils/functions';
 
 const screen = 'diyLanding';
