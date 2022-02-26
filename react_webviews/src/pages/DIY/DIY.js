@@ -6,7 +6,7 @@ import FundDetails from '../fundDetailsV2';
 import getTheme from '../../theme';
 import SubCategoryList from './SubCategoryList';
 import SubCategoryFunds from './SubCategoryFunds';
-import SubCategoryLanding from './SubCategoryLanding';
+import SubCategoryLanding from './SubCategoryFundList';
 
 const DIY = (props) => {
   const theme = getTheme();
@@ -18,7 +18,7 @@ const DIY = (props) => {
           <Route path={`${url}/sub-category-list`} component={SubCategoryList} />
           <Route path={`${url}/sub-category-funds`} component={SubCategoryFunds} />
           <Route path={`${url}/fund-details`} component={FundDetails} />
-          <Route path={`${url}/sub-category/funds-list`} component={SubCategoryLanding} />
+          <Route path={`${url}/sub-category/fund-list`} component={SubCategoryLanding} />
           <Route exact path={`${url}/:diyType/landing`} component={CommonCategoryLanding} />
         </Switch>
       </ThemeProvider>

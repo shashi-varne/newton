@@ -34,7 +34,7 @@ const SubCategoryList = (props) => {
         subcategoryOption,
       })
     );
-    navigate(DIY_PATHNAME_MAPPER.subcategoryFundsList);
+    navigate(DIY_PATHNAME_MAPPER.subcategoryFundList);
   };
 
   return (

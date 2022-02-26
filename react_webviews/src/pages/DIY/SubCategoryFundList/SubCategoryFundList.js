@@ -18,7 +18,7 @@ import get from "lodash/get";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
 
-import "./SubCategoryLanding.scss";
+import "./SubCategoryFundList.scss";
 import ConfirmAction from "../../../designSystem/molecules/ConfirmAction";
 import FilterNavigation from "../../../featureComponent/DIY/Filters/FilterNavigation";
 import Footer from "../../../designSystem/molecules/Footer";
