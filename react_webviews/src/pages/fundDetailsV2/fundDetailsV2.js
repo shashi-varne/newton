@@ -50,10 +50,6 @@ const FundDetailsV2 = () => {
     if(isins !== fundData?.isin) {
       dispatch(fetchFundDetails(payload));
     }
-
-    return () => {
-      dispatch(setFundTimePeriod('5Y'));
-    }
   }, []);
 
   return (

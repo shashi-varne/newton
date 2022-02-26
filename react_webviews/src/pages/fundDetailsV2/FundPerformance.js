@@ -12,7 +12,7 @@ import { getFundData } from 'businesslogic/dataStore/reducers/fundDetails';
 
 const fetchReturns = (fundData) => {
   const returns = {};
-    // eslint-disable-next-line no-unused-expressions
+  // eslint-disable-next-line no-unused-expressions
   fundData?.performance?.returns?.forEach((el) => {
     let [value, timePeriod] = el?.name?.split(' ');
     if (timePeriod.match(/month/)) {
@@ -25,12 +25,12 @@ const fetchReturns = (fundData) => {
   });
 
   return returns;
-}
+};
 const FundPerformance = () => {
   const fundData = useSelector(getFundData);
   const fundTimePeriod = useSelector((state) => state?.fundDetails?.fundTimePeriod);
-  const fundReturns = useMemo(() => fetchReturns(fundData),[]);
-  
+  const fundReturns = useMemo(() => fetchReturns(fundData), []);
+
   const minimumInvestment = orderBy(
     fundData?.additional_info?.minimum_investment,
     ['value'],
@@ -47,10 +47,12 @@ const FundPerformance = () => {
         leftTitle={`NAV as on ${NavDate}`}
         leftTitleColor='foundationColors.content.secondary'
         leftSubtitle={formatAmountInr(fundData?.performance?.current_nav)}
-        rightTitle={`Returns (${fundTimePeriod})`}
+        rightTitle={`Returns (${fundReturns[fundTimePeriod] ? fundTimePeriod : 'N/A'})`}
         rightTitleColor='foundationColors.content.secondary'
-        rightSubtitle={`${fundReturns[fundTimePeriod]}%`}
-        rightSubtitleColor={`foundationColors.secondary.${fundReturns[fundTimePeriod] > 0 ? 'profitGreen' : 'lossRed'}.400`}
+        rightSubtitle={`${fundReturns[fundTimePeriod] || 'N/A'}`}
+        rightSubtitleColor={`foundationColors.secondary.${
+          fundReturns[fundTimePeriod] > 0 ? 'profitGreen' : 'lossRed'
+        }.400`}
         imgSrc={require(`assets/${
           fundReturns[fundTimePeriod] > 0 ? 'positive_return' : 'negative_return'
         }.svg`)}

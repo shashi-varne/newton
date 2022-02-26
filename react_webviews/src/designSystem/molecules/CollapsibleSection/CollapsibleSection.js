@@ -12,7 +12,7 @@
 */
 
 import React from 'react';
-import { Collapse as CollapseLib } from '@mui/material';
+import { Box, Collapse as CollapseLib } from '@mui/material';
 import Typography from '../../atoms/Typography';
 import PropTypes from 'prop-types';
 import './CollapsibleSection.scss';
@@ -27,10 +27,12 @@ const CollapsibleSection = ({
   collapsedIcon,
   labelColor,
   childWrapperClass,
+  disabled,
+  sx,
   dataAid,
 }) => {
   return (
-    <div className='c-wrapper' data-aid={`collapsibleSection_${dataAid}`}>
+    <Box sx={sx} className={`c-wrapper ${disabled && 'collapsed-disabled'}`} data-aid={`collapsibleSection_${dataAid}`}>
       <div className='c-label-wrapper' onClick={onClick}>
         <Typography variant='heading3' color={labelColor} dataAid='title'>
           {label}
@@ -40,7 +42,7 @@ const CollapsibleSection = ({
       <CollapseLib in={isOpen}>
         <div className={`c-child-wrapper ${childWrapperClass}`}>{children}</div>
       </CollapseLib>
-    </div>
+    </Box>
   );
 };
 

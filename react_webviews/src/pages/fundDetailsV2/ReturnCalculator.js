@@ -22,6 +22,7 @@ import {
   setInvestmentType,
 } from 'businesslogic/dataStore/reducers/fundDetails';
 import { getExpectedReturn } from './helperFunctions';
+import isEmpty from 'lodash/isEmpty';
 
 const ReturnCalculator = () => {
   const [isReturnCalcOpen, setIsReturnCalcOpen] = useState(false);
@@ -35,6 +36,7 @@ const ReturnCalculator = () => {
   const investedAmount = useSelector((state) => state?.fundDetails?.investedAmount);
   const expectedAmount = useSelector((state) => state?.fundDetails?.expectedAmount);
   const expectedReturnPerc = useSelector((state) => state?.fundDetails?.expectedReturnPerc);
+  const isReturnAvailable = isEmpty(fundData?.performance?.returns);
   const returns = useMemo(() => {
     const yearReturns = {};
     // eslint-disable-next-line no-unused-expressions
@@ -93,7 +95,8 @@ const ReturnCalculator = () => {
       <CollapsibleSection
         isOpen={isReturnCalcOpen}
         onClick={handleReturnCalcSection}
-        label='Return calculator'
+        label={`Return calculator ${isReturnAvailable && '(N/A)'}`}
+        disabled={isReturnAvailable}
       >
         <Stack direction='column' spacing={3} sx={{ pb: 3 }}>
           <Box sx={{ maxWidth: 'fit-content' }}>
