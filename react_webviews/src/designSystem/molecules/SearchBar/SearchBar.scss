@@ -1,0 +1,17 @@
+.searchBar-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  width: 100%;
+
+  .search-bar-suffix-wrapper,.search-bar-prefix-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: inherit;
+    &.sb-suffix-clickable,&.sb-prefix-clickable {
+        cursor: pointer;
+    }
+  }
+}

@@ -104,5 +104,21 @@ const customCommonVariants = (colors={}) => {
         color: colors?.content?.secondary,
       },
     },
+    {
+      props: {customvariant: 'searchBar'},
+      style: {
+        borderRadius: '24px',
+        backgroundColor: `${colors?.supporting?.grey} !important`,
+        border: 'none',
+        '& .MuiOutlinedInput-input': {
+          padding: '0px 8px',
+          borderRadius: '24px',
+          height: '40px',
+        },
+        '& .MuiOutlinedInput-notchedOutline': {
+          border: 'none !important',
+        }
+      }
+    }
   ];
 };
