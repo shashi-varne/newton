@@ -10,6 +10,7 @@ import Icon from '../../designSystem/atoms/Icon';
 import { useSelector } from 'react-redux';
 import { getFundData } from 'businesslogic/dataStore/reducers/fundDetails';
 import { isValidValue } from './helperFunctions';
+import isEmpty from 'lodash/isEmpty';
 
 function calculateFullAge(dob) {
   const startDate = parse(dob, 'dd/MM/yyyy', new Date());
@@ -162,6 +163,9 @@ const FundStats = () => {
             </Tooltip>
           </Box>
         </Stack>
+        {isEmpty(fundData?.additional_info?.exit_load) && (
+          <Typography variant='heading4'>NA</Typography>
+        )}
         {fundData?.additional_info?.exit_load?.map((exitLoadData, idx) => {
           return (
             <div key={idx}>
@@ -173,7 +177,7 @@ const FundStats = () => {
                 variant='body5'
                 color='foundationColors.content.secondary'
               >
-                {` (${exitLoadData?.period})`}
+                {exitLoadData?.period}
               </Typography>
             </div>
           );

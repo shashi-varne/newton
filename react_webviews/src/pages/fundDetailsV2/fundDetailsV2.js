@@ -23,6 +23,7 @@ import { Stack } from '@mui/material';
 import { getConfig } from '../../utils/functions';
 import { getUrlParams } from '../../utils/validators';
 import { getPageLoading } from 'businesslogic/dataStore/reducers/loader';
+import { getDiyCart, getDiyCartCount, setCartItem } from 'businesslogic/dataStore/reducers/diy';
 
 
 const screen = 'fundDetailsV2';
@@ -38,8 +39,9 @@ const FundDetailsV2 = () => {
   const riskDetailsRef = useRef();
   const returnCompRef = useRef();
   const { productName } = useMemo(getConfig, []);
-  const ctaText = productName === 'fisdom' ? 'ADD TO CART' : 'INVEST NOW';
-  const cartCount = 0;
+  const isFisdom = productName === 'fisdom';
+  const ctaText = isFisdom ? 'ADD TO CART' : 'INVEST NOW';
+  const cartCount = useSelector(getDiyCartCount);
   useEffect(() => {
     const payload = {
       isins,
@@ -47,9 +49,23 @@ const FundDetailsV2 = () => {
       screen,
     };
     if(isins !== fundData?.isin) {
-      dispatch(fetchFundDetails(payload));
+        dispatch(fetchFundDetails(payload));
     }
   }, []);
+
+  const onCartClick = () => {
+
+  }
+
+  const diyCart = useSelector(getDiyCart);
+  const isfundAdded = useMemo(() => {
+    const fund = diyCart?.find(el => el.isin === fundData.isin);
+    return !isEmpty(fund);
+  },[diyCart, fundData]);
+
+  const addFundToCart = () => {
+    dispatch(setCartItem(fundData));
+  }
 
   return (
     <Container
@@ -57,9 +73,17 @@ const FundDetailsV2 = () => {
       footer={{
         button1Props: {
           title: ctaText,
+          onClick: addFundToCart
         },
-        hideButton1: cartCount > 0,
-        hideConfirmAction: cartCount <= 0,
+        confirmActionProps: {
+          title:`${cartCount} items in the cart`,
+          buttonTitle:'View Cart',
+          badgeContent:cartCount,
+          onClick:onCartClick,
+          dataAid: '_'
+        },
+        hideButton1: isFisdom && isfundAdded,
+        hideConfirmAction: !isFisdom || !isfundAdded,
       }}
       isPageLoading={isPageLoading}
       renderComponentAboveFooter={
