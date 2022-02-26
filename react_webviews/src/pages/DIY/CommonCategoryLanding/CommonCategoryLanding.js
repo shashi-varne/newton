@@ -49,11 +49,11 @@ const CommonCategoryLanding = (props) => {
 
   const diyTypeData = useSelector(getDiyTypeData);
   const categoryData = useSelector((state) => getDiyCategoryData(state, props.match.params.diyType));
+  const trendingFunds = useSelector((state) => getTrendingFundsByCategory(state, props.match.params.diyType));
   const twoRowsImageCarouselData = useSelector((state) => getDiySubcategoryDataByViewType(state, diyTypeData.category, VIEW_TYPE_MAPPER.twoRowsImageCaurosel));
   const singleCategoryData = useSelector((state) => getDiySubcategoryDataByViewType(state, diyTypeData.category, VIEW_TYPE_MAPPER.singleCard));
   const horizontalCauroselData = useSelector((state) => getDiySubcategoryDataByViewType(state, diyTypeData.category, VIEW_TYPE_MAPPER.cardHorizontalImageCaurosel));
   const imageCarouselData = useSelector((state) => getDiySubcategoryDataByViewType(state, diyTypeData.category, VIEW_TYPE_MAPPER.imageCaurosel));
-  const trendingFunds = useSelector((state) => getTrendingFundsByCategory(state, diyTypeData.category));
   const { isPageLoading } = useLoadingState(screen);
   
   useEffect(() => {
