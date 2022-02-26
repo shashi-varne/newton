@@ -21,6 +21,7 @@ import PropTypes from 'prop-types';
 
 import './HeaderTitle.scss';
 import Icon from '../../atoms/Icon';
+import { Box } from '@mui/material';
 
 const HeaderTitle = ({
   imgSrc,
@@ -31,12 +32,13 @@ const HeaderTitle = ({
   subtitleColor,
   dataAid,
   subTitleLabels = [],
+  sx
 }) => {
   return (
-    <div className='ht-wrapper' data-aid={`headerTitle_${dataAid}`}>
+    <Box sx={sx} className='ht-wrapper' data-aid={`headerTitle_${dataAid}`}>
       {imgSrc && <Icon src={imgSrc} size='40px' className='ht-left-image' dataAid='left' {...imgProps} />}
       <div className='ht-child-wrapper'>
-        <Typography variant='heading2' color={titleColor} dataAid='title'>
+        <Typography variant='heading3' color={titleColor} dataAid='title'>
           {title}
         </Typography>
         <Typography variant='body2' color={subtitleColor} dataAid='title'>
@@ -44,7 +46,7 @@ const HeaderTitle = ({
         </Typography>
         {Array.isArray(subTitleLabels) && <SubtitleLabels subTitleLabels={subTitleLabels} />}
       </div>
-    </div>
+    </Box>
   );
 };
 

@@ -1,0 +1,89 @@
+.invest-card-wrapper {
+  padding: 16px;
+  padding-bottom: 0px;
+  border-radius: 12px;
+  background-color: white;
+  flex: 1;
+  cursor: default;
+
+  .ic-header-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-bottom: 16px;
+
+    .ic-header-left-img {
+      margin-right: 16px;
+    }
+  }
+
+
+  .ic-left-section {
+    flex: 1 1 50%;
+    display: flex;
+    flex-direction: column;
+  }
+  .ic-right-section {
+    flex: 1 1 50%;
+  }
+
+  .ic-input-field-section,
+  .ic-footer-section,
+  .ic-pills-wrapper {
+    padding: 0px 0px 16px 0px;
+    > div {
+      flex-basis: 50%;
+    }
+  }
+
+  .ic-pills-wrapper {
+    .ic-pill-left-label {
+      flex-basis: 40%;
+    }
+    .ic-pill {
+      flex: 1;
+      .MuiTabs-flexContainer {
+        justify-content: flex-end !important;
+      }
+    }
+  }
+
+  .ic-input-field-section {
+    .ic-right-section {
+      flex-basis: 20%;
+    }
+  }
+
+  .ic-footer-section {
+    .ic-left-section,
+    .ic-right-section {
+      flex: none;
+    }
+
+    .ic-right-section {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+
+        .fc-bottom-right-img {
+          margin-left: 8px;
+        }
+
+        &.fc-cursor-pointer {
+            cursor: pointer;
+        }
+    }
+  }
+}
+
+
+@media (max-width: 600px) {
+  .invest-card-wrapper {
+    .ic-input-field-section {
+      .ic-right-section {
+        flex-basis: 50%;
+      }
+    }
+  }
+}

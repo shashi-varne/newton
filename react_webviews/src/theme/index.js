@@ -2,12 +2,16 @@ import { createTheme } from '@mui/material';
 import { buttonStyleOverRides, buttonVariantsConfig, } from './button';
 import { tabsStyleOverRides, tabStyleOverRides, tabsVariantsConfig, tabVariantsConfig } from './tabs';
 import { radioButtonStyleOverRides } from './radioButton';
+import { tooltipStyleOverRides } from './tooltip';
 import { checkboxStyleOverRides } from './checkbox';
 import { tooltipStyleOverRides } from './tooltip';
 import { switchStyleOverRides } from './switch';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
 import getPartnerThemeData from './utils';
+import { dialogDefaultProps, dialogStylesOverride } from './dialog';
 import { separatorStyleOverRides } from './separator';
+import { badgeStyleOverRides } from './badge';
+import { customShadows } from './shadows';
 import {
   customVariantsFilledInput,
   customVariantsOutlinedInput,
@@ -17,9 +21,6 @@ import {
   inputLabelStyleOverRides,
   outlinedTextFieldStyleOverRides,
 } from './textfield';
-import { dialogDefaultProps, dialogStylesOverride } from './dialog';
-import { customShadows } from './shadows';
-import { badgeStyleOverRides } from './badge';
 const defaultTheme = createTheme();
 
 const getTheme = () => {
@@ -59,6 +60,23 @@ const getTheme = () => {
       MuiCheckbox: {
         styleOverrides: checkboxStyleOverRides(colors),
       },
+      MuiFilledInput: {
+        defaultProps: {
+          disableUnderline: true,
+        },
+        variants: customVariantsFilledInput(colors),
+        styleOverrides: filledTextFieldStyleOverRides(colors, partnerConfig),
+      },
+      MuiOutlinedInput: {
+        variants: customVariantsOutlinedInput(colors),
+        styleOverrides: outlinedTextFieldStyleOverRides(colors, partnerConfig),
+      },
+      MuiInputLabel: {
+        styleOverrides: inputLabelStyleOverRides(colors, partnerConfig),
+      },
+      MuiInputAdornment: {
+        styleOverrides: inputAdornmentStyleOverRides(colors)
+      },
       MuiTabs: {
         variants:tabsVariantsConfig(),
         styleOverrides: tabsStyleOverRides()
@@ -76,30 +94,15 @@ const getTheme = () => {
           root:{
             [defaultTheme.breakpoints.up('sm')]: {
               left: '300px !important',
-              maxWidth: 'var(--desktop-width) !important',
+              right: 'unset !important',
+              width: 'var(--desktop-width) !important',
+              top: '60px !important'
             }
-          },
+          }
         }
       },
       MuiBadge: {
         styleOverrides: badgeStyleOverRides(colors, partnerConfig),
-      },
-      MuiFilledInput: {
-        defaultProps: {
-          disableUnderline: true,
-        },
-        variants: customVariantsFilledInput(colors),
-        styleOverrides: filledTextFieldStyleOverRides(colors, partnerConfig),
-      },
-      MuiOutlinedInput: {
-        variants: customVariantsOutlinedInput(colors),
-        styleOverrides: outlinedTextFieldStyleOverRides(colors, partnerConfig),
-      },
-      MuiInputLabel: {
-        styleOverrides: inputLabelStyleOverRides(colors, partnerConfig),
-      },
-      MuiInputAdornment: {
-        styleOverrides: inputAdornmentStyleOverRides(colors),
       },
       MuiFormHelperText: {
         styleOverrides: helperTextStyleOverRides(colors, partnerConfig),

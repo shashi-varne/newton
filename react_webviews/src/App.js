@@ -107,6 +107,7 @@ const App = () => {
   }
 
     return (
+      <Provider store={store}>
       <BrowserRouter basename={basename}>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
@@ -148,6 +149,7 @@ const App = () => {
           </PersistGate>
         </Provider>
       </BrowserRouter>
+      </Provider>
     );
 }
 

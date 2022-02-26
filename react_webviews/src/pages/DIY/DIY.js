@@ -7,6 +7,7 @@ import getTheme from '../../theme';
 import SubCategoryList from './SubCategoryList';
 import SubCategoryFunds from './SubCategoryFunds';
 import SubCategoryLanding from './SubCategoryFundList';
+import MfOrder from '../MfOrder/MfOrder';
 
 const DIY = (props) => {
   const theme = getTheme();
@@ -20,6 +21,7 @@ const DIY = (props) => {
           <Route path={`${url}/fund-details`} component={FundDetails} />
           <Route path={`${url}/sub-category/fund-list`} component={SubCategoryLanding} />
           <Route exact path={`${url}/:diyType/landing`} component={CommonCategoryLanding} />
+          <Route path={`${url}/mf-orders`} component={MfOrder} />
         </Switch>
       </ThemeProvider>
     </StyledEngineProvider>
