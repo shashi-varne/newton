@@ -7,6 +7,8 @@ import CollapsibleSection from '../../designSystem/molecules/CollapsibleSection'
 import EstimationCard from '../../designSystem/molecules/EstimationCard';
 import ComparisonChart from './ComparisonChart';
 import { formatAmountInr } from '../../utils/validators';
+import isEmpty from 'lodash/isEmpty';
+import { getFundData } from 'businesslogic/dataStore/reducers/fundDetails';
 
 const ReturnComparison = () => {
   const [isRetunCompOpen, setIsRetunCompOpen] = useState(false);
@@ -14,6 +16,9 @@ const ReturnComparison = () => {
   const expectedAmount = useSelector(state => state?.fundDetails?.expectedAmount);
   const investmentPeriod = useSelector(state => state?.fundDetails?.investmentPeriod);
   const expectedReturnPerc = useSelector(state => state?.fundDetails?.expectedReturnPerc);
+  const fundData = useSelector(getFundData);
+  const isReturnAvailable = isEmpty(fundData?.performance?.returns);
+
   const handleReturnCompSection = () => {
     setIsRetunCompOpen(!isRetunCompOpen);
   };
@@ -22,7 +27,8 @@ const ReturnComparison = () => {
       <CollapsibleSection
         isOpen={isRetunCompOpen}
         onClick={handleReturnCompSection}
-        label='Return comparison'
+        label={`Return comparison ${isReturnAvailable ? '(N/A)' : ''}`}
+        disabled={isReturnAvailable}
       >
         <Box>
           <Stack direction='column' spacing={3}>

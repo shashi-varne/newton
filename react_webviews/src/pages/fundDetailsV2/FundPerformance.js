@@ -8,11 +8,12 @@ import isEqual from 'lodash/isEqual';
 import Typography from '../../designSystem/atoms/Typography';
 import Icon from '../../designSystem/atoms/Icon';
 import { useSelector } from 'react-redux';
-import { getFundData } from 'businesslogic/dataStore/reducers/fundDetailsReducer';
+import { getFundData } from 'businesslogic/dataStore/reducers/fundDetails';
+import { isValidValue } from './helperFunctions';
 
 const fetchReturns = (fundData) => {
   const returns = {};
-    // eslint-disable-next-line no-unused-expressions
+  // eslint-disable-next-line no-unused-expressions
   fundData?.performance?.returns?.forEach((el) => {
     let [value, timePeriod] = el?.name?.split(' ');
     if (timePeriod.match(/month/)) {
@@ -25,12 +26,12 @@ const fetchReturns = (fundData) => {
   });
 
   return returns;
-}
+};
 const FundPerformance = () => {
   const fundData = useSelector(getFundData);
   const fundTimePeriod = useSelector((state) => state?.fundDetails?.fundTimePeriod);
-  const fundReturns = useMemo(() => fetchReturns(fundData),[]);
-  
+  const fundReturns = useMemo(() => fetchReturns(fundData), []);
+
   const minimumInvestment = orderBy(
     fundData?.additional_info?.minimum_investment,
     ['value'],
@@ -47,11 +48,13 @@ const FundPerformance = () => {
         leftTitle={`NAV as on ${NavDate}`}
         leftTitleColor='foundationColors.content.secondary'
         leftSubtitle={formatAmountInr(fundData?.performance?.current_nav)}
-        rightTitle={`Returns (${fundTimePeriod})`}
+        rightTitle={`Returns (${fundReturns[fundTimePeriod] ? fundTimePeriod : 'N/A'})`}
         rightTitleColor='foundationColors.content.secondary'
-        rightSubtitle={`${fundReturns[fundTimePeriod]}%`}
-        rightSubtitleColor={`foundationColors.secondary.${fundReturns[fundTimePeriod] > 0 ? 'profitGreen' : 'lossRed'}.400`}
-        imgSrc={require(`assets/${
+        rightSubtitle={`${fundReturns[fundTimePeriod] || 'N/A'}`}
+        rightSubtitleColor={fundReturns[fundTimePeriod] && `foundationColors.secondary.${
+          fundReturns[fundTimePeriod] > 0 ? 'profitGreen' : 'lossRed'
+        }.400`}
+        imgSrc={fundReturns[fundTimePeriod] && require(`assets/${
           fundReturns[fundTimePeriod] > 0 ? 'positive_return' : 'negative_return'
         }.svg`)}
       />
@@ -61,9 +64,9 @@ const FundPerformance = () => {
         leftSubtitle={formatAmountInr(minimumInvestment[0]?.value)}
         rightTitle='Morning Star'
         rightTitleColor='foundationColors.content.secondary'
-        rightSubtitle={fundData?.performance?.ms_rating}
-        rightSubtitleColor='foundationColors.secondary.mango.400'
-        imgSrc={require('assets/star_large.svg')}
+        rightSubtitle={isValidValue(fundData?.performance?.ms_rating)}
+        rightSubtitleColor={fundData?.performance?.ms_rating && 'foundationColors.secondary.mango.400'}
+        imgSrc={fundData?.performance?.ms_rating && require('assets/star_large.svg')}
       />
     </Stack>
   );

@@ -13,14 +13,16 @@ import Icon from '../../designSystem/atoms/Icon';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getFundData,
+  resetReturnCalculatorData,
   setAmount,
   setExpectedAmount,
   setExpectedReturnPerc,
   setInvestedAmount,
   setInvestmentPeriod,
   setInvestmentType,
-} from 'businesslogic/dataStore/reducers/fundDetailsReducer';
+} from 'businesslogic/dataStore/reducers/fundDetails';
 import { getExpectedReturn } from './helperFunctions';
+import isEmpty from 'lodash/isEmpty';
 
 const ReturnCalculator = () => {
   const [isReturnCalcOpen, setIsReturnCalcOpen] = useState(false);
@@ -34,6 +36,7 @@ const ReturnCalculator = () => {
   const investedAmount = useSelector((state) => state?.fundDetails?.investedAmount);
   const expectedAmount = useSelector((state) => state?.fundDetails?.expectedAmount);
   const expectedReturnPerc = useSelector((state) => state?.fundDetails?.expectedReturnPerc);
+  const isReturnAvailable = isEmpty(fundData?.performance?.returns);
   const returns = useMemo(() => {
     const yearReturns = {};
     // eslint-disable-next-line no-unused-expressions
@@ -48,11 +51,20 @@ const ReturnCalculator = () => {
 
   useEffect(() => {
     dispatch(setExpectedReturnPerc(returns[investmentPeriod]));
+
+    return () => {
+      dispatch(resetReturnCalculatorData());
+    };
   }, [fundData]);
 
   useEffect(() => {
     const investedValue = getInvestedValue(investmentPeriod, amountToBeInvested, isRecurring);
-    const expectedValue = getExpectedReturn(amountToBeInvested, investmentPeriod, investmentType, expectedReturnPerc);
+    const expectedValue = getExpectedReturn(
+      amountToBeInvested,
+      investmentPeriod,
+      investmentType,
+      expectedReturnPerc
+    );
     dispatch(setExpectedAmount(expectedValue));
     dispatch(setInvestedAmount(investedValue));
   }, [amountToBeInvested, investmentType, investmentPeriod, isRecurring, expectedReturnPerc]);
@@ -83,7 +95,8 @@ const ReturnCalculator = () => {
       <CollapsibleSection
         isOpen={isReturnCalcOpen}
         onClick={handleReturnCalcSection}
-        label='Return calculator'
+        label={`Return calculator ${isReturnAvailable ? '(N/A)' : ''}`}
+        disabled={isReturnAvailable}
       >
         <Stack direction='column' spacing={3} sx={{ pb: 3 }}>
           <Box sx={{ maxWidth: 'fit-content' }}>
@@ -149,7 +162,10 @@ const ReturnCalculator = () => {
                 </div>
               </Stack>
               <Typography variant='body1' color='foundationColors.content.secondary' align='right'>
-                Estimated return <Typography component='span' variant='inherit' color='primary'>({expectedReturnPerc}%)</Typography>
+                Estimated return{' '}
+                <Typography component='span' variant='inherit' color='primary'>
+                  ({expectedReturnPerc}%)
+                </Typography>
               </Typography>
             </Stack>
           </Stack>

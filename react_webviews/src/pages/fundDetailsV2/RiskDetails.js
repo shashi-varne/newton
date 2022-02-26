@@ -1,7 +1,7 @@
 import { Box, Stack } from '@mui/material';
 import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getFundData } from 'businesslogic/dataStore/reducers/fundDetailsReducer';
+import { getFundData } from 'businesslogic/dataStore/reducers/fundDetails';
 import BarMeter from '../../designSystem/atoms/BarMeter';
 import Separator from '../../designSystem/atoms/Separator';
 import Typography from '../../designSystem/atoms/Typography';
@@ -40,7 +40,7 @@ const TOOLTIP_MEASURES = {
 };
 
 const getBarIndex = (riskValue) => {
-  if(!riskValue) return -1;
+  if (!riskValue) return -1;
   const riskIndex = barData?.findIndex((el) => el.name.toLowerCase() === riskValue.toLowerCase());
   return riskIndex;
 };
@@ -53,17 +53,17 @@ const RiskDetails = () => {
     squared: false,
   });
   const fundData = useSelector(getFundData);
-  const { riskVsCategoryActiveIndex, returnVsCategoryActiveIndex } =
-    useMemo(() => {
-      return {
-        riskVsCategoryActiveIndex: getBarIndex(
-          fundData?.risk?.risk_vs_category
-        ),
-        returnVsCategoryActiveIndex: getBarIndex(
-          fundData?.risk?.return_vs_category
-        ),
-      };
-    }, [fundData?.risk?.risk_vs_category, fundData?.risk?.return_vs_category]);
+  const isRiskVsCatAvailable = isEmpty(fundData?.risk?.risk_vs_category);
+  const isReturnVsCatAvailable = isEmpty(fundData?.risk?.return_vs_category);
+  const isRiskMeasureAvailable = isEmpty(fundData?.risk?.risk_measures);
+  const isRiskDetailsAvailable =
+    isRiskVsCatAvailable && isReturnVsCatAvailable && isRiskMeasureAvailable;
+  const { riskVsCategoryActiveIndex, returnVsCategoryActiveIndex } = useMemo(() => {
+    return {
+      riskVsCategoryActiveIndex: getBarIndex(fundData?.risk?.risk_vs_category),
+      returnVsCategoryActiveIndex: getBarIndex(fundData?.risk?.return_vs_category),
+    };
+  }, [fundData?.risk?.risk_vs_category, fundData?.risk?.return_vs_category]);
   const handleRiskAction = () => {
     setIsRiskOpen(!isRiskOpen);
   };
@@ -74,25 +74,24 @@ const RiskDetails = () => {
 
   return (
     <Box sx={{ mt: 4 }}>
-      <CollapsibleSection label='Risk details' isOpen={isRiskOpen} onClick={handleRiskAction}>
+      <CollapsibleSection
+        disabled={isRiskDetailsAvailable}
+        label={`Risk details ${isRiskDetailsAvailable ? '(N/A)' : ''}`}
+        isOpen={isRiskOpen}
+        onClick={handleRiskAction}
+      >
         <Box>
           <Stack direction='column' spacing={3}>
             {!isEmpty(fundData?.risk?.risk_vs_category) && (
-              <Stack direction="column" spacing={3}>
-                <Typography variant="heading4">Risk vs Category</Typography>
-                <BarMeter
-                  barMeterData={barData}
-                  activeIndex={riskVsCategoryActiveIndex}
-                />
+              <Stack direction='column' spacing={3}>
+                <Typography variant='heading4'>Risk vs Category</Typography>
+                <BarMeter barMeterData={barData} activeIndex={riskVsCategoryActiveIndex} />
               </Stack>
             )}
             {!isEmpty(fundData?.risk?.return_vs_category) && (
-              <Stack direction="column" spacing={3}>
-                <Typography variant="heading4">Return vs Category</Typography>
-                <BarMeter
-                  barMeterData={barData}
-                  activeIndex={returnVsCategoryActiveIndex}
-                />
+              <Stack direction='column' spacing={3}>
+                <Typography variant='heading4'>Return vs Category</Typography>
+                <BarMeter barMeterData={barData} activeIndex={returnVsCategoryActiveIndex} />
               </Stack>
             )}
           </Stack>

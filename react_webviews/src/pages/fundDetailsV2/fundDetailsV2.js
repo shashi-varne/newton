@@ -14,7 +14,7 @@ import Api from '../../utils/api';
 import FundPerformance from './FundPerformance';
 import NavigationPopup from '../../designSystem/molecules/NavigationPopup';
 import NavigationPill from '../../designSystem/atoms/NavigationPill';
-import { fetchFundDetails, getFundData } from 'businesslogic/dataStore/reducers/fundDetailsReducer';
+import { fetchFundDetails, getFundData } from 'businesslogic/dataStore/reducers/fundDetails';
 import { useDispatch, useSelector } from 'react-redux';
 import scrollIntoView from 'scroll-into-view-if-needed';
 
@@ -22,7 +22,7 @@ import './fundDetailsV2.scss';
 import { Stack } from '@mui/material';
 import { getConfig } from '../../utils/functions';
 import { getUrlParams } from '../../utils/validators';
-import { getPageLoading } from 'businesslogic/dataStore/reducers/loaderReducer';
+import { getPageLoading } from 'businesslogic/dataStore/reducers/loader';
 
 
 const screen = 'fundDetailsV2';
@@ -46,7 +46,9 @@ const FundDetailsV2 = () => {
       Api,
       screen,
     };
-    dispatch(fetchFundDetails(payload));
+    if(isins !== fundData?.isin) {
+      dispatch(fetchFundDetails(payload));
+    }
   }, []);
 
   return (

@@ -7,19 +7,24 @@ import { TimeLine, Timelines } from '../../designSystem/atoms/TimelineList';
 import Typography from '../../designSystem/atoms/Typography';
 import CollapsibleSection from '../../designSystem/molecules/CollapsibleSection';
 import CustomSwiper from '../../designSystem/molecules/CustomSwiper';
-import {  nonRoundingToFixed } from '../../utils/validators';
+import { nonRoundingToFixed } from '../../utils/validators';
 import meanBy from 'lodash/meanBy';
 import minBy from 'lodash/minBy';
 import maxBy from 'lodash/maxBy';
 import Separator from '../../designSystem/atoms/Separator';
 import { useSelector } from 'react-redux';
-import { getFundData } from 'businesslogic/dataStore/reducers/fundDetailsReducer';
+import { getFundData } from 'businesslogic/dataStore/reducers/fundDetails';
+import isEmpty from 'lodash/isEmpty';
+import { isValidValue } from './helperFunctions';
+
+const secondaryColor = 'foundationColors.content.secondary';
 
 const Returns = () => {
   const [isReturn, setIsReturn] = useState(false);
   const [pillReturnValue, setPillReturnValue] = useState(0);
   const [swiper, setSwiper] = useState('');
   const fundData = useSelector(getFundData);
+  const isReturnAvailable = isEmpty(fundData?.performance?.returns);
 
   const handleReturnSection = () => {
     setIsReturn(!isReturn);
@@ -37,7 +42,12 @@ const Returns = () => {
 
   return (
     <Box sx={{ mt: 4 }} component='section'>
-      <CollapsibleSection isOpen={isReturn} onClick={handleReturnSection} label='Returns'>
+      <CollapsibleSection
+        disabled={isReturnAvailable}
+        isOpen={isReturn}
+        onClick={handleReturnSection}
+        label={`Returns ${isReturnAvailable ? '(N/A)' : ''}`}
+      >
         <Stack direction='column'>
           <Box>
             <Pills value={pillReturnValue} onChange={handleReturnValue}>
@@ -95,7 +105,9 @@ const RollingReturn = ({ returns = [] }) => {
   return (
     <Box sx={{ mt: 3, mb: 3 }}>
       <Stack>
-        <Typography variant='heading4' color='foundationColors.content.secondary'>Investment period</Typography>
+        <Typography variant='heading4' color={secondaryColor}>
+          Investment period
+        </Typography>
         <Box sx={{ mt: 4, maxWidth: 'fit-content' }}>
           <Timelines value={investmentYear} onChange={handleInvestmentYear}>
             <TimeLine label='1Y' />
@@ -107,17 +119,17 @@ const RollingReturn = ({ returns = [] }) => {
           </Timelines>
         </Box>
         <Stack sx={{ mt: 4, mb: 2 }} direction='column' spacing={3}>
-          <Typography variant='heading4' color='foundationColors.content.secondary'>
+          <Typography variant='heading4' color={secondaryColor}>
             Net asset value
           </Typography>
           {NET_ASSET_VALUE?.map((net_asset, idx) => {
             return (
               <Stack key={idx} direction='column' spacing={2}>
                 <Stack direction='row' justifyContent='space-between'>
-                  <Typography variant='body8' color='foundationColors.content.secondary'>
+                  <Typography variant='body8' color={secondaryColor}>
                     {net_asset?.name}
                   </Typography>
-                  <Typography variant='heading4' color='foundationColors.content.secondary'>
+                  <Typography variant='heading4' color={secondaryColor}>
                     {net_asset?.value > 0 ? `+ ${net_asset?.value}` : `- ${net_asset?.value}`}%
                   </Typography>
                 </Stack>
@@ -145,11 +157,11 @@ const ReturnView = ({ returns = [] }) => {
         {returns?.map((returnData, idx) => {
           return (
             <Stack key={idx} direction='row' justifyContent='space-between'>
-              <Typography variant='body8' color='foundationColors.content.secondary'>
+              <Typography variant='body8' color={secondaryColor}>
                 Last {returnData?.name}
               </Typography>
-              <Typography variant='heading4' color='foundationColors.content.secondary'>
-                {returnData?.value}%
+              <Typography variant='heading4' color={secondaryColor}>
+                {isValidValue(returnData?.value, `${returnData?.value}%`)}
               </Typography>
             </Stack>
           );
