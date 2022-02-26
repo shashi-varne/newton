@@ -14,7 +14,7 @@ import Api from '../../utils/api';
 import FundPerformance from './FundPerformance';
 import NavigationPopup from '../../designSystem/molecules/NavigationPopup';
 import NavigationPill from '../../designSystem/atoms/NavigationPill';
-import { fetchFundDetails, getFundData } from 'businesslogic/dataStore/reducers/fundDetails';
+import { fetchFundDetails, getFundData, setFundTimePeriod } from 'businesslogic/dataStore/reducers/fundDetails';
 import { useDispatch, useSelector } from 'react-redux';
 import scrollIntoView from 'scroll-into-view-if-needed';
 

@@ -6,6 +6,7 @@ import Button from '../../designSystem/atoms/Button';
 import Separator from '../../designSystem/atoms/Separator';
 import Typography from '../../designSystem/atoms/Typography';
 import CollapsibleSection from '../../designSystem/molecules/CollapsibleSection';
+import isNull from 'lodash/isNull';
 
 const AssetColors = {
   Equity: 'foundationColors.secondary.profitGreen.400',
@@ -47,12 +48,12 @@ const AssetAllocation = () => {
                       {assetData?.name}
                     </Typography>
                     <Typography variant='body8' color='foundationColors.content.secondary'>
-                      {assetData?.value}%
+                      { isNull(assetData?.value) ? 'N/A' : `${assetData?.value}%`}
                     </Typography>
                   </Stack>
                   <Box
                     sx={{
-                      width: `${assetData?.value}%`,
+                      width: `${assetData?.value || 0}%`,
                       backgroundColor: AssetColors[assetData?.name],
                     }}
                     className='fund-asset-perc'

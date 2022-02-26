@@ -7,19 +7,21 @@ import { TimeLine, Timelines } from '../../designSystem/atoms/TimelineList';
 import Typography from '../../designSystem/atoms/Typography';
 import CollapsibleSection from '../../designSystem/molecules/CollapsibleSection';
 import CustomSwiper from '../../designSystem/molecules/CustomSwiper';
-import {  nonRoundingToFixed } from '../../utils/validators';
+import { nonRoundingToFixed } from '../../utils/validators';
 import meanBy from 'lodash/meanBy';
 import minBy from 'lodash/minBy';
 import maxBy from 'lodash/maxBy';
 import Separator from '../../designSystem/atoms/Separator';
 import { useSelector } from 'react-redux';
 import { getFundData } from 'businesslogic/dataStore/reducers/fundDetails';
+import isEmpty from 'lodash/isEmpty';
 
 const Returns = () => {
   const [isReturn, setIsReturn] = useState(false);
   const [pillReturnValue, setPillReturnValue] = useState(0);
   const [swiper, setSwiper] = useState('');
   const fundData = useSelector(getFundData);
+  const isReturnAvailable = isEmpty(fundData?.performance?.returns);
 
   const handleReturnSection = () => {
     setIsReturn(!isReturn);
@@ -37,7 +39,12 @@ const Returns = () => {
 
   return (
     <Box sx={{ mt: 4 }} component='section'>
-      <CollapsibleSection isOpen={isReturn} onClick={handleReturnSection} label='Returns'>
+      <CollapsibleSection
+        disabled={isReturnAvailable}
+        isOpen={isReturn}
+        onClick={handleReturnSection}
+        label={`Returns ${isReturnAvailable && '(N/A)'}`}
+      >
         <Stack direction='column'>
           <Box>
             <Pills value={pillReturnValue} onChange={handleReturnValue}>
@@ -95,7 +102,9 @@ const RollingReturn = ({ returns = [] }) => {
   return (
     <Box sx={{ mt: 3, mb: 3 }}>
       <Stack>
-        <Typography variant='heading4' color='foundationColors.content.secondary'>Investment period</Typography>
+        <Typography variant='heading4' color='foundationColors.content.secondary'>
+          Investment period
+        </Typography>
         <Box sx={{ mt: 4, maxWidth: 'fit-content' }}>
           <Timelines value={investmentYear} onChange={handleInvestmentYear}>
             <TimeLine label='1Y' />

@@ -251,15 +251,45 @@ const FundGraph = () => {
     <div className='fund-graph-wrapper'>
       <HighchartsReact highcharts={Highcharts} options={options} />
       <Timelines onChange={handleTimePeriodChange} value={fundTimePeriod}>
-        <TimeLine label='1M' value='1M' />
-        <TimeLine label='3M' value='3M' />
-        <TimeLine label='6M' value='6M' />
-        <TimeLine label='1Y' value='1Y' />
-        <TimeLine label='3Y' value='3Y' />
-        <TimeLine label='5Y' value='5Y' />
+        {
+          timeLines?.map((el, id) => {
+            console.log("fundData",fundData);
+            const isDisabled = id > fundData?.performance.returns.length - 1;
+            return(
+              <TimeLine disabled={isDisabled} key={id} label={el.label} value={el.value} />
+            )
+          })
+        }
       </Timelines>
     </div>
   );
 };
+
+const timeLines = [
+  {
+    label: '1M',
+    value: '1M'
+  },
+  {
+    label: '3M',
+    value: '3M'
+  },
+  {
+    label: '6M',
+    value: '6M'
+  },
+  {
+    label: '1Y',
+    value: '1Y'
+  },
+  {
+    label: '3Y',
+    value: '3Y'
+  },
+  {
+    label: '5Y',
+    value: '5Y'
+  },
+]
 
 export default FundGraph;
