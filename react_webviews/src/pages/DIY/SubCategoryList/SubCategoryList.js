@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import CardVertical from '../../../designSystem/molecules/CardVertical';
+import CategoryCard from '../../../designSystem/molecules/CategoryCard';
 import WrapperBox from '../../../designSystem/atoms/WrapperBox';
 import Container from '../../../designSystem/organisms/Container';
 import isArray from 'lodash/isArray';
@@ -17,6 +18,7 @@ import { navigate as navigateFunc } from "../../../utils/functions";
 import './SubCategoryList.scss';
 import { DIY_PATHNAME_MAPPER } from '../common/constants';
 import { hideDiyCartFooter } from "businesslogic/utils/diy/functions";
+import { VIEW_TYPE_MAPPER } from 'businesslogic/constants/diy';
 
 const SubCategoryList = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -56,27 +58,50 @@ const SubCategoryList = (props) => {
       fixedFooter
       noFooter={hideFooter}
     >
-      <div className='diy-sc-cv-lists'>
+      <div className="diy-sc-cv-lists">
         {isArray(subcategoryData.options) &&
           subcategoryData.options?.map((data, idx) => {
             return (
-              <WrapperBox
-                elevation={1}
-                className='diy-sc-cv-item'
+              <SubcategoryOptionCard
                 key={idx}
                 onClick={handleCardClick(data.key)}
-              >
-                <CardVertical
-                  imgSrc={require('assets/large_cap.svg')}
-                  title={data?.name}
-                  subtitle={data?.trivia}
-                  dataAid={data?.key}
-                />
-              </WrapperBox>
+                data={data}
+                viewType={subcategoryData.viewType}
+              />
             );
           })}
       </div>
     </Container>
+  );
+};
+
+const SubcategoryOptionCard = ({ viewType, data, onClick }) => {
+  return (
+    <>
+      {viewType === VIEW_TYPE_MAPPER.imageCaurosel ? (
+        <div className="diy-sc-cv-item" onClick={onClick}>
+          <CategoryCard
+            variant="large"
+            imgSrc={require("assets/tech_fund.svg")}
+            title={data?.name}
+            dataAid={data?.key}
+          />
+        </div>
+      ) : (
+        <WrapperBox
+          elevation={1}
+          className="diy-sc-cv-item"
+          onClick={onClick}
+        >
+          <CardVertical
+            imgSrc={require("assets/large_cap.svg")}
+            title={data?.name}
+            subtitle={data?.trivia}
+            dataAid={data?.key}
+          />
+        </WrapperBox>
+      )}
+    </>
   );
 };
 
