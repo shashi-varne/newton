@@ -51,7 +51,8 @@ import {
   getReturnData,
   getSortData,
   checkFundPresentInCart,
-  hideDiyCartFooter
+  hideDiyCartFooter,
+  hideDiyCartButton
 } from "businesslogic/utils/diy/functions";
 import ToastMessage from "../../../designSystem/atoms/ToastMessage";
 import { navigate as navigateFunc } from "../../../utils/functions";
@@ -81,6 +82,7 @@ const SubCategoryLanding = (props) => {
   );
   const { productName } = useMemo(getConfig, []);
   const hideCartFooter = useMemo(hideDiyCartFooter(productName, diyCartCount), [productName, diyCartCount]);
+  const hideCartButton = useMemo(hideDiyCartButton(productName), [productName]);
 
   useEffect(() => {
     if (isEmpty(subcategoryOptionsData)) {
@@ -277,20 +279,14 @@ const SubCategoryLanding = (props) => {
                 <TabPanel
                   returnPeriod={selectedFilterValue[FILTER_TYPES.returns]?.value}
                   returnLabel={selectedFilterValue[FILTER_TYPES.returns]?.returnLabel}
-                  sortFundsBy={selectedFilterValue[FILTER_TYPES.sort]?.value}
-                  sortingOrder={selectedFilterValue[FILTER_TYPES.sort]?.order}
                   key={idx}
                   value={idx}
-                  selectedFilterValue={selectedFilterValue}
-                  productName={productName}
                   data={filteredFunds[el.key]}
-                  selectedFundHouses={selectedFundHouses}
-                  selectedFundOption={selectedFundOption}
-                  selectedMinInvestment={selectedMinInvestment}
                   activeTab={tabValue}
                   isPageLoading={isPageLoading}
                   handleAddToCart={handleAddToCart}
                   diyCartData={diyCartData}
+                  hideCartButton={hideCartButton}
                 />
               </SwiperSlide>
             );
@@ -336,6 +332,7 @@ const TabPanel = memo((props) => {
     isPageLoading,
     handleAddToCart,
     diyCartData,
+    hideCartButton
   } = props;
   const [NumOfItems, setNumOfItems] = useState(10);
   const [showLoader, setShowLoader] = useState(false);
@@ -452,11 +449,13 @@ const TabPanel = memo((props) => {
                     </ProductItem.LeftSection>
                     <ProductItem.RightSection spacing={2}>
                       <ProductItem.Description title={returnData} titleColor={returnColor} />
-                      <Icon
-                        size='32px'
-                        src={require(`assets/${isFundAddedToCart ? `minus` : `add_icon`}.svg`)}
-                        onClick={handleAddToCart(fund)}
-                      />
+                      {!hideCartButton && (
+                        <Icon
+                          size='32px'
+                          src={require(`assets/${isFundAddedToCart ? `minus` : `add_icon`}.svg`)}
+                          onClick={handleAddToCart(fund)}
+                        />
+                      )}
                     </ProductItem.RightSection>
                   </ProductItem>
                 </div>
