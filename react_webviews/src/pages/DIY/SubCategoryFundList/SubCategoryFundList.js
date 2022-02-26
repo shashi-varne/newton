@@ -1,4 +1,4 @@
-import { Box, Skeleton, Stack } from "@mui/material";
+import { Box, Fade, Grow, Skeleton, Stack, Zoom } from "@mui/material";
 import React, {
   memo,
   useCallback,
@@ -58,6 +58,7 @@ import ToastMessage from "../../../designSystem/atoms/ToastMessage";
 import { navigate as navigateFunc } from "../../../utils/functions";
 import { DIY_PATHNAME_MAPPER } from "../common/constants";
 import Separator from "../../../designSystem/atoms/Separator";
+import { useLocation } from "react-router-dom";
 
 const screen = "diyFundList";
 const SubCategoryLanding = (props) => {
@@ -211,7 +212,8 @@ const SubCategoryLanding = (props) => {
     setIsFilterSheetOpen({ ...isFilterSheetOpen, [filterType]: true });
   };
 
-  const handleAddToCart = (fund) => () => {
+  const handleAddToCart = (e,fund) => {
+    e.stopPropagation();
     dispatch(setCartItem(fund));
   };
 
@@ -287,6 +289,7 @@ const SubCategoryLanding = (props) => {
                   handleAddToCart={handleAddToCart}
                   diyCartData={diyCartData}
                   hideCartButton={hideCartButton}
+                  navigate={navigate}
                 />
               </SwiperSlide>
             );
@@ -332,11 +335,13 @@ const TabPanel = memo((props) => {
     isPageLoading,
     handleAddToCart,
     diyCartData,
-    hideCartButton
+    hideCartButton,
+    navigate
   } = props;
   const [NumOfItems, setNumOfItems] = useState(10);
   const [showLoader, setShowLoader] = useState(false);
   const observer = useRef();
+  const location = useLocation();
   const lastProductItem = useCallback((node) => {
     if (observer.current) observer.current.disconnect();
     observer.current = new IntersectionObserver((enteries) => {
@@ -352,6 +357,15 @@ const TabPanel = memo((props) => {
     const loader = value === activeTab && isPageLoading;
     setShowLoader(loader);
   }, [activeTab, isPageLoading]);
+
+  const showFundDetails = (fund) => () => {
+    navigate(
+      `/diyv2/fund-details`,
+      {
+        searchParams: `${location.search}&isins=${fund.isin}`,
+      }
+    )
+  }
 
   return (
     <div
@@ -420,13 +434,13 @@ const TabPanel = memo((props) => {
               }
               const isFundAddedToCart = checkFundPresentInCart(diyCartData, fund);
               return (
-                <div key={idx} {...refData}>
+                <div key={idx} {...refData} >
                   <ProductItem
                     // sx={{ mb: '16px' }}
                     key={idx}
                     imgSrc={fund?.amc_logo_big}
                     showSeparator
-                    // onClick={handleClick}
+                    onClick={showFundDetails(fund)}
                   >
                     <ProductItem.LeftSection>
                       <ProductItem.Title>{fund?.legal_name}</ProductItem.Title>
@@ -453,7 +467,7 @@ const TabPanel = memo((props) => {
                         <Icon
                           size='32px'
                           src={require(`assets/${isFundAddedToCart ? `minus` : `add_icon`}.svg`)}
-                          onClick={handleAddToCart(fund)}
+                          onClick={(e) => handleAddToCart(e,fund)}
                         />
                       )}
                     </ProductItem.RightSection>
@@ -481,16 +495,16 @@ const CustomFooter = ({
 }) => {
   return (
     <Stack spacing={2} className='sub-category-custom-footer'>
-      {!hideCartFooter && (
+      <Grow in={!hideCartFooter} timeout={500}>
         <div className='sc-confirmation-btn-wrapper'>
           <ConfirmAction
             title={`${cartCount} items in the cart`}
             buttonTitle='View Cart'
             badgeContent={cartCount}
             onClick={onCartClick}
-          />
+            />
         </div>
-      )}
+      </Grow>
       <FilterNavigation
         returnLabel={returnLabel}
         handleSortClick={handleSortClick}
