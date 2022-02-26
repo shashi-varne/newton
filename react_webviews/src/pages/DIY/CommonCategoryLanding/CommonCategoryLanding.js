@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
   LandingHeader,
   LandingHeaderPoints,
@@ -27,9 +27,11 @@ import {
   setDiyTypeData,
   getDiyTypeData,
   getTrendingFundsByCategory,
-  getDiySubcategoryDataByViewType
+  getDiySubcategoryDataByViewType,
+  getDiyCartCount
 } from "businesslogic/dataStore/reducers/diy";
 import { DIY_PATHNAME_MAPPER } from '../constants';
+import { hideDiyCartFooter } from "businesslogic/utils/diy/functions";
 import useLoadingState from '../../../common/customHooks/useLoadingState';
 
 const screen = 'diyLanding';
@@ -41,6 +43,7 @@ const CommonCategoryLanding = (props) => {
   let { diyType = "" } = props.match.params;
 
   const diyTypeData = useSelector(getDiyTypeData);
+  const cartCount = useSelector(getDiyCartCount);
   const categoryData = useSelector((state) => getDiyCategoryData(state, diyType));
   const trendingFunds = useSelector((state) => getTrendingFundsByCategory(state, diyType));
   const twoRowsImageCarouselData = useSelector((state) => getDiySubcategoryDataByViewType(state, diyTypeData.category, VIEW_TYPE_MAPPER.twoRowsImageCaurosel));
@@ -48,6 +51,7 @@ const CommonCategoryLanding = (props) => {
   const horizontalCauroselData = useSelector((state) => getDiySubcategoryDataByViewType(state, diyTypeData.category, VIEW_TYPE_MAPPER.cardHorizontalImageCaurosel));
   const imageCarouselData = useSelector((state) => getDiySubcategoryDataByViewType(state, diyTypeData.category, VIEW_TYPE_MAPPER.imageCaurosel));
   const { isPageLoading } = useLoadingState(screen);
+  const hideFooter = useMemo(hideDiyCartFooter(productName, cartCount), [productName, cartCount]);
   
   useEffect(() => {
     if (isEmpty(trendingFunds) || isEmpty(categoryData)) {
@@ -85,8 +89,22 @@ const CommonCategoryLanding = (props) => {
     });
   };
 
+  const onCartClick = () => {};
+
   return (
-    <Container>
+    <Container
+      footer={{
+        confirmActionProps: {
+          buttonTitle: 'View Cart',
+          title: `${cartCount} item saved in your cart`,
+          badgeContent: cartCount,
+          onClick: onCartClick,
+          imgSrc: require('assets/cart_icon.svg'),
+        },
+      }}
+      fixedFooter
+      noFooter={hideFooter}
+    >
       <div className='diy-category-landing-wrapper'>
         <LandingHeader variant='center' dataAid='equity'>
           <Lottie

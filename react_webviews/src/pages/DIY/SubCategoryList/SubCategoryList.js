@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { navigate as navigateFunc } from "../../../utils/functions";
 import './SubCategoryList.scss';
 import { DIY_PATHNAME_MAPPER } from '../constants';
+import { hideDiyCartFooter } from "businesslogic/utils/diy/functions";
 
 const SubCategoryList = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -24,7 +25,7 @@ const SubCategoryList = (props) => {
   const cartCount = useSelector(getDiyCartCount);
   const subcategoryData = useSelector((state) => getDiySubcategoryData(state, diyTypeData.category, diyTypeData.subcategory));
   const { productName } = useMemo(getConfig, []);
-  const hideFooter = productName === 'finity' || cartCount <= 0;
+  const hideFooter = useMemo(hideDiyCartFooter(productName, cartCount), [productName, cartCount]);
   
   const onCartClick = () => {};
 

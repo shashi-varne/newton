@@ -51,8 +51,8 @@ import {
   getReturnData,
   getSortData,
   checkFundPresentInCart,
+  hideDiyCartFooter
 } from "businesslogic/utils/diy/functions";
-import { SkeltonRect } from "../../../common/ui/Skelton";
 import ToastMessage from "../../../designSystem/atoms/ToastMessage";
 import { navigate as navigateFunc } from "../../../utils/functions";
 import { DIY_PATHNAME_MAPPER } from "../constants";
@@ -79,6 +79,8 @@ const SubCategoryLanding = (props) => {
   const subcategoryOptionsData = useSelector((state) =>
     getDiySubcategoryOptions(state, category, subcategory)
   );
+  const { productName } = useMemo(getConfig, []);
+  const hideCartFooter = useMemo(hideDiyCartFooter(productName, diyCartCount), [productName, diyCartCount]);
 
   useEffect(() => {
     if (isEmpty(subcategoryOptionsData)) {
@@ -116,7 +118,6 @@ const SubCategoryLanding = (props) => {
   const [selectedMinInvestment, setSelectedMinInvestment] = useState(
     getMinimumInvestmentData(filterOptions.minInvestment)
   );
-  const { productName } = useMemo(getConfig, []);
 
   const fetchDiyFundList = () => {
     if (!isEmpty(subcategoryOptionsData)) {
@@ -233,11 +234,11 @@ const SubCategoryLanding = (props) => {
           handleSortClick={handleFilterClick(FILTER_TYPES.sort)}
           handleReturnClick={handleFilterClick(FILTER_TYPES.returns)}
           handleFilterClick={handleFilterClick("filter")}
-          productName={productName}
           cartCount={diyCartCount}
           onCartClick={onCartClick}
           returnLabel={selectedFilterValue[FILTER_TYPES.returns]?.returnLabel}
           filterCount={selectedFundHouses.length}
+          hideCartFooter={hideCartFooter}
         />
       }
       className="sub-category-landing-wrapper"
@@ -470,7 +471,6 @@ const TabPanel = memo((props) => {
 }, isEqual);
 
 const CustomFooter = ({
-  productName,
   cartCount,
   onCartClick,
   handleSortClick,
@@ -478,10 +478,11 @@ const CustomFooter = ({
   handleReturnClick,
   returnLabel,
   filterCount,
+  hideCartFooter
 }) => {
   return (
     <Stack spacing={2} className='sub-category-custom-footer'>
-      {cartCount > 0 && productName === 'fisdom' && (
+      {!hideCartFooter && (
         <div className='sc-confirmation-btn-wrapper'>
           <ConfirmAction
             title={`${cartCount} items in the cart`}
