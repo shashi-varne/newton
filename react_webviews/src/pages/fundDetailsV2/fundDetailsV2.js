@@ -14,7 +14,7 @@ import Api from '../../utils/api';
 import FundPerformance from './FundPerformance';
 import NavigationPopup from '../../designSystem/molecules/NavigationPopup';
 import NavigationPill from '../../designSystem/atoms/NavigationPill';
-import { fetchFundDetails, getFundData, setFundTimePeriod } from 'businesslogic/dataStore/reducers/fundDetails';
+import { fetchFundDetails, getFundData } from 'businesslogic/dataStore/reducers/fundDetails';
 import { useDispatch, useSelector } from 'react-redux';
 import scrollIntoView from 'scroll-into-view-if-needed';
 
@@ -41,7 +41,6 @@ const FundDetailsV2 = () => {
   const ctaText = productName === 'fisdom' ? 'ADD TO CART' : 'INVEST NOW';
   const cartCount = 0;
   useEffect(() => {
-    console.log("fund data is",fundData);
     const payload = {
       isins,
       Api,

@@ -1,3 +1,5 @@
+import isEmpty from 'lodash/isEmpty';
+
 export const getExpectedReturn = (amount, year, invest_type, rateOfInterest) => {
   let projectedValue = 0;
   let principal = amount;
@@ -12,4 +14,15 @@ export const getExpectedReturn = (amount, year, invest_type, rateOfInterest) => 
     }
   }
   return Number(projectedValue.toFixed(0));
+};
+
+export const isValidValue = (value, valueToBeReturned, stringToBeReplaced = 'NA') => {
+  if (typeof value === 'object') {
+    return isEmpty(value) ? stringToBeReplaced : value;
+  } else {
+    if(valueToBeReturned) {
+      value = valueToBeReturned;
+    }
+    return (value || value === 0) ? value : stringToBeReplaced;
+  }
 };

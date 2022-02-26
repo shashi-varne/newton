@@ -9,6 +9,7 @@ import Tooltip from '../../designSystem/atoms/Tooltip';
 import Icon from '../../designSystem/atoms/Icon';
 import { useSelector } from 'react-redux';
 import { getFundData } from 'businesslogic/dataStore/reducers/fundDetails';
+import { isValidValue } from './helperFunctions';
 
 function calculateFullAge(dob) {
   const startDate = parse(dob, 'dd/MM/yyyy', new Date());
@@ -85,7 +86,8 @@ const FundStats = () => {
             Total Aum
           </Typography>
           <Typography variant='heading4' align='right'>
-            {`₹ ${fundData?.performance?.aum}`}
+            {/* {fundData?.performance?.aum ? formatAmountInr(fundData?.performance?.aum) : 'NA'} */}
+            {isValidValue(fundData?.performance?.aum, `₹ ${fundData?.performance?.aum}`)}
           </Typography>
         </Stack>
       </Stack>
@@ -96,25 +98,31 @@ const FundStats = () => {
             <Typography allCaps variant='body9' color='foundationColors.content.secondary'>
               Expense ratio
             </Typography>
-              <Box sx={{ height: '16px', width: '16px' }}>
-                <Tooltip
-                  open={isTooltipOpen['er']}
-                  title='This is the annual maintenance fee charged by the Asset Management Companies. This includes opearting costs, management fees, etc.'
-                >
-                  <div>
-                    <Icon
-                      src={require('assets/info_icon_ds.svg')}
-                      size='16px'
-                      className='ec_info_icon'
-                      alt='info_icon'
-                      dataAid='right'
-                      onClick={handleTooltip('er')}
-                    />
-                  </div>
-                </Tooltip>
-              </Box>
+            <Box sx={{ height: '16px', width: '16px' }}>
+              <Tooltip
+                open={isTooltipOpen['er']}
+                title='This is the annual maintenance fee charged by the Asset Management Companies. This includes opearting costs, management fees, etc.'
+              >
+                <div>
+                  <Icon
+                    src={require('assets/info_icon_ds.svg')}
+                    size='16px'
+                    className='ec_info_icon'
+                    alt='info_icon'
+                    dataAid='right'
+                    onClick={handleTooltip('er')}
+                  />
+                </div>
+              </Tooltip>
+            </Box>
           </Stack>
-          <Typography variant='heading4'>{`${fundData?.portfolio?.expense_ratio}%`}</Typography>
+          <Typography variant='heading4'>
+            {isValidValue(
+              fundData?.portfolio?.expense_ratio,
+              `${fundData?.portfolio?.expense_ratio}%`
+            )}
+            {/* {fundData?.portfolio?.expense_ratio ? `${fundData?.portfolio?.expense_ratio}%` : 'NA'} */}
+          </Typography>
         </Stack>
         <Stack spacing='4px' direction='column'>
           <Typography
@@ -136,23 +144,23 @@ const FundStats = () => {
           <Typography variant='body9' allCaps color='foundationColors.content.secondary'>
             Exit load
           </Typography>
-            <Box sx={{ height: '16px', width: '16px' }}>
-              <Tooltip
-                open={isTooltipOpen['el']}
-                title='This refers to the fee charged by the Asset Management Companies at the time of exiting or redeeming fund units'
-              >
-                <div>
-                  <Icon
-                    src={require('assets/info_icon_ds.svg')}
-                    size='16px'
-                    className='ec_info_icon'
-                    alt='info_icon'
-                    dataAid='right'
-                    onClick={handleTooltip('el')}
-                  />
-                </div>
-              </Tooltip>
-            </Box>
+          <Box sx={{ height: '16px', width: '16px' }}>
+            <Tooltip
+              open={isTooltipOpen['el']}
+              title='This refers to the fee charged by the Asset Management Companies at the time of exiting or redeeming fund units'
+            >
+              <div>
+                <Icon
+                  src={require('assets/info_icon_ds.svg')}
+                  size='16px'
+                  className='ec_info_icon'
+                  alt='info_icon'
+                  dataAid='right'
+                  onClick={handleTooltip('el')}
+                />
+              </div>
+            </Tooltip>
+          </Box>
         </Stack>
         {fundData?.additional_info?.exit_load?.map((exitLoadData, idx) => {
           return (

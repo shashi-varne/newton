@@ -9,6 +9,7 @@ import Typography from '../../designSystem/atoms/Typography';
 import Icon from '../../designSystem/atoms/Icon';
 import { useSelector } from 'react-redux';
 import { getFundData } from 'businesslogic/dataStore/reducers/fundDetails';
+import { isValidValue } from './helperFunctions';
 
 const fetchReturns = (fundData) => {
   const returns = {};
@@ -50,10 +51,10 @@ const FundPerformance = () => {
         rightTitle={`Returns (${fundReturns[fundTimePeriod] ? fundTimePeriod : 'N/A'})`}
         rightTitleColor='foundationColors.content.secondary'
         rightSubtitle={`${fundReturns[fundTimePeriod] || 'N/A'}`}
-        rightSubtitleColor={`foundationColors.secondary.${
+        rightSubtitleColor={fundReturns[fundTimePeriod] && `foundationColors.secondary.${
           fundReturns[fundTimePeriod] > 0 ? 'profitGreen' : 'lossRed'
         }.400`}
-        imgSrc={require(`assets/${
+        imgSrc={fundReturns[fundTimePeriod] && require(`assets/${
           fundReturns[fundTimePeriod] > 0 ? 'positive_return' : 'negative_return'
         }.svg`)}
       />
@@ -63,9 +64,9 @@ const FundPerformance = () => {
         leftSubtitle={formatAmountInr(minimumInvestment[0]?.value)}
         rightTitle='Morning Star'
         rightTitleColor='foundationColors.content.secondary'
-        rightSubtitle={fundData?.performance?.ms_rating}
-        rightSubtitleColor='foundationColors.secondary.mango.400'
-        imgSrc={require('assets/star_large.svg')}
+        rightSubtitle={isValidValue(fundData?.performance?.ms_rating)}
+        rightSubtitleColor={fundData?.performance?.ms_rating && 'foundationColors.secondary.mango.400'}
+        imgSrc={fundData?.performance?.ms_rating && require('assets/star_large.svg')}
       />
     </Stack>
   );
