@@ -77,9 +77,6 @@ const getTheme = () => {
             [defaultTheme.breakpoints.up('sm')]: {
               left: '300px !important',
               maxWidth: 'var(--desktop-width) !important',
-              "& .MuiPaper-root": {
-                left: '185px !important',
-              },
             }
           },
         }

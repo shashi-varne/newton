@@ -1,45 +1,16 @@
 import { Skeleton, Stack } from '@mui/material';
 import React from 'react';
-import { useSelector } from 'react-redux';
 import CustomSwiper from '../../../designSystem/molecules/CustomSwiper';
 import { SwiperSlide } from 'swiper/react';
 import WrapperBox from '../../../designSystem/atoms/WrapperBox';
 import CardVertical from '../../../designSystem/molecules/CardVertical';
 import SectionHeader from './SectionHeader';
-import { getPageLoading } from 'businesslogic/dataStore/reducers/loader';
 import Icon from '../../../designSystem/atoms/Icon';
 import isEmpty from 'lodash/isEmpty';
-import { navigate as navigateFunc } from '../../../utils/functions';
 import { withRouter } from 'react-router-dom';
 
-const screen = 'diyLanding';
-const TwoRowCarousel = (props) => {
-  const categoriesNew = useSelector((state) => state?.diy?.categories);
-  const isPageLoading = useSelector((state) => getPageLoading(state, screen));
-  const navigate = navigateFunc.bind(props);
-  const categoryOptions = categoriesNew?.find((el) => {
-    return el.category.toLowerCase() === props.diyType;
-  });
-
-  const twoImageCarousel = categoryOptions?.sub_categories?.find((el) => {
-    return el.viewType === 'twoRowsImageCaurosel';
-  });
-
-  const handleCardClick = (item) => () => {
-    console.log('item is', item);
-  };
-
-  const seeAllCategories = () => {
-    console.log('all categories');
-    navigate('sub-category', {
-      state: {
-        headerTitle: twoImageCarousel?.name,
-        categoryList: twoImageCarousel?.options,
-      },
-    });
-  };
-
-  if (!isPageLoading && isEmpty(twoImageCarousel)) {
+const TwoRowCarousel = ({ isPageLoading, handleCardClick, seeAllCategories, data }) => {
+  if (!isPageLoading && isEmpty(data)) {
     return null;
   }
   return (
@@ -47,8 +18,8 @@ const TwoRowCarousel = (props) => {
       <SectionHeader
         isPageLoading={isPageLoading}
         sx={{ pl: 2, pr: 2 }}
-        title={twoImageCarousel?.name}
-        onClick={seeAllCategories}
+        title={data?.name}
+        onClick={seeAllCategories(data.key)}
       />
       <div>
         <CustomSwiper
@@ -66,19 +37,20 @@ const TwoRowCarousel = (props) => {
                   </SwiperSlide>
                 );
               })
-            : twoImageCarousel?.options?.map((category, idx) => {
+            : data?.options?.map((el, idx) => {
                 return (
                   <SwiperSlide key={idx} style={{ padding: '1px 0px' }}>
                     <WrapperBox
                       elevation={1}
                       sx={{ height: '100%' }}
-                      onClick={handleCardClick(category)}
+                      onClick={handleCardClick(data.key, el.key)}
                     >
                       <CardVertical
                         imgSrc={require('assets/large_cap.svg')}
-                        title={category?.name}
-                        subtitle={category?.trivia}
-                        dataAid={category?.key}
+                        title={el?.name}
+                        subtitle={el?.trivia}
+                        dataAid={el?.key}
+                        className="pointer"
                       />
                     </WrapperBox>
                   </SwiperSlide>

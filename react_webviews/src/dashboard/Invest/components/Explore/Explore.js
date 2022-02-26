@@ -94,7 +94,7 @@ const InvestExplore = (props) => {
   const navigate = navigateFunc.bind(props)
   const goNext = (title) => () => {
     sendEvents('next', title)
-    navigate(`/diyv2/${title}`)
+    navigate(`/diyv2/${title}/landing`)
   }
 
   const handleRightIconClick = () => {

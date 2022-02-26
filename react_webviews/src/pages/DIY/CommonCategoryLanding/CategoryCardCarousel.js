@@ -1,44 +1,16 @@
 import { Skeleton, Stack } from '@mui/material';
 import React from 'react';
-import { useSelector } from 'react-redux';
 import CustomSwiper from '../../../designSystem/molecules/CustomSwiper';
 import { SwiperSlide } from 'swiper/react';
 import CategoryCard from '../../../designSystem/molecules/CategoryCard';
 import SectionHeader from './SectionHeader';
 import Icon from '../../../designSystem/atoms/Icon';
 import Typography from '../../../designSystem/atoms/Typography';
-import { getPageLoading } from 'businesslogic/dataStore/reducers/loader';
 import isEmpty from 'lodash/isEmpty';
-import { navigate as navigateFunc } from '../../../utils/functions';
 import { withRouter } from 'react-router-dom';
 
-const screen = 'diyLanding';
-const CategoryCardCarousel = ({ diyType, config, ...restProps }) => {
-  const categoriesNew = useSelector((state) => state?.diy?.categories);
-  const isPageLoading = useSelector((state) => getPageLoading(state, screen));
-  const navigate = navigateFunc.bind(restProps);
-  const categoryOptions = categoriesNew?.find((el) => {
-    return el.category.toLowerCase() === diyType;
-  });
-
-  const handleCardClick = (item) => () => {
-    console.log("item is",item);
-  }
-
-  const seeAllCategories = () => {
-    console.log('all categories');
-    navigate('sub-category-funds', {
-      state: {
-        headerTitle: imageCaurosel?.name,
-        fundCategoryList: imageCaurosel?.options,
-      },
-    });
-  };
-  
-  const imageCaurosel = categoryOptions?.sub_categories?.find(
-    (el) => el.viewType === 'imageCaurosel'
-  );
-  if (!isPageLoading && isEmpty(imageCaurosel)) {
+const CategoryCardCarousel = ({ handleCardClick, isPageLoading, data = {}, seeAllCategories, config }) => {
+  if (!isPageLoading && isEmpty(data)) {
     return null;
   }
   return (
@@ -46,8 +18,8 @@ const CategoryCardCarousel = ({ diyType, config, ...restProps }) => {
       <SectionHeader
         isPageLoading={isPageLoading}
         sx={{ pl: 2, pr: 2 }}
-        title={imageCaurosel?.name}
-        onClick={seeAllCategories}
+        title={data?.name}
+        onClick={seeAllCategories(data.key)}
       />
       <CustomSwiper
         spaceBetween={16}
@@ -79,13 +51,14 @@ const CategoryCardCarousel = ({ diyType, config, ...restProps }) => {
                 </SwiperSlide>
               );
             })
-          : imageCaurosel?.options?.map((sector, idx) => (
+          : data?.options?.map((el, idx) => (
               <SwiperSlide key={idx}>
                 <CategoryCard
                   imgSrc={require('assets/tech_fund.svg')}
-                  title={sector?.name}
+                  title={el?.name}
                   variant='large'
-                  onClick={handleCardClick(sector)}
+                  onClick={handleCardClick(data.key, el.key)}
+                  className="pointer"
                 />
               </SwiperSlide>
             ))}
