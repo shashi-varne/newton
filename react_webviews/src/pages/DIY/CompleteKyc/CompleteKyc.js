@@ -13,12 +13,36 @@ import { getConfig } from '../../../utils/functions';
 import checkedIcon from 'assets/checked.svg';
 import { DIY } from 'businesslogic/strings/diy';
 import Icon from '../../../designSystem/atoms/Icon';
-import PropTypes from 'prop-types';
+import { navigate as navigateFunc } from '../../../utils/functions';
+import { DIY_PATHNAME_MAPPER } from '../common/constants';
 
 import './CompleteKyc.scss';
 
-const CompleteKyc = ({ onCtaClick }) => {
-  const { productName } = useMemo(getConfig, []);
+const CompleteKyc = (props) => {
+  const navigate = navigateFunc.bind(props);
+  const { productName, Web, isIframe } = useMemo(getConfig, []);
+  const onClick = () => {
+    const event = {
+      event_name: "journey_details",
+      properties: {
+        journey: {
+          name: "mf",
+          trigger: "cta",
+          journey_status: "incomplete",
+          next_journey: "kyc",
+        },
+      },
+    };
+    // send event
+    if (!Web) {
+      window.callbackWeb.eventCallback(event);
+    } else if (isIframe) {
+      const message = JSON.stringify(event);
+      window.callbackWeb.sendEvent(message);
+    }
+    navigate(DIY_PATHNAME_MAPPER.kycWeb);
+  };
+
   return (
     <Container
       headerProps={{
@@ -27,7 +51,7 @@ const CompleteKyc = ({ onCtaClick }) => {
       footer={{
         button1Props: {
           title: 'Continue',
-          onClick: onCtaClick,
+          onClick,
         },
       }}
       className='complete-kyc-wrapper'
@@ -68,9 +92,5 @@ const COMPLETE_KYC_POINTS = [
   DIY.digilockerIntegeration,
   DIY.instantSafe,
 ];
-
-CompleteKyc.propTypes = {
-  onCtaClick: PropTypes.func.isRequired,
-};
 
 export default CompleteKyc;

@@ -25,7 +25,9 @@ import { getUrlParams } from '../../utils/validators';
 import { getDiyCart, getDiyCartCount, setCartItem } from 'businesslogic/dataStore/reducers/diy';
 import { navigate as navigateFunc } from "utils/functions";
 import useLoadingState from '../../common/customHooks/useLoadingState';
-
+import { validateKycAndRedirect } from '../DIY/common/functions';
+import useUserKycHook from '../../kyc/common/hooks/userKycHook';
+import { checkFundPresentInCart } from 'businesslogic/utils/diy/functions';
 
 const screen = 'fundDetailsV2';
 const FundDetailsV2 = (props) => {
@@ -44,6 +46,7 @@ const FundDetailsV2 = (props) => {
   const isFisdom = productName === 'fisdom';
   const ctaText = isFisdom ? 'ADD TO CART' : 'INVEST NOW';
   const cartCount = useSelector(getDiyCartCount);
+  const { kyc, isLoading } = useUserKycHook();
   useEffect(() => {
     const payload = {
       isins,
@@ -55,15 +58,8 @@ const FundDetailsV2 = (props) => {
     }
   }, []);
 
-  const onCartClick = () => {
-    navigate('/diyv2/mf-orders');
-  }
-
   const diyCart = useSelector(getDiyCart);
-  const isfundAdded = useMemo(() => {
-    const fund = diyCart?.find(el => el.isin === fundData.isin);
-    return !isEmpty(fund);
-  },[diyCart, fundData]);
+  const isfundAdded = useMemo(() => checkFundPresentInCart(diyCart, fundData), [diyCart, fundData]);
 
   const addFundToCart = () => {
     dispatch(setCartItem(fundData));
@@ -84,13 +80,13 @@ const FundDetailsV2 = (props) => {
           title:`${cartCount} items in the cart`,
           buttonTitle:'View Cart',
           badgeContent:cartCount,
-          onButtonClick:onCartClick,
+          onButtonClick: validateKycAndRedirect({ navigate, kyc }),
           dataAid: '_'
         },
         hideButton1: isFisdom && isfundAdded,
         hideConfirmAction: !isFisdom || !isfundAdded,
       }}
-      isPageLoading={isPageLoading}
+      isPageLoading={isPageLoading || isLoading}
       renderComponentAboveFooter={
         <CustomJumpTo
           fundStatRef={fundStatRef}

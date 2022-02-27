@@ -5,5 +5,6 @@ export const DIY_PATHNAME_MAPPER = {
   fundDetails: "/diyv2/fund-details",
   diyInvestLanding: "/invest/explore",
   mfOrders: "/diyv2/mf-orders",
-  completeKyc: "/diyv2/complete-kyc"
+  completeKyc: "/diyv2/complete-kyc",
+  kycWeb: "/kyc/web",
 };
