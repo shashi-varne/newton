@@ -16,6 +16,7 @@ import Api from '../../utils/api';
 import './FundGraph.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUrlParams } from '../../utils/validators';
+import { getPageLoading } from 'businesslogic/dataStore/reducers/loader';
 
 const screen = 'FundGraphData';
 
@@ -26,6 +27,7 @@ const FundGraph = () => {
   const fundData = useSelector(getFundData);
   const fundTimePeriod = useSelector((state) => state?.fundDetails?.fundTimePeriod);
   const fundGraphData = useSelector((state) => state?.fundDetails?.fundGraphData);
+  const isPageLoading = useSelector(state => getPageLoading(state, screen));
   const disptach = useDispatch();
   const [periodWiseData, setPeriodWiseData] = useState({});
   const theme = getTheme();
@@ -238,7 +240,7 @@ const FundGraph = () => {
       },
     ],
   };
-  if (isEmpty(graphData))
+  if (isPageLoading || isEmpty(graphData))
     return (
       <Skeleton
         variant='rectangular'

@@ -90,7 +90,9 @@ const CommonCategoryLanding = (props) => {
     });
   };
 
-  const onCartClick = () => {};
+  const onCartClick = () => {
+    navigate('/diyv2/mf-orders');
+  };
 
   return (
     <Container
@@ -99,7 +101,7 @@ const CommonCategoryLanding = (props) => {
           buttonTitle: 'View Cart',
           title: `${cartCount} item saved in your cart`,
           badgeContent: cartCount,
-          onClick: onCartClick,
+          onButtonClick: onCartClick,
           imgSrc: require('assets/cart_icon.svg'),
           dataAid: '_'
         },

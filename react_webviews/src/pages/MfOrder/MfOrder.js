@@ -19,6 +19,7 @@ import { Pill, Pills } from '../../designSystem/atoms/Pills/Pills';
 import values from 'lodash/values';
 import scrollIntoView from 'scroll-into-view-if-needed';
 import Api from '../../utils/api';
+import size from 'lodash/size';
 
 import './MfOrder.scss';
 import FundOrderItem from './FundOrderItem';
@@ -135,13 +136,15 @@ const MfOrder = (props) => {
   const handlePlaceOrders = () => {
     let amountInputError = false;
     let amountValidationError = false;
+    let isError = false;
     const validateErrors = values(isInvestmentValid);
     // eslint-disable-next-line array-callback-return
     validateErrors.some((el) => {
-      if (el?.amountError) {
-        amountInputError = true;
-        scrollIntoView(el?.orderItemRef, {
-          behavior: 'smooth',
+      if(el?.isInvestmentAllowed) {
+        if (el?.amountError) {
+          amountInputError = true;
+          scrollIntoView(el?.orderItemRef, {
+            behavior: 'smooth',
           block: 'center',
         });
         return true;
@@ -154,6 +157,14 @@ const MfOrder = (props) => {
         });
         return true;
       }
+    } else {
+        if(size(fundOrderDetails) <= 1 && el?.investErrorMessage) {
+          Toast(el?.investErrorMessage);
+          isError = true;
+          return true;
+
+        }
+    }
     });
     if (amountInputError) {
       Toast('Please enter the amount');
@@ -163,6 +174,9 @@ const MfOrder = (props) => {
     if (amountValidationError) {
       Toast('Please enter the correct amount');
       return;
+    }
+    if(!isError) {
+      console.log("diy cart data us", mfOrders);
     }
   };
 

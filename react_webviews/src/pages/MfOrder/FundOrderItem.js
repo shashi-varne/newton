@@ -1,5 +1,5 @@
 import { Box, IconButton } from '@mui/material';
-import { setMfOrders } from 'businesslogic/dataStore/reducers/mfOrders';
+import { setMfOrders, removeMfOrder } from 'businesslogic/dataStore/reducers/mfOrders';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Icon from '../../designSystem/atoms/Icon';
@@ -54,10 +54,12 @@ const FundOrderItem = ({
           validationError: showError,
           amountError: !amount,
           orderItemRef: fundOrderItemRef.current,
+          isInvestmentAllowed,
+          investErrorMessage
         },
       };
     });
-  }, [showError]);
+  }, [showError, isInvestmentAllowed]);
   useEffect(() => {
     setInvestmentType(parentInvestmentType);
   }, [parentInvestmentType]);
@@ -76,8 +78,12 @@ const FundOrderItem = ({
     const order = {
       [fundDetails.mfid]: orderData,
     };
-    dispatch(setMfOrders(order));
-  }, [investmentType, amount, selectedDate]);
+    if(isInvestmentAllowed) {
+      dispatch(setMfOrders(order));
+    } else {
+      dispatch(removeMfOrder(orderData.mfid));
+    }
+  }, [investmentType, amount, selectedDate, isInvestmentAllowed]);
 
   const handleAmountValue = (e) => {
     setAmount(e.target.value);
