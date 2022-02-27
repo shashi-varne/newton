@@ -5,6 +5,7 @@ import {
   getfundOrderDetails,
   resetMfOrders,
   setFundOrderDetails,
+  triggerInvestment
 } from 'businesslogic/dataStore/reducers/mfOrders';
 import { getIsins } from 'businesslogic/utils/mfOrder/functions';
 import isEmpty from 'lodash/isEmpty';
@@ -24,28 +25,34 @@ import BottomSheet from '../../designSystem/organisms/BottomSheet';
 import Container from '../../designSystem/organisms/Container';
 import Api from '../../utils/api';
 import { getConfig } from '../../utils/functions';
-import { formatAmountInr } from '../../utils/validators';
+import { formatAmountInr, storageService } from '../../utils/validators';
 import FundOrderItem from './FundOrderItem';
 import MFSkeletonLoader from './MFSkeletonLoader';
 import NoMfOrders from './NoMfOrders';
+import { navigate as navigateFunc } from '../../utils/functions';
+import useUserKycHook from '../../kyc/common/hooks/userKycHook';
+import { nativeCallback } from '../../utils/native_callback';
+import { handlePaymentRedirection } from '../DIY/common/functions';
 
 import './MfOrder.scss';
-import { nativeCallback } from '../../utils/native_callback';
 const screen = 'mfOrder';
 
-const MfOrder = () => {
+const MfOrder = (props) => {
+  const navigate = navigateFunc.bind(props);
   const [isOpen, setIsOpen] = useState(false);
   const [fundTobeRemoved, setFundTobeRemoved] = useState({});
   const [parentInvestmentType, setParentInvestmentType] = useState('sip');
   const [isInvestmentValid, setIsInvestmentValid] = useState({});
+  const [showLoader, setShowLoader] = useState(false);
   const { fundOrderDetails, mfOrders } = useSelector((state) => state?.mfOrders);
   const cartData = useSelector(getDiyCart);
   const cartCount = useSelector(getDiyCartCount);
   const { productName, termsLink } = useMemo(getConfig, []);
-  const { isPageLoading } = useLoadingState(screen);
+  const { isPageLoading, isButtonLoading } = useLoadingState(screen);
   const noMfOrdersAvailable = !isPageLoading && isEmpty(fundOrderDetails);
   const dispatch = useDispatch();
   const isProductFisdom = productName === 'fisdom';
+  const { kyc, isLoading } = useUserKycHook();
 
   useEffect(() => {
     getMfOrderDetails();
@@ -155,7 +162,57 @@ const MfOrder = () => {
   const handlePlaceOrders = () => {
     const isError = validateMfOrders();
     if (!isError) {
-      console.log('diy cart data us', mfOrders);
+      let allocations = [];
+      fundOrderDetails
+        .filter((data) => data[`${parentInvestmentType}_allowed`])
+        .forEach((fund) => {
+          let allocation = {
+            mfid: fund.mfid,
+            mfname: fund.mfname,
+            amount: parseInt(mfOrders[fund.isin].amount),
+            default_date: fund.addl_purchase.sip.default_date,
+            sip_dates: fund.addl_purchase.sip.sip_dates,
+          };
+          if (parentInvestmentType === "sip") {
+            allocation.sip_date = mfOrders[fund.isin].sip_date
+          }
+          allocations.push(allocation);
+        });
+      const totalAmount = allocations.reduce(
+        (sum, data) => (sum += parseInt(data.amount)),
+        0
+      );
+      let investment = {};
+      investment.amount = parseFloat(totalAmount);
+      let investmentType = "";
+      if (parentInvestmentType === "lumpsum") {
+        investment.type = "diy";
+        investmentType = "onetime";
+      } else {
+        investment.type = "diysip";
+        investmentType = "sip";
+      }
+      investment.allocations = allocations;
+      const body = {
+        investment: investment,
+      };
+      const investmentEventData = {
+        amount: parseFloat(totalAmount),
+        investment_type: investmentType,
+        investment_subtype: "",
+        journey_name: "diy",
+      };
+
+      storageService().setObject("mf_invest_data", investmentEventData);
+
+      const sagaCallback = handlePaymentRedirection({ navigate, kyc, handleApiRunning: setShowLoader })
+      const payload = {
+        screen,
+        Api,
+        body,
+        sagaCallback
+      };
+      dispatch(triggerInvestment(payload))
     }
   };
 
@@ -176,9 +233,11 @@ const MfOrder = () => {
           title: 'Continue',
           onClick: handlePlaceOrders,
           disabled: isEmpty(fundOrderDetails),
+          isLoading: isButtonLoading
         },
       }}
       noFooter={isPageLoading}
+      isPageLoading={showLoader || isLoading}
       className='mf-order-wrapper'
     >
       {noMfOrdersAvailable ? (
