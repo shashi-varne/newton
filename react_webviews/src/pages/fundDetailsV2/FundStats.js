@@ -12,7 +12,7 @@ import { getFundData } from 'businesslogic/dataStore/reducers/fundDetails';
 import { isValidValue } from './helperFunctions';
 import isEmpty from 'lodash/isEmpty';
 
-function calculateFullAge(dob) {
+function calculateFullAge(dob = "") {
   const startDate = parse(dob, 'dd/MM/yyyy', new Date());
   const { years, months, days } = intervalToDuration({ start: startDate, end: new Date() });
   return { years, months, days };

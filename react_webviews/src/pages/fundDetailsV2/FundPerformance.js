@@ -39,7 +39,7 @@ const FundPerformance = () => {
   );
 
   const NavDate = format(
-    parse(fundData?.performance?.nav_update_date, 'dd/MM/yyyy', new Date()),
+    parse(fundData?.performance?.nav_update_date || "", 'dd/MM/yyyy', new Date()),
     'MMM d'
   );
   return (
