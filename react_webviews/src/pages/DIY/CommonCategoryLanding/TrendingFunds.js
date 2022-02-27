@@ -38,7 +38,7 @@ const TrendingFunds = ({ config, handleFundDetails, diyType }) => {
 
   return (
     <Stack direction='column' spacing={2} className='diy-c-trending-wrapper'>
-      <SectionHeader isPageLoading={true} sx={{ pl: 2, pr: 2 }} title='Trending' />
+      <SectionHeader sx={{ pl: 2, pr: 2 }} title='Trending' />
       <CustomSwiper
         slidesPerView={isMobileDevice ? 1 : 2}
         slidesPerColumn={1}
