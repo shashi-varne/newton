@@ -24,12 +24,14 @@ import { getConfig } from '../../utils/functions';
 import { getUrlParams } from '../../utils/validators';
 import { getPageLoading } from 'businesslogic/dataStore/reducers/loader';
 import { getDiyCart, getDiyCartCount, setCartItem } from 'businesslogic/dataStore/reducers/diy';
+import { navigate as navigateFunc } from "utils/functions";
 
 
 const screen = 'fundDetailsV2';
-const FundDetailsV2 = () => {
+const FundDetailsV2 = (props) => {
   const dispatch = useDispatch();
   const fundData = useSelector(getFundData);
+  const navigate = navigateFunc.bind(props);
   let { isins } = getUrlParams();
   const isPageLoading = useSelector(state => getPageLoading(state, screen));
   const fundStatRef = useRef();
@@ -54,7 +56,7 @@ const FundDetailsV2 = () => {
   }, []);
 
   const onCartClick = () => {
-
+    navigate('/diyv2/mf-orders');
   }
 
   const diyCart = useSelector(getDiyCart);
@@ -65,6 +67,9 @@ const FundDetailsV2 = () => {
 
   const addFundToCart = () => {
     dispatch(setCartItem(fundData));
+    if(!isFisdom) {
+      navigate('/diyv2/mf-orders');
+    }
   }
 
   return (
@@ -79,7 +84,7 @@ const FundDetailsV2 = () => {
           title:`${cartCount} items in the cart`,
           buttonTitle:'View Cart',
           badgeContent:cartCount,
-          onClick:onCartClick,
+          onButtonClick:onCartClick,
           dataAid: '_'
         },
         hideButton1: isFisdom && isfundAdded,
