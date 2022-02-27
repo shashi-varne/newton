@@ -308,7 +308,7 @@ const MfOrder = (props) => {
             isOpen={isOpen}
             onClose={handleSheetClose}
             title='Delete fund'
-            imageLabelSrc={require('assets/amazon_pay.svg')}
+            imageLabelSrc={fundTobeRemoved?.logo}
             label={fundTobeRemoved?.mfname}
             subtitle='Are you sure, want to delete this fund from your cart, you can also add anytime'
             primaryBtnTitle='Cancel'
