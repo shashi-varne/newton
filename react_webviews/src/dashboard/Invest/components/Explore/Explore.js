@@ -27,7 +27,7 @@ import { useDispatch } from 'react-redux'
 import { fetchDiyCategoriesAndTrendingFunds, setFundsCart, setFilteredFundList } from 'businesslogic/dataStore/reducers/diy';
 import { DEFAULT_FILTER_DATA } from 'businesslogic/constants/diy'
 
-const screen = 'diyLanding';
+const screen = 'diyCategoryLanding';
 const InvestExplore = (props) => {
   const [loader, setLoader] = useState(true)
   const config = getConfig();
