@@ -4,4 +4,6 @@ export const DIY_PATHNAME_MAPPER = {
   subcategoryFundList: "/diyv2/sub-category/fund-list",
   fundDetails: "/diyv2/fund-details",
   diyInvestLanding: "/invest/explore",
+  mfOrders: "/diyv2/mf-orders",
+  
 };
