@@ -6,12 +6,12 @@ import {
   NavigationHeaderSubtitle,
 } from '../../molecules/NavigationHeader/NavigationHeader';
 import isArray from 'lodash/isArray';
-import isEmpty from 'lodash/isEmpty';
-import Footer from '../../molecules/Footer';
 import { getConfig } from 'utils/functions';
 
 import './Container.scss';
-import UiSkelton from '../../../common/ui/Skelton';
+import './ContainerIframe.scss';
+import ContainerFooter from './ContainerFooter';
+import ContainerMain from './ContainerMain';
 
 const Container = ({
   headerProps = {},
@@ -25,10 +25,13 @@ const Container = ({
   containerSx,
   fixedFooter,
   footerElevation,
+  iframeRightChildren,
+  iframeRightSectionImgSrc,
+  iframeRightSectionImgSrcProps,
 }) => {
   const containerRef = useRef();
   const footerWrapperRef = useRef();
-  const { isMobileDevice } = useMemo(getConfig, []);
+  const { isMobileDevice, isIframe } = useMemo(getConfig, []);
   const { headerTitle, subtitle, points = [], ...restHeaderProps } = headerProps;
   fixedFooter = isMobileDevice ? true : fixedFooter;
   useEffect(() => {
@@ -38,13 +41,19 @@ const Container = ({
       }px`;
     }
   }, [footer?.direction, footerWrapperRef?.current, noFooter]);
+  const containerClass = isIframe ? 'Iframe-container-wrapper' : 'container-wrapper';
   return (
     <Box
       ref={containerRef}
       sx={{ ...containerWrapperSx(isPageLoading), ...containerSx }}
-      className={`container-wrapper ${className}`}
+      className={`${containerClass} ${className}`}
     >
-      <NavigationHeader className='container-nav-header' headerTitle={headerTitle} anchorOrigin={containerRef} {...restHeaderProps}>
+      <NavigationHeader
+        className='container-nav-header'
+        headerTitle={headerTitle}
+        anchorOrigin={!isIframe ? containerRef : null}
+        {...restHeaderProps}
+      >
         {subtitle && <NavigationHeaderSubtitle dataIdx={1}>{subtitle}</NavigationHeaderSubtitle>}
         {isArray(points) &&
           points?.map((point, idx) => {
@@ -55,51 +64,36 @@ const Container = ({
             );
           })}
       </NavigationHeader>
-      <main className="container-content-wrapper">
-        {isPageLoading ? <UiSkelton type={skeltonType} /> : children}
-      </main>
+      <ContainerMain
+        skeltonType={skeltonType}
+        isPageLoading={isPageLoading}
+        iframeRightChildren={iframeRightChildren}
+        iframeRightSectionImgSrc={iframeRightSectionImgSrc}
+        iframeRightSectionImgSrcProps={iframeRightSectionImgSrcProps}
+      >
+        {children}
+      </ContainerMain>
       {!isPageLoading && (
-        <div
-          ref={footerWrapperRef}
-          className={`container-footer-wrapper ${
-            fixedFooter && "container-fixed-footer"
-          }`}
-        >
-          {renderComponentAboveFooter}
-          <div className="container-footer-child-wrapper">
-            {!isEmpty(footer) && !noFooter && (
-              <Box
-                sx={footerElevation ? footerSxStyle : {}}
-                component="footer"
-                className="container-footer-cta"
-              >
-                <Footer
-                  wrapperClassName="footer-wrapper"
-                  stackWrapperClassName="footer-stack-wrapper"
-                  {...footer}
-                />
-              </Box>
-            )}
-          </div>
+        <div ref={footerWrapperRef}>
+          <ContainerFooter
+            fixedFooter={fixedFooter}
+            renderComponentAboveFooter={renderComponentAboveFooter}
+            footer={footer}
+            noFooter={noFooter}
+            footerElevation={footerElevation}
+          />
         </div>
       )}
     </Box>
   );
 };
 
-const footerSxStyle = (theme) => {
-  return {
-    [theme.breakpoints.down('sm')]: {
-      backgroundColor: 'foundationColors.supporting.white',
-      boxShadow: '1',
-    },
-  };
-};
-
 const containerWrapperSx = (isPageLoading) => {
   return {
-    backgroundColor: isPageLoading ? 'foundationColors.supporting.white' : 'foundationColors.supporting.grey',
-  }
+    backgroundColor: isPageLoading
+      ? 'foundationColors.supporting.white'
+      : 'foundationColors.supporting.grey',
+  };
 };
 
 export default Container;
