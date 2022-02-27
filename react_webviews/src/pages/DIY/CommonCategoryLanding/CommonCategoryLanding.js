@@ -23,14 +23,12 @@ import { navigate as navigateFunc } from '../../../utils/functions';
 
 import {
   getDiyCategoryData,
-  fetchDiyCategoriesAndTrendingFunds,
   setDiyTypeData,
   getDiyTypeData,
   getTrendingFundsByCategory,
   getDiySubcategoryDataByViewType,
   getDiyCartCount,
   fetchDiyCategories,
-  setFundsCart
 } from "businesslogic/dataStore/reducers/diy";
 import { DIY_PATHNAME_MAPPER } from '../common/constants';
 import { hideDiyCartFooter } from "businesslogic/utils/diy/functions";

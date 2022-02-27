@@ -1,108 +1,66 @@
-import { Box, Fade, Grow, Skeleton, Stack, Zoom } from "@mui/material";
-import React, {
-  memo,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import Typography from "../../../designSystem/atoms/Typography";
-import Container from "../../../designSystem/organisms/Container";
-import ProductItem from "../../../designSystem/molecules/ProductItem";
-import SwipeableViews from "react-swipeable-views";
-import Button from "../../../designSystem/atoms/Button";
-import isEqual from "lodash/isEqual";
-import isEmpty from "lodash/isEmpty";
-import get from "lodash/get";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/swiper-bundle.css";
-
-import "./SubCategoryFundList.scss";
-import ConfirmAction from "../../../designSystem/molecules/ConfirmAction";
-import FilterNavigation from "../../../featureComponent/DIY/Filters/FilterNavigation";
-import Footer from "../../../designSystem/molecules/Footer";
-import { getConfig } from "../../../utils/functions";
-import Tag from "../../../designSystem/molecules/Tag";
-import FilterReturnBottomSheet from "../../../featureComponent/DIY/Filters/FilterReturnBottomSheet";
-import Filter from "../../../featureComponent/DIY/Filters/Filter";
-import Icon from "../../../designSystem/atoms/Icon";
-import useErrorState from "../../../common/customHooks/useErrorState";
-import useLoadingState from "../../../common/customHooks/useLoadingState";
-
-import Api from "../../../utils/api";
+import { Grow, Stack } from '@mui/material';
+import { FILTER_TYPES } from 'businesslogic/constants/diy';
 import {
   fetchFundList,
+  getDiyCart,
+  getDiyCartCount,
   getDiySubcategoryOptions,
-  setFilteredFundList,
+  getDiyTypeData,
   getFilteredFundsByCategory,
   getFilterOptions,
   getFundsByCategory,
-  getDiyTypeData,
-  setDiyTypeData,
   setCartItem,
-  getDiyCartCount,
-  getDiyCart,
-} from "businesslogic/dataStore/reducers/diy";
-import { useDispatch, useSelector } from "react-redux";
-import { CART_LIMIT, FILTER_TYPES } from "businesslogic/constants/diy";
+  setDiyTypeData,
+  setFilteredFundList
+} from 'businesslogic/dataStore/reducers/diy';
 import {
   getMinimumInvestmentData,
   getReturnData,
   getSortData,
-  checkFundPresentInCart,
-  hideDiyCartFooter,
-  hideDiyCartButton
-} from "businesslogic/utils/diy/functions";
-import ToastMessage from "../../../designSystem/atoms/ToastMessage";
-import { navigate as navigateFunc } from "../../../utils/functions";
-import { DIY_PATHNAME_MAPPER } from "../common/constants";
-import Separator from "../../../designSystem/atoms/Separator";
-import { useLocation } from "react-router-dom";
+  hideDiyCartButton,
+  hideDiyCartFooter
+} from 'businesslogic/utils/diy/functions';
+import isEmpty from 'lodash/isEmpty';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/swiper-bundle.css';
+import useErrorState from '../../../common/customHooks/useErrorState';
+import useLoadingState from '../../../common/customHooks/useLoadingState';
+import ToastMessage from '../../../designSystem/atoms/ToastMessage';
+import ConfirmAction from '../../../designSystem/molecules/ConfirmAction';
+import Container from '../../../designSystem/organisms/Container';
+import Filter from '../../../featureComponent/DIY/Filters/Filter';
+import FilterNavigation from '../../../featureComponent/DIY/Filters/FilterNavigation';
+import FilterReturnBottomSheet from '../../../featureComponent/DIY/Filters/FilterReturnBottomSheet';
+import Api from '../../../utils/api';
+import { getConfig, navigate as navigateFunc } from '../../../utils/functions';
+import { DIY_PATHNAME_MAPPER } from '../common/constants';
+import './SubCategoryFundList.scss';
+import TabPanel from './TabPanel';
 
-const screen = "diyFundList";
+
+const screen = 'diyFundList';
 const SubCategoryLanding = (props) => {
   const dispatch = useDispatch();
   const navigate = navigateFunc.bind(props);
-  const diyTypeData = useSelector(getDiyTypeData);
+  const { category, subcategory, subcategoryOption } = useSelector(getDiyTypeData);
   const diyCartData = useSelector(getDiyCart);
   const diyCartCount = useSelector(getDiyCartCount);
-  const { category, subcategory, subcategoryOption } = useMemo(
-    () => diyTypeData,
-    [diyTypeData]
-  );
-  const filteredFunds = useSelector((state) =>
-    getFilteredFundsByCategory(state, category)
-  );
-  const categoryFunds = useSelector((state) =>
-    getFundsByCategory(state, category)
-  );
+  const filteredFunds = useSelector((state) => getFilteredFundsByCategory(state, category));
+  const categoryFunds = useSelector((state) => getFundsByCategory(state, category));
   const filterOptions = useSelector(getFilterOptions);
   const subcategoryOptionsData = useSelector((state) =>
     getDiySubcategoryOptions(state, category, subcategory)
   );
   const { productName } = useMemo(getConfig, []);
-  const hideCartFooter = useMemo(hideDiyCartFooter(productName, diyCartCount), [productName, diyCartCount]);
+  const hideCartFooter = useMemo(hideDiyCartFooter(productName, diyCartCount), [
+    productName,
+    diyCartCount,
+  ]);
   const hideCartButton = useMemo(hideDiyCartButton(productName), [productName]);
-
-  useEffect(() => {
-    if (isEmpty(subcategoryOptionsData)) {
-      navigate(DIY_PATHNAME_MAPPER.diyInvestLanding);
-    }
-  }, []);
-
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const { isPageLoading } = useLoadingState(screen);
-
-  const getSubcategoryOptionIndex = () => {
-    const index = subcategoryOptionsData.findIndex(
-      (el) => el.key === subcategoryOption
-    );
-    return index === -1 ? 0 : index;
-  };
-
-  const [tabValue, setTabValue] = useState(getSubcategoryOptionIndex());
-  const dataRef = useRef(0);
   const [selectedFilterValue, setSelectedFilterValue] = useState({
     [FILTER_TYPES.returns]: getReturnData(filterOptions.returnPeriod),
     [FILTER_TYPES.sort]: getSortData(filterOptions.sortFundsBy),
@@ -112,15 +70,24 @@ const SubCategoryLanding = (props) => {
     [FILTER_TYPES.sort]: false,
     filter: false,
   });
-  console.log("count of render is", dataRef.current++);
   const [swiper, setSwiper] = useState(null);
   const [selectedFundHouses, setSelectedFundHouses] = useState([]);
-  const [selectedFundOption, setSelectedFundOption] = useState(
-    filterOptions.fundOption
-  );
+  const [selectedFundOption, setSelectedFundOption] = useState(filterOptions.fundOption);
   const [selectedMinInvestment, setSelectedMinInvestment] = useState(
     getMinimumInvestmentData(filterOptions.minInvestment)
   );
+
+  useEffect(() => {
+    if (isEmpty(subcategoryOptionsData)) {
+      navigate(DIY_PATHNAME_MAPPER.diyInvestLanding);
+    }
+  }, []);
+
+  const getSubcategoryOptionIndex = () => {
+    const index = subcategoryOptionsData.findIndex((el) => el.key === subcategoryOption);
+    return index === -1 ? 0 : index;
+  };
+  const [tabValue, setTabValue] = useState(getSubcategoryOptionIndex());
 
   const fetchDiyFundList = () => {
     if (!isEmpty(subcategoryOptionsData)) {
@@ -176,7 +143,6 @@ const SubCategoryLanding = (props) => {
     selectedMinInvestment,
   ]);
 
-  const swipeableViewsRef = useRef();
   const handleTabChange = (e, value) => {
     setTabValue(value);
     if (swiper) {
@@ -185,8 +151,7 @@ const SubCategoryLanding = (props) => {
   };
 
   const handleSlideChange = (swiper) => {
-    console.log("swiper is", swiper["$wrapperEl"][0].height);
-    // swiper.updateSize()
+    console.log('swiper is', swiper['$wrapperEl'][0].height);
     setTabValue(swiper?.activeIndex);
   };
 
@@ -196,10 +161,6 @@ const SubCategoryLanding = (props) => {
       [filterType]: false,
     });
   };
-
-  // const handleChangeIndex = (index) => {
-  //   setTabValue(index);
-  // };
 
   const handleFilterSelect = (filterType) => (selectedItem) => {
     setSelectedFilterValue({
@@ -212,7 +173,7 @@ const SubCategoryLanding = (props) => {
     setIsFilterSheetOpen({ ...isFilterSheetOpen, [filterType]: true });
   };
 
-  const handleAddToCart = (e,fund) => {
+  const handleAddToCart = (e, fund) => {
     e.stopPropagation();
     dispatch(setCartItem(fund));
   };
@@ -230,7 +191,7 @@ const SubCategoryLanding = (props) => {
         tabsProps: {
           selectedTab: tabValue,
           onTabChange: handleTabChange,
-          labelName: "name",
+          labelName: 'name',
         },
         tabChilds: subcategoryOptionsData?.length > 1 ? subcategoryOptionsData : [],
       }}
@@ -239,7 +200,7 @@ const SubCategoryLanding = (props) => {
         <CustomFooter
           handleSortClick={handleFilterClick(FILTER_TYPES.sort)}
           handleReturnClick={handleFilterClick(FILTER_TYPES.returns)}
-          handleFilterClick={handleFilterClick("filter")}
+          handleFilterClick={handleFilterClick('filter')}
           cartCount={diyCartCount}
           onCartClick={onCartClick}
           returnLabel={selectedFilterValue[FILTER_TYPES.returns]?.returnLabel}
@@ -247,30 +208,9 @@ const SubCategoryLanding = (props) => {
           hideCartFooter={hideCartFooter}
         />
       }
-      className="sub-category-landing-wrapper"
+      className='sub-category-landing-wrapper'
     >
-      {/* <div className='sub-category-swipper-wrapper'>
-        <SwipeableViews
-          // axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-          index={tabValue}
-          // onChangeIndex={handleChangeIndex}
-          animateHeight
-          ref={swipeableViewsRef}
-        >
-          {tabChilds?.map((el, idx) => {
-            return (
-              <TabPanel
-                key={idx}
-                value={tabValue}
-                index={idx}
-                data={el?.data}
-                swipeableViewsRef={swipeableViewsRef}
-              />
-            );
-          })}
-        </SwipeableViews>
-      </div> */}
-      <div className="sub-category-swipper-wrapper">
+      <div className='sub-category-swipper-wrapper'>
         <Swiper
           slidesPerView={1}
           onSwiper={setSwiper}
@@ -318,7 +258,7 @@ const SubCategoryLanding = (props) => {
         selectedFundHouses={selectedFundHouses}
         selectedFundOption={selectedFundOption}
         selectedMinInvestment={selectedMinInvestment}
-        handleFilterClose={handleFiltterSheetClose("filter")}
+        handleFilterClose={handleFiltterSheetClose('filter')}
         setSelectedFundHouses={setSelectedFundHouses}
         setSelectedFundOption={setSelectedFundOption}
         setSelectedMinInvestment={setSelectedMinInvestment}
@@ -327,163 +267,7 @@ const SubCategoryLanding = (props) => {
   );
 };
 
-const TabPanel = memo((props) => {
-  const {
-    data = [],
-    returnPeriod,
-    returnLabel,
-    value,
-    activeTab,
-    isPageLoading,
-    handleAddToCart,
-    diyCartData,
-    hideCartButton,
-    navigate
-  } = props;
-  const [NumOfItems, setNumOfItems] = useState(10);
-  const [showLoader, setShowLoader] = useState(false);
-  const observer = useRef();
-  const location = useLocation();
-  const lastProductItem = useCallback((node) => {
-    if (observer.current) observer.current.disconnect();
-    observer.current = new IntersectionObserver((enteries) => {
-      if (enteries[0].isIntersecting) {
-        setNumOfItems((NumOfItems) => NumOfItems + 10);
-      }
-    });
 
-    if (node) observer.current.observe(node);
-  });
-
-  useEffect(() => {
-    const loader = value === activeTab && isPageLoading;
-    setShowLoader(loader);
-  }, [activeTab, isPageLoading]);
-
-  const showFundDetails = (fund) => () => {
-    navigate(
-      `/diyv2/fund-details`,
-      {
-        searchParams: `${location.search}&isins=${fund.isin}`,
-      }
-    )
-  }
-
-  return (
-    <div
-    // role='tabpanel'
-    // hidden={value !== index}
-    // id={`full-width-tabpanel-${index}`}
-    // aria-labelledby={`full-width-tab-${index}`}
-    // {...other}
-    >
-      {/* {value === index && ( */}
-      <Box sx={{ backgroundColor: 'foundationColors.supporting.white' }}>
-        <Stack
-          justifyContent='space-between'
-          direction='row'
-          className='sub-category-filter-info'
-          backgroundColor='foundationColors.supporting.grey'
-          sx={{ mb: '16px', padding: '8px 16px' }}
-        >
-          <Typography
-            variant='body5'
-            color='foundationColors.content.secondary'
-            sx={{ display: 'flex', alignItems: 'center' }}
-          >
-            {showLoader ? <Skeleton type='text' width='12px' /> : data.length}
-            <Typography component='span' variant='inherit' color='inherit' sx={{ ml: 0.5 }}>
-              funds
-            </Typography>
-          </Typography>
-          <Typography
-            variant='body5'
-            color='foundationColors.content.secondary'
-            sx={{ display: 'flex', alignItems: 'center' }}
-          >
-            {showLoader ? <Skeleton type='text' width='12px' /> : returnLabel}
-            <Typography component='span' variant='inherit' color='inherit' sx={{ ml: 0.5 }}>
-              returns
-            </Typography>
-          </Typography>
-        </Stack>
-        {showLoader ? (
-          <Stack direction='column' spacing={2} sx={{ px: 2, mb: 2 }}>
-            <FundItemSkeletonLoader />
-            <FundItemSkeletonLoader />
-            <FundItemSkeletonLoader />
-            <FundItemSkeletonLoader />
-            <FundItemSkeletonLoader />
-          </Stack>
-        ) : (
-          <Typography component='div' sx={{ p: '0px 16px' }}>
-            {data?.slice(0, NumOfItems)?.map((fund, idx) => {
-              const returnValue = fund[returnPeriod];
-              const returnData = !returnValue
-                ? 'N/A'
-                : fund[returnPeriod] > 0
-                ? `+${fund[returnPeriod]}%`
-                : `${fund[returnPeriod]}%`;
-              const returnColor = !returnValue
-                ? 'foundationColors.content.secondary'
-                : fund[returnPeriod] > 0
-                ? 'foundationColors.secondary.profitGreen.300'
-                : 'foundationColors.secondary.lossRed.300';
-              const setRef = NumOfItems - 4 === idx + 1;
-              let refData = {};
-              if (setRef) {
-                refData.ref = lastProductItem;
-              }
-              const isFundAddedToCart = checkFundPresentInCart(diyCartData, fund);
-              return (
-                <div key={idx} {...refData} >
-                  <ProductItem
-                    // sx={{ mb: '16px' }}
-                    key={idx}
-                    imgSrc={fund?.amc_logo_big}
-                    showSeparator
-                    onClick={showFundDetails(fund)}
-                  >
-                    <ProductItem.LeftSection>
-                      <ProductItem.Title>{fund?.legal_name}</ProductItem.Title>
-                      <ProductItem.LeftBottomSection>
-                        {fund?.is_fisdom_recommended && (
-                          <Tag
-                            label='Recommendation'
-                            labelColor='foundationColors.content.secondary'
-                            labelBackgroundColor='foundationColors.secondary.blue.200'
-                          />
-                        )}
-                        {fund?.morning_star_rating && (
-                          <Tag
-                            morningStarVariant='small'
-                            label={fund?.morning_star_rating}
-                            labelColor='foundationColors.content.secondary'
-                          />
-                        )}
-                      </ProductItem.LeftBottomSection>
-                    </ProductItem.LeftSection>
-                    <ProductItem.RightSection spacing={2}>
-                      <ProductItem.Description title={returnData} titleColor={returnColor} />
-                      {!hideCartButton && (
-                        <Icon
-                          size='32px'
-                          src={require(`assets/${isFundAddedToCart ? `minus` : `add_icon`}.svg`)}
-                          onClick={(e) => handleAddToCart(e,fund)}
-                        />
-                      )}
-                    </ProductItem.RightSection>
-                  </ProductItem>
-                </div>
-              );
-            })}
-          </Typography>
-        )}
-      </Box>
-      {/* )} */}
-    </div>
-  );
-}, isEqual);
 
 const CustomFooter = ({
   cartCount,
@@ -493,7 +277,7 @@ const CustomFooter = ({
   handleReturnClick,
   returnLabel,
   filterCount,
-  hideCartFooter
+  hideCartFooter,
 }) => {
   return (
     <Stack spacing={2} className='sub-category-custom-footer'>
@@ -505,7 +289,7 @@ const CustomFooter = ({
             badgeContent={cartCount}
             onButtonClick={onCartClick}
             dataAid='_'
-            />
+          />
         </div>
       </Grow>
       <FilterNavigation
@@ -519,28 +303,6 @@ const CustomFooter = ({
   );
 };
 
-const FundItemSkeletonLoader = () => {
-  return (
-    <Stack direction='column'>
-      <Stack direction='row' justifyContent='space-between'>
-        <Stack flex={1} direction='row' spacing={1} alignItems='end' justifyContent='flex-start'>
-          <Icon size='40px' />
-          <Stack direction='column' spacing={1} flex={1}>
-            <Skeleton type='text' width='70%' />
-            <Stack direction='row' spacing={1} alignItems='center' justifyContent='flex-start'>
-              <Skeleton type='text' width='100px' />
-              <Skeleton type='text' width='100px' />
-            </Stack>
-          </Stack>
-        </Stack>
-        <Stack spacing={2} direction='column'>
-          <Skeleton type='text' width='50px' />
-          <Icon size='32px' />
-        </Stack>
-      </Stack>
-      <Separator marginLeft='46px' marginTop='8px' />
-    </Stack>
-  );
-};
+
 
 export default SubCategoryLanding;
