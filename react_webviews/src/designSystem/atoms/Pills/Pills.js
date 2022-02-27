@@ -3,9 +3,12 @@ import LibTabs from '@mui/material/Tabs';
 import LibTab from '@mui/material/Tab';
 import PropTypes from 'prop-types';
 
-const indicatorStyles = {
+const indicatorStyles = (disabled) => {
+  return {
     height: '100%',
-    borderRadius: 100
+    borderRadius: 100,
+    backgroundColor: disabled ? 'foundationColors.supporting.athensGrey' : ''
+  }
 }
 export const Pills = ({
   value,
@@ -15,6 +18,7 @@ export const Pills = ({
   allowScrollButtonsMobile,
   children,
   classes,
+  disabled,
   sx,
   dataAid,
   ...props
@@ -28,7 +32,7 @@ export const Pills = ({
       scrollButtons={scrollButtons}
       allowScrollButtonsMobile={allowScrollButtonsMobile}
       classes={classes}
-      TabIndicatorProps={{style:indicatorStyles}}
+      TabIndicatorProps={{ sx:indicatorStyles(disabled)}}
       sx={sx}
       {...props}
     >

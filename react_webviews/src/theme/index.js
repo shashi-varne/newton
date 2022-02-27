@@ -4,7 +4,6 @@ import { tabsStyleOverRides, tabStyleOverRides, tabsVariantsConfig, tabVariantsC
 import { radioButtonStyleOverRides } from './radioButton';
 import { tooltipStyleOverRides } from './tooltip';
 import { checkboxStyleOverRides } from './checkbox';
-import { tooltipStyleOverRides } from './tooltip';
 import { switchStyleOverRides } from './switch';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
 import getPartnerThemeData from './utils';

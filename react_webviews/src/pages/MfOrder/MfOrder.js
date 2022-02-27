@@ -1,4 +1,4 @@
-import { Stack } from '@mui/material';
+import { Box, IconButton, Skeleton, Stack } from '@mui/material';
 import React, { useEffect, useMemo, useState } from 'react';
 import WrapperBox from '../../designSystem/atoms/WrapperBox';
 import Container from '../../designSystem/organisms/Container';
@@ -24,8 +24,23 @@ import './MfOrder.scss';
 import FundOrderItem from './FundOrderItem';
 import NoMfOrders from './NoMfOrders';
 import { CART } from '../../dashboard/DIY/constants';
-import { filterMfOrders, getfundOrderDetails, setFundOrderDetails } from 'businesslogic/dataStore/reducers/mfOrders';
+import {
+  filterMfOrders,
+  getfundOrderDetails,
+  setFundOrderDetails,
+} from 'businesslogic/dataStore/reducers/mfOrders';
 import { getConfig } from '../../utils/functions';
+import {
+  getDiyCart,
+  getDiyCartCount,
+  setCartItem,
+  setFundsCart,
+} from 'businesslogic/dataStore/reducers/diy';
+import Icon from '../../designSystem/atoms/Icon';
+import Separator from '../../designSystem/atoms/Separator';
+import { getPageLoading } from 'businesslogic/dataStore/reducers/loader';
+import { getError, getFetchFailed } from 'businesslogic/dataStore/reducers/error';
+import ToastMessage from '../../designSystem/atoms/ToastMessage';
 
 export const investmentAmountTile = {
   sip: 'SIP amount',
@@ -37,7 +52,8 @@ const getIsins = (fundsData) => {
   });
   return isinArr.join(',');
 };
-const MfOrder = () => {
+const screen = 'mfOrder';
+const MfOrder = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [fundTobeRemoved, setFundTobeRemoved] = useState({});
   const [parentInvestmentType, setParentInvestmentType] = useState('sip');
@@ -46,35 +62,37 @@ const MfOrder = () => {
   const { fundOrderDetails, mfOrders } = useSelector((state) => state?.mfOrders);
   const { productName } = useMemo(getConfig, []);
   const isProductFisdom = productName === 'fisdom';
+  const isPageLoading = useSelector((state) => getPageLoading(state, screen));
+  // const isFetchFailed = useSelector((state) => getFetchFailed(state, screen));
 
   const handleInvestmentType = (e, val) => {
     setParentInvestmentType(val);
   };
 
+  const cartData = useSelector(getDiyCart);
+  const cartCount = useSelector(getDiyCartCount);
   useEffect(() => {
-    let fundsData = [];
-    const fundInfo = storageService().getObject('diystore_fundInfo')
-      ? [storageService().getObject('diystore_fundInfo')]
-      : false;
-    fundsData = isEmpty(storageService().getObject(CART))
-      ? fundInfo
-      : storageService().getObject(CART);
-
-    if (!fundsData || fundsData?.length < 1) {
-      return;
+    const isins = getIsins(cartData);
+    if (!isEmpty(cartData)) {
+      dispatch(
+        getfundOrderDetails({
+          Api,
+          isins,
+          fundsData: cartData,
+          screen,
+        })
+      );
+    } else {
+      dispatch(setFundOrderDetails([]));
     }
-    fundsData = fundsData.map((data) => {
-      return { ...data, allow_purchase: { sip: false, onetime: false } };
-    });
-    const isins = getIsins(fundsData);
-    dispatch(
-      getfundOrderDetails({
-        Api,
-        isins,
-        fundsData,
-      })
-    );
   }, []);
+
+  // useEffect(() => {
+  //   if(isFetchFailed) {
+  //     ToastMessage('Something went wrong !!')
+  //     props.history.goBack();
+  //   }
+  // },[isFetchFailed]);
 
   const handleSheetClose = () => {
     setIsOpen(false);
@@ -94,6 +112,15 @@ const MfOrder = () => {
         return true;
       }
     });
+    console.log('');
+    const newDiyCart = cartData?.filter((el) => {
+      console.log('isin inside is', el.isin);
+      if (el.isin !== fundTobeRemoved.isin) {
+        return true;
+      }
+    });
+    console.log('newDiyCart', newDiyCart);
+    dispatch(setFundsCart(newDiyCart));
     dispatch(setFundOrderDetails(remainingFunds));
     dispatch(filterMfOrders(remainingOrders));
     handleSheetClose();
@@ -146,12 +173,14 @@ const MfOrder = () => {
           disabled: isEmpty(fundOrderDetails),
         },
       }}
+      noFooter={isPageLoading}
+      className='mf-order-wrapper'
     >
-      {isEmpty(fundOrderDetails) ? (
+      {!isPageLoading && isEmpty(fundOrderDetails) ? (
         <NoMfOrders />
       ) : (
         <>
-          <Stack direction='column' spacing={2} component='section' className='mf-order-wrapper'>
+          <Stack direction='column' spacing={2} component='section'>
             {isProductFisdom && (
               <Stack
                 sx={{ mb: 1 }}
@@ -160,26 +189,40 @@ const MfOrder = () => {
                 justifyContent='space-between'
               >
                 <Typography variant='heading4'>Investment type</Typography>
-                <Pills value={parentInvestmentType} onChange={handleInvestmentType}>
+                <Pills
+                  value={parentInvestmentType}
+                  disabled={isPageLoading}
+                  sx={{ pointerEvents: isPageLoading ? 'none' : 'default' }}
+                  onChange={handleInvestmentType}
+                >
                   <Pill label='SIP' value='sip' />
                   <Pill label='Lumpsum' value='lumpsum' />
                 </Pills>
               </Stack>
             )}
-            <Stack spacing='25px' className='mf-order-list'>
-              {fundOrderDetails?.map((fundDetails, idx) => {
-                return (
-                  <FundOrderItem
-                    key={idx}
-                    fundDetails={fundDetails}
-                    handleInvestmentCard={handleInvestmentCard}
-                    parentInvestmentType={parentInvestmentType}
-                    isProductFisdom={isProductFisdom}
-                    setIsInvestmentValid={setIsInvestmentValid}
-                  />
-                );
-              })}
-            </Stack>
+            {isPageLoading ? (
+              <Stack direction='column' spacing={3} sx={{ mt: 2 }}>
+                {[...Array(cartCount).keys()]?.map((el, idx) => {
+                  return <MfSkeletonLoading key={idx} isProductFisdom={isProductFisdom} />;
+                })}
+              </Stack>
+            ) : (
+              <Stack spacing='25px' className='mf-order-list'>
+                {fundOrderDetails?.map((fundDetails, idx) => {
+                  return (
+                    <FundOrderItem
+                      key={idx}
+                      fundDetails={fundDetails}
+                      handleInvestmentCard={handleInvestmentCard}
+                      parentInvestmentType={parentInvestmentType}
+                      isProductFisdom={isProductFisdom}
+                      setIsInvestmentValid={setIsInvestmentValid}
+                    />
+                  );
+                })}
+              </Stack>
+            )}
+
             {!isProductFisdom && (
               <WrapperBox elevation={1}>
                 <EstimationCard
@@ -218,3 +261,37 @@ const MfOrder = () => {
 };
 
 export default MfOrder;
+
+const MfSkeletonLoading = ({ isProductFisdom }) => {
+  return (
+    <WrapperBox sx={{ p: 2 }} className='mf-investment-card-wrapper'>
+      {isProductFisdom && (
+        <IconButton className='mf-ic-close'>
+          <Icon src={require('assets/close_grey.svg')} size='24px' />
+        </IconButton>
+      )}
+      <Stack>
+        <Stack direction='row' spacing={2}>
+          <Icon size='32px' />
+          <Skeleton type='text' width='60%' />
+        </Stack>
+        <Separator marginTop='16px' marginBottom='16px' />
+        <Stack direction='row' spacing={2} justifyContent='space-between'>
+          <Stack direction='column'>
+            <Skeleton type='text' width='50px' />
+            <Skeleton type='text' width='20px' />
+          </Stack>
+          <Skeleton type='text' width='40%' height='38px' />
+        </Stack>
+        <Separator marginTop='16px' marginBottom='16px' />
+        <Stack direction='row' spacing={2} justifyContent='space-between'>
+          <Stack direction='column'>
+            <Skeleton type='text' width='50px' />
+            <Skeleton type='text' width='20px' />
+          </Stack>
+          <Skeleton type='text' width='40%' height='38px' />
+        </Stack>
+      </Stack>
+    </WrapperBox>
+  );
+};

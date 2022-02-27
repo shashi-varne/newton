@@ -29,7 +29,8 @@ import {
   getTrendingFundsByCategory,
   getDiySubcategoryDataByViewType,
   getDiyCartCount,
-  fetchDiyCategories
+  fetchDiyCategories,
+  setFundsCart
 } from "businesslogic/dataStore/reducers/diy";
 import { DIY_PATHNAME_MAPPER } from '../common/constants';
 import { hideDiyCartFooter } from "businesslogic/utils/diy/functions";
@@ -57,11 +58,15 @@ const CommonCategoryLanding = (props) => {
     if (isEmpty(categoryData)) {
       dispatch(fetchDiyCategories({ Api, screen }));
     }
-      dispatch(
-        setDiyTypeData({
-          category: diyType,
-        })
-      );
+    dispatch(
+      setDiyTypeData({
+        category: diyType,
+      })
+    );
+
+    return () => {
+      dispatch(setFundsCart([]));
+    }
   }, []);
 
   const handleCardClick = (subcategory, subcategoryOption) => () => {
@@ -100,6 +105,7 @@ const CommonCategoryLanding = (props) => {
           badgeContent: cartCount,
           onClick: onCartClick,
           imgSrc: require('assets/cart_icon.svg'),
+          dataAid: '_'
         },
       }}
       fixedFooter

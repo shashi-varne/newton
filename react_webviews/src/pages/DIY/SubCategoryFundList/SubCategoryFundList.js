@@ -217,7 +217,9 @@ const SubCategoryLanding = (props) => {
     dispatch(setCartItem(fund));
   };
 
-  const onCartClick = () => {};
+  const onCartClick = () => {
+    navigate('/diyv2/mf-orders');
+  };
 
   return (
     <Container
@@ -501,7 +503,8 @@ const CustomFooter = ({
             title={`${cartCount} items in the cart`}
             buttonTitle='View Cart'
             badgeContent={cartCount}
-            onClick={onCartClick}
+            onButtonClick={onCartClick}
+            dataAid='_'
             />
         </div>
       </Grow>
