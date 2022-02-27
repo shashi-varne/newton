@@ -1,0 +1,53 @@
+.selection-mode-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  flex: 1;
+
+  .selection-mode-left-img {
+    margin-right: 16px;
+  }
+
+  .sm-right-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    .sm-text-wrapper {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .selection-mode-right-img {
+      margin-left: 10px;
+    }
+  }
+}
+
+
+.selection-mode-form-wrapper {
+  flex: 1;
+
+  .sm-radio-wrapper {
+    label {
+      margin-left: 0px;
+      margin-right: 0px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex: 1;
+      .MuiTypography-root {
+        flex: 1;
+      }
+
+      &:last-child {
+        margin-bottom: 0px;
+      }
+    }
+  }
+}

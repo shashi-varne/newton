@@ -86,16 +86,14 @@ const getTheme = () => {
       },
       MuiDialog: {
         defaultProps: dialogDefaultProps(),
-        styleOverrides:dialogStylesOverride()
+        styleOverrides:dialogStylesOverride(),
       },
       MuiModal: {
         styleOverrides : {
           root:{
             [defaultTheme.breakpoints.up('sm')]: {
               left: '300px !important',
-              right: 'unset !important',
-              width: 'var(--desktop-width) !important',
-              top: '60px !important'
+              maxWidth: 'var(--desktop-width) !important',
             }
           }
         }
