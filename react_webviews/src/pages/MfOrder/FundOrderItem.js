@@ -68,7 +68,7 @@ const FundOrderItem = ({
         },
       };
     });
-  }, [showError, isInvestmentAllowed]);
+  }, [showError, investmentType, isInvestmentAllowed]);
 
   useEffect(() => {
     setInvestmentType(parentInvestmentType);
