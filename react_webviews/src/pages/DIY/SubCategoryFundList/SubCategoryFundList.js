@@ -45,7 +45,6 @@ const SubCategoryLanding = (props) => {
   const dispatch = useDispatch();
   const navigate = navigateFunc.bind(props);
   const { category, subcategory, subcategoryOption } = useSelector(getDiyTypeData);
-  const diyCartData = useSelector(getDiyCart);
   const diyCartCount = useSelector(getDiyCartCount);
   const filteredFunds = useSelector((state) => getFilteredFundsByCategory(state, category));
   const categoryFunds = useSelector((state) => getFundsByCategory(state, category));
@@ -58,7 +57,6 @@ const SubCategoryLanding = (props) => {
     productName,
     diyCartCount,
   ]);
-  const hideCartButton = useMemo(hideDiyCartButton(productName), [productName]);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const { isPageLoading } = useLoadingState(screen);
   const [selectedFilterValue, setSelectedFilterValue] = useState({
@@ -227,11 +225,7 @@ const SubCategoryLanding = (props) => {
                   value={idx}
                   data={filteredFunds[el.key]}
                   activeTab={tabValue}
-                  isPageLoading={isPageLoading}
                   handleAddToCart={handleAddToCart}
-                  diyCartData={diyCartData}
-                  hideCartButton={hideCartButton}
-                  navigate={navigate}
                 />
               </SwiperSlide>
             );

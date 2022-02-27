@@ -1,14 +1,19 @@
 import { Box, Skeleton, Stack } from '@mui/material';
-import { checkFundPresentInCart } from 'businesslogic/utils/diy/functions';
-import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
+import { checkFundPresentInCart, hideDiyCartButton } from 'businesslogic/utils/diy/functions';
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Icon from '../../../designSystem/atoms/Icon';
 import Typography from '../../../designSystem/atoms/Typography';
 import ProductItem from '../../../designSystem/molecules/ProductItem';
 import Tag from '../../../designSystem/molecules/Tag';
 import isEqual from 'lodash/isEqual';
-import { useLocation } from 'react-router-dom';
+import { useLocation, withRouter } from 'react-router-dom';
 import Separator from '../../../designSystem/atoms/Separator';
+import { useSelector } from 'react-redux';
+import { getDiyCart } from 'businesslogic/dataStore/reducers/diy';
+import { getConfig, navigate as navigateFunc  } from '../../../utils/functions';
+import useLoadingState from '../../../common/customHooks/useLoadingState';
 
+const screen = 'diyFundList';
 const TabPanel = memo((props) => {
   const {
     data = [],
@@ -16,16 +21,17 @@ const TabPanel = memo((props) => {
     returnLabel,
     value,
     activeTab,
-    isPageLoading,
     handleAddToCart,
-    diyCartData,
-    hideCartButton,
-    navigate,
   } = props;
   const [NumOfItems, setNumOfItems] = useState(10);
   const [showLoader, setShowLoader] = useState(false);
+  const {productName} = useMemo(getConfig,[]);
   const observer = useRef();
   const location = useLocation();
+  const diyCartData = useSelector(getDiyCart);
+  const hideCartButton = useMemo(hideDiyCartButton(productName), [productName]);
+  const { isPageLoading } = useLoadingState(screen);
+  const navigate = navigateFunc.bind(props);
   const lastProductItem = useCallback((node) => {
     if (observer.current) observer.current.disconnect();
     observer.current = new IntersectionObserver((enteries) => {
@@ -156,7 +162,7 @@ const TabPanel = memo((props) => {
   );
 }, isEqual);
 
-export default TabPanel;
+export default withRouter(TabPanel);
 
 const FundItemSkeletonLoader = () => {
   return (
