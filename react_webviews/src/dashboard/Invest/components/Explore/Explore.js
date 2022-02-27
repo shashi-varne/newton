@@ -24,7 +24,8 @@ import { flowName } from '../../constants'
 import { isNewIframeDesktopLayout } from '../../../../utils/functions'
 import Api from '../../../../utils/api';
 import { useDispatch } from 'react-redux'
-import { fetchDiyCategoriesAndTrendingFunds, setFundsCart } from 'businesslogic/dataStore/reducers/diy';
+import { fetchDiyCategoriesAndTrendingFunds, setFundsCart, setFilteredFundList } from 'businesslogic/dataStore/reducers/diy';
+import { DEFAULT_FILTER_DATA } from 'businesslogic/constants/diy'
 
 const screen = 'diyLanding';
 const InvestExplore = (props) => {
@@ -38,6 +39,7 @@ const InvestExplore = (props) => {
   useEffect(() => {
     dispatch(fetchDiyCategoriesAndTrendingFunds({Api, screen}));    
     dispatch(setFundsCart([]));
+    dispatch(setFilteredFundList({ filterOptions: DEFAULT_FILTER_DATA }));
   },[])
   const newIframeDesktopLayout = isNewIframeDesktopLayout() || (partnerCode === 'moneycontrol' && !isMobileDevice);
 
