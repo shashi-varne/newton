@@ -30,6 +30,7 @@ import MFSkeletonLoader from './MFSkeletonLoader';
 import NoMfOrders from './NoMfOrders';
 
 import './MfOrder.scss';
+import { nativeCallback } from '../../utils/native_callback';
 const screen = 'mfOrder';
 
 const MfOrder = () => {
@@ -40,7 +41,7 @@ const MfOrder = () => {
   const { fundOrderDetails, mfOrders } = useSelector((state) => state?.mfOrders);
   const cartData = useSelector(getDiyCart);
   const cartCount = useSelector(getDiyCartCount);
-  const { productName } = useMemo(getConfig, []);
+  const { productName, termsLink } = useMemo(getConfig, []);
   const { isPageLoading } = useLoadingState(screen);
   const noMfOrdersAvailable = !isPageLoading && isEmpty(fundOrderDetails);
   const dispatch = useDispatch();
@@ -158,6 +159,12 @@ const MfOrder = () => {
     }
   };
 
+  const handleTermsAndConditions = () => {
+    nativeCallback({action: "open_in_browser", message: {
+      url: termsLink
+    }})
+  }
+
   return (
     <Container
       headerProps={{
@@ -223,7 +230,7 @@ const MfOrder = () => {
 
             {isProductFisdom ? (
               <Typography variant='body5' color='foundationColors.content.tertiary'>
-                By continue, I agree that I have read the terms & conditions
+                By continue, I agree that I have read the <span className="pointer" onClick={handleTermsAndConditions}>terms & conditions</span>
               </Typography>
             ) : (
               <TrusIcon variant='secure' opacity='0.6' />
