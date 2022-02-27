@@ -19,6 +19,8 @@ import './SubCategoryList.scss';
 import { DIY_PATHNAME_MAPPER } from '../common/constants';
 import { hideDiyCartFooter } from "businesslogic/utils/diy/functions";
 import { VIEW_TYPE_MAPPER } from 'businesslogic/constants/diy';
+import { validateKycAndRedirect } from '../common/functions';
+import useUserKycHook from '../../../kyc/common/hooks/userKycHook';
 
 const SubCategoryList = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -28,9 +30,8 @@ const SubCategoryList = (props) => {
   const subcategoryData = useSelector((state) => getDiySubcategoryData(state, diyTypeData.category, diyTypeData.subcategory));
   const { productName } = useMemo(getConfig, []);
   const hideFooter = useMemo(hideDiyCartFooter(productName, cartCount), [productName, cartCount]);
+  const { kyc, isLoading } = useUserKycHook();
   
-  const onCartClick = () => {};
-
   const handleCardClick = (subcategoryOption) => () => {
     dispatch(
       setDiyTypeData({
@@ -51,12 +52,13 @@ const SubCategoryList = (props) => {
           buttonTitle: 'View Cart',
           title: `${cartCount} item saved in your cart`,
           badgeContent: cartCount,
-          onClick: onCartClick,
+          onButtonClick: validateKycAndRedirect({ navigate, kyc }),
           imgSrc: require('assets/cart_icon.svg'),
         },
       }}
       fixedFooter
       noFooter={hideFooter}
+      isPageLoading={isLoading}
     >
       <div className="diy-sc-cv-lists">
         {isArray(subcategoryData.options) &&

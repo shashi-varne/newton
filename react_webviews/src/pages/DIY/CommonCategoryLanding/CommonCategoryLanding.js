@@ -33,6 +33,8 @@ import {
 import { DIY_PATHNAME_MAPPER } from '../common/constants';
 import { hideDiyCartFooter } from "businesslogic/utils/diy/functions";
 import useLoadingState from '../../../common/customHooks/useLoadingState';
+import { validateKycAndRedirect } from '../common/functions';
+import useUserKycHook from '../../../kyc/common/hooks/userKycHook';
 
 const screen = 'diyLanding';
 const CommonCategoryLanding = (props) => {
@@ -51,6 +53,7 @@ const CommonCategoryLanding = (props) => {
   const imageCarouselData = useSelector((state) => getDiySubcategoryDataByViewType(state, diyTypeData.category, VIEW_TYPE_MAPPER.imageCaurosel));
   const { isPageLoading } = useLoadingState(screen);
   const hideFooter = useMemo(hideDiyCartFooter(productName, cartCount), [productName, cartCount]);
+  const { kyc, isLoading } = useUserKycHook();
   
   useEffect(() => {
     if (isEmpty(categoryData)) {
@@ -88,10 +91,6 @@ const CommonCategoryLanding = (props) => {
     });
   };
 
-  const onCartClick = () => {
-    navigate('/diyv2/mf-orders');
-  };
-
   return (
     <Container
       footer={{
@@ -99,13 +98,14 @@ const CommonCategoryLanding = (props) => {
           buttonTitle: 'View Cart',
           title: `${cartCount} item saved in your cart`,
           badgeContent: cartCount,
-          onButtonClick: onCartClick,
+          onButtonClick: validateKycAndRedirect({ navigate, kyc }),
           imgSrc: require('assets/cart_icon.svg'),
           dataAid: '_'
         },
       }}
       fixedFooter
       noFooter={hideFooter}
+      isPageLoading={isLoading}
     >
       <div className='diy-category-landing-wrapper'>
         <LandingHeader variant='center' dataAid='equity'>

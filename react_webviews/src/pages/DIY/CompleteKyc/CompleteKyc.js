@@ -11,7 +11,7 @@ import Typography from '../../../designSystem/atoms/Typography';
 import TrustIcon from '../../../designSystem/atoms/TrustIcon';
 import { getConfig } from '../../../utils/functions';
 import checkedIcon from 'assets/checked.svg';
-import { DIY } from 'businessLogic/strings/diy';
+import { DIY } from 'businesslogic/strings/diy';
 import Icon from '../../../designSystem/atoms/Icon';
 import PropTypes from 'prop-types';
 

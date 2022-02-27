@@ -38,6 +38,8 @@ import { getConfig, navigate as navigateFunc } from '../../../utils/functions';
 import { DIY_PATHNAME_MAPPER } from '../common/constants';
 import './SubCategoryFundList.scss';
 import TabPanel from './TabPanel';
+import { validateKycAndRedirect } from '../common/functions';
+import useUserKycHook from '../../../kyc/common/hooks/userKycHook';
 
 
 const screen = 'diyFundList';
@@ -58,6 +60,7 @@ const SubCategoryLanding = (props) => {
     diyCartCount,
   ]);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
+  const { kyc, isLoading } = useUserKycHook();
   const { isPageLoading } = useLoadingState(screen);
   const [selectedFilterValue, setSelectedFilterValue] = useState({
     [FILTER_TYPES.returns]: getReturnData(filterOptions.returnPeriod),
@@ -176,10 +179,6 @@ const SubCategoryLanding = (props) => {
     dispatch(setCartItem(fund));
   };
 
-  const onCartClick = () => {
-    navigate('/diyv2/mf-orders');
-  };
-
   return (
     <Container
       headerProps={{
@@ -200,13 +199,14 @@ const SubCategoryLanding = (props) => {
           handleReturnClick={handleFilterClick(FILTER_TYPES.returns)}
           handleFilterClick={handleFilterClick('filter')}
           cartCount={diyCartCount}
-          onCartClick={onCartClick}
+          onCartClick={validateKycAndRedirect({ navigate, kyc })}
           returnLabel={selectedFilterValue[FILTER_TYPES.returns]?.returnLabel}
           filterCount={selectedFundHouses.length}
           hideCartFooter={hideCartFooter}
         />
       }
       className='sub-category-landing-wrapper'
+      isPageLoading={isLoading}
     >
       <div className='sub-category-swipper-wrapper'>
         <Swiper
