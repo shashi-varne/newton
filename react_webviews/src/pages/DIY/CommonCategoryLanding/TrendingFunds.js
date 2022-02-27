@@ -20,20 +20,19 @@ import {useDispatch, useSelector} from 'react-redux';
 import { fetchTrendingFunds, getTrendingFundsByCategory } from 'businesslogic/dataStore/reducers/diy';
 import Api from 'utils/api';
 import useLoadingState from '../../../common/customHooks/useLoadingState';
-const screen = 'trendingFunds';
+const screen = 'diyLanding';
 
 const TrendingFunds = ({ config, handleFundDetails, diyType }) => {
   const isMobileDevice = config.isMobileDevice;
   const trendingFunds = useSelector((state) => getTrendingFundsByCategory(state, diyType));
   const dispatch = useDispatch();
-  const { isPageLoading } = useLoadingState(screen);
+  const { loadingData } = useLoadingState(screen);
   useEffect(() => {
     if (isEmpty(trendingFunds)) {
       dispatch(fetchTrendingFunds({ Api, screen }));
     }
   }, []);
-
-  if (!isPageLoading && isEmpty(trendingFunds)) {
+  if (!loadingData.isTrendingFundsLoading && isEmpty(trendingFunds)) {
     return null;
   }
 
@@ -47,7 +46,7 @@ const TrendingFunds = ({ config, handleFundDetails, diyType }) => {
         spaceBetween={10}
         speed={500}
       >
-        {isPageLoading
+        {loadingData.isTrendingFundsLoading
           ? [1, 1, 1]?.map((el, idx) => {
               return (
                 <SwiperSlide key={idx}>
