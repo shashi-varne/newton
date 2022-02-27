@@ -15,6 +15,7 @@ import { DIY } from 'businesslogic/strings/diy';
 import Icon from '../../../designSystem/atoms/Icon';
 import { navigate as navigateFunc } from '../../../utils/functions';
 import { DIY_PATHNAME_MAPPER } from '../common/constants';
+import Lottie from 'lottie-react';
 
 import './CompleteKyc.scss';
 
@@ -23,13 +24,13 @@ const CompleteKyc = (props) => {
   const { productName, Web, isIframe } = useMemo(getConfig, []);
   const onClick = () => {
     const event = {
-      event_name: "journey_details",
+      event_name: 'journey_details',
       properties: {
         journey: {
-          name: "mf",
-          trigger: "cta",
-          journey_status: "incomplete",
-          next_journey: "kyc",
+          name: 'mf',
+          trigger: 'cta',
+          journey_status: 'incomplete',
+          next_journey: 'kyc',
         },
       },
     };
@@ -57,7 +58,12 @@ const CompleteKyc = (props) => {
       className='complete-kyc-wrapper'
     >
       <LandingHeader variant='side'>
-        <LandingHeaderImage imgSrc={require(`assets/${productName}/complete_kyc.svg`)} />
+        <Lottie
+          animationData={require(`assets/${productName}/lottie/kyc_complete.json`)}
+          autoPlay
+          loop
+          className='kyc-compl-lottie-anim'
+        />
         <LandingHeaderTitle>{DIY.completeKycTitle}</LandingHeaderTitle>
         <LandingHeaderSubtitle dataIdx={1}>{DIY.completeKycSubtitle}</LandingHeaderSubtitle>
       </LandingHeader>
@@ -67,11 +73,7 @@ const CompleteKyc = (props) => {
             return (
               <Stack key={idx} direction='row' spacing={2} alignItems='center'>
                 <Icon src={checkedIcon} size='24px' />
-                <Typography
-                  variant='body2'
-                  align='left'
-                  component='div'
-                >
+                <Typography variant='body2' align='left' component='div'>
                   {point}
                 </Typography>
               </Stack>
