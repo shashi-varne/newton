@@ -1,0 +1,16 @@
+.iframe-container-wrapper {
+  display: flex;
+  width: 100%;
+  .iframe-left-section {
+    max-width: 55%;
+    background-color: green;
+    min-width: 420px;
+    flex: 1;
+  }
+
+  .iframe-left-section + .iframe-right-section {
+    max-width: 45%;
+    background-color: blue;
+    flex: 1;
+  }
+}
