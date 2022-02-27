@@ -22,7 +22,6 @@ import './fundDetailsV2.scss';
 import { Stack } from '@mui/material';
 import { getConfig } from '../../utils/functions';
 import { getUrlParams } from '../../utils/validators';
-import { getPageLoading } from 'businesslogic/dataStore/reducers/loader';
 import { getDiyCart, getDiyCartCount, setCartItem } from 'businesslogic/dataStore/reducers/diy';
 import { navigate as navigateFunc } from "utils/functions";
 import useLoadingState from '../../common/customHooks/useLoadingState';
@@ -34,7 +33,7 @@ const FundDetailsV2 = (props) => {
   const fundData = useSelector(getFundData);
   const navigate = navigateFunc.bind(props);
   let { isins } = getUrlParams();
-  const {isPageLoading} = useLoadingState(screen);
+  const { isPageLoading } = useLoadingState(screen);
   const fundStatRef = useRef();
   const returnCalcRef = useRef();
   const assetAllocRef = useRef();
