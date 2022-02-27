@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 import CommonCategoryLanding from './CommonCategoryLanding';
 import FundDetails from '../fundDetailsV2';
 import CompleteKyc from './CompleteKyc';
+import InvestmentProcess from './InvestmentProcess';
 import getTheme from '../../theme';
 import SubCategoryList from './SubCategoryList';
 import SubCategoryFunds from './SubCategoryFunds';
@@ -24,6 +25,7 @@ const DIY = (props) => {
           <Route exact path={`${url}/:diyType/landing`} component={CommonCategoryLanding} />
           <Route path={`${url}/mf-orders`} component={MfOrder} />
             <Route path={`${url}/complete-kyc`} component={CompleteKyc} />
+          <Route path={`${url}/invest-process`} component={InvestmentProcess} />
         </Switch>
       </ThemeProvider>
     </StyledEngineProvider>
