@@ -63,10 +63,6 @@ const CommonCategoryLanding = (props) => {
         category: diyType,
       })
     );
-
-    return () => {
-      dispatch(setFundsCart([]));
-    }
   }, []);
 
   const handleCardClick = (subcategory, subcategoryOption) => () => {
