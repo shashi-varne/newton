@@ -33,6 +33,7 @@ import { navigate as navigateFunc } from '../../utils/functions';
 import useUserKycHook from '../../kyc/common/hooks/userKycHook';
 import { nativeCallback } from '../../utils/native_callback';
 import { handlePaymentRedirection } from '../DIY/common/functions';
+import { DIY_PATHNAME_MAPPER } from '../DIY/common/constants';
 
 import './MfOrder.scss';
 const screen = 'mfOrder';
@@ -52,7 +53,7 @@ const MfOrder = (props) => {
   const noMfOrdersAvailable = !isPageLoading && isEmpty(fundOrderDetails);
   const dispatch = useDispatch();
   const isProductFisdom = productName === 'fisdom';
-  const { kyc, isLoading } = useUserKycHook();
+  const { kyc, user, isLoading } = useUserKycHook();
 
   useEffect(() => {
     getMfOrderDetails();
@@ -194,7 +195,7 @@ const MfOrder = (props) => {
       }
       investment.allocations = allocations;
       const body = {
-        investment: investment,
+        investment,
       };
       const investmentEventData = {
         amount: parseFloat(totalAmount),
@@ -203,8 +204,12 @@ const MfOrder = (props) => {
         journey_name: "diy",
       };
 
+      storageService().setObject("investment", investment);
       storageService().setObject("mf_invest_data", investmentEventData);
-
+      if (!user.active_investment) {
+        navigate(DIY_PATHNAME_MAPPER.investProcess);
+        return;
+      }
       const sagaCallback = handlePaymentRedirection({ navigate, kyc, handleApiRunning: setShowLoader })
       const payload = {
         screen,
