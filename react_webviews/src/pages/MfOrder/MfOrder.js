@@ -1,80 +1,60 @@
-import { Box, IconButton, Skeleton, Stack } from '@mui/material';
-import React, { useEffect, useMemo, useState } from 'react';
-import WrapperBox from '../../designSystem/atoms/WrapperBox';
-import Container from '../../designSystem/organisms/Container';
-import { formatAmountInr, storageService } from '../../utils/validators';
-import EstimationCard from '../../designSystem/molecules/EstimationCard';
-import BottomSheet from '../../designSystem/organisms/BottomSheet';
-import { useDispatch, useSelector } from 'react-redux';
-import Toast from '../../designSystem/atoms/ToastMessage';
-import TrusIcon from '../../designSystem/atoms/TrustIcon';
-// import {
-//   filterMfOrders,
-//   getfundOrderDetails,
-//   setFundOrderDetails,
-// } from '../../../dataLayer/store/dataStore/reducers/diy';
-import isEmpty from 'lodash/isEmpty';
-import Typography from '../../designSystem/atoms/Typography';
-import { Pill, Pills } from '../../designSystem/atoms/Pills/Pills';
-import values from 'lodash/values';
-import scrollIntoView from 'scroll-into-view-if-needed';
-import Api from '../../utils/api';
-import size from 'lodash/size';
-
-import './MfOrder.scss';
-import FundOrderItem from './FundOrderItem';
-import NoMfOrders from './NoMfOrders';
-import { CART } from '../../dashboard/DIY/constants';
+import { Stack } from '@mui/material';
+import { getDiyCart, getDiyCartCount, setFundsCart } from 'businesslogic/dataStore/reducers/diy';
 import {
   filterMfOrders,
   getfundOrderDetails,
+  resetMfOrders,
   setFundOrderDetails,
-  setMfOrders,
-  resetMfOrders
 } from 'businesslogic/dataStore/reducers/mfOrders';
+import { getIsins } from 'businesslogic/utils/mfOrder/functions';
+import isEmpty from 'lodash/isEmpty';
+import size from 'lodash/size';
+import values from 'lodash/values';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import scrollIntoView from 'scroll-into-view-if-needed';
+import useLoadingState from '../../common/customHooks/useLoadingState';
+import { Pill, Pills } from '../../designSystem/atoms/Pills/Pills';
+import Toast from '../../designSystem/atoms/ToastMessage';
+import TrusIcon from '../../designSystem/atoms/TrustIcon';
+import Typography from '../../designSystem/atoms/Typography';
+import WrapperBox from '../../designSystem/atoms/WrapperBox';
+import EstimationCard from '../../designSystem/molecules/EstimationCard';
+import BottomSheet from '../../designSystem/organisms/BottomSheet';
+import Container from '../../designSystem/organisms/Container';
+import Api from '../../utils/api';
 import { getConfig } from '../../utils/functions';
-import {
-  getDiyCart,
-  getDiyCartCount,
-  setCartItem,
-  setFundsCart,
-} from 'businesslogic/dataStore/reducers/diy';
-import Icon from '../../designSystem/atoms/Icon';
-import Separator from '../../designSystem/atoms/Separator';
-import { getPageLoading } from 'businesslogic/dataStore/reducers/loader';
-import { getError, getFetchFailed } from 'businesslogic/dataStore/reducers/error';
-import ToastMessage from '../../designSystem/atoms/ToastMessage';
+import { formatAmountInr } from '../../utils/validators';
+import FundOrderItem from './FundOrderItem';
+import MFSkeletonLoader from './MFSkeletonLoader';
+import NoMfOrders from './NoMfOrders';
 
-export const investmentAmountTile = {
-  sip: 'SIP amount',
-  lumpsum: 'Lumpsum amount',
-};
-const getIsins = (fundsData) => {
-  let isinArr = fundsData.map((data) => {
-    return data.isin;
-  });
-  return isinArr.join(',');
-};
+import './MfOrder.scss';
 const screen = 'mfOrder';
-const MfOrder = (props) => {
+
+const MfOrder = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [fundTobeRemoved, setFundTobeRemoved] = useState({});
   const [parentInvestmentType, setParentInvestmentType] = useState('sip');
   const [isInvestmentValid, setIsInvestmentValid] = useState({});
-  const dispatch = useDispatch();
   const { fundOrderDetails, mfOrders } = useSelector((state) => state?.mfOrders);
-  const { productName } = useMemo(getConfig, []);
-  const isProductFisdom = productName === 'fisdom';
-  const isPageLoading = useSelector((state) => getPageLoading(state, screen));
-  // const isFetchFailed = useSelector((state) => getFetchFailed(state, screen));
-
-  const handleInvestmentType = (e, val) => {
-    setParentInvestmentType(val);
-  };
-
   const cartData = useSelector(getDiyCart);
   const cartCount = useSelector(getDiyCartCount);
+  const { productName } = useMemo(getConfig, []);
+  const { isPageLoading } = useLoadingState(screen);
+  const noMfOrdersAvailable = !isPageLoading && isEmpty(fundOrderDetails);
+  const dispatch = useDispatch();
+  const isProductFisdom = productName === 'fisdom';
+
   useEffect(() => {
+    getMfOrderDetails();
+    return () => {
+      dispatch(setFundOrderDetails([]));
+      dispatch(resetMfOrders());
+    };
+  }, []);
+
+  const getMfOrderDetails = () => {
     const isins = getIsins(cartData);
     if (!isEmpty(cartData)) {
       dispatch(
@@ -88,18 +68,10 @@ const MfOrder = (props) => {
     } else {
       dispatch(setFundOrderDetails([]));
     }
-    return () => {
-      dispatch(setFundOrderDetails([]));
-      dispatch(resetMfOrders());
-    }
-  }, []);
-
-  // useEffect(() => {
-  //   if(isFetchFailed) {
-  //     ToastMessage('Something went wrong !!')
-  //     props.history.goBack();
-  //   }
-  // },[isFetchFailed]);
+  };
+  const handleInvestmentType = (e, val) => {
+    setParentInvestmentType(val);
+  };
 
   const handleSheetClose = () => {
     setIsOpen(false);
@@ -109,6 +81,7 @@ const MfOrder = (props) => {
     setFundTobeRemoved(fund);
     setIsOpen(true);
   };
+
   const removeFund = () => {
     const remainingOrders = {};
     const remainingFunds = fundOrderDetails?.filter((el) => {
@@ -119,64 +92,69 @@ const MfOrder = (props) => {
         return true;
       }
     });
-    console.log('');
     const newDiyCart = cartData?.filter((el) => {
-      console.log('isin inside is', el.isin);
       if (el.isin !== fundTobeRemoved.isin) {
         return true;
       }
     });
-    console.log('newDiyCart', newDiyCart);
     dispatch(setFundsCart(newDiyCart));
     dispatch(setFundOrderDetails(remainingFunds));
     dispatch(filterMfOrders(remainingOrders));
     handleSheetClose();
   };
 
-  const handlePlaceOrders = () => {
+  const validateMfOrders = () => {
     let amountInputError = false;
     let amountValidationError = false;
-    let isError = false;
+    let investmentNotAllowedError = false;
     const validateErrors = values(isInvestmentValid);
     // eslint-disable-next-line array-callback-return
     validateErrors.some((el) => {
-      if(el?.isInvestmentAllowed) {
+      if (el?.isInvestmentAllowed) {
         if (el?.amountError) {
           amountInputError = true;
           scrollIntoView(el?.orderItemRef, {
             behavior: 'smooth',
-          block: 'center',
-        });
-        return true;
-      }
-      if (el?.validationError) {
-        amountValidationError = true;
-        scrollIntoView(el?.orderItemRef, {
-          behavior: 'smooth',
-          block: 'center',
-        });
-        return true;
-      }
-    } else {
-        if(size(fundOrderDetails) <= 1 && el?.investErrorMessage) {
-          Toast(el?.investErrorMessage);
-          isError = true;
+            block: 'center',
+          });
           return true;
-
         }
-    }
+        if (el?.validationError) {
+          amountValidationError = true;
+          scrollIntoView(el?.orderItemRef, {
+            behavior: 'smooth',
+            block: 'center',
+          });
+          return true;
+        }
+      } else {
+        if (size(fundOrderDetails) <= 1 && el?.investErrorMessage) {
+          Toast(el?.investErrorMessage);
+          investmentNotAllowedError = true;
+          return true;
+        }
+      }
     });
+    if (investmentNotAllowedError) {
+      return true;
+    }
     if (amountInputError) {
       Toast('Please enter the amount');
-      return;
+      return true;
     }
 
     if (amountValidationError) {
       Toast('Please enter the correct amount');
-      return;
+      return true;
     }
-    if(!isError) {
-      console.log("diy cart data us", mfOrders);
+
+    return false;
+  };
+
+  const handlePlaceOrders = () => {
+    const isError = validateMfOrders();
+    if (!isError) {
+      console.log('diy cart data us', mfOrders);
     }
   };
 
@@ -196,34 +174,22 @@ const MfOrder = (props) => {
       noFooter={isPageLoading}
       className='mf-order-wrapper'
     >
-      {!isPageLoading && isEmpty(fundOrderDetails) ? (
+      {noMfOrdersAvailable ? (
         <NoMfOrders />
       ) : (
         <>
           <Stack direction='column' spacing={2} component='section'>
             {isProductFisdom && (
-              <Stack
-                sx={{ mb: 1 }}
-                direction='row'
-                alignItems='center'
-                justifyContent='space-between'
-              >
-                <Typography variant='heading4'>Investment type</Typography>
-                <Pills
-                  value={parentInvestmentType}
-                  disabled={isPageLoading}
-                  sx={{ pointerEvents: isPageLoading ? 'none' : 'default' }}
-                  onChange={handleInvestmentType}
-                >
-                  <Pill label='SIP' value='sip' />
-                  <Pill label='Lumpsum' value='lumpsum' />
-                </Pills>
-              </Stack>
+              <ParentInvestTypeSection
+                parentInvestmentType={parentInvestmentType}
+                isPageLoading={isPageLoading}
+                handleInvestmentType={handleInvestmentType}
+              />
             )}
             {isPageLoading ? (
               <Stack direction='column' spacing={3} sx={{ mt: 2 }}>
                 {[...Array(cartCount).keys()]?.map((el, idx) => {
-                  return <MfSkeletonLoading key={idx} isProductFisdom={isProductFisdom} />;
+                  return <MFSkeletonLoader key={idx} isProductFisdom={isProductFisdom} />;
                 })}
               </Stack>
             ) : (
@@ -254,6 +220,7 @@ const MfOrder = (props) => {
                 />
               </WrapperBox>
             )}
+
             {isProductFisdom ? (
               <Typography variant='body5' color='foundationColors.content.tertiary'>
                 By continue, I agree that I have read the terms & conditions
@@ -262,6 +229,7 @@ const MfOrder = (props) => {
               <TrusIcon variant='secure' opacity='0.6' />
             )}
           </Stack>
+
           <BottomSheet
             isOpen={isOpen}
             onClose={handleSheetClose}
@@ -282,36 +250,19 @@ const MfOrder = (props) => {
 
 export default MfOrder;
 
-const MfSkeletonLoading = ({ isProductFisdom }) => {
+const ParentInvestTypeSection = ({ parentInvestmentType, isPageLoading, handleInvestmentType }) => {
   return (
-    <WrapperBox sx={{ p: 2 }} className='mf-investment-card-wrapper'>
-      {isProductFisdom && (
-        <IconButton className='mf-ic-close'>
-          <Icon src={require('assets/close_grey.svg')} size='24px' />
-        </IconButton>
-      )}
-      <Stack>
-        <Stack direction='row' spacing={2}>
-          <Icon size='32px' />
-          <Skeleton type='text' width='60%' />
-        </Stack>
-        <Separator marginTop='16px' marginBottom='16px' />
-        <Stack direction='row' spacing={2} justifyContent='space-between'>
-          <Stack direction='column'>
-            <Skeleton type='text' width='50px' />
-            <Skeleton type='text' width='20px' />
-          </Stack>
-          <Skeleton type='text' width='40%' height='38px' />
-        </Stack>
-        <Separator marginTop='16px' marginBottom='16px' />
-        <Stack direction='row' spacing={2} justifyContent='space-between'>
-          <Stack direction='column'>
-            <Skeleton type='text' width='50px' />
-            <Skeleton type='text' width='20px' />
-          </Stack>
-          <Skeleton type='text' width='40%' height='38px' />
-        </Stack>
-      </Stack>
-    </WrapperBox>
+    <Stack sx={{ mb: 1 }} direction='row' alignItems='center' justifyContent='space-between'>
+      <Typography variant='heading4'>Investment type</Typography>
+      <Pills
+        value={parentInvestmentType}
+        disabled={isPageLoading}
+        sx={{ pointerEvents: isPageLoading ? 'none' : 'default' }}
+        onChange={handleInvestmentType}
+      >
+        <Pill label='SIP' value='sip' />
+        <Pill label='Lumpsum' value='lumpsum' />
+      </Pills>
+    </Stack>
   );
 };
