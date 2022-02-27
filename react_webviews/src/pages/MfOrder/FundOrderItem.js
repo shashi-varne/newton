@@ -1,4 +1,4 @@
-import { IconButton } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
 import { setMfOrders } from 'businesslogic/dataStore/reducers/mfOrders';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -33,16 +33,18 @@ const FundOrderItem = ({
   const maxAmount = fundDetails?.addl_purchase[investmentType]?.max;
   const multiple = fundDetails?.addl_purchase[investmentType]?.mul;
   const { message, showError } = validateMfOrderFunds(amount, minAmount, maxAmount, multiple);
-  const isInvestmentAllowed = {
+  const investmentInfo = {
     sip: {
-      allowed: fundDetails?.sip,
-      errorMessage: fundDetails?.sip ? '' : 'Sip investment not allowed',
+      allowed: fundDetails?.sip_allowed,
+      errorMessage: fundDetails?.sip_allowed ? '' : 'Sip investment not allowed',
     },
     lumpsum: {
-      allowed: fundDetails?.onetime,
-      errorMessage: fundDetails?.onetime ? '' : 'Lumpsum investment not allowed',
+      allowed: fundDetails?.lumpsum_allowed,
+      errorMessage: fundDetails?.lumpsum_allowed ? '' : 'Lumpsum investment not allowed',
     },
   };
+  const isInvestmentAllowed = investmentInfo[investmentType].allowed;
+  const investErrorMessage = investmentInfo[investmentType].errorMessage;
   const fundOrderItemRef = useRef();
   useEffect(() => {
     setIsInvestmentValid((prevState) => {
@@ -107,59 +109,64 @@ const FundOrderItem = ({
             <Icon src={require('assets/close_grey.svg')} size='24px' />
           </IconButton>
         )}
-        <InvestmentCard>
-          {isProductFisdom && (
-            <InvestmentCardHeaderRow title={fundDetails.mfname} imgSrc={fundDetails.amc_logo_big} />
-          )}
-          <InvestmentCardPillsRow
-            title='Investment Type'
-            hideSeparator={!isProductFisdom}
-            hide={isProductFisdom}
-            pillsProps={{
-              value: investmentType,
-              onChange: handleInvestmentType,
-            }}
-            pillsChild={[
-              {
-                label: 'SIP',
-                value: 'sip',
-              },
-              {
-                label: 'Lumpsum',
-                value: 'lumpsum',
-              },
-            ]}
+        <Box sx={{pointerEvents:isInvestmentAllowed ? 'default': 'none'}}>
+          <InvestmentCard>
+            {isProductFisdom && (
+              <InvestmentCardHeaderRow
+                title={fundDetails.mfname}
+                imgSrc={fundDetails.amc_logo_big}
+              />
+            )}
+            <InvestmentCardPillsRow
+              title='Investment Type'
+              hideSeparator={!isProductFisdom}
+              hide={isProductFisdom}
+              pillsProps={{
+                value: investmentType,
+                onChange: handleInvestmentType,
+              }}
+              pillsChild={[
+                {
+                  label: 'SIP',
+                  value: 'sip',
+                },
+                {
+                  label: 'Lumpsum',
+                  value: 'lumpsum',
+                },
+              ]}
+            />
+            <InvestmentCardInputRow
+              title={investmentAmountTile[investmentType]}
+              subtitle={investErrorMessage || message}
+              subtitleColor={
+                !isInvestmentAllowed || showError
+                  ? 'foundationColors.secondary.lossRed.400'
+                  : 'foundationColors.content.tertiary'
+              }
+              inputFieldProps={{
+                prefix: '₹',
+                value: amount,
+                onChange: handleAmountValue,
+                disabled: !isInvestmentAllowed,
+              }}
+            />
+            <InvestmentCardBottomRow
+              hide={parentInvestmentType === 'lumpsum' || investmentType === 'lumpsum'}
+              leftTitle='Monthly SIP date'
+              rightTitle={isInvestmentAllowed ? `${dateOrdinal(selectedDate)} every month` : 'NA'}
+              onRightSectionClick={openSipSelectorSheet}
+              rightImgSrc={require('assets/arrw_down.svg')}
+            />
+          </InvestmentCard>
+          <SipDateSelector
+            sipDates={fundDetails.addl_purchase?.sip?.sip_dates}
+            selectedDate={selectedDate}
+            isOpen={isSipSelectorOpen}
+            onClose={closeSipDateSheet}
+            handleSelectedDate={handleSelectedDate}
           />
-          <InvestmentCardInputRow
-            title={investmentAmountTile[investmentType]}
-            subtitle={isInvestmentAllowed[investmentType].errorMessage || message}
-            subtitleColor={
-              !isInvestmentAllowed[investmentType].allowed || showError
-                ? 'foundationColors.secondary.lossRed.400'
-                : 'foundationColors.content.tertiary'
-            }
-            inputFieldProps={{
-              prefix: '₹',
-              value: amount,
-              onChange: handleAmountValue,
-              disabled: !isInvestmentAllowed[investmentType].allowed,
-            }}
-          />
-          <InvestmentCardBottomRow
-            hide={parentInvestmentType === 'lumpsum' || investmentType === 'lumpsum'}
-            leftTitle='Monthly SIP date'
-            rightTitle={`${dateOrdinal(selectedDate)} every month`}
-            onRightSectionClick={openSipSelectorSheet}
-            rightImgSrc={require('assets/arrw_down.svg')}
-          />
-        </InvestmentCard>
-        <SipDateSelector
-          sipDates={fundDetails.addl_purchase?.sip?.sip_dates}
-          selectedDate={selectedDate}
-          isOpen={isSipSelectorOpen}
-          onClose={closeSipDateSheet}
-          handleSelectedDate={handleSelectedDate}
-        />
+        </Box>
       </WrapperBox>
     </div>
   );

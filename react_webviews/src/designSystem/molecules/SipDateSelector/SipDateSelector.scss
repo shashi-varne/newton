@@ -18,10 +18,11 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      cursor: pointer;
       position: relative;
       .selected-date-text {
         position: absolute;
-        right: 60px;
+        right: 30%;
       }
     }
   }

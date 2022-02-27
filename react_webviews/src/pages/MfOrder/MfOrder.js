@@ -28,6 +28,8 @@ import {
   filterMfOrders,
   getfundOrderDetails,
   setFundOrderDetails,
+  setMfOrders,
+  resetMfOrders
 } from 'businesslogic/dataStore/reducers/mfOrders';
 import { getConfig } from '../../utils/functions';
 import {
@@ -84,6 +86,10 @@ const MfOrder = (props) => {
       );
     } else {
       dispatch(setFundOrderDetails([]));
+    }
+    return () => {
+      dispatch(setFundOrderDetails([]));
+      dispatch(resetMfOrders());
     }
   }, []);
 
