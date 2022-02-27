@@ -25,7 +25,7 @@ import BottomSheet from '../../designSystem/organisms/BottomSheet';
 import Container from '../../designSystem/organisms/Container';
 import Api from '../../utils/api';
 import { getConfig } from '../../utils/functions';
-import { formatAmountInr, storageService } from '../../utils/validators';
+import { capitalizeFirstLetter, formatAmountInr, storageService } from '../../utils/validators';
 import FundOrderItem from './FundOrderItem';
 import MFSkeletonLoader from './MFSkeletonLoader';
 import NoMfOrders from './NoMfOrders';
@@ -166,10 +166,13 @@ const MfOrder = (props) => {
   const handlePlaceOrders = () => {
     const isError = validateMfOrders();
     if (!isError) {
+      const allowedFunds = fundOrderDetails.filter((data) => data[`${parentInvestmentType}_allowed`]);
+      if (allowedFunds.length <= 0) {
+        Toast(`${capitalizeFirstLetter(parentInvestmentType)} investment not allowed`);
+        return
+      }
       let allocations = [];
-      fundOrderDetails
-        .filter((data) => data[`${parentInvestmentType}_allowed`])
-        .forEach((fund) => {
+      allowedFunds.forEach((fund) => {
           let allocation = {
             mfid: fund.mfid,
             mfname: fund.mfname,
