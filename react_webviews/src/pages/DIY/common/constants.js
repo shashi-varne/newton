@@ -7,4 +7,5 @@ export const DIY_PATHNAME_MAPPER = {
   mfOrders: "/diyv2/mf-orders",
   completeKyc: "/diyv2/complete-kyc",
   kycWeb: "/kyc/web",
+  investProcess: "/diyv2/invest-process"
 };
