@@ -106,9 +106,12 @@ const MfOrder = (props) => {
         return true;
       }
     });
+    const newInvestmentValidData = { ...isInvestmentValid }
+    delete newInvestmentValidData[fundTobeRemoved.isin]
     dispatch(setFundsCart(newDiyCart));
     dispatch(setFundOrderDetails(remainingFunds));
     dispatch(filterMfOrders(remainingOrders));
+    setIsInvestmentValid(newInvestmentValidData);
     handleSheetClose();
   };
 
