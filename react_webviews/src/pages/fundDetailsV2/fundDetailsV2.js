@@ -63,7 +63,7 @@ const FundDetailsV2 = (props) => {
   const addFundToCart = () => {
     dispatch(setCartItem(fundData));
     if(!isFisdom) {
-      navigate('/diyv2/mf-orders');
+      validateKycAndRedirect({ navigate, kyc })
     }
   }
 
@@ -107,7 +107,7 @@ const FundDetailsV2 = (props) => {
           subTitleLabels={[
             { name: fundData?.performance?.ms_risk },
             { name: fundData?.performance?.category },
-            { name: 'large cap' },
+            { name: fundData?.performance?.subcat },
           ]}
         />
       </Box>
