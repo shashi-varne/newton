@@ -91,7 +91,7 @@ const ReturnCalculator = () => {
     setIsTooltipOpen(!isTooltipOpen);
   };
   return (
-    <div>
+    <Box  sx={{ mt: 4 }}>
       <CollapsibleSection
         isOpen={isReturnCalcOpen}
         onClick={handleReturnCalcSection}
@@ -171,7 +171,7 @@ const ReturnCalculator = () => {
           </Stack>
         </Stack>
       </CollapsibleSection>
-    </div>
+    </Box>
   );
 };
 

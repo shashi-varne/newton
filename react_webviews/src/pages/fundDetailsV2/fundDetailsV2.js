@@ -99,8 +99,9 @@ const FundDetailsV2 = (props) => {
       }
       className='fund-details-wrapper'
       fixedFooter
+      noPadding
     >
-      <Box sx={{ mt: 3, mb: 3 }}>
+      <Box sx={{ bgcolor: "foundationColors.supporting.white", p: '3px 16px' }}>
         <HeaderTitle
           title={fundData?.performance?.friendly_name}
           imgSrc={fundData?.performance?.amc_logo_big}
@@ -116,19 +117,19 @@ const FundDetailsV2 = (props) => {
       <div ref={fundStatRef}>
         <FundStats />
       </div>
-      <div ref={returnCalcRef}>
+      <div className="fund-details-section" ref={returnCalcRef}>
         <ReturnCalculator />
       </div>
-      <div ref={assetAllocRef}>
+      <div className="fund-details-section" ref={assetAllocRef}>
         <AssetAllocation />
       </div>
-      <div ref={returnsRef}>
+      <div className="fund-details-section" ref={returnsRef}>
         <Returns />
       </div>
-      <div ref={riskDetailsRef}>
+      <div className="fund-details-section" ref={riskDetailsRef}>
         <RiskDetails />
       </div>
-      <div ref={returnCompRef}>
+      <div className="fund-details-section" ref={returnCompRef}>
         <ReturnComparison />
       </div>
     </Container>
