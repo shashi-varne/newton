@@ -46,7 +46,7 @@ const TwoRowCarousel = ({ isPageLoading, handleCardClick, seeAllCategories, data
                       onClick={handleCardClick(data.key, el.key)}
                     >
                       <CardVertical
-                        imgSrc={require('assets/large_cap.svg')}
+                        imgSrc={el?.image_url}
                         title={el?.name}
                         subtitle={el?.trivia}
                         dataAid={el?.key}

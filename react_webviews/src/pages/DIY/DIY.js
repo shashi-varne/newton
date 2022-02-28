@@ -8,8 +8,8 @@ import InvestmentProcess from './InvestmentProcess';
 import getTheme from '../../theme';
 import SubCategoryList from './SubCategoryList';
 import SubCategoryFunds from './SubCategoryFunds';
-import SubCategoryLanding from './SubCategoryFundList';
 import MfOrder from '../MfOrder/MfOrder';
+import SubCategoryFundList from './SubCategoryFundList';
 
 const DIY = (props) => {
   const theme = getTheme();
@@ -21,11 +21,11 @@ const DIY = (props) => {
           <Route path={`${url}/sub-category-list`} component={SubCategoryList} />
           <Route path={`${url}/sub-category-funds`} component={SubCategoryFunds} />
           <Route path={`${url}/fund-details`} component={FundDetails} />
-          <Route path={`${url}/sub-category/fund-list`} component={SubCategoryLanding} />
           <Route exact path={`${url}/:diyType/landing`} component={CommonCategoryLanding} />
           <Route path={`${url}/mf-orders`} component={MfOrder} />
-            <Route path={`${url}/complete-kyc`} component={CompleteKyc} />
+          <Route path={`${url}/complete-kyc`} component={CompleteKyc} />
           <Route path={`${url}/invest-process`} component={InvestmentProcess} />
+          <Route path={`${url}/sub-category/fund-list`} component={SubCategoryFundList} />
         </Switch>
       </ThemeProvider>
     </StyledEngineProvider>

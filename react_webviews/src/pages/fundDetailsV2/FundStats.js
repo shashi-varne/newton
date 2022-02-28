@@ -63,7 +63,7 @@ const FundStats = () => {
   };
 
   return (
-    <Stack sx={{ mt: 4, mb: 3 }} spacing={3}>
+    <Stack sx={{ bgcolor: "foundationColors.supporting.white", p: '32px 16px 24px 16px' }} spacing={3}>
       <Typography variant='heading3'>Fund stats</Typography>
       <Stack direction='row' justifyContent='space-between'>
         <Stack spacing='4px' direction='column'>
@@ -176,8 +176,9 @@ const FundStats = () => {
                 component='span'
                 variant='body5'
                 color='foundationColors.content.secondary'
+                sx={{ marginLeft: '5px' }}
               >
-                {exitLoadData?.period}
+                ({exitLoadData?.period})
               </Typography>
             </div>
           );

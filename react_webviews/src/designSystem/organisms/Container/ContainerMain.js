@@ -7,7 +7,7 @@ import IframeContainer from '../IframeContainer/IframeContainer';
 
 // have a iframeProps for Iframe container.
 const ContainerMain = (props) => {
-  const { isMobileDevice, isIframe } = useMemo(getConfig, []);
+  const { isIframe } = useMemo(getConfig, []);
   const {
     children,
     isPageLoading,

@@ -2,7 +2,6 @@ import { Grow, Stack } from '@mui/material';
 import { FILTER_TYPES } from 'businesslogic/constants/diy';
 import {
   fetchFundList,
-  getDiyCart,
   getDiyCartCount,
   getDiySubcategoryOptions,
   getDiyTypeData,
@@ -17,7 +16,6 @@ import {
   getMinimumInvestmentData,
   getReturnData,
   getSortData,
-  hideDiyCartButton,
   hideDiyCartFooter
 } from 'businesslogic/utils/diy/functions';
 import isEmpty from 'lodash/isEmpty';
@@ -26,7 +24,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
 import useErrorState from '../../../common/customHooks/useErrorState';
-import useLoadingState from '../../../common/customHooks/useLoadingState';
 import ToastMessage from '../../../designSystem/atoms/ToastMessage';
 import ConfirmAction from '../../../designSystem/molecules/ConfirmAction';
 import Container from '../../../designSystem/organisms/Container';
@@ -60,7 +57,6 @@ const SubCategoryLanding = (props) => {
   ]);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const { kyc, isLoading } = useUserKycHook();
-  const { isPageLoading } = useLoadingState(screen);
   const [selectedFilterValue, setSelectedFilterValue] = useState({
     [FILTER_TYPES.returns]: getReturnData(filterOptions.returnPeriod),
     [FILTER_TYPES.sort]: getSortData(filterOptions.sortFundsBy),

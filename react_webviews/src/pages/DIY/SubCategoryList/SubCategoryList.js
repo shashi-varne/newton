@@ -84,7 +84,7 @@ const SubcategoryOptionCard = ({ viewType, data, onClick }) => {
         <div className="diy-sc-cv-item" onClick={onClick}>
           <CategoryCard
             variant="large"
-            imgSrc={require("assets/tech_fund.svg")}
+            imgSrc={data?.image_url}
             title={data?.name}
             dataAid={data?.key}
           />
@@ -96,7 +96,7 @@ const SubcategoryOptionCard = ({ viewType, data, onClick }) => {
           onClick={onClick}
         >
           <CardVertical
-            imgSrc={require("assets/large_cap.svg")}
+            imgSrc={data?.image_url}
             title={data?.name}
             subtitle={data?.trivia}
             dataAid={data?.key}
