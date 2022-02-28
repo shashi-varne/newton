@@ -1,17 +1,11 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import Box from '@mui/material/Box';
-import NavigationHeader from '../../molecules/NavigationHeader';
-import {
-  NavigationHeaderPoints,
-  NavigationHeaderSubtitle,
-} from '../../molecules/NavigationHeader/NavigationHeader';
-import isArray from 'lodash/isArray';
 import { getConfig } from 'utils/functions';
-
-import './Container.scss';
-import './ContainerIframe.scss';
 import ContainerFooter from './ContainerFooter';
 import ContainerMain from './ContainerMain';
+import ContainerHeader from './ContainerHeader';
+import './Container.scss';
+import './ContainerIframe.scss';
 
 const Container = ({
   headerProps = {},
@@ -28,17 +22,22 @@ const Container = ({
   iframeRightChildren,
   iframeRightSectionImgSrc,
   iframeRightSectionImgSrcProps,
+  noPadding,
+  disableHorizontalPadding,
+  disableVerticalPadding,
 }) => {
   const containerRef = useRef();
   const footerWrapperRef = useRef();
   const { isMobileDevice, isIframe } = useMemo(getConfig, []);
-  const { headerTitle, subtitle, points = [], ...restHeaderProps } = headerProps;
   fixedFooter = isMobileDevice ? true : fixedFooter;
   useEffect(() => {
-    if (footerWrapperRef?.current && containerRef.current) {
-      containerRef.current.style.paddingBottom = `${
-        footerWrapperRef?.current?.getBoundingClientRect()?.height
-      }px`;
+    if (containerRef.current) {
+      const footerWrapper = document.getElementsByClassName('container-footer-wrapper')[0];
+      if (footerWrapper) {
+        const footerWrapperHeight = footerWrapper.clientHeight;
+        console.log('footerWrapper', footerWrapper.clientHeight);
+        containerRef.current.style.paddingBottom = `${footerWrapperHeight}px`;
+      }
     }
   }, [footer?.direction, footerWrapperRef?.current, noFooter]);
   const containerClass = isIframe ? 'Iframe-container-wrapper' : 'container-wrapper';
@@ -48,41 +47,27 @@ const Container = ({
       sx={{ ...containerWrapperSx(isPageLoading), ...containerSx }}
       className={`${containerClass} ${className}`}
     >
-      <NavigationHeader
-        className='container-nav-header'
-        headerTitle={headerTitle}
-        anchorOrigin={!isIframe ? containerRef : null}
-        {...restHeaderProps}
-      >
-        {subtitle && <NavigationHeaderSubtitle dataIdx={1}>{subtitle}</NavigationHeaderSubtitle>}
-        {isArray(points) &&
-          points?.map((point, idx) => {
-            return (
-              <NavigationHeaderPoints key={idx} dataIdx={idx + 1}>
-                {point}
-              </NavigationHeaderPoints>
-            );
-          })}
-      </NavigationHeader>
+      <ContainerHeader headerProps={headerProps} containerRef={containerRef} />
       <ContainerMain
         skeltonType={skeltonType}
         isPageLoading={isPageLoading}
         iframeRightChildren={iframeRightChildren}
         iframeRightSectionImgSrc={iframeRightSectionImgSrc}
         iframeRightSectionImgSrcProps={iframeRightSectionImgSrcProps}
+        noPadding={noPadding}
+        disableHorizontalPadding={disableHorizontalPadding}
+        disableVerticalPadding={disableVerticalPadding}
       >
         {children}
       </ContainerMain>
       {!isPageLoading && (
-        <div ref={footerWrapperRef}>
-          <ContainerFooter
-            fixedFooter={fixedFooter}
-            renderComponentAboveFooter={renderComponentAboveFooter}
-            footer={footer}
-            noFooter={noFooter}
-            footerElevation={footerElevation}
-          />
-        </div>
+        <ContainerFooter
+          fixedFooter={fixedFooter}
+          renderComponentAboveFooter={renderComponentAboveFooter}
+          footer={footer}
+          noFooter={noFooter}
+          footerElevation={footerElevation}
+        />
       )}
     </Box>
   );

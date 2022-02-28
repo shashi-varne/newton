@@ -1,3 +1,4 @@
+import { Box } from '@mui/material';
 import React, { useMemo } from 'react';
 import { getConfig } from 'utils/functions';
 import UiSkelton from '../../../common/ui/Skelton';
@@ -12,6 +13,10 @@ const ContainerMain = (props) => {
     iframeRightChildren,
     iframeRightSectionImgSrc,
     iframeRightSectionImgSrcProps,
+    noPadding,
+    disableHorizontalPadding,
+    disableVerticalPadding,
+    sx,
   } = props;
 
   if (isIframe) {
@@ -28,10 +33,31 @@ const ContainerMain = (props) => {
     );
   } else {
     return (
-      <main className={`container-content-wrapper`}>
+      <Box
+        sx={{ ...containersx(noPadding, disableHorizontalPadding, disableVerticalPadding), ...sx }}
+        className={`container-content-wrapper`}
+      >
         {isPageLoading ? <UiSkelton type={skeltonType} /> : children}
-      </main>
+      </Box>
     );
+  }
+};
+
+const containersx = (noPadding, disableHorizontalPadding, disableVerticalPadding) => {
+  if (noPadding) {
+    return {
+      p: '0px !important',
+    };
+  }
+  if (disableHorizontalPadding) {
+    return {
+      px: '0px !important',
+    };
+  }
+  if (disableVerticalPadding) {
+    return {
+      py: '0px !important',
+    };
   }
 };
 
