@@ -310,8 +310,8 @@ export function getKycAppStatus(kyc) {
     status = 'ground_premium';
   }
 
-  if (!kyc.address.meta_data.is_nri && kyc.kyc_status !== 'compliant' && (kyc.application_status_v2 !== 'init' && kyc.application_status_v2 !== 'submitted' &&
-    kyc.application_status_v2 !== 'complete') && kyc.dl_docs_status !== null) {
+  if (!kyc.address.meta_data.is_nri && kyc.kyc_status !== 'compliant' && kyc.kyc_type !== 'manual' && !['init', 'submitted', 'complete'].includes(kyc.application_status_v2)
+      && kyc.dl_docs_status !== null) {
     status = 'ground_aadhaar';
   }
 

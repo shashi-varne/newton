@@ -523,7 +523,7 @@ export function redirectAfterLogin(data, user, navigateFunc) {
   } else if (sdkStocksRedirection) {
     storageService().setBoolean("sdkStocksRedirection", false);
     storageService().setBoolean("openEquityCallback", true);
-    navigate("/", { edit: true, state: { goBack: "/" } });
+    navigate("/invest", { edit: true, state: { goBack: "/" } });
   } else if (ipoContactNotVerified){
     storageService().set("ipoContactNotVerified", false);
     navigate("/market-products", { state: { goBack: "/invest" } });
@@ -611,9 +611,6 @@ export async function authCheckApi(type, data) {
 export async function generateOtp(data) {
   let error = "";
   try {
-    this.setState({
-      loading: true,
-    });
     const otpResponse = await Api.post("/api/communication/send/otp", data);
     if (otpResponse.pfwresponse.status_code === 200) {
       // OTP_ID GENERATED, NAGIVATE TO THE OTP VERIFICATION SCREEN
@@ -627,10 +624,6 @@ export async function generateOtp(data) {
     }
   } catch (err) {
     Toast(err);
-  } finally {
-    this.setState({
-      loading: false,
-    });
   }
 }
 

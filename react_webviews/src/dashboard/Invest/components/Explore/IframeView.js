@@ -4,11 +4,10 @@ import { withRouter } from 'react-router-dom';
 
 import diy_kyc from 'assets/finity/diy_kyc.svg';
 import search from 'assets/icon_search.svg';
-import { getConfig } from 'utils/functions';
-import './IframeView.scss';
-import { initialize } from '../../functions';
 import InvestExploreCard from './InvestExploreCard';
-// import { Imgc } from '../../../../common/ui/Imgc';
+import { getKycData } from '../../functions';
+import { getConfig, navigate } from '../../../../utils/functions';
+import './IframeView.scss';
 
 class IframeView extends Component {
   constructor(props) {
@@ -16,18 +15,16 @@ class IframeView extends Component {
     this.state = {
       show_loader: false,
       kycStatusLoader: false,
+      kycStatusData: {},
       isMobileDevice: getConfig().isMobileDevice,
     };
-    this.initialize = initialize.bind(this);
+    this.navigate = navigate.bind(this.props);
   }
 
-  componentWillMount() {
-    this.initialize();
+  componentDidMount() {
+    const kycData = getKycData();
+    this.setState({ ...kycData })
   }
-
-  onload = () => {
-    this.initilizeKyc();
-  };
 
   checkKyc = () => {
     if (this.state.kycJourneyStatus === 'ground') {

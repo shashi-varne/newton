@@ -8,7 +8,7 @@ const BankListOptions = ({
   handleClick,
   selectedValue,
   handleChange,
-  options,
+  options = [],
   error,
   showLoader
 }) => {
@@ -18,7 +18,7 @@ const BankListOptions = ({
       button1Props={{
         title: "PROCEED",
         onClick: handleClick,
-        type: "primary",
+        variant: "contained",
         showLoader: showLoader
       }}
     >

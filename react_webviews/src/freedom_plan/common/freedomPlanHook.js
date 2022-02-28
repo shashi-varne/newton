@@ -3,8 +3,9 @@ import { storageService } from "../../utils/validators";
 import { getAllPlans, triggerPayment } from "./api";
 import isEmpty from "lodash/isEmpty";
 import { getBasePath, getConfig } from "../../utils/functions";
-import { PATHNAME_MAPPER } from "./constants";
+import { FREEDOM_PLAN_STORAGE_CONSTANTS, PATHNAME_MAPPER } from "./constants";
 import { getActivePlans, getDefaultPlan, isNative } from "./functions";
+import { getAccountSummary } from "../../kyc/services";
 
 const DEFAULT_ERROR_DATA = {
   showError: false,
@@ -16,10 +17,11 @@ function useFreedomDataHook(initializeData) {
   const planData = storageService().getObject("freedomPlanData") || {};
   const planList = storageService().getObject("freedomPlanList") || [];
   const planCharges = storageService().getObject("freedomPlanCharges") || {};
-
+  const freedomPlanStatus = storageService().getObject(FREEDOM_PLAN_STORAGE_CONSTANTS.subscriptionStatus) || {};
   const [freedomPlanData, setFreedomPlanData] = useState(planData);
   const [freedomPlanList, setFreedomPlanList] = useState(planList);
   const [freedomPlanCharges, setFreedomPlanCharges] = useState(planCharges);
+  const [subscriptionStatus, setSubscriptionStatus] = useState(freedomPlanStatus);
   const [showLoader, setShowLoader] = useState(false);
   const [errorData, setErrorData] = useState(DEFAULT_ERROR_DATA);
 
@@ -65,6 +67,28 @@ function useFreedomDataHook(initializeData) {
     }
   };
 
+  const getSubscriptionStatus = async () => {
+    try {
+      resetErrorData();
+      setShowLoader(true);
+      const result = await getAccountSummary({
+        equity: ["subscription_status"],
+      });
+      const subscriptionStatus = result?.data?.equity?.subscription_status?.data || {};
+      if(!isEmpty(subscriptionStatus)) {
+        setSubscriptionStatus(subscriptionStatus);
+      }
+    } catch (err) {
+      setErrorData({
+        showError: true,
+        title2: err.message,
+        handleClick1: getSubscriptionStatus,
+      });
+    } finally {
+      setShowLoader(false);
+    }
+  };
+
   const initiatePayment = async (data) => {
     try {
       setShowLoader("button");
@@ -86,7 +110,7 @@ function useFreedomDataHook(initializeData) {
         };
         if (config.Android) {
           nativeData.upi_apps = upiApps;
-        } else if(config.iOS) {
+        } else if (config.iOS) {
           nativeData.upi_others = true;
         }
         nativeData = JSON.stringify(nativeData);
@@ -122,6 +146,11 @@ function useFreedomDataHook(initializeData) {
     setFreedomPlanCharges(data);
   };
 
+  const updateSubscriptionStatus = (data) => {
+    storageService().setObject(FREEDOM_PLAN_STORAGE_CONSTANTS.subscriptionStatus, data);
+    setSubscriptionStatus(data);
+  };
+
   const resetFreedomPlan = () => {
     updateFreedomPlanData({});
     updateFreedomPlanList([]);
@@ -134,11 +163,13 @@ function useFreedomDataHook(initializeData) {
     errorData,
     freedomPlanList,
     freedomPlanCharges,
+    subscriptionStatus,
     setErrorData,
     resetErrorData,
     initiatePayment,
     resetFreedomPlan,
     updateFreedomPlanData,
+    updateSubscriptionStatus,
   };
 }
 

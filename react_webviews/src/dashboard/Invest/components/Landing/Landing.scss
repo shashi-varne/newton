@@ -1,8 +1,12 @@
 .invest-landing {
   padding-bottom: 20px;
 
-  .generic-page-subtitle {
-    margin: -10px 0 20px 0;
+  .generic-page-subtitle, .il-subtitle-skelton {
+    margin: -10px 0 20px 0 !important;
+  }
+
+  .il-subtitle-skelton {
+    width: 75% !important;
   }
 
   .invest-fp-loader {
@@ -135,7 +139,7 @@
     display: flex;
     overflow: auto;
 
-    .list {
+    .bsc-list {
       width: fit-content;
       display: flex;
     }
