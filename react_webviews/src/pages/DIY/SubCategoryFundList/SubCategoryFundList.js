@@ -290,7 +290,7 @@ const CustomFooter = ({
         handleSortClick={handleSortClick}
         handleReturnClick={handleReturnClick}
         handleFilterClick={handleFilterClick}
-        count={filterCount}
+        filterCount={filterCount}
       />
     </Stack>
   );

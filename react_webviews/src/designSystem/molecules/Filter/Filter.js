@@ -62,14 +62,14 @@ const Filter = ({
       >
         {title}
       </Typography>
-      {filterCount && (
+      {filterCount || filterCount === 0 ? (
         <Badge
           badgeContent={filterCount}
           dataAid="number"
           className="filter-nav-badge"
           {...badgeProps}
         />
-      )}
+      ) : null}
     </Stack>
   );
 };
