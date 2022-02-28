@@ -132,8 +132,8 @@ const SdkLanding = (props) => {
           name: data.account_number,
         });
       });
-      handleDialogStates({ showBankList: true });
       setBankData({ bankList, bankListOptions });
+      handleDialogStates({ showBankList: true });
     }
   };
 
