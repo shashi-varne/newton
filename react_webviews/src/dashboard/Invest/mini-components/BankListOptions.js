@@ -8,7 +8,7 @@ const BankListOptions = ({
   handleClick,
   selectedValue,
   handleChange,
-  options,
+  options = [],
   error,
   showLoader
 }) => {
