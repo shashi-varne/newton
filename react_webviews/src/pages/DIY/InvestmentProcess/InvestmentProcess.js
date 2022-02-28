@@ -16,7 +16,7 @@ import { handlePaymentRedirection } from '../common/functions';
 import useUserKycHook from '../../../kyc/common/hooks/userKycHook';
 import useLoadingState from '../../../common/customHooks/useLoadingState';
 import { useDispatch } from 'react-redux';
-import { storageService } from '../../../utils/validators';
+import { capitalizeFirstLetter, storageService } from '../../../utils/validators';
 
 import './InvestmentProcess.scss';
 
@@ -59,7 +59,7 @@ const InvestmentProcess = (props) => {
       <LandingHeader variant='side'>
         <LandingHeaderImage imgSrc={require(`assets/${productName}/invest_process.svg`)} />
         <LandingHeaderTitle>{DIY.investmentProcessTitle}</LandingHeaderTitle>
-        <LandingHeaderSubtitle dataIdx={1}>{DIY.investmentProcessSubtitle}</LandingHeaderSubtitle>
+        <LandingHeaderSubtitle dataIdx={1}>{DIY.investmentProcessSubtitle(capitalizeFirstLetter(productName))}</LandingHeaderSubtitle>
       </LandingHeader>
       <section className='ip-points-wrapper'>
         <ul className='ip-points-list'>
