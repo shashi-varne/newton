@@ -4,6 +4,8 @@ import { getConfig } from 'utils/functions';
 import UiSkelton from '../../../common/ui/Skelton';
 import IframeContainer from '../IframeContainer/IframeContainer';
 
+
+// have a iframeProps for Iframe container.
 const ContainerMain = (props) => {
   const { isMobileDevice, isIframe } = useMemo(getConfig, []);
   const {
