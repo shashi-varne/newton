@@ -41,7 +41,6 @@ import TabPanel from './TabPanel';
 import { validateKycAndRedirect } from '../common/functions';
 import useUserKycHook from '../../../kyc/common/hooks/userKycHook';
 
-
 const screen = 'diyFundList';
 const SubCategoryLanding = (props) => {
   const dispatch = useDispatch();
