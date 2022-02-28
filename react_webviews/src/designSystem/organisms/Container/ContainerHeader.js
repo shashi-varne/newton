@@ -6,27 +6,37 @@ import {
   NavigationHeaderPoints,
   NavigationHeaderSubtitle,
 } from '../../molecules/NavigationHeader/NavigationHeader';
+import { Box } from '@mui/material';
 
-const ContainerHeader = ({headerProps, containerRef}) => {
-  const { headerTitle, subtitle, points = [], ...restHeaderProps } = headerProps;
+const ContainerHeader = ({ headerProps, containerRef }) => {
+  const {
+    headerTitle,
+    subtitle,
+    points = [],
+    headerSx,
+    headerClassName,
+    ...restHeaderProps
+  } = headerProps;
   const { isIframe } = useMemo(getConfig, []);
   return (
-    <NavigationHeader
-      className='container-nav-header'
-      headerTitle={headerTitle}
-      anchorOrigin={!isIframe ? containerRef : null}
-      {...restHeaderProps}
-    >
-      {subtitle && <NavigationHeaderSubtitle dataIdx={1}>{subtitle}</NavigationHeaderSubtitle>}
-      {isArray(points) &&
-        points?.map((point, idx) => {
-          return (
-            <NavigationHeaderPoints key={idx} dataIdx={idx + 1}>
-              {point}
-            </NavigationHeaderPoints>
-          );
-        })}
-    </NavigationHeader>
+    <Box className={`container-header-wrapper ${headerClassName}`} sx={headerSx}>
+      <NavigationHeader
+        className='container-nav-header'
+        headerTitle={headerTitle}
+        anchorOrigin={!isIframe ? containerRef : null}
+        {...restHeaderProps}
+      >
+        {subtitle && <NavigationHeaderSubtitle dataIdx={1}>{subtitle}</NavigationHeaderSubtitle>}
+        {isArray(points) &&
+          points?.map((point, idx) => {
+            return (
+              <NavigationHeaderPoints key={idx} dataIdx={idx + 1}>
+                {point}
+              </NavigationHeaderPoints>
+            );
+          })}
+      </NavigationHeader>
+    </Box>
   );
 };
 
