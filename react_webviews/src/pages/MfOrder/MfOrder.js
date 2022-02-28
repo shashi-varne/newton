@@ -255,7 +255,7 @@ const MfOrder = (props) => {
         <NoMfOrders />
       ) : (
         <>
-          <Stack direction='column' spacing={2} component='section'>
+          <Stack className="mf-order-section" direction='column' spacing={2} component='section'>
             {isProductFisdom && (
               <ParentInvestTypeSection
                 parentInvestmentType={parentInvestmentType}
