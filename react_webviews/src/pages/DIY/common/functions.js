@@ -2,7 +2,7 @@ import { handleIframeInvest } from "../../../dashboard/proceedInvestmentFunction
 import { getBasePath, getConfig } from "../../../utils/functions";
 import { storageService } from "../../../utils/validators";
 import { DIY_PATHNAME_MAPPER } from "./constants";
-
+/* eslint-disable */
 export const validateKycAndRedirect =
   ({ navigate, kyc }) =>
   () => {
