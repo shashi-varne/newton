@@ -515,10 +515,15 @@ export async function getKycFromSummary(params = {}) {
 export function redirectAfterLogin(data, user, navigateFunc) {
   const kyc = storageService().getObject("kyc");
   const ipoContactNotVerified = storageService().get("ipoContactNotVerified") || false;
+  const sdkStocksRedirection = storageService().getBoolean("sdkStocksRedirection");
   user = user || storageService().getObject("user");
   const navigate = navigateFunc || this.navigate;
   if (data.firstLogin) {
     navigate("/referral-code", { state: { goBack: "/", communicationType: data?.contacts?.auth_type } });
+  } else if (sdkStocksRedirection) {
+    storageService().setBoolean("sdkStocksRedirection", false);
+    storageService().setBoolean("openEquityCallback", true);
+    navigate("/invest", { edit: true, state: { goBack: "/" } });
   } else if (ipoContactNotVerified){
     storageService().set("ipoContactNotVerified", false);
     navigate("/market-products", { state: { goBack: "/invest" } });
@@ -606,9 +611,6 @@ export async function authCheckApi(type, data) {
 export async function generateOtp(data) {
   let error = "";
   try {
-    this.setState({
-      loading: true,
-    });
     const otpResponse = await Api.post("/api/communication/send/otp", data);
     if (otpResponse.pfwresponse.status_code === 200) {
       // OTP_ID GENERATED, NAGIVATE TO THE OTP VERIFICATION SCREEN
@@ -622,10 +624,6 @@ export async function generateOtp(data) {
     }
   } catch (err) {
     Toast(err);
-  } finally {
-    this.setState({
-      loading: false,
-    });
   }
 }
 

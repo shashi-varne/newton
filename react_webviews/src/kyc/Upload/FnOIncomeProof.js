@@ -66,9 +66,9 @@ const FnOIncomeProof = (props) => {
   const { kyc, isLoading, updateKyc } = useUserKycHook();
   const fromState = props?.location?.state?.fromState;
   const goBackPath = props.location?.state?.goBack || "";
-  const { productName, Web } = getConfig();
+  const { productName, Web, isSdk } = getConfig();
   const fromNativeLandingOrMyAccounts = storageService().get("native") && goBackPath === "exit";
-  const isFromKycJourney = !(!Web ? fromNativeLandingOrMyAccounts : hideSkipOptionPaths.includes(fromState));
+  const isFromKycJourney = !((!Web && !isSdk) ? fromNativeLandingOrMyAccounts : hideSkipOptionPaths.includes(fromState));
   const isMyAccountFlow = fromState === "/my-account";
   const fromWebModuleEntry = fromState === "/kyc/web";
 
@@ -124,7 +124,7 @@ const FnOIncomeProof = (props) => {
       sendEvents("skip");
     }
     
-    if (!Web) {
+    if (!Web && !isSdk) {
       commonNativeNavigation();
     } else {
       if (isMyAccountFlow) {

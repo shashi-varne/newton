@@ -3,12 +3,13 @@ import Container from "../../common/Container";
 import OtpDefault from "common/ui/otp";
 import toast from "common/ui/Toast";
 import { navigate as navigateFunc} from "utils/functions";
-import { storageService, isEmpty, validateNumber } from "../../../utils/validators";
+import { storageService, validateNumber } from "../../../utils/validators";
 import { getPathname, storageConstants } from "../../constants";
 import { initData } from "../../../kyc/services";
 import { resendOtp, submitOtp } from "../../common/api";
 import "./commonStyles.scss";
 import { nativeCallback } from "../../../utils/native_callback";
+import isEmpty from "lodash/isEmpty";
 
 class Otp extends Component {
   constructor(props) {
@@ -39,9 +40,13 @@ class Otp extends Component {
     let title = "";
     if (action === "pause" || action === "cancel") title = "Request placed!";
     let userKyc = storageService().getObject(storageConstants.KYC);
-    if (!userKyc) {
-      await initData();
-      userKyc = storageService().getObject(storageConstants.KYC);
+    if (isEmpty(userKyc)) {
+      try {
+        await initData();
+        userKyc = storageService().getObject(storageConstants.KYC);
+      } catch(err) {
+        toast(err.message)
+      }
     }
     this.setState({ userKyc, urls, action, title, showSkelton: false });
   };

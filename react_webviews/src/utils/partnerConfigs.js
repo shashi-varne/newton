@@ -559,7 +559,8 @@ export const partnerConfigs = {
     logo: "ucomb.svg",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
-      ourRecommendations: ["buildwealth", "savetax"],
+      stocksAndIpo: ["stocks", "ipo"],
+      ourRecommendations: ["buildwealth", "savetax", "nps"],
       diy: ["diyv2"],
     },
     styles: {
@@ -574,7 +575,8 @@ export const partnerConfigs = {
       }
     },
     features: {
-      addAnotherBank: true
+      addAnotherBank: true,
+      taxFiling: true,
     },
     referralConfig: {
       applyRefferal: true,

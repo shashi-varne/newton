@@ -18,12 +18,14 @@ export const investCardsBase = {
       subtitle: "Invest in your favourite companies",
       button_text: "INVEST",
       icon: "ic_stocks.svg",
+      tagTitle: "NEW"
     },
     ipo: {
       title: "IPO, SGB, NCD & more",
       subtitle: "Primary market products",
       button_text: "INVEST",
       icon: "ic_ipo.svg",
+      tagTitle: "NEW"
     },
   },
   popularCards: {
@@ -163,6 +165,9 @@ export const keyPathMapper = {
   diyv2: "invest/explore",
   parkmoney: "invest/parkmoney",
   savegoal: "invest/savegoal",
+  insurance: "/group-insurance",
+  gold: "/gold/my-gold",
+  fhc: "/fhc",
 };
 
 export const investRedeemData = {
@@ -589,13 +594,6 @@ export const sdkInvestCardMapper = [
     subtitle: 'Account details, Mandate',
     img: 'ic_db_account.svg',
     path: '/my-account'
-  },
-  {
-    key: 'kyc',
-    title: 'KYC',
-    subtitle: 'Create investment profile',
-    img: 'ic_db_kyc.svg',
-    path: '/kyc'
   },
   {
     key: 'refer',

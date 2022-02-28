@@ -5,7 +5,6 @@ import { getMyAccount } from "../common/api";
 import { storageService } from "utils/validators";
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import toast from "../../common/ui/Toast";
-import { initData } from "../services";
 import "./BanksList.scss";
 import { nativeCallback } from "../../utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
@@ -32,7 +31,6 @@ const BanksList = (props) => {
       setChangerequest(result.change_requests || {});
       updateKyc(result.kyc);
       setShowLoader(false);
-      await initData();
       storageService().setObject(
         STORAGE_CONSTANTS.BANK_MANDATES,
         result.bank_mandates.banks

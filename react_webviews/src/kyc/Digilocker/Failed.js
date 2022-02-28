@@ -1,5 +1,5 @@
 import "./Digilocker.scss";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "../common/Container";
 import { pollProgress } from "../common/functions";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
@@ -37,6 +37,12 @@ const Failed = (props) => {
       setIsApiRunning(false);
     }
   };
+
+  useEffect(() => {
+    if (config.app === "ios") {
+      nativeCallback({ action: 'hide_top_bar' });
+    }
+  }, [])
 
   const sendEvents = (userAction) => {
     let eventObj = {
