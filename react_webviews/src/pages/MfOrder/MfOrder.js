@@ -176,6 +176,7 @@ const MfOrder = (props) => {
           let allocation = {
             mfid: fund.mfid,
             mfname: fund.mfname,
+            // eslint-disable-next-line
             amount: parseInt(mfOrders[fund.isin].amount),
             default_date: fund.addl_purchase.sip.default_date,
             sip_dates: fund.addl_purchase.sip.sip_dates,
@@ -186,6 +187,7 @@ const MfOrder = (props) => {
           allocations.push(allocation);
         });
       const totalAmount = allocations.reduce(
+        // eslint-disable-next-line
         (sum, data) => (sum += parseInt(data.amount)),
         0
       );

@@ -3,7 +3,6 @@ import Container from '../../../designSystem/organisms/Container';
 import Stack from '@mui/material/Stack';
 import {
   LandingHeader,
-  LandingHeaderImage,
   LandingHeaderSubtitle,
   LandingHeaderTitle,
 } from '../../../designSystem/molecules/LandingHeader';

@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Container from '../../designSystem/organisms/Container';
 import HeaderTitle from '../../designSystem/molecules/HeaderTitle';
 import Box from '@mui/material/Box';
-import isEmpty from 'lodash/isEmpty';
 import ReturnCalculator from './ReturnCalculator';
 import AssetAllocation from './AssetAllocation';
 import Returns from './Returns';
