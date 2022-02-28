@@ -66,7 +66,7 @@ const Home = (props) => {
         <Route path={`${url}invest`} component={Invest} />
         <Route path={`${url}landing`} component={Invest} />
         <Route path={`${url}mf`} component={SdkLanding} />
-        <Route path={`${url}diy`} component={DIY} />
+        <Route path={`${url}diyv2`} component={DIY} />
         <Route path={`${url}invest-journey`} component={InvestJourney} />
         <Route path={`${url}nps`} component={NPS} />
         <Route path={`${url}passive-index-funds`} component={PassiveIndexFunds} />
