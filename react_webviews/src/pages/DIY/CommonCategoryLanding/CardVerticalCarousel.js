@@ -56,7 +56,7 @@ const CardVerticalCarousel = ({ handleCardClick, isPageLoading, data = {} }) => 
                     onClick={handleCardClick(data.key, el.key)}
                   >
                     <CardVertical
-                      imgSrc={require('assets/investment_contra.svg')}
+                      imgSrc={el?.image_url}
                       title={el?.name}
                       subtitle={el?.trivia}
                       dataAid={idx}

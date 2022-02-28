@@ -54,7 +54,7 @@ const CategoryCardCarousel = ({ handleCardClick, isPageLoading, data = {}, seeAl
           : data?.options?.map((el, idx) => (
               <SwiperSlide key={idx}>
                 <CategoryCard
-                  imgSrc={require('assets/tech_fund.svg')}
+                  imgSrc={el.image_url}
                   title={el?.name}
                   variant='large'
                   onClick={handleCardClick(data.key, el.key)}

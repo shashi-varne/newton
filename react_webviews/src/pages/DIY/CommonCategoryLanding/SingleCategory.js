@@ -32,6 +32,7 @@ const SingleCategory = ({ handleCardClick, isPageLoading, data = {} }) => {
                   subtitle={el?.trivia}
                   dataAid={el?.key}
                   className="pointer"
+                  leftImgSrc={el.image_url}
                 />
               </WrapperBox>
             );

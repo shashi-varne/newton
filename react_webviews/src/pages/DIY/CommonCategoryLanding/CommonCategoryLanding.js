@@ -9,7 +9,7 @@ import { getConfig } from '../../../utils/functions';
 import Container from '../../../designSystem/organisms/Container';
 
 import isEmpty from 'lodash/isEmpty';
-import { DescriptionMapper, DIY_TYPE, VIEW_TYPE_MAPPER } from 'businesslogic/constants/diy';
+import { VIEW_TYPE_MAPPER } from 'businesslogic/constants/diy';
 import { useDispatch, useSelector } from 'react-redux';
 import Api from '../../../utils/api';
 import TrendingFunds from './TrendingFunds';
@@ -116,11 +116,11 @@ const CommonCategoryLanding = (props) => {
             loop
             className='diy-landing-lottie-anim'
           />
-          <LandingHeaderTitle>{DIY_TYPE[diyType.toUpperCase()]}</LandingHeaderTitle>
+          <LandingHeaderTitle>{categoryData.category?.toUpperCase()}</LandingHeaderTitle>
           <LandingHeaderSubtitle dataIdx={1}>
-            {DescriptionMapper[diyType.toUpperCase()]?.desc}
+            {categoryData.subtitle}
           </LandingHeaderSubtitle>
-          {DescriptionMapper[diyType.toUpperCase()]?.points?.map((el, idx) => {
+          {categoryData?.points?.map((el, idx) => {
             return (
               <LandingHeaderPoints key={idx} dataIdx={idx + 1}>
                 {el}
