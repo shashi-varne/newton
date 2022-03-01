@@ -1,5 +1,5 @@
 import { Stack } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import SearchBar from '../../../designSystem/molecules/SearchBar';
 import Checkbox from '../../../designSystem/atoms/Checkbox';
 import isEmpty from 'lodash/isEmpty';
@@ -8,10 +8,12 @@ import './FundHouses.scss';
 import Typography from '../../../designSystem/atoms/Typography';
 import { useSelector } from 'react-redux';
 import { getFundHouses } from "businesslogic/dataStore/reducers/diy";
+import { getConfig } from '../../../utils/functions';
 const FundHouses = ({ activeFundHouses, setActiveFundHouses }) => {
   const fundHouses = useSelector(getFundHouses);
   const [searchQuery, setSearchQuery] = useState('');
   const [fundHouseList, setFundHouseList] = useState(fundHouses);
+  const { isMobileDevice } = useMemo(getConfig, [])
 
   const handleChange = (option) => () => {
     const isFundAdded = activeFundHouses.includes(option);
@@ -34,7 +36,7 @@ const FundHouses = ({ activeFundHouses, setActiveFundHouses }) => {
   return (
     <div className='fund-house-wrapper'>
       <SearchBar placeholder='Search...' value={searchQuery} onChange={handleSearch} />
-      <Stack sx={{ mt: 1, height:'calc(100vh - 300px)', overflowY: 'auto' }}>
+      <Stack sx={{ mt: 1, height: isMobileDevice ? 'calc(100vh - 220px)' : 'calc(100vh - 300px)', overflowY: 'auto' }}>
         {isEmpty(fundHouseList) && (
           <Typography align='center' variant='body2' color='foundationColors.supporting.cadetBlue'>
             No results
