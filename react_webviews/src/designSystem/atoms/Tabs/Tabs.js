@@ -60,6 +60,7 @@ export const Tab = ({
   wrapper,
   idx,
   dataAid,
+  disableRipple,
   ...props
 }) => {
   const dataAidValue = dataAid || idx + 1;
@@ -72,6 +73,7 @@ export const Tab = ({
       iconPosition={iconPosition}
       label={label}
       classes={classes}
+      disableRipple={disableRipple}
       sx={sx}
       wrapper={wrapper}
       {...props}

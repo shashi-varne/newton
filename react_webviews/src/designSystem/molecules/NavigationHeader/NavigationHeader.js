@@ -238,7 +238,7 @@ const TabsSection = ({ tabs, tabChilds }) => {
     <Tabs value={selectedTab} onChange={onTabChange} {...restTabs}>
       {tabChilds?.map((el, idx) => {
         const value = el?.value || idx;
-        return <Tab key={idx} label={el[labelName]} value={value} {...el} />;
+        return <Tab disableRipple={true} key={idx} label={el[labelName]} value={value} {...el} />;
       })}
     </Tabs>
   );
