@@ -5,8 +5,11 @@ import Button from '@material-ui/core/Button';
 import {SkeltonRect} from '../../../common/ui/Skelton';
 import DotLoader from 'common/ui/DotDotLoaderNew';
 import { getConfig } from '../../../utils/functions';
+import WVTag from "../../../common/ui/Tag/WVTag";
+
 const SdkInvestCard = ({
   title,
+  tagTitle,
   subtitle,
   img,
   height,
@@ -30,6 +33,7 @@ const SdkInvestCard = ({
   return (
     <div className={`card sdk-landing-card ${isLoading && 'disable-card-action'}`} style={{ height: height }} onClick={handleCard} data-aid='sdk-landing-card'>
       <div className='text' style={{ backgroundImage: `url(${titleBg})` }}>
+        {tagTitle && <WVTag content={tagTitle} />}
         <div className='title' data-aid='sdk-landing-card-title'>{title}</div>
         {referralCode ? (
           <Input

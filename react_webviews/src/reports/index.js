@@ -23,6 +23,7 @@ import Request from "./components/Sip/Request";
 import PauseResumeRestart from "./components/Sip/PauseResumeRestart";
 import SwitchedTransaction from "./components/SwitchedTransaction";
 import InvestMore from "./components/InvestMore";
+import KycStatus from "./components/KycStatus";
 
 const Reports = (props) => {
   const { url } = props.match;
@@ -30,6 +31,7 @@ const Reports = (props) => {
     <Fragment>
       <Switch>
         <Route path={url} exact component={Summary} />
+        <Route path={`${url}/kyc-status`} exact component={KycStatus} />
         <Route path={`${url}/goals`} exact component={Goals} />
         <Route path={`${url}/goals/funds/:itype/`} exact component={Funds} />
         <Route path={`${url}/goals/funds/:itype/:subtype`} exact component={Funds} />

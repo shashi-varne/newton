@@ -320,13 +320,21 @@
       background-size: contain;
       background-repeat: no-repeat;
       text-align: left;
+
+      .wv-tag {
+        padding: 0 5px;
+        font-size: 8px;
+        font-weight: 700;
+      }
+
       .title{
         font-size: 20px;
         font-weight: bold;
+        color: var(--gunmetal);
       }
 
       .subtitle{
-        color: #160d2e;
+        color: var(--steelgrey);
         font-size: 13px;
         margin: 4px 0 0 0;
 

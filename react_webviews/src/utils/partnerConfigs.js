@@ -55,32 +55,10 @@ export const commonCardsConfig = {
   landingMarketingBanners: [],
   nfoBanners: [
     {
-      image: "nfo5.svg",
+      image: "nfo.svg",
       type: "nfo",
-      startDate: "01/17/2022",
-      endDate: "01/30/2022",
-    },
-    {
-      image: "nfo2.svg",
-      type: "nfo",
-      endDate: "01/26/2022",
-    },
-    {
-      image: "nfo3.svg",
-      type: "nfo",
-      endDate: "01/26/2022",
-    },
-    {
-      image: "nfo4.svg",
-      type: "nfo",
-      startDate: "01/21/2022",
-      endDate: "02/03/2022",
-    },
-    {
-      image: "nfo1.svg",
-      type: "nfo",
-      endDate: "01/23/2022",
-    },
+      endDate: "02/23/2022",
+    }
   ],
 };
 
@@ -581,7 +559,8 @@ export const partnerConfigs = {
     logo: "ucomb.svg",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
-      ourRecommendations: ["buildwealth", "savetax"],
+      stocksAndIpo: ["stocks", "ipo"],
+      ourRecommendations: ["buildwealth", "savetax", "nps"],
       diy: ["diyv2"],
     },
     styles: {
@@ -596,7 +575,8 @@ export const partnerConfigs = {
       }
     },
     features: {
-      addAnotherBank: true
+      addAnotherBank: true,
+      taxFiling: true,
     },
     referralConfig: {
       applyRefferal: true,

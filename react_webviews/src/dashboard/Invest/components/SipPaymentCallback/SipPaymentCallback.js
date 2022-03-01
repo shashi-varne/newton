@@ -5,10 +5,11 @@ import { Imgc } from "common/ui/Imgc";
 import { resetRiskProfileJourney } from "../../functions";
 import { getCampaign } from "../../common/api";
 import { isEmpty, storageService } from "utils/validators";
-import { getCampaignBySection, initData } from "../../../../kyc/services";
+import { getCampaignBySection } from "../../../../kyc/services";
 import { getBasePath } from "utils/functions";
 import "./SipPaymentCallback.scss";
 import { isNewIframeDesktopLayout } from "../../../../utils/functions";
+import useUserKycHook from "../../../../kyc/common/hooks/userKycHook";
 
 const SipPaymentCallback = (props) => {
   const hideImage = isNewIframeDesktopLayout();
@@ -17,9 +18,7 @@ const SipPaymentCallback = (props) => {
   const status = params.status || "";
   let message = params.message || "";
   const [campaign, setCampaign] = useState({});
-  const [currentUser, setCurrentUser] = useState(
-    storageService().getObject("user") || {}
-  );
+  const { user: currentUser, isLoading } = useUserKycHook();
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [skelton, setSkelton] = useState(true);
   const basePath = getBasePath();
@@ -84,12 +83,6 @@ const SipPaymentCallback = (props) => {
       if (campaignData && !isEmpty(campaignData) && !paymentError)
         setButtonTitle("AUTOMATE SIPS VIA EASYSIP");
       setCampaign(campaignData);
-      let user = { ...currentUser };
-      if (isEmpty(user)) {
-        await initData();
-        user = storageService().getObject("user");
-        setCurrentUser(user);
-      }
     } catch (err) {
       console.log(err);
     } finally {
@@ -158,7 +151,7 @@ const SipPaymentCallback = (props) => {
       handleClick={() => handleClick()}
       iframeRightContent={require(`assets/${config.productName}/${paymentError ? 'error_illustration' : 'congratulations_illustration'}.svg`)}
       title={!paymentError ? "Payment successful" : "Payment failed"}
-      skelton={skelton}
+      skelton={skelton || isLoading}
       headerData={{goBack}}
       data-aid='sip-payment-callback-screen'
     >

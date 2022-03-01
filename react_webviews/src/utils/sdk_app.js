@@ -84,6 +84,12 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
         return true;
       }
       break;
+    case "/kyc/home":
+      if (fromState.includes("/direct/")) {
+        navigate("/invest");
+        return true;
+      }
+      break;
     case "/kyc/digilocker/failed":
       navigate("/kyc/journey", {
         state: { show_aadhaar: true }

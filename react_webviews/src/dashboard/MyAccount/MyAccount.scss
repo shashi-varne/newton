@@ -330,3 +330,14 @@
     }
   }
 }
+
+@media only screen and (max-width: 767px) {
+  .my-account .my-account-content .account .my-account-investment-card {
+    justify-content: space-between;
+
+    .maic-progress {
+      margin-right: 0;
+      min-width: unset;
+    }
+  }
+}

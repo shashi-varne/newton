@@ -12,7 +12,7 @@ const TermsAndConditions = ({ isOpen, handleClick, showLoader }) => {
       isOpen={isOpen}
       button1Props={{
         title: "ACCEPT",
-        type: "primary",
+        variant: "contained",
         onClick: handleClick,
         showLoader: showLoader
       }}

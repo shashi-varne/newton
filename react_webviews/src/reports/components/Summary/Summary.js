@@ -13,7 +13,7 @@ import { getSummaryV2 } from "../../common/api";
 import useUserKycHook from "../../../kyc/common/hooks/userKycHook";
 import "./commonStyles.scss";
 import CheckInvestment from "../mini-components/CheckInvestment";
-import { getInvestCards } from "../../../utils/functions";
+import { getInvestCards, isTradingEnabled } from "../../../utils/functions";
 import { Imgc } from "../../../common/ui/Imgc";
 
 const Summary = (props) => {
@@ -32,13 +32,19 @@ const Summary = (props) => {
   const [showSkelton, setShowSkelton] = useState(true);
   const [isAmountSliderUsed, setIsAmountSliderUsed] = useState(false);
   const [isYearSliderUsed, setIsYearSliderUsed] = useState(false);
-  const { user: currentUser, isLoading } = useUserKycHook();
+  const { user: currentUser, isLoading, kyc } = useUserKycHook();
+  const [isEquityEnabled, setIsEquityEnabled] = useState(isTradingEnabled(kyc));
   const investCards = getInvestCards(["nps", "insurance", "gold"]);
   const taxFiling_enable =  (storageService().get('callback_version') >= 3 && !config.Web) || config.Web;
 
   useEffect(() => {
     initialize();
   }, []);
+
+  useEffect(() => {
+    const tradingEnabled = isTradingEnabled(kyc)
+    setIsEquityEnabled(tradingEnabled);
+  }, [kyc])
 
   const initialize = async () => {
     const result = await getSummaryV2();
@@ -139,6 +145,19 @@ const Summary = (props) => {
     }
     navigate(getPathname[name], { state: { fromPath: "reports" } });
   };
+
+  const handleStocks = () => {
+    if (kyc.equity_investment_ready) {
+      nativeCallback({
+        action: "open_equity",
+        message: {
+          module: "portfolio",
+        },
+      });
+    } else {
+      navigate(getPathname.kycStatus);
+    }
+  }
 
   const redirectWithdraw = () => {
     sendEvents("next", "Withdraw");
@@ -363,6 +382,16 @@ const Summary = (props) => {
                   <div className="rtf-know-more">KNOW MORE</div>
                 </div>
               )}
+              {config.isSdk && isEquityEnabled && (
+                <SummaryCard
+                  dataAid="stocks"
+                  goNext={handleStocks}
+                  icon='growth.svg'
+                  title="Stocks, F&O, and more"
+                  subtitle="Track your holdings and positions"
+                  iconClassName="reports-finity-icon"
+                />
+              )}
               {currentUser.nps_investment ||
               data.showTrackGoals ||
               data.showPendingPurchase ||
@@ -490,7 +519,7 @@ const Summary = (props) => {
                   title="Insurance"
                 />
               )}
-              {data.gold_active_investment && investCards.gold && (
+              {/* {data.gold_active_investment && investCards.gold && (
                 <SummaryCard
                   dataAid='gold'
                   goNext={() => {
@@ -501,7 +530,7 @@ const Summary = (props) => {
                   title="Gold"
                   subtitle={`${data?.gold_details?.total_balance || 0} gm`}
                 />
-              )}
+              )} */}
             </main>
           </>
         )}

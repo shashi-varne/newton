@@ -124,6 +124,8 @@
   "scripts": {
     "start": "NODE_PATH=./src node scripts/start.js",
     "build": "NODE_PATH=./src node --max_old_space_size=4096 scripts/build.js",
+    "build-webapp": "NODE_PATH=./src PIPELINE_ENV=webapp node --max_old_space_size=4096  scripts/build.js",
+    "build-pipeline": "NODE_PATH=./src PIPELINE_ENV=true node --max_old_space_size=4096 scripts/build.js",
     "test": "NODE_PATH=./src node scripts/test.js --env=jsdom"
   },
   "jest": {
