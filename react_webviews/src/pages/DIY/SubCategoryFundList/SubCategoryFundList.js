@@ -37,6 +37,7 @@ import './SubCategoryFundList.scss';
 import TabPanel from './TabPanel';
 import { validateKycAndRedirect } from '../common/functions';
 import useUserKycHook from '../../../kyc/common/hooks/userKycHook';
+import useLoadingState from '../../../common/customHooks/useLoadingState';
 
 const screen = 'diyFundList';
 const SubCategoryLanding = (props) => {
@@ -84,6 +85,7 @@ const SubCategoryLanding = (props) => {
     return index === -1 ? 0 : index;
   };
   const [tabValue, setTabValue] = useState(getSubcategoryOptionIndex());
+  const { isPageLoading } = useLoadingState(screen);
 
   const fetchDiyFundList = () => {
     if (!isEmpty(subcategoryOptionsData)) {
@@ -147,7 +149,6 @@ const SubCategoryLanding = (props) => {
   };
 
   const handleSlideChange = (swiper) => {
-    console.log('swiper is', swiper['$wrapperEl'][0].height);
     setTabValue(swiper?.activeIndex);
   };
 
@@ -198,6 +199,7 @@ const SubCategoryLanding = (props) => {
           returnLabel={selectedFilterValue[FILTER_TYPES.returns]?.returnLabel}
           filterCount={selectedFundHouses.length}
           hideCartFooter={hideCartFooter}
+          isPageLoading={isPageLoading}
         />
       }
       className='sub-category-landing-wrapper'
@@ -267,9 +269,10 @@ const CustomFooter = ({
   returnLabel,
   filterCount,
   hideCartFooter,
+  isPageLoading
 }) => {
   return (
-    <Stack spacing={2} className='sub-category-custom-footer'>
+    <Stack spacing={2} sx={{mx:'-16px'}} className='sub-category-custom-footer'>
       <Grow in={!hideCartFooter} timeout={500}>
         <div className='sc-confirmation-btn-wrapper'>
           <ConfirmAction
@@ -287,6 +290,7 @@ const CustomFooter = ({
         handleReturnClick={handleReturnClick}
         handleFilterClick={handleFilterClick}
         filterCount={filterCount}
+        disabled={isPageLoading}
       />
     </Stack>
   );

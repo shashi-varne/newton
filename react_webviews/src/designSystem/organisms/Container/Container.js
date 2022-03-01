@@ -36,7 +36,6 @@ const Container = ({
       const footerWrapper = document.getElementsByClassName('container-footer-wrapper')[0];
       if (footerWrapper) {
         const footerWrapperHeight = footerWrapper.clientHeight;
-        console.log('footerWrapper', footerWrapper.clientHeight);
         containerRef.current.style.paddingBottom = `${footerWrapperHeight}px`;
       }
     }
