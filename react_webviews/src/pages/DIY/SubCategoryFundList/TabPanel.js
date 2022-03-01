@@ -10,22 +10,16 @@ import { useLocation, withRouter } from 'react-router-dom';
 import Separator from '../../../designSystem/atoms/Separator';
 import { useSelector } from 'react-redux';
 import { getDiyCart } from 'businesslogic/dataStore/reducers/diy';
-import { getConfig, navigate as navigateFunc  } from '../../../utils/functions';
+import { getConfig, navigate as navigateFunc } from '../../../utils/functions';
 import useLoadingState from '../../../common/customHooks/useLoadingState';
+import isEmpty from 'lodash/isEmpty';
 
 const screen = 'diyFundList';
 const TabPanel = memo((props) => {
-  const {
-    data = [],
-    returnPeriod,
-    returnLabel,
-    value,
-    activeTab,
-    handleAddToCart,
-  } = props;
+  const { data = [], returnPeriod, returnLabel, value, activeTab, handleAddToCart } = props;
   const [NumOfItems, setNumOfItems] = useState(10);
   const [showLoader, setShowLoader] = useState(false);
-  const {productName} = useMemo(getConfig,[]);
+  const { productName } = useMemo(getConfig, []);
   const observer = useRef();
   const location = useLocation();
   const diyCartData = useSelector(getDiyCart);
@@ -154,6 +148,11 @@ const TabPanel = memo((props) => {
                 </div>
               );
             })}
+            {isEmpty(data) && (
+              <Typography align='center' variant='body2' color='foundationColors.content.secondary'>
+                No Funds Available
+              </Typography>
+            )}
           </Typography>
         )}
       </Box>
