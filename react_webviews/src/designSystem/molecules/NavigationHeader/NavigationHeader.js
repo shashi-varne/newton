@@ -1,6 +1,6 @@
 import IconButton from '@mui/material/IconButton';
 import Button from '../../atoms/Button';
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Typography from '../../atoms/Typography';
 import backIcon from 'assets/nav_back.svg';
 import closeIcon from 'assets/nav_close.svg';
@@ -11,6 +11,7 @@ import isFunction from 'lodash/isFunction';
 import Icon from '../../atoms/Icon';
 import { getEvents, onScroll, setTabPadding } from './helperFunctions';
 import PropTypes from 'prop-types';
+import isArray from 'lodash/isArray';
 import {
   backButtonHandler,
   getConfig,
@@ -240,6 +241,49 @@ const TabsSection = ({ tabs, tabChilds }) => {
         return <Tab key={idx} label={el[labelName]} value={value} {...el} />;
       })}
     </Tabs>
+  );
+};
+
+export const NavigationSeeMoreWrapper = ({ subtitle, points }) => {
+  const [seeMore, setSeeMore] = useState(false);
+  return (
+    <>
+      {seeMore ? (
+        <div
+          onClick={() => {
+            setSeeMore((prevState) => !prevState);
+          }}
+        >
+          {subtitle && <NavigationHeaderSubtitle dataIdx={1}>{subtitle}</NavigationHeaderSubtitle>}
+          {isArray(points) &&
+            points?.map((point, idx) => {
+              return (
+                <NavigationHeaderPoints key={idx} dataIdx={idx + 1}>
+                  {point}
+                </NavigationHeaderPoints>
+              );
+            })}
+          <Typography variant='body8' color='primary'>
+            See less
+          </Typography>
+        </div>
+      ) : (
+        <div
+          onClick={() => {
+            setSeeMore((prevState) => !prevState);
+          }}
+        >
+          {subtitle && (
+            <NavigationHeaderSubtitle dataIdx={1}>
+              {subtitle.slice(0, 89).trim()}...
+              <Typography variant='body8' color='primary'>
+                See more
+              </Typography>
+            </NavigationHeaderSubtitle>
+          )}
+        </div>
+      )}
+    </>
   );
 };
 
