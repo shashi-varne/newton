@@ -47,3 +47,9 @@ export const setTabPadding = (tabWrapperEl, navHeaderWrapperEl, subtitleEl) => {
   subtitleEl.style.paddingBottom = '24px';
   navHeaderWrapperEl.style.paddingBottom = `${tabWrapperEl?.getBoundingClientRect()?.height}px`;
 };
+
+export const getEvents = (events, user_action) => {
+  if (!events?.properties?.user_action) return;
+  events.properties.user_action = user_action;
+  return events;
+};

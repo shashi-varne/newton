@@ -1,25 +1,48 @@
 import IconButton from '@mui/material/IconButton';
 import Button from '../../atoms/Button';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import Typography from '../../atoms/Typography';
 import backIcon from 'assets/nav_back.svg';
 import closeIcon from 'assets/nav_close.svg';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { Tab, Tabs } from '../../atoms/Tabs';
 import isEmpty from 'lodash/isEmpty';
 import isFunction from 'lodash/isFunction';
 import Icon from '../../atoms/Icon';
-import { onScroll, setTabPadding } from './helperFunctions';
+import { getEvents, onScroll, setTabPadding } from './helperFunctions';
 import PropTypes from 'prop-types';
+import {
+  backButtonHandler,
+  getConfig,
+  listenPartnerEvents,
+  navigate as navigateFunc,
+} from '../../../utils/functions';
 
 import './NavigationHeader.scss';
+import {
+  useNativeAddRemoveListener,
+  useNativeSendEventListener,
+} from '../../../common/customHooks/useNativeListener';
+import { nativeCallback } from '../../../utils/native_callback';
+
+const hideLoaderEvent = {
+  event_name: 'hide_loader',
+  properties: {
+    journey: {
+      name: '',
+      trigger: '',
+      journey_status: '',
+      next_journey: '',
+    },
+  },
+};
 
 const NavigationHeader = ({
   headerTitle,
   hideInPageTitle,
   hideHeaderTitle,
   leftIconSrc,
-  onLeftIconClick,
+  onBackClick,
   hideLeftIcon,
   showCloseIcon,
   actionTextProps = {},
@@ -30,12 +53,18 @@ const NavigationHeader = ({
   tabsProps = {},
   tabChilds = [],
   className,
+  parentProps,
+  eventData,
 }) => {
   const navHeaderWrapperRef = useRef();
   const subtitleRef = useRef();
   const inPageTitleRef = useRef();
   const tabWrapperRef = useRef();
   const history = useHistory();
+  const location = useLocation();
+  const navigate = navigateFunc.bind(parentProps);
+  const { isIframe } = useMemo(getConfig, []);
+
   useEffect(() => {
     if (anchorOrigin?.current) {
       anchorOrigin.current.addEventListener('scroll', handleOnScroll);
@@ -47,6 +76,7 @@ const NavigationHeader = ({
       setTabPadding(tabWrapperEl, navHeaderWrapperEl, subtitleEl);
     }
   }, []);
+
   const handleOnScroll = (anchorOriginEl) => {
     onScroll(
       anchorOriginEl,
@@ -58,12 +88,67 @@ const NavigationHeader = ({
     );
   };
 
-  const handleLeftIconClick = (e) => {
-    if (isFunction(onLeftIconClick)) {
-      return onLeftIconClick(e);
+  const handleRedirectionFromPlatform = () => {
+    const fromState = location?.state?.fromState || '';
+    const toState = location?.state?.toState || '';
+    const params = location?.params || {};
+    const pathname = location?.pathname || '';
+    const currentState = toState || pathname;
+    const isRedirectedByPlatform = backButtonHandler(parentProps, fromState, currentState, params);
+    return isRedirectedByPlatform || false;
+  };
+
+  const handleDefaultBackRoute = () => {
+    const backRoute = location?.state?.backRoute || '';
+    if (backRoute) {
+      navigate(backRoute);
+      return;
     }
     history.goBack();
   };
+
+  const handleonBackClick = (e) => {
+    const events = getEvents(eventData, 'back');
+    if (events) {
+      nativeCallback({ events });
+    }
+    // handling back press click via the prop.
+    if (isFunction(onBackClick)) {
+      onBackClick(e);
+      return;
+    }
+
+    //this will handle the back button handling as per the platform
+    const isRedirectedByPlatform = handleRedirectionFromPlatform();
+    if (isRedirectedByPlatform) return true;
+
+    // default back button routing.
+    handleDefaultBackRoute();
+  };
+
+  useNativeAddRemoveListener({
+    type: 'back_pressed',
+    go_back: handleonBackClick,
+  });
+
+  useEffect(() => {
+    if (isIframe) {
+      const partnerEvents = function (res) {
+        switch (res.type) {
+          case 'back_pressed':
+            handleonBackClick();
+            break;
+
+          default:
+            break;
+        }
+      };
+      listenPartnerEvents(partnerEvents);
+    }
+  }, []);
+
+  useNativeSendEventListener(hideLoaderEvent, isIframe);
+
   const leftIcon = leftIconSrc ? leftIconSrc : showCloseIcon ? closeIcon : backIcon;
   return (
     <header className={`nav-header-wrapper ${className}`} ref={navHeaderWrapperRef}>
@@ -73,7 +158,7 @@ const NavigationHeader = ({
             <IconButton
               classes={{ root: 'nav-left-icn-btn' }}
               className='nav-hl-icon-wrapper'
-              onClick={handleLeftIconClick}
+              onClick={handleonBackClick}
             >
               <Icon src={leftIcon} size='24px' />
             </IconButton>
@@ -147,7 +232,7 @@ export const NavigationHeaderPoints = ({ children, color, dataIdx }) => {
 };
 
 const TabsSection = ({ tabs, tabChilds }) => {
-  const { selectedTab = 0, onTabChange, labelName = "label", ...restTabs } = tabs;
+  const { selectedTab = 0, onTabChange, labelName = 'label', ...restTabs } = tabs;
   return (
     <Tabs value={selectedTab} onChange={onTabChange} {...restTabs}>
       {tabChilds?.map((el, idx) => {
@@ -162,7 +247,7 @@ NavigationHeader.propTypes = {
   headerTitle: PropTypes.node,
   hideInPageTitle: PropTypes.bool,
   hideHeaderTitle: PropTypes.bool,
-  onLeftIconClick: PropTypes.func,
+  onBackClick: PropTypes.func,
   hideLeftIcon: PropTypes.bool,
   showCloseIcon: PropTypes.bool,
   actionTextProps: PropTypes.object,

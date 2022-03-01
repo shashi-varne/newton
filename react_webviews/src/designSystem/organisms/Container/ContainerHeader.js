@@ -7,8 +7,9 @@ import {
   NavigationHeaderSubtitle,
 } from '../../molecules/NavigationHeader/NavigationHeader';
 import { Box } from '@mui/material';
+import { withRouter } from 'react-router-dom';
 
-const ContainerHeader = ({ headerProps, containerRef }) => {
+const ContainerHeader = ({ headerProps, containerRef, eventData, ...restProps }) => {
   const {
     headerTitle,
     subtitle,
@@ -24,6 +25,8 @@ const ContainerHeader = ({ headerProps, containerRef }) => {
         className='container-nav-header'
         headerTitle={headerTitle}
         anchorOrigin={!isIframe ? containerRef : null}
+        parentProps={restProps}
+        eventData={eventData}
         {...restHeaderProps}
       >
         {subtitle && <NavigationHeaderSubtitle dataIdx={1}>{subtitle}</NavigationHeaderSubtitle>}
@@ -40,4 +43,4 @@ const ContainerHeader = ({ headerProps, containerRef }) => {
   );
 };
 
-export default ContainerHeader;
+export default withRouter(ContainerHeader);

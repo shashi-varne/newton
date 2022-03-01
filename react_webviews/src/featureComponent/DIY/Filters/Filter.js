@@ -82,7 +82,7 @@ const Filter = ({
           headerTitle="Filters"
           hideInPageTitle
           actionTextProps={{ title: "Clear all", onClick: handleClearAll }}
-          onLeftIconClick={handleFilterClose}
+          onBackClick={handleFilterClose}
         />
         <Stack
           sx={{ height: "100vh" }}

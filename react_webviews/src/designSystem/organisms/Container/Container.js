@@ -25,6 +25,7 @@ const Container = ({
   noPadding,
   disableHorizontalPadding,
   disableVerticalPadding,
+  eventData,
 }) => {
   const containerRef = useRef();
   const footerWrapperRef = useRef();
@@ -40,6 +41,7 @@ const Container = ({
       }
     }
   }, [footer?.direction, footerWrapperRef?.current, noFooter]);
+
   const containerClass = isIframe ? 'Iframe-container-wrapper' : 'container-wrapper';
   return (
     <Box
@@ -47,7 +49,7 @@ const Container = ({
       sx={{ ...containerWrapperSx(isPageLoading), ...containerSx }}
       className={`${containerClass} ${className}`}
     >
-      <ContainerHeader headerProps={headerProps} containerRef={containerRef} />
+      <ContainerHeader headerProps={headerProps} containerRef={containerRef} eventData={eventData}/>
       <ContainerMain
         skeltonType={skeltonType}
         isPageLoading={isPageLoading}

@@ -29,9 +29,9 @@ import {
   getDiySubcategoryDataByViewType,
   getDiyCartCount,
   fetchDiyCategories,
-} from "businesslogic/dataStore/reducers/diy";
+} from 'businesslogic/dataStore/reducers/diy';
 import { DIY_PATHNAME_MAPPER } from '../common/constants';
-import { hideDiyCartFooter } from "businesslogic/utils/diy/functions";
+import { hideDiyCartFooter } from 'businesslogic/utils/diy/functions';
 import useLoadingState from '../../../common/customHooks/useLoadingState';
 import { validateKycAndRedirect } from '../common/functions';
 import useUserKycHook from '../../../kyc/common/hooks/userKycHook';
@@ -42,19 +42,35 @@ const CommonCategoryLanding = (props) => {
   const config = getConfig();
   const dispatch = useDispatch();
   const productName = config.productName;
-  let { diyType = "" } = props.match.params;
+  let { diyType = '' } = props.match.params;
   const diyTypeData = useSelector(getDiyTypeData);
   const cartCount = useSelector(getDiyCartCount);
   const categoryData = useSelector((state) => getDiyCategoryData(state, diyType));
   const trendingFunds = useSelector((state) => getTrendingFundsByCategory(state, diyType));
-  const twoRowsImageCarouselData = useSelector((state) => getDiySubcategoryDataByViewType(state, diyTypeData.category, VIEW_TYPE_MAPPER.twoRowsImageCaurosel));
-  const singleCategoryData = useSelector((state) => getDiySubcategoryDataByViewType(state, diyTypeData.category, VIEW_TYPE_MAPPER.singleCard));
-  const horizontalCauroselData = useSelector((state) => getDiySubcategoryDataByViewType(state, diyTypeData.category, VIEW_TYPE_MAPPER.cardHorizontalImageCaurosel));
-  const imageCarouselData = useSelector((state) => getDiySubcategoryDataByViewType(state, diyTypeData.category, VIEW_TYPE_MAPPER.imageCaurosel));
+  const twoRowsImageCarouselData = useSelector((state) =>
+    getDiySubcategoryDataByViewType(
+      state,
+      diyTypeData.category,
+      VIEW_TYPE_MAPPER.twoRowsImageCaurosel
+    )
+  );
+  const singleCategoryData = useSelector((state) =>
+    getDiySubcategoryDataByViewType(state, diyTypeData.category, VIEW_TYPE_MAPPER.singleCard)
+  );
+  const horizontalCauroselData = useSelector((state) =>
+    getDiySubcategoryDataByViewType(
+      state,
+      diyTypeData.category,
+      VIEW_TYPE_MAPPER.cardHorizontalImageCaurosel
+    )
+  );
+  const imageCarouselData = useSelector((state) =>
+    getDiySubcategoryDataByViewType(state, diyTypeData.category, VIEW_TYPE_MAPPER.imageCaurosel)
+  );
   const { isPageLoading } = useLoadingState(screen);
   const hideFooter = useMemo(hideDiyCartFooter(productName, cartCount), [productName, cartCount]);
   const { kyc, isLoading } = useUserKycHook();
-  
+
   useEffect(() => {
     if (isEmpty(categoryData)) {
       dispatch(fetchDiyCategories({ Api, screen }));
@@ -100,7 +116,7 @@ const CommonCategoryLanding = (props) => {
           badgeContent: cartCount,
           onButtonClick: validateKycAndRedirect({ navigate, kyc }),
           imgSrc: require('assets/cart_icon.svg'),
-          dataAid: '_'
+          dataAid: '_',
         },
       }}
       fixedFooter
@@ -117,9 +133,7 @@ const CommonCategoryLanding = (props) => {
             className='diy-landing-lottie-anim'
           />
           <LandingHeaderTitle>{categoryData.category?.toUpperCase()}</LandingHeaderTitle>
-          <LandingHeaderSubtitle dataIdx={1}>
-            {categoryData.subtitle}
-          </LandingHeaderSubtitle>
+          <LandingHeaderSubtitle dataIdx={1}>{categoryData.subtitle}</LandingHeaderSubtitle>
           {categoryData?.points?.map((el, idx) => {
             return (
               <LandingHeaderPoints key={idx} dataIdx={idx + 1}>
