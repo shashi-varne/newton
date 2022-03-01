@@ -4,4 +4,5 @@ export {
   LandingHeaderTitle,
   LandingHeaderSubtitle,
   LandingHeaderPoints,
+  LandingHeaderSeeMoreWrapper,
 } from './LandingHeader';

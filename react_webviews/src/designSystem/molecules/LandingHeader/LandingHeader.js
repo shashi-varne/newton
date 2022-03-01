@@ -53,10 +53,11 @@
     color: 'foundationColors.secondary.mango.300'
 */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import PropTypes from 'prop-types';
 import Typography from '../../atoms/Typography';
+import isArray from 'lodash/isArray';
 
 import './LandingHeader.scss';
 import Icon from '../../atoms/Icon';
@@ -101,6 +102,49 @@ export const LandingHeaderPoints = ({ children, color, dataIdx }) => {
         </Typography>
       </li>
     </ul>
+  );
+};
+
+export const LandingHeaderSeeMoreWrapper = ({ subtitle='', points=[] }) => {
+  const [seeMore, setSeeMore] = useState(false);
+  return (
+    <>
+      {seeMore ? (
+        <div
+          onClick={() => {
+            setSeeMore((prevState) => !prevState);
+          }}
+        >
+          {subtitle && <LandingHeaderSubtitle dataIdx={1}>{subtitle}</LandingHeaderSubtitle>}
+          {isArray(points) &&
+            points?.map((point, idx) => {
+              return (
+                <LandingHeaderPoints key={idx} dataIdx={idx + 1}>
+                  {point}
+                </LandingHeaderPoints>
+              );
+            })}
+          <Typography variant='body8' color='primary'>
+            See less
+          </Typography>
+        </div>
+      ) : (
+        <div
+          onClick={() => {
+            setSeeMore((prevState) => !prevState);
+          }}
+        >
+          {subtitle && (
+            <LandingHeaderSubtitle dataIdx={1}>
+              {subtitle.slice(0, 89).trim()}...
+              <Typography variant='body8' color='primary'>
+                See more
+              </Typography>
+            </LandingHeaderSubtitle>
+          )}
+        </div>
+      )}
+    </>
   );
 };
 

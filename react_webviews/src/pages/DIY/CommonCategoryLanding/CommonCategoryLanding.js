@@ -2,6 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import {
   LandingHeader,
   LandingHeaderPoints,
+  LandingHeaderSeeMoreWrapper,
   LandingHeaderSubtitle,
   LandingHeaderTitle,
 } from '../../../designSystem/molecules/LandingHeader';
@@ -70,6 +71,9 @@ const CommonCategoryLanding = (props) => {
   const { isPageLoading } = useLoadingState(screen);
   const hideFooter = useMemo(hideDiyCartFooter(productName, cartCount), [productName, cartCount]);
   const { kyc, isLoading } = useUserKycHook();
+  const subtitleLength = categoryData?.subtitle?.length || 0;
+  const pointsLength = categoryData?.points?.length || 0;
+  const showSeeMore = subtitleLength > 89 || (pointsLength >= 2 && subtitleLength > 40);
 
   useEffect(() => {
     if (isEmpty(categoryData)) {
@@ -133,14 +137,23 @@ const CommonCategoryLanding = (props) => {
             className='diy-landing-lottie-anim'
           />
           <LandingHeaderTitle>{categoryData.category?.toUpperCase()}</LandingHeaderTitle>
-          <LandingHeaderSubtitle dataIdx={1}>{categoryData.subtitle}</LandingHeaderSubtitle>
-          {categoryData?.points?.map((el, idx) => {
-            return (
-              <LandingHeaderPoints key={idx} dataIdx={idx + 1}>
-                {el}
-              </LandingHeaderPoints>
-            );
-          })}
+          {config.isMobileDevice && showSeeMore ? (
+            <LandingHeaderSeeMoreWrapper
+              subtitle={categoryData.subtitle}
+              points={categoryData?.points}
+            />
+          ) : (
+            <>
+              <LandingHeaderSubtitle dataIdx={1}>{categoryData.subtitle}</LandingHeaderSubtitle>
+              {categoryData?.points?.map((el, idx) => {
+                return (
+                  <LandingHeaderPoints key={idx} dataIdx={idx + 1}>
+                    {el}
+                  </LandingHeaderPoints>
+                );
+              })}
+            </>
+          )}
         </LandingHeader>
         <TrendingFunds
           trendingFunds={trendingFunds}
