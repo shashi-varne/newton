@@ -272,8 +272,8 @@ const CustomFooter = ({
   isPageLoading
 }) => {
   return (
-    <Stack spacing={2} sx={{mx:'-16px'}} className='sub-category-custom-footer'>
-      <Grow in={!hideCartFooter} timeout={500}>
+    <Stack spacing={1} sx={{mx:'-16px'}} className='sub-category-custom-footer'>
+      <Grow in={!hideCartFooter} timeout={500} mountOnEnter unmountOnExit>
         <div className='sc-confirmation-btn-wrapper'>
           <ConfirmAction
             title={`${cartCount} items in the cart`}

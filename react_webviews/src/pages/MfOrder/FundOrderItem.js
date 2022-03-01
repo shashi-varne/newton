@@ -100,7 +100,9 @@ const FundOrderItem = ({
   };
 
   const handleAmountValue = (e) => {
-    setAmount(e.target.value);
+    if (isNaN(e.target.value)) return;
+    const amountValue = Number(e.target.value);
+    setAmount(amountValue);
   };
 
   const closeSipDateSheet = () => {
@@ -160,6 +162,9 @@ const FundOrderItem = ({
                 value: amount,
                 onChange: handleAmountValue,
                 disabled: !isInvestmentAllowed,
+                inputProps: {
+                  inputMode: 'numeric',
+                },
               }}
             />
             <InvestmentCardBottomRow

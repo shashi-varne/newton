@@ -125,6 +125,9 @@ const ReturnCalculator = () => {
             prefix='₹'
             value={amountToBeInvested}
             onChange={handleAmountChange}
+            inputProps={{
+              inputMode: 'numeric'
+            }}
           />
           <Stack direction='column' spacing={2}>
             <Typography variant='heading4' color='foundationColorContentSecondary'>

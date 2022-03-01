@@ -27,7 +27,6 @@ const FilterNavigation = ({
       sx={{
         boxShadow: '1',
         bgcolor: 'foundationColors.supporting.white',
-        m: '0px -16px !important',
         ...isDisabledStyle,
       }}
     >

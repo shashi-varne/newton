@@ -42,14 +42,6 @@ const ReturnComparison = () => {
             <div>
               <ComparisonChart />
             </div>
-            <Stack direction='row' spacing={2}>
-              <Typography variant='body5' color='foundationColors.content.secondary'>
-                Principal invested
-              </Typography>
-              <Typography variant='body5' color='foundationColors.content.secondary'>
-                Returns gained
-              </Typography>
-            </Stack>
             <Stack direction='column' spacing={2} sx={{ pb: 3 }}>
               <WrapperBox elevation={1}>
                 <EstimationCard
