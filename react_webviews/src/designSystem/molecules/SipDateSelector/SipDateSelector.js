@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Dialog, Stack } from '@mui/material';
+import { Dialog, IconButton, Stack } from '@mui/material';
 import Typography from '../../atoms/Typography';
 import scrollIntoView from 'scroll-into-view-if-needed';
 
 import './SipDateSelector.scss';
 import Button from '../../atoms/Button';
+import Icon from '../../atoms/Icon';
 
 const SipDateSelector = ({ isOpen, sipDates, onClose, selectedDate, handleSelectedDate }) => {
   const [selectedData, setSelectedDate] = useState(selectedDate);
@@ -43,9 +44,14 @@ const SipDateSelector = ({ isOpen, sipDates, onClose, selectedDate, handleSelect
       className='sip-date-selector-sheet'
     >
       <Stack className='sip-date-selector-wrapper'>
-        <Typography sx={{ mb: 2 }} variant='heading3'>
-          Available dates
-        </Typography>
+        <Stack sx={{ mb: 2 }} direction='row' justifyContent='center' className='sip-title-wrapper'>
+          <IconButton onClick={handleClose}>
+            <Icon size='24px' src={require('assets/close_small.svg')} />
+          </IconButton>
+          <Typography variant='heading3' align='center'>
+            Available dates
+          </Typography>
+        </Stack>
         <Stack className='selector-list-wrapper'>
           {sipDates?.map((el, idx) => {
             const elRef = selectedData === el ? itemRef : null;
