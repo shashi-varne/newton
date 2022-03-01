@@ -17,9 +17,12 @@ const ContainerHeader = ({ headerProps, containerRef, eventData, ...restProps })
     points = [],
     headerSx,
     headerClassName,
-    seeMoreFeature = true,
+    disableSeeMoreFeature = false,
     ...restHeaderProps
   } = headerProps;
+  const subtitleLength = subtitle?.length || 0;
+  const pointsLength = points?.length || 0;
+  const showSeeMore = subtitleLength > 89 || (pointsLength >= 2 && subtitleLength > 40);
   const { isIframe, isMobileDevice } = useMemo(getConfig, []);
 
   return (
@@ -32,7 +35,7 @@ const ContainerHeader = ({ headerProps, containerRef, eventData, ...restProps })
         eventData={eventData}
         {...restHeaderProps}
       >
-        {seeMoreFeature && isMobileDevice ? (
+        {!disableSeeMoreFeature && isMobileDevice && showSeeMore  ? (
           <NavigationSeeMoreWrapper subtitle={subtitle} points={points} />
         ) : (
           <>
