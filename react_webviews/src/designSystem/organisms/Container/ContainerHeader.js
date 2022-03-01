@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { getConfig } from '../../../utils/functions';
 import NavigationHeader from '../../molecules/NavigationHeader';
 import isArray from 'lodash/isArray';

@@ -84,7 +84,7 @@ const ComparisonChart = () => {
     series: [
       {
         name: 'Returns gained',
-        data: [savingsExpectedAmount, fdExpectedAmount, expectedAmount],
+        data: [savingsExpectedAmount, fdExpectedAmount, expectedAmount || 0],
         color: theme?.palette?.foundationColors?.primary['400'],
       },
       {

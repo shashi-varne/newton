@@ -9,13 +9,14 @@ import ComparisonChart from './ComparisonChart';
 import { formatAmountInr } from '../../utils/validators';
 import isEmpty from 'lodash/isEmpty';
 import { getFundData } from 'businesslogic/dataStore/reducers/fundDetails';
+import { isValidValue } from './helperFunctions';
 
 const ReturnComparison = () => {
   const [isRetunCompOpen, setIsRetunCompOpen] = useState(false);
-  const investedAmount = useSelector(state => state?.fundDetails?.investedAmount);
-  const expectedAmount = useSelector(state => state?.fundDetails?.expectedAmount);
-  const investmentPeriod = useSelector(state => state?.fundDetails?.investmentPeriod);
-  const expectedReturnPerc = useSelector(state => state?.fundDetails?.expectedReturnPerc);
+  const investedAmount = useSelector((state) => state?.fundDetails?.investedAmount);
+  const expectedAmount = useSelector((state) => state?.fundDetails?.expectedAmount);
+  const investmentPeriod = useSelector((state) => state?.fundDetails?.investmentPeriod);
+  const expectedReturnPerc = useSelector((state) => state?.fundDetails?.expectedReturnPerc);
   const fundData = useSelector(getFundData);
   const isReturnAvailable = isEmpty(fundData?.performance?.returns);
 
@@ -54,9 +55,17 @@ const ReturnComparison = () => {
                 <EstimationCard
                   leftTitle={`Estimated return in ${investmentPeriod}Y`}
                   leftSubtitle='Return %'
-                  rightTitle={`${formatAmountInr(expectedAmount)}`}
-                  rightSubtitle={`${expectedReturnPerc > 0 ? '+':'-'}${expectedReturnPerc}%`}
-                  rightSubtitleColor='foundationColors.secondary.profitGreen.400'
+                  rightTitle={isValidValue(expectedAmount, `${formatAmountInr(expectedAmount)}`)}
+                  rightSubtitle={`${
+                    expectedReturnPerc ? (expectedReturnPerc > 0 ? '+' : '-') : ''
+                  }${isValidValue(expectedReturnPerc, `${expectedReturnPerc}%`)}`}
+                  rightSubtitleColor={
+                    expectedReturnPerc
+                      ? `foundationColors.secondary.${
+                          expectedReturnPerc > 0 ? 'profitGreen' : 'lossRed'
+                        }.400`
+                      : ''
+                  }
                 />
               </WrapperBox>
               <Typography variant='body5' color='foundationColors.content.secondary'>

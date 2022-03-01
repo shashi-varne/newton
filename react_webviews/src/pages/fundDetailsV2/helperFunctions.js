@@ -20,7 +20,7 @@ export const isValidValue = (value, valueToBeReturned, stringToBeReplaced = 'NA'
   if (typeof value === 'object') {
     return isEmpty(value) ? stringToBeReplaced : value;
   } else {
-    if(valueToBeReturned) {
+    if(value && valueToBeReturned) {
       value = valueToBeReturned;
     }
     return (value || value === 0) ? value : stringToBeReplaced;

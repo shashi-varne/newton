@@ -21,8 +21,18 @@ import {
   setInvestmentPeriod,
   setInvestmentType,
 } from 'businesslogic/dataStore/reducers/fundDetails';
-import { getExpectedReturn } from './helperFunctions';
+import { getExpectedReturn, isValidValue } from './helperFunctions';
 import isEmpty from 'lodash/isEmpty';
+
+const getEstimatedReturnTooltip = (investmentPeriod, expectedAmount) => {
+  if (!expectedAmount) {
+    return `Estimated return for ${investmentPeriod} year is not available`;
+  } else {
+    return `Estimated based on the fund's last ${
+      investmentPeriod <= 5 ? investmentPeriod : 5
+    } years returns`;
+  }
+};
 
 const ReturnCalculator = () => {
   const [isReturnCalcOpen, setIsReturnCalcOpen] = useState(false);
@@ -37,6 +47,10 @@ const ReturnCalculator = () => {
   const expectedAmount = useSelector((state) => state?.fundDetails?.expectedAmount);
   const expectedReturnPerc = useSelector((state) => state?.fundDetails?.expectedReturnPerc);
   const isReturnAvailable = isEmpty(fundData?.performance?.returns);
+  const estimatedReturnTooltip = useMemo(
+    () => getEstimatedReturnTooltip(investmentPeriod, expectedAmount),
+    [expectedAmount, investmentPeriod]
+  );
   const returns = useMemo(() => {
     const yearReturns = {};
     // eslint-disable-next-line no-unused-expressions
@@ -91,7 +105,7 @@ const ReturnCalculator = () => {
     setIsTooltipOpen(!isTooltipOpen);
   };
   return (
-    <Box  sx={{ mt: 4 }}>
+    <Box sx={{ mt: 4 }}>
       <CollapsibleSection
         isOpen={isReturnCalcOpen}
         onClick={handleReturnCalcSection}
@@ -118,12 +132,16 @@ const ReturnCalculator = () => {
             </Typography>
             <Box sx={{ mt: 4, maxWidth: 'fit-content' }}>
               <Timelines value={investmentPeriod} onChange={handleInvestmentYear}>
-                <TimeLine label='1Y' value={1} />
-                <TimeLine label='3Y' value={3} />
-                <TimeLine label='5Y' value={5} />
-                <TimeLine label='10Y' value={10} />
-                <TimeLine label='15Y' value={15} />
-                <TimeLine label='20Y' value={20} />
+                {timeLines?.map((el, id) => {
+                  const isDisabled = useMemo(
+                    () =>
+                      disableReturnCalculatorTimePeriod(fundData?.performance.returns, el.value),
+                    []
+                  );
+                  return (
+                    <TimeLine disabled={isDisabled} key={id} label={el.label} value={el.value} />
+                  );
+                })}
               </Timelines>
             </Box>
           </Stack>
@@ -139,15 +157,10 @@ const ReturnCalculator = () => {
             <Stack direction='column'>
               <Stack direction='row' spacing='4px' alignItems='flex-end' justifyContent='flex-end'>
                 <Typography variant='heading2' color='primary' align='right'>
-                  {formatAmountInr(expectedAmount)}
+                  {isValidValue(expectedAmount, formatAmountInr(expectedAmount))}
                 </Typography>
                 <div>
-                  <Tooltip
-                    open={isTooltipOpen}
-                    title={`Estimated based on the fund's last ${
-                      investmentPeriod <= 5 ? investmentPeriod : 5
-                    } years returns`}
-                  >
+                  <Tooltip open={isTooltipOpen} title={estimatedReturnTooltip}>
                     <div>
                       <Icon
                         src={require('assets/info_icon_ds.svg')}
@@ -176,3 +189,45 @@ const ReturnCalculator = () => {
 };
 
 export default ReturnCalculator;
+
+const timeLines = [
+  {
+    label: '1Y',
+    value: 1,
+  },
+  {
+    label: '3Y',
+    value: 3,
+  },
+  {
+    label: '5Y',
+    value: 5,
+  },
+  {
+    label: '10Y',
+    value: 10,
+  },
+  {
+    label: '15Y',
+    value: 15,
+  },
+  {
+    label: '20Y',
+    value: 20,
+  },
+];
+
+const disableReturnCalculatorTimePeriod = (returns = [], timePeriod) => {
+  let isDisable = true;
+  if (isEmpty(returns)) return true;
+  if (timePeriod > 5) {
+    timePeriod = 5;
+  }
+  // eslint-disable-next-line no-unused-expressions
+  returns?.some((el) => {
+    if (!el.name.match(/month/) && el.name.match(`${timePeriod} year`)) {
+      isDisable = false;
+    }
+  });
+  return isDisable;
+};
