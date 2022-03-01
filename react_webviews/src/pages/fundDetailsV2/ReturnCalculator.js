@@ -177,7 +177,7 @@ const ReturnCalculator = () => {
               <Typography variant='body1' color='foundationColors.content.secondary' align='right'>
                 Estimated return{' '}
                 <Typography component='span' variant='inherit' color='primary'>
-                  ({expectedReturnPerc}%)
+                  ({isValidValue(expectedReturnPerc, `${expectedReturnPerc}%`)})
                 </Typography>
               </Typography>
             </Stack>
