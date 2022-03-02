@@ -18,11 +18,17 @@ const TerserPlugin = require('terser-webpack-plugin');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
-const publicPath = process.env.IS_PIPELINE ? '' : paths.servedPath;
+console.log("PIPELINE_ENV :" + (process.env.PIPELINE_ENV ? process.env.PIPELINE_ENV : '') )
 
+let PIPELINE_ENV_PATH_MAPPER = {
+  [true]: '',
+  'webapp': '/webapp/'
+}
+const publicPath = process.env.PIPELINE_ENV ? PIPELINE_ENV_PATH_MAPPER[process.env.PIPELINE_ENV] || '' : paths.servedPath;
+console.log("publicPath : ", publicPath)
 // Some apps do not use client-side routing with pushState.
 // For these, "homepage" can be set to "." to enable relative asset paths.
-const shouldUseRelativeAssetPaths = publicPath === './' || process.env.IS_PIPELINE ? true : false;
+const shouldUseRelativeAssetPaths = publicPath === './' || process.env.PIPELINE_ENV ? true : false;
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 // `publicUrl` is just like `publicPath`, but we will provide it to our app
@@ -30,7 +36,7 @@ const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 // Omit trailing slash as %PUBLIC_URL%/xyz looks better than %PUBLIC_URL%xyz.
 const publicUrl = publicPath.slice(0, -1);
 // Get environment variables to inject into our app.
-const env = getClientEnvironment(publicUrl);
+const env = getClientEnvironment(publicUrl, publicPath);
 
 // Assert this just to be safe.
 // Development builds of React are slow and not intended for production.

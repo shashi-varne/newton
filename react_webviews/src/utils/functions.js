@@ -102,10 +102,12 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--lime`, '#7ED321');
   html.style.setProperty(`--red`, '#D0021B');
   html.style.setProperty(`--primaryVariant1`, `${config_to_return.styles.primaryVariant1}`);
+  html.style.setProperty(`--primaryVariant2`, `${config_to_return.styles.primaryVariant2}`);
   html.style.setProperty(`--primaryVariant4`, `${config_to_return.styles.primaryVariant4}`);
+  html.style.setProperty(`--primaryVariant5`, `${config_to_return.styles.primaryVariant5}`);
   html.style.setProperty(`--spacing`, '10px');
   html.style.setProperty(`--gunmetal`, '#161A2E');
-  html.style.setProperty(`--darkblue`, '#132056');
+  html.style.setProperty(`--darkBackground`, `${config_to_return.styles.darkBackground}`);
   html.style.setProperty(`--linkwater`, '#D3DBE4');
   html.style.setProperty(`--border-radius`, `${config_to_return.uiElements.button.borderRadius}px`);
   html.style.setProperty(`--whitegrey`, '#EEEEEE');
@@ -159,14 +161,31 @@ export const getConfig = () => {
   let origin = window.location.origin;
   let generic_callback = true;
 
-  let isProdFisdom = origin.indexOf('app.fisdom.com') >= 0  || origin.indexOf('wv.fisdom.com') >= 0 || origin.indexOf('my.preprod.fisdom.com') >= 0 || origin.indexOf('app2.fisdom.com') >= 0;
-  let isProdMyway = origin.indexOf('app.mywaywealth.com') >= 0 || origin.indexOf('wv.mywaywealth.com') >= 0;
-  let isProdFinity = origin.indexOf('my.preprod.finity.in') >= 0  || origin.indexOf('app.finity.in') >= 0 || origin.indexOf('app2.finity.in') >= 0 || origin.indexOf('wv.finity.in') >= 0;
+  let isProdFisdom = origin.indexOf('app.fisdom.com') >= 0  || origin.indexOf('wv.fisdom.com') >= 0 || 
+        origin.indexOf('app2.fisdom.com') >= 0;
 
-  // let base_href = window.localStorage.getItem('base_href') || '';
+  let isProdMyway = origin.indexOf('app.mywaywealth.com') >= 0 || 
+                origin.indexOf('wv.mywaywealth.com') >= 0;
+
+  let isProdFinity = origin.indexOf('app.finity.in') >= 0 || 
+             origin.indexOf('app2.finity.in') >= 0 || origin.indexOf('wv.finity.in') >= 0;
+  let isPreprodFisdom = origin.indexOf('fisdom.equityapppreprod.finwizard.co.in') >= 0;
+  let isPreprodFinity = origin.indexOf('finity.equityapppreprod.finwizard.co.in') >= 0;
+
+  let apiKey = '6Ldah04eAAAAAM7-gR7PWL35nSMvNZRMsngMgObG';
+  if(isProdFisdom || isPreprodFisdom) {
+    apiKey = '6LcUeDweAAAAAJ7gWP6OkmCuO1WXN54Qju-fJPLg';
+  }
+
+  if(isProdFinity || isProdMyway || isPreprodFinity) {
+    apiKey = '6LdSjzweAAAAAHSGjqfOVjy_vVQ_n8iBWe9xCSrL';
+  }
+
   let base_url_default = '';
   
   const isStaging = origin.indexOf('plutus-web-staging') >= 0;
+  const isSDKStaging = origin.indexOf('sdk-dot-plutus-web.appspot.com') >= 0;
+  const isIosSdkStaging = origin.indexOf('app.gaeuat.finwizard.co.in') >= 0;
   const isFisdomStaging = origin.indexOf('fisdom.equityappuat.finwizard.co.in') >= 0 || origin.indexOf('fisdomapp.staging.finwizard.co.in') >= 0;
   const isFinityStaging = origin.indexOf('finity.equityappuat.finwizard.co.in') >= 0 || origin.indexOf('finityapp.staging.finwizard.co.in') >= 0;
   const isLocal = origin.indexOf('localhost') >=0;
@@ -193,9 +212,25 @@ export const getConfig = () => {
       base_url_default = 'https://api.mywaywealth.com';
     }
 
+    if(isPreprodFisdom) {
+      base_url_default = 'https://my.preprod.fisdom.com';
+    }
+
+    if(isPreprodFinity) {
+      base_url_default = 'https://my.preprod.finity.in';
+    }
+
     // change server url here for local and staging url builds (Not commit id one's)
     if (isStaging || isLocal) {
-      base_url_default = "https://wdash-dot-plutus-staging.appspot.com";
+      base_url_default = "https://eqt-feature-dot-plutus-staging.appspot.com";
+    }
+
+    if (isSDKStaging) {
+      base_url_default = "https://sdk-dot-plutus-staging.appspot.com";
+    }
+
+    if (isIosSdkStaging) {
+      base_url_default = "https://my.gaeuat.finwizard.co.in";
     }
 
     if(isFisdomStaging) {
@@ -365,6 +400,7 @@ export const getConfig = () => {
   returnConfig.project = project;
   returnConfig.project_child = project_child;
   returnConfig.isMobileDevice = isMobileDevice();
+  returnConfig.apiKey = apiKey;
 
   let { insurance_allweb } = main_query_params;
   if (insurance_allweb) {
@@ -574,12 +610,16 @@ export function getBasePath() {
 
 export function isTradingEnabled(userKyc = {}) {
   const kyc = !isEmpty(userKyc) ? userKyc : storageService().getObject("kyc");
+  const androidSdkVersionCode = storageService().get("android_sdk_version_code");
+  const iosSdkVersionCode = storageService().get("ios_sdk_version_code");
   const config = getConfig();
   const equityEnabled = storageService().getBoolean('equityEnabled'); // Used to enable kyc equity flow from native/external side
-  if (config.isSdk) {
-    return false;
-  } else if (config.isNative) {
+  if (config.isNative) {
     return equityEnabled && kyc?.equity_enabled;
+  }
+  if(config.isSdk) {
+    // eslint-disable-next-line
+    return kyc?.equity_enabled && (parseInt(androidSdkVersionCode) >= 21 || parseInt(iosSdkVersionCode) >= 999)
   }
   return kyc?.equity_enabled;
 }

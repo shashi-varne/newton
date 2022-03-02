@@ -43,7 +43,13 @@ const UploadInstructions = (props) => {
     props.history.goBack();
   };
   return (
-    <Container buttonTitle="OKAY" title={data.title} handleClick={goBack} data-aid='kyc-upload-instructions-screen'>
+    <Container 
+      buttonTitle="OKAY" 
+      title={data.title} 
+      handleClick={goBack} 
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
+      data-aid='kyc-upload-instructions-screen'
+    >
       {data.instructions.map((data, index) => {
         return (
           <div key={index} className="stocks-pan-instructions">

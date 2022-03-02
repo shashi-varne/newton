@@ -34,6 +34,10 @@ class DigiStatus extends Component {
   }
 
   componentDidMount = () => {
+    const config = getConfig();
+    if (config.app === "ios") {
+      nativeCallback({ action: 'hide_top_bar' });
+    }
     this.initialize();
   };
   
@@ -94,6 +98,19 @@ class DigiStatus extends Component {
       this.sendEvents('home');
     }
     if (this.state.set2faPin) {
+      if (config.isSdk) {
+        const that = this;
+        window.callbackWeb["open_2fa_module"]({
+          operation: "setup_pin",
+          request_code: "REQ_SETUP_2FA",
+          callback: function (data) {
+            if (data.status === "success") {
+              that.redirectToHome();
+            }
+          },
+        });
+        return;
+      }
       // Handles behaviour for both web as well as native
       openModule('account/setup_2fa', this.props, { routeUrlParams: '/kyc-complete' });
       if (config.isNative && config.app === "android") {

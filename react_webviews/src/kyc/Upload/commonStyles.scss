@@ -51,8 +51,10 @@
       line-height: 31px;
     }
 
-    img {
+    .kup-top-image {
       margin-left: 20px;
+      width: 110px !important;
+      min-height: 70px;
     }
   }
 
@@ -415,6 +417,7 @@
     text-align: center;
     color: var(--steelgrey);
     margin: 20px 0;
+    padding: 0 10px;
   }
 }
 

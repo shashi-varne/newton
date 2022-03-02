@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
+import React, { useEffect, useMemo, useState } from "react";
+import { getConfig, isNewIframeDesktopLayout, navigate as navigateFunc } from "../../../utils/functions";
 import Container from "../../common/Container";
 import Checkbox from "../../../common/ui/Checkbox";
 import "./commonStyles.scss";
@@ -93,6 +93,7 @@ const TradingInfo = (props) => {
   const [showSkelton, setShowSkelton] = useState(false);
   const [selectedTiles, setSelectedTiles] = useState([0]);
   const [equityChargesData, setEquityChargesData] = useState([])
+  const newIframeDesktopLayout = useMemo(isNewIframeDesktopLayout, [])
   const { kyc, isLoading } = useUserKycHook();
   const title = `${capitalize(productName)} Trading & Demat account`;
 
@@ -183,7 +184,7 @@ const TradingInfo = (props) => {
         icon: "close",
       };
 
-      openPdfCall(data);
+      openPdfCall(data, config.isSdk);
     }
   };
 
@@ -196,15 +197,19 @@ const TradingInfo = (props) => {
       data-aid='kyc-demate-account-screen'
       handleClick={handleClick}
       skelton={isLoading || showSkelton}
+      iframeRightContent={require(`assets/${productName}/ic_upgrade.svg`)}
+      noBackIcon={showSkelton}
     >
       <div className="kyc-account-info" data-aid='kyc-account-info'>
         <header className="kyc-account-info-header" data-aid='kyc-account-info-header'>
           <div className="kaih-text">{title}</div>
-          <Imgc 
-            src={require(`assets/${productName}/ic_upgrade.svg`)} 
-            alt=""
-            className="kyc-ai-header-icon" 
-          />
+          {!newIframeDesktopLayout && (
+            <Imgc
+              src={require(`assets/${productName}/ic_upgrade.svg`)}
+              alt=""
+              className="kyc-ai-header-icon"
+            />
+          )}
         </header>
         <main className="kyc-account-info-main" data-aid='kyc-account-info-main'>
           <div className="kaim-subtitle" data-aid='kyc-subtitle'>

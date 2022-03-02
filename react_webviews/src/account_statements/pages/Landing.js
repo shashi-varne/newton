@@ -9,11 +9,11 @@ import WVInPageHeader from "../../common/ui/InPageHeader/WVInPageHeader";
 import WVInPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
 import WVInPageSubtitle from "../../common/ui/InPageHeader/WVInPageSubtitle";
 import { getConfig } from "../../utils/functions";
-import { handleNativeExit } from '../../utils/native_callback';
+import { handleNativeExit, nativeCallback } from '../../utils/native_callback';
 
 export default function Landing(props) {
   const navigate = navigateFunc.bind(props);
-  const { productName } = useMemo(() => getConfig(), []);
+  const { productName, isSdk } = useMemo(() => getConfig(), []);
   const STATEMENT_OPTIONS = cloneDeep(ACCOUNT_STATEMENT_OPTIONS).map(option => {
     delete option.pageProps;
     return option;
@@ -24,12 +24,17 @@ export default function Landing(props) {
   }
 
   const goBack = () => {
-    handleNativeExit(props, { action: "exit" });
+    if (isSdk) {
+      nativeCallback({ action: "exit_web"});
+    } else {
+      handleNativeExit(props, { action: "exit" });
+    }
   }
 
   return (
     <Container
       noFooter
+      title="Statements"
       force_hide_inpage_title
       headerData={{
         goBack
@@ -38,7 +43,7 @@ export default function Landing(props) {
       <WVInPageHeader
         withImg
         imageProps={{
-          src: require(`assets/${productName}/statements.svg`),
+          src: require(`assets/${productName}/statements_briefcase.svg`),
           style: { width: '95px', height: '52px' }
         }}
       >

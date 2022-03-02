@@ -33,6 +33,7 @@ import Partner from "./partner"
 import TaxFiling from './tax_filing'
 import Kyc from './kyc';
 import AccountStatements from './account_statements';
+import FreedomPlan from './freedom_plan';
 
 const Feature = () => {
   // old # route support added
@@ -76,6 +77,7 @@ const Feature = () => {
         <ProtectedRoute path='/reports' component={Report} />
         <ProtectedRoute path='/statements' component={AccountStatements} />
         <ProtectedRoute path='/kyc' component={Kyc} />
+        <ProtectedRoute path='/freedom-plan' component={FreedomPlan} />
         <ProtectedRoute path='/' component={Landing} />
         <Route component={NotFound} />
       </Switch>

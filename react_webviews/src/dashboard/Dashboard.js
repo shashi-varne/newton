@@ -42,9 +42,12 @@ import Referral from "../login_and_registration/pages/Referral/Referral.js";
 import SecondaryVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryVerification"
 import SecondaryOtpVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryOtpVerification"
 import StatusCallback from "../kyc/Native/StatusCallback";
+import NativeRedirection from "../kyc/Native/NativeRedirection";
 import ProductMarketTypes from './ProductMarketTypes';
 import PrimaryMarketProducts from "./PrimaryMarketProducts/PrimaryMarketProducts";
 import DIYV2 from "../pages/DIY";
+import StocksAndIpoDirectEntry from "./DirectEntry/StocksAndIpoDirectEntry";
+import PaymentNativeCallback from "./nps/components/paymentCallback";
 
 const Home = (props) => {
   const config = getConfig(); 
@@ -52,6 +55,7 @@ const Home = (props) => {
   return (
     <Fragment>
       <Switch>
+        <Route exact path={`${url}direct/:type`} component={StocksAndIpoDirectEntry} />
         <Route exact path={`${url}secondary-verification`} component={SecondaryVerification} />
         <Route exact path={`${url}secondary-otp-verification`} component={SecondaryOtpVerification} />
         <Route path={`${url}referral-code`} component={Referral} />
@@ -148,6 +152,21 @@ const Home = (props) => {
           exact
           path={`${url}status/callback/native`}
           component={StatusCallback}
+        />
+        <Route
+          exact
+          path={`${url}status/redirection/native`}
+          component={NativeRedirection}
+        />
+        <Route
+          exact
+          path={`${url}payment-status/callback/native/:status`}
+          component={PaymentNativeCallback}
+        />
+        <Route
+          exact
+          path={`${url}payment-status/callback/native/:status/:message`}
+          component={PaymentNativeCallback}
         />
         {/* -----------My Account sub-routes ------------- */}
         <Route exact path={`${url}account/merge/:pan_number`} component={AccountMerge} />

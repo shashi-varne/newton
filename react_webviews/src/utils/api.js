@@ -64,9 +64,14 @@ class Api {
     if (sdk_capabilities) {
       axios.defaults.headers.common['sdk-capabilities'] = sdk_capabilities;
     }
-    if(route.includes("/api/") && storageService().get("x-plutus-auth") && config.isIframe) {
-      axios.defaults.headers.common["X-Plutus-Auth"] = storageService().get("x-plutus-auth")
+
+    if(route.includes("/api/user/login/v5/initiate")) {
+      axios.defaults.headers.common["X-Platform"] = "web";
     }
+
+    // if(route.includes("/api/") && storageService().get("x-plutus-auth") && config.isIframe) {
+    //   axios.defaults.headers.common["X-Plutus-Auth"] = storageService().get("x-plutus-auth")
+    // }
     if(route.includes('api/insurance')){  
       route = getGuestUserRoute(route)
     }
@@ -90,9 +95,9 @@ class Api {
           nativeCallback({ action: 'login_required' });
         }
 
-        if (response.config.url.includes("/api/") && response.headers["x-plutus-auth"] && config.isIframe) {
-          storageService().set("x-plutus-auth", response.headers["x-plutus-auth"])
-        }
+        // if (response.config.url.includes("/api/") && response.headers["x-plutus-auth"] && config.isIframe) {
+        //   storageService().set("x-plutus-auth", response.headers["x-plutus-auth"])
+        // }
 
         const pfwResponseData = response?.data?.pfwresponse;
 

@@ -8,9 +8,12 @@ import { getKyc } from './api'
 export const isEquityAllowed = (config = getConfig()) => {
   // Function to check if Equity broking/trading is allowed as per frontend checks/rules
   const equityEnabled = storageService().getBoolean('equityEnabled'); // Used to enable kyc equity flow from native/external side
+  const androidSdkVersionCode = storageService().get("android_sdk_version_code");
+  const iosSdkVersionCode = storageService().get("ios_sdk_version_code");
   
   if (config.isSdk) {
-    return false;
+    // eslint-disable-next-line
+    return (parseInt(androidSdkVersionCode) >= 21 || parseInt(iosSdkVersionCode) >= 999);
   } else if (config.isNative) {
     return equityEnabled;
   }
@@ -488,3 +491,10 @@ export const checkNomineeNameValidity = (kyc, nomineeName) => {
   }
   return '';
 }
+
+export const isBankVerified = (bank = {}, kyc = {}) => {
+  return (
+    bank.bank_status === "verified" ||
+    (bank.status === "default" && kyc.bank?.meta_data_status === "approved")
+  );
+};

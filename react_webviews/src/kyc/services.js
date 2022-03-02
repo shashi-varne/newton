@@ -1,11 +1,13 @@
 import Api from '../utils/api'
-import { isEmpty, storageService } from '../utils/validators'
+import { storageService } from '../utils/validators'
 import toast from '../common/ui/Toast'
 import { isTradingEnabled } from '../utils/functions'
 import { kycSubmit } from './common/api'
 import { isDigilockerFlow } from './common/functions'
 import eventManager from '../utils/eventManager'
 import { EVENT_MANAGER_CONSTANTS } from '../utils/constants'
+import isEmpty from "lodash/isEmpty"
+import { FREEDOM_PLAN_STORAGE_CONSTANTS } from '../freedom_plan/common/constants'
 
 const DOCUMENTS_MAPPER = {
   DL: 'Driving license',
@@ -27,6 +29,7 @@ export async function getAccountSummary(params = {}) {
       partner: ['partner'],
       bank_list: ['bank_list'],
       referral: ['subbroker', 'p2p'],
+      equity: ['subscription_status']
     }
   }
   try {
@@ -72,40 +75,35 @@ export async function initData() {
   const user = storageService().getObject('user')
   const kyc = storageService().getObject('kyc')
   try {
-    if (currentUser && user && kyc) {
-      if (!storageService().get('referral')) {
+    if (currentUser && !isEmpty(user) && !isEmpty(kyc)) {
+      const referral = storageService().getObject('referral');
+      if (isEmpty(referral)) {
         const queryParams = {
           campaign: ['user_campaign'],
           nps: ['nps_user'],
           bank_list: ['bank_list'],
           referral: ['subbroker', 'p2p'],
+          equity: ['subscription_status']
         }
         const result = await getAccountSummary(queryParams);
         storageService().set('dataSettedInsideBoot', true)
         setSDKSummaryData(result)
       }
     } else {
-      const queryParams = {
-        campaign: ['user_campaign'],
-        kyc: ['kyc'],
-        user: ['user'],
-        nps: ['nps_user'],
-        partner: ['partner'],
-        bank_list: ['bank_list'],
-        referral: ['subbroker', 'p2p'],
-      }
-      const result = await getAccountSummary(queryParams);
+      const result = await getAccountSummary();
       storageService().set('dataSettedInsideBoot', true)
       setSummaryData(result)
     }
   } catch (err) {
     console.log(err);
+    throw err;
   }
 }
 
 export async function setSummaryData(result) {
   const currentUser = result.data.user.user.data
   const userKyc = result.data.kyc.kyc.data
+  const subscriptionStatus = result?.data?.equity?.subscription_status?.data || {};
   if (userKyc.firstlogin) {
     storageService().set('firstlogin', true)
   }
@@ -120,6 +118,9 @@ export async function setSummaryData(result) {
   storageService().setObject("npsUser", result?.data?.nps?.nps_user?.data);
   storageService().setObject("banklist", result?.data?.bank_list?.bank_list?.data);
   storageService().setObject("referral", result.data.referral);
+  if(!isEmpty(subscriptionStatus)) {
+    storageService().setObject(FREEDOM_PLAN_STORAGE_CONSTANTS.subscriptionStatus, subscriptionStatus);
+  }
   let partner = "";
   let consent_required = false;
   if (result.data.partner.partner.data) {
@@ -171,6 +172,10 @@ export function getCampaignBySection(notifications, sections) {
 }
 
 function setSDKSummaryData(result) {
+  const subscriptionStatus = result?.data?.equity?.subscription_status?.data || {};
+  if(!isEmpty(subscriptionStatus)) {
+    storageService().setObject(FREEDOM_PLAN_STORAGE_CONSTANTS.subscriptionStatus, subscriptionStatus);
+  }
   const campaignData = getCampaignBySection(
     result.data.campaign.user_campaign.data
   )
@@ -305,8 +310,8 @@ export function getKycAppStatus(kyc) {
     status = 'ground_premium';
   }
 
-  if (!kyc.address.meta_data.is_nri && kyc.kyc_status !== 'compliant' && (kyc.application_status_v2 !== 'init' && kyc.application_status_v2 !== 'submitted' &&
-    kyc.application_status_v2 !== 'complete') && kyc.dl_docs_status !== null) {
+  if (!kyc.address.meta_data.is_nri && kyc.kyc_status !== 'compliant' && kyc.kyc_type !== 'manual' && !['init', 'submitted', 'complete'].includes(kyc.application_status_v2)
+      && kyc.dl_docs_status !== null) {
     status = 'ground_aadhaar';
   }
 
@@ -565,4 +570,16 @@ export async function setKycProductType(data) {
     console.log(err.message);
     toast(err.message || "Something went wrong");
   } 
+}
+
+export async function validateLocation({ lat, lng }) {
+  try {
+    const res = await Api.get('/api/kyc/location/validation', {
+      latlon: `${lat}, ${lng}`
+    })
+
+    return Api.handleApiResponse(res);
+  } catch (err) {
+    throw (err)
+  }
 }

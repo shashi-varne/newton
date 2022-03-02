@@ -26,7 +26,7 @@ export function initialize() {
   this.navigate = navigateFunc.bind(this.props);
   this.getKycFromSummary = getKycFromSummary.bind(this);
   this.redirectAfterLogin = redirectAfterLogin.bind(this);
-  this.setUserAgent = setUserAgent.bind(this);
+  this.verifyRecaptchaAndInitiateOtp = verifyRecaptchaAndInitiateOtp.bind(this);
   let main_query_params = getUrlParams();
   let { referrer = "" } = main_query_params;
 
@@ -52,43 +52,14 @@ export function initialize() {
       redirectUrl = deeplinkUrl;
     }
   }
-  const rebalancingRedirectUrl = main_query_params.redirect_url
-    ? `?redirect_url=${main_query_params.redirect_url}`
-    : "";
 
-  let socialRedirectUrl = encodeURIComponent(
-    basePath + "/social/callback" + rebalancingRedirectUrl
-  );
 
-  this.setUserAgent();
 
-  let facebookUrl =
-    config.base_url +
-    "/auth/facebook?redirect_url=" +
-    socialRedirectUrl +
-    "&referrer=" +
-    referrer;
-  let googleUrl =
-    config.base_url +
-    "/auth/google?redirect_url=" +
-    socialRedirectUrl +
-    "&referrer=" +
-    referrer;
   this.setState({
     referrer: referrer,
-    facebookUrl: facebookUrl,
-    googleUrl: googleUrl,
     redirectUrl: redirectUrl,
     rebalancingRedirectUrl: main_query_params.redirect_url,
   });
-}
-
-export function setUserAgent() {
-  nativeCallback({
-    action: "set_user_agent", message: {
-      user_agent: "Mozilla/5.0 AppleWebKit/537.36 Chrome/65.0.3325.181 Mobile Safari/537.36"
-    }
-  })
 }
 
 export function formCheckFields(
@@ -152,7 +123,7 @@ export function formCheckFields(
     } else {
       body.auth_type = loginType;
       body.auth_value = form_data["email"];
-      this.initiateOtpApi(body, loginType);
+      this.verifyRecaptchaAndInitiateOtp(body, loginType);
     }
   } else {
     if (secondaryVerification) {     // body.redirect_url = redirectUrl;
@@ -164,12 +135,25 @@ export function formCheckFields(
     } else { 
       // eslint-disable-next-line
       body.auth_type = 'mobile',
-      body.auth_value = `${form_data["code"]}${form_data["mobile"]}`,
+      body.auth_value = `${form_data["code"]}|${form_data["mobile"]}`,
       body.need_key_hash = true,
       body.user_whatsapp_consent = form_data["whatsapp_consent"],
-      this.initiateOtpApi(body, loginType);
+      this.verifyRecaptchaAndInitiateOtp(body, loginType);
     }
   }
+}
+
+export function verifyRecaptchaAndInitiateOtp(body, loginType) {
+  const config = getConfig();
+  const apiKey = config.apiKey;
+  const action = "login"; 
+  window.grecaptcha.enterprise.ready(() => {
+    window.grecaptcha.enterprise.execute(apiKey, { action }).then(token => {
+      body.recaptcha_token = token;
+      body.recaptcha_action = action;
+      this.initiateOtpApi(body, loginType)
+    });
+  });
 }
 
 export function setBaseHref() {
@@ -214,18 +198,6 @@ export async function triggerOtpApi(body, loginType, bottomsheet) {
             communicationType: loginType,
           },
         });
-      } if (this.state.referrer) {
-        let item = {
-          promo_code: this.state.referrer,
-        };
-        storageService().setObject("user_promo", item);
-      }
-
-      if (this.state.isPromoSuccess && this.state.form_data.referral_code !== "") {
-        let item = {
-          promo_code: this.state.form_data.referral_code,
-        };
-        storageService().setObject("user_promo", item);
       }
       toast(result?.message || "Success");
     } else throw result?.error || result?.message || errorMessage;
@@ -243,8 +215,24 @@ export async function initiateOtpApi(body, loginType) {
   formData.append("auth_value", body.auth_value);
   formData.append("Content-Type", "application/x-www-form-urlencoded")   // [ "multipart/form-data" ]
   formData.append("user_whatsapp_consent", body?.user_whatsapp_consent);
+  formData.append("recaptcha_token", body.recaptcha_token);
+  formData.append("recaptcha_action", body.recaptcha_action);
+  const referrer = this.state.referrer;
+  if(referrer) {
+    const item = {
+      promo_code: referrer,
+    };
+    storageService().setObject("user_promo", item);
+  }
   try {
-    const res = await Api.post(`/api/user/login/v4/initiate`, formData)
+    const res = await Api.post(`/api/user/login/v5/initiate`, formData);
+    if (
+      res.pfwstatus_code !== 200 ||
+      !res.pfwresponse ||
+      isEmpty(res.pfwresponse)
+    ) {
+      throw res?.pfwmessage || errorMessage;
+    }
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       this.setState({ isApiRunning: false });
@@ -317,6 +305,10 @@ export const redirectToLaunchDiet = async () => {
 
 export async function otpLoginVerification(verify_url, body) {
   let formData = new FormData();
+  const userPromo = storageService().getObject("user_promo");
+  if(userPromo?.promo_code) {
+    formData.append("referrer_code", userPromo?.promo_code);
+  }
   formData.append("otp", body?.otp);
   formData.append("user_whatsapp_consent", body?.user_whatsapp_consent);
   formData.append("Content-Type", "application/x-www-form-urlencoded"); //   [ "multipart/form-data" ]
@@ -326,7 +318,6 @@ export async function otpLoginVerification(verify_url, body) {
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       this.sendEvents("next")
-      applyCode(result.user);
       storageService().setObject("user", result.user);
 
       // Redirect to PIN Verification
@@ -451,24 +442,6 @@ export async function otpVerification(body) {
   }
 }
 
-
-export async function applyCode(user) {
-  var userPromo = storageService().getObject("user_promo");
-  if (userPromo && user.user_id) {
-    try {
-      const res = await Api.post(`/api/referral/apply`, {
-        code: userPromo.promo_code,
-      });
-      const { status_code: status } = res.pfwresponse;
-      if (status === 200) {
-        storageService().remove("user_promo");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-}
-
 export async function resendOtp(otp_id) {
   this.setState({ isResendOtpApiRunning: true });
   try {
@@ -518,6 +491,7 @@ export async function getKycFromSummary(params = {}) {
       referral: ["subbroker", "p2p"],
       contacts: ["contacts"],
       nps: ['nps_user'],
+      equity: ['subscription_status']
     }
   }
   const res = await Api.post(`/api/user/account/summary`, params);
@@ -526,10 +500,12 @@ export async function getKycFromSummary(params = {}) {
   if (status === 200) {
     let user = result.data.user.user.data;
     let kyc = result.data.kyc.kyc.data;
-    let nps = result.data.nps.nps_user.data;
+    let nps = result.data?.nps?.nps_user?.data;
     storageService().setObject("kyc", kyc);
     storageService().setObject("user", user);
-    storageService().setObject("npsUser", nps);
+    if (!isEmpty(nps)) {
+      storageService().setObject("npsUser", nps);
+    }
     return result;
   } else {
     throw result.error || result.message || errorMessage;
@@ -539,10 +515,15 @@ export async function getKycFromSummary(params = {}) {
 export function redirectAfterLogin(data, user, navigateFunc) {
   const kyc = storageService().getObject("kyc");
   const ipoContactNotVerified = storageService().get("ipoContactNotVerified") || false;
+  const sdkStocksRedirection = storageService().getBoolean("sdkStocksRedirection");
   user = user || storageService().getObject("user");
   const navigate = navigateFunc || this.navigate;
   if (data.firstLogin) {
     navigate("/referral-code", { state: { goBack: "/", communicationType: data?.contacts?.auth_type } });
+  } else if (sdkStocksRedirection) {
+    storageService().setBoolean("sdkStocksRedirection", false);
+    storageService().setBoolean("openEquityCallback", true);
+    navigate("/invest", { edit: true, state: { goBack: "/" } });
   } else if (ipoContactNotVerified){
     storageService().set("ipoContactNotVerified", false);
     navigate("/market-products", { state: { goBack: "/invest" } });
@@ -630,9 +611,6 @@ export async function authCheckApi(type, data) {
 export async function generateOtp(data) {
   let error = "";
   try {
-    this.setState({
-      loading: true,
-    });
     const otpResponse = await Api.post("/api/communication/send/otp", data);
     if (otpResponse.pfwresponse.status_code === 200) {
       // OTP_ID GENERATED, NAGIVATE TO THE OTP VERIFICATION SCREEN
@@ -646,10 +624,6 @@ export async function generateOtp(data) {
     }
   } catch (err) {
     Toast(err);
-  } finally {
-    this.setState({
-      loading: false,
-    });
   }
 }
 
@@ -670,4 +644,16 @@ export const partnerAuthentication = async (data) => {
   } else {
     throw new Error(result.error || result.message || errorMessage);
   }
-} 
+}
+
+// todo will make login as functional component, this is temp fix
+export const loadScriptInBody = (id, url) => {
+  const isScriptLoaded = document.getElementById(id);
+  if (!isScriptLoaded) {
+    const script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = url;
+    script.id = id;
+    document.body.appendChild(script);
+  }
+}

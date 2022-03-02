@@ -55,11 +55,10 @@ if (basename && basename.indexOf('appl/web') !== -1) {
 
 const clearBottomsheetDisplays = () => {
   const bottomSheetsArr = [
-    "is_bottom_sheet_displayed", 
+    "isCampaignDialogDisplayed", 
     "verifyDetailsSheetDisplayed", 
-    "is_bottom_sheet_displayed_kyc_premium", 
+    "isKycPremiumBottomSheetDisplayed", 
     "landingBottomSheetDisplayed",
-    "bfdlBannerDisplayed",
   ];
 
   bottomSheetsArr.forEach((bottomSheet) => {

@@ -18,12 +18,14 @@ export const investCardsBase = {
       subtitle: "Invest in your favourite companies",
       button_text: "INVEST",
       icon: "ic_stocks.svg",
+      tagTitle: "NEW"
     },
     ipo: {
-      title: "IPO, Gold Bonds and more",
+      title: "IPO, SGB, NCD & more",
       subtitle: "Primary market products",
       button_text: "INVEST",
       icon: "ic_ipo.svg",
+      tagTitle: "NEW"
     },
   },
   popularCards: {
@@ -31,10 +33,10 @@ export const investCardsBase = {
       title: "Top equity funds",
       icon: "icn_top_equity_funds.svg",
     },
-    gold: {
-      title: "Buy & sell 24K Gold",
-      icon: "icn_gold.svg",
-    },
+    // gold: {
+    //   title: "Buy & sell 24K Gold",
+    //   icon: "icn_gold.svg",
+    // },
     nps: {
       title: "NPS",
       icon: "icn_nps.svg",
@@ -92,12 +94,12 @@ export const investCardsBase = {
       button_text: "START NOW",
       icon: "ic_invest_build_wealth.svg",
     },
-    gold: {
-      title: "Buy & sell 24K Gold",
-      subtitle: "Starting from Rs. 100, doorstep delivery",
-      button_text: "BUY NOW",
-      icon: "ic_invest_gold.svg",
-    },
+    // gold: {
+    //   title: "Buy & sell 24K Gold",
+    //   subtitle: "Starting from Rs. 100, doorstep delivery",
+    //   button_text: "BUY NOW",
+    //   icon: "ic_invest_gold.svg",
+    // },
   },
   diy: {
     diyv2: {
@@ -106,12 +108,12 @@ export const investCardsBase = {
       button_text: "EXPLORE FUNDS",
       icon: "ic_invest_explore_mf.svg",
     },
-    gold: {
-      title: "Buy & sell 24K Gold",
-      subtitle: "Starting from Rs. 100, doorstep delivery",
-      button_text: "BUY NOW",
-      icon: "ic_invest_gold.svg",
-    },
+    // gold: {
+    //   title: "Buy & sell 24K Gold",
+    //   subtitle: "Starting from Rs. 100, doorstep delivery",
+    //   button_text: "BUY NOW",
+    //   icon: "ic_invest_gold.svg",
+    // },
   },
   bottomScrollCards: {
     parkmoney: {
@@ -163,6 +165,9 @@ export const keyPathMapper = {
   diyv2: "invest/explore",
   parkmoney: "invest/parkmoney",
   savegoal: "invest/savegoal",
+  insurance: "/group-insurance",
+  gold: "/gold/my-gold",
+  fhc: "/fhc",
 };
 
 export const investRedeemData = {
@@ -589,13 +594,6 @@ export const sdkInvestCardMapper = [
     subtitle: 'Account details, Mandate',
     img: 'ic_db_account.svg',
     path: '/my-account'
-  },
-  {
-    key: 'kyc',
-    title: 'KYC',
-    subtitle: 'Create investment profile',
-    img: 'ic_db_kyc.svg',
-    path: '/kyc'
   },
   {
     key: 'refer',
