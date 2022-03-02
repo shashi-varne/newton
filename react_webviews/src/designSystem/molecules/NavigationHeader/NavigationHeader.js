@@ -244,7 +244,7 @@ const TabsSection = ({ tabs, tabChilds }) => {
   );
 };
 
-export const NavigationSeeMoreWrapper = ({ subtitle='', points=[] }) => {
+export const NavigationSeeMoreWrapper = ({ subtitle = '', points = [] }) => {
   const [seeMore, setSeeMore] = useState(false);
   return (
     <>

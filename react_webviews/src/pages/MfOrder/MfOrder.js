@@ -5,7 +5,7 @@ import {
   getfundOrderDetails,
   resetMfOrders,
   setFundOrderDetails,
-  triggerInvestment
+  triggerInvestment,
 } from 'businesslogic/dataStore/reducers/mfOrders';
 import { getIsins } from 'businesslogic/utils/mfOrder/functions';
 import isEmpty from 'lodash/isEmpty';
@@ -106,8 +106,8 @@ const MfOrder = (props) => {
         return true;
       }
     });
-    const newInvestmentValidData = { ...isInvestmentValid }
-    delete newInvestmentValidData[fundTobeRemoved.isin]
+    const newInvestmentValidData = { ...isInvestmentValid };
+    delete newInvestmentValidData[fundTobeRemoved.isin];
     dispatch(setFundsCart(newDiyCart));
     dispatch(setFundOrderDetails(remainingFunds));
     dispatch(filterMfOrders(remainingOrders));
@@ -115,6 +115,7 @@ const MfOrder = (props) => {
     handleSheetClose();
   };
 
+  // check if two sip are not allowed
   const validateMfOrders = () => {
     let amountInputError = false;
     let amountValidationError = false;
@@ -166,74 +167,69 @@ const MfOrder = (props) => {
   const handlePlaceOrders = () => {
     const isError = validateMfOrders();
     if (!isError) {
-      const allowedFunds = fundOrderDetails.filter((data) => data[`${parentInvestmentType}_allowed`]);
+      const allowedFunds = fundOrderDetails.filter(
+        (data) => data[`${parentInvestmentType}_allowed`]
+      );
       if (allowedFunds.length <= 0) {
         Toast(`${capitalizeFirstLetter(parentInvestmentType)} investment not allowed`);
-        return
+        return;
       }
-      let allocations = [];
-      allowedFunds.forEach((fund) => {
-          let allocation = {
-            mfid: fund.mfid,
-            mfname: fund.mfname,
-            // eslint-disable-next-line
-            amount: parseInt(mfOrders[fund.isin].amount),
-            default_date: fund.addl_purchase.sip.default_date,
-            sip_dates: fund.addl_purchase.sip.sip_dates,
-          };
-          if (parentInvestmentType === "sip") {
-            allocation.sip_date = mfOrders[fund.isin].sip_date
-          }
-          allocations.push(allocation);
-        });
-      const totalAmount = allocations.reduce(
+      const mfOrderList = values(mfOrders);
+      const totalAmount = mfOrderList.reduce(
         // eslint-disable-next-line
-        (sum, data) => (sum += parseInt(data.amount)),
+        (sum, data) => (sum += data.amount),
         0
       );
       let investment = {};
       investment.amount = parseFloat(totalAmount);
-      let investmentType = "";
-      if (parentInvestmentType === "lumpsum") {
-        investment.type = "diy";
-        investmentType = "onetime";
+      let investmentType = '';
+      if (parentInvestmentType === 'lumpsum') {
+        investment.type = 'diy';
+        investmentType = 'onetime';
       } else {
-        investment.type = "diysip";
-        investmentType = "sip";
+        investment.type = 'diysip';
+        investmentType = 'sip';
       }
-      investment.allocations = allocations;
+      investment.allocations = mfOrderList;
       const body = {
         investment,
       };
       const investmentEventData = {
         amount: parseFloat(totalAmount),
         investment_type: investmentType,
-        investment_subtype: "",
-        journey_name: "diy",
+        investment_subtype: '',
+        journey_name: 'diy',
       };
 
-      storageService().setObject("investment", investment);
-      storageService().setObject("mf_invest_data", investmentEventData);
+      storageService().setObject('investment', investment);
+      storageService().setObject('mf_invest_data', investmentEventData);
       if (!user.active_investment) {
         navigate(DIY_PATHNAME_MAPPER.investProcess);
         return;
       }
-      const sagaCallback = handlePaymentRedirection({ navigate, kyc, handleApiRunning: setShowLoader })
+      const sagaCallback = handlePaymentRedirection({
+        navigate,
+        kyc,
+        handleApiRunning: setShowLoader,
+      });
       const payload = {
         screen,
         Api,
         body,
-        sagaCallback
+        sagaCallback,
       };
-      dispatch(triggerInvestment(payload))
+      dispatch(triggerInvestment(payload));
     }
   };
 
   const handleTermsAndConditions = () => {
-    nativeCallback({action: "open_in_browser", message: {
-      url: termsLink
-    }})
-  }
+    nativeCallback({
+      action: 'open_in_browser',
+      message: {
+        url: termsLink,
+      },
+    });
+  };
 
   return (
     <Container
@@ -246,7 +242,7 @@ const MfOrder = (props) => {
           title: 'Continue',
           onClick: handlePlaceOrders,
           disabled: isEmpty(fundOrderDetails),
-          isLoading: isButtonLoading
+          isLoading: isButtonLoading,
         },
       }}
       noFooter={isPageLoading}
@@ -257,7 +253,7 @@ const MfOrder = (props) => {
         <NoMfOrders />
       ) : (
         <>
-          <Stack className="mf-order-section" direction='column' spacing={2} component='section'>
+          <Stack className='mf-order-section' direction='column' spacing={2} component='section'>
             {isProductFisdom && (
               <ParentInvestTypeSection
                 parentInvestmentType={parentInvestmentType}
@@ -302,7 +298,10 @@ const MfOrder = (props) => {
 
             {isProductFisdom ? (
               <Typography variant='body5' color='foundationColors.content.tertiary'>
-                By continue, I agree that I have read the <span className="pointer" onClick={handleTermsAndConditions}>terms & conditions</span>
+                By continue, I agree that I have read the{' '}
+                <span className='pointer' onClick={handleTermsAndConditions}>
+                  terms & conditions
+                </span>
               </Typography>
             ) : (
               <TrusIcon variant='secure' opacity='0.6' />
