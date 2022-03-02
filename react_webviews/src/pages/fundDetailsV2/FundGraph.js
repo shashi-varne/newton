@@ -252,7 +252,7 @@ const FundGraph = () => {
   return (
     <div className='fund-graph-wrapper'>
       <HighchartsReact highcharts={Highcharts} options={options} />
-      <Timelines onChange={handleTimePeriodChange} value={fundTimePeriod}>
+      <Timelines onChange={handleTimePeriodChange} value={fundTimePeriod} className="fund-details-timeline">
         {
           timeLines?.map((el, id) => {
             const isDisabled = id > fundData?.performance.returns.length - 1;

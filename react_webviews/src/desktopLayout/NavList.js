@@ -93,7 +93,7 @@ let data = [
     id: 'diy',
     name: 'DIY',
     icon: logout,
-    path: '/diyv2/equity',
+    path: '/invest/explore',
   },
 ];
 

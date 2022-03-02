@@ -26,7 +26,6 @@ import {
   getDiyCategoryData,
   setDiyTypeData,
   getDiyTypeData,
-  getTrendingFundsByCategory,
   getDiySubcategoryDataByViewType,
   getDiyCartCount,
   fetchDiyCategories,
@@ -47,7 +46,6 @@ const CommonCategoryLanding = (props) => {
   const diyTypeData = useSelector(getDiyTypeData);
   const cartCount = useSelector(getDiyCartCount);
   const categoryData = useSelector((state) => getDiyCategoryData(state, diyType));
-  const trendingFunds = useSelector((state) => getTrendingFundsByCategory(state, diyType));
   const twoRowsImageCarouselData = useSelector((state) =>
     getDiySubcategoryDataByViewType(
       state,
@@ -156,10 +154,9 @@ const CommonCategoryLanding = (props) => {
           )}
         </LandingHeader>
         <TrendingFunds
-          trendingFunds={trendingFunds}
           handleFundDetails={handleFundDetails}
           config={config}
-          diyType={diyType}
+          diyType={diyType?.toLowerCase()}
         />
         <TwoRowCarousel
           data={twoRowsImageCarouselData}
