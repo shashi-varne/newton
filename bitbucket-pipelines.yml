@@ -40,6 +40,7 @@ definitions:
         size: 2x
         script:
           - apt-get update
+          - apt install nasm
           - apt-get install -y curl
           - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
           - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
@@ -68,6 +69,7 @@ definitions:
           - export HTTP_PORT=3000
           - echo "127.0.0.1 $HTTP_ADDR" >> /etc/hosts
           - apt-get update
+          - apt install nasm
           - apt-get install -y curl
           - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
           - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
