@@ -21,7 +21,7 @@ const SipDateSelector = ({ isOpen, sipDates, onClose, selectedDate, handleSelect
   };
 
   useEffect(() => {
-    if (itemRef.current) {
+    if (itemRef.current && isOpen) {
       const element = itemRef.current;
       scrollIntoView(element, {
         block: 'center',
@@ -29,7 +29,7 @@ const SipDateSelector = ({ isOpen, sipDates, onClose, selectedDate, handleSelect
         behavior: 'smooth',
       });
     }
-  }, [itemRef.current]);
+  }, [itemRef.current, isOpen]);
 
   const handleSetDate = () => {
     handleSelectedDate(selectedData);
@@ -42,6 +42,7 @@ const SipDateSelector = ({ isOpen, sipDates, onClose, selectedDate, handleSelect
       open={isOpen}
       onClose={handleClose}
       className='sip-date-selector-sheet'
+      keepMounted
     >
       <Stack className='sip-date-selector-wrapper'>
         <Stack sx={{ mb: 2 }} direction='row' justifyContent='center' className='sip-title-wrapper'>
