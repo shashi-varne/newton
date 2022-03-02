@@ -13,10 +13,11 @@ import { getDiyCart } from 'businesslogic/dataStore/reducers/diy';
 import { getConfig, navigate as navigateFunc } from '../../../utils/functions';
 import useLoadingState from '../../../common/customHooks/useLoadingState';
 import isEmpty from 'lodash/isEmpty';
+import { getDiyDataAid } from '../common/functions';
 
 const screen = 'diyFundList';
 const TabPanel = memo((props) => {
-  const { data = [], returnPeriod, returnLabel, value, activeTab, handleAddToCart } = props;
+  const { data = [], returnPeriod, returnLabel, value, activeTab, handleAddToCart, subcategoryOption } = props;
   const [NumOfItems, setNumOfItems] = useState(10);
   const [showLoader, setShowLoader] = useState(false);
   const { productName } = useMemo(getConfig, []);
@@ -57,26 +58,25 @@ const TabPanel = memo((props) => {
           className='sub-category-filter-info'
           backgroundColor='foundationColors.supporting.grey'
           sx={{ mb: '16px', padding: '8px 16px' }}
+          data-aid="grp_fundsReturns"
         >
           <Typography
             variant='body5'
             color='foundationColors.content.secondary'
             sx={{ display: 'flex', alignItems: 'center' }}
+            dataAid='funds'
           >
             {showLoader ? <Skeleton type='text' width='12px' /> : data.length}
-            <Typography component='span' variant='inherit' color='inherit' sx={{ ml: 0.5 }}>
-              funds
-            </Typography>
+            {" "}funds
           </Typography>
           <Typography
             variant='body5'
             color='foundationColors.content.secondary'
             sx={{ display: 'flex', alignItems: 'center' }}
+            dataAid={`${returnLabel?.toLowerCase()}Returns`}
           >
             {showLoader ? <Skeleton type='text' width='12px' /> : returnLabel}
-            <Typography component='span' variant='inherit' color='inherit' sx={{ ml: 0.5 }}>
-              returns
-            </Typography>
+            {" "}returns
           </Typography>
         </Stack>
         {showLoader ? (
@@ -88,7 +88,7 @@ const TabPanel = memo((props) => {
             <FundItemSkeletonLoader />
           </Stack>
         ) : (
-          <Typography component='div' sx={{ p: '0px 16px' }}>
+          <Box data-aid={`fundList_${getDiyDataAid(subcategoryOption)}`} sx={{ p: '0px 16px' }}>
             {data?.slice(0, NumOfItems)?.map((fund, idx) => {
               const returnValue = fund[returnPeriod];
               const returnData = !returnValue
@@ -114,6 +114,7 @@ const TabPanel = memo((props) => {
                     imgSrc={fund?.amc_logo_big}
                     showSeparator
                     onClick={showFundDetails(fund)}
+                    dataAid={idx+1}
                   >
                     <ProductItem.LeftSection>
                       <ProductItem.Title>{fund?.legal_name}</ProductItem.Title>
@@ -123,6 +124,7 @@ const TabPanel = memo((props) => {
                             label='Recommendation'
                             labelColor='foundationColors.content.secondary'
                             labelBackgroundColor='foundationColors.secondary.blue.200'
+                            dataAid="label1"
                           />
                         )}
                         {fund?.morning_star_rating && (
@@ -130,17 +132,22 @@ const TabPanel = memo((props) => {
                             morningStarVariant='small'
                             label={fund?.morning_star_rating}
                             labelColor='foundationColors.content.secondary'
+                            dataAid="label2"
+                            leftImgProps={{
+                              dataAid: "star"
+                            }}
                           />
                         )}
                       </ProductItem.LeftBottomSection>
                     </ProductItem.LeftSection>
                     <ProductItem.RightSection spacing={2}>
-                      <ProductItem.Description title={returnData} titleColor={returnColor} />
+                      <ProductItem.Description title={returnData} titleColor={returnColor} titleDataAid="value" />
                       {!hideCartButton && (
                         <Icon
                           size='32px'
                           src={require(`assets/${isFundAddedToCart ? `minus` : `add_icon`}.svg`)}
                           onClick={(e) => handleAddToCart(e, fund)}
+                          dataAid="right"
                         />
                       )}
                     </ProductItem.RightSection>
@@ -153,7 +160,7 @@ const TabPanel = memo((props) => {
                 No Funds Available
               </Typography>
             )}
-          </Typography>
+          </Box>
         )}
       </Box>
       {/* )} */}

@@ -29,6 +29,7 @@ const FilterNavigation = ({
         bgcolor: 'foundationColors.supporting.white',
         ...isDisabledStyle,
       }}
+      data-aid="grp_filterList"
     >
       <Filter
         title='Sort'

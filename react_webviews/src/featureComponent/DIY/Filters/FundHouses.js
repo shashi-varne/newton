@@ -34,24 +34,24 @@ const FundHouses = ({ activeFundHouses, setActiveFundHouses }) => {
   };
 
   return (
-    <div className='fund-house-wrapper'>
-      <SearchBar placeholder='Search...' value={searchQuery} onChange={handleSearch} />
+    <div className='fund-house-wrapper' data-aid="grp_fundNames">
+      <SearchBar placeholder='Search...' value={searchQuery} onChange={handleSearch} dataAid="fundHouse" />
       <Stack sx={{ mt: 1, height: isMobileDevice ? 'calc(100vh - 220px)' : 'calc(100vh - 300px)', overflowY: 'auto' }}>
         {isEmpty(fundHouseList) && (
-          <Typography align='center' variant='body2' color='foundationColors.supporting.cadetBlue'>
+          <Typography align='center' variant='body2' color='foundationColors.supporting.cadetBlue' dataAid="noResults">
             No results
           </Typography>
         )}
-        <Stack direction='column' spacing={2} sx={{ ml: 2 }}>
+        <Stack direction='column' spacing={2} sx={{ ml: 2 }} data-aid="grp_fundHouseList" >
           {fundHouseList?.map((option, idx) => {
             const isSelected = activeFundHouses?.includes(option);
             const selectedColor = isSelected
               ? 'foundationColors.primary.content'
               : 'foundationColors.content.secondary';
             return (
-              <Stack direction='row' spading={2} key={idx}>
-                <Checkbox checked={isSelected} onChange={handleChange(option)} />
-                <Typography color={selectedColor} sx={{ ml: 2 }} variant='body2'>
+              <Stack direction='row' spading={2} key={idx} data-aid={`grp_${idx+1}`} >
+                <Checkbox checked={isSelected} onChange={handleChange(option)} dataAid={idx+1} />
+                <Typography color={selectedColor} sx={{ ml: 2 }} variant='body2' dataAid={`list${idx+1}`} >
                   {option}
                 </Typography>
               </Stack>

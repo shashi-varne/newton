@@ -6,6 +6,7 @@ import Button from '../../../designSystem/atoms/Button';
 
 import './FilterReturnBottomSheet.scss';
 import { FILTER_TYPES, RETURNS_DATA_LIST, SORT_DATA_LIST } from "businesslogic/constants/diy";
+import Separator from '../../../designSystem/atoms/Separator';
 
 const FilterReturnBottomSheet = ({ variant, isOpen, handleClose, applyFilter, selectedValue }) => {
   const [selectedItem, setSelectedItem] = useState(selectedValue);
@@ -39,9 +40,9 @@ const FilterReturnBottomSheet = ({ variant, isOpen, handleClose, applyFilter, se
         <Stack sx={{ p: 2 }}>
           <Stack direction='row' justifyContent='center' className='fr-title-wrapper'>
             <IconButton onClick={handleClose}>
-              <Icon size='24px' src={require('assets/close_small.svg')} />
+              <Icon size='24px' src={require('assets/close_small.svg')} dataAid="close" />
             </IconButton>
-            <Typography variant='heading3' align='center'>
+            <Typography variant='heading3' align='center'dataAid={title?.toLowerCase()}  >
               {title}
             </Typography>
           </Stack>
@@ -51,7 +52,7 @@ const FilterReturnBottomSheet = ({ variant, isOpen, handleClose, applyFilter, se
             <Sorting selectedItem={selectedItem} handleSelection={handleSelection} />
           )}
 
-          <Button title='Apply' sx={{ mt: '74px' }} onClick={onSelect} />
+          <Button title='Apply' sx={{ mt: '74px' }} onClick={onSelect} dataAid="primary" />
         </Stack>
       </Dialog>
     </div>
@@ -66,20 +67,22 @@ const Sorting = ({ selectedItem, handleSelection }) => {
       {SORT_DATA_LIST?.map((item, idx) => {
         return (
           <Stack spacing='4px' direction='column' key={idx} onClick={() => handleSelection(item)}>
-            <Typography variant='body2' color='foundationColors.content.tertiary'>
+            <Typography variant='body2' color='foundationColors.content.tertiary' dataAid={item.label1TestIdSuffix} >
               {item?.label1}
             </Typography>
             <Stack direction='row' justifyContent='space-between' alignItems='center'>
               <Typography
                 variant={selectedItem?.value === item?.value ? 'heading4' : 'body8'}
                 color='foundationColors.content.secondary'
+                dataAid={item.label2TestIdSuffix}
               >
                 {item.label2}
               </Typography>
               {selectedItem?.value === item?.value && (
-                <Icon size='24px' src={require('assets/checked.svg')} />
+                <Icon size='24px' src={require('assets/checked.svg')} dataAid="check" />
               )}
             </Stack>
+            <Separator dataAid={idx+1} marginTop="16px !important" />
           </Stack>
         );
       })}
@@ -103,11 +106,12 @@ const Return = ({ selectedItem, handleSelection }) => {
             <Typography
               variant={selectedItem?.value === item?.value ? 'heading4' : 'body8'}
               color='foundationColors.content.secondary'
+              dataAid={`label${idx+1}`}
             >
               {item.label}
             </Typography>
             {selectedItem?.value === item?.value && (
-              <Icon size='24px' src={require('assets/checked.svg')} />
+              <Icon size='24px' src={require('assets/checked.svg')} dataAid="check" />
             )}
           </Stack>
         );
