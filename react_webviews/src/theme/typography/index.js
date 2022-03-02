@@ -148,7 +148,7 @@ export const customTypographyVariantProps = () => {
     props: {allcaps: 1},
     style: {
       textTransform: 'uppercase'
-    }
+    },
   }];
   mapper.push(...additionalVariants);
   return mapper;
