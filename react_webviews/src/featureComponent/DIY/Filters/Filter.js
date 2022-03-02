@@ -79,6 +79,7 @@ const Filter = ({
       >
         <NavigationHeader
           showCloseIcon
+          hideMenuBar
           headerTitle="Filters"
           hideInPageTitle
           actionTextProps={{ title: "Clear all", onClick: handleClearAll, dataAid: "link" }}
