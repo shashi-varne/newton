@@ -170,6 +170,7 @@ const NavigationHeader = ({
                 hideInPageTitle && 'show-nav-title'
               }`}
               variant='heading3'
+              dataAid="title"
             >
               {headerTitle}
             </Typography>
