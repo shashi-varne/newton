@@ -34,6 +34,8 @@ import useUserKycHook from '../../kyc/common/hooks/userKycHook';
 import { nativeCallback } from '../../utils/native_callback';
 import { handlePaymentRedirection } from '../DIY/common/functions';
 import { DIY_PATHNAME_MAPPER } from '../DIY/common/constants';
+import useErrorState from '../../common/customHooks/useErrorState';
+import ToastMessage from '../../designSystem/atoms/ToastMessage';
 
 import './MfOrder.scss';
 const screen = 'mfOrder';
@@ -50,6 +52,7 @@ const MfOrder = (props) => {
   const cartCount = useSelector(getDiyCartCount);
   const { productName, termsLink } = useMemo(getConfig, []);
   const { isPageLoading, isButtonLoading } = useLoadingState(screen);
+  const { isUpdateFailed, isFetchFailed, errorMessage } = useErrorState(screen);
   const noMfOrdersAvailable = !isPageLoading && isEmpty(fundOrderDetails);
   const dispatch = useDispatch();
   const isProductFisdom = productName === 'fisdom';
@@ -62,6 +65,12 @@ const MfOrder = (props) => {
       dispatch(resetMfOrders());
     };
   }, []);
+
+  useEffect(() => {
+    if ((isFetchFailed || isUpdateFailed) && !isEmpty(errorMessage)) {
+      ToastMessage(errorMessage)
+    }
+  }, [isFetchFailed, isUpdateFailed])
 
   const getMfOrderDetails = () => {
     const isins = getIsins(cartData);
