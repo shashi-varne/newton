@@ -152,7 +152,7 @@ const NavigationHeader = ({
 
   const leftIcon = leftIconSrc ? leftIconSrc : showCloseIcon ? closeIcon : backIcon;
   return (
-    <header className={`nav-header-wrapper ${className}`} ref={navHeaderWrapperRef}>
+    <header className={`nav-header-wrapper ${className}`} ref={navHeaderWrapperRef} data-aid="navigationHeader" >
       <section className='nav-header-top-section'>
         <div className='nav-header-left'>
           {!hideLeftIcon && (
@@ -170,6 +170,7 @@ const NavigationHeader = ({
                 hideInPageTitle && 'show-nav-title'
               }`}
               variant='heading3'
+              dataAid="title"
             >
               {headerTitle}
             </Typography>
@@ -184,7 +185,7 @@ const NavigationHeader = ({
       </section>
       {!(hideInPageTitle || hideHeaderTitle) && headerTitle && (
         <div className='nav-bar-title-wrapper' ref={inPageTitleRef}>
-          <Typography variant='heading2'>{headerTitle}</Typography>
+          <Typography variant='heading2' dataAid="title">{headerTitle}</Typography>
         </div>
       )}
       <section className='nav-bar-subtitle-wrapper' ref={subtitleRef}>

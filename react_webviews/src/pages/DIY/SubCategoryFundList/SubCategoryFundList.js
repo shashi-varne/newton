@@ -223,6 +223,7 @@ const SubCategoryLanding = (props) => {
                   data={filteredFunds[el.key]}
                   activeTab={tabValue}
                   handleAddToCart={handleAddToCart}
+                  subcategoryOption={subcategoryOption}
                 />
               </SwiperSlide>
             );

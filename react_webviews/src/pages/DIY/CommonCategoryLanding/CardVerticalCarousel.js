@@ -7,6 +7,7 @@ import CardVertical from '../../../designSystem/molecules/CardVertical';
 import SectionHeader from './SectionHeader';
 import Icon from '../../../designSystem/atoms/Icon';
 import isEmpty from 'lodash/isEmpty';
+import { getDiyDataAid } from '../common/functions';
 
 const CardVerticalCarousel = ({ handleCardClick, isPageLoading, data = {} }) => {
   if (!isPageLoading && isEmpty(data)) {
@@ -18,6 +19,7 @@ const CardVerticalCarousel = ({ handleCardClick, isPageLoading, data = {} }) => 
         isPageLoading={isPageLoading}
         sx={{ pl: 2, pr: 2 }}
         title={data?.name}
+        dataAid={getDiyDataAid(data?.key)}
       />
       <CustomSwiper
         spaceBetween={8}
@@ -59,8 +61,8 @@ const CardVerticalCarousel = ({ handleCardClick, isPageLoading, data = {} }) => 
                       imgSrc={el?.image_url}
                       title={el?.name}
                       subtitle={el?.trivia}
-                      dataAid={idx}
                       className="pointer"
+                      dataAid={getDiyDataAid(el?.key)}
                     />
                   </WrapperBox>
                 </SwiperSlide>

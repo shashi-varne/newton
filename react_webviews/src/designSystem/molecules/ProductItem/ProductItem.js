@@ -44,7 +44,7 @@ const ProductItem = ({ children, imgSrc, imgProps, dataAid, sx, showSeparator, o
         <Stack alignItems='flex-start' className='product-item-child-wrapper'>
           {children}
         </Stack>
-        {showSeparator && <Separator marginTop='16px' className='product-item-separator' />}
+        {showSeparator && <Separator marginTop='16px' className='product-item-separator' dataAid={dataAid} />}
       </Stack>
     </Stack>
   );
@@ -76,20 +76,20 @@ ProductItem.RightSection = ({ children, direction = 'column', spacing }) => {
 
 ProductItem.Title = ({ children, color }) => {
   return (
-    <Typography variant='body2' color={color}>
+    <Typography variant='body2' color={color} dataAid="title" >
       {children}
     </Typography>
   );
 };
 
-ProductItem.Description = ({ title, titleColor, subtitle, subtitleColor }) => {
+ProductItem.Description = ({ title, titleColor, subtitle, subtitleColor, titleDataAid, subtitleDataAid }) => {
   if (!title && !subtitle) return null;
   return (
     <div className='pi-right-text-wrapper'>
-      <Typography variant='body1' align='right' color={titleColor} component='div'>
+      <Typography variant='body1' align='right' color={titleColor} component='div' dataAid={titleDataAid} >
         {title}
       </Typography>
-      <Typography variant='body2' align='right' color={subtitleColor} component='div'>
+      <Typography variant='body2' align='right' color={subtitleColor} component='div' dataAid={subtitleDataAid} >
         {subtitle}
       </Typography>
     </div>

@@ -38,7 +38,7 @@ const TrendingFunds = ({ config, handleFundDetails, diyType }) => {
 
   return (
     <Stack direction='column' spacing={2} className='diy-c-trending-wrapper'>
-      <SectionHeader sx={{ pl: 2, pr: 2 }} title='Trending' />
+      <SectionHeader sx={{ pl: 2, pr: 2 }} title='Trending' dataAid="trending" />
       <CustomSwiper
         slidesPerView={isMobileDevice ? 1 : 2}
         slidesPerColumn={1}
@@ -60,7 +60,7 @@ const TrendingFunds = ({ config, handleFundDetails, diyType }) => {
               <SwiperSlide key={idx} style={{ padding: '1px 0px' }}>
                 <WrapperBox elevation={1} onClick={handleFundDetails(trendingFund)}>
                   <FeatureCard
-                    dataAid={idx}
+                    dataAid={idx+1}
                     topLeftImgSrc={trendingFund?.amc_logo_big}
                     heading={trendingFund?.legal_name}
                   >

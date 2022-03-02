@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Typography from "@mui/material/Typography";
+import Typography from "../../../designSystem/atoms/Typography";
 import Box from "@mui/material/Box";
 import { Drawer, Stack } from "@mui/material";
 
@@ -81,7 +81,7 @@ const Filter = ({
           showCloseIcon
           headerTitle="Filters"
           hideInPageTitle
-          actionTextProps={{ title: "Clear all", onClick: handleClearAll }}
+          actionTextProps={{ title: "Clear all", onClick: handleClearAll, dataAid: "link" }}
           onBackClick={handleFilterClose}
         />
         <Stack
@@ -142,6 +142,7 @@ const LeftPanel = ({ selectedTab, handleSelection }) => {
             sx={{ p: "16px 24px" }}
             onClick={handleSelection(idx)}
             backgroundColor={selectedBackgroundColor}
+            dataAid={el?.testIdSuffix}
           >
             {el.label}
           </Typography>
