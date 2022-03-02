@@ -51,7 +51,7 @@ const TabPanel = memo((props) => {
 
   return (
     <div>
-      <Box sx={{ backgroundColor: 'foundationColors.supporting.white' }}>
+      <Box sx={{ backgroundColor:!isEmpty(data) && 'foundationColors.supporting.white' }}>
         <Stack
           justifyContent='space-between'
           direction='row'
