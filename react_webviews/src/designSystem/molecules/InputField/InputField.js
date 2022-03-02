@@ -11,6 +11,7 @@ const InputField = (props) => {
     helperText,
     error,
     inputProps,
+    inputLabelProps,
     prefix,
     suffix,
     disabled,
@@ -106,9 +107,14 @@ const InputField = (props) => {
       size={size}
       required={required}
       type={type}
+      InputLabelProps={{
+        'data-aid': 'tv_label',
+        ...inputLabelProps
+      }}
       InputProps={{
         startAdornment: InputPrefix(),
         endAdornment: InputSuffix(),
+        'data-aid': 'et_text',
         ...inputProps,
       }}
       {...restProps}
