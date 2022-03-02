@@ -27,6 +27,7 @@ import useLoadingState from '../../common/customHooks/useLoadingState';
 import { validateKycAndRedirect } from '../DIY/common/functions';
 import useUserKycHook from '../../kyc/common/hooks/userKycHook';
 import { checkFundPresentInCart } from 'businesslogic/utils/diy/functions';
+import isEmpty from 'lodash/isEmpty';
 
 const screen = 'fundDetailsV2';
 const FundDetailsV2 = (props) => {
@@ -85,7 +86,7 @@ const FundDetailsV2 = (props) => {
         hideButton1: isFisdom && isfundAdded,
         hideConfirmAction: !isFisdom || !isfundAdded,
       }}
-      isPageLoading={isPageLoading || isLoading}
+      isPageLoading={isPageLoading || isLoading || isEmpty(fundData)}
       renderComponentAboveFooter={
         <CustomJumpTo
           fundStatRef={fundStatRef}
