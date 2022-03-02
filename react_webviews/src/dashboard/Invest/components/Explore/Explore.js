@@ -63,11 +63,11 @@ const InvestExplore = (props) => {
       description: 'Perfect balance of equity and debt',
       src: newIframeDesktopLayout ? hybrid_icon : diy_hybrid_icon,
     },
-    {
-      title: 'Goal Oriented',
-      description: 'Align investments with your life goals',
-      src: newIframeDesktopLayout ? goal_icon : diy_goal_icon,
-    },
+    // {
+    //   title: 'Goal Oriented',
+    //   description: 'Align investments with your life goals',
+    //   src: newIframeDesktopLayout ? goal_icon : diy_goal_icon,
+    // },
   ]
 
   useEffect(() => {
