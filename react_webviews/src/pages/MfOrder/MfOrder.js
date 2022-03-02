@@ -3,7 +3,6 @@ import { getDiyCart, getDiyCartCount, setFundsCart, setDiyStorage } from 'busine
 import {
   filterMfOrders,
   getfundOrderDetails,
-  resetMfOrders,
   setFundOrderDetails,
   triggerInvestment,
 } from 'businesslogic/dataStore/reducers/mfOrders';
