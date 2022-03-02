@@ -1,0 +1,17 @@
+.cc-wrapper {
+  min-width: 103px;
+  cursor: pointer;
+  > img {
+    margin-bottom: 4px;
+  }
+
+  &.cc-wrapper-large-variant {
+    > img {
+      margin-bottom: 8px;
+    }
+  }
+}
+
+.cc-wrapper-large-variant {
+  min-width: 159px;
+}
