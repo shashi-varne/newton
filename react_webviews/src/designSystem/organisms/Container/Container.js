@@ -39,7 +39,7 @@ const Container = ({
         containerRef.current.style.paddingBottom = `${footerWrapperHeight}px`;
       }
     }
-  }, [footer?.direction, footerWrapperRef?.current, noFooter]);
+  }, [footer?.direction, footerWrapperRef?.current, noFooter, isPageLoading]);
 
   const containerClass = isIframe ? 'Iframe-container-wrapper' : 'container-wrapper';
   return (
