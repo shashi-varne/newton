@@ -89,12 +89,6 @@ let data = [
     icon: logout,
     path: '/logout',
   },
-  {
-    id: 'diy',
-    name: 'DIY',
-    icon: logout,
-    path: '/invest/explore',
-  },
 ];
 
 const NavList = (props) => {

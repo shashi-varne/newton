@@ -34,6 +34,7 @@ const SingleCategory = ({ handleCardClick, isPageLoading, data = {} }) => {
                   dataAid={getDiyDataAid(el?.key)}
                   className="pointer"
                   leftImgSrc={el.image_url}
+                  rightImgSrc={el.image_url2}
                 />
               </WrapperBox>
             );
