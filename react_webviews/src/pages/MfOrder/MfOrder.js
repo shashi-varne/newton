@@ -58,7 +58,6 @@ const MfOrder = (props) => {
   useEffect(() => {
     getMfOrderDetails();
     return () => {
-      dispatch(setFundOrderDetails([]));
       dispatch(resetMfOrders());
     };
   }, []);
