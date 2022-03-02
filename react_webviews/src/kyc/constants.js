@@ -257,7 +257,7 @@ export const getIfscCodeError = (code) => {
     case "ippb":
       return "Please enter a valid ifsc code of India Post Payments Bank";
     case "ucomb":
-      return "Please enter a valid ifsc code of United Commercial Bank";
+      return "Please enter a valid ifsc code of UCO Bank";
     case "tmb":
       return "Please enter a valid ifsc code of TamilNad Mercantile Bank";
     default:

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { STORAGE_CONSTANTS, } from "../../constants";
 import { initData } from "../../services";
 import { isEmpty, storageService, } from "../../../utils/validators";
+import Toast from '../../../common/ui/Toast';
 
 function useUserKycHook() {
     const [kyc, setUserKyc] = useState(
@@ -17,16 +18,18 @@ function useUserKycHook() {
         return false;
     });
 
-    let kycDetails = {}, userDetails = {};
-
     useEffect(() => {
         const init = async () => {
-            await initData();
-            kycDetails = storageService().getObject(STORAGE_CONSTANTS.KYC);
-            userDetails = storageService().getObject(STORAGE_CONSTANTS.USER);
-            setIsLoading(false);
-            setUser(userDetails);
-            setUserKyc(kycDetails);
+            try {
+                await initData();
+                const kycDetails = storageService().getObject(STORAGE_CONSTANTS.KYC);
+                const userDetails = storageService().getObject(STORAGE_CONSTANTS.USER);
+                setIsLoading(false);
+                setUser(userDetails);
+                setUserKyc(kycDetails);
+            } catch(err) {
+                Toast(err.message);
+            }
         };
         if (isEmpty(user) || isEmpty(kyc)) {
             init();
@@ -40,7 +43,14 @@ function useUserKycHook() {
         }
     };
 
-    return {kyc, user, isLoading, updateKyc};
+    const updateUser = (userData) => {
+        if (userData) {
+            storageService().setObject("user", userData);
+            setUser(userData);
+        }
+    };
+
+    return { kyc, user, isLoading, updateKyc, updateUser };
 }
 
 export default useUserKycHook

@@ -24,7 +24,7 @@ export const handleExit = (props) => {
       storageService().setBoolean(storageKey, false);
       navigate("/my-account");
     } else {
-      navigate("/");
+      navigate("/invest");
     }
   }
 };

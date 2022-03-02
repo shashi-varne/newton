@@ -186,6 +186,15 @@ class SecondaryVerification extends Component {
         })
     }
 
+    goBack = () => {
+        if (this.props.location?.state?.isDirectEntry) {
+            this.navigate('/invest')
+        } else {
+            this.props.history.goBack();
+        }
+    }
+    
+
 
     render() {
         const { loginType, form_data, isEdit, firstTimeLogin } = this.state;
@@ -201,6 +210,9 @@ class SecondaryVerification extends Component {
                 onSkipClick={() => {
                     this.navigate("/");
                     this.sendEvents("skip");
+                }}
+                headerData={{
+                    goBack: this.goBack
                 }}
                 showLoader={this.state.isApiRunning}
                 title={isEdit ? `Edit ${loginType === "mobile" ? 'mobile number' : 'email'}` : loginType === "mobile" ? "Share your mobile number" : "Share your email address"}>

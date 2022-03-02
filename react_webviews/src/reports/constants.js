@@ -49,6 +49,7 @@ export const getPathname = {
   sipOtp: "/reports/sip/otp/",
   pauseRequest: "/reports/sip/pause-request",
   taxFiling: "/tax-filing",
+  kycStatus: "/reports/kyc-status"
 };
 
 export const storageConstants = {

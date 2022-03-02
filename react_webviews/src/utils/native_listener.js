@@ -7,6 +7,7 @@ import eventManager from './eventManager';
 import { isMobile } from './functions';
 import { getConfig } from './functions';
 import isEmpty from 'lodash/isEmpty';
+import isFunction from 'lodash/isFunction';
 
 
 (function (exports) {
@@ -90,6 +91,34 @@ import isEmpty from 'lodash/isEmpty';
       window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
     }
   };
+
+  exports.open_2fa_module = function (listener) {
+    listeners.push(listener);
+    const { operation, request_code, show_intro = false } = listener;
+    let callbackData = {};
+    callbackData.action = "2fa_module";
+    callbackData.action_data = { operation, request_code, show_intro };
+    if (typeof window.Android !== "undefined") {
+      window.Android.callbackNative(JSON.stringify(callbackData));
+    } else if (isMobile.iOS() && typeof window.webkit !== "undefined") {
+      window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+    }
+  };
+
+  exports.on_native_result = function (data_json_str) {
+    let json_data = {};
+    if (data_json_str !== "" && typeof data_json_str === "string") {
+      json_data = JSON.parse(data_json_str);
+    } else if (typeof data_json_str === "object") {
+      json_data = data_json_str;
+    }
+    for (let lis of listeners) {
+      if (lis.request_code === "REQ_SETUP_2FA" && isFunction(lis.callback)) {
+        lis.callback(json_data);
+        break;
+      }
+    }
+  }
 
   exports.open_camera = function (listener) {
     listeners.push(listener);
@@ -349,7 +378,6 @@ import isEmpty from 'lodash/isEmpty';
     }
     set_session_storage("currentUser", true);
     set_session_storage('is_secure', true);
-    set_session_storage("dataSettedInsideBoot", true);
 
     if (json_data?.partner) {
       if (json_data.partner === "bfdl") {
@@ -367,12 +395,13 @@ import isEmpty from 'lodash/isEmpty';
     }
 
     if (json_data?.user_data) {
+      set_session_storage("dataSettedInsideBoot", true);
       set_session_storage("user", json_data.user_data.user);
       set_session_storage("kyc", json_data.user_data.kyc);
       set_session_storage("banklist", json_data.user_data.bank_list);
       set_session_storage("firstlogin", json_data.user_data.user.firstlogin);
       if (json_data.user_data.partner.partner_code) {
-        var partner = json_data.user_data.partner.partner_code;
+        const partner = json_data.user_data.partner.partner_code;
         if (partner === "bfdl") {
           set_session_storage("partner", "bfdlmobile");
         } else if (partner === "obcweb") {
@@ -387,8 +416,16 @@ import isEmpty from 'lodash/isEmpty';
     if (json_data?.callback_version) {
       set_session_storage("callback_version", json_data.callback_version);
     }
-  }
+
+    if (json_data?.android_sdk_version_code) {
+      set_session_storage("android_sdk_version_code", json_data.android_sdk_version_code);
+    }
   
+    if (json_data?.ios_sdk_version_code) {
+      set_session_storage("ios_sdk_version_code", json_data.ios_sdk_version_code);
+    }
+  }
+
   exports.set_content_data = function (data) {
     let contentData = {};
     if (data !== "" && typeof data === "string") {
