@@ -8,6 +8,7 @@ import Icon from '../../../designSystem/atoms/Icon';
 import Typography from '../../../designSystem/atoms/Typography';
 import isEmpty from 'lodash/isEmpty';
 import { withRouter } from 'react-router-dom';
+import { getDiyDataAid } from '../common/functions';
 
 const CategoryCardCarousel = ({ handleCardClick, isPageLoading, data = {}, seeAllCategories, config }) => {
   if (!isPageLoading && isEmpty(data)) {
@@ -20,6 +21,7 @@ const CategoryCardCarousel = ({ handleCardClick, isPageLoading, data = {}, seeAl
         sx={{ pl: 2, pr: 2 }}
         title={data?.name}
         onClick={seeAllCategories(data.key)}
+        dataAid={getDiyDataAid(data?.key)}
       />
       <CustomSwiper
         spaceBetween={16}
@@ -59,6 +61,7 @@ const CategoryCardCarousel = ({ handleCardClick, isPageLoading, data = {}, seeAl
                   variant='large'
                   onClick={handleCardClick(data.key, el.key)}
                   className="pointer"
+                  dataAid={getDiyDataAid(el?.key)}
                 />
               </SwiperSlide>
             ))}

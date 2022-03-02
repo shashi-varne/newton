@@ -19,7 +19,7 @@ import './SubCategoryList.scss';
 import { DIY_PATHNAME_MAPPER } from '../common/constants';
 import { hideDiyCartFooter } from "businesslogic/utils/diy/functions";
 import { VIEW_TYPE_MAPPER } from 'businesslogic/constants/diy';
-import { validateKycAndRedirect } from '../common/functions';
+import { getDiyDataAid, validateKycAndRedirect } from '../common/functions';
 import useUserKycHook from '../../../kyc/common/hooks/userKycHook';
 
 const SubCategoryList = (props) => {
@@ -86,7 +86,7 @@ const SubcategoryOptionCard = ({ viewType, data, onClick }) => {
             variant="large"
             imgSrc={data?.image_url}
             title={data?.name}
-            dataAid={data?.key}
+            dataAid={getDiyDataAid(data?.key)}
           />
         </div>
       ) : (
@@ -99,7 +99,7 @@ const SubcategoryOptionCard = ({ viewType, data, onClick }) => {
             imgSrc={data?.image_url}
             title={data?.name}
             subtitle={data?.trivia}
-            dataAid={data?.key}
+            dataAid={getDiyDataAid(data?.key)}
           />
         </WrapperBox>
       )}

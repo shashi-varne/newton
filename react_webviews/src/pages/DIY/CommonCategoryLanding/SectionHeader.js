@@ -5,7 +5,7 @@ import Icon from '../../../designSystem/atoms/Icon';
 import Typography from '../../../designSystem/atoms/Typography';
 import { getConfig } from '../../../utils/functions';
 
-const SectionHeader = ({ sx, isPageLoading, title, buttonTitle = 'See all', onClick }) => {
+const SectionHeader = ({ sx, isPageLoading, title, buttonTitle = 'See all', onClick, buttonDataAid="seeAll", dataAid }) => {
   const { productName } = getConfig();
   return (
     <Stack
@@ -15,7 +15,7 @@ const SectionHeader = ({ sx, isPageLoading, title, buttonTitle = 'See all', onCl
       justifyContent='space-between'
       flexBasis='100%'
     >
-      <Typography sx={{ width: '100%' }} variant='heading4'>
+      <Typography sx={{ width: '100%' }} dataAid={dataAid} variant='heading4'>
         {isPageLoading ? <Skeleton width='140px' /> : title}
       </Typography>
       {isPageLoading ? (
@@ -25,7 +25,7 @@ const SectionHeader = ({ sx, isPageLoading, title, buttonTitle = 'See all', onCl
       ) : (
         onClick && (
           <Stack direction='row' sx={{cursor: 'pointer'}} alignItems='center' spacing='4px' onClick={onClick}>
-            <Button title={buttonTitle} variant='link' />
+            <Button title={buttonTitle} dataAid={buttonDataAid} variant='link'  />
             <Icon src={require(`assets/${productName}/right_arrow_small.svg`)} size='16px' />
           </Stack>
         )
