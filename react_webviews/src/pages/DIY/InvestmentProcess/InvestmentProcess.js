@@ -12,12 +12,14 @@ import TrustIcon from '../../../designSystem/atoms/TrustIcon';
 import Api from '../../../utils/api';
 import { getConfig, navigate as navigateFunc } from '../../../utils/functions';
 import { triggerInvestment } from 'businesslogic/dataStore/reducers/mfOrders';
+import { getDiyStorage } from 'businesslogic/dataStore/reducers/diy';
 import { handlePaymentRedirection } from '../common/functions';
 import useUserKycHook from '../../../kyc/common/hooks/userKycHook';
 import useLoadingState from '../../../common/customHooks/useLoadingState';
-import { useDispatch } from 'react-redux';
-import { capitalizeFirstLetter, storageService } from '../../../utils/validators';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { capitalizeFirstLetter } from '../../../utils/validators';
+import isEmpty from "lodash/isEmpty";
+import { DIY_PATHNAME_MAPPER } from '../common/constants';
 import './InvestmentProcess.scss';
 
 const screen = 'investProcess';
@@ -28,9 +30,14 @@ const InvestmentProcess = (props) => {
   const { kyc, isLoading } = useUserKycHook();
   const { isButtonLoading } = useLoadingState(screen);
   const [showLoader, setShowLoader] = useState(false);
+  const diyStorage = useSelector(getDiyStorage);
 
   const onClick = () => {
-    const investment = storageService().getObject("investment");
+    const investment = diyStorage.investment;
+    if(isEmpty(investment)) {
+      navigate(DIY_PATHNAME_MAPPER.diyInvestLanding)
+      return;
+    }
     const body = {
       investment
     }

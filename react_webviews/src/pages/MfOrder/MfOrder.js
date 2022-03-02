@@ -1,5 +1,5 @@
 import { Stack } from '@mui/material';
-import { getDiyCart, getDiyCartCount, setFundsCart } from 'businesslogic/dataStore/reducers/diy';
+import { getDiyCart, getDiyCartCount, setFundsCart, setDiyStorage } from 'businesslogic/dataStore/reducers/diy';
 import {
   filterMfOrders,
   getfundOrderDetails,
@@ -201,6 +201,7 @@ const MfOrder = (props) => {
       };
 
       storageService().setObject('investment', investment);
+      dispatch(setDiyStorage({ investment }));
       storageService().setObject('mf_invest_data', investmentEventData);
       if (!user.active_investment) {
         navigate(DIY_PATHNAME_MAPPER.investProcess);
