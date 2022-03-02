@@ -8,7 +8,7 @@ import {
   setFundTimePeriod,
 } from 'businesslogic/dataStore/reducers/fundDetails';
 import isEmpty from 'lodash/isEmpty';
-import { Skeleton } from '@mui/material';
+import { Box, Skeleton } from '@mui/material';
 import format from 'date-fns/format';
 import getTheme from '../../theme';
 import Api from '../../utils/api';
@@ -242,25 +242,27 @@ const FundGraph = () => {
   };
   if (loadingData.isGraphLoading || isEmpty(graphData))
     return (
-      <Skeleton
-        variant='rectangular'
-        height='290px'
-        width='100%'
-        sx={{ mt: 3, borderRadius: 1, backgroundColor: 'foundationColors.primary.200' }}
-      />
+      <Box sx={{ px: 2 }}>
+        <Skeleton
+          variant='rectangular'
+          height='290px'
+          width='100%'
+          sx={{ mt: 3, borderRadius: 1, backgroundColor: 'foundationColors.primary.200' }}
+        />
+      </Box>
     );
   return (
     <div className='fund-graph-wrapper'>
       <HighchartsReact highcharts={Highcharts} options={options} />
-      <Timelines onChange={handleTimePeriodChange} value={fundTimePeriod} className="fund-details-timeline">
-        {
-          timeLines?.map((el, id) => {
-            const isDisabled = id > fundData?.performance.returns.length - 1;
-            return(
-              <TimeLine disabled={isDisabled} key={id} label={el.label} value={el.value} />
-            )
-          })
-        }
+      <Timelines
+        onChange={handleTimePeriodChange}
+        value={fundTimePeriod}
+        className='fund-details-timeline'
+      >
+        {timeLines?.map((el, id) => {
+          const isDisabled = id > fundData?.performance.returns.length - 1;
+          return <TimeLine disabled={isDisabled} key={id} label={el.label} value={el.value} />;
+        })}
       </Timelines>
     </div>
   );
