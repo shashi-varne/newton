@@ -26,6 +26,7 @@ const InputField = (props) => {
     type,
     size,
     fullWidth,
+    dataAid,
     ...restProps
   } = props;
 
@@ -92,6 +93,7 @@ const InputField = (props) => {
       label={label}
       variant={variant}
       helperText={helperText}
+      data-aid={`inputField_${dataAid}`}
       error={error}
       className='input-field-wrapper'
       disabled={disabled}
