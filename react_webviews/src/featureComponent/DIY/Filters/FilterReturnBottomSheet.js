@@ -35,7 +35,6 @@ const FilterReturnBottomSheet = ({ variant, isOpen, handleClose, applyFilter, se
         disablePortal
         open={isOpen}
         onClose={onClose}
-        variant='bottomsheet'
       >
         <Stack sx={{ p: 2 }}>
           <Stack direction='row' justifyContent='center' className='fr-title-wrapper'>
