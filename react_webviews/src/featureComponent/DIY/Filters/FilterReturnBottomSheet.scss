@@ -10,6 +10,21 @@
       flex: 1;
     }
   }
+
+  .MuiModal-root {
+    top: unset;
+    background-color: transparent;
+    border-radius: 12px;
+  }
+
+  .MuiDialog-container {
+    .MuiDialog-paper {
+      margin: 0px !important;
+      max-width: var(--desktop-width);
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+    }
+  }
 }
 .diy-filter-wrapper {
   position: relative;
@@ -80,27 +95,15 @@
   .filter-return-wrapper {
     .MuiModal-root {
       bottom: 0;
-      top: unset;
       left: 300px;
       right: unset;
       width: var(--desktop-width);
-      background-color: transparent;
-      border-radius: 12px;
 
       .MuiBackdrop-root {
         position: fixed !important;
         top: 60px;
         left: 300px;
         width: var(--desktop-width);
-      }
-
-      .MuiDialog-container {
-        .MuiDialog-paper {
-          margin: 0px !important;
-          max-width: var(--desktop-width);
-          border-top-left-radius: 12px;
-          border-top-right-radius: 12px;
-        }
       }
     }
   }
