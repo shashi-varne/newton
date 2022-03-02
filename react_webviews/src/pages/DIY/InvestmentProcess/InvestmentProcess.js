@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Container from '../../../designSystem/organisms/Container';
 import {
   LandingHeader,
@@ -21,6 +21,8 @@ import { capitalizeFirstLetter } from '../../../utils/validators';
 import isEmpty from "lodash/isEmpty";
 import { DIY_PATHNAME_MAPPER } from '../common/constants';
 import './InvestmentProcess.scss';
+import ToastMessage from '../../../designSystem/atoms/ToastMessage';
+import useErrorState from '../../../common/customHooks/useErrorState';
 
 const screen = 'investProcess';
 const InvestmentProcess = (props) => {
@@ -30,8 +32,15 @@ const InvestmentProcess = (props) => {
   const { kyc, isLoading } = useUserKycHook();
   const { isButtonLoading } = useLoadingState(screen);
   const [showLoader, setShowLoader] = useState(false);
+  const { isUpdateFailed, errorMessage } = useErrorState(screen);
   const diyStorage = useSelector(getDiyStorage);
 
+  useEffect(() => {
+    if (isUpdateFailed && !isEmpty(errorMessage)) {
+      ToastMessage(errorMessage)
+    }
+  }, [isUpdateFailed]);
+  
   const onClick = () => {
     const investment = diyStorage.investment;
     if(isEmpty(investment)) {

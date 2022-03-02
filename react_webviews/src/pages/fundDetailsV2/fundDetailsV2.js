@@ -28,6 +28,8 @@ import { validateKycAndRedirect } from '../DIY/common/functions';
 import useUserKycHook from '../../kyc/common/hooks/userKycHook';
 import { checkFundPresentInCart } from 'businesslogic/utils/diy/functions';
 import isEmpty from 'lodash/isEmpty';
+import useErrorState from '../../common/customHooks/useErrorState';
+import ToastMessage from '../../designSystem/atoms/ToastMessage';
 
 const screen = 'fundDetailsV2';
 const FundDetailsV2 = (props) => {
@@ -47,6 +49,14 @@ const FundDetailsV2 = (props) => {
   const ctaText = isFisdom ? 'ADD TO CART' : 'INVEST NOW';
   const cartCount = useSelector(getDiyCartCount);
   const { kyc, isLoading } = useUserKycHook();
+  const { isFetchFailed, errorMessage } = useErrorState(screen);
+
+  useEffect(() => {
+    if (isFetchFailed && !isEmpty(errorMessage)) {
+      ToastMessage(errorMessage)
+    }
+  }, [isFetchFailed]);
+
   useEffect(() => {
     const payload = {
       isins,
