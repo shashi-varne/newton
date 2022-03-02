@@ -52,7 +52,7 @@ const Returns = () => {
           <Box>
             <Pills value={pillReturnValue} onChange={handleReturnValue}>
               <Pill label='Return' />
-              <Pill label='Rolling return' />
+              <Pill label='Rolling return' disabled/>
             </Pills>
           </Box>
           <CustomSwiper
@@ -60,6 +60,8 @@ const Returns = () => {
             slidesPerColumn={1}
             onSlideChange={handleSlideChange}
             onSwiper={setSwiper}
+            allowSlideNext={false}
+            allowSlidePrev={false}
             autoHeight
             hidePagination
           >
