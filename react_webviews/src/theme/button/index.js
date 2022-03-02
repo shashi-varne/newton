@@ -28,6 +28,7 @@ export const buttonVariantsConfig = (colors={}, partnerConfig={}) => {
       props: { isloading: 1 },
       style: {
         pointerEvents: 'none',
+        minWidth: '120px !important'
       },
     },
     {

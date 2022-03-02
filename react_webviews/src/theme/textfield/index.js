@@ -101,7 +101,7 @@ const customCommonVariants = (colors={}) => {
     {
       props: { size: 'small' },
       style: {
-        color: colors?.content?.secondary,
+        color: colors?.content?.primary,
       },
     },
     {
