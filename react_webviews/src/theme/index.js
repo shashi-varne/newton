@@ -1,15 +1,21 @@
+import { createTheme } from '@mui/material';
 import { buttonStyleOverRides, buttonVariantsConfig, } from './button';
-import { tooltipStyleOverRides } from './tooltip';
+import { tabsStyleOverRides, tabStyleOverRides, tabsVariantsConfig, tabVariantsConfig } from './tabs';
+import { radioButtonStyleOverRides } from './radioButton';
 import { checkboxStyleOverRides } from './checkbox';
+import { tooltipStyleOverRides } from './tooltip';
 import { switchStyleOverRides } from './switch';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
 import getPartnerThemeData from './utils';
-import { createTheme } from '@mui/material';
 import { dialogDefaultProps, dialogStylesOverride } from './dialog';
+import { separatorStyleOverRides } from './separator';
+import { badgeStyleOverRides } from './badge';
+import { customShadows } from './shadows';
+const defaultTheme = createTheme();
 
 const getTheme = () => {
-  const {colors, partnerConfig} = getPartnerThemeData();
-  
+  const { colors, partnerConfig } = getPartnerThemeData();
+
   const theme = {
     palette: {
       primary: {
@@ -32,17 +38,45 @@ const getTheme = () => {
       MuiSwitch: {
         styleOverrides: switchStyleOverRides(colors)
       },
-      MuiCheckbox: {
-        styleOverrides: checkboxStyleOverRides(colors),
       MuiTooltip: {
         styleOverrides: tooltipStyleOverRides(colors),
       },
+      MuiDivider: {
+        styleOverrides: separatorStyleOverRides(colors)
+      },
+      MuiRadio: {
+        styleOverrides: radioButtonStyleOverRides(colors),
+      },
+      MuiCheckbox: {
+        styleOverrides: checkboxStyleOverRides(colors),
+      },
+      MuiTabs: {
+        variants:tabsVariantsConfig(),
+        styleOverrides: tabsStyleOverRides()
+      },
+      MuiTab: {
+        variants:tabVariantsConfig(colors, partnerConfig),
+        styleOverrides: tabStyleOverRides(colors, partnerConfig)
+      },
       MuiDialog: {
         defaultProps: dialogDefaultProps(),
-        styleOverrides:dialogStylesOverride()
+        styleOverrides:dialogStylesOverride(),
       },
-      }
+      MuiModal: {
+        styleOverrides : {
+          root:{
+            [defaultTheme.breakpoints.up('sm')]: {
+              left: '300px !important',
+              maxWidth: 'var(--desktop-width) !important',
+            }
+          }
+        }
+      },
+      MuiBadge: {
+        styleOverrides: badgeStyleOverRides(colors, partnerConfig),
+      },
     },
+    shadows: customShadows()
   };
   return createTheme(theme);
 };

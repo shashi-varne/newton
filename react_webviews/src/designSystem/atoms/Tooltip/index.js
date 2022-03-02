@@ -25,14 +25,22 @@ export const TOOLTIP_VARIANTS = {
   SUBTITLE: "subtitle",
 };
 
-const tooltipStyles = {
+const styles = {
   textAlign: "left",
   padding: "0px 8px",
 };
 
+const initializeData = ({ title, description }) => () => {
+  if (!isEmpty(title) && !isEmpty(description)) {
+    return { styles, descriptionDataAid: "subtitle" };
+  } else {
+    return { descriptionDataAid: "title" };
+  }
+};
+
 const TooltipDescription = ({ title, description }) => {
-  const styles = useMemo(
-    () => (!isEmpty(title) && !isEmpty(description) ? tooltipStyles : {}),
+  const { styles, descriptionDataAid } = useMemo(
+    initializeData({ title, description }),
     [title, description]
   );
   return (
@@ -41,7 +49,7 @@ const TooltipDescription = ({ title, description }) => {
         <Typography
           variant="body1"
           color="foundationColors.supporting.white"
-          data-aid="tv_title"
+          dataAid="title"
         >
           {title}
         </Typography>
@@ -50,7 +58,7 @@ const TooltipDescription = ({ title, description }) => {
         <Typography
           variant="body2"
           color="foundationColors.supporting.white"
-          data-aid="tv_subtitle"
+          dataAid={descriptionDataAid}
         >
           {description}
         </Typography>

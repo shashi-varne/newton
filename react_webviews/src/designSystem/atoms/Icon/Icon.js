@@ -14,9 +14,12 @@
 
 import { Skeleton } from '@mui/material';
 import React, { useState, memo, useEffect } from 'react';
+import isFunction from 'lodash/isFunction';
+import './Icon.scss';
 
 const Image = (props) => {
-  const { height, width, fallBackImageSrc, size, className, style, src, alt, onClick, dataAid } = props;
+  const { height, width, fallBackImageSrc, size, className, style, src, alt, onClick, dataAid } =
+    props;
   const imgWidth = width || size;
   const imgHeight = height || size;
   const [currentSrc, updateSrc] = useState(src);
@@ -36,7 +39,7 @@ const Image = (props) => {
       {!loaded && (
         <Skeleton
           className={className}
-          style={style}
+          style={{ ...customSkeletonStyle, ...style }}
           variant='rectangular'
           width={imgWidth || '16px'}
           height={imgHeight || '16px'}
@@ -51,7 +54,7 @@ const Image = (props) => {
           flexShrink: 0,
           display: !loaded ? 'none' : '',
         }}
-        className={className}
+        className={`${isFunction(onClick) && 'icon-clickable'} ${className}`}
         alt={alt}
         onClick={onClick}
         onLoad={onLoadImage}
@@ -63,6 +66,10 @@ const Image = (props) => {
 };
 
 export default memo(Image);
+
+const customSkeletonStyle = {
+  borderRadius: '8px',
+};
 
 Image.defaultProps = {
   fallBackImageSrc: require('assets/fallback_icon.svg'),
