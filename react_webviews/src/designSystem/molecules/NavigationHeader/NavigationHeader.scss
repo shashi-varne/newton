@@ -112,6 +112,14 @@
     .nav-header-top-section {
       top: 0px;
       width: 100%;
+
+      .nav-header-right {
+        .mobile-navbar-menu {
+          > button {
+            padding: 0px;
+          }
+        }
+      }
     }
   }
 }

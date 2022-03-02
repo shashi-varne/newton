@@ -12,6 +12,9 @@ import Icon from '../../atoms/Icon';
 import { getEvents, onScroll, setTabPadding } from './helperFunctions';
 import PropTypes from 'prop-types';
 import isArray from 'lodash/isArray';
+import MenuIcon from '@mui/icons-material/Menu';
+import Drawer from '../../../desktopLayout/Drawer';
+import ReferDialog from '../../../desktopLayout/ReferralDialog';
 import {
   backButtonHandler,
   getConfig,
@@ -25,6 +28,7 @@ import {
   useNativeSendEventListener,
 } from '../../../common/customHooks/useNativeListener';
 import { nativeCallback } from '../../../utils/native_callback';
+import { storageService } from '../../../utils/validators';
 
 const hideLoaderEvent = {
   event_name: 'hide_loader',
@@ -56,6 +60,7 @@ const NavigationHeader = ({
   className,
   parentProps,
   eventData,
+  hideMenuBar = false,
 }) => {
   const navHeaderWrapperRef = useRef();
   const subtitleRef = useRef();
@@ -64,8 +69,13 @@ const NavigationHeader = ({
   const history = useHistory();
   const location = useLocation();
   const navigate = navigateFunc.bind(parentProps);
-  const { isIframe } = useMemo(getConfig, []);
-
+  const { isIframe, Web, isMobileDevice } = useMemo(getConfig, []);
+  const isGuestUser = storageService().getBoolean('guestUser');
+  const [mobileViewDrawer, setMobileViewDrawer] = useState(false);
+  const [referDialog, setReferDialog] = useState(false);
+  const equityPayment = window.location.pathname.includes('pg/eq');
+  const showMenuBar =
+    isMobileDevice && !hideMenuBar && Web && !isIframe && !isGuestUser && !equityPayment;
   useEffect(() => {
     if (anchorOrigin?.current) {
       anchorOrigin.current.addEventListener('scroll', handleOnScroll);
@@ -97,6 +107,17 @@ const NavigationHeader = ({
     const currentState = toState || pathname;
     const isRedirectedByPlatform = backButtonHandler(parentProps, fromState, currentState, params);
     return isRedirectedByPlatform || false;
+  };
+
+  const handleMobileViewDrawer = () => {
+    setMobileViewDrawer(!mobileViewDrawer);
+  };
+
+  const handleReferModal = () => {
+    if (!referDialog) {
+      setMobileViewDrawer(!mobileViewDrawer);
+    }
+    setReferDialog(!referDialog);
   };
 
   const handleDefaultBackRoute = () => {
@@ -152,7 +173,11 @@ const NavigationHeader = ({
 
   const leftIcon = leftIconSrc ? leftIconSrc : showCloseIcon ? closeIcon : backIcon;
   return (
-    <header className={`nav-header-wrapper ${className}`} ref={navHeaderWrapperRef} data-aid="navigationHeader" >
+    <header
+      className={`nav-header-wrapper ${className}`}
+      ref={navHeaderWrapperRef}
+      data-aid='navigationHeader'
+    >
       <section className='nav-header-top-section'>
         <div className='nav-header-left'>
           {!hideLeftIcon && (
@@ -170,7 +195,7 @@ const NavigationHeader = ({
                 hideInPageTitle && 'show-nav-title'
               }`}
               variant='heading3'
-              dataAid="title"
+              dataAid='title'
             >
               {headerTitle}
             </Typography>
@@ -181,11 +206,25 @@ const NavigationHeader = ({
           {actionTextProps?.title && (
             <Button variant='link' title={actionTextProps?.title} {...actionTextProps} />
           )}
+          {showMenuBar && (
+            <div className='mobile-navbar-menu'>
+              <IconButton onClick={handleMobileViewDrawer}>
+                <MenuIcon sx={{ color: 'foundationColors.primary.content' }} />
+              </IconButton>
+              <Drawer
+                mobileViewDrawer={mobileViewDrawer}
+                handleMobileViewDrawer={handleMobileViewDrawer}
+                handleReferModal={handleReferModal}
+              />
+            </div>
+          )}
         </div>
       </section>
       {!(hideInPageTitle || hideHeaderTitle) && headerTitle && (
         <div className='nav-bar-title-wrapper' ref={inPageTitleRef}>
-          <Typography variant='heading2' dataAid="title">{headerTitle}</Typography>
+          <Typography variant='heading2' dataAid='title'>
+            {headerTitle}
+          </Typography>
         </div>
       )}
       <section className='nav-bar-subtitle-wrapper' ref={subtitleRef}>
@@ -196,6 +235,7 @@ const NavigationHeader = ({
           <TabsSection tabs={tabsProps} tabChilds={tabChilds} />
         </section>
       )}
+      {isMobileDevice && <ReferDialog isOpen={referDialog} close={handleReferModal} />}
     </header>
   );
 };
