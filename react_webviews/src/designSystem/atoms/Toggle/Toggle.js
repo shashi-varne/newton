@@ -1,26 +1,37 @@
 import React from 'react';
 import Switch from '@mui/material/Switch';
+import PropTypes from 'prop-types';
+
 const Toggle = (props) => {
   const {
-    label,
     checked,
+    dataAid,
     classes,
     onChange,
     disabled,
-    disableRipple,
+    required,
+    className,
     ...restProps
   } = props;
   return (
     <Switch
-      label={label}
+      data-aid={`toggle_${dataAid}`}
       checked={checked}
       onChange={onChange}
       disabled={disabled}
-      disableRipple={disableRipple}
+      className={className}
       classes={classes}
       {...restProps}
     />
   );
+};
+
+Toggle.propTypes = {
+  checked: PropTypes.bool,
+  disabled: PropTypes.bool,
+  onChange: PropTypes.func,
+  required: PropTypes.bool,
+  dataAid: PropTypes.string,
 };
 
 export default Toggle;
