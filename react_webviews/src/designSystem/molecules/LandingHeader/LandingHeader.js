@@ -124,7 +124,7 @@ export const LandingHeaderSeeMoreWrapper = ({ subtitle='', points=[] }) => {
                 </LandingHeaderPoints>
               );
             })}
-          <Typography variant='body8' color='primary'>
+          <Typography variant='body8' color='secondary'>
             See less
           </Typography>
         </div>
@@ -137,7 +137,7 @@ export const LandingHeaderSeeMoreWrapper = ({ subtitle='', points=[] }) => {
           {subtitle && (
             <LandingHeaderSubtitle dataIdx={1}>
               {subtitle.slice(0, 89).trim()}...
-              <Typography variant='body8' color='primary'>
+              <Typography variant='body8' color='secondary'>
                 See more
               </Typography>
             </LandingHeaderSubtitle>

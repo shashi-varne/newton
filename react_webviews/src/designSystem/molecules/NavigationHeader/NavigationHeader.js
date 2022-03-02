@@ -304,7 +304,7 @@ export const NavigationSeeMoreWrapper = ({ subtitle = '', points = [] }) => {
                 </NavigationHeaderPoints>
               );
             })}
-          <Typography variant='body8' color='primary'>
+          <Typography variant='body8' color='secondary'>
             See less
           </Typography>
         </div>
@@ -317,7 +317,7 @@ export const NavigationSeeMoreWrapper = ({ subtitle = '', points = [] }) => {
           {subtitle && (
             <NavigationHeaderSubtitle dataIdx={1}>
               {subtitle.slice(0, 89).trim()}...
-              <Typography variant='body8' color='primary'>
+              <Typography variant='body8' color='secondary'>
                 See more
               </Typography>
             </NavigationHeaderSubtitle>

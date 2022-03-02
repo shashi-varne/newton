@@ -5,11 +5,11 @@ import IframeView from './IframeView'
 import diy_equity_icon from 'assets/diy_equity_icon.svg'
 import diy_debt_icon from 'assets/diy_debt_icon.svg'
 import diy_hybrid_icon from 'assets/diy_hybrid_icon.svg'
-import diy_goal_icon from 'assets/diy_goal_icon.svg'
+// import diy_goal_icon from 'assets/diy_goal_icon.svg'
 import equity_icon from 'assets/finity/equity_icon.svg';
 import debt_icon from 'assets/finity/debt_icon.svg';
 import hybrid_icon from 'assets/finity/hybrid_icon.svg';
-import goal_icon from 'assets/finity/goal_icon.svg';
+// import goal_icon from 'assets/finity/goal_icon.svg';
 import { navigate as navigateFunc } from "utils/functions";
 import { storageService } from 'utils/validators'
 import InvestExploreCard from './InvestExploreCard'
@@ -63,11 +63,11 @@ const InvestExplore = (props) => {
       description: 'Perfect balance of equity and debt',
       src: newIframeDesktopLayout ? hybrid_icon : diy_hybrid_icon,
     },
-    {
-      title: 'Goal Oriented',
-      description: 'Align investments with your life goals',
-      src: newIframeDesktopLayout ? goal_icon : diy_goal_icon,
-    },
+    // {
+    //   title: 'Goal Oriented',
+    //   description: 'Align investments with your life goals',
+    //   src: newIframeDesktopLayout ? goal_icon : diy_goal_icon,
+    // },
   ]
 
   useEffect(() => {
