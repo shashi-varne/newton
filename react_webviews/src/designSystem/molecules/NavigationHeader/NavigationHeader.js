@@ -5,15 +5,11 @@ import Typography from '../../atoms/Typography';
 import backIcon from 'assets/nav_back.svg';
 import closeIcon from 'assets/nav_close.svg';
 import { useHistory, useLocation } from 'react-router-dom';
-import { Tab, Tabs } from '../../atoms/Tabs';
 import isEmpty from 'lodash/isEmpty';
 import isFunction from 'lodash/isFunction';
 import Icon from '../../atoms/Icon';
 import { getEvents, onScroll, setTabPadding } from './helperFunctions';
 import PropTypes from 'prop-types';
-import isArray from 'lodash/isArray';
-import MenuIcon from '@mui/icons-material/Menu';
-import Drawer from '../../../desktopLayout/Drawer';
 import ReferDialog from '../../../desktopLayout/ReferralDialog';
 import {
   backButtonHandler,
@@ -29,18 +25,8 @@ import {
 } from '../../../common/customHooks/useNativeListener';
 import { nativeCallback } from '../../../utils/native_callback';
 import { storageService } from '../../../utils/validators';
-
-const hideLoaderEvent = {
-  event_name: 'hide_loader',
-  properties: {
-    journey: {
-      name: '',
-      trigger: '',
-      journey_status: '',
-      next_journey: '',
-    },
-  },
-};
+import MenuBar from './MenuBar';
+import TabsSection from './TabsSection';
 
 const NavigationHeader = ({
   headerTitle,
@@ -109,15 +95,15 @@ const NavigationHeader = ({
     return isRedirectedByPlatform || false;
   };
 
-  const handleMobileViewDrawer = () => {
-    setMobileViewDrawer(!mobileViewDrawer);
-  };
-
   const handleReferModal = () => {
     if (!referDialog) {
       setMobileViewDrawer(!mobileViewDrawer);
     }
     setReferDialog(!referDialog);
+  };
+
+  const handleMobileViewDrawer = () => {
+    setMobileViewDrawer(!mobileViewDrawer);
   };
 
   const handleDefaultBackRoute = () => {
@@ -207,16 +193,11 @@ const NavigationHeader = ({
             <Button variant='link' title={actionTextProps?.title} {...actionTextProps} />
           )}
           {showMenuBar && (
-            <div className='mobile-navbar-menu'>
-              <IconButton onClick={handleMobileViewDrawer}>
-                <MenuIcon sx={{ color: 'foundationColors.primary.content' }} />
-              </IconButton>
-              <Drawer
-                mobileViewDrawer={mobileViewDrawer}
-                handleMobileViewDrawer={handleMobileViewDrawer}
-                handleReferModal={handleReferModal}
-              />
-            </div>
+            <MenuBar
+              handleMobileViewDrawer={handleMobileViewDrawer}
+              mobileViewDrawer={mobileViewDrawer}
+              handleReferModal={handleReferModal}
+            />
           )}
         </div>
       </section>
@@ -240,94 +221,6 @@ const NavigationHeader = ({
   );
 };
 
-export const NavigationHeaderSubtitle = ({ children, color, dataIdx }) => {
-  return (
-    <Typography
-      className='lh-subtitle'
-      dataAid={`subtitle${dataIdx}`}
-      variant='body2'
-      color={color}
-      align='left'
-      component='div'
-    >
-      {children}
-    </Typography>
-  );
-};
-
-export const NavigationHeaderPoints = ({ children, color, dataIdx }) => {
-  return (
-    <ul className='lh-description-list'>
-      <li className='lh-description-item'>
-        <Typography
-          variant='body2'
-          color={color}
-          align='left'
-          dataAid={`point${dataIdx}`}
-          component='div'
-        >
-          {children}
-        </Typography>
-      </li>
-    </ul>
-  );
-};
-
-const TabsSection = ({ tabs, tabChilds }) => {
-  const { selectedTab = 0, onTabChange, labelName = 'label', ...restTabs } = tabs;
-  return (
-    <Tabs value={selectedTab} onChange={onTabChange} {...restTabs}>
-      {tabChilds?.map((el, idx) => {
-        const value = el?.value || idx;
-        return <Tab disableRipple={true} key={idx} label={el[labelName]} value={value} {...el} />;
-      })}
-    </Tabs>
-  );
-};
-
-export const NavigationSeeMoreWrapper = ({ subtitle = '', points = [] }) => {
-  const [seeMore, setSeeMore] = useState(false);
-  return (
-    <>
-      {seeMore ? (
-        <div
-          onClick={() => {
-            setSeeMore((prevState) => !prevState);
-          }}
-        >
-          {subtitle && <NavigationHeaderSubtitle dataIdx={1}>{subtitle}</NavigationHeaderSubtitle>}
-          {isArray(points) &&
-            points?.map((point, idx) => {
-              return (
-                <NavigationHeaderPoints key={idx} dataIdx={idx + 1}>
-                  {point}
-                </NavigationHeaderPoints>
-              );
-            })}
-          <Typography variant='body8' color='secondary'>
-            See less
-          </Typography>
-        </div>
-      ) : (
-        <div
-          onClick={() => {
-            setSeeMore((prevState) => !prevState);
-          }}
-        >
-          {subtitle && (
-            <NavigationHeaderSubtitle dataIdx={1}>
-              {subtitle.slice(0, 89).trim()}...
-              <Typography variant='body8' color='secondary'>
-                See more
-              </Typography>
-            </NavigationHeaderSubtitle>
-          )}
-        </div>
-      )}
-    </>
-  );
-};
-
 NavigationHeader.propTypes = {
   headerTitle: PropTypes.node,
   hideInPageTitle: PropTypes.bool,
@@ -342,24 +235,16 @@ NavigationHeader.propTypes = {
   tabChilds: PropTypes.array,
 };
 
-NavigationHeaderSubtitle.propTypes = {
-  children: PropTypes.node,
-  color: PropTypes.string,
-  dataIdx: PropTypes.number.isRequired,
-};
-
-NavigationHeaderPoints.propTypes = {
-  children: PropTypes.node,
-  color: PropTypes.string,
-  dataIdx: PropTypes.number.isRequired,
-};
-
-NavigationHeaderSubtitle.defaultProps = {
-  color: 'foundationColors.content.secondary',
-};
-
-NavigationHeaderPoints.defaultProps = {
-  color: 'foundationColors.content.secondary',
-};
-
 export default NavigationHeader;
+
+const hideLoaderEvent = {
+  event_name: 'hide_loader',
+  properties: {
+    journey: {
+      name: '',
+      trigger: '',
+      journey_status: '',
+      next_journey: '',
+    },
+  },
+};

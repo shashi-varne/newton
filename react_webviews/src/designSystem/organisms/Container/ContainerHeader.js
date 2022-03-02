@@ -1,14 +1,9 @@
 import React, { useMemo } from 'react';
 import { getConfig } from '../../../utils/functions';
-import NavigationHeader from '../../molecules/NavigationHeader';
 import isArray from 'lodash/isArray';
-import {
-  NavigationHeaderPoints,
-  NavigationHeaderSubtitle,
-  NavigationSeeMoreWrapper,
-} from '../../molecules/NavigationHeader/NavigationHeader';
 import { Box } from '@mui/material';
 import { withRouter } from 'react-router-dom';
+import { NavigationHeader, NavigationHeaderPoints, NavigationHeaderSubtitle, NavigationSeeMoreWrapper } from '../../molecules/NavigationHeader';
 
 const ContainerHeader = ({ headerProps, containerRef, eventData, ...restProps }) => {
   const {
@@ -35,7 +30,7 @@ const ContainerHeader = ({ headerProps, containerRef, eventData, ...restProps })
         eventData={eventData}
         {...restHeaderProps}
       >
-        {!disableSeeMoreFeature && isMobileDevice && showSeeMore  ? (
+        {!disableSeeMoreFeature && isMobileDevice && showSeeMore ? (
           <NavigationSeeMoreWrapper subtitle={subtitle} points={points} />
         ) : (
           <>

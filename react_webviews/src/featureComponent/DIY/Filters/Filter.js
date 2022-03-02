@@ -4,7 +4,6 @@ import Box from "@mui/material/Box";
 import { Drawer, Stack } from "@mui/material";
 
 import "./FilterReturnBottomSheet.scss";
-import NavigationHeader from "../../../designSystem/molecules/NavigationHeader";
 
 import Button from "../../../designSystem/atoms/Button";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
@@ -15,6 +14,7 @@ import {
   FILTER_TAB_OPTIONS,
   DEFAULT_FILTER_DATA,
 } from "businesslogic/constants/diy";
+import { NavigationHeader } from "../../../designSystem/molecules/NavigationHeader";
 
 const DEFAULT_FUND_OPTION = DEFAULT_FILTER_DATA.fundOption;
 

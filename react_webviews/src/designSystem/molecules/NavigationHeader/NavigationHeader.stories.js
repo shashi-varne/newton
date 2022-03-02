@@ -1,9 +1,6 @@
 import React, { useRef, useState } from 'react';
+import { NavigationHeader, NavigationHeaderPoints, NavigationHeaderSubtitle } from '.';
 import Typography from '../../atoms/Typography';
-import NavigationHeader, {
-  NavigationHeaderPoints,
-  NavigationHeaderSubtitle,
-} from './NavigationHeader';
 
 export default {
   component: NavigationHeader,
