@@ -4,8 +4,10 @@ import { formatAmountInr, isEmpty } from "utils/validators";
 import { getTransactions, getNextTransactions } from "../../common/api";
 import "./commonStyles.scss";
 import { nativeCallback } from "../../../utils/native_callback";
+import { navigate as navigateFunc } from "../../../utils/functions";
 
 const FundswiseTransactions = (props) => {
+  const navigate = navigateFunc.bind(props);
   const params = props?.match?.params || {};
   const amfi = params.amfi || "";
   if (amfi === "" && props.type === "fundswise") props.history.goBack();
@@ -52,12 +54,13 @@ const FundswiseTransactions = (props) => {
     }
   };
 
-  const sendEvents = (userAction) => {
+  const sendEvents = (userAction, fundClicked = "no") => {
     let eventObj = {
       event_name: "my_portfolio",
       properties: {
         user_action: userAction || "",
         screen_name: "transactions",
+        fund_clicked: fundClicked,
       },
     };
     if (userAction === "just_set_events") {
@@ -65,6 +68,11 @@ const FundswiseTransactions = (props) => {
     } else {
       nativeCallback({ events: eventObj });
     }
+  };
+
+  const goToFundDetails = (transaction) => () => {
+    sendEvents('next', "yes");
+    navigate(`/diy/fundinfo/direct/${transaction.isin}`);
   };
 
   return (
@@ -82,7 +90,7 @@ const FundswiseTransactions = (props) => {
         {!isEmpty(transactions) &&
           transactions.map((transaction, index) => {
             return (
-              <div key={index} className="transaction" data-aid='transaction'>
+              <div key={index} className="transaction" data-aid='transaction' onClick={goToFundDetails(transaction)} >
                 <div className="folio-no" data-aid={transaction.folio_number}>
                   <span>Folio No: {transaction.folio_number}</span>
                   <span
