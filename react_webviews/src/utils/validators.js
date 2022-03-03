@@ -174,7 +174,13 @@ export function validateEmail(string) {
 
 export function validateNumber(number) {
   // eslint-disable-next-line
-  let rule = /^[0-9]+$/;
+  let rule = /^[0-9]+$/i;
+  return rule.test(number);
+}
+
+export function validateAlphaNumeric(number) {
+  // eslint-disable-next-line
+  let rule = /^[A-Za-z0-9]+$/;
   return rule.test(number);
 }
 
