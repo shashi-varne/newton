@@ -18,6 +18,9 @@ export const handlePaymentRedirection =
   (result) => {
     const config = getConfig();
     const partnerCode = config.code;
+    if (partnerCode) {
+      storageService().set("partner", partnerCode)
+    }
     const investmentData = result?.investments[0] || {};
     const paymentRedirectUrl = encodeURIComponent(
       `${getBasePath()}/page/callback/${investmentData.order_type}/${

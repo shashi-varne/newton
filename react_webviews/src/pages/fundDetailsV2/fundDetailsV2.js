@@ -21,7 +21,7 @@ import './fundDetailsV2.scss';
 import { Stack } from '@mui/material';
 import { getConfig } from '../../utils/functions';
 import { getUrlParams } from '../../utils/validators';
-import { getDiyCart, getDiyCartCount, setCartItem } from 'businesslogic/dataStore/reducers/diy';
+import { getDiyCart, getDiyCartCount, setFundsCart } from 'businesslogic/dataStore/reducers/diy';
 import { navigate as navigateFunc } from "utils/functions";
 import useLoadingState from '../../common/customHooks/useLoadingState';
 import { validateKycAndRedirect } from '../DIY/common/functions';
@@ -72,9 +72,9 @@ const FundDetailsV2 = (props) => {
   const isfundAdded = useMemo(() => checkFundPresentInCart(diyCart, fundData), [diyCart, fundData]);
 
   const addFundToCart = () => {
-    dispatch(setCartItem(fundData));
+    dispatch(setFundsCart([fundData]));
     if(!isFisdom) {
-      validateKycAndRedirect({ navigate, kyc })();
+      validateKycAndRedirect({ navigate, kyc })()
     }
   }
 

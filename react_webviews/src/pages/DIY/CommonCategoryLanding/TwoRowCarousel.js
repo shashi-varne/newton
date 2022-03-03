@@ -8,7 +8,6 @@ import SectionHeader from './SectionHeader';
 import Icon from '../../../designSystem/atoms/Icon';
 import isEmpty from 'lodash/isEmpty';
 import { withRouter } from 'react-router-dom';
-import { getDiyDataAid } from '../common/functions';
 
 const TwoRowCarousel = ({ isPageLoading, handleCardClick, seeAllCategories, data }) => {
   if (!isPageLoading && isEmpty(data)) {
@@ -21,7 +20,7 @@ const TwoRowCarousel = ({ isPageLoading, handleCardClick, seeAllCategories, data
         sx={{ pl: 2, pr: 2 }}
         title={data?.name}
         onClick={seeAllCategories(data.key)}
-        dataAid={getDiyDataAid(data?.key)}
+        dataAid={data?.design_id}
       />
       <div>
         <CustomSwiper
@@ -51,7 +50,7 @@ const TwoRowCarousel = ({ isPageLoading, handleCardClick, seeAllCategories, data
                         imgSrc={el?.image_url}
                         title={el?.name}
                         subtitle={el?.trivia}
-                        dataAid={getDiyDataAid(el?.key)}
+                        dataAid={el?.design_id}
                         className="pointer"
                       />
                     </WrapperBox>

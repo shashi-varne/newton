@@ -6,7 +6,6 @@ import WrapperBox from '../../../designSystem/atoms/WrapperBox';
 import CardHorizontal from '../../../designSystem/molecules/CardHorizontal';
 import SectionHeader from './SectionHeader';
 import isEmpty from 'lodash/isEmpty';
-import { getDiyDataAid } from '../common/functions';
 
 const SingleCategory = ({ handleCardClick, isPageLoading, data = {} }) => {
   if (!isPageLoading && isEmpty(data)) {
@@ -14,7 +13,7 @@ const SingleCategory = ({ handleCardClick, isPageLoading, data = {} }) => {
   }
   return (
     <Stack direction='column' spacing={2} className='diy-c-tax-saving-wrapper'>
-      <SectionHeader isPageLoading={isPageLoading} title={data?.name} dataAid={getDiyDataAid(data?.key)} />
+      <SectionHeader isPageLoading={isPageLoading} title={data?.name} dataAid={data?.design_id} />
       {isPageLoading ? (
         <SingleCategorySkeleton />
       ) : (
@@ -31,7 +30,7 @@ const SingleCategory = ({ handleCardClick, isPageLoading, data = {} }) => {
                   key={idx}
                   title={el?.name}
                   subtitle={el?.trivia}
-                  dataAid={getDiyDataAid(el?.key)}
+                  dataAid={el?.design_id}
                   className="pointer"
                   leftImgSrc={el.image_url}
                   rightImgSrc={el.image_url2}

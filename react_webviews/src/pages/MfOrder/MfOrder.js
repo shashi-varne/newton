@@ -313,6 +313,7 @@ const MfOrder = (props) => {
                       setIsInvestmentValid={setIsInvestmentValid}
                       setInvestedValue={setInvestedValue}
                       setParentInvestmentType={setParentInvestmentType}
+                      dataAid={idx+1}
                     />
                   );
                 })}
@@ -371,15 +372,15 @@ export default MfOrder;
 
 const ParentInvestTypeSection = ({ parentInvestmentType, isPageLoading, handleInvestmentType }) => {
   return (
-    <Stack sx={{ mb: 1 }} direction='row' alignItems='center' justifyContent='space-between'>
-      <Typography variant='heading4'>Investment type</Typography>
+    <Stack sx={{ mb: 1 }} direction='row' alignItems='center' justifyContent='space-between' data-aid="grp_investmentType" >
+      <Typography variant='heading4' dataAid="title" >Investment type</Typography>
       <Pills
         value={parentInvestmentType}
         disabled={isPageLoading}
         sx={{ pointerEvents: isPageLoading ? 'none' : 'default' }}
         onChange={handleInvestmentType}
       >
-        <Pill label='SIP' value='sip' />
+        <Pill label='SIP' value='sip'  />
         <Pill label='Lumpsum' value='lumpsum' />
       </Pills>
     </Stack>

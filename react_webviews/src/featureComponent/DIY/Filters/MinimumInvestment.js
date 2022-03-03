@@ -21,7 +21,7 @@ const MinimumInvestment = ({
     setMinimumInvestment(value);
   };
   return (
-    <div className="fund-options-wrapper">
+    <div className="fund-options-wrapper" data-aid="grp_minInvestment" >
       <FormControl>
         <RadioGroup
           aria-labelledby="demo-radio-buttons-group-label"
@@ -40,16 +40,18 @@ const MinimumInvestment = ({
                 <FormControlLabel
                   key={idx}
                   value={option.id}
-                  control={<RadioButton isChecked={selectedValue} />}
+                  control={<RadioButton isChecked={selectedValue} dataAid={idx+1} />}
                   label={
                     <Typography
                       color={selectedColor}
                       sx={{ ml: 2 }}
                       variant="body2"
+                      dataAid={`list${idx+1}`}
                     >
                       {option.label}
                     </Typography>
                   }
+                  data-aid={`grp_${idx+1}`}
                 />
               );
             })}

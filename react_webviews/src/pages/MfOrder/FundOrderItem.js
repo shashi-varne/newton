@@ -24,7 +24,8 @@ const FundOrderItem = ({
   parentInvestmentType,
   setIsInvestmentValid,
   setInvestedValue,
-  setParentInvestmentType
+  setParentInvestmentType,
+  dataAid,
 }) => {
   const [investmentType, setInvestmentType] = useState(parentInvestmentType);
   const [selectedDate, setSelectedDate] = useState(fundDetails.addl_purchase?.sip?.default_date);
@@ -136,11 +137,11 @@ const FundOrderItem = ({
       <WrapperBox elevation={1} className='mf-investment-card-wrapper'>
         {isProductFisdom && (
           <IconButton className='mf-ic-close' onClick={handleInvestmentCard(fundDetails)}>
-            <Icon src={require('assets/close_grey.svg')} size='24px' />
+            <Icon src={require('assets/close_grey.svg')} size='24px' dataAid="cancel" />
           </IconButton>
         )}
         <Box sx={{ pointerEvents: isInvestmentAllowed ? 'default' : 'none' }}>
-          <InvestmentCard>
+          <InvestmentCard dataAid={dataAid} >
             {isProductFisdom && (
               <InvestmentCardHeaderRow
                 title={fundDetails.mfname}
