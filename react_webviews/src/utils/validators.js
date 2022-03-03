@@ -174,7 +174,7 @@ export function validateEmail(string) {
 
 export function validateNumber(number) {
   // eslint-disable-next-line
-  let rule = /^[0-9]+$/i;
+  let rule = /^[0-9]+$/;
   return rule.test(number);
 }
 
