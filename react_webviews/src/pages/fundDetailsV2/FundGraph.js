@@ -129,7 +129,14 @@ const FundGraph = () => {
       >
         {timeLines?.map((el, id) => {
           const isDisabled = id > fundData?.performance.returns.length - 1;
-          return <TimeLine disabled={isDisabled} key={id} label={el.label} value={el.value} />;
+          return (
+            <TimeLine
+              disabled={isDisabled || loadingData.isGraphLoading}
+              key={id}
+              label={el.label}
+              value={el.value}
+            />
+          );
         })}
       </Timelines>
     </div>

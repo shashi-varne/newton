@@ -87,7 +87,6 @@ const FundStats = () => {
             Total Aum
           </Typography>
           <Typography variant='heading4' align='right'>
-            {/* {fundData?.performance?.aum ? formatAmountInr(fundData?.performance?.aum) : 'NA'} */}
             {isValidValue(fundData?.performance?.aum, `₹ ${fundData?.performance?.aum}`)}
           </Typography>
         </Stack>
@@ -125,7 +124,7 @@ const FundStats = () => {
             {/* {fundData?.portfolio?.expense_ratio ? `${fundData?.portfolio?.expense_ratio}%` : 'NA'} */}
           </Typography>
         </Stack>
-        <Stack spacing='4px' direction='column'>
+        <Stack spacing='4px' direction='column' flexBasis='50%'>
           <Typography
             align='right'
             allCaps
@@ -135,7 +134,7 @@ const FundStats = () => {
             Lock-in
           </Typography>
           <Typography align='right' variant='heading4'>
-            NA
+            {isValidValue(fundData?.additional_info?.lockin_period)}
           </Typography>
         </Stack>
       </Stack>

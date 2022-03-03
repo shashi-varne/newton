@@ -28,6 +28,7 @@ import { fetchDiyCategoriesAndTrendingFunds, setFundsCart, setFilteredFundList }
 import { resetFundDetails } from 'businesslogic/dataStore/reducers/fundDetails';
 import { DEFAULT_FILTER_DATA } from 'businesslogic/constants/diy'
 import { resetMfOrders } from 'businesslogic/dataStore/reducers/mfOrders'
+import useLoadingState from '../../../../common/customHooks/useLoadingState'
 
 const screen = 'diyCategoryLanding';
 const InvestExplore = (props) => {
@@ -37,6 +38,8 @@ const InvestExplore = (props) => {
   const isMobileDevice = config.isMobileDevice;
   const partnerCode = config.code;
   const dispatch = useDispatch();
+
+  const {isPageLoading} = useLoadingState(screen);
 
   useEffect(() => {
     dispatch(fetchDiyCategoriesAndTrendingFunds({Api, screen}));    
@@ -136,7 +139,7 @@ const InvestExplore = (props) => {
       classOverRideContainer="pr-container"
       hidePageTitle={partnerCode === 'moneycontrol'}
       handleClick={goNext}
-      skelton={loader}
+      skelton={loader || isPageLoading}
       rightIcon="search"
       handleTopIcon={handleRightIconClick}
       disableBack={(iframe || config.isSdk) && partnerCode === 'moneycontrol'}

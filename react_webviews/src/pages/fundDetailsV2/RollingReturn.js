@@ -7,26 +7,32 @@ import Typography from '../../designSystem/atoms/Typography';
 import { TimeLine, Timelines } from '../../designSystem/atoms/TimelineList';
 import Separator from '../../designSystem/atoms/Separator';
 import FundCommonGraph from './FundCommonGraph';
+import isEmpty from 'lodash/isEmpty';
+import { isValidValue } from './helperFunctions';
+import useLoadingState from '../../common/customHooks/useLoadingState';
 
+const screen = 'fundDetailsV2';
 const secondaryColor = 'foundationColors.content.secondary';
 const RollingReturn = () => {
   const [investmentYear, setInvestmentYear] = useState(36);
-
+  const { loadingData } = useLoadingState(screen);
   const rollingReturnData = useSelector(getRollingReturnData);
-  const returnGraphData = [...rollingReturnData[investmentYear].data];
+  const rollingData = rollingReturnData[investmentYear];
+  const rollingGraphData = !isEmpty(rollingData?.data) ? rollingData?.data : [];
+  const returnGraphData = [...rollingGraphData];
   const NET_ASSET_VALUE = useMemo(() => {
     return [
       {
         name: 'Minimum',
-        value: rollingReturnData[investmentYear].min,
+        value: rollingData?.min,
       },
       {
         name: 'Maximum',
-        value: rollingReturnData[investmentYear].max,
+        value: rollingData?.max,
       },
       {
         name: 'Average',
-        value: rollingReturnData[investmentYear].avg,
+        value: rollingData?.avg,
       },
     ];
   }, [rollingReturnData, investmentYear]);
@@ -51,8 +57,15 @@ const RollingReturn = () => {
         <Box sx={{ mt: 4, maxWidth: 'fit-content' }}>
           <Timelines value={investmentYear} onChange={handleInvestmentYear}>
             {ROLLING_RETURN_TIMELINES?.map((timeline, idx) => {
-                const isDisable = !rollingReturnData[timeline?.value];
-              return <TimeLine key={idx} label={timeline.label} value={timeline.value} disabled={isDisable}/>;
+              const isDisable = !rollingReturnData[timeline?.value];
+              return (
+                <TimeLine
+                  key={idx}
+                  label={timeline.label}
+                  value={timeline.value}
+                  disabled={isDisable}
+                />
+              );
             })}
           </Timelines>
         </Box>
@@ -61,6 +74,7 @@ const RollingReturn = () => {
             Net asset value
           </Typography>
           {NET_ASSET_VALUE?.map((net_asset, idx) => {
+            const value = net_asset?.value > 0 ? `+ ${net_asset?.value}` : `${net_asset?.value}`;
             return (
               <Stack key={idx} direction='column' spacing={2}>
                 <Stack direction='row' justifyContent='space-between'>
@@ -68,7 +82,7 @@ const RollingReturn = () => {
                     {net_asset?.name}
                   </Typography>
                   <Typography variant='heading4' color={secondaryColor}>
-                    {net_asset?.value > 0 ? `+ ${net_asset?.value}` : `${net_asset?.value}`}%
+                    {isValidValue(net_asset?.value, `${value}%`)}
                   </Typography>
                 </Stack>
                 {NET_ASSET_VALUE?.length !== idx + 1 && <Separator />}
@@ -77,7 +91,11 @@ const RollingReturn = () => {
           })}
         </Stack>
         <div className='fund-graph-wrapper'>
-          <FundCommonGraph graphData={returnGraphData} labelFormatter={labelFormatter} />
+          <FundCommonGraph
+            isGraphLoading={loadingData.isGraphLoading}
+            graphData={returnGraphData}
+            labelFormatter={labelFormatter}
+          />
         </div>
       </Stack>
     </Box>
@@ -87,6 +105,14 @@ const RollingReturn = () => {
 export default RollingReturn;
 
 const ROLLING_RETURN_TIMELINES = [
+  {
+    label: '3M',
+    value: 3,
+  },
+  {
+    label: '6M',
+    value: 6,
+  },
   {
     label: '1Y',
     value: 12,
@@ -98,13 +124,5 @@ const ROLLING_RETURN_TIMELINES = [
   {
     label: '5Y',
     value: 12 * 5,
-  },
-  {
-    label: '10Y',
-    value: 12 * 10,
-  },
-  {
-    label: '20Y',
-    value: 12 * 20,
   },
 ];

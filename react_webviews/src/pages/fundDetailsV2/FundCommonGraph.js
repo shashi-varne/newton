@@ -138,7 +138,7 @@ const FundCommonGraph = ({ isGraphLoading, graphData, labelFormatter }) => {
           variant='rectangular'
           height='290px'
           width='100%'
-          sx={{ mt: 3, borderRadius: 1, backgroundColor: 'foundationColors.primary.200' }}
+          sx={{borderRadius: 1, backgroundColor: 'foundationColors.primary.200' }}
         />
       </Box>
     );

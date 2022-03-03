@@ -1,18 +1,20 @@
 import { Stack } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { SwiperSlide } from 'swiper/react';
 import { Pill, Pills } from '../../designSystem/atoms/Pills/Pills';
 import Typography from '../../designSystem/atoms/Typography';
 import CollapsibleSection from '../../designSystem/molecules/CollapsibleSection';
 import CustomSwiper from '../../designSystem/molecules/CustomSwiper';
 import { useSelector } from 'react-redux';
-import { getFundData } from 'businesslogic/dataStore/reducers/fundDetails';
+import { getFundData, getRollingReturnData } from 'businesslogic/dataStore/reducers/fundDetails';
 import isEmpty from 'lodash/isEmpty';
 import { isValidValue } from './helperFunctions';
 import RollingReturn from './RollingReturn';
 
 const secondaryColor = 'foundationColors.content.secondary';
+
+const minRollingYear = 3; // number is in month
 
 const Returns = () => {
   const [isReturn, setIsReturn] = useState(false);
@@ -20,6 +22,15 @@ const Returns = () => {
   const [swiper, setSwiper] = useState('');
   const fundData = useSelector(getFundData);
   const isReturnAvailable = isEmpty(fundData?.performance?.returns);
+  const rollingReturnData = useSelector(getRollingReturnData);
+
+  const RETURN_TYPES = useMemo(() => {
+    let returnTypes = ['Return'];
+    if (rollingReturnData[minRollingYear]) {
+      returnTypes.push('Rolling return');
+    }
+    return returnTypes;
+  }, [rollingReturnData]);
 
   const handleReturnSection = () => {
     setIsReturn(!isReturn);
@@ -46,8 +57,9 @@ const Returns = () => {
         <Stack direction='column'>
           <Box>
             <Pills value={pillReturnValue} onChange={handleReturnValue}>
-              <Pill label='Return' />
-              <Pill label='Rolling return' />
+              {RETURN_TYPES?.map((el, idx) => {
+                return <Pill key={idx} label={el} />;
+              })}
             </Pills>
           </Box>
           <CustomSwiper
@@ -57,6 +69,8 @@ const Returns = () => {
             onSwiper={setSwiper}
             autoHeight
             hidePagination
+            allowSlideNext={rollingReturnData[minRollingYear]}
+            allowSlidePrev={rollingReturnData[minRollingYear]}
           >
             <SwiperSlide>
               <ReturnView returns={fundData?.performance?.returns} />
