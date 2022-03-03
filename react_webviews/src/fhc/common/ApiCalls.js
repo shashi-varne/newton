@@ -1,5 +1,6 @@
 import Api from '../../utils/api';
-import FHC from '../FHCClass'; 
+import FHC from '../FHCClass';
+const genericErrMsg = 'Something went wrong. Please try again';
 
 export const fetchFHCData = async () => {
   try {
@@ -10,7 +11,7 @@ export const fetchFHCData = async () => {
     if (status === 200) {
       return new FHC(fhc_data);
     } else {
-      throw (fhc_data.error || fhc_data.message || 'Something went wrong. Please try again');
+      throw (fhc_data.error || fhc_data.message || genericErrMsg);
     }
   } catch (e) {
     throw e;
@@ -23,11 +24,12 @@ export const uploadFHCData = async (fhc_data, ignoreErr) => {
     const { result, status_code: status } = res.pfwresponse;
 
     if (status !== 200 && !ignoreErr) {
-      throw (result.error || result.message || 'Something went wrong. Please try again');
+      throw (result.error || result.message || genericErrMsg);
     }
     return result;
   } catch (e) {
-    throw e;
+    // eslint-disable-next-line no-throw-literal
+    throw genericErrMsg;
   }
 }
 
@@ -40,7 +42,7 @@ export const fetchFHCReport = async () => {
     if (status === 200) {
       return result;
     } else {
-      throw (result.error || result.message || 'Something went wrong. Please try again');
+      throw (result.error || result.message || genericErrMsg);
     }
   } catch (e) {
     throw e;

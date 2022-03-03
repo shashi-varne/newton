@@ -698,6 +698,9 @@
 
     .checkbox {
       margin-left: -15px;
+      // TODO: Remove height and width styling. Used as a temp fix for https://fisdom.atlassian.net/browse/WEBAPP-1893
+      height: 56px;
+      width: 48px;
     }
 
     .rim-terms-text {

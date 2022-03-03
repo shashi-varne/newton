@@ -121,34 +121,42 @@ export class FooterLayoutBase extends Component {
 
   WithProviderLayoutInsurance = (props) =>  {
     const leftArrowMapper = {
-        'up': up_arrow,
-        'down': down_arrow
-      }
-      return(
-        <div className="FooterDefaultLayout">
-        {props.buttonData && <div className="FlexItem1 FlexItem1-withProvider-footer" 
-        onClick={this.dualButtonClickHandler(props.handleClick2)}
-        style={props.buttonData.leftStyle}>
+      'up': up_arrow,
+      'down': down_arrow
+    }
 
-          {props.buttonData.logo && <div className='image-block'>
-            <Imgc
-              style={{width:'40px', height:'40px'}}
-              alt=""
-              src={require(`assets/${props.buttonData.logo}`)}
-              className="FooterImage" />
-          </div>}
-          <div className="text-block">
-          <div className="text-block-1">{props.buttonData.leftTitle}</div>
-            <div className="text-block-2">
-            {props.buttonData.leftSubtitle}
-              {props.handleClick2 && <SVG
-                className="text-block-2-img"
-                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.primaryColor)}
-                src={leftArrowMapper[props.buttonData.leftArrow || 'down']}
-              />}
+    return (
+      <div className="FooterDefaultLayout">
+        {props.buttonData &&
+          <div
+            className="FlexItem1 FlexItem1-withProvider-footer" 
+            onClick={this.dualButtonClickHandler(props.handleClick2)}
+            style={props.buttonData.leftStyle}
+          >
+            {props.buttonData.logo &&
+              <div className='image-block'>
+                <Imgc
+                  style={{width:'40px', height:'40px'}}
+                  alt=""
+                  src={require(`assets/${props.buttonData.logo}`)}
+                  className="FooterImage" />
               </div>
+            }
+            <div className="text-block">
+              <div className="text-block-1">{props.buttonData.leftTitle}</div>
+              <div className="text-block-2">
+                {props.buttonData.leftSubtitle}
+                {props.handleClick2 &&
+                  <SVG
+                    className="text-block-2-img"
+                    preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.primaryColor)}
+                    src={leftArrowMapper[props.buttonData.leftArrow || 'down']}
+                  />
+                }
+              </div>
+            </div>
           </div>
-        </div>}
+        }
         <div className="FlexItem2 FlexItem2-withProvider-footer" onClick={this.clickHandler}>
           <Button
             type={props.type}
@@ -156,7 +164,7 @@ export class FooterLayoutBase extends Component {
             {...props} />
         </div>
       </div>
-      )
+    )
   }
 
   WithProviderLayoutWithdraw = (props) => {

@@ -1,6 +1,7 @@
 import { getConfig } from 'utils/functions';
 
 export function navigate (pathname, params, replace) {
+  console.log('params', params)
   if (!replace) {
     this.props.history.push({
       pathname: pathname,
