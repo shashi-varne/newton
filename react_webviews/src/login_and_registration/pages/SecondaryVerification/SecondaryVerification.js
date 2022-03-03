@@ -99,8 +99,11 @@ class SecondaryVerification extends Component {
             toast("Invalid email");
             return;
         }
+        
+        let contactValue = loginType === "mobile" ? `${form_data.code}|${form_data[loginType]}` : form_data[loginType];
+
         let result = await this.authCheckApi(loginType, {
-            "contact_value": form_data[loginType]
+            "contact_value": contactValue
         });
         if (result && result.is_user) {
             this.sendEvents("next")

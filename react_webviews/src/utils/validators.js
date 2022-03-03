@@ -1194,10 +1194,18 @@ export function sortArrayOfObjectsByTime(array, key){
   return array.sort((a,b) => new Date(b[key]) - new Date(a[key])) //desc
 }
 
-export function formatMobileNumber(value) {  // Example:  0000012345 -> +91 0000 012 345
-  if (isEmpty(value) || value.length < 10) return value;
-  let number = "+91" + value.slice(-10);
-  return number.replace(/(\d{2})(\d{4})(\d{3})(\d{3})/, '$1 $2 $3 $4');
+export function formatMobileNumber(value) {  // Example:  91|0000012345 -> +91 0000 012 345
+  if (isEmpty(value)) return value;
+  let number;
+  if (value.includes("|")) {
+    const [code, mobileNumber] = value?.split("|");
+    number =  mobileNumber.replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3');
+    return `+${code}${" "}${number}`;
+  } else {
+    number = "+91" + value.slice(-10);
+    number = number.replace(/(\d{2})(\d{4})(\d{3})(\d{3})/, '$1 $2 $3 $4');
+    return number;
+  }
 }
 
 export function splitMobileNumberFromContryCode(mobileNumber) {
