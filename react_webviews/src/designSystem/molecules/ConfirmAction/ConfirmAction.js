@@ -48,6 +48,7 @@ const ConfirmAction = ({
           <Badge
             className='confirm-action-badge'
             badgeContent={badgeContent}
+            dataAid="singleNumber"
             {...badgeProps}
           >
             <Icon

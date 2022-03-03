@@ -9,10 +9,10 @@ const SecureIcon = () => {
   productName = productName === 'finity' ? 'Finity' : 'Fisdom';
   return (
     <Stack justifyContent='center' alignItems='center' spacing={1}>
-      <Typography variant='body5' color='foundationColors.content.secondary'>
+      <Typography variant='body5' color='foundationColors.content.secondary' dataAid="title" >
         Investments with {productName} are 100% secure
       </Typography>
-      <Icon src={require('assets/trust_icon_secure.svg')} />
+      <Icon src={require('assets/trust_icon_secure.svg')} dataAid="sebi" />
     </Stack>
   );
 };
