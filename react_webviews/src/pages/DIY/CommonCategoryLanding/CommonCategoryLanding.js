@@ -127,7 +127,7 @@ const CommonCategoryLanding = (props) => {
       noPadding={true}
     >
       <div className='diy-category-landing-wrapper'>
-        <LandingHeader variant='center' dataAid='equity'>
+        <LandingHeader variant='center' dataAid={categoryData?.design_id}>
           <Lottie
             animationData={require(`assets/${productName}/lottie/${diyType.toLowerCase()}.json`)}
             autoPlay

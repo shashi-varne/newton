@@ -34,11 +34,11 @@ const FundHouses = ({ activeFundHouses, setActiveFundHouses }) => {
   };
 
   return (
-    <div className='fund-house-wrapper' data-aid="grp_fundNames">
-      <SearchBar placeholder='Search...' value={searchQuery} onChange={handleSearch} dataAid="fundHouse" />
+    <div className='fund-house-wrapper' data-aid="grp_fundsName">
+      <SearchBar placeholder='Search...' value={searchQuery} onChange={handleSearch} dataAid="fundHouse" inputProps={{ "data-aid": "tv_title" }} />
       <Stack sx={{ mt: 1, height: isMobileDevice ? 'calc(100vh - 220px)' : 'calc(100vh - 300px)', overflowY: 'auto' }}>
         {isEmpty(fundHouseList) && (
-          <Typography align='center' variant='body2' color='foundationColors.supporting.cadetBlue' dataAid="noResults">
+          <Typography align='center' variant='body2' color='foundationColors.supporting.cadetBlue' dataAid="noResult">
             No results
           </Typography>
         )}

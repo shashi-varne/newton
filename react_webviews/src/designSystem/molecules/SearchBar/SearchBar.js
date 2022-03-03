@@ -81,7 +81,7 @@ const SearchBar = ({
 export default SearchBar;
 
 const DefaultPrefix = () => (
-  <Icon src={require('assets/search_icon.svg')} size='16px' />
+  <Icon src={require('assets/search_icon.svg')} size='16px' dataAid="left" />
 );
 SearchBar.defaultProps = {
   prefix: <DefaultPrefix />,

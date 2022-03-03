@@ -13,7 +13,7 @@ const FundOptions = ({ fundOption, setFundOption }) => {
 
   };
   return (
-    <div className='fund-options-wrapper'>
+    <div className='fund-options-wrapper' data-aid="grp_fundOptions" >
       <FormControl>
         <RadioGroup
           aria-labelledby='demo-radio-buttons-group-label'
@@ -32,12 +32,13 @@ const FundOptions = ({ fundOption, setFundOption }) => {
                 <FormControlLabel
                   key={idx}
                   value={option.value}
-                  control={<RadioButton isChecked={selectedValue} />}
+                  control={<RadioButton isChecked={selectedValue} dataAid={idx+1} />}
                   label={
-                    <Typography color={selectedColor} sx={{ ml: 2 }} variant='body2'>
+                    <Typography color={selectedColor} sx={{ ml: 2 }} variant='body2' dataAid={`list${idx+1}`} >
                       {option.label}
                     </Typography>
                   }
+                  data-aid={`grp_${idx+1}`}
                 />
               );
             })}
