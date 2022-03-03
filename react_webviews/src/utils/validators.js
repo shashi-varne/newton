@@ -1202,8 +1202,7 @@ export function formatMobileNumber(value) {  // Example:  91|0000012345 -> +91 0
     number =  mobileNumber.replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3');
     return `+${code}${" "}${number}`;
   } else {
-    number = "+91" + value.slice(-10);
-    number = number.replace(/(\d{2})(\d{4})(\d{3})(\d{3})/, '$1 $2 $3 $4');
+    number = value.replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3');
     return number;
   }
 }
