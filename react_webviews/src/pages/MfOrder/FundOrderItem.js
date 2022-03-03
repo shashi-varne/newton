@@ -23,6 +23,8 @@ const FundOrderItem = ({
   handleInvestmentCard,
   parentInvestmentType,
   setIsInvestmentValid,
+  setInvestedValue,
+  setParentInvestmentType
 }) => {
   const [investmentType, setInvestmentType] = useState(parentInvestmentType);
   const [selectedDate, setSelectedDate] = useState(fundDetails.addl_purchase?.sip?.default_date);
@@ -103,6 +105,9 @@ const FundOrderItem = ({
     if (isNaN(e.target.value)) return;
     const amountValue = Number(e.target.value);
     setAmount(amountValue);
+    if(!isProductFisdom) {
+      setInvestedValue(amountValue)
+    }
   };
 
   const closeSipDateSheet = () => {
@@ -118,6 +123,9 @@ const FundOrderItem = ({
   };
   const handleInvestmentType = (e, value) => {
     setInvestmentType(value);
+    if(!isProductFisdom) {
+      setParentInvestmentType(value);
+    }
   };
 
   return (

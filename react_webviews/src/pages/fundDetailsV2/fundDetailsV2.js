@@ -74,7 +74,7 @@ const FundDetailsV2 = (props) => {
   const addFundToCart = () => {
     dispatch(setCartItem(fundData));
     if(!isFisdom) {
-      validateKycAndRedirect({ navigate, kyc })
+      validateKycAndRedirect({ navigate, kyc })();
     }
   }
 

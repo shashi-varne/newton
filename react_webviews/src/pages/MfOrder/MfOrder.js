@@ -1,5 +1,10 @@
-import { Stack } from '@mui/material';
-import { getDiyCart, getDiyCartCount, setFundsCart, setDiyStorage } from 'businesslogic/dataStore/reducers/diy';
+import { Fade, Stack } from '@mui/material';
+import {
+  getDiyCart,
+  getDiyCartCount,
+  setFundsCart,
+  setDiyStorage,
+} from 'businesslogic/dataStore/reducers/diy';
 import {
   filterMfOrders,
   getfundOrderDetails,
@@ -37,6 +42,7 @@ import useErrorState from '../../common/customHooks/useErrorState';
 import ToastMessage from '../../designSystem/atoms/ToastMessage';
 
 import './MfOrder.scss';
+import { getExpectedReturn } from '../fundDetailsV2/helperFunctions';
 const screen = 'mfOrder';
 
 const MfOrder = (props) => {
@@ -46,6 +52,9 @@ const MfOrder = (props) => {
   const [parentInvestmentType, setParentInvestmentType] = useState('sip');
   const [isInvestmentValid, setIsInvestmentValid] = useState({});
   const [showLoader, setShowLoader] = useState(false);
+  const [investedValue, setInvestedValue] = useState(0);
+  const [expectedAmount, setExpectedAmount] = useState(0);
+  const [expectedReturnData, setExpectedReturnData] = useState(0);
   const { fundOrderDetails, mfOrders } = useSelector((state) => state?.mfOrders);
   const cartData = useSelector(getDiyCart);
   const cartCount = useSelector(getDiyCartCount);
@@ -61,11 +70,30 @@ const MfOrder = (props) => {
     getMfOrderDetails();
   }, []);
 
+  const getExpectedAmount = () => {
+    const fundReturns = fundOrderDetails[0]?.fund_returns;
+    const returnAvailable = RETURNS?.find((el) => fundReturns[el.value]);
+    const returnPercentage = fundReturns[returnAvailable.value];
+    const expectedValue = getExpectedReturn(
+      investedValue,
+      10,
+      parentInvestmentType,
+      returnPercentage
+    );
+    setExpectedReturnData({ ...returnAvailable, return: returnPercentage });
+    setExpectedAmount(expectedValue);
+  };
+  useEffect(() => {
+    if (!isProductFisdom) {
+      getExpectedAmount();
+    }
+  }, [investedValue, parentInvestmentType]);
+
   useEffect(() => {
     if ((isFetchFailed || isUpdateFailed) && !isEmpty(errorMessage)) {
-      ToastMessage(errorMessage)
+      ToastMessage(errorMessage);
     }
-  }, [isFetchFailed, isUpdateFailed])
+  }, [isFetchFailed, isUpdateFailed]);
 
   const getMfOrderDetails = () => {
     const isins = getIsins(cartData);
@@ -283,23 +311,31 @@ const MfOrder = (props) => {
                       parentInvestmentType={parentInvestmentType}
                       isProductFisdom={isProductFisdom}
                       setIsInvestmentValid={setIsInvestmentValid}
+                      setInvestedValue={setInvestedValue}
+                      setParentInvestmentType={setParentInvestmentType}
                     />
                   );
                 })}
               </Stack>
             )}
 
-            {!isProductFisdom && (
-              <WrapperBox elevation={1}>
-                <EstimationCard
-                  leftTitle='Value after 10 years'
-                  leftSubtitle='Return %'
-                  rightTitle={`${formatAmountInr(110000)}`}
-                  rightSubtitle='+116.06%'
-                  toolTipText='Hello I am the tooltup'
-                />
-              </WrapperBox>
-            )}
+            <Fade in={!isProductFisdom && investedValue > 0} unmountOnExit mountOnEnter>
+              <div>
+                <WrapperBox elevation={1}>
+                  <EstimationCard
+                    leftTitle='Value after 10 years'
+                    leftSubtitle='Return %'
+                    rightTitle={`${formatAmountInr(expectedAmount)}`}
+                    rightSubtitle={
+                      expectedReturnData?.return > 0
+                        ? `+${expectedReturnData?.return}%`
+                        : expectedReturnData?.return
+                    }
+                    toolTipText={`Estimation based on last ${expectedReturnData?.name} of the fund.`}
+                  />
+                </WrapperBox>
+              </div>
+            </Fade>
 
             {isProductFisdom ? (
               <Typography variant='body5' color='foundationColors.content.tertiary'>
@@ -349,3 +385,31 @@ const ParentInvestTypeSection = ({ parentInvestmentType, isPageLoading, handleIn
     </Stack>
   );
 };
+
+const RETURNS = [
+  {
+    name: '5 year',
+    value: 'five_year_return',
+  },
+  {
+    name: '3 year',
+    value: 'three_year_return',
+  },
+  {
+    name: '1 year',
+    value: 'one_year_return',
+  },
+  {
+    name: '6 months',
+    value: 'six_month_return',
+  },
+  {
+    name: '3 months',
+    value: 'three_month_return',
+  },
+
+  {
+    name: '1 month',
+    value: 'one_month_return',
+  },
+];
