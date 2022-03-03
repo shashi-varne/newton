@@ -12,7 +12,7 @@ import { getFundData } from 'businesslogic/dataStore/reducers/fundDetails';
 import { isValidValue } from './helperFunctions';
 import isEmpty from 'lodash/isEmpty';
 
-function calculateFullAge(dob = "") {
+function calculateFullAge(dob = '') {
   const startDate = parse(dob, 'dd/MM/yyyy', new Date());
   const { years, months, days } = intervalToDuration({ start: startDate, end: new Date() });
   return { years, months, days };
@@ -45,6 +45,18 @@ const calculateFundAge = (fundAge) => {
   }
 };
 
+const getLockinData = (lockinString) => {
+  if (!lockinString) return {};
+  const substr = lockinString.match(/(\w+.+)\s\(/)[1];
+  const newData = substr.match(/(\d+.*)(or.*)/);
+  const lockingPeriod = newData[1];
+  const lockingAge = newData[2];
+  return {
+    lockingAge,
+    lockingPeriod,
+  };
+};
+
 const FundStats = () => {
   const [isTooltipOpen, setIsTooltipOpen] = useState({
     er: false,
@@ -58,12 +70,16 @@ const FundStats = () => {
     'MMM d, yyyy'
   );
 
+  const lokinPeriodData = getLockinData(fundData?.additional_info?.lockin_period);
   const handleTooltip = (anchor) => () => {
     setIsTooltipOpen({ ...isTooltipOpen, [anchor]: !isTooltipOpen[anchor] });
   };
 
   return (
-    <Stack sx={{ bgcolor: "foundationColors.supporting.white", p: '32px 16px 24px 16px' }} spacing={3}>
+    <Stack
+      sx={{ bgcolor: 'foundationColors.supporting.white', p: '32px 16px 24px 16px' }}
+      spacing={3}
+    >
       <Typography variant='heading3'>Fund stats</Typography>
       <Stack direction='row' justifyContent='space-between'>
         <Stack spacing='4px' direction='column'>
@@ -73,22 +89,37 @@ const FundStats = () => {
           <Stack direction='column'>
             <Typography variant='heading4'>{fundAge}</Typography>
             <Typography variant='body5' color='foundationColors.content.secondary'>
-              {`since ${launchDate}`}
+              {`(since ${launchDate})`}
             </Typography>
           </Stack>
         </Stack>
-        <Stack spacing='4px' direction='column'>
+        <Stack spacing='4px' direction='column' flexBasis='50%'>
           <Typography
+            align='right'
             allCaps
             variant='body9'
-            align='right'
             color='foundationColors.content.secondary'
           >
-            Total Aum
+            Lock-in
           </Typography>
-          <Typography variant='heading4' align='right'>
-            {isValidValue(fundData?.performance?.aum, `₹ ${fundData?.performance?.aum}`)}
-          </Typography>
+          <Stack direction='column'>
+            {isEmpty(lokinPeriodData) ? (
+              <Typography align='right' variant='heading4'>NA</Typography>
+            ) : (
+              <>
+                <Typography align='right' variant='heading4'>
+                  {lokinPeriodData?.lockingPeriod}
+                </Typography>
+                <Typography
+                  align='right'
+                  variant='body5'
+                  color='foundationColors.content.secondary'
+                >
+                  {`(${lokinPeriodData?.lockingAge})`}
+                </Typography>
+              </>
+            )}
+          </Stack>
         </Stack>
       </Stack>
 
@@ -121,20 +152,19 @@ const FundStats = () => {
               fundData?.portfolio?.expense_ratio,
               `${fundData?.portfolio?.expense_ratio}%`
             )}
-            {/* {fundData?.portfolio?.expense_ratio ? `${fundData?.portfolio?.expense_ratio}%` : 'NA'} */}
           </Typography>
         </Stack>
-        <Stack spacing='4px' direction='column' flexBasis='50%'>
+        <Stack spacing='4px' direction='column'>
           <Typography
-            align='right'
             allCaps
             variant='body9'
+            align='right'
             color='foundationColors.content.secondary'
           >
-            Lock-in
+            Total Aum
           </Typography>
-          <Typography align='right' variant='heading4'>
-            {isValidValue(fundData?.additional_info?.lockin_period)}
+          <Typography variant='heading4' align='right'>
+            {isValidValue(fundData?.performance?.aum, `₹ ${fundData?.performance?.aum}`)}
           </Typography>
         </Stack>
       </Stack>
