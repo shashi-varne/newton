@@ -62,18 +62,19 @@ const CompleteKyc = (props) => {
           autoPlay
           loop
           className='kyc-compl-lottie-anim'
+          data-aid="iv_top"
         />
         <LandingHeaderTitle>{DIY.completeKycTitle}</LandingHeaderTitle>
         <LandingHeaderSubtitle dataIdx={1}>{DIY.completeKycSubtitle}</LandingHeaderSubtitle>
       </LandingHeader>
       <section className='ck-points-wrapper'>
         <Stack spacing={2}>
-          {COMPLETE_KYC_POINTS?.map((point, idx) => {
+          {COMPLETE_KYC_POINTS?.map((data, idx) => {
             return (
               <Stack key={idx} direction='row' spacing={2} alignItems='center'>
-                <Icon src={checkedIcon} size='24px' />
-                <Typography variant='body2' align='left' component='div'>
-                  {point}
+                <Icon src={checkedIcon} size='24px' dataAid={`left${idx+1}`} />
+                <Typography variant='body2' align='left' component='div' dataAid={data.dataAid} >
+                  {data.label}
                 </Typography>
               </Stack>
             );
@@ -88,10 +89,10 @@ const CompleteKyc = (props) => {
 };
 
 const COMPLETE_KYC_POINTS = [
-  DIY.singleKyc,
-  DIY.digitalKyc,
-  DIY.digilockerIntegeration,
-  DIY.instantSafe,
+  { label: DIY.singleKyc, dataAid: "singleKyc" },
+  { label: DIY.digitalKyc, dataAid: "aadhaar" },
+  { label: DIY.digilockerIntegeration, dataAid: "digiLocker" },
+  { label: DIY.instantSafe, dataAid: "oneTime" },
 ];
 
 export default CompleteKyc;
