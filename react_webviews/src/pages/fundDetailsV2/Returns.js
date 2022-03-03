@@ -3,19 +3,14 @@ import { Box } from '@mui/system';
 import React, { useState } from 'react';
 import { SwiperSlide } from 'swiper/react';
 import { Pill, Pills } from '../../designSystem/atoms/Pills/Pills';
-import { TimeLine, Timelines } from '../../designSystem/atoms/TimelineList';
 import Typography from '../../designSystem/atoms/Typography';
 import CollapsibleSection from '../../designSystem/molecules/CollapsibleSection';
 import CustomSwiper from '../../designSystem/molecules/CustomSwiper';
-import { nonRoundingToFixed } from '../../utils/validators';
-import meanBy from 'lodash/meanBy';
-import minBy from 'lodash/minBy';
-import maxBy from 'lodash/maxBy';
-import Separator from '../../designSystem/atoms/Separator';
 import { useSelector } from 'react-redux';
 import { getFundData } from 'businesslogic/dataStore/reducers/fundDetails';
 import isEmpty from 'lodash/isEmpty';
 import { isValidValue } from './helperFunctions';
+import RollingReturn from './RollingReturn';
 
 const secondaryColor = 'foundationColors.content.secondary';
 
@@ -52,7 +47,7 @@ const Returns = () => {
           <Box>
             <Pills value={pillReturnValue} onChange={handleReturnValue}>
               <Pill label='Return' />
-              <Pill label='Rolling return' disabled/>
+              <Pill label='Rolling return' />
             </Pills>
           </Box>
           <CustomSwiper
@@ -60,8 +55,6 @@ const Returns = () => {
             slidesPerColumn={1}
             onSlideChange={handleSlideChange}
             onSwiper={setSwiper}
-            allowSlideNext={false}
-            allowSlidePrev={false}
             autoHeight
             hidePagination
           >
@@ -69,7 +62,7 @@ const Returns = () => {
               <ReturnView returns={fundData?.performance?.returns} />
             </SwiperSlide>
             <SwiperSlide>
-              <RollingReturn returns={fundData?.performance?.returns} />
+              <RollingReturn />
             </SwiperSlide>
           </CustomSwiper>
         </Stack>
@@ -79,78 +72,6 @@ const Returns = () => {
 };
 
 export default Returns;
-
-const RollingReturn = ({ returns = [] }) => {
-  const [investmentYear, setInvestmentYear] = useState(0);
-
-  const minimun = minBy(returns, 'value')?.value;
-  const maximum = maxBy(returns, 'value')?.value;
-  const average = nonRoundingToFixed(meanBy(returns, 'value'), 2);
-  const NET_ASSET_VALUE = [
-    {
-      name: 'Minimum',
-      value: minimun,
-    },
-    {
-      name: 'Maximum',
-      value: maximum,
-    },
-    {
-      name: 'Average',
-      value: average,
-    },
-  ];
-  const handleInvestmentYear = (e, value) => {
-    setInvestmentYear(value);
-  };
-
-  return (
-    <Box sx={{ mt: 3, mb: 3 }}>
-      <Stack>
-        <Typography variant='heading4' color={secondaryColor}>
-          Investment period
-        </Typography>
-        <Box sx={{ mt: 4, maxWidth: 'fit-content' }}>
-          <Timelines value={investmentYear} onChange={handleInvestmentYear}>
-            <TimeLine label='1Y' />
-            <TimeLine label='3Y' />
-            <TimeLine label='5Y' />
-            <TimeLine label='10Y' />
-            <TimeLine label='15Y' />
-            <TimeLine label='20Y' />
-          </Timelines>
-        </Box>
-        <Stack sx={{ mt: 4, mb: 2 }} direction='column' spacing={3}>
-          <Typography variant='heading4' color={secondaryColor}>
-            Net asset value
-          </Typography>
-          {NET_ASSET_VALUE?.map((net_asset, idx) => {
-            return (
-              <Stack key={idx} direction='column' spacing={2}>
-                <Stack direction='row' justifyContent='space-between'>
-                  <Typography variant='body8' color={secondaryColor}>
-                    {net_asset?.name}
-                  </Typography>
-                  <Typography variant='heading4' color={secondaryColor}>
-                    {net_asset?.value > 0 ? `+ ${net_asset?.value}` : `- ${net_asset?.value}`}%
-                  </Typography>
-                </Stack>
-                {NET_ASSET_VALUE?.length !== idx + 1 && <Separator />}
-              </Stack>
-            );
-          })}
-        </Stack>
-        <Box
-          sx={{
-            height: '300px',
-            width: '100%',
-            backgroundColor: 'foundationColors.secondary.profitGreen.200',
-          }}
-        />
-      </Stack>
-    </Box>
-  );
-};
 
 const ReturnView = ({ returns = [] }) => {
   return (
