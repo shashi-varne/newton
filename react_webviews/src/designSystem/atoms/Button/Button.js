@@ -38,7 +38,7 @@ const Button = (props) => {
       color='secondary'
       disabled={disabled}
       onClick={onClick}
-      data-aid={`button_${dataAid}`}
+      data-aid={`button_${dataAid || variant}`}
       sx={{color, backgroundColor,':hover': onHoverStyle}}
       {...restProps}
     >
