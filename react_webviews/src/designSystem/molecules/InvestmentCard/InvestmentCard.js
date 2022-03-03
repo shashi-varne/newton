@@ -209,7 +209,7 @@ InvestmentCardBottomRow.defaultProps = {
 
 InvestmentCard.propTypes = {
   children: PropTypes.node,
-  dataAid: PropTypes.string,
+  dataAid: PropTypes.oneOfType([PropTypes.string,PropTypes.number])
 };
 
 InvestmentCardHeaderRow.propTypes = {
