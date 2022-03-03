@@ -107,9 +107,8 @@ const App = () => {
 
     return (
       <Provider store={store}>
-      <BrowserRouter basename={basename}>
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
+        <PersistGate loading={null} persistor={persistor}>
+          <BrowserRouter basename={basename}>
             <JssProvider jss={jss} generateClassName={generateClassName}>
               <MuiThemeProvider theme={themeConfiguration}>
                 <ScrollToTop />
@@ -145,9 +144,8 @@ const App = () => {
                 </Switch>
               </MuiThemeProvider>
             </JssProvider>
-          </PersistGate>
-        </Provider>
-      </BrowserRouter>
+          </BrowserRouter>
+        </PersistGate>
       </Provider>
     );
 }
