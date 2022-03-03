@@ -1,6 +1,7 @@
 import { calculateAge, isValidDate, validateEmail, isEmpty, storageService } from 'utils/validators'
 import { isTradingEnabled, getConfig } from '../../utils/functions'
 import { nativeCallback, openPdfCall } from '../../utils/native_callback'
+import { validateAlphaNumeric } from '../../utils/validators'
 import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS, GENDER_OPTIONS, PATHNAME_MAPPER, PINCODE_LENGTH } from '../constants'
 import { isReadyToInvest } from '../services'
 import { getKyc } from './api'
@@ -90,6 +91,11 @@ export const validateFields = (formData, keyToCheck) => {
             canSubmit = false
           }
           break
+        case 'nri_pincode':
+          if (!validateAlphaNumeric(value)) {
+            formData[`${key}_error`] = 'invalid pincode'
+            canSubmit = false
+          }
         default:
           break
       }
