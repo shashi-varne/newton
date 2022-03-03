@@ -17,6 +17,7 @@ const Logout = (props) => {
   const initialize = async () => {
     if (config.Web) {
       storageService().clear();
+      window.localStorage.removeItem('persist:root');
       if (config.isIframe) {
         let message = JSON.stringify({
           type: "iframe_close",

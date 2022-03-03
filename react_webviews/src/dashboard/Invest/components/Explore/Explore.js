@@ -15,7 +15,7 @@ import { storageService } from 'utils/validators'
 import InvestExploreCard from './InvestExploreCard'
 import { getConfig } from "utils/functions";
 
-import { getTrendingFunds, getSubCategories } from '../../common/api'
+import { getDiyTrendingFunds, getSubCategories } from '../../common/api'
 import { CART, CATEGORY, FUNDSLIST, SUBCATEGORY } from '../../../DIY/constants'
 import isEmpty from 'lodash/isEmpty';
 import './Explore.scss';
@@ -23,8 +23,8 @@ import { nativeCallback } from '../../../../utils/native_callback'
 import { flowName } from '../../constants'
 import { isNewIframeDesktopLayout } from '../../../../utils/functions'
 import Api from '../../../../utils/api';
-import { useDispatch } from 'react-redux'
-import { fetchDiyCategoriesAndTrendingFunds, setFundsCart, setFilteredFundList } from 'businesslogic/dataStore/reducers/diy';
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchDiyCategoriesAndTrendingFunds, setFundsCart, setFilteredFundList, getAllCategories, getTrendingFunds } from 'businesslogic/dataStore/reducers/diy';
 import { resetFundDetails } from 'businesslogic/dataStore/reducers/fundDetails';
 import { DEFAULT_FILTER_DATA } from 'businesslogic/constants/diy'
 import { resetMfOrders } from 'businesslogic/dataStore/reducers/mfOrders'
@@ -40,9 +40,13 @@ const InvestExplore = (props) => {
   const dispatch = useDispatch();
 
   const {isPageLoading} = useLoadingState(screen);
+  const trendingFunds = useSelector(getTrendingFunds);
+  const allCategories = useSelector(getAllCategories);
 
   useEffect(() => {
-    dispatch(fetchDiyCategoriesAndTrendingFunds({Api, screen}));    
+    if(isEmpty(trendingFunds) || isEmpty(allCategories)) {
+      dispatch(fetchDiyCategoriesAndTrendingFunds({Api, screen}));
+    }
     dispatch(setFundsCart([]));
     dispatch(setFilteredFundList({ filterOptions: DEFAULT_FILTER_DATA }));
     dispatch(resetMfOrders());
@@ -91,7 +95,7 @@ const InvestExplore = (props) => {
     try {
       const categoryList = storageService().getObject('diystore_categoryList')
       if(isEmpty(categoryList)) {
-        const data = await getTrendingFunds()
+        const data = await getDiyTrendingFunds()
         const categories = await getSubCategories()
         storageService().setObject('diystore_trending', data.trends)
         storageService().setObject('diystore_categoryList', categories.result)
