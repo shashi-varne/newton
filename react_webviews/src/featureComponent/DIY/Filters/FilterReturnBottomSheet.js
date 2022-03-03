@@ -81,7 +81,7 @@ const Sorting = ({ selectedItem, handleSelection }) => {
                 <Icon size='24px' src={require('assets/checked.svg')} dataAid="check" />
               )}
             </Stack>
-            <Separator dataAid={idx+1} marginTop="16px !important" />
+            {SORT_DATA_LIST.length !== idx + 1 && <Separator dataAid={idx+1} marginTop="16px !important" />}
           </Stack>
         );
       })}
