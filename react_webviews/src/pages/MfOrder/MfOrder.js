@@ -84,7 +84,7 @@ const MfOrder = (props) => {
     setExpectedAmount(expectedValue);
   };
   useEffect(() => {
-    if (!isProductFisdom) {
+    if (!isProductFisdom && !isEmpty(fundOrderDetails)) {
       getExpectedAmount();
     }
   }, [investedValue, parentInvestmentType]);
