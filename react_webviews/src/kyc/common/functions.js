@@ -96,6 +96,7 @@ export const validateFields = (formData, keyToCheck) => {
             formData[`${key}_error`] = 'invalid pincode'
             canSubmit = false
           }
+          break
         default:
           break
       }
