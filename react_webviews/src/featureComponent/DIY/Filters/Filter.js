@@ -106,7 +106,7 @@ const Filter = ({
             />
           </Stack>
           <div className="diy-filter-footer-btn-wrapper">
-            <Button title="Apply" onClick={onSelect} />
+            <Button title="Apply" onClick={onSelect} dataAid="primary" />
           </div>
         </Stack>
       </Drawer>
@@ -123,6 +123,7 @@ const LeftPanel = ({ selectedTab, handleSelection }) => {
         backgroundColor: "foundationColors.supporting.grey",
         cursor: "pointer",
       }}
+      data-aid="grp_filterOptions"
     >
       {FILTER_TAB_OPTIONS?.map((el, idx) => {
         const selectedValue = selectedTab === idx;
