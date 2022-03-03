@@ -12,7 +12,7 @@ import toast from "common/ui/Toast";
 import "./commonStyles.scss";
 import { storageService } from "../../../utils/validators";
 import { nativeCallback } from "../../../utils/native_callback";
-import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
+import { navigate as navigateFunc } from "../../../utils/functions";
 
 const FundswiseSummary = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -37,12 +37,7 @@ const FundswiseSummary = (props) => {
 
   const goToFundDetails = (fund) => () => {
     sendEvents('next', fund, "", "yes");
-    navigate(
-      `/fund-details`,
-      {
-        searchParams: `${getConfig().searchParams}&isins=${fund.mf.isin}`,
-      },
-    )
+    navigate(`/diy/fundinfo/direct/${fund.mf.isin}`);
   };
 
   const handleMenuClick = (fund, index) => (event) => {

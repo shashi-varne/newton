@@ -4,7 +4,7 @@ import { formatAmountInr, isEmpty } from "utils/validators";
 import { getTransactions, getNextTransactions } from "../../common/api";
 import "./commonStyles.scss";
 import { nativeCallback } from "../../../utils/native_callback";
-import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
+import { navigate as navigateFunc } from "../../../utils/functions";
 
 const FundswiseTransactions = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -72,12 +72,7 @@ const FundswiseTransactions = (props) => {
 
   const goToFundDetails = (transaction) => () => {
     sendEvents('next', "yes");
-    navigate(
-      `/fund-details`,
-      {
-        searchParams: `${getConfig().searchParams}&isins=${transaction.isin}`,
-      },
-    )
+    navigate(`/diy/fundinfo/direct/${transaction.isin}`);
   };
 
   return (
