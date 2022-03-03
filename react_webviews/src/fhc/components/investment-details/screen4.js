@@ -18,7 +18,7 @@ class InvestmentDetails4 extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      show_loader: 'button',
       tax_investment: '',
       tax_investment_error: '',
       fhc_data: new FHC(),
@@ -110,7 +110,7 @@ class InvestmentDetails4 extends Component {
     if (!fhc_data.isValidTaxes()) {
       this.setState({ fhc_data });
     } else {
-      this.setState({ show_loader: true });
+      this.setState({ show_loader: 'button' });
       if (!Number(fhc_data.tax_savings.tax_saving_80C)) {
         fhc_data.tax_savings.tax_saving_80C = '0';
       } else if (!Number(fhc_data.tax_savings.tax_saving_80CCD)) {
@@ -144,7 +144,7 @@ class InvestmentDetails4 extends Component {
             type="text"
             width="40"
             label="Investment under Sec 80C ?"
-            class="Income"
+            className="Income"
             id="invest-80C"
             name="tax_saving_80C"
             value={formatAmount(tax_saving_80C || '')}
@@ -158,7 +158,7 @@ class InvestmentDetails4 extends Component {
             type="text"
             width="40"
             label="Invested in NPS under Sec 80CCD ?"
-            class="Income"
+            className="Income"
             id="invest-80CCD"
             name="tax_saving_80CCD"
             value={formatAmount(tax_saving_80CCD || '')}
@@ -191,7 +191,7 @@ class InvestmentDetails4 extends Component {
               helperText={fhc_data.tax_is_present_error}
               width="40"
               label="Have you invested under 80C or others?"
-              class="MaritalStatus"
+              className="MaritalStatus"
               options={yesOrNoOptions}
               id="tax-saving"
               value={is_present}

@@ -1,39 +1,98 @@
-import React from 'react';
-import { Route, Switch, useHistory } from 'react-router-dom';
-
 import 'common/theme/Style.scss';
-
-import NotFound from './common/components/NotFound';
-import Insurance from './insurance';
-import GroupInsurance from './group_insurance';
-import Referral from './referral';
-import Gold from './gold';
-import Mandate from './mandate_address';
-import Mandate_OTM from './mandate_otm';
-import EMandate from './e_mandate';
-import RiskProfiler from './risk_profiler';
-import HNI from './external_portfolio';
-import IsipBIller from './isip';
-import HelpSupport from './help_support_v2';
-import CommonLanding from './common/components/landing';
-import Withdraw from './withdraw';
-import Report from './reports';
-import Fhc from './fhc';
-// import Loan from './loan_idfc';
-import Payment from './payment';
-import EquityPayment from './equity_payment';
-import KycEsign from './kyc_esign';
-import PortfolioRebalancing from './portfolio_rebalancing';
-import FundDetails from './fund_details';
-import Whatsapp from './whatsapp';
-import Landing from './dashboard';
+import React, { lazy, Suspense } from 'react';
+import { Route, Switch, useHistory } from 'react-router-dom';
+import ErrorBoundary from './ErrorBoundary';
 import ProtectedRoute from './common/components/ProtectedRoute';
-import FeedBack from './feedback';
-import Partner from "./partner"
-import TaxFiling from './tax_filing'
-import Kyc from './kyc';
-import AccountStatements from './account_statements';
-import FreedomPlan from './freedom_plan';
+import BootSkeleton from './common/components/BootSkeleton';
+import NotFound from './common/components/NotFound';
+
+const Insurance = lazy(() => import(
+  /*webpackChunkName: "Insurance"*/ './insurance'
+));
+const GroupInsurance = lazy(() => import(
+  /*webpackChunkName: "GroupInsurance"*/ './group_insurance'
+));
+const Referral = lazy(() => import(
+  /*webpackChunkName: "Referral"*/ './referral'
+));
+const Gold = lazy(() => import(
+  /*webpackChunkName: "Gold"*/ './gold'
+));
+const Mandate = lazy(() => import(
+  /*webpackChunkName: "Mandate"*/ './mandate_address'
+));
+const Mandate_OTM = lazy(() => import(
+  /*webpackChunkName: "Mandate_OTM"*/ './mandate_otm'
+));
+const EMandate = lazy(() => import(
+  /*webpackChunkName: "EMandate"*/ './e_mandate'
+));
+const RiskProfiler = lazy(() => import(
+  /*webpackChunkName: "RiskProfiler"*/ './risk_profiler'
+));
+const HNI = lazy(() => import(
+  /*webpackChunkName: "HNI"*/ './external_portfolio'
+));
+const IsipBIller = lazy(() => import(
+  /*webpackChunkName: "IsipBiller"*/ './isip'
+));
+const HelpSupport = lazy(() => import(
+  /*webpackChunkName: "HelpSupport"*/ './help_support_v2'
+));
+const CommonLanding = lazy(() => import(
+  /*webpackChunkName: "CommonLanding"*/ './common/components/landing'
+));
+const Withdraw = lazy(() => import(
+  /*webpackChunkName: "Withdraw"*/ './withdraw'
+));
+const Report = lazy(() => import(
+  /*webpackChunkName: "Report"*/ './reports'
+));
+const Fhc = lazy(() => import(
+  /*webpackChunkName: "Fhc"*/ './fhc'
+));
+// const Loan = lazy(() => import(
+//   /*webpackChunkName: "Loan"*/ './loan_idfc'
+// ));
+const Payment = lazy(() => import(
+  /*webpackChunkName: "Payment"*/ './payment'
+));
+const KycEsign = lazy(() => import(
+  /*webpackChunkName: "KycEsign"*/ './kyc_esign'
+));
+const PortfolioRebalancing = lazy(() => import(
+  /*webpackChunkName: "PortfolioRebalancing"*/ './portfolio_rebalancing'
+));
+const FundDetails = lazy(() => import(
+  /*webpackChunkName: "FundDetails"*/ './fund_details'
+));
+const Whatsapp = lazy(() => import(
+  /*webpackChunkName: "Whatsapp"*/ './whatsapp'
+));
+const Landing = lazy(() => import(
+  /*webpackChunkName: "Landing"*/ './dashboard'
+));
+const FeedBack = lazy(() => import(
+  /*webpackChunkName: "FeedBack"*/ './feedback'
+));
+const Partner = lazy(() => import(
+  /*webpackChunkName: "Partner"*/ "./partner"
+));
+const TaxFiling = lazy(() => import(
+  /*webpackChunkName: "TaxFiling"*/ './tax_filing'
+));
+const Kyc = lazy(() => import(
+  /*webpackChunkName: "Kyc"*/ './kyc'
+));
+const AccountStatements = lazy(() => import(
+  /*webpackChunkName: "AccountStatements"*/ './account_statements'
+));
+const EquityPayment = lazy(() => import(
+  /*webpackChunkName: "EquityPayment"*/ './equity_payment'
+));
+const FreedomPlan = lazy(() => import(
+  /*webpackChunkName: "FreedomPlan"*/ './freedom_plan'
+));
 
 const Feature = () => {
   // old # route support added
@@ -48,39 +107,43 @@ const Feature = () => {
     return null;
   } else {
     return (
-      <Switch>
-        <ProtectedRoute path='/insurance' component={Insurance} />
-        <ProtectedRoute path='/group-insurance' component={GroupInsurance} />
-        <ProtectedRoute path='/referral' component={Referral} />
-        <ProtectedRoute path={['/gold','/direct/gold']} component={Gold} />
-        <ProtectedRoute path='/fhc' component={Fhc} />
-        <ProtectedRoute path='/mandate' component={Mandate} />
-        <ProtectedRoute path='/mandate-otm' component={Mandate_OTM} />
-        <ProtectedRoute path='/e-mandate' component={EMandate} />
-        <ProtectedRoute path='/risk' component={RiskProfiler} />
-        <ProtectedRoute path='/hni/' component={HNI} />
-        <ProtectedRoute path='/isip' component={IsipBIller} />
-        <ProtectedRoute path='/help' component={HelpSupport} />
-        {/* <ProtectedRoute path='/loan' component={Loan} /> */}
-        <Route path='/pg/eq' component={EquityPayment} />
-        <ProtectedRoute path='/pg' component={Payment} />
-        <ProtectedRoute path='/kyc-esign' component={KycEsign} />
-        <ProtectedRoute path='/whatsapp/' component={Whatsapp} />
-        <ProtectedRoute path='/webview/:main_module/:sub_module' component={CommonLanding} />
-        <ProtectedRoute path='/webview/:main_module' component={CommonLanding} />
-        <ProtectedRoute path='/portfolio-rebalancing' component={PortfolioRebalancing} />
-        <ProtectedRoute path='/fund-details' component={FundDetails} />
-        <ProtectedRoute path='/feedback' component={FeedBack} />
-        <ProtectedRoute path='/partner' component={Partner} />
-        <ProtectedRoute path='/tax-filing' component={TaxFiling} />
-        <ProtectedRoute path='/withdraw' component={Withdraw} />
-        <ProtectedRoute path='/reports' component={Report} />
-        <ProtectedRoute path='/statements' component={AccountStatements} />
-        <ProtectedRoute path='/kyc' component={Kyc} />
-        <ProtectedRoute path='/freedom-plan' component={FreedomPlan} />
-        <ProtectedRoute path='/' component={Landing} />
-        <Route component={NotFound} />
-      </Switch>
+      <ErrorBoundary>
+        <Suspense fallback={<BootSkeleton />}>
+          <Switch>
+            <ProtectedRoute path='/insurance' component={Insurance} />
+            <ProtectedRoute path='/group-insurance' component={GroupInsurance} />
+            <ProtectedRoute path='/referral' component={Referral} />
+            <ProtectedRoute path={['/gold','/direct/gold']} component={Gold} />
+            <ProtectedRoute path='/fhc' component={Fhc} />
+            <ProtectedRoute path='/mandate' component={Mandate} />
+            <ProtectedRoute path='/mandate-otm' component={Mandate_OTM} />
+            <ProtectedRoute path='/e-mandate' component={EMandate} />
+            <ProtectedRoute path='/risk' component={RiskProfiler} />
+            <ProtectedRoute path='/hni/' component={HNI} />
+            <ProtectedRoute path='/isip' component={IsipBIller} />
+            <ProtectedRoute path='/help' component={HelpSupport} />
+            {/* <ProtectedRoute path='/loan' component={Loan} /> */}
+            <Route path='/pg/eq' component={EquityPayment} />
+            <ProtectedRoute path='/pg' component={Payment} />
+            <ProtectedRoute path='/kyc-esign' component={KycEsign} />
+            <ProtectedRoute path='/whatsapp/' component={Whatsapp} />
+            <ProtectedRoute path='/webview/:main_module/:sub_module' component={CommonLanding} />
+            <ProtectedRoute path='/webview/:main_module' component={CommonLanding} />
+            <ProtectedRoute path='/portfolio-rebalancing' component={PortfolioRebalancing} />
+            <ProtectedRoute path='/fund-details' component={FundDetails} />
+            <ProtectedRoute path='/feedback' component={FeedBack} />
+            <ProtectedRoute path='/tax-filing' component={TaxFiling} />
+            <ProtectedRoute path='/partner' component={Partner} />
+            <ProtectedRoute path='/statements' component={AccountStatements} />
+            <ProtectedRoute path='/withdraw' component={Withdraw} />
+            <ProtectedRoute path='/reports' component={Report} />
+            <ProtectedRoute path='/kyc' component={Kyc} />
+            <ProtectedRoute path='/freedom-plan' component={FreedomPlan} />
+            <ProtectedRoute path='/' component={Landing} />
+            <Route component={NotFound} />
+          </Switch>
+        </Suspense>
+      </ErrorBoundary>
     );
   }
 };

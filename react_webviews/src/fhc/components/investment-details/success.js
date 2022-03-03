@@ -9,7 +9,7 @@ class InvestSuccess extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            show_loader: true,
+            show_loader: 'button',
             name: '',
         };
         this.navigate = navigate.bind(this);
