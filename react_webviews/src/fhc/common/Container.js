@@ -6,7 +6,6 @@ import '../../utils/native_listener';
 import { getConfig } from 'utils/functions';
 import { storageService } from '../../utils/validators';
 import { uploadFHCData } from '../common/ApiCalls';
-import toast from '../../common/ui/Toast';
 import { navigate } from './commonFunctions';
 
 import {didMount ,commonRender} from '../../common/components/container_functions';
@@ -29,7 +28,7 @@ class Container extends Component {
     this.didMount = didMount.bind(this);
     this.commonRender =  commonRender.bind(this);
   }
-
+  
   componentDidMount() {
     this.didMount();
   }
@@ -82,13 +81,12 @@ class Container extends Component {
     try {
       const fhc_data = storageService().getObject('fhc_data');
       await uploadFHCData(fhc_data, true);
+    } catch (e) {
+      this.setState({ show_loader: false });
+    } finally {
       storageService().remove('fhc_data'); // remove cached fhc data when exiting
       nativeCallback({ events: this.getEvents('exit_yes') });
       handleNativeExit(this.props, {action: this.state.callbackType});
-    } catch (e) {
-      this.setState({ show_loader: false });
-      console.log(e);
-      toast(e);
     }
   }
 

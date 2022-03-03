@@ -79,7 +79,7 @@ class ConfirmDialogClass extends Component {
                 <div className="hr"></div>
               </div>
             </DialogContent>
-          </Dialog >
+          </Dialog>
         );
     
     }
