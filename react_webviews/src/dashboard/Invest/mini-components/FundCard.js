@@ -50,7 +50,7 @@ const FundCard = ({
     }
     setInvestmentData({}, "", true)
     navigate(
-      `/diyv2/fund-details`,
+      `/fund-details`,
       {
         searchParams: `${parentProps.location.search}&isins=${isins}&selected_isin=${isin}&type=mf`,
         state:{flow:"mf journey"}

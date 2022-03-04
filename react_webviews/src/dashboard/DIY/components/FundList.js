@@ -305,7 +305,7 @@ const DiyFundCard = ({
     dataCopy.diy_type = 'categories'
     storageService().setObject('diystore_fundInfo', dataCopy)
     navigate(
-      `/diyv2/fund-details`,
+      `/fund-details`,
       {
         searchParams: `${parentProps.location.search}&isins=${props.isin}&type=diy`,
       }
