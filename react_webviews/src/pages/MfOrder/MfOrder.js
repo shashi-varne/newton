@@ -71,7 +71,7 @@ const MfOrder = (props) => {
   }, []);
 
   const getExpectedAmount = () => {
-    const fundReturns = fundOrderDetails[0]?.fund_returns;
+    const fundReturns = fundOrderDetails[0]?.fund_returns || {};
     const returnAvailable = RETURNS?.find((el) => fundReturns[el.value]);
     const returnPercentage = fundReturns[returnAvailable.value];
     const expectedValue = getExpectedReturn(
@@ -84,7 +84,7 @@ const MfOrder = (props) => {
     setExpectedAmount(expectedValue);
   };
   useEffect(() => {
-    if (!isProductFisdom) {
+    if (!isProductFisdom && !isEmpty(fundOrderDetails)) {
       getExpectedAmount();
     }
   }, [investedValue, parentInvestmentType]);

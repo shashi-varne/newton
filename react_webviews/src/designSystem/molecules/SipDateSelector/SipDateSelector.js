@@ -44,16 +44,16 @@ const SipDateSelector = ({ isOpen, sipDates, onClose, selectedDate, handleSelect
       className='sip-date-selector-sheet'
       keepMounted
     >
-      <Stack className='sip-date-selector-wrapper'>
+      <Stack className='sip-date-selector-wrapper' data-aid="btmshtDatePicker" >
         <Stack sx={{ mb: 2 }} direction='row' justifyContent='center' className='sip-title-wrapper'>
           <IconButton onClick={handleClose}>
-            <Icon size='24px' src={require('assets/close_small.svg')} />
+            <Icon size='24px' src={require('assets/close_small.svg')} dataAid="close" />
           </IconButton>
-          <Typography variant='heading3' align='center'>
+          <Typography variant='heading3' align='center' dataAid="title" >
             Available dates
           </Typography>
         </Stack>
-        <Stack className='selector-list-wrapper'>
+        <Stack className='selector-list-wrapper' data-aid="grp_label" >
           {sipDates?.map((el, idx) => {
             const elRef = selectedData === el ? itemRef : null;
             const selectedItemColor =
@@ -69,7 +69,7 @@ const SipDateSelector = ({ isOpen, sipDates, onClose, selectedDate, handleSelect
                 className='selector-item-wrapper'
                 onClick={handleSelectedItem(el)}
               >
-                <Typography variant={selectedVariant} color={selectedItemColor}>
+                <Typography variant={selectedVariant} color={selectedItemColor} dataAid={`label${idx+1}`} >
                   {el}
                 </Typography>
                 {selectedData === el && (
@@ -77,6 +77,7 @@ const SipDateSelector = ({ isOpen, sipDates, onClose, selectedDate, handleSelect
                     className='selected-date-text'
                     color='foundationColors.content.secondary'
                     variant='body5'
+                    dataAid="info"
                   >
                     of every month
                   </Typography>
@@ -85,7 +86,7 @@ const SipDateSelector = ({ isOpen, sipDates, onClose, selectedDate, handleSelect
             );
           })}
         </Stack>
-        <Button sx={{ mt: 4 }} title='Select Date' onClick={handleSetDate} />
+        <Button sx={{ mt: 4 }} title='Select Date' onClick={handleSetDate} dataAid="primary" />
       </Stack>
     </Dialog>
   );
