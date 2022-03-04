@@ -69,8 +69,8 @@ const Returns = () => {
             onSwiper={setSwiper}
             autoHeight
             hidePagination
-            allowSlideNext={rollingReturnData[minRollingYear]}
-            allowSlidePrev={rollingReturnData[minRollingYear]}
+            noSwiping
+            noSwipingClass='swiper-slide'
           >
             <SwiperSlide>
               <ReturnView returns={fundData?.performance?.returns} />
