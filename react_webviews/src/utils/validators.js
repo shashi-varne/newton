@@ -178,6 +178,12 @@ export function validateNumber(number) {
   return rule.test(number);
 }
 
+export function validateAlphaNumeric(number) {
+  // eslint-disable-next-line
+  let rule = /^[A-Za-z0-9]+$/;
+  return rule.test(number);
+}
+
 export function isNumberKey(evt) {
     var charCode = (evt.which) ? evt.which : evt.keyCode
     if (charCode !== 43 && charCode > 31 && (charCode < 48 || charCode > 57))
