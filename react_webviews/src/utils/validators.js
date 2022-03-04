@@ -1195,12 +1195,12 @@ export function sortArrayOfObjectsByTime(array, key){
 }
 
 export function formatMobileNumber(value) {  // Example:  91|0000012345 -> +91 0000 012 345
-  if (isEmpty(value)) return value;
+  if (isEmpty(value) || value.length < 10) return value;
   let number;
   if (value.includes("|")) {
     const [code, mobileNumber] = value?.split("|");
     number =  mobileNumber.replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3');
-    return `+${code}${" "}${number}`;
+    return `+${code} ${number}`;
   } else {
     number = value.replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3');
     return number;
