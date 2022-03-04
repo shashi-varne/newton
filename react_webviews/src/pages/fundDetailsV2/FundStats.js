@@ -47,14 +47,22 @@ const calculateFundAge = (fundAge) => {
 
 const getLockinData = (lockinString) => {
   if (!lockinString) return {};
-  const substr = lockinString.match(/(\w+.+)\s\(/)[1];
-  const newData = substr.match(/(\d+.*)(or.*)/);
-  const lockingPeriod = newData[1];
-  const lockingAge = newData[2];
-  return {
-    lockingAge,
-    lockingPeriod,
-  };
+  const substr = lockinString.match(/(\w+.+)\s\(/);
+  if (substr) {
+    const substrEl = substr[1];
+    const newData = substrEl.match(/(\d+.*)(or.*)/);
+    const lockingPeriod = newData[1];
+    const lockingAge = newData[2];
+    return {
+      lockingAge,
+      lockingPeriod,
+    };
+  } else {
+    return {
+      lockingPeriod: lockinString,
+      lockingAge: '',
+    };
+  }
 };
 
 const FundStats = () => {
@@ -104,19 +112,23 @@ const FundStats = () => {
           </Typography>
           <Stack direction='column'>
             {isEmpty(lokinPeriodData) ? (
-              <Typography align='right' variant='heading4'>NA</Typography>
+              <Typography align='right' variant='heading4'>
+                NA
+              </Typography>
             ) : (
               <>
                 <Typography align='right' variant='heading4'>
                   {lokinPeriodData?.lockingPeriod}
                 </Typography>
-                <Typography
-                  align='right'
-                  variant='body5'
-                  color='foundationColors.content.secondary'
-                >
-                  {`(${lokinPeriodData?.lockingAge})`}
-                </Typography>
+                {lokinPeriodData?.lockingAge && (
+                  <Typography
+                    align='right'
+                    variant='body5'
+                    color='foundationColors.content.secondary'
+                  >
+                    {`(${lokinPeriodData?.lockingAge})`}
+                  </Typography>
+                )}
               </>
             )}
           </Stack>

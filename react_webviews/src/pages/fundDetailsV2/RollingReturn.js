@@ -13,12 +13,35 @@ import useLoadingState from '../../common/customHooks/useLoadingState';
 
 const screen = 'fundDetailsV2';
 const secondaryColor = 'foundationColors.content.secondary';
+const getValidRollingReturnYear = (rollingReturnData, investmentYear) => {
+  if(rollingReturnData[investmentYear]){
+    return {
+      graphData: rollingReturnData[investmentYear],
+      year: investmentYear
+    }
+  } else {
+    let data = {};
+    // eslint-disable-next-line no-unused-expressions
+    ROLLING_RETURN_TIMELINES?.some((el) => {
+      if(rollingReturnData[el.value]) {
+        data = {
+          graphData: rollingReturnData[el.value],
+          year: el.value
+        };
+        return true;
+      }
+      return false;
+    })
+    return data;
+  }
+}
+const defaultRollingReturnYear = 36;
 const RollingReturn = () => {
-  const [investmentYear, setInvestmentYear] = useState(36);
   const { loadingData } = useLoadingState(screen);
   const rollingReturnData = useSelector(getRollingReturnData);
-  const rollingData = rollingReturnData[investmentYear];
-  const rollingGraphData = !isEmpty(rollingData?.data) ? rollingData?.data : [];
+  const rollingData = getValidRollingReturnYear(rollingReturnData,defaultRollingReturnYear);
+  const rollingGraphData = !isEmpty(rollingData?.graphData?.data) ? rollingData?.graphData?.data : [];
+  const [investmentYear, setInvestmentYear] = useState(rollingData?.year);
   const returnGraphData = [...rollingGraphData];
   const NET_ASSET_VALUE = useMemo(() => {
     return [

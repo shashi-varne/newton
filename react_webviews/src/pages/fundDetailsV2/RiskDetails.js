@@ -45,6 +45,17 @@ const getBarIndex = (riskValue) => {
   return riskIndex;
 };
 
+const checkRiskMeasuresAttribute = (riskMeasure) => {
+  if(isEmpty(riskMeasure)) return true;
+  const isRiskMeasureAvialable = riskMeasure?.find(el => el?.name?.match(/Alpha|Beta|squared/i));
+  if(isEmpty(isRiskMeasureAvialable)) {
+    return true;
+  } else {
+    return false;
+  }
+
+}
+
 const RiskDetails = () => {
   const [isRiskOpen, setIsRiskOpen] = useState(false);
   const [isTooltipOpen, setIsTooltipOpen] = useState({
@@ -55,7 +66,7 @@ const RiskDetails = () => {
   const fundData = useSelector(getFundData);
   const isRiskVsCatAvailable = isEmpty(fundData?.risk?.risk_vs_category);
   const isReturnVsCatAvailable = isEmpty(fundData?.risk?.return_vs_category);
-  const isRiskMeasureAvailable = isEmpty(fundData?.risk?.risk_measures);
+  const isRiskMeasureAvailable = isEmpty(fundData?.risk?.risk_measures) || checkRiskMeasuresAttribute(fundData?.risk?.risk_measures);
   const isRiskDetailsAvailable =
     isRiskVsCatAvailable && isReturnVsCatAvailable && isRiskMeasureAvailable;
   const { riskVsCategoryActiveIndex, returnVsCategoryActiveIndex } = useMemo(() => {
