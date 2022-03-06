@@ -4,20 +4,28 @@ import { nativeCallback } from "../../../utils/native_callback";
 import { storageService } from "../../../utils/validators";
 import { logout } from "../../functions";
 import { isRmJourney } from "../../../group_insurance/products/group_health/common_data";
+import { useDispatch } from "react-redux";
+import { resetDiyData } from "businesslogic/dataStore/reducers/diy";
+import { resetMfOrders } from "businesslogic/dataStore/reducers/mfOrders";
+import { resetFundDetails } from "businesslogic/dataStore/reducers/fundDetails";
 
 const config = getConfig();
 const Logout = (props) => {
   const navigate = navigateFunc.bind(props); 
   const isRM = isRmJourney();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     initialize();
   }, []);
 
   const initialize = async () => {
+    window.localStorage.removeItem('persist:root');
+    dispatch(resetDiyData());
+    dispatch(resetMfOrders());
+    dispatch(resetFundDetails());
     if (config.Web) {
       storageService().clear();
-      window.localStorage.removeItem('persist:root');
       if (config.isIframe) {
         let message = JSON.stringify({
           type: "iframe_close",

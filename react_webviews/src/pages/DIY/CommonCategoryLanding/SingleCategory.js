@@ -23,7 +23,7 @@ const SingleCategory = ({ handleCardClick, isPageLoading, data = {} }) => {
               <WrapperBox
                 elevation={1}
                 sx={{ height: "100%" }}
-                onClick={handleCardClick(data.key, el.key)}
+                onClick={handleCardClick(data.key, el.key, el.name)}
                 key={idx}
               >
                 <CardHorizontal
