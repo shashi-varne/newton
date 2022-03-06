@@ -9,22 +9,26 @@ import isEqual from 'lodash/isEqual';
 import { useLocation, withRouter } from 'react-router-dom';
 import Separator from '../../../designSystem/atoms/Separator';
 import { useSelector } from 'react-redux';
-import { getDiyCart } from 'businesslogic/dataStore/reducers/diy';
+import { getDiyCart, getDiyTypeData } from 'businesslogic/dataStore/reducers/diy';
 import { getConfig, navigate as navigateFunc } from '../../../utils/functions';
 import useLoadingState from '../../../common/customHooks/useLoadingState';
 import isEmpty from 'lodash/isEmpty';
 import { getDiyDataAid } from '../common/functions';
+import useUserKycHook from '../../../kyc/common/hooks/userKycHook';
+import { nativeCallback } from '../../../utils/native_callback';
 
 const screen = 'diyFundList';
 const TabPanel = memo((props) => {
   const { data = [], returnPeriod, returnLabel, value, activeTab, handleAddToCart, subcategoryOption } = props;
   const [NumOfItems, setNumOfItems] = useState(10);
   const [showLoader, setShowLoader] = useState(false);
+  const { kyc, user } = useUserKycHook();
   const { productName } = useMemo(getConfig, []);
   const observer = useRef();
   const location = useLocation();
   const diyCartData = useSelector(getDiyCart);
   const hideCartButton = useMemo(hideDiyCartButton(productName), [productName]);
+  const { category } = useSelector(getDiyTypeData);
   const { isPageLoading } = useLoadingState(screen);
   const navigate = navigateFunc.bind(props);
   const lastProductItem = useCallback((node) => {
@@ -44,6 +48,20 @@ const TabPanel = memo((props) => {
   }, [activeTab, isPageLoading]);
 
   const showFundDetails = (fund) => () => {
+    const eventObj = {
+      event_name: 'diy fund clicked',
+      properties: {
+        fund : fund?.legal_name,
+        flow: 'diy',
+        asset_class: category?.toLowerCase() || '',
+        rating: fund?.morning_star_rating || '',
+        user_application_status: kyc?.application_status_v2 || 'init',
+        user_investment_status: user?.active_investment,
+        user_kyc_status: kyc?.mf_kyc_processed || false,
+        user_action: 'next',
+      },
+    }
+    nativeCallback({ events: eventObj });
     navigate(`/diyv2/fund-details`, {
       searchParams: `${location.search}&isins=${fund.isin}`,
     });
@@ -184,7 +202,7 @@ const FundItemSkeletonLoader = () => {
             </Stack>
           </Stack>
         </Stack>
-        <Stack spacing={2} direction='column'>
+        <Stack spacing={2} direction='column' alignItems='flex-end'>
           <Skeleton type='text' width='50px' />
           <Icon size='32px' />
         </Stack>
