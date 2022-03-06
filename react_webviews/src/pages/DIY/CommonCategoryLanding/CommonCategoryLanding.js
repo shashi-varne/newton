@@ -125,7 +125,6 @@ const CommonCategoryLanding = (props) => {
         category: category || '',
         user_action: userAction || 'back',
         sub_category: subCategory || '',
-        is_kyc_done: kyc?.mf_kyc_processed || '',
         user_application_status: kyc?.application_status_v2 || 'init',
         user_investment_status: user?.active_investment,
         user_kyc_status: kyc?.mf_kyc_processed || false,
