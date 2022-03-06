@@ -99,10 +99,10 @@ const FundDetailsV2 = (props) => {
         rolling_return_investment_period:
           fundDetailsRef.current?.rolling_return_investment_period || '',
         risk_measures: fundDetailsRef.current?.risk_measures || [],
-        user_application_status: '',
-        user_investment_status: user?.active_investment,
-        user_kyc_status: kyc?.mf_kyc_processed,
         user_action: userAction || 'back',
+        user_application_status: kyc?.application_status_v2 || 'init',
+        user_investment_status: user?.active_investment,
+        user_kyc_status: kyc?.mf_kyc_processed || false,
       },
     };
     if (userAction) {

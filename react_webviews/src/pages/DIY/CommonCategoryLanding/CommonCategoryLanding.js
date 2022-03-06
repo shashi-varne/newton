@@ -86,20 +86,22 @@ const CommonCategoryLanding = (props) => {
   }, []);
 
   const formatString = (string) => {
-    return string.replace(/_/g,' ');
-  }
-  const handleCardClick = (subcategory, subcategoryOption, subcategoryOptionName='') => () => {
-    dispatch(
-      setDiyTypeData({
-        subcategory,
-        subcategoryOption,
-      })
-    );
-    const categoryEvent = `${diyType.toLowerCase()} ${formatString(subcategory.toLowerCase())}`;
-    const subCategoryEvent = subcategoryOptionName.toLowerCase();
-    sendEvents(categoryEvent, subCategoryEvent, 'next');
-    navigate(DIY_PATHNAME_MAPPER.subcategoryFundList);
+    return string.replace(/_/g, ' ');
   };
+  const handleCardClick =
+    (subcategory, subcategoryOption, subcategoryOptionName = '') =>
+    () => {
+      dispatch(
+        setDiyTypeData({
+          subcategory,
+          subcategoryOption,
+        })
+      );
+      const categoryEvent = `${diyType.toLowerCase()} ${formatString(subcategory.toLowerCase())}`;
+      const subCategoryEvent = subcategoryOptionName.toLowerCase();
+      sendEvents(categoryEvent, subCategoryEvent, 'next');
+      navigate(DIY_PATHNAME_MAPPER.subcategoryFundList);
+    };
 
   const seeAllCategories = (subcategory) => () => {
     dispatch(
@@ -123,12 +125,13 @@ const CommonCategoryLanding = (props) => {
         category: category || '',
         user_action: userAction || 'back',
         sub_category: subCategory || '',
-        user_kyc_status: kyc?.kyc_process_status || 'init',
-        user_investment_status: user?.active_investment || '',
         is_kyc_done: kyc?.mf_kyc_processed || '',
+        user_application_status: kyc?.application_status_v2 || 'init',
+        user_investment_status: user?.active_investment,
+        user_kyc_status: kyc?.mf_kyc_processed || false,
       },
     };
-    if(userAction) {
+    if (userAction) {
       nativeCallback({ events: eventObj });
     } else {
       return eventObj;
@@ -136,7 +139,7 @@ const CommonCategoryLanding = (props) => {
   };
   return (
     <Container
-    eventData={sendEvents()}
+      eventData={sendEvents()}
       footer={{
         confirmActionProps: {
           buttonTitle: 'View Cart',
