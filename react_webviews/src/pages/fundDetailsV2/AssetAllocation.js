@@ -15,7 +15,7 @@ const AssetColors = {
   Others: 'foundationColors.secondary.coralOrange.400',
 };
 
-const AssetAllocation = () => {
+const AssetAllocation = ({fundDetailsRef}) => {
   const [isAssetOpen, setIsAssetOpen] = useState(false);
   const [viewMoreHolding, setViewMoreHolding] = useState(3);
   const [viewMoreSector, setViewMoreSector] = useState(3);
@@ -27,10 +27,18 @@ const AssetAllocation = () => {
   };
 
   const handleMoreHolding = () => {
+    fundDetailsRef.current = {
+      ...fundDetailsRef.current,
+      asset_allocation: 'view holdings'
+    }
     setViewMoreHolding((prevProp) => prevProp + 10);
   };
 
   const handleMoreSector = () => {
+    fundDetailsRef.current = {
+      ...fundDetailsRef.current,
+      asset_allocation: 'view sectors'
+    }
     setViewMoreSector((prevProp) => prevProp + 10);
   };
 

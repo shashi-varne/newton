@@ -232,7 +232,7 @@ const MfOrder = (props) => {
         investment_subtype: '',
         journey_name: 'diy',
       };
-
+      sendEvents('next',totalAmount)
       storageService().setObject('investment', investment);
       dispatch(setDiyStorage({ investment }));
       storageService().setObject('mf_invest_data', investmentEventData);
@@ -264,8 +264,28 @@ const MfOrder = (props) => {
     });
   };
 
+  const sendEvents = (userAction='', totalAmount='') => {
+    const eventObj = {
+      event_name: 'mf_order_screen',
+      properties: {
+        user_action: userAction || 'back',
+        screen_name: 'fund order',
+        order_type: parentInvestmentType,
+        number_of_funds: fundOrderDetails?.length || 0,
+        total_amount: totalAmount || '',
+        monthly_sip_date: '',
+      },
+    };
+    if(userAction) {
+      nativeCallback({ events: eventObj });
+    } else {
+      return eventObj;
+    }
+  };
+
   return (
     <Container
+    eventData={sendEvents()}
       headerProps={{
         headerTitle: 'Mutual funds order',
         hideInPageTitle: true,

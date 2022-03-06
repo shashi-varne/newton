@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import format from 'date-fns/format';
 import { getRollingReturnData } from 'businesslogic/dataStore/reducers/fundDetails';
@@ -10,14 +10,19 @@ import FundCommonGraph from './FundCommonGraph';
 import isEmpty from 'lodash/isEmpty';
 import { isValidValue } from './helperFunctions';
 import useLoadingState from '../../common/customHooks/useLoadingState';
+import Tooltip from '../../designSystem/atoms/Tooltip';
+import Icon from '../../designSystem/atoms/Icon';
 
 const screen = 'fundDetailsV2';
 const secondaryColor = 'foundationColors.content.secondary';
-const RollingReturn = () => {
+const rollingRetunInfo =
+  "This indicates how the fund's returns have stacked up for a particular investment period. E.g. A 3-year  rolling return would show the average annual return for every 3 years since the start of the fund till today";
+const RollingReturn = ({fundDetailsRef}) => {
   const [investmentYear, setInvestmentYear] = useState(36);
   const { loadingData } = useLoadingState(screen);
   const rollingReturnData = useSelector(getRollingReturnData);
   const rollingData = rollingReturnData[investmentYear];
+  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const rollingGraphData = !isEmpty(rollingData?.data) ? rollingData?.data : [];
   const returnGraphData = [...rollingGraphData];
   const NET_ASSET_VALUE = useMemo(() => {
@@ -36,8 +41,23 @@ const RollingReturn = () => {
       },
     ];
   }, [rollingReturnData, investmentYear]);
+
+  useEffect(() => {
+    fundDetailsRef.current = {
+      ...fundDetailsRef.current,
+      rolling_return_investment_period: investmentYear,
+    }
+  },[investmentYear])
   const handleInvestmentYear = (e, value) => {
     setInvestmentYear(value);
+  };
+
+  const handleTooltip = () => {
+    fundDetailsRef.current = {
+      ...fundDetailsRef.current,
+      rolling_return: 'what is rolling return?',
+    }
+    setIsTooltipOpen(!isTooltipOpen);
   };
 
   function labelFormatter() {
@@ -97,6 +117,23 @@ const RollingReturn = () => {
             labelFormatter={labelFormatter}
           />
         </div>
+        <Stack sx={{mt: 1}} direction='row' spacing={1} alignItems='center' justifyContent='flex-start'>
+          <Typography variant='body5' color='foundationColors.content.tertiary'>What is rolling return?</Typography>
+          <div>
+            <Tooltip open={isTooltipOpen} title={rollingRetunInfo}>
+              <Stack width='16px' height='16px'>
+                <Icon
+                  src={require('assets/info_icon_ds.svg')}
+                  size='16px'
+                  className='ec_info_icon'
+                  alt='info_icon'
+                  dataAid='right'
+                  onClick={handleTooltip}
+                />
+              </Stack>
+            </Tooltip>
+          </div>
+        </Stack>
       </Stack>
     </Box>
   );

@@ -2,17 +2,21 @@ import React, { useState } from 'react';
 import isArray from 'lodash/isArray';
 import Typography from '../../atoms/Typography';
 import { NavigationHeaderPoints, NavigationHeaderSubtitle } from '.';
+import { useDispatch } from 'react-redux';
+import { setDiySeeMore } from 'businesslogic/dataStore/reducers/diy';
 
 export const NavigationSeeMoreWrapper = ({ subtitle = '', points = [] }) => {
   const [seeMore, setSeeMore] = useState(false);
+  const dispatch = useDispatch();
+
+  const handleSeeMore = () => {
+    dispatch(setDiySeeMore(true));
+    setSeeMore((prevState) => !prevState);
+  };
   return (
     <>
       {seeMore ? (
-        <div
-          onClick={() => {
-            setSeeMore((prevState) => !prevState);
-          }}
-        >
+        <div onClick={handleSeeMore}>
           {subtitle && <NavigationHeaderSubtitle dataIdx={1}>{subtitle}</NavigationHeaderSubtitle>}
           {isArray(points) &&
             points?.map((point, idx) => {
@@ -27,11 +31,7 @@ export const NavigationSeeMoreWrapper = ({ subtitle = '', points = [] }) => {
           </Typography>
         </div>
       ) : (
-        <div
-          onClick={() => {
-            setSeeMore((prevState) => !prevState);
-          }}
-        >
+        <div onClick={handleSeeMore}>
           {subtitle && (
             <NavigationHeaderSubtitle dataIdx={1}>
               {subtitle.slice(0, 89).trim()}...

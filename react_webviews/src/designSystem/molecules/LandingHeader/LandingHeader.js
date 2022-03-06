@@ -61,6 +61,8 @@ import isArray from 'lodash/isArray';
 
 import './LandingHeader.scss';
 import Icon from '../../atoms/Icon';
+import { useDispatch } from 'react-redux';
+import { setDiySeeMore } from 'businesslogic/dataStore/reducers/diy';
 
 export const LandingHeader = ({ variant, children, dataAid }) => {
   const variantClass = variant === 'center' ? 'landing-header-center-align' : '';
@@ -72,9 +74,7 @@ export const LandingHeader = ({ variant, children, dataAid }) => {
 };
 
 export const LandingHeaderImage = ({ imgSrc, imgProps = {} }) => {
-  return (
-    <Icon src={imgSrc} width='140px' height='120px' {...imgProps} dataAid='top' />
-  );
+  return <Icon src={imgSrc} width='140px' height='120px' {...imgProps} dataAid='top' />;
 };
 
 export const LandingHeaderTitle = ({ children, color }) => {
@@ -87,7 +87,14 @@ export const LandingHeaderTitle = ({ children, color }) => {
 
 export const LandingHeaderSubtitle = ({ children, color, dataIdx }) => {
   return (
-    <Typography className='lh-subtitle' dataAid={`subtitle${dataIdx}`} variant='body2' color={color} align='left' component='div'>
+    <Typography
+      className='lh-subtitle'
+      dataAid={`subtitle${dataIdx}`}
+      variant='body2'
+      color={color}
+      align='left'
+      component='div'
+    >
       {children}
     </Typography>
   );
@@ -97,7 +104,13 @@ export const LandingHeaderPoints = ({ children, color, dataIdx }) => {
   return (
     <ul className='lh-description-list'>
       <li className='lh-description-item'>
-        <Typography variant='body2' color={color} align='left' dataAid={`point${dataIdx}`} component='div'>
+        <Typography
+          variant='body2'
+          color={color}
+          align='left'
+          dataAid={`point${dataIdx}`}
+          component='div'
+        >
           {children}
         </Typography>
       </li>
@@ -105,16 +118,18 @@ export const LandingHeaderPoints = ({ children, color, dataIdx }) => {
   );
 };
 
-export const LandingHeaderSeeMoreWrapper = ({ subtitle='', points=[] }) => {
+export const LandingHeaderSeeMoreWrapper = ({ subtitle = '', points = [] }) => {
   const [seeMore, setSeeMore] = useState(false);
+  const dispatch = useDispatch();
+
+  const handleSeeMore = () => {
+    dispatch(setDiySeeMore(true));
+    setSeeMore((prevState) => !prevState);
+  };
   return (
     <>
       {seeMore ? (
-        <div
-          onClick={() => {
-            setSeeMore((prevState) => !prevState);
-          }}
-        >
+        <div onClick={handleSeeMore}>
           {subtitle && <LandingHeaderSubtitle dataIdx={1}>{subtitle}</LandingHeaderSubtitle>}
           {isArray(points) &&
             points?.map((point, idx) => {
@@ -129,11 +144,7 @@ export const LandingHeaderSeeMoreWrapper = ({ subtitle='', points=[] }) => {
           </Typography>
         </div>
       ) : (
-        <div
-          onClick={() => {
-            setSeeMore((prevState) => !prevState);
-          }}
-        >
+        <div onClick={handleSeeMore}>
           {subtitle && (
             <LandingHeaderSubtitle dataIdx={1}>
               {subtitle.slice(0, 89).trim()}...
@@ -181,5 +192,3 @@ LandingHeaderPoints.propTypes = {
 LandingHeaderPoints.defaultProps = {
   color: 'foundationColors.content.secondary',
 };
-
-
