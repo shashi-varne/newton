@@ -113,8 +113,9 @@ const ComparisonChart = () => {
                   width: '6px',
                   backgroundColor: el.backgroundColor,
                 }}
+                data-aid={`iv_${el.id}`}
               />
-              <Typography variant='body5' color='foundationColors.content.secondary'>
+              <Typography dataAid={el.id} variant='body5' color='foundationColors.content.secondary'>
                 {el.name}
               </Typography>
             </Stack>
@@ -131,9 +132,11 @@ const CHART_LEGEND_DATA = [
   {
     name: 'Principal invested',
     backgroundColor: 'foundationColors.primary.200',
+    id: "pricipalInvested"
   },
   {
     name: 'Returns gained',
     backgroundColor: 'foundationColors.primary.400',
+    id: "returnsGained"
   },
 ];

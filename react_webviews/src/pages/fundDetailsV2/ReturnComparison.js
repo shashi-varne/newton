@@ -34,10 +34,10 @@ const ReturnComparison = () => {
         <Box>
           <Stack direction='column' spacing={3}>
             <Stack direction='row' spacing={1}>
-              <Typography variant='body2' color='foundationColors.content.secondary'>
+              <Typography dataAid="investmentAmountKey" variant='body2' color='foundationColors.content.secondary'>
                 Investment amount:
               </Typography>
-              <Typography variant='heading4'>{formatAmountInr(investedAmount)}</Typography>
+              <Typography dataAid="investmentAmountValue" variant='heading4'>{formatAmountInr(investedAmount)}</Typography>
             </Stack>
             <div>
               <ComparisonChart />
@@ -59,9 +59,10 @@ const ReturnComparison = () => {
                       : ''
                   }
                   toolTipDataAid="returnComparision"
+                  dataAid="1"
                 />
               </WrapperBox>
-              <Typography variant='body5' color='foundationColors.content.secondary'>
+              <Typography dataAid="note" variant='body5' color='foundationColors.content.secondary'>
                 Note: Savings account & fixed deposit can at max give an average return of 6%
                 annually
               </Typography>
