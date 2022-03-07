@@ -85,7 +85,7 @@ export const LandingHeaderTitle = ({ children, color }) => {
   );
 };
 
-export const LandingHeaderSubtitle = ({ children, color, dataIdx }) => {
+export const LandingHeaderSubtitle = ({ children, color, dataIdx = "" }) => {
   return (
     <Typography className='lh-subtitle' dataAid={`subtitle${dataIdx}`} variant='body2' color={color} align='left' component='div'>
       {children}
@@ -115,7 +115,7 @@ export const LandingHeaderSeeMoreWrapper = ({ subtitle='', points=[] }) => {
             setSeeMore((prevState) => !prevState);
           }}
         >
-          {subtitle && <LandingHeaderSubtitle dataIdx={1}>{subtitle}</LandingHeaderSubtitle>}
+          {subtitle && <LandingHeaderSubtitle>{subtitle}</LandingHeaderSubtitle>}
           {isArray(points) &&
             points?.map((point, idx) => {
               return (
@@ -135,7 +135,7 @@ export const LandingHeaderSeeMoreWrapper = ({ subtitle='', points=[] }) => {
           }}
         >
           {subtitle && (
-            <LandingHeaderSubtitle dataIdx={1}>
+            <LandingHeaderSubtitle>
               {subtitle.slice(0, 89).trim()}...
               <Typography variant='body8' color='secondary'>
                 See more
@@ -166,7 +166,7 @@ LandingHeaderTitle.propTypes = {
 LandingHeaderSubtitle.propTypes = {
   children: PropTypes.node,
   color: PropTypes.string,
-  dataIdx: PropTypes.number.isRequired,
+  dataIdx: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 LandingHeaderSubtitle.defaultProps = {

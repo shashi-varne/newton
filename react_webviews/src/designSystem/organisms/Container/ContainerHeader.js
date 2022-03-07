@@ -35,7 +35,7 @@ const ContainerHeader = ({ headerProps, containerRef, eventData, ...restProps })
         ) : (
           <>
             {subtitle && (
-              <NavigationHeaderSubtitle dataIdx={1}>{subtitle}</NavigationHeaderSubtitle>
+              <NavigationHeaderSubtitle>{subtitle}</NavigationHeaderSubtitle>
             )}
             {isArray(points) &&
               points?.map((point, idx) => {

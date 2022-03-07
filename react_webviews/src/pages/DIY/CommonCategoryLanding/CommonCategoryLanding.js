@@ -118,13 +118,14 @@ const CommonCategoryLanding = (props) => {
           badgeContent: cartCount,
           onButtonClick: validateKycAndRedirect({ navigate, kyc }),
           imgSrc: require('assets/cart_icon.svg'),
-          dataAid: '_',
+          dataAid: 'viewCart',
         },
       }}
       fixedFooter
       noFooter={hideFooter}
       isPageLoading={isLoading}
       noPadding={true}
+      dataAid={categoryData?.design_id}
     >
       <div className='diy-category-landing-wrapper'>
         <LandingHeader variant='center' dataAid={categoryData?.design_id}>
@@ -142,7 +143,7 @@ const CommonCategoryLanding = (props) => {
             />
           ) : (
             <>
-              <LandingHeaderSubtitle dataIdx={1}>{categoryData.subtitle}</LandingHeaderSubtitle>
+              <LandingHeaderSubtitle>{categoryData.subtitle}</LandingHeaderSubtitle>
               {categoryData?.points?.map((el, idx) => {
                 return (
                   <LandingHeaderPoints key={idx} dataIdx={idx + 1}>
