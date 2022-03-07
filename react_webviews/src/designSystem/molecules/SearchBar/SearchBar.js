@@ -16,6 +16,7 @@ const SearchBar = ({
   placeholder,
   onPrefixClick,
   dataAid,
+  inputDataAid,
   ...props
 }) => {
   const InputPrefix = () => {
@@ -71,6 +72,9 @@ const SearchBar = ({
           endAdornment: InputSuffix(),
           customvariant: 'searchBar',
           ...inputProps,
+        }}
+        inputProps={{
+          "data-aid": inputDataAid
         }}
         {...props}
       />

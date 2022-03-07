@@ -43,8 +43,9 @@ const SipDateSelector = ({ isOpen, sipDates, onClose, selectedDate, handleSelect
       onClose={handleClose}
       className='sip-date-selector-sheet'
       keepMounted
+      data-aid="bottomsheet_datePicker"
     >
-      <Stack className='sip-date-selector-wrapper' data-aid="btmshtDatePicker" >
+      <Stack className='sip-date-selector-wrapper'>
         <Stack sx={{ mb: 2 }} direction='row' justifyContent='center' className='sip-title-wrapper'>
           <IconButton onClick={handleClose}>
             <Icon size='24px' src={require('assets/close_small.svg')} dataAid="close" />

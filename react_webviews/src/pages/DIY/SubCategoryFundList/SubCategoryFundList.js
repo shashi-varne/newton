@@ -187,6 +187,7 @@ const SubCategoryLanding = (props) => {
           labelName: 'name',
         },
         tabChilds: subcategoryOptionsData?.length > 1 ? subcategoryOptionsData : [],
+        dataAid: subcategoryOptionsData[tabValue]?.design_id,
       }}
       fixedFooter
       renderComponentAboveFooter={
@@ -204,6 +205,7 @@ const SubCategoryLanding = (props) => {
       }
       className='sub-category-landing-wrapper'
       isPageLoading={isLoading}
+      dataAid={subcategoryOptionsData[tabValue]?.design_id}
     >
       <div className='sub-category-swipper-wrapper'>
         <Swiper
@@ -281,7 +283,7 @@ const CustomFooter = ({
             buttonTitle='View Cart'
             badgeContent={cartCount}
             onButtonClick={onCartClick}
-            dataAid='_'
+            dataAid='viewCart'
           />
         </div>
       </Grow>

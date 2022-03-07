@@ -65,7 +65,7 @@ const Filter = ({
       {filterCount || filterCount === 0 ? (
         <Badge
           badgeContent={filterCount}
-          dataAid="number"
+          dataAid="singleNumber"
           className="filter-nav-badge"
           {...badgeProps}
         />

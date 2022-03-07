@@ -71,7 +71,7 @@ const Filter = ({
   }, [isOpen]);
 
   return (
-    <Box className="diy-filter-wrapper">
+    <Box className="diy-filter-wrapper" data-aid="filter" >
       <Drawer
         transitionDuration={250}
         PaperProps={{ elevation: 1 }}
@@ -89,6 +89,7 @@ const Filter = ({
           hideInPageTitle
           actionTextProps={{ title: "Clear all", onClick: handleClearAll, dataAid: "link" }}
           onBackClick={handleFilterClose}
+          dataAid="filters"
         />
         <Stack
           sx={{ height: "100vh" }}

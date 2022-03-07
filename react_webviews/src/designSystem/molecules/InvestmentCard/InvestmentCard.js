@@ -134,7 +134,7 @@ export const InvestmentCardInputRow = ({
               size='small'
               placeholder='Enter amount'
               className='ic-input-field'
-              dataAid=''
+              dataAid='1'
               {...inputFieldProps}
             />
           </div>

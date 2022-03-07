@@ -114,8 +114,10 @@ const InputField = (props) => {
       InputProps={{
         startAdornment: InputPrefix(),
         endAdornment: InputSuffix(),
-        'data-aid': 'et_text',
         ...inputProps,
+      }}
+      inputProps={{
+        "data-aid": "et_text",
       }}
       {...restProps}
     />
