@@ -153,6 +153,7 @@ const CommonCategoryLanding = (props) => {
       noFooter={hideFooter}
       isPageLoading={isLoading}
       noPadding={true}
+      className='diy-main-wrapper'
     >
       <div className='diy-category-landing-wrapper'>
         <LandingHeader variant='center' dataAid={categoryData?.design_id}>

@@ -1,100 +1,103 @@
-.diy-category-landing-wrapper {
-  .landing-header-wrapper {
-    padding: 0px 16px 32px 16px;
-    background-color: white;
-  }
-
-  .diy-landing-lottie-anim {
-    width: 140px;
-    height: 120px;
-  }
-
-  .diy-c-trending-wrapper {
-    padding-bottom: 24px;
-    background-color: white;
-
-    .swiper-container {
-      padding: 0px 16px;
-      .swiper-slide {
-        height: auto;
-        > div {
-          height: 100%;
-        }
-      }
+.diy-main-wrapper {
+  background-color: #F8F8FA;
+  .diy-category-landing-wrapper {
+    .landing-header-wrapper {
+      padding: 0px 16px 32px 16px;
+      background-color: white;
     }
-  }
 
-  .diy-c-category-wrapper {
-    padding: 24px 0px;
-    .swiper-container {
-      padding: 0px 16px;
-      .swiper-wrapper {
-        display: grid;
-        grid-auto-flow: column;
-        row-gap: 8px;
-        grid-template-rows: 1fr 1fr;
+    .diy-landing-lottie-anim {
+      width: 140px;
+      height: 120px;
+    }
+
+    .diy-c-trending-wrapper {
+      padding-bottom: 24px;
+      background-color: white;
+
+      .swiper-container {
+        padding: 0px 16px;
         .swiper-slide {
-          margin: 0px !important;
-          width: 100%;
+          height: auto;
+          > div {
+            height: 100%;
+          }
         }
       }
     }
-  }
 
-  .diy-c-tax-saving-wrapper {
-    background-color: white;
-    padding: 24px 16px 16px 16px;
-    .diy-c-card-horz-wrapper {
-      margin-top: 16px;
-    }
-  }
-
-  .diy-c-sector-theme {
-    background-color: white;
-    padding: 16px 0px;
-    .diy-c-sector-list {
-      display: flex;
-      flex-direction: row;
-      overflow-x: auto;
-      margin-left: -16px;
-      margin-right: -16px;
-  
-      .diy-c-sector-item {
-        margin-right: 16px;
-        &:first-child {
-          padding-left: 16px;
-        }
-        &:last-child {
-          padding-right: 16px;
+    .diy-c-category-wrapper {
+      padding: 24px 0px;
+      .swiper-container {
+        padding: 0px 16px;
+        .swiper-wrapper {
+          display: grid;
+          grid-auto-flow: column;
+          row-gap: 8px;
+          grid-template-rows: 1fr 1fr;
+          .swiper-slide {
+            margin: 0px !important;
+            width: 100%;
+          }
         }
       }
     }
-  }
 
-  .diy-c-investment-style-wrapper {
-    background-color: white;
-    padding: 16px 0;
-    .swiper-container {
-      padding: 0px 16px;
-
-      .swiper-slide {
-        height: auto;
+    .diy-c-tax-saving-wrapper {
+      background-color: white;
+      padding: 24px 16px 16px 16px;
+      .diy-c-card-horz-wrapper {
+        margin-top: 16px;
       }
     }
-    .diy-c-investment-list {
-      margin-top: 16px;
-      display: flex;
-      flex-direction: row;
-      overflow-x: auto;
-      margin-left: -16px;
-      margin-right: -16px;
-      .diy-c-investment-item {
-        padding: 16px 8px 16px 0px;
-        &:first-child {
-          padding-left: 16px;
+
+    .diy-c-sector-theme {
+      background-color: white;
+      padding: 16px 0px;
+      .diy-c-sector-list {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        margin-left: -16px;
+        margin-right: -16px;
+
+        .diy-c-sector-item {
+          margin-right: 16px;
+          &:first-child {
+            padding-left: 16px;
+          }
+          &:last-child {
+            padding-right: 16px;
+          }
         }
-        &:last-child {
-          padding-right: 16px;
+      }
+    }
+
+    .diy-c-investment-style-wrapper {
+      background-color: white;
+      padding: 16px 0;
+      .swiper-container {
+        padding: 0px 16px;
+
+        .swiper-slide {
+          height: auto;
+        }
+      }
+      .diy-c-investment-list {
+        margin-top: 16px;
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        margin-left: -16px;
+        margin-right: -16px;
+        .diy-c-investment-item {
+          padding: 16px 8px 16px 0px;
+          &:first-child {
+            padding-left: 16px;
+          }
+          &:last-child {
+            padding-right: 16px;
+          }
         }
       }
     }

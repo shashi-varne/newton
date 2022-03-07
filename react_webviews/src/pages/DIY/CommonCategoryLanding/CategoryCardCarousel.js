@@ -1,5 +1,5 @@
 import { Skeleton, Stack } from '@mui/material';
-import React from 'react';
+import React, { useMemo } from 'react';
 import CustomSwiper from '../../../designSystem/molecules/CustomSwiper';
 import { SwiperSlide } from 'swiper/react';
 import CategoryCard from '../../../designSystem/molecules/CategoryCard';
@@ -8,10 +8,17 @@ import Icon from '../../../designSystem/atoms/Icon';
 import Typography from '../../../designSystem/atoms/Typography';
 import isEmpty from 'lodash/isEmpty';
 import { withRouter } from 'react-router-dom';
+import { getConfig } from '../../../utils/functions';
 
 const CategoryCardCarousel = ({ handleCardClick, isPageLoading, data = {}, seeAllCategories, config }) => {
   if (!isPageLoading && isEmpty(data)) {
     return null;
+  }
+  const {isMobileDevice} = useMemo(getConfig,[]);
+  const listLength = data?.options?.length || 0;
+  let hideSeeMore = listLength <=3;
+  if(isMobileDevice) {
+    hideSeeMore = listLength <= 2;
   }
   return (
     <Stack direction='column' spacing={2} className='diy-c-sector-theme'>
@@ -21,6 +28,7 @@ const CategoryCardCarousel = ({ handleCardClick, isPageLoading, data = {}, seeAl
         title={data?.name}
         onClick={seeAllCategories(data.key)}
         dataAid={data?.design_id}
+        hideSeeMore={hideSeeMore}
       />
       <CustomSwiper
         spaceBetween={16}

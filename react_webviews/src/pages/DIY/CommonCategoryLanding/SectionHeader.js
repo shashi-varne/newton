@@ -5,7 +5,7 @@ import Icon from '../../../designSystem/atoms/Icon';
 import Typography from '../../../designSystem/atoms/Typography';
 import { getConfig } from '../../../utils/functions';
 
-const SectionHeader = ({ sx, isPageLoading, title, buttonTitle = 'See all', onClick, buttonDataAid="seeAll", dataAid }) => {
+const SectionHeader = ({ sx, isPageLoading, title, buttonTitle = 'See all', onClick, buttonDataAid="seeAll", dataAid, hideSeeMore = false }) => {
   const { productName } = getConfig();
   return (
     <Stack
@@ -23,7 +23,7 @@ const SectionHeader = ({ sx, isPageLoading, title, buttonTitle = 'See all', onCl
           <Skeleton width='50px' sx={{ ml: 'auto' }} />
         </Typography>
       ) : (
-        onClick && (
+        onClick && !hideSeeMore && (
           <Stack direction='row' sx={{cursor: 'pointer'}} alignItems='center' spacing='4px' onClick={onClick}>
             <Button title={buttonTitle} dataAid={buttonDataAid} variant='link'  />
             <Icon src={require(`assets/${productName}/right_arrow_small.svg`)} size='16px' />
