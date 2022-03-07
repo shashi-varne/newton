@@ -359,6 +359,7 @@ const MfOrder = (props) => {
                     }
                     toolTipText={`Estimation based on last ${expectedReturnData?.name} of the fund.`}
                     dataAid="1"
+                    toolTipDataAid="aftertenYears"
                   />
                 </WrapperBox>
               </div>

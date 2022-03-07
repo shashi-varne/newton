@@ -57,6 +57,11 @@ const FundPerformance = () => {
         imgSrc={fundReturns[fundTimePeriod] && require(`assets/${
           fundReturns[fundTimePeriod] > 0 ? 'positive_return' : 'negative_return'
         }.svg`)}
+        leftTitleDataAid="navKey"
+        leftSubtitleDataAid="navValue"
+        rightTitleDataAid="returnKey"
+        rightSubtitleDataAid="returnValue"
+        rightIconDataAid="growth"
       />
       <RowData
         leftTitle='Min. investment'
@@ -67,6 +72,11 @@ const FundPerformance = () => {
         rightSubtitle={isValidValue(fundData?.performance?.ms_rating)}
         rightSubtitleColor={fundData?.performance?.ms_rating && 'foundationColors.secondary.mango.400'}
         imgSrc={fundData?.performance?.ms_rating && require('assets/star_large.svg')}
+        leftTitleDataAid="minimunInvestmentKey"
+        leftSubtitleDataAid="minimunInvestmentValue"
+        rightTitleDataAid="morningStarKey"
+        rightSubtitleDataAid="morningStarRating"
+        rightIconDataAid="star"
       />
     </Stack>
   );
@@ -84,22 +94,27 @@ const RowData = memo(
     rightSubtitle,
     rightSubtitleColor,
     imgSrc,
+    leftTitleDataAid,
+    leftSubtitleDataAid,
+    rightTitleDataAid,
+    rightSubtitleDataAid,
+    rightIconDataAid
   }) => {
     return (
       <Stack direction='row' justifyContent='space-between'>
         <Stack direction='column' spacing='4px'>
-          <Typography variant='body2' color={leftTitleColor}>
+          <Typography variant='body2' color={leftTitleColor} dataAid={leftTitleDataAid} >
             {leftTitle}
           </Typography>
-          <Typography variant='heading3'>{leftSubtitle}</Typography>
+          <Typography variant='heading3' dataAid={leftSubtitleDataAid}>{leftSubtitle}</Typography>
         </Stack>
         <Stack direction='column' spacing='4px'>
-          <Typography variant='body2' align='right' color={rightTitleColor}>
+          <Typography variant='body2' align='right' color={rightTitleColor} dataAid={rightTitleDataAid} >
             {rightTitle}
           </Typography>
           <Stack direction='row' alignItems='center' justifyContent='flex-end' spacing={1}>
-            {imgSrc && <Icon size='16px' src={imgSrc} />}
-            <Typography variant='heading3' align='right' color={rightSubtitleColor}>
+            {imgSrc && <Icon size='16px' src={imgSrc} dataAid={rightIconDataAid} />}
+            <Typography variant='heading3' align='right' color={rightSubtitleColor} dataAid={rightSubtitleDataAid} >
               {rightSubtitle}
             </Typography>
           </Stack>

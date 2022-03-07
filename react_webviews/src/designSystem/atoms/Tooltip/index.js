@@ -38,13 +38,13 @@ const initializeData = ({ title, description }) => () => {
   }
 };
 
-const TooltipDescription = ({ title, description }) => {
+const TooltipDescription = ({ title, description, dataAid }) => {
   const { styles, descriptionDataAid } = useMemo(
     initializeData({ title, description }),
     [title, description]
   );
   return (
-    <Box sx={styles}>
+    <Box sx={styles} data-aid={`tooltip_${dataAid}`} >
       {!isEmpty(title) && (
         <Typography
           variant="body1"
@@ -79,10 +79,9 @@ const Tooltip = (props) => {
   } = props;
   return (
     <MuiTooltip
-      title={TooltipDescription({ title, description })}
+      title={TooltipDescription({ title, description, dataAid })}
       arrow={arrow}
       placement={placement}
-      data-aid={`tooltip_${dataAid}`}
       {...restProps}
     >
       {children}

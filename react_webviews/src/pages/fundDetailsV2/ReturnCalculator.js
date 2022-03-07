@@ -167,7 +167,7 @@ const ReturnCalculator = () => {
                   {isValidValue(expectedAmount, formatAmountInr(expectedAmount))}
                 </Typography>
                 <div>
-                  <Tooltip open={isTooltipOpen} title={estimatedReturnTooltip}>
+                  <Tooltip dataAid="returns" open={isTooltipOpen} title={estimatedReturnTooltip}>
                     <div>
                       <Icon
                         src={require('assets/info_icon_ds.svg')}

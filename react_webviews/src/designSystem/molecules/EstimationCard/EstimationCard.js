@@ -33,6 +33,7 @@ const EstimationCard = ({
   onClick,
   dataAid,
   toolTipText,
+  toolTipDataAid,
   sx,
 }) => {
   return (
@@ -48,7 +49,7 @@ const EstimationCard = ({
             <Typography variant='body1' color={leftTitleColor} component='div' dataAid='title1'>
               {leftTitle}
             </Typography>
-            {(iconSrc || toolTipText ) && <InfoTooltip toolTipText={toolTipText} onIconClick={onIconClick} iconSrc={iconSrc}/>}
+            {(iconSrc || toolTipText ) && <InfoTooltip dataAid={toolTipDataAid} toolTipText={toolTipText} onIconClick={onIconClick} iconSrc={iconSrc}/>}
           </div>
         )}
         {leftSubtitle && (
@@ -92,7 +93,7 @@ const EstimationCard = ({
 
 export default EstimationCard;
 
-const InfoTooltip = ({ toolTipText, onIconClick, iconSrc }) => {
+const InfoTooltip = ({ dataAid, toolTipText, onIconClick, iconSrc }) => {
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
 
   const handleTooltipClose = () => {
@@ -120,6 +121,7 @@ const InfoTooltip = ({ toolTipText, onIconClick, iconSrc }) => {
           disableTouchListener
           open={isTooltipOpen}
           title={toolTipText}
+          dataAid={dataAid}
         >
           <div onClick={handleIconClick}>
             <Icon

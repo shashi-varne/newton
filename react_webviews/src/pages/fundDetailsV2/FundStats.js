@@ -88,13 +88,13 @@ const FundStats = () => {
       sx={{ bgcolor: 'foundationColors.supporting.white', p: '32px 16px 24px 16px' }}
       spacing={3}
     >
-      <Typography variant='heading3'>Fund stats</Typography>
+      <Typography variant='heading3' dataAid="fundStats">Fund stats</Typography>
       <Stack direction='row' justifyContent='space-between'>
         <Stack spacing='4px' direction='column'>
-          <Typography allCaps variant='body9' color='foundationColors.content.secondary'>
+          <Typography allCaps variant='body9' color='foundationColors.content.secondary' dataAid="fundAgeKey" >
             Fund Age
           </Typography>
-          <Stack direction='column'>
+          <Stack direction='column' data-aid="tv_fundAgeValue" >
             <Typography variant='heading4'>{fundAge}</Typography>
             <Typography variant='body5' color='foundationColors.content.secondary'>
               {`(since ${launchDate})`}
@@ -107,10 +107,11 @@ const FundStats = () => {
             allCaps
             variant='body9'
             color='foundationColors.content.secondary'
+            dataAid="totalAumKey"
           >
             Lock-in
           </Typography>
-          <Stack direction='column'>
+          <Stack direction='column' data-aid="tv_totalAumValue">
             {isEmpty(lokinPeriodData) ? (
               <Typography align='right' variant='heading4'>
                 NA
@@ -138,11 +139,12 @@ const FundStats = () => {
       <Stack direction='row' justifyContent='space-between'>
         <Stack spacing='4px' direction='column'>
           <Stack direction='row' spacing='4px' alignItems='center'>
-            <Typography allCaps variant='body9' color='foundationColors.content.secondary'>
+            <Typography allCaps variant='body9' color='foundationColors.content.secondary' dataAid="expenseratioKey" >
               Expense ratio
             </Typography>
             <Box sx={{ height: '16px', width: '16px' }}>
               <Tooltip
+                dataAid="expenseRatio"
                 open={isTooltipOpen['er']}
                 title='This is the annual maintenance fee charged by the Asset Management Companies. This includes opearting costs, management fees, etc.'
               >
@@ -152,14 +154,14 @@ const FundStats = () => {
                     size='16px'
                     className='ec_info_icon'
                     alt='info_icon'
-                    dataAid='right'
+                    dataAid='infoExpenseRatio'
                     onClick={handleTooltip('er')}
                   />
                 </div>
               </Tooltip>
             </Box>
           </Stack>
-          <Typography variant='heading4'>
+          <Typography variant='heading4' dataAid="expenseRatioValue">
             {isValidValue(
               fundData?.portfolio?.expense_ratio,
               `${fundData?.portfolio?.expense_ratio}%`
@@ -172,10 +174,11 @@ const FundStats = () => {
             variant='body9'
             align='right'
             color='foundationColors.content.secondary'
+            dataAid="totalAumKey"
           >
             Total Aum
           </Typography>
-          <Typography variant='heading4' align='right'>
+          <Typography variant='heading4' align='right' data-aid="tv_totalAumValue">
             {isValidValue(fundData?.performance?.aum, `₹ ${fundData?.performance?.aum}`)}
           </Typography>
         </Stack>
@@ -183,11 +186,12 @@ const FundStats = () => {
 
       <Stack direction='column' spacing='4px'>
         <Stack direction='row' spacing='4px' alignItems='center'>
-          <Typography variant='body9' allCaps color='foundationColors.content.secondary'>
+          <Typography dataAid="exitLoadKey" variant='body9' allCaps color='foundationColors.content.secondary'>
             Exit load
           </Typography>
           <Box sx={{ height: '16px', width: '16px' }}>
             <Tooltip
+              dataAid="exitLoad"
               open={isTooltipOpen['el']}
               title='This refers to the fee charged by the Asset Management Companies at the time of exiting or redeeming fund units'
             >
@@ -197,7 +201,7 @@ const FundStats = () => {
                   size='16px'
                   className='ec_info_icon'
                   alt='info_icon'
-                  dataAid='right'
+                  dataAid='infoExitLoad'
                   onClick={handleTooltip('el')}
                 />
               </div>
@@ -205,11 +209,11 @@ const FundStats = () => {
           </Box>
         </Stack>
         {isEmpty(fundData?.additional_info?.exit_load) && (
-          <Typography variant='heading4'>NA</Typography>
+          <Typography variant='heading4' dataAid="exitLoadNA" >NA</Typography>
         )}
         {fundData?.additional_info?.exit_load?.map((exitLoadData, idx) => {
           return (
-            <div key={idx}>
+            <div key={idx} data-aid={`tv_exitLoadValue${idx}`} >
               <Typography variant='heading4' allCaps>
                 {`${nonRoundingToFixed(exitLoadData?.value, 2)}${exitLoadData?.unit}`}
               </Typography>

@@ -148,7 +148,7 @@ const RiskDetails = ({ fundDetailsRef }) => {
                         + {riskMeasure?.value}%
                       </Typography>
                       <div>
-                        <Tooltip open={isTooltipOpen[riskMeasureName]} title={tooltipInfo}>
+                        <Tooltip dataAid="riskMeasure" open={isTooltipOpen[riskMeasureName]} title={tooltipInfo}>
                           <Stack width='16px' height='16px'>
                             <Icon
                               src={require('assets/info_icon_ds.svg')}

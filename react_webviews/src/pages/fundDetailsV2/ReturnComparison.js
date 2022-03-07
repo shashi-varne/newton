@@ -58,6 +58,7 @@ const ReturnComparison = () => {
                         }.400`
                       : ''
                   }
+                  toolTipDataAid="returnComparision"
                 />
               </WrapperBox>
               <Typography variant='body5' color='foundationColors.content.secondary'>

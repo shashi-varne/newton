@@ -135,6 +135,7 @@ const FundGraph = () => {
               key={id}
               label={el.label}
               value={el.value}
+              dataAid={id}
             />
           );
         })}
