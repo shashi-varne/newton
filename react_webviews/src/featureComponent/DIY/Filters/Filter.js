@@ -27,6 +27,7 @@ const Filter = ({
   setSelectedFundOption,
   setSelectedMinInvestment,
   selectedMinInvestment,
+  filterEventRef,
 }) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [activeFundHouses, setActiveFundHouses] = useState([]);
@@ -47,6 +48,10 @@ const Filter = ({
   };
 
   const handleClearAll = () => {
+    filterEventRef.current = {
+      ...filterEventRef.current,
+      reset_applied: true
+    }
     setSelectedTab(0);
     setActiveFundHouses([]);
     setSelectedFundHouses([]);

@@ -8,7 +8,8 @@ import Typography from '../../designSystem/atoms/Typography';
 import CollapsibleSection from '../../designSystem/molecules/CollapsibleSection';
 import Tooltip from '../../designSystem/atoms/Tooltip';
 import Icon from '../../designSystem/atoms/Icon';
-import { isEmpty } from '../../utils/validators';
+import isEmpty from 'lodash/isEmpty';
+import sortedUniq from 'lodash/sortedUniq';
 
 const barData = [
   {
@@ -45,7 +46,17 @@ const getBarIndex = (riskValue) => {
   return riskIndex;
 };
 
-const RiskDetails = () => {
+const checkRiskMeasuresAttribute = (riskMeasure) => {
+  if (isEmpty(riskMeasure)) return true;
+  const isRiskMeasureAvialable = riskMeasure?.find((el) => el?.name?.match(/Alpha|Beta|squared/i));
+  if (isEmpty(isRiskMeasureAvialable)) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+const RiskDetails = ({ fundDetailsRef }) => {
   const [isRiskOpen, setIsRiskOpen] = useState(false);
   const [isTooltipOpen, setIsTooltipOpen] = useState({
     Alpha: false,
@@ -55,7 +66,9 @@ const RiskDetails = () => {
   const fundData = useSelector(getFundData);
   const isRiskVsCatAvailable = isEmpty(fundData?.risk?.risk_vs_category);
   const isReturnVsCatAvailable = isEmpty(fundData?.risk?.return_vs_category);
-  const isRiskMeasureAvailable = isEmpty(fundData?.risk?.risk_measures);
+  const isRiskMeasureAvailable =
+    isEmpty(fundData?.risk?.risk_measures) ||
+    checkRiskMeasuresAttribute(fundData?.risk?.risk_measures);
   const isRiskDetailsAvailable =
     isRiskVsCatAvailable && isReturnVsCatAvailable && isRiskMeasureAvailable;
   const { riskVsCategoryActiveIndex, returnVsCategoryActiveIndex } = useMemo(() => {
@@ -69,6 +82,12 @@ const RiskDetails = () => {
   };
 
   const handleTooltip = (riskMeasureName) => () => {
+    fundDetailsRef.current = {
+      ...fundDetailsRef.current,
+      risk_measures: !fundDetailsRef.current?.risk_measures
+        ? [riskMeasureName]
+        : sortedUniq([...fundDetailsRef.current?.risk_measures, riskMeasureName]),
+    };
     setIsTooltipOpen({ ...isTooltipOpen, [riskMeasureName]: !isTooltipOpen[riskMeasureName] });
   };
 

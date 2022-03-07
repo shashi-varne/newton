@@ -58,7 +58,7 @@ const CategoryCardCarousel = ({ handleCardClick, isPageLoading, data = {}, seeAl
                   imgSrc={el.image_url}
                   title={el?.name}
                   variant='large'
-                  onClick={handleCardClick(data.key, el.key)}
+                  onClick={handleCardClick(data.key, el.key, el.name)}
                   className="pointer"
                   dataAid={el?.design_id}
                 />

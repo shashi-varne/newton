@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import {
   LandingHeader,
   LandingHeaderPoints,
@@ -35,6 +35,7 @@ import { hideDiyCartFooter } from 'businesslogic/utils/diy/functions';
 import useLoadingState from '../../../common/customHooks/useLoadingState';
 import { validateKycAndRedirect } from '../common/functions';
 import useUserKycHook from '../../../kyc/common/hooks/userKycHook';
+import { nativeCallback } from '../../../utils/native_callback';
 
 const screen = 'diyLanding';
 const CommonCategoryLanding = (props) => {
@@ -68,13 +69,13 @@ const CommonCategoryLanding = (props) => {
   );
   const { isPageLoading } = useLoadingState(screen);
   const hideFooter = useMemo(hideDiyCartFooter(productName, cartCount), [productName, cartCount]);
-  const { kyc, isLoading } = useUserKycHook();
+  const { kyc, isLoading, user } = useUserKycHook();
   const subtitleLength = categoryData?.subtitle?.length || 0;
   const pointsLength = categoryData?.points?.length || 0;
   const showSeeMore = subtitleLength > 89 || (pointsLength >= 2 && subtitleLength > 40);
 
   useEffect(() => {
-    if (isEmpty(categoryData)) {
+    if (isEmpty(categoryData) || true) {
       dispatch(fetchDiyCategories({ Api, screen }));
     }
     dispatch(
@@ -84,15 +85,23 @@ const CommonCategoryLanding = (props) => {
     );
   }, []);
 
-  const handleCardClick = (subcategory, subcategoryOption) => () => {
-    dispatch(
-      setDiyTypeData({
-        subcategory,
-        subcategoryOption,
-      })
-    );
-    navigate(DIY_PATHNAME_MAPPER.subcategoryFundList);
+  const formatString = (string) => {
+    return string.replace(/_/g, ' ');
   };
+  const handleCardClick =
+    (subcategory, subcategoryOption, subcategoryOptionName = '') =>
+    () => {
+      dispatch(
+        setDiyTypeData({
+          subcategory,
+          subcategoryOption,
+        })
+      );
+      const categoryEvent = `${diyType.toLowerCase()} ${formatString(subcategory.toLowerCase())}`;
+      const subCategoryEvent = subcategoryOptionName.toLowerCase();
+      sendEvents(categoryEvent, subCategoryEvent, 'next');
+      navigate(DIY_PATHNAME_MAPPER.subcategoryFundList);
+    };
 
   const seeAllCategories = (subcategory) => () => {
     dispatch(
@@ -109,8 +118,27 @@ const CommonCategoryLanding = (props) => {
     });
   };
 
+  const sendEvents = (category, subCategory, userAction) => {
+    const eventObj = {
+      event_name: 'diy_sub_category_clicked',
+      properties: {
+        category: category || '',
+        user_action: userAction || 'back',
+        sub_category: subCategory || '',
+        user_application_status: kyc?.application_status_v2 || 'init',
+        user_investment_status: user?.active_investment,
+        user_kyc_status: kyc?.mf_kyc_processed || false,
+      },
+    };
+    if (userAction) {
+      nativeCallback({ events: eventObj });
+    } else {
+      return eventObj;
+    }
+  };
   return (
     <Container
+      eventData={sendEvents()}
       footer={{
         confirmActionProps: {
           buttonTitle: 'View Cart',

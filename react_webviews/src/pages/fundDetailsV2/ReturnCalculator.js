@@ -46,15 +46,18 @@ const ReturnCalculator = () => {
   const investedAmount = useSelector((state) => state?.fundDetails?.investedAmount);
   const expectedAmount = useSelector((state) => state?.fundDetails?.expectedAmount);
   const expectedReturnPerc = useSelector((state) => state?.fundDetails?.expectedReturnPerc);
-  const isReturnAvailable = isEmpty(fundData?.performance?.returns);
+  const fundReturns = fundData?.performance?.returns || [];
+  const isReturnAvailable = isEmpty(fundReturns);
   const estimatedReturnTooltip = useMemo(
     () => getEstimatedReturnTooltip(investmentPeriod, expectedAmount),
     [expectedAmount, investmentPeriod]
   );
+  const isOneYearReturnAvailable = fundReturns?.find(el => el?.name.match(/1 year/));
+  const disableChild = isEmpty(isOneYearReturnAvailable);
   const returns = useMemo(() => {
     const yearReturns = {};
     // eslint-disable-next-line no-unused-expressions
-    fundData?.performance?.returns?.forEach((el) => {
+    fundReturns?.forEach((el) => {
       if (el.name.match(/year/)) {
         const year = el.name.match(/\d+/g).join('');
         yearReturns[year] = el.value;
@@ -125,6 +128,7 @@ const ReturnCalculator = () => {
             prefix='₹'
             value={amountToBeInvested}
             onChange={handleAmountChange}
+            disabled={disableChild}
             inputProps={{
               inputMode: 'numeric'
             }}
