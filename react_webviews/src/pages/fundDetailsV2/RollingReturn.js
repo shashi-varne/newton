@@ -69,9 +69,9 @@ const RollingReturn = ({fundDetailsRef}) => {
       return '<p class="xaxis-label">' + format(this.pos, 'd MMM') + '</p>';
   }
   return (
-    <Box sx={{ mt: 3, mb: 3 }}>
+    <Box sx={{ mt: 3, mb: 3 }} data-aid="grp_rollingReturns" >
       <Stack>
-        <Typography variant='heading4' color={secondaryColor}>
+        <Typography dataAid="title" variant='heading4' color={secondaryColor}>
           Investment period
         </Typography>
         <Box sx={{ mt: 4, maxWidth: 'fit-content' }}>
@@ -84,13 +84,14 @@ const RollingReturn = ({fundDetailsRef}) => {
                   label={timeline.label}
                   value={timeline.value}
                   disabled={isDisable}
+                  dataAid={idx}
                 />
               );
             })}
           </Timelines>
         </Box>
         <Stack sx={{ mt: 4, mb: 2 }} direction='column' spacing={3}>
-          <Typography variant='heading4' color={secondaryColor}>
+          <Typography dataAid="title" variant='heading4' color={secondaryColor}>
             Net asset value
           </Typography>
           {NET_ASSET_VALUE?.map((net_asset, idx) => {
@@ -98,14 +99,14 @@ const RollingReturn = ({fundDetailsRef}) => {
             return (
               <Stack key={idx} direction='column' spacing={2}>
                 <Stack direction='row' justifyContent='space-between'>
-                  <Typography variant='body8' color={secondaryColor}>
+                  <Typography dataAid={`${net_asset?.name?.toLowerCase()}Key`} variant='body8' color={secondaryColor}>
                     {net_asset?.name}
                   </Typography>
-                  <Typography variant='heading4' color={secondaryColor}>
+                  <Typography dataAid={`${net_asset?.name?.toLowerCase()}Value`} variant='heading4' color={secondaryColor}>
                     {isValidValue(net_asset?.value, `${value}%`)}
                   </Typography>
                 </Stack>
-                {NET_ASSET_VALUE?.length !== idx + 1 && <Separator />}
+                {NET_ASSET_VALUE?.length !== idx + 1 && <Separator dataAid={4+idx} />}
               </Stack>
             );
           })}
@@ -118,16 +119,16 @@ const RollingReturn = ({fundDetailsRef}) => {
           />
         </div>
         <Stack sx={{mt: 1}} direction='row' spacing={1} alignItems='center' justifyContent='flex-start'>
-          <Typography variant='body5' color='foundationColors.content.tertiary'>What is rolling return?</Typography>
+          <Typography dataAid="note" variant='body5' color='foundationColors.content.tertiary'>What is rolling return?</Typography>
           <div>
-            <Tooltip open={isTooltipOpen} title={rollingRetunInfo}>
+            <Tooltip dataAid="rollingReturn" open={isTooltipOpen} title={rollingRetunInfo}>
               <Stack width='16px' height='16px'>
                 <Icon
                   src={require('assets/info_icon_ds.svg')}
                   size='16px'
                   className='ec_info_icon'
                   alt='info_icon'
-                  dataAid='right'
+                  dataAid='infoRollingReturn'
                   onClick={handleTooltip}
                 />
               </Stack>
