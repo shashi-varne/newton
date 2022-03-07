@@ -118,8 +118,8 @@ const ReturnCalculator = () => {
         <Stack direction='column' spacing={3} sx={{ pb: 3 }}>
           <Box sx={{ maxWidth: 'fit-content' }}>
             <Pills value={investmentType} onChange={onPillChange}>
-              <Pill label='SIP' value='sip' />
-              <Pill label='Lumpsum' value='lumpsum' />
+              <Pill label='SIP' value='sip' dataAid="sip" />
+              <Pill label='Lumpsum' value='lumpsum' dataAid="lumpsum" />
             </Pills>
           </Box>
 
@@ -132,9 +132,10 @@ const ReturnCalculator = () => {
             inputProps={{
               inputMode: 'numeric'
             }}
+            dataAid="1"
           />
           <Stack direction='column' spacing={2}>
-            <Typography variant='heading4' color='foundationColorContentSecondary'>
+            <Typography dataAid="investmentPeriod" variant='heading4' color='foundationColorContentSecondary'>
               Investment period
             </Typography>
             <Box sx={{ mt: 4, maxWidth: 'fit-content' }}>
@@ -146,24 +147,24 @@ const ReturnCalculator = () => {
                     []
                   );
                   return (
-                    <TimeLine disabled={isDisabled} key={id} label={el.label} value={el.value} />
+                    <TimeLine dataAid={id} disabled={isDisabled} key={id} label={el.label} value={el.value} />
                   );
                 })}
               </Timelines>
             </Box>
           </Stack>
-          <Separator />
+          <Separator dataAid="1" />
 
           <Stack direction='row' justifyContent='space-between'>
             <Stack direction='column'>
-              <Typography variant='heading2'>{formatAmountInr(investedAmount)}</Typography>
-              <Typography variant='body1' color='foundationColors.content.secondary'>
+              <Typography dataAid="investedValue" variant='heading2'>{formatAmountInr(investedAmount)}</Typography>
+              <Typography dataAid="investedKey" variant='body1' color='foundationColors.content.secondary'>
                 You invested
               </Typography>
             </Stack>
             <Stack direction='column'>
               <Stack direction='row' spacing='4px' alignItems='flex-end' justifyContent='flex-end'>
-                <Typography variant='heading2' color='primary' align='right'>
+                <Typography dataAid="estimatedReturnValue" variant='heading2' color='primary' align='right'>
                   {isValidValue(expectedAmount, formatAmountInr(expectedAmount))}
                 </Typography>
                 <div>
@@ -174,14 +175,14 @@ const ReturnCalculator = () => {
                         size='16px'
                         className='ec_info_icon'
                         alt='info_icon'
-                        dataAid='right'
+                        dataAid='infoReturnValue'
                         onClick={handleTooltip}
                       />
                     </div>
                   </Tooltip>
                 </div>
               </Stack>
-              <Typography variant='body1' color='foundationColors.content.secondary' align='right'>
+              <Typography dataAid="estimatedReturnKey" variant='body1' color='foundationColors.content.secondary' align='right'>
                 Estimated return{' '}
                 <Typography component='span' variant='inherit' color='primary'>
                   ({isValidValue(expectedReturnPerc, `${expectedReturnPerc}%`)})
