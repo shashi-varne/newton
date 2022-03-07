@@ -118,7 +118,7 @@ export const LandingHeaderPoints = ({ children, color, dataIdx }) => {
   );
 };
 
-export const LandingHeaderSeeMoreWrapper = ({ subtitle = '', points = [] }) => {
+export const LandingHeaderSeeMoreWrapper = ({ subtitle = '', points = [], subtitleDataIdx }) => {
   const [seeMore, setSeeMore] = useState(false);
   const dispatch = useDispatch();
 
@@ -130,7 +130,7 @@ export const LandingHeaderSeeMoreWrapper = ({ subtitle = '', points = [] }) => {
     <>
       {seeMore ? (
         <div onClick={handleSeeMore}>
-          {subtitle && <LandingHeaderSubtitle>{subtitle}</LandingHeaderSubtitle>}
+          {subtitle && <LandingHeaderSubtitle dataIdx={subtitleDataIdx}>{subtitle}</LandingHeaderSubtitle>}
           {isArray(points) &&
             points?.map((point, idx) => {
               return (
@@ -146,7 +146,7 @@ export const LandingHeaderSeeMoreWrapper = ({ subtitle = '', points = [] }) => {
       ) : (
         <div onClick={handleSeeMore}>
           {subtitle && (
-            <LandingHeaderSubtitle>
+            <LandingHeaderSubtitle dataIdx={subtitleDataIdx}>
               {subtitle.slice(0, 89).trim()}...
               <Typography variant='body8' color='secondary'>
                 See more

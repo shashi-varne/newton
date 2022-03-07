@@ -7,7 +7,7 @@ const MenuBar = ({ handleMobileViewDrawer, mobileViewDrawer, handleReferModal })
   return (
     <div className='mobile-navbar-menu'>
       <IconButton onClick={handleMobileViewDrawer}>
-        <MenuIcon sx={{ color: 'foundationColors.primary.content' }} />
+        <MenuIcon sx={{ color: 'foundationColors.primary.content' }} data-aid="iv_menu" />
       </IconButton>
       <Drawer
         mobileViewDrawer={mobileViewDrawer}

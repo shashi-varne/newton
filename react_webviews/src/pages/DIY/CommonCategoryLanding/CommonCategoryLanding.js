@@ -154,6 +154,9 @@ const CommonCategoryLanding = (props) => {
       isPageLoading={isLoading}
       noPadding={true}
       dataAid={categoryData?.design_id}
+      headerProps={{
+        dataAid: 1,
+      }}
     >
       <div className='diy-category-landing-wrapper'>
         <LandingHeader variant='center' dataAid={categoryData?.design_id}>
@@ -162,16 +165,18 @@ const CommonCategoryLanding = (props) => {
             autoPlay
             loop
             className='diy-landing-lottie-anim'
+            data-aid="iv_top"
           />
           <LandingHeaderTitle>{categoryData.category?.toUpperCase()}</LandingHeaderTitle>
           {config.isMobileDevice && showSeeMore ? (
             <LandingHeaderSeeMoreWrapper
               subtitle={categoryData.subtitle}
               points={categoryData?.points}
+              subtitleDataIdx={1}
             />
           ) : (
             <>
-              <LandingHeaderSubtitle>{categoryData.subtitle}</LandingHeaderSubtitle>
+              <LandingHeaderSubtitle dataIdx={1}>{categoryData.subtitle}</LandingHeaderSubtitle>
               {categoryData?.points?.map((el, idx) => {
                 return (
                   <LandingHeaderPoints key={idx} dataIdx={idx + 1}>

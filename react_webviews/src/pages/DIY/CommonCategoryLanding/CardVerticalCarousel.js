@@ -39,6 +39,7 @@ const CardVerticalCarousel = ({ handleCardClick, isPageLoading, data = {} }) => 
             slidesPerGroup: 1,
           },
         }}
+        paginationDataAid={data?.design_id}
       >
         {isPageLoading
           ? [1, 1, 1, 1].map((el, idx) => {

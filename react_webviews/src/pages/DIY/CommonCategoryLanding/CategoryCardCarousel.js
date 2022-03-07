@@ -21,6 +21,8 @@ const CategoryCardCarousel = ({ handleCardClick, isPageLoading, data = {}, seeAl
         title={data?.name}
         onClick={seeAllCategories(data.key)}
         dataAid={data?.design_id}
+        buttonDataAid={`seeAll${data?.design_id?.charAt(0)?.toUpperCase() + data?.design_id?.slice(1)}`}
+        iconDataAid={data?.design_id}
       />
       <CustomSwiper
         spaceBetween={16}
@@ -43,6 +45,7 @@ const CategoryCardCarousel = ({ handleCardClick, isPageLoading, data = {}, seeAl
           },
         }}
         freeMode
+        paginationDataAid={data?.design_id}
       >
         {isPageLoading
           ? [1, 1, 1, 1].map((el, idx) => {

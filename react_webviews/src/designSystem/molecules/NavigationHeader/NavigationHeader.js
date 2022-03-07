@@ -47,6 +47,7 @@ const NavigationHeader = ({
   parentProps,
   eventData,
   hideMenuBar = false,
+  dataAid
 }) => {
   const navHeaderWrapperRef = useRef();
   const subtitleRef = useRef();
@@ -162,7 +163,7 @@ const NavigationHeader = ({
     <header
       className={`nav-header-wrapper ${className}`}
       ref={navHeaderWrapperRef}
-      data-aid='navigationHeader'
+      data-aid={`navigationHeader_${dataAid}`}
     >
       <section className='nav-header-top-section'>
         <div className='nav-header-left'>
@@ -172,7 +173,7 @@ const NavigationHeader = ({
               className='nav-hl-icon-wrapper'
               onClick={handleonBackClick}
             >
-              <Icon src={leftIcon} size='24px' />
+              <Icon src={leftIcon} size='24px' dataAid="left" />
             </IconButton>
           )}
           {!hideHeaderTitle && (
@@ -188,7 +189,7 @@ const NavigationHeader = ({
           )}
         </div>
         <div className='nav-header-right'>
-          {rightIconSrc && <Icon src={rightIconSrc} size='24px' onClick={onRightIconClick} />}
+          {rightIconSrc && <Icon src={rightIconSrc} size='24px' onClick={onRightIconClick} dataAid="right" />}
           {actionTextProps?.title && (
             <Button variant='link' title={actionTextProps?.title} {...actionTextProps} />
           )}
