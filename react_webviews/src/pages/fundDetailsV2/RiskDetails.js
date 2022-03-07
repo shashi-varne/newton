@@ -103,20 +103,20 @@ const RiskDetails = ({ fundDetailsRef }) => {
           <Stack direction='column' spacing={3}>
             {!isEmpty(fundData?.risk?.risk_vs_category) && (
               <Stack direction='column' spacing={3}>
-                <Typography variant='heading4'>Risk vs Category</Typography>
+                <Typography dataAid="riskVsCategory" variant='heading4'>Risk vs Category</Typography>
                 <BarMeter barMeterData={barData} activeIndex={riskVsCategoryActiveIndex} />
               </Stack>
             )}
             {!isEmpty(fundData?.risk?.return_vs_category) && (
               <Stack direction='column' spacing={3}>
-                <Typography variant='heading4'>Return vs Category</Typography>
+                <Typography dataAid="returnVsCategory" variant='heading4'>Return vs Category</Typography>
                 <BarMeter barMeterData={barData} activeIndex={returnVsCategoryActiveIndex} />
               </Stack>
             )}
           </Stack>
 
           <Stack sx={{ mt: 4, mb: 2 }} direction='column' spacing={3}>
-            <Typography variant='heading4'>Risk measures</Typography>
+            <Typography dataAid="riskMeasures" variant='heading4'>Risk measures</Typography>
             {fundData?.risk?.risk_measures?.map((riskMeasure, idx) => {
               let tooltipInfo = '';
               let riskMeasureName = '';
@@ -135,7 +135,7 @@ const RiskDetails = ({ fundDetailsRef }) => {
               return (
                 <Stack key={idx} direction='column' spacing={2}>
                   <Stack direction='row' justifyContent='space-between'>
-                    <Typography variant='body8' color='foundationColors.content.secondary'>
+                    <Typography dataAid={`${RISK_DATA_ID_MAPPER[riskMeasureName]?.text}Key`} variant='body8' color='foundationColors.content.secondary'>
                       {riskMeasure?.name}
                     </Typography>
                     <Stack
@@ -144,7 +144,7 @@ const RiskDetails = ({ fundDetailsRef }) => {
                       justifyContent='flex-start'
                       alignItems='center'
                     >
-                      <Typography variant='heading4' color='foundationColors.content.secondary'>
+                      <Typography dataAid={`${RISK_DATA_ID_MAPPER[riskMeasureName]?.text}Value`} variant='heading4' color='foundationColors.content.secondary'>
                         + {riskMeasure?.value}%
                       </Typography>
                       <div>
@@ -155,7 +155,7 @@ const RiskDetails = ({ fundDetailsRef }) => {
                               size='16px'
                               className='ec_info_icon'
                               alt='info_icon'
-                              dataAid='right'
+                              dataAid={RISK_DATA_ID_MAPPER[riskMeasureName]?.icon}
                               onClick={handleTooltip(riskMeasureName)}
                             />
                           </Stack>
@@ -163,7 +163,7 @@ const RiskDetails = ({ fundDetailsRef }) => {
                       </div>
                     </Stack>
                   </Stack>
-                  {idx < 2 && <Separator />}
+                  {idx < 2 && <Separator dataAid={4+idx} />}
                 </Stack>
               );
             })}
@@ -173,5 +173,20 @@ const RiskDetails = ({ fundDetailsRef }) => {
     </Box>
   );
 };
+
+const RISK_DATA_ID_MAPPER = {
+  Alpha: {
+    text: "alpha",
+    icon: "infoAlpha"
+  },
+  Beta: {
+    text: "beta",
+    icon: "infoBeta"
+  },
+  squared: {
+    text: "rSquared",
+    icon: "rSquared"
+  },
+}
 
 export default RiskDetails;
