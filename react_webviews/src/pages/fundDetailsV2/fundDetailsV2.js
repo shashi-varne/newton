@@ -246,6 +246,7 @@ const CustomJumpTo = ({
         backgroundColor='foundationColors.content.primary'
         label='Jump To'
         onClick={handleClick}
+        dataAid="jumpTo"
       />
       <NavigationPopup
         activeIndex={activeSection}
@@ -253,6 +254,7 @@ const CustomJumpTo = ({
         anchorEl={anchorEl}
         onClose={onClose}
         handleClick={handleSectionNavigation}
+        dataAid="jumpToNavigation"
       />
     </Stack>
   );
