@@ -273,7 +273,6 @@ const MfOrder = (props) => {
         order_type: parentInvestmentType,
         number_of_funds: fundOrderDetails?.length || 0,
         total_amount: totalAmount || '',
-        monthly_sip_date: '',
         user_application_status: kyc?.application_status_v2 || 'init',
         user_investment_status: user?.active_investment,
         user_kyc_status: kyc?.mf_kyc_processed || false,
