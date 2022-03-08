@@ -41,7 +41,6 @@ const AssetAllocation = ({fundDetailsRef}) => {
     }
     setViewMoreSector((prevProp) => prevProp + 10);
   };
-  console.log("fundData?.portfolio ", fundData?.portfolio)
 
   return (
     <Box sx={{ mt: 4 }} component='section' className='fund-details-asset-section'>
