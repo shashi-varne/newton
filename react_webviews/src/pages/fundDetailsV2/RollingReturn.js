@@ -91,7 +91,7 @@ const RollingReturn = ({fundDetailsRef}) => {
           </Timelines>
         </Box>
         <Stack sx={{ mt: 4, mb: 2 }} direction='column' spacing={3}>
-          <Typography dataAid="title" variant='heading4' color={secondaryColor}>
+          <Typography dataAid="netAssetValue" variant='heading4' color={secondaryColor}>
             Net asset value
           </Typography>
           {NET_ASSET_VALUE?.map((net_asset, idx) => {
