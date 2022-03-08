@@ -141,7 +141,7 @@ export function formCheckUpdate(keys_to_check, form_data) {
   };
 
   let selectTypeInput = ["relationship"];
-  let keysMapperArrayName = ["mother_name", "spouse_name", "nominee_name", "state", "city", "relationship", "marital_status"];
+  let keysMapperArrayName = ["mother_name", "spouse_name", "nominee_name", "relationship", "marital_status"];
 
   for (var i = 0; i < keys_to_check.length; i++) {
     let key_check = keys_to_check[i];
