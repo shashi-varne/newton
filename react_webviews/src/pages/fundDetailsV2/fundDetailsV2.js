@@ -254,7 +254,7 @@ const CustomJumpTo = ({
         anchorEl={anchorEl}
         onClose={onClose}
         handleClick={handleSectionNavigation}
-        dataAid="jumpToNavigation"
+        dataAid="1"
       />
     </Stack>
   );
