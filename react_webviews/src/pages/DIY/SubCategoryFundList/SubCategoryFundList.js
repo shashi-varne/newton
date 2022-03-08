@@ -1,5 +1,5 @@
 import { Grow, Stack } from '@mui/material';
-import { FILTER_TYPES } from 'businesslogic/constants/diy';
+import { DEFAULT_FILTER_DATA, FILTER_TYPES } from 'businesslogic/constants/diy';
 import {
   fetchFundList,
   getDiyCartCount,
@@ -69,7 +69,7 @@ const SubCategoryLanding = (props) => {
   });
   const [swiper, setSwiper] = useState(null);
   const [selectedFundHouses, setSelectedFundHouses] = useState([]);
-  const [selectedFundOption, setSelectedFundOption] = useState(filterOptions.fundOption);
+  const [selectedFundOption, setSelectedFundOption] = useState(DEFAULT_FILTER_DATA.fundOption);
   const [selectedMinInvestment, setSelectedMinInvestment] = useState(
     getMinimumInvestmentData(filterOptions.minInvestment)
   );
