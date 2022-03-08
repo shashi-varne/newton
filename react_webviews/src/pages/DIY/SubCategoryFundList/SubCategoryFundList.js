@@ -88,8 +88,8 @@ const SubCategoryLanding = (props) => {
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const { kyc, isLoading, user } = useUserKycHook();
   const [selectedFilterValue, setSelectedFilterValue] = useState({
-    [FILTER_TYPES.returns]: getReturnData(filterOptions.returnPeriod),
-    [FILTER_TYPES.sort]: getSortData(filterOptions.sortFundsBy),
+    [FILTER_TYPES.returns]: getReturnData(DEFAULT_FILTER_DATA.returnPeriod),
+    [FILTER_TYPES.sort]: getSortData(DEFAULT_FILTER_DATA.sortFundsBy),
   });
   const [isFilterSheetOpen, setIsFilterSheetOpen] = useState({
     [FILTER_TYPES.returns]: false,
@@ -256,7 +256,6 @@ const SubCategoryLanding = (props) => {
       if(filterEventRef.current?.category === 'filter') {
         // eslint-disable-next-line no-unused-expressions
         filtersApplied?.forEach(filterType => {
-          console.log("filterType",filterType);
           const newEvent = {...diyFilterEvent,properties: {...diyFilterEvent.properties, filter: filterType}}
           // diyFilterEvent.properties.filter = filterType;
           nativeCallback({events: newEvent});
