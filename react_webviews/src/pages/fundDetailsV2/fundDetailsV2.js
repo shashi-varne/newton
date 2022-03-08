@@ -50,6 +50,7 @@ const FundDetailsV2 = (props) => {
   const returnsRef = useRef();
   const riskDetailsRef = useRef();
   const returnCompRef = useRef();
+  const avoidFirstRef = useRef(null);
   const { productName } = useMemo(getConfig, []);
   const isFisdom = productName === 'fisdom';
   const ctaText = isFisdom ? 'ADD TO CART' : 'INVEST NOW';
@@ -85,43 +86,46 @@ const FundDetailsV2 = (props) => {
     if (!isFisdom) {
       dispatch(setFundsCart([fundData]));
       validateKycAndRedirect({ navigate, kyc })();
-    }
-    else {
-       dispatch(setCartItem(fundData));
+    } else {
+      dispatch(setCartItem(fundData));
     }
   };
 
-  const sendEvents = useCallback(
-    (userAction) => {
-      const eventObj = {
-        event_name: 'fund_detail',
-        properties: {
-          risk: fundData?.performance?.ms_risk,
-          flow: 'diy',
-          shared: 'no',
-          jump_to: fundDetailsRef.current?.jumpTo || '',
-          return_calculator_mode: investmentType,
-          return_calculator_investment_period: investmentPeriod,
-          asset_allocation: fundDetailsRef.current?.asset_allocation || '',
-          returns: fundDetailsRef.current?.returns || '',
-          rolling_return: fundDetailsRef.current?.rolling_return || 'investment period',
-          rolling_return_investment_period:
-            fundDetailsRef.current?.rolling_return_investment_period || '',
-          risk_measures: fundDetailsRef.current?.risk_measures || [],
-          user_action: userAction || 'back',
-          user_application_status: kyc?.application_status_v2 || 'init',
-          user_investment_status: user?.active_investment,
-          user_kyc_status: kyc?.mf_kyc_processed || false,
-        },
-      };
-      if (userAction) {
-        nativeCallback({ events: eventObj });
-      } else {
-        return eventObj;
-      }
-    },
-    [fundDetailsRef.current]
-  );
+  useEffect(() => {
+    if(avoidFirstRef.current){
+      sendEvents('back');
+    }
+    avoidFirstRef.current = true;
+  },[investmentType, investmentPeriod])
+
+  const sendEvents = (userAction) => {
+    const eventObj = {
+      event_name: 'fund_detail',
+      properties: {
+        risk: fundData?.performance?.ms_risk,
+        flow: 'diy',
+        shared: 'no',
+        jump_to: fundDetailsRef.current?.jumpTo || '',
+        return_calculator_mode: investmentType,
+        return_calculator_investment_period: `${investmentPeriod}y`,
+        asset_allocation: fundDetailsRef.current?.asset_allocation || '',
+        returns: fundDetailsRef.current?.returns || '',
+        rolling_return: fundDetailsRef.current?.rolling_return || 'investment period',
+        rolling_return_investment_period:
+          fundDetailsRef.current?.rolling_return_investment_period || '',
+        risk_measures:fundDetailsRef.current?.risk_measures ? `${fundDetailsRef.current?.risk_measures} 3Y know more` : '',
+        user_action: userAction || 'back',
+        user_application_status: kyc?.application_status_v2 || 'init',
+        user_investment_status: user?.active_investment,
+        user_kyc_status: kyc?.mf_kyc_processed || false,
+      },
+    };
+    if (userAction) {
+      nativeCallback({ events: eventObj });
+    } else {
+      return eventObj;
+    }
+  };
 
   const handleBack = () => {
     sendEvents('back');
@@ -130,10 +134,10 @@ const FundDetailsV2 = (props) => {
 
   return (
     <Container
-      headerProps={{ 
+      headerProps={{
         dataAid: 1,
-        hideHeaderTitle: true, 
-        onBackClick: handleBack, 
+        hideHeaderTitle: true,
+        onBackClick: handleBack,
       }}
       footer={{
         button1Props: {
@@ -160,12 +164,13 @@ const FundDetailsV2 = (props) => {
           riskDetailsRef={riskDetailsRef}
           returnCompRef={returnCompRef}
           fundDetailsRef={fundDetailsRef}
+          sendEvents={sendEvents}
         />
       }
       className='fund-details-wrapper'
       fixedFooter
       noPadding
-      dataAid="fundDetails"
+      dataAid='fundDetails'
     >
       <Box sx={{ bgcolor: 'foundationColors.supporting.white', p: '3px 16px' }}>
         <HeaderTitle
@@ -176,7 +181,7 @@ const FundDetailsV2 = (props) => {
             { name: fundData?.performance?.category },
             { name: fundData?.performance?.subcat },
           ]}
-          dataAid="1"
+          dataAid='1'
         />
       </Box>
       <FundPerformance />
@@ -188,13 +193,13 @@ const FundDetailsV2 = (props) => {
         <ReturnCalculator />
       </div>
       <div className='fund-details-section' ref={assetAllocRef}>
-        <AssetAllocation fundDetailsRef={fundDetailsRef} />
+        <AssetAllocation fundDetailsRef={fundDetailsRef} sendEvents={sendEvents}/>
       </div>
       <div className='fund-details-section' ref={returnsRef}>
-        <Returns fundDetailsRef={fundDetailsRef} />
+        <Returns fundDetailsRef={fundDetailsRef} sendEvents={sendEvents}/>
       </div>
       <div className='fund-details-section' ref={riskDetailsRef}>
-        <RiskDetails fundDetailsRef={fundDetailsRef} />
+        <RiskDetails fundDetailsRef={fundDetailsRef} sendEvents={sendEvents}/>
       </div>
       <div className='fund-details-section' ref={returnCompRef}>
         <ReturnComparison />
@@ -211,6 +216,7 @@ const CustomJumpTo = ({
   riskDetailsRef,
   returnCompRef,
   fundDetailsRef,
+  sendEvents,
 }) => {
   const [anchorEl, setAnchorEl] = useState(false);
   const [activeSection, setActiveSection] = useState();
@@ -245,6 +251,7 @@ const CustomJumpTo = ({
       ...fundDetailsRef.current,
       jumpTo: options[index],
     };
+    sendEvents('back');
     scrollIntoView(SectionRefs[index].current, {
       behavior: 'smooth',
     });
@@ -257,7 +264,7 @@ const CustomJumpTo = ({
         backgroundColor='foundationColors.content.primary'
         label='Jump To'
         onClick={handleClick}
-        dataAid="jumpTo"
+        dataAid='jumpTo'
       />
       <NavigationPopup
         activeIndex={activeSection}
@@ -265,7 +272,7 @@ const CustomJumpTo = ({
         anchorEl={anchorEl}
         onClose={onClose}
         handleClick={handleSectionNavigation}
-        dataAid="1"
+        dataAid='1'
       />
     </Stack>
   );

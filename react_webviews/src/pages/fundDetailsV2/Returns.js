@@ -1,6 +1,6 @@
 import { Stack } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { SwiperSlide } from 'swiper/react';
 import { Pill, Pills } from '../../designSystem/atoms/Pills/Pills';
 import Typography from '../../designSystem/atoms/Typography';
@@ -16,14 +16,14 @@ const secondaryColor = 'foundationColors.content.secondary';
 
 const minRollingYear = 3; // number is in month
 
-const Returns = ({fundDetailsRef}) => {
+const Returns = ({fundDetailsRef, sendEvents}) => {
   const [isReturn, setIsReturn] = useState(false);
   const [pillReturnValue, setPillReturnValue] = useState(0);
   const [swiper, setSwiper] = useState('');
   const fundData = useSelector(getFundData);
   const isReturnAvailable = isEmpty(fundData?.performance?.returns);
   const rollingReturnData = useSelector(getRollingReturnData);
-
+  const avoidFirstRender = useRef(null);
   const RETURN_TYPES = useMemo(() => {
     let returnTypes = [{ label: 'Return', dataAid: "return" }];
     if (rollingReturnData[minRollingYear]) {
@@ -35,8 +35,12 @@ const Returns = ({fundDetailsRef}) => {
   useEffect(() => {
     fundDetailsRef.current = {
       ...fundDetailsRef.current,
-      returns: pillReturnValue === 0 ? 'return' : 'rolling_return'
+      returns: pillReturnValue === 0 ? 'return' : 'rolling return'
     }
+    if(avoidFirstRender.current){
+      sendEvents('back');
+    }
+    avoidFirstRender.current = true;
   },[pillReturnValue]);
 
   const handleReturnSection = () => {
@@ -84,7 +88,7 @@ const Returns = ({fundDetailsRef}) => {
               <ReturnView returns={fundData?.performance?.returns} />
             </SwiperSlide>
             <SwiperSlide>
-              <RollingReturn fundDetailsRef={fundDetailsRef} />
+              <RollingReturn fundDetailsRef={fundDetailsRef} sendEvents={sendEvents}/>
             </SwiperSlide>
           </CustomSwiper>
         </Stack>

@@ -56,7 +56,7 @@ const checkRiskMeasuresAttribute = (riskMeasure) => {
   }
 };
 
-const RiskDetails = ({ fundDetailsRef }) => {
+const RiskDetails = ({ fundDetailsRef, sendEvents }) => {
   const [isRiskOpen, setIsRiskOpen] = useState(false);
   const [isTooltipOpen, setIsTooltipOpen] = useState({
     Alpha: false,
@@ -84,10 +84,9 @@ const RiskDetails = ({ fundDetailsRef }) => {
   const handleTooltip = (riskMeasureName) => () => {
     fundDetailsRef.current = {
       ...fundDetailsRef.current,
-      risk_measures: !fundDetailsRef.current?.risk_measures
-        ? [riskMeasureName]
-        : sortedUniq([...fundDetailsRef.current?.risk_measures, riskMeasureName]),
+      risk_measures: riskMeasureName
     };
+    sendEvents('back')
     setIsTooltipOpen({ ...isTooltipOpen, [riskMeasureName]: !isTooltipOpen[riskMeasureName] });
   };
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import format from 'date-fns/format';
 import { getRollingReturnData } from 'businesslogic/dataStore/reducers/fundDetails';
@@ -17,7 +17,7 @@ const screen = 'fundDetailsV2';
 const secondaryColor = 'foundationColors.content.secondary';
 const rollingRetunInfo =
   "This indicates how the fund's returns have stacked up for a particular investment period. E.g. A 3-year  rolling return would show the average annual return for every 3 years since the start of the fund till today";
-const RollingReturn = ({fundDetailsRef}) => {
+const RollingReturn = ({fundDetailsRef, sendEvents}) => {
   const [investmentYear, setInvestmentYear] = useState(36);
   const { loadingData } = useLoadingState(screen);
   const rollingReturnData = useSelector(getRollingReturnData);
@@ -25,6 +25,7 @@ const RollingReturn = ({fundDetailsRef}) => {
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const rollingGraphData = !isEmpty(rollingData?.data) ? rollingData?.data : [];
   const returnGraphData = [...rollingGraphData];
+  const avoidFirstRender = useRef(null);
   const NET_ASSET_VALUE = useMemo(() => {
     return [
       {
@@ -45,8 +46,13 @@ const RollingReturn = ({fundDetailsRef}) => {
   useEffect(() => {
     fundDetailsRef.current = {
       ...fundDetailsRef.current,
+      rolling_return: 'investment period',
       rolling_return_investment_period: investmentYear,
     }
+    if(avoidFirstRender.current){
+      sendEvents('back');
+    }
+    avoidFirstRender.current = true;
   },[investmentYear])
   const handleInvestmentYear = (e, value) => {
     setInvestmentYear(value);
@@ -56,6 +62,9 @@ const RollingReturn = ({fundDetailsRef}) => {
     fundDetailsRef.current = {
       ...fundDetailsRef.current,
       rolling_return: 'what is rolling return?',
+    }
+    if(!isTooltipOpen) {
+      sendEvents('back');
     }
     setIsTooltipOpen(!isTooltipOpen);
   };
