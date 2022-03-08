@@ -12,7 +12,10 @@ const SecureIcon = () => {
       <Typography variant='body5' color='foundationColors.content.secondary' dataAid="title" >
         Investments with {productName} are 100% secure
       </Typography>
-      <Icon src={require('assets/trust_icon_secure.svg')} dataAid="sebi" />
+      <Stack direction="row" justifyContent="center" alignItems="center" spacing={3} >
+        <Icon src={require('assets/sebi.svg')} dataAid="sebi" />
+        <Icon src={require('assets/secure.svg')} dataAid="lock" />
+      </Stack>
     </Stack>
   );
 };
