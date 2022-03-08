@@ -107,11 +107,11 @@ const FundStats = () => {
             allCaps
             variant='body9'
             color='foundationColors.content.secondary'
-            dataAid="totalAumKey"
+            dataAid="lockInKey"
           >
             Lock-in
           </Typography>
-          <Stack direction='column' data-aid="tv_totalAumValue">
+          <Stack direction='column' data-aid="tv_lockInValue">
             {isEmpty(lokinPeriodData) ? (
               <Typography align='right' variant='heading4'>
                 NA
