@@ -126,7 +126,9 @@ const FundOrderItem = ({
   };
 
   const openSipSelectorSheet = () => {
-    setIsSipSelectorOpen(true);
+    if(isInvestmentAllowed) {
+      setIsSipSelectorOpen(true);
+    }
   };
 
   const handleSelectedDate = (date) => {
@@ -181,7 +183,7 @@ const FundOrderItem = ({
             <Icon src={require('assets/close_grey.svg')} size='24px' dataAid='cancel' />
           </IconButton>
         )}
-        <Box sx={{ pointerEvents: isInvestmentAllowed ? 'default' : 'none' }}>
+        <Box>
           <InvestmentCard dataAid={dataAid}>
             {isProductFisdom && (
               <InvestmentCardHeaderRow
