@@ -50,6 +50,7 @@ import FundDetailsV2 from "../pages/fundDetailsV2";
 import MfOrder from "../pages/MfOrder";
 import StocksAndIpoDirectEntry from "./DirectEntry/StocksAndIpoDirectEntry";
 import PaymentNativeCallback from "./nps/components/paymentCallback";
+import ThemeWrapper from "../theme/ThemeWrapper";
 
 const Home = (props) => {
   const config = getConfig(); 
@@ -73,9 +74,6 @@ const Home = (props) => {
         <Route path={`${url}landing`} component={Invest} />
         <Route path={`${url}mf`} component={SdkLanding} />
         <Route path={`${url}diy`} component={DIY} />
-        <Route path={`${url}diyv2`} component={DIYV2} />
-        <Route path={`${url}fund-details-v2`} component={FundDetailsV2} />
-        <Route path={`${url}mf-orders`} component={MfOrder} />
         <Route path={`${url}invest-journey`} component={InvestJourney} />
         <Route path={`${url}nps`} component={NPS} />
         <Route path={`${url}passive-index-funds`} component={PassiveIndexFunds} />
@@ -197,6 +195,11 @@ const Home = (props) => {
           render={(props) => <InvestmentProof {...props} type="capital-gain" />} 
         />
         <Route exact path={`${url}page/invest/campaign/callback`} component={CampaignCallback} />
+        <ThemeWrapper>
+          <Route path={`${url}diyv2`} component={DIYV2} />
+          <Route path={`${url}fund-details-v2`} component={FundDetailsV2} />
+          <Route path={`${url}mf-orders`} component={MfOrder} />
+        </ThemeWrapper>
         <Route component={NotFound} />
       </Switch>
     </Fragment>

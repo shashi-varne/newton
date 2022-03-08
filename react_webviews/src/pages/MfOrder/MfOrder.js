@@ -2,11 +2,9 @@ import { Fade, Stack } from '@mui/material';
 import {
   getDiyCart,
   getDiyCartCount,
-  setFundsCart,
   setDiyStorage,
 } from 'businesslogic/dataStore/reducers/diy';
 import {
-  filterMfOrders,
   getfundOrderDetails,
   setFundOrderDetails,
   triggerInvestment,
@@ -25,7 +23,6 @@ import TrusIcon from '../../designSystem/atoms/TrustIcon';
 import Typography from '../../designSystem/atoms/Typography';
 import WrapperBox from '../../designSystem/atoms/WrapperBox';
 import EstimationCard from '../../designSystem/molecules/EstimationCard';
-import BottomSheet from '../../designSystem/organisms/BottomSheet';
 import Container from '../../designSystem/organisms/Container';
 import Api from '../../utils/api';
 import { getConfig } from '../../utils/functions';
@@ -47,8 +44,6 @@ const screen = 'mfOrder';
 
 const MfOrder = (props) => {
   const navigate = navigateFunc.bind(props);
-  const [isOpen, setIsOpen] = useState(false);
-  const [fundTobeRemoved, setFundTobeRemoved] = useState({});
   const [parentInvestmentType, setParentInvestmentType] = useState('sip');
   const [isInvestmentValid, setIsInvestmentValid] = useState({});
   const [showLoader, setShowLoader] = useState(false);
@@ -112,39 +107,6 @@ const MfOrder = (props) => {
   };
   const handleInvestmentType = (e, val) => {
     setParentInvestmentType(val);
-  };
-
-  const handleSheetClose = () => {
-    setIsOpen(false);
-  };
-
-  const handleInvestmentCard = (fund) => () => {
-    setFundTobeRemoved(fund);
-    setIsOpen(true);
-  };
-
-  const removeFund = () => {
-    const remainingOrders = {};
-    const remainingFunds = fundOrderDetails?.filter((el) => {
-      if (el.isin === fundTobeRemoved.isin) {
-        return false;
-      } else {
-        remainingOrders[el.isin] = mfOrders[el.isin];
-        return true;
-      }
-    });
-    const newDiyCart = cartData?.filter((el) => {
-      if (el.isin !== fundTobeRemoved.isin) {
-        return true;
-      }
-    });
-    const newInvestmentValidData = { ...isInvestmentValid };
-    delete newInvestmentValidData[fundTobeRemoved.isin];
-    dispatch(setFundsCart(newDiyCart));
-    dispatch(setFundOrderDetails(remainingFunds));
-    dispatch(filterMfOrders(remainingOrders));
-    setIsInvestmentValid(newInvestmentValidData);
-    handleSheetClose();
   };
 
   // check if two sip are not allowed
@@ -232,7 +194,7 @@ const MfOrder = (props) => {
         investment_subtype: '',
         journey_name: 'diy',
       };
-      sendEvents('next',totalAmount)
+      sendEvents('next', totalAmount);
       storageService().setObject('investment', investment);
       dispatch(setDiyStorage({ investment }));
       storageService().setObject('mf_invest_data', investmentEventData);
@@ -264,7 +226,7 @@ const MfOrder = (props) => {
     });
   };
 
-  const sendEvents = (userAction='', totalAmount='') => {
+  const sendEvents = (userAction = '', totalAmount = '') => {
     const eventObj = {
       event_name: 'mf_order_screen',
       properties: {
@@ -278,7 +240,7 @@ const MfOrder = (props) => {
         user_kyc_status: kyc?.mf_kyc_processed || false,
       },
     };
-    if(userAction) {
+    if (userAction) {
       nativeCallback({ events: eventObj });
     } else {
       return eventObj;
@@ -287,7 +249,7 @@ const MfOrder = (props) => {
 
   return (
     <Container
-    eventData={sendEvents()}
+      eventData={sendEvents()}
       headerProps={{
         headerTitle: 'Mutual funds order',
         hideInPageTitle: true,
@@ -331,13 +293,13 @@ const MfOrder = (props) => {
                     <FundOrderItem
                       key={idx}
                       fundDetails={fundDetails}
-                      handleInvestmentCard={handleInvestmentCard}
                       parentInvestmentType={parentInvestmentType}
                       isProductFisdom={isProductFisdom}
                       setIsInvestmentValid={setIsInvestmentValid}
+                      isInvestmentValid={isInvestmentValid}
                       setInvestedValue={setInvestedValue}
                       setParentInvestmentType={setParentInvestmentType}
-                      dataAid={idx+1}
+                      dataAid={idx + 1}
                     />
                   );
                 })}
@@ -375,23 +337,6 @@ const MfOrder = (props) => {
               <TrusIcon variant='secure' opacity='0.6' dataAid="1" />
             )}
           </Stack>
-
-          <BottomSheet
-            isOpen={isOpen}
-            onClose={handleSheetClose}
-            title='Delete fund'
-            imageLabelSrc={fundTobeRemoved?.logo}
-            label={fundTobeRemoved?.mfname}
-            subtitle='Are you sure, want to delete this fund from your cart, you can also add anytime'
-            primaryBtnTitle='Cancel'
-            secondaryBtnTitle='yes'
-            onPrimaryClick={handleSheetClose}
-            onSecondaryClick={removeFund}
-            dataAid="deleteFund"
-            imageLabelSrcProps={{
-              dataAid: "brandLogo"
-            }}
-          />
         </>
       )}
     </Container>
@@ -402,15 +347,23 @@ export default MfOrder;
 
 const ParentInvestTypeSection = ({ parentInvestmentType, isPageLoading, handleInvestmentType }) => {
   return (
-    <Stack sx={{ mb: 1 }} direction='row' alignItems='center' justifyContent='space-between' data-aid="grp_investmentType" >
-      <Typography variant='heading4' dataAid="title" >Investment type</Typography>
+    <Stack
+      sx={{ mb: 1 }}
+      direction='row'
+      alignItems='center'
+      justifyContent='space-between'
+      data-aid='grp_investmentType'
+    >
+      <Typography variant='heading4' dataAid='title'>
+        Investment type
+      </Typography>
       <Pills
         value={parentInvestmentType}
         disabled={isPageLoading}
         sx={{ pointerEvents: isPageLoading ? 'none' : 'default' }}
         onChange={handleInvestmentType}
       >
-        <Pill label='SIP' value='sip'  />
+        <Pill label='SIP' value='sip' />
         <Pill label='Lumpsum' value='lumpsum' />
       </Pills>
     </Stack>

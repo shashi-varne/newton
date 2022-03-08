@@ -21,7 +21,12 @@ import './fundDetailsV2.scss';
 import { Stack } from '@mui/material';
 import { getConfig } from '../../utils/functions';
 import { getUrlParams } from '../../utils/validators';
-import { getDiyCart, getDiyCartCount, setFundsCart } from 'businesslogic/dataStore/reducers/diy';
+import {
+  getDiyCart,
+  getDiyCartCount,
+  setCartItem,
+  setFundsCart,
+} from 'businesslogic/dataStore/reducers/diy';
 import { navigate as navigateFunc } from 'utils/functions';
 import useLoadingState from '../../common/customHooks/useLoadingState';
 import { validateKycAndRedirect } from '../DIY/common/functions';
@@ -77,45 +82,51 @@ const FundDetailsV2 = (props) => {
 
   const addFundToCart = () => {
     sendEvents('next');
-    dispatch(setFundsCart([fundData]));
-    if(!isFisdom) {
-      validateKycAndRedirect({ navigate, kyc })()
+    if (!isFisdom) {
+      dispatch(setFundsCart([fundData]));
+      validateKycAndRedirect({ navigate, kyc })();
+    }
+    else {
+       dispatch(setCartItem(fundData));
     }
   };
-  
-  const sendEvents = useCallback((userAction) => {
-    const eventObj = {
-      event_name: 'fund_detail',
-      properties: {
-        risk: fundData?.performance?.ms_risk,
-        flow: 'diy',
-        shared: 'no',
-        jump_to: fundDetailsRef.current?.jumpTo || '',
-        return_calculator_mode: investmentType,
-        return_calculator_investment_period: investmentPeriod,
-        asset_allocation: fundDetailsRef.current?.asset_allocation || '',
-        returns: fundDetailsRef.current?.returns || '',
-        rolling_return: fundDetailsRef.current?.rolling_return || 'investment period',
-        rolling_return_investment_period:
-          fundDetailsRef.current?.rolling_return_investment_period || '',
-        risk_measures: fundDetailsRef.current?.risk_measures || [],
-        user_action: userAction || 'back',
-        user_application_status: kyc?.application_status_v2 || 'init',
-        user_investment_status: user?.active_investment,
-        user_kyc_status: kyc?.mf_kyc_processed || false,
-      },
-    };
-    if (userAction) {
-      nativeCallback({ events: eventObj });
-    } else {
-      return eventObj;
-    }
-  },[fundDetailsRef.current]);
+
+  const sendEvents = useCallback(
+    (userAction) => {
+      const eventObj = {
+        event_name: 'fund_detail',
+        properties: {
+          risk: fundData?.performance?.ms_risk,
+          flow: 'diy',
+          shared: 'no',
+          jump_to: fundDetailsRef.current?.jumpTo || '',
+          return_calculator_mode: investmentType,
+          return_calculator_investment_period: investmentPeriod,
+          asset_allocation: fundDetailsRef.current?.asset_allocation || '',
+          returns: fundDetailsRef.current?.returns || '',
+          rolling_return: fundDetailsRef.current?.rolling_return || 'investment period',
+          rolling_return_investment_period:
+            fundDetailsRef.current?.rolling_return_investment_period || '',
+          risk_measures: fundDetailsRef.current?.risk_measures || [],
+          user_action: userAction || 'back',
+          user_application_status: kyc?.application_status_v2 || 'init',
+          user_investment_status: user?.active_investment,
+          user_kyc_status: kyc?.mf_kyc_processed || false,
+        },
+      };
+      if (userAction) {
+        nativeCallback({ events: eventObj });
+      } else {
+        return eventObj;
+      }
+    },
+    [fundDetailsRef.current]
+  );
 
   const handleBack = () => {
     sendEvents('back');
     props.history.goBack();
-  }
+  };
 
   return (
     <Container

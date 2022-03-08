@@ -75,7 +75,7 @@ const CommonCategoryLanding = (props) => {
   const showSeeMore = subtitleLength > 89 || (pointsLength >= 2 && subtitleLength > 40);
 
   useEffect(() => {
-    if (isEmpty(categoryData) || true) {
+    if (isEmpty(categoryData)) {
       dispatch(fetchDiyCategories({ Api, screen }));
     }
     dispatch(

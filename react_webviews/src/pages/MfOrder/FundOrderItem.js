@@ -1,7 +1,12 @@
 import { Box, IconButton } from '@mui/material';
-import { setMfOrders, removeMfOrder } from 'businesslogic/dataStore/reducers/mfOrders';
+import {
+  setMfOrders,
+  removeMfOrder,
+  setFundOrderDetails,
+  filterMfOrders,
+} from 'businesslogic/dataStore/reducers/mfOrders';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Icon from '../../designSystem/atoms/Icon';
 import WrapperBox from '../../designSystem/atoms/WrapperBox';
 import HeaderTitle from '../../designSystem/molecules/HeaderTitle';
@@ -16,13 +21,15 @@ import SipDateSelector from '../../designSystem/molecules/SipDateSelector';
 import { dateOrdinal } from '../../utils/validators';
 import { investmentAmountTile } from 'businesslogic/constants/mfOrder';
 import { validateMfOrderFunds } from 'businesslogic/utils/mfOrder/functions';
+import BottomSheet from '../../designSystem/organisms/BottomSheet';
+import { getDiyCart, setFundsCart } from 'businesslogic/dataStore/reducers/diy';
 
 const FundOrderItem = ({
   fundDetails,
   isProductFisdom,
-  handleInvestmentCard,
   parentInvestmentType,
   setIsInvestmentValid,
+  isInvestmentValid,
   setInvestedValue,
   setParentInvestmentType,
   dataAid,
@@ -30,11 +37,14 @@ const FundOrderItem = ({
   const [investmentType, setInvestmentType] = useState(parentInvestmentType);
   const [selectedDate, setSelectedDate] = useState(fundDetails.addl_purchase?.sip?.default_date);
   const [isSipSelectorOpen, setIsSipSelectorOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [amount, setAmount] = useState('');
   const dispatch = useDispatch();
   const minAmount = fundDetails?.addl_purchase[investmentType]?.min;
   const maxAmount = fundDetails?.addl_purchase[investmentType]?.max;
   const multiple = fundDetails?.addl_purchase[investmentType]?.mul;
+  const { fundOrderDetails, mfOrders } = useSelector((state) => state?.mfOrders);
+  const cartData = useSelector(getDiyCart);
   const { message, showError } = validateMfOrderFunds(amount, minAmount, maxAmount, multiple);
 
   const getInvestmentAllowedStatus = () => {
@@ -106,8 +116,8 @@ const FundOrderItem = ({
     if (isNaN(e.target.value)) return;
     const amountValue = Number(e.target.value);
     setAmount(amountValue);
-    if(!isProductFisdom) {
-      setInvestedValue(amountValue)
+    if (!isProductFisdom) {
+      setInvestedValue(amountValue);
     }
   };
 
@@ -124,9 +134,40 @@ const FundOrderItem = ({
   };
   const handleInvestmentType = (e, value) => {
     setInvestmentType(value);
-    if(!isProductFisdom) {
+    if (!isProductFisdom) {
       setParentInvestmentType(value);
     }
+  };
+
+  const handleSheetClose = () => {
+    setIsOpen(false);
+  };
+
+  const removeFund = () => {
+    handleSheetClose();
+    const remainingOrders = {};
+    const remainingFunds = fundOrderDetails?.filter((el) => {
+      if (el.isin === fundDetails.isin) {
+        return false;
+      } else {
+        remainingOrders[el.isin] = mfOrders[el.isin];
+        return true;
+      }
+    });
+    const newDiyCart = cartData?.filter((el) => {
+      if (el.isin !== fundDetails.isin) {
+        return true;
+      }
+    });
+    const newInvestmentValidData = { ...isInvestmentValid };
+    delete newInvestmentValidData[fundDetails.isin];
+    dispatch(setFundsCart(newDiyCart));
+    dispatch(setFundOrderDetails(remainingFunds));
+    dispatch(filterMfOrders(remainingOrders));
+    setIsInvestmentValid(newInvestmentValidData);
+  };
+  const handleInvestmentCard = () => {
+    setIsOpen(true);
   };
 
   return (
@@ -136,12 +177,12 @@ const FundOrderItem = ({
       )}
       <WrapperBox elevation={1} className='mf-investment-card-wrapper'>
         {isProductFisdom && (
-          <IconButton className='mf-ic-close' onClick={handleInvestmentCard(fundDetails)}>
-            <Icon src={require('assets/close_grey.svg')} size='24px' dataAid="cancel" />
+          <IconButton className='mf-ic-close' onClick={handleInvestmentCard}>
+            <Icon src={require('assets/close_grey.svg')} size='24px' dataAid='cancel' />
           </IconButton>
         )}
         <Box sx={{ pointerEvents: isInvestmentAllowed ? 'default' : 'none' }}>
-          <InvestmentCard dataAid={dataAid} >
+          <InvestmentCard dataAid={dataAid}>
             {isProductFisdom && (
               <InvestmentCardHeaderRow
                 title={fundDetails.mfname}
@@ -184,6 +225,19 @@ const FundOrderItem = ({
               rightImgSrc={require('assets/arrw_down.svg')}
             />
           </InvestmentCard>
+          <BottomSheet
+            isOpen={isOpen}
+            onClose={handleSheetClose}
+            title='Delete fund'
+            imageLabelSrc={fundDetails?.logo}
+            label={fundDetails?.mfname}
+            disablePortal
+            subtitle='Are you sure, want to delete this fund from your cart, you can also add anytime'
+            primaryBtnTitle='Cancel'
+            secondaryBtnTitle='yes'
+            onPrimaryClick={handleSheetClose}
+            onSecondaryClick={removeFund}
+          />
           <SipDateSelector
             sipDates={fundDetails.addl_purchase?.sip?.sip_dates}
             selectedDate={selectedDate}
