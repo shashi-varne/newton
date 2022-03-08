@@ -101,6 +101,8 @@ const ReturnCalculator = () => {
   const handleAmountChange = (e) => {
     if (isNaN(e.target.value)) return;
     const amountValue = Number(e.target.value);
+    if(investmentType === 'sip' && amountValue > 50000) return;
+    if(investmentType === 'lumpsum' && amountValue > 100000) return;
     dispatch(setAmount(amountValue));
   };
 
@@ -156,7 +158,7 @@ const ReturnCalculator = () => {
           </Stack>
           <Separator dataAid="1" />
 
-          <Stack direction='row' justifyContent='space-between'>
+          <Stack direction='row' justifyContent='space-between' spacing={1}>
             <Stack direction='column'>
               <Typography dataAid="investedValue" variant='heading2'>{formatAmountInr(investedAmount)}</Typography>
               <Typography dataAid="investedKey" variant='body1' color='foundationColors.content.secondary'>
