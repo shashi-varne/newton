@@ -6,6 +6,7 @@ import Container from '../../../designSystem/organisms/Container';
 import isArray from 'lodash/isArray';
 import { getConfig } from '../../../utils/functions';
 import PropTypes from 'prop-types';
+import replace from 'lodash/replace';
 
 import {
   setDiyTypeData,
@@ -21,6 +22,7 @@ import { hideDiyCartFooter } from "businesslogic/utils/diy/functions";
 import { VIEW_TYPE_MAPPER } from 'businesslogic/constants/diy';
 import { validateKycAndRedirect } from '../common/functions';
 import useUserKycHook from '../../../kyc/common/hooks/userKycHook';
+import { nativeCallback } from '../../../utils/native_callback';
 
 const SubCategoryList = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -30,15 +32,33 @@ const SubCategoryList = (props) => {
   const subcategoryData = useSelector((state) => getDiySubcategoryData(state, diyTypeData.category, diyTypeData.subcategory));
   const { productName } = useMemo(getConfig, []);
   const hideFooter = useMemo(hideDiyCartFooter(productName, cartCount), [productName, cartCount]);
-  const { kyc, isLoading } = useUserKycHook();
-  
-  const handleCardClick = (subcategoryOption) => () => {
+  const { kyc, isLoading, user } = useUserKycHook();
+  const handleCardClick = (subcategoryOption, subcategoryOptionName) => () => {
     dispatch(
       setDiyTypeData({
         subcategoryOption,
       })
     );
+    const formatedCategory = replace(diyTypeData.subcategory,/_/g,' ').toLowerCase();
+    const categoryEvent = `${diyTypeData.category.toLowerCase()} ${formatedCategory}`;
+    const subCategoryEvent = subcategoryOptionName.toLowerCase();
+    sendEvents(categoryEvent, subCategoryEvent);
     navigate(DIY_PATHNAME_MAPPER.subcategoryFundList);
+  };
+
+  const sendEvents = (category, subCategory) => {
+    const eventObj = {
+      event_name: 'diy_sub_category_clicked',
+      properties: {
+        category: category || '',
+        user_action: 'next',
+        sub_category: subCategory || '',
+        user_application_status: kyc?.application_status_v2 || 'init',
+        user_investment_status: user?.active_investment,
+        user_kyc_status: kyc?.mf_kyc_processed || false,
+      },
+    };
+    nativeCallback({ events: eventObj });
   };
 
   return (
@@ -69,7 +89,7 @@ const SubCategoryList = (props) => {
             return (
               <SubcategoryOptionCard
                 key={idx}
-                onClick={handleCardClick(data.key)}
+                onClick={handleCardClick(data.key, data.name)}
                 data={data}
                 viewType={subcategoryData.viewType}
               />

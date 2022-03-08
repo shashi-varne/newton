@@ -36,6 +36,7 @@ import useLoadingState from '../../../common/customHooks/useLoadingState';
 import { validateKycAndRedirect } from '../common/functions';
 import useUserKycHook from '../../../kyc/common/hooks/userKycHook';
 import { nativeCallback } from '../../../utils/native_callback';
+import replace from 'lodash/replace';
 
 const screen = 'diyLanding';
 const CommonCategoryLanding = (props) => {
@@ -85,9 +86,6 @@ const CommonCategoryLanding = (props) => {
     );
   }, []);
 
-  const formatString = (string) => {
-    return string.replace(/_/g, ' ');
-  };
   const handleCardClick =
     (subcategory, subcategoryOption, subcategoryOptionName = '') =>
     () => {
@@ -97,7 +95,8 @@ const CommonCategoryLanding = (props) => {
           subcategoryOption,
         })
       );
-      const categoryEvent = `${diyType.toLowerCase()} ${formatString(subcategory.toLowerCase())}`;
+      const formatedCategory = replace(diyTypeData.subcategory,/_/g,' ').toLowerCase();
+      const categoryEvent = `${diyType.toLowerCase()} ${formatedCategory}`;
       const subCategoryEvent = subcategoryOptionName.toLowerCase();
       sendEvents(categoryEvent, subCategoryEvent, 'next');
       navigate(DIY_PATHNAME_MAPPER.subcategoryFundList);
