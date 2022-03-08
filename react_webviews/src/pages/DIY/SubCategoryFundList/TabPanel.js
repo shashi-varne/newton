@@ -50,9 +50,9 @@ const TabPanel = memo((props) => {
 
   const showFundDetails = (fund) => () => {
     const eventObj = {
-      event_name: 'diy fund clicked',
+      event_name: 'diy_fund_clicked',
       properties: {
-        fund : fund?.legal_name,
+        fund: fund?.legal_name,
         flow: 'diy',
         asset_class: category?.toLowerCase() || '',
         rating: fund?.morning_star_rating || '',
@@ -61,7 +61,7 @@ const TabPanel = memo((props) => {
         user_kyc_status: kyc?.mf_kyc_processed || false,
         user_action: 'next',
       },
-    }
+    };
     nativeCallback({ events: eventObj });
     navigate(DIY_PATHNAME_MAPPER.fundDetails, {
       searchParams: `${location.search}&isins=${fund.isin}`,
@@ -70,14 +70,14 @@ const TabPanel = memo((props) => {
 
   return (
     <div>
-      <Box sx={{ backgroundColor:!isEmpty(data) && 'foundationColors.supporting.white' }}>
+      <Box sx={{ backgroundColor: !isEmpty(data) && 'foundationColors.supporting.white' }}>
         <Stack
           justifyContent='space-between'
           direction='row'
           className='sub-category-filter-info'
           backgroundColor='foundationColors.supporting.grey'
           sx={{ mb: '16px', padding: '8px 16px' }}
-          data-aid="grp_fundsReturns"
+          data-aid='grp_fundsReturns'
         >
           <Typography
             variant='body5'
@@ -85,8 +85,7 @@ const TabPanel = memo((props) => {
             sx={{ display: 'flex', alignItems: 'center' }}
             dataAid='funds'
           >
-            {showLoader ? <Skeleton type='text' width='12px' /> : data.length}
-            {" "}funds
+            {showLoader ? <Skeleton type='text' width='12px' /> : data.length} funds
           </Typography>
           <Typography
             variant='body5'
@@ -94,8 +93,7 @@ const TabPanel = memo((props) => {
             sx={{ display: 'flex', alignItems: 'center' }}
             dataAid={`${returnLabel?.toLowerCase()}Returns`}
           >
-            {showLoader ? <Skeleton type='text' width='12px' /> : returnLabel}
-            {" "}returns
+            {showLoader ? <Skeleton type='text' width='12px' /> : returnLabel} returns
           </Typography>
         </Stack>
         {showLoader ? (
@@ -107,7 +105,11 @@ const TabPanel = memo((props) => {
             <FundItemSkeletonLoader />
           </Stack>
         ) : (
-          <Box data-aid={`fundList_${getDiyDataAid(subcategoryOption)}`} sx={{ p: '0px 16px' }}>
+          <Box
+            className='fund-list-wrapper'
+            data-aid={`fundList_${getDiyDataAid(subcategoryOption)}`}
+            sx={{ p: '0px 16px' }}
+          >
             {data?.slice(0, NumOfItems)?.map((fund, idx) => {
               const returnValue = fund[returnPeriod];
               const returnData = !returnValue
@@ -133,7 +135,7 @@ const TabPanel = memo((props) => {
                     imgSrc={fund?.amc_logo_big}
                     showSeparator
                     onClick={showFundDetails(fund)}
-                    dataAid={idx+1}
+                    dataAid={idx + 1}
                   >
                     <ProductItem.LeftSection>
                       <ProductItem.Title>{fund?.legal_name}</ProductItem.Title>
@@ -143,7 +145,7 @@ const TabPanel = memo((props) => {
                             label='Recommendation'
                             labelColor='foundationColors.content.secondary'
                             labelBackgroundColor='foundationColors.secondary.blue.200'
-                            dataAid="label1"
+                            dataAid='label1'
                           />
                         )}
                         {fund?.morning_star_rating && (
@@ -151,19 +153,23 @@ const TabPanel = memo((props) => {
                             morningStarVariant='small'
                             label={fund?.morning_star_rating}
                             labelColor='foundationColors.content.secondary'
-                            dataAid="label2"
+                            dataAid='label2'
                           />
                         )}
                       </ProductItem.LeftBottomSection>
                     </ProductItem.LeftSection>
                     <ProductItem.RightSection spacing={2}>
-                      <ProductItem.Description title={returnData} titleColor={returnColor} titleDataAid="value" />
+                      <ProductItem.Description
+                        title={returnData}
+                        titleColor={returnColor}
+                        titleDataAid='value'
+                      />
                       {!hideCartButton && (
                         <Icon
                           size='32px'
                           src={require(`assets/${isFundAddedToCart ? `minus` : `add_icon`}.svg`)}
                           onClick={(e) => handleAddToCart(e, fund)}
-                          dataAid="right"
+                          dataAid='right'
                         />
                       )}
                     </ProductItem.RightSection>
