@@ -13,6 +13,7 @@ const TwoRowCarousel = ({ isPageLoading, handleCardClick, seeAllCategories, data
   if (!isPageLoading && isEmpty(data)) {
     return null;
   }
+  const listLength = data?.options?.length || 0;
   return (
     <Stack direction='column' spacing={2} className='diy-c-category-wrapper'>
       <SectionHeader
@@ -23,6 +24,7 @@ const TwoRowCarousel = ({ isPageLoading, handleCardClick, seeAllCategories, data
         dataAid={data?.design_id}
         buttonDataAid={`seeAll${data?.design_id?.charAt(0)?.toUpperCase() + data?.design_id?.slice(1)}`}
         iconDataAid={data?.design_id}
+        hideSeeMore={listLength <= 4}
       />
       <div>
         <CustomSwiper

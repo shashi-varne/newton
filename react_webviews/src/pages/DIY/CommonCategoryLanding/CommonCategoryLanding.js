@@ -157,6 +157,7 @@ const CommonCategoryLanding = (props) => {
       headerProps={{
         dataAid: 1,
       }}
+      className='diy-main-wrapper'
     >
       <div className='diy-category-landing-wrapper'>
         <LandingHeader variant='center' dataAid={categoryData?.design_id}>
