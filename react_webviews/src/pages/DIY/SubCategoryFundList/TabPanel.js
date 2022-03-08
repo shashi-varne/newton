@@ -114,7 +114,7 @@ const TabPanel = memo((props) => {
             {data?.slice(0, NumOfItems)?.map((fund, idx) => {
               const returnValue = fund[returnPeriod];
               const returnData = !returnValue
-                ? 'N/A'
+                ? 'NA'
                 : fund[returnPeriod] > 0
                 ? `+${fund[returnPeriod]}%`
                 : `${fund[returnPeriod]}%`;

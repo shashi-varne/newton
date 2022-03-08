@@ -63,7 +63,7 @@ const Returns = ({fundDetailsRef, sendEvents}) => {
         disabled={isReturnAvailable}
         isOpen={isReturn}
         onClick={handleReturnSection}
-        label={`Returns ${isReturnAvailable ? '(N/A)' : ''}`}
+        label={`Returns ${isReturnAvailable ? '(NA)' : ''}`}
         dataAid="returns"
       >
         <Stack direction='column'>

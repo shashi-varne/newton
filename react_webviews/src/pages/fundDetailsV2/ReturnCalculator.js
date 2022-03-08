@@ -114,7 +114,7 @@ const ReturnCalculator = () => {
       <CollapsibleSection
         isOpen={isReturnCalcOpen}
         onClick={handleReturnCalcSection}
-        label={`Return calculator ${isReturnAvailable ? '(N/A)' : ''}`}
+        label={`Return calculator ${isReturnAvailable ? '(NA)' : ''}`}
         disabled={isReturnAvailable}
         dataAid="returnCalculator"
       >

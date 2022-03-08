@@ -70,7 +70,7 @@ const TrendingFunds = ({ config, handleFundDetails, diyType }) => {
                         title: '3 Year Return',
                         titleColor: 'foundationColors.content.secondary',
                         subtitle: !trendingFund?.three_month_return
-                          ? 'N/A'
+                          ? 'NA'
                           : trendingFund?.three_month_return > 0
                           ? `+ ${trendingFund?.three_month_return}%`
                           : `- ${trendingFund?.three_month_return}%`,
@@ -94,7 +94,7 @@ const TrendingFunds = ({ config, handleFundDetails, diyType }) => {
                         leftImgSrc: require('assets/small_heart.svg'),
                         subtitle: trendingFund?.purchase_percent
                           ? `${trendingFund?.purchase_percent}% users`
-                          : 'N/A',
+                          : 'NA',
                         subtitleColor: trendingFund?.purchase_percent
                           ? 'foundationColors.secondary.coralOrange.400'
                           : 'foundationColors.content.secondary',

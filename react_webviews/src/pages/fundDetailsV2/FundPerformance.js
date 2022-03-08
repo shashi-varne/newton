@@ -48,7 +48,7 @@ const FundPerformance = () => {
         leftTitle={`NAV as on ${NavDate}`}
         leftTitleColor='foundationColors.content.secondary'
         leftSubtitle={formatAmountInr(fundData?.performance?.current_nav)}
-        rightTitle={`Returns (${fundReturns[fundTimePeriod] ? fundTimePeriod : 'N/A'})`}
+        rightTitle={`Returns (${fundReturns[fundTimePeriod] ? fundTimePeriod : 'NA'})`}
         rightTitleColor='foundationColors.content.secondary'
         rightSubtitle={isValidValue(fundReturns[fundTimePeriod],`${fundReturns[fundTimePeriod]}%`)}
         rightSubtitleColor={fundReturns[fundTimePeriod] && `foundationColors.secondary.${

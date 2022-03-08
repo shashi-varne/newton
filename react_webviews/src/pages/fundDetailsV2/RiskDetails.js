@@ -94,7 +94,7 @@ const RiskDetails = ({ fundDetailsRef, sendEvents }) => {
     <Box sx={{ mt: 4 }}>
       <CollapsibleSection
         disabled={isRiskDetailsAvailable}
-        label={`Risk details ${isRiskDetailsAvailable ? '(N/A)' : ''}`}
+        label={`Risk details ${isRiskDetailsAvailable ? '(NA)' : ''}`}
         isOpen={isRiskOpen}
         onClick={handleRiskAction}
         dataAid="riskDetails"
