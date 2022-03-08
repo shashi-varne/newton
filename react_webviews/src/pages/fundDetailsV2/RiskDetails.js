@@ -104,13 +104,13 @@ const RiskDetails = ({ fundDetailsRef }) => {
             {!isEmpty(fundData?.risk?.risk_vs_category) && (
               <Stack direction='column' spacing={3}>
                 <Typography dataAid="riskVsCategory" variant='heading4'>Risk vs Category</Typography>
-                <BarMeter barMeterData={barData} activeIndex={riskVsCategoryActiveIndex} />
+                <BarMeter dataAid="1" barMeterData={barData} activeIndex={riskVsCategoryActiveIndex} />
               </Stack>
             )}
             {!isEmpty(fundData?.risk?.return_vs_category) && (
               <Stack direction='column' spacing={3}>
                 <Typography dataAid="returnVsCategory" variant='heading4'>Return vs Category</Typography>
-                <BarMeter barMeterData={barData} activeIndex={returnVsCategoryActiveIndex} />
+                <BarMeter dataAid="2" barMeterData={barData} activeIndex={returnVsCategoryActiveIndex} />
               </Stack>
             )}
           </Stack>
