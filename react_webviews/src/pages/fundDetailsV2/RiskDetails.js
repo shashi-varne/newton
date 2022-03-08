@@ -98,6 +98,7 @@ const RiskDetails = ({ fundDetailsRef }) => {
         label={`Risk details ${isRiskDetailsAvailable ? '(N/A)' : ''}`}
         isOpen={isRiskOpen}
         onClick={handleRiskAction}
+        dataAid="riskDetails"
       >
         <Box>
           <Stack direction='column' spacing={3}>

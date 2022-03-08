@@ -114,6 +114,7 @@ const ReturnCalculator = () => {
         onClick={handleReturnCalcSection}
         label={`Return calculator ${isReturnAvailable ? '(N/A)' : ''}`}
         disabled={isReturnAvailable}
+        dataAid="returnCalculator"
       >
         <Stack direction='column' spacing={3} sx={{ pb: 3 }}>
           <Box sx={{ maxWidth: 'fit-content' }}>

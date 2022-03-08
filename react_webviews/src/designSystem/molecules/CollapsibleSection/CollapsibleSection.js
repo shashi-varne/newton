@@ -37,7 +37,7 @@ const CollapsibleSection = ({
         <Typography variant='heading3' color={labelColor} dataAid='title'>
           {label}
         </Typography>
-        <Icon size='24px' src={isOpen ? expandedIcon : collapsedIcon} className='c-icon-wrapper' />
+        <Icon dataAid="right" size='24px' src={isOpen ? expandedIcon : collapsedIcon} className='c-icon-wrapper' />
       </div>
       <CollapseLib in={isOpen}>
         <div className={`c-child-wrapper ${childWrapperClass}`}>{children}</div>

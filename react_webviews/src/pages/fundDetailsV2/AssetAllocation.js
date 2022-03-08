@@ -49,6 +49,7 @@ const AssetAllocation = ({fundDetailsRef}) => {
         isOpen={isAssetOpen}
         onClick={handleAssetSection}
         label='Asset allocation'
+        dataAid="assetAllocation"
       >
         <Stack>
           <Stack direction='row' spacing='40px'>

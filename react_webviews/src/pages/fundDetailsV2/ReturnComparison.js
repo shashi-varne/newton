@@ -30,6 +30,7 @@ const ReturnComparison = () => {
         onClick={handleReturnCompSection}
         label={`Return comparison ${isReturnAvailable ? '(N/A)' : ''}`}
         disabled={isReturnAvailable}
+        dataAid="returnComparision"
       >
         <Box>
           <Stack direction='column' spacing={3}>
