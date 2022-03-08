@@ -2,9 +2,9 @@ export const DIY_PATHNAME_MAPPER = {
   subcategoryList: "/diyv2/sub-category-list",
   subcategoryFunds: "/diyv2/sub-category-funds",
   subcategoryFundList: "/diyv2/sub-category/fund-list",
-  fundDetails: "/diyv2/fund-details",
+  fundDetails: "/fund-details-v2",
   diyInvestLanding: "/invest/explore",
-  mfOrders: "/diyv2/mf-orders",
+  mfOrders: "/mf-orders",
   completeKyc: "/diyv2/complete-kyc",
   kycWeb: "/kyc/web",
   investProcess: "/diyv2/invest-process"

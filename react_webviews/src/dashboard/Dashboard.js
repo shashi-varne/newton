@@ -46,6 +46,8 @@ import NativeRedirection from "../kyc/Native/NativeRedirection";
 import ProductMarketTypes from './ProductMarketTypes';
 import PrimaryMarketProducts from "./PrimaryMarketProducts/PrimaryMarketProducts";
 import DIYV2 from "../pages/DIY";
+import FundDetailsV2 from "../pages/fundDetailsV2";
+import MfOrder from "../pages/MfOrder";
 import StocksAndIpoDirectEntry from "./DirectEntry/StocksAndIpoDirectEntry";
 import PaymentNativeCallback from "./nps/components/paymentCallback";
 
@@ -72,6 +74,8 @@ const Home = (props) => {
         <Route path={`${url}mf`} component={SdkLanding} />
         <Route path={`${url}diy`} component={DIY} />
         <Route path={`${url}diyv2`} component={DIYV2} />
+        <Route path={`${url}fund-details-v2`} component={FundDetailsV2} />
+        <Route path={`${url}mf-orders`} component={MfOrder} />
         <Route path={`${url}invest-journey`} component={InvestJourney} />
         <Route path={`${url}nps`} component={NPS} />
         <Route path={`${url}passive-index-funds`} component={PassiveIndexFunds} />

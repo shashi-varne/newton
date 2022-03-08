@@ -6,6 +6,7 @@ import ContainerMain from './ContainerMain';
 import ContainerHeader from './ContainerHeader';
 import './Container.scss';
 import './ContainerIframe.scss';
+import ThemeWrapper from '../../../theme/ThemeWrapper';
 
 const Container = ({
   headerProps = {},
@@ -43,34 +44,40 @@ const Container = ({
 
   const containerClass = isIframe ? 'Iframe-container-wrapper' : 'container-wrapper';
   return (
-    <Box
-      ref={containerRef}
-      sx={{ ...containerWrapperSx(isPageLoading), ...containerSx }}
-      className={`${containerClass} ${className}`}
-    >
-      <ContainerHeader headerProps={headerProps} containerRef={containerRef} eventData={eventData}/>
-      <ContainerMain
-        skeltonType={skeltonType}
-        isPageLoading={isPageLoading}
-        iframeRightChildren={iframeRightChildren}
-        iframeRightSectionImgSrc={iframeRightSectionImgSrc}
-        iframeRightSectionImgSrcProps={iframeRightSectionImgSrcProps}
-        noPadding={noPadding}
-        disableHorizontalPadding={disableHorizontalPadding}
-        disableVerticalPadding={disableVerticalPadding}
+    <ThemeWrapper>
+      <Box
+        ref={containerRef}
+        sx={{ ...containerWrapperSx(isPageLoading), ...containerSx }}
+        className={`${containerClass} ${className}`}
       >
-        {children}
-      </ContainerMain>
-      {!isPageLoading && (
-        <ContainerFooter
-          fixedFooter={fixedFooter}
-          renderComponentAboveFooter={renderComponentAboveFooter}
-          footer={footer}
-          noFooter={noFooter}
-          footerElevation={footerElevation}
+        <ContainerHeader
+          headerProps={headerProps}
+          containerRef={containerRef}
+          eventData={eventData}
         />
-      )}
-    </Box>
+        <ContainerMain
+          skeltonType={skeltonType}
+          isPageLoading={isPageLoading}
+          iframeRightChildren={iframeRightChildren}
+          iframeRightSectionImgSrc={iframeRightSectionImgSrc}
+          iframeRightSectionImgSrcProps={iframeRightSectionImgSrcProps}
+          noPadding={noPadding}
+          disableHorizontalPadding={disableHorizontalPadding}
+          disableVerticalPadding={disableVerticalPadding}
+        >
+          {children}
+        </ContainerMain>
+        {!isPageLoading && (
+          <ContainerFooter
+            fixedFooter={fixedFooter}
+            renderComponentAboveFooter={renderComponentAboveFooter}
+            footer={footer}
+            noFooter={noFooter}
+            footerElevation={footerElevation}
+          />
+        )}
+      </Box>
+    </ThemeWrapper>
   );
 };
 
