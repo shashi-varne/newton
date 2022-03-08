@@ -16,6 +16,7 @@ import isEmpty from 'lodash/isEmpty';
 import { getDiyDataAid } from '../common/functions';
 import useUserKycHook from '../../../kyc/common/hooks/userKycHook';
 import { nativeCallback } from '../../../utils/native_callback';
+import { DIY_PATHNAME_MAPPER } from '../common/constants';
 
 const screen = 'diyFundList';
 const TabPanel = memo((props) => {
@@ -62,7 +63,7 @@ const TabPanel = memo((props) => {
       },
     }
     nativeCallback({ events: eventObj });
-    navigate(`/diyv2/fund-details`, {
+    navigate(DIY_PATHNAME_MAPPER.fundDetails, {
       searchParams: `${location.search}&isins=${fund.isin}`,
     });
   };
