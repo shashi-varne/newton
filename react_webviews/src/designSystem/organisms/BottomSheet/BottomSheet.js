@@ -50,6 +50,7 @@ const BottomSheet = ({
   onSecondaryClick,
   primaryBtnProps,
   secondaryBtnProps,
+  dataAid
 }) => {
   const handleOnClose = useCallback(
     (event, reason) => {
@@ -68,6 +69,7 @@ const BottomSheet = ({
       onClose={handleOnClose}
       disableEscapeKeyDown={disableEscapeKeyDown}
       onBackdropClick={onBackdropClick}
+      data-aid={`bottomsheet_${dataAid}`}
     >
       <Stack direction='column' spacing={1} className='bottom-sheet-wrapper'>
         <Stack justifyContent='center' alignItems='center' className='btm-sheet-indicator'>

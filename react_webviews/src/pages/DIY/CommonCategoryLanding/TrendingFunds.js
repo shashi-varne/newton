@@ -45,6 +45,7 @@ const TrendingFunds = ({ config, handleFundDetails, diyType }) => {
         slidesPerGroup={1}
         spaceBetween={10}
         speed={500}
+        paginationDataAid="trending"
       >
         {loadingData.isTrendingFundsLoading
           ? [1, 1, 1]?.map((el, idx) => {

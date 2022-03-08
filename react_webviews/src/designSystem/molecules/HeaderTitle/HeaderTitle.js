@@ -41,7 +41,7 @@ const HeaderTitle = ({
         <Typography variant='heading3' color={titleColor} dataAid='title'>
           {title}
         </Typography>
-        <Typography variant='body2' color={subtitleColor} dataAid='title'>
+        <Typography variant='body2' color={subtitleColor} dataAid='subtitle'>
           {subtitle}
         </Typography>
         {Array.isArray(subTitleLabels) && <SubtitleLabels subTitleLabels={subTitleLabels} />}

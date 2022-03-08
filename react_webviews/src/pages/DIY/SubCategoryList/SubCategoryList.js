@@ -45,6 +45,7 @@ const SubCategoryList = (props) => {
     <Container
       headerProps={{
         headerTitle: subcategoryData.name,
+        dataAid: subcategoryData?.design_id,
       }}
       className='diy-sub-category-cv-wrapper'
       footer={{
@@ -54,11 +55,13 @@ const SubCategoryList = (props) => {
           badgeContent: cartCount,
           onButtonClick: validateKycAndRedirect({ navigate, kyc }),
           imgSrc: require('assets/cart_icon.svg'),
+          dataAid: 'viewCart',
         },
       }}
       fixedFooter
       noFooter={hideFooter}
       isPageLoading={isLoading}
+      dataAid={subcategoryData?.design_id}
     >
       <div className="diy-sc-cv-lists">
         {isArray(subcategoryData.options) &&

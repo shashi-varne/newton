@@ -119,7 +119,11 @@ const FundDetailsV2 = (props) => {
 
   return (
     <Container
-      headerProps={{ hideHeaderTitle: true, onBackClick: handleBack }}
+      headerProps={{ 
+        dataAid: 1,
+        hideHeaderTitle: true, 
+        onBackClick: handleBack, 
+      }}
       footer={{
         button1Props: {
           title: ctaText,
@@ -130,7 +134,7 @@ const FundDetailsV2 = (props) => {
           buttonTitle: 'View Cart',
           badgeContent: cartCount,
           onButtonClick: validateKycAndRedirect({ navigate, kyc }),
-          dataAid: '_',
+          dataAid: 'viewCart',
         },
         hideButton1: isFisdom && isfundAdded,
         hideConfirmAction: !isFisdom || !isfundAdded,
@@ -150,6 +154,7 @@ const FundDetailsV2 = (props) => {
       className='fund-details-wrapper'
       fixedFooter
       noPadding
+      dataAid="fundDetails"
     >
       <Box sx={{ bgcolor: 'foundationColors.supporting.white', p: '3px 16px' }}>
         <HeaderTitle
@@ -160,6 +165,7 @@ const FundDetailsV2 = (props) => {
             { name: fundData?.performance?.category },
             { name: fundData?.performance?.subcat },
           ]}
+          dataAid="1"
         />
       </Box>
       <FundPerformance />
@@ -240,6 +246,7 @@ const CustomJumpTo = ({
         backgroundColor='foundationColors.content.primary'
         label='Jump To'
         onClick={handleClick}
+        dataAid="jumpTo"
       />
       <NavigationPopup
         activeIndex={activeSection}
@@ -247,6 +254,7 @@ const CustomJumpTo = ({
         anchorEl={anchorEl}
         onClose={onClose}
         handleClick={handleSectionNavigation}
+        dataAid="1"
       />
     </Stack>
   );

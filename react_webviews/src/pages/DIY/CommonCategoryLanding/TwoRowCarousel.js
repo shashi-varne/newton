@@ -22,6 +22,8 @@ const TwoRowCarousel = ({ isPageLoading, handleCardClick, seeAllCategories, data
         title={data?.name}
         onClick={seeAllCategories(data.key)}
         dataAid={data?.design_id}
+        buttonDataAid={`seeAll${data?.design_id?.charAt(0)?.toUpperCase() + data?.design_id?.slice(1)}`}
+        iconDataAid={data?.design_id}
         hideSeeMore={listLength <= 4}
       />
       <div>
@@ -31,6 +33,7 @@ const TwoRowCarousel = ({ isPageLoading, handleCardClick, seeAllCategories, data
           slidesPerGroup={2}
           slidesPerColumnFill={'row'}
           spaceBetween={10}
+          paginationDataAid={data?.design_id}
         >
           {isPageLoading
             ? [1, 1, 1, 1, 1, 1].map((el, idx) => {

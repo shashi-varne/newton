@@ -291,6 +291,7 @@ const MfOrder = (props) => {
       headerProps={{
         headerTitle: 'Mutual funds order',
         hideInPageTitle: true,
+        dataAid: "mutualFundOrder"
       }}
       footer={{
         button1Props: {
@@ -303,6 +304,7 @@ const MfOrder = (props) => {
       noFooter={isPageLoading}
       isPageLoading={showLoader || isLoading}
       className='mf-order-wrapper'
+      dataAid="invest"
     >
       {noMfOrdersAvailable ? (
         <NoMfOrders />
@@ -355,20 +357,22 @@ const MfOrder = (props) => {
                         : expectedReturnData?.return
                     }
                     toolTipText={`Estimation based on last ${expectedReturnData?.name} of the fund.`}
+                    dataAid="1"
+                    toolTipDataAid="aftertenYears"
                   />
                 </WrapperBox>
               </div>
             </Fade>
 
             {isProductFisdom ? (
-              <Typography variant='body5' color='foundationColors.content.tertiary'>
+              <Typography variant='body5' color='foundationColors.content.tertiary' dataAid="termsCondition" >
                 By continue, I agree that I have read the{' '}
                 <span className='pointer' onClick={handleTermsAndConditions}>
                   terms & conditions
                 </span>
               </Typography>
             ) : (
-              <TrusIcon variant='secure' opacity='0.6' />
+              <TrusIcon variant='secure' opacity='0.6' dataAid="1" />
             )}
           </Stack>
 
@@ -383,6 +387,10 @@ const MfOrder = (props) => {
             secondaryBtnTitle='yes'
             onPrimaryClick={handleSheetClose}
             onSecondaryClick={removeFund}
+            dataAid="deleteFund"
+            imageLabelSrcProps={{
+              dataAid: "brandLogo"
+            }}
           />
         </>
       )}

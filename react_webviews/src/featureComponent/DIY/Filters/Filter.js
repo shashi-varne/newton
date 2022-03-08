@@ -71,7 +71,7 @@ const Filter = ({
   }, [isOpen]);
 
   return (
-    <Box className="diy-filter-wrapper">
+    <Box className="diy-filter-wrapper" data-aid={SCREEN_DATA_ID_MAPPER[selectedTab]} >
       <Drawer
         transitionDuration={250}
         PaperProps={{ elevation: 1 }}
@@ -89,6 +89,7 @@ const Filter = ({
           hideInPageTitle
           actionTextProps={{ title: "Clear all", onClick: handleClearAll, dataAid: "link" }}
           onBackClick={handleFilterClose}
+          dataAid="filters"
         />
         <Stack
           sx={{ height: "100vh" }}
@@ -212,4 +213,5 @@ const RightPanel = ({
   );
 };
 
+const SCREEN_DATA_ID_MAPPER = ["filtersFundHouses", "filtersFundOptions", "filtersMinimumInvestments"]
 export default Filter;

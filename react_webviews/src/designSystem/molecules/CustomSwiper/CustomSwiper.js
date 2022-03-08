@@ -26,6 +26,7 @@ export const CustomSwiper = ({
   slidesPerColumnFill,
   grabCursor,
   hidePagination,
+  paginationDataAid,
   ...restProps
 }) => {
   const useSwiperRef = () => {
@@ -57,7 +58,7 @@ export const CustomSwiper = ({
         {children}
       </Swiper>
       {
-        !hidePagination && <CustomPagination ref={paginationRef} />
+        !hidePagination && <CustomPagination ref={paginationRef} dataAid={paginationDataAid} />
       }
     </div>
   );
@@ -93,7 +94,7 @@ const customSx = {
 };
 
 const CustomPagination = React.forwardRef((props, ref) => {
-  return <Box component='div' sx={customSx} ref={ref} {...props}></Box>;
+  return <Box component='div' sx={customSx} ref={ref} {...props} data-aid={`scrollIndicator_${props.dataAid}`}></Box>;
 });
 
 export default CustomSwiper;

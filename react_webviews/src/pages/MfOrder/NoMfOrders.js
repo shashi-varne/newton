@@ -14,9 +14,10 @@ const NoMfOrders = () => {
           animationData={require(`assets/${productName}/lottie/no_mf_order.json`)}
           autoPlay
           loop
+          data-aid="iv_notAvailable"
         />
       </Box>
-      <Typography align='center'>Please add at least one fund to make an investment</Typography>
+      <Typography align='center' dataAid="title" >Please add at least one fund to make an investment</Typography>
     </Stack>
   );
 };

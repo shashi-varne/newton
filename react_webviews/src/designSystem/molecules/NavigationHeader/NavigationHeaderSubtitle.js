@@ -2,7 +2,7 @@ import React from 'react';
 import Typography from '../../atoms/Typography';
 import PropTypes from 'prop-types';
 
-export const NavigationHeaderSubtitle = ({ children, color, dataIdx }) => {
+export const NavigationHeaderSubtitle = ({ children, color, dataIdx = "" }) => {
   return (
     <Typography
       className='lh-subtitle'
@@ -20,7 +20,7 @@ export const NavigationHeaderSubtitle = ({ children, color, dataIdx }) => {
 NavigationHeaderSubtitle.propTypes = {
   children: PropTypes.node,
   color: PropTypes.string,
-  dataIdx: PropTypes.number.isRequired,
+  dataIdx: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 NavigationHeaderSubtitle.defaultProps = {

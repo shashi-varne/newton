@@ -151,9 +151,6 @@ const TabPanel = memo((props) => {
                             label={fund?.morning_star_rating}
                             labelColor='foundationColors.content.secondary'
                             dataAid="label2"
-                            leftImgProps={{
-                              dataAid: "star"
-                            }}
                           />
                         )}
                       </ProductItem.LeftBottomSection>

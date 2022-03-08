@@ -16,6 +16,7 @@ const NavigationPill = ({
   disabled,
   labelColor,
   backgroundColor,
+  dataAid
 }) => {
   const navigationSxStyle = {
     color: labelColor,
@@ -28,6 +29,7 @@ const NavigationPill = ({
       type='navigationPill'
       onClick={onClick}
       sx={navigationSxStyle}
+      data-aid={`navigationPill_${dataAid}`}
     />
   );
 };

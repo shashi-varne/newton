@@ -25,9 +25,9 @@ const Returns = ({fundDetailsRef}) => {
   const rollingReturnData = useSelector(getRollingReturnData);
 
   const RETURN_TYPES = useMemo(() => {
-    let returnTypes = ['Return'];
+    let returnTypes = [{ label: 'Return', dataAid: "return" }];
     if (rollingReturnData[minRollingYear]) {
-      returnTypes.push('Rolling return');
+      returnTypes.push({ label: 'Rolling return', dataAid: "rollingReturn" });
     }
     return returnTypes;
   }, [rollingReturnData]);
@@ -60,12 +60,13 @@ const Returns = ({fundDetailsRef}) => {
         isOpen={isReturn}
         onClick={handleReturnSection}
         label={`Returns ${isReturnAvailable ? '(N/A)' : ''}`}
+        dataAid="returns"
       >
         <Stack direction='column'>
           <Box>
             <Pills value={pillReturnValue} onChange={handleReturnValue}>
               {RETURN_TYPES?.map((el, idx) => {
-                return <Pill key={idx} label={el} />;
+                return <Pill key={idx} {...el} />;
               })}
             </Pills>
           </Box>
@@ -96,15 +97,15 @@ export default Returns;
 
 const ReturnView = ({ returns = [] }) => {
   return (
-    <Box sx={{ mt: 3, mb: 3 }}>
+    <Box sx={{ mt: 3, mb: 3 }} data-aid="grp_timePeriod">
       <Stack direction='column' spacing={3}>
         {returns?.map((returnData, idx) => {
           return (
             <Stack key={idx} direction='row' justifyContent='space-between'>
-              <Typography variant='body8' color={secondaryColor}>
+              <Typography dataAid={getReturnsDataAid(returnData?.name, "Key")} variant='body8' color={secondaryColor}>
                 Last {returnData?.name}
               </Typography>
-              <Typography variant='heading4' color={secondaryColor}>
+              <Typography dataAid={getReturnsDataAid(returnData?.name, "Value")} variant='heading4' color={secondaryColor}>
                 {isValidValue(returnData?.value, `${returnData?.value}%`)}
               </Typography>
             </Stack>
@@ -114,3 +115,9 @@ const ReturnView = ({ returns = [] }) => {
     </Box>
   );
 };
+
+const getReturnsDataAid = (name, key) => {
+  name = name.split(" ").join("");
+  name = name?.toLowerCase() || "";
+  return `${name}${key}`;
+}

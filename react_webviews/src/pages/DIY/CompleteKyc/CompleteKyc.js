@@ -55,8 +55,9 @@ const CompleteKyc = (props) => {
         },
       }}
       className='complete-kyc-wrapper'
+      dataAid="completeKyc"
     >
-      <LandingHeader variant='side'>
+      <LandingHeader variant='side' dataAid="completeKyc" >
         <Lottie
           animationData={require(`assets/${productName}/lottie/kyc_complete.json`)}
           autoPlay
@@ -82,7 +83,7 @@ const CompleteKyc = (props) => {
         </Stack>
       </section>
       <div className='ck-trust-icon-wrapper'>
-        <TrustIcon variant='secure' opacity='0.6' />
+        <TrustIcon variant='secure' opacity='0.6' dataAid="1" />
       </div>
     </Container>
   );

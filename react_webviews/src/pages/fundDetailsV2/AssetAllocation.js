@@ -48,13 +48,14 @@ const AssetAllocation = ({fundDetailsRef}) => {
         isOpen={isAssetOpen}
         onClick={handleAssetSection}
         label='Asset allocation'
+        dataAid="assetAllocation"
       >
         <Stack>
           <Stack direction='row' spacing='40px'>
             {fundData?.portfolio?.asset_allocation?.map((assetData, idx) => {
               return (
                 <Stack sx={{ ml: '-3px', mr: '-3px' }} key={idx} direction='column' spacing='4px'>
-                  <Stack direction='column'>
+                  <Stack data-aid={`tv_${assetData?.name?.toLowerCase()}`} direction='column'>
                     <Typography variant='body8' color='foundationColors.content.secondary'>
                       {assetData?.name}
                     </Typography>
@@ -68,6 +69,7 @@ const AssetAllocation = ({fundDetailsRef}) => {
                       backgroundColor: AssetColors[assetData?.name],
                     }}
                     className='fund-asset-perc'
+                    data-aid={`iv_${assetData?.name?.toLowerCase()}`}
                   />
                 </Stack>
               );
@@ -75,32 +77,32 @@ const AssetAllocation = ({fundDetailsRef}) => {
           </Stack>
           {!isTopHoldingsAvailable && (
             <>
-              <Separator marginTop='16px' />
+              <Separator marginTop='16px' dataAid="2" />
               <Stack sx={{ pt: 3 }} spacing={2}>
-                <Typography variant='heading4'>Top Holdings</Typography>
+                <Typography dataAid="topHolding" variant='heading4'>Top Holdings</Typography>
                 {fundData?.portfolio?.top_ten_holdings
                   ?.slice(0, viewMoreHolding)
                   .map((holding, idx) => {
                     return (
                       <Stack key={idx} direction='row' justifyContent='space-between'>
-                        <Typography variant='body8' color='foundationColors.content.secondary'>
+                        <Typography dataAid={getAssestAllocationDataAid(holding?.name, "Key")} variant='body8' color='foundationColors.content.secondary'>
                           {holding?.name}
                         </Typography>
-                        <Typography variant='heading4' color='foundationColors.content.secondary'>
+                        <Typography dataAid={getAssestAllocationDataAid(holding?.name, "Value")} variant='heading4' color='foundationColors.content.secondary'>
                           {holding?.weighting}%
                         </Typography>
                       </Stack>
                     );
                   })}
                 {fundData?.portfolio?.top_ten_holdings?.length > viewMoreHolding && (
-                  <Button title='View all holdings' variant='link' onClick={handleMoreHolding} />
+                  <Button dataAid="viewAllHoldings" title='View all holdings' variant='link' onClick={handleMoreHolding} />
                 )}
               </Stack>
             </>
           )}
           {!isSectorsAvailable && (
             <>
-              <Separator marginTop='16px' />
+              <Separator marginTop='16px' dataAid="3" />
 
               <Stack sx={{ pt: 3, pb: 2 }} spacing={2}>
                 <Typography variant='heading4'>Top sectors</Typography>
@@ -109,17 +111,17 @@ const AssetAllocation = ({fundDetailsRef}) => {
                   .map((sector, idx) => {
                     return (
                       <Stack key={idx} direction='row' justifyContent='space-between'>
-                        <Typography variant='body8' color='foundationColors.content.secondary'>
+                        <Typography dataAid={getAssestAllocationDataAid(sector?.name, "Key")} variant='body8' color='foundationColors.content.secondary'>
                           {sector?.name}
                         </Typography>
-                        <Typography variant='heading4' color='foundationColors.content.secondary'>
+                        <Typography dataAid={getAssestAllocationDataAid(sector?.name, "Value")} variant='heading4' color='foundationColors.content.secondary'>
                           {sector?.value}%
                         </Typography>
                       </Stack>
                     );
                   })}
                 {fundData?.portfolio?.sector_allocation.length > viewMoreSector && (
-                  <Button title='View all sectors' variant='link' onClick={handleMoreSector} />
+                  <Button dataAid="viewAllSectors" title='View all sectors' variant='link' onClick={handleMoreSector} />
                 )}
               </Stack>
             </>
@@ -131,3 +133,9 @@ const AssetAllocation = ({fundDetailsRef}) => {
 };
 
 export default AssetAllocation;
+
+const getAssestAllocationDataAid = (name, key) => {
+  let [firstName] = name.split(" ");
+  firstName = firstName?.toLowerCase() || "";
+  return `${firstName}${key}`;
+}

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
   LandingHeader,
   LandingHeaderPoints,
@@ -146,13 +146,17 @@ const CommonCategoryLanding = (props) => {
           badgeContent: cartCount,
           onButtonClick: validateKycAndRedirect({ navigate, kyc }),
           imgSrc: require('assets/cart_icon.svg'),
-          dataAid: '_',
+          dataAid: 'viewCart',
         },
       }}
       fixedFooter
       noFooter={hideFooter}
       isPageLoading={isLoading}
       noPadding={true}
+      dataAid={categoryData?.design_id}
+      headerProps={{
+        dataAid: 1,
+      }}
       className='diy-main-wrapper'
     >
       <div className='diy-category-landing-wrapper'>
@@ -162,12 +166,14 @@ const CommonCategoryLanding = (props) => {
             autoPlay
             loop
             className='diy-landing-lottie-anim'
+            data-aid="iv_top"
           />
           <LandingHeaderTitle>{categoryData.category?.toUpperCase()}</LandingHeaderTitle>
           {config.isMobileDevice && showSeeMore ? (
             <LandingHeaderSeeMoreWrapper
               subtitle={categoryData.subtitle}
               points={categoryData?.points}
+              subtitleDataIdx={1}
             />
           ) : (
             <>

@@ -6,7 +6,7 @@ import ContainerMain from './ContainerMain';
 import ContainerHeader from './ContainerHeader';
 import './Container.scss';
 import './ContainerIframe.scss';
-import ThemeWrapper from '../../../theme/ThemeWrapper';
+import PropTypes from 'prop-types';
 
 const Container = ({
   headerProps = {},
@@ -27,6 +27,7 @@ const Container = ({
   disableHorizontalPadding,
   disableVerticalPadding,
   eventData,
+  dataAid,
 }) => {
   const containerRef = useRef();
   const footerWrapperRef = useRef();
@@ -44,40 +45,39 @@ const Container = ({
 
   const containerClass = isIframe ? 'Iframe-container-wrapper' : 'container-wrapper';
   return (
-    <ThemeWrapper>
-      <Box
-        ref={containerRef}
-        sx={{ ...containerWrapperSx(isPageLoading), ...containerSx }}
-        className={`${containerClass} ${className}`}
+    <Box
+      ref={containerRef}
+      sx={{ ...containerWrapperSx(isPageLoading), ...containerSx }}
+      className={`${containerClass} ${className}`}
+      data-aid={dataAid}
+    >
+      <ContainerHeader
+        headerProps={headerProps}
+        containerRef={containerRef}
+        eventData={eventData}
+      />
+      <ContainerMain
+        skeltonType={skeltonType}
+        isPageLoading={isPageLoading}
+        iframeRightChildren={iframeRightChildren}
+        iframeRightSectionImgSrc={iframeRightSectionImgSrc}
+        iframeRightSectionImgSrcProps={iframeRightSectionImgSrcProps}
+        noPadding={noPadding}
+        disableHorizontalPadding={disableHorizontalPadding}
+        disableVerticalPadding={disableVerticalPadding}
       >
-        <ContainerHeader
-          headerProps={headerProps}
-          containerRef={containerRef}
-          eventData={eventData}
+        {children}
+      </ContainerMain>
+      {!isPageLoading && (
+        <ContainerFooter
+          fixedFooter={fixedFooter}
+          renderComponentAboveFooter={renderComponentAboveFooter}
+          footer={footer}
+          noFooter={noFooter}
+          footerElevation={footerElevation}
         />
-        <ContainerMain
-          skeltonType={skeltonType}
-          isPageLoading={isPageLoading}
-          iframeRightChildren={iframeRightChildren}
-          iframeRightSectionImgSrc={iframeRightSectionImgSrc}
-          iframeRightSectionImgSrcProps={iframeRightSectionImgSrcProps}
-          noPadding={noPadding}
-          disableHorizontalPadding={disableHorizontalPadding}
-          disableVerticalPadding={disableVerticalPadding}
-        >
-          {children}
-        </ContainerMain>
-        {!isPageLoading && (
-          <ContainerFooter
-            fixedFooter={fixedFooter}
-            renderComponentAboveFooter={renderComponentAboveFooter}
-            footer={footer}
-            noFooter={noFooter}
-            footerElevation={footerElevation}
-          />
-        )}
-      </Box>
-    </ThemeWrapper>
+      )}
+    </Box>
   );
 };
 
@@ -87,6 +87,10 @@ const containerWrapperSx = (isPageLoading) => {
       ? 'foundationColors.supporting.white'
       : 'foundationColors.supporting.grey',
   };
+};
+
+Container.propTypes = {
+  dataAid: PropTypes.string.isRequired,
 };
 
 export default Container;

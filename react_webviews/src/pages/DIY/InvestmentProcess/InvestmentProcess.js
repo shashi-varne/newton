@@ -71,8 +71,12 @@ const InvestmentProcess = (props) => {
       }}
       className='investment-process-wrapper'
       isPageLoading={showLoader || isLoading}
+      dataAid="howMoneyInvested"
+      headerProps={{
+        dataAid: 1,
+      }}
     >
-      <LandingHeader variant='side'>
+      <LandingHeader variant='side' dataAid="moneyInvested" >
         <LandingHeaderImage imgSrc={require(`assets/${productName}/invest_process.svg`)} />
         <LandingHeaderTitle>{DIY.investmentProcessTitle}</LandingHeaderTitle>
         <LandingHeaderSubtitle dataIdx={1}>{DIY.investmentProcessSubtitle(capitalizeFirstLetter(productName))}</LandingHeaderSubtitle>
@@ -96,7 +100,7 @@ const InvestmentProcess = (props) => {
         </ul>
       </section>
       <div className='ip-trust-icon-wrapper'>
-        <TrustIcon variant='secure' opacity='0.6' />
+        <TrustIcon variant='secure' opacity='0.6' dataAid="1" />
       </div>
     </Container>
   );
