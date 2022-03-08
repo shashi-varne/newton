@@ -20,7 +20,7 @@ import { DIY_PATHNAME_MAPPER } from '../common/constants';
 
 const screen = 'diyFundList';
 const TabPanel = memo((props) => {
-  const { data = [], returnPeriod, returnLabel, value, activeTab, handleAddToCart, subcategoryOption } = props;
+  const { data = [], returnPeriod,sendEvents, returnLabel, value, activeTab, handleAddToCart, subcategoryOption } = props;
   const [NumOfItems, setNumOfItems] = useState(10);
   const [showLoader, setShowLoader] = useState(false);
   const { kyc, user } = useUserKycHook();
@@ -62,6 +62,7 @@ const TabPanel = memo((props) => {
         user_action: 'next',
       },
     };
+    sendEvents('diy_fund_list', 'next', true);
     nativeCallback({ events: eventObj });
     navigate(DIY_PATHNAME_MAPPER.fundDetails, {
       searchParams: `${location.search}&isins=${fund.isin}`,

@@ -1,5 +1,5 @@
 import { Grow, Stack } from '@mui/material';
-import { FILTER_TYPES } from 'businesslogic/constants/diy';
+import { DEFAULT_FILTER_DATA, FILTER_TYPES } from 'businesslogic/constants/diy';
 import {
   fetchFundList,
   getDiyCartCount,
@@ -9,17 +9,18 @@ import {
   getFilterOptions,
   getFundsByCategory,
   setCartItem,
+  setDiySeeMore,
   setDiyTypeData,
-  setFilteredFundList
+  setFilteredFundList,
 } from 'businesslogic/dataStore/reducers/diy';
 import {
   getMinimumInvestmentData,
   getReturnData,
   getSortData,
-  hideDiyCartFooter
+  hideDiyCartFooter,
 } from 'businesslogic/utils/diy/functions';
 import isEmpty from 'lodash/isEmpty';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
@@ -38,8 +39,34 @@ import TabPanel from './TabPanel';
 import { validateKycAndRedirect } from '../common/functions';
 import useUserKycHook from '../../../kyc/common/hooks/userKycHook';
 import useLoadingState from '../../../common/customHooks/useLoadingState';
+import { nativeCallback } from '../../../utils/native_callback';
 
 const screen = 'diyFundList';
+
+const FundListEventMapper = {
+  aum: 'fund size (aum)',
+  expense_ratio: 'expense ratio',
+  morning_star_rating: 'rating',
+  one_month_return: '1 month',
+  three_month_return: '3 months',
+  six_month_return: '6 months',
+  one_year_return: '1 year',
+  three_year_return: '3 year',
+  five_year_return: '5 year',
+};
+
+const getFilterCount = (fundHouses, fundOption, minInvestment) => {
+  const fundHouseLength = fundHouses?.length || 0;
+  const fundOptionLength = fundOption ? 1 : 0;
+  const minInvestmentLength = !isEmpty(minInvestment) ? 1 : 0;
+  const filterCount = fundHouseLength + fundOptionLength + minInvestmentLength;
+  return filterCount;
+};
+
+const getfilterMapEventValue = (value) => {
+  const eventValue = FundListEventMapper[value] || value || '';
+  return eventValue;
+};
 const SubCategoryLanding = (props) => {
   const dispatch = useDispatch();
   const navigate = navigateFunc.bind(props);
@@ -48,16 +75,18 @@ const SubCategoryLanding = (props) => {
   const filteredFunds = useSelector((state) => getFilteredFundsByCategory(state, category));
   const categoryFunds = useSelector((state) => getFundsByCategory(state, category));
   const filterOptions = useSelector(getFilterOptions);
+  const filteredData = useSelector((state) => state?.diy?.filteredData);
   const subcategoryOptionsData = useSelector((state) =>
     getDiySubcategoryOptions(state, category, subcategory)
   );
+  const isSeeMoreClicked = useSelector((state) => state.diy.isSeeMoreClicked);
   const { productName } = useMemo(getConfig, []);
   const hideCartFooter = useMemo(hideDiyCartFooter(productName, diyCartCount), [
     productName,
     diyCartCount,
   ]);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
-  const { kyc, isLoading } = useUserKycHook();
+  const { kyc, isLoading, user } = useUserKycHook();
   const [selectedFilterValue, setSelectedFilterValue] = useState({
     [FILTER_TYPES.returns]: getReturnData(filterOptions.returnPeriod),
     [FILTER_TYPES.sort]: getSortData(filterOptions.sortFundsBy),
@@ -69,16 +98,33 @@ const SubCategoryLanding = (props) => {
   });
   const [swiper, setSwiper] = useState(null);
   const [selectedFundHouses, setSelectedFundHouses] = useState([]);
-  const [selectedFundOption, setSelectedFundOption] = useState(filterOptions.fundOption);
+  const [selectedFundOption, setSelectedFundOption] = useState(DEFAULT_FILTER_DATA.fundOption);
   const [selectedMinInvestment, setSelectedMinInvestment] = useState(
     getMinimumInvestmentData(filterOptions.minInvestment)
   );
+
+  const filterCount = getFilterCount(selectedFundHouses, selectedFundOption, selectedMinInvestment);
+
+  const firstRender = useRef(false);
+  const filterEventRef = useRef({});
+  const diyFundListRef = useRef({});
 
   useEffect(() => {
     if (isEmpty(subcategoryOptionsData)) {
       navigate(DIY_PATHNAME_MAPPER.diyInvestLanding);
     }
+    return () => {
+      dispatch(setDiySeeMore(false));
+    };
   }, []);
+
+  // this hook takes care of diy filter event
+  useEffect(() => {
+    if (filterEventRef.current?.category && !isFilterSheetOpen[filterEventRef.current?.category]) {
+      sendEvents('diy_filter');
+      filterEventRef.current.reset_applied = false;
+    }
+  }, [filteredData, filterEventRef.current?.category]);
 
   const getSubcategoryOptionIndex = () => {
     const index = subcategoryOptionsData.findIndex((el) => el.key === subcategoryOption);
@@ -86,6 +132,14 @@ const SubCategoryLanding = (props) => {
   };
   const [tabValue, setTabValue] = useState(getSubcategoryOptionIndex());
   const { isPageLoading } = useLoadingState(screen);
+
+  // this hook is triggering the event for diy fund list.
+  useEffect(() => {
+    if (!isPageLoading && firstRender.current) {
+    sendEvents('diy_fund_list');
+    }
+    firstRender.current = true;
+  }, [subcategoryOption, isPageLoading]);
 
   const fetchDiyFundList = () => {
     if (!isEmpty(subcategoryOptionsData)) {
@@ -132,6 +186,7 @@ const SubCategoryLanding = (props) => {
         },
       })
     );
+    sendEvents('diy_fund_list');
   }, [
     selectedFilterValue[FILTER_TYPES.sort]?.value,
     selectedFilterValue[FILTER_TYPES.sort]?.order,
@@ -140,9 +195,12 @@ const SubCategoryLanding = (props) => {
     selectedFundOption,
     selectedMinInvestment,
   ]);
-
   const handleTabChange = (e, value) => {
     setTabValue(value);
+    diyFundListRef.current = {
+      ...diyFundListRef.current,
+      tab_swiched: true,
+    };
     if (swiper) {
       swiper.slideTo(value);
     }
@@ -167,6 +225,10 @@ const SubCategoryLanding = (props) => {
   };
 
   const handleFilterClick = (filterType) => () => {
+    filterEventRef.current = {
+      ...filterEventRef.current,
+      category: filterType,
+    };
     setIsFilterSheetOpen({ ...isFilterSheetOpen, [filterType]: true });
   };
 
@@ -175,8 +237,72 @@ const SubCategoryLanding = (props) => {
     dispatch(setCartItem(fund));
   };
 
+  const handleGoNext = () => {
+    sendEvents('diy_fund_list', 'next');
+    validateKycAndRedirect({ navigate, kyc })();
+  };
+
+  const sendEvents = (eventName,userAction ='back', cardClicked = false) => {
+    if(eventName === 'diy_fund_list') {
+      if(userAction === 'next') {
+        fundListEvent.properties.user_action = 'next';
+      }
+      if(cardClicked) {
+        fundListEvent.properties.card_clicked = 'yes';
+      }
+      nativeCallback({events: fundListEvent});
+    } else if(eventName === 'diy_filter') {
+      const filtersApplied =  [...new Set(filterEventRef.current?.filter)] || [];
+      if(filterEventRef.current?.category === 'filter') {
+        // eslint-disable-next-line no-unused-expressions
+        filtersApplied?.forEach(filterType => {
+          console.log("filterType",filterType);
+          const newEvent = {...diyFilterEvent,properties: {...diyFilterEvent.properties, filter: filterType}}
+          // diyFilterEvent.properties.filter = filterType;
+          nativeCallback({events: newEvent});
+        })
+      } else {
+        nativeCallback({events: diyFilterEvent});
+      }
+    }
+  }
+  const sub_category_option = subcategoryOption?.toLowerCase().replace(/_/g, ' ');
+  const fundListEvent = {
+    event_name: 'diy_fund_list',
+    properties: {
+      sub_category: sub_category_option,
+      list_length: filteredData?.fundList?.[category]?.[subcategoryOption]?.length || 0,
+      tab_swiched: diyFundListRef.current?.tab_swiched ? 'yes' : 'no',
+      card_clicked: 'no',
+      user_action: 'back',
+      see_all: isSeeMoreClicked ? 'yes' : 'no',
+      user_application_status: kyc?.application_status_v2 || 'init',
+      user_investment_status: user?.active_investment,
+      user_kyc_status: kyc?.mf_kyc_processed || false,
+    },
+  };
+
+  const diyFilterEvent = {
+    event_name: 'diy_filter',
+    properties: {
+      category: filterEventRef.current?.category,
+      sort: getfilterMapEventValue(filteredData?.filterOptions?.sortFundsBy),
+      filter: '',
+      fund_houses: filteredData?.filterOptions?.fundHouse || [],
+      fund_options: filteredData?.filterOptions?.fundOption || '',
+      minimum_investment:
+        filteredData?.filterOptions?.minInvestment?.label?.toLowerCase() || '',
+      returns: getfilterMapEventValue(filteredData?.filterOptions?.returnPeriod),
+      reset_applied: filterEventRef.current?.reset_applied ? 'yes' : 'no',
+      user_application_status: kyc?.application_status_v2 || 'init',
+      user_investment_status: user?.active_investment,
+      user_kyc_status: kyc?.mf_kyc_processed || false,
+    },
+  };
+
   return (
     <Container
+      eventData={fundListEvent}
       headerProps={{
         headerTitle: subcategoryOptionsData[tabValue]?.name,
         subtitle: subcategoryOptionsData[tabValue]?.subtitle,
@@ -196,9 +322,9 @@ const SubCategoryLanding = (props) => {
           handleReturnClick={handleFilterClick(FILTER_TYPES.returns)}
           handleFilterClick={handleFilterClick('filter')}
           cartCount={diyCartCount}
-          onCartClick={validateKycAndRedirect({ navigate, kyc })}
+          onCartClick={handleGoNext}
           returnLabel={selectedFilterValue[FILTER_TYPES.returns]?.returnLabel}
-          filterCount={selectedFundHouses.length}
+          filterCount={filterCount}
           hideCartFooter={hideCartFooter}
           isPageLoading={isPageLoading}
         />
@@ -226,6 +352,9 @@ const SubCategoryLanding = (props) => {
                   activeTab={tabValue}
                   handleAddToCart={handleAddToCart}
                   subcategoryOption={subcategoryOption}
+                  swiper={swiper}
+                  sendEvents={sendEvents}
+                  diyFundListRef={diyFundListRef}
                 />
               </SwiperSlide>
             );
@@ -256,12 +385,11 @@ const SubCategoryLanding = (props) => {
         setSelectedFundHouses={setSelectedFundHouses}
         setSelectedFundOption={setSelectedFundOption}
         setSelectedMinInvestment={setSelectedMinInvestment}
+        filterEventRef={filterEventRef}
       />
     </Container>
   );
 };
-
-
 
 const CustomFooter = ({
   cartCount,
@@ -272,10 +400,10 @@ const CustomFooter = ({
   returnLabel,
   filterCount,
   hideCartFooter,
-  isPageLoading
+  isPageLoading,
 }) => {
   return (
-    <Stack spacing={1} sx={{mx:'-16px'}} className='sub-category-custom-footer'>
+    <Stack spacing={1} sx={{ mx: '-16px' }} className='sub-category-custom-footer'>
       <Grow in={!hideCartFooter} timeout={500} mountOnEnter unmountOnExit>
         <div className='sc-confirmation-btn-wrapper'>
           <ConfirmAction
@@ -298,7 +426,5 @@ const CustomFooter = ({
     </Stack>
   );
 };
-
-
 
 export default SubCategoryLanding;
