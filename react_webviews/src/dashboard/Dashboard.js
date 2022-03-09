@@ -46,11 +46,11 @@ import NativeRedirection from "../kyc/Native/NativeRedirection";
 import ProductMarketTypes from './ProductMarketTypes';
 import PrimaryMarketProducts from "./PrimaryMarketProducts/PrimaryMarketProducts";
 import DIYV2 from "../pages/DIY";
-import MfOrder from "../pages/MfOrder";
 import StocksAndIpoDirectEntry from "./DirectEntry/StocksAndIpoDirectEntry";
 import PaymentNativeCallback from "./nps/components/paymentCallback";
 import ThemeWrapper from "../theme/ThemeWrapper";
 import fundDetailsV2Container from "../containers/fundDetailsV2/fundDetailsV2Container";
+import mfOrderContainer from "../containers/mfOrder/mfOrderContainer";
 
 const Home = (props) => {
   const config = getConfig(); 
@@ -198,7 +198,7 @@ const Home = (props) => {
         <ThemeWrapper>
           <Route path={`${url}diyv2`} component={DIYV2} />
           <Route path={`${url}fund-details-v2`} component={fundDetailsV2Container} />
-          <Route path={`${url}mf-orders`} component={MfOrder} />
+          <Route path={`${url}mf-orders`} component={mfOrderContainer} />
         </ThemeWrapper>
         <Route component={NotFound} />
       </Switch>
