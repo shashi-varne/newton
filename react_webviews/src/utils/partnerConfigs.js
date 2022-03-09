@@ -57,7 +57,7 @@ export const commonCardsConfig = {
     {
       image: "nfo.svg",
       type: "nfo",
-      endDate: "03/06/2022",
+      endDate: "03/15/2022",
     }
   ],
 };
