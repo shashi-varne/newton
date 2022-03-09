@@ -28,12 +28,6 @@ const FundGraph = () => {
   const disptach = useDispatch();
   const [periodWiseData, setPeriodWiseData] = useState({});
 
-  useEffect(() => {
-    return () => {
-      disptach(setFundTimePeriod('5Y'));
-    };
-  }, []);
-
   const getGraphData = async (dataGraph) => {
     if (isEmpty(dataGraph)) {
       dataGraph = {};

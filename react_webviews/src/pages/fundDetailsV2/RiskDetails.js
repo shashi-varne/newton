@@ -9,7 +9,6 @@ import CollapsibleSection from '../../designSystem/molecules/CollapsibleSection'
 import Tooltip from '../../designSystem/atoms/Tooltip';
 import Icon from '../../designSystem/atoms/Icon';
 import isEmpty from 'lodash/isEmpty';
-import sortedUniq from 'lodash/sortedUniq';
 
 const barData = [
   {

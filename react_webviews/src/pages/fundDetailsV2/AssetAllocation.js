@@ -81,7 +81,7 @@ const AssetAllocation = ({fundDetailsRef, sendEvents}) => {
             <>
               <Separator marginTop='16px' dataAid="2" />
               <Stack sx={{ pt: 3 }} spacing={2}>
-                <Typography dataAid="topHolding" variant='heading4'>Top Holdings</Typography>
+                <Typography dataAid="topHolding" variant='heading4'>Top holdings</Typography>
                 {fundData?.portfolio?.top_ten_holdings
                   ?.slice(0, viewMoreHolding)
                   .map((holding, idx) => {

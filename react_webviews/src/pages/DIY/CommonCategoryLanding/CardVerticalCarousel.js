@@ -8,12 +8,17 @@ import SectionHeader from './SectionHeader';
 import Icon from '../../../designSystem/atoms/Icon';
 import isEmpty from 'lodash/isEmpty';
 
-const CardVerticalCarousel = ({ handleCardClick, isPageLoading, data = {} }) => {
+const CardVerticalCarousel = ({ handleCardClick, isPageLoading, data = {}, diyType }) => {
   if (!isPageLoading && isEmpty(data)) {
     return null;
   }
+  const isHybrid = diyType?.toLowerCase() === 'hybrid';
   return (
-    <Stack direction='column' spacing={2} className='diy-c-investment-style-wrapper'>
+    <Stack
+      direction='column'
+      spacing={2}
+      className={`diy-c-investment-style-wrapper ${isHybrid && 'diy-c-investment-style-hybrid'}`}
+    >
       <SectionHeader
         isPageLoading={isPageLoading}
         sx={{ pl: 2, pr: 2 }}
@@ -61,7 +66,7 @@ const CardVerticalCarousel = ({ handleCardClick, isPageLoading, data = {} }) => 
                       imgSrc={el?.image_url}
                       title={el?.name}
                       subtitle={el?.trivia}
-                      className="pointer"
+                      className='pointer'
                       dataAid={el?.design_id}
                     />
                   </WrapperBox>
