@@ -21,6 +21,7 @@ import { getUrlParams } from 'utils/validators';
 import FundDetailsV2 from '../../pages/fundDetailsV2/fundDetailsV2';
 import { validateKycAndRedirect } from '../../pages/DIY/common/functions';
 import useUserKycHook from '../../kyc/common/hooks/userKycHook';
+import { useParams } from 'react-router-dom';
 
 const screen = 'fundDetailsV2';
 
@@ -29,6 +30,7 @@ const fundDetailsV2Container = (WrappedComponent) => (props) => {
   const fundData = useSelector(getFundData);
   const navigate = navigateFunc.bind(props);
   let { isins } = getUrlParams();
+  const {isin = ''} = useParams();
   const { isPageLoading } = useLoadingState(screen);
   const fundStatRef = useRef();
   const returnCalcRef = useRef();
@@ -53,12 +55,13 @@ const fundDetailsV2Container = (WrappedComponent) => (props) => {
   }, [isFetchFailed]);
 
   useEffect(() => {
+    const fundIsin = isin || isins;
     const payload = {
-      isins,
+      isins: fundIsin,
       Api,
       screen,
     };
-    if (isins !== fundData?.isin) {
+    if (fundIsin !== fundData?.isin) {
       dispatch(fetchFundDetails(payload));
     }
     return () => {
