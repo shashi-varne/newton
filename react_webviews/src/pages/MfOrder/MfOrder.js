@@ -1,6 +1,7 @@
 import { Fade, Stack } from '@mui/material';
 import isEmpty from 'lodash/isEmpty';
 import React from 'react';
+import FundOrderItemContainer from '../../containers/mfOrder/fundOrderItemContainer';
 import { Pill, Pills } from '../../designSystem/atoms/Pills/Pills';
 import TrusIcon from '../../designSystem/atoms/TrustIcon';
 import Typography from '../../designSystem/atoms/Typography';
@@ -8,7 +9,6 @@ import WrapperBox from '../../designSystem/atoms/WrapperBox';
 import EstimationCard from '../../designSystem/molecules/EstimationCard';
 import Container from '../../designSystem/organisms/ContainerWrapper';
 import { formatAmountInr } from '../../utils/validators';
-import FundOrderItem from './FundOrderItem';
 import './MfOrder.scss';
 import MFSkeletonLoader from './MFSkeletonLoader';
 import NoMfOrders from './NoMfOrders';
@@ -79,7 +79,7 @@ const MfOrder = (props) => {
               <Stack spacing='25px' className='mf-order-list'>
                 {fundOrderDetails?.map((fundDetails, idx) => {
                   return (
-                    <FundOrderItem
+                    <FundOrderItemContainer
                       key={idx}
                       fundDetails={fundDetails}
                       parentInvestmentType={parentInvestmentType}
