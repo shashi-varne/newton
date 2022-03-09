@@ -100,7 +100,7 @@ const Funds = (props) => {
     setIsApiRunning("button");
     try {
       const result = await getFundMf({
-        mfid: fund.mf.amfi,
+        mfid: fund.mf.isin,
       });
       if (!result) return;
       setSelectedFund(fund);
