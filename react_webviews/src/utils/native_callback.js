@@ -248,15 +248,15 @@ export function openNativeModule(moduleName) {
   });
 }
 
-export function openModule(moduleName, props, additionalParams) {
+export function openModule(moduleName, props, additionalParams = {}) {
   const config = getConfig();
-  if (getConfig().isWebOrSdk) {
+  if (config.isWebOrSdk) {
     const module_mapper = {
       'app/portfolio': '/reports',
       'app/profile': '/my-account',
       'invest/save_tax': '/invest',
       'invest/nps': '/nps/info',
-      'account/setup_2fa': `/account/set-pin${additionalParams.routeUrlParams || ''}`
+      'account/setup_2fa': `/account/set-pin${additionalParams?.routeUrlParams || ''}`
     }
     
     let moduleNameWeb = module_mapper[moduleName] || '/';
