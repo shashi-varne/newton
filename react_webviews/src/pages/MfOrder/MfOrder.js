@@ -53,7 +53,7 @@ const MfOrder = (props) => {
   const { fundOrderDetails, mfOrders } = useSelector((state) => state?.mfOrders);
   const cartData = useSelector(getDiyCart);
   const cartCount = useSelector(getDiyCartCount);
-  const { productName, termsLink } = useMemo(getConfig, []);
+  const { productName, termsLink, isSdk } = useMemo(getConfig, []);
   const { isPageLoading, isButtonLoading } = useLoadingState(screen);
   const { isUpdateFailed, isFetchFailed, errorMessage } = useErrorState(screen);
   const noMfOrdersAvailable = !isPageLoading && isEmpty(fundOrderDetails);
@@ -248,13 +248,22 @@ const MfOrder = (props) => {
     }
   };
 
+  const onBackClick = () => {
+    if (isSdk) {
+      navigate("/")
+    } else {
+      props.history.goBack();
+    }
+  }
+
   return (
     <Container
       eventData={sendEvents()}
       headerProps={{
         headerTitle: 'Mutual funds order',
         hideInPageTitle: true,
-        dataAid: "mutualFundOrder"
+        dataAid: "mutualFundOrder",
+        onBackClick,
       }}
       footer={{
         button1Props: {
