@@ -29,6 +29,7 @@ import {
   getDiySubcategoryDataByViewType,
   getDiyCartCount,
   fetchDiyCategories,
+  setDiyStorage,
 } from 'businesslogic/dataStore/reducers/diy';
 import { DIY_PATHNAME_MAPPER } from '../common/constants';
 import { hideDiyCartFooter } from 'businesslogic/utils/diy/functions';
@@ -99,6 +100,7 @@ const CommonCategoryLanding = (props) => {
       const categoryEvent = `${diyType.toLowerCase()} ${formatedCategory}`;
       const subCategoryEvent = subcategoryOptionName.toLowerCase();
       sendEvents(categoryEvent, subCategoryEvent, 'next');
+      dispatch(setDiyStorage({fromScreen: screen}));
       navigate(DIY_PATHNAME_MAPPER.subcategoryFundList);
     };
 
@@ -217,6 +219,7 @@ const CommonCategoryLanding = (props) => {
           isPageLoading={isPageLoading}
           handleCardClick={handleCardClick}
           config={config}
+          diyType={diyType}
         />
       </div>
     </Container>

@@ -7,6 +7,10 @@ export const tabsStyleOverRides = () => {
       height: 36,
       minHeight: 36,
       '& .MuiTabScrollButton-root': {
+        '.MuiSvgIcon-root' : {
+          position: 'absolute',
+          top: '2px',
+        },
         ':first-of-type': {
           display: 'none',
         },

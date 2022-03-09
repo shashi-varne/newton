@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Container from '../../designSystem/organisms/Container';
 import HeaderTitle from '../../designSystem/molecules/HeaderTitle';
 import Box from '@mui/material/Box';
@@ -25,6 +25,7 @@ import {
   getDiyCart,
   getDiyCartCount,
   setCartItem,
+  setDiyStorage,
   setFundsCart,
 } from 'businesslogic/dataStore/reducers/diy';
 import { navigate as navigateFunc } from 'utils/functions';
@@ -60,7 +61,6 @@ const FundDetailsV2 = (props) => {
   const { kyc, isLoading, user } = useUserKycHook();
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const fundDetailsRef = useRef({});
-
   useEffect(() => {
     if (isFetchFailed && !isEmpty(errorMessage)) {
       ToastMessage(errorMessage);
@@ -75,6 +75,9 @@ const FundDetailsV2 = (props) => {
     };
     if (isins !== fundData?.isin) {
       dispatch(fetchFundDetails(payload));
+    }
+    return () => {
+      dispatch(setDiyStorage({fromScreen: screen}));
     }
   }, []);
 
