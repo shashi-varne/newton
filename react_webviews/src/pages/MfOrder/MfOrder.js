@@ -23,7 +23,7 @@ import TrusIcon from '../../designSystem/atoms/TrustIcon';
 import Typography from '../../designSystem/atoms/Typography';
 import WrapperBox from '../../designSystem/atoms/WrapperBox';
 import EstimationCard from '../../designSystem/molecules/EstimationCard';
-import Container from '../../designSystem/organisms/Container';
+import Container from '../../designSystem/organisms/ContainerWrapper';
 import Api from '../../utils/api';
 import { getConfig } from '../../utils/functions';
 import { capitalizeFirstLetter, formatAmountInr, storageService } from '../../utils/validators';

@@ -28,7 +28,7 @@ import 'swiper/swiper-bundle.css';
 import useErrorState from '../../../common/customHooks/useErrorState';
 import ToastMessage from '../../../designSystem/atoms/ToastMessage';
 import ConfirmAction from '../../../designSystem/molecules/ConfirmAction';
-import Container from '../../../designSystem/organisms/Container';
+import Container from '../../../designSystem/organisms/ContainerWrapper';
 import Filter from '../../../featureComponent/DIY/Filters/Filter';
 import FilterNavigation from '../../../featureComponent/DIY/Filters/FilterNavigation';
 import FilterReturnBottomSheet from '../../../featureComponent/DIY/Filters/FilterReturnBottomSheet';

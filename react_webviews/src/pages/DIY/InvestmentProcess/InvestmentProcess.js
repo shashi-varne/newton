@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import Container from '../../../designSystem/organisms/Container';
+import Container from '../../../designSystem/organisms/ContainerWrapper';
 import {
   LandingHeader,
   LandingHeaderImage,

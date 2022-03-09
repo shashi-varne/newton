@@ -4,7 +4,7 @@ import { getConfig } from 'utils/functions';
 import ContainerFooter from './ContainerFooter';
 import ContainerMain from './ContainerMain';
 import ContainerHeader from './ContainerHeader';
-import './Container.scss';
+import './ContainerWrapper.scss';
 import './ContainerIframe.scss';
 import PropTypes from 'prop-types';
 

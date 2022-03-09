@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import CardVertical from '../../../designSystem/molecules/CardVertical';
 import CategoryCard from '../../../designSystem/molecules/CategoryCard';
 import WrapperBox from '../../../designSystem/atoms/WrapperBox';
-import Container from '../../../designSystem/organisms/Container';
+import Container from '../../../designSystem/organisms/ContainerWrapper';
 import isArray from 'lodash/isArray';
 import { getConfig } from '../../../utils/functions';
 import PropTypes from 'prop-types';

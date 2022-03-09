@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import Container from '../../../designSystem/organisms/Container';
+import Container from '../../../designSystem/organisms/ContainerWrapper';
 import Stack from '@mui/material/Stack';
 import {
   LandingHeader,

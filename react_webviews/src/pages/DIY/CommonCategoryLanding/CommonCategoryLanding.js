@@ -7,7 +7,7 @@ import {
   LandingHeaderTitle,
 } from '../../../designSystem/molecules/LandingHeader';
 import { getConfig } from '../../../utils/functions';
-import Container from '../../../designSystem/organisms/Container';
+import Container from '../../../designSystem/organisms/ContainerWrapper';
 
 import isEmpty from 'lodash/isEmpty';
 import { VIEW_TYPE_MAPPER } from 'businesslogic/constants/diy';
