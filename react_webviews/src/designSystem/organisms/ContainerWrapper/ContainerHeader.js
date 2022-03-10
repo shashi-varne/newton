@@ -12,6 +12,7 @@ const ContainerHeader = ({ headerProps, containerRef, handleonBackClick }) => {
     headerSx,
     headerClassName,
     disableSeeMoreFeature = false,
+    hideBackButton=false,
     ...restHeaderProps
   } = headerProps;
   const subtitleLength = subtitle?.length || 0;
@@ -26,6 +27,7 @@ const ContainerHeader = ({ headerProps, containerRef, handleonBackClick }) => {
         headerTitle={headerTitle}
         anchorOrigin={!isIframe ? containerRef : null}
         onBackClick={handleonBackClick}
+        hideLeftIcon={hideBackButton}
         {...restHeaderProps}
       >
         {!disableSeeMoreFeature && isMobileDevice && showSeeMore ? (

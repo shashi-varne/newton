@@ -14,12 +14,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getUrlParams } from '../../utils/validators';
 import useLoadingState from '../../common/customHooks/useLoadingState';
 import FundCommonGraph from './FundCommonGraph';
+import { useParams } from 'react-router-dom';
 
 const screen = 'fundDetailsV2';
 
 const getTimeInMs = (time) => time * 60 * 60 * 24 * 1000;
 const FundGraph = () => {
   let { isins } = getUrlParams();
+  const {isin = ''} = useParams();
   const [graphData, setGraphData] = useState([]);
   const fundData = useSelector(getFundData);
   const fundTimePeriod = useSelector((state) => state?.fundDetails?.fundTimePeriod);
@@ -33,13 +35,14 @@ const FundGraph = () => {
       dataGraph = {};
     }
     let graph_data = {};
+    const fundIsin = isin || isins;
     const payload = {
-      isin: isins,
+      isin: fundIsin,
       Api,
       screen,
     };
     const fundGraphDataIsin = dataGraph?.graph_report?.[0]?.isin;
-    if (isins !== fundData?.isin && fundGraphDataIsin !== isins) {
+    if (fundIsin !== fundData?.isin && fundGraphDataIsin !== fundIsin) {
       disptach(fetchFundGraphData(payload));
     } else {
       if (isEmpty(dataGraph)) {
