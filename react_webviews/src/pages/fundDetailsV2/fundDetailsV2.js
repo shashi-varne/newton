@@ -81,38 +81,40 @@ const FundDetailsV2 = (props) => {
       noPadding
       dataAid='fundDetails'
     >
-      <Box sx={{ bgcolor: 'foundationColors.supporting.white', p: '3px 16px' }}>
-        <HeaderTitle
-          title={fundData?.performance?.friendly_name}
-          imgSrc={fundData?.performance?.amc_logo_big}
-          subTitleLabels={[
-            { name: fundData?.performance?.ms_risk },
-            { name: fundData?.performance?.category },
-            { name: fundData?.performance?.subcat },
-          ]}
-          dataAid='1'
-        />
+      <Box sx={{ pb: 2 }}>
+        <Box sx={{ bgcolor: 'foundationColors.supporting.white', p: '3px 16px' }}>
+          <HeaderTitle
+            title={fundData?.performance?.friendly_name}
+            imgSrc={fundData?.performance?.amc_logo_big}
+            subTitleLabels={[
+              { name: fundData?.performance?.ms_risk },
+              { name: fundData?.performance?.category },
+              { name: fundData?.performance?.subcat },
+            ]}
+            dataAid='1'
+          />
+        </Box>
+        <FundPerformance />
+        <FundGraph />
+        <div ref={fundStatRef}>
+          <FundStats />
+        </div>
+        <div className='fund-details-section' ref={returnCalcRef}>
+          <ReturnCalculator />
+        </div>
+        <div className='fund-details-section' ref={assetAllocRef}>
+          <AssetAllocation fundDetailsRef={fundDetailsRef} sendEvents={sendEvents} />
+        </div>
+        <div className='fund-details-section' ref={returnsRef}>
+          <Returns fundDetailsRef={fundDetailsRef} sendEvents={sendEvents} />
+        </div>
+        <div className='fund-details-section' ref={riskDetailsRef}>
+          <RiskDetails fundDetailsRef={fundDetailsRef} sendEvents={sendEvents} />
+        </div>
+        <div className='fund-details-section' ref={returnCompRef}>
+          <ReturnComparison />
+        </div>
       </Box>
-      <FundPerformance />
-      <FundGraph />
-      <div ref={fundStatRef}>
-        <FundStats />
-      </div>
-      <div className='fund-details-section' ref={returnCalcRef}>
-        <ReturnCalculator />
-      </div>
-      <div className='fund-details-section' ref={assetAllocRef}>
-        <AssetAllocation fundDetailsRef={fundDetailsRef} sendEvents={sendEvents} />
-      </div>
-      <div className='fund-details-section' ref={returnsRef}>
-        <Returns fundDetailsRef={fundDetailsRef} sendEvents={sendEvents} />
-      </div>
-      <div className='fund-details-section' ref={riskDetailsRef}>
-        <RiskDetails fundDetailsRef={fundDetailsRef} sendEvents={sendEvents} />
-      </div>
-      <div className='fund-details-section' ref={returnCompRef}>
-        <ReturnComparison />
-      </div>
     </Container>
   );
 };
