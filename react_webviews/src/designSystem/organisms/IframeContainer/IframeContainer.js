@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
-import React from 'react';
+import React, { useMemo } from 'react';
 import UiSkelton from '../../../common/ui/Skelton';
+import { getConfig } from '../../../utils/functions';
 import Icon from '../../atoms/Icon';
 
 import './IframeContainer.scss';
@@ -13,6 +14,7 @@ const IframeContainer = ({
   iframeRightSectionImgSrcProps,
   rightChildren,
 }) => {
+  const {isMobileDevice} = useMemo(getConfig,[]);
     console.log("rightChildren",rightChildren);
     console.log("iframeRightSectionImgSrc",iframeRightSectionImgSrc);
   return (
@@ -20,7 +22,7 @@ const IframeContainer = ({
       <IframeLeftSection isPageLoading={isPageLoading} skeltonType={skeltonType}>
         {children}
       </IframeLeftSection>
-      {(!rightChildren || !iframeRightSectionImgSrc) && (
+      {(!rightChildren || !iframeRightSectionImgSrc) && !isMobileDevice && (
         <IframeRightSection isPageLoading={isPageLoading} skeltonType={skeltonType}>
           <>
             <Icon src={iframeRightSectionImgSrc} {...iframeRightSectionImgSrcProps} />
