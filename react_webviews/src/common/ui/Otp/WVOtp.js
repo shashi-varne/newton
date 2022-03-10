@@ -36,6 +36,7 @@ const WVOtp = ({
           isDisabled={isDisabled}
           errorStyle={hasError ? "wv-otp-error-style" : ""}
           {...additionalOtpProps}
+          data-testid="otp"
         />
       </div>
       <div
@@ -45,6 +46,7 @@ const WVOtp = ({
           ${classes.bottomText}
         `}
         style={{ textAlign: align }}
+        data-aid="tv_infoContent"
       >
         {bottomText}
       </div>
