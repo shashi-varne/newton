@@ -2,10 +2,9 @@ import React, { useMemo } from 'react';
 import { getConfig } from '../../../utils/functions';
 import isArray from 'lodash/isArray';
 import { Box } from '@mui/material';
-import { withRouter } from 'react-router-dom';
 import { NavigationHeader, NavigationHeaderPoints, NavigationHeaderSubtitle, NavigationSeeMoreWrapper } from '../../molecules/NavigationHeader';
 
-const ContainerHeader = ({ headerProps, containerRef, eventData, ...restProps }) => {
+const ContainerHeader = ({ headerProps, containerRef, handleonBackClick }) => {
   const {
     headerTitle,
     subtitle,
@@ -26,8 +25,7 @@ const ContainerHeader = ({ headerProps, containerRef, eventData, ...restProps })
         className='container-nav-header'
         headerTitle={headerTitle}
         anchorOrigin={!isIframe ? containerRef : null}
-        parentProps={restProps}
-        eventData={eventData}
+        onBackClick={handleonBackClick}
         {...restHeaderProps}
       >
         {!disableSeeMoreFeature && isMobileDevice && showSeeMore ? (
@@ -52,4 +50,4 @@ const ContainerHeader = ({ headerProps, containerRef, eventData, ...restProps })
   );
 };
 
-export default withRouter(ContainerHeader);
+export default ContainerHeader;

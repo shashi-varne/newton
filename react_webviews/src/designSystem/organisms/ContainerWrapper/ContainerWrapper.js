@@ -1,12 +1,21 @@
-import React, { useEffect, useMemo, useRef } from 'react';
 import Box from '@mui/material/Box';
-import { getConfig } from 'utils/functions';
-import ContainerFooter from './ContainerFooter';
-import ContainerMain from './ContainerMain';
-import ContainerHeader from './ContainerHeader';
-import './ContainerWrapper.scss';
-import './ContainerIframe.scss';
+import isFunction from 'lodash/isFunction';
 import PropTypes from 'prop-types';
+import React, { useEffect, useMemo, useRef } from 'react';
+import { useHistory, useLocation, withRouter } from 'react-router-dom';
+import { getConfig, navigate as navigateFunc } from 'utils/functions';
+import {
+  useNativeAddRemoveListener,
+  useNativeSendEventListener
+} from '../../../common/customHooks/useNativeListener';
+import { backButtonHandler, listenPartnerEvents } from '../../../utils/functions';
+import { nativeCallback } from '../../../utils/native_callback';
+import { getEvents } from '../../molecules/NavigationHeader/helperFunctions';
+import ContainerFooter from './ContainerFooter';
+import ContainerHeader from './ContainerHeader';
+import './ContainerIframe.scss';
+import ContainerMain from './ContainerMain';
+import './ContainerWrapper.scss';
 
 const Container = ({
   headerProps = {},
@@ -28,9 +37,13 @@ const Container = ({
   disableVerticalPadding,
   eventData,
   dataAid,
+  ...restProps
 }) => {
   const containerRef = useRef();
+  const location = useLocation();
+  const history = useHistory();
   const footerWrapperRef = useRef();
+  const navigate = navigateFunc.bind(restProps);
   const { isMobileDevice, isIframe } = useMemo(getConfig, []);
   fixedFooter = isMobileDevice ? true : fixedFooter;
   useEffect(() => {
@@ -43,6 +56,67 @@ const Container = ({
     }
   }, [footer?.direction, footerWrapperRef?.current, noFooter, isPageLoading]);
 
+  const handleDefaultBackRoute = () => {
+    const backRoute = location?.state?.backRoute || '';
+    if (backRoute) {
+      navigate(backRoute);
+      return;
+    }
+    history.goBack();
+  };
+
+  const handleonBackClick = (e) => {
+    const events = getEvents(eventData, 'back');
+    if (events) {
+      nativeCallback({ events });
+    }
+    // handling back press click via the prop.
+    if (isFunction(headerProps?.onBackClick)) {
+      headerProps.onBackClick(e);
+      return;
+    }
+
+    //this will handle the back button handling as per the platform
+    const isRedirectedByPlatform = handleRedirectionFromPlatform();
+    if (isRedirectedByPlatform) return true;
+
+    // default back button routing.
+    handleDefaultBackRoute();
+  };
+
+  const handleRedirectionFromPlatform = () => {
+    const fromState = location?.state?.fromState || '';
+    const toState = location?.state?.toState || '';
+    const params = location?.params || {};
+    const pathname = location?.pathname || '';
+    const currentState = toState || pathname;
+    const isRedirectedByPlatform = backButtonHandler(restProps, fromState, currentState, params);
+    return isRedirectedByPlatform || false;
+  };
+
+  useNativeAddRemoveListener({
+    type: 'back_pressed',
+    go_back: handleonBackClick,
+  });
+
+  useEffect(() => {
+    if (isIframe) {
+      const partnerEvents = function (res) {
+        switch (res.type) {
+          case 'back_pressed':
+            handleonBackClick();
+            break;
+
+          default:
+            break;
+        }
+      };
+      listenPartnerEvents(partnerEvents);
+    }
+  }, []);
+
+  useNativeSendEventListener(hideLoaderEvent, isIframe);
+
   const containerClass = isIframe ? 'Iframe-container-wrapper' : 'container-wrapper';
   return (
     <Box
@@ -54,7 +128,7 @@ const Container = ({
       <ContainerHeader
         headerProps={headerProps}
         containerRef={containerRef}
-        eventData={eventData}
+        handleonBackClick={handleonBackClick}
       />
       <ContainerMain
         skeltonType={skeltonType}
@@ -93,4 +167,16 @@ Container.propTypes = {
   dataAid: PropTypes.string.isRequired,
 };
 
-export default Container;
+export default withRouter(Container);
+
+const hideLoaderEvent = {
+  event_name: 'hide_loader',
+  properties: {
+    journey: {
+      name: '',
+      trigger: '',
+      journey_status: '',
+      next_journey: '',
+    },
+  },
+};
