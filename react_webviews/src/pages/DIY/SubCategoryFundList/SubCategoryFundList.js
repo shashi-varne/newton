@@ -336,6 +336,10 @@ const SubCategoryLanding = (props) => {
     },
   };
 
+  const handleSearchIconClick = () => {
+    navigate("/diy/invest/search")
+  }
+
   return (
     <Container
       eventData={fundListEvent}
@@ -348,6 +352,8 @@ const SubCategoryLanding = (props) => {
           onTabChange: handleTabChange,
           labelName: 'name',
         },
+        rightIconSrc:require('assets/search_diy.svg'),
+        onRightIconClick: handleSearchIconClick,
         tabChilds: subcategoryOptionsData?.length > 1 ? subcategoryOptionsData : [],
         dataAid: subcategoryOptionsData[tabValue]?.design_id,
       }}

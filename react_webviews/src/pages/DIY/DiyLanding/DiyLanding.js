@@ -37,6 +37,7 @@ const DiyLanding = (props) => {
     singleCategoryData,
     imageCarouselData,
     horizontalCauroselData,
+    handleSearchIconClick
   } = props;
   return (
     <Container
@@ -58,6 +59,8 @@ const DiyLanding = (props) => {
       dataAid={categoryData?.design_id}
       headerProps={{
         dataAid: 1,
+        rightIconSrc:require('assets/search_diy.svg'),
+        onRightIconClick: handleSearchIconClick
       }}
       className='diy-main-wrapper'
     >

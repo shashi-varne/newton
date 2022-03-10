@@ -96,6 +96,10 @@ const diyLandingContainer = (WrappedComponent) => (props) => {
     });
   };
 
+  const handleSearchIconClick = () => {
+    navigate("/diy/invest/search")
+  }
+
   const sendEvents = (category, subCategory, userAction) => {
     const eventObj = {
       event_name: 'diy_sub_category_clicked',
@@ -135,6 +139,7 @@ const diyLandingContainer = (WrappedComponent) => (props) => {
       singleCategoryData={singleCategoryData}
       imageCarouselData={imageCarouselData}
       horizontalCauroselData={horizontalCauroselData}
+      handleSearchIconClick={handleSearchIconClick}
     />
   );
 };
