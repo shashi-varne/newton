@@ -9,7 +9,6 @@ import { getConfig } from './functions';
 import isEmpty from 'lodash/isEmpty';
 import filter from 'lodash/filter';
 import get from 'lodash/get';
-import find from 'lodash/find';
 import isFunction from 'lodash/isFunction';
 
 
