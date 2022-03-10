@@ -4,6 +4,7 @@ import { nativeCallback } from "../../../utils/native_callback";
 import { storageService } from "../../../utils/validators";
 import { logout } from "../../functions";
 import { isRmJourney } from "../../../group_insurance/products/group_health/common_data";
+import { persistor } from "../../../dataLayer/store";
 
 const config = getConfig();
 const Logout = (props) => {
@@ -15,6 +16,7 @@ const Logout = (props) => {
   }, []);
 
   const initialize = async () => {
+    persistor.purge();
     if (config.Web) {
       storageService().clear();
       if (config.isIframe) {
