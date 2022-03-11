@@ -53,7 +53,7 @@ const AssetAllocation = ({fundDetailsRef, sendEvents}) => {
         dataAid="assetAllocation"
       >
         <Stack>
-          <Stack direction='row' spacing='40px'>
+          <Stack direction='row' spacing='40px' sx={{ pb: 2 }} >
             {fundData?.portfolio?.asset_allocation?.map((assetData, idx) => {
               return (
                 <Stack sx={{ ml: '-3px', mr: '-3px' }} key={idx} direction='column' spacing='4px'>
@@ -79,7 +79,7 @@ const AssetAllocation = ({fundDetailsRef, sendEvents}) => {
           </Stack>
           {!isTopHoldingsAvailable && (
             <>
-              <Separator marginTop='16px' dataAid="2" />
+              <Separator dataAid="2" />
               <Stack sx={{ pt: 3, pb: 2 }} spacing={2}>
                 <Typography dataAid="topHolding" variant='heading4'>Top holdings</Typography>
                 {fundData?.portfolio?.top_ten_holdings
