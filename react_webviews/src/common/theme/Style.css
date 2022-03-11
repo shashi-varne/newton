@@ -11,12 +11,12 @@ html,
 body,
 #root {
   height: 100%;
-  background-color: #fff;
+  /* background-color: #fff; */
 }
 html,
 body[data-device="web"] #root {
   height: 100%;
-  background: #f3f4f6;
+  /* background: #f3f4f6; */
 }
 body[data-device="web"] {
   height: 100%;
@@ -160,10 +160,6 @@ body[data-device="web"] #bottom-popup .MuiDialog-paper {
 }
 .TextCenter {
   text-align: center;
-}
-.Checkbox {
-  width: auto;
-  height: auto;
 }
 .SameAddress {
   color: #444;

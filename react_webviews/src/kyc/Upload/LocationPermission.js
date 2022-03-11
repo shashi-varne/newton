@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble';
 import { getConfig } from '../../utils/functions';
 import isFunction from 'lodash/isFunction';
-import isEmpty from 'lodash/isEmpty';
-import useScript from '../../common/customHooks/useScript';
 import WVButton from '../../common/ui/Button/WVButton';
 import WVFullscreenDialog from '../../common/ui/FullscreenDialog/WVFullscreenDialog';
+import { validateLocation } from '../services';
 
 const { productName } = getConfig();
 const locationIcon = (
@@ -20,29 +18,31 @@ const foreignLocationIcon = (
     alt="foreign location error"
   />
 );
+const DEFAULT_PAGE_CONFIG = {
+  imgElem: locationIcon,
+  title: 'Allow location access',
+  subtitle: 'As per SEBI, we need to record your location while you take the selfie',
+  buttonText: 'Allow'
+};
 const PAGE_TYPE_CONTENT_MAP = {
-  'permission-denied': {
-    imgElem: locationIcon,
-    title: 'Allow location access',
-    subtitle: 'As per SEBI, we need to record your location while you take the selfie',
-  },
+  'permission-denied': DEFAULT_PAGE_CONFIG,
   'verifying-location': {
-    imgElem: locationIcon,
+    ...DEFAULT_PAGE_CONFIG,
     title: 'Verifying location access',
-    subtitle: 'As per SEBI, we need to record your location while you take the selfie',
+  },
+  'location-fetch-failed': {
+    ...DEFAULT_PAGE_CONFIG,
+    title: 'Unable to identify location',
+    subtitle: 'We are currently unable to identify your location. Please try again or contact Support for further help',
+    buttonText: 'Try Again'
   },
   'invalid-region': {
     imgElem: foreignLocationIcon,
     title: 'You cannot proceed with KYC',
     subtitle: 'As per SEBI regulations, your location should be in India',
+    buttonText: 'Okay'
   },
-  'default': {
-    imgElem: locationIcon,
-    title: 'Allow location access',
-    subtitle: 'As per SEBI, we need to record your location while you take the selfie'
-  }
 };
-const GEOCODER = "https://maps.googleapis.com/maps/api/js?key=AIzaSyDWYwMM4AaZj3zE4sEcMH1nenEs3dOYZ14&libraries=&v=weekly&language=en&result_type=country"
 
 const LocationPermission = ({
   isOpen,
@@ -56,39 +56,44 @@ const LocationPermission = ({
   const [pageContent, setPageContent] = useState({});
   const [permissionWarning, setPermissionWarning] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(true);
-  const { isLoaded } = useScript(GEOCODER);
+
+  useEffect(onInit, []);
 
   useEffect(() => {
     if (isOpen) {
       requestLocnPermission();
     }
   }, [isOpen]);
-
-  useEffect(() => {
-    if (isLoaded) {
-      onInit();
-    }
-  }, [isLoaded]);
   
   useEffect(() => {
     setPageContent(PAGE_TYPE_CONTENT_MAP[pageType]);
   }, [pageType]);
 
-  const fetchCountryFromResults = (results = []) => {
-    const addressObjs = results.find(obj => obj.types.includes("country"))?.address_components;
-    const countryAddressObj = addressObjs?.find(obj => obj.types.includes("country"));
-    return countryAddressObj || {};
-  }
-  
-  const sendLocationFetchedEvent = (countryObj, coordinates) => {
-    sendEvents(
-      'location_fetched',
-      'allow_location_access',
-      {
-        location_obj: JSON.stringify(isEmpty(countryObj) ? 'N/A' : countryObj),
-        location_coords: JSON.stringify(coordinates)
+  const verifyLocationRegion = async (data = {}) => {
+    const coordinates = {
+      lat: data.location?.lat,
+      lng: data.location?.lng,
+    };
+
+    try {
+      setIsApiRunning(true);
+
+      const result = await validateLocation(coordinates);
+      setIsApiRunning(false);
+      
+      if (result.location_verified) {
+        onLocationFetchSuccess();
+      } else {
+        setPageType("invalid-region");
       }
-    );
+    } catch (err) {
+      console.log(err);
+      setIsApiRunning(false);
+      setPageType('location-fetch-failed');
+      if (isFunction(onLocationFetchFailure)) {
+        onLocationFetchFailure();
+      }
+    }
   }
 
   const locationCallbackSuccess = async (data) => {
@@ -98,41 +103,7 @@ const LocationPermission = ({
       setIsApiRunning(false);
     } else {
       setPermissionWarning(false);
-      try {
-        setIsApiRunning(true);        
-        const geocoderService = new window.google.maps.Geocoder();
-        const coordinates = {
-          lat: data.location.lat,
-          lng: data.location.lng,
-        };
-
-        geocoderService.geocode({
-          location: coordinates
-        }, (results, status) => {
-          if (status === 'OK') {
-            const country = fetchCountryFromResults(results);
-            sendLocationFetchedEvent(country, coordinates);
-            setIsApiRunning(false);
-            if (
-              country.long_name?.toUpperCase() === 'INDIA' ||
-              country.short_name?.toUpperCase() === 'IN'
-            ) {
-              onLocationFetchSuccess(data.location);
-            } else {
-              setPageType("invalid-region");
-            }
-          } else {
-            throw(status);
-          }
-        });
-      } catch (err) {
-        console.log(err);
-        setIsApiRunning(false);
-        toast('Something went wrong! Please try again');
-        if (isFunction(onLocationFetchFailure)) {
-          onLocationFetchFailure();
-        }
-      }
+      verifyLocationRegion(data);
     }
   }
 
@@ -195,7 +166,7 @@ const LocationPermission = ({
           color="secondary"
           showLoader={isApiRunning}
         >
-          {pageType === 'invalid-region' ? "Okay" : "Allow"}
+          {pageContent.buttonText}
         </WVButton>
       </WVFullscreenDialog.Action>
     </WVFullscreenDialog>

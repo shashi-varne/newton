@@ -11,7 +11,7 @@ import { fiscalYearGenerator } from "../functions";
 import DropDownNew from '../../common/ui/DropDownNew'
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 // TODO: Remove less and less-loader loader when rsuite is removed from app
-import DatePicker from 'rsuite/lib/DatePicker';
+import { DatePicker } from 'rsuite';
 import 'rsuite/lib/DatePicker/styles';
 import { format, isAfter, isBefore, startOfDay } from "date-fns";
 import { getConfig } from "../../utils/functions";
@@ -92,8 +92,14 @@ export default function GenerateStatement(props) {
   }, [selectedFinYear, errorObj]);
   useEffect(() => {
     if (pageProps.fields.find(field => field.type === 'fin-year')) {
-      const startYear = new Date().getFullYear();
-      handleFinYearChange(`${startYear}-${startYear + 1}`)
+      const currentDate = new Date();
+      const startYear = currentDate.getFullYear();
+      const currentMonth = currentDate.getMonth();
+      if (currentMonth > 2) {
+        handleFinYearChange(`${startYear}-${startYear + 1}`)
+      } else {
+        handleFinYearChange(`${startYear - 1}-${startYear}`)
+      }
     }
   }, []);
 
@@ -107,7 +113,6 @@ export default function GenerateStatement(props) {
     }
 
     setSelectedFinYear(selectedValue);
-    setCalendarDefaultDate(new Date(startYear, 3, 1));
     
     if (pageObj.type === 'capital_gains') {
       setSelectedDateMap({
@@ -120,7 +125,6 @@ export default function GenerateStatement(props) {
 
   // ---------------- DATE FIELD -----------------------
   const [selectedDateMap, setSelectedDateMap] = useState({});
-  const [calendarDefaultDate, setCalendarDefaultDate] = useState({});
   const dateSelector = useCallback(({ dateType, type, title, fieldProps = {} }) => {
     return (
       <div className="as-date-picker" key={dateType}>
@@ -128,20 +132,19 @@ export default function GenerateStatement(props) {
           {title || "Select Date"}
         </InputLabel>
         <DatePicker
-          key={calendarDefaultDate}
+          key={dateType}
           block
           oneTap
           isoWeek
           preventOverflow
           size="lg"
           format="DD/MM/YYYY"
-          calendarDefaultDate={calendarDefaultDate}
           limitEndYear={1}
           disabledDate={disableDate(dateType)}
           placement={isWeb ? "autoVerticalStart" : "auto"}
           style={{ width: 'auto' }}
           ranges={[]}
-          value={selectedDateMap[dateType] || ""}
+          value={selectedDateMap[dateType]}
           onChange={handleDateChange(dateType)}
           id={`${dateType}-date`}
           {...fieldProps}
@@ -151,7 +154,7 @@ export default function GenerateStatement(props) {
         </div>
       </div>
     );
-  }, [calendarDefaultDate, selectedDateMap, errorObj]);
+  }, [selectedDateMap, errorObj]);
   useEffect(() => {
     if (pageObj.type === 'demat_holding') {
       setSelectedDateMap({

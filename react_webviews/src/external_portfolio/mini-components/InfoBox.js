@@ -21,7 +21,6 @@ export default class InfoBox extends Component {
   }
 
   render() {
-    const { copyText } = this.state;
     const {
       image,
       imageAltText,
@@ -68,13 +67,12 @@ export default class InfoBox extends Component {
           </div>
         }
         {isCopiable &&
-          <div
-            id="info-box-ctrl"
-            className={classes.ctrl}
+          <img
+            className="info-box-copy-icon"
+            src={require('assets/copy_icn.svg')}
+            alt="copy"
             onClick={this.copyItem}
-          >
-            <span>{copyText}</span>
-          </div>
+          />
         }
       </div>
     );

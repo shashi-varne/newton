@@ -99,8 +99,11 @@ class SecondaryVerification extends Component {
             toast("Invalid email");
             return;
         }
+        
+        let contactValue = loginType === "mobile" ? `${form_data.code}|${form_data[loginType]}` : form_data[loginType];
+
         let result = await this.authCheckApi(loginType, {
-            "contact_value": form_data[loginType]
+            "contact_value": contactValue
         });
         if (result && result.is_user) {
             this.sendEvents("next")
@@ -186,6 +189,15 @@ class SecondaryVerification extends Component {
         })
     }
 
+    goBack = () => {
+        if (this.props.location?.state?.isDirectEntry) {
+            this.navigate('/invest')
+        } else {
+            this.props.history.goBack();
+        }
+    }
+    
+
 
     render() {
         const { loginType, form_data, isEdit, firstTimeLogin } = this.state;
@@ -201,6 +213,9 @@ class SecondaryVerification extends Component {
                 onSkipClick={() => {
                     this.navigate("/");
                     this.sendEvents("skip");
+                }}
+                headerData={{
+                    goBack: this.goBack
                 }}
                 showLoader={this.state.isApiRunning}
                 title={isEdit ? `Edit ${loginType === "mobile" ? 'mobile number' : 'email'}` : loginType === "mobile" ? "Share your mobile number" : "Share your email address"}>

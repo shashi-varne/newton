@@ -31,7 +31,7 @@ import internalStorage from '../common/InternalStorage';
 import { isNewIframeDesktopLayout } from "../../utils/functions"
 import { storageService } from "../../utils/validators";
 
-let titleText = "Primary bank account details";
+const defaultTitle = "Primary bank account details";
 const genericErrorMessage = "Something Went wrong!";
 const KycBankDetails = (props) => {
   const config = getConfig();
@@ -41,9 +41,6 @@ const KycBankDetails = (props) => {
   const params = props.match.params || {};
   const userType = params.userType || "";
   const isEdit = props.location.state?.isEdit || false;
-  if (isEdit) {
-    titleText = "Edit primary bank account details";
-  }
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const [bankData, setBankData] = useState({
@@ -60,6 +57,7 @@ const KycBankDetails = (props) => {
       "This bank account will be the default account for all your investments and withdrawals",
     variant: "info",
   });
+  const [screenTitle, setScreenTitle] = useState(defaultTitle);
   const [disableFields, setDisableFields] = useState({
     skip_api_call: false,
     account_number_disabled: false,
@@ -100,9 +98,17 @@ const KycBankDetails = (props) => {
   }
 
   let initialize = async () => {
+    if (isEdit) {
+      setScreenTitle("Edit primary bank account details");
+    }
     let disableData = { ...disableFields };
-    if (skipBankDetails()) {
-      disableData.skip_api_call = true;
+    let data = kyc.bank.meta_data || {};
+    data.c_account_number = data.account_number;
+    const skipBankStep = skipBankDetails();
+    const disableBankDetailsForTmb = config.code === "tmb" && ["submitted", "pd_triggered"].includes(data.bank_status);
+    const disableBankData = skipBankStep || disableBankDetailsForTmb
+    if (disableBankData) {
+      disableData.skip_api_call = skipBankStep;
       disableData.account_number_disabled = true;
       disableData.c_account_number_disabled = true;
       disableData.account_type_disabled = true;
@@ -113,8 +119,6 @@ const KycBankDetails = (props) => {
       setDlFlow(true);
     }
     setName(kyc.pan.meta_data.name || "");
-    let data = kyc.bank.meta_data || {};
-    data.c_account_number = data.account_number;
     const accountTypeOptions = bankAccountTypeOptions(kyc?.address?.meta_data?.is_nri || "");
     const selectedAccountType = accountTypeOptions.filter(el => el.value === data.account_type);
     if(isEmpty(selectedAccountType)) {
@@ -434,7 +438,7 @@ const KycBankDetails = (props) => {
       showLoader={isApiRunning}
       skelton={isLoading}
       handleClick={handleClick}
-      title={titleText}
+      title={screenTitle}
       headerData={{goBack}}
       iframeRightContent={require(`assets/${config.productName}/add_bank.svg`)}
       data-aid='kyc-enter-bank-account-details-screen'

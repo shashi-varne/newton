@@ -555,41 +555,6 @@ img.gold-offer-slide-img {
   }
 }
 
-
-.gold-dialog {
-  .hr {
-    width: 100%;
-    height: 1px;
-    background-color: #ededed;
-  }
-  
-  .content-points {
-    color: #0a1d32;
-    font-size: 14px;
-    display: flex;
-    justify-content: space-between;
-    margin: 15px 0 15px 0;
-  }
-  
-  .content2-points {
-    color: #0a1d32;
-    font-size: 14px;
-    display: flex;
-    justify-content: space-between;
-    margin: 15px 0 15px 0;
-    font-weight: 600;
-  }
-  .content2-points-inside-heading {
-    margin: 0 0 -10px 0;
-    font-size: 11px;
-    color: #372e2e;
-  }
-  .mid-buttons {
-    margin: 0 0 20px 0;
-  }
-}
-
-
 .gold-payment-container {
   .payment-screen-banner{
     width: 100% !important;
@@ -1585,4 +1550,28 @@ img.gold-offer-slide-img {
 }
 .gold-check-how-container {
   height: -webkit-fill-available;
+}
+
+.gold-home {
+  margin-bottom: 50px;
+  .subtext {
+    font-size: 14px;
+    margin-bottom: 12px;
+    line-height: 21px;
+  }
+
+  .link {
+    cursor: pointer;
+    color: var(--primary);
+    text-decoration: underline;
+  }
+
+  .contact {
+    margin-top: 15px;
+    font-size: 13px;
+  }
+
+  .email {
+    font-weight: 600;
+  }
 }

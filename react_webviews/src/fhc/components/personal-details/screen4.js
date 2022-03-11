@@ -18,7 +18,7 @@ class PersonalDetails4 extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      show_loader: 'button',
       fhc_data: new FHC(),
       type: getConfig().productName
     };
@@ -142,7 +142,7 @@ class PersonalDetails4 extends Component {
               icon={income}
               width="40"
               label="Annual CTC *"
-              class="Income"
+              className="Income"
               id="income"
               name="annualCTC"
               value={formatAmount(fhc_data.annual_sal || '')}
@@ -157,7 +157,7 @@ class PersonalDetails4 extends Component {
               icon={income}
               width="40"
               label="Monthly Salary *"
-              class="Income"
+              className="Income"
               id="income"
               name="monthly-sal"
               value={formatAmount(fhc_data.monthly_sal || '')}
@@ -172,7 +172,7 @@ class PersonalDetails4 extends Component {
               icon={income}
               width="40"
               label="Monthly Expenses *"
-              class="Income"
+              className="Income"
               id="monthly-exp"
               name="monthly_exp"
               value={formatAmount(fhc_data.monthly_exp || '')}

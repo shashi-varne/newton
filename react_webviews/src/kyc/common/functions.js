@@ -1,6 +1,7 @@
 import { calculateAge, isValidDate, validateEmail, isEmpty, storageService } from 'utils/validators'
 import { isTradingEnabled, getConfig } from '../../utils/functions'
 import { nativeCallback, openPdfCall } from '../../utils/native_callback'
+import { validateAlphaNumeric } from '../../utils/validators'
 import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS, GENDER_OPTIONS, PATHNAME_MAPPER, PINCODE_LENGTH } from '../constants'
 import { isReadyToInvest } from '../services'
 import { getKyc } from './api'
@@ -8,9 +9,12 @@ import { getKyc } from './api'
 export const isEquityAllowed = (config = getConfig()) => {
   // Function to check if Equity broking/trading is allowed as per frontend checks/rules
   const equityEnabled = storageService().getBoolean('equityEnabled'); // Used to enable kyc equity flow from native/external side
+  const androidSdkVersionCode = storageService().get("android_sdk_version_code");
+  const iosSdkVersionCode = storageService().get("ios_sdk_version_code");
   
   if (config.isSdk) {
-    return false;
+    // eslint-disable-next-line
+    return (parseInt(androidSdkVersionCode) >= 21 || parseInt(iosSdkVersionCode) >= 999);
   } else if (config.isNative) {
     return equityEnabled;
   }
@@ -84,6 +88,12 @@ export const validateFields = (formData, keyToCheck) => {
         case 'spouse_name':
           if (value.includes("  ")) {
             formData[`${key}_error`] = 'consecutive spaces are not allowed'
+            canSubmit = false
+          }
+          break
+        case 'nri_pincode':
+          if (!validateAlphaNumeric(value)) {
+            formData[`${key}_error`] = 'invalid pincode'
             canSubmit = false
           }
           break

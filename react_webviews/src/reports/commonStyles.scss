@@ -93,6 +93,24 @@
   }
 }
 
+.reports-kyc-status {
+  text-align: center;
+  font-size: 13px;
+  line-height: 21px;
+  color: var(--steelgrey);
+
+  .rks-banner {
+    min-height: 150px;
+  }
+
+  .rks-title {
+    font-weight: 500;
+    font-size: 15px;
+    color: var(--gunmetal);
+    margin: 40px 0 10px 0;
+  }
+}
+
 .reports-funds {
   line-height: 1.5;
   color: #333333;
@@ -680,6 +698,9 @@
 
     .checkbox {
       margin-left: -15px;
+      // TODO: Remove height and width styling. Used as a temp fix for https://fisdom.atlassian.net/browse/WEBAPP-1893
+      height: 56px;
+      width: 48px;
     }
 
     .rim-terms-text {

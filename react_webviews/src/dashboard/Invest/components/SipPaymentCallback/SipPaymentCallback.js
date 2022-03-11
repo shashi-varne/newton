@@ -5,10 +5,11 @@ import { Imgc } from "common/ui/Imgc";
 import { resetRiskProfileJourney } from "../../functions";
 import { getCampaign } from "../../common/api";
 import { isEmpty, storageService } from "utils/validators";
-import { getCampaignBySection, initData } from "../../../../kyc/services";
+import { getCampaignBySection } from "../../../../kyc/services";
 import { getBasePath } from "utils/functions";
 import "./SipPaymentCallback.scss";
 import { isNewIframeDesktopLayout } from "../../../../utils/functions";
+import useUserKycHook from "../../../../kyc/common/hooks/userKycHook";
 
 const SipPaymentCallback = (props) => {
   const hideImage = isNewIframeDesktopLayout();
@@ -17,9 +18,7 @@ const SipPaymentCallback = (props) => {
   const status = params.status || "";
   let message = params.message || "";
   const [campaign, setCampaign] = useState({});
-  const [currentUser, setCurrentUser] = useState(
-    storageService().getObject("user") || {}
-  );
+  const { user: currentUser, isLoading } = useUserKycHook();
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [skelton, setSkelton] = useState(true);
   const basePath = getBasePath();
@@ -76,19 +75,14 @@ const SipPaymentCallback = (props) => {
               obj.campaign.name === "auto_debit_campaign" ||
               obj.campaign.name === "enach_mandate_campaign" ||
               obj.campaign.name === "indb_mandate_campaign" ||
-              obj.campaign.name === "ucomb_mandate_campaign"
+              obj.campaign.name === "ucomb_mandate_campaign" ||
+              obj.campaign.name === "tmb_mandate_campaign"
             );
           }) || {};
       }
       if (campaignData && !isEmpty(campaignData) && !paymentError)
         setButtonTitle("AUTOMATE SIPS VIA EASYSIP");
       setCampaign(campaignData);
-      let user = { ...currentUser };
-      if (isEmpty(user)) {
-        await initData();
-        user = storageService().getObject("user");
-        setCurrentUser(user);
-      }
     } catch (err) {
       console.log(err);
     } finally {
@@ -117,7 +111,8 @@ const SipPaymentCallback = (props) => {
             (campaign.campaign.name === "auto_debit_campaign" ||
               campaign.campaign.name === "enach_mandate_campaign" ||
               campaign.campaign.name === "indb_mandate_campaign" ||
-              campaign.campaign.name === "ucomb_mandate_campaign") &&
+              campaign.campaign.name === "ucomb_mandate_campaign"||
+              campaign.campaign.name === "tmb_mandate_campaign") &&
             target.section === "in_flow"
           ) {
             setIsApiRunning("page");
@@ -126,10 +121,11 @@ const SipPaymentCallback = (props) => {
             auto_debit_campaign_url = `${auto_debit_campaign_url}${auto_debit_campaign_url.match(/[\?]/g) ? "&" : "?"}generic_callback=true&plutus_redirect_url=${encodeURIComponent(`${basePath}/?is_secure=${storageService().get("is_secure")}&partner_code=${config.code}`)}`
             window.location.href = auto_debit_campaign_url;
           } else if (
-            campaign.campaign.name !== "auto_debit_campaign" ||
-            campaign.campaign.name !== "enach_mandate_campaign" ||
-            campaign.campaign.name !== "indb_mandate_campaign" ||
-            campaign.campaign.name !== "ucomb_mandate_campaign"
+            campaign.campaign.name !== "auto_debit_campaign" &&
+            campaign.campaign.name !== "enach_mandate_campaign" &&
+            campaign.campaign.name !== "indb_mandate_campaign" &&
+            campaign.campaign.name !== "ucomb_mandate_campaign" &&
+            campaign.campaign.name !== "tmb_mandate_campaign"
           ) {
             setIsApiRunning("page");
             let url = campaign.notification_visual_data.target[0].url;
@@ -155,7 +151,7 @@ const SipPaymentCallback = (props) => {
       handleClick={() => handleClick()}
       iframeRightContent={require(`assets/${config.productName}/${paymentError ? 'error_illustration' : 'congratulations_illustration'}.svg`)}
       title={!paymentError ? "Payment successful" : "Payment failed"}
-      skelton={skelton}
+      skelton={skelton || isLoading}
       headerData={{goBack}}
       data-aid='sip-payment-callback-screen'
     >

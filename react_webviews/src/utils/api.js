@@ -67,6 +67,11 @@ class Api {
     if(route.includes("/api/") && getXPlutusAuth() && config.isIframe) {
       axios.defaults.headers.common["X-Plutus-Auth"] = getXPlutusAuth();
     }
+
+    if(route.includes("/api/user/login/v5/initiate")) {
+      axios.defaults.headers.common["X-Platform"] = "web";
+    }
+    
     if(route.includes('api/insurance')){  
       route = getGuestUserRoute(route)
     }

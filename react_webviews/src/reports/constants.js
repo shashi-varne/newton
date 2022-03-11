@@ -49,6 +49,7 @@ export const getPathname = {
   sipOtp: "/reports/sip/otp/",
   pauseRequest: "/reports/sip/pause-request",
   taxFiling: "/tax-filing",
+  kycStatus: "/reports/kyc-status"
 };
 
 export const storageConstants = {
@@ -84,19 +85,19 @@ export const getPurchaseProcessData = (
         title: "Order placed",
         desc:
           "The payment and investment details are sent to the mutual fund company for order execution.",
-        time: "1 day",
+        time: "1 working day",
       },
       {
         title: "Units allotted",
         desc:
           "On successful order execution units are allotted. Your investment will be active from this day onward.",
-        time: nfo_recommendation ? "10-15 days" : "1 day",
+        time: nfo_recommendation ? "10-15 working days" : "1 working day",
       },
       {
         title: "Investment confirmed",
         desc:
           `${productName} has received confirmation of the investment from the mutual fund company and your portfolio is updated.`,
-        time: "2-3 days",
+        time: "2-3 working days",
       },
     ],
     withdraw: [
@@ -108,12 +109,12 @@ export const getPurchaseProcessData = (
       {
         title: "Order placed",
         desc: "Order sent to fund house.",
-        time: "1 day",
+        time: "1 working day",
       },
       {
         title: "Units deducted",
         desc: "Order executed and units deducted.",
-        time: "2-3 days",
+        time: "2-3 working days",
       },
       {
         title: "Amount credited",
@@ -132,18 +133,18 @@ export const getPurchaseProcessData = (
         title: "Order placed",
         desc:
           "Your order has been sent to the mutual fund company for execution",
-        time: "1 day*",
+        time: "1 working day*",
       },
       {
         title: "Units switched",
         desc: "On succesful order execution, units are switched",
-        time: "2-3 days*",
+        time: "2-3 working days*",
       },
       {
         title: "Switch confirmed",
         desc:
           `${productName} has received confirmation of the switch from the mutual fund company.`,
-        time: "3-6 days*",
+        time: "3-6 working days*",
       },
     ],
     autodebit: [
@@ -157,13 +158,13 @@ export const getPurchaseProcessData = (
         title: "Units allotted",
         desc:
           "On successful order execution, units are allotted. Your investment will be active from this day onward.",
-        time: "1 day",
+        time: "1 working day",
       },
       {
         title: "Investment confirmed",
         desc:
           `${productName} has received confirmation of the investment from the mutual fund company and your portfolio is updated.`,
-        time: "2-3 days",
+        time: "2-3 working days",
       },
     ],
   };

@@ -15,7 +15,7 @@ const AmountUpdateDialog = ({
         isOpen={isOpen}
         buttonLayout='horizontal'
         button1Props={{
-          type: 'primary',
+          variant: 'contained',
           title: 'Confirm',
           onClick: onConfirm,
         }}
