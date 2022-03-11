@@ -598,7 +598,11 @@ export const partnerConfigs = {
     },
     styles: {
       primaryColor: "#378ECF",
-    }
+    },
+    referralConfig: {
+      applyRefferal: true,
+      shareRefferal: true,
+    },
   },
   sbnri: {
     code: "sbnri",
