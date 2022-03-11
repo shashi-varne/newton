@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 // import Container from '../../../common/Container';
 import IframeView from './IframeView';
 
@@ -48,6 +48,33 @@ const InvestExplore = (props) => {
   const trendingFunds = useSelector(getTrendingFunds);
   const allCategories = useSelector(getAllCategories);
 
+  const newIframeDesktopLayout =
+    isNewIframeDesktopLayout() || (partnerCode === 'moneycontrol' && !isMobileDevice);
+
+  const exploreMFMappings = {
+    Equity: {
+      src: newIframeDesktopLayout ? equity_icon : diy_equity_icon,
+    },
+    Debt: {
+      src: newIframeDesktopLayout ? debt_icon : diy_debt_icon,
+    },
+    Hybrid: {
+      src: newIframeDesktopLayout ? hybrid_icon : diy_hybrid_icon,
+    },
+  };
+
+  const getDiyCategories = () => {
+    return allCategories.map(data => {
+      return {
+        ...data,
+        ...exploreMFMappings[data.category]
+      }
+    })
+  }
+
+  const diyCategories = useMemo(getDiyCategories, [allCategories]);
+
+  console.log("diyCategories ", diyCategories)
   useEffect(() => {
     if (isEmpty(trendingFunds) || isEmpty(allCategories)) {
       dispatch(fetchDiyCategoriesAndTrendingFunds({ Api, screen }));
@@ -57,31 +84,6 @@ const InvestExplore = (props) => {
     dispatch(resetMfOrders());
     dispatch(resetFundDetails());
   }, []);
-  const newIframeDesktopLayout =
-    isNewIframeDesktopLayout() || (partnerCode === 'moneycontrol' && !isMobileDevice);
-
-  const exploreMFMappings = [
-    {
-      title: 'Equity',
-      description: 'Invest in large, mid and small-sized companies',
-      src: newIframeDesktopLayout ? equity_icon : diy_equity_icon,
-    },
-    {
-      title: 'Debt',
-      description: 'Stable returns with bonds and securities',
-      src: newIframeDesktopLayout ? debt_icon : diy_debt_icon,
-    },
-    {
-      title: 'Hybrid',
-      description: 'Perfect balance of equity and debt',
-      src: newIframeDesktopLayout ? hybrid_icon : diy_hybrid_icon,
-    },
-    // {
-    //   title: 'Goal Oriented',
-    //   description: 'Align investments with your life goals',
-    //   src: newIframeDesktopLayout ? goal_icon : diy_goal_icon,
-    // },
-  ];
 
   useEffect(() => {
     storageService().remove(FUNDSLIST);
@@ -143,16 +145,16 @@ const InvestExplore = (props) => {
     >
       {partnerCode === 'moneycontrol' ? (
         <IframeView
-          exploreMFMappings={exploreMFMappings}
+          exploreMFMappings={diyCategories}
           goNext={goNext}
           handleRightIconClick={handleSearchIconClick}
         />
       ) : (
         <section className='invest-explore-cards' id='invest-explore' data-aid='invest-explore'>
           <div className='title'>Where do you want to invest?</div>
-          {exploreMFMappings.map(({ title, description, src }) => (
-            <div key={title} onClick={goNext(title)} data-aid={`explore-mf-${title}`}>
-              <InvestExploreCard title={title} description={description} src={src} />
+          {diyCategories.map(({ category, trivia, src }) => (
+            <div key={category} onClick={goNext(category)} data-aid={`explore-mf-${category}`}>
+              <InvestExploreCard title={category} description={trivia} src={src} />
             </div>
           ))}
           <article className='invest-explore-quote' data-aid='invest-explore-quote'>
