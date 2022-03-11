@@ -14,7 +14,7 @@ import PropTypes from 'prop-types';
 import Typography from '../../atoms/Typography';
 import Tooltip from '../../atoms/Tooltip';
 import './EstimationCard.scss';
-import { ClickAwayListener, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import isFunction from 'lodash/isFunction';
 import Icon from '../../atoms/Icon';
 
