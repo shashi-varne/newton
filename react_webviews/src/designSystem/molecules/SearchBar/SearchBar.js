@@ -16,6 +16,7 @@ const SearchBar = ({
   placeholder,
   onPrefixClick,
   dataAid,
+  autoFocus,
   inputDataAid,
   InputProps,
   ...props
@@ -68,6 +69,7 @@ const SearchBar = ({
         onChange={onChange}
         disabled={disabled}
         data-aid={`searchBar_${dataAid}`}
+        autoFocus={autoFocus}
         InputProps={{
           startAdornment: InputPrefix(),
           endAdornment: InputSuffix(),

@@ -30,6 +30,7 @@ const InputField = (props) => {
     dataAid,
     InputProps,
     className,
+    inputMode,
     ...restProps
   } = props;
 
@@ -118,6 +119,7 @@ const InputField = (props) => {
         endAdornment: InputSuffix(),
         inputProps:{
           "data-aid": "et_text",
+          inputMode: inputMode,
           ...inputProps,
         },
         ...InputProps,

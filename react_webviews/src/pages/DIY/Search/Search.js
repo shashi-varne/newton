@@ -100,6 +100,7 @@ const Search = (props) => {
             suffix={value ? <Close className='close-icon' /> : ''}
             onSuffixClick={clearInputFields}
             placeholder='Search funds'
+            autoFocus
           />
         )}
         <Box sx={{ px: 2, pb: 2 }}>
