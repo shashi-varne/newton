@@ -8,22 +8,9 @@
   &.ec-cursor-pointer {
     cursor: pointer;
   }
-  .ec-left-wrapper {
-    flex: 1;
-    .ec-left-title-wrapper {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      > img {
-        cursor: pointer;
-      }
-      .ec_info_icon {
-        margin-left: 8px;
-        cursor: pointer;
-      }
+  .ec-tooltip-wrapper {
+    > div {
+      display: inline;
     }
-  }
-  .ec-right-wrapper {
-    flex: 1;
   }
 }
