@@ -108,13 +108,10 @@ export default EstimationCard;
 const InfoTooltip = ({ dataAid, toolTipText, onIconClick, iconSrc }) => {
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
 
-  const handleTooltipClose = () => {
-    setIsTooltipOpen(false);
-  };
   const handleIconClick = (e) => {
     if (toolTipText) {
       e.stopPropagation();
-      setIsTooltipOpen(true);
+      setIsTooltipOpen(!isTooltipOpen);
     }
     if (isFunction(onIconClick)) {
       e.stopPropagation();
@@ -122,32 +119,28 @@ const InfoTooltip = ({ dataAid, toolTipText, onIconClick, iconSrc }) => {
     }
   };
   return (
-    <Box component='span'>
-      <ClickAwayListener onClickAway={handleTooltipClose}>
-        <Box sx={{ pl: 1 }} component='span' className='ec-tooltip-wrapper'>
-          <Tooltip
-            PopperProps={{
-              disablePortal: true,
-            }}
-            disableFocusListener
-            disableHoverListener
-            disableTouchListener
-            open={isTooltipOpen}
-            title={toolTipText}
-            dataAid={dataAid}
-          >
-            <div onClick={handleIconClick}>
-              <Icon
-                src={iconSrc}
-                size='16px'
-                className='ec_info_icon'
-                alt='info_icon'
-                dataAid='right'
-              />
-            </div>
-          </Tooltip>
-        </Box>
-      </ClickAwayListener>
+    <Box sx={{ pl: 1 }} component='span' className='ec-tooltip-wrapper'>
+      <Tooltip
+        PopperProps={{
+          disablePortal: true,
+        }}
+        disableFocusListener
+        disableHoverListener
+        disableTouchListener
+        open={isTooltipOpen}
+        title={toolTipText}
+        dataAid={dataAid}
+      >
+        <div onClick={handleIconClick}>
+          <Icon
+            src={iconSrc}
+            size='16px'
+            className='ec_info_icon'
+            alt='info_icon'
+            dataAid='right'
+          />
+        </div>
+      </Tooltip>
     </Box>
   );
 };

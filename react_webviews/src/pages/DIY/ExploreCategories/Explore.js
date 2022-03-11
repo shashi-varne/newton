@@ -74,7 +74,6 @@ const InvestExplore = (props) => {
 
   const diyCategories = useMemo(getDiyCategories, [allCategories]);
 
-  console.log("diyCategories ", diyCategories)
   useEffect(() => {
     if (isEmpty(trendingFunds) || isEmpty(allCategories)) {
       dispatch(fetchDiyCategoriesAndTrendingFunds({ Api, screen }));
