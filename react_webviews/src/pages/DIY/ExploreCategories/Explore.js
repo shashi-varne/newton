@@ -139,6 +139,7 @@ const InvestExplore = (props) => {
         onRightIconClick: handleSearchIconClick,
       }}
       isPageLoading={isPageLoading}
+      className='diy-explore-wrapper'
     >
       {partnerCode === 'moneycontrol' ? (
         <IframeView
