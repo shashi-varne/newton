@@ -5,10 +5,10 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import getTheme from '../../theme';
 import { formatAmountInr } from '../../utils/validators';
-
-import './ComparisonChart.scss';
+import { renderToString } from 'react-dom/server';
 import { Box, Stack } from '@mui/material';
 import Typography from '../../designSystem/atoms/Typography';
+import './ComparisonChart.scss';
 
 const ComparisonChart = () => {
   const investmentType = useSelector((state) => state?.fundDetails?.investmentType);
@@ -40,11 +40,16 @@ const ComparisonChart = () => {
     },
     xAxis: {
       categories: ['Savings account', 'Fixed deposit', 'This fund'],
+      gridLineColor: 'transparent',
+      lineColor: 'transparent',
+      tickColor: 'transparent',
     },
     credits: {
       enabled: false,
     },
     yAxis: {
+      gridLineColor: '#ffffff',
+      gridLineWidth: 0,
       title: {
         text: undefined,
       },
@@ -53,9 +58,13 @@ const ComparisonChart = () => {
         formatter: function () {
           const investedAmountGraphData = Number(this?.points[0][0]);
           const cumulativeAmountGraphData = Number(this?.points[0][1]);
-          let expectedReturnAmount = cumulativeAmountGraphData - investedAmountGraphData;
-          expectedReturnAmount = formatAmountInr(expectedReturnAmount) || 'NA';
-          return '<div class="comparison-chart-values">' + expectedReturnAmount + '</div>';
+          const expectedReturnAmount = cumulativeAmountGraphData - investedAmountGraphData;
+          return renderToString(
+            <CustomStackLabel
+              expectedReturnAmount={expectedReturnAmount}
+              expectedAmount={expectedAmount}
+            />
+          );
         },
       },
       labels: {
@@ -115,7 +124,11 @@ const ComparisonChart = () => {
                 }}
                 data-aid={`iv_${el.id}`}
               />
-              <Typography dataAid={el.id} variant='body5' color='foundationColors.content.secondary'>
+              <Typography
+                dataAid={el.id}
+                variant='body5'
+                color='foundationColors.content.secondary'
+              >
                 {el.name}
               </Typography>
             </Stack>
@@ -132,11 +145,23 @@ const CHART_LEGEND_DATA = [
   {
     name: 'Principal invested',
     backgroundColor: 'foundationColors.primary.200',
-    id: "pricipalInvested"
+    id: 'pricipalInvested',
   },
   {
     name: 'Returns gained',
     backgroundColor: 'foundationColors.primary.400',
-    id: "returnsGained"
+    id: 'returnsGained',
   },
 ];
+
+const CustomStackLabel = ({ expectedAmount, expectedReturnAmount }) => {
+  const formatedExpectedReturnAmount = formatAmountInr(expectedReturnAmount) || 'NA';
+  if (expectedAmount === expectedReturnAmount) {
+    return <div className='fund-expected-retun'>{formatedExpectedReturnAmount}</div>;
+  }
+  return (
+    <div variant='body2' className='fund-normal-return'>
+      {formatedExpectedReturnAmount}
+    </div>
+  );
+};

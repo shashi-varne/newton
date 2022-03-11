@@ -15,7 +15,7 @@
 
   .feature-container {
     width: var(--desktop-width) !important;
-
+    overflow: auto;
     .ContainerWrapper {
       margin: 0px !important;
       max-width: 100% !important;

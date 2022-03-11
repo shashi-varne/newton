@@ -43,7 +43,7 @@ const FundPerformance = () => {
     'MMM d'
   );
   return (
-    <Stack sx={{ bgcolor: "foundationColors.supporting.white", p: '0px 16px' }} component='section' spacing={3}>
+    <Stack sx={{ bgcolor: "foundationColors.supporting.white", px:2, pt: 4 }} component='section' spacing={3}>
       <RowData
         leftTitle={`NAV as on ${NavDate}`}
         leftTitleColor='foundationColors.content.secondary'

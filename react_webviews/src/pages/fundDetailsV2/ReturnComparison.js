@@ -61,6 +61,7 @@ const ReturnComparison = () => {
                   }
                   toolTipDataAid="returnComparision"
                   dataAid="1"
+                  toolTipText={`Estimated based on the fund’s last ${investmentPeriod} year returns`}
                 />
               </WrapperBox>
               <Typography dataAid="note" variant='body5' color='foundationColors.content.secondary'>

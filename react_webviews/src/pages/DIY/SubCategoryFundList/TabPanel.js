@@ -8,8 +8,8 @@ import Tag from '../../../designSystem/molecules/Tag';
 import isEqual from 'lodash/isEqual';
 import { useLocation, withRouter } from 'react-router-dom';
 import Separator from '../../../designSystem/atoms/Separator';
-import { useSelector } from 'react-redux';
-import { getDiyCart, getDiyTypeData } from 'businesslogic/dataStore/reducers/diy';
+import { useDispatch, useSelector } from 'react-redux';
+import { getDiyCart, getDiyTypeData, setDiyStorage } from 'businesslogic/dataStore/reducers/diy';
 import { getConfig, navigate as navigateFunc } from '../../../utils/functions';
 import useLoadingState from '../../../common/customHooks/useLoadingState';
 import isEmpty from 'lodash/isEmpty';
@@ -27,6 +27,7 @@ const TabPanel = memo((props) => {
   const { productName } = useMemo(getConfig, []);
   const observer = useRef();
   const location = useLocation();
+  const dispatch = useDispatch();
   const diyCartData = useSelector(getDiyCart);
   const hideCartButton = useMemo(hideDiyCartButton(productName), [productName]);
   const { category } = useSelector(getDiyTypeData);
@@ -63,6 +64,7 @@ const TabPanel = memo((props) => {
       },
     };
     sendEvents('diy_fund_list', 'next', true);
+    dispatch(setDiyStorage({fromScreen: screen}));
     nativeCallback({ events: eventObj });
     navigate(DIY_PATHNAME_MAPPER.fundDetails, {
       searchParams: `${location.search}&isins=${fund.isin}`,

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import CategoryCard from '../../../designSystem/molecules/CategoryCard';
-import Container from '../../../designSystem/organisms/Container';
+import Container from '../../../designSystem/organisms/ContainerWrapper';
 import isFunction from 'lodash/isFunction';
 import isArray from 'lodash/isArray';
 import { getConfig } from '../../../utils/functions';

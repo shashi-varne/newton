@@ -3,6 +3,7 @@ import { DEFAULT_FILTER_DATA, FILTER_TYPES } from 'businesslogic/constants/diy';
 import {
   fetchFundList,
   getDiyCartCount,
+  getDiyStorage,
   getDiySubcategoryOptions,
   getDiyTypeData,
   getFilteredFundsByCategory,
@@ -10,6 +11,7 @@ import {
   getFundsByCategory,
   setCartItem,
   setDiySeeMore,
+  setDiyStorage,
   setDiyTypeData,
   setFilteredFundList,
 } from 'businesslogic/dataStore/reducers/diy';
@@ -27,7 +29,7 @@ import 'swiper/swiper-bundle.css';
 import useErrorState from '../../../common/customHooks/useErrorState';
 import ToastMessage from '../../../designSystem/atoms/ToastMessage';
 import ConfirmAction from '../../../designSystem/molecules/ConfirmAction';
-import Container from '../../../designSystem/organisms/Container';
+import Container from '../../../designSystem/organisms/ContainerWrapper';
 import Filter from '../../../featureComponent/DIY/Filters/Filter';
 import FilterNavigation from '../../../featureComponent/DIY/Filters/FilterNavigation';
 import FilterReturnBottomSheet from '../../../featureComponent/DIY/Filters/FilterReturnBottomSheet';
@@ -67,6 +69,29 @@ const getfilterMapEventValue = (value) => {
   const eventValue = FundListEventMapper[value] || value || '';
   return eventValue;
 };
+
+const getDefaultFilterOptions = (filterOptions, fromDiyLanding) => {
+  let defaultReturnPeriod = filterOptions.returnPeriod;
+  let defaultSort = filterOptions.sortFundsBy;
+  let defaultFundOptions = filterOptions?.fundOption;
+  let defaultFundHouses = filterOptions?.fundHouse;
+  let defaultMinimumInvestment = filterOptions?.minInvestment?.id;
+
+  if (fromDiyLanding) {
+    defaultReturnPeriod = DEFAULT_FILTER_DATA.returnPeriod;
+    defaultSort = DEFAULT_FILTER_DATA.sortFundsBy;
+    defaultFundOptions = DEFAULT_FILTER_DATA.fundOption;
+    defaultFundHouses = [];
+    defaultMinimumInvestment = '';
+  }
+  return {
+    defaultReturnPeriod,
+    defaultSort,
+    defaultFundOptions,
+    defaultFundHouses,
+    defaultMinimumInvestment,
+  };
+};
 const SubCategoryLanding = (props) => {
   const dispatch = useDispatch();
   const navigate = navigateFunc.bind(props);
@@ -79,6 +104,7 @@ const SubCategoryLanding = (props) => {
   const subcategoryOptionsData = useSelector((state) =>
     getDiySubcategoryOptions(state, category, subcategory)
   );
+  const diyStorage = useSelector(getDiyStorage);
   const isSeeMoreClicked = useSelector((state) => state.diy.isSeeMoreClicked);
   const { productName } = useMemo(getConfig, []);
   const hideCartFooter = useMemo(hideDiyCartFooter(productName, diyCartCount), [
@@ -87,9 +113,19 @@ const SubCategoryLanding = (props) => {
   ]);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const { kyc, isLoading, user } = useUserKycHook();
+  const fromDiyLanding = diyStorage?.fromScreen === 'diyLanding';
+  const defaultFilterValues = getDefaultFilterOptions(filterOptions, fromDiyLanding);
+  const {
+    defaultReturnPeriod,
+    defaultSort,
+    defaultFundOptions,
+    defaultFundHouses,
+    defaultMinimumInvestment,
+  } = defaultFilterValues;
+  let minimumInvestment = getMinimumInvestmentData(defaultMinimumInvestment);
   const [selectedFilterValue, setSelectedFilterValue] = useState({
-    [FILTER_TYPES.returns]: getReturnData(DEFAULT_FILTER_DATA.returnPeriod),
-    [FILTER_TYPES.sort]: getSortData(DEFAULT_FILTER_DATA.sortFundsBy),
+    [FILTER_TYPES.returns]: getReturnData(defaultReturnPeriod),
+    [FILTER_TYPES.sort]: getSortData(defaultSort),
   });
   const [isFilterSheetOpen, setIsFilterSheetOpen] = useState({
     [FILTER_TYPES.returns]: false,
@@ -97,11 +133,9 @@ const SubCategoryLanding = (props) => {
     filter: false,
   });
   const [swiper, setSwiper] = useState(null);
-  const [selectedFundHouses, setSelectedFundHouses] = useState([]);
-  const [selectedFundOption, setSelectedFundOption] = useState(DEFAULT_FILTER_DATA.fundOption);
-  const [selectedMinInvestment, setSelectedMinInvestment] = useState(
-    getMinimumInvestmentData(filterOptions.minInvestment)
-  );
+  const [selectedFundHouses, setSelectedFundHouses] = useState(defaultFundHouses);
+  const [selectedFundOption, setSelectedFundOption] = useState(defaultFundOptions);
+  const [selectedMinInvestment, setSelectedMinInvestment] = useState(minimumInvestment);
 
   const filterCount = getFilterCount(selectedFundHouses, selectedFundOption, selectedMinInvestment);
 
@@ -136,7 +170,7 @@ const SubCategoryLanding = (props) => {
   // this hook is triggering the event for diy fund list.
   useEffect(() => {
     if (!isPageLoading && firstRender.current) {
-    sendEvents('diy_fund_list');
+      sendEvents('diy_fund_list');
     }
     firstRender.current = true;
   }, [subcategoryOption, isPageLoading]);
@@ -162,6 +196,8 @@ const SubCategoryLanding = (props) => {
 
   useEffect(() => {
     fetchDiyFundList();
+    const containerWrapper = document.getElementsByClassName('container-wrapper')[0];
+    containerWrapper.scrollTop=0;
   }, [tabValue]);
 
   useEffect(() => {
@@ -242,29 +278,32 @@ const SubCategoryLanding = (props) => {
     validateKycAndRedirect({ navigate, kyc })();
   };
 
-  const sendEvents = (eventName,userAction ='back', cardClicked = false) => {
-    if(eventName === 'diy_fund_list') {
-      if(userAction === 'next') {
+  const sendEvents = (eventName, userAction = 'back', cardClicked = false) => {
+    if (eventName === 'diy_fund_list') {
+      if (userAction === 'next') {
         fundListEvent.properties.user_action = 'next';
       }
-      if(cardClicked) {
+      if (cardClicked) {
         fundListEvent.properties.card_clicked = 'yes';
       }
-      nativeCallback({events: fundListEvent});
-    } else if(eventName === 'diy_filter') {
-      const filtersApplied =  [...new Set(filterEventRef.current?.filter)] || [];
-      if(filterEventRef.current?.category === 'filter') {
+      nativeCallback({ events: fundListEvent });
+    } else if (eventName === 'diy_filter') {
+      const filtersApplied = [...new Set(filterEventRef.current?.filter)] || [];
+      if (filterEventRef.current?.category === 'filter') {
         // eslint-disable-next-line no-unused-expressions
-        filtersApplied?.forEach(filterType => {
-          const newEvent = {...diyFilterEvent,properties: {...diyFilterEvent.properties, filter: filterType}}
+        filtersApplied?.forEach((filterType) => {
+          const newEvent = {
+            ...diyFilterEvent,
+            properties: { ...diyFilterEvent.properties, filter: filterType },
+          };
           // diyFilterEvent.properties.filter = filterType;
-          nativeCallback({events: newEvent});
-        })
+          nativeCallback({ events: newEvent });
+        });
       } else {
-        nativeCallback({events: diyFilterEvent});
+        nativeCallback({ events: diyFilterEvent });
       }
     }
-  }
+  };
   const sub_category_option = subcategoryOption?.toLowerCase().replace(/_/g, ' ');
   const fundListEvent = {
     event_name: 'diy_fund_list',
@@ -289,8 +328,7 @@ const SubCategoryLanding = (props) => {
       filter: '',
       fund_houses: filteredData?.filterOptions?.fundHouse || [],
       fund_options: filteredData?.filterOptions?.fundOption || '',
-      minimum_investment:
-        filteredData?.filterOptions?.minInvestment?.label?.toLowerCase() || '',
+      minimum_investment: filteredData?.filterOptions?.minInvestment?.label?.toLowerCase() || '',
       returns: getfilterMapEventValue(filteredData?.filterOptions?.returnPeriod),
       reset_applied: filterEventRef.current?.reset_applied ? 'yes' : 'no',
       user_application_status: kyc?.application_status_v2 || 'init',
@@ -298,6 +336,11 @@ const SubCategoryLanding = (props) => {
       user_kyc_status: kyc?.mf_kyc_processed || false,
     },
   };
+
+  const handleSearchIconClick = () => {
+    dispatch(setDiyStorage({fromScreen: screen}));
+    navigate("/diy/invest/search")
+  }
 
   return (
     <Container
@@ -311,6 +354,8 @@ const SubCategoryLanding = (props) => {
           onTabChange: handleTabChange,
           labelName: 'name',
         },
+        rightIconSrc:require('assets/search_diy.svg'),
+        onRightIconClick: handleSearchIconClick,
         tabChilds: subcategoryOptionsData?.length > 1 ? subcategoryOptionsData : [],
         dataAid: subcategoryOptionsData[tabValue]?.design_id,
       }}

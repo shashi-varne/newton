@@ -1,32 +1,22 @@
 import IconButton from '@mui/material/IconButton';
-import Button from '../../atoms/Button';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import Typography from '../../atoms/Typography';
 import backIcon from 'assets/nav_back.svg';
 import closeIcon from 'assets/nav_close.svg';
-import { useHistory, useLocation } from 'react-router-dom';
 import isEmpty from 'lodash/isEmpty';
-import isFunction from 'lodash/isFunction';
-import Icon from '../../atoms/Icon';
-import { getEvents, onScroll, setTabPadding } from './helperFunctions';
 import PropTypes from 'prop-types';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import ReferDialog from '../../../desktopLayout/ReferralDialog';
 import {
-  backButtonHandler,
-  getConfig,
-  listenPartnerEvents,
-  navigate as navigateFunc,
+  getConfig
 } from '../../../utils/functions';
-
-import './NavigationHeader.scss';
-import {
-  useNativeAddRemoveListener,
-  useNativeSendEventListener,
-} from '../../../common/customHooks/useNativeListener';
-import { nativeCallback } from '../../../utils/native_callback';
 import { storageService } from '../../../utils/validators';
+import Button from '../../atoms/Button';
+import Icon from '../../atoms/Icon';
+import Typography from '../../atoms/Typography';
+import { onScroll, setTabPadding } from './helperFunctions';
 import MenuBar from './MenuBar';
+import './NavigationHeader.scss';
 import TabsSection from './TabsSection';
+
 
 const NavigationHeader = ({
   headerTitle,
@@ -44,8 +34,6 @@ const NavigationHeader = ({
   tabsProps = {},
   tabChilds = [],
   className,
-  parentProps,
-  eventData,
   hideMenuBar = false,
   dataAid
 }) => {
@@ -53,9 +41,6 @@ const NavigationHeader = ({
   const subtitleRef = useRef();
   const inPageTitleRef = useRef();
   const tabWrapperRef = useRef();
-  const history = useHistory();
-  const location = useLocation();
-  const navigate = navigateFunc.bind(parentProps);
   const { isIframe, Web, isMobileDevice } = useMemo(getConfig, []);
   const isGuestUser = storageService().getBoolean('guestUser');
   const [mobileViewDrawer, setMobileViewDrawer] = useState(false);
@@ -86,16 +71,6 @@ const NavigationHeader = ({
     );
   };
 
-  const handleRedirectionFromPlatform = () => {
-    const fromState = location?.state?.fromState || '';
-    const toState = location?.state?.toState || '';
-    const params = location?.params || {};
-    const pathname = location?.pathname || '';
-    const currentState = toState || pathname;
-    const isRedirectedByPlatform = backButtonHandler(parentProps, fromState, currentState, params);
-    return isRedirectedByPlatform || false;
-  };
-
   const handleReferModal = () => {
     if (!referDialog) {
       setMobileViewDrawer(!mobileViewDrawer);
@@ -106,58 +81,6 @@ const NavigationHeader = ({
   const handleMobileViewDrawer = () => {
     setMobileViewDrawer(!mobileViewDrawer);
   };
-
-  const handleDefaultBackRoute = () => {
-    const backRoute = location?.state?.backRoute || '';
-    if (backRoute) {
-      navigate(backRoute);
-      return;
-    }
-    history.goBack();
-  };
-
-  const handleonBackClick = (e) => {
-    const events = getEvents(eventData, 'back');
-    if (events) {
-      nativeCallback({ events });
-    }
-    // handling back press click via the prop.
-    if (isFunction(onBackClick)) {
-      onBackClick(e);
-      return;
-    }
-
-    //this will handle the back button handling as per the platform
-    const isRedirectedByPlatform = handleRedirectionFromPlatform();
-    if (isRedirectedByPlatform) return true;
-
-    // default back button routing.
-    handleDefaultBackRoute();
-  };
-
-  useNativeAddRemoveListener({
-    type: 'back_pressed',
-    go_back: handleonBackClick,
-  });
-
-  useEffect(() => {
-    if (isIframe) {
-      const partnerEvents = function (res) {
-        switch (res.type) {
-          case 'back_pressed':
-            handleonBackClick();
-            break;
-
-          default:
-            break;
-        }
-      };
-      listenPartnerEvents(partnerEvents);
-    }
-  }, []);
-
-  useNativeSendEventListener(hideLoaderEvent, isIframe);
-
   const leftIcon = leftIconSrc ? leftIconSrc : showCloseIcon ? closeIcon : backIcon;
   return (
     <header
@@ -171,7 +94,7 @@ const NavigationHeader = ({
             <IconButton
               classes={{ root: 'nav-left-icn-btn' }}
               className='nav-hl-icon-wrapper'
-              onClick={handleonBackClick}
+              onClick={onBackClick}
             >
               <Icon src={leftIcon} size='24px' dataAid="left" />
             </IconButton>
@@ -237,15 +160,3 @@ NavigationHeader.propTypes = {
 };
 
 export default NavigationHeader;
-
-const hideLoaderEvent = {
-  event_name: 'hide_loader',
-  properties: {
-    journey: {
-      name: '',
-      trigger: '',
-      journey_status: '',
-      next_journey: '',
-    },
-  },
-};

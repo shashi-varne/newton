@@ -110,7 +110,7 @@ const ReturnView = ({ returns = [] }) => {
                 Last {returnData?.name}
               </Typography>
               <Typography dataAid={getReturnsDataAid(returnData?.name, "Value")} variant='heading4' color={secondaryColor}>
-                {isValidValue(returnData?.value, `${returnData?.value}%`)}
+                {isValidValue(returnData?.value, `${returnData?.value > 0 ? '+': ''}${returnData?.value}%`)}
               </Typography>
             </Stack>
           );
