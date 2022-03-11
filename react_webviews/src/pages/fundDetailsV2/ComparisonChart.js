@@ -66,7 +66,6 @@ const ComparisonChart = () => {
             />
           );
         },
-        // return '<div class="comparison-chart-values">' + expectedReturnAmount + '</div>';
       },
       labels: {
         enabled: false,
