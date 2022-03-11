@@ -80,7 +80,7 @@ const AssetAllocation = ({fundDetailsRef, sendEvents}) => {
           {!isTopHoldingsAvailable && (
             <>
               <Separator marginTop='16px' dataAid="2" />
-              <Stack sx={{ pt: 3 }} spacing={2}>
+              <Stack sx={{ pt: 3, pb: 2 }} spacing={2}>
                 <Typography dataAid="topHolding" variant='heading4'>Top holdings</Typography>
                 {fundData?.portfolio?.top_ten_holdings
                   ?.slice(0, viewMoreHolding)
@@ -104,7 +104,7 @@ const AssetAllocation = ({fundDetailsRef, sendEvents}) => {
           )}
           {!isSectorsAvailable && (
             <>
-              <Separator marginTop='16px' dataAid="3" />
+              <Separator dataAid="3" />
 
               <Stack sx={{ pt: 3, pb: 2 }} spacing={2}>
                 <Typography variant='heading4'>Top sectors</Typography>
