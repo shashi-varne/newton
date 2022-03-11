@@ -5,17 +5,24 @@ import { storageService } from "../../../utils/validators";
 import { logout } from "../../functions";
 import { isRmJourney } from "../../../group_insurance/products/group_health/common_data";
 import { persistor } from "../../../dataLayer/store";
+import { useDispatch } from "react-redux";
+import { resetDiyData } from "businesslogic/dataStore/reducers/diy";
+import { resetMfOrders } from "businesslogic/dataStore/reducers/mfOrders";
+import { resetFundDetails } from "businesslogic/dataStore/reducers/fundDetails";
 
 const config = getConfig();
 const Logout = (props) => {
   const navigate = navigateFunc.bind(props); 
   const isRM = isRmJourney();
-
+  const dispatch = useDispatch();
   useEffect(() => {
     initialize();
   }, []);
 
   const initialize = async () => {
+    dispatch(resetDiyData());
+    dispatch(resetMfOrders());
+    dispatch(resetFundDetails());
     persistor.purge();
     if (config.Web) {
       storageService().clear();
