@@ -67,17 +67,17 @@ class IframeView extends Component {
                 <div
                   key={idx}
                   className='diy-iframe-category'
-                  onClick={this.props.goNext(el.title)}
+                  onClick={this.props.goNext(el.category)}
                 >
                   <div className='diy-iframe-category-icon'>
-                    <img src={el.src} alt={el.title} />
+                    <img src={el.src} alt={el.category} />
                   </div>
-                  <div className='diy-iframe-category-title'>{el.title}</div>
-                  <div className='diy-iframe-category-desc'>{el.description}</div>
+                  <div className='diy-iframe-category-title'>{el.category}</div>
+                  <div className='diy-iframe-category-desc'>{el.trivia}</div>
                 </div>
               ) : (
-                <div key={idx} onClick={this.props.goNext(el.title)}>
-                  <InvestExploreCard title={el.title} description={el.description} src={el.src} />
+                <div key={idx} onClick={this.props.goNext(el.category)}>
+                  <InvestExploreCard title={el.category} description={el.trivia} src={el.src} />
                 </div>
               );
             })}
