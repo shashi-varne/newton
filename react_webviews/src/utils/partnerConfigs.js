@@ -52,7 +52,13 @@ export const commonCardsConfig = {
     bottomScrollCards: ["parkmoney", "savegoal"],
     bottomCards: ["nfo"],
   },
-  landingMarketingBanners: [],
+  landingMarketingBanners: [
+    {
+      image: "elss.svg",
+      type: "elss",
+      endDate: "03/31/2022",
+    }
+  ],
   nfoBanners: [
     {
       image: "nfo.svg",
