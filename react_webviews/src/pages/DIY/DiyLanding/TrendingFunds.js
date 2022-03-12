@@ -83,7 +83,7 @@ const TrendingFunds = ({ config, handleFundDetails, diyType }) => {
                       description={{
                         title: 'Total AUM',
                         titleColor: 'foundationColors.content.secondary',
-                        subtitle: trendingFund?.aum ? formatAmountInr(trendingFund?.aum) : 'N/A',
+                        subtitle: trendingFund?.aum ? formatAmountInr(trendingFund?.aum) : 'NA',
                         subtitleColor: !trendingFund?.aum && 'foundationColors.content.secondary',
                       }}
                     />

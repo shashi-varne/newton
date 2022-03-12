@@ -28,7 +28,7 @@ const ReturnComparison = () => {
       <CollapsibleSection
         isOpen={isRetunCompOpen}
         onClick={handleReturnCompSection}
-        label={`Return comparison ${isReturnAvailable ? '(N/A)' : ''}`}
+        label={`Return comparison ${isReturnAvailable ? '(NA)' : ''}`}
         disabled={isReturnAvailable}
         dataAid="returnComparision"
       >
