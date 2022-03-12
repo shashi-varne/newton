@@ -36,7 +36,7 @@ const mfOrderContainer = (WrappedComponent) => (props) => {
   const { fundOrderDetails, mfOrders } = useSelector((state) => state?.mfOrders);
   const cartData = useSelector(getDiyCart);
   const cartCount = useSelector(getDiyCartCount);
-  const { productName, termsLink } = useMemo(getConfig, []);
+  const { productName, termsLink, isSdk } = useMemo(getConfig, []);
   const { isPageLoading, isButtonLoading } = useLoadingState(screen);
   const { isUpdateFailed, isFetchFailed, errorMessage } = useErrorState(screen);
   const noMfOrdersAvailable = !isPageLoading && isEmpty(fundOrderDetails);
@@ -230,6 +230,15 @@ const mfOrderContainer = (WrappedComponent) => (props) => {
       return eventObj;
     }
   };
+
+  const onBackClick = () => {
+    if (isSdk) {
+      navigate("/")
+    } else {
+      props.history.goBack();
+    }
+  }
+
   return (
     <WrappedComponent
       sendEvents={sendEvents}
@@ -252,6 +261,7 @@ const mfOrderContainer = (WrappedComponent) => (props) => {
       expectedAmount={expectedAmount}
       expectedReturnData={expectedReturnData}
       handleTermsAndConditions={handleTermsAndConditions}
+      onBackClick={onBackClick}
     />
   );
 };

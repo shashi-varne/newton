@@ -11,7 +11,7 @@ import NfoFundDetail from "./Invest/components/NFO/FundDetail";
 import NfoCheckout from "./Invest/components/Checkout/Checkout";
 import SipDates from "./SipDates/SipDates";
 import InvestJourney from "./InvestJourney";
-import DIY from "./DIY";
+// import DIY from "./DIY";
 
 import MyAccount from "./MyAccount";
 import Notification from "./Notification";
@@ -73,7 +73,7 @@ const Home = (props) => {
         <Route path={`${url}invest`} component={Invest} />
         <Route path={`${url}landing`} component={Invest} />
         <Route path={`${url}mf`} component={SdkLanding} />
-        <Route path={`${url}diy`} component={DIY} />
+        {/* <Route path={`${url}diy`} component={DIY} /> */}
         <Route path={`${url}invest-journey`} component={InvestJourney} />
         <Route path={`${url}nps`} component={NPS} />
         <Route path={`${url}passive-index-funds`} component={PassiveIndexFunds} />
@@ -196,7 +196,7 @@ const Home = (props) => {
         />
         <Route exact path={`${url}page/invest/campaign/callback`} component={CampaignCallback} />
         <ThemeWrapper>
-          <Route path={`${url}diyv2`} component={DIYV2} />
+          <Route path={`${url}diy`} component={DIYV2} />
           <Route path={`${url}fund-details-v2`} component={fundDetailsV2Container} />
           <Route path={`${url}mf-orders`} component={mfOrderContainer} />
         </ThemeWrapper>

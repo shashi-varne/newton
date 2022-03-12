@@ -83,9 +83,7 @@ const FundOrderItem = (props) => {
                 value: amount,
                 onChange: handleAmountValue,
                 disabled: !isInvestmentAllowed,
-                inputProps: {
-                  inputMode: 'numeric',
-                },
+                inputMode: 'numeric',
               }}
             />
             <InvestmentCardBottomRow

@@ -22,6 +22,7 @@ import FundDetailsV2 from '../../pages/fundDetailsV2/fundDetailsV2';
 import { validateKycAndRedirect } from '../../pages/DIY/common/functions';
 import useUserKycHook from '../../kyc/common/hooks/userKycHook';
 import { useParams } from 'react-router-dom';
+import { resetMfOrders } from 'businesslogic/dataStore/reducers/mfOrders';
 
 const screen = 'fundDetailsV2';
 
@@ -63,6 +64,9 @@ const fundDetailsV2Container = (WrappedComponent) => (props) => {
     };
     if (fundIsin !== fundData?.isin) {
       dispatch(fetchFundDetails(payload));
+    }
+    if (!isFisdom) {
+      dispatch(resetMfOrders());
     }
     return () => {
       dispatch(setDiyStorage({ fromScreen: screen }));

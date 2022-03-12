@@ -9,6 +9,7 @@ import CollapsibleSection from '../../designSystem/molecules/CollapsibleSection'
 import Tooltip from '../../designSystem/atoms/Tooltip';
 import Icon from '../../designSystem/atoms/Icon';
 import isEmpty from 'lodash/isEmpty';
+import { isValidValue } from './helperFunctions';
 
 const barData = [
   {
@@ -144,7 +145,7 @@ const RiskDetails = ({ fundDetailsRef, sendEvents }) => {
                       alignItems='center'
                     >
                       <Typography dataAid={`${RISK_DATA_ID_MAPPER[riskMeasureName]?.text}Value`} variant='heading4' color='foundationColors.content.secondary'>
-                        + {riskMeasure?.value}%
+                        { isValidValue(riskMeasure?.value,`${riskMeasure?.value > 0 ? '+' : ''}${riskMeasure?.value}%`)}
                       </Typography>
                       <div>
                         <Tooltip dataAid="riskMeasure" open={isTooltipOpen[riskMeasureName]} title={tooltipInfo}>

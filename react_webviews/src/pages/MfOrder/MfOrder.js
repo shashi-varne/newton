@@ -35,6 +35,7 @@ const MfOrder = (props) => {
     expectedAmount,
     expectedReturnData,
     handleTermsAndConditions,
+    onBackClick
   } = props;
   return (
     <Container
@@ -42,6 +43,7 @@ const MfOrder = (props) => {
       headerProps={{
         headerTitle: 'Mutual funds order',
         hideInPageTitle: true,
+        onBackClick,
         dataAid: 'mutualFundOrder',
       }}
       footer={{

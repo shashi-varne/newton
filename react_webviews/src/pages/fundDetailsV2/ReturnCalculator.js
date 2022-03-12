@@ -132,9 +132,7 @@ const ReturnCalculator = () => {
             value={amountToBeInvested}
             onChange={handleAmountChange}
             disabled={disableChild}
-            inputProps={{
-              inputMode: 'numeric'
-            }}
+            inputMode='numeric'
             dataAid="1"
           />
           <Stack direction='column' spacing={2}>

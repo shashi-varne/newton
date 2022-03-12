@@ -11,6 +11,7 @@ import {
   getFundsByCategory,
   setCartItem,
   setDiySeeMore,
+  setDiyStorage,
   setDiyTypeData,
   setFilteredFundList,
 } from 'businesslogic/dataStore/reducers/diy';
@@ -337,6 +338,7 @@ const SubCategoryLanding = (props) => {
   };
 
   const handleSearchIconClick = () => {
+    dispatch(setDiyStorage({fromScreen: screen}));
     navigate("/diy/invest/search")
   }
 

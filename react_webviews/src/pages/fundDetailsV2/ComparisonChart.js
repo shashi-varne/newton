@@ -40,11 +40,16 @@ const ComparisonChart = () => {
     },
     xAxis: {
       categories: ['Savings account', 'Fixed deposit', 'This fund'],
+      gridLineColor: 'transparent',
+      lineColor: 'transparent',
+      tickColor: 'transparent',
     },
     credits: {
       enabled: false,
     },
     yAxis: {
+      gridLineColor: '#ffffff',
+      gridLineWidth: 0,
       title: {
         text: undefined,
       },
@@ -61,7 +66,6 @@ const ComparisonChart = () => {
             />
           );
         },
-        // return '<div class="comparison-chart-values">' + expectedReturnAmount + '</div>';
       },
       labels: {
         enabled: false,
@@ -153,11 +157,7 @@ const CHART_LEGEND_DATA = [
 const CustomStackLabel = ({ expectedAmount, expectedReturnAmount }) => {
   const formatedExpectedReturnAmount = formatAmountInr(expectedReturnAmount) || 'NA';
   if (expectedAmount === expectedReturnAmount) {
-    return (
-      <div className='fund-expected-retun'>
-        {formatedExpectedReturnAmount}
-      </div>
-    );
+    return <div className='fund-expected-retun'>{formatedExpectedReturnAmount}</div>;
   }
   return (
     <div variant='body2' className='fund-normal-return'>

@@ -29,6 +29,8 @@ const InputField = (props) => {
     fullWidth,
     dataAid,
     InputProps,
+    className,
+    inputMode,
     ...restProps
   } = props;
 
@@ -97,7 +99,7 @@ const InputField = (props) => {
       helperText={helperText}
       data-aid={`inputField_${dataAid}`}
       error={error}
-      className='input-field-wrapper'
+      className={`input-field-wrapper ${className}`}
       disabled={disabled}
       onChange={onChange}
       value={value}
@@ -117,6 +119,7 @@ const InputField = (props) => {
         endAdornment: InputSuffix(),
         inputProps:{
           "data-aid": "et_text",
+          inputMode: inputMode,
           ...inputProps,
         },
         ...InputProps,
