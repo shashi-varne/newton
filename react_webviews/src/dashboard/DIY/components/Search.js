@@ -64,7 +64,7 @@ const Search = (props) => {
     dataCopy.diy_type = "categories";
     storageService().setObject("diystore_fundInfo", dataCopy);
     props.history.push({
-      pathname: "/fund-details-v2",
+      pathname: "/fund-details",
       search: `${getConfig().searchParams}&isins=${data.isin}&type=diy`,
     });
   };

@@ -14,7 +14,7 @@ import InvestAmount from "./mini-components/InvestAmount";
 import InvestedAmount from "./mini-components/InvestedAmount";
 import SelectYear from "./components/InvestGoal/SelectYear";
 import GoalTarget from "./components/InvestGoal/GoalTarget";
-// import ExploreFunds from  "./components/Explore"
+import ExploreFunds from  "./components/Explore"
 import FundType from "./components/Explore/FundType"
 import Recommendations from "../Recommendation/Recommendation";
 import EditFunds from "../Recommendation/EditFunds"
@@ -38,7 +38,7 @@ const Invest = (props) => {
       <Route
         exact
         path={`${url}`}
-        component={partnerCode === 'moneycontrol' ? InvestExplore : Landing}
+        component={partnerCode === 'moneycontrol' ? ExploreFunds : Landing}
       />
       <Route
         exact
@@ -60,11 +60,11 @@ const Invest = (props) => {
         path={`${url}/parkmoney`}
         component={ParkMoney}
       />
-      {/* <Route
+      <Route
         exact
         path={[`${url}/explore`,`${url}/doityourself/direct`]}
         component={ExploreFunds}
-      /> */}
+      />
       <Route
         exact
         path={`${url}/explore/:type`}
@@ -151,7 +151,7 @@ const Invest = (props) => {
       <ThemeWrapper>
         <Route
           exact
-          path={[`${url}/explore`,`${url}/doityourself/direct`]}
+          path={`${url}/explore-v2`}
           component={InvestExplore}
         />
       </ThemeWrapper>

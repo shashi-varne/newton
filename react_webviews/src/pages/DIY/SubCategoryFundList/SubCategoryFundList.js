@@ -339,7 +339,7 @@ const SubCategoryLanding = (props) => {
 
   const handleSearchIconClick = () => {
     dispatch(setDiyStorage({fromScreen: screen}));
-    navigate("/diy/invest/search")
+    navigate("/diyv2/invest/search")
   }
 
   return (

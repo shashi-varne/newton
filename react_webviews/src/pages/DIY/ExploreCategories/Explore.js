@@ -100,11 +100,11 @@ const InvestExplore = (props) => {
   const navigate = navigateFunc.bind(props);
   const goNext = (title) => () => {
     sendEvents('next', title);
-    navigate(`/diy/${title}/landing`);
+    navigate(`/diyv2/${title}/landing`);
   };
 
   const handleSearchIconClick = () => {
-    navigate('/diy/invest/search');
+    navigate('/diyv2/invest/search');
   };
 
   const sendEvents = (userAction, cardClicked) => {

@@ -88,7 +88,7 @@ const Input = (props) => {
         onKeyDown={onKeyDown}
         onKeyUp={props.onKeyUp}
         rowsMax="3"
-        data-aid={getDataAid('inputField', props?.dataAidSuffix || (props?.dataAid || camelCase(props?.label.replace(`'s`, ''))))}
+        data-aid={getDataAid('inputField', props?.dataAidSuffix || (props?.dataAid || camelCase(props?.label?.replace(`'s`, ''))))}
       />
     );
   }

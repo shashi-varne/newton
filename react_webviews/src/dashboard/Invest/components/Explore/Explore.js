@@ -15,44 +15,22 @@ import { storageService } from 'utils/validators'
 import InvestExploreCard from './InvestExploreCard'
 import { getConfig } from "utils/functions";
 
-import { getDiyTrendingFunds, getSubCategories } from '../../common/api'
+import { getSubCategories, getDiyTrendingFunds } from '../../common/api'
 import { CART, CATEGORY, FUNDSLIST, SUBCATEGORY } from '../../../DIY/constants'
 import isEmpty from 'lodash/isEmpty';
+import isArray from 'lodash/isArray';
 import './Explore.scss';
 import { nativeCallback } from '../../../../utils/native_callback'
 import { flowName } from '../../constants'
 import { isNewIframeDesktopLayout } from '../../../../utils/functions'
-import Api from '../../../../utils/api';
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchDiyCategoriesAndTrendingFunds, setFundsCart, setFilteredFundList, getAllCategories, getTrendingFunds } from 'businesslogic/dataStore/reducers/diy';
-import { resetFundDetails } from 'businesslogic/dataStore/reducers/fundDetails';
-import { DEFAULT_FILTER_DATA } from 'businesslogic/constants/diy'
-import { resetMfOrders } from 'businesslogic/dataStore/reducers/mfOrders'
-import useLoadingState from '../../../../common/customHooks/useLoadingState'
 
-const screen = 'diyCategoryLanding';
 const InvestExplore = (props) => {
   const [loader, setLoader] = useState(true)
   const config = getConfig();
   const iframe = config.isIframe;
   const isMobileDevice = config.isMobileDevice;
   const partnerCode = config.code;
-  const dispatch = useDispatch();
-
-  const {isPageLoading} = useLoadingState(screen);
-  const trendingFunds = useSelector(getTrendingFunds);
-  const allCategories = useSelector(getAllCategories);
-
-  useEffect(() => {
-    if(isEmpty(trendingFunds) || isEmpty(allCategories)) {
-      dispatch(fetchDiyCategoriesAndTrendingFunds({Api, screen}));
-    }
-    dispatch(setFundsCart([]));
-    dispatch(setFilteredFundList({ filterOptions: DEFAULT_FILTER_DATA }));
-    dispatch(resetMfOrders());
-    dispatch(resetFundDetails());
-  },[])
-  const newIframeDesktopLayout = isNewIframeDesktopLayout() || (partnerCode === 'moneycontrol' && !isMobileDevice);
+  const newIframeDesktopLayout = isNewIframeDesktopLayout();
 
   const exploreMFMappings = [
     {
@@ -94,7 +72,7 @@ const InvestExplore = (props) => {
   const fetchTrendingFunds = async () => {
     try {
       const categoryList = storageService().getObject('diystore_categoryList')
-      if(isEmpty(categoryList)) {
+      if(isEmpty(categoryList) || !isArray(categoryList)) {
         const data = await getDiyTrendingFunds()
         const categories = await getSubCategories()
         storageService().setObject('diystore_trending', data.trends)
@@ -108,7 +86,7 @@ const InvestExplore = (props) => {
   const navigate = navigateFunc.bind(props)
   const goNext = (title) => () => {
     sendEvents('next', title)
-    navigate(`/diy/${title}/landing`)
+    navigate(`/invest/explore/${title}`)
   }
 
   const handleRightIconClick = () => {
@@ -139,19 +117,18 @@ const InvestExplore = (props) => {
       data-aid='explore-all-mutual-funds-screen'
       classOverRIde="pr-error-container"
       noFooter
-      title={partnerCode === 'moneycontrol' ? "" : "Explore All Mutual Funds"}
+      title={newIframeDesktopLayout ? "" : "Explore All Mutual Funds"}
       classOverRideContainer="pr-container"
-      hidePageTitle={partnerCode === 'moneycontrol'}
+      hidePageTitle={iframe && isMobileDevice}
       handleClick={goNext}
-      skelton={loader || isPageLoading}
+      skelton={loader}
       rightIcon="search"
       handleTopIcon={handleRightIconClick}
-      disableBack={(iframe || config.isSdk) && partnerCode === 'moneycontrol'}
+      disableBack={iframe && partnerCode === 'moneycontrol'}
       showIframePartnerLogo
-      headerData={{partnerLogo : (iframe || config.isSdk) && partnerCode === 'moneycontrol'}}
     >
       {
-        partnerCode === 'moneycontrol' ? <IframeView exploreMFMappings={exploreMFMappings} goNext={goNext} handleRightIconClick={handleRightIconClick}/> :
+        iframe && partnerCode === 'moneycontrol' ? <IframeView exploreMFMappings={exploreMFMappings} goNext={goNext} handleRightIconClick={handleRightIconClick}/> :
       <section className="invest-explore-cards" id="invest-explore" data-aid='invest-explore'>
         <div className='title'>Where do you want to invest?</div>
         {exploreMFMappings.map(({ title, description, src }) => (

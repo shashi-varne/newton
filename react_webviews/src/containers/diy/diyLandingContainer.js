@@ -97,7 +97,7 @@ const diyLandingContainer = (WrappedComponent) => (props) => {
   };
 
   const handleSearchIconClick = () => {
-    navigate("/diy/invest/search")
+    navigate("/diyv2/invest/search")
   }
 
   const sendEvents = (category, subCategory, userAction) => {

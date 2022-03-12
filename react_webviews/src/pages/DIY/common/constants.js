@@ -1,11 +1,11 @@
 export const DIY_PATHNAME_MAPPER = {
-  subcategoryList: "/diy/sub-category-list",
-  subcategoryFunds: "/diy/sub-category-funds",
-  subcategoryFundList: "/diy/sub-category/fund-list",
+  subcategoryList: "/diyv2/sub-category-list",
+  subcategoryFunds: "/diyv2/sub-category-funds",
+  subcategoryFundList: "/diyv2/sub-category/fund-list",
   fundDetails: "/fund-details-v2",
-  diyInvestLanding: "/invest/explore",
+  diyInvestLanding: "/invest/explore-v2",
   mfOrders: "/mf-orders",
-  completeKyc: "/diy/complete-kyc",
+  completeKyc: "/diyv2/complete-kyc",
   kycWeb: "/kyc/web",
-  investProcess: "/diy/invest-process"
+  investProcess: "/diyv2/invest-process"
 };

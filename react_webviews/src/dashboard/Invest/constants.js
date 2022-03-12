@@ -162,7 +162,7 @@ export const keyPathMapper = {
   buildwealth: "invest/buildwealth",
   savetax: "invest/savetax",
   nps: "/nps/info",
-  diyv2: "invest/explore",
+  diyv2: "invest/explore-v2",
   parkmoney: "invest/parkmoney",
   savegoal: "invest/savegoal",
   insurance: "/group-insurance",
