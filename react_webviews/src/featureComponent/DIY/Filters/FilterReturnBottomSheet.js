@@ -39,7 +39,7 @@ const FilterReturnBottomSheet = ({ variant, isOpen, handleClose, applyFilter, se
       >
         <Stack sx={{ p: 2 }}>
           <Stack direction='row' justifyContent='center' className='fr-title-wrapper'>
-            <IconButton onClick={handleClose}>
+            <IconButton onClick={onClose}>
               <Icon size='24px' src={require('assets/close_small.svg')} dataAid="close" />
             </IconButton>
             <Typography variant='heading3' align='center'dataAid={title?.toLowerCase()}  >
