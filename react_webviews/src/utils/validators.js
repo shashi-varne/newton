@@ -1208,3 +1208,12 @@ export function splitMobileNumberFromContryCode(mobileNumber) {
       return [numberVal];
   }
 };
+
+
+export function getDataAid(preffix, suffix = '') {
+
+	const dataAid = isEmpty(suffix) ? preffix : `${preffix}_${suffix}`;
+
+	return dataAid;
+
+}

@@ -8,6 +8,7 @@ import './style.scss';
 import { getConfig } from 'utils/functions';
 
 import DotDotLoaderNew from './DotDotLoaderNew';
+import { getDataAid } from 'utils/validators';
 
 const typeToClass = {
   'outlined' : 'generic-button-outlined',
@@ -29,7 +30,6 @@ class CustomButton extends Component {
         return(
           <div>
           <Button
-            data-aid={props.dataAid}
             fullWidth={(props.reset || props.type === 'summary') ? true : false}
             variant="raised"
             size="large"
@@ -123,7 +123,6 @@ class CustomButton extends Component {
       return (
         // <div>
           <Button
-            data-aid={props.dataAid}
             fullWidth={(props.reset || props.type === 'summary') ? true : false}
             variant="raised"
             size="large"
@@ -134,8 +133,9 @@ class CustomButton extends Component {
             disabled={props.buttonDisabled || props.disable}
             onClick={props.onClick}
             type={props.buttonType}
+            data-aid={getDataAid('button', props.dataAidSuffix || (props.type === 'outlined' ? 'secondary' : 'primary'))}
           >
-            {!showLoader && props.buttonTitle}
+            <span data-aid={getDataAid('tv', 'text')}>{!showLoader && props.buttonTitle}</span>
             {showLoader && 
             <DotDotLoaderNew
               styleBounce={{backgroundColor:'white'}}
