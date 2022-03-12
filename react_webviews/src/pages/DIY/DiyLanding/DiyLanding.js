@@ -73,7 +73,7 @@ const DiyLanding = (props) => {
             className='diy-landing-lottie-anim'
             data-aid='iv_top'
           />
-          <LandingHeaderTitle>{categoryData.category?.toUpperCase()}</LandingHeaderTitle>
+          <LandingHeaderTitle>{categoryData.category}</LandingHeaderTitle>
           {config.isMobileDevice && showSeeMore ? (
             <LandingHeaderSeeMoreWrapper
               subtitle={categoryData.subtitle}
