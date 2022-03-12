@@ -3,12 +3,17 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import isEmpty from 'lodash/isEmpty';
 import { Box, Skeleton } from '@mui/material';
-import format from 'date-fns/format';
 import getTheme from '../../theme';
 
 import './FundGraph.scss';
 
-const FundCommonGraph = ({ isGraphLoading, graphData, labelFormatter }) => {
+const FundCommonGraph = ({
+  isGraphLoading,
+  graphData,
+  labelFormatter,
+  tooltipFormatter,
+  isRollingReturn = false,
+}) => {
   const theme = getTheme();
   Highcharts.setOptions({
     lang: {
@@ -26,7 +31,13 @@ const FundCommonGraph = ({ isGraphLoading, graphData, labelFormatter }) => {
       showLastLabel: true,
       labels: {
         formatter: function () {
-          return '<p class="yaxis-label">' + (this.value > 0 ? '₹' : '') + this.value + '</p>';
+          return (
+            '<p class="yaxis-label">' +
+            (this.value > 0 && !isRollingReturn ? '₹' : '') +
+            this.value +
+            (isRollingReturn ? '%' : '') +
+            '</p>'
+          );
         },
       },
       gridLineColor: '#F7F3FF',
@@ -40,15 +51,7 @@ const FundCommonGraph = ({ isGraphLoading, graphData, labelFormatter }) => {
       borderWidth: 0,
       shape: 'square',
       useHTML: true,
-      formatter: function () {
-        return (
-          '<div class="tooltip-container"><div class="tooltip-date">' +
-          format(this.key, 'MMM d yyyy') +
-          '</div><div class="tooltip-nav-amount">₹' +
-          this.y.toFixed(2) +
-          ' NAV</div></div>'
-        );
-      },
+      formatter: tooltipFormatter,
     },
     plotOptions: {
       areaspline: {
@@ -138,7 +141,7 @@ const FundCommonGraph = ({ isGraphLoading, graphData, labelFormatter }) => {
           variant='rectangular'
           height='290px'
           width='100%'
-          sx={{borderRadius: 1, backgroundColor: 'foundationColors.primary.200' }}
+          sx={{ borderRadius: 1, backgroundColor: 'foundationColors.primary.200' }}
         />
       </Box>
     );

@@ -112,12 +112,24 @@ const FundGraph = () => {
     if (fundTimePeriod === '3M' || fundTimePeriod === '6M' || fundTimePeriod === '1M')
       return '<p class="xaxis-label">' + format(this.pos, 'd MMM') + '</p>';
   }
+
+  function tooltipFormatter() {
+    return (
+      '<div class="tooltip-container"><div class="tooltip-date">' +
+      format(this.key, 'MMM d yyyy') +
+      '</div><div class="tooltip-nav-amount">₹' +
+      this.y.toFixed(2) +
+      ' NAV</div></div>'
+    );
+  }
+
   return (
     <div className='fund-graph-wrapper'>
       <FundCommonGraph
         isGraphLoading={loadingData.isGraphLoading}
         graphData={graphData}
         labelFormatter={labelFormatter}
+        tooltipFormatter={tooltipFormatter}
       />
       <Timelines
         onChange={handleTimePeriodChange}

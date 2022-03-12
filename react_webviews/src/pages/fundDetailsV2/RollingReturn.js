@@ -77,6 +77,17 @@ const RollingReturn = ({fundDetailsRef, sendEvents}) => {
     if (investmentYear === 3 || investmentYear === 6 || investmentYear === 1)
       return '<p class="xaxis-label">' + format(this.pos, 'd MMM') + '</p>';
   }
+  function tooltipFormatter() {
+    console.log("this",this);
+    return (
+      '<div class="tooltip-container"><div class="tooltip-date">' +
+      format(this.key, 'MMM d yyyy') +
+      '</div><div class="tooltip-nav-amount">' +
+      this.y.toFixed(2) +
+      '%</div></div>'
+    );
+  }
+
   return (
     <Box sx={{ mt: 3, mb: 3 }} data-aid="grp_rollingReturns" >
       <Stack>
@@ -125,6 +136,8 @@ const RollingReturn = ({fundDetailsRef, sendEvents}) => {
             isGraphLoading={loadingData.isGraphLoading}
             graphData={returnGraphData}
             labelFormatter={labelFormatter}
+            tooltipFormatter={tooltipFormatter}
+            isRollingReturn
           />
         </div>
         <Stack sx={{mt: 1}} direction='row' spacing={1} alignItems='center' justifyContent='flex-start'>
