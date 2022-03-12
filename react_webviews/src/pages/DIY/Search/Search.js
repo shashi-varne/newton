@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef, useMemo } from 'react';
 import { getConfig } from 'utils/functions';
 import Close from '@mui/icons-material/Close';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -16,27 +16,34 @@ import { Box } from '@mui/material';
 import Typography from '../../../designSystem/atoms/Typography';
 
 const Search = (props) => {
-  const [value, setValue] = useState('');
-  const [fundResult, setFundResult] = useState();
+  const [searchValue, setSearchValue] = useState('');
+  const [fundResult, setFundResult] = useState([]);
   const [showLoader, setShowLoader] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [showNoFundmessage, setShowNoFundmessage] = useState(false);
+  const [hideFundList, setHideFundList] = useState(false);
   const iframe = isIframe();
-  const isMobileDevice = getConfig().isMobileDevice;
-  const productName = getConfig().productName;
-
+  const {isMobileDevice, productName} = useMemo(getConfig,[]);
+  const searchQueryRef = useRef(null);
   const handleChange = (event) => {
     let value = event.target.value || '';
-    setValue(value);
-    if (!value) setShowErrorMessage(false);
-    else if (value.length > 3) {
-      setShowLoader(true);
+    setSearchValue(value);
+    if (!value) {
+      clearData();
+    } else if (value.length > 3) {
       setShowErrorMessage(false);
-      if (!showNoFundmessage) setShowNoFundmessage(true);
-      search(value);
+      if(searchQueryRef.current === value) {
+        setHideFundList(false);
+        if(isEmpty(fundResult)){
+          setShowNoFundmessage(true);
+        }
+      } else {
+        setShowLoader(true);
+        search(value);
+      }
     } else if (value.length < 4) {
       if (!isEmpty(fundResult)) {
-        setFundResult([]);
+        setHideFundList(true);
       }
       setShowErrorMessage(true);
       setShowNoFundmessage(false);
@@ -44,13 +51,16 @@ const Search = (props) => {
   };
 
   const searchFunc = async (value) => {
+    searchQueryRef.current = value;
     let data = await querySearch(value);
     setShowLoader(false);
     if (data && data.funds) {
       storageService().setObject('diystore_fundsList', data.funds);
       setFundResult(data.funds);
+      setHideFundList(false);
       return;
     } else {
+      setShowNoFundmessage(true);
       setFundResult([]);
     }
   };
@@ -72,11 +82,15 @@ const Search = (props) => {
     });
   };
 
-  const clearInputFields = () => {
-    setValue('');
+  const clearData = () => {
     setShowNoFundmessage(false);
     setShowErrorMessage(false);
-    setFundResult([]);
+    setHideFundList(true)
+  }
+
+  const clearInputFields = () => {
+    setSearchValue('');
+    clearData();
   };
 
   return (
@@ -92,12 +106,12 @@ const Search = (props) => {
     >
       <div className={`diy-search ${isMobileDevice ? 'diy-search-mob' : ''}`} data-aid='diy-search'>
         {iframe || (getConfig().code === 'moneycontrol' && !getConfig().Web) ? (
-          <IframeSearch value={value} handleChange={handleChange} />
+          <IframeSearch value={searchValue} handleChange={handleChange} />
         ) : (
           <SearchBar
-            value={value}
+            value={searchValue}
             onChange={handleChange}
-            suffix={value ? <Close className='close-icon' /> : ''}
+            suffix={searchValue ? <Close className='close-icon' /> : ''}
             onSuffixClick={clearInputFields}
             placeholder='Search funds'
             autoFocus
@@ -118,7 +132,7 @@ const Search = (props) => {
               <CircularProgress size={22} thickness={4} className='progress-bar' />
             </div>
           )}
-          {!showLoader && fundResult && (
+          {!showLoader && fundResult && !hideFundList && (
             <>
               {fundResult.length !== 0 && (
                 <Box className='search-list' data-aid='diy-search-list'>
@@ -137,17 +151,17 @@ const Search = (props) => {
                   })}
                 </Box>
               )}
-              {fundResult.length === 0 && showNoFundmessage && (
-                <Typography
-                  dataAid='diy-message'
-                  variant='body1'
-                  color='foundationColors.content.secondary'
-                  align='center'
-                >
-                  No result found
-                </Typography>
-              )}
             </>
+          )}
+          {showNoFundmessage && !showLoader && (
+            <Typography
+              dataAid='diy-message'
+              variant='body1'
+              color='foundationColors.content.secondary'
+              align='center'
+            >
+              No result found
+            </Typography>
           )}
           {!fundResult && iframe && !isMobileDevice && !showLoader && (
             <div className='diy-iframe-search-content'>
