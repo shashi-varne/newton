@@ -16,8 +16,6 @@
 import React from 'react';
 import Typography from '../../atoms/Typography';
 import Separator from '../../atoms/Separator';
-import isEmpty from 'lodash/isEmpty';
-import isFunction from 'lodash/isFunction';
 import PropTypes from 'prop-types';
 import { Stack } from '@mui/material';
 import Icon from '../../atoms/Icon';
@@ -99,57 +97,35 @@ ProductItem.Description = ({ title, titleColor, subtitle, subtitleColor }) => {
   );
 };
 
-// ProductItem.LeftBottomSection.propTypes = {
-//   children: function (props, propName, componentName) {
-//     const supportedElements = ['Tag', 'Typography'];
-//     // eslint-disable-next-line no-unused-expressions
-//     props?.children?.map((el) => {
-//       if (supportedElements.indexOf(el?.type?.displayName) === -1) {
-//         console.error(
-//           `Invalid component ${
-//             el?.type || el?.type?.displayName
-//           } passed, supported Components are 'Tag' and 'Typography' inside LeftBottomSection`
-//         );
-//       }
-//     });
-//   },
-// };
+ProductItem.propTypes = {
+  children: PropTypes.node,
+  imgProps: PropTypes.object,
+  dataAid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  sx: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
+  showSeparator: PropTypes.bool,
+  onClick: PropTypes.func,
+};
 
-// const defaultValues = {
-//   leftImgProps: {},
-//   rightSectionData: {
-//     description: {
-//       subtitleColor: 'foundationColors.content.tertiary',
-//     },
-//     btnProps: {},
-//   },
-//   bottomSectionData: {
-//     tagOne: {},
-//     tagTwo: {},
-//     titleOneColor: 'foundationColors.content.tertiary',
-//   },
-// };
+const STACK_PROPTYPES = {
+  children: PropTypes.node,
+  direction: PropTypes.oneOf(['column', 'row']),
+  spacing: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+};
 
-// ProductItem.propTypes = {
-//   leftImgProps: PropTypes.object,
-//   headerTitle: PropTypes.node,
-//   headerTitleColor: PropTypes.string,
-//   showSeparator: PropTypes.bool,
-//   bottomSectionData: PropTypes.exact({
-//     tagOne: PropTypes.object,
-//     tagTwo: PropTypes.object,
-//     titleOne: PropTypes.node,
-//     titleOneColor: PropTypes.string,
-//   }),
-//   rightSectionData: PropTypes.exact({
-//     btnProps: PropTypes.object,
-//     description: PropTypes.exact({
-//       title: PropTypes.node,
-//       titleColor: PropTypes.string,
-//       subtitle: PropTypes.node,
-//       subtitleColor: PropTypes.string,
-//     }),
-//   }),
-// };
+ProductItem.Title.propTypes = {
+  children: PropTypes.node,
+};
+
+ProductItem.Description.propTypes = {
+  title: PropTypes.node,
+  titleColor: PropTypes.string,
+  subtitle: PropTypes.node,
+  subtitleColor: PropTypes.string,
+};
+
+ProductItem.LeftSection.propTypes = STACK_PROPTYPES;
+ProductItem.LeftBottomSection.propTypes = STACK_PROPTYPES;
+ProductItem.RightSection.propTypes = STACK_PROPTYPES;
+ProductItem.LeftBottomSection.propTypes = STACK_PROPTYPES;
 
 export default ProductItem;
