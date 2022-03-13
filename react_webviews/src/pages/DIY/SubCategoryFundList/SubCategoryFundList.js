@@ -395,7 +395,7 @@ const SubCategoryLanding = (props) => {
                   data={filteredFunds[el.key]}
                   activeTab={tabValue}
                   handleAddToCart={handleAddToCart}
-                  subcategoryOption={subcategoryOption}
+                  subcategoryOption={el.key}
                   swiper={swiper}
                   sendEvents={sendEvents}
                   diyFundListRef={diyFundListRef}

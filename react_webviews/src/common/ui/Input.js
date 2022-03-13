@@ -2,6 +2,11 @@ import React, { useMemo } from 'react';
 import TextField from 'material-ui/TextField';
 import './style.scss';
 
+import { getDataAid } from '../../utils/validators';
+
+import { camelCase } from 'lodash';
+
+
 const Input = (props) => {
   const onKeyDownCapture = (event) => {
     const code = event.keyCode;
@@ -24,9 +29,11 @@ const Input = (props) => {
         helperText={props.helperText}
         InputLabelProps={{
           shrink: true,
+          'data-aid': getDataAid('tv', 'label')
         }}
         inputProps={{
-          max: `${props.max}`
+          max: `${props.max}`,
+          'data-aid': getDataAid('et', 'text')
         }}
         fullWidth
         required={props.required}
@@ -39,6 +46,7 @@ const Input = (props) => {
         onChange={props.onChange}
         inputRef={props.inputRef}
         onKeyDown={props.onKeyDown}
+        data-aid={getDataAid('inputField', props?.dataAid || 'dob')}
       />
     );
   } else {
@@ -67,6 +75,11 @@ const Input = (props) => {
           maxLength: props.maxLength,
           inputMode: props.inputMode,
           pattern:props.pattern,
+          'data-aid': getDataAid('et', 'text')
+        }}
+        InputLabelProps={{
+          shrink: true,
+          'data-aid': getDataAid('tv', 'label')
         }}
         onClick={props.onClick}
         autoComplete={props.autoComplete}
@@ -75,6 +88,7 @@ const Input = (props) => {
         onKeyDown={onKeyDown}
         onKeyUp={props.onKeyUp}
         rowsMax="3"
+        data-aid={getDataAid('inputField', props?.dataAidSuffix || (props?.dataAid || camelCase(props?.label.replace(`'s`, ''))))}
       />
     );
   }
