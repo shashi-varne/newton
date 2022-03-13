@@ -3,7 +3,7 @@
   title, subtitle, description => string/node
   titleColor, subtitleColor, descriptionColor: can accept foundation colors.
   Example: 
-  NOTE: STRINGLY RECOMMENDED TO USE ONLY FOUNDATION COLORS.
+  NOTE: STRICTLY RECOMMENDED TO USE ONLY FOUNDATION COLORS.
   titleColor: 'foundationColors.secondary.mango.300'
   onClick(function): control the behaviour of the card when clicked.
 */

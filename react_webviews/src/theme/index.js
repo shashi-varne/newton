@@ -76,6 +76,13 @@ const getTheme = () => {
       MuiInputAdornment: {
         styleOverrides: inputAdornmentStyleOverRides(colors)
       },
+      MuiDialog: {
+        defaultProps: dialogDefaultProps(),
+        styleOverrides: dialogStylesOverride(),
+      },
+      MuiFormHelperText: {
+        styleOverrides: helperTextStyleOverRides(colors, partnerConfig),
+      },
       MuiTabs: {
         variants:tabsVariantsConfig(),
         styleOverrides: tabsStyleOverRides()
@@ -83,10 +90,6 @@ const getTheme = () => {
       MuiTab: {
         variants:tabVariantsConfig(colors, partnerConfig),
         styleOverrides: tabStyleOverRides(colors, partnerConfig)
-      },
-      MuiDialog: {
-        defaultProps: dialogDefaultProps(),
-        styleOverrides:dialogStylesOverride(),
       },
       MuiModal: {
         styleOverrides : {
@@ -100,9 +103,6 @@ const getTheme = () => {
       },
       MuiBadge: {
         styleOverrides: badgeStyleOverRides(colors, partnerConfig),
-      },
-      MuiFormHelperText: {
-        styleOverrides: helperTextStyleOverRides(colors, partnerConfig),
       },
     },
     shadows: customShadows()
