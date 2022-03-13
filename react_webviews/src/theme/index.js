@@ -7,6 +7,15 @@ import { tooltipStyleOverRides } from './tooltip';
 import { switchStyleOverRides } from './switch';
 import baseTypographyConfig, { customTypographyVariantProps } from './typography';
 import getPartnerThemeData from './utils';
+import {
+  customVariantsFilledInput,
+  customVariantsOutlinedInput,
+  filledTextFieldStyleOverRides,
+  helperTextStyleOverRides,
+  inputAdornmentStyleOverRides,
+  inputLabelStyleOverRides,
+  outlinedTextFieldStyleOverRides,
+} from './textfield';
 import { dialogDefaultProps, dialogStylesOverride } from './dialog';
 import { separatorStyleOverRides } from './separator';
 import { badgeStyleOverRides } from './badge';
@@ -50,6 +59,30 @@ const getTheme = () => {
       MuiCheckbox: {
         styleOverrides: checkboxStyleOverRides(colors),
       },
+      MuiFilledInput: {
+        defaultProps: {
+          disableUnderline: true,
+        },
+        variants: customVariantsFilledInput(colors),
+        styleOverrides: filledTextFieldStyleOverRides(colors, partnerConfig),
+      },
+      MuiOutlinedInput: {
+        variants: customVariantsOutlinedInput(colors),
+        styleOverrides: outlinedTextFieldStyleOverRides(colors, partnerConfig),
+      },
+      MuiInputLabel: {
+        styleOverrides: inputLabelStyleOverRides(colors, partnerConfig),
+      },
+      MuiInputAdornment: {
+        styleOverrides: inputAdornmentStyleOverRides(colors),
+      },
+      MuiDialog: {
+        defaultProps: dialogDefaultProps(),
+        styleOverrides: dialogStylesOverride(),
+      },
+      MuiFormHelperText: {
+        styleOverrides: helperTextStyleOverRides(colors, partnerConfig),
+      },
       MuiTabs: {
         variants:tabsVariantsConfig(),
         styleOverrides: tabsStyleOverRides()
@@ -57,10 +90,6 @@ const getTheme = () => {
       MuiTab: {
         variants:tabVariantsConfig(colors, partnerConfig),
         styleOverrides: tabStyleOverRides(colors, partnerConfig)
-      },
-      MuiDialog: {
-        defaultProps: dialogDefaultProps(),
-        styleOverrides:dialogStylesOverride(),
       },
       MuiModal: {
         styleOverrides : {
