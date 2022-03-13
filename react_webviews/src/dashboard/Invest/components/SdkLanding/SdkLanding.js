@@ -38,7 +38,7 @@ const screenName = "sdkLanding";
 
 const PATHNAME_MAPPER = {
   nfo: "/advanced-investing/new-fund-offers/info",
-  diy: "/invest/explore",
+  diy: "/invest/explore-v2",
   buildwealth: "/invest/buildwealth",
   instaredeem: "/invest/instaredeem",
   mf: "/invest",
