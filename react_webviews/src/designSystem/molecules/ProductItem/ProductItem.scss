@@ -12,10 +12,5 @@
     margin-left: 10px;
     align-self: baseline;
     min-width: fit-content;
-    margin-left: auto;
-    align-items: flex-end;
-    &> * {
-      margin-left: 10px;
-    }
   }
 }

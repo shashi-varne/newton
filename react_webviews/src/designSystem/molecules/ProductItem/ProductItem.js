@@ -16,6 +16,7 @@
 import React from 'react';
 import Typography from '../../atoms/Typography';
 import Separator from '../../atoms/Separator';
+import PropTypes from 'prop-types';
 import { Stack } from '@mui/material';
 import Icon from '../../atoms/Icon';
 
@@ -95,5 +96,36 @@ ProductItem.Description = ({ title, titleColor, subtitle, subtitleColor, titleDa
     </div>
   );
 };
+
+ProductItem.propTypes = {
+  children: PropTypes.node,
+  imgProps: PropTypes.object,
+  dataAid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  sx: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
+  showSeparator: PropTypes.bool,
+  onClick: PropTypes.func,
+};
+
+const STACK_PROPTYPES = {
+  children: PropTypes.node,
+  direction: PropTypes.oneOf(['column', 'row']),
+  spacing: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+};
+
+ProductItem.Title.propTypes = {
+  children: PropTypes.node,
+};
+
+ProductItem.Description.propTypes = {
+  title: PropTypes.node,
+  titleColor: PropTypes.string,
+  subtitle: PropTypes.node,
+  subtitleColor: PropTypes.string,
+};
+
+ProductItem.LeftSection.propTypes = STACK_PROPTYPES;
+ProductItem.LeftBottomSection.propTypes = STACK_PROPTYPES;
+ProductItem.RightSection.propTypes = STACK_PROPTYPES;
+ProductItem.LeftBottomSection.propTypes = STACK_PROPTYPES;
 
 export default ProductItem;
