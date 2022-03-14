@@ -55,7 +55,7 @@ const Goals = (props) => {
     }
 
     let iType = goal?.itag?.itype;
-    if(iType === 'diy' && !config.isIframe) {
+    if(iType === 'diy' && config.code !== 'moneycontrol' && !config.isIframe) {
       iType = 'diyv2';
     }
 
