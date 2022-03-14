@@ -168,6 +168,7 @@ export const keyPathMapper = {
   insurance: "/group-insurance",
   gold: "/gold/my-gold",
   fhc: "/fhc",
+  top_equity: "/diyv2/Equity/landing",
 };
 
 export const investRedeemData = {

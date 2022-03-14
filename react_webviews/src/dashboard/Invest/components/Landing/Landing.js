@@ -314,9 +314,6 @@ const Landing = (props) => {
           state: { fromExternalSrc: true },
         });
         break;
-      case "top_equity":
-        navigate("/diyv2/Equity/landing");
-        break;
       default:
         navigate(keyPathMapper[state] || state);
         break;
