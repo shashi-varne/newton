@@ -100,7 +100,7 @@ const FundDetailsV2 = (props) => {
           <FundStats />
         </div>
         <div className='fund-details-section' ref={returnCalcRef}>
-          <ReturnCalculator />
+          <ReturnCalculator fundDetailsRef={fundDetailsRef} sendEvents={sendEvents}/>
         </div>
         <div className='fund-details-section' ref={assetAllocRef}>
           <AssetAllocation fundDetailsRef={fundDetailsRef} sendEvents={sendEvents} />

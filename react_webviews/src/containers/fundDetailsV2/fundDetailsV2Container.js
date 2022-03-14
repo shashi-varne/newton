@@ -39,13 +39,10 @@ const fundDetailsV2Container = (WrappedComponent) => (props) => {
   const returnsRef = useRef();
   const riskDetailsRef = useRef();
   const returnCompRef = useRef();
-  const avoidFirstRef = useRef(null);
   const { productName } = useMemo(getConfig, []);
   const isFisdom = productName === 'fisdom';
   const ctaText = isFisdom ? 'ADD TO CART' : 'INVEST NOW';
   const cartCount = useSelector(getDiyCartCount);
-  const investmentType = useSelector((state) => state?.fundDetails?.investmentType);
-  const investmentPeriod = useSelector((state) => state?.fundDetails?.investmentPeriod);
   const { kyc, isLoading, user } = useUserKycHook();
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const fundDetailsRef = useRef({});
@@ -86,14 +83,11 @@ const fundDetailsV2Container = (WrappedComponent) => (props) => {
     }
   };
 
-  useEffect(() => {
-    if (avoidFirstRef.current) {
-      sendEvents('back');
-    }
-    avoidFirstRef.current = true;
-  }, [investmentType, investmentPeriod]);
 
-  const sendEvents = (userAction) => {
+  const sendEvents = (userAction, rinvestmentType='', rinvestmentPeriod='') => {
+    rinvestmentType = rinvestmentType || fundDetailsRef.current.return_calculator_mode;
+    rinvestmentPeriod = rinvestmentPeriod || fundDetailsRef.current.return_calculator_investment_period;
+
     const eventObj = {
       event_name: 'fund_detail',
       properties: {
@@ -101,8 +95,8 @@ const fundDetailsV2Container = (WrappedComponent) => (props) => {
         flow: 'diy',
         shared: 'no',
         jump_to: fundDetailsRef.current?.jumpTo || '',
-        return_calculator_mode: investmentType,
-        return_calculator_investment_period: `${investmentPeriod}y`,
+        return_calculator_mode: rinvestmentType,
+        return_calculator_investment_period: `${rinvestmentType ? `${rinvestmentPeriod}y` : ''}`,
         asset_allocation: fundDetailsRef.current?.asset_allocation || '',
         returns: fundDetailsRef.current?.returns || '',
         rolling_return: fundDetailsRef.current?.rolling_return || 'investment period',

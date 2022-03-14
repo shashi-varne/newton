@@ -1,5 +1,5 @@
 import { Box, Stack } from '@mui/material';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { getInvestedValue } from '../../dashboard/Invest/common/commonFunctions';
 import { Pill, Pills } from '../../designSystem/atoms/Pills/Pills';
 import Separator from '../../designSystem/atoms/Separator';
@@ -34,7 +34,7 @@ const getEstimatedReturnTooltip = (investmentPeriod, expectedAmount) => {
   }
 };
 
-const ReturnCalculator = () => {
+const ReturnCalculator = ({sendEvents, fundDetailsRef}) => {
   const [isReturnCalcOpen, setIsReturnCalcOpen] = useState(false);
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const dispatch = useDispatch();
@@ -54,6 +54,7 @@ const ReturnCalculator = () => {
   );
   const isOneYearReturnAvailable = fundReturns?.find(el => el?.name.match(/1 year/));
   const disableChild = isEmpty(isOneYearReturnAvailable);
+  const avoidFirstRef = useRef(null);
   const returns = useMemo(() => {
     const yearReturns = {};
     // eslint-disable-next-line no-unused-expressions
@@ -73,6 +74,19 @@ const ReturnCalculator = () => {
       dispatch(resetReturnCalculatorData());
     };
   }, [fundData]);
+
+  useEffect(() => {
+    if (avoidFirstRef.current) {
+      sendEvents('back', investmentType, investmentPeriod);
+    } else {
+      fundDetailsRef.current = {
+        ...fundDetailsRef.current,
+        return_calculator_mode: investmentType,
+        return_calculator_investment_period: investmentPeriod
+      }
+    }
+    avoidFirstRef.current = true;
+  }, [investmentType, investmentPeriod]);
 
   useEffect(() => {
     const investedValue = getInvestedValue(investmentPeriod, amountToBeInvested, isRecurring);

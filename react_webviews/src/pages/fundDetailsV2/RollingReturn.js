@@ -47,7 +47,7 @@ const RollingReturn = ({fundDetailsRef, sendEvents}) => {
     fundDetailsRef.current = {
       ...fundDetailsRef.current,
       rolling_return: 'investment period',
-      rolling_return_investment_period: investmentYear,
+      rolling_return_investment_period: ROLLING_RETURN_EVENT[investmentYear],
     }
     if(avoidFirstRender.current){
       sendEvents('back');
@@ -185,3 +185,11 @@ const ROLLING_RETURN_TIMELINES = [
     value: 12 * 5,
   },
 ];
+
+const ROLLING_RETURN_EVENT = {
+  3: '3m',
+  6: '6m',
+  12: '1y',
+  36: '3y',
+  60: '5y'
+};
