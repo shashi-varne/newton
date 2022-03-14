@@ -54,7 +54,7 @@ const FundDetailsV2 = (props) => {
           onClick: addFundToCart,
         },
         confirmActionProps: {
-          title: `${cartCount} items in the cart`,
+          title: `${cartCount} ${cartCount > 1 ? 'items' : 'item'} saved in your cart`,
           buttonTitle: 'View Cart',
           badgeContent: cartCount,
           onButtonClick: validateKycAndRedirect({ navigate, kyc }),

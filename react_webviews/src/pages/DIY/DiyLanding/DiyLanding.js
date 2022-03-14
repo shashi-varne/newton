@@ -45,7 +45,7 @@ const DiyLanding = (props) => {
       footer={{
         confirmActionProps: {
           buttonTitle: 'View Cart',
-          title: `${cartCount} item saved in your cart`,
+          title: `${cartCount} ${cartCount > 1 ? 'items' : 'item'} saved in your cart`,
           badgeContent: cartCount,
           onButtonClick: validateKycAndRedirect({ navigate, kyc }),
           imgSrc: require('assets/cart_icon.svg'),
