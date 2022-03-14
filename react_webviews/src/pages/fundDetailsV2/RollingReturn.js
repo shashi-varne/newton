@@ -78,7 +78,6 @@ const RollingReturn = ({fundDetailsRef, sendEvents}) => {
       return '<p class="xaxis-label">' + format(this.pos, 'd MMM') + '</p>';
   }
   function tooltipFormatter() {
-    console.log("this",this);
     return (
       '<div class="tooltip-container"><div class="tooltip-date">' +
       format(this.key, 'MMM d yyyy') +
