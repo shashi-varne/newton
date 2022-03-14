@@ -41,7 +41,7 @@ const MfOrder = (props) => {
     <Container
       eventData={sendEvents()}
       headerProps={{
-        headerTitle: 'Mutual funds order',
+        headerTitle: 'Mutual fund order',
         hideInPageTitle: true,
         onBackClick,
         dataAid: 'mutualFundOrder',
