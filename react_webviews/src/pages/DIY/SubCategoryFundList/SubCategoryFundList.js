@@ -451,7 +451,7 @@ const CustomFooter = ({
       <Grow in={!hideCartFooter} timeout={500} mountOnEnter unmountOnExit>
         <div className='sc-confirmation-btn-wrapper'>
           <ConfirmAction
-            title={`${cartCount} items in the cart`}
+            title={`${cartCount} ${cartCount > 1 ? 'items' : 'item'} saved in your cart`}
             buttonTitle='View Cart'
             badgeContent={cartCount}
             onButtonClick={onCartClick}
