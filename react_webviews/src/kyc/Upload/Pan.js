@@ -50,7 +50,6 @@ const Pan = (props) => {
 
   const onFileSelectError = (error, file) => {
     sendEvents("file_select_error", "", file?.type, error)
-    // sendEvents("attach_document");
     toast('Please select image file only');
   }
 
@@ -165,7 +164,7 @@ const Pan = (props) => {
         // "type": type || "",
       }
     };
-    if (errorMessage) {
+    if (errorMessage || fileType) {
       eventObj.properties.file_type = fileType;
       eventObj.properties.error_message = errorMessage;
     }

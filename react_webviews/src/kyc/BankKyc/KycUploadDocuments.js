@@ -279,7 +279,7 @@ const KycUploadDocuments = (props) => {
           // "status" : screen_name ? "verification pending":""
         },
       };
-      if (errorMessage) {
+      if (errorMessage || fileType) {
         eventObj.properties.file_type = fileType;
         eventObj.properties.error_message = errorMessage;
       }
