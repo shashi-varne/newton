@@ -48,8 +48,9 @@ const Pan = (props) => {
     setFileToShow(fileBase64);
   }
 
-  const onFileSelectError = (error) => {
-    sendEvents("attach_document");
+  const onFileSelectError = (error, file) => {
+    sendEvents("file_select_error", "", file?.type, error)
+    // sendEvents("attach_document");
     toast('Please select image file only');
   }
 
@@ -155,7 +156,7 @@ const Pan = (props) => {
     setFileToShow(null);
   }
 
-  const sendEvents = (userAction, screenName) => {
+  const sendEvents = (userAction, screenName, fileType, errorMessage) => {
     let eventObj = {
       "event_name": tradingEnabled ? 'trading_onboarding' : 'kyc_registration',
       "properties": {
@@ -164,6 +165,10 @@ const Pan = (props) => {
         // "type": type || "",
       }
     };
+    if (errorMessage) {
+      eventObj.properties.file_type = fileType;
+      eventObj.properties.error_message = errorMessage;
+    }
     if (userAction === 'just_set_events') {
       return eventObj;
     } else {

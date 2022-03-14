@@ -107,7 +107,7 @@ export const WVFilePickerWrapper = ({
       }
     } catch(err) {
       if (isFunction(onFileSelectError)) {
-        onFileSelectError(err);
+        onFileSelectError(err, file);
       } else {
         console.log(err);
         toast(err);
