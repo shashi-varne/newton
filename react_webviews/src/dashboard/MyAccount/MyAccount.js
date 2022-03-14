@@ -477,7 +477,7 @@ class MyAccount extends Component {
           <div className="my-account-content">
             <div className="account">
               <div className="account-head-title" data-aid='account-head-title'>Account options</div>
-              {isReadyToInvestBase && (
+              {/* {isReadyToInvestBase && (
                 <div
                   data-aid='change-address'
                   className="account-options"
@@ -489,7 +489,7 @@ class MyAccount extends Component {
                   <Imgc className="my-imgc" src={require(`assets/address_icon.svg`)} alt="" />
                   <div>Change Address</div>
                 </div>
-              )}
+              )} */}
               {(isReadyToInvestBase || bank.doc_status === "rejected") && (
                 <div
                   data-aid='add-bank-mandate'
