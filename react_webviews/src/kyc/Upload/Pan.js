@@ -12,6 +12,7 @@ import useUserKycHook from '../common/hooks/userKycHook'
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 import PanUploadStatus from "../Equity/mini-components/PanUploadStatus";
 import { nativeCallback } from '../../utils/native_callback'
+import { triggerSentryError } from "../../utils/api";
 
 const Pan = (props) => {
   const { productName } = useMemo(() => {
@@ -49,7 +50,8 @@ const Pan = (props) => {
   }
 
   const onFileSelectError = (error, file) => {
-    sendEvents("file_select_error", "", file?.type, error)
+    sendEvents("file_select_error", "", file?.type, error);
+    triggerSentryError("select file error", {}, error, file?.type);
     toast('Please select image file only');
   }
 

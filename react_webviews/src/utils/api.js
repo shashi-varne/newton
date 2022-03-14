@@ -147,7 +147,7 @@ class Api {
   }
 }
 
-function triggerSentryError(verb, response, errorMsg) {
+export function triggerSentryError(verb, response, errorMsg, additionalInfo) {
   var main_pathname = window.location.pathname;
   var project = getConfig().project || 'Others';
   Sentry.configureScope(
@@ -157,6 +157,7 @@ function triggerSentryError(verb, response, errorMsg) {
       .setTransactionName(`Error on ${verb} request`)
       .setLevel(Sentry.Severity.Warning)
       .setExtra("api_res", JSON.stringify(response))
+      .setExtra("additional_info", JSON.stringify(additionalInfo))
   )
   var SentryError = new Error(errorMsg)
   SentryError.name = `${project} ${main_pathname}`

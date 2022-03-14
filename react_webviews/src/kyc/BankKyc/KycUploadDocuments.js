@@ -18,6 +18,7 @@ import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClick
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 import { isReadyToInvest } from "../services";
 import { storageService } from "../../utils/validators";
+import { triggerSentryError } from "../../utils/api";
 
 const INIT_BOTTOMSHEET_TEXT = "We've added your bank account details. The verification is in progress, meanwhile you can continue with KYC."
 
@@ -83,6 +84,7 @@ const KycUploadDocuments = (props) => {
 
   const onFileSelectError = (err, file) => {
     sendEvents("file_select_error", "", file?.type, err)
+    triggerSentryError("select file error", {}, err, file?.type);
     toast('Please select image file only');
   }
 
