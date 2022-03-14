@@ -97,7 +97,7 @@ const diyLandingContainer = (WrappedComponent) => (props) => {
   };
 
   const handleSearchIconClick = () => {
-    navigate("/diyv2/invest/search")
+    navigate(DIY_PATHNAME_MAPPER.search)
   }
 
   const sendEvents = (category, subCategory, userAction) => {
