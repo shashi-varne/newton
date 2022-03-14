@@ -85,7 +85,7 @@ const FundDetailsV2 = (props) => {
         <Box sx={{ bgcolor: 'foundationColors.supporting.white', p: '3px 16px' }}>
           <HeaderTitle
             title={fundData?.performance?.friendly_name}
-            imgSrc={fundData?.performance?.amc_logo_big}
+            imgSrc={fundData?.performance?.amc_logo_small}
             subTitleLabels={[
               { name: fundData?.performance?.ms_risk },
               { name: fundData?.performance?.category },

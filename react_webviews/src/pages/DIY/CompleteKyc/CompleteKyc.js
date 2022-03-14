@@ -47,7 +47,7 @@ const CompleteKyc = ({ onClick, productName }) => {
             return (
               <Stack key={idx} direction='row' spacing={2} alignItems='center'>
                 <Icon src={checkedIcon} size='24px' dataAid={`left${idx + 1}`} />
-                <Typography variant='body2' align='left' component='div' dataAid={data.dataAid}>
+                <Typography variant='body2' align='left' component='div' dataAid={`point${idx + 1}`}>
                   {data.label}
                 </Typography>
               </Stack>

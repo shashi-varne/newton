@@ -141,7 +141,7 @@ const Search = (props) => {
                       <ProductItem
                         key={index}
                         dataAid={`diy-fund-result-${index + 1}`}
-                        imgSrc={fund.amc_logo_big}
+                        imgSrc={fund.amc_logo_small}
                         showSeparator
                         onClick={showFundInfo(fund)}
                       >

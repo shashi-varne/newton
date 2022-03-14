@@ -135,7 +135,7 @@ const TabPanel = memo((props) => {
                 <div key={idx} {...refData}>
                   <ProductItem
                     key={idx}
-                    imgSrc={fund?.amc_logo_big}
+                    imgSrc={fund?.amc_logo_small}
                     showSeparator
                     onClick={showFundDetails(fund)}
                     dataAid={idx + 1}

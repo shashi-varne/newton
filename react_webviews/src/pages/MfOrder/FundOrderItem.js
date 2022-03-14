@@ -44,7 +44,7 @@ const FundOrderItem = (props) => {
   return (
     <div ref={fundOrderItemRef}>
       {!isProductFisdom && (
-        <HeaderTitle sx={{ mb: 2 }} title={fundDetails.mfname} imgSrc={fundDetails.amc_logo_big} />
+        <HeaderTitle sx={{ mb: 2 }} title={fundDetails.mfname} imgSrc={fundDetails.amc_logo_small} />
       )}
       <WrapperBox elevation={1} className='mf-investment-card-wrapper'>
         {isProductFisdom && (
@@ -57,7 +57,7 @@ const FundOrderItem = (props) => {
             {isProductFisdom && (
               <InvestmentCardHeaderRow
                 title={fundDetails.mfname}
-                imgSrc={fundDetails.amc_logo_big}
+                imgSrc={fundDetails.amc_logo_small}
               />
             )}
             <InvestmentCardPillsRow
