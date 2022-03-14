@@ -5,17 +5,17 @@ import IframeView from './IframeView'
 import diy_equity_icon from 'assets/diy_equity_icon.svg'
 import diy_debt_icon from 'assets/diy_debt_icon.svg'
 import diy_hybrid_icon from 'assets/diy_hybrid_icon.svg'
-// import diy_goal_icon from 'assets/diy_goal_icon.svg'
+import diy_goal_icon from 'assets/diy_goal_icon.svg'
 import equity_icon from 'assets/finity/equity_icon.svg';
 import debt_icon from 'assets/finity/debt_icon.svg';
 import hybrid_icon from 'assets/finity/hybrid_icon.svg';
-// import goal_icon from 'assets/finity/goal_icon.svg';
+import goal_icon from 'assets/finity/goal_icon.svg';
 import { navigate as navigateFunc } from "utils/functions";
 import { storageService } from 'utils/validators'
 import InvestExploreCard from './InvestExploreCard'
 import { getConfig } from "utils/functions";
 
-import { getSubCategories, getDiyTrendingFunds } from '../../common/api'
+import { getDiyTrendingFunds, getSubCategories } from '../../common/api'
 import { CART, CATEGORY, FUNDSLIST, SUBCATEGORY } from '../../../DIY/constants'
 import isEmpty from 'lodash/isEmpty';
 import isArray from 'lodash/isArray';
@@ -30,7 +30,7 @@ const InvestExplore = (props) => {
   const iframe = config.isIframe;
   const isMobileDevice = config.isMobileDevice;
   const partnerCode = config.code;
-  const newIframeDesktopLayout = isNewIframeDesktopLayout();
+  const newIframeDesktopLayout = isNewIframeDesktopLayout() || (partnerCode === 'moneycontrol' && !isMobileDevice);
 
   const exploreMFMappings = [
     {
@@ -48,11 +48,11 @@ const InvestExplore = (props) => {
       description: 'Perfect balance of equity and debt',
       src: newIframeDesktopLayout ? hybrid_icon : diy_hybrid_icon,
     },
-    // {
-    //   title: 'Goal Oriented',
-    //   description: 'Align investments with your life goals',
-    //   src: newIframeDesktopLayout ? goal_icon : diy_goal_icon,
-    // },
+    {
+      title: 'Goal Oriented',
+      description: 'Align investments with your life goals',
+      src: newIframeDesktopLayout ? goal_icon : diy_goal_icon,
+    },
   ]
 
   useEffect(() => {
@@ -117,18 +117,19 @@ const InvestExplore = (props) => {
       data-aid='explore-all-mutual-funds-screen'
       classOverRIde="pr-error-container"
       noFooter
-      title={newIframeDesktopLayout ? "" : "Explore All Mutual Funds"}
+      title={partnerCode === 'moneycontrol' ? "" : "Explore All Mutual Funds"}
       classOverRideContainer="pr-container"
-      hidePageTitle={iframe && isMobileDevice}
+      hidePageTitle={partnerCode === 'moneycontrol'}
       handleClick={goNext}
       skelton={loader}
       rightIcon="search"
       handleTopIcon={handleRightIconClick}
-      disableBack={iframe && partnerCode === 'moneycontrol'}
+      disableBack={(iframe || config.isSdk) && partnerCode === 'moneycontrol'}
       showIframePartnerLogo
+      headerData={{partnerLogo : (iframe || config.isSdk) && partnerCode === 'moneycontrol'}}
     >
       {
-        iframe && partnerCode === 'moneycontrol' ? <IframeView exploreMFMappings={exploreMFMappings} goNext={goNext} handleRightIconClick={handleRightIconClick}/> :
+        partnerCode === 'moneycontrol' ? <IframeView exploreMFMappings={exploreMFMappings} goNext={goNext} handleRightIconClick={handleRightIconClick}/> :
       <section className="invest-explore-cards" id="invest-explore" data-aid='invest-explore'>
         <div className='title'>Where do you want to invest?</div>
         {exploreMFMappings.map(({ title, description, src }) => (
