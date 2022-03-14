@@ -63,7 +63,7 @@ const CompleteKyc = ({ onClick, productName }) => {
 };
 
 const COMPLETE_KYC_POINTS = [
-  { label: DIY.singleKyc, dataAid: 'singleKyc' },
+  { label: DIY.singleKyc, dataAid: 'singleKYC' },
   { label: DIY.digitalKyc, dataAid: 'aadhaar' },
   { label: DIY.digilockerIntegeration, dataAid: 'digiLocker' },
   { label: DIY.instantSafe, dataAid: 'oneTime' },
