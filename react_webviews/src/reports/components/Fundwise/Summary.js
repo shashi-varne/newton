@@ -37,7 +37,7 @@ const FundswiseSummary = (props) => {
 
   const goToFundDetails = (fund) => () => {
     sendEvents('next', fund, "", "yes");
-    navigate(`/diy/fundinfo/direct/${fund.mf.isin}`);
+    navigate(`/diyv2/fundinfo/direct/${fund.mf.isin}`);
   };
 
   const handleMenuClick = (fund, index) => (event) => {

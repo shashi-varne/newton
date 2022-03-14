@@ -72,7 +72,7 @@ const FundswiseTransactions = (props) => {
 
   const goToFundDetails = (transaction) => () => {
     sendEvents('next', "yes");
-    navigate(`/diy/fundinfo/direct/${transaction.isin}`);
+    navigate(`/diyv2/fundinfo/direct/${transaction.isin}`);
   };
 
   return (
