@@ -36,6 +36,8 @@ import { CART, CATEGORY, FUNDSLIST, SUBCATEGORY } from '../../../dashboard/DIY/c
 import useLoadingState from '../../../common/customHooks/useLoadingState';
 import ContainerWrapper from '../../../designSystem/organisms/ContainerWrapper';
 import { flowName } from '../../../dashboard/Invest/constants';
+import useErrorState from '../../../common/customHooks/useErrorState';
+import ToastMessage from '../../../designSystem/atoms/ToastMessage';
 
 const screen = 'diyCategoryLanding';
 const InvestExplore = (props) => {
@@ -47,6 +49,7 @@ const InvestExplore = (props) => {
   const { isPageLoading } = useLoadingState(screen);
   const trendingFunds = useSelector(getTrendingFunds);
   const allCategories = useSelector(getAllCategories);
+  const { isFetchFailed, errorMessage } = useErrorState(screen);
 
   const newIframeDesktopLayout =
     isNewIframeDesktopLayout() || (partnerCode === 'moneycontrol' && !isMobileDevice);
@@ -62,6 +65,12 @@ const InvestExplore = (props) => {
       src: newIframeDesktopLayout ? hybrid_icon : diy_hybrid_icon,
     },
   };
+
+  useEffect(() => {
+    if (isFetchFailed && !isEmpty(errorMessage)) {
+      ToastMessage(errorMessage);
+    }
+  }, [isFetchFailed]);
 
   const getDiyCategories = () => {
     return allCategories.map(data => {
