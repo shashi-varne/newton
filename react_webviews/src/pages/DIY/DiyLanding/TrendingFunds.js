@@ -16,8 +16,11 @@ import isEmpty from 'lodash/isEmpty';
 import SectionHeader from './SectionHeader';
 import Icon from '../../../designSystem/atoms/Icon';
 import { withRouter } from 'react-router-dom';
-import {useDispatch, useSelector} from 'react-redux';
-import { fetchTrendingFunds, getTrendingFundsByCategory } from 'businesslogic/dataStore/reducers/diy';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  fetchTrendingFunds,
+  getTrendingFundsByCategory,
+} from 'businesslogic/dataStore/reducers/diy';
 import Api from 'utils/api';
 import useLoadingState from '../../../common/customHooks/useLoadingState';
 const screen = 'diyLanding';
@@ -38,14 +41,14 @@ const TrendingFunds = ({ config, handleFundDetails, diyType }) => {
 
   return (
     <Stack direction='column' spacing={2} className='diy-c-trending-wrapper'>
-      <SectionHeader sx={{ pl: 2, pr: 2 }} title='Trending' dataAid="trending" />
+      <SectionHeader sx={{ pl: 2, pr: 2 }} title='Trending' dataAid='trending' />
       <CustomSwiper
         slidesPerView={isMobileDevice ? 1 : 2}
         slidesPerColumn={1}
         slidesPerGroup={1}
         spaceBetween={10}
         speed={500}
-        paginationDataAid="trending"
+        paginationDataAid='trending'
       >
         {loadingData.isTrendingFundsLoading
           ? [1, 1, 1]?.map((el, idx) => {
@@ -61,32 +64,34 @@ const TrendingFunds = ({ config, handleFundDetails, diyType }) => {
               <SwiperSlide key={idx} style={{ padding: '1px 0px' }}>
                 <WrapperBox elevation={1} onClick={handleFundDetails(trendingFund)}>
                   <FeatureCard
-                    dataAid={idx+1}
-                    topLeftImgSrc={trendingFund?.amc_logo_big}
+                    dataAid={idx + 1}
+                    topLeftImgSrc={trendingFund?.amc_logo_small}
                     heading={trendingFund?.legal_name}
                   >
                     <LeftSlot
                       description={{
                         title: '3 Year Return',
                         titleColor: 'foundationColors.content.secondary',
-                        subtitle: !trendingFund?.three_month_return
+                        subtitle: !trendingFund?.three_year_return
                           ? 'NA'
-                          : trendingFund?.three_month_return > 0
-                          ? `+ ${trendingFund?.three_month_return}%`
-                          : `- ${trendingFund?.three_month_return}%`,
-                        subtitleColor: !trendingFund?.three_month_return
+                          : trendingFund?.three_year_return > 0
+                          ? `+ ${trendingFund?.three_year_return}%`
+                          : `- ${trendingFund?.three_year_return}%`,
+                        subtitleColor: !trendingFund?.three_year_return
                           ? 'foundationColors.content.secondary'
                           : 'foundationColors.secondary.profitGreen.400',
                       }}
                     />
-                    <MiddleSlot
-                      description={{
-                        title: 'Total AUM',
-                        titleColor: 'foundationColors.content.secondary',
-                        subtitle: trendingFund?.aum ? formatAmountInr(trendingFund?.aum) : 'NA',
-                        subtitleColor: !trendingFund?.aum && 'foundationColors.content.secondary',
-                      }}
-                    />
+                    {trendingFund?.aum && (
+                      <MiddleSlot
+                        description={{
+                          title: 'Total AUM',
+                          titleColor: 'foundationColors.content.secondary',
+                          subtitle: trendingFund?.aum ? formatAmountInr(trendingFund?.aum) : 'NA',
+                          subtitleColor: !trendingFund?.aum && 'foundationColors.content.secondary',
+                        }}
+                      />
+                    )}
                     <RightSlot
                       description={{
                         title: 'Invested by',
