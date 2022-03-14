@@ -73,7 +73,7 @@ const diyLandingContainer = (WrappedComponent) => (props) => {
           subcategoryOption,
         })
       );
-      const formatedCategory = replace(diyTypeData.subcategory, /_/g, ' ').toLowerCase();
+      const formatedCategory = replace(subcategory, /_/g, ' ').toLowerCase();
       const categoryEvent = `${diyType.toLowerCase()} ${formatedCategory}`;
       const subCategoryEvent = subcategoryOptionName.toLowerCase();
       sendEvents(categoryEvent, subCategoryEvent, 'next');
