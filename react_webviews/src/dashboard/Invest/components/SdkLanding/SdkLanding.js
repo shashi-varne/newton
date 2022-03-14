@@ -42,6 +42,7 @@ const PATHNAME_MAPPER = {
   buildwealth: "/invest/buildwealth",
   instaredeem: "/invest/instaredeem",
   mf: "/invest",
+  elss: "/invest/savetax"
 };
 
 const CARD_NAME_MAPPER = {

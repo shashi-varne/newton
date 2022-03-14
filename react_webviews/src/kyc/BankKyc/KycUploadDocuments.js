@@ -18,6 +18,7 @@ import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClick
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 import { isReadyToInvest } from "../services";
 import { storageService } from "../../utils/validators";
+import { triggerSentryError } from "../../utils/api";
 
 const INIT_BOTTOMSHEET_TEXT = "We've added your bank account details. The verification is in progress, meanwhile you can continue with KYC."
 
@@ -81,7 +82,9 @@ const KycUploadDocuments = (props) => {
     setFileToShow(fileBase64);
   };
 
-  const onFileSelectError = () => {
+  const onFileSelectError = (err, file) => {
+    sendEvents("file_select_error", "", file?.type, err)
+    triggerSentryError("select file error", {}, err, file?.type);
     toast('Please select image file only');
   }
 
@@ -264,7 +267,7 @@ const KycUploadDocuments = (props) => {
   const selectedDocValue =
     selected !== null ? VERIFICATION_DOC_OPTIONS[selected].value : "";
 
-    const sendEvents = (userAction, screen_name) => {
+    const sendEvents = (userAction, screen_name, fileType, errorMessage) => {
       let docMapper = ["bank_statement", "cancelled_cheque", "passbook"];
       let eventObj = {
         event_name: "kyc_registration",
@@ -278,6 +281,10 @@ const KycUploadDocuments = (props) => {
           // "status" : screen_name ? "verification pending":""
         },
       };
+      if (errorMessage || fileType) {
+        eventObj.properties.file_type = fileType;
+        eventObj.properties.error_message = errorMessage;
+      }
       if (userAction === "just_set_events") {
         return eventObj;
       } else {

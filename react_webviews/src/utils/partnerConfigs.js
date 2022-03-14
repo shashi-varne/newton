@@ -52,12 +52,23 @@ export const commonCardsConfig = {
     bottomScrollCards: ["parkmoney", "savegoal"],
     bottomCards: ["nfo"],
   },
-  landingMarketingBanners: [],
+  landingMarketingBanners: [
+    {
+      image: "elss.svg",
+      type: "elss",
+      endDate: "03/31/2022",
+    }
+  ],
   nfoBanners: [
+    {
+      image: "nfo1.svg",
+      type: "nfo",
+      endDate: "03/20/2022",
+    },
     {
       image: "nfo.svg",
       type: "nfo",
-      endDate: "02/23/2022",
+      endDate: "03/15/2022",
     }
   ],
 };
@@ -592,7 +603,11 @@ export const partnerConfigs = {
     },
     styles: {
       primaryColor: "#378ECF",
-    }
+    },
+    referralConfig: {
+      applyRefferal: true,
+      shareRefferal: true,
+    },
   },
   sbnri: {
     code: "sbnri",

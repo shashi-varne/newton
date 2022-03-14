@@ -64,14 +64,14 @@ class Api {
     if (sdk_capabilities) {
       axios.defaults.headers.common['sdk-capabilities'] = sdk_capabilities;
     }
+    if(route.includes("/api/") && getXPlutusAuth() && config.isIframe) {
+      axios.defaults.headers.common["X-Plutus-Auth"] = getXPlutusAuth();
+    }
 
     if(route.includes("/api/user/login/v5/initiate")) {
       axios.defaults.headers.common["X-Platform"] = "web";
     }
-
-    // if(route.includes("/api/") && storageService().get("x-plutus-auth") && config.isIframe) {
-    //   axios.defaults.headers.common["X-Plutus-Auth"] = storageService().get("x-plutus-auth")
-    // }
+    
     if(route.includes('api/insurance')){  
       route = getGuestUserRoute(route)
     }
@@ -95,9 +95,9 @@ class Api {
           nativeCallback({ action: 'login_required' });
         }
 
-        // if (response.config.url.includes("/api/") && response.headers["x-plutus-auth"] && config.isIframe) {
-        //   storageService().set("x-plutus-auth", response.headers["x-plutus-auth"])
-        // }
+        if (response.config.url.includes("/api/") && response.headers["x-plutus-auth"] && config.isIframe) {
+          setXPlutusData(response.headers["x-plutus-auth"]);
+        } 
 
         const pfwResponseData = response?.data?.pfwresponse;
 
@@ -147,7 +147,7 @@ class Api {
   }
 }
 
-function triggerSentryError(verb, response, errorMsg) {
+export function triggerSentryError(verb, response, errorMsg, additionalInfo) {
   var main_pathname = window.location.pathname;
   var project = getConfig().project || 'Others';
   Sentry.configureScope(
@@ -157,10 +157,32 @@ function triggerSentryError(verb, response, errorMsg) {
       .setTransactionName(`Error on ${verb} request`)
       .setLevel(Sentry.Severity.Warning)
       .setExtra("api_res", JSON.stringify(response))
+      .setExtra("additional_info", JSON.stringify(additionalInfo))
   )
   var SentryError = new Error(errorMsg)
   SentryError.name = `${project} ${main_pathname}`
   Sentry.captureException(SentryError)
+}
+
+const setXPlutusData = (xPlutusAuth = "") => {
+  const xPlutusAuthData = xPlutusAuth.split(";") || [];
+  // eslint-disable-next-line no-unused-expressions
+  xPlutusAuthData?.forEach((element) => {
+    if (element.includes("plutus-session")) {
+      storageService().set("plutus-session", element);
+    } else if (element.includes("plutus-auth")) {
+      storageService().set("plutus-auth", element);
+    }
+  });
+};
+
+const getXPlutusAuth = () => {
+  const plutusSession = storageService().get("plutus-session") || "";
+  const plutusAuth = storageService().get("plutus-auth") || "";
+  if(isEmpty(plutusAuth) && isEmpty(plutusSession)) {
+    return ""
+  }
+  return `${plutusAuth ? `${plutusAuth};` : ''}${plutusSession}`;
 }
 
 export default Api;

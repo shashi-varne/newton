@@ -20,7 +20,7 @@ class LoanDetails2 extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      show_loader: 'button',
       fhc_data: new FHC(),
       type: getConfig().productName
     };
@@ -122,7 +122,7 @@ class LoanDetails2 extends Component {
           type="text"
           width="40"
           label="Rent per month"
-          class="Income"
+          className="Income"
           id="house_rent"
           name="house_rent"
           value={formatAmount(fhc_data.house_rent || '')}
@@ -154,7 +154,7 @@ class LoanDetails2 extends Component {
               helperText={fhc_data.pays_rent_error}
               width="40"
               label="Do you pay house rent?"
-              class="MaritalStatus"
+              className="MaritalStatus"
               options={yesOrNoOptions}
               id="house-rent"
               value={fhc_data.pays_rent}

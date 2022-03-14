@@ -9,6 +9,7 @@ import FundNotAvailable from "./mini-components/FundNotAvailable";
 import AskInvestType from "./mini-components/AskInvestType";
 import Button from "../../common/ui/Button";
 import { getConfig } from "../../utils/functions";
+import Toast from "../../common/ui/Toast";
 
 const Funds = (props) => {
   const params = props?.match?.params || {};
@@ -100,7 +101,7 @@ const Funds = (props) => {
     setIsApiRunning("button");
     try {
       const result = await getFundMf({
-        mfid: fund.mf.amfi,
+        mfid: fund.mf.isin,
       });
       if (!result) return;
       setSelectedFund(fund);
@@ -198,6 +199,7 @@ const Funds = (props) => {
       }
     } catch (err) {
       console.log(err);
+      Toast(err);
     } finally {
       setIsApiRunning(false);
     }

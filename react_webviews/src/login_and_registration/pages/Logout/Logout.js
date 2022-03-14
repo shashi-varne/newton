@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
+import ErrorScreen from "../../../common/responsive-components/ErrorScreen";
+import { isRmJourney } from "../../../group_insurance/products/group_health/common_data";
 import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import { nativeCallback } from "../../../utils/native_callback";
 import { storageService } from "../../../utils/validators";
 import { logout } from "../../functions";
-import { isRmJourney } from "../../../group_insurance/products/group_health/common_data";
 import { persistor } from "../../../dataLayer/store";
 import { useDispatch } from "react-redux";
 import { resetDiyData } from "businesslogic/dataStore/reducers/diy";
@@ -40,12 +41,12 @@ const Logout = (props) => {
       } catch (err) {
         console.log(err);
       } finally {
-        if(isRM){
+        if(isRM) {
           navigate("/rm-login")  
-        }else{
-          navigate("/login", {
+        } else {
+          setTimeout(() => navigate("/login", {
             searchParams: `base_url=${config.base_url}`
-          })
+          }), 2000);
         }
       }
     } else {
@@ -53,7 +54,13 @@ const Logout = (props) => {
     }
   };
 
-  return <div className="logout" data-aid='logout-text'>Logging out...</div>;
+  return (
+    <ErrorScreen
+      useTemplate
+      templateErrTitle="You have been logged out."
+      templateErrText="Redirecting to login page..."
+    />
+  );
 };
 
 export default Logout;

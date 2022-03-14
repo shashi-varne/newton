@@ -8,6 +8,7 @@ const FundSummaryMenu = ({
   handleMenuClose,
   handleSwitch,
   handleTransactions,
+  handleTransactionSummary
 }) => {
   return (
     <Menu
@@ -36,6 +37,12 @@ const FundSummaryMenu = ({
         <div className="menu-item">
           <img src={require(`assets/trans_icon.png`)} alt="" />
           <div>Transactions</div>
+        </div>
+      </MenuItem>
+      <MenuItem onClick={handleTransactionSummary}>
+        <div className="menu-item">
+          <img src={require(`assets/transaction_summary.svg`)} alt="" />
+          <div>Transaction Summary</div>
         </div>
       </MenuItem>
     </Menu>
