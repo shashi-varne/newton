@@ -315,11 +315,7 @@ const Landing = (props) => {
         });
         break;
       case "top_equity":
-        navigate(`/diy/fundlist/Equity/Multi_Cap`, {
-          state: {
-            name: "Top equity funds",
-          },
-        });
+        navigate("/diyv2/Equity/landing");
         break;
       default:
         navigate(keyPathMapper[state] || state);
