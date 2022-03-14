@@ -156,9 +156,11 @@ const SubCategoryLanding = (props) => {
   useEffect(() => {
     if (filterEventRef.current?.category && !isFilterSheetOpen[filterEventRef.current?.category]) {
       sendEvents('diy_filter');
-      filterEventRef.current.reset_applied = false;
+      if(filterEventRef.current?.category === 'filter'){
+        sendEvents('diy_fund_list');
+      }
     }
-  }, [filteredData, filterEventRef.current?.category]);
+  }, [filteredData]);
 
   const getSubcategoryOptionIndex = () => {
     const index = subcategoryOptionsData.findIndex((el) => el.key === subcategoryOption);
@@ -222,7 +224,6 @@ const SubCategoryLanding = (props) => {
         },
       })
     );
-    sendEvents('diy_fund_list');
   }, [
     selectedFilterValue[FILTER_TYPES.sort]?.value,
     selectedFilterValue[FILTER_TYPES.sort]?.order,
@@ -287,9 +288,12 @@ const SubCategoryLanding = (props) => {
         fundListEvent.properties.card_clicked = 'yes';
       }
       nativeCallback({ events: fundListEvent });
+      if(filterEventRef.current?.category === 'filter') {
+        filterEventRef.current.category = '';
+      }
     } else if (eventName === 'diy_filter') {
       const filtersApplied = [...new Set(filterEventRef.current?.filter)] || [];
-      if (filterEventRef.current?.category === 'filter') {
+      if (filterEventRef.current?.category === 'filter' && !isEmpty(filtersApplied)) {
         // eslint-disable-next-line no-unused-expressions
         filtersApplied?.forEach((filterType) => {
           const newEvent = {
@@ -304,7 +308,7 @@ const SubCategoryLanding = (props) => {
       }
     }
   };
-  const sub_category_option = subcategoryOption?.toLowerCase().replace(/_/g, ' ');
+  const sub_category_option = subcategoryOptionsData[tabValue]?.name?.toLowerCase().replace(/_/g, ' ');
   const fundListEvent = {
     event_name: 'diy_fund_list',
     properties: {
