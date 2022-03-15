@@ -16,6 +16,10 @@ const Logout = (props) => {
   }, []);
 
   const initialize = async () => {
+    if (window.clevertap) {
+      window.clevertap.logout();
+      window.clevertap.profile= [];
+    }
     if (config.Web) {
       storageService().clear();
       if (config.isIframe) {
