@@ -20,7 +20,16 @@ import { DIY_PATHNAME_MAPPER } from '../common/constants';
 
 const screen = 'diyFundList';
 const TabPanel = memo((props) => {
-  const { data = [], returnPeriod,sendEvents, returnLabel, value, activeTab, handleAddToCart, subcategoryOption } = props;
+  const {
+    data = [],
+    returnPeriod,
+    sendEvents,
+    returnLabel,
+    value,
+    activeTab,
+    handleAddToCart,
+    subcategoryOption,
+  } = props;
   const [NumOfItems, setNumOfItems] = useState(10);
   const [showLoader, setShowLoader] = useState(false);
   const { kyc, user } = useUserKycHook();
@@ -64,7 +73,7 @@ const TabPanel = memo((props) => {
       },
     };
     sendEvents('diy_fund_list', 'next', true);
-    dispatch(setDiyStorage({fromScreen: screen}));
+    dispatch(setDiyStorage({ fromScreen: screen }));
     nativeCallback({ events: eventObj });
     navigate(DIY_PATHNAME_MAPPER.fundDetails, {
       searchParams: `${location.search}&isins=${fund.isin}`,
@@ -73,7 +82,10 @@ const TabPanel = memo((props) => {
 
   return (
     <div>
-      <Box sx={{ backgroundColor: !isEmpty(data) && 'foundationColors.supporting.white' }}>
+      <Box
+        sx={{ backgroundColor: !isEmpty(data) && 'foundationColors.supporting.white' }}
+        data-aid={`grp_fundList_${getDiyDataAid(subcategoryOption)}`}
+      >
         <Stack
           justifyContent='space-between'
           direction='row'
@@ -110,7 +122,7 @@ const TabPanel = memo((props) => {
         ) : (
           <Box
             className='fund-list-wrapper'
-            data-aid={`fundList_${getDiyDataAid(subcategoryOption)}`}
+            data-aid='fundList'
             sx={{ p: '0px 16px' }}
           >
             {data?.slice(0, NumOfItems)?.map((fund, idx) => {
