@@ -311,6 +311,9 @@ const SubCategoryLanding = (props) => {
           selectedTab: tabValue,
           onTabChange: handleTabChange,
           labelName: 'name',
+          classes: {
+            flexContainer: subcategoryOptionsData?.length > 2 ? '' : 'fund-list-tab-flex-wrapper'
+          }
         },
         rightIconSrc:require('assets/search_diy.svg'),
         onRightIconClick: handleSearchIconClick,
