@@ -81,7 +81,7 @@ class uploadAddressProof extends Component {
     getBase64(file, function (img) {
       that.setState({
         [that.state.doc_side]: img,
-        [`${[that.state.doc_side]}_file`]: file,
+        [`${that.state.doc_side}_file`]: file,
         uploaded: that.state.doc_side,
       })
     });
