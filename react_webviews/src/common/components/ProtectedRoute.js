@@ -8,6 +8,7 @@ import isObject from 'lodash/isObject';
 import { Route } from "react-router-dom";
 import { getUrlParams, storageService } from "../../utils/validators";
 import Toast from "../ui/Toast";
+import { initializeClevertapProfile } from "../../utils/functions";
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
   const { isIframe, isMobileDevice } = useMemo(getConfig, []);
@@ -60,6 +61,8 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
     if (showLoader) {
       await fetch();
     }
+    user = storageService().getObject("user")
+    initializeClevertapProfile(user);
   }
 
   return (
