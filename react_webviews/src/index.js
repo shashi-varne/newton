@@ -13,7 +13,7 @@ import App from './App';
 import $ from 'jquery';
 import { isMobile } from 'utils/functions';
 import scrollIntoView from 'scroll-into-view-if-needed';
-import { getCssVarObject, getConfig, isIframe } from './utils/functions';
+import { getCssVarObject, getConfig, isIframe, loadClevertapScript } from './utils/functions';
 // ----- Rubik font imports -----
 import "@fontsource/rubik/latin.css"; // all weights from 300 to 900, (does not include italics)
 import "@fontsource/rubik/latin-400-italic.css";
@@ -26,6 +26,7 @@ import "@fontsource/roboto/latin-700.css";
 import { storageService } from "./utils/validators"
 import isEmpty from 'lodash/isEmpty';
 
+loadClevertapScript();
 $(document).ready(function () {
   const cssVarObj = getCssVarObject();
   cssVars({
