@@ -1,7 +1,6 @@
-import { isMobile, navigate as navigateFunc } from './functions';
+import { navigate as navigateFunc } from './functions';
 import { getConfig, getBasePath } from './functions';
 import { open_browser_web, renameObjectKeys } from 'utils/validators';
-import Api from 'utils/api';
 import { storageService } from './validators';
 import eventManager from './eventManager';
 import { EVENT_MANAGER_CONSTANTS } from './constants';
@@ -101,6 +100,14 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     }
   }
 
+  if (events && window.clevertap) {
+    if (events.properties) {
+      window.clevertap.event.push(events.event_name, events.properties);
+    } else {
+      window.clevertap.event.push(events.event_name);
+    }
+  }
+
   if (config.generic_callback) {
     if (action === 'take_control_reset_hard' || action === 'take_control_reset') {
       nativeCallback({ action: 'hide_top_bar' });
@@ -127,63 +134,11 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     if (message) {
       callbackData.action_data = message;
     }
-    if (events) {
-      callbackData.event = events;
-    }
 
   } else {
 
-    if (events) {
-      callbackData.events = events;
-    }
     if (message) {
       callbackData.data = message;
-    }
-
-    if (['mandate-otm', 'isip', 'w-report', 'iw-dashboard'].includes(project)) {
-
-      // For only events, if actions is present, then proceed to next block
-      if (events) {
-        // clevertap api
-
-        // Do not send any other keys apart from event object to eventCallback
-        // if (isMobile.Android()) {
-        //   if (typeof window.Android !== 'undefined') window.Android.eventCallback(JSON.stringify(events));
-        // }
-
-        try {
-          await Api.post('/api/clevertap/events', events);
-        } catch (error) {
-          console.log(error);
-        }
-
-
-        // if (isMobile.iOS()) {
-        //   if (typeof window.webkit !== 'undefined') window.webkit.messageHandlers.callbackNative.postMessage(events);
-        // }
-      }
-
-      if (!action) {
-        return;
-      }
-
-      if (isMobile.Android() && action) {
-        if (typeof window.Android !== 'undefined') {
-          if (action === 'show_toast' || action === 'open_in_browser') {
-            window.Android.callbackNative(JSON.stringify(callbackData));
-            return;
-          }
-        }
-      }
-
-      if (isMobile.iOS() && action) {
-        if (typeof window.webkit !== 'undefined') {
-          window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
-        }
-        return;
-      }
-
-      return;
     }
 
     if ( project === 'insurance') {
