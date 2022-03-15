@@ -15,7 +15,6 @@ import NoMfOrders from './NoMfOrders';
 
 const MfOrder = (props) => {
   const {
-    sendEvents,
     handlePlaceOrders,
     fundOrderDetails,
     isButtonLoading,
@@ -39,7 +38,6 @@ const MfOrder = (props) => {
   } = props;
   return (
     <Container
-      eventData={sendEvents()}
       headerProps={{
         headerTitle: 'Mutual fund order',
         hideInPageTitle: true,

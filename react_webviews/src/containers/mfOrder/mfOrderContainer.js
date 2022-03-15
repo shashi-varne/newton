@@ -232,6 +232,7 @@ const mfOrderContainer = (WrappedComponent) => (props) => {
   };
 
   const onBackClick = () => {
+    sendEvents('back');
     if (isSdk) {
       navigate("/")
     } else {

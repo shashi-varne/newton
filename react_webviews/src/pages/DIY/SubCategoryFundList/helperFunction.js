@@ -9,8 +9,8 @@ export const FUNDLIST_EVENT_MAPPER = {
   three_month_return: '3 months',
   six_month_return: '6 months',
   one_year_return: '1 year',
-  three_year_return: '3 year',
-  five_year_return: '5 year',
+  three_year_return: '3 years',
+  five_year_return: '5 years',
 };
 
 export const getFilterCount = (fundHouses, fundOption, minInvestment) => {
