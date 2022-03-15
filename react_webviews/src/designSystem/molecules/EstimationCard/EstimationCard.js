@@ -131,7 +131,7 @@ const InfoTooltip = ({ dataAid, toolTipText, onIconClick, iconSrc }) => {
         title={toolTipText}
         dataAid={dataAid}
       >
-        <div onClick={handleIconClick}>
+        <Box className='ec-icon-wrapper' onClick={handleIconClick}>
           <Icon
             src={iconSrc}
             size='16px'
@@ -139,7 +139,7 @@ const InfoTooltip = ({ dataAid, toolTipText, onIconClick, iconSrc }) => {
             alt='info_icon'
             dataAid='right'
           />
-        </div>
+        </Box>
       </Tooltip>
     </Box>
   );

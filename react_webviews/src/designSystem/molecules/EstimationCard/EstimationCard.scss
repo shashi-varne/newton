@@ -12,5 +12,11 @@
     > div {
       display: inline;
     }
+
+    .ec-icon-wrapper {
+      position: relative;
+      top: 2px;
+      cursor: pointer;
+    }
   }
 }
