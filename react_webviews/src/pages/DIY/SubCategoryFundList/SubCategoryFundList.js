@@ -1,5 +1,5 @@
 import { Grow, Stack } from '@mui/material';
-import { DEFAULT_FILTER_DATA, FILTER_TYPES } from 'businesslogic/constants/diy';
+import { FILTER_TYPES } from 'businesslogic/constants/diy';
 import {
   fetchFundList,
   getDiyCartCount,
@@ -42,56 +42,10 @@ import { validateKycAndRedirect } from '../common/functions';
 import useUserKycHook from '../../../kyc/common/hooks/userKycHook';
 import useLoadingState from '../../../common/customHooks/useLoadingState';
 import { nativeCallback } from '../../../utils/native_callback';
+import { getDefaultFilterOptions, getFilterCount, getfilterMapEventValue } from './helperFunction';
 
 const screen = 'diyFundList';
 
-const FundListEventMapper = {
-  aum: 'fund size (aum)',
-  expense_ratio: 'expense ratio',
-  morning_star_rating: 'rating',
-  one_month_return: '1 month',
-  three_month_return: '3 months',
-  six_month_return: '6 months',
-  one_year_return: '1 year',
-  three_year_return: '3 year',
-  five_year_return: '5 year',
-};
-
-const getFilterCount = (fundHouses, fundOption, minInvestment) => {
-  const fundHouseLength = fundHouses?.length || 0;
-  const fundOptionLength = fundOption ? 1 : 0;
-  const minInvestmentLength = !isEmpty(minInvestment) ? 1 : 0;
-  const filterCount = fundHouseLength + fundOptionLength + minInvestmentLength;
-  return filterCount;
-};
-
-const getfilterMapEventValue = (value) => {
-  const eventValue = FundListEventMapper[value] || value || '';
-  return eventValue;
-};
-
-const getDefaultFilterOptions = (filterOptions, fromDiyLanding) => {
-  let defaultReturnPeriod = filterOptions.returnPeriod;
-  let defaultSort = filterOptions.sortFundsBy;
-  let defaultFundOptions = filterOptions?.fundOption;
-  let defaultFundHouses = filterOptions?.fundHouse;
-  let defaultMinimumInvestment = filterOptions?.minInvestment?.id;
-
-  if (fromDiyLanding) {
-    defaultReturnPeriod = DEFAULT_FILTER_DATA.returnPeriod;
-    defaultSort = DEFAULT_FILTER_DATA.sortFundsBy;
-    defaultFundOptions = DEFAULT_FILTER_DATA.fundOption;
-    defaultFundHouses = [];
-    defaultMinimumInvestment = '';
-  }
-  return {
-    defaultReturnPeriod,
-    defaultSort,
-    defaultFundOptions,
-    defaultFundHouses,
-    defaultMinimumInvestment,
-  };
-};
 const SubCategoryLanding = (props) => {
   const dispatch = useDispatch();
   const navigate = navigateFunc.bind(props);
