@@ -908,3 +908,58 @@ export function isDietProduct() {
   const {diet = ''} = getUrlParams();
   return diet.toLowerCase() === 'true';
 }
+
+export const loadClevertapScript = () => {
+  let clevertap = {
+    event: [],
+    profile: [],
+    account: [],
+    onUserLogin: [],
+    notifications: [],
+    privacy: []
+  };
+  const config  = getConfig()
+  const productName = config.productName;
+  const isProd = config.isProdEnv;
+  if (isProd) {
+    if (productName === 'finity') {
+      clevertap.account.push({ id: "R78-KRW-KK5Z" });
+    } else {
+      clevertap.account.push({ id: "R74-Z4W-R74Z" });
+    }
+  } else {
+    clevertap.account.push({ id: "TEST-K7R-49R-W74Z" });
+  }
+  clevertap.privacy.push({ optOut: false }); //set the flag to true, if the user of the device opts out of sharing their data
+  clevertap.privacy.push({ useIP: false }); //set the flag to true, if the user agrees to share their IP data
+  window.clevertap = clevertap;
+  let wzrk = document.createElement("script");
+  wzrk.type = "text/javascript";
+  wzrk.id="clevertap-id";
+  wzrk.src =
+    ("https:" === document.location.protocol
+      ? "https://d2r1yp2w7bby2u.cloudfront.net"
+      : "http://static.clevertap.com") + "/js/a.js";
+  const s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(wzrk, s);
+}
+
+export const initializeClevertapProfile = (user) => {
+  try {
+    if (!isEmpty(user) && window.clevertap) {
+      const payload = {
+        Site: {
+          Name: user.name,
+          Identity: user.user_id,
+          Email: user.email,
+          "MSG-email": true,
+          "MSG-push": true,
+          "MSG-sms": true
+        }
+      };
+      window.clevertap.profile = [...window.clevertap.profile, payload];
+    }
+  } catch (e) {
+    console.log(e);
+  }
+}

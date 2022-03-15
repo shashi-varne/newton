@@ -25,6 +25,10 @@ const Logout = (props) => {
     dispatch(resetMfOrders());
     dispatch(resetFundDetails());
     persistor.purge();
+    if (window.clevertap) {
+      window.clevertap.logout();
+      window.clevertap.profile= [];
+    }
     if (config.Web) {
       storageService().clear();
       if (config.isIframe) {
