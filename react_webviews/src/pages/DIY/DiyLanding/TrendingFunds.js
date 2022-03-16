@@ -11,7 +11,7 @@ import {
   MiddleSlot,
   RightSlot,
 } from '../../../designSystem/molecules/FeatureCard/FeatureCard';
-import { formatAmountInr } from '../../../utils/validators';
+import { formatAmountInr, nonRoundingToFixed } from '../../../utils/validators';
 import isEmpty from 'lodash/isEmpty';
 import SectionHeader from './SectionHeader';
 import Icon from '../../../designSystem/atoms/Icon';
@@ -75,8 +75,8 @@ const TrendingFunds = ({ config, handleFundDetails, diyType }) => {
                         subtitle: !trendingFund?.three_year_return
                           ? 'NA'
                           : trendingFund?.three_year_return > 0
-                          ? `+ ${trendingFund?.three_year_return}%`
-                          : `- ${trendingFund?.three_year_return}%`,
+                          ? `+ ${nonRoundingToFixed(trendingFund?.three_year_return, 2)}%`
+                          : `- ${nonRoundingToFixed(trendingFund?.three_year_return, 2)}%`,
                         subtitleColor: !trendingFund?.three_year_return
                           ? 'foundationColors.content.secondary'
                           : 'foundationColors.secondary.profitGreen.400',
