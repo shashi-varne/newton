@@ -37,6 +37,7 @@ const FundswiseSummary = (props) => {
 
   const goToFundDetails = (fund) => () => {
     sendEvents('next', fund, "", "yes");
+    storageService().remove("diystore_fundInfo");
     const config = getConfig();
     const pathname = `/${config.code === "moneycontrol" ? "diy" : "diyv2"}/fundinfo/direct/${fund.mf.isin}`
     navigate(pathname);
