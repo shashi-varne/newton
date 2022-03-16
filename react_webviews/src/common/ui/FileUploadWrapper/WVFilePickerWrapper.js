@@ -59,7 +59,7 @@ const compressImage = async (file) => {
         reject({
           ...err,
           errorMessage: err?.message,
-          message: "Failed to compress file, please try again later",
+          message: "Failed to process file, please try again later",
           type: "compress"
         });
       },
