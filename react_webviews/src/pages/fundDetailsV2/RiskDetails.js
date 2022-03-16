@@ -47,12 +47,12 @@ const getBarIndex = (riskValue) => {
 };
 
 const checkRiskMeasuresAttribute = (riskMeasure) => {
-  if (isEmpty(riskMeasure)) return true;
+  if (isEmpty(riskMeasure)) return false;
   const isRiskMeasureAvialable = riskMeasure?.find((el) => el?.name?.match(/Alpha|Beta|squared/i));
   if (isEmpty(isRiskMeasureAvialable)) {
-    return true;
-  } else {
     return false;
+  } else {
+    return true;
   }
 };
 
@@ -67,7 +67,7 @@ const RiskDetails = ({ fundDetailsRef, sendEvents }) => {
   const isRiskVsCatAvailable = isEmpty(fundData?.risk?.risk_vs_category);
   const isReturnVsCatAvailable = isEmpty(fundData?.risk?.return_vs_category);
   const isRiskMeasureAvailable =
-    isEmpty(fundData?.risk?.risk_measures) ||
+    !isEmpty(fundData?.risk?.risk_measures) ||
     checkRiskMeasuresAttribute(fundData?.risk?.risk_measures);
   const isRiskDetailsAvailable =
     isRiskVsCatAvailable && isReturnVsCatAvailable && isRiskMeasureAvailable;
@@ -114,60 +114,62 @@ const RiskDetails = ({ fundDetailsRef, sendEvents }) => {
               </Stack>
             )}
           </Stack>
+          {
+            isRiskMeasureAvailable &&
+            <Stack sx={{ mt: 4, mb: 2 }} direction='column' spacing={3}>
+              <Typography dataAid="riskMeasures" variant='heading4'>Risk measures</Typography>
+              {fundData?.risk?.risk_measures?.map((riskMeasure, idx) => {
+                let tooltipInfo = '';
+                let riskMeasureName = '';
+                if (!riskMeasure?.name.match(/Alpha|Beta|squared/i)) return;
+                if (riskMeasure?.name.match(/Alpha/)) {
+                  tooltipInfo = TOOLTIP_MEASURES['Alpha'];
+                  riskMeasureName = 'Alpha';
+                } else if (riskMeasure?.name.match(/Beta/)) {
+                  tooltipInfo = TOOLTIP_MEASURES['Beta'];
+                  riskMeasureName = 'Beta';
+                } else if (riskMeasure?.name.match(/squared/)) {
+                  tooltipInfo = TOOLTIP_MEASURES['squared'];
+                  riskMeasureName = 'squared';
+                }
 
-          <Stack sx={{ mt: 4, mb: 2 }} direction='column' spacing={3}>
-            <Typography dataAid="riskMeasures" variant='heading4'>Risk measures</Typography>
-            {fundData?.risk?.risk_measures?.map((riskMeasure, idx) => {
-              let tooltipInfo = '';
-              let riskMeasureName = '';
-              if (!riskMeasure?.name.match(/Alpha|Beta|squared/i)) return;
-              if (riskMeasure?.name.match(/Alpha/)) {
-                tooltipInfo = TOOLTIP_MEASURES['Alpha'];
-                riskMeasureName = 'Alpha';
-              } else if (riskMeasure?.name.match(/Beta/)) {
-                tooltipInfo = TOOLTIP_MEASURES['Beta'];
-                riskMeasureName = 'Beta';
-              } else if (riskMeasure?.name.match(/squared/)) {
-                tooltipInfo = TOOLTIP_MEASURES['squared'];
-                riskMeasureName = 'squared';
-              }
-
-              return (
-                <Stack key={idx} direction='column' spacing={2}>
-                  <Stack direction='row' justifyContent='space-between'>
-                    <Typography dataAid={`${RISK_DATA_ID_MAPPER[riskMeasureName]?.text}Key`} variant='body8' color='foundationColors.content.secondary'>
-                      {riskMeasure?.name}
-                    </Typography>
-                    <Stack
-                      direction='row'
-                      spacing='6px'
-                      justifyContent='flex-start'
-                      alignItems='center'
-                    >
-                      <Typography dataAid={`${RISK_DATA_ID_MAPPER[riskMeasureName]?.text}Value`} variant='heading4' color='foundationColors.content.secondary'>
-                        { isValidValue(riskMeasure?.value,`${riskMeasure?.value > 0 ? '+' : ''}${riskMeasure?.value}%`)}
+                return (
+                  <Stack key={idx} direction='column' spacing={2}>
+                    <Stack direction='row' justifyContent='space-between'>
+                      <Typography dataAid={`${RISK_DATA_ID_MAPPER[riskMeasureName]?.text}Key`} variant='body8' color='foundationColors.content.secondary'>
+                        {riskMeasure?.name}
                       </Typography>
-                      <div>
-                        <Tooltip dataAid="riskMeasure" open={isTooltipOpen[riskMeasureName]} title={tooltipInfo}>
-                          <Stack width='16px' height='16px'>
-                            <Icon
-                              src={require('assets/info_icon_ds.svg')}
-                              size='16px'
-                              className='ec_info_icon'
-                              alt='info_icon'
-                              dataAid={RISK_DATA_ID_MAPPER[riskMeasureName]?.icon}
-                              onClick={handleTooltip(riskMeasureName)}
-                            />
-                          </Stack>
-                        </Tooltip>
-                      </div>
+                      <Stack
+                        direction='row'
+                        spacing='6px'
+                        justifyContent='flex-start'
+                        alignItems='center'
+                      >
+                        <Typography dataAid={`${RISK_DATA_ID_MAPPER[riskMeasureName]?.text}Value`} variant='heading4' color='foundationColors.content.secondary'>
+                          { isValidValue(riskMeasure?.value,`${riskMeasure?.value > 0 ? '+' : ''}${riskMeasure?.value}%`)}
+                        </Typography>
+                        <div>
+                          <Tooltip dataAid="riskMeasure" open={isTooltipOpen[riskMeasureName]} title={tooltipInfo}>
+                            <Stack width='16px' height='16px'>
+                              <Icon
+                                src={require('assets/info_icon_ds.svg')}
+                                size='16px'
+                                className='ec_info_icon'
+                                alt='info_icon'
+                                dataAid={RISK_DATA_ID_MAPPER[riskMeasureName]?.icon}
+                                onClick={handleTooltip(riskMeasureName)}
+                              />
+                            </Stack>
+                          </Tooltip>
+                        </div>
+                      </Stack>
                     </Stack>
+                    {idx < 2 && <Separator dataAid={4+idx} />}
                   </Stack>
-                  {idx < 2 && <Separator dataAid={4+idx} />}
-                </Stack>
-              );
-            })}
-          </Stack>
+                );
+              })}
+            </Stack>
+          }
         </Box>
       </CollapsibleSection>
     </Box>
