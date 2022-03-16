@@ -98,12 +98,18 @@ export const WVFilePickerWrapper = ({
     try {
       // Basic size and file type validations
       const errMsg = validateFileTypeAndSize(file, supportedFormats, sizeLimit);
-      if (errMsg) throw { message: errMsg };
+      if (errMsg) {
+        const error = { message: errMsg };
+        throw error
+      };
 
       // Additional file validations, if any
       if (isFunction(extraValidation)) {
         const extraErr = extraValidation();
-        if (extraErr) throw { message: extraErr };
+        if (extraErr) {
+          const error = { message: extraErr };
+          throw error
+        };
       }
 
       let fileBase64 = '';
