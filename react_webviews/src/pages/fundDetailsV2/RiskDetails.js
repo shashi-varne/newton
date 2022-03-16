@@ -67,7 +67,7 @@ const RiskDetails = ({ fundDetailsRef, sendEvents }) => {
   const isRiskVsCatAvailable = !isEmpty(fundData?.risk?.risk_vs_category);
   const isReturnVsCatAvailable = !isEmpty(fundData?.risk?.return_vs_category);
   const isRiskMeasureAvailable =
-    !isEmpty(fundData?.risk?.risk_measures) ||
+    !isEmpty(fundData?.risk?.risk_measures) &&
     checkRiskMeasuresAttribute(fundData?.risk?.risk_measures);
   const disableRiskDetailsAvailable =
     !isRiskVsCatAvailable && !isReturnVsCatAvailable && !isRiskMeasureAvailable;
