@@ -83,7 +83,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const onFileSelectError = (err) => {
-    triggerSentryError("select file", {}, err.message);
+    triggerSentryError("select file", {}, err.message, err);
     toast(err.message);
   }
 
