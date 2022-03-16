@@ -31,11 +31,20 @@ const isWeb = getConfig().Web;
 
 export function promisableGetBase64(file) {
   const reader = new FileReader();
-  return new Promise(resolve => {
-    reader.onload = ev => {
-      resolve(ev.target.result)
+  return new Promise((resolve, reject) => {
+    try {
+      reader.onload = ev => {
+        resolve(ev.target.result)
+      }
+      reader.readAsDataURL(file)
+    } catch (err) {
+      reject({
+        ...err,
+        errorMessage: err.message,
+        message: "Failed to read the file, please try again later",
+        type: "reader",
+      })
     }
-    reader.readAsDataURL(file)
   })
 }
 
@@ -47,7 +56,12 @@ const compressImage = async (file) => {
         resolve(compressed);
       },
       error(err) {
-        reject(err.message);
+        reject({
+          ...err,
+          errorMessage: err.message,
+          message: "Failed to compress file, please try again later",
+          type: "compress"
+        });
       },
     })
   })
@@ -84,12 +98,12 @@ export const WVFilePickerWrapper = ({
     try {
       // Basic size and file type validations
       const errMsg = validateFileTypeAndSize(file, supportedFormats, sizeLimit);
-      if (errMsg) throw errMsg;
+      if (errMsg) throw { message: errMsg };
 
       // Additional file validations, if any
       if (isFunction(extraValidation)) {
         const extraErr = extraValidation();
-        if (extraErr) throw extraErr;
+        if (extraErr) throw { message: extraErr };
       }
 
       let fileBase64 = '';
@@ -107,10 +121,10 @@ export const WVFilePickerWrapper = ({
       }
     } catch(err) {
       if (isFunction(onFileSelectError)) {
-        onFileSelectError(err, file);
+        onFileSelectError({...err, fileType: file.type});
       } else {
         console.log(err);
-        toast(err);
+        toast(err.message);
       }
     }
   };
