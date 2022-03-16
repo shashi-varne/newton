@@ -4,7 +4,7 @@ import { formatAmountInr, isEmpty } from "utils/validators";
 import { getTransactions, getNextTransactions } from "../../common/api";
 import "./commonStyles.scss";
 import { nativeCallback } from "../../../utils/native_callback";
-import { navigate as navigateFunc } from "../../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 
 const FundswiseTransactions = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -72,7 +72,9 @@ const FundswiseTransactions = (props) => {
 
   const goToFundDetails = (transaction) => () => {
     sendEvents('next', "yes");
-    navigate(`/diyv2/fundinfo/direct/${transaction.isin}`);
+    const config = getConfig();
+    const pathname = `/${config.code === "moneycontrol" ? "diy" : "diyv2"}/fundinfo/direct/${transaction.isin}`
+    navigate(pathname);
   };
 
   return (
