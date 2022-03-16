@@ -40,7 +40,7 @@ export function promisableGetBase64(file) {
     } catch (err) {
       reject({
         ...err,
-        errorMessage: err.message,
+        errorMessage: err?.message,
         message: "Failed to read the file, please try again later",
         type: "reader",
       })
@@ -58,7 +58,7 @@ const compressImage = async (file) => {
       error(err) {
         reject({
           ...err,
-          errorMessage: err.message,
+          errorMessage: err?.message,
           message: "Failed to compress file, please try again later",
           type: "compress"
         });
