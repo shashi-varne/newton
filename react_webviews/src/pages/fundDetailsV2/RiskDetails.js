@@ -64,13 +64,13 @@ const RiskDetails = ({ fundDetailsRef, sendEvents }) => {
     squared: false,
   });
   const fundData = useSelector(getFundData);
-  const isRiskVsCatAvailable = isEmpty(fundData?.risk?.risk_vs_category);
-  const isReturnVsCatAvailable = isEmpty(fundData?.risk?.return_vs_category);
+  const isRiskVsCatAvailable = !isEmpty(fundData?.risk?.risk_vs_category);
+  const isReturnVsCatAvailable = !isEmpty(fundData?.risk?.return_vs_category);
   const isRiskMeasureAvailable =
     !isEmpty(fundData?.risk?.risk_measures) ||
     checkRiskMeasuresAttribute(fundData?.risk?.risk_measures);
-  const isRiskDetailsAvailable =
-    isRiskVsCatAvailable && isReturnVsCatAvailable && isRiskMeasureAvailable;
+  const disableRiskDetailsAvailable =
+    !isRiskVsCatAvailable && !isReturnVsCatAvailable && !isRiskMeasureAvailable;
   const { riskVsCategoryActiveIndex, returnVsCategoryActiveIndex } = useMemo(() => {
     return {
       riskVsCategoryActiveIndex: getBarIndex(fundData?.risk?.risk_vs_category),
@@ -93,21 +93,21 @@ const RiskDetails = ({ fundDetailsRef, sendEvents }) => {
   return (
     <Box sx={{ mt: 4 }}>
       <CollapsibleSection
-        disabled={isRiskDetailsAvailable}
-        label={`Risk details ${isRiskDetailsAvailable ? '(NA)' : ''}`}
+        disabled={disableRiskDetailsAvailable}
+        label={`Risk details ${disableRiskDetailsAvailable ? '(NA)' : ''}`}
         isOpen={isRiskOpen}
         onClick={handleRiskAction}
         dataAid="riskDetails"
       >
-        <Box>
+        <Box sx={{mb: 3}}>
           <Stack direction='column' spacing={3}>
-            {!isEmpty(fundData?.risk?.risk_vs_category) && (
+            {isRiskVsCatAvailable && (
               <Stack direction='column' spacing={3}>
                 <Typography dataAid="riskVsCategory" variant='heading4'>Risk vs Category</Typography>
                 <BarMeter dataAid="1" barMeterData={barData} activeIndex={riskVsCategoryActiveIndex} />
               </Stack>
             )}
-            {!isEmpty(fundData?.risk?.return_vs_category) && (
+            {isReturnVsCatAvailable && (
               <Stack direction='column' spacing={3}>
                 <Typography dataAid="returnVsCategory" variant='heading4'>Return vs Category</Typography>
                 <BarMeter dataAid="2" barMeterData={barData} activeIndex={returnVsCategoryActiveIndex} />
@@ -116,7 +116,7 @@ const RiskDetails = ({ fundDetailsRef, sendEvents }) => {
           </Stack>
           {
             isRiskMeasureAvailable &&
-            <Stack sx={{ mt: 4, mb: 2 }} direction='column' spacing={3}>
+            <Stack sx={{ mt: 4 }} direction='column' spacing={3}>
               <Typography dataAid="riskMeasures" variant='heading4'>Risk measures</Typography>
               {fundData?.risk?.risk_measures?.map((riskMeasure, idx) => {
                 let tooltipInfo = '';
