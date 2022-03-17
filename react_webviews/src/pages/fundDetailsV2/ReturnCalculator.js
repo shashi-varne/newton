@@ -36,7 +36,6 @@ const getEstimatedReturnTooltip = (investmentPeriod, expectedAmount) => {
 
 const ReturnCalculator = ({sendEvents, fundDetailsRef}) => {
   const [isReturnCalcOpen, setIsReturnCalcOpen] = useState(false);
-  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const dispatch = useDispatch();
   const fundData = useSelector(getFundData);
   const investmentType = useSelector((state) => state?.fundDetails?.investmentType);
@@ -120,9 +119,6 @@ const ReturnCalculator = ({sendEvents, fundDetailsRef}) => {
     dispatch(setAmount(amountValue));
   };
 
-  const handleTooltip = () => {
-    setIsTooltipOpen(!isTooltipOpen);
-  };
   return (
     <Box sx={{ mt: 4 }}>
       <CollapsibleSection
@@ -183,7 +179,7 @@ const ReturnCalculator = ({sendEvents, fundDetailsRef}) => {
                   {isValidValue(expectedAmount, formatAmountInr(expectedAmount))}
                 </Typography>
                 <div>
-                  <Tooltip dataAid="returns" open={isTooltipOpen} title={estimatedReturnTooltip}>
+                  <Tooltip dataAid="returns" title={estimatedReturnTooltip}>
                     <div>
                       <Icon
                         src={require('assets/info_icon_ds.svg')}
@@ -191,7 +187,6 @@ const ReturnCalculator = ({sendEvents, fundDetailsRef}) => {
                         className='ec_info_icon'
                         alt='info_icon'
                         dataAid='infoReturnValue'
-                        onClick={handleTooltip}
                       />
                     </div>
                   </Tooltip>

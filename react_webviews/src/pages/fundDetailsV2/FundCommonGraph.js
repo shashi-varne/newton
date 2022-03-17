@@ -2,7 +2,7 @@ import React from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import isEmpty from 'lodash/isEmpty';
-import { Box, Skeleton } from '@mui/material';
+import { CircularProgress, Stack } from '@mui/material';
 import getTheme from '../../theme';
 
 import './FundGraph.scss';
@@ -136,14 +136,9 @@ const FundCommonGraph = ({
   };
   if (isGraphLoading || isEmpty(graphData))
     return (
-      <Box sx={{ px: 2 }}>
-        <Skeleton
-          variant='rectangular'
-          height='290px'
-          width='100%'
-          sx={{ borderRadius: 1, backgroundColor: 'foundationColors.primary.200' }}
-        />
-      </Box>
+      <Stack sx={{ height:'250px' }} justifyContent='center' alignItems='center'>
+        <CircularProgress color='primary' size='30px'/>
+      </Stack>
     );
   return (
     <div className='common-graph-wrapper'>
