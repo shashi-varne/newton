@@ -127,7 +127,6 @@ class MyAccount extends Component {
   }
 
   onload = () => {
-    this.getMyAccount();
     this.setKycStatusData();
     this.setFreedomPlanData();
   };
@@ -153,8 +152,8 @@ class MyAccount extends Component {
   }
 
   setKycStatusData = () => {
-    const tradingEnabled = isTradingEnabled();
     let { userKyc, kycStatusData } = this.state;
+    const tradingEnabled = isTradingEnabled(userKyc);
     const kycJourneyStatus = getKycAppStatus(userKyc) || {};
     const kycStatus = kycJourneyStatus.status;
     let mfStatus = "inprogress";
