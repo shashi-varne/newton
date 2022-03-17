@@ -1,0 +1,28 @@
+.c-wrapper {
+    background-color: white;
+    border-radius: 12px;
+
+    &.collapsed-disabled {
+        pointer-events: none;
+        opacity: 0.3;
+    }
+
+    .c-label-wrapper {
+        background-color: white;
+        border-radius: 12px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 16px;
+        cursor: pointer;
+    }
+
+    .c-icon-wrapper {
+        margin-left: 8px;
+    }
+    
+    .c-child-wrapper {
+        padding: 0px 16px;
+    }
+}

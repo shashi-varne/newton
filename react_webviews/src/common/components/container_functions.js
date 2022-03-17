@@ -417,6 +417,8 @@ export function onScroll() {
 
 };
 
+
+// hardware back handling check
 export function getEvents(user_action) {
     if (!this || !this.props || !this.props.events) {
         return;

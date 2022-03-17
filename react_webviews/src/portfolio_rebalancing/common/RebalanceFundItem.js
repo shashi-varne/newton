@@ -116,7 +116,7 @@ const RebalanceFundItem = ({ classes, data, ...props }) => {
             </div>
 
             <div className='switch-badge flex-item right-item'>
-              <p className='folio-number-text'>Folio: {data.folio_number || 'N/A'}</p>
+              <p className='folio-number-text'>Folio: {data.folio_number || 'NA'}</p>
 
               <div className='flex-item'>
                 <Chip className='badge' label={` ${data.name} SWITCH `} />

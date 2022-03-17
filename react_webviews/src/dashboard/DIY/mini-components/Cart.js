@@ -30,7 +30,7 @@ const Cart = ({ isOpen, setCartActive, cart, setCart, sendEvents, ...props }) =>
   const handleCheckoutProceed = () => {
     sendEvents('next', 'card_bottom_sheet', cart.length, "")
     const navigate = navigateFunc.bind(props)
-    navigate('/diy/invest')
+    navigate('/diy_v2/mf-orders')
   }
 
   return (

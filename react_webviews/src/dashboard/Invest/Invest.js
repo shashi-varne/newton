@@ -27,6 +27,8 @@ import RiskInfo from "./components/RiskPages/RiskInfo";
 import HowWeRecommend from "../Recommendation/HowWeRecommend";
 
 import { getConfig } from 'utils/functions';
+import InvestExplore from "../../pages/DIY/ExploreCategories/Explore";
+import ThemeWrapper from "../../theme/ThemeWrapper";
 
 const Invest = (props) => {
   const { url } = props.match;
@@ -146,6 +148,13 @@ const Invest = (props) => {
         path={`${url}/savegoal/:subtype/:year`}
         component={GoalTarget}
       />
+      <ThemeWrapper>
+        <Route
+          exact
+          path={`${url}/explore-v2`}
+          component={InvestExplore}
+        />
+      </ThemeWrapper>
 
       <Route component={NotFound} />
     </Switch>

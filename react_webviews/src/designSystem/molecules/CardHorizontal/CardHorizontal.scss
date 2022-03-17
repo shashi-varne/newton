@@ -1,0 +1,36 @@
+.ch-wrapper {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  &.fc-default-pointer {
+    cursor: default;
+  }
+
+  .ch-top-section-wrapper {
+    &.ch-hero-top-section-wrapper {
+      align-items: flex-start;
+    }
+  }
+
+  .ch-bottom-section-wrapper {
+    background: linear-gradient(180deg, rgba(51, 207, 144, 0.2) 27.54%, rgba(130, 121, 248, 0.13) 100%);
+    padding: 8px 16px;
+    margin: 24px -16px -24px -16px;
+  }
+}
+
+.ch-hero-wrapper {
+  padding-bottom: 24px;
+  padding-top: 24px;
+  background: linear-gradient(
+    107.83deg,
+    #4f44d0 0%,
+    #675af6 52.2%,
+    #8279f8 97.81%
+  );
+
+  .ch-action-btn {
+    margin-top: 24px;
+  }
+}

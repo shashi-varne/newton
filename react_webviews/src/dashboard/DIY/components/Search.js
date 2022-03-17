@@ -9,6 +9,7 @@ import { storageService } from "utils/validators";
 import { querySearch } from "../../Invest/common/api";
 import debounce from "lodash/debounce";
 import {isIframe} from 'utils/functions';
+import isEmpty from 'lodash/isEmpty';
 import "./Search.scss";
 
 const Search = (props) => {
@@ -31,6 +32,9 @@ const Search = (props) => {
       if (!showNoFundmessage) setShowNoFundmessage(true);
       search(value);
     } else if (value.length < 4) {
+      if(!isEmpty(fundResult)){
+        setFundResult([]);
+      }
       setShowErrorMessage(true);
       setShowNoFundmessage(false);
     }
@@ -65,6 +69,12 @@ const Search = (props) => {
     });
   };
 
+  const clearInputFields = () => {
+    setValue("");
+    setShowNoFundmessage(false);
+    setFundResult([]);
+  }
+
   return (
     <Container
       noFooter
@@ -88,10 +98,7 @@ const Search = (props) => {
               {value && value.length !== 0 && (
                 <Close
                 className="close-icon"
-                  onClick={() => {
-                    setValue("");
-                    setShowNoFundmessage(false);
-                  }}
+                  onClick={clearInputFields}
                 />
               )}
             </div>

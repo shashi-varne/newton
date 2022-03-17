@@ -1,0 +1,19 @@
+.input-field-wrapper {
+  .inputSuffix-string {
+    margin-top: 16px;
+  }
+
+  .input-field-prefix-wrapper,
+  .input-field-suffix-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .if-prefix-clickable,
+    .if-suffix-clickable {
+      cursor: pointer;
+    }
+  }
+  .input-field-prefix-wrapper {
+    margin-right: 4px;
+  }
+}

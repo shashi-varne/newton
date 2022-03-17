@@ -1,0 +1,26 @@
+.bottom-sheet-wrapper {
+  background-color: white;
+  padding: 12px 16px 16px 16px;
+
+  .btm-sheet-cta-wrapper {
+    margin-top: 32px;
+  }
+
+  .btm-sheet-indicator {
+    margin-bottom: 16px;
+    span {
+      width: 57px;
+      height: 4px;
+      border-radius: 100px;
+    }
+  }
+}
+
+@media only screen and (min-width: 600px) {
+  .bottom-sheet-wrapper {
+    margin-top: 16px;
+    .btm-sheet-indicator {
+      display: none;
+    }
+  }
+}
