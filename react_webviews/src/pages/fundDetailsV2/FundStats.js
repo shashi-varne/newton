@@ -1,5 +1,5 @@
 import { Box, Stack } from '@mui/material';
-import React, { useState } from 'react';
+import React from 'react';
 import Typography from '../../designSystem/atoms/Typography';
 import intervalToDuration from 'date-fns/intervalToDuration';
 import parse from 'date-fns/parse';

@@ -8,7 +8,7 @@
    onClick: will tigger the event if card container is clicked.
 */
 
-import React, { useState } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import Typography from '../../atoms/Typography';

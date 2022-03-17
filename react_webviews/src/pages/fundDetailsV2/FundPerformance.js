@@ -67,7 +67,7 @@ const FundPerformance = () => {
         leftTitle='Min. investment'
         leftTitleColor='foundationColors.content.secondary'
         leftSubtitle={formatAmountInr(minimumInvestment[0]?.value)}
-        rightTitle='Morning Star'
+        rightTitle='Morningstar'
         rightTitleColor='foundationColors.content.secondary'
         rightSubtitle={isValidValue(fundData?.performance?.ms_rating)}
         rightSubtitleColor={fundData?.performance?.ms_rating && 'foundationColors.secondary.mango.400'}
