@@ -7,6 +7,8 @@ import eventManager from './eventManager';
 import { isMobile } from './functions';
 import { getConfig } from './functions';
 import isEmpty from 'lodash/isEmpty';
+import filter from 'lodash/filter';
+import get from 'lodash/get';
 import isFunction from 'lodash/isFunction';
 
 
@@ -240,11 +242,24 @@ import isFunction from 'lodash/isFunction';
   let listeners = [];
 
   exports.add_listener = function (listener) {
-    listeners.push(listener);
+    const listenerType = get(listener,'type','');
+    let newListenerList = [];
+    if(listenerType === 'back_pressed') {
+      newListenerList = filter(listeners, function (el) {
+        return el.type !== listenerType;
+      })
+      newListenerList.push(listener)
+      listeners = newListenerList;
+    } else {
+      listeners.push(listener);
+    }
   }
 
   exports.remove_listener = function (listener) {
-    listeners = [];
+    let newListenerList = filter(listeners, function (el) {
+      return el.type === 'back_pressed';
+    })
+    listeners = newListenerList;
   }
 
   exports.back_pressed = function () {

@@ -24,6 +24,7 @@ export const getPathname = {
   investsurplus: "/invest/parkmoney",
   saveforgoal: "/invest/savegoal",
   diy: "/invest/explore",
+  diyv2: "/invest/explore-v2",
   "insta-redeem": "/invest/instaredeem",
   npsInvestments: "/nps/investments",
   withdraw: "/withdraw",

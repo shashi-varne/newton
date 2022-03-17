@@ -12,7 +12,7 @@ import toast from "common/ui/Toast";
 import "./commonStyles.scss";
 import { storageService } from "../../../utils/validators";
 import { nativeCallback } from "../../../utils/native_callback";
-import { navigate as navigateFunc } from "../../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 
 const FundswiseSummary = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -37,7 +37,10 @@ const FundswiseSummary = (props) => {
 
   const goToFundDetails = (fund) => () => {
     sendEvents('next', fund, "", "yes");
-    navigate(`/diy/fundinfo/direct/${fund.mf.isin}`);
+    storageService().remove("diystore_fundInfo");
+    const config = getConfig();
+    const pathname = `/${config.code === "moneycontrol" ? "diy" : "diyv2"}/fundinfo/direct/${fund.mf.isin}`
+    navigate(pathname);
   };
 
   const handleMenuClick = (fund, index) => (event) => {

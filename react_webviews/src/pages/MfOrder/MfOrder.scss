@@ -1,0 +1,15 @@
+.mf-order-wrapper {
+  .mf-order-section {
+    padding-top: 25px;
+  }
+  .mf-investment-card-wrapper {
+    position: relative;
+
+    .mf-ic-close {
+      position: absolute;
+      right: -12px;
+      top: -12px;
+      padding: 0px;
+    }
+  }
+}

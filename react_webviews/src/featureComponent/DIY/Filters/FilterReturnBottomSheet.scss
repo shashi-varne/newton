@@ -1,0 +1,135 @@
+.filter-return-wrapper {
+  .fr-title-wrapper {
+    position: relative;
+    margin-bottom: 16px;
+    > button {
+      position: absolute;
+      left: 0;
+    }
+    > p {
+      flex: 1;
+    }
+  }
+
+  .MuiModal-root {
+    top: unset;
+    background-color: transparent;
+    border-radius: 12px;
+  }
+
+  .MuiDialog-container {
+    .MuiDialog-paper {
+      margin: 0px !important;
+      max-width: var(--desktop-width);
+      width: 100%;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+    }
+  }
+}
+.diy-filter-wrapper {
+  position: relative;
+  .MuiModal-root {
+    top: 60px;
+    left: 300px;
+    width: var(--desktop-width);
+    background-color: transparent;
+    overflow: hidden;
+  }
+
+  .MuiDrawer-paper {
+    bottom: 0;
+    top: 60px;
+    left: 300px;
+    right: unset;
+    width: var(--desktop-width);
+    background-color: white;
+    overflow: hidden;
+
+    .MuiDialog-container {
+      .MuiDialog-paper {
+        margin: 0px !important;
+        max-width: var(--desktop-width);
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+      }
+    }
+  }
+
+  .diy-filter-footer-btn-wrapper {
+    padding: 16px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .right-panel-transition-enter {
+    opacity: 0.1;
+    transform: translate(0, 6px);
+  }
+
+  .right-panel-transition-enter-active {
+    opacity: 1;
+    transform: translate(0, 0);
+    transition: all 225ms ease-in;
+  }
+
+  .right-panel-wrapper {
+    flex-basis: 70%;
+    padding: 16px;
+  }
+
+  // .right-panel-transition-exit {
+  //   opacity: 1;
+  //   transform: translate(0, 0);
+  // }
+
+  // .right-panel-transition-exit-active {
+  //   opacity: 0.1;
+  //   transform: translate(0, -10px);
+  // }
+
+}
+
+@media (min-width: 600px) {
+  .filter-return-wrapper {
+    .MuiModal-root {
+      bottom: 0;
+      left: 300px;
+      right: unset;
+      width: var(--desktop-width);
+
+      .MuiBackdrop-root {
+        position: fixed !important;
+        top: 60px;
+        left: 300px;
+        width: var(--desktop-width);
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .diy-filter-wrapper {
+    .MuiModal-root {
+      top: 0px;
+      left: unset;
+      width: 100%;
+      background-color: transparent;
+    }
+
+    .MuiDrawer-paper {
+      bottom: 0;
+      top: 0px;
+      left: unset;
+      right: unset;
+      width: 100%;
+      background-color: white;
+    }
+    
+    .diy-filter-footer-btn-wrapper {
+      position: fixed;
+    }
+  }
+}
