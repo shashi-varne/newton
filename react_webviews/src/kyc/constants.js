@@ -70,6 +70,7 @@ export const PATHNAME_MAPPER = {
   tradingInfo: '/kyc/trading-info',
   documentVerification: '/kyc/document-verification',
   kycEsignNsdl: '/kyc-esign/nsdl',
+  aocPaymentStatus: "/kyc/aoc/payment-status",
 }
 
 export const STORAGE_CONSTANTS = {
