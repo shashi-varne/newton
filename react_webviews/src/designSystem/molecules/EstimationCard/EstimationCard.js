@@ -106,14 +106,8 @@ const EstimationCard = ({
 export default EstimationCard;
 
 const InfoTooltip = ({ dataAid, toolTipText, onIconClick, iconSrc }) => {
-  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
-
   const handleIconClick = (e) => {
-    if (toolTipText) {
-      e.stopPropagation();
-      setIsTooltipOpen(!isTooltipOpen);
-    }
-    if (isFunction(onIconClick)) {
+    if (isFunction(onIconClick) && !toolTipText) {
       e.stopPropagation();
       onIconClick(e);
     }
@@ -124,14 +118,10 @@ const InfoTooltip = ({ dataAid, toolTipText, onIconClick, iconSrc }) => {
         PopperProps={{
           disablePortal: true,
         }}
-        disableFocusListener
-        disableHoverListener
-        disableTouchListener
-        open={isTooltipOpen}
         title={toolTipText}
         dataAid={dataAid}
       >
-        <Box className='ec-icon-wrapper' onClick={handleIconClick}>
+        <span className='ec-icon-wrapper' onClick={handleIconClick}>
           <Icon
             src={iconSrc}
             size='16px'
@@ -139,7 +129,7 @@ const InfoTooltip = ({ dataAid, toolTipText, onIconClick, iconSrc }) => {
             alt='info_icon'
             dataAid='right'
           />
-        </Box>
+        </span>
       </Tooltip>
     </Box>
   );

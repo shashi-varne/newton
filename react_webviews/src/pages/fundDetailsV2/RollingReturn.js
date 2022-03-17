@@ -22,7 +22,6 @@ const RollingReturn = ({fundDetailsRef, sendEvents}) => {
   const { loadingData } = useLoadingState(screen);
   const rollingReturnData = useSelector(getRollingReturnData);
   const rollingData = rollingReturnData[investmentYear];
-  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const rollingGraphData = !isEmpty(rollingData?.data) ? rollingData?.data : [];
   const returnGraphData = [...rollingGraphData];
   const avoidFirstRender = useRef(null);
@@ -63,10 +62,7 @@ const RollingReturn = ({fundDetailsRef, sendEvents}) => {
       ...fundDetailsRef.current,
       rolling_return: 'what is rolling return?',
     }
-    if(!isTooltipOpen) {
-      sendEvents('back');
-    }
-    setIsTooltipOpen(!isTooltipOpen);
+    sendEvents('back');
   };
 
   function labelFormatter() {
@@ -142,7 +138,7 @@ const RollingReturn = ({fundDetailsRef, sendEvents}) => {
         <Stack sx={{mt: 1}} direction='row' spacing={1} alignItems='center' justifyContent='flex-start'>
           <Typography dataAid="note" variant='body5' color='foundationColors.content.tertiary'>What is rolling return?</Typography>
           <div>
-            <Tooltip dataAid="rollingReturn" open={isTooltipOpen} title={rollingRetunInfo}>
+            <Tooltip dataAid="rollingReturn" title={rollingRetunInfo}>
               <Stack width='16px' height='16px'>
                 <Icon
                   src={require('assets/info_icon_ds.svg')}
