@@ -157,7 +157,7 @@ const TabPanel = memo((props) => {
                       <ProductItem.LeftBottomSection>
                         {fund?.is_fisdom_recommended && (
                           <Tag
-                            label='Recommendation'
+                            label='Recommended'
                             labelColor='foundationColors.content.secondary'
                             labelBackgroundColor='foundationColors.secondary.blue.200'
                             dataAid='label1'
