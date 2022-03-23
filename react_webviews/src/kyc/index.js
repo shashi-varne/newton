@@ -68,6 +68,7 @@ import DialogAsPage from './mini_components/DialogAsPage';
 
 // AOC Components
 import AocPaymentStatus from "./Aoc/pages/PaymentStatus";
+import AocSelectAccountType from "./Aoc/pages/SelectAccountType";
 
 const Kyc = (props) => {
   const { url } = props.match;
@@ -377,6 +378,11 @@ const Kyc = (props) => {
           exact
           path={`${url}/aoc/payment-status`}
           component={AocPaymentStatus}
+        />
+        <Route
+          exact
+          path={`${url}/aoc/select-account`}
+          component={AocSelectAccountType}
         />
         <Route component={NotFound} />
       </Switch>
