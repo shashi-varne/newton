@@ -1,25 +1,29 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import Container from "../../common/Container";
 import { Imgc } from "../../../common/ui/Imgc";
+import WVPageTitle from "../../../common/ui/InPageHeader/WVInPageTitle";
+import WVPageSubtitle from "../../../common/ui/InPageHeader/WVInPageSubtitle";
 import Toast from "../../../common/ui/Toast";
 
 import isEmpty from "lodash/isEmpty";
 import get from "lodash/get";
 
-import { nativeCallback } from "../../../utils/native_callback";
+import {
+  handleNativeExit,
+  nativeCallback,
+} from "../../../utils/native_callback";
+import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import { getUserKycFromSummary } from "../../common/api";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import {
   getAocPaymentSummaryData,
   PAYMENT_STATUS_DATA,
 } from "../common/constants";
-import { PATHNAME_MAPPER } from "../../constants";
 
 import "./PaymentStatus.scss";
 
 const PaymentStatus = (props) => {
-  const { productName, Web } = useMemo(getConfig, []);
+  const { productName } = useMemo(getConfig, []);
   const navigate = navigateFunc.bind(props);
   const [paymentStatusData, setPaymentStatusData] = useState({});
   const [showSkelton, setShowSkelton] = useState(true);
@@ -35,10 +39,14 @@ const PaymentStatus = (props) => {
   useEffect(() => {
     const data =
       PAYMENT_STATUS_DATA[kyc?.equity_aoc_payment_status] ||
-      PAYMENT_STATUS_DATA["failed"];
+      PAYMENT_STATUS_DATA["success"];
     setPaymentStatusData(data);
     if (data.isSuccess) {
-      const aocPaymentDetails = getAocPaymentSummaryData();
+      const aocPaymentDetails = getAocPaymentSummaryData({
+        amount: 200,
+        total_amount: 300,
+        gst: 100,
+      });
       setPaymentDetails(aocPaymentDetails);
     }
   }, [kyc]);
@@ -74,18 +82,11 @@ const PaymentStatus = (props) => {
     }
   };
 
-  const handleClick = () => {
-    sendEvents("home");
-    if (Web) {
-      navigate("/");
-    } else {
-      nativeCallback({ action: "exit_web" });
-    }
-  };
+  const handleClick = () => {};
 
   const redirectToHome = () => {
     if (paymentStatusData.isSuccess) {
-      navigate(PATHNAME_MAPPER.invest);
+      handleNativeExit(props, { action: "exit" });
     } else {
     }
   };
@@ -105,27 +106,32 @@ const PaymentStatus = (props) => {
       title={paymentStatusData.title}
       events={sendEvents("just_set_events")}
       handleClick={handleClick}
-      data-aid="freedomPlanPaymentStatus"
+      data-aid="aocPaymentStatus"
     >
       <div
-        className="freedom-plan-payment-status"
+        className="aoc-payment-status"
         data-aid={`pg_${paymentStatusData.id}`}
       >
         {!isEmpty(paymentStatusData) && (
           <Imgc
             src={require(`assets/${productName}/${paymentStatusData.icon}`)}
-            className="fpps-icon"
+            className="aoc-icon"
+            dataAid="top"
           />
         )}
-        <WVPageTitle>{paymentStatusData.title}</WVPageTitle>
-        <WVPageSubtitle>{paymentStatusData.subtitle}</WVPageSubtitle>
+        <WVPageTitle dataAidSuffix="title">
+          {paymentStatusData.title}
+        </WVPageTitle>
+        <WVPageSubtitle dataAidSuffix="description">
+          {paymentStatusData.subtitle}
+        </WVPageSubtitle>
         {paymentStatusData.isSuccess && !isEmpty(paymentDetails) && (
           <>
-            <div className="fpps-title" data-aid="grp_paymentSummary">
+            <div className="aoc-success-title" data-aid="tv_title">
               {paymentDetails.title}
             </div>
             {paymentDetails.data.map((el, index) => (
-              <Tile key={index} {...el} />
+              <Tile key={index} {...el} index={index} />
             ))}
           </>
         )}
@@ -136,9 +142,21 @@ const PaymentStatus = (props) => {
 
 export default PaymentStatus;
 
-const Tile = ({ title, amount, className, dataAid, showDivider }) => (
-  <div>
-    <div>{title}</div>
-    <div>{amount}</div>
-  </div>
+const Tile = ({ title, amount, className = "", showDivider, index }) => (
+  <>
+    <div
+      className={`flex-between-center aoc-ps-content ${className}`}
+      data-aid={`grp_tile${index + 1}`}
+    >
+      <div className="aoc-ps-title" data-aid="tv_title">
+        {title}
+      </div>
+      <div className="aoc-ps-subtitle" data-aid="tv_description">
+        {amount}
+      </div>
+    </div>
+    {showDivider && (
+      <div className="generic-hr" data-aid={`separator_${index + 1}`} />
+    )}
+  </>
 );

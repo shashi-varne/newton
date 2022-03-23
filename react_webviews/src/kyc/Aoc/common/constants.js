@@ -2,7 +2,7 @@ import { inrFormatDecimal } from "../../../utils/validators";
 
 export const PAYMENT_STATUS_DATA = {
   success: {
-    title: "Payment successful",
+    title: "Payment is successful",
     subtitle:
       "Last step remaining! Now eSign to complete opening your Trading & Demat + Mutual Fund account",
     buttonTitle: "Continue",
@@ -36,6 +36,8 @@ export const getAocPaymentSummaryData = ({ amount, gst, total_amount }) => {
         title: "GST",
         amount: inrFormatDecimal(gst, 2),
         dataAid: "gst",
+        showDivider: true,
+        className: "aoc-ps-gst"
       },
       {
         title: "Total",

@@ -66,6 +66,9 @@ import CommunicationCallback from "./Equity/components/CommunicationCallback";
 import FnOSampleDocuments from "./Upload/FnOSampleDocuments";
 import DialogAsPage from './mini_components/DialogAsPage';
 
+// AOC Components
+import AocPaymentStatus from "./Aoc/pages/PaymentStatus";
+
 const Kyc = (props) => {
   const { url } = props.match;
   return (
@@ -369,6 +372,11 @@ const Kyc = (props) => {
           exact
           path={`${url}/communication-details/callback`}
           component={CommunicationCallback}
+        />
+        <Route
+          exact
+          path={`${url}/aoc/payment-status`}
+          component={AocPaymentStatus}
         />
         <Route component={NotFound} />
       </Switch>
