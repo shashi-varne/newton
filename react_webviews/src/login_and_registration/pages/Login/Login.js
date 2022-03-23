@@ -142,7 +142,7 @@ class Login extends Component {
                     name="code"
                     isAOB={true}
                   /> */}
-                  {form_data.code}
+                  +{form_data.code}
                 </div>
               </div>
               <Input

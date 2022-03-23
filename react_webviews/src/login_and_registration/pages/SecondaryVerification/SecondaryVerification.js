@@ -241,7 +241,7 @@ class SecondaryVerification extends Component {
                                         isAOB={true}
                                         disabled={true}
                                     /> */}
-                                    {form_data.code}
+                                    +{form_data.code}
                                 </span>
                                 <span className="mobile-number-login">
                                     <Input
