@@ -239,7 +239,6 @@ class SecondaryVerification extends Component {
                                         id="code"
                                         name="code"
                                         isAOB={true}
-                                        disabled={true}
                                     /> */}
                                     +{form_data.code}
                                 </span>
