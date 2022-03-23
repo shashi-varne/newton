@@ -10,8 +10,13 @@
   
   .login-form-field{
     display: flex;
+    align-items: center;
+    
     .country-code{
-      min-width: 85px;
+      height: 52px;
+      min-width: 40px;
+      background: rgba(238, 238, 238, 0.3);
+      color: var(--default);
       margin-right: 15px;
       .react-select__single-value{
         margin-top: -3px !important;
