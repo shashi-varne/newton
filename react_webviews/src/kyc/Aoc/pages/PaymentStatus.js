@@ -15,7 +15,6 @@ import {
 import { getConfig } from "../../../utils/functions";
 import { getUserKycFromSummary } from "../../common/api";
 import useUserKycHook from "../../common/hooks/userKycHook";
-import useAocDataHook from "../common/aocDataHook";
 import {
   getAocPaymentSummaryData,
   PAYMENT_STATUS_DATA,
@@ -31,7 +30,6 @@ const PaymentStatus = (props) => {
   const [paymentDetails, setPaymentDetails] = useState({});
   const { kyc, updateKyc } = useUserKycHook();
   const [errorData, setErrorData] = useState({});
-  const { aocData } = useAocDataHook();
 
   useEffect(() => {
     initialize();
@@ -40,9 +38,14 @@ const PaymentStatus = (props) => {
   useEffect(() => {
     const data =
       PAYMENT_STATUS_DATA[kyc?.equity_aoc_payment_status] ||
-      PAYMENT_STATUS_DATA["success"];
+      PAYMENT_STATUS_DATA["failed"];
     setPaymentStatusData(data);
     if (data.isSuccess) {
+      const aocData = {
+        amount: kyc.equity_account_charges.amount || 200,
+        total_amount: kyc.equity_account_charges.total_amount || 300,
+        gst: kyc.equity_account_charges.gst || 100,
+      };
       const aocPaymentDetails = getAocPaymentSummaryData(aocData);
       setPaymentDetails(aocPaymentDetails);
     }
