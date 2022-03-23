@@ -16,7 +16,7 @@ import { getConfig } from "../../../utils/functions";
 import { getUserKycFromSummary } from "../../common/api";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import {
-  getAocPaymentSummaryData,
+  getAocPaymentStatusData,
   PAYMENT_STATUS_DATA,
 } from "../common/constants";
 
@@ -46,7 +46,7 @@ const PaymentStatus = (props) => {
         total_amount: kyc.equity_account_charges.total_amount || 300,
         gst: kyc.equity_account_charges.gst || 100,
       };
-      const aocPaymentDetails = getAocPaymentSummaryData(aocData);
+      const aocPaymentDetails = getAocPaymentStatusData(aocData);
       setPaymentDetails(aocPaymentDetails);
     }
   }, [kyc]);

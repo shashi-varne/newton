@@ -1,4 +1,5 @@
-.aoc-payment-status {
+.aoc-payment-status,
+.aoc-payment-summary {
   text-align: center;
 
   .aoc-success-title {
@@ -26,5 +27,50 @@
 
   .aoc-ps-gst {
     margin-bottom: 7px;
+  }
+}
+
+.aoc-payment-summary {
+  text-align: left;
+  .aoc-locker-details {
+    background-color: var(--highlight);
+    padding: 20px;
+    color: var(--steelgrey);
+    font-size: 14px;
+    font-weight: 400;
+    border-radius: 6px;
+
+    .aoc-ld-title {
+      font-weight: 500;
+      color: var(--gunmetal);
+      line-height: 17px;
+    }
+  }
+
+  .aoc-success-title {
+    margin-bottom: 15px;
+  }
+
+  .aoc-ps-content {
+    color: var(--steelgrey);
+    font-weight: 400;
+    font-size: 13px;
+  }
+
+  .aoc-ps-gst {
+    .aoc-ps-subtitle {
+      color: var(--steelgrey);
+    }
+  }
+
+  .aoc-ps-total {
+    font-weight: 500;
+    color: var(--dark);
+    font-size: 14px;
+
+    .aoc-ps-subtitle {
+      font-weight: 500;
+      font-size: 16px;
+    }
   }
 }
