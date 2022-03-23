@@ -49,3 +49,7 @@ export const getAocPaymentSummaryData = ({ amount, gst, total_amount }) => {
     ],
   };
 };
+
+export const AOC_STORAGE_CONSTANTS = {
+  AOC_DATA: 'aocData',
+}

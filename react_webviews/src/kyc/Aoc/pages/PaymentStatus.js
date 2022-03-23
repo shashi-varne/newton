@@ -12,9 +12,10 @@ import {
   handleNativeExit,
   nativeCallback,
 } from "../../../utils/native_callback";
-import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
+import { getConfig } from "../../../utils/functions";
 import { getUserKycFromSummary } from "../../common/api";
 import useUserKycHook from "../../common/hooks/userKycHook";
+import useAocDataHook from "../common/aocDataHook";
 import {
   getAocPaymentSummaryData,
   PAYMENT_STATUS_DATA,
@@ -24,13 +25,13 @@ import "./PaymentStatus.scss";
 
 const PaymentStatus = (props) => {
   const { productName } = useMemo(getConfig, []);
-  const navigate = navigateFunc.bind(props);
   const [paymentStatusData, setPaymentStatusData] = useState({});
   const [showSkelton, setShowSkelton] = useState(true);
-  const [showLoader, setShowLoader] = useState(false);
+  const [showLoader] = useState(false);
   const [paymentDetails, setPaymentDetails] = useState({});
   const { kyc, updateKyc } = useUserKycHook();
   const [errorData, setErrorData] = useState({});
+  const { aocData } = useAocDataHook();
 
   useEffect(() => {
     initialize();
@@ -42,11 +43,7 @@ const PaymentStatus = (props) => {
       PAYMENT_STATUS_DATA["success"];
     setPaymentStatusData(data);
     if (data.isSuccess) {
-      const aocPaymentDetails = getAocPaymentSummaryData({
-        amount: 200,
-        total_amount: 300,
-        gst: 100,
-      });
+      const aocPaymentDetails = getAocPaymentSummaryData(aocData);
       setPaymentDetails(aocPaymentDetails);
     }
   }, [kyc]);
