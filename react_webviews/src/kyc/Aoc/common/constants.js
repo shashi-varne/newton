@@ -37,7 +37,7 @@ export const getAocPaymentStatusData = ({ amount, gst, total_amount }) => {
         amount: inrFormatDecimal(gst, 2),
         dataAid: "gst",
         showDivider: true,
-        className: "aoc-ps-gst"
+        className: "aoc-ps-gst",
       },
       {
         title: "Total",
@@ -51,9 +51,8 @@ export const getAocPaymentStatusData = ({ amount, gst, total_amount }) => {
 };
 
 export const AOC_STORAGE_CONSTANTS = {
-  AOC_DATA: 'aocData',
-}
-
+  AOC_DATA: "aocData",
+};
 
 export const getAocPaymentSummaryData = ({ amount, gst, total_amount }) => {
   return {
@@ -69,14 +68,14 @@ export const getAocPaymentSummaryData = ({ amount, gst, total_amount }) => {
         amount: inrFormatDecimal(gst, 2),
         dataAid: "gst",
         showDivider: true,
-        className: "aoc-ps-gst"
+        className: "aoc-ps-gst",
       },
       {
         title: "Amount payable",
         amount: inrFormatDecimal(total_amount, 2),
         showDivider: true,
         dataAid: "totalAmount",
-        className: "aoc-ps-total"
+        className: "aoc-ps-total",
       },
     ],
   };
