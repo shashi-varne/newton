@@ -1,0 +1,146 @@
+$tableBorder: 1px solid var(--primaryVariant2);
+
+.aoc-mf-vs-trading {
+  .aoc-mfvt-subtitle {
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 30px;
+    margin-bottom: 20px;
+  }
+
+  .mftd-table-content {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    width: 100%;
+    border: $tableBorder;
+    border-radius: 10px;
+    border-collapse: separate;
+    color: var(--steelgrey);
+
+    .mftd-tc-type {
+      text-align: left;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 19px;
+      color: var(--gunmetal);
+      width: 42%;
+    }
+
+    thead tr td {
+      font-weight: bold;
+      font-size: 12px;
+      line-height: 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--gunmetal);
+      border-bottom: $tableBorder;
+      padding: 20px 10px;
+    }
+
+    thead tr .mftd-tc-type {
+      font-weight: bold;
+    }
+
+    .mftd-tc-type {
+      border-right: $tableBorder;
+    }
+
+    .mftd-tc-mf {
+      text-align: center;
+    }
+
+    tbody .mftd-tc-mf,
+    tbody .mftd-tc-trading {
+      font-weight: 400;
+      font-size: 13px;
+      line-height: 21px;
+    }
+
+    .mftd-tc-trading {
+      border-left: $tableBorder;
+    }
+
+    .mftd-tc-trading:first-child {
+      border-top-right-radius: 10px;
+    }
+
+    thead > tr:last-child .mftd-tc-trading {
+      border-top-right-radius: 10px;
+    }
+
+    tbody > tr:last-child .mftd-tc-trading {
+      border-bottom-right-radius: 10px;
+    }
+
+    .mftd-tc-trading {
+      background-color: var(--highlight);
+      text-align: center;
+    }
+
+    tr td {
+      padding: 5px 10px;
+    }
+
+    tbody > tr:first-child td {
+      padding-top: 10px;
+    }
+
+    .mfvt-features {
+      td {
+        border-top: $tableBorder;
+        padding-top: 20px;
+      }
+
+      .mftd-tc-type {
+        font-weight: 700;
+        font-size: 12px;
+        line-height: 14px;
+        letter-spacing: 1px;
+      }
+    }
+
+    .mfvt-bottom-content td {
+      padding-bottom: 20px;
+    }
+
+    .mfvt-aoc-summary {
+      td {
+        border-top: $tableBorder;
+        padding: 20px 10px 15px 10px;
+      }
+
+      .mftd-tc-trading {
+        font-size: 10px;
+      }
+
+      .mftd-amount {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--primary);
+      }
+
+      .mftd-strike-amount {
+        font-weight: 400;
+        color: var(--steelgrey);
+        text-decoration-line: line-through;
+      }
+    }
+
+    .mfvt-noaoc-summary {
+      .mftd-tc-trading {
+        color: var(--primary);
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 22px;
+      }
+    }
+
+    .mfvt-mf {
+      background-color: var(--highlight);
+    }
+  }
+}
+
+.aoc-mf-vs-trading-mobile-view {
+  padding-bottom: 95px;
+}
