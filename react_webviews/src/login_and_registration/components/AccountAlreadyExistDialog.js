@@ -16,7 +16,6 @@ export function AccountAlreadyExistDialog({
   const { mobile, email, pan_number } = useMemo(() => isEmpty(data) ? {} : data, [data]);
   const secondaryDetail = useMemo(() => type === 'email' ? mobile : email, [type, mobile, email]);
   const [subtitleText, setSubtitleText] = useState('');
-  const [loading, setLoading] = useState(false);
   const [secondaryDetailExists, setSecondaryDetailExists] = useState(!isEmpty(secondaryDetail));
 
   useEffect(() => {
@@ -33,12 +32,6 @@ export function AccountAlreadyExistDialog({
     }
   }, [secondaryDetail]);
 
-  const handleClick = async () => {
-    setLoading(true);
-    await props.next(type, data);
-    setLoading(false);
-  }
-
   return (
     <WVBottomSheet
       isOpen={isOpen}
@@ -50,13 +43,6 @@ export function AccountAlreadyExistDialog({
         variant: "outlined",
         title: `EDIT ${type === "email" ? "EMAIL" : "NUMBER"}`,
         onClick: props.editDetails,
-      }}
-      button2Props={{
-        color: "secondary",
-        variant: "contained",
-        title: "CONTINUE",
-        showLoader: loading,
-        onClick: handleClick
       }}
       classes={{
         container: "account-already-exists-container",

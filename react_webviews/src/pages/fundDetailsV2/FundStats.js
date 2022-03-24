@@ -1,5 +1,5 @@
 import { Box, Stack } from '@mui/material';
-import React, { useState } from 'react';
+import React from 'react';
 import Typography from '../../designSystem/atoms/Typography';
 import intervalToDuration from 'date-fns/intervalToDuration';
 import parse from 'date-fns/parse';
@@ -66,10 +66,6 @@ const getLockinData = (lockinString) => {
 };
 
 const FundStats = () => {
-  const [isTooltipOpen, setIsTooltipOpen] = useState({
-    er: false,
-    el: false,
-  });
   const fundData = useSelector(getFundData);
   const fullAgeData = calculateFullAge(fundData?.additional_info?.launch_date);
   const fundAge = calculateFundAge(fullAgeData);
@@ -79,9 +75,6 @@ const FundStats = () => {
   );
 
   const lokinPeriodData = getLockinData(fundData?.additional_info?.lockin_period);
-  const handleTooltip = (anchor) => () => {
-    setIsTooltipOpen({ ...isTooltipOpen, [anchor]: !isTooltipOpen[anchor] });
-  };
 
   return (
     <Stack
@@ -145,7 +138,6 @@ const FundStats = () => {
             <Box sx={{ height: '16px', width: '16px' }}>
               <Tooltip
                 dataAid="expenseRatio"
-                open={isTooltipOpen['er']}
                 title='This is the annual maintenance fee charged by the Asset Management Companies. This includes opearting costs, management fees, etc.'
               >
                 <div>
@@ -155,7 +147,6 @@ const FundStats = () => {
                     className='ec_info_icon'
                     alt='info_icon'
                     dataAid='infoExpenseRatio'
-                    onClick={handleTooltip('er')}
                   />
                 </div>
               </Tooltip>
@@ -192,7 +183,6 @@ const FundStats = () => {
           <Box sx={{ height: '16px', width: '16px' }}>
             <Tooltip
               dataAid="exitLoad"
-              open={isTooltipOpen['el']}
               title='This refers to the fee charged by the Asset Management Companies at the time of exiting or redeeming fund units'
             >
               <div>
@@ -202,7 +192,6 @@ const FundStats = () => {
                   className='ec_info_icon'
                   alt='info_icon'
                   dataAid='infoExitLoad'
-                  onClick={handleTooltip('el')}
                 />
               </div>
             </Tooltip>

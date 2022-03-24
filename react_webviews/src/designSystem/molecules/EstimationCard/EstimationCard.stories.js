@@ -46,7 +46,9 @@ Default.args = {
   rightTitleColor: 'foundationColors.primary.content',
   leftSubtitleColor: 'foundationColors.content.secondary',
   rightSubtitleColor: 'foundationColors.content.secondary',
+  iconSrc: require('assets/amazon_pay.svg'),
   onClick: null,
+  onIconClick: () => {console.log("hello")}
 };
 
 export const WithTooltip = (args) => {

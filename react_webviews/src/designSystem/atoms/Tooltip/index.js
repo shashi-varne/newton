@@ -1,7 +1,7 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import MuiTooltip from "@mui/material/Tooltip";
 import PropTypes from "prop-types";
-import { Box } from "@mui/material";
+import { Box, ClickAwayListener } from "@mui/material";
 import Typography from "../Typography";
 import isEmpty from "lodash/isEmpty";
 
@@ -75,17 +75,39 @@ const Tooltip = (props) => {
     dataAid = "",
     arrow = false,
     placement = TOOLTIP_PLACEMENTS.BOTTOM,
+    disableFocusListener=true,
+    disableHoverListener= true,
+    disableTouchListener= true,
     ...restProps
   } = props;
+  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
+
+  const handleTooltipClose = () => {
+    setIsTooltipOpen(false);
+  }
+
+  const handleTooltip = () => {
+    setIsTooltipOpen(!isTooltipOpen);
+  }
   return (
-    <MuiTooltip
-      title={TooltipDescription({ title, description, dataAid })}
-      arrow={arrow}
-      placement={placement}
-      {...restProps}
-    >
-      {children}
-    </MuiTooltip>
+    <ClickAwayListener onClickAway={handleTooltipClose}>
+      <MuiTooltip
+        title={TooltipDescription({ title, description, dataAid })}
+        arrow={arrow}
+        placement={placement}
+        open={isTooltipOpen}
+        onClose={handleTooltipClose}
+        disableFocusListener={disableFocusListener}
+        disableHoverListener={disableHoverListener}
+        disableTouchListener={disableTouchListener}
+        {...restProps}
+      >
+        <Box component='span' sx={{cursor: 'pointer'}} onClick={handleTooltip}>
+          {children}
+        </Box>
+      </MuiTooltip>
+    </ClickAwayListener>
+
   );
 };
 
