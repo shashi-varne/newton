@@ -1,0 +1,123 @@
+.aoc-account-type {
+  box-shadow: 0px 6px 12px -6px rgba(0, 0, 0, 0.04),
+    0px 0px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 25px;
+
+  .aat-top-content {
+    margin-bottom: 16px;
+  }
+
+  .aat-top-icon {
+    width: 58px !important;
+    height: 58px;
+  }
+
+  .aat-check-icon {
+    width: 20px !important;
+    height: 20px;
+    cursor: pointer;
+  }
+
+  .aat-title {
+    color: var(--gunmetal);
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 21px;
+    margin-bottom: 10px;
+  }
+
+  .aat-subtitle-list {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 19px;
+    color: var(--dark);
+    margin-bottom: 12px;
+
+    .aat-sl-content {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-right: 10px;
+    }
+
+    .aat-sl-icon {
+      width: 12px !important;
+      height: 12px;
+      margin-right: 5px;
+    }
+  }
+
+  .aat-keypoints {
+    margin-bottom: 13px;
+
+    .aat-keypoints-content {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 19px;
+      color: var(--steelgrey);
+
+      .aat-kc-icon {
+        margin-right: 10px;
+        margin-top: -3px;
+      }
+    }
+  }
+
+  .aat-clickable-text {
+    color: var(--secondary);
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 19px;
+    margin-left: 10px;
+  }
+
+  .aat-bc-info {
+    font-weight: 500;
+    font-size: 10px;
+    line-height: 16px;
+    color: var(--primary);
+
+    .aat-bc-amount {
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 22px;
+      color: var(--primary);
+    }
+
+    .aat-bc-strike-amount {
+      text-decoration-line: line-through;
+      font-weight: 400;
+      color: var(--steelgrey);
+    }
+
+    .aat-bc-free-tag {
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 22px;
+      color: var(--primary);
+      margin-left: 5px;
+    }
+  }
+
+  .aat-bc-recommended {
+    background: #ffe0ec;
+    border-radius: 4px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 19px;
+    color: #ba3366;
+    padding: 0 8px;
+  }
+}
+
+.aoc-selected-account {
+  background-color: var(--highlight);
+}

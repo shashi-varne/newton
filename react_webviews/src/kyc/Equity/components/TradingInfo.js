@@ -1,17 +1,16 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { getConfig, isNewIframeDesktopLayout, navigate as navigateFunc } from "../../../utils/functions";
 import Container from "../../common/Container";
-import Checkbox from "../../../common/ui/Checkbox";
 import "./commonStyles.scss";
-import SebiRegistrationFooter from "../../../common/ui/SebiRegistrationFooter/WVSebiRegistrationFooter";
 import { getUpgradeAccountFlowNextStep } from "../../common/functions";
 import { PATHNAME_MAPPER } from "../../constants";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import Toast from "../../../common/ui/Toast";
-import { nativeCallback, openPdfCall } from "../../../utils/native_callback";
+import { nativeCallback } from "../../../utils/native_callback";
 import { capitalize, formatAmountInr } from "../../../utils/validators";
 import SVG from 'react-inlinesvg';
 import { Imgc } from "../../../common/ui/Imgc";
+import TermsAndConditions from "../../mini-components/TermsAndConditions";
 
 const BENEFITS = [
   {
@@ -158,36 +157,6 @@ const TradingInfo = (props) => {
     }
   };
 
-  const openInBrowser = (url) => () => {
-    nativeCallback({
-      action: "open_browser",
-      message: {
-        url: url,
-      },
-    });
-  };
-
-  const openPdf = (url) => () => {
-    if (config.iOS) {
-      nativeCallback({
-        action: "open_inapp_tab",
-        message: {
-          url: url || "",
-          back_url: "",
-        },
-      });
-    } else {
-      setShowSkelton(true);
-      const data = {
-        url: url,
-        header_title: "EQUITY ANNEXURE",
-        icon: "close",
-      };
-
-      openPdfCall(data, config.isSdk);
-    }
-  };
-
   return (
     <Container
       events={sendEvents("just_set_events")}
@@ -243,54 +212,11 @@ const TradingInfo = (props) => {
             );
           })}
           <div className="line-divider"/>
-          <div className="kaim-terms" data-aid='kaim-terms'>
-            <Checkbox
-              checked={checkTermsAndConditions}
-              handleChange={handleCheckBox}
-            />
-            <div className="kaim-terms-info">
-              I agree to have read and understood the{" "}
-              {config.Web ? (
-                <>
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href={config.termsLink}
-                    className="terms-text"
-                  >
-                    Terms & conditions
-                  </a>{" "}
-                  and{" "}
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href={config.equityAnnexure}
-                    className="terms-text"
-                  >
-                    Equity Annexure
-                  </a>{" "}
-                </>
-              ) : (
-                <>
-                  <span
-                    className="terms-text"
-                    onClick={openInBrowser(config.termsLink)}
-                  >
-                    Terms & conditions
-                  </span>{" "}
-                  and{" "}
-                  <span
-                    className="terms-text"
-                    onClick={openPdf(config.equityAnnexure)}
-                  >
-                    Equity Annexure
-                  </span>{" "}
-                </>
-              )}
-            </div>
-          </div>
-          <div className="line-divider bottom-line-divider" />
-          <SebiRegistrationFooter />
+          <TermsAndConditions
+            checkTermsAndConditions={checkTermsAndConditions}
+            handleCheckBox={handleCheckBox}
+            setShowSkelton={setShowSkelton}
+          />
         </main>
       </div>
     </Container>
