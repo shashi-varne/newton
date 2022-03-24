@@ -4,6 +4,7 @@ import { Imgc } from "../../../common/ui/Imgc";
 import WVPageTitle from "../../../common/ui/InPageHeader/WVInPageTitle";
 import WVPageSubtitle from "../../../common/ui/InPageHeader/WVInPageSubtitle";
 import Toast from "../../../common/ui/Toast";
+import { Tile } from "../mini-components/Tile";
 
 import isEmpty from "lodash/isEmpty";
 import get from "lodash/get";
@@ -16,7 +17,7 @@ import { getConfig } from "../../../utils/functions";
 import { getUserKycFromSummary } from "../../common/api";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import {
-  getAocPaymentSummaryData,
+  getAocPaymentStatusData,
   PAYMENT_STATUS_DATA,
 } from "../common/constants";
 
@@ -46,7 +47,7 @@ const PaymentStatus = (props) => {
         total_amount: kyc.equity_account_charges.total_amount || 300,
         gst: kyc.equity_account_charges.gst || 100,
       };
-      const aocPaymentDetails = getAocPaymentSummaryData(aocData);
+      const aocPaymentDetails = getAocPaymentStatusData(aocData);
       setPaymentDetails(aocPaymentDetails);
     }
   }, [kyc]);
@@ -141,22 +142,3 @@ const PaymentStatus = (props) => {
 };
 
 export default PaymentStatus;
-
-const Tile = ({ title, amount, className = "", showDivider, index }) => (
-  <>
-    <div
-      className={`flex-between-center aoc-ps-content ${className}`}
-      data-aid={`grp_tile${index + 1}`}
-    >
-      <div className="aoc-ps-title" data-aid="tv_title">
-        {title}
-      </div>
-      <div className="aoc-ps-subtitle" data-aid="tv_description">
-        {amount}
-      </div>
-    </div>
-    {showDivider && (
-      <div className="generic-hr" data-aid={`separator_${index + 1}`} />
-    )}
-  </>
-);

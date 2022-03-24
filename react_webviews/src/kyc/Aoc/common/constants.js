@@ -23,7 +23,7 @@ export const PAYMENT_STATUS_DATA = {
   },
 };
 
-export const getAocPaymentSummaryData = ({ amount, gst, total_amount }) => {
+export const getAocPaymentStatusData = ({ amount, gst, total_amount }) => {
   return {
     title: "Payment details",
     data: [
@@ -45,6 +45,33 @@ export const getAocPaymentSummaryData = ({ amount, gst, total_amount }) => {
         className: "aoc-total-amount",
         showDivider: true,
         dataAid: "totalAmount",
+      },
+    ],
+  };
+};
+
+export const getAocPaymentSummaryData = ({ amount, gst, total_amount }) => {
+  return {
+    title: "Payment details",
+    data: [
+      {
+        title: "Account opening fees",
+        amount: inrFormatDecimal(amount, 2),
+        dataAid: "price",
+      },
+      {
+        title: "GST (18%)",
+        amount: inrFormatDecimal(gst, 2),
+        dataAid: "gst",
+        showDivider: true,
+        className: "aoc-ps-gst"
+      },
+      {
+        title: "Amount payable",
+        amount: inrFormatDecimal(total_amount, 2),
+        showDivider: true,
+        dataAid: "totalAmount",
+        className: "aoc-ps-total"
       },
     ],
   };
