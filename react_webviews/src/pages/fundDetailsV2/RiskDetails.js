@@ -58,11 +58,6 @@ const checkRiskMeasuresAttribute = (riskMeasure) => {
 
 const RiskDetails = ({ fundDetailsRef, sendEvents }) => {
   const [isRiskOpen, setIsRiskOpen] = useState(false);
-  const [isTooltipOpen, setIsTooltipOpen] = useState({
-    Alpha: false,
-    Beta: false,
-    squared: false,
-  });
   const fundData = useSelector(getFundData);
   const isRiskVsCatAvailable = !isEmpty(fundData?.risk?.risk_vs_category);
   const isReturnVsCatAvailable = !isEmpty(fundData?.risk?.return_vs_category);
@@ -84,10 +79,9 @@ const RiskDetails = ({ fundDetailsRef, sendEvents }) => {
   const handleTooltip = (riskMeasureName) => () => {
     fundDetailsRef.current = {
       ...fundDetailsRef.current,
-      risk_measures: riskMeasureName
+      risk_measures: riskMeasureName,
     };
-    sendEvents('back')
-    setIsTooltipOpen({ ...isTooltipOpen, [riskMeasureName]: !isTooltipOpen[riskMeasureName] });
+    sendEvents('back');
   };
 
   return (
@@ -97,9 +91,9 @@ const RiskDetails = ({ fundDetailsRef, sendEvents }) => {
         label={`Risk details ${disableRiskDetailsAvailable ? '(NA)' : ''}`}
         isOpen={isRiskOpen}
         onClick={handleRiskAction}
-        dataAid="riskDetails"
+        dataAid='riskDetails'
       >
-        <Box sx={{mb: 3}}>
+        <Box sx={{ mb: 3 }}>
           <Stack direction='column' spacing={3}>
             {isRiskVsCatAvailable && (
               <Stack direction='column' spacing={3}>
@@ -114,8 +108,7 @@ const RiskDetails = ({ fundDetailsRef, sendEvents }) => {
               </Stack>
             )}
           </Stack>
-          {
-            isRiskMeasureAvailable &&
+          {isRiskMeasureAvailable && (
             <Stack sx={{ mt: 4 }} direction='column' spacing={3}>
               <Typography dataAid="riskMeasures" variant='heading4'>Risk measures</Typography>
               {fundData?.risk?.risk_measures?.map((riskMeasure, idx) => {
@@ -149,7 +142,7 @@ const RiskDetails = ({ fundDetailsRef, sendEvents }) => {
                           { isValidValue(riskMeasure?.value,`${riskMeasure?.value > 0 ? '+' : ''}${riskMeasure?.value}%`)}
                         </Typography>
                         <div>
-                          <Tooltip dataAid="riskMeasure" open={isTooltipOpen[riskMeasureName]} title={tooltipInfo}>
+                          <Tooltip dataAid='riskMeasure' title={tooltipInfo}>
                             <Stack width='16px' height='16px'>
                               <Icon
                                 src={require('assets/info_icon_ds.svg')}
@@ -164,12 +157,12 @@ const RiskDetails = ({ fundDetailsRef, sendEvents }) => {
                         </div>
                       </Stack>
                     </Stack>
-                    {idx < 2 && <Separator dataAid={4+idx} />}
+                    {idx < 2 && <Separator dataAid={4 + idx} />}
                   </Stack>
                 );
               })}
             </Stack>
-          }
+          )}
         </Box>
       </CollapsibleSection>
     </Box>
