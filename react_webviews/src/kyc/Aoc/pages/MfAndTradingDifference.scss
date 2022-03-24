@@ -49,6 +49,12 @@ $tableBorder: 1px solid var(--primaryVariant2);
       text-align: center;
     }
 
+    .mftd-tc-subtext {
+      color: var(--steelgrey);
+      margin-left: 4px;
+      font-size: 10px;
+    }
+
     tbody .mftd-tc-mf,
     tbody .mftd-tc-trading {
       font-weight: 400;

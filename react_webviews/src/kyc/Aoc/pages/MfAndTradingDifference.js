@@ -71,7 +71,7 @@ const MFAndTradingDifferences = (props) => {
 
 export default MFAndTradingDifferences;
 
-const getTableData = (data) => () => {
+const getTableData = (data) => {
   const tableHeaderData = data[0];
   const tableBodyData = data.slice(1);
   return {
@@ -84,6 +84,7 @@ const TableRow = ({ data = {}, index }) => (
   <tr className={data.className}>
     <td className="mftd-tc-type" data-aid={`tv_title${index}`}>
       {data.type}
+      {data.subText && <span className="mftd-tc-subtext">{data.subText}</span>}
     </td>
 
     <td className="mftd-tc-mf" data-aid={`tv_mfDescription${index}`}>
@@ -107,9 +108,9 @@ const TableRow = ({ data = {}, index }) => (
 );
 
 const MfVsTrading = ({ data = [] }) => {
-  const { tableBodyData, tableHeaderData } = getTableData(data);
+  const { tableBodyData = [], tableHeaderData = {} } = getTableData(data);
   return (
-    <table className="mftd-table-content render-faqs-table" cellSpacing="0">
+    <table className="mftd-table-content" cellSpacing="0">
       <thead>
         <TableRow data={tableHeaderData} index={0} />
       </thead>
