@@ -53,7 +53,9 @@
   }
 
   .aat-keypoints {
-    margin-bottom: 13px;
+    .aat-kp-info {
+      margin-bottom: 13px;
+    }
 
     .aat-keypoints-content {
       display: flex;
@@ -71,12 +73,20 @@
     }
   }
 
+  .aat-keypoints .aat-kp-info:last-child {
+    margin-bottom: 0px;
+  }
+
   .aat-clickable-text {
     color: var(--secondary);
     cursor: pointer;
     font-size: 12px;
     line-height: 19px;
     margin-left: 10px;
+  }
+
+  .aat-bc-data {
+    margin-top: 24px;
   }
 
   .aat-bc-info {

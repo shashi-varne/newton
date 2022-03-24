@@ -79,7 +79,7 @@ const KeyPoints = ({ keyPoints = [], onElementClick }) => (
     {!isEmpty(keyPoints) && isArray(keyPoints) && (
       <div className="aat-keypoints">
         {keyPoints.map((el, index) => (
-          <div key={index} className="flex-between-center">
+          <div key={index} className="aat-kp-info flex-between-center">
             <div className="aat-keypoints-content">
               <Imgc
                 src={require(`assets/${el.icon}.svg`)}
@@ -102,7 +102,7 @@ const KeyPoints = ({ keyPoints = [], onElementClick }) => (
 const BottomContent = ({ data, isFree, amount = 900 }) => (
   <>
     {!isEmpty(data) && (
-      <div className="flex-between-center">
+      <div className="aat-bc-data flex-between-center">
         <div className="aat-bc-info">
           <div>{data.title}</div>
           <div>

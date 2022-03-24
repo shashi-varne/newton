@@ -95,7 +95,7 @@ export const ACCOUNT_TYPES = [
         icon: "star_large",
       },
       {
-        title: "Single KYC for all investments",
+        title: "Affordable brokerage & fees",
         clickableText: "See charges",
         icon: "star_large",
       },
