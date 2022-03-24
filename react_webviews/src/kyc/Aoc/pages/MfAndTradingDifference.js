@@ -13,7 +13,13 @@ const MFAndTradingDifferences = (props) => {
   const { kyc, isLoading } = useUserKycHook();
   const { isMobileDevice } = useMemo(getConfig, []);
 
-  const mfVsTradingData = useMemo(getMfVsTradingData(300, true), [kyc]);
+  const mfVsTradingData = useMemo(
+    getMfVsTradingData(
+      kyc?.equity_account_charges?.account_opening?.charges,
+      kyc?.is_equity_aoc_applicable
+    ),
+    [kyc]
+  );
 
   const sendEvents = (userAction) => {
     let eventObj = {
