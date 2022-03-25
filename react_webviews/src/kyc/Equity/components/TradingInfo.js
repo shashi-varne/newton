@@ -12,6 +12,7 @@ import { nativeCallback, openPdfCall } from "../../../utils/native_callback";
 import { capitalize, formatAmountInr } from "../../../utils/validators";
 import SVG from 'react-inlinesvg';
 import { Imgc } from "../../../common/ui/Imgc";
+import BrokerageChargesTile from "../mini-components/BrokerageChargesTile";
 
 const BENEFITS = [
   {
@@ -41,7 +42,7 @@ const getEquityChargesData = (equityChargesData={}) => {
         },
         {
           name: "Standard brokerage",
-          className: "aabc-title"
+          className: "kaim-fit-sb"
         },
         {
           name: "Delivery",
@@ -319,37 +320,7 @@ const AccountAndBrokerageCharges = ({open, onClick, ...props }) => {
       </div>
       {open &&
         props?.list?.map((data, idx) => {
-          return (
-            <div
-              className="kaim-fees-info"
-              data-aid="kyc-opening-charges"
-              key={idx}
-            >
-              <div className="kaim-fees-info-text">
-                <div className={data.className}>{data.name}</div>
-                <div className="kaim-fees-info-subtext">{data.subText}</div>
-              </div>
-              <div>
-                <div
-                  className="kaim-no-fees-text1"
-                  style={{
-                    textDecorationLine: data.lineStroke
-                      ? "line-through"
-                      : "none",
-                    color: props.id === "brokerage" ? "var(--dark)" : "var(--steelgrey)"
-                  }}
-                >
-                  {data.value}
-                </div>
-                {data.message && (
-                  <div className="kaim-no-fees-text2">{data.message}</div>
-                )}
-                {data.subValue && (
-                  <div className="kaim-fees-info-subvalue">{data.subValue}</div>
-                )}
-              </div>
-            </div>
-          );
+          return <BrokerageChargesTile data={data} key={idx} />;
         })}
     </div>
   );

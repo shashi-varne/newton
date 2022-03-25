@@ -130,49 +130,6 @@
       border-top: 1px solid #D6D6D6;
       padding: 10px 0;
       cursor: pointer;
-
-      .aabc-title {
-        font-size: 13px;
-        color: var(--gunmetal);
-        font-weight: 500;
-      }
-    }
-
-    .kaim-fees-info {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      padding: 5px 0;
-
-      .kaim-fees-info-text {
-        font-size: 13px;
-        line-height: 21px;
-        color: var(--dark);
-      }
-
-      .kaim-fees-info-subtext {
-        @include fees-subtext();
-      }
-
-      .kaim-no-fees-text1 {
-        font-size: 13px;
-        line-height: 21px;
-        color: var(--steelgrey);
-        text-align: right;
-      }
-
-      .kaim-no-fees-text2 {
-        font-weight: 600;
-        font-size: 13px;
-        line-height: 21px;
-        color: var(--primary);
-        text-align: right;
-      }
-
-      .kaim-fees-info-subvalue {
-        @include fees-subtext();
-        text-align: right;
-      }
     }
 
     .line-divider {
