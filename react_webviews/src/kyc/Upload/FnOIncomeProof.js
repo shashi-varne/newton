@@ -11,7 +11,7 @@ import { upload } from '../common/api';
 import { nativeCallback } from '../../utils/native_callback';
 import WVInPageHeader from '../../common/ui/InPageHeader/WVInPageHeader';
 import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
-import { isEquityEsignReady } from '../common/functions';
+import { validateAocPaymentAndRedirect } from '../common/functions';
 import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet';
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 import { storageService } from '../../utils/validators';
@@ -132,16 +132,8 @@ const FnOIncomeProof = (props) => {
       } else if (landingEntryPoints.includes(fromState) || fromWebModuleEntry) {
         navigate("/");
       } else {
-        commonRedirection();
+        validateAocPaymentAndRedirect(kyc, navigate);
       }
-    }
-  }
-  
-  const commonRedirection = async () => {
-    if (isEquityEsignReady(kyc)) {
-      navigate(PATHNAME_MAPPER.kycEsign);
-    } else {
-      navigate(PATHNAME_MAPPER.documentVerification);
     }
   }
 
@@ -149,7 +141,7 @@ const FnOIncomeProof = (props) => {
     if (fromNativeLandingOrMyAccounts) {
       nativeCallback({ action: "exit_web"});
     } else {
-      commonRedirection();
+      validateAocPaymentAndRedirect(kyc, navigate);
     }
   }
 

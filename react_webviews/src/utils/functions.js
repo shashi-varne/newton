@@ -625,6 +625,7 @@ export function isTradingEnabled(userKyc = {}) {
 }
 
 export const isTradingFlow = (kyc) => {
+  kyc = !isEmpty(kyc) ? kyc : storageService().getObject("kyc");
 	return isTradingEnabled(kyc) && kyc?.kyc_product_type === "equity";
 };
 

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { getConfig, isNewIframeDesktopLayout, navigate as navigateFunc } from "../../../utils/functions";
 import Container from "../../common/Container";
 import "./commonStyles.scss";
-import { getUpgradeAccountFlowNextStep } from "../../common/functions";
+import { getUpgradeAccountFlowNextStep, isEquityApplSubmittedOrComplete, validateAocPaymentAndRedirect } from "../../common/functions";
 import { PATHNAME_MAPPER } from "../../constants";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import Toast from "../../../common/ui/Toast";
@@ -118,6 +118,10 @@ const TradingInfo = (props) => {
     sendEvents("next");
     if(!checkTermsAndConditions) {
       Toast("Tap on T&C check box to continue");
+      return;
+    }
+    if (isEquityApplSubmittedOrComplete(kyc)) {
+      validateAocPaymentAndRedirect(kyc, navigate);
       return;
     }
     if (kyc?.mf_kyc_processed) {

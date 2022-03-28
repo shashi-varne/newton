@@ -516,3 +516,15 @@ export const isEquityAocPaymentCompleted = (kyc) => {
     kyc.equity_aoc_payment_status === "success" || !isEquityAocApplicable(kyc)
   );
 };
+
+export const validateAocPaymentAndRedirect = (kyc, navigate) => {
+  if(isEquityAocPaymentCompleted(kyc)) {
+    if (isEquityEsignReady(kyc)) {
+      navigate(PATHNAME_MAPPER.kycEsign)
+    } else {
+      navigate(PATHNAME_MAPPER.documentVerification)
+    }
+  } else {
+    navigate(PATHNAME_MAPPER.aocPaymentSummary);
+  }
+}
