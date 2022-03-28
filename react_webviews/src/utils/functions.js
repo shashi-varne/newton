@@ -628,6 +628,10 @@ export const isTradingFlow = (kyc) => {
 	return isTradingEnabled(kyc) && kyc?.kyc_product_type === "equity";
 };
 
+export const isEquityAocApplicable = (kyc) => {
+	return kyc?.is_equity_aoc_applicable
+};
+
 const { checkBeforeRedirection, checkAfterRedirection, backButtonHandler } = require(`./${getConfig().platform}_app`);
 
 export function navigate(pathname, data = {}) {

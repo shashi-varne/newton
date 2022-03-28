@@ -4,12 +4,12 @@ import BrokerageChargesTile from "../../Equity/mini-components/BrokerageChargesT
 import { formatAmountInr } from "../../../utils/validators";
 import "./mini-components.scss";
 
-const getDematChargesData = (equityChargesData) => () => {
+const getDematChargesData = (equityChargesData = {}) => () => {
   return [
     {
       name: "Annual maintainence",
       value: `${formatAmountInr(
-        equityChargesData.demat_amc?.charges
+        equityChargesData.demat_amc?.rupees
       )}/yr + GST`,
       subText: "Placeholder",
       className: "kaim-fit-amf",
@@ -53,7 +53,7 @@ const getDematChargesData = (equityChargesData) => () => {
   ];
 };
 
-const DematCharges = ({ isOpen, onClose, onClick, equityChargesData }) => {
+const DematCharges = ({ isOpen, onClose, equityChargesData }) => {
   const dematList = useMemo(getDematChargesData(equityChargesData), [
     equityChargesData,
   ]);
@@ -65,7 +65,7 @@ const DematCharges = ({ isOpen, onClose, onClick, equityChargesData }) => {
       button1Props={{
         title: "OKAY",
         variant: "contained",
-        onClick: onClick,
+        onClick: onClose,
       }}
       classes={{
         title: "wvbs-dc-title",

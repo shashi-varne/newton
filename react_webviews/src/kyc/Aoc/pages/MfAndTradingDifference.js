@@ -1,59 +1,94 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import Container from "../../common/Container";
 import { Imgc } from "../../../common/ui/Imgc";
 
-import { getConfig } from "../../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import useUserKycHook from "../../common/hooks/userKycHook";
-import { nativeCallback } from "../../../utils/native_callback";
+// import { nativeCallback } from "../../../utils/native_callback";
 import { getMfVsTradingData } from "../common/constants";
+import { PATHNAME_MAPPER } from "../../constants";
+import { triggerAocPaymentDecision } from "../../common/api";
 
 import "./MfAndTradingDifference.scss";
 
 const MFAndTradingDifferences = (props) => {
-  const { kyc, isLoading } = useUserKycHook();
-  const { isMobileDevice } = useMemo(getConfig, []);
+  const navigate = navigateFunc.bind(props);
+  const { kyc, isLoading, updateKyc } = useUserKycHook();
+  const { isMobileDevice, searchParams } = useMemo(getConfig, []);
+  const [showLoader, setShowLoader] = useState(false);
+  const [errorData, setErrorData] = useState({});
 
   const mfVsTradingData = useMemo(
     getMfVsTradingData(
-      kyc?.equity_account_charges?.account_opening?.charges,
-      kyc?.is_equity_aoc_applicable
+      kyc?.equity_account_charges_v2?.account_opening?.rupees,
+      !kyc?.is_equity_aoc_applicable
     ),
     [kyc]
   );
 
-  const sendEvents = (userAction) => {
-    let eventObj = {
-      event_name: "trading_onboarding",
-      properties: {
-        user_action: userAction || "",
-        screen_name: "payment_summary",
-      },
-    };
-    if (userAction === "just_set_events") {
-      return eventObj;
-    } else {
-      nativeCallback({ events: eventObj });
+  // const sendEvents = (userAction) => {
+  //   let eventObj = {
+  //     event_name: "trading_onboarding",
+  //     properties: {
+  //       user_action: userAction || "",
+  //       screen_name: "mf_vs_trading",
+  //     },
+  //   };
+  //   if (userAction === "just_set_events") {
+  //     return eventObj;
+  //   } else {
+  //     nativeCallback({ events: eventObj });
+  //   }
+  // };
+
+  const handleClick = async () => {
+    // sendEvents("next");
+    setErrorData({});
+    try {
+      setShowLoader("button");
+      const result = await triggerAocPaymentDecision("skip");
+      if (result.kyc) {
+        updateKyc(result.kyc);
+      }
+      if (kyc.kyc_status === "compliant") {
+        navigate(PATHNAME_MAPPER.kycEsignNsdl, {
+          searchParams: `${searchParams}&status=success`,
+        });
+      } else {
+        navigate(PATHNAME_MAPPER.kycEsign);
+      }
+    } catch (err) {
+      setErrorData({
+        showError: true,
+        title2: err.message,
+        handleClick1: handleClick
+      })
+    } finally {
+      setShowLoader(false);
     }
   };
 
-  const handleClick = () => {
-    sendEvents("next");
+  const handleChangeAccountType = () => {
+    // sendEvents("next");
+    if (showLoader) return;
+    navigate(PATHNAME_MAPPER.aocSelectAccount);
   };
-
-  const handleChangeAccountType = () => {};
 
   return (
     <Container
       skelton={isLoading}
       title="Account type - Mutual fund only"
-      events={sendEvents("just_set_events")}
+      // events={sendEvents("just_set_events")}
       handleClick={handleClick}
       data-aid="mfAndTradingDifference"
+      errorData={errorData}
+      showError={errorData.showError}
       twoButtonVertical={true}
       button1Props={{
         variant: "outlined",
         title: "Continue with mutual fund only",
         onClick: handleClick,
+        showLoader,
       }}
       button2Props={{
         variant: "contained",

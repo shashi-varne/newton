@@ -4,21 +4,27 @@ import Container from "../../common/Container";
 import { Tile } from "../mini-components/Tile";
 
 import isEmpty from "lodash/isEmpty";
+import get from "lodash/get";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import { getAocPaymentSummaryData } from "../common/constants";
 import { nativeCallback } from "../../../utils/native_callback";
 
 import "./PaymentStatus.scss";
+import { triggerAocPaymentDecision } from "../../common/api";
 
 const PaymentSummary = (props) => {
   const [paymentDetails, setPaymentDetails] = useState({});
-  const { kyc, isLoading } = useUserKycHook();
+  const [errorData, setErrorData] = useState({});
+  const [showLoader, setShowLoader] = useState(false);
+  const { kyc, isLoading, updateKyc } = useUserKycHook();
 
   useEffect(() => {
+    const accountOpeningData = get(kyc, "equity_account_charges_v2.account_opening", {})
     const aocData = {
-      amount: kyc.equity_account_charges.amount || 200,
-      total_amount: kyc.equity_account_charges.total_amount || 300,
-      gst: kyc.equity_account_charges.gst || 100,
+      amount: accountOpeningData?.base?.rupees,
+      totalAmount: accountOpeningData.total?.rupees,
+      gst: accountOpeningData.gst?.rupees,
+      gstPercentage: accountOpeningData.gst?.percentage || ""
     };
     const aocPaymentDetails = getAocPaymentSummaryData(aocData);
     setPaymentDetails(aocPaymentDetails);
@@ -39,8 +45,25 @@ const PaymentSummary = (props) => {
     }
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
+    setErrorData({});
     sendEvents("next");
+    try {
+      setShowLoader("button");
+      const result = await triggerAocPaymentDecision("accept");
+      if (result.kyc) {
+        updateKyc(result.kyc);
+      }
+
+      setShowLoader("page");
+    } catch (err) {
+      setErrorData({
+        showError: true,
+        title2: err.message,
+        handleClick1: handleClick,
+      });
+      setShowLoader(false);
+    }
   };
 
   return (
@@ -49,6 +72,9 @@ const PaymentSummary = (props) => {
       buttonTitle="PAY NOW"
       title="Payment summary"
       events={sendEvents("just_set_events")}
+      showLoader={showLoader}
+      errorData={errorData}
+      showError={errorData.showError}
       handleClick={handleClick}
       data-aid="paymentSummary"
     >

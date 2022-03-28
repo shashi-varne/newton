@@ -366,3 +366,8 @@ export const getKyc = async () => {
   }
   return result;
 }
+
+export const triggerAocPaymentDecision = async (status) => {
+  const res = await Api.post(`${API_CONSTANTS.aocPaymentDecision}${status}`)
+  return handleApi(res);
+};

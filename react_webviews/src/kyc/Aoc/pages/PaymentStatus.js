@@ -42,10 +42,16 @@ const PaymentStatus = (props) => {
       PAYMENT_STATUS_DATA["failed"];
     setPaymentStatusData(data);
     if (data.isSuccess) {
+      const accountOpeningData = get(
+        kyc,
+        "equity_account_charges_v2.account_opening",
+        {}
+      );
       const aocData = {
-        amount: kyc.equity_account_charges.amount || 200,
-        total_amount: kyc.equity_account_charges.total_amount || 300,
-        gst: kyc.equity_account_charges.gst || 100,
+        amount: accountOpeningData?.base?.rupees,
+        totalAmount: accountOpeningData.total?.rupees,
+        gst: accountOpeningData.gst?.rupees,
+        gstPercentage: accountOpeningData.gst?.percentage || "",
       };
       const aocPaymentDetails = getAocPaymentStatusData(aocData);
       setPaymentDetails(aocPaymentDetails);

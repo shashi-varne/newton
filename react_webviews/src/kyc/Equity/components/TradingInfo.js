@@ -36,7 +36,7 @@ const getEquityChargesData = (equityChargesData={}) => {
       list: [
         {
           name: "Annual maintainence",
-          value: `${formatAmountInr(equityChargesData.demat_amc?.charges)}/yr + GST`,
+          value: `${formatAmountInr(equityChargesData.demat_amc?.rupees)}/yr + GST`,
           subText: "Placeholder"
         },
         {
@@ -81,7 +81,7 @@ const TradingInfo = (props) => {
   const title = `${capitalize(productName)} Trading & Demat account`;
 
   useEffect(() => {
-    setEquityChargesData(getEquityChargesData(kyc.equity_account_charges))
+    setEquityChargesData(getEquityChargesData(kyc.equity_account_charges_v2))
   }, [kyc])
 
   const handleTiles = (index) => () => {
@@ -194,7 +194,7 @@ const TradingInfo = (props) => {
                 }`}
               >
                 {formatAmountInr(
-                  kyc.equity_account_charges?.account_opening?.charges
+                  kyc.equity_account_charges_v2?.account_opening?.base?.rupees
                 )}
                 /-
               </span>

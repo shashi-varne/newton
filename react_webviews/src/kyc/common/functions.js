@@ -1,5 +1,5 @@
 import { calculateAge, isValidDate, validateEmail, isEmpty, storageService } from 'utils/validators'
-import { isTradingEnabled, getConfig } from '../../utils/functions'
+import { isTradingEnabled, getConfig, isEquityAocApplicable } from '../../utils/functions'
 import { nativeCallback, openPdfCall } from '../../utils/native_callback'
 import { validateAlphaNumeric } from '../../utils/validators'
 import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS, GENDER_OPTIONS, PATHNAME_MAPPER, PINCODE_LENGTH } from '../constants'
@@ -241,7 +241,8 @@ export function isEquityEsignReady(kyc) {
   return (
     kyc.kyc_product_type === 'equity' &&
     kyc.equity_application_status === 'complete' &&
-    kyc.equity_sign_status !== 'signed'
+    kyc.equity_sign_status !== 'signed' &&
+    isEquityAocPaymentCompleted(kyc)
   );
 }
 
@@ -508,4 +509,10 @@ export const isBankVerified = (bank = {}, kyc = {}) => {
 
 export const isRetroMfIRUser = (kyc) => {
   return kyc.mf_kyc_processed;
+};
+
+export const isEquityAocPaymentCompleted = (kyc) => {
+  return (
+    kyc.equity_aoc_payment_status === "success" || !isEquityAocApplicable(kyc)
+  );
 };
