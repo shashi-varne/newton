@@ -16,7 +16,8 @@ import {
   isDigilockerFlow,
   validateFields,
   skipBankDetails,
-  getFlow
+  getFlow,
+  isRetroMfIRUser
 } from "../common/functions";
 import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { getIFSC, kycSubmit } from "../common/api";
@@ -212,7 +213,7 @@ const KycBankDetails = (props) => {
   };
 
   const handleOtherPlatformNavigation = () => {
-    const nextStep = kyc.show_equity_charges_page ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
+    const nextStep = isRetroMfIRUser(kyc) ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
     if (userType === "compliant") {
       if (isEdit) navigate(PATHNAME_MAPPER.journey);
       else navigate(nextStep, {

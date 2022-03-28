@@ -77,8 +77,8 @@ const Pan = (props) => {
     } else {
       if (dlFlow) {
         if (kyc.equity_sign_status !== 'signed') {
-          if (kyc.show_equity_charges_page) {
-            navigate(PATHNAME_MAPPER.tradingInfo, {
+          if (!kyc?.equity_data?.meta_data?.trading_experience) {
+            navigate(PATHNAME_MAPPER.tradingExperience, {
               state: { goBack: PATHNAME_MAPPER.journey }
             });
           } else {

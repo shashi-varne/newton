@@ -370,7 +370,7 @@ const Journey = (props) => {
       sendEvents('edit')
     }
     let stateMapper = {}
-    const tradingEsignPath = kyc.show_equity_charges_page ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
+    const tradingEsignPath = isKycDone ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
     if (kyc?.kyc_status === 'compliant') {
       // if (key === 'pan' && !customerVerified) {
       //   navigate('/kyc/compliant-confirm-pan')

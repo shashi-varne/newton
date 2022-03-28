@@ -505,3 +505,7 @@ export const isBankVerified = (bank = {}, kyc = {}) => {
     (bank.status === "default" && kyc.bank?.meta_data_status === "approved")
   );
 };
+
+export const isRetroMfIRUser = (kyc) => {
+  return kyc.mf_kyc_processed;
+};
