@@ -6,7 +6,7 @@ import { getUrlParams, isEmpty } from "utils/validators";
 import { checkDLPanFetchAndApprovedStatus, getFlow, isDigilockerFlow, isRetroMfIRUser } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
-import { getConfig, isTradingEnabled, navigate as navigateFunc, isNewIframeDesktopLayout } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc, isNewIframeDesktopLayout, isTradingFlow } from "../../utils/functions";
 import toast from '../../common/ui/Toast'
 import { PATHNAME_MAPPER } from "../constants";
 import InternalStorage from "../common/InternalStorage";
@@ -68,7 +68,7 @@ const KycUploadDocuments = (props) => {
     if (isDigilockerFlow(kyc)) {
       setDlFlow(true);
     }
-    const tradeFlow = isTradingEnabled(kyc)
+    const tradeFlow = isTradingFlow(kyc)
     setTradingEnabled(tradeFlow);
 
     if (isReadyToInvest() || additional) {

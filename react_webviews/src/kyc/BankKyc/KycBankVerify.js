@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Container from "../common/Container";
 import { isEmpty } from "utils/validators";
-import { navigate as navigateFunc, isTradingEnabled } from "utils/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { BANK_ACCOUNT_TYPES_NOMENCLATURE, PATHNAME_MAPPER } from "../constants";
 import { checkDLPanFetchAndApprovedStatus, getFlow, isDigilockerFlow, isRetroMfIRUser } from "../common/functions";
 import { saveBankData, getBankStatus } from "../common/api";
@@ -16,7 +16,7 @@ import { getConfig } from "utils/functions";
 import internalStorage from '../common/InternalStorage';
 import { nativeCallback } from "../../utils/native_callback";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
-import { isNewIframeDesktopLayout } from "../../utils/functions";
+import { isNewIframeDesktopLayout, isTradingFlow } from "../../utils/functions";
 import { storageService } from "../../utils/validators";
 
 const INITIAL_INFO_CONTENT = "We’ll credit ₹1 to verify your bank account.";
@@ -61,7 +61,7 @@ const KycBankVerify = (props) => {
     }
     setBankData({ ...kyc.bank.meta_data });
 
-    const TRADING_ENABLED = isTradingEnabled(kyc);
+    const TRADING_ENABLED = isTradingFlow(kyc);
     setTradingEnabled(TRADING_ENABLED);
     if (TRADING_ENABLED && isPartnerBank && !isPartnerEquityEnabled) {
       setInfoContent(NON_EQUITY_PARTNER_INFO);
