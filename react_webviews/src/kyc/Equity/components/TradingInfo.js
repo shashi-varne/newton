@@ -45,12 +45,12 @@ const getEquityChargesData = (equityChargesData={}) => {
         },
         {
           name: "Delivery",
-          value: `0.15% or min ${formatAmountInr(equityChargesData.brokerage_delivery?.rupees)}/-`,
+          value: `${equityChargesData.brokerage_delivery?.percentage}% or min ${formatAmountInr(equityChargesData.brokerage_delivery?.rupees)}/-`,
           subValue: "on transaction value"
         },
         {
           name: "Intraday",
-          value: `0.05% or min ${formatAmountInr(equityChargesData.brokerage_intraday?.rupees)}/-`,
+          value: `${equityChargesData.brokerage_intraday?.percentage}% or min ${formatAmountInr(equityChargesData.brokerage_intraday?.rupees)}/-`,
           subValue: "on transaction value"
         },
         {
