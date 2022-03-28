@@ -1,4 +1,4 @@
-import { inrFormatDecimal } from "../../../utils/validators";
+import { formatAmountInr, inrFormatDecimal } from "../../../utils/validators";
 
 export const PAYMENT_STATUS_DATA = {
   success: {
@@ -122,3 +122,78 @@ export const ACCOUNT_TYPES = [
     ],
   },
 ];
+
+export const getMfVsTradingData = (amount, isFree) => () => {
+  return [
+    {
+      type: "PRODUCTS",
+      mf: "MUTUAL FUND ONLY",
+      trading: "TRADING & DEMAT + MF",
+    },
+    {
+      type: "Stocks",
+      mfIcon: "cross",
+      tradingIcon: `check`,
+    },
+    {
+      type: "IPOs",
+      mfIcon: "cross",
+      tradingIcon: `check`,
+    },
+    {
+      type: "Futures & options",
+      mfIcon: "cross",
+      tradingIcon: `check`,
+    },
+    {
+      type: "Mutual funds",
+      mfIcon: "check",
+      tradingIcon: `check`,
+      className: "mfvt-mf",
+    },
+    {
+      type: "Bonds",
+      mfIcon: "cross",
+      tradingIcon: `check`,
+    },
+    {
+      type: "Debentures & more",
+      mfIcon: "cross",
+      tradingIcon: `check`,
+      className: "mfvt-bottom-content",
+    },
+    {
+      type: "FEATURES",
+      mf: "",
+      trading: "",
+      showTopBorder: true,
+      className: "mfvt-features",
+    },
+    {
+      type: "Exclusive stock reports",
+      mfIcon: "cross",
+      tradingIcon: `check`,
+    },
+    {
+      type: "Multi channel support",
+      subText: "(App, Web, Call & trade)",
+      mfIcon: "cross",
+      tradingIcon: `check`,
+    },
+    {
+      type: "Real-time portfolio tracking",
+      mfIcon: "cross",
+      tradingIcon: `check`,
+      className: "mfvt-bottom-content",
+    },
+    {
+      type: "Account opening charges",
+      showTopBorder: true,
+      mf: "No charges",
+      amount: `${formatAmountInr(amount)}/-`,
+      trading: `${isFree ? "Free" : "(One-time)"}`,
+      className: `mfvt-aoc-summary ${isFree && "mfvt-noaoc-summary"}`,
+      strikeOut: isFree,
+    },
+  ];
+};

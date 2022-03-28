@@ -70,6 +70,7 @@ import DialogAsPage from './mini_components/DialogAsPage';
 import AocPaymentStatus from "./Aoc/pages/PaymentStatus";
 import AocPaymentSummary from "./Aoc/pages/PaymentSummary";
 import AocSelectAccountType from "./Aoc/pages/SelectAccountType";
+import MFAndTradingDifferences from "./Aoc/pages/MfAndTradingDifference";
 
 const Kyc = (props) => {
   const { url } = props.match;
@@ -389,6 +390,11 @@ const Kyc = (props) => {
           exact
           path={`${url}/aoc/select-account`}
           component={AocSelectAccountType}
+        />
+        <Route
+          exact
+          path={`${url}/aoc/mf-trading-difference`}
+          component={MFAndTradingDifferences}
         />
         <Route component={NotFound} />
       </Switch>
