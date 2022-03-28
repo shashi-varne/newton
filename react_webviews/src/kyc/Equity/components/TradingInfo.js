@@ -194,7 +194,7 @@ const TradingInfo = (props) => {
                 }`}
               >
                 {formatAmountInr(
-                  kyc.equity_account_charges.account_opening.charges
+                  kyc.equity_account_charges?.account_opening?.charges
                 )}
                 /-
               </span>
