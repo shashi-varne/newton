@@ -624,6 +624,10 @@ export function isTradingEnabled(userKyc = {}) {
   return kyc?.equity_enabled;
 }
 
+export const isTradingFlow = (kyc) => {
+	return isTradingEnabled(kyc) && kyc?.kyc_product_type === "equity";
+};
+
 const { checkBeforeRedirection, checkAfterRedirection, backButtonHandler } = require(`./${getConfig().platform}_app`);
 
 export function navigate(pathname, data = {}) {
