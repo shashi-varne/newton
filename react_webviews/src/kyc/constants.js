@@ -71,6 +71,9 @@ export const PATHNAME_MAPPER = {
   documentVerification: '/kyc/document-verification',
   kycEsignNsdl: '/kyc-esign/nsdl',
   aocPaymentStatus: "/kyc/aoc/payment-status",
+  aocPaymentSummary: "/kyc/aoc/payment-summary",
+  aocSelectAccount: "/kyc/aoc/select-account",
+  aocMfVsTrading: "/kyc/aoc/mf-trading-difference",
 }
 
 export const STORAGE_CONSTANTS = {

@@ -65,6 +65,7 @@ const PlanReview = (props) => {
         "ground_premium",
         "ground_aadhaar",
         "upgraded_incomplete",
+        "complete_account_setup",
       ];
       const kycInProgressStatus = ["submitted", "verifying_trading_account"];
       if (kycInitStatus.includes(kycStatus)) {

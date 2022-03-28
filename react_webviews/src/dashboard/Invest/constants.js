@@ -382,7 +382,7 @@ export const kycStatusMapper = {
     button2Title: "Later",
     buttonTitle: "UPGRADE NOW",
     icon: "ic_upgrade.svg",
-    nextState: KYC_PATHNAME_MAPPER.journey
+    nextState: KYC_PATHNAME_MAPPER.tradingInfo
   },
   esign_pending: {
     color: "#ffa60b",
@@ -430,6 +430,7 @@ export const kycStatusMapper = {
     landingText: "PENDING",
     oneButton: true,
     icon: "icn_kyc_doc_rejected.svg",
+    nextState: KYC_PATHNAME_MAPPER.aocSelectAccount,
   },
 };
 
@@ -507,7 +508,7 @@ export const kycStatusMapperInvest = {
     icon: "ic_kyc_complete.svg",
     title: "Upgrade to Trading & Demat account",
     subtitle: "Stocks | IPO | F&O",
-    nextState: KYC_PATHNAME_MAPPER.journey,
+    nextState: KYC_PATHNAME_MAPPER.tradingInfo,
     subTitleClass: "kyc-complete",
   },
   esign_pending: {
@@ -530,6 +531,7 @@ export const kycStatusMapperInvest = {
     title: "Complete account setup",
     subtitle: "Now proceed with account opening",
     subTitleClass: "kyc-account-setup-incomplete",
+    nextState: KYC_PATHNAME_MAPPER.aocSelectAccount,
   },
 };
 
