@@ -485,7 +485,7 @@ export async function handleCommonKycRedirections({
       searchParams: `${getConfig().searchParams}&status=success`
     });
   } else if (tradingEnabled && kyc?.kyc_product_type !== "equity") {
-    await setKycProductTypeAndRedirect({ kyc, kycJourneyStatus, isReadyToInvestBase, handleLoader, navigate, updateKyc });
+    await setKycProductTypeAndRedirect({ kyc, kycJourneyStatus, isReadyToInvestBase, handleLoader, navigate, updateKyc, kycStatusData });
   } else if (kycStatusData.nextState) {
     navigate(kycStatusData.nextState);
   } else {
@@ -493,7 +493,7 @@ export async function handleCommonKycRedirections({
   }
 }
 
-export async function setKycProductTypeAndRedirect({ kyc, kycJourneyStatus, isReadyToInvestBase, handleLoader, navigate, updateKyc }) {
+export async function setKycProductTypeAndRedirect({ kyc, kycJourneyStatus, isReadyToInvestBase, handleLoader, navigate, updateKyc, kycStatusData }) {
   const config = getConfig();
   let result;
   if (!kyc?.mf_kyc_processed) {
@@ -507,13 +507,13 @@ export async function setKycProductTypeAndRedirect({ kyc, kycJourneyStatus, isRe
   } else if (kycJourneyStatus === "ground") {
     navigate("/kyc/home");
   } else {
-    const showAadhaar = !(result?.kyc?.address.meta_data.is_nri || result?.kyc?.kyc_type === "manual");
-    if (result?.kyc?.kyc_status !== "compliant") {
+    const showAadhaar = !(result?.kyc?.address.meta_data.is_nri || result?.kyc?.kyc_type === "manual" || result?.kyc?.kyc_status === "compliant");
+    if (kycStatusData?.nextState) {
+      navigate(kycStatusData.nextState);
+    } else {
       navigate(KYC_PATHNAME_MAPPER.journey, {
         searchParams: `${config.searchParams}&show_aadhaar=${showAadhaar}`
       });
-    } else {
-      navigate(KYC_PATHNAME_MAPPER.journey)
     }
   }
 }
@@ -691,6 +691,7 @@ export const handleKycStatus = ({
       handleLoader,
       navigate,
       updateKyc,
+      kycStatusData: modalData
     });
   } else if (kycJourneyStatus === "ground_pan") {
     navigate("/kyc/journey", {
