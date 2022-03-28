@@ -30,54 +30,37 @@ const BENEFITS = [
 const getEquityChargesData = (equityChargesData={}) => {
   return [
     {
-      title: "Fees and charges",
-      id: "fees",
-      list: [
-        {
-          name: "Account opening charges",
-          subText: "(one-time fee)",
-          value: `${formatAmountInr(equityChargesData.account_opening?.charges)}/yr + GST`,
-          message: equityChargesData.account_opening?.actual_charges,
-          lineStroke: true,
-        },
-        {
-          name: "Platform charges",
-          value: `${formatAmountInr(equityChargesData.platform?.charges)}/yr + GST`,
-          message: equityChargesData.platform?.actual_charges,
-          lineStroke: true,
-        },
-        {
-          name: "Demat AMC",
-          subText: "(Account maintainence charges)",
-          value: `${formatAmountInr(equityChargesData.demat_amc?.charges)}/yr + GST`,
-          message: equityChargesData.demat_amc?.actual_charges,
-          lineStroke: true,
-        }
-      ]
-    },
-    {
-      title: "Brokerage",
+      title: "Brokerage & other charges",
       id: "brokerage",
       list: [
         {
+          name: "Annual maintainence",
+          value: `${formatAmountInr(equityChargesData.demat_amc?.charges)}/yr + GST`,
+          subText: "Placeholder"
+        },
+        {
+          name: "Standard brokerage",
+          className: "aabc-title"
+        },
+        {
           name: "Delivery",
-          value: `Flat ${formatAmountInr(equityChargesData.brokerage_delivery?.rupees)}`,
-          subValue: "per executed order"
+          value: `0.15% or min ${formatAmountInr(equityChargesData.brokerage_delivery?.rupees)}/-`,
+          subValue: "on transaction value"
         },
         {
           name: "Intraday",
-          value: `Flat ${formatAmountInr(equityChargesData.brokerage_intraday?.rupees)}`,
-          subValue: "per executed order"
+          value: `0.05% or min ${formatAmountInr(equityChargesData.brokerage_intraday?.rupees)}/-`,
+          subValue: "on transaction value"
         },
         {
           name: "Futures",
-          value: `Flat ${formatAmountInr(equityChargesData.brokerage_future?.rupees)}`,
-          subValue: "per executed order"
+          value: `Flat ${formatAmountInr(equityChargesData.brokerage_future?.rupees)} per lot`,
+          subValue: "on executed order"
         },
         {
           name: "Options",
-          value: `Flat ${formatAmountInr(equityChargesData.brokerage_options?.rupees)}`,
-          subValue: "per executed order"
+          value: `Flat ${formatAmountInr(equityChargesData.brokerage_options?.rupees)} per lot`,
+          subValue: "on executed order"
         }
       ]
     },
@@ -90,7 +73,7 @@ const TradingInfo = (props) => {
   const navigate = navigateFunc.bind(props);
   const [checkTermsAndConditions, setCheckTermsAndConditions] = useState(true);
   const [showSkelton, setShowSkelton] = useState(false);
-  const [selectedTiles, setSelectedTiles] = useState([0]);
+  const [selectedTiles, setSelectedTiles] = useState([]);
   const [equityChargesData, setEquityChargesData] = useState([])
   const newIframeDesktopLayout = useMemo(isNewIframeDesktopLayout, [])
   const { kyc, isLoading } = useUserKycHook();
@@ -201,6 +184,24 @@ const TradingInfo = (props) => {
               })}
             </div>
           </div>
+          <div className="kaim-account-fee">
+            <div className="kaim-af-title">One-time account opening fee</div>
+            <div>
+              <span
+                className={`kaim-af-amount ${
+                  kyc.is_aoc_equity_applicable && `kaim-af-strike-amount`
+                }`}
+              >
+                {formatAmountInr(
+                  kyc.equity_account_charges.account_opening.charges
+                )}
+                /-
+              </span>
+              {kyc.is_aoc_equity_applicable && (
+                <span className="kaim-af-amount">Free</span>
+              )}
+            </div>
+          </div>
           {equityChargesData.map((data, index) => {
             return (
               <AccountAndBrokerageCharges
@@ -251,7 +252,7 @@ const AccountAndBrokerageCharges = ({open, onClick, ...props }) => {
               key={idx}
             >
               <div className="kaim-fees-info-text">
-                <div>{data.name}</div>
+                <div className={data.className}>{data.name}</div>
                 <div className="kaim-fees-info-subtext">{data.subText}</div>
               </div>
               <div>
