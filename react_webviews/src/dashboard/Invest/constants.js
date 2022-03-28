@@ -362,7 +362,7 @@ export const kycStatusMapper = {
   complete: {
     color: "#ffa60b",
     title: "Upgrade to trading and demat account",
-    subtitle: "Invest in India's best performing stocks in just a few taps!",
+    subtitle: "Invest in India's top companies  in just a few taps",
     button2Title: "Later",
     buttonTitle: "UPGRADE NOW",
     icon: "ic_upgrade.svg",
@@ -378,7 +378,7 @@ export const kycStatusMapper = {
   },
   upgraded_incomplete: {
     title: "Upgrade to trading and demat account",
-    subtitle: "Invest in India's best performing stocks in just a few taps!",
+    subtitle: "Invest in India's top companies  in just a few taps",
     button2Title: "Later",
     buttonTitle: "UPGRADE NOW",
     icon: "ic_upgrade.svg",
@@ -422,7 +422,15 @@ export const kycStatusMapper = {
     buttonTitle: "OKAY",
     oneButton: true,
     icon: "icn_kyc_completed.svg",
-  }
+  },
+  complete_account_setup: {
+    title: "2 more steps to go!",
+    subtitle: "Complete opening your Trading & Demat account to start investing in stocks, F&O & more",
+    buttonTitle: "Continue with Account opening",
+    landingText: "PENDING",
+    oneButton: true,
+    icon: "icn_kyc_doc_rejected.svg",
+  },
 };
 
 export const kycStatusMapperInvest = {
@@ -490,21 +498,21 @@ export const kycStatusMapperInvest = {
   },
   complete: {
     icon: "ic_kyc_complete.svg",
-    title: "You’re ready to invest in mutual funds",
-    subtitle: "UPGRAGE ACCOUNT",
+    title: "Upgrade to Trading & Demat account",
+    subtitle: "Stocks | IPO | F&O",
     nextState: KYC_PATHNAME_MAPPER.tradingInfo,
     subTitleClass: "kyc-complete",
   },
   upgraded_incomplete: {
     icon: "ic_kyc_complete.svg",
-    title: "You’re ready to invest in mutual funds",
-    subtitle: "UPGRAGE ACCOUNT",
+    title: "Upgrade to Trading & Demat account",
+    subtitle: "Stocks | IPO | F&O",
     nextState: KYC_PATHNAME_MAPPER.journey,
     subTitleClass: "kyc-complete",
   },
   esign_pending: {
     icon: "ic_kyc_complete.svg",
-    title: "KYC application",
+    title: "KYC documents verified",
     subtitle: "COMPLETE ESIGN",
     nextState: KYC_PATHNAME_MAPPER.kycEsign,
     subTitleClass: "kyc-complete",
@@ -516,7 +524,13 @@ export const kycStatusMapperInvest = {
     addPoint: true,
     subTitleClass: "kyc-submitted",
     subtitleColor: "var(--mustard)"
-  }
+  },
+  complete_account_setup: {
+    icon: "ic_kyc_rejected.svg",
+    title: "Complete account setup",
+    subtitle: "Now proceed with account opening",
+    subTitleClass: "kyc-account-setup-incomplete",
+  },
 };
 
 export const premiumBottomSheetMapper = {
