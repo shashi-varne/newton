@@ -54,8 +54,8 @@ const PaymentSummary = (props) => {
       if (result.kyc) {
         updateKyc(result.kyc);
       }
-
       setShowLoader("page");
+      window.location.href = result.payment_link;
     } catch (err) {
       setErrorData({
         showError: true,
