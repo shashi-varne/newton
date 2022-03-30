@@ -3,33 +3,34 @@ import Container from "../../common/Container";
 import { Imgc } from "../../../common/ui/Imgc";
 import WVPageTitle from "../../../common/ui/InPageHeader/WVInPageTitle";
 import WVPageSubtitle from "../../../common/ui/InPageHeader/WVInPageSubtitle";
-import Toast from "../../../common/ui/Toast";
 import { Tile } from "../mini-components/Tile";
 
 import isEmpty from "lodash/isEmpty";
-import get from "lodash/get";
 
 import {
   handleNativeExit,
   nativeCallback,
 } from "../../../utils/native_callback";
 import { getConfig } from "../../../utils/functions";
-import { getUserKycFromSummary } from "../../common/api";
+import { checkPaymentStatus } from "../../common/api";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import {
+  AOC_STORAGE_CONSTANTS,
   getAocPaymentStatusData,
   PAYMENT_STATUS_DATA,
 } from "../common/constants";
+import { storageService } from "../../../utils/validators";
+import { getAocData, triggerAocPayment } from "../common/functions";
 
 import "./PaymentStatus.scss";
 
 const PaymentStatus = (props) => {
-  const { productName } = useMemo(getConfig, []);
+  const config = useMemo(getConfig, []);
   const [paymentStatusData, setPaymentStatusData] = useState({});
   const [showLoader, setShowLoader] = useState(false);
   const [paymentDetails, setPaymentDetails] = useState({});
   const [errorData, setErrorData] = useState({});
-  const [count, setCount] = useState(30);
+  const [count, setCount] = useState(10);
   const [countdownInterval, setCountdownInterval] = useState();
   const { kyc, updateKyc } = useUserKycHook();
 
@@ -37,45 +38,19 @@ const PaymentStatus = (props) => {
     initialize();
   }, []);
 
-  useEffect(() => {
-    const data =
-      PAYMENT_STATUS_DATA[kyc?.equity_aoc_payment_status] ||
-      PAYMENT_STATUS_DATA["failed"];
-    setPaymentStatusData(data);
-    if (data.isSuccess) {
-      const accountOpeningData = get(
-        kyc,
-        "equity_account_charges_v2.account_opening",
-        {}
-      );
-      const aocData = {
-        amount: accountOpeningData?.base?.rupees,
-        totalAmount: accountOpeningData.total?.rupees,
-        gst: accountOpeningData.gst?.rupees,
-        gstPercentage: accountOpeningData.gst?.percentage || "",
-      };
-      const aocPaymentDetails = getAocPaymentStatusData(aocData);
-      setPaymentDetails(aocPaymentDetails);
-    }
-  }, [kyc]);
-
   const initialize = async () => {
     setShowLoader("page");
     let value = count;
     let intervalId = setInterval(() => {
       value--;
-      if (value === 20) {
-        getUserKycFromSummary();
-      } else if (value === 0) {
-        clearInterval(intervalId);
-        setCountdownInterval(null);
-        getUserKycFromSummary();
-        setShowLoader(false);
+      if (value === 29) {
+        checkAocPaymentStatus();
+      } else if (value === 3) {
+        checkAocPaymentStatus(true);
       }
       setCount(value);
     }, 1000);
     setCountdownInterval(intervalId);
-
   };
 
   const sendEvents = (userAction) => {
@@ -93,13 +68,65 @@ const PaymentStatus = (props) => {
     }
   };
 
-  const handleClick = () => {};
+  const checkAocPaymentStatus = async (refund = false) => {
+    const aocPaymentData = storageService().getObject(
+      AOC_STORAGE_CONSTANTS.AOC_PAYMENT_DATA
+    );
+    try {
+      const result = await checkPaymentStatus({
+        paymentId: aocPaymentData.payment_id,
+        pptId: aocPaymentData.ppt_id,
+        refund,
+      });
+      if (result.status === "success" || refund) {
+        clearInterval(countdownInterval);
+        setCountdownInterval(null);
+        const data =
+          PAYMENT_STATUS_DATA[result.status] || PAYMENT_STATUS_DATA["failed"];
+        setPaymentStatusData(data);
+        if (data.isSuccess) {
+          const aocData = getAocData(kyc);
+          const aocPaymentDetails = getAocPaymentStatusData(aocData);
+          setPaymentDetails(aocPaymentDetails);
+        }
+        setShowLoader(false);
+      }
+    } catch (err) {
+      console.log("er ", err);
+      if (refund) {
+        const handleRetry = () => {
+          setErrorData({});
+          setShowLoader("page");
+          checkAocPaymentStatus(true);
+        };
+        setErrorData({
+          showError: "page",
+          title2: err.message,
+          handleClick1: handleRetry,
+        });
+        setShowLoader(false);
+      }
+    }
+  };
+
+  const handleClick = () => {
+    const aocPaymentData = storageService().getObject(
+      AOC_STORAGE_CONSTANTS.AOC_PAYMENT_DATA
+    );
+    if (paymentStatusData.isSuccess || !aocPaymentData.payment_link) {
+      redirectToHome();
+    } else {
+      triggerAocPayment({
+        setErrorData,
+        setShowLoader,
+        updateKyc,
+        config,
+      });
+    }
+  };
 
   const redirectToHome = () => {
-    if (paymentStatusData.isSuccess) {
-      handleNativeExit(props, { action: "exit" });
-    } else {
-    }
+    handleNativeExit(props, { action: "exit" });
   };
 
   return (
@@ -124,7 +151,7 @@ const PaymentStatus = (props) => {
       >
         {!isEmpty(paymentStatusData) && (
           <Imgc
-            src={require(`assets/${productName}/${paymentStatusData.icon}`)}
+            src={require(`assets/${config.productName}/${paymentStatusData.icon}`)}
             className="aoc-icon"
             dataAid="top"
           />

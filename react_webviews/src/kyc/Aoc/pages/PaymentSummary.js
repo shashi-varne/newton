@@ -2,20 +2,14 @@ import React, { useEffect, useMemo, useState } from "react";
 import Container from "../../common/Container";
 import { Tile } from "../mini-components/Tile";
 
-import isEmpty from "lodash/isEmpty";
-import get from "lodash/get";
 import useUserKycHook from "../../common/hooks/userKycHook";
-import {
-  AOC_STORAGE_CONSTANTS,
-  getAocPaymentSummaryData,
-} from "../common/constants";
-import { PATHNAME_MAPPER } from "../../constants";
+import isEmpty from "lodash/isEmpty";
+import { getAocPaymentSummaryData } from "../common/constants";
 import { nativeCallback } from "../../../utils/native_callback";
-import { triggerAocPaymentDecision } from "../../common/api";
-import { getBasePath, getConfig } from "../../../utils/functions";
-import { storageService } from "../../../utils/validators";
+import { getConfig } from "../../../utils/functions";
 
 import "./PaymentStatus.scss";
+import { getAocData, triggerAocPayment } from "../common/functions";
 
 const PaymentSummary = (props) => {
   const [paymentDetails, setPaymentDetails] = useState({});
@@ -25,17 +19,7 @@ const PaymentSummary = (props) => {
   const config = useMemo(getConfig, []);
 
   useEffect(() => {
-    const accountOpeningData = get(
-      kyc,
-      "equity_account_charges_v2.account_opening",
-      {}
-    );
-    const aocData = {
-      amount: accountOpeningData?.base?.rupees,
-      totalAmount: accountOpeningData.total?.rupees,
-      gst: accountOpeningData.gst?.rupees,
-      gstPercentage: accountOpeningData.gst?.percentage || "",
-    };
+    const aocData = getAocData(kyc);
     const aocPaymentDetails = getAocPaymentSummaryData(aocData);
     setPaymentDetails(aocPaymentDetails);
   }, [kyc]);
@@ -56,37 +40,13 @@ const PaymentSummary = (props) => {
   };
 
   const handleClick = async () => {
-    setErrorData({});
     sendEvents("next");
-    try {
-      setShowLoader("button");
-      const redirectUrl = encodeURIComponent(
-        `${getBasePath()}${PATHNAME_MAPPER.aocPaymentStatus}${
-          config.searchParams
-        }`
-      );
-      const result = await triggerAocPaymentDecision(
-        `accept&plutus_redirect_url=${redirectUrl}`
-      );
-      if (!isEmpty(result.kyc)) {
-        updateKyc(result.kyc);
-      }
-      if (!isEmpty(result.equity_payment_details)) {
-        storageService().setObject(
-          AOC_STORAGE_CONSTANTS.AOC_PAYMENT_DATA,
-          result.equity_payment_details
-        );
-      }
-      setShowLoader("page");
-      window.location.href = result.payment_link;
-    } catch (err) {
-      setErrorData({
-        showError: true,
-        title2: err.message,
-        handleClick1: handleClick,
-      });
-      setShowLoader(false);
-    }
+    triggerAocPayment({
+      setErrorData,
+      setShowLoader,
+      updateKyc,
+      config,
+    });
   };
 
   return (

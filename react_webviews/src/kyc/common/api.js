@@ -374,7 +374,7 @@ export const triggerAocPaymentDecision = async (status) => {
 
 export const checkPaymentStatus = async (data) => {
   const res = await Api.post(
-    `${API_CONSTANTS.aocPaymentStatus}/${data.payment_id}/${data.ppt_id}?mark_as_refund=${data.refund}`
+    `${API_CONSTANTS.aocPaymentStatus}/${data.paymentId}/${data.pptId}?mark_as_refund=${data.refund}`
   );
   return handleApi(res);
 };

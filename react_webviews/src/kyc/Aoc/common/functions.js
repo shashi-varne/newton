@@ -1,0 +1,69 @@
+import get from "lodash/get";
+import isEmpty from "lodash/isEmpty";
+import { getBasePath } from "../../../utils/functions";
+import { storageService } from "../../../utils/validators";
+import { AOC_STORAGE_CONSTANTS } from "./constants";
+import { triggerAocPaymentDecision } from "../../common/api";
+import { PATHNAME_MAPPER } from "../../constants";
+
+export const getAocData = (kyc) => {
+  const accountOpeningData = get(
+    kyc,
+    "equity_account_charges_v2.account_opening",
+    {}
+  );
+  const aocData = {
+    amount: accountOpeningData?.base?.rupees,
+    totalAmount: accountOpeningData.total?.rupees,
+    gst: accountOpeningData.gst?.rupees,
+    gstPercentage: accountOpeningData.gst?.percentage || "",
+  };
+
+  return aocData;
+};
+
+export const triggerAocPayment = async ({
+  setErrorData,
+  setShowLoader,
+  config,
+  updateKyc,
+}) => {
+  try {
+    setShowLoader("button");
+    const redirectUrl = encodeURIComponent(
+      `${getBasePath()}${PATHNAME_MAPPER.aocPaymentStatus}${
+        config.searchParams
+      }`
+    );
+    const result = await triggerAocPaymentDecision(
+      `accept&plutus_redirect_url=${redirectUrl}`
+    );
+    if (!isEmpty(result.kyc)) {
+      updateKyc(result.kyc);
+    }
+    if (!isEmpty(result.equity_payment_details)) {
+      storageService().setObject(
+        AOC_STORAGE_CONSTANTS.AOC_PAYMENT_DATA,
+        result.equity_payment_details
+      );
+    }
+    setShowLoader("page");
+    window.location.href = result.payment_link;
+  } catch (err) {
+    const retry = () => {
+      setErrorData({});
+      triggerAocPayment({
+        setErrorData,
+        setShowLoader,
+        config,
+        updateKyc,
+      });
+    };
+    setErrorData({
+      showError: true,
+      title2: err.message,
+      handleClick1: retry,
+    });
+    setShowLoader(false);
+  }
+};
