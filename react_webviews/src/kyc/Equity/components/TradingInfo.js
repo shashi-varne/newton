@@ -122,7 +122,7 @@ const TradingInfo = (props) => {
       return;
     }
     if (isEquityApplSubmittedOrComplete(kyc)) {
-      validateAocPaymentAndRedirect(kyc, navigate);
+      validateAocPaymentAndRedirect(kyc, navigate, true);
       return;
     }
     if (kyc?.mf_kyc_processed) {

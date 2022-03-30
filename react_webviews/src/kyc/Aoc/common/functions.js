@@ -5,7 +5,7 @@ import { storageService } from "../../../utils/validators";
 import { AOC_STORAGE_CONSTANTS } from "./constants";
 import { triggerAocPaymentDecision } from "../../common/api";
 import { PATHNAME_MAPPER } from "../../constants";
-import { isEquityEsignReady } from "../../common/functions";
+import { isEquityEsignReady, isRetroMfIRUser } from "../../common/functions";
 
 export const isEquityAocApplicable = (kyc) => {
   return kyc?.is_equity_aoc_applicable;
@@ -17,13 +17,15 @@ export const isAocPaymentSuccessOrNotApplicable = (kyc) => {
   );
 };
 
-export const validateAocPaymentAndRedirect = (kyc, navigate) => {
+export const validateAocPaymentAndRedirect = (kyc, navigate, skipSelectAccount) => {
   if (isAocPaymentSuccessOrNotApplicable(kyc)) {
     if (isEquityEsignReady(kyc)) {
       navigate(PATHNAME_MAPPER.kycEsign);
     } else {
       navigate(PATHNAME_MAPPER.documentVerification);
     }
+  } else if (!isRetroMfIRUser(kyc) && !skipSelectAccount) {
+    navigate(PATHNAME_MAPPER.aocSelectAccount);
   } else {
     navigate(PATHNAME_MAPPER.aocPaymentSummary);
   }
