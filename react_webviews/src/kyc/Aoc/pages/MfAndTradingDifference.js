@@ -8,6 +8,7 @@ import useUserKycHook from "../../common/hooks/userKycHook";
 import { getMfVsTradingData } from "../common/constants";
 import { PATHNAME_MAPPER } from "../../constants";
 import { triggerAocPaymentDecision } from "../../common/api";
+import { getAocData, isEquityAocApplicable } from "../common/functions";
 
 import "./MfAndTradingDifference.scss";
 
@@ -19,10 +20,7 @@ const MFAndTradingDifferences = (props) => {
   const [errorData, setErrorData] = useState({});
 
   const mfVsTradingData = useMemo(
-    getMfVsTradingData(
-      kyc?.equity_account_charges_v2?.account_opening?.rupees,
-      !kyc?.is_equity_aoc_applicable
-    ),
+    getMfVsTradingData(getAocData(kyc).amount, !isEquityAocApplicable(kyc)),
     [kyc]
   );
 
@@ -61,8 +59,8 @@ const MFAndTradingDifferences = (props) => {
       setErrorData({
         showError: true,
         title2: err.message,
-        handleClick1: handleClick
-      })
+        handleClick1: handleClick,
+      });
     } finally {
       setShowLoader(false);
     }
