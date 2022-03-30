@@ -5,11 +5,15 @@ import { Tile } from "../mini-components/Tile";
 import isEmpty from "lodash/isEmpty";
 import get from "lodash/get";
 import useUserKycHook from "../../common/hooks/userKycHook";
-import { getAocPaymentSummaryData } from "../common/constants";
+import {
+  AOC_STORAGE_CONSTANTS,
+  getAocPaymentSummaryData,
+} from "../common/constants";
 import { PATHNAME_MAPPER } from "../../constants";
 import { nativeCallback } from "../../../utils/native_callback";
 import { triggerAocPaymentDecision } from "../../common/api";
 import { getBasePath, getConfig } from "../../../utils/functions";
+import { storageService } from "../../../utils/validators";
 
 import "./PaymentStatus.scss";
 
@@ -64,8 +68,14 @@ const PaymentSummary = (props) => {
       const result = await triggerAocPaymentDecision(
         `accept&app_redirect_url=${redirectUrl}`
       );
-      if (result.kyc) {
+      if (!isEmpty(result.kyc)) {
         updateKyc(result.kyc);
+      }
+      if (!isEmpty(result.equity_payment_details)) {
+        storageService().setObject(
+          AOC_STORAGE_CONSTANTS.AOC_PAYMENT_DATA,
+          result.equity_payment_details
+        );
       }
       setShowLoader("page");
       window.location.href = result.payment_link;

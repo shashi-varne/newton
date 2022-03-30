@@ -51,7 +51,7 @@ export const getAocPaymentStatusData = ({ amount, gst, totalAmount }) => {
 };
 
 export const AOC_STORAGE_CONSTANTS = {
-  AOC_DATA: "aocData",
+  AOC_PAYMENT_DATA: "aocPaymentData",
 };
 
 export const getAocPaymentSummaryData = ({ amount, gst, totalAmount, gstPercentage }) => {

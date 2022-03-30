@@ -17,7 +17,8 @@ export const API_CONSTANTS = {
   sendContactConsent: '/api/communication/contact/consent',
   authCheck: '/api/iam/auth/check',
   goldUserInfo: '/api/gold/user/account',
-  aocPaymentDecision: "/api/equity/eqm/payment/aoc?payment_decision="
+  aocPaymentDecision: "/api/equity/eqm/payment/aoc?payment_decision=",
+  aocPaymentStatus: "/api/equity/api/eqm/aoc/pg/status",
 }
 
 export const PATHNAME_MAPPER = {

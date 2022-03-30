@@ -26,11 +26,12 @@ import "./PaymentStatus.scss";
 const PaymentStatus = (props) => {
   const { productName } = useMemo(getConfig, []);
   const [paymentStatusData, setPaymentStatusData] = useState({});
-  const [showSkelton, setShowSkelton] = useState(true);
-  const [showLoader] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
   const [paymentDetails, setPaymentDetails] = useState({});
-  const { kyc, updateKyc } = useUserKycHook();
   const [errorData, setErrorData] = useState({});
+  const [count, setCount] = useState(30);
+  const [countdownInterval, setCountdownInterval] = useState();
+  const { kyc, updateKyc } = useUserKycHook();
 
   useEffect(() => {
     initialize();
@@ -59,19 +60,22 @@ const PaymentStatus = (props) => {
   }, [kyc]);
 
   const initialize = async () => {
-    setShowSkelton(true);
-    try {
-      const result = await getUserKycFromSummary();
-      let userKyc = get(result, "data.kyc.kyc.data", {});
-      if (!isEmpty(userKyc)) {
-        updateKyc(userKyc);
+    setShowLoader("page");
+    let value = count;
+    let intervalId = setInterval(() => {
+      value--;
+      if (value === 20) {
+        getUserKycFromSummary();
+      } else if (value === 0) {
+        clearInterval(intervalId);
+        setCountdownInterval(null);
+        getUserKycFromSummary();
+        setShowLoader(false);
       }
-    } catch (err) {
-      Toast(err.message, "error");
-      setErrorData();
-    } finally {
-      setShowSkelton(false);
-    }
+      setCount(value);
+    }, 1000);
+    setCountdownInterval(intervalId);
+
   };
 
   const sendEvents = (userAction) => {
@@ -105,7 +109,6 @@ const PaymentStatus = (props) => {
         goBack: redirectToHome,
       }}
       hidePageTitle
-      skelton={showSkelton}
       showLoader={showLoader}
       errorData={errorData}
       showError={errorData.showError}
