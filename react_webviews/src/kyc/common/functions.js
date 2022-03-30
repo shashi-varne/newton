@@ -3,7 +3,7 @@ import { isTradingEnabled, getConfig, isEquityAocApplicable } from '../../utils/
 import { nativeCallback, openPdfCall } from '../../utils/native_callback'
 import { validateAlphaNumeric } from '../../utils/validators'
 import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS, GENDER_OPTIONS, PATHNAME_MAPPER, PINCODE_LENGTH } from '../constants'
-import { isReadyToInvest } from '../services'
+import { getKycAppStatus, isReadyToInvest } from '../services'
 import { getKyc } from './api'
 
 export const isEquityAllowed = (config = getConfig()) => {
@@ -528,3 +528,10 @@ export const validateAocPaymentAndRedirect = (kyc, navigate) => {
     navigate(PATHNAME_MAPPER.aocPaymentSummary);
   }
 }
+
+export const isUpgradeToEquityAccountEnabled = (kyc, kycStatus) => {
+  if (!kycStatus) {
+    kycStatus = getKycAppStatus(kyc).status;
+  }
+  return isTradingEnabled(kyc) && kyc?.kyc_product_type !== "equity" && kycStatus !== "mf_esign_pending";
+};
