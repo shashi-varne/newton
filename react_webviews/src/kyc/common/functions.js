@@ -1,7 +1,8 @@
 import { calculateAge, isValidDate, validateEmail, isEmpty, storageService } from 'utils/validators'
-import { isTradingEnabled, getConfig, isEquityAocApplicable } from '../../utils/functions'
+import { isTradingEnabled, getConfig } from '../../utils/functions'
 import { nativeCallback, openPdfCall } from '../../utils/native_callback'
 import { validateAlphaNumeric } from '../../utils/validators'
+import { isAocPaymentSuccessOrNotApplicable } from '../Aoc/common/functions'
 import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS, GENDER_OPTIONS, PATHNAME_MAPPER, PINCODE_LENGTH } from '../constants'
 import { getKycAppStatus, isReadyToInvest } from '../services'
 import { getKyc } from './api'
@@ -242,7 +243,7 @@ export function isEquityEsignReady(kyc) {
     kyc.kyc_product_type === 'equity' &&
     kyc.equity_application_status === 'complete' &&
     kyc.equity_sign_status !== 'signed' &&
-    isEquityAocPaymentCompleted(kyc)
+    isAocPaymentSuccessOrNotApplicable(kyc)
   );
 }
 
@@ -510,24 +511,6 @@ export const isBankVerified = (bank = {}, kyc = {}) => {
 export const isRetroMfIRUser = (kyc) => {
   return kyc.mf_kyc_processed;
 };
-
-export const isEquityAocPaymentCompleted = (kyc) => {
-  return (
-    kyc.equity_aoc_payment_status === "success" || !isEquityAocApplicable(kyc)
-  );
-};
-
-export const validateAocPaymentAndRedirect = (kyc, navigate) => {
-  if(isEquityAocPaymentCompleted(kyc)) {
-    if (isEquityEsignReady(kyc)) {
-      navigate(PATHNAME_MAPPER.kycEsign)
-    } else {
-      navigate(PATHNAME_MAPPER.documentVerification)
-    }
-  } else {
-    navigate(PATHNAME_MAPPER.aocPaymentSummary);
-  }
-}
 
 export const isUpgradeToEquityAccountEnabled = (kyc, kycStatus) => {
   if (!kycStatus) {

@@ -3,11 +3,12 @@ import { storageService } from '../utils/validators'
 import toast from '../common/ui/Toast'
 import { isTradingEnabled } from '../utils/functions'
 import { kycSubmit } from './common/api'
-import { isDigilockerFlow, isEquityAocPaymentCompleted, isRetroMfIRUser } from './common/functions'
+import { isDigilockerFlow, isRetroMfIRUser } from './common/functions'
 import eventManager from '../utils/eventManager'
 import { EVENT_MANAGER_CONSTANTS } from '../utils/constants'
 import isEmpty from "lodash/isEmpty"
 import { FREEDOM_PLAN_STORAGE_CONSTANTS } from '../freedom_plan/common/constants'
+import { isAocPaymentSuccessOrNotApplicable } from './Aoc/common/functions'
 
 const DOCUMENTS_MAPPER = {
   DL: 'Driving license',
@@ -295,6 +296,8 @@ export function getKycAppStatus(kyc) {
       status = kyc.equity_application_status;
     }
   }
+  
+  const aocPaymentSuccessOrNotApplicable = isAocPaymentSuccessOrNotApplicable(kyc);
 
   if (!kyc.pan.meta_data.pan_number || (kyc.pan.meta_data.pan_number &&
     kyc.customer_verified !== 'VERIFIED')) {
@@ -348,7 +351,7 @@ export function getKycAppStatus(kyc) {
   }
   
   // this condition handles equity esign pending case
-  if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && kyc.equity_application_status === 'complete' && isEquityAocPaymentCompleted(kyc) && kyc.equity_sign_status !== "signed") {
+  if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && kyc.equity_application_status === 'complete' && aocPaymentSuccessOrNotApplicable && kyc.equity_sign_status !== "signed") {
     status = 'esign_pending';
   }
 
@@ -370,11 +373,11 @@ export function getKycAppStatus(kyc) {
   }
 
   // this condition handles showing upgrade account to MF IR or Submitted users until user submits all equity related docs
-  if (TRADING_ENABLED && (isMfApplicationSubmitted(kyc) || isReadyToInvest()) && kyc.equity_application_status !== "init" && !isEquityAocPaymentCompleted(kyc) && kyc.equity_sign_status !== "signed") {
+  if (TRADING_ENABLED && (isMfApplicationSubmitted(kyc) || isReadyToInvest()) && kyc.equity_application_status !== "init" && !aocPaymentSuccessOrNotApplicable && kyc.equity_sign_status !== "signed") {
     status = "upgraded_incomplete";
   }
 
-  if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && !isRetroMfIRUser(kyc) && ["submitted", "complete"].includes(kyc.equity_application_status) && !isEquityAocPaymentCompleted(kyc) && kyc.sign_status !== "signed") {
+  if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && !isRetroMfIRUser(kyc) && ["submitted", "complete"].includes(kyc.equity_application_status) && !aocPaymentSuccessOrNotApplicable && kyc.sign_status !== "signed") {
     status = "complete_account_setup";
   }
 

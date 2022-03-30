@@ -11,7 +11,6 @@ import { upload } from '../common/api';
 import { nativeCallback } from '../../utils/native_callback';
 import WVInPageHeader from '../../common/ui/InPageHeader/WVInPageHeader';
 import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
-import { validateAocPaymentAndRedirect } from '../common/functions';
 import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet';
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 import { storageService } from '../../utils/validators';
@@ -19,6 +18,7 @@ import { getConfig, isNewIframeDesktopLayout, navigate as navigateFunc } from '.
 import InternalStorage from '../common/InternalStorage';
 import { landingEntryPoints } from '../../utils/constants';
 import { PATHNAME_MAPPER } from '../constants';
+import { validateAocPaymentAndRedirect } from '../Aoc/common/functions';
 
 const UPLOAD_OPTIONS_MAP = {
   'bank-statement': {

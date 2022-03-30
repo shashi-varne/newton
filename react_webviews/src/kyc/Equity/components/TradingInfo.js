@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { getConfig, isNewIframeDesktopLayout, navigate as navigateFunc } from "../../../utils/functions";
 import Container from "../../common/Container";
 import "./commonStyles.scss";
-import { getUpgradeAccountFlowNextStep, isEquityApplSubmittedOrComplete, validateAocPaymentAndRedirect } from "../../common/functions";
+import { getUpgradeAccountFlowNextStep, isEquityApplSubmittedOrComplete } from "../../common/functions";
 import { PATHNAME_MAPPER } from "../../constants";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import Toast from "../../../common/ui/Toast";
@@ -12,6 +12,7 @@ import SVG from 'react-inlinesvg';
 import { Imgc } from "../../../common/ui/Imgc";
 import TermsAndConditions from "../../mini-components/TermsAndConditions";
 import BrokerageChargesTile from "../mini-components/BrokerageChargesTile";
+import { validateAocPaymentAndRedirect } from "../../Aoc/common/functions";
 
 const BENEFITS = [
   {
