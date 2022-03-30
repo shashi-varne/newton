@@ -66,7 +66,7 @@ const PaymentSummary = (props) => {
         }`
       );
       const result = await triggerAocPaymentDecision(
-        `accept&app_redirect_url=${redirectUrl}`
+        `accept&plutus_redirect_url=${redirectUrl}`
       );
       if (!isEmpty(result.kyc)) {
         updateKyc(result.kyc);
