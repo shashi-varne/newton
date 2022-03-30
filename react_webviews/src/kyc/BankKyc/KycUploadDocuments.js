@@ -3,7 +3,7 @@ import Container from "../common/Container";
 import { SUPPORTED_IMAGE_TYPES, VERIFICATION_DOC_OPTIONS } from "../constants";
 import { uploadBankDocuments } from "../common/api";
 import { getUrlParams, isEmpty } from "utils/validators";
-import { checkDLPanFetchAndApprovedStatus, getFlow, isDigilockerFlow, isRetroMfIRUser } from "../common/functions";
+import { checkDLPanFetchAndApprovedStatus, getFlow, isDigilockerFlow, showTradingInfoScreen } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
 import { getConfig, navigate as navigateFunc, isNewIframeDesktopLayout, isTradingFlow } from "../../utils/functions";
@@ -151,7 +151,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const handleOtherPlatformNavigation = () => {
-    const nextStep = isRetroMfIRUser(kyc) ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
+    const nextStep = showTradingInfoScreen(kyc) ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
     sendEvents('next', 'bank_verification_pending');
     if (additional) {
       navigate(PATHNAME_MAPPER.bankList);

@@ -535,3 +535,7 @@ export const isUpgradeToEquityAccountEnabled = (kyc, kycStatus) => {
   }
   return isTradingEnabled(kyc) && kyc?.kyc_product_type !== "equity" && kycStatus !== "mf_esign_pending";
 };
+
+export const showTradingInfoScreen = (kyc) => {
+  return isRetroMfIRUser(kyc) && isEquityApplSubmittedOrComplete(kyc);
+}

@@ -6,7 +6,7 @@ import { isEmpty, storageService, getUrlParams } from '../../utils/validators'
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
-import { isDigilockerFlow, isIncompleteEquityApplication, updateQueryStringParameter, getFlow, pollProgress } from "../common/functions";
+import { isDigilockerFlow, isIncompleteEquityApplication, updateQueryStringParameter, getFlow, pollProgress, showTradingInfoScreen } from "../common/functions";
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
 import { 
@@ -370,7 +370,7 @@ const Journey = (props) => {
       sendEvents('edit')
     }
     let stateMapper = {}
-    const tradingEsignPath = isKycDone ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
+    const tradingEsignPath = showTradingInfoScreen(kyc) ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
     if (kyc?.kyc_status === 'compliant') {
       // if (key === 'pan' && !customerVerified) {
       //   navigate('/kyc/compliant-confirm-pan')

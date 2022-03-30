@@ -3,7 +3,7 @@ import Container from "../common/Container";
 import { isEmpty } from "utils/validators";
 import { navigate as navigateFunc } from "utils/functions";
 import { BANK_ACCOUNT_TYPES_NOMENCLATURE, PATHNAME_MAPPER } from "../constants";
-import { checkDLPanFetchAndApprovedStatus, getFlow, isDigilockerFlow, isRetroMfIRUser } from "../common/functions";
+import { checkDLPanFetchAndApprovedStatus, getFlow, isDigilockerFlow, showTradingInfoScreen } from "../common/functions";
 import { saveBankData, getBankStatus } from "../common/api";
 import toast from "../../common/ui/Toast";
 import PennyDialog from "../mini-components/PennyDialog";
@@ -239,7 +239,7 @@ const KycBankVerify = (props) => {
   };
 
   const handleOtherPlatformNavigation = () => {
-    const nextStep = isRetroMfIRUser(kyc) ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
+    const nextStep = showTradingInfoScreen(kyc) ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
     if (userType === "compliant") {
       if (isEdit) goToJourney();
       else navigate(nextStep, {

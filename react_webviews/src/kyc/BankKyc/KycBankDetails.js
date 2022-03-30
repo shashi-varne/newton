@@ -17,7 +17,7 @@ import {
   validateFields,
   skipBankDetails,
   getFlow,
-  isRetroMfIRUser
+  showTradingInfoScreen
 } from "../common/functions";
 import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { getIFSC, kycSubmit } from "../common/api";
@@ -213,7 +213,7 @@ const KycBankDetails = (props) => {
   };
 
   const handleOtherPlatformNavigation = () => {
-    const nextStep = isRetroMfIRUser(kyc) ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
+    const nextStep = showTradingInfoScreen(kyc) ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
     if (userType === "compliant") {
       if (isEdit) navigate(PATHNAME_MAPPER.journey);
       else navigate(nextStep, {
