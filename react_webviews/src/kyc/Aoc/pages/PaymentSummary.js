@@ -1,30 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Container from "../../common/Container";
-
 import { Tile } from "../mini-components/Tile";
 
 import isEmpty from "lodash/isEmpty";
 import get from "lodash/get";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import { getAocPaymentSummaryData } from "../common/constants";
+import { PATHNAME_MAPPER } from "../../constants";
 import { nativeCallback } from "../../../utils/native_callback";
+import { triggerAocPaymentDecision } from "../../common/api";
+import { getBasePath, getConfig } from "../../../utils/functions";
 
 import "./PaymentStatus.scss";
-import { triggerAocPaymentDecision } from "../../common/api";
 
 const PaymentSummary = (props) => {
   const [paymentDetails, setPaymentDetails] = useState({});
   const [errorData, setErrorData] = useState({});
   const [showLoader, setShowLoader] = useState(false);
   const { kyc, isLoading, updateKyc } = useUserKycHook();
+  const config = useMemo(getConfig, []);
 
   useEffect(() => {
-    const accountOpeningData = get(kyc, "equity_account_charges_v2.account_opening", {})
+    const accountOpeningData = get(
+      kyc,
+      "equity_account_charges_v2.account_opening",
+      {}
+    );
     const aocData = {
       amount: accountOpeningData?.base?.rupees,
       totalAmount: accountOpeningData.total?.rupees,
       gst: accountOpeningData.gst?.rupees,
-      gstPercentage: accountOpeningData.gst?.percentage || ""
+      gstPercentage: accountOpeningData.gst?.percentage || "",
     };
     const aocPaymentDetails = getAocPaymentSummaryData(aocData);
     setPaymentDetails(aocPaymentDetails);
@@ -50,7 +56,14 @@ const PaymentSummary = (props) => {
     sendEvents("next");
     try {
       setShowLoader("button");
-      const result = await triggerAocPaymentDecision("accept");
+      const redirectUrl = encodeURIComponent(
+        `${getBasePath()}${PATHNAME_MAPPER.aocPaymentStatus}${
+          config.searchParams
+        }`
+      );
+      const result = await triggerAocPaymentDecision(
+        `accept&app_redirect_url=${redirectUrl}`
+      );
       if (result.kyc) {
         updateKyc(result.kyc);
       }
