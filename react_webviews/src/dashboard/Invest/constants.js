@@ -513,6 +513,7 @@ export const kycStatusMapperInvest = {
     subtitle: "Stocks | IPO | F&O",
     nextState: KYC_PATHNAME_MAPPER.tradingInfo,
     subTitleClass: "kyc-complete",
+    eventStatus: "upgrade_to_trading_account",
   },
   upgraded_incomplete: {
     icon: "ic_kyc_complete.svg",
@@ -520,6 +521,7 @@ export const kycStatusMapperInvest = {
     subtitle: "Stocks | IPO | F&O",
     nextState: KYC_PATHNAME_MAPPER.tradingInfo,
     subTitleClass: "kyc-complete",
+    eventStatus: "upgrade_to_trading_account",
   },
   esign_pending: {
     icon: "ic_kyc_complete.svg",
