@@ -432,6 +432,16 @@ export const kycStatusMapper = {
     icon: "icn_kyc_doc_rejected.svg",
     nextState: KYC_PATHNAME_MAPPER.aocSelectAccount,
   },
+  mf_esign_pending: {
+    color: "#ffa60b",
+    title: "Complete KYC",
+    subtitle: "KYC is a mandatory process to invest in stocks, primary market products, F&O",
+    button2Title: "Later",
+    buttonTitle: "COMPLETE NOW",
+    landingText: "INCOMPLETE",
+    icon: "icn_kyc_incomplete.svg",
+    nextState: KYC_PATHNAME_MAPPER.kycEsign
+  }
 };
 
 export const kycStatusMapperInvest = {
@@ -533,6 +543,12 @@ export const kycStatusMapperInvest = {
     subTitleClass: "kyc-account-setup-incomplete",
     nextState: KYC_PATHNAME_MAPPER.aocSelectAccount,
   },
+  mf_esign_pending: {
+    icon: "ic_kyc_incomplete.svg",
+    title: "Complete your KYC",
+    subtitle: "You’re just a few steps away!",
+    nextState: KYC_PATHNAME_MAPPER.kycEsign,
+  }
 };
 
 export const premiumBottomSheetMapper = {

@@ -339,8 +339,12 @@ export function getKycAppStatus(kyc) {
     status = "submitted"
   }
 
-  if ((!TRADING_ENABLED || kyc.kyc_product_type === "mf") && kyc.kyc_status !== 'compliant' && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && kyc.sign_status !== 'signed') {
-    status = 'incomplete';
+  if ((!TRADING_ENABLED || kyc.equity_aoc_payment_status === "skipped") && kyc.kyc_status !== 'compliant' && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && kyc.sign_status !== 'signed') {
+    if (kyc.equity_aoc_payment_status === "skipped") {
+      status = 'mf_esign_pending'
+    } else {
+      status = 'incomplete';
+    }
   }
   
   // this condition handles equity esign pending case
