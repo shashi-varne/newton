@@ -39,7 +39,7 @@ const PaymentSummary = (props) => {
     }
   };
 
-  const handleClick = async () => {
+  const handleClick = () => {
     sendEvents("next");
     triggerAocPayment({
       setErrorData,
