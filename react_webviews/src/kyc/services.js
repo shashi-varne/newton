@@ -377,7 +377,7 @@ export function getKycAppStatus(kyc) {
     status = "upgraded_incomplete";
   }
 
-  if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && !isRetroMfIRUser(kyc) && isEquityApplSubmittedOrComplete(kyc) && !aocPaymentSuccessOrNotApplicable && kyc.sign_status !== "signed") {
+  if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && !isRetroMfIRUser(kyc) && isEquityApplSubmittedOrComplete(kyc) && !aocPaymentSuccessOrNotApplicable) {
     status = "complete_account_setup";
   }
 
