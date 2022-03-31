@@ -14,7 +14,7 @@ import { ACCOUNT_TYPES } from "../common/constants";
 import { PATHNAME_MAPPER } from "../../constants";
 import "./PaymentStatus.scss";
 import ConfirmBackDialog from "../../mini-components/ConfirmBackDialog";
-import { getAocData, isEquityAocApplicable } from "../common/functions";
+import { getAocData, isEquityAocApplicable, validateAocPaymentAndRedirect } from "../common/functions";
 
 const SelectAccountType = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -67,7 +67,7 @@ const SelectAccountType = (props) => {
       return;
     }
     if (selectedAccount.value === "trading") {
-      navigate(PATHNAME_MAPPER.aocPaymentSummary);
+      validateAocPaymentAndRedirect(kyc, navigate, true)
     } else {
       navigate(PATHNAME_MAPPER.aocMfVsTrading);
     }
