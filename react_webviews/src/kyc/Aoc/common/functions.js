@@ -11,10 +11,12 @@ export const isEquityAocApplicable = (kyc) => {
   return kyc?.is_equity_aoc_applicable;
 };
 
+export const isAocPaymentSuccessful = (kyc) => {
+  return kyc.equity_aoc_payment_status === "success";
+};
+
 export const isAocPaymentSuccessOrNotApplicable = (kyc) => {
-  return (
-    kyc.equity_aoc_payment_status === "success" || !isEquityAocApplicable(kyc)
-  );
+  return isAocPaymentSuccessful(kyc) || !isEquityAocApplicable(kyc);
 };
 
 export const validateAocPaymentAndRedirect = (
@@ -23,15 +25,19 @@ export const validateAocPaymentAndRedirect = (
   skipSelectAccount
 ) => {
   if (isAocPaymentSuccessOrNotApplicable(kyc)) {
-    if (isEquityEsignReady(kyc)) {
-      navigate(PATHNAME_MAPPER.kycEsign);
-    } else {
-      navigate(PATHNAME_MAPPER.documentVerification);
-    }
+    validateEquityEsignStatusAndRedirect(kyc, navigate);
   } else if (!isRetroMfIRUser(kyc) && !skipSelectAccount) {
     navigate(PATHNAME_MAPPER.aocSelectAccount);
   } else {
     navigate(PATHNAME_MAPPER.aocPaymentSummary);
+  }
+};
+
+export const validateEquityEsignStatusAndRedirect = (kyc, navigate) => {
+  if (isEquityEsignReady(kyc)) {
+    navigate(PATHNAME_MAPPER.kycEsign);
+  } else {
+    navigate(PATHNAME_MAPPER.documentVerification);
   }
 };
 
