@@ -19,7 +19,7 @@ import {
   getAocPaymentStatusData,
   PAYMENT_STATUS_DATA,
 } from "../common/constants";
-import { getUrlParams, storageService } from "../../../utils/validators";
+import { storageService } from "../../../utils/validators";
 import { getAocData, triggerAocPayment } from "../common/functions";
 
 import "./PaymentStatus.scss";
@@ -39,26 +39,27 @@ const PaymentStatus = (props) => {
   }, []);
 
   const initialize = async () => {
-    const { status } = getUrlParams();
-    if (status === "success") {
-      const data = PAYMENT_STATUS_DATA.success;
-      setPaymentStatusData(data);
+    setShowLoader("page");
+    let value = count;
+    let intervalId = setInterval(() => {
+      value--;
+      if (value === 29) {
+        checkAocPaymentStatus(false);
+      } else if (value === 3) {
+        checkAocPaymentStatus(true);
+      }
+      setCount(value);
+    }, 1000);
+    setCountdownInterval(intervalId);
+  };
+
+  const setAocPaymentStatusData = (status) => {
+    const data = PAYMENT_STATUS_DATA[status] || PAYMENT_STATUS_DATA["failed"];
+    setPaymentStatusData(data);
+    if (data.isSuccess) {
       const aocData = getAocData(kyc);
       const aocPaymentDetails = getAocPaymentStatusData(aocData);
       setPaymentDetails(aocPaymentDetails);
-    } else {
-      setShowLoader("page");
-      let value = count;
-      let intervalId = setInterval(() => {
-        value--;
-        if (value === 29) {
-          checkAocPaymentStatus(false);
-        } else if (value === 3) {
-          checkAocPaymentStatus(true);
-        }
-        setCount(value);
-      }, 1000);
-      setCountdownInterval(intervalId);
     }
   };
 
@@ -90,14 +91,7 @@ const PaymentStatus = (props) => {
       if (result.status === "success" || refund) {
         clearInterval(countdownInterval);
         setCountdownInterval(null);
-        const data =
-          PAYMENT_STATUS_DATA[result.status] || PAYMENT_STATUS_DATA["failed"];
-        setPaymentStatusData(data);
-        if (data.isSuccess) {
-          const aocData = getAocData(kyc);
-          const aocPaymentDetails = getAocPaymentStatusData(aocData);
-          setPaymentDetails(aocPaymentDetails);
-        }
+        setAocPaymentStatusData(result.status);
         setShowLoader(false);
       }
     } catch (err) {
