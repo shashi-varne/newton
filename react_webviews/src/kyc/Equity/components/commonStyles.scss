@@ -222,7 +222,8 @@
     margin-top: -10px;
   }
 
-  .form-download-btn {
+  .form-download-btn div {
+    display: flex;
     justify-content: space-between;
 
     img {
