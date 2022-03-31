@@ -4,7 +4,8 @@
   border-radius: 12px;
   padding: 16px;
   margin-bottom: 25px;
-
+  cursor: pointer;
+  
   .aat-top-content {
     margin-bottom: 16px;
   }
@@ -17,7 +18,6 @@
   .aat-check-icon {
     width: 20px !important;
     height: 20px;
-    cursor: pointer;
   }
 
   .aat-title {

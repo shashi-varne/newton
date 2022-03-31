@@ -18,27 +18,24 @@ export const AccountType = ({
   onElementClick = noop,
   handleClick = noop,
 }) => {
-  const { productName } = useMemo(() => {
-    return getConfig();
-  }, []);
+  const { productName } = useMemo(getConfig, []);
   return (
-    <div className={`aoc-account-type ${isSelected && "aoc-selected-account"}`}>
+    <div
+      className={`aoc-account-type ${isSelected && "aoc-selected-account"}`}
+      onClick={handleClick}
+    >
       {data.icon && (
         <div className="flex-between-center aat-top-content">
           <Imgc
             src={require(`assets/${productName}/aoc_trading.svg`)}
             className="aat-top-icon"
           />
-          {data.showRadioIconWithImage && (
-            <RadioIcon isSelected={isSelected} onClick={handleClick} />
-          )}
+          {data.showRadioIconWithImage && <RadioIcon isSelected={isSelected} />}
         </div>
       )}
       <div className="flex-between-center">
         <div className="aat-title">{data.title}</div>
-        {data.showRadioIconWithTitle && (
-          <RadioIcon isSelected={isSelected} onClick={handleClick} />
-        )}
+        {data.showRadioIconWithTitle && <RadioIcon isSelected={isSelected} />}
       </div>
       <SubtitleList subtitleList={data.subtitleList} />
       <KeyPoints keyPoints={data.keyPoints} onElementClick={onElementClick} />
@@ -51,11 +48,10 @@ export const AccountType = ({
   );
 };
 
-const RadioIcon = ({ isSelected, onClick }) => (
+const RadioIcon = ({ isSelected }) => (
   <Imgc
     src={require(`assets/${isSelected ? "selected" : "not_selected"}.svg`)}
     className="aat-check-icon"
-    onClick={onClick}
   />
 );
 

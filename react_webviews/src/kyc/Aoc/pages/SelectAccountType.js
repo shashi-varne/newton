@@ -73,7 +73,8 @@ const SelectAccountType = (props) => {
     }
   };
 
-  const handleDematCharges = (value) => () => {
+  const handleDematCharges = (value) => (e) => {
+    e.stopPropagation();
     setOpenDematCharges(value);
   };
 
