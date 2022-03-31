@@ -175,6 +175,10 @@ class ESignInfo extends Component {
           setTimeout(() => {
             this.navigate('/kyc/journey');
           }, 3000)
+        } else if (resultData?.error_code === 401) {
+          toast(resultData.error || resultData.message);
+          const path = config.isWebOrSdk ? "/kyc/web" : "/kyc/native";
+          this.navigate(path);
         } else {
           toast(resultData.error ||
             resultData.message || 'Something went wrong', 'error');
