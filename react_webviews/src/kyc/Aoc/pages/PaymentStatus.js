@@ -19,7 +19,7 @@ import {
   getAocPaymentStatusData,
   PAYMENT_STATUS_DATA,
 } from "../common/constants";
-import { storageService } from "../../../utils/validators";
+import { getUrlParams, storageService } from "../../../utils/validators";
 import { getAocData, triggerAocPayment } from "../common/functions";
 
 import "./PaymentStatus.scss";
@@ -39,18 +39,27 @@ const PaymentStatus = (props) => {
   }, []);
 
   const initialize = async () => {
-    setShowLoader("page");
-    let value = count;
-    let intervalId = setInterval(() => {
-      value--;
-      if (value === 29) {
-        checkAocPaymentStatus();
-      } else if (value === 3) {
-        checkAocPaymentStatus(true);
-      }
-      setCount(value);
-    }, 1000);
-    setCountdownInterval(intervalId);
+    const { status } = getUrlParams();
+    if (status === "success") {
+      const data = PAYMENT_STATUS_DATA.success;
+      setPaymentStatusData(data);
+      const aocData = getAocData(kyc);
+      const aocPaymentDetails = getAocPaymentStatusData(aocData);
+      setPaymentDetails(aocPaymentDetails);
+    } else {
+      setShowLoader("page");
+      let value = count;
+      let intervalId = setInterval(() => {
+        value--;
+        if (value === 29) {
+          checkAocPaymentStatus(false);
+        } else if (value === 3) {
+          checkAocPaymentStatus(true);
+        }
+        setCount(value);
+      }, 1000);
+      setCountdownInterval(intervalId);
+    }
   };
 
   const sendEvents = (userAction) => {
