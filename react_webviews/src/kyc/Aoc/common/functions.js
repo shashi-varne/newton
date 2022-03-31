@@ -17,7 +17,11 @@ export const isAocPaymentSuccessOrNotApplicable = (kyc) => {
   );
 };
 
-export const validateAocPaymentAndRedirect = (kyc, navigate, skipSelectAccount) => {
+export const validateAocPaymentAndRedirect = (
+  kyc,
+  navigate,
+  skipSelectAccount
+) => {
   if (isAocPaymentSuccessOrNotApplicable(kyc)) {
     if (isEquityEsignReady(kyc)) {
       navigate(PATHNAME_MAPPER.kycEsign);
@@ -60,9 +64,10 @@ export const triggerAocPayment = async ({
         config.searchParams
       }`
     );
-    const result = await triggerAocPaymentDecision(
-      `accept&plutus_redirect_url=${redirectUrl}`
-    );
+    const result = await triggerAocPaymentDecision({
+      status: "accept",
+      redirectUrl,
+    });
     if (!isEmpty(result.kyc)) {
       updateKyc(result.kyc);
     }

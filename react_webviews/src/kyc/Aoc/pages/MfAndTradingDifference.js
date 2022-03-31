@@ -44,11 +44,11 @@ const MFAndTradingDifferences = (props) => {
     setErrorData({});
     try {
       setShowLoader("button");
-      const result = await triggerAocPaymentDecision("skip");
+      const result = await triggerAocPaymentDecision({ status: "skip" });
       if (result.kyc) {
         updateKyc(result.kyc);
       }
-      if (kyc.kyc_status === "compliant") {
+      if (kyc.kyc_status === "compliant" || kyc.sign_status === "signed") {
         navigate(PATHNAME_MAPPER.kycEsignNsdl, {
           searchParams: `${searchParams}&status=success`,
         });

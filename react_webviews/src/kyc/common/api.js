@@ -367,8 +367,12 @@ export const getKyc = async () => {
   return result;
 }
 
-export const triggerAocPaymentDecision = async (status) => {
-  const res = await Api.post(`${API_CONSTANTS.aocPaymentDecision}${status}`);
+export const triggerAocPaymentDecision = async ({ status, redirectUrl }) => {
+  const res = await Api.post(
+    `${API_CONSTANTS.aocPaymentDecision}?payment_decision=${status}${
+      redirectUrl ? `&plutus_redirect_url=${redirectUrl}` : ""
+    }`
+  );
   return handleApi(res);
 };
 
