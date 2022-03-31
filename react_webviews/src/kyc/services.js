@@ -3,7 +3,7 @@ import { storageService } from '../utils/validators'
 import toast from '../common/ui/Toast'
 import { isTradingEnabled } from '../utils/functions'
 import { kycSubmit } from './common/api'
-import { isDigilockerFlow, isRetroMfIRUser } from './common/functions'
+import { isDigilockerFlow, isEquityApplSubmittedOrComplete, isRetroMfIRUser } from './common/functions'
 import eventManager from '../utils/eventManager'
 import { EVENT_MANAGER_CONSTANTS } from '../utils/constants'
 import isEmpty from "lodash/isEmpty"
@@ -377,7 +377,7 @@ export function getKycAppStatus(kyc) {
     status = "upgraded_incomplete";
   }
 
-  if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && !isRetroMfIRUser(kyc) && ["submitted", "complete"].includes(kyc.equity_application_status) && !aocPaymentSuccessOrNotApplicable && kyc.sign_status !== "signed") {
+  if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && !isRetroMfIRUser(kyc) && isEquityApplSubmittedOrComplete(kyc) && !aocPaymentSuccessOrNotApplicable && kyc.sign_status !== "signed") {
     status = "complete_account_setup";
   }
 

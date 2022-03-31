@@ -66,7 +66,6 @@ const SelectAccountType = (props) => {
       Toast("Tap on T&C check box to continue");
       return;
     }
-    console.log("selectedAccount ", selectedAccount);
     if (selectedAccount.value === "trading") {
       navigate(PATHNAME_MAPPER.aocPaymentSummary);
     } else {
