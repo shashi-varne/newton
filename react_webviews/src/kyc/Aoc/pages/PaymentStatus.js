@@ -19,15 +19,27 @@ import {
   getAocPaymentStatusData,
   PAYMENT_STATUS_DATA,
 } from "../common/constants";
-import { storageService } from "../../../utils/validators";
+import { getUrlParams, storageService } from "../../../utils/validators";
 import { getAocData, triggerAocPayment } from "../common/functions";
 
 import "./PaymentStatus.scss";
 
+const initializePaymentStatusData = () => {
+  const { status, message = "" } = getUrlParams();
+  return {
+    config: getConfig(),
+    aocPaymentData: storageService().getObject(
+      AOC_STORAGE_CONSTANTS.AOC_PAYMENT_DATA
+    ),
+    status,
+    message,
+  };
+};
+
 const PaymentStatus = (props) => {
-  const config = useMemo(getConfig, []);
-  const aocPaymentData = storageService().getObject(
-    AOC_STORAGE_CONSTANTS.AOC_PAYMENT_DATA
+  const { config, aocPaymentData, status, message } = useMemo(
+    initializePaymentStatusData,
+    []
   );
   const [paymentStatusData, setPaymentStatusData] = useState({});
   const [showLoader, setShowLoader] = useState(false);
@@ -42,26 +54,33 @@ const PaymentStatus = (props) => {
   }, []);
 
   const initialize = async () => {
-    if (isEmpty(aocPaymentData)) {
-      redirectToHome();
-      return;
-    }
-    setShowLoader("page");
-    let value = count;
-    let intervalId = setInterval(() => {
-      value--;
-      if (value === 29) {
-        checkAocPaymentStatus(false);
-      } else if (value === 3) {
-        checkAocPaymentStatus(true);
+    if (status === "success") {
+      setAocPaymentStatusData(status);
+    } else {
+      if (isEmpty(aocPaymentData)) {
+        setAocPaymentStatusData("failed");
+        return;
       }
-      setCount(value);
-    }, 1000);
-    setCountdownInterval(intervalId);
+      setShowLoader("page");
+      let value = count;
+      let intervalId = setInterval(() => {
+        value--;
+        if (value === 29) {
+          checkAocPaymentStatus(false);
+        } else if (value === 3) {
+          checkAocPaymentStatus(true);
+        }
+        setCount(value);
+      }, 1000);
+      setCountdownInterval(intervalId);
+    }
   };
 
-  const setAocPaymentStatusData = (status) => {
-    const data = PAYMENT_STATUS_DATA[status] || PAYMENT_STATUS_DATA["failed"];
+  const setAocPaymentStatusData = (paymentStatus) => {
+    const data = PAYMENT_STATUS_DATA[paymentStatus] || PAYMENT_STATUS_DATA["failed"];
+    if (!data.isSuccess && !isEmpty(message)) {
+      data.subtitle = decodeURIComponent(message);
+    }
     setPaymentStatusData(data);
     if (data.isSuccess) {
       const aocData = getAocData(kyc);

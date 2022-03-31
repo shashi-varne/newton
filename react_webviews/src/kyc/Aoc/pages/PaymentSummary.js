@@ -7,9 +7,9 @@ import isEmpty from "lodash/isEmpty";
 import { getAocPaymentSummaryData } from "../common/constants";
 import { nativeCallback } from "../../../utils/native_callback";
 import { getConfig } from "../../../utils/functions";
+import { getAocData, triggerAocPayment } from "../common/functions";
 
 import "./PaymentStatus.scss";
-import { getAocData, triggerAocPayment } from "../common/functions";
 
 const PaymentSummary = (props) => {
   const [paymentDetails, setPaymentDetails] = useState({});
