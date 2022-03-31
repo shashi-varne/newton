@@ -26,6 +26,9 @@ import "./PaymentStatus.scss";
 
 const PaymentStatus = (props) => {
   const config = useMemo(getConfig, []);
+  const aocPaymentData = storageService().getObject(
+    AOC_STORAGE_CONSTANTS.AOC_PAYMENT_DATA
+  );
   const [paymentStatusData, setPaymentStatusData] = useState({});
   const [showLoader, setShowLoader] = useState(false);
   const [paymentDetails, setPaymentDetails] = useState({});
@@ -39,6 +42,10 @@ const PaymentStatus = (props) => {
   }, []);
 
   const initialize = async () => {
+    if (isEmpty(aocPaymentData)) {
+      redirectToHome();
+      return;
+    }
     setShowLoader("page");
     let value = count;
     let intervalId = setInterval(() => {
@@ -79,9 +86,6 @@ const PaymentStatus = (props) => {
   };
 
   const checkAocPaymentStatus = async (refund = false) => {
-    const aocPaymentData = storageService().getObject(
-      AOC_STORAGE_CONSTANTS.AOC_PAYMENT_DATA
-    );
     try {
       const result = await checkPaymentStatus({
         paymentId: aocPaymentData.payment_id,
@@ -113,10 +117,7 @@ const PaymentStatus = (props) => {
   };
 
   const handleClick = () => {
-    const aocPaymentData = storageService().getObject(
-      AOC_STORAGE_CONSTANTS.AOC_PAYMENT_DATA
-    );
-    if (paymentStatusData.isSuccess || !aocPaymentData.payment_link) {
+    if (paymentStatusData.isSuccess) {
       redirectToHome();
     } else {
       triggerAocPayment({
