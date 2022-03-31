@@ -19,6 +19,7 @@ import InternalStorage from '../common/InternalStorage';
 import { landingEntryPoints } from '../../utils/constants';
 import { PATHNAME_MAPPER } from '../constants';
 import { validateAocPaymentAndRedirect } from '../Aoc/common/functions';
+import { isRetroMfIRUser } from '../common/functions';
 
 const UPLOAD_OPTIONS_MAP = {
   'bank-statement': {
@@ -132,16 +133,24 @@ const FnOIncomeProof = (props) => {
       } else if (landingEntryPoints.includes(fromState) || fromWebModuleEntry) {
         navigate("/");
       } else {
-        validateAocPaymentAndRedirect(kyc, navigate);
+        commonRedirection();
       }
     }
   }
 
+  const commonRedirection = () => {
+    if (isRetroMfIRUser(kyc)) {
+      validateAocPaymentAndRedirect(kyc, navigate);
+    } else {
+      navigate(PATHNAME_MAPPER.aocSelectAccount);
+    }
+  }
+  
   const commonNativeNavigation = () => {
     if (fromNativeLandingOrMyAccounts) {
       nativeCallback({ action: "exit_web"});
     } else {
-      validateAocPaymentAndRedirect(kyc, navigate);
+      commonRedirection();
     }
   }
 
