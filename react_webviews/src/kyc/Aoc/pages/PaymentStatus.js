@@ -6,12 +6,13 @@ import WVPageSubtitle from "../../../common/ui/InPageHeader/WVInPageSubtitle";
 import { Tile } from "../mini-components/Tile";
 
 import isEmpty from "lodash/isEmpty";
+import get from "lodash/get";
 
 import {
   handleNativeExit,
   nativeCallback,
 } from "../../../utils/native_callback";
-import { getConfig } from "../../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import { checkPaymentStatus } from "../../common/api";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import {
@@ -20,7 +21,12 @@ import {
   PAYMENT_STATUS_DATA,
 } from "../common/constants";
 import { getUrlParams, storageService } from "../../../utils/validators";
-import { getAocData, triggerAocPayment } from "../common/functions";
+import {
+  getAocData,
+  triggerAocPayment,
+  validateAocPaymentAndRedirect,
+} from "../common/functions";
+import { getAccountSummary } from "../../services";
 
 import "./PaymentStatus.scss";
 
@@ -37,11 +43,13 @@ const initializePaymentStatusData = () => {
 };
 
 const PaymentStatus = (props) => {
+  const navigate = navigateFunc.bind(props);
   const { config, aocPaymentData, status, message } = useMemo(
     initializePaymentStatusData,
     []
   );
   const [paymentStatusData, setPaymentStatusData] = useState({});
+  const [showSkelton, setShowSkelton] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
   const [paymentDetails, setPaymentDetails] = useState({});
   const [errorData, setErrorData] = useState({});
@@ -55,6 +63,7 @@ const PaymentStatus = (props) => {
 
   const initialize = async () => {
     if (status === "success") {
+      await fetchKyc();
       setAocPaymentStatusData(status);
     } else {
       if (isEmpty(aocPaymentData)) {
@@ -73,6 +82,29 @@ const PaymentStatus = (props) => {
         setCount(value);
       }, 1000);
       setCountdownInterval(intervalId);
+    }
+  };
+
+  const fetchKyc = async () => {
+    try {
+      setShowSkelton(true);
+      setErrorData({});
+      const result = await getAccountSummary({
+        user: ["user"],
+        kyc: ["kyc"],
+      });
+      let userKyc = get(result, "data.kyc.kyc.data", {});
+      if (!isEmpty(kyc)) {
+        updateKyc(userKyc);
+      }
+    } catch (err) {
+      setErrorData({
+        showError: "page",
+        title2: err.message,
+        handleClick1: fetchKyc,
+      });
+    } finally {
+      setShowSkelton(false);
     }
   };
 
@@ -137,7 +169,7 @@ const PaymentStatus = (props) => {
 
   const handleClick = () => {
     if (paymentStatusData.isSuccess) {
-      redirectToHome();
+      validateAocPaymentAndRedirect(kyc, navigate);
     } else {
       triggerAocPayment({
         setErrorData,
@@ -159,6 +191,7 @@ const PaymentStatus = (props) => {
         goBack: redirectToHome,
       }}
       hidePageTitle
+      skelton={showSkelton}
       showLoader={showLoader}
       errorData={errorData}
       showError={errorData.showError}
