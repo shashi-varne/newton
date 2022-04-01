@@ -200,6 +200,9 @@ const PaymentStatus = (props) => {
       events={sendEvents("just_set_events")}
       handleClick={handleClick}
       data-aid="aocPaymentStatus"
+      loaderData={{
+        loadingText: "Please wait...",
+      }}
     >
       <div
         className="aoc-payment-status"

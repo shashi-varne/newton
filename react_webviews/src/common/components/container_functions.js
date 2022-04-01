@@ -611,7 +611,7 @@ export function renderPageLoader() {
     } else if (this.props.showLoader === 'page') {
         disableBodyTouch(true);
         return (
-            <WVFullPageLoader classes={{ container: loaderClass }} showQuote/>
+            <WVFullPageLoader classes={{ container: loaderClass }} loadingText={loadingText} showQuote/>
         );
     } else {
         disableBodyTouch(false);
