@@ -162,6 +162,7 @@ class ESignInfo extends Component {
         this.setState({ show_loader: "page" })
         window.location.href = resultData.esign_link;
       } else {
+        const pathName = config.isWebOrSdk ? "/kyc/web" : "/kyc/native";
         if (resultData?.error_code === 'kyc_40001') {
           toast("Esign already completed");
           this.navigate("/kyc-esign/nsdl", {
@@ -172,13 +173,10 @@ class ESignInfo extends Component {
           resultData?.error === "all documents are not submitted"
         ) {
           toast("Document pending, redirecting to kyc");
-          setTimeout(() => {
-            this.navigate('/kyc/journey');
-          }, 3000)
-        } else if (resultData?.error_code === 401) {
+          this.navigate(pathName);
+        } else if (resultData?.code === 401) {
           toast(resultData.error || resultData.message);
-          const path = config.isWebOrSdk ? "/kyc/web" : "/kyc/native";
-          this.navigate(path);
+          this.navigate(pathName);
         } else {
           toast(resultData.error ||
             resultData.message || 'Something went wrong', 'error');
