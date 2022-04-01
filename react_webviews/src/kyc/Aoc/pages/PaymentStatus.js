@@ -53,7 +53,7 @@ const PaymentStatus = (props) => {
   const [showLoader, setShowLoader] = useState(false);
   const [paymentDetails, setPaymentDetails] = useState({});
   const [errorData, setErrorData] = useState({});
-  const [count, setCount] = useState(10);
+  const [count, setCount] = useState(30);
   const [countdownInterval, setCountdownInterval] = useState();
   const { kyc, updateKyc } = useUserKycHook();
 
@@ -139,7 +139,7 @@ const PaymentStatus = (props) => {
   const checkAocPaymentStatus = async (refund = false) => {
     try {
       const result = await checkPaymentStatus({
-        paymentId: aocPaymentData.payment_id,
+        paymentId: aocPaymentData.id,
         pptId: aocPaymentData.ppt_id,
         refund,
       });
