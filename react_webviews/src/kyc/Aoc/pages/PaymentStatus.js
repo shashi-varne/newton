@@ -203,6 +203,7 @@ const PaymentStatus = (props) => {
       loaderData={{
         loadingText: "Please wait...",
       }}
+      noFooter={showLoader === "page"}
     >
       <div
         className="aoc-payment-status"
