@@ -15,6 +15,10 @@ export const isAocPaymentSuccessful = (kyc) => {
   return kyc.equity_aoc_payment_status === "success";
 };
 
+export const isAocPaymentSkipped = (kyc) => {
+  return kyc.equity_aoc_payment_status === "skipped";
+};
+
 export const isAocPaymentSuccessOrNotApplicable = (kyc) => {
   return isAocPaymentSuccessful(kyc) || !isEquityAocApplicable(kyc);
 };
