@@ -1,14 +1,14 @@
 import Api from '../utils/api'
 import { storageService } from '../utils/validators'
 import toast from '../common/ui/Toast'
-import { isTradingEnabled } from '../utils/functions'
+import { isTradingEnabled, isTradingFlow } from '../utils/functions'
 import { kycSubmit } from './common/api'
 import { isDigilockerFlow, isEquityApplSubmittedOrComplete, isRetroMfIRUser } from './common/functions'
 import eventManager from '../utils/eventManager'
 import { EVENT_MANAGER_CONSTANTS } from '../utils/constants'
 import isEmpty from "lodash/isEmpty"
 import { FREEDOM_PLAN_STORAGE_CONSTANTS } from '../freedom_plan/common/constants'
-import { isAocPaymentSuccessOrNotApplicable } from './Aoc/common/functions'
+import { isAocPaymentSkipped, isAocPaymentSuccessful, isAocPaymentSuccessOrNotApplicable } from './Aoc/common/functions'
 
 const DOCUMENTS_MAPPER = {
   DL: 'Driving license',
@@ -296,8 +296,9 @@ export function getKycAppStatus(kyc) {
       status = kyc.equity_application_status;
     }
   }
-  
-  const aocPaymentSuccessOrNotApplicable = isAocPaymentSuccessOrNotApplicable(kyc);
+  const aocPaymentSuccessful = isAocPaymentSuccessful(kyc);
+  const aocPaymentSkipped = isAocPaymentSkipped(kyc);
+  const tradingFlow = isTradingFlow(kyc);
 
   if (!kyc.pan.meta_data.pan_number || (kyc.pan.meta_data.pan_number &&
     kyc.customer_verified !== 'VERIFIED')) {
@@ -342,8 +343,8 @@ export function getKycAppStatus(kyc) {
     status = "submitted"
   }
 
-  if ((!TRADING_ENABLED || kyc.equity_aoc_payment_status === "skipped") && kyc.kyc_status !== 'compliant' && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && kyc.sign_status !== 'signed') {
-    if (kyc.equity_aoc_payment_status === "skipped") {
+  if ((!TRADING_ENABLED || aocPaymentSkipped) && kyc.kyc_status !== 'compliant' && ["submitted", "complete"].includes(kyc.application_status_v2) && kyc.sign_status !== 'signed') {
+    if (aocPaymentSkipped) {
       status = 'mf_esign_pending'
     } else {
       status = 'incomplete';
@@ -351,18 +352,18 @@ export function getKycAppStatus(kyc) {
   }
   
   // this condition handles equity esign pending case
-  if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && kyc.equity_application_status === 'complete' && aocPaymentSuccessOrNotApplicable && kyc.equity_sign_status !== "signed") {
+  if (tradingFlow && kyc.equity_application_status === 'complete' && isAocPaymentSuccessOrNotApplicable(kyc) && kyc.equity_sign_status !== "signed") {
     status = 'esign_pending';
   }
 
   // this condition handles fno doc rejected case
-  if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && kyc.equity_application_status === 'complete' && kyc.equity_sign_status === "signed" &&
+  if (tradingFlow && kyc.equity_application_status === 'complete' && kyc.equity_sign_status === "signed" &&
   kyc?.equity_investment_ready && kyc?.equity_income.doc_status === "rejected") {
     status = 'fno_rejected';
   }
 
   // this condition handles equity activation pending case
-  if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && kyc.equity_application_status === 'complete' && kyc.equity_sign_status === "signed" &&
+  if (tradingFlow && kyc.equity_application_status === 'complete' && kyc.equity_sign_status === "signed" &&
   !kyc?.equity_investment_ready) {
     status = 'verifying_trading_account';
   }
@@ -372,12 +373,15 @@ export function getKycAppStatus(kyc) {
     status = "complete";
   }
 
-  // this condition handles showing upgrade account to MF IR or Submitted users until user submits all equity related docs
-  if (TRADING_ENABLED && (isMfApplicationSubmitted(kyc) || isReadyToInvest()) && kyc.equity_application_status !== "init" && !aocPaymentSuccessOrNotApplicable && kyc.equity_sign_status !== "signed") {
+  // this condition handles showing upgrade account to MF IR or Submitted users until user submits all equity related docs & aoc payment is successful
+  if (TRADING_ENABLED && ((isMfApplicationSubmitted(kyc) && aocPaymentSkipped) || isReadyToInvest()) && kyc.equity_application_status !== "init" 
+    && !aocPaymentSuccessful && kyc.equity_sign_status !== "signed") {
     status = "upgraded_incomplete";
   }
 
-  if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && !isRetroMfIRUser(kyc) && isEquityApplSubmittedOrComplete(kyc) && !aocPaymentSuccessOrNotApplicable) {
+  // this condition handles showing complete account setup card for new users until aoc payment is successful 
+  if (tradingFlow && !isRetroMfIRUser(kyc) && isEquityApplSubmittedOrComplete(kyc) && !aocPaymentSuccessful && !aocPaymentSkipped 
+    && kyc.equity_sign_status !== "signed") {
     status = "complete_account_setup";
   }
 
