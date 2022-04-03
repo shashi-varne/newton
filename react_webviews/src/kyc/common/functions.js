@@ -520,5 +520,5 @@ export const isUpgradeToEquityAccountEnabled = (kyc, kycStatus) => {
 };
 
 export const showTradingInfoScreen = (kyc) => {
-  return isRetroMfIRUser(kyc) && isEquityApplSubmittedOrComplete(kyc);
+  return isRetroMfIRUser(kyc) || isEquityApplSubmittedOrComplete(kyc);
 }
