@@ -16,9 +16,7 @@ import otp_img_fisdom from 'assets/fisdom/ic_verify_otp_fisdom.svg';
 import esign_otp_img_fisdom from 'assets/fisdom/ic_esign_otp_fisdom.svg';
 import done_img_fisdom from  'assets/fisdom/ic_esign_done_fisdom.svg';
 import { landingEntryPoints } from '../../utils/constants';
-import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from '../../kyc/constants';
-
-
+import { STORAGE_CONSTANTS } from '../../kyc/constants';
 
 class ESignInfo extends Component {
   constructor(props) {
@@ -58,26 +56,17 @@ class ESignInfo extends Component {
     const navigate = navigateFunc.bind(this.props);
     const stateParams = this.props?.location?.state;
     const { goBack: goBackPath, fromState }  = stateParams || {};
-    const fromWebModuleEntry = fromState === "/kyc/web";
 
     if (!getConfig().Web) {
       if (storageService().get('native') && (goBackPath === "exit")) {
         nativeCallback({ action: "exit_web" })
-      } else if (landingEntryPoints.includes(fromState) || fromWebModuleEntry) {
-        if(fromWebModuleEntry) {
-          navigate("/")
-        } else {
-          navigate(fromState)
-        }
+      } else if (landingEntryPoints.includes(fromState)) {
+        navigate(fromState);
       } else {
-        navigate(PATHNAME_MAPPER.journey);
+        navigate("/invest");
       }
     } else {
-      if (landingEntryPoints.includes(fromState) || fromWebModuleEntry) {
-        navigate("/")
-      } else {
-        navigate(PATHNAME_MAPPER.journey);
-      }
+      navigate("/")
     }
   }
 
