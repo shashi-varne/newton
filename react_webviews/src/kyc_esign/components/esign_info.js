@@ -57,6 +57,11 @@ class ESignInfo extends Component {
     const stateParams = this.props?.location?.state;
     const { goBack: goBackPath, fromState }  = stateParams || {};
 
+    if (["/kyc/trading-info", "/kyc/journey"].includes(fromState)) {
+      this.props.history.goBack();
+      return;
+    }
+
     if (!getConfig().Web) {
       if (storageService().get('native') && (goBackPath === "exit")) {
         nativeCallback({ action: "exit_web" })
