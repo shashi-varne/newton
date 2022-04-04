@@ -81,8 +81,8 @@ const TradingInfo = (props) => {
   const [openConfirmBackModal, setOpenConfirmBackModal] = useState(false);
   const newIframeDesktopLayout = useMemo(isNewIframeDesktopLayout, [])
   const { kyc, isLoading } = useUserKycHook();
-  const [isAocApplicable, setIsAocApplicable] = useState(isEquityAocApplicable(kyc));
-  const [aocCharges, setAocCharges] = useState(getAocData(kyc));
+  const [isAocApplicable, setIsAocApplicable] = useState(false);
+  const [aocCharges, setAocCharges] = useState({});
   const title = `${capitalize(productName)} Trading & Demat account`;
 
   useEffect(() => {
