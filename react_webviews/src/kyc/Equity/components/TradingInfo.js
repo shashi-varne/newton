@@ -13,7 +13,7 @@ import SVG from 'react-inlinesvg';
 import { Imgc } from "../../../common/ui/Imgc";
 import TermsAndConditions from "../../mini-components/TermsAndConditions";
 import BrokerageChargesTile from "../mini-components/BrokerageChargesTile";
-import { isEquityAocApplicable, validateAocPaymentAndRedirect } from "../../Aoc/common/functions";
+import { getAocData, isEquityAocApplicable, validateAocPaymentAndRedirect } from "../../Aoc/common/functions";
 
 const BENEFITS = [
   {
@@ -82,12 +82,15 @@ const TradingInfo = (props) => {
   const newIframeDesktopLayout = useMemo(isNewIframeDesktopLayout, [])
   const { kyc, isLoading } = useUserKycHook();
   const [isAocApplicable, setIsAocApplicable] = useState(isEquityAocApplicable(kyc));
+  const [aocCharges, setAocCharges] = useState(getAocData(kyc));
   const title = `${capitalize(productName)} Trading & Demat account`;
 
   useEffect(() => {
     setEquityChargesData(getEquityChargesData(kyc.equity_account_charges_v2))
     const aocApplicable = isEquityAocApplicable(kyc);
     setIsAocApplicable(aocApplicable);
+    const aocData = getAocData(kyc);
+    setAocCharges(aocData);
   }, [kyc])
 
   const handleTiles = (index) => () => {
@@ -105,12 +108,14 @@ const TradingInfo = (props) => {
   };
 
   const sendEvents = (userAction) => {
+    const charges = isAocApplicable ? aocCharges.amount : 0
     let eventObj = {
       event_name: "trading",
       properties: {
         user_action: userAction || "",
         screen_name: "trading_and_demat_info",
         tnc_checked: checkTermsAndConditions ? "yes" : "no",
+        account_opening_charges: `${charges}/-`,
       },
     };
     if (userAction === "just_set_events") {
@@ -156,6 +161,7 @@ const TradingInfo = (props) => {
   };
 
   const redirectToHome = () => {
+    sendEvents("back");
     handleNativeExit(props, { action: "exit" });
   };
 
@@ -212,9 +218,7 @@ const TradingInfo = (props) => {
                   !isAocApplicable && `kaim-af-strike-amount`
                 }`}
               >
-                {formatAmountInr(
-                  kyc.equity_account_charges_v2?.account_opening?.base?.rupees
-                )}
+                {formatAmountInr(aocCharges.amount)}
                 /-
               </span>
               {!isAocApplicable && <span className="kaim-af-amount">Free</span>}

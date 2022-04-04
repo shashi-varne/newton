@@ -123,10 +123,10 @@ const PaymentStatus = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      event_name: "kyc_registration",
+      event_name: "trading_onboarding",
       properties: {
         user_action: userAction || "",
-        screen_name: "NRI_not_available",
+        screen_name: "payment_status",
       },
     };
     if (userAction === "just_set_events") {

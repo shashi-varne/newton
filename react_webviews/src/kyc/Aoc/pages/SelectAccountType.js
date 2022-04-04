@@ -83,6 +83,7 @@ const SelectAccountType = (props) => {
   };
 
   const redirectToHome = () => {
+    sendEvents("back");
     handleNativeExit(props, { action: "exit" });
   };
 
