@@ -1,18 +1,19 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { getConfig, isNewIframeDesktopLayout, navigate as navigateFunc } from "../../../utils/functions";
 import Container from "../../common/Container";
+import ConfirmBackDialog from "../../mini-components/ConfirmBackDialog";
 import "./commonStyles.scss";
 import { getUpgradeAccountFlowNextStep, isEquityApplSubmittedOrComplete } from "../../common/functions";
 import { PATHNAME_MAPPER } from "../../constants";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import Toast from "../../../common/ui/Toast";
-import { nativeCallback } from "../../../utils/native_callback";
+import { handleNativeExit, nativeCallback } from "../../../utils/native_callback";
 import { capitalize, formatAmountInr } from "../../../utils/validators";
 import SVG from 'react-inlinesvg';
 import { Imgc } from "../../../common/ui/Imgc";
 import TermsAndConditions from "../../mini-components/TermsAndConditions";
 import BrokerageChargesTile from "../mini-components/BrokerageChargesTile";
-import { validateAocPaymentAndRedirect } from "../../Aoc/common/functions";
+import { isEquityAocApplicable, validateAocPaymentAndRedirect } from "../../Aoc/common/functions";
 
 const BENEFITS = [
   {
@@ -77,12 +78,16 @@ const TradingInfo = (props) => {
   const [showSkelton, setShowSkelton] = useState(false);
   const [selectedTiles, setSelectedTiles] = useState([]);
   const [equityChargesData, setEquityChargesData] = useState([])
+  const [openConfirmBackModal, setOpenConfirmBackModal] = useState(false);
   const newIframeDesktopLayout = useMemo(isNewIframeDesktopLayout, [])
   const { kyc, isLoading } = useUserKycHook();
+  const [isAocApplicable, setIsAocApplicable] = useState(isEquityAocApplicable(kyc));
   const title = `${capitalize(productName)} Trading & Demat account`;
 
   useEffect(() => {
     setEquityChargesData(getEquityChargesData(kyc.equity_account_charges_v2))
+    const aocApplicable = isEquityAocApplicable(kyc);
+    setIsAocApplicable(aocApplicable);
   }, [kyc])
 
   const handleTiles = (index) => () => {
@@ -146,6 +151,14 @@ const TradingInfo = (props) => {
     }
   };
 
+  const handleConfirmBackDialog = (value) => () => {
+    setOpenConfirmBackModal(value);
+  };
+
+  const redirectToHome = () => {
+    handleNativeExit(props, { action: "exit" });
+  };
+
   return (
     <Container
       events={sendEvents("just_set_events")}
@@ -157,6 +170,7 @@ const TradingInfo = (props) => {
       skelton={isLoading || showSkelton}
       iframeRightContent={require(`assets/${productName}/ic_upgrade.svg`)}
       noBackIcon={showSkelton}
+      headerData={{ goBack: handleConfirmBackDialog(true) }}
     >
       <div className="kyc-account-info" data-aid='kyc-account-info'>
         <header className="kyc-account-info-header" data-aid='kyc-account-info-header'>
@@ -195,7 +209,7 @@ const TradingInfo = (props) => {
             <div>
               <span
                 className={`kaim-af-amount ${
-                  kyc.is_aoc_equity_applicable && `kaim-af-strike-amount`
+                  !isAocApplicable && `kaim-af-strike-amount`
                 }`}
               >
                 {formatAmountInr(
@@ -203,9 +217,7 @@ const TradingInfo = (props) => {
                 )}
                 /-
               </span>
-              {kyc.is_aoc_equity_applicable && (
-                <span className="kaim-af-amount">Free</span>
-              )}
+              {!isAocApplicable && <span className="kaim-af-amount">Free</span>}
             </div>
           </div>
           {equityChargesData.map((data, index) => {
@@ -226,6 +238,11 @@ const TradingInfo = (props) => {
           />
         </main>
       </div>
+      <ConfirmBackDialog
+        isOpen={openConfirmBackModal}
+        close={handleConfirmBackDialog(false)}
+        goBack={redirectToHome}
+      />
     </Container>
   );
 };
