@@ -7,7 +7,7 @@ import "./mini-components.scss";
 const getDematChargesData = (equityChargesData = {}) => () => {
   return [
     {
-      name: "Annual maintainence",
+      name: "Annual maintainence fee",
       value: `${formatAmountInr(
         equityChargesData.demat_amc?.rupees
       )}/yr + GST`,
