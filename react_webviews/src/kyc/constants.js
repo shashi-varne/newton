@@ -18,7 +18,7 @@ export const API_CONSTANTS = {
   authCheck: '/api/iam/auth/check',
   goldUserInfo: '/api/gold/user/account',
   aocPaymentDecision: "/api/equity/eqm/payment/aoc",
-  aocPaymentStatus: "/api/equity/api/eqm/aoc/pg/status",
+  aocPaymentStatus: "/api/equity/eqm/payment/aoc/status",
 }
 
 export const PATHNAME_MAPPER = {
