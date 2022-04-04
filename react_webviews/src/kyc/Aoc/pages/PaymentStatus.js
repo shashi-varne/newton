@@ -94,7 +94,7 @@ const PaymentStatus = (props) => {
         kyc: ["kyc"],
       });
       let userKyc = get(result, "data.kyc.kyc.data", {});
-      if (!isEmpty(kyc)) {
+      if (!isEmpty(userKyc)) {
         updateKyc(userKyc);
       }
     } catch (err) {
@@ -148,6 +148,9 @@ const PaymentStatus = (props) => {
         setCountdownInterval(null);
         setAocPaymentStatusData(result.status);
         setShowLoader(false);
+        if (!isEmpty(result.kyc)) {
+          updateKyc(result.kyc);
+        }
       }
     } catch (err) {
       console.log("er ", err);
