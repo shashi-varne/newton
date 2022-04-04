@@ -201,7 +201,7 @@ const PaymentStatus = (props) => {
       handleClick={handleClick}
       data-aid="aocPaymentStatus"
       loaderData={{
-        loadingText: "Please wait...",
+        loadingText: "Please wait while your payment is being processed",
       }}
       noFooter={showLoader === "page"}
     >
