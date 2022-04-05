@@ -4,7 +4,7 @@ import { Imgc } from "../../../common/ui/Imgc";
 
 import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import useUserKycHook from "../../common/hooks/userKycHook";
-// import { nativeCallback } from "../../../utils/native_callback";
+import { nativeCallback } from "../../../utils/native_callback";
 import { getMfVsTradingData } from "../common/constants";
 import { PATHNAME_MAPPER } from "../../constants";
 import { triggerAocPaymentDecision } from "../../common/api";
@@ -24,23 +24,23 @@ const MFAndTradingDifferences = (props) => {
     [kyc]
   );
 
-  // const sendEvents = (userAction) => {
-  //   let eventObj = {
-  //     event_name: "trading_onboarding",
-  //     properties: {
-  //       user_action: userAction || "",
-  //       screen_name: "mf_vs_trading",
-  //     },
-  //   };
-  //   if (userAction === "just_set_events") {
-  //     return eventObj;
-  //   } else {
-  //     nativeCallback({ events: eventObj });
-  //   }
-  // };
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "trading_onboarding",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "mf_vs_trading_difference",
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
 
   const handleClick = async () => {
-    // sendEvents("next");
+    sendEvents("continue_with_mf");
     setErrorData({});
     try {
       setShowLoader("button");
@@ -67,7 +67,7 @@ const MFAndTradingDifferences = (props) => {
   };
 
   const handleChangeAccountType = () => {
-    // sendEvents("next");
+    sendEvents("change_account_type");
     if (showLoader) return;
     navigate(PATHNAME_MAPPER.aocSelectAccount);
   };
@@ -76,7 +76,7 @@ const MFAndTradingDifferences = (props) => {
     <Container
       skelton={isLoading}
       title="Account type - Mutual fund only"
-      // events={sendEvents("just_set_events")}
+      events={sendEvents("just_set_events")}
       handleClick={handleClick}
       data-aid="mfAndTradingDifference"
       errorData={errorData}

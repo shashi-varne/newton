@@ -126,7 +126,7 @@ const PaymentStatus = (props) => {
       event_name: "trading_onboarding",
       properties: {
         user_action: userAction || "",
-        screen_name: "payment_status",
+        screen_name: paymentStatusData.screenName,
       },
     };
     if (userAction === "just_set_events") {
@@ -171,6 +171,7 @@ const PaymentStatus = (props) => {
   };
 
   const handleClick = () => {
+    sendEvents("next");
     if (paymentStatusData.isSuccess) {
       validateAocPaymentAndRedirect(kyc, navigate);
     } else {
@@ -184,6 +185,7 @@ const PaymentStatus = (props) => {
   };
 
   const redirectToHome = () => {
+    sendEvents("back");
     handleNativeExit(props, { action: "exit" });
   };
 
