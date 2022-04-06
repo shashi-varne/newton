@@ -114,10 +114,7 @@ function KycModuleEntry(props) {
     } else if (kycStatus === "fno_rejected") {
       navigate(PATHNAME_MAPPER.uploadFnOIncomeProof, data);
     } else if (isUpgradeToEquityAccountEnabled(kyc, kycStatus)) {
-      let result;
-      if (!kyc?.mf_kyc_processed) {
-        result = await setProductType();
-      }
+      let result = await setProductType();
       
       // already kyc completed users
       if (isReadyToInvestUser && (result?.kyc?.mf_kyc_processed || kyc?.mf_kyc_processed)) {

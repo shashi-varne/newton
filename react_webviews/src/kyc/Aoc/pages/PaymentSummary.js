@@ -4,15 +4,20 @@ import { Tile } from "../mini-components/Tile";
 
 import useUserKycHook from "../../common/hooks/userKycHook";
 import isEmpty from "lodash/isEmpty";
-import { getAocPaymentSummaryData } from "../common/constants";
+import {
+  getAocPaymentSummaryData,
+  PAYMENT_SUMMARY_DATA,
+} from "../common/constants";
 import { nativeCallback } from "../../../utils/native_callback";
 import { getConfig } from "../../../utils/functions";
 import { getAocData, triggerAocPayment } from "../common/functions";
+import { getKycAppStatus } from "../../services";
 
 import "./PaymentStatus.scss";
 
 const PaymentSummary = (props) => {
   const [paymentDetails, setPaymentDetails] = useState({});
+  const [paymentSummaryContent, setPaymentSummaryContent] = useState({});
   const [errorData, setErrorData] = useState({});
   const [showLoader, setShowLoader] = useState(false);
   const { kyc, isLoading, updateKyc } = useUserKycHook();
@@ -22,6 +27,12 @@ const PaymentSummary = (props) => {
     const aocData = getAocData(kyc);
     const aocPaymentDetails = getAocPaymentSummaryData(aocData);
     setPaymentDetails(aocPaymentDetails);
+    const status = getKycAppStatus(kyc).status;
+    const summaryData =
+      status === "upgraded_incomplete"
+        ? PAYMENT_SUMMARY_DATA.upgrade
+        : PAYMENT_SUMMARY_DATA.default;
+    setPaymentSummaryContent(summaryData);
   }, [kyc]);
 
   const sendEvents = (userAction) => {
@@ -52,7 +63,7 @@ const PaymentSummary = (props) => {
   return (
     <Container
       skelton={isLoading}
-      buttonTitle="PAY NOW"
+      buttonTitle={paymentSummaryContent.buttonTitle}
       title="Payment summary"
       events={sendEvents("just_set_events")}
       showLoader={showLoader}
@@ -63,10 +74,8 @@ const PaymentSummary = (props) => {
     >
       <div className="aoc-payment-summary" data-aid="summary">
         <div className="aoc-locker-details">
-          <div className="aoc-ld-title">
-            Trading & Demat + Mutual Fund account
-          </div>
-          <div>Stocks, Mutual funds, IPOs, NCDs, SGBs</div>
+          <div className="aoc-ld-title">{paymentSummaryContent.title}</div>
+          <div>{paymentSummaryContent.subtitle}</div>
         </div>
         {!isEmpty(paymentDetails) && (
           <>

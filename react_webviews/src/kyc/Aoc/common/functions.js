@@ -99,10 +99,14 @@ export const triggerAocPayment = async ({
         updateKyc,
       });
     };
+    const resetErrorData = () => {
+      setErrorData({})
+    }
     setErrorData({
       showError: true,
       title2: err.message,
       handleClick1: retry,
+      setErrorData: resetErrorData,
     });
     setShowLoader(false);
   }

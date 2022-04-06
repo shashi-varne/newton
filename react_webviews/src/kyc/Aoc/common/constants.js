@@ -1,5 +1,18 @@
 import { formatAmountInr, inrFormatDecimal } from "../../../utils/validators";
 
+export const PAYMENT_SUMMARY_DATA = {
+  upgrade: {
+    title: "Upgrading to trading and demat account",
+    subtitle: "Stocks, IPOs, NCDs, SGBs",
+    buttonTitle: "Continue to Pay",
+  },
+  default: {
+    title: "Trading & Demat + Mutual Fund account",
+    subtitle: "Stocks, Mutual funds, IPOs, NCDs, SGBs",
+    buttonTitle: "PAY NOW",
+  },
+};
+
 export const PAYMENT_STATUS_DATA = {
   success: {
     title: "Payment is successful",

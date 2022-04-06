@@ -495,11 +495,8 @@ export async function handleCommonKycRedirections({
 
 export async function setKycProductTypeAndRedirect({ kyc, kycJourneyStatus, isReadyToInvestBase, handleLoader, navigate, updateKyc, kycStatusData }) {
   const config = getConfig();
-  let result;
-  if (!kyc?.mf_kyc_processed) {
-    result = await setProductType(handleLoader);
-    updateKyc(result.kyc);
-  }
+  const result = await setProductType(handleLoader);
+  updateKyc(result.kyc);
   
   // already kyc done users
   if (isReadyToInvestBase && (result?.kyc?.mf_kyc_processed || kyc?.mf_kyc_processed)) {
