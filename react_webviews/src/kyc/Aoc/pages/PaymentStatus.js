@@ -194,8 +194,7 @@ const PaymentStatus = (props) => {
   const handleGoBack = () => {
     if(paymentStatusData.isSuccess){
       redirectToHome();
-    }
-    else{
+    }else{
       setOpenConfirmBackModal(true);
     }
   }
