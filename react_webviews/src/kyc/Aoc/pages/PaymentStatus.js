@@ -200,7 +200,7 @@ const PaymentStatus = (props) => {
   }
 
   const closeConfirmBackModal= () => {
-      setOpenConfirmBackModal(false);
+    setOpenConfirmBackModal(false);
   }
 
   return (
@@ -256,7 +256,7 @@ const PaymentStatus = (props) => {
         isOpen={openConfirmBackModal}
         close = {closeConfirmBackModal}
         goBack={redirectToHome}
-        />
+      />
     </Container>
   );
 };
