@@ -22,7 +22,7 @@ export const get_recommended_funds = async (params) => {
   }
 };
 
-export const getTrendingFunds = async () => {
+export const getDiyTrendingFunds = async () => {
 
   try {
     const res = await Api.get('/api/persona/trends/gettrendingfunds');

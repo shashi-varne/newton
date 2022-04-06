@@ -166,6 +166,7 @@ export function triggerSentryError(verb, response, errorMsg, additionalInfo) {
 
 const setXPlutusData = (xPlutusAuth = "") => {
   const xPlutusAuthData = xPlutusAuth.split(";") || [];
+  // eslint-disable-next-line no-unused-expressions
   xPlutusAuthData?.forEach((element) => {
     if (element.includes("plutus-session")) {
       storageService().set("plutus-session", element);

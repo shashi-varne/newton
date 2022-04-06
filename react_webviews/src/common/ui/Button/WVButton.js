@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, withStyles } from '@material-ui/core';
 import { getConfig } from '../../../utils/functions';
 import DotDotLoaderNew from '../DotDotLoaderNew';
+import { getDataAid } from '../../../utils/validators';
 
 const noop = () => {};
 
@@ -21,7 +22,7 @@ const WVButton = ({
       {...props}
       variant={variant}
       onClick={showLoader ? noop : onClick}
-      data-aid={`wv-button-${dataAidSuffix}`}
+      data-aid={getDataAid('button', dataAidSuffix || (variant === 'outlined' ? 'secondary' : 'primary'))}
     >
       {showLoader ?
         <DotDotLoaderNew
@@ -29,7 +30,7 @@ const WVButton = ({
             backgroundColor: props.variant === 'contained' ? 'white' : '#35cb5d'
           }}
         /> :
-        children
+        <div data-aid={getDataAid('tv', 'text')}>{children}</div>
       }
     </Button>
   );

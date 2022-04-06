@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { withRouter } from 'react-router';
+import { withRouter } from 'react-router-dom';
 
 import { nativeCallback, handleNativeExit } from 'utils/native_callback';
 import '../../utils/native_listener';

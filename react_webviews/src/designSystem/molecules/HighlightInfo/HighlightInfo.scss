@@ -1,0 +1,14 @@
+.hi-wrapper {
+    padding: 10.5px 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 4px;
+    flex: 1;
+    cursor: pointer;
+
+    .hi-img-wrapper {
+        margin-left: 10px;
+    }
+}

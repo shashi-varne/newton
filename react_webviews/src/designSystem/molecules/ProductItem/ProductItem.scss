@@ -1,0 +1,21 @@
+.product-item-wrapper {
+  cursor: pointer !important;
+  padding-bottom: 16px;
+
+  .product-item-child-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .pi-right-section {
+    margin-left: 10px;
+    align-self: baseline;
+    min-width: fit-content;
+    margin-left: auto;
+    align-items: flex-end;
+    &> * {
+      margin-left: 10px;
+    }
+  }
+}

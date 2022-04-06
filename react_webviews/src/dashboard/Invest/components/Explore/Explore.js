@@ -15,9 +15,10 @@ import { storageService } from 'utils/validators'
 import InvestExploreCard from './InvestExploreCard'
 import { getConfig } from "utils/functions";
 
-import { getTrendingFunds, getSubCategories } from '../../common/api'
+import { getDiyTrendingFunds, getSubCategories } from '../../common/api'
 import { CART, CATEGORY, FUNDSLIST, SUBCATEGORY } from '../../../DIY/constants'
 import isEmpty from 'lodash/isEmpty';
+import isArray from 'lodash/isArray';
 import './Explore.scss';
 import { nativeCallback } from '../../../../utils/native_callback'
 import { flowName } from '../../constants'
@@ -71,8 +72,8 @@ const InvestExplore = (props) => {
   const fetchTrendingFunds = async () => {
     try {
       const categoryList = storageService().getObject('diystore_categoryList')
-      if(isEmpty(categoryList)) {
-        const data = await getTrendingFunds()
+      if(isEmpty(categoryList) || !isArray(categoryList)) {
+        const data = await getDiyTrendingFunds()
         const categories = await getSubCategories()
         storageService().setObject('diystore_trending', data.trends)
         storageService().setObject('diystore_categoryList', categories.result)

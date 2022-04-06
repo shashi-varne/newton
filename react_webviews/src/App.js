@@ -1,6 +1,6 @@
 import "common/theme/Style.scss";
 import React, { Component, useState, useEffect, lazy, Suspense } from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch, withRouter } from "react-router-dom";
 import JssProvider from "react-jss/lib/JssProvider";
 import {
   createGenerateClassName,
@@ -9,7 +9,6 @@ import {
   createMuiTheme,
 } from "@material-ui/core/styles";
 import { create } from "jss";
-import { withRouter } from "react-router";
 import { themeConfig } from "utils/constants";
 import { getConfig, isDietProduct } from './utils/functions';
 import { storageService } from "./utils/validators";
@@ -22,6 +21,9 @@ import UnAuthenticatedRoute from './common/components/UnAuthenticatedRoute.js';
 import RedirectToAnyPath from './common/components/RedirectToAnyPath.js';
 import eventManager from './utils/eventManager.js';
 import { EVENT_MANAGER_CONSTANTS } from './utils/constants.js';
+import { Provider } from 'react-redux';
+import store, { persistor } from './dataLayer/store/index.js';
+import { PersistGate } from 'redux-persist/integration/react';
 import LoginContainer from './login_and_registration/components/LoginContainer';
 import Logout from "./login_and_registration/pages/Logout/Logout";
 
@@ -117,66 +119,70 @@ const App = () => {
   }
 
   return (
-    <BrowserRouter basename={basename}>
-      <JssProvider jss={jss} generateClassName={generateClassName}>
-        <MuiThemeProvider theme={themeConfiguration}>
-          <ScrollToTop />
-          <ToastContainer autoClose={3000} />
-          <ErrorBoundary>
-            <Suspense fallback={<BootSkeleton />}>
-              <Tooltip />
-              <RedirectToAnyPath />
-              <Switch>
-                {/* <Route
-                  path="/iw-dashboard"
-                  component={InternalWealthDashboard}
-                />
-                <Route
-                  path="/w-report"
-                  component={WealthReport}
-                /> */}
-                <UnAuthenticatedRoute
-                  path={[
-                    '/login',
-                    '/forgot-pin'
-                  ]}
-                  component={LoginContainer}
-                />
-                <Route
-                  path="/rm-login"
-                  component={RmLogin}
-                />
-                <Route
-                  path="/partner-landing"
-                  component={FisdomPartnerRedirect}
-                />
-                <Route
-                  path="/partner-authentication/:partnerCode"
-                  component={PartnerAuthentication}
-                />
-                <Route
-                  path="/logout"
-                  component={Logout}
-                />
-                <Route
-                  path="/prepare"
-                  component={Prepare}
-                />
-                {
-                  isWithoutDesktopLayout
-                    ? <Route component={Feature} />
-                    : <DesktopLayout>
-                        <Feature />
-                      </DesktopLayout>
-                }
-                <Route path='/component-test' component={ComponentTest} />
-                <Route component={NotFound} />
-              </Switch>
-            </Suspense>
-          </ErrorBoundary>
-        </MuiThemeProvider>
-      </JssProvider>
-    </BrowserRouter>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <BrowserRouter basename={basename}>
+          <JssProvider jss={jss} generateClassName={generateClassName}>
+            <MuiThemeProvider theme={themeConfiguration}>
+              <ScrollToTop />
+              <ToastContainer autoClose={3000} />
+              <ErrorBoundary>
+                <Suspense fallback={<BootSkeleton />}>
+                  <Tooltip />
+                  <RedirectToAnyPath />
+                  <Switch>
+                    {/* <Route
+                      path="/iw-dashboard"
+                      component={InternalWealthDashboard}
+                    />
+                    <Route
+                      path="/w-report"
+                      component={WealthReport}
+                    /> */}
+                    <UnAuthenticatedRoute
+                      path={[
+                        '/login',
+                        '/forgot-pin'
+                      ]}
+                      component={LoginContainer}
+                    />
+                    <Route
+                      path="/rm-login"
+                      component={RmLogin}
+                    />
+                    <Route
+                      path="/partner-landing"
+                      component={FisdomPartnerRedirect}
+                    />
+                    <Route
+                      path="/partner-authentication/:partnerCode"
+                      component={PartnerAuthentication}
+                    />
+                    <Route
+                      path="/logout"
+                      component={Logout}
+                    />
+                    <Route
+                      path="/prepare"
+                      component={Prepare}
+                    />
+                    {
+                      isWithoutDesktopLayout
+                        ? <Route component={Feature} />
+                        : <DesktopLayout>
+                            <Feature />
+                          </DesktopLayout>
+                    }
+                    <Route path='/component-test' component={ComponentTest} />
+                    <Route component={NotFound} />
+                  </Switch>
+                </Suspense>
+              </ErrorBoundary>
+            </MuiThemeProvider>
+          </JssProvider>
+        </BrowserRouter>
+      </PersistGate>
+    </Provider>
   );
 };
 

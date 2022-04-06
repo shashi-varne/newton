@@ -1,0 +1,31 @@
+.tag-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: fit-content;
+  padding: 1px 8px;
+
+  &.tag-small-wrapper {
+    padding: 0px;
+  }
+
+  .tag-left-image {
+    margin-right: 8px;
+    &.tag-left-image-small {
+      margin-right: 4px;
+    }
+  }
+
+  .tag-right-image {
+    margin-left: 8px;
+    &.tag-right-image-small {
+      margin-left: 4px;
+    }
+  }
+}
+
+.label-tag-wrapper {
+  max-width: max-content;
+  border-radius: 4px;
+  padding: 1px 8px;
+}

@@ -13,6 +13,7 @@ export async function initializeComponentFunctions() {
   const currentUser = storageService().getObject("user") || {};
   const userKyc = storageService().getObject("kyc") || {};
   this.setState({ currentUser, userKyc });
+  await this.getMyAccount();
   if (this.onload) this.onload();
 }
 

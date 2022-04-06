@@ -54,7 +54,12 @@ const Goals = (props) => {
       window.callbackWeb.sendEvent(_event);
     }
 
-    let pathname = getPathname[goal?.itag?.itype] || "";
+    let iType = goal?.itag?.itype;
+    if(iType === 'diy' && config.code !== 'moneycontrol' && !config.isIframe) {
+      iType = 'diyv2';
+    }
+
+    let pathname = getPathname[iType] || "";
     if (!pathname) return;
     if (goal.itag.itype === "saveforgoal")
       pathname = `${pathname}/${goal.itag.subtype}`;
