@@ -69,7 +69,7 @@ const MFAndTradingDifferences = (props) => {
   const handleChangeAccountType = () => {
     sendEvents("change_account_type");
     if (showLoader) return;
-    navigate(PATHNAME_MAPPER.aocSelectAccount);
+    props.history.goBack();
   };
 
   return (
