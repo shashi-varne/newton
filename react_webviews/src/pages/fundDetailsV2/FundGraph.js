@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { TimeLine, Timelines } from '../../designSystem/atoms/TimelineList';
 import {
   fetchFundGraphData,
@@ -29,6 +29,8 @@ const FundGraph = () => {
   const { loadingData } = useLoadingState(screen);
   const disptach = useDispatch();
   const [periodWiseData, setPeriodWiseData] = useState({});
+  const setAvailableInvestmentPeriod = useRef(false);
+  const isGraphLoaded = useRef(false);
 
   const getGraphData = async (dataGraph) => {
     if (isEmpty(dataGraph)) {
@@ -93,16 +95,19 @@ const FundGraph = () => {
       }
     }
     setPeriodWiseData(choppedData);
-    setGraphData(amfi_data);
+    setGraphData([...choppedData[fundTimePeriod]]);
   };
   useEffect(() => {
-    getGraphData(fundGraphData);
-  }, [fundGraphData]);
+    if(!isGraphLoaded.current) {
+      getGraphData(fundGraphData);
+    }
+  }, [fundGraphData, fundTimePeriod]);
 
   const handleTimePeriodChange = (e, value) => {
     disptach(setFundTimePeriod(value));
     const newData = [...periodWiseData[value]];
     setGraphData(newData);
+    isGraphLoaded.current = true;
   };
   function labelFormatter() {
     if (this.isFirst) return '<p class="xaxis-label">' + format(this.pos, 'd MMM yyyy') + '</p>';
@@ -138,6 +143,11 @@ const FundGraph = () => {
       >
         {timeLines?.map((el, id) => {
           const isDisabled = id > fundData?.performance.returns.length - 1;
+          if(isDisabled && !setAvailableInvestmentPeriod.current) {
+            const availablePeriod = timeLines[id -1];
+            disptach(setFundTimePeriod(availablePeriod?.value));
+            setAvailableInvestmentPeriod.current = true;
+          }
           return (
             <TimeLine
               disabled={isDisabled || loadingData.isGraphLoading}
