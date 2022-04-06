@@ -544,6 +544,7 @@ export const kycStatusMapperInvest = {
     subtitle: "Now proceed with account opening",
     subTitleClass: "kyc-account-setup-incomplete",
     nextState: KYC_PATHNAME_MAPPER.aocSelectAccount,
+    eventStatus: "complete_your_account_setup",
   },
   mf_esign_pending: {
     icon: "ic_kyc_incomplete.svg",
