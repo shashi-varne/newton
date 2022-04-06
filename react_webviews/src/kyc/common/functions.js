@@ -520,6 +520,6 @@ export const isUpgradeToEquityAccountEnabled = (kyc, kycStatus) => {
 };
 
 export const showTradingInfoScreen = (kyc, productName) => {
-  const kycJourneyStatus = getKycAppStatus(kyc);
+  const kycJourneyStatus = getKycAppStatus(kyc).status;
   return isRetroMfIRUser(kyc) || kycJourneyStatus === "upgraded_incomplete" || productName === "finity";
 }
