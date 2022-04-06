@@ -170,7 +170,7 @@ const TradingInfo = (props) => {
       return;
     }
 
-    if (goBackPath) {
+    if (goBackPath && goBackPath !== "exit") {
       navigate(goBackPath);
       return;
     }
