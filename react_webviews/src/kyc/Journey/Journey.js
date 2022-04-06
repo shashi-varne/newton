@@ -370,7 +370,7 @@ const Journey = (props) => {
       sendEvents('edit')
     }
     let stateMapper = {}
-    const tradingEsignPath = showTradingInfoScreen(kyc) ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
+    const tradingEsignPath = showTradingInfoScreen(kyc, productName) ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
     if (kyc?.kyc_status === 'compliant') {
       // if (key === 'pan' && !customerVerified) {
       //   navigate('/kyc/compliant-confirm-pan')

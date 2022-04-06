@@ -131,7 +131,7 @@ const TradingInfo = (props) => {
       Toast("Tap on T&C check box to continue");
       return;
     }
-    if (isEquityApplSubmittedOrComplete(kyc)) {
+    if (isEquityApplSubmittedOrComplete(kyc) && productName !== "finity") {
       validateAocPaymentAndRedirect(kyc, navigate, true);
       return;
     }
@@ -162,6 +162,19 @@ const TradingInfo = (props) => {
 
   const redirectToHome = () => {
     sendEvents("back");
+    const stateParams = props?.location?.state;
+    const { goBack: goBackPath, fromState }  = stateParams || {};
+
+    if (["/kyc/journey"].includes(fromState)) {
+      props.history.goBack();
+      return;
+    }
+
+    if (goBackPath) {
+      navigate(goBackPath);
+      return;
+    }
+
     handleNativeExit(props, { action: "exit" });
   };
 

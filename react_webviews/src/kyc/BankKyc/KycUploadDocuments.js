@@ -151,7 +151,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const handleOtherPlatformNavigation = () => {
-    const nextStep = showTradingInfoScreen(kyc) ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
+    const nextStep = showTradingInfoScreen(kyc, config.productName) ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
     sendEvents('next', 'bank_verification_pending');
     if (additional) {
       navigate(PATHNAME_MAPPER.bankList);
