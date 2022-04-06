@@ -11,7 +11,7 @@ import isEmpty from 'lodash/isEmpty';
 import { getFundData } from 'businesslogic/dataStore/reducers/fundDetails';
 import { isValidValue } from './helperFunctions';
 
-const ReturnComparison = () => {
+const ReturnComparison = ({isDataLoading}) => {
   const [isRetunCompOpen, setIsRetunCompOpen] = useState(false);
   const investedAmount = useSelector((state) => state?.fundDetails?.investedAmount);
   const expectedAmount = useSelector((state) => state?.fundDetails?.expectedAmount);
@@ -29,7 +29,7 @@ const ReturnComparison = () => {
         isOpen={isRetunCompOpen}
         onClick={handleReturnCompSection}
         label={`Return comparison ${isReturnAvailable ? '(NA)' : ''}`}
-        disabled={isReturnAvailable}
+        disabled={isReturnAvailable || isDataLoading}
         dataAid="returnComparision"
       >
         <Box>

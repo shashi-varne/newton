@@ -1,5 +1,5 @@
-import { Box, Stack } from '@mui/material';
-import React from 'react';
+import { Box, Skeleton, Stack } from '@mui/material';
+import React, { useMemo } from 'react';
 import Typography from '../../designSystem/atoms/Typography';
 import intervalToDuration from 'date-fns/intervalToDuration';
 import parse from 'date-fns/parse';
@@ -13,12 +13,17 @@ import { isValidValue } from './helperFunctions';
 import isEmpty from 'lodash/isEmpty';
 
 function calculateFullAge(dob = '') {
-  const startDate = parse(dob, 'dd/MM/yyyy', new Date());
-  const { years, months, days } = intervalToDuration({ start: startDate, end: new Date() });
-  return { years, months, days };
+  console.log('dob is', dob);
+  if (dob) {
+    const startDate = parse(dob, 'dd/MM/yyyy', new Date());
+    const { years, months, days } = intervalToDuration({ start: startDate, end: new Date() });
+    return { years, months, days };
+  } else {
+    return { years: 0, months: 0, days: 0 };
+  }
 }
 
-const calculateFundAge = (fundAge) => {
+const calculateFundAge = (fundAge = {}) => {
   const fundDay = fundAge?.days || 0;
   const fundMonth = fundAge?.months || 0;
   const fundYear = fundAge?.years || 0;
@@ -65,14 +70,26 @@ const getLockinData = (lockinString) => {
   }
 };
 
-const FundStats = () => {
+const FundStats = ({ isDataLoading }) => {
   const fundData = useSelector(getFundData);
   const fullAgeData = calculateFullAge(fundData?.additional_info?.launch_date);
   const fundAge = calculateFundAge(fullAgeData);
-  const launchDate = format(
-    parse(fundData?.additional_info?.launch_date, 'dd/MM/yyyy', new Date()),
-    'MMM d, yyyy'
-  );
+  const launchDate = useMemo(() => {
+    if (isDataLoading) {
+      return '--';
+    } else {
+      const launchDateState = fundData?.additional_info?.launch_date;
+      if (!launchDateState) {
+        return 'NA';
+      } else {
+        const formatedLaunchDate = format(
+          parse(launchDateState, 'dd/MM/yyyy', new Date()),
+          'MMM d, yyyy'
+        );
+        return formatedLaunchDate;
+      }
+    }
+  }, [isDataLoading]);
 
   const lokinPeriodData = getLockinData(fundData?.additional_info?.lockin_period);
 
@@ -81,17 +98,33 @@ const FundStats = () => {
       sx={{ bgcolor: 'foundationColors.supporting.white', p: '32px 16px 24px 16px' }}
       spacing={3}
     >
-      <Typography variant='heading3' dataAid="fundStats">Fund stats</Typography>
+      <Typography variant='heading3' dataAid='fundStats'>
+        Fund stats
+      </Typography>
       <Stack direction='row' justifyContent='space-between'>
         <Stack spacing='4px' direction='column'>
-          <Typography allCaps variant='body9' color='foundationColors.content.secondary' dataAid="fundAgeKey" >
+          <Typography
+            allCaps
+            variant='body9'
+            color='foundationColors.content.secondary'
+            dataAid='fundAgeKey'
+          >
             Fund Age
           </Typography>
-          <Stack direction='column' data-aid="tv_fundAgeValue" >
-            <Typography variant='heading4'>{fundAge}</Typography>
-            <Typography variant='body5' color='foundationColors.content.secondary'>
-              {`(since ${launchDate})`}
-            </Typography>
+          <Stack direction='column' data-aid='tv_fundAgeValue'>
+            {isDataLoading ? (
+              <>
+                <TextLineLoader width='50px' />
+                <TextLineLoader width='80px' />
+              </>
+            ) : (
+              <>
+                <Typography variant='heading4'>{fundAge}</Typography>
+                <Typography variant='body5' color='foundationColors.content.secondary'>
+                  {`(since ${launchDate})`}
+                </Typography>
+              </>
+            )}
           </Stack>
         </Stack>
         <Stack spacing='4px' direction='column' flexBasis='50%'>
@@ -100,28 +133,34 @@ const FundStats = () => {
             allCaps
             variant='body9'
             color='foundationColors.content.secondary'
-            dataAid="lockInKey"
+            dataAid='lockInKey'
           >
             Lock-in
           </Typography>
-          <Stack direction='column' data-aid="tv_lockInValue">
-            {isEmpty(lokinPeriodData) ? (
-              <Typography align='right' variant='heading4'>
-                NA
-              </Typography>
+          <Stack direction='column' data-aid='tv_lockInValue'>
+            {isDataLoading ? (
+              <TextLineLoader sx={{ ml: 'auto' }} />
             ) : (
               <>
-                <Typography align='right' variant='heading4'>
-                  {lokinPeriodData?.lockingPeriod}
-                </Typography>
-                {lokinPeriodData?.lockingAge && (
-                  <Typography
-                    align='right'
-                    variant='body5'
-                    color='foundationColors.content.secondary'
-                  >
-                    {`(${lokinPeriodData?.lockingAge})`}
+                {isEmpty(lokinPeriodData) ? (
+                  <Typography align='right' variant='heading4'>
+                    NA
                   </Typography>
+                ) : (
+                  <>
+                    <Typography align='right' variant='heading4'>
+                      {lokinPeriodData?.lockingPeriod}
+                    </Typography>
+                    {lokinPeriodData?.lockingAge && (
+                      <Typography
+                        align='right'
+                        variant='body5'
+                        color='foundationColors.content.secondary'
+                      >
+                        {`(${lokinPeriodData?.lockingAge})`}
+                      </Typography>
+                    )}
+                  </>
                 )}
               </>
             )}
@@ -132,12 +171,17 @@ const FundStats = () => {
       <Stack direction='row' justifyContent='space-between'>
         <Stack spacing='4px' direction='column'>
           <Stack direction='row' spacing='4px' alignItems='center'>
-            <Typography allCaps variant='body9' color='foundationColors.content.secondary' dataAid="expenseratioKey" >
+            <Typography
+              allCaps
+              variant='body9'
+              color='foundationColors.content.secondary'
+              dataAid='expenseratioKey'
+            >
               Expense ratio
             </Typography>
             <Box sx={{ height: '16px', width: '16px' }}>
               <Tooltip
-                dataAid="expenseRatio"
+                dataAid='expenseRatio'
                 title='This is the annual maintenance fee charged by the Asset Management Companies. This includes opearting costs, management fees, etc.'
               >
                 <div>
@@ -152,12 +196,16 @@ const FundStats = () => {
               </Tooltip>
             </Box>
           </Stack>
-          <Typography variant='heading4' dataAid="expenseRatioValue">
-            {isValidValue(
-              fundData?.portfolio?.expense_ratio,
-              `${fundData?.portfolio?.expense_ratio}%`
-            )}
-          </Typography>
+          {isDataLoading ? (
+            <TextLineLoader width='50px' />
+          ) : (
+            <Typography variant='heading4' dataAid='expenseRatioValue'>
+              {isValidValue(
+                fundData?.portfolio?.expense_ratio,
+                `${fundData?.portfolio?.expense_ratio}%`
+              )}
+            </Typography>
+          )}
         </Stack>
         <Stack spacing='4px' direction='column'>
           <Typography
@@ -165,24 +213,33 @@ const FundStats = () => {
             variant='body9'
             align='right'
             color='foundationColors.content.secondary'
-            dataAid="totalAumKey"
+            dataAid='totalAumKey'
           >
             Total Aum
           </Typography>
-          <Typography variant='heading4' align='right' data-aid="tv_totalAumValue">
-            {isValidValue(fundData?.performance?.aum, `₹ ${fundData?.performance?.aum}`)}
-          </Typography>
+          {isDataLoading ? (
+            <TextLineLoader width='80px' />
+          ) : (
+            <Typography variant='heading4' align='right' data-aid='tv_totalAumValue'>
+              {isValidValue(fundData?.performance?.aum, `₹ ${fundData?.performance?.aum}`)}
+            </Typography>
+          )}
         </Stack>
       </Stack>
 
       <Stack direction='column' spacing='4px'>
         <Stack direction='row' spacing='4px' alignItems='center'>
-          <Typography dataAid="exitLoadKey" variant='body9' allCaps color='foundationColors.content.secondary'>
+          <Typography
+            dataAid='exitLoadKey'
+            variant='body9'
+            allCaps
+            color='foundationColors.content.secondary'
+          >
             Exit load
           </Typography>
           <Box sx={{ height: '16px', width: '16px' }}>
             <Tooltip
-              dataAid="exitLoad"
+              dataAid='exitLoad'
               title='This refers to the fee charged by the Asset Management Companies at the time of exiting or redeeming fund units'
             >
               <div>
@@ -197,29 +254,44 @@ const FundStats = () => {
             </Tooltip>
           </Box>
         </Stack>
-        {isEmpty(fundData?.additional_info?.exit_load) && (
-          <Typography variant='heading4' dataAid="exitLoadNA" >NA</Typography>
+        {isDataLoading ? (
+          <>
+            <TextLineLoader width='120px' />
+            <TextLineLoader width='120px' />
+          </>
+        ) : (
+          <>
+            {isEmpty(fundData?.additional_info?.exit_load) && (
+              <Typography variant='heading4' dataAid='exitLoadNA'>
+                NA
+              </Typography>
+            )}
+            {fundData?.additional_info?.exit_load?.map((exitLoadData, idx) => {
+              return (
+                <div key={idx} data-aid={`tv_exitLoadValue${idx}`}>
+                  <Typography variant='heading4' allCaps>
+                    {`${nonRoundingToFixed(exitLoadData?.value, 2)}${exitLoadData?.unit}`}
+                  </Typography>
+                  <Typography
+                    component='span'
+                    variant='body5'
+                    color='foundationColors.content.secondary'
+                    sx={{ marginLeft: '5px' }}
+                  >
+                    ({exitLoadData?.period})
+                  </Typography>
+                </div>
+              );
+            })}
+          </>
         )}
-        {fundData?.additional_info?.exit_load?.map((exitLoadData, idx) => {
-          return (
-            <div key={idx} data-aid={`tv_exitLoadValue${idx}`} >
-              <Typography variant='heading4' allCaps>
-                {`${nonRoundingToFixed(exitLoadData?.value, 2)}${exitLoadData?.unit}`}
-              </Typography>
-              <Typography
-                component='span'
-                variant='body5'
-                color='foundationColors.content.secondary'
-                sx={{ marginLeft: '5px' }}
-              >
-                ({exitLoadData?.period})
-              </Typography>
-            </div>
-          );
-        })}
       </Stack>
     </Stack>
   );
 };
 
 export default FundStats;
+
+const TextLineLoader = ({ width = '40px', ...props }) => {
+  return <Skeleton type='text' width={width} {...props} />;
+};

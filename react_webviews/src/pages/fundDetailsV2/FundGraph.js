@@ -19,7 +19,7 @@ import { useParams } from 'react-router-dom';
 const screen = 'fundDetailsV2';
 
 const getTimeInMs = (time) => time * 60 * 60 * 24 * 1000;
-const FundGraph = () => {
+const FundGraph = ({isDataLoading}) => {
   let { isins } = getUrlParams();
   const {isin = ''} = useParams();
   const [graphData, setGraphData] = useState([]);
@@ -98,10 +98,10 @@ const FundGraph = () => {
     setGraphData([...choppedData[fundTimePeriod]]);
   };
   useEffect(() => {
-    if(!isGraphLoaded.current) {
+    if(!isGraphLoaded.current && !isDataLoading) {
       getGraphData(fundGraphData);
     }
-  }, [fundGraphData, fundTimePeriod]);
+  }, [fundGraphData, fundTimePeriod, isDataLoading]);
 
   const handleTimePeriodChange = (e, value) => {
     disptach(setFundTimePeriod(value));
@@ -131,7 +131,7 @@ const FundGraph = () => {
   return (
     <div className='fund-graph-wrapper'>
       <FundCommonGraph
-        isGraphLoading={loadingData.isGraphLoading}
+        isGraphLoading={loadingData.isGraphLoading || isDataLoading}
         graphData={graphData}
         labelFormatter={labelFormatter}
         tooltipFormatter={tooltipFormatter}
@@ -142,15 +142,15 @@ const FundGraph = () => {
         className='fund-details-timeline'
       >
         {timeLines?.map((el, id) => {
-          const isDisabled = id > fundData?.performance.returns.length - 1;
-          if(isDisabled && !setAvailableInvestmentPeriod.current) {
+          const isDisabled = id > fundData?.performance?.returns.length - 1;
+          if(isDisabled && !setAvailableInvestmentPeriod.current && !isDataLoading) {
             const availablePeriod = timeLines[id -1];
             disptach(setFundTimePeriod(availablePeriod?.value));
             setAvailableInvestmentPeriod.current = true;
           }
           return (
             <TimeLine
-              disabled={isDisabled || loadingData.isGraphLoading}
+              disabled={isDisabled || loadingData.isGraphLoading || isDataLoading}
               key={id}
               label={el.label}
               value={el.value}

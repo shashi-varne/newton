@@ -56,7 +56,7 @@ const checkRiskMeasuresAttribute = (riskMeasure) => {
   }
 };
 
-const RiskDetails = ({ fundDetailsRef, sendEvents }) => {
+const RiskDetails = ({ fundDetailsRef, sendEvents, isDataLoading }) => {
   const [isRiskOpen, setIsRiskOpen] = useState(false);
   const fundData = useSelector(getFundData);
   const isRiskVsCatAvailable = !isEmpty(fundData?.risk?.risk_vs_category);
@@ -71,7 +71,7 @@ const RiskDetails = ({ fundDetailsRef, sendEvents }) => {
       riskVsCategoryActiveIndex: getBarIndex(fundData?.risk?.risk_vs_category),
       returnVsCategoryActiveIndex: getBarIndex(fundData?.risk?.return_vs_category),
     };
-  }, [fundData?.risk?.risk_vs_category, fundData?.risk?.return_vs_category]);
+  }, [fundData?.risk?.risk_vs_category, fundData?.risk?.return_vs_category, isDataLoading]);
   const handleRiskAction = () => {
     setIsRiskOpen(!isRiskOpen);
   };
@@ -87,7 +87,7 @@ const RiskDetails = ({ fundDetailsRef, sendEvents }) => {
   return (
     <Box sx={{ mt: 4 }}>
       <CollapsibleSection
-        disabled={disableRiskDetailsAvailable}
+        disabled={disableRiskDetailsAvailable || isDataLoading}
         label={`Risk details ${disableRiskDetailsAvailable ? '(NA)' : ''}`}
         isOpen={isRiskOpen}
         onClick={handleRiskAction}
