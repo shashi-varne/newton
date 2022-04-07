@@ -25,6 +25,7 @@ const RollingReturn = ({fundDetailsRef, sendEvents}) => {
   const rollingGraphData = !isEmpty(rollingData?.data) ? rollingData?.data : [];
   const returnGraphData = [...rollingGraphData];
   const avoidFirstRender = useRef(null);
+  const disabledValueSet = useRef(false);
   const NET_ASSET_VALUE = useMemo(() => {
     return [
       {
@@ -90,20 +91,28 @@ const RollingReturn = ({fundDetailsRef, sendEvents}) => {
           Investment period
         </Typography>
         <Box sx={{ mt: 4, maxWidth: 'fit-content' }}>
-          <Timelines value={investmentYear} onChange={handleInvestmentYear}>
-            {ROLLING_RETURN_TIMELINES?.map((timeline, idx) => {
-              const isDisable = !rollingReturnData[timeline?.value];
-              return (
-                <TimeLine
-                  key={idx}
-                  label={timeline.label}
-                  value={timeline.value}
-                  disabled={isDisable}
-                  dataAid={idx}
-                />
-              );
-            })}
-          </Timelines>
+          {
+            !loadingData.isGraphLoading && !isEmpty(rollingReturnData) &&
+              <Timelines value={investmentYear} onChange={handleInvestmentYear}>
+                {ROLLING_RETURN_TIMELINES?.map((timeline, idx) => {
+                  const isDisable = !rollingReturnData[timeline?.value];
+                  if(isDisable && !disabledValueSet.current) {
+                    const disableTimelineValue = ROLLING_RETURN_TIMELINES[idx - 1];
+                    setInvestmentYear(disableTimelineValue?.value);
+                    disabledValueSet.current = true;
+                  }
+                  return (
+                    <TimeLine
+                      key={idx}
+                      label={timeline.label}
+                      value={timeline.value}
+                      disabled={isDisable}
+                      dataAid={idx}
+                      />
+                      );
+                    })}
+              </Timelines>
+          }
         </Box>
         <Stack sx={{ mt: 4, mb: 2 }} direction='column' spacing={3}>
           <Typography dataAid="netAssetValue" variant='heading4' color={secondaryColor}>

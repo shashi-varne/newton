@@ -21,7 +21,7 @@ const barData = [
     value: 2,
   },
   {
-    name: 'Medium',
+    name: 'Average',
     value: 3,
   },
   {
