@@ -30,9 +30,9 @@ const Sign = (props) => {
     setFileToShow(fileBase64)
   }
 
-  const onFileSelectError = () => {
+  const onFileSelectError = (err) => {
     sendEvents("sign");
-    toast('Please select image file only')
+    toast(err.message);
   }
 
   const handleSubmit = async () => {

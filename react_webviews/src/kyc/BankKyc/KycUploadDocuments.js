@@ -82,10 +82,9 @@ const KycUploadDocuments = (props) => {
     setFileToShow(fileBase64);
   };
 
-  const onFileSelectError = (err, file) => {
-    sendEvents("file_select_error", "", file?.type, err)
-    triggerSentryError("select file error", {}, err, file?.type);
-    toast('Please select image file only');
+  const onFileSelectError = (err) => {
+    triggerSentryError("select file", {}, err.message, err);
+    toast(err.message);
   }
 
   const handleDocType = (index) => {
@@ -267,7 +266,7 @@ const KycUploadDocuments = (props) => {
   const selectedDocValue =
     selected !== null ? VERIFICATION_DOC_OPTIONS[selected].value : "";
 
-    const sendEvents = (userAction, screen_name, fileType, errorMessage) => {
+    const sendEvents = (userAction, screen_name) => {
       let docMapper = ["bank_statement", "cancelled_cheque", "passbook"];
       let eventObj = {
         event_name: "kyc_registration",
@@ -281,10 +280,6 @@ const KycUploadDocuments = (props) => {
           // "status" : screen_name ? "verification pending":""
         },
       };
-      if (errorMessage || fileType) {
-        eventObj.properties.file_type = fileType;
-        eventObj.properties.error_message = errorMessage;
-      }
       if (userAction === "just_set_events") {
         return eventObj;
       } else {
