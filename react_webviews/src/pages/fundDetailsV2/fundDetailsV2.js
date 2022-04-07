@@ -64,7 +64,6 @@ const FundDetailsV2 = (props) => {
         hideButton1: (isFisdom && isfundAdded) || isDataLoading,
         hideConfirmAction: !isFisdom || !isfundAdded || isDataLoading,
       }}
-      // isPageLoading={isDataLoading}
       renderComponentAboveFooter={
         <CustomJumpTo
           fundStatRef={fundStatRef}
