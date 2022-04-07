@@ -139,7 +139,7 @@ const FnOIncomeProof = (props) => {
   }
 
   const commonRedirection = () => {
-    if (isRetroMfIRUser(kyc)) {
+    if (isRetroMfIRUser(kyc) || productName === "finity") {
       validateAocPaymentAndRedirect(kyc, navigate);
     } else {
       navigate(PATHNAME_MAPPER.aocSelectAccount);

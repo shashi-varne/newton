@@ -239,7 +239,7 @@ const KycBankVerify = (props) => {
   };
 
   const handleOtherPlatformNavigation = () => {
-    const nextStep = showTradingInfoScreen(kyc) ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
+    const nextStep = showTradingInfoScreen(kyc, productName) ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
     if (userType === "compliant") {
       if (isEdit) goToJourney();
       else navigate(nextStep, {

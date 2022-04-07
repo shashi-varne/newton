@@ -1,7 +1,7 @@
 import Api from '../utils/api'
 import { storageService } from '../utils/validators'
 import toast from '../common/ui/Toast'
-import { isTradingEnabled, isTradingFlow } from '../utils/functions'
+import { getConfig, isTradingEnabled, isTradingFlow } from '../utils/functions'
 import { kycSubmit } from './common/api'
 import { isDigilockerFlow, isEquityApplSubmittedOrComplete, isRetroMfIRUser } from './common/functions'
 import eventManager from '../utils/eventManager'
@@ -210,6 +210,7 @@ async function setNpsData(result) {
 export function getKycAppStatus(kyc) {
   if(isEmpty(kyc)) return {};
   const TRADING_ENABLED = isTradingEnabled(kyc);
+  const isFinity = getConfig().productName === "finity";
   var rejected = 0;
   var metaRejected = 0;
   var docRejected = 0;
@@ -374,13 +375,13 @@ export function getKycAppStatus(kyc) {
   }
 
   // this condition handles showing upgrade account to MF IR or Submitted users until user submits all equity related docs & aoc payment is successful
-  if (TRADING_ENABLED && ((isMfApplicationSubmitted(kyc) && aocPaymentSkipped) || isReadyToInvest()) && kyc.equity_application_status !== "init" 
-    && !aocPaymentSuccessful && kyc.equity_sign_status !== "signed") {
+  if (TRADING_ENABLED && ((!isFinity && isMfApplicationSubmitted(kyc) && aocPaymentSkipped) || isReadyToInvest()) && kyc.equity_application_status !== "init" 
+    && ((isFinity && !isEquityApplSubmittedOrComplete(kyc)) || (!isFinity && !aocPaymentSuccessful)) && kyc.equity_sign_status !== "signed") {
     status = "upgraded_incomplete";
   }
 
   // this condition handles showing complete account setup card for new users until aoc payment is successful 
-  if (tradingFlow && !isRetroMfIRUser(kyc) && isEquityApplSubmittedOrComplete(kyc) && !aocPaymentSuccessful && !aocPaymentSkipped 
+  if (tradingFlow && !isFinity && !isRetroMfIRUser(kyc) && isEquityApplSubmittedOrComplete(kyc) && !aocPaymentSuccessful && !aocPaymentSkipped 
     && kyc.equity_sign_status !== "signed") {
     status = "complete_account_setup";
   }

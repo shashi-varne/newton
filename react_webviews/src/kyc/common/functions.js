@@ -519,6 +519,7 @@ export const isUpgradeToEquityAccountEnabled = (kyc, kycStatus) => {
   return isTradingEnabled(kyc) && kyc?.kyc_product_type !== "equity" && kycStatus !== "mf_esign_pending";
 };
 
-export const showTradingInfoScreen = (kyc) => {
-  return isRetroMfIRUser(kyc) || isEquityApplSubmittedOrComplete(kyc);
+export const showTradingInfoScreen = (kyc, productName) => {
+  const kycJourneyStatus = getKycAppStatus(kyc).status;
+  return isRetroMfIRUser(kyc) || kycJourneyStatus === "upgraded_incomplete" || productName === "finity";
 }
