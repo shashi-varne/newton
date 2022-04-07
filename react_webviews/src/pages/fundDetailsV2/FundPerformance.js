@@ -36,7 +36,6 @@ const FundPerformance = ({ isDataLoading }) => {
   const fundData = useSelector(getFundData);
   const fundTimePeriod = useSelector((state) => state?.fundDetails?.fundTimePeriod);
   const fundReturns = useMemo(() => fetchReturns(fundData), [isDataLoading]);
-  console.log('fundReturns', fundReturns);
 
   const minimumInvestment = orderBy(
     fundData?.additional_info?.minimum_investment,

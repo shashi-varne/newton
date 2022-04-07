@@ -13,7 +13,6 @@ import { isValidValue } from './helperFunctions';
 import isEmpty from 'lodash/isEmpty';
 
 function calculateFullAge(dob = '') {
-  console.log('dob is', dob);
   if (dob) {
     const startDate = parse(dob, 'dd/MM/yyyy', new Date());
     const { years, months, days } = intervalToDuration({ start: startDate, end: new Date() });
