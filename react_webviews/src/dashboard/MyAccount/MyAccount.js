@@ -16,6 +16,7 @@ import Dialog, {
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
 import { isTradingEnabled } from "../../utils/functions";
 import { getKycAppStatus } from "../../kyc/services";
+import { isAocPaymentSkipped } from "../../kyc/Aoc/common/functions";
 import "./MyAccount.scss";
 import { PATHNAME_MAPPER as KYC_PATHNAME_MAPPER } from "../../kyc/constants";
 import { storageService } from "../../utils/validators";
@@ -191,7 +192,7 @@ class MyAccount extends Component {
       } else if (["submitted", "approved"].includes(userKyc.equity_income?.doc_status)) {
         fnoStatus = "inprogress";
       }
-      if(userKyc.kyc_product_type !== "equity") {
+      if (userKyc.kyc_product_type !== "equity" && !isAocPaymentSkipped(userKyc)) {
         fnoStatus = "init";
         stocksStatus = "init";
       }
