@@ -29,6 +29,7 @@ import {
 import { getAccountSummary } from "../../services";
 
 import "./PaymentStatus.scss";
+import ConfirmBackDialog from "../../mini-components/ConfirmBackDialog";
 
 const initializePaymentStatusData = () => {
   const { status, message = "" } = getUrlParams();
@@ -56,6 +57,7 @@ const PaymentStatus = (props) => {
   const [count, setCount] = useState(30);
   const [countdownInterval, setCountdownInterval] = useState();
   const { kyc, updateKyc } = useUserKycHook();
+  const [openConfirmBackModal, setOpenConfirmBackModal] = useState(false);
 
   useEffect(() => {
     initialize();
@@ -189,11 +191,23 @@ const PaymentStatus = (props) => {
     handleNativeExit(props, { action: "exit" });
   };
 
+  const handleGoBack = () => {
+    if(paymentStatusData.isSuccess){
+      redirectToHome();
+    }else{
+      setOpenConfirmBackModal(true);
+    }
+  }
+
+  const closeConfirmBackModal= () => {
+    setOpenConfirmBackModal(false);
+  }
+
   return (
     <Container
       headerData={{
         icon: "close",
-        goBack: redirectToHome,
+        goBack: handleGoBack,
       }}
       hidePageTitle
       skelton={showSkelton}
@@ -238,6 +252,11 @@ const PaymentStatus = (props) => {
           </>
         )}
       </div>
+      <ConfirmBackDialog
+        isOpen={openConfirmBackModal}
+        close = {closeConfirmBackModal}
+        goBack={redirectToHome}
+      />
     </Container>
   );
 };
