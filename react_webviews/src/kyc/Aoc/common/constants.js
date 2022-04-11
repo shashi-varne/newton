@@ -15,7 +15,7 @@ export const PAYMENT_SUMMARY_DATA = {
 
 export const PAYMENT_STATUS_DATA = {
   success: {
-    title: "Payment is successful",
+    title: "Payment successful",
     subtitle:
       "Last step remaining! Now eSign to complete opening your Trading & Demat + Mutual Fund account",
     buttonTitle: "Continue",

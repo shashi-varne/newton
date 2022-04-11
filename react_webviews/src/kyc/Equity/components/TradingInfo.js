@@ -47,13 +47,13 @@ const getEquityChargesData = (equityChargesData={}) => {
         },
         {
           name: "Delivery",
-          value: `${equityChargesData.brokerage_delivery?.percentage}% or min ${formatAmountInr(equityChargesData.brokerage_delivery?.rupees)}/-`,
-          subValue: "on transaction value"
+          value: `${formatAmountInr(equityChargesData.brokerage_delivery?.rupees)}/-`,
+          subValue: "on executed order"
         },
         {
           name: "Intraday",
-          value: `${equityChargesData.brokerage_intraday?.percentage}% or min ${formatAmountInr(equityChargesData.brokerage_intraday?.rupees)}/-`,
-          subValue: "on transaction value"
+          value: `${formatAmountInr(equityChargesData.brokerage_intraday?.rupees)}/-`,
+          subValue: "on executed order"
         },
         {
           name: "Futures",
@@ -231,7 +231,7 @@ const TradingInfo = (props) => {
                   !isAocApplicable && `kaim-af-strike-amount`
                 }`}
               >
-                {formatAmountInr(aocCharges.amount)}
+                {formatAmountInr(aocCharges.totalAmount)}
                 /-
               </span>
               {!isAocApplicable && <span className="kaim-af-amount">Free</span>}

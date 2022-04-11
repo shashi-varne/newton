@@ -104,7 +104,7 @@ const SelectAccountType = (props) => {
           data={data}
           isSelected={selectedAccount.value === data.value}
           handleClick={handleAccountType(data)}
-          amount={aocData.amount}
+          amount={aocData.totalAmount}
           isFree={!isAocApplicable}
           onElementClick={handleDematCharges(true)}
         />
