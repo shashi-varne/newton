@@ -20,7 +20,7 @@ const MFAndTradingDifferences = (props) => {
   const [errorData, setErrorData] = useState({});
 
   const mfVsTradingData = useMemo(
-    getMfVsTradingData(getAocData(kyc).amount, !isEquityAocApplicable(kyc)),
+    getMfVsTradingData(getAocData(kyc).totalAmount, !isEquityAocApplicable(kyc)),
     [kyc]
   );
 
