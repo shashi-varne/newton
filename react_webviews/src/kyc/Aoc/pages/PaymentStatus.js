@@ -256,6 +256,7 @@ const PaymentStatus = (props) => {
         isOpen={openConfirmBackModal}
         close = {closeConfirmBackModal}
         goBack={redirectToHome}
+        enableBackDrop={true}
       />
     </Container>
   );

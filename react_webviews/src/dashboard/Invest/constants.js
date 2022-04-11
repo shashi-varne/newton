@@ -435,7 +435,7 @@ export const kycStatusMapper = {
   mf_esign_pending: {
     color: "#ffa60b",
     title: "Complete KYC",
-    subtitle: "KYC is a mandatory process to invest in stocks, primary market products, F&O",
+    subtitle: "kyc is a mandatory process to invest in Mutual Funds, stocks and other primary market products",
     button2Title: "Later",
     buttonTitle: "COMPLETE NOW",
     landingText: "INCOMPLETE",

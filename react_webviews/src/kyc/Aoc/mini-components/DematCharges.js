@@ -11,7 +11,7 @@ const getDematChargesData = (equityChargesData = {}) => () => {
       value: `${formatAmountInr(
         equityChargesData.demat_amc?.rupees
       )}/yr + GST`,
-      subText: "Placeholder",
+      subText: "Charged Yearly",
       className: "kaim-fit-amf",
     },
     {
@@ -23,14 +23,14 @@ const getDematChargesData = (equityChargesData = {}) => () => {
       value: `${formatAmountInr(
         equityChargesData.brokerage_delivery?.rupees
       )}/-`,
-      subValue: "on transaction value",
+      subValue: "on executed order",
     },
     {
       name: "Intraday",
       value: `${formatAmountInr(
         equityChargesData.brokerage_intraday?.rupees
       )}/-`,
-      subValue: "on transaction value",
+      subValue: "on executed order",
     },
     {
       name: "Futures",
