@@ -47,12 +47,12 @@ const getEquityChargesData = (equityChargesData={}) => {
         },
         {
           name: "Delivery",
-          value: `${formatAmountInr(equityChargesData.brokerage_delivery?.rupees)}/-`,
+          value: `Flat ${formatAmountInr(equityChargesData.brokerage_delivery?.rupees)}/-`,
           subValue: "on executed order"
         },
         {
           name: "Intraday",
-          value: `${formatAmountInr(equityChargesData.brokerage_intraday?.rupees)}/-`,
+          value: `Flat ${formatAmountInr(equityChargesData.brokerage_intraday?.rupees)}/-`,
           subValue: "on executed order"
         },
         {
