@@ -16,7 +16,6 @@ import Dialog, {
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
 import { isTradingEnabled } from "../../utils/functions";
 import { getKycAppStatus } from "../../kyc/services";
-import { isAocPaymentSkipped } from "../../kyc/Aoc/common/functions";
 import "./MyAccount.scss";
 import { PATHNAME_MAPPER as KYC_PATHNAME_MAPPER } from "../../kyc/constants";
 import { storageService } from "../../utils/validators";
