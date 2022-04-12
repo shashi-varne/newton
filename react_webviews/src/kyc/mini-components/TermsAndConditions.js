@@ -8,6 +8,7 @@ const TermsAndConditions = ({
   checkTermsAndConditions,
   handleCheckBox,
   setShowSkelton,
+  className=""
 }) => {
   const config = useMemo(getConfig, []);
 
@@ -41,7 +42,7 @@ const TermsAndConditions = ({
     }
   };
   return (
-    <div className="kyc-terms-and-conditions">
+    <div className={`kyc-terms-and-conditions ${className}`}>
       <div className="kaim-terms" data-aid="kaim-terms">
         <Checkbox
           checked={checkTermsAndConditions}
@@ -89,7 +90,7 @@ const TermsAndConditions = ({
         </div>
       </div>
       <div className="line-divider bottom-line-divider" />
-      <SebiRegistrationFooter />
+      <SebiRegistrationFooter className="ktac-sebir" />
     </div>
   );
 };

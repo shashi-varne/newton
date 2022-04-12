@@ -113,6 +113,7 @@ const SelectAccountType = (props) => {
         checkTermsAndConditions={checkTermsAndConditions}
         handleCheckBox={handleCheckBox}
         setShowSkelton={setShowSkelton}
+        className="kyc-select-account-terms"
       />
       <DematCharges
         equityChargesData={kyc.equity_account_charges_v2}
