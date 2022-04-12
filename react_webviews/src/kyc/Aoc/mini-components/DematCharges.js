@@ -20,14 +20,14 @@ const getDematChargesData = (equityChargesData = {}) => () => {
     },
     {
       name: "Delivery",
-      value: `${formatAmountInr(
+      value: `Flat ${formatAmountInr(
         equityChargesData.brokerage_delivery?.rupees
       )}/-`,
       subValue: "on executed order",
     },
     {
       name: "Intraday",
-      value: `${formatAmountInr(
+      value: `Flat ${formatAmountInr(
         equityChargesData.brokerage_intraday?.rupees
       )}/-`,
       subValue: "on executed order",
