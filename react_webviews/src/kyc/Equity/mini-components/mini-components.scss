@@ -80,6 +80,18 @@
   font-weight: 500;
 }
 
+.kaim-fit-ti-amf, .kaim-fit-amf {
+  .kaim-no-fees-text1 {
+    text-decoration-line: line-through;
+  }
+
+  .kaim-fees-info-subvalue {
+    color: var(--primary);
+    font-weight: 500;
+    font-size: 13px;
+  }
+}
+
 .kaim-fit-sb-pt20 {
   padding-top: 15px;
 }

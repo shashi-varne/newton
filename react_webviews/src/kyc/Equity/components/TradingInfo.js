@@ -39,7 +39,9 @@ const getEquityChargesData = (equityChargesData={}) => {
         {
           name: "Annual maintainence",
           value: `${formatAmountInr(equityChargesData.demat_amc?.rupees)}/yr + GST`,
-          subText: "Charged Yearly"
+          subText: "Charged Yearly",
+          className: "kaim-fit-ti-amf",
+          subValue: "1st year FREE",
         },
         {
           name: "Standard brokerage",
