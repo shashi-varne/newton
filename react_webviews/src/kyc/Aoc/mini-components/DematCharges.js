@@ -11,7 +11,7 @@ const getDematChargesData = (equityChargesData = {}) => () => {
       value: `${formatAmountInr(
         equityChargesData.demat_amc?.rupees
       )}/yr + GST`,
-      subText: "Charged Yearly",
+      subText: "Charged yearly",
       subValue: "1st year FREE",
       className: "kaim-fit-amf",
     },
