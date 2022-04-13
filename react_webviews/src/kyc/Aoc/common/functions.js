@@ -6,6 +6,7 @@ import { AOC_STORAGE_CONSTANTS } from "./constants";
 import { triggerAocPaymentDecision } from "../../common/api";
 import { PATHNAME_MAPPER } from "../../constants";
 import { isEquityEsignReady, isRetroMfIRUser } from "../../common/functions";
+import { nativeCallback } from "../../../utils/native_callback";
 
 export const isEquityAocApplicable = (kyc) => {
   return kyc?.is_equity_aoc_applicable;
@@ -86,6 +87,49 @@ export const triggerAocPayment = async ({
         AOC_STORAGE_CONSTANTS.AOC_PAYMENT_DATA,
         result.equity_payment_details
       );
+    }
+    const backUrl = window.location.href;
+    if (!config.isWebOrSdk) {
+      const data = {
+        url: backUrl,
+        message: "You are almost there, do you really want to go back?",
+      };
+      if (config.iOS) {
+        nativeCallback({
+          action: "show_top_bar",
+          message: { title: "Payment" },
+        });
+      }
+      nativeCallback({ action: "take_control", message: data });
+    } else if (config.isSdk) {
+      const redirectData = {
+        show_toolbar: false,
+        icon: "back",
+        dialog: {
+          message: "You are almost there, do you really want to go back?",
+          action: [
+            {
+              action_name: "positive",
+              action_text: "Yes",
+              action_type: "redirect",
+              redirect_url: encodeURIComponent(backUrl),
+            },
+            {
+              action_name: "negative",
+              action_text: "No",
+              action_type: "cancel",
+              redirect_url: "",
+            },
+          ],
+        },
+        data: {
+          type: "server",
+        },
+      };
+      if (config.iOS) {
+        redirectData.show_toolbar = true;
+      }
+      nativeCallback({ action: "third_party_redirect", message: redirectData });
     }
     setShowLoader("page");
     window.location.href = result.payment_link;
