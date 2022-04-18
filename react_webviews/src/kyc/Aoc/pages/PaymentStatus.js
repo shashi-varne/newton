@@ -192,6 +192,9 @@ const PaymentStatus = (props) => {
   };
 
   const handleGoBack = () => {
+    if (showLoader || showSkelton) {
+      return;
+    }
     if(paymentStatusData.isSuccess){
       redirectToHome();
     }else{
