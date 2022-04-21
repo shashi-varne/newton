@@ -8,14 +8,17 @@ import {
   getAocPaymentSummaryData,
   PAYMENT_SUMMARY_DATA,
 } from "../common/constants";
+import { PATHNAME_MAPPER } from "../../constants";
 import { nativeCallback } from "../../../utils/native_callback";
-import { getConfig } from "../../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import { getAocData, triggerAocPayment } from "../common/functions";
+import { showTradingInfoScreen } from "../../common/functions";
 import { getKycAppStatus } from "../../services";
 
 import "./PaymentStatus.scss";
 
 const PaymentSummary = (props) => {
+  const navigate = navigateFunc.bind(props);
   const [paymentDetails, setPaymentDetails] = useState({});
   const [paymentSummaryContent, setPaymentSummaryContent] = useState({});
   const [errorData, setErrorData] = useState({});
@@ -60,6 +63,18 @@ const PaymentSummary = (props) => {
     });
   };
 
+  const handleGoBack = () => {
+    sendEvents("back");
+    const stateParams = props?.location?.state;
+    const { fromState }  = stateParams || {};
+    if (fromState || config.Web) {
+      props.history.goBack();
+    } else {
+      const pathName = showTradingInfoScreen(kyc, config.productName) ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.aocSelectAccount;
+      navigate(pathName)
+    }
+  }
+
   return (
     <Container
       skelton={isLoading}
@@ -71,6 +86,9 @@ const PaymentSummary = (props) => {
       showError={errorData.showError}
       handleClick={handleClick}
       data-aid="paymentSummary"
+      headerData={{
+        goBack: handleGoBack,
+      }}
     >
       <div className="aoc-payment-summary" data-aid="summary">
         <div className="aoc-locker-details">
