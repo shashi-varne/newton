@@ -300,6 +300,7 @@ export function getKycAppStatus(kyc) {
   const aocPaymentSuccessful = isAocPaymentSuccessful(kyc);
   const aocPaymentSkipped = isAocPaymentSkipped(kyc);
   const tradingFlow = isTradingFlow(kyc);
+  const isMfKycProcessed = isRetroMfIRUser(kyc);
 
   if (!kyc.pan.meta_data.pan_number || (kyc.pan.meta_data.pan_number &&
     kyc.customer_verified !== 'VERIFIED')) {
@@ -375,13 +376,13 @@ export function getKycAppStatus(kyc) {
   }
 
   // this condition handles showing upgrade account to MF IR or Submitted users until user submits all equity related docs & aoc payment is successful
-  if (TRADING_ENABLED && ((!isFinity && isMfApplicationSubmitted(kyc) && aocPaymentSkipped) || isReadyToInvest()) && kyc.equity_application_status !== "init" 
+  if (TRADING_ENABLED && ((!isFinity && isMfApplicationSubmitted(kyc) && aocPaymentSkipped) || (isReadyToInvest() && isMfKycProcessed)) && kyc.equity_application_status !== "init" 
     && ((isFinity && !isEquityApplSubmittedOrComplete(kyc)) || (!isFinity && !aocPaymentSuccessful)) && kyc.equity_sign_status !== "signed") {
     status = "upgraded_incomplete";
   }
 
   // this condition handles showing complete account setup card for new users until aoc payment is successful 
-  if (tradingFlow && !isFinity && !isRetroMfIRUser(kyc) && isEquityApplSubmittedOrComplete(kyc) && !aocPaymentSuccessful && !aocPaymentSkipped 
+  if (tradingFlow && !isFinity && !isMfKycProcessed && isEquityApplSubmittedOrComplete(kyc) && !aocPaymentSuccessful && !aocPaymentSkipped 
     && kyc.equity_sign_status !== "signed") {
     status = "complete_account_setup";
   }
