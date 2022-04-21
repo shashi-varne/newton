@@ -225,7 +225,7 @@ const AddressUpload = (props) => {
               withPicker
               filePickerProps={{
                 showOptionsDialog: true,
-                shouldCompress: true,
+                shouldCompress: config.Web,
                 nativePickerMethodName: "open_gallery",
                 fileName: "address_proof_front",
                 customPickerId: "wv-input-front",
@@ -252,7 +252,7 @@ const AddressUpload = (props) => {
                   withPicker
                   filePickerProps={{
                     showOptionsDialog: true,
-                    shouldCompress: true,
+                    shouldCompress: config.Web,
                     nativePickerMethodName: "open_gallery",
                     fileName: "address_proof_rear",
                     customPickerId: "wv-input-back",

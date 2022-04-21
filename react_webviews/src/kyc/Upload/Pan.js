@@ -15,9 +15,7 @@ import { nativeCallback } from '../../utils/native_callback'
 import { triggerSentryError } from "../../utils/api";
 
 const Pan = (props) => {
-  const { productName } = useMemo(() => {
-    return getConfig();
-  }, []);
+  const { productName, Web: isWeb } = useMemo(getConfig, []);
   const navigate = navigateFunc.bind(props)
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)
@@ -208,7 +206,7 @@ const Pan = (props) => {
               withPicker
               filePickerProps={{
                 showOptionsDialog: true,
-                shouldCompress: true,
+                shouldCompress: isWeb,
                 nativePickerMethodName: "open_gallery",
                 fileName: "pan",
                 onFileSelectComplete: onFileSelectComplete,
