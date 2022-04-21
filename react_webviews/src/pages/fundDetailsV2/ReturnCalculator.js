@@ -47,6 +47,7 @@ const ReturnCalculator = ({sendEvents, fundDetailsRef}) => {
   const expectedReturnPerc = useSelector((state) => state?.fundDetails?.expectedReturnPerc);
   const fundReturns = fundData?.performance?.returns || [];
   const isReturnAvailable = isEmpty(fundReturns);
+  const setAvailableReturnPeriod = useRef(false);
   const estimatedReturnTooltip = useMemo(
     () => getEstimatedReturnTooltip(investmentPeriod, expectedAmount),
     [expectedAmount, investmentPeriod]
@@ -67,7 +68,9 @@ const ReturnCalculator = ({sendEvents, fundDetailsRef}) => {
   }, [fundData]);
 
   useEffect(() => {
-    dispatch(setExpectedReturnPerc(returns[investmentPeriod]));
+    if(returns[investmentPeriod]) {
+      dispatch(setExpectedReturnPerc(returns[investmentPeriod]));
+    }
 
     return () => {
       dispatch(resetReturnCalculatorData());
@@ -94,7 +97,7 @@ const ReturnCalculator = ({sendEvents, fundDetailsRef}) => {
       investmentPeriod,
       investmentType,
       expectedReturnPerc
-    );
+      );
     dispatch(setExpectedAmount(expectedValue));
     dispatch(setInvestedAmount(investedValue));
   }, [amountToBeInvested, investmentType, investmentPeriod, isRecurring, expectedReturnPerc]);
@@ -157,6 +160,13 @@ const ReturnCalculator = ({sendEvents, fundDetailsRef}) => {
                       disableReturnCalculatorTimePeriod(fundData?.performance.returns, el.value),
                     []
                   );
+                  if(isDisabled && !setAvailableReturnPeriod.current) {
+                    const availablePeriod = timeLines[id - 1] || timeLines[0];
+                    dispatch(setInvestmentPeriod(availablePeriod?.value));
+                    const availableExpectedReturn = returns[availablePeriod?.value];
+                    dispatch(setExpectedReturnPerc(availableExpectedReturn));
+                    setAvailableReturnPeriod.current = true;
+                  }
                   return (
                     <TimeLine dataAid={id} disabled={isDisabled} key={id} label={el.label} value={el.value} />
                   );

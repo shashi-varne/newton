@@ -11,7 +11,7 @@ import {
   MiddleSlot,
   RightSlot,
 } from '../../../designSystem/molecules/FeatureCard/FeatureCard';
-import { formatAmountInr, nonRoundingToFixed } from '../../../utils/validators';
+import { nonRoundingToFixed } from '../../../utils/validators';
 import isEmpty from 'lodash/isEmpty';
 import SectionHeader from './SectionHeader';
 import Icon from '../../../designSystem/atoms/Icon';
@@ -23,6 +23,7 @@ import {
 } from 'businesslogic/dataStore/reducers/diy';
 import Api from 'utils/api';
 import useLoadingState from '../../../common/customHooks/useLoadingState';
+import { isValidValue } from '../../fundDetailsV2/helperFunctions';
 const screen = 'diyLanding';
 
 const TrendingFunds = ({ config, handleFundDetails, diyType }) => {
@@ -87,7 +88,7 @@ const TrendingFunds = ({ config, handleFundDetails, diyType }) => {
                         description={{
                           title: 'Total AUM',
                           titleColor: 'foundationColors.content.secondary',
-                          subtitle: trendingFund?.aum ? formatAmountInr(trendingFund?.aum) : 'NA',
+                          subtitle: isValidValue(trendingFund?.aum,`₹ ${trendingFund?.aum}`),
                           subtitleColor: !trendingFund?.aum && 'foundationColors.content.secondary',
                         }}
                       />

@@ -266,6 +266,10 @@ export const getIfscCodeError = (code) => {
       return "Please enter a valid ifsc code of UCO Bank";
     case "tmb":
       return "Please enter a valid ifsc code of TamilNad Mercantile Bank";
+    case "indb":
+      return "Please enter a valid ifsc code of Indian Bank";
+    case "bom":
+      return "Please enter a valid ifsc code of Bank of Maharashtra";
     default:
       return "Please enter a valid ifsc code";
   }
@@ -277,6 +281,8 @@ export const BANK_IFSC_CODES = {
   'cub': 'CIUB',
   'ucomb': 'UCBA',
   'tmb': 'TMBL',
+  'indb': 'IDIB',
+  'bom': 'MAHB'
 }
 
 export const VERIFICATION_DOC_OPTIONS = [

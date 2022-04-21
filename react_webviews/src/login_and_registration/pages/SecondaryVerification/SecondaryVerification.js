@@ -8,7 +8,7 @@ import { authCheckApi, formCheckFields, triggerOtpApi } from "../../functions";
 import { validateNumber, validateEmail } from "utils/validators";
 import { nativeCallback } from "../../../utils/native_callback";
 import toast from "common/ui/Toast";
-import DropDownNew from "common/ui/DropDownNew";
+// import DropDownNew from "common/ui/DropDownNew";
 import Checkbox from "../../../common/ui/Checkbox";
 import WVInPageSubtitle from "../../../common/ui/InPageHeader/WVInPageSubtitle";
 import AccountAlreadyExistDialog from "../../components/AccountAlreadyExistDialog";
@@ -228,8 +228,8 @@ class SecondaryVerification extends Component {
                     {loginType === "mobile" && (
                         <div>
                             <div className="login-form-field">
-                                <span className="country-code" data-aid='country-code'>
-                                    <DropDownNew
+                                <span className="country-code flex-justify-center align-center" data-aid='country-code'>
+                                    {/* <DropDownNew
                                         onChange={this.handleChange("code")}
                                         error={form_data.code_error ? true : false}
                                         helperText={form_data.code_error || ""}
@@ -239,7 +239,8 @@ class SecondaryVerification extends Component {
                                         id="code"
                                         name="code"
                                         isAOB={true}
-                                    />
+                                    /> */}
+                                    +{form_data.code}
                                 </span>
                                 <span className="mobile-number-login">
                                     <Input

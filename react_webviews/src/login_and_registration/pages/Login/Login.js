@@ -1,10 +1,10 @@
 import "./Login.scss";
 import React, { Component } from "react";
 import { getConfig } from "utils/functions";
-import { countries } from "../../constants";
+// import { countries } from "../../constants";
 import Input from "common/ui/Input";
 import { initialize, loadScriptInBody } from "../../functions";
-import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
+// import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import { validateNumber } from "utils/validators";
 import Button from "../../../common/ui/Button";
 import { nativeCallback } from "../../../utils/native_callback";
@@ -133,7 +133,7 @@ class Login extends Component {
             <div className="form-field">
               <div className="country-code" data-aid='country-code'>
                 <div className="dropdown-without-icon">
-                  <DropdownWithoutIcon
+                  {/* <DropdownWithoutIcon
                     onChange={this.handleChange("code")}
                     error={!!form_data.code_error ? true : false}
                     helperText={form_data.code_error || ""}
@@ -143,7 +143,8 @@ class Login extends Component {
                     id="code"
                     name="code"
                     isAOB={true}
-                  />
+                  /> */}
+                  +{form_data.code}
                 </div>
               </div>
               <Input
