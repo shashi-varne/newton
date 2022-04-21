@@ -59,12 +59,12 @@ const getEquityChargesData = (equityChargesData={}) => {
         },
         {
           name: "Futures",
-          value: `Flat ${formatAmountInr(equityChargesData.brokerage_future?.rupees)} per lot`,
+          value: `Flat ${formatAmountInr(equityChargesData.brokerage_future?.rupees)}`,
           subValue: "on executed order"
         },
         {
           name: "Options",
-          value: `Flat ${formatAmountInr(equityChargesData.brokerage_options?.rupees)} per lot`,
+          value: `Flat ${formatAmountInr(equityChargesData.brokerage_options?.rupees)}`,
           subValue: "on executed order"
         }
       ]
