@@ -196,7 +196,7 @@ const NRIAddressUpload = (props) => {
               withPicker
               filePickerProps={{
                 showOptionsDialog: true,
-                shouldCompress: true,
+                shouldCompress: config.Web,
                 nativePickerMethodName: "open_gallery",
                 fileName: "nri_address_front",
                 customPickerId: "wv-input-front",
@@ -223,7 +223,7 @@ const NRIAddressUpload = (props) => {
                   filePickerProps={{
                     showOptionsDialog: true,
                     nativePickerMethodName: "open_gallery",
-                    shouldCompress: true,
+                    shouldCompress: config.Web,
                     fileName: "nri_address_back",
                     customPickerId: "wv-input-back",
                     onFileSelectComplete: onFileSelectComplete('back'),

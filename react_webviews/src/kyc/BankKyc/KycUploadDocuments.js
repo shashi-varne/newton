@@ -368,7 +368,7 @@ const KycUploadDocuments = (props) => {
                 withPicker
                 filePickerProps={{
                   showOptionsDialog: true,
-                  shouldCompress: true,
+                  shouldCompress: config.Web,
                   nativePickerMethodName: "open_gallery",
                   fileName: "doc",
                   onFileSelectComplete,
