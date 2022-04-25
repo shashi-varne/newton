@@ -67,6 +67,8 @@ const PaymentStatus = (props) => {
     if (status === "success") {
       await fetchKyc();
       setAocPaymentStatusData(status);
+    } else if (status === "failed") {
+      setAocPaymentStatusData(status);
     } else {
       if (isEmpty(aocPaymentData)) {
         setAocPaymentStatusData("failed");
