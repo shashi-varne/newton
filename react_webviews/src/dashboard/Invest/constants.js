@@ -541,7 +541,7 @@ export const kycStatusMapperInvest = {
   complete_account_setup: {
     icon: "ic_kyc_rejected.svg",
     title: "Complete account setup",
-    subtitle: "Now proceed with account opening",
+    subtitle: "Only few steps remaining",
     subTitleClass: "kyc-account-setup-incomplete",
     nextState: KYC_PATHNAME_MAPPER.aocSelectAccount,
     eventStatus: "complete_your_account_setup",
