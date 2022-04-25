@@ -126,37 +126,20 @@ class NEFT extends React.Component {
                                 Please transfer <b>Rs.{this.state.store?.amount}</b> to the following bank account:<br />
                             </p>
                             <table className="neft-table">
-                                {this.state.store?.partner === "obc" || this.state.store?.partner === "ktb" ?
-                                    <tbody>
-                                        <tr>
-                                            <td>Name</td>
-                                            <td>Indian Clearing Corporation Limited</td>
-                                        </tr>
-                                        <tr>
-                                            <td>A/C No</td>
-                                            <td>3922</td>
-                                        </tr>
-                                        <tr>
-                                            <td>IFSC</td>
-                                            <td>ICIC0000104</td>
-                                        </tr>
-                                    </tbody>
-                                    :
-                                    <tbody>
-                                        <tr>
-                                            <td>Name</td>
-                                            <td>FINWIZARD TECHNOLOGY PRIVATE LIMITED NEFT</td>
-                                        </tr>
-                                        <tr>
-                                            <td>A/C No</td>
-                                            <td>602860</td>
-                                        </tr>
-                                        <tr>
-                                            <td>IFSC</td>
-                                            <td>YESB0CMSNOC</td>
-                                        </tr>
-                                    </tbody>
-                                }
+                                <tbody>
+                                    <tr>
+                                        <td>Name</td>
+                                        <td>{this.state.store?.default_neft_payment_details?.beneficiary_name}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>A/C No</td>
+                                        <td>{this.state.store?.default_neft_payment_details?.beneficiary_account_number}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>IFSC</td>
+                                        <td>{this.state.store?.default_neft_payment_details?.ifsc_code}</td>
+                                    </tr>
+                                </tbody>
                             </table>
                             <p className="unsupport-bank">
                                 NEFT or RTGS only (IMPS not supported)</p>
