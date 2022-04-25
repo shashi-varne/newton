@@ -147,7 +147,7 @@ const PaymentStatus = (props) => {
         pptId: aocPaymentData.ppt_id,
         refund,
       });
-      if (result.status === "success" || refund) {
+      if (["success", "failed"].includes(result.status) || refund) {
         clearInterval(countdownInterval);
         setCountdownInterval(null);
         setAocPaymentStatusData(result.status);
