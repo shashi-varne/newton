@@ -1,0 +1,82 @@
+.aoc-payment-status,
+.aoc-payment-summary {
+  text-align: center;
+
+  .aoc-success-title {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 21px;
+    color: var(--dark);
+    margin-bottom: 30px;
+    margin-top: 20px;
+    text-align: left;
+  }
+
+  .aoc-ps-content {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 22px;
+    color: var(--dark);
+    margin: 15px 0px;
+
+    .aoc-ps-subtitle {
+      font-weight: 400;
+      color: var(--gunmetal);
+    }
+  }
+
+  .aoc-ps-gst {
+    margin-bottom: 7px;
+  }
+}
+
+.aoc-payment-summary {
+  text-align: left;
+  .aoc-locker-details {
+    background-color: var(--highlight);
+    padding: 20px;
+    color: var(--steelgrey);
+    font-size: 14px;
+    font-weight: 400;
+    border-radius: 6px;
+
+    .aoc-ld-title {
+      font-weight: 500;
+      color: var(--gunmetal);
+      line-height: 17px;
+      padding-bottom: 3px;
+    }
+  }
+
+  .aoc-success-title {
+    margin-bottom: 15px;
+  }
+
+  .aoc-ps-content {
+    color: var(--steelgrey);
+    font-weight: 400;
+    font-size: 13px;
+  }
+
+  .aoc-ps-gst {
+    .aoc-ps-subtitle {
+      color: var(--steelgrey);
+    }
+  }
+
+  .aoc-ps-total {
+    font-weight: 500;
+    color: var(--dark);
+    font-size: 14px;
+
+    .aoc-ps-subtitle {
+      font-weight: 500;
+      font-size: 16px;
+    }
+  }
+}
+
+.kyc-select-account-terms .ktac-sebir {
+  padding-bottom: 40px;
+  margin-bottom: 20px !important;
+}

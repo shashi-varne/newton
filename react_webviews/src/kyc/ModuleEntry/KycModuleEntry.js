@@ -8,6 +8,7 @@ import Container from '../common/Container';
 import { PATHNAME_MAPPER } from '../constants';
 import { getConfig, isTradingEnabled } from '../../utils/functions';
 import { kycStatusMapperInvest } from '../../dashboard/Invest/constants';
+import { isUpgradeToEquityAccountEnabled } from '../common/functions';
 
 
 function KycModuleEntry(props) {
@@ -112,11 +113,8 @@ function KycModuleEntry(props) {
       navigate(PATHNAME_MAPPER.uploadProgress, data);
     } else if (kycStatus === "fno_rejected") {
       navigate(PATHNAME_MAPPER.uploadFnOIncomeProof, data);
-    } else if (TRADING_ENABLED && kyc?.kyc_product_type !== "equity") {
-      let result;
-      if (!kyc?.mf_kyc_processed) {
-        result = await setProductType();
-      }
+    } else if (isUpgradeToEquityAccountEnabled(kyc, kycStatus)) {
+      let result = await setProductType();
       
       // already kyc completed users
       if (isReadyToInvestUser && (result?.kyc?.mf_kyc_processed || kyc?.mf_kyc_processed)) {

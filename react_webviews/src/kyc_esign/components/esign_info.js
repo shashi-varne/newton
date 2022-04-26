@@ -16,9 +16,7 @@ import otp_img_fisdom from 'assets/fisdom/ic_verify_otp_fisdom.svg';
 import esign_otp_img_fisdom from 'assets/fisdom/ic_esign_otp_fisdom.svg';
 import done_img_fisdom from  'assets/fisdom/ic_esign_done_fisdom.svg';
 import { landingEntryPoints } from '../../utils/constants';
-import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from '../../kyc/constants';
-
-
+import { STORAGE_CONSTANTS } from '../../kyc/constants';
 
 class ESignInfo extends Component {
   constructor(props) {
@@ -58,26 +56,22 @@ class ESignInfo extends Component {
     const navigate = navigateFunc.bind(this.props);
     const stateParams = this.props?.location?.state;
     const { goBack: goBackPath, fromState }  = stateParams || {};
-    const fromWebModuleEntry = fromState === "/kyc/web";
+
+    if (["/kyc/trading-info", "/kyc/journey"].includes(fromState)) {
+      this.props.history.goBack();
+      return;
+    }
 
     if (!getConfig().Web) {
       if (storageService().get('native') && (goBackPath === "exit")) {
         nativeCallback({ action: "exit_web" })
-      } else if (landingEntryPoints.includes(fromState) || fromWebModuleEntry) {
-        if(fromWebModuleEntry) {
-          navigate("/")
-        } else {
-          navigate(fromState)
-        }
+      } else if (landingEntryPoints.includes(fromState)) {
+        navigate(fromState);
       } else {
-        navigate(PATHNAME_MAPPER.journey);
+        navigate("/invest");
       }
     } else {
-      if (landingEntryPoints.includes(fromState) || fromWebModuleEntry) {
-        navigate("/")
-      } else {
-        navigate(PATHNAME_MAPPER.journey);
-      }
+      navigate("/")
     }
   }
 
@@ -162,6 +156,7 @@ class ESignInfo extends Component {
         this.setState({ show_loader: "page" })
         window.location.href = resultData.esign_link;
       } else {
+        const pathName = config.isWebOrSdk ? "/kyc/web" : "/kyc/native";
         if (resultData?.error_code === 'kyc_40001') {
           toast("Esign already completed");
           this.navigate("/kyc-esign/nsdl", {
@@ -172,9 +167,10 @@ class ESignInfo extends Component {
           resultData?.error === "all documents are not submitted"
         ) {
           toast("Document pending, redirecting to kyc");
-          setTimeout(() => {
-            this.navigate('/kyc/journey');
-          }, 3000)
+          this.navigate(pathName);
+        } else if (resultData?.code === 401) {
+          toast(resultData.error || resultData.message);
+          this.navigate(pathName);
         } else {
           toast(resultData.error ||
             resultData.message || 'Something went wrong', 'error');

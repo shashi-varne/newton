@@ -47,9 +47,9 @@ const AddressUpload = (props) => {
     }
   }
 
-  const onFileSelectError = (type) => () => {
+  const onFileSelectError = (type) => (err) => {
     sendEvents('get_image', 'gallery', type);
-    return toast('Please select image file only');
+    return toast(err.message);
   }
 
   const handleImageLoad = () => {
@@ -225,12 +225,12 @@ const AddressUpload = (props) => {
               withPicker
               filePickerProps={{
                 showOptionsDialog: true,
-                shouldCompress: true,
+                shouldCompress: config.Web,
                 nativePickerMethodName: "open_gallery",
                 fileName: "address_proof_front",
                 customPickerId: "wv-input-front",
                 onFileSelectComplete: onFileSelectComplete('front'),
-                onFileSelectError: onFileSelectError,
+                onFileSelectError: onFileSelectError('front'),
                 supportedFormats: SUPPORTED_IMAGE_TYPES
               }}
             />
@@ -252,12 +252,12 @@ const AddressUpload = (props) => {
                   withPicker
                   filePickerProps={{
                     showOptionsDialog: true,
-                    shouldCompress: true,
+                    shouldCompress: config.Web,
                     nativePickerMethodName: "open_gallery",
                     fileName: "address_proof_rear",
                     customPickerId: "wv-input-back",
                     onFileSelectComplete: onFileSelectComplete('back'),
-                    onFileSelectError: onFileSelectError,
+                    onFileSelectError: onFileSelectError('back'),
                     supportedFormats: SUPPORTED_IMAGE_TYPES
                   }}
                 />
