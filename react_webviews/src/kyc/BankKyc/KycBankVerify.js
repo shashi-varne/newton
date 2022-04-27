@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Container from "../common/Container";
 import { isEmpty } from "utils/validators";
-import { navigate as navigateFunc, isTradingEnabled } from "utils/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { BANK_ACCOUNT_TYPES_NOMENCLATURE, PATHNAME_MAPPER } from "../constants";
-import { checkDLPanFetchAndApprovedStatus, getFlow, isDigilockerFlow } from "../common/functions";
+import { checkDLPanFetchAndApprovedStatus, getFlow, isDigilockerFlow, showTradingInfoScreen } from "../common/functions";
 import { saveBankData, getBankStatus } from "../common/api";
 import toast from "../../common/ui/Toast";
 import PennyDialog from "../mini-components/PennyDialog";
@@ -16,7 +16,7 @@ import { getConfig } from "utils/functions";
 import internalStorage from '../common/InternalStorage';
 import { nativeCallback } from "../../utils/native_callback";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
-import { isNewIframeDesktopLayout } from "../../utils/functions";
+import { isNewIframeDesktopLayout, isTradingFlow } from "../../utils/functions";
 import { storageService } from "../../utils/validators";
 
 const INITIAL_INFO_CONTENT = "We’ll credit ₹1 to verify your bank account.";
@@ -61,7 +61,7 @@ const KycBankVerify = (props) => {
     }
     setBankData({ ...kyc.bank.meta_data });
 
-    const TRADING_ENABLED = isTradingEnabled(kyc);
+    const TRADING_ENABLED = isTradingFlow(kyc);
     setTradingEnabled(TRADING_ENABLED);
     if (TRADING_ENABLED && isPartnerBank && !isPartnerEquityEnabled) {
       setInfoContent(NON_EQUITY_PARTNER_INFO);
@@ -239,7 +239,7 @@ const KycBankVerify = (props) => {
   };
 
   const handleOtherPlatformNavigation = () => {
-    const nextStep = kyc.show_equity_charges_page ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
+    const nextStep = showTradingInfoScreen(kyc, productName) ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
     if (userType === "compliant") {
       if (isEdit) goToJourney();
       else navigate(nextStep, {

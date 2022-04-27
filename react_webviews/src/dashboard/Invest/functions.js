@@ -12,7 +12,7 @@ import {
 import { getAccountSummary, getKycAppStatus, isReadyToInvest, setKycProductType, setSummaryData } from "../../kyc/services";
 import { get_recommended_funds } from "./common/api";
 import { PATHNAME_MAPPER as KYC_PATHNAME_MAPPER } from "../../kyc/constants";
-import { isEquityCompleted } from "../../kyc/common/functions";
+import { isEquityCompleted, isUpgradeToEquityAccountEnabled } from "../../kyc/common/functions";
 import { nativeCallback, openModule } from "../../utils/native_callback";
 import isEmpty from "lodash/isEmpty";
 import isFunction from "lodash/isFunction";
@@ -484,8 +484,8 @@ export async function handleCommonKycRedirections({
     navigate(KYC_PATHNAME_MAPPER.kycEsignNsdl, {
       searchParams: `${getConfig().searchParams}&status=success`
     });
-  } else if (tradingEnabled && kyc?.kyc_product_type !== "equity") {
-    await setKycProductTypeAndRedirect({ kyc, kycJourneyStatus, isReadyToInvestBase, handleLoader, navigate, updateKyc });
+  } else if (isUpgradeToEquityAccountEnabled(kyc, kycJourneyStatus)) {
+    await setKycProductTypeAndRedirect({ kyc, kycJourneyStatus, isReadyToInvestBase, handleLoader, navigate, updateKyc, kycStatusData });
   } else if (kycStatusData.nextState) {
     navigate(kycStatusData.nextState);
   } else {
@@ -493,13 +493,10 @@ export async function handleCommonKycRedirections({
   }
 }
 
-export async function setKycProductTypeAndRedirect({ kyc, kycJourneyStatus, isReadyToInvestBase, handleLoader, navigate, updateKyc }) {
+export async function setKycProductTypeAndRedirect({ kyc, kycJourneyStatus, isReadyToInvestBase, handleLoader, navigate, updateKyc, kycStatusData }) {
   const config = getConfig();
-  let result;
-  if (!kyc?.mf_kyc_processed) {
-    result = await setProductType(handleLoader);
-    updateKyc(result.kyc);
-  }
+  const result = await setProductType(handleLoader);
+  updateKyc(result.kyc);
   
   // already kyc done users
   if (isReadyToInvestBase && (result?.kyc?.mf_kyc_processed || kyc?.mf_kyc_processed)) {
@@ -507,13 +504,13 @@ export async function setKycProductTypeAndRedirect({ kyc, kycJourneyStatus, isRe
   } else if (kycJourneyStatus === "ground") {
     navigate("/kyc/home");
   } else {
-    const showAadhaar = !(result?.kyc?.address.meta_data.is_nri || result?.kyc?.kyc_type === "manual");
-    if (result?.kyc?.kyc_status !== "compliant") {
+    const showAadhaar = !(result?.kyc?.address.meta_data.is_nri || result?.kyc?.kyc_type === "manual" || result?.kyc?.kyc_status === "compliant");
+    if (kycStatusData?.nextState) {
+      navigate(kycStatusData.nextState);
+    } else {
       navigate(KYC_PATHNAME_MAPPER.journey, {
         searchParams: `${config.searchParams}&show_aadhaar=${showAadhaar}`
       });
-    } else {
-      navigate(KYC_PATHNAME_MAPPER.journey)
     }
   }
 }
@@ -674,7 +671,7 @@ export const handleKycStatus = ({
   if (isFunction(sendEvents)) {
     sendEvents("next", "kyc_bottom_sheet");
   }
-  const { kycJourneyStatus, tradingEnabled, isReadyToInvestBase } = kycData;
+  const { kycJourneyStatus, isReadyToInvestBase } = kycData;
   if (
     ["submitted", "verifying_trading_account"].includes(kycJourneyStatus) ||
     (kycJourneyStatus === "complete" && kyc.mf_kyc_processed)
@@ -682,7 +679,7 @@ export const handleKycStatus = ({
     closeKycStatusDialog();
   } else if (kycJourneyStatus === "rejected") {
     navigate(KYC_PATHNAME_MAPPER.uploadProgress);
-  } else if (tradingEnabled && kyc?.kyc_product_type !== "equity") {
+  } else if (isUpgradeToEquityAccountEnabled(kyc, kycJourneyStatus)) {
     closeKycStatusDialog(true);
     await setKycProductTypeAndRedirect({
       kyc,
@@ -691,6 +688,7 @@ export const handleKycStatus = ({
       handleLoader,
       navigate,
       updateKyc,
+      kycStatusData: modalData
     });
   } else if (kycJourneyStatus === "ground_pan") {
     navigate("/kyc/journey", {

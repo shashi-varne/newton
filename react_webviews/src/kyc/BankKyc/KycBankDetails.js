@@ -16,19 +16,20 @@ import {
   isDigilockerFlow,
   validateFields,
   skipBankDetails,
-  getFlow
+  getFlow,
+  showTradingInfoScreen
 } from "../common/functions";
 import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { getIFSC, kycSubmit } from "../common/api";
 import toast from "../../common/ui/Toast";
-import { getConfig, isTradingEnabled, navigate as navigateFunc } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 import { nativeCallback } from "../../utils/native_callback";
 import PennyFailedDialog from "../mini-components/PennyFailedDialog";
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 import internalStorage from '../common/InternalStorage';
-import { isNewIframeDesktopLayout } from "../../utils/functions"
+import { isNewIframeDesktopLayout, isTradingFlow } from "../../utils/functions"
 import { storageService } from "../../utils/validators";
 
 const defaultTitle = "Primary bank account details";
@@ -212,7 +213,7 @@ const KycBankDetails = (props) => {
   };
 
   const handleOtherPlatformNavigation = () => {
-    const nextStep = kyc.show_equity_charges_page ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
+    const nextStep = showTradingInfoScreen(kyc, config.productName) ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
     if (userType === "compliant") {
       if (isEdit) navigate(PATHNAME_MAPPER.journey);
       else navigate(nextStep, {
@@ -259,7 +260,7 @@ const KycBankDetails = (props) => {
   };
 
   const handleNavigation = () => {
-    if (isTradingEnabled()) {
+    if (isTradingFlow(kyc)) {
       handleOtherPlatformNavigation();
     } else {
       handleSdkNavigation();

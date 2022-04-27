@@ -10,6 +10,37 @@
   flex: 1 0 40%;
 }
 
+.kyc-terms-and-conditions {
+  .line-divider {
+    height: 1px;
+    background: #d6d6d6;
+  }
+
+  .bottom-line-divider {
+    margin: 40px -20px 20px;
+  }
+
+  .kaim-terms {
+    padding-top: 40px;
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    line-height: 21px;
+    color: var(--steelgrey);
+
+    .kaim-terms-info {
+      margin-left: 10px;
+
+      .terms-text {
+        color: var(--primary);
+        font-weight: 500;
+        cursor: pointer;
+        text-decoration: none;
+      }
+    }
+  }
+}
+
 .kyc-show-aadhar-content .info-box .title {
   margin-left: 10px;
   color: #767e86;

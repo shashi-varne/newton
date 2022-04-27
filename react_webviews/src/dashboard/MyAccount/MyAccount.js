@@ -191,7 +191,7 @@ class MyAccount extends Component {
       } else if (["submitted", "approved"].includes(userKyc.equity_income?.doc_status)) {
         fnoStatus = "inprogress";
       }
-      if(userKyc.kyc_product_type !== "equity") {
+      if (userKyc.kyc_product_type !== "equity") {
         fnoStatus = "init";
         stocksStatus = "init";
       }
