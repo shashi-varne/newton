@@ -1,17 +1,19 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { getConfig, isNewIframeDesktopLayout, navigate as navigateFunc } from "../../../utils/functions";
 import Container from "../../common/Container";
-import Checkbox from "../../../common/ui/Checkbox";
+import ConfirmBackDialog from "../../mini-components/ConfirmBackDialog";
 import "./commonStyles.scss";
-import SebiRegistrationFooter from "../../../common/ui/SebiRegistrationFooter/WVSebiRegistrationFooter";
-import { getUpgradeAccountFlowNextStep } from "../../common/functions";
+import { getUpgradeAccountFlowNextStep, isEquityApplSubmittedOrComplete } from "../../common/functions";
 import { PATHNAME_MAPPER } from "../../constants";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import Toast from "../../../common/ui/Toast";
-import { nativeCallback, openPdfCall } from "../../../utils/native_callback";
+import { handleNativeExit, nativeCallback } from "../../../utils/native_callback";
 import { capitalize, formatAmountInr } from "../../../utils/validators";
 import SVG from 'react-inlinesvg';
 import { Imgc } from "../../../common/ui/Imgc";
+import TermsAndConditions from "../../mini-components/TermsAndConditions";
+import BrokerageChargesTile from "../mini-components/BrokerageChargesTile";
+import { getAocData, isEquityAocApplicable, validateAocPaymentAndRedirect } from "../../Aoc/common/functions";
 
 const BENEFITS = [
   {
@@ -31,54 +33,39 @@ const BENEFITS = [
 const getEquityChargesData = (equityChargesData={}) => {
   return [
     {
-      title: "Fees and charges",
-      id: "fees",
-      list: [
-        {
-          name: "Account opening charges",
-          subText: "(one-time fee)",
-          value: `${formatAmountInr(equityChargesData.account_opening?.charges)}/yr + GST`,
-          message: equityChargesData.account_opening?.actual_charges,
-          lineStroke: true,
-        },
-        {
-          name: "Platform charges",
-          value: `${formatAmountInr(equityChargesData.platform?.charges)}/yr + GST`,
-          message: equityChargesData.platform?.actual_charges,
-          lineStroke: true,
-        },
-        {
-          name: "Demat AMC",
-          subText: "(Account maintainence charges)",
-          value: `${formatAmountInr(equityChargesData.demat_amc?.charges)}/yr + GST`,
-          message: equityChargesData.demat_amc?.actual_charges,
-          lineStroke: true,
-        }
-      ]
-    },
-    {
-      title: "Brokerage",
+      title: "Brokerage & other charges",
       id: "brokerage",
       list: [
         {
+          name: "Annual maintainence",
+          value: `${formatAmountInr(equityChargesData.demat_amc?.rupees)}/yr + GST`,
+          subText: "Charged yearly",
+          className: "kaim-fit-ti-amf",
+          subValue: "1st year FREE",
+        },
+        {
+          name: "Standard brokerage",
+          className: "kaim-fit-sb"
+        },
+        {
           name: "Delivery",
-          value: `Flat ${formatAmountInr(equityChargesData.brokerage_delivery?.rupees)}`,
-          subValue: "per executed order"
+          value: `Flat ${formatAmountInr(equityChargesData.brokerage_delivery?.rupees)}/-`,
+          subValue: "on executed order"
         },
         {
           name: "Intraday",
-          value: `Flat ${formatAmountInr(equityChargesData.brokerage_intraday?.rupees)}`,
-          subValue: "per executed order"
+          value: `Flat ${formatAmountInr(equityChargesData.brokerage_intraday?.rupees)}/-`,
+          subValue: "on executed order"
         },
         {
           name: "Futures",
           value: `Flat ${formatAmountInr(equityChargesData.brokerage_future?.rupees)}`,
-          subValue: "per executed order"
+          subValue: "on executed order"
         },
         {
           name: "Options",
           value: `Flat ${formatAmountInr(equityChargesData.brokerage_options?.rupees)}`,
-          subValue: "per executed order"
+          subValue: "on executed order"
         }
       ]
     },
@@ -91,14 +78,21 @@ const TradingInfo = (props) => {
   const navigate = navigateFunc.bind(props);
   const [checkTermsAndConditions, setCheckTermsAndConditions] = useState(true);
   const [showSkelton, setShowSkelton] = useState(false);
-  const [selectedTiles, setSelectedTiles] = useState([0]);
+  const [selectedTiles, setSelectedTiles] = useState([]);
   const [equityChargesData, setEquityChargesData] = useState([])
+  const [openConfirmBackModal, setOpenConfirmBackModal] = useState(false);
   const newIframeDesktopLayout = useMemo(isNewIframeDesktopLayout, [])
   const { kyc, isLoading } = useUserKycHook();
+  const [isAocApplicable, setIsAocApplicable] = useState(false);
+  const [aocCharges, setAocCharges] = useState({});
   const title = `${capitalize(productName)} Trading & Demat account`;
 
   useEffect(() => {
-    setEquityChargesData(getEquityChargesData(kyc.equity_account_charges))
+    setEquityChargesData(getEquityChargesData(kyc.equity_account_charges_v2))
+    const aocApplicable = isEquityAocApplicable(kyc);
+    setIsAocApplicable(aocApplicable);
+    const aocData = getAocData(kyc);
+    setAocCharges(aocData);
   }, [kyc])
 
   const handleTiles = (index) => () => {
@@ -116,12 +110,14 @@ const TradingInfo = (props) => {
   };
 
   const sendEvents = (userAction) => {
+    const charges = isAocApplicable ? aocCharges.amount : 0
     let eventObj = {
       event_name: "trading",
       properties: {
         user_action: userAction || "",
         screen_name: "trading_and_demat_info",
         tnc_checked: checkTermsAndConditions ? "yes" : "no",
+        account_opening_charges: `${charges}/-`,
       },
     };
     if (userAction === "just_set_events") {
@@ -135,6 +131,10 @@ const TradingInfo = (props) => {
     sendEvents("next");
     if(!checkTermsAndConditions) {
       Toast("Tap on T&C check box to continue");
+      return;
+    }
+    if (isEquityApplSubmittedOrComplete(kyc) && productName !== "finity") {
+      validateAocPaymentAndRedirect(kyc, navigate, true);
       return;
     }
     if (kyc?.mf_kyc_processed) {
@@ -158,34 +158,26 @@ const TradingInfo = (props) => {
     }
   };
 
-  const openInBrowser = (url) => () => {
-    nativeCallback({
-      action: "open_browser",
-      message: {
-        url: url,
-      },
-    });
+  const handleConfirmBackDialog = (value) => () => {
+    setOpenConfirmBackModal(value);
   };
 
-  const openPdf = (url) => () => {
-    if (config.iOS) {
-      nativeCallback({
-        action: "open_inapp_tab",
-        message: {
-          url: url || "",
-          back_url: "",
-        },
-      });
-    } else {
-      setShowSkelton(true);
-      const data = {
-        url: url,
-        header_title: "EQUITY ANNEXURE",
-        icon: "close",
-      };
+  const redirectToHome = () => {
+    sendEvents("back");
+    const stateParams = props?.location?.state;
+    const { goBack: goBackPath, fromState }  = stateParams || {};
 
-      openPdfCall(data, config.isSdk);
+    if (["/kyc/journey"].includes(fromState)) {
+      props.history.goBack();
+      return;
     }
+
+    if (goBackPath && goBackPath !== "exit") {
+      navigate(goBackPath);
+      return;
+    }
+
+    handleNativeExit(props, { action: "exit" });
   };
 
   return (
@@ -199,6 +191,7 @@ const TradingInfo = (props) => {
       skelton={isLoading || showSkelton}
       iframeRightContent={require(`assets/${productName}/ic_upgrade.svg`)}
       noBackIcon={showSkelton}
+      headerData={{ goBack: handleConfirmBackDialog(true) }}
     >
       <div className="kyc-account-info" data-aid='kyc-account-info'>
         <header className="kyc-account-info-header" data-aid='kyc-account-info-header'>
@@ -232,6 +225,20 @@ const TradingInfo = (props) => {
               })}
             </div>
           </div>
+          <div className="kaim-account-fee">
+            <div className="kaim-af-title">One-time account opening fee</div>
+            <div>
+              <span
+                className={`kaim-af-amount ${
+                  !isAocApplicable && `kaim-af-strike-amount`
+                }`}
+              >
+                {formatAmountInr(aocCharges.totalAmount)}
+                /-
+              </span>
+              {!isAocApplicable && <span className="kaim-af-amount">Free</span>}
+            </div>
+          </div>
           {equityChargesData.map((data, index) => {
             return (
               <AccountAndBrokerageCharges
@@ -243,56 +250,18 @@ const TradingInfo = (props) => {
             );
           })}
           <div className="line-divider"/>
-          <div className="kaim-terms" data-aid='kaim-terms'>
-            <Checkbox
-              checked={checkTermsAndConditions}
-              handleChange={handleCheckBox}
-            />
-            <div className="kaim-terms-info">
-              I agree to have read and understood the{" "}
-              {config.Web ? (
-                <>
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href={config.termsLink}
-                    className="terms-text"
-                  >
-                    Terms & conditions
-                  </a>{" "}
-                  and{" "}
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href={config.equityAnnexure}
-                    className="terms-text"
-                  >
-                    Equity Annexure
-                  </a>{" "}
-                </>
-              ) : (
-                <>
-                  <span
-                    className="terms-text"
-                    onClick={openInBrowser(config.termsLink)}
-                  >
-                    Terms & conditions
-                  </span>{" "}
-                  and{" "}
-                  <span
-                    className="terms-text"
-                    onClick={openPdf(config.equityAnnexure)}
-                  >
-                    Equity Annexure
-                  </span>{" "}
-                </>
-              )}
-            </div>
-          </div>
-          <div className="line-divider bottom-line-divider" />
-          <SebiRegistrationFooter />
+          <TermsAndConditions
+            checkTermsAndConditions={checkTermsAndConditions}
+            handleCheckBox={handleCheckBox}
+            setShowSkelton={setShowSkelton}
+          />
         </main>
       </div>
+      <ConfirmBackDialog
+        isOpen={openConfirmBackModal}
+        close={handleConfirmBackDialog(false)}
+        goBack={redirectToHome}
+      />
     </Container>
   );
 };
@@ -318,37 +287,7 @@ const AccountAndBrokerageCharges = ({open, onClick, ...props }) => {
       </div>
       {open &&
         props?.list?.map((data, idx) => {
-          return (
-            <div
-              className="kaim-fees-info"
-              data-aid="kyc-opening-charges"
-              key={idx}
-            >
-              <div className="kaim-fees-info-text">
-                <div>{data.name}</div>
-                <div className="kaim-fees-info-subtext">{data.subText}</div>
-              </div>
-              <div>
-                <div
-                  className="kaim-no-fees-text1"
-                  style={{
-                    textDecorationLine: data.lineStroke
-                      ? "line-through"
-                      : "none",
-                    color: props.id === "brokerage" ? "var(--dark)" : "var(--steelgrey)"
-                  }}
-                >
-                  {data.value}
-                </div>
-                {data.message && (
-                  <div className="kaim-no-fees-text2">{data.message}</div>
-                )}
-                {data.subValue && (
-                  <div className="kaim-fees-info-subvalue">{data.subValue}</div>
-                )}
-              </div>
-            </div>
-          );
+          return <BrokerageChargesTile data={data} key={idx} />;
         })}
     </div>
   );

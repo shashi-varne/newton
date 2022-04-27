@@ -17,6 +17,8 @@ export const API_CONSTANTS = {
   sendContactConsent: '/api/communication/contact/consent',
   authCheck: '/api/iam/auth/check',
   goldUserInfo: '/api/gold/user/account',
+  aocPaymentDecision: "/api/equity/eqm/payment/aoc",
+  aocPaymentStatus: "/api/equity/eqm/payment/aoc/status",
 }
 
 export const PATHNAME_MAPPER = {
@@ -70,6 +72,10 @@ export const PATHNAME_MAPPER = {
   tradingInfo: '/kyc/trading-info',
   documentVerification: '/kyc/document-verification',
   kycEsignNsdl: '/kyc-esign/nsdl',
+  aocPaymentStatus: "/kyc/aoc/payment-status",
+  aocPaymentSummary: "/kyc/aoc/payment-summary",
+  aocSelectAccount: "/kyc/aoc/select-account",
+  aocMfVsTrading: "/kyc/aoc/mf-trading-difference",
 }
 
 export const STORAGE_CONSTANTS = {
@@ -260,6 +266,10 @@ export const getIfscCodeError = (code) => {
       return "Please enter a valid ifsc code of UCO Bank";
     case "tmb":
       return "Please enter a valid ifsc code of TamilNad Mercantile Bank";
+    case "indb":
+      return "Please enter a valid ifsc code of Indian Bank";
+    case "bom":
+      return "Please enter a valid ifsc code of Bank of Maharashtra";
     default:
       return "Please enter a valid ifsc code";
   }
@@ -271,6 +281,8 @@ export const BANK_IFSC_CODES = {
   'cub': 'CIUB',
   'ucomb': 'UCBA',
   'tmb': 'TMBL',
+  'indb': 'IDIB',
+  'bom': 'MAHB'
 }
 
 export const VERIFICATION_DOC_OPTIONS = [

@@ -6,7 +6,6 @@
     .marketing-banners-list {
       display: flex;
       width: fit-content;
-      margin-bottom: 20px;
     }
 
     .marketing-banner-icon-wrapper {
@@ -16,6 +15,7 @@
       display: block;
       padding-bottom: 0px;
       cursor: pointer;
+      margin-bottom: 20px;
     }
 
     .single-marketing-banner {
@@ -28,10 +28,6 @@
         margin-right: 0px;
       }
     }
-  }
-
-  .sdk-landing-cards {
-    margin-top: 20px;
   }
   
   .generic-page-subtitle{

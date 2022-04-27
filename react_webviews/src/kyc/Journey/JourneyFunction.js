@@ -1,8 +1,8 @@
-import { isTradingEnabled } from "utils/functions";
+import { isTradingFlow } from "../../utils/functions";
 import { panUiSet } from "../common/functions";
 
 export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
-  const TRADING_ENABLED = isTradingEnabled(kyc);
+  const TRADING_FLOW = isTradingFlow(kyc);
 
   let journeyData = [];
   if (isCompliant) {
@@ -81,7 +81,7 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
         inputsForStatus: ['esign'],
       }
     ]
-    if (TRADING_ENABLED) {
+    if (TRADING_FLOW) {
       journeyData = [...journeyData, ...tradingJourneyData];
     }
     if(kyc.address.meta_data.is_nri) {
@@ -158,7 +158,7 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
         inputsForStatus: ['esign'],
       }
     ]
-    if (TRADING_ENABLED) {
+    if (TRADING_FLOW) {
       journeyData = journeyData.slice(0,3);
       journeyData = [...journeyData, ...tradingJourneyData];
     }
@@ -247,7 +247,7 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
       }
     ]
 
-    if (kyc.kyc_type === "manual" && TRADING_ENABLED) {
+    if (kyc.kyc_type === "manual" && TRADING_FLOW) {
       journeyData = journeyData.slice(0, 4);
       journeyData = [...journeyData, ...tradingJourneyData];
     }

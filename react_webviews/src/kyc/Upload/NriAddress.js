@@ -42,9 +42,9 @@ const NRIAddressUpload = (props) => {
     }
   }
 
-  const onFileSelectError = (type) => () => {
+  const onFileSelectError = (type) => (err) => {
     sendEvents('get_image', 'gallery', type);
-    return toast('Please select image file only');
+    return toast(err.message);
   }
 
   const handleImageLoad = () => {
@@ -196,12 +196,12 @@ const NRIAddressUpload = (props) => {
               withPicker
               filePickerProps={{
                 showOptionsDialog: true,
-                shouldCompress: true,
+                shouldCompress: config.Web,
                 nativePickerMethodName: "open_gallery",
                 fileName: "nri_address_front",
                 customPickerId: "wv-input-front",
                 onFileSelectComplete: onFileSelectComplete('front'),
-                onFileSelectError: onFileSelectError,
+                onFileSelectError: onFileSelectError('front'),
                 supportedFormats: SUPPORTED_IMAGE_TYPES
               }}
             />
@@ -223,11 +223,11 @@ const NRIAddressUpload = (props) => {
                   filePickerProps={{
                     showOptionsDialog: true,
                     nativePickerMethodName: "open_gallery",
-                    shouldCompress: true,
+                    shouldCompress: config.Web,
                     fileName: "nri_address_back",
                     customPickerId: "wv-input-back",
                     onFileSelectComplete: onFileSelectComplete('back'),
-                    onFileSelectError: onFileSelectError,
+                    onFileSelectError: onFileSelectError('back'),
                     supportedFormats: SUPPORTED_IMAGE_TYPES
                   }}
                 />

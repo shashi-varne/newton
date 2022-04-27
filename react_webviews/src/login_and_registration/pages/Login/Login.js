@@ -14,15 +14,16 @@ import { storageService } from "../../../utils/validators";
 import eventManager from "../../../utils/eventManager";
 import { EVENT_MANAGER_CONSTANTS } from "../../../utils/constants";
 
-const config = getConfig();
 class Login extends Component {
   constructor(props) {
     super(props);
+    const config = getConfig();
     this.state = {
       productName: config.productName,
       loginType: "mobile",
       form_data: { whatsapp_consent: true, },
       isApiRunning: false,
+      config,
     };
     this.initialize = initialize.bind(this);
     this.navigate = navigate.bind(this);
@@ -31,7 +32,7 @@ class Login extends Component {
   componentWillMount() {
     storageService().remove('pin-attempts');
     this.initialize();
-    let { form_data } = this.state;
+    let { form_data, config } = this.state;
     form_data.code = "91";
     this.setState({ form_data: form_data });
     eventManager.emit(EVENT_MANAGER_CONSTANTS.updateAppTheme);
@@ -98,6 +99,7 @@ class Login extends Component {
       form_data,
       isApiRunning,
       productName,
+      config
     } = this.state;
     return (
       <div className="login-form" data-aid='login-form'>
