@@ -116,6 +116,10 @@ const Home = (props) => {
   };
 
   const handleClick = async () => {
+    if (!checkTermsAndConditions) {
+      toast("Tap on T&C check box to continue");
+      return;
+    }
     try {
       if (pan.length !== 10) {
         setPanError("Minimum length is 10");
@@ -463,7 +467,6 @@ const Home = (props) => {
       title={homeData.title}
       iframeRightContent={require(`assets/${config.productName}/kyc_illust.svg`)}
       data-aid='kyc-home-screen'
-      disable={!checkTermsAndConditions}
     >
       {!isEmpty(homeData) && (
         <div className="kyc-home" data-aid='kyc-home-screen-page'>
