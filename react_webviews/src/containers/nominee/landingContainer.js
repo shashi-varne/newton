@@ -9,7 +9,7 @@ import {
 const landingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const mfStatus = "complete";
-  const dematStatus = "complete";
+  const dematStatus = "inprogress";
   const mfNomineeData = useMemo(getMfNomineeData(mfStatus), [mfStatus]);
   const dematNomineeData = useMemo(getDematNomineeData(dematStatus), [
     dematStatus,
