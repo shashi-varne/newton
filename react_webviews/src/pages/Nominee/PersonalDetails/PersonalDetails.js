@@ -56,13 +56,13 @@ const PersonalDetails = ({
       <InputField
         label={PERSONAL_DETAILS_STRINGS.formLabels.name}
         value={formData.name}
-        onChange={onChange}
+        onChange={onChange("name")}
         dataAid="1"
       />
       <InputField
         label={PERSONAL_DETAILS_STRINGS.formLabels.dob}
         value={formData.dob}
-        onChange={onChange}
+        onChange={onChange("dob")}
         dataAid="2"
       />
       {!isMinor && (
@@ -70,13 +70,13 @@ const PersonalDetails = ({
           <InputField
             label={PERSONAL_DETAILS_STRINGS.formLabels.mobile}
             value={formData.mobile}
-            onChange={onChange}
+            onChange={onChange("mobile")}
             dataAid="3"
           />
           <InputField
             label={PERSONAL_DETAILS_STRINGS.formLabels.email}
             value={formData.email}
-            onChange={onChange}
+            onChange={onChange("email")}
             dataAid="5"
           />
         </>
@@ -100,7 +100,7 @@ const PersonalDetails = ({
       <InputField
         label={PERSONAL_DETAILS_STRINGS.formLabels.share}
         value={formData.share}
-        onChange={onChange}
+        onChange={onChange("share")}
         dataAid={isMinor ? "4" : "6"}
         helperText={PERSONAL_DETAILS_STRINGS.formLabels.helperText}
       />
@@ -117,19 +117,19 @@ const PersonalDetails = ({
           <InputField
             label={PERSONAL_DETAILS_STRINGS.formLabels.guardianName}
             value={formData.guardianName}
-            onChange={onChange}
+            onChange={onChange("guardianName")}
             dataAid="5"
           />
           <InputField
             label={PERSONAL_DETAILS_STRINGS.formLabels.mobile}
             value={formData.mobile}
-            onChange={onChange}
+            onChange={onChange("mobile")}
             dataAid="7"
           />
           <InputField
             label={PERSONAL_DETAILS_STRINGS.formLabels.email}
             value={formData.email}
-            onChange={onChange}
+            onChange={onChange("email")}
             dataAid="8"
           />
         </>

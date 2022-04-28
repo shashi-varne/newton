@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useState } from "react";
 import PersonalDetails from "../../pages/Nominee/PersonalDetails";
 import { navigate as navigateFunc } from "../../utils/functions";
 
