@@ -39,6 +39,15 @@ const menuProps = {
         backgroundColor: "foundationColors.primary.100",
       },
     },
+    "&& .MuiPaper-root": {
+      borderTopColor: "foundationColors.supporting.gainsboro",
+      "&::-webkit-scrollbar-track": {
+        backgroundColor: "foundationColors.supporting.grey",
+      },
+      "&::-webkit-scrollbar-thumb": {
+        backgroundColor: "foundationColors.supporting.gainsboro",
+      },
+    },
   },
 };
 const Dropdown = (props) => {

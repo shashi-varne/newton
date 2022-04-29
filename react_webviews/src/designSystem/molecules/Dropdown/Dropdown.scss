@@ -5,7 +5,8 @@
   border-bottom-right-radius: 8px;
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
-  max-height: 276px;
+  max-height: 277px;
+  border-top: 1px solid;
 
   .dropdown-menu-list {
     padding: 0px;
@@ -23,7 +24,6 @@
 
 .dropdown-popover {
   background-color: transparent !important;
-  margin-top: 1px;
   ::-webkit-scrollbar {
     width: 6px !important;
   }
@@ -38,6 +38,7 @@
   .dropdown-popover {
     left: 0px !important;
     .dropdown-menu-paper {
+      max-height: unset !important;
       ul {
         padding: 0px !important;
       }
