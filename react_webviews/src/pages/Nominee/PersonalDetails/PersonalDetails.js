@@ -1,10 +1,12 @@
 import React from "react";
 import Stack from "@mui/material/Stack";
-import Typography from "../../../designSystem/atoms/Typography";
-import Container from "../../../designSystem/organisms/ContainerWrapper";
 import Checkbox from "../../../designSystem/atoms/Checkbox";
+import Typography from "../../../designSystem/atoms/Typography";
+import Dropdown from "../../../designSystem/molecules/Dropdown";
 import InputField from "../../../designSystem/molecules/InputField";
+import Container from "../../../designSystem/organisms/ContainerWrapper";
 import { NOMINEE } from "businesslogic/strings/nominee";
+import { NOMINEE_RELATIONSHIP } from "businesslogic/constants/nominee";
 
 import "./PersonalDetails.scss";
 const PERSONAL_DETAILS_STRINGS = NOMINEE.personalDetails;
@@ -64,6 +66,10 @@ const PersonalDetails = ({
         value={formData.dob}
         onChange={onChange("dob")}
         dataAid="2"
+      />
+      <Dropdown
+        options={NOMINEE_RELATIONSHIP}
+        label={PERSONAL_DETAILS_STRINGS.formLabels.relationship}
       />
       {!isMinor && (
         <>

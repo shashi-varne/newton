@@ -5,16 +5,14 @@
   border-bottom-right-radius: 8px;
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
+  max-height: 276px;
 
   .dropdown-menu-list {
     padding: 0px;
 
     .dropdown-menu-item {
       padding: 12px 16px;
-    }
-
-    .dropdown-menu-item:last-child {
-      padding-bottom: 16px;
+      min-height: 46px;
     }
   }
 }
@@ -25,6 +23,10 @@
 
 .dropdown-popover {
   background-color: transparent !important;
+  margin-top: 1px;
+  ::-webkit-scrollbar {
+    width: 6px !important;
+  }
 }
 
 .dropdown-open {
@@ -34,8 +36,8 @@
 
 @media only screen and (min-width: 786px) {
   .dropdown-popover {
+    left: 0px !important;
     .dropdown-menu-paper {
-      left: 0px !important;
       ul {
         padding: 0px !important;
       }

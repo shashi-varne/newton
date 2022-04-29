@@ -49,7 +49,7 @@ const Dropdown = (props) => {
     inputLabelProps,
     disabled,
     onChange,
-    value,
+    value = "",
     variant,
     fullWidth,
     dataAid,
@@ -74,7 +74,7 @@ const Dropdown = (props) => {
       dropdownOptions: dropdownData,
     };
   }, [value, options]);
-  console.log("val ", value);
+
   const onOpen = () => {
     setIsOpen(true);
   };
@@ -99,6 +99,7 @@ const Dropdown = (props) => {
       data-aid={`dropdown_${dataAid}`}
       error={error}
       autoComplete="off"
+      className="molecule-dropdown"
     >
       <InputLabel
         id="select-label"
@@ -160,13 +161,13 @@ const Dropdown = (props) => {
 
           return (
             <MenuItem
-              variant="body2"
               value={menuData.value}
               className="dropdown-menu-item"
               key={index}
-              data-aid={`tv_text${index + 1}`}
             >
-              {menuData.title}
+              <Typography variant="body2" dataAid={`text${index + 1}`}>
+                {menuData.title}
+              </Typography>
             </MenuItem>
           );
         })}
