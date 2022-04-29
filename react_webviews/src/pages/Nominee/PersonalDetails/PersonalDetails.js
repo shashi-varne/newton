@@ -6,7 +6,10 @@ import Dropdown from "../../../designSystem/molecules/Dropdown";
 import InputField from "../../../designSystem/molecules/InputField";
 import Container from "../../../designSystem/organisms/ContainerWrapper";
 import { NOMINEE } from "businesslogic/strings/nominee";
-import { NOMINEE_RELATIONSHIP } from "businesslogic/constants/nominee";
+import {
+  NOMINEE_RELATIONSHIP,
+  PERSONAL_DETAILS_FORM_MAPPER,
+} from "businesslogic/constants/nominee";
 
 import "./PersonalDetails.scss";
 const PERSONAL_DETAILS_STRINGS = NOMINEE.personalDetails;
@@ -58,32 +61,33 @@ const PersonalDetails = ({
       <InputField
         label={PERSONAL_DETAILS_STRINGS.formLabels.name}
         value={formData.name}
-        onChange={onChange("name")}
+        onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.name)}
         dataAid="1"
       />
       <InputField
         label={PERSONAL_DETAILS_STRINGS.formLabels.dob}
         value={formData.dob}
-        onChange={onChange("dob")}
+        onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.dob)}
         dataAid="2"
       />
       <Dropdown
         options={NOMINEE_RELATIONSHIP}
         label={PERSONAL_DETAILS_STRINGS.formLabels.relationship}
+        dataAid={PERSONAL_DETAILS_FORM_MAPPER.relationship}
       />
       {!isMinor && (
         <>
           <InputField
             label={PERSONAL_DETAILS_STRINGS.formLabels.mobile}
             value={formData.mobile}
-            onChange={onChange("mobile")}
+            onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.mobile)}
             dataAid="3"
           />
           <InputField
             label={PERSONAL_DETAILS_STRINGS.formLabels.email}
             value={formData.email}
-            onChange={onChange("email")}
-            dataAid="5"
+            onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.email)}
+            dataAid="4"
           />
         </>
       )}
@@ -106,9 +110,9 @@ const PersonalDetails = ({
       <InputField
         label={PERSONAL_DETAILS_STRINGS.formLabels.share}
         value={formData.share}
-        onChange={onChange("share")}
-        dataAid={isMinor ? "4" : "6"}
-        helperText={PERSONAL_DETAILS_STRINGS.formLabels.helperText}
+        dataAid={isMinor ? "3" : "5"}
+        onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.share)}
+        helperText={PERSONAL_DETAILS_STRINGS.formLabels.shareHelperText}
       />
       {isMinor && (
         <>
@@ -123,20 +127,28 @@ const PersonalDetails = ({
           <InputField
             label={PERSONAL_DETAILS_STRINGS.formLabels.guardianName}
             value={formData.guardianName}
-            onChange={onChange("guardianName")}
-            dataAid="5"
+            onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.guardianName)}
+            dataAid="4"
+          />
+          <Dropdown
+            options={NOMINEE_RELATIONSHIP}
+            label={PERSONAL_DETAILS_STRINGS.formLabels.guardianRelationship}
+            dataAid={PERSONAL_DETAILS_FORM_MAPPER.guardianRelationship}
+            onChange={onChange(
+              PERSONAL_DETAILS_FORM_MAPPER.guardianRelationship
+            )}
           />
           <InputField
             label={PERSONAL_DETAILS_STRINGS.formLabels.mobile}
             value={formData.mobile}
-            onChange={onChange("mobile")}
-            dataAid="7"
+            onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.mobile)}
+            dataAid="5"
           />
           <InputField
             label={PERSONAL_DETAILS_STRINGS.formLabels.email}
             value={formData.email}
-            onChange={onChange("email")}
-            dataAid="8"
+            onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.email)}
+            dataAid="6"
           />
         </>
       )}
