@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useRef, useEffect } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormHelperText from "@mui/material/FormHelperText";
@@ -6,6 +6,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import PropTypes from "prop-types";
 import isObject from "lodash/isObject";
+import scrollIntoView from "scroll-into-view-if-needed";
 
 import Typography from "../../atoms/Typography";
 import Icon from "../../atoms/Icon";
@@ -70,6 +71,7 @@ const Dropdown = (props) => {
   } = props;
 
   const [isOpen, setIsOpen] = useState(false);
+  const itemRef = useRef();
 
   const { isValidValue, dropdownOptions } = useMemo(() => {
     const dropdownData = {};
@@ -83,6 +85,17 @@ const Dropdown = (props) => {
       dropdownOptions: dropdownData,
     };
   }, [value, options]);
+
+  useEffect(() => {
+    if (itemRef.current && isOpen) {
+      const element = itemRef.current;
+      scrollIntoView(element, {
+        block: "center",
+        inline: "nearest",
+        behavior: "smooth",
+      });
+    }
+  }, [itemRef.current, isOpen]);
 
   const onOpen = () => {
     setIsOpen(true);
@@ -167,11 +180,12 @@ const Dropdown = (props) => {
             displayKey,
             valueKey,
           });
-
+          const elementRef = value === menuData.value ? itemRef : null;
           return (
             <MenuItem
               value={menuData.value}
               className="dropdown-menu-item"
+              ref={elementRef}
               key={index}
             >
               <Typography variant="body2" dataAid={`text${index + 1}`}>
