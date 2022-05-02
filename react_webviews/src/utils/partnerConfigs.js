@@ -482,6 +482,7 @@ export const partnerConfigs = {
     mobile: "+80-48-093070",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
+      stocksAndIpo: ["stocks", "ipo"],
       ourRecommendations: ["buildwealth", "savetax", "nps"],
     },
     referralConfig: {
