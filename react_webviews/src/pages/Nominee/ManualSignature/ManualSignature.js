@@ -19,6 +19,8 @@ const ManualSignature = ({ email, onClickDownloadForm }) => {
         <Typography
           color={"foundationColors.content.secondary"}
           variant="body2"
+          component="div"
+          dataAid={"subtitle"}
         >
           {subtitle}
           <Typography
@@ -41,6 +43,7 @@ const ManualSignature = ({ email, onClickDownloadForm }) => {
         <Typography
           color={"foundationColors.content.primary"}
           variant="body2"
+          component="div"
           dataAid={"subtitle"}
         >
           {COMPANY_DETAILS.NAME}
@@ -60,7 +63,7 @@ const ManualSignature = ({ email, onClickDownloadForm }) => {
   return (
     <Container
       headerProps={{
-        dataAid:  MANUAL_SIGNATURE.title.dataAid,
+        dataAid: MANUAL_SIGNATURE.title.dataAid,
         headerTitle: MANUAL_SIGNATURE.title.text,
         subtitle: MANUAL_SIGNATURE.subtitle,
       }}
@@ -80,6 +83,7 @@ const ManualSignature = ({ email, onClickDownloadForm }) => {
         </Typography>
         {MANUAL_SIGNATURE_STEPS.map((item, index) => (
           <OrderStep
+            key={index}
             className="ms-order-step"
             stepCount={index + 1}
             title={item.title}
