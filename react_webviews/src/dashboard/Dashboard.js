@@ -199,6 +199,7 @@ const Home = (props) => {
           <Route path={`${url}diyv2`} component={DIYV2} />
           <Route path={`${url}fund-details-v2`} component={fundDetailsV2Container} />
           <Route path={`${url}mf-orders`} component={mfOrderContainer} />
+          <Route path={`${url}manual-signature`} component={ManualSignatureContainer} />
         </ThemeWrapper>
         <Route component={NotFound} />
       </Switch>
