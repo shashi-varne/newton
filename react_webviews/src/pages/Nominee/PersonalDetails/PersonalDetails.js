@@ -10,15 +10,19 @@ import {
   NOMINEE_RELATIONSHIP,
   PERSONAL_DETAILS_FORM_MAPPER,
 } from "businesslogic/constants/nominee";
+import { isEmpty } from "lodash-es";
 
 import "./PersonalDetails.scss";
 const PERSONAL_DETAILS_STRINGS = NOMINEE.personalDetails;
 const PersonalDetails = ({
   onClick,
-  isMinor = true,
+  isMinor,
   formData = {},
+  errorData = {},
   onChange,
   availableShare = "",
+  handleCheckbox,
+  sendEvents
 }) => {
   return (
     <Container
@@ -34,6 +38,7 @@ const PersonalDetails = ({
       }}
       className="nominee-personal-details"
       dataAid="nominee"
+      eventData={sendEvents("just_set_events")}
     >
       <Typography
         dataAid={PERSONAL_DETAILS_STRINGS.personalDetailsSubtext.dataAid}
@@ -49,7 +54,7 @@ const PersonalDetails = ({
         alignItems="center"
         justifyContent="flex-start"
       >
-        <Checkbox dataAid="1" checked={isMinor} />
+        <Checkbox dataAid="1" checked={isMinor} onChange={handleCheckbox} />
         <Typography
           variant="body2"
           dataAid={PERSONAL_DETAILS_STRINGS.minorNominee.dataAid}
@@ -63,17 +68,29 @@ const PersonalDetails = ({
         value={formData.name}
         onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.name)}
         dataAid="1"
+        error={!isEmpty(errorData.name)}
+        helperText={errorData.name}
       />
       <InputField
         label={PERSONAL_DETAILS_STRINGS.formLabels.dob}
         value={formData.dob}
         onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.dob)}
         dataAid="2"
+        id={PERSONAL_DETAILS_FORM_MAPPER.dob}
+        inputProps={{
+          maxLength: 10,
+        }}
+        error={!isEmpty(errorData.dob)}
+        helperText={errorData.dob}
       />
       <Dropdown
         options={NOMINEE_RELATIONSHIP}
         label={PERSONAL_DETAILS_STRINGS.formLabels.relationship}
         dataAid={PERSONAL_DETAILS_FORM_MAPPER.relationship}
+        onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.relationship)}
+        value={formData.relationship}
+        error={!isEmpty(errorData.relationship)}
+        helperText={errorData.relationship}
       />
       {!isMinor && (
         <>
@@ -81,13 +98,21 @@ const PersonalDetails = ({
             label={PERSONAL_DETAILS_STRINGS.formLabels.mobile}
             value={formData.mobile}
             onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.mobile)}
+            inputMode="numeric"
             dataAid="3"
+            inputProps={{
+              maxLength: 10,
+            }}
+            error={!isEmpty(errorData.mobile)}
+            helperText={errorData.mobile}
           />
           <InputField
             label={PERSONAL_DETAILS_STRINGS.formLabels.email}
             value={formData.email}
             onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.email)}
             dataAid="4"
+            error={!isEmpty(errorData.email)}
+            helperText={errorData.email}
           />
         </>
       )}
@@ -109,10 +134,17 @@ const PersonalDetails = ({
       </Typography>
       <InputField
         label={PERSONAL_DETAILS_STRINGS.formLabels.share}
+        inputMode="numeric"
         value={formData.share}
         dataAid={isMinor ? "3" : "5"}
         onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.share)}
-        helperText={PERSONAL_DETAILS_STRINGS.formLabels.shareHelperText}
+        inputProps={{
+          maxLength: 3,
+        }}
+        error={!isEmpty(errorData.share)}
+        helperText={
+          errorData.share || PERSONAL_DETAILS_STRINGS.formLabels.shareHelperText
+        }
       />
       {isMinor && (
         <>
@@ -129,6 +161,8 @@ const PersonalDetails = ({
             value={formData.guardianName}
             onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.guardianName)}
             dataAid="4"
+            error={!isEmpty(errorData.guardianName)}
+            helperText={errorData.guardianName}
           />
           <Dropdown
             options={NOMINEE_RELATIONSHIP}
@@ -137,18 +171,29 @@ const PersonalDetails = ({
             onChange={onChange(
               PERSONAL_DETAILS_FORM_MAPPER.guardianRelationship
             )}
+            value={formData.guardianRelationship}
+            error={!isEmpty(errorData.guardianRelationship)}
+            helperText={errorData.guardianRelationship}
           />
           <InputField
             label={PERSONAL_DETAILS_STRINGS.formLabels.mobile}
             value={formData.mobile}
             onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.mobile)}
             dataAid="5"
+            inputMode="numeric"
+            inputProps={{
+              maxLength: 10,
+            }}
+            error={!isEmpty(errorData.mobile)}
+            helperText={errorData.mobile}
           />
           <InputField
             label={PERSONAL_DETAILS_STRINGS.formLabels.email}
             value={formData.email}
             onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.email)}
             dataAid="6"
+            error={!isEmpty(errorData.email)}
+            helperText={errorData.email}
           />
         </>
       )}
