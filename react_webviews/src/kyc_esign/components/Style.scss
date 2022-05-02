@@ -129,9 +129,9 @@ $text-color1: var(--steelgrey);
     }
 
     .title {
-      font-size: 17px;
+      font-size: 20px;
       color: var(--dark);
-      font-weight: 500;
+      font-weight: 700;
     }
 
     .text {
@@ -161,7 +161,7 @@ $text-color1: var(--steelgrey);
       font-size: 13px;
       font-weight: 500;
       color: var(--primary);
-      margin: 30px 0 0 0;
+      margin: 11px 0 0 0;
       cursor: pointer;
     }
 
@@ -169,7 +169,8 @@ $text-color1: var(--steelgrey);
       @include d-flex-center();
       font-size: 13px;
       line-height: 22px;
-      color: $text-color1
+      color: $text-color1;
+      padding-top: 16px;
     }
   }
 

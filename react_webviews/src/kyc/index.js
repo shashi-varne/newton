@@ -66,6 +66,12 @@ import CommunicationCallback from "./Equity/components/CommunicationCallback";
 import FnOSampleDocuments from "./Upload/FnOSampleDocuments";
 import DialogAsPage from './mini_components/DialogAsPage';
 
+// AOC Components
+import AocPaymentStatus from "./Aoc/pages/PaymentStatus";
+import AocPaymentSummary from "./Aoc/pages/PaymentSummary";
+import AocSelectAccountType from "./Aoc/pages/SelectAccountType";
+import MFAndTradingDifferences from "./Aoc/pages/MfAndTradingDifference";
+
 const Kyc = (props) => {
   const { url } = props.match;
   return (
@@ -369,6 +375,26 @@ const Kyc = (props) => {
           exact
           path={`${url}/communication-details/callback`}
           component={CommunicationCallback}
+        />
+        <Route
+          exact
+          path={`${url}/aoc/payment-status`}
+          component={AocPaymentStatus}
+        />
+        <Route
+          exact
+          path={`${url}/aoc/payment-summary`}
+          component={AocPaymentSummary}
+        />
+        <Route
+          exact
+          path={`${url}/aoc/select-account`}
+          component={AocSelectAccountType}
+        />
+        <Route
+          exact
+          path={`${url}/aoc/mf-trading-difference`}
+          component={MFAndTradingDifferences}
         />
         <Route component={NotFound} />
       </Switch>

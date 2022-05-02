@@ -15,6 +15,7 @@ import CheckCompliant from "../Equity/mini-components/CheckCompliant";
 import { isDigilockerFlow, isEquityAllowed, panUiSet } from "../common/functions";
 import internalStorage from '../common/InternalStorage';
 import isEmpty from 'lodash/isEmpty';
+import Checkbox from "../../common/ui/Checkbox";
 
 const residentialStatusOptions = [
   {
@@ -50,6 +51,11 @@ const Home = (props) => {
   const [userName, setUserName] = useState("");
   const [tradingEnabled, setTradingEnabled] = useState();
   const [disableResidentialStatus, setDisableResidentialStatus] = useState();
+  const [checkTermsAndConditions, setCheckTermsAndConditions] = useState(true);
+  
+  const handleCheckBox = () => {
+    setCheckTermsAndConditions(!checkTermsAndConditions);
+  };
 
   const checkIfTradingEnabled = (isIndian) => {
     return isTradingEnabled(kyc) && isIndian;
@@ -110,6 +116,10 @@ const Home = (props) => {
   };
 
   const handleClick = async () => {
+    if (!checkTermsAndConditions) {
+      toast("Tap on T&C check box to continue");
+      return;
+    }
     try {
       if (pan.length !== 10) {
         setPanError("Minimum length is 10");
@@ -460,33 +470,49 @@ const Home = (props) => {
     >
       {!isEmpty(homeData) && (
         <div className="kyc-home" data-aid='kyc-home-screen-page'>
-          <div className="kyc-main-subtitle" data-aid='kyc-main-subtitle'>{homeData.subtitle}</div>
-          <main data-aid='kyc-home'>
-            <Input
-              label="Enter your PAN"
-              class="input"
-              value={pan.toUpperCase()}
-              error={panError ? true : false}
-              helperText={panError || ""}
-              onChange={handleChange}
-              minLenth={10}
-              maxLength={10}
-              type="text"
-              disabled={!!showLoader}
-              autoFocus
-            />
-            <div className={`input ${showLoader && `disabled`}`}>
-              <RadioWithoutIcon
-                width="40"
-                label="Are you an Indian resident?"
-                options={residentialStatusOptions}
-                value={residentialStatus}
-                onChange={handleResidentialStatus}
-                disabled={showLoader || disableResidentialStatus}
-                disabledWithValue={disableResidentialStatus}
+          <div>
+            <div className="kyc-main-subtitle" data-aid='kyc-main-subtitle'>{homeData.subtitle}</div>
+            <main data-aid='kyc-home'>
+              <Input
+                label="Enter your PAN"
+                class="input"
+                value={pan.toUpperCase()}
+                error={panError ? true : false}
+                helperText={panError || ""}
+                onChange={handleChange}
+                minLenth={10}
+                maxLength={10}
+                type="text"
+                disabled={!!showLoader}
+                autoFocus
               />
+              <div className={`input ${showLoader && `disabled`}`}>
+                <RadioWithoutIcon
+                  width="40"
+                  label="Are you an Indian resident?"
+                  options={residentialStatusOptions}
+                  value={residentialStatus}
+                  onChange={handleResidentialStatus}
+                  disabled={showLoader || disableResidentialStatus}
+                  disabledWithValue={disableResidentialStatus}
+                />
+              </div>
+            </main>
+          </div>
+          <div className="kh-terms-and-conditions">
+            <Checkbox
+              checked={checkTermsAndConditions}
+              handleChange={handleCheckBox}
+              class="kh-terms-checkbox"
+            />
+            <div className="kh-tac-text">
+              I authorise Finwizard Technology Pvt. Ltd. to fetch my KYC
+              details & supporting documents from DigiLocker/KRA for
+              completing KYC & consent to provide my Aadhaar Number,
+              Biometric/One-time PIN (OTP) data for Aadhaar-based
+              authentication for availing eSign services
             </div>
-          </main>
+          </div>
           <ConfirmPan
             isOpen={openConfirmPan}
             name={userName}

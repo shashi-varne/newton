@@ -3,10 +3,10 @@ import Container from "../common/Container";
 import { SUPPORTED_IMAGE_TYPES, VERIFICATION_DOC_OPTIONS } from "../constants";
 import { uploadBankDocuments } from "../common/api";
 import { getUrlParams, isEmpty } from "utils/validators";
-import { checkDLPanFetchAndApprovedStatus, getFlow, isDigilockerFlow } from "../common/functions";
+import { checkDLPanFetchAndApprovedStatus, getFlow, isDigilockerFlow, showTradingInfoScreen } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
-import { getConfig, isTradingEnabled, navigate as navigateFunc, isNewIframeDesktopLayout } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc, isNewIframeDesktopLayout, isTradingFlow } from "../../utils/functions";
 import toast from '../../common/ui/Toast'
 import { PATHNAME_MAPPER } from "../constants";
 import InternalStorage from "../common/InternalStorage";
@@ -68,7 +68,7 @@ const KycUploadDocuments = (props) => {
     if (isDigilockerFlow(kyc)) {
       setDlFlow(true);
     }
-    const tradeFlow = isTradingEnabled(kyc)
+    const tradeFlow = isTradingFlow(kyc)
     setTradingEnabled(tradeFlow);
 
     if (isReadyToInvest() || additional) {
@@ -82,10 +82,9 @@ const KycUploadDocuments = (props) => {
     setFileToShow(fileBase64);
   };
 
-  const onFileSelectError = (err, file) => {
-    sendEvents("file_select_error", "", file?.type, err)
-    triggerSentryError("select file error", {}, err, file?.type);
-    toast('Please select image file only');
+  const onFileSelectError = (err) => {
+    triggerSentryError("select file", {}, err.message, err);
+    toast(err.message);
   }
 
   const handleDocType = (index) => {
@@ -151,7 +150,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const handleOtherPlatformNavigation = () => {
-    const nextStep = kyc.show_equity_charges_page ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
+    const nextStep = showTradingInfoScreen(kyc, config.productName) ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
     sendEvents('next', 'bank_verification_pending');
     if (additional) {
       navigate(PATHNAME_MAPPER.bankList);
@@ -267,7 +266,7 @@ const KycUploadDocuments = (props) => {
   const selectedDocValue =
     selected !== null ? VERIFICATION_DOC_OPTIONS[selected].value : "";
 
-    const sendEvents = (userAction, screen_name, fileType, errorMessage) => {
+    const sendEvents = (userAction, screen_name) => {
       let docMapper = ["bank_statement", "cancelled_cheque", "passbook"];
       let eventObj = {
         event_name: "kyc_registration",
@@ -281,10 +280,6 @@ const KycUploadDocuments = (props) => {
           // "status" : screen_name ? "verification pending":""
         },
       };
-      if (errorMessage || fileType) {
-        eventObj.properties.file_type = fileType;
-        eventObj.properties.error_message = errorMessage;
-      }
       if (userAction === "just_set_events") {
         return eventObj;
       } else {
@@ -373,7 +368,7 @@ const KycUploadDocuments = (props) => {
                 withPicker
                 filePickerProps={{
                   showOptionsDialog: true,
-                  shouldCompress: true,
+                  shouldCompress: config.Web,
                   nativePickerMethodName: "open_gallery",
                   fileName: "doc",
                   onFileSelectComplete,

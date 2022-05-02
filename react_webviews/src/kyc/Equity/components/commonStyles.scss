@@ -96,52 +96,45 @@
       }
     }
 
-    .account-and-brokerage-charges {
-      border-top: 1px solid #D6D6D6;
-      padding: 15px 0;
-      cursor: pointer;
+    .kaim-account-fee {
+      padding: 20px;
+      background-color: #f8f8fa;
+      margin-bottom: 20px;
+      border-radius: 4px;
 
-      .aabc-title {
+      .kaim-af-title {
+        font-weight: 400;
         font-size: 13px;
+        line-height: 21px;
         color: var(--gunmetal);
+      }
+
+      .kaim-af-amount {
+        color: var(--primary);
         font-weight: 500;
+        font-size: 14px;
+        line-height: 22px;
+      }
+
+      .kaim-af-strike-amount {
+        font-weight: 400;
+        font-size: 11px;
+        line-height: 22px;
+        text-decoration-line: line-through;
+        color: var(--gunmetal);
+        margin-right: 5px;
       }
     }
 
-    .kaim-fees-info {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
+    .account-and-brokerage-charges {
+      border-top: 1px solid #D6D6D6;
       padding: 10px 0;
+      cursor: pointer;
 
-      .kaim-fees-info-text {
+      .aabc-title {
+        color: var(--gunmetal);
+        font-weight: 500;
         font-size: 13px;
-        line-height: 21px;
-        color: var(--dark);
-      }
-
-      .kaim-fees-info-subtext {
-        @include fees-subtext();
-      }
-
-      .kaim-no-fees-text1 {
-        font-size: 13px;
-        line-height: 21px;
-        color: var(--steelgrey);
-        text-align: right;
-      }
-
-      .kaim-no-fees-text2 {
-        font-weight: 600;
-        font-size: 13px;
-        line-height: 21px;
-        color: var(--primary);
-        text-align: right;
-      }
-
-      .kaim-fees-info-subvalue {
-        @include fees-subtext();
-        text-align: right;
       }
     }
 
@@ -164,13 +157,6 @@
 
       .kaim-terms-info {
         margin-left: 10px;
-
-        .terms-text {
-          color: var(--primary);
-          font-weight: 600;
-          cursor: pointer;
-          text-decoration: none;
-        }
       }
     }
   }
@@ -235,7 +221,8 @@
     margin-top: -10px;
   }
 
-  .form-download-btn {
+  .form-download-btn div {
+    display: flex;
     justify-content: space-between;
 
     img {
