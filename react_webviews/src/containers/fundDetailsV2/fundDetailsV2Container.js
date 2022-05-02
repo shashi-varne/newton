@@ -21,7 +21,7 @@ import { getUrlParams } from 'utils/validators';
 import FundDetailsV2 from '../../pages/fundDetailsV2/fundDetailsV2';
 import { validateKycAndRedirect } from '../../pages/DIY/common/functions';
 import useUserKycHook from '../../kyc/common/hooks/userKycHook';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { resetMfOrders } from 'businesslogic/dataStore/reducers/mfOrders';
 
 const screen = 'fundDetailsV2';
@@ -30,6 +30,7 @@ const fundDetailsV2Container = (WrappedComponent) => (props) => {
   const dispatch = useDispatch();
   const fundData = useSelector(getFundData);
   const navigate = navigateFunc.bind(props);
+  const location = useLocation();
   let { isins } = getUrlParams();
   const {isin = ''} = useParams();
   const { isPageLoading } = useLoadingState(screen);
@@ -40,15 +41,18 @@ const fundDetailsV2Container = (WrappedComponent) => (props) => {
   const riskDetailsRef = useRef();
   const returnCompRef = useRef();
   const { productName } = useMemo(getConfig, []);
-  const isFisdom = productName === 'fisdom';
-  const ctaText = isFisdom ? 'ADD TO CART' : 'INVEST NOW';
   const cartCount = useSelector(getDiyCartCount);
   const { kyc, isLoading, user } = useUserKycHook();
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const fundDetailsRef = useRef({});
+  const stateParams = location?.state;
+  const fromOutsideDiy = stateParams?.fromOutsideDiy || false;
+  const isFisdom = productName === 'fisdom' && !fromOutsideDiy;
+  const ctaText = isFisdom ? 'ADD TO CART' : 'INVEST NOW';
   useEffect(() => {
     if (isFetchFailed && !isEmpty(errorMessage)) {
       ToastMessage(errorMessage);
+      props.history.goBack();
     }
   }, [isFetchFailed]);
 

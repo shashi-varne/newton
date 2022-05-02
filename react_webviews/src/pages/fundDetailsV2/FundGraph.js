@@ -15,6 +15,7 @@ import { getUrlParams } from '../../utils/validators';
 import useLoadingState from '../../common/customHooks/useLoadingState';
 import FundCommonGraph from './FundCommonGraph';
 import { useParams } from 'react-router-dom';
+import useErrorState from '../../common/customHooks/useErrorState';
 
 const screen = 'fundDetailsV2';
 
@@ -31,6 +32,7 @@ const FundGraph = ({isDataLoading}) => {
   const [periodWiseData, setPeriodWiseData] = useState({});
   const setAvailableInvestmentPeriod = useRef(false);
   const isGraphLoaded = useRef(false);
+  const { isFetchFailed } = useErrorState(screen);
 
   const getGraphData = async (dataGraph) => {
     if (isEmpty(dataGraph)) {
@@ -98,10 +100,10 @@ const FundGraph = ({isDataLoading}) => {
     setGraphData([...choppedData[fundTimePeriod]]);
   };
   useEffect(() => {
-    if(!isGraphLoaded.current && !isDataLoading) {
+    if(!isGraphLoaded.current && !isDataLoading && !isFetchFailed) {
       getGraphData(fundGraphData);
     }
-  }, [fundGraphData, fundTimePeriod, isDataLoading]);
+  }, [fundGraphData, fundTimePeriod, isDataLoading, isFetchFailed]);
 
   const handleTimePeriodChange = (e, value) => {
     disptach(setFundTimePeriod(value));
