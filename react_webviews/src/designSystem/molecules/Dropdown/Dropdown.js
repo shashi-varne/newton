@@ -5,7 +5,7 @@ import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import PropTypes from "prop-types";
-import isObject from "lodash/isObject";
+import { isObject, isEmpty } from "lodash-es";
 import scrollIntoView from "scroll-into-view-if-needed";
 
 import Typography from "../../atoms/Typography";
@@ -128,7 +128,8 @@ const Dropdown = (props) => {
         variant={variant}
         {...inputLabelProps}
         shrink={
-          ((!isValidValue || !value) && isOpen) || (isValidValue && value)
+          ((!isValidValue || !value) && isOpen) ||
+          (isValidValue && !isEmpty(value))
         }
       >
         <Typography
