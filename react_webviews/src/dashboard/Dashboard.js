@@ -51,6 +51,7 @@ import PaymentNativeCallback from "./nps/components/paymentCallback";
 import ThemeWrapper from "../theme/ThemeWrapper";
 import fundDetailsV2Container from "../containers/fundDetailsV2/fundDetailsV2Container";
 import mfOrderContainer from "../containers/mfOrder/mfOrderContainer";
+import manualSignatureContainer from "../containers/nominee/manualSignatureContainer";
 
 const Home = (props) => {
   const config = getConfig(); 
@@ -199,7 +200,7 @@ const Home = (props) => {
           <Route path={`${url}diyv2`} component={DIYV2} />
           <Route path={`${url}fund-details-v2`} component={fundDetailsV2Container} />
           <Route path={`${url}mf-orders`} component={mfOrderContainer} />
-          <Route path={`${url}manual-signature`} component={ManualSignatureContainer} />
+          <Route path={`${url}manual-signature`} component={manualSignatureContainer} />
         </ThemeWrapper>
         <Route component={NotFound} />
       </Switch>
