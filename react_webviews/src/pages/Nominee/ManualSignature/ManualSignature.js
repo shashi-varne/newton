@@ -60,7 +60,7 @@ const ManualSignature = ({ email, onClickDownloadForm }) => {
   return (
     <Container
       headerProps={{
-        dataAid: "",
+        dataAid:  MANUAL_SIGNATURE.title.dataAid,
         headerTitle: MANUAL_SIGNATURE.title.text,
         subtitle: MANUAL_SIGNATURE.subtitle,
       }}
@@ -68,7 +68,7 @@ const ManualSignature = ({ email, onClickDownloadForm }) => {
         noFooter: true,
       }}
       className="manual-signature-wrapper"
-      dataAid={dataAid}
+      dataAid={MANUAL_SIGNATURE.screenDataAid}
     >
       <Stack direction="column">
         <Typography
@@ -85,7 +85,7 @@ const ManualSignature = ({ email, onClickDownloadForm }) => {
             title={item.title}
             subtitle={dynamicStepsSubtitle(index, item.subtitle)}
             variant={ORDER_STEP_VARIANTS.SUCCESSFUL}
-            showStepLine={index + 1 !== Data.length}
+            showStepLine={index + 1 !== MANUAL_SIGNATURE_STEPS.length}
           />
         ))}
       </Stack>
