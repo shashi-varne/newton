@@ -17,13 +17,9 @@ const DEFAULT_FORM_DATA = {
 
 const addressDetailsContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
-  const [isMinor, setIsMinor] = useState(false);
   const [formData, setFormData] = useState(DEFAULT_FORM_DATA);
   const [errorData, setErrorData] = useState(DEFAULT_FORM_DATA);
-
-  const handleCheckbox = () => {
-    setIsMinor(!isMinor);
-  };
+  const isMinor = false;
 
   const onClick = () => {
     const keysToCheck = [
