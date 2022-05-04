@@ -41,8 +41,8 @@ const Selfie = (props) => {
   const goBackPath = props.location?.state?.goBack || "";
 
   const config = getConfig();
-  const { productName, isNative, Web: isWeb, isSdk, code } = config;
-  const isIndbEquityEnabled = ["indb", "fisdom"].includes(code) && isSdkEquityEnabled;  
+  const { productName, isNative, Web: isWeb, isSdk } = config;
+  const isIndbEquityEnabled = isIndbSdkTradingFlow(kyc);  
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -58,7 +58,7 @@ const Selfie = (props) => {
   }
 
   const commonNavigation = () => {
-    if (isIndbSdkTradingFlow(kyc) && !isDocSubmittedOrApproved("ipvvideo")) {
+    if (isIndbEquityEnabled && !isDocSubmittedOrApproved("ipvvideo")) {
       navigate(PATHNAME_MAPPER.uploadSelfieVideo, {
         state: { goBack: PATHNAME_MAPPER.journey }
       });

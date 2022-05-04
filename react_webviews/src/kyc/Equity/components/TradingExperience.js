@@ -90,10 +90,10 @@ const TradingExperience = (props) => {
     if (!isDocSubmittedOrApproved("equity_identification")) {
         navigate(PATHNAME_MAPPER.uploadSelfie);
     } else {
-      if (!isDocSubmittedOrApproved("equity_income")) {
-        navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
-      } else if (isIndbSdkTradingFlow(kyc) && !isDocSubmittedOrApproved("ipvvideo")) {
+      if (isIndbSdkTradingFlow(kyc) && !isDocSubmittedOrApproved("ipvvideo")) {
         navigate(PATHNAME_MAPPER.uploadSelfieVideo);
+      } else if (!isDocSubmittedOrApproved("equity_income")) {
+        navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
       } else {
         if (isEquityEsignReady(kyc)) {
           navigate(PATHNAME_MAPPER.kycEsign)
