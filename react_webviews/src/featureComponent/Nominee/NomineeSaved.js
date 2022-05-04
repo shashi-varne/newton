@@ -10,7 +10,7 @@ const NomineeSaved = ({
   onSecondaryClick,
   onPrimaryClick,
   productName = "fisdom",
-  confirmNominee = true,
+  confirmNominee = false,
 }) => {
   return (
     <BottomSheet
