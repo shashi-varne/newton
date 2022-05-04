@@ -126,7 +126,7 @@ const Selfie = (props) => {
       }
 
       if (isIndbEquityEnabled) {
-        params.live_score = 0;
+        params.live_score = "0";
         params.forced = true;
       }
 
