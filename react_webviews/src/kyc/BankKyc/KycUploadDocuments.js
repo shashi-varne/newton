@@ -3,10 +3,10 @@ import Container from "../common/Container";
 import { SUPPORTED_IMAGE_TYPES, VERIFICATION_DOC_OPTIONS } from "../constants";
 import { uploadBankDocuments } from "../common/api";
 import { getUrlParams, isEmpty } from "utils/validators";
-import { checkDLPanFetchAndApprovedStatus, getFlow, isDigilockerFlow } from "../common/functions";
+import { checkDLPanFetchAndApprovedStatus, getFlow, isDigilockerFlow, showTradingInfoScreen } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
-import { getConfig, isTradingEnabled, navigate as navigateFunc, isNewIframeDesktopLayout } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc, isNewIframeDesktopLayout, isTradingFlow } from "../../utils/functions";
 import toast from '../../common/ui/Toast'
 import { PATHNAME_MAPPER } from "../constants";
 import InternalStorage from "../common/InternalStorage";
@@ -68,7 +68,7 @@ const KycUploadDocuments = (props) => {
     if (isDigilockerFlow(kyc)) {
       setDlFlow(true);
     }
-    const tradeFlow = isTradingEnabled(kyc)
+    const tradeFlow = isTradingFlow(kyc)
     setTradingEnabled(tradeFlow);
 
     if (isReadyToInvest() || additional) {
@@ -150,7 +150,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const handleOtherPlatformNavigation = () => {
-    const nextStep = kyc.show_equity_charges_page ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
+    const nextStep = showTradingInfoScreen(kyc, config.productName) ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
     sendEvents('next', 'bank_verification_pending');
     if (additional) {
       navigate(PATHNAME_MAPPER.bankList);

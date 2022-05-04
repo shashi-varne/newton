@@ -4,6 +4,7 @@ import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 import WVSteps from "../../common/ui/Steps/WVSteps";
 import { isDocSubmittedOrApproved } from "../../kyc/common/functions";
 import { isReadyToInvest } from "../../kyc/services";
+import { isTradingFlow } from "../../utils/functions";
 import { isEmpty } from "../../utils/validators";
 
 
@@ -12,13 +13,14 @@ const stepsData = [
   { title: "Stocks & IPO", status: "Under process" },
   { title: "Futures & Options", status: "Under process" }
 ]
-const initialSubtitleText = "Trading & demat A/c will be ready in 24 - 48 hours. Till then you can start investing in mutual funds";
+const equitySubtitleText = "Trading & demat A/c will be ready in 24 - 48 hours. Till then you can start investing in mutual funds";
+const mfSubtitleText = "You are ready to invest";
 
 const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
   const [steps, setSteps] = useState(stepsData);
-  const [tradingEnabled, setTradingEnabled] = useState(false);
+  const [tradngFlow, setTradingFlow] = useState(false);
   const [showAccountStatus, setShowAccountStatus] = useState(false);
-  const [tradingSubtitleText, setTradingSubtitleText] = useState(initialSubtitleText);
+  const [tradingSubtitleText, setTradingSubtitleText] = useState(equitySubtitleText);
   
   const hideImage = isNewIframeDesktopLayout();
   const config = getConfig();
@@ -27,27 +29,36 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
   useEffect(() => {
     if(!isEmpty(kyc)) {
       const TRADING_ENABLED = isTradingEnabled(kyc);
-      setTradingEnabled(TRADING_ENABLED);
-      const displayAccountStatus = TRADING_ENABLED && !show_note;
-      setShowAccountStatus(displayAccountStatus);
+      const TRADING_FLOW = isTradingFlow(kyc);
+      setTradingFlow(TRADING_FLOW);
       const isReadyToInvestUser = isReadyToInvest();
+      const displayAccountStatus = (TRADING_FLOW && !show_note) || (TRADING_ENABLED && isReadyToInvestUser);
+      setShowAccountStatus(displayAccountStatus);
 
-      if (displayAccountStatus && kyc?.sign_status === "signed" && !isDocSubmittedOrApproved("equity_income")) {
-        setSteps((stepsArr) => stepsArr.filter((step) => step.title !== "Futures & Options"))
-      }
+      if (kyc.kyc_product_type === "equity") {
+        if (displayAccountStatus && kyc?.sign_status === "signed" && !isDocSubmittedOrApproved("equity_income")) {
+          setSteps((stepsArr) => stepsArr.filter((step) => step.title !== "Futures & Options"))
+        }
+    
+        if (isReadyToInvestUser && kyc?.mf_kyc_processed) {
+          setSteps((stepsArr) => stepsArr.filter((step) => step.title !== "Mutual fund"))
+          setTradingSubtitleText("Trading & demat A/c will be ready in 2 hours")
+        }
   
-      if (isReadyToInvestUser && kyc?.mf_kyc_processed) {
-        setSteps((stepsArr) => stepsArr.filter((step) => step.title !== "Mutual fund"))
-        setTradingSubtitleText("Trading & demat A/c will be ready in 2 hours")
-      }
-
-      if (isReadyToInvestUser && kyc.equity_investment_ready) {
-        setSteps((stepsArr) => stepsArr.map((step) => {
-          if (step.title === "Stocks & IPO" || (kyc.fno_active && step.title === "Futures & Options")) {
-            step.status = "Ready to invest"
-          }
-          return step;
-        }));
+        if (isReadyToInvestUser && kyc.equity_investment_ready) {
+          setSteps((stepsArr) => stepsArr.map((step) => {
+            if (step.title === "Stocks & IPO" || (kyc.fno_active && step.title === "Futures & Options")) {
+              step.status = "Ready to invest"
+            }
+            return step;
+          }));
+        }
+      } else {
+        if (isReadyToInvestUser) {
+          setTradingSubtitleText(mfSubtitleText);
+          let mfSteps = steps.filter(step => step.title === "Mutual fund");
+          setSteps(mfSteps)
+        }
       }
     }
   }, [kyc]);
@@ -65,14 +76,14 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
         {showAccountStatus && (
           <div className="title" data-aid='kyc-header-title'>KYC complete!</div>
         )}
-        {!tradingEnabled && (
+        {!tradngFlow && !showAccountStatus && (
           <div className="title" data-aid='kyc-header-title'>Great! Your KYC application is submitted!</div>
         )}
         {/* {(kyc?.kyc_status !== 'compliant' && !dl_flow) && (
           <div className="title" data-aid='kyc-header-title'>
             Kudos! KYC application is submitted!</div>
         )} */}
-        {!tradingEnabled && (
+        {!tradngFlow && !showAccountStatus && (
           <div className="text" data-aid='kyc-header-text'>
             <img src={require(`assets/eta_icon.svg`)} alt="" />
             It usually takes 1 working day for the documents to be verified and approved
