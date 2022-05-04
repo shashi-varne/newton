@@ -1,39 +1,53 @@
 import React from "react";
 import Stack from "@mui/material/Stack";
-import Typography from "../../../designSystem/atoms/Typography";
-import Container from "../../../designSystem/organisms/ContainerWrapper";
-import WrapperBox from "../../../designSystem/atoms/WrapperBox";
-import Button from "../../../designSystem/atoms/Button";
 import Icon from "../../../designSystem/atoms/Icon";
+import Button from "../../../designSystem/atoms/Button";
 import Status from "../../../designSystem/atoms/Status";
-import { NOMINEE } from "businesslogic/strings/nominee";
+import Typography from "../../../designSystem/atoms/Typography";
+import WrapperBox from "../../../designSystem/atoms/WrapperBox";
+import MenuOverlay from "../../../designSystem/atoms/MenuOverlay";
+import Container from "../../../designSystem/organisms/ContainerWrapper";
+import BottomSheet from "../../../designSystem/organisms/BottomSheet";
+import { NOMINEE_MENU_OPTIONS } from "businesslogic/constants/nominee";
+import {
+  NOMINEE_LANDING,
+  BOTTOMSHEETS_CONTENT,
+} from "businesslogic/strings/nominee";
 import { isEmpty, isArray } from "lodash-es";
 
 import "./Landing.scss";
 
-const LANDING_STRINGS = NOMINEE.nomineeLanding;
+const RESET_NOMINEES_STRINGS = BOTTOMSHEETS_CONTENT.resetNominees;
 const Landing = ({
   onClick,
   mfNomineeData = {},
   dematNomineeData = {},
   onMoreClick,
+  handleEdit,
+  onMenuClose,
+  anchorEl,
+  confirmEditNominees,
+  closeResetNominee,
+  openResetNominees = false,
+  sendEvents,
 }) => {
   return (
     <Container
       headerProps={{
-        dataAid: LANDING_STRINGS.title.dataAid,
-        headerTitle: LANDING_STRINGS.title.text,
+        dataAid: NOMINEE_LANDING.title.dataAid,
+        headerTitle: NOMINEE_LANDING.title.text,
       }}
       noFooter={true}
       className="nominee-landing"
       dataAid="nominee"
+      eventData={sendEvents("just_set_events")}
     >
       <WrapperBox elevation={1} className="nl-nominee-wrapper">
         <Typography
           variant="heading4"
-          dataAid={LANDING_STRINGS.mfTitle.dataAid}
+          dataAid={NOMINEE_LANDING.mfTitle.dataAid}
         >
-          {LANDING_STRINGS.mfTitle.text}
+          {NOMINEE_LANDING.mfTitle.text}
         </Typography>
         <NomineeDetails data={mfNomineeData} index={1} />
       </WrapperBox>
@@ -41,9 +55,9 @@ const Landing = ({
         <Stack direction="row" justifyContent="space-between" spacing="4px">
           <Typography
             variant="heading4"
-            dataAid={LANDING_STRINGS.dematTitle.dataAid}
+            dataAid={NOMINEE_LANDING.dematTitle.dataAid}
           >
-            {LANDING_STRINGS.dematTitle.text}
+            {NOMINEE_LANDING.dematTitle.text}
           </Typography>
           {!isEmpty(dematNomineeData?.statusTitle) && (
             <Status
@@ -71,6 +85,18 @@ const Landing = ({
           />
         )}
       </WrapperBox>
+      <BottomSheet
+        isOpen={openResetNominees}
+        onClose={closeResetNominee}
+        title={RESET_NOMINEES_STRINGS.title}
+        imageTitleSrc={require(`assets/caution.svg`)}
+        subtitle={RESET_NOMINEES_STRINGS.subtitle}
+        primaryBtnTitle={RESET_NOMINEES_STRINGS.primaryButtonTitle}
+        secondaryBtnTitle={RESET_NOMINEES_STRINGS.secondaryButtonTitle}
+        onPrimaryClick={closeResetNominee}
+        onSecondaryClick={confirmEditNominees}
+        dataAid={RESET_NOMINEES_STRINGS.dataAid}
+      />
     </Container>
   );
 };
