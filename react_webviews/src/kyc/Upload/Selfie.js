@@ -41,7 +41,8 @@ const Selfie = (props) => {
   const goBackPath = props.location?.state?.goBack || "";
 
   const config = getConfig();
-  const { productName, isNative, Web: isWeb, isSdk } = config;  
+  const { productName, isNative, Web: isWeb, isSdk, code } = config;
+  const isIndbEquityEnabled = code === "indb" && isSdkEquityEnabled;  
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -172,7 +173,7 @@ const Selfie = (props) => {
   const onLocationFetchSuccess = (data) => {
     setLocationData(data);
     closeLocnPermDialog();
-    if (!isNative && !isSdkEquityEnabled) {
+    if (!isNative && (!isSdkEquityEnabled || isIndbEquityEnabled)) {
       setIsLiveCamOpen(true);
     } else if (fileHandlerParams.length) {
       openFilePicker(...fileHandlerParams);
@@ -180,7 +181,7 @@ const Selfie = (props) => {
   }
 
   const onCaptureSuccess = async (...resultParams) => {
-    if (isWeb) {
+    if (isWeb || isIndbEquityEnabled) {
       setIsLiveCamOpen(false);
       
       const [result] = resultParams;
@@ -293,8 +294,8 @@ const Selfie = (props) => {
                   supportedFormats: SUPPORTED_IMAGE_TYPES,
                   onFileSelectComplete: onCaptureSuccess,
                   onFileSelectError: onCaptureFailure,
-                  fileHandlerParams: (isNative || isSdkEquityEnabled) ? { check_liveness: true } : {},
-                  customClickHandler: (isNative || isSdkEquityEnabled) ? onOpenCameraClick : ''
+                  fileHandlerParams: ((isNative || isSdkEquityEnabled) && !isIndbEquityEnabled) ? { check_liveness: true } : {},
+                  customClickHandler: ((isNative || isSdkEquityEnabled) && !isIndbEquityEnabled) ? onOpenCameraClick : ''
                 }}
               >
                 {file ? "Retake" : "Open Camera"}
@@ -307,7 +308,7 @@ const Selfie = (props) => {
               Know More
             </WVClickableTextElement>
           </div>
-          {isWeb &&
+          {(isWeb || isIndbEquityEnabled) &&
             <WVLiveCamera
               open={isLiveCamOpen}
               onCameraInit={onCameraInit}
