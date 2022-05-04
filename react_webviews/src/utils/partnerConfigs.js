@@ -607,7 +607,7 @@ export const partnerConfigs = {
     },
     referralConfig: {
       applyRefferal: true,
-      shareRefferal: true,
+      shareRefferal: false,
     },
   },
   sbnri: {
