@@ -42,7 +42,7 @@ const Selfie = (props) => {
 
   const config = getConfig();
   const { productName, isNative, Web: isWeb, isSdk, code } = config;
-  const isIndbEquityEnabled = code === "indb" && isSdkEquityEnabled;  
+  const isIndbEquityEnabled = ["indb", "test"].includes(code) && isSdkEquityEnabled;  
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
