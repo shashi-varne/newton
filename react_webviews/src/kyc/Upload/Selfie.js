@@ -15,7 +15,7 @@ import LocationPermission from "./LocationPermission";
 import KycUploadContainer from "../mini-components/KycUploadContainer";
 import SelfieUploadStatus from "../Equity/mini-components/SelfieUploadStatus";
 import { nativeCallback } from '../../utils/native_callback'
-import { isNewIframeDesktopLayout, openFilePicker } from "../../utils/functions";
+import { isIndbSdkTradingFlow, isNewIframeDesktopLayout, openFilePicker } from "../../utils/functions";
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 import { capitalize } from 'lodash';
 
@@ -42,7 +42,7 @@ const Selfie = (props) => {
 
   const config = getConfig();
   const { productName, isNative, Web: isWeb, isSdk, code } = config;
-  const isIndbEquityEnabled = ["indb", "test", "fisdom"].includes(code) && isSdkEquityEnabled;  
+  const isIndbEquityEnabled = ["indb", "fisdom"].includes(code) && isSdkEquityEnabled;  
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -58,7 +58,11 @@ const Selfie = (props) => {
   }
 
   const commonNavigation = () => {
-    if (!isDocSubmittedOrApproved("equity_income")) {
+    if (isIndbSdkTradingFlow(kyc) && !isDocSubmittedOrApproved("ipvvideo")) {
+      navigate(PATHNAME_MAPPER.uploadSelfieVideo, {
+        state: { goBack: PATHNAME_MAPPER.journey }
+      });
+    } else if (!isDocSubmittedOrApproved("equity_income")) {
       navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
     } else {
       if (isEquityEsignReady(kyc)) {
@@ -121,6 +125,11 @@ const Selfie = (props) => {
         params.kyc_product_type = 'equity';
       }
 
+      if (isIndbEquityEnabled) {
+        params.live_score = 0;
+        params.forced = true;
+      }
+
       setIsApiRunning("button");
       const result = await upload(file, 'identification', params);
       updateKyc(result.kyc);
@@ -173,7 +182,7 @@ const Selfie = (props) => {
   const onLocationFetchSuccess = (data) => {
     setLocationData(data);
     closeLocnPermDialog();
-    if (!isNative && (!isSdkEquityEnabled || isIndbEquityEnabled)) {
+    if (!isNative && !isSdkEquityEnabled) {
       setIsLiveCamOpen(true);
     } else if (fileHandlerParams.length) {
       openFilePicker(...fileHandlerParams);
@@ -181,7 +190,7 @@ const Selfie = (props) => {
   }
 
   const onCaptureSuccess = async (...resultParams) => {
-    if (isWeb || isIndbEquityEnabled) {
+    if (isWeb) {
       setIsLiveCamOpen(false);
       
       const [result] = resultParams;
@@ -295,7 +304,7 @@ const Selfie = (props) => {
                   onFileSelectComplete: onCaptureSuccess,
                   onFileSelectError: onCaptureFailure,
                   fileHandlerParams: ((isNative || isSdkEquityEnabled) && !isIndbEquityEnabled) ? { check_liveness: true } : {},
-                  customClickHandler: (isNative || isSdkEquityEnabled) ? onOpenCameraClick : ''
+                  customClickHandler: ((isNative || isSdkEquityEnabled) && !isIndbEquityEnabled) ? onOpenCameraClick : ''
                 }}
               >
                 {file ? "Retake" : "Open Camera"}
@@ -308,7 +317,7 @@ const Selfie = (props) => {
               Know More
             </WVClickableTextElement>
           </div>
-          {(isWeb || isIndbEquityEnabled) &&
+          {isWeb &&
             <WVLiveCamera
               open={isLiveCamOpen}
               onCameraInit={onCameraInit}
