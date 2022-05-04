@@ -304,7 +304,7 @@ const Selfie = (props) => {
                   onFileSelectComplete: onCaptureSuccess,
                   onFileSelectError: onCaptureFailure,
                   fileHandlerParams: ((isNative || isSdkEquityEnabled) && !isIndbEquityEnabled) ? { check_liveness: true } : {},
-                  customClickHandler: ((isNative || isSdkEquityEnabled) && !isIndbEquityEnabled) ? onOpenCameraClick : ''
+                  customClickHandler: (isNative || isSdkEquityEnabled) ? onOpenCameraClick : ''
                 }}
               >
                 {file ? "Retake" : "Open Camera"}
