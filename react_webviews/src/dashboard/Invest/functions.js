@@ -970,7 +970,7 @@ export function dateValidation(endDate, startDate) {
 }
 
 export function validateFeature(type) {
-  if (type.includes("ipo")) {
+  if (type === "ipo") {
     return isTradingEnabled();
   }
   return true;
