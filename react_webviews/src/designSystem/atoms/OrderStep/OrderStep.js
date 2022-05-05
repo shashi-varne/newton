@@ -98,6 +98,7 @@ const OrderStep = (props) => {
               className="aos-subtitle"
               color={subtitleColor}
               dataAid="subtitle"
+              component="div"
             >
               {subtitle}
             </Typography>

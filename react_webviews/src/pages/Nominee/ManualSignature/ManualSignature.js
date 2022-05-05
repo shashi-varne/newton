@@ -16,37 +16,37 @@ const ManualSignature = ({ email, onClickDownloadForm }) => {
   const dynamicStepsSubtitle = (index, subtitle) => {
     if (index === 0) {
       return (
-        <Typography
-          color={"foundationColors.content.secondary"}
-          variant="body2"
-          component="div"
-          dataAid={"subtitle"}
-        >
-          {subtitle}
+        <>
+          <Typography
+            color={"foundationColors.content.secondary"}
+            variant="body2"
+          >
+            {subtitle}
+          </Typography>
           <Typography
             color={"foundationColors.content.primary"}
             variant="body2"
           >
             {email}
           </Typography>
-        </Typography>
+        </>
       );
     } else if (index === 2) {
       return (
-        <Typography
-          color={"foundationColors.content.primary"}
-          variant="body2"
-          component="div"
-          dataAid={"subtitle"}
-        >
-          {COMPANY_DETAILS.NAME}
+        <>
+          <Typography
+            color={"foundationColors.content.primary"}
+            variant="body2"
+          >
+            {COMPANY_DETAILS.NAME}
+          </Typography>
           <Typography
             color={"foundationColors.content.secondary"}
             variant="body2"
           >
             {COMPANY_DETAILS.ADDRESS}
           </Typography>
-        </Typography>
+        </>
       );
     } else {
       return subtitle;
