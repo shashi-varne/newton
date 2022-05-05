@@ -172,6 +172,9 @@ const Dropdown = (props) => {
         onClose={onClose}
         displayEmpty={true}
         renderValue={getValue}
+        inputProps={{
+          "data-aid": "et_text",
+        }}
         {...restProps}
       >
         {/* <Separator dataAid="1" /> */}
