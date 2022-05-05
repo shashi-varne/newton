@@ -299,6 +299,7 @@ export const partnerConfigs = {
     mobile: "+91-7829733111",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
+      stocksAndIpo: ["stocks", "ipo"],
       ourRecommendations: ["buildwealth", "savetax", "nps"],
     },
     styles: {
