@@ -15,7 +15,7 @@ import LocationPermission from "./LocationPermission";
 import KycUploadContainer from "../mini-components/KycUploadContainer";
 import SelfieUploadStatus from "../Equity/mini-components/SelfieUploadStatus";
 import { nativeCallback } from '../../utils/native_callback'
-import { isNewIframeDesktopLayout, openFilePicker } from "../../utils/functions";
+import { isIndbSdkTradingFlow, isNewIframeDesktopLayout, openFilePicker } from "../../utils/functions";
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 import { capitalize } from 'lodash';
 
@@ -41,7 +41,8 @@ const Selfie = (props) => {
   const goBackPath = props.location?.state?.goBack || "";
 
   const config = getConfig();
-  const { productName, isNative, Web: isWeb, isSdk } = config;  
+  const { productName, isNative, Web: isWeb, isSdk } = config;
+  const isIndbEquityEnabled = isIndbSdkTradingFlow(kyc);  
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -57,7 +58,11 @@ const Selfie = (props) => {
   }
 
   const commonNavigation = () => {
-    if (!isDocSubmittedOrApproved("equity_income")) {
+    if (isIndbEquityEnabled && !isDocSubmittedOrApproved("ipvvideo")) {
+      navigate(PATHNAME_MAPPER.uploadSelfieVideo, {
+        state: { goBack: PATHNAME_MAPPER.journey }
+      });
+    } else if (!isDocSubmittedOrApproved("equity_income")) {
       navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
     } else {
       if (isEquityEsignReady(kyc)) {
@@ -118,6 +123,11 @@ const Selfie = (props) => {
 
       if (isTradingFlow) {
         params.kyc_product_type = 'equity';
+      }
+
+      if (isIndbEquityEnabled) {
+        params.live_score = "0";
+        params.forced = true;
       }
 
       setIsApiRunning("button");
@@ -293,7 +303,7 @@ const Selfie = (props) => {
                   supportedFormats: SUPPORTED_IMAGE_TYPES,
                   onFileSelectComplete: onCaptureSuccess,
                   onFileSelectError: onCaptureFailure,
-                  fileHandlerParams: (isNative || isSdkEquityEnabled) ? { check_liveness: true } : {},
+                  fileHandlerParams: ((isNative || isSdkEquityEnabled) && !isIndbEquityEnabled) ? { check_liveness: true } : {},
                   customClickHandler: (isNative || isSdkEquityEnabled) ? onOpenCameraClick : ''
                 }}
               >

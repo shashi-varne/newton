@@ -9,7 +9,7 @@ import { PATHNAME_MAPPER } from "../../constants";
 import "./commonStyles.scss";
 import { nativeCallback } from "../../../utils/native_callback";
 import WVSelect from "../../../common/ui/Select/WVSelect";
-import { getConfig, navigate as navigateFunc, } from "../../../utils/functions";
+import { getConfig, isIndbSdkTradingFlow, navigate as navigateFunc, } from "../../../utils/functions";
 
 const TRADING_EXPERIENCE_VALUES = [
   {
@@ -90,7 +90,9 @@ const TradingExperience = (props) => {
     if (!isDocSubmittedOrApproved("equity_identification")) {
         navigate(PATHNAME_MAPPER.uploadSelfie);
     } else {
-      if (!isDocSubmittedOrApproved("equity_income")) {
+      if (isIndbSdkTradingFlow(kyc) && !isDocSubmittedOrApproved("ipvvideo")) {
+        navigate(PATHNAME_MAPPER.uploadSelfieVideo);
+      } else if (!isDocSubmittedOrApproved("equity_income")) {
         navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
       } else {
         if (isEquityEsignReady(kyc)) {
