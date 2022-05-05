@@ -632,7 +632,7 @@ export const isTradingFlow = (kyc) => {
 export const isIndbSdkTradingFlow = (kyc) => {
   kyc = !isEmpty(kyc) ? kyc : storageService().getObject("kyc");
   const config = getConfig();
-	return isTradingEnabled(kyc) && config.isSdk && ["indb", "fisdom"].includes(config.code);
+	return isTradingEnabled(kyc) && config.isSdk && ["indb"].includes(config.code);
 };
 
 const { checkBeforeRedirection, checkAfterRedirection, backButtonHandler } = require(`./${getConfig().platform}_app`);

@@ -103,7 +103,11 @@ const IpvVideo = (props) => {
 
   const handleNavigation = () => {
     const fromStatePath = props.location?.state?.fromState || "";
-    const fromTradingFlow = [PATHNAME_MAPPER.uploadSelfie, PATHNAME_MAPPER.tradingExperience, PATHNAME_MAPPER.uploadPan].includes(fromStatePath)
+    const fromTradingFlow = [
+      PATHNAME_MAPPER.uploadSelfie,
+      PATHNAME_MAPPER.tradingExperience,
+      PATHNAME_MAPPER.uploadPan
+    ].includes(fromStatePath);
     if (isIndbSdkTradingFlow(kyc) && fromTradingFlow) {
       navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
     } else if (goBackPath) {

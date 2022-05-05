@@ -225,7 +225,7 @@ export function getKycAppStatus(kyc) {
       { name: "sign", keys: ["doc_status"] },
     ];
     if (isIndbSdkTradingFlow(kyc)) {
-      fieldsToCheck = [...fieldsToCheck, { name: "ipvvideo", keys: ["doc_status"] }]
+      fieldsToCheck = [...fieldsToCheck, { name: "ipvvideo", keys: ["doc_status"] }];
     }
   } else {
     fieldsToCheck = [
