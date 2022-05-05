@@ -2,9 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Box, Stack } from "@mui/material";
 import Typography from "../Typography";
-import { isEmpty } from "lodash";
+import { isEmpty, noop } from "lodash";
 import Separator from "../Separator";
-
+import Button from "../Button/Button";
 import "./OrderStep.scss";
 
 export const ORDER_STEP_VARIANTS = {
@@ -34,6 +34,8 @@ const OrderStep = (props) => {
     children,
     variant = ORDER_STEP_VARIANTS.DEFAULT,
     showStepLine,
+    buttonTitle = "",
+    onClickButton = noop,
   } = props;
 
   return (
@@ -75,9 +77,10 @@ const OrderStep = (props) => {
         )}
       </div>
       <Stack spacing="8px" direction="row" sx={{ display: "flex", flex: 1 }}>
-        <Box
-          sx={{ display: "flex", flex: 1, flexDirection: "column" }}
+        <Stack
+          sx={{ display: "flex", flex: 1 }}
           direction="column"
+          spacing="4px"
         >
           {!isEmpty(title) && (
             <Typography
@@ -100,7 +103,15 @@ const OrderStep = (props) => {
             </Typography>
           )}
           {children}
-        </Box>
+          {!isEmpty(buttonTitle) && (
+            <Button
+              size={"small"}
+              variant={"link"}
+              title={buttonTitle}
+              onClick={onClickButton}
+            />
+          )}
+        </Stack>
         {!isEmpty(label) && (
           <Typography variant="body2" dataAid="label" color={labelColor}>
             {label}
