@@ -12,7 +12,7 @@ import {
 } from "businesslogic/constants/nominee";
 import "./ManualSignature.scss";
 
-const ManualSignature = ({ email, onClickDownloadForm }) => {
+const ManualSignature = ({ email, onClickDownloadForm, sendEvents }) => {
   const dynamicStepsSubtitle = (index, subtitle) => {
     if (index === 0) {
       return (
@@ -55,6 +55,7 @@ const ManualSignature = ({ email, onClickDownloadForm }) => {
 
   return (
     <Container
+      eventData={sendEvents("just_set_events")}
       headerProps={{
         dataAid: MANUAL_SIGNATURE.title.dataAid,
         headerTitle: MANUAL_SIGNATURE.title.text,
