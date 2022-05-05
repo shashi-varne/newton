@@ -224,6 +224,9 @@ export function getKycAppStatus(kyc) {
       { name: "nomination", keys: ["meta_data_status"] },
       { name: "sign", keys: ["doc_status"] },
     ];
+    if (isIndbSdkTradingFlow(kyc)) {
+      fieldsToCheck = [...fieldsToCheck, { name: "ipvvideo", keys: ["doc_status"] }]
+    }
   } else {
     fieldsToCheck = [
       { name: "pan", keys: ["doc_status", "meta_data_status"] },
