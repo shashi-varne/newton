@@ -3,7 +3,7 @@ import Popover from "@mui/material/Popover";
 import Box from "@mui/material/Box";
 import Typography from "../Typography";
 import PropTypes from "prop-types";
-import noop from "lodash/noop";
+import { noop, isObject } from "lodash";
 import "./MenuOverlay.scss";
 import { makeStyles } from "@mui/styles";
 
@@ -19,6 +19,7 @@ const MenuOverlay = (props) => {
     onClose = noop,
     onClickLabel = noop,
     options = [],
+    displayKey = "name",
     dataAid,
     anchorOriginVertical = "top",
     anchorOriginHorizontal = "right",
@@ -50,12 +51,13 @@ const MenuOverlay = (props) => {
         data-aid={`menuOverlay_${dataAid}`}
         className={"molecule-menu-overlay" + " " + classes.root}
       >
-        {options.map((label, index) => (
+        {options.map((data, index) => (
           <MenuListItem
             key={index}
             index={index + 1}
             onClick={handleLabelClick(index)}
-            label={label}
+            data={data}
+            displayKey={displayKey}
             labelColor={labelColor}
           />
         ))}
@@ -64,7 +66,9 @@ const MenuOverlay = (props) => {
   );
 };
 
-const MenuListItem = ({ index, onClick, label, labelColor }) => {
+const MenuListItem = ({ index, onClick, data, displayKey, labelColor }) => {
+  const labelName = isObject(data) ? data[displayKey] : data;
+
   return (
     <Box className="mo-item-wrapper" onClick={onClick}>
       <Typography
@@ -72,7 +76,7 @@ const MenuListItem = ({ index, onClick, label, labelColor }) => {
         variant={"body8"}
         color={labelColor}
       >
-        {label}
+        {labelName}
       </Typography>
     </Box>
   );
@@ -89,4 +93,5 @@ MenuOverlay.propTypes = {
   transformOriginVertical: PropTypes.string,
   transformOriginHorizontal: PropTypes.string,
   dataAid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  displayKey: PropTypes.string,
 };
