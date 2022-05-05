@@ -385,7 +385,8 @@ import isFunction from 'lodash/isFunction';
       } else if (json_data.partner === "obcweb") {
         set_session_storage("partner", "obc");
       } else {
-        set_session_storage("partner", json_data.partner);
+        const partner = json_data.partner.toLowerCase();
+        set_session_storage("partner", partner);
       }
       eventManager.emit(EVENT_MANAGER_CONSTANTS.updateAppTheme);
     }
@@ -401,7 +402,7 @@ import isFunction from 'lodash/isFunction';
       set_session_storage("banklist", json_data.user_data.bank_list);
       set_session_storage("firstlogin", json_data.user_data.user.firstlogin);
       if (json_data.user_data.partner.partner_code) {
-        const partner = json_data.user_data.partner.partner_code;
+        const partner = json_data.user_data.partner?.partner_code?.toLowerCase();
         if (partner === "bfdl") {
           set_session_storage("partner", "bfdlmobile");
         } else if (partner === "obcweb") {
