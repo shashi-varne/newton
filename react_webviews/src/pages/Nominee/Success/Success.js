@@ -6,6 +6,7 @@ import Container from "../../../designSystem/organisms/ContainerWrapper";
 import "./Success.scss";
 
 const Success = ({
+  sendEvents,
   onClick = () => {},
   productName = "fisdom",
   dataAid = "",
@@ -16,6 +17,7 @@ const Success = ({
 }) => {
   return (
     <Container
+      eventData={sendEvents("just_set_events")}
       headerProps={{
         headerSx: { display: "none" },
       }}
