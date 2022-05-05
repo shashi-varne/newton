@@ -20,14 +20,14 @@
       }
     }
 
-    .aos-title {
-      display: flex;
-      flex-grow: 1;
-    }
-
     .aos-line {
       max-width: 1px;
       align-self: center;
     }
+  }
+
+  .aos-title {
+    display: flex;
+    flex-grow: 1;
   }
 }

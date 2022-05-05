@@ -16,6 +16,7 @@ export default {
 export const Default = (args) => <OrderStep {...args} />;
 
 Default.args = {
+  buttonTitle: "continue",
   stepCount: 10,
   title: "Title",
   subtitle: "Subtitle",
