@@ -29,13 +29,6 @@ const ManualSignature = ({ email, onClickDownloadForm }) => {
           >
             {email}
           </Typography>
-          <Typography
-            color={"foundationColors.action.brand"}
-            variant="body2"
-            onClick={onClickDownloadForm}
-          >
-            Download forms
-          </Typography>
         </Typography>
       );
     } else if (index === 2) {
@@ -81,17 +74,22 @@ const ManualSignature = ({ email, onClickDownloadForm }) => {
         >
           {MANUAL_SIGNATURE.stepsTitle.text}
         </Typography>
-        {MANUAL_SIGNATURE_STEPS.map((item, index) => (
-          <OrderStep
-            key={index}
-            className="ms-order-step"
-            stepCount={index + 1}
-            title={item.title}
-            subtitle={dynamicStepsSubtitle(index, item.subtitle)}
-            variant={ORDER_STEP_VARIANTS.SUCCESSFUL}
-            showStepLine={index + 1 !== MANUAL_SIGNATURE_STEPS.length}
-          />
-        ))}
+        {MANUAL_SIGNATURE_STEPS.map((item, index) => {
+          const isLastItem = index + 1 !== MANUAL_SIGNATURE_STEPS.length;
+          return (
+            <OrderStep
+              key={index}
+              className="ms-order-step"
+              stepCount={index + 1}
+              title={item?.title}
+              subtitle={dynamicStepsSubtitle(index, item?.subtitle)}
+              variant={ORDER_STEP_VARIANTS.SUCCESSFUL}
+              showStepLine={isLastItem}
+              buttonTitle={item?.buttonTitle}
+              onClickButton={onClickDownloadForm}
+            />
+          );
+        })}
       </Stack>
     </Container>
   );

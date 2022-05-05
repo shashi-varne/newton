@@ -136,4 +136,5 @@ OrderStep.propTypes = {
   className: PropTypes.string,
   stepCount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   showStepLine: PropTypes.bool,
+  onClickButton: PropTypes.func,
 };
