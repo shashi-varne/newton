@@ -42,9 +42,10 @@ const esignStepsImageMapper = (productName, index) => {
   return stepImageList[index].imgSrc;
 };
 
-const ESignLanding = ({ productName, onClickProceed }) => {
+const ESignLanding = ({ sendEvents, productName, onClickProceed }) => {
   return (
     <Container
+      sendEvents={sendEvents("just_set_events")}
       headerProps={{
         dataAid: ESIGN_LANDING.title.dataAid,
         headerTitle: ESIGN_LANDING.title.text,

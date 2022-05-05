@@ -6,10 +6,31 @@ const ESignLandingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const { productName } = useMemo(getConfig, []);
 
-  const handleProceed = () => {};
+  const sendEvents = (userAction) => {
+    const eventObj = {
+      event_name: "nominee",
+
+      properties: {
+        user_action: userAction || "",
+        screen_name: "esign_landing",
+      },
+    };
+
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
+  const handleProceed = () => {
+    const userAction = "next";
+    sendEvents(userAction);
+  };
 
   return (
     <WrappedComponent
+      sendEvents={sendEvents}
       onClickProceed={handleProceed}
       productName={productName}
     />
