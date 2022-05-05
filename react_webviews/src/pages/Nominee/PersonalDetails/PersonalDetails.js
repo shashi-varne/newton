@@ -4,8 +4,12 @@ import Checkbox from "../../../designSystem/atoms/Checkbox";
 import Typography from "../../../designSystem/atoms/Typography";
 import Dropdown from "../../../designSystem/molecules/Dropdown";
 import InputField from "../../../designSystem/molecules/InputField";
+import BottomSheet from "../../../designSystem/organisms/BottomSheet";
 import Container from "../../../designSystem/organisms/ContainerWrapper";
-import { NOMINEE } from "businesslogic/strings/nominee";
+import {
+  PERSONAL_DETAILS,
+  BOTTOMSHEETS_CONTENT,
+} from "businesslogic/strings/nominee";
 import {
   NOMINEE_RELATIONSHIP,
   PERSONAL_DETAILS_FORM_MAPPER,
@@ -13,7 +17,8 @@ import {
 import { isEmpty } from "lodash-es";
 
 import "./PersonalDetails.scss";
-const PERSONAL_DETAILS_STRINGS = NOMINEE.personalDetails;
+
+const EXIT_NOMINEE = BOTTOMSHEETS_CONTENT.exitNominee;
 const PersonalDetails = ({
   onClick,
   isMinor,
@@ -22,17 +27,17 @@ const PersonalDetails = ({
   onChange,
   availableShare = "",
   handleCheckbox,
-  sendEvents
+  sendEvents,
 }) => {
   return (
     <Container
       headerProps={{
-        dataAid: PERSONAL_DETAILS_STRINGS.title.dataAid,
-        headerTitle: PERSONAL_DETAILS_STRINGS.title.text,
+        dataAid: PERSONAL_DETAILS.title.dataAid,
+        headerTitle: PERSONAL_DETAILS.title.text,
       }}
       footer={{
         button1Props: {
-          title: PERSONAL_DETAILS_STRINGS.buttonTitle,
+          title: PERSONAL_DETAILS.buttonTitle,
           onClick,
         },
       }}
@@ -41,12 +46,12 @@ const PersonalDetails = ({
       eventData={sendEvents("just_set_events")}
     >
       <Typography
-        dataAid={PERSONAL_DETAILS_STRINGS.personalDetailsSubtext.dataAid}
+        dataAid={PERSONAL_DETAILS.personalDetailsSubtext.dataAid}
         variant="heading4"
         sx={{ pt: "24px" }}
         component="div"
       >
-        {PERSONAL_DETAILS_STRINGS.personalDetailsSubtext.text}
+        {PERSONAL_DETAILS.personalDetailsSubtext.text}
       </Typography>
       <Stack
         direction="row"
@@ -57,14 +62,14 @@ const PersonalDetails = ({
         <Checkbox dataAid="1" checked={isMinor} onChange={handleCheckbox} />
         <Typography
           variant="body2"
-          dataAid={PERSONAL_DETAILS_STRINGS.minorNominee.dataAid}
+          dataAid={PERSONAL_DETAILS.minorNominee.dataAid}
           color="foundationColors.content.secondary"
         >
-          {PERSONAL_DETAILS_STRINGS.minorNominee.text}
+          {PERSONAL_DETAILS.minorNominee.text}
         </Typography>
       </Stack>
       <InputField
-        label={PERSONAL_DETAILS_STRINGS.formLabels.name}
+        label={PERSONAL_DETAILS.formLabels.name}
         value={formData.name}
         onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.name)}
         dataAid="1"
@@ -72,7 +77,7 @@ const PersonalDetails = ({
         helperText={errorData.name}
       />
       <InputField
-        label={PERSONAL_DETAILS_STRINGS.formLabels.dob}
+        label={PERSONAL_DETAILS.formLabels.dob}
         value={formData.dob}
         onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.dob)}
         dataAid="2"
@@ -85,7 +90,7 @@ const PersonalDetails = ({
       />
       <Dropdown
         options={NOMINEE_RELATIONSHIP}
-        label={PERSONAL_DETAILS_STRINGS.formLabels.relationship}
+        label={PERSONAL_DETAILS.formLabels.relationship}
         dataAid={PERSONAL_DETAILS_FORM_MAPPER.relationship}
         onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.relationship)}
         value={formData.relationship}
@@ -95,7 +100,7 @@ const PersonalDetails = ({
       {!isMinor && (
         <>
           <InputField
-            label={PERSONAL_DETAILS_STRINGS.formLabels.mobile}
+            label={PERSONAL_DETAILS.formLabels.mobile}
             value={formData.mobile}
             onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.mobile)}
             inputMode="numeric"
@@ -107,7 +112,7 @@ const PersonalDetails = ({
             helperText={errorData.mobile}
           />
           <InputField
-            label={PERSONAL_DETAILS_STRINGS.formLabels.email}
+            label={PERSONAL_DETAILS.formLabels.email}
             value={formData.email}
             onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.email)}
             dataAid="4"
@@ -117,23 +122,23 @@ const PersonalDetails = ({
         </>
       )}
       <Typography
-        dataAid={PERSONAL_DETAILS_STRINGS.percentageOfHoldings.dataAid}
+        dataAid={PERSONAL_DETAILS.percentageOfHoldings.dataAid}
         variant="heading4"
         sx={{ mt: "24px" }}
         component="div"
       >
-        {PERSONAL_DETAILS_STRINGS.percentageOfHoldings.text}
+        {PERSONAL_DETAILS.percentageOfHoldings.text}
       </Typography>
       <Typography
-        dataAid={PERSONAL_DETAILS_STRINGS.percentageSubtext.dataAid}
+        dataAid={PERSONAL_DETAILS.percentageSubtext.dataAid}
         variant="body2"
         component="div"
         color="foundationColors.content.secondary"
       >
-        {availableShare}% {PERSONAL_DETAILS_STRINGS.percentageSubtext.text}
+        {availableShare}% {PERSONAL_DETAILS.percentageSubtext.text}
       </Typography>
       <InputField
-        label={PERSONAL_DETAILS_STRINGS.formLabels.share}
+        label={PERSONAL_DETAILS.formLabels.share}
         inputMode="numeric"
         value={formData.share}
         dataAid={isMinor ? "3" : "5"}
@@ -143,21 +148,21 @@ const PersonalDetails = ({
         }}
         error={!isEmpty(errorData.share)}
         helperText={
-          errorData.share || PERSONAL_DETAILS_STRINGS.formLabels.shareHelperText
+          errorData.share || PERSONAL_DETAILS.formLabels.shareHelperText
         }
       />
       {isMinor && (
         <>
           <Typography
-            dataAid={PERSONAL_DETAILS_STRINGS.guardianSubtext.dataAid}
+            dataAid={PERSONAL_DETAILS.guardianSubtext.dataAid}
             variant="heading4"
             component="div"
             sx={{ mt: "24px" }}
           >
-            {PERSONAL_DETAILS_STRINGS.guardianSubtext.text}
+            {PERSONAL_DETAILS.guardianSubtext.text}
           </Typography>
           <InputField
-            label={PERSONAL_DETAILS_STRINGS.formLabels.guardianName}
+            label={PERSONAL_DETAILS.formLabels.guardianName}
             value={formData.guardianName}
             onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.guardianName)}
             dataAid="4"
@@ -166,7 +171,7 @@ const PersonalDetails = ({
           />
           <Dropdown
             options={NOMINEE_RELATIONSHIP}
-            label={PERSONAL_DETAILS_STRINGS.formLabels.guardianRelationship}
+            label={PERSONAL_DETAILS.formLabels.guardianRelationship}
             dataAid={PERSONAL_DETAILS_FORM_MAPPER.guardianRelationship}
             onChange={onChange(
               PERSONAL_DETAILS_FORM_MAPPER.guardianRelationship
@@ -176,7 +181,7 @@ const PersonalDetails = ({
             helperText={errorData.guardianRelationship}
           />
           <InputField
-            label={PERSONAL_DETAILS_STRINGS.formLabels.mobile}
+            label={PERSONAL_DETAILS.formLabels.mobile}
             value={formData.mobile}
             onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.mobile)}
             dataAid="5"
@@ -188,7 +193,7 @@ const PersonalDetails = ({
             helperText={errorData.mobile}
           />
           <InputField
-            label={PERSONAL_DETAILS_STRINGS.formLabels.email}
+            label={PERSONAL_DETAILS.formLabels.email}
             value={formData.email}
             onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.email)}
             dataAid="6"
@@ -197,6 +202,16 @@ const PersonalDetails = ({
           />
         </>
       )}
+      <BottomSheet
+        isOpen={openExitNominee}
+        onClose={handleClose}
+        title={EXIT_NOMINEE.title}
+        imageTitleSrc={require(`assets/caution.svg`)}
+        subtitle={EXIT_NOMINEE.subtitle}
+        primaryBtnTitle={EXIT_NOMINEE.edit}
+        onPrimaryClick={onPrimaryClick}
+        dataAid={EXIT_NOMINEE.dataAid}
+      />
     </Container>
   );
 };
