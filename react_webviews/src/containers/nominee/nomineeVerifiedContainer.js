@@ -1,9 +1,7 @@
 import React, { useMemo } from "react";
 import Success from "../../pages/Nominee/Success";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
-import { NOMINEE } from "businesslogic/strings/nominee";
-
-const VerifiedStrings = NOMINEE.nomineeVerified;
+import { NOMINEE_VERIFIED } from "businesslogic/strings/nominee";
 
 const NomineeVerifiedContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
@@ -14,11 +12,11 @@ const NomineeVerifiedContainer = (WrappedComponent) => (props) => {
     <WrappedComponent
       onClick={onClick}
       productName={productName}
-      dataAid={VerifiedStrings.title.dataAid}
-      title={VerifiedStrings.successTitle.text}
-      titleDataAid={VerifiedStrings.successTitle.dataAid}
-      subtitle={VerifiedStrings.successSubtitle.text}
-      subtitleDataAid={VerifiedStrings.successSubtitle.dataAid}
+      dataAid={NOMINEE_VERIFIED.title.dataAid}
+      title={NOMINEE_VERIFIED.successTitle.text}
+      titleDataAid={NOMINEE_VERIFIED.successTitle.dataAid}
+      subtitle={NOMINEE_VERIFIED.successSubtitle.text}
+      subtitleDataAid={NOMINEE_VERIFIED.successSubtitle.dataAid}
     />
   );
 };
