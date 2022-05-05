@@ -28,12 +28,17 @@ const PersonalDetails = ({
   availableShare = "",
   handleCheckbox,
   sendEvents,
+  openExitNominee,
+  handleClose,
+  handleExit,
+  onBackClick,
 }) => {
   return (
     <Container
       headerProps={{
         dataAid: PERSONAL_DETAILS.title.dataAid,
         headerTitle: PERSONAL_DETAILS.title.text,
+        onBackClick,
       }}
       footer={{
         button1Props: {
@@ -208,8 +213,10 @@ const PersonalDetails = ({
         title={EXIT_NOMINEE.title}
         imageTitleSrc={require(`assets/caution.svg`)}
         subtitle={EXIT_NOMINEE.subtitle}
-        primaryBtnTitle={EXIT_NOMINEE.edit}
-        onPrimaryClick={onPrimaryClick}
+        primaryBtnTitle={EXIT_NOMINEE.primaryButtonTitle}
+        secondaryBtnTitle={EXIT_NOMINEE.secondaryButtonTitle}
+        onPrimaryClick={handleClose}
+        onSecondaryClick={handleExit}
         dataAid={EXIT_NOMINEE.dataAid}
       />
     </Container>

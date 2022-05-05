@@ -26,6 +26,7 @@ const personalDetailsContainer = (WrappedComponent) => (props) => {
   const [isMinor, setIsMinor] = useState(false);
   const [formData, setFormData] = useState(DEFAULT_FORM_DATA);
   const [errorData, setErrorData] = useState(DEFAULT_FORM_DATA);
+  const [openExitNominee, setOpenExitNominee] = useState(false);
 
   const availableShare = 20;
 
@@ -101,6 +102,12 @@ const personalDetailsContainer = (WrappedComponent) => (props) => {
     setErrorData(errorInfo);
   };
 
+  const handleExitNominee = (value) => () => {
+    setOpenExitNominee(value);
+  };
+
+  const handleExit = () => {};
+
   return (
     <WrappedComponent
       isMinor={isMinor}
@@ -111,6 +118,10 @@ const personalDetailsContainer = (WrappedComponent) => (props) => {
       onChange={onChange}
       handleCheckbox={handleCheckbox}
       sendEvents={sendEvents}
+      openExitNominee={openExitNominee}
+      handleClose={handleExitNominee(false)}
+      handleExit={handleExit}
+      onBackClick={handleExitNominee(true)}
     />
   );
 };
