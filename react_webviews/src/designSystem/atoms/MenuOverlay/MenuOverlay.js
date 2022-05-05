@@ -5,9 +5,17 @@ import Typography from "../Typography";
 import PropTypes from "prop-types";
 import noop from "lodash/noop";
 import "./MenuOverlay.scss";
+import { makeStyles } from "@mui/styles";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    backgroundColor: "transparent",
+  },
+}));
 
 const MenuOverlay = (props) => {
   const {
+    anchorEl,
     onClose = noop,
     onClickLabel = noop,
     options = [],
@@ -17,31 +25,20 @@ const MenuOverlay = (props) => {
     transformOriginVertical = "top",
     transformOriginHorizontal = "right",
     labelColor = "foundationColors.content.primary",
-    children = null,
   } = props;
-
-  const [anchorEl, setAnchorEl] = useState(false);
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-    onClose();
-  };
 
   const handleLabelClick = (index) => () => {
     onClickLabel(index);
-    handleClose();
   };
+  const classes = useStyles();
 
   return (
     <div>
-      <div onClick={handleClick}>{children}</div>
       <Popover
+        id={"menu-overlay"}
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
-        onClose={handleClose}
+        onClose={onClose}
         anchorOrigin={{
           vertical: anchorOriginVertical,
           horizontal: anchorOriginHorizontal,
@@ -51,7 +48,7 @@ const MenuOverlay = (props) => {
           horizontal: transformOriginHorizontal,
         }}
         data-aid={`menuOverlay_${dataAid}`}
-        className="molecule-menu-overlay"
+        className={"molecule-menu-overlay" + " " + classes.root}
       >
         {options.map((label, index) => (
           <MenuListItem
