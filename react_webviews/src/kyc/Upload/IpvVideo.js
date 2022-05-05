@@ -15,6 +15,7 @@ import KycUploadContainer from '../mini-components/KycUploadContainer'
 import Toast from '../../common/ui/Toast'
 import { PATHNAME_MAPPER } from '../constants'
 import { Imgc } from '../../common/ui/Imgc'
+import { isIndbSdkTradingFlow } from '../../utils/functions'
 
 const IpvVideo = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
@@ -101,7 +102,15 @@ const IpvVideo = (props) => {
   }
 
   const handleNavigation = () => {
-    if (goBackPath) {
+    const fromStatePath = props.location?.state?.fromState || "";
+    const fromTradingFlow = [
+      PATHNAME_MAPPER.uploadSelfie, 
+      PATHNAME_MAPPER.tradingExperience, 
+      PATHNAME_MAPPER.uploadPan
+    ].includes(fromStatePath);
+    if (isIndbSdkTradingFlow(kyc) && fromTradingFlow) {
+      navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
+    } else if (goBackPath) {
       navigate(goBackPath);
     } else {
       navigate(PATHNAME_MAPPER.uploadProgress)

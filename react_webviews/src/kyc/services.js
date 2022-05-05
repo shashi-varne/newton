@@ -1,7 +1,7 @@
 import Api from '../utils/api'
 import { storageService } from '../utils/validators'
 import toast from '../common/ui/Toast'
-import { getConfig, isTradingEnabled, isTradingFlow } from '../utils/functions'
+import { getConfig, isIndbSdkTradingFlow, isTradingEnabled, isTradingFlow } from '../utils/functions'
 import { kycSubmit } from './common/api'
 import { isDigilockerFlow, isEquityApplSubmittedOrComplete, isRetroMfIRUser } from './common/functions'
 import eventManager from '../utils/eventManager'
@@ -224,6 +224,9 @@ export function getKycAppStatus(kyc) {
       { name: "nomination", keys: ["meta_data_status"] },
       { name: "sign", keys: ["doc_status"] },
     ];
+    if (isIndbSdkTradingFlow(kyc)) {
+      fieldsToCheck = [...fieldsToCheck, { name: "ipvvideo", keys: ["doc_status"] }];
+    }
   } else {
     fieldsToCheck = [
       { name: "pan", keys: ["doc_status", "meta_data_status"] },
@@ -393,6 +396,7 @@ export function getKycAppStatus(kyc) {
 }
 
 export function getDocuments(userKyc) {
+  const isIndbTradingFlow = isIndbSdkTradingFlow(userKyc);
   if(userKyc.kyc_status === 'compliant') {
     let documents = [
       {
@@ -411,6 +415,13 @@ export function getDocuments(userKyc) {
         approved_image: "selfie_approved.svg",
       },
       {
+        key: "selfie_video",
+        title: "Selfie video (IPV)",
+        doc_status: userKyc.ipvvideo.doc_status,
+        default_image: 'video_default.svg',
+        approved_image: "video_approved.svg",
+      },
+      {
         key: "bank",
         title: "Bank details",
         doc_status: userKyc.bank.meta_data_status,
@@ -425,6 +436,10 @@ export function getDocuments(userKyc) {
         approved_image: "sign_approved.svg",
       }
     ];
+
+    if (!isIndbTradingFlow) {
+      documents.splice(1, 1);
+    }
 
     if (!isTradingEnabled(userKyc)) {
       // Removing Pan and Selfie
@@ -499,7 +514,7 @@ export function getDocuments(userKyc) {
     documents.splice(2, 0, data);
   }
 
-  if (isDigilockerFlow(userKyc)) {
+  if (isDigilockerFlow(userKyc) && !isIndbTradingFlow) {
     // removing selfie video (IPV)
     documents.splice(3, 1);
   }
