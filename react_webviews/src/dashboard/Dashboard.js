@@ -51,8 +51,7 @@ import PaymentNativeCallback from "./nps/components/paymentCallback";
 import ThemeWrapper from "../theme/ThemeWrapper";
 import fundDetailsV2Container from "../containers/fundDetailsV2/fundDetailsV2Container";
 import mfOrderContainer from "../containers/mfOrder/mfOrderContainer";
-import NomineeVerifiedContainer from '../containers/nominee/nomineeVerifiedContainer'
-import NomineeSubmittedContainer from '../containers/nominee/nomineeSubmittedContainer'
+import Nominee from "../pages/Nominee";
 
 const Home = (props) => {
   const config = getConfig(); 
@@ -201,8 +200,7 @@ const Home = (props) => {
           <Route path={`${url}diyv2`} component={DIYV2} />
           <Route path={`${url}fund-details-v2`} component={fundDetailsV2Container} />
           <Route path={`${url}mf-orders`} component={mfOrderContainer} />
-          <Route path={`${url}nominee-verified`} omponent={NomineeVerifiedContainer} />
-          <Route path={`${url}nominee-submitted`} component={NomineeSubmittedContainer} />
+          <Route path={`${url}nominee`} component={Nominee} />
         </ThemeWrapper>
         <Route component={NotFound} />
       </Switch>
