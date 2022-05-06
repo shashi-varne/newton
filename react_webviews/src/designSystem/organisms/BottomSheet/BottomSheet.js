@@ -50,7 +50,9 @@ const BottomSheet = ({
   onSecondaryClick,
   primaryBtnProps,
   secondaryBtnProps,
-  dataAid
+  dataAid,
+  imageSrc,
+  imageSrcProps,
 }) => {
   const handleOnClose = useCallback(
     (event, reason) => {
@@ -71,14 +73,22 @@ const BottomSheet = ({
       onBackdropClick={onBackdropClick}
       data-aid={`bottomsheet_${dataAid}`}
     >
-      <Stack direction='column' spacing={1} className='bottom-sheet-wrapper'>
+      <Stack direction='column' spacing={1} className={`bottom-sheet-wrapper ${imageSrc && `bottom-sheet-icon-wrapper`}`}>
         <Stack justifyContent='center' alignItems='center' className='btm-sheet-indicator'>
           <Box
             component='span'
             sx={{ backgroundColor: 'foundationColors.supporting.athensGrey' }}
           />
         </Stack>
-
+        {imageSrc && (
+          <Icon
+            size='132px'
+            src={imageSrc}
+            className='btn-sheet-img'
+            dataAid="top"
+            {...imageSrcProps}
+          />
+        )}
         <Stack direction='row' alignItems='center' spacing={1}>
           {imageTitleSrc && (
             <Icon
@@ -89,7 +99,7 @@ const BottomSheet = ({
             />
           )}
           {title && (
-            <Typography variant='heading3' color={titleColor} component='div' dataAid='title'>
+            <Typography className="btn-sheet-title" variant='heading3' color={titleColor} component='div' dataAid='title'>
               {title}
             </Typography>
           )}
@@ -112,7 +122,7 @@ const BottomSheet = ({
         </Stack>
 
         {subtitle && (
-          <Typography variant='body2' color={subtitleColor} component='div' dataAid='subtitle'>
+          <Typography className="btn-sheet-subtitle" variant='body2' color={subtitleColor} component='div' dataAid='subtitle'>
             {subtitle}
           </Typography>
         )}
