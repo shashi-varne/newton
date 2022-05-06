@@ -42,37 +42,49 @@ export default {
 };
 
 export const Default = (args) => {
+  const [anchorEl, setAnchorEl] = useState(false);
+
+  const handleClick = (event) => {
+    console.log({ current: event.currentTarget });
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <div
       style={{
         minHeight: "400px",
         display: "flex",
         justifyContent: "center",
-        alignItems: "flex-end",
+        alignItems: "center",
       }}
     >
+      <div
+        style={{
+          cursor: "pointer",
+          padding: "10px 16px",
+          width: "fit-content",
+          textAlign: "center",
+          borderRadius: "8px",
+          backgroundColor: "#E7E7E7",
+        }}
+        aria-owns={anchorEl ? "menu-overlay" : undefined}
+        aria-haspopup="true"
+        onClick={handleClick}
+      >
+        SHOW OVERLAY
+      </div>
       <MenuOverlay
         {...args}
-        onClose={(event) => {
-          console.log("closing menu");
-        }}
+        anchorEl={anchorEl}
+        onClose={handleClose}
         onClickLabel={(index) => {
           console.log("clicked label", index);
         }}
-      >
-        <Box
-          style={{
-            cursor: "pointer",
-            padding: "10px 16px",
-            width: "fit-content",
-            textAlign: "center",
-            borderRadius: "8px",
-            backgroundColor: "#E7E7E7",
-          }}
-        >
-          SHOW OVERLAY
-        </Box>
-      </MenuOverlay>
+      />
     </div>
   );
 };
