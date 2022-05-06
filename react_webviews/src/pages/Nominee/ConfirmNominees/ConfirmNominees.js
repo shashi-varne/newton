@@ -24,20 +24,10 @@ const ConfirmNominees = ({
   handleRemoveNominee,
   handleNominees,
   openNomineeTab = [],
+  isRemoveSheetOpen,
+  closeRemoveSheet,
+  openRemoveSheet,
 }) => {
-  const [selectedIndex, setSelectedIndex] = React.useState("");
-  const [isRemoveSheetOpen, setRemoveSheetOpen] = React.useState(false);
-
-  const closeRemoveSheet = () => {
-    setSelectedIndex("");
-    setRemoveSheetOpen(false);
-  };
-
-  const openRemoveSheet = (index) => {
-    setSelectedIndex(index);
-    setRemoveSheetOpen(true);
-  };
-
   return (
     <Container
       headerProps={{
@@ -318,10 +308,7 @@ const ConfirmNominees = ({
         primaryBtnTitle={REMOVE_NOMINEE.cancel}
         secondaryBtnTitle={REMOVE_NOMINEE.title}
         onPrimaryClick={closeRemoveSheet}
-        onSecondaryClick={() => {
-          handleRemoveNominee(selectedIndex);
-          closeRemoveSheet();
-        }}
+        onSecondaryClick={handleRemoveNominee}
         dataAid={REMOVE_NOMINEE.dataAid}
       />
     </Container>
