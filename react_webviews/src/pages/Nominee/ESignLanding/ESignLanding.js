@@ -48,11 +48,11 @@ const ESignLanding = ({ sendEvents, productName, onClickProceed }) => {
       sendEvents={sendEvents("just_set_events")}
       headerProps={{
         dataAid: ESIGN_LANDING.title.dataAid,
-        headerTitle: ESIGN_LANDING.title.text,
+        headerTitle: "",
       }}
       footer={{
         button1Props: {
-          title: ESIGN_LANDING.CtaText,
+          title: ESIGN_LANDING.ctaText,
           onClick: { onClickProceed },
         },
       }}
