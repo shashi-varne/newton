@@ -7,6 +7,7 @@ import addressDetailsContainer from "../../containers/nominee/addressDetailsCont
 import confirmNomineesContainer from "../../containers/nominee/confirmNomineesContainer";
 import NomineeVerifiedContainer from "../../containers/nominee/nomineeVerifiedContainer";
 import NomineeSubmittedContainer from "../../containers/nominee/nomineeSubmittedContainer";
+import manualSignatureContainer from "../../containers/nominee/manualSignatureContainer";
 
 const Nominee = (props) => {
   const { url } = props.match;
@@ -34,6 +35,10 @@ const Nominee = (props) => {
         exact
         path={`${url}/esign-landing`}
         component={ESignLaningContainer}
+      />
+      <Route
+        path={`${url}/manual-signature`}
+        component={manualSignatureContainer}
       />
     </Switch>
   );

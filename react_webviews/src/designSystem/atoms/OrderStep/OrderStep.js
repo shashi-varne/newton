@@ -98,6 +98,7 @@ const OrderStep = (props) => {
               className="aos-subtitle"
               color={subtitleColor}
               dataAid="subtitle"
+              component="div"
             >
               {subtitle}
             </Typography>
@@ -136,4 +137,5 @@ OrderStep.propTypes = {
   className: PropTypes.string,
   stepCount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   showStepLine: PropTypes.bool,
+  onClickButton: PropTypes.func,
 };
