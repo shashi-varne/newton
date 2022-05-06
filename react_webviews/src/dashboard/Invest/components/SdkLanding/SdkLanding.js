@@ -25,6 +25,7 @@ import {
   updateConsent,
   dateValidation,
   handleKycAndCampaign,
+  validateFeature,
 } from "../../functions";
 import toast from "../../../../common/ui/Toast";
 import { Imgc } from "../../../../common/ui/Imgc";
@@ -181,8 +182,17 @@ const SdkLanding = (props) => {
     }
   };
 
-  const handleMarketingBanner = (bannerType = "") => () => {
+  const handleMarketingBanner = (bannerType = "", actionUrl) => () => {
     sendEvents("marketing_banner_clicked", bannerType);
+    if (actionUrl) {
+      nativeCallback({
+        action: "open_in_browser",
+        message: {
+          url: actionUrl,
+        },
+      })
+      return;
+    }
     if (bannerType === "100_sip") {
       getRecommendationsAndNavigate({ amount: 100, navigate, handleLoader });
     } else {
@@ -345,10 +355,10 @@ const SdkLanding = (props) => {
               {baseConfig.landingMarketingBanners?.map((el, idx) => {
                 return (
                   <Fragment key={idx}>
-                    {dateValidation(el?.endDate, el?.startDate) && (
+                    {dateValidation(el?.endDate, el?.startDate) && validateFeature(el?.type) && (
                       <div
                         className="marketing-banner-icon-wrapper"
-                        onClick={handleMarketingBanner(el?.type)}
+                        onClick={handleMarketingBanner(el?.type, el?.actionUrl)}
                       >
                         <Imgc
                           src={require(`assets/${el.image}`)}

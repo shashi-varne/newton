@@ -969,6 +969,13 @@ export function dateValidation(endDate, startDate) {
   return false;
 }
 
+export function validateFeature(type) {
+  if (type === "ipo") {
+    return isTradingEnabled();
+  }
+  return true;
+}
+
 export const handleCampaign = ({ campaignData, handleLoader, handleDialogStates }) => () => {
   const campLink = campaignData.url;
   if(campaignData.campaign_name === "insurance_o2o_campaign"){

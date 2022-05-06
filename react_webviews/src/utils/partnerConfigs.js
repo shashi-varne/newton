@@ -54,23 +54,18 @@ export const commonCardsConfig = {
   },
   landingMarketingBanners: [
     {
-      image: "elss.svg",
-      type: "elss",
-      endDate: "03/31/2022",
-    }
-  ],
-  nfoBanners: [
-    {
-      image: "nfo1.svg",
-      type: "nfo",
-      endDate: "03/20/2022",
+      image: "ipo1.svg",
+      type: "ipo",
+      endDate: "05/08/2022",
+      actionUrl: "https://youtu.be/khCf5foDUmQ"
     },
     {
-      image: "nfo.svg",
-      type: "nfo",
-      endDate: "03/15/2022",
+      image: "ipo.svg",
+      type: "ipo",
+      endDate: "05/08/2022",
     }
   ],
+  nfoBanners: [],
 };
 
 export const basePartnerConfig = {
