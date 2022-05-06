@@ -26,13 +26,30 @@ const confirmNomineesContainer = (WrappedComponent) => (props) => {
   const [openNomineeTab, setOpenNomineeTabs] = useState([true]);
   const isMinor = false;
 
+  const [selectedIndex, setSelectedIndex] = React.useState("");
+  const [isRemoveSheetOpen, setRemoveSheetOpen] = React.useState(false);
+
+  const closeRemoveSheet = () => {
+    setSelectedIndex("");
+    setRemoveSheetOpen(false);
+  };
+
+  const openRemoveSheet = (index) => {
+    setSelectedIndex(index);
+    setRemoveSheetOpen(true);
+  };
+
   const onClick = () => {
     sendEvents("next");
   };
 
   const handleEditNominee = () => {};
 
-  const handleRemoveNominee = () => {};
+  const handleRemoveNominee = () => {
+    //remove selectedIndex
+    console.log("remove ", selectedIndex);
+    closeRemoveSheet();
+  };
 
   const handleNominees = (index) => () => {
     let data = [...openNomineeTab];
@@ -67,6 +84,9 @@ const confirmNomineesContainer = (WrappedComponent) => (props) => {
       handleEditNominee={handleEditNominee}
       handleRemoveNominee={handleRemoveNominee}
       handleNominees={handleNominees}
+      isRemoveSheetOpen={isRemoveSheetOpen}
+      closeRemoveSheet={closeRemoveSheet}
+      openRemoveSheet={openRemoveSheet}
     />
   );
 };

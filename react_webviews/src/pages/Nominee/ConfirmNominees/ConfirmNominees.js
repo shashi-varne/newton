@@ -5,9 +5,14 @@ import Separator from "../../../designSystem/atoms/Separator";
 import Typography from "../../../designSystem/atoms/Typography";
 import CollapsibleSection from "../../../designSystem/molecules/CollapsibleSection";
 import Container from "../../../designSystem/organisms/ContainerWrapper";
-import { CONFIRM_NOMINEES as CONFIRM_NOMINEES_STRINGS } from "businesslogic/strings/nominee";
-
+import {
+  CONFIRM_NOMINEES as CONFIRM_NOMINEES_STRINGS,
+  BOTTOMSHEETS_CONTENT,
+} from "businesslogic/strings/nominee";
+import BottomSheet from "../../../designSystem/organisms/BottomSheet";
 import "./ConfirmNominees.scss";
+
+const REMOVE_NOMINEE = BOTTOMSHEETS_CONTENT.removeNominee;
 
 const ConfirmNominees = ({
   onClick,
@@ -19,6 +24,9 @@ const ConfirmNominees = ({
   handleRemoveNominee,
   handleNominees,
   openNomineeTab = [],
+  isRemoveSheetOpen,
+  closeRemoveSheet,
+  openRemoveSheet,
 }) => {
   return (
     <Container
@@ -265,7 +273,7 @@ const ConfirmNominees = ({
                 />
                 <Button
                   dataAid={CONFIRM_NOMINEES_STRINGS.removeNominee.dataAid}
-                  onClick={handleRemoveNominee}
+                  onClick={() => openRemoveSheet(index)}
                   variant="link"
                   color="foundationColors.secondary.lossRed.400"
                   title={CONFIRM_NOMINEES_STRINGS.removeNominee.title}
@@ -291,6 +299,18 @@ const ConfirmNominees = ({
           </Typography>
         </div>
       )}
+      <BottomSheet
+        isOpen={isRemoveSheetOpen}
+        onClose={closeRemoveSheet}
+        title={REMOVE_NOMINEE.title}
+        imageTitleSrc={require(`assets/caution.svg`)}
+        subtitle={REMOVE_NOMINEE.subtitle}
+        primaryBtnTitle={REMOVE_NOMINEE.cancel}
+        secondaryBtnTitle={REMOVE_NOMINEE.title}
+        onPrimaryClick={closeRemoveSheet}
+        onSecondaryClick={handleRemoveNominee}
+        dataAid={REMOVE_NOMINEE.dataAid}
+      />
     </Container>
   );
 };
