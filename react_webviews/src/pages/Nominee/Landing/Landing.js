@@ -22,8 +22,9 @@ const Landing = ({
   onClick,
   mfNomineeData = {},
   dematNomineeData = {},
+  menuOptions,
   onMoreClick,
-  handleEdit,
+  onClickMenuItem,
   onMenuClose,
   anchorEl,
   confirmEditNominees,
@@ -96,6 +97,12 @@ const Landing = ({
         onPrimaryClick={closeResetNominee}
         onSecondaryClick={confirmEditNominees}
         dataAid={RESET_NOMINEES_STRINGS.dataAid}
+      />
+      <MenuOverlay
+        anchorEl={anchorEl}
+        onClose={onMenuClose}
+        onClickLabel={onClickMenuItem}
+        options={menuOptions}
       />
     </Container>
   );

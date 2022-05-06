@@ -18,6 +18,17 @@ const landingContainer = (WrappedComponent) => (props) => {
     dematStatus,
   ]);
   const onClick = () => {};
+  const menuOptions = [{ name: "Edit", value: "edit" }];
+
+  const onClickMenuItem = (index) => {
+    const item = menuOptions[index].value;
+    console.log("Clicked item", item);
+
+    if (item === "edit") {
+      handleResetNominee(true);
+    }
+    onMenuClose();
+  };
 
   const onMoreClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -55,9 +66,10 @@ const landingContainer = (WrappedComponent) => (props) => {
       dematNomineeData={dematNomineeData}
       openResetNominee={openResetNominee}
       onClick={onClick}
+      menuOptions={menuOptions}
       onMoreClick={onMoreClick}
       onMenuClose={onMenuClose}
-      handleEdit={handleResetNominee(true)}
+      onClickMenuItem={onClickMenuItem}
       closeResetNominee={handleResetNominee(false)}
       sendEvents={sendEvents}
     />
