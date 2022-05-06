@@ -87,12 +87,12 @@ class HealthInsuranceLanding extends Component {
         title: 'Super Top Up',
         subtitle: 'Boost your existing health insurance',
         icon: super_topup_icon
-      },
-      {
-        key: 'HOSPICASH',
-        title: 'Hospital Daily Cash',
-        subtitle: 'Get guaranteed cash on hospitalisation',
-        icon: ic_hospicash
+      // },
+      // {
+      //   key: 'HOSPICASH',
+      //   title: 'Hospital Daily Cash',
+      //   subtitle: 'Get guaranteed cash on hospitalisation',
+      //   icon: ic_hospicash
       }
     ];
 
