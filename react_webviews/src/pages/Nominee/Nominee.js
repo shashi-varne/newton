@@ -1,4 +1,5 @@
 import React from "react";
+import ESignLaningContainer from "../../containers/nominee/ESignLandingContainer";
 import { Route, Switch } from "react-router-dom";
 import landingContainer from "../../containers/nominee/landingContainer";
 import personalDetailsContainer from "../../containers/nominee/personalDetailsContainer";
@@ -29,6 +30,11 @@ const Nominee = (props) => {
       />
       <Route path={`${url}/verified`} component={NomineeVerifiedContainer} />
       <Route path={`${url}/submitted`} component={NomineeSubmittedContainer} />
+      <Route
+        exact
+        path={`${url}/esign-landing`}
+        component={ESignLaningContainer}
+      />
     </Switch>
   );
 };
