@@ -4,6 +4,8 @@ import landingContainer from "../../containers/nominee/landingContainer";
 import personalDetailsContainer from "../../containers/nominee/personalDetailsContainer";
 import addressDetailsContainer from "../../containers/nominee/addressDetailsContainer";
 import confirmNomineesContainer from "../../containers/nominee/confirmNomineesContainer";
+import NomineeVerifiedContainer from "../../containers/nominee/nomineeVerifiedContainer";
+import NomineeSubmittedContainer from "../../containers/nominee/nomineeSubmittedContainer";
 
 const Nominee = (props) => {
   const { url } = props.match;
@@ -25,6 +27,8 @@ const Nominee = (props) => {
         path={`${url}/confirm-nominees`}
         component={confirmNomineesContainer}
       />
+      <Route path={`${url}/verified`} component={NomineeVerifiedContainer} />
+      <Route path={`${url}/submitted`} component={NomineeSubmittedContainer} />
     </Switch>
   );
 };
