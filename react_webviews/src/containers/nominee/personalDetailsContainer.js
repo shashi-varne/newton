@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import PersonalDetails from "../../pages/Nominee/PersonalDetails";
 import { navigate as navigateFunc } from "../../utils/functions";
 import {
@@ -7,31 +7,49 @@ import {
   validateName,
   validateNumber,
 } from "../../utils/validators";
-
-import { PERSONAL_DETAILS_FORM_MAPPER } from "businesslogic/constants/nominee";
-import { validateFields } from "businesslogic/utils/nominee/functions";
 import { nativeCallback } from "../../utils/native_callback";
-const DEFAULT_FORM_DATA = {
-  [PERSONAL_DETAILS_FORM_MAPPER.name]: "",
-  [PERSONAL_DETAILS_FORM_MAPPER.mobile]: "",
-  [PERSONAL_DETAILS_FORM_MAPPER.relationship]: "",
-  [PERSONAL_DETAILS_FORM_MAPPER.guardianName]: "",
-  [PERSONAL_DETAILS_FORM_MAPPER.guardianRelationship]: "",
-  [PERSONAL_DETAILS_FORM_MAPPER.mobile]: "",
-  [PERSONAL_DETAILS_FORM_MAPPER.email]: "",
-  [PERSONAL_DETAILS_FORM_MAPPER.share]: "",
-};
+
+import {
+  PERSONAL_DETAILS_FORM_MAPPER,
+  DEFAULT_NOMINEE_PERSONAL_DETAILS,
+} from "businesslogic/constants/nominee";
+import {
+  validateFields,
+  getNomineePersonalDetails,
+  getAvailableShares
+} from "businesslogic/utils/nominee/functions";
+import {
+  getEquityNominationData,
+  getNomineeDetails,
+  updateNomineeDetails,
+} from "businesslogic/dataStore/reducers/nominee";
+import { useDispatch, useSelector } from "react-redux";
+import { NOMINEE_PATHNAME_MAPPER } from "../../pages/Nominee/common/constants";
+
 const personalDetailsContainer = (WrappedComponent) => (props) => {
+  const dispatch = useDispatch();
   const navigate = navigateFunc.bind(props);
-  const [isMinor, setIsMinor] = useState(false);
-  const [formData, setFormData] = useState(DEFAULT_FORM_DATA);
-  const [errorData, setErrorData] = useState(DEFAULT_FORM_DATA);
+  const nomineeDetails = useSelector((state) => getNomineeDetails(state));
+  const equityNominationData = useSelector((state) =>
+    getEquityNominationData(state)
+  );
+  const [isMinor, setIsMinor] = useState(nomineeDetails.isMinor);
+  const [formData, setFormData] = useState(
+    getNomineePersonalDetails(nomineeDetails)
+  );
+  const [errorData, setErrorData] = useState(DEFAULT_NOMINEE_PERSONAL_DETAILS);
   const [openExitNominee, setOpenExitNominee] = useState(false);
 
-  const availableShare = 20;
+  const availableShare = useMemo(
+    () => getAvailableShares(equityNominationData.eq_nominee_list),
+    [equityNominationData.eq_nominee_list]
+  );
 
   const handleCheckbox = () => {
     setIsMinor(!isMinor);
+    const errorInfo = { ...errorData };
+    errorInfo[PERSONAL_DETAILS_FORM_MAPPER.dob] = "";
+    setErrorData(errorInfo);
   };
 
   const onClick = () => {
@@ -49,13 +67,16 @@ const personalDetailsContainer = (WrappedComponent) => (props) => {
         PERSONAL_DETAILS_FORM_MAPPER.guardianRelationship
       );
     }
-    const result = validateFields(formData, keysToCheck);
+    const data = { ...formData, isMinor };
+    const result = validateFields(data, keysToCheck);
     if (!result.canSubmit) {
       const data = { ...errorData, ...result.errorData };
       setErrorData(data);
       return;
     }
     sendEvents("next");
+    dispatch(updateNomineeDetails(data));
+    navigate(NOMINEE_PATHNAME_MAPPER.addressDetails);
   };
 
   const sendEvents = (userAction) => {

@@ -1,15 +1,22 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Typography from "../../../designSystem/atoms/Typography";
 import InfoCard from "../../../designSystem/molecules/InfoCard";
 import WrapperBox from "../../../designSystem/atoms/WrapperBox";
 import Dropdown from "../../../designSystem/molecules/Dropdown";
 import InputField from "../../../designSystem/molecules/InputField";
 import Container from "../../../designSystem/organisms/ContainerWrapper";
+import { WVFilePickerWrapper } from "../../../common/ui/FileUploadWrapper/WVFilePickerWrapper";
+import NomineeSaved from "../../../featureComponent/Nominee/NomineeSaved";
+import ReviewNominee from "../../../featureComponent/Nominee/ReviewNominee";
+import HoldingPercentageFull from "../../../featureComponent/Nominee/HoldingPercentageFull";
+
 import { ADDRESS_DETAILS as ADDRESS_DETAILS_STRINGS } from "businesslogic/strings/nominee";
 import {
   NOMINEE_PROOF_OF_IDENTITY,
   ADDRESS_DETAILS_FORM_MAPPER,
 } from "businesslogic/constants/nominee";
+
+import { SUPPORTED_IMAGE_TYPES } from "../../../utils/constants";
 import { isEmpty } from "lodash-es";
 
 import "./AddressDetails.scss";
@@ -18,8 +25,25 @@ const AddressDetails = ({
   isMinor,
   formData = {},
   errorData = {},
+  confirmNominees,
   onChange,
   sendEvents,
+  frontDoc,
+  backDoc,
+  onFileSelectStart,
+  onFileSelectComplete,
+  onFileSelectError,
+  isWeb,
+  isButtonLoading,
+  poiData = {},
+  openNomineeSaved,
+  openReviewNominee,
+  openPercentageHoldingFull,
+  onSecondaryClick,
+  onPrimaryClick,
+  addAnotherNominee,
+  editNominee,
+  closeDialogStates,
 }) => {
   return (
     <Container
@@ -31,6 +55,7 @@ const AddressDetails = ({
         button1Props: {
           title: ADDRESS_DETAILS_STRINGS.buttonTitle,
           onClick,
+          isLoading: isButtonLoading,
         },
       }}
       className="nominee-personal-details"
@@ -116,14 +141,40 @@ const AddressDetails = ({
           {ADDRESS_DETAILS_STRINGS.poiNomineeTitle.text}
         </Typography>
       )}
-      <WrapperBox elevation={1} className="nad-info-wrapper">
-        <InfoCard
-          dataAid={ADDRESS_DETAILS_STRINGS.poiInfoTitle.dataAid}
-          title={ADDRESS_DETAILS_STRINGS.poiInfoTitle.text}
-          subtitle={ADDRESS_DETAILS_STRINGS.poiInfoSubtitle.text}
-          imgSrc={require(`assets/attach_button.svg`)}
+      <UploadContainer
+        filePickerProps={{
+          shouldCompress: isWeb,
+          nativePickerMethodName: "open_gallery",
+          fileName: "address_proof_front",
+          onFileSelectStart: onFileSelectStart,
+          onFileSelectComplete: onFileSelectComplete("front"),
+          onFileSelectError: onFileSelectError,
+          supportedFormats: SUPPORTED_IMAGE_TYPES,
+          customPickerId: "addressProofFront",
+        }}
+        dataAid={poiData?.numberOfDocs === 1 ? "" : "1"}
+        fileName={frontDoc?.name}
+        docSide="front"
+        poiData={poiData}
+      />
+      {poiData?.numberOfDocs === 2 && (
+        <UploadContainer
+          filePickerProps={{
+            shouldCompress: isWeb,
+            nativePickerMethodName: "open_gallery",
+            fileName: "address_proof_back",
+            onFileSelectStart: onFileSelectStart,
+            onFileSelectComplete: onFileSelectComplete("back"),
+            onFileSelectError: onFileSelectError,
+            supportedFormats: SUPPORTED_IMAGE_TYPES,
+            customPickerId: "addressProofBack",
+          }}
+          dataAid="2"
+          fileName={backDoc?.name}
+          docSide="back"
+          poiData={poiData}
         />
-      </WrapperBox>
+      )}
       <InputField
         label={ADDRESS_DETAILS_STRINGS.formLabels.password}
         value={formData.password}
@@ -133,8 +184,54 @@ const AddressDetails = ({
         helperText={errorData.password}
         type="password"
       />
+      <NomineeSaved
+        isOpen={openNomineeSaved}
+        onPrimaryClick={onPrimaryClick}
+        onSecondaryClick={onSecondaryClick}
+        confirmNominees={confirmNominees}
+        handleClose={closeDialogStates("openNomineeSaved")}
+      />
+      <ReviewNominee
+        isOpen={openReviewNominee}
+        onPrimaryClick={editNominee}
+        onSecondaryClick={addAnotherNominee}
+        handleClose={closeDialogStates("openReviewNominee")}
+      />
+      <HoldingPercentageFull
+        isOpen={openPercentageHoldingFull}
+        onPrimaryClick={editNominee}
+        handleClose={closeDialogStates("openPercentageHoldingFull")}
+      />
     </Container>
   );
 };
 
 export default AddressDetails;
+
+const UploadContainer = ({
+  filePickerProps = {},
+  dataAid,
+  fileName,
+  poiData = {},
+  docSide,
+}) => {
+  const title = useMemo(() => {
+    return !isEmpty(fileName)
+      ? fileName || poiData?.value
+      : !isEmpty(poiData)
+      ? `${poiData?.name} ${poiData.numberOfDocs === 2 ? docSide : ""}`
+      : ADDRESS_DETAILS_STRINGS.poiInfoTitle.text;
+  }, [poiData, fileName]);
+  return (
+    <WrapperBox elevation={1} className="nad-info-wrapper">
+      <WVFilePickerWrapper {...filePickerProps}>
+        <InfoCard
+          dataAid={`${ADDRESS_DETAILS_STRINGS.poiInfoTitle.dataAid}${dataAid}`}
+          title={title}
+          subtitle={ADDRESS_DETAILS_STRINGS.poiInfoSubtitle.text}
+          imgSrc={require(`assets/attach_button.svg`)}
+        />
+      </WVFilePickerWrapper>
+    </WrapperBox>
+  );
+};

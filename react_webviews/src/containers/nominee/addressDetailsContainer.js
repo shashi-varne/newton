@@ -1,25 +1,79 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import Api from "../../utils/api";
 import AddressDetails from "../../pages/Nominee/AddressDetails";
-import { navigate as navigateFunc } from "../../utils/functions";
+import ToastMessage from "../../designSystem/atoms/ToastMessage";
+import {
+  navigate as navigateFunc,
+  combinedDocBlob,
+} from "../../utils/functions";
 import { validateName, validateNumber } from "../../utils/validators";
-
-import { ADDRESS_DETAILS_FORM_MAPPER } from "businesslogic/constants/nominee";
-import { validateFields } from "businesslogic/utils/nominee/functions";
 import { nativeCallback } from "../../utils/native_callback";
-const DEFAULT_FORM_DATA = {
-  [ADDRESS_DETAILS_FORM_MAPPER.pincode]: "",
-  [ADDRESS_DETAILS_FORM_MAPPER.address]: "",
-  [ADDRESS_DETAILS_FORM_MAPPER.city]: "",
-  [ADDRESS_DETAILS_FORM_MAPPER.state]: "",
-  [ADDRESS_DETAILS_FORM_MAPPER.password]: "",
-  [ADDRESS_DETAILS_FORM_MAPPER.poi]: "",
-};
+import { useDispatch, useSelector } from "react-redux";
+
+import {
+  ADDRESS_DETAILS_FORM_MAPPER,
+  DEFAULT_NOMINEE_ADDRESS_DETAILS,
+} from "businesslogic/constants/nominee";
+import {
+  validateFields,
+  getNomineeAddressDetails,
+  getPoiData,
+  isDematNomineeStatusInit,
+  hideAddAnotherNominee,
+  getAvailableShares,
+} from "businesslogic/utils/nominee/functions";
+import {
+  getNomineeDetails,
+  updateNomineeDetails,
+  getEquityNominationData,
+  createNomineeRequest,
+} from "businesslogic/dataStore/reducers/nominee";
+
+import useLoadingState from "../../common/customHooks/useLoadingState";
+import useErrorState from "../../common/customHooks/useErrorState";
+
+import isEmpty from "lodash-es/isEmpty";
+import { NOMINEE_PATHNAME_MAPPER } from "../../pages/Nominee/common/constants";
+
+const screen = "addressDetails";
 
 const addressDetailsContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
-  const [formData, setFormData] = useState(DEFAULT_FORM_DATA);
-  const [errorData, setErrorData] = useState(DEFAULT_FORM_DATA);
-  const isMinor = false;
+  const dispatch = useDispatch();
+  const nomineeDetails = useSelector((state) => getNomineeDetails(state));
+  const equityNominationData = useSelector((state) =>
+    getEquityNominationData(state)
+  );
+  const { isButtonLoading } = useLoadingState(screen);
+  const { isUpdateFailed, errorMessage } = useErrorState(screen);
+
+  const [formData, setFormData] = useState(
+    getNomineeAddressDetails(nomineeDetails)
+  );
+  const [errorData, setErrorData] = useState(DEFAULT_NOMINEE_ADDRESS_DETAILS);
+  const [dialogStates, setDialogStates] = useState({
+    openNomineeSaved: false,
+    openReviewNominee: false,
+    openPercentageHoldingFull: false,
+  });
+
+  const [file, setFile] = useState(null);
+  const [backDoc, setBackDoc] = useState(null);
+  const [frontDoc, setFrontDoc] = useState(null);
+  const [fileLoading, setFileLoading] = useState(false);
+  const [previewFiles, setPreviewFiles] = useState(null);
+
+  const poiData = useMemo(() => getPoiData(formData.poi), [formData.poi]);
+  const confirmNominees = useMemo(
+    () => !hideAddAnotherNominee(equityNominationData.eq_nominee_list),
+    [equityNominationData.eq_nominee_list]
+  );
+
+  useEffect(() => {
+    if (isUpdateFailed && !isEmpty(errorMessage)) {
+      ToastMessage(errorMessage);
+    }
+  }, [isUpdateFailed]);
 
   const onClick = () => {
     const keysToCheck = [
@@ -30,12 +84,6 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
       ADDRESS_DETAILS_FORM_MAPPER.state,
       ADDRESS_DETAILS_FORM_MAPPER.poi,
     ];
-    if (isMinor) {
-      keysToCheck.push(
-        ADDRESS_DETAILS_FORM_MAPPER.guardianName,
-        ADDRESS_DETAILS_FORM_MAPPER.guardianRelationship
-      );
-    }
     const result = validateFields(formData, keysToCheck);
     if (!result.canSubmit) {
       const data = { ...errorData, ...result.errorData };
@@ -43,6 +91,53 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
       return;
     }
     sendEvents("next");
+    dispatch(updateNomineeDetails(formData));
+    let payload = {
+      Api,
+      screen,
+      data: {
+        ...nomineeDetails,
+        ...formData,
+      },
+      file: poiData.numberOfDocs === 2 ? file : frontDoc,
+      sagaCallback,
+    };
+    if (!isDematNomineeStatusInit(equityNominationData.friendly_status)) {
+      payload.requestId = equityNominationData.equity_nomination_request_id;
+    }
+    dispatch(createNomineeRequest(payload));
+  };
+
+  const sagaCallback = () => {
+    openDialog("openNomineeSaved");
+  };
+
+  const addAnotherNominee = () => {
+    navigate(NOMINEE_PATHNAME_MAPPER.personalDetails);
+  };
+
+  const editNominee = () => {
+    navigate(NOMINEE_PATHNAME_MAPPER.personalDetails, {
+      isEdit: true,
+    });
+  };
+
+  const handleConfirmNominees = () => {
+    if (getAvailableShares(equityNominationData.eq_nominee_list) < 100) {
+      openDialog("openReviewNominee");
+    }
+    navigate(NOMINEE_PATHNAME_MAPPER.confirmNominees);
+  };
+
+  const handlePrimaryClick = () => {
+    if (confirmNominees) {
+      handleConfirmNominees();
+    } else {
+      if (getAvailableShares(equityNominationData.eq_nominee_list) >= 100) {
+        openDialog("openPercentageHoldingFull");
+      }
+      addAnotherNominee();
+    }
   };
 
   const sendEvents = (userAction) => {
@@ -51,7 +146,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
       properties: {
         user_action: userAction || "",
         screen_name: "nominee_address_details",
-        minor_nominee: isMinor ? "yes" : "no",
+        minor_nominee: nomineeDetails.isMinor ? "yes" : "no",
         nominee_percentage_share: formData.share,
       },
     };
@@ -84,14 +179,85 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
     setErrorData(errorInfo);
   };
 
+  const mergeDocuments = () => {
+    if (previewFiles?.frontFile && previewFiles?.backFile) {
+      const fr = new Image(1280, 720);
+      const bc = new Image(1280, 720);
+      fr.src = previewFiles.frontFile;
+      bc.src = previewFiles.backFile;
+      const blob = combinedDocBlob(fr, bc, "address");
+      setFile(blob);
+    }
+  };
+
+  useEffect(() => {
+    mergeDocuments();
+  }, [previewFiles]);
+
+  const onFileSelectStart = () => {
+    setFileLoading(true);
+  };
+
+  const onFileSelectComplete = (docSide) => (file, fileBase64) => {
+    setFileLoading(false);
+    if (docSide === "front") {
+      setFrontDoc(file);
+      setPreviewFiles({
+        ...previewFiles,
+        frontFile: fileBase64,
+      });
+    } else {
+      setBackDoc(file);
+      setPreviewFiles({
+        ...previewFiles,
+        backFile: fileBase64,
+      });
+    }
+  };
+
+  const onFileSelectError = (err) => {
+    setFileLoading(false);
+    ToastMessage(err.message);
+  };
+
+  const closeDialogStates = (key) => () => {
+    setDialogStates({
+      ...dialogStates,
+      [key]: false,
+    });
+  };
+
+  const openDialog = (key) => {
+    setDialogStates({
+      ...dialogStates,
+      [key]: true,
+    });
+  };
+
   return (
     <WrappedComponent
-      isMinor={isMinor}
+      poiData={poiData}
+      backDoc={backDoc}
+      frontDoc={frontDoc}
       formData={formData}
       errorData={errorData}
+      isMinor={nomineeDetails.isMinor}
+      confirmNominees={confirmNominees}
+      openNomineeSaved={dialogStates.openNomineeSaved}
+      openReviewNominee={dialogStates.openReviewNominee}
+      openPercentageHoldingFull={dialogStates.openPercentageHoldingFull}
+      isButtonLoading={fileLoading || isButtonLoading}
       onClick={onClick}
       onChange={onChange}
       sendEvents={sendEvents}
+      onFileSelectStart={onFileSelectStart}
+      onFileSelectComplete={onFileSelectComplete}
+      onFileSelectError={onFileSelectError}
+      onPrimaryClick={handlePrimaryClick}
+      onSecondaryClick={handleConfirmNominees}
+      addAnotherNominee={addAnotherNominee}
+      editNominee={editNominee}
+      closeDialogStates={closeDialogStates}
     />
   );
 };
