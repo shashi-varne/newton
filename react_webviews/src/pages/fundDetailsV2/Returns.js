@@ -16,7 +16,7 @@ const secondaryColor = 'foundationColors.content.secondary';
 
 const minRollingYear = 3; // number is in month
 
-const Returns = ({fundDetailsRef, sendEvents}) => {
+const Returns = ({fundDetailsRef, sendEvents, isDataLoading}) => {
   const [isReturn, setIsReturn] = useState(false);
   const [pillReturnValue, setPillReturnValue] = useState(0);
   const [swiper, setSwiper] = useState('');
@@ -30,7 +30,7 @@ const Returns = ({fundDetailsRef, sendEvents}) => {
       returnTypes.push({ label: 'Rolling return', dataAid: "rollingReturn" });
     }
     return returnTypes;
-  }, [rollingReturnData]);
+  }, [rollingReturnData, isDataLoading]);
 
   useEffect(() => {
     fundDetailsRef.current = {
@@ -60,7 +60,7 @@ const Returns = ({fundDetailsRef, sendEvents}) => {
   return (
     <Box sx={{ mt: 4 }} component='section'>
       <CollapsibleSection
-        disabled={isReturnAvailable}
+        disabled={isReturnAvailable || isDataLoading}
         isOpen={isReturn}
         onClick={handleReturnSection}
         label={`Returns ${isReturnAvailable ? '(NA)' : ''}`}

@@ -34,13 +34,13 @@ const getEstimatedReturnTooltip = (investmentPeriod, expectedAmount) => {
   }
 };
 
-const ReturnCalculator = ({sendEvents, fundDetailsRef}) => {
+const ReturnCalculator = ({sendEvents, fundDetailsRef, isDataLoading}) => {
   const [isReturnCalcOpen, setIsReturnCalcOpen] = useState(false);
   const dispatch = useDispatch();
   const fundData = useSelector(getFundData);
   const investmentType = useSelector((state) => state?.fundDetails?.investmentType);
   const investmentPeriod = useSelector((state) => state?.fundDetails?.investmentPeriod);
-  const isRecurring = useMemo(() => investmentType === 'sip', [investmentType]);
+  const isRecurring = useMemo(() => investmentType === 'sip', [investmentType, isDataLoading]);
   const amountToBeInvested = useSelector((state) => state?.fundDetails[investmentType]);
   const investedAmount = useSelector((state) => state?.fundDetails?.investedAmount);
   const expectedAmount = useSelector((state) => state?.fundDetails?.expectedAmount);
@@ -50,7 +50,7 @@ const ReturnCalculator = ({sendEvents, fundDetailsRef}) => {
   const setAvailableReturnPeriod = useRef(false);
   const estimatedReturnTooltip = useMemo(
     () => getEstimatedReturnTooltip(investmentPeriod, expectedAmount),
-    [expectedAmount, investmentPeriod]
+    [expectedAmount, investmentPeriod, isDataLoading]
   );
   const isOneYearReturnAvailable = fundReturns?.find(el => el?.name.match(/1 year/));
   const disableChild = isEmpty(isOneYearReturnAvailable);
@@ -65,7 +65,7 @@ const ReturnCalculator = ({sendEvents, fundDetailsRef}) => {
       }
     });
     return yearReturns;
-  }, [fundData]);
+  }, [fundData, isDataLoading]);
 
   useEffect(() => {
     if(returns[investmentPeriod]) {
@@ -128,7 +128,7 @@ const ReturnCalculator = ({sendEvents, fundDetailsRef}) => {
         isOpen={isReturnCalcOpen}
         onClick={handleReturnCalcSection}
         label={`Return calculator ${isReturnAvailable ? '(NA)' : ''}`}
-        disabled={isReturnAvailable}
+        disabled={isReturnAvailable || isDataLoading}
         dataAid="returnCalculator"
       >
         <Stack direction='column' spacing={3} sx={{ pb: 3 }}>
@@ -157,8 +157,8 @@ const ReturnCalculator = ({sendEvents, fundDetailsRef}) => {
                 {timeLines?.map((el, id) => {
                   const isDisabled = useMemo(
                     () =>
-                      disableReturnCalculatorTimePeriod(fundData?.performance.returns, el.value),
-                    []
+                      disableReturnCalculatorTimePeriod(fundData?.performance?.returns, el.value),
+                    [isDataLoading]
                   );
                   if(isDisabled && !setAvailableReturnPeriod.current) {
                     const availablePeriod = timeLines[id - 1] || timeLines[0];
