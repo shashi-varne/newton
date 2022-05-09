@@ -34,7 +34,7 @@ const confirmNomineesContainer = (WrappedComponent) => (props) => {
     setRemoveSheetOpen(false);
   };
 
-  const openRemoveSheet = (index) => {
+  const openRemoveSheet = (index) => () => {
     setSelectedIndex(index);
     setRemoveSheetOpen(true);
   };

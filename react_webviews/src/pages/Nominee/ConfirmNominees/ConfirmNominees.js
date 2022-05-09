@@ -273,7 +273,7 @@ const ConfirmNominees = ({
                 />
                 <Button
                   dataAid={CONFIRM_NOMINEES_STRINGS.removeNominee.dataAid}
-                  onClick={() => openRemoveSheet(index)}
+                  onClick={openRemoveSheet(index)}
                   variant="link"
                   color="foundationColors.secondary.lossRed.400"
                   title={CONFIRM_NOMINEES_STRINGS.removeNominee.title}
