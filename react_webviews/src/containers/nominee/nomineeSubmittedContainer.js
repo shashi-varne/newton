@@ -29,12 +29,13 @@ const NomineeSubmittedContainer = (WrappedComponent) => (props) => {
     sendEvents(userAction);
   };
 
+  console.log({ NOMINEE_SUBMITTED });
   return (
     <WrappedComponent
       sendEvents={sendEvents}
       onClick={onClick}
       productName={productName}
-      dataAid={NOMINEE_SUBMITTED.title.dataAid}
+      dataAid={NOMINEE_SUBMITTED.screenDataAid}
       title={NOMINEE_SUBMITTED.successTitle.text}
       titleDataAid={NOMINEE_SUBMITTED.successTitle.dataAid}
       subtitle={NOMINEE_SUBMITTED.successSubtitle.text}
