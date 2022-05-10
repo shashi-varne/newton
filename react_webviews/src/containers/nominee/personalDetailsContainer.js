@@ -16,7 +16,7 @@ import {
 import {
   validateFields,
   getNomineePersonalDetails,
-  getAvailableShares
+  getAvailableShares,
 } from "businesslogic/utils/nominee/functions";
 import {
   getEquityNominationData,
@@ -25,6 +25,7 @@ import {
 } from "businesslogic/dataStore/reducers/nominee";
 import { useDispatch, useSelector } from "react-redux";
 import { NOMINEE_PATHNAME_MAPPER } from "../../pages/Nominee/common/constants";
+import { handleNomineeExit } from "../../pages/Nominee/common/functions";
 
 const personalDetailsContainer = (WrappedComponent) => (props) => {
   const dispatch = useDispatch();
@@ -127,7 +128,9 @@ const personalDetailsContainer = (WrappedComponent) => (props) => {
     setOpenExitNominee(value);
   };
 
-  const handleExit = () => {};
+  const handleExit = () => {
+    handleNomineeExit(navigate);
+  };
 
   return (
     <WrappedComponent

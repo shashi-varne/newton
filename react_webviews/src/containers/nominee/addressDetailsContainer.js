@@ -28,8 +28,8 @@ import {
   updateNomineeDetails,
   getEquityNominationData,
   createNomineeRequest,
-  getNominations,
   resetNomineeDetails,
+  updateNomineeRequest,
 } from "businesslogic/dataStore/reducers/nominee";
 
 import useLoadingState from "../../common/customHooks/useLoadingState";
@@ -38,7 +38,7 @@ import useErrorState from "../../common/customHooks/useErrorState";
 import isEmpty from "lodash-es/isEmpty";
 import { NOMINEE_PATHNAME_MAPPER } from "../../pages/Nominee/common/constants";
 
-const screen = "addressDetails";
+const screen = "ADDRESS_DETAILS";
 
 const addressDetailsContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
@@ -65,18 +65,9 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
 
   const poiData = useMemo(() => getPoiData(formData.poi), [formData.poi]);
   const confirmNominees = useMemo(
-    () => !hideAddAnotherNominee(equityNominationData?.eq_nominee_list),
+    () => hideAddAnotherNominee(equityNominationData?.eq_nominee_list),
     [equityNominationData?.eq_nominee_list]
   );
-
-  useEffect(() => {
-    dispatch(
-      getNominations({
-        Api,
-        screen,
-      })
-    );
-  }, []);
 
   useEffect(() => {
     if (isUpdateFailed && !isEmpty(errorMessage)) {
@@ -114,11 +105,17 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
       },
       file: poiData?.numberOfDocs === 2 ? file : formData?.frontDoc,
       sagaCallback,
+      equityNominationData,
     };
     if (!isDematNomineeStatusInit(equityNominationData)) {
       payload.requestId = equityNominationData.equity_nomination_request_id;
     }
-    dispatch(createNomineeRequest(payload));
+    if (nomineeDetails.id) {
+      payload.nomineeId = nomineeDetails.id;
+      dispatch(updateNomineeRequest(payload));
+    } else {
+      dispatch(createNomineeRequest(payload));
+    }
   };
 
   const sagaCallback = () => {
@@ -261,7 +258,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
       errorData={errorData}
       isMinor={nomineeDetails.isMinor}
       confirmNominees={confirmNominees}
-      openNomineeSaved={dialogStates.openNomineeSaved}
+      openNomineeSaved={dialogStates.openNomineeSaved || true}
       openReviewNominee={dialogStates.openReviewNominee}
       openPercentageHoldingFull={dialogStates.openPercentageHoldingFull}
       isButtonLoading={fileLoading || isButtonLoading}
@@ -272,7 +269,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
       onFileSelectComplete={onFileSelectComplete}
       onFileSelectError={onFileSelectError}
       onPrimaryClick={handlePrimaryClick}
-      onSecondaryClick={handleConfirmNominees}
+      handleConfirmNominees={handleConfirmNominees}
       addAnotherNominee={addAnotherNominee}
       editNominee={editNominee}
       closeDialogStates={closeDialogStates}

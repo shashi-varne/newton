@@ -4,19 +4,21 @@ import Button from "../../../designSystem/atoms/Button";
 import Separator from "../../../designSystem/atoms/Separator";
 import Typography from "../../../designSystem/atoms/Typography";
 import CollapsibleSection from "../../../designSystem/molecules/CollapsibleSection";
+import BottomSheet from "../../../designSystem/organisms/BottomSheet";
 import Container from "../../../designSystem/organisms/ContainerWrapper";
 import {
   CONFIRM_NOMINEES as CONFIRM_NOMINEES_STRINGS,
   BOTTOMSHEETS_CONTENT,
 } from "businesslogic/strings/nominee";
-import BottomSheet from "../../../designSystem/organisms/BottomSheet";
+import { MAXIMUM_DEMAT_NOMINEES } from "businesslogic/constants/nominee";
+import { getAddress } from "businesslogic/utils/nominee/functions";
 import "./ConfirmNominees.scss";
 
 const REMOVE_NOMINEE = BOTTOMSHEETS_CONTENT.removeNominee;
 
 const ConfirmNominees = ({
+  addNominee,
   onClick,
-  isMinor,
   productName,
   sendEvents,
   nominees = [],
@@ -27,6 +29,8 @@ const ConfirmNominees = ({
   isRemoveSheetOpen,
   closeRemoveSheet,
   openRemoveSheet,
+  isButtonLoading,
+  onBackClick,
 }) => {
   return (
     <Container
@@ -34,17 +38,23 @@ const ConfirmNominees = ({
         dataAid: CONFIRM_NOMINEES_STRINGS.headerData.dataAid,
         headerTitle: CONFIRM_NOMINEES_STRINGS.headerData.title,
         subtitle: CONFIRM_NOMINEES_STRINGS.headerData.subtitle,
+        onBackClick,
       }}
       footer={{
-        button1Props: {
-          title: CONFIRM_NOMINEES_STRINGS.buttonTitle1,
-          onClick,
-          variant: "secondary",
-          className: "ncn-footer-button",
-        },
         button2Props: {
           title: CONFIRM_NOMINEES_STRINGS.buttonTitle2,
+          onClick: addNominee,
+          variant: "secondary",
+        },
+        hideButton2:
+          nominees.length === MAXIMUM_DEMAT_NOMINEES || !nominees.length,
+        button1Props: {
+          title: !nominees.length
+            ? CONFIRM_NOMINEES_STRINGS.addNominees
+            : CONFIRM_NOMINEES_STRINGS.buttonTitle1,
           onClick,
+          className: "ncn-footer-button",
+          isLoading: isButtonLoading,
         },
         direction: "column",
       }}
@@ -58,6 +68,10 @@ const ConfirmNominees = ({
             <CollapsibleSection
               label={`${CONFIRM_NOMINEES_STRINGS.nomineeTitle.title} ${
                 index + 1
+              } ${
+                data.isMinor
+                  ? CONFIRM_NOMINEES_STRINGS.nomineeTitle.subtext
+                  : ""
               }`}
               isOpen={openNomineeTab[index]}
               dataAid={index}
@@ -130,11 +144,11 @@ const ConfirmNominees = ({
                     variant="body2"
                     dataAid={CONFIRM_NOMINEES_STRINGS.nomineeShare.valueDataAid}
                   >
-                    {data.share}
+                    {data.share}%
                   </Typography>
                 </div>
               </div>
-              {isMinor && (
+              {data.isMinor && (
                 <>
                   <Typography variant="body1" className="ncn-cs-content">
                     {CONFIRM_NOMINEES_STRINGS.nomineeGuardianTitle.title}
@@ -238,7 +252,7 @@ const ConfirmNominees = ({
                   variant="body2"
                   dataAid={CONFIRM_NOMINEES_STRINGS.nomineeAddress.valueDataAid}
                 >
-                  {data.address}
+                  {getAddress(data)}
                 </Typography>
               </div>
               <div className="ncn-cs-content">
@@ -266,18 +280,21 @@ const ConfirmNominees = ({
               <div className="flex-justify-center ncn-cs-button-wrapper">
                 <Button
                   dataAid={CONFIRM_NOMINEES_STRINGS.editNominee.dataAid}
-                  onClick={handleEditNominee}
+                  onClick={handleEditNominee(index)}
                   variant="link"
                   title={CONFIRM_NOMINEES_STRINGS.editNominee.title}
                   className="ncn-csbw-content"
                 />
                 <Button
                   dataAid={CONFIRM_NOMINEES_STRINGS.removeNominee.dataAid}
-                  onClick={() => openRemoveSheet(index)}
+                  onClick={openRemoveSheet(index)}
                   variant="link"
                   color="foundationColors.secondary.lossRed.400"
                   title={CONFIRM_NOMINEES_STRINGS.removeNominee.title}
                   className="ncn-csbw-content"
+                  onHoverStyle={{
+                    color: "foundationColors.secondary.lossRed.400",
+                  }}
                 />
               </div>
               <Separator />

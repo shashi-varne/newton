@@ -1,53 +1,123 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import Api from "../../utils/api";
 import ConfirmNominee from "../../pages/Nominee/ConfirmNominees";
+import ToastMessage from "../../designSystem/atoms/ToastMessage";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
-
-import {
-  ADDRESS_DETAILS_FORM_MAPPER,
-  PERSONAL_DETAILS_FORM_MAPPER,
-} from "businesslogic/constants/nominee";
+import { useDispatch, useSelector } from "react-redux";
 import { nativeCallback } from "../../utils/native_callback";
 
-const DEFAULT_FORM_DATA = {
-  [PERSONAL_DETAILS_FORM_MAPPER.share]: "10%",
-  [PERSONAL_DETAILS_FORM_MAPPER.name]: "Alekhya",
-  [PERSONAL_DETAILS_FORM_MAPPER.dob]: "11/11/1111",
-  [PERSONAL_DETAILS_FORM_MAPPER.relationship]: "Son",
-  [PERSONAL_DETAILS_FORM_MAPPER.mobile]: "11111111111111",
-  [PERSONAL_DETAILS_FORM_MAPPER.email]: "alekhya@gmail.com",
-  [ADDRESS_DETAILS_FORM_MAPPER.poi]: "aadhaar.pdf",
-  [ADDRESS_DETAILS_FORM_MAPPER.address]: "18-8-iusdbv, wufev",
-};
+import {
+  getAllNominees,
+  getTotalShares,
+} from "businesslogic/utils/nominee/functions";
+import {
+  getEquityNominationData,
+  updateNomineeRequest,
+  updateNomineeDetails,
+  resetNomineeDetails,
+  updateNomineeStatus,
+} from "businesslogic/dataStore/reducers/nominee";
+import { PERSONAL_DETAILS_FORM_MAPPER } from "businesslogic/constants/nominee";
+import useLoadingState from "../../common/customHooks/useLoadingState";
+import useErrorState from "../../common/customHooks/useErrorState";
+import isEmpty from "lodash-es/isEmpty";
+import { NOMINEE_PATHNAME_MAPPER } from "../../pages/Nominee/common/constants";
+import { handleNomineeExit } from "../../pages/Nominee/common/functions";
+
+const screen = "CONFIRM_NOMINEE";
 
 const confirmNomineesContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
+  const dispatch = useDispatch();
   const { productName } = useMemo(getConfig, []);
-  const nominees = [DEFAULT_FORM_DATA];
-  const [openNomineeTab, setOpenNomineeTabs] = useState([true]);
-  const isMinor = false;
-
-  const [selectedIndex, setSelectedIndex] = React.useState("");
-  const [isRemoveSheetOpen, setRemoveSheetOpen] = React.useState(false);
+  const { isButtonLoading } = useLoadingState(screen);
+  const { isUpdateFailed, errorMessage } = useErrorState(screen);
+  const [selectedIndex, setSelectedIndex] = useState("");
+  const [isRemoveSheetOpen, setRemoveSheetOpen] = useState(false);
+  const equityNominationData = useSelector((state) =>
+    getEquityNominationData(state)
+  );
+  const nominees = useMemo(
+    () => getAllNominees(equityNominationData?.eq_nominee_list),
+    [equityNominationData?.eq_nominee_list]
+  );
+  const [openNomineeTab, setOpenNomineeTabs] = useState([true, true, true]);
 
   const closeRemoveSheet = () => {
+    if (isButtonLoading) return;
     setSelectedIndex("");
     setRemoveSheetOpen(false);
   };
 
-  const openRemoveSheet = (index) => {
+  const openRemoveSheet = (index) => () => {
     setSelectedIndex(index);
     setRemoveSheetOpen(true);
   };
 
-  const onClick = () => {
+  const addNominee = () => {
     sendEvents("next");
+    dispatch(resetNomineeDetails());
+    navigate(NOMINEE_PATHNAME_MAPPER.personalDetails);
   };
 
-  const handleEditNominee = () => {};
+  const onClick = () => {
+    if (!nominees.length) {
+      addNominee();
+      return;
+    }
+    sendEvents("next");
+    const totalShares = getTotalShares(equityNominationData.eq_nominee_list);
+    if (totalShares > 100) {
+    } else if (totalShares < 100) {
+    } else {
+      const data = {
+        data_status: "submitted",
+      };
+      const sagaCallback = () => {
+        navigate(NOMINEE_PATHNAME_MAPPER.nomineeSubmitted);
+      };
+      const payload = {
+        screen,
+        Api,
+        data,
+        requestId: equityNominationData.equity_nomination_request_id,
+        sagaCallback,
+      };
+      dispatch(updateNomineeStatus(payload));
+    }
+  };
+
+  useEffect(() => {
+    if (isUpdateFailed && !isEmpty(errorMessage)) {
+      if (isRemoveSheetOpen) {
+        closeRemoveSheet();
+      }
+      ToastMessage(errorMessage);
+    }
+  }, [isUpdateFailed]);
+
+  const handleEditNominee = (index) => () => {
+    sendEvents("next");
+    const nominee = nominees[index];
+    dispatch(updateNomineeDetails(nominee));
+    navigate(NOMINEE_PATHNAME_MAPPER.personalDetails);
+  };
 
   const handleRemoveNominee = () => {
-    //remove selectedIndex
-    console.log("remove ", selectedIndex);
+    const nominee = nominees[selectedIndex];
+    const data = {
+      isDiscarded: true,
+      share: nominee[PERSONAL_DETAILS_FORM_MAPPER.share],
+    };
+    const payload = {
+      screen,
+      Api,
+      data,
+      requestId: equityNominationData.equity_nomination_request_id,
+      nomineeId: nominee.id,
+      equityNominationData,
+    };
+    dispatch(updateNomineeRequest(payload));
     closeRemoveSheet();
   };
 
@@ -73,12 +143,16 @@ const confirmNomineesContainer = (WrappedComponent) => (props) => {
     }
   };
 
+  const onBackClick = () => {
+    handleNomineeExit(navigate)
+  }
+
   return (
     <WrappedComponent
-      isMinor={isMinor}
       productName={productName}
       nominees={nominees}
       openNomineeTab={openNomineeTab}
+      addNominee={addNominee}
       onClick={onClick}
       sendEvents={sendEvents}
       handleEditNominee={handleEditNominee}
@@ -87,6 +161,8 @@ const confirmNomineesContainer = (WrappedComponent) => (props) => {
       isRemoveSheetOpen={isRemoveSheetOpen}
       closeRemoveSheet={closeRemoveSheet}
       openRemoveSheet={openRemoveSheet}
+      isButtonLoading={isButtonLoading}
+      onBackClick={onBackClick}
     />
   );
 };

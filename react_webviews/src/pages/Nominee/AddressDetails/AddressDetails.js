@@ -37,7 +37,7 @@ const AddressDetails = ({
   openNomineeSaved,
   openReviewNominee,
   openPercentageHoldingFull,
-  onSecondaryClick,
+  handleConfirmNominees,
   onPrimaryClick,
   addAnotherNominee,
   editNominee,
@@ -188,7 +188,7 @@ const AddressDetails = ({
       <NomineeSaved
         isOpen={openNomineeSaved}
         onPrimaryClick={onPrimaryClick}
-        onSecondaryClick={onSecondaryClick}
+        onSecondaryClick={handleConfirmNominees}
         confirmNominees={confirmNominees}
         handleClose={closeDialogStates("openNomineeSaved")}
       />
@@ -200,7 +200,7 @@ const AddressDetails = ({
       />
       <HoldingPercentageFull
         isOpen={openPercentageHoldingFull}
-        onPrimaryClick={editNominee}
+        onPrimaryClick={handleConfirmNominees}
         handleClose={closeDialogStates("openPercentageHoldingFull")}
       />
     </Container>
