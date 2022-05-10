@@ -91,13 +91,6 @@ function KycModuleEntry(props) {
       
     } else if (kycStatus === 'ground') {
        navigate('/kyc/home', data);
-    } else if (kycStatus === "ground_pan") {
-      navigate("/kyc/journey", {
-        state: {
-          ...data.state,
-          show_aadhaar: !(kyc.address.meta_data.is_nri || kyc.kyc_type === "manual"),
-        }
-      });
     } else if (kycStatus === "submitted") {
       // this condition will help in redirection from sdk
       if (TRADING_ENABLED) {
@@ -133,6 +126,13 @@ function KycModuleEntry(props) {
       // this condition also helps with redirection from IPO sdk
       navigate(PATHNAME_MAPPER.kycEsignNsdl, {
         searchParams: `${getConfig().searchParams}&status=success`
+      });
+    } else if (kycStatus === "ground_pan") {
+      navigate("/kyc/journey", {
+        state: {
+          ...data.state,
+          show_aadhaar: !(kyc.address.meta_data.is_nri || kyc.kyc_type === "manual"),
+        }
       });
     } else if (kycStatusData.nextState) {
       navigate(kycStatusData.nextState, data);
