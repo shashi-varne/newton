@@ -2,7 +2,10 @@ import Stack from "@mui/material/Stack";
 import React from "react";
 import Typography from "../../../designSystem/atoms/Typography";
 import Container from "../../../designSystem/organisms/ContainerWrapper";
-import { ESIGN_LANDING } from "businesslogic/strings/nominee";
+import {
+  BOTTOMSHEETS_CONTENT,
+  ESIGN_LANDING,
+} from "businesslogic/strings/nominee";
 import { ESIGN_STEPS } from "businesslogic/constants/nominee";
 import "./ESignLanding.scss";
 import {
@@ -12,6 +15,10 @@ import {
   LandingHeaderTitle,
 } from "../../../designSystem/molecules/LandingHeader";
 import Icon from "../../../designSystem/atoms/Icon";
+import BottomSheet from "../../../designSystem/organisms/BottomSheet";
+
+const ESIGN_FAILED = BOTTOMSHEETS_CONTENT.esignFailed;
+const LINK_AADHAAR_WITH_MOBILE = BOTTOMSHEETS_CONTENT.linkAadhaarWithMobile;
 
 const ImageWithText = ({ title, dataAid, imgSrc }) => {
   return (
@@ -42,7 +49,17 @@ const esignStepsImageMapper = (productName, index) => {
   return stepImageList[index].imgSrc;
 };
 
-const ESignLanding = ({ sendEvents, productName, onClickProceed }) => {
+const ESignLanding = ({
+  sendEvents,
+  productName,
+  onClickProceed,
+  openAadharBottomsheet,
+  openEsignFailure,
+  redirectToEsign,
+  redirectToManualSignature,
+  retryEsign,
+  showLoader
+}) => {
   return (
     <Container
       sendEvents={sendEvents("just_set_events")}
@@ -50,6 +67,7 @@ const ESignLanding = ({ sendEvents, productName, onClickProceed }) => {
         dataAid: ESIGN_LANDING.title.dataAid,
         headerTitle: "",
       }}
+      isPageLoading={showLoader}
       footer={{
         button1Props: {
           title: ESIGN_LANDING.ctaText,
@@ -103,6 +121,29 @@ const ESignLanding = ({ sendEvents, productName, onClickProceed }) => {
           />
         ))}
       </Stack>
+      <BottomSheet
+        isOpen={openEsignFailure}
+        onClose={retryEsign(true)}
+        title={ESIGN_FAILED.title}
+        imageTitleSrc={require(`assets/caution.svg`)}
+        subtitle={ESIGN_FAILED.subtitle}
+        primaryBtnTitle={ESIGN_FAILED.primaryButtonTitle}
+        secondaryBtnTitle={ESIGN_FAILED.secondaryButtonTitle}
+        onPrimaryClick={retryEsign(false)}
+        onSecondaryClick={redirectToManualSignature}
+        dataAid={ESIGN_FAILED.dataAid}
+      />
+      <BottomSheet
+        isOpen={openAadharBottomsheet}
+        onClose={closeAadharBottomsheet}
+        title={LINK_AADHAAR_WITH_MOBILE.title}
+        subtitle={LINK_AADHAAR_WITH_MOBILE.subtitle}
+        primaryBtnTitle={LINK_AADHAAR_WITH_MOBILE.primaryButtonTitle}
+        secondaryBtnTitle={LINK_AADHAAR_WITH_MOBILE.secondaryButtonTitle}
+        onPrimaryClick={redirectToEsign}
+        onSecondaryClick={redirectToManualSignature}
+        dataAid={LINK_AADHAAR_WITH_MOBILE.dataAid}
+      />
     </Container>
   );
 };

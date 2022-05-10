@@ -15,6 +15,7 @@ const Success = ({
   subtitle = "",
   subtitleDataAid = "subtitle",
   onBackClick,
+  isPageLoading = false,
 }) => {
   return (
     <Container
@@ -29,6 +30,7 @@ const Success = ({
           onClick,
         },
       }}
+      isPageLoading={isPageLoading}
       className="success-wrapper"
       dataAid={dataAid}
     >
