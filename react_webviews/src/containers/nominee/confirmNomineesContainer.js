@@ -144,8 +144,9 @@ const confirmNomineesContainer = (WrappedComponent) => (props) => {
   };
 
   const onBackClick = () => {
-    handleNomineeExit(navigate)
-  }
+    sendEvents("back");
+    handleNomineeExit(navigate);
+  };
 
   return (
     <WrappedComponent

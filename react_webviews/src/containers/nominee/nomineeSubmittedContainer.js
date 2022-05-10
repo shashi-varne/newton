@@ -3,6 +3,7 @@ import Success from "../../pages/Nominee/Success";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { NOMINEE_SUBMITTED } from "businesslogic/strings/nominee";
 import { nativeCallback } from "../../utils/native_callback";
+import { NOMINEE_PATHNAME_MAPPER } from "../../pages/Nominee/common/constants";
 
 const NomineeSubmittedContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
@@ -27,6 +28,12 @@ const NomineeSubmittedContainer = (WrappedComponent) => (props) => {
   const onClick = () => {
     const userAction = "next";
     sendEvents(userAction);
+    navigate(NOMINEE_PATHNAME_MAPPER.landing);
+  };
+
+  const onBackClick = () => {
+    sendEvents("back");
+    navigate(NOMINEE_PATHNAME_MAPPER.landing);
   };
 
   return (
@@ -39,6 +46,7 @@ const NomineeSubmittedContainer = (WrappedComponent) => (props) => {
       titleDataAid={NOMINEE_SUBMITTED.successTitle.dataAid}
       subtitle={NOMINEE_SUBMITTED.successSubtitle.text}
       subtitleDataAid={NOMINEE_SUBMITTED.successSubtitle.dataAid}
+      onBackClick={onBackClick}
     />
   );
 };

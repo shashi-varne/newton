@@ -14,12 +14,14 @@ const Success = ({
   titleDataAid = "title",
   subtitle = "",
   subtitleDataAid = "subtitle",
+  onBackClick,
 }) => {
   return (
     <Container
       eventData={sendEvents("just_set_events")}
       headerProps={{
         headerSx: { display: "none" },
+        onBackClick
       }}
       footer={{
         button1Props: {

@@ -129,6 +129,7 @@ const personalDetailsContainer = (WrappedComponent) => (props) => {
   };
 
   const handleExit = () => {
+    sendEvents("back");
     handleNomineeExit(navigate);
   };
 
