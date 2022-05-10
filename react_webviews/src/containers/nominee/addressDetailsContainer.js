@@ -102,7 +102,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
       file: poiData.numberOfDocs === 2 ? file : frontDoc,
       sagaCallback,
     };
-    if (!isDematNomineeStatusInit(equityNominationData.friendly_status)) {
+    if (!isDematNomineeStatusInit(equityNominationData)) {
       payload.requestId = equityNominationData.equity_nomination_request_id;
     }
     dispatch(createNomineeRequest(payload));
