@@ -474,18 +474,18 @@ export async function handleCommonKycRedirections({
 }) {
   if (kycJourneyStatus === "ground") {
     navigate("/kyc/home");
-  } else if (kycJourneyStatus === "ground_pan") {
-    navigate("/kyc/journey", {
-      state: {
-        show_aadhaar: !(kyc.address.meta_data.is_nri || kyc.kyc_type === "manual") ? true : false,
-      },
-    });
   } else if (!tradingEnabled && kycJourneyStatus === "complete") {
     navigate(KYC_PATHNAME_MAPPER.kycEsignNsdl, {
       searchParams: `${getConfig().searchParams}&status=success`
     });
   } else if (isUpgradeToEquityAccountEnabled(kyc, kycJourneyStatus)) {
     await setKycProductTypeAndRedirect({ kyc, kycJourneyStatus, isReadyToInvestBase, handleLoader, navigate, updateKyc, kycStatusData });
+  } else if (kycJourneyStatus === "ground_pan") {
+    navigate("/kyc/journey", {
+      state: {
+        show_aadhaar: !(kyc.address.meta_data.is_nri || kyc.kyc_type === "manual") ? true : false,
+      },
+    });
   } else if (kycStatusData.nextState) {
     navigate(kycStatusData.nextState);
   } else {
@@ -497,14 +497,20 @@ export async function setKycProductTypeAndRedirect({ kyc, kycJourneyStatus, isRe
   const config = getConfig();
   const result = await setProductType(handleLoader);
   updateKyc(result.kyc);
+  const showAadhaar = !(result?.kyc?.address.meta_data.is_nri || result?.kyc?.kyc_type === "manual" || result?.kyc?.kyc_status === "compliant");
   
   // already kyc done users
   if (isReadyToInvestBase && (result?.kyc?.mf_kyc_processed || kyc?.mf_kyc_processed)) {
     navigate(KYC_PATHNAME_MAPPER.tradingInfo)
   } else if (kycJourneyStatus === "ground") {
     navigate("/kyc/home");
+  } else if (kycJourneyStatus === "ground_pan") {
+    navigate("/kyc/journey", {
+      state: {
+        show_aadhaar: showAadhaar,
+      },
+    });
   } else {
-    const showAadhaar = !(result?.kyc?.address.meta_data.is_nri || result?.kyc?.kyc_type === "manual" || result?.kyc?.kyc_status === "compliant");
     if (kycStatusData?.nextState) {
       navigate(kycStatusData.nextState);
     } else {
