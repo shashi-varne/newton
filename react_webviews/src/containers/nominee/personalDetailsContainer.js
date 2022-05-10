@@ -41,8 +41,8 @@ const personalDetailsContainer = (WrappedComponent) => (props) => {
   const [openExitNominee, setOpenExitNominee] = useState(false);
 
   const availableShare = useMemo(
-    () => getAvailableShares(equityNominationData.eq_nominee_list),
-    [equityNominationData.eq_nominee_list]
+    () => getAvailableShares(equityNominationData?.eq_nominee_list),
+    [equityNominationData?.eq_nominee_list]
   );
 
   const handleCheckbox = () => {

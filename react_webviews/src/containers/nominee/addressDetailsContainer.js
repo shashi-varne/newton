@@ -21,12 +21,15 @@ import {
   isDematNomineeStatusInit,
   hideAddAnotherNominee,
   getAvailableShares,
+  getTotalShares,
 } from "businesslogic/utils/nominee/functions";
 import {
   getNomineeDetails,
   updateNomineeDetails,
   getEquityNominationData,
   createNomineeRequest,
+  getNominations,
+  resetNomineeDetails,
 } from "businesslogic/dataStore/reducers/nominee";
 
 import useLoadingState from "../../common/customHooks/useLoadingState";
@@ -46,7 +49,6 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
   );
   const { isButtonLoading } = useLoadingState(screen);
   const { isUpdateFailed, errorMessage } = useErrorState(screen);
-
   const [formData, setFormData] = useState(
     getNomineeAddressDetails(nomineeDetails)
   );
@@ -58,16 +60,23 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
   });
 
   const [file, setFile] = useState(null);
-  const [backDoc, setBackDoc] = useState(null);
-  const [frontDoc, setFrontDoc] = useState(null);
   const [fileLoading, setFileLoading] = useState(false);
   const [previewFiles, setPreviewFiles] = useState(null);
 
   const poiData = useMemo(() => getPoiData(formData.poi), [formData.poi]);
   const confirmNominees = useMemo(
-    () => !hideAddAnotherNominee(equityNominationData.eq_nominee_list),
-    [equityNominationData.eq_nominee_list]
+    () => !hideAddAnotherNominee(equityNominationData?.eq_nominee_list),
+    [equityNominationData?.eq_nominee_list]
   );
+
+  useEffect(() => {
+    dispatch(
+      getNominations({
+        Api,
+        screen,
+      })
+    );
+  }, []);
 
   useEffect(() => {
     if (isUpdateFailed && !isEmpty(errorMessage)) {
@@ -83,15 +92,19 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
       ADDRESS_DETAILS_FORM_MAPPER.address,
       ADDRESS_DETAILS_FORM_MAPPER.state,
       ADDRESS_DETAILS_FORM_MAPPER.poi,
+      ADDRESS_DETAILS_FORM_MAPPER.frontDoc,
     ];
+    if (poiData?.numberOfDocs === 2) {
+      keysToCheck.push(ADDRESS_DETAILS_FORM_MAPPER.backDoc);
+    }
     const result = validateFields(formData, keysToCheck);
     if (!result.canSubmit) {
       const data = { ...errorData, ...result.errorData };
       setErrorData(data);
       return;
     }
-    sendEvents("next");
     dispatch(updateNomineeDetails(formData));
+    sendEvents("next");
     let payload = {
       Api,
       screen,
@@ -99,7 +112,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
         ...nomineeDetails,
         ...formData,
       },
-      file: poiData.numberOfDocs === 2 ? file : frontDoc,
+      file: poiData?.numberOfDocs === 2 ? file : formData?.frontDoc,
       sagaCallback,
     };
     if (!isDematNomineeStatusInit(equityNominationData)) {
@@ -113,6 +126,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
   };
 
   const addAnotherNominee = () => {
+    dispatch(resetNomineeDetails());
     navigate(NOMINEE_PATHNAME_MAPPER.personalDetails);
   };
 
@@ -123,7 +137,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
   };
 
   const handleConfirmNominees = () => {
-    if (getAvailableShares(equityNominationData.eq_nominee_list) < 100) {
+    if (getTotalShares(equityNominationData?.eq_nominee_list) < 100) {
       openDialog("openReviewNominee");
     }
     navigate(NOMINEE_PATHNAME_MAPPER.confirmNominees);
@@ -133,7 +147,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
     if (confirmNominees) {
       handleConfirmNominees();
     } else {
-      if (getAvailableShares(equityNominationData.eq_nominee_list) >= 100) {
+      if (getAvailableShares(equityNominationData?.eq_nominee_list) <= 0) {
         openDialog("openPercentageHoldingFull");
       }
       addAnotherNominee();
@@ -201,13 +215,19 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
   const onFileSelectComplete = (docSide) => (file, fileBase64) => {
     setFileLoading(false);
     if (docSide === "front") {
-      setFrontDoc(file);
+      setFormData({
+        ...formData,
+        [ADDRESS_DETAILS_FORM_MAPPER.frontDoc]: file,
+      });
       setPreviewFiles({
         ...previewFiles,
         frontFile: fileBase64,
       });
     } else {
-      setBackDoc(file);
+      setFormData({
+        ...formData,
+        [ADDRESS_DETAILS_FORM_MAPPER.backDoc]: file,
+      });
       setPreviewFiles({
         ...previewFiles,
         backFile: fileBase64,
@@ -237,8 +257,6 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
   return (
     <WrappedComponent
       poiData={poiData}
-      backDoc={backDoc}
-      frontDoc={frontDoc}
       formData={formData}
       errorData={errorData}
       isMinor={nomineeDetails.isMinor}

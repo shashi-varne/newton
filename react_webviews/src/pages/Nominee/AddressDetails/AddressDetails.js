@@ -28,8 +28,6 @@ const AddressDetails = ({
   confirmNominees,
   onChange,
   sendEvents,
-  frontDoc,
-  backDoc,
   onFileSelectStart,
   onFileSelectComplete,
   onFileSelectError,
@@ -56,6 +54,9 @@ const AddressDetails = ({
           title: ADDRESS_DETAILS_STRINGS.buttonTitle,
           onClick,
           isLoading: isButtonLoading,
+          disabled:
+            !formData.frontDoc ||
+            (poiData.numberOfDocs === 2 && !formData.backDoc),
         },
       }}
       className="nominee-personal-details"
@@ -153,7 +154,7 @@ const AddressDetails = ({
           customPickerId: "addressProofFront",
         }}
         dataAid={poiData?.numberOfDocs === 1 ? "" : "1"}
-        fileName={frontDoc?.name}
+        fileName={formData?.frontDoc?.name}
         docSide="front"
         poiData={poiData}
       />
@@ -170,7 +171,7 @@ const AddressDetails = ({
             customPickerId: "addressProofBack",
           }}
           dataAid="2"
-          fileName={backDoc?.name}
+          fileName={formData?.backDoc?.name}
           docSide="back"
           poiData={poiData}
         />
