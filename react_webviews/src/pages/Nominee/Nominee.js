@@ -1,12 +1,12 @@
 import React from "react";
-import ESignLaningContainer from "../../containers/nominee/ESignLandingContainer";
+import esignLaningContainer from "../../containers/nominee/esignLandingContainer";
 import { Route, Switch } from "react-router-dom";
 import landingContainer from "../../containers/nominee/landingContainer";
 import personalDetailsContainer from "../../containers/nominee/personalDetailsContainer";
 import addressDetailsContainer from "../../containers/nominee/addressDetailsContainer";
 import confirmNomineesContainer from "../../containers/nominee/confirmNomineesContainer";
-import NomineeVerifiedContainer from "../../containers/nominee/nomineeVerifiedContainer";
-import NomineeSubmittedContainer from "../../containers/nominee/nomineeSubmittedContainer";
+import nomineeVerifiedContainer from "../../containers/nominee/nomineeVerifiedContainer";
+import nomineeSubmittedContainer from "../../containers/nominee/nomineeSubmittedContainer";
 import manualSignatureContainer from "../../containers/nominee/manualSignatureContainer";
 import esignStatusContainer from "../../containers/nominee/esignStatusContainer";
 
@@ -30,21 +30,18 @@ const Nominee = (props) => {
         path={`${url}/confirm-nominees`}
         component={confirmNomineesContainer}
       />
-      <Route path={`${url}/verified`} component={NomineeVerifiedContainer} />
-      <Route path={`${url}/submitted`} component={NomineeSubmittedContainer} />
+      <Route path={`${url}/verified`} component={nomineeVerifiedContainer} />
+      <Route path={`${url}/submitted`} component={nomineeSubmittedContainer} />
       <Route
         exact
         path={`${url}/esign-landing`}
-        component={ESignLaningContainer}
+        component={esignLaningContainer}
       />
       <Route
         path={`${url}/manual-signature`}
         component={manualSignatureContainer}
       />
-      <Route
-        path={`${url}/esign-status`}
-        component={esignStatusContainer}
-      />
+      <Route path={`${url}/esign-status`} component={esignStatusContainer} />
     </Switch>
   );
 };

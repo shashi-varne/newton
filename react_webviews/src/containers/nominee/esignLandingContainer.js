@@ -16,7 +16,7 @@ const initializeData = () => {
   };
 };
 
-const ESignLandingContainer = (WrappedComponent) => (props) => {
+const esignLandingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const { productName, isFailed, searchParams } = useMemo(initializeData, []);
   const [openAadharBottomsheet, setOpenAadhaarBottomsheet] = useState(false);
@@ -94,4 +94,4 @@ const ESignLandingContainer = (WrappedComponent) => (props) => {
   );
 };
 
-export default ESignLandingContainer(ESignLanding);
+export default esignLandingContainer(ESignLanding);
