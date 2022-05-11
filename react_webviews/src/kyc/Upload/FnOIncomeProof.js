@@ -48,7 +48,7 @@ const UPLOAD_OPTIONS_MAP = {
   },
   'demat-holding-statement': {
     title: 'Demat holding statement',
-    subtitle: 'Last 1 month',
+    subtitle: 'Latest copy',
     nativePickerMethodName: 'open_file',
     supportedFormats: ["pdf"],
     fileName: "demat-holding-statement",
