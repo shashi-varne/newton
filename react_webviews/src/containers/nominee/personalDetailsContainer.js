@@ -68,7 +68,7 @@ const personalDetailsContainer = (WrappedComponent) => (props) => {
         PERSONAL_DETAILS_FORM_MAPPER.guardianRelationship
       );
     }
-    const data = { ...formData, isMinor };
+    const data = { ...formData, isMinor, availableShare };
     const result = validateFields(data, keysToCheck);
     if (!result.canSubmit) {
       const data = { ...errorData, ...result.errorData };
