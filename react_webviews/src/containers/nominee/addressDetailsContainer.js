@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   ADDRESS_DETAILS_FORM_MAPPER,
   DEFAULT_NOMINEE_ADDRESS_DETAILS,
+  PERSONAL_DETAILS_FORM_MAPPER,
 } from "businesslogic/constants/nominee";
 import {
   validateFields,
@@ -84,7 +85,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
   const poiData = useMemo(() => getPoiData(formData.poi), [formData.poi]);
   const { nomineeData, totalShares, hideAddNominee, isUpdateFlow } = useMemo(
     initializeData(equityNominationData?.eq_nominee_list, nomineeDetails),
-    [equityNominationData?.eq_nominee_list, nomineeDetails?.id]
+    [equityNominationData?.eq_nominee_list, nomineeDetails]
   );
 
   useEffect(() => {
@@ -126,7 +127,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
         ...formData,
       },
       file: addressDoc,
-      sagaCallback,
+      sagaCallback: openNomineeSaved,
       equityNominationData,
     };
     if (!isDematNomineeStatusInit(equityNominationData)) {
@@ -143,9 +144,22 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
         payload.file = poiData?.numberOfDocs === 2 ? file : formData?.frontDoc;
         data[ADDRESS_DETAILS_FORM_MAPPER.poi] =
           formData[ADDRESS_DETAILS_FORM_MAPPER.poi];
+        data[ADDRESS_DETAILS_FORM_MAPPER.password] =
+          formData[ADDRESS_DETAILS_FORM_MAPPER.password];
       } else {
         payload.file = null;
       }
+      if (
+        nomineeData[PERSONAL_DETAILS_FORM_MAPPER.isMinor] !==
+        nomineeDetails[PERSONAL_DETAILS_FORM_MAPPER.isMinor]
+      ) {
+        data = payload.data;
+      }
+      if (isEmpty(data)) {
+        openNomineeSaved();
+        return;
+      }
+      data.isMinor = nomineeDetails.isMinor;
       payload.data = data;
       dispatch(updateNomineeRequest(payload));
     } else {
@@ -153,7 +167,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
     }
   };
 
-  const sagaCallback = () => {
+  const openNomineeSaved = () => {
     openDialog("openNomineeSaved");
   };
 
