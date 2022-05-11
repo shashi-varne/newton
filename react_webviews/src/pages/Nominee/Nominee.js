@@ -8,6 +8,7 @@ import confirmNomineesContainer from "../../containers/nominee/confirmNomineesCo
 import NomineeVerifiedContainer from "../../containers/nominee/nomineeVerifiedContainer";
 import NomineeSubmittedContainer from "../../containers/nominee/nomineeSubmittedContainer";
 import manualSignatureContainer from "../../containers/nominee/manualSignatureContainer";
+import esignStatusContainer from "../../containers/nominee/esignStatusContainer";
 
 const Nominee = (props) => {
   const { url } = props.match;
@@ -39,6 +40,10 @@ const Nominee = (props) => {
       <Route
         path={`${url}/manual-signature`}
         component={manualSignatureContainer}
+      />
+      <Route
+        path={`${url}/esign-status`}
+        component={esignStatusContainer}
       />
     </Switch>
   );
