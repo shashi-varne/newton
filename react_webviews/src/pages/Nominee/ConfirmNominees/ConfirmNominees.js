@@ -14,9 +14,20 @@ import {
 } from "businesslogic/strings/nominee";
 import { MAXIMUM_DEMAT_NOMINEES } from "businesslogic/constants/nominee";
 import { getAddress } from "businesslogic/utils/nominee/functions";
+import { format, parse } from "date-fns";
 import "./ConfirmNominees.scss";
 
 const REMOVE_NOMINEE = BOTTOMSHEETS_CONTENT.removeNominee;
+
+const getFomattedDob = (dateStr) => {
+  if (!date) {
+    return "";
+  }
+
+  const dt = parse(dateStr, "dd-MM-yyyy", new Date());
+  const date = format(dt, "dd MMMM yyyy");
+  return date;
+};
 
 const ConfirmNominees = ({
   addNominee,
@@ -111,7 +122,7 @@ const ConfirmNominees = ({
                     variant="body2"
                     dataAid={CONFIRM_NOMINEES_STRINGS.nomineeDob.valueDataAid}
                   >
-                    {data.dob}
+                    {getFomattedDob(data?.dob)}
                   </Typography>
                 </div>
               </div>
