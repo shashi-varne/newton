@@ -70,7 +70,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
 
   const poiData = useMemo(() => getPoiData(formData.poi), [formData.poi]);
   const nomineeData = useMemo(() =>
-    getNomineeDataById(equityNominationData.eq_nominee_list, nomineeDetails.id)
+    getNomineeDataById(equityNominationData?.eq_nominee_list, nomineeDetails?.id)
   );
   const confirmNominees = useMemo(
     () => hideAddAnotherNominee(equityNominationData?.eq_nominee_list),
