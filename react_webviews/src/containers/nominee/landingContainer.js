@@ -60,7 +60,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     );
   };
 
-  const onClick = () => {
+  const handleEquityRedirection = () => {
     if (dematStatus === DEMAT_NOMINEE_STATUS_MAPPER.inProgress) {
       return;
     } else if (
@@ -139,22 +139,27 @@ const landingContainer = (WrappedComponent) => (props) => {
     }
   };
 
+  const handleMfRedirection = () => {
+    navigate(NOMINEE_PATHNAME_MAPPER.helpAndSupport)
+  }
+
   return (
     <WrappedComponent
       anchorEl={anchorEl}
       mfNomineeData={mfNomineeData}
       dematNomineeData={dematNomineeData}
       openResetNominees={openResetNominee}
-      onClick={onClick}
+      isPageLoading={isPageLoading}
       menuOptions={NOMINEE_MENU_OPTIONS}
       onMoreClick={onMoreClick}
       onMenuClose={onMenuClose}
       onClickMenuItem={onClickMenuItem}
       closeResetNominee={handleResetNominee(false)}
       confirmEditNominees={handleConfirmEditNominees}
-      isPageLoading={isPageLoading}
       sendEvents={sendEvents}
       onBackClick={onBackClick}
+      handleEquityRedirection={handleEquityRedirection}
+      handleMfRedirection={handleMfRedirection}
     />
   );
 };

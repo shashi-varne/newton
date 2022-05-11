@@ -18,7 +18,7 @@ import "./Landing.scss";
 
 const RESET_NOMINEES_STRINGS = BOTTOMSHEETS_CONTENT.resetNominees;
 const Landing = ({
-  onClick,
+  handleEquityRedirection,
   mfNomineeData = {},
   dematNomineeData = {},
   menuOptions,
@@ -32,6 +32,7 @@ const Landing = ({
   isPageLoading,
   onBackClick,
   sendEvents,
+  handleMfRedirection,
 }) => {
   return (
     <Container
@@ -43,10 +44,14 @@ const Landing = ({
       noFooter={true}
       isPageLoading={isPageLoading}
       className="nominee-landing"
-      dataAid="nominee"
+      dataAid={NOMINEE_LANDING.screenDataAid}
       eventData={sendEvents("just_set_events")}
     >
-      <WrapperBox elevation={1} className="nl-nominee-wrapper">
+      <WrapperBox
+        elevation={1}
+        className="nl-nominee-wrapper"
+        onClick={handleMfRedirection}
+      >
         <Typography
           variant="heading4"
           dataAid={NOMINEE_LANDING.mfTitle.dataAid}
@@ -67,6 +72,7 @@ const Landing = ({
             <Status
               title={dematNomineeData.statusTitle}
               variant={dematNomineeData.statusVariant}
+              dataAid={dematNomineeData.statusDataAid}
             />
           )}
           {dematNomineeData?.showEdit && (
@@ -85,7 +91,7 @@ const Landing = ({
           <Button
             sx={{ mt: "32px" }}
             title={dematNomineeData.buttonTitle}
-            onClick={onClick}
+            onClick={handleEquityRedirection}
           />
         )}
       </WrapperBox>

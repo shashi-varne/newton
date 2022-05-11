@@ -47,7 +47,7 @@ const PersonalDetails = ({
         },
       }}
       className="nominee-personal-details"
-      dataAid="nominee"
+      dataAid={PERSONAL_DETAILS.screenDataAid}
       eventData={sendEvents("just_set_events")}
     >
       <Typography

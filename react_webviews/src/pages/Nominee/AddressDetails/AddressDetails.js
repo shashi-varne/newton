@@ -60,7 +60,7 @@ const AddressDetails = ({
         },
       }}
       className="nominee-personal-details"
-      dataAid="nominee"
+      dataAid={ADDRESS_DETAILS_STRINGS.screenDataAid}
       eventData={sendEvents("just_set_events")}
     >
       <Typography
@@ -154,7 +154,7 @@ const AddressDetails = ({
           customPickerId: "addressProofFront",
           docType: "image",
         }}
-        dataAid={poiData?.numberOfDocs === 1 ? "" : "1"}
+        dataAid={poiData?.numberOfDocs === 2 ? "1" : ""}
         fileName={formData?.frontDoc?.name}
         docSide="front"
         poiData={poiData}
