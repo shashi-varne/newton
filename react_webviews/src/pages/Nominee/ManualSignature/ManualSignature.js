@@ -12,7 +12,13 @@ import {
 } from "businesslogic/constants/nominee";
 import "./ManualSignature.scss";
 
-const ManualSignature = ({ email, onClickDownloadForm, sendEvents }) => {
+const ManualSignature = ({
+  email,
+  onClickDownloadForm,
+  onPressOkay,
+  sendEvents,
+  isLoading = false,
+}) => {
   const dynamicStepsSubtitle = (index, subtitle) => {
     if (index === 0) {
       return (
@@ -38,13 +44,13 @@ const ManualSignature = ({ email, onClickDownloadForm, sendEvents }) => {
             color={"foundationColors.content.primary"}
             variant="body2"
           >
-            {COMPANY_DETAILS.NAME}
+            {COMPANY_DETAILS.name}
           </Typography>
           <Typography
             color={"foundationColors.content.secondary"}
             variant="body2"
           >
-            {COMPANY_DETAILS.ADDRESS}
+            {COMPANY_DETAILS.address}
           </Typography>
         </>
       );
@@ -62,10 +68,14 @@ const ManualSignature = ({ email, onClickDownloadForm, sendEvents }) => {
         subtitle: MANUAL_SIGNATURE.subtitle,
       }}
       footer={{
-        noFooter: true,
+        button1Props: {
+          title: MANUAL_SIGNATURE.ctaText,
+          onClick: onPressOkay,
+        },
       }}
       className="manual-signature-wrapper"
       dataAid={MANUAL_SIGNATURE.screenDataAid}
+      isPageLoading={isLoading}
     >
       <Stack direction="column">
         <Typography
