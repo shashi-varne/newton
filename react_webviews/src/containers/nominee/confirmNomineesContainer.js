@@ -16,7 +16,6 @@ import {
   updateNomineeDetails,
   resetNomineeDetails,
   updateNomineeStatus,
-  getNominations,
 } from "businesslogic/dataStore/reducers/nominee";
 import { PERSONAL_DETAILS_FORM_MAPPER } from "businesslogic/constants/nominee";
 import useLoadingState from "../../common/customHooks/useLoadingState";
@@ -35,6 +34,10 @@ const confirmNomineesContainer = (WrappedComponent) => (props) => {
   const { isUpdateFailed, errorMessage } = useErrorState(screen);
   const [selectedIndex, setSelectedIndex] = useState("");
   const [isRemoveSheetOpen, setRemoveSheetOpen] = useState(false);
+  const [dialogStates, setDialogStates] = useState({
+    openReviewNominee: false,
+    openPercentageHoldingFull: false,
+  });
   const equityNominationData = useSelector((state) =>
     getEquityNominationData(state)
   );
@@ -44,12 +47,6 @@ const confirmNomineesContainer = (WrappedComponent) => (props) => {
   );
   const [openNomineeTab, setOpenNomineeTabs] = useState([true, true, true]);
 
-  useEffect(() => {
-    dispatch(getNominations({
-      Api,
-      screen
-    }))
-  }, [])
   const closeRemoveSheet = () => {
     if (isButtonLoading) return;
     setSelectedIndex("");
@@ -72,11 +69,13 @@ const confirmNomineesContainer = (WrappedComponent) => (props) => {
       addNominee();
       return;
     }
-    sendEvents("next");
     const totalShares = getTotalShares(equityNominationData.eq_nominee_list);
     if (totalShares > 100) {
+      openDialog("openPercentageHoldingFull");
     } else if (totalShares < 100) {
+      openDialog("openReviewNominee");
     } else {
+      sendEvents("next");
       const data = {
         data_status: "submitted",
       };
@@ -155,6 +154,20 @@ const confirmNomineesContainer = (WrappedComponent) => (props) => {
     handleNomineeExit(navigate);
   };
 
+  const closeDialogStates = (key) => () => {
+    setDialogStates({
+      ...dialogStates,
+      [key]: false,
+    });
+  };
+
+  const openDialog = (key) => {
+    setDialogStates({
+      ...dialogStates,
+      [key]: true,
+    });
+  };
+
   return (
     <WrappedComponent
       productName={productName}
@@ -171,6 +184,9 @@ const confirmNomineesContainer = (WrappedComponent) => (props) => {
       openRemoveSheet={openRemoveSheet}
       isButtonLoading={isButtonLoading}
       onBackClick={onBackClick}
+      openReviewNominee={dialogStates.openReviewNominee}
+      openPercentageHoldingFull={dialogStates.openPercentageHoldingFull}
+      closeDialogStates={closeDialogStates}
     />
   );
 };

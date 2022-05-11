@@ -12,6 +12,7 @@ import {
   getNominations,
   getEquityNominationData,
   getMfNominationData,
+  resetNomineeDetails,
 } from "businesslogic/dataStore/reducers/nominee";
 import { useDispatch, useSelector } from "react-redux";
 import { isEmpty } from "lodash-es";
@@ -68,6 +69,7 @@ const landingContainer = (WrappedComponent) => (props) => {
         DEMAT_NOMINEE_STATUS_MAPPER.rejected,
       ].includes(dematStatus)
     ) {
+      dispatch(resetNomineeDetails());
       navigate(NOMINEE_PATHNAME_MAPPER.personalDetails);
     } else if (dematStatus === DEMAT_NOMINEE_STATUS_MAPPER.esignReady) {
       navigate(NOMINEE_PATHNAME_MAPPER.esignLanding);

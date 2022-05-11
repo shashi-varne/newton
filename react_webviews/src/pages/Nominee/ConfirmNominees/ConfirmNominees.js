@@ -6,6 +6,8 @@ import Typography from "../../../designSystem/atoms/Typography";
 import CollapsibleSection from "../../../designSystem/molecules/CollapsibleSection";
 import BottomSheet from "../../../designSystem/organisms/BottomSheet";
 import Container from "../../../designSystem/organisms/ContainerWrapper";
+import ReviewNominee from "../../../featureComponent/Nominee/ReviewNominee";
+import HoldingPercentageFull from "../../../featureComponent/Nominee/HoldingPercentageFull";
 import {
   CONFIRM_NOMINEES as CONFIRM_NOMINEES_STRINGS,
   BOTTOMSHEETS_CONTENT,
@@ -31,6 +33,9 @@ const ConfirmNominees = ({
   openRemoveSheet,
   isButtonLoading,
   onBackClick,
+  closeDialogStates,
+  openReviewNominee,
+  openPercentageHoldingFull,
 }) => {
   return (
     <Container
@@ -327,6 +332,17 @@ const ConfirmNominees = ({
         onPrimaryClick={closeRemoveSheet}
         onSecondaryClick={handleRemoveNominee}
         dataAid={REMOVE_NOMINEE.dataAid}
+      />
+      <ReviewNominee
+        isOpen={openReviewNominee}
+        onPrimaryClick={closeDialogStates("openReviewNominee")}
+        onSecondaryClick={addNominee}
+        handleClose={closeDialogStates("openReviewNominee")}
+      />
+      <HoldingPercentageFull
+        isOpen={openPercentageHoldingFull}
+        onPrimaryClick={closeDialogStates("openPercentageHoldingFull")}
+        handleClose={closeDialogStates("openPercentageHoldingFull")}
       />
     </Container>
   );
