@@ -42,6 +42,7 @@ const AddressDetails = ({
   addAnotherNominee,
   editNominee,
   closeDialogStates,
+  disabled
 }) => {
   return (
     <Container
@@ -54,9 +55,7 @@ const AddressDetails = ({
           title: ADDRESS_DETAILS_STRINGS.buttonTitle,
           onClick,
           isLoading: isButtonLoading,
-          disabled:
-            !formData.frontDoc ||
-            (poiData.numberOfDocs === 2 && !formData.backDoc),
+          disabled: disabled            
         },
       }}
       className="nominee-personal-details"

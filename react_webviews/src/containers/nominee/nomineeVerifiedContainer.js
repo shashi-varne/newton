@@ -5,7 +5,7 @@ import { NOMINEE_VERIFIED } from "businesslogic/strings/nominee";
 import { nativeCallback } from "../../utils/native_callback";
 import { NOMINEE_PATHNAME_MAPPER } from "../../pages/Nominee/common/constants";
 
-const NomineeVerifiedContainer = (WrappedComponent) => (props) => {
+const nomineeVerifiedContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const { productName } = useMemo(getConfig, []);
 
@@ -51,4 +51,4 @@ const NomineeVerifiedContainer = (WrappedComponent) => (props) => {
   );
 };
 
-export default NomineeVerifiedContainer(Success);
+export default nomineeVerifiedContainer(Success);

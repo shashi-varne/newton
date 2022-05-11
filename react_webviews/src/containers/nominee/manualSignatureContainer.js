@@ -10,7 +10,7 @@ import ToastMessage from "../../designSystem/atoms/ToastMessage";
 
 const screen = "MANUAL_SIGNATURE";
 
-const ManualSignatureContainer = (WrappedComponent) => (props) => {
+const manualSignatureContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const { kyc, isLoading } = useUserKycHook();
   const email = kyc?.identification?.meta_data.email || "";
@@ -64,4 +64,4 @@ const ManualSignatureContainer = (WrappedComponent) => (props) => {
   );
 };
 
-export default ManualSignatureContainer(ManualSignature);
+export default manualSignatureContainer(ManualSignature);

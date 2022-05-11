@@ -5,7 +5,7 @@ import { NOMINEE_SUBMITTED } from "businesslogic/strings/nominee";
 import { nativeCallback } from "../../utils/native_callback";
 import { NOMINEE_PATHNAME_MAPPER } from "../../pages/Nominee/common/constants";
 
-const NomineeSubmittedContainer = (WrappedComponent) => (props) => {
+const nomineeSubmittedContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const { productName } = useMemo(getConfig, []);
 
@@ -52,4 +52,4 @@ const NomineeSubmittedContainer = (WrappedComponent) => (props) => {
   );
 };
 
-export default NomineeSubmittedContainer(Success);
+export default nomineeSubmittedContainer(Success);

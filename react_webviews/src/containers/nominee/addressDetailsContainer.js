@@ -24,6 +24,7 @@ import {
   getTotalShares,
   getNomineeDataById,
   getUpdatedData,
+  isNomineeUpdateFlow,
 } from "businesslogic/utils/nominee/functions";
 import {
   getNomineeDetails,
@@ -46,6 +47,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const dispatch = useDispatch();
   const nomineeDetails = useSelector((state) => getNomineeDetails(state));
+  const isUpdateFlow = isNomineeUpdateFlow(nomineeDetails);
   const equityNominationData = useSelector((state) =>
     getEquityNominationData(state)
   );
@@ -60,6 +62,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
     openReviewNominee: false,
     openPercentageHoldingFull: false,
   });
+  const [isDocumentUpdated, setIsDocumentUpdated] = useState(false);
 
   const [file, setFile] = useState(null);
   const [fileLoading, setFileLoading] = useState(false);
@@ -88,11 +91,14 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
       ADDRESS_DETAILS_FORM_MAPPER.address,
       ADDRESS_DETAILS_FORM_MAPPER.state,
       ADDRESS_DETAILS_FORM_MAPPER.poi,
-      ADDRESS_DETAILS_FORM_MAPPER.frontDoc,
     ];
-    if (poiData?.numberOfDocs === 2) {
-      keysToCheck.push(ADDRESS_DETAILS_FORM_MAPPER.backDoc);
+    if (!isUpdateFlow || isDocumentUpdated) {
+      keysToCheck.push(ADDRESS_DETAILS_FORM_MAPPER.frontDoc);
+      if (poiData?.numberOfDocs === 2) {
+        keysToCheck.push(ADDRESS_DETAILS_FORM_MAPPER.backDoc);
+      }
     }
+
     const result = validateFields(formData, keysToCheck);
     if (!result.canSubmit) {
       const data = { ...errorData, ...result.errorData };
@@ -116,9 +122,13 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
     if (!isDematNomineeStatusInit(equityNominationData)) {
       payload.requestId = equityNominationData.equity_nomination_request_id;
     }
-    if (nomineeDetails.id) {
+    if (isUpdateFlow) {
       payload.nomineeId = nomineeDetails.id;
-      let data = getUpdatedData(nomineeData, payload.data, Object.keys(nomineeDetails));
+      let data = getUpdatedData(
+        nomineeData,
+        payload.data,
+        Object.keys(nomineeDetails)
+      );
       if (data.frontDoc) {
         payload.file = poiData?.numberOfDocs === 2 ? file : formData?.frontDoc;
       } else {
@@ -141,9 +151,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
   };
 
   const editNominee = () => {
-    navigate(NOMINEE_PATHNAME_MAPPER.personalDetails, {
-      isEdit: true,
-    });
+    navigate(NOMINEE_PATHNAME_MAPPER.personalDetails);
   };
 
   const handleConfirmNominees = () => {
@@ -171,7 +179,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
         user_action: userAction || "",
         screen_name: "nominee_address_details",
         minor_nominee: nomineeDetails.isMinor ? "yes" : "no",
-        nominee_percentage_share: formData.share,
+        nominee_percentage_share: nomineeDetails.share,
       },
     };
     if (userAction === "just_set_events") {
@@ -184,10 +192,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
   const onChange = (name) => (event) => {
     const data = { ...formData };
     const errorInfo = { ...errorData };
-    const numberFields = [
-      ADDRESS_DETAILS_FORM_MAPPER.pincode,
-      ADDRESS_DETAILS_FORM_MAPPER.share,
-    ];
+    const numberFields = [ADDRESS_DETAILS_FORM_MAPPER.pincode];
     const nameFields = [
       ADDRESS_DETAILS_FORM_MAPPER.city,
       ADDRESS_DETAILS_FORM_MAPPER.state,
@@ -243,6 +248,9 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
         backFile: fileBase64,
       });
     }
+    if (isUpdateFlow && !isDocumentUpdated) {
+      setIsDocumentUpdated(true);
+    }
   };
 
   const onFileSelectError = (err) => {
@@ -275,6 +283,11 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
       openReviewNominee={dialogStates.openReviewNominee}
       openPercentageHoldingFull={dialogStates.openPercentageHoldingFull}
       isButtonLoading={fileLoading || isButtonLoading}
+      disabled={
+        (!isUpdateFlow || isDocumentUpdated) &&
+        (!formData.frontDoc ||
+          (poiData.numberOfDocs === 2 && !formData.backDoc))
+      }
       onClick={onClick}
       onChange={onChange}
       sendEvents={sendEvents}
