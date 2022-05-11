@@ -6,6 +6,7 @@ import {
   NOMINEE_MENU_OPTIONS,
   getMfNomineeData,
   getDematNomineeData,
+  DEMAT_NOMINEE_STATUS_MAPPER,
 } from "businesslogic/constants/nominee";
 import {
   getNominations,
@@ -13,24 +14,17 @@ import {
   getMfNominationData,
 } from "businesslogic/dataStore/reducers/nominee";
 import { useDispatch, useSelector } from "react-redux";
-import { get, isEmpty } from "lodash-es";
+import { isEmpty } from "lodash-es";
 import useLoadingState from "../../common/customHooks/useLoadingState";
 import useErrorState from "../../common/customHooks/useErrorState";
 import Api from "../../utils/api";
 import ToastMessage from "../../designSystem/atoms/ToastMessage";
 import { NOMINEE_PATHNAME_MAPPER } from "../../pages/Nominee/common/constants";
-
+import {
+  getMfNomineeStatus,
+  getDematNomineeStatus,
+} from "businesslogic/utils/nominee/functions";
 const screen = "NOMINEE_LANDING";
-
-const getDematNomineeStatus = (equityNominationData) => {
-  const status = get(equityNominationData, "friendly_status", "init");
-  return status;
-};
-
-const getMfNomineeStatus = (mfNominations) => {
-  const status = get(mfNominations, "meta_data_status", "init");
-  return status;
-};
 
 const landingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
@@ -66,16 +60,21 @@ const landingContainer = (WrappedComponent) => (props) => {
   };
 
   const onClick = () => {
-    const { eventStatus } = dematNomineeData;
-    if (eventStatus === "no_nominee_added") {
-      navigate("/nominee/personal-details");
-    } else if (eventStatus === "nominee_incomplete") {
-      navigate("/nominee/confirm-nominees");
-    } else if (eventStatus === "nomiee_rejected") {
-      navigate("/nominee/personal-details");
-    } else if (eventStatus === "nominee_esign_pending") {
-      navigate("/nominee/esign-landing");
+    if (dematStatus === DEMAT_NOMINEE_STATUS_MAPPER.inProgress) {
+      return;
+    } else if (
+      [
+        DEMAT_NOMINEE_STATUS_MAPPER.init,
+        DEMAT_NOMINEE_STATUS_MAPPER.rejected,
+      ].includes(dematStatus)
+    ) {
+      navigate(NOMINEE_PATHNAME_MAPPER.personalDetails);
+    } else if (dematStatus === DEMAT_NOMINEE_STATUS_MAPPER.esignReady) {
+      navigate(NOMINEE_PATHNAME_MAPPER.esignLanding);
+    } else {
+      navigate(NOMINEE_PATHNAME_MAPPER.confirmNominees);
     }
+    sendEvents("next");
   };
 
   useEffect(() => {
