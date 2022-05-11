@@ -106,6 +106,7 @@ const Landing = ({
         onClose={onMenuClose}
         onClickLabel={onClickMenuItem}
         options={menuOptions}
+        dataAid={NOMINEE_LANDING.menuOverlayDataAid}
       />
     </Container>
   );

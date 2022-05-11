@@ -267,6 +267,7 @@ const ConfirmNominees = ({
                   <Icon
                     src={require(`assets/paperclip.svg`)}
                     className="ncn-left-icon"
+                    dataAid={CONFIRM_NOMINEES_STRINGS.nomineePoi.iconDataAid}
                   />
                   <Typography
                     variant="body2"
@@ -297,7 +298,7 @@ const ConfirmNominees = ({
                   }}
                 />
               </div>
-              <Separator />
+              <Separator dataAid={`${index + 1}`} />
             </CollapsibleSection>
           );
         })
@@ -306,6 +307,7 @@ const ConfirmNominees = ({
           <Icon
             src={require(`assets/${productName}/nominee.svg`)}
             className="ncn-cw-nominees-icon"
+            dataAid={CONFIRM_NOMINEES_STRINGS.noNominee.iconDataAid}
           />
           <Typography
             variant="body8"
