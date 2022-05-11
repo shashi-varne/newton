@@ -20,7 +20,7 @@ import "./ConfirmNominees.scss";
 const REMOVE_NOMINEE = BOTTOMSHEETS_CONTENT.removeNominee;
 
 const getFomattedDob = (dateStr) => {
-  if (!date) {
+  if (!dateStr) {
     return "";
   }
 
