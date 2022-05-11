@@ -149,7 +149,7 @@ const PersonalDetails = ({
         dataAid={isMinor ? "3" : "5"}
         onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.share)}
         inputProps={{
-          maxLength: 3,
+          maxLength: 6,
         }}
         error={!isEmpty(errorData.share)}
         helperText={

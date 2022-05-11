@@ -17,6 +17,7 @@ import {
   validateFields,
   getNomineePersonalDetails,
   getAvailableShares,
+  validateDecimalPercentage,
 } from "businesslogic/utils/nominee/functions";
 import {
   getEquityNominationData,
@@ -100,10 +101,7 @@ const personalDetailsContainer = (WrappedComponent) => (props) => {
   const onChange = (name) => (event) => {
     const data = { ...formData };
     const errorInfo = { ...errorData };
-    const numberFields = [
-      PERSONAL_DETAILS_FORM_MAPPER.mobile,
-      PERSONAL_DETAILS_FORM_MAPPER.share,
-    ];
+    const numberFields = [PERSONAL_DETAILS_FORM_MAPPER.mobile];
     const nameFields = [
       PERSONAL_DETAILS_FORM_MAPPER.name,
       PERSONAL_DETAILS_FORM_MAPPER.guardianName,
@@ -117,6 +115,11 @@ const personalDetailsContainer = (WrappedComponent) => (props) => {
       }
       const input = document.getElementById(PERSONAL_DETAILS_FORM_MAPPER.dob);
       input.onkeyup = formatDate;
+    }
+    if (name === PERSONAL_DETAILS_FORM_MAPPER.share) {
+      if (!validateDecimalPercentage(value)) {
+        return;
+      }
     }
     data[name] = value;
     errorInfo[name] = "";
