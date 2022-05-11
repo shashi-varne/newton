@@ -22,6 +22,8 @@ import {
   hideAddAnotherNominee,
   getAvailableShares,
   getTotalShares,
+  getNomineeDataById,
+  getUpdatedData,
 } from "businesslogic/utils/nominee/functions";
 import {
   getNomineeDetails,
@@ -64,6 +66,9 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
   const [previewFiles, setPreviewFiles] = useState(null);
 
   const poiData = useMemo(() => getPoiData(formData.poi), [formData.poi]);
+  const nomineeData = useMemo(() =>
+    getNomineeDataById(equityNominationData.eq_nominee_list, nomineeDetails.id)
+  );
   const confirmNominees = useMemo(
     () => hideAddAnotherNominee(equityNominationData?.eq_nominee_list),
     [equityNominationData?.eq_nominee_list]
@@ -96,6 +101,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
     }
     dispatch(updateNomineeDetails(formData));
     sendEvents("next");
+    const addressDoc = poiData?.numberOfDocs === 2 ? file : formData?.frontDoc;
     let payload = {
       Api,
       screen,
@@ -103,7 +109,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
         ...nomineeDetails,
         ...formData,
       },
-      file: poiData?.numberOfDocs === 2 ? file : formData?.frontDoc,
+      file: addressDoc,
       sagaCallback,
       equityNominationData,
     };
@@ -112,6 +118,13 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
     }
     if (nomineeDetails.id) {
       payload.nomineeId = nomineeDetails.id;
+      let data = getUpdatedData(nomineeData, payload.data, Object.keys(nomineeDetails));
+      if (data.frontDoc) {
+        payload.file = poiData?.numberOfDocs === 2 ? file : formData?.frontDoc;
+      } else {
+        payload.file = null;
+      }
+      payload.data = data;
       dispatch(updateNomineeRequest(payload));
     } else {
       dispatch(createNomineeRequest(payload));
@@ -258,7 +271,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
       errorData={errorData}
       isMinor={nomineeDetails.isMinor}
       confirmNominees={confirmNominees}
-      openNomineeSaved={dialogStates.openNomineeSaved || true}
+      openNomineeSaved={dialogStates.openNomineeSaved}
       openReviewNominee={dialogStates.openReviewNominee}
       openPercentageHoldingFull={dialogStates.openPercentageHoldingFull}
       isButtonLoading={fileLoading || isButtonLoading}

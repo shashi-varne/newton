@@ -16,6 +16,7 @@ import {
   updateNomineeDetails,
   resetNomineeDetails,
   updateNomineeStatus,
+  getNominations,
 } from "businesslogic/dataStore/reducers/nominee";
 import { PERSONAL_DETAILS_FORM_MAPPER } from "businesslogic/constants/nominee";
 import useLoadingState from "../../common/customHooks/useLoadingState";
@@ -43,6 +44,12 @@ const confirmNomineesContainer = (WrappedComponent) => (props) => {
   );
   const [openNomineeTab, setOpenNomineeTabs] = useState([true, true, true]);
 
+  useEffect(() => {
+    dispatch(getNominations({
+      Api,
+      screen
+    }))
+  }, [])
   const closeRemoveSheet = () => {
     if (isButtonLoading) return;
     setSelectedIndex("");

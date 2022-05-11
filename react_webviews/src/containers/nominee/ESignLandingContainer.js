@@ -15,6 +15,7 @@ const initializeData = () => {
     isFailed: status === "failed",
   };
 };
+
 const ESignLandingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const { productName, isFailed } = useMemo(initializeData, []);
@@ -24,6 +25,7 @@ const ESignLandingContainer = (WrappedComponent) => (props) => {
   const equityNominationData = useSelector((state) =>
     getEquityNominationData(state)
   );
+  
   useEffect(() => {
     if (isFailed) {
       setOpenEsignFailure(true);
