@@ -1,16 +1,40 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import ManualSignature from "../../pages/Nominee/ManualSignature/ManualSignature";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
+import { openPdf } from "../../kyc/common/functions";
+import { NOMINEE_API_CONSTANTS } from "businesslogic/apis/nominee";
+import { getUrlParams } from "../../utils/validators";
+import ToastMessage from "../../designSystem/atoms/ToastMessage";
+
+const screen = "MANUAL_SIGNATURE";
 
 const ManualSignatureContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const { kyc, isLoading } = useUserKycHook();
   const email = kyc?.identification?.meta_data.email || "";
+
   const handleDownloadForm = () => {
     const userAction = "next";
     sendEvents(userAction);
+
+    const params = getUrlParams();
+    const { base_url = "" } = params;
+    const formUrl = base_url + NOMINEE_API_CONSTANTS.nominationPdfForm;
+
+    try {
+      openPdf(formUrl, "download_kra_form");
+    } catch (err) {
+      console.log({ err });
+      ToastMessage("Something went wrong");
+    }
+  };
+
+  const onPressOkay = () => {
+    const userAction = "next";
+    sendEvents(userAction);
+    navigate("/nominee/landing");
   };
 
   const sendEvents = (userAction) => {
@@ -34,6 +58,8 @@ const ManualSignatureContainer = (WrappedComponent) => (props) => {
       email={email}
       onClickDownloadForm={handleDownloadForm}
       sendEvents={sendEvents}
+      onPressOkay={onPressOkay}
+      isLoading={isLoading}
     />
   );
 };
