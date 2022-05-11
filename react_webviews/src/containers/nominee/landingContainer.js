@@ -18,6 +18,7 @@ import useLoadingState from "../../common/customHooks/useLoadingState";
 import useErrorState from "../../common/customHooks/useErrorState";
 import Api from "../../utils/api";
 import ToastMessage from "../../designSystem/atoms/ToastMessage";
+import { NOMINEE_PATHNAME_MAPPER } from "../../pages/Nominee/common/constants";
 
 const screen = "NOMINEE_LANDING";
 
@@ -35,7 +36,7 @@ const landingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const [anchorEl, setAnchorEl] = useState(false);
   const [openResetNominee, setOpenResetNominee] = useState(false);
-  const { isSdk } = useMemo(getConfig, []);
+  const { isWebOrSdk } = useMemo(getConfig, []);
   const { isPageLoading } = useLoadingState(screen);
   const { isUpdateFailed, isFetchFailed, errorMessage } = useErrorState(screen);
   const equityNominations = useSelector((state) =>
@@ -119,7 +120,7 @@ const landingContainer = (WrappedComponent) => (props) => {
   };
 
   const handleConfirmEditNominees = () => {
-    navigate("/nominee/confirm-nominees");
+    navigate(NOMINEE_PATHNAME_MAPPER.confirmNominees);
   };
 
   useEffect(() => {
@@ -130,10 +131,10 @@ const landingContainer = (WrappedComponent) => (props) => {
 
   const onBackClick = () => {
     sendEvents("back");
-    if (isSdk) {
-      navigate("/my-account");
+    if (isWebOrSdk) {
+      navigate(NOMINEE_PATHNAME_MAPPER.myAccount);
     } else {
-      props.history.goBack();
+      nativeCallback({ action: "exit_web" });
     }
   };
 
