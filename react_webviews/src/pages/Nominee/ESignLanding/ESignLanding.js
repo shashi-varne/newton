@@ -57,6 +57,7 @@ const ESignLanding = ({
   openEsignFailure,
   redirectToEsign,
   redirectToManualSignature,
+  closeAadharBottomsheet,
   retryEsign,
   showLoader
 }) => {
