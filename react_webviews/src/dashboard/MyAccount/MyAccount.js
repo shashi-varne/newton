@@ -579,8 +579,9 @@ class MyAccount extends Component {
                     className="my-imgc"
                     src={require(`assets/my_nominee_icon.svg`)}
                     alt=""
+                    dataAid="left"
                   />
-                  <div data-aid="tv_myNominees">My nominees</div>
+                  <div data-aid="tv_myNominee">My nominees</div>
                 </div>
               )}
               {(tradingEnabled && (!isSdk || currentUser.pin_status === 'pin_setup_complete')) && (
