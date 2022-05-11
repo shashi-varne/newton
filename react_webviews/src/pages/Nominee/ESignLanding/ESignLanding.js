@@ -65,7 +65,7 @@ const ESignLanding = ({
     <Container
       sendEvents={sendEvents("just_set_events")}
       headerProps={{
-        dataAid: ESIGN_LANDING.title.dataAid,
+        dataAid: ESIGN_LANDING.navigationDataAid,
         headerTitle: "",
       }}
       isPageLoading={showLoader}
@@ -80,26 +80,26 @@ const ESignLanding = ({
     >
       <LandingHeader
         variant="center"
-        dataAid={ESIGN_LANDING.LandingHeader.dataAid}
+        dataAid={ESIGN_LANDING.landingHeader.dataAid}
       >
         <LandingHeaderImage
           imgSrc={require(`assets/${productName}/iv_esign_top.svg`)}
         />
         <LandingHeaderTitle>
-          {ESIGN_LANDING.LandingHeader.title}
+          {ESIGN_LANDING.landingHeader.title}
         </LandingHeaderTitle>
         <LandingHeaderSubtitle dataIdx={1}>
           <Typography
             variant="body2"
             color={"foundationColors.content.secondary"}
           >
-            {ESIGN_LANDING.LandingHeader.subtitle}
+            {ESIGN_LANDING.landingHeader.subtitle}
             <Typography
               variant="body2"
               color={"foundationColors.content.primary"}
               component="span"
             >
-              {ESIGN_LANDING.LandingHeader.boldSubtitle}
+              {ESIGN_LANDING.landingHeader.boldSubtitle}
             </Typography>
           </Typography>
         </LandingHeaderSubtitle>

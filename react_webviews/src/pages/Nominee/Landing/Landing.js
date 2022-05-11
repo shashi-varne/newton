@@ -8,7 +8,6 @@ import WrapperBox from "../../../designSystem/atoms/WrapperBox";
 import MenuOverlay from "../../../designSystem/atoms/MenuOverlay";
 import Container from "../../../designSystem/organisms/ContainerWrapper";
 import BottomSheet from "../../../designSystem/organisms/BottomSheet";
-import { NOMINEE_MENU_OPTIONS } from "businesslogic/constants/nominee";
 import {
   NOMINEE_LANDING,
   BOTTOMSHEETS_CONTENT,
@@ -30,6 +29,8 @@ const Landing = ({
   confirmEditNominees,
   closeResetNominee,
   openResetNominees = false,
+  isPageLoading,
+  onBackClick,
   sendEvents,
 }) => {
   return (
@@ -37,8 +38,10 @@ const Landing = ({
       headerProps={{
         dataAid: NOMINEE_LANDING.title.dataAid,
         headerTitle: NOMINEE_LANDING.title.text,
+        onBackClick,
       }}
       noFooter={true}
+      isPageLoading={isPageLoading}
       className="nominee-landing"
       dataAid="nominee"
       eventData={sendEvents("just_set_events")}
@@ -130,7 +133,7 @@ const NomineeDetails = ({ data, index }) => (
           color="foundationColors.content.secondary"
           dataAid={`${data?.share?.dataAid}${index}`}
         >
-          {data.share.value}
+          {data?.share?.value}
         </Typography>
       )}
     </Stack>

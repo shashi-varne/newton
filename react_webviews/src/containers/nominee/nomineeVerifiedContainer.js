@@ -38,9 +38,10 @@ const NomineeVerifiedContainer = (WrappedComponent) => (props) => {
 
   return (
     <WrappedComponent
+      sendEvents={sendEvents}
       onClick={onClick}
       productName={productName}
-      dataAid={NOMINEE_VERIFIED.title.dataAid}
+      dataAid={NOMINEE_VERIFIED.screenDataAid}
       title={NOMINEE_VERIFIED.successTitle.text}
       titleDataAid={NOMINEE_VERIFIED.successTitle.dataAid}
       subtitle={NOMINEE_VERIFIED.successSubtitle.text}
