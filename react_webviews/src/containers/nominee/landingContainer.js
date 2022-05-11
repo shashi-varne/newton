@@ -13,10 +13,11 @@ import {
   getMfNominationData,
 } from "businesslogic/dataStore/reducers/nominee";
 import { useDispatch, useSelector } from "react-redux";
-import { get } from "lodash-es";
+import { get, isEmpty } from "lodash-es";
 import useLoadingState from "../../common/customHooks/useLoadingState";
 import useErrorState from "../../common/customHooks/useErrorState";
 import Api from "../../utils/api";
+import ToastMessage from "../../designSystem/atoms/ToastMessage";
 
 const screen = "NOMINEE_LANDING";
 
@@ -69,7 +70,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       navigate("/nominee/personal-details");
     } else if (eventStatus === "nominee_incomplete") {
       navigate("/nominee/confirm-nominees");
-    } else if (eventStatus === nomiee_rejected) {
+    } else if (eventStatus === "nomiee_rejected") {
       navigate("/nominee/personal-details");
     } else if (eventStatus === "nominee_esign_pending") {
       navigate("/nominee/esign-landing");
