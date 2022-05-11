@@ -1,1 +1,1 @@
-export { default } from './Nominee';
+export { default } from "./Nominee";
