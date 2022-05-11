@@ -42,7 +42,7 @@ const Status = (props) => {
         <Typography
           variant="body4"
           color={VARIANT_COLOR_MAPPER[variant]}
-          dataAid={variant?.toLowerCase()}
+          dataAid={"label"}
           allCaps
         >
           {title}

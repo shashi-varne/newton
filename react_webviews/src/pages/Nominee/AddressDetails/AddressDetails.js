@@ -42,7 +42,7 @@ const AddressDetails = ({
   addAnotherNominee,
   editNominee,
   closeDialogStates,
-  disabled
+  disabled,
 }) => {
   return (
     <Container
@@ -55,7 +55,7 @@ const AddressDetails = ({
           title: ADDRESS_DETAILS_STRINGS.buttonTitle,
           onClick,
           isLoading: isButtonLoading,
-          disabled: disabled            
+          disabled: disabled,
         },
       }}
       className="nominee-personal-details"
@@ -116,7 +116,7 @@ const AddressDetails = ({
       <Dropdown
         options={NOMINEE_PROOF_OF_IDENTITY}
         label={ADDRESS_DETAILS_STRINGS.formLabels.poi}
-        dataAid={ADDRESS_DETAILS_FORM_MAPPER.poi}
+        dataAid={ADDRESS_DETAILS_STRINGS.dropdownDataAid}
         onChange={onChange(ADDRESS_DETAILS_FORM_MAPPER.poi)}
         value={formData.poi}
         error={!isEmpty(errorData.poi)}
