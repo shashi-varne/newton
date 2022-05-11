@@ -59,7 +59,7 @@ const ESignLanding = ({
   redirectToManualSignature,
   closeAadharBottomsheet,
   retryEsign,
-  showLoader
+  showLoader,
 }) => {
   return (
     <Container
@@ -72,7 +72,7 @@ const ESignLanding = ({
       footer={{
         button1Props: {
           title: ESIGN_LANDING.ctaText,
-          onClick: { onClickProceed },
+          onClick: onClickProceed,
         },
       }}
       className="esign-wrapper"

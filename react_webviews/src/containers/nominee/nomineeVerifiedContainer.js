@@ -14,7 +14,7 @@ const NomineeVerifiedContainer = (WrappedComponent) => (props) => {
       event_name: "nominee",
       properties: {
         user_action: userAction || "",
-        screen_name: "nominee_approval",
+        screen_name: "esign_success",
       },
     };
 
