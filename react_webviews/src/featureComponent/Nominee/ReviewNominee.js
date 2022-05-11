@@ -6,6 +6,7 @@ import { BOTTOMSHEETS_CONTENT } from "businesslogic/strings/nominee";
 const STRINGS = BOTTOMSHEETS_CONTENT.reviewNomination;
 const ReviewNominee = ({
   isOpen,
+  hideAddNominee,
   handleClose,
   onPrimaryClick,
   onSecondaryClick,
@@ -18,7 +19,7 @@ const ReviewNominee = ({
       imageTitleSrc={require(`assets/caution.svg`)}
       subtitle={STRINGS.subtitle}
       primaryBtnTitle={STRINGS.editNominee}
-      secondaryBtnTitle={STRINGS.addAnotherNominee}
+      secondaryBtnTitle={!hideAddNominee ? STRINGS.addAnotherNominee : ""}
       onPrimaryClick={onPrimaryClick}
       onSecondaryClick={onSecondaryClick}
       dataAid={STRINGS.dataAid}

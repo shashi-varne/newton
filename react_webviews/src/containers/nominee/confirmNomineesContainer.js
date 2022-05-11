@@ -26,6 +26,15 @@ import { handleNomineeExit } from "../../pages/Nominee/common/functions";
 
 const screen = "CONFIRM_NOMINEE";
 
+const initializeData = (list) => () => {
+  const nominees = getAllNominees(list);
+  const totalShares = getTotalShares(list);
+  return {
+    nominees,
+    totalShares,
+  };
+};
+
 const confirmNomineesContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const dispatch = useDispatch();
@@ -41,10 +50,11 @@ const confirmNomineesContainer = (WrappedComponent) => (props) => {
   const equityNominationData = useSelector((state) =>
     getEquityNominationData(state)
   );
-  const nominees = useMemo(
-    () => getAllNominees(equityNominationData?.eq_nominee_list),
+  const { nominees, totalShares } = useMemo(
+    initializeData(equityNominationData?.eq_nominee_list),
     [equityNominationData?.eq_nominee_list]
   );
+
   const [openNomineeTab, setOpenNomineeTabs] = useState([true, true, true]);
 
   const closeRemoveSheet = () => {
@@ -59,9 +69,37 @@ const confirmNomineesContainer = (WrappedComponent) => (props) => {
   };
 
   const addNominee = () => {
+    const isPercentageFull = checkPercentageFull(true);
+    if (isPercentageFull) {
+      return;
+    }
     sendEvents("next");
     dispatch(resetNomineeDetails());
     navigate(NOMINEE_PATHNAME_MAPPER.personalDetails);
+  };
+
+  const checkPercentageFull = (isPercentageFull = false) => {
+    if (totalShares > 100 || (isPercentageFull && totalShares === 100)) {
+      openDialog("openPercentageHoldingFull");
+      return true;
+    }
+  };
+
+  const checkReviewNomination = () => {
+    if (totalShares < 100) {
+      openDialog("openReviewNominee");
+      return;
+    }
+  };
+
+  const canSubmitNominees = () => {
+    let canSubmit = true;
+    if (checkPercentageFull()) {
+      canSubmit = false;
+    } else if (checkReviewNomination()) {
+      canSubmit = false;
+    }
+    return canSubmit;
   };
 
   const onClick = () => {
@@ -69,28 +107,27 @@ const confirmNomineesContainer = (WrappedComponent) => (props) => {
       addNominee();
       return;
     }
-    const totalShares = getTotalShares(equityNominationData.eq_nominee_list);
-    if (totalShares > 100) {
-      openDialog("openPercentageHoldingFull");
-    } else if (totalShares < 100) {
-      openDialog("openReviewNominee");
-    } else {
-      sendEvents("next");
-      const data = {
-        data_status: "submitted",
-      };
-      const sagaCallback = () => {
-        navigate(NOMINEE_PATHNAME_MAPPER.nomineeSubmitted);
-      };
-      const payload = {
-        screen,
-        Api,
-        data,
-        requestId: equityNominationData.equity_nomination_request_id,
-        sagaCallback,
-      };
-      dispatch(updateNomineeStatus(payload));
+
+    const canSubmit = canSubmitNominees();
+    if (!canSubmit) {
+      return;
     }
+
+    sendEvents("next");
+    const data = {
+      data_status: "submitted",
+    };
+    const sagaCallback = () => {
+      navigate(NOMINEE_PATHNAME_MAPPER.nomineeSubmitted);
+    };
+    const payload = {
+      screen,
+      Api,
+      data,
+      requestId: equityNominationData.equity_nomination_request_id,
+      sagaCallback,
+    };
+    dispatch(updateNomineeStatus(payload));
   };
 
   useEffect(() => {

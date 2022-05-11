@@ -25,7 +25,7 @@ const AddressDetails = ({
   isMinor,
   formData = {},
   errorData = {},
-  confirmNominees,
+  hideAddNominee,
   onChange,
   sendEvents,
   onFileSelectStart,
@@ -188,11 +188,12 @@ const AddressDetails = ({
         isOpen={openNomineeSaved}
         onPrimaryClick={onPrimaryClick}
         onSecondaryClick={handleConfirmNominees}
-        confirmNominees={confirmNominees}
+        hideAddNominee={hideAddNominee}
         handleClose={closeDialogStates("openNomineeSaved")}
       />
       <ReviewNominee
         isOpen={openReviewNominee}
+        hideAddNominee={hideAddNominee}
         onPrimaryClick={editNominee}
         onSecondaryClick={addAnotherNominee}
         handleClose={closeDialogStates("openReviewNominee")}

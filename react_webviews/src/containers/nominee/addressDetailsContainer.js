@@ -20,7 +20,6 @@ import {
   getPoiData,
   isDematNomineeStatusInit,
   hideAddAnotherNominee,
-  getAvailableShares,
   getTotalShares,
   getNomineeDataById,
   getUpdatedData,
@@ -43,11 +42,29 @@ import { NOMINEE_PATHNAME_MAPPER } from "../../pages/Nominee/common/constants";
 
 const screen = "ADDRESS_DETAILS";
 
+const DEFAULT_DIALOG_STATES = {
+  openNomineeSaved: false,
+  openReviewNominee: false,
+  openPercentageHoldingFull: false,
+};
+
+const initializeData = (list, nomineeDetails) => () => {
+  const nomineeData = getNomineeDataById(list, nomineeDetails?.id);
+  const hideAddNominee = hideAddAnotherNominee(list);
+  const totalShares = getTotalShares(list);
+  const isUpdateFlow = isNomineeUpdateFlow(nomineeDetails);
+  return {
+    nomineeData,
+    totalShares,
+    hideAddNominee,
+    isUpdateFlow,
+  };
+};
+
 const addressDetailsContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const dispatch = useDispatch();
   const nomineeDetails = useSelector((state) => getNomineeDetails(state));
-  const isUpdateFlow = isNomineeUpdateFlow(nomineeDetails);
   const equityNominationData = useSelector((state) =>
     getEquityNominationData(state)
   );
@@ -57,11 +74,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
     getNomineeAddressDetails(nomineeDetails)
   );
   const [errorData, setErrorData] = useState(DEFAULT_NOMINEE_ADDRESS_DETAILS);
-  const [dialogStates, setDialogStates] = useState({
-    openNomineeSaved: false,
-    openReviewNominee: false,
-    openPercentageHoldingFull: false,
-  });
+  const [dialogStates, setDialogStates] = useState(DEFAULT_DIALOG_STATES);
   const [isDocumentUpdated, setIsDocumentUpdated] = useState(false);
 
   const [file, setFile] = useState(null);
@@ -69,12 +82,9 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
   const [previewFiles, setPreviewFiles] = useState(null);
 
   const poiData = useMemo(() => getPoiData(formData.poi), [formData.poi]);
-  const nomineeData = useMemo(() =>
-    getNomineeDataById(equityNominationData?.eq_nominee_list, nomineeDetails?.id)
-  );
-  const confirmNominees = useMemo(
-    () => hideAddAnotherNominee(equityNominationData?.eq_nominee_list),
-    [equityNominationData?.eq_nominee_list]
+  const { nomineeData, totalShares, hideAddNominee, isUpdateFlow } = useMemo(
+    initializeData(equityNominationData?.eq_nominee_list, nomineeDetails),
+    [equityNominationData?.eq_nominee_list, nomineeDetails?.id]
   );
 
   useEffect(() => {
@@ -146,6 +156,10 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
   };
 
   const addAnotherNominee = () => {
+    if (totalShares >= 100) {
+      openDialog("openPercentageHoldingFull");
+      return;
+    }
     dispatch(resetNomineeDetails());
     navigate(NOMINEE_PATHNAME_MAPPER.personalDetails);
   };
@@ -155,19 +169,17 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
   };
 
   const handleConfirmNominees = () => {
-    if (getTotalShares(equityNominationData?.eq_nominee_list) < 100) {
+    if (totalShares < 100) {
       openDialog("openReviewNominee");
+      return;
     }
     navigate(NOMINEE_PATHNAME_MAPPER.confirmNominees);
   };
 
   const handlePrimaryClick = () => {
-    if (confirmNominees) {
+    if (hideAddNominee) {
       handleConfirmNominees();
     } else {
-      if (getAvailableShares(equityNominationData?.eq_nominee_list) <= 0) {
-        openDialog("openPercentageHoldingFull");
-      }
       addAnotherNominee();
     }
   };
@@ -267,7 +279,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
 
   const openDialog = (key) => {
     setDialogStates({
-      ...dialogStates,
+      ...DEFAULT_DIALOG_STATES,
       [key]: true,
     });
   };
@@ -278,7 +290,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
       formData={formData}
       errorData={errorData}
       isMinor={nomineeDetails.isMinor}
-      confirmNominees={confirmNominees}
+      hideAddNominee={hideAddNominee}
       openNomineeSaved={dialogStates.openNomineeSaved}
       openReviewNominee={dialogStates.openReviewNominee}
       openPercentageHoldingFull={dialogStates.openPercentageHoldingFull}

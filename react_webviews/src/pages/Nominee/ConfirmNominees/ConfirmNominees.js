@@ -81,6 +81,7 @@ const ConfirmNominees = ({
               isOpen={openNomineeTab[index]}
               dataAid={index}
               onClick={handleNominees(index)}
+              key={index}
             >
               <div className="flex-between">
                 <div>
