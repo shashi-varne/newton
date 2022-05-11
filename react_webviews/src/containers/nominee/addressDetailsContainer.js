@@ -139,8 +139,10 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
         payload.data,
         Object.keys(nomineeDetails)
       );
-      if (data.frontDoc) {
+      if (isDocumentUpdated) {
         payload.file = poiData?.numberOfDocs === 2 ? file : formData?.frontDoc;
+        data[ADDRESS_DETAILS_FORM_MAPPER.poi] =
+          formData[ADDRESS_DETAILS_FORM_MAPPER.poi];
       } else {
         payload.file = null;
       }
@@ -173,6 +175,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
       openDialog("openReviewNominee");
       return;
     }
+    dispatch(resetNomineeDetails());
     navigate(NOMINEE_PATHNAME_MAPPER.confirmNominees);
   };
 
@@ -241,7 +244,9 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
 
   const onFileSelectComplete = (docSide) => (file, fileBase64) => {
     setFileLoading(false);
+    const errorInfo = { ...errorData };
     if (docSide === "front") {
+      errorInfo[ADDRESS_DETAILS_FORM_MAPPER.frontDoc] = "";
       setFormData({
         ...formData,
         [ADDRESS_DETAILS_FORM_MAPPER.frontDoc]: file,
@@ -251,6 +256,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
         frontFile: fileBase64,
       });
     } else {
+      errorInfo[ADDRESS_DETAILS_FORM_MAPPER.backDoc] = "";
       setFormData({
         ...formData,
         [ADDRESS_DETAILS_FORM_MAPPER.backDoc]: file,
@@ -260,6 +266,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
         backFile: fileBase64,
       });
     }
+    setErrorData(errorInfo);
     if (isUpdateFlow && !isDocumentUpdated) {
       setIsDocumentUpdated(true);
     }
@@ -295,11 +302,6 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
       openReviewNominee={dialogStates.openReviewNominee}
       openPercentageHoldingFull={dialogStates.openPercentageHoldingFull}
       isButtonLoading={fileLoading || isButtonLoading}
-      disabled={
-        (!isUpdateFlow || isDocumentUpdated) &&
-        (!formData.frontDoc ||
-          (poiData.numberOfDocs === 2 && !formData.backDoc))
-      }
       onClick={onClick}
       onChange={onChange}
       sendEvents={sendEvents}
