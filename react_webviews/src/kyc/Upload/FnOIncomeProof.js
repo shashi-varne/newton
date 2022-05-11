@@ -46,7 +46,14 @@ const UPLOAD_OPTIONS_MAP = {
     fileName: "salary-slip",
     api_doc_type: "payslips",
   },
-  
+  'demat-holding-statement': {
+    title: 'Demat holding statement',
+    subtitle: 'Last 1 month',
+    nativePickerMethodName: 'open_file',
+    supportedFormats: ["pdf"],
+    fileName: "demat-holding-statement",
+    api_doc_type: "demat_holding_statement",
+  },
 }
 
 const ORElem = (
