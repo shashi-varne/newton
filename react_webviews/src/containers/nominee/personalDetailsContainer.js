@@ -17,6 +17,8 @@ import {
   validateFields,
   getNomineePersonalDetails,
   getAvailableShares,
+  getNomineeDataById,
+  isNomineeUpdateFlow,
 } from "businesslogic/utils/nominee/functions";
 import {
   getEquityNominationData,
@@ -26,6 +28,18 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { NOMINEE_PATHNAME_MAPPER } from "../../pages/Nominee/common/constants";
 import { handleNomineeExit } from "../../pages/Nominee/common/functions";
+
+const initializeData = (list, nomineeDetails) => () => {
+  const nomineeData = getNomineeDataById(list, nomineeDetails?.id);
+  let availableShare = getAvailableShares(list);
+  const isUpdateFlow = isNomineeUpdateFlow(nomineeDetails);
+  if (isUpdateFlow) {
+    availableShare += nomineeData[PERSONAL_DETAILS_FORM_MAPPER.share];
+  }
+  return {
+    availableShare,
+  };
+};
 
 const personalDetailsContainer = (WrappedComponent) => (props) => {
   const dispatch = useDispatch();
@@ -41,9 +55,9 @@ const personalDetailsContainer = (WrappedComponent) => (props) => {
   const [errorData, setErrorData] = useState(DEFAULT_NOMINEE_PERSONAL_DETAILS);
   const [openExitNominee, setOpenExitNominee] = useState(false);
 
-  const availableShare = useMemo(
-    () => getAvailableShares(equityNominationData?.eq_nominee_list),
-    [equityNominationData?.eq_nominee_list]
+  const { availableShare } = useMemo(
+    initializeData(equityNominationData?.eq_nominee_list, nomineeDetails),
+    [equityNominationData?.eq_nominee_list, nomineeDetails?.id]
   );
 
   const handleCheckbox = () => {
