@@ -27,7 +27,8 @@ import { openFilePicker, validateFileTypeAndSize } from '../../../utils/function
 import Compressor from 'compressorjs';
 import PropTypes from 'prop-types';
 
-const isWeb = getConfig().Web;
+const config = getConfig();
+const isWeb = config.Web;
 
 export function promisableGetBase64(file) {
   const reader = new FileReader();
@@ -89,7 +90,8 @@ export const WVFilePickerWrapper = ({
   fileHandlerParams, // Object containing any additional params for native file handler (check functions.js > openFilePicker())
   customClickHandler, // To override <input> click handler (Not usually required, only for absolute edge cases)
   shouldCompress, // If true, image files will be compressed to make them smaller in size
-  children // Any child element for which file picker functionality is required
+  children, // Any child element for which file picker functionality is required
+  docType
 }) => {
   const [openOptionsDialog, setOpenOptionsDialog] = useState(false);
   const [filePickerType, setFilePickerType] = useState(nativePickerMethodName);
@@ -135,7 +137,16 @@ export const WVFilePickerWrapper = ({
     }
   };
 
-  const onElementClick = () => {
+  const onElementClick = async () => {
+    if (docType === "image" && config.isQaTest) {
+      const response = await fetch('https://picsum.photos/200');
+      const blob = await response.blob();
+      const dummyFile = new File([blob], 'image.jpg', {
+        type: blob.type,
+      });
+      onFileSelected(dummyFile)
+      return;
+    }
     // Note: Order of params in array matters
     const functionParams = [
       customPickerId,

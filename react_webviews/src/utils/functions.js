@@ -194,6 +194,7 @@ export const getConfig = () => {
   let { base_url = ""  } = main_query_params;
   let origin = window.location.origin;
   let generic_callback = true;
+  let isQaTest = false;
 
   let isProdFisdom = origin.indexOf('app.fisdom.com') >= 0  || origin.indexOf('wv.fisdom.com') >= 0 || 
         origin.indexOf('app2.fisdom.com') >= 0;
@@ -358,6 +359,8 @@ export const getConfig = () => {
 
   let searchParams = ``;
   let searchParamsMustAppend = ``;
+
+  returnConfig.isQaTest = isQaTest;
 
   base_url_default = '' // removing as of now, because from backend its getting appended & in plutus_redirect_url, so need atleast one from from webview
   if(!base_url_default) {
