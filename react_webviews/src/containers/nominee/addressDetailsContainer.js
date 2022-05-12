@@ -6,11 +6,7 @@ import {
   navigate as navigateFunc,
   combinedDocBlob,
 } from "../../utils/functions";
-import {
-  validateAddressWords,
-  validateName,
-  validateNumber,
-} from "../../utils/validators";
+import { validateName, validateNumber } from "../../utils/validators";
 import { nativeCallback } from "../../utils/native_callback";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -55,12 +51,12 @@ const DEFAULT_DIALOG_STATES = {
 };
 
 const initializeData = (list, nomineeDetails) => () => {
-  const nomineeData = getNomineeDataById(list, nomineeDetails?.id);
+  const oldNomineeData = getNomineeDataById(list, nomineeDetails?.id);
   const hideAddNominee = hideAddAnotherNominee(list);
   const totalShares = getTotalShares(list);
   const isUpdateFlow = isNomineeUpdateFlow(nomineeDetails);
   return {
-    nomineeData,
+    oldNomineeData,
     totalShares,
     hideAddNominee,
     isUpdateFlow,
@@ -88,7 +84,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
   const [previewFiles, setPreviewFiles] = useState(null);
 
   const poiData = useMemo(() => getPoiData(formData.poi), [formData.poi]);
-  const { nomineeData, totalShares, hideAddNominee, isUpdateFlow } = useMemo(
+  const { oldNomineeData, totalShares, hideAddNominee, isUpdateFlow } = useMemo(
     initializeData(equityNominationData?.eq_nominee_list, nomineeDetails),
     [equityNominationData?.eq_nominee_list, nomineeDetails]
   );
@@ -124,6 +120,12 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
     dispatch(updateNomineeDetails(formData));
     sendEvents("next");
     const addressDoc = poiData?.numberOfDocs === 2 ? file : formData?.frontDoc;
+    const sagaCallback = () => {
+      if (isDocumentUpdated) {
+        setIsDocumentUpdated(false);
+      }
+      openNomineeSaved();
+    };
     let payload = {
       Api,
       screen,
@@ -132,7 +134,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
         ...formData,
       },
       file: addressDoc,
-      sagaCallback: openNomineeSaved,
+      sagaCallback,
       equityNominationData,
     };
     if (!isDematNomineeStatusInit(equityNominationData)) {
@@ -141,7 +143,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
     if (isUpdateFlow) {
       payload.nomineeId = nomineeDetails.id;
       let data = getUpdatedData(
-        nomineeData,
+        oldNomineeData,
         payload.data,
         Object.keys(nomineeDetails)
       );
@@ -155,7 +157,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
         payload.file = null;
       }
       if (
-        nomineeData[PERSONAL_DETAILS_FORM_MAPPER.isMinor] !==
+        oldNomineeData[PERSONAL_DETAILS_FORM_MAPPER.isMinor] !==
         nomineeDetails[PERSONAL_DETAILS_FORM_MAPPER.isMinor]
       ) {
         data = payload.data;
