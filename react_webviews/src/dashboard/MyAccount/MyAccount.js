@@ -21,6 +21,7 @@ import { PATHNAME_MAPPER as KYC_PATHNAME_MAPPER } from "../../kyc/constants";
 import { storageService } from "../../utils/validators";
 import { FREEDOM_PLAN_STORAGE_CONSTANTS } from "../../freedom_plan/common/constants";
 import isEmpty from "lodash/isEmpty";
+import { NOMINEE_PATHNAME_MAPPER } from "../../pages/Nominee/common/constants";
 
 const MF_AND_STOCKS_STATUS_MAPPER = {
   init: {
@@ -118,6 +119,7 @@ class MyAccount extends Component {
       verifyDetails: false,
       accountAlreadyExists: false,
       freedomPlanData: {},
+      showNominee: false,
     };
     this.initializeComponentFunctions = initializeComponentFunctions.bind(this);
   }
@@ -152,7 +154,7 @@ class MyAccount extends Component {
   }
 
   setKycStatusData = () => {
-    let { userKyc, kycStatusData } = this.state;
+    let { userKyc, kycStatusData, showNominee } = this.state;
     const tradingEnabled = isTradingEnabled(userKyc);
     const kycJourneyStatus = getKycAppStatus(userKyc) || {};
     const kycStatus = kycJourneyStatus.status;
@@ -177,6 +179,7 @@ class MyAccount extends Component {
 
     if (tradingEnabled) {
       if (userKyc.equity_investment_ready) {
+        showNominee = true;
         stocksStatus = "complete";
       }
       if (userKyc.fno_active) {
@@ -198,7 +201,7 @@ class MyAccount extends Component {
       kycStatusData.push({ ...MF_AND_STOCKS_STATUS_MAPPER[stocksStatus], status: stocksStatus, key: "stocks", title: "Stocks & IPO" });
       kycStatusData.push({ ...FNO_STATUS_MAPPER[fnoStatus], status: fnoStatus, key: "fno", title: "Futures & Options" });
     }
-    this.setState({ kycStatusData, tradingEnabled });
+    this.setState({ kycStatusData, tradingEnabled, showNominee });
   }
 
   handleInvestmentCard = (data) => () => {
@@ -328,6 +331,10 @@ class MyAccount extends Component {
     });
   };
 
+  handleNominees = () => {
+    this.navigate(NOMINEE_PATHNAME_MAPPER.landing);
+  };
+
   sendEvents = (userAction, screenName, upgradePlanClicked = "no") => {
     if (screenName === "continuebottomsheet") {
       let eventObj = {
@@ -392,7 +399,8 @@ class MyAccount extends Component {
       accountAlreadyExists,
       tradingEnabled,
       isSdk,
-      freedomPlanData
+      freedomPlanData,
+      showNominee
     } = this.state;
     let bank = userKyc.bank || {};
     return (
@@ -562,6 +570,19 @@ class MyAccount extends Component {
                 />
                 <div>Upload Mandate</div>
               </div>
+              {showNominee && (
+                <div
+                  className="account-options"
+                  onClick={this.handleNominees}
+                >
+                  <Imgc
+                    className="my-imgc"
+                    src={require(`assets/my_nominee_icon.svg`)}
+                    alt=""
+                  />
+                  <div data-aid="tv_myNominees">My nominees</div>
+                </div>
+              )}
               {(tradingEnabled && (!isSdk || currentUser.pin_status === 'pin_setup_complete')) && (
                 <div
                   data-aid="security-setting"
