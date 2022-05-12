@@ -193,15 +193,6 @@ const AddressDetails = ({
           helperText={errorData.backDoc}
         />
       )}
-      <InputField
-        label={ADDRESS_DETAILS_STRINGS.formLabels.password}
-        value={formData.password}
-        dataAid="5"
-        onChange={onChange(ADDRESS_DETAILS_FORM_MAPPER.password)}
-        error={!isEmpty(errorData.password)}
-        helperText={errorData.password}
-        type="password"
-      />
       <NomineeSaved
         isOpen={openNomineeSaved}
         onPrimaryClick={onPrimaryClick}

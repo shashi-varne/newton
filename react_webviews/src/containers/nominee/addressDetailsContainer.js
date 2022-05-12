@@ -157,7 +157,6 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
       if (isDocumentUpdated) {
         payload.file = poiData?.numberOfDocs === 2 ? file : formData?.frontDoc;
         data.poi = formData.poi;
-        data.password = formData.password;
       } else {
         payload.file = null;
       }
