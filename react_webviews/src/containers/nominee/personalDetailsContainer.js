@@ -22,6 +22,7 @@ import {
   isNomineeUpdateFlow,
   getDematNomineeStatus,
   getNomineeNames,
+  getNomineesList,
 } from "businesslogic/utils/nominee/functions";
 import {
   getEquityNominationData,
@@ -34,7 +35,7 @@ import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import { getUserName } from "businesslogic/utils/common/functions";
 
 const initializeData = (nominationData, nomineeDetails) => () => {
-  const list = nominationData?.eq_nominee_list || [];
+  const list = getNomineesList(nominationData);
   const dematStatus = getDematNomineeStatus(nominationData);
   const nomineeData = getNomineeDataById(list, nomineeDetails?.id);
   let availableShare = getAvailableShares(list, dematStatus);

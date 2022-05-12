@@ -11,6 +11,7 @@ import {
   getTotalShares,
   getDematNomineeStatus,
   hideAddAnotherNominee,
+  getNomineesList,
 } from "businesslogic/utils/nominee/functions";
 import {
   getEquityNominationData,
@@ -28,7 +29,7 @@ import { NOMINEE_PATHNAME_MAPPER } from "../../pages/Nominee/common/constants";
 const screen = "CONFIRM_NOMINEE";
 
 const initializeData = (nominationData) => () => {
-  const list = nominationData?.eq_nominee_list || [];
+  const list = getNomineesList(nominationData);
   const dematStatus = getDematNomineeStatus(nominationData);
   const nominees = getAllNominees(list);
   const totalShares = getTotalShares(list, dematStatus);

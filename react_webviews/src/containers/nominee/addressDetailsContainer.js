@@ -28,6 +28,7 @@ import {
   validateAddress,
   getDematNomineeStatus,
   isNomineeStatusRejectedOrApproved,
+  getNomineesList,
 } from "businesslogic/utils/nominee/functions";
 import {
   getNomineeDetails,
@@ -53,7 +54,7 @@ const DEFAULT_DIALOG_STATES = {
 };
 
 const initializeData = (nominationData, nomineeDetails) => () => {
-  const list = nominationData?.eq_nominee_list || [];
+  const list = getNomineesList(nominationData) || [];
   const dematStatus = getDematNomineeStatus(nominationData);
   const oldNomineeData = getNomineeDataById(list, nomineeDetails?.id);
   const hideAddNominee = hideAddAnotherNominee(list);
