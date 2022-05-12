@@ -21,6 +21,7 @@ import {
   getNomineeDataById,
   isNomineeUpdateFlow,
   getDematNomineeStatus,
+  getNomineeNames,
 } from "businesslogic/utils/nominee/functions";
 import {
   getEquityNominationData,
@@ -89,8 +90,23 @@ const personalDetailsContainer = (WrappedComponent) => (props) => {
       );
     }
     const userName = getUserName(kyc);
-    const data = { ...formData, isMinor, availableShare, userName };
-    const result = validateFields(data, keysToCheck);
+    const data = { ...formData, isMinor };
+    const nomineeNames = getNomineeNames(
+      equityNominationData,
+      nomineeDetails.id
+    );
+    const nomineeNameValidationList = [
+      ...nomineeNames,
+      {
+        name: userName,
+        isUser: true,
+      },
+    ];
+    const additionalInfo = {
+      availableShare,
+      nomineeNameValidationList,
+    };
+    const result = validateFields(data, keysToCheck, additionalInfo);
     if (!result.canSubmit) {
       const data = { ...errorData, ...result.errorData };
       setErrorData(data);
@@ -100,8 +116,6 @@ const personalDetailsContainer = (WrappedComponent) => (props) => {
     data[PERSONAL_DETAILS_FORM_MAPPER.share] = Number(
       data[PERSONAL_DETAILS_FORM_MAPPER.share]
     );
-    delete data.availableShare;
-    delete data.userName;
     dispatch(updateNomineeDetails(data));
     navigate(NOMINEE_PATHNAME_MAPPER.addressDetails);
   };
