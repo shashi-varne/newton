@@ -7,6 +7,7 @@ import { openPdf } from "../../kyc/common/functions";
 import { NOMINEE_API_CONSTANTS } from "businesslogic/apis/nominee";
 import { getUrlParams } from "../../utils/validators";
 import ToastMessage from "../../designSystem/atoms/ToastMessage";
+import { NOMINEE_PATHNAME_MAPPER } from "../../pages/Nominee/common/constants";
 
 const manualSignatureContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
@@ -32,7 +33,7 @@ const manualSignatureContainer = (WrappedComponent) => (props) => {
   const onPressOkay = () => {
     const userAction = "next";
     sendEvents(userAction);
-    navigate("/nominee/landing");
+    navigate(NOMINEE_PATHNAME_MAPPER.landing);
   };
 
   const sendEvents = (userAction) => {

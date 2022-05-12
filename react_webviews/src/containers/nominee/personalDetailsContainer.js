@@ -28,7 +28,6 @@ import {
 } from "businesslogic/dataStore/reducers/nominee";
 import { useDispatch, useSelector } from "react-redux";
 import { NOMINEE_PATHNAME_MAPPER } from "../../pages/Nominee/common/constants";
-import { handleNomineeExit } from "../../pages/Nominee/common/functions";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import { getUserName } from "businesslogic/utils/common/functions";
 
@@ -157,7 +156,7 @@ const personalDetailsContainer = (WrappedComponent) => (props) => {
 
   const handleExit = () => {
     sendEvents("back");
-    handleNomineeExit(navigate);
+    handleExitNominee(navigate);
   };
 
   return (

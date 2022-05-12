@@ -23,7 +23,6 @@ import useLoadingState from "../../common/customHooks/useLoadingState";
 import useErrorState from "../../common/customHooks/useErrorState";
 import isEmpty from "lodash-es/isEmpty";
 import { NOMINEE_PATHNAME_MAPPER } from "../../pages/Nominee/common/constants";
-import { handleNomineeExit } from "../../pages/Nominee/common/functions";
 
 const screen = "CONFIRM_NOMINEE";
 
@@ -191,7 +190,7 @@ const confirmNomineesContainer = (WrappedComponent) => (props) => {
 
   const onBackClick = () => {
     sendEvents("back");
-    handleNomineeExit(navigate);
+    navigate(NOMINEE_PATHNAME_MAPPER.landing);
   };
 
   const closeDialogStates = (key) => () => {
