@@ -10,6 +10,7 @@ import { WVFilePickerWrapper } from "../../../common/ui/FileUploadWrapper/WVFile
 import NomineeSaved from "../../../featureComponent/Nominee/NomineeSaved";
 import ReviewNominee from "../../../featureComponent/Nominee/ReviewNominee";
 import HoldingPercentageFull from "../../../featureComponent/Nominee/HoldingPercentageFull";
+import { Imgc } from "../../../common/ui/Imgc";
 
 import { ADDRESS_DETAILS as ADDRESS_DETAILS_STRINGS } from "businesslogic/strings/nominee";
 import {
@@ -21,6 +22,7 @@ import { SUPPORTED_IMAGE_TYPES } from "../../../utils/constants";
 import { isEmpty } from "lodash-es";
 
 import "./AddressDetails.scss";
+
 const AddressDetails = ({
   onClick,
   isMinor,
@@ -44,6 +46,8 @@ const AddressDetails = ({
   editNominee,
   closeDialogStates,
   disabled,
+  previewFiles = {},
+  mergeDocuments,
 }) => {
   return (
     <Container
@@ -171,6 +175,8 @@ const AddressDetails = ({
         poiData={poiData}
         error={!isEmpty(errorData.frontDoc)}
         helperText={errorData.frontDoc}
+        onLoad={mergeDocuments}
+        previewFile={previewFiles.frontFile}
       />
       {poiData?.numberOfDocs === 2 && (
         <UploadContainer
@@ -191,6 +197,8 @@ const AddressDetails = ({
           poiData={poiData}
           error={!isEmpty(errorData.backDoc)}
           helperText={errorData.backDoc}
+          onLoad={mergeDocuments}
+          previewFile={previewFiles.backFile}
         />
       )}
       <NomineeSaved
@@ -226,6 +234,8 @@ const UploadContainer = ({
   docSide,
   helperText = "",
   error = false,
+  previewFile,
+  onLoad,
 }) => {
   const title = useMemo(() => {
     return !isEmpty(fileName)
@@ -245,6 +255,7 @@ const UploadContainer = ({
             imgSrc={require(`assets/attach_button.svg`)}
           />
         </WVFilePickerWrapper>
+        <Imgc src={previewFile} className="nad-info-img" onLoad={onLoad} />
       </WrapperBox>
       {error && (
         <FormControl error={error}>

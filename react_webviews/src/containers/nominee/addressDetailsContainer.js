@@ -20,13 +20,14 @@ import {
   validateFields,
   getNomineeAddressDetails,
   getPoiData,
-  isDematNomineeStatusInit,
   hideAddAnotherNominee,
   getTotalShares,
   getNomineeDataById,
   getUpdatedData,
   isNomineeUpdateFlow,
   validateAddress,
+  getDematNomineeStatus,
+  isDematNomineeStatusRejected,
 } from "businesslogic/utils/nominee/functions";
 import {
   getNomineeDetails,
@@ -51,16 +52,19 @@ const DEFAULT_DIALOG_STATES = {
   openPercentageHoldingFull: false,
 };
 
-const initializeData = (list, nomineeDetails) => () => {
+const initializeData = (nominationData, nomineeDetails) => () => {
+  const list = nominationData?.eq_nominee_list || [];
+  const dematStatus = getDematNomineeStatus(nominationData);
   const oldNomineeData = getNomineeDataById(list, nomineeDetails?.id);
   const hideAddNominee = hideAddAnotherNominee(list);
-  const totalShares = getTotalShares(list);
+  const totalShares = getTotalShares(list, dematStatus);
   const isUpdateFlow = isNomineeUpdateFlow(nomineeDetails);
   return {
     oldNomineeData,
     totalShares,
     hideAddNominee,
     isUpdateFlow,
+    dematStatus,
   };
 };
 
@@ -82,13 +86,19 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
 
   const [file, setFile] = useState(null);
   const [fileLoading, setFileLoading] = useState(false);
-  const [previewFiles, setPreviewFiles] = useState(null);
+  const [previewFiles, setPreviewFiles] = useState({});
 
   const poiData = useMemo(() => getPoiData(formData.poi), [formData.poi]);
-  const { oldNomineeData, totalShares, hideAddNominee, isUpdateFlow } = useMemo(
-    initializeData(equityNominationData?.eq_nominee_list, nomineeDetails),
-    [equityNominationData?.eq_nominee_list, nomineeDetails]
-  );
+  const {
+    oldNomineeData,
+    totalShares,
+    hideAddNominee,
+    isUpdateFlow,
+    dematStatus,
+  } = useMemo(initializeData(equityNominationData, nomineeDetails), [
+    equityNominationData,
+    nomineeDetails,
+  ]);
 
   useEffect(() => {
     if (isUpdateFailed && !isEmpty(errorMessage)) {
@@ -144,7 +154,10 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
       sagaCallback,
       equityNominationData,
     };
-    if (!isDematNomineeStatusInit(equityNominationData)) {
+    if (
+      equityNominationData?.equity_nomination_request_id &&
+      !isDematNomineeStatusRejected(dematStatus)
+    ) {
       payload.requestId = equityNominationData.equity_nomination_request_id;
     }
     if (isUpdateFlow) {
@@ -286,10 +299,6 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
     }
   };
 
-  useEffect(() => {
-    mergeDocuments();
-  }, [previewFiles]);
-
   const onFileSelectStart = () => {
     setFileLoading(true);
   };
@@ -299,23 +308,23 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
     const errorInfo = { ...errorData };
     if (docSide === "front") {
       errorInfo[ADDRESS_DETAILS_FORM_MAPPER.frontDoc] = "";
-      setFormData({
-        ...formData,
-        [ADDRESS_DETAILS_FORM_MAPPER.frontDoc]: file,
-      });
       setPreviewFiles({
         ...previewFiles,
         frontFile: fileBase64,
       });
-    } else {
-      errorInfo[ADDRESS_DETAILS_FORM_MAPPER.backDoc] = "";
       setFormData({
         ...formData,
-        [ADDRESS_DETAILS_FORM_MAPPER.backDoc]: file,
+        [ADDRESS_DETAILS_FORM_MAPPER.frontDoc]: file,
       });
+    } else {
+      errorInfo[ADDRESS_DETAILS_FORM_MAPPER.backDoc] = "";
       setPreviewFiles({
         ...previewFiles,
         backFile: fileBase64,
+      });
+      setFormData({
+        ...formData,
+        [ADDRESS_DETAILS_FORM_MAPPER.backDoc]: file,
       });
     }
     setErrorData(errorInfo);
@@ -365,6 +374,8 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
       addAnotherNominee={addAnotherNominee}
       editNominee={editNominee}
       closeDialogStates={closeDialogStates}
+      previewFiles={previewFiles}
+      mergeDocuments={mergeDocuments}
     />
   );
 };

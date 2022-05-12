@@ -9,6 +9,7 @@ import { nativeCallback } from "../../utils/native_callback";
 import {
   getAllNominees,
   getTotalShares,
+  getDematNomineeStatus,
   hideAddAnotherNominee,
 } from "businesslogic/utils/nominee/functions";
 import {
@@ -26,9 +27,11 @@ import { NOMINEE_PATHNAME_MAPPER } from "../../pages/Nominee/common/constants";
 
 const screen = "CONFIRM_NOMINEE";
 
-const initializeData = (list) => () => {
+const initializeData = (nominationData) => () => {
+  const list = nominationData?.eq_nominee_list || [];
+  const dematStatus = getDematNomineeStatus(nominationData);
   const nominees = getAllNominees(list);
-  const totalShares = getTotalShares(list);
+  const totalShares = getTotalShares(list, dematStatus);
   const hideAddNominee = hideAddAnotherNominee(list);
   return {
     nominees,
@@ -53,8 +56,8 @@ const confirmNomineesContainer = (WrappedComponent) => (props) => {
     getEquityNominationData(state)
   );
   const { nominees, totalShares, hideAddNominee } = useMemo(
-    initializeData(equityNominationData?.eq_nominee_list),
-    [equityNominationData?.eq_nominee_list]
+    initializeData(equityNominationData),
+    [equityNominationData]
   );
 
   const [openNomineeTab, setOpenNomineeTabs] = useState([true, true, true]);

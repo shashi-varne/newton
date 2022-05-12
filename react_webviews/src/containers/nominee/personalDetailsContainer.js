@@ -20,6 +20,7 @@ import {
   validateDecimalPercentage,
   getNomineeDataById,
   isNomineeUpdateFlow,
+  getDematNomineeStatus,
 } from "businesslogic/utils/nominee/functions";
 import {
   getEquityNominationData,
@@ -30,10 +31,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { NOMINEE_PATHNAME_MAPPER } from "../../pages/Nominee/common/constants";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import { getUserName } from "businesslogic/utils/common/functions";
+import { handleNomineeExit } from "../../pages/Nominee/common/functions";
 
-const initializeData = (list, nomineeDetails) => () => {
+const initializeData = (nominationData, nomineeDetails) => () => {
+  const list = nominationData?.eq_nominee_list || [];
+  const dematStatus = getDematNomineeStatus(nominationData);
   const nomineeData = getNomineeDataById(list, nomineeDetails?.id);
-  let availableShare = getAvailableShares(list);
+  let availableShare = getAvailableShares(list, dematStatus);
   const isUpdateFlow = isNomineeUpdateFlow(nomineeDetails);
   if (isUpdateFlow) {
     availableShare += nomineeData[PERSONAL_DETAILS_FORM_MAPPER.share];
@@ -59,8 +63,8 @@ const personalDetailsContainer = (WrappedComponent) => (props) => {
 
   const { kyc } = useUserKycHook();
   const { availableShare } = useMemo(
-    initializeData(equityNominationData?.eq_nominee_list, nomineeDetails),
-    [equityNominationData?.eq_nominee_list, nomineeDetails?.id]
+    initializeData(equityNominationData, nomineeDetails),
+    [equityNominationData, nomineeDetails]
   );
 
   const handleCheckbox = () => {
@@ -150,13 +154,13 @@ const personalDetailsContainer = (WrappedComponent) => (props) => {
     setErrorData(errorInfo);
   };
 
-  const handleExitNominee = (value) => () => {
+  const handleExitNomination = (value) => () => {
     setOpenExitNominee(value);
   };
 
   const handleExit = () => {
     sendEvents("back");
-    handleExitNominee(navigate);
+    handleNomineeExit(navigate);
   };
 
   return (
@@ -170,9 +174,9 @@ const personalDetailsContainer = (WrappedComponent) => (props) => {
       handleCheckbox={handleCheckbox}
       sendEvents={sendEvents}
       openExitNominee={openExitNominee}
-      handleClose={handleExitNominee(false)}
+      handleClose={handleExitNomination(false)}
       handleExit={handleExit}
-      onBackClick={handleExitNominee(true)}
+      onBackClick={handleExitNomination(true)}
     />
   );
 };
