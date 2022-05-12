@@ -20,6 +20,7 @@ const initializeData = () => {
   };
 };
 
+/* eslint-disable */
 const esignLandingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const { productName, code, isFailed, searchParams, isWebOrSdk, isSdk, iOS } =

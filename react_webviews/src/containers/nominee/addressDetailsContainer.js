@@ -239,10 +239,11 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
     if (value && numberFields.includes(name) && !validateNumber(value)) return;
     if (value && nameFields.includes(name) && !validateName(value)) return;
     if (value && value.indexOf(" ") === 0) return;
-    if (name === ADDRESS_DETAILS_FORM_MAPPER.address) {
-      if (!validateAddress(value)) {
-        return;
-      }
+    if (
+      name === ADDRESS_DETAILS_FORM_MAPPER.address &&
+      !validateAddress(value)
+    ) {
+      return;
     }
     data[name] = value;
     errorInfo[name] = "";

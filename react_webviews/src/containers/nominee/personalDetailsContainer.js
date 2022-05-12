@@ -95,7 +95,9 @@ const personalDetailsContainer = (WrappedComponent) => (props) => {
       return;
     }
     sendEvents("next");
-    data[PERSONAL_DETAILS_FORM_MAPPER.share] = Number(data[PERSONAL_DETAILS_FORM_MAPPER.share])
+    data[PERSONAL_DETAILS_FORM_MAPPER.share] = Number(
+      data[PERSONAL_DETAILS_FORM_MAPPER.share]
+    );
     dispatch(updateNomineeDetails(data));
     navigate(NOMINEE_PATHNAME_MAPPER.addressDetails);
   };
@@ -135,10 +137,11 @@ const personalDetailsContainer = (WrappedComponent) => (props) => {
       const input = document.getElementById(PERSONAL_DETAILS_FORM_MAPPER.dob);
       input.onkeyup = formatDate;
     }
-    if (name === PERSONAL_DETAILS_FORM_MAPPER.share) {
-      if (!validateDecimalPercentage(value)) {
-        return;
-      }
+    if (
+      name === PERSONAL_DETAILS_FORM_MAPPER.share &&
+      !validateDecimalPercentage(value)
+    ) {
+      return;
     }
     data[name] = value;
     errorInfo[name] = "";
