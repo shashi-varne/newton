@@ -48,12 +48,11 @@ const ESignLanding = ({ sendEvents, productName, onClickProceed }) => {
       sendEvents={sendEvents("just_set_events")}
       headerProps={{
         dataAid: ESIGN_LANDING.navigationDataAid,
-        headerTitle: "",
       }}
       footer={{
         button1Props: {
           title: ESIGN_LANDING.ctaText,
-          onClick: { onClickProceed },
+          onClick: onClickProceed,
         },
       }}
       className="esign-wrapper"
