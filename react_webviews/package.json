@@ -40,7 +40,7 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react-app": "^9.1.2",
     "babel-runtime": "^6.26.0",
-    "businesslogic": "git+https://fdamitsingh:EafwBATbn2DqxeV7KhsN@bitbucket.org/finwizardtech/businesslogic.git#master",
+    "businesslogic": "git+https://fdamitsingh:EafwBATbn2DqxeV7KhsN@bitbucket.org/finwizardtech/businesslogic.git#feature-nominee",
     "case-sensitive-paths-webpack-plugin": "2.1.1",
     "chalk": "1.1.3",
     "chart.js": "^2.9.3",
