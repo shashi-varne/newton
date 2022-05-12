@@ -248,8 +248,6 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
   }, [formData?.pincode]);
 
   const onChange = (name) => (event) => {
-    console.log({ name, mm: ADDRESS_DETAILS_FORM_MAPPER.address });
-
     const data = { ...formData };
     const errorInfo = { ...errorData };
     const numberFields = [ADDRESS_DETAILS_FORM_MAPPER.pincode];

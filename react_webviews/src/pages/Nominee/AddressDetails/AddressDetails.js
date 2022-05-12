@@ -109,6 +109,9 @@ const AddressDetails = ({
         error={!isEmpty(errorData.city)}
         helperText={errorData.city}
         disabled
+        inputLabelProps={{
+          shrink: !isEmpty(formData.city),
+        }}
       />
       <InputField
         label={ADDRESS_DETAILS_STRINGS.formLabels.state}
@@ -118,6 +121,9 @@ const AddressDetails = ({
         error={!isEmpty(errorData.state)}
         helperText={errorData.state}
         disabled
+        inputLabelProps={{
+          shrink: !isEmpty(formData.state),
+        }}
       />
       <Dropdown
         options={NOMINEE_PROOF_OF_IDENTITY}
