@@ -6,11 +6,18 @@ import {
   getConfig,
   navigate as navigateFunc,
 } from "../../utils/functions";
+import Api from "../../utils/api";
 import { nativeCallback } from "../../utils/native_callback";
 import { getUrlParams } from "../../utils/validators";
-import { useSelector } from "react-redux";
-import { getEquityNominationData } from "businesslogic/dataStore/reducers/nominee";
+import { useDispatch, useSelector } from "react-redux";
+import { isEmpty } from "lodash-es";
+import {
+  getEquityNominationData,
+  getNominations,
+} from "businesslogic/dataStore/reducers/nominee";
+import useLoadingState from "../../common/customHooks/useLoadingState";
 
+const screen = "ESIGN_LANDING";
 const initializeData = () => {
   const { status } = getUrlParams();
   return {
@@ -23,6 +30,7 @@ const initializeData = () => {
 /* eslint-disable */
 const esignLandingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
+  const dispatch = useDispatch();
   const { productName, code, isFailed, searchParams, isWebOrSdk, isSdk, iOS } =
     useMemo(initializeData, []);
   const [openAadharBottomsheet, setOpenAadhaarBottomsheet] = useState(false);
@@ -31,6 +39,18 @@ const esignLandingContainer = (WrappedComponent) => (props) => {
   const equityNominationData = useSelector((state) =>
     getEquityNominationData(state)
   );
+  const { isPageLoading } = useLoadingState(screen);
+
+  useEffect(() => {
+    if (isEmpty(equityNominationData?.esign_link)) {
+      dispatch(
+        getNominations({
+          Api,
+          screen,
+        })
+      );
+    }
+  }, []);
 
   useEffect(() => {
     if (isFailed) {
@@ -142,7 +162,7 @@ const esignLandingContainer = (WrappedComponent) => (props) => {
   return (
     <WrappedComponent
       productName={productName}
-      showLoader={showLoader}
+      showLoader={showLoader || isPageLoading}
       openAadharBottomsheet={openAadharBottomsheet}
       openEsignFailure={openEsignFailure}
       sendEvents={sendEvents}
