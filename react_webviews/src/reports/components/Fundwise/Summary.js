@@ -40,7 +40,8 @@ const FundswiseSummary = (props) => {
     storageService().remove("diystore_fundInfo");
     const config = getConfig();
     const pathname = `/${config.code === "moneycontrol" ? "diy" : "diyv2"}/fundinfo/direct/${fund.mf.isin}`
-    navigate(pathname);
+    // the below state param 'fromOutsideDiy' will allow fund details to replace 'Add to cart' with 'Invest Now' button. 
+    navigate(pathname,{state: {fromOutsideDiy: true}});
   };
 
   const handleMenuClick = (fund, index) => (event) => {

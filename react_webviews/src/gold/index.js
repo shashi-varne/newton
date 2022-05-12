@@ -53,6 +53,10 @@ const Gold = props => {
      <Fragment>
         <Switch>
 
+          {/* components used across application */}
+          <Route path={`${url}/common/render-benefits`} component={CommonRenderBenefits} />
+          <Route path={`${url}/common/render-faqs`} component={CommonRenderFaqs} />
+
           {/* REMOVING EXACT PROPS TO SHOW CLOSURE PAGE FOR EVERY ROUTE */}
           {/* <Route exact path={`${url}`} component={GoldLanding} /> */}
           <Route path={`${url}`} component={GoldHomeClosure} />
@@ -65,8 +69,8 @@ const Gold = props => {
           <Route path={`${url}/check-how1`} component={CheckHow1} />
           <Route path={`${url}/check-how2`} component={CheckHow2} />
           <Route path={`${url}/check-how3`} component={CheckHow3} />
-          <Route path={`${url}/common/render-benefits`} component={CommonRenderBenefits} />
-          <Route path={`${url}/common/render-faqs`} component={CommonRenderFaqs} />
+
+
 
            {/* common */}
            <Route path={`${url}/my-gold`} component={GoldLanding} />

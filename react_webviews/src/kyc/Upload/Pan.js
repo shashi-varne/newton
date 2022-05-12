@@ -5,9 +5,9 @@ import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClick
 import { isEmpty } from '../../utils/validators'
 import { PATHNAME_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
-import { getConfig, isTradingEnabled, navigate as navigateFunc } from '../../utils/functions'
+import { getConfig, isIndbSdkTradingFlow, isTradingEnabled, navigate as navigateFunc } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
-import { isDigilockerFlow, isDocSubmittedOrApproved, isEquityEsignReady } from '../common/functions'
+import { isDigilockerFlow, isDocSubmittedOrApproved, isEquityEsignReady, showTradingInfoScreen } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 import PanUploadStatus from "../Equity/mini-components/PanUploadStatus";
@@ -56,6 +56,10 @@ const Pan = (props) => {
   const commonRedirection = () => {
     if (!isDocSubmittedOrApproved("equity_identification")) {
       navigate(PATHNAME_MAPPER.uploadSelfie);
+    } else if (isIndbSdkTradingFlow(kyc) && !isDocSubmittedOrApproved("ipvvideo")) {
+      navigate(PATHNAME_MAPPER.uploadSelfieVideo, {
+        state: { goBack: PATHNAME_MAPPER.journey }
+      });
     } else {
       if (!isDocSubmittedOrApproved("equity_income")) {
         navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
@@ -75,8 +79,9 @@ const Pan = (props) => {
     } else {
       if (dlFlow) {
         if (kyc.equity_sign_status !== 'signed') {
-          if (kyc.show_equity_charges_page) {
-            navigate(PATHNAME_MAPPER.tradingInfo, {
+          if (!kyc?.equity_data?.meta_data?.trading_experience) {
+            const pathName = showTradingInfoScreen(kyc, productName) ? PATHNAME_MAPPER.tradingInfo : PATHNAME_MAPPER.tradingExperience;
+            navigate(pathName, {
               state: { goBack: PATHNAME_MAPPER.journey }
             });
           } else {

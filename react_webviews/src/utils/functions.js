@@ -222,7 +222,7 @@ export const getConfig = () => {
 
     // change server url here for local and staging url builds (Not commit id one's)
     if (isStaging || isLocal) {
-      base_url_default = "https://arsil-dot-plutus-staging.appspot.com";
+      base_url_default = "https://mpin-dot-plutus-staging.appspot.com";
     }
 
     if (isSDKStaging) {
@@ -623,6 +623,17 @@ export function isTradingEnabled(userKyc = {}) {
   }
   return kyc?.equity_enabled;
 }
+
+export const isTradingFlow = (kyc) => {
+  kyc = !isEmpty(kyc) ? kyc : storageService().getObject("kyc");
+	return isTradingEnabled(kyc) && kyc?.kyc_product_type === "equity";
+};
+
+export const isIndbSdkTradingFlow = (kyc) => {
+  kyc = !isEmpty(kyc) ? kyc : storageService().getObject("kyc");
+  const config = getConfig();
+	return isTradingEnabled(kyc) && config.isSdk && ["indb", "alb"].includes(config.code);
+};
 
 const { checkBeforeRedirection, checkAfterRedirection, backButtonHandler } = require(`./${getConfig().platform}_app`);
 

@@ -2,8 +2,9 @@ import { calculateAge, isValidDate, validateEmail, isEmpty, storageService } fro
 import { isTradingEnabled, getConfig } from '../../utils/functions'
 import { nativeCallback, openPdfCall } from '../../utils/native_callback'
 import { validateAlphaNumeric } from '../../utils/validators'
+import { isAocPaymentSuccessOrNotApplicable } from '../Aoc/common/functions'
 import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS, GENDER_OPTIONS, PATHNAME_MAPPER, PINCODE_LENGTH } from '../constants'
-import { isReadyToInvest } from '../services'
+import { getKycAppStatus, isReadyToInvest } from '../services'
 import { getKyc } from './api'
 
 export const isEquityAllowed = (config = getConfig()) => {
@@ -241,7 +242,8 @@ export function isEquityEsignReady(kyc) {
   return (
     kyc.kyc_product_type === 'equity' &&
     kyc.equity_application_status === 'complete' &&
-    kyc.equity_sign_status !== 'signed'
+    kyc.equity_sign_status !== 'signed' &&
+    isAocPaymentSuccessOrNotApplicable(kyc)
   );
 }
 
@@ -505,3 +507,19 @@ export const isBankVerified = (bank = {}, kyc = {}) => {
     (bank.status === "default" && kyc.bank?.meta_data_status === "approved")
   );
 };
+
+export const isRetroMfIRUser = (kyc) => {
+  return kyc.mf_kyc_processed;
+};
+
+export const isUpgradeToEquityAccountEnabled = (kyc, kycStatus) => {
+  if (!kycStatus) {
+    kycStatus = getKycAppStatus(kyc).status;
+  }
+  return isTradingEnabled(kyc) && kyc?.kyc_product_type !== "equity" && kycStatus !== "mf_esign_pending";
+};
+
+export const showTradingInfoScreen = (kyc, productName) => {
+  const kycJourneyStatus = getKycAppStatus(kyc).status;
+  return isRetroMfIRUser(kyc) || kycJourneyStatus === "upgraded_incomplete" || productName === "finity";
+}

@@ -8,6 +8,7 @@ import Container from '../common/Container';
 import { PATHNAME_MAPPER } from '../constants';
 import { getConfig, isTradingEnabled } from '../../utils/functions';
 import { kycStatusMapperInvest } from '../../dashboard/Invest/constants';
+import { isUpgradeToEquityAccountEnabled } from '../common/functions';
 
 
 function KycModuleEntry(props) {
@@ -90,13 +91,6 @@ function KycModuleEntry(props) {
       
     } else if (kycStatus === 'ground') {
        navigate('/kyc/home', data);
-    } else if (kycStatus === "ground_pan") {
-      navigate("/kyc/journey", {
-        state: {
-          ...data.state,
-          show_aadhaar: !(kyc.address.meta_data.is_nri || kyc.kyc_type === "manual"),
-        }
-      });
     } else if (kycStatus === "submitted") {
       // this condition will help in redirection from sdk
       if (TRADING_ENABLED) {
@@ -112,11 +106,8 @@ function KycModuleEntry(props) {
       navigate(PATHNAME_MAPPER.uploadProgress, data);
     } else if (kycStatus === "fno_rejected") {
       navigate(PATHNAME_MAPPER.uploadFnOIncomeProof, data);
-    } else if (TRADING_ENABLED && kyc?.kyc_product_type !== "equity") {
-      let result;
-      if (!kyc?.mf_kyc_processed) {
-        result = await setProductType();
-      }
+    } else if (isUpgradeToEquityAccountEnabled(kyc, kycStatus)) {
+      let result = await setProductType();
       
       // already kyc completed users
       if (isReadyToInvestUser && (result?.kyc?.mf_kyc_processed || kyc?.mf_kyc_processed)) {
@@ -135,6 +126,13 @@ function KycModuleEntry(props) {
       // this condition also helps with redirection from IPO sdk
       navigate(PATHNAME_MAPPER.kycEsignNsdl, {
         searchParams: `${getConfig().searchParams}&status=success`
+      });
+    } else if (kycStatus === "ground_pan") {
+      navigate("/kyc/journey", {
+        state: {
+          ...data.state,
+          show_aadhaar: !(kyc.address.meta_data.is_nri || kyc.kyc_type === "manual"),
+        }
       });
     } else if (kycStatusData.nextState) {
       navigate(kycStatusData.nextState, data);

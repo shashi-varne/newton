@@ -36,7 +36,7 @@ const PaymentStatus = (props) => {
     };
   };
 
-  const { productName, paymentStatusData } = useMemo(initialize, []);
+  const { productName, paymentStatusData, iOS } = useMemo(initialize, []);
 
   const { isLoading, kyc } = useUserKycHook();
 
@@ -70,6 +70,9 @@ const PaymentStatus = (props) => {
   };
 
   useEffect(() => {
+    if (iOS) {
+      nativeCallback({ action: 'hide_top_bar' });
+    }
     if(paymentStatusData.isSuccess) {
       fetchSubscriptionStatus();
     }

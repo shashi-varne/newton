@@ -362,7 +362,7 @@ export const kycStatusMapper = {
   complete: {
     color: "#ffa60b",
     title: "Upgrade to trading and demat account",
-    subtitle: "Invest in India's best performing stocks in just a few taps!",
+    subtitle: "Invest in India's top companies  in just a few taps",
     button2Title: "Later",
     buttonTitle: "UPGRADE NOW",
     icon: "ic_upgrade.svg",
@@ -378,11 +378,11 @@ export const kycStatusMapper = {
   },
   upgraded_incomplete: {
     title: "Upgrade to trading and demat account",
-    subtitle: "Invest in India's best performing stocks in just a few taps!",
+    subtitle: "Invest in India's top companies  in just a few taps",
     button2Title: "Later",
     buttonTitle: "UPGRADE NOW",
     icon: "ic_upgrade.svg",
-    nextState: KYC_PATHNAME_MAPPER.journey
+    nextState: KYC_PATHNAME_MAPPER.tradingInfo
   },
   esign_pending: {
     color: "#ffa60b",
@@ -422,6 +422,25 @@ export const kycStatusMapper = {
     buttonTitle: "OKAY",
     oneButton: true,
     icon: "icn_kyc_completed.svg",
+  },
+  complete_account_setup: {
+    title: "2 more steps to go!",
+    subtitle: "Complete opening your Trading & Demat account to start investing in stocks, F&O & more",
+    buttonTitle: "Continue with Account opening",
+    landingText: "PENDING",
+    oneButton: true,
+    icon: "icn_kyc_doc_rejected.svg",
+    nextState: KYC_PATHNAME_MAPPER.aocSelectAccount,
+  },
+  mf_esign_pending: {
+    color: "#ffa60b",
+    title: "Complete KYC",
+    subtitle: "kyc is a mandatory process to invest in Mutual Funds, stocks and other primary market products",
+    button2Title: "Later",
+    buttonTitle: "COMPLETE NOW",
+    landingText: "INCOMPLETE",
+    icon: "icn_kyc_incomplete.svg",
+    nextState: KYC_PATHNAME_MAPPER.kycEsign
   }
 };
 
@@ -490,21 +509,23 @@ export const kycStatusMapperInvest = {
   },
   complete: {
     icon: "ic_kyc_complete.svg",
-    title: "You’re ready to invest in mutual funds",
-    subtitle: "UPGRAGE ACCOUNT",
+    title: "Upgrade to Trading & Demat account",
+    subtitle: "Stocks | IPO | F&O",
     nextState: KYC_PATHNAME_MAPPER.tradingInfo,
     subTitleClass: "kyc-complete",
+    eventStatus: "upgrade_to_trading_account",
   },
   upgraded_incomplete: {
     icon: "ic_kyc_complete.svg",
-    title: "You’re ready to invest in mutual funds",
-    subtitle: "UPGRAGE ACCOUNT",
-    nextState: KYC_PATHNAME_MAPPER.journey,
+    title: "Upgrade to Trading & Demat account",
+    subtitle: "Stocks | IPO | F&O",
+    nextState: KYC_PATHNAME_MAPPER.tradingInfo,
     subTitleClass: "kyc-complete",
+    eventStatus: "upgrade_to_trading_account",
   },
   esign_pending: {
     icon: "ic_kyc_complete.svg",
-    title: "KYC application",
+    title: "KYC documents verified",
     subtitle: "COMPLETE ESIGN",
     nextState: KYC_PATHNAME_MAPPER.kycEsign,
     subTitleClass: "kyc-complete",
@@ -516,6 +537,20 @@ export const kycStatusMapperInvest = {
     addPoint: true,
     subTitleClass: "kyc-submitted",
     subtitleColor: "var(--mustard)"
+  },
+  complete_account_setup: {
+    icon: "ic_kyc_rejected.svg",
+    title: "Complete account setup",
+    subtitle: "Only few steps remaining",
+    subTitleClass: "kyc-account-setup-incomplete",
+    nextState: KYC_PATHNAME_MAPPER.aocSelectAccount,
+    eventStatus: "complete_your_account_setup",
+  },
+  mf_esign_pending: {
+    icon: "ic_kyc_incomplete.svg",
+    title: "Complete your KYC",
+    subtitle: "You’re just a few steps away!",
+    nextState: KYC_PATHNAME_MAPPER.kycEsign,
   }
 };
 
