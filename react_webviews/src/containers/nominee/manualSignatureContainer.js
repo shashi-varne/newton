@@ -1,14 +1,12 @@
-import React, { useEffect, useMemo } from "react";
+import React from "react";
 import ManualSignature from "../../pages/Nominee/ManualSignature/ManualSignature";
-import { getConfig, navigate as navigateFunc } from "../../utils/functions";
+import { navigate as navigateFunc } from "../../utils/functions";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
 import { openPdf } from "../../kyc/common/functions";
 import { NOMINEE_API_CONSTANTS } from "businesslogic/apis/nominee";
 import { getUrlParams } from "../../utils/validators";
 import ToastMessage from "../../designSystem/atoms/ToastMessage";
-
-const screen = "MANUAL_SIGNATURE";
 
 const manualSignatureContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);

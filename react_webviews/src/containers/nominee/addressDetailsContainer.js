@@ -6,18 +6,15 @@ import {
   navigate as navigateFunc,
   combinedDocBlob,
 } from "../../utils/functions";
-import {
-  validateAddressWords,
-  validateName,
-  validateNumber,
-} from "../../utils/validators";
+import { validateName, validateNumber } from "../../utils/validators";
 import { nativeCallback } from "../../utils/native_callback";
 import { useDispatch, useSelector } from "react-redux";
+import isEmpty from "lodash-es/isEmpty";
 
 import {
   ADDRESS_DETAILS_FORM_MAPPER,
   DEFAULT_NOMINEE_ADDRESS_DETAILS,
-  PERSONAL_DETAILS_FORM_MAPPER,
+  ERROR_MESSAGES,
 } from "businesslogic/constants/nominee";
 import {
   validateFields,
@@ -39,11 +36,11 @@ import {
   resetNomineeDetails,
   updateNomineeRequest,
 } from "businesslogic/dataStore/reducers/nominee";
+import { getPinCodeData } from "businesslogic/apis/common";
 
 import useLoadingState from "../../common/customHooks/useLoadingState";
 import useErrorState from "../../common/customHooks/useErrorState";
 
-import isEmpty from "lodash-es/isEmpty";
 import { NOMINEE_PATHNAME_MAPPER } from "../../pages/Nominee/common/constants";
 
 const screen = "ADDRESS_DETAILS";
@@ -55,12 +52,12 @@ const DEFAULT_DIALOG_STATES = {
 };
 
 const initializeData = (list, nomineeDetails) => () => {
-  const nomineeData = getNomineeDataById(list, nomineeDetails?.id);
+  const oldNomineeData = getNomineeDataById(list, nomineeDetails?.id);
   const hideAddNominee = hideAddAnotherNominee(list);
   const totalShares = getTotalShares(list);
   const isUpdateFlow = isNomineeUpdateFlow(nomineeDetails);
   return {
-    nomineeData,
+    oldNomineeData,
     totalShares,
     hideAddNominee,
     isUpdateFlow,
@@ -88,7 +85,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
   const [previewFiles, setPreviewFiles] = useState(null);
 
   const poiData = useMemo(() => getPoiData(formData.poi), [formData.poi]);
-  const { nomineeData, totalShares, hideAddNominee, isUpdateFlow } = useMemo(
+  const { oldNomineeData, totalShares, hideAddNominee, isUpdateFlow } = useMemo(
     initializeData(equityNominationData?.eq_nominee_list, nomineeDetails),
     [equityNominationData?.eq_nominee_list, nomineeDetails]
   );
@@ -124,6 +121,12 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
     dispatch(updateNomineeDetails(formData));
     sendEvents("next");
     const addressDoc = poiData?.numberOfDocs === 2 ? file : formData?.frontDoc;
+    const sagaCallback = () => {
+      if (isDocumentUpdated) {
+        setIsDocumentUpdated(false);
+      }
+      openNomineeSaved();
+    };
     let payload = {
       Api,
       screen,
@@ -132,7 +135,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
         ...formData,
       },
       file: addressDoc,
-      sagaCallback: openNomineeSaved,
+      sagaCallback,
       equityNominationData,
     };
     if (!isDematNomineeStatusInit(equityNominationData)) {
@@ -141,23 +144,18 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
     if (isUpdateFlow) {
       payload.nomineeId = nomineeDetails.id;
       let data = getUpdatedData(
-        nomineeData,
+        oldNomineeData,
         payload.data,
         Object.keys(nomineeDetails)
       );
       if (isDocumentUpdated) {
         payload.file = poiData?.numberOfDocs === 2 ? file : formData?.frontDoc;
-        data[ADDRESS_DETAILS_FORM_MAPPER.poi] =
-          formData[ADDRESS_DETAILS_FORM_MAPPER.poi];
-        data[ADDRESS_DETAILS_FORM_MAPPER.password] =
-          formData[ADDRESS_DETAILS_FORM_MAPPER.password];
+        data.poi = formData.poi;
+        data.password = formData.password;
       } else {
         payload.file = null;
       }
-      if (
-        nomineeData[PERSONAL_DETAILS_FORM_MAPPER.isMinor] !==
-        nomineeDetails[PERSONAL_DETAILS_FORM_MAPPER.isMinor]
-      ) {
+      if (oldNomineeData.isMinor !== nomineeDetails.isMinor) {
         data = payload.data;
       }
       if (isEmpty(data)) {
@@ -223,9 +221,33 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
     }
   };
 
-  const onChange = (name) => (event) => {
-    console.log({ name, mm: ADDRESS_DETAILS_FORM_MAPPER.address });
+  const fetchPincodeData = async () => {
+    let data = { ...formData };
+    let errorInfo = { ...errorData };
+    try {
+      const result = await getPinCodeData(Api, data.pincode);
+      if (result && result.length === 0) {
+        errorInfo.pincode = ERROR_MESSAGES.pincode;
+        data.city = "";
+        data.state = "";
+      } else {
+        data.city = result[0].district_name?.toUpperCase();
+        data.state = result[0].state_name?.toUpperCase();
+      }
+    } catch (err) {
+      console.error(err);
+    }
+    setFormData(data);
+    setErrorData(errorInfo);
+  };
 
+  useEffect(() => {
+    if (formData?.pincode?.length === 6) {
+      fetchPincodeData();
+    }
+  }, [formData?.pincode]);
+
+  const onChange = (name) => (event) => {
     const data = { ...formData };
     const errorInfo = { ...errorData };
     const numberFields = [ADDRESS_DETAILS_FORM_MAPPER.pincode];
@@ -237,10 +259,11 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
     if (value && numberFields.includes(name) && !validateNumber(value)) return;
     if (value && nameFields.includes(name) && !validateName(value)) return;
     if (value && value.indexOf(" ") === 0) return;
-    if (name === ADDRESS_DETAILS_FORM_MAPPER.address) {
-      if (!validateAddress(value)) {
-        return;
-      }
+    if (
+      name === ADDRESS_DETAILS_FORM_MAPPER.address &&
+      !validateAddress(value)
+    ) {
+      return;
     }
     data[name] = value;
     errorInfo[name] = "";

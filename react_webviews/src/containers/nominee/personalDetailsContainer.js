@@ -29,6 +29,8 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { NOMINEE_PATHNAME_MAPPER } from "../../pages/Nominee/common/constants";
 import { handleNomineeExit } from "../../pages/Nominee/common/functions";
+import useUserKycHook from "../../kyc/common/hooks/userKycHook";
+import { getUserName } from "businesslogic/utils/common/functions";
 
 const initializeData = (list, nomineeDetails) => () => {
   const nomineeData = getNomineeDataById(list, nomineeDetails?.id);
@@ -49,13 +51,14 @@ const personalDetailsContainer = (WrappedComponent) => (props) => {
   const equityNominationData = useSelector((state) =>
     getEquityNominationData(state)
   );
-  const [isMinor, setIsMinor] = useState(nomineeDetails.isMinor);
+  const [isMinor, setIsMinor] = useState(nomineeDetails.isMinor || false);
   const [formData, setFormData] = useState(
     getNomineePersonalDetails(nomineeDetails)
   );
   const [errorData, setErrorData] = useState(DEFAULT_NOMINEE_PERSONAL_DETAILS);
   const [openExitNominee, setOpenExitNominee] = useState(false);
 
+  const { kyc } = useUserKycHook();
   const { availableShare } = useMemo(
     initializeData(equityNominationData?.eq_nominee_list, nomineeDetails),
     [equityNominationData?.eq_nominee_list, nomineeDetails?.id]
@@ -83,7 +86,8 @@ const personalDetailsContainer = (WrappedComponent) => (props) => {
         PERSONAL_DETAILS_FORM_MAPPER.guardianRelationship
       );
     }
-    const data = { ...formData, isMinor, availableShare };
+    const userName = getUserName(kyc);
+    const data = { ...formData, isMinor, availableShare, userName };
     const result = validateFields(data, keysToCheck);
     if (!result.canSubmit) {
       const data = { ...errorData, ...result.errorData };
@@ -91,6 +95,9 @@ const personalDetailsContainer = (WrappedComponent) => (props) => {
       return;
     }
     sendEvents("next");
+    data[PERSONAL_DETAILS_FORM_MAPPER.share] = Number(
+      data[PERSONAL_DETAILS_FORM_MAPPER.share]
+    );
     dispatch(updateNomineeDetails(data));
     navigate(NOMINEE_PATHNAME_MAPPER.addressDetails);
   };
@@ -130,10 +137,11 @@ const personalDetailsContainer = (WrappedComponent) => (props) => {
       const input = document.getElementById(PERSONAL_DETAILS_FORM_MAPPER.dob);
       input.onkeyup = formatDate;
     }
-    if (name === PERSONAL_DETAILS_FORM_MAPPER.share) {
-      if (!validateDecimalPercentage(value)) {
-        return;
-      }
+    if (
+      name === PERSONAL_DETAILS_FORM_MAPPER.share &&
+      !validateDecimalPercentage(value)
+    ) {
+      return;
     }
     data[name] = value;
     errorInfo[name] = "";

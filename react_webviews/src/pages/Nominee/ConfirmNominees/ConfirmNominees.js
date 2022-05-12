@@ -53,6 +53,7 @@ const ConfirmNominees = ({
   closeDialogStates,
   openReviewNominee,
   openPercentageHoldingFull,
+  hideAddNominee,
 }) => {
   return (
     <Container
@@ -359,6 +360,7 @@ const ConfirmNominees = ({
         onPrimaryClick={closeDialogStates("openReviewNominee")}
         onSecondaryClick={addNominee}
         handleClose={closeDialogStates("openReviewNominee")}
+        hideAddNominee={hideAddNominee}
       />
       <HoldingPercentageFull
         isOpen={openPercentageHoldingFull}
