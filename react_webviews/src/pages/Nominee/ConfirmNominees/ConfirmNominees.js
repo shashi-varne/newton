@@ -55,6 +55,7 @@ const ConfirmNominees = ({
         headerTitle: CONFIRM_NOMINEES_STRINGS.headerData.title,
         subtitle: CONFIRM_NOMINEES_STRINGS.headerData.subtitle,
         onBackClick,
+        showCloseIcon: true,
       }}
       footer={{
         button2Props: {
@@ -75,7 +76,7 @@ const ConfirmNominees = ({
         direction: "column",
       }}
       className="nominee-confirm-nominees"
-      dataAid="nominee"
+      dataAid={CONFIRM_NOMINEES_STRINGS.screenDataAid}
       eventData={sendEvents("just_set_events")}
     >
       {nominees.length > 0 ? (
@@ -90,8 +91,9 @@ const ConfirmNominees = ({
                   : ""
               }`}
               isOpen={openNomineeTab[index]}
-              dataAid={index}
+              dataAid={index + 1}
               onClick={handleNominees(index)}
+              key={index}
             >
               <div className="flex-between">
                 <div>

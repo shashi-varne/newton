@@ -10,7 +10,7 @@ const NomineeSaved = ({
   onSecondaryClick,
   onPrimaryClick,
   productName = "fisdom",
-  confirmNominees = false,
+  hideAddNominee = false,
 }) => {
   return (
     <BottomSheet
@@ -19,17 +19,17 @@ const NomineeSaved = ({
       title={NOMINEE_SAVED_STRINGS.title}
       imageSrc={require(`assets/${productName}/nominee.svg`)}
       subtitle={
-        confirmNominees
+        hideAddNominee
           ? NOMINEE_SAVED_STRINGS.confirmNomineeSubtitle
           : NOMINEE_SAVED_STRINGS.subtitle
       }
       primaryBtnTitle={
-        confirmNominees
+        hideAddNominee
           ? NOMINEE_SAVED_STRINGS.confirmNominees
           : NOMINEE_SAVED_STRINGS.addAnotherNominee
       }
       secondaryBtnTitle={
-        !confirmNominees && NOMINEE_SAVED_STRINGS.confirmNominees
+        !hideAddNominee && NOMINEE_SAVED_STRINGS.confirmNominees
       }
       onPrimaryClick={onPrimaryClick}
       onSecondaryClick={onSecondaryClick}

@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { FormControl, FormHelperText } from "@mui/material";
 import Typography from "../../../designSystem/atoms/Typography";
 import InfoCard from "../../../designSystem/molecules/InfoCard";
 import WrapperBox from "../../../designSystem/atoms/WrapperBox";
@@ -25,7 +26,7 @@ const AddressDetails = ({
   isMinor,
   formData = {},
   errorData = {},
-  confirmNominees,
+  hideAddNominee,
   onChange,
   sendEvents,
   onFileSelectStart,
@@ -59,7 +60,7 @@ const AddressDetails = ({
         },
       }}
       className="nominee-personal-details"
-      dataAid="nominee"
+      dataAid={ADDRESS_DETAILS_STRINGS.screenDataAid}
       eventData={sendEvents("just_set_events")}
     >
       <Typography
@@ -151,11 +152,14 @@ const AddressDetails = ({
           onFileSelectError: onFileSelectError,
           supportedFormats: SUPPORTED_IMAGE_TYPES,
           customPickerId: "addressProofFront",
+          docType: "image",
         }}
-        dataAid={poiData?.numberOfDocs === 1 ? "" : "1"}
+        dataAid={poiData?.numberOfDocs === 2 ? "1" : ""}
         fileName={formData?.frontDoc?.name}
         docSide="front"
         poiData={poiData}
+        error={!isEmpty(errorData.frontDoc)}
+        helperText={errorData.frontDoc}
       />
       {poiData?.numberOfDocs === 2 && (
         <UploadContainer
@@ -168,11 +172,14 @@ const AddressDetails = ({
             onFileSelectError: onFileSelectError,
             supportedFormats: SUPPORTED_IMAGE_TYPES,
             customPickerId: "addressProofBack",
+            docType: "image",
           }}
           dataAid="2"
           fileName={formData?.backDoc?.name}
           docSide="back"
           poiData={poiData}
+          error={!isEmpty(errorData.backDoc)}
+          helperText={errorData.backDoc}
         />
       )}
       <InputField
@@ -188,11 +195,12 @@ const AddressDetails = ({
         isOpen={openNomineeSaved}
         onPrimaryClick={onPrimaryClick}
         onSecondaryClick={handleConfirmNominees}
-        confirmNominees={confirmNominees}
+        hideAddNominee={hideAddNominee}
         handleClose={closeDialogStates("openNomineeSaved")}
       />
       <ReviewNominee
         isOpen={openReviewNominee}
+        hideAddNominee={hideAddNominee}
         onPrimaryClick={editNominee}
         onSecondaryClick={addAnotherNominee}
         handleClose={closeDialogStates("openReviewNominee")}
@@ -214,6 +222,8 @@ const UploadContainer = ({
   fileName,
   poiData = {},
   docSide,
+  helperText = "",
+  error = false,
 }) => {
   const title = useMemo(() => {
     return !isEmpty(fileName)
@@ -223,15 +233,22 @@ const UploadContainer = ({
       : ADDRESS_DETAILS_STRINGS.poiInfoTitle.text;
   }, [poiData, fileName]);
   return (
-    <WrapperBox elevation={1} className="nad-info-wrapper">
-      <WVFilePickerWrapper {...filePickerProps}>
-        <InfoCard
-          dataAid={`${ADDRESS_DETAILS_STRINGS.poiInfoTitle.dataAid}${dataAid}`}
-          title={title}
-          subtitle={ADDRESS_DETAILS_STRINGS.poiInfoSubtitle.text}
-          imgSrc={require(`assets/attach_button.svg`)}
-        />
-      </WVFilePickerWrapper>
-    </WrapperBox>
+    <>
+      <WrapperBox elevation={1} className="nad-info-wrapper">
+        <WVFilePickerWrapper {...filePickerProps}>
+          <InfoCard
+            dataAid={`${ADDRESS_DETAILS_STRINGS.poiInfoTitle.dataAid}${dataAid}`}
+            title={title}
+            subtitle={ADDRESS_DETAILS_STRINGS.poiInfoSubtitle.text}
+            imgSrc={require(`assets/attach_button.svg`)}
+          />
+        </WVFilePickerWrapper>
+      </WrapperBox>
+      {error && (
+        <FormControl error={error}>
+          <FormHelperText>{helperText}</FormHelperText>
+        </FormControl>
+      )}
+    </>
   );
 };

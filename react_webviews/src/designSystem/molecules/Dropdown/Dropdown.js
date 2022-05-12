@@ -155,7 +155,7 @@ const Dropdown = (props) => {
             <Icon
               {...iconProps}
               src={require("assets/iv_down.svg")}
-              dataAid="right1"
+              dataAid="right"
               imageWidth="24px"
               imageHeight="24px"
               style={{

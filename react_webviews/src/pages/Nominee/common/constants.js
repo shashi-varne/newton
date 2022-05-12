@@ -7,5 +7,6 @@ export const NOMINEE_PATHNAME_MAPPER = {
   nomineeVerified: "/nominee/verified",
   myAccount: "/my-account",
   esignLanding: "/nominee/esign-landing",
-  manualSignature: "/nominee/manual-signature"
+  manualSignature: "/nominee/manual-signature",
+  helpAndSupport: "/help"
 };
