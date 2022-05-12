@@ -74,6 +74,33 @@ export const buttonVariantsConfig = (colors={}, partnerConfig={}) => {
       },
     },
     {
+      props: { variant: "link", size: "small" },
+      style: {
+        ...typographyVariants.body2,
+        padding: 0,
+        margin: 0,
+        height: "auto",
+        width: "max-content",
+        minWidth: "max-content",
+        color: colors?.action?.brand,
+        textTransform: "none",
+        "&:hover": {
+          color: colors?.action?.brand,
+          backgroundColor: "transparent",
+        },
+        ".MuiTouchRipple-root": {
+          color: "transparent",
+          padding: 0,
+          margin: 0,
+        },
+        "&.Mui-disabled": {
+          backgroundColor: "transparent",
+          opacity: "0.5",
+          color: colors?.action?.brand,
+        },
+      },
+    },
+    {
       props: { isinverted: 1},
       style: {
         backgroundColor: colors?.supporting?.white,
