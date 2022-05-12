@@ -9,6 +9,7 @@ import { nativeCallback } from "../../utils/native_callback";
 import {
   getAllNominees,
   getTotalShares,
+  hideAddAnotherNominee,
 } from "businesslogic/utils/nominee/functions";
 import {
   getEquityNominationData,
@@ -29,9 +30,11 @@ const screen = "CONFIRM_NOMINEE";
 const initializeData = (list) => () => {
   const nominees = getAllNominees(list);
   const totalShares = getTotalShares(list);
+  const hideAddNominee = hideAddAnotherNominee(list);
   return {
     nominees,
     totalShares,
+    hideAddNominee,
   };
 };
 
@@ -50,7 +53,7 @@ const confirmNomineesContainer = (WrappedComponent) => (props) => {
   const equityNominationData = useSelector((state) =>
     getEquityNominationData(state)
   );
-  const { nominees, totalShares } = useMemo(
+  const { nominees, totalShares, hideAddNominee } = useMemo(
     initializeData(equityNominationData?.eq_nominee_list),
     [equityNominationData?.eq_nominee_list]
   );
@@ -88,7 +91,7 @@ const confirmNomineesContainer = (WrappedComponent) => (props) => {
   const checkReviewNomination = () => {
     if (totalShares < 100) {
       openDialog("openReviewNominee");
-      return;
+      return true;
     }
   };
 
@@ -209,6 +212,7 @@ const confirmNomineesContainer = (WrappedComponent) => (props) => {
     <WrappedComponent
       productName={productName}
       nominees={nominees}
+      hideAddNominee={hideAddNominee}
       openNomineeTab={openNomineeTab}
       addNominee={addNominee}
       onClick={onClick}
