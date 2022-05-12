@@ -13,6 +13,7 @@ import {
   getEquityNominationData,
   getMfNominationData,
   resetNomineeDetails,
+  resetNomineeStorage,
 } from "businesslogic/dataStore/reducers/nominee";
 import { useDispatch, useSelector } from "react-redux";
 import { isEmpty } from "lodash-es";
@@ -58,6 +59,7 @@ const landingContainer = (WrappedComponent) => (props) => {
         screen: screen,
       })
     );
+    dispatch(resetNomineeStorage());
   };
 
   const handleEquityRedirection = () => {
