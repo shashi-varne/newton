@@ -1,7 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { NOMINEE_PATHNAME_MAPPER } from "../../pages/Nominee/common/constants";
 import ESignLanding from "../../pages/Nominee/ESignLanding";
-import { getConfig, navigate as navigateFunc } from "../../utils/functions";
+import {
+  getBasePath,
+  getConfig,
+  navigate as navigateFunc,
+} from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 import { getUrlParams } from "../../utils/validators";
 import { useSelector } from "react-redux";
@@ -18,7 +22,8 @@ const initializeData = () => {
 
 const esignLandingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
-  const { productName, isFailed, searchParams } = useMemo(initializeData, []);
+  const { productName, code, isFailed, searchParams, isWebOrSdk, isSdk, iOS } =
+    useMemo(initializeData, []);
   const [openAadharBottomsheet, setOpenAadhaarBottomsheet] = useState(false);
   const [openEsignFailure, setOpenEsignFailure] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
@@ -75,7 +80,62 @@ const esignLandingContainer = (WrappedComponent) => (props) => {
 
   const redirectToEsign = () => {
     setShowLoader(true);
-    window.location.href = equityNominationData.esign_link;
+    const basepath = getBasePath();
+    const backUrl = window.location.href;
+    const redirectUrl = encodeURIComponent(
+      `${basepath}${NOMINEE_PATHNAME_MAPPER.esignStatus}${searchParams}`
+    );
+    let esignLink = equityNominationData.esign_link;
+    esignLink = `${esignLink}${
+      esignLink.match(/[\?]/g) ? "&" : "?"
+    }digio_redirect_url=${redirectUrl}&partner_code=${code}`;
+    if (!isWebOrSdk) {
+      if (iOS) {
+        nativeCallback({
+          action: "show_top_bar",
+          message: {
+            title: "eSign",
+          },
+        });
+      }
+      nativeCallback({
+        action: "take_back_button_control",
+        message: {
+          url: backUrl,
+          message: "You are almost there, do you really want to go back?",
+        },
+      });
+    } else if (isSdk) {
+      const redirectData = {
+        show_toolbar: false,
+        icon: "back",
+        dialog: {
+          message: "You are almost there, do you really want to go back?",
+          action: [
+            {
+              action_name: "positive",
+              action_text: "Yes",
+              action_type: "redirect",
+              redirect_url: encodeURIComponent(backUrl),
+            },
+            {
+              action_name: "negative",
+              action_text: "No",
+              action_type: "cancel",
+              redirect_url: "",
+            },
+          ],
+        },
+        data: {
+          type: "server",
+        },
+      };
+      if (iOS) {
+        redirectData.show_toolbar = true;
+      }
+      nativeCallback({ action: "third_party_redirect", message: redirectData });
+    }
+    window.location.href = esignLink;
   };
 
   return (
