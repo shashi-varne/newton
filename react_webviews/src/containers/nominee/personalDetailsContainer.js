@@ -98,6 +98,8 @@ const personalDetailsContainer = (WrappedComponent) => (props) => {
     data[PERSONAL_DETAILS_FORM_MAPPER.share] = Number(
       data[PERSONAL_DETAILS_FORM_MAPPER.share]
     );
+    delete data.availableShare;
+    delete data.userName;
     dispatch(updateNomineeDetails(data));
     navigate(NOMINEE_PATHNAME_MAPPER.addressDetails);
   };
