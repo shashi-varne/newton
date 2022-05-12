@@ -5,12 +5,11 @@ import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import PropTypes from "prop-types";
-import isObject from "lodash/isObject";
+import { isObject, isEmpty } from "lodash-es";
 import scrollIntoView from "scroll-into-view-if-needed";
 
 import Typography from "../../atoms/Typography";
 import Icon from "../../atoms/Icon";
-// import Separator from "../../atoms/Separator";
 
 import "./Dropdown.scss";
 
@@ -128,7 +127,8 @@ const Dropdown = (props) => {
         variant={variant}
         {...inputLabelProps}
         shrink={
-          ((!isValidValue || !value) && isOpen) || (isValidValue && value)
+          ((!isValidValue || !value) && isOpen) ||
+          (isValidValue && !isEmpty(value))
         }
       >
         <Typography
@@ -171,9 +171,11 @@ const Dropdown = (props) => {
         onClose={onClose}
         displayEmpty={true}
         renderValue={getValue}
+        inputProps={{
+          "data-aid": "et_text",
+        }}
         {...restProps}
       >
-        {/* <Separator dataAid="1" /> */}
         {options.map((data, index) => {
           const menuData = getMenuData({
             data,
