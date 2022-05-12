@@ -42,7 +42,7 @@ export const helperTextStyleOverRides = (colors = {}, partnerConfig = {}) => {
   return {
     root: {
       ...typographyVariants.body5,
-      color: 'foundationColors.content.secondary',
+      color: colors?.content?.secondary,
       '&.Mui-error': {
         color: colors?.secondary?.lossRed['400'],
       },
