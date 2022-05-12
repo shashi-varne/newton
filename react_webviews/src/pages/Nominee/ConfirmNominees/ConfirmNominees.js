@@ -8,6 +8,7 @@ import BottomSheet from "../../../designSystem/organisms/BottomSheet";
 import Container from "../../../designSystem/organisms/ContainerWrapper";
 import ReviewNominee from "../../../featureComponent/Nominee/ReviewNominee";
 import HoldingPercentageFull from "../../../featureComponent/Nominee/HoldingPercentageFull";
+import WVDisableBodyTouch from "../../../common/ui/DisableBodyTouch/WVDisableBodyTouch";
 import {
   CONFIRM_NOMINEES as CONFIRM_NOMINEES_STRINGS,
   BOTTOMSHEETS_CONTENT,
@@ -373,6 +374,7 @@ const ConfirmNominees = ({
         onPrimaryClick={closeDialogStates("openPercentageHoldingFull")}
         handleClose={closeDialogStates("openPercentageHoldingFull")}
       />
+      <WVDisableBodyTouch disableTouch={isButtonLoading} />
     </Container>
   );
 };
