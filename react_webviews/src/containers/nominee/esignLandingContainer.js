@@ -8,36 +8,33 @@ import {
 } from "../../utils/functions";
 import Api from "../../utils/api";
 import { nativeCallback } from "../../utils/native_callback";
-import { getUrlParams } from "../../utils/validators";
 import { useDispatch, useSelector } from "react-redux";
 import { isEmpty } from "lodash-es";
 import {
   getEquityNominationData,
   getNominations,
+  getNomineeStorage,
+  updateNomineeStorage,
 } from "businesslogic/dataStore/reducers/nominee";
 import useLoadingState from "../../common/customHooks/useLoadingState";
 
 const screen = "ESIGN_LANDING";
-const initializeData = () => {
-  const { status } = getUrlParams();
-  return {
-    ...getConfig(),
-    status,
-    isFailed: status === "failed",
-  };
-};
 
 /* eslint-disable */
 const esignLandingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const dispatch = useDispatch();
-  const { productName, code, isFailed, searchParams, isWebOrSdk, isSdk, iOS } =
-    useMemo(initializeData, []);
+
   const [openAadharBottomsheet, setOpenAadhaarBottomsheet] = useState(false);
   const [openEsignFailure, setOpenEsignFailure] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
   const equityNominationData = useSelector((state) =>
     getEquityNominationData(state)
+  );
+  const nomineeStorage = useSelector((state) => getNomineeStorage(state));
+  const { productName, code, searchParams, isWebOrSdk, isSdk, iOS } = useMemo(
+    getConfig,
+    []
   );
   const { isPageLoading } = useLoadingState(screen);
 
@@ -53,13 +50,17 @@ const esignLandingContainer = (WrappedComponent) => (props) => {
   }, []);
 
   useEffect(() => {
-    if (isFailed) {
+    if (nomineeStorage.showEsignFailure) {
       setOpenEsignFailure(true);
+    } else {
+      setOpenEsignFailure(false);
     }
-  }, [isFailed]);
+  }, [nomineeStorage]);
 
   const sendEvents = (userAction) => {
-    const screenName = isFailed ? "esign_failed" : "esign_landing";
+    const screenName = nomineeStorage.showEsignFailure
+      ? "esign_failed"
+      : "esign_landing";
     const eventObj = {
       event_name: "nominee",
 
@@ -87,10 +88,7 @@ const esignLandingContainer = (WrappedComponent) => (props) => {
   const retryEsign = (isBack) => () => {
     const action = isBack ? "back" : "next";
     sendEvents(action);
-    setOpenEsignFailure(false);
-    navigate(`${NOMINEE_PATHNAME_MAPPER.esignLanding}`, {
-      searchParams: `${searchParams}`,
-    });
+    dispatch(updateNomineeStorage({ showEsignFailure: false }));
   };
 
   const redirectToManualSignature = () => {
