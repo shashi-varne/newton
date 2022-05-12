@@ -24,8 +24,14 @@ const getFomattedDob = (dateStr) => {
     return "";
   }
 
-  const dt = parse(dateStr, "dd-MM-yyyy", new Date());
-  const date = format(dt, "dd MMMM yyyy");
+  let date = dateStr;
+  try {
+    const dt = parse(dateStr, "dd/MM/yyyy", new Date());
+    date = format(dt, "dd MMMM yyyy");
+  } catch (error) {
+    date = dateStr;
+  }
+
   return date;
 };
 
