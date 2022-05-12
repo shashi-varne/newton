@@ -96,6 +96,12 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
     }
   }, [isUpdateFailed]);
 
+  useEffect(() => {
+    if (isEmpty(nomineeDetails)) {
+      navigate(NOMINEE_PATHNAME_MAPPER.personalDetails);
+    }
+  }, []);
+
   const onClick = () => {
     const keysToCheck = [
       ADDRESS_DETAILS_FORM_MAPPER.pincode,
@@ -192,7 +198,6 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
       openDialog("openReviewNominee");
       return;
     }
-    dispatch(resetNomineeDetails());
     navigate(NOMINEE_PATHNAME_MAPPER.confirmNominees);
   };
 
