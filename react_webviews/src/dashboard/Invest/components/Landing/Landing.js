@@ -227,6 +227,8 @@ const Landing = (props) => {
       cardClick = "ipo_gold";
     }
 
+    const kycStatus = kycData?.kycStatusData?.eventStatus || kycData?.kycJourneyStatus;
+
     let eventObj = {
       event_name: "landing_page",
       properties: {
@@ -236,7 +238,7 @@ const Landing = (props) => {
         card_click: cardClick,
         channel: getConfig().code,
         user_investment_status: user?.active_investment,
-        kyc_status: kycData.kycJourneyStatus,
+        kyc_status: kycStatus,
       },
     };
     if (cardClick === "kyc_bottom_sheet") {

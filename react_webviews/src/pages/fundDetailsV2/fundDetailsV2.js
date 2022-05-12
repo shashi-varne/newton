@@ -13,6 +13,7 @@ import './fundDetailsV2.scss';
 import FundGraph from './FundGraph';
 import FundPerformance from './FundPerformance';
 import FundStats from './FundStats';
+import FundTitleLoader from './FundTitleLoader';
 import ReturnCalculator from './ReturnCalculator';
 import ReturnComparison from './ReturnComparison';
 import Returns from './Returns';
@@ -40,7 +41,7 @@ const FundDetailsV2 = (props) => {
     fundDetailsRef,
     sendEvents,
   } = props;
-
+  const isDataLoading = isPageLoading || isLoading || isEmpty(fundData);
   return (
     <Container
       headerProps={{
@@ -60,10 +61,9 @@ const FundDetailsV2 = (props) => {
           onButtonClick: validateKycAndRedirect({ navigate, kyc }),
           dataAid: 'viewCart',
         },
-        hideButton1: isFisdom && isfundAdded,
-        hideConfirmAction: !isFisdom || !isfundAdded,
+        hideButton1: (isFisdom && isfundAdded) || isDataLoading,
+        hideConfirmAction: !isFisdom || !isfundAdded || isDataLoading,
       }}
-      isPageLoading={isPageLoading || isLoading || isEmpty(fundData)}
       renderComponentAboveFooter={
         <CustomJumpTo
           fundStatRef={fundStatRef}
@@ -74,6 +74,7 @@ const FundDetailsV2 = (props) => {
           returnCompRef={returnCompRef}
           fundDetailsRef={fundDetailsRef}
           sendEvents={sendEvents}
+          isDataLoading={isDataLoading}
         />
       }
       className='fund-details-wrapper'
@@ -83,36 +84,42 @@ const FundDetailsV2 = (props) => {
     >
       <Box sx={{ pb: 2 }}>
         <Box sx={{ bgcolor: 'foundationColors.supporting.white', p: '3px 16px' }}>
-          <HeaderTitle
-            title={fundData?.performance?.friendly_name}
-            imgSrc={fundData?.performance?.amc_logo_small}
-            subTitleLabels={[
-              { name: fundData?.performance?.ms_risk },
-              { name: fundData?.performance?.category },
-              { name: fundData?.performance?.subcat },
-            ]}
-            dataAid='1'
-          />
+          {
+            isDataLoading ?
+            <FundTitleLoader />
+            :
+            <HeaderTitle
+              title={fundData?.performance?.friendly_name}
+              imgSrc={fundData?.performance?.amc_logo_small}
+              subTitleLabels={[
+                { name: fundData?.performance?.ms_risk },
+                { name: fundData?.performance?.category },
+                { name: fundData?.performance?.subcat },
+              ]}
+              dataAid='1'
+            />
+        }
+
         </Box>
-        <FundPerformance />
-        <FundGraph />
+        <FundPerformance isDataLoading={isDataLoading}/>
+          <FundGraph isDataLoading={isDataLoading}/>
         <div ref={fundStatRef}>
-          <FundStats />
+          <FundStats isDataLoading={isDataLoading}/>
         </div>
         <div className='fund-details-section' ref={returnCalcRef}>
-          <ReturnCalculator fundDetailsRef={fundDetailsRef} sendEvents={sendEvents}/>
+          <ReturnCalculator fundDetailsRef={fundDetailsRef} sendEvents={sendEvents} isDataLoading={isDataLoading}/>
         </div>
         <div className='fund-details-section' ref={assetAllocRef}>
-          <AssetAllocation fundDetailsRef={fundDetailsRef} sendEvents={sendEvents} />
+          <AssetAllocation fundDetailsRef={fundDetailsRef} sendEvents={sendEvents} isDataLoading={isDataLoading} />
         </div>
         <div className='fund-details-section' ref={returnsRef}>
-          <Returns fundDetailsRef={fundDetailsRef} sendEvents={sendEvents} />
+          <Returns fundDetailsRef={fundDetailsRef} sendEvents={sendEvents} isDataLoading={isDataLoading}/>
         </div>
         <div className='fund-details-section' ref={riskDetailsRef}>
-          <RiskDetails fundDetailsRef={fundDetailsRef} sendEvents={sendEvents} />
+          <RiskDetails fundDetailsRef={fundDetailsRef} sendEvents={sendEvents} isDataLoading={isDataLoading}/>
         </div>
-        <div className='fund-details-section' ref={returnCompRef}>
-          <ReturnComparison />
+        <div className='fund-details-section' ref={returnCompRef} >
+          <ReturnComparison isDataLoading={isDataLoading}/>
         </div>
       </Box>
     </Container>
@@ -128,6 +135,7 @@ const CustomJumpTo = ({
   returnCompRef,
   fundDetailsRef,
   sendEvents,
+  isDataLoading
 }) => {
   const [anchorEl, setAnchorEl] = useState(false);
   const [activeSection, setActiveSection] = useState();
@@ -176,6 +184,7 @@ const CustomJumpTo = ({
         label='Jump To'
         onClick={handleClick}
         dataAid='jumpTo'
+        disabled={isDataLoading}
       />
       <NavigationPopup
         activeIndex={activeSection}

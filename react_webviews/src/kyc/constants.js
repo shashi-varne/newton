@@ -17,6 +17,8 @@ export const API_CONSTANTS = {
   sendContactConsent: '/api/communication/contact/consent',
   authCheck: '/api/iam/auth/check',
   goldUserInfo: '/api/gold/user/account',
+  aocPaymentDecision: "/api/equity/eqm/payment/aoc",
+  aocPaymentStatus: "/api/equity/eqm/payment/aoc/status",
 }
 
 export const PATHNAME_MAPPER = {
@@ -70,6 +72,10 @@ export const PATHNAME_MAPPER = {
   tradingInfo: '/kyc/trading-info',
   documentVerification: '/kyc/document-verification',
   kycEsignNsdl: '/kyc-esign/nsdl',
+  aocPaymentStatus: "/kyc/aoc/payment-status",
+  aocPaymentSummary: "/kyc/aoc/payment-summary",
+  aocSelectAccount: "/kyc/aoc/select-account",
+  aocMfVsTrading: "/kyc/aoc/mf-trading-difference",
 }
 
 export const STORAGE_CONSTANTS = {

@@ -15,7 +15,7 @@ const AssetColors = {
   Others: 'foundationColors.secondary.coralOrange.400',
 };
 
-const AssetAllocation = ({fundDetailsRef, sendEvents}) => {
+const AssetAllocation = ({fundDetailsRef, sendEvents, isDataLoading}) => {
   const [isAssetOpen, setIsAssetOpen] = useState(false);
   const [viewMoreHolding, setViewMoreHolding] = useState(3);
   const [viewMoreSector, setViewMoreSector] = useState(3);
@@ -51,6 +51,7 @@ const AssetAllocation = ({fundDetailsRef, sendEvents}) => {
         onClick={handleAssetSection}
         label='Asset allocation'
         dataAid="assetAllocation"
+        disabled={isDataLoading}
       >
         <Stack>
           <Stack direction='row' spacing='40px' sx={{ pb: 2 }} >

@@ -2,12 +2,12 @@ import React from "react";
 import Dialog, { DialogContent } from "material-ui/Dialog";
 import "./mini-components.scss";
 
-const ConfirmBackDialog = ({ isOpen = false, close, goBack }) => {
+const ConfirmBackDialog = ({ isOpen = false, close, goBack, enableBackDrop }) => {
   return (
     <Dialog
       open={isOpen}
       onClose={close}
-      hideBackdrop
+      hideBackdrop={!enableBackDrop}
       keepMounted
       className="kyc-back-confirm-dialog"
     >

@@ -661,6 +661,17 @@ export function isTradingEnabled(userKyc = {}) {
   return kyc?.equity_enabled;
 }
 
+export const isTradingFlow = (kyc) => {
+  kyc = !isEmpty(kyc) ? kyc : storageService().getObject("kyc");
+	return isTradingEnabled(kyc) && kyc?.kyc_product_type === "equity";
+};
+
+export const isIndbSdkTradingFlow = (kyc) => {
+  kyc = !isEmpty(kyc) ? kyc : storageService().getObject("kyc");
+  const config = getConfig();
+	return isTradingEnabled(kyc) && config.isSdk && ["indb", "alb"].includes(config.code);
+};
+
 const { checkBeforeRedirection, checkAfterRedirection, backButtonHandler } = require(`./${getConfig().platform}_app`);
 
 export function navigate(pathname, data = {}) {

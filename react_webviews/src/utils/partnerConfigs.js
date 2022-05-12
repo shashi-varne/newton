@@ -54,23 +54,18 @@ export const commonCardsConfig = {
   },
   landingMarketingBanners: [
     {
-      image: "elss.svg",
-      type: "elss",
-      endDate: "03/31/2022",
-    }
-  ],
-  nfoBanners: [
-    {
-      image: "nfo1.svg",
-      type: "nfo",
-      endDate: "04/10/2022",
+      image: "ipo1.svg",
+      type: "ipo",
+      endDate: "05/08/2022",
+      actionUrl: "https://youtu.be/khCf5foDUmQ"
     },
     {
-      image: "nfo.svg",
-      type: "nfo",
-      endDate: "04/07/2022",
+      image: "ipo.svg",
+      type: "ipo",
+      endDate: "05/08/2022",
     }
   ],
+  nfoBanners: [],
 };
 
 export const basePartnerConfig = {
@@ -304,6 +299,7 @@ export const partnerConfigs = {
     mobile: "+91-7829733111",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
+      stocksAndIpo: ["stocks", "ipo"],
       ourRecommendations: ["buildwealth", "savetax", "nps"],
     },
     styles: {
@@ -482,6 +478,7 @@ export const partnerConfigs = {
     mobile: "+80-48-093070",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
+      stocksAndIpo: ["stocks", "ipo"],
       ourRecommendations: ["buildwealth", "savetax", "nps"],
     },
     referralConfig: {
@@ -606,7 +603,7 @@ export const partnerConfigs = {
     },
     referralConfig: {
       applyRefferal: true,
-      shareRefferal: true,
+      shareRefferal: false,
     },
   },
   sbnri: {
