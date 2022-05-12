@@ -332,6 +332,7 @@ class MyAccount extends Component {
   };
 
   handleNominees = () => {
+    this.sendEvents("my_nominee_clicked");
     this.navigate(NOMINEE_PATHNAME_MAPPER.landing);
   };
 

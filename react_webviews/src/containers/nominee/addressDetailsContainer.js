@@ -27,7 +27,7 @@ import {
   isNomineeUpdateFlow,
   validateAddress,
   getDematNomineeStatus,
-  isDematNomineeStatusRejected,
+  isNomineeStatusRejectedOrApproved,
 } from "businesslogic/utils/nominee/functions";
 import {
   getNomineeDetails,
@@ -135,7 +135,6 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
       return;
     }
     dispatch(updateNomineeDetails(formData));
-    sendEvents("next");
     const addressDoc = poiData?.numberOfDocs === 2 ? file : formData?.frontDoc;
     const sagaCallback = () => {
       if (isDocumentUpdated) {
@@ -156,7 +155,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
     };
     if (
       equityNominationData?.equity_nomination_request_id &&
-      !isDematNomineeStatusRejected(dematStatus)
+      !isNomineeStatusRejectedOrApproved(dematStatus)
     ) {
       payload.requestId = equityNominationData.equity_nomination_request_id;
     }
@@ -198,10 +197,12 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
       return;
     }
     dispatch(resetNomineeDetails());
+    sendEvents("next");
     navigate(NOMINEE_PATHNAME_MAPPER.personalDetails);
   };
 
   const editNominee = () => {
+    sendEvents("next");
     navigate(NOMINEE_PATHNAME_MAPPER.personalDetails);
   };
 
@@ -210,6 +211,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
       openDialog("openReviewNominee");
       return;
     }
+    sendEvents("next");
     navigate(NOMINEE_PATHNAME_MAPPER.confirmNominees);
   };
 

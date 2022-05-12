@@ -61,6 +61,7 @@ const landingContainer = (WrappedComponent) => (props) => {
   };
 
   const handleEquityRedirection = () => {
+    sendEvents("next");
     if (dematStatus === DEMAT_NOMINEE_STATUS_MAPPER.inProgress) {
       return;
     } else if (
@@ -69,14 +70,12 @@ const landingContainer = (WrappedComponent) => (props) => {
         DEMAT_NOMINEE_STATUS_MAPPER.rejected,
       ].includes(dematStatus)
     ) {
-      dispatch(resetNomineeDetails());
-      navigate(NOMINEE_PATHNAME_MAPPER.personalDetails);
+      redirectToPersonalDetails();
     } else if (dematStatus === DEMAT_NOMINEE_STATUS_MAPPER.esignReady) {
       navigate(NOMINEE_PATHNAME_MAPPER.esignLanding);
     } else {
       navigate(NOMINEE_PATHNAME_MAPPER.confirmNominees);
     }
-    sendEvents("next");
   };
 
   useEffect(() => {
@@ -120,8 +119,12 @@ const landingContainer = (WrappedComponent) => (props) => {
     }
   };
 
-  const handleConfirmEditNominees = () => {
-    navigate(NOMINEE_PATHNAME_MAPPER.confirmNominees);
+  const redirectToPersonalDetails = (triggerEvent) => {
+    if (triggerEvent) {
+      sendEvents("next");
+    }
+    dispatch(resetNomineeDetails());
+    navigate(NOMINEE_PATHNAME_MAPPER.personalDetails);
   };
 
   useEffect(() => {
@@ -140,8 +143,9 @@ const landingContainer = (WrappedComponent) => (props) => {
   };
 
   const handleMfRedirection = () => {
-    navigate(NOMINEE_PATHNAME_MAPPER.helpAndSupport)
-  }
+    sendEvents("next");
+    navigate(NOMINEE_PATHNAME_MAPPER.helpAndSupport);
+  };
 
   return (
     <WrappedComponent
@@ -155,7 +159,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       onMenuClose={onMenuClose}
       onClickMenuItem={onClickMenuItem}
       closeResetNominee={handleResetNominee(false)}
-      confirmEditNominees={handleConfirmEditNominees}
+      confirmEditNominees={redirectToPersonalDetails}
       sendEvents={sendEvents}
       onBackClick={onBackClick}
       handleEquityRedirection={handleEquityRedirection}

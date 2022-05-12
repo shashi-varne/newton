@@ -175,7 +175,13 @@ const ConfirmNominees = ({
               </div>
               {data.isMinor && (
                 <>
-                  <Typography variant="body1" className="ncn-cs-content">
+                  <Typography
+                    variant="body1"
+                    className="ncn-cs-content"
+                    dataAid={
+                      CONFIRM_NOMINEES_STRINGS.nomineeGuardianTitle.dataAid
+                    }
+                  >
                     {CONFIRM_NOMINEES_STRINGS.nomineeGuardianTitle.title}
                   </Typography>
                   <div className="flex-between ncn-cs-content">

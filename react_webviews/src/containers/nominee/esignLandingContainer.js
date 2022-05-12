@@ -77,8 +77,6 @@ const esignLandingContainer = (WrappedComponent) => (props) => {
   };
 
   const handleProceed = () => {
-    const userAction = "next";
-    sendEvents(userAction);
     setOpenAadhaarBottomsheet(true);
   };
 
@@ -91,16 +89,18 @@ const esignLandingContainer = (WrappedComponent) => (props) => {
     sendEvents(action);
     setOpenEsignFailure(false);
     navigate(`${NOMINEE_PATHNAME_MAPPER.esignLanding}`, {
-      searchParams: `${searchParams}&status=""`,
+      searchParams: `${searchParams}`,
     });
   };
 
   const redirectToManualSignature = () => {
+    sendEvents("next");
     navigate(NOMINEE_PATHNAME_MAPPER.manualSignature);
   };
 
   const redirectToEsign = () => {
     setShowLoader(true);
+    sendEvents("next");
     const basepath = getBasePath();
     const backUrl = window.location.href;
     const redirectUrl = encodeURIComponent(
@@ -159,12 +159,18 @@ const esignLandingContainer = (WrappedComponent) => (props) => {
     window.location.href = esignLink;
   };
 
+  const onBackClick = () => {
+    sendEvents("back");
+    navigate(NOMINEE_PATHNAME_MAPPER.landing);
+  };
+
   return (
     <WrappedComponent
       productName={productName}
       showLoader={showLoader || isPageLoading}
       openAadharBottomsheet={openAadharBottomsheet}
       openEsignFailure={openEsignFailure}
+      onBackClick={onBackClick}
       sendEvents={sendEvents}
       retryEsign={retryEsign}
       onClickProceed={handleProceed}

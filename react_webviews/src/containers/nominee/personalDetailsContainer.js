@@ -31,7 +31,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { NOMINEE_PATHNAME_MAPPER } from "../../pages/Nominee/common/constants";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import { getUserName } from "businesslogic/utils/common/functions";
-import { handleNomineeExit } from "../../pages/Nominee/common/functions";
 
 const initializeData = (nominationData, nomineeDetails) => () => {
   const list = nominationData?.eq_nominee_list || [];
@@ -160,7 +159,7 @@ const personalDetailsContainer = (WrappedComponent) => (props) => {
 
   const handleExit = () => {
     sendEvents("back");
-    handleNomineeExit(navigate);
+    navigate(NOMINEE_PATHNAME_MAPPER.landing);
   };
 
   return (

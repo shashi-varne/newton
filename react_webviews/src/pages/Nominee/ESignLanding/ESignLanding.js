@@ -60,13 +60,15 @@ const ESignLanding = ({
   closeAadharBottomsheet,
   retryEsign,
   showLoader,
+  onBackClick,
 }) => {
   return (
     <Container
-      sendEvents={sendEvents("just_set_events")}
+      eventData={sendEvents("just_set_events")}
       headerProps={{
         dataAid: ESIGN_LANDING.navigationDataAid,
         headerTitle: "",
+        onBackClick,
       }}
       isPageLoading={showLoader}
       footer={{
