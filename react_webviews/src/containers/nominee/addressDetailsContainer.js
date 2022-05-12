@@ -6,7 +6,11 @@ import {
   navigate as navigateFunc,
   combinedDocBlob,
 } from "../../utils/functions";
-import { validateName, validateNumber } from "../../utils/validators";
+import {
+  validateAddressWords,
+  validateName,
+  validateNumber,
+} from "../../utils/validators";
 import { nativeCallback } from "../../utils/native_callback";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -25,6 +29,7 @@ import {
   getNomineeDataById,
   getUpdatedData,
   isNomineeUpdateFlow,
+  validateAddress,
 } from "businesslogic/utils/nominee/functions";
 import {
   getNomineeDetails,
@@ -219,6 +224,8 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
   };
 
   const onChange = (name) => (event) => {
+    console.log({ name, mm: ADDRESS_DETAILS_FORM_MAPPER.address });
+
     const data = { ...formData };
     const errorInfo = { ...errorData };
     const numberFields = [ADDRESS_DETAILS_FORM_MAPPER.pincode];
@@ -230,7 +237,11 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
     if (value && numberFields.includes(name) && !validateNumber(value)) return;
     if (value && nameFields.includes(name) && !validateName(value)) return;
     if (value && value.indexOf(" ") === 0) return;
-
+    if (name === ADDRESS_DETAILS_FORM_MAPPER.address) {
+      if (!validateAddress(value)) {
+        return;
+      }
+    }
     data[name] = value;
     errorInfo[name] = "";
     setFormData(data);
