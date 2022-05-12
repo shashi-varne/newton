@@ -97,6 +97,9 @@ const AddressDetails = ({
         id={ADDRESS_DETAILS_FORM_MAPPER.address}
         error={!isEmpty(errorData.address)}
         helperText={errorData.address}
+        inputProps={{
+          maxLength: 200,
+        }}
       />
       <InputField
         label={ADDRESS_DETAILS_STRINGS.formLabels.city}
@@ -105,6 +108,7 @@ const AddressDetails = ({
         dataAid="3"
         error={!isEmpty(errorData.city)}
         helperText={errorData.city}
+        disabled
       />
       <InputField
         label={ADDRESS_DETAILS_STRINGS.formLabels.state}
@@ -113,6 +117,7 @@ const AddressDetails = ({
         dataAid="4"
         error={!isEmpty(errorData.state)}
         helperText={errorData.state}
+        disabled
       />
       <Dropdown
         options={NOMINEE_PROOF_OF_IDENTITY}

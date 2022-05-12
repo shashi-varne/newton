@@ -9,11 +9,12 @@ import {
 import { validateName, validateNumber } from "../../utils/validators";
 import { nativeCallback } from "../../utils/native_callback";
 import { useDispatch, useSelector } from "react-redux";
+import isEmpty from "lodash-es/isEmpty";
 
 import {
   ADDRESS_DETAILS_FORM_MAPPER,
   DEFAULT_NOMINEE_ADDRESS_DETAILS,
-  PERSONAL_DETAILS_FORM_MAPPER,
+  ERROR_MESSAGES,
 } from "businesslogic/constants/nominee";
 import {
   validateFields,
@@ -35,11 +36,11 @@ import {
   resetNomineeDetails,
   updateNomineeRequest,
 } from "businesslogic/dataStore/reducers/nominee";
+import { getPinCodeData } from "businesslogic/apis/common";
 
 import useLoadingState from "../../common/customHooks/useLoadingState";
 import useErrorState from "../../common/customHooks/useErrorState";
 
-import isEmpty from "lodash-es/isEmpty";
 import { NOMINEE_PATHNAME_MAPPER } from "../../pages/Nominee/common/constants";
 
 const screen = "ADDRESS_DETAILS";
@@ -149,17 +150,12 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
       );
       if (isDocumentUpdated) {
         payload.file = poiData?.numberOfDocs === 2 ? file : formData?.frontDoc;
-        data[ADDRESS_DETAILS_FORM_MAPPER.poi] =
-          formData[ADDRESS_DETAILS_FORM_MAPPER.poi];
-        data[ADDRESS_DETAILS_FORM_MAPPER.password] =
-          formData[ADDRESS_DETAILS_FORM_MAPPER.password];
+        data.poi = formData.poi;
+        data.password = formData.password;
       } else {
         payload.file = null;
       }
-      if (
-        oldNomineeData[PERSONAL_DETAILS_FORM_MAPPER.isMinor] !==
-        nomineeDetails[PERSONAL_DETAILS_FORM_MAPPER.isMinor]
-      ) {
+      if (oldNomineeData.isMinor !== nomineeDetails.isMinor) {
         data = payload.data;
       }
       if (isEmpty(data)) {
@@ -224,6 +220,32 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
       nativeCallback({ events: eventObj });
     }
   };
+
+  const fetchPincodeData = async () => {
+    let data = { ...formData };
+    let errorInfo = { ...errorData };
+    try {
+      const result = await getPinCodeData(data.pincode);
+      if (result && result.length === 0) {
+        errorInfo.pincode = ERROR_MESSAGES.pincode;
+        data.city = "";
+        data.state = "";
+      } else {
+        data.city = result[0].district_name?.toUpperCase();
+        data.state = result[0].state_name?.toUpperCase();
+      }
+    } catch (err) {
+      console.error(err);
+    }
+    setFormData(data);
+    setErrorData(errorInfo);
+  };
+
+  useEffect(() => {
+    if (formData?.pincode?.length === 6) {
+      fetchPincodeData();
+    }
+  }, [formData?.pincode]);
 
   const onChange = (name) => (event) => {
     console.log({ name, mm: ADDRESS_DETAILS_FORM_MAPPER.address });
