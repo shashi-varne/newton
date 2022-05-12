@@ -225,7 +225,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
     let data = { ...formData };
     let errorInfo = { ...errorData };
     try {
-      const result = await getPinCodeData(data.pincode);
+      const result = await getPinCodeData(Api, data.pincode);
       if (result && result.length === 0) {
         errorInfo.pincode = ERROR_MESSAGES.pincode;
         data.city = "";
