@@ -7,7 +7,10 @@ import { nativeCallback } from "../../utils/native_callback";
 const ManualSignatureContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const { kyc, isLoading } = useUserKycHook();
-  const email = kyc?.identification?.meta_data.email || "";
+  const email = useMemo(() => {
+    return get(kyc, "identification?.meta_data.email", "");
+  }, [kyc?.identification?.meta_data.email]);
+
   const handleDownloadForm = () => {
     const userAction = "next";
     sendEvents(userAction);

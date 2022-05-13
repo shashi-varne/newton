@@ -76,7 +76,7 @@ const ManualSignature = ({ email, onClickDownloadForm, sendEvents }) => {
           {MANUAL_SIGNATURE.stepsTitle.text}
         </Typography>
         {MANUAL_SIGNATURE_STEPS.map((item, index) => {
-          const isLastItem = index + 1 !== MANUAL_SIGNATURE_STEPS.length;
+          const isLastItem = index + 1 === MANUAL_SIGNATURE_STEPS.length;
           return (
             <OrderStep
               key={index}
@@ -85,7 +85,7 @@ const ManualSignature = ({ email, onClickDownloadForm, sendEvents }) => {
               title={item?.title}
               subtitle={dynamicStepsSubtitle(index, item?.subtitle)}
               variant={ORDER_STEP_VARIANTS.SUCCESSFUL}
-              showStepLine={isLastItem}
+              showStepLine={!isLastItem}
               buttonTitle={item?.buttonTitle}
               onClickButton={onClickDownloadForm}
             />
