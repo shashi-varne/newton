@@ -5,7 +5,7 @@ export const dropdownStyleOverRides = (colors, partnerConfig) => {
   return {
     select: {
       ...typographyConfig["body5"],
-      padding: "25px 16px 8px 16px",
+      padding: "25px 16px 8px 12px",
       borderBottomRightRadius: "0px",
       borderBottomLeftRadius: "0px",
       borderTopRightRadius: "8px",

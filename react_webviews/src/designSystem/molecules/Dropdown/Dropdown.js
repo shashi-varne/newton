@@ -135,9 +135,6 @@ const Dropdown = (props) => {
           variant="body2"
           color="foundationColors.content.secondary"
           dataAid="label"
-          sx={{
-            pl: "8px",
-          }}
         >
           {label}
         </Typography>
