@@ -253,6 +253,8 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
       } else {
         data.city = result[0].district_name?.toUpperCase();
         data.state = result[0].state_name?.toUpperCase();
+        errorInfo.city = "";
+        errorInfo.state = "";
       }
     } catch (err) {
       console.error(err);
