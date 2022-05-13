@@ -36,7 +36,6 @@ const nomineeSubmittedContainer = (WrappedComponent) => (props) => {
     navigate(NOMINEE_PATHNAME_MAPPER.landing);
   };
 
-  console.log({ NOMINEE_SUBMITTED });
   return (
     <WrappedComponent
       sendEvents={sendEvents}
