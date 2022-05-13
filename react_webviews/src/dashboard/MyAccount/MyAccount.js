@@ -585,6 +585,10 @@ class MyAccount extends Component {
                   <div data-aid="tv_myNominee">My nominees</div>
                 </div>
               )}
+            </div>
+          </div>
+          <div className="my-account-content my-account-bottom-content">
+            <div className="account">
               {(tradingEnabled && (!isSdk || currentUser.pin_status === 'pin_setup_complete')) && (
                 <div
                   data-aid="security-setting"
