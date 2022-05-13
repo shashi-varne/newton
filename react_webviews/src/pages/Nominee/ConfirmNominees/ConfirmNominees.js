@@ -167,7 +167,7 @@ const ConfirmNominees = ({
                   <Typography
                     color="foundationColors.primary.brand"
                     textAlign="right"
-                    variant="body2"
+                    variant="body1"
                     dataAid={CONFIRM_NOMINEES_STRINGS.nomineeShare.valueDataAid}
                   >
                     {data.share}%
