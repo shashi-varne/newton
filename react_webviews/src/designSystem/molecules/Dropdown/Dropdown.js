@@ -10,7 +10,6 @@ import scrollIntoView from "scroll-into-view-if-needed";
 
 import Typography from "../../atoms/Typography";
 import Icon from "../../atoms/Icon";
-// import Separator from "../../atoms/Separator";
 
 import "./Dropdown.scss";
 
@@ -177,7 +176,6 @@ const Dropdown = (props) => {
         }}
         {...restProps}
       >
-        {/* <Separator dataAid="1" /> */}
         {options.map((data, index) => {
           const menuData = getMenuData({
             data,
