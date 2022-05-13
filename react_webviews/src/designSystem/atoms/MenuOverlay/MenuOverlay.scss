@@ -1,0 +1,28 @@
+.molecule-menu-overlay {
+  .MuiPaper-root {
+    margin: 3px;
+    min-width: 196px;
+    box-shadow: 0px 6px 12px -6px rgba(0, 0, 0, 0.04),
+      0px 0px 1px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    max-height: unset !important;
+    background-color: white;
+  }
+
+  .mo-item-wrapper {
+    margin-top: 8px;
+    padding: 16px;
+    cursor: pointer;
+  }
+
+  .mo-item-wrapper:first-child {
+    margin-top: 0px;
+  }
+}
+
+@media only screen and (min-width: 786px) {
+  .MuiModal-root.MuiPopover-root.molecule-menu-overlay {
+    left: 0px !important;
+    max-width: 100% !important;
+  }
+}
