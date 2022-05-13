@@ -63,144 +63,146 @@ const AddressDetails = ({
           disabled: disabled,
         },
       }}
-      className="nominee-personal-details"
+      className="nominee-address-details"
       dataAid={ADDRESS_DETAILS_STRINGS.screenDataAid}
       eventData={sendEvents("just_set_events")}
     >
-      <Typography
-        dataAid={
-          isMinor
-            ? ADDRESS_DETAILS_STRINGS.guardianSubtext.dataAid
-            : ADDRESS_DETAILS_STRINGS.addressDetailsSubtext.dataAid
-        }
-        variant="heading4"
-        sx={{ pt: "24px" }}
-        component="div"
-      >
-        {isMinor
-          ? ADDRESS_DETAILS_STRINGS.guardianSubtext.text
-          : ADDRESS_DETAILS_STRINGS.addressDetailsSubtext.text}
-      </Typography>
-      <InputField
-        label={ADDRESS_DETAILS_STRINGS.formLabels.pincode}
-        value={formData.pincode}
-        onChange={onChange(ADDRESS_DETAILS_FORM_MAPPER.pincode)}
-        dataAid="1"
-        error={!isEmpty(errorData.pincode)}
-        helperText={errorData.pincode}
-        inputMode="numeric"
-        inputProps={{
-          maxLength: 6,
-        }}
-      />
-      <InputField
-        label={ADDRESS_DETAILS_STRINGS.formLabels.address}
-        value={formData.address}
-        onChange={onChange(ADDRESS_DETAILS_FORM_MAPPER.address)}
-        dataAid="2"
-        id={ADDRESS_DETAILS_FORM_MAPPER.address}
-        error={!isEmpty(errorData.address)}
-        helperText={errorData.address}
-        inputProps={{
-          maxLength: 200,
-        }}
-      />
-      <InputField
-        label={ADDRESS_DETAILS_STRINGS.formLabels.city}
-        value={formData.city}
-        onChange={onChange(ADDRESS_DETAILS_FORM_MAPPER.city)}
-        dataAid="3"
-        error={!isEmpty(errorData.city)}
-        helperText={errorData.city}
-        disabled
-        inputLabelProps={{
-          shrink: !isEmpty(formData.city),
-        }}
-      />
-      <InputField
-        label={ADDRESS_DETAILS_STRINGS.formLabels.state}
-        value={formData.state}
-        onChange={onChange(ADDRESS_DETAILS_FORM_MAPPER.state)}
-        dataAid="4"
-        error={!isEmpty(errorData.state)}
-        helperText={errorData.state}
-        disabled
-        inputLabelProps={{
-          shrink: !isEmpty(formData.state),
-        }}
-      />
-      <Dropdown
-        options={NOMINEE_PROOF_OF_IDENTITY}
-        label={ADDRESS_DETAILS_STRINGS.formLabels.poi}
-        dataAid={ADDRESS_DETAILS_STRINGS.dropdownDataAid}
-        onChange={onChange(ADDRESS_DETAILS_FORM_MAPPER.poi)}
-        value={formData.poi}
-        error={!isEmpty(errorData.poi)}
-        helperText={errorData.poi}
-      />
-      {isMinor ? (
+      <div className="nominee-address-wrapper">
         <Typography
-          dataAid={ADDRESS_DETAILS_STRINGS.poiGuardianTitle.dataAid}
+          dataAid={
+            isMinor
+              ? ADDRESS_DETAILS_STRINGS.guardianSubtext.dataAid
+              : ADDRESS_DETAILS_STRINGS.addressDetailsSubtext.dataAid
+          }
           variant="heading4"
-          sx={{ mt: "24px" }}
+          sx={{ pt: "24px" }}
           component="div"
         >
-          {ADDRESS_DETAILS_STRINGS.poiGuardianTitle.text}
+          {isMinor
+            ? ADDRESS_DETAILS_STRINGS.guardianSubtext.text
+            : ADDRESS_DETAILS_STRINGS.addressDetailsSubtext.text}
         </Typography>
-      ) : (
-        <Typography
-          dataAid={ADDRESS_DETAILS_STRINGS.poiNomineeTitle.dataAid}
-          variant="heading4"
-          sx={{ mt: "24px" }}
-          component="div"
-        >
-          {ADDRESS_DETAILS_STRINGS.poiNomineeTitle.text}
-        </Typography>
-      )}
-      <UploadContainer
-        filePickerProps={{
-          shouldCompress: isWeb,
-          nativePickerMethodName: "open_gallery",
-          fileName: "address_proof_front",
-          onFileSelectStart: onFileSelectStart,
-          onFileSelectComplete: onFileSelectComplete("front"),
-          onFileSelectError: onFileSelectError,
-          supportedFormats: SUPPORTED_IMAGE_TYPES,
-          customPickerId: "addressProofFront",
-          docType: "image",
-        }}
-        dataAid={poiData?.numberOfDocs === 2 ? "1" : ""}
-        fileName={formData?.frontDoc?.name}
-        docSide="front"
-        poiData={poiData}
-        error={!isEmpty(errorData.frontDoc)}
-        helperText={errorData.frontDoc}
-        onLoad={mergeDocuments}
-        previewFile={previewFiles.frontFile}
-      />
-      {poiData?.numberOfDocs === 2 && (
+        <InputField
+          label={ADDRESS_DETAILS_STRINGS.formLabels.pincode}
+          value={formData.pincode}
+          onChange={onChange(ADDRESS_DETAILS_FORM_MAPPER.pincode)}
+          dataAid="1"
+          error={!isEmpty(errorData.pincode)}
+          helperText={errorData.pincode}
+          inputMode="numeric"
+          inputProps={{
+            maxLength: 6,
+          }}
+        />
+        <InputField
+          label={ADDRESS_DETAILS_STRINGS.formLabels.address}
+          value={formData.address}
+          onChange={onChange(ADDRESS_DETAILS_FORM_MAPPER.address)}
+          dataAid="2"
+          id={ADDRESS_DETAILS_FORM_MAPPER.address}
+          error={!isEmpty(errorData.address)}
+          helperText={errorData.address}
+          inputProps={{
+            maxLength: 200,
+          }}
+        />
+        <InputField
+          label={ADDRESS_DETAILS_STRINGS.formLabels.city}
+          value={formData.city}
+          onChange={onChange(ADDRESS_DETAILS_FORM_MAPPER.city)}
+          dataAid="3"
+          error={!isEmpty(errorData.city)}
+          helperText={errorData.city}
+          disabled
+          inputLabelProps={{
+            shrink: !isEmpty(formData.city),
+          }}
+        />
+        <InputField
+          label={ADDRESS_DETAILS_STRINGS.formLabels.state}
+          value={formData.state}
+          onChange={onChange(ADDRESS_DETAILS_FORM_MAPPER.state)}
+          dataAid="4"
+          error={!isEmpty(errorData.state)}
+          helperText={errorData.state}
+          disabled
+          inputLabelProps={{
+            shrink: !isEmpty(formData.state),
+          }}
+        />
+        <Dropdown
+          options={NOMINEE_PROOF_OF_IDENTITY}
+          label={ADDRESS_DETAILS_STRINGS.formLabels.poi}
+          dataAid={ADDRESS_DETAILS_STRINGS.dropdownDataAid}
+          onChange={onChange(ADDRESS_DETAILS_FORM_MAPPER.poi)}
+          value={formData.poi}
+          error={!isEmpty(errorData.poi)}
+          helperText={errorData.poi}
+        />
+        {isMinor ? (
+          <Typography
+            dataAid={ADDRESS_DETAILS_STRINGS.poiGuardianTitle.dataAid}
+            variant="heading4"
+            sx={{ mt: "24px" }}
+            component="div"
+          >
+            {ADDRESS_DETAILS_STRINGS.poiGuardianTitle.text}
+          </Typography>
+        ) : (
+          <Typography
+            dataAid={ADDRESS_DETAILS_STRINGS.poiNomineeTitle.dataAid}
+            variant="heading4"
+            sx={{ mt: "24px" }}
+            component="div"
+          >
+            {ADDRESS_DETAILS_STRINGS.poiNomineeTitle.text}
+          </Typography>
+        )}
         <UploadContainer
           filePickerProps={{
             shouldCompress: isWeb,
             nativePickerMethodName: "open_gallery",
-            fileName: "address_proof_back",
+            fileName: "address_proof_front",
             onFileSelectStart: onFileSelectStart,
-            onFileSelectComplete: onFileSelectComplete("back"),
+            onFileSelectComplete: onFileSelectComplete("front"),
             onFileSelectError: onFileSelectError,
             supportedFormats: SUPPORTED_IMAGE_TYPES,
-            customPickerId: "addressProofBack",
+            customPickerId: "addressProofFront",
             docType: "image",
           }}
-          dataAid="2"
-          fileName={formData?.backDoc?.name}
-          docSide="back"
+          dataAid={poiData?.numberOfDocs === 2 ? "1" : ""}
+          fileName={formData?.frontDoc?.name}
+          docSide="front"
           poiData={poiData}
-          error={!isEmpty(errorData.backDoc)}
-          helperText={errorData.backDoc}
+          error={!isEmpty(errorData.frontDoc)}
+          helperText={errorData.frontDoc}
           onLoad={mergeDocuments}
-          previewFile={previewFiles.backFile}
+          previewFile={previewFiles.frontFile}
         />
-      )}
+        {poiData?.numberOfDocs === 2 && (
+          <UploadContainer
+            filePickerProps={{
+              shouldCompress: isWeb,
+              nativePickerMethodName: "open_gallery",
+              fileName: "address_proof_back",
+              onFileSelectStart: onFileSelectStart,
+              onFileSelectComplete: onFileSelectComplete("back"),
+              onFileSelectError: onFileSelectError,
+              supportedFormats: SUPPORTED_IMAGE_TYPES,
+              customPickerId: "addressProofBack",
+              docType: "image",
+            }}
+            dataAid="2"
+            fileName={formData?.backDoc?.name}
+            docSide="back"
+            poiData={poiData}
+            error={!isEmpty(errorData.backDoc)}
+            helperText={errorData.backDoc}
+            onLoad={mergeDocuments}
+            previewFile={previewFiles.backFile}
+          />
+        )}
+      </div>
       <NomineeSaved
         isOpen={openNomineeSaved}
         onPrimaryClick={onPrimaryClick}
