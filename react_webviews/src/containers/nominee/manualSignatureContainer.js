@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import ManualSignature from "../../pages/Nominee/ManualSignature/ManualSignature";
 import { navigate as navigateFunc } from "../../utils/functions";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
@@ -8,11 +8,14 @@ import { NOMINEE_API_CONSTANTS } from "businesslogic/apis/nominee";
 import { getUrlParams } from "../../utils/validators";
 import ToastMessage from "../../designSystem/atoms/ToastMessage";
 import { NOMINEE_PATHNAME_MAPPER } from "../../pages/Nominee/common/constants";
+import { get } from "lodash-es";
 
 const manualSignatureContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const { kyc, isLoading } = useUserKycHook();
-  const email = kyc?.identification?.meta_data.email || "";
+  const email = useMemo(() => {
+    return get(kyc, "identification?.meta_data.email", "");
+  }, [kyc?.identification?.meta_data.email]);
 
   const handleDownloadForm = () => {
     const userAction = "next";

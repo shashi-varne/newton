@@ -67,7 +67,6 @@ const ESignLanding = ({
       eventData={sendEvents("just_set_events")}
       headerProps={{
         dataAid: ESIGN_LANDING.navigationDataAid,
-        headerTitle: "",
         onBackClick,
       }}
       isPageLoading={showLoader}

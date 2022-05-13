@@ -1,6 +1,6 @@
 import React from "react";
-import esignLaningContainer from "../../containers/nominee/esignLandingContainer";
 import { Route, Switch } from "react-router-dom";
+import esignLaningContainer from "../../containers/nominee/esignLandingContainer";
 import landingContainer from "../../containers/nominee/landingContainer";
 import personalDetailsContainer from "../../containers/nominee/personalDetailsContainer";
 import addressDetailsContainer from "../../containers/nominee/addressDetailsContainer";
