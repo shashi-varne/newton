@@ -169,9 +169,10 @@ const AddressDetails = ({
             supportedFormats: SUPPORTED_IMAGE_TYPES,
             customPickerId: "addressProofFront",
             docType: "image",
+            showOptionsDialog: true,
           }}
           dataAid={poiData?.numberOfDocs === 2 ? "1" : ""}
-          fileName={formData?.frontDoc?.name}
+          fileName={formData?.frontDoc?.fileName}
           docSide="front"
           poiData={poiData}
           error={!isEmpty(errorData.frontDoc)}
@@ -191,9 +192,10 @@ const AddressDetails = ({
               supportedFormats: SUPPORTED_IMAGE_TYPES,
               customPickerId: "addressProofBack",
               docType: "image",
+              showOptionsDialog: true,
             }}
             dataAid="2"
-            fileName={formData?.backDoc?.name}
+            fileName={formData?.backDoc?.fileName}
             docSide="back"
             poiData={poiData}
             error={!isEmpty(errorData.backDoc)}

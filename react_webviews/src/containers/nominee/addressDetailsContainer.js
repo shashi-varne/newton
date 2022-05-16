@@ -311,6 +311,10 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
   const onFileSelectComplete = (docSide) => (file, fileBase64) => {
     setFileLoading(false);
     const errorInfo = { ...errorData };
+    file.fileName =
+      file.name ||
+      file.file_name ||
+      `${poiData.value}${poiData.numberOfDocs === 2 ? `_${docSide}` : ""}.jpeg`;
     if (docSide === "front") {
       errorInfo[ADDRESS_DETAILS_FORM_MAPPER.frontDoc] = "";
       setPreviewFiles({
