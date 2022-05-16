@@ -7,6 +7,7 @@ import { nativeCallback } from "../utils/native_callback";
 import Toast from "../common/ui/Toast";
 import { getBasePath } from "../utils/functions";
 import { setSummaryData } from "../kyc/services";
+import { func } from "prop-types";
 
 const config = getConfig();
 const errorMessage = "Something went wrong!";
@@ -301,6 +302,15 @@ export const redirectToLaunchDiet = async () => {
     console.log(error);
     toast(errorMessage);
   }
+}
+
+export function redirectToLaunchOdin() {
+    const user = storageService().getObject("user");
+    if (user.kyc_registration_v2 === "complete") {
+      window.location.href = `${config.base_url}/page/equity/launchapp`;
+    } else {
+      toast(errorMessage);
+    }
 } 
 
 export async function otpLoginVerification(verify_url, body) {
