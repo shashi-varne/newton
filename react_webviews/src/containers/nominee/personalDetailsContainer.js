@@ -23,6 +23,7 @@ import {
   getDematNomineeStatus,
   getNomineeNames,
   getNomineesList,
+  isNomineeStatusRejectedOrApproved,
 } from "businesslogic/utils/nominee/functions";
 import {
   getEquityNominationData,
@@ -45,6 +46,7 @@ const initializeData = (nominationData, nomineeDetails) => () => {
   }
   return {
     availableShare,
+    dematStatus,
   };
 };
 
@@ -63,7 +65,7 @@ const personalDetailsContainer = (WrappedComponent) => (props) => {
   const [openExitNominee, setOpenExitNominee] = useState(false);
 
   const { kyc } = useUserKycHook();
-  const { availableShare } = useMemo(
+  const { availableShare, dematStatus } = useMemo(
     initializeData(equityNominationData, nomineeDetails),
     [equityNominationData, nomineeDetails]
   );
@@ -96,13 +98,18 @@ const personalDetailsContainer = (WrappedComponent) => (props) => {
       equityNominationData,
       nomineeDetails.id
     );
-    const nomineeNameValidationList = [
-      ...nomineeNames,
+    let nomineeNameValidationList = [
       {
         name: userName,
         isUser: true,
       },
     ];
+    if (!isNomineeStatusRejectedOrApproved(dematStatus)) {
+      nomineeNameValidationList = [
+        ...nomineeNameValidationList,
+        ...nomineeNames,
+      ];
+    }
     const additionalInfo = {
       availableShare,
       nomineeNameValidationList,
