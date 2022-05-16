@@ -102,7 +102,7 @@ const esignLandingContainer = (WrappedComponent) => (props) => {
     const basepath = getBasePath();
     const backUrl = window.location.href;
     const redirectUrl = encodeURIComponent(
-      `${basepath}${NOMINEE_PATHNAME_MAPPER.esignStatus}${searchParams}`
+      `${basepath}${NOMINEE_PATHNAME_MAPPER.esignStatus}${searchParams}&is_secure=${isSdk}`
     );
     let esignLink = equityNominationData.esign_link;
     esignLink = `${esignLink}${
