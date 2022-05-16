@@ -87,6 +87,7 @@ const PersonalDetails = ({
         onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.dob)}
         dataAid={PERSONAL_DETAILS.formLabelsDataAid.dob}
         id={PERSONAL_DETAILS_FORM_MAPPER.dob}
+        inputMode="numeric"
         inputProps={{
           maxLength: 10,
         }}
