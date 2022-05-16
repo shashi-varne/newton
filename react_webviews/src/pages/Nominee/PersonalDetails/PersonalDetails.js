@@ -77,7 +77,7 @@ const PersonalDetails = ({
         label={PERSONAL_DETAILS.formLabels.name}
         value={formData.name}
         onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.name)}
-        dataAid="1"
+        dataAid={PERSONAL_DETAILS.formLabelsDataAid.name}
         error={!isEmpty(errorData.name)}
         helperText={errorData.name}
       />
@@ -85,7 +85,7 @@ const PersonalDetails = ({
         label={PERSONAL_DETAILS.formLabels.dob}
         value={formData.dob}
         onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.dob)}
-        dataAid="2"
+        dataAid={PERSONAL_DETAILS.formLabelsDataAid.dob}
         id={PERSONAL_DETAILS_FORM_MAPPER.dob}
         inputProps={{
           maxLength: 10,
@@ -96,7 +96,7 @@ const PersonalDetails = ({
       <Dropdown
         options={NOMINEE_RELATIONSHIP}
         label={PERSONAL_DETAILS.formLabels.relationship}
-        dataAid={PERSONAL_DETAILS_FORM_MAPPER.relationship}
+        dataAid={PERSONAL_DETAILS.formLabelsDataAid.relationship}
         onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.relationship)}
         value={formData.relationship}
         error={!isEmpty(errorData.relationship)}
@@ -109,7 +109,7 @@ const PersonalDetails = ({
             value={formData.mobile}
             onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.mobile)}
             inputMode="numeric"
-            dataAid="3"
+            dataAid={PERSONAL_DETAILS.formLabelsDataAid.mobile}
             inputProps={{
               maxLength: 10,
             }}
@@ -120,7 +120,7 @@ const PersonalDetails = ({
             label={PERSONAL_DETAILS.formLabels.email}
             value={formData.email}
             onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.email)}
-            dataAid="4"
+            dataAid={PERSONAL_DETAILS.formLabelsDataAid.email}
             error={!isEmpty(errorData.email)}
             helperText={errorData.email}
           />
@@ -146,7 +146,7 @@ const PersonalDetails = ({
         label={PERSONAL_DETAILS.formLabels.share}
         inputMode="numeric"
         value={formData.share}
-        dataAid={isMinor ? "3" : "5"}
+        dataAid={PERSONAL_DETAILS.formLabelsDataAid.share}
         onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.share)}
         inputProps={{
           maxLength: 6,
@@ -170,14 +170,14 @@ const PersonalDetails = ({
             label={PERSONAL_DETAILS.formLabels.guardianName}
             value={formData.guardianName}
             onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.guardianName)}
-            dataAid="4"
+            dataAid={PERSONAL_DETAILS.formLabelsDataAid.guardianName}
             error={!isEmpty(errorData.guardianName)}
             helperText={errorData.guardianName}
           />
           <Dropdown
             options={NOMINEE_RELATIONSHIP}
             label={PERSONAL_DETAILS.formLabels.guardianRelationship}
-            dataAid={PERSONAL_DETAILS_FORM_MAPPER.guardianRelationship}
+            dataAid={PERSONAL_DETAILS.formLabelsDataAid.guardianRelationship}
             onChange={onChange(
               PERSONAL_DETAILS_FORM_MAPPER.guardianRelationship
             )}
@@ -189,7 +189,7 @@ const PersonalDetails = ({
             label={PERSONAL_DETAILS.formLabels.mobile}
             value={formData.mobile}
             onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.mobile)}
-            dataAid="5"
+            dataAid={PERSONAL_DETAILS.formLabelsDataAid.mobile}
             inputMode="numeric"
             inputProps={{
               maxLength: 10,
@@ -201,7 +201,7 @@ const PersonalDetails = ({
             label={PERSONAL_DETAILS.formLabels.email}
             value={formData.email}
             onChange={onChange(PERSONAL_DETAILS_FORM_MAPPER.email)}
-            dataAid="6"
+            dataAid={PERSONAL_DETAILS.formLabelsDataAid.email}
             error={!isEmpty(errorData.email)}
             helperText={errorData.email}
           />
