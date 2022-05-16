@@ -144,14 +144,25 @@ const NomineeDetails = ({ data, index }) => (
         </Typography>
       )}
     </Stack>
-    {!isEmpty(data?.subtext?.text) && (
-      <Typography
-        variant="body5"
-        color="foundationColors.content.secondary"
-        dataAid={`${data?.subtext?.dataAid}${index}`}
-      >
-        {data.subtext.text}
-      </Typography>
-    )}
+    <Stack direction="row" justifyContent="space-between" spacing="4px">
+      {!isEmpty(data?.subtext?.text) && (
+        <Typography
+          variant="body5"
+          color="foundationColors.content.secondary"
+          dataAid={`${data?.subtext?.dataAid}${index}`}
+        >
+          {data.subtext.text}
+        </Typography>
+      )}
+      {!isEmpty(data?.status?.text) && (
+        <Typography
+          variant="body5"
+          color="foundationColors.secondary.lossRed.400"
+          dataAid={`${data?.status?.dataAid}${index}`}
+        >
+          {data?.status?.text}
+        </Typography>
+      )}
+    </Stack>
   </>
 );
