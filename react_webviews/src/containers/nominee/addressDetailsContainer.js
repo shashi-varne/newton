@@ -38,7 +38,7 @@ import {
   resetNomineeDetails,
   updateNomineeRequest,
 } from "businesslogic/dataStore/reducers/nominee";
-import { getPinCodeData } from "businesslogic/apis/common";
+import { getCMMPincodeData } from "businesslogic/apis/common";
 
 import useLoadingState from "../../common/customHooks/useLoadingState";
 import useErrorState from "../../common/customHooks/useErrorState";
@@ -244,15 +244,15 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
   const fetchPincodeData = async () => {
     let data = { ...formData };
     let errorInfo = { ...errorData };
-    try {
-      const result = await getPinCodeData(Api, data.pincode);
-      if (result && result.length === 0) {
+    try { 
+      const result = await getCMMPincodeData(Api, data.pincode);
+      if (isEmpty(result?.address)) {
         errorInfo.pincode = ERROR_MESSAGES.pincode;
         data.city = "";
         data.state = "";
       } else {
-        data.city = result[0].district_name?.toUpperCase();
-        data.state = result[0].state_name?.toUpperCase();
+        data.city = result.address.cdsl_city?.toUpperCase();
+        data.state = result.address.cdsl_state?.toUpperCase();
         errorInfo.city = "";
         errorInfo.state = "";
       }
