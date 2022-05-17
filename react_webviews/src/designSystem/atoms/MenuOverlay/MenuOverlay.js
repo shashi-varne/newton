@@ -49,7 +49,7 @@ const MenuOverlay = (props) => {
           horizontal: transformOriginHorizontal,
         }}
         data-aid={`menuOverlay_${dataAid}`}
-        className={"molecule-menu-overlay" + " " + classes.root}
+        className={`molecule-menu-overlay ${classes.root}`}
       >
         {options.map((data, index) => (
           <MenuListItem
