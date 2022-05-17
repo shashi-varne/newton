@@ -246,7 +246,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
     let errorInfo = { ...errorData };
     try { 
       const result = await getCMMPincode(Api, data.pincode);
-      if (result && result.length === 0) {
+      if (result && !isEmpty(result?.address)) {
         errorInfo.pincode = ERROR_MESSAGES.pincode;
         data.city = "";
         data.state = "";
