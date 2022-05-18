@@ -28,10 +28,8 @@ const esignLandingContainer = (WrappedComponent) => (props) => {
   const [openAadharBottomsheet, setOpenAadhaarBottomsheet] = useState(false);
   const [openEsignFailure, setOpenEsignFailure] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
-  const equityNominationData = useSelector((state) =>
-    getEquityNominationData(state)
-  );
-  const nomineeStorage = useSelector((state) => getNomineeStorage(state));
+  const equityNominationData = useSelector(getEquityNominationData);
+  const nomineeStorage = useSelector(getNomineeStorage);
   const { productName, code, searchParams, isWebOrSdk, isSdk, iOS } = useMemo(
     getConfig,
     []

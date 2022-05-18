@@ -72,10 +72,8 @@ const initializeData = (nominationData, nomineeDetails) => () => {
 const addressDetailsContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const dispatch = useDispatch();
-  const nomineeDetails = useSelector((state) => getNomineeDetails(state));
-  const equityNominationData = useSelector((state) =>
-    getEquityNominationData(state)
-  );
+  const nomineeDetails = useSelector(getNomineeDetails);
+  const equityNominationData = useSelector(getEquityNominationData);
   const { isButtonLoading } = useLoadingState(screen);
   const { isUpdateFailed, errorMessage } = useErrorState(screen);
   const [formData, setFormData] = useState(
@@ -244,7 +242,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
   const fetchPincodeData = async () => {
     let data = { ...formData };
     let errorInfo = { ...errorData };
-    try { 
+    try {
       const result = await getCMMPincodeData(Api, data.pincode);
       if (isEmpty(result?.address)) {
         errorInfo.pincode = ERROR_MESSAGES.pincode;

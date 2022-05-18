@@ -35,10 +35,8 @@ const landingContainer = (WrappedComponent) => (props) => {
   const { isWebOrSdk } = useMemo(getConfig, []);
   const { isPageLoading } = useLoadingState(screen);
   const { isUpdateFailed, isFetchFailed, errorMessage } = useErrorState(screen);
-  const equityNominations = useSelector((state) =>
-    getEquityNominationData(state)
-  );
-  const mfNominations = useSelector((state) => getMfNominationData(state));
+  const equityNominations = useSelector(getEquityNominationData);
+  const mfNominations = useSelector(getMfNominationData);
   const dispatch = useDispatch();
 
   const mfStatus = getMfNomineeStatus(mfNominations);

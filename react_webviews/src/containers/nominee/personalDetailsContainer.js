@@ -53,10 +53,8 @@ const initializeData = (nominationData, nomineeDetails) => () => {
 const personalDetailsContainer = (WrappedComponent) => (props) => {
   const dispatch = useDispatch();
   const navigate = navigateFunc.bind(props);
-  const nomineeDetails = useSelector((state) => getNomineeDetails(state));
-  const equityNominationData = useSelector((state) =>
-    getEquityNominationData(state)
-  );
+  const nomineeDetails = useSelector(getNomineeDetails);
+  const equityNominationData = useSelector(getEquityNominationData);
   const [isMinor, setIsMinor] = useState(nomineeDetails.isMinor || false);
   const [formData, setFormData] = useState(
     getNomineePersonalDetails(nomineeDetails)

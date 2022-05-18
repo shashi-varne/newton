@@ -53,9 +53,7 @@ const confirmNomineesContainer = (WrappedComponent) => (props) => {
     openReviewNominee: false,
     openPercentageHoldingFull: false,
   });
-  const equityNominationData = useSelector((state) =>
-    getEquityNominationData(state)
-  );
+  const equityNominationData = useSelector(getEquityNominationData);
   const { nominees, totalShares, hideAddNominee } = useMemo(
     initializeData(equityNominationData),
     [equityNominationData]
