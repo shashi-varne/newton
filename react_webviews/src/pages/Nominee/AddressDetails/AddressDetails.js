@@ -10,7 +10,7 @@ import { WVFilePickerWrapper } from "../../../common/ui/FileUploadWrapper/WVFile
 import NomineeSaved from "../../../featureComponent/Nominee/NomineeSaved";
 import ReviewNominee from "../../../featureComponent/Nominee/ReviewNominee";
 import HoldingPercentageFull from "../../../featureComponent/Nominee/HoldingPercentageFull";
-import { Imgc } from "../../../common/ui/Imgc";
+import Icon from "../../../designSystem/atoms/Icon";
 
 import { ADDRESS_DETAILS as ADDRESS_DETAILS_STRINGS } from "businesslogic/strings/nominee";
 import {
@@ -259,7 +259,7 @@ const UploadContainer = ({
             imgSrc={require(`assets/attach_button.svg`)}
           />
         </WVFilePickerWrapper>
-        <Imgc src={previewFile} className="nad-info-img" onLoad={onLoad} />
+        <Icon src={previewFile} className="nad-info-img" onLoad={onLoad} />
       </WrapperBox>
       {error && (
         <FormControl error={error}>
