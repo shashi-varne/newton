@@ -57,6 +57,7 @@ const StocksAndIpoDirectEntry = (props) => {
         navigate("/product-types");
         break;
       case "equity":
+      case "odin":
         const kycDetails = getKycData(kyc, user);
         const contactData = contactVerification(kyc);
         const config = getConfig();

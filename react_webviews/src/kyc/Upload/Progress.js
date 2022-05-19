@@ -21,7 +21,7 @@ const Progress = (props) => {
   const { kyc, isLoading } = useUserKycHook();
   const stateParams = props?.location?.state || {};
   const { disableNext = false, goBack: goBackPath, fromState } = stateParams;
-  const isWebDirectEntry = ["/kyc/web", "/direct/equity"];
+  const isWebDirectEntry = ["/kyc/web", "/direct/equity", "/direct/odin"].includes(fromState);
   const newIframeDesktopLayout = useMemo(isNewIframeDesktopLayout, []);
 
   let documents = [];

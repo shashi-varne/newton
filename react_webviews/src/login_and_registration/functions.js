@@ -523,7 +523,7 @@ export function redirectAfterLogin(data, user, navigateFunc) {
   const appConfig = getConfig();
   const TRADING_ENABLED = isTradingEnabled(kyc);
   if (appConfig.odin && TRADING_ENABLED) {
-    navigate("/direct/equity");
+    navigate("/direct/odin");
   } else if (data.firstLogin) {
     navigate("/referral-code", { state: { goBack: "/", communicationType: data?.contacts?.auth_type } });
   } else if (sdkStocksRedirection) {

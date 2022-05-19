@@ -60,7 +60,7 @@ const ORElem = (
   <div className="kyc-fno-OR">OR</div>
 );
 
-const hideSkipOptionPaths = [...landingEntryPoints, "/my-account", "/kyc/web", "/direct/equity"]
+const hideSkipOptionPaths = [...landingEntryPoints, "/my-account", "/kyc/web", "/direct/equity", "/direct/odin"]
 
 const FnOIncomeProof = (props) => {
   const [selectedFile, setSelectedFile] = useState();
@@ -78,7 +78,7 @@ const FnOIncomeProof = (props) => {
   const fromNativeLandingOrMyAccounts = storageService().get("native") && goBackPath === "exit";
   const isFromKycJourney = !((!Web && !isSdk) ? fromNativeLandingOrMyAccounts : hideSkipOptionPaths.includes(fromState));
   const isMyAccountFlow = fromState === "/my-account";
-  const isWebDirectEntry = ["/kyc/web", "/direct/equity"];
+  const isWebDirectEntry = ["/kyc/web", "/direct/equity", "/direct/odin"].includes(fromState);
 
   useEffect(() => {
     setFilePassword('');
