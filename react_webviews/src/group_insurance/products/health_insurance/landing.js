@@ -10,8 +10,8 @@ import health_suraksha_myway from 'assets/health_suraksha_myway.svg';
 import super_topup_fisdom from 'assets/super_topup_fisdom.svg';
 import super_topup_myway from 'assets/super_topup_myway.svg';
 
-import ic_hospicash_fisdom from '../../../assets/ic_hospicash_fisdom.svg'
-import ic_hospicash_finity from '../../../assets/ic_hospicash_myway.svg'
+// import ic_hospicash_fisdom from '../../../assets/ic_hospicash_fisdom.svg'
+// import ic_hospicash_finity from '../../../assets/ic_hospicash_myway.svg'
 
 import icn_diseases_insurance_fisdom from '../../../assets/fisdom/icn_diseases_insurance.svg'
 import icn_diseases_insurance_finity from '../../../assets/finity/icn_diseases_insurance.svg'
@@ -61,7 +61,7 @@ class HealthInsuranceLanding extends Component {
 
     let health_suraksha_icon = this.state.type !== 'fisdom' ? health_suraksha_myway : health_suraksha_fisdom;
     let super_topup_icon = this.state.type !== 'fisdom' ? super_topup_myway : super_topup_fisdom;
-    let ic_hospicash = this.state.type !== 'fisdom' ? ic_hospicash_finity : ic_hospicash_fisdom;
+    // let ic_hospicash = this.state.type !== 'fisdom' ? ic_hospicash_finity : ic_hospicash_fisdom;
     let icn_diseases = this.state.type !== 'fisdom' ? icn_diseases_insurance_finity : icn_diseases_insurance_fisdom
 
 
