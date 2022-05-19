@@ -5,7 +5,7 @@ import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { isEmpty } from "../utils/validators";
 import { nativeCallback } from "../utils/native_callback";
 import Toast from "../common/ui/Toast";
-import { getBasePath } from "../utils/functions";
+import { getBasePath, isTradingEnabled } from "../utils/functions";
 import { setSummaryData } from "../kyc/services";
 
 const config = getConfig();
@@ -303,15 +303,6 @@ export const redirectToLaunchDiet = async () => {
   }
 }
 
-export function redirectToLaunchOdin() {
-    const user = storageService().getObject("user");
-    if (user.kyc_registration_v2 === "complete") {
-      window.location.href = `${config.base_url}/page/equity/launchapp`;
-    } else {
-      toast(errorMessage);
-    }
-} 
-
 export async function otpLoginVerification(verify_url, body) {
   let formData = new FormData();
   const userPromo = storageService().getObject("user_promo");
@@ -529,7 +520,11 @@ export function redirectAfterLogin(data, user, navigateFunc) {
   const sdkStocksRedirection = storageService().getBoolean("sdkStocksRedirection");
   user = user || storageService().getObject("user");
   const navigate = navigateFunc || this.navigate;
-  if (data.firstLogin) {
+  const appConfig = getConfig();
+  const TRADING_ENABLED = isTradingEnabled(kyc);
+  if (appConfig.odin && TRADING_ENABLED) {
+    navigate("/direct/equity");
+  } else if (data.firstLogin) {
     navigate("/referral-code", { state: { goBack: "/", communicationType: data?.contacts?.auth_type } });
   } else if (sdkStocksRedirection) {
     storageService().setBoolean("sdkStocksRedirection", false);
