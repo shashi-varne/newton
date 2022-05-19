@@ -21,7 +21,7 @@ const Progress = (props) => {
   const { kyc, isLoading } = useUserKycHook();
   const stateParams = props?.location?.state || {};
   const { disableNext = false, goBack: goBackPath, fromState } = stateParams;
-  const fromWebModuleEntry = fromState === "/kyc/web";
+  const isWebDirectEntry = ["/kyc/web", "/direct/equity"];
   const newIframeDesktopLayout = useMemo(isNewIframeDesktopLayout, []);
 
   let documents = [];
@@ -29,7 +29,7 @@ const Progress = (props) => {
   let canGoNext = false;
 
   useEffect(() => {
-    if ((landingEntryPoints.includes(fromState) || fromWebModuleEntry) || (!Web && storageService().get("native") && goBackPath === "exit")) {
+    if ((landingEntryPoints.includes(fromState) || isWebDirectEntry) || (!Web && storageService().get("native") && goBackPath === "exit")) {
       storageService().set("uploadDocsEntry", "landing");
     }
   },[])
