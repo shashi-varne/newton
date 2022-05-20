@@ -318,7 +318,7 @@ const Landing = (props) => {
         });
         break;
       case "wealthdesk":
-        handleWealthdeskRedirection();
+        handleWealthdeskRedirection(handleLoader);
         break;
       default:
         navigate(keyPathMapper[state] || state);

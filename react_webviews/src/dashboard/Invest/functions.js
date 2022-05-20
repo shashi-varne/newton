@@ -1051,18 +1051,24 @@ export function openBfdlBanner(handleDialogStates) {
   }
 }
 
-export function handleWealthdeskRedirection() {
-  const response = Api.get("/api/equity/api/eqm/get/wealthdesk/redirection/url");
-  if (
-    response.pfwstatus_code !== 200 ||
-    isEmpty(response.pfwresponse)
-  ) {
-    throw new Error( response?.pfwmessage || errorMessage);
-  }
-  const { status_code, result } = response.pfwresponse;
-  if (status_code === 200) {
-    window.location.href = result.url;
-  } else {
-    throw new Error(result?.message || result?.error || errorMessage);
+export async function handleWealthdeskRedirection(handleLoader) {
+  handleLoader({ skelton: true });
+  try {
+    const response = await Api.get("/api/equity/api/eqm/get/wealthdesk/redirection/url");
+    if (
+      response.pfwstatus_code !== 200 ||
+      isEmpty(response.pfwresponse)
+    ) {
+      throw new Error( response?.pfwmessage || errorMessage);
+    }
+    const { status_code, result } = response.pfwresponse;
+    if (status_code === 200) {
+      window.location.href = result.url;
+    } else {
+      throw new Error(result?.message || result?.error || errorMessage);
+    }
+  } catch (er) {
+    toast(er.message);
+    handleLoader({ skelton: false });
   }
 }
