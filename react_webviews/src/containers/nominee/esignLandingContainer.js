@@ -45,6 +45,10 @@ const esignLandingContainer = (WrappedComponent) => (props) => {
         })
       );
     }
+
+    if (!isWebOrSdk) {
+      nativeCallback({ action: "reset_back_button_control" });
+    }
   }, []);
 
   useEffect(() => {
