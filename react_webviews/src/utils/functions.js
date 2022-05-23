@@ -194,7 +194,7 @@ export const getConfig = () => {
   let { base_url = ""  } = main_query_params;
   let origin = window.location.origin;
   let generic_callback = true;
-  let isQaTest = false;
+  let isQaTest = true;
 
   let isProdFisdom = origin.indexOf('app.fisdom.com') >= 0  || origin.indexOf('wv.fisdom.com') >= 0 || 
         origin.indexOf('app2.fisdom.com') >= 0;
