@@ -6,9 +6,11 @@ import {navigate as navigateFunc} from 'utils/functions'
 import {withRouter} from 'react-router-dom';
 import './NavBar.scss';
 import { storageService } from "../utils/validators";
+import isEmpty from "lodash/isEmpty"
 
 const NavBar = (props) => {
-  const {code,logo} = getConfig();
+  const { code,logo, webLogo } = getConfig();
+  const navLogo = !isEmpty(webLogo) ? webLogo : logo;
   const navigate = navigateFunc.bind(props);
   const user = storageService().getObject('user');
   const isGuestUser = storageService().getBoolean('guestUser');
@@ -21,7 +23,7 @@ const NavBar = (props) => {
       <Toolbar className='navbar-container'>
         <div className='header-partner-logo'>
           <img
-            src={require(`assets/${logo}`)}
+            src={require(`assets/${navLogo}`)}
             alt={code}
             style={{ cursor: 'pointer' }}
             onClick={() => navigate('/invest')}
