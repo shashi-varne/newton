@@ -14,8 +14,8 @@ const manualSignatureContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const { kyc, isLoading } = useUserKycHook();
   const email = useMemo(() => {
-    return get(kyc, "identification?.meta_data.email", "");
-  }, [kyc?.identification?.meta_data.email]);
+    return get(kyc, "identification.meta_data.email", "");
+  }, [kyc?.identification?.meta_data?.email]);
 
   const handleDownloadForm = () => {
     const userAction = "next";
