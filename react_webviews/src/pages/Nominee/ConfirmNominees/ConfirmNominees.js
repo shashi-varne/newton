@@ -152,6 +152,7 @@ const ConfirmNominees = ({
                     dataAid={
                       CONFIRM_NOMINEES_STRINGS.nomineeRelationship.valueDataAid
                     }
+                    className="capitalize"
                   >
                     {data.relationship}
                   </Typography>
