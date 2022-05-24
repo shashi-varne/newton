@@ -123,7 +123,7 @@ export const buttonStyleOverRides = (colors={}, partnerConfig={}) => {
       ...typographyVariants.actionText,
       color: colors?.supporting?.white,
       borderRadius: partnerConfig?.button?.borderRadius || 12,
-      height: '48px',
+      minHeight: '48px',
       '&:hover': {
         backgroundColor: partnerConfig?.button?.disableHoverEffect
           ? colors?.action?.brand
