@@ -5,7 +5,7 @@ import OnboardingCarousels from "./OnboardingCarousels";
 import "./Landing.scss";
 
 const Landing = (props) => {
-  const { carousalsData, tabValue, handleTabChange } = props;
+  const { carousalsData, tabValue, handleTabChange, showCarousals, handleClose } = props;
   return (
     <Container
       noPadding={true}
@@ -13,11 +13,18 @@ const Landing = (props) => {
       className="landing-main-wrapper"
       dataAid="onboarding"
     >
-      <OnboardingCarousels
-        carousalsData={carousalsData}
-        tabValue={tabValue}
-        handleTabChange={handleTabChange}
-      />
+      {showCarousals ? (
+        <OnboardingCarousels
+          carousalsData={carousalsData}
+          tabValue={tabValue}
+          handleTabChange={handleTabChange}
+          handleClose={handleClose}
+        />
+      ) : (
+        <>
+
+        </>
+      )}
     </Container>
   );
 };

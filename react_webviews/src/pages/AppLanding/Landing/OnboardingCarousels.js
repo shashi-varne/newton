@@ -15,6 +15,7 @@ const OnboardingCarousels = ({
   tabValue,
   handleTabChange,
   carousalsData = [],
+  handleClose,
 }) => {
   return (
     <div>
@@ -33,7 +34,7 @@ const OnboardingCarousels = ({
           width="24px"
           height="24px"
           className="oc-pb-icon"
-          onClick={handleTabChange}
+          onClick={handleClose}
         />
       </Box>
       <AutoPlaySwipeableViews
@@ -42,9 +43,7 @@ const OnboardingCarousels = ({
         interval={4000}
       >
         {carousalsData.map((el, idx) => {
-          return (
-            <Carousel key={idx} handleTabChange={handleTabChange} {...el} />
-          );
+          return <Carousel key={idx} handleClose={handleClose} {...el} />;
         })}
       </AutoPlaySwipeableViews>
     </div>
@@ -53,9 +52,9 @@ const OnboardingCarousels = ({
 
 export default OnboardingCarousels;
 
-const Carousel = ({ icon, iconDataAid, title, subtitle, handleTabChange }) => {
+const Carousel = ({ icon, iconDataAid, title, subtitle, handleClose }) => {
   return (
-    <div onClick={handleTabChange}>
+    <div onClick={handleClose}>
       <Box
         sx={{ backgroundColor: "foundationColors.supporting.grey" }}
         className="oc-icon-wrapper"
