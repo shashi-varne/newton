@@ -76,10 +76,9 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
   const equityNominationData = useSelector(getEquityNominationData);
   const { isButtonLoading } = useLoadingState(screen);
   const { isUpdateFailed, errorMessage } = useErrorState(screen);
-  const [formData, setFormData] = useState(
-    getNomineeAddressDetails(nomineeDetails)
-  );
-  const [cityStateData, setCityStateData] = useState({});
+  const addressData= getNomineeAddressDetails(nomineeDetails)
+  const [formData, setFormData] = useState(addressData); 
+  const [cityStateData, setCityStateData] = useState( {city: addressData?.city, state:addressData?.state });
   const [errorData, setErrorData] = useState(DEFAULT_NOMINEE_ADDRESS_DETAILS);
   const [dialogStates, setDialogStates] = useState(DEFAULT_DIALOG_STATES);
   const [isDocumentUpdated, setIsDocumentUpdated] = useState(false);
