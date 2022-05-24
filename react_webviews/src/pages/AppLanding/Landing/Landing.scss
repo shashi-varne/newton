@@ -1,5 +1,4 @@
-.landing-main-wrapper {
-  height: 100%;
+.landing-onboarding-wrapper {
   background-color: white;
 
   .oc-progressbar {
@@ -35,5 +34,54 @@
     .oc-subtitle {
       padding: 0px 30px 0px 20px;
     }
+  }
+}
+
+.landing-main-wrapper {
+  .lmp-platform-motivators {
+    background-color: white;
+    padding: 26px 16px 38px 16px;
+
+    .swiper-slide {
+      width: unset !important;
+    }
+  }
+
+  .lmw-kyc {
+    margin: 24px 16px 16px 16px;
+  }
+
+  .lmw-product-list {
+    background-color: white;
+    padding: 32px 0px 20px 0px;
+
+    .lmw-pl-title {
+      padding: 0px 16px;
+    }
+  }
+
+  .lmw-manage-investments {
+    padding: 24px 16px;
+
+    .lmw-mi-title {
+      margin-bottom: 24px;
+    }
+  }
+
+  .lmw-referral-code {
+    margin: 0px 16px;
+    padding: 16px;
+
+    .lmw-rc-title {
+      padding-bottom: 16px;
+    }
+  }
+
+  .lmw-trust-icon {
+    margin: 48px 0px 28px 0px;
+  }
+
+  .lmw-partnership {
+    margin-bottom: 50px;
   }
 }

@@ -1,0 +1,22 @@
+.platform-motivator-wrapper {
+  display: flex;
+  flex-direction: row;
+  border-radius: 12px;
+  cursor: pointer;
+  padding: 16px 12px;
+  align-items: center;
+  width: 295px;
+
+  .pm-left-img {
+    margin-right: 16px;
+  }
+
+  .pm-text-wrapper {
+    display: flex;
+    flex-direction: column;
+
+    .pm-subtitle-text {
+      margin-top: 4px;
+    }
+  }
+}
