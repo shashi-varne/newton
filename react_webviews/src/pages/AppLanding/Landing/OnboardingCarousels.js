@@ -3,19 +3,18 @@ import Icon from "../../../designSystem/atoms/Icon";
 import Typography from "../../../designSystem/atoms/Typography";
 import WrapperBox from "../../../designSystem/atoms/WrapperBox";
 import ProgressBar from "../../../designSystem/atoms/ProgressBar";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/swiper-bundle.css";
+import SwipeableViews from "react-swipeable-views";
+import { autoPlay } from "react-swipeable-views-utils";
 import { Box } from "@mui/material";
-
-import { ONBOARDING_CAROUSALS } from "../common/constants";
 
 import "./Landing.scss";
 
+const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+
 const OnboardingCarousels = ({
-  setSwiper,
-  handleSlideChange,
   tabValue,
   handleTabChange,
+  carousalsData = [],
 }) => {
   return (
     <div>
@@ -24,7 +23,7 @@ const OnboardingCarousels = ({
         className="flex-between-center oc-progressbar"
       >
         <ProgressBar
-          numberOfBars={3}
+          numberOfBars={carousalsData.length}
           activeIndex={tabValue}
           dataAid="stories"
         />
@@ -37,20 +36,17 @@ const OnboardingCarousels = ({
           onClick={handleTabChange}
         />
       </Box>
-      <Swiper
-        slidesPerView={1}
-        onSwiper={setSwiper}
-        onSlideChange={handleSlideChange}
-        initialSlide={tabValue}
+      <AutoPlaySwipeableViews
+        index={tabValue}
+        onChangeIndex={handleTabChange}
+        interval={4000}
       >
-        {ONBOARDING_CAROUSALS.map((el, idx) => {
+        {carousalsData.map((el, idx) => {
           return (
-            <SwiperSlide key={idx}>
-              <Carousel handleTabChange={handleTabChange} {...el} />
-            </SwiperSlide>
+            <Carousel key={idx} handleTabChange={handleTabChange} {...el} />
           );
         })}
-      </Swiper>
+      </AutoPlaySwipeableViews>
     </div>
   );
 };

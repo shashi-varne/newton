@@ -15,7 +15,7 @@
   }
 
   .oc-content-wrapper {
-    padding: 20px 37px 10px 20px;
+    padding: 20px 10px 10px 20px;
     border-radius: 24px 24px 0px 0px;
     height: 32vh;
     position: relative;
@@ -24,19 +24,16 @@
     .oc-bg-wrapper {
       background-repeat: no-repeat;
       background-size: contain;
-    }
-
-    .oc-title,
-    .oc-subtitle {
-      margin-right: -30px;
+      min-height: 167px;
+      position: absolute;
     }
 
     .oc-title {
-      padding: 20px 0px 8px 20px;
+      padding: 20px 30px 8px 20px;
     }
 
     .oc-subtitle {
-      padding: 0px 0px 50px 20px;
+      padding: 0px 30px 0px 20px;
     }
   }
 }
