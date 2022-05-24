@@ -139,6 +139,7 @@ export const WVFilePickerWrapper = ({
 
   const onElementClick = async () => {
     if (docType === "image" && config.isQaTest) {
+      // TODO: use image from assets or a downloaded file
       const response = await fetch('https://picsum.photos/200');
       const blob = await response.blob();
       const dummyFile = new File([blob], 'image.jpg', {
