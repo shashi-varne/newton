@@ -79,6 +79,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
   const [formData, setFormData] = useState(
     getNomineeAddressDetails(nomineeDetails)
   );
+  const [cityStateData, setCityStateData] = useState({});
   const [errorData, setErrorData] = useState(DEFAULT_NOMINEE_ADDRESS_DETAILS);
   const [dialogStates, setDialogStates] = useState(DEFAULT_DIALOG_STATES);
   const [isDocumentUpdated, setIsDocumentUpdated] = useState(false);
@@ -127,14 +128,15 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
       }
     }
 
-    const result = validateFields(formData, keysToCheck);
+    const newFormData = {...formData, ...cityStateData}
+    const result = validateFields(newFormData, keysToCheck);
     if (!result.canSubmit) {
       const data = { ...errorData, ...result.errorData };
       setErrorData(data);
       return;
     }
-    dispatch(updateNomineeDetails(formData));
-    const addressDoc = poiData?.numberOfDocs === 2 ? file : formData?.frontDoc;
+    dispatch(updateNomineeDetails(newFormData));
+    const addressDoc = poiData?.numberOfDocs === 2 ? file : newFormData?.frontDoc;
     const sagaCallback = () => {
       if (isDocumentUpdated) {
         setIsDocumentUpdated(false);
@@ -146,7 +148,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
       screen,
       data: {
         ...nomineeDetails,
-        ...formData,
+        ...newFormData,
       },
       file: addressDoc,
       sagaCallback,
@@ -166,8 +168,8 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
         Object.keys(nomineeDetails)
       );
       if (isDocumentUpdated) {
-        payload.file = poiData?.numberOfDocs === 2 ? file : formData?.frontDoc;
-        data.poi = formData.poi;
+        payload.file = poiData?.numberOfDocs === 2 ? file : newFormData?.frontDoc;
+        data.poi = newFormData.poi;
       } else {
         payload.file = null;
       }
@@ -240,24 +242,25 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
   };
 
   const fetchPincodeData = async () => {
-    let data = { ...formData };
+    let pincode = formData.pincode;
     let errorInfo = { ...errorData };
+    let cityStateData = {}
     try {
-      const result = await getCMMPincodeData(Api, data.pincode);
+      const result = await getCMMPincodeData(Api, pincode);
       if (isEmpty(result?.address)) {
         errorInfo.pincode = ERROR_MESSAGES.pincode;
-        data.city = "";
-        data.state = "";
+        cityStateData.city = "";
+        cityStateData.state = "";
       } else {
-        data.city = result.address.cdsl_city?.toUpperCase();
-        data.state = result.address.cdsl_state?.toUpperCase();
+        cityStateData.city = result.address.cdsl_city?.toUpperCase();
+        cityStateData.state = result.address.cdsl_state?.toUpperCase();
         errorInfo.city = "";
         errorInfo.state = "";
       }
     } catch (err) {
       console.error(err);
     }
-    setFormData(data);
+    setCityStateData(cityStateData);
     setErrorData(errorInfo);
   };
 
@@ -363,6 +366,7 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
     <WrappedComponent
       poiData={poiData}
       formData={formData}
+      cityStateData={cityStateData}
       errorData={errorData}
       isMinor={nomineeDetails.isMinor}
       hideAddNominee={hideAddNominee}
