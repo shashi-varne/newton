@@ -63,12 +63,14 @@ const PersonalDetails = ({
         sx={{ pt: "16px" }}
         alignItems="center"
         justifyContent="flex-start"
+        onClick={handleCheckbox}
       >
-        <Checkbox dataAid="1" checked={isMinor} onChange={handleCheckbox} />
+        <Checkbox dataAid="1" checked={isMinor} />
         <Typography
           variant="body2"
           dataAid={PERSONAL_DETAILS.minorNominee.dataAid}
           color="foundationColors.content.secondary"
+          className="pointer"
         >
           {PERSONAL_DETAILS.minorNominee.text}
         </Typography>
