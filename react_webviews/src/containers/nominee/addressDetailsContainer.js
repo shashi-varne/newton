@@ -244,23 +244,23 @@ const addressDetailsContainer = (WrappedComponent) => (props) => {
   const fetchPincodeData = async () => {
     let pincode = formData.pincode;
     let errorInfo = { ...errorData };
-    let cityStateData = {}
+    let data = {}
     try {
       const result = await getCMMPincodeData(Api, pincode);
       if (isEmpty(result?.address)) {
         errorInfo.pincode = ERROR_MESSAGES.pincode;
-        cityStateData.city = "";
-        cityStateData.state = "";
+        data.city = "";
+        data.state = "";
       } else {
-        cityStateData.city = result.address.cdsl_city?.toUpperCase();
-        cityStateData.state = result.address.cdsl_state?.toUpperCase();
+        data.city = result.address.cdsl_city?.toUpperCase();
+        data.state = result.address.cdsl_state?.toUpperCase();
         errorInfo.city = "";
         errorInfo.state = "";
       }
     } catch (err) {
       console.error(err);
     }
-    setCityStateData(cityStateData);
+    setCityStateData(data);
     setErrorData(errorInfo);
   };
 
