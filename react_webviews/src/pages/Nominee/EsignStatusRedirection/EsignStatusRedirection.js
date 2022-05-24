@@ -1,7 +1,7 @@
 import React from "react";
 import Container from "../../../designSystem/organisms/ContainerWrapper";
 
-const EsignStatus = ({ onBackClick }) => {
+const EsignRedirecionStatus = ({ onBackClick }) => {
   return (
     <Container
       headerProps={{
@@ -13,4 +13,4 @@ const EsignStatus = ({ onBackClick }) => {
   );
 };
 
-export default EsignStatus;
+export default EsignRedirecionStatus;

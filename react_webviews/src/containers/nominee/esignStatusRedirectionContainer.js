@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
-import EsignStatus from "../../pages/Nominee/EsignStatus";
+import EsignStatusRedirection from "../../pages/Nominee/EsignStatusRedirection";
 import { navigate as navigateFunc } from "../../utils/functions";
 import { NOMINEE_PATHNAME_MAPPER } from "../../pages/Nominee/common/constants";
 import { getUrlParams } from "../../utils/validators";
 import { useDispatch } from "react-redux";
 import { updateNomineeStorage } from "businesslogic/dataStore/reducers/nominee";
 
-const esignStatusContainer = (WrappedComponent) => (props) => {
+const esignStatusRedirectionContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const dispatch = useDispatch();
 
@@ -27,4 +27,4 @@ const esignStatusContainer = (WrappedComponent) => (props) => {
   return <WrappedComponent onBackClick={onBackClick} />;
 };
 
-export default esignStatusContainer(EsignStatus);
+export default esignStatusRedirectionContainer(EsignStatusRedirection);

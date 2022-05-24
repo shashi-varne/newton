@@ -8,7 +8,7 @@ import confirmNomineesContainer from "../../containers/nominee/confirmNomineesCo
 import nomineeVerifiedContainer from "../../containers/nominee/nomineeVerifiedContainer";
 import nomineeSubmittedContainer from "../../containers/nominee/nomineeSubmittedContainer";
 import manualSignatureContainer from "../../containers/nominee/manualSignatureContainer";
-import esignStatusContainer from "../../containers/nominee/esignStatusContainer";
+import EsignStatusRedirectionContainer from "../../containers/nominee/esignStatusRedirectionContainer";
 
 const Nominee = (props) => {
   const { url } = props.match;
@@ -41,7 +41,10 @@ const Nominee = (props) => {
         path={`${url}/manual-signature`}
         component={manualSignatureContainer}
       />
-      <Route path={`${url}/esign-status`} component={esignStatusContainer} />
+      <Route
+        path={`${url}/esign-status`}
+        component={EsignStatusRedirectionContainer}
+      />
     </Switch>
   );
 };
