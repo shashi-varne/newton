@@ -27,6 +27,7 @@ const AddressDetails = ({
   onClick,
   isMinor,
   formData = {},
+  cityStateData={},
   errorData = {},
   hideAddNominee,
   onChange,
@@ -108,26 +109,26 @@ const AddressDetails = ({
         />
         <InputField
           label={ADDRESS_DETAILS_STRINGS.formLabels.city}
-          value={formData.city}
+          value={cityStateData?.city}
           onChange={onChange(ADDRESS_DETAILS_FORM_MAPPER.city)}
           dataAid="3"
           error={!isEmpty(errorData.city)}
           helperText={errorData.city}
           disabled
           inputLabelProps={{
-            shrink: !isEmpty(formData.city),
+            shrink: !isEmpty(cityStateData?.city),
           }}
         />
         <InputField
           label={ADDRESS_DETAILS_STRINGS.formLabels.state}
-          value={formData.state}
+          value={cityStateData?.state}
           onChange={onChange(ADDRESS_DETAILS_FORM_MAPPER.state)}
           dataAid="4"
           error={!isEmpty(errorData.state)}
           helperText={errorData.state}
           disabled
           inputLabelProps={{
-            shrink: !isEmpty(formData.state),
+            shrink: !isEmpty(cityStateData?.state),
           }}
         />
         <Dropdown
