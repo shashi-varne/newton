@@ -40,8 +40,8 @@ const Header = ({
     const config = getConfig();
     const isGuestUser = storageService().getBoolean('guestUser');
     const isMobileDevice = config.isMobileDevice;
-    const partnerLogo = config.logo;
     const isWeb = config.Web;
+    const partnerLogo = isWeb && !isEmpty(config.webLogo) ? config.webLogo : config.logo;
     const backgroundColor = !isWeb ? config.uiElements?.header?.backgroundColor : '';
     const backButtonColor = (!isWeb || config.isIframe) ? config.styles?.backButtonColor : '';
     const notificationsColor = !isWeb || config.isSdk ? config?.styles.notificationsColor : '';
@@ -82,7 +82,7 @@ const Header = ({
           }
           {
             headerData.partnerLogo && config.isMobileDevice && !(moneycontrolHeader && isWeb) &&
-             <div className='sdk-header-partner-logo'>
+             <div className='sdk-header-partner-logo' style={{ width: config.logoWidth }} >
                 <img src={require(`assets/${partnerLogo}`)} alt="partner logo" /> 
             </div>
           }

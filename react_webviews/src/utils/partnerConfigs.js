@@ -403,6 +403,7 @@ export const partnerConfigs = {
   },
   hbl: {
     logo: "hbl.svg",
+    logoWidth: "200px",
     code: "hbl",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
@@ -518,6 +519,7 @@ export const partnerConfigs = {
   taxwin: {
     code: "taxwin",
     logo: "taxwin.svg",
+    logoWidth: "200px",
     investSections: ["kyc", "ourRecommendations"],
     investSubSectionMap: {
       ourRecommendations: [
@@ -533,6 +535,7 @@ export const partnerConfigs = {
   },
   quesscorp: {
     logo: "quesscorp.svg",
+    logoWidth: "200px",
     code: 'quesscorp',
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
@@ -565,6 +568,8 @@ export const partnerConfigs = {
   ucomb: {
     code: "ucomb",
     logo: "ucomb.svg",
+    webLogo: "ucomb_bank.svg",
+    logoWidth: "200px",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
       stocksAndIpo: ["stocks", "ipo"],
