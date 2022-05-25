@@ -124,6 +124,8 @@ const ConfirmNominees = ({
                     dataAid={CONFIRM_NOMINEES_STRINGS.nomineeDob.titleDataAid}
                     variant="body5"
                     color="foundationColors.content.secondary"
+                    component="div"
+                    textAlign="right"
                   >
                     {CONFIRM_NOMINEES_STRINGS.nomineeDob.title}
                   </Typography>
