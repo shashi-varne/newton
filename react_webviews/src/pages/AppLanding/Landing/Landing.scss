@@ -42,9 +42,25 @@
     background-color: white;
     padding: 26px 16px 38px 16px;
 
+    .lmw-mb-icon {
+      width: 332px;
+      height: 174px;
+    }
+  }
+
+  .lmp-platform-motivators,
+  .lmp-marketing-banners {
     .swiper-slide {
       width: unset !important;
     }
+  }
+
+  .lmp-marketing-banners {
+    padding: 24px 16px;
+  }
+
+  .info-card-wrapper {
+    margin: 0px 16px 16px 16px;
   }
 
   .lmw-kyc {
@@ -75,6 +91,10 @@
     .lmw-rc-title {
       padding-bottom: 16px;
     }
+  }
+
+  .lmw-share-code {
+    margin: 0px 16px;
   }
 
   .lmw-trust-icon {

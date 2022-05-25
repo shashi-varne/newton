@@ -4,12 +4,14 @@ import OnboardingCarousels from "./OnboardingCarousels";
 import Button from "../../../designSystem/atoms/Button";
 import WrapperBox from "../../../designSystem/atoms/WrapperBox";
 import Typography from "../../../designSystem/atoms/Typography";
-import TrustIcon from "../../../designSystem/atoms/TrustIcon/TrustIcon";
+import TrustIcon from "../../../designSystem/atoms/TrustIcon";
+import Icon from "../../../designSystem/atoms/Icon";
 import CustomSwiper from "../../../designSystem/molecules/CustomSwiper";
 import CardHorizontal from "../../../designSystem/molecules/CardHorizontal";
 import MenuItem from "../../../designSystem/molecules/MenuItem";
 import CategoryCard from "../../../designSystem/molecules/CategoryCard";
 import InputField from "../../../designSystem/molecules/InputField";
+import InfoCard from "../../../designSystem/molecules/InfoCard";
 import Partnership from "../../../featureComponent/appLanding/Partnership";
 import PlatformMotivator from "../../../featureComponent/appLanding/PlatformMotivator";
 import { SwiperSlide } from "swiper/react";
@@ -41,6 +43,25 @@ const pmList = [
     imgSrc: require(`assets/invest_with_confidence.svg`),
     title: "Track investments real-time",
     subtitle: "With in-depth portfolio tracking",
+    dataAid: "trackInvestment",
+  },
+];
+
+const mbList = [
+  {
+    imgSrc: `freedomplan.svg`,
+    id: "freedomplan",
+  },
+  {
+    imgSrc: `freedomplan.svg`,
+    dataAid: "withdrawal",
+  },
+  {
+    imgSrc: `freedomplan.svg`,
+    dataAid: "manageSips",
+  },
+  {
+    imgSrc: `freedomplan.svg`,
     dataAid: "trackInvestment",
   },
 ];
@@ -128,7 +149,14 @@ const Landing = (props) => {
 
 export default Landing;
 
-const MainLanding = ({ showPlatformMotivators = true, showKycCard = true }) => {
+const MainLanding = ({
+  showPlatformMotivators = false,
+  showMarketingBanners = true,
+  showKycCard = false,
+  showShareReferral = true,
+  showApplyReferral = false,
+  showSetupEasySip = true,
+}) => {
   return (
     <>
       {showPlatformMotivators && (
@@ -147,6 +175,36 @@ const MainLanding = ({ showPlatformMotivators = true, showKycCard = true }) => {
             ))}
           </CustomSwiper>
         </div>
+      )}
+      {showMarketingBanners && (
+        <div className="lmp-marketing-banners">
+          <CustomSwiper
+            spaceBetween={8}
+            speed={500}
+            slidesPerView="auto"
+            grabCursor={true}
+            paginationDataAid="platformMotivators"
+            hidePagination={true}
+          >
+            {mbList.map((data, idx) => (
+              <SwiperSlide key={idx}>
+                <Icon
+                  className="lmw-mb-icon"
+                  src={require(`assets/${data.imgSrc}`)}
+                  dataAid={`banner${idx + 1}`}
+                />
+              </SwiperSlide>
+            ))}
+          </CustomSwiper>
+        </div>
+      )}
+      {showSetupEasySip && (
+        <InfoCard
+          imgSrc={require(`assets/invest_with_confidence.svg`)}
+          rightImgSrc={require(`assets/invest_with_confidence.svg`)}
+          title="Set up easySIP"
+          subtitle="Authorise one-time eMandate to automate your upcoming SIPs"
+        />
       )}
       {showKycCard && (
         <CardHorizontal
@@ -192,24 +250,40 @@ const MainLanding = ({ showPlatformMotivators = true, showKycCard = true }) => {
           ))}
         </Stack>
       </div>
-      <WrapperBox
-        className="lmw-referral-code"
-        data-aid="referral_card"
-        elevation={1}
-      >
-        <Typography component="div" className="lmw-rc-title" variant="heading3">
-          Have a referral code?
-        </Typography>
-        <Stack
-          flexDirection="row"
-          alignItems="center"
-          gap="32px"
-          justifyContent="space-between"
+      {showApplyReferral && (
+        <WrapperBox
+          className="lmw-referral-code"
+          data-aid="referral_card"
+          elevation={1}
         >
-          <InputField dataAid={1} label="Enter referral code" />
-          <Button size="small" title="APPLY" />
-        </Stack>
-      </WrapperBox>
+          <Typography
+            component="div"
+            className="lmw-rc-title"
+            variant="heading3"
+          >
+            Have a referral code?
+          </Typography>
+          <Stack
+            flexDirection="row"
+            alignItems="center"
+            gap="32px"
+            justifyContent="space-between"
+          >
+            <InputField dataAid={1} label="Enter referral code" />
+            <Button size="small" title="APPLY" />
+          </Stack>
+        </WrapperBox>
+      )}
+      {showShareReferral && (
+        <WrapperBox className="lmw-share-code">
+          <CardHorizontal
+            dataAid="referEarn"
+            title="Refer & earn"
+            subtitle="Invite as many friends as you can to earn unlimited cash"
+            rightImgSrc={require(`assets/invest_with_confidence.svg`)}
+          />
+        </WrapperBox>
+      )}
       <TrustIcon
         dataAid="1"
         variant="registration"
