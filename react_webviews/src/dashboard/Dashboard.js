@@ -52,6 +52,7 @@ import ThemeWrapper from "../theme/ThemeWrapper";
 import fundDetailsV2Container from "../containers/fundDetailsV2/fundDetailsV2Container";
 import mfOrderContainer from "../containers/mfOrder/mfOrderContainer";
 import landingContainer from "../containers/appLanding/landingContainer";
+import mfLandingContainer from "../containers/appLanding/mfLandingContainer";
 
 const Home = (props) => {
   const config = getConfig(); 
@@ -201,6 +202,7 @@ const Home = (props) => {
           <Route path={`${url}fund-details-v2`} component={fundDetailsV2Container} />
           <Route path={`${url}mf-orders`} component={mfOrderContainer} />
           <Route path={`${url}landing-new`} component={landingContainer} />
+          <Route path={`${url}mf-landing-new`} component={mfLandingContainer} />
         </ThemeWrapper>
         <Route component={NotFound} />
       </Switch>

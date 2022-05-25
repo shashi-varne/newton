@@ -79,7 +79,7 @@ const MainLanding = ({
       {showSetupEasySip && (
         <WrapperBox elevation={1} className="lmw-setup-easysip">
           <InfoCard
-            imgSrc={EASY_SIP_DATA.leftImgSrc}
+            imgSrc={require(`assets/${EASY_SIP_DATA.icon}`)}
             rightImgSrc={require(`assets/invest_with_confidence.svg`)}
             title={EASY_SIP_DATA.title}
             subtitle={EASY_SIP_DATA.subtitle}
@@ -158,6 +158,7 @@ const ManageInvestments = ({ manageInvestments = [] }) => {
         {manageInvestments.map((data, idx) => (
           <CategoryCard
             {...data}
+            imgSrc={require(`assets/${data.icon}`)}
             key={idx}
             showSeparator={manageInvestments.length !== idx + 1}
             imgProps={{

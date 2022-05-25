@@ -21,15 +21,15 @@ export const ONBOARDING_CAROUSALS = [
 
 export const MANAGE_INVESTMENTS = [
   {
-    imgSrc: require(`assets/portfolio.svg`),
+    imgSrc: "portfolio.svg",
     title: "Portfolio",
   },
   {
-    imgSrc: require(`assets/account.svg`),
+    imgSrc: "account.svg",
     title: "Account",
   },
   {
-    imgSrc: require(`assets/help.svg`),
+    imgSrc: "help.svg",
     title: "Help",
   },
 ];
@@ -80,37 +80,37 @@ export const MARKETING_BANNERS = [
 
 export const INVESTMENT_OPTIONS = [
   {
-    leftImgSrc: require(`assets/stocks.svg`),
+    icon: "stocks.svg",
     title: "Stocks, F&O",
     subtitle: "Invest in your favourite companies",
     dataAid: "stocks",
   },
   {
-    leftImgSrc: require(`assets/ipo.svg`),
+    icon: "ipo.svg",
     title: "IPO, SGB, NCD & more",
     subtitle: "Invest in primary market products",
     dataAid: "ipoSgbNcd",
   },
   {
-    leftImgSrc: require(`assets/mf.svg`),
+    icon: "mf.svg",
     title: "Mutual funds",
     subtitle: "Top performing funds for your goals",
     dataAid: "mutualFunds",
   },
   {
-    leftImgSrc: require(`assets/nps.svg`),
+    icon: "nps.svg",
     title: "National pension scheme",
     subtitle: "Invest today for a secure retirement",
     dataAid: "nps",
   },
   {
-    leftImgSrc: require(`assets/io_insurance.svg`),
+    icon: "io_insurance.svg",
     title: "Insurance",
     subtitle: "Build a safety net for your future",
     dataAid: "insurance",
   },
   {
-    leftImgSrc: require(`assets/tax_filing.svg`),
+    icon: "tax_filing.svg",
     title: "Free tax filing",
     subtitle: "Save and file your ITRs fast",
     dataAid: "taxFiling",
@@ -118,7 +118,7 @@ export const INVESTMENT_OPTIONS = [
 ];
 
 export const EASY_SIP_DATA = {
-  leftImgSrc: require(`assets/easy_sip.svg`),
+  icon: "easy_sip.svg",
   title: "Set up easySIP",
   subtitle: "Authorise one-time eMandate to automate your upcoming SIPs",
   dataAid: "easySip",
@@ -130,3 +130,24 @@ export const kycData = {
   buttonTitle: "Check now",
   imgSrc: require(`assets/invest_with_confidence.svg`),
 };
+
+export const EXPLORE_CATEGORIES = [
+  {
+    icon: `equity.svg`,
+    title: "Equity",
+    description: "Large, mid & small companies",
+    dataAid: "equity",
+  },
+  {
+    icon: "debt.svg",
+    title: "Debt",
+    description: "Stable returns with bonds & securities",
+    dataAid: "debt",
+  },
+  {
+    icon: "equity.svg",
+    title: "Hybrid",
+    description: "Perfect balance of equity & debt",
+    dataAid: "hybrid",
+  },
+];

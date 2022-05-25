@@ -18,6 +18,7 @@ const InvestmentOptions = ({ productList = [], title, titleDataAid }) => {
       {productList.map((data, idx) => (
         <MenuItem
           {...data}
+          leftImgSrc={require(`assets/${data.icon}`)}
           key={idx}
           showSeparator={productList.length !== idx + 1}
           leftImgProps={{
