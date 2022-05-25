@@ -9,6 +9,21 @@
     margin-right: 16px;
   }
 
+  .ic-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .ic-label-wrapper {
+      display: flex;
+      align-items: center;
+
+      .ic-right-img {
+        margin-left: 6px;
+      }
+    }
+  }
+
   .ic-text-wrapper {
     display: flex;
     flex-direction: column;
