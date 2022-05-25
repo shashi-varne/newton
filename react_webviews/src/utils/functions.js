@@ -670,6 +670,7 @@ export const isIndbSdkTradingFlow = (kyc) => {
   kyc = !isEmpty(kyc) ? kyc : storageService().getObject("kyc");
   const config = getConfig();
   const androidSdkVersionCode = storageService().get("android_sdk_version_code");
+  // eslint-disable-next-line
   const isHVEnabled = parseInt(androidSdkVersionCode) >= 24;
   const indbSdkTradingFlow = isTradingEnabled(kyc) && config.isSdk && !isHVEnabled && ["indb", "alb"].includes(config.code);
 	return indbSdkTradingFlow;

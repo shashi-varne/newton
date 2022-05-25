@@ -13,6 +13,7 @@ import {
   BOTTOMSHEETS_CONTENT,
 } from "businesslogic/strings/nominee";
 import { isEmpty, isArray } from "lodash-es";
+import { capitalize } from "../../../utils/validators";
 
 import "./Landing.scss";
 
@@ -150,9 +151,8 @@ const NomineeDetails = ({ data, index }) => (
           variant="body5"
           color="foundationColors.content.secondary"
           dataAid={`${data?.subtext?.dataAid}${index}`}
-          className="capitalize"
         >
-          {data.subtext.text}
+          {capitalize(data.subtext.text)}
         </Typography>
       )}
       {!isEmpty(data?.status?.text) && (
