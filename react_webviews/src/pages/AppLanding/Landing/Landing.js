@@ -152,7 +152,7 @@ const MainLanding = ({ showPlatformMotivators = true, showKycCard = true }) => {
         <CardHorizontal
           rightImgSrc={kycData.imgSrc}
           title={kycData.title}
-          subtitle={kycData.subtitle}
+          description={kycData.subtitle}
           actionLink={kycData.buttonTitle}
           className="lmw-kyc"
         />
