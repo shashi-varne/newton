@@ -62,9 +62,8 @@ const InfoCard = ({
           {label && (
             <Typography
               variant="body2"
-              color={labelColor}
               component="div"
-              color="foundationColors.content.secondary"
+              color={labelColor}
               dataAid="label"
             >
               {label}
@@ -93,6 +92,7 @@ const infoCardWrapperSxStyle = {
 
 InfoCard.defaultProps = {
   subtitleColor: 'foundationColors.content.secondary',
+  labelColor: "foundationColors.content.secondary"
 };
 
 InfoCard.propTypes = {

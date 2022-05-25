@@ -41,37 +41,37 @@
   .lmp-platform-motivators {
     background-color: white;
     padding: 26px 16px 38px 16px;
-
-    .lmw-mb-icon {
-      width: 332px;
-      height: 174px;
-    }
   }
 
   .lmp-platform-motivators,
-  .lmp-marketing-banners {
+  .al-marketing-banners {
     .swiper-slide {
       width: unset !important;
     }
   }
 
-  .lmp-marketing-banners {
-    padding: 24px 16px;
+  .al-marketing-banners {
+    padding: 24px 16px 0px 16px;
+
+    .al-mb-icon {
+      width: 332px;
+      height: 174px;
+    }
   }
 
-  .info-card-wrapper {
-    margin: 0px 16px 16px 16px;
+  .lmw-setup-easysip {
+    margin: 24px 24px 16px 24px;
   }
 
   .lmw-kyc {
     margin: 24px 16px 16px 16px;
   }
 
-  .lmw-product-list {
+  .al-investment-options {
     background-color: white;
     padding: 32px 0px 20px 0px;
 
-    .lmw-pl-title {
+    .al-io-title {
       padding: 0px 16px;
     }
   }
