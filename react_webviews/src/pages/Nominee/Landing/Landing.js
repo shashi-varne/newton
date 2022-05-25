@@ -150,6 +150,7 @@ const NomineeDetails = ({ data, index }) => (
           variant="body5"
           color="foundationColors.content.secondary"
           dataAid={`${data?.subtext?.dataAid}${index}`}
+          className="capitalize"
         >
           {data.subtext.text}
         </Typography>
