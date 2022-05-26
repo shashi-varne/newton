@@ -14,6 +14,7 @@ import Partnership from "../../../featureComponent/appLanding/Partnership";
 import PlatformMotivator from "../../../featureComponent/appLanding/PlatformMotivator";
 import InvestmentOptions from "../../../featureComponent/appLanding/InvestmentOptions";
 import MarketingBanners from "../../../featureComponent/appLanding/MarketingBanners";
+import ExploreCategories from "../../../featureComponent/appLanding/ExploreCategories";
 import { SwiperSlide } from "swiper/react";
 import { Stack } from "@mui/material";
 
@@ -23,6 +24,7 @@ import {
   MANAGE_INVESTMENTS,
   MARKETING_BANNERS,
   PLATFORM_MOTIVATORS,
+  EXPLORE_CATEGORIES,
   EASY_SIP_DATA,
 } from "../common/constants";
 
@@ -45,6 +47,7 @@ const Landing = (props) => {
         showCarousals && `landing-onboarding-wrapper`
       }`}
       dataAid="onboarding"
+      noHeader={showCarousals}
     >
       {showCarousals ? (
         <OnboardingCarousels
@@ -63,12 +66,13 @@ const Landing = (props) => {
 export default Landing;
 
 const MainLanding = ({
-  showPlatformMotivators = false,
+  showPlatformMotivators = true,
   showMarketingBanners = true,
   showKycCard = false,
   showShareReferral = true,
   showApplyReferral = false,
   showSetupEasySip = true,
+  showExploreCategories = true,
 }) => {
   return (
     <>
@@ -79,8 +83,8 @@ const MainLanding = ({
       {showSetupEasySip && (
         <WrapperBox elevation={1} className="lmw-setup-easysip">
           <InfoCard
-            imgSrc={require(`assets/${EASY_SIP_DATA.icon}`)}
-            rightImgSrc={require(`assets/invest_with_confidence.svg`)}
+            imgSrc={require(`assets/easy_sip.svg`)}
+            rightImgSrc={require(`assets/fisdom/right_arrow.svg`)}
             title={EASY_SIP_DATA.title}
             subtitle={EASY_SIP_DATA.subtitle}
             dataAid={EASY_SIP_DATA.dataAid}
@@ -101,6 +105,13 @@ const MainLanding = ({
         title="Get started"
         productList={INVESTMENT_OPTIONS}
       />
+      {showExploreCategories && (
+        <ExploreCategories
+          categories={EXPLORE_CATEGORIES}
+          title="Explore by categories"
+          titleDataAid="exploreCategories"
+        />
+      )}
       <ManageInvestments manageInvestments={MANAGE_INVESTMENTS} />
       {showApplyReferral && <ApplyReferral />}
       {showShareReferral && (

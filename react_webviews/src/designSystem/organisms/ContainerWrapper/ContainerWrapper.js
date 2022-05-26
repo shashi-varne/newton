@@ -37,6 +37,7 @@ const Container = ({
   disableVerticalPadding,
   eventData,
   dataAid,
+  noHeader,
   ...restProps
 }) => {
   const containerRef = useRef();
@@ -125,11 +126,13 @@ const Container = ({
       className={`${containerClass} ${className}`}
       data-aid={dataAid}
     >
-      <ContainerHeader
-        headerProps={headerProps}
-        containerRef={containerRef}
-        handleonBackClick={handleonBackClick}
-      />
+      {!noHeader && (
+        <ContainerHeader
+          headerProps={headerProps}
+          containerRef={containerRef}
+          handleonBackClick={handleonBackClick}
+        />
+      )}
       <ContainerMain
         skeltonType={skeltonType}
         isPageLoading={isPageLoading}

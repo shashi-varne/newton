@@ -21,10 +21,6 @@ const InvestmentOptions = ({ productList = [], title, titleDataAid }) => {
           leftImgSrc={require(`assets/${data.icon}`)}
           key={idx}
           showSeparator={productList.length !== idx + 1}
-          leftImgProps={{
-            width: "32px",
-            height: "32px",
-          }}
         />
       ))}
     </div>

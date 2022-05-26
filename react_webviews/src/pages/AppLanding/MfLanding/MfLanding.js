@@ -8,9 +8,9 @@ import MarketingBanners from "../../../featureComponent/appLanding/MarketingBann
 import ExploreCategories from "../../../featureComponent/appLanding/ExploreCategories";
 import {
   EXPLORE_CATEGORIES,
-  INVESTMENT_OPTIONS,
   kycData,
   MARKETING_BANNERS,
+  MF_INVESTMENT_OPTIONS,
 } from "../common/constants";
 
 import "./MfLanding.scss";
@@ -42,7 +42,7 @@ const MfLanding = ({ showMarketingBanners = true, showKycCard = false }) => {
       <InvestmentOptions
         titleDataAid="InvestorFavourites"
         title="Investors’ favourites"
-        productList={INVESTMENT_OPTIONS}
+        productList={MF_INVESTMENT_OPTIONS}
       />
       <ExploreCategories
         title="Explore by categories"

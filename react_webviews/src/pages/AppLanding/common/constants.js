@@ -21,41 +21,47 @@ export const ONBOARDING_CAROUSALS = [
 
 export const MANAGE_INVESTMENTS = [
   {
-    imgSrc: "portfolio.svg",
+    icon: "portfolio.svg",
     title: "Portfolio",
   },
   {
-    imgSrc: "account.svg",
+    icon: "account.svg",
     title: "Account",
   },
   {
-    imgSrc: "help.svg",
+    icon: "help.svg",
     title: "Help",
   },
 ];
 
 export const PLATFORM_MOTIVATORS = [
   {
-    imgSrc: require(`assets/invest_with_confidence.svg`),
+    icon: "one_kyc.json",
     title: "One KYC for Mutual Funds & Stocks",
     subtitle: "Easy. Paperless. Secure",
     dataAid: "oneKyc",
     id: "kyc",
   },
   {
-    imgSrc: require(`assets/invest_with_confidence.svg`),
+    icon: "withdrawal.json",
     title: "Convenient & easy withdrawals",
     subtitle: "Get money in savings bank A/c.",
     dataAid: "withdrawal",
   },
   {
-    imgSrc: require(`assets/invest_with_confidence.svg`),
-    title: "Seamless order placement",
-    subtitle: "Select fund, add amount & pay!",
+    icon: "account_manage.json",
+    title: "Manage your SIPs with ease",
+    subtitle: "Pause, edit, cancel in 1 tap ",
     dataAid: "manageSips",
   },
   {
-    imgSrc: require(`assets/invest_with_confidence.svg`),
+    icon: "order_place.json",
+    title: "Seamless order placement",
+    subtitle: "Select fund, add amount & pay!",
+    dataAid: "orderPlacement",
+  },
+  {
+    icon: "insights.json",
     title: "Track investments real-time",
     subtitle: "With in-depth portfolio tracking",
     dataAid: "trackInvestment",
@@ -64,17 +70,17 @@ export const PLATFORM_MOTIVATORS = [
 
 export const MARKETING_BANNERS = [
   {
-    imgSrc: `freedomplan.svg`,
+    icon: `freedomplan.svg`,
     id: "freedomplan",
   },
   {
-    imgSrc: `freedomplan.svg`,
+    icon: `freedomplan.svg`,
   },
   {
-    imgSrc: `freedomplan.svg`,
+    icon: `freedomplan.svg`,
   },
   {
-    imgSrc: `freedomplan.svg`,
+    icon: `freedomplan.svg`,
   },
 ];
 
@@ -117,8 +123,74 @@ export const INVESTMENT_OPTIONS = [
   },
 ];
 
+export const MF_INVESTMENT_OPTIONS = [
+  {
+    icon: "high_growth.svg",
+    title: "High growth funds",
+    subtitle: "Start with as low as ₹500 ",
+    dataAid: "highGrowthFunds",
+  },
+  {
+    icon: "new_fund.svg",
+    title: "New fund offer",
+    subtitle: "Invest in newly launched funds",
+    dataAid: "newFund",
+  },
+  {
+    icon: "park_money.svg",
+    title: "Park your savings",
+    subtitle: "Make your idle money work ",
+    dataAid: "parkMySavings",
+  },
+  {
+    icon: "view_all.svg",
+    title: "View all",
+    subtitle: "Invest as per your unique needs",
+    dataAid: "viewAll",
+  },
+];
+
+export const INVESTER_FAVOURITES = [
+  {
+    icon: "high_growth.svg",
+    title: "High growth funds",
+    subtitle: "Start with as low as ₹500 ",
+    dataAid: "highGrowthFunds",
+  },
+  {
+    icon: "new_fund.svg",
+    title: "New fund offer",
+    subtitle: "Invest in newly launched funds",
+    dataAid: "newFund",
+  },
+  {
+    icon: "park_money.svg",
+    title: "Park your savings",
+    subtitle: "Make your idle money work ",
+    dataAid: "parkMySavings",
+  },
+  {
+    icon: "tax_savings.svg",
+    title: "Tax saving funds",
+    subtitle: "Save tax up to ₹46,800",
+    dataAid: "taxSavingFund",
+  },
+  {
+    icon: "invest_goal.svg",
+    title: "Invest for a goal",
+    subtitle: "Plans for every investment goal",
+    dataAid: "goalFund",
+  },
+  {
+    icon: "insta_redeem.svg",
+    title: "Insta redemption funds",
+    subtitle: "Superior return and money available 24x7",
+    dataAid: "instaRedemptionFund",
+  },
+];
+
 export const EASY_SIP_DATA = {
-  icon: "easy_sip.svg",
+  icon: "assets/easy_sip.svg",
   title: "Set up easySIP",
   subtitle: "Authorise one-time eMandate to automate your upcoming SIPs",
   dataAid: "easySip",

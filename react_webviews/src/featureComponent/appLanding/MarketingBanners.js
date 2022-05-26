@@ -17,7 +17,7 @@ const MarketingBanners = ({ banners = [] }) => {
           <SwiperSlide key={idx}>
             <Icon
               className="al-mb-icon"
-              src={require(`assets/${data.imgSrc}`)}
+              src={require(`assets/${data.icon}`)}
               dataAid={`banner${idx + 1}`}
             />
           </SwiperSlide>

@@ -37,7 +37,7 @@ const MenuItem = ({
         data-aid={`menuItem_${dataAid}`}
       >
         {leftImgSrc && (
-          <Icon src={leftImgSrc} size='54px' className='menu-item-left-img' dataAid='left' {...leftImgProps} />
+          <Icon src={leftImgSrc} size='32px' className='menu-item-left-img' dataAid='left' {...leftImgProps} />
         )}
 
         <div className='mi-right-wrapper'>
@@ -60,7 +60,7 @@ const MenuItem = ({
           )}
         </div>
       </div>
-      {showSeparator && <Separator marginLeft={leftImgSrc ? '94px' : '16px'} />}
+      {showSeparator && <Separator marginLeft={leftImgSrc ? '72px' : '16px'} />}
     </div>
   );
 };

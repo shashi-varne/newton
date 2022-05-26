@@ -1,20 +1,28 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Box from "@mui/material/Box";
 import PropTypes from "prop-types";
+import Lottie from "lottie-react";
 import Typography from "../../designSystem/atoms/Typography";
-import Icon from "../../designSystem/atoms/Icon";
+import { getConfig } from "../../utils/functions";
 
 import "./PlatformMotivator.scss";
 
-const PlatformMotivator = ({ imgSrc, title, subtitle, dataAid }) => {
+const PlatformMotivator = ({ icon, title, subtitle, dataAid }) => {
+  const { productName } = useMemo(getConfig, []);
   return (
     <Box
       sx={infoCardWrapperSxStyle}
       className="platform-motivator-wrapper"
       data-aid={`carousel_${dataAid}`}
     >
-      {imgSrc && (
-        <Icon size="64px" src={imgSrc} className="pm-left-img" dataAid="left" />
+      {icon && (
+        <Lottie
+          animationData={require(`assets/${productName}/lottie/${icon}`)}
+          autoPlay
+          loop
+          data-aid="iv_left"
+          className="pm-left-image"
+        />
       )}
       <div className="pm-text-wrapper">
         <Typography variant="heading4" component="div" dataAid="title">

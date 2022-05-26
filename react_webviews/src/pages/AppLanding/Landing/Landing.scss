@@ -2,7 +2,7 @@
   background-color: white;
 
   .oc-progressbar {
-    padding: 0px 16px;
+    padding: 26px 16px 0px 16px;
 
     .oc-pb-icon {
       margin-left: 13px;
@@ -41,8 +41,14 @@
   .lmp-platform-motivators {
     background-color: white;
     padding: 26px 16px 38px 16px;
+
+    .pm-left-image {
+      width: 64px;
+      height: 64px;
+    }
   }
 
+  .al-explore-categories,
   .lmp-platform-motivators,
   .al-marketing-banners {
     .swiper-slide {
@@ -73,6 +79,18 @@
 
     .al-io-title {
       padding: 0px 16px;
+    }
+  }
+
+  .al-explore-categories {
+    padding: 24px 16px 16px 16px;
+
+    .al-ec-title {
+      padding-bottom: 16px;
+    }
+
+    .al-ec-card {
+      width: 168px;
     }
   }
 
