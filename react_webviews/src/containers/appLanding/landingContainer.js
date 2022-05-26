@@ -1,7 +1,16 @@
 import React, { useState } from "react";
 import Landing from "../../pages/AppLanding/Landing";
 import { navigate as navigateFunc } from "../../utils/functions";
-import { ONBOARDING_CAROUSALS } from "../../pages/AppLanding/common/constants";
+import {
+  EASY_SIP_DATA,
+  EXPLORE_CATEGORIES,
+  INVESTMENT_OPTIONS,
+  kycData,
+  MANAGE_INVESTMENTS,
+  MARKETING_BANNERS,
+  ONBOARDING_CAROUSALS,
+  PLATFORM_MOTIVATORS,
+} from "../../pages/AppLanding/common/constants";
 
 const screen = "LANDING";
 const landingContainer = (WrappedComponent) => (props) => {
@@ -27,6 +36,21 @@ const landingContainer = (WrappedComponent) => (props) => {
       handleClose={handleCarousels(true)}
       carousalsData={ONBOARDING_CAROUSALS}
       showCarousals={showCarousals}
+      platformMotivators={PLATFORM_MOTIVATORS}
+      marketingBanners={MARKETING_BANNERS}
+      easySipData={EASY_SIP_DATA}
+      kycData={kycData}
+      investmentOptions={INVESTMENT_OPTIONS}
+      exploreCategories={EXPLORE_CATEGORIES}
+      manageInvestments={MANAGE_INVESTMENTS}
+      showPlatformMotivators={true}
+      showPlatformMotivators={true}
+      showExploreCategories={true}
+      showMarketingBanners={true}
+      showApplyReferral={false}
+      showShareReferral={true}
+      showSetupEasySip={true}
+      showKycCard={false}
     />
   );
 };

@@ -6,16 +6,17 @@ import Partnership from "../../../featureComponent/appLanding/Partnership";
 import InvestmentOptions from "../../../featureComponent/appLanding/InvestmentOptions";
 import MarketingBanners from "../../../featureComponent/appLanding/MarketingBanners";
 import ExploreCategories from "../../../featureComponent/appLanding/ExploreCategories";
-import {
-  EXPLORE_CATEGORIES,
-  kycData,
-  MARKETING_BANNERS,
-  MF_INVESTMENT_OPTIONS,
-} from "../common/constants";
 
 import "./MfLanding.scss";
 
-const MfLanding = ({ showMarketingBanners = true, showKycCard = false }) => {
+const MfLanding = ({
+  showMarketingBanners,
+  showKycCard,
+  kycData,
+  marketingBanners,
+  investmentOptions,
+  exploreCategories,
+}) => {
   return (
     <Container
       noPadding={true}
@@ -29,7 +30,7 @@ const MfLanding = ({ showMarketingBanners = true, showKycCard = false }) => {
         hideInPageTitle: true,
       }}
     >
-      {showMarketingBanners && <MarketingBanners banners={MARKETING_BANNERS} />}
+      {showMarketingBanners && <MarketingBanners banners={marketingBanners} />}
       {showKycCard && (
         <CardHorizontal
           rightImgSrc={kycData.imgSrc}
@@ -42,12 +43,12 @@ const MfLanding = ({ showMarketingBanners = true, showKycCard = false }) => {
       <InvestmentOptions
         titleDataAid="InvestorFavourites"
         title="Investors’ favourites"
-        productList={MF_INVESTMENT_OPTIONS}
+        productList={investmentOptions}
       />
       <ExploreCategories
         title="Explore by categories"
         titleDataAid="exploreCategories"
-        categories={EXPLORE_CATEGORIES}
+        categories={exploreCategories}
       />
       <TrustIcon
         dataAid="1"

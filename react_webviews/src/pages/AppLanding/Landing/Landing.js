@@ -18,16 +18,6 @@ import ExploreCategories from "../../../featureComponent/appLanding/ExploreCateg
 import { SwiperSlide } from "swiper/react";
 import { Stack } from "@mui/material";
 
-import {
-  INVESTMENT_OPTIONS,
-  kycData,
-  MANAGE_INVESTMENTS,
-  MARKETING_BANNERS,
-  PLATFORM_MOTIVATORS,
-  EXPLORE_CATEGORIES,
-  EASY_SIP_DATA,
-} from "../common/constants";
-
 import "./Landing.scss";
 
 const Landing = (props) => {
@@ -37,6 +27,7 @@ const Landing = (props) => {
     handleTabChange,
     showCarousals,
     handleClose,
+    ...restProps
   } = props;
 
   return (
@@ -57,7 +48,7 @@ const Landing = (props) => {
           handleClose={handleClose}
         />
       ) : (
-        <MainLanding />
+        <MainLanding {...restProps} />
       )}
     </Container>
   );
@@ -73,21 +64,28 @@ const MainLanding = ({
   showApplyReferral = false,
   showSetupEasySip = true,
   showExploreCategories = true,
+  kycData,
+  easySipData,
+  marketingBanners,
+  investmentOptions,
+  platformMotivators,
+  exploreCategories,
+  manageInvestments,
 }) => {
   return (
     <>
       {showPlatformMotivators && (
-        <PlatformMotivators options={PLATFORM_MOTIVATORS} />
+        <PlatformMotivators options={platformMotivators} />
       )}
-      {showMarketingBanners && <MarketingBanners banners={MARKETING_BANNERS} />}
+      {showMarketingBanners && <MarketingBanners banners={marketingBanners} />}
       {showSetupEasySip && (
         <WrapperBox elevation={1} className="lmw-setup-easysip">
           <InfoCard
             imgSrc={require(`assets/easy_sip.svg`)}
             rightImgSrc={require(`assets/fisdom/right_arrow.svg`)}
-            title={EASY_SIP_DATA.title}
-            subtitle={EASY_SIP_DATA.subtitle}
-            dataAid={EASY_SIP_DATA.dataAid}
+            title={easySipData.title}
+            subtitle={easySipData.subtitle}
+            dataAid={easySipData.dataAid}
           />
         </WrapperBox>
       )}
@@ -103,16 +101,16 @@ const MainLanding = ({
       <InvestmentOptions
         titleDataAid="moreOptions"
         title="Get started"
-        productList={INVESTMENT_OPTIONS}
+        productList={investmentOptions}
       />
       {showExploreCategories && (
         <ExploreCategories
-          categories={EXPLORE_CATEGORIES}
+          categories={exploreCategories}
           title="Explore by categories"
           titleDataAid="exploreCategories"
         />
       )}
-      <ManageInvestments manageInvestments={MANAGE_INVESTMENTS} />
+      <ManageInvestments manageInvestments={manageInvestments} />
       {showApplyReferral && <ApplyReferral />}
       {showShareReferral && (
         <WrapperBox elevation={1} className="lmw-share-code">
