@@ -45,6 +45,7 @@ const CardHorizontal = ({
   className,
   sx,
   variant = 'product',
+  buttonProps = {}
 }) => {
   const isHeroCardVariant = variant === 'heroCard';
   const variantStyle = getVariantStyle(isHeroCardVariant, footerText);
@@ -63,7 +64,7 @@ const CardHorizontal = ({
     <Stack
       direction='column'
       className={`${wrapperClassNames} ${className}`}
-      sx={{ sx }}
+      sx={sx}
       onClick={onClick}
       data-aid={`cardHorizontal_${dataAid}`}
     >
@@ -116,6 +117,7 @@ const CardHorizontal = ({
               size='small'
               onClick={onActionClick}
               dataAid={variantStyle?.btnDataAid}
+              {...buttonProps}
             />
           )}
         </Stack>

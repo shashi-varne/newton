@@ -59,7 +59,7 @@ export default Landing;
 const MainLanding = ({
   showPlatformMotivators = true,
   showMarketingBanners = true,
-  showKycCard = false,
+  showKycCard = true,
   showShareReferral = true,
   showApplyReferral = false,
   showSetupEasySip = true,
@@ -96,6 +96,15 @@ const MainLanding = ({
           description={kycData.subtitle}
           actionLink={kycData.buttonTitle}
           className="lmw-kyc"
+          variant="heroCard"
+          buttonProps={{
+            isInverted: false,
+          }}
+          sx={{
+            background: "white !important",
+          }}
+          dataAid="kyc"
+          titleColor="foundationColors.content.primary"
         />
       )}
       <InvestmentOptions

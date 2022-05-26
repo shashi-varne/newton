@@ -50,7 +50,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       showApplyReferral={false}
       showShareReferral={true}
       showSetupEasySip={true}
-      showKycCard={false}
+      showKycCard={true}
     />
   );
 };
