@@ -10,7 +10,11 @@
   }
 
   .oc-icon-wrapper {
-    padding: 35px 0px 60px 0px;
+    padding: 35px 16px 60px 16px;
+
+    .oc-icon {
+      min-height: 320px;
+    }
   }
 
   .oc-content-wrapper {

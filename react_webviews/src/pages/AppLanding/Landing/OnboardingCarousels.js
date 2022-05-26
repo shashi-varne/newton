@@ -63,6 +63,7 @@ const Carousel = ({ icon, iconDataAid, title, subtitle, handleClose }) => {
           src={require(`assets/${icon}`)}
           width="100%"
           dataAid={iconDataAid}
+          className="oc-icon"
         />
       </Box>
       <WrapperBox elevation={1} className="oc-content-wrapper">
