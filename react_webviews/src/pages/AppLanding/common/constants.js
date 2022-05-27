@@ -1,3 +1,65 @@
+export const KYC_CARD_STATUS_MAPPER = {
+  init: {
+    title: "Are you investment ready?",
+    subtitle: "Check your KYC status",
+    buttonTitle: "Check now",
+    icon: "kyc_default.svg",
+  },
+  incomplete: {
+    title: "Complete your KYC",
+    subtitle: "Just a few more steps to go",
+    buttonTitle: "Complete now",
+    icon: "kyc_default.svg",
+  },
+  submitted: {
+    title: "KYC application submitted",
+    subtitle: "In progress",
+    buttonTitle: "track status",
+    icon: "kyc_inprogress.svg",
+    descriptionColor: "foundationColors.secondary.coralOrange.400",
+  },
+  rejected: {
+    title: "KYC application rejected",
+    subtitle: "Your documents couldn’t be verified",
+    buttonTitle: "review & Modify",
+    icon: "kyc_rejected.svg",
+    descriptionColor: "foundationColors.secondary.lossRed.400",
+  },
+  complete_setup: {
+    title: "Complete account set up",
+    subtitle: "Only a few steps remaining",
+    buttonTitle: "Continue ",
+    icon: "kyc_complete_setup.svg",
+  },
+  esign_ready: {
+    title: "KYC documents verified",
+    subtitle: "Now eSign to complete application",
+    buttonTitle: "eSIGN now",
+    icon: "kyc_esign.svg",
+  },
+  verifying_trading_account: {
+    title: "You’re ready to invest in mutual funds",
+    subtitle: "Trading account set up in progress",
+    buttonTitle: "track status",
+    icon: "kyc_inprogress.svg",
+    descriptionColor: "foundationColors.secondary.coralOrange.400",
+  },
+  fno_rejected: {
+    title: "F&O verification failed",
+    subtitle: "We’re unable to verify the documents submitted to activate F&O",
+    buttonTitle: "review & Modify",
+    icon: "kyc_rejected.svg",
+    descriptionColor: "foundationColors.secondary.lossRed.400",
+  },
+  upgrade_incomplete: {
+    title: "Upgrade to Trading & Demat account",
+    subtitle: "STOCKS | IPO | F&O",
+    buttonTitle: "Continue ",
+    descriptionColor: "foundationColors.secondary.profitGreen.400",
+    icon: "kyc_upgrade.svg",
+  },
+};
+
 export const ONBOARDING_CAROUSALS = [
   {
     icon: "invest_with_confidence.svg",
@@ -194,13 +256,6 @@ export const EASY_SIP_DATA = {
   title: "Set up easySIP",
   subtitle: "Authorise one-time eMandate to automate your upcoming SIPs",
   dataAid: "easySip",
-};
-
-export const kycData = {
-  title: "Are you investment ready?",
-  subtitle: "Check your KYC status",
-  buttonTitle: "Check now",
-  imgSrc: require(`assets/invest_with_confidence.svg`),
 };
 
 export const EXPLORE_CATEGORIES = [

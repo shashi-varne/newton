@@ -1,7 +1,7 @@
 import React from "react";
 import {
   EXPLORE_CATEGORIES,
-  kycData,
+  KYC_CARD_STATUS_MAPPER,
   MARKETING_BANNERS,
   MF_INVESTMENT_OPTIONS,
 } from "../../pages/AppLanding/common/constants";
@@ -11,6 +11,7 @@ import { navigate as navigateFunc } from "../../utils/functions";
 const screen = "MF_LANDING";
 const mfLandingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
+  const kycData = KYC_CARD_STATUS_MAPPER.rejected;
 
   return (
     <WrappedComponent

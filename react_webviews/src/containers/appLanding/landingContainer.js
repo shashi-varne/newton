@@ -5,7 +5,7 @@ import {
   EASY_SIP_DATA,
   EXPLORE_CATEGORIES,
   INVESTMENT_OPTIONS,
-  kycData,
+  KYC_CARD_STATUS_MAPPER,
   MANAGE_INVESTMENTS,
   MARKETING_BANNERS,
   ONBOARDING_CAROUSALS,
@@ -17,6 +17,7 @@ const landingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const [tabValue, setTabValue] = useState(0);
   const [showCarousals, setShowCarousals] = useState(true);
+  const kycData = KYC_CARD_STATUS_MAPPER.submitted;
 
   const handleCarousels = (isClose) => () => {
     const value = tabValue + 1;
