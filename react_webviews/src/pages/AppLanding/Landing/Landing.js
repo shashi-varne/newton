@@ -37,8 +37,11 @@ const Landing = (props) => {
       className={`landing-main-wrapper ${
         showCarousals && `landing-onboarding-wrapper`
       }`}
-      dataAid="onboarding"
+      dataAid={showCarousals ? "onboarding" : "sdkLandingPage"}
       noHeader={showCarousals}
+      headerProps={{
+        dataAid: "sdkLandingPage",
+      }}
     >
       {showCarousals ? (
         <OnboardingCarousels

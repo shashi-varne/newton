@@ -4,7 +4,7 @@ import SelectionMode from "../../../designSystem/molecules/SelectionMode";
 
 import "./BankList.scss";
 
-const MfLanding = ({ bankList, selectedValue, handleChange, onClick }) => {
+const BankList = ({ bankList, selectedValue, handleChange, onClick }) => {
   return (
     <Container
       headerProps={{
@@ -16,7 +16,7 @@ const MfLanding = ({ bankList, selectedValue, handleChange, onClick }) => {
         hideLeftIcon: true,
       }}
       className="bank-list-wrapper"
-      dataAid="onboarding"
+      dataAid="selectBankAccount"
       footer={{
         button1Props: {
           title: "Continue",
@@ -36,4 +36,4 @@ const MfLanding = ({ bankList, selectedValue, handleChange, onClick }) => {
   );
 };
 
-export default MfLanding;
+export default BankList;

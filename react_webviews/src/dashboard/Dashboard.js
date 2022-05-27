@@ -54,6 +54,7 @@ import mfOrderContainer from "../containers/mfOrder/mfOrderContainer";
 import landingContainer from "../containers/appLanding/landingContainer";
 import mfLandingContainer from "../containers/appLanding/mfLandingContainer";
 import bankListContainer from "../containers/appLanding/bankListContainer";
+import investorFavouritesContainer from "../containers/appLanding/investorFavouritesContainer";
 
 const Home = (props) => {
   const config = getConfig(); 
@@ -203,8 +204,9 @@ const Home = (props) => {
           <Route path={`${url}fund-details-v2`} component={fundDetailsV2Container} />
           <Route path={`${url}mf-orders`} component={mfOrderContainer} />
           <Route path={`${url}landing-new`} component={landingContainer} />
-          <Route path={`${url}mf-landing-new`} component={mfLandingContainer} />
+          <Route exact path={`${url}mf-landing-new`} component={mfLandingContainer} />
           <Route path={`${url}bank-list`} component={bankListContainer} />
+          <Route path={`${url}mf-landing-new/view-all`} component={investorFavouritesContainer} />
         </ThemeWrapper>
         <Route component={NotFound} />
       </Switch>

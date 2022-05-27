@@ -232,7 +232,7 @@ export const INVESTER_FAVOURITES = [
     dataAid: "parkMySavings",
   },
   {
-    icon: "tax_savings.svg",
+    icon: "tax_saving.svg",
     title: "Tax saving funds",
     subtitle: "Save tax up to ₹46,800",
     dataAid: "taxSavingFund",

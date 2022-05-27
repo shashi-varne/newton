@@ -22,9 +22,9 @@ const MfLanding = ({
       noPadding={true}
       noFooter={true}
       className="mf-landing-wrapper"
-      dataAid="onboarding"
+      dataAid="mutualFunds"
       headerProps={{
-        dataAid: 1,
+        dataAid: "mutualFunds",
         rightIconSrc: require("assets/search_diy.svg"),
         headerTitle: "Mutual Funds",
         hideInPageTitle: true,

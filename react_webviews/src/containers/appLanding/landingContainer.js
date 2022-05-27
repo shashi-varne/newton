@@ -45,7 +45,6 @@ const landingContainer = (WrappedComponent) => (props) => {
       exploreCategories={EXPLORE_CATEGORIES}
       manageInvestments={MANAGE_INVESTMENTS}
       showPlatformMotivators={true}
-      showPlatformMotivators={true}
       showExploreCategories={true}
       showMarketingBanners={true}
       showApplyReferral={false}
