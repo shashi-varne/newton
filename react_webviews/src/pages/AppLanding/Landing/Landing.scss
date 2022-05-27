@@ -52,6 +52,18 @@
     }
   }
 
+  .lmw-portfolio-overview {
+    margin: 24px 16px 16px 16px;
+    padding: 24px 16px 16px 16px;
+    background-color: white;
+
+    .lmw-po-loader {
+      border-radius: 100px;
+      height: 22px;
+      width: 100px;
+    }
+  }
+
   .al-explore-categories,
   .lmp-platform-motivators,
   .al-marketing-banners {

@@ -13,6 +13,12 @@ import {
 } from "../../pages/AppLanding/common/constants";
 
 const screen = "LANDING";
+const portfolioOverViewData = {
+  currentValue: "₹19.6Cr",
+  investedValue: "₹3.5Cr",
+  profitOrLoss: "+ ₹1.2Cr",
+  isProfit: true,
+}
 const landingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const [tabValue, setTabValue] = useState(0);
@@ -44,6 +50,8 @@ const landingContainer = (WrappedComponent) => (props) => {
       investmentOptions={INVESTMENT_OPTIONS}
       exploreCategories={EXPLORE_CATEGORIES}
       manageInvestments={MANAGE_INVESTMENTS}
+      portfolioOverViewData={portfolioOverViewData}
+      showPortfolioOverview={true}
       showPlatformMotivators={true}
       showExploreCategories={true}
       showMarketingBanners={true}
@@ -51,6 +59,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       showShareReferral={true}
       showSetupEasySip={true}
       showKycCard={true}
+      showLoader={false}
     />
   );
 };

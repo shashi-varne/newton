@@ -17,7 +17,7 @@ const PlatformMotivator = ({ icon, title, subtitle, dataAid }) => {
     >
       {icon && (
         <Lottie
-          animationData={require(`assets/${productName}/lottie/${icon}`)}
+          animationData={require(`assets/fisdom/lottie/${icon}`)}
           autoPlay
           loop
           data-aid="iv_left"

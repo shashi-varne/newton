@@ -16,7 +16,7 @@ import InvestmentOptions from "../../../featureComponent/appLanding/InvestmentOp
 import MarketingBanners from "../../../featureComponent/appLanding/MarketingBanners";
 import ExploreCategories from "../../../featureComponent/appLanding/ExploreCategories";
 import { SwiperSlide } from "swiper/react";
-import { Stack } from "@mui/material";
+import { Skeleton, Stack } from "@mui/material";
 
 import "./Landing.scss";
 
@@ -60,13 +60,14 @@ const Landing = (props) => {
 export default Landing;
 
 const MainLanding = ({
-  showPlatformMotivators = true,
-  showMarketingBanners = true,
-  showKycCard = true,
-  showShareReferral = true,
-  showApplyReferral = false,
-  showSetupEasySip = true,
-  showExploreCategories = true,
+  showPlatformMotivators,
+  showMarketingBanners,
+  showKycCard,
+  showShareReferral,
+  showApplyReferral,
+  showSetupEasySip,
+  showExploreCategories,
+  showPortfolioOverview,
   kycData,
   easySipData,
   marketingBanners,
@@ -74,11 +75,19 @@ const MainLanding = ({
   platformMotivators,
   exploreCategories,
   manageInvestments,
+  showLoader,
+  portfolioOverViewData,
 }) => {
   return (
     <>
       {showPlatformMotivators && (
         <PlatformMotivators options={platformMotivators} />
+      )}
+      {showPortfolioOverview && (
+        <PortfolioOverview
+          showLoader={showLoader}
+          portfolioOverViewData={portfolioOverViewData}
+        />
       )}
       {showMarketingBanners && <MarketingBanners banners={marketingBanners} />}
       {showSetupEasySip && (
@@ -94,7 +103,7 @@ const MainLanding = ({
       )}
       {showKycCard && (
         <CardHorizontal
-          rightImgSrc={kycData.imgSrc}
+          rightImgSrc={require(`assets/fisdom/${kycData.icon}`)}
           title={kycData.title}
           description={kycData.subtitle}
           actionLink={kycData.buttonTitle}
@@ -213,5 +222,87 @@ const ApplyReferral = () => {
         <Button size="small" title="APPLY" />
       </Stack>
     </WrapperBox>
+  );
+};
+
+const PortfolioOverview = ({ showLoader, portfolioOverViewData }) => {
+  return (
+    <WrapperBox className="lmw-portfolio-overview">
+      <Typography variant="heading3" dataAid="portfolioOverView">
+        Portfolio overview
+      </Typography>
+      <Stack
+        flexDirection="row"
+        justifyContent="space-between"
+        alignItems="center"
+        sx={{ pt: "16px" }}
+      >
+        <Tile
+          title="Current value"
+          titleDataAid="currentKey"
+          value={portfolioOverViewData.currentValue}
+          gap="8px"
+          valueProps={{
+            variant: "heading3",
+            dataAid: "currentValue",
+          }}
+          showLoader={showLoader}
+        />
+        <Tile
+          title="Invested value"
+          titleDataAid="investedKey"
+          value={portfolioOverViewData.investedValue}
+          gap="8px"
+          valueProps={{
+            variant: "heading3",
+            dataAid: "investedValue",
+            textAlign: "right",
+          }}
+          showLoader={showLoader}
+        />
+      </Stack>
+      <Tile
+        title="P&L:"
+        titleDataAid="p&LKey"
+        value={portfolioOverViewData.profitOrLoss}
+        flexDirection="row"
+        gap="4px"
+        sx={{ pt: "16px" }}
+        valueProps={{
+          variant: "body2",
+          color: portfolioOverViewData.isProfit
+            ? "foundationColors.secondary.profitGreen.400"
+            : "foundationColors.secondary.lossRed.400",
+          dataAid: "p&LValue",
+        }}
+        showLoader={showLoader}
+      />
+    </WrapperBox>
+  );
+};
+
+const Tile = ({
+  title,
+  titleDataAid,
+  value,
+  showLoader,
+  valueProps,
+  ...restProps
+}) => {
+  return (
+    <Stack {...restProps}>
+      <Typography
+        dataAid={titleDataAid}
+        variant="body2"
+        color="foundationColors.content.secondary"
+      >
+        {title}
+      </Typography>
+      {showLoader ? (
+        <Skeleton variant="rectangular" className="lmw-po-loader" />
+      ) : (
+        <Typography {...valueProps}>{value}</Typography>
+      )}
+    </Stack>
   );
 };
