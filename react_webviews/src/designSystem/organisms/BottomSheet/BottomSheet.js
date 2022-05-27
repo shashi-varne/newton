@@ -82,7 +82,6 @@ const BottomSheet = ({
         </Stack>
         {imageSrc && (
           <Icon
-            size='132px'
             src={imageSrc}
             className='btn-sheet-img'
             dataAid="top"
