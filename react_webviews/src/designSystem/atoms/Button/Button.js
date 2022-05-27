@@ -7,6 +7,7 @@ const VARIANTS = {
   primary: 'contained',
   secondary: 'text',
   link: 'link',
+  outlined: 'outlined',
 };
 
 const SIZES = {

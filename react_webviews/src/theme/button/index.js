@@ -86,6 +86,25 @@ export const buttonVariantsConfig = (colors={}, partnerConfig={}) => {
         },
       },
     },
+    {
+      props: { variant: 'outlined' },
+      style: {
+        ...typographyVariants.actionText,
+        color: colors?.action?.brand,
+        borderColor: colors?.action?.brand,
+        borderRadius: partnerConfig?.button?.borderRadius || 12,
+        minHeight: '48px',
+        '&:hover': {
+          color: colors?.action?.brand,
+          backgroundColor: colors?.action[300]
+        },
+        '&.Mui-disabled': {
+          backgroundColor: 'transparent',
+          color: colors?.supporting?.athensGrey,
+          borderColor: colors?.supporting?.athensGrey,
+        },
+      },
+    },
   ];
 }
 
