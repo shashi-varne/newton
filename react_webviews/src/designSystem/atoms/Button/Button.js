@@ -57,7 +57,7 @@ Button.defaultProps = {
 }
 
 Button.propTypes = {
-  variant: PropTypes.oneOf(['primary', 'secondary', 'link']),
+  variant: PropTypes.oneOf(Object.keys(VARIANTS)),
   size: PropTypes.oneOf(['small', 'large']),
   title: PropTypes.string.isRequired,
   disabled: PropTypes.bool,

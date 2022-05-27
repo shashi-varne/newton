@@ -38,6 +38,7 @@ const Container = ({
   eventData,
   dataAid,
   noHeader,
+  isFetchFailed,
   ...restProps
 }) => {
   const containerRef = useRef();
@@ -142,6 +143,7 @@ const Container = ({
         noPadding={noPadding}
         disableHorizontalPadding={disableHorizontalPadding}
         disableVerticalPadding={disableVerticalPadding}
+        isFetchFailed={isFetchFailed}
       >
         {children}
       </ContainerMain>
