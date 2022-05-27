@@ -60,7 +60,7 @@ const MenuItem = ({
           )}
         </div>
       </div>
-      {showSeparator && <Separator marginLeft={leftImgSrc ? '72px' : '16px'} />}
+      {showSeparator && <Separator marginLeft={leftImgSrc ? '72px' : '16px'} dataAid="1" />}
     </div>
   );
 };
