@@ -41,6 +41,7 @@ const Landing = (props) => {
       noHeader={showCarousals}
       headerProps={{
         dataAid: "sdkLandingPage",
+        showPartnerLogo: true,
       }}
     >
       {showCarousals ? (

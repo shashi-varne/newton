@@ -35,13 +35,14 @@ const NavigationHeader = ({
   tabChilds = [],
   className,
   hideMenuBar = false,
-  dataAid
+  dataAid,
+  showPartnerLogo,
 }) => {
   const navHeaderWrapperRef = useRef();
   const subtitleRef = useRef();
   const inPageTitleRef = useRef();
   const tabWrapperRef = useRef();
-  const { isIframe, Web, isMobileDevice } = useMemo(getConfig, []);
+  const { isIframe, Web, isMobileDevice, logo } = useMemo(getConfig, []);
   const isGuestUser = storageService().getBoolean('guestUser');
   const [mobileViewDrawer, setMobileViewDrawer] = useState(false);
   const [referDialog, setReferDialog] = useState(false);
@@ -99,7 +100,7 @@ const NavigationHeader = ({
               <Icon src={leftIcon} size='24px' dataAid="left" />
             </IconButton>
           )}
-          {!hideHeaderTitle && (
+          {!hideHeaderTitle && !showPartnerLogo && (
             <Typography
               className={`nav-header-title ${hideLeftIcon && 'nav-header-lm'} ${
                 hideInPageTitle && 'show-nav-title'
@@ -109,6 +110,13 @@ const NavigationHeader = ({
             >
               {headerTitle}
             </Typography>
+          )}
+          {showPartnerLogo && (
+            <Icon
+              dataAid="logo"
+              src={require(`assets/${logo}`)}
+              className="nav-bar-logo"
+            />
           )}
         </div>
         <div className='nav-header-right'>
