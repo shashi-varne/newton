@@ -14,7 +14,7 @@ import {
   REFERRAL_DATA,
   AUTH_VERIFICATION_DATA,
   PREMIUM_ONBORDING_MAPPER,
-} from "businesslogic/constants/webAppLanding";
+} from "businesslogic/constants/webappLanding";
 
 const screen = "LANDING";
 const portfolioOverViewData = {

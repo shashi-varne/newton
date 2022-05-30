@@ -4,7 +4,7 @@ import {
   KYC_CARD_STATUS_MAPPER,
   MARKETING_BANNERS,
   MF_INVESTMENT_OPTIONS,
-} from "businesslogic/constants/webAppLanding";
+} from "businesslogic/constants/webappLanding";
 import MfLanding from "../../pages/AppLanding/MfLanding";
 import { navigate as navigateFunc } from "../../utils/functions";
 
