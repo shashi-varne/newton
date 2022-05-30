@@ -1,0 +1,203 @@
+import React, { useMemo, useState } from "react";
+import PersonalDetails from "../../pages/Nominee/PersonalDetails";
+import { navigate as navigateFunc } from "../../utils/functions";
+import {
+  dobFormatTest,
+  formatDate,
+  validateName,
+  validateNumber,
+} from "../../utils/validators";
+import { nativeCallback } from "../../utils/native_callback";
+
+import {
+  PERSONAL_DETAILS_FORM_MAPPER,
+  DEFAULT_NOMINEE_PERSONAL_DETAILS,
+} from "businesslogic/constants/nominee";
+import {
+  validateFields,
+  getNomineePersonalDetails,
+  getAvailableShares,
+  validateDecimalPercentage,
+  getNomineeDataById,
+  isNomineeUpdateFlow,
+  getDematNomineeStatus,
+  getNomineeNames,
+  getNomineesList,
+  isNomineeStatusRejectedOrApproved,
+} from "businesslogic/utils/nominee/functions";
+import {
+  getEquityNominationData,
+  getNomineeDetails,
+  updateNomineeDetails,
+} from "businesslogic/dataStore/reducers/nominee";
+import { useDispatch, useSelector } from "react-redux";
+import { NOMINEE_PATHNAME_MAPPER } from "../../pages/Nominee/common/constants";
+import useUserKycHook from "../../kyc/common/hooks/userKycHook";
+import { getUserName } from "businesslogic/utils/common/functions";
+
+const initializeData = (nominationData, nomineeDetails) => () => {
+  const list = getNomineesList(nominationData);
+  const dematStatus = getDematNomineeStatus(nominationData);
+  const nomineeData = getNomineeDataById(list, nomineeDetails?.id);
+  let availableShare = getAvailableShares(list, dematStatus);
+  const isUpdateFlow = isNomineeUpdateFlow(nomineeDetails);
+  if (isUpdateFlow) {
+    availableShare += nomineeData[PERSONAL_DETAILS_FORM_MAPPER.share];
+  }
+  return {
+    availableShare,
+    dematStatus,
+  };
+};
+
+const personalDetailsContainer = (WrappedComponent) => (props) => {
+  const dispatch = useDispatch();
+  const navigate = navigateFunc.bind(props);
+  const nomineeDetails = useSelector(getNomineeDetails);
+  const equityNominationData = useSelector(getEquityNominationData);
+  const [isMinor, setIsMinor] = useState(nomineeDetails.isMinor || false);
+  const [formData, setFormData] = useState(
+    getNomineePersonalDetails(nomineeDetails)
+  );
+  const [errorData, setErrorData] = useState(DEFAULT_NOMINEE_PERSONAL_DETAILS);
+  const [openExitNominee, setOpenExitNominee] = useState(false);
+
+  const { kyc } = useUserKycHook();
+  const { availableShare, dematStatus } = useMemo(
+    initializeData(equityNominationData, nomineeDetails),
+    [equityNominationData, nomineeDetails]
+  );
+
+  const handleCheckbox = () => {
+    setIsMinor(!isMinor);
+    const errorInfo = { ...errorData };
+    errorInfo[PERSONAL_DETAILS_FORM_MAPPER.dob] = "";
+    setErrorData(errorInfo);
+  };
+
+  const onClick = () => {
+    const keysToCheck = [
+      PERSONAL_DETAILS_FORM_MAPPER.name,
+      PERSONAL_DETAILS_FORM_MAPPER.dob,
+      PERSONAL_DETAILS_FORM_MAPPER.mobile,
+      PERSONAL_DETAILS_FORM_MAPPER.relationship,
+      PERSONAL_DETAILS_FORM_MAPPER.share,
+      PERSONAL_DETAILS_FORM_MAPPER.email,
+    ];
+    if (isMinor) {
+      keysToCheck.push(
+        PERSONAL_DETAILS_FORM_MAPPER.guardianName,
+        PERSONAL_DETAILS_FORM_MAPPER.guardianRelationship
+      );
+    }
+    const userName = getUserName(kyc);
+    const data = { ...formData, isMinor };
+    const nomineeNames = getNomineeNames(
+      equityNominationData,
+      nomineeDetails.id
+    );
+    let nomineeNameValidationList = [
+      {
+        name: userName,
+        isUser: true,
+      },
+    ];
+    if (!isNomineeStatusRejectedOrApproved(dematStatus)) {
+      nomineeNameValidationList = [
+        ...nomineeNameValidationList,
+        ...nomineeNames,
+      ];
+    }
+    const additionalInfo = {
+      availableShare,
+      nomineeNameValidationList,
+    };
+    const result = validateFields(data, keysToCheck, additionalInfo);
+    if (!result.canSubmit) {
+      const data = { ...errorData, ...result.errorData };
+      setErrorData(data);
+      return;
+    }
+    sendEvents("next");
+    data[PERSONAL_DETAILS_FORM_MAPPER.share] = Number(
+      data[PERSONAL_DETAILS_FORM_MAPPER.share]
+    );
+    dispatch(updateNomineeDetails(data));
+    navigate(NOMINEE_PATHNAME_MAPPER.addressDetails);
+  };
+
+  const sendEvents = (userAction) => {
+    const eventObj = {
+      event_name: "nominee",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "nominee_details",
+        minor_nominee: isMinor ? "yes" : "no",
+        nominee_percentage_share: formData.share,
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
+  const onChange = (name) => (event) => {
+    const data = { ...formData };
+    const errorInfo = { ...errorData };
+    const numberFields = [PERSONAL_DETAILS_FORM_MAPPER.mobile];
+    const nameFields = [
+      PERSONAL_DETAILS_FORM_MAPPER.name,
+      PERSONAL_DETAILS_FORM_MAPPER.guardianName,
+    ];
+    const value = event.target.value || "";
+    if (value && numberFields.includes(name) && !validateNumber(value)) return;
+    if (value && nameFields.includes(name) && !validateName(value)) return;
+    if (name === PERSONAL_DETAILS_FORM_MAPPER.dob) {
+      if (!dobFormatTest(value)) {
+        return;
+      }
+      const input = document.getElementById(PERSONAL_DETAILS_FORM_MAPPER.dob);
+      input.onkeyup = formatDate;
+    }
+    if (
+      name === PERSONAL_DETAILS_FORM_MAPPER.share &&
+      !validateDecimalPercentage(value)
+    ) {
+      return;
+    }
+    data[name] = value;
+    errorInfo[name] = "";
+    setFormData(data);
+    setErrorData(errorInfo);
+  };
+
+  const handleExitNomination = (value) => () => {
+    setOpenExitNominee(value);
+  };
+
+  const handleExit = () => {
+    sendEvents("back");
+    navigate(NOMINEE_PATHNAME_MAPPER.landing);
+  };
+
+  return (
+    <WrappedComponent
+      isMinor={isMinor}
+      formData={formData}
+      errorData={errorData}
+      availableShare={availableShare}
+      onClick={onClick}
+      onChange={onChange}
+      handleCheckbox={handleCheckbox}
+      sendEvents={sendEvents}
+      openExitNominee={openExitNominee}
+      handleClose={handleExitNomination(false)}
+      handleExit={handleExit}
+      onBackClick={handleExitNomination(true)}
+    />
+  );
+};
+
+export default personalDetailsContainer(PersonalDetails);

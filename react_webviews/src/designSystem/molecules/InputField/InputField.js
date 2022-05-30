@@ -114,6 +114,9 @@ const InputField = (props) => {
         'data-aid': 'tv_label',
         ...inputLabelProps
       }}
+      FormHelperTextProps={{
+        'data-aid': 'tv_helperText',
+      }}
       InputProps={{
         startAdornment: InputPrefix(),
         endAdornment: InputSuffix(),

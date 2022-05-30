@@ -51,6 +51,7 @@ import PaymentNativeCallback from "./nps/components/paymentCallback";
 import ThemeWrapper from "../theme/ThemeWrapper";
 import fundDetailsV2Container from "../containers/fundDetailsV2/fundDetailsV2Container";
 import mfOrderContainer from "../containers/mfOrder/mfOrderContainer";
+import Nominee from "../pages/Nominee";
 import landingContainer from "../containers/appLanding/landingContainer";
 import mfLandingContainer from "../containers/appLanding/mfLandingContainer";
 import bankListContainer from "../containers/appLanding/bankListContainer";
@@ -207,6 +208,7 @@ const Home = (props) => {
           <Route exact path={`${url}mf-landing-new`} component={mfLandingContainer} />
           <Route path={`${url}bank-list`} component={bankListContainer} />
           <Route path={`${url}mf-landing-new/view-all`} component={investorFavouritesContainer} />
+          <Route path={`${url}nominee`} component={Nominee} />
         </ThemeWrapper>
         <Route component={NotFound} />
       </Switch>
