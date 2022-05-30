@@ -17,6 +17,10 @@ const MfLanding = ({
   marketingBanners,
   investmentOptions,
   exploreCategories,
+  handleKyc,
+  handleCardClick,
+  handleExploreCategories,
+  handleMarketingBanners,
 }) => {
   return (
     <Container
@@ -31,7 +35,12 @@ const MfLanding = ({
         hideInPageTitle: true,
       }}
     >
-      {showMarketingBanners && <MarketingBanners banners={marketingBanners} />}
+      {showMarketingBanners && (
+        <MarketingBanners
+          onClick={handleMarketingBanners}
+          banners={marketingBanners}
+        />
+      )}
       {showKycCard && (
         <CardHorizontal
           rightImgSrc={kycData.imgSrc}
@@ -40,17 +49,20 @@ const MfLanding = ({
           actionLink={kycData.buttonTitle}
           className="mfl-kyc"
           dataAid={MF_LANDING.kycDataAid}
+          onClick={handleKyc(kycData.eventStatus)}
         />
       )}
       <InvestmentOptions
         titleDataAid={MF_LANDING.investmentOptions.dataAid}
         title={MF_LANDING.investmentOptions.title}
         productList={investmentOptions}
+        onClick={handleCardClick}
       />
       <ExploreCategories
         titleDataAid={MF_LANDING.exploreCategories.dataAid}
         title={MF_LANDING.exploreCategories.title}
         categories={exploreCategories}
+        onClick={handleExploreCategories}
       />
       <TrustIcon
         dataAid="1"

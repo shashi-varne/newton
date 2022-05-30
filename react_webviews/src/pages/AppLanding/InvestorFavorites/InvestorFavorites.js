@@ -5,7 +5,7 @@ import { INVESTOR_FAVORITES } from "businesslogic/strings/webappLanding";
 
 import "./InvestorFavorites.scss";
 
-const InvestorFavorites = ({ investmentOptions }) => {
+const InvestorFavorites = ({ investmentOptions, handleCardClick }) => {
   return (
     <Container
       noPadding={true}
@@ -20,7 +20,10 @@ const InvestorFavorites = ({ investmentOptions }) => {
         showCloseIcon: true,
       }}
     >
-      <InvestmentOptions productList={investmentOptions} />
+      <InvestmentOptions
+        productList={investmentOptions}
+        onClick={handleCardClick}
+      />
     </Container>
   );
 };

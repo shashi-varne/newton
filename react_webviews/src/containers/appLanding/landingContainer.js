@@ -102,7 +102,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     }
 
     if (data.cardClick) {
-      eventObj.properties.card_click = data.cardClick?.toLowerCase();
+      eventObj.properties.card_click = data.cardClick;
     }
 
     if (data.menuName) {
