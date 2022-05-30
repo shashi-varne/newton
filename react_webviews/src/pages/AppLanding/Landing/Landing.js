@@ -1,4 +1,5 @@
 import React from "react";
+import BottomSheet from "../../../designSystem/organisms/BottomSheet";
 import Container from "../../../designSystem/organisms/ContainerWrapper";
 import OnboardingCarousels from "./OnboardingCarousels";
 import Button from "../../../designSystem/atoms/Button";
@@ -78,6 +79,9 @@ const MainLanding = ({
   manageInvestments,
   showLoader,
   portfolioOverViewData,
+  closeReferral,
+  referralData = {},
+  openReferral,
 }) => {
   return (
     <>
@@ -150,6 +154,16 @@ const MainLanding = ({
         className="lmw-trust-icon"
       />
       <Partnership className="lmw-partnership" />
+      <BottomSheet
+        isOpen={openReferral}
+        onClose={closeReferral}
+        title={referralData.title}
+        imageTitleSrc={referralData.image}
+        subtitle={referralData.subtitle}
+        primaryBtnTitle={referralData.primaryButtonTitle}
+        onPrimaryClick={closeReferral}
+        dataAid={referralData.dataAid}
+      />
     </>
   );
 };

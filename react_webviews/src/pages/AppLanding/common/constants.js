@@ -278,3 +278,20 @@ export const EXPLORE_CATEGORIES = [
     dataAid: "hybrid",
   },
 ];
+
+export const REFERRAL_DATA = {
+  success: {
+    title: "Sucessful",
+    subtitle: "You have applied referral code successfully",
+    primaryButtonTitle: "OKAY",
+    dataAid: "referralSuccessful",
+    image: require(`assets/check_circled.svg`)
+  },
+  failed: {
+    title: "Entered incorrect code	",
+    subtitle: "You have entered an incorrect referral code",
+    primaryButtonTitle: "OKAY",
+    dataAid: "referralError",
+    image: require(`assets/caution.svg`),
+  },
+};

@@ -10,6 +10,7 @@ import {
   MARKETING_BANNERS,
   ONBOARDING_CAROUSALS,
   PLATFORM_MOTIVATORS,
+  REFERRAL_DATA,
 } from "../../pages/AppLanding/common/constants";
 
 const screen = "LANDING";
@@ -18,11 +19,12 @@ const portfolioOverViewData = {
   investedValue: "₹3.5Cr",
   profitOrLoss: "+ ₹1.2Cr",
   isProfit: true,
-}
+};
 const landingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const [tabValue, setTabValue] = useState(0);
   const [showCarousals, setShowCarousals] = useState(true);
+  const [openReferral, setOpenReferral] = useState(false);
   const kycData = KYC_CARD_STATUS_MAPPER.submitted;
 
   const handleCarousels = (isClose) => () => {
@@ -34,6 +36,10 @@ const landingContainer = (WrappedComponent) => (props) => {
       return;
     }
     setTabValue(value);
+  };
+
+  const closeReferral = () => {
+    setOpenReferral(false);
   };
 
   return (
@@ -60,6 +66,9 @@ const landingContainer = (WrappedComponent) => (props) => {
       showSetupEasySip={true}
       showKycCard={true}
       showLoader={false}
+      referralData={REFERRAL_DATA.failed}
+      openReferral={openReferral}
+      closeReferral={closeReferral}
     />
   );
 };
