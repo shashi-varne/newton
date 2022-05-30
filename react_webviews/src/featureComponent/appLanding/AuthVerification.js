@@ -27,6 +27,7 @@ const AuthVerification = ({
           color="foundationColors.content.secondary"
           className="flex-between-center"
           dataAid="point1"
+          component="div"
         >
           <div variant="body2">
             {authData.authType}: {authData.authValue}{" "}

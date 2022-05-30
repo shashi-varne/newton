@@ -21,7 +21,7 @@ import Campaign from "../../../featureComponent/appLanding/Campaign";
 import PremiumOnboarding from "../../../featureComponent/appLanding/PremiumOnboarding";
 import { SwiperSlide } from "swiper/react";
 import { Skeleton, Stack } from "@mui/material";
-import { BOTTOMSHEET_KEYS } from "../common/constants";
+import { BOTTOMSHEET_KEYS } from "businesslogic/constants/webAppLanding";
 
 import "./Landing.scss";
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { INVESTER_FAVOURITES } from "../../pages/AppLanding/common/constants";
+import { INVESTER_FAVOURITES } from "businesslogic/constants/webAppLanding";
 import InvestorFavorites from "../../pages/AppLanding/InvestorFavorites";
 import { navigate as navigateFunc } from "../../utils/functions";
 

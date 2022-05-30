@@ -22,6 +22,7 @@ const PremiumOnboarding = ({ isOpen, onClose, data, onClick }) => {
           color="foundationColors.content.secondary"
           className="flex-between-center"
           dataAid="point1"
+          component="div"
         >
           <div variant="body2">Instant investment</div>
           <div>|</div>
