@@ -4,7 +4,7 @@ import CardVertical from "../../designSystem/molecules/CardVertical";
 import CustomSwiper from "../../designSystem/molecules/CustomSwiper";
 import { SwiperSlide } from "swiper/react";
 
-const ExploreCategories = ({ categories = [], title, titleDataAid }) => {
+const ExploreCategories = ({ categories = [], title, titleDataAid, onClick }) => {
   return (
     <div className="al-explore-categories">
       <Typography
@@ -28,6 +28,7 @@ const ExploreCategories = ({ categories = [], title, titleDataAid }) => {
               {...data}
               imgSrc={require(`assets/${data.icon}`)}
               className="al-ec-card"
+              onClick={onClick(data)}
             />
           </SwiperSlide>
         ))}

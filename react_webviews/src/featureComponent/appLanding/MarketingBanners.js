@@ -1,9 +1,9 @@
 import React from "react";
 import CustomSwiper from "../../designSystem/molecules/CustomSwiper";
-import Icon from "../../common/ui/Icon";
+import Icon from "../../designSystem/atoms/Icon";
 import { SwiperSlide } from "swiper/react";
 
-const MarketingBanners = ({ banners = [] }) => {
+const MarketingBanners = ({ banners = [], onClick }) => {
   return (
     <div className="al-marketing-banners">
       <CustomSwiper
@@ -19,6 +19,7 @@ const MarketingBanners = ({ banners = [] }) => {
               className="al-mb-icon"
               src={require(`assets/${data.icon}`)}
               dataAid={`banner${idx + 1}`}
+              onClick={onClick(data)}
             />
           </SwiperSlide>
         ))}

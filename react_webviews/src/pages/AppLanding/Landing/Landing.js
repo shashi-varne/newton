@@ -101,6 +101,13 @@ const MainLanding = ({
   onCampaignSecondaryClick,
   premiumData,
   handlePremiumBottomsheet,
+  handleKyc,
+  handleCardClick,
+  handleExploreCategories,
+  handleEasySip,
+  handleReferral,
+  handleManageInvestments,
+  handleMarketingBanners,
 }) => {
   return (
     <>
@@ -113,7 +120,12 @@ const MainLanding = ({
           portfolioOverViewData={portfolioOverViewData}
         />
       )}
-      {showMarketingBanners && <MarketingBanners banners={marketingBanners} />}
+      {showMarketingBanners && (
+        <MarketingBanners
+          banners={marketingBanners}
+          onClick={handleMarketingBanners}
+        />
+      )}
       {showSetupEasySip && (
         <WrapperBox elevation={1} className="lmw-setup-easysip">
           <InfoCard
@@ -122,6 +134,7 @@ const MainLanding = ({
             title={easySipData.title}
             subtitle={easySipData.subtitle}
             dataAid={easySipData.dataAid}
+            onClick={handleEasySip}
           />
         </WrapperBox>
       )}
@@ -141,22 +154,28 @@ const MainLanding = ({
           }}
           dataAid={LANDING.kycDataAid}
           titleColor="foundationColors.content.primary"
+          onClick={handleKyc(kycData.eventStatus)}
         />
       )}
       <InvestmentOptions
         titleDataAid={LANDING.investmentOptions.dataAid}
         title={LANDING.investmentOptions.title}
         productList={investmentOptions}
+        onClick={handleCardClick}
       />
       {showExploreCategories && (
         <ExploreCategories
           categories={exploreCategories}
           titleDataAid={LANDING.exploreCategories.dataAid}
           title={LANDING.exploreCategories.title}
+          onClick={handleExploreCategories}
         />
       )}
-      <ManageInvestments manageInvestments={manageInvestments} />
-      {showApplyReferral && <ApplyReferral />}
+      <ManageInvestments
+        manageInvestments={manageInvestments}
+        onClick={handleManageInvestments}
+      />
+      {showApplyReferral && <ApplyReferral onClick={handleReferral} />}
       {showShareReferral && (
         <WrapperBox elevation={1} className="lmw-share-code">
           <CardHorizontal
@@ -164,6 +183,7 @@ const MainLanding = ({
             title={shareReferralData.title}
             subtitle={shareReferralData.subtitle}
             rightImgSrc={require(`assets/${shareReferralData.rightIcon}`)}
+            onClick={handleReferral}
           />
         </WrapperBox>
       )}
@@ -238,7 +258,7 @@ const PlatformMotivators = ({ options }) => {
   );
 };
 
-const ManageInvestments = ({ manageInvestments = [] }) => {
+const ManageInvestments = ({ manageInvestments = [], onClick }) => {
   return (
     <div className="lmw-manage-investments">
       <Typography
@@ -260,6 +280,7 @@ const ManageInvestments = ({ manageInvestments = [] }) => {
               width: "32px",
               height: "32px",
             }}
+            onClick={onClick(data)}
           />
         ))}
       </Stack>

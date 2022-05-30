@@ -14,6 +14,7 @@ import {
   AUTH_VERIFICATION_DATA,
   PREMIUM_ONBORDING_MAPPER,
 } from "businesslogic/constants/webappLanding";
+import { nativeCallback } from "../../utils/native_callback";
 
 const screen = "LANDING";
 const portfolioOverViewData = {
@@ -54,12 +55,21 @@ const landingContainer = (WrappedComponent) => (props) => {
 
   const handleCarousels = (isClose) => () => {
     const value = tabValue + 1;
+    const userAction = isClose ? "close" : "next";
+    const screenName = ONBOARDING_CAROUSALS[tabValue].title || "";
+    const data = {
+      screenName,
+      eventName: "info_carousel",
+    };
     if (value >= ONBOARDING_CAROUSALS.length) {
       if (isClose) {
+        sendEvents(userAction, data);
         setShowCarousals(false);
       }
       return;
     }
+
+    sendEvents(userAction, data);
     setTabValue(value);
   };
 
@@ -72,6 +82,86 @@ const landingContainer = (WrappedComponent) => (props) => {
 
   const closeBottomsheet = (key) => () => {
     handleBottomsheets({ [key]: false });
+  };
+
+  const sendEvents = (userAction, data = {}) => {
+    let eventObj = {
+      event_name: data.eventName || "home_screen",
+      properties: {
+        user_action: userAction || "",
+        primary_category: data.primaryCategory || "generic type",
+        channel: "",
+        user_application_status: "",
+        user_investment_status: "",
+        user_kyc_status: "",
+      },
+    };
+
+    if (data.screenName) {
+      eventObj.properties.screen_name = data.screenName?.toLowerCase();
+    }
+
+    if (data.cardClick) {
+      eventObj.properties.card_click = data.cardClick?.toLowerCase();
+    }
+
+    if (data.menuName) {
+      eventObj.properties.menu_name = data.menuName?.toLowerCase();
+    }
+
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
+  const handleCardClick = (data) => () => {
+    sendEvents("next", {
+      primaryCategory: "product item",
+      cardClick: data.eventStatus,
+    });
+  };
+
+  const handleExploreCategories = (data) => () => {
+    sendEvents("next", {
+      primaryCategory: "category item",
+      cardClick: data.title?.toLowerCase(),
+    });
+  };
+
+  const handleKyc = (cardClick) => () => {
+    sendEvents("next", {
+      primaryCategory: "kyc info",
+      cardClick,
+    });
+  };
+
+  const handleEasySip = () => {
+    sendEvents("next", {
+      cardClick: "setup easysip",
+    });
+  };
+
+  const handleReferral = () => {
+    sendEvents("next", {
+      cardClick: "refer clicked",
+    });
+  };
+
+  const handleManageInvestments = (data) => () => {
+    sendEvents("next", {
+      menuName: data.title?.toLowerCase(),
+      eventName: "bottom_menu_click",
+    });
+  };
+
+  const handleMarketingBanners = (data) => () => {
+    const cardClick = data.eventStatus || data.id;
+    sendEvents("next", {
+      primaryCategory: "marketing banner carousel",
+      cardClick,
+    });
   };
 
   return (
@@ -100,10 +190,17 @@ const landingContainer = (WrappedComponent) => (props) => {
       referralData={REFERRAL_DATA.success}
       kycBottomsheetData={kycBottomsheetData}
       bottomsheetStates={bottomsheetStates}
-      closeBottomsheet={closeBottomsheet}
       authData={AUTH_VERIFICATION_DATA.accountExists}
       campaignData={campaignData}
       premiumData={premiumData}
+      closeBottomsheet={closeBottomsheet}
+      handleKyc={handleKyc}
+      handleCardClick={handleCardClick}
+      handleExploreCategories={handleExploreCategories}
+      handleEasySip={handleEasySip}
+      handleReferral={handleReferral}
+      handleManageInvestments={handleManageInvestments}
+      handleMarketingBanners={handleMarketingBanners}
     />
   );
 };
