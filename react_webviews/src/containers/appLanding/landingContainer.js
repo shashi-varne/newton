@@ -23,20 +23,28 @@ const portfolioOverViewData = {
   isProfit: true,
 };
 
+const campaignData = {
+  title: "Setup easySIP",
+  imageSrc:
+    "https://eqnom-dot-plutus-staging.appspot.com/static/img/ic_sip_mandate_attention_fisdom.png",
+  subtitle:
+    "Never miss your monthly SIP payments. Setup a secure easySIP in just 2 minutes.",
+  primaryButtonTitle: "continue",
+};
+
 const DEFAULT_BOTTOMSHEETS_DATA = {
   openKyc: false,
   openReferral: false,
-  openAuthVerification: true,
+  openAuthVerification: false,
   openAccountAlreadyExists: false,
   openPremiumBottomsheet: false,
-  openCampaign: false,
+  openCampaign: true,
 };
+
 const landingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const [tabValue, setTabValue] = useState(0);
   const [showCarousals, setShowCarousals] = useState(true);
-  const [openReferral, setOpenReferral] = useState(false);
-  const [openKyc, setOpenkyc] = useState(false);
   const [bottomsheetStates, setBottomsheetStates] = useState(
     DEFAULT_BOTTOMSHEETS_DATA
   );
@@ -52,10 +60,6 @@ const landingContainer = (WrappedComponent) => (props) => {
       return;
     }
     setTabValue(value);
-  };
-
-  const closeReferral = () => {
-    setOpenReferral(false);
   };
 
   const handleBottomsheets = (data) => {
@@ -94,13 +98,11 @@ const landingContainer = (WrappedComponent) => (props) => {
       showKycCard={true}
       showLoader={false}
       referralData={REFERRAL_DATA.success}
-      openReferral={openReferral}
-      closeReferral={closeReferral}
       kycBottomsheetData={kycBottomsheetData}
-      openKyc={openKyc}
       bottomsheetStates={bottomsheetStates}
       closeBottomsheet={closeBottomsheet}
       authData={AUTH_VERIFICATION_DATA.accountExists}
+      campaignData={campaignData}
     />
   );
 };

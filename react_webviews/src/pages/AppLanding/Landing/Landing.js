@@ -22,6 +22,7 @@ import { BOTTOMSHEET_KEYS } from "../common/constants";
 
 import "./Landing.scss";
 import AuthVerification from "../../../featureComponent/appLanding/AuthVerification";
+import Campaign from "../../../featureComponent/appLanding/Campaign";
 
 const Landing = (props) => {
   const {
@@ -89,7 +90,10 @@ const MainLanding = ({
   closeBottomsheet,
   handleKycSecondaryClick,
   handleAuthEdit,
-  authData
+  authData,
+  campaignData,
+  onCampaignPrimaryClick,
+  onCampaignSecondaryClick,
 }) => {
   return (
     <>
@@ -191,6 +195,13 @@ const MainLanding = ({
         )}
         handleAuthEdit={handleAuthEdit}
         authData={authData}
+      />
+      <Campaign
+        isOpen={bottomsheetStates.openCampaign}
+        onClose={closeBottomsheet(BOTTOMSHEET_KEYS.openCampaign)}
+        onPrimaryClick={onCampaignPrimaryClick}
+        onSecondaryClick={onCampaignSecondaryClick}
+        campaignData={campaignData}
       />
     </>
   );
