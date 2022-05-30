@@ -76,7 +76,8 @@ const SipPaymentCallback = (props) => {
               obj.campaign.name === "enach_mandate_campaign" ||
               obj.campaign.name === "indb_mandate_campaign" ||
               obj.campaign.name === "ucomb_mandate_campaign" ||
-              obj.campaign.name === "tmb_mandate_campaign"
+              obj.campaign.name === "tmb_mandate_campaign" ||
+              obj.campaign.name === "partner_auto_debit_campaign"
             );
           }) || {};
       }
@@ -111,8 +112,9 @@ const SipPaymentCallback = (props) => {
             (campaign.campaign.name === "auto_debit_campaign" ||
               campaign.campaign.name === "enach_mandate_campaign" ||
               campaign.campaign.name === "indb_mandate_campaign" ||
-              campaign.campaign.name === "ucomb_mandate_campaign"||
-              campaign.campaign.name === "tmb_mandate_campaign") &&
+              campaign.campaign.name === "ucomb_mandate_campaign" ||
+              campaign.campaign.name === "tmb_mandate_campaign" ||
+              campaign.campaign.name === "partner_auto_debit_campaign") &&
             target.section === "in_flow"
           ) {
             setIsApiRunning("page");
@@ -125,7 +127,8 @@ const SipPaymentCallback = (props) => {
             campaign.campaign.name !== "enach_mandate_campaign" &&
             campaign.campaign.name !== "indb_mandate_campaign" &&
             campaign.campaign.name !== "ucomb_mandate_campaign" &&
-            campaign.campaign.name !== "tmb_mandate_campaign"
+            campaign.campaign.name !== "tmb_mandate_campaign" &&
+            campaign.campaign.name !== "partner_auto_debit_campaign"
           ) {
             setIsApiRunning("page");
             let url = campaign.notification_visual_data.target[0].url;
