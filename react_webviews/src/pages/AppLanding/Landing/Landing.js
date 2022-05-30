@@ -22,9 +22,14 @@ import PremiumOnboarding from "../../../featureComponent/appLanding/PremiumOnboa
 import { SwiperSlide } from "swiper/react";
 import { Skeleton, Stack } from "@mui/material";
 import { BOTTOMSHEET_KEYS } from "businesslogic/constants/webappLanding";
+import { LANDING } from "businesslogic/strings/webappLanding";
 
 import "./Landing.scss";
 
+const easySipData = LANDING.easySipData;
+const shareReferralData = LANDING.shareReferralData;
+const applyReferralData = LANDING.applyReferralData;
+const portfolioData = LANDING.portfolioData;
 const Landing = (props) => {
   const {
     carousalsData,
@@ -42,10 +47,10 @@ const Landing = (props) => {
       className={`landing-main-wrapper ${
         showCarousals && `landing-onboarding-wrapper`
       }`}
-      dataAid={showCarousals ? "onboarding" : "sdkLandingPage"}
+      dataAid={showCarousals ? LANDING.onboardingDataAid : LANDING.dataAid}
       noHeader={showCarousals}
       headerProps={{
-        dataAid: "sdkLandingPage",
+        dataAid: LANDING.dataAid,
         showPartnerLogo: true,
       }}
     >
@@ -75,7 +80,6 @@ const MainLanding = ({
   showExploreCategories,
   showPortfolioOverview,
   kycData,
-  easySipData,
   marketingBanners,
   investmentOptions,
   platformMotivators,
@@ -113,8 +117,8 @@ const MainLanding = ({
       {showSetupEasySip && (
         <WrapperBox elevation={1} className="lmw-setup-easysip">
           <InfoCard
-            imgSrc={require(`assets/easy_sip.svg`)}
-            rightImgSrc={require(`assets/fisdom/right_arrow.svg`)}
+            imgSrc={require(`assets/${easySipData.icon}`)}
+            rightImgSrc={require(`assets/fisdom/${easySipData.rightIcon}`)}
             title={easySipData.title}
             subtitle={easySipData.subtitle}
             dataAid={easySipData.dataAid}
@@ -135,20 +139,20 @@ const MainLanding = ({
           sx={{
             background: "white !important",
           }}
-          dataAid="kyc"
+          dataAid={LANDING.kycDataAid}
           titleColor="foundationColors.content.primary"
         />
       )}
       <InvestmentOptions
-        titleDataAid="moreOptions"
-        title="Get started"
+        titleDataAid={LANDING.investmentOptions.dataAid}
+        title={LANDING.investmentOptions.title}
         productList={investmentOptions}
       />
       {showExploreCategories && (
         <ExploreCategories
           categories={exploreCategories}
-          title="Explore by categories"
-          titleDataAid="exploreCategories"
+          titleDataAid={LANDING.exploreCategories.dataAid}
+          title={LANDING.exploreCategories.title}
         />
       )}
       <ManageInvestments manageInvestments={manageInvestments} />
@@ -156,10 +160,10 @@ const MainLanding = ({
       {showShareReferral && (
         <WrapperBox elevation={1} className="lmw-share-code">
           <CardHorizontal
-            dataAid="referEarn"
-            title="Refer & earn"
-            subtitle="Invite as many friends as you can to earn unlimited cash"
-            rightImgSrc={require(`assets/share_refer.svg`)}
+            dataAid={shareReferralData.dataAid}
+            title={shareReferralData.title}
+            subtitle={shareReferralData.subtitle}
+            rightImgSrc={require(`assets/${shareReferralData.rightIcon}`)}
           />
         </WrapperBox>
       )}
@@ -238,12 +242,12 @@ const ManageInvestments = ({ manageInvestments = [] }) => {
   return (
     <div className="lmw-manage-investments">
       <Typography
-        dataAid="ManageInvestments"
+        dataAid={LANDING.manageInvestments.dataAid}
         variant="heading3"
         className="lmw-mi-title"
         component="div"
       >
-        Manage your investments
+        {LANDING.manageInvestments.title}
       </Typography>
       <Stack flexDirection="row" gap="24px">
         {manageInvestments.map((data, idx) => (
@@ -265,13 +269,14 @@ const ManageInvestments = ({ manageInvestments = [] }) => {
 
 const ApplyReferral = () => {
   return (
-    <WrapperBox
-      className="lmw-referral-code"
-      data-aid="referral_card"
-      elevation={1}
-    >
-      <Typography component="div" className="lmw-rc-title" variant="heading3">
-        Have a referral code?
+    <WrapperBox className="lmw-referral-code" elevation={1}>
+      <Typography
+        component="div"
+        dataAid={applyReferralData.titleDataAid}
+        className="lmw-rc-title"
+        variant="heading3"
+      >
+        {applyReferralData.title}
       </Typography>
       <Stack
         flexDirection="row"
@@ -279,8 +284,15 @@ const ApplyReferral = () => {
         gap="32px"
         justifyContent="space-between"
       >
-        <InputField dataAid={1} label="Enter referral code" />
-        <Button size="small" title="APPLY" />
+        <InputField
+          dataAid={applyReferralData.inputDataAid}
+          label={applyReferralData.inputLabel}
+        />
+        <Button
+          size="small"
+          title={applyReferralData.buttonTitle}
+          dataAid={applyReferralData.buttonDataAid}
+        />
       </Stack>
     </WrapperBox>
   );
@@ -289,8 +301,8 @@ const ApplyReferral = () => {
 const PortfolioOverview = ({ showLoader, portfolioOverViewData }) => {
   return (
     <WrapperBox className="lmw-portfolio-overview">
-      <Typography variant="heading3" dataAid="portfolioOverView">
-        Portfolio overview
+      <Typography variant="heading3" dataAid={portfolioData.titleDataAid}>
+        {portfolioData.title}
       </Typography>
       <Stack
         flexDirection="row"
@@ -299,32 +311,32 @@ const PortfolioOverview = ({ showLoader, portfolioOverViewData }) => {
         sx={{ pt: "16px" }}
       >
         <Tile
-          title="Current value"
-          titleDataAid="currentKey"
+          title={portfolioData.currentData.title}
+          titleDataAid={portfolioData.currentData.titleDataAid}
           value={portfolioOverViewData.currentValue}
           gap="8px"
           valueProps={{
             variant: "heading3",
-            dataAid: "currentValue",
+            dataAid: portfolioData.currentData.valueDataAid,
           }}
           showLoader={showLoader}
         />
         <Tile
-          title="Invested value"
-          titleDataAid="investedKey"
+          title={portfolioData.investedData.title}
+          titleDataAid={portfolioData.investedData.titleDataAid}
           value={portfolioOverViewData.investedValue}
           gap="8px"
           valueProps={{
             variant: "heading3",
-            dataAid: "investedValue",
+            dataAid: portfolioData.investedData.valueDataAid,
             textAlign: "right",
           }}
           showLoader={showLoader}
         />
       </Stack>
       <Tile
-        title="P&L:"
-        titleDataAid="p&LKey"
+        title={portfolioData.profitOrLossData.title}
+        titleDataAid={portfolioData.profitOrLossData.titleDataAid}
         value={portfolioOverViewData.profitOrLoss}
         flexDirection="row"
         gap="4px"
@@ -334,7 +346,7 @@ const PortfolioOverview = ({ showLoader, portfolioOverViewData }) => {
           color: portfolioOverViewData.isProfit
             ? "foundationColors.secondary.profitGreen.400"
             : "foundationColors.secondary.lossRed.400",
-          dataAid: "p&LValue",
+          dataAid: portfolioData.profitOrLossData.valueDataAid,
         }}
         showLoader={showLoader}
       />

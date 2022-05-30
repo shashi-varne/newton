@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Landing from "../../pages/AppLanding/Landing";
 import { navigate as navigateFunc } from "../../utils/functions";
 import {
-  EASY_SIP_DATA,
   EXPLORE_CATEGORIES,
   INVESTMENT_OPTIONS,
   KYC_BOTOMSHEET_STATUS_MAPPER,
@@ -84,7 +83,6 @@ const landingContainer = (WrappedComponent) => (props) => {
       showCarousals={showCarousals}
       platformMotivators={PLATFORM_MOTIVATORS}
       marketingBanners={MARKETING_BANNERS}
-      easySipData={EASY_SIP_DATA}
       kycData={kycData}
       investmentOptions={INVESTMENT_OPTIONS}
       exploreCategories={EXPLORE_CATEGORIES}

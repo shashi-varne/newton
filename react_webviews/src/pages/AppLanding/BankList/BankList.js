@@ -1,6 +1,7 @@
 import React from "react";
 import Container from "../../../designSystem/organisms/ContainerWrapper";
 import SelectionMode from "../../../designSystem/molecules/SelectionMode";
+import { BANK_LIST } from "businesslogic/strings/webappLanding";
 
 import "./BankList.scss";
 
@@ -8,18 +9,17 @@ const BankList = ({ bankList, selectedValue, handleChange, onClick }) => {
   return (
     <Container
       headerProps={{
-        headerTitle: "Select savings account",
-        subtitle:
-          "The selected account will be your primary account & will be used for investments & withdrawal",
-        dataAid: "selectAccount",
+        headerTitle: BANK_LIST.headerData.title,
+        subtitle: BANK_LIST.headerData.subtitle,
+        dataAid: BANK_LIST.headerData.dataAid,
         disableSeeMoreFeature: true,
         hideLeftIcon: true,
       }}
       className="bank-list-wrapper"
-      dataAid="selectBankAccount"
+      dataAid={BANK_LIST.dataAid}
       footer={{
         button1Props: {
-          title: "Continue",
+          title: BANK_LIST.buttonTitle,
           onClick,
         },
       }}

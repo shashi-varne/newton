@@ -6,6 +6,7 @@ import Partnership from "../../../featureComponent/appLanding/Partnership";
 import InvestmentOptions from "../../../featureComponent/appLanding/InvestmentOptions";
 import MarketingBanners from "../../../featureComponent/appLanding/MarketingBanners";
 import ExploreCategories from "../../../featureComponent/appLanding/ExploreCategories";
+import { MF_LANDING } from "businesslogic/strings/webappLanding";
 
 import "./MfLanding.scss";
 
@@ -22,11 +23,11 @@ const MfLanding = ({
       noPadding={true}
       noFooter={true}
       className="mf-landing-wrapper"
-      dataAid="mutualFunds"
+      dataAid={MF_LANDING.title.dataAid}
       headerProps={{
-        dataAid: "mutualFunds",
+        dataAid: MF_LANDING.title.value,
         rightIconSrc: require("assets/search_diy.svg"),
-        headerTitle: "Mutual Funds",
+        headerTitle: MF_LANDING.title.dataAid,
         hideInPageTitle: true,
       }}
     >
@@ -38,16 +39,17 @@ const MfLanding = ({
           description={kycData.subtitle}
           actionLink={kycData.buttonTitle}
           className="mfl-kyc"
+          dataAid={MF_LANDING.kycDataAid}
         />
       )}
       <InvestmentOptions
-        titleDataAid="InvestorFavourites"
-        title="Investors’ favourites"
+        titleDataAid={MF_LANDING.investmentOptions.dataAid}
+        title={MF_LANDING.investmentOptions.title}
         productList={investmentOptions}
       />
       <ExploreCategories
-        title="Explore by categories"
-        titleDataAid="exploreCategories"
+        titleDataAid={MF_LANDING.exploreCategories.dataAid}
+        title={MF_LANDING.exploreCategories.title}
         categories={exploreCategories}
       />
       <TrustIcon
