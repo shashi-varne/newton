@@ -13,6 +13,7 @@ import {
   PLATFORM_MOTIVATORS,
   REFERRAL_DATA,
   AUTH_VERIFICATION_DATA,
+  PREMIUM_ONBORDING_MAPPER,
 } from "../../pages/AppLanding/common/constants";
 
 const screen = "LANDING";
@@ -37,8 +38,8 @@ const DEFAULT_BOTTOMSHEETS_DATA = {
   openReferral: false,
   openAuthVerification: false,
   openAccountAlreadyExists: false,
-  openPremiumBottomsheet: false,
-  openCampaign: true,
+  openPremiumOnboarding: true,
+  openCampaign: false,
 };
 
 const landingContainer = (WrappedComponent) => (props) => {
@@ -50,6 +51,7 @@ const landingContainer = (WrappedComponent) => (props) => {
   );
   const kycData = KYC_CARD_STATUS_MAPPER.submitted;
   const kycBottomsheetData = KYC_BOTOMSHEET_STATUS_MAPPER.esign_ready;
+  const premiumData = PREMIUM_ONBORDING_MAPPER.incomplete;
 
   const handleCarousels = (isClose) => () => {
     const value = tabValue + 1;
@@ -103,6 +105,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       closeBottomsheet={closeBottomsheet}
       authData={AUTH_VERIFICATION_DATA.accountExists}
       campaignData={campaignData}
+      premiumData={premiumData}
     />
   );
 };

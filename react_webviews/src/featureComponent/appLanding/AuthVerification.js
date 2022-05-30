@@ -4,21 +4,20 @@ import BottomSheet from "../../designSystem/organisms/BottomSheet";
 import Button from "../../designSystem/atoms/Button";
 
 const AuthVerification = ({
-  openAuthVerification,
-  closeAuthVerification,
+  isOpen,
+  onClose,
   authData,
   handleEdit,
   onClick,
 }) => {
   return (
     <BottomSheet
-      isOpen={openAuthVerification}
-      onClose={closeAuthVerification}
+      isOpen={isOpen}
+      onClose={onClose}
       title={authData.title}
       imageSrc={require(`assets/${authData.icon}`)}
       subtitle={authData.subtitle}
       primaryBtnTitle={authData.primaryButtonTitle}
-      secondaryBtnTitle={authData.secondaryButtonTitle}
       onPrimaryClick={onClick}
       dataAid="verification"
     >

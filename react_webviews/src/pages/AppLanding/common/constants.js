@@ -418,3 +418,21 @@ export const AUTH_VERIFICATION_DATA = {
     pan: "CXIPP****M",
   },
 };
+
+export const PREMIUM_ONBORDING_MAPPER = {
+  ground_premium: {
+    title: `Premium Onboarding`,
+    subtitle: `Congratulations! You have been selected for premium onboarding. Fast track your investment journey.`,
+    primaryButtonTitle: "CONTINUE",
+    oneButton: true,
+    icon: "premium.svg",
+    instant: true,
+  },
+  incomplete: {
+    title: `Premium Onboarding`,
+    subtitle: `Fast track your investment with premium onboarding`,
+    primaryButtonTitle: "complete now",
+    secondaryButtonTitle: "Not now",
+    icon: "premium.svg",
+  },
+};

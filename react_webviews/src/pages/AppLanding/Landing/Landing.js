@@ -16,13 +16,14 @@ import PlatformMotivator from "../../../featureComponent/appLanding/PlatformMoti
 import InvestmentOptions from "../../../featureComponent/appLanding/InvestmentOptions";
 import MarketingBanners from "../../../featureComponent/appLanding/MarketingBanners";
 import ExploreCategories from "../../../featureComponent/appLanding/ExploreCategories";
+import AuthVerification from "../../../featureComponent/appLanding/AuthVerification";
+import Campaign from "../../../featureComponent/appLanding/Campaign";
+import PremiumOnboarding from "../../../featureComponent/appLanding/PremiumOnboarding";
 import { SwiperSlide } from "swiper/react";
 import { Skeleton, Stack } from "@mui/material";
 import { BOTTOMSHEET_KEYS } from "../common/constants";
 
 import "./Landing.scss";
-import AuthVerification from "../../../featureComponent/appLanding/AuthVerification";
-import Campaign from "../../../featureComponent/appLanding/Campaign";
 
 const Landing = (props) => {
   const {
@@ -94,6 +95,8 @@ const MainLanding = ({
   campaignData,
   onCampaignPrimaryClick,
   onCampaignSecondaryClick,
+  premiumData,
+  handlePremiumBottomsheet,
 }) => {
   return (
     <>
@@ -189,10 +192,8 @@ const MainLanding = ({
         dataAid="kyc"
       />
       <AuthVerification
-        openAuthVerification={bottomsheetStates.openAuthVerification}
-        closeAuthVerification={closeBottomsheet(
-          BOTTOMSHEET_KEYS.openAuthVerification
-        )}
+        isOpen={bottomsheetStates.openAuthVerification}
+        onClose={closeBottomsheet(BOTTOMSHEET_KEYS.openAuthVerification)}
         handleAuthEdit={handleAuthEdit}
         authData={authData}
       />
@@ -202,6 +203,12 @@ const MainLanding = ({
         onPrimaryClick={onCampaignPrimaryClick}
         onSecondaryClick={onCampaignSecondaryClick}
         campaignData={campaignData}
+      />
+      <PremiumOnboarding
+        isOpen={bottomsheetStates.openPremiumOnboarding}
+        onClose={closeBottomsheet(BOTTOMSHEET_KEYS.openPremiumOnboarding)}
+        onPrimaryClick={handlePremiumBottomsheet}
+        data={premiumData}
       />
     </>
   );
