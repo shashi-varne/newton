@@ -37,6 +37,8 @@ const NavigationHeader = ({
   hideMenuBar = false,
   dataAid,
   showPartnerLogo,
+  rightIconSrc2,
+  onRightIconClick2,
 }) => {
   const navHeaderWrapperRef = useRef();
   const subtitleRef = useRef();
@@ -121,6 +123,7 @@ const NavigationHeader = ({
         </div>
         <div className='nav-header-right'>
           {rightIconSrc && <Icon src={rightIconSrc} size='24px' onClick={onRightIconClick} dataAid="right" />}
+          {rightIconSrc2 && <Icon src={rightIconSrc2} size='24px' onClick={onRightIconClick2} dataAid="right2" />}
           {actionTextProps?.title && (
             <Button variant='link' title={actionTextProps?.title} {...actionTextProps} />
           )}
