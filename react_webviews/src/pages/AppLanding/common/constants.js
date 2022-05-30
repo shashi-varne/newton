@@ -155,7 +155,7 @@ export const INVESTMENT_OPTIONS = [
   },
   {
     icon: "ipo.svg",
-    title: "IPO, SGB, NCD & more",
+    title: "IPOs",
     subtitle: "Invest in primary market products",
     dataAid: "ipoSgbNcd",
   },
@@ -285,7 +285,7 @@ export const REFERRAL_DATA = {
     subtitle: "You have applied referral code successfully",
     primaryButtonTitle: "OKAY",
     dataAid: "referralSuccessful",
-    image: require(`assets/check_circled.svg`)
+    image: require(`assets/check_circled.svg`),
   },
   failed: {
     title: "Entered incorrect code	",
@@ -293,5 +293,89 @@ export const REFERRAL_DATA = {
     primaryButtonTitle: "OKAY",
     dataAid: "referralError",
     image: require(`assets/caution.svg`),
+  },
+};
+
+export const KYC_BOTOMSHEET_STATUS_MAPPER = {
+  init: {
+    title: "Are you investment ready",
+    subtitle:
+      "Complete KYC to invest in stocks, IPOs, F&O & primary market products",
+    primaryButtonTitle: "start kyc",
+    icon: "kyc_default.svg",
+  },
+  incomplete: {
+    title: "KYC pending",
+    subtitle:
+      "KYC is a mandatory process to invest in stocks, primary market products, F&O",
+    primaryButtonTitle: "Complete now",
+    icon: "kyc_complete_setup.svg",
+  },
+  submitted: {
+    title: "Verifying KYC",
+    subtitle:
+      "We’ll notify you once KYC verification is done. This may take up to 12 hours",
+    primaryButtonTitle: "Continue",
+    icon: "kyc_inprogress.svg",
+    oneButton: true,
+  },
+  rejected: {
+    title: "KYC rejected",
+    subtitle: "Tap UPDATE KYC to re-submit the correct documents",
+    primaryButtonTitle: "Update kyc",
+    icon: "kyc_rejected.svg",
+  },
+  complete_setup: {
+    title: "2 more steps to go!",
+    subtitle:
+      "Complete opening your Trading & Demat account to start investing in stocks, F&O & more",
+    primaryButtonTitle: "Continue with Account opening",
+    buttonTitle: "Continue with Account opening",
+    icon: "kyc_complete_setup.svg",
+    oneButton: true,
+  },
+  esign_ready: {
+    title: "Documents verified",
+    subtitle:
+      "Great, just one more step to go! Now complete eSign to get investment ready",
+    primaryButtonTitle: "complete esign",
+    icon: "kyc_esign.svg",
+    oneButton: true,
+  },
+  complete: {
+    title: "You're ready to invest",
+    subtitle:
+      "Start investing in your favourite stocks, IPOs, F&O, mutual funds & more",
+    primaryButtonTitle: "OKAY",
+    icon: "kyc_esign.svg",
+    oneButton: true,
+  },
+  mf_complete: {
+    title: "You're investment ready",
+    subtitle: "You can now invest in more than 5000+ mutual funds.",
+    primaryButtonTitle: "OKAY",
+    icon: "kyc_esign.svg",
+    oneButton: true,
+  },
+  verifying_trading_account: {
+    title: "Trading and Demat account set up in progress",
+    subtitle: "This could take up to 12 hours. We’ll notify you once done",
+    primaryButtonTitle: "Continue",
+    icon: "kyc_inprogress.svg",
+    oneButton: true,
+  },
+  fno_rejected: {
+    title: "Income proof rejected",
+    subtitle:
+      "F&O application was not processed due to wrong income proof. Please upload the correct document to proceed",
+    primaryButtonTitle: "update document",
+    secondaryButtonTitle: "later",
+    icon: "kyc_rejected.svg",
+  },
+  upgrade_incomplete: {
+    title: "Upgrade to trading and demat account",
+    subtitle: "Invest in India's top companies in just a few taps",
+    primaryButtonTitle: "upgrade now",
+    icon: "kyc_upgrade.svg",
   },
 };

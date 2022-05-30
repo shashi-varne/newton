@@ -82,6 +82,11 @@ const MainLanding = ({
   closeReferral,
   referralData = {},
   openReferral,
+  kycBottomsheetData = {},
+  closeKyc,
+  openKyc,
+  handleKycPrimaryClick,
+  handleKycSecondaryClick,
 }) => {
   return (
     <>
@@ -163,6 +168,18 @@ const MainLanding = ({
         primaryBtnTitle={referralData.primaryButtonTitle}
         onPrimaryClick={closeReferral}
         dataAid={referralData.dataAid}
+      />
+      <BottomSheet
+        isOpen={openKyc}
+        onClose={closeKyc}
+        title={kycBottomsheetData.title}
+        imageSrc={require(`assets/fisdom/${kycBottomsheetData.icon}`)}
+        subtitle={kycBottomsheetData.subtitle}
+        primaryBtnTitle={kycBottomsheetData.primaryButtonTitle}
+        secondaryBtnTitle={kycBottomsheetData.secondaryButtonTitle}
+        onPrimaryClick={handleKycPrimaryClick}
+        onSecondaryClick={handleKycSecondaryClick}
+        dataAid="kyc"
       />
     </>
   );
