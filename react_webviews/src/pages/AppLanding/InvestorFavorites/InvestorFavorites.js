@@ -5,7 +5,11 @@ import { INVESTOR_FAVORITES } from "businesslogic/strings/webappLanding";
 
 import "./InvestorFavorites.scss";
 
-const InvestorFavorites = ({ investmentOptions, handleCardClick }) => {
+const InvestorFavorites = ({
+  investmentOptions,
+  handleCardClick,
+  sendEvents,
+}) => {
   return (
     <Container
       noPadding={true}
@@ -19,6 +23,7 @@ const InvestorFavorites = ({ investmentOptions, handleCardClick }) => {
         hideInPageTitle: true,
         showCloseIcon: true,
       }}
+      eventData={sendEvents("just_set_events")}
     >
       <InvestmentOptions
         productList={investmentOptions}

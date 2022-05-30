@@ -72,6 +72,7 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
       exploreCategories={EXPLORE_CATEGORIES}
       showMarketingBanners={true}
       showKycCard={false}
+      sendEvents={sendEvents}
       handleKyc={handleKyc}
       handleCardClick={handleCardClick}
       handleExploreCategories={handleExploreCategories}

@@ -37,6 +37,7 @@ const Landing = (props) => {
     handleTabChange,
     showCarousals,
     handleClose,
+    sendEvents,
     ...restProps
   } = props;
 
@@ -53,6 +54,7 @@ const Landing = (props) => {
         dataAid: LANDING.dataAid,
         showPartnerLogo: true,
       }}
+      eventData={sendEvents("just_set_events")}
     >
       {showCarousals ? (
         <OnboardingCarousels

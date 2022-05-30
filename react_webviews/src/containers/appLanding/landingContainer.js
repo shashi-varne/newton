@@ -201,6 +201,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       handleReferral={handleReferral}
       handleManageInvestments={handleManageInvestments}
       handleMarketingBanners={handleMarketingBanners}
+      sendEvents={sendEvents}
     />
   );
 };

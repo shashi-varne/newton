@@ -21,6 +21,7 @@ const MfLanding = ({
   handleCardClick,
   handleExploreCategories,
   handleMarketingBanners,
+  sendEvents,
 }) => {
   return (
     <Container
@@ -34,6 +35,7 @@ const MfLanding = ({
         headerTitle: MF_LANDING.title.dataAid,
         hideInPageTitle: true,
       }}
+      eventData={sendEvents("just_set_events")}
     >
       {showMarketingBanners && (
         <MarketingBanners

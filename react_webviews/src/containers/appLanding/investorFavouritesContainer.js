@@ -8,7 +8,7 @@ const screen = "INVESTOR_FAVORITES";
 const investorFavoritesContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
 
-  const sendEvents = (userAction, cardClick) => {
+  const sendEvents = (userAction, cardClick = "") => {
     let eventObj = {
       event_name: "investing_options_screen",
       properties: {
@@ -37,6 +37,7 @@ const investorFavoritesContainer = (WrappedComponent) => (props) => {
     <WrappedComponent
       investmentOptions={INVESTER_FAVOURITES}
       handleCardClick={handleCardClick}
+      sendEvents={sendEvents}
     />
   );
 };
