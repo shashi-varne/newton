@@ -379,3 +379,42 @@ export const KYC_BOTOMSHEET_STATUS_MAPPER = {
     icon: "kyc_upgrade.svg",
   },
 };
+
+export const BOTTOMSHEET_KEYS = {
+  openKyc: "openKyc",
+  openCampaign: "openCampaign",
+  openReferral: "openReferral",
+  openAuthVerification: "openAuthVerification",
+  openAccountAlreadyExists: "openAccountAlreadyExists",
+  openPremiumBottomsheet: "openPremiumBottomsheet",
+};
+
+export const AUTH_VERIFICATION_DATA = {
+  icon: "account_already_exists.svg",
+  email: {
+    title: "Verify your email address",
+    subtitle: "Email verification is mandatory for investment as per SEBI",
+    primaryButtonTitle: "Continue",
+    authValue: "alek@yopmail.com",
+    dataAid: "emailAddress",
+  },
+  mobile: {
+    icon: "mobile_verification.svg",
+    title: "Verify your mobile number",
+    subtitle: "Mobile verification is mandatory for investment as per SEBI",
+    primaryButtonTitle: "Continue",
+    authValue: "9087217311",
+    dataAid: "mobileNumber",
+  },
+  accountExists: {
+    showAuthExists: true,
+    icon: "account_already_exists.svg",
+    title: "Account already exists!",
+    subtitle: "Mobile verification is mandatory for investment as per SEBI",
+    primaryButtonTitle: "Continue",
+    dataAid: "verification",
+    authValue: "9087217311",
+    authType: "Email",
+    pan: "CXIPP****M",
+  },
+};

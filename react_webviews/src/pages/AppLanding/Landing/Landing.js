@@ -18,8 +18,10 @@ import MarketingBanners from "../../../featureComponent/appLanding/MarketingBann
 import ExploreCategories from "../../../featureComponent/appLanding/ExploreCategories";
 import { SwiperSlide } from "swiper/react";
 import { Skeleton, Stack } from "@mui/material";
+import { BOTTOMSHEET_KEYS } from "../common/constants";
 
 import "./Landing.scss";
+import AuthVerification from "../../../featureComponent/appLanding/AuthVerification";
 
 const Landing = (props) => {
   const {
@@ -81,12 +83,13 @@ const MainLanding = ({
   portfolioOverViewData,
   closeReferral,
   referralData = {},
-  openReferral,
   kycBottomsheetData = {},
-  closeKyc,
-  openKyc,
   handleKycPrimaryClick,
+  bottomsheetStates,
+  closeBottomsheet,
   handleKycSecondaryClick,
+  handleAuthEdit,
+  authData
 }) => {
   return (
     <>
@@ -160,8 +163,8 @@ const MainLanding = ({
       />
       <Partnership className="lmw-partnership" />
       <BottomSheet
-        isOpen={openReferral}
-        onClose={closeReferral}
+        isOpen={bottomsheetStates.openReferral}
+        onClose={closeBottomsheet(BOTTOMSHEET_KEYS.openReferral)}
         title={referralData.title}
         imageTitleSrc={referralData.image}
         subtitle={referralData.subtitle}
@@ -170,8 +173,8 @@ const MainLanding = ({
         dataAid={referralData.dataAid}
       />
       <BottomSheet
-        isOpen={openKyc}
-        onClose={closeKyc}
+        isOpen={bottomsheetStates.openKyc}
+        onClose={closeBottomsheet(BOTTOMSHEET_KEYS.openKyc)}
         title={kycBottomsheetData.title}
         imageSrc={require(`assets/fisdom/${kycBottomsheetData.icon}`)}
         subtitle={kycBottomsheetData.subtitle}
@@ -180,6 +183,14 @@ const MainLanding = ({
         onPrimaryClick={handleKycPrimaryClick}
         onSecondaryClick={handleKycSecondaryClick}
         dataAid="kyc"
+      />
+      <AuthVerification
+        openAuthVerification={bottomsheetStates.openAuthVerification}
+        closeAuthVerification={closeBottomsheet(
+          BOTTOMSHEET_KEYS.openAuthVerification
+        )}
+        handleAuthEdit={handleAuthEdit}
+        authData={authData}
       />
     </>
   );
