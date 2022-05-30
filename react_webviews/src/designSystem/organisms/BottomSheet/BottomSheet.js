@@ -88,7 +88,7 @@ const BottomSheet = ({
             {...imageSrcProps}
           />
         )}
-        <Stack direction='row' alignItems='center' spacing={1}>
+        <Stack direction='row' alignItems='center' spacing={1} style={{marginTop:'0px'}}>
           {imageTitleSrc && (
             <Icon
               size='16px'
