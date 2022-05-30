@@ -12,10 +12,10 @@ const ReferEarnSheet = ({
     <BottomSheet
       isOpen={isOpen}
       onClose={handleClose}
-      title={'Refer & earn'}
+      title={STRINGS.title}
       imageSrc={require(`assets/iv_refer_and_earn.svg`)}
-      subtitle={'Invite as many friends as you can and earn up to ₹2,00,000'}
-      primaryBtnTitle={'REFER NOW'}
+      subtitle={STRINGS.subtitle}
+      primaryBtnTitle={STRINGS.primaryButtonTitle}
       onPrimaryClick={onPrimaryClick}
       dataAid={STRINGS.dataAid}
     />
