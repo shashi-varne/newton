@@ -3,7 +3,7 @@ import BottomSheet from "../../designSystem/organisms/BottomSheet";
 import { BOTTOMSHEETS_CONTENT } from "businesslogic/strings/referAndEarn";
 
 const STRINGS = BOTTOMSHEETS_CONTENT.referAndEarnSheet;
-const ReviewNominee = ({
+const ReferEarnSheet = ({
   isOpen, 
   handleClose,
   onPrimaryClick,
@@ -22,4 +22,4 @@ const ReviewNominee = ({
   );
 };
 
-export default ReviewNominee;
+export default ReferEarnSheet;
