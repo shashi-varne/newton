@@ -34,10 +34,10 @@ const Landing = (props) => {
   const {
     carousalsData,
     tabValue,
-    handleBack,
     showCarousals,
-    handleClose,
-    handleNext,
+    handleCarousels,
+    handleDiySearch,
+    handleNotification,
     sendEvents,
     ...restProps
   } = props;
@@ -54,6 +54,10 @@ const Landing = (props) => {
       headerProps={{
         dataAid: LANDING.dataAid,
         showPartnerLogo: true,
+        rightIconSrc: require("assets/notification_badge.svg"),
+        rightIconSrc2: require("assets/search_diy.svg"),
+        onRightIconClick: handleNotification,
+        onRightIconClick2: handleDiySearch
       }}
       eventData={sendEvents("just_set_events")}
     >
@@ -61,9 +65,9 @@ const Landing = (props) => {
         <OnboardingCarousels
           carousalsData={carousalsData}
           tabValue={tabValue}
-          handleBack={handleBack}
-          handleClose={handleClose}
-          handleNext={handleNext}
+          handleClose={handleCarousels(true, false)}
+          handleNext={handleCarousels(false, false)}
+          handleBack={handleCarousels(false, true)}
         />
       ) : (
         <MainLanding {...restProps} />

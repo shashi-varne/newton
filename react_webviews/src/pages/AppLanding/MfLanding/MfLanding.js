@@ -22,6 +22,7 @@ const MfLanding = ({
   handleExploreCategories,
   handleMarketingBanners,
   sendEvents,
+  onRightIconClick
 }) => {
   return (
     <Container
@@ -34,6 +35,7 @@ const MfLanding = ({
         rightIconSrc: require("assets/search_diy.svg"),
         headerTitle: MF_LANDING.title.dataAid,
         hideInPageTitle: true,
+        onRightIconClick
       }}
       eventData={sendEvents("just_set_events")}
     >

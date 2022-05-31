@@ -21,7 +21,7 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
       properties: {
         user_action: userAction || "",
         primary_category: data.primaryCategory || "generic type",
-        card_click: data.cardClick,
+        card_click: data.cardClick || "",
         channel: code,
         user_application_status: "",
         user_investment_status: "",
@@ -65,6 +65,12 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
     });
   };
 
+  const onRightIconClick = () => {
+    sendEvents("next", {
+      eventName: "diy_search_clicked",
+    });
+  };
+
   return (
     <WrappedComponent
       kycData={kycData}
@@ -78,6 +84,7 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
       handleCardClick={handleCardClick}
       handleExploreCategories={handleExploreCategories}
       handleMarketingBanners={handleMarketingBanners}
+      onRightIconClick={onRightIconClick}
     />
   );
 };

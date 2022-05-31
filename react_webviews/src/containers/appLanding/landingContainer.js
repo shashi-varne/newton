@@ -38,7 +38,7 @@ const DEFAULT_BOTTOMSHEETS_DATA = {
   openReferral: false,
   openAuthVerification: false,
   openAccountAlreadyExists: false,
-  openPremiumOnboarding: true,
+  openPremiumOnboarding: false,
   openCampaign: false,
 };
 
@@ -102,15 +102,12 @@ const landingContainer = (WrappedComponent) => (props) => {
     if (data.screenName) {
       eventObj.properties.screen_name = data.screenName?.toLowerCase();
     }
-
     if (data.cardClick) {
       eventObj.properties.card_click = data.cardClick;
     }
-
     if (data.menuName) {
       eventObj.properties.menu_name = data.menuName?.toLowerCase();
     }
-
     if (userAction === "just_set_events") {
       return eventObj;
     } else {
@@ -166,12 +163,23 @@ const landingContainer = (WrappedComponent) => (props) => {
     });
   };
 
+  const handleDiySearch = () => {
+    sendEvents("next", {
+      eventName: "diy_search_clicked",
+    });
+  };
+
+  const handleNotification = () => {
+    sendEvents("next", {
+      menuName: "notification",
+      eventName: "bottom_menu_click",
+    });
+  };
+
   return (
     <WrappedComponent
       tabValue={tabValue}
-      handleClose={handleCarousels(true, false)}
-      handleNext={handleCarousels(false, false)}
-      handleBack={handleCarousels(false, true)}
+      handleCarousels={handleCarousels}
       carousalsData={ONBOARDING_CAROUSALS}
       showCarousals={showCarousals}
       signfierKey="stocks"
@@ -206,6 +214,8 @@ const landingContainer = (WrappedComponent) => (props) => {
       handleManageInvestments={handleManageInvestments}
       handleMarketingBanners={handleMarketingBanners}
       sendEvents={sendEvents}
+      handleDiySearch={handleDiySearch}
+      handleNotification={handleNotification}
     />
   );
 };
