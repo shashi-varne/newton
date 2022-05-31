@@ -205,7 +205,7 @@ const MainLanding = ({
         </WrapperBox>
       )}
       <TrustIcon
-        dataAid="1"
+        dataAid="fisdom"
         variant="registration"
         className="lmw-trust-icon"
       />

@@ -11,7 +11,11 @@ const Partnership = ({ className, ...restProps }) => {
       <Typography variant="body4" component="div" dataAid="text">
         In partnership with
       </Typography>
-      <Icon src={require(`assets/${colorLogo}`)} dataAid={productName} />
+      <Icon
+        src={require(`assets/${colorLogo}`)}
+        dataAid={productName}
+        height="24px"
+      />
     </Box>
   );
 };
