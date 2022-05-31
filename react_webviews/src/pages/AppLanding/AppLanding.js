@@ -8,7 +8,6 @@ import mfLandingContainer from "../../containers/appLanding/mfLandingContainer";
 
 const AppLanding = (props) => {
   const { url } = props.match;
-  console.log("url ", url)
   return (
     <Switch>
       <Route exact path="/landing-new" component={landingContainer} />
