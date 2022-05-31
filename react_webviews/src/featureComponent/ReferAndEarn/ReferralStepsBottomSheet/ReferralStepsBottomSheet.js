@@ -56,15 +56,17 @@ const ReferralStepsBottomSheet = ({
           className="rs-btm-sheet-img"
           dataAid="top"
         />
-        <Typography
-          className="rs-btm-sheet-title"
-          variant="heading3"
-          color={"foundationColors.content.primary"}
-          component="div"
-          dataAid="title"
-        >
-          {title}
-        </Typography>
+        {!isEmpty(title) && (
+          <Typography
+            className="rs-btm-sheet-title"
+            variant="heading3"
+            color={"foundationColors.content.primary"}
+            component="div"
+            dataAid="title"
+          >
+            {title}
+          </Typography>
+        )}
         <Stack>
           {stepsData.map((item, index) => (
             <OrderStep

@@ -3,7 +3,7 @@ import { Stack } from "@mui/material";
 import Typography from "../../../designSystem/atoms/Typography";
 import Button from "../../../designSystem/atoms/Button";
 import "./ShareCodeComponent.scss";
-import { isEmpty, noop } from "lodash-es";
+import { noop } from "lodash-es";
 import Icon from "../../../designSystem/atoms/Icon";
 import ToastMessage from "../../../designSystem/atoms/ToastMessage";
 import { SHARE_COMPONENT } from "businesslogic/strings/referAndEarn";
@@ -76,7 +76,12 @@ const CopyCodeComponent = ({ refferalCode, onClickCopy, onClickMail }) => {
         alignItems="center"
         className="copy-code-container"
       >
-        <Typography variant="action">{refferalCode}</Typography>
+        <Typography
+          variant="actionText"
+          color="foundationColors.content.secondary"
+        >
+          {refferalCode}
+        </Typography>
         <Button
           title={STRINGS.copyCode}
           variant="link"
