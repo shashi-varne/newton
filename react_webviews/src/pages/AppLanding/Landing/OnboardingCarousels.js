@@ -13,7 +13,7 @@ const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 const OnboardingCarousels = ({
   tabValue,
-  handleTabChange,
+  handleBack,
   carousalsData = [],
   handleClose,
   handleNext,
@@ -40,11 +40,18 @@ const OnboardingCarousels = ({
       </Box>
       <AutoPlaySwipeableViews
         index={tabValue}
-        onChangeIndex={handleTabChange}
+        onChangeIndex={handleNext}
         interval={4000}
       >
         {carousalsData.map((el, idx) => {
-          return <Carousel key={idx} onClick={handleNext} {...el} />;
+          return (
+            <Carousel
+              key={idx}
+              onNext={handleNext}
+              onBack={handleBack}
+              {...el}
+            />
+          );
         })}
       </AutoPlaySwipeableViews>
     </div>
@@ -53,9 +60,13 @@ const OnboardingCarousels = ({
 
 export default OnboardingCarousels;
 
-const Carousel = ({ icon, iconDataAid, title, subtitle, onClick }) => {
+const Carousel = ({ icon, iconDataAid, title, subtitle, onNext, onBack }) => {
   return (
-    <div onClick={onClick}>
+    <div className="oc-container">
+      <div className="flex-between-center oc-overlay">
+        <div onClick={onBack} />
+        <div onClick={onNext} />
+      </div>
       <Box
         sx={{ backgroundColor: "foundationColors.supporting.grey" }}
         className="oc-icon-wrapper"

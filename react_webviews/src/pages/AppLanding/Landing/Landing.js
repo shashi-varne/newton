@@ -34,7 +34,7 @@ const Landing = (props) => {
   const {
     carousalsData,
     tabValue,
-    handleTabChange,
+    handleBack,
     showCarousals,
     handleClose,
     handleNext,
@@ -61,7 +61,7 @@ const Landing = (props) => {
         <OnboardingCarousels
           carousalsData={carousalsData}
           tabValue={tabValue}
-          handleTabChange={handleTabChange}
+          handleBack={handleBack}
           handleClose={handleClose}
           handleNext={handleNext}
         />

@@ -54,9 +54,9 @@ const landingContainer = (WrappedComponent) => (props) => {
   const kycBottomsheetData = KYC_BOTOMSHEET_STATUS_MAPPER.esign_ready;
   const premiumData = PREMIUM_ONBORDING_MAPPER.incomplete;
 
-  const handleCarousels = (isClose) => () => {
-    const value = tabValue + 1;
-    const userAction = isClose ? "close" : "next";
+  const handleCarousels = (isClose, isBack) => () => {
+    const value = isBack ? tabValue - 1 : tabValue + 1;
+    const userAction = isClose ? "close" : isBack ? "back" : "next";
     const screenName = ONBOARDING_CAROUSALS[tabValue].title || "";
     const data = {
       screenName,
@@ -66,6 +66,8 @@ const landingContainer = (WrappedComponent) => (props) => {
     if (value >= ONBOARDING_CAROUSALS.length) {
       sendEvents(userAction, data);
       setShowCarousals(false);
+      return;
+    } else if (value < 0) {
       return;
     }
 
@@ -167,9 +169,9 @@ const landingContainer = (WrappedComponent) => (props) => {
   return (
     <WrappedComponent
       tabValue={tabValue}
-      handleTabChange={handleCarousels(false)}
-      handleClose={handleCarousels(true)}
-      handleNext={handleCarousels(false, true)}
+      handleClose={handleCarousels(true, false)}
+      handleNext={handleCarousels(false, false)}
+      handleBack={handleCarousels(false, true)}
       carousalsData={ONBOARDING_CAROUSALS}
       showCarousals={showCarousals}
       signfierKey="stocks"
