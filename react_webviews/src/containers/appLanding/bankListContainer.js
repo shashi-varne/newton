@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import BankList from "../../pages/AppLanding/BankList";
-import { navigate as navigateFunc } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 
 const bankList = [
@@ -20,6 +20,7 @@ const screen = "BANK_LIST";
 const bankListContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const [selectedBank, setSelectedBank] = useState("");
+  const { code } = useMemo(getConfig, []);
 
   const handleChange = (event) => {
     const value = event.target.value || "";
@@ -32,7 +33,7 @@ const bankListContainer = (WrappedComponent) => (props) => {
       properties: {
         user_action: userAction || "",
         screen_name: "select savings account",
-        channel: "",
+        channel: code,
       },
     };
 

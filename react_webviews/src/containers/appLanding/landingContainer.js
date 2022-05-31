@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import Landing from "../../pages/AppLanding/Landing";
-import { navigate as navigateFunc } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import {
   EXPLORE_CATEGORIES,
   INVESTMENT_OPTIONS,
@@ -49,6 +49,7 @@ const landingContainer = (WrappedComponent) => (props) => {
   const [bottomsheetStates, setBottomsheetStates] = useState(
     DEFAULT_BOTTOMSHEETS_DATA
   );
+  const { code } = useMemo(getConfig, []);
   const kycData = KYC_CARD_STATUS_MAPPER.submitted;
   const kycBottomsheetData = KYC_BOTOMSHEET_STATUS_MAPPER.esign_ready;
   const premiumData = PREMIUM_ONBORDING_MAPPER.incomplete;
@@ -90,7 +91,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       properties: {
         user_action: userAction || "",
         primary_category: data.primaryCategory || "generic type",
-        channel: "",
+        channel: code,
         user_application_status: "",
         user_investment_status: "",
         user_kyc_status: "",

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   EXPLORE_CATEGORIES,
   KYC_CARD_STATUS_MAPPER,
@@ -6,12 +6,13 @@ import {
   MF_INVESTMENT_OPTIONS,
 } from "businesslogic/constants/webappLanding";
 import MfLanding from "../../pages/AppLanding/MfLanding";
-import { navigate as navigateFunc } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 
 const screen = "MF_LANDING";
 const mfLandingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
+  const { code } = useMemo(getConfig, []);
   const kycData = KYC_CARD_STATUS_MAPPER.rejected;
 
   const sendEvents = (userAction, data = {}) => {
@@ -21,7 +22,7 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
         user_action: userAction || "",
         primary_category: data.primaryCategory || "generic type",
         card_click: data.cardClick,
-        channel: "",
+        channel: code,
         user_application_status: "",
         user_investment_status: "",
         user_kyc_status: "",

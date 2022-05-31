@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { INVESTER_FAVOURITES } from "businesslogic/constants/webappLanding";
 import InvestorFavorites from "../../pages/AppLanding/InvestorFavorites";
-import { navigate as navigateFunc } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 
 const screen = "INVESTOR_FAVORITES";
 const investorFavoritesContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
+  const { code } = useMemo(getConfig, []);
 
   const sendEvents = (userAction, cardClick = "") => {
     let eventObj = {
@@ -15,7 +16,7 @@ const investorFavoritesContainer = (WrappedComponent) => (props) => {
         user_action: userAction || "",
         primary_category: "product item",
         card_click: cardClick,
-        channel: "",
+        channel: code,
         user_application_status: "",
         user_investment_status: "",
         user_kyc_status: "",
