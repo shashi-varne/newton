@@ -18,7 +18,7 @@ const MarketingBanners = ({ banners = [], onClick }) => {
             <Icon
               className="al-mb-icon"
               src={require(`assets/${data.icon}`)}
-              dataAid={`banner${idx + 1}`}
+              dataAid={`marketingBanner${idx + 1}`}
               onClick={onClick(data)}
             />
           </SwiperSlide>
