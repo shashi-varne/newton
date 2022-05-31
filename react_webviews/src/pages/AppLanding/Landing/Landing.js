@@ -230,7 +230,7 @@ const MainLanding = ({
         secondaryBtnTitle={kycBottomsheetData.secondaryButtonTitle}
         onPrimaryClick={handleKycPrimaryClick}
         onSecondaryClick={handleKycSecondaryClick}
-        dataAid="kyc"
+        dataAid={LANDING.kycDataAid}
       />
       <AuthVerification
         isOpen={bottomsheetStates.openAuthVerification}
