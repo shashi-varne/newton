@@ -62,11 +62,10 @@ const landingContainer = (WrappedComponent) => (props) => {
       screenName,
       eventName: "info_carousel",
     };
+
     if (value >= ONBOARDING_CAROUSALS.length) {
-      if (isClose) {
-        sendEvents(userAction, data);
-        setShowCarousals(false);
-      }
+      sendEvents(userAction, data);
+      setShowCarousals(false);
       return;
     }
 
@@ -170,8 +169,10 @@ const landingContainer = (WrappedComponent) => (props) => {
       tabValue={tabValue}
       handleTabChange={handleCarousels(false)}
       handleClose={handleCarousels(true)}
+      handleNext={handleCarousels(false, true)}
       carousalsData={ONBOARDING_CAROUSALS}
       showCarousals={showCarousals}
+      signfierKey="stocks"
       platformMotivators={PLATFORM_MOTIVATORS}
       marketingBanners={MARKETING_BANNERS}
       kycData={kycData}

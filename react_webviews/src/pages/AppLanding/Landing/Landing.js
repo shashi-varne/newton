@@ -37,6 +37,7 @@ const Landing = (props) => {
     handleTabChange,
     showCarousals,
     handleClose,
+    handleNext,
     sendEvents,
     ...restProps
   } = props;
@@ -62,6 +63,7 @@ const Landing = (props) => {
           tabValue={tabValue}
           handleTabChange={handleTabChange}
           handleClose={handleClose}
+          handleNext={handleNext}
         />
       ) : (
         <MainLanding {...restProps} />
@@ -81,6 +83,8 @@ const MainLanding = ({
   showSetupEasySip,
   showExploreCategories,
   showPortfolioOverview,
+  signfierKey,
+  showMarketingBannersAtBottom,
   kycData,
   marketingBanners,
   investmentOptions,
@@ -164,7 +168,14 @@ const MainLanding = ({
         title={LANDING.investmentOptions.title}
         productList={investmentOptions}
         onClick={handleCardClick}
+        signfierKey={signfierKey}
       />
+      {showMarketingBannersAtBottom && (
+        <MarketingBanners
+          banners={marketingBanners}
+          onClick={handleMarketingBanners}
+        />
+      )}
       {showExploreCategories && (
         <ExploreCategories
           categories={exploreCategories}

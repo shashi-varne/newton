@@ -12,13 +12,15 @@ import React from 'react';
 import Typography from '../../atoms/Typography';
 import PropTypes from 'prop-types';
 import Separator from '../../atoms/Separator';
-import './MenuItem.scss';
 import Icon from '../../atoms/Icon';
+import Lottie from "lottie-react";
+import './MenuItem.scss';
 
 const MenuItem = ({
   leftImgSrc,
   leftImgProps,
   rightImgSrc,
+  rightLottieSrc,
   rightImgProps,
   title,
   titleColor,
@@ -55,6 +57,16 @@ const MenuItem = ({
               size='24px'
               className='menu-item-right-img'
               dataAid='right'
+              {...rightImgProps}
+            />
+          )}
+          {rightLottieSrc && (
+            <Lottie
+              animationData={rightLottieSrc}
+              autoPlay
+              loop
+              data-aid="iv_right"
+              className="menu-item-right-img"
               {...rightImgProps}
             />
           )}

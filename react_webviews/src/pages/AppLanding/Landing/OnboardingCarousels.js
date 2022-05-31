@@ -16,6 +16,7 @@ const OnboardingCarousels = ({
   handleTabChange,
   carousalsData = [],
   handleClose,
+  handleNext,
 }) => {
   return (
     <div>
@@ -43,7 +44,7 @@ const OnboardingCarousels = ({
         interval={4000}
       >
         {carousalsData.map((el, idx) => {
-          return <Carousel key={idx} onClick={handleTabChange} {...el} />;
+          return <Carousel key={idx} onClick={handleNext} {...el} />;
         })}
       </AutoPlaySwipeableViews>
     </div>
