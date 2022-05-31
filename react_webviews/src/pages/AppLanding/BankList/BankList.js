@@ -5,7 +5,13 @@ import { BANK_LIST } from "businesslogic/strings/webappLanding";
 
 import "./BankList.scss";
 
-const BankList = ({ bankList, selectedValue, handleChange, onClick }) => {
+const BankList = ({
+  bankList,
+  selectedValue,
+  handleChange,
+  onClick,
+  sendEvents,
+}) => {
   return (
     <Container
       headerProps={{
@@ -23,6 +29,7 @@ const BankList = ({ bankList, selectedValue, handleChange, onClick }) => {
           onClick,
         },
       }}
+      eventsData={sendEvents("just_set_events")}
     >
       <SelectionMode
         variant="radio"
