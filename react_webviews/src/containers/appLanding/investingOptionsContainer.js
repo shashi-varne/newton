@@ -1,11 +1,11 @@
 import React, { useMemo } from "react";
-import { INVESTER_FAVOURITES } from "businesslogic/constants/webappLanding";
-import InvestorFavorites from "../../pages/AppLanding/InvestorFavorites";
+import { MF_INVEST_OPTIONS } from "businesslogic/constants/webappLanding";
+import InvestingOptions from "../../pages/AppLanding/InvestingOptions";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 
-const screen = "INVESTOR_FAVORITES";
-const investorFavoritesContainer = (WrappedComponent) => (props) => {
+const screen = "INVESTING_OPTIONS";
+const investingOptionsContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const { code } = useMemo(getConfig, []);
 
@@ -36,11 +36,11 @@ const investorFavoritesContainer = (WrappedComponent) => (props) => {
 
   return (
     <WrappedComponent
-      investmentOptions={INVESTER_FAVOURITES}
+      investmentOptions={MF_INVEST_OPTIONS}
       handleCardClick={handleCardClick}
       sendEvents={sendEvents}
     />
   );
 };
 
-export default investorFavoritesContainer(InvestorFavorites);
+export default investingOptionsContainer(InvestingOptions);

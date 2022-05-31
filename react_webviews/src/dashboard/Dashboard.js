@@ -52,10 +52,7 @@ import ThemeWrapper from "../theme/ThemeWrapper";
 import fundDetailsV2Container from "../containers/fundDetailsV2/fundDetailsV2Container";
 import mfOrderContainer from "../containers/mfOrder/mfOrderContainer";
 import Nominee from "../pages/Nominee";
-import landingContainer from "../containers/appLanding/landingContainer";
-import mfLandingContainer from "../containers/appLanding/mfLandingContainer";
-import bankListContainer from "../containers/appLanding/bankListContainer";
-import investorFavouritesContainer from "../containers/appLanding/investorFavouritesContainer";
+import AppLanding from "../pages/AppLanding";
 
 const Home = (props) => {
   const config = getConfig(); 
@@ -204,11 +201,8 @@ const Home = (props) => {
           <Route path={`${url}diyv2`} component={DIYV2} />
           <Route path={`${url}fund-details-v2`} component={fundDetailsV2Container} />
           <Route path={`${url}mf-orders`} component={mfOrderContainer} />
-          <Route path={`${url}landing-new`} component={landingContainer} />
-          <Route exact path={`${url}mf-landing-new`} component={mfLandingContainer} />
-          <Route path={`${url}bank-list`} component={bankListContainer} />
-          <Route path={`${url}mf-landing-new/view-all`} component={investorFavouritesContainer} />
           <Route path={`${url}nominee`} component={Nominee} />
+          <Route path={url} component={AppLanding} />
         </ThemeWrapper>
         <Route component={NotFound} />
       </Switch>

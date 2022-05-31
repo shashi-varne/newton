@@ -1,11 +1,11 @@
 import React from "react";
 import Container from "../../../designSystem/organisms/ContainerWrapper";
 import InvestmentOptions from "../../../featureComponent/appLanding/InvestmentOptions";
-import { INVESTOR_FAVORITES } from "businesslogic/strings/webappLanding";
+import { INVESTING_OPTIONS } from "businesslogic/strings/webappLanding";
 
-import "./InvestorFavorites.scss";
+import "./InvestingOptions.scss";
 
-const InvestorFavorites = ({
+const InvestingOptions = ({
   investmentOptions,
   handleCardClick,
   sendEvents,
@@ -15,11 +15,11 @@ const InvestorFavorites = ({
       noPadding={true}
       noFooter={true}
       className="investor-favourites-wrapper"
-      dataAid={INVESTOR_FAVORITES.dataAid}
+      dataAid={INVESTING_OPTIONS.dataAid}
       headerProps={{
-        dataAid: INVESTOR_FAVORITES.dataAid,
+        dataAid: INVESTING_OPTIONS.dataAid,
         rightIconSrc: require("assets/search_diy.svg"),
-        headerTitle: INVESTOR_FAVORITES.title,
+        headerTitle: INVESTING_OPTIONS.title,
         hideInPageTitle: true,
         showCloseIcon: true,
       }}
@@ -33,4 +33,4 @@ const InvestorFavorites = ({
   );
 };
 
-export default InvestorFavorites;
+export default InvestingOptions;
