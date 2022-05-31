@@ -123,7 +123,7 @@ export const buttonVariantsConfig = (colors={}, partnerConfig={}) => {
         minHeight: '48px',
         '&:hover': {
           color: colors?.action?.brand,
-          backgroundColor: colors?.action[300]
+          backgroundColor: colors?.primary[100]
         },
         '&.Mui-disabled': {
           backgroundColor: 'transparent',
