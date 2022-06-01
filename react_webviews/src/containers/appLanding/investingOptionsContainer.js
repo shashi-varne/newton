@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { MF_INVEST_OPTIONS } from "businesslogic/constants/webappLanding";
+import { getInvestCardsData } from "../../business/appLanding/helper";
 import InvestingOptions from "../../pages/AppLanding/InvestingOptions";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
@@ -7,8 +7,8 @@ import { nativeCallback } from "../../utils/native_callback";
 const screen = "INVESTING_OPTIONS";
 const investingOptionsContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
-  const { code } = useMemo(getConfig, []);
-
+  const { code, investingOptions } = useMemo(getConfig, []);
+  const investCardsData = getInvestCardsData(investingOptions);
   const sendEvents = (userAction, cardClick = "") => {
     let eventObj = {
       event_name: "investing_options_screen",
@@ -36,7 +36,7 @@ const investingOptionsContainer = (WrappedComponent) => (props) => {
 
   return (
     <WrappedComponent
-      investmentOptions={MF_INVEST_OPTIONS}
+      investmentOptions={investCardsData}
       handleCardClick={handleCardClick}
       sendEvents={sendEvents}
     />

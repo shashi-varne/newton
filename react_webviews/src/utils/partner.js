@@ -48,6 +48,7 @@ export const commonCardsConfig = {
     {
       image: "freedomplan.svg",
       id: "freedomplan",
+      eventStatus: "introducing freedom plan",
     },
     {
       image: "freedomplan.svg",

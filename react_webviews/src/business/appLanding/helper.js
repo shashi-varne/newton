@@ -1,4 +1,4 @@
-import { INVESTMENT_OPTIONS } from "../../constants/appLanding";
+import { INVESTMENT_OPTIONS } from "../../constants/webappLanding";
 import { getConfig, isTradingEnabled } from "../../utils/functions";
 import { getPartnerData } from "../../utils/partner";
 import { storageService } from "../../utils/validators";
@@ -6,8 +6,8 @@ import { isEmpty } from "lodash-es";
 
 export const getInvestCardsData = (
   investSections = [],
-  fallbackOptions,
-  signifier
+  signifier,
+  fallbackOptions
 ) => {
   const config = getConfig();
   let data = getEnabledFeaturesData(config, investSections, signifier);
@@ -75,7 +75,8 @@ export const getEnabledMarketingBanners = (banners) => {
 
 export const dateValidation = (endDate, startDate) => {
   const date = new Date();
-  const currentDate = date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear();
+  const currentDate =
+    date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear();
   if (!endDate && !startDate) return true;
   const startDateInMs = Date.parse(startDate);
   const endDateInMs = Date.parse(endDate);

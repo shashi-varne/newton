@@ -2,17 +2,21 @@ import React, { useMemo } from "react";
 import {
   EXPLORE_CATEGORIES,
   KYC_CARD_STATUS_MAPPER,
-  MARKETING_BANNERS,
-  MF_INVESTMENT_OPTIONS,
 } from "businesslogic/constants/webappLanding";
 import MfLanding from "../../pages/AppLanding/MfLanding";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
+import {
+  getEnabledMarketingBanners,
+  getInvestCardsData,
+} from "../../business/appLanding/helper";
 
 const screen = "MF_LANDING";
 const mfLandingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
-  const { code } = useMemo(getConfig, []);
+  const { code, mfOptions, landingMarketingBanners } = useMemo(getConfig, []);
+  const investCardsData = getInvestCardsData(mfOptions);
+  const marketingBanners = getEnabledMarketingBanners(landingMarketingBanners);
   const kycData = KYC_CARD_STATUS_MAPPER.rejected;
 
   const sendEvents = (userAction, data = {}) => {
@@ -74,8 +78,8 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
   return (
     <WrappedComponent
       kycData={kycData}
-      marketingBanners={MARKETING_BANNERS}
-      investmentOptions={MF_INVESTMENT_OPTIONS}
+      marketingBanners={marketingBanners}
+      investmentOptions={investCardsData}
       exploreCategories={EXPLORE_CATEGORIES}
       showMarketingBanners={true}
       showKycCard={false}

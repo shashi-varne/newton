@@ -9,7 +9,7 @@ import {
   REFERRAL_DATA,
   AUTH_VERIFICATION_DATA,
   PREMIUM_ONBORDING_MAPPER,
-} from "businesslogic/constants/webappLanding";
+} from "../../constants/webappLanding";
 import { nativeCallback } from "../../utils/native_callback";
 import { useDispatch } from "react-redux";
 import { fetchSummary } from "businesslogic/dataStore/reducers/app";
@@ -47,6 +47,8 @@ const DEFAULT_BOTTOMSHEETS_DATA = {
   openCampaign: false,
 };
 
+const signifierKey = "nps";
+
 const landingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const dispatch = useDispatch();
@@ -64,7 +66,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     platformMotivators,
     landingMarketingBanners,
   } = useMemo(getConfig, []);
-  const investCardsData = getInvestCardsData(investSections, mfOptions, "nps");
+  const investCardsData = getInvestCardsData(investSections, signifierKey, mfOptions);
   const marketingBanners = getEnabledMarketingBanners(landingMarketingBanners);
   const kycData = KYC_CARD_STATUS_MAPPER.submitted;
   const kycBottomsheetData = KYC_BOTOMSHEET_STATUS_MAPPER.esign_ready;
@@ -223,7 +225,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       handleCarousels={handleCarousels}
       carousalsData={onboardingCarousels}
       showCarousals={showCarousals}
-      signfierKey="nps"
+      signfierKey={signifierKey}
       platformMotivators={platformMotivators}
       marketingBanners={marketingBanners}
       kycData={kycData}
