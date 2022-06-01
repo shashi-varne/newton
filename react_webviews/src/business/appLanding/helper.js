@@ -16,9 +16,9 @@ export const getInvestCardsData = (
   }
   let { cardsData, signifierIndex } = data;
   if (signifierIndex !== -1) {
-    let cardData = cardsData[signifierIndex];
+    const selectedCardData = cardsData.find((el) => el.id === signifier);
     cardsData = cardsData.filter((el) => el.id !== signifier);
-    cardsData.unshift(cardData);
+    cardsData.unshift(selectedCardData);
   }
   return cardsData;
 };

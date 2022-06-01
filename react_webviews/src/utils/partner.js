@@ -200,7 +200,7 @@ export const partnerConfigs = {
     },
   },
   lvb: {
-    logo: "lvb.png",
+    logo: "lvb.svg",
     code: "lvb",
     email: "lvb@fisdom.com",
     message: getPartnerMessage("LVB Mobile"),
@@ -209,7 +209,7 @@ export const partnerConfigs = {
     },
   },
   svc: {
-    logo: "svc.png",
+    logo: "svc.svg",
     code: "svc",
     email: "svc@fisdom.com",
     styles: {
@@ -291,7 +291,7 @@ export const partnerConfigs = {
     },
   },
   tvscredit: {
-    logo: "tvs.png",
+    logo: "tvs.svg",
     code: "tvscredit",
     email: "tvscredit@fisdom.com",
     message: getPartnerMessage("Tvs Credit"),
@@ -315,7 +315,7 @@ export const partnerConfigs = {
     },
   },
   cub: {
-    logo: "cub.png",
+    logo: "cub.svg",
     code: "cub",
     email: "cub@fisdom.com",
     features: {
@@ -327,7 +327,7 @@ export const partnerConfigs = {
     },
   },
   fpg: {
-    logo: "text_investments.svg",
+    logo: "fpg.svg",
     code: "fpg",
     mobile: "1800-212-5997",
     email: "care.futuremoney@fisdom.com",
@@ -513,7 +513,7 @@ export const partnerConfigs = {
   },
   bom: {
     code: "bom",
-    logo: "bom.png",
+    logo: "bom.svg",
     styles: {
       primaryColor: "#378ECF",
     },
