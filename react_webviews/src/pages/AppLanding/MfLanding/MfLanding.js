@@ -33,7 +33,7 @@ const MfLanding = ({
       headerProps={{
         dataAid: MF_LANDING.title.value,
         rightIconSrc: require("assets/search_diy.svg"),
-        headerTitle: MF_LANDING.title.dataAid,
+        headerTitle: MF_LANDING.title.value,
         hideInPageTitle: true,
         onRightIconClick,
       }}

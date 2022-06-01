@@ -22,6 +22,8 @@ import {
   getInvestCardsData,
   handleMarketingBanners,
 } from "../../business/appLanding/helper";
+import { WEBAPP_LANDING_PATHNAME_MAPPER } from "../../constants/webappLanding";
+
 const screen = "LANDING";
 const portfolioOverViewData = {
   currentValue: "₹19.6Cr",
@@ -165,6 +167,8 @@ const landingContainer = (WrappedComponent) => (props) => {
       primaryCategory: "product item",
       cardClick: data.eventStatus,
     });
+    const pathname = WEBAPP_LANDING_PATHNAME_MAPPER[data.id];
+    navigate(pathname);
   };
 
   const handleExploreCategories = (data) => () => {
@@ -172,6 +176,8 @@ const landingContainer = (WrappedComponent) => (props) => {
       primaryCategory: "category item",
       cardClick: data.title?.toLowerCase(),
     });
+    const pathname = WEBAPP_LANDING_PATHNAME_MAPPER[data.id];
+    navigate(pathname);
   };
 
   const handleKyc = (cardClick) => () => {
@@ -198,6 +204,8 @@ const landingContainer = (WrappedComponent) => (props) => {
       menuName: data.title?.toLowerCase(),
       eventName: "bottom_menu_click",
     });
+    const pathname = WEBAPP_LANDING_PATHNAME_MAPPER[data.id];
+    navigate(pathname);
   };
 
   const onMarketingBannerClick = (data) => () => {
@@ -208,6 +216,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     sendEvents("next", {
       eventName: "diy_search_clicked",
     });
+    navigate(WEBAPP_LANDING_PATHNAME_MAPPER.diySearch);
   };
 
   const handleNotification = () => {
@@ -215,6 +224,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       menuName: "notification",
       eventName: "bottom_menu_click",
     });
+    navigate(WEBAPP_LANDING_PATHNAME_MAPPER.notification);
   };
 
   return (

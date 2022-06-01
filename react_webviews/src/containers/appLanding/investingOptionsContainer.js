@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import { getInvestCardsData } from "../../business/appLanding/helper";
+import { WEBAPP_LANDING_PATHNAME_MAPPER } from "../../constants/webappLanding";
 import InvestingOptions from "../../pages/AppLanding/InvestingOptions";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
@@ -32,6 +33,8 @@ const investingOptionsContainer = (WrappedComponent) => (props) => {
 
   const handleCardClick = (data) => () => {
     sendEvents("next", data.eventStatus);
+    const pathname = WEBAPP_LANDING_PATHNAME_MAPPER[data.id];
+    navigate(pathname);
   };
 
   return (

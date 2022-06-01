@@ -11,7 +11,16 @@ export const WEBAPP_LANDING_PATHNAME_MAPPER = {
   mf: "/invest",
   elss: "/invest/savetax",
   ipo: "/market-products",
-  freedomplan: "/freedom-plan"
+  freedomplan: "/freedom-plan",
+  myAccount: "/my-account",
+  help: "/help",
+  portfolio: "/reports",
+  equity: "/diyv2/Equity/landing",
+  debt: "/diyv2/Debt/landing",
+  hybrid: "/diyv2/Hybrid/landing",
+  diySearch: "/diyv2/invest/search",
+  notification: "/notification",
+  investingOptions: "/mf-landing/view-all"
 };
 
 export const KYC_CARD_STATUS_MAPPER = {
@@ -89,14 +98,17 @@ export const MANAGE_INVESTMENTS = [
   {
     icon: "portfolio.svg",
     title: "Portfolio",
+    id: "portfolio",
   },
   {
     icon: "account.svg",
     title: "Account",
+    id: "myAccount",
   },
   {
     icon: "help.svg",
     title: "Help",
+    id: "help",
   },
 ];
 
@@ -178,7 +190,7 @@ export const INVESTMENT_OPTIONS = {
     title: "View all",
     subtitle: "Invest as per your unique needs",
     eventStatus: "view all",
-    id: "viewAll",
+    id: "investingOptions",
     dataAid: "viewAll",
   },
   elss: {
@@ -213,18 +225,21 @@ export const EXPLORE_CATEGORIES = [
     title: "Equity",
     description: "Large, mid & small companies",
     dataAid: "equity",
+    id: "equity",
   },
   {
     icon: "debt.svg",
     title: "Debt",
     description: "Stable returns with bonds & securities",
     dataAid: "debt",
+    id: "debt",
   },
   {
     icon: "equity.svg",
     title: "Hybrid",
     description: "Perfect balance of equity & debt",
     dataAid: "hybrid",
+    id: "hybrid",
   },
 ];
 

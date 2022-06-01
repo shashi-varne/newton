@@ -11,6 +11,7 @@ import {
   getInvestCardsData,
   handleMarketingBanners,
 } from "../../business/appLanding/helper";
+import { WEBAPP_LANDING_PATHNAME_MAPPER } from "../../constants/webappLanding";
 
 const screen = "MF_LANDING";
 const mfLandingContainer = (WrappedComponent) => (props) => {
@@ -46,6 +47,8 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
       primaryCategory: "product item",
       cardClick: data.eventStatus,
     });
+    const pathname = WEBAPP_LANDING_PATHNAME_MAPPER[data.id];
+    navigate(pathname);
   };
 
   const handleExploreCategories = (data) => () => {
@@ -53,6 +56,8 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
       primaryCategory: "category item",
       cardClick: data.title?.toLowerCase(),
     });
+    const pathname = WEBAPP_LANDING_PATHNAME_MAPPER[data.id];
+    navigate(pathname);
   };
 
   const handleKyc = (cardClick) => () => {
@@ -70,6 +75,7 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
     sendEvents("next", {
       eventName: "diy_search_clicked",
     });
+    navigate(WEBAPP_LANDING_PATHNAME_MAPPER.diySearch);
   };
 
   return (
