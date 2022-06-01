@@ -1,0 +1,23 @@
+.al-marketing-banners {
+  padding: 24px 16px 0px 16px;
+
+  .swiper-slide {
+    width: unset !important;
+  }
+
+  .al-mb-icon {
+    width: 332px;
+    height: 174px;
+  }
+}
+
+.al-single-marketing-banners {
+  .swiper-slide {
+    width: 100% !important;
+  }
+
+  .al-mb-icon {
+    width: 100%;
+    height: unset;
+  }
+}

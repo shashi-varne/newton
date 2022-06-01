@@ -38,6 +38,8 @@ const Landing = (props) => {
     handleCarousels,
     handleDiySearch,
     handleNotification,
+    isFetchFailed,
+    errorData,
     sendEvents,
     ...restProps
   } = props;
@@ -57,9 +59,11 @@ const Landing = (props) => {
         rightIconSrc: require("assets/notification_badge.svg"),
         rightIconSrc2: require("assets/search_diy.svg"),
         onRightIconClick: handleNotification,
-        onRightIconClick2: handleDiySearch
+        onRightIconClick2: handleDiySearch,
       }}
       eventData={sendEvents("just_set_events")}
+      isFetchFailed={isFetchFailed}
+      errorData={errorData}
     >
       {showCarousals ? (
         <OnboardingCarousels

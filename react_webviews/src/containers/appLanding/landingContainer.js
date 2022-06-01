@@ -1,21 +1,26 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Landing from "../../pages/AppLanding/Landing";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import {
   EXPLORE_CATEGORIES,
-  INVESTMENT_OPTIONS,
   KYC_BOTOMSHEET_STATUS_MAPPER,
   KYC_CARD_STATUS_MAPPER,
   MANAGE_INVESTMENTS,
-  MARKETING_BANNERS,
-  ONBOARDING_CAROUSALS,
-  PLATFORM_MOTIVATORS,
   REFERRAL_DATA,
   AUTH_VERIFICATION_DATA,
   PREMIUM_ONBORDING_MAPPER,
 } from "businesslogic/constants/webappLanding";
 import { nativeCallback } from "../../utils/native_callback";
-
+import { useDispatch } from "react-redux";
+import { fetchSummary } from "businesslogic/dataStore/reducers/app";
+import useLoadingState from "../../common/customHooks/useLoadingState";
+import useErrorState from "../../common/customHooks/useErrorState";
+import Api from "../../utils/api";
+import { setSummaryData } from "../../kyc/services";
+import {
+  getEnabledMarketingBanners,
+  getInvestCardsData,
+} from "../../business/appLanding/helper";
 const screen = "LANDING";
 const portfolioOverViewData = {
   currentValue: "₹19.6Cr",
@@ -44,26 +49,59 @@ const DEFAULT_BOTTOMSHEETS_DATA = {
 
 const landingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
+  const dispatch = useDispatch();
   const [tabValue, setTabValue] = useState(0);
   const [showCarousals, setShowCarousals] = useState(true);
+  const [errorData, setErrorData] = useState({});
   const [bottomsheetStates, setBottomsheetStates] = useState(
     DEFAULT_BOTTOMSHEETS_DATA
   );
-  const { code } = useMemo(getConfig, []);
+  const {
+    code,
+    investSections,
+    mfOptions,
+    onboardingCarousels,
+    platformMotivators,
+    landingMarketingBanners,
+  } = useMemo(getConfig, []);
+  const investCardsData = getInvestCardsData(investSections, mfOptions, "nps");
+  const marketingBanners = getEnabledMarketingBanners(landingMarketingBanners);
   const kycData = KYC_CARD_STATUS_MAPPER.submitted;
   const kycBottomsheetData = KYC_BOTOMSHEET_STATUS_MAPPER.esign_ready;
   const premiumData = PREMIUM_ONBORDING_MAPPER.incomplete;
+  const { isPageLoading } = useLoadingState(screen);
+  const { isFetchFailed, errorMessage } = useErrorState(screen);
+
+  useEffect(() => {
+    initialize();
+  }, []);
+
+  const initialize = () => {
+    const sagaCallback = (response, data) => {
+      setSummaryData(response);
+    };
+    dispatch(fetchSummary({ Api, screen, sagaCallback }));
+  };
+
+  useEffect(() => {
+    if (isFetchFailed) {
+      setErrorData({
+        handleClicke: initialize,
+        subtitle: errorMessage,
+      });
+    }
+  }, [isFetchFailed]);
 
   const handleCarousels = (isClose, isBack) => () => {
     const value = isBack ? tabValue - 1 : tabValue + 1;
     const userAction = isClose ? "close" : isBack ? "back" : "next";
-    const screenName = ONBOARDING_CAROUSALS[tabValue].title || "";
+    const screenName = onboardingCarousels[tabValue].title || "";
     const data = {
       screenName,
       eventName: "info_carousel",
     };
 
-    if (value >= ONBOARDING_CAROUSALS.length) {
+    if (value >= onboardingCarousels.length) {
       sendEvents(userAction, data);
       setShowCarousals(false);
       return;
@@ -178,15 +216,18 @@ const landingContainer = (WrappedComponent) => (props) => {
 
   return (
     <WrappedComponent
+      isPageLoading={isPageLoading}
+      isFetchFailed={isFetchFailed}
+      errorData={errorData}
       tabValue={tabValue}
       handleCarousels={handleCarousels}
-      carousalsData={ONBOARDING_CAROUSALS}
+      carousalsData={onboardingCarousels}
       showCarousals={showCarousals}
-      signfierKey="stocks"
-      platformMotivators={PLATFORM_MOTIVATORS}
-      marketingBanners={MARKETING_BANNERS}
+      signfierKey="nps"
+      platformMotivators={platformMotivators}
+      marketingBanners={marketingBanners}
       kycData={kycData}
-      investmentOptions={INVESTMENT_OPTIONS}
+      investmentOptions={investCardsData}
       exploreCategories={EXPLORE_CATEGORIES}
       manageInvestments={MANAGE_INVESTMENTS}
       portfolioOverViewData={portfolioOverViewData}
