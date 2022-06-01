@@ -121,7 +121,7 @@ const MainLanding = ({
   handleEasySip,
   handleReferral,
   handleManageInvestments,
-  handleMarketingBanners,
+  onMarketingBannerClick,
 }) => {
   return (
     <>
@@ -137,7 +137,7 @@ const MainLanding = ({
       {showMarketingBanners && (
         <MarketingBanners
           banners={marketingBanners}
-          onClick={handleMarketingBanners}
+          onClick={onMarketingBannerClick}
         />
       )}
       {showSetupEasySip && (
@@ -157,6 +157,7 @@ const MainLanding = ({
           rightImgSrc={require(`assets/fisdom/${kycData.icon}`)}
           title={kycData.title}
           description={kycData.subtitle}
+          descriptionColor={kycData.descriptionColor}
           actionLink={kycData.buttonTitle}
           className="lmw-kyc"
           variant="heroCard"
@@ -181,7 +182,7 @@ const MainLanding = ({
       {showMarketingBannersAtBottom && (
         <MarketingBanners
           banners={marketingBanners}
-          onClick={handleMarketingBanners}
+          onClick={onMarketingBannerClick}
         />
       )}
       {showExploreCategories && (

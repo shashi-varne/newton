@@ -1,8 +1,9 @@
-import { INVESTMENT_OPTIONS } from "../../constants/webappLanding";
+import { INVESTMENT_OPTIONS, WEBAPP_LANDING_PATHNAME_MAPPER } from "../../constants/webappLanding";
 import { getConfig, isTradingEnabled } from "../../utils/functions";
 import { getPartnerData } from "../../utils/partner";
 import { storageService } from "../../utils/validators";
 import { isEmpty } from "lodash-es";
+import { nativeCallback } from "../../utils/native_callback";
 
 export const getInvestCardsData = (
   investSections = [],
@@ -104,4 +105,23 @@ export const validateFeature = (type) => {
     return isTradingEnabled();
   }
   return true;
+};
+
+export const handleMarketingBanners = (data, sendEvents, navigate) => {
+  const cardClick = data.eventStatus || data.id;
+  sendEvents("next", {
+    primaryCategory: "marketing banner carousel",
+    cardClick,
+  });
+  if (data.actionUrl) {
+    nativeCallback({
+      action: "open_in_browser",
+      message: {
+        url: data.actionUrl,
+      },
+    });
+    return;
+  }
+  const path = WEBAPP_LANDING_PATHNAME_MAPPER[data.id] || "/";
+  navigate(path);
 };

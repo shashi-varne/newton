@@ -52,7 +52,7 @@ export const commonCardsConfig = {
     },
     {
       image: "freedomplan.svg",
-      id: "savetax",
+      id: "elss",
     },
   ],
   nfoBanners: [],

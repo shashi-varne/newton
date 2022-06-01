@@ -9,6 +9,7 @@ import { nativeCallback } from "../../utils/native_callback";
 import {
   getEnabledMarketingBanners,
   getInvestCardsData,
+  handleMarketingBanners,
 } from "../../business/appLanding/helper";
 
 const screen = "MF_LANDING";
@@ -61,12 +62,8 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
     });
   };
 
-  const handleMarketingBanners = (data) => () => {
-    const cardClick = data.eventStatus || data.id;
-    sendEvents("next", {
-      primaryCategory: "marketing banner carousel",
-      cardClick,
-    });
+  const onMarketingBannerClick = (data) => () => {
+    handleMarketingBanners(data, sendEvents, navigate);
   };
 
   const onRightIconClick = () => {
@@ -82,12 +79,12 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
       investmentOptions={investCardsData}
       exploreCategories={EXPLORE_CATEGORIES}
       showMarketingBanners={true}
-      showKycCard={false}
+      showKycCard={true}
       sendEvents={sendEvents}
       handleKyc={handleKyc}
       handleCardClick={handleCardClick}
       handleExploreCategories={handleExploreCategories}
-      handleMarketingBanners={handleMarketingBanners}
+      onMarketingBannerClick={onMarketingBannerClick}
       onRightIconClick={onRightIconClick}
     />
   );

@@ -1,3 +1,19 @@
+export const WEBAPP_LANDING_PATHNAME_MAPPER = {
+  nfo: "/advanced-investing/new-fund-offers/info",
+  indexFunds: "/passive-index-funds/landing",
+  instaredeem: "invest/instaredeem",
+  buildwealth: "invest/buildwealth",
+  nps: "/nps/info",
+  diy: "invest/explore-v2",
+  parkmoney: "invest/parkmoney",
+  savegoal: "invest/savegoal",
+  insurance: "/group-insurance",
+  mf: "/invest",
+  elss: "/invest/savetax",
+  ipo: "/market-products",
+  freedomplan: "/freedom-plan"
+};
+
 export const KYC_CARD_STATUS_MAPPER = {
   init: {
     title: "Are you investment ready?",

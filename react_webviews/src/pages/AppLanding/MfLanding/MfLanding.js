@@ -20,9 +20,9 @@ const MfLanding = ({
   handleKyc,
   handleCardClick,
   handleExploreCategories,
-  handleMarketingBanners,
+  onMarketingBannerClick,
   sendEvents,
-  onRightIconClick
+  onRightIconClick,
 }) => {
   return (
     <Container
@@ -35,24 +35,33 @@ const MfLanding = ({
         rightIconSrc: require("assets/search_diy.svg"),
         headerTitle: MF_LANDING.title.dataAid,
         hideInPageTitle: true,
-        onRightIconClick
+        onRightIconClick,
       }}
       eventData={sendEvents("just_set_events")}
     >
       {showMarketingBanners && (
         <MarketingBanners
-          onClick={handleMarketingBanners}
+          onClick={onMarketingBannerClick}
           banners={marketingBanners}
         />
       )}
       {showKycCard && (
         <CardHorizontal
-          rightImgSrc={kycData.imgSrc}
+          rightImgSrc={require(`assets/fisdom/${kycData.icon}`)}
           title={kycData.title}
           description={kycData.subtitle}
+          descriptionColor={kycData.descriptionColor}
           actionLink={kycData.buttonTitle}
           className="mfl-kyc"
+          variant="heroCard"
+          buttonProps={{
+            isInverted: false,
+          }}
+          sx={{
+            background: "white !important",
+          }}
           dataAid={MF_LANDING.kycDataAid}
+          titleColor="foundationColors.content.primary"
           onClick={handleKyc(kycData.eventStatus)}
         />
       )}

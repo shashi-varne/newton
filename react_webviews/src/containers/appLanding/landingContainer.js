@@ -20,6 +20,7 @@ import { setSummaryData } from "../../kyc/services";
 import {
   getEnabledMarketingBanners,
   getInvestCardsData,
+  handleMarketingBanners,
 } from "../../business/appLanding/helper";
 const screen = "LANDING";
 const portfolioOverViewData = {
@@ -66,9 +67,13 @@ const landingContainer = (WrappedComponent) => (props) => {
     platformMotivators,
     landingMarketingBanners,
   } = useMemo(getConfig, []);
-  const investCardsData = getInvestCardsData(investSections, signifierKey, mfOptions);
+  const investCardsData = getInvestCardsData(
+    investSections,
+    signifierKey,
+    mfOptions
+  );
   const marketingBanners = getEnabledMarketingBanners(landingMarketingBanners);
-  const kycData = KYC_CARD_STATUS_MAPPER.submitted;
+  const kycData = KYC_CARD_STATUS_MAPPER.rejected;
   const kycBottomsheetData = KYC_BOTOMSHEET_STATUS_MAPPER.esign_ready;
   const premiumData = PREMIUM_ONBORDING_MAPPER.incomplete;
   const { isPageLoading } = useLoadingState(screen);
@@ -195,12 +200,8 @@ const landingContainer = (WrappedComponent) => (props) => {
     });
   };
 
-  const handleMarketingBanners = (data) => () => {
-    const cardClick = data.eventStatus || data.id;
-    sendEvents("next", {
-      primaryCategory: "marketing banner carousel",
-      cardClick,
-    });
+  const onMarketingBannerClick = (data) => () => {
+    handleMarketingBanners(data, sendEvents, navigate);
   };
 
   const handleDiySearch = () => {
@@ -255,7 +256,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       handleEasySip={handleEasySip}
       handleReferral={handleReferral}
       handleManageInvestments={handleManageInvestments}
-      handleMarketingBanners={handleMarketingBanners}
+      onMarketingBannerClick={onMarketingBannerClick}
       sendEvents={sendEvents}
       handleDiySearch={handleDiySearch}
       handleNotification={handleNotification}
