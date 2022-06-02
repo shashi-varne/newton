@@ -25,55 +25,47 @@ Exhaustive list of property values:
     "fhc", "risk_profile" (only used under 'financialTools' key)
 */
 
-/*
-Note: To enable nps, gold or insurance in partner config :
-      After updating the below partnerConfigs, please check if the partner(for the particular feature which has to be enabled)
-      is removed from the disabledPartnersMap variable.
-      path for disabledPartnersMap variable -> 'invest/functions' file -> 'setInvestCardsData' function.
-*/
+import {
+  EQUITY_ONBOARDING_CAROUSELS,
+  EQUITY_PLATFORM_MOTIVATORS,
+  ONBOARDING_CAROUSELS,
+  PLATFORM_MOTIVATORS,
+} from "./partnerConstants";
 
 // common config across all partners
 export const commonCardsConfig = {
-  investSections: [
-    "kyc",
-    "stocks",
-    "indexFunds",
-    "stocksAndIpo",
-    "ourRecommendations",
-    "diy",
-    "bottomScrollCards",
-    "bottomCards",
-    "financialTools",
-    "popularCards",
+  investSections: ["stocks", "ipo", "mf", "nps", "insurance", "taxFiling"],
+  mfOptions: ["buildwealth", "nfo", "parkmoney", "viewAll"],
+  investingOptions: [
+    "buildwealth",
+    "nfo",
+    "parkmoney",
+    "elss",
+    "savegoal",
+    "instaredeem",
   ],
-  investSubSectionMap: {
-    ourRecommendations: ["buildwealth", "savetax"],
-    diy: ["diyv2"],
-    bottomScrollCards: ["parkmoney", "savegoal"],
-    bottomCards: ["nfo"],
-  },
   landingMarketingBanners: [
     {
-      image: "ipo1.svg",
-      type: "ipo",
-      endDate: "05/08/2022",
-      actionUrl: "https://youtu.be/khCf5foDUmQ"
+      image: "freedomplan.svg",
+      id: "freedomplan",
+      eventStatus: "introducing freedom plan",
     },
     {
-      image: "ipo.svg",
-      type: "ipo",
-      endDate: "05/08/2022",
-    }
+      image: "freedomplan.svg",
+      id: "elss",
+    },
   ],
   nfoBanners: [],
 };
 
 export const basePartnerConfig = {
   common: {
+    onboardingCarousels: ONBOARDING_CAROUSELS,
+    platformMotivators: PLATFORM_MOTIVATORS,
   },
   fisdom: {
     productName: "fisdom",
-    logo: "fisdom/fisdom_logo_white.svg",
+    logo: "fisdom/fisdom_logo.svg",
     colorLogo: "fisdom/fisdom_logo.svg",
     email: "ask@fisdom.com",
     mobile: "+91-9642596425",
@@ -97,7 +89,7 @@ export const basePartnerConfig = {
   },
   finity: {
     productName: "finity",
-    logo: "finity/finity_logo_white.svg",
+    logo: "finity/finity_logo.svg",
     colorLogo: "finity/finity_logo.svg",
     email: "ask@finity.in",
     mobile: "+91-8142381423",
@@ -198,7 +190,7 @@ export const baseUIElementsConfig = {
 
 export const partnerConfigs = {
   obc: {
-    logo: "obc.png",
+    logo: "obc.svg",
     code: "obc",
     email: "obc@fisdom.com",
     mobile: "+91-7829228887",
@@ -208,8 +200,9 @@ export const partnerConfigs = {
     },
   },
   lvb: {
-    logo: "lvb.png",
+    logo: "lvb.svg",
     code: "lvb",
+    navLogoClassname: "navbar-white-bg",
     email: "lvb@fisdom.com",
     message: getPartnerMessage("LVB Mobile"),
     styles: {
@@ -217,7 +210,7 @@ export const partnerConfigs = {
     },
   },
   svc: {
-    logo: "svc.png",
+    logo: "svc.svg",
     code: "svc",
     email: "svc@fisdom.com",
     styles: {
@@ -226,54 +219,37 @@ export const partnerConfigs = {
   },
   fisdom: {
     code: "fisdom",
-    investSubSectionMap: {
-      stocksAndIpo: ["stocks", "ipo"],
-      ourRecommendations: [
-        "instaredeem",
-        "buildwealth",
-        "insurance",
-        "savetax",
-        "nps",
-      ],
-      diy: ["diyv2", "gold"],
-      bottomScrollCards: ["parkmoney", "savegoal"],
-      bottomCards: ["nfo"],
-      financialTools: ["fhc", "risk_profile"],
-    },
+    navLogo: "fisdom/fisdom_logo_white.svg",
     features: {
-      loan: true,
       taxFiling: true,
-      addAnotherBank: true
-    }
+      addAnotherBank: true,
+      stocks: true,
+      ipo: true,
+      nps: true,
+      instaredeem: true,
+    },
+    onboardingCarousels: EQUITY_ONBOARDING_CAROUSELS,
+    platformMotivators: EQUITY_PLATFORM_MOTIVATORS,
   },
   finity: {
     code: "finity",
+    navLogo: "finity/finity_logo_white.svg",
     mobile: "+91-9916149111",
-    investSubSectionMap: {
-      ...commonCardsConfig.investSubSectionMap,
-      indexFunds : ["passiveIndexFunds"],
-      ourRecommendations: ["instaredeem", "buildwealth", "savetax"],
-      financialTools: ["fhc", "risk_profile"],
-    },
     features: {
       taxFiling: true,
-      addAnotherBank: true
-    }
+      addAnotherBank: true,
+      instaredeem: true,
+      indexFunds: true,
+    },
   },
   bfdlmobile: {
     logo: "bfdl_white_sdk_logo.svg",
     code: "bfdlmobile",
     email: "bajajfinserv@finity.in",
     mobile: "+91-7829331118",
-    investSubSectionMap: {
-      ...commonCardsConfig.investSubSectionMap,
-      ourRecommendations: ["100_sip", "buildwealth", "savetax"],
-      financialTools: ["risk_profile"],
-    },
     landingMarketingBanners: [
       ...commonCardsConfig.landingMarketingBanners,
       ...commonCardsConfig.nfoBanners,
-      { image: "mb_4.svg", type: "100_sip" },
       { image: "mb_6.svg", type: "diy" },
       { image: "mb_5.svg", type: "buildwealth" },
     ],
@@ -288,8 +264,8 @@ export const partnerConfigs = {
     uiElements: {
       button: {
         hoverBackgroundColor: "#ff5928",
-      }
-    }
+      },
+    },
   },
   alb: {
     logo: "alb.png",
@@ -297,10 +273,10 @@ export const partnerConfigs = {
     email: "alb@fisdom.com",
     message: getPartnerMessage("emPower", "emPower http://onelink.to/uuxsss"),
     mobile: "+91-7829733111",
-    investSubSectionMap: {
-      ...commonCardsConfig.investSubSectionMap,
-      stocksAndIpo: ["stocks", "ipo"],
-      ourRecommendations: ["buildwealth", "savetax", "nps"],
+    features: {
+      stocks: true,
+      ipo: true,
+      nps: true,
     },
     styles: {
       primaryColor: "#2E3192",
@@ -313,18 +289,17 @@ export const partnerConfigs = {
         color: "#2E3192",
       },
       header: {
-        backgroundColor : "#E8FD00",
-      }
+        backgroundColor: "#E8FD00",
+      },
     },
   },
   tvscredit: {
-    logo: "tvs.png",
+    logo: "tvscredit.svg",
     code: "tvscredit",
     email: "tvscredit@fisdom.com",
     message: getPartnerMessage("Tvs Credit"),
-    investSubSectionMap: {
-      ...commonCardsConfig.investSubSectionMap,
-      ourRecommendations: ["100_sip", "instaredeem", "buildwealth", "savetax"],
+    features: {
+      instaredeem: true,
     },
     styles: {
       primaryColor: "#2d2851",
@@ -333,6 +308,7 @@ export const partnerConfigs = {
   ktb: {
     code: "ktb",
     email: "kbl@fisdom.com",
+    navLogo: "fisdom/fisdom_logo_white.svg",
     mobile: "+91-7829229997",
     styles: {
       primaryColor: "#8C0094",
@@ -343,23 +319,20 @@ export const partnerConfigs = {
     },
   },
   cub: {
-    logo: "cub.png",
+    logo: "cub.svg",
+    navLogoClassname: "navbar-white-bg",
     code: "cub",
     email: "cub@fisdom.com",
-    investSubSectionMap: {
-      ...commonCardsConfig.investSubSectionMap,
-      ourRecommendations: ["buildwealth", "savetax", "nps"],
-      diy: ["diyv2","gold"],
-    },
     features: {
-      taxFiling: true
+      taxFiling: true,
+      nps: true,
     },
     styles: {
       primaryColor: "#000180",
     },
   },
   fpg: {
-    logo: "text_investments.svg",
+    logo: "fpg.svg",
     code: "fpg",
     mobile: "1800-212-5997",
     email: "care.futuremoney@fisdom.com",
@@ -369,19 +342,9 @@ export const partnerConfigs = {
       { image: "fpg_mb_insta.svg", type: "instaredeem" },
       { image: "fpg_mb_100.svg", type: "buildwealth" },
     ],
-    investSections: [
-      "kyc",
-      "ourRecommendations",
-      "popularCards",
-      "diy",
-      "bottomScrollCards",
-      "bottomCards",
-      "financialTools",
-    ],
-    investSubSectionMap: {
-      ...commonCardsConfig.investSubSectionMap,
-      ourRecommendations: ["instaredeem", "buildwealth", "gold", "savetax"],
-      popularCards: ["top_equity", "nps"],
+    features: {
+      nps: true,
+      instaredeem: true,
     },
     referralConfig: {
       applyRefferal: false, // same as hide_apply_referral but with opposite value
@@ -402,19 +365,12 @@ export const partnerConfigs = {
     },
   },
   hbl: {
+    navLogoClassname: "navbar-white-bg",
     logo: "hbl.svg",
     logoWidth: "200px",
     code: "hbl",
-    investSubSectionMap: {
-      ...commonCardsConfig.investSubSectionMap,
-      ourRecommendations: [
-        "buildwealth",
-        "insurance",
-        "savetax",
-        "nps",
-      ],
-      diy: ["diyv2", "gold"],
-      financialTools: ["risk_profile"],
+    features: {
+      nps: true,
     },
     styles: {
       primaryColor: "#0066B3",
@@ -425,11 +381,6 @@ export const partnerConfigs = {
     code: "subh",
     email: "support@shubhloans.com",
     mobile: "+91-9019900199",
-    investSections: ["kyc", "ourRecommendations", "diy"],
-    investSubSectionMap: {
-      ourRecommendations: ["100_sip", "300_sip", "instaredeem"],
-      diy: ["diyv2"],
-    },
     styles: {
       primaryColor: "#F5821F",
       secondaryColor: "#F5821F",
@@ -437,6 +388,7 @@ export const partnerConfigs = {
   },
   sbm: {
     logo: "sbm.svg",
+    navLogoClassname: "navbar-white-bg",
     code: "sbm",
     email: "sbm@fisdom.com",
     styles: {
@@ -445,42 +397,32 @@ export const partnerConfigs = {
   },
   flexi: {
     code: "flexi",
-    investSubSectionMap: {
-      ...commonCardsConfig.investSubSectionMap,
-      ourRecommendations: [
-        "buildwealth",
-        "insurance",
-        "savetax",
-        "nps",
-      ],
-      diy: ["diyv2", "gold"],
-      financialTools: ["risk_profile"],
+    navLogo: "fisdom/fisdom_logo_white.svg",
+    features: {
+      nps: true,
     },
   },
   medlife: {
     code: "medlife",
-    investSubSectionMap: {
-      ...commonCardsConfig.investSubSectionMap,
-      ourRecommendations: [
-        "buildwealth",
-        "insurance",
-        "savetax",
-        "nps",
-      ],
-      diy: ["diyv2", "gold"],
-      financialTools: ["risk_profile"],
+    navLogo: "fisdom/fisdom_logo_white.svg",
+    features: {
+      nps: true,
     },
   },
   life99: {
     code: "life99",
+    navLogo: "fisdom/fisdom_logo_white.svg",
   },
   indb: {
     code: "indb",
     mobile: "+80-48-093070",
-    investSubSectionMap: {
-      ...commonCardsConfig.investSubSectionMap,
-      stocksAndIpo: ["stocks", "ipo"],
-      ourRecommendations: ["buildwealth", "savetax", "nps"],
+    navLogo: "fisdom/fisdom_logo_white.svg",
+    onboardingCarousels: EQUITY_ONBOARDING_CAROUSELS,
+    platformMotivators: EQUITY_PLATFORM_MOTIVATORS,
+    features: {
+      stocks: true,
+      ipo: true,
+      nps: true,
     },
     referralConfig: {
       applyRefferal: true,
@@ -496,9 +438,8 @@ export const partnerConfigs = {
     code: "finshell",
     email: "finshellpay@fisdom.com",
     mobile: "+80-48-093070",
-    investSubSectionMap: {
-      ...commonCardsConfig.investSubSectionMap,
-      ourRecommendations: ["buildwealth", "savetax", "nps"],
+    features: {
+      nps: true,
     },
     styles: {
       primaryColor: "#007AFF",
@@ -507,6 +448,7 @@ export const partnerConfigs = {
   },
   ippb: {
     code: "ippb",
+    navLogo: "fisdom/fisdom_logo_white.svg",
     styles: {
       primaryColor: "#3F1027",
     },
@@ -520,13 +462,8 @@ export const partnerConfigs = {
     code: "taxwin",
     logo: "taxwin.svg",
     logoWidth: "200px",
-    investSections: ["kyc", "ourRecommendations"],
-    investSubSectionMap: {
-      ourRecommendations: [
-        "savetax",
-        "nps",
-        "insurance",
-      ],
+    features: {
+      nps: true,
     },
   },
   google: {
@@ -536,18 +473,13 @@ export const partnerConfigs = {
   quesscorp: {
     logo: "quesscorp.svg",
     logoWidth: "200px",
-    code: 'quesscorp',
-    investSubSectionMap: {
-      ...commonCardsConfig.investSubSectionMap,
-      diy: ["diyv2", "gold"],
-    },
+    code: "quesscorp",
   },
   sahaj: {
     code: "sahaj",
-    investSubSectionMap: {
-      ...commonCardsConfig.investSubSectionMap,
-      ourRecommendations: ["buildwealth", "savetax", "nps"],
-      diy: ["diyv2", "gold"],
+    navLogo: "fisdom/fisdom_logo_white.svg",
+    features: {
+      nps: true,
     },
     styles: {
       primaryColor: "#e5322d",
@@ -555,41 +487,38 @@ export const partnerConfigs = {
   },
   mspl: {
     code: "mspl",
-    investSubSectionMap: {
-      ...commonCardsConfig.investSubSectionMap,
-      ourRecommendations: ["buildwealth", "savetax", "nps"],
-      diy: ["diyv2", "gold"],
-    },
+    navLogo: "fisdom/fisdom_logo_white.svg",
     styles: {
       primaryColor: "#252B69",
     },
-    features:{loan: true}
+    features: {
+      nps: true,
+    },
   },
   ucomb: {
     code: "ucomb",
     logo: "ucomb.svg",
     webLogo: "ucomb_bank.svg",
     logoWidth: "200px",
-    investSubSectionMap: {
-      ...commonCardsConfig.investSubSectionMap,
-      stocksAndIpo: ["stocks", "ipo"],
-      ourRecommendations: ["buildwealth", "savetax", "nps"],
-      diy: ["diyv2"],
-    },
+    onboardingCarousels: EQUITY_ONBOARDING_CAROUSELS,
+    platformMotivators: EQUITY_PLATFORM_MOTIVATORS,
     styles: {
       primaryColor: "#002759",
       secondaryColor: "#002759",
       backButtonColor: "#002759",
-      notificationsColor: "#002759"
+      notificationsColor: "#002759",
     },
     uiElements: {
       header: {
-        backgroundColor : "#FFF500",
-      }
+        backgroundColor: "#FFF500",
+      },
     },
     features: {
       addAnotherBank: true,
       taxFiling: true,
+      stocks: true,
+      ipo: true,
+      nps: true,
     },
     referralConfig: {
       applyRefferal: true,
@@ -598,11 +527,8 @@ export const partnerConfigs = {
   },
   bom: {
     code: "bom",
-    logo: "bom.png",
-    investSubSectionMap: {
-      ...commonCardsConfig.investSubSectionMap,
-      ourRecommendations: ["instaredeem", "buildwealth", "savetax"],
-    },
+    navLogoClassname: "navbar-white-bg",
+    logo: "bom.svg",
     styles: {
       primaryColor: "#378ECF",
     },
@@ -613,34 +539,47 @@ export const partnerConfigs = {
   },
   sbnri: {
     code: "sbnri",
+    navLogoClassname: "navbar-white-bg",
     logo: "sbnri.svg",
-    investSubSectionMap: {
-      ...commonCardsConfig.investSubSectionMap,
-      ourRecommendations: ["instaredeem", "buildwealth", "savetax"],
-    },
     styles: {
       primaryColor: "#3E89FA",
-    }
+    },
   },
   tmb: {
     code: "tmb",
-    logo: "tmb.png",
+    navLogoClassname: "navbar-white-bg",
+    logo: "tmb.svg",
     styles: {
       primaryColor: "#2D4191",
-      secondaryColor:  "#2D4191",
+      secondaryColor: "#2D4191",
       backButtonColor: "#2D4191",
       notificationsColor: "#2D4191",
     },
     uiElements: {
       header: {
-        backgroundColor : "#FFFFFF",
-      }
+        backgroundColor: "#FFFFFF",
+      },
     },
-    investSubSectionMap: {
-      ...commonCardsConfig.investSubSectionMap,
-      ourRecommendations: ["instaredeem", "buildwealth", "savetax"],
-    }
-  }
+  },
+  cccb: {
+    code: "cccb",
+    navLogo: "fisdom/fisdom_logo_white.svg",
+  },
+  sury: {
+    code: "sury",
+    navLogo: "fisdom/fisdom_logo_white.svg",
+  },
+  svcho: {
+    code: "svcho",
+    navLogo: "fisdom/fisdom_logo_white.svg",
+  },
+  apna: {
+    code: "apna",
+    navLogo: "fisdom/fisdom_logo_white.svg",
+    features: {
+      nps: true,
+    },
+  },
 };
 
 export const getPartnerData = (productType, partnerCode) => {
