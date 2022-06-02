@@ -9,7 +9,7 @@ const screen = "INVESTING_OPTIONS";
 const investingOptionsContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const { code, investingOptions } = useMemo(getConfig, []);
-  const investCardsData = getInvestCardsData(investingOptions);
+  const { investCardsData } = getInvestCardsData(investingOptions);
   const sendEvents = (userAction, cardClick = "") => {
     let eventObj = {
       event_name: "investing_options_screen",

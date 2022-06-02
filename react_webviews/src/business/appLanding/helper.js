@@ -1,4 +1,7 @@
-import { INVESTMENT_OPTIONS, WEBAPP_LANDING_PATHNAME_MAPPER } from "../../constants/webappLanding";
+import {
+  INVESTMENT_OPTIONS,
+  WEBAPP_LANDING_PATHNAME_MAPPER,
+} from "../../constants/webappLanding";
 import { getConfig, isTradingEnabled } from "../../utils/functions";
 import { getPartnerData } from "../../utils/partner";
 import { storageService } from "../../utils/validators";
@@ -11,9 +14,11 @@ export const getInvestCardsData = (
   fallbackOptions
 ) => {
   const config = getConfig();
+  let isMfOnly = false;
   let data = getEnabledFeaturesData(config, investSections, signifier);
   if (data.cardsData.length === 1) {
     data = getEnabledFeaturesData(config, fallbackOptions, signifier);
+    isMfOnly = true;
   }
   let { cardsData, signifierIndex } = data;
   if (signifierIndex !== -1) {
@@ -21,7 +26,7 @@ export const getInvestCardsData = (
     cardsData = cardsData.filter((el) => el.id !== signifier);
     cardsData.unshift(selectedCardData);
   }
-  return cardsData;
+  return { investCardsData: cardsData, isMfOnly };
 };
 
 export const getEnabledFeaturesData = (config, investOptions, signifier) => {

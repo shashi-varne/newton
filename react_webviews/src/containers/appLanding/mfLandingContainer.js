@@ -17,7 +17,7 @@ const screen = "MF_LANDING";
 const mfLandingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const { code, mfOptions, landingMarketingBanners } = useMemo(getConfig, []);
-  const investCardsData = getInvestCardsData(mfOptions);
+  const { investCardsData } = getInvestCardsData(mfOptions);
   const marketingBanners = getEnabledMarketingBanners(landingMarketingBanners);
   const kycData = KYC_CARD_STATUS_MAPPER.rejected;
 

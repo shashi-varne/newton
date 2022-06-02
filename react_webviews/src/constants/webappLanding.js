@@ -1,3 +1,5 @@
+import { PATHNAME_MAPPER as KYC_PATHNAME_MAPPER } from "../kyc/constants";
+
 export const WEBAPP_LANDING_PATHNAME_MAPPER = {
   nfo: "/advanced-investing/new-fund-offers/info",
   indexFunds: "/passive-index-funds/landing",
@@ -20,7 +22,8 @@ export const WEBAPP_LANDING_PATHNAME_MAPPER = {
   hybrid: "/diyv2/Hybrid/landing",
   diySearch: "/diyv2/invest/search",
   notification: "/notification",
-  investingOptions: "/mf-landing/view-all"
+  investingOptions: "/mf-landing/view-all",
+  bankList: "/bank-list",
 };
 
 export const KYC_CARD_STATUS_MAPPER = {
@@ -30,6 +33,7 @@ export const KYC_CARD_STATUS_MAPPER = {
     buttonTitle: "Check now",
     icon: "kyc_default.svg",
     eventStatus: "Are you investment ready?",
+    nextState: KYC_PATHNAME_MAPPER.homeKyc,
   },
   incomplete: {
     title: "Complete your KYC",
@@ -37,6 +41,15 @@ export const KYC_CARD_STATUS_MAPPER = {
     buttonTitle: "Complete now",
     icon: "kyc_default.svg",
     eventStatus: "complete your KYC",
+    nextState: KYC_PATHNAME_MAPPER.journey,
+  },
+  ground_premium: {
+    icon: "kyc_default.svg",
+    title: "Premium onboarding",
+    subtitle: "No documentation  |  Instant investment",
+    buttonTitle: "Complete now",
+    eventStatus: "complete your KYC",
+    nextState: KYC_PATHNAME_MAPPER.journey,
   },
   submitted: {
     title: "KYC application submitted",
@@ -46,6 +59,14 @@ export const KYC_CARD_STATUS_MAPPER = {
     eventStatus: "kyc application submitted",
     descriptionColor: "foundationColors.secondary.coralOrange.400",
   },
+  mf_esign_pending: {
+    title: "Complete your KYC",
+    subtitle: "Just a few more steps to go",
+    buttonTitle: "Complete now",
+    icon: "kyc_default.svg",
+    eventStatus: "complete your KYC",
+    nextState: KYC_PATHNAME_MAPPER.journey,
+  },
   rejected: {
     title: "KYC application rejected",
     subtitle: "Your documents couldn’t be verified",
@@ -53,20 +74,23 @@ export const KYC_CARD_STATUS_MAPPER = {
     icon: "kyc_rejected.svg",
     eventStatus: "kyc application rejected",
     descriptionColor: "foundationColors.secondary.lossRed.400",
+    nextState: KYC_PATHNAME_MAPPER.uploadProgress,
   },
-  complete_setup: {
+  complete_account_setup: {
     title: "Complete account set up",
     subtitle: "Only a few steps remaining",
     buttonTitle: "Continue ",
     eventStatus: "complete account setup",
     icon: "kyc_complete_setup.svg",
+    nextState: KYC_PATHNAME_MAPPER.aocSelectAccount,
   },
-  esign_ready: {
+  esign_pending: {
     title: "KYC documents verified",
     subtitle: "Now eSign to complete application",
     buttonTitle: "eSIGN now",
     eventStatus: "kyc documents verified",
     icon: "kyc_esign.svg",
+    nextState: KYC_PATHNAME_MAPPER.kycEsign,
   },
   verifying_trading_account: {
     title: "You’re ready to invest in mutual funds",
@@ -83,6 +107,7 @@ export const KYC_CARD_STATUS_MAPPER = {
     icon: "kyc_rejected.svg",
     eventStatus: "f & o verification failed",
     descriptionColor: "foundationColors.secondary.lossRed.400",
+    nextState: KYC_PATHNAME_MAPPER.uploadProgress,
   },
   upgrade_incomplete: {
     title: "Upgrade to Trading & Demat account",
@@ -91,6 +116,7 @@ export const KYC_CARD_STATUS_MAPPER = {
     descriptionColor: "foundationColors.secondary.profitGreen.400",
     eventStatus: "upgrade to trading & demat account",
     icon: "kyc_upgrade.svg",
+    nextState: KYC_PATHNAME_MAPPER.tradingInfo,
   },
 };
 
@@ -267,6 +293,7 @@ export const KYC_BOTOMSHEET_STATUS_MAPPER = {
       "Complete KYC to invest in stocks, IPOs, F&O & primary market products",
     primaryButtonTitle: "start kyc",
     icon: "kyc_default.svg",
+    nextState: KYC_PATHNAME_MAPPER.homeKyc,
   },
   incomplete: {
     title: "KYC pending",
@@ -274,6 +301,15 @@ export const KYC_BOTOMSHEET_STATUS_MAPPER = {
       "KYC is a mandatory process to invest in stocks, primary market products, F&O",
     primaryButtonTitle: "Complete now",
     icon: "kyc_complete_setup.svg",
+    nextState: KYC_PATHNAME_MAPPER.journey,
+  },
+  mf_esign_pending: {
+    title: "KYC pending",
+    subtitle:
+      "kyc is a mandatory process to invest in Mutual Funds, stocks and other primary market products",
+    primaryButtonTitle: "Complete now",
+    icon: "kyc_complete_setup.svg",
+    nextState: KYC_PATHNAME_MAPPER.journey,
   },
   submitted: {
     title: "Verifying KYC",
@@ -288,8 +324,9 @@ export const KYC_BOTOMSHEET_STATUS_MAPPER = {
     subtitle: "Tap UPDATE KYC to re-submit the correct documents",
     primaryButtonTitle: "Update kyc",
     icon: "kyc_rejected.svg",
+    nextState: KYC_PATHNAME_MAPPER.uploadProgress,
   },
-  complete_setup: {
+  complete_account_setup: {
     title: "2 more steps to go!",
     subtitle:
       "Complete opening your Trading & Demat account to start investing in stocks, F&O & more",
@@ -297,14 +334,16 @@ export const KYC_BOTOMSHEET_STATUS_MAPPER = {
     buttonTitle: "Continue with Account opening",
     icon: "kyc_complete_setup.svg",
     oneButton: true,
+    nextState: KYC_PATHNAME_MAPPER.aocSelectAccount,
   },
-  esign_ready: {
+  esign_pending: {
     title: "Documents verified",
     subtitle:
       "Great, just one more step to go! Now complete eSign to get investment ready",
     primaryButtonTitle: "complete esign",
     icon: "kyc_esign.svg",
     oneButton: true,
+    nextState: KYC_PATHNAME_MAPPER.kycEsign,
   },
   complete: {
     title: "You're ready to invest",
@@ -313,6 +352,7 @@ export const KYC_BOTOMSHEET_STATUS_MAPPER = {
     primaryButtonTitle: "OKAY",
     icon: "kyc_esign.svg",
     oneButton: true,
+    nextState: KYC_PATHNAME_MAPPER.journey,
   },
   mf_complete: {
     title: "You're investment ready",
@@ -335,17 +375,19 @@ export const KYC_BOTOMSHEET_STATUS_MAPPER = {
     primaryButtonTitle: "update document",
     secondaryButtonTitle: "later",
     icon: "kyc_rejected.svg",
+    nextState: KYC_PATHNAME_MAPPER.uploadProgress,
   },
   upgrade_incomplete: {
     title: "Upgrade to trading and demat account",
     subtitle: "Invest in India's top companies in just a few taps",
     primaryButtonTitle: "upgrade now",
     icon: "kyc_upgrade.svg",
+    nextState: KYC_PATHNAME_MAPPER.tradingInfo,
   },
 };
 
 export const BOTTOMSHEET_KEYS = {
-  openKyc: "openKyc",
+  openKyc: "openKycStatusDialog",
   openCampaign: "openCampaign",
   openReferral: "openReferral",
   openAuthVerification: "openAuthVerification",

@@ -19,12 +19,14 @@ import ExploreCategories from "../../../featureComponent/appLanding/ExploreCateg
 import AuthVerification from "../../../featureComponent/appLanding/AuthVerification";
 import Campaign from "../../../featureComponent/appLanding/Campaign";
 import PremiumOnboarding from "../../../featureComponent/appLanding/PremiumOnboarding";
+import KycBottomsheet from "../../../featureComponent/appLanding/KycBottomsheet";
 import { SwiperSlide } from "swiper/react";
 import { Skeleton, Stack } from "@mui/material";
-import { BOTTOMSHEET_KEYS } from "businesslogic/constants/webappLanding";
+import { BOTTOMSHEET_KEYS } from "../../../constants/webappLanding";
 import { LANDING } from "businesslogic/strings/webappLanding";
 
 import "./Landing.scss";
+import { isEmpty } from "lodash-es";
 
 const easySipData = LANDING.easySipData;
 const shareReferralData = LANDING.shareReferralData;
@@ -35,10 +37,12 @@ const Landing = (props) => {
     carousalsData,
     tabValue,
     showCarousals,
+    showSeachIcon,
     handleCarousels,
     handleDiySearch,
     handleNotification,
     isFetchFailed,
+    showSkelton,
     errorData,
     sendEvents,
     ...restProps
@@ -57,12 +61,13 @@ const Landing = (props) => {
         dataAid: LANDING.dataAid,
         showPartnerLogo: true,
         rightIconSrc: require("assets/notification_badge.svg"),
-        rightIconSrc2: require("assets/search_diy.svg"),
+        rightIconSrc2: showSeachIcon ? require("assets/search_diy.svg") : null,
         onRightIconClick: handleNotification,
         onRightIconClick2: handleDiySearch,
       }}
       eventData={sendEvents("just_set_events")}
       isFetchFailed={isFetchFailed}
+      isPageLoading={showSkelton}
       errorData={errorData}
     >
       {showCarousals ? (
@@ -93,7 +98,7 @@ const MainLanding = ({
   showPortfolioOverview,
   signfierKey,
   showMarketingBannersAtBottom,
-  kycData,
+  kycData = {},
   marketingBanners,
   investmentOptions,
   platformMotivators,
@@ -122,6 +127,7 @@ const MainLanding = ({
   handleReferral,
   handleManageInvestments,
   onMarketingBannerClick,
+  isPageLoading,
 }) => {
   return (
     <>
@@ -170,6 +176,7 @@ const MainLanding = ({
           dataAid={LANDING.kycDataAid}
           titleColor="foundationColors.content.primary"
           onClick={handleKyc(kycData.eventStatus)}
+          showLoader={isPageLoading}
         />
       )}
       <InvestmentOptions
@@ -178,6 +185,7 @@ const MainLanding = ({
         productList={investmentOptions}
         onClick={handleCardClick}
         signfierKey={signfierKey}
+        isLoading={showKycCard && isPageLoading}
       />
       {showMarketingBannersAtBottom && (
         <MarketingBanners
@@ -225,17 +233,21 @@ const MainLanding = ({
         onPrimaryClick={closeReferral}
         dataAid={referralData.dataAid}
       />
-      <BottomSheet
-        isOpen={bottomsheetStates.openKyc}
-        onClose={closeBottomsheet(BOTTOMSHEET_KEYS.openKyc)}
-        title={kycBottomsheetData.title}
-        imageSrc={require(`assets/fisdom/${kycBottomsheetData.icon}`)}
-        subtitle={kycBottomsheetData.subtitle}
-        primaryBtnTitle={kycBottomsheetData.primaryButtonTitle}
-        secondaryBtnTitle={kycBottomsheetData.secondaryButtonTitle}
-        onPrimaryClick={handleKycPrimaryClick}
-        onSecondaryClick={handleKycSecondaryClick}
-        dataAid={LANDING.kycDataAid}
+      {!isEmpty(kycBottomsheetData) && (
+        <KycBottomsheet
+          isOpen={bottomsheetStates[BOTTOMSHEET_KEYS.openKyc]}
+          onClose={closeBottomsheet(BOTTOMSHEET_KEYS.openKyc)}
+          dataAid={LANDING.kycDataAid}
+          data={kycBottomsheetData}
+          onPrimaryClick={handleKycPrimaryClick}
+          onSecondaryClick={handleKycSecondaryClick}
+        />
+      )}
+      <PremiumOnboarding
+        isOpen={bottomsheetStates.openPremiumOnboarding}
+        onClose={closeBottomsheet(BOTTOMSHEET_KEYS.openPremiumOnboarding)}
+        onPrimaryClick={handlePremiumBottomsheet}
+        data={premiumData}
       />
       <AuthVerification
         isOpen={bottomsheetStates.openAuthVerification}
@@ -249,12 +261,6 @@ const MainLanding = ({
         onPrimaryClick={onCampaignPrimaryClick}
         onSecondaryClick={onCampaignSecondaryClick}
         campaignData={campaignData}
-      />
-      <PremiumOnboarding
-        isOpen={bottomsheetStates.openPremiumOnboarding}
-        onClose={closeBottomsheet(BOTTOMSHEET_KEYS.openPremiumOnboarding)}
-        onPrimaryClick={handlePremiumBottomsheet}
-        data={premiumData}
       />
     </>
   );
