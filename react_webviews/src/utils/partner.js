@@ -191,7 +191,7 @@ export const baseUIElementsConfig = {
 
 export const partnerConfigs = {
   obc: {
-    logo: "obc.png",
+    logo: "obc.svg",
     code: "obc",
     email: "obc@fisdom.com",
     mobile: "+91-7829228887",
@@ -203,6 +203,7 @@ export const partnerConfigs = {
   lvb: {
     logo: "lvb.svg",
     code: "lvb",
+    navLogoClassname: "navbar-white-bg",
     email: "lvb@fisdom.com",
     message: getPartnerMessage("LVB Mobile"),
     styles: {
@@ -219,6 +220,7 @@ export const partnerConfigs = {
   },
   fisdom: {
     code: "fisdom",
+    navLogo: "fisdom/fisdom_logo_white.svg",
     features: {
       taxFiling: true,
       addAnotherBank: true,
@@ -232,6 +234,7 @@ export const partnerConfigs = {
   },
   finity: {
     code: "finity",
+    navLogo: "finity/finity_logo_white.svg",
     mobile: "+91-9916149111",
     features: {
       taxFiling: true,
@@ -292,7 +295,7 @@ export const partnerConfigs = {
     },
   },
   tvscredit: {
-    logo: "tvs.svg",
+    logo: "tvscredit.svg",
     code: "tvscredit",
     email: "tvscredit@fisdom.com",
     message: getPartnerMessage("Tvs Credit"),
@@ -306,6 +309,7 @@ export const partnerConfigs = {
   ktb: {
     code: "ktb",
     email: "kbl@fisdom.com",
+    navLogo: "fisdom/fisdom_logo_white.svg",
     mobile: "+91-7829229997",
     styles: {
       primaryColor: "#8C0094",
@@ -317,6 +321,7 @@ export const partnerConfigs = {
   },
   cub: {
     logo: "cub.svg",
+    navLogoClassname: "navbar-white-bg",
     code: "cub",
     email: "cub@fisdom.com",
     features: {
@@ -361,6 +366,7 @@ export const partnerConfigs = {
     },
   },
   hbl: {
+    navLogoClassname: "navbar-white-bg",
     logo: "hbl.svg",
     logoWidth: "200px",
     code: "hbl",
@@ -383,6 +389,7 @@ export const partnerConfigs = {
   },
   sbm: {
     logo: "sbm.svg",
+    navLogoClassname: "navbar-white-bg",
     code: "sbm",
     email: "sbm@fisdom.com",
     styles: {
@@ -391,22 +398,26 @@ export const partnerConfigs = {
   },
   flexi: {
     code: "flexi",
+    navLogo: "fisdom/fisdom_logo_white.svg",
     features: {
       nps: true,
     },
   },
   medlife: {
     code: "medlife",
+    navLogo: "fisdom/fisdom_logo_white.svg",
     features: {
       nps: true,
     },
   },
   life99: {
     code: "life99",
+    navLogo: "fisdom/fisdom_logo_white.svg",
   },
   indb: {
     code: "indb",
     mobile: "+80-48-093070",
+    navLogo: "fisdom/fisdom_logo_white.svg",
     onboardingCarousels: EQUITY_ONBOARDING_CAROUSELS,
     platformMotivators: EQUITY_PLATFORM_MOTIVATORS,
     features: {
@@ -438,6 +449,7 @@ export const partnerConfigs = {
   },
   ippb: {
     code: "ippb",
+    navLogo: "fisdom/fisdom_logo_white.svg",
     styles: {
       primaryColor: "#3F1027",
     },
@@ -466,6 +478,7 @@ export const partnerConfigs = {
   },
   sahaj: {
     code: "sahaj",
+    navLogo: "fisdom/fisdom_logo_white.svg",
     features: {
       nps: true,
     },
@@ -475,6 +488,7 @@ export const partnerConfigs = {
   },
   mspl: {
     code: "mspl",
+    navLogo: "fisdom/fisdom_logo_white.svg",
     styles: {
       primaryColor: "#252B69",
     },
@@ -514,6 +528,7 @@ export const partnerConfigs = {
   },
   bom: {
     code: "bom",
+    navLogoClassname: "navbar-white-bg",
     logo: "bom.svg",
     styles: {
       primaryColor: "#378ECF",
@@ -525,6 +540,7 @@ export const partnerConfigs = {
   },
   sbnri: {
     code: "sbnri",
+    navLogoClassname: "navbar-white-bg",
     logo: "sbnri.svg",
     styles: {
       primaryColor: "#3E89FA",
@@ -532,7 +548,8 @@ export const partnerConfigs = {
   },
   tmb: {
     code: "tmb",
-    logo: "tmb.png",
+    navLogoClassname: "navbar-white-bg",
+    logo: "tmb.svg",
     styles: {
       primaryColor: "#2D4191",
       secondaryColor: "#2D4191",
@@ -547,15 +564,19 @@ export const partnerConfigs = {
   },
   cccb: {
     code: "cccb",
+    navLogo: "fisdom/fisdom_logo_white.svg",
   },
   sury: {
     code: "sury",
+    navLogo: "fisdom/fisdom_logo_white.svg",
   },
   svcho: {
     code: "svcho",
+    navLogo: "fisdom/fisdom_logo_white.svg",
   },
   apna: {
     code: "apna",
+    navLogo: "fisdom/fisdom_logo_white.svg",
     features: {
       nps: true,
     },
