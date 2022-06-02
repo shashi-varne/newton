@@ -15,6 +15,7 @@ import Separator from '../../atoms/Separator';
 import Icon from '../../atoms/Icon';
 import Lottie from "lottie-react";
 import './MenuItem.scss';
+import { Skeleton } from '@mui/material';
 
 const MenuItem = ({
   leftImgSrc,
@@ -30,7 +31,42 @@ const MenuItem = ({
   dataAid,
   showSeparator,
   className,
+  showLoader,
 }) => {
+  if (showLoader) {
+    return (
+      <div>
+        <div className={`menu-item-wrapper ${className}`}>
+          <Skeleton
+            variant="rectangle"
+            className="menu-item-left-img mis-left-img"
+            width="38px"
+            height="32px"
+            {...leftImgProps}
+          />
+          <div className="mi-right-wrapper">
+            <div className="mi-text-wrapper mis-text-wrapper">
+              <Skeleton
+                variant="text"
+                height="24px"
+                component="div"
+                width="60%"
+              />
+              <Skeleton
+                variant="text"
+                height="24px"
+                component="div"
+                width="40%"
+              />
+            </div>
+          </div>
+        </div>
+        {showSeparator && (
+          <Separator marginLeft={leftImgSrc ? "72px" : "16px"} dataAid="1" />
+        )}
+      </div>
+    );
+  }
   return (
     <div>
       <div
