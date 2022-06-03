@@ -307,8 +307,9 @@ export const partnerConfigs = {
   },
   ktb: {
     code: "ktb",
+    logo: "ktb.svg",
     email: "kbl@fisdom.com",
-    navLogo: "fisdom/fisdom_logo_white.svg",
+    navLogoClassname: "navbar-white-bg",
     mobile: "+91-7829229997",
     styles: {
       primaryColor: "#8C0094",
@@ -415,8 +416,9 @@ export const partnerConfigs = {
   },
   indb: {
     code: "indb",
+    logo: "indb.svg",
+    navLogoClassname: "navbar-white-bg",
     mobile: "+80-48-093070",
-    navLogo: "fisdom/fisdom_logo_white.svg",
     onboardingCarousels: EQUITY_ONBOARDING_CAROUSELS,
     platformMotivators: EQUITY_PLATFORM_MOTIVATORS,
     features: {
