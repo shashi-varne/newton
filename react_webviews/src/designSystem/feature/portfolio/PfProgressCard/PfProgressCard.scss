@@ -1,0 +1,25 @@
+.container {
+  width: 100%;
+  border-radius: 12px;
+  cursor: pointer;
+  .top-row {
+    padding: 16px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    .left-img {
+      margin-right: 16px;
+    }
+  }
+  .middle-row,
+  .bottom-row {
+    padding: 16px;
+  }
+  .middle-row {
+    .right-align {
+      text-align: right;
+    }
+  }
+  .progress-bar-container {
+    padding: 8px 16px;
+  }
+}
