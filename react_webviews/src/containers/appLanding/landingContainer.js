@@ -16,6 +16,7 @@ import {
   fetchSummary,
   getAppData,
   setKyc,
+  setUser,
   updateAppStorage,
 } from "businesslogic/dataStore/reducers/app";
 import useLoadingState from "../../common/customHooks/useLoadingState";
@@ -54,7 +55,7 @@ const portfolioOverViewData = {
 };
 
 const DEFAULT_BOTTOMSHEETS_DATA = {
-  openKyc: false,
+  openKycStatusDialog: false,
   openReferral: false,
   openAuthVerification: false,
   openAccountAlreadyExists: false,
@@ -151,7 +152,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       bottomsheetKey = BOTTOMSHEET_KEYS.openAuthVerification;
       appStorageKey = APPSTORAGE_KEYS.isAuthVerificationDisplayed;
     } else if (bottomsheetData.showKycBottomsheet) {
-      bottomsheetKey = BOTTOMSHEET_KEYS.openKyc;
+      bottomsheetKey = BOTTOMSHEET_KEYS.openKycStatusDialog;
       appStorageKey = APPSTORAGE_KEYS.isKycBottomsheetDisplayed;
       setKycBottomsheetData(bottomsheetData.modalData);
     } else if (bottomsheetData.showPremiumOnboarding) {
@@ -296,7 +297,9 @@ const landingContainer = (WrappedComponent) => (props) => {
           handleLoader,
           handleDialogStates: handleBottomsheets,
           handleSummaryData,
-          closeKycStatusDialog: closeBottomsheet(BOTTOMSHEET_KEYS.openKyc),
+          closeKycStatusDialog: closeBottomsheet(
+            BOTTOMSHEET_KEYS.openKycStatusDialog
+          ),
         },
         props
       );
@@ -424,9 +427,9 @@ const landingContainer = (WrappedComponent) => (props) => {
       } else {
         let body = {};
         if (contactDetails.contactType === "email") {
-          body.email = data.contactValue;
+          body.email = contactDetails.contactValue;
         } else {
-          body.mobile = data.contactValue;
+          body.mobile = contactDetails.contactValue;
           body.whatsapp_consent = true;
         }
         const otpRes = await generateOtp(Api, body);
@@ -511,7 +514,7 @@ const landingContainer = (WrappedComponent) => (props) => {
         navigate,
         updateKyc,
         closeKycStatusDialog: closeBottomsheet(
-          BOTTOMSHEET_KEYS.openKyc,
+          BOTTOMSHEET_KEYS.openKycStatusDialog,
           kycBottomsheetData.title
         ),
         handleLoader,

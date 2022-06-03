@@ -26,7 +26,6 @@ import { BOTTOMSHEET_KEYS } from "../../../constants/webappLanding";
 import { LANDING } from "businesslogic/strings/webappLanding";
 
 import "./Landing.scss";
-import { isEmpty } from "lodash-es";
 
 const easySipData = LANDING.easySipData;
 const shareReferralData = LANDING.shareReferralData;
@@ -119,7 +118,6 @@ const MainLanding = ({
   campaignData,
   onCampaignPrimaryClick,
   closeCampaignDialog,
-  handlePremiumBottomsheet,
   handleKyc,
   handleCardClick,
   handleExploreCategories,
@@ -237,11 +235,11 @@ const MainLanding = ({
         onPrimaryClick={closeReferral}
         dataAid={referralData.dataAid}
       />
-      {!isEmpty(kycBottomsheetData) && (
+      {bottomsheetStates.openKycStatusDialog && (
         <KycBottomsheet
-          isOpen={bottomsheetStates[BOTTOMSHEET_KEYS.openKyc]}
+          isOpen={bottomsheetStates.openKycStatusDialog}
           onClose={closeBottomsheet(
-            BOTTOMSHEET_KEYS.openKyc,
+            BOTTOMSHEET_KEYS.openKycStatusDialog,
             kycBottomsheetData.title
           )}
           dataAid={LANDING.kycDataAid}
@@ -257,7 +255,7 @@ const MainLanding = ({
             BOTTOMSHEET_KEYS.openPremiumOnboarding,
             kycBottomsheetData.title
           )}
-          onPrimaryClick={handlePremiumBottomsheet}
+          onClick={handleKycPrimaryClick}
           data={kycBottomsheetData}
         />
       )}

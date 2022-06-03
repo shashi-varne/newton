@@ -580,33 +580,35 @@ export const kycStatusMapperInvest = {
 export const premiumBottomSheetMapper = {
   ground_premium: {
     title: `Premium Onboarding`,
-    boldText: "Congratulations!",
-    subtitle: `You have been selected for Premium onboarding. Fast track your investment journey.`,
+    subtitle: `Congratulations! You have been selected for premium onboarding. Fast track your investment journey.`,
     buttonTitle: "CONTINUE",
     oneButton: true,
     nextState: KYC_PATHNAME_MAPPER.journey,
-    icon: "ic_premium_onboarding_small.svg",
+    icon: "premium.svg",
+    instant: true,
   },
   init: {
     title: "Premium Onboarding",
     subtitle: "Fast track your investment with Premium onboarding!",
     buttonTitle: "COMPLETE NOW",
+    button2Title: "Not now",
     nextState: KYC_PATHNAME_MAPPER.journey,
-    icon: "ic_popup_premium_onboarding_big.svg",
+    icon: "premium.svg",
   },
   incomplete: {
     title: `Premium Onboarding`,
     subtitle: "Fast track your investment with Premium onboarding!",
     buttonTitle: "COMPLETE NOW",
+    button2Title: "Not now",
     nextState: KYC_PATHNAME_MAPPER.journey,
-    icon: "ic_popup_premium_onboarding_big.svg",
+    icon: "premium.svg",
   },
   complete: {
     title: `Congratulations! KYC verified`,
     subtitle: "You're ready to invest in Mutual Funds",
     buttonTitle: "START INVESTING",
     nextState: "/invest",
-    icon: "ic_popup_kyc_verified.svg",
+    icon: "premium.svg",
   }
 };
 

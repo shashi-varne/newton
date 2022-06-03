@@ -387,7 +387,7 @@ export const KYC_BOTOMSHEET_STATUS_MAPPER = {
 };
 
 export const BOTTOMSHEET_KEYS = {
-  openKyc: "openKycStatusDialog",
+  openKycStatusDialog: "openKycStatusDialog",
   openCampaign: "openCampaign",
   openReferral: "openReferral",
   openAuthVerification: "openAuthVerification",

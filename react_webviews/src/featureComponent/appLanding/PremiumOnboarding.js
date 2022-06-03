@@ -10,8 +10,8 @@ const PremiumOnboarding = ({ isOpen, onClose, data, onClick }) => {
       title={data.title}
       imageSrc={require(`assets/${data.icon}`)}
       subtitle={data.subtitle}
-      primaryBtnTitle={data.primaryButtonTitle}
-      secondaryBtnTitle={data.secondaryButtonTitle}
+      primaryBtnTitle={data.buttonTitle}
+      secondaryBtnTitle={data.button2Title}
       onPrimaryClick={onClick}
       onSecondaryClick={onClose}
       dataAid="premium"
