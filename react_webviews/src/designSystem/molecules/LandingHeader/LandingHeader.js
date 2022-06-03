@@ -85,14 +85,14 @@ export const LandingHeaderTitle = ({ children, color }) => {
   );
 };
 
-export const LandingHeaderSubtitle = ({ children, color, dataIdx = "" }) => {
+export const LandingHeaderSubtitle = ({ children, color, dataIdx = "",  align = "left"}) => {
   return (
     <Typography
       className='lh-subtitle'
       dataAid={`subtitle${dataIdx}`}
       variant='body2'
       color={color}
-      align='left'
+      align={align}
       component='div'
     >
       {children}
