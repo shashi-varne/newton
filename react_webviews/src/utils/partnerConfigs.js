@@ -603,6 +603,8 @@ export const partnerConfigs = {
   bom: {
     code: "bom",
     logo: "bom.png",
+    webLogo: "bom_bank.svg",
+    logoWidth: "200px",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
       ourRecommendations: ["instaredeem", "buildwealth", "savetax"],
