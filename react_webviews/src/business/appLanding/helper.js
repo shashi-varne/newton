@@ -348,7 +348,7 @@ export const getContactVerification = (
         isVerified = true;
       if (
         !isEmpty(contactDetails.mobile_number) &&
-        contactDetails.mobile_number_verified
+        !contactDetails.mobile_number_verified
       ) {
         contactType = "mobile";
         isVerified = false;
