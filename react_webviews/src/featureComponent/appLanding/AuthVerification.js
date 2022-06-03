@@ -2,6 +2,7 @@ import React from "react";
 import Typography from "../../designSystem/atoms/Typography";
 import BottomSheet from "../../designSystem/organisms/BottomSheet";
 import Button from "../../designSystem/atoms/Button";
+import { isEmpty } from "lodash-es";
 
 const AuthVerification = ({
   isOpen,
@@ -9,6 +10,7 @@ const AuthVerification = ({
   authData,
   handleEdit,
   onClick,
+  showLoader,
 }) => {
   return (
     <BottomSheet
@@ -18,6 +20,9 @@ const AuthVerification = ({
       imageSrc={require(`assets/${authData.icon}`)}
       subtitle={authData.subtitle}
       primaryBtnTitle={authData.primaryButtonTitle}
+      primaryBtnProps={{
+        isLoading: showLoader,
+      }}
       onPrimaryClick={onClick}
       dataAid="verification"
     >
@@ -30,15 +35,19 @@ const AuthVerification = ({
           component="div"
         >
           <div variant="body2">
-            {authData.authType}: {authData.authValue}{" "}
+            {authData.authType}: {authData.authValue || "Not Found"}{" "}
           </div>
-          <div>|</div>
-          <div variant="body2"> PAN: {authData.pan} </div>
+          {!isEmpty(authData.pan) && (
+            <>
+              <div>|</div>
+              <div variant="body2"> PAN: {authData.pan} </div>
+            </>
+          )}
         </Typography>
       ) : (
         <div className="flex-between-center">
           <Typography variant="body2" dataAid={authData.dataAid}>
-            {authData.authValue}{" "}
+            {authData.contactValue}{" "}
           </Typography>
           <Button variant="link" onClick={handleEdit} title="Edit" />
         </div>

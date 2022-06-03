@@ -8,15 +8,17 @@ const Campaign = ({
   onPrimaryClick,
   onSecondaryClick,
 }) => {
+  const buttonData = campaignData?.action_buttons?.buttons || [];
+  const secondaryButtonTitle = buttonData?.length === 2 ? buttonData[1]?.title || "Not Now" : "";
   return (
     <BottomSheet
       isOpen={isOpen}
       onClose={onClose}
       title={campaignData.title}
-      imageSrc={campaignData.imageSrc}
+      imageSrc={campaignData.image}
       subtitle={campaignData.subtitle}
-      primaryBtnTitle={campaignData.primaryButtonTitle}
-      secondaryBtnTitle={campaignData.secondaryButtonTitle}
+      primaryBtnTitle={buttonData[0]?.title}
+      secondaryBtnTitle={secondaryButtonTitle}
       onPrimaryClick={onPrimaryClick}
       onSecondaryClick={onSecondaryClick}
       dataAid="campaign"

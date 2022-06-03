@@ -42,7 +42,7 @@ const Landing = (props) => {
     handleDiySearch,
     handleNotification,
     isFetchFailed,
-    showSkelton,
+    loaderData,
     errorData,
     sendEvents,
     ...restProps
@@ -67,7 +67,7 @@ const Landing = (props) => {
       }}
       eventData={sendEvents("just_set_events")}
       isFetchFailed={isFetchFailed}
-      isPageLoading={showSkelton}
+      isPageLoading={loaderData.skelton}
       errorData={errorData}
     >
       {showCarousals ? (
@@ -79,7 +79,7 @@ const Landing = (props) => {
           handleBack={handleCarousels(false, true)}
         />
       ) : (
-        <MainLanding {...restProps} />
+        <MainLanding loaderData={loaderData} {...restProps} />
       )}
     </Container>
   );
@@ -104,6 +104,7 @@ const MainLanding = ({
   platformMotivators,
   exploreCategories,
   manageInvestments,
+  loaderData,
   showLoader,
   portfolioOverViewData,
   closeReferral,
@@ -117,8 +118,7 @@ const MainLanding = ({
   authData,
   campaignData,
   onCampaignPrimaryClick,
-  onCampaignSecondaryClick,
-  premiumData,
+  closeCampaignDialog,
   handlePremiumBottomsheet,
   handleKyc,
   handleCardClick,
@@ -128,6 +128,7 @@ const MainLanding = ({
   handleManageInvestments,
   onMarketingBannerClick,
   isPageLoading,
+  handleAuthVerification,
 }) => {
   return (
     <>
@@ -225,7 +226,10 @@ const MainLanding = ({
       <Partnership className="lmw-partnership" />
       <BottomSheet
         isOpen={bottomsheetStates.openReferral}
-        onClose={closeBottomsheet(BOTTOMSHEET_KEYS.openReferral)}
+        onClose={closeBottomsheet(
+          BOTTOMSHEET_KEYS.openReferral,
+          referralData.title
+        )}
         title={referralData.title}
         imageTitleSrc={referralData.image}
         subtitle={referralData.subtitle}
@@ -236,30 +240,45 @@ const MainLanding = ({
       {!isEmpty(kycBottomsheetData) && (
         <KycBottomsheet
           isOpen={bottomsheetStates[BOTTOMSHEET_KEYS.openKyc]}
-          onClose={closeBottomsheet(BOTTOMSHEET_KEYS.openKyc)}
+          onClose={closeBottomsheet(
+            BOTTOMSHEET_KEYS.openKyc,
+            kycBottomsheetData.title
+          )}
           dataAid={LANDING.kycDataAid}
           data={kycBottomsheetData}
           onPrimaryClick={handleKycPrimaryClick}
           onSecondaryClick={handleKycSecondaryClick}
         />
       )}
-      <PremiumOnboarding
-        isOpen={bottomsheetStates.openPremiumOnboarding}
-        onClose={closeBottomsheet(BOTTOMSHEET_KEYS.openPremiumOnboarding)}
-        onPrimaryClick={handlePremiumBottomsheet}
-        data={premiumData}
-      />
-      <AuthVerification
-        isOpen={bottomsheetStates.openAuthVerification}
-        onClose={closeBottomsheet(BOTTOMSHEET_KEYS.openAuthVerification)}
-        handleAuthEdit={handleAuthEdit}
-        authData={authData}
-      />
+      {bottomsheetStates.openPremiumOnboarding && (
+        <PremiumOnboarding
+          isOpen={bottomsheetStates.openPremiumOnboarding}
+          onClose={closeBottomsheet(
+            BOTTOMSHEET_KEYS.openPremiumOnboarding,
+            kycBottomsheetData.title
+          )}
+          onPrimaryClick={handlePremiumBottomsheet}
+          data={kycBottomsheetData}
+        />
+      )}
+      {bottomsheetStates.openAuthVerification && (
+        <AuthVerification
+          isOpen={bottomsheetStates.openAuthVerification}
+          onClose={closeBottomsheet(
+            BOTTOMSHEET_KEYS.openAuthVerification,
+            authData.title
+          )}
+          handleEdit={handleAuthEdit}
+          authData={authData}
+          onClick={handleAuthVerification}
+          showLoader={loaderData.bottomsheetLoader}
+        />
+      )}
       <Campaign
         isOpen={bottomsheetStates.openCampaign}
-        onClose={closeBottomsheet(BOTTOMSHEET_KEYS.openCampaign)}
+        onClose={closeCampaignDialog}
         onPrimaryClick={onCampaignPrimaryClick}
-        onSecondaryClick={onCampaignSecondaryClick}
+        onSecondaryClick={closeCampaignDialog}
         campaignData={campaignData}
       />
     </>

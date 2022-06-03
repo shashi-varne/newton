@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { initData } from "../../kyc/services";
 import isEmpty from "lodash/isEmpty";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
@@ -9,6 +8,7 @@ import { Route } from "react-router-dom";
 import { getUrlParams, storageService } from "../../utils/validators";
 import Toast from "../ui/Toast";
 import { initializeClevertapProfile } from "../../utils/functions";
+import { initData } from "../../business/appLanding/helper";
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
   const { isIframe, isMobileDevice } = useMemo(getConfig, []);
@@ -27,7 +27,7 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   const fetch = async () => {
     try {
       if(!guestLeadId && !guestUser){
-        await initData();
+        await initData(true);
         setIsLoginValid(true);
       }
     } catch (err) {

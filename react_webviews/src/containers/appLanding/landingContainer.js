@@ -6,8 +6,9 @@ import {
   MANAGE_INVESTMENTS,
   REFERRAL_DATA,
   AUTH_VERIFICATION_DATA,
-  PREMIUM_ONBORDING_MAPPER,
   BOTTOMSHEET_KEYS,
+  APPSTORAGE_KEYS,
+  CAMPAIGNS_TO_SHOW_ON_PRIORITY,
 } from "../../constants/webappLanding";
 import { nativeCallback } from "../../utils/native_callback";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,15 +26,24 @@ import {
   getEnabledMarketingBanners,
   getInvestCardsData,
   handleMarketingBanners,
+  getContactVerification,
+  getKycBottomsheetData,
+  handleCampaign,
+  closeCampaignDialog,
 } from "../../business/appLanding/helper";
 import { WEBAPP_LANDING_PATHNAME_MAPPER } from "../../constants/webappLanding";
 import {
+  getCampaignData,
   getKycData,
+  handleKycStatus,
+  handleKycStatusRedirection,
   handleStocksAndIpoCards,
   openKyc,
 } from "../../dashboard/Invest/functions";
 import { storageService } from "../../utils/validators";
 import { isEmpty } from "lodash-es";
+import { authVerification, generateOtp } from "businesslogic/apis/app";
+import ToastMessage from "../../designSystem/atoms/ToastMessage";
 
 const screen = "LANDING";
 const portfolioOverViewData = {
@@ -41,15 +51,6 @@ const portfolioOverViewData = {
   investedValue: "₹3.5Cr",
   profitOrLoss: "+ ₹1.2Cr",
   isProfit: true,
-};
-
-const campaignData = {
-  title: "Setup easySIP",
-  imageSrc:
-    "https://eqnom-dot-plutus-staging.appspot.com/static/img/ic_sip_mandate_attention_fisdom.png",
-  subtitle:
-    "Never miss your monthly SIP payments. Setup a secure easySIP in just 2 minutes.",
-  primaryButtonTitle: "continue",
 };
 
 const DEFAULT_BOTTOMSHEETS_DATA = {
@@ -82,6 +83,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     onboardingCarousels,
     platformMotivators,
     landingMarketingBanners,
+    ...baseConfig
   } = useMemo(getConfig, []);
   const { investCardsData, isMfOnly } = getInvestCardsData(
     investSections,
@@ -89,11 +91,12 @@ const landingContainer = (WrappedComponent) => (props) => {
     mfOptions
   );
   const marketingBanners = getEnabledMarketingBanners(landingMarketingBanners);
-  const premiumData = PREMIUM_ONBORDING_MAPPER.incomplete;
   const { isPageLoading } = useLoadingState(screen);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const { kyc, user, appStorage } = useSelector(getAppData);
-  const kycData = useMemo(() => getKycData(kyc, user), [kyc, user]);
+  const [kycData, setKycData] = useState(getKycData(kyc, user));
+  const [campaignData, setCampaignData] = useState({});
+  const [contactDetails, setContactDetails] = useState({});
   const [showCarousals, setShowCarousals] = useState(
     !isEmpty(onboardingCarousels) &&
       !kycData.isReadyToInvestBase &&
@@ -108,14 +111,66 @@ const landingContainer = (WrappedComponent) => (props) => {
   const onLoad = () => {
     const sagaCallback = (response, data) => {
       setSummaryData(response);
-      handleBankList(data.bankList);
+      const kycDetails = getKycData(data.kyc, data.user);
+      setKycData(kycDetails);
+      if (!isEmpty(data.bankList)) {
+        navigate(WEBAPP_LANDING_PATHNAME_MAPPER.bankList);
+      } else {
+        handleLandingBottomsheets(kycDetails);
+      }
     };
     dispatch(fetchSummary({ Api, screen, sagaCallback }));
   };
 
-  const handleBankList = (bankList) => {
-    if (!isEmpty(bankList)) {
-      navigate(WEBAPP_LANDING_PATHNAME_MAPPER.bankList);
+  const handleLandingBottomsheets = (kycDetails) => {
+    let campaignBottomSheetData = {},
+      bottomsheetData = {};
+    const contactData = getContactVerification(kycDetails.kyc, false, screen);
+    setContactDetails(contactData);
+
+    if (!appStorage.isCampaignDisplayed) {
+      campaignBottomSheetData = getCampaignData();
+      setCampaignData(campaignBottomSheetData);
+    }
+    if (
+      !appStorage.isKycBottomsheetDisplayed ||
+      !appStorage.isPremiumBottomsheetDisplayed
+    ) {
+      bottomsheetData = getKycBottomsheetData(kycDetails, appStorage, code);
+    }
+
+    const isPriorityCampaign = CAMPAIGNS_TO_SHOW_ON_PRIORITY.includes(
+      campaignBottomSheetData.campaign_name
+    );
+    let bottomsheetKey = "";
+    let appStorageKey = "";
+    if (isPriorityCampaign) {
+      bottomsheetKey = BOTTOMSHEET_KEYS.openCampaign;
+      appStorageKey = APPSTORAGE_KEYS.isCampaignDisplayed;
+    } else if (contactData.showAuthVerification) {
+      bottomsheetKey = BOTTOMSHEET_KEYS.openAuthVerification;
+      appStorageKey = APPSTORAGE_KEYS.isAuthVerificationDisplayed;
+    } else if (bottomsheetData.showKycBottomsheet) {
+      bottomsheetKey = BOTTOMSHEET_KEYS.openKyc;
+      appStorageKey = APPSTORAGE_KEYS.isKycBottomsheetDisplayed;
+      setKycBottomsheetData(bottomsheetData.modalData);
+    } else if (bottomsheetData.showPremiumOnboarding) {
+      bottomsheetKey = BOTTOMSHEET_KEYS.openPremiumOnboarding;
+      appStorageKey = APPSTORAGE_KEYS.isPremiumBottomsheetDisplayed;
+      setKycBottomsheetData(bottomsheetData.premiumDialogData);
+    } else if (!isEmpty(campaignBottomSheetData)) {
+      bottomsheetKey = BOTTOMSHEET_KEYS.openCampaign;
+      appStorageKey = APPSTORAGE_KEYS.isCampaignDisplayed;
+    }
+    if (!isEmpty(bottomsheetKey)) {
+      handleBottomsheets({
+        [bottomsheetKey]: true,
+      });
+      dispatch(
+        updateAppStorage({
+          [appStorageKey]: true,
+        })
+      );
     }
   };
 
@@ -175,9 +230,16 @@ const landingContainer = (WrappedComponent) => (props) => {
     }
   };
 
-  const closeBottomsheet = (key) => () => {
-    handleBottomsheets({ [key]: false });
-  };
+  const closeBottomsheet =
+    (key, intent) =>
+    (outsideClick = false) => {
+      handleBottomsheets({ [key]: false });
+      sendEvents("back", {
+        eventName: "bottom_sheet",
+        intent,
+        outsideClick,
+      });
+    };
 
   const sendEvents = (userAction, data = {}) => {
     let eventObj = {
@@ -201,6 +263,11 @@ const landingContainer = (WrappedComponent) => (props) => {
     if (data.menuName) {
       eventObj.properties.menu_name = data.menuName?.toLowerCase();
     }
+    if (data.intent) {
+      eventObj.event_name = "bottom_sheet";
+      eventObj.properties.intent = data.intent;
+      eventObj.properties.outside_click = !!data.outsideClick;
+    }
     if (userAction === "just_set_events") {
       return eventObj;
     } else {
@@ -209,7 +276,8 @@ const landingContainer = (WrappedComponent) => (props) => {
   };
 
   const handleSummaryData = (data) => {
-    updateKyc(data.kyc);
+    dispatch(setKyc(data.kyc));
+    dispatch(setUser(data.user));
   };
 
   const handleCardClick = (data) => () => {
@@ -303,10 +371,88 @@ const landingContainer = (WrappedComponent) => (props) => {
     navigate(WEBAPP_LANDING_PATHNAME_MAPPER.notification);
   };
 
+  const handleAuthEdit = () => {
+    sendEvents("edit", {
+      intent: contactDetails.title,
+    });
+    navigate("/secondary-verification", {
+      state: {
+        page: "landing",
+        edit: true,
+        communicationType: contactDetails.contactType,
+        contactValue: contactDetails.contactValue,
+      },
+    });
+  };
+
+  const handleAuthVerification = async () => {
+    if (contactDetails.showAuthExists) {
+      handleAuthEdit();
+      return;
+    }
+    sendEvents("next", {
+      intent: contactDetails.title,
+    });
+    try {
+      handleLoader({
+        bottomsheetLoader: true,
+      });
+      const result = await authVerification(Api, contactDetails);
+      if (result.is_user) {
+        const userData = result.user;
+        const { mobile, email, pan_number } = userData;
+        const accountExistsData = AUTH_VERIFICATION_DATA.accountExists;
+        let authType = "Email",
+          authValue = email,
+          primaryButtonTitle = `${accountExistsData.buttonTitle} Number`,
+          subtitle = `Mobile number ${accountExistsData.commonSubtitle}`;
+        if (contactDetails.contactType === "email") {
+          authType = "Mobile";
+          authValue = mobile;
+          primaryButtonTitle = `${accountExistsData.buttonTitle} Email`;
+          subtitle = `Email address ${accountExistsData.commonSubtitle}`;
+        }
+        setContactDetails({
+          ...contactDetails,
+          ...accountExistsData,
+          authType,
+          authValue,
+          primaryButtonTitle,
+          subtitle,
+          pan: pan_number,
+        });
+      } else {
+        let body = {};
+        if (contactDetails.contactType === "email") {
+          body.email = data.contactValue;
+        } else {
+          body.mobile = data.contactValue;
+          body.whatsapp_consent = true;
+        }
+        const otpRes = await generateOtp(Api, body);
+        ToastMessage(otpRes.message || "Success");
+        navigate("/secondary-otp-verification", {
+          state: {
+            value: contactDetails?.contactValue,
+            otp_id: result.otp_id,
+            communicationType: contactDetails.contactType,
+          },
+        });
+      }
+    } catch (err) {
+      console.log("err");
+      ToastMessage(err.message);
+    } finally {
+      handleLoader({
+        bottomsheetLoader: false,
+      });
+    }
+  };
+
   return (
     <WrappedComponent
       isPageLoading={isPageLoading}
-      showSkelton={loaderData.skelton}
+      loaderData={loaderData}
       isFetchFailed={isFetchFailed}
       errorData={errorData}
       tabValue={tabValue}
@@ -331,13 +477,11 @@ const landingContainer = (WrappedComponent) => (props) => {
       showShareReferral={true}
       showSetupEasySip={true}
       showKycCard={kycData.showKycCard}
-      showLoader={false}
       referralData={REFERRAL_DATA.success}
       kycBottomsheetData={kycBottomsheetData}
       bottomsheetStates={bottomsheetStates}
-      authData={AUTH_VERIFICATION_DATA.accountExists}
+      authData={contactDetails}
       campaignData={campaignData}
-      premiumData={premiumData}
       closeBottomsheet={closeBottomsheet}
       handleKyc={handleKyc}
       handleCardClick={handleCardClick}
@@ -349,6 +493,45 @@ const landingContainer = (WrappedComponent) => (props) => {
       sendEvents={sendEvents}
       handleDiySearch={handleDiySearch}
       handleNotification={handleNotification}
+      handleAuthVerification={handleAuthVerification}
+      handleAuthEdit={handleAuthEdit}
+      onCampaignPrimaryClick={handleCampaign({
+        campaignData,
+        handleLoader,
+        handleBottomsheets,
+      })}
+      closeCampaignDialog={closeCampaignDialog({
+        campaignData,
+        handleBottomsheets,
+      })}
+      handleKycPrimaryClick={handleKycStatus({
+        kyc,
+        kycData,
+        modalData: kycBottomsheetData,
+        navigate,
+        updateKyc,
+        closeKycStatusDialog: closeBottomsheet(
+          BOTTOMSHEET_KEYS.openKyc,
+          kycBottomsheetData.title
+        ),
+        handleLoader,
+        sendEvents,
+      })}
+      handleKycSecondaryClick={handleKycStatusRedirection(
+        {
+          kyc,
+          user,
+          kycData,
+          modalData: kycBottomsheetData,
+          baseConfig,
+          contactDetails,
+          navigate,
+          handleLoader,
+          handleSummaryData,
+          handleDialogStates: handleBottomsheets,
+        },
+        props
+      )}
     />
   );
 };

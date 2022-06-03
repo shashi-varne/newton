@@ -395,13 +395,20 @@ export const BOTTOMSHEET_KEYS = {
   openPremiumOnboarding: "openPremiumOnboarding",
 };
 
+export const CAMPAIGNS_TO_SHOW_ON_PRIORITY = ["trading_restriction_campaign"];
+
+export const APPSTORAGE_KEYS = {
+  isCampaignDisplayed: "isCampaignDisplayed",
+  isAuthVerificationDisplayed: "isAuthVerificationDisplayed",
+  isKycBottomsheetDisplayed: "isKycBottomsheetDisplayed",
+  isPremiumBottomsheetDisplayed: "isPremiumBottomsheetDisplayed",
+};
+
 export const AUTH_VERIFICATION_DATA = {
-  icon: "account_already_exists.svg",
   email: {
     title: "Verify your email address",
     subtitle: "Email verification is mandatory for investment as per SEBI",
     primaryButtonTitle: "Continue",
-    authValue: "alek@yopmail.com",
     dataAid: "emailAddress",
   },
   mobile: {
@@ -409,19 +416,15 @@ export const AUTH_VERIFICATION_DATA = {
     title: "Verify your mobile number",
     subtitle: "Mobile verification is mandatory for investment as per SEBI",
     primaryButtonTitle: "Continue",
-    authValue: "9087217311",
     dataAid: "mobileNumber",
   },
   accountExists: {
     showAuthExists: true,
     icon: "account_already_exists.svg",
     title: "Account already exists!",
-    subtitle: "Mobile verification is mandatory for investment as per SEBI",
-    primaryButtonTitle: "Continue",
+    commonSubtitle: "is mandatory for investment as per SEBI",
+    buttonTitle: "Edit",
     dataAid: "verification",
-    authValue: "9087217311",
-    authType: "Email",
-    pan: "CXIPP****M",
   },
 };
 

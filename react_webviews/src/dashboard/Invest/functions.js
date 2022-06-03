@@ -263,6 +263,7 @@ export const getKycData = (kyc, user) => {
     showKycCard,
     isKycStatusDialogDisplayed: false,
     isPremiumBottomsheetDisplayed: false,
+    isMfInvested: user.active_investment,
   };
   return kycData;
 }
@@ -675,7 +676,9 @@ export const handleKycStatus = ({
   sendEvents,
 }) => async () => {
   if (isFunction(sendEvents)) {
-    sendEvents("next", "kyc_bottom_sheet");
+    sendEvents("next", {
+      intent: modalData.title,
+    });
   }
   const { kycJourneyStatus, isReadyToInvestBase } = kycData;
   if (
@@ -686,7 +689,7 @@ export const handleKycStatus = ({
   } else if (kycJourneyStatus === "rejected") {
     navigate(KYC_PATHNAME_MAPPER.uploadProgress);
   } else if (isUpgradeToEquityAccountEnabled(kyc, kycJourneyStatus)) {
-    closeKycStatusDialog(true);
+    closeKycStatusDialog();
     await setKycProductTypeAndRedirect({
       kyc,
       kycJourneyStatus,
@@ -775,7 +778,7 @@ export const handleKycStatusRedirection = (
         });
         return;
       }
-      closeKycStatusDialog(true);
+      closeKycStatusDialog();
       handleStocksRedirection({ isDirectEntry, navigate })
       return;
     } else if (kycJourneyStatus === "fno_rejected") {

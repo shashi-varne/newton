@@ -1003,3 +1003,14 @@ export const initializeClevertapProfile = (user) => {
     console.log(e);
   }
 }
+
+export const getPartner = (partner) => {
+  if (partner === "bfdl") {
+    partner = "bfdlmobile";
+  } else if (partner === "obcweb") {
+    partner = "obc";
+  } else if (partner === "moneycontrolweb") {
+    partner = "moneycontrol";
+  }
+  return partner;
+}
