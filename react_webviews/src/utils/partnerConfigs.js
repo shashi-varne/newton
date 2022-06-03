@@ -332,6 +332,8 @@ export const partnerConfigs = {
   },
   ktb: {
     code: "ktb",
+    webLogo: "ktb_bank.svg",
+    logoWidth: "200px",
     email: "kbl@fisdom.com",
     mobile: "+91-7829229997",
     styles: {
@@ -476,6 +478,8 @@ export const partnerConfigs = {
   },
   indb: {
     code: "indb",
+    webLogo: "indb_bank.svg",
+    logoWidth: "200px",
     mobile: "+80-48-093070",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
