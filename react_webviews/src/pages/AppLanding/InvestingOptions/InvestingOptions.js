@@ -1,7 +1,7 @@
 import React from "react";
 import Container from "../../../designSystem/organisms/ContainerWrapper";
 import InvestmentOptions from "../../../featureComponent/appLanding/InvestmentOptions";
-import { INVESTING_OPTIONS } from "businesslogic/strings/webappLanding";
+import { INVESTING_OPTIONS } from "../../../strings/webappLanding";
 
 import "./InvestingOptions.scss";
 

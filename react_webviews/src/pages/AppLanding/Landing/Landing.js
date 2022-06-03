@@ -23,7 +23,7 @@ import KycBottomsheet from "../../../featureComponent/appLanding/KycBottomsheet"
 import { SwiperSlide } from "swiper/react";
 import { Skeleton, Stack } from "@mui/material";
 import { BOTTOMSHEET_KEYS } from "../../../constants/webappLanding";
-import { LANDING } from "businesslogic/strings/webappLanding";
+import { LANDING } from "../../../strings/webappLanding";
 
 import "./Landing.scss";
 

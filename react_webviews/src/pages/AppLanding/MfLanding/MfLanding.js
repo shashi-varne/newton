@@ -6,7 +6,7 @@ import Partnership from "../../../featureComponent/appLanding/Partnership";
 import InvestmentOptions from "../../../featureComponent/appLanding/InvestmentOptions";
 import MarketingBanners from "../../../featureComponent/appLanding/MarketingBanners";
 import ExploreCategories from "../../../featureComponent/appLanding/ExploreCategories";
-import { MF_LANDING } from "businesslogic/strings/webappLanding";
+import { MF_LANDING } from "../../../strings/webappLanding";
 
 import "./MfLanding.scss";
 

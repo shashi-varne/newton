@@ -1,7 +1,7 @@
 import React from "react";
 import Container from "../../../designSystem/organisms/ContainerWrapper";
 import SelectionMode from "../../../designSystem/molecules/SelectionMode";
-import { BANK_LIST } from "businesslogic/strings/webappLanding";
+import { BANK_LIST } from "../../../strings/webappLanding";
 
 import "./BankList.scss";
 
