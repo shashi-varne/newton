@@ -6,6 +6,8 @@ import Icon from "../../../atoms/Icon";
 import Typography from "../../../atoms/Typography";
 import Tag from "../../../molecules/Tag/Tag";
 import "./PfFundSelectionCard.scss";
+import PropTypes from "prop-types";
+import { noop } from "lodash-es";
 
 function PfFundSelectionCard({
   checked,
@@ -34,8 +36,8 @@ function PfFundSelectionCard({
       className="container"
       onClick={onClick}
     >
-      <RowContainer className="top-row">
-        <RowContainer>
+      <RowContainer className="top-row" alignItems="flex-start">
+        <RowContainer justifyContent="flex-start">
           <Checkbox checked={checked} className="checkbox" />
           <Typography
             variant="body1"
@@ -50,6 +52,7 @@ function PfFundSelectionCard({
           variant="body1"
           color="foundationColors.content.primary"
           dataAid="label"
+          className="top-label"
         >
           {topLabel}
         </Typography>
@@ -149,6 +152,46 @@ const CardItem = ({ img, title, subtitle, align, hideTitle, id }) => {
       </RowContainer>
     </Box>
   );
+};
+
+PfFundSelectionCard.defaultProps = {
+  checked: false,
+  topTitle: "",
+  topLabel: "",
+  leftTitle: "",
+  leftSubtitle: "",
+  middleTitle: "",
+  middleSubtitle: "",
+  rightTitle: "",
+  rightSubtitle: "",
+  bottomTitle: "",
+  bottomSubtitle: "",
+  bottomLabel: "",
+  leftImgSrc: "",
+  rightImgSrc: "",
+  middleImgSrc: "",
+  bottomImgSrc: "",
+  onClick: noop,
+};
+
+PfFundSelectionCard.propTypes = {
+  checked: PropTypes.bool,
+  topTitle: PropTypes.string,
+  topLabel: PropTypes.string,
+  leftTitle: PropTypes.string,
+  leftSubtitle: PropTypes.string,
+  middleTitle: PropTypes.string,
+  middleSubtitle: PropTypes.string,
+  rightTitle: PropTypes.string,
+  rightSubtitle: PropTypes.string,
+  bottomTitle: PropTypes.string,
+  bottomSubtitle: PropTypes.string,
+  bottomLabel: PropTypes.string,
+  leftImgSrc: PropTypes.string,
+  rightImgSrc: PropTypes.string,
+  middleImgSrc: PropTypes.string,
+  bottomImgSrc: PropTypes.string,
+  onClick: PropTypes.func,
 };
 
 export default PfFundSelectionCard;
