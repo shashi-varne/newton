@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from "react";
-import { EXPLORE_CATEGORIES } from "businesslogic/constants/webappLanding";
 import MfLanding from "../../pages/AppLanding/MfLanding";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
@@ -9,14 +8,21 @@ import {
   getInvestCardsData,
   handleMarketingBanners,
 } from "../../business/appLanding/helper";
-import { WEBAPP_LANDING_PATHNAME_MAPPER } from "../../constants/webappLanding";
+import {
+  EXPLORE_CATEGORIES,
+  WEBAPP_LANDING_PATHNAME_MAPPER,
+} from "../../constants/webappLanding";
 import {
   getKycData,
   handleKycStatus,
   handleKycStatusRedirection,
 } from "../../dashboard/Invest/functions";
 import { useDispatch, useSelector } from "react-redux";
-import { getAppData, setKyc, setUser } from "businesslogic/dataStore/reducers/app";
+import {
+  getAppData,
+  setKyc,
+  setUser,
+} from "businesslogic/dataStore/reducers/app";
 import { storageService } from "../../utils/validators";
 import { isEmpty } from "lodash-es";
 
