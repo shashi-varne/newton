@@ -38,14 +38,69 @@ const myReferralsContainer = (WrappedComponent) => (props) => {
     }
   };
 
+  const onClickListItem = ({ id, isOpen }) => {};
+
+  const onClickCopy = (id) => {};
+
   return (
     <WrappedComponent
       isWeb={isWeb}
+      data={dummyData}
+      pendingReferralsCount="02"
+      totalEarned="1000"
       sendEvents={sendEvents}
       isPageLoading={isPageLoading}
+      onClickCopy={onClickCopy}
+      onClickListItem={onClickListItem}
       navigate={navigate}
     />
   );
 };
+
+const dummyData = [
+  {
+    title: "User A",
+    isExpandable: true,
+    showNotification: true,
+    statusData: [
+      {
+        label: "Demat account",
+        status: "complete",
+        amount: "₹100",
+        dataAid: "dematAccount",
+      },
+      {
+        label: "SIP or one-time investment",
+        status: "pending",
+        amount: " ₹150",
+        dataAid: "sip",
+      },
+    ],
+  },
+  {
+    title: "User B",
+    isExpandable: false,
+    showNotification: false,
+  },
+  {
+    title: "User C",
+    isExpandable: true,
+    showNotification: true,
+    statusData: [
+      {
+        label: "Demat account",
+        status: "complete",
+        amount: "₹100",
+        dataAid: "dematAccount",
+      },
+      {
+        label: "SIP or one-time investment",
+        status: "pending",
+        amount: " ₹150",
+        dataAid: "sip",
+      },
+    ],
+  },
+];
 
 export default myReferralsContainer(MyReferrals);

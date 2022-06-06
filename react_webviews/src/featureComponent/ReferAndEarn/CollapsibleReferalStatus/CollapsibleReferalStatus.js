@@ -13,7 +13,7 @@ import { MY_REFERRALS } from "businesslogic/strings/referAndEarn";
 const STRINGS = MY_REFERRALS;
 
 const CollapsibleReferalStatus = ({
-  isOpen,
+  id,
   imgSrc,
   label,
   onClick,
@@ -26,6 +26,13 @@ const CollapsibleReferalStatus = ({
   data = dummyData,
   productName = "fisdom",
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const handleCollapse = () => {
+    const val = !isOpen;
+    setIsOpen(val);
+    onClick({ id, isOpen: val });
+  };
+
   return (
     <>
       <Box
@@ -33,7 +40,7 @@ const CollapsibleReferalStatus = ({
         className={`c-ref-wrapper ${disabled && "collapsed-disabled"}`}
         data-aid={`grp_referral` + dataAid}
       >
-        <div className="c-label-wrapper" onClick={onClick}>
+        <div className="c-label-wrapper" onClick={handleCollapse}>
           <Stack direction="row" alignItems="center">
             <Badge variant="dot" overlap="circular">
               <Icon
@@ -80,7 +87,7 @@ const CollapsibleReferalStatus = ({
                     <Typography
                       variant="body2"
                       color="foundationColors.secondary.coralOrange.400"
-                      dataAid={`status${index + 1}`}
+                      dataAid={`status${dataAid}`}
                     >
                       Pending
                     </Typography>
@@ -95,7 +102,7 @@ const CollapsibleReferalStatus = ({
                 ) : (
                   <Button
                     title={STRINGS.copyBtn.text}
-                    onClick={onClickCopy}
+                    onClick={() => onClickCopy(id)}
                     variant={"link"}
                     dataAid={STRINGS.copyBtn.dataAid}
                     sx={{ alignSelf: "flex-start" }}
@@ -106,9 +113,7 @@ const CollapsibleReferalStatus = ({
           </>
         </CollapseLib>
       </Box>
-      {showSeparator && (
-        <Separator dataAid={dataAid} marginLeft="16px" marginRight="16px" />
-      )}
+      {showSeparator && <Separator dataAid={dataAid} />}
     </>
   );
 };
