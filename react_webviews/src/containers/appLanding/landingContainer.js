@@ -72,7 +72,8 @@ const signifierKey = "stocks";
 const initializeData = () => {
   const {
     code,
-    investSections,
+    landingSections,
+    featuresList,
     mfOptions,
     onboardingCarousels,
     platformMotivators,
@@ -80,13 +81,14 @@ const initializeData = () => {
     ...baseConfig
   } = getConfig();
   const { investCardsData, isMfOnly, showPortfolioOverview } =
-    getInvestCardsData(investSections, signifierKey, mfOptions);
+    getInvestCardsData(featuresList, signifierKey, mfOptions);
   const marketingBanners = getEnabledMarketingBanners(landingMarketingBanners);
   return {
     code,
     onboardingCarousels,
     platformMotivators,
     marketingBanners,
+    landingSections,
     investCardsData,
     isMfOnly,
     showPortfolioOverview,
@@ -118,8 +120,10 @@ const landingContainer = (WrappedComponent) => (props) => {
     marketingBanners,
     baseConfig,
     investCardsData,
+    landingSections,
     isMfOnly,
     showPortfolioOverview,
+    showSetupEasySip,
   } = useMemo(initializeData, [partner]);
   const [kycData, setKycData] = useState(getKycData(kyc, user));
   const [campaignData, setCampaignData] = useState({});
@@ -131,8 +135,9 @@ const landingContainer = (WrappedComponent) => (props) => {
       !appStorage.isOnboardingCarouselsDisplayed
   );
   const [kycBottomsheetData, setKycBottomsheetData] = useState({});
+  const [referralData, setReferralData] = useState({});
 
-  const getReferalData = () => {
+  const getReferalConfig = () => {
     const showShareReferral =
       kycData.isMfInvested &&
       !baseConfig.Web &&
@@ -147,10 +152,23 @@ const landingContainer = (WrappedComponent) => (props) => {
     };
   };
 
-  const { showApplyReferral, showShareReferral } = useMemo(getReferalData, [
+  const { showApplyReferral, showShareReferral } = useMemo(getReferalConfig, [
     user,
     partner,
   ]);
+
+  const getLandingSections = () => {
+    if (showPortfolioOverview && showSetupEasySip) {
+      const list = landingSections.filter(
+        (data) => data !== "marketingBanners"
+      );
+      const index = list.indexOf("featuresList");
+      list.splice(index + 1, 0, "marketingBanners");
+      return list;
+    }
+    return landingSections;
+  };
+  const mainLandingSections = useMemo(getLandingSections, []);
 
   useEffect(() => {
     onLoad();
@@ -514,16 +532,29 @@ const landingContainer = (WrappedComponent) => (props) => {
     try {
       handleLoader({ dotLoader: true });
       await applyReferralCode(Api, referral);
-      ToastMessage("You have applied referral code successfully");
+      setReferralData(REFERRAL_DATA.success);
+      handleBottomsheets({ [BOTTOMSHEET_KEYS.openReferral]: true });
     } catch (err) {
-      ToastMessage(err.message);
+      setReferralData({
+        ...REFERRAL_DATA.failed,
+        subtitle: err.message,
+      });
+      handleBottomsheets({ [BOTTOMSHEET_KEYS.openReferral]: true });
     } finally {
       handleLoader({ dotLoader: false });
     }
   };
 
+  const handleReferralBottomsheet = () => {
+    sendEvents("next", {
+      intent: referralData.title,
+    });
+    handleBottomsheets({ [BOTTOMSHEET_KEYS.openReferral]: false });
+  };
+
   return (
     <WrappedComponent
+      landingSections={mainLandingSections}
       isPageLoading={isPageLoading}
       loaderData={loaderData}
       isFetchFailed={isFetchFailed}
@@ -546,17 +577,12 @@ const landingContainer = (WrappedComponent) => (props) => {
       showPlatformMotivators={!kycData.isReadyToInvestBase}
       showExploreCategories={isMfOnly}
       showSeachIcon={isMfOnly}
-      showMarketingBanners={
-        !showPortfolioOverview && kycData.isReadyToInvestBase
-      }
-      showMarketingBannersAtBottom={
-        showPortfolioOverview && kycData.isReadyToInvestBase
-      }
+      showMarketingBanners={kycData.isReadyToInvestBase}
       showApplyReferral={showApplyReferral}
       showShareReferral={showShareReferral}
-      showSetupEasySip={true}
+      showSetupEasySip={showSetupEasySip}
       showKycCard={kycData.showKycCard}
-      referralData={REFERRAL_DATA.success}
+      referralData={referralData}
       kycBottomsheetData={kycBottomsheetData}
       bottomsheetStates={bottomsheetStates}
       authData={contactDetails}
@@ -564,6 +590,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       referral={referral}
       handleReferralChange={handleReferralChange}
       closeBottomsheet={closeBottomsheet}
+      handleReferralBottomsheet={handleReferralBottomsheet}
       handleKyc={handleKyc}
       handleCardClick={handleCardClick}
       handleExploreCategories={handleExploreCategories}

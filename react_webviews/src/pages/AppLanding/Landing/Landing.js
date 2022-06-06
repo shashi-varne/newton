@@ -16,12 +16,13 @@ import PlatformMotivator from "../../../featureComponent/appLanding/PlatformMoti
 import InvestmentOptions from "../../../featureComponent/appLanding/InvestmentOptions";
 import MarketingBanners from "../../../featureComponent/appLanding/MarketingBanners";
 import ExploreCategories from "../../../featureComponent/appLanding/ExploreCategories";
+import PortfolioOverview from "../../../featureComponent/appLanding/PortfolioOverview";
 import AuthVerification from "../../../featureComponent/appLanding/AuthVerification";
 import Campaign from "../../../featureComponent/appLanding/Campaign";
 import PremiumOnboarding from "../../../featureComponent/appLanding/PremiumOnboarding";
 import KycBottomsheet from "../../../featureComponent/appLanding/KycBottomsheet";
 import { SwiperSlide } from "swiper/react";
-import { Skeleton, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import { BOTTOMSHEET_KEYS } from "../../../constants/webappLanding";
 import { LANDING } from "../../../strings/webappLanding";
 
@@ -87,26 +88,8 @@ const Landing = (props) => {
 export default Landing;
 
 const MainLanding = ({
-  showPlatformMotivators,
-  showMarketingBanners,
-  showKycCard,
-  showShareReferral,
-  showApplyReferral,
-  showSetupEasySip,
-  showExploreCategories,
-  showPortfolioOverview,
-  signfierKey,
-  showMarketingBannersAtBottom,
-  kycData = {},
-  marketingBanners,
-  investmentOptions,
-  platformMotivators,
-  exploreCategories,
-  manageInvestments,
   loaderData,
-  showLoader,
-  portfolioOverViewData,
-  closeReferral,
+  handleReferralBottomsheet,
   referralData = {},
   kycBottomsheetData = {},
   handleKycPrimaryClick,
@@ -118,113 +101,23 @@ const MainLanding = ({
   campaignData,
   onCampaignPrimaryClick,
   closeCampaignDialog,
-  handleKyc,
-  handleCardClick,
-  handleExploreCategories,
-  handleEasySip,
-  handleReferral,
-  handleManageInvestments,
-  onMarketingBannerClick,
-  isPageLoading,
   handleAuthVerification,
-  handleReferralChange,
-  referral,
+  landingSections,
+  ...restProps
 }) => {
   return (
     <>
-      {showPlatformMotivators && (
-        <PlatformMotivators options={platformMotivators} />
-      )}
-      {showPortfolioOverview && (
-        <PortfolioOverview
-          showLoader={showLoader}
-          portfolioOverViewData={portfolioOverViewData}
-        />
-      )}
-      {showMarketingBanners && (
-        <MarketingBanners
-          banners={marketingBanners}
-          onClick={onMarketingBannerClick}
-        />
-      )}
-      {showSetupEasySip && (
-        <WrapperBox elevation={1} className="lmw-setup-easysip">
-          <InfoCard
-            imgSrc={require(`assets/${easySipData.icon}`)}
-            rightImgSrc={require(`assets/fisdom/${easySipData.rightIcon}`)}
-            title={easySipData.title}
-            subtitle={easySipData.subtitle}
-            dataAid={easySipData.dataAid}
-            onClick={handleEasySip}
-          />
-        </WrapperBox>
-      )}
-      {showKycCard && (
-        <CardHorizontal
-          rightImgSrc={require(`assets/fisdom/${kycData.icon}`)}
-          title={kycData.title}
-          description={kycData.subtitle}
-          descriptionColor={kycData.descriptionColor}
-          actionLink={kycData.buttonTitle}
-          className="lmw-kyc"
-          variant="heroCard"
-          buttonProps={{
-            isInverted: false,
-          }}
-          sx={{
-            background: "white !important",
-          }}
-          dataAid={LANDING.kycDataAid}
-          titleColor="foundationColors.content.primary"
-          onClick={handleKyc(kycData.eventStatus)}
-          showLoader={isPageLoading}
-        />
-      )}
-      <InvestmentOptions
-        titleDataAid={LANDING.investmentOptions.dataAid}
-        title={LANDING.investmentOptions.title}
-        productList={investmentOptions}
-        onClick={handleCardClick}
-        signfierKey={signfierKey}
-        isLoading={showKycCard && isPageLoading}
-      />
-      {showMarketingBannersAtBottom && (
-        <MarketingBanners
-          banners={marketingBanners}
-          onClick={onMarketingBannerClick}
-        />
-      )}
-      {showExploreCategories && (
-        <ExploreCategories
-          categories={exploreCategories}
-          titleDataAid={LANDING.exploreCategories.dataAid}
-          title={LANDING.exploreCategories.title}
-          onClick={handleExploreCategories}
-        />
-      )}
-      <ManageInvestments
-        manageInvestments={manageInvestments}
-        onClick={handleManageInvestments}
-      />
-      {showApplyReferral && (
-        <ApplyReferral
-          onClick={handleReferral}
-          handleChange={handleReferralChange}
-          referral={referral}
-          isLoading={loaderData.dotLoader}
-        />
-      )}
-      {showShareReferral && (
-        <WrapperBox elevation={1} className="lmw-share-code">
-          <CardHorizontal
-            dataAid={shareReferralData.dataAid}
-            title={shareReferralData.title}
-            subtitle={shareReferralData.subtitle}
-            rightImgSrc={require(`assets/${shareReferralData.rightIcon}`)}
-            onClick={handleReferral}
-          />
-        </WrapperBox>
-      )}
+      {landingSections.map((el, index) => {
+        return (
+          <React.Fragment key={index}>
+            {renderCards({
+              id: el,
+              loaderData,
+              ...restProps,
+            })}
+          </React.Fragment>
+        );
+      })}
       <TrustIcon
         dataAid="fisdom"
         variant="registration"
@@ -241,7 +134,7 @@ const MainLanding = ({
         imageTitleSrc={referralData.image}
         subtitle={referralData.subtitle}
         primaryBtnTitle={referralData.primaryButtonTitle}
-        onPrimaryClick={closeReferral}
+        onPrimaryClick={handleReferralBottomsheet}
         dataAid={referralData.dataAid}
       />
       {bottomsheetStates.openKycStatusDialog && (
@@ -290,6 +183,162 @@ const MainLanding = ({
       />
     </>
   );
+};
+
+const renderCards = ({
+  id,
+  showPlatformMotivators,
+  showMarketingBanners,
+  showKycCard,
+  showShareReferral,
+  showApplyReferral,
+  showSetupEasySip,
+  showExploreCategories,
+  showPortfolioOverview,
+  signfierKey,
+  kycData = {},
+  marketingBanners,
+  investmentOptions,
+  platformMotivators,
+  exploreCategories,
+  manageInvestments,
+  loaderData,
+  showLoader,
+  portfolioOverViewData,
+  handleKyc,
+  handleCardClick,
+  handleExploreCategories,
+  handleEasySip,
+  handleReferral,
+  handleManageInvestments,
+  onMarketingBannerClick,
+  isPageLoading,
+  handleReferralChange,
+  referral,
+}) => {
+  const cardsMapper = {
+    platformMotivators: (
+      <>
+        {showPlatformMotivators && (
+          <PlatformMotivators options={platformMotivators} />
+        )}
+      </>
+    ),
+    portfolioOverview: (
+      <>
+        {showPortfolioOverview && (
+          <PortfolioOverview
+            showLoader={showLoader}
+            portfolioOverViewData={portfolioOverViewData}
+            portfolioData={portfolioData}
+          />
+        )}
+      </>
+    ),
+    marketingBanners: (
+      <>
+        {showMarketingBanners && (
+          <MarketingBanners
+            banners={marketingBanners}
+            onClick={onMarketingBannerClick}
+          />
+        )}
+      </>
+    ),
+    easySip: (
+      <>
+        {showSetupEasySip && (
+          <WrapperBox elevation={1} className="lmw-setup-easysip">
+            <InfoCard
+              imgSrc={require(`assets/${easySipData.icon}`)}
+              rightImgSrc={require(`assets/fisdom/${easySipData.rightIcon}`)}
+              title={easySipData.title}
+              subtitle={easySipData.subtitle}
+              dataAid={easySipData.dataAid}
+              onClick={handleEasySip}
+            />
+          </WrapperBox>
+        )}
+      </>
+    ),
+    kyc: (
+      <>
+        {showKycCard && (
+          <CardHorizontal
+            rightImgSrc={require(`assets/fisdom/${kycData.icon}`)}
+            title={kycData.title}
+            description={kycData.subtitle}
+            descriptionColor={kycData.descriptionColor}
+            actionLink={kycData.buttonTitle}
+            className="lmw-kyc"
+            variant="heroCard"
+            buttonProps={{
+              isInverted: false,
+            }}
+            sx={{
+              background: "white !important",
+            }}
+            dataAid={LANDING.kycDataAid}
+            titleColor="foundationColors.content.primary"
+            onClick={handleKyc(kycData.eventStatus)}
+            showLoader={isPageLoading}
+          />
+        )}
+      </>
+    ),
+    featuresList: (
+      <InvestmentOptions
+        titleDataAid={LANDING.investmentOptions.dataAid}
+        title={LANDING.investmentOptions.title}
+        productList={investmentOptions}
+        onClick={handleCardClick}
+        signfierKey={signfierKey}
+        isLoading={showKycCard && isPageLoading}
+      />
+    ),
+    exploreCategories: (
+      <>
+        {showExploreCategories && (
+          <ExploreCategories
+            categories={exploreCategories}
+            titleDataAid={LANDING.exploreCategories.dataAid}
+            title={LANDING.exploreCategories.title}
+            onClick={handleExploreCategories}
+          />
+        )}
+      </>
+    ),
+    manageInvestments: (
+      <ManageInvestments
+        manageInvestments={manageInvestments}
+        onClick={handleManageInvestments}
+      />
+    ),
+    referral: (
+      <>
+        {showApplyReferral && (
+          <ApplyReferral
+            onClick={handleReferral}
+            handleChange={handleReferralChange}
+            referral={referral}
+            isLoading={loaderData?.dotLoader}
+          />
+        )}
+        {showShareReferral && (
+          <WrapperBox elevation={1} className="lmw-share-code">
+            <CardHorizontal
+              dataAid={shareReferralData.dataAid}
+              title={shareReferralData.title}
+              subtitle={shareReferralData.subtitle}
+              rightImgSrc={require(`assets/${shareReferralData.rightIcon}`)}
+              onClick={handleReferral}
+            />
+          </WrapperBox>
+        )}
+      </>
+    ),
+  };
+  return cardsMapper[id];
 };
 
 const PlatformMotivators = ({ options }) => {
@@ -375,87 +424,5 @@ const ApplyReferral = ({ referral, handleChange, onClick, isLoading }) => {
         />
       </Stack>
     </WrapperBox>
-  );
-};
-
-const PortfolioOverview = ({ showLoader, portfolioOverViewData }) => {
-  return (
-    <WrapperBox className="lmw-portfolio-overview">
-      <Typography variant="heading3" dataAid={portfolioData.titleDataAid}>
-        {portfolioData.title}
-      </Typography>
-      <Stack
-        flexDirection="row"
-        justifyContent="space-between"
-        alignItems="center"
-        sx={{ pt: "16px" }}
-      >
-        <Tile
-          title={portfolioData.currentData.title}
-          titleDataAid={portfolioData.currentData.titleDataAid}
-          value={portfolioOverViewData.currentValue}
-          gap="8px"
-          valueProps={{
-            variant: "heading3",
-            dataAid: portfolioData.currentData.valueDataAid,
-          }}
-          showLoader={showLoader}
-        />
-        <Tile
-          title={portfolioData.investedData.title}
-          titleDataAid={portfolioData.investedData.titleDataAid}
-          value={portfolioOverViewData.investedValue}
-          gap="8px"
-          valueProps={{
-            variant: "heading3",
-            dataAid: portfolioData.investedData.valueDataAid,
-            textAlign: "right",
-          }}
-          showLoader={showLoader}
-        />
-      </Stack>
-      <Tile
-        title={portfolioData.profitOrLossData.title}
-        titleDataAid={portfolioData.profitOrLossData.titleDataAid}
-        value={portfolioOverViewData.profitOrLoss}
-        flexDirection="row"
-        gap="4px"
-        sx={{ pt: "16px" }}
-        valueProps={{
-          variant: "body2",
-          color: portfolioOverViewData.isProfit
-            ? "foundationColors.secondary.profitGreen.400"
-            : "foundationColors.secondary.lossRed.400",
-          dataAid: portfolioData.profitOrLossData.valueDataAid,
-        }}
-        showLoader={showLoader}
-      />
-    </WrapperBox>
-  );
-};
-
-const Tile = ({
-  title,
-  titleDataAid,
-  value,
-  showLoader,
-  valueProps,
-  ...restProps
-}) => {
-  return (
-    <Stack {...restProps}>
-      <Typography
-        dataAid={titleDataAid}
-        variant="body2"
-        color="foundationColors.content.secondary"
-      >
-        {title}
-      </Typography>
-      {showLoader ? (
-        <Skeleton variant="rectangular" className="lmw-po-loader" />
-      ) : (
-        <Typography {...valueProps}>{value}</Typography>
-      )}
-    </Stack>
   );
 };
