@@ -43,7 +43,11 @@ import {
 } from "../../dashboard/Invest/functions";
 import { storageService } from "../../utils/validators";
 import { isEmpty } from "lodash-es";
-import { authVerification, generateOtp } from "businesslogic/apis/app";
+import {
+  applyReferralCode,
+  authVerification,
+  generateOtp,
+} from "businesslogic/apis/app";
 import ToastMessage from "../../designSystem/atoms/ToastMessage";
 
 const screen = "LANDING";
@@ -73,6 +77,7 @@ const landingContainer = (WrappedComponent) => (props) => {
   const [loaderData, setLoaderData] = useState({
     skelton: false,
     pageLoader: false,
+    dotLoader: false,
   });
   const [bottomsheetStates, setBottomsheetStates] = useState(
     DEFAULT_BOTTOMSHEETS_DATA
@@ -97,6 +102,7 @@ const landingContainer = (WrappedComponent) => (props) => {
   const { kyc, user, appStorage } = useSelector(getAppData);
   const [kycData, setKycData] = useState(getKycData(kyc, user));
   const [campaignData, setCampaignData] = useState({});
+  const [referral, setReferral] = useState("");
   const [contactDetails, setContactDetails] = useState({});
   const [showCarousals, setShowCarousals] = useState(
     !isEmpty(onboardingCarousels) &&
@@ -344,6 +350,8 @@ const landingContainer = (WrappedComponent) => (props) => {
     sendEvents("next", {
       cardClick: "refer clicked",
     });
+
+    applyReferral();
   };
 
   const handleManageInvestments = (data) => () => {
@@ -452,6 +460,23 @@ const landingContainer = (WrappedComponent) => (props) => {
     }
   };
 
+  const handleReferralChange = (e) => {
+    const value = e.target.value;
+    setReferral(value);
+  };
+
+  const applyReferral = async () => {
+    try {
+      handleLoader({ dotLoader: true });
+      await applyReferralCode(Api, referral);
+      ToastMessage("You have applied referral code successfully");
+    } catch (err) {
+      ToastMessage(err.message);
+    } finally {
+      handleLoader({ dotLoader: false });
+    }
+  };
+
   return (
     <WrappedComponent
       isPageLoading={isPageLoading}
@@ -485,6 +510,8 @@ const landingContainer = (WrappedComponent) => (props) => {
       bottomsheetStates={bottomsheetStates}
       authData={contactDetails}
       campaignData={campaignData}
+      referral={referral}
+      handleReferralChange={handleReferralChange}
       closeBottomsheet={closeBottomsheet}
       handleKyc={handleKyc}
       handleCardClick={handleCardClick}

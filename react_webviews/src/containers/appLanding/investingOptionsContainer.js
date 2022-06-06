@@ -5,7 +5,6 @@ import InvestingOptions from "../../pages/AppLanding/InvestingOptions";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 
-const screen = "INVESTING_OPTIONS";
 const investingOptionsContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const { code, investingOptions } = useMemo(getConfig, []);

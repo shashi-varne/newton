@@ -127,6 +127,8 @@ const MainLanding = ({
   onMarketingBannerClick,
   isPageLoading,
   handleAuthVerification,
+  handleReferralChange,
+  referral,
 }) => {
   return (
     <>
@@ -204,7 +206,14 @@ const MainLanding = ({
         manageInvestments={manageInvestments}
         onClick={handleManageInvestments}
       />
-      {showApplyReferral && <ApplyReferral onClick={handleReferral} />}
+      {showApplyReferral && (
+        <ApplyReferral
+          onClick={handleReferral}
+          handleChange={handleReferralChange}
+          referral={referral}
+          isLoading={loaderData.dotLoader}
+        />
+      )}
       {showShareReferral && (
         <WrapperBox elevation={1} className="lmw-share-code">
           <CardHorizontal
@@ -333,7 +342,7 @@ const ManageInvestments = ({ manageInvestments = [], onClick }) => {
   );
 };
 
-const ApplyReferral = () => {
+const ApplyReferral = ({ referral, handleChange, onClick, isLoading }) => {
   return (
     <WrapperBox className="lmw-referral-code" elevation={1}>
       <Typography
@@ -347,17 +356,22 @@ const ApplyReferral = () => {
       <Stack
         flexDirection="row"
         alignItems="center"
-        gap="32px"
+        gap="24px"
         justifyContent="space-between"
       >
         <InputField
           dataAid={applyReferralData.inputDataAid}
           label={applyReferralData.inputLabel}
+          value={referral}
+          onChange={handleChange}
+          disabled={isLoading}
         />
         <Button
           size="small"
           title={applyReferralData.buttonTitle}
           dataAid={applyReferralData.buttonDataAid}
+          onClick={onClick}
+          isLoading={isLoading}
         />
       </Stack>
     </WrapperBox>
