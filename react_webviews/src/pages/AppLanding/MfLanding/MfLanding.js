@@ -6,7 +6,9 @@ import Partnership from "../../../featureComponent/appLanding/Partnership";
 import InvestmentOptions from "../../../featureComponent/appLanding/InvestmentOptions";
 import MarketingBanners from "../../../featureComponent/appLanding/MarketingBanners";
 import ExploreCategories from "../../../featureComponent/appLanding/ExploreCategories";
+import KycBottomsheet from "../../../featureComponent/appLanding/KycBottomsheet";
 import { MF_LANDING } from "../../../strings/webappLanding";
+import { isEmpty } from "lodash-es";
 
 import "./MfLanding.scss";
 
@@ -23,6 +25,11 @@ const MfLanding = ({
   onMarketingBannerClick,
   sendEvents,
   onRightIconClick,
+  handleKycPrimaryClick,
+  handleKycSecondaryClick,
+  bottomsheetStates,
+  kycBottomsheetData,
+  closeKycBottomsheet,
 }) => {
   return (
     <Container
@@ -83,6 +90,17 @@ const MfLanding = ({
         className="mfl-trust-icon"
       />
       <Partnership className="mfl-partnership" />
+      {bottomsheetStates.openKycStatusDialog &&
+        !isEmpty(kycBottomsheetData) && (
+          <KycBottomsheet
+            isOpen={bottomsheetStates.openKycStatusDialog}
+            onClose={closeKycBottomsheet}
+            dataAid="kyc"
+            data={kycBottomsheetData}
+            onPrimaryClick={handleKycPrimaryClick}
+            onSecondaryClick={handleKycSecondaryClick}
+          />
+        )}
     </Container>
   );
 };
