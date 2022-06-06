@@ -1,0 +1,26 @@
+.container {
+  width: 100%;
+  border-radius: 12px;
+
+  .top-row {
+    padding: 16px 16px 8px !important;
+    .main-title {
+      margin-left: 12px;
+    }
+    .checkbox {
+      width: 20px;
+      height: 20px;
+      svg {
+        width: 20px;
+        height: 20px;
+        transform: translateY(-2px);
+      }
+    }
+  }
+  .middle-row {
+    padding: 8px 16px 8px !important;
+  }
+  .bottom-row {
+    padding: 8px 16px 16px !important;
+  }
+}
