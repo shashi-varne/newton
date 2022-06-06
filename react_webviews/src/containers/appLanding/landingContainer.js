@@ -69,6 +69,31 @@ const DEFAULT_BOTTOMSHEETS_DATA = {
 
 const signifierKey = "stocks";
 
+const initializeData = () => {
+  const {
+    code,
+    investSections,
+    mfOptions,
+    onboardingCarousels,
+    platformMotivators,
+    landingMarketingBanners,
+    ...baseConfig
+  } = getConfig();
+  const { investCardsData, isMfOnly, showPortfolioOverview } =
+    getInvestCardsData(investSections, signifierKey, mfOptions);
+  const marketingBanners = getEnabledMarketingBanners(landingMarketingBanners);
+  return {
+    code,
+    onboardingCarousels,
+    platformMotivators,
+    marketingBanners,
+    investCardsData,
+    isMfOnly,
+    showPortfolioOverview,
+    baseConfig,
+  };
+};
+
 const landingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const dispatch = useDispatch();
@@ -82,21 +107,20 @@ const landingContainer = (WrappedComponent) => (props) => {
   const [bottomsheetStates, setBottomsheetStates] = useState(
     DEFAULT_BOTTOMSHEETS_DATA
   );
-  const {
-    code,
-    investSections,
-    mfOptions,
-    onboardingCarousels,
-    platformMotivators,
-    landingMarketingBanners,
-    ...baseConfig
-  } = useMemo(getConfig, []);
-  const { investCardsData, isMfOnly, showPortfolioOverview } =
-    getInvestCardsData(investSections, signifierKey, mfOptions);
-  const marketingBanners = getEnabledMarketingBanners(landingMarketingBanners);
+
   const { isPageLoading } = useLoadingState(screen);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
-  const { kyc, user, appStorage } = useSelector(getAppData);
+  const { kyc, user, appStorage, partner } = useSelector(getAppData);
+  const {
+    code,
+    onboardingCarousels,
+    platformMotivators,
+    marketingBanners,
+    baseConfig,
+    investCardsData,
+    isMfOnly,
+    showPortfolioOverview,
+  } = useMemo(initializeData, [partner]);
   const [kycData, setKycData] = useState(getKycData(kyc, user));
   const [campaignData, setCampaignData] = useState({});
   const [referral, setReferral] = useState("");
@@ -107,6 +131,26 @@ const landingContainer = (WrappedComponent) => (props) => {
       !appStorage.isOnboardingCarouselsDisplayed
   );
   const [kycBottomsheetData, setKycBottomsheetData] = useState({});
+
+  const getReferalData = () => {
+    const showShareReferral =
+      kycData.isMfInvested &&
+      !baseConfig.Web &&
+      baseConfig?.referralConfig?.shareRefferal;
+    const showApplyReferral =
+      !kycData.isMfInvested &&
+      !baseConfig.Web &&
+      baseConfig?.referralConfig?.applyRefferal;
+    return {
+      showApplyReferral,
+      showShareReferral,
+    };
+  };
+
+  const { showApplyReferral, showShareReferral } = useMemo(getReferalData, [
+    user,
+    partner,
+  ]);
 
   useEffect(() => {
     onLoad();
@@ -348,7 +392,11 @@ const landingContainer = (WrappedComponent) => (props) => {
       cardClick: "refer clicked",
     });
 
-    applyReferral();
+    if (showApplyReferral) {
+      applyReferral();
+    } else {
+      navigate(WEBAPP_LANDING_PATHNAME_MAPPER.refer);
+    }
   };
 
   const handleManageInvestments = (data) => () => {
@@ -504,8 +552,8 @@ const landingContainer = (WrappedComponent) => (props) => {
       showMarketingBannersAtBottom={
         showPortfolioOverview && kycData.isReadyToInvestBase
       }
-      showApplyReferral={false}
-      showShareReferral={true}
+      showApplyReferral={showApplyReferral}
+      showShareReferral={showShareReferral}
       showSetupEasySip={true}
       showKycCard={kycData.showKycCard}
       referralData={REFERRAL_DATA.success}

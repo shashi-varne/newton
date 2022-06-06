@@ -15,7 +15,7 @@ import {
   splitMobileNumberFromContryCode,
   storageService,
 } from "../../utils/validators";
-import { isEmpty, isFunction } from "lodash-es";
+import { get, isEmpty, isFunction } from "lodash-es";
 import { nativeCallback } from "../../utils/native_callback";
 import {
   kycStatusMapper,
@@ -41,6 +41,7 @@ import Api from "../../utils/api";
 import { FREEDOM_PLAN_STORAGE_CONSTANTS } from "../../freedom_plan/common/constants";
 import Toast from "../../designSystem/atoms/ToastMessage";
 
+/* eslint-disable */
 export const initData = async (updateStore) => {
   const currentUser = storageService().get("currentUser");
   const user = storageService().getObject("user");
@@ -306,6 +307,9 @@ export const dateValidation = (endDate, startDate) => {
 export const validateFeature = (type) => {
   if (type === "ipo") {
     return isTradingEnabled();
+  } else if (type === "freedomplan") {
+    const subscriptionStatus = get(store.getState(), "subscriptionStatus", {});
+    return subscriptionStatus?.freedom_cta || subscriptionStatus?.renewal_cta;
   }
   return true;
 };
@@ -468,7 +472,6 @@ export function handleCampaignRedirection(url, showRedirectUrl) {
   let plutusRedirectUrl = `${getBasePath()}/?is_secure=${
     config.isSdk
   }&partner_code=${config.code}`;
-  // eslint-disable-next-line
   campLink = `${campLink}${
     campLink.match(/[\?]/g) ? "&" : "?"
   }generic_callback=true&${

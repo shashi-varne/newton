@@ -24,6 +24,7 @@ export const WEBAPP_LANDING_PATHNAME_MAPPER = {
   notification: "/notification",
   investingOptions: "/mf-landing/view-all",
   bankList: "/bank-list",
+  refer: "/refer",
 };
 
 export const KYC_CARD_STATUS_MAPPER = {

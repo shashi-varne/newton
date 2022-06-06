@@ -25,6 +25,7 @@ const bankListContainer = (WrappedComponent) => (props) => {
 
   const getBankListOptions = () => {
     let bankListData = [];
+    // eslint-disable-next-line
     bankList?.forEach((data) => {
       bankListData.push({
         title: data.account_number,
