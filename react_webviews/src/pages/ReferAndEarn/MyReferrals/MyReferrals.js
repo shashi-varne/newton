@@ -17,7 +17,7 @@ const MyReferrals = ({
   totalEarned,
   sendEvents,
   isPageLoading,
-  conClickListItem,
+  onClickListItem,
   onClickCopy,
 }) => {
   return (
@@ -84,7 +84,7 @@ const MyReferrals = ({
               label={item.title}
               showNotification={item.showNotification}
               onClick={onClickListItem}
-              dataAid={index + 1}
+              dataAid={`${index + 1}`}
               onClickCopy={onClickCopy}
               showSeparator={!isLastItem}
               productName="fisdom"
@@ -96,10 +96,7 @@ const MyReferrals = ({
               key={index}
               id={index}
               label={item.title}
-              onClick={({ index, isOpen }) => {
-                console.log({ isOpen, index });
-              }}
-              dataAid={index + 1}
+              dataAid={`${index + 1}`}
               onClickCopy={onClickCopy}
               showSeparator={!isLastItem}
               productName="fisdom"
