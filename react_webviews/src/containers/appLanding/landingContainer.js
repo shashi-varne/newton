@@ -91,11 +91,8 @@ const landingContainer = (WrappedComponent) => (props) => {
     landingMarketingBanners,
     ...baseConfig
   } = useMemo(getConfig, []);
-  const { investCardsData, isMfOnly } = getInvestCardsData(
-    investSections,
-    signifierKey,
-    mfOptions
-  );
+  const { investCardsData, isMfOnly, showPortfolioOverview } =
+    getInvestCardsData(investSections, signifierKey, mfOptions);
   const marketingBanners = getEnabledMarketingBanners(landingMarketingBanners);
   const { isPageLoading } = useLoadingState(screen);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
@@ -495,12 +492,18 @@ const landingContainer = (WrappedComponent) => (props) => {
       exploreCategories={EXPLORE_CATEGORIES}
       manageInvestments={MANAGE_INVESTMENTS}
       portfolioOverViewData={portfolioOverViewData}
-      showPortfolioOverview={isMfOnly && kycData.isReadyToInvestBase}
+      showPortfolioOverview={
+        showPortfolioOverview && kycData.isReadyToInvestBase
+      }
       showPlatformMotivators={!kycData.isReadyToInvestBase}
       showExploreCategories={isMfOnly}
       showSeachIcon={isMfOnly}
-      showMarketingBanners={!isMfOnly && kycData.isReadyToInvestBase}
-      showMarketingBannersAtBottom={isMfOnly && kycData.isReadyToInvestBase}
+      showMarketingBanners={
+        !showPortfolioOverview && kycData.isReadyToInvestBase
+      }
+      showMarketingBannersAtBottom={
+        showPortfolioOverview && kycData.isReadyToInvestBase
+      }
       showApplyReferral={false}
       showShareReferral={true}
       showSetupEasySip={true}

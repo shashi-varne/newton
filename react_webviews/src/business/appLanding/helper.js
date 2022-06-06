@@ -200,19 +200,31 @@ export const getInvestCardsData = (
   fallbackOptions
 ) => {
   const config = getConfig();
-  let isMfOnly = false;
+  let isMfOnly = false,
+    showPortfolioOverview = false;
   let data = getEnabledFeaturesData(config, investSections, signifier);
-  if (data.cardsData.length === 1) {
+
+  const FEATURES_TO_ENABLE_PORTFOLIO = ["mf", "taxFiling"];
+  if (data.cardsData.length === FEATURES_TO_ENABLE_PORTFOLIO.length) {
+    showPortfolioOverview = true;
+    data.cardsData.forEach((el) => {
+      if (!FEATURES_TO_ENABLE_PORTFOLIO.includes(el.id)) {
+        showPortfolioOverview = false;
+      }
+    });
+  } else if (data.cardsData.length === 1) {
     data = getEnabledFeaturesData(config, fallbackOptions, signifier);
     isMfOnly = true;
+    showPortfolioOverview = true;
   }
+
   let { cardsData, signifierIndex } = data;
   if (signifierIndex !== -1) {
     const selectedCardData = cardsData.find((el) => el.id === signifier);
     cardsData = cardsData.filter((el) => el.id !== signifier);
     cardsData.unshift(selectedCardData);
   }
-  return { investCardsData: cardsData, isMfOnly };
+  return { investCardsData: cardsData, isMfOnly, showPortfolioOverview };
 };
 
 export const getEnabledFeaturesData = (config, investOptions, signifier) => {

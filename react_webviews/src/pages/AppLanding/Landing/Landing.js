@@ -66,7 +66,7 @@ const Landing = (props) => {
       }}
       eventData={sendEvents("just_set_events")}
       isFetchFailed={isFetchFailed}
-      isPageLoading={loaderData.skelton}
+      isPageLoading={loaderData.skelton || loaderData.pageLoader}
       errorData={errorData}
     >
       {showCarousals ? (
