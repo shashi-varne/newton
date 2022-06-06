@@ -16,8 +16,9 @@ import {
   handleKycStatusRedirection,
 } from "../../dashboard/Invest/functions";
 import { useDispatch, useSelector } from "react-redux";
-import { getAppData, setUser } from "businesslogic/dataStore/reducers/app";
+import { getAppData, setKyc, setUser } from "businesslogic/dataStore/reducers/app";
 import { storageService } from "../../utils/validators";
+import { isEmpty } from "lodash-es";
 
 const screen = "MF_LANDING";
 const mfLandingContainer = (WrappedComponent) => (props) => {
@@ -104,7 +105,7 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
   };
 
   const updateKyc = (data) => {
-    if (!isEmpty) {
+    if (!isEmpty(data)) {
       storageService().setObject("kyc", data);
       dispatch(setKyc(data));
     }

@@ -36,7 +36,6 @@ import {
   setReferral,
   setSubscriptionStatus,
   setUser,
-  updateAppStore,
 } from "businesslogic/dataStore/reducers/app";
 import Api from "../../utils/api";
 import { FREEDOM_PLAN_STORAGE_CONSTANTS } from "../../freedom_plan/common/constants";
@@ -150,15 +149,11 @@ const setSDKSummaryData = (result, updateStore) => {
   storageService().setObject("banklist", bankList);
   storageService().setObject("referral", referral);
   if (updateStore) {
-    store.dispatch(
-      updateAppStore({
-        campaign: campaignData,
-        nps,
-        referral,
-        bankList,
-        subscriptionStatus,
-      })
-    );
+    store.dispatch(setCampaign(campaignData));
+    store.dispatch(setNps(nps));
+    store.dispatch(setReferral(referral));
+    store.dispatch(setBankList(bankList));
+    store.dispatch(setSubscriptionStatus(subscriptionStatus));
   }
   setNpsData(result);
 };
