@@ -550,7 +550,7 @@ function initiatePinSetup({ key, isDirectEntry, navigate, handleLoader, handleSu
       },
     });
   } else {
-    handleDialogStates({ openPinSetupDialog: true, cardKey: key })
+    navigate(`/account/set-pin/${key}`);
   }
 }
 

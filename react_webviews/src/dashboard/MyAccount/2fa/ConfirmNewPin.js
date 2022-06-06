@@ -17,13 +17,14 @@ const ConfirmNewPin = (props) => {
   const routeParamsExist = useMemo(() => {
     return !isEmpty(routeParams);
   }, []);
-  const { productName } = getConfig();
+  const { productName, base_url } = getConfig();
   const successText = routeParams.set_flow ? `${capitalize(productName)} security enabled` : `${capitalize(productName)} PIN changed`;
   const comingFrom = useMemo(() => props.match?.params?.coming_from, [props]);
   const kycFlow = useMemo(() => comingFrom === 'kyc-complete', [comingFrom]);
   const [mpin, setMpin] = useState('');
   const [pinError, setPinError] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
+  const [showSkelton, setShowSkelton] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const navigate = navigateFunc.bind(props);
 
@@ -85,7 +86,12 @@ const ConfirmNewPin = (props) => {
     clearRouteParams();
     if (kycFlow) {
       navigate("/invest");
-    } else {
+    } else if (comingFrom === "stocks") {
+      setShowSkelton(true);
+      window.location.href = `${base_url}/page/equity/launchapp`;
+    } else if (comingFrom === "ipo") {
+      navigate("/market-products");
+    }  else {
       navigate('/account/security-settings');
     }
   }
@@ -98,6 +104,7 @@ const ConfirmNewPin = (props) => {
       handleClick={handleClick}
       buttonTitle="Continue"
       disable={mpin?.length !== 4}
+      skelton={showSkelton}
     >
       <div style={{ paddingTop: '60px' }}>
         <EnterMPin
