@@ -34,7 +34,18 @@ import {
 
 // common config across all partners
 export const commonCardsConfig = {
-  investSections: ["stocks", "ipo", "mf", "nps", "insurance", "taxFiling"],
+  landingSections: [
+    "platformMotivators",
+    "portfolioOverview",
+    "marketingBanners",
+    "easySip",
+    "kyc",
+    "featuresList",
+    "exploreCategories",
+    "manageInvestments",
+    "referral",
+  ],
+  featuresList: ["stocks", "ipo", "mf", "nps", "insurance", "taxFiling"],
   mfOptions: ["buildwealth", "nfo", "parkmoney", "viewAll"],
   investingOptions: [
     "buildwealth",
