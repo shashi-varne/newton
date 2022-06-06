@@ -11,6 +11,7 @@ const BankList = ({
   handleChange,
   onClick,
   sendEvents,
+  isButtonLoading,
 }) => {
   return (
     <Container
@@ -27,6 +28,7 @@ const BankList = ({
         button1Props: {
           title: BANK_LIST.buttonTitle,
           onClick,
+          isLoading: isButtonLoading,
         },
       }}
       eventsData={sendEvents("just_set_events")}
