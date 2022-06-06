@@ -308,7 +308,11 @@ export const validateFeature = (type) => {
   if (type === "ipo") {
     return isTradingEnabled();
   } else if (type === "freedomplan") {
-    const subscriptionStatus = get(store.getState(), "subscriptionStatus", {});
+    const subscriptionStatus = get(
+      store.getState(),
+      "app.subscriptionStatus",
+      {}
+    );
     return subscriptionStatus?.freedom_cta || subscriptionStatus?.renewal_cta;
   }
   return true;
