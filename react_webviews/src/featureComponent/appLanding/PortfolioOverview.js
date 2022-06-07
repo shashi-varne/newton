@@ -2,12 +2,20 @@ import React from "react";
 import Typography from "../../designSystem/atoms/Typography";
 import WrapperBox from "../../designSystem/atoms/WrapperBox";
 import { Skeleton, Stack } from "@mui/material";
+import { numDifferentiationInr } from "../../utils/validators";
 
 const PortfolioOverview = ({
   showLoader,
-  portfolioOverViewData,
+  portfolioOverViewData = {},
   portfolioData,
+  showPortfolioOverview,
 }) => {
+  if (
+    (!showPortfolioOverview || portfolioOverViewData.investedValue === 0) &&
+    !showLoader
+  ) {
+    return null;
+  }
   return (
     <WrapperBox className="lmw-portfolio-overview">
       <Typography variant="heading3" dataAid={portfolioData.titleDataAid}>
@@ -83,7 +91,9 @@ const Tile = ({
       {showLoader ? (
         <Skeleton variant="rectangular" className="lmw-po-loader" />
       ) : (
-        <Typography {...valueProps}>{value}</Typography>
+        <Typography {...valueProps}>
+          {numDifferentiationInr(value, 2, false, true)}
+        </Typography>
       )}
     </Stack>
   );

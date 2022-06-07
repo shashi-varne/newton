@@ -47,17 +47,11 @@ import {
   applyReferralCode,
   authVerification,
   generateOtp,
+  getPortfolioData,
 } from "businesslogic/apis/app";
 import ToastMessage from "../../designSystem/atoms/ToastMessage";
 
 const screen = "LANDING";
-const portfolioOverViewData = {
-  currentValue: "₹19.6Cr",
-  investedValue: "₹3.5Cr",
-  profitOrLoss: "+ ₹1.2Cr",
-  isProfit: true,
-};
-
 const DEFAULT_BOTTOMSHEETS_DATA = {
   openKycStatusDialog: false,
   openReferral: false,
@@ -78,7 +72,7 @@ const initializeData = () => {
     landingMarketingBanners,
     ...baseConfig
   } = getConfig();
-  const { feature } = getUrlParams()
+  const { feature } = getUrlParams();
   const { investCardsData, isMfOnly, showPortfolioOverview } =
     getInvestCardsData(featuresList, feature, mfOptions, 4);
   const marketingBanners = getEnabledMarketingBanners(landingMarketingBanners);
@@ -92,7 +86,7 @@ const initializeData = () => {
     isMfOnly,
     showPortfolioOverview,
     baseConfig,
-    feature
+    feature,
   };
 };
 
@@ -138,6 +132,8 @@ const landingContainer = (WrappedComponent) => (props) => {
   );
   const [kycBottomsheetData, setKycBottomsheetData] = useState({});
   const [referralData, setReferralData] = useState({});
+  const [showPortfolioLoader, setShowPorfolioLoader] = useState(false);
+  const [portfolioOverViewData, setPortfolioOverViewData] = useState({});
 
   const getReferalConfig = () => {
     const showShareReferral =
@@ -250,6 +246,39 @@ const landingContainer = (WrappedComponent) => (props) => {
           [appStorageKey]: true,
         })
       );
+    }
+  };
+
+  useEffect(() => {
+    handlePortfolio();
+  }, [showPortfolioOverview]);
+
+  const handlePortfolio = async () => {
+    if (!showPortfolioOverview) {
+      return;
+    }
+    try {
+      setShowPorfolioLoader(true);
+      const result = await getPortfolioData(Api);
+      const currentData = result.current || {};
+      const currentValue = currentData?.current;
+      const investedValue = currentData.invested;
+      const profitOrLoss = currentData.earings;
+      const data = {
+        currentValue,
+        investedValue,
+        profitOrLoss,
+        isProfit: profitOrLoss >= 0,
+      };
+      setPortfolioOverViewData(data);
+    } catch (err) {
+      setErrorData({
+        handleClick: handlePortfolio,
+        subtitle: err.message,
+        isFetchFailed: true,
+      });
+    } finally {
+      setShowPorfolioLoader(false);
     }
   };
 
@@ -585,6 +614,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       manageInvestments={MANAGE_INVESTMENTS}
       portfolioOverViewData={portfolioOverViewData}
       showPortfolioOverview={showPortfolioOverview}
+      showPortfolioLoader={showPortfolioLoader}
       showPlatformMotivators={!kycData.isReadyToInvestBase}
       showExploreCategories={isMfOnly}
       showSeachIcon={isMfOnly}
