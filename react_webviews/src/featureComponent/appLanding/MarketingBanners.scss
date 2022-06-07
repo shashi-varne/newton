@@ -11,13 +11,15 @@
   }
 }
 
-.al-single-marketing-banners {
-  .swiper-slide {
-    width: 100% !important;
-  }
+@media only screen and (max-width: 767px) {
+  .al-single-marketing-banners {
+    .swiper-slide {
+      width: 100% !important;
+    }
 
-  .al-mb-icon {
-    width: 100%;
-    height: unset;
+    .al-mb-icon {
+      width: 100%;
+      height: unset;
+    }
   }
 }
