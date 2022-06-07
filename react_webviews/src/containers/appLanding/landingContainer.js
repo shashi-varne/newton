@@ -112,7 +112,7 @@ const landingContainer = (WrappedComponent) => (props) => {
 
   const { isPageLoading } = useLoadingState(screen);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
-  const { kyc, user, appStorage, partner, subscriptionStatus } =
+  const { kyc, user, appStorage, partner, subscriptionStatus, bankList } =
     useSelector(getAppData);
   const {
     code,
@@ -183,14 +183,22 @@ const landingContainer = (WrappedComponent) => (props) => {
       setSummaryData(response);
       const kycDetails = getKycData(data.kyc, data.user);
       setKycData(kycDetails);
-      if (!isEmpty(data.bankList)) {
-        navigate(WEBAPP_LANDING_PATHNAME_MAPPER.bankList);
-      } else {
+      if (isEmpty(data.bankList)) {
         handleLandingBottomsheets(kycDetails);
       }
     };
     dispatch(fetchSummary({ Api, screen, sagaCallback }));
   };
+
+  const handleBankList = () => {
+    if (!showCarousals && !isEmpty(bankList)) {
+      navigate(WEBAPP_LANDING_PATHNAME_MAPPER.bankList);
+    }
+  };
+
+  useEffect(() => {
+    handleBankList();
+  }, [showCarousals, bankList]);
 
   const handleLandingBottomsheets = (kycDetails) => {
     let campaignBottomSheetData = {},
