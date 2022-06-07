@@ -8,8 +8,8 @@ const InvestmentOptions = ({
   title,
   titleDataAid,
   onClick,
-  signfierKey,
-  isLoading
+  feature,
+  isLoading,
 }) => {
   return (
     <div className="al-investment-options">
@@ -23,9 +23,9 @@ const InvestmentOptions = ({
         </Typography>
       )}
       {productList.map((data, idx) => {
-        const showLoader = ["stocks", "ipo"].includes(data.id) && isLoading
+        const showLoader = ["stocks", "ipo"].includes(data.id) && isLoading;
         const rightLottieSrc =
-          signfierKey === data.id
+          feature === data.id
             ? require(`assets/fisdom/lottie/signfier.json`)
             : null;
         return (

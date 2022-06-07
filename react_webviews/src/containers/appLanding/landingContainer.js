@@ -41,7 +41,7 @@ import {
   handleStocksAndIpoCards,
   openKyc,
 } from "../../dashboard/Invest/functions";
-import { storageService } from "../../utils/validators";
+import { getUrlParams, storageService } from "../../utils/validators";
 import { isEmpty } from "lodash-es";
 import {
   applyReferralCode,
@@ -67,8 +67,6 @@ const DEFAULT_BOTTOMSHEETS_DATA = {
   openCampaign: false,
 };
 
-const signifierKey = "stocks";
-
 const initializeData = () => {
   const {
     code,
@@ -80,8 +78,9 @@ const initializeData = () => {
     landingMarketingBanners,
     ...baseConfig
   } = getConfig();
+  const { feature } = getUrlParams()
   const { investCardsData, isMfOnly, showPortfolioOverview } =
-    getInvestCardsData(featuresList, signifierKey, mfOptions, 4);
+    getInvestCardsData(featuresList, feature, mfOptions, 4);
   const marketingBanners = getEnabledMarketingBanners(landingMarketingBanners);
   return {
     code,
@@ -93,6 +92,7 @@ const initializeData = () => {
     isMfOnly,
     showPortfolioOverview,
     baseConfig,
+    feature
   };
 };
 
@@ -125,6 +125,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     isMfOnly,
     showPortfolioOverview,
     showSetupEasySip,
+    feature,
   } = useMemo(initializeData, [partner, subscriptionStatus, kyc]);
   const [kycData, setKycData] = useState(getKycData(kyc, user));
   const [campaignData, setCampaignData] = useState({});
@@ -575,7 +576,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       handleCarousels={handleCarousels}
       carousalsData={onboardingCarousels}
       showCarousals={showCarousals}
-      signfierKey={signifierKey}
+      feature={feature}
       platformMotivators={platformMotivators}
       marketingBanners={marketingBanners}
       kycData={kycData.kycStatusData}

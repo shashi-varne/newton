@@ -54,28 +54,14 @@ const StocksAndIpoDirectEntry = (props) => {
   const onLoad = () => {
     switch (type) {
       case "tpp":
-        navigate("/product-types");
+        navigate("/", {
+          searchParams: `${baseConfig.searchParams}&feature=ipo`
+        })
         break;
       case "equity":
-        const kycDetails = getKycData(kyc, user);
-        const contactData = contactVerification(kyc);
-        const config = getConfig();
-        setBaseConfig(config);
-        setKycData(kycDetails);
-        setContactDetails(contactData);
-        const data = {
-          ...kycDetails,
-          key: "stocks",
-          isDirectEntry: true,
-          kyc,
-          user,
-          navigate,
-          handleLoader: noop,
-          handleDialogStates,
-          handleSummaryData,
-          closeKycStatusDialog,
-        };
-        handleStocksAndIpoCards(data, props);
+        navigate("/", {
+          searchParams: `${baseConfig.searchParams}&feature=stocks`
+        })
         break;
       default:
         navigate("/invest");

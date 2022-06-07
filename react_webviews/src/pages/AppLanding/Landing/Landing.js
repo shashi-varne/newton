@@ -195,7 +195,7 @@ const renderCards = ({
   showSetupEasySip,
   showExploreCategories,
   showPortfolioOverview,
-  signfierKey,
+  feature,
   kycData = {},
   marketingBanners,
   investmentOptions,
@@ -292,7 +292,7 @@ const renderCards = ({
         title={LANDING.investmentOptions.title}
         productList={investmentOptions}
         onClick={handleCardClick}
-        signfierKey={signfierKey}
+        feature={feature}
         isLoading={showKycCard && isPageLoading}
       />
     ),

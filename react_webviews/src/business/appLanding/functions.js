@@ -193,19 +193,30 @@ const setNpsData = async (result) => {
 
 export const getInvestCardsData = (
   investSections = [],
-  signifier,
+  feature,
   fallbackOptions,
   maximumProducts
 ) => {
   const config = getConfig();
   let isMfOnly = false,
     showPortfolioOverview = false;
-  let data = getEnabledFeaturesData(config, investSections, signifier);
+  let data = getEnabledFeaturesData(config, investSections, feature);
   const user = get(store.getState(), "app.user", {});
+
+  let { cardsData, featureIndex } = data;
+  if (featureIndex !== -1) {
+    const selectedCardData = cardsData.find((el) => el.id === feature);
+    cardsData = cardsData.filter((el) => el.id !== feature);
+    if (!isEmpty(selectedCardData)) {
+      cardsData.unshift(selectedCardData);
+    }
+    data.cardsData = cardsData;
+  }
+
   const FEATURES_TO_ENABLE_PORTFOLIO = ["mf", "taxFiling"];
   if (
     user.active_investment &&
-    data.cardsData.length === FEATURES_TO_ENABLE_PORTFOLIO.length
+    data.cardsData.length <= FEATURES_TO_ENABLE_PORTFOLIO.length
   ) {
     showPortfolioOverview = true;
     data.cardsData.forEach((el) => {
@@ -213,12 +224,10 @@ export const getInvestCardsData = (
         showPortfolioOverview = false;
       }
     });
-  } else if (data.cardsData.length === 1) {
-    data = getEnabledFeaturesData(config, fallbackOptions, signifier);
+  }
+  if (data.cardsData.length === 1) {
+    data = getEnabledFeaturesData(config, fallbackOptions, feature);
     isMfOnly = true;
-    if (user.active_investment) {
-      showPortfolioOverview = true;
-    }
   } else if (maximumProducts && data.cardsData.length > maximumProducts) {
     data.cardsData.splice(
       maximumProducts - 1,
@@ -227,16 +236,10 @@ export const getInvestCardsData = (
     );
   }
 
-  let { cardsData, signifierIndex } = data;
-  if (signifierIndex !== -1) {
-    const selectedCardData = cardsData.find((el) => el.id === signifier);
-    cardsData = cardsData.filter((el) => el.id !== signifier);
-    cardsData.unshift(selectedCardData);
-  }
-  return { investCardsData: cardsData, isMfOnly, showPortfolioOverview };
+  return { investCardsData: data.cardsData, isMfOnly, showPortfolioOverview };
 };
 
-export const getEnabledFeaturesData = (config, investOptions, signifier) => {
+export const getEnabledFeaturesData = (config, investOptions, feature) => {
   const { productName, features = {} } = config;
   const restrictedItems = [
     "stocks",
@@ -256,7 +259,7 @@ export const getEnabledFeaturesData = (config, investOptions, signifier) => {
   }
 
   let cardsData = [],
-    signifierIndex = -1;
+    featureIndex = -1;
 
   investOptions.forEach((section, index) => {
     if (
@@ -270,13 +273,13 @@ export const getEnabledFeaturesData = (config, investOptions, signifier) => {
       const cardData = INVESTMENT_OPTIONS[section];
       if (!isEmpty(cardData)) {
         cardsData.push(cardData);
-        if (signifier === section) {
-          signifierIndex = index;
+        if (feature === section) {
+          featureIndex = index;
         }
       }
     }
   });
-  return { cardsData, signifierIndex };
+  return { cardsData, featureIndex };
 };
 
 export const getEnabledMarketingBanners = (banners) => {
