@@ -267,12 +267,12 @@ export const getEnabledFeaturesData = (config, investOptions, signifier) => {
     } else if (["stocks", "ipo"].includes(section) && !isTradingEnabled()) {
       return;
     } else {
-      if (signifier === section) {
-        signifierIndex = index;
-      }
       const cardData = INVESTMENT_OPTIONS[section];
       if (!isEmpty(cardData)) {
         cardsData.push(cardData);
+        if (signifier === section) {
+          signifierIndex = index;
+        }
       }
     }
   });
