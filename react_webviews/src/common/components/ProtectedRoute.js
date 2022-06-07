@@ -27,7 +27,7 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   const fetch = async () => {
     try {
       if(!guestLeadId && !guestUser){
-        await initData(true);
+        await initData();
         setIsLoginValid(true);
       }
     } catch (err) {
