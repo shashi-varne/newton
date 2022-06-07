@@ -75,7 +75,19 @@ const dummyData = [
     amount: "₹2000",
     date: "3 May, 2022",
     account: "HDFC •••••••• 9220",
-    status: "pending",
+    status: "successfull",
+  },
+  {
+    amount: "₹8,000",
+    date: "3 May, 2022",
+    account: "HDFC •••••••• 9220",
+    status: "successfull",
+  },
+  {
+    amount: "₹2000",
+    date: "3 May, 2022",
+    account: "HDFC •••••••• 9220",
+    status: "failed",
   },
 ];
 

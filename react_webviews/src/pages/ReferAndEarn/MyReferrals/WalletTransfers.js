@@ -54,10 +54,10 @@ const WalletTransfers = ({
           return (
             <WalletTransactionListItem
               key={index}
-              amount="₹80,000"
-              date="3 May, 2022"
-              account="HDFC •••••••• 9220"
-              status="pending"
+              amount={item.amount}
+              date={item.date}
+              account={item.account}
+              status={item.status}
               showSeparator={!isLastItem}
               dataAid={`${index + 1}`}
             />

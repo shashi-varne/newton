@@ -1,7 +1,6 @@
 import React from "react";
 import Typography from "../../../designSystem/atoms/Typography";
 import { WALLET_TRANSFERS } from "businesslogic/strings/referAndEarn";
-import { WALLET_TRANSFERS_FILTER_DATA } from "businesslogic/constants/referAndEarn";
 import { Stack } from "@mui/material";
 import Icon from "../../../designSystem/atoms/Icon";
 import Separator from "../../../designSystem/atoms/Separator";
@@ -58,7 +57,7 @@ const WalletTransactionListItem = ({
             {account}
           </Typography>
         </Stack>
-        <Stack>
+        <Stack alignItems={"flex-end"}>
           <Typography
             variant="body1"
             color="foundationColors.content.secondary"
