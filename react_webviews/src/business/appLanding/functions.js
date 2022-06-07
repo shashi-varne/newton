@@ -10,7 +10,7 @@ import {
   getPartner,
   isTradingEnabled,
 } from "../../utils/functions";
-import { getPartnerData } from "../../utils/partner";
+import { getPartnerData } from "../../utils/partnerConfigs";
 import {
   splitMobileNumberFromContryCode,
   storageService,
@@ -264,7 +264,10 @@ export const getEnabledFeaturesData = (config, investOptions, feature) => {
   investOptions.forEach((section, index) => {
     if (
       restrictedItems.includes(section) &&
-      ((subbrokerCode && !subbrokerFeatures[section]) || !features[section])
+      ((subbrokerCode &&
+        !["fisdom", "finity"].includes(subbrokerCode) &&
+        !subbrokerFeatures[section]) ||
+        !features[section])
     ) {
       return;
     } else if (["stocks", "ipo"].includes(section) && !isTradingEnabled()) {
