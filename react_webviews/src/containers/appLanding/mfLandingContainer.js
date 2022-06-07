@@ -65,6 +65,7 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
     if (data.intent) {
       eventObj.properties.intent = data.intent;
       eventObj.properties.outside_click = !!data.outsideClick;
+      eventObj.event_name = "bottom_sheet";
     }
 
     if (userAction === "just_set_events") {
@@ -126,6 +127,7 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
     sendEvents("back", {
       intent: kycData.kycBottomsheetData?.title,
       outsideClick,
+      eventName: "bottom_sheet",
     });
   };
 

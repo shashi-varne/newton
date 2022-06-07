@@ -73,8 +73,16 @@ export const MF_LANDING = {
 };
 
 export const INVESTING_OPTIONS = {
-  title: "Investors’ favourites",
-  dataAid: "investorsFavourites",
+  category: {
+    title: "Get started",
+    headerDataAid: "investorsFavourites",
+    dataAid: "viewAll",
+  },
+  default: {
+    title: "Investors’ favourites",
+    dataAid: "investorsFavourites",
+    headerDataAid: "investorsFavourites",
+  },
 };
 
 export const BANK_LIST = {
