@@ -238,6 +238,7 @@ export const partnerConfigs = {
       ipo: true,
       nps: true,
       instaredeem: true,
+      insurance: true,
     },
     onboardingCarousels: EQUITY_ONBOARDING_CAROUSELS,
     platformMotivators: EQUITY_PLATFORM_MOTIVATORS,
@@ -251,6 +252,7 @@ export const partnerConfigs = {
       addAnotherBank: true,
       instaredeem: true,
       indexFunds: true,
+      insurance: true,
     },
   },
   bfdlmobile: {
