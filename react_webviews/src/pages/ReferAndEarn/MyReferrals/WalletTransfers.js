@@ -16,6 +16,7 @@ const WalletTransfers = ({
   isPageLoading,
   filterApplied,
   handleWalletFilter,
+  onClickContact,
 }) => {
   return (
     <Container
@@ -29,7 +30,7 @@ const WalletTransfers = ({
       dataAid={STRINGS.screenDataAid}
       eventData={sendEvents("just_set_events")}
       fixedFooter={true}
-      renderComponentAboveFooter={<FooterComponent />}
+      renderComponentAboveFooter={<FooterComponent onClick={onClickContact} />}
     >
       <Stack>
         <Box className="wt-pill-filter-wrapper">
@@ -40,6 +41,7 @@ const WalletTransfers = ({
           >
             {WALLET_TRANSFERS_FILTER_DATA.map((item, index) => (
               <Pill
+                key={index}
                 label={item.label}
                 value={item.value}
                 dataAid={item.dataAid}
@@ -51,6 +53,7 @@ const WalletTransfers = ({
           const isLastItem = index + 1 === transactionData.length;
           return (
             <WalletTransactionListItem
+              key={index}
               amount="₹80,000"
               date="3 May, 2022"
               account="HDFC •••••••• 9220"
@@ -65,7 +68,7 @@ const WalletTransfers = ({
   );
 };
 
-const FooterComponent = () => {
+const FooterComponent = ({ onClick }) => {
   return (
     <Stack
       justifyContent="center"
@@ -85,9 +88,7 @@ const FooterComponent = () => {
         <Typography
           variant="body2"
           component="span"
-          onClick={() => {
-            console.log("footer");
-          }}
+          onClick={onClick}
           color={"foundationColors.action.brand"}
         >
           {STRINGS.footer.secondaryText}

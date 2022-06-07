@@ -48,12 +48,15 @@ const walletTransfersContainer = (WrappedComponent) => (props) => {
 
   const onClickCopy = (id) => {};
 
+  const onClickContact = () => {};
+
   return (
     <WrappedComponent
       transactionData={dummyData}
       isWeb={isWeb}
       filterApplied={filterApplied}
       handleWalletFilter={handleWalletFilter}
+      onClickContact={onClickContact}
       sendEvents={sendEvents}
       isPageLoading={isPageLoading}
       navigate={navigate}

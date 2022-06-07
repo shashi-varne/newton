@@ -32,7 +32,7 @@ const WalletTransactionListItem = ({
         direction="row"
         alignItems="center"
         className="wt-content"
-        dataAid={`grp_${dataAid}`}
+        data-aid={`grp_${dataAid}`}
       >
         {badgeIcon && (
           <Icon
