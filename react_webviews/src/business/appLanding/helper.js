@@ -42,7 +42,7 @@ import { FREEDOM_PLAN_STORAGE_CONSTANTS } from "../../freedom_plan/common/consta
 import Toast from "../../designSystem/atoms/ToastMessage";
 
 /* eslint-disable */
-export const initData = async (updateStore) => {
+export const initData = async () => {
   const currentUser = storageService().get("currentUser");
   const user = storageService().getObject("user");
   const kyc = storageService().getObject("kyc");
@@ -58,16 +58,16 @@ export const initData = async (updateStore) => {
       };
       const result = await getAccountSummary(Api, queryParams);
       storageService().set("dataSettedInsideBoot", true);
-      setSDKSummaryData(result, updateStore);
+      setSDKSummaryData(result);
     }
   } else {
     const result = await getAccountSummary(Api);
     storageService().set("dataSettedInsideBoot", true);
-    setSummaryData(result, updateStore);
+    setSummaryData(result);
   }
 };
 
-export const setSummaryData = (result, updateStore) => {
+export const setSummaryData = (result) => {
   const currentUser = result.data.user.user.data;
   const userKyc = result.data.kyc.kyc.data;
   const subscriptionStatus =
@@ -118,21 +118,19 @@ export const setSummaryData = (result, updateStore) => {
     partner = subbrokerCode;
   }
   storageService().set("partner", partner);
-  if (updateStore) {
-    store.dispatch(setKyc(userKyc));
-    store.dispatch(setUser(currentUser));
-    store.dispatch(setCampaign(campaignData));
-    store.dispatch(setNps(nps));
-    store.dispatch(setReferral(referral));
-    store.dispatch(setBankList(bankList));
-    store.dispatch(setPartner(partner));
-    store.dispatch(setSubscriptionStatus(subscriptionStatus));
-  }
+  store.dispatch(setKyc(userKyc));
+  store.dispatch(setUser(currentUser));
+  store.dispatch(setCampaign(campaignData));
+  store.dispatch(setNps(nps));
+  store.dispatch(setReferral(referral));
+  store.dispatch(setBankList(bankList));
+  store.dispatch(setPartner(partner));
+  store.dispatch(setSubscriptionStatus(subscriptionStatus));
   eventManager.emit(EVENT_MANAGER_CONSTANTS.updateAppTheme);
   setNpsData(result);
 };
 
-const setSDKSummaryData = (result, updateStore) => {
+const setSDKSummaryData = (result) => {
   const subscriptionStatus =
     result?.data?.equity?.subscription_status?.data || {};
   if (!isEmpty(subscriptionStatus)) {
@@ -149,13 +147,11 @@ const setSDKSummaryData = (result, updateStore) => {
   storageService().setObject("npsUser", nps);
   storageService().setObject("banklist", bankList);
   storageService().setObject("referral", referral);
-  if (updateStore) {
-    store.dispatch(setCampaign(campaignData));
-    store.dispatch(setNps(nps));
-    store.dispatch(setReferral(referral));
-    store.dispatch(setBankList(bankList));
-    store.dispatch(setSubscriptionStatus(subscriptionStatus));
-  }
+  store.dispatch(setCampaign(campaignData));
+  store.dispatch(setNps(nps));
+  store.dispatch(setReferral(referral));
+  store.dispatch(setBankList(bankList));
+  store.dispatch(setSubscriptionStatus(subscriptionStatus));
   setNpsData(result);
 };
 

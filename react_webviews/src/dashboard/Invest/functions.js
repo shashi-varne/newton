@@ -9,7 +9,7 @@ import {
   premiumBottomSheetMapper,
   sdkInvestCardMapper
 } from "./constants";
-import { getAccountSummary, getKycAppStatus, isReadyToInvest, setKycProductType, setSummaryData } from "../../kyc/services";
+import { getKycAppStatus, isReadyToInvest, setKycProductType } from "../../kyc/services";
 import { get_recommended_funds } from "./common/api";
 import { PATHNAME_MAPPER as KYC_PATHNAME_MAPPER } from "../../kyc/constants";
 import { isEquityCompleted, isUpgradeToEquityAccountEnabled } from "../../kyc/common/functions";
@@ -17,6 +17,8 @@ import { nativeCallback, openModule } from "../../utils/native_callback";
 import isEmpty from "lodash/isEmpty";
 import isFunction from "lodash/isFunction";
 import { getCorpusValue } from "./common/commonFunctions";
+import { getAccountSummary } from "businesslogic/apis/common";
+import { setSummaryData } from "../../business/appLanding/helper";
 
 let errorMessage = "Something went wrong!";
 export async function initialize({ screenName, kyc, user, handleLoader, handleSummaryData }) {

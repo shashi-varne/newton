@@ -6,7 +6,7 @@ import { isEmpty } from "../utils/validators";
 import { nativeCallback } from "../utils/native_callback";
 import Toast from "../common/ui/Toast";
 import { getBasePath } from "../utils/functions";
-import { setSummaryData } from "../kyc/services";
+import { setSummaryData } from "../business/appLanding/helper";
 
 const config = getConfig();
 const errorMessage = "Something went wrong!";

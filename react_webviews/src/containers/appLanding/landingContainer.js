@@ -22,7 +22,6 @@ import {
 import useLoadingState from "../../common/customHooks/useLoadingState";
 import useErrorState from "../../common/customHooks/useErrorState";
 import Api from "../../utils/api";
-import { setSummaryData } from "../../kyc/services";
 import {
   getEnabledMarketingBanners,
   getInvestCardsData,
@@ -31,6 +30,7 @@ import {
   getKycBottomsheetData,
   handleCampaign,
   closeCampaignDialog,
+  setSummaryData,
 } from "../../business/appLanding/helper";
 import { WEBAPP_LANDING_PATHNAME_MAPPER } from "../../constants/webappLanding";
 import {
@@ -112,7 +112,8 @@ const landingContainer = (WrappedComponent) => (props) => {
 
   const { isPageLoading } = useLoadingState(screen);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
-  const { kyc, user, appStorage, partner } = useSelector(getAppData);
+  const { kyc, user, appStorage, partner, subscriptionStatus } =
+    useSelector(getAppData);
   const {
     code,
     onboardingCarousels,
@@ -124,7 +125,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     isMfOnly,
     showPortfolioOverview,
     showSetupEasySip,
-  } = useMemo(initializeData, [partner]);
+  } = useMemo(initializeData, [partner, subscriptionStatus, kyc]);
   const [kycData, setKycData] = useState(getKycData(kyc, user));
   const [campaignData, setCampaignData] = useState({});
   const [referral, setReferral] = useState("");
