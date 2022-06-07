@@ -194,15 +194,19 @@ const setNpsData = async (result) => {
 export const getInvestCardsData = (
   investSections = [],
   signifier,
-  fallbackOptions
+  fallbackOptions,
+  maximumProducts
 ) => {
   const config = getConfig();
   let isMfOnly = false,
     showPortfolioOverview = false;
   let data = getEnabledFeaturesData(config, investSections, signifier);
-
+  const user = get(store.getState(), "app.user", {});
   const FEATURES_TO_ENABLE_PORTFOLIO = ["mf", "taxFiling"];
-  if (data.cardsData.length === FEATURES_TO_ENABLE_PORTFOLIO.length) {
+  if (
+    user.active_investment &&
+    data.cardsData.length === FEATURES_TO_ENABLE_PORTFOLIO.length
+  ) {
     showPortfolioOverview = true;
     data.cardsData.forEach((el) => {
       if (!FEATURES_TO_ENABLE_PORTFOLIO.includes(el.id)) {
@@ -212,7 +216,15 @@ export const getInvestCardsData = (
   } else if (data.cardsData.length === 1) {
     data = getEnabledFeaturesData(config, fallbackOptions, signifier);
     isMfOnly = true;
-    showPortfolioOverview = true;
+    if (user.active_investment) {
+      showPortfolioOverview = true;
+    }
+  } else if (maximumProducts && data.cardsData.length > maximumProducts) {
+    data.cardsData.splice(
+      maximumProducts - 1,
+      4,
+      INVESTMENT_OPTIONS.categoryViewAll
+    );
   }
 
   let { cardsData, signifierIndex } = data;

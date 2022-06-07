@@ -23,6 +23,7 @@ export const WEBAPP_LANDING_PATHNAME_MAPPER = {
   diySearch: "/diyv2/invest/search",
   notification: "/notification",
   investingOptions: "/mf-landing/view-all",
+  allCategories: "/landing-new/view-all",
   bankList: "/bank-list",
   refer: "/refer",
 };
@@ -187,6 +188,14 @@ export const INVESTMENT_OPTIONS = {
     eventStatus: "tax filing",
     dataAid: "taxFiling",
     id: "taxFiling",
+  },
+  categoryViewAll: {
+    icon: "viewall_menu.svg",
+    title: "All categories",
+    subtitle: "Choose as per your unique needs",
+    eventStatus: "all categories",
+    id: "allCategories",
+    dataAid: "viewAll",
   },
   buildwealth: {
     icon: "high_growth.svg",

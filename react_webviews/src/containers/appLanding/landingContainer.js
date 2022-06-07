@@ -81,7 +81,7 @@ const initializeData = () => {
     ...baseConfig
   } = getConfig();
   const { investCardsData, isMfOnly, showPortfolioOverview } =
-    getInvestCardsData(featuresList, signifierKey, mfOptions);
+    getInvestCardsData(featuresList, signifierKey, mfOptions, 4);
   const marketingBanners = getEnabledMarketingBanners(landingMarketingBanners);
   return {
     code,
@@ -169,7 +169,10 @@ const landingContainer = (WrappedComponent) => (props) => {
     }
     return landingSections;
   };
-  const mainLandingSections = useMemo(getLandingSections, []);
+  const mainLandingSections = useMemo(getLandingSections, [
+    showPortfolioOverview,
+    showSetupEasySip,
+  ]);
 
   useEffect(() => {
     onLoad();
@@ -572,9 +575,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       exploreCategories={EXPLORE_CATEGORIES}
       manageInvestments={MANAGE_INVESTMENTS}
       portfolioOverViewData={portfolioOverViewData}
-      showPortfolioOverview={
-        showPortfolioOverview && kycData.isReadyToInvestBase
-      }
+      showPortfolioOverview={showPortfolioOverview}
       showPlatformMotivators={!kycData.isReadyToInvestBase}
       showExploreCategories={isMfOnly}
       showSeachIcon={isMfOnly}

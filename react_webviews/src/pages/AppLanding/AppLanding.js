@@ -18,6 +18,11 @@ const AppLanding = (props) => {
         path="/mf-landing/view-all"
         component={investingOptionsContainer}
       />
+      <Route
+        exact
+        path="/landing-new/view-all"
+        component={investingOptionsContainer}
+      />
       {/* <Route component={NotFound} /> */}
     </Switch>
   );
