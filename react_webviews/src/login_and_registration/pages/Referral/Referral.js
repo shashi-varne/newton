@@ -6,7 +6,7 @@ import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { nativeCallback } from "../../../utils/native_callback";
 import toast from "common/ui/Toast";
 import Api from "utils/api";
-import { setSummaryData } from '../../../business/appLanding/helper';
+import { setSummaryData } from '../../../business/appLanding/functions';
 import { getAccountSummary } from 'businesslogic/apis/common';
 const errorMessage = "Something went wrong!";
 

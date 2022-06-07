@@ -7,7 +7,7 @@ import {
   getEnabledMarketingBanners,
   getInvestCardsData,
   handleMarketingBanners,
-} from "../../business/appLanding/helper";
+} from "../../business/appLanding/functions";
 import {
   EXPLORE_CATEGORIES,
   WEBAPP_LANDING_PATHNAME_MAPPER,

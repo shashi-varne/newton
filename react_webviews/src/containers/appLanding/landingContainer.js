@@ -31,7 +31,7 @@ import {
   handleCampaign,
   closeCampaignDialog,
   setSummaryData,
-} from "../../business/appLanding/helper";
+} from "../../business/appLanding/functions";
 import { WEBAPP_LANDING_PATHNAME_MAPPER } from "../../constants/webappLanding";
 import {
   getCampaignData,

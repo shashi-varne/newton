@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { getInvestCardsData } from "../../business/appLanding/helper";
+import { getInvestCardsData } from "../../business/appLanding/functions";
 import { WEBAPP_LANDING_PATHNAME_MAPPER } from "../../constants/webappLanding";
 import InvestingOptions from "../../pages/AppLanding/InvestingOptions";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";

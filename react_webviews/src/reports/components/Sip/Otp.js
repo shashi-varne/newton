@@ -5,7 +5,7 @@ import toast from "common/ui/Toast";
 import { navigate as navigateFunc} from "utils/functions";
 import { storageService, validateNumber } from "../../../utils/validators";
 import { getPathname, storageConstants } from "../../constants";
-import { initData } from "../../../business/appLanding/helper";
+import { initData } from "../../../business/appLanding/functions";
 import { resendOtp, submitOtp } from "../../common/api";
 import "./commonStyles.scss";
 import { nativeCallback } from "../../../utils/native_callback";

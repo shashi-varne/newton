@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { STORAGE_CONSTANTS, } from "../../constants";
-import { initData } from '../../../business/appLanding/helper';
+import { initData } from '../../../business/appLanding/functions';
 import { isEmpty, storageService, } from "../../../utils/validators";
 import Toast from '../../../common/ui/Toast';
 

@@ -18,7 +18,7 @@ import isEmpty from "lodash/isEmpty";
 import isFunction from "lodash/isFunction";
 import { getCorpusValue } from "./common/commonFunctions";
 import { getAccountSummary } from "businesslogic/apis/common";
-import { setSummaryData } from "../../business/appLanding/helper";
+import { setSummaryData } from "../../business/appLanding/functions";
 
 let errorMessage = "Something went wrong!";
 export async function initialize({ screenName, kyc, user, handleLoader, handleSummaryData }) {
