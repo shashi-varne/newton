@@ -30,6 +30,7 @@ const MfLanding = ({
   bottomsheetStates,
   kycBottomsheetData,
   closeKycBottomsheet,
+  isPageLoading,
 }) => {
   return (
     <Container
@@ -45,6 +46,7 @@ const MfLanding = ({
         onRightIconClick,
       }}
       eventData={sendEvents("just_set_events")}
+      isPageLoading={isPageLoading}
     >
       {showMarketingBanners && (
         <MarketingBanners

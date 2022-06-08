@@ -146,6 +146,7 @@ const investingOptionsContainer = (WrappedComponent) => (props) => {
       handleCardClick={handleCardClick}
       closeKycBottomsheet={closeKycStatusDialog}
       sendEvents={sendEvents}
+      isPageLoading={loaderData.skelton || loaderData.pageLoader}
       handleKycPrimaryClick={handleKycStatus({
         kyc,
         kycData,

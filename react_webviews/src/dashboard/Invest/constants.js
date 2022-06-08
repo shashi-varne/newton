@@ -528,7 +528,7 @@ export const kycStatusMapperInvest = {
   complete: {
     title: "Upgrade to Trading & Demat account",
     subtitle: "STOCKS | IPO | F&O",
-    buttonTitle: "Continue ",
+    buttonTitle: "Upgrade now",
     descriptionColor: "foundationColors.secondary.profitGreen.400",
     eventStatus: "upgrade to trading & demat account",
     icon: "kyc_upgrade.svg",
@@ -537,7 +537,7 @@ export const kycStatusMapperInvest = {
   upgraded_incomplete: {
     title: "Upgrade to Trading & Demat account",
     subtitle: "STOCKS | IPO | F&O",
-    buttonTitle: "Continue ",
+    buttonTitle: "Upgrade now",
     descriptionColor: "foundationColors.secondary.profitGreen.400",
     eventStatus: "upgrade to trading & demat account",
     icon: "kyc_upgrade.svg",

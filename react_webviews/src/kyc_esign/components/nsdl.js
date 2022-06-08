@@ -126,7 +126,7 @@ class DigiStatus extends Component {
     if (config.isNative) {
       nativeCallback({ action: 'exit_web' });
     } else {
-      this.navigate("/invest");
+      this.navigate("/");
     }
   }
 

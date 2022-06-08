@@ -17,6 +17,7 @@ const InvestingOptions = ({
   bottomsheetStates,
   kycBottomsheetData,
   closeKycBottomsheet,
+  isPageLoading
 }) => {
   return (
     <Container
@@ -32,6 +33,7 @@ const InvestingOptions = ({
         showCloseIcon: true,
       }}
       eventData={sendEvents("just_set_events")}
+      isPageLoading={isPageLoading}
     >
       <InvestmentOptions
         productList={investmentOptions}

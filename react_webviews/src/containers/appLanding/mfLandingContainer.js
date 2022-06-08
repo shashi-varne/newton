@@ -182,6 +182,7 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
       showMarketingBanners={kycData.isReadyToInvestBase}
       showKycCard={kycData.showKycCard}
       bottomsheetStates={bottomsheetStates}
+      isPageLoading={loaderData.skelton || loaderData.pageLoader}
       sendEvents={sendEvents}
       handleKyc={handleKyc}
       handleCardClick={handleCardClick}
