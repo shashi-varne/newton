@@ -335,7 +335,7 @@ export const kycStatusMapper = {
     subtitle:
       "We’ll notify you once KYC verification is done. This may take up to 12 hours",
     primaryButtonTitle: "Continue",
-    buttonTitle: "Continue",
+    buttonTitle: "OKAY",
     oneButton: true,
     landingText: "UNDER PROCESS",
     icon: "kyc_inprogress.svg",

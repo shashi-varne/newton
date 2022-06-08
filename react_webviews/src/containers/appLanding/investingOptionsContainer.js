@@ -40,7 +40,7 @@ const investingOptionsContainer = (WrappedComponent) => (props) => {
 
   const closeKycStatusDialog = (outsideClick = false) => {
     sendEvents("back", {
-      intent: kycData.kycBottomsheetData?.title,
+      intent: kycBottomsheetData?.title,
       outsideClick,
     });
     handleBottomsheets({
@@ -105,6 +105,8 @@ const investingOptionsContainer = (WrappedComponent) => (props) => {
       eventObj.properties.intent = data.intent;
       eventObj.properties.outside_click = !!data.outsideClick;
       eventObj.event_name = "bottom_sheet";
+      delete eventObj.properties.card_click;
+      delete eventObj.properties.primary_category;
     }
     if (userAction === "just_set_events") {
       return eventObj;

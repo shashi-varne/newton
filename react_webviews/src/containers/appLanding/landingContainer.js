@@ -390,6 +390,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       eventObj.event_name = "bottom_sheet";
       eventObj.properties.intent = data.intent;
       eventObj.properties.outside_click = !!data.outsideClick;
+      delete eventObj.properties.primary_category;
     }
     if (userAction === "just_set_events") {
       return eventObj;
