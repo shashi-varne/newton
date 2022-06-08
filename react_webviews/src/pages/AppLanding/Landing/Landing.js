@@ -203,7 +203,6 @@ const renderCards = ({
   exploreCategories,
   manageInvestments,
   loaderData,
-  showLoader,
   portfolioOverViewData,
   handleKyc,
   handleCardClick,
@@ -215,6 +214,7 @@ const renderCards = ({
   isPageLoading,
   handleReferralChange,
   referral,
+  showPortfolioLoader,
 }) => {
   const cardsMapper = {
     platformMotivators: (
@@ -225,15 +225,12 @@ const renderCards = ({
       </>
     ),
     portfolioOverview: (
-      <>
-        {showPortfolioOverview && (
-          <PortfolioOverview
-            showLoader={showLoader}
-            portfolioOverViewData={portfolioOverViewData}
-            portfolioData={portfolioData}
-          />
-        )}
-      </>
+      <PortfolioOverview
+        showLoader={showPortfolioLoader}
+        portfolioOverViewData={portfolioOverViewData}
+        portfolioData={portfolioData}
+        showPortfolioOverview={showPortfolioOverview}
+      />
     ),
     marketingBanners: (
       <>
