@@ -87,9 +87,9 @@ const investingOptionsContainer = (WrappedComponent) => (props) => {
         primary_category: "product item",
         card_click: data.cardClick,
         channel: code,
-        user_application_status: "",
-        user_investment_status: "",
-        user_kyc_status: "",
+        user_application_status: kycData.applicationStatus,
+        user_investment_status: kycData.isMfInvested,
+        user_kyc_status: kycData.isReadyToInvestBase,
       },
     };
     if (data.intent) {

@@ -271,6 +271,7 @@ export const getKycData = (kyc, user) => {
     isKycStatusDialogDisplayed: false,
     isPremiumBottomsheetDisplayed: false,
     isMfInvested: user.active_investment,
+    applicationStatus: kyc.application_status_v2,
   };
   return kycData;
 }

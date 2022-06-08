@@ -354,9 +354,9 @@ const landingContainer = (WrappedComponent) => (props) => {
         user_action: userAction || "",
         primary_category: data.primaryCategory || "generic type",
         channel: code,
-        user_application_status: "",
-        user_investment_status: "",
-        user_kyc_status: "",
+        user_application_status: kycData.applicationStatus,
+        user_investment_status: kycData.isMfInvested,
+        user_kyc_status: kycData.isReadyToInvestBase,
       },
     };
 

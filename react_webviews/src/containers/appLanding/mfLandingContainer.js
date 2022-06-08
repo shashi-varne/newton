@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import MfLanding from "../../pages/AppLanding/MfLanding";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
@@ -21,20 +21,28 @@ import { useSelector } from "react-redux";
 import { getAppData } from "businesslogic/dataStore/reducers/app";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 
-const screen = "MF_LANDING";
+const initializeData = () => {
+  const {
+    code,
+    featuresList,
+    mfOptions,
+    landingMarketingBanners,
+    ...baseConfig
+  } = getConfig();
+  const { investCardsData } = getInvestCardsData(mfOptions);
+  const { isMfOnly } = getInvestCardsData(featuresList);
+  const marketingBanners = getEnabledMarketingBanners(landingMarketingBanners);
+  return {
+    code,
+    marketingBanners,
+    investCardsData,
+    isMfOnly,
+    baseConfig,
+  };
+};
+
 const mfLandingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
-  const { code, mfOptions, landingMarketingBanners, ...baseConfig } = useMemo(
-    getConfig,
-    []
-  );
-  const { investCardsData } = getInvestCardsData(mfOptions);
-  const marketingBanners = getEnabledMarketingBanners(landingMarketingBanners);
-  const { updateKyc } = useUserKycHook();
-  const { kyc, user } = useSelector(getAppData);
-  const kycData = useMemo(() => getKycData(kyc, user), [kyc, user]);
-  const contactDetails = getContactVerification(kyc, false, screen);
-
   const [loaderData, setLoaderData] = useState({
     skelton: false,
     pageLoader: false,
@@ -42,6 +50,27 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
   const [bottomsheetStates, setBottomsheetStates] = useState({
     openKycStatusDialog: false,
   });
+  const { kyc, user, partner, subscriptionStatus } = useSelector(getAppData);
+  const { code, marketingBanners, baseConfig, investCardsData, isMfOnly } =
+    useMemo(initializeData, [partner, subscriptionStatus, kyc]);
+  const { updateKyc } = useUserKycHook();
+
+  useEffect(() => {
+    if (isMfOnly) {
+      navigate("/");
+    }
+  }, []);
+
+  const initializeKycData = () => {
+    const kycData = getKycData(kyc, user);
+    const contactDetails = getContactVerification(kyc, false);
+    return {
+      kycData,
+      contactDetails,
+    };
+  };
+
+  const { kycData, contactDetails } = useMemo(initializeKycData, [kyc, user]);
 
   const sendEvents = (userAction, data = {}) => {
     let eventObj = {
@@ -51,9 +80,9 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
         primary_category: data.primaryCategory || "generic type",
         card_click: data.cardClick || "",
         channel: code,
-        user_application_status: "",
-        user_investment_status: "",
-        user_kyc_status: "",
+        user_application_status: kycData.applicationStatus,
+        user_investment_status: kycData.isMfInvested,
+        user_kyc_status: kycData.isReadyToInvestBase,
       },
     };
 

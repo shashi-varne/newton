@@ -228,8 +228,10 @@ export const getInvestCardsData = (
     });
   }
   if (data.cardsData.length === 1) {
-    data = getEnabledFeaturesData(config, fallbackOptions, feature);
     isMfOnly = true;
+    if (!isEmpty(fallbackOptions)) {
+      data = getEnabledFeaturesData(config, fallbackOptions, feature);
+    }
   } else if (maximumProducts && data.cardsData.length > maximumProducts) {
     data.cardsData.splice(
       maximumProducts - 1,
