@@ -7,6 +7,8 @@ import { nativeCallback } from "../utils/native_callback";
 import Toast from "../common/ui/Toast";
 import { getBasePath } from "../utils/functions";
 import { setSummaryData } from "../business/appLanding/functions";
+import store from "../dataLayer/store";
+import { updateAppStorage } from "businesslogic/dataStore/reducers/app";
 
 const config = getConfig();
 const errorMessage = "Something went wrong!";
@@ -523,7 +525,11 @@ export function redirectAfterLogin(data, user, navigateFunc) {
     navigate("/referral-code", { state: { goBack: "/", communicationType: data?.contacts?.auth_type } });
   } else if (sdkStocksRedirection) {
     storageService().setBoolean("sdkStocksRedirection", false);
-    storageService().setBoolean("openEquityCallback", true);
+    store.dispatch(
+      updateAppStorage({
+        openEquityCallback: true,
+      })
+    );
     navigate("/", { edit: true, state: { goBack: "/" } });
   } else if (ipoContactNotVerified){
     storageService().set("ipoContactNotVerified", false);

@@ -20,7 +20,7 @@ import { getCorpusValue } from "./common/commonFunctions";
 import { getAccountSummary } from "businesslogic/apis/common";
 import { setSummaryData } from "../../business/appLanding/functions";
 import store from "../../dataLayer/store";
-import { setKyc, setSubscriptionStatus, setUser } from "businesslogic/dataStore/reducers/app";
+import { setKyc, setSubscriptionStatus, setUser, updateAppStorage } from "businesslogic/dataStore/reducers/app";
 
 let errorMessage = "Something went wrong!";
 export async function initialize({ screenName, kyc, user, handleLoader, handleSummaryData }) {
@@ -648,7 +648,11 @@ export function handleStocksAndIpoCards(
 
 export const handleStocksRedirection = ({ isDirectEntry = false, navigate }) => {
   if (isDirectEntry) {
-    storageService().setBoolean("openEquityCallback", true);
+    store.dispatch(
+      updateAppStorage({
+        openEquityCallback: true,
+      })
+    );
     navigate("/")
   } else {
     nativeCallback({

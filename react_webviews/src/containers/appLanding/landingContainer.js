@@ -39,7 +39,7 @@ import {
   handleStocksAndIpoCards,
   openKyc,
 } from "../../dashboard/Invest/functions";
-import { getUrlParams, storageService } from "../../utils/validators";
+import { getUrlParams } from "../../utils/validators";
 import { isEmpty } from "lodash-es";
 import {
   applyReferralCode,
@@ -177,14 +177,6 @@ const landingContainer = (WrappedComponent) => (props) => {
   }, []);
 
   const onLoad = () => {
-    const openEquityCallback =
-      storageService().getBoolean("openEquityCallback");
-    if (openEquityCallback) {
-      storageService().setBoolean("openEquityCallback", false);
-      nativeCallback({
-        action: "open_equity",
-      });
-    }
     const sagaCallback = (response, data) => {
       setSummaryData(response, true);
       const kycDetails = getKycData(data.kyc, data.user);
@@ -292,6 +284,23 @@ const landingContainer = (WrappedComponent) => (props) => {
       });
     } finally {
       setShowPorfolioLoader(false);
+    }
+  };
+
+  useEffect(() => {
+    openEquity();
+  }, [appStorage.openEquityCallback]);
+
+  const openEquity = () => {
+    if (appStorage.openEquityCallback) {
+      dispatch(
+        updateAppStorage({
+          openEquityCallback: false,
+        })
+      );
+      nativeCallback({
+        action: "open_equity",
+      });
     }
   };
 
