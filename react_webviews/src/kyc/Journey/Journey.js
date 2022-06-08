@@ -91,7 +91,7 @@ const Journey = (props) => {
       if (config.code === 'moneycontrol') {
         navigate("/");
       } else {
-        navigate("/landing");
+        navigate("/");
       }
       return;
     } else if (!config.Web) {

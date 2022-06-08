@@ -117,7 +117,7 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
   }
 
   if (landingRedirectPaths.indexOf(currentState) !== -1 || currentState.indexOf("/nps/payment/callback") !== -1) {
-    navigate("/landing");
+    navigate("/");
     return true;
   }
 
@@ -153,7 +153,7 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
         navigate("/");
         return true;
       } else {
-        navigate("/landing");
+        navigate("/");
         return true;
       }
     case "/account/merge/linked/success":
