@@ -40,7 +40,7 @@ let data = [
     id: 'invest',
     name: 'Invest',
     icon: invest,
-    path: '/invest',
+    path: '/',
   },
   // {
   //   id: 'loans',
@@ -133,7 +133,7 @@ const NavList = (props) => {
       } else if (user.active_investment) {
         path = "/reports";
       } else {
-        path = "/invest";
+        path = "/";
       }
     }
     if (path) {

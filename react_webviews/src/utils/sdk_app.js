@@ -86,7 +86,7 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
       break;
     case "/kyc/home":
       if (fromState.includes("/direct/")) {
-        navigate("/invest");
+        navigate("/");
         return true;
       }
       break;
@@ -101,7 +101,7 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
           nativeCallback({ action: "exit_web" });
           return true;
         } else {
-          navigate("/invest");
+          navigate("/");
           return true;
         }
       }

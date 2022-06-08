@@ -139,7 +139,7 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
       navigate("/");
       return true;
     } else {
-      navigate("/invest");
+      navigate("/");
       return true;
     }
   }

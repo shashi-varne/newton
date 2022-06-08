@@ -648,7 +648,7 @@ export function handleStocksAndIpoCards(
 export const handleStocksRedirection = ({ isDirectEntry = false, navigate }) => {
   if (isDirectEntry) {
     storageService().setBoolean("openEquityCallback", true);
-    navigate("/invest")
+    navigate("/")
   } else {
     nativeCallback({
       action: "open_equity"

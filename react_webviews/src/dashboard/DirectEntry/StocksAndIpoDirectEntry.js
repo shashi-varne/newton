@@ -43,7 +43,7 @@ const StocksAndIpoDirectEntry = (props) => {
       openKycStatusDialog: false,
     });
     if (!skipNavigation) {
-      navigate("/invest");
+      navigate("/");
     }
   };
 
@@ -64,7 +64,7 @@ const StocksAndIpoDirectEntry = (props) => {
         })
         break;
       default:
-        navigate("/invest");
+        navigate("/");
         break;
     }
   };

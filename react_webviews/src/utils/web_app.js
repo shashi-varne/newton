@@ -81,7 +81,7 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
   }
 
   if (currentState === "/kyc-esign/nsdl" && params?.status === "success") {
-     navigate("/invest");
+     navigate("/");
      return true;
   }
 

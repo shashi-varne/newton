@@ -85,7 +85,7 @@ const ConfirmNewPin = (props) => {
   const handleYes = () => {
     clearRouteParams();
     if (kycFlow) {
-      navigate("/invest");
+      navigate("/");
     } else if (comingFrom === "stocks") {
       setShowSkelton(true);
       window.location.href = `${base_url}/page/equity/launchapp`;

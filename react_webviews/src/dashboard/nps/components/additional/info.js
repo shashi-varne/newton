@@ -51,7 +51,7 @@ class NpsInfo extends Component {
   };
 
   goBack = () => {
-    this.navigate('/invest')
+    this.navigate('/')
   }
 
   render() {

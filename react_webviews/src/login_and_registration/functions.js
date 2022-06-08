@@ -525,30 +525,17 @@ export function redirectAfterLogin(data, user, navigateFunc) {
   } else if (sdkStocksRedirection) {
     storageService().setBoolean("sdkStocksRedirection", false);
     storageService().setBoolean("openEquityCallback", true);
-    navigate("/invest", { edit: true, state: { goBack: "/" } });
+    navigate("/", { edit: true, state: { goBack: "/" } });
   } else if (ipoContactNotVerified){
     storageService().set("ipoContactNotVerified", false);
-    navigate("/market-products", { state: { goBack: "/invest" } });
+    navigate("/market-products", { state: { goBack: "/" } });
   } else if (
     user.kyc_registration_v2 === "incomplete" &&
     user.active_investment
   ) {
-    navigate("/kyc/journey", { state: { goBack: "/invest" } });
-  } else if (
-    user.kyc_registration_v2 === "incomplete" &&
-    !user.active_investment
-  ) {
-    navigate("/invest", { edit: true, state: { goBack: "/" } });
-  } else if (
-    kyc &&
-    !kyc.pan.meta_data.pan_number &&
-    user.kyc_registration_v2 === "init"
-  ) {
-    navigate("/invest", { edit: true, state: { goBack: "/invest" } });
-  } else if (user.active_investment) {
-    navigate("/invest", { edit: true, state: { goBack: "/invest" } });
+    navigate("/kyc/journey", { state: { goBack: "/" } });
   } else {
-    navigate("/invest", { edit: true, state: { goBack: "/" } });
+    navigate("/", { edit: true, state: { goBack: "/" } });
   }
 }
 

@@ -26,7 +26,7 @@ const NavBar = (props) => {
             src={require(`assets/${navbarLogo}`)}
             alt={code}
             style={{ cursor: 'pointer' }}
-            onClick={() => navigate('/invest')}
+            onClick={() => navigate('/')}
             className={navLogoClassname}
           />
         </div>
