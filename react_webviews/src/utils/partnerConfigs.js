@@ -399,6 +399,9 @@ export const partnerConfigs = {
       primaryColor: "#F5821F",
       secondaryColor: "#F5821F",
     },
+    features: {
+      instaredeem: true,
+    },
   },
   sbm: {
     logo: "sbm.svg",
@@ -551,6 +554,9 @@ export const partnerConfigs = {
       applyRefferal: true,
       shareRefferal: false,
     },
+    features: {
+      instaredeem: true,
+    },
   },
   sbnri: {
     code: "sbnri",
@@ -558,6 +564,9 @@ export const partnerConfigs = {
     logo: "sbnri.svg",
     styles: {
       primaryColor: "#3E89FA",
+    },
+    features: {
+      instaredeem: true,
     },
   },
   tmb: {
@@ -574,6 +583,9 @@ export const partnerConfigs = {
       header: {
         backgroundColor: "#FFFFFF",
       },
+    },
+    features: {
+      instaredeem: true,
     },
   },
   cccb: {
