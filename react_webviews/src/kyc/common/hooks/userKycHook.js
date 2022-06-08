@@ -3,6 +3,8 @@ import { STORAGE_CONSTANTS, } from "../../constants";
 import { initData } from '../../../business/appLanding/functions';
 import { isEmpty, storageService, } from "../../../utils/validators";
 import Toast from '../../../common/ui/Toast';
+import store from '../../../dataLayer/store';
+import { setKyc, setUser as setUserData } from 'businesslogic/dataStore/reducers/app';
 
 function useUserKycHook() {
     const [kyc, setUserKyc] = useState(
@@ -40,6 +42,7 @@ function useUserKycHook() {
         if (kycData) {
             storageService().setObject("kyc", kycData);
             setUserKyc(kycData);
+            store.dispatch(setKyc(kycData));
         }
     };
 
@@ -47,6 +50,7 @@ function useUserKycHook() {
         if (userData) {
             storageService().setObject("user", userData);
             setUser(userData);
+            store.dispatch(setUserData(userData));
         }
     };
 
