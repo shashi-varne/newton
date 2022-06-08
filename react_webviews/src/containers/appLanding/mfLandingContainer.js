@@ -20,6 +20,7 @@ import {
 import { useSelector } from "react-redux";
 import { getAppData } from "businesslogic/dataStore/reducers/app";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
+import { isEmpty } from "lodash-es";
 
 const initializeData = () => {
   const {
@@ -43,6 +44,7 @@ const initializeData = () => {
 
 const mfLandingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
+  const [kycBottomsheetData, setKycBottomsheetData] = useState({});
   const [loaderData, setLoaderData] = useState({
     skelton: false,
     pageLoader: false,
@@ -141,13 +143,19 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
       outsideClick,
       eventName: "bottom_sheet",
     });
+    handleBottomsheets({
+      openKycStatusDialog: false,
+    });
   };
 
   const handleLoader = (data) => {
     setLoaderData({ ...loaderData, ...data });
   };
 
-  const handleBottomsheets = (data) => {
+  const handleBottomsheets = (data, modalData) => {
+    if (!isEmpty(modalData)) {
+      setKycBottomsheetData(modalData);
+    }
     setBottomsheetStates({
       ...bottomsheetStates,
       ...data,
@@ -157,7 +165,7 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
   return (
     <WrappedComponent
       kycData={kycData.kycStatusData}
-      kycBottomsheetData={kycData.kycBottomsheetData}
+      kycBottomsheetData={kycBottomsheetData}
       marketingBanners={marketingBanners}
       investmentOptions={investCardsData}
       exploreCategories={EXPLORE_CATEGORIES}
@@ -173,7 +181,7 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
       handleKycPrimaryClick={handleKycStatus({
         kyc,
         kycData,
-        modalData: kycData.kycBottomsheetData,
+        modalData: kycBottomsheetData,
         navigate,
         updateKyc,
         closeKycStatusDialog,
@@ -185,7 +193,7 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
           kyc,
           user,
           kycData,
-          modalData: kycData.kycBottomsheetData,
+          modalData: kycBottomsheetData,
           baseConfig,
           contactDetails,
           navigate,

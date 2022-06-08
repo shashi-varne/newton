@@ -17,9 +17,11 @@ import { INVESTING_OPTIONS } from "../../strings/webappLanding";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
+import { isEmpty } from "lodash-es";
 
 const investingOptionsContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
+  const [kycBottomsheetData, setKycBottomsheetData] = useState({});
   const { code, investingOptions, featuresList, ...baseConfig } = useMemo(
     getConfig,
     []
@@ -41,13 +43,19 @@ const investingOptionsContainer = (WrappedComponent) => (props) => {
       intent: kycData.kycBottomsheetData?.title,
       outsideClick,
     });
+    handleBottomsheets({
+      openKycStatusDialog: false,
+    });
   };
 
   const handleLoader = (data) => {
     setLoaderData({ ...loaderData, ...data });
   };
 
-  const handleBottomsheets = (data) => {
+  const handleBottomsheets = (data, modalData) => {
+    if (!isEmpty(modalData)) {
+      setKycBottomsheetData(modalData);
+    }
     setBottomsheetStates({
       ...bottomsheetStates,
       ...data,
@@ -133,14 +141,15 @@ const investingOptionsContainer = (WrappedComponent) => (props) => {
       showSearchIcon={showSearchIcon}
       screenData={screenData}
       kycData={kycData.kycStatusData}
-      kycBottomsheetData={kycData.kycBottomsheetData}
+      kycBottomsheetData={kycBottomsheetData}
       bottomsheetStates={bottomsheetStates}
       handleCardClick={handleCardClick}
+      closeKycBottomsheet={closeKycStatusDialog}
       sendEvents={sendEvents}
       handleKycPrimaryClick={handleKycStatus({
         kyc,
         kycData,
-        modalData: kycData.kycBottomsheetData,
+        modalData: kycBottomsheetData,
         navigate,
         updateKyc,
         closeKycStatusDialog,
@@ -152,7 +161,7 @@ const investingOptionsContainer = (WrappedComponent) => (props) => {
           kyc,
           user,
           kycData,
-          modalData: kycData.kycBottomsheetData,
+          modalData: kycBottomsheetData,
           baseConfig,
           contactDetails,
           navigate,
