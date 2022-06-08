@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Container from "../../../common/Container";
 import { storageService } from "utils/validators";
 import { initialize } from "../../common/commonFunctions";
+import { landingEntryPoints } from "../../../../utils/constants";
 
 class NpsInfo extends Component {
   constructor(props) {
@@ -51,7 +52,12 @@ class NpsInfo extends Component {
   };
 
   goBack = () => {
-    this.navigate('/')
+    const fromState = this.props?.location?.state?.fromState || "";
+    if (landingEntryPoints.includes(fromState)) {
+      this.props.history.goBack();
+    } else {
+      this.navigate('/')
+    }
   }
 
   render() {

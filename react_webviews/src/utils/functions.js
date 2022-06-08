@@ -257,7 +257,7 @@ export const getConfig = () => {
 
     // change server url here for local and staging url builds (Not commit id one's)
     if (isStaging || isLocal) {
-      base_url_default = "https://eqnom-dot-plutus-staging.appspot.com";
+      base_url_default = "https://sarthak-dot-plutus-staging.appspot.com";
     }
 
     if (isSDKStaging) {

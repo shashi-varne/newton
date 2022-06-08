@@ -9,6 +9,7 @@ import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { storageService } from "utils/validators";
 import { commonBackMapper } from "utils/constants";
 import isEmpty from "lodash/isEmpty";
+import { landingEntryPoints } from "./constants";
 
 
 
@@ -93,7 +94,7 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
   console.log("entryPath", entryPath);
   
   const landingRedirectPaths = ["/kyc/report", "/notification", "/nps/payment/callback",
-    "/nps/mandate/callback", "/nps/success", "/page/invest/campaign/callback", "/reports"];
+    "/nps/mandate/callback", "/nps/success", "/page/invest/campaign/callback", "/reports", "/landing/view-all/category", "/landing/view-all/mf"];
 
   // Note: will have to remove "/invest/explore"  from the direct enteries.
   const directEnteries = ["/invest/doityourself/direct/", "/nps", "/advanced-investing/new-fund-offers/info",
@@ -117,7 +118,11 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
   }
 
   if (landingRedirectPaths.indexOf(currentState) !== -1 || currentState.indexOf("/nps/payment/callback") !== -1) {
-    navigate("/");
+    if (landingEntryPoints.includes(fromState)) {
+      navigate(fromState);
+    } else {
+      navigate("/");
+    }
     return true;
   }
 

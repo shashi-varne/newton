@@ -26,6 +26,7 @@ export const WEBAPP_LANDING_PATHNAME_MAPPER = {
   allCategories: "/landing/view-all/category",
   bankList: "/landing/bank-list",
   refer: "/refer",
+  taxFiling: "/tax-filing",
 };
 
 export const KYC_CARD_STATUS_MAPPER = {
@@ -190,7 +191,7 @@ export const INVESTMENT_OPTIONS = {
     id: "taxFiling",
   },
   categoryViewAll: {
-    icon: "viewall_menu.svg",
+    icon: "view_all.svg",
     title: "All categories",
     subtitle: "Choose as per your unique needs",
     eventStatus: "all categories",
