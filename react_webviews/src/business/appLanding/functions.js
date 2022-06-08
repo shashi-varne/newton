@@ -67,7 +67,7 @@ export const initData = async () => {
   }
 };
 
-export const setSummaryData = (result) => {
+export const setSummaryData = (result, skipStoreUpdate = false) => {
   const currentUser = result.data.user.user.data;
   const userKyc = result.data.kyc.kyc.data;
   const subscriptionStatus =
@@ -118,14 +118,16 @@ export const setSummaryData = (result) => {
     partner = subbrokerCode;
   }
   storageService().set("partner", partner);
-  store.dispatch(setKyc(userKyc));
-  store.dispatch(setUser(currentUser));
-  store.dispatch(setCampaign(campaignData));
-  store.dispatch(setNps(nps));
-  store.dispatch(setReferral(referral));
-  store.dispatch(setBankList(bankList));
-  store.dispatch(setPartner(partner));
-  store.dispatch(setSubscriptionStatus(subscriptionStatus));
+  if (!skipStoreUpdate) {
+    store.dispatch(setKyc(userKyc));
+    store.dispatch(setUser(currentUser));
+    store.dispatch(setCampaign(campaignData));
+    store.dispatch(setNps(nps));
+    store.dispatch(setReferral(referral));
+    store.dispatch(setBankList(bankList));
+    store.dispatch(setPartner(partner));
+    store.dispatch(setSubscriptionStatus(subscriptionStatus));
+  }
   eventManager.emit(EVENT_MANAGER_CONSTANTS.updateAppTheme);
   setNpsData(result);
 };
