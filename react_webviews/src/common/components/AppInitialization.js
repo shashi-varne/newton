@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { updateAppStorage } from "businesslogic/dataStore/reducers/app";
 
 const AppInitialization = () => {
   const dispacth = useDispatch();
