@@ -16,6 +16,7 @@ import {
   getKycData,
   handleKycStatus,
   handleKycStatusRedirection,
+  openKyc,
 } from "../../dashboard/Invest/functions";
 import { useSelector } from "react-redux";
 import { getAppData } from "businesslogic/dataStore/reducers/app";
@@ -123,6 +124,15 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
     sendEvents("next", {
       primaryCategory: "kyc info",
       cardClick,
+    });
+    openKyc({
+      ...kycData,
+      kyc,
+      user,
+      navigate,
+      handleLoader,
+      handleDialogStates: handleBottomsheets,
+      updateKyc,
     });
   };
 
