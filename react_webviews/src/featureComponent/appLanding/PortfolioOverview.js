@@ -11,7 +11,7 @@ const PortfolioOverview = ({
   showPortfolioOverview,
 }) => {
   if (
-    (!showPortfolioOverview || portfolioOverViewData.investedValue === 0) &&
+    (!showPortfolioOverview || !portfolioOverViewData.investedValue) &&
     !showLoader
   ) {
     return null;
