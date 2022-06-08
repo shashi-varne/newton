@@ -15,8 +15,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchSummary,
   getAppData,
-  setKyc,
-  setUser,
   updateAppStorage,
 } from "businesslogic/dataStore/reducers/app";
 import useLoadingState from "../../common/customHooks/useLoadingState";
@@ -41,7 +39,7 @@ import {
   handleStocksAndIpoCards,
   openKyc,
 } from "../../dashboard/Invest/functions";
-import { getUrlParams, storageService } from "../../utils/validators";
+import { getUrlParams } from "../../utils/validators";
 import { isEmpty } from "lodash-es";
 import {
   applyReferralCode,
@@ -50,6 +48,7 @@ import {
   getPortfolioData,
 } from "businesslogic/apis/app";
 import ToastMessage from "../../designSystem/atoms/ToastMessage";
+import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 
 const screen = "LANDING";
 const DEFAULT_BOTTOMSHEETS_DATA = {
@@ -106,6 +105,7 @@ const landingContainer = (WrappedComponent) => (props) => {
 
   const { isPageLoading } = useLoadingState(screen);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
+  const { updateKyc } = useUserKycHook();
   const { kyc, user, appStorage, partner, subscriptionStatus, bankList } =
     useSelector(getAppData);
   const {
@@ -286,13 +286,6 @@ const landingContainer = (WrappedComponent) => (props) => {
     setLoaderData({ ...loaderData, ...data });
   };
 
-  const updateKyc = (data) => {
-    if (!isEmpty) {
-      storageService().setObject("kyc", data);
-      dispatch(setKyc(data));
-    }
-  };
-
   useEffect(() => {
     if (isFetchFailed) {
       setErrorData({
@@ -383,11 +376,6 @@ const landingContainer = (WrappedComponent) => (props) => {
     }
   };
 
-  const handleSummaryData = (data) => {
-    dispatch(setKyc(data.kyc));
-    dispatch(setUser(data.user));
-  };
-
   const handleCardClick = (data) => () => {
     sendEvents("next", {
       primaryCategory: "product item",
@@ -403,7 +391,6 @@ const landingContainer = (WrappedComponent) => (props) => {
           navigate,
           handleLoader,
           handleDialogStates: handleBottomsheets,
-          handleSummaryData,
           closeKycStatusDialog: closeBottomsheet(
             BOTTOMSHEET_KEYS.openKycStatusDialog
           ),
@@ -676,7 +663,6 @@ const landingContainer = (WrappedComponent) => (props) => {
           contactDetails,
           navigate,
           handleLoader,
-          handleSummaryData,
           handleDialogStates: handleBottomsheets,
         },
         props

@@ -1,12 +1,7 @@
 import React, { useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import InvestingOptions from "../../pages/AppLanding/InvestingOptions";
-import {
-  getAppData,
-  setKyc,
-  setUser,
-} from "businesslogic/dataStore/reducers/app";
-import { isEmpty } from "lodash-es";
+import { getAppData } from "businesslogic/dataStore/reducers/app";
 import {
   getContactVerification,
   getInvestCardsData,
@@ -20,11 +15,10 @@ import {
 import { INVESTING_OPTIONS } from "../../strings/webappLanding";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
-import { storageService } from "../../utils/validators";
+import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 
 const investingOptionsContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
-  const dispatch = useDispatch();
   const { code, investingOptions, featuresList, ...baseConfig } = useMemo(
     getConfig,
     []
@@ -39,18 +33,8 @@ const investingOptionsContainer = (WrappedComponent) => (props) => {
   const [bottomsheetStates, setBottomsheetStates] = useState({
     openKycStatusDialog: false,
   });
+  const { updateKyc } = useUserKycHook();
 
-  const updateKyc = (data) => {
-    if (!isEmpty(data)) {
-      storageService().setObject("kyc", data);
-      dispatch(setKyc(data));
-    }
-  };
-
-  const handleSummaryData = (data) => {
-    dispatch(setKyc(data.kyc));
-    dispatch(setUser(data.user));
-  };
   const closeKycStatusDialog = (outsideClick = false) => {
     sendEvents("back", {
       intent: kycData.kycBottomsheetData?.title,
@@ -156,7 +140,6 @@ const investingOptionsContainer = (WrappedComponent) => (props) => {
           contactDetails,
           navigate,
           handleLoader,
-          handleSummaryData,
           handleDialogStates: handleBottomsheets,
         },
         props

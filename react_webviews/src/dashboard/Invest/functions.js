@@ -19,6 +19,8 @@ import isFunction from "lodash/isFunction";
 import { getCorpusValue } from "./common/commonFunctions";
 import { getAccountSummary } from "businesslogic/apis/common";
 import { setSummaryData } from "../../business/appLanding/functions";
+import store from "../../dataLayer/store";
+import { setKyc, setSubscriptionStatus, setUser } from "businesslogic/dataStore/reducers/app";
 
 let errorMessage = "Something went wrong!";
 export async function initialize({ screenName, kyc, user, handleLoader, handleSummaryData }) {
@@ -63,6 +65,9 @@ export async function getSummary({ handleLoader, handleSummaryData }) {
     if(isFunction(handleSummaryData)) {
       handleSummaryData({ kyc, user, subscriptionStatus })
     }
+    store.dispatch(setKyc(kyc));
+    store.dispatch(setUser(user));
+    store.dispatch(setSubscriptionStatus(subscriptionStatus));
   } catch (error) {
     console.log(error);
     toast(error.message || errorMessage);
@@ -535,7 +540,7 @@ export function handleIpoCardRedirection({ kyc, user, isDirectEntry, navigate, h
   }
 }
 
-function initiatePinSetup({ key, isDirectEntry, navigate, handleLoader, handleSummaryData, handleDialogStates }, props) {
+function initiatePinSetup({ key, isDirectEntry, navigate, handleLoader, handleSummaryData }, props) {
   const config  = getConfig();
   if (config.isNative) {
     openModule('account/setup_2fa', props, { routeUrlParams: `/${key}` });

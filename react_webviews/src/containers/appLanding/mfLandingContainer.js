@@ -17,18 +17,12 @@ import {
   handleKycStatus,
   handleKycStatusRedirection,
 } from "../../dashboard/Invest/functions";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  getAppData,
-  setKyc,
-  setUser,
-} from "businesslogic/dataStore/reducers/app";
-import { storageService } from "../../utils/validators";
-import { isEmpty } from "lodash-es";
+import { useSelector } from "react-redux";
+import { getAppData } from "businesslogic/dataStore/reducers/app";
+import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 
 const screen = "MF_LANDING";
 const mfLandingContainer = (WrappedComponent) => (props) => {
-  const dispatch = useDispatch();
   const navigate = navigateFunc.bind(props);
   const { code, mfOptions, landingMarketingBanners, ...baseConfig } = useMemo(
     getConfig,
@@ -36,6 +30,7 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
   );
   const { investCardsData } = getInvestCardsData(mfOptions);
   const marketingBanners = getEnabledMarketingBanners(landingMarketingBanners);
+  const { updateKyc } = useUserKycHook();
   const { kyc, user } = useSelector(getAppData);
   const kycData = useMemo(() => getKycData(kyc, user), [kyc, user]);
   const contactDetails = getContactVerification(kyc, false, screen);
@@ -111,18 +106,6 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
     navigate(WEBAPP_LANDING_PATHNAME_MAPPER.diySearch);
   };
 
-  const updateKyc = (data) => {
-    if (!isEmpty(data)) {
-      storageService().setObject("kyc", data);
-      dispatch(setKyc(data));
-    }
-  };
-
-  const handleSummaryData = (data) => {
-    dispatch(setKyc(data.kyc));
-    dispatch(setUser(data.user));
-  };
-
   const closeKycStatusDialog = (outsideClick = false) => {
     sendEvents("back", {
       intent: kycData.kycBottomsheetData?.title,
@@ -178,7 +161,6 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
           contactDetails,
           navigate,
           handleLoader,
-          handleSummaryData,
           handleDialogStates: handleBottomsheets,
         },
         props
