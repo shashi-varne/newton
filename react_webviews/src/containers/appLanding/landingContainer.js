@@ -39,7 +39,7 @@ import {
   handleStocksAndIpoCards,
   openKyc,
 } from "../../dashboard/Invest/functions";
-import { getUrlParams } from "../../utils/validators";
+import { getUrlParams, storageService } from "../../utils/validators";
 import { isEmpty } from "lodash-es";
 import {
   applyReferralCode,
@@ -177,6 +177,14 @@ const landingContainer = (WrappedComponent) => (props) => {
   }, []);
 
   const onLoad = () => {
+    const openEquityCallback =
+      storageService().getBoolean("openEquityCallback");
+    if (openEquityCallback) {
+      storageService().setBoolean("openEquityCallback", false);
+      nativeCallback({
+        action: "open_equity",
+      });
+    }
     const sagaCallback = (response, data) => {
       setSummaryData(response, true);
       const kycDetails = getKycData(data.kyc, data.user);

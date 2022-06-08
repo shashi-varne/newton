@@ -23,7 +23,7 @@ import DigilockerCallback from "../kyc/Digilocker/DigilockerCallback";
 import AccountMerge from "./AccountMerge";
 import AccountMergeOtp from "./AccountMerge/Otp";
 import AccountLinked from "./AccountMerge/Linked";
-import SdkLanding from './Invest/components/SdkLanding';
+// import SdkLanding from './Invest/components/SdkLanding';
 import NPS from "./nps";
 import PassiveIndexFunds from "./PassiveIndexFunds"
 import {getConfig} from 'utils/functions';

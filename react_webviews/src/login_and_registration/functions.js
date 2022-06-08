@@ -515,7 +515,6 @@ export async function getKycFromSummary(params = {}) {
 }
 
 export function redirectAfterLogin(data, user, navigateFunc) {
-  const kyc = storageService().getObject("kyc");
   const ipoContactNotVerified = storageService().get("ipoContactNotVerified") || false;
   const sdkStocksRedirection = storageService().getBoolean("sdkStocksRedirection");
   user = user || storageService().getObject("user");

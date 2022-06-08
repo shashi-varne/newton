@@ -11,6 +11,7 @@ import {
   getKycData,
   handleKycStatus,
   handleKycStatusRedirection,
+  handleStocksAndIpoCards,
 } from "../../dashboard/Invest/functions";
 import { INVESTING_OPTIONS } from "../../strings/webappLanding";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
@@ -106,6 +107,22 @@ const investingOptionsContainer = (WrappedComponent) => (props) => {
 
   const handleCardClick = (data) => () => {
     sendEvents("next", { cardClick: data.eventStatus });
+    if (["stocks", "ipo"].includes(data.id)) {
+      handleStocksAndIpoCards(
+        {
+          ...kycData,
+          key: data.id,
+          kyc,
+          user,
+          navigate,
+          handleLoader,
+          handleDialogStates: handleBottomsheets,
+          closeKycStatusDialog,
+        },
+        props
+      );
+      return;
+    }
     const pathname = WEBAPP_LANDING_PATHNAME_MAPPER[data.id];
     navigate(pathname);
   };
