@@ -11,6 +11,7 @@ const FisdomTheme = {
     },
     action: {
       brand: '#35CB5D',
+      200: '#C1FFD2',
       300: '#C1FFD2',
       400: '#96FFB2',
       500: '#53EA7B',

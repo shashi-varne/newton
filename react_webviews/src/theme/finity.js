@@ -11,6 +11,7 @@ const FinityTheme = {
     },
     action: {
       brand: '#675AF6',
+      200: '#DCDAFF',
       300: '#B9B3F9',
       400: '#9D95F8',
       500: '#8279F8',
