@@ -102,6 +102,7 @@ const MainLanding = ({
   onCampaignPrimaryClick,
   closeCampaignDialog,
   handleAuthVerification,
+  handlePremiumOnboarding,
   landingSections,
   ...restProps
 }) => {
@@ -157,7 +158,7 @@ const MainLanding = ({
             BOTTOMSHEET_KEYS.openPremiumOnboarding,
             kycBottomsheetData.title
           )}
-          onClick={handleKycPrimaryClick}
+          onClick={handlePremiumOnboarding}
           data={kycBottomsheetData}
         />
       )}

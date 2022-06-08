@@ -216,7 +216,12 @@ const landingContainer = (WrappedComponent) => (props) => {
       !appStorage.isKycBottomsheetDisplayed ||
       !appStorage.isPremiumBottomsheetDisplayed
     ) {
-      bottomsheetData = getKycBottomsheetData(kycDetails, appStorage, code);
+      bottomsheetData = getKycBottomsheetData(
+        kycDetails,
+        appStorage,
+        code,
+        baseConfig.productName
+      );
     }
 
     const isPriorityCampaign = CAMPAIGNS_TO_SHOW_ON_PRIORITY.includes(
@@ -604,6 +609,18 @@ const landingContainer = (WrappedComponent) => (props) => {
     handleBottomsheets({ [BOTTOMSHEET_KEYS.openReferral]: false });
   };
 
+  const handlePremiumOnboarding = () => {
+    if (
+      kycBottomsheetData.nextState &&
+      (!isMfOnly || kycBottomsheetData.nextState !== "/invest")
+    ) {
+      navigate(kycBottomsheetData.nextState);
+    }
+    handleBottomsheets({
+      [BOTTOMSHEET_KEYS.openPremiumOnboarding]: false,
+    });
+  };
+
   return (
     <WrappedComponent
       landingSections={mainLandingSections}
@@ -639,6 +656,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       authData={contactDetails}
       campaignData={campaignData}
       referral={referral}
+      handlePremiumOnboarding={handlePremiumOnboarding}
       handleReferralChange={handleReferralChange}
       closeBottomsheet={closeBottomsheet}
       handleReferralBottomsheet={handleReferralBottomsheet}

@@ -401,7 +401,7 @@ export const getContactVerification = (
   return contactData;
 };
 
-export const getKycBottomsheetData = (kycData = {}, appStorage = {}, code) => {
+export const getKycBottomsheetData = (kycData = {}, appStorage = {}, code, productName) => {
   const {
     isCompliant,
     kycJourneyStatus,
@@ -429,7 +429,7 @@ export const getKycBottomsheetData = (kycData = {}, appStorage = {}, code) => {
       kyc.bank.meta_data_status === "approved"
     ) {
       premiumDialogData = kycStatusMapper["mf_complete"];
-      premiumDialogData.status = premiumOnboardingStatus;
+      premiumDialogData.icon = `${productName}/${premiumDialogData.icon}`
     }
 
     if (premiumOnboardingStatus && !isEmpty(premiumDialogData)) {
