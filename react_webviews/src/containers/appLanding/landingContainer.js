@@ -178,7 +178,7 @@ const landingContainer = (WrappedComponent) => (props) => {
 
   const onLoad = () => {
     const sagaCallback = (response, data) => {
-      setSummaryData(response, skipStoreUpdate);
+      setSummaryData(response, true);
       const kycDetails = getKycData(data.kyc, data.user);
       setKycData(kycDetails);
       if (isEmpty(data.bankList)) {
