@@ -112,7 +112,7 @@ const CardHorizontal = ({
           {description && (
             <Typography
               className='mt-4'
-              variant='body2'
+              variant='body5'
               color={descriptionColor}
               dataAid='description'
             >

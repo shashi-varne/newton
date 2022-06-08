@@ -413,8 +413,8 @@ export const kycStatusMapper = {
   verifying_trading_account: {
     color: "#3792fc",
     title: "Trading and Demat account set up in progress",
-    subtitle: "This could take up to 12 hours. We’ll notify you once done",
-    buttonTitle: "Continue",
+    subtitle: "Meanwhile, you can invest in more than 5000+ mutual funds",
+    buttonTitle: "OK",
     oneButton: true,
     landingText: "UNDER PROCESS",
     icon: "kyc_inprogress.svg",
@@ -441,7 +441,7 @@ export const kycStatusMapper = {
   mf_esign_pending: {
     color: "#ffa60b",
     title: "Complete KYC",
-    subtitle: "kyc is a mandatory process to invest in Mutual Funds, stocks and other primary market products",
+    subtitle: "KYC is a mandatory process to invest in Mutual Funds, stocks and other primary market products",
     button2Title: "Later",
     buttonTitle: "COMPLETE NOW",
     landingText: "INCOMPLETE",

@@ -390,7 +390,7 @@ export function getKycAppStatus(kyc) {
     status = "complete_account_setup";
   }
 
-  result.status = "submitted";
+  result.status = status;
 
   return result;
 }
