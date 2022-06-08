@@ -29,17 +29,18 @@ import HowWeRecommend from "../Recommendation/HowWeRecommend";
 import { getConfig } from 'utils/functions';
 import InvestExplore from "../../pages/DIY/ExploreCategories/Explore";
 import ThemeWrapper from "../../theme/ThemeWrapper";
+import mfLandingContainer from "../../containers/appLanding/mfLandingContainer";
 
 const Invest = (props) => {
   const { url } = props.match;
   const partnerCode = getConfig().code;
   return (
     <Switch>
-      <Route
+      {/* <Route
         exact
         path={`${url}`}
         component={partnerCode === 'moneycontrol' ? ExploreFunds : Landing}
-      />
+      /> */}
       <Route
         exact
         path={`${url}/instaredeem`}
@@ -154,6 +155,7 @@ const Invest = (props) => {
           path={`${url}/explore-v2`}
           component={InvestExplore}
         />
+        <Route exact path={`${url}`} component={mfLandingContainer} />
       </ThemeWrapper>
 
       <Route component={NotFound} />

@@ -22,9 +22,9 @@ export const WEBAPP_LANDING_PATHNAME_MAPPER = {
   hybrid: "/diyv2/Hybrid/landing",
   diySearch: "/diyv2/invest/search",
   notification: "/notification",
-  investingOptions: "/mf-landing/view-all",
-  allCategories: "/landing-new/view-all",
-  bankList: "/bank-list",
+  investingOptions: "/landing/view-all/mf",
+  allCategories: "/landing/view-all/category",
+  bankList: "/landing/bank-list",
   refer: "/refer",
 };
 

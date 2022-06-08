@@ -64,17 +64,16 @@ const Home = (props) => {
         <Route exact path={`${url}secondary-verification`} component={SecondaryVerification} />
         <Route exact path={`${url}secondary-otp-verification`} component={SecondaryOtpVerification} />
         <Route path={`${url}referral-code`} component={Referral} />
-        <Route
+        <Route path={`${url}invest`} component={Invest} />
+        {/* <Route
           exact
           path={`${url}`}
           component={
             config.isSdk && config.code !== "moneycontrol" ? SdkLanding : Invest
           }
-        />
+        /> */}
         <Route exact path={`${url}refer`} component={Refer} />
         <Route path={`${url}invest`} component={Invest} />
-        <Route path={`${url}landing`} component={Invest} />
-        <Route path={`${url}mf`} component={SdkLanding} />
         <Route path={`${url}diy`} component={DIY} />
         <Route path={`${url}invest-journey`} component={InvestJourney} />
         <Route path={`${url}nps`} component={NPS} />
