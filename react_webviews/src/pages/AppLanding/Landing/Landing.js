@@ -103,22 +103,15 @@ const MainLanding = ({
   closeCampaignDialog,
   handleAuthVerification,
   handlePremiumOnboarding,
-  landingSections,
   ...restProps
 }) => {
   return (
     <>
-      {landingSections.map((el, index) => {
-        return (
-          <React.Fragment key={index}>
-            {renderCards({
-              id: el,
-              loaderData,
-              ...restProps,
-            })}
-          </React.Fragment>
-        );
+      {renderCards({
+        loaderData,
+        ...restProps,
       })}
+
       <TrustIcon
         dataAid="fisdom"
         variant="registration"
@@ -187,7 +180,6 @@ const MainLanding = ({
 };
 
 const renderCards = ({
-  id,
   showPlatformMotivators,
   showMarketingBanners,
   showKycCard,
@@ -216,6 +208,7 @@ const renderCards = ({
   handleReferralChange,
   referral,
   showPortfolioLoader,
+  landingSections,
 }) => {
   const cardsMapper = {
     platformMotivators: (
@@ -336,7 +329,13 @@ const renderCards = ({
       </>
     ),
   };
-  return cardsMapper[id];
+  return (
+    <>
+      {landingSections.map((el, index) => {
+        return <React.Fragment key={index}>{cardsMapper[el]}</React.Fragment>;
+      })}
+    </>
+  );
 };
 
 const PlatformMotivators = ({ options }) => {
