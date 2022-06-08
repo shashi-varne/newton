@@ -8,6 +8,8 @@ import investmentProcessContainer from '../../containers/diy/investmentProcessCo
 import subCategoryListContainer from '../../containers/diy/subCategoryListContainer';
 import Search from './Search/Search';
 import FundDetailsV2Container from '../../containers/fundDetailsV2/fundDetailsV2Container';
+import NotFound from "../../designSystem/organisms/PageNotFound";
+
 const DIY = (props) => {
   const { url } = props.match;
   return (
@@ -20,6 +22,7 @@ const DIY = (props) => {
       <Route path={`${url}/sub-category/fund-list`} component={SubCategoryFundList} />
       <Route path={`${url}/invest/search`} component={Search} />
       <Route path={`${url}/fundinfo/direct/:isin`} component={FundDetailsV2Container} /> 
+      <Route component={NotFound} />
     </Switch>
   );
 };
