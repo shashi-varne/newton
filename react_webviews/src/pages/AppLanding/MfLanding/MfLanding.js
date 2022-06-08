@@ -13,16 +13,6 @@ import { isEmpty } from "lodash-es";
 import "./MfLanding.scss";
 
 const MfLanding = ({
-  showMarketingBanners,
-  showKycCard,
-  kycData,
-  marketingBanners,
-  investmentOptions,
-  exploreCategories,
-  handleKyc,
-  handleCardClick,
-  handleExploreCategories,
-  onMarketingBannerClick,
   sendEvents,
   onRightIconClick,
   handleKycPrimaryClick,
@@ -31,6 +21,7 @@ const MfLanding = ({
   kycBottomsheetData,
   closeKycBottomsheet,
   isPageLoading,
+  ...restProps
 }) => {
   return (
     <Container
@@ -48,44 +39,9 @@ const MfLanding = ({
       eventData={sendEvents("just_set_events")}
       isPageLoading={isPageLoading}
     >
-      {showMarketingBanners && (
-        <MarketingBanners
-          onClick={onMarketingBannerClick}
-          banners={marketingBanners}
-        />
-      )}
-      {showKycCard && (
-        <CardHorizontal
-          rightImgSrc={require(`assets/fisdom/${kycData.icon}`)}
-          title={kycData.title}
-          description={kycData.subtitle}
-          descriptionColor={kycData.descriptionColor}
-          actionLink={kycData.buttonTitle}
-          className="mfl-kyc"
-          variant="heroCard"
-          buttonProps={{
-            isInverted: false,
-          }}
-          sx={{
-            background: "white !important",
-          }}
-          dataAid={MF_LANDING.kycDataAid}
-          titleColor="foundationColors.content.primary"
-          onClick={handleKyc(kycData.eventStatus)}
-        />
-      )}
-      <InvestmentOptions
-        titleDataAid={MF_LANDING.investmentOptions.dataAid}
-        title={MF_LANDING.investmentOptions.title}
-        productList={investmentOptions}
-        onClick={handleCardClick}
-      />
-      <ExploreCategories
-        titleDataAid={MF_LANDING.exploreCategories.dataAid}
-        title={MF_LANDING.exploreCategories.title}
-        categories={exploreCategories}
-        onClick={handleExploreCategories}
-      />
+      {renderCards({
+        ...restProps,
+      })}
       <TrustIcon
         dataAid="1"
         variant="registration"
@@ -108,3 +64,77 @@ const MfLanding = ({
 };
 
 export default MfLanding;
+
+const renderCards = ({
+  showMarketingBanners,
+  showKycCard,
+  kycData,
+  marketingBanners,
+  investmentOptions,
+  exploreCategories,
+  handleKyc,
+  handleCardClick,
+  handleExploreCategories,
+  onMarketingBannerClick,
+  mfSections,
+}) => {
+  const cardsMapper = {
+    marketingBanners: (
+      <>
+        {showMarketingBanners && (
+          <MarketingBanners
+            onClick={onMarketingBannerClick}
+            banners={marketingBanners}
+          />
+        )}
+      </>
+    ),
+    kyc: (
+      <>
+        {showKycCard && (
+          <CardHorizontal
+            rightImgSrc={require(`assets/fisdom/${kycData.icon}`)}
+            title={kycData.title}
+            description={kycData.subtitle}
+            descriptionColor={kycData.descriptionColor}
+            actionLink={kycData.buttonTitle}
+            className="mfl-kyc"
+            variant="heroCard"
+            buttonProps={{
+              isInverted: false,
+            }}
+            sx={{
+              background: "white !important",
+            }}
+            dataAid={MF_LANDING.kycDataAid}
+            titleColor="foundationColors.content.primary"
+            onClick={handleKyc(kycData.eventStatus)}
+          />
+        )}
+      </>
+    ),
+    mfOptions: (
+      <InvestmentOptions
+        titleDataAid={MF_LANDING.investmentOptions.dataAid}
+        title={MF_LANDING.investmentOptions.title}
+        productList={investmentOptions}
+        onClick={handleCardClick}
+      />
+    ),
+    exploreCategories: (
+      <ExploreCategories
+        titleDataAid={MF_LANDING.exploreCategories.dataAid}
+        title={MF_LANDING.exploreCategories.title}
+        categories={exploreCategories}
+        onClick={handleExploreCategories}
+      />
+    ),
+  };
+  return (
+    <>
+      {mfSections.map((el, index) => {
+        return <React.Fragment key={index}>{cardsMapper[el]}</React.Fragment>;
+      })}
+    </>
+  );
+};

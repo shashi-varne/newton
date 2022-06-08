@@ -28,6 +28,7 @@ const initializeData = () => {
     code,
     featuresList,
     mfOptions,
+    mfSections,
     landingMarketingBanners,
     ...baseConfig
   } = getConfig();
@@ -40,6 +41,7 @@ const initializeData = () => {
     investCardsData,
     isMfOnly,
     baseConfig,
+    mfSections,
   };
 };
 
@@ -54,8 +56,14 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
     openKycStatusDialog: false,
   });
   const { kyc, user, partner, subscriptionStatus } = useSelector(getAppData);
-  const { code, marketingBanners, baseConfig, investCardsData, isMfOnly } =
-    useMemo(initializeData, [partner, subscriptionStatus, kyc]);
+  const {
+    code,
+    marketingBanners,
+    baseConfig,
+    investCardsData,
+    isMfOnly,
+    mfSections,
+  } = useMemo(initializeData, [partner, subscriptionStatus, kyc]);
   const { updateKyc } = useUserKycHook();
 
   useEffect(() => {
@@ -176,6 +184,7 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
 
   return (
     <WrappedComponent
+      mfSections={mfSections}
       kycData={kycData.kycStatusData}
       kycBottomsheetData={kycBottomsheetData}
       marketingBanners={marketingBanners}

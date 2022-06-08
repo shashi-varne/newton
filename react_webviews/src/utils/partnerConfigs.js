@@ -46,6 +46,7 @@ export const commonCardsConfig = {
     "referral",
   ],
   featuresList: ["stocks", "ipo", "mf", "nps", "insurance", "taxFiling"],
+  mfSections: ["marketingBanners", "kyc", "mfOptions", "exploreCategories"],
   mfOptions: ["buildwealth", "nfo", "parkmoney", "viewAll"],
   investingOptions: [
     "buildwealth",
@@ -253,6 +254,8 @@ export const partnerConfigs = {
       instaredeem: true,
       indexFunds: true,
       insurance: true,
+      fhc: true,
+      riskProfile: true,
     },
   },
   bfdlmobile: {
@@ -480,6 +483,7 @@ export const partnerConfigs = {
     code: "taxwin",
     logo: "taxwin.svg",
     logoWidth: "200px",
+    mfSections: ["marketingBanners", "kyc", "mfOptions"],
     features: {
       nps: true,
     },
