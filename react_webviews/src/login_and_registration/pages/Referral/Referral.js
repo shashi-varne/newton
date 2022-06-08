@@ -54,7 +54,7 @@ class Referral extends Component {
       const res = await Api.get(`/api/referral/apply?code=${referral_code}`);
       const { result, status_code: status } = res.pfwresponse;
       if (status === 200) {
-        const result = await getAccountSummary();
+        const result = await getAccountSummary(Api);
         setSummaryData(result);
         toast("Success");
         this.sendEvents("next")

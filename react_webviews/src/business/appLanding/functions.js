@@ -25,7 +25,10 @@ import { getAccountSummary } from "businesslogic/apis/common";
 import eventManager from "../../utils/eventManager";
 import { EVENT_MANAGER_CONSTANTS } from "../../utils/constants";
 import { getCampaignData } from "businesslogic/utils/app/functions";
-import { hitCampaignFeedbackUrl } from "businesslogic/apis/app";
+import {
+  getNPSInvestmentStatus,
+  hitCampaignFeedbackUrl,
+} from "businesslogic/apis/app";
 import store from "../../dataLayer/store";
 import {
   setBankList,
@@ -39,7 +42,6 @@ import {
 } from "businesslogic/dataStore/reducers/app";
 import Api from "../../utils/api";
 import { FREEDOM_PLAN_STORAGE_CONSTANTS } from "../../freedom_plan/common/constants";
-import Toast from "../../designSystem/atoms/ToastMessage";
 
 /* eslint-disable */
 export const initData = async () => {
@@ -157,36 +159,25 @@ const setSDKSummaryData = (result) => {
   setNpsData(result);
 };
 
-export const getNPSInvestmentStatus = async () => {
-  const url = "/api/nps/invest/status/v2";
-  try {
-    const response = await Api.get(url);
-    if (response?.pfwresponse?.status_code === 200) {
-      return response?.pfwresponse?.result;
-    } else {
-      throw new Error(response?.pfwresponse?.result?.message);
-    }
-  } catch (err) {
-    Toast(err.message || "Something went wrong!");
-  }
-};
-
 const setNpsData = async (result) => {
   if (
     result?.data?.user?.user?.data?.nps_investment &&
     result?.data?.nps?.nps_user?.data?.is_doc_required
   ) {
-    const data = await getNPSInvestmentStatus();
-    if (!data) return;
-    storageService().setObject(
-      "nps_additional_details",
-      data.registration_details
-    );
-    storageService().setObject("nps_data", data);
-    if (!data?.registration_details?.additional_details_status) {
-      storageService().set("nps_additional_details_required", true);
-    } else {
-      storageService().set("nps_additional_details_required", false);
+    try {
+      const data = await getNPSInvestmentStatus(Api);
+      storageService().setObject(
+        "nps_additional_details",
+        data.registration_details
+      );
+      storageService().setObject("nps_data", data);
+      if (!data?.registration_details?.additional_details_status) {
+        storageService().set("nps_additional_details_required", true);
+      } else {
+        storageService().set("nps_additional_details_required", false);
+      }
+    } catch (err) {
+      console.log("err ", err);
     }
   } else {
     storageService().set("nps_additional_details_required", false);
@@ -517,6 +508,7 @@ export const handleCampaign =
     }
     if (campaignData.campaign_name === "insurance_o2o_campaign") {
       hitCampaignFeedbackUrl(
+        Api,
         campaignData.action_buttons?.buttons[0]?.feedback_url
       );
       return;
@@ -536,6 +528,7 @@ export const closeCampaignDialog =
     ];
     if (campaignsToHitFeedback.includes(campaignData.campaign_name)) {
       hitCampaignFeedbackUrl(
+        Api,
         campaignData.action_buttons?.buttons[0]?.feedback_url
       );
     }

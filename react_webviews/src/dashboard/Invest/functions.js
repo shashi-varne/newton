@@ -57,7 +57,7 @@ export async function getSummary({ handleLoader, handleSummaryData }) {
     handleLoader({ kycStatusLoader: true });
   }
   try {
-    const result = await getAccountSummary();
+    const result = await getAccountSummary(Api);
     setSummaryData(result);
     user = result.data.user.user.data;
     kyc = result.data.kyc.kyc.data;
