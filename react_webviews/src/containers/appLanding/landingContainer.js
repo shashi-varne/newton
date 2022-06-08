@@ -127,7 +127,8 @@ const landingContainer = (WrappedComponent) => (props) => {
   const [contactDetails, setContactDetails] = useState({});
   const [showCarousals, setShowCarousals] = useState(
     !isEmpty(onboardingCarousels) &&
-      !kycData.isReadyToInvestBase &&
+      baseConfig.isSdk &&
+      user.firslogin &&
       !appStorage.isOnboardingCarouselsDisplayed
   );
   const [kycBottomsheetData, setKycBottomsheetData] = useState({});
