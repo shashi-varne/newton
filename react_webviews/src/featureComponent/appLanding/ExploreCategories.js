@@ -27,7 +27,7 @@ const ExploreCategories = ({ categories = [], title, titleDataAid, onClick }) =>
             <CardVertical
               {...data}
               imgSrc={require(`assets/${data.icon}`)}
-              className="al-ec-card"
+              className="al-ec-card pointer"
               onClick={onClick(data)}
             />
           </SwiperSlide>
