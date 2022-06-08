@@ -200,7 +200,11 @@ const landingContainer = (WrappedComponent) => (props) => {
   const handleLandingBottomsheets = (kycDetails) => {
     let campaignBottomSheetData = {},
       bottomsheetData = {};
-    const contactData = getContactVerification(kycDetails.kyc, false, screen);
+    const contactData = getContactVerification(
+      kycDetails.kyc,
+      appStorage.isAuthVerificationDisplayed,
+      screen
+    );
     setContactDetails(contactData);
 
     if (!appStorage.isCampaignDisplayed) {

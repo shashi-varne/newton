@@ -1,12 +1,10 @@
 import 'common/theme/Style.scss';
-import React, { lazy, Suspense, useEffect } from 'react';
+import React, { lazy, Suspense } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import ErrorBoundary from './ErrorBoundary';
 import ProtectedRoute from './common/components/ProtectedRoute';
 import BootSkeleton from './common/components/BootSkeleton';
 import NotFound from './common/components/NotFound';
-import { useDispatch } from 'react-redux';
-import { updateAppStorage } from 'businesslogic/dataStore/reducers/app';
 
 const Insurance = lazy(() => import(
   /*webpackChunkName: "Insurance"*/ './insurance'
@@ -96,30 +94,7 @@ const FreedomPlan = lazy(() => import(
   /*webpackChunkName: "FreedomPlan"*/ './freedom_plan'
 ));
 
-const clearBottomsheetDisplays = (dispacth) => {
-  const bottomSheetsArr = [
-    "isCampaignDisplayed", 
-    "verifyDetailsSheetDisplayed", 
-    "isKycBottomsheetDisplayed", 
-    "isPremiumBottomsheetDisplayed",
-  ];
-
-  let data = {};
-  bottomSheetsArr.forEach((bottomSheet) => {
-    data = {
-      ...data,
-      [bottomSheet]: false,
-    }
-  });
-  dispacth(updateAppStorage(data));
-}
-
 const Feature = () => {
-  const dispacth = useDispatch();
-  useEffect(() => {
-    clearBottomsheetDisplays(dispacth);
-  }, []);
-
   // old # route support added
   // start
   const history = useHistory();
