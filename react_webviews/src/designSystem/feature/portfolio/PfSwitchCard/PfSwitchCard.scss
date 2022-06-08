@@ -1,17 +1,52 @@
 .switch-container {
   width: 100%;
   border-radius: 12px;
+  position: relative;
   .top-section {
-    padding: 16px;
+    padding: 16px 16px 0 16px;
     .top-row {
-      margin-bottom: 8px;
       .status {
         margin: 2px 0 0 4px;
       }
     }
   }
+  .label {
+    margin: 10px 0 0 16px;
+  }
+  .progress-item {
+    padding: 12px 16px 16px 16px;
+    .title {
+      margin: 0 5px 0 0;
+    }
+    .progress-label {
+      margin-bottom: 8px;
+    }
+    .progress-row {
+      margin-top: 8px;
+    }
+    .progress-icon {
+      margin-right: 8px;
+    }
+  }
+  .progress-item-one {
+    padding: 8px 16px 16px 16px;
+  }
+  .middle-img-container {
+    background-color: #fff;
+    border: 1px solid #ececf1;
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+  }
+
   .detail-container {
-    padding: 0 16px 8px 16px;
+    padding: 10px 16px 8px 16px;
     .middle-left {
       width: 80%;
       .divider {

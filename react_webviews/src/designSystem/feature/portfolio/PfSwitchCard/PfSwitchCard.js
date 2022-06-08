@@ -16,9 +16,18 @@ function PfSwitchCard({
   infoText,
   topLeftImgSrc,
   status,
-  label,
   variant,
   onClick,
+  label,
+  labelOne,
+  topTitle,
+  topImgSrc,
+  topDesc,
+  labelTwo,
+  bottomTitle,
+  bottomImgSrc,
+  bottomDesc,
+  switchImgSrc,
   ...props
 }) {
   return (
@@ -39,7 +48,7 @@ function PfSwitchCard({
           <RowContainer>
             <Icon
               src={topLeftImgSrc}
-              dataAid={"top"}
+              dataAid="top"
               width="16px"
               height="16px"
             />
@@ -53,7 +62,9 @@ function PfSwitchCard({
             </Typography>
           </RowContainer>
         </RowContainer>
-        <RowContainer>
+      </Box>
+      {variant === PF_SWITCH_TYPE.DETAIL ? (
+        <>
           <Typography
             variant="body5"
             color="foundationColors.content.secondary"
@@ -62,20 +73,87 @@ function PfSwitchCard({
           >
             {label}
           </Typography>
-        </RowContainer>
-      </Box>
-      {variant === PF_SWITCH_TYPE.DETAIL ? (
-        <>
           <FeatureDetail {...props} />
           <Separator dataAid={1} />
           <FeatureBottomRow {...props} />
         </>
       ) : (
-        <FeatureProgress {...props} />
+        <>
+          <ProgressItem
+            label={labelOne}
+            title={topTitle}
+            imgSrc={topImgSrc}
+            desc={topDesc}
+            id={1}
+          />
+          <Box className="middle-img-container">
+            <Icon
+              src={switchImgSrc}
+              width="22px"
+              height="22px"
+              className="img-center"
+              dataAid="center"
+            />
+          </Box>
+          <Separator dataAid={1} />
+          <ProgressItem
+            label={labelTwo}
+            title={bottomTitle}
+            imgSrc={bottomImgSrc}
+            desc={bottomDesc}
+            id={2}
+          />
+        </>
       )}
     </Box>
   );
 }
+
+const ProgressItem = ({ label, imgSrc, title, desc, id }) => {
+  return (
+    <Box className={`progress-item ${id === 1 && "progress-item-one"} `}>
+      <Typography
+        variant="body5"
+        color="foundationColors.content.secondary"
+        dataAid={`label${id}`}
+        className="progress-label"
+      >
+        {label}
+      </Typography>
+      <RowContainer
+        className="progress-row"
+        justifyContent="space-between"
+        alignItems="flex-start"
+      >
+        <RowContainer justifyContent="flex-start" alignItems="flex-start">
+          <Icon
+            src={imgSrc}
+            width="32px"
+            height="32px"
+            className="progress-icon"
+            dataAid={`left${id}`}
+          />
+          <Typography
+            variant="body2"
+            color="foundationColors.content.primary"
+            dataAid={`title${id}`}
+            style={{ marginRight: 5 }}
+            className="title"
+          >
+            {title}
+          </Typography>
+        </RowContainer>
+        <Typography
+          variant="body1"
+          color="foundationColors.content.primary"
+          dataAid={`value${id}`}
+        >
+          {desc}
+        </Typography>
+      </RowContainer>
+    </Box>
+  );
+};
 
 export const RowContainer = ({ children, ...props }) => {
   return (
