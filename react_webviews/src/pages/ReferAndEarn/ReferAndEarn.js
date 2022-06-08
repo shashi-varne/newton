@@ -7,7 +7,7 @@ const ReferAndEarn = (props) => {
   return (
     <Switch>
       <Route
-        path={`${url}/withdrawal-placed`}
+        path={`${url}/withdraw-placed`}
         component={withdrawPlacedContainer}
       />
     </Switch>
