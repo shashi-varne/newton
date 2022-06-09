@@ -405,6 +405,8 @@ export const partnerConfigs = {
     features: {
       instaredeem: true,
     },
+    mfSections: ["marketingBanners", "kyc", "mfOptions"],
+    mfOptions: ["buildwealth", "instaredeem"],
   },
   sbm: {
     logo: "sbm.svg",
@@ -483,7 +485,19 @@ export const partnerConfigs = {
     code: "taxwin",
     logo: "taxwin.svg",
     logoWidth: "200px",
+    landingSections: [
+      "platformMotivators",
+      "portfolioOverview",
+      "marketingBanners",
+      "easySip",
+      "kyc",
+      "featuresList",
+      "manageInvestments",
+      "referral",
+    ],
+    featuresList: ["nps"],
     mfSections: ["marketingBanners", "kyc", "mfOptions"],
+    mfOptions: ["elss", "nps"],
     features: {
       nps: true,
     },
