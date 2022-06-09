@@ -1,6 +1,5 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-// import NotFound from "../../common/components/NotFound";
 import bankListContainer from "../../containers/appLanding/bankListContainer";
 import investingOptionsContainer from "../../containers/appLanding/investingOptionsContainer";
 import landingContainer from "../../containers/appLanding/landingContainer";
@@ -24,7 +23,6 @@ const AppLanding = (props) => {
         path="/landing/view-all/:type"
         component={investingOptionsContainer}
       />
-      {/* <Route component={NotFound} /> */}
     </Switch>
   );
 };
