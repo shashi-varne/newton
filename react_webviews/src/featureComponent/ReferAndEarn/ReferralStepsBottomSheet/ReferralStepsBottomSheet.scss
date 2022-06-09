@@ -1,0 +1,42 @@
+.ref-steps-bottom-sheet-wrapper {
+  background-color: white;
+  padding: 12px 16px 16px 16px;
+
+  .rs-btm-sheet-title {
+    margin-bottom: 24px;
+    align-self: center;
+  }
+
+  .rs-btm-sheet-img {
+    align-self: center;
+  }
+
+  .rs-btm-sheet-indicator {
+    margin-bottom: 12px;
+    span {
+      width: 57px;
+      height: 4px;
+      border-radius: 100px;
+    }
+  }
+
+  .rs-btm-sheet-order-step {
+    .aos-subtitle {
+      padding-bottom: 16px;
+    }
+  }
+
+  .rs-btm-share-wrapper {
+    margin-top: 24px;
+  }
+  
+}
+
+@media only screen and (min-width: 600px) {
+  .ref-steps-bottom-sheet-wrapper {
+    margin-top: 16px;
+    .btm-sheet-indicator {
+      display: none;
+    }
+  }
+}
