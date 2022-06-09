@@ -39,7 +39,7 @@ const SuccessDetails = ({
       <Stack direction="column" alignItems="center" justifyContent="center">
         <LandingHeader variant="center" dataAid={STRINGS.landingHeader.dataAid}>
           <Lottie
-            animationData={require(`assets/${productName}/lottie/debt.json`)}
+            animationData={require(`assets/${productName}/lottie/calendar.json`)}
             autoPlay
             loop
             className="sd-lottie-anim"
