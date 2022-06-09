@@ -348,7 +348,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     setTabValue(value);
   };
 
-  const handleBottomsheets = (data, bottomsheetData) => {
+  const handleBottomsheets = (data = {}, bottomsheetData) => {
     setBottomsheetStates({
       ...bottomsheetStates,
       ...data,
@@ -404,7 +404,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     }
   };
 
-  const handleCardClick = (data) => () => {
+  const handleCardClick = (data = {}) => () => {
     sendEvents("next", {
       primaryCategory: "product item",
       cardClick: data.eventStatus,
@@ -431,7 +431,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     navigate(pathname);
   };
 
-  const handleExploreCategories = (data) => () => {
+  const handleExploreCategories = (data = {}) => () => {
     sendEvents("next", {
       primaryCategory: "category item",
       cardClick: data.title?.toLowerCase(),
@@ -474,7 +474,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     }
   };
 
-  const handleManageInvestments = (data) => () => {
+  const handleManageInvestments = (data = {}) => () => {
     sendEvents("next", {
       menuName: data.title?.toLowerCase(),
       eventName: "bottom_menu_click",
@@ -483,7 +483,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     navigate(pathname);
   };
 
-  const onMarketingBannerClick = (data) => () => {
+  const onMarketingBannerClick = (data = {}) => () => {
     handleMarketingBanners(data, sendEvents, navigate);
   };
 

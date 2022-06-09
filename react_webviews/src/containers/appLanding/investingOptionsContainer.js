@@ -115,7 +115,7 @@ const investingOptionsContainer = (WrappedComponent) => (props) => {
     }
   };
 
-  const handleCardClick = (data) => () => {
+  const handleCardClick = (data = {}) => () => {
     sendEvents("next", { cardClick: data.eventStatus });
     if (["stocks", "ipo"].includes(data.id)) {
       handleStocksAndIpoCards(

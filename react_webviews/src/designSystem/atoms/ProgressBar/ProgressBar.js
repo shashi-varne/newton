@@ -8,7 +8,7 @@ const getBarMeterData = (numberOfBars) => () => {
 };
 
 const ProgressBar = (props) => {
-  const { dataAid, classes = {}, activeIndex, numberOfBars } = props;
+  const { dataAid, className, activeIndex, numberOfBars } = props;
 
   const progressBarData = useMemo(getBarMeterData(numberOfBars), [
     numberOfBars,
@@ -19,7 +19,7 @@ const ProgressBar = (props) => {
       direction="row"
       justifyContent="center"
       spacing="4px"
-      className={`atom-progress-bar ${classes.container}`}
+      className={`atom-progress-bar ${className}`}
       data-aid={`progressBar_${dataAid}`}
     >
       {progressBarData.map((index) => (
