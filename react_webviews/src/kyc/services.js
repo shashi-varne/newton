@@ -4,10 +4,7 @@ import toast from '../common/ui/Toast'
 import { getConfig, isIndbSdkTradingFlow, isTradingEnabled, isTradingFlow } from '../utils/functions'
 import { kycSubmit } from './common/api'
 import { isDigilockerFlow, isEquityApplSubmittedOrComplete, isRetroMfIRUser } from './common/functions'
-import eventManager from '../utils/eventManager'
-import { EVENT_MANAGER_CONSTANTS } from '../utils/constants'
 import isEmpty from "lodash/isEmpty"
-import { FREEDOM_PLAN_STORAGE_CONSTANTS } from '../freedom_plan/common/constants'
 import { isAocPaymentSkipped, isAocPaymentSuccessful, isAocPaymentSuccessOrNotApplicable } from './Aoc/common/functions'
 
 const DOCUMENTS_MAPPER = {
@@ -19,136 +16,136 @@ const DOCUMENTS_MAPPER = {
   LAT_BANK_PB: 'Passbook',
 }
 
-export async function getAccountSummary(params = {}) {
-  const url = '/api/user/account/summary'
-  if (isEmpty(params)) {
-    params = {
-      campaign: ['user_campaign'],
-      kyc: ['kyc'],
-      user: ['user'],
-      nps: ['nps_user'],
-      partner: ['partner'],
-      bank_list: ['bank_list'],
-      referral: ['subbroker', 'p2p'],
-      equity: ['subscription_status']
-    }
-  }
-  try {
-    const response = await Api.post(url, params);
+// export async function getAccountSummary(params = {}) {
+//   const url = '/api/user/account/summary'
+//   if (isEmpty(params)) {
+//     params = {
+//       campaign: ['user_campaign'],
+//       kyc: ['kyc'],
+//       user: ['user'],
+//       nps: ['nps_user'],
+//       partner: ['partner'],
+//       bank_list: ['bank_list'],
+//       referral: ['subbroker', 'p2p'],
+//       equity: ['subscription_status']
+//     }
+//   }
+//   try {
+//     const response = await Api.post(url, params);
 
-    if (
-      response.pfwstatus_code !== 200 ||
-      !response.pfwresponse ||
-      isEmpty(response.pfwresponse)
-    ) {
-      const errObj = {
-        pfwstatus_code: response?.pfwstatus_code,
-        message: response?.pfwmessage
-      };
-      throw errObj;
-    }
-    if (response?.pfwresponse?.status_code === 200) {
-      return response?.pfwresponse?.result;
-    } else {
-      throw new Error(response?.pfwresponse?.result?.message);
-    }
-  } catch (err) {
-    throw(err);
-  }
-}
+//     if (
+//       response.pfwstatus_code !== 200 ||
+//       !response.pfwresponse ||
+//       isEmpty(response.pfwresponse)
+//     ) {
+//       const errObj = {
+//         pfwstatus_code: response?.pfwstatus_code,
+//         message: response?.pfwmessage
+//       };
+//       throw errObj;
+//     }
+//     if (response?.pfwresponse?.status_code === 200) {
+//       return response?.pfwresponse?.result;
+//     } else {
+//       throw new Error(response?.pfwresponse?.result?.message);
+//     }
+//   } catch (err) {
+//     throw(err);
+//   }
+// }
 
-export async function getNPSInvestmentStatus() {
-  const url = '/api/nps/invest/status/v2'
-  try {
-    const response = await Api.get(url);
-    if (response?.pfwresponse?.status_code === 200) {
-      return response?.pfwresponse?.result;
-    } else {
-      throw new Error(response?.pfwresponse?.result?.message);
-    }
-  } catch (err) {
-    toast(err.message || "Something went wrong!");
-  }
-}
+// export async function getNPSInvestmentStatus() {
+//   const url = '/api/nps/invest/status/v2'
+//   try {
+//     const response = await Api.get(url);
+//     if (response?.pfwresponse?.status_code === 200) {
+//       return response?.pfwresponse?.result;
+//     } else {
+//       throw new Error(response?.pfwresponse?.result?.message);
+//     }
+//   } catch (err) {
+//     toast(err.message || "Something went wrong!");
+//   }
+// }
 
-export async function initData() {
-  const currentUser = storageService().get('currentUser')
-  const user = storageService().getObject('user')
-  const kyc = storageService().getObject('kyc')
-  try {
-    if (currentUser && !isEmpty(user) && !isEmpty(kyc)) {
-      const referral = storageService().getObject('referral');
-      if (isEmpty(referral)) {
-        const queryParams = {
-          campaign: ['user_campaign'],
-          nps: ['nps_user'],
-          bank_list: ['bank_list'],
-          referral: ['subbroker', 'p2p'],
-          equity: ['subscription_status']
-        }
-        const result = await getAccountSummary(queryParams);
-        storageService().set('dataSettedInsideBoot', true)
-        setSDKSummaryData(result)
-      }
-    } else {
-      const result = await getAccountSummary();
-      storageService().set('dataSettedInsideBoot', true)
-      setSummaryData(result)
-    }
-  } catch (err) {
-    console.log(err);
-    throw err;
-  }
-}
+// export async function initData() {
+//   const currentUser = storageService().get('currentUser')
+//   const user = storageService().getObject('user')
+//   const kyc = storageService().getObject('kyc')
+//   try {
+//     if (currentUser && !isEmpty(user) && !isEmpty(kyc)) {
+//       const referral = storageService().getObject('referral');
+//       if (isEmpty(referral)) {
+//         const queryParams = {
+//           campaign: ['user_campaign'],
+//           nps: ['nps_user'],
+//           bank_list: ['bank_list'],
+//           referral: ['subbroker', 'p2p'],
+//           equity: ['subscription_status']
+//         }
+//         const result = await getAccountSummary(queryParams);
+//         storageService().set('dataSettedInsideBoot', true)
+//         setSDKSummaryData(result)
+//       }
+//     } else {
+//       const result = await getAccountSummary();
+//       storageService().set('dataSettedInsideBoot', true)
+//       setSummaryData(result)
+//     }
+//   } catch (err) {
+//     console.log(err);
+//     throw err;
+//   }
+// }
 
-export async function setSummaryData(result) {
-  const currentUser = result.data.user.user.data
-  const userKyc = result.data.kyc.kyc.data
-  const subscriptionStatus = result?.data?.equity?.subscription_status?.data || {};
-  if (userKyc.firstlogin) {
-    storageService().set('firstlogin', true)
-  }
-  storageService().set('currentUser', true)
-  storageService().setObject('user', currentUser)
-  storageService().setObject('kyc', userKyc)
+// export async function setSummaryData(result) {
+//   const currentUser = result.data.user.user.data
+//   const userKyc = result.data.kyc.kyc.data
+//   const subscriptionStatus = result?.data?.equity?.subscription_status?.data || {};
+//   if (userKyc.firstlogin) {
+//     storageService().set('firstlogin', true)
+//   }
+//   storageService().set('currentUser', true)
+//   storageService().setObject('user', currentUser)
+//   storageService().setObject('kyc', userKyc)
 
-  const campaignData = await getCampaignBySection(
-    result.data.campaign.user_campaign.data
-  )
-  storageService().setObject('campaign', campaignData)
-  storageService().setObject("npsUser", result?.data?.nps?.nps_user?.data);
-  storageService().setObject("banklist", result?.data?.bank_list?.bank_list?.data);
-  storageService().setObject("referral", result.data.referral);
-  if(!isEmpty(subscriptionStatus)) {
-    storageService().setObject(FREEDOM_PLAN_STORAGE_CONSTANTS.subscriptionStatus, subscriptionStatus);
-  }
-  let partner = "";
-  let consent_required = false;
-  if (result.data.partner.partner.data) {
-    partner = result.data.partner.partner.data.name;
-    consent_required = result.data.partner.partner.data.consent_required;
-  }
-  storageService().set("consent_required", consent_required);
-  const subBrokerCodePartersList = ["hbl", "sbm", "flexi", "medlife", "life99", "taxwin", "ippb", "quesscorp", "sahaj", "mspl"]
-  if (partner === "bfdl") {
-    storageService().set("partner", "bfdlmobile");
-  } else if (partner === "obcweb") {
-    storageService().set("partner", "obc");
-  } else if (partner === "moneycontrolweb") {
-    storageService().set("partner", "moneycontrol");
-  } else if (
-    subBrokerCodePartersList.indexOf(result.data.referral.subbroker.data.subbroker_code) !== -1
-  ) {
-    storageService().set(
-      "partner",
-      result.data.referral.subbroker.data.subbroker_code
-    );
-  } else {
-    storageService().set("partner", partner);
-  }
-  eventManager.emit(EVENT_MANAGER_CONSTANTS.updateAppTheme);
-  setNpsData(result)
-}
+//   const campaignData = await getCampaignBySection(
+//     result.data.campaign.user_campaign.data
+//   )
+//   storageService().setObject('campaign', campaignData)
+//   storageService().setObject("npsUser", result?.data?.nps?.nps_user?.data);
+//   storageService().setObject("banklist", result?.data?.bank_list?.bank_list?.data);
+//   storageService().setObject("referral", result.data.referral);
+//   if(!isEmpty(subscriptionStatus)) {
+//     storageService().setObject(FREEDOM_PLAN_STORAGE_CONSTANTS.subscriptionStatus, subscriptionStatus);
+//   }
+//   let partner = "";
+//   let consent_required = false;
+//   if (result.data.partner.partner.data) {
+//     partner = result.data.partner.partner.data.name;
+//     consent_required = result.data.partner.partner.data.consent_required;
+//   }
+//   storageService().set("consent_required", consent_required);
+//   const subBrokerCodePartersList = ["hbl", "sbm", "flexi", "medlife", "life99", "taxwin", "ippb", "quesscorp", "sahaj", "mspl"]
+//   if (partner === "bfdl") {
+//     storageService().set("partner", "bfdlmobile");
+//   } else if (partner === "obcweb") {
+//     storageService().set("partner", "obc");
+//   } else if (partner === "moneycontrolweb") {
+//     storageService().set("partner", "moneycontrol");
+//   } else if (
+//     subBrokerCodePartersList.indexOf(result.data.referral.subbroker.data.subbroker_code) !== -1
+//   ) {
+//     storageService().set(
+//       "partner",
+//       result.data.referral.subbroker.data.subbroker_code
+//     );
+//   } else {
+//     storageService().set("partner", partner);
+//   }
+//   eventManager.emit(EVENT_MANAGER_CONSTANTS.updateAppTheme);
+//   setNpsData(result)
+// }
 
 export function getCampaignBySection(notifications, sections) {
   if (!sections) {
@@ -172,40 +169,40 @@ export function getCampaignBySection(notifications, sections) {
   return notificationsData;
 }
 
-function setSDKSummaryData(result) {
-  const subscriptionStatus = result?.data?.equity?.subscription_status?.data || {};
-  if(!isEmpty(subscriptionStatus)) {
-    storageService().setObject(FREEDOM_PLAN_STORAGE_CONSTANTS.subscriptionStatus, subscriptionStatus);
-  }
-  const campaignData = getCampaignBySection(
-    result.data.campaign.user_campaign.data
-  )
-  storageService().setObject('campaign', campaignData)
-  storageService().setObject('npsUser', result.data.nps.nps_user.data)
-  storageService().setObject('banklist', result.data.bank_list.data)
-  storageService().setObject('referral', result.data.referral)
+// function setSDKSummaryData(result) {
+//   const subscriptionStatus = result?.data?.equity?.subscription_status?.data || {};
+//   if(!isEmpty(subscriptionStatus)) {
+//     storageService().setObject(FREEDOM_PLAN_STORAGE_CONSTANTS.subscriptionStatus, subscriptionStatus);
+//   }
+//   const campaignData = getCampaignBySection(
+//     result.data.campaign.user_campaign.data
+//   )
+//   storageService().setObject('campaign', campaignData)
+//   storageService().setObject('npsUser', result.data.nps.nps_user.data)
+//   storageService().setObject('banklist', result.data.bank_list.data)
+//   storageService().setObject('referral', result.data.referral)
 
-  setNpsData(result)
-}
+//   setNpsData(result)
+// }
 
-async function setNpsData(result) {
-  if (
-    result?.data?.user?.user?.data?.nps_investment &&
-    result?.data?.nps?.nps_user?.data?.is_doc_required
-  ) {
-    const data = await getNPSInvestmentStatus()
-    if(!data) return;
-    storageService().setObject("nps_additional_details", data.registration_details);
-    storageService().setObject("nps_data", data);
-    if (!data?.registration_details?.additional_details_status) {
-      storageService().set('nps_additional_details_required', true)
-    } else {
-      storageService().set('nps_additional_details_required', false)
-    }
-  } else {
-    storageService().set('nps_additional_details_required', false)
-  }
-}
+// async function setNpsData(result) {
+//   if (
+//     result?.data?.user?.user?.data?.nps_investment &&
+//     result?.data?.nps?.nps_user?.data?.is_doc_required
+//   ) {
+//     const data = await getNPSInvestmentStatus()
+//     if(!data) return;
+//     storageService().setObject("nps_additional_details", data.registration_details);
+//     storageService().setObject("nps_data", data);
+//     if (!data?.registration_details?.additional_details_status) {
+//       storageService().set('nps_additional_details_required', true)
+//     } else {
+//       storageService().set('nps_additional_details_required', false)
+//     }
+//   } else {
+//     storageService().set('nps_additional_details_required', false)
+//   }
+// }
 
 export function getKycAppStatus(kyc) {
   if(isEmpty(kyc)) return {};
