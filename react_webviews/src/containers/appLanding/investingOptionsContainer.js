@@ -137,6 +137,13 @@ const investingOptionsContainer = (WrappedComponent) => (props) => {
     navigate(pathname);
   };
 
+  const onRightIconClick = () => {
+    sendEvents("next", {
+      eventName: "diy_search_clicked",
+    });
+    navigate(WEBAPP_LANDING_PATHNAME_MAPPER.diySearch);
+  };
+
   return (
     <WrappedComponent
       investmentOptions={investCardsData}
@@ -145,6 +152,7 @@ const investingOptionsContainer = (WrappedComponent) => (props) => {
       kycData={kycData.kycStatusData}
       kycBottomsheetData={kycBottomsheetData}
       bottomsheetStates={bottomsheetStates}
+      onRightIconClick={onRightIconClick}
       handleCardClick={handleCardClick}
       closeKycBottomsheet={closeKycStatusDialog}
       sendEvents={sendEvents}
