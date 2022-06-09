@@ -36,14 +36,14 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
     }
   };
 
-  const handleCardClick = (data) => () => {
+  const handleCardClick = (data = {}) => () => {
     sendEvents("next", {
       primaryCategory: "product item",
       cardClick: data.eventStatus,
     });
   };
 
-  const handleExploreCategories = (data) => () => {
+  const handleExploreCategories = (data = {}) => () => {
     sendEvents("next", {
       primaryCategory: "category item",
       cardClick: data.title?.toLowerCase(),

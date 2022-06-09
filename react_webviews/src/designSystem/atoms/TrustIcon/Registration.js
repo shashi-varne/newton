@@ -16,8 +16,7 @@ const Registration = () => {
         <Icon
           src={require(`assets/sebi-logo.svg`)}
           dataAid="right"
-          width="20px"
-          height="20px"
+          size="20px"
         />
       </div>
       <Typography

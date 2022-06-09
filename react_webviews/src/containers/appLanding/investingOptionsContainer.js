@@ -30,7 +30,7 @@ const investingOptionsContainer = (WrappedComponent) => (props) => {
     }
   };
 
-  const handleCardClick = (data) => () => {
+  const handleCardClick = (data = {}) => () => {
     sendEvents("next", data.eventStatus);
   };
 
