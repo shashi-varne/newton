@@ -623,6 +623,7 @@ const landingContainer = (WrappedComponent) => (props) => {
 
   return (
     <WrappedComponent
+      showPartnership={baseConfig.isSdk}
       landingSections={mainLandingSections}
       isPageLoading={isPageLoading}
       loaderData={loaderData}

@@ -112,23 +112,27 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
     }
   };
 
-  const handleCardClick = (data = {}) => () => {
-    sendEvents("next", {
-      primaryCategory: "product item",
-      cardClick: data.eventStatus,
-    });
-    const pathname = WEBAPP_LANDING_PATHNAME_MAPPER[data.id];
-    navigate(pathname);
-  };
+  const handleCardClick =
+    (data = {}) =>
+    () => {
+      sendEvents("next", {
+        primaryCategory: "product item",
+        cardClick: data.eventStatus,
+      });
+      const pathname = WEBAPP_LANDING_PATHNAME_MAPPER[data.id];
+      navigate(pathname);
+    };
 
-  const handleExploreCategories = (data = {}) => () => {
-    sendEvents("next", {
-      primaryCategory: "category item",
-      cardClick: data.title?.toLowerCase(),
-    });
-    const pathname = WEBAPP_LANDING_PATHNAME_MAPPER[data.id];
-    navigate(pathname);
-  };
+  const handleExploreCategories =
+    (data = {}) =>
+    () => {
+      sendEvents("next", {
+        primaryCategory: "category item",
+        cardClick: data.title?.toLowerCase(),
+      });
+      const pathname = WEBAPP_LANDING_PATHNAME_MAPPER[data.id];
+      navigate(pathname);
+    };
 
   const handleKyc = (cardClick) => () => {
     sendEvents("next", {
@@ -184,6 +188,7 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
 
   return (
     <WrappedComponent
+      showPartnership={baseConfig.isSdk}
       mfSections={mfSections}
       kycData={kycData.kycStatusData}
       kycBottomsheetData={kycBottomsheetData}

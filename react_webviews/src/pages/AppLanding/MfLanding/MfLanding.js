@@ -21,6 +21,7 @@ const MfLanding = ({
   kycBottomsheetData,
   closeKycBottomsheet,
   isPageLoading,
+  showPartnership,
   ...restProps
 }) => {
   return (
@@ -47,7 +48,7 @@ const MfLanding = ({
         variant="registration"
         className="mfl-trust-icon"
       />
-      <Partnership className="mfl-partnership" />
+      {showPartnership && <Partnership className="lmw-partnership" />}
       {bottomsheetStates.openKycStatusDialog &&
         !isEmpty(kycBottomsheetData) && (
           <KycBottomsheet

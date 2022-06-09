@@ -103,6 +103,7 @@ const MainLanding = ({
   closeCampaignDialog,
   handleAuthVerification,
   handlePremiumOnboarding,
+  showPartnership,
   ...restProps
 }) => {
   return (
@@ -117,7 +118,7 @@ const MainLanding = ({
         variant="registration"
         className="lmw-trust-icon"
       />
-      <Partnership className="lmw-partnership" />
+      {showPartnership && <Partnership className="lmw-partnership" />}
       <BottomSheet
         isOpen={bottomsheetStates.openReferral}
         onClose={closeBottomsheet(
