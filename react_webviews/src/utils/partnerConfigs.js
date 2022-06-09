@@ -61,11 +61,7 @@ export const commonCardsConfig = {
       image: "freedomplan.svg",
       id: "freedomplan",
       eventStatus: "introducing freedom plan",
-    },
-    {
-      image: "freedomplan.svg",
-      id: "elss",
-    },
+    }
   ],
   nfoBanners: [],
 };
@@ -266,8 +262,8 @@ export const partnerConfigs = {
     landingMarketingBanners: [
       ...commonCardsConfig.landingMarketingBanners,
       ...commonCardsConfig.nfoBanners,
-      { image: "mb_6.svg", type: "diy" },
-      { image: "mb_5.svg", type: "buildwealth" },
+      { image: "mb_6.svg", id: "diy" },
+      { image: "mb_5.svg", id: "buildwealth" },
     ],
     referralConfig: {
       applyRefferal: false, // same as hide_apply_referral but with opposite value
@@ -356,8 +352,8 @@ export const partnerConfigs = {
     landingMarketingBanners: [
       ...commonCardsConfig.landingMarketingBanners,
       ...commonCardsConfig.nfoBanners,
-      { image: "fpg_mb_insta.svg", type: "instaredeem" },
-      { image: "fpg_mb_100.svg", type: "buildwealth" },
+      { image: "fpg_mb_insta.svg", id: "instaredeem" },
+      { image: "fpg_mb_100.svg", id: "buildwealth" },
     ],
     features: {
       nps: true,
