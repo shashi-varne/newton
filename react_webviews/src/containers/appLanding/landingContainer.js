@@ -331,7 +331,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       eventName: "info_carousel",
     };
 
-    if (value >= onboardingCarousels.length) {
+    if (value >= onboardingCarousels.length || isClose) {
       sendEvents(userAction, data);
       dispatch(
         updateAppStorage({
