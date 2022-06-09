@@ -224,6 +224,7 @@ const renderCards = ({
         portfolioOverViewData={portfolioOverViewData}
         portfolioData={portfolioData}
         showPortfolioOverview={showPortfolioOverview}
+        onClick={handleCardClick(portfolioData)}
       />
     ),
     marketingBanners: (

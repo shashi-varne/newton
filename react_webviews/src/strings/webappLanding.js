@@ -37,7 +37,9 @@ export const LANDING = {
   },
   portfolioData: {
     title: "Portfolio overview",
+    id: "portfolio",
     titleDataAid: "portfolioOverView",
+    eventStatus: "portfolio overview",
     currentData: {
       title: "Current value",
       titleDataAid: "currentKey",

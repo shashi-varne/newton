@@ -3,12 +3,14 @@ import Typography from "../../designSystem/atoms/Typography";
 import WrapperBox from "../../designSystem/atoms/WrapperBox";
 import { Skeleton, Stack } from "@mui/material";
 import { numDifferentiationInr } from "../../utils/validators";
+import { isFunction } from "lodash-es";
 
 const PortfolioOverview = ({
   showLoader,
   portfolioOverViewData = {},
   portfolioData,
   showPortfolioOverview,
+  onClick,
 }) => {
   if (
     (!showPortfolioOverview || !portfolioOverViewData.investedValue) &&
@@ -16,8 +18,15 @@ const PortfolioOverview = ({
   ) {
     return null;
   }
+
+  const handleClick = () => {
+    if (!showLoader && isFunction(onClick)) {
+      onClick();
+    }
+  };
+
   return (
-    <WrapperBox className="lmw-portfolio-overview">
+    <WrapperBox className="lmw-portfolio-overview" onClick={handleClick}>
       <Typography variant="heading3" dataAid={portfolioData.titleDataAid}>
         {portfolioData.title}
       </Typography>
