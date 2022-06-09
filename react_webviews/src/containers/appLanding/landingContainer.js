@@ -273,7 +273,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       const currentData = result.current || {};
       const currentValue = currentData?.current;
       const investedValue = currentData.invested;
-      const profitOrLoss = currentData.earings;
+      const profitOrLoss = currentData.earnings;
       const data = {
         currentValue,
         investedValue,
