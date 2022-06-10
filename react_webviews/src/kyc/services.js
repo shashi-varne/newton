@@ -269,7 +269,8 @@ export function getDocuments(userKyc) {
     ];
 
     if (!isIndbTradingFlow) {
-      documents.splice(1, 1);
+      // Remove selfie video (IPV)
+      documents.splice(2, 1);
     }
 
     if (!isTradingEnabled(userKyc)) {
