@@ -67,23 +67,20 @@ const investingOptionsContainer = (WrappedComponent) => (props) => {
     let list = investingOptions,
       eventName = "investing_options_screen",
       screenData = INVESTING_OPTIONS.default,
-      showSearchIcon = true;
     if (showFeaturesList) {
       list = featuresList;
       eventName = "category_screen";
       screenData = INVESTING_OPTIONS.category;
-      showSearchIcon = false;
     }
     const { investCardsData } = getInvestCardsData(list);
     return {
       investCardsData,
       eventName,
       screenData,
-      showSearchIcon,
     };
   };
 
-  const { investCardsData, eventName, screenData, showSearchIcon } = useMemo(
+  const { investCardsData, eventName, screenData } = useMemo(
     initializeData,
     [props]
   );
@@ -147,7 +144,6 @@ const investingOptionsContainer = (WrappedComponent) => (props) => {
   return (
     <WrappedComponent
       investmentOptions={investCardsData}
-      showSearchIcon={showSearchIcon}
       screenData={screenData}
       kycData={kycData.kycStatusData}
       kycBottomsheetData={kycBottomsheetData}
