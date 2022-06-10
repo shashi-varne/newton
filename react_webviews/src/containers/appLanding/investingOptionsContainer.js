@@ -66,7 +66,7 @@ const investingOptionsContainer = (WrappedComponent) => (props) => {
     const showFeaturesList = props.match?.params?.type === "category";
     let list = investingOptions,
       eventName = "investing_options_screen",
-      screenData = INVESTING_OPTIONS.default,
+      screenData = INVESTING_OPTIONS.default;
     if (showFeaturesList) {
       list = featuresList;
       eventName = "category_screen";
