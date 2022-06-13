@@ -27,8 +27,10 @@ const bankListContainer = (WrappedComponent) => (props) => {
     let bankListData = [];
     // eslint-disable-next-line
     bankList?.forEach((data) => {
+      let title = data.account_number?.toString()?.match(/.{1,4}/g);
+      title = title.join(" ");
       bankListData.push({
-        title: data.account_number,
+        title,
         value: data.account_number,
         leftImgSrc: data.image_url,
       });
@@ -74,7 +76,10 @@ const bankListContainer = (WrappedComponent) => (props) => {
     sendEvents("continue");
     const updatedBankList = bankList.map((data) => {
       if (data.account_number === selectedBank) {
-        data.is_primary = "true";
+        data = {
+          ...data,
+          is_primary: true,
+        };
       }
       return data;
     });
