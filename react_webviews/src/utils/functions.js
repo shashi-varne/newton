@@ -1004,7 +1004,7 @@ export const initializeClevertapProfile = (user) => {
   }
 }
 
-export const getPartner = (partner) => {
+export const getPartnerName = (partner) => {
   if (partner === "bfdl") {
     partner = "bfdlmobile";
   } else if (partner === "obcweb") {

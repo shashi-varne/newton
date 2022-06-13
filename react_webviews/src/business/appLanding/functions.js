@@ -7,7 +7,7 @@ import {
 import {
   getBasePath,
   getConfig,
-  getPartner,
+  getPartnerName,
   isTradingEnabled,
 } from "../../utils/functions";
 import { getPartnerData } from "../../utils/partnerConfigs";
@@ -126,7 +126,7 @@ export const setSummaryData = (result, skipStoreUpdate = false) => {
     "sahaj",
     "mspl",
   ];
-  partner = getPartner(partner);
+  partner = getPartnerName(partner);
   if (subBrokerCodePartersList.includes(subbrokerCode)) {
     partner = subbrokerCode;
   }

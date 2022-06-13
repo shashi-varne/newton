@@ -4,7 +4,7 @@
 /* -----------------------------------------------------------------*/
 import { EVENT_MANAGER_CONSTANTS } from './constants';
 import eventManager from './eventManager';
-import { getPartner, isMobile } from './functions';
+import { getPartnerName, isMobile } from './functions';
 import { getConfig } from './functions';
 import isEmpty from 'lodash/isEmpty';
 import filter from 'lodash/filter';
@@ -397,7 +397,7 @@ import { setBankList, setKyc, setPartner, setUser, updateAppStorage } from 'busi
     set_session_storage('is_secure', true);
 
     if (json_data?.partner) {
-      let partner = getPartner(json_data.partner.toLowerCase());
+      const partner = getPartnerName(json_data.partner.toLowerCase());
       set_session_storage("partner", partner);
       store.dispatch(setPartner(partner))
       eventManager.emit(EVENT_MANAGER_CONSTANTS.updateAppTheme);
@@ -419,7 +419,7 @@ import { setBankList, setKyc, setPartner, setUser, updateAppStorage } from 'busi
       set_session_storage("firstlogin", firstLogin);
       store.dispatch(updateAppStorage({ firstLogin }))
       if (json_data.user_data.partner.partner_code) {
-        let partner = getPartner(json_data.user_data.partner?.partner_code?.toLowerCase());
+        const partner = getPartnerName(json_data.user_data.partner?.partner_code?.toLowerCase());
         set_session_storage("partner", partner);
         store.dispatch(setPartner(partner))
         eventManager.emit(EVENT_MANAGER_CONSTANTS.updateAppTheme);
