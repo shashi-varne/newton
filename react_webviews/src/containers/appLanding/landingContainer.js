@@ -128,7 +128,7 @@ const landingContainer = (WrappedComponent) => (props) => {
   const [showCarousals, setShowCarousals] = useState(
     !isEmpty(onboardingCarousels) &&
       baseConfig.isSdk &&
-      user.firslogin &&
+      appStorage.firstLogin &&
       !appStorage.isOnboardingCarouselsDisplayed
   );
   const [kycBottomsheetData, setKycBottomsheetData] = useState({});
@@ -177,6 +177,9 @@ const landingContainer = (WrappedComponent) => (props) => {
   }, []);
 
   const onLoad = () => {
+    if (baseConfig.isSdk && baseConfig.Android) {
+      nativeCallback({ action: "get_data" });
+    }
     const sagaCallback = (response, data) => {
       setSummaryData(response, true);
       const kycDetails = getKycData(data.kyc, data.user);
@@ -404,41 +407,45 @@ const landingContainer = (WrappedComponent) => (props) => {
     }
   };
 
-  const handleCardClick = (data = {}) => () => {
-    sendEvents("next", {
-      primaryCategory: "product item",
-      cardClick: data.eventStatus,
-    });
-    if (["stocks", "ipo"].includes(data.id)) {
-      handleStocksAndIpoCards(
-        {
-          ...kycData,
-          key: data.id,
-          kyc,
-          user,
-          navigate,
-          handleLoader,
-          handleDialogStates: handleBottomsheets,
-          closeKycStatusDialog: closeBottomsheet(
-            BOTTOMSHEET_KEYS.openKycStatusDialog
-          ),
-        },
-        props
-      );
-      return;
-    }
-    const pathname = WEBAPP_LANDING_PATHNAME_MAPPER[data.id];
-    navigate(pathname);
-  };
+  const handleCardClick =
+    (data = {}) =>
+    () => {
+      sendEvents("next", {
+        primaryCategory: "product item",
+        cardClick: data.eventStatus,
+      });
+      if (["stocks", "ipo"].includes(data.id)) {
+        handleStocksAndIpoCards(
+          {
+            ...kycData,
+            key: data.id,
+            kyc,
+            user,
+            navigate,
+            handleLoader,
+            handleDialogStates: handleBottomsheets,
+            closeKycStatusDialog: closeBottomsheet(
+              BOTTOMSHEET_KEYS.openKycStatusDialog
+            ),
+          },
+          props
+        );
+        return;
+      }
+      const pathname = WEBAPP_LANDING_PATHNAME_MAPPER[data.id];
+      navigate(pathname);
+    };
 
-  const handleExploreCategories = (data = {}) => () => {
-    sendEvents("next", {
-      primaryCategory: "category item",
-      cardClick: data.title?.toLowerCase(),
-    });
-    const pathname = WEBAPP_LANDING_PATHNAME_MAPPER[data.id];
-    navigate(pathname);
-  };
+  const handleExploreCategories =
+    (data = {}) =>
+    () => {
+      sendEvents("next", {
+        primaryCategory: "category item",
+        cardClick: data.title?.toLowerCase(),
+      });
+      const pathname = WEBAPP_LANDING_PATHNAME_MAPPER[data.id];
+      navigate(pathname);
+    };
 
   const handleKyc = (cardClick) => () => {
     sendEvents("next", {
@@ -474,18 +481,22 @@ const landingContainer = (WrappedComponent) => (props) => {
     }
   };
 
-  const handleManageInvestments = (data = {}) => () => {
-    sendEvents("next", {
-      menuName: data.title?.toLowerCase(),
-      eventName: "bottom_menu_click",
-    });
-    const pathname = WEBAPP_LANDING_PATHNAME_MAPPER[data.id];
-    navigate(pathname);
-  };
+  const handleManageInvestments =
+    (data = {}) =>
+    () => {
+      sendEvents("next", {
+        menuName: data.title?.toLowerCase(),
+        eventName: "bottom_menu_click",
+      });
+      const pathname = WEBAPP_LANDING_PATHNAME_MAPPER[data.id];
+      navigate(pathname);
+    };
 
-  const onMarketingBannerClick = (data = {}) => () => {
-    handleMarketingBanners(data, sendEvents, navigate);
-  };
+  const onMarketingBannerClick =
+    (data = {}) =>
+    () => {
+      handleMarketingBanners(data, sendEvents, navigate);
+    };
 
   const handleDiySearch = () => {
     sendEvents("next", {
