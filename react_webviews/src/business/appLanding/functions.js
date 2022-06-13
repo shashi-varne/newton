@@ -85,9 +85,6 @@ export const setSummaryData = (result, skipStoreUpdate = false) => {
   const userKyc = result.data.kyc.kyc.data;
   const subscriptionStatus =
     result?.data?.equity?.subscription_status?.data || {};
-  if (userKyc.firstlogin) {
-    storageService().set("firstlogin", true);
-  }
   storageService().set("currentUser", true);
   storageService().setObject("user", currentUser);
   storageService().setObject("kyc", userKyc);
@@ -325,7 +322,7 @@ export const dateValidation = (endDate, startDate) => {
 };
 
 export const validateFeature = (type) => {
-  if (type === "ipo") {
+  if (["ipo", "stocks"].includes(type)) {
     return isTradingEnabled();
   } else if (type === "freedomplan") {
     const subscriptionStatus = get(
