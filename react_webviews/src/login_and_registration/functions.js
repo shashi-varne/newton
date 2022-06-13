@@ -532,7 +532,7 @@ export function redirectAfterLogin(data, user, navigateFunc) {
   user = user || storageService().getObject("user");
   const navigate = navigateFunc || this.navigate;
   if (data.firstLogin) {
-    sessionStorage().set("firstlogin", true);
+    storageService().set("firstlogin", true);
     navigate("/referral-code", { state: { goBack: "/", communicationType: data?.contacts?.auth_type } });
   } else if (sdkStocksRedirection) {
     storageService().setBoolean("sdkStocksRedirection", false);
