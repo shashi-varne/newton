@@ -12,8 +12,16 @@ import {
   handleStocksAndIpoCards,
   handleKycStatusRedirection,
 } from "../Invest/functions";
+import { useDispatch } from "react-redux";
+import { updateAppStorage } from "businesslogic/dataStore/reducers/app";
+
+const FEATURE_NAME_MAPPER = {
+  tpp: "ipo",
+  equity: "stocks",
+};
 
 const StocksAndIpoDirectEntry = (props) => {
+  const dispatch = useDispatch();
   const { kyc, user, updateKyc, updateUser } = useUserKycHook();
   const [baseConfig, setBaseConfig] = useState(getConfig());
   const type = useMemo(() => props.match?.params?.type, [props.match?.params]);
@@ -52,21 +60,13 @@ const StocksAndIpoDirectEntry = (props) => {
   };
 
   const onLoad = () => {
-    switch (type) {
-      case "tpp":
-        navigate("/", {
-          searchParams: `${baseConfig.searchParams}&feature=ipo`
-        })
-        break;
-      case "equity":
-        navigate("/", {
-          searchParams: `${baseConfig.searchParams}&feature=stocks`
-        })
-        break;
-      default:
-        navigate("/");
-        break;
-    }
+    const feature = FEATURE_NAME_MAPPER[type] || type;
+    dispatch(
+      updateAppStorage({
+        feature,
+      })
+    );
+    navigate("/");
   };
 
   useEffect(() => {

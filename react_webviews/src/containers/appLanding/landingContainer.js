@@ -40,7 +40,6 @@ import {
   handleStocksAndIpoCards,
   openKyc,
 } from "../../dashboard/Invest/functions";
-import { getUrlParams } from "../../utils/validators";
 import { isEmpty } from "lodash-es";
 import {
   applyReferralCode,
@@ -59,36 +58,6 @@ const DEFAULT_BOTTOMSHEETS_DATA = {
   openAccountAlreadyExists: false,
   openPremiumOnboarding: false,
   openCampaign: false,
-};
-
-const initializeData = () => {
-  const {
-    code,
-    landingSections,
-    featuresList,
-    mfOptions,
-    onboardingCarousels,
-    platformMotivators,
-    landingMarketingBanners,
-    ...baseConfig
-  } = getConfig();
-  const { feature } = getUrlParams();
-  const { investCardsData, isMfOnly, showPortfolioOverview } =
-    getInvestCardsData(featuresList, feature, mfOptions, 4);
-  const marketingBanners = getEnabledMarketingBanners(landingMarketingBanners);
-  const motivators = getEnabledPlatformMotivators(platformMotivators);
-  return {
-    code,
-    onboardingCarousels,
-    marketingBanners,
-    landingSections,
-    investCardsData,
-    isMfOnly,
-    showPortfolioOverview,
-    baseConfig,
-    feature,
-    platformMotivators: motivators,
-  };
 };
 
 const landingContainer = (WrappedComponent) => (props) => {
@@ -110,6 +79,45 @@ const landingContainer = (WrappedComponent) => (props) => {
   const { updateKyc } = useUserKycHook();
   const { kyc, user, appStorage, partner, subscriptionStatus, bankList } =
     useSelector(getAppData);
+  const [kycData, setKycData] = useState(getKycData(kyc, user));
+  const [campaignData, setCampaignData] = useState({});
+  const [referral, setReferral] = useState("");
+  const [contactDetails, setContactDetails] = useState({});
+  const [kycBottomsheetData, setKycBottomsheetData] = useState({});
+  const [referralData, setReferralData] = useState({});
+  const [showPortfolioLoader, setShowPorfolioLoader] = useState(false);
+  const [portfolioOverViewData, setPortfolioOverViewData] = useState({});
+
+  const initializeData = () => {
+    const {
+      code,
+      landingSections,
+      featuresList,
+      mfOptions,
+      onboardingCarousels,
+      platformMotivators,
+      landingMarketingBanners,
+      ...baseConfig
+    } = getConfig();
+    const { investCardsData, isMfOnly, showPortfolioOverview } =
+      getInvestCardsData(featuresList, appStorage.feature, mfOptions, 4);
+    const marketingBanners = getEnabledMarketingBanners(
+      landingMarketingBanners
+    );
+    const motivators = getEnabledPlatformMotivators(platformMotivators);
+    return {
+      code,
+      onboardingCarousels,
+      marketingBanners,
+      landingSections,
+      investCardsData,
+      isMfOnly,
+      showPortfolioOverview,
+      baseConfig,
+      platformMotivators: motivators,
+    };
+  };
+
   const {
     code,
     onboardingCarousels,
@@ -121,22 +129,19 @@ const landingContainer = (WrappedComponent) => (props) => {
     isMfOnly,
     showPortfolioOverview,
     showSetupEasySip,
-    feature,
-  } = useMemo(initializeData, [partner, subscriptionStatus, kyc]);
-  const [kycData, setKycData] = useState(getKycData(kyc, user));
-  const [campaignData, setCampaignData] = useState({});
-  const [referral, setReferral] = useState("");
-  const [contactDetails, setContactDetails] = useState({});
+  } = useMemo(initializeData, [
+    partner,
+    subscriptionStatus,
+    kyc,
+    appStorage.feature,
+  ]);
+  
   const [showCarousals, setShowCarousals] = useState(
     !isEmpty(onboardingCarousels) &&
       baseConfig.isSdk &&
       appStorage.firstLogin &&
       !appStorage.isOnboardingCarouselsDisplayed
   );
-  const [kycBottomsheetData, setKycBottomsheetData] = useState({});
-  const [referralData, setReferralData] = useState({});
-  const [showPortfolioLoader, setShowPorfolioLoader] = useState(false);
-  const [portfolioOverViewData, setPortfolioOverViewData] = useState({});
 
   const getReferalConfig = () => {
     const showShareReferral =
@@ -659,7 +664,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       handleCarousels={handleCarousels}
       carousalsData={onboardingCarousels}
       showCarousals={showCarousals}
-      feature={feature}
+      feature={appStorage.feature}
       platformMotivators={platformMotivators}
       marketingBanners={marketingBanners}
       kycData={kycData.kycStatusData}
