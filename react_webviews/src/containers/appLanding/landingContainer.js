@@ -29,6 +29,7 @@ import {
   handleCampaign,
   closeCampaignDialog,
   setSummaryData,
+  getEnabledPlatformMotivators,
 } from "../../business/appLanding/functions";
 import { WEBAPP_LANDING_PATHNAME_MAPPER } from "../../constants/webappLanding";
 import {
@@ -75,10 +76,10 @@ const initializeData = () => {
   const { investCardsData, isMfOnly, showPortfolioOverview } =
     getInvestCardsData(featuresList, feature, mfOptions, 4);
   const marketingBanners = getEnabledMarketingBanners(landingMarketingBanners);
+  const motivators = getEnabledPlatformMotivators(platformMotivators);
   return {
     code,
     onboardingCarousels,
-    platformMotivators,
     marketingBanners,
     landingSections,
     investCardsData,
@@ -86,6 +87,7 @@ const initializeData = () => {
     showPortfolioOverview,
     baseConfig,
     feature,
+    platformMotivators: motivators,
   };
 };
 
@@ -188,6 +190,10 @@ const landingContainer = (WrappedComponent) => (props) => {
       );
       return;
     }
+    fetchSummaryData();
+  };
+
+  const fetchSummaryData = () => {
     const sagaCallback = (response, data) => {
       setSummaryData(response, true);
       const kycDetails = getKycData(data.kyc, data.user);
@@ -609,6 +615,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       handleLoader({ dotLoader: true });
       await applyReferralCode(Api, referral);
       setReferralData(REFERRAL_DATA.success);
+      fetchSummaryData();
       handleBottomsheets({ [BOTTOMSHEET_KEYS.openReferral]: true });
     } catch (err) {
       setReferralData({

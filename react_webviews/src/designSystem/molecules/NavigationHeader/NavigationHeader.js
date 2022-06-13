@@ -4,6 +4,7 @@ import closeIcon from 'assets/nav_close.svg';
 import isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import ReferDialog from '../../../desktopLayout/ReferralDialog';
 import {
   getConfig
@@ -16,7 +17,7 @@ import { onScroll, setTabPadding } from './helperFunctions';
 import MenuBar from './MenuBar';
 import './NavigationHeader.scss';
 import TabsSection from './TabsSection';
-
+import { getPartner } from "businesslogic/dataStore/reducers/app";
 
 const NavigationHeader = ({
   headerTitle,
@@ -40,11 +41,12 @@ const NavigationHeader = ({
   rightIconSrc2,
   onRightIconClick2,
 }) => {
+  const partner = useSelector(getPartner);
   const navHeaderWrapperRef = useRef();
   const subtitleRef = useRef();
   const inPageTitleRef = useRef();
   const tabWrapperRef = useRef();
-  const { isIframe, Web, isMobileDevice, logo } = useMemo(getConfig, []);
+  const { isIframe, Web, isMobileDevice, logo } = useMemo(getConfig, [partner]);
   const isGuestUser = storageService().getBoolean('guestUser');
   const [mobileViewDrawer, setMobileViewDrawer] = useState(false);
   const [referDialog, setReferDialog] = useState(false);

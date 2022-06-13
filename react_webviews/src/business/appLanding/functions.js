@@ -138,9 +138,9 @@ export const setSummaryData = (result, skipStoreUpdate = false) => {
     store.dispatch(setNps(nps));
     store.dispatch(setReferral(referral));
     store.dispatch(setBankList(bankList));
-    store.dispatch(setPartner(partner));
     store.dispatch(setSubscriptionStatus(subscriptionStatus));
   }
+  store.dispatch(setPartner(partner));
   eventManager.emit(EVENT_MANAGER_CONSTANTS.updateAppTheme);
   setNpsData(result);
 };
@@ -336,6 +336,10 @@ export const validateFeature = (type) => {
     return subscriptionStatus?.freedom_cta || subscriptionStatus?.renewal_cta;
   }
   return true;
+};
+
+export const getEnabledPlatformMotivators = (motivators) => {
+  return motivators.filter((data) => validateFeature(data.id));
 };
 
 export const handleMarketingBanners = (data, sendEvents, navigate) => {

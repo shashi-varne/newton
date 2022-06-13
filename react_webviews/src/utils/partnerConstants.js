@@ -40,41 +40,14 @@ export const ONBOARDING_CAROUSELS = [
   },
 ];
 
-export const EQUITY_PLATFORM_MOTIVATORS = [
+export const PLATFORM_MOTIVATORS = [
   {
     icon: "one_kyc.json",
     title: "One KYC for Mutual Funds & Stocks",
     subtitle: "Easy. Paperless. Secure",
     dataAid: "oneKyc",
-    id: "kyc",
+    id: "stocks",
   },
-  {
-    icon: "withdrawal.json",
-    title: "Convenient & easy withdrawals",
-    subtitle: "Get money in savings bank A/c.",
-    dataAid: "withdrawal",
-  },
-  {
-    icon: "account_manage.json",
-    title: "Manage your SIPs with ease",
-    subtitle: "Pause, edit, cancel in 1 tap ",
-    dataAid: "manageSips",
-  },
-  {
-    icon: "order_place.json",
-    title: "Seamless order placement",
-    subtitle: "Select fund, add amount & pay!",
-    dataAid: "orderPlacement",
-  },
-  {
-    icon: "insights.json",
-    title: "Track investments real-time",
-    subtitle: "With in-depth portfolio tracking",
-    dataAid: "trackInvestment",
-  },
-];
-
-export const PLATFORM_MOTIVATORS = [
   {
     icon: "withdrawal.json",
     title: "Convenient & easy withdrawals",

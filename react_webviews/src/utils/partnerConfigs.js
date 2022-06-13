@@ -27,7 +27,6 @@ Exhaustive list of property values:
 
 import {
   EQUITY_ONBOARDING_CAROUSELS,
-  EQUITY_PLATFORM_MOTIVATORS,
   ONBOARDING_CAROUSELS,
   PLATFORM_MOTIVATORS,
 } from "./partnerConstants";
@@ -64,12 +63,12 @@ export const commonCardsConfig = {
     }
   ],
   nfoBanners: [],
+  platformMotivators: PLATFORM_MOTIVATORS,
 };
 
 export const basePartnerConfig = {
   common: {
     onboardingCarousels: ONBOARDING_CAROUSELS,
-    platformMotivators: PLATFORM_MOTIVATORS,
   },
   fisdom: {
     productName: "fisdom",
@@ -238,7 +237,6 @@ export const partnerConfigs = {
       insurance: true,
     },
     onboardingCarousels: EQUITY_ONBOARDING_CAROUSELS,
-    platformMotivators: EQUITY_PLATFORM_MOTIVATORS,
   },
   finity: {
     code: "finity",
@@ -437,7 +435,6 @@ export const partnerConfigs = {
     navLogoClassname: "navbar-white-bg",
     mobile: "+80-48-093070",
     onboardingCarousels: EQUITY_ONBOARDING_CAROUSELS,
-    platformMotivators: EQUITY_PLATFORM_MOTIVATORS,
     features: {
       stocks: true,
       ipo: true,
@@ -533,7 +530,6 @@ export const partnerConfigs = {
     webLogo: "ucomb_bank.svg",
     logoWidth: "200px",
     onboardingCarousels: EQUITY_ONBOARDING_CAROUSELS,
-    platformMotivators: EQUITY_PLATFORM_MOTIVATORS,
     styles: {
       primaryColor: "#002759",
       secondaryColor: "#002759",
