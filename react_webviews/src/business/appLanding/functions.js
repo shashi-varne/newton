@@ -39,6 +39,7 @@ import {
   setReferral,
   setSubscriptionStatus,
   setUser,
+  updateAppStorage,
 } from "businesslogic/dataStore/reducers/app";
 import Api from "../../utils/api";
 import { FREEDOM_PLAN_STORAGE_CONSTANTS } from "../../freedom_plan/common/constants";
@@ -61,11 +62,21 @@ export const initData = async () => {
       const result = await getAccountSummary(Api, queryParams);
       storageService().set("dataSettedInsideBoot", true);
       setSDKSummaryData(result);
+      store.dispatch(
+        updateAppStorage({
+          dataSettedInsideBoot: true,
+        })
+      );
     }
   } else {
     const result = await getAccountSummary(Api);
     storageService().set("dataSettedInsideBoot", true);
     setSummaryData(result);
+    store.dispatch(
+      updateAppStorage({
+        dataSettedInsideBoot: true,
+      })
+    );
   }
 };
 
@@ -401,7 +412,12 @@ export const getContactVerification = (
   return contactData;
 };
 
-export const getKycBottomsheetData = (kycData = {}, appStorage = {}, code, productName) => {
+export const getKycBottomsheetData = (
+  kycData = {},
+  appStorage = {},
+  code,
+  productName
+) => {
   const {
     isCompliant,
     kycJourneyStatus,
@@ -429,7 +445,7 @@ export const getKycBottomsheetData = (kycData = {}, appStorage = {}, code, produ
       kyc.bank.meta_data_status === "approved"
     ) {
       premiumDialogData = kycStatusMapper["mf_complete"];
-      premiumDialogData.icon = `${productName}/${premiumDialogData.icon}`
+      premiumDialogData.icon = `${productName}/${premiumDialogData.icon}`;
     }
 
     if (premiumOnboardingStatus && !isEmpty(premiumDialogData)) {

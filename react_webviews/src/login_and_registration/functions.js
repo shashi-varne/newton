@@ -375,7 +375,12 @@ export async function otpLoginVerification(verify_url, body) {
 export const postLoginSetup = async (getKycResult) => {
   try {
     const kycResult = await getKycFromSummary();
-    storageService().set('dataSettedInsideBoot', true)
+    storageService().set('dataSettedInsideBoot', true);
+    store.dispatch(
+      updateAppStorage({
+        dataSettedInsideBoot: true,
+      })
+    );
     setSummaryData(kycResult);
     setBaseHref();
     const eventObj = {
@@ -411,6 +416,11 @@ export async function otpVerification(body) {
 
       storageService().set('dataSettedInsideBoot', true);
       setSummaryData(kycResult);
+      store.dispatch(
+        updateAppStorage({
+          dataSettedInsideBoot: true,
+        })
+      );
       let user = kycResult.data.user.user.data;
       userData.me = user;
       setBaseHref();

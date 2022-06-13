@@ -180,6 +180,14 @@ const landingContainer = (WrappedComponent) => (props) => {
     if (baseConfig.isSdk && baseConfig.Android) {
       nativeCallback({ action: "get_data" });
     }
+    if (appStorage.dataSettedInsideBoot) {
+      dispatch(
+        updateAppStorage({
+          dataSettedInsideBoot: false,
+        })
+      );
+      return;
+    }
     const sagaCallback = (response, data) => {
       setSummaryData(response, true);
       const kycDetails = getKycData(data.kyc, data.user);
