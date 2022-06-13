@@ -11,7 +11,7 @@ import filter from 'lodash/filter';
 import get from 'lodash/get';
 import isFunction from 'lodash/isFunction';
 import store from '../dataLayer/store';
-import { setBankList, setKyc, setPartner, setUser } from 'businesslogic/dataStore/reducers/app';
+import { setBankList, setKyc, setPartner, setUser, updateAppStorage } from 'businesslogic/dataStore/reducers/app';
 
 
 (function (exports) {
@@ -411,11 +411,13 @@ import { setBankList, setKyc, setPartner, setUser } from 'businesslogic/dataStor
       const user = json_data.user_data.user;
       const kyc = json_data.user_data.kyc;
       const bankList = json_data.user_data.bank_list;
+      const firstLogin = json_data.user_data.firstLogin;
       set_session_storage("dataSettedInsideBoot", true);
       set_session_storage("user", user);
       set_session_storage("kyc", kyc);
       set_session_storage("banklist", bankList);
-      set_session_storage("firstlogin", json_data.user_data.user.firstlogin);
+      set_session_storage("firstlogin", firstLogin);
+      store.dispatch(updateAppStorage({ firstLogin }))
       if (json_data.user_data.partner.partner_code) {
         let partner = getPartner(json_data.user_data.partner?.partner_code?.toLowerCase());
         set_session_storage("partner", partner);
