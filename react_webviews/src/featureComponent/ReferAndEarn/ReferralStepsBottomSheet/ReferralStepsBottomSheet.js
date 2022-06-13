@@ -28,6 +28,7 @@ const ReferralStepsBottomSheet = ({
   onClickMail = noop,
   onClickShare = noop,
   onClickCta = noop,
+  ctaText = "",
 }) => {
   return (
     <Dialog
@@ -88,6 +89,7 @@ const ReferralStepsBottomSheet = ({
             onClickMail={onClickMail}
             onClickShare={onClickShare}
             onClickCta={onClickCta}
+            ctaText={ctaText}
           />
         </Stack>
       </Stack>
