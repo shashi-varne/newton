@@ -46,7 +46,7 @@ export const PLATFORM_MOTIVATORS = [
     title: "One KYC for Mutual Funds & Stocks",
     subtitle: "Easy. Paperless. Secure",
     dataAid: "oneKyc",
-    id: "stocks",
+    id: "equityKyc",
   },
   {
     icon: "withdrawal.json",
@@ -71,5 +71,94 @@ export const PLATFORM_MOTIVATORS = [
     title: "Track investments real-time",
     subtitle: "With in-depth portfolio tracking",
     dataAid: "trackInvestment",
+  },
+];
+
+export const DEFAULT_MARKETING_BANNERS = [
+  {
+    image: "buildwealth.svg",
+    id: "buildwealth",
+  },
+  {
+    image: "explore.svg",
+    id: "equity",
+  },
+  {
+    image: "retirement.svg",
+    id: "retirement",
+  },
+  {
+    image: "education.svg",
+    id: "education",
+  },
+];
+
+export const PRODUCT_MARKETING_BANNERS = [
+  {
+    image: "freedomplan.svg",
+    id: "freedomplan",
+  },
+  {
+    image: "taxfiling_banner.svg",
+    id: "taxFiling",
+  },
+  {
+    image: "stocks_banner.svg",
+    id: "stocks",
+  },
+  {
+    image: "kyc.svg",
+    id: "equityKyc",
+  },
+  {
+    image: "buildwealth.svg",
+    id: "buildwealth",
+  },
+  {
+    image: "explore.svg",
+    id: "equity",
+  },
+  {
+    image: "retirement.svg",
+    id: "retirement",
+  },
+  {
+    image: "education.svg",
+    id: "education",
+  },
+];
+
+export const EQUITY_MARKETING_BANNERS = [
+  {
+    image: "freedomplan.svg",
+    id: "freedomplan",
+  },
+  {
+    image: "buildwealth_1.svg",
+    id: "buildwealth",
+  },
+  {
+    image: "taxfiling_1.svg",
+    id: "taxFiling",
+  },
+  {
+    image: "kyc.svg",
+    id: "equityKyc",
+  },
+  {
+    image: "stocks_banner.svg",
+    id: "stocks",
+  },
+  {
+    image: "explore.svg",
+    id: "equity",
+  },
+  {
+    image: "retirement.svg",
+    id: "retirement",
+  },
+  {
+    image: "education.svg",
+    id: "education",
   },
 ];

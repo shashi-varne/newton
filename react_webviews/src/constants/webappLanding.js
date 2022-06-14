@@ -1,5 +1,14 @@
 import { PATHNAME_MAPPER as KYC_PATHNAME_MAPPER } from "../kyc/constants";
 
+export const RESTRICTED_FEATURES = [
+  "stocks",
+  "ipo",
+  "nps",
+  "insurance",
+  "instaredeem",
+  "taxFiling",
+];
+
 export const WEBAPP_LANDING_PATHNAME_MAPPER = {
   nfo: "/advanced-investing/new-fund-offers/info",
   indexFunds: "/passive-index-funds/landing",
@@ -27,6 +36,9 @@ export const WEBAPP_LANDING_PATHNAME_MAPPER = {
   bankList: "/landing/bank-list",
   refer: "/refer",
   taxFiling: "/tax-filing",
+  education: "/invest/savegoal/childeducation",
+  retirement: "/invest/savegoal/retirement",
+  equityKyc: "/kyc/web",
 };
 
 export const MANAGE_INVESTMENTS = [

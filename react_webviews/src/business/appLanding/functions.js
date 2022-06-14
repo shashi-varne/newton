@@ -2,6 +2,7 @@ import {
   AUTH_VERIFICATION_DATA,
   BOTTOMSHEET_KEYS,
   INVESTMENT_OPTIONS,
+  RESTRICTED_FEATURES,
   WEBAPP_LANDING_PATHNAME_MAPPER,
 } from "../../constants/webappLanding";
 import {
@@ -239,26 +240,27 @@ export const getInvestCardsData = (
     );
   }
 
-  return { investCardsData: data.cardsData, isMfOnly, showPortfolioOverview };
+  return {
+    investCardsData: data.cardsData,
+    isMfOnly,
+    showPortfolioOverview,
+    availableFeatures: data.availableFeatures,
+  };
 };
 
 export const getEnabledFeaturesData = (config, investOptions, feature) => {
   const { productName, features = {} } = config;
-  const restrictedItems = [
-    "stocks",
-    "ipo",
-    "nps",
-    "insurance",
-    "instaredeem",
-    "taxFiling",
-  ];
-  const referralData = storageService().getObject("referral") || {};
+  const referralData = get(store.getState(), "app.referral", {});
   let subbrokerCode = "";
   let subbrokerFeatures = {};
   if (referralData?.subbroker?.data) {
     subbrokerCode = referralData.subbroker.data.subbroker_code;
-    const subbrokerData = getPartnerData(productName, subbrokerCode);
-    subbrokerFeatures = subbrokerData.features || {};
+    if (["fisdom", "finity"].includes(subbrokerCode)) {
+      subbrokerCode = "";
+    } else {
+      const subbrokerData = getPartnerData(productName, subbrokerCode);
+      subbrokerFeatures = subbrokerData.features || {};
+    }
   }
 
   let cardsData = [],
@@ -266,11 +268,8 @@ export const getEnabledFeaturesData = (config, investOptions, feature) => {
 
   investOptions.forEach((section, index) => {
     if (
-      restrictedItems.includes(section) &&
-      ((subbrokerCode &&
-        !["fisdom", "finity"].includes(subbrokerCode) &&
-        !subbrokerFeatures[section]) ||
-        !features[section])
+      RESTRICTED_FEATURES.includes(section) &&
+      ((subbrokerCode && !subbrokerFeatures[section]) || !features[section])
     ) {
       return;
     } else if (["stocks", "ipo"].includes(section) && !isTradingEnabled()) {
@@ -285,13 +284,15 @@ export const getEnabledFeaturesData = (config, investOptions, feature) => {
       }
     }
   });
-  return { cardsData, featureIndex };
+  const availableFeatures = !isEmpty(subbrokerFeatures) ? subbrokerFeatures : features;
+  return { cardsData, featureIndex, availableFeatures };
 };
 
-export const getEnabledMarketingBanners = (banners) => {
+export const getEnabledMarketingBanners = (banners, availableFeatures) => {
   return banners.filter(
     (data) =>
-      dateValidation(data.endDate, data.startDate) && validateFeature(data.id)
+      dateValidation(data.endDate, data.startDate) &&
+      validateFeature(data.id, availableFeatures)
   );
 };
 
@@ -321,8 +322,11 @@ export const dateValidation = (endDate, startDate) => {
   return false;
 };
 
-export const validateFeature = (type) => {
-  if (["ipo", "stocks"].includes(type)) {
+export const validateFeature = (type, availableFeatures = {}) => {
+  if (RESTRICTED_FEATURES.includes(type) && !availableFeatures[type]) {
+    return false;
+  }
+  if (["ipo", "stocks", "equityKyc"].includes(type)) {
     return isTradingEnabled();
   } else if (type === "freedomplan") {
     const subscriptionStatus = get(
@@ -339,7 +343,12 @@ export const getEnabledPlatformMotivators = (motivators) => {
   return motivators.filter((data) => validateFeature(data.id));
 };
 
-export const handleMarketingBanners = (data, sendEvents, navigate) => {
+export const handleMarketingBanners = (
+  data,
+  sendEvents,
+  navigate,
+  openPageLoader
+) => {
   const cardClick = data.eventStatus || data.id;
   sendEvents("next", {
     primaryCategory: "marketing banner carousel",
@@ -354,8 +363,26 @@ export const handleMarketingBanners = (data, sendEvents, navigate) => {
     });
     return;
   }
+  if (data.id === "stocks") {
+    openStocks(openPageLoader);
+    return;
+  }
   const path = WEBAPP_LANDING_PATHNAME_MAPPER[data.id] || "/";
   navigate(path);
+};
+
+export const openStocks = (openPageLoader) => {
+  const config = getConfig();
+  if (config.Web) {
+    if (isFunction(openPageLoader)) {
+      openPageLoader();
+    }
+    window.location.href = `${config.base_url}/page/equity/launchapp`;
+  } else {
+    nativeCallback({
+      action: "open_equity",
+    });
+  }
 };
 
 export const getContactVerification = (
