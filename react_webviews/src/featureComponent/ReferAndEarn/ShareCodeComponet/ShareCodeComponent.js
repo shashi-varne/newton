@@ -12,11 +12,13 @@ const STRINGS = SHARE_COMPONENT;
 
 const ShareCodeComponent = ({
   showCopyCode = true,
+  showWhatsappShare = false,
   refferalCode = "",
   onClickCopy = noop,
   onClickMail = noop,
   onClickShare = noop,
   onClickCta = noop,
+  ctaText = "",
 }) => {
   return (
     <Stack flexDirection="row" spacing={1} className="ref-share-code-wrapper">
@@ -26,14 +28,20 @@ const ShareCodeComponent = ({
           onClickCopy={onClickCopy}
           onClickMail={onClickMail}
         />
+      ) : showWhatsappShare ? (
+        <WhatsAppShareCta
+          ctaText={ctaText}
+          onClickCta={onClickCta}
+          onClickShare={onClickShare}
+        />
       ) : (
-        <WhatsAppShareCta onClickCta={onClickCta} onClickShare={onClickShare} />
+        <Button title={ctaText || STRINGS.ctaText} onClick={onClickCta} />
       )}
     </Stack>
   );
 };
 
-const WhatsAppShareCta = ({ onClickShare, onClickCta }) => {
+const WhatsAppShareCta = ({ onClickShare, onClickCta, ctaText }) => {
   return (
     <>
       <Button
@@ -45,7 +53,7 @@ const WhatsAppShareCta = ({ onClickShare, onClickCta }) => {
             dataAid="right"
           />
         }
-        title={STRINGS.WhatsAppShareCta}
+        title={ctaText || STRINGS.WhatsAppShareCta}
         onClick={onClickCta}
         dataAid="primary"
         style={{ maxHeight: "48px" }}
