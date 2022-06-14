@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import landingContainer from "../../containers/referAndEarn/landingContainer";
 import myReferralsContainer from "../../containers/referAndEarn/myReferralsContainer";
+import walletTransfersContainer from "../../containers/referAndEarn/walletTransfersContainer";
 
 const ReferAndEarn = (props) => {
   const { url } = props.match;
@@ -9,6 +10,7 @@ const ReferAndEarn = (props) => {
     <Switch>
       <Route path={`${url}/landing`} component={landingContainer} />
       <Route path={`${url}/my-referrals`} component={myReferralsContainer} />
+      <Route path={`${url}/wallet-transfers`} component={walletTransfersContainer} />
     </Switch>
   );
 };
