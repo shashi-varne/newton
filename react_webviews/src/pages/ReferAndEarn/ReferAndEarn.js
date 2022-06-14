@@ -3,6 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import landingContainer from "../../containers/referAndEarn/landingContainer";
 import myReferralsContainer from "../../containers/referAndEarn/myReferralsContainer";
 import walletTransfersContainer from "../../containers/referAndEarn/walletTransfersContainer";
+import claimCashRewardsContainer from "../../containers/referAndEarn/claimCashRewardsContainer";
 
 const ReferAndEarn = (props) => {
   const { url } = props.match;
@@ -11,6 +12,7 @@ const ReferAndEarn = (props) => {
       <Route path={`${url}/landing`} component={landingContainer} />
       <Route path={`${url}/my-referrals`} component={myReferralsContainer} />
       <Route path={`${url}/wallet-transfers`} component={walletTransfersContainer} />
+      <Route path={`${url}/claim-cash-rewards`} component={claimCashRewardsContainer} />
     </Switch>
   );
 };
