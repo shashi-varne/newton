@@ -5,6 +5,7 @@ import myReferralsContainer from "../../containers/referAndEarn/myReferralsConta
 import walletTransfersContainer from "../../containers/referAndEarn/walletTransfersContainer";
 import claimCashRewardsContainer from "../../containers/referAndEarn/claimCashRewardsContainer";
 import tncContainer from "../../containers/referAndEarn/tncContainer";
+import successDetailsContainer from "../../containers/referAndEarn/successDetailsContainer";
 
 const ReferAndEarn = (props) => {
   const { url } = props.match;
@@ -21,6 +22,10 @@ const ReferAndEarn = (props) => {
         component={claimCashRewardsContainer}
       />
       <Route path={`${url}/tnc`} component={tncContainer} />
+      <Route
+        path={`${url}/success-details`}
+        component={successDetailsContainer}
+      />
     </Switch>
   );
 };
