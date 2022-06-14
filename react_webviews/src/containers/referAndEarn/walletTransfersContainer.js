@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import WalletTransfers from "../../pages/ReferAndEarn/MyReferrals";
+import WalletTransfers from "../../pages/ReferAndEarn/WalletTransfer";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 import { useDispatch } from "react-redux";
