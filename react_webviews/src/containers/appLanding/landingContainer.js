@@ -737,6 +737,9 @@ const landingContainer = (WrappedComponent) => (props) => {
           navigate,
           handleLoader,
           handleDialogStates: handleBottomsheets,
+          closeKycStatusDialog: closeBottomsheet(
+            BOTTOMSHEET_KEYS.openKycStatusDialog
+          ),
         },
         props
       )}

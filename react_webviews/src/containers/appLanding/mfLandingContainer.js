@@ -226,6 +226,7 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
           contactDetails,
           navigate,
           handleLoader,
+          closeKycStatusDialog,
           handleDialogStates: handleBottomsheets,
         },
         props
