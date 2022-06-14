@@ -103,11 +103,11 @@ const landingContainer = (WrappedComponent) => (props) => {
       investCardsData,
       isMfOnly,
       showPortfolioOverview,
-      availableFeatures,
+      enabledFeatures,
     } = getInvestCardsData(featuresList, appStorage.feature, mfOptions, 4);
     const marketingBanners = getEnabledMarketingBanners(
       landingMarketingBanners,
-      availableFeatures
+      enabledFeatures
     );
     const motivators = getEnabledPlatformMotivators(platformMotivators);
     return {

@@ -244,7 +244,7 @@ export const getInvestCardsData = (
     investCardsData: data.cardsData,
     isMfOnly,
     showPortfolioOverview,
-    availableFeatures: data.availableFeatures,
+    enabledFeatures: data.enabledFeatures,
   };
 };
 
@@ -284,15 +284,15 @@ export const getEnabledFeaturesData = (config, investOptions, feature) => {
       }
     }
   });
-  const availableFeatures = !isEmpty(subbrokerFeatures) ? subbrokerFeatures : features;
-  return { cardsData, featureIndex, availableFeatures };
+  const enabledFeatures = !isEmpty(subbrokerCode) ? subbrokerFeatures : features;
+  return { cardsData, featureIndex, enabledFeatures };
 };
 
-export const getEnabledMarketingBanners = (banners, availableFeatures) => {
+export const getEnabledMarketingBanners = (banners, enabledFeatures) => {
   return banners.filter(
     (data) =>
       dateValidation(data.endDate, data.startDate) &&
-      validateFeature(data.id, availableFeatures)
+      validateFeature(data.id, enabledFeatures)
   );
 };
 
@@ -322,8 +322,8 @@ export const dateValidation = (endDate, startDate) => {
   return false;
 };
 
-export const validateFeature = (type, availableFeatures = {}) => {
-  if (RESTRICTED_FEATURES.includes(type) && !availableFeatures[type]) {
+export const validateFeature = (type, enabledFeatures = {}) => {
+  if (RESTRICTED_FEATURES.includes(type) && !enabledFeatures[type]) {
     return false;
   }
   if (["ipo", "stocks", "equityKyc"].includes(type)) {

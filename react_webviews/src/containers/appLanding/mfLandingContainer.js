@@ -32,11 +32,11 @@ const initializeData = () => {
     landingMarketingBanners,
     ...baseConfig
   } = getConfig();
-  const { investCardsData, availableFeatures } = getInvestCardsData(mfOptions);
+  const { investCardsData, enabledFeatures } = getInvestCardsData(mfOptions);
   const { isMfOnly } = getInvestCardsData(featuresList);
   const marketingBanners = getEnabledMarketingBanners(
     landingMarketingBanners,
-    availableFeatures
+    enabledFeatures
   );
   return {
     code,
