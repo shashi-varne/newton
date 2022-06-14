@@ -97,7 +97,9 @@ const renderCards = ({
             rightImgSrc={require(`assets/fisdom/${kycData.icon}`)}
             title={kycData.title}
             description={kycData.subtitle}
-            descriptionColor={kycData.descriptionColor}
+            descriptionColor={
+              kycData.descriptionColor || "foundationColors.content.secondary"
+            }
             actionLink={kycData.buttonTitle}
             className="mfl-kyc"
             variant="heroCard"
