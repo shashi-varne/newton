@@ -11,6 +11,7 @@
 
 import React from 'react';
 import Box from '@mui/material/Box';
+import { Stack } from '@mui/material';
 import Typography from '../../atoms/Typography';
 import PropTypes from 'prop-types';
 import './InfoCard.scss';
@@ -25,6 +26,10 @@ const InfoCard = ({
   subtitleColor,
   onClick,
   dataAid,
+  rightImgSrc,
+  rightImgProps = {},
+  rightLabel,
+  rightLabelColor,
 }) => {
   return (
     <Box
@@ -48,6 +53,26 @@ const InfoCard = ({
           {subtitle}
         </Typography>
       </div>
+      <Stack
+        direction="row"
+        sx={{ flexGrow: 1, paddingLeft: "8px", gap: "6px" }}
+        justifyContent="flex-end"
+        alignItems="center"
+      >
+        {rightLabel && (
+          <Typography variant="body2" color={rightLabelColor}>
+            {rightLabel}
+          </Typography>
+        )}
+        {rightImgSrc && (
+          <Icon
+            size="24px"
+            src={rightImgSrc}
+            dataAid="right"
+            {...rightImgProps}
+          />
+        )}
+      </Stack>
     </Box>
   );
 };
@@ -59,7 +84,8 @@ const infoCardWrapperSxStyle = {
 };
 
 InfoCard.defaultProps = {
-  subtitleColor: 'foundationColors.content.secondary',
+  subtitleColor: "foundationColors.content.secondary",
+  rightLabelColor: "foundationColors.content.secondary",
 };
 
 InfoCard.propTypes = {
