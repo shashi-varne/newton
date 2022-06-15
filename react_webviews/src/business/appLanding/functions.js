@@ -284,7 +284,9 @@ export const getEnabledFeaturesData = (config, investOptions, feature) => {
       }
     }
   });
-  const enabledFeatures = !isEmpty(subbrokerCode) ? subbrokerFeatures : features;
+  const enabledFeatures = !isEmpty(subbrokerCode)
+    ? subbrokerFeatures
+    : features;
   return { cardsData, featureIndex, enabledFeatures };
 };
 
@@ -329,14 +331,21 @@ export const validateFeature = (type, enabledFeatures = {}) => {
   if (["ipo", "stocks", "equityKyc"].includes(type)) {
     return isTradingEnabled();
   } else if (type === "freedomplan") {
-    const subscriptionStatus = get(
-      store.getState(),
-      "app.subscriptionStatus",
-      {}
-    );
-    return subscriptionStatus?.freedom_cta || subscriptionStatus?.renewal_cta;
+    return isFreedomPlanEnabled();
   }
   return true;
+};
+
+export const isFreedomPlanEnabled = () => {
+  const subscriptionStatus = get(
+    store.getState(),
+    "app.subscriptionStatus",
+    {}
+  );
+  return (
+    isTradingEnabled() &&
+    (subscriptionStatus?.freedom_cta || subscriptionStatus?.renewal_cta)
+  );
 };
 
 export const getEnabledPlatformMotivators = (motivators) => {
