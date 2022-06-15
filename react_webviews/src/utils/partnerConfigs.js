@@ -259,6 +259,16 @@ export const partnerConfigs = {
       ipo: true,
       stocks: true,
     },
+    mfSections: [
+      "kyc",
+      "passiveIndexFunds",
+      "mfOptions",
+      "exploreCategories",
+      "trendingFunds",
+      "portfolioTracker",
+      "financialTools",
+      "marketingBanners",
+    ],
     landingMarketingBanners: PRODUCT_MARKETING_BANNERS,
   },
   bfdlmobile: {

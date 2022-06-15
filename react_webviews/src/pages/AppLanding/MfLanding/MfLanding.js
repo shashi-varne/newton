@@ -1,6 +1,7 @@
 import React from "react";
 import Container from "../../../designSystem/organisms/ContainerWrapper";
 import TrustIcon from "../../../designSystem/atoms/TrustIcon";
+import Typography from "../../../designSystem/atoms/Typography";
 import CardHorizontal from "../../../designSystem/molecules/CardHorizontal";
 import Partnership from "../../../featureComponent/appLanding/Partnership";
 import InvestmentOptions from "../../../featureComponent/appLanding/InvestmentOptions";
@@ -12,6 +13,7 @@ import { isEmpty } from "lodash-es";
 
 import "./MfLanding.scss";
 
+const passiveIndexFundsData = MF_LANDING.passiveIndexFunds;
 const MfLanding = ({
   sendEvents,
   onRightIconClick,
@@ -114,6 +116,29 @@ const renderCards = ({
             onClick={handleKyc(kycData.eventStatus)}
           />
         )}
+      </>
+    ),
+    passiveIndexFunds: (
+      <>
+        <div className="mfl-kyc">
+          <CardHorizontal
+            rightImgSrc={require(`assets/${passiveIndexFundsData.icon}`)}
+            title={passiveIndexFundsData.title}
+            subtitle={passiveIndexFundsData.subtitle}
+            actionLink={passiveIndexFundsData.buttonTitle}
+            variant="heroCard"
+            dataAid={passiveIndexFundsData.dataAid}
+            footerText={passiveIndexFundsData.footerText}
+            // onClick={handleKyc(kycData.eventStatus)}
+          />
+          <Typography
+            variant="body6"
+            dataAid="helperText"
+            color="foundationColors.content.secondary"
+          >
+            *Based on TER averages of regular large cap and direct index funds
+          </Typography>
+        </div>
       </>
     ),
     mfOptions: (

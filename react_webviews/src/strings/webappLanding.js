@@ -72,6 +72,15 @@ export const MF_LANDING = {
     title: "Explore by categories",
     dataAid: "exploreCategories",
   },
+  passiveIndexFunds: {
+    title: "Passive index funds",
+    subtitle: "*Earn upto 2% more than actively managed funds",
+    buttonTitle: "EXPLORE",
+    footerText: "NIFTY has outperformed 90% of the large-cap funds",
+    bottomText: "*Based on TER averages of regular large cap and direct index funds",
+    icon: "finity/passive_index.svg",
+    dataAid: "heroCard",
+  },
 };
 
 export const INVESTING_OPTIONS = {
