@@ -21,7 +21,7 @@ const FEATURE_NAME_MAPPER = {
   taxfiling: "taxFiling",
 };
 
-const StocksAndIpoDirectEntry = (props) => {
+const DirectEntry = (props) => {
   const dispatch = useDispatch();
   const { kyc, user, updateKyc, updateUser } = useUserKycHook();
   const [baseConfig, setBaseConfig] = useState(getConfig());
@@ -116,4 +116,4 @@ const StocksAndIpoDirectEntry = (props) => {
   );
 };
 
-export default StocksAndIpoDirectEntry;
+export default DirectEntry;

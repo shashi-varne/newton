@@ -46,7 +46,7 @@ import NativeRedirection from "../kyc/Native/NativeRedirection";
 import ProductMarketTypes from './ProductMarketTypes';
 import PrimaryMarketProducts from "./PrimaryMarketProducts/PrimaryMarketProducts";
 import DIYV2 from "../pages/DIY";
-import StocksAndIpoDirectEntry from "./DirectEntry/StocksAndIpoDirectEntry";
+import DirectEntry from "./DirectEntry/DirectEntry";
 import PaymentNativeCallback from "./nps/components/paymentCallback";
 import ThemeWrapper from "../theme/ThemeWrapper";
 import fundDetailsV2Container from "../containers/fundDetailsV2/fundDetailsV2Container";
@@ -60,7 +60,7 @@ const Home = (props) => {
   return (
     <Fragment>
       <Switch>
-        <Route exact path={`${url}direct/:type`} component={StocksAndIpoDirectEntry} />
+        <Route exact path={`${url}direct/:type`} component={DirectEntry} />
         <Route exact path={`${url}secondary-verification`} component={SecondaryVerification} />
         <Route exact path={`${url}secondary-otp-verification`} component={SecondaryOtpVerification} />
         <Route path={`${url}referral-code`} component={Referral} />
