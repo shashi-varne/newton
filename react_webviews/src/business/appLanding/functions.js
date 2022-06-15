@@ -44,6 +44,7 @@ import {
 } from "businesslogic/dataStore/reducers/app";
 import Api from "../../utils/api";
 import { FREEDOM_PLAN_STORAGE_CONSTANTS } from "../../freedom_plan/common/constants";
+import { isEquityCompleted } from "../../kyc/common/functions";
 
 /* eslint-disable */
 export const initData = async () => {
@@ -284,7 +285,9 @@ export const getEnabledFeaturesData = (config, investOptions, feature) => {
       }
     }
   });
-  const enabledFeatures = !isEmpty(subbrokerCode) ? subbrokerFeatures : features;
+  const enabledFeatures = !isEmpty(subbrokerCode)
+    ? subbrokerFeatures
+    : features;
   return { cardsData, featureIndex, enabledFeatures };
 };
 
@@ -326,17 +329,26 @@ export const validateFeature = (type, enabledFeatures = {}) => {
   if (RESTRICTED_FEATURES.includes(type) && !enabledFeatures[type]) {
     return false;
   }
-  if (["ipo", "stocks", "equityKyc"].includes(type)) {
+  if (["ipo", "stocks"].includes(type)) {
     return isTradingEnabled();
   } else if (type === "freedomplan") {
-    const subscriptionStatus = get(
-      store.getState(),
-      "app.subscriptionStatus",
-      {}
-    );
-    return subscriptionStatus?.freedom_cta || subscriptionStatus?.renewal_cta;
+    return isFreedomPlanEnabled();
+  } else if (type === "equityKyc") {
+    return isTradingEnabled() && !isEquityCompleted();
   }
   return true;
+};
+
+export const isFreedomPlanEnabled = () => {
+  const subscriptionStatus = get(
+    store.getState(),
+    "app.subscriptionStatus",
+    {}
+  );
+  return (
+    isTradingEnabled() &&
+    (subscriptionStatus?.freedom_cta || subscriptionStatus?.renewal_cta)
+  );
 };
 
 export const getEnabledPlatformMotivators = (motivators) => {
