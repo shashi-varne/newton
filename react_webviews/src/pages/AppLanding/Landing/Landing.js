@@ -25,11 +25,11 @@ import { SwiperSlide } from "swiper/react";
 import { Stack } from "@mui/material";
 import { BOTTOMSHEET_KEYS } from "../../../constants/webappLanding";
 import { LANDING } from "../../../strings/webappLanding";
+import { isEmpty } from "lodash-es";
 
 import "./Landing.scss";
 
 const easySipData = LANDING.easySipData;
-const shareReferralData = LANDING.shareReferralData;
 const applyReferralData = LANDING.applyReferralData;
 const portfolioData = LANDING.portfolioData;
 const Landing = (props) => {
@@ -194,7 +194,8 @@ const renderCards = ({
   marketingBanners,
   investmentOptions,
   platformMotivators,
-  exploreCategories,
+  exploreCategoryData,
+  shareReferralData,
   manageInvestments,
   loaderData,
   portfolioOverViewData,
@@ -293,11 +294,11 @@ const renderCards = ({
     ),
     exploreCategories: (
       <>
-        {showExploreCategories && (
+        {showExploreCategories && !isEmpty(exploreCategoryData) && (
           <ExploreCategories
-            categories={exploreCategories}
-            titleDataAid={LANDING.exploreCategories.dataAid}
-            title={LANDING.exploreCategories.title}
+            categories={exploreCategoryData.options}
+            titleDataAid={exploreCategoryData.dataAid}
+            title={exploreCategoryData.title}
             onClick={handleExploreCategories}
           />
         )}
@@ -325,7 +326,7 @@ const renderCards = ({
               dataAid={shareReferralData.dataAid}
               title={shareReferralData.title}
               subtitle={shareReferralData.subtitle}
-              rightImgSrc={require(`assets/${shareReferralData.rightIcon}`)}
+              rightImgSrc={require(`assets/${shareReferralData.productName}/${shareReferralData.rightIcon}`)}
               onClick={handleReferral}
             />
           </WrapperBox>

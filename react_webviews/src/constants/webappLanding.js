@@ -7,11 +7,12 @@ export const RESTRICTED_FEATURES = [
   "insurance",
   "instaredeem",
   "taxFiling",
+  "passiveIndexFunds",
 ];
 
 export const WEBAPP_LANDING_PATHNAME_MAPPER = {
   nfo: "/advanced-investing/new-fund-offers/info",
-  indexFunds: "/passive-index-funds/landing",
+  passiveIndexFunds: "/passive-index-funds/landing",
   instaredeem: "/invest/instaredeem",
   buildwealth: "/invest/buildwealth",
   nps: "/nps/info",
@@ -39,6 +40,8 @@ export const WEBAPP_LANDING_PATHNAME_MAPPER = {
   education: "/invest/savegoal/childeducation",
   retirement: "/invest/savegoal/retirement",
   equityKyc: "/kyc/web",
+  nifty: "/passive-index-funds/nifty_backers/fund-list",
+  sensex: "/passive-index-funds/sensex_backers/fund-list",
 };
 
 export const MANAGE_INVESTMENTS = [
@@ -172,6 +175,14 @@ export const INVESTMENT_OPTIONS = {
     id: "instaredeem",
     dataAid: "instaRedemptionFund",
   },
+  passiveIndexFunds: {
+    icon: "passive.svg",
+    title: "Passive Index funds",
+    subtitle: "Superior return and money available 24x7",
+    eventStatus: "Insta redemption funds",
+    id: "passiveIndexFunds",
+    dataAid: "passiveIndexFunds",
+  },
 };
 
 export const EXPLORE_CATEGORIES = [
@@ -190,13 +201,47 @@ export const EXPLORE_CATEGORIES = [
     id: "debt",
   },
   {
-    icon: "equity.svg",
+    icon: "hybrid.svg",
     title: "Hybrid",
     description: "Perfect balance of equity & debt",
     dataAid: "hybrid",
     id: "hybrid",
   },
 ];
+
+export const FINITY_RECOMMENDATIONS = [
+  {
+    icon: `equity.svg`,
+    title: "Nifty backers",
+    dataAid: "nifity",
+    id: "nifty",
+  },
+  {
+    icon: "sensex.svg",
+    title: "sensex backers",
+    dataAid: "sensex",
+    id: "sensex",
+  },
+  {
+    icon: `equity.svg`,
+    title: "Equity FUnds",
+    dataAid: "equityFunds",
+    id: "equity",
+  },
+];
+
+export const EXPLORE_CATEGORY_DATA = {
+  fisdom: {
+    title: "Explore by categories",
+    dataAid: "exploreCategories",
+    options: EXPLORE_CATEGORIES,
+  },
+  finity: {
+    title: "Our recommendations",
+    dataAid: "ourRecommendations",
+    options: FINITY_RECOMMENDATIONS,
+  },
+};
 
 export const REFERRAL_DATA = {
   success: {
@@ -212,6 +257,23 @@ export const REFERRAL_DATA = {
     primaryButtonTitle: "OKAY",
     dataAid: "referralError",
     image: require(`assets/caution.svg`),
+  },
+};
+
+export const SHARE_REFERRAL_DATA = {
+  fisdom: {
+    dataAid: "referEarn",
+    title: "Refer & earn",
+    subtitle: "Invite your friends & earn exciting rewards",
+    rightIcon: "share_refer.svg",
+    productName: "fisdom",
+  },
+  finity: {
+    dataAid: "referEarn",
+    title: "Share the joy",
+    subtitle: "Invite your friends & family",
+    rightIcon: "share_refer.svg",
+    productName: "finity",
   },
 };
 

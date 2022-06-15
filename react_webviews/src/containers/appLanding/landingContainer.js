@@ -2,13 +2,14 @@ import React, { useEffect, useMemo, useState } from "react";
 import Landing from "../../pages/AppLanding/Landing";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import {
-  EXPLORE_CATEGORIES,
+  SHARE_REFERRAL_DATA,
   MANAGE_INVESTMENTS,
   REFERRAL_DATA,
   AUTH_VERIFICATION_DATA,
   BOTTOMSHEET_KEYS,
   APPSTORAGE_KEYS,
   CAMPAIGNS_TO_SHOW_ON_PRIORITY,
+  EXPLORE_CATEGORY_DATA,
 } from "../../constants/webappLanding";
 import { nativeCallback } from "../../utils/native_callback";
 import { useDispatch, useSelector } from "react-redux";
@@ -110,6 +111,10 @@ const landingContainer = (WrappedComponent) => (props) => {
       enabledFeatures
     );
     const motivators = getEnabledPlatformMotivators(platformMotivators);
+    const isFinity = baseConfig.productName === "finity";
+    const showExploreCategories = isMfOnly || isFinity;
+    const exploreCategoryData = EXPLORE_CATEGORY_DATA[baseConfig.productName];
+    const shareReferralData = SHARE_REFERRAL_DATA[baseConfig.productName];
     return {
       code,
       onboardingCarousels,
@@ -120,6 +125,10 @@ const landingContainer = (WrappedComponent) => (props) => {
       showPortfolioOverview,
       baseConfig,
       platformMotivators: motivators,
+      showExploreCategories,
+      exploreCategoryData,
+      isFinity,
+      shareReferralData
     };
   };
 
@@ -132,8 +141,12 @@ const landingContainer = (WrappedComponent) => (props) => {
     investCardsData,
     landingSections,
     isMfOnly,
+    isFinity,
     showPortfolioOverview,
     showSetupEasySip,
+    showExploreCategories,
+    exploreCategoryData,
+    shareReferralData,
   } = useMemo(initializeData, [
     partner,
     subscriptionStatus,
@@ -463,6 +476,13 @@ const landingContainer = (WrappedComponent) => (props) => {
   const handleExploreCategories =
     (data = {}) =>
     () => {
+      if (isFinity) {
+        dispatch(
+          updateAppStorage({
+            categoryTitle: data.title,
+          })
+        );
+      }
       sendEvents("next", {
         primaryCategory: "category item",
         cardClick: data.title?.toLowerCase(),
@@ -680,7 +700,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       marketingBanners={marketingBanners}
       kycData={kycData.kycStatusData}
       investmentOptions={investCardsData}
-      exploreCategories={EXPLORE_CATEGORIES}
+      exploreCategoryData={exploreCategoryData}
       manageInvestments={MANAGE_INVESTMENTS}
       portfolioOverViewData={portfolioOverViewData}
       showPortfolioOverview={showPortfolioOverview}
@@ -688,7 +708,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       showPlatformMotivators={
         !isEmpty(platformMotivators) && !kycData.isReadyToInvestBase
       }
-      showExploreCategories={isMfOnly}
+      showExploreCategories={showExploreCategories}
       showSeachIcon={isMfOnly}
       showMarketingBanners={
         !isEmpty(marketingBanners) && kycData.isReadyToInvestBase
@@ -698,6 +718,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       showSetupEasySip={showSetupEasySip}
       showKycCard={kycData.showKycCard}
       referralData={referralData}
+      shareReferralData={shareReferralData}
       kycBottomsheetData={kycBottomsheetData}
       bottomsheetStates={bottomsheetStates}
       authData={contactDetails}
