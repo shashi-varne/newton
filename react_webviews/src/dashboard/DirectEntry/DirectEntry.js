@@ -18,9 +18,10 @@ import { updateAppStorage } from "businesslogic/dataStore/reducers/app";
 const FEATURE_NAME_MAPPER = {
   tpp: "ipo",
   equity: "stocks",
+  taxfiling: "taxFiling",
 };
 
-const StocksAndIpoDirectEntry = (props) => {
+const DirectEntry = (props) => {
   const dispatch = useDispatch();
   const { kyc, user, updateKyc, updateUser } = useUserKycHook();
   const [baseConfig, setBaseConfig] = useState(getConfig());
@@ -115,4 +116,4 @@ const StocksAndIpoDirectEntry = (props) => {
   );
 };
 
-export default StocksAndIpoDirectEntry;
+export default DirectEntry;
