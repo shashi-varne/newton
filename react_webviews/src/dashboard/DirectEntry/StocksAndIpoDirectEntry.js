@@ -18,6 +18,7 @@ import { updateAppStorage } from "businesslogic/dataStore/reducers/app";
 const FEATURE_NAME_MAPPER = {
   tpp: "ipo",
   equity: "stocks",
+  taxfiling: "taxFiling",
 };
 
 const StocksAndIpoDirectEntry = (props) => {
