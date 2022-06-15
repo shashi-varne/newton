@@ -44,6 +44,7 @@ import {
 } from "businesslogic/dataStore/reducers/app";
 import Api from "../../utils/api";
 import { FREEDOM_PLAN_STORAGE_CONSTANTS } from "../../freedom_plan/common/constants";
+import { isEquityCompleted } from "../../kyc/common/functions";
 
 /* eslint-disable */
 export const initData = async () => {
@@ -328,10 +329,12 @@ export const validateFeature = (type, enabledFeatures = {}) => {
   if (RESTRICTED_FEATURES.includes(type) && !enabledFeatures[type]) {
     return false;
   }
-  if (["ipo", "stocks", "equityKyc"].includes(type)) {
+  if (["ipo", "stocks"].includes(type)) {
     return isTradingEnabled();
   } else if (type === "freedomplan") {
     return isFreedomPlanEnabled();
+  } else if (type === "equityKyc") {
+    return isTradingEnabled() && !isEquityCompleted();
   }
   return true;
 };
