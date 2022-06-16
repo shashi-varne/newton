@@ -95,7 +95,11 @@ const claimCashRewardsContainer = (WrappedComponent) => (props) => {
     try {
       const resp = await trigger_wallet_transfer(Api, { amount });
       console.log({ resp });
-      navigate(REFER_AND_EARN_PATHNAME_MAPPER.successDetails);
+      navigate(REFER_AND_EARN_PATHNAME_MAPPER.withdrawPlaced, {
+        state: {
+          amount: amount,
+        },
+      });
     } catch (error) {
       console.error(error);
       setShowErrorBottonSheet(true);

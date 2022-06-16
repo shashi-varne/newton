@@ -3,10 +3,14 @@ import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 import SuccessDetails from "../../pages/ReferAndEarn/SuccessDetails";
 import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../pages/ReferAndEarn/common/constants";
+import { format } from "date-fns";
+import { formatAmountInr } from "businesslogic/utils/common/functions";
 
 const successDetailsContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const { productName } = useMemo(getConfig, []);
+  const amount = formatAmountInr(props?.location?.state?.amount || "");
+  const date = format(new Date(), "dd MMM yyyy");
 
   const sendEvents = (userAction) => {
     const eventObj = {
@@ -30,8 +34,8 @@ const successDetailsContainer = (WrappedComponent) => (props) => {
 
   return (
     <WrappedComponent
-      date="10 Oct 2021"
-      amount="2000"
+      date={date}
+      amount={amount}
       sendEvents={sendEvents}
       productName={productName}
       onClickCta={onClickCta}

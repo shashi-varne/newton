@@ -7,6 +7,8 @@ const withdrawPlacedContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const { productName } = useMemo(getConfig, []);
 
+  console.log({ props });
+  const amount = props?.location?.state?.amount || "";
   const sendEvents = (userAction) => {
     const eventObj = {
       event_name: "",
@@ -23,7 +25,14 @@ const withdrawPlacedContainer = (WrappedComponent) => (props) => {
     }
   };
 
-  return <WrappedComponent sendEvents={sendEvents} productName={productName} />;
+  return (
+    <WrappedComponent
+      amount={amount}
+      sendEvents={sendEvents}
+      productName={productName}
+      navigate={navigate}
+    />
+  );
 };
 
 export default withdrawPlacedContainer(WithdrawPlaced);

@@ -26,6 +26,7 @@ const ReferAndEarn = (props) => {
       <Route
         path={`${url}/success-details`}
         component={successDetailsContainer}
+      />
       <Route
         path={`${url}/withdraw-placed`}
         component={withdrawPlacedContainer}

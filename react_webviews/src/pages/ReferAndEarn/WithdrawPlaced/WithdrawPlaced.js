@@ -5,11 +5,33 @@ import Typography from "../../../designSystem/atoms/Typography";
 import { WITHDRAW_PLACED } from "businesslogic/strings/referAndEarn";
 import { Stack } from "@mui/material";
 import "./WithdrawPlaced.scss";
+import { REFER_AND_EARN_PATHNAME_MAPPER } from "../common/constants";
 
 const sound = require("assets/audio/success.mp3"); // Audio file path to be added
 const STRINGS = WITHDRAW_PLACED;
 
-const WithdrawPlaced = ({ productName = "fisdom", sendEvents }) => {
+const WithdrawPlaced = ({
+  productName = "fisdom",
+  sendEvents,
+  navigate,
+  amount,
+}) => {
+  const lottieRef = React.useRef();
+
+  React.useEffect(() => {
+    const animationDuration = lottieRef?.current?.getDuration() || 3;
+    const animationTimeout = setTimeout(() => {
+      navigate(REFER_AND_EARN_PATHNAME_MAPPER.successDetails, {
+        state: {
+          amount: amount,
+        },
+      });
+    }, animationDuration * 1000);
+    return () => {
+      clearTimeout(animationTimeout);
+    };
+  });
+
   return (
     <Container
       headerProps={{
@@ -26,6 +48,7 @@ const WithdrawPlaced = ({ productName = "fisdom", sendEvents }) => {
         sx={{ height: "70vh" }}
       >
         <Lottie
+          lottieRef={lottieRef}
           animationData={require(`assets/${productName}/lottie/success_animation.json`)}
           autoPlay
           loop
