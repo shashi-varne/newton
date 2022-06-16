@@ -14,7 +14,6 @@ const screen = "REFER_AND_EARN_TNC";
 const tncContainer = (WrappedComponent) => (props) => {
   const dispatch = useDispatch();
   const tncPoints = useSelector(getTncData);
-  console.log({ tncPoints });
 
   const initialize = () => {
     if (tncPoints.length === 0) {

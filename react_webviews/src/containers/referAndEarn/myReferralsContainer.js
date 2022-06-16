@@ -37,8 +37,6 @@ const myReferralsContainer = (WrappedComponent) => (props) => {
   const walletBalance = useSelector(getWalletBalanceData);
   const earnedCash = walletBalance.balance_amount || 0;
 
-  console.log({ refereeListData, refereeListViewData });
-
   const dispatch = useDispatch();
 
   const initialize = () => {
@@ -95,8 +93,6 @@ const myReferralsContainer = (WrappedComponent) => (props) => {
   };
 
   const onClickCopy = async (cardIndex, eventIndex = -1) => {
-    console.log(cardIndex, eventIndex);
-
     let msg = refereeListViewData[cardIndex].message;
     if (eventIndex !== -1) {
       msg = refereeListViewData[cardIndex].events[eventIndex].remind_message;

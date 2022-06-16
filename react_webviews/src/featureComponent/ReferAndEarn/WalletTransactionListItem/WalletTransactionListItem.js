@@ -36,7 +36,7 @@ const WalletTransactionListItem = ({
         {badgeIcon && (
           <Icon
             dataAid={STRINGS.listItem.iconDataAid}
-            size="16px"
+            size="24px"
             src={require(`assets/${badgeIcon}`)}
             className="c-icon-wrapper"
           />

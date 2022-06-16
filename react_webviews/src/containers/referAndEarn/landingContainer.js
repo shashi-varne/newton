@@ -42,7 +42,6 @@ const landingContainer = (WrappedComponent) => (props) => {
   const [showTransferNotAllowed, setShowTransferNotAllowed] = useState(false);
   const [tabValue, setTabValue] = useState(0);
 
-  console.log({ activeCampaignData });
   const noReferrals =
     !isEmpty(refereeListData) && refereeListData?.length === 0;
   const allowClaimRewards =
