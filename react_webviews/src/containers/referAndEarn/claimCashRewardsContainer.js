@@ -4,7 +4,7 @@ import { navigate as navigateFunc } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 import { useDispatch, useSelector } from "react-redux";
 import useLoadingState from "../../common/customHooks/useLoadingState";
-import { isEmpty } from "lodash-es";
+import { isEmpty, get } from "lodash-es";
 import { ERROR_MESSAGES } from "businesslogic/constants/referAndEarn";
 import {
   getWalletBalance,
@@ -13,6 +13,7 @@ import {
 import { trigger_wallet_transfer } from "businesslogic/apis/referAndEarn";
 import Api from "../../utils/api";
 import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../pages/ReferAndEarn/common/constants";
+import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 const screen = "CLAIM_CASH_REWARDS";
 
 const claimCashRewardsContainer = (WrappedComponent) => (props) => {
@@ -23,9 +24,11 @@ const claimCashRewardsContainer = (WrappedComponent) => (props) => {
   const totalBalance = walletBalance.total_amount;
   const minAmount = walletBalance.min_withdraw_limit;
   const [showErrorBottomSheet, setShowErrorBottonSheet] = useState(false);
-  //Temporary data: these will come from api
-  const accDetails = { name: "HFFC", number: "9220" };
-  //end Temporary data: these will come from api
+  const { kyc, isLoading } = useUserKycHook();
+
+  const bankName = get(kyc, "bank.meta_data.bank_code", "");
+  const accountNumber = get(kyc, "bank.meta_data.account_number", "");
+  const accDetails = { name: bankName, number: accountNumber?.slice(-4) };
 
   const [amount, setAmount] = useState("");
   const [inputError, setInputError] = useState("");
@@ -114,9 +117,9 @@ const claimCashRewardsContainer = (WrappedComponent) => (props) => {
       onChangeAmount={onChangeAmount}
       inputError={inputError}
       sendEvents={sendEvents}
-      isPageLoading={isPageLoading}
+      isPageLoading={isPageLoading || isLoading}
       buttonDisabled={
-        isPageLoading || !isEmpty(inputError) || amount < minAmount
+        isPageLoading || isLoading || !isEmpty(inputError) || amount < minAmount
       }
       accDetails={accDetails}
       transferFullFlag={transferFullFlag}
