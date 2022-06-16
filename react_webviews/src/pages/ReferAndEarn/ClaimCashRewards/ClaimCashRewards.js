@@ -10,9 +10,9 @@ import { isEmpty } from "lodash-es";
 import Checkbox from "../../../designSystem/atoms/Checkbox/Checkbox";
 import "./ClaimCashRewards.scss";
 import BottomSheet from "../../../designSystem/organisms/BottomSheet/BottomSheet";
-import { BOTTOM_SHEET_CONTENT } from "businesslogic/strings/referAndEarn";
+import { BOTTOMSHEETS_CONTENT } from "businesslogic/strings/referAndEarn";
 
-const { transferFailed } = BOTTOM_SHEET_CONTENT;
+const { transferFailed } = BOTTOMSHEETS_CONTENT;
 const STRINGS = CLAIM_CASH_REWARDS;
 
 const ClaimCashRewards = ({
