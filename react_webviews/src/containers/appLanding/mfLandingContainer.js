@@ -23,6 +23,7 @@ import { getAppData } from "businesslogic/dataStore/reducers/app";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import { isEmpty } from "lodash-es";
 import { MF_LANDING } from "../../strings/webappLanding";
+import { DIY_PATHNAME_MAPPER } from "../../pages/DIY/common/constants";
 
 const initializeData = () => {
   const {
@@ -205,6 +206,12 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
     });
   };
 
+  const handleFundDetails = (fundData) => () => {
+    navigate(DIY_PATHNAME_MAPPER.fundDetails, {
+      searchParams: `${baseConfig?.searchParams}&isins=${fundData?.isin}`,
+    });
+  };
+
   return (
     <WrappedComponent
       showPartnership={baseConfig.isSdk}
@@ -254,6 +261,7 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
         props
       )}
       showPassiveFunds={enabledFeatures.passiveIndexFunds}
+      handleFundDetails={handleFundDetails}
     />
   );
 };

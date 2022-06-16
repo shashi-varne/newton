@@ -85,6 +85,10 @@ export const MF_LANDING = {
       buttonTitle: "See All",
     },
   },
+  financialTools: {
+    title: "Financial tools",
+    dataAid: "financialTools",
+  },
   passiveIndexFunds: {
     title: "Passive index funds",
     subtitle: "*Earn upto 2% more than actively managed funds",
@@ -95,6 +99,14 @@ export const MF_LANDING = {
     icon: "passive_index.svg",
     dataAid: "heroCard",
     id: "passiveIndexFunds",
+  },
+  externalPortfolio: {
+    title: "Portfolio tracker",
+    subtitle: "Get a consolidated view of all your external investments",
+    buttonTitle: "View portfolio",
+    icon: "external_portfolio.svg",
+    dataAid: "externalInvestments",
+    id: "externalPortfolio",
   },
 };
 

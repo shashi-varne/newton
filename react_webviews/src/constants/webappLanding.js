@@ -309,6 +309,30 @@ export const MF_EXPLORE_CATEGORY_DATA = {
   },
 };
 
+export const FINANCIAL_TOOLS = [
+  {
+    icon: `risk.svg`,
+    title: "Risk profiler",
+    description: "Investment planning made easy",
+    dataAid: "riskProfiler",
+    id: "riskProfile",
+  },
+  {
+    icon: "fhc.svg",
+    title: "Financial health check",
+    description: "Stay finacially fit",
+    dataAid: "financialHealth",
+    id: "fhc",
+  },
+  {
+    icon: "tax_calculator.svg",
+    title: "Tax calucator",
+    description: "Get an estimate of your income tax",
+    dataAid: "taxCalculator",
+    id: "taxCalculator",
+  },
+];
+
 export const REFERRAL_DATA = {
   success: {
     title: "Sucessful",

@@ -9,11 +9,14 @@ import MarketingBanners from "../../../featureComponent/appLanding/MarketingBann
 import ExploreCategories from "../../../featureComponent/appLanding/ExploreCategories";
 import KycBottomsheet from "../../../featureComponent/appLanding/KycBottomsheet";
 import { MF_LANDING } from "../../../strings/webappLanding";
+import { FINANCIAL_TOOLS } from "../../../constants/webappLanding";
+import TrendingFunds from "../../DIY/DiyLanding/TrendingFunds";
 import { isEmpty } from "lodash-es";
 
 import "./MfLanding.scss";
 
 const passiveIndexFundsData = MF_LANDING.passiveIndexFunds;
+const externalPortfolioData = MF_LANDING.externalPortfolio;
 const MfLanding = ({
   sendEvents,
   onRightIconClick,
@@ -82,6 +85,8 @@ const renderCards = ({
   mfSections,
   showPassiveFunds,
   baseConfig,
+  handleFundDetails,
+  showExternalPortfolio,
 }) => {
   const cardsMapper = {
     marketingBanners: (
@@ -165,6 +170,36 @@ const renderCards = ({
         className={exploreCategoriesData.className}
         buttonTitle={exploreCategoriesData.buttonTitle}
       />
+    ),
+    financialTools: (
+      <ExploreCategories
+        titleDataAid={MF_LANDING.financialTools.dataAid}
+        title={MF_LANDING.financialTools.title}
+        categories={FINANCIAL_TOOLS}
+        onClick={handleExploreCategories}
+      />
+    ),
+    trendingFunds: (
+      <TrendingFunds
+        diyType="equity"
+        config={baseConfig}
+        handleFundDetails={handleFundDetails}
+      />
+    ),
+    portfolioTracker: (
+      <>
+        {showExternalPortfolio && (
+          <CardHorizontal
+            className="mfl-kyc"
+            rightImgSrc={require(`assets/${baseConfig.productName}/${externalPortfolioData.icon}`)}
+            title={externalPortfolioData.title}
+            description={externalPortfolioData.subtitle}
+            descriptionColor="foundationColors.content.secondary"
+            actionLink={externalPortfolioData.buttonTitle}
+            dataAid={externalPortfolioData.dataAid}
+          />
+        )}
+      </>
     ),
   };
   return (
