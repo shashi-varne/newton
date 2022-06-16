@@ -12,8 +12,17 @@ import {
   handleStocksAndIpoCards,
   handleKycStatusRedirection,
 } from "../Invest/functions";
+import { useDispatch } from "react-redux";
+import { updateAppStorage } from "businesslogic/dataStore/reducers/app";
 
-const StocksAndIpoDirectEntry = (props) => {
+const FEATURE_NAME_MAPPER = {
+  tpp: "ipo",
+  equity: "stocks",
+  taxfiling: "taxFiling",
+};
+
+const DirectEntry = (props) => {
+  const dispatch = useDispatch();
   const { kyc, user, updateKyc, updateUser } = useUserKycHook();
   const [baseConfig, setBaseConfig] = useState(getConfig());
   const type = useMemo(() => props.match?.params?.type, [props.match?.params]);
@@ -43,7 +52,7 @@ const StocksAndIpoDirectEntry = (props) => {
       openKycStatusDialog: false,
     });
     if (!skipNavigation) {
-      navigate("/invest");
+      navigate("/");
     }
   };
 
@@ -52,35 +61,13 @@ const StocksAndIpoDirectEntry = (props) => {
   };
 
   const onLoad = () => {
-    switch (type) {
-      case "tpp":
-        navigate("/product-types");
-        break;
-      case "equity":
-        const kycDetails = getKycData(kyc, user);
-        const contactData = contactVerification(kyc);
-        const config = getConfig();
-        setBaseConfig(config);
-        setKycData(kycDetails);
-        setContactDetails(contactData);
-        const data = {
-          ...kycDetails,
-          key: "stocks",
-          isDirectEntry: true,
-          kyc,
-          user,
-          navigate,
-          handleLoader: noop,
-          handleDialogStates,
-          handleSummaryData,
-          closeKycStatusDialog,
-        };
-        handleStocksAndIpoCards(data, props);
-        break;
-      default:
-        navigate("/invest");
-        break;
-    }
+    const feature = FEATURE_NAME_MAPPER[type] || type;
+    dispatch(
+      updateAppStorage({
+        feature,
+      })
+    );
+    navigate("/");
   };
 
   useEffect(() => {
@@ -129,4 +116,4 @@ const StocksAndIpoDirectEntry = (props) => {
   );
 };
 
-export default StocksAndIpoDirectEntry;
+export default DirectEntry;

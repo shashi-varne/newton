@@ -11,7 +11,7 @@
   variat: you can seleect either two of them => 'product' or 'herocard'
 */
 
-import { Box, Stack } from '@mui/material';
+import { Box, Skeleton, Stack } from '@mui/material';
 import React from 'react';
 import Typography from '../../atoms/Typography';
 import Button from '../../atoms/Button';
@@ -47,6 +47,8 @@ const CardHorizontal = ({
   className,
   sx,
   variant = 'product',
+  buttonProps = {},
+  showLoader
 }) => {
   const isHeroCardVariant = variant === 'heroCard';
   const variantStyle = getVariantStyle(isHeroCardVariant, footerText);
@@ -61,11 +63,21 @@ const CardHorizontal = ({
       onButtonClick(e);
     }
   };
+
+  if (showLoader) {
+    return (
+      <Skeleton
+        variant="rectangular"
+        className={`${className} card-horizontal-skelton-wrapper`}
+      />
+    );
+  }
+
   return (
     <Stack
       direction='column'
       className={`${wrapperClassNames} ${className}`}
-      sx={{ sx }}
+      sx={sx}
       onClick={onClick}
       data-aid={`cardHorizontal_${dataAid}`}
     >
@@ -102,7 +114,7 @@ const CardHorizontal = ({
           {description && (
             <Typography
               className='mt-4'
-              variant='body2'
+              variant='body5'
               color={descriptionColor}
               dataAid='description'
             >
@@ -118,6 +130,7 @@ const CardHorizontal = ({
               size='small'
               onClick={onActionClick}
               dataAid={variantStyle?.btnDataAid}
+              {...buttonProps}
             />
           )}
         </Stack> 

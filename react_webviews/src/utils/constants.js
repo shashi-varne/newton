@@ -204,7 +204,7 @@ export const commonBackMapper = {
     '/kyc/upload/address-nri': '/kyc/upload/progress',
 }
 
-export const landingEntryPoints = ["/", "/invest", "/landing"];
+export const landingEntryPoints = ["/", "/invest", "/landing", "/landing/view-all/category"];
 
 export const EVENT_MANAGER_CONSTANTS = {
     redirectPath: "redirectPath",

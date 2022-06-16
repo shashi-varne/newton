@@ -55,6 +55,7 @@ const BottomSheet = ({
   imageSrc,
   imageSrcProps,
   renderButtonComponent,
+  children,
   ...restProps
 }) => {
   const handleOnClose = useCallback(
@@ -86,6 +87,8 @@ const BottomSheet = ({
         </Stack>
         {imageSrc && (
           <Icon
+            width='140px'
+            height="120px"
             src={imageSrc}
             className='btn-sheet-img'
             dataAid="top"
@@ -130,6 +133,7 @@ const BottomSheet = ({
           </Typography>
         )}
 
+        {children}
         {(primaryBtnTitle || secondaryBtnTitle ||renderButtonComponent) && (
           <Stack flexDirection='column' spacing={1} className='btm-sheet-cta-wrapper'>
             {

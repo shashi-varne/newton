@@ -177,7 +177,7 @@
     <base id="myBaseHref" href="%PUBLIC_PATH%" />
     <script>
       var browser = window.navigator.userAgent;
-      if(browser.indexOf("MSIE") !== -1) {
+      if(browser.indexOf("MSIE") !== -1 || browser.indexOf("Trident") !== -1) {
         window.location.href='./support.html';
       }
     </script>

@@ -12,13 +12,16 @@ import React from 'react';
 import Typography from '../../atoms/Typography';
 import PropTypes from 'prop-types';
 import Separator from '../../atoms/Separator';
-import './MenuItem.scss';
 import Icon from '../../atoms/Icon';
+import Lottie from "lottie-react";
+import './MenuItem.scss';
+import { Skeleton } from '@mui/material';
 
 const MenuItem = ({
   leftImgSrc,
   leftImgProps,
   rightImgSrc,
+  rightLottieSrc,
   rightImgProps,
   title,
   titleColor,
@@ -28,7 +31,42 @@ const MenuItem = ({
   dataAid,
   showSeparator,
   className,
+  showLoader,
 }) => {
+  if (showLoader) {
+    return (
+      <div>
+        <div className={`menu-item-wrapper ${className}`}>
+          <Skeleton
+            variant="rectangle"
+            className="menu-item-left-img mis-left-img"
+            width="38px"
+            height="32px"
+            {...leftImgProps}
+          />
+          <div className="mi-right-wrapper">
+            <div className="mi-text-wrapper mis-text-wrapper">
+              <Skeleton
+                variant="text"
+                height="24px"
+                component="div"
+                width="60%"
+              />
+              <Skeleton
+                variant="text"
+                height="24px"
+                component="div"
+                width="40%"
+              />
+            </div>
+          </div>
+        </div>
+        {showSeparator && (
+          <Separator marginLeft={leftImgSrc ? "72px" : "16px"} dataAid="1" />
+        )}
+      </div>
+    );
+  }
   return (
     <div>
       <div
@@ -37,7 +75,7 @@ const MenuItem = ({
         data-aid={`menuItem_${dataAid}`}
       >
         {leftImgSrc && (
-          <Icon src={leftImgSrc} size='54px' className='menu-item-left-img' dataAid='left' {...leftImgProps} />
+          <Icon src={leftImgSrc} size='32px' className='menu-item-left-img' dataAid='left' {...leftImgProps} />
         )}
 
         <div className='mi-right-wrapper'>
@@ -58,9 +96,19 @@ const MenuItem = ({
               {...rightImgProps}
             />
           )}
+          {rightLottieSrc && (
+            <Lottie
+              animationData={rightLottieSrc}
+              autoPlay
+              loop
+              data-aid="iv_right"
+              className="menu-item-right-img"
+              {...rightImgProps}
+            />
+          )}
         </div>
       </div>
-      {showSeparator && <Separator marginLeft={leftImgSrc ? '94px' : '16px'} />}
+      {showSeparator && <Separator marginLeft={leftImgSrc ? '72px' : '16px'} dataAid="1" />}
     </div>
   );
 };

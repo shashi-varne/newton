@@ -9,7 +9,7 @@ import {
   premiumBottomSheetMapper,
   sdkInvestCardMapper
 } from "./constants";
-import { getAccountSummary, getKycAppStatus, isReadyToInvest, setKycProductType, setSummaryData } from "../../kyc/services";
+import { getKycAppStatus, isReadyToInvest, setKycProductType } from "../../kyc/services";
 import { get_recommended_funds } from "./common/api";
 import { PATHNAME_MAPPER as KYC_PATHNAME_MAPPER } from "../../kyc/constants";
 import { isEquityCompleted, isUpgradeToEquityAccountEnabled } from "../../kyc/common/functions";
@@ -17,6 +17,10 @@ import { nativeCallback, openModule } from "../../utils/native_callback";
 import isEmpty from "lodash/isEmpty";
 import isFunction from "lodash/isFunction";
 import { getCorpusValue } from "./common/commonFunctions";
+import { getAccountSummary } from "businesslogic/apis/common";
+import { setSummaryData } from "../../business/appLanding/functions";
+import store from "../../dataLayer/store";
+import { setKyc, setSubscriptionStatus, setUser, updateAppStorage } from "businesslogic/dataStore/reducers/app";
 
 let errorMessage = "Something went wrong!";
 export async function initialize({ screenName, kyc, user, handleLoader, handleSummaryData }) {
@@ -53,7 +57,7 @@ export async function getSummary({ handleLoader, handleSummaryData }) {
     handleLoader({ kycStatusLoader: true });
   }
   try {
-    const result = await getAccountSummary();
+    const result = await getAccountSummary(Api);
     setSummaryData(result);
     user = result.data.user.user.data;
     kyc = result.data.kyc.kyc.data;
@@ -61,6 +65,9 @@ export async function getSummary({ handleLoader, handleSummaryData }) {
     if(isFunction(handleSummaryData)) {
       handleSummaryData({ kyc, user, subscriptionStatus })
     }
+    store.dispatch(setKyc(kyc));
+    store.dispatch(setUser(user));
+    store.dispatch(setSubscriptionStatus(subscriptionStatus));
   } catch (error) {
     console.log(error);
     toast(error.message || errorMessage);
@@ -263,6 +270,8 @@ export const getKycData = (kyc, user) => {
     showKycCard,
     isKycStatusDialogDisplayed: false,
     isPremiumBottomsheetDisplayed: false,
+    isMfInvested: user.active_investment,
+    applicationStatus: kyc.application_status_v2,
   };
   return kycData;
 }
@@ -532,7 +541,7 @@ export function handleIpoCardRedirection({ kyc, user, isDirectEntry, navigate, h
   }
 }
 
-function initiatePinSetup({ key, isDirectEntry, navigate, handleLoader, handleSummaryData, handleDialogStates }, props) {
+function initiatePinSetup({ key, isDirectEntry, navigate, handleLoader, handleSummaryData }, props) {
   const config  = getConfig();
   if (config.isNative) {
     openModule('account/setup_2fa', props, { routeUrlParams: `/${key}` });
@@ -549,7 +558,7 @@ function initiatePinSetup({ key, isDirectEntry, navigate, handleLoader, handleSu
       },
     });
   } else {
-    handleDialogStates({ openPinSetupDialog: true, cardKey: key })
+    navigate(`/account/set-pin/${key}`);
   }
 }
 
@@ -639,8 +648,12 @@ export function handleStocksAndIpoCards(
 
 export const handleStocksRedirection = ({ isDirectEntry = false, navigate }) => {
   if (isDirectEntry) {
-    storageService().setBoolean("openEquityCallback", true);
-    navigate("/invest")
+    store.dispatch(
+      updateAppStorage({
+        openEquityCallback: true,
+      })
+    );
+    navigate("/")
   } else {
     nativeCallback({
       action: "open_equity"
@@ -675,7 +688,9 @@ export const handleKycStatus = ({
   sendEvents,
 }) => async () => {
   if (isFunction(sendEvents)) {
-    sendEvents("next", "kyc_bottom_sheet");
+    sendEvents("next", {
+      intent: modalData.title,
+    });
   }
   const { kycJourneyStatus, isReadyToInvestBase } = kycData;
   if (
@@ -686,7 +701,7 @@ export const handleKycStatus = ({
   } else if (kycJourneyStatus === "rejected") {
     navigate(KYC_PATHNAME_MAPPER.uploadProgress);
   } else if (isUpgradeToEquityAccountEnabled(kyc, kycJourneyStatus)) {
-    closeKycStatusDialog(true);
+    closeKycStatusDialog();
     await setKycProductTypeAndRedirect({
       kyc,
       kycJourneyStatus,
@@ -775,7 +790,7 @@ export const handleKycStatusRedirection = (
         });
         return;
       }
-      closeKycStatusDialog(true);
+      closeKycStatusDialog();
       handleStocksRedirection({ isDirectEntry, navigate })
       return;
     } else if (kycJourneyStatus === "fno_rejected") {

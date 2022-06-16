@@ -1,0 +1,147 @@
+.landing-onboarding-wrapper {
+  background-color: white;
+
+  .oc-progressbar {
+    padding: 26px 16px 0px 16px;
+
+    .oc-pb-icon {
+      margin-left: 13px;
+    }
+  }
+
+  .oc-container {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .oc-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    div {
+      width: 50%;
+      height: 100%;
+    }
+  }
+
+  .oc-icon-wrapper {
+    padding: 35px 16px 60px 16px;
+
+    .oc-icon {
+      min-height: 320px;
+    }
+  }
+
+  .oc-content-wrapper {
+    padding: 20px 10px 10px 20px;
+    border-radius: 24px 24px 0px 0px;
+    height: 30vh;
+    margin-top: -24px;
+
+    .oc-bg-wrapper {
+      background-repeat: no-repeat;
+      background-size: contain;
+      min-height: 167px;
+    }
+
+    .oc-title {
+      padding: 20px 30px 8px 20px;
+    }
+
+    .oc-subtitle {
+      padding: 0px 30px 0px 20px;
+    }
+  }
+}
+
+.landing-main-wrapper {
+  padding-bottom: 40px !important;
+  
+  .lmp-platform-motivators {
+    background-color: white;
+    padding: 26px 16px 38px 16px;
+
+    .pm-left-image {
+      width: 64px;
+      height: 64px;
+    }
+  }
+
+  .lmw-portfolio-overview {
+    margin: 24px 16px 16px 16px;
+    padding: 24px 16px 16px 16px;
+    background-color: white;
+
+    .lmw-po-loader {
+      border-radius: 100px;
+      height: 22px;
+      width: 100px;
+    }
+  }
+
+  .al-explore-categories,
+  .lmp-platform-motivators {
+    .swiper-slide {
+      width: unset !important;
+    }
+  }
+
+  .lmw-setup-easysip {
+    margin: 24px 24px 16px 24px;
+  }
+
+  .lmw-kyc {
+    margin: 24px 16px 16px 16px;
+  }
+
+  .al-investment-options {
+    background-color: white;
+    padding: 32px 0px 20px 0px;
+
+    .al-io-title {
+      padding: 0px 16px;
+    }
+  }
+
+  .al-explore-categories {
+    padding: 24px 16px 16px 16px;
+
+    .al-ec-title {
+      padding-bottom: 16px;
+    }
+
+    .al-ec-card {
+      width: 168px;
+    }
+  }
+
+  .lmw-manage-investments {
+    padding: 24px 16px;
+
+    .lmw-mi-title {
+      margin-bottom: 24px;
+    }
+  }
+
+  .lmw-referral-code {
+    margin: 0px 16px;
+    padding: 16px;
+
+    .lmw-rc-title {
+      padding-bottom: 16px;
+    }
+  }
+
+  .lmw-share-code {
+    margin: 0px 16px;
+  }
+
+  .lmw-trust-icon {
+    padding: 48px 16px 28px 16px;
+  }
+
+  .lmw-partnership {
+    margin-bottom: 50px;
+  }
+}

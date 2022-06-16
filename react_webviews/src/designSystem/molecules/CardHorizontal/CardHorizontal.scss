@@ -17,6 +17,8 @@
     background: linear-gradient(180deg, rgba(51, 207, 144, 0.2) 27.54%, rgba(130, 121, 248, 0.13) 100%);
     padding: 8px 16px;
     margin: 24px -16px -24px -16px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
   }
 }
 
@@ -33,4 +35,10 @@
   .ch-action-btn {
     margin-top: 24px;
   }
+}
+
+.card-horizontal-skelton-wrapper {
+  min-height: 150px;
+  border-radius: 12px;
+  padding: 16px;
 }

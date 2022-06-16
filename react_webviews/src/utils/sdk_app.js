@@ -12,6 +12,7 @@ import { nativeCallback } from "./native_callback";
 import { commonBackMapper } from "utils/constants";
 import { getConfig } from "./functions";
 import isEmpty from "lodash/isEmpty";
+import { landingEntryPoints } from "./constants";
 
 export const backMapper = (state) => {
   return commonBackMapper[state] || "";
@@ -45,7 +46,7 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
   console.log("entryPath", entryPath);
   
   const landingRedirectPaths = ["/sip/payment/callback", "/kyc/report", "/notification", "/diy/fundlist/direct",
-    "/diy/fundinfo/direct", "/diy/invest", "/invest/doityourself/direct/", "/risk/recommendations/error"];
+    "/diy/fundinfo/direct", "/diy/invest", "/invest/doityourself/direct/", "/risk/recommendations/error", "/landing/view-all/category", "/landing/view-all/mf"];
 
   // const fromStateArray = ['/payment/callback', '/nps/payment/callback', '/sip/payment/callback', '/invest', '/reports',
   //  '/landing', '', '/new/mandate', '/otm-options', '/mandate', '/nps/mandate/callback', '/nps/success',
@@ -69,7 +70,11 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
   }
 
   if (landingRedirectPaths.indexOf(currentState) !== -1) {
-    navigate("/");
+    if (landingEntryPoints.includes(fromState)) {
+      navigate(fromState);
+    } else {
+      navigate("/");
+    }
     return true;
   }
 
@@ -86,7 +91,7 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
       break;
     case "/kyc/home":
       if (fromState.includes("/direct/")) {
-        navigate("/invest");
+        navigate("/");
         return true;
       }
       break;
@@ -101,7 +106,7 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
           nativeCallback({ action: "exit_web" });
           return true;
         } else {
-          navigate("/invest");
+          navigate("/");
           return true;
         }
       }

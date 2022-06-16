@@ -6,7 +6,9 @@ import { isEmpty } from "../utils/validators";
 import { nativeCallback } from "../utils/native_callback";
 import Toast from "../common/ui/Toast";
 import { getBasePath } from "../utils/functions";
-import { setSummaryData } from "../kyc/services";
+import { setSummaryData } from "../business/appLanding/functions";
+import store from "../dataLayer/store";
+import { updateAppStorage } from "businesslogic/dataStore/reducers/app";
 
 const config = getConfig();
 const errorMessage = "Something went wrong!";
@@ -373,7 +375,12 @@ export async function otpLoginVerification(verify_url, body) {
 export const postLoginSetup = async (getKycResult) => {
   try {
     const kycResult = await getKycFromSummary();
-    storageService().set('dataSettedInsideBoot', true)
+    storageService().set('dataSettedInsideBoot', true);
+    store.dispatch(
+      updateAppStorage({
+        dataSettedInsideBoot: true,
+      })
+    );
     setSummaryData(kycResult);
     setBaseHref();
     const eventObj = {
@@ -409,6 +416,11 @@ export async function otpVerification(body) {
 
       storageService().set('dataSettedInsideBoot', true);
       setSummaryData(kycResult);
+      store.dispatch(
+        updateAppStorage({
+          dataSettedInsideBoot: true,
+        })
+      );
       let user = kycResult.data.user.user.data;
       userData.me = user;
       setBaseHref();
@@ -515,40 +527,31 @@ export async function getKycFromSummary(params = {}) {
 }
 
 export function redirectAfterLogin(data, user, navigateFunc) {
-  const kyc = storageService().getObject("kyc");
   const ipoContactNotVerified = storageService().get("ipoContactNotVerified") || false;
   const sdkStocksRedirection = storageService().getBoolean("sdkStocksRedirection");
   user = user || storageService().getObject("user");
   const navigate = navigateFunc || this.navigate;
   if (data.firstLogin) {
+    storageService().set("firstlogin", true);
     navigate("/referral-code", { state: { goBack: "/", communicationType: data?.contacts?.auth_type } });
   } else if (sdkStocksRedirection) {
     storageService().setBoolean("sdkStocksRedirection", false);
-    storageService().setBoolean("openEquityCallback", true);
-    navigate("/invest", { edit: true, state: { goBack: "/" } });
+    store.dispatch(
+      updateAppStorage({
+        openEquityCallback: true,
+      })
+    );
+    navigate("/", { edit: true, state: { goBack: "/" } });
   } else if (ipoContactNotVerified){
     storageService().set("ipoContactNotVerified", false);
-    navigate("/market-products", { state: { goBack: "/invest" } });
+    navigate("/market-products", { state: { goBack: "/" } });
   } else if (
     user.kyc_registration_v2 === "incomplete" &&
     user.active_investment
   ) {
-    navigate("/kyc/journey", { state: { goBack: "/invest" } });
-  } else if (
-    user.kyc_registration_v2 === "incomplete" &&
-    !user.active_investment
-  ) {
-    navigate("/invest", { edit: true, state: { goBack: "/" } });
-  } else if (
-    kyc &&
-    !kyc.pan.meta_data.pan_number &&
-    user.kyc_registration_v2 === "init"
-  ) {
-    navigate("/invest", { edit: true, state: { goBack: "/invest" } });
-  } else if (user.active_investment) {
-    navigate("/invest", { edit: true, state: { goBack: "/invest" } });
+    navigate("/kyc/journey", { state: { goBack: "/" } });
   } else {
-    navigate("/invest", { edit: true, state: { goBack: "/" } });
+    navigate("/", { edit: true, state: { goBack: "/" } });
   }
 }
 

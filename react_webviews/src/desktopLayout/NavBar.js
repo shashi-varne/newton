@@ -9,8 +9,8 @@ import { storageService } from "../utils/validators";
 import isEmpty from "lodash/isEmpty"
 
 const NavBar = (props) => {
-  const { code,logo, webLogo } = getConfig();
-  const navLogo = !isEmpty(webLogo) ? webLogo : logo;
+  const { code,logo, navLogo, navLogoClassname } = getConfig();
+  const navbarLogo = !isEmpty(navLogo) ? navLogo : logo;
   const navigate = navigateFunc.bind(props);
   const user = storageService().getObject('user');
   const isGuestUser = storageService().getBoolean('guestUser');
@@ -23,10 +23,11 @@ const NavBar = (props) => {
       <Toolbar className='navbar-container'>
         <div className='header-partner-logo'>
           <img
-            src={require(`assets/${navLogo}`)}
+            src={require(`assets/${navbarLogo}`)}
             alt={code}
             style={{ cursor: 'pointer' }}
-            onClick={() => navigate('/invest')}
+            onClick={() => navigate('/')}
+            className={navLogoClassname}
           />
         </div>
         <div className='navbar-right-container'>

@@ -1,0 +1,15 @@
+.atom-progress-bar {
+  width: 100%;
+  text-align: center;
+  padding: 10px 0px;
+
+  .atom-bar {
+    border-radius: 100px;
+    height: 4px;
+    width: 100%;
+  }
+
+  .atom-bar-content:last-child {
+    margin-right: 0;
+  }
+}

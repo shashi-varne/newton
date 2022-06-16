@@ -26,6 +26,7 @@ import store, { persistor } from './dataLayer/store/index.js';
 import { PersistGate } from 'redux-persist/integration/react';
 import LoginContainer from './login_and_registration/components/LoginContainer';
 import Logout from "./login_and_registration/pages/Logout/Logout";
+import AppInitialization from "./common/components/AppInitialization";
 
 const Prepare = lazy(() => import(
   /*webpackChunkName: "Prepare"*/ "./dashboard/Invest/components/SdkLanding/Prepare"
@@ -129,6 +130,7 @@ const App = () => {
               <ErrorBoundary>
                 <Suspense fallback={<BootSkeleton />}>
                   <Tooltip />
+                  <AppInitialization />
                   <RedirectToAnyPath />
                   <Switch>
                     {/* <Route
