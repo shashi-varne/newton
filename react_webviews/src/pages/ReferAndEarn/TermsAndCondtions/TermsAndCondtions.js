@@ -23,7 +23,7 @@ const TermsAndCondtions = ({ sendEvents, points = [] }) => {
         <ul>
           {points.map((item, index) => {
             return (
-              <li>
+              <li key={index}>
                 <Typography
                   variant="body2"
                   align="left"

@@ -11,7 +11,7 @@ import { capitalizeFirstLetter } from "../../../utils/validators";
 const STRINGS = WALLET_TRANSFERS;
 
 const StatusIconMapper = {
-  successfull: "iv_badge_successfull.svg",
+  success: "iv_badge_successfull.svg",
   failed: "iv_badge_failed.svg",
   pending: "iv_badge_pending.svg",
 };

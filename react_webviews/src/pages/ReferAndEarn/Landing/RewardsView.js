@@ -10,27 +10,29 @@ import {
 import InfoCard from "../../../designSystem/molecules/InfoCard";
 import { REFERRAL_LANDING } from "businesslogic/strings/referAndEarn";
 import { REWARDS_SCREEN_INFO_CARD_DATA } from "businesslogic/constants/referAndEarn";
+import { REFER_AND_EARN_PATHNAME_MAPPER } from "../common/constants";
 import "./Landing.scss";
 
 const STRINGS = REFERRAL_LANDING;
 const DATA = REWARDS_SCREEN_INFO_CARD_DATA;
+const { myReferrals, claimCashRewards, walletTransfer } =
+  REFER_AND_EARN_PATHNAME_MAPPER;
 
 const InfoCardExtraDataMapper = {
-  [DATA[0].id]: { asset: "iv_referrals.svg", navLink: "" },
-  [DATA[1].id]: { asset: "iv_rewards.svg", navLink: "" },
-  [DATA[2].id]: { asset: "iv_wallet.svg", navLink: "" },
+  [DATA[0].id]: { asset: "iv_referrals.svg", navLink: myReferrals },
+  [DATA[1].id]: { asset: "iv_rewards.svg", navLink: claimCashRewards },
+  [DATA[2].id]: { asset: "iv_wallet.svg", navLink: walletTransfer },
 };
 
 const RewardsView = ({
   productName = "fisdom",
-  noRewards,
+  onClickInfoCard,
+  noRewardsView,
   balance,
-  navigate,
 }) => {
-  console.log({ InfoCardExtraDataMapper });
   return (
     <>
-      {noRewards ? (
+      {noRewardsView ? (
         <NoRewardsView productName={productName} />
       ) : (
         <Stack sx={{ marginTop: "24px" }}>
@@ -51,14 +53,18 @@ const RewardsView = ({
             </LandingHeaderSubtitle>
           </LandingHeader>
           <Stack sx={{ width: "100%", marginTop: "32px" }}>
-            {DATA.map((item) => {
+            {DATA.map((item, index) => {
               return (
                 <WrapperBox
+                  key={index}
                   elevation={1}
                   sx={{ height: "100%", marginBottom: "16px" }}
-                  onclick={() =>
-                    navigate(InfoCardExtraDataMapper[item.id].navLink)
-                  }
+                  onClick={() => {
+                    onClickInfoCard(
+                      item.id,
+                      InfoCardExtraDataMapper[item.id].navLink
+                    );
+                  }}
                 >
                   <InfoCard
                     dataAid={item.dataAid}
@@ -82,7 +88,7 @@ const RewardsView = ({
 
 const NoRewardsView = ({ productName }) => {
   return (
-    <Stack justifyContent="center" alignItem="center" sx={{ height: "70vh" }}>
+    <Stack justifyContent="center" alignItems="center" sx={{ height: "70vh" }}>
       <LandingHeader
         variant="center"
         dataAid={STRINGS.noRewardsLandingHeader.dataAid}

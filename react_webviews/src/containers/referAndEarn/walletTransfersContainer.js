@@ -2,10 +2,19 @@ import React, { useEffect, useMemo, useState } from "react";
 import WalletTransfers from "../../pages/ReferAndEarn/WalletTransfer";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useLoadingState from "../../common/customHooks/useLoadingState";
 import useErrorState from "../../common/customHooks/useErrorState";
 import { WALLET_TRANSFERS_FILTER_DATA } from "businesslogic/constants/referAndEarn";
+import {
+  getWalletTransactions,
+  getWalletTransactionsData,
+} from "businesslogic/dataStore/reducers/referAndEarn";
+import Api from "../../utils/api";
+import { isEmpty } from "lodash-es";
+import { getFnsFormattedDate } from "../../pages/ReferAndEarn/common/utils";
+import { formatAmountInr } from "businesslogic/utils/common/functions";
+import ToastMessage from "../../designSystem/atoms/ToastMessage";
 
 const screen = "WALLET_TRANSFERS";
 
@@ -13,17 +22,37 @@ const walletTransfersContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const { isWeb } = useMemo(getConfig, []);
   const { isPageLoading } = useLoadingState(screen);
-  const { isUpdateFailed, isFetchFailed, errorMessage } = useErrorState(screen);
+  const { isFetchFailed, errorMessage } = useErrorState(screen);
   const [filterApplied, setFilterApplied] = useState(
     WALLET_TRANSFERS_FILTER_DATA[0].value
   );
+
+  const walletTransactions = useSelector(getWalletTransactionsData);
+  let walletTransactionsViewData = getWalletTransactionsViewData(
+    walletTransactions,
+    filterApplied
+  );
+
   const dispatch = useDispatch();
 
-  const initialize = () => {};
+  const initialize = () => {
+    dispatch(
+      getWalletTransactions({
+        Api: Api,
+        screen: screen,
+      })
+    );
+  };
 
   useEffect(() => {
     initialize();
   }, []);
+
+  useEffect(() => {
+    if (isFetchFailed && !isEmpty(errorMessage)) {
+      ToastMessage(errorMessage);
+    }
+  }, [isFetchFailed]);
 
   const sendEvents = (userAction) => {
     const eventObj = {
@@ -46,13 +75,11 @@ const walletTransfersContainer = (WrappedComponent) => (props) => {
     setFilterApplied(val);
   };
 
-  const onClickCopy = (id) => {};
-
   const onClickContact = () => {};
 
   return (
     <WrappedComponent
-      transactionData={dummyData}
+      transactionData={walletTransactionsViewData}
       isWeb={isWeb}
       filterApplied={filterApplied}
       handleWalletFilter={handleWalletFilter}
@@ -64,31 +91,31 @@ const walletTransfersContainer = (WrappedComponent) => (props) => {
   );
 };
 
-const dummyData = [
-  {
-    amount: "₹8,000",
-    date: "3 May, 2022",
-    account: "HDFC •••••••• 9220",
-    status: "pending",
-  },
-  {
-    amount: "₹2000",
-    date: "3 May, 2022",
-    account: "HDFC •••••••• 9220",
-    status: "successfull",
-  },
-  {
-    amount: "₹8,000",
-    date: "3 May, 2022",
-    account: "HDFC •••••••• 9220",
-    status: "successfull",
-  },
-  {
-    amount: "₹2000",
-    date: "3 May, 2022",
-    account: "HDFC •••••••• 9220",
-    status: "failed",
-  },
-];
+const getWalletTransactionsViewData = (walletTransactions, filterApplied) => {
+  let walletTransactionsViewData = walletTransactions.map((item, index) => {
+    const acc =
+      item?.to_account_number &&
+      item?.bank_name &&
+      `${item.bank_name}••••••••${item?.to_account_number?.substring(6)}`;
+    const date = getFnsFormattedDate(
+      item?.dt_updated,
+      "yyyy-MM-dd",
+      "dd MMM, yyyy"
+    );
+    return {
+      amount: formatAmountInr(item.amount),
+      date: date || "NA",
+      account: acc || "NA",
+      status: item.status,
+    };
+  });
+
+  if (!isEmpty(filterApplied) && filterApplied !== "all") {
+    walletTransactionsViewData = walletTransactionsViewData.filter(
+      (item) => item.status === filterApplied
+    );
+  }
+  return walletTransactionsViewData;
+};
 
 export default walletTransfersContainer(WalletTransfers);

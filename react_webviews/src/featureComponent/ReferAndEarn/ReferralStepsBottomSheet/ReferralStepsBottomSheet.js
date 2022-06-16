@@ -18,12 +18,12 @@ const dummyData = [
 
 const ReferralStepsBottomSheet = ({
   isOpen,
-  title = "Refer & earn cash rewards",
+  title = "",
   stepsData = dummyData,
   handleClose = noop,
   dataAid = "",
   isWeb = true,
-  refferalCode = "ABCD1234",
+  referralCode = "",
   onClickCopy = noop,
   onClickMail = noop,
   onClickShare = noop,
@@ -75,7 +75,7 @@ const ReferralStepsBottomSheet = ({
               stepCount={index + 1}
               stepCountColor={"foundationColors.primary.500"}
               stepColor={"foundationColors.primary.200"}
-              subtitle={item.text}
+              subtitle={item}
               subtitleColor={"foundationColors.content.primary"}
               showStepLine={index !== stepsData.length - 1}
             />
@@ -84,7 +84,7 @@ const ReferralStepsBottomSheet = ({
         <Stack className="rs-btm-share-wrapper">
           <ShareCodeComponent
             showCopyCode={isWeb}
-            refferalCode={refferalCode}
+            referralCode={referralCode}
             onClickCopy={onClickCopy}
             onClickMail={onClickMail}
             onClickShare={onClickShare}

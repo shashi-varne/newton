@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 import SuccessDetails from "../../pages/ReferAndEarn/SuccessDetails";
+import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../pages/ReferAndEarn/common/constants";
 
 const successDetailsContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
@@ -23,7 +24,9 @@ const successDetailsContainer = (WrappedComponent) => (props) => {
     }
   };
 
-  const onClickCta = () => {};
+  const onClickCta = () => {
+    navigate(REFER_AND_EARN_PATHNAME_MAPPER.walletTransfer);
+  };
 
   return (
     <WrappedComponent

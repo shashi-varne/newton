@@ -9,25 +9,32 @@ import RewardsView from "./RewardsView";
 import ShareCodeComponent from "../../../featureComponent/ReferAndEarn/ShareCodeComponet/ShareCodeComponent";
 import { REFERRAL_LANDING } from "businesslogic/strings/referAndEarn";
 import { LANDING_TABS_DATA } from "businesslogic/constants/referAndEarn";
-import { referralMockData } from "./mockData.js";
+import ReferralStepsBottomSheet from "../../../featureComponent/ReferAndEarn/ReferralStepsBottomSheet/ReferralStepsBottomSheet";
+import TransferNotAllowedBottomSheet from "../../../featureComponent/ReferAndEarn/TransferNotAllowedBottomSheet/TransferNotAllowedBottomSheet";
 import "./Landing.scss";
 
 const landing = ({
+  tabValue,
+  setTabValue,
   sendEvents,
   isWeb,
-  noRewards,
+  noRewardsView,
   balance,
   potentialAmount,
-  referralData = referralMockData,
-  referralCode = "ABCD1234",
+  referralData = [],
+  referralCode = "",
   onClickCopy,
   onClickMail,
   onClickShare,
+  onClickTnc,
   isPageLoading,
-  navigate,
+  activeSheetIndex,
+  setActiveSheetIndex,
+  onClickInfoCard,
+  showTransferNotAllowed,
+  setShowTransferNotAllowed,
 }) => {
   const [swiper, setSwiper] = useState(null);
-  const [tabValue, setTabValue] = useState(0);
   const { productName } = getConfig();
 
   const handleTabChange = (e, value) => {
@@ -57,7 +64,7 @@ const landing = ({
         tabChilds: LANDING_TABS_DATA,
       }}
       renderComponentAboveFooter={
-        noRewards &&
+        noRewardsView &&
         tabValue === 1 && (
           <Box style={{ marginBottom: "16px" }}>
             <ShareCodeComponent
@@ -89,20 +96,54 @@ const landing = ({
             isWeb={isWeb}
             data={referralData}
             referralCode={referralCode}
-            onClickCopy={onClickCopy}
-            onClickMail={onClickMail}
-            onClickShare={onClickShare}
+            setActiveSheetIndex={setActiveSheetIndex}
+            onClickTnc={onClickTnc}
           />
         </SwiperSlide>
         <SwiperSlide key={2}>
           <RewardsView
             balance={balance}
             productName={productName}
-            noRewards={noRewards}
-            navigate={navigate}
+            noRewardsView={noRewardsView}
+            onClickInfoCard={onClickInfoCard}
           />
         </SwiperSlide>
       </CustomSwiper>
+      <ReferralStepsBottomSheet
+        isOpen={activeSheetIndex !== -1}
+        title={
+          activeSheetIndex !== -1
+            ? referralData[activeSheetIndex].bottomSheetData.title
+            : ""
+        }
+        stepsData={
+          activeSheetIndex !== -1
+            ? referralData[activeSheetIndex].bottomSheetData.stepsData
+            : []
+        }
+        handleClose={() => {
+          setActiveSheetIndex(-1);
+        }}
+        dataAid={
+          activeSheetIndex !== -1
+            ? referralData[activeSheetIndex].bottomSheetData.dataAid
+            : ""
+        }
+        isWeb={isWeb}
+        referralCode={referralCode}
+        onClickCopy={() => onClickCopy(activeSheetIndex)}
+        onClickMail={() => onClickMail(activeSheetIndex)}
+        onClickShare={() => onClickShare(activeSheetIndex)}
+      />
+      <TransferNotAllowedBottomSheet
+        isOpen={showTransferNotAllowed}
+        handleClose={() => setShowTransferNotAllowed(false)}
+        isWeb={isWeb}
+        referralCode={referralCode}
+        onClickCopy={onClickCopy}
+        onClickMail={onClickMail}
+        onClickCta={onClickShare}
+      />
     </Container>
   );
 };

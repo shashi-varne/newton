@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Stack from "@mui/material/Stack";
 import Typography from "../../../designSystem/atoms/Typography";
 import WrapperBox from "../../../designSystem/atoms/WrapperBox";
@@ -12,21 +12,15 @@ import {
 } from "../../../designSystem/molecules/LandingHeader";
 import CardHorizontal from "../../../designSystem/molecules/CardHorizontal";
 import { Box } from "@mui/system";
-import ReferralStepsBottomSheet from "../../../featureComponent/ReferAndEarn/ReferralStepsBottomSheet/ReferralStepsBottomSheet";
 import "./Landing.scss";
 
 const ReferralsView = ({
-  isWeb,
   productName,
   potentialAmount,
   data,
-  referralCode,
-  onClickCopy,
-  onClickMail,
-  onClickShare,
+  setActiveSheetIndex,
+  onClickTnc,
 }) => {
-  const [activeSheetIndex, setActiveSheetIndex] = useState(-1);
-
   return (
     <Stack sx={{ marginTop: "24px" }}>
       <LandingHeader
@@ -79,32 +73,16 @@ const ReferralsView = ({
           );
         })}
       </Stack>
-      <ReferralStepsBottomSheet
-        isOpen={activeSheetIndex !== -1}
-        title={
-          activeSheetIndex !== -1
-            ? data[activeSheetIndex].bottomSheetData.title
-            : ""
-        }
-        stepsData={
-          activeSheetIndex !== -1
-            ? data[activeSheetIndex].bottomSheetData.stepsData
-            : []
-        }
-        handleClose={() => {
-          setActiveSheetIndex(-1);
-        }}
-        dataAid={
-          activeSheetIndex !== -1
-            ? data[activeSheetIndex].bottomSheetData.dataAid
-            : ""
-        }
-        isWeb={isWeb}
-        refferalCode={referralCode}
-        onClickCopy={() => onClickCopy(activeSheetIndex)}
-        onClickMail={() => onClickMail(activeSheetIndex)}
-        onClickShare={() => onClickShare(activeSheetIndex)}
-      />
+      <Stack sx={{ width: "100%", marginTop: "40px" }}>
+        <Typography
+          onClick={onClickTnc}
+          variant="body5"
+          color="foundationColors.content.tertiary"
+          align="center"
+        >
+          *View T&Cs
+        </Typography>
+      </Stack>
     </Stack>
   );
 };

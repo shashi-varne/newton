@@ -6,8 +6,8 @@ import { WALLET_TRANSFERS_FILTER_DATA } from "businesslogic/constants/referAndEa
 import { Box, Stack } from "@mui/material";
 import { Pill, Pills } from "../../../designSystem/atoms/Pills";
 import WalletTransactionListItem from "../../../featureComponent/ReferAndEarn/WalletTransactionListItem";
-
 import "./WalletTransfers.scss";
+
 const STRINGS = WALLET_TRANSFERS;
 
 const WalletTransfers = ({
@@ -55,8 +55,8 @@ const WalletTransfers = ({
             <WalletTransactionListItem
               key={index}
               amount={item.amount}
-              date={item.date}
-              account={item.account}
+              date={item.date || "NA"}
+              account={item.account || "NA"}
               status={item.status}
               showSeparator={!isLastItem}
               dataAid={`${index + 1}`}

@@ -8,6 +8,7 @@ import Icon from "../../../designSystem/atoms/Icon";
 import Button from "../../../designSystem/atoms/Button";
 import Separator from "../../../designSystem/atoms/Separator";
 import "./MyReferrals.scss";
+import { inrFormatDecimal } from "../../../utils/validators";
 
 const STRINGS = MY_REFERRALS;
 
@@ -45,7 +46,7 @@ const MyReferrals = ({
             color="foundationColors.content.primary"
             dataAid={STRINGS.earnedCash.valueDataAid}
           >
-            {totalEarned}
+            {inrFormatDecimal(totalEarned, 0)}
           </Typography>
         </Stack>
         <Stack alignItems="flex-end">
@@ -84,6 +85,7 @@ const MyReferrals = ({
               label={item.title}
               showNotification={item.showNotification}
               onClick={onClickListItem}
+              data={item.events}
               dataAid={`${index + 1}`}
               onClickCopy={onClickCopy}
               showSeparator={!isLastItem}

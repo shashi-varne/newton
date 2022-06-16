@@ -1,34 +1,48 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ClaimCashRewards from "../../pages/ReferAndEarn/ClaimCashRewards";
-import { getConfig, navigate as navigateFunc } from "../../utils/functions";
+import { navigate as navigateFunc } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useLoadingState from "../../common/customHooks/useLoadingState";
-import useErrorState from "../../common/customHooks/useErrorState";
 import { isEmpty } from "lodash-es";
 import { ERROR_MESSAGES } from "businesslogic/constants/referAndEarn";
-
+import {
+  getWalletBalance,
+  getWalletBalanceData,
+} from "businesslogic/dataStore/reducers/referAndEarn";
+import { trigger_wallet_transfer } from "businesslogic/apis/referAndEarn";
+import Api from "../../utils/api";
+import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../pages/ReferAndEarn/common/constants";
 const screen = "CLAIM_CASH_REWARDS";
 
 const claimCashRewardsContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
-  const { isWeb } = useMemo(getConfig, []);
   const { isPageLoading } = useLoadingState(screen);
-  const { isUpdateFailed, isFetchFailed, errorMessage } = useErrorState(screen);
 
+  const walletBalance = useSelector(getWalletBalanceData);
+  const totalBalance = walletBalance.total_amount;
+  const minAmount = walletBalance.min_withdraw_limit;
+  const [showErrorBottomSheet, setShowErrorBottonSheet] = useState(false);
   //Temporary data: these will come from api
-  const totalBalance = 2000;
-  const minAmount = 200;
   const accDetails = { name: "HFFC", number: "9220" };
   //end Temporary data: these will come from api
 
-  const [amount, setAmount] = useState(minAmount);
+  const [amount, setAmount] = useState("");
   const [inputError, setInputError] = useState("");
   const [transferFullFlag, setTransferFullFlag] = useState(false);
 
   const dispatch = useDispatch();
 
-  const initialize = () => {};
+  const initialize = () => {
+    if (isEmpty(walletBalance)) {
+      dispatch(
+        getWalletBalance({
+          Api: Api,
+          screen: screen,
+        })
+      );
+    }
+  };
 
   useEffect(() => {
     initialize();
@@ -77,6 +91,17 @@ const claimCashRewardsContainer = (WrappedComponent) => (props) => {
     setTransferFullFlag(!transferFullFlag);
   };
 
+  const onClickTransfer = async () => {
+    try {
+      const resp = await trigger_wallet_transfer(Api, { amount });
+      console.log({ resp });
+      navigate(REFER_AND_EARN_PATHNAME_MAPPER.successDetails);
+    } catch (error) {
+      console.error(error);
+      setShowErrorBottonSheet(true);
+    }
+  };
+
   return (
     <WrappedComponent
       minAmount={minAmount}
@@ -92,6 +117,9 @@ const claimCashRewardsContainer = (WrappedComponent) => (props) => {
       accDetails={accDetails}
       transferFullFlag={transferFullFlag}
       onCheckTransferFull={onCheckTransferFull}
+      onClickTransfer={onClickTransfer}
+      showErrorBottomSheet={showErrorBottomSheet}
+      setShowErrorBottonSheet={setShowErrorBottonSheet}
     />
   );
 };

@@ -9,7 +9,10 @@ import InputField from "../../../designSystem/molecules/InputField";
 import { isEmpty } from "lodash-es";
 import Checkbox from "../../../designSystem/atoms/Checkbox/Checkbox";
 import "./ClaimCashRewards.scss";
+import BottomSheet from "../../../designSystem/organisms/BottomSheet/BottomSheet";
+import { BOTTOM_SHEET_CONTENT } from "businesslogic/strings/referAndEarn";
 
+const { transferFailed } = BOTTOM_SHEET_CONTENT;
 const STRINGS = CLAIM_CASH_REWARDS;
 
 const ClaimCashRewards = ({
@@ -25,6 +28,8 @@ const ClaimCashRewards = ({
   onCheckTransferFull,
   onClickTransfer,
   sendEvents,
+  showErrorBottomSheet,
+  setShowErrorBottonSheet,
 }) => {
   return (
     <Container
@@ -97,6 +102,20 @@ const ClaimCashRewards = ({
           {`Note: Amount will be credited to your ${accDetails.name} account ending with ${accDetails.number}`}
         </Typography>
       </Stack>
+      <BottomSheet
+        dataAid={transferFailed.dataAid}
+        isOpen={showErrorBottomSheet}
+        onClose={() => {
+          setShowErrorBottonSheet(false);
+        }}
+        title={transferFailed.title}
+        imageTitleSrc={require(`assets/caution.svg`)}
+        subtitle={transferFailed.subtitle}
+        primaryBtnTitle={transferFailed.cta}
+        onPrimaryClick={() => {
+          setShowErrorBottonSheet(false);
+        }}
+      />
     </Container>
   );
 };

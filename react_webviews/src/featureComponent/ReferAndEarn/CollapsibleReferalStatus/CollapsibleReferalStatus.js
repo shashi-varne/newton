@@ -21,9 +21,9 @@ const CollapsibleReferalStatus = ({
   sx,
   dataAid = 0,
   onClickCopy,
-  showNotification = true,
+  showNotification,
   showSeparator = true,
-  data = dummyData,
+  data = [],
   productName = "fisdom",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -42,7 +42,11 @@ const CollapsibleReferalStatus = ({
       >
         <div className="c-label-wrapper" onClick={handleCollapse}>
           <Stack direction="row" alignItems="center">
-            <Badge variant="dot" overlap="circular">
+            <Badge
+              variant="dot"
+              overlap="circular"
+              invisible={!showNotification}
+            >
               <Icon
                 invisible={!showNotification}
                 dataAid={STRINGS.cardImageDataAid}
@@ -80,10 +84,10 @@ const CollapsibleReferalStatus = ({
                 justifyContent="space-between"
               >
                 <Stack>
-                  <Typography variant="body2" dataAid={item.dataAid}>
-                    {item?.label}
+                  <Typography variant="body2" dataAid={item?.dataAid}>
+                    {item?.name}
                   </Typography>
-                  {item?.status === "pending" && (
+                  {item?.event_pending === true && (
                     <Typography
                       variant="body2"
                       color="foundationColors.secondary.coralOrange.400"
@@ -93,7 +97,7 @@ const CollapsibleReferalStatus = ({
                     </Typography>
                   )}
                 </Stack>
-                {item?.status === "complete" ? (
+                {item?.event_pending === false ? (
                   <TickAnimationComp
                     isOpen={isOpen}
                     amount={item?.amount}
@@ -102,7 +106,7 @@ const CollapsibleReferalStatus = ({
                 ) : (
                   <Button
                     title={STRINGS.copyBtn.text}
-                    onClick={() => onClickCopy(id)}
+                    onClick={() => onClickCopy(id, index)}
                     variant={"link"}
                     dataAid={STRINGS.copyBtn.dataAid}
                     sx={{ alignSelf: "flex-start" }}
@@ -173,20 +177,5 @@ CollapsibleReferalStatus.propTypes = {
   onClick: PropTypes.func.isRequired,
   dataAid: PropTypes.string,
 };
-
-const dummyData = [
-  {
-    label: "Demat account",
-    status: "complete",
-    amount: "₹100",
-    dataAid: "dematAccount",
-  },
-  {
-    label: "SIP or one-time investment",
-    status: "pending",
-    amount: " ₹100",
-    dataAid: "sip",
-  },
-];
 
 export default CollapsibleReferalStatus;

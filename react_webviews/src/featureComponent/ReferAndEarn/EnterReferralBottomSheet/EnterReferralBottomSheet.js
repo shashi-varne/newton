@@ -8,6 +8,7 @@ import { Box } from "@mui/system";
 import InputField from "../../../designSystem/molecules/InputField";
 import { isEmpty, noop } from "lodash-es";
 const STRINGS = BOTTOMSHEETS_CONTENT.enterReferral;
+
 const EnterReferralBottomSheet = ({
   isOpen,
   value = "",

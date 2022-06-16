@@ -11,7 +11,7 @@ const TransferNotAllowedBottomSheet = ({
   isOpen,
   handleClose = noop,
   isWeb = true,
-  refferalCode = "ABCD1234",
+  referralCode = "",
   onClickCopy = noop,
   onClickMail = noop,
   onClickCta = noop,
@@ -28,7 +28,7 @@ const TransferNotAllowedBottomSheet = ({
       renderButtonComponent={
         <ShareCodeComponent
           showCopyCode={isWeb}
-          refferalCode={refferalCode}
+          referralCode={referralCode}
           onClickCopy={onClickCopy}
           onClickMail={onClickMail}
           onClickCta={onClickCta}

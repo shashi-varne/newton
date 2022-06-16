@@ -13,7 +13,7 @@ const STRINGS = SHARE_COMPONENT;
 const ShareCodeComponent = ({
   showCopyCode = true,
   showWhatsappShare = false,
-  refferalCode = "",
+  referralCode = "",
   onClickCopy = noop,
   onClickMail = noop,
   onClickShare = noop,
@@ -25,7 +25,7 @@ const ShareCodeComponent = ({
     <Stack flexDirection="row" spacing={1} className="ref-share-code-wrapper">
       {showCopyCode ? (
         <CopyCodeComponent
-          refferalCode={refferalCode}
+          referralCode={referralCode}
           onClickCopy={onClickCopy}
           onClickMail={onClickMail}
           customToastClassName={customToastClassName}
@@ -73,13 +73,13 @@ const WhatsAppShareCta = ({ onClickShare, onClickCta, ctaText }) => {
 };
 
 const CopyCodeComponent = ({
-  refferalCode,
+  referralCode,
   onClickCopy,
   onClickMail,
   customToastClassName = "",
 }) => {
-  const handleCopy = () => {
-    onClickCopy();
+  const handleCopy = async () => {
+    await onClickCopy();
     ToastMessage(STRINGS.toastMessage, "default", customToastClassName);
   };
 
@@ -95,7 +95,7 @@ const CopyCodeComponent = ({
           variant="actionText"
           color="foundationColors.content.secondary"
         >
-          {refferalCode}
+          {referralCode}
         </Typography>
         <Button
           title={STRINGS.copyCode}
