@@ -7,7 +7,7 @@ import { storageService } from "../utils/validators";
 import { apiConstants, kycStatusMapperInvest } from "./Invest/constants";
 /* eslint-disable */
 export function isInvestRefferalRequired(partner_code) {
-  if (partner_code === "ktb") {
+  if (["ktb", "tmb"].includes(partner_code)) {
     return true;
   }
   return false;

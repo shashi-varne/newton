@@ -28,3 +28,17 @@
     }
   }
 }
+
+@media only screen and (max-width: 700px) {
+  #kyc-bottom-dialog {
+    .MuiDialog-paper {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+
+    .MuiDialog-paperWidthSm {
+      width: 100%;
+      align-self: flex-end;
+    }
+  }
+}

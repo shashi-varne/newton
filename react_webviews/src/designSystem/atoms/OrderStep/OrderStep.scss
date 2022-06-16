@@ -1,14 +1,33 @@
 .atom-order-step {
-  .aos-circle {
-    border-radius: 50%;
-    min-width: 32px;
-    min-height: 32px;
+  .aos-grp {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    align-self: stretch;
+    min-width: 32px;
+    overflow: hidden;
 
-    .aos-step-content {
-      line-height: 23px;
+    .aos-circle {
+      display: flex;
+      border-radius: 50%;
+      min-width: 32px;
+      min-height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .aos-step-content {
+        line-height: 23px;
+      }
     }
+
+    .aos-line {
+      max-width: 1px;
+      align-self: center;
+    }
+  }
+
+  .aos-title {
+    display: flex;
+    flex-grow: 1;
   }
 }

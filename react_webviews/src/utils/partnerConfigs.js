@@ -332,6 +332,8 @@ export const partnerConfigs = {
   },
   ktb: {
     code: "ktb",
+    webLogo: "ktb_bank.svg",
+    logoWidth: "200px",
     email: "kbl@fisdom.com",
     mobile: "+91-7829229997",
     styles: {
@@ -403,6 +405,7 @@ export const partnerConfigs = {
   },
   hbl: {
     logo: "hbl.svg",
+    logoWidth: "200px",
     code: "hbl",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
@@ -475,6 +478,8 @@ export const partnerConfigs = {
   },
   indb: {
     code: "indb",
+    webLogo: "indb_bank.svg",
+    logoWidth: "200px",
     mobile: "+80-48-093070",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
@@ -518,6 +523,7 @@ export const partnerConfigs = {
   taxwin: {
     code: "taxwin",
     logo: "taxwin.svg",
+    logoWidth: "200px",
     investSections: ["kyc", "ourRecommendations"],
     investSubSectionMap: {
       ourRecommendations: [
@@ -533,6 +539,7 @@ export const partnerConfigs = {
   },
   quesscorp: {
     logo: "quesscorp.svg",
+    logoWidth: "200px",
     code: 'quesscorp',
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
@@ -565,6 +572,8 @@ export const partnerConfigs = {
   ucomb: {
     code: "ucomb",
     logo: "ucomb.svg",
+    webLogo: "ucomb_bank.svg",
+    logoWidth: "200px",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
       stocksAndIpo: ["stocks", "ipo"],
@@ -594,6 +603,8 @@ export const partnerConfigs = {
   bom: {
     code: "bom",
     logo: "bom.png",
+    webLogo: "bom_bank.svg",
+    logoWidth: "200px",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
       ourRecommendations: ["instaredeem", "buildwealth", "savetax"],

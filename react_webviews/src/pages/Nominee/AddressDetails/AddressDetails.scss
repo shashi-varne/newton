@@ -1,0 +1,23 @@
+.nominee-address-details {
+  background-color: white;
+
+  .nominee-address-wrapper {
+    padding-bottom: 40px;
+  }
+
+  .input-field-wrapper {
+    margin-top: 16px;
+  }
+
+  .molecule-dropdown,
+  .nad-info-wrapper {
+    margin-top: 16px;
+    position: relative;
+
+    .nad-info-img {
+      width: 1px !important;
+      height: 1px !important;
+      position: absolute;
+    }
+  }
+}

@@ -20,6 +20,8 @@ import {
   inputLabelStyleOverRides,
   outlinedTextFieldStyleOverRides,
 } from './textfield';
+import { dropdownStyleOverRides } from './dropdown';
+
 const defaultTheme = createTheme();
 
 const getTheme = () => {
@@ -104,6 +106,9 @@ const getTheme = () => {
       MuiBadge: {
         styleOverrides: badgeStyleOverRides(colors, partnerConfig),
       },
+      MuiSelect: {
+        styleOverrides: dropdownStyleOverRides(colors, partnerConfig),
+      }
     },
     shadows: customShadows()
   };
