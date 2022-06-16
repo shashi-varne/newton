@@ -6,7 +6,7 @@ import { WITHDRAW_PLACED } from "businesslogic/strings/referAndEarn";
 import { Stack } from "@mui/material";
 import "./WithdrawPlaced.scss";
 
-const sound = require(""); // Audio file path to be added
+const sound = require("assets/audio/success.mp3"); // Audio file path to be added
 const STRINGS = WITHDRAW_PLACED;
 
 const WithdrawPlaced = ({ productName = "fisdom", sendEvents }) => {
