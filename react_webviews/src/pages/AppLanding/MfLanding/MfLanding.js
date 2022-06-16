@@ -49,7 +49,7 @@ const MfLanding = ({
         ...restProps,
       })}
       <TrustIcon
-        dataAid="1"
+        dataAid={baseConfig.productName}
         variant="registration"
         className="mfl-trust-icon"
       />
