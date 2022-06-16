@@ -269,6 +269,15 @@ export const partnerConfigs = {
       "financialTools",
       "marketingBanners",
     ],
+    mfOptions: ["equity", "debt", "hybrid"],
+    investingOptions: [
+      "nfo",
+      "buildwealth",
+      "elss",
+      "savegoal",
+      "parkmoney",
+      "instaredeem",
+    ],
     landingMarketingBanners: PRODUCT_MARKETING_BANNERS,
   },
   bfdlmobile: {

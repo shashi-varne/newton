@@ -65,21 +65,36 @@ export const MF_LANDING = {
   },
   kycDataAid: "kyc",
   investmentOptions: {
-    title: "Investors’ favourites",
-    dataAid: "InvestorFavourites",
+    fisdom: {
+      title: "Investors’ favourites",
+      dataAid: "investorFavourites",
+    },
+    finity: {
+      title: "Explore all mutual funds",
+      dataAid: "manageInvestments",
+    },
   },
   exploreCategories: {
-    title: "Explore by categories",
-    dataAid: "exploreCategories",
+    fisdom: {
+      title: "Explore by categories",
+      dataAid: "exploreCategories",
+    },
+    finity: {
+      title: "Finity recommendations",
+      dataAid: "finityRecommendation",
+      buttonTitle: "See All",
+    },
   },
   passiveIndexFunds: {
     title: "Passive index funds",
     subtitle: "*Earn upto 2% more than actively managed funds",
     buttonTitle: "EXPLORE",
     footerText: "NIFTY has outperformed 90% of the large-cap funds",
-    bottomText: "*Based on TER averages of regular large cap and direct index funds",
-    icon: "finity/passive_index.svg",
+    bottomText:
+      "*Based on TER averages of regular large cap and direct index funds",
+    icon: "passive_index.svg",
     dataAid: "heroCard",
+    id: "passiveIndexFunds",
   },
 };
 

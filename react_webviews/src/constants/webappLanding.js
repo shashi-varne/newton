@@ -179,9 +179,33 @@ export const INVESTMENT_OPTIONS = {
     icon: "passive.svg",
     title: "Passive Index funds",
     subtitle: "Superior return and money available 24x7",
-    eventStatus: "Insta redemption funds",
+    eventStatus: "passive index funds",
     id: "passiveIndexFunds",
     dataAid: "passiveIndexFunds",
+  },
+  equity: {
+    icon: `diy_equity.svg`,
+    title: "Equity",
+    subtitle: "Large, mid and samll-sized companies",
+    dataAid: "equity",
+    eventStatus: "equity",
+    id: "equity",
+  },
+  debt: {
+    icon: "diy_debt.svg",
+    title: "Debt",
+    subtitle: "Stable returns with bonds & securities",
+    dataAid: "debt",
+    eventStatus: "debt",
+    id: "debt",
+  },
+  hybrid: {
+    icon: "diy_hybrid.svg",
+    title: "Hybrid",
+    subtitle: "Perfect balance of equity & debt",
+    dataAid: "hybrid",
+    eventStatus: "hybrid",
+    id: "hybrid",
   },
 };
 
@@ -209,9 +233,9 @@ export const EXPLORE_CATEGORIES = [
   },
 ];
 
-export const FINITY_RECOMMENDATIONS = [
+export const FINITY_EXPLORE_CATEGORIES = [
   {
-    icon: `equity.svg`,
+    icon: `nifty.svg`,
     title: "Nifty backers",
     dataAid: "nifity",
     id: "nifty",
@@ -239,7 +263,49 @@ export const EXPLORE_CATEGORY_DATA = {
   finity: {
     title: "Our recommendations",
     dataAid: "ourRecommendations",
+    options: FINITY_EXPLORE_CATEGORIES,
+  },
+};
+
+export const FINITY_RECOMMENDATIONS = [
+  {
+    icon: `new_fund_offer.svg`,
+    title: "New fund offer (NFO)",
+    dataAid: "newFundOffer",
+    id: "nfo",
+  },
+  {
+    icon: "sensex.svg",
+    title: "High growth funds",
+    dataAid: "highGrowth",
+    id: "buildwealth",
+  },
+  {
+    icon: `tax_save.svg`,
+    title: "Tax saving funds (ELSS)",
+    dataAid: "taxSaving",
+    id: "elss",
+  },
+  {
+    icon: `view_more.svg`,
+    title: "More investing options",
+    dataAid: "moreInvestingOptions",
+    id: "investingOptions",
+  },
+];
+
+export const MF_EXPLORE_CATEGORY_DATA = {
+  fisdom: {
+    title: "Explore by categories",
+    dataAid: "exploreCategories",
+    options: EXPLORE_CATEGORIES,
+  },
+  finity: {
+    title: "Finity recommendations",
+    dataAid: "finityRecommendation",
+    buttonTitle: "See All",
     options: FINITY_RECOMMENDATIONS,
+    className: "al-ec-content",
   },
 };
 

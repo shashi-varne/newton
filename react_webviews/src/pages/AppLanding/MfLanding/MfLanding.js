@@ -73,13 +73,15 @@ const renderCards = ({
   showKycCard,
   kycData,
   marketingBanners,
-  investmentOptions,
-  exploreCategories,
+  investOptionsData,
+  exploreCategoriesData,
   handleKyc,
   handleCardClick,
   handleExploreCategories,
   onMarketingBannerClick,
   mfSections,
+  showPassiveFunds,
+  baseConfig,
 }) => {
   const cardsMapper = {
     marketingBanners: (
@@ -96,7 +98,7 @@ const renderCards = ({
       <>
         {showKycCard && (
           <CardHorizontal
-            rightImgSrc={require(`assets/fisdom/${kycData.icon}`)}
+            rightImgSrc={require(`assets/${baseConfig.productName}/${kycData.icon}`)}
             title={kycData.title}
             description={kycData.subtitle}
             descriptionColor={
@@ -120,41 +122,48 @@ const renderCards = ({
     ),
     passiveIndexFunds: (
       <>
-        <div className="mfl-kyc">
-          <CardHorizontal
-            rightImgSrc={require(`assets/${passiveIndexFundsData.icon}`)}
-            title={passiveIndexFundsData.title}
-            subtitle={passiveIndexFundsData.subtitle}
-            actionLink={passiveIndexFundsData.buttonTitle}
-            variant="heroCard"
-            dataAid={passiveIndexFundsData.dataAid}
-            footerText={passiveIndexFundsData.footerText}
-            // onClick={handleKyc(kycData.eventStatus)}
-          />
-          <Typography
-            variant="body6"
-            dataAid="helperText"
-            color="foundationColors.content.secondary"
-          >
-            *Based on TER averages of regular large cap and direct index funds
-          </Typography>
-        </div>
+        {showPassiveFunds && (
+          <>
+            <div className="mfl-kyc">
+              <CardHorizontal
+                rightImgSrc={require(`assets/${baseConfig.productName}/${passiveIndexFundsData.icon}`)}
+                title={passiveIndexFundsData.title}
+                subtitle={passiveIndexFundsData.subtitle}
+                actionLink={passiveIndexFundsData.buttonTitle}
+                variant="heroCard"
+                dataAid={passiveIndexFundsData.dataAid}
+                footerText={passiveIndexFundsData.footerText}
+                onClick={handleCardClick(passiveIndexFundsData)}
+              />
+              <Typography
+                variant="body6"
+                dataAid="helperText"
+                color="foundationColors.content.secondary"
+              >
+                *Based on TER averages of regular large cap and direct index
+                funds
+              </Typography>
+            </div>
+          </>
+        )}
       </>
     ),
     mfOptions: (
       <InvestmentOptions
-        titleDataAid={MF_LANDING.investmentOptions.dataAid}
-        title={MF_LANDING.investmentOptions.title}
-        productList={investmentOptions}
+        titleDataAid={investOptionsData.dataAid}
+        title={investOptionsData.title}
+        productList={investOptionsData.options}
         onClick={handleCardClick}
       />
     ),
     exploreCategories: (
       <ExploreCategories
-        titleDataAid={MF_LANDING.exploreCategories.dataAid}
-        title={MF_LANDING.exploreCategories.title}
-        categories={exploreCategories}
+        titleDataAid={exploreCategoriesData.dataAid}
+        title={exploreCategoriesData.title}
+        categories={exploreCategoriesData.options}
         onClick={handleExploreCategories}
+        className={exploreCategoriesData.className}
+        buttonTitle={exploreCategoriesData.buttonTitle}
       />
     ),
   };

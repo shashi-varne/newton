@@ -9,7 +9,7 @@ import {
   handleMarketingBanners,
 } from "../../business/appLanding/functions";
 import {
-  EXPLORE_CATEGORIES,
+  MF_EXPLORE_CATEGORY_DATA,
   WEBAPP_LANDING_PATHNAME_MAPPER,
 } from "../../constants/webappLanding";
 import {
@@ -22,6 +22,7 @@ import { useSelector } from "react-redux";
 import { getAppData } from "businesslogic/dataStore/reducers/app";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import { isEmpty } from "lodash-es";
+import { MF_LANDING } from "../../strings/webappLanding";
 
 const initializeData = () => {
   const {
@@ -38,13 +39,20 @@ const initializeData = () => {
     landingMarketingBanners,
     enabledFeatures
   );
+  const investOptionsData = {
+    ...MF_LANDING.investmentOptions[baseConfig.productName],
+    options: investCardsData,
+  };
+  const categoriesData = MF_EXPLORE_CATEGORY_DATA[baseConfig.productName];
   return {
     code,
     marketingBanners,
-    investCardsData,
     isMfOnly,
     baseConfig,
     mfSections,
+    enabledFeatures,
+    investOptionsData,
+    exploreCategoriesData: categoriesData,
   };
 };
 
@@ -63,9 +71,11 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
     code,
     marketingBanners,
     baseConfig,
-    investCardsData,
+    investOptionsData,
     isMfOnly,
     mfSections,
+    enabledFeatures,
+    exploreCategoriesData,
   } = useMemo(initializeData, [partner, subscriptionStatus, kyc]);
   const { updateKyc } = useUserKycHook();
 
@@ -199,11 +209,12 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
     <WrappedComponent
       showPartnership={baseConfig.isSdk}
       mfSections={mfSections}
+      baseConfig={baseConfig}
       kycData={kycData.kycStatusData}
       kycBottomsheetData={kycBottomsheetData}
       marketingBanners={marketingBanners}
-      investmentOptions={investCardsData}
-      exploreCategories={EXPLORE_CATEGORIES}
+      investOptionsData={investOptionsData}
+      exploreCategoriesData={exploreCategoriesData}
       showMarketingBanners={
         !isEmpty(marketingBanners) && kycData.isReadyToInvestBase
       }
@@ -242,6 +253,7 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
         },
         props
       )}
+      showPassiveFunds={enabledFeatures.passiveIndexFunds}
     />
   );
 };

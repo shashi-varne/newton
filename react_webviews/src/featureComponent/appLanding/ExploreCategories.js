@@ -3,18 +3,29 @@ import Typography from "../../designSystem/atoms/Typography";
 import CardVertical from "../../designSystem/molecules/CardVertical";
 import CustomSwiper from "../../designSystem/molecules/CustomSwiper";
 import { SwiperSlide } from "swiper/react";
+import Button from "../../designSystem/atoms/Button";
+import { Stack } from "@mui/material";
 
-const ExploreCategories = ({ categories = [], title, titleDataAid, onClick }) => {
+const ExploreCategories = ({
+  categories = [],
+  title,
+  titleDataAid,
+  onClick,
+  className = "",
+  buttonTitle,
+}) => {
   return (
-    <div className="al-explore-categories">
-      <Typography
-        component="div"
+    <div className={`al-explore-categories ${className}`}>
+      <Stack
+        justifyContent="space-between"
+        flexDirection="row"
         className="al-ec-title"
-        variant="heading4"
-        dataAid={titleDataAid}
       >
-        {title}
-      </Typography>
+        <Typography component="div" variant="heading4" dataAid={titleDataAid}>
+          {title}
+        </Typography>
+        {buttonTitle && <Button title={buttonTitle} variant="link" />}
+      </Stack>
       <CustomSwiper
         spaceBetween={8}
         speed={500}

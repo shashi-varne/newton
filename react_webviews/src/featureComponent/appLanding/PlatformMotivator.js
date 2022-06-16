@@ -16,13 +16,15 @@ const PlatformMotivator = ({ icon, title, subtitle, dataAid }) => {
       data-aid={`carousel_${dataAid}`}
     >
       {icon && (
-        <Lottie
-          animationData={require(`assets/${productName}/lottie/${icon}`)}
-          autoPlay
-          loop
-          data-aid="iv_left"
-          className="pm-left-image"
-        />
+        <div className="pm-left-wrapper">
+          <Lottie
+            animationData={require(`assets/${productName}/lottie/${icon}`)}
+            autoPlay
+            loop
+            data-aid="iv_left"
+            className="pm-left-image"
+          />
+        </div>
       )}
       <div className="pm-text-wrapper">
         <Typography variant="heading4" component="div" dataAid="title">

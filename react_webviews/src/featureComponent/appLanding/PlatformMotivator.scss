@@ -6,8 +6,17 @@
   align-items: center;
   width: 295px;
 
-  .pm-left-img {
+  .pm-left-image {
     margin-right: 16px;
+    width: 64px;
+    height: 64px;
+  }
+
+  .pm-left-wrapper {
+    background-color: white;
+    border-radius: 50%;
+    width: 64px;
+    height: 64px;
   }
 
   .pm-text-wrapper {
