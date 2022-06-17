@@ -75,11 +75,15 @@ const claimCashRewardsContainer = (WrappedComponent) => (props) => {
   };
 
   const sendEvents = (userAction) => {
+    const screenName = setShowErrorBottonSheet
+      ? "transfer failed"
+      : "claim_cash_rewards";
+
     const eventObj = {
       event_name: "refer_earn",
       properties: {
         user_action: userAction || "back",
-        screen_name: "claim_cash_rewards",
+        screen_name: screenName,
         transfer_full_amount: transferFullFlag ? "yes" : "no",
         amount: amount,
         user_application_status: kyc?.application_status_v2 || "init",

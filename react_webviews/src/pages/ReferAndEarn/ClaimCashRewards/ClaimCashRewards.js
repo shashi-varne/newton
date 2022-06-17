@@ -106,6 +106,7 @@ const ClaimCashRewards = ({
         dataAid={transferFailed.dataAid}
         isOpen={showErrorBottomSheet}
         onClose={() => {
+          sendEvents("back");
           setShowErrorBottonSheet(false);
         }}
         title={transferFailed.title}
@@ -113,6 +114,7 @@ const ClaimCashRewards = ({
         subtitle={transferFailed.subtitle}
         primaryBtnTitle={transferFailed.cta}
         onPrimaryClick={() => {
+          sendEvents("okay");
           setShowErrorBottonSheet(false);
         }}
       />
