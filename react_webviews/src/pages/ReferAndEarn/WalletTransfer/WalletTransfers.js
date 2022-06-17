@@ -12,7 +12,6 @@ const STRINGS = WALLET_TRANSFERS;
 
 const WalletTransfers = ({
   transactionData = [],
-  sendEvents,
   isPageLoading,
   filterApplied,
   handleWalletFilter,
@@ -28,7 +27,6 @@ const WalletTransfers = ({
       isPageLoading={isPageLoading}
       className="wallet-transactions"
       dataAid={STRINGS.screenDataAid}
-      eventData={sendEvents("just_set_events")}
       fixedFooter={true}
       renderComponentAboveFooter={<FooterComponent onClick={onClickContact} />}
     >

@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import WalletTransfers from "../../pages/ReferAndEarn/WalletTransfer";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
-import { nativeCallback } from "../../utils/native_callback";
 import { useDispatch, useSelector } from "react-redux";
 import useLoadingState from "../../common/customHooks/useLoadingState";
 import useErrorState from "../../common/customHooks/useErrorState";
@@ -54,22 +53,6 @@ const walletTransfersContainer = (WrappedComponent) => (props) => {
     }
   }, [isFetchFailed]);
 
-  const sendEvents = (userAction) => {
-    const eventObj = {
-      event_name: "",
-      properties: {
-        user_action: userAction || "",
-        screen_name: "",
-      },
-    };
-
-    if (userAction === "just_set_events") {
-      return eventObj;
-    } else {
-      nativeCallback({ events: eventObj });
-    }
-  };
-
   const handleWalletFilter = (e, val) => {
     console.log({ val });
     setFilterApplied(val);
@@ -84,7 +67,6 @@ const walletTransfersContainer = (WrappedComponent) => (props) => {
       filterApplied={filterApplied}
       handleWalletFilter={handleWalletFilter}
       onClickContact={onClickContact}
-      sendEvents={sendEvents}
       isPageLoading={isPageLoading}
       navigate={navigate}
     />

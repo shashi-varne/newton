@@ -28,7 +28,7 @@ const myReferralsContainer = (WrappedComponent) => (props) => {
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const refereeListData = useSelector(getRefereeListData);
 
-  const { user } = useUserKycHook();
+  const { kyc, user, isLoading } = useUserKycHook();
   const referralCode = get(user, "referral_code", "");
 
   const { refereeListViewData, pendingReferralsCount } =
@@ -60,10 +60,13 @@ const myReferralsContainer = (WrappedComponent) => (props) => {
 
   const sendEvents = (userAction) => {
     const eventObj = {
-      event_name: "",
+      event_name: "refer_earn",
       properties: {
-        user_action: userAction || "",
-        screen_name: "",
+        user_action: userAction || "back",
+        screen_name: "my_referrals",
+        user_application_status: kyc?.application_status_v2 || "init",
+        user_investment_status: user?.active_investment,
+        user_kyc_status: kyc?.mf_kyc_processed || false,
       },
     };
 
@@ -97,14 +100,15 @@ const myReferralsContainer = (WrappedComponent) => (props) => {
     if (eventIndex !== -1) {
       msg = refereeListViewData[cardIndex].events[eventIndex].remind_message;
     }
-
     msg = msg.replace("{}", referralCode);
+
     try {
       await navigator.clipboard.writeText(msg);
       ToastMessage(SHARE_COMPONENT.toastMessage);
     } catch (error) {
       console.error(error);
     }
+    sendEvents("remind");
   };
 
   return (
@@ -114,7 +118,7 @@ const myReferralsContainer = (WrappedComponent) => (props) => {
       pendingReferralsCount={pendingReferralsCount}
       totalEarned={earnedCash}
       sendEvents={sendEvents}
-      isPageLoading={isPageLoading}
+      isPageLoading={isPageLoading || isLoading}
       onClickCopy={onClickCopy}
       onClickListItem={onClickListItem}
       navigate={navigate}

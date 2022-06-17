@@ -24,7 +24,7 @@ const claimCashRewardsContainer = (WrappedComponent) => (props) => {
   const totalBalance = walletBalance.total_amount;
   const minAmount = walletBalance.min_withdraw_limit;
   const [showErrorBottomSheet, setShowErrorBottonSheet] = useState(false);
-  const { kyc, isLoading } = useUserKycHook();
+  const { user, kyc, isLoading } = useUserKycHook();
 
   const bankName = get(kyc, "bank.meta_data.bank_code", "");
   const accountNumber = get(kyc, "bank.meta_data.account_number", "");
@@ -76,10 +76,15 @@ const claimCashRewardsContainer = (WrappedComponent) => (props) => {
 
   const sendEvents = (userAction) => {
     const eventObj = {
-      event_name: "",
+      event_name: "refer_earn",
       properties: {
-        user_action: userAction || "",
-        screen_name: "",
+        user_action: userAction || "back",
+        screen_name: "claim_cash_rewards",
+        transfer_full_amount: transferFullFlag ? "yes" : "no",
+        amount: amount,
+        user_application_status: kyc?.application_status_v2 || "init",
+        user_investment_status: user?.active_investment,
+        user_kyc_status: kyc?.mf_kyc_processed || false,
       },
     };
 
@@ -95,6 +100,7 @@ const claimCashRewardsContainer = (WrappedComponent) => (props) => {
   };
 
   const onClickTransfer = async () => {
+    sendEvents("transfer_now");
     try {
       const resp = await trigger_wallet_transfer(Api, { amount });
       console.log({ resp });

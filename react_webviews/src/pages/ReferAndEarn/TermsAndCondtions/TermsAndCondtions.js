@@ -7,7 +7,7 @@ import "./TermsAndCondtions.scss";
 
 const STRINGS = TNC;
 
-const TermsAndCondtions = ({ sendEvents, points = [] }) => {
+const TermsAndCondtions = ({ points = [] }) => {
   return (
     <Container
       headerProps={{
@@ -17,7 +17,6 @@ const TermsAndCondtions = ({ sendEvents, points = [] }) => {
       renderComponentAboveFooter={<FooterComponent />}
       className="refer-and-earn-tnc"
       dataAid={STRINGS.screenDataAid}
-      eventData={sendEvents("just_set_events")}
     >
       <Stack className="tnc-wrapper">
         <ul>
