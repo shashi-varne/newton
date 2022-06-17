@@ -8,6 +8,8 @@ import useErrorState from "../../common/customHooks/useErrorState";
 import {
   getActiveCampaigns,
   getActiveCampaignsData,
+  getActiveCampaignsShareMessage,
+  getActiveCampaignsTitle,
   getRefereeList,
   getRefereeListData,
   getWalletBalance,
@@ -35,6 +37,9 @@ const landingContainer = (WrappedComponent) => (props) => {
   const referralCode = get(user, "referral_code", "");
 
   const activeCampaignData = useSelector(getActiveCampaignsData);
+  const campaignTitle = useSelector(getActiveCampaignsTitle);
+  const shareMessage = useSelector(getActiveCampaignsShareMessage);
+
   const activeCampaignViewData = getActiveCampaignsViewData(activeCampaignData);
   const refereeListData = useSelector(getRefereeListData);
   const walletBalance = useSelector(getWalletBalanceData);
@@ -42,8 +47,8 @@ const landingContainer = (WrappedComponent) => (props) => {
   const [showTransferNotAllowed, setShowTransferNotAllowed] = useState(false);
   const [tabValue, setTabValue] = useState(0);
 
-  const noReferrals =
-    !isEmpty(refereeListData) && refereeListData?.length === 0;
+  const noReferrals = true;
+  // !isEmpty(refereeListData) && refereeListData?.length === 0;
   const allowClaimRewards =
     walletBalance?.balance_amount >= walletBalance?.min_withdraw_limit;
 
@@ -137,7 +142,11 @@ const landingContainer = (WrappedComponent) => (props) => {
 
   const onClickCopy = async () => {
     sendShareEvents("share_icon");
-    let msg = activeCampaignViewData?.[activeSheetIndex]?.shareMessage;
+
+    let msg = shareMessage;
+    if (activeSheetIndex >= 0) {
+      msg = activeCampaignViewData?.[activeSheetIndex]?.shareMessage;
+    }
     msg = msg.replace("{}", referralCode);
     try {
       await navigator.clipboard.writeText(msg);
@@ -148,16 +157,26 @@ const landingContainer = (WrappedComponent) => (props) => {
 
   const onClickMail = () => {
     sendShareEvents("share_icon");
-    const subject = activeCampaignViewData?.[activeSheetIndex]?.subtitle;
-    const emailBody = activeCampaignViewData?.[activeSheetIndex]?.shareMessage;
+    let subject = "";
+    let emailBody = shareMessage;
+
+    if (activeSheetIndex >= 0) {
+      subject = activeCampaignViewData?.[activeSheetIndex]?.subtitle;
+      emailBody = activeCampaignViewData?.[activeSheetIndex]?.shareMessage;
+    }
+    emailBody.replace("{}", referralCode);
+
     document.location =
       "mailto:" + "?subject=" + subject + "&body=" + emailBody;
   };
 
   const onClickShare = () => {
     sendShareEvents("share_icon");
-    let msg =
-      activeCampaignViewData?.[activeSheetIndex]?.shareMessage || referralCode;
+    let msg = shareMessage;
+    if (activeSheetIndex >= 0) {
+      msg = activeCampaignViewData?.[activeSheetIndex]?.shareMessage;
+    }
+
     msg = msg.replace("{}", referralCode);
 
     const data = { message: msg };
@@ -188,7 +207,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       sendEvents={sendEvents}
       noRewardsView={noReferrals}
       balance={totalBalance}
-      potentialAmount={"₹2,00,000"}
+      campaignTitle={campaignTitle}
       referralCode={referralCode}
       onClickCopy={onClickCopy}
       onClickMail={onClickMail}

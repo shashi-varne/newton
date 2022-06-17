@@ -16,7 +16,7 @@ import "./Landing.scss";
 
 const ReferralsView = ({
   productName,
-  potentialAmount,
+  campaignTitle,
   data,
   setActiveSheetIndex,
   onClickTnc,
@@ -31,11 +31,7 @@ const ReferralsView = ({
         <LandingHeaderImage
           imgSrc={require(`assets/${productName}/iv_refer_earn_landing.svg`)}
         />
-        <LandingHeaderTitle>
-          {REFERRAL_LANDING.referralsLandingHeader.title +
-            " " +
-            potentialAmount}
-        </LandingHeaderTitle>
+        <LandingHeaderTitle>{campaignTitle}</LandingHeaderTitle>
       </LandingHeader>
       <Stack sx={{ width: "100%", marginTop: "32px" }}>
         {data.map((item, index) => {

@@ -20,7 +20,7 @@ const landing = ({
   isWeb,
   noRewardsView,
   balance,
-  potentialAmount,
+  campaignTitle = "",
   referralData = [],
   referralCode = "",
   onClickCopy,
@@ -91,7 +91,7 @@ const landing = ({
       >
         <SwiperSlide key={1}>
           <ReferralsView
-            potentialAmount={potentialAmount}
+            campaignTitle={campaignTitle}
             productName={productName}
             isWeb={isWeb}
             data={referralData}
