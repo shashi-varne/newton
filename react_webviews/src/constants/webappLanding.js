@@ -35,7 +35,7 @@ export const WEBAPP_LANDING_PATHNAME_MAPPER = {
   investingOptions: "/landing/view-all/mf",
   allCategories: "/landing/view-all/category",
   bankList: "/landing/bank-list",
-  refer: "/refer",
+  refer: "/refer-and-earn/landing",
   taxFiling: "/tax-filing",
   education: "/invest/savegoal/childeducation",
   retirement: "/invest/savegoal/retirement",
