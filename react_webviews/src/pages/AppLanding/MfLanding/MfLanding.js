@@ -27,6 +27,7 @@ const MfLanding = ({
   closeKycBottomsheet,
   isPageLoading,
   showPartnership,
+  baseConfig,
   ...restProps
 }) => {
   return (
@@ -47,6 +48,7 @@ const MfLanding = ({
     >
       {renderCards({
         ...restProps,
+        baseConfig,
       })}
       <TrustIcon
         dataAid={baseConfig.productName}
