@@ -9,13 +9,13 @@
   titleColor: foundationColors.secondary.mango.300
 */
 
-import React from 'react';
-import Box from '@mui/material/Box';
-import { Stack } from '@mui/material';
-import Typography from '../../atoms/Typography';
-import PropTypes from 'prop-types';
-import './InfoCard.scss';
-import Icon from '../../atoms/Icon';
+import React from "react";
+import Box from "@mui/material/Box";
+import { Stack } from "@mui/material";
+import Typography from "../../atoms/Typography";
+import PropTypes from "prop-types";
+import "./InfoCard.scss";
+import Icon from "../../atoms/Icon";
 
 const InfoCard = ({
   imgSrc,
@@ -31,16 +31,24 @@ const InfoCard = ({
   rightLabel,
   rightLabelColor,
   label,
-  labelColor, 
+  labelColor,
 }) => {
   return (
     <Box
       sx={infoCardWrapperSxStyle}
-      className='info-card-wrapper'
+      className="info-card-wrapper"
       onClick={onClick}
       data-aid={`infoCard_${dataAid}`}
     >
-      {imgSrc && <Icon size='32px' src={imgSrc} className='info-card-left-img' dataAid='left' {...imgProps} />}
+      {imgSrc && (
+        <Icon
+          size="32px"
+          src={imgSrc}
+          className="info-card-left-img"
+          dataAid="left"
+          {...imgProps}
+        />
+      )}
       <div className="ic-content">
         <div className="ic-text-wrapper">
           <Typography
@@ -94,14 +102,6 @@ const InfoCard = ({
             {rightLabel}
           </Typography>
         )}
-        {rightImgSrc && (
-          <Icon
-            size="24px"
-            src={rightImgSrc}
-            dataAid="right"
-            {...rightImgProps}
-          />
-        )}
       </Stack>
     </Box>
   );
@@ -110,13 +110,13 @@ const InfoCard = ({
 export default InfoCard;
 
 const infoCardWrapperSxStyle = {
-  backgroundColor: 'foundationColors.supporting.white',
+  backgroundColor: "foundationColors.supporting.white",
 };
 
 InfoCard.defaultProps = {
   subtitleColor: "foundationColors.content.secondary",
   rightLabelColor: "foundationColors.content.secondary",
-  labelColor: "foundationColors.content.secondary"
+  labelColor: "foundationColors.content.secondary",
 };
 
 InfoCard.propTypes = {
@@ -125,5 +125,5 @@ InfoCard.propTypes = {
   titleColor: PropTypes.string,
   subtitleColor: PropTypes.string,
   onClick: PropTypes.func,
-  imgProps: PropTypes.object
+  imgProps: PropTypes.object,
 };
