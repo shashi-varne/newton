@@ -8,7 +8,6 @@ import useErrorState from "../../common/customHooks/useErrorState";
 import {
   getActiveCampaigns,
   getActiveCampaignsData,
-  getActiveCampaignsShareMessage,
   getActiveCampaignsTitle,
   getRefereeList,
   getRefereeListData,
@@ -38,7 +37,6 @@ const landingContainer = (WrappedComponent) => (props) => {
 
   const activeCampaignData = useSelector(getActiveCampaignsData);
   const campaignTitle = useSelector(getActiveCampaignsTitle);
-  const shareMessage = useSelector(getActiveCampaignsShareMessage);
 
   const activeCampaignViewData = getActiveCampaignsViewData(activeCampaignData);
   const refereeListData = useSelector(getRefereeListData);
@@ -50,7 +48,7 @@ const landingContainer = (WrappedComponent) => (props) => {
   const noReferrals =
     !isEmpty(refereeListData) && refereeListData?.length === 0;
   const allowClaimRewards =
-    walletBalance?.balance_amount >= walletBalance?.min_withdraw_limit;
+    !walletBalance?.balance_amount >= walletBalance?.min_withdraw_limit;
 
   const totalBalance = "₹" + walletBalance?.balance_amount;
 
@@ -86,6 +84,11 @@ const landingContainer = (WrappedComponent) => (props) => {
   useEffect(() => {
     initialize();
   }, []);
+
+  useEffect(() => {
+    const userAction = showTransferNotAllowed ? "next" : "back";
+    sendEvents(userAction);
+  }, [showTransferNotAllowed]);
 
   useEffect(() => {
     if (isFetchFailed && !isEmpty(errorMessage)) {
@@ -143,7 +146,7 @@ const landingContainer = (WrappedComponent) => (props) => {
   const onClickCopy = async () => {
     sendShareEvents("share_icon");
 
-    let msg = shareMessage;
+    let msg = "";
     if (activeSheetIndex >= 0) {
       msg = activeCampaignViewData?.[activeSheetIndex]?.shareMessage;
     }
@@ -158,7 +161,7 @@ const landingContainer = (WrappedComponent) => (props) => {
   const onClickMail = () => {
     sendShareEvents("share_icon");
     let subject = "";
-    let emailBody = shareMessage;
+    let emailBody = "";
 
     if (activeSheetIndex >= 0) {
       subject = activeCampaignViewData?.[activeSheetIndex]?.subtitle;
@@ -172,7 +175,7 @@ const landingContainer = (WrappedComponent) => (props) => {
 
   const onClickShare = () => {
     sendShareEvents("share_icon");
-    let msg = shareMessage;
+    let msg = "";
     if (activeSheetIndex >= 0) {
       msg = activeCampaignViewData?.[activeSheetIndex]?.shareMessage;
     }

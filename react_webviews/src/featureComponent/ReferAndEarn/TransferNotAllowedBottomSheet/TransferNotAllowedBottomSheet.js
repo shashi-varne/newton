@@ -10,10 +10,6 @@ const STRINGS = BOTTOMSHEETS_CONTENT.transferNotAllowed;
 const TransferNotAllowedBottomSheet = ({
   isOpen,
   handleClose = noop,
-  isWeb = true,
-  referralCode = "",
-  onClickCopy = noop,
-  onClickMail = noop,
   onClickCta = noop,
 }) => {
   return (
@@ -24,17 +20,8 @@ const TransferNotAllowedBottomSheet = ({
       subtitle={STRINGS.subtitle}
       subtitleColor={"foundationColors.content.tertiary"}
       onClose={handleClose}
-      disablePortal={true}
-      renderButtonComponent={
-        <ShareCodeComponent
-          showCopyCode={isWeb}
-          referralCode={referralCode}
-          onClickCopy={onClickCopy}
-          onClickMail={onClickMail}
-          onClickCta={onClickCta}
-          customToastClassName="tna-btm-sheet-toast"
-        />
-      }
+      primaryBtnTitle={"okay"}
+      onPrimaryClick={onClickCta}
     />
   );
 };
