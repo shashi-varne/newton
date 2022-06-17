@@ -47,8 +47,8 @@ const landingContainer = (WrappedComponent) => (props) => {
   const [showTransferNotAllowed, setShowTransferNotAllowed] = useState(false);
   const [tabValue, setTabValue] = useState(0);
 
-  const noReferrals = true;
-  // !isEmpty(refereeListData) && refereeListData?.length === 0;
+  const noReferrals =
+    !isEmpty(refereeListData) && refereeListData?.length === 0;
   const allowClaimRewards =
     walletBalance?.balance_amount >= walletBalance?.min_withdraw_limit;
 
