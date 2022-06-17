@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 // import { navigate as navigateFunc } from "../../utils/functions";
-import { nativeCallback } from "../../utils/native_callback";
 import TermsAndCondtions from "../../pages/ReferAndEarn/TermsAndCondtions";
 import {
   getTnc,
@@ -30,23 +29,7 @@ const tncContainer = (WrappedComponent) => (props) => {
     initialize();
   }, []);
 
-  const sendEvents = (userAction) => {
-    const eventObj = {
-      event_name: "",
-      properties: {
-        user_action: userAction || "",
-        screen_name: "",
-      },
-    };
-
-    if (userAction === "just_set_events") {
-      return eventObj;
-    } else {
-      nativeCallback({ events: eventObj });
-    }
-  };
-
-  return <WrappedComponent points={tncPoints} sendEvents={sendEvents} />;
+  return <WrappedComponent points={tncPoints} />;
 };
 
 export default tncContainer(TermsAndCondtions);

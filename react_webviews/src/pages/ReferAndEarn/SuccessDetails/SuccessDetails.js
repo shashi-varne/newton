@@ -19,6 +19,7 @@ const SuccessDetails = ({
   amount,
   productName = "fisdom",
   sendEvents,
+  isPageLoading,
   onClickCta,
 }) => {
   return (
@@ -32,6 +33,7 @@ const SuccessDetails = ({
           onClick: onClickCta,
         },
       }}
+      isPageLoading={isPageLoading}
       className="success-details"
       dataAid={STRINGS.screenDataAid}
       eventData={sendEvents("just_set_events")}

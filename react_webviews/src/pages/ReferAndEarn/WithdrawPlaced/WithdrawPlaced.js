@@ -10,12 +10,7 @@ import { REFER_AND_EARN_PATHNAME_MAPPER } from "../common/constants";
 const sound = require("assets/audio/success.mp3"); // Audio file path to be added
 const STRINGS = WITHDRAW_PLACED;
 
-const WithdrawPlaced = ({
-  productName = "fisdom",
-  sendEvents,
-  navigate,
-  amount,
-}) => {
+const WithdrawPlaced = ({ productName = "fisdom", navigate, amount }) => {
   const lottieRef = React.useRef();
 
   React.useEffect(() => {
@@ -39,7 +34,6 @@ const WithdrawPlaced = ({
       }}
       className="reward-withdrawal-placed"
       dataAid={STRINGS.screenDataAid}
-      eventData={sendEvents("just_set_events")}
     >
       <Stack
         direction="column"

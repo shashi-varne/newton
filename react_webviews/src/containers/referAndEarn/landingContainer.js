@@ -8,6 +8,8 @@ import useErrorState from "../../common/customHooks/useErrorState";
 import {
   getActiveCampaigns,
   getActiveCampaignsData,
+  getActiveCampaignsShareMessage,
+  getActiveCampaignsTitle,
   getRefereeList,
   getRefereeListData,
   getWalletBalance,
@@ -31,10 +33,13 @@ const landingContainer = (WrappedComponent) => (props) => {
   const { isWeb } = useMemo(getConfig, []);
   const { isPageLoading } = useLoadingState(screen);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
-  const { user } = useUserKycHook();
+  const { user, kyc, isLoading } = useUserKycHook();
   const referralCode = get(user, "referral_code", "");
 
   const activeCampaignData = useSelector(getActiveCampaignsData);
+  const campaignTitle = useSelector(getActiveCampaignsTitle);
+  const shareMessage = useSelector(getActiveCampaignsShareMessage);
+
   const activeCampaignViewData = getActiveCampaignsViewData(activeCampaignData);
   const refereeListData = useSelector(getRefereeListData);
   const walletBalance = useSelector(getWalletBalanceData);
@@ -88,14 +93,37 @@ const landingContainer = (WrappedComponent) => (props) => {
     }
   }, [isFetchFailed]);
 
-  const sendEvents = (userAction) => {
+  const sendEvents = (userAction, shareVia = "", activeCard = "") => {
+    const screenName =
+      tabValue === 0
+        ? "referrals"
+        : noReferrals
+        ? "empty_cash_reward"
+        : showTransferNotAllowed
+        ? "transfer_not_allowed"
+        : "cash_rewards";
+
+    let cardClicked = activeCard;
+    if (!isEmpty(activeCard) && tabValue === 0 && activeSheetIndex >= 0) {
+      cardClicked =
+        activeCampaignViewData?.[activeSheetIndex]?.title?.toLowerCase();
+    }
+
     const eventObj = {
-      event_name: "",
+      event_name: "refer_earn",
       properties: {
-        user_action: userAction || "",
-        screen_name: "",
+        user_action: userAction || "back",
+        screen_name: screenName,
+        card_click: cardClicked,
+        user_application_status: kyc?.application_status_v2 || "init",
+        user_investment_status: user?.active_investment,
+        user_kyc_status: kyc?.mf_kyc_processed || false,
       },
     };
+
+    if (!isEmpty(shareVia)) {
+      eventObj.share_via = shareVia;
+    }
 
     if (userAction === "just_set_events") {
       return eventObj;
@@ -104,8 +132,21 @@ const landingContainer = (WrappedComponent) => (props) => {
     }
   };
 
+  const sendShareEvents = (shareVia) => {
+    if (showTransferNotAllowed) {
+      sendEvents("next", shareVia);
+    } else {
+      sendEvents(shareVia);
+    }
+  };
+
   const onClickCopy = async () => {
-    let msg = activeCampaignViewData?.[activeSheetIndex]?.shareMessage;
+    sendShareEvents("share_icon");
+
+    let msg = shareMessage;
+    if (activeSheetIndex >= 0) {
+      msg = activeCampaignViewData?.[activeSheetIndex]?.shareMessage;
+    }
     msg = msg.replace("{}", referralCode);
     try {
       await navigator.clipboard.writeText(msg);
@@ -115,15 +156,27 @@ const landingContainer = (WrappedComponent) => (props) => {
   };
 
   const onClickMail = () => {
-    const subject = activeCampaignViewData?.[activeSheetIndex]?.subtitle;
-    const emailBody = activeCampaignViewData?.[activeSheetIndex]?.shareMessage;
+    sendShareEvents("share_icon");
+    let subject = "";
+    let emailBody = shareMessage;
+
+    if (activeSheetIndex >= 0) {
+      subject = activeCampaignViewData?.[activeSheetIndex]?.subtitle;
+      emailBody = activeCampaignViewData?.[activeSheetIndex]?.shareMessage;
+    }
+    emailBody.replace("{}", referralCode);
+
     document.location =
       "mailto:" + "?subject=" + subject + "&body=" + emailBody;
   };
 
   const onClickShare = () => {
-    let msg =
-      activeCampaignViewData?.[activeSheetIndex]?.shareMessage || referralCode;
+    sendShareEvents("share_icon");
+    let msg = shareMessage;
+    if (activeSheetIndex >= 0) {
+      msg = activeCampaignViewData?.[activeSheetIndex]?.shareMessage;
+    }
+
     msg = msg.replace("{}", referralCode);
 
     const data = { message: msg };
@@ -131,6 +184,7 @@ const landingContainer = (WrappedComponent) => (props) => {
   };
 
   const onClickTnc = () => {
+    sendEvents("next");
     navigate(REFER_AND_EARN_PATHNAME_MAPPER.tnc);
   };
 
@@ -139,7 +193,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       setShowTransferNotAllowed(true);
       return;
     }
-
+    sendEvents("next", "", id);
     navigate(navLink);
   };
 
@@ -153,14 +207,14 @@ const landingContainer = (WrappedComponent) => (props) => {
       sendEvents={sendEvents}
       noRewardsView={noReferrals}
       balance={totalBalance}
-      potentialAmount={"₹2,00,000"}
+      campaignTitle={campaignTitle}
       referralCode={referralCode}
       onClickCopy={onClickCopy}
       onClickMail={onClickMail}
       onClickShare={onClickShare}
       onClickTnc={onClickTnc}
       onClickInfoCard={onClickRewardsInfoCard}
-      isPageLoading={isPageLoading}
+      isPageLoading={isPageLoading || isLoading}
       navigate={navigate}
       referralData={activeCampaignViewData}
       showTransferNotAllowed={showTransferNotAllowed}
