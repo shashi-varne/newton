@@ -128,7 +128,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       showExploreCategories,
       exploreCategoryData,
       isFinity,
-      shareReferralData
+      shareReferralData,
     };
   };
 
@@ -163,13 +163,10 @@ const landingContainer = (WrappedComponent) => (props) => {
 
   const getReferalConfig = () => {
     const showShareReferral =
-      kycData.isMfInvested &&
-      !baseConfig.Web &&
-      baseConfig?.referralConfig?.shareRefferal;
+      kycData.isMfInvested && baseConfig?.referralConfig?.shareRefferal;
     const showApplyReferral =
-      !kycData.isMfInvested &&
-      !baseConfig.Web &&
-      baseConfig?.referralConfig?.applyRefferal;
+      !kycData.isMfInvested && baseConfig?.referralConfig?.applyRefferal;
+
     return {
       showApplyReferral,
       showShareReferral,
