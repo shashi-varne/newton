@@ -42,6 +42,8 @@ export const WEBAPP_LANDING_PATHNAME_MAPPER = {
   equityKyc: "/kyc/web",
   nifty: "/passive-index-funds/nifty_backers/fund-list",
   sensex: "/passive-index-funds/sensex_backers/fund-list",
+  riskProfile: "/risk/result-new",
+  fhc: "/fhc",
 };
 
 export const MANAGE_INVESTMENTS = [
@@ -324,13 +326,13 @@ export const FINANCIAL_TOOLS = [
     dataAid: "financialHealth",
     id: "fhc",
   },
-  {
-    icon: "tax_calculator.svg",
-    title: "Tax calucator",
-    description: "Get an estimate of your income tax",
-    dataAid: "taxCalculator",
-    id: "taxCalculator",
-  },
+  // {
+  //   icon: "tax_calculator.svg",
+  //   title: "Tax calucator",
+  //   description: "Get an estimate of your income tax",
+  //   dataAid: "taxCalculator",
+  //   id: "taxCalculator",
+  // },
 ];
 
 export const REFERRAL_DATA = {

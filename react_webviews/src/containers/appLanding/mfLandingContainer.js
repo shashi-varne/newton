@@ -145,7 +145,13 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
         cardClick: data.title?.toLowerCase(),
       });
       const pathname = WEBAPP_LANDING_PATHNAME_MAPPER[data.id];
-      navigate(pathname);
+      if (data.id === "riskProfile") {
+        navigate(pathname, {
+          state: { fromExternalSrc: true },
+        });
+      } else {
+        navigate(pathname);
+      }
     };
 
   const handleKyc = (cardClick) => () => {
