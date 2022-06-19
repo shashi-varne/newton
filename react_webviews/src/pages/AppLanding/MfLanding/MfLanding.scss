@@ -51,6 +51,7 @@
       padding: 0px 16px;
       .swiper-slide {
         width: unset !important;
+        min-width: 320px;
       }
     }
   }

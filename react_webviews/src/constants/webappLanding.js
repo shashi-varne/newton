@@ -305,7 +305,10 @@ export const MF_EXPLORE_CATEGORY_DATA = {
   finity: {
     title: "Finity recommendations",
     dataAid: "finityRecommendation",
-    buttonTitle: "See All",
+    buttonData: {
+      id: "investingOptions",
+      title: "See All",
+    },
     options: FINITY_RECOMMENDATIONS,
     className: "al-ec-content",
   },

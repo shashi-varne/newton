@@ -170,7 +170,7 @@ const renderCards = ({
         categories={exploreCategoriesData.options}
         onClick={handleExploreCategories}
         className={exploreCategoriesData.className}
-        buttonTitle={exploreCategoriesData.buttonTitle}
+        buttonData={baseConfig.isMobileDevice &&  exploreCategoriesData.buttonData}
       />
     ),
     financialTools: (

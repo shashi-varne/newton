@@ -12,7 +12,7 @@ const ExploreCategories = ({
   titleDataAid,
   onClick,
   className = "",
-  buttonTitle,
+  buttonData = {},
 }) => {
   return (
     <div className={`al-explore-categories ${className}`}>
@@ -24,7 +24,13 @@ const ExploreCategories = ({
         <Typography component="div" variant="heading4" dataAid={titleDataAid}>
           {title}
         </Typography>
-        {buttonTitle && <Button title={buttonTitle} variant="link" />}
+        {buttonData.title && (
+          <Button
+            title={buttonData.title}
+            variant="link"
+            onClick={onClick(buttonData)}
+          />
+        )}
       </Stack>
       <CustomSwiper
         spaceBetween={8}
