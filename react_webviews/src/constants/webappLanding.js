@@ -173,7 +173,7 @@ export const INVESTMENT_OPTIONS = {
   instaredeem: {
     icon: "insta_redeem.svg",
     title: "Insta redemption funds",
-    subtitle: "Superior return and money available 24x7",
+    subtitle: "24x7 instant withdrawal of funds",
     eventStatus: "Insta redemption funds",
     id: "instaredeem",
     dataAid: "instaRedemptionFund",
@@ -181,7 +181,7 @@ export const INVESTMENT_OPTIONS = {
   passiveIndexFunds: {
     icon: "passive.svg",
     title: "Passive Index funds",
-    subtitle: "Superior return and money available 24x7",
+    subtitle: "Earn upto 2% more than active funds",
     eventStatus: "passive index funds",
     id: "passiveIndexFunds",
     dataAid: "passiveIndexFunds",
