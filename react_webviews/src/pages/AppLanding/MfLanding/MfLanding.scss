@@ -1,6 +1,6 @@
 .mf-landing-wrapper {
   padding-bottom: 40px !important;
-  
+
   .al-explore-categories {
     .swiper-slide {
       width: unset !important;
@@ -42,5 +42,37 @@
 
   .mfl-partnership {
     margin-bottom: 50px;
+  }
+
+  .diy-c-trending-wrapper {
+    padding-bottom: 16px;
+
+    .swiper-container {
+      padding: 0px 16px;
+      .swiper-slide {
+        width: unset !important;
+      }
+    }
+  }
+
+  .feature-card-wrapper {
+    .feature-card-slot-wrapper > div {
+      flex: none;
+    }
+
+    .diy-tw-right-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .diy-tw-rc-text,
+      .diy-tw-rc-returns {
+        min-width: fit-content;
+      }
+
+      .diy-tw-rc-returns {
+        margin-right: 5px;
+      }
+    }
   }
 }

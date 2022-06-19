@@ -186,6 +186,7 @@ const renderCards = ({
         diyType="equity"
         config={baseConfig}
         handleFundDetails={handleFundDetails}
+        isLanding
       />
     ),
     portfolioTracker: (
