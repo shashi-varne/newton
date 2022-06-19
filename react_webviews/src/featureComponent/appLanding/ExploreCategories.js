@@ -5,6 +5,7 @@ import CustomSwiper from "../../designSystem/molecules/CustomSwiper";
 import { SwiperSlide } from "swiper/react";
 import Button from "../../designSystem/atoms/Button";
 import { Stack } from "@mui/material";
+import "./ExploreCategories.scss";
 
 const ExploreCategories = ({
   categories = [],
