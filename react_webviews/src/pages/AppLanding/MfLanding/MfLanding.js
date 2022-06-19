@@ -15,8 +15,10 @@ import { isEmpty } from "lodash-es";
 
 import "./MfLanding.scss";
 
-const passiveIndexFundsData = MF_LANDING.passiveIndexFunds;
-const externalPortfolioData = MF_LANDING.externalPortfolio;
+const {
+  passiveIndexFunds: passiveIndexFundsData,
+  externalPortfolio: externalPortfolioData,
+} = MF_LANDING;
 const MfLanding = ({
   sendEvents,
   onRightIconClick,
@@ -170,7 +172,9 @@ const renderCards = ({
         categories={exploreCategoriesData.options}
         onClick={handleExploreCategories}
         className={exploreCategoriesData.className}
-        buttonData={baseConfig.isMobileDevice &&  exploreCategoriesData.buttonData}
+        buttonData={
+          baseConfig.isMobileDevice && exploreCategoriesData.buttonData
+        }
       />
     ),
     financialTools: (
