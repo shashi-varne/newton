@@ -202,6 +202,10 @@ const landingContainer = (WrappedComponent) => (props) => {
   }, []);
 
   const onLoad = () => {
+    if (code === "moneycontrol") {
+      navigate(WEBAPP_LANDING_PATHNAME_MAPPER.investExplore);
+      return;
+    }
     if (baseConfig.isSdk && baseConfig.Android) {
       nativeCallback({ action: "get_data" });
     }

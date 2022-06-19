@@ -81,7 +81,9 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
   const { updateKyc } = useUserKycHook();
 
   useEffect(() => {
-    if (isMfOnly) {
+    if (code === "moneycontrol") {
+      navigate(WEBAPP_LANDING_PATHNAME_MAPPER.investExplore);
+    } else if (isMfOnly) {
       navigate("/");
     }
   }, []);

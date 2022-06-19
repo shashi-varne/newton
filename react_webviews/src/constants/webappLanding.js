@@ -44,6 +44,7 @@ export const WEBAPP_LANDING_PATHNAME_MAPPER = {
   sensex: "/passive-index-funds/sensex_backers/fund-list",
   riskProfile: "/risk/result-new",
   fhc: "/fhc",
+  investExplore: "/invest/explore",
 };
 
 export const MANAGE_INVESTMENTS = [
