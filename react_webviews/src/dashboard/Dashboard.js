@@ -23,10 +23,8 @@ import DigilockerCallback from "../kyc/Digilocker/DigilockerCallback";
 import AccountMerge from "./AccountMerge";
 import AccountMergeOtp from "./AccountMerge/Otp";
 import AccountLinked from "./AccountMerge/Linked";
-// import SdkLanding from './Invest/components/SdkLanding';
 import NPS from "./nps";
 import PassiveIndexFunds from "./PassiveIndexFunds"
-import {getConfig} from 'utils/functions';
 import BlankMandateUpload from "./MyAccount/BlankMandateUpload";
 import InvestmentProof from "./MyAccount/InvestmentProof";
 import Refer from "./Invest/components/SdkLanding/Refer";
@@ -55,7 +53,6 @@ import Nominee from "../pages/Nominee";
 import AppLanding from "../pages/AppLanding";
 
 const Home = (props) => {
-  const config = getConfig(); 
   const { url } = props.match;
   return (
     <Fragment>
@@ -65,13 +62,6 @@ const Home = (props) => {
         <Route exact path={`${url}secondary-otp-verification`} component={SecondaryOtpVerification} />
         <Route path={`${url}referral-code`} component={Referral} />
         <Route path={`${url}invest`} component={Invest} />
-        {/* <Route
-          exact
-          path={`${url}`}
-          component={
-            config.isSdk && config.code !== "moneycontrol" ? SdkLanding : Invest
-          }
-        /> */}
         <Route exact path={`${url}refer`} component={Refer} />
         <Route path={`${url}invest`} component={Invest} />
         <Route path={`${url}diy`} component={DIY} />

@@ -2,7 +2,6 @@ import "../../common/theme/Style.scss";
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import NotFound from "../../common/components/NotFound";
-import Landing from "./components/Landing";
 import InstaRedeem from "./components/InstaRedeem";
 import Type from "./components/InstaRedeem/Type";
 import Amount from "./components/InstaRedeem/Amount";
@@ -26,21 +25,14 @@ import RiskCustomize from "./components/RiskPages/RiskCustomize";
 import RiskInfo from "./components/RiskPages/RiskInfo";
 import HowWeRecommend from "../Recommendation/HowWeRecommend";
 
-import { getConfig } from 'utils/functions';
 import InvestExplore from "../../pages/DIY/ExploreCategories/Explore";
 import ThemeWrapper from "../../theme/ThemeWrapper";
 import mfLandingContainer from "../../containers/appLanding/mfLandingContainer";
 
 const Invest = (props) => {
   const { url } = props.match;
-  const partnerCode = getConfig().code;
   return (
     <Switch>
-      {/* <Route
-        exact
-        path={`${url}`}
-        component={partnerCode === 'moneycontrol' ? ExploreFunds : Landing}
-      /> */}
       <Route
         exact
         path={`${url}/instaredeem`}
