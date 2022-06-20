@@ -3,14 +3,15 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import './ToastMessage.scss';
 
 const ToastMessage = (message, type = 'default', customClassName='' ) => {
-  console.log({customClassName})
+  const toastClasses= `custom-toast-message ${customClassName}`
+
   switch (type) {
     case 'success':
       if (!toast.isActive('success')) {
         toast.success(message, {
           toastId: 'success',
           ...DEFAULT_PROPS,
-          className: `custom-toast-message ${customClassName}`,
+          className: toastClasses,
         });
       }
       break;
@@ -19,7 +20,7 @@ const ToastMessage = (message, type = 'default', customClassName='' ) => {
         toast.error(message, {
           toastId: 'error',
           ...DEFAULT_PROPS,
-          className: `custom-toast-message ${customClassName}`,
+          className: toastClasses,
         });
       }
       break;
@@ -28,7 +29,7 @@ const ToastMessage = (message, type = 'default', customClassName='' ) => {
         toast.warn(message, {
           toastId: 'warn',
           ...DEFAULT_PROPS,
-          className: `custom-toast-message ${customClassName}`,
+          className: toastClasses,
         });
       }
       break;
@@ -37,7 +38,7 @@ const ToastMessage = (message, type = 'default', customClassName='' ) => {
         toast.info(message, {
           toastId: 'info',
           ...DEFAULT_PROPS,
-          className: `custom-toast-message ${customClassName}`,
+          className: toastClasses,
         });
       }
       break;
@@ -46,7 +47,7 @@ const ToastMessage = (message, type = 'default', customClassName='' ) => {
         toast(message, {
           toastId: 'default',
           ...DEFAULT_PROPS,
-          className: `custom-toast-message ${customClassName}`,
+          className: toastClasses,
          });
       }
   }
