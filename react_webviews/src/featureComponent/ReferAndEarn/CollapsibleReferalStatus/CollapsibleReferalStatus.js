@@ -9,6 +9,7 @@ import Badge from "../../../designSystem/atoms/Badge/Badge";
 import Separator from "../../../designSystem/atoms/Separator";
 import Button from "../../../designSystem/atoms/Button";
 import { MY_REFERRALS } from "businesslogic/strings/referAndEarn";
+import { formatAmountInr } from "businesslogic/utils/common/functions";
 
 const STRINGS = MY_REFERRALS;
 
@@ -100,7 +101,7 @@ const CollapsibleReferalStatus = ({
                 {item?.event_pending === false ? (
                   <TickAnimationComp
                     isOpen={isOpen}
-                    amount={item?.amount}
+                    amount={formatAmountInr(item?.amount)}
                     productName={productName}
                   />
                 ) : (

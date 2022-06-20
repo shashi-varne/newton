@@ -54,7 +54,6 @@ const walletTransfersContainer = (WrappedComponent) => (props) => {
   }, [isFetchFailed]);
 
   const handleWalletFilter = (e, val) => {
-    console.log({ val });
     setFilterApplied(val);
   };
 

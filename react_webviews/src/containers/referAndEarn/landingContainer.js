@@ -52,10 +52,9 @@ const landingContainer = (WrappedComponent) => (props) => {
     dispatch(setSelectedTab(value));
   };
 
-  const noReferrals =
-    !isEmpty(refereeListData) && refereeListData?.length === 0;
+  const noReferrals = isEmpty(refereeListData) || refereeListData?.length === 0;
   const allowClaimRewards =
-    !walletBalance?.balance_amount >= walletBalance?.min_withdraw_limit;
+    walletBalance?.balance_amount >= walletBalance?.min_withdraw_limit;
 
   const totalBalance = "₹" + walletBalance?.balance_amount;
 
