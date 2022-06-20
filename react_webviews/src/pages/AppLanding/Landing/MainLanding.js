@@ -143,7 +143,6 @@ const LandingSections = ({
   showPortfolioLoader,
   landingSections,
 }) => {
-    console.log("landingSections ", landingSections)
   const cardsMapper = {
     platformMotivators: (
       <>

@@ -159,7 +159,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
 
     if (
       config.isSdk &&
-      pathname !== "/" &&
+      !["/", "/landing/bank-list"].includes(pathname) &&
       (entryPath !== pathname) &&
       (callbackData.action === 'exit_web' || callbackData.action === 'exit_module' || callbackData.action === 'open_module')
     ) {

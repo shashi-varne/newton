@@ -17,7 +17,7 @@ const screen = "BANK_LIST";
 const bankListContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const dispatch = useDispatch();
-  const { code } = useMemo(getConfig, []);
+  const { code, base_url } = useMemo(getConfig, []);
   const bankList = useSelector(getBankList);
   const [selectedBank, setSelectedBank] = useState("");
   const { isButtonLoading } = useLoadingState(screen);
@@ -32,7 +32,7 @@ const bankListContainer = (WrappedComponent) => (props) => {
       bankListData.push({
         title,
         value: data.account_number,
-        leftImgSrc: data.image_url,
+        leftImgSrc: `${base_url}${data.image_url}`,
       });
     });
     return bankListData;
@@ -69,6 +69,10 @@ const bankListContainer = (WrappedComponent) => (props) => {
   };
 
   const onClick = () => {
+    if (isEmpty(bankList)) {
+      navigate("/");
+      return;
+    }
     if (!selectedBank) {
       ToastMessage("Please select bank");
       return;
