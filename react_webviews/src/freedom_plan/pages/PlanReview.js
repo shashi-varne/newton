@@ -127,12 +127,8 @@ const PlanReview = (props) => {
 
   const handleClick = () => {
     sendEvents("next");
-    if (initiateFreedomPlanPayment) {
+    if (!initiateFreedomPlanPayment) {
       initiatePayment({
-        ucc: kyc.ucc,
-        amount: freedomPlanData.amount,
-        gst: freedomPlanData.gst,
-        total_amount: freedomPlanData.total_amount,
         plan_id: freedomPlanData.id,
       });
       return;
