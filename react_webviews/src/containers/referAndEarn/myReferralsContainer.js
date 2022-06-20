@@ -18,24 +18,30 @@ import ToastMessage from "../../designSystem/atoms/ToastMessage";
 import { SHARE_COMPONENT } from "businesslogic/strings/referAndEarn";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import { get, isEmpty } from "lodash-es";
+import { isReadyToInvest } from "../../kyc/services";
 
 const screen = "MY_REFERRALS";
 
 const myReferralsContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
-  const { isWeb } = useMemo(getConfig, []);
+  const { Web: isWeb, productName } = useMemo(getConfig, []);
   const { isPageLoading } = useLoadingState(screen);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const refereeListData = useSelector(getRefereeListData);
 
   const { kyc, user, isLoading } = useUserKycHook();
-  const referralCode = get(user, "referral_code", "");
+  const referralCode = useMemo(() => get(user, "referral_code", ""), [user]);
 
-  const { refereeListViewData, pendingReferralsCount } =
-    getRefereeListViewData(refereeListData);
+  const { refereeListViewData, pendingReferralsCount } = useMemo(
+    () => getRefereeListViewData(refereeListData),
+    [refereeListData]
+  );
 
   const walletBalance = useSelector(getWalletBalanceData);
-  const earnedCash = walletBalance.balance_amount || 0;
+  const earnedCash = useMemo(
+    () => walletBalance.balance_amount,
+    [walletBalance]
+  );
 
   const dispatch = useDispatch();
 
@@ -59,6 +65,7 @@ const myReferralsContainer = (WrappedComponent) => (props) => {
   }, [isFetchFailed]);
 
   const sendEvents = (userAction) => {
+    const userKycReady = isReadyToInvest();
     const eventObj = {
       event_name: "refer_earn",
       properties: {
@@ -66,7 +73,7 @@ const myReferralsContainer = (WrappedComponent) => (props) => {
         screen_name: "my_referrals",
         user_application_status: kyc?.application_status_v2 || "init",
         user_investment_status: user?.active_investment,
-        user_kyc_status: kyc?.mf_kyc_processed || false,
+        user_kyc_status: userKycReady || false,
       },
     };
 
@@ -79,7 +86,6 @@ const myReferralsContainer = (WrappedComponent) => (props) => {
 
   const onClickListItem = async ({ id, isOpen }) => {
     const hasNotification = refereeListData[id].new_notification;
-    console.log({ id, isOpen, hasNotification });
 
     if (hasNotification && isOpen) {
       const referee_id = refereeListData[id].id;
@@ -122,6 +128,7 @@ const myReferralsContainer = (WrappedComponent) => (props) => {
       onClickCopy={onClickCopy}
       onClickListItem={onClickListItem}
       navigate={navigate}
+      productName={productName}
     />
   );
 };

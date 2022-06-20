@@ -14,12 +14,13 @@ import { isEmpty } from "lodash-es";
 import { getFnsFormattedDate } from "../../pages/ReferAndEarn/common/utils";
 import { formatAmountInr } from "businesslogic/utils/common/functions";
 import ToastMessage from "../../designSystem/atoms/ToastMessage";
+import { nativeCallback } from "../../utils/native_callback";
 
 const screen = "WALLET_TRANSFERS";
 
 const walletTransfersContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
-  const { isWeb } = useMemo(getConfig, []);
+  const { Web: isWeb, mobile } = useMemo(getConfig, []);
   const { isPageLoading } = useLoadingState(screen);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const [filterApplied, setFilterApplied] = useState(
@@ -27,9 +28,14 @@ const walletTransfersContainer = (WrappedComponent) => (props) => {
   );
 
   const walletTransactions = useSelector(getWalletTransactionsData);
-  let walletTransactionsViewData = getWalletTransactionsViewData(
-    walletTransactions,
-    filterApplied
+  let walletTransactionsViewData = useMemo(
+    () => getWalletTransactionsViewData(walletTransactions),
+    [walletTransactions]
+  );
+
+  let filteredData = useMemo(
+    () => getFilteredTansactionsData(walletTransactionsViewData, filterApplied),
+    [walletTransactionsViewData, filterApplied]
   );
 
   const dispatch = useDispatch();
@@ -54,15 +60,25 @@ const walletTransfersContainer = (WrappedComponent) => (props) => {
   }, [isFetchFailed]);
 
   const handleWalletFilter = (e, val) => {
-    console.log({ val });
     setFilterApplied(val);
   };
 
-  const onClickContact = () => {};
+  const onClickContact = () => {
+    if (isWeb) {
+      navigate("/help");
+    } else {
+      nativeCallback({
+        action: "open_browser",
+        message: {
+          url: `tel:${mobile}`,
+        },
+      });
+    }
+  };
 
   return (
     <WrappedComponent
-      transactionData={walletTransactionsViewData}
+      transactionData={filteredData}
       isWeb={isWeb}
       filterApplied={filterApplied}
       handleWalletFilter={handleWalletFilter}
@@ -73,7 +89,7 @@ const walletTransfersContainer = (WrappedComponent) => (props) => {
   );
 };
 
-const getWalletTransactionsViewData = (walletTransactions, filterApplied) => {
+const getWalletTransactionsViewData = (walletTransactions) => {
   let walletTransactionsViewData = walletTransactions.map((item, index) => {
     const acc =
       item?.to_account_number &&
@@ -92,12 +108,20 @@ const getWalletTransactionsViewData = (walletTransactions, filterApplied) => {
     };
   });
 
+  return walletTransactionsViewData;
+};
+
+const getFilteredTansactionsData = (
+  walletTransactionsViewData,
+  filterApplied
+) => {
+  let filteredData = walletTransactionsViewData;
   if (!isEmpty(filterApplied) && filterApplied !== "all") {
-    walletTransactionsViewData = walletTransactionsViewData.filter(
+    filteredData = walletTransactionsViewData.filter(
       (item) => item.status === filterApplied
     );
   }
-  return walletTransactionsViewData;
+  return filteredData;
 };
 
 export default walletTransfersContainer(WalletTransfers);

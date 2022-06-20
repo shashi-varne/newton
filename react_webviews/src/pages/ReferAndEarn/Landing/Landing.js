@@ -2,11 +2,8 @@ import React, { useState } from "react";
 import Container from "../../../designSystem/organisms/ContainerWrapper";
 import CustomSwiper from "../../../designSystem/molecules/CustomSwiper/CustomSwiper";
 import { SwiperSlide } from "swiper/react";
-import { getConfig } from "../../../utils/functions";
-import { Box } from "@mui/system";
 import ReferralsView from "./ReferralsView";
 import RewardsView from "./RewardsView";
-import ShareCodeComponent from "../../../featureComponent/ReferAndEarn/ShareCodeComponet/ShareCodeComponent";
 import { REFERRAL_LANDING } from "businesslogic/strings/referAndEarn";
 import { LANDING_TABS_DATA } from "businesslogic/constants/referAndEarn";
 import ReferralStepsBottomSheet from "../../../featureComponent/ReferAndEarn/ReferralStepsBottomSheet/ReferralStepsBottomSheet";
@@ -20,6 +17,7 @@ const landing = ({
   isWeb,
   noRewardsView,
   balance,
+  minWithrawAmount,
   campaignTitle = "",
   referralData = [],
   referralCode = "",
@@ -33,9 +31,9 @@ const landing = ({
   onClickInfoCard,
   showTransferNotAllowed,
   setShowTransferNotAllowed,
+  productName,
 }) => {
   const [swiper, setSwiper] = useState(null);
-  const { productName } = getConfig();
 
   const handleTabChange = (e, value) => {
     setTabValue(value);
@@ -63,20 +61,6 @@ const landing = ({
         },
         tabChilds: LANDING_TABS_DATA,
       }}
-      renderComponentAboveFooter={
-        noRewardsView &&
-        tabValue === 1 && (
-          <Box style={{ marginBottom: "16px" }}>
-            <ShareCodeComponent
-              showCopyCode={true}
-              referralCode={referralCode}
-              onClickCopy={onClickCopy}
-              onClickMail={onClickMail}
-              onClickShare={onClickShare}
-            />
-          </Box>
-        )
-      }
       isPageLoading={isPageLoading}
       className="refer-and-earn-landing"
       dataAid={REFERRAL_LANDING.screenDataAid}
@@ -134,15 +118,14 @@ const landing = ({
         onClickCopy={() => onClickCopy(activeSheetIndex)}
         onClickMail={() => onClickMail(activeSheetIndex)}
         onClickShare={() => onClickShare(activeSheetIndex)}
+        productName={productName}
       />
       <TransferNotAllowedBottomSheet
+        minAmount={minWithrawAmount}
         isOpen={showTransferNotAllowed}
         handleClose={() => setShowTransferNotAllowed(false)}
         isWeb={isWeb}
-        referralCode={referralCode}
-        onClickCopy={onClickCopy}
-        onClickMail={onClickMail}
-        onClickCta={onClickShare}
+        onClickCta={() => setShowTransferNotAllowed(false)}
       />
     </Container>
   );

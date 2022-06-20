@@ -30,7 +30,7 @@ const WithdrawPlaced = ({ productName = "fisdom", navigate, amount }) => {
   return (
     <Container
       headerProps={{
-        headerSx: { display: "none" },
+        hide:true,
       }}
       className="reward-withdrawal-placed"
       dataAid={STRINGS.screenDataAid}

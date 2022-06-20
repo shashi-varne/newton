@@ -29,7 +29,7 @@ const ReferralsView = ({
         dataAid={REFERRAL_LANDING.referralsLandingHeader.dataAid}
       >
         <LandingHeaderImage
-          imgSrc={require(`assets/${productName}/iv_refer_earn_landing.svg`)}
+          imgSrc={require(`assets/iv_refer_earn_landing.svg`)}
         />
         <LandingHeaderTitle>{campaignTitle}</LandingHeaderTitle>
       </LandingHeader>

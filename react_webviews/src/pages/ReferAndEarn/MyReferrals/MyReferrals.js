@@ -20,6 +20,7 @@ const MyReferrals = ({
   isPageLoading,
   onClickListItem,
   onClickCopy,
+  productName,
 }) => {
   return (
     <Container
@@ -89,7 +90,7 @@ const MyReferrals = ({
               dataAid={`${index + 1}`}
               onClickCopy={onClickCopy}
               showSeparator={!isLastItem}
-              productName="fisdom"
+              productName={productName}
             />
           );
         } else {
@@ -101,7 +102,7 @@ const MyReferrals = ({
               dataAid={`${index + 1}`}
               onClickCopy={onClickCopy}
               showSeparator={!isLastItem}
-              productName="fisdom"
+              productName={productName}
             />
           );
         }
@@ -116,6 +117,7 @@ const ReferralStatusCard = ({
   dataAid,
   onClickCopy,
   showSeparator,
+  productName,
 }) => {
   return (
     <>
@@ -128,7 +130,7 @@ const ReferralStatusCard = ({
         <Icon
           dataAid={STRINGS.cardImageDataAid}
           size="32px"
-          src={require("assets/iv_profile.svg")}
+          src={require(`assets/${productName}/iv_profile.svg`)}
           className="c-icon-wrapper"
         />
         <Stack style={{ marginLeft: "12px", flexGrow: 1 }}>

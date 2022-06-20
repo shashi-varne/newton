@@ -8,12 +8,13 @@ import useErrorState from "../../common/customHooks/useErrorState";
 import {
   getActiveCampaigns,
   getActiveCampaignsData,
-  getActiveCampaignsShareMessage,
   getActiveCampaignsTitle,
   getRefereeList,
   getRefereeListData,
   getWalletBalance,
   getWalletBalanceData,
+  getSelectedTabIndex,
+  setSelectedTab,
 } from "businesslogic/dataStore/reducers/referAndEarn";
 import Api from "../../utils/api";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
@@ -25,12 +26,13 @@ import {
   getDiffInHours,
 } from "../../pages/ReferAndEarn/common/utils";
 import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../pages/ReferAndEarn/common/constants";
+import { isReadyToInvest } from "../../kyc/services";
 
 const screen = "REFER_AND_EARN_LANDING";
 
 const landingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
-  const { isWeb } = useMemo(getConfig, []);
+  const { Web: isWeb, productName } = useMemo(getConfig, []);
   const { isPageLoading } = useLoadingState(screen);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const { user, kyc, isLoading } = useUserKycHook();
@@ -38,21 +40,35 @@ const landingContainer = (WrappedComponent) => (props) => {
 
   const activeCampaignData = useSelector(getActiveCampaignsData);
   const campaignTitle = useSelector(getActiveCampaignsTitle);
-  const shareMessage = useSelector(getActiveCampaignsShareMessage);
 
-  const activeCampaignViewData = getActiveCampaignsViewData(activeCampaignData);
+  const activeCampaignViewData = useMemo(
+    () => getActiveCampaignsViewData(activeCampaignData),
+    [activeCampaignData]
+  );
   const refereeListData = useSelector(getRefereeListData);
   const walletBalance = useSelector(getWalletBalanceData);
   const [activeSheetIndex, setActiveSheetIndex] = useState(-1);
   const [showTransferNotAllowed, setShowTransferNotAllowed] = useState(false);
-  const [tabValue, setTabValue] = useState(0);
 
-  const noReferrals =
-    !isEmpty(refereeListData) && refereeListData?.length === 0;
-  const allowClaimRewards =
-    walletBalance?.balance_amount >= walletBalance?.min_withdraw_limit;
+  const tabValue = useSelector(getSelectedTabIndex);
+  const handleSelectTab = (value) => {
+    dispatch(setSelectedTab(value));
+  };
 
-  const totalBalance = "₹" + walletBalance?.balance_amount;
+  const noReferrals = useMemo(
+    () => isEmpty(refereeListData) || refereeListData?.length === 0,
+    [refereeListData]
+  );
+  const { totalBalance, minWithrawAmount } = useMemo(() => {
+    return {
+      totalBalance: walletBalance?.balance_amount,
+      minWithrawAmount: walletBalance?.min_withdraw_limit,
+    };
+  }, [walletBalance]);
+
+  const allowClaimRewards = useMemo(() => {
+    return walletBalance?.balance_amount >= walletBalance?.min_withdraw_limit;
+  }, [walletBalance]);
 
   const dispatch = useDispatch();
 
@@ -85,7 +101,15 @@ const landingContainer = (WrappedComponent) => (props) => {
 
   useEffect(() => {
     initialize();
+    if (props?.history?.action === "PUSH") {
+      handleSelectTab(0);
+    }
   }, []);
+
+  useEffect(() => {
+    const userAction = showTransferNotAllowed ? "next" : "back";
+    sendEvents(userAction);
+  }, [showTransferNotAllowed]);
 
   useEffect(() => {
     if (isFetchFailed && !isEmpty(errorMessage)) {
@@ -108,6 +132,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       cardClicked =
         activeCampaignViewData?.[activeSheetIndex]?.title?.toLowerCase();
     }
+    const userKycReady = isReadyToInvest();
 
     const eventObj = {
       event_name: "refer_earn",
@@ -117,7 +142,7 @@ const landingContainer = (WrappedComponent) => (props) => {
         card_click: cardClicked,
         user_application_status: kyc?.application_status_v2 || "init",
         user_investment_status: user?.active_investment,
-        user_kyc_status: kyc?.mf_kyc_processed || false,
+        user_kyc_status: userKycReady || false,
       },
     };
 
@@ -143,7 +168,7 @@ const landingContainer = (WrappedComponent) => (props) => {
   const onClickCopy = async () => {
     sendShareEvents("share_icon");
 
-    let msg = shareMessage;
+    let msg = "";
     if (activeSheetIndex >= 0) {
       msg = activeCampaignViewData?.[activeSheetIndex]?.shareMessage;
     }
@@ -158,7 +183,7 @@ const landingContainer = (WrappedComponent) => (props) => {
   const onClickMail = () => {
     sendShareEvents("share_icon");
     let subject = "";
-    let emailBody = shareMessage;
+    let emailBody = "";
 
     if (activeSheetIndex >= 0) {
       subject = activeCampaignViewData?.[activeSheetIndex]?.subtitle;
@@ -172,7 +197,7 @@ const landingContainer = (WrappedComponent) => (props) => {
 
   const onClickShare = () => {
     sendShareEvents("share_icon");
-    let msg = shareMessage;
+    let msg = "";
     if (activeSheetIndex >= 0) {
       msg = activeCampaignViewData?.[activeSheetIndex]?.shareMessage;
     }
@@ -201,7 +226,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     <WrappedComponent
       isWeb={isWeb}
       tabValue={tabValue}
-      setTabValue={setTabValue}
+      setTabValue={handleSelectTab}
       activeSheetIndex={activeSheetIndex}
       setActiveSheetIndex={setActiveSheetIndex}
       sendEvents={sendEvents}
@@ -219,6 +244,8 @@ const landingContainer = (WrappedComponent) => (props) => {
       referralData={activeCampaignViewData}
       showTransferNotAllowed={showTransferNotAllowed}
       setShowTransferNotAllowed={setShowTransferNotAllowed}
+      productName={productName}
+      minWithrawAmount={minWithrawAmount}
     />
   );
 };
