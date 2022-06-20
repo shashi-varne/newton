@@ -27,6 +27,7 @@ import Button from '../../atoms/Button';
 import PropTypes from 'prop-types';
 import './BottomSheet.scss';
 import Icon from '../../atoms/Icon';
+import { isEmpty } from 'lodash-es';
 
 const BottomSheet = ({
   isOpen,
@@ -53,7 +54,9 @@ const BottomSheet = ({
   dataAid,
   imageSrc,
   imageSrcProps,
-  children
+  children,
+  renderButtonComponent,
+  ...restProps
 }) => {
   const handleOnClose = useCallback(
     (event, reason) => {
@@ -73,6 +76,7 @@ const BottomSheet = ({
       disableEscapeKeyDown={disableEscapeKeyDown}
       onBackdropClick={onBackdropClick}
       data-aid={`bottomsheet_${dataAid}`}
+      {...restProps}
     >
       <Stack direction='column' spacing={1} className={`bottom-sheet-wrapper ${imageSrc && `bottom-sheet-icon-wrapper`}`}>
         <Stack justifyContent='center' alignItems='center' className='btm-sheet-indicator'>
@@ -130,11 +134,13 @@ const BottomSheet = ({
             {subtitle}
           </Typography>
         )}
-
         {children}
 
-        {(primaryBtnTitle || secondaryBtnTitle) && (
+        {(primaryBtnTitle || secondaryBtnTitle ||renderButtonComponent) && (
           <Stack flexDirection='column' spacing={1} className='btm-sheet-cta-wrapper'>
+            {
+              !isEmpty(renderButtonComponent) && renderButtonComponent
+            }
             {primaryBtnTitle && (
               <Button
                 title={primaryBtnTitle}

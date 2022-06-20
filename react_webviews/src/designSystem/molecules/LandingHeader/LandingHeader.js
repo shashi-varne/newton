@@ -77,22 +77,22 @@ export const LandingHeaderImage = ({ imgSrc, imgProps = {} }) => {
   return <Icon src={imgSrc} width='140px' height='120px' {...imgProps} dataAid='top' />;
 };
 
-export const LandingHeaderTitle = ({ children, color }) => {
+export const LandingHeaderTitle = ({ children, color, align = "left" }) => {
   return (
-    <Typography variant='heading1' color={color} dataAid='title' component='div'>
+    <Typography variant='heading1' color={color} dataAid='title' component='div' align={align}>
       {children}
     </Typography>
   );
 };
 
-export const LandingHeaderSubtitle = ({ children, color, dataIdx = "" }) => {
+export const LandingHeaderSubtitle = ({ children, color, dataIdx = "", align = "left" }) => {
   return (
     <Typography
       className='lh-subtitle'
       dataAid={`subtitle${dataIdx}`}
       variant='body2'
       color={color}
-      align='left'
+      align={align}
       component='div'
     >
       {children}
@@ -100,21 +100,23 @@ export const LandingHeaderSubtitle = ({ children, color, dataIdx = "" }) => {
   );
 };
 
-export const LandingHeaderPoints = ({ children, color, dataIdx }) => {
+export const LandingHeaderPoints = ({ children, color, dataIdx, align = "left" }) => {
   return (
-    <ul className='lh-description-list'>
-      <li className='lh-description-item'>
-        <Typography
-          variant='body2'
-          color={color}
-          align='left'
-          dataAid={`point${dataIdx}`}
-          component='div'
-        >
-          {children}
-        </Typography>
-      </li>
-    </ul>
+    <div style={{textAlign:align}}>
+      <ul className='lh-description-list'>
+        <li className='lh-description-item'>
+          <Typography
+            variant='body2'
+            color={color}
+            align='left'
+            dataAid={`point${dataIdx}`}
+            component='div'
+          >
+            {children}
+          </Typography>
+        </li>
+      </ul>
+    </div>
   );
 };
 
