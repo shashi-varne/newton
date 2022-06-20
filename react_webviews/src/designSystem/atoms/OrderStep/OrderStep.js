@@ -28,6 +28,7 @@ const OrderStep = (props) => {
     subtitleColor,
     stepCount = "",
     stepCountColor,
+    stepColor,
     label = "",
     labelColor,
     dataAid,
@@ -52,6 +53,7 @@ const OrderStep = (props) => {
           className="aos-circle"
           sx={{
             backgroundColor:
+              stepColor ||
               VARIANT_COLOR_MAPPER[variant] ||
               VARIANT_COLOR_MAPPER[ORDER_STEP_VARIANTS.DEFAULT],
           }}

@@ -52,7 +52,7 @@ import ThemeWrapper from "../theme/ThemeWrapper";
 import fundDetailsV2Container from "../containers/fundDetailsV2/fundDetailsV2Container";
 import mfOrderContainer from "../containers/mfOrder/mfOrderContainer";
 import Nominee from "../pages/Nominee";
-import ReferAndEarn from "../pages/ReferAndEarn/ReferAndEarn";
+import ReferAndEarn from "../pages/ReferAndEarn";
 
 const Home = (props) => {
   const config = getConfig(); 
