@@ -97,6 +97,11 @@ const bankListContainer = (WrappedComponent) => (props) => {
     );
   };
 
+  const onBackClick = () => {
+    sendEvents("back");
+    nativeCallback({ action: "exit_web" });
+  };
+
   return (
     <WrappedComponent
       bankList={bankListOptions}
@@ -105,6 +110,7 @@ const bankListContainer = (WrappedComponent) => (props) => {
       handleChange={handleChange}
       sendEvents={sendEvents}
       onClick={onClick}
+      onBackClick={onBackClick}
     />
   );
 };
