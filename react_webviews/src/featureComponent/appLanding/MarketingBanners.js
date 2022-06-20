@@ -2,6 +2,7 @@ import React from "react";
 import CustomSwiper from "../../designSystem/molecules/CustomSwiper";
 import Icon from "../../designSystem/atoms/Icon";
 import { SwiperSlide } from "swiper/react";
+import PropTypes from 'prop-types';
 
 const MarketingBanners = ({ banners = [], onClick }) => {
   return (
@@ -29,3 +30,8 @@ const MarketingBanners = ({ banners = [], onClick }) => {
 };
 
 export default MarketingBanners;
+
+MarketingBanners.propTypes = {
+  banners: PropTypes.array,
+  onClick: PropTypes.func,
+};

@@ -2,6 +2,7 @@ import React from "react";
 import Typography from "../../designSystem/atoms/Typography";
 import BottomSheet from "../../designSystem/organisms/BottomSheet";
 import Button from "../../designSystem/atoms/Button";
+import PropTypes from 'prop-types';
 
 const AuthVerification = ({
   isOpen,
@@ -48,3 +49,8 @@ const AuthVerification = ({
 };
 
 export default AuthVerification;
+
+AuthVerification.propTypes = {
+  authData: PropTypes.object,
+  handleEdit: PropTypes.func,
+};
