@@ -11,36 +11,47 @@ import Button from "../../../designSystem/atoms/Button";
 import { MY_REFERRALS } from "businesslogic/strings/referAndEarn";
 
 const STRINGS = MY_REFERRALS;
+const expandIcon = require("assets/arrow_up_new.svg");
+const collapseIcon = require("assets/arrow_down_new.svg");
 
 const CollapsibleReferalStatus = ({
-  isOpen,
-  imgSrc,
+  id,
   label,
   onClick,
   disabled,
   sx,
   dataAid = 0,
   onClickCopy,
-  showNotification = true,
-  showSeparator = true,
+  showNotification,
+  showSeparator,
   data = dummyData,
-  productName = "fisdom",
+  productName,
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const handleCollapse = () => {
+    const val = !isOpen;
+    setIsOpen(val);
+    onClick({ id, isOpen: val });
+  };
+
   return (
     <>
       <Box
         sx={sx}
         className={`c-ref-wrapper ${disabled && "collapsed-disabled"}`}
-        data-aid={`grp_referral` + dataAid}
+        data-aid={`grp_referral${dataAid}`}
       >
-        <div className="c-label-wrapper" onClick={onClick}>
+        <div className="c-label-wrapper" onClick={handleCollapse}>
           <Stack direction="row" alignItems="center">
-            <Badge variant="dot" overlap="circular">
+            <Badge
+              variant="dot"
+              overlap="circular"
+              invisible={!showNotification}
+            >
               <Icon
-                invisible={!showNotification}
                 dataAid={STRINGS.cardImageDataAid}
                 size="32px"
-                src={imgSrc || require("assets/iv_profile.svg")}
+                src={require("assets/iv_profile.svg")}
                 className="c-icon-wrapper"
               />
             </Badge>
@@ -55,11 +66,7 @@ const CollapsibleReferalStatus = ({
           <Icon
             dataAid={STRINGS.collapseIconDataAid}
             size="24px"
-            src={
-              isOpen
-                ? require("assets/arrow_up_new.svg")
-                : require("assets/arrow_down_new.svg")
-            }
+            src={isOpen ? expandIcon : collapseIcon}
             className="c-icon-wrapper"
           />
         </div>
@@ -80,7 +87,7 @@ const CollapsibleReferalStatus = ({
                     <Typography
                       variant="body2"
                       color="foundationColors.secondary.coralOrange.400"
-                      dataAid={`status${index + 1}`}
+                      dataAid={`status${dataAid}`}
                     >
                       Pending
                     </Typography>
@@ -95,7 +102,7 @@ const CollapsibleReferalStatus = ({
                 ) : (
                   <Button
                     title={STRINGS.copyBtn.text}
-                    onClick={onClickCopy}
+                    onClick={() => onClickCopy(id)}
                     variant={"link"}
                     dataAid={STRINGS.copyBtn.dataAid}
                     sx={{ alignSelf: "flex-start" }}
@@ -106,20 +113,19 @@ const CollapsibleReferalStatus = ({
           </>
         </CollapseLib>
       </Box>
-      {showSeparator && (
-        <Separator dataAid={dataAid} marginLeft="16px" marginRight="16px" />
-      )}
+      {showSeparator && <Separator dataAid={dataAid} />}
     </>
   );
 };
 
 const TickAnimationComp = ({ isOpen, amount, productName }) => {
-  const [showAinamtion, setShowAnimation] = useState(true);
+  const [showAnimation, setShowAnimation] = useState(true);
   const lottieRef = useRef();
+  let animationTimeout;
 
-  useEffect(() => {
+  const showTickAnimation = () => {
     const animationDuration = lottieRef?.current?.getDuration();
-    const animationTimeout = setTimeout(() => {
+    animationTimeout = setTimeout(() => {
       lottieRef?.current?.stop();
       setShowAnimation(false);
     }, animationDuration * 1000);
@@ -130,7 +136,10 @@ const TickAnimationComp = ({ isOpen, amount, productName }) => {
     } else {
       lottieRef?.current?.stop();
     }
+  };
 
+  useEffect(() => {
+    showTickAnimation();
     return () => {
       clearTimeout(animationTimeout);
     };
@@ -138,7 +147,7 @@ const TickAnimationComp = ({ isOpen, amount, productName }) => {
 
   return (
     <Box>
-      <div style={{ display: showAinamtion ? "block" : "none" }}>
+      <div style={{ display: showAnimation ? "block" : "none" }}>
         <Lottie
           lottieRef={lottieRef}
           animationData={require(`assets/${productName}/lottie/tick.json`)}
@@ -148,7 +157,7 @@ const TickAnimationComp = ({ isOpen, amount, productName }) => {
           data-aid={`iv_${STRINGS.animationDataAid}`}
         />
       </div>
-      {!showAinamtion && (
+      {!showAnimation && (
         <Typography
           variant="body2"
           color="foundationColors.secondary.profitGreen.400"
@@ -166,7 +175,12 @@ CollapsibleReferalStatus.propTypes = {
   isOpen: PropTypes.bool,
   label: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
-  dataAid: PropTypes.string,
+  dataAid: PropTypes.string.isRequired,
+};
+
+CollapsibleReferalStatus.defaultProps = {
+  showNotification: false,
+  showSeparator: true,
 };
 
 const dummyData = [
