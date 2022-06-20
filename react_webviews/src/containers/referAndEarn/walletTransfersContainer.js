@@ -19,7 +19,7 @@ const screen = "WALLET_TRANSFERS";
 
 const walletTransfersContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
-  const { isWeb } = useMemo(getConfig, []);
+  const { isWeb, mobile } = useMemo(getConfig, []);
   const { isPageLoading } = useLoadingState(screen);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const [filterApplied, setFilterApplied] = useState(
@@ -57,7 +57,18 @@ const walletTransfersContainer = (WrappedComponent) => (props) => {
     setFilterApplied(val);
   };
 
-  const onClickContact = () => {};
+  const onClickContact = () => {
+    if (isWeb) {
+      navigate("/help");
+    } else {
+      nativeCallback({
+        action: "open_browser",
+        message: {
+          url: `tel:${mobile}`,
+        },
+      });
+    }
+  };
 
   return (
     <WrappedComponent
