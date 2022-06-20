@@ -1,0 +1,40 @@
+.platform-motivators-wrapper {
+  background-color: white;
+  padding: 26px 16px 38px 16px;
+
+  .swiper-slide {
+    width: unset !important;
+  }
+
+  .platform-motivator {
+    display: flex;
+    flex-direction: row;
+    border-radius: 12px;
+    padding: 16px 12px;
+    align-items: center;
+    width: 295px;
+
+    .pm-left-wrapper {
+      background-color: white;
+      border-radius: 50%;
+      width: 64px;
+      height: 64px;
+    }
+
+    .pm-left-image {
+      margin-right: 16px;
+      width: 64px;
+      height: 64px;
+    }
+
+    .pm-text-wrapper {
+      display: flex;
+      flex-direction: column;
+      padding-left: 8px;
+
+      .pm-subtitle-text {
+        margin-top: 4px;
+      }
+    }
+  }
+}
