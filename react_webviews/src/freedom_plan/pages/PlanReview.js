@@ -127,7 +127,7 @@ const PlanReview = (props) => {
 
   const handleClick = () => {
     sendEvents("next");
-    if (!initiateFreedomPlanPayment) {
+    if (initiateFreedomPlanPayment) {
       initiatePayment({
         plan_id: freedomPlanData.id,
       });
