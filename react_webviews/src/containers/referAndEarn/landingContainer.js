@@ -25,10 +25,6 @@ import {
   getFnsFormattedDate,
   getDiffInHours,
 } from "../../pages/ReferAndEarn/common/utils";
-// import {
-//   getTotalBalance,
-//   checkAllowClaimingRewards,
-// } from "businesslogic/utils/referAndEarn/functions";
 import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../pages/ReferAndEarn/common/constants";
 import { isReadyToInvest } from "../../kyc/services";
 
