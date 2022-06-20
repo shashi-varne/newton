@@ -251,7 +251,9 @@ export const getInvestCardsData = (
 
 export const getEnabledFeaturesData = (config, investOptions, feature) => {
   const { productName, features = {} } = config;
-  const referralData = get(store.getState(), "app.referral", {});
+  const state = store.getState();
+  const referralData = get(state, "app.referral", {});
+  const kyc = get(state, "app.kyc", {});
   let subbrokerCode = "";
   let subbrokerFeatures = {};
   if (referralData?.subbroker?.data) {
@@ -273,7 +275,7 @@ export const getEnabledFeaturesData = (config, investOptions, feature) => {
       ((subbrokerCode && !subbrokerFeatures[section]) || !features[section])
     ) {
       return;
-    } else if (["stocks", "ipo"].includes(section) && !isTradingEnabled()) {
+    } else if (["stocks", "ipo"].includes(section) && !isTradingEnabled(kyc)) {
       return;
     } else {
       const cardData = INVESTMENT_OPTIONS[section];
@@ -329,8 +331,10 @@ export const validateFeature = (type, enabledFeatures = {}) => {
   if (RESTRICTED_FEATURES.includes(type) && !enabledFeatures[type]) {
     return false;
   }
+  const state = store.getState();
+  const kyc = get(state, "app.kyc", {});
   if (["ipo", "stocks"].includes(type)) {
-    return isTradingEnabled();
+    return isTradingEnabled(kyc);
   } else if (type === "freedomplan") {
     return isFreedomPlanEnabled();
   } else if (type === "equityKyc") {
@@ -340,19 +344,20 @@ export const validateFeature = (type, enabledFeatures = {}) => {
 };
 
 export const isFreedomPlanEnabled = () => {
-  const subscriptionStatus = get(
-    store.getState(),
-    "app.subscriptionStatus",
-    {}
-  );
+  const state = store.getState();
+  const subscriptionStatus = get(state, "app.subscriptionStatus", {});
+  const kyc = get(state, "app.kyc", {});
   return (
-    isTradingEnabled() &&
+    isTradingEnabled(kyc) &&
     (subscriptionStatus?.freedom_cta || subscriptionStatus?.renewal_cta)
   );
 };
 
-export const getEnabledPlatformMotivators = (motivators) => {
-  return motivators.filter((data) => validateFeature(data.id));
+export const getEnabledPlatformMotivators = (
+  motivators,
+  enabledFeatures = {}
+) => {
+  return motivators.filter((data) => validateFeature(data.id, enabledFeatures));
 };
 
 export const handleMarketingBanners = (

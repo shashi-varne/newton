@@ -109,7 +109,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       landingMarketingBanners,
       enabledFeatures
     );
-    const motivators = getEnabledPlatformMotivators(platformMotivators);
+    const motivators = getEnabledPlatformMotivators(platformMotivators, enabledFeatures);
     return {
       code,
       onboardingCarousels,
@@ -139,6 +139,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     subscriptionStatus,
     kyc,
     appStorage.feature,
+    referral,
   ]);
 
   const [showCarousals, setShowCarousals] = useState(
@@ -662,6 +663,8 @@ const landingContainer = (WrappedComponent) => (props) => {
       [BOTTOMSHEET_KEYS.openPremiumOnboarding]: false,
     });
   };
+
+  console.log("handle bs ", bottomsheetStates)
 
   return (
     <WrappedComponent
