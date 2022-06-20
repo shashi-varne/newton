@@ -1,0 +1,15 @@
+.customized-slider {
+  width: 100%;
+  .MuiSlider-track,
+  .MuiSlider-rail {
+    height: 12px;
+  }
+  .slider-base {
+    position: relative;
+    .slider-arrow {
+      position: absolute;
+      left: 12px;
+      top: 18px;
+    }
+  }
+}
