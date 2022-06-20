@@ -4,17 +4,18 @@ import { TNC } from "businesslogic/strings/referAndEarn";
 import { Box, Stack } from "@mui/material";
 import Typography from "../../../designSystem/atoms/Typography";
 import "./TermsAndCondtions.scss";
+import { capitalizeFirstLetter } from "../../../utils/validators";
 
 const STRINGS = TNC;
 
-const TermsAndCondtions = ({ points = [] }) => {
+const TermsAndCondtions = ({ points = [], productName }) => {
   return (
     <Container
       headerProps={{
         headerTitle: STRINGS.title.text,
         dataAid: STRINGS.title.dataAid,
       }}
-      renderComponentAboveFooter={<FooterComponent />}
+      renderComponentAboveFooter={<FooterComponent productName={productName} />}
       className="refer-and-earn-tnc"
       dataAid={STRINGS.screenDataAid}
     >
@@ -44,7 +45,9 @@ const TermsAndCondtions = ({ points = [] }) => {
   );
 };
 
-const FooterComponent = () => {
+const FooterComponent = ({ productName }) => {
+  const footerText = STRINGS.footer.text.replace("{product}", productName);
+
   return (
     <Stack
       justifyContent="center"
@@ -61,7 +64,7 @@ const FooterComponent = () => {
         color="foundationColors.content.tertiary"
         align="center"
       >
-        {STRINGS.footer.text}
+        {capitalizeFirstLetter(footerText)}
       </Typography>
     </Stack>
   );

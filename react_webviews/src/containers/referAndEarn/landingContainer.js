@@ -59,8 +59,11 @@ const landingContainer = (WrappedComponent) => (props) => {
     () => isEmpty(refereeListData) || refereeListData?.length === 0,
     [refereeListData]
   );
-  const totalBalance = useMemo(() => {
-    return walletBalance?.balance_amount;
+  const { totalBalance, minWithrawAmount } = useMemo(() => {
+    return {
+      totalBalance: walletBalance?.balance_amount,
+      minWithrawAmount: walletBalance?.min_withdraw_limit,
+    };
   }, [walletBalance]);
 
   const allowClaimRewards = useMemo(() => {
@@ -242,6 +245,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       showTransferNotAllowed={showTransferNotAllowed}
       setShowTransferNotAllowed={setShowTransferNotAllowed}
       productName={productName}
+      minWithrawAmount={minWithrawAmount}
     />
   );
 };

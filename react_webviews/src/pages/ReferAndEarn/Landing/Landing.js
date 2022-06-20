@@ -17,6 +17,7 @@ const landing = ({
   isWeb,
   noRewardsView,
   balance,
+  minWithrawAmount,
   campaignTitle = "",
   referralData = [],
   referralCode = "",
@@ -120,6 +121,7 @@ const landing = ({
         productName={productName}
       />
       <TransferNotAllowedBottomSheet
+        minAmount={minWithrawAmount}
         isOpen={showTransferNotAllowed}
         handleClose={() => setShowTransferNotAllowed(false)}
         isWeb={isWeb}

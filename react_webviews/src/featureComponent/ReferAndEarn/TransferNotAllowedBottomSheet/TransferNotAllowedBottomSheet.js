@@ -10,13 +10,15 @@ const TransferNotAllowedBottomSheet = ({
   isOpen,
   handleClose = noop,
   onClickCta = noop,
+  minAmount,
 }) => {
+  const subtitle = STRINGS.subtitle.replace("{minAmount}", minAmount);
   return (
     <BottomSheet
       isOpen={isOpen}
       title={STRINGS.title}
       imageTitleSrc={require(`assets/caution.svg`)}
-      subtitle={STRINGS.subtitle}
+      subtitle={subtitle}
       subtitleColor={"foundationColors.content.tertiary"}
       onClose={handleClose}
       primaryBtnTitle={"okay"}
