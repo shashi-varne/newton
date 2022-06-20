@@ -99,10 +99,15 @@ const landingContainer = (WrappedComponent) => (props) => {
       landingMarketingBanners,
       ...baseConfig
     } = getConfig();
-    const { investCardsData, isMfOnly, showPortfolioOverview } =
-      getInvestCardsData(featuresList, appStorage.feature, mfOptions, 4);
+    const {
+      investCardsData,
+      isMfOnly,
+      showPortfolioOverview,
+      enabledFeatures,
+    } = getInvestCardsData(featuresList, appStorage.feature, mfOptions, 4);
     const marketingBanners = getEnabledMarketingBanners(
-      landingMarketingBanners
+      landingMarketingBanners,
+      enabledFeatures
     );
     const motivators = getEnabledPlatformMotivators(platformMotivators);
     return {
@@ -135,7 +140,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     kyc,
     appStorage.feature,
   ]);
-  
+
   const [showCarousals, setShowCarousals] = useState(
     !isEmpty(onboardingCarousels) &&
       baseConfig.isSdk &&
@@ -511,10 +516,16 @@ const landingContainer = (WrappedComponent) => (props) => {
       navigate(pathname);
     };
 
+  const openPageLoader = () => {
+    handleLoader({
+      pageLoader: true,
+    });
+  };
+
   const onMarketingBannerClick =
     (data = {}) =>
     () => {
-      handleMarketingBanners(data, sendEvents, navigate);
+      handleMarketingBanners(data, sendEvents, navigate, openPageLoader);
     };
 
   const handleDiySearch = () => {
@@ -674,10 +685,14 @@ const landingContainer = (WrappedComponent) => (props) => {
       portfolioOverViewData={portfolioOverViewData}
       showPortfolioOverview={showPortfolioOverview}
       showPortfolioLoader={showPortfolioLoader}
-      showPlatformMotivators={!kycData.isReadyToInvestBase}
+      showPlatformMotivators={
+        !isEmpty(platformMotivators) && !kycData.isReadyToInvestBase
+      }
       showExploreCategories={isMfOnly}
       showSeachIcon={isMfOnly}
-      showMarketingBanners={kycData.isReadyToInvestBase}
+      showMarketingBanners={
+        !isEmpty(marketingBanners) && kycData.isReadyToInvestBase
+      }
       showApplyReferral={showApplyReferral}
       showShareReferral={showShareReferral}
       showSetupEasySip={showSetupEasySip}

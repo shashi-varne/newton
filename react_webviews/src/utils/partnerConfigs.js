@@ -29,6 +29,9 @@ import {
   EQUITY_ONBOARDING_CAROUSELS,
   ONBOARDING_CAROUSELS,
   PLATFORM_MOTIVATORS,
+  PRODUCT_MARKETING_BANNERS,
+  DEFAULT_MARKETING_BANNERS,
+  EQUITY_MARKETING_BANNERS,
 } from "./partnerConstants";
 
 // common config across all partners
@@ -55,13 +58,7 @@ export const commonCardsConfig = {
     "savegoal",
     "instaredeem",
   ],
-  landingMarketingBanners: [
-    {
-      image: "freedomplan.svg",
-      id: "freedomplan",
-      eventStatus: "introducing freedom plan",
-    }
-  ],
+  landingMarketingBanners: DEFAULT_MARKETING_BANNERS,
   nfoBanners: [],
   platformMotivators: PLATFORM_MOTIVATORS,
 };
@@ -237,6 +234,7 @@ export const partnerConfigs = {
       insurance: true,
     },
     onboardingCarousels: EQUITY_ONBOARDING_CAROUSELS,
+    landingMarketingBanners: PRODUCT_MARKETING_BANNERS,
   },
   finity: {
     code: "finity",
@@ -251,6 +249,7 @@ export const partnerConfigs = {
       fhc: true,
       riskProfile: true,
     },
+    landingMarketingBanners: PRODUCT_MARKETING_BANNERS,
   },
   bfdlmobile: {
     logo: "bfdl_white_sdk_logo.svg",
@@ -401,6 +400,12 @@ export const partnerConfigs = {
     },
     mfSections: ["marketingBanners", "kyc", "mfOptions"],
     mfOptions: ["buildwealth", "instaredeem"],
+    landingMarketingBanners: [
+      {
+        image: "buildwealth.svg",
+        id: "buildwealth",
+      },
+    ]
   },
   sbm: {
     logo: "sbm.svg",
@@ -435,6 +440,7 @@ export const partnerConfigs = {
     navLogoClassname: "navbar-white-bg",
     mobile: "+80-48-093070",
     onboardingCarousels: EQUITY_ONBOARDING_CAROUSELS,
+    landingMarketingBanners: EQUITY_MARKETING_BANNERS,
     features: {
       stocks: true,
       ipo: true,
@@ -494,6 +500,7 @@ export const partnerConfigs = {
     features: {
       nps: true,
     },
+    landingMarketingBanners: []
   },
   google: {
     code: "google",
@@ -530,6 +537,7 @@ export const partnerConfigs = {
     webLogo: "ucomb_bank.svg",
     logoWidth: "200px",
     onboardingCarousels: EQUITY_ONBOARDING_CAROUSELS,
+    landingMarketingBanners: EQUITY_MARKETING_BANNERS,
     styles: {
       primaryColor: "#002759",
       secondaryColor: "#002759",

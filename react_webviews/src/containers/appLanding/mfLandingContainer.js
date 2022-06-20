@@ -32,9 +32,12 @@ const initializeData = () => {
     landingMarketingBanners,
     ...baseConfig
   } = getConfig();
-  const { investCardsData } = getInvestCardsData(mfOptions);
+  const { investCardsData, enabledFeatures } = getInvestCardsData(mfOptions);
   const { isMfOnly } = getInvestCardsData(featuresList);
-  const marketingBanners = getEnabledMarketingBanners(landingMarketingBanners);
+  const marketingBanners = getEnabledMarketingBanners(
+    landingMarketingBanners,
+    enabledFeatures
+  );
   return {
     code,
     marketingBanners,
@@ -150,8 +153,14 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
     });
   };
 
+  const openPageLoader = () => {
+    handleLoader({
+      pageLoader: true,
+    });
+  };
+
   const onMarketingBannerClick = (data) => () => {
-    handleMarketingBanners(data, sendEvents, navigate);
+    handleMarketingBanners(data, sendEvents, navigate, openPageLoader);
   };
 
   const onRightIconClick = () => {
@@ -195,7 +204,9 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
       marketingBanners={marketingBanners}
       investmentOptions={investCardsData}
       exploreCategories={EXPLORE_CATEGORIES}
-      showMarketingBanners={kycData.isReadyToInvestBase}
+      showMarketingBanners={
+        !isEmpty(marketingBanners) && kycData.isReadyToInvestBase
+      }
       showKycCard={kycData.showKycCard}
       bottomsheetStates={bottomsheetStates}
       isPageLoading={loaderData.skelton || loaderData.pageLoader}
