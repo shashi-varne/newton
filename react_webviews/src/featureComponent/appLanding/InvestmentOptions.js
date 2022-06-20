@@ -1,7 +1,7 @@
 import React from "react";
 import Typography from "../../designSystem/atoms/Typography";
 import MenuItem from "../../designSystem/molecules/MenuItem";
-import { isEmpty } from "lodash-es";
+import PropTypes from 'prop-types';
 
 const ICON_COLOR = [
   "#33CF90",
@@ -20,7 +20,7 @@ const InvestmentOptions = ({
 }) => {
   return (
     <div className="al-investment-options">
-      {!isEmpty(title) && (
+      {!title && (
         <Typography
           dataAid={titleDataAid}
           variant="heading3"
@@ -53,3 +53,10 @@ const InvestmentOptions = ({
 };
 
 export default InvestmentOptions;
+
+InvestmentOptions.propTypes = {
+  productList: PropTypes.array,
+  title: PropTypes.string,
+  onClick: PropTypes.func,
+  titleDataAid: PropTypes.string,
+};

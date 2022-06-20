@@ -5,6 +5,7 @@ import CustomSwiper from "../../designSystem/molecules/CustomSwiper";
 import { SwiperSlide } from "swiper/react";
 import Button from "../../designSystem/atoms/Button";
 import { Stack } from "@mui/material";
+import PropTypes from "prop-types";
 import "./ExploreCategories.scss";
 
 const ExploreCategories = ({
@@ -56,3 +57,10 @@ const ExploreCategories = ({
 };
 
 export default ExploreCategories;
+
+ExploreCategories.propTypes = {
+  categories: PropTypes.array,
+  title: PropTypes.string,
+  onClick: PropTypes.func,
+  titleDataAid: PropTypes.string,
+};

@@ -48,10 +48,7 @@ const MfLanding = ({
       eventData={sendEvents("just_set_events")}
       isPageLoading={isPageLoading}
     >
-      {renderCards({
-        ...restProps,
-        baseConfig,
-      })}
+      <MfLandingSections baseConfig={baseConfig} {...restProps} />
       <TrustIcon
         dataAid={baseConfig.productName}
         variant="registration"
@@ -75,7 +72,7 @@ const MfLanding = ({
 
 export default MfLanding;
 
-const renderCards = ({
+const MfLandingSections = ({
   showMarketingBanners,
   showKycCard,
   kycData,

@@ -378,8 +378,6 @@ export const partnerConfigs = {
     landingMarketingBanners: [
       ...commonCardsConfig.landingMarketingBanners,
       ...commonCardsConfig.nfoBanners,
-      { image: "fpg_mb_insta.svg", id: "instaredeem" },
-      { image: "fpg_mb_100.svg", id: "buildwealth" },
     ],
     features: {
       nps: true,

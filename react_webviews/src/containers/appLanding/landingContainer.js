@@ -110,7 +110,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       landingMarketingBanners,
       enabledFeatures
     );
-    const motivators = getEnabledPlatformMotivators(platformMotivators);
+    const motivators = getEnabledPlatformMotivators(platformMotivators, enabledFeatures);
     const isFinity = baseConfig.productName === "finity";
     const showExploreCategories = isMfOnly || isFinity;
     const exploreCategoryData = EXPLORE_CATEGORY_DATA[baseConfig.productName];
@@ -152,6 +152,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     subscriptionStatus,
     kyc,
     appStorage.feature,
+    referral,
   ]);
 
   const [showCarousals, setShowCarousals] = useState(
