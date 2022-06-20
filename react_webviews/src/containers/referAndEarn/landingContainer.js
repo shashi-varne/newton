@@ -26,13 +26,12 @@ import {
   getDiffInHours,
 } from "../../pages/ReferAndEarn/common/utils";
 import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../pages/ReferAndEarn/common/constants";
-import { hasData } from "jquery";
 
 const screen = "REFER_AND_EARN_LANDING";
 
 const landingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
-  const { Web: isWeb } = useMemo(getConfig, []);
+  const { Web: isWeb, productName } = useMemo(getConfig, []);
   const { isPageLoading } = useLoadingState(screen);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const { user, kyc, isLoading } = useUserKycHook();
@@ -231,6 +230,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       referralData={activeCampaignViewData}
       showTransferNotAllowed={showTransferNotAllowed}
       setShowTransferNotAllowed={setShowTransferNotAllowed}
+      productName={productName}
     />
   );
 };

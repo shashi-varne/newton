@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import Container from "../../../designSystem/organisms/ContainerWrapper";
 import CustomSwiper from "../../../designSystem/molecules/CustomSwiper/CustomSwiper";
 import { SwiperSlide } from "swiper/react";
-import { getConfig } from "../../../utils/functions";
-import { Box } from "@mui/system";
 import ReferralsView from "./ReferralsView";
 import RewardsView from "./RewardsView";
 import { REFERRAL_LANDING } from "businesslogic/strings/referAndEarn";
@@ -32,9 +30,9 @@ const landing = ({
   onClickInfoCard,
   showTransferNotAllowed,
   setShowTransferNotAllowed,
+  productName,
 }) => {
   const [swiper, setSwiper] = useState(null);
-  const { productName } = getConfig();
 
   const handleTabChange = (e, value) => {
     setTabValue(value);
@@ -119,6 +117,7 @@ const landing = ({
         onClickCopy={() => onClickCopy(activeSheetIndex)}
         onClickMail={() => onClickMail(activeSheetIndex)}
         onClickShare={() => onClickShare(activeSheetIndex)}
+        productName={productName}
       />
       <TransferNotAllowedBottomSheet
         isOpen={showTransferNotAllowed}

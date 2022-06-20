@@ -23,7 +23,7 @@ const screen = "MY_REFERRALS";
 
 const myReferralsContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
-  const { Web: isWeb } = useMemo(getConfig, []);
+  const { Web: isWeb, productName } = useMemo(getConfig, []);
   const { isPageLoading } = useLoadingState(screen);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const refereeListData = useSelector(getRefereeListData);
@@ -122,6 +122,7 @@ const myReferralsContainer = (WrappedComponent) => (props) => {
       onClickCopy={onClickCopy}
       onClickListItem={onClickListItem}
       navigate={navigate}
+      productName={productName}
     />
   );
 };

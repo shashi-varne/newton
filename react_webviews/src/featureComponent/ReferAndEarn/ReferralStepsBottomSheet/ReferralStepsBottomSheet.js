@@ -29,6 +29,7 @@ const ReferralStepsBottomSheet = ({
   onClickShare = noop,
   onClickCta = noop,
   ctaText = "",
+  productName,
 }) => {
   return (
     <Dialog
@@ -52,7 +53,7 @@ const ReferralStepsBottomSheet = ({
         </Stack>
         <Icon
           size="110px"
-          src={require("assets/fisdom/iv_earn_reward.svg")}
+          src={require(`assets/${productName}/iv_earn_reward.svg`)}
           className="rs-btm-sheet-img"
           dataAid="top"
         />

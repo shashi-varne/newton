@@ -70,7 +70,7 @@ const RewardsView = ({
                     dataAid={item.dataAid}
                     title={item.title}
                     subtitle={item.subtitle}
-                    imgSrc={require(`assets/fisdom/${
+                    imgSrc={require(`assets/${
                       InfoCardExtraDataMapper[item.id].asset
                     }`)}
                     imgProps={{ style: { alignSelf: "center" } }}
