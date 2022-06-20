@@ -13,6 +13,8 @@ import {
   getRefereeListData,
   getWalletBalance,
   getWalletBalanceData,
+  getSelectedTabIndex,
+  setSelectedTab,
 } from "businesslogic/dataStore/reducers/referAndEarn";
 import Api from "../../utils/api";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
@@ -24,6 +26,7 @@ import {
   getDiffInHours,
 } from "../../pages/ReferAndEarn/common/utils";
 import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../pages/ReferAndEarn/common/constants";
+import { hasData } from "jquery";
 
 const screen = "REFER_AND_EARN_LANDING";
 
@@ -43,7 +46,11 @@ const landingContainer = (WrappedComponent) => (props) => {
   const walletBalance = useSelector(getWalletBalanceData);
   const [activeSheetIndex, setActiveSheetIndex] = useState(-1);
   const [showTransferNotAllowed, setShowTransferNotAllowed] = useState(false);
-  const [tabValue, setTabValue] = useState(0);
+
+  const tabValue = useSelector(getSelectedTabIndex);
+  const handleSelectTab = (value) => {
+    dispatch(setSelectedTab(value));
+  };
 
   const noReferrals =
     !isEmpty(refereeListData) && refereeListData?.length === 0;
@@ -83,6 +90,9 @@ const landingContainer = (WrappedComponent) => (props) => {
 
   useEffect(() => {
     initialize();
+    if (props?.history?.action === "PUSH") {
+      handleSelectTab(0);
+    }
   }, []);
 
   useEffect(() => {
@@ -204,7 +214,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     <WrappedComponent
       isWeb={isWeb}
       tabValue={tabValue}
-      setTabValue={setTabValue}
+      setTabValue={handleSelectTab}
       activeSheetIndex={activeSheetIndex}
       setActiveSheetIndex={setActiveSheetIndex}
       sendEvents={sendEvents}
