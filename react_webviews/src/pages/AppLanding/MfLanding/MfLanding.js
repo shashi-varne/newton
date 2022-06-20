@@ -1,12 +1,12 @@
 import React from "react";
 import Container from "../../../designSystem/organisms/ContainerWrapper";
 import TrustIcon from "../../../designSystem/atoms/TrustIcon";
-import Typography from "../../../designSystem/atoms/Typography";
 import CardHorizontal from "../../../designSystem/molecules/CardHorizontal";
 import Partnership from "../../../featureComponent/appLanding/Partnership";
 import InvestmentOptions from "../../../featureComponent/appLanding/InvestmentOptions";
 import MarketingBanners from "../../../featureComponent/appLanding/MarketingBanners";
 import ExploreCategories from "../../../featureComponent/appLanding/ExploreCategories";
+import PassiveIndexFunds from "../../../featureComponent/appLanding/PassiveIndesFunds";
 import KycBottomsheet from "../../../featureComponent/appLanding/KycBottomsheet";
 import { MF_LANDING } from "../../../strings/webappLanding";
 import { FINANCIAL_TOOLS } from "../../../constants/webappLanding";
@@ -15,10 +15,8 @@ import { isEmpty } from "lodash-es";
 
 import "./MfLanding.scss";
 
-const {
-  passiveIndexFunds: passiveIndexFundsData,
-  externalPortfolio: externalPortfolioData,
-} = MF_LANDING;
+const { externalPortfolio: externalPortfolioData } = MF_LANDING;
+
 const MfLanding = ({
   sendEvents,
   onRightIconClick,
@@ -129,28 +127,10 @@ const MfLandingSections = ({
     passiveIndexFunds: (
       <>
         {showPassiveFunds && (
-          <>
-            <div className="mfl-kyc">
-              <CardHorizontal
-                rightImgSrc={require(`assets/${baseConfig.productName}/${passiveIndexFundsData.icon}`)}
-                title={passiveIndexFundsData.title}
-                subtitle={passiveIndexFundsData.subtitle}
-                actionLink={passiveIndexFundsData.buttonTitle}
-                variant="heroCard"
-                dataAid={passiveIndexFundsData.dataAid}
-                footerText={passiveIndexFundsData.footerText}
-                onClick={handleCardClick(passiveIndexFundsData)}
-              />
-              <Typography
-                variant="body6"
-                dataAid="helperText"
-                color="foundationColors.content.secondary"
-              >
-                *Based on TER averages of regular large cap and direct index
-                funds
-              </Typography>
-            </div>
-          </>
+          <PassiveIndexFunds
+            productName={baseConfig.productName}
+            onClick={handleCardClick}
+          />
         )}
       </>
     ),
