@@ -14,12 +14,13 @@ import { isEmpty } from "lodash-es";
 import { getFnsFormattedDate } from "../../pages/ReferAndEarn/common/utils";
 import { formatAmountInr } from "businesslogic/utils/common/functions";
 import ToastMessage from "../../designSystem/atoms/ToastMessage";
+import { nativeCallback } from "../../utils/native_callback";
 
 const screen = "WALLET_TRANSFERS";
 
 const walletTransfersContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
-  const { isWeb, mobile } = useMemo(getConfig, []);
+  const { Web: isWeb, mobile } = useMemo(getConfig, []);
   const { isPageLoading } = useLoadingState(screen);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const [filterApplied, setFilterApplied] = useState(
