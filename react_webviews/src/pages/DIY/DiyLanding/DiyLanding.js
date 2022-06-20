@@ -15,6 +15,7 @@ import SingleCategory from './SingleCategory';
 import TrendingFunds from './TrendingFunds';
 import TwoRowCarousel from './TwoRowCarousel';
 import './DiyLanding.scss';
+import EnterReferralBottomSheet from '../../../featureComponent/ReferAndEarn/EnterReferralBottomSheet/EnterReferralBottomSheet';
 
 const DiyLanding = (props) => {
   const {
@@ -125,6 +126,7 @@ const DiyLanding = (props) => {
           config={config}
           diyType={diyType}
         />
+        <EnterReferralBottomSheet isOpen={true} />
       </div>
     </Container>
   );
