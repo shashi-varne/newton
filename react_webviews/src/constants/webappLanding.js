@@ -362,14 +362,12 @@ export const SHARE_REFERRAL_DATA = {
     title: "Refer & earn",
     subtitle: "Invite your friends & earn exciting rewards",
     rightIcon: "share_refer.svg",
-    productName: "fisdom",
   },
   finity: {
     dataAid: "referEarn",
     title: "Share the joy",
     subtitle: "Invite your friends & family",
     rightIcon: "share_refer.svg",
-    productName: "finity",
   },
 };
 

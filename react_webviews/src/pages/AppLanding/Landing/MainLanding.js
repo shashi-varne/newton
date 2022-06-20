@@ -144,6 +144,7 @@ const LandingSections = ({
   referral,
   showPortfolioLoader,
   landingSections,
+  productName
 }) => {
   const cardsMapper = {
     platformMotivators: (
@@ -192,7 +193,7 @@ const LandingSections = ({
       <>
         {showKycCard && (
           <CardHorizontal
-            rightImgSrc={require(`assets/fisdom/${kycData.icon}`)}
+            rightImgSrc={require(`assets/${productName}/${kycData.icon}`)}
             title={kycData.title}
             description={kycData.subtitle}
             descriptionColor={
@@ -259,7 +260,7 @@ const LandingSections = ({
               dataAid={shareReferralData.dataAid}
               title={shareReferralData.title}
               subtitle={shareReferralData.subtitle}
-              rightImgSrc={require(`assets/${shareReferralData.productName}/${shareReferralData.rightIcon}`)}
+              rightImgSrc={require(`assets/${productName}/${shareReferralData.rightIcon}`)}
               onClick={handleReferral}
             />
           </WrapperBox>

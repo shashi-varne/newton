@@ -691,6 +691,7 @@ const landingContainer = (WrappedComponent) => (props) => {
   return (
     <WrappedComponent
       showPartnership={baseConfig.isSdk}
+      productName={baseConfig.productName}
       landingSections={mainLandingSections}
       isPageLoading={isPageLoading}
       loaderData={loaderData}
