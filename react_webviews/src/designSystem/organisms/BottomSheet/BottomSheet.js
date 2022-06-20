@@ -27,6 +27,7 @@ import Button from '../../atoms/Button';
 import PropTypes from 'prop-types';
 import './BottomSheet.scss';
 import Icon from '../../atoms/Icon';
+import { isEmpty } from 'lodash-es';
 
 const BottomSheet = ({
   isOpen,
@@ -53,6 +54,9 @@ const BottomSheet = ({
   dataAid,
   imageSrc,
   imageSrcProps,
+  children,
+  renderButtonComponent,
+  ...restProps
 }) => {
   const handleOnClose = useCallback(
     (event, reason) => {
@@ -72,6 +76,7 @@ const BottomSheet = ({
       disableEscapeKeyDown={disableEscapeKeyDown}
       onBackdropClick={onBackdropClick}
       data-aid={`bottomsheet_${dataAid}`}
+      {...restProps}
     >
       <Stack direction='column' spacing={1} className={`bottom-sheet-wrapper ${imageSrc && `bottom-sheet-icon-wrapper`}`}>
         <Stack justifyContent='center' alignItems='center' className='btm-sheet-indicator'>
@@ -82,53 +87,60 @@ const BottomSheet = ({
         </Stack>
         {imageSrc && (
           <Icon
-            size='132px'
+            width='140px'
+            height="120px"
             src={imageSrc}
             className='btn-sheet-img'
             dataAid="top"
             {...imageSrcProps}
           />
         )}
-        <Stack direction='row' alignItems='center' spacing={1}>
-          {imageTitleSrc && (
-            <Icon
-              size='16px'
-              src={imageTitleSrc}
-              className='btn-sheet-header-img'
-              {...imageTitleSrcProps}
-            />
-          )}
-          {title && (
-            <Typography className="btn-sheet-title" variant='heading3' color={titleColor} component='div' dataAid='title'>
-              {title}
-            </Typography>
-          )}
-        </Stack>
-
-        <Stack direction='row' spacing={2} alignItems='center'>
-          {imageLabelSrc && (
-            <Icon
-              size='32px'
-              src={imageLabelSrc}
-              className='btn-sheet-label-img'
-              {...imageLabelSrcProps}
-            />
-          )}
-          {label && (
-            <Typography variant='body2' color={labelColor} component='div' dataAid='label'>
-              {label}
-            </Typography>
-          )}
-        </Stack>
-
+        {(imageTitleSrc || title )&&
+          <Stack direction='row' alignItems='center' spacing={1}>
+            {imageTitleSrc && (
+              <Icon
+                size='16px'
+                src={imageTitleSrc}
+                className='btn-sheet-header-img'
+                {...imageTitleSrcProps}
+              />
+            )}
+            {title && (
+              <Typography className="btn-sheet-title" variant='heading3' color={titleColor} component='div' dataAid='title'>
+                {title}
+              </Typography>
+            )}
+          </Stack>
+        }
+        {(imageLabelSrc || label) &&
+          <Stack direction='row' spacing={2} alignItems='center'>
+            {imageLabelSrc && (
+              <Icon
+                size='32px'
+                src={imageLabelSrc}
+                className='btn-sheet-label-img'
+                {...imageLabelSrcProps}
+              />
+            )}
+            {label && (
+              <Typography variant='body2' color={labelColor} component='div' dataAid='label'>
+                {label}
+              </Typography>
+            )}
+          </Stack>
+        }
         {subtitle && (
           <Typography className="btn-sheet-subtitle" variant='body2' color={subtitleColor} component='div' dataAid='subtitle'>
             {subtitle}
           </Typography>
         )}
+        {children}
 
-        {(primaryBtnTitle || secondaryBtnTitle) && (
+        {(primaryBtnTitle || secondaryBtnTitle ||renderButtonComponent) && (
           <Stack flexDirection='column' spacing={1} className='btm-sheet-cta-wrapper'>
+            {
+              !isEmpty(renderButtonComponent) && renderButtonComponent
+            }
             {primaryBtnTitle && (
               <Button
                 title={primaryBtnTitle}
