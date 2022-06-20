@@ -18,6 +18,7 @@ import Button from '../../atoms/Button';
 import Status from '../../atoms/Status';
 import isFunction from 'lodash/isFunction';
 import PropTypes from 'prop-types';
+import {isEmpty} from 'lodash-es'
 
 import './CardHorizontal.scss';
 import Icon from '../../atoms/Icon';
@@ -27,6 +28,7 @@ const CardHorizontal = ({
   leftImgProps,
   rightImgSrc,
   rightImgProps,
+  rightComponent,
   title,
   titleColor,
   subtitle,
@@ -118,14 +120,18 @@ const CardHorizontal = ({
               dataAid={variantStyle?.btnDataAid}
             />
           )}
-        </Stack>
-        <Icon
-          size='110px'
-          src={rightImgSrc}
-          style={{ marginLeft: '4px' }}
-          {...rightImgProps}
-          dataAid='right'
-        />
+        </Stack> 
+         {!isEmpty(rightImgSrc) ? (
+          <Icon
+            size="110px"
+            src={rightImgSrc}
+            style={{ marginLeft: "4px" }}
+            {...rightImgProps}
+            dataAid="right"
+          />
+        ) : !isEmpty(rightComponent) ? (
+          rightComponent
+        ) : null}
       </Stack>
       {variantStyle?.showFooter && (
         <Box className='ch-bottom-section-wrapper' sx={{ background: footerBackground }}>
@@ -181,6 +187,7 @@ CardHorizontal.propTypes = {
   footerTextColor: PropTypes.string,
   footerBackground: PropTypes.string,
   variant: PropTypes.oneOf(['product', 'heroCard']),
+  rightComponent:PropTypes.node,
 };
 
 CardHorizontal.defaultProps = {

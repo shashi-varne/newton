@@ -1,0 +1,30 @@
+.refer-and-earn-landing {
+  margin-bottom: 24px;
+
+  .rae-wrapper {
+    padding: 24px 16px;
+    margin: 24px 0;
+  }
+
+  .rae-tab-flex-wrapper {
+    justify-content: flex-start !important;
+  }
+
+  .rae-ref-landing-header {
+    margin: 24px 0px 16px 0px;
+  }
+
+  .rae-coin-wrapper {
+    height: 110px;
+    width: 110px;
+    position: relative;
+  }
+
+  .rae-coin-centered-text {
+    z-index: 1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
