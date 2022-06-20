@@ -32,7 +32,7 @@ const screen = "REFER_AND_EARN_LANDING";
 
 const landingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
-  const { isWeb } = useMemo(getConfig, []);
+  const { Web: isWeb } = useMemo(getConfig, []);
   const { isPageLoading } = useLoadingState(screen);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const { user, kyc, isLoading } = useUserKycHook();

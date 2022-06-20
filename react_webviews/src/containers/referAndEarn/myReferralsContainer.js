@@ -23,7 +23,7 @@ const screen = "MY_REFERRALS";
 
 const myReferralsContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
-  const { isWeb } = useMemo(getConfig, []);
+  const { Web: isWeb } = useMemo(getConfig, []);
   const { isPageLoading } = useLoadingState(screen);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const refereeListData = useSelector(getRefereeListData);
