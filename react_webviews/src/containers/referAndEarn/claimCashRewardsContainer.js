@@ -15,7 +15,6 @@ const claimCashRewardsContainer = (WrappedComponent) => (props) => {
   const { isWeb } = useMemo(getConfig, []);
   const { isPageLoading } = useLoadingState(screen);
   const { isUpdateFailed, isFetchFailed, errorMessage } = useErrorState(screen);
-
   //Temporary data: these will come from api
   const totalBalance = 2000;
   const minAmount = 200;
@@ -25,6 +24,8 @@ const claimCashRewardsContainer = (WrappedComponent) => (props) => {
   const [amount, setAmount] = useState(minAmount);
   const [inputError, setInputError] = useState("");
   const [transferFullFlag, setTransferFullFlag] = useState(false);
+  const isButtonDisabled =
+    isPageLoading || !isEmpty(inputError) || amount < minAmount;
 
   const dispatch = useDispatch();
 
@@ -86,9 +87,7 @@ const claimCashRewardsContainer = (WrappedComponent) => (props) => {
       inputError={inputError}
       sendEvents={sendEvents}
       isPageLoading={isPageLoading}
-      buttonDisabled={
-        isPageLoading || !isEmpty(inputError) || amount < minAmount
-      }
+      buttonDisabled={isButtonDisabled}
       accDetails={accDetails}
       transferFullFlag={transferFullFlag}
       onCheckTransferFull={onCheckTransferFull}
