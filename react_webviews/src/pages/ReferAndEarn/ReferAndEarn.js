@@ -28,8 +28,8 @@ const ReferAndEarn = (props) => {
         component={successDetailsContainer}
       />
       <Route
-        path={`${url}/withdraw-placed`}
-        component={withdrawPlacedContainer}
+        path={`${url}/wallet-transfers`}
+        component={walletTransfersContainer}
       />
     </Switch>
   );

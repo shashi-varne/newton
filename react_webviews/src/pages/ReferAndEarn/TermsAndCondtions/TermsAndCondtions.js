@@ -1,7 +1,7 @@
 import React from "react";
 import Container from "../../../designSystem/organisms/ContainerWrapper";
 import { TNC } from "businesslogic/strings/referAndEarn";
-import { Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import Typography from "../../../designSystem/atoms/Typography";
 import "./TermsAndCondtions.scss";
 
@@ -19,7 +19,10 @@ const TermsAndCondtions = ({ points = [] }) => {
       dataAid={STRINGS.screenDataAid}
     >
       <Stack className="tnc-wrapper">
-        <ul>
+        <Box
+          component="ul"
+          sx={{ color: "foundationColors.content.secondary" }}
+        >
           {points.map((item, index) => {
             return (
               <li key={index}>
@@ -35,7 +38,7 @@ const TermsAndCondtions = ({ points = [] }) => {
               </li>
             );
           })}
-        </ul>
+        </Box>
       </Stack>
     </Container>
   );

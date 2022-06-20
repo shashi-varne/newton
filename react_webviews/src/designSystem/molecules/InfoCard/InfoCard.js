@@ -55,7 +55,7 @@ const InfoCard = ({
       </div>
       <Stack
         direction="row"
-        sx={{ flexGrow: 1, paddingLeft: "8px", gap: "6px" }}
+        className={"ic-right-label"}
         justifyContent="flex-end"
         alignItems="center"
       >
