@@ -3,6 +3,7 @@ import Typography from "../../designSystem/atoms/Typography";
 import CardVertical from "../../designSystem/molecules/CardVertical";
 import CustomSwiper from "../../designSystem/molecules/CustomSwiper";
 import { SwiperSlide } from "swiper/react";
+import PropTypes from "prop-types";
 
 const ExploreCategories = ({ categories = [], title, titleDataAid, onClick }) => {
   return (
@@ -38,3 +39,10 @@ const ExploreCategories = ({ categories = [], title, titleDataAid, onClick }) =>
 };
 
 export default ExploreCategories;
+
+ExploreCategories.propTypes = {
+  categories: PropTypes.array,
+  title: PropTypes.string,
+  onClick: PropTypes.func,
+  titleDataAid: PropTypes.string,
+};

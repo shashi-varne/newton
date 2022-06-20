@@ -11,7 +11,7 @@ const PlatformMotivator = ({ icon, title, subtitle, dataAid }) => {
   const { productName } = useMemo(getConfig, []);
   return (
     <Box
-      sx={infoCardWrapperSxStyle}
+      sx={cardWrapperSxStyle}
       className="platform-motivator-wrapper"
       data-aid={`carousel_${dataAid}`}
     >
@@ -43,14 +43,13 @@ const PlatformMotivator = ({ icon, title, subtitle, dataAid }) => {
 
 export default PlatformMotivator;
 
-const infoCardWrapperSxStyle = {
+const cardWrapperSxStyle = {
   backgroundColor: "foundationColors.supporting.grey",
 };
 
 PlatformMotivator.propTypes = {
-  title: PropTypes.node,
-  subtitle: PropTypes.node,
-  titleColor: PropTypes.string,
-  subtitleColor: PropTypes.string,
-  imgProps: PropTypes.object,
+  title: PropTypes.string,
+  subtitle: PropTypes.string,
+  icon: PropTypes.string,
+  dataAid: PropTypes.string,
 };
