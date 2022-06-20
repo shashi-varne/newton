@@ -664,8 +664,6 @@ const landingContainer = (WrappedComponent) => (props) => {
     });
   };
 
-  console.log("handle bs ", bottomsheetStates)
-
   return (
     <WrappedComponent
       showPartnership={baseConfig.isSdk}
