@@ -13,7 +13,7 @@ const WithdrawPlaced = ({ productName = "fisdom", sendEvents }) => {
   return (
     <Container
       headerProps={{
-        headerSx: { display: "none" },
+        hide:true,
       }}
       className="reward-withdrawal-placed"
       dataAid={STRINGS.screenDataAid}

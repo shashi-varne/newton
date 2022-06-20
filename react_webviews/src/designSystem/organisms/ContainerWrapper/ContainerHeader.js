@@ -11,6 +11,7 @@ const ContainerHeader = ({ headerProps, containerRef, handleonBackClick }) => {
     points = [],
     headerSx,
     headerClassName,
+    hide=false,
     disableSeeMoreFeature = false,
     hideBackButton=false,
     ...restHeaderProps
@@ -19,6 +20,10 @@ const ContainerHeader = ({ headerProps, containerRef, handleonBackClick }) => {
   const pointsLength = points?.length || 0;
   const showSeeMore = subtitleLength > 89 || (pointsLength >= 2 && subtitleLength > 40);
   const { isIframe, isMobileDevice } = useMemo(getConfig, []);
+
+  if(hide){
+    return null
+  }
 
   return (
     <Box className={`container-header-wrapper ${headerClassName}`} sx={headerSx}>
