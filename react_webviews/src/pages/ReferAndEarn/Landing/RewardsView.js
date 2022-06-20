@@ -12,6 +12,7 @@ import { REFERRAL_LANDING } from "businesslogic/strings/referAndEarn";
 import { REWARDS_SCREEN_INFO_CARD_DATA } from "businesslogic/constants/referAndEarn";
 import { REFER_AND_EARN_PATHNAME_MAPPER } from "../common/constants";
 import "./Landing.scss";
+import { formatAmountInr } from "businesslogic/utils/common/functions";
 
 const STRINGS = REFERRAL_LANDING;
 const DATA = REWARDS_SCREEN_INFO_CARD_DATA;
@@ -47,7 +48,11 @@ const RewardsView = ({
               data-aid="iv_top"
               style={{ width: "140px", height: "120px" }}
             />
-            <LandingHeaderTitle>{balance}</LandingHeaderTitle>
+            {balance && (
+              <LandingHeaderTitle>
+                {formatAmountInr(balance)}
+              </LandingHeaderTitle>
+            )}
             <LandingHeaderSubtitle align="center" dataAid="1">
               {STRINGS.rewardsLandingHeader.subtitle}
             </LandingHeaderSubtitle>

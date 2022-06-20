@@ -1,6 +1,5 @@
 import React from "react";
 import { noop } from "lodash-es";
-import ShareCodeComponent from "../ShareCodeComponet/ShareCodeComponent";
 import { BOTTOMSHEETS_CONTENT } from "businesslogic/strings/referAndEarn";
 import BottomSheet from "../../../designSystem/organisms/BottomSheet";
 import "./TransferNotAllowedBottomSheet.scss";

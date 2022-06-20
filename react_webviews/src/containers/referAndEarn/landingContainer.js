@@ -25,7 +25,12 @@ import {
   getFnsFormattedDate,
   getDiffInHours,
 } from "../../pages/ReferAndEarn/common/utils";
+// import {
+//   getTotalBalance,
+//   checkAllowClaimingRewards,
+// } from "businesslogic/utils/referAndEarn/functions";
 import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../pages/ReferAndEarn/common/constants";
+import { isReadyToInvest } from "../../kyc/services";
 
 const screen = "REFER_AND_EARN_LANDING";
 
@@ -40,7 +45,10 @@ const landingContainer = (WrappedComponent) => (props) => {
   const activeCampaignData = useSelector(getActiveCampaignsData);
   const campaignTitle = useSelector(getActiveCampaignsTitle);
 
-  const activeCampaignViewData = getActiveCampaignsViewData(activeCampaignData);
+  const activeCampaignViewData = useMemo(
+    () => getActiveCampaignsViewData(activeCampaignData),
+    [activeCampaignData]
+  );
   const refereeListData = useSelector(getRefereeListData);
   const walletBalance = useSelector(getWalletBalanceData);
   const [activeSheetIndex, setActiveSheetIndex] = useState(-1);
@@ -51,11 +59,17 @@ const landingContainer = (WrappedComponent) => (props) => {
     dispatch(setSelectedTab(value));
   };
 
-  const noReferrals = isEmpty(refereeListData) || refereeListData?.length === 0;
-  const allowClaimRewards =
-    walletBalance?.balance_amount >= walletBalance?.min_withdraw_limit;
+  const noReferrals = useMemo(
+    () => isEmpty(refereeListData) || refereeListData?.length === 0,
+    [refereeListData]
+  );
+  const totalBalance = useMemo(() => {
+    return walletBalance?.balance_amount;
+  }, [walletBalance]);
 
-  const totalBalance = "₹" + walletBalance?.balance_amount;
+  const allowClaimRewards = useMemo(() => {
+    return walletBalance?.balance_amount >= walletBalance?.min_withdraw_limit;
+  }, [walletBalance]);
 
   const dispatch = useDispatch();
 
@@ -119,6 +133,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       cardClicked =
         activeCampaignViewData?.[activeSheetIndex]?.title?.toLowerCase();
     }
+    const userKycReady = isReadyToInvest();
 
     const eventObj = {
       event_name: "refer_earn",
@@ -128,7 +143,7 @@ const landingContainer = (WrappedComponent) => (props) => {
         card_click: cardClicked,
         user_application_status: kyc?.application_status_v2 || "init",
         user_investment_status: user?.active_investment,
-        user_kyc_status: kyc?.mf_kyc_processed || false,
+        user_kyc_status: userKycReady || false,
       },
     };
 

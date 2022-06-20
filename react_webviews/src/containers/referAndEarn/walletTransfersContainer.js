@@ -28,9 +28,14 @@ const walletTransfersContainer = (WrappedComponent) => (props) => {
   );
 
   const walletTransactions = useSelector(getWalletTransactionsData);
-  let walletTransactionsViewData = getWalletTransactionsViewData(
-    walletTransactions,
-    filterApplied
+  let walletTransactionsViewData = useMemo(
+    () => getWalletTransactionsViewData(walletTransactions),
+    [walletTransactions]
+  );
+
+  let filteredData = useMemo(
+    () => getFilteredTansactionsData(walletTransactionsViewData, filterApplied),
+    [walletTransactionsViewData, filterApplied]
   );
 
   const dispatch = useDispatch();
@@ -73,7 +78,7 @@ const walletTransfersContainer = (WrappedComponent) => (props) => {
 
   return (
     <WrappedComponent
-      transactionData={walletTransactionsViewData}
+      transactionData={filteredData}
       isWeb={isWeb}
       filterApplied={filterApplied}
       handleWalletFilter={handleWalletFilter}
@@ -84,7 +89,7 @@ const walletTransfersContainer = (WrappedComponent) => (props) => {
   );
 };
 
-const getWalletTransactionsViewData = (walletTransactions, filterApplied) => {
+const getWalletTransactionsViewData = (walletTransactions) => {
   let walletTransactionsViewData = walletTransactions.map((item, index) => {
     const acc =
       item?.to_account_number &&
@@ -103,12 +108,20 @@ const getWalletTransactionsViewData = (walletTransactions, filterApplied) => {
     };
   });
 
+  return walletTransactionsViewData;
+};
+
+const getFilteredTansactionsData = (
+  walletTransactionsViewData,
+  filterApplied
+) => {
+  let filteredData = walletTransactionsViewData;
   if (!isEmpty(filterApplied) && filterApplied !== "all") {
-    walletTransactionsViewData = walletTransactionsViewData.filter(
+    filteredData = walletTransactionsViewData.filter(
       (item) => item.status === filterApplied
     );
   }
-  return walletTransactionsViewData;
+  return filteredData;
 };
 
 export default walletTransfersContainer(WalletTransfers);

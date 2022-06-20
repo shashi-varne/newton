@@ -52,7 +52,7 @@ const CollapsibleReferalStatus = ({
               <Icon
                 dataAid={STRINGS.cardImageDataAid}
                 size="32px"
-                src={require("assets/iv_profile.svg")}
+                src={require(`assets/${productName}/iv_profile.svg`)}
                 className="c-icon-wrapper"
               />
             </Badge>

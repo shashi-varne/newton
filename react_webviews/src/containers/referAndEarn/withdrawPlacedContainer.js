@@ -6,7 +6,6 @@ const withdrawPlacedContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const { productName } = useMemo(getConfig, []);
 
-  console.log({ props });
   const amount = props?.location?.state?.amount || "";
 
   return (

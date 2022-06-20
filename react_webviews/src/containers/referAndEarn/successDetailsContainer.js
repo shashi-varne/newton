@@ -6,6 +6,7 @@ import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../pages/ReferAndEarn/common/
 import { format } from "date-fns";
 import { formatAmountInr } from "businesslogic/utils/common/functions";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
+import { isReadyToInvest } from "../../kyc/services";
 
 const successDetailsContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
@@ -20,6 +21,7 @@ const successDetailsContainer = (WrappedComponent) => (props) => {
   };
 
   const sendEvents = (userAction) => {
+    const userKycReady = isReadyToInvest();
     const eventObj = {
       event_name: "refer_earn",
       properties: {
@@ -27,7 +29,7 @@ const successDetailsContainer = (WrappedComponent) => (props) => {
         screen_name: "transfer request placed",
         user_application_status: kyc?.application_status_v2 || "init",
         user_investment_status: user?.active_investment,
-        user_kyc_status: kyc?.mf_kyc_processed || false,
+        user_kyc_status: userKycReady || false,
       },
     };
 
