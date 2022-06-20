@@ -3,7 +3,7 @@ import { getConfig, getBasePath } from './functions';
 import { open_browser_web, renameObjectKeys } from 'utils/validators';
 import { storageService } from './validators';
 import eventManager from './eventManager';
-import { EVENT_MANAGER_CONSTANTS } from './constants';
+import { EVENT_MANAGER_CONSTANTS, landingEntryPoints } from './constants';
 import isEmpty from "lodash/isEmpty";
 
 export const nativeCallback = async ({ action = null, message = null, events = null, action_path = null, rnData = {} } = {}) => {
@@ -291,7 +291,12 @@ export function handleNativeExit(props, data) {
         searchParams: searchParams
       });
     } else {
-      navigate("/", {
+      const fromState = props.location?.state?.fromState;
+      let pathname = "/";
+      if (landingEntryPoints.includes(fromState)) {
+        pathname = fromState;
+      }
+      navigate(pathname, {
         searchParams: searchParams
       });
     }
