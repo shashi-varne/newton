@@ -60,6 +60,10 @@ const claimCashRewardsContainer = (WrappedComponent) => (props) => {
   const onChangeAmount = (event) => {
     const val = event.target.value;
 
+    if (isNaN(val)) {
+      return;
+    }
+
     if (transferFullFlag) {
       setTransferFullFlag(false);
     }
