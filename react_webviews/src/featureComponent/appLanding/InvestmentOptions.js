@@ -3,6 +3,13 @@ import Typography from "../../designSystem/atoms/Typography";
 import MenuItem from "../../designSystem/molecules/MenuItem";
 import { isEmpty } from "lodash-es";
 
+const ICON_COLOR = [
+  "#33CF90",
+  "#FE794D",
+  "#5AAAF6",
+  "#FFBD00",
+];
+
 const InvestmentOptions = ({
   productList = [],
   title,
@@ -31,7 +38,8 @@ const InvestmentOptions = ({
         return (
           <MenuItem
             {...data}
-            leftImgSrc={require(`assets/${data.icon}`)}
+            leftSvgSrc={require(`assets/${data.icon}`)}
+            leftSvgIconColor={ICON_COLOR[idx % 4]}
             key={idx}
             showSeparator={productList.length !== idx + 1}
             onClick={onClick(data)}
