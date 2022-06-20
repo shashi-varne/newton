@@ -5,7 +5,6 @@ import Typography from "../../../designSystem/atoms/Typography";
 import Icon from "../../../designSystem/atoms/Icon";
 import { isEmpty, noop } from "lodash-es";
 import ShareCodeComponent from "../ShareCodeComponet/ShareCodeComponent";
-import { ToastContainer } from "react-toastify";
 import "./ReferralStepsBottomSheet.scss";
 import OrderStep from "../../../designSystem/atoms/OrderStep/OrderStep";
 
@@ -29,6 +28,7 @@ const ReferralStepsBottomSheet = ({
   onClickMail = noop,
   onClickShare = noop,
   onClickCta = noop,
+  ctaText = "",
 }) => {
   return (
     <Dialog
@@ -37,9 +37,9 @@ const ReferralStepsBottomSheet = ({
       open={isOpen}
       onClose={handleClose}
       data-aid={`bottomsheet_${dataAid}`}
+      disablePortal={true}
     >
       <Stack className={`ref-steps-bottom-sheet-wrapper`}>
-        <ToastContainer autoClose={3000} />
         <Stack
           justifyContent="center"
           alignItems="center"
@@ -89,6 +89,7 @@ const ReferralStepsBottomSheet = ({
             onClickMail={onClickMail}
             onClickShare={onClickShare}
             onClickCta={onClickCta}
+            ctaText={ctaText}
           />
         </Stack>
       </Stack>
