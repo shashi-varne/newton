@@ -119,7 +119,7 @@ const CollapsibleReferalStatus = ({
 };
 
 const TickAnimationComp = ({ isOpen, amount, productName }) => {
-  const [showAinamtion, setShowAnimation] = useState(true);
+  const [showAnimation, setShowAnimation] = useState(true);
   const lottieRef = useRef();
   let animationTimeout;
 
@@ -147,7 +147,7 @@ const TickAnimationComp = ({ isOpen, amount, productName }) => {
 
   return (
     <Box>
-      <div style={{ display: showAinamtion ? "block" : "none" }}>
+      <div style={{ display: showAnimation ? "block" : "none" }}>
         <Lottie
           lottieRef={lottieRef}
           animationData={require(`assets/${productName}/lottie/tick.json`)}
@@ -157,7 +157,7 @@ const TickAnimationComp = ({ isOpen, amount, productName }) => {
           data-aid={`iv_${STRINGS.animationDataAid}`}
         />
       </div>
-      {!showAinamtion && (
+      {!showAnimation && (
         <Typography
           variant="body2"
           color="foundationColors.secondary.profitGreen.400"
