@@ -38,7 +38,7 @@ const InvestmentOptions = ({
         return (
           <MenuItem
             {...data}
-            leftSvgSrc={require(`assets/${data.icon}`)}
+            leftImgSrc={require(`assets/${data.icon}`)}
             leftSvgIconColor={ICON_COLOR[idx % 4]}
             key={idx}
             showSeparator={productList.length !== idx + 1}
