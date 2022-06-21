@@ -13,7 +13,7 @@ const InvestmentOptions = ({
 }) => {
   return (
     <div className="al-investment-options">
-      {!title && (
+      {title && (
         <Typography
           dataAid={titleDataAid}
           variant="heading3"

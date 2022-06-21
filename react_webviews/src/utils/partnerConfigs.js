@@ -227,8 +227,6 @@ export const partnerConfigs = {
     features: {
       taxFiling: true,
       addAnotherBank: true,
-      stocks: true,
-      ipo: true,
       nps: true,
       instaredeem: true,
       insurance: true,
@@ -283,8 +281,6 @@ export const partnerConfigs = {
     message: getPartnerMessage("emPower", "emPower http://onelink.to/uuxsss"),
     mobile: "+91-7829733111",
     features: {
-      stocks: true,
-      ipo: true,
       nps: true,
     },
     styles: {
@@ -440,8 +436,6 @@ export const partnerConfigs = {
     onboardingCarousels: EQUITY_ONBOARDING_CAROUSELS,
     landingMarketingBanners: EQUITY_MARKETING_BANNERS,
     features: {
-      stocks: true,
-      ipo: true,
       nps: true,
     },
     referralConfig: {
@@ -494,7 +488,7 @@ export const partnerConfigs = {
     ],
     featuresList: ["nps"],
     mfSections: ["marketingBanners", "kyc", "mfOptions"],
-    mfOptions: ["elss", "nps"],
+    mfOptions: ["stocks", "ipo", "elss", "nps"],
     features: {
       nps: true,
     },
@@ -550,8 +544,6 @@ export const partnerConfigs = {
     features: {
       addAnotherBank: true,
       taxFiling: true,
-      stocks: true,
-      ipo: true,
       nps: true,
     },
     referralConfig: {

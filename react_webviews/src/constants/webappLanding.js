@@ -1,8 +1,6 @@
 import { PATHNAME_MAPPER as KYC_PATHNAME_MAPPER } from "../kyc/constants";
 
 export const RESTRICTED_FEATURES = [
-  "stocks",
-  "ipo",
   "nps",
   "insurance",
   "instaredeem",
