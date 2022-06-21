@@ -1,6 +1,1 @@
-<svg width="32" height="33" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect x="2" y="2.5" width="12" height="12" rx="1" fill="#FFBD00"/>
-<rect x="18" y="2.5" width="12" height="12" rx="1" fill="#FFBD00"/>
-<rect x="18" y="18.5001" width="12" height="12" rx="1" fill="#FFBD00"/>
-<rect x="2" y="18.5001" width="12" height="12" rx="1" fill="#FFBD00"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="33" fill="#ffbd00" xmlns:v="https://vecta.io/nano"><rect x="2" y="2.5" width="12" height="12" rx="1"/><rect x="18" y="2.5" width="12" height="12" rx="1"/><rect x="18" y="18.5" width="12" height="12" rx="1"/><rect x="2" y="18.5" width="12" height="12" rx="1"/></svg>

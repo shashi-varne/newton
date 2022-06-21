@@ -179,7 +179,7 @@ export const INVESTMENT_OPTIONS = {
     dataAid: "instaRedemptionFund",
   },
   passiveIndexFunds: {
-    icon: "passive.svg",
+    icon: "high_growth.svg",
     title: "Passive Index funds",
     subtitle: "Earn upto 2% more than active funds",
     eventStatus: "passive index funds",
