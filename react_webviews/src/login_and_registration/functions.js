@@ -9,6 +9,7 @@ import { getBasePath } from "../utils/functions";
 import { setSummaryData } from "../business/appLanding/functions";
 import store from "../dataLayer/store";
 import { updateAppStorage } from "businesslogic/dataStore/reducers/app";
+import { getAccountSummary } from "businesslogic/apis/common";
 
 const config = getConfig();
 const errorMessage = "Something went wrong!";
@@ -495,23 +496,8 @@ export async function resendLoginOtp(resend_url) {
 }
 
 export async function getKycFromSummary(params = {}) {
-  if (isEmpty(params)) {
-    // Default params
-    params = {
-      kyc: ["kyc"],
-      user: ["user"],
-      partner: ["partner"],
-      campaign: ["user_campaign"],
-      referral: ["subbroker", "p2p"],
-      contacts: ["contacts"],
-      nps: ['nps_user'],
-      equity: ['subscription_status']
-    }
-  }
-  const res = await Api.post(`/api/user/account/summary`, params);
-  if (!res || !res.pfwresponse) throw errorMessage;
-  const { result, status_code: status } = res.pfwresponse;
-  if (status === 200) {
+  try {
+    const result = await getAccountSummary(Api, params);
     let user = result.data.user.user.data;
     let kyc = result.data.kyc.kyc.data;
     let nps = result.data?.nps?.nps_user?.data;
@@ -521,8 +507,8 @@ export async function getKycFromSummary(params = {}) {
       storageService().setObject("npsUser", nps);
     }
     return result;
-  } else {
-    throw result.error || result.message || errorMessage;
+  } catch(err) {
+    throw err.message;
   }
 }
 

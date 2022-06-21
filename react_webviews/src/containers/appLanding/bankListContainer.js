@@ -91,11 +91,14 @@ const bankListContainer = (WrappedComponent) => (props) => {
       ToastMessage(result?.success);
       navigate("/");
     };
+    const body = {
+      bank_list: updatedBankList
+    }
     dispatch(
       updateBankList({
         Api,
         screen,
-        data: updatedBankList,
+        data: body,
         sagaCallback,
       })
     );
