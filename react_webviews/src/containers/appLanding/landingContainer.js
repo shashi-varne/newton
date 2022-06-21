@@ -77,8 +77,15 @@ const landingContainer = (WrappedComponent) => (props) => {
   const { isPageLoading } = useLoadingState(screen);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const { updateKyc } = useUserKycHook();
-  const { kyc, user, appStorage, partner, subscriptionStatus, bankList } =
-    useSelector(getAppData);
+  const {
+    kyc,
+    user,
+    appStorage,
+    partner,
+    subscriptionStatus,
+    bankList,
+    referral: referralContent,
+  } = useSelector(getAppData);
   const [kycData, setKycData] = useState(getKycData(kyc, user));
   const [campaignData, setCampaignData] = useState({});
   const [referral, setReferral] = useState("");
@@ -109,7 +116,10 @@ const landingContainer = (WrappedComponent) => (props) => {
       landingMarketingBanners,
       enabledFeatures
     );
-    const motivators = getEnabledPlatformMotivators(platformMotivators, enabledFeatures);
+    const motivators = getEnabledPlatformMotivators(
+      platformMotivators,
+      enabledFeatures
+    );
     return {
       code,
       onboardingCarousels,
@@ -139,7 +149,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     subscriptionStatus,
     kyc,
     appStorage.feature,
-    referral,
+    referralContent,
   ]);
 
   const [showCarousals, setShowCarousals] = useState(
@@ -632,7 +642,6 @@ const landingContainer = (WrappedComponent) => (props) => {
       handleLoader({ dotLoader: true });
       await applyReferralCode(Api, referral);
       setReferralData(REFERRAL_DATA.success);
-      fetchSummaryData();
       handleBottomsheets({ [BOTTOMSHEET_KEYS.openReferral]: true });
     } catch (err) {
       setReferralData({
