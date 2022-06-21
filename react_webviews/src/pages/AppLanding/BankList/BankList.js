@@ -12,6 +12,7 @@ const BankList = ({
   onClick,
   sendEvents,
   isButtonLoading,
+  onBackClick
 }) => {
   return (
     <Container
@@ -21,6 +22,7 @@ const BankList = ({
         dataAid: BANK_LIST.headerData.dataAid,
         disableSeeMoreFeature: true,
         hideLeftIcon: true,
+        onBackClick,
       }}
       className="bank-list-wrapper"
       dataAid={BANK_LIST.dataAid}

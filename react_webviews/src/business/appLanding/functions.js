@@ -155,7 +155,7 @@ const setSDKSummaryData = (result) => {
   }
   const campaignData = getCampaignData(result.data.campaign.user_campaign.data);
   const nps = result.data.nps.nps_user.data;
-  const bankList = result.data.bank_list.data;
+  const bankList = result?.data?.bank_list?.bank_list?.data;
   const referral = result.data.referral;
   storageService().setObject("campaign", campaignData);
   storageService().setObject("npsUser", nps);
