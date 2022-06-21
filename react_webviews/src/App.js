@@ -10,37 +10,43 @@ import {
 } from "@material-ui/core/styles";
 import { create } from "jss";
 import { themeConfig } from "utils/constants";
-import { getConfig, isDietProduct } from './utils/functions';
+import { getConfig, isDietProduct } from "./utils/functions";
 import { storageService } from "./utils/validators";
 import { ToastContainer } from "react-toastify";
 import DesktopLayout from "./desktopLayout";
 import ErrorBoundary from "./ErrorBoundary";
 import BootSkeleton from "./common/components/BootSkeleton";
-import ComponentTest from './ComponentTest';
-import UnAuthenticatedRoute from './common/components/UnAuthenticatedRoute.js';
-import RedirectToAnyPath from './common/components/RedirectToAnyPath.js';
-import eventManager from './utils/eventManager.js';
-import { EVENT_MANAGER_CONSTANTS } from './utils/constants.js';
-import { Provider } from 'react-redux';
-import store, { persistor } from './dataLayer/store/index.js';
-import { PersistGate } from 'redux-persist/integration/react';
-import LoginContainer from './login_and_registration/components/LoginContainer';
+import ComponentTest from "./ComponentTest";
+import UnAuthenticatedRoute from "./common/components/UnAuthenticatedRoute.js";
+import RedirectToAnyPath from "./common/components/RedirectToAnyPath.js";
+import eventManager from "./utils/eventManager.js";
+import { EVENT_MANAGER_CONSTANTS } from "./utils/constants.js";
+import { Provider } from "react-redux";
+import store, { persistor } from "./dataLayer/store/index.js";
+import { PersistGate } from "redux-persist/integration/react";
+import LoginContainer from "./login_and_registration/components/LoginContainer";
 import Logout from "./login_and_registration/pages/Logout/Logout";
 
-const Prepare = lazy(() => import(
-  /*webpackChunkName: "Prepare"*/ "./dashboard/Invest/components/SdkLanding/Prepare"
-));
-const Tooltip = lazy(() => import(
-  /*webpackChunkName: "Tooltip"*/ "common/ui/Tooltip"
-));
-const NotFound = lazy(() => import(
-  /*webpackChunkName: "NotFound"*/ "./common/components/NotFound"
-));
-const FisdomPartnerRedirect = lazy(() => import(
-  /* webpackChunkName: "FisdomPartnerRedirect" */ "./fisdom_partner_redirect")
+const Prepare = lazy(() =>
+  import(
+    /*webpackChunkName: "Prepare"*/ "./dashboard/Invest/components/SdkLanding/Prepare"
+  )
 );
-const PartnerAuthentication = lazy(() => import(
-  /* webpackChunkName: "Authentication" */ "./login_and_registration/pages/Authentication")
+const Tooltip = lazy(() =>
+  import(/*webpackChunkName: "Tooltip"*/ "common/ui/Tooltip")
+);
+const NotFound = lazy(() =>
+  import(/*webpackChunkName: "NotFound"*/ "./common/components/NotFound")
+);
+const FisdomPartnerRedirect = lazy(() =>
+  import(
+    /* webpackChunkName: "FisdomPartnerRedirect" */ "./fisdom_partner_redirect"
+  )
+);
+const PartnerAuthentication = lazy(() =>
+  import(
+    /* webpackChunkName: "Authentication" */ "./login_and_registration/pages/Authentication"
+  )
 );
 const Feature = lazy(() =>
   import(/* webpackChunkName: "Feature" */ "./Feature")
@@ -61,23 +67,23 @@ const getMuiThemeConfig = () => {
   return createMuiTheme(themeConfig());
 };
 
-var basename = window.localStorage.getItem('base_href') || '';
-if (basename && basename.indexOf('appl/web') !== -1) {
-  basename = basename ? basename + 'view/' : '';
+var basename = window.localStorage.getItem("base_href") || "";
+if (basename && basename.indexOf("appl/web") !== -1) {
+  basename = basename ? basename + "view/" : "";
 }
 
 const clearBottomsheetDisplays = () => {
   const bottomSheetsArr = [
-    "isCampaignDialogDisplayed", 
-    "verifyDetailsSheetDisplayed", 
-    "isKycPremiumBottomSheetDisplayed", 
+    "isCampaignDialogDisplayed",
+    "verifyDetailsSheetDisplayed",
+    "isKycPremiumBottomSheetDisplayed",
     "landingBottomSheetDisplayed",
   ];
 
   bottomSheetsArr.forEach((bottomSheet) => {
     storageService().remove(bottomSheet);
   });
-}
+};
 
 const ScrollToTop = withRouter(
   class ScrollToTopWithoutRouter extends Component {
@@ -98,25 +104,36 @@ const App = () => {
   const iframe = config.isIframe;
   const isMobileDevice = config.isMobileDevice;
   const isDietEnabled = isDietProduct();
-  const [themeConfiguration, setThemeConfiguration] = useState(getMuiThemeConfig());
-  const isWithoutDesktopLayout = isMobileDevice || iframe || window.location.pathname.includes('pg/eq') || isDietEnabled;
+  const [themeConfiguration, setThemeConfiguration] = useState(
+    getMuiThemeConfig()
+  );
+  const isWithoutDesktopLayout =
+    isMobileDevice ||
+    iframe ||
+    window.location.pathname.includes("pg/eq") ||
+    isDietEnabled;
   useEffect(() => {
     if (config.isSdk || config.isIframe) {
       storageService().set("entry_path", window.location.pathname);
     }
     clearBottomsheetDisplays();
     eventManager.add(EVENT_MANAGER_CONSTANTS.updateAppTheme, updateAppTheme);
-    eventManager.add(EVENT_MANAGER_CONSTANTS.storePartnerCode, getConfig().code);
+    eventManager.add(
+      EVENT_MANAGER_CONSTANTS.storePartnerCode,
+      getConfig().code
+    );
   }, []);
 
   const updateAppTheme = (event) => {
-    const oldPartnerCode = eventManager.get(EVENT_MANAGER_CONSTANTS.storePartnerCode);
+    const oldPartnerCode = eventManager.get(
+      EVENT_MANAGER_CONSTANTS.storePartnerCode
+    );
     const newPartnerCode = getConfig().code;
-    if(newPartnerCode === oldPartnerCode) return;
+    if (newPartnerCode === oldPartnerCode) return;
     const theme = getMuiThemeConfig();
     setThemeConfiguration(theme);
     eventManager.add(EVENT_MANAGER_CONSTANTS.storePartnerCode, newPartnerCode);
-  }
+  };
 
   return (
     <Provider store={store}>
@@ -140,16 +157,10 @@ const App = () => {
                       component={WealthReport}
                     /> */}
                     <UnAuthenticatedRoute
-                      path={[
-                        '/login',
-                        '/forgot-pin'
-                      ]}
+                      path={["/login", "/forgot-pin"]}
                       component={LoginContainer}
                     />
-                    <Route
-                      path="/rm-login"
-                      component={RmLogin}
-                    />
+                    <Route path="/rm-login" component={RmLogin} />
                     <Route
                       path="/partner-landing"
                       component={FisdomPartnerRedirect}
@@ -158,22 +169,15 @@ const App = () => {
                       path="/partner-authentication/:partnerCode"
                       component={PartnerAuthentication}
                     />
-                    <Route
-                      path="/logout"
-                      component={Logout}
-                    />
-                    <Route
-                      path="/prepare"
-                      component={Prepare}
-                    />
-                    {
-                      isWithoutDesktopLayout
-                        ? <Route component={Feature} />
-                        : <DesktopLayout>
-                            <Feature />
-                          </DesktopLayout>
-                    }
-                    <Route path='/component-test' component={ComponentTest} />
+                    <Route path="/logout" component={Logout} />
+                    <Route path="/prepare" component={Prepare} />
+                    {isWithoutDesktopLayout ? (
+                      <Route component={Feature} />
+                    ) : (
+                      <DesktopLayout>
+                        <Feature />
+                      </DesktopLayout>
+                    )}
                     <Route component={NotFound} />
                   </Switch>
                 </Suspense>
