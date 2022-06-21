@@ -25,6 +25,7 @@ const InvestmentOptions = ({
           dataAid={titleDataAid}
           variant="heading3"
           className="al-io-title"
+          component="div"
         >
           {title}
         </Typography>
