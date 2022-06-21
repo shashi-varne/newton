@@ -23,6 +23,7 @@ const PassiveIndexFunds = ({ productName, onClick }) => {
         variant="body6"
         dataAid="helperText"
         color="foundationColors.content.secondary"
+        className="mfl-passive-footer"
       >
         *Based on TER averages of regular large cap and direct index funds
       </Typography>

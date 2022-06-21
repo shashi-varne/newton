@@ -254,8 +254,6 @@ export const partnerConfigs = {
       insurance: true,
       fhc: true,
       riskProfile: true,
-      ipo: true,
-      stocks: true,
     },
     mfSections: [
       "kyc",
