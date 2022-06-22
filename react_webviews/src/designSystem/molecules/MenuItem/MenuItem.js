@@ -86,16 +86,17 @@ const MenuItem = ({
             {...leftImgProps}
           />
         ) : leftSvgSrc ? (
-          <SVG
-            preProcessor={(code) =>
-              code.replace(/fill=".*?"/g, `fill=${leftSvgIconColor ? leftSvgIconColor : undefined}`)
-            }
-            src={leftSvgSrc}
-            size="32px"
-            className="menu-item-left-img"
-            data-aid="iv_left"
-            {...leftImgProps}
-          />
+          <div className="menu-item-left-img" >
+            <SVG
+              preProcessor={(code) =>
+                code.replace(/fill=".*?"/g, `fill=${leftSvgIconColor ? leftSvgIconColor : undefined}`)
+              }
+              src={leftSvgSrc}
+              size="32px"           
+              data-aid="iv_left"
+              {...leftImgProps}
+            />
+          </div>
         ) : null}
 
         <div className='mi-right-wrapper'>
@@ -128,7 +129,7 @@ const MenuItem = ({
           )}
         </div>
       </div>
-      {showSeparator && <Separator marginLeft={leftImgSrc ? '72px' : '16px'} dataAid="1" />}
+      {showSeparator && <Separator marginLeft={(leftImgSrc || leftSvgSrc) ? '72px' : '16px'} dataAid="1" />}
     </div>
   );
 };
