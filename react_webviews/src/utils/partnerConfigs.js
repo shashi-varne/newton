@@ -32,6 +32,7 @@ import {
   PRODUCT_MARKETING_BANNERS,
   DEFAULT_MARKETING_BANNERS,
   EQUITY_MARKETING_BANNERS,
+  UCOMB_MARKETING_BANNERS,
 } from "./partnerConstants";
 
 // common config across all partners
@@ -556,7 +557,7 @@ export const partnerConfigs = {
     webLogo: "ucomb_bank.svg",
     logoWidth: "200px",
     onboardingCarousels: EQUITY_ONBOARDING_CAROUSELS,
-    landingMarketingBanners: EQUITY_MARKETING_BANNERS,
+    landingMarketingBanners: UCOMB_MARKETING_BANNERS,
     styles: {
       primaryColor: "#002759",
       secondaryColor: "#002759",
@@ -577,9 +578,6 @@ export const partnerConfigs = {
       applyRefferal: true,
       shareRefferal: true,
     },
-    landingMarketingBanners: [
-      ...commonCardsConfig.landingMarketingBanners,
-    ],
   },
   bom: {
     code: "bom",
