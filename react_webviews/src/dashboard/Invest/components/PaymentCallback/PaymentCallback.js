@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import Container from "../../../common/Container";
 import { Imgc } from "common/ui/Imgc";
@@ -7,12 +7,14 @@ import "./PaymentCallback.scss";
 import useUserKycHook from "../../../../kyc/common/hooks/userKycHook";
 import { storageService } from "../../../../utils/validators";
 import { isNewIframeDesktopLayout } from "../../../../utils/functions";
+import { getAccountSummary } from "../../../../kyc/services";
 
 const PaymentCallback = (props) => {
   const config = getConfig();
   const params = props.match.params || {};
   const navigate = navigateFunc.bind(props);
-  const { user, isLoading } = useUserKycHook();
+  const [skelton, setSkelton] = useState(false);
+  const { user, isLoading, updateKyc, updateUser } = useUserKycHook();
   const status = params.status || "";
   let message = params.message || "";
   resetRiskProfileJourney()
@@ -83,6 +85,32 @@ const PaymentCallback = (props) => {
     }
   }
 
+  useEffect(() => {
+    initialize();
+  }, []);
+
+  const initialize = async () => {
+    const isKycIncomplete = ["init", "incomplete"].includes(user.kyc_registration_v2)
+    if (isKycIncomplete) {
+      setSkelton(true);
+      try {
+        const params = {
+          kyc: ["kyc"],
+          user: ["user"],
+        };
+        const result = await getAccountSummary(params);
+        const userData = result?.data?.user?.user?.data;
+        const userKyc = result?.data?.kyc?.kyc?.data;
+        updateUser(userData);
+        updateKyc(userKyc);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setSkelton(false);
+      }
+    }
+  };
+
   return (
     <Container
       data-aid='payment-call-back-screen'
@@ -90,7 +118,7 @@ const PaymentCallback = (props) => {
       hidePageTitle
       handleClick={handleClick}
       headerData={{goBack}}
-      skelton={isLoading}
+      skelton={isLoading || skelton}
       iframeRightContent={require(`assets/${config.productName}/${paymentError ? 'error_illustration' : 'congratulations_illustration'}.svg`)}
     >
       <section className="invest-payment-callback" data-aid='invest-payment-callback'>
