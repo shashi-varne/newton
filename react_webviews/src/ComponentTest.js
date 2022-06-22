@@ -1,11 +1,15 @@
 import React from "react";
 import ThemeWrapper from "./theme/ThemeWrapper";
-import ProgressBar from "designSystem/atoms/ProgressBar";
 
 function ComponentTest() {
+  const onChange = (val) => {
+    console.log(val);
+  };
   return (
     <ThemeWrapper>
-      <div style={{ padding: 20 }}>{/* component here */}</div>
+      <div
+        style={{ padding: 20, backgroundColor: "#DFDFDF", height: "100%" }}
+      ></div>
     </ThemeWrapper>
   );
 }
