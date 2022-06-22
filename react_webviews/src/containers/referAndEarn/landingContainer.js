@@ -173,10 +173,15 @@ const landingContainer = (WrappedComponent) => (props) => {
       msg = activeCampaignViewData?.[activeSheetIndex]?.shareMessage;
     }
     msg = msg.replace("{}", referralCode);
-    try {
-      await navigator.clipboard.writeText(msg);
-    } catch (error) {
-      console.error(error);
+    if (isWeb) {
+      try {
+        await navigator.clipboard.writeText(msg);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      const data = { message: msg };
+      nativeCallback({ action: "share_text", message: data });
     }
   };
 

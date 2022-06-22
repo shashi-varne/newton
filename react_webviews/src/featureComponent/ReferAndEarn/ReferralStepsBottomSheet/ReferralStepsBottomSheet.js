@@ -26,7 +26,6 @@ const ReferralStepsBottomSheet = ({
   referralCode = "",
   onClickCopy = noop,
   onClickMail = noop,
-  onClickShare = noop,
   onClickCta = noop,
   ctaText = "",
   productName,
@@ -88,7 +87,6 @@ const ReferralStepsBottomSheet = ({
             referralCode={referralCode}
             onClickCopy={onClickCopy}
             onClickMail={onClickMail}
-            onClickShare={onClickShare}
             onClickCta={onClickCta}
             ctaText={ctaText}
           />

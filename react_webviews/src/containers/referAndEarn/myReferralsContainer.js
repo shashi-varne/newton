@@ -108,11 +108,16 @@ const myReferralsContainer = (WrappedComponent) => (props) => {
     }
     msg = msg.replace("{}", referralCode);
 
-    try {
-      await navigator.clipboard.writeText(msg);
-      ToastMessage(SHARE_COMPONENT.toastMessage);
-    } catch (error) {
-      console.error(error);
+    if (isWeb) {
+      try {
+        await navigator.clipboard.writeText(msg);
+        ToastMessage(SHARE_COMPONENT.toastMessage);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      const data = { message: msg };
+      nativeCallback({ action: "share_text", message: data });
     }
     sendEvents("remind");
   };
