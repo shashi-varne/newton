@@ -482,6 +482,9 @@ export const partnerConfigs = {
       primaryColor: "#173883",
       secondaryColor: "#173883",
     },
+    features: {
+      taxFiling: true,
+    },
   },
   finshell: {
     logo: "finshell.svg",
