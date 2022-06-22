@@ -27,7 +27,7 @@ import { isValidValue } from '../../fundDetailsV2/helperFunctions';
 import Typography from '../../../designSystem/atoms/Typography';
 const screen = 'diyLanding';
 
-const TrendingFunds = ({ config, handleFundDetails, diyType, isLanding }) => {
+const TrendingFunds = ({ config, handleFundDetails, diyType, isLanding, sx }) => {
   const isMobileDevice = config.isMobileDevice;
   const trendingFunds = useSelector((state) => getTrendingFundsByCategory(state, diyType));
   const dispatch = useDispatch();
@@ -42,7 +42,7 @@ const TrendingFunds = ({ config, handleFundDetails, diyType, isLanding }) => {
   }
 
   return (
-    <Stack direction='column' spacing={2} className='diy-c-trending-wrapper'>
+    <Stack direction='column' spacing={2} className='diy-c-trending-wrapper' sx={sx}>
       <SectionHeader sx={{ pl: 2, pr: 2 }} title='Trending' dataAid='trending' />
       <CustomSwiper
         slidesPerView={isLanding ? "auto": isMobileDevice ? 1 : 2}

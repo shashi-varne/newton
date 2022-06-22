@@ -45,6 +45,7 @@ const initializeData = () => {
     options: investCardsData,
   };
   const categoriesData = MF_EXPLORE_CATEGORY_DATA[baseConfig.productName];
+  const isFinity = baseConfig.productName === "finity";
   return {
     code,
     marketingBanners,
@@ -54,6 +55,7 @@ const initializeData = () => {
     enabledFeatures,
     investOptionsData,
     exploreCategoriesData: categoriesData,
+    isFinity,
   };
 };
 
@@ -77,6 +79,7 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
     mfSections,
     enabledFeatures,
     exploreCategoriesData,
+    isFinity,
   } = useMemo(initializeData, [partner, subscriptionStatus, kyc]);
   const { updateKyc } = useUserKycHook();
 
@@ -222,6 +225,7 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
 
   return (
     <WrappedComponent
+      isFinity={isFinity}
       showPartnership={baseConfig.isSdk}
       mfSections={mfSections}
       baseConfig={baseConfig}

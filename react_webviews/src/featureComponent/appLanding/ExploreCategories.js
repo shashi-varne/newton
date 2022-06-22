@@ -1,5 +1,6 @@
 import React from "react";
 import Typography from "../../designSystem/atoms/Typography";
+import WrapperBox from "../../designSystem/atoms/WrapperBox";
 import CardVertical from "../../designSystem/molecules/CardVertical";
 import CustomSwiper from "../../designSystem/molecules/CustomSwiper";
 import { SwiperSlide } from "swiper/react";
@@ -15,9 +16,10 @@ const ExploreCategories = ({
   onClick,
   className = "",
   buttonData = {},
+  sx,
 }) => {
   return (
-    <div className={`al-explore-categories ${className}`}>
+    <Stack className={`al-explore-categories ${className}`} sx={sx}>
       <Stack
         justifyContent="space-between"
         flexDirection="row"
@@ -43,16 +45,17 @@ const ExploreCategories = ({
       >
         {categories.map((data, idx) => (
           <SwiperSlide key={idx}>
-            <CardVertical
-              {...data}
-              imgSrc={require(`assets/${data.icon}`)}
-              className="al-ec-card pointer"
-              onClick={onClick(data)}
-            />
+            <WrapperBox elevation={1} className="al-ec-card pointer">
+              <CardVertical
+                {...data}
+                imgSrc={require(`assets/${data.icon}`)}
+                onClick={onClick(data)}
+              />
+            </WrapperBox>
           </SwiperSlide>
         ))}
       </CustomSwiper>
-    </div>
+    </Stack>
   );
 };
 

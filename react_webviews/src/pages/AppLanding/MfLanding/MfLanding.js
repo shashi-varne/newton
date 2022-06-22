@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Container from "../../../designSystem/organisms/ContainerWrapper";
 import TrustIcon from "../../../designSystem/atoms/TrustIcon";
+import WrapperBox from "../../../designSystem/atoms/WrapperBox";
 import CardHorizontal from "../../../designSystem/molecules/CardHorizontal";
 import Partnership from "../../../featureComponent/appLanding/Partnership";
 import InvestmentOptions from "../../../featureComponent/appLanding/InvestmentOptions";
@@ -12,6 +13,7 @@ import { MF_LANDING } from "../../../strings/webappLanding";
 import { FINANCIAL_TOOLS } from "../../../constants/webappLanding";
 import TrendingFunds from "../../DIY/DiyLanding/TrendingFunds";
 import { isEmpty } from "lodash-es";
+import { Stack } from "@mui/material";
 
 import "./MfLanding.scss";
 
@@ -28,13 +30,14 @@ const MfLanding = ({
   isPageLoading,
   showPartnership,
   baseConfig,
+  isFinity,
   ...restProps
 }) => {
   return (
     <Container
       noPadding={true}
       noFooter={true}
-      className="mf-landing-wrapper"
+      className={`mf-landing-wrapper ${isFinity ? `mf-landing-finity` : ``}`}
       dataAid={MF_LANDING.title.dataAid}
       headerProps={{
         dataAid: MF_LANDING.title.value,
@@ -46,7 +49,11 @@ const MfLanding = ({
       eventData={sendEvents("just_set_events")}
       isPageLoading={isPageLoading}
     >
-      <MfLandingSections baseConfig={baseConfig} {...restProps} />
+      <MfLandingSections
+        baseConfig={baseConfig}
+        isFinity={isFinity}
+        {...restProps}
+      />
       <TrustIcon
         dataAid={baseConfig.productName}
         variant="registration"
@@ -86,7 +93,20 @@ const MfLandingSections = ({
   baseConfig,
   handleFundDetails,
   showExternalPortfolio,
+  isFinity,
 }) => {
+  const getStyles = () => {
+    if (isFinity) {
+      const styles = {
+        backgroundColor: "foundationColors.supporting.grey",
+      };
+      return styles;
+    }
+    return {};
+  };
+
+  const sx = useMemo(getStyles, [isFinity]);
+
   const cardsMapper = {
     marketingBanners: (
       <>
@@ -101,26 +121,30 @@ const MfLandingSections = ({
     kyc: (
       <>
         {showKycCard && (
-          <CardHorizontal
-            rightImgSrc={require(`assets/${baseConfig.productName}/${kycData.icon}`)}
-            title={kycData.title}
-            description={kycData.subtitle}
-            descriptionColor={
-              kycData.descriptionColor || "foundationColors.content.secondary"
-            }
-            actionLink={kycData.buttonTitle}
-            className="mfl-kyc"
-            variant="heroCard"
-            buttonProps={{
-              isInverted: false,
-            }}
-            sx={{
-              background: "white !important",
-            }}
-            dataAid={MF_LANDING.kycDataAid}
-            titleColor="foundationColors.content.primary"
-            onClick={handleKyc(kycData.eventStatus)}
-          />
+          <div className="mfl-kyc-wrapper">
+            <WrapperBox elevation={1}>
+              <CardHorizontal
+                rightImgSrc={require(`assets/${baseConfig.productName}/${kycData.icon}`)}
+                title={kycData.title}
+                description={kycData.subtitle}
+                descriptionColor={
+                  kycData.descriptionColor ||
+                  "foundationColors.content.secondary"
+                }
+                actionLink={kycData.buttonTitle}
+                variant="heroCard"
+                buttonProps={{
+                  isInverted: false,
+                }}
+                sx={{
+                  background: "white !important",
+                }}
+                dataAid={MF_LANDING.kycDataAid}
+                titleColor="foundationColors.content.primary"
+                onClick={handleKyc(kycData.eventStatus)}
+              />
+            </WrapperBox>
+          </div>
         )}
       </>
     ),
@@ -152,6 +176,7 @@ const MfLandingSections = ({
         buttonData={
           baseConfig.isMobileDevice && exploreCategoriesData.buttonData
         }
+        sx={sx}
       />
     ),
     financialTools: (
@@ -168,20 +193,23 @@ const MfLandingSections = ({
         config={baseConfig}
         handleFundDetails={handleFundDetails}
         isLanding
+        sx={sx}
       />
     ),
     portfolioTracker: (
       <>
         {showExternalPortfolio && (
-          <CardHorizontal
-            className="mfl-kyc"
-            rightImgSrc={require(`assets/${baseConfig.productName}/${externalPortfolioData.icon}`)}
-            title={externalPortfolioData.title}
-            description={externalPortfolioData.subtitle}
-            descriptionColor="foundationColors.content.secondary"
-            actionLink={externalPortfolioData.buttonTitle}
-            dataAid={externalPortfolioData.dataAid}
-          />
+          <Stack sx={sx}>
+            <CardHorizontal
+              className="mfl-portfolio"
+              rightImgSrc={require(`assets/${baseConfig.productName}/${externalPortfolioData.icon}`)}
+              title={externalPortfolioData.title}
+              description={externalPortfolioData.subtitle}
+              descriptionColor="foundationColors.content.secondary"
+              actionLink={externalPortfolioData.buttonTitle}
+              dataAid={externalPortfolioData.dataAid}
+            />
+          </Stack>
         )}
       </>
     ),

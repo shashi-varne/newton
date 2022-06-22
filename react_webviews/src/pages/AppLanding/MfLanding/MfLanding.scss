@@ -3,29 +3,38 @@
 
   .al-explore-categories {
     .al-ec-title {
-      padding: 0px 16px 16px 16px;
+      padding: 0px 16px 8px 16px;
     }
   }
 
   .al-ec-content .al-ec-card div {
-    width: 85%;
+    width: 90%;
   }
 
-  .mfl-kyc {
-    margin: 24px 16px 16px 16px;
+  .mfl-kyc-wrapper {
+    background-color: white;
+    padding: 24px 16px 16px 16px;
   }
 
-  .mfl-passive-footer {
+  .fc-passive-funds {
+    margin: 24px 16px 0px 16px;
+  }
+
+  .fc-passive-footer {
     font-weight: 400;
   }
 
   .al-investment-options {
     background-color: white;
-    padding: 32px 0px 20px 0px;
+    padding: 32px 0px 24px 0px;
 
     .al-io-title {
       padding: 0px 16px 16px 16px;
     }
+  }
+
+  .mfl-portfolio {
+    margin: 24px 16px 16px 16px;
   }
 
   .mfl-trust-icon {
@@ -68,4 +77,8 @@
       }
     }
   }
+}
+
+.mf-landing-finity {
+  background-color: white;
 }

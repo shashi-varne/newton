@@ -8,7 +8,7 @@ const { passiveIndexFunds } = MF_LANDING;
 
 const PassiveIndexFunds = ({ productName, onClick }) => {
   return (
-    <div className="mfl-kyc">
+    <div className="fc-passive-funds">
       <CardHorizontal
         rightImgSrc={require(`assets/${productName}/${passiveIndexFunds.icon}`)}
         title={passiveIndexFunds.title}
@@ -23,7 +23,7 @@ const PassiveIndexFunds = ({ productName, onClick }) => {
         variant="body6"
         dataAid="helperText"
         color="foundationColors.content.secondary"
-        className="mfl-passive-footer"
+        className="fc-passive-footer"
       >
         *Based on TER averages of regular large cap and direct index funds
       </Typography>
