@@ -18,7 +18,7 @@ import {
 } from "businesslogic/dataStore/reducers/referAndEarn";
 import Api from "../../utils/api";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
-import { get, isEmpty } from "lodash-es";
+import { camelCase, get, isEmpty } from "lodash-es";
 import { capitalizeFirstLetter } from "../../utils/validators";
 import ToastMessage from "../../designSystem/atoms/ToastMessage";
 import {
@@ -268,6 +268,7 @@ const getActiveCampaignsViewData = (activeCampaignData) => {
           item.campaign_end_date,
           "yyyy-MM-dd HH:mm:ss"
         )}`;
+    const dataAid = camelCase(item.campaign_name);
 
     return {
       title: item.campaign_name,
@@ -275,10 +276,10 @@ const getActiveCampaignsViewData = (activeCampaignData) => {
       expiryDescription: expDate,
       isExpiringSoon: isExpiringSoon,
       amount: item.amount_per_referral,
-      dataAid: capitalizeFirstLetter(item.campaign_name),
+      dataAid: dataAid,
       bottomSheetData: {
         title: item.subtitle,
-        dataAid: capitalizeFirstLetter(item.campaign_name),
+        dataAid: dataAid,
         stepsData: item.content,
       },
       shareMessage: item.share_message,
