@@ -577,6 +577,10 @@ export const partnerConfigs = {
       applyRefferal: true,
       shareRefferal: true,
     },
+    landingMarketingBanners: [
+      ...commonCardsConfig.landingMarketingBanners,
+      { image: "tax_filing_banner.svg", type: "taxFiling" },
+    ],
   },
   bom: {
     code: "bom",
