@@ -44,7 +44,8 @@ const PATHNAME_MAPPER = {
   instaredeem: "/invest/instaredeem",
   mf: "/invest",
   elss: "/invest/savetax",
-  ipo: "/market-products"
+  ipo: "/market-products",
+  taxFiling: "/tax-filing"
 };
 
 const CARD_NAME_MAPPER = {
