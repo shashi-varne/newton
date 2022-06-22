@@ -52,19 +52,7 @@ export const commonCardsConfig = {
     bottomScrollCards: ["parkmoney", "savegoal"],
     bottomCards: ["nfo"],
   },
-  landingMarketingBanners: [
-    {
-      image: "ipo1.svg",
-      type: "ipo",
-      endDate: "05/08/2022",
-      actionUrl: "https://youtu.be/khCf5foDUmQ"
-    },
-    {
-      image: "ipo.svg",
-      type: "ipo",
-      endDate: "05/08/2022",
-    }
-  ],
+  landingMarketingBanners: [],
   nfoBanners: [],
 };
 
@@ -599,6 +587,10 @@ export const partnerConfigs = {
       applyRefferal: true,
       shareRefferal: true,
     },
+    landingMarketingBanners: [
+      ...commonCardsConfig.landingMarketingBanners,
+      { image: "tax_filing_banner.svg", type: "taxFiling" },
+    ],
   },
   bom: {
     code: "bom",
