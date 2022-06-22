@@ -1,3 +1,4 @@
+import { Box } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import backIcon from 'assets/nav_back.svg';
 import closeIcon from 'assets/nav_close.svg';
@@ -35,6 +36,7 @@ const NavigationHeader = ({
   tabChilds = [],
   className,
   hideMenuBar = false,
+  headerSx,
   dataAid
 }) => {
   const navHeaderWrapperRef = useRef();
@@ -88,7 +90,7 @@ const NavigationHeader = ({
       ref={navHeaderWrapperRef}
       data-aid={`navigationHeader_${dataAid}`}
     >
-      <section className='nav-header-top-section'>
+      <Box component='section' sx={{backgroundColor: 'foundationColors.supporting.white',...headerSx}} className='nav-header-top-section'>
         <div className='nav-header-left'>
           {!hideLeftIcon && (
             <IconButton
@@ -124,13 +126,13 @@ const NavigationHeader = ({
             />
           )}
         </div>
-      </section>
+      </Box>
       {!(hideInPageTitle || hideHeaderTitle) && headerTitle && (
-        <div className='nav-bar-title-wrapper' ref={inPageTitleRef}>
+        <Box component='div' sx={{backgroundColor: 'foundationColors.supporting.white',...headerSx}} className='nav-bar-title-wrapper' ref={inPageTitleRef}>
           <Typography variant='heading2' dataAid='title'>
             {headerTitle}
           </Typography>
-        </div>
+        </Box>
       )}
       <section className='nav-bar-subtitle-wrapper' ref={subtitleRef}>
         {children}

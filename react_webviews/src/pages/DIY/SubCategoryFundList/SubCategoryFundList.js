@@ -305,6 +305,10 @@ const SubCategoryLanding = (props) => {
       eventData={fundListEvent}
       headerProps={{
         headerTitle: subcategoryOptionsData[tabValue]?.name,
+        headerSx: {
+          backgroundColor: 'red',
+          color: 'white'
+        },
         subtitle: subcategoryOptionsData[tabValue]?.subtitle,
         points: subcategoryOptionsData[tabValue]?.points,
         tabsProps: {
