@@ -24,7 +24,7 @@ const screen = "MY_REFERRALS";
 
 const myReferralsContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
-  const { Web: isWeb, productName } = useMemo(getConfig, []);
+  const { Web: isWeb, productName, appLink } = useMemo(getConfig, []);
   const { isPageLoading } = useLoadingState(screen);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const refereeListData = useSelector(getRefereeListData);
@@ -107,12 +107,18 @@ const myReferralsContainer = (WrappedComponent) => (props) => {
       msg = refereeListViewData[cardIndex].events[eventIndex].remind_message;
     }
     msg = msg.replace("{}", referralCode);
+    msg = msg + "\n" + appLink;
 
-    try {
-      await navigator.clipboard.writeText(msg);
-      ToastMessage(SHARE_COMPONENT.toastMessage);
-    } catch (error) {
-      console.error(error);
+    if (isWeb) {
+      try {
+        await navigator.clipboard.writeText(msg);
+        ToastMessage(SHARE_COMPONENT.toastMessage);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      const data = { message: msg };
+      nativeCallback({ action: "share_text", message: data });
     }
     sendEvents("remind");
   };

@@ -43,7 +43,7 @@ import "./Landing.scss";
 // temp
 import WrapperBox from "../../../../designSystem/atoms/WrapperBox";
 import Typography from "../../../../designSystem/atoms/Typography";
-import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../../../pages/ReferAndEarn/common/constants";
+import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../../../constants/referAndEarn";
 // end-- temp
 
 const fromLoginStates = ["/login", "/logout", "/verify-otp"];

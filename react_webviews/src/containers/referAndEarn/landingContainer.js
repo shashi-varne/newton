@@ -18,21 +18,20 @@ import {
 } from "businesslogic/dataStore/reducers/referAndEarn";
 import Api from "../../utils/api";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
-import { get, isEmpty } from "lodash-es";
-import { capitalizeFirstLetter } from "../../utils/validators";
+import { camelCase, get, isEmpty } from "lodash-es";
 import ToastMessage from "../../designSystem/atoms/ToastMessage";
 import {
   getFnsFormattedDate,
   getDiffInHours,
-} from "../../pages/ReferAndEarn/common/utils";
-import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../pages/ReferAndEarn/common/constants";
+} from "../../business/referAndEarn/utils";
+import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../constants/referAndEarn";
 import { isReadyToInvest } from "../../kyc/services";
 
 const screen = "REFER_AND_EARN_LANDING";
 
 const landingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
-  const { Web: isWeb, productName } = useMemo(getConfig, []);
+  const { Web: isWeb, productName, appLink } = useMemo(getConfig, []);
   const { isPageLoading } = useLoadingState(screen);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const { user, kyc, isLoading } = useUserKycHook();
@@ -173,26 +172,33 @@ const landingContainer = (WrappedComponent) => (props) => {
       msg = activeCampaignViewData?.[activeSheetIndex]?.shareMessage;
     }
     msg = msg.replace("{}", referralCode);
-    try {
-      await navigator.clipboard.writeText(msg);
-    } catch (error) {
-      console.error(error);
+    msg = msg + "\n" + appLink;
+
+    if (isWeb) {
+      try {
+        await navigator.clipboard.writeText(msg);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      const data = { message: msg };
+      nativeCallback({ action: "share_text", message: data });
     }
   };
 
   const onClickMail = () => {
     sendShareEvents("share_icon");
-    let subject = "";
     let emailBody = "";
 
     if (activeSheetIndex >= 0) {
-      subject = activeCampaignViewData?.[activeSheetIndex]?.subtitle;
       emailBody = activeCampaignViewData?.[activeSheetIndex]?.shareMessage;
     }
-    emailBody.replace("{}", referralCode);
 
-    document.location =
-      "mailto:" + "?subject=" + subject + "&body=" + emailBody;
+    emailBody = emailBody.replace("{}", referralCode);
+    emailBody = emailBody.replace(/&/g, "and");
+    emailBody = emailBody + " \n" + appLink;
+
+    document.location = `mailto:?&body=${emailBody}`;
   };
 
   const onClickShare = () => {
@@ -203,6 +209,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     }
 
     msg = msg.replace("{}", referralCode);
+    msg = msg + "\n" + appLink;
 
     const data = { message: msg };
     nativeCallback({ action: "share_text", message: data });
@@ -263,6 +270,7 @@ const getActiveCampaignsViewData = (activeCampaignData) => {
           item.campaign_end_date,
           "yyyy-MM-dd HH:mm:ss"
         )}`;
+    const dataAid = camelCase(item.campaign_name);
 
     return {
       title: item.campaign_name,
@@ -270,10 +278,10 @@ const getActiveCampaignsViewData = (activeCampaignData) => {
       expiryDescription: expDate,
       isExpiringSoon: isExpiringSoon,
       amount: item.amount_per_referral,
-      dataAid: capitalizeFirstLetter(item.campaign_name),
+      dataAid: dataAid,
       bottomSheetData: {
         title: item.subtitle,
-        dataAid: capitalizeFirstLetter(item.campaign_name),
+        dataAid: dataAid,
         stepsData: item.content,
       },
       shareMessage: item.share_message,

@@ -11,7 +11,7 @@ import {
 } from "businesslogic/dataStore/reducers/referAndEarn";
 import Api from "../../utils/api";
 import { isEmpty } from "lodash-es";
-import { getFnsFormattedDate } from "../../pages/ReferAndEarn/common/utils";
+import { getFnsFormattedDate } from "../../business/referAndEarn/utils";
 import { formatAmountInr } from "businesslogic/utils/common/functions";
 import ToastMessage from "../../designSystem/atoms/ToastMessage";
 import { nativeCallback } from "../../utils/native_callback";

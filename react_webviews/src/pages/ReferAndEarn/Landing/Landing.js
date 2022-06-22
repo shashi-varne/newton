@@ -117,7 +117,7 @@ const landing = ({
         referralCode={referralCode}
         onClickCopy={() => onClickCopy(activeSheetIndex)}
         onClickMail={() => onClickMail(activeSheetIndex)}
-        onClickShare={() => onClickShare(activeSheetIndex)}
+        onClickCta={() => onClickShare(activeSheetIndex)}
         productName={productName}
       />
       <TransferNotAllowedBottomSheet

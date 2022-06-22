@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 import SuccessDetails from "../../pages/ReferAndEarn/SuccessDetails";
-import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../pages/ReferAndEarn/common/constants";
+import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../constants/referAndEarn";
 import { format } from "date-fns";
 import { formatAmountInr } from "businesslogic/utils/common/functions";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
