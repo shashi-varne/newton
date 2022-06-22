@@ -5,7 +5,7 @@ import Typography from "../../../designSystem/atoms/Typography";
 import { WITHDRAW_PLACED } from "businesslogic/strings/referAndEarn";
 import { Stack } from "@mui/material";
 import "./WithdrawPlaced.scss";
-import { REFER_AND_EARN_PATHNAME_MAPPER } from "../common/constants";
+import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../../constants/referAndEarn";
 
 const sound = require("assets/audio/success.mp3"); // Audio file path to be added
 const STRINGS = WITHDRAW_PLACED;
@@ -30,7 +30,7 @@ const WithdrawPlaced = ({ productName = "fisdom", navigate, amount }) => {
   return (
     <Container
       headerProps={{
-        hide:true,
+        hide: true,
       }}
       className="reward-withdrawal-placed"
       dataAid={STRINGS.screenDataAid}

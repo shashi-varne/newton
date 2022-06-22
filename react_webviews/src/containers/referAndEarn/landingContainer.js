@@ -24,8 +24,8 @@ import ToastMessage from "../../designSystem/atoms/ToastMessage";
 import {
   getFnsFormattedDate,
   getDiffInHours,
-} from "../../pages/ReferAndEarn/common/utils";
-import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../pages/ReferAndEarn/common/constants";
+} from "../../business/referAndEarn/utils";
+import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../constants/referAndEarn";
 import { isReadyToInvest } from "../../kyc/services";
 
 const screen = "REFER_AND_EARN_LANDING";

@@ -10,7 +10,7 @@ import {
 import InfoCard from "../../../designSystem/molecules/InfoCard";
 import { REFERRAL_LANDING } from "businesslogic/strings/referAndEarn";
 import { REWARDS_SCREEN_INFO_CARD_DATA } from "businesslogic/constants/referAndEarn";
-import { REFER_AND_EARN_PATHNAME_MAPPER } from "../common/constants";
+import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../../constants/referAndEarn";
 import "./Landing.scss";
 import { formatAmountInr } from "businesslogic/utils/common/functions";
 

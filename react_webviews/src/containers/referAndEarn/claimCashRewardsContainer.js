@@ -12,7 +12,7 @@ import {
 } from "businesslogic/dataStore/reducers/referAndEarn";
 import { trigger_wallet_transfer } from "businesslogic/apis/referAndEarn";
 import Api from "../../utils/api";
-import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../pages/ReferAndEarn/common/constants";
+import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../constants/referAndEarn";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import { isReadyToInvest } from "../../kyc/services";
 const screen = "CLAIM_CASH_REWARDS";
