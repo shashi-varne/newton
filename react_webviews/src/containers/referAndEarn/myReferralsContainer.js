@@ -24,7 +24,7 @@ const screen = "MY_REFERRALS";
 
 const myReferralsContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
-  const { Web: isWeb, productName } = useMemo(getConfig, []);
+  const { Web: isWeb, productName, appLink } = useMemo(getConfig, []);
   const { isPageLoading } = useLoadingState(screen);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const refereeListData = useSelector(getRefereeListData);
@@ -107,6 +107,7 @@ const myReferralsContainer = (WrappedComponent) => (props) => {
       msg = refereeListViewData[cardIndex].events[eventIndex].remind_message;
     }
     msg = msg.replace("{}", referralCode);
+    msg = msg + "\n" + appLink;
 
     if (isWeb) {
       try {

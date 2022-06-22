@@ -19,7 +19,6 @@ import {
 import Api from "../../utils/api";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import { camelCase, get, isEmpty } from "lodash-es";
-import { capitalizeFirstLetter } from "../../utils/validators";
 import ToastMessage from "../../designSystem/atoms/ToastMessage";
 import {
   getFnsFormattedDate,
@@ -32,7 +31,7 @@ const screen = "REFER_AND_EARN_LANDING";
 
 const landingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
-  const { Web: isWeb, productName } = useMemo(getConfig, []);
+  const { Web: isWeb, productName, appLink } = useMemo(getConfig, []);
   const { isPageLoading } = useLoadingState(screen);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const { user, kyc, isLoading } = useUserKycHook();
@@ -173,6 +172,8 @@ const landingContainer = (WrappedComponent) => (props) => {
       msg = activeCampaignViewData?.[activeSheetIndex]?.shareMessage;
     }
     msg = msg.replace("{}", referralCode);
+    msg = msg + "\n" + appLink;
+
     if (isWeb) {
       try {
         await navigator.clipboard.writeText(msg);
@@ -187,17 +188,17 @@ const landingContainer = (WrappedComponent) => (props) => {
 
   const onClickMail = () => {
     sendShareEvents("share_icon");
-    let subject = "";
     let emailBody = "";
 
     if (activeSheetIndex >= 0) {
-      subject = activeCampaignViewData?.[activeSheetIndex]?.subtitle;
       emailBody = activeCampaignViewData?.[activeSheetIndex]?.shareMessage;
     }
-    emailBody.replace("{}", referralCode);
 
-    document.location =
-      "mailto:" + "?subject=" + subject + "&body=" + emailBody;
+    emailBody = emailBody.replace("{}", referralCode);
+    emailBody = emailBody.replace(/&/g, "and");
+    emailBody = emailBody + " \n" + appLink;
+
+    document.location = `mailto:?&body=${emailBody}`;
   };
 
   const onClickShare = () => {
@@ -208,6 +209,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     }
 
     msg = msg.replace("{}", referralCode);
+    msg = msg + "\n" + appLink;
 
     const data = { message: msg };
     nativeCallback({ action: "share_text", message: data });
