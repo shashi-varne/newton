@@ -1,12 +1,12 @@
-import React, { useMemo } from 'react';
-import CategoryCard from '../../../designSystem/molecules/CategoryCard';
-import Container from '../../../designSystem/organisms/ContainerWrapper';
-import isFunction from 'lodash/isFunction';
-import isArray from 'lodash/isArray';
-import { getConfig } from '../../../utils/functions';
-import PropTypes from 'prop-types';
-import './SubCategoryFunds.scss';
-import { useLocation } from 'react-router-dom';
+import React, { useMemo } from "react";
+import CategoryCard from "../../../designSystem/molecules/CategoryCard";
+import Container from "../../../designSystem/organisms/ContainerWrapper";
+import isFunction from "lodash/isFunction";
+import isArray from "lodash/isArray";
+import { getConfig } from "../../../utils/functions";
+import PropTypes from "prop-types";
+import "./SubCategoryFunds.scss";
+import { useLocation } from "react-router-dom";
 
 const SubCategoryFunds = () => {
   const { productName } = useMemo(getConfig, []);
@@ -15,7 +15,7 @@ const SubCategoryFunds = () => {
   const cartCount = 1;
   const onCartClick = () => {};
   const onCardClick = () => {};
-  const hideFooter = productName === 'finity' || cartCount <= 0;
+  const hideFooter = productName === "finity" || cartCount <= 0;
   const handleCardClick = (item) => () => {
     if (isFunction(onCardClick)) {
       onCardClick(item);
@@ -27,10 +27,10 @@ const SubCategoryFunds = () => {
       headerProps={{
         headerTitle,
       }}
-      className='diy-sub-category-fund-cc-wrapper'
+      className="diy-sub-category-fund-cc-wrapper"
       footer={{
         confirmActionProps: {
-          buttonTitle: 'View Cart',
+          buttonTitle: "View Cart",
           title: `${cartCount} item saved in your cart`,
           badgeContent: cartCount,
           onClick: onCartClick,
@@ -39,14 +39,18 @@ const SubCategoryFunds = () => {
       fixedFooter
       noFooter={hideFooter}
     >
-      <div className='diy-scf-cc-lists'>
+      <div className="diy-scf-cc-lists">
         {isArray(fundCategoryList) &&
           fundCategoryList?.map((fundCategory, idx) => {
             return (
-              <div className='diy-sc-cv-item' key={idx} onClick={handleCardClick(fundCategory)}>
+              <div
+                className="diy-sc-cv-item"
+                key={idx}
+                onClick={handleCardClick(fundCategory)}
+              >
                 <CategoryCard
-                  variant='large'
-                  imgSrc={require('assets/tech_fund.svg')}
+                  variant="variant88"
+                  imgSrc={require("assets/tech_fund.svg")}
                   title={fundCategory?.name}
                   onClick={handleCardClick(fundCategory)}
                 />
@@ -61,7 +65,7 @@ const SubCategoryFunds = () => {
 export default SubCategoryFunds;
 
 SubCategoryFunds.defaultProps = {
-  CCvariant: 'large',
+  CCvariant: "large",
   cartCount: 0,
 };
 

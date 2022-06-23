@@ -7,13 +7,34 @@
   titleColor: 'foundationColors.secondary.mango.300'
 */
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import Typography from '../../atoms/Typography';
-import Stack from '@mui/material/Stack';
-import Icon from '../../atoms/Icon';
+import React from "react";
+import PropTypes from "prop-types";
+import Typography from "../../atoms/Typography";
+import Stack from "@mui/material/Stack";
+import Icon from "../../atoms/Icon";
 
-import './CategoryCard.scss';
+import "./CategoryCard.scss";
+
+const CATEGORY_CARD_VARIANT_88 = {
+  titleVariant: "heading4",
+  size: "88px",
+};
+
+const CATEGORY_CARD_VARIANT_55 = {
+  size: "52px",
+  titleVariant: "body2",
+};
+
+const CATEGORY_CARD_VARIANT_32 = {
+  size: "32px",
+  titleVariant: "body2",
+};
+
+const variantMapper = {
+  variant88: CATEGORY_CARD_VARIANT_88,
+  variant52: CATEGORY_CARD_VARIANT_55,
+  variant32: CATEGORY_CARD_VARIANT_32,
+};
 
 const CategoryCard = ({
   variant,
@@ -26,37 +47,37 @@ const CategoryCard = ({
   onClick,
   dataAid,
 }) => {
-  const largeVariant = variant === 'large';
-  const variantData = largeVariant ? LARGE_CARD_VARIANT : SMALL_CARD_VARIANT;
-
+  const isVariant88 = variant === "variant88";
+  const variantData = variantMapper[variant || "variant52"];
+  console.log("v", variant, variantData);
   return (
     <Stack
-      direction='column'
-      justifyContent='flex-start'
-      alignItems='center'
-      className={`cc-wrapper ${largeVariant && 'cc-wrapper-large-variant'}`}
+      direction="column"
+      justifyContent="flex-start"
+      alignItems="center"
+      className={`cc-wrapper ${isVariant88 && "cc-wrapper-large-variant"}`}
       onClick={onClick}
       data-aid={`categoryCard_${dataAid}`}
     >
-      <Icon src={imgSrc} size={variantData.size} dataAid='top' {...imgProps} />
+      <Icon src={imgSrc} size={"32px"} dataAid="top" {...imgProps} />
       {title && (
         <Typography
           variant={variantData.titleVariant}
-          align='center'
+          align="center"
           color={titleColor}
-          dataAid='title'
-          component='div'
+          dataAid="title"
+          component="div"
         >
           {title}
         </Typography>
       )}
       {subtitle && (
         <Typography
-          variant='body2'
+          variant="body2"
           color={subtitleColor ? subtitleColor : variantData.subtitleColor}
-          align='center'
-          dataAid='subtitle'
-          component='div'
+          align="center"
+          dataAid="subtitle"
+          component="div"
         >
           {subtitle}
         </Typography>
@@ -68,9 +89,9 @@ const CategoryCard = ({
 export default CategoryCard;
 
 CategoryCard.defaultProps = {
-  variant: 'small',
+  variant: "variant52",
   imgProps: {},
-  subtitleColor: 'foundationColors.content.secondary',
+  subtitleColor: "foundationColors.content.secondary",
 };
 
 CategoryCard.propTypes = {
@@ -78,17 +99,7 @@ CategoryCard.propTypes = {
   subtitle: PropTypes.node,
   titleColor: PropTypes.string,
   subtitleColor: PropTypes.string,
-  variant: PropTypes.oneOf(['small', 'large']),
+  variant: PropTypes.oneOf(["variant88", "variant52", "variant32"]),
   onClick: PropTypes.func,
   dataAid: PropTypes.string,
-};
-
-const LARGE_CARD_VARIANT = {
-  titleVariant: 'heading4',
-  size: '88px',
-};
-
-const SMALL_CARD_VARIANT = {
-  size: '52px',
-  titleVariant: 'body2',
 };

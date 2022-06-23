@@ -1,0 +1,33 @@
+.mf-landing-container {
+  .top-section {
+    padding: 0 20px 24px;
+    .eye-icon {
+      cursor: pointer;
+    }
+  }
+  .info-card-section {
+    padding: 24px 20px 24px;
+    .info-card-wrapper:first-child {
+      margin-bottom: 16px;
+    }
+  }
+  .banner-section {
+    padding: 0 20px 24px;
+    .marketing-banner {
+      width: 100%;
+    }
+  }
+  .asset-allocation {
+    padding: 0 20px 30px;
+  }
+  .more-options {
+    padding: 0 20px 50px;
+    .options-grid {
+      margin-top: 24px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(100px, 1fr));
+      grid-template-rows: repeat(2 auto-fit);
+      gap: 24px;
+    }
+  }
+}
