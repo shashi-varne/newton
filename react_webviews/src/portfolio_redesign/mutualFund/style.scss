@@ -4,9 +4,12 @@
     .eye-icon {
       cursor: pointer;
     }
+    .pf-feature-card-container {
+      margin-top: 24px;
+    }
   }
   .info-card-section {
-    padding: 24px 20px 24px;
+    padding: 24px 20px 0;
     .info-card-wrapper:first-child {
       margin-bottom: 16px;
     }

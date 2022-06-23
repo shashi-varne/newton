@@ -49,7 +49,6 @@ const CategoryCard = ({
 }) => {
   const isVariant88 = variant === "variant88";
   const variantData = variantMapper[variant || "variant52"];
-  console.log("v", variant, variantData);
   return (
     <Stack
       direction="column"
