@@ -465,6 +465,7 @@ export const partnerConfigs = {
     landingMarketingBanners: EQUITY_MARKETING_BANNERS,
     features: {
       nps: true,
+      taxFiling: true,
     },
     referralConfig: {
       applyRefferal: true,
