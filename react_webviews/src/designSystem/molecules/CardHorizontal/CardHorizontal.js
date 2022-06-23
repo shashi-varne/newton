@@ -65,7 +65,7 @@ const CardHorizontal = ({
 
   if (showLoader) {
     return (
-      <WrapperBox elevation={1} className={className}>
+      <WrapperBox elevation={1} className={`card-horizontal-skelton-wrapper ${className}`}>
         <Stack
           sx={{ p: 2 }}
           justifyContent="space-between"
@@ -80,7 +80,7 @@ const CardHorizontal = ({
               <Skeleton width="180px" />
             </Typography>
             <Typography variant="body1">
-              <Skeleton width="180px" height="52px" />
+              <Skeleton width="180px" height="52px" className="ch-sw-button" />
             </Typography>
           </Stack>
           <Icon size="110px" {...rightImgProps} />

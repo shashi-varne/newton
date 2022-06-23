@@ -40,5 +40,8 @@
 .card-horizontal-skelton-wrapper {
   min-height: 150px;
   border-radius: 12px;
-  padding: 16px;
+
+  .ch-sw-button {
+    border-radius: 12px;
+  }
 }
