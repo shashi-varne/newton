@@ -699,6 +699,7 @@ const landingContainer = (WrappedComponent) => (props) => {
 
   return (
     <WrappedComponent
+      hideBackIcon={baseConfig.Web}
       showPartnership={baseConfig.isSdk}
       productName={baseConfig.productName}
       landingSections={mainLandingSections}
