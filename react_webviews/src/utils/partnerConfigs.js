@@ -466,8 +466,7 @@ export const partnerConfigs = {
   },
   indb: {
     code: "indb",
-    webLogo: "indb_bank.svg",
-    logoWidth: "200px",
+    webLogo: "indb.svg",
     mobile: "+80-48-093070",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
