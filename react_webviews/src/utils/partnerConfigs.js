@@ -465,6 +465,7 @@ export const partnerConfigs = {
     code: "life99",
   },
   indb: {
+    logo: "indb.svg",
     code: "indb",
     webLogo: "indb_bank.svg",
     logoWidth: "200px",
