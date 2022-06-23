@@ -28,6 +28,7 @@ const ContainerHeader = ({ headerProps, containerRef, handleonBackClick }) => {
         anchorOrigin={!isIframe ? containerRef : null}
         onBackClick={handleonBackClick}
         hideLeftIcon={hideBackButton}
+        headerSx={headerSx}
         {...restHeaderProps}
       >
         {!disableSeeMoreFeature && isMobileDevice && showSeeMore ? (
