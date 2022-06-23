@@ -95,16 +95,12 @@ export const DEFAULT_MARKETING_BANNERS = [
 
 export const PRODUCT_MARKETING_BANNERS = [
   {
-    image: "freedomplan.svg",
-    id: "freedomplan",
-  },
-  {
     image: "taxfiling_banner.svg",
     id: "taxFiling",
   },
   {
-    image: "stocks_banner.svg",
-    id: "stocks",
+    image: "freedomplan.svg",
+    id: "freedomplan",
   },
   {
     image: "kyc.svg",
@@ -113,18 +109,6 @@ export const PRODUCT_MARKETING_BANNERS = [
   {
     image: "buildwealth.svg",
     id: "buildwealth",
-  },
-  {
-    image: "explore.svg",
-    id: "equity",
-  },
-  {
-    image: "retirement.svg",
-    id: "retirement",
-  },
-  {
-    image: "education.svg",
-    id: "education",
   },
 ];
 
@@ -140,18 +124,6 @@ export const EQUITY_MARKETING_BANNERS = [
   {
     image: "kyc.svg",
     id: "equityKyc",
-  },
-  {
-    image: "stocks_banner.svg",
-    id: "stocks",
-  },
-  {
-    image: "explore.svg",
-    id: "equity",
-  },
-  {
-    image: "retirement.svg",
-    id: "retirement",
   },
   {
     image: "education.svg",
@@ -178,26 +150,6 @@ export const UCOMB_MARKETING_BANNERS = [
   {
     image: "kyc.svg",
     id: "equityKyc",
-    endDate: "06/31/2022",
-  },
-  {
-    image: "stocks_banner.svg",
-    id: "stocks",
-    endDate: "06/31/2022",
-  },
-  {
-    image: "explore.svg",
-    id: "equity",
-    endDate: "06/31/2022",
-  },
-  {
-    image: "retirement.svg",
-    id: "retirement",
-    endDate: "06/31/2022",
-  },
-  {
-    image: "education.svg",
-    id: "education",
     endDate: "06/31/2022",
   },
 ];
