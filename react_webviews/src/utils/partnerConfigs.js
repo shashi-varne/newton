@@ -520,7 +520,8 @@ export const partnerConfigs = {
     features: {
       nps: true,
     },
-    landingMarketingBanners: []
+    landingMarketingBanners: [],
+    onboardingCarousels: EQUITY_ONBOARDING_CAROUSELS,
   },
   google: {
     code: "google",
@@ -544,6 +545,7 @@ export const partnerConfigs = {
   mspl: {
     code: "mspl",
     navLogo: "fisdom/fisdom_logo_white.svg",
+    onboardingCarousels: EQUITY_ONBOARDING_CAROUSELS,
     styles: {
       primaryColor: "#252B69",
     },
@@ -630,6 +632,7 @@ export const partnerConfigs = {
   },
   sury: {
     code: "sury",
+    onboardingCarousels: EQUITY_ONBOARDING_CAROUSELS,
     navLogo: "fisdom/fisdom_logo_white.svg",
   },
   svcho: {
@@ -639,6 +642,7 @@ export const partnerConfigs = {
   apna: {
     code: "apna",
     navLogo: "fisdom/fisdom_logo_white.svg",
+    onboardingCarousels: EQUITY_ONBOARDING_CAROUSELS,
     features: {
       nps: true,
     },
