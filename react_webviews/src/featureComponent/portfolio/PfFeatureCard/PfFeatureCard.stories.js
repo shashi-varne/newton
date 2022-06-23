@@ -41,7 +41,6 @@ Default.args = {
   leftIcon: require("assets/ec_info.svg"),
   middleIcon: require("assets/ec_info.svg"),
   rightIcon: require("assets/ec_info.svg"),
-  onIconClick: () => console.log("icon"),
 };
 
 export const WithoutImg = (args) => <PfFeatureCard {...args} />;

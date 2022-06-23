@@ -8,6 +8,7 @@ import PropTypes from "prop-types";
 import Tooltip, {
   TOOLTIP_PLACEMENTS,
 } from "../../../designSystem/atoms/Tooltip";
+import { noop } from "lodash-es";
 
 function PfFeatureCard({
   topImgSrc,
@@ -15,7 +16,6 @@ function PfFeatureCard({
   leftIcon,
   middleIcon,
   rightIcon,
-  onIconClick,
   textColors,
   dataAid,
   toolTipProps,
@@ -68,7 +68,6 @@ function PfFeatureCard({
         justifyContent="space-between"
       >
         <FeatureItem
-          onClick={onIconClick}
           src={leftIcon}
           title={leftTitle}
           subtitle={leftSubtitle}
@@ -80,7 +79,6 @@ function PfFeatureCard({
           tooltipText={toolTipProps?.leftText}
         />
         <FeatureItem
-          onClick={onIconClick}
           src={middleIcon}
           title={middleTitle}
           subtitle={middleSubtitle}
@@ -92,7 +90,6 @@ function PfFeatureCard({
           tooltipText={toolTipProps?.middleText}
         />
         <FeatureItem
-          onClick={onIconClick}
           src={rightIcon}
           title={rightTitle}
           subtitle={rightSubtitle}
@@ -112,7 +109,6 @@ const FeatureItem = ({
   src,
   title,
   subtitle,
-  onClick,
   alignment,
   id,
   iconId,
@@ -142,7 +138,6 @@ const FeatureItem = ({
                 width="16px"
                 height="16px"
                 style={{ marginLeft: 4 }}
-                onClick={onClick}
                 className="info-icon"
                 dataAid={iconId}
               />
@@ -165,17 +160,35 @@ PfFeatureCard.defaultProps = {
   textProps: {},
   toolTipProps: {},
   textColors: {},
-  onClick: () => {},
-  onIconClick: () => {},
+  onClick: noop,
   dataAid: "",
 };
 
 PfFeatureCard.propTypes = {
-  textProps: PropTypes.object,
-  toolTipProps: PropTypes.object,
-  textColors: PropTypes.object,
+  textProps: PropTypes.shape({
+    title: PropTypes.string,
+    leftTitle: PropTypes.string,
+    leftSubtitle: PropTypes.string,
+    rightTitle: PropTypes.string,
+    rightSubtitle: PropTypes.string,
+    middleTitle: PropTypes.string,
+    middleSubtitle: PropTypes.string,
+  }),
+  toolTipProps: PropTypes.shape({
+    leftText: PropTypes.string,
+    middleText: PropTypes.string,
+    rightText: PropTypes.string,
+  }),
+  textColors: PropTypes.shape({
+    title: PropTypes.string,
+    leftTitle: PropTypes.string,
+    leftSubtitle: PropTypes.string,
+    rightTitle: PropTypes.string,
+    rightSubtitle: PropTypes.string,
+    middleTitle: PropTypes.string,
+    middleSubtitle: PropTypes.string,
+  }),
   onClick: PropTypes.func,
-  onIconClick: PropTypes.func,
   dataAid: PropTypes.string.isRequired,
 };
 
