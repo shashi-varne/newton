@@ -740,9 +740,15 @@ export const handleKycStatusRedirection = (
     handleLoader,
     handleSummaryData,
     handleDialogStates,
+    sendEvents
   },
   props
 ) => () => {
+  if (isFunction(sendEvents)) {
+    sendEvents("back", {
+      intent: modalData.title,
+    });
+  }
   let { kycJourneyStatus } = kycData;
   const {
     contactValue,

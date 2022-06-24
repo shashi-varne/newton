@@ -266,6 +266,7 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
           baseConfig,
           contactDetails,
           navigate,
+          sendEvents,
           handleLoader,
           closeKycStatusDialog,
           handleDialogStates: handleBottomsheets,

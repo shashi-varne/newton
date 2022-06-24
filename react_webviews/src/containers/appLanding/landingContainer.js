@@ -414,14 +414,16 @@ const landingContainer = (WrappedComponent) => (props) => {
   };
 
   const closeBottomsheet =
-    (key, intent) =>
+    (key, intent, skipEvents = false) =>
     (outsideClick = false) => {
       handleBottomsheets({ [key]: false });
-      sendEvents("back", {
-        eventName: "bottom_sheet",
-        intent,
-        outsideClick,
-      });
+      if (!skipEvents) {
+        sendEvents("back", {
+          eventName: "bottom_sheet",
+          intent,
+          outsideClick,
+        });
+      }
     };
 
   const sendEvents = (userAction, data = {}) => {
@@ -480,7 +482,8 @@ const landingContainer = (WrappedComponent) => (props) => {
             handleLoader,
             handleDialogStates: handleBottomsheets,
             closeKycStatusDialog: closeBottomsheet(
-              BOTTOMSHEET_KEYS.openKycStatusDialog
+              BOTTOMSHEET_KEYS.openKycStatusDialog,
+              kycBottomsheetData.title
             ),
           },
           props
@@ -780,7 +783,8 @@ const landingContainer = (WrappedComponent) => (props) => {
         updateKyc,
         closeKycStatusDialog: closeBottomsheet(
           BOTTOMSHEET_KEYS.openKycStatusDialog,
-          kycBottomsheetData.title
+          kycBottomsheetData.title,
+          true
         ),
         handleLoader,
         sendEvents,
@@ -794,11 +798,13 @@ const landingContainer = (WrappedComponent) => (props) => {
           baseConfig,
           contactDetails,
           navigate,
+          sendEvents,
           handleLoader,
           handleDialogStates: handleBottomsheets,
           closeKycStatusDialog: closeBottomsheet(
             BOTTOMSHEET_KEYS.openKycStatusDialog,
-            kycBottomsheetData.title
+            kycBottomsheetData.title,
+            true
           ),
         },
         props
