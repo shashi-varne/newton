@@ -21,7 +21,7 @@ const Otp = ({
   buttonText,
   onClickButton,
   onChange,
-  otpTimerInSeconds,
+  otpTimerInSeconds = 30,
 }) => {
   const box1 = useRef(null);
   const box2 = useRef(null);
@@ -30,7 +30,7 @@ const Otp = ({
   const boxList = [box1, box2, box3, box4];
   const [otpStatus, setOtpStatus] = useState("");
   const [otpValues, setOtpValues] = useState(["", "", "", ""]);
-  const [otpTimer, setOtpTimer] = useState(otpTimerInSeconds || 30);
+  const [otpTimer, setOtpTimer] = useState(otpTimerInSeconds);
   const [showRetryButton, setShowRetryButton] = useState(false);
 
   const customBorderColor = {
