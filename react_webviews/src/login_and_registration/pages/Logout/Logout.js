@@ -9,6 +9,7 @@ import { persistor } from "../../../dataLayer/store";
 import { useDispatch } from "react-redux";
 import { resetDiyData } from "businesslogic/dataStore/reducers/diy";
 import { resetMfOrders } from "businesslogic/dataStore/reducers/mfOrders";
+import { resetAppData } from "businesslogic/dataStore/reducers/app";
 import { resetFundDetails } from "businesslogic/dataStore/reducers/fundDetails";
 
 const config = getConfig();
@@ -24,6 +25,7 @@ const Logout = (props) => {
     dispatch(resetDiyData());
     dispatch(resetMfOrders());
     dispatch(resetFundDetails());
+    dispatch(resetAppData());
     persistor.purge();
     if (window.clevertap) {
       window.clevertap.logout();
