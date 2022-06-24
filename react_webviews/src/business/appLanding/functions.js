@@ -425,16 +425,17 @@ export const getContactVerification = (
     if (!isEmpty(contactDetails)) {
       let contactType,
         contactValue,
+        countryCode,
         isVerified = true;
       if (
         !isEmpty(contactDetails.mobile_number) &&
         !contactDetails.mobile_number_verified
       ) {
+        const [code, number] = contactDetails?.mobile_number?.toString().split("|");
         contactType = "mobile";
         isVerified = false;
-        contactValue = splitMobileNumberFromContryCode(
-          contactDetails?.mobile_number
-        );
+        contactValue = number;
+        countryCode = code;
       } else if (
         !isEmpty(contactDetails.email) &&
         !contactDetails.email_verified
@@ -447,6 +448,7 @@ export const getContactVerification = (
         return {
           ...contactData,
           ...AUTH_VERIFICATION_DATA[contactType],
+          countryCode,
           contactType,
           contactValue,
           showAuthVerification: true,
