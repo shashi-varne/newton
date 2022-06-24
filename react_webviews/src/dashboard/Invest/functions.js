@@ -699,6 +699,7 @@ export const handleKycStatus = ({
     });
   }
   const { kycJourneyStatus, isReadyToInvestBase } = kycData;
+  const initialKycStatus = ["init", "ground"];
   if (
     ["submitted", "verifying_trading_account"].includes(kycJourneyStatus) ||
     (kycJourneyStatus === "complete" && kyc.mf_kyc_processed)
@@ -725,6 +726,8 @@ export const handleKycStatus = ({
         ),
       },
     });
+  } else if (initialKycStatus.includes(kycJourneyStatus)) {
+    navigate(KYC_PATHNAME_MAPPER.homeKyc);
   } else if (modalData.nextState && modalData.nextState !== "/invest") {
     navigate(modalData.nextState);
   } else {
