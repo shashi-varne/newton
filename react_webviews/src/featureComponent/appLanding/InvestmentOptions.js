@@ -1,14 +1,19 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Typography from "../../designSystem/atoms/Typography";
 import MenuItem from "../../designSystem/molecules/MenuItem";
-import PropTypes from 'prop-types';
+import getPartnerThemeData from "../../theme/utils";
+import PropTypes from "prop-types";
 
-const ICON_COLOR = [
-  "#33CF90",
-  "#FE794D",
-  "#5AAAF6",
-  "#FFBD00",
-];
+const getIconColors = () => {
+  const { colors } = getPartnerThemeData();
+  const iconColors = [
+    colors.secondary.profitGreen[400],
+    colors.secondary.coralOrange[400],
+    colors.secondary.blue[400],
+    colors.secondary.mango[400],
+  ];
+  return iconColors;
+};
 
 const InvestmentOptions = ({
   productList = [],
@@ -18,6 +23,8 @@ const InvestmentOptions = ({
   feature,
   isLoading,
 }) => {
+  const iconColors = useMemo(getIconColors, []);
+
   return (
     <div className="al-investment-options">
       {title && (
@@ -40,7 +47,7 @@ const InvestmentOptions = ({
           <MenuItem
             {...data}
             leftSvgSrc={require(`assets/${data.icon}`)}
-            leftSvgIconColor={ICON_COLOR[idx % 4]}
+            leftSvgIconColor={iconColors[idx % 4]}
             key={idx}
             showSeparator={productList.length !== idx + 1}
             onClick={onClick(data)}
