@@ -19,7 +19,6 @@ import Status from '../../atoms/Status';
 import isFunction from 'lodash/isFunction';
 import PropTypes from 'prop-types';
 import Icon from '../../atoms/Icon';
-import WrapperBox from '../../atoms/WrapperBox';
 
 import './CardHorizontal.scss';
 
@@ -65,27 +64,26 @@ const CardHorizontal = ({
 
   if (showLoader) {
     return (
-      <WrapperBox elevation={1} className={`card-horizontal-skelton-wrapper ${className}`}>
-        <Stack
-          sx={{ p: 2 }}
-          justifyContent="space-between"
-          alignItems="center"
-          direction="row"
-        >
-          <Stack direction="column" spacing={1}>
-            <Typography variant="heading3">
-              <Skeleton width="140px" />
-            </Typography>
-            <Typography variant="body1">
-              <Skeleton width="180px" />
-            </Typography>
-            <Typography variant="body1">
-              <Skeleton width="180px" height="52px" className="ch-sw-button" />
-            </Typography>
-          </Stack>
-          <Icon size="110px" {...rightImgProps} />
+      <Stack
+        sx={{ p: 2 }}
+        justifyContent="space-between"
+        alignItems="center"
+        direction="row"
+        className={`card-horizontal-skelton-wrapper ${className}`}
+      >
+        <Stack direction="column" spacing={1}>
+          <Typography variant="heading3">
+            <Skeleton width="140px" />
+          </Typography>
+          <Typography variant="body1">
+            <Skeleton width="180px" />
+          </Typography>
+          <Typography variant="body1">
+            <Skeleton width="180px" height="52px" className="ch-sw-button" />
+          </Typography>
         </Stack>
-      </WrapperBox>
+        <Icon size="110px" {...rightImgProps} />
+      </Stack>
     );
   }
 
