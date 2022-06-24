@@ -57,7 +57,7 @@ const ClaimCashRewards = ({
           title={STRINGS.headerTitle.text + totalBalance}
           dataAid={STRINGS.headerTitle.dataAid}
         />
-        <WrapperBox elevation={1}>
+        <WrapperBox elevation={1} data-aid="grp_enterAmount">
           <Stack className="ccr-enter-amount-wrapper">
             <Typography
               variant="heading4"
@@ -73,6 +73,7 @@ const ClaimCashRewards = ({
               inputMode="numeric"
               error={!isEmpty(inputError)}
               helperText={inputError || STRINGS.helperText + minAmount}
+              dataAid={"withdrawAmount"}
             />
             <Stack
               direction={"row"}

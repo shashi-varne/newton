@@ -78,6 +78,7 @@ const ReferralStepsBottomSheet = ({
               subtitle={item}
               subtitleColor={"foundationColors.content.primary"}
               showStepLine={index !== stepsData.length - 1}
+              dataAid={`${index + 1}`}
             />
           ))}
         </Stack>
