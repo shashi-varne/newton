@@ -2,10 +2,12 @@ import { Stack } from "@mui/material";
 import { Box } from "@mui/system";
 import Separator from "designSystem/atoms/Separator";
 import React from "react";
-import Icon from "../../../atoms/Icon";
-import Typography from "../../../atoms/Typography";
-import { FeatureBottomRow, FeatureDetail } from "./FeatureDetail";
+import Icon from "designSystem/atoms/Icon";
+import Typography from "designSystem/atoms/Typography";
+import { FeatureBottomRow, FeatureDetail } from "./subComponents/FeatureDetail";
 import "./PfSwitchCard.scss";
+import PropTypes from "prop-types";
+import { noop } from "lodash-es";
 
 export const PF_SWITCH_TYPE = {
   DETAIL: "detail",
@@ -28,6 +30,7 @@ function PfSwitchCard({
   bottomImgSrc,
   bottomDesc,
   switchImgSrc,
+  textColors,
   ...props
 }) {
   return (
@@ -40,7 +43,7 @@ function PfSwitchCard({
         <RowContainer className="top-row" justifyContent="space-between">
           <Typography
             variant="body5"
-            color="foundationColors.content.secondary"
+            color={textColors?.infoText || "foundationColors.content.secondary"}
             dataAid="info"
           >
             {infoText}
@@ -55,7 +58,7 @@ function PfSwitchCard({
             <Typography
               allCaps
               color="foundationColors.content.secondary"
-              dataAid="status"
+              dataAid={textColors?.status || "status"}
               className="status"
             >
               {status}
@@ -67,15 +70,15 @@ function PfSwitchCard({
         <>
           <Typography
             variant="body5"
-            color="foundationColors.content.secondary"
+            color={textColors?.label || "foundationColors.content.secondary"}
             dataAid="label"
             className="label"
           >
             {label}
           </Typography>
-          <FeatureDetail {...props} />
+          <FeatureDetail textColors={textColors} {...props} />
           <Separator dataAid={1} />
-          <FeatureBottomRow {...props} />
+          <FeatureBottomRow textColors={textColors} {...props} />
         </>
       ) : (
         <>
@@ -85,6 +88,7 @@ function PfSwitchCard({
             imgSrc={topImgSrc}
             desc={topDesc}
             id={1}
+            textColors={textColors}
           />
           <Box className="middle-img-container">
             <Icon
@@ -166,6 +170,52 @@ export const RowContainer = ({ children, ...props }) => {
       {children}
     </Stack>
   );
+};
+PfSwitchCard.defaultProps = {
+  infoText: "",
+  status: "",
+  variant: PF_SWITCH_TYPE.DETAIL,
+  onClick: noop,
+  label: "",
+  labelOne: "",
+  topTitle: "",
+  topDesc: "",
+  labelTwo: "",
+  bottomTitle: "",
+  bottomDesc: "",
+};
+
+PfSwitchCard.PropTypes = {
+  infoText: PropTypes.string,
+  topLeftImgSrc: PropTypes.node,
+  status: PropTypes.string,
+  variant: PropTypes.string,
+  onClick: PropTypes.func,
+  label: PropTypes.string,
+  labelOne: PropTypes.labelOne,
+  topTitle: PropTypes.string,
+  topImgSrc: PropTypes.node,
+  topDesc: PropTypes.topDesc,
+  labelTwo: PropTypes.string,
+  bottomTitle: PropTypes.string,
+  bottomImgSrc: PropTypes.node,
+  bottomDesc: PropTypes.string,
+  switchImgSrc: PropTypes.node,
+  textColors: PropTypes.shape({
+    infoText: PropTypes.string,
+    status: PropTypes.string,
+    label: PropTypes.string,
+    tags: PropTypes.string,
+    description: PropTypes.string,
+    middleLabel: PropTypes.string,
+    title: PropTypes.string,
+    leftTitle: PropTypes.string,
+    leftSubtitle: PropTypes.string,
+    centerTitle: PropTypes.string,
+    centerSubtitle: PropTypes.string,
+    rightTitle: PropTypes.string,
+    rightSubtitle: PropTypes.string,
+  }),
 };
 
 export default PfSwitchCard;
