@@ -11,10 +11,7 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 import FundOptions from "./FundOptions";
 import FundHouses from "./FundHouses";
 import MinimumInvestment from "./MinimumInvestment";
-import {
-  FILTER_TAB_OPTIONS,
-  DEFAULT_FILTER_DATA,
-} from "businesslogic/constants/diy";
+import { FILTER_TAB_OPTIONS, DEFAULT_FILTER_DATA } from "businesslogic/constants/diy";
 import { NavigationHeader } from "../../../designSystem/molecules/NavigationHeader";
 
 const DEFAULT_FUND_OPTION = DEFAULT_FILTER_DATA.fundOption;
@@ -45,30 +42,19 @@ const Filter = ({
     filterEventRef.current.filter = [];
     setSelectedFundOption((prevState) => {
       if (prevState !== fundOption) {
-        filterEventRef.current.filter = [
-          ...filterEventRef.current?.filter,
-          "fund options",
-        ];
+        filterEventRef.current.filter = [...filterEventRef.current?.filter, "fund options"];
       }
       return fundOption;
     });
     if (!isEmpty(activeFundHouses)) {
-      filterEventRef.current.filter = [
-        ...filterEventRef.current?.filter,
-        "fund houses",
-      ];
+      filterEventRef.current.filter = [...filterEventRef.current?.filter, "fund houses"];
     } else {
-      const newFilterValues = filterEventRef.current.filter?.filter(
-        (el) => el !== "fund houses"
-      );
+      const newFilterValues = filterEventRef.current.filter?.filter((el) => el !== "fund houses");
       filterEventRef.current.filter = newFilterValues;
     }
     setSelectedFundHouses(activeFundHouses);
     if (!isEmpty(minimumInvestment)) {
-      filterEventRef.current.filter = [
-        ...filterEventRef.current?.filter,
-        "minimum investment",
-      ];
+      filterEventRef.current.filter = [...filterEventRef.current?.filter, "minimum investment"];
     }
     setSelectedMinInvestment(minimumInvestment);
     handleFilterClose();
@@ -99,10 +85,7 @@ const Filter = ({
   }, [isOpen]);
 
   return (
-    <Box
-      className="diy-filter-wrapper"
-      data-aid={SCREEN_DATA_ID_MAPPER[selectedTab]}
-    >
+    <Box className="diy-filter-wrapper" data-aid={SCREEN_DATA_ID_MAPPER[selectedTab]} >
       <Drawer
         transitionDuration={250}
         PaperProps={{ elevation: 1 }}
@@ -118,24 +101,13 @@ const Filter = ({
           hideMenuBar
           headerTitle="Filters"
           hideInPageTitle
-          actionTextProps={{
-            title: "Clear all",
-            onClick: handleClearAll,
-            dataAid: "link",
-          }}
+          actionTextProps={{ title: "Clear all", onClick: handleClearAll, dataAid: "link" }}
           onBackClick={handleFilterClose}
           dataAid="filters"
         />
-        <Stack
-          sx={{ height: "100vh" }}
-          justifyContent="space-between"
-          direction="column"
-        >
+        <Stack sx={{ height: "100vh" }} justifyContent="space-between" direction="column">
           <Stack direction="row" flexBasis="90%">
-            <LeftPanel
-              selectedTab={selectedTab}
-              handleSelection={handleSelection}
-            />
+            <LeftPanel selectedTab={selectedTab} handleSelection={handleSelection} />
             <RightPanel
               selectedTab={selectedTab}
               setActiveFundHouses={setActiveFundHouses}
@@ -208,11 +180,7 @@ const RightPanel = ({
     <TransitionGroup className="right-panel-wrapper">
       <Stack flexBasis="70%">
         {selectedTab === 0 && (
-          <CSSTransition
-            in={selectedTab === 0}
-            timeout={225}
-            classNames="right-panel-transition"
-          >
+          <CSSTransition in={selectedTab === 0} timeout={225} classNames="right-panel-transition">
             <FundHouses
               activeFundHouses={activeFundHouses}
               setActiveFundHouses={setActiveFundHouses}
@@ -220,23 +188,12 @@ const RightPanel = ({
           </CSSTransition>
         )}
         {selectedTab === 1 && (
-          <CSSTransition
-            in={selectedTab === 1}
-            timeout={225}
-            classNames="right-panel-transition"
-          >
-            <FundOptions
-              fundOption={fundOption}
-              setFundOption={setFundOption}
-            />
+          <CSSTransition in={selectedTab === 1} timeout={225} classNames="right-panel-transition">
+            <FundOptions fundOption={fundOption} setFundOption={setFundOption} />
           </CSSTransition>
         )}
         {selectedTab === 2 && (
-          <CSSTransition
-            in={selectedTab === 2}
-            timeout={225}
-            classNames="right-panel-transition"
-          >
+          <CSSTransition in={selectedTab === 2} timeout={225} classNames="right-panel-transition">
             <MinimumInvestment
               minimumInvestment={minimumInvestment}
               setMinimumInvestment={setMinimumInvestment}
@@ -248,9 +205,5 @@ const RightPanel = ({
   );
 };
 
-const SCREEN_DATA_ID_MAPPER = [
-  "filtersFundHouses",
-  "filtersFundOptions",
-  "filtersMinimumInvestments",
-];
+const SCREEN_DATA_ID_MAPPER = ["filtersFundHouses", "filtersFundOptions", "filtersMinimumInvestments"]
 export default Filter;
