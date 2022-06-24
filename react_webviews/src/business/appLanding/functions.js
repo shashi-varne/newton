@@ -83,8 +83,8 @@ export const initData = async () => {
 };
 
 export const setSummaryData = (result, skipStoreUpdate = false) => {
-  const currentUser = result.data.user.user.data;
-  const userKyc = result.data.kyc.kyc.data;
+  const currentUser = result?.data?.user?.user?.data || {};
+  const userKyc = result?.data?.kyc?.kyc?.data || {};
   const subscriptionStatus =
     result?.data?.equity?.subscription_status?.data || {};
   storageService().set("currentUser", true);
@@ -92,8 +92,8 @@ export const setSummaryData = (result, skipStoreUpdate = false) => {
   storageService().setObject("kyc", userKyc);
 
   const campaignData = getCampaignData(result.data.campaign.user_campaign.data);
-  const referral = result.data.referral;
-  const bankList = result?.data?.bank_list?.bank_list?.data;
+  const referral = result?.data?.referral || {};
+  const bankList = result?.data?.bank_list?.bank_list?.data || [];
   const nps = result?.data?.nps?.nps_user?.data;
   storageService().setObject("campaign", campaignData);
   storageService().setObject("npsUser", nps);
@@ -153,10 +153,12 @@ const setSDKSummaryData = (result) => {
       subscriptionStatus
     );
   }
-  const campaignData = getCampaignData(result.data.campaign.user_campaign.data);
-  const nps = result.data.nps.nps_user.data;
-  const bankList = result?.data?.bank_list?.bank_list?.data;
-  const referral = result.data.referral;
+  const campaignData = getCampaignData(
+    result?.data?.campaign?.user_campaign?.data
+  );
+  const nps = result?.data?.nps?.nps_user?.data || {};
+  const bankList = result?.data?.bank_list?.bank_list?.data || [];
+  const referral = result?.data?.referral || {};
   storageService().setObject("campaign", campaignData);
   storageService().setObject("npsUser", nps);
   storageService().setObject("banklist", bankList);
@@ -170,10 +172,9 @@ const setSDKSummaryData = (result) => {
 };
 
 const setNpsData = async (result) => {
-  if (
-    result?.data?.user?.user?.data?.nps_investment &&
-    result?.data?.nps?.nps_user?.data?.is_doc_required
-  ) {
+  const npsInvestment = result?.data?.user?.user?.data?.nps_investment;
+  const isDocRequired = result?.data?.nps?.nps_user?.data?.is_doc_required;
+  if (npsInvestment && isDocRequired) {
     try {
       const data = await getNPSInvestmentStatus(Api);
       storageService().setObject(
@@ -206,7 +207,7 @@ export const getInvestCardsData = (
   let data = getEnabledFeaturesData(config, investSections, feature);
   const user = get(store.getState(), "app.user", {});
 
-  let { cardsData, featureIndex } = data;
+  let { cardsData = [], featureIndex } = data;
   if (featureIndex !== -1) {
     const selectedCardData = cardsData.find((el) => el.id === feature);
     cardsData = cardsData.filter((el) => el.id !== feature);
@@ -270,12 +271,13 @@ export const getEnabledFeaturesData = (config, investOptions, feature) => {
     featureIndex = -1;
 
   investOptions.forEach((section, index) => {
-    if (
-      RESTRICTED_FEATURES.includes(section) &&
-      ((subbrokerCode && !subbrokerFeatures[section]) || !features[section])
-    ) {
+    const isRestrictedFeature = RESTRICTED_FEATURES.includes(section);
+    const isFeatureNotEnabled = (subbrokerCode && !subbrokerFeatures[section]) || !features[section];
+    const isRestrictedFeatureNotEnabled = isRestrictedFeature && isFeatureNotEnabled;
+    const isStocksAndIpoNotEnabled = ["stocks", "ipo"].includes(section) && !isTradingEnabled(kyc);
+    if (isRestrictedFeatureNotEnabled) {
       return;
-    } else if (["stocks", "ipo"].includes(section) && !isTradingEnabled(kyc)) {
+    } else if (isStocksAndIpoNotEnabled) {
       return;
     } else {
       const cardData = INVESTMENT_OPTIONS[section];
@@ -293,7 +295,7 @@ export const getEnabledFeaturesData = (config, investOptions, feature) => {
   return { cardsData, featureIndex, enabledFeatures };
 };
 
-export const getEnabledMarketingBanners = (banners, enabledFeatures) => {
+export const getEnabledMarketingBanners = (banners = [], enabledFeatures) => {
   return banners.filter(
     (data) =>
       dateValidation(data.endDate, data.startDate) &&
@@ -302,26 +304,23 @@ export const getEnabledMarketingBanners = (banners, enabledFeatures) => {
 };
 
 export const dateValidation = (endDate, startDate) => {
+  if (!endDate && !startDate) return true;
   const date = new Date();
   const currentDate =
     date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear();
-  if (!endDate && !startDate) return true;
   const startDateInMs = Date.parse(startDate);
   const endDateInMs = Date.parse(endDate);
   const currentDateInMs = Date.parse(currentDate);
-  if (
-    startDate &&
-    endDate &&
-    startDateInMs <= endDateInMs &&
-    startDateInMs <= currentDateInMs &&
-    currentDateInMs <= endDateInMs
-  ) {
+  const isValidStartDate = startDate && startDateInMs <= currentDateInMs;
+  const isValidEndDate = endDate && currentDateInMs <= endDateInMs;
+  const isValidDateRange = startDateInMs <= endDateInMs;
+  if (isValidStartDate && isValidEndDate && isValidDateRange) {
     return true;
   }
-  if (startDate && !endDate && startDateInMs <= currentDateInMs) {
+  if (!endDate && isValidStartDate) {
     return true;
   }
-  if (!startDate && endDate && currentDateInMs <= endDateInMs) {
+  if (!startDate && isValidEndDate) {
     return true;
   }
   return false;
@@ -345,16 +344,16 @@ export const validateFeature = (type, enabledFeatures = {}) => {
 
 export const isFreedomPlanEnabled = () => {
   const state = store.getState();
-  const subscriptionStatus = get(state, "app.subscriptionStatus", {});
+  const subscription = get(state, "app.subscriptionStatus", {});
   const kyc = get(state, "app.kyc", {});
-  return (
-    isTradingEnabled(kyc) &&
-    (subscriptionStatus?.freedom_cta || subscriptionStatus?.renewal_cta)
-  );
+  const showFreedomPlan =
+    subscription?.freedom_cta || subscription?.renewal_cta;
+  const enabledFreedomPlan = isTradingEnabled(kyc) && showFreedomPlan;
+  return enabledFreedomPlan;
 };
 
 export const getEnabledPlatformMotivators = (
-  motivators,
+  motivators = [],
   enabledFeatures = {}
 ) => {
   return motivators.filter((data) => validateFeature(data.id, enabledFeatures));
@@ -475,22 +474,26 @@ export const getKycBottomsheetData = (
   } = kycData;
   let premiumDialogData = {};
   let premiumOnboardingStatus = "";
-  if (
-    isCompliant &&
-    !tradingEnabled &&
-    !appStorage.isPremiumBottomsheetDisplayed
-  ) {
+  const isCompliantNonEquityFlow = isCompliant && !tradingEnabled;
+  const showPremiumDialog =
+    isCompliantNonEquityFlow && !appStorage.isPremiumBottomsheetDisplayed;
+  if (showPremiumDialog) {
     premiumOnboardingStatus = kycJourneyStatus;
-    if (["ground_premium", "init", "incomplete"].includes(kycJourneyStatus)) {
+    const isKycStatusIncomplete = [
+      "ground_premium",
+      "init",
+      "incomplete",
+    ].includes(kycJourneyStatus);
+    if (isKycStatusIncomplete) {
       premiumDialogData = premiumBottomSheetMapper[premiumOnboardingStatus];
       premiumDialogData.status = premiumOnboardingStatus;
     }
 
-    if (
-      ["submitted", "complete"].includes(kycJourneyStatus) &&
-      !isMfInvested &&
-      kyc.bank.meta_data_status === "approved"
-    ) {
+    const isKycSubmittedOrComplete = ["submitted", "complete"].includes(
+      kycJourneyStatus
+    );
+    const isBankApproved = kyc.bank.meta_data_status === "approved";
+    if (isKycSubmittedOrComplete && !isMfInvested && isBankApproved) {
       premiumDialogData = kycStatusMapper["mf_complete"];
       premiumDialogData.icon = `${productName}/${premiumDialogData.icon}`;
     }
@@ -514,7 +517,10 @@ export const getKycBottomsheetData = (
       "esign_pending",
     ];
     if (kycStatusesToShowDialog.includes(kycJourneyStatus)) {
-      if (["fno_rejected", "complete"].includes(kycJourneyStatus)) {
+      const isKycCompleted = ["fno_rejected", "complete"].includes(
+        kycJourneyStatus
+      );
+      if (isKycCompleted) {
         if (
           tradingEnabled &&
           kyc.equity_investment_ready &&
