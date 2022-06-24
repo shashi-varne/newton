@@ -10,6 +10,8 @@ import { getConfig } from "../../utils/functions";
 import CategoryCard from "../../designSystem/molecules/CategoryCard/CategoryCard";
 import PfFeatureCard from "../../featureComponent/portfolio/PfFeatureCard/PfFeatureCard";
 import WrapperBox from "../../designSystem/atoms/WrapperBox/WrapperBox";
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
 
 const productName = getConfig().productName;
 const optionList = [
@@ -18,38 +20,99 @@ const optionList = [
     dataAid: "sipManager",
     title: "SIP manager",
     imgSrc: require("assets/mf_sip.svg"),
+    // goto: TODO:
   },
   {
     variant: "variant32",
     dataAid: "yourFunds",
     title: "Your funds",
     imgSrc: require("assets/mf_your_funds.svg"),
+    // goto: TODO:
   },
   {
     variant: "variant32",
     dataAid: "goalTracker",
     title: "Goal tracker",
     imgSrc: require("assets/mf_goal_tracker.svg"),
+    // goto: TODO:
   },
   {
     variant: "variant32",
     dataAid: "yourOrders",
     title: "Your orders",
     imgSrc: require("assets/mf_your_orders.svg"),
+    // goto: TODO:
   },
   {
     variant: "variant32",
     dataAid: "withdraw",
     title: "Withdraw",
     imgSrc: require("assets/mf_withdraw.svg"),
+    // goto: TODO:
   },
 ];
 
 function MFLanding({}) {
+  const graphOptions = {
+    chart: {
+      backgroundColor: "#F8F8FA",
+      height: "180px",
+      panning: false,
+      zoomType: false,
+      pinchType: false,
+    },
+    credits: {
+      enabled: false,
+    },
+    title: {
+      text: undefined,
+    },
+    tooltip: {
+      pointFormat: "<b>{point.percentage:.1f}%</b>",
+    },
+    accessibility: {
+      point: {
+        valueSuffix: "%",
+      },
+    },
+    plotOptions: {
+      pie: {
+        dataLabels: {
+          enabled: true,
+          distance: -50,
+          style: {
+            fontWeight: "bold",
+            color: "white",
+          },
+        },
+        startAngle: -90,
+        endAngle: 90,
+        center: ["50%", "100%"],
+        size: "220%",
+        colors: ["#33CF90", "#FE794D", "#5AAAF6"],
+      },
+    },
+    series: [
+      {
+        type: "pie",
+        name: undefined,
+        innerSize: "50%",
+        data: [
+          ["Equity", 60],
+          ["Debt", 30],
+          ["Others", 10],
+        ],
+      },
+    ],
+  };
   return (
     <Container
       headerProps={{
         headerTitle: "Mutual funds",
+        headerSx: {
+          backgroundColor: "foundationColors.primary.600",
+          color: "foundationColors.supporting.white",
+        },
       }}
       className="mf-landing-container"
       noPadding
@@ -189,6 +252,9 @@ function MFLanding({}) {
             />
           </Stack>
         </Stack>
+        <Box className="semi-donut-graph">
+          <HighchartsReact highcharts={Highcharts} options={graphOptions} />
+        </Box>
       </Box>
       <Box className="more-options">
         <Typography

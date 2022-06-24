@@ -21,7 +21,7 @@
     }
   }
   .asset-allocation {
-    padding: 0 20px 30px;
+    padding: 0 20px 0;
   }
   .more-options {
     padding: 0 20px 50px;
@@ -29,7 +29,7 @@
       margin-top: 24px;
       display: grid;
       grid-template-columns: repeat(3, minmax(100px, 1fr));
-      grid-template-rows: repeat(2 auto-fit);
+      grid-template-rows: repeat(2, auto-fit);
       gap: 24px;
     }
   }
