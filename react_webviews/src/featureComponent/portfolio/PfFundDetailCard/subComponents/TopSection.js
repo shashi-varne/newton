@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import React from "react";
-import Icon from "../../../../atoms/Icon";
-import Typography from "../../../../atoms/Typography";
+import Icon from "designSystem/atoms/Icon";
+import Typography from "designSystem/atoms/Typography";
 import RowContainer from "./RowContainer";
 
 const TopSection = ({
