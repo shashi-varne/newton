@@ -226,6 +226,9 @@ const landingContainer = (WrappedComponent) => (props) => {
           dataSettedInsideBoot: false,
         })
       );
+      if (isEmpty(bankList)) {
+        handleLandingBottomsheets(kycData);
+      }
       return;
     }
     fetchSummaryData();
