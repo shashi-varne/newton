@@ -271,12 +271,13 @@ export const getEnabledFeaturesData = (config, investOptions, feature) => {
     featureIndex = -1;
 
   investOptions.forEach((section, index) => {
-    if (
-      RESTRICTED_FEATURES.includes(section) &&
-      ((subbrokerCode && !subbrokerFeatures[section]) || !features[section])
-    ) {
+    const isRestrictedFeature = RESTRICTED_FEATURES.includes(section);
+    const isFeatureNotEnabled = (subbrokerCode && !subbrokerFeatures[section]) || !features[section];
+    const isRestrictedFeatureNotEnabled = isRestrictedFeature && isFeatureNotEnabled;
+    const isStocksAndIpoNotEnabled = ["stocks", "ipo"].includes(section) && !isTradingEnabled(kyc);
+    if (isRestrictedFeatureNotEnabled) {
       return;
-    } else if (["stocks", "ipo"].includes(section) && !isTradingEnabled(kyc)) {
+    } else if (isStocksAndIpoNotEnabled) {
       return;
     } else {
       const cardData = INVESTMENT_OPTIONS[section];
@@ -472,7 +473,8 @@ export const getKycBottomsheetData = (
   let premiumDialogData = {};
   let premiumOnboardingStatus = "";
   const isCompliantNonEquityFlow = isCompliant && !tradingEnabled;
-  const showPremiumDialog = isCompliantNonEquityFlow && !appStorage.isPremiumBottomsheetDisplayed;
+  const showPremiumDialog =
+    isCompliantNonEquityFlow && !appStorage.isPremiumBottomsheetDisplayed;
   if (showPremiumDialog) {
     premiumOnboardingStatus = kycJourneyStatus;
     const isKycStatusIncomplete = [
