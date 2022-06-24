@@ -91,7 +91,7 @@ const investingOptionsContainer = (WrappedComponent) => (props) => {
       properties: {
         user_action: userAction || "",
         primary_category: "product item",
-        card_click: data.cardClick,
+        card_click: data.cardClick || "",
         channel: code,
         user_application_status: kycData.applicationStatus,
         user_investment_status: kycData.isMfInvested,
