@@ -35,10 +35,10 @@ const Landing = (props) => {
       headerProps={{
         dataAid: LANDING.dataAid,
         showPartnerLogo: true,
-        rightIconSrc: require("assets/notification_badge.svg"),
-        rightIconSrc2: showSeachIcon ? require("assets/search_diy.svg") : null,
-        onRightIconClick: handleNotification,
-        onRightIconClick2: handleDiySearch,
+        rightIconSrc2: require("assets/notification_badge.svg"),
+        rightIconSrc: showSeachIcon ? require("assets/search_diy.svg") : null,
+        onRightIconClick2: handleNotification,
+        onRightIconClick: handleDiySearch,
         hideLeftIcon: hideBackIcon
       }}
       eventData={sendEvents("just_set_events")}

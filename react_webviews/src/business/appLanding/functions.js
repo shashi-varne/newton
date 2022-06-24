@@ -207,16 +207,6 @@ export const getInvestCardsData = (
   let data = getEnabledFeaturesData(config, investSections, feature);
   const user = get(store.getState(), "app.user", {});
 
-  let { cardsData = [], featureIndex } = data;
-  if (featureIndex !== -1) {
-    const selectedCardData = cardsData.find((el) => el.id === feature);
-    cardsData = cardsData.filter((el) => el.id !== feature);
-    if (!isEmpty(selectedCardData)) {
-      cardsData.unshift(selectedCardData);
-    }
-    data.cardsData = cardsData;
-  }
-
   const FEATURES_TO_ENABLE_PORTFOLIO = ["mf", "taxFiling"];
   if (
     user.active_investment &&
@@ -234,7 +224,19 @@ export const getInvestCardsData = (
     if (!isEmpty(fallbackOptions)) {
       data = getEnabledFeaturesData(config, fallbackOptions, feature);
     }
-  } else if (maximumProducts && data.cardsData.length > maximumProducts) {
+  }
+  
+  let { cardsData = [], featureIndex } = data;
+  if (featureIndex !== -1) {
+    const selectedCardData = cardsData.find((el) => el.id === feature);
+    cardsData = cardsData.filter((el) => el.id !== feature);
+    if (!isEmpty(selectedCardData)) {
+      cardsData.unshift(selectedCardData);
+    }
+    data.cardsData = cardsData;
+  }
+  
+  if (maximumProducts && data.cardsData.length > maximumProducts) {
     data.cardsData.splice(
       maximumProducts - 1,
       4,

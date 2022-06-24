@@ -123,6 +123,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     );
     const isFinity = baseConfig.productName === "finity";
     const showExploreCategories = isMfOnly || isFinity;
+    const showSearchIcon = isMfOnly || isFinity;
     const exploreCategoryData = EXPLORE_CATEGORY_DATA[baseConfig.productName];
     const shareReferralData = SHARE_REFERRAL_DATA[baseConfig.productName];
     return {
@@ -139,6 +140,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       exploreCategoryData,
       isFinity,
       shareReferralData,
+      showSearchIcon
     };
   };
 
@@ -157,6 +159,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     showExploreCategories,
     exploreCategoryData,
     shareReferralData,
+    showSearchIcon
   } = useMemo(initializeData, [
     partner,
     subscriptionStatus,
@@ -736,7 +739,7 @@ const landingContainer = (WrappedComponent) => (props) => {
         !isEmpty(platformMotivators) && !kycData.isReadyToInvestBase
       }
       showExploreCategories={showExploreCategories}
-      showSeachIcon={isMfOnly}
+      showSeachIcon={showSearchIcon}
       showMarketingBanners={
         !isEmpty(marketingBanners) && kycData.isReadyToInvestBase
       }
