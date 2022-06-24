@@ -765,10 +765,12 @@ const landingContainer = (WrappedComponent) => (props) => {
         campaignData,
         handleLoader,
         handleBottomsheets,
+        sendEvents,
       })}
       closeCampaignDialog={closeCampaignDialog({
         campaignData,
         handleBottomsheets,
+        sendEvents,
       })}
       handleKycPrimaryClick={handleKycStatus({
         kyc,
