@@ -9,7 +9,7 @@ import {
   handleMarketingBanners,
 } from "../../business/appLanding/functions";
 import {
-  EXPLORE_CATEGORIES,
+  MF_EXPLORE_CATEGORY_DATA,
   WEBAPP_LANDING_PATHNAME_MAPPER,
 } from "../../constants/webappLanding";
 import {
@@ -22,6 +22,8 @@ import { useSelector } from "react-redux";
 import { getAppData } from "businesslogic/dataStore/reducers/app";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import { isEmpty } from "lodash-es";
+import { MF_LANDING } from "../../strings/webappLanding";
+import { DIY_PATHNAME_MAPPER } from "../../pages/DIY/common/constants";
 
 const initializeData = () => {
   const {
@@ -38,13 +40,22 @@ const initializeData = () => {
     landingMarketingBanners,
     enabledFeatures
   );
+  const investOptionsData = {
+    ...MF_LANDING.investmentOptions[baseConfig.productName],
+    options: investCardsData,
+  };
+  const categoriesData = MF_EXPLORE_CATEGORY_DATA[baseConfig.productName];
+  const isFinity = baseConfig.productName === "finity";
   return {
     code,
     marketingBanners,
-    investCardsData,
     isMfOnly,
     baseConfig,
     mfSections,
+    enabledFeatures,
+    investOptionsData,
+    exploreCategoriesData: categoriesData,
+    isFinity,
   };
 };
 
@@ -63,14 +74,19 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
     code,
     marketingBanners,
     baseConfig,
-    investCardsData,
+    investOptionsData,
     isMfOnly,
     mfSections,
+    enabledFeatures,
+    exploreCategoriesData,
+    isFinity,
   } = useMemo(initializeData, [partner, subscriptionStatus, kyc]);
   const { updateKyc } = useUserKycHook();
 
   useEffect(() => {
-    if (isMfOnly) {
+    if (code === "moneycontrol") {
+      navigate(WEBAPP_LANDING_PATHNAME_MAPPER.investExplore);
+    } else if (isMfOnly) {
       navigate("/");
     }
   }, []);
@@ -134,7 +150,13 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
         cardClick: data.title?.toLowerCase(),
       });
       const pathname = WEBAPP_LANDING_PATHNAME_MAPPER[data.id];
-      navigate(pathname);
+      if (data.id === "riskProfile") {
+        navigate(pathname, {
+          state: { fromExternalSrc: true },
+        });
+      } else {
+        navigate(pathname);
+      }
     };
 
   const handleKyc = (cardClick) => () => {
@@ -195,15 +217,23 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
     });
   };
 
+  const handleFundDetails = (fundData) => () => {
+    navigate(DIY_PATHNAME_MAPPER.fundDetails, {
+      searchParams: `${baseConfig?.searchParams}&isins=${fundData?.isin}`,
+    });
+  };
+
   return (
     <WrappedComponent
+      isFinity={isFinity}
       showPartnership={baseConfig.isSdk}
       mfSections={mfSections}
+      baseConfig={baseConfig}
       kycData={kycData.kycStatusData}
       kycBottomsheetData={kycBottomsheetData}
       marketingBanners={marketingBanners}
-      investmentOptions={investCardsData}
-      exploreCategories={EXPLORE_CATEGORIES}
+      investOptionsData={investOptionsData}
+      exploreCategoriesData={exploreCategoriesData}
       showMarketingBanners={
         !isEmpty(marketingBanners) && kycData.isReadyToInvestBase
       }
@@ -236,12 +266,15 @@ const mfLandingContainer = (WrappedComponent) => (props) => {
           baseConfig,
           contactDetails,
           navigate,
+          sendEvents,
           handleLoader,
           closeKycStatusDialog,
           handleDialogStates: handleBottomsheets,
         },
         props
       )}
+      showPassiveFunds={enabledFeatures.passiveIndexFunds}
+      handleFundDetails={handleFundDetails}
     />
   );
 };

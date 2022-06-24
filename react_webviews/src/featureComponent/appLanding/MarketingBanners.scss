@@ -1,5 +1,9 @@
 .al-marketing-banners {
-  padding: 24px 16px 0px 16px;
+  padding-top: 24px;
+
+  .swiper-container {
+    padding: 0px 16px;
+  }
 
   .swiper-slide {
     width: unset !important;

@@ -18,8 +18,9 @@ import { BOTTOMSHEET_KEYS } from "../../../constants/webappLanding";
 import { LANDING } from "../../../strings/webappLanding";
 import ManageInvestments from "../../../featureComponent/appLanding/ManageInvestments";
 import ApplyReferral from "../../../featureComponent/appLanding/ApplyReferral";
+import { isEmpty } from "lodash-es";
 
-const { easySipData, shareReferralData, portfolioData } = LANDING;
+const { easySipData, portfolioData } = LANDING;
 
 const MainLanding = ({
   loaderData,
@@ -126,7 +127,8 @@ const LandingSections = ({
   marketingBanners,
   investmentOptions,
   platformMotivators,
-  exploreCategories,
+  exploreCategoryData,
+  shareReferralData,
   manageInvestments,
   loaderData,
   portfolioOverViewData,
@@ -142,6 +144,7 @@ const LandingSections = ({
   referral,
   showPortfolioLoader,
   landingSections,
+  productName
 }) => {
   const cardsMapper = {
     platformMotivators: (
@@ -190,7 +193,7 @@ const LandingSections = ({
       <>
         {showKycCard && (
           <CardHorizontal
-            rightImgSrc={require(`assets/fisdom/${kycData.icon}`)}
+            rightImgSrc={require(`assets/${productName}/${kycData.icon}`)}
             title={kycData.title}
             description={kycData.subtitle}
             descriptionColor={
@@ -225,11 +228,11 @@ const LandingSections = ({
     ),
     exploreCategories: (
       <>
-        {showExploreCategories && (
+        {showExploreCategories && !isEmpty(exploreCategoryData) && (
           <ExploreCategories
-            categories={exploreCategories}
-            titleDataAid={LANDING.exploreCategories.dataAid}
-            title={LANDING.exploreCategories.title}
+            categories={exploreCategoryData.options}
+            titleDataAid={exploreCategoryData.dataAid}
+            title={exploreCategoryData.title}
             onClick={handleExploreCategories}
           />
         )}
@@ -257,7 +260,7 @@ const LandingSections = ({
               dataAid={shareReferralData.dataAid}
               title={shareReferralData.title}
               subtitle={shareReferralData.subtitle}
-              rightImgSrc={require(`assets/${shareReferralData.rightIcon}`)}
+              rightImgSrc={require(`assets/${productName}/${shareReferralData.rightIcon}`)}
               onClick={handleReferral}
             />
           </WrapperBox>

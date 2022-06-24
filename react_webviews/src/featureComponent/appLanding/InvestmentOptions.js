@@ -1,7 +1,19 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Typography from "../../designSystem/atoms/Typography";
 import MenuItem from "../../designSystem/molecules/MenuItem";
-import PropTypes from 'prop-types';
+import getPartnerThemeData from "../../theme/utils";
+import PropTypes from "prop-types";
+
+const getIconColors = () => {
+  const { colors } = getPartnerThemeData();
+  const iconColors = [
+    colors.secondary.profitGreen[400],
+    colors.secondary.coralOrange[400],
+    colors.secondary.blue[400],
+    colors.secondary.mango[400],
+  ];
+  return iconColors;
+};
 
 const InvestmentOptions = ({
   productList = [],
@@ -11,6 +23,8 @@ const InvestmentOptions = ({
   feature,
   isLoading,
 }) => {
+  const iconColors = useMemo(getIconColors, []);
+
   return (
     <div className="al-investment-options">
       {title && (
@@ -18,12 +32,12 @@ const InvestmentOptions = ({
           dataAid={titleDataAid}
           variant="heading3"
           className="al-io-title"
+          component="div"
         >
           {title}
         </Typography>
       )}
       {productList.map((data, idx) => {
-        const showLoader = ["stocks", "ipo"].includes(data.id) && isLoading;
         const rightLottieSrc =
           feature === data.id
             ? require(`assets/fisdom/lottie/signfier.json`)
@@ -31,11 +45,12 @@ const InvestmentOptions = ({
         return (
           <MenuItem
             {...data}
-            leftImgSrc={require(`assets/${data.icon}`)}
+            leftSvgSrc={require(`assets/${data.icon}`)}
+            leftSvgIconColor={iconColors[idx % 4]}
             key={idx}
             showSeparator={productList.length !== idx + 1}
             onClick={onClick(data)}
-            showLoader={showLoader}
+            showLoader={isLoading}
             rightLottieSrc={rightLottieSrc}
           />
         );

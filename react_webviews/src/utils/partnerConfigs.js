@@ -32,6 +32,7 @@ import {
   PRODUCT_MARKETING_BANNERS,
   DEFAULT_MARKETING_BANNERS,
   EQUITY_MARKETING_BANNERS,
+  UCOMB_MARKETING_BANNERS,
 } from "./partnerConstants";
 
 // common config across all partners
@@ -47,7 +48,15 @@ export const commonCardsConfig = {
     "manageInvestments",
     "referral",
   ],
-  featuresList: ["stocks", "ipo", "mf", "nps", "insurance", "taxFiling"],
+  featuresList: [
+    "stocks",
+    "ipo",
+    "passiveIndexFunds",
+    "mf",
+    "nps",
+    "insurance",
+    "taxFiling",
+  ],
   mfSections: ["marketingBanners", "kyc", "mfOptions", "exploreCategories"],
   mfOptions: ["buildwealth", "nfo", "parkmoney", "viewAll"],
   investingOptions: [
@@ -242,11 +251,30 @@ export const partnerConfigs = {
       taxFiling: true,
       addAnotherBank: true,
       instaredeem: true,
-      indexFunds: true,
+      passiveIndexFunds: true,
       insurance: true,
       fhc: true,
       riskProfile: true,
     },
+    mfSections: [
+      "kyc",
+      "passiveIndexFunds",
+      "mfOptions",
+      "exploreCategories",
+      "trendingFunds",
+      "portfolioTracker",
+      "financialTools",
+      "marketingBanners",
+    ],
+    mfOptions: ["equity", "debt", "hybrid"],
+    investingOptions: [
+      "nfo",
+      "buildwealth",
+      "elss",
+      "savegoal",
+      "parkmoney",
+      "instaredeem",
+    ],
     landingMarketingBanners: PRODUCT_MARKETING_BANNERS,
   },
   bfdlmobile: {
@@ -437,6 +465,7 @@ export const partnerConfigs = {
     landingMarketingBanners: EQUITY_MARKETING_BANNERS,
     features: {
       nps: true,
+      taxFiling: true,
     },
     referralConfig: {
       applyRefferal: true,
@@ -492,7 +521,8 @@ export const partnerConfigs = {
     features: {
       nps: true,
     },
-    landingMarketingBanners: []
+    landingMarketingBanners: [],
+    onboardingCarousels: EQUITY_ONBOARDING_CAROUSELS,
   },
   google: {
     code: "google",
@@ -516,6 +546,7 @@ export const partnerConfigs = {
   mspl: {
     code: "mspl",
     navLogo: "fisdom/fisdom_logo_white.svg",
+    onboardingCarousels: EQUITY_ONBOARDING_CAROUSELS,
     styles: {
       primaryColor: "#252B69",
     },
@@ -529,7 +560,7 @@ export const partnerConfigs = {
     webLogo: "ucomb_bank.svg",
     logoWidth: "200px",
     onboardingCarousels: EQUITY_ONBOARDING_CAROUSELS,
-    landingMarketingBanners: EQUITY_MARKETING_BANNERS,
+    landingMarketingBanners: UCOMB_MARKETING_BANNERS,
     styles: {
       primaryColor: "#002759",
       secondaryColor: "#002759",
@@ -550,10 +581,6 @@ export const partnerConfigs = {
       applyRefferal: true,
       shareRefferal: true,
     },
-    landingMarketingBanners: [
-      ...commonCardsConfig.landingMarketingBanners,
-      { image: "tax_filing_banner.svg", type: "taxFiling" },
-    ],
   },
   bom: {
     code: "bom",
@@ -606,6 +633,7 @@ export const partnerConfigs = {
   },
   sury: {
     code: "sury",
+    onboardingCarousels: EQUITY_ONBOARDING_CAROUSELS,
     navLogo: "fisdom/fisdom_logo_white.svg",
   },
   svcho: {
@@ -615,6 +643,7 @@ export const partnerConfigs = {
   apna: {
     code: "apna",
     navLogo: "fisdom/fisdom_logo_white.svg",
+    onboardingCarousels: EQUITY_ONBOARDING_CAROUSELS,
     features: {
       nps: true,
     },

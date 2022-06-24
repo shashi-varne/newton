@@ -424,16 +424,17 @@ export const getContactVerification = (
     if (!isEmpty(contactDetails)) {
       let contactType,
         contactValue,
+        countryCode,
         isVerified = true;
       if (
         !isEmpty(contactDetails.mobile_number) &&
         !contactDetails.mobile_number_verified
       ) {
+        const [code, number] = contactDetails?.mobile_number?.toString().split("|");
         contactType = "mobile";
         isVerified = false;
-        contactValue = splitMobileNumberFromContryCode(
-          contactDetails?.mobile_number
-        );
+        contactValue = number;
+        countryCode = code;
       } else if (
         !isEmpty(contactDetails.email) &&
         !contactDetails.email_verified
@@ -446,6 +447,7 @@ export const getContactVerification = (
         return {
           ...contactData,
           ...AUTH_VERIFICATION_DATA[contactType],
+          countryCode,
           contactType,
           contactValue,
           showAuthVerification: true,
@@ -587,8 +589,14 @@ export const handleCampaign =
   };
 
 export const closeCampaignDialog =
-  ({ campaignData, handleBottomsheets }) =>
+  ({ campaignData, handleBottomsheets, sendEvents }) =>
   () => {
+    if (isFunction(sendEvents)) {
+      sendEvents("back", {
+        intent: campaignData.title,
+        outsideClick: true,
+      });
+    }
     const campaignsToHitFeedback = [
       "insurance_o2o_campaign",
       "trading_restriction_campaign",

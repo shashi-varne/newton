@@ -5,11 +5,12 @@ export const RESTRICTED_FEATURES = [
   "insurance",
   "instaredeem",
   "taxFiling",
+  "passiveIndexFunds",
 ];
 
 export const WEBAPP_LANDING_PATHNAME_MAPPER = {
   nfo: "/advanced-investing/new-fund-offers/info",
-  indexFunds: "/passive-index-funds/landing",
+  passiveIndexFunds: "/passive-index-funds/landing",
   instaredeem: "/invest/instaredeem",
   buildwealth: "/invest/buildwealth",
   nps: "/nps/info",
@@ -37,6 +38,11 @@ export const WEBAPP_LANDING_PATHNAME_MAPPER = {
   education: "/invest/savegoal/childeducation",
   retirement: "/invest/savegoal/retirement",
   equityKyc: "/kyc/web",
+  nifty: "/passive-index-funds/nifty_backers/fund-list",
+  sensex: "/passive-index-funds/sensex_backers/fund-list",
+  riskProfile: "/risk/result-new",
+  fhc: "/fhc",
+  investExplore: "/invest/explore",
 };
 
 export const MANAGE_INVESTMENTS = [
@@ -165,10 +171,42 @@ export const INVESTMENT_OPTIONS = {
   instaredeem: {
     icon: "insta_redeem.svg",
     title: "Insta redemption funds",
-    subtitle: "Superior return and money available 24x7",
+    subtitle: "24x7 instant withdrawal of funds",
     eventStatus: "Insta redemption funds",
     id: "instaredeem",
     dataAid: "instaRedemptionFund",
+  },
+  passiveIndexFunds: {
+    icon: "high_growth.svg",
+    title: "Passive Index funds",
+    subtitle: "Earn upto 2% more than active funds",
+    eventStatus: "passive index funds",
+    id: "passiveIndexFunds",
+    dataAid: "passiveIndexFunds",
+  },
+  equity: {
+    icon: `diy_equity.svg`,
+    title: "Equity",
+    subtitle: "Large, mid and samll-sized companies",
+    dataAid: "equity",
+    eventStatus: "equity",
+    id: "equity",
+  },
+  debt: {
+    icon: "diy_debt.svg",
+    title: "Debt",
+    subtitle: "Stable returns with bonds & securities",
+    dataAid: "debt",
+    eventStatus: "debt",
+    id: "debt",
+  },
+  hybrid: {
+    icon: "diy_hybrid.svg",
+    title: "Hybrid",
+    subtitle: "Perfect balance of equity & debt",
+    dataAid: "hybrid",
+    eventStatus: "hybrid",
+    id: "hybrid",
   },
 };
 
@@ -188,12 +226,115 @@ export const EXPLORE_CATEGORIES = [
     id: "debt",
   },
   {
-    icon: "equity.svg",
+    icon: "hybrid.svg",
     title: "Hybrid",
     description: "Perfect balance of equity & debt",
     dataAid: "hybrid",
     id: "hybrid",
   },
+];
+
+export const FINITY_EXPLORE_CATEGORIES = [
+  {
+    icon: `nifty.svg`,
+    title: "Nifty backers",
+    dataAid: "nifity",
+    id: "nifty",
+  },
+  {
+    icon: "sensex.svg",
+    title: "sensex backers",
+    dataAid: "sensex",
+    id: "sensex",
+  },
+  {
+    icon: `equity.svg`,
+    title: "Equity FUnds",
+    dataAid: "equityFunds",
+    id: "equity",
+  },
+];
+
+export const EXPLORE_CATEGORY_DATA = {
+  fisdom: {
+    title: "Explore by categories",
+    dataAid: "exploreCategories",
+    options: EXPLORE_CATEGORIES,
+  },
+  finity: {
+    title: "Our recommendations",
+    dataAid: "ourRecommendations",
+    options: FINITY_EXPLORE_CATEGORIES,
+  },
+};
+
+export const FINITY_RECOMMENDATIONS = [
+  {
+    icon: `new_fund_offer.svg`,
+    title: "New fund offer (NFO)",
+    dataAid: "newFundOffer",
+    id: "nfo",
+  },
+  {
+    icon: "sensex.svg",
+    title: "High growth funds",
+    dataAid: "highGrowth",
+    id: "buildwealth",
+  },
+  {
+    icon: `tax_save.svg`,
+    title: "Tax saving funds (ELSS)",
+    dataAid: "taxSaving",
+    id: "elss",
+  },
+  {
+    icon: `view_more.svg`,
+    title: "More investing options",
+    dataAid: "moreInvestingOptions",
+    id: "investingOptions",
+  },
+];
+
+export const MF_EXPLORE_CATEGORY_DATA = {
+  fisdom: {
+    title: "Explore by categories",
+    dataAid: "exploreCategories",
+    options: EXPLORE_CATEGORIES,
+  },
+  finity: {
+    title: "Finity recommendations",
+    dataAid: "finityRecommendation",
+    buttonData: {
+      id: "investingOptions",
+      title: "See All",
+    },
+    options: FINITY_RECOMMENDATIONS,
+    className: "al-ec-content",
+  },
+};
+
+export const FINANCIAL_TOOLS = [
+  {
+    icon: `risk.svg`,
+    title: "Risk profiler",
+    description: "Investment planning made easy",
+    dataAid: "riskProfiler",
+    id: "riskProfile",
+  },
+  {
+    icon: "fhc.svg",
+    title: "Financial health check",
+    description: "Stay finacially fit",
+    dataAid: "financialHealth",
+    id: "fhc",
+  },
+  // {
+  //   icon: "tax_calculator.svg",
+  //   title: "Tax calucator",
+  //   description: "Get an estimate of your income tax",
+  //   dataAid: "taxCalculator",
+  //   id: "taxCalculator",
+  // },
 ];
 
 export const REFERRAL_DATA = {
@@ -210,6 +351,21 @@ export const REFERRAL_DATA = {
     primaryButtonTitle: "OKAY",
     dataAid: "referralError",
     image: require(`assets/caution.svg`),
+  },
+};
+
+export const SHARE_REFERRAL_DATA = {
+  fisdom: {
+    dataAid: "referEarn",
+    title: "Refer & earn",
+    subtitle: "Invite your friends & earn exciting rewards",
+    rightIcon: "share_refer.svg",
+  },
+  finity: {
+    dataAid: "referEarn",
+    title: "Share the joy",
+    subtitle: "Invite your friends & family",
+    rightIcon: "share_refer.svg",
   },
 };
 
@@ -427,6 +583,7 @@ export const APPSTORAGE_KEYS = {
 
 export const AUTH_VERIFICATION_DATA = {
   email: {
+    icon: "email_verification.svg",
     title: "Verify your email address",
     subtitle: "Email verification is mandatory for investment as per SEBI",
     primaryButtonTitle: "Continue",

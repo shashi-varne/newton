@@ -581,6 +581,12 @@ export function handleStocksAndIpoCards(
   const config = getConfig();
   let modalData = Object.assign({key}, kycJourneyStatusMapperData);
 
+  const isKycInitState = ["init", "ground"].includes(kycJourneyStatus);
+
+  if (isKycInitState) {
+    modalData = kycStatusMapper.incomplete;
+  }
+
   if (key === "ipo") {
     const handleClick = () => {
       handleIpoCardRedirection({ kyc, user, isDirectEntry, navigate, handleLoader, handleSummaryData, handleDialogStates }, props)
@@ -693,6 +699,7 @@ export const handleKycStatus = ({
     });
   }
   const { kycJourneyStatus, isReadyToInvestBase } = kycData;
+  const initialKycStatus = ["init", "ground"];
   if (
     ["submitted", "verifying_trading_account"].includes(kycJourneyStatus) ||
     (kycJourneyStatus === "complete" && kyc.mf_kyc_processed)
@@ -719,6 +726,8 @@ export const handleKycStatus = ({
         ),
       },
     });
+  } else if (initialKycStatus.includes(kycJourneyStatus)) {
+    navigate(KYC_PATHNAME_MAPPER.homeKyc);
   } else if (modalData.nextState && modalData.nextState !== "/invest") {
     navigate(modalData.nextState);
   } else {
@@ -740,9 +749,15 @@ export const handleKycStatusRedirection = (
     handleLoader,
     handleSummaryData,
     handleDialogStates,
+    sendEvents
   },
   props
 ) => () => {
+  if (isFunction(sendEvents)) {
+    sendEvents("back", {
+      intent: modalData.title,
+    });
+  }
   let { kycJourneyStatus } = kycData;
   const {
     contactValue,

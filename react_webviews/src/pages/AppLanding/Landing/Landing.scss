@@ -70,12 +70,6 @@
     }
   }
 
-  .al-explore-categories {
-    .swiper-slide {
-      width: unset !important;
-    }
-  }
-
   .lmw-setup-easysip {
     margin: 24px 24px 16px 24px;
   }
@@ -86,22 +80,10 @@
 
   .al-investment-options {
     background-color: white;
-    padding: 32px 0px 20px 0px;
+    padding: 32px 0px 24px 0px;
 
     .al-io-title {
-      padding: 0px 16px;
-    }
-  }
-
-  .al-explore-categories {
-    padding: 24px 16px 16px 16px;
-
-    .al-ec-title {
-      padding-bottom: 16px;
-    }
-
-    .al-ec-card {
-      width: 168px;
+      padding: 0px 16px 16px 16px;
     }
   }
 

@@ -19,6 +19,7 @@ const Landing = (props) => {
     loaderData,
     errorData,
     sendEvents,
+    hideBackIcon,
     ...restProps
   } = props;
 
@@ -38,6 +39,7 @@ const Landing = (props) => {
         rightIconSrc2: showSeachIcon ? require("assets/search_diy.svg") : null,
         onRightIconClick: handleNotification,
         onRightIconClick2: handleDiySearch,
+        hideLeftIcon: hideBackIcon
       }}
       eventData={sendEvents("just_set_events")}
       isFetchFailed={isFetchFailed}

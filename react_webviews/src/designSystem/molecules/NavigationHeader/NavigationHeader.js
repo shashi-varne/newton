@@ -119,7 +119,7 @@ const NavigationHeader = ({
             <Icon
               dataAid="logo"
               src={require(`assets/${logo}`)}
-              className="nav-bar-logo"
+              className={`nav-bar-logo ${hideLeftIcon && 'nav-header-lm'}`}
             />
           )}
         </div>
