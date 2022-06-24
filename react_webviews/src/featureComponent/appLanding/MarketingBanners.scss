@@ -1,0 +1,31 @@
+.al-marketing-banners {
+  padding-top: 24px;
+
+  .swiper-container {
+    padding: 0px 16px;
+  }
+
+  .swiper-slide {
+    width: unset !important;
+  }
+
+  .al-mb-icon {
+    width: 332px;
+    height: 174px;
+    min-width: 332px;
+    min-height: 174px;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .al-single-marketing-banners {
+    .swiper-slide {
+      width: 100% !important;
+    }
+
+    .al-mb-icon {
+      width: 100%;
+      height: unset;
+    }
+  }
+}

@@ -39,6 +39,7 @@ const Container = ({
   dataAid,
   noHeader,
   isFetchFailed,
+  errorData,
   ...restProps
 }) => {
   const containerRef = useRef();
@@ -144,6 +145,7 @@ const Container = ({
         disableHorizontalPadding={disableHorizontalPadding}
         disableVerticalPadding={disableVerticalPadding}
         isFetchFailed={isFetchFailed}
+        errorData={errorData}
       >
         {children}
       </ContainerMain>

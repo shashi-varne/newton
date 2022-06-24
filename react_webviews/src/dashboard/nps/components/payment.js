@@ -61,7 +61,7 @@ class NpsPaymentCallback extends Component {
   handleClick = async () => {
     const config = getConfig();
     if (this.state.status !== 'success') {
-      this.navigate('/invest')
+      this.navigate('/')
     } else {
       const result = await this.getNPSInvestmentStatus();
       storageService().set('nps_additional_details_required', true);

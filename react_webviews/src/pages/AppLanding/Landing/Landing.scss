@@ -36,7 +36,7 @@
   .oc-content-wrapper {
     padding: 20px 10px 10px 20px;
     border-radius: 24px 24px 0px 0px;
-    height: 32vh;
+    height: 30vh;
     margin-top: -24px;
 
     .oc-bg-wrapper {
@@ -56,15 +56,7 @@
 }
 
 .landing-main-wrapper {
-  .lmp-platform-motivators {
-    background-color: white;
-    padding: 26px 16px 38px 16px;
-
-    .pm-left-image {
-      width: 64px;
-      height: 64px;
-    }
-  }
+  padding-bottom: 40px !important;
 
   .lmw-portfolio-overview {
     margin: 24px 16px 16px 16px;
@@ -78,23 +70,6 @@
     }
   }
 
-  .al-explore-categories,
-  .lmp-platform-motivators,
-  .al-marketing-banners {
-    .swiper-slide {
-      width: unset !important;
-    }
-  }
-
-  .al-marketing-banners {
-    padding: 24px 16px 0px 16px;
-
-    .al-mb-icon {
-      width: 332px;
-      height: 174px;
-    }
-  }
-
   .lmw-setup-easysip {
     margin: 24px 24px 16px 24px;
   }
@@ -105,22 +80,10 @@
 
   .al-investment-options {
     background-color: white;
-    padding: 32px 0px 20px 0px;
+    padding: 32px 0px 24px 0px;
 
     .al-io-title {
-      padding: 0px 16px;
-    }
-  }
-
-  .al-explore-categories {
-    padding: 24px 16px 16px 16px;
-
-    .al-ec-title {
-      padding-bottom: 16px;
-    }
-
-    .al-ec-card {
-      width: 168px;
+      padding: 0px 16px 16px 16px;
     }
   }
 

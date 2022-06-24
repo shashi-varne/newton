@@ -35,6 +35,7 @@ export const buttonVariantsConfig = (colors={}, partnerConfig={}) => {
       props: { size: 'small' },
       style: {
         height: '37px',
+        minHeight: "37px",
         width: 'max-content',
         paddingLeft: '16px',
         paddingRight: '16px'

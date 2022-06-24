@@ -63,7 +63,7 @@ const PaymentCallback = (props) => {
       window.callbackWeb.sendEvent(_event);
     }
     if(config.code === "moneycontrol") {
-      navigate("/");
+      navigate("/invest/explore");
     } else {
       if(config.code === "bfdlmobile" && config.isIframe) {
         return;

@@ -41,7 +41,7 @@ const OnboardingCarousels = ({
       <AutoPlaySwipeableViews
         index={tabValue}
         onChangeIndex={handleNext}
-        interval={4000}
+        interval={2000}
       >
         {carousalsData.map((el, idx) => {
           return (

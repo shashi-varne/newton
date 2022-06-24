@@ -3,26 +3,52 @@ import Box from "@mui/material/Box";
 import PropTypes from "prop-types";
 import Lottie from "lottie-react";
 import Typography from "../../designSystem/atoms/Typography";
+import CustomSwiper from "../../designSystem/molecules/CustomSwiper";
+import { SwiperSlide } from "swiper/react";
 import { getConfig } from "../../utils/functions";
 
-import "./PlatformMotivator.scss";
+import "./PlatformMotivators.scss";
+
+const PlatformMotivators = ({ options }) => {
+  return (
+    <div className="platform-motivators-wrapper">
+      <CustomSwiper
+        spaceBetween={16}
+        speed={500}
+        slidesPerView="auto"
+        grabCursor={true}
+        paginationDataAid="platformMotivators"
+      >
+        {options.map((data, idx) => (
+          <SwiperSlide key={idx}>
+            <PlatformMotivator {...data} />
+          </SwiperSlide>
+        ))}
+      </CustomSwiper>
+    </div>
+  );
+};
+
+export default PlatformMotivators;
 
 const PlatformMotivator = ({ icon, title, subtitle, dataAid }) => {
   const { productName } = useMemo(getConfig, []);
   return (
     <Box
       sx={cardWrapperSxStyle}
-      className="platform-motivator-wrapper"
+      className="platform-motivator"
       data-aid={`carousel_${dataAid}`}
     >
       {icon && (
-        <Lottie
-          animationData={require(`assets/fisdom/lottie/${icon}`)}
-          autoPlay
-          loop
-          data-aid="iv_left"
-          className="pm-left-image"
-        />
+        <div className="pm-left-wrapper">
+          <Lottie
+            animationData={require(`assets/${productName}/lottie/${icon}`)}
+            autoPlay
+            loop
+            data-aid="iv_left"
+            className="pm-left-image"
+          />
+        </div>
       )}
       <div className="pm-text-wrapper">
         <Typography variant="heading4" component="div" dataAid="title">
@@ -40,8 +66,6 @@ const PlatformMotivator = ({ icon, title, subtitle, dataAid }) => {
     </Box>
   );
 };
-
-export default PlatformMotivator;
 
 const cardWrapperSxStyle = {
   backgroundColor: "foundationColors.supporting.grey",

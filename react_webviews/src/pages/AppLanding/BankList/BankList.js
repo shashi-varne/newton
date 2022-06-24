@@ -1,7 +1,7 @@
 import React from "react";
 import Container from "../../../designSystem/organisms/ContainerWrapper";
 import SelectionMode from "../../../designSystem/molecules/SelectionMode";
-import { BANK_LIST } from "businesslogic/strings/webappLanding";
+import { BANK_LIST } from "../../../strings/webappLanding";
 
 import "./BankList.scss";
 
@@ -11,6 +11,8 @@ const BankList = ({
   handleChange,
   onClick,
   sendEvents,
+  isButtonLoading,
+  onBackClick
 }) => {
   return (
     <Container
@@ -20,6 +22,7 @@ const BankList = ({
         dataAid: BANK_LIST.headerData.dataAid,
         disableSeeMoreFeature: true,
         hideLeftIcon: true,
+        onBackClick,
       }}
       className="bank-list-wrapper"
       dataAid={BANK_LIST.dataAid}
@@ -27,6 +30,7 @@ const BankList = ({
         button1Props: {
           title: BANK_LIST.buttonTitle,
           onClick,
+          isLoading: isButtonLoading,
         },
       }}
       eventsData={sendEvents("just_set_events")}

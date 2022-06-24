@@ -4,12 +4,14 @@
 /* -----------------------------------------------------------------*/
 import { EVENT_MANAGER_CONSTANTS } from './constants';
 import eventManager from './eventManager';
-import { isMobile } from './functions';
+import { getPartnerName, isMobile } from './functions';
 import { getConfig } from './functions';
 import isEmpty from 'lodash/isEmpty';
 import filter from 'lodash/filter';
 import get from 'lodash/get';
 import isFunction from 'lodash/isFunction';
+import store from '../dataLayer/store';
+import { setBankList, setKyc, setPartner, setUser, updateAppStorage } from 'businesslogic/dataStore/reducers/app';
 
 
 (function (exports) {
@@ -395,14 +397,9 @@ import isFunction from 'lodash/isFunction';
     set_session_storage('is_secure', true);
 
     if (json_data?.partner) {
-      if (json_data.partner === "bfdl") {
-        set_session_storage("partner", "bfdlmobile");
-      } else if (json_data.partner === "obcweb") {
-        set_session_storage("partner", "obc");
-      } else {
-        const partner = json_data.partner.toLowerCase();
-        set_session_storage("partner", partner);
-      }
+      const partner = getPartnerName(json_data.partner.toLowerCase());
+      set_session_storage("partner", partner);
+      store.dispatch(setPartner(partner))
       eventManager.emit(EVENT_MANAGER_CONSTANTS.updateAppTheme);
     }
 
@@ -411,22 +408,25 @@ import isFunction from 'lodash/isFunction';
     }
 
     if (json_data?.user_data) {
+      const user = json_data.user_data.user;
+      const kyc = json_data.user_data.kyc;
+      const bankList = json_data.user_data.bank_list;
+      const firstLogin = json_data.user_data.firstLogin;
       set_session_storage("dataSettedInsideBoot", true);
-      set_session_storage("user", json_data.user_data.user);
-      set_session_storage("kyc", json_data.user_data.kyc);
-      set_session_storage("banklist", json_data.user_data.bank_list);
-      set_session_storage("firstlogin", json_data.user_data.user.firstlogin);
+      set_session_storage("user", user);
+      set_session_storage("kyc", kyc);
+      set_session_storage("banklist", bankList);
+      set_session_storage("firstlogin", firstLogin);
+      store.dispatch(updateAppStorage({ firstLogin }))
       if (json_data.user_data.partner.partner_code) {
-        const partner = json_data.user_data.partner?.partner_code?.toLowerCase();
-        if (partner === "bfdl") {
-          set_session_storage("partner", "bfdlmobile");
-        } else if (partner === "obcweb") {
-          set_session_storage("partner", "obc");
-        } else {
-          set_session_storage("partner", partner);
-        }
+        const partner = getPartnerName(json_data.user_data.partner?.partner_code?.toLowerCase());
+        set_session_storage("partner", partner);
+        store.dispatch(setPartner(partner))
         eventManager.emit(EVENT_MANAGER_CONSTANTS.updateAppTheme);
       }
+      store.dispatch(setKyc(kyc))
+      store.dispatch(setUser(user))
+      store.dispatch(setBankList(bankList))
     }
 
     if (json_data?.callback_version) {

@@ -8,7 +8,7 @@ const getBarMeterData = (numberOfBars) => () => {
 };
 
 const ProgressBar = (props) => {
-  const { dataAid, className, activeIndex, numberOfBars } = props;
+  const { dataAid, className = "", activeIndex, numberOfBars } = props;
 
   const progressBarData = useMemo(getBarMeterData(numberOfBars), [
     numberOfBars,

@@ -173,7 +173,7 @@ class NpsInvestments extends Component {
 
   goBack = () => {
     this.sendEvents('back')
-    this.navigate('/invest');
+    this.navigate('/');
   };
 
   sendEvents = (userAction, screenName, cardClicked) => {

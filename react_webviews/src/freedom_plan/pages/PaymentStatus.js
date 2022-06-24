@@ -19,7 +19,10 @@ import "./PaymentStatus.scss";
 import { handleExit } from "../common/functions";
 import isEmpty from "lodash/isEmpty";
 import Toast from "../../common/ui/Toast";
-import { getAccountSummary } from "../../kyc/services";
+import { getAccountSummary } from "businesslogic/apis/common";
+import Api from "../../utils/api";
+import store from "../../dataLayer/store";
+import { setSubscriptionStatus } from "businesslogic/dataStore/reducers/app";
 
 const PaymentStatus = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -55,12 +58,13 @@ const PaymentStatus = (props) => {
   const fetchSubscriptionStatus = async () => {
     try {
       setShowSkelton(true);
-      const result = await getAccountSummary({
+      const result = await getAccountSummary(Api, {
         equity: ["subscription_status"],
       });
       const subscriptionStatus = result?.data?.equity?.subscription_status?.data || {};
       if (!isEmpty(subscriptionStatus)) {
         storageService().setObject(FREEDOM_PLAN_STORAGE_CONSTANTS.subscriptionStatus, subscriptionStatus);
+        store.dispatch(setSubscriptionStatus(subscriptionStatus));
       }
     } catch (err) {
       Toast(err.message);

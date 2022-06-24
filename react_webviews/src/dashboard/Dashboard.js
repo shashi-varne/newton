@@ -23,10 +23,8 @@ import DigilockerCallback from "../kyc/Digilocker/DigilockerCallback";
 import AccountMerge from "./AccountMerge";
 import AccountMergeOtp from "./AccountMerge/Otp";
 import AccountLinked from "./AccountMerge/Linked";
-import SdkLanding from './Invest/components/SdkLanding';
 import NPS from "./nps";
 import PassiveIndexFunds from "./PassiveIndexFunds"
-import {getConfig} from 'utils/functions';
 import BlankMandateUpload from "./MyAccount/BlankMandateUpload";
 import InvestmentProof from "./MyAccount/InvestmentProof";
 import Refer from "./Invest/components/SdkLanding/Refer";
@@ -46,7 +44,7 @@ import NativeRedirection from "../kyc/Native/NativeRedirection";
 import ProductMarketTypes from './ProductMarketTypes';
 import PrimaryMarketProducts from "./PrimaryMarketProducts/PrimaryMarketProducts";
 import DIYV2 from "../pages/DIY";
-import StocksAndIpoDirectEntry from "./DirectEntry/StocksAndIpoDirectEntry";
+import DirectEntry from "./DirectEntry/DirectEntry";
 import PaymentNativeCallback from "./nps/components/paymentCallback";
 import ThemeWrapper from "../theme/ThemeWrapper";
 import fundDetailsV2Container from "../containers/fundDetailsV2/fundDetailsV2Container";
@@ -55,26 +53,17 @@ import Nominee from "../pages/Nominee";
 import AppLanding from "../pages/AppLanding";
 
 const Home = (props) => {
-  const config = getConfig(); 
   const { url } = props.match;
   return (
     <Fragment>
       <Switch>
-        <Route exact path={`${url}direct/:type`} component={StocksAndIpoDirectEntry} />
+        <Route exact path={`${url}direct/:type`} component={DirectEntry} />
         <Route exact path={`${url}secondary-verification`} component={SecondaryVerification} />
         <Route exact path={`${url}secondary-otp-verification`} component={SecondaryOtpVerification} />
         <Route path={`${url}referral-code`} component={Referral} />
-        <Route
-          exact
-          path={`${url}`}
-          component={
-            config.isSdk && config.code !== "moneycontrol" ? SdkLanding : Invest
-          }
-        />
+        <Route path={`${url}invest`} component={Invest} />
         <Route exact path={`${url}refer`} component={Refer} />
         <Route path={`${url}invest`} component={Invest} />
-        <Route path={`${url}landing`} component={Invest} />
-        <Route path={`${url}mf`} component={SdkLanding} />
         <Route path={`${url}diy`} component={DIY} />
         <Route path={`${url}invest-journey`} component={InvestJourney} />
         <Route path={`${url}nps`} component={NPS} />
