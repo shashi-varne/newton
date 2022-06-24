@@ -1,8 +1,8 @@
 import { Box } from "@mui/material";
 import React from "react";
-import Icon from "../../../../atoms/Icon";
-import Typography from "../../../../atoms/Typography";
-import Tag from "../../../../molecules/Tag";
+import Icon from "designSystem/atoms/Icon";
+import Typography from "designSystem/atoms/Typography";
+import Tag from "designSystem/molecules/Tag";
 import RowContainer from "./RowContainer";
 
 const PrimaryBottomSection = ({
