@@ -179,7 +179,7 @@ const LandingSections = ({
           <WrapperBox elevation={1} className="lmw-setup-easysip">
             <InfoCard
               imgSrc={require(`assets/${easySipData.icon}`)}
-              rightImgSrc={require(`assets/fisdom/${easySipData.rightIcon}`)}
+              rightImgSrc={require(`assets/${productName}/${easySipData.rightIcon}`)}
               title={easySipData.title}
               subtitle={easySipData.subtitle}
               dataAid={easySipData.dataAid}
@@ -224,6 +224,7 @@ const LandingSections = ({
         onClick={handleCardClick}
         feature={feature}
         isLoading={showKycCard && isPageLoading}
+        productName={productName}
       />
     ),
     exploreCategories: (

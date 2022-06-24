@@ -22,6 +22,7 @@ const InvestmentOptions = ({
   onClick,
   feature,
   isLoading,
+  productName,
 }) => {
   const iconColors = useMemo(getIconColors, []);
 
@@ -40,7 +41,7 @@ const InvestmentOptions = ({
       {productList.map((data, idx) => {
         const rightLottieSrc =
           feature === data.id
-            ? require(`assets/fisdom/lottie/signfier.json`)
+            ? require(`assets/${productName}/lottie/signfier.json`)
             : null;
         return (
           <MenuItem
