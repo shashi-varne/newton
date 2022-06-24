@@ -429,13 +429,16 @@ const landingContainer = (WrappedComponent) => (props) => {
       event_name: data.eventName || "home_screen",
       properties: {
         user_action: userAction || "",
-        primary_category: data.primaryCategory || "generic type",
         channel: code,
         user_application_status: kycData.applicationStatus,
         user_investment_status: kycData.isMfInvested,
         user_kyc_status: kycData.isReadyToInvestBase,
       },
     };
+
+    if (data.primaryCategory) {
+      eventObj.properties.primary_category = data.primaryCategory;
+    }
 
     if (data.screenName) {
       eventObj.properties.screen_name = data.screenName?.toLowerCase();
@@ -525,12 +528,14 @@ const landingContainer = (WrappedComponent) => (props) => {
   const handleEasySip = () => {
     sendEvents("next", {
       cardClick: "setup easysip",
+      primaryCategory: "generic type",
     });
   };
 
   const handleReferral = () => {
     sendEvents("next", {
       cardClick: "refer clicked",
+      primaryCategory: "generic type",
     });
 
     if (showApplyReferral) {
