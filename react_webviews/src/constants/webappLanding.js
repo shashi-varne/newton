@@ -583,6 +583,7 @@ export const APPSTORAGE_KEYS = {
 
 export const AUTH_VERIFICATION_DATA = {
   email: {
+    icon: "email_verification.svg",
     title: "Verify your email address",
     subtitle: "Email verification is mandatory for investment as per SEBI",
     primaryButtonTitle: "Continue",
