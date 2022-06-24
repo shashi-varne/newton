@@ -1,10 +1,12 @@
-import { Box, Stack } from "@mui/material";
 import React from "react";
-import Icon from "../../../atoms/Icon";
-import Typography from "../../../atoms/Typography";
-import "./PfFundDetail.scss";
+import { Box } from "@mui/material";
 import Separator from "designSystem/atoms/Separator";
-import Tag from "../../../molecules/Tag/Tag";
+import { noop } from "lodash-es";
+import PropTypes from "prop-types";
+import "./PfFundDetail.scss";
+import PrimaryBottomSection from "./subComponents/PrimaryBottomSection";
+import SecondaryBottomSection from "./subComponents/SecondaryBottomSection";
+import TopSection from "./subComponents/TopSection";
 
 export const PF_DETAIL_VARIANT = {
   PRIMARY: "primary",
@@ -31,190 +33,42 @@ function PfFundDetail({ variant, onClick, ...props }) {
   );
 }
 
-const TopSection = ({
-  label,
-  topImgSrc,
-  topTitle,
-  middleImgSrc,
-  mainTitle,
-  middleLabel,
-}) => {
-  return (
-    <Box className="top-section">
-      <RowContainer className="row-one">
-        <Typography
-          variant="body5"
-          color="foundationColors.content.secondary"
-          dataAid="label1"
-          className="label"
-        >
-          {label}
-        </Typography>
-        <RowContainer justifyContent="flex-start">
-          <Icon
-            src={topImgSrc}
-            width="16px"
-            height="16px"
-            dataAid="top"
-            style={{ marginRight: 4 }}
-          />
-          <Typography
-            allCaps
-            color="foundationColors.content.secondary"
-            dataAid="label2"
-          >
-            {topTitle}
-          </Typography>
-        </RowContainer>
-      </RowContainer>
-      <RowContainer className="row-two">
-        <RowContainer justifyContent="flex-start">
-          <Icon
-            src={middleImgSrc}
-            width="32px"
-            height="32px"
-            dataAid="left"
-            style={{ marginRight: 16 }}
-          />
-          <Typography
-            variant="body2"
-            color="foundationColors.content.secondary"
-            dataAid="title"
-          >
-            {mainTitle}
-          </Typography>
-        </RowContainer>
-        <Typography
-          variant="body1"
-          color="foundationColors.content.primary"
-          dataAid="subtitle1"
-        >
-          {middleLabel}
-        </Typography>
-      </RowContainer>
-    </Box>
-  );
+PfFundDetail.defaultProps = {
+  variant: PF_DETAIL_VARIANT.PRIMARY,
+  onClick: noop,
+  label: "",
+  topTitle: "",
+  middleImgSrc: "",
+  mainTitle: "",
+  middleLabel: "",
+  bottomTitle: "",
+  bottomLabel: "",
+  bottomSubtitle: "",
+  bottomRowData: {},
 };
 
-const PrimaryBottomSection = ({
-  bottomTitle,
-  bottomLabel,
-  bottomSubtitle,
-  bottomImgSrc,
-}) => {
-  return (
-    <Box className="bottom-section">
-      <RowContainer>
-        <Typography
-          variant="body5"
-          color="foundationColors.content.secondary"
-          dataAid="info"
-        >
-          {bottomTitle}
-        </Typography>
-        <Tag label={bottomLabel} dataAid="label" />
-        <RowContainer justifyContent="flex-start">
-          <Icon
-            src={bottomImgSrc}
-            width="16px"
-            height="16px"
-            dataAid="left4"
-            style={{ marginRight: 4 }}
-          />
-          <Typography
-            variant="body5"
-            color="foundationColors.content.secondary"
-            dataAid="subtitle2"
-          >
-            {bottomSubtitle}
-          </Typography>
-        </RowContainer>
-      </RowContainer>
-    </Box>
-  );
-};
-
-const SecondaryBottomSection = ({ bottomRowData }) => {
-  const {
-    leftTitle,
-    leftSubtitle,
-    leftImgSrc,
-    middleTitle,
-    middleImgSrc,
-    middleSubtitle,
-    rightTitle,
-    rightImgSrc,
-    rightSubtitle,
-  } = bottomRowData;
-
-  return (
-    <RowContainer className="bottom-section-two">
-      <CustomItem
-        title={leftTitle}
-        subtitle={leftSubtitle}
-        id={1}
-        imgSrc={leftImgSrc}
-        align="left"
-      />
-      <CustomItem
-        title={middleTitle}
-        subtitle={middleSubtitle}
-        id={2}
-        imgSrc={middleImgSrc}
-        align="center"
-      />
-      <CustomItem
-        title={rightTitle}
-        subtitle={rightSubtitle}
-        id={3}
-        imgSrc={rightImgSrc}
-        align="right"
-      />
-    </RowContainer>
-  );
-};
-
-const CustomItem = ({ title, subtitle, id, imgSrc, align }) => {
-  return (
-    <Box sx={{ textAlign: align }}>
-      <Typography
-        variant="body5"
-        color="foundationColors.content.secondary"
-        dataAid={`key${id}`}
-      >
-        {title}
-      </Typography>
-      <RowContainer justifyContent="flex-start">
-        <Icon
-          src={imgSrc}
-          width="16px"
-          height="16px"
-          dataAid={`left${id}`}
-          style={{ marginRight: 4 }}
-        />
-        <Typography
-          variant="body5"
-          color="foundationColors.content.secondary"
-          dataAid={`value${id}`}
-        >
-          {subtitle}
-        </Typography>
-      </RowContainer>
-    </Box>
-  );
-};
-
-export const RowContainer = ({ children, ...props }) => {
-  return (
-    <Stack
-      flexDirection="row"
-      alignItems="center"
-      justifyContent="space-between"
-      {...props}
-    >
-      {children}
-    </Stack>
-  );
+PfFundDetail.propTypes = {
+  variant: PropTypes.string,
+  onClick: noop,
+  label: PropTypes.string,
+  topTitle: PropTypes.string,
+  middleImgSrc: PropTypes.string,
+  mainTitle: PropTypes.string,
+  middleLabel: PropTypes.string,
+  bottomTitle: PropTypes.string,
+  bottomLabel: PropTypes.string,
+  bottomSubtitle: PropTypes.string,
+  bottomRowData: PropTypes.shape({
+    leftTitle: PropTypes.string,
+    leftImgSrc: PropTypes.node,
+    leftSubtitle: PropTypes.string,
+    middleTitle: PropTypes.string,
+    middleImgSrc: PropTypes.node,
+    middleSubtitle: PropTypes.string,
+    rightTitle: PropTypes.string,
+    rightImgSrc: PropTypes.node,
+    rightSubtitle: PropTypes.string,
+  }),
 };
 
 export default PfFundDetail;
