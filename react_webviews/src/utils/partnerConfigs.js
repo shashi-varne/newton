@@ -457,6 +457,7 @@ export const partnerConfigs = {
     navLogo: "fisdom/fisdom_logo_white.svg",
   },
   indb: {
+    logo: "indb.svg",
     code: "indb",
     logo: "indb.svg",
     navLogoClassname: "navbar-white-bg",
@@ -474,6 +475,9 @@ export const partnerConfigs = {
     styles: {
       primaryColor: "#173883",
       secondaryColor: "#173883",
+    },
+    features: {
+      taxFiling: true,
     },
   },
   finshell: {
