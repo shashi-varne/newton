@@ -120,7 +120,7 @@ const MfLandingSections = ({
     ),
     kyc: (
       <>
-        {showKycCard && (
+        {showKycCard && !isEmpty(kycData) && (
           <div className="mfl-kyc-wrapper">
             <WrapperBox elevation={1}>
               <CardHorizontal

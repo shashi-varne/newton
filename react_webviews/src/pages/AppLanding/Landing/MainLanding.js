@@ -191,7 +191,7 @@ const LandingSections = ({
     ),
     kyc: (
       <>
-        {showKycCard && (
+        {showKycCard && (!isEmpty(kycData) || isPageLoading) && (
           <CardHorizontal
             rightImgSrc={require(`assets/${productName}/${kycData.icon}`)}
             title={kycData.title}

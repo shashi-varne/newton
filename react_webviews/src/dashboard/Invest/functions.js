@@ -230,10 +230,10 @@ export async function getRecommendations({
   }
 }
 
-export const getKycData = (kyc, user) => {
-  kyc = kyc || storageService().getObject("kyc") || {};
+export const getKycData = (userKyc, userData) => {
+  let kyc = !isEmpty(userKyc) ? userKyc : (storageService().getObject("kyc") || {});
   const TRADING_ENABLED = isTradingEnabled(kyc);
-  user = user || storageService().getObject("user") || {};
+  let user = !isEmpty(userData) ? userData : (storageService().getObject("user") || {});
   const isCompliant = kyc.kyc_status === "compliant";
   const kycJourneyStatus = getKycAppStatus(kyc)?.status || "";
   let kycStatusData = kycStatusMapperInvest[kycJourneyStatus];
