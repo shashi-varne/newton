@@ -153,3 +153,14 @@ export const UCOMB_MARKETING_BANNERS = [
     endDate: "06/31/2022",
   },
 ];
+
+export const TAXWIN_MARKETING_BANNERS = [
+  {
+    image: "freedomplan.svg",
+    id: "freedomplan",
+  },
+  {
+    image: "kyc.svg",
+    id: "equityKyc",
+  },
+];
