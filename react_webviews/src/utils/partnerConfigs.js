@@ -33,6 +33,7 @@ import {
   DEFAULT_MARKETING_BANNERS,
   EQUITY_MARKETING_BANNERS,
   UCOMB_MARKETING_BANNERS,
+  TAXWIN_MARKETING_BANNERS,
 } from "./partnerConstants";
 
 // common config across all partners
@@ -285,8 +286,6 @@ export const partnerConfigs = {
     landingMarketingBanners: [
       ...commonCardsConfig.landingMarketingBanners,
       ...commonCardsConfig.nfoBanners,
-      { image: "mb_6.svg", id: "diy" },
-      { image: "mb_5.svg", id: "buildwealth" },
     ],
     referralConfig: {
       applyRefferal: false, // same as hide_apply_referral but with opposite value
@@ -325,6 +324,7 @@ export const partnerConfigs = {
         backgroundColor: "#E8FD00",
       },
     },
+    landingMarketingBanners: EQUITY_MARKETING_BANNERS,
   },
   tvscredit: {
     logo: "tvscredit.svg",
@@ -521,7 +521,7 @@ export const partnerConfigs = {
     features: {
       nps: true,
     },
-    landingMarketingBanners: [],
+    landingMarketingBanners: TAXWIN_MARKETING_BANNERS,
     onboardingCarousels: EQUITY_ONBOARDING_CAROUSELS,
   },
   google: {
@@ -547,6 +547,7 @@ export const partnerConfigs = {
     code: "mspl",
     navLogo: "fisdom/fisdom_logo_white.svg",
     onboardingCarousels: EQUITY_ONBOARDING_CAROUSELS,
+    landingMarketingBanners: EQUITY_MARKETING_BANNERS,
     styles: {
       primaryColor: "#252B69",
     },
@@ -634,6 +635,7 @@ export const partnerConfigs = {
   sury: {
     code: "sury",
     onboardingCarousels: EQUITY_ONBOARDING_CAROUSELS,
+    landingMarketingBanners: EQUITY_MARKETING_BANNERS,
     navLogo: "fisdom/fisdom_logo_white.svg",
   },
   svcho: {
@@ -644,6 +646,7 @@ export const partnerConfigs = {
     code: "apna",
     navLogo: "fisdom/fisdom_logo_white.svg",
     onboardingCarousels: EQUITY_ONBOARDING_CAROUSELS,
+    landingMarketingBanners: EQUITY_MARKETING_BANNERS,
     features: {
       nps: true,
     },
