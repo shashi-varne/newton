@@ -14,6 +14,8 @@ const screen = "REFER_AND_EARN_TNC";
 const tncContainer = (WrappedComponent) => (props) => {
   const dispatch = useDispatch();
   const tncPoints = useSelector(getTncData);
+  const { isPageLoading } = useLoadingState(screen);
+
   const { productName } = useMemo(getConfig, []);
 
   const initialize = () => {
@@ -31,7 +33,7 @@ const tncContainer = (WrappedComponent) => (props) => {
     initialize();
   }, []);
 
-  return <WrappedComponent points={tncPoints} productName={productName} />;
+  return <WrappedComponent points={tncPoints} productName={productName} isPageLoading={isPageLoading} />;
 };
 
 export default tncContainer(TermsAndCondtions);
