@@ -63,6 +63,7 @@ const DEFAULT_BOTTOMSHEETS_DATA = {
   openCampaign: false,
 };
 
+/* eslint-disable */
 const landingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const dispatch = useDispatch();

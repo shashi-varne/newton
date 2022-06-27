@@ -3,13 +3,11 @@ import Icon from "../../../designSystem/atoms/Icon";
 import Typography from "../../../designSystem/atoms/Typography";
 import WrapperBox from "../../../designSystem/atoms/WrapperBox";
 import ProgressBar from "../../../designSystem/atoms/ProgressBar";
-import SwipeableViews from "react-swipeable-views";
-import { autoPlay } from "react-swipeable-views-utils";
+import CustomSwiper from "../../../designSystem/molecules/CustomSwiper";
 import { Box } from "@mui/material";
+import { SwiperSlide } from "swiper/react";
 
 import "./Landing.scss";
-
-const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 const OnboardingCarousels = ({
   tabValue,
@@ -17,6 +15,9 @@ const OnboardingCarousels = ({
   carousalsData = [],
   handleClose,
   handleNext,
+  longPressEvent,
+  setSwiper,
+  handleSlideChange,
 }) => {
   return (
     <div>
@@ -38,34 +39,54 @@ const OnboardingCarousels = ({
           onClick={handleClose}
         />
       </Box>
-      <AutoPlaySwipeableViews
-        index={tabValue}
-        onChangeIndex={handleNext}
-        interval={2000}
+      <CustomSwiper
+        spaceBetween={0}
+        speed={500}
+        grabCursor={false}
+        hidePagination={true}
+        autoplay={{
+          delay: 3000,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        }}
+        initialSlide={tabValue}
+        onSwiper={setSwiper}
+        onSlideChange={handleSlideChange}
       >
         {carousalsData.map((el, idx) => {
           return (
-            <Carousel
-              key={idx}
-              onNext={handleNext}
-              onBack={handleBack}
-              {...el}
-            />
+            <SwiperSlide key={idx}>
+              <Carousel
+                key={idx}
+                onNext={handleNext}
+                onBack={handleBack}
+                longPressEvent={longPressEvent}
+                {...el}
+              />
+            </SwiperSlide>
           );
         })}
-      </AutoPlaySwipeableViews>
+      </CustomSwiper>
     </div>
   );
 };
 
 export default OnboardingCarousels;
 
-const Carousel = ({ icon, iconDataAid, title, subtitle, onNext, onBack }) => {
+const Carousel = ({
+  icon,
+  iconDataAid,
+  title,
+  subtitle,
+  onNext,
+  onBack,
+  longPressEvent,
+}) => {
   return (
     <div className="oc-container">
-      <div className="flex-between-center oc-overlay">
-        <div onClick={onBack} />
-        <div onClick={onNext} />
+      <div className="flex-between-center oc-overlay" {...longPressEvent}>
+        <div onTouchStart={onBack} />
+        <div onTouchEnd={onNext} />
       </div>
       <Box
         sx={{ backgroundColor: "foundationColors.supporting.grey" }}
