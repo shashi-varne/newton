@@ -41,7 +41,7 @@ import {
   handleStocksAndIpoCards,
   openKyc,
 } from "../../dashboard/Invest/functions";
-import { isEmpty } from "lodash-es";
+import { isEmpty, noop } from "lodash-es";
 import {
   applyReferralCode,
   authVerification,
@@ -50,8 +50,10 @@ import {
 } from "businesslogic/apis/app";
 import ToastMessage from "../../designSystem/atoms/ToastMessage";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
+import useLongPress from "../../common/customHooks/useLongPress";
 
 const screen = "LANDING";
+
 const DEFAULT_BOTTOMSHEETS_DATA = {
   openKycStatusDialog: false,
   openReferral: false,
@@ -88,6 +90,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     referral: referralContent,
   } = useSelector(getAppData);
   const [kycData, setKycData] = useState(getKycData(kyc, user));
+  const [swiper, setSwiper] = useState(null);
   const [campaignData, setCampaignData] = useState({});
   const [referral, setReferral] = useState("");
   const [contactDetails, setContactDetails] = useState({});
@@ -140,7 +143,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       exploreCategoryData,
       isFinity,
       shareReferralData,
-      showSearchIcon
+      showSearchIcon,
     };
   };
 
@@ -159,7 +162,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     showExploreCategories,
     exploreCategoryData,
     shareReferralData,
-    showSearchIcon
+    showSearchIcon,
   } = useMemo(initializeData, [
     partner,
     subscriptionStatus,
@@ -214,6 +217,14 @@ const landingContainer = (WrappedComponent) => (props) => {
   useEffect(() => {
     onLoad();
   }, []);
+
+  const handleSlideChange = (swiper) => {
+    const value = swiper?.activeIndex;
+    if (value !== tabValue) {
+      const userAction = value === tabValue - 1 ? "back" : "next";
+      handleTabChange(value, userAction, false, true);
+    }
+  };
 
   const onLoad = () => {
     if (code === "moneycontrol") {
@@ -383,16 +394,38 @@ const landingContainer = (WrappedComponent) => (props) => {
     }
   }, [isFetchFailed]);
 
-  const handleCarousels = (isClose, isBack) => () => {
-    const value = isBack ? tabValue - 1 : tabValue + 1;
-    const userAction = isClose ? "close" : isBack ? "back" : "next";
+  const { isLongPressTriggered, ...longPressEvent } = useLongPress(
+    noop,
+    noop,
+    100
+  );
+
+  useEffect(() => {
+    if (swiper) {
+      if (isLongPressTriggered) {
+        swiper?.autoplay?.stop();
+      } else {
+        swiper?.autoplay?.start();
+      }
+    }
+  }, [isLongPressTriggered]);
+
+  const handleTabChange = (
+    value,
+    userAction,
+    isClose,
+    skipSwiperUpdate = false
+  ) => {
     const screenName = onboardingCarousels[tabValue].title || "";
     const data = {
       screenName,
       eventName: "info_carousel",
     };
-
-    if (value >= onboardingCarousels.length || isClose) {
+    const isFinalTab = tabValue === onboardingCarousels.length - 1;
+    const slideLoop = value === 0 && isFinalTab;
+    const slideExceeded = value >= onboardingCarousels.length;
+    const hideCarousels = slideLoop || isClose || slideExceeded;
+    if (hideCarousels) {
       sendEvents(userAction, data);
       dispatch(
         updateAppStorage({
@@ -400,6 +433,7 @@ const landingContainer = (WrappedComponent) => (props) => {
         })
       );
       setShowCarousals(false);
+      setSwiper(null);
       return;
     } else if (value < 0) {
       return;
@@ -407,6 +441,15 @@ const landingContainer = (WrappedComponent) => (props) => {
 
     sendEvents(userAction, data);
     setTabValue(value);
+    if (swiper && !skipSwiperUpdate) {
+      swiper?.slideTo(value);
+    }
+  };
+
+  const handleCarousels = (isClose, isBack) => () => {
+    const value = isBack ? tabValue - 1 : tabValue + 1;
+    const userAction = isClose ? "close" : isBack ? "back" : "next";
+    handleTabChange(value, userAction, isClose);
   };
 
   const handleBottomsheets = (data = {}, bottomsheetData) => {
@@ -723,6 +766,10 @@ const landingContainer = (WrappedComponent) => (props) => {
       errorData={errorData}
       tabValue={tabValue}
       handleCarousels={handleCarousels}
+      handleSlideChange={handleSlideChange}
+      setSwiper={setSwiper}
+      longPressEvent={longPressEvent}
+      isLongPressTriggered={isLongPressTriggered}
       carousalsData={onboardingCarousels}
       showCarousals={showCarousals}
       feature={appStorage.feature}
