@@ -168,14 +168,14 @@ export const INVESTMENT_OPTIONS = {
     id: "savegoal",
     dataAid: "goalFund",
   },
-  instaredeem: {
-    icon: "insta_redeem.svg",
-    title: "Insta redemption funds",
-    subtitle: "24x7 instant withdrawal of funds",
-    eventStatus: "Insta redemption funds",
-    id: "instaredeem",
-    dataAid: "instaRedemptionFund",
-  },
+  // instaredeem: {
+  //   icon: "insta_redeem.svg",
+  //   title: "Insta redemption funds",
+  //   subtitle: "24x7 instant withdrawal of funds",
+  //   eventStatus: "Insta redemption funds",
+  //   id: "instaredeem",
+  //   dataAid: "instaRedemptionFund",
+  // },
   passiveIndexFunds: {
     icon: "high_growth.svg",
     title: "Passive Index funds",
