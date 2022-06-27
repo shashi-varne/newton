@@ -75,8 +75,9 @@ const ReferralsView = ({
           variant="body5"
           color="foundationColors.content.tertiary"
           align="center"
+          dataAid={REFERRAL_LANDING.tnc.dataAid}
         >
-          *View T&Cs
+          {REFERRAL_LANDING.tnc.text}
         </Typography>
       </Stack>
     </Stack>

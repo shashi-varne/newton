@@ -50,6 +50,7 @@ const ClaimCashRewards = ({
       className="claim-cash-rewards"
       dataAid={STRINGS.screenDataAid}
       eventData={sendEvents("just_set_events")}
+      containerSx={{ backgroundColor: "foundationColors.supporting.grey" }}
     >
       <Stack>
         <HeaderTitle

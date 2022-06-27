@@ -8,7 +8,7 @@ import { capitalizeFirstLetter } from "../../../utils/validators";
 
 const STRINGS = TNC;
 
-const TermsAndCondtions = ({ points = [], productName }) => {
+const TermsAndCondtions = ({ points = [], productName, isPageLoading }) => {
   return (
     <Container
       headerProps={{
@@ -16,8 +16,10 @@ const TermsAndCondtions = ({ points = [], productName }) => {
         dataAid: STRINGS.title.dataAid,
       }}
       renderComponentAboveFooter={<FooterComponent productName={productName} />}
+      isPageLoading={isPageLoading}
       className="refer-and-earn-tnc"
       dataAid={STRINGS.screenDataAid}
+      containerSx={{ backgroundColor: "foundationColors.supporting.grey" }}
     >
       <Stack className="tnc-wrapper">
         <Box
