@@ -57,6 +57,7 @@ const CopyCodeComponent = ({
         <Typography
           variant="actionText"
           color="foundationColors.content.secondary"
+          dataAid={STRINGS.referralCodeDataAid}
         >
           {referralCode}
         </Typography>
