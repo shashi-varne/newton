@@ -78,11 +78,18 @@ const landingContainer = (WrappedComponent) => (props) => {
   const { isPageLoading } = useLoadingState(screen);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const { updateKyc } = useUserKycHook();
-  const { kyc, user, appStorage, partner, subscriptionStatus, bankList } =
-    useSelector(getAppData);
+  const {
+    kyc,
+    user,
+    appStorage,
+    partner,
+    subscriptionStatus,
+    bankList,
+    referral,
+  } = useSelector(getAppData);
   const [kycData, setKycData] = useState(getKycData(kyc, user));
   const [campaignData, setCampaignData] = useState({});
-  const [referral, setReferral] = useState("");
+  const [referralCode, setReferralCode] = useState("");
   const [contactDetails, setContactDetails] = useState({});
   const [kycBottomsheetData, setKycBottomsheetData] = useState({});
   const [referralData, setReferralData] = useState({});
@@ -164,8 +171,12 @@ const landingContainer = (WrappedComponent) => (props) => {
   const getReferalConfig = () => {
     const showShareReferral =
       kycData.isMfInvested && baseConfig?.referralConfig?.shareRefferal;
+
+    const appliedSubbrokerCode = referral?.subbroker?.data?.subbroker_code;
     const showApplyReferral =
-      !kycData.isMfInvested && baseConfig?.referralConfig?.applyRefferal;
+      !kycData.isMfInvested &&
+      baseConfig?.referralConfig?.applyRefferal &&
+      !appliedSubbrokerCode;
 
     return {
       showApplyReferral,
@@ -640,7 +651,7 @@ const landingContainer = (WrappedComponent) => (props) => {
 
   const handleReferralChange = (e) => {
     const value = e.target.value;
-    setReferral(value);
+    setReferralCode(value);
   };
 
   const applyReferral = async () => {
@@ -720,7 +731,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       bottomsheetStates={bottomsheetStates}
       authData={contactDetails}
       campaignData={campaignData}
-      referral={referral}
+      referral={referralCode}
       handlePremiumOnboarding={handlePremiumOnboarding}
       handleReferralChange={handleReferralChange}
       closeBottomsheet={closeBottomsheet}
