@@ -79,7 +79,7 @@ function MFLanding({}) {
       pie: {
         dataLabels: {
           enabled: true,
-          distance: -50,
+          distance: 25,
           style: {
             fontWeight: "bold",
             color: "white",
