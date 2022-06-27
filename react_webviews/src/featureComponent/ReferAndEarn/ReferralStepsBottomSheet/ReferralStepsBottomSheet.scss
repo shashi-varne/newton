@@ -29,13 +29,12 @@
   .rs-btm-share-wrapper {
     margin-top: 24px;
   }
-  
 }
 
 @media only screen and (min-width: 600px) {
   .ref-steps-bottom-sheet-wrapper {
     margin-top: 16px;
-    .btm-sheet-indicator {
+    .rs-btm-sheet-indicator {
       display: none;
     }
   }

@@ -8,6 +8,7 @@ import {
 import Api from "../../utils/api";
 import { useDispatch, useSelector } from "react-redux";
 import { getConfig } from "../../utils/functions";
+import useLoadingState from "../../common/customHooks/useLoadingState";
 
 const screen = "REFER_AND_EARN_TNC";
 

@@ -32,8 +32,14 @@ const MyReferrals = ({
       className="my-referrals"
       dataAid={STRINGS.screenDataAid}
       eventData={sendEvents("just_set_events")}
+      containerSx={{ backgroundColor: "foundationColors.supporting.grey" }}
+      disableHorizontalPadding={true}
     >
-      <Stack direction={"row"} justifyContent="space-between">
+      <Stack
+        direction={"row"}
+        justifyContent="space-between"
+        className="mr-top-header"
+      >
         <Stack>
           <Typography
             variant="body2"
@@ -67,46 +73,48 @@ const MyReferrals = ({
           </Typography>
         </Stack>
       </Stack>
-      <Typography
-        variant="heading3"
-        color="foundationColors.content.primary"
-        component="div"
-        className="mr-referred-title"
-        dataAid={STRINGS.referredTitle.dataAid}
-      >
-        {STRINGS.referredTitle.text}
-      </Typography>
-      {data.map((item, index) => {
-        const isLastItem = index + 1 === data.length;
-        if (item.isExpandable) {
-          return (
-            <CollapsibleReferalStatus
-              key={index}
-              id={index}
-              label={item.title}
-              showNotification={item.showNotification}
-              onClick={onClickListItem}
-              data={item.events}
-              dataAid={`${index + 1}`}
-              onClickCopy={onClickCopy}
-              showSeparator={!isLastItem}
-              productName={productName}
-            />
-          );
-        } else {
-          return (
-            <ReferralStatusCard
-              key={index}
-              id={index}
-              label={item.title}
-              dataAid={`${index + 1}`}
-              onClickCopy={onClickCopy}
-              showSeparator={!isLastItem}
-              productName={productName}
-            />
-          );
-        }
-      })}
+      <Stack className="mr-referral-list-wrapper">
+        <Typography
+          variant="heading3"
+          color="foundationColors.content.primary"
+          component="div"
+          className="mr-referred-title"
+          dataAid={STRINGS.referredTitle.dataAid}
+        >
+          {STRINGS.referredTitle.text}
+        </Typography>
+        {data.map((item, index) => {
+          const isLastItem = index + 1 === data.length;
+          if (item.isExpandable) {
+            return (
+              <CollapsibleReferalStatus
+                key={index}
+                id={index}
+                label={item.title}
+                showNotification={item.showNotification}
+                onClick={onClickListItem}
+                data={item.events}
+                dataAid={`${index + 1}`}
+                onClickCopy={onClickCopy}
+                showSeparator={!isLastItem}
+                productName={productName}
+              />
+            );
+          } else {
+            return (
+              <ReferralStatusCard
+                key={index}
+                id={index}
+                label={item.title}
+                dataAid={`${index + 1}`}
+                onClickCopy={onClickCopy}
+                showSeparator={!isLastItem}
+                productName={productName}
+              />
+            );
+          }
+        })}
+      </Stack>
     </Container>
   );
 };

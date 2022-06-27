@@ -19,6 +19,7 @@ const TermsAndCondtions = ({ points = [], productName, isPageLoading }) => {
       isPageLoading={isPageLoading}
       className="refer-and-earn-tnc"
       dataAid={STRINGS.screenDataAid}
+      containerSx={{ backgroundColor: "foundationColors.supporting.grey" }}
     >
       <Stack className="tnc-wrapper">
         <Box
