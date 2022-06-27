@@ -1,6 +1,5 @@
 import React from "react";
 import ThemeWrapper from "./theme/ThemeWrapper";
-import ProgressBar from "designSystem/atoms/ProgressBar";
 
 function ComponentTest() {
   return (
