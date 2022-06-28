@@ -23,10 +23,10 @@ import DigilockerCallback from "../kyc/Digilocker/DigilockerCallback";
 import AccountMerge from "./AccountMerge";
 import AccountMergeOtp from "./AccountMerge/Otp";
 import AccountLinked from "./AccountMerge/Linked";
-import SdkLanding from './Invest/components/SdkLanding';
+import SdkLanding from "./Invest/components/SdkLanding";
 import NPS from "./nps";
-import PassiveIndexFunds from "./PassiveIndexFunds"
-import {getConfig} from 'utils/functions';
+import PassiveIndexFunds from "./PassiveIndexFunds";
+import { getConfig } from "utils/functions";
 import BlankMandateUpload from "./MyAccount/BlankMandateUpload";
 import InvestmentProof from "./MyAccount/InvestmentProof";
 import Refer from "./Invest/components/SdkLanding/Refer";
@@ -39,11 +39,11 @@ import EnterNewPin from "./MyAccount/2fa/EnterNewPin";
 import ConfirmNewPin from "./MyAccount/2fa/ConfirmNewPin";
 import VerifyPinOtp from "./MyAccount/2fa/VerifyForgotOtp";
 import Referral from "../login_and_registration/pages/Referral/Referral.js";
-import SecondaryVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryVerification"
-import SecondaryOtpVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryOtpVerification"
+import SecondaryVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryVerification";
+import SecondaryOtpVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryOtpVerification";
 import StatusCallback from "../kyc/Native/StatusCallback";
 import NativeRedirection from "../kyc/Native/NativeRedirection";
-import ProductMarketTypes from './ProductMarketTypes';
+import ProductMarketTypes from "./ProductMarketTypes";
 import PrimaryMarketProducts from "./PrimaryMarketProducts/PrimaryMarketProducts";
 import DIYV2 from "../pages/DIY";
 import StocksAndIpoDirectEntry from "./DirectEntry/StocksAndIpoDirectEntry";
@@ -52,16 +52,29 @@ import ThemeWrapper from "../theme/ThemeWrapper";
 import fundDetailsV2Container from "../containers/fundDetailsV2/fundDetailsV2Container";
 import mfOrderContainer from "../containers/mfOrder/mfOrderContainer";
 import Nominee from "../pages/Nominee";
+import PortfolioRedesign from "../portfolio_redesign";
 
 const Home = (props) => {
-  const config = getConfig(); 
+  const config = getConfig();
   const { url } = props.match;
   return (
     <Fragment>
       <Switch>
-        <Route exact path={`${url}direct/:type`} component={StocksAndIpoDirectEntry} />
-        <Route exact path={`${url}secondary-verification`} component={SecondaryVerification} />
-        <Route exact path={`${url}secondary-otp-verification`} component={SecondaryOtpVerification} />
+        <Route
+          exact
+          path={`${url}direct/:type`}
+          component={StocksAndIpoDirectEntry}
+        />
+        <Route
+          exact
+          path={`${url}secondary-verification`}
+          component={SecondaryVerification}
+        />
+        <Route
+          exact
+          path={`${url}secondary-otp-verification`}
+          component={SecondaryOtpVerification}
+        />
         <Route path={`${url}referral-code`} component={Referral} />
         <Route
           exact
@@ -77,8 +90,14 @@ const Home = (props) => {
         <Route path={`${url}diy`} component={DIY} />
         <Route path={`${url}invest-journey`} component={InvestJourney} />
         <Route path={`${url}nps`} component={NPS} />
-        <Route path={`${url}passive-index-funds`} component={PassiveIndexFunds} />
-        <Route path={`${url}market-products`} component={PrimaryMarketProducts} />
+        <Route
+          path={`${url}passive-index-funds`}
+          component={PassiveIndexFunds}
+        />
+        <Route
+          path={`${url}market-products`}
+          component={PrimaryMarketProducts}
+        />
         <Route path={`${url}product-types`} component={ProductMarketTypes} />
         <Route
           path={`${url}advanced-investing/new-fund-offers/info`}
@@ -93,7 +112,10 @@ const Home = (props) => {
           component={NfoFunds}
         />
         <Route
-          path={[`${url}advanced-investing/new-fund-offers/fund`,'/direct/new-fund-offers/:isin']}
+          path={[
+            `${url}advanced-investing/new-fund-offers/fund`,
+            "/direct/new-fund-offers/:isin",
+          ]}
           component={NfoFundDetail}
         />
         <Route
@@ -129,7 +151,7 @@ const Home = (props) => {
         <Route
           exact
           path={`${url}sdk/page/callback`}
-          render={(props) => <PageCallback {...props} type="sdk" />} 
+          render={(props) => <PageCallback {...props} type="sdk" />}
         />
         <Route
           exact
@@ -172,35 +194,79 @@ const Home = (props) => {
           component={PaymentNativeCallback}
         />
         {/* -----------My Account sub-routes ------------- */}
-        <Route exact path={`${url}account/merge/:pan_number`} component={AccountMerge} />
-        <Route exact path={`${url}account/merge/otp/:pan_number`} component={AccountMergeOtp} />
-        <Route exact path={`${url}account/merge/linked/success`} component={AccountLinked} />
-        <Route exact path={`${url}account/security-settings`} component={SecuritySettings} />
+        <Route
+          exact
+          path={`${url}account/merge/:pan_number`}
+          component={AccountMerge}
+        />
+        <Route
+          exact
+          path={`${url}account/merge/otp/:pan_number`}
+          component={AccountMergeOtp}
+        />
+        <Route
+          exact
+          path={`${url}account/merge/linked/success`}
+          component={AccountLinked}
+        />
+        <Route
+          exact
+          path={`${url}account/security-settings`}
+          component={SecuritySettings}
+        />
         <Route exact path={`${url}account/forgot-pin`} component={ForgotPin} />
-        <Route exact path={`${url}account/reset-pin-verify`} component={VerifyPin} />
+        <Route
+          exact
+          path={`${url}account/reset-pin-verify`}
+          component={VerifyPin}
+        />
         <Route exact path={`${url}account/new-pin`} component={EnterNewPin} />
-        <Route exact path={`${url}account/verify-otp`} component={VerifyPinOtp} />
-        <Route path={`${url}account/set-pin/:coming_from?`} component={SetPin} />
-        <Route path={`${url}account/confirm-pin/:coming_from?`} component={ConfirmNewPin} />
+        <Route
+          exact
+          path={`${url}account/verify-otp`}
+          component={VerifyPinOtp}
+        />
+        <Route
+          path={`${url}account/set-pin/:coming_from?`}
+          component={SetPin}
+        />
+        <Route
+          path={`${url}account/confirm-pin/:coming_from?`}
+          component={ConfirmNewPin}
+        />
         {/* ------------------------------------------- */}
 
-        <Route exact path={`${url}blank-mandate/upload`} component={BlankMandateUpload} />
-        <Route 
+        <Route
           exact
-          path={`${url}investment-proof`} 
-          render={(props) => <InvestmentProof {...props} type="investment-proof" />} 
+          path={`${url}blank-mandate/upload`}
+          component={BlankMandateUpload}
         />
-        <Route 
+        <Route
           exact
-          path={`${url}capital-gain`} 
-          render={(props) => <InvestmentProof {...props} type="capital-gain" />} 
+          path={`${url}investment-proof`}
+          render={(props) => (
+            <InvestmentProof {...props} type="investment-proof" />
+          )}
         />
-        <Route exact path={`${url}page/invest/campaign/callback`} component={CampaignCallback} />
+        <Route
+          exact
+          path={`${url}capital-gain`}
+          render={(props) => <InvestmentProof {...props} type="capital-gain" />}
+        />
+        <Route
+          exact
+          path={`${url}page/invest/campaign/callback`}
+          component={CampaignCallback}
+        />
         <ThemeWrapper>
           <Route path={`${url}diyv2`} component={DIYV2} />
-          <Route path={`${url}fund-details-v2`} component={fundDetailsV2Container} />
+          <Route
+            path={`${url}fund-details-v2`}
+            component={fundDetailsV2Container}
+          />
           <Route path={`${url}mf-orders`} component={mfOrderContainer} />
           <Route path={`${url}nominee`} component={Nominee} />
+          <Route path={`${url}portfolio`} component={PortfolioRedesign} />
         </ThemeWrapper>
         <Route component={NotFound} />
       </Switch>

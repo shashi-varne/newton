@@ -1,7 +1,7 @@
 
 
 export const withdrawOptions = [
-  { title: 'Instant Withdraw', desc: 'Get the amount within 30 mins', redirectUrl: '/withdraw/insta-redeem', openModal: false, type: "instaredeem" },
+  // { title: 'Instant Withdraw', desc: 'Get the amount within 30 mins', redirectUrl: '/withdraw/insta-redeem', openModal: false, type: "instaredeem" },
   {
     title: 'System Selected',
     desc: 'System selected funds optimized for your portfolio.',

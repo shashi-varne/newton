@@ -52,19 +52,7 @@ export const commonCardsConfig = {
     bottomScrollCards: ["parkmoney", "savegoal"],
     bottomCards: ["nfo"],
   },
-  landingMarketingBanners: [
-    {
-      image: "ipo1.svg",
-      type: "ipo",
-      endDate: "05/08/2022",
-      actionUrl: "https://youtu.be/khCf5foDUmQ"
-    },
-    {
-      image: "ipo.svg",
-      type: "ipo",
-      endDate: "05/08/2022",
-    }
-  ],
+  landingMarketingBanners: [],
   nfoBanners: [],
 };
 
@@ -332,6 +320,8 @@ export const partnerConfigs = {
   },
   ktb: {
     code: "ktb",
+    webLogo: "ktb_bank.svg",
+    logoWidth: "200px",
     email: "kbl@fisdom.com",
     mobile: "+91-7829229997",
     styles: {
@@ -366,7 +356,7 @@ export const partnerConfigs = {
     landingMarketingBanners: [
       ...commonCardsConfig.landingMarketingBanners,
       ...commonCardsConfig.nfoBanners,
-      { image: "fpg_mb_insta.svg", type: "instaredeem" },
+      // { image: "fpg_mb_insta.svg", type: "instaredeem" },
       { image: "fpg_mb_100.svg", type: "buildwealth" },
     ],
     investSections: [
@@ -476,6 +466,8 @@ export const partnerConfigs = {
   },
   indb: {
     code: "indb",
+    webLogo: "indb_bank.svg",
+    logoWidth: "200px",
     mobile: "+80-48-093070",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
@@ -595,10 +587,16 @@ export const partnerConfigs = {
       applyRefferal: true,
       shareRefferal: true,
     },
+    landingMarketingBanners: [
+      ...commonCardsConfig.landingMarketingBanners,
+      { image: "tax_filing_banner.svg", type: "taxFiling" },
+    ],
   },
   bom: {
     code: "bom",
     logo: "bom.png",
+    webLogo: "bom_bank.svg",
+    logoWidth: "200px",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
       ourRecommendations: ["instaredeem", "buildwealth", "savetax"],

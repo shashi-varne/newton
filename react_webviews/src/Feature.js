@@ -138,9 +138,9 @@ const Feature = () => {
             <ProtectedRoute path="/statements" component={AccountStatements} />
             <ProtectedRoute path="/withdraw" component={Withdraw} />
             <ProtectedRoute path="/reports" component={Report} />
-            <Route path="/component-test" component={ComponentTest} />
             <ProtectedRoute path="/kyc" component={Kyc} />
             <ProtectedRoute path="/freedom-plan" component={FreedomPlan} />
+            <ProtectedRoute path="/component-test" component={ComponentTest} />
             <ProtectedRoute path="/" component={Landing} />
             <Route component={NotFound} />
           </Switch>

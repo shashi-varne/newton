@@ -170,7 +170,6 @@ const App = () => {
                       component={PartnerAuthentication}
                     />
                     <Route path="/logout" component={Logout} />
-
                     <Route path="/prepare" component={Prepare} />
                     {isWithoutDesktopLayout ? (
                       <Route component={Feature} />
@@ -179,7 +178,6 @@ const App = () => {
                         <Feature />
                       </DesktopLayout>
                     )}
-                    {/* <Route path="/component-test" component={ComponentTest} /> */}
                     <Route component={NotFound} />
                   </Switch>
                 </Suspense>
