@@ -30,7 +30,7 @@ const RewardsView = ({
   productName = "fisdom",
   onClickInfoCard,
   noRewardsView,
-  balance,
+  balance = 0,
 }) => {
   return (
     <>
@@ -49,7 +49,7 @@ const RewardsView = ({
               data-aid="iv_top"
               style={{ width: "140px", height: "120px" }}
             />
-            {!isEmpty(balance) && (
+            {(balance || balance === 0) && (
               <LandingHeaderTitle>
                 {formatAmountInr(balance)}
               </LandingHeaderTitle>
