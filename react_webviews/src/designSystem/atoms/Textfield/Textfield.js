@@ -41,7 +41,7 @@ const HelperText = ({ helperText, error, wordLimit, value }) => {
   const color = error ? 'foundationColors.secondary.lossRed.400' : 'foundationColors.content.secondary';
   return (
     <div className='custom-helper-text-wrapper'>
-      <Typography align='left' variant='body5' color={color}>
+      <Typography align='left' data-aid="tv_helperText" variant='body5' color={color}>
         {helperText}
       </Typography>
       {wordLimit && (

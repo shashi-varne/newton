@@ -14,10 +14,12 @@ import WVInPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
 import GoBackToLoginBtn from "../common/GoBackToLoginBtn";
 import { navigate as navigateFunc } from "../../utils/functions";
 import { Imgc } from "../../common/ui/Imgc";
+import isEmpty from "lodash/isEmpty";
 
 const LoginContainer = (props) => {
   const config = getConfig();
-  const { productName } = config;
+  const { productName, logo, webLogo } = config;
+  const navLogo = !isEmpty(webLogo) ? webLogo : logo;
   const { match: { url }, location } = props;
   const pathName = url.split('/')[1];
   const navigate = navigateFunc.bind(props);
@@ -26,7 +28,7 @@ const LoginContainer = (props) => {
     <div className="login" data-aid='login'>
       <div className="header">
         <img
-          src={require(`assets/${config.logo}`)}
+          src={require(`assets/${navLogo}`)}
           alt={productName}
           style={{ cursor: 'pointer' }}
           onClick={() => navigate('/login')}
