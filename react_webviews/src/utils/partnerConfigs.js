@@ -217,6 +217,7 @@ export const partnerConfigs = {
     investSubSectionMap: {
       stocksAndIpo: ["stocks", "ipo"],
       ourRecommendations: [
+        // "wealthdesk",
         "instaredeem",
         "buildwealth",
         "insurance",

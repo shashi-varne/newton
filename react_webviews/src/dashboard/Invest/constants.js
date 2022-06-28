@@ -52,6 +52,12 @@ export const investCardsBase = {
     },
   },
   ourRecommendations: {
+    wealthdesk: {
+      title: "WealthDesk",
+      subtitle: "The Investment Revolution Is Here",
+      button_text: "INVEST",
+      icon: "ic_stocks.svg"
+    },
     buildwealth: {
       title: "High growth funds (Build Wealth)",
       subtitle: "Start SIP or One-time investment",
