@@ -65,7 +65,8 @@ const landing = ({
       className="refer-and-earn-landing"
       dataAid={REFERRAL_LANDING.screenDataAid}
       eventData={sendEvents("just_set_events")}
-      containerSx={{backgroundColor: "foundationColors.supporting.grey"}}
+      containerSx={{ backgroundColor: "foundationColors.supporting.grey" }}
+      disableHorizontalPadding={true}
     >
       <CustomSwiper
         slidesPerView={1}

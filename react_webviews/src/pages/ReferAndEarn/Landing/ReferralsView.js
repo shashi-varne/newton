@@ -39,7 +39,7 @@ const ReferralsView = ({
             <WrapperBox
               key={index}
               elevation={1}
-              sx={{ height: "100%", marginBottom: "16px" }}
+              className="rae-card-wrapper"
               onClick={() => {
                 setActiveSheetIndex(index);
               }}
