@@ -69,13 +69,14 @@ const ReferralsView = ({
           );
         })}
       </Stack>
-      <Stack sx={{ width: "100%", marginTop: "40px" }}>
+      <Stack sx={{ width: "100%" }}>
         <Typography
           onClick={onClickTnc}
           variant="body5"
           color="foundationColors.content.tertiary"
           align="center"
           dataAid={REFERRAL_LANDING.tnc.dataAid}
+          className="rae-bottom-tnc"
         >
           {REFERRAL_LANDING.tnc.text}
         </Typography>
