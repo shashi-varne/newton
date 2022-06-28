@@ -60,7 +60,7 @@ const ORElem = (
   <div className="kyc-fno-OR">OR</div>
 );
 
-const hideSkipOptionPaths = [...landingEntryPoints, "/my-account", "/kyc/web"]
+const hideSkipOptionPaths = [...landingEntryPoints, "/my-account", "/kyc/web", "/direct/equity", "/direct/odin"]
 
 const FnOIncomeProof = (props) => {
   const [selectedFile, setSelectedFile] = useState();
@@ -78,7 +78,7 @@ const FnOIncomeProof = (props) => {
   const fromNativeLandingOrMyAccounts = storageService().get("native") && goBackPath === "exit";
   const isFromKycJourney = !((!Web && !isSdk) ? fromNativeLandingOrMyAccounts : hideSkipOptionPaths.includes(fromState));
   const isMyAccountFlow = fromState === "/my-account";
-  const fromWebModuleEntry = fromState === "/kyc/web";
+  const isWebDirectEntry = ["/kyc/web", "/direct/equity", "/direct/odin"].includes(fromState);
 
   useEffect(() => {
     setFilePassword('');
@@ -137,7 +137,7 @@ const FnOIncomeProof = (props) => {
     } else {
       if (isMyAccountFlow) {
         navigate("/my-account");
-      } else if (landingEntryPoints.includes(fromState) || fromWebModuleEntry) {
+      } else if (landingEntryPoints.includes(fromState) || isWebDirectEntry) {
         navigate("/");
       } else {
         commonRedirection();
@@ -181,7 +181,7 @@ const FnOIncomeProof = (props) => {
 
     if(goBackPath && goBackPath !== "exit") {
       navigate(goBackPath)
-    } else if (landingEntryPoints.includes(fromState) || fromWebModuleEntry) {
+    } else if (landingEntryPoints.includes(fromState) || isWebDirectEntry) {
       navigate("/");
     } else {
       navigate(PATHNAME_MAPPER.journey);
