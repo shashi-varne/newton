@@ -9,7 +9,7 @@ import {
   contactVerification,
   getKycData,
   handleKycStatus,
-  // handleStocksAndIpoCards,
+  handleStocksAndIpoCards,
   handleKycStatusRedirection,
 } from "../Invest/functions";
 import { useDispatch } from "react-redux";
@@ -68,6 +68,22 @@ const DirectEntry = (props) => {
   };
 
   const onLoad = () => {
+    if (type === "odin") {
+      const data = {
+        ...kycData,
+        key: "stocks",
+        isDirectEntry: true,
+        kyc,
+        user,
+        navigate,
+        handleLoader: noop,
+        handleDialogStates,
+        handleSummaryData,
+        closeKycStatusDialog,
+      };
+      handleStocksAndIpoCards(data, props);
+      return;
+    }
     const feature = FEATURE_NAME_MAPPER[type] || type;
     dispatch(
       updateAppStorage({

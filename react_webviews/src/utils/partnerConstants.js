@@ -99,15 +99,15 @@ export const PRODUCT_MARKETING_BANNERS = [
     id: "taxFiling",
   },
   {
-    image: "freedomplan.svg",
+    image: "freedomplan_1.svg",
     id: "freedomplan",
   },
   {
-    image: "kyc.svg",
+    image: "kyc_banner.svg",
     id: "equityKyc",
   },
   {
-    image: "buildwealth.svg",
+    image: "buildwealth_2.svg",
     id: "buildwealth",
   },
 ];
@@ -122,7 +122,7 @@ export const EQUITY_MARKETING_BANNERS = [
     id: "buildwealth",
   },
   {
-    image: "kyc.svg",
+    image: "kyc_banner.svg",
     id: "equityKyc",
   },
   {
@@ -133,17 +133,17 @@ export const EQUITY_MARKETING_BANNERS = [
 
 export const UCOMB_MARKETING_BANNERS = [
   {
-    image: "taxfiling_1.svg",
+    image: "taxfiling_banner.svg",
     id: "taxFiling",
     endDate: "06/31/2022",
   },
   {
-    image: "freedomplan.svg",
+    image: "freedomplan_1.svg",
     id: "freedomplan",
     endDate: "06/31/2022",
   },
   {
-    image: "buildwealth_1.svg",
+    image: "buildwealth_3.svg",
     id: "buildwealth",
     endDate: "06/31/2022",
   },

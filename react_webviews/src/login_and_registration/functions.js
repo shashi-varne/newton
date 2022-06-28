@@ -5,7 +5,7 @@ import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { isEmpty } from "../utils/validators";
 import { nativeCallback } from "../utils/native_callback";
 import Toast from "../common/ui/Toast";
-import { getBasePath } from "../utils/functions";
+import { getBasePath, isTradingEnabled } from "../utils/functions";
 import { setSummaryData } from "../business/appLanding/functions";
 import store from "../dataLayer/store";
 import { updateAppStorage } from "businesslogic/dataStore/reducers/app";
@@ -304,7 +304,7 @@ export const redirectToLaunchDiet = async () => {
     console.log(error);
     toast(errorMessage);
   }
-} 
+}
 
 export async function otpLoginVerification(verify_url, body) {
   let formData = new FormData();
@@ -517,7 +517,11 @@ export function redirectAfterLogin(data, user, navigateFunc) {
   const sdkStocksRedirection = storageService().getBoolean("sdkStocksRedirection");
   user = user || storageService().getObject("user");
   const navigate = navigateFunc || this.navigate;
-  if (data.firstLogin) {
+  const appConfig = getConfig();
+  const TRADING_ENABLED = isTradingEnabled(kyc);
+  if (appConfig.odin && TRADING_ENABLED) {
+    navigate("/direct/odin");
+  } else if (data.firstLogin) {
     storageService().set("firstlogin", true);
     navigate("/referral-code", { state: { goBack: "/", communicationType: data?.contacts?.auth_type } });
   } else if (sdkStocksRedirection) {
