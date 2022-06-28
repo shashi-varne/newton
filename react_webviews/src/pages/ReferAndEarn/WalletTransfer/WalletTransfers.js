@@ -88,6 +88,7 @@ const FooterComponent = ({ onClick }) => {
           component="span"
           onClick={onClick}
           color={"foundationColors.action.brand"}
+          style={{ cursor: "pointer" }}
         >
           {STRINGS.footer.secondaryText}
         </Typography>
