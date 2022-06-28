@@ -81,11 +81,13 @@ const PlanReview = (props) => {
       } else if (kycInProgressStatus.includes(kycStatus)) {
         kycStatus = "in_progress";
       }
+      const initiateFreedomPlanPayment = kyc.equity_primary_bank.bank_status === "verified";
       return {
         kycStatusData: KYC_STATUS_MAPPER[kycStatus] || {},
         isEquityReady: isEquityCompleted(),
         isEquityEnabled: equityEnabled,
         kycStatus,
+        initiateFreedomPlanPayment
       };
     }
     return {};
@@ -96,6 +98,7 @@ const PlanReview = (props) => {
     isEquityReady,
     kycStatus,
     isEquityEnabled,
+    initiateFreedomPlanPayment,
   } = useMemo(initializeKycData, [kyc]);
 
   const sendEvents = (userAction, isSelectPlan, changePlan = "no", duration) => {
@@ -124,12 +127,8 @@ const PlanReview = (props) => {
 
   const handleClick = () => {
     sendEvents("next");
-    if (isEquityReady) {
+    if (initiateFreedomPlanPayment) {
       initiatePayment({
-        ucc: kyc.ucc,
-        amount: freedomPlanData.amount,
-        gst: freedomPlanData.gst,
-        total_amount: freedomPlanData.total_amount,
         plan_id: freedomPlanData.id,
       });
       return;

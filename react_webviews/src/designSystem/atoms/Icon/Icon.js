@@ -18,14 +18,17 @@ import isFunction from 'lodash/isFunction';
 import './Icon.scss';
 
 const Image = (props) => {
-  const { height, width, fallBackImageSrc, size, className, style, src, alt, onClick, dataAid } =
+  const { height, width, fallBackImageSrc, size, className, style, src, alt, onClick, dataAid, onLoad } =
     props;
   const imgWidth = width || size;
   const imgHeight = height || size;
   const [currentSrc, updateSrc] = useState(src);
   const [loaded, setLoaded] = useState(false);
-  const onLoadImage = () => {
+  const onLoadImage = (event) => {
     setLoaded(true);
+    if (isFunction(onLoad)) {
+      onLoad(event);
+    }
   };
   useEffect(() => {
     updateSrc(src);

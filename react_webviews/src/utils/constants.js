@@ -211,3 +211,5 @@ export const EVENT_MANAGER_CONSTANTS = {
     updateAppTheme: "updateAppTheme",
     storePartnerCode: "storePartnerCode",
 }
+
+export const SUPPORTED_IMAGE_TYPES = ['jpeg', 'jpg', 'png', 'bmp'];
