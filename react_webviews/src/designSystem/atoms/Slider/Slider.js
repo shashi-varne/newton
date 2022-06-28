@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import Slider, { SliderThumb } from "@mui/material/Slider";
 import "./Slider.scss";
 import PropTypes from "prop-types";
+import { noop } from "lodash-es";
 
 const CustomThumb = (props) => {
   const { children, ...other } = props;
@@ -60,6 +61,8 @@ CustomizedSlider.defaultProps = {
   max: 100,
   step: 1,
   disabled: false,
+  value: 0,
+  getSliderValue: noop,
 };
 
 CustomizedSlider.propTypes = {
@@ -67,4 +70,6 @@ CustomizedSlider.propTypes = {
   max: PropTypes.number,
   step: PropTypes.number,
   disabled: PropTypes.bool,
+  value: PropTypes.number.required,
+  getSliderValue: PropTypes.func,
 };
