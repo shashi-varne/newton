@@ -19,7 +19,6 @@ import {
 import Api from "../../utils/api";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import { camelCase, get, isEmpty } from "lodash-es";
-import ToastMessage from "../../designSystem/atoms/ToastMessage";
 import {
   getFnsFormattedDate,
   getDiffInHours,
@@ -34,6 +33,7 @@ const landingContainer = (WrappedComponent) => (props) => {
   const { Web: isWeb, productName, appLink } = useMemo(getConfig, []);
   const { isPageLoading } = useLoadingState(screen);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
+  const [errorData, setErrorData] = useState({});
   const { user, kyc, isLoading } = useUserKycHook();
   const referralCode = get(user, "referral_code", "");
 
@@ -111,8 +111,11 @@ const landingContainer = (WrappedComponent) => (props) => {
   }, [showTransferNotAllowed]);
 
   useEffect(() => {
-    if (isFetchFailed && !isEmpty(errorMessage)) {
-      ToastMessage(errorMessage);
+    if (isFetchFailed) {
+      setErrorData({
+        handleClick: initialize,
+        subtitle: errorMessage,
+      });
     }
   }, [isFetchFailed]);
 
@@ -253,6 +256,8 @@ const landingContainer = (WrappedComponent) => (props) => {
       setShowTransferNotAllowed={setShowTransferNotAllowed}
       productName={productName}
       minWithrawAmount={minWithrawAmount}
+      isFetchFailed={isFetchFailed}
+      errorData={errorData}
     />
   );
 };

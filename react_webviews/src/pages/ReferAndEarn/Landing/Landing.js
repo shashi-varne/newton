@@ -32,6 +32,8 @@ const landing = ({
   showTransferNotAllowed,
   setShowTransferNotAllowed,
   productName,
+  isFetchFailed,
+  errorData,
 }) => {
   const [swiper, setSwiper] = useState(null);
 
@@ -67,6 +69,8 @@ const landing = ({
       eventData={sendEvents("just_set_events")}
       containerSx={{ backgroundColor: "foundationColors.supporting.grey" }}
       disableHorizontalPadding={true}
+      isFetchFailed={isFetchFailed}
+      errorData={errorData}
     >
       <CustomSwiper
         slidesPerView={1}

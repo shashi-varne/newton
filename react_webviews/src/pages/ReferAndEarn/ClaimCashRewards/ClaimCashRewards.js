@@ -30,6 +30,8 @@ const ClaimCashRewards = ({
   sendEvents,
   showErrorBottomSheet,
   setShowErrorBottonSheet,
+  isFetchFailed,
+  errorData,
 }) => {
   return (
     <Container
@@ -52,6 +54,8 @@ const ClaimCashRewards = ({
       eventData={sendEvents("just_set_events")}
       containerSx={{ backgroundColor: "foundationColors.supporting.grey" }}
       disableHorizontalPadding={true}
+      isFetchFailed={isFetchFailed}
+      errorData={errorData}
     >
       <Stack>
         <HeaderTitle

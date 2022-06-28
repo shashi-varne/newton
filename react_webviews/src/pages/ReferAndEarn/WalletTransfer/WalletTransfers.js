@@ -16,6 +16,8 @@ const WalletTransfers = ({
   filterApplied,
   handleWalletFilter,
   onClickContact,
+  isFetchFailed,
+  errorData,
 }) => {
   return (
     <Container
@@ -29,6 +31,8 @@ const WalletTransfers = ({
       dataAid={STRINGS.screenDataAid}
       fixedFooter={true}
       renderComponentAboveFooter={<FooterComponent onClick={onClickContact} />}
+      isFetchFailed={isFetchFailed}
+      errorData={errorData}
     >
       <Stack>
         <Box className="wt-pill-filter-wrapper">

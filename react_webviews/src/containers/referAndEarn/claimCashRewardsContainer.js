@@ -15,11 +15,15 @@ import Api from "../../utils/api";
 import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../constants/referAndEarn";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import { isReadyToInvest } from "../../kyc/services";
+import useErrorState from "../../common/customHooks/useErrorState";
 const screen = "CLAIM_CASH_REWARDS";
 
 const claimCashRewardsContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const { isPageLoading } = useLoadingState(screen);
+
+  const { isFetchFailed, errorMessage } = useErrorState(screen);
+  const [errorData, setErrorData] = useState({});
 
   const walletBalance = useSelector(getWalletBalanceData);
   const totalBalance = walletBalance.total_amount;
@@ -42,14 +46,12 @@ const claimCashRewardsContainer = (WrappedComponent) => (props) => {
   const dispatch = useDispatch();
 
   const initialize = () => {
-    if (isEmpty(walletBalance)) {
-      dispatch(
-        getWalletBalance({
-          Api: Api,
-          screen: screen,
-        })
-      );
-    }
+    dispatch(
+      getWalletBalance({
+        Api: Api,
+        screen: screen,
+      })
+    );
   };
 
   useEffect(() => {
@@ -61,6 +63,15 @@ const claimCashRewardsContainer = (WrappedComponent) => (props) => {
       setAmount(totalBalance);
     }
   }, [transferFullFlag]);
+
+  useEffect(() => {
+    if (isFetchFailed) {
+      setErrorData({
+        handleClick: initialize,
+        subtitle: errorMessage,
+      });
+    }
+  }, [isFetchFailed]);
 
   const onChangeAmount = (event) => {
     const val = event.target.value;
@@ -144,6 +155,8 @@ const claimCashRewardsContainer = (WrappedComponent) => (props) => {
       onClickTransfer={onClickTransfer}
       showErrorBottomSheet={showErrorBottomSheet}
       setShowErrorBottonSheet={setShowErrorBottonSheet}
+      isFetchFailed={isFetchFailed}
+      errorData={errorData}
     />
   );
 };

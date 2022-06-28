@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import MyReferrals from "../../pages/ReferAndEarn/MyReferrals";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
@@ -28,6 +28,7 @@ const myReferralsContainer = (WrappedComponent) => (props) => {
   const { Web: isWeb, productName, appLink } = useMemo(getConfig, []);
   const { isPageLoading } = useLoadingState(screen);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
+  const [errorData, setErrorData] = useState({});
   const refereeListData = useSelector(getRefereeListData);
 
   const { kyc, user, isLoading } = useUserKycHook();
@@ -60,8 +61,11 @@ const myReferralsContainer = (WrappedComponent) => (props) => {
   }, []);
 
   useEffect(() => {
-    if (isFetchFailed && !isEmpty(errorMessage)) {
-      ToastMessage(errorMessage);
+    if (isFetchFailed) {
+      setErrorData({
+        handleClick: initialize,
+        subtitle: errorMessage,
+      });
     }
   }, [isFetchFailed]);
 
@@ -136,6 +140,8 @@ const myReferralsContainer = (WrappedComponent) => (props) => {
       onClickListItem={onClickListItem}
       navigate={navigate}
       productName={productName}
+      isFetchFailed={isFetchFailed}
+      errorData={errorData}
     />
   );
 };

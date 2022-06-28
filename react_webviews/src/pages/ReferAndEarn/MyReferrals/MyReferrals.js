@@ -21,6 +21,8 @@ const MyReferrals = ({
   onClickListItem,
   onClickCopy,
   productName,
+  isFetchFailed,
+  errorData,
 }) => {
   return (
     <Container
@@ -35,6 +37,8 @@ const MyReferrals = ({
       eventData={sendEvents("just_set_events")}
       containerSx={{ backgroundColor: "foundationColors.supporting.grey" }}
       disableHorizontalPadding={true}
+      isFetchFailed={isFetchFailed}
+      errorData={errorData}
     >
       <Stack
         direction={"row"}

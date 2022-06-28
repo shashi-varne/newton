@@ -23,6 +23,8 @@ const walletTransfersContainer = (WrappedComponent) => (props) => {
   const { Web: isWeb, mobile } = useMemo(getConfig, []);
   const { isPageLoading } = useLoadingState(screen);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
+  const [errorData, setErrorData] = useState({});
+
   const [filterApplied, setFilterApplied] = useState(
     WALLET_TRANSFERS_FILTER_DATA[0].value
   );
@@ -54,8 +56,11 @@ const walletTransfersContainer = (WrappedComponent) => (props) => {
   }, []);
 
   useEffect(() => {
-    if (isFetchFailed && !isEmpty(errorMessage)) {
-      ToastMessage(errorMessage);
+    if (isFetchFailed) {
+      setErrorData({
+        handleClick: initialize,
+        subtitle: errorMessage,
+      });
     }
   }, [isFetchFailed]);
 
@@ -85,6 +90,8 @@ const walletTransfersContainer = (WrappedComponent) => (props) => {
       onClickContact={onClickContact}
       isPageLoading={isPageLoading}
       navigate={navigate}
+      isFetchFailed={isFetchFailed}
+      errorData={errorData}
     />
   );
 };
