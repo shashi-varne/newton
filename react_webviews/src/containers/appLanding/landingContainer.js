@@ -592,6 +592,10 @@ const landingContainer = (WrappedComponent) => (props) => {
     });
 
     if (showApplyReferral) {
+      if (!referral) {
+        ToastMessage("Please enter referral code");
+        return;
+      }
       applyReferral();
     } else {
       navigate(WEBAPP_LANDING_PATHNAME_MAPPER.refer);
