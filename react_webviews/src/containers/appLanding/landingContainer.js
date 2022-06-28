@@ -78,15 +78,8 @@ const landingContainer = (WrappedComponent) => (props) => {
   const { isPageLoading } = useLoadingState(screen);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const { updateKyc } = useUserKycHook();
-  const {
-    kyc,
-    user,
-    appStorage,
-    partner,
-    subscriptionStatus,
-    bankList,
-    referral,
-  } = useSelector(getAppData);
+  const { kyc, user, appStorage, partner, subscriptionStatus, bankList } =
+    useSelector(getAppData);
   const [kycData, setKycData] = useState(getKycData(kyc, user));
   const [campaignData, setCampaignData] = useState({});
   const [referralCode, setReferralCode] = useState("");
@@ -172,11 +165,8 @@ const landingContainer = (WrappedComponent) => (props) => {
     const showShareReferral =
       kycData.isMfInvested && baseConfig?.referralConfig?.shareRefferal;
 
-    const appliedSubbrokerCode = referral?.subbroker?.data?.subbroker_code;
     const showApplyReferral =
-      !kycData.isMfInvested &&
-      baseConfig?.referralConfig?.applyRefferal &&
-      !appliedSubbrokerCode;
+      !kycData.isMfInvested && baseConfig?.referralConfig?.applyRefferal;
 
     return {
       showApplyReferral,
@@ -657,7 +647,7 @@ const landingContainer = (WrappedComponent) => (props) => {
   const applyReferral = async () => {
     try {
       handleLoader({ dotLoader: true });
-      await applyReferralCode(Api, referral);
+      await applyReferralCode(Api, referralCode);
       setReferralData(REFERRAL_DATA.success);
       fetchSummaryData();
       handleBottomsheets({ [BOTTOMSHEET_KEYS.openReferral]: true });
