@@ -140,7 +140,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       exploreCategoryData,
       isFinity,
       shareReferralData,
-      showSearchIcon
+      showSearchIcon,
     };
   };
 
@@ -159,7 +159,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     showExploreCategories,
     exploreCategoryData,
     shareReferralData,
-    showSearchIcon
+    showSearchIcon,
   } = useMemo(initializeData, [
     partner,
     subscriptionStatus,
@@ -548,6 +548,10 @@ const landingContainer = (WrappedComponent) => (props) => {
     });
 
     if (showApplyReferral) {
+      if (!referral) {
+        ToastMessage("Please enter referral code");
+        return;
+      }
       applyReferral();
     } else {
       navigate(WEBAPP_LANDING_PATHNAME_MAPPER.refer);
