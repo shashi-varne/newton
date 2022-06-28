@@ -27,6 +27,7 @@ const MyReferrals = ({
       headerProps={{
         dataAid: STRINGS.title.dataAid,
         headerTitle: STRINGS.title.text,
+        hideInPageTitle: true,
       }}
       isPageLoading={isPageLoading}
       className="my-referrals"

@@ -16,6 +16,7 @@ import Api from "../../utils/api";
 import { update_notification } from "businesslogic/apis/referAndEarn";
 import ToastMessage from "../../designSystem/atoms/ToastMessage";
 import { SHARE_COMPONENT } from "businesslogic/strings/referAndEarn";
+import { capitalizeName } from "businesslogic/utils/common/functions";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import { get, isEmpty } from "lodash-es";
 import { isReadyToInvest } from "../../kyc/services";
@@ -145,9 +146,12 @@ const getRefereeListViewData = (refereeListData) => {
     if (item.pending) {
       pendingReferralsCount += 1;
     }
+
+    const name = capitalizeName(item.name);
+
     return {
       dataAid: index,
-      title: item.name,
+      title: name,
       isExpandable: !item.pending,
       showNotification: item.new_notification,
       message: item.remind_message,
