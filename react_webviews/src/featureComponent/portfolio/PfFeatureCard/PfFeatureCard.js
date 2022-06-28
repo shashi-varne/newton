@@ -19,6 +19,7 @@ function PfFeatureCard({
   textColors,
   dataAid,
   toolTipProps,
+  className,
 }) {
   const {
     title,
@@ -34,7 +35,7 @@ function PfFeatureCard({
       sx={{
         backgroundColor: "foundationColors.supporting.white",
       }}
-      className="pf-feature-card-container"
+      className={`pf-feature-card-container  ${className}`}
       data-aid={`pfFeatureCardSmall_${dataAid}`}
     >
       <Stack
@@ -162,6 +163,7 @@ PfFeatureCard.defaultProps = {
   textColors: {},
   onClick: noop,
   dataAid: "",
+  className: "",
 };
 
 PfFeatureCard.propTypes = {
@@ -190,6 +192,7 @@ PfFeatureCard.propTypes = {
   }),
   onClick: PropTypes.func,
   dataAid: PropTypes.string.isRequired,
+  className: PropTypes.string,
 };
 
 export default PfFeatureCard;
