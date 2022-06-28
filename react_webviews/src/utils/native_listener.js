@@ -417,7 +417,7 @@ import { setBankList, setKyc, setPartner, setUser, updateAppStorage } from 'busi
       set_session_storage("kyc", kyc);
       set_session_storage("banklist", bankList);
       set_session_storage("firstlogin", firstLogin);
-      store.dispatch(updateAppStorage({ firstLogin }))
+      store.dispatch(updateAppStorage({ firstLogin: firstLogin }))
       if (json_data.user_data.partner.partner_code) {
         const partner = getPartnerName(json_data.user_data.partner?.partner_code?.toLowerCase());
         set_session_storage("partner", partner);
