@@ -13,6 +13,7 @@ import { REWARDS_SCREEN_INFO_CARD_DATA } from "businesslogic/constants/referAndE
 import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../../constants/referAndEarn";
 import "./Landing.scss";
 import { formatAmountInr } from "businesslogic/utils/common/functions";
+import { isEmpty } from "lodash-es";
 
 const STRINGS = REFERRAL_LANDING;
 const DATA = REWARDS_SCREEN_INFO_CARD_DATA;
@@ -48,7 +49,7 @@ const RewardsView = ({
               data-aid="iv_top"
               style={{ width: "140px", height: "120px" }}
             />
-            {balance && (
+            {!isEmpty(balance) && (
               <LandingHeaderTitle>
                 {formatAmountInr(balance)}
               </LandingHeaderTitle>
@@ -106,8 +107,7 @@ const NoRewardsView = ({ productName }) => {
           style={{ width: "140px", height: "120px" }}
         />
         <LandingHeaderTitle>
-          {" "}
-          {STRINGS.noRewardsLandingHeader.title}{" "}
+          {STRINGS.noRewardsLandingHeader.title}
         </LandingHeaderTitle>
         <LandingHeaderSubtitle align="center">
           {STRINGS.noRewardsLandingHeader.subtitle}
