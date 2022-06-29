@@ -87,6 +87,11 @@ const Landing = (props) => {
     onLoad();
   }, []);
 
+  useEffect(() => {
+    const data = getKycData(kyc, user);
+    setKycData(data);
+  }, [kyc, user]);
+
   const handleDialogStates = (dialogStatus, dialogData) => {
     setDialogStates({ ...dialogStates, ...dialogStatus });
     if (!isEmpty(dialogData)) {
