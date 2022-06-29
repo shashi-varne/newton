@@ -10,6 +10,7 @@ import "./SipPaymentCallback.scss";
 import { isNewIframeDesktopLayout } from "../../../../utils/functions";
 import useUserKycHook from "../../../../kyc/common/hooks/userKycHook";
 import { getAccountSummary } from "businesslogic/apis/common";
+import Api from "../../../../utils/api";
 
 const SipPaymentCallback = (props) => {
   const hideImage = isNewIframeDesktopLayout();
@@ -72,7 +73,7 @@ const SipPaymentCallback = (props) => {
           user: ['user'],
         }
       }
-      const result = await getAccountSummary(params);
+      const result = await getAccountSummary(Api, params);
       if (isKycIncomplete) {
         const user = result?.data?.user?.user?.data;
         const userKyc = result?.data?.kyc?.kyc?.data;

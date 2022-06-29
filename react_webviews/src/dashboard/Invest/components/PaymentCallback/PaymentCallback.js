@@ -8,6 +8,7 @@ import useUserKycHook from "../../../../kyc/common/hooks/userKycHook";
 import { storageService } from "../../../../utils/validators";
 import { isNewIframeDesktopLayout } from "../../../../utils/functions";
 import { getAccountSummary } from "businesslogic/apis/common";
+import Api from "../../../../utils/api";
 
 const PaymentCallback = (props) => {
   const config = getConfig();
@@ -98,7 +99,7 @@ const PaymentCallback = (props) => {
           kyc: ["kyc"],
           user: ["user"],
         };
-        const result = await getAccountSummary(params);
+        const result = await getAccountSummary(Api, params);
         const userData = result?.data?.user?.user?.data;
         const userKyc = result?.data?.kyc?.kyc?.data;
         updateUser(userData);
