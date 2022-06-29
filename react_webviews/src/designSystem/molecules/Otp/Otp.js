@@ -72,10 +72,7 @@ const Otp = ({
     if (otpStatus !== OTP_STATUS.DEFAULT) {
       setOtpStatus(OTP_STATUS.DEFAULT);
     }
-    if (isNaN(value)) {
-      console.log(value, typeof value);
-      return;
-    }
+    if (isNaN(value)) return;
     if (value.length > 1) return;
     const otpValuesCopy = [...otpValues];
     otpValuesCopy[index] = value;
