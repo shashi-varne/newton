@@ -31,6 +31,7 @@ import useResetTakeControl from '../hooks/useResetTakeControl'
 import useBackButtonTracker from '../hooks/useBackButtonTracker'
 
 import './Landing.scss'
+import { landingEntryPoints } from '../../utils/constants'
 
 function Landing(props) {
   const stateParams = props.location.state || {}
@@ -87,6 +88,9 @@ function Landing(props) {
     clearITRSessionStorage()
     if(stateParams.fromState === "/reports") {
       navigate("/reports");
+      return;
+    } else if (landingEntryPoints.includes(stateParams.fromState)) {
+      props.history.goBack();
       return;
     }
     nativeCallback({ action: 'exit', events: sendEvents('back') })

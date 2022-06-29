@@ -1,0 +1,17 @@
+.page-not-found {
+  height: 70vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0px 40px;
+
+  .pnf-icon {
+    margin-top: 30px;
+  }
+
+  .pnf-home {
+    margin-top: 20px;
+  }
+}

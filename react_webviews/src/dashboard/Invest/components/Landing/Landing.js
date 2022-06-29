@@ -31,6 +31,7 @@ import {
   openBfdlBanner,
   getKycData,
   handleKycAndCampaign,
+  handleWealthdeskRedirection,
 } from "../../functions";
 import { generateOtp } from "../../../../login_and_registration/functions";
 import toast from "../../../../common/ui/Toast";
@@ -320,6 +321,9 @@ const Landing = (props) => {
         navigate("/risk/result-new", {
           state: { fromExternalSrc: true },
         });
+        break;
+      case "wealthdesk":
+        handleWealthdeskRedirection(handleLoader);
         break;
       default:
         navigate(keyPathMapper[state] || state);

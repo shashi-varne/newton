@@ -3,6 +3,7 @@ import React, { useMemo } from 'react';
 import { getConfig } from 'utils/functions';
 import UiSkelton from '../../../common/ui/Skelton';
 import IframeContainer from '../IframeContainer/IframeContainer';
+import PageError from '../PageError';
 
 
 // have a iframeProps for Iframe container.
@@ -19,6 +20,8 @@ const ContainerMain = (props) => {
     disableHorizontalPadding,
     disableVerticalPadding,
     sx,
+    isFetchFailed,
+    errorData={}
   } = props;
 
   if (isIframe) {
@@ -39,7 +42,13 @@ const ContainerMain = (props) => {
         sx={{ ...containersx(noPadding, disableHorizontalPadding, disableVerticalPadding), ...sx }}
         className={`container-content-wrapper`}
       >
-        {isPageLoading ? <UiSkelton type={skeltonType} /> : children}
+        {isFetchFailed ? (
+          <PageError {...errorData} noPadding={!(noPadding || disableHorizontalPadding)} />
+        ) : isPageLoading ? (
+          <UiSkelton type={skeltonType} />
+        ) : (
+          children
+        )}
       </Box>
     );
   }
