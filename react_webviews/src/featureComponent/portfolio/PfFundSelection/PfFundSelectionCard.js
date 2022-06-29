@@ -1,13 +1,14 @@
-import { Box, Stack } from "@mui/material";
+import { Box } from "@mui/material";
 import Checkbox from "designSystem/atoms/Checkbox";
 import Separator from "designSystem/atoms/Separator";
 import React from "react";
-import Icon from "designSystem/atoms/Icon";
 import Typography from "designSystem/atoms/Typography";
 import Tag from "designSystem/molecules/Tag/Tag";
 import "./PfFundSelectionCard.scss";
 import PropTypes from "prop-types";
 import { noop } from "lodash-es";
+import CardItem from "./subComponents/CardItem";
+import RowContainer from "./subComponents/RowContainer";
 
 function PfFundSelectionCard({
   checked,
@@ -44,7 +45,7 @@ function PfFundSelectionCard({
     >
       <RowContainer className="top-row" alignItems="flex-start">
         <RowContainer justifyContent="flex-start">
-          <Checkbox checked={checked} className="checkbox" />
+          <Checkbox checked={checked} dataAid="1" className="checkbox" />
           <Typography
             variant="body1"
             color={textColors?.topTitle || "foundationColors.content.primary"}
@@ -119,74 +120,14 @@ function PfFundSelectionCard({
   );
 }
 
-const RowContainer = ({ children, ...props }) => {
-  return (
-    <Stack
-      flexDirection="row"
-      alignItems="center"
-      justifyContent="space-between"
-      {...props}
-    >
-      {children}
-    </Stack>
-  );
-};
-
-const CardItem = ({
-  img,
-  title,
-  subtitle,
-  align,
-  hideTitle,
-  id,
-  titleColor,
-  subtitleColor,
-}) => {
-  return (
-    <Box sx={{ textAlign: align }}>
-      {!hideTitle && (
-        <Typography
-          variant="body5"
-          color={titleColor || "foundationColors.content.secondary"}
-          dataAid={`key${id}`}
-        >
-          {title}
-        </Typography>
-      )}
-
-      <RowContainer>
-        <Icon
-          src={img}
-          width="16px"
-          height="16px"
-          style={{ marginRight: 4 }}
-          dataAid={`left${id}`}
-        />
-        <Typography
-          variant={hideTitle ? "body5" : "body2"}
-          dataAid={hideTitle ? "subtitle" : `value${id}`}
-          color={
-            subtitleColor ||
-            (hideTitle
-              ? "foundationColors.content.secondary"
-              : "foundationColors.content.primary")
-          }
-        >
-          {subtitle}
-        </Typography>
-      </RowContainer>
-    </Box>
-  );
-};
-
 PfFundSelectionCard.defaultProps = {
   checked: false,
   textProps: PropTypes.object,
   textColors: PropTypes.object,
-  leftImgSrc: "",
-  rightImgSrc: "",
-  middleImgSrc: "",
-  bottomImgSrc: "",
+  leftImgSrc: PropTypes.node,
+  rightImgSrc: PropTypes.node,
+  middleImgSrc: PropTypes.node,
+  bottomImgSrc: PropTypes.node,
   onClick: noop,
   dataAidSuffix: "",
 };
