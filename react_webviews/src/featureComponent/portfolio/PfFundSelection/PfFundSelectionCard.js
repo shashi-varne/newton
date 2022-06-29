@@ -122,12 +122,8 @@ function PfFundSelectionCard({
 
 PfFundSelectionCard.defaultProps = {
   checked: false,
-  textProps: PropTypes.object,
-  textColors: PropTypes.object,
-  leftImgSrc: PropTypes.node,
-  rightImgSrc: PropTypes.node,
-  middleImgSrc: PropTypes.node,
-  bottomImgSrc: PropTypes.node,
+  textProps: {},
+  textColors: {},
   onClick: noop,
   dataAidSuffix: "",
 };
@@ -136,10 +132,10 @@ PfFundSelectionCard.propTypes = {
   checked: PropTypes.bool,
   textProps: PropTypes.object,
   textColors: PropTypes.object,
-  leftImgSrc: PropTypes.string,
-  rightImgSrc: PropTypes.string,
-  middleImgSrc: PropTypes.string,
-  bottomImgSrc: PropTypes.string,
+  leftImgSrc: PropTypes.node,
+  rightImgSrc: PropTypes.node,
+  middleImgSrc: PropTypes.node,
+  bottomImgSrc: PropTypes.node,
   onClick: PropTypes.func,
   dataAidSuffix: PropTypes.string.isRequired,
 };
