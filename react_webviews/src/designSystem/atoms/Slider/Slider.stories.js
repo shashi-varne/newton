@@ -22,6 +22,6 @@ SliderDisabled.args = {
   min: 0,
   max: 100,
   step: 1,
-  disabled: true,
-  getSliderValue: () => {},
+  sliderValue: true,
+  onChange: () => {},
 };

@@ -1,26 +1,24 @@
-import React, { useState } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 import Slider, { SliderThumb } from "@mui/material/Slider";
 import "./Slider.scss";
 import PropTypes from "prop-types";
-import { noop } from "lodash-es";
+
+const disabledImg = require("assets/disabled_slider_base.svg");
+const activeImg = require("assets/slider_base.svg");
+const sliderArrow = require("assets/slider_arrow.svg");
 
 const CustomThumb = (props) => {
   const { children, ...other } = props;
   const disabled = props?.children?.props?.disabled;
-  const sliderBaseUrl = disabled
-    ? require("assets/disabled_slider_base.svg")
-    : require("assets/slider_base.svg");
+  const sliderBaseUrl = disabled ? disabledImg : activeImg;
 
   return (
     <SliderThumb {...other}>
       {children}
       <div className="slider-base">
         <img src={sliderBaseUrl} style={{ width: 42, height: 42 }} />
-        <img
-          src={require("assets/slider_arrow.svg")}
-          className="slider-arrow"
-        />
+        <img src={sliderArrow} className="slider-arrow" />
       </div>
     </SliderThumb>
   );
@@ -30,24 +28,17 @@ export default function CustomizedSlider({
   min,
   max,
   step,
-  getSliderValue,
+  onChange,
   disabled,
-  value,
+  sliderValue,
 }) {
-  const [sliderValue, setSliderValue] = useState(() => {
-    return value || min;
-  });
-  const handleChange = (e, value) => {
-    setSliderValue(value);
-    getSliderValue(value);
-  };
   return (
     <Box className="customized-slider">
       <Slider
         components={{ Thumb: CustomThumb }}
         min={min}
         max={max}
-        onChange={handleChange}
+        onChange={(e, val) => onChange(e, val)}
         step={step}
         value={sliderValue}
         disabled={disabled}
@@ -61,8 +52,7 @@ CustomizedSlider.defaultProps = {
   max: 100,
   step: 1,
   disabled: false,
-  value: 0,
-  getSliderValue: noop,
+  sliderValue: 0,
 };
 
 CustomizedSlider.propTypes = {
@@ -70,6 +60,5 @@ CustomizedSlider.propTypes = {
   max: PropTypes.number,
   step: PropTypes.number,
   disabled: PropTypes.bool,
-  value: PropTypes.number.required,
-  getSliderValue: PropTypes.func,
+  sliderValue: PropTypes.number.required,
 };
