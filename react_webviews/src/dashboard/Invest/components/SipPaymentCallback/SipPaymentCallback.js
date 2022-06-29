@@ -4,11 +4,12 @@ import Container from "../../../common/Container";
 import { Imgc } from "common/ui/Imgc";
 import { resetRiskProfileJourney } from "../../functions";
 import { isEmpty, storageService } from "utils/validators";
-import { getAccountSummary, getCampaignBySection } from "../../../../kyc/services";
+import { getCampaignBySection } from "../../../../kyc/services";
 import { getBasePath } from "utils/functions";
 import "./SipPaymentCallback.scss";
 import { isNewIframeDesktopLayout } from "../../../../utils/functions";
 import useUserKycHook from "../../../../kyc/common/hooks/userKycHook";
+import { getAccountSummary } from "businesslogic/apis/common";
 
 const SipPaymentCallback = (props) => {
   const hideImage = isNewIframeDesktopLayout();

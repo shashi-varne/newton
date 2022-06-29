@@ -7,7 +7,7 @@ import "./PaymentCallback.scss";
 import useUserKycHook from "../../../../kyc/common/hooks/userKycHook";
 import { storageService } from "../../../../utils/validators";
 import { isNewIframeDesktopLayout } from "../../../../utils/functions";
-import { getAccountSummary } from "../../../../kyc/services";
+import { getAccountSummary } from "businesslogic/apis/common";
 
 const PaymentCallback = (props) => {
   const config = getConfig();
