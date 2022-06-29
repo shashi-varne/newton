@@ -22,6 +22,8 @@ const Otp = ({
   onClickButton,
   onChange,
   otpTimerInSeconds = 30,
+  helperTextColor,
+  infoTextColor,
 }) => {
   const box1 = useRef(null);
   const box2 = useRef(null);
@@ -70,7 +72,10 @@ const Otp = ({
     if (otpStatus !== OTP_STATUS.DEFAULT) {
       setOtpStatus(OTP_STATUS.DEFAULT);
     }
-    if (isNaN(parseInt(value))) return;
+    if (isNaN(value)) {
+      console.log(value, typeof value);
+      return;
+    }
     if (value.length > 1) return;
     const otpValuesCopy = [...otpValues];
     otpValuesCopy[index] = value;
@@ -100,7 +105,7 @@ const Otp = ({
       boxList[index - 1].current.focus();
       otpValuesCopy[index - 1] = "";
     }
-    let isAllValuesEmpty = otpValuesCopy.every((val) => val === "");
+    const isAllValuesEmpty = otpValuesCopy.every((val) => val === "");
     if (isAllValuesEmpty) {
       setOtpStatus(OTP_STATUS.DEFAULT);
     }
@@ -144,7 +149,7 @@ const Otp = ({
               color={
                 !!errorMessage
                   ? "foundationColors.secondary.lossRed.400"
-                  : "foundationColors.content.tertiary"
+                  : helperTextColor || "foundationColors.content.tertiary"
               }
               className={!!errorMessage ? "error" : "helper-text"}
               dataAid={!!errorMessage ? "error" : "helperText"}
@@ -164,7 +169,7 @@ const Otp = ({
           ) : (
             <Typography
               variant="body2"
-              color={"foundationColors.content.secondary"}
+              color={infoTextColor || "foundationColors.content.secondary"}
               dataAid="otpTime"
               className="otp-info-text"
             >
