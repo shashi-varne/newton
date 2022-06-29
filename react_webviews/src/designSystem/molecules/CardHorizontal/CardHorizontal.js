@@ -11,16 +11,16 @@
   variat: you can seleect either two of them => 'product' or 'herocard'
 */
 
-import { Box, Stack } from '@mui/material';
+import { Box, Skeleton, Stack } from '@mui/material';
 import React from 'react';
 import Typography from '../../atoms/Typography';
 import Button from '../../atoms/Button';
 import Status from '../../atoms/Status';
 import isFunction from 'lodash/isFunction';
 import PropTypes from 'prop-types';
+import Icon from '../../atoms/Icon';
 
 import './CardHorizontal.scss';
-import Icon from '../../atoms/Icon';
 
 const CardHorizontal = ({
   leftImgSrc,
@@ -42,9 +42,11 @@ const CardHorizontal = ({
   footerText,
   footerTextColor,
   footerBackground,
-  className,
+  className = "",
   sx,
   variant = 'product',
+  buttonProps = {},
+  showLoader
 }) => {
   const isHeroCardVariant = variant === 'heroCard';
   const variantStyle = getVariantStyle(isHeroCardVariant, footerText);
@@ -59,11 +61,37 @@ const CardHorizontal = ({
       onButtonClick(e);
     }
   };
+
+  if (showLoader) {
+    return (
+      <Stack
+        sx={{ p: 2 }}
+        justifyContent="space-between"
+        alignItems="center"
+        direction="row"
+        className={`card-horizontal-skelton-wrapper ${className}`}
+      >
+        <Stack direction="column" spacing={1}>
+          <Typography variant="heading3">
+            <Skeleton width="140px" />
+          </Typography>
+          <Typography variant="body1">
+            <Skeleton width="180px" />
+          </Typography>
+          <Typography variant="body1">
+            <Skeleton width="180px" height="52px" className="ch-sw-button" />
+          </Typography>
+        </Stack>
+        <Icon size="110px" {...rightImgProps} />
+      </Stack>
+    );
+  }
+
   return (
     <Stack
       direction='column'
       className={`${wrapperClassNames} ${className}`}
-      sx={{ sx }}
+      sx={sx}
       onClick={onClick}
       data-aid={`cardHorizontal_${dataAid}`}
     >
@@ -100,7 +128,7 @@ const CardHorizontal = ({
           {description && (
             <Typography
               className='mt-4'
-              variant='body2'
+              variant='body5'
               color={descriptionColor}
               dataAid='description'
             >
@@ -116,6 +144,7 @@ const CardHorizontal = ({
               size='small'
               onClick={onActionClick}
               dataAid={variantStyle?.btnDataAid}
+              {...buttonProps}
             />
           )}
         </Stack>

@@ -25,6 +25,10 @@ const InfoCard = ({
   subtitleColor,
   onClick,
   dataAid,
+  label,
+  labelColor,
+  rightImgSrc,
+  rightImgProps,
 }) => {
   return (
     <Box
@@ -34,19 +38,47 @@ const InfoCard = ({
       data-aid={`infoCard_${dataAid}`}
     >
       {imgSrc && <Icon size='32px' src={imgSrc} className='info-card-left-img' dataAid='left' {...imgProps} />}
-      <div className='ic-text-wrapper'>
-        <Typography variant='heading4' color={titleColor} component='div' dataAid='title'>
-          {title}
-        </Typography>
-        <Typography
-          className='ic-subtitle-text'
-          variant='body2'
-          color={subtitleColor}
-          component='div'
-          dataAid='subtitle'
-        >
-          {subtitle}
-        </Typography>
+      <div className="ic-content">
+        <div className="ic-text-wrapper">
+          <Typography
+            variant="heading4"
+            color={titleColor}
+            component="div"
+            dataAid="title"
+          >
+            {title}
+          </Typography>
+          <Typography
+            className="ic-subtitle-text"
+            variant="body2"
+            color={subtitleColor}
+            component="div"
+            dataAid="subtitle"
+          >
+            {subtitle}
+          </Typography>
+        </div>
+        <div className="ic-label-wrapper">
+          {label && (
+            <Typography
+              variant="body2"
+              component="div"
+              color={labelColor}
+              dataAid="label"
+            >
+              {label}
+            </Typography>
+          )}
+          {rightImgSrc && (
+            <Icon
+              size="24px"
+              src={rightImgSrc}
+              className="ic-right-img"
+              dataAid="right"
+              {...rightImgProps}
+            />
+          )}
+        </div>
       </div>
     </Box>
   );
@@ -60,6 +92,7 @@ const infoCardWrapperSxStyle = {
 
 InfoCard.defaultProps = {
   subtitleColor: 'foundationColors.content.secondary',
+  labelColor: "foundationColors.content.secondary"
 };
 
 InfoCard.propTypes = {

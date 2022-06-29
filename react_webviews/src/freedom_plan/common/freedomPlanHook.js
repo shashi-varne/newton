@@ -5,7 +5,10 @@ import isEmpty from "lodash/isEmpty";
 import { getBasePath, getConfig } from "../../utils/functions";
 import { FREEDOM_PLAN_STORAGE_CONSTANTS, PATHNAME_MAPPER } from "./constants";
 import { getActivePlans, getDefaultPlan, isNative } from "./functions";
-import { getAccountSummary } from "../../kyc/services";
+import { getAccountSummary } from "businesslogic/apis/common";
+import store from "../../dataLayer/store";
+import { setSubscriptionStatus as setSubscriptionData } from "businesslogic/dataStore/reducers/app";
+import Api from "../../utils/api";
 
 const DEFAULT_ERROR_DATA = {
   showError: false,
@@ -71,12 +74,12 @@ function useFreedomDataHook(initializeData) {
     try {
       resetErrorData();
       setShowLoader(true);
-      const result = await getAccountSummary({
+      const result = await getAccountSummary(Api, {
         equity: ["subscription_status"],
       });
       const subscriptionStatus = result?.data?.equity?.subscription_status?.data || {};
       if(!isEmpty(subscriptionStatus)) {
-        setSubscriptionStatus(subscriptionStatus);
+        updateSubscriptionStatus(subscriptionStatus);
       }
     } catch (err) {
       setErrorData({
@@ -149,6 +152,7 @@ function useFreedomDataHook(initializeData) {
   const updateSubscriptionStatus = (data) => {
     storageService().setObject(FREEDOM_PLAN_STORAGE_CONSTANTS.subscriptionStatus, data);
     setSubscriptionStatus(data);
+    store.dispatch(setSubscriptionData(subscriptionStatus));
   };
 
   const resetFreedomPlan = () => {

@@ -6,8 +6,9 @@ import IconButton from 'material-ui/IconButton';
 import Close from '@material-ui/icons/Close';
 import SVG from 'react-inlinesvg';
 import { getConfig } from 'utils/functions';
-import back_arrow from 'assets/back_arrow.svg';
-import close_icn from 'assets/close_icn.svg';
+
+import back_arrow from 'assets/nav_back.svg';
+import close_icn from 'assets/nav_close.svg';
 import search from 'assets/icon_search.svg';
 import notificationLogo from 'assets/ic_notification.svg';
 import notificationBadgeLogo from 'assets/ic_notification_badge.svg';
@@ -43,7 +44,7 @@ const Header = ({
     const isWeb = config.Web;
     const partnerLogo = isWeb && !isEmpty(config.webLogo) ? config.webLogo : config.logo;
     const backgroundColor = !isWeb ? config.uiElements?.header?.backgroundColor : '';
-    const backButtonColor = (!isWeb || config.isIframe) ? config.styles?.backButtonColor : '';
+    // const backButtonColor = (!isWeb || config.isIframe) ? config.styles?.backButtonColor : '';
     const notificationsColor = !isWeb || config.isSdk ? config?.styles.notificationsColor : '';
     const moneycontrolHeader = isMobileDevice && config.code === 'moneycontrol';
     const equityPayment = window.location.pathname.includes('pg/eq');
@@ -72,7 +73,7 @@ const Header = ({
             >
               {!disableBack && !headerData.hide_icon &&
               <SVG
-                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (customTopIconColor ? customTopIconColor : backButtonColor ?  backButtonColor : !headerData.partnerLogo ? getConfig().styles.primaryColor : 'white'))}
+                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (customTopIconColor ? customTopIconColor : !headerData.partnerLogo ? undefined : 'white'))}
                 src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
               />
               }

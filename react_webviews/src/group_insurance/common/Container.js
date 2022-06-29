@@ -7,6 +7,7 @@ import '../../utils/native_listener';
 import { back_button_mapper } from '../constants';
 import { storageService, checkStringInString } from '../../utils/validators';
 import {didMount ,commonRender} from '../../common/components/container_functions';
+import { landingEntryPoints } from '../../utils/constants';
 
 class Container extends Component {
 
@@ -343,15 +344,13 @@ class Container extends Component {
 
     switch (pathname) {
       case "/group-insurance":
-        nativeCallback({ events: this.getEvents('back') });
-        handleNativeExit(this.props, {action: "exit"});
+        this.redirectToLanding();
         break;
       case "/group-insurance/common/report":
         if(!getConfig().from_notification){
           openModule('app/portfolio', this.props)
         }else{
-          nativeCallback({ events: this.getEvents('back') });
-          handleNativeExit(this.props, {action: "exit"});
+          this.redirectToLanding();
         }
         break;
       case "/group-insurance/term/resume":
@@ -378,7 +377,15 @@ class Container extends Component {
     }
   }
 
-
+  redirectToLanding = () => {
+    nativeCallback({ events: this.getEvents('back') });
+    const fromState = this.props.location?.state?.fromState || {};
+    if (landingEntryPoints.includes(fromState)) {
+      this.props.history.goBack();
+    } else {
+      handleNativeExit(this.props, { action: "exit" });
+    }
+  }
 
   handlePopup = () => {
     this.setState({

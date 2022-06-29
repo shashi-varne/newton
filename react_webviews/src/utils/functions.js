@@ -257,7 +257,7 @@ export const getConfig = () => {
 
     // change server url here for local and staging url builds (Not commit id one's)
     if (isStaging || isLocal) {
-      base_url_default = "https://eqnom-dot-plutus-staging.appspot.com";
+      base_url_default = "https://sdk-test-dot-plutus-staging.appspot.com";
     }
 
     if (isSDKStaging) {
@@ -857,21 +857,9 @@ export const isNewIframeDesktopLayout = () => {
   return config.code === "moneycontrol" && !config.isMobileDevice && config.isIframe
 }
 
-export const getInvestCards = (keysToCheck=[]) => {
+export const getInvestCards = () => {
   const config = getConfig();
-  const investSections = config.investSections || [];
-  const investSubSectionMap = config.investSubSectionMap;
-  const cardsToShow = {};
-  investSections.forEach(section => {
-    if(!isEmpty(investSubSectionMap[section])) {
-      investSubSectionMap[section].forEach(subSections => {
-        if (keysToCheck.includes(subSections)) {
-          cardsToShow[subSections] = true;
-        }
-      })
-    }
-  })
-  return cardsToShow;
+  return config.features;
 }
 
 export function stringToHexa(str) {
@@ -1021,4 +1009,15 @@ export const initializeClevertapProfile = (user) => {
   } catch (e) {
     console.log(e);
   }
+}
+
+export const getPartnerName = (partner) => {
+  if (partner === "bfdl") {
+    partner = "bfdlmobile";
+  } else if (partner === "obcweb") {
+    partner = "obc";
+  } else if (partner === "moneycontrolweb") {
+    partner = "moneycontrol";
+  }
+  return partner;
 }

@@ -15,6 +15,7 @@ import Dialog, {
   DialogContent,
   DialogContentText,
 } from "material-ui/Dialog";
+import { handleNativeExit } from "../../utils/native_callback";
 
 
 class CategoryList extends Component {
@@ -277,7 +278,7 @@ class CategoryList extends Component {
   };
 
   onBackPress = () => {
-    nativeCallback({ action: "exit" });
+    handleNativeExit(this.props, {action: "exit"});
   }
 
   render() {

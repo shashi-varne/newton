@@ -12,19 +12,35 @@ import {
   handleStocksAndIpoCards,
   handleKycStatusRedirection,
 } from "../Invest/functions";
+import { useDispatch } from "react-redux";
+import { updateAppStorage } from "businesslogic/dataStore/reducers/app";
 
-const StocksAndIpoDirectEntry = (props) => {
+const FEATURE_NAME_MAPPER = {
+  tpp: "ipo",
+  equity: "stocks",
+  taxfiling: "taxFiling",
+};
+
+const DirectEntry = (props) => {
+  const dispatch = useDispatch();
   const { kyc, user, updateKyc, updateUser } = useUserKycHook();
-  const [baseConfig, setBaseConfig] = useState(getConfig());
   const type = useMemo(() => props.match?.params?.type, [props.match?.params]);
   const navigate = navigateFunc.bind(props);
   const [dialogStates, setDialogStates] = useState({
     openKycStatusDialog: false,
   });
-
   const [modalData, setModalData] = useState({});
-  const [contactDetails, setContactDetails] = useState({});
-  const [kycData, setKycData] = useState(getKycData(kyc, user));
+
+  const { baseConfig, kycData, contactDetails } = useMemo(() => {
+    const kycData = getKycData(kyc, user);
+    const contactDetails = contactVerification(kyc);
+    const baseConfig = getConfig();
+    return {
+      baseConfig,
+      kycData,
+      contactDetails,
+    };
+  }, [kyc, user]);
 
   const handleDialogStates = (dialogStatus, dialogData) => {
     setDialogStates({ ...dialogStates, ...dialogStatus });
@@ -43,7 +59,7 @@ const StocksAndIpoDirectEntry = (props) => {
       openKycStatusDialog: false,
     });
     if (!skipNavigation) {
-      navigate("/invest");
+      navigate("/");
     }
   };
 
@@ -52,36 +68,29 @@ const StocksAndIpoDirectEntry = (props) => {
   };
 
   const onLoad = () => {
-    switch (type) {
-      case "tpp":
-        navigate("/product-types");
-        break;
-      case "equity":
-      case "odin":
-        const kycDetails = getKycData(kyc, user);
-        const contactData = contactVerification(kyc);
-        const config = getConfig();
-        setBaseConfig(config);
-        setKycData(kycDetails);
-        setContactDetails(contactData);
-        const data = {
-          ...kycDetails,
-          key: "stocks",
-          isDirectEntry: true,
-          kyc,
-          user,
-          navigate,
-          handleLoader: noop,
-          handleDialogStates,
-          handleSummaryData,
-          closeKycStatusDialog,
-        };
-        handleStocksAndIpoCards(data, props);
-        break;
-      default:
-        navigate("/invest");
-        break;
+    if (type === "odin") {
+      const data = {
+        ...kycData,
+        key: "stocks",
+        isDirectEntry: true,
+        kyc,
+        user,
+        navigate,
+        handleLoader: noop,
+        handleDialogStates,
+        handleSummaryData,
+        closeKycStatusDialog,
+      };
+      handleStocksAndIpoCards(data, props);
+      return;
     }
+    const feature = FEATURE_NAME_MAPPER[type] || type;
+    dispatch(
+      updateAppStorage({
+        feature,
+      })
+    );
+    navigate("/");
   };
 
   useEffect(() => {
@@ -130,4 +139,4 @@ const StocksAndIpoDirectEntry = (props) => {
   );
 };
 
-export default StocksAndIpoDirectEntry;
+export default DirectEntry;

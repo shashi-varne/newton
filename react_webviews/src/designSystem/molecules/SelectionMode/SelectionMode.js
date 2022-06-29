@@ -30,11 +30,12 @@ import PropTypes from 'prop-types';
 import './SelectionMode.scss';
 import RadioButton from '../../atoms/RadioButton';
 import Icon from '../../atoms/Icon';
+import { FONT_WEIGHT } from '../../../theme/typography';
 
-const SelectionMode = ({ variant, dataAid, ...props }) => {
+const SelectionMode = ({ variant, dataAid, className, ...props }) => {
   return (
-    <div className='selection-mode-wrapper' data-aid={`selectionMode_${dataAid}`}>
-      {variant === 'radio' && <RadioSelectionMode {...props} />}
+    <div className={`selection-mode-wrapper ${className}`}  data-aid={`selectionMode_${dataAid}`}>
+      {variant === 'radio' && <RadioSelectionMode dataAid={dataAid} {...props} />}
       {variant === 'default' && <DefaultSelectionMode {...props} />}
     </div>
   );
@@ -50,6 +51,7 @@ const DefaultSelectionMode = ({
   leftImgSrc,
   rightImgSrc,
   rightImgProps,
+  isSelected
 }) => {
   return (
     <Box className={`selection-mode-wrapper ${className}`} sx={sx}>
@@ -65,8 +67,16 @@ const DefaultSelectionMode = ({
       <div className='sm-right-wrapper'>
         <div className='sm-text-wrapper'>
           {title && (
-            <Typography variant={titleVariant} color={titleColor} component='div' dataAid='title'>
-              {title}
+            <Typography
+            variant={titleVariant}
+            color={titleColor}
+            component="div"
+            dataAid="title"
+            sx={{
+              fontWeight: isSelected ? FONT_WEIGHT.Medium : FONT_WEIGHT.Regular,
+            }}
+           >
+            {title}
             </Typography>
           )}
         </div>
@@ -84,7 +94,7 @@ const DefaultSelectionMode = ({
   );
 };
 
-const RadioSelectionMode = ({ options, selectedValue, handleChange }) => {
+const RadioSelectionMode = ({ options, selectedValue, handleChange, dataAid }) => {
   return (
     <FormControl component='fieldset' className='selection-mode-form-wrapper'>
       <RadioGroup
@@ -95,14 +105,16 @@ const RadioSelectionMode = ({ options, selectedValue, handleChange }) => {
       >
         {options?.map((el, idx) => {
           delete el?.rightImgSrc;
+          const isSelected = el.value === selectedValue;
           return (
             <FormControlLabel
               key={idx}
               value={el?.value}
               disabled={el?.disabled}
               labelPlacement='start'
-              control={<RadioButton isChecked={el?.value === selectedValue} />}
-              label={<DefaultSelectionMode {...el} />}
+              control={<RadioButton isChecked={isSelected} />}
+              label={<DefaultSelectionMode isSelected={isSelected} {...el} />}
+              data-aid={`selectionMode_${dataAid}${idx+1}`}
             />
           );
         })}
