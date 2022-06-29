@@ -24,11 +24,11 @@ function PfSwitchCard({
   labelOne,
   topTitle,
   topImgSrc,
-  topDesc,
+  topDescription,
   labelTwo,
   bottomTitle,
   bottomImgSrc,
-  bottomDesc,
+  bottomDescription,
   switchImgSrc,
   textColors,
   ...props
@@ -57,8 +57,8 @@ function PfSwitchCard({
             />
             <Typography
               allCaps
-              color="foundationColors.content.secondary"
-              dataAid={textColors?.status || "status"}
+              color={textColors?.status || "foundationColors.content.secondary"}
+              dataAid={"status"}
               className="status"
             >
               {status}
@@ -86,7 +86,7 @@ function PfSwitchCard({
             label={labelOne}
             title={topTitle}
             imgSrc={topImgSrc}
-            desc={topDesc}
+            description={topDescription}
             id={1}
             textColors={textColors}
           />
@@ -104,7 +104,7 @@ function PfSwitchCard({
             label={labelTwo}
             title={bottomTitle}
             imgSrc={bottomImgSrc}
-            desc={bottomDesc}
+            description={bottomDescription}
             id={2}
           />
         </>
@@ -113,12 +113,19 @@ function PfSwitchCard({
   );
 }
 
-const ProgressItem = ({ label, imgSrc, title, desc, id }) => {
+const ProgressItem = ({
+  label,
+  imgSrc,
+  title,
+  description,
+  id,
+  textColors,
+}) => {
   return (
     <Box className={`progress-item ${id === 1 && "progress-item-one"} `}>
       <Typography
         variant="body5"
-        color="foundationColors.content.secondary"
+        color={textColors?.labelColor || "foundationColors.content.secondary"}
         dataAid={`label${id}`}
         className="progress-label"
       >
@@ -139,7 +146,7 @@ const ProgressItem = ({ label, imgSrc, title, desc, id }) => {
           />
           <Typography
             variant="body2"
-            color="foundationColors.content.primary"
+            color={textColors?.titleColor || "foundationColors.content.primary"}
             dataAid={`title${id}`}
             style={{ marginRight: 5 }}
             className="title"
@@ -149,10 +156,12 @@ const ProgressItem = ({ label, imgSrc, title, desc, id }) => {
         </RowContainer>
         <Typography
           variant="body1"
-          color="foundationColors.content.primary"
+          color={
+            textColors?.descriptionColor || "foundationColors.content.primary"
+          }
           dataAid={`value${id}`}
         >
-          {desc}
+          {description}
         </Typography>
       </RowContainer>
     </Box>
@@ -179,27 +188,27 @@ PfSwitchCard.defaultProps = {
   label: "",
   labelOne: "",
   topTitle: "",
-  topDesc: "",
+  topDescription: "",
   labelTwo: "",
   bottomTitle: "",
-  bottomDesc: "",
+  bottomDescription: "",
 };
 
 PfSwitchCard.PropTypes = {
-  infoText: PropTypes.string,
+  infoText: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   topLeftImgSrc: PropTypes.node,
   status: PropTypes.string,
   variant: PropTypes.string,
   onClick: PropTypes.func,
-  label: PropTypes.string,
-  labelOne: PropTypes.labelOne,
-  topTitle: PropTypes.string,
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  labelOne: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  topTitle: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   topImgSrc: PropTypes.node,
-  topDesc: PropTypes.topDesc,
-  labelTwo: PropTypes.string,
-  bottomTitle: PropTypes.string,
+  topDescription: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  labelTwo: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  bottomTitle: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   bottomImgSrc: PropTypes.node,
-  bottomDesc: PropTypes.string,
+  bottomDescription: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   switchImgSrc: PropTypes.node,
   textColors: PropTypes.shape({
     infoText: PropTypes.string,
@@ -215,6 +224,9 @@ PfSwitchCard.PropTypes = {
     centerSubtitle: PropTypes.string,
     rightTitle: PropTypes.string,
     rightSubtitle: PropTypes.string,
+    labelColor: PropTypes.string,
+    titleColor: PropTypes.string,
+    descriptionColor: PropTypes.string,
   }),
 };
 
