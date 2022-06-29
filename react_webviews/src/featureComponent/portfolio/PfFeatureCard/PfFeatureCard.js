@@ -19,6 +19,9 @@ function PfFeatureCard({
   textColors,
   dataAid,
   toolTipProps,
+  onClickIconLeft,
+  onClickIconMiddle,
+  onClickIconRight,
 }) {
   const {
     title,
@@ -77,6 +80,7 @@ function PfFeatureCard({
           titleColor={textColors?.leftTitle}
           subTitleColor={textColors?.leftSubtitle}
           tooltipText={toolTipProps?.leftText}
+          onClickIcon={onClickIconLeft}
         />
         <FeatureItem
           src={middleIcon}
@@ -88,6 +92,7 @@ function PfFeatureCard({
           titleColor={textColors?.middleTitle}
           subTitleColor={textColors?.middleSubtitle}
           tooltipText={toolTipProps?.middleText}
+          onClickIcon={onClickIconMiddle}
         />
         <FeatureItem
           src={rightIcon}
@@ -99,6 +104,7 @@ function PfFeatureCard({
           titleColor={textColors?.rightTitle}
           subTitleColor={textColors?.rightSubtitle}
           tooltipText={toolTipProps?.rightText}
+          onClickIcon={onClickIconRight}
         />
       </Stack>
     </Box>
@@ -115,6 +121,7 @@ const FeatureItem = ({
   titleColor,
   subTitleColor,
   tooltipText,
+  onClickIcon,
 }) => {
   return (
     <Box>
@@ -126,7 +133,7 @@ const FeatureItem = ({
         >
           {title}
         </Typography>
-        {!!tooltipText && (
+        {!!tooltipText ? (
           <Tooltip
             dataAid="exitLoad"
             title={tooltipText}
@@ -143,6 +150,16 @@ const FeatureItem = ({
               />
             </div>
           </Tooltip>
+        ) : (
+          <Icon
+            src={src}
+            width="16px"
+            height="16px"
+            style={{ marginLeft: 4 }}
+            className="info-icon"
+            dataAid={iconId}
+            onClick={onClickIcon}
+          />
         )}
       </Stack>
       <Typography
@@ -162,6 +179,9 @@ PfFeatureCard.defaultProps = {
   textColors: {},
   onClick: noop,
   dataAid: "",
+  onClickIconLeft: noop,
+  onClickIconMiddle: noop,
+  onClickIconRight: noop,
 };
 
 PfFeatureCard.propTypes = {
@@ -190,6 +210,9 @@ PfFeatureCard.propTypes = {
   }),
   onClick: PropTypes.func,
   dataAid: PropTypes.string.isRequired,
+  onClickIconLeft: PropTypes.func,
+  onClickIconMiddle: PropTypes.func,
+  onClickIconRight: PropTypes.func,
 };
 
 export default PfFeatureCard;
