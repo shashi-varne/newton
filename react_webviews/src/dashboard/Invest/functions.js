@@ -9,7 +9,7 @@ import {
   premiumBottomSheetMapper,
   sdkInvestCardMapper
 } from "./constants";
-import { getAccountSummary, getKycAppStatus, isReadyToInvest, setKycProductType, setSummaryData } from "../../kyc/services";
+import { getKycAppStatus, isReadyToInvest, setKycProductType } from "../../kyc/services";
 import { get_recommended_funds } from "./common/api";
 import { PATHNAME_MAPPER as KYC_PATHNAME_MAPPER } from "../../kyc/constants";
 import { isEquityCompleted, isUpgradeToEquityAccountEnabled } from "../../kyc/common/functions";
@@ -17,6 +17,10 @@ import { nativeCallback, openModule } from "../../utils/native_callback";
 import isEmpty from "lodash/isEmpty";
 import isFunction from "lodash/isFunction";
 import { getCorpusValue } from "./common/commonFunctions";
+import { getAccountSummary } from "businesslogic/apis/common";
+import { setSummaryData } from "../../business/appLanding/functions";
+import store from "../../dataLayer/store";
+import { setKyc, setSubscriptionStatus, setUser, updateAppStorage } from "businesslogic/dataStore/reducers/app";
 
 let errorMessage = "Something went wrong!";
 export async function initialize({ screenName, kyc, user, handleLoader, handleSummaryData }) {
@@ -53,7 +57,7 @@ export async function getSummary({ handleLoader, handleSummaryData }) {
     handleLoader({ kycStatusLoader: true });
   }
   try {
-    const result = await getAccountSummary();
+    const result = await getAccountSummary(Api);
     setSummaryData(result);
     user = result.data.user.user.data;
     kyc = result.data.kyc.kyc.data;
@@ -61,6 +65,9 @@ export async function getSummary({ handleLoader, handleSummaryData }) {
     if(isFunction(handleSummaryData)) {
       handleSummaryData({ kyc, user, subscriptionStatus })
     }
+    store.dispatch(setKyc(kyc));
+    store.dispatch(setUser(user));
+    store.dispatch(setSubscriptionStatus(subscriptionStatus));
   } catch (error) {
     console.log(error);
     toast(error.message || errorMessage);
@@ -223,10 +230,10 @@ export async function getRecommendations({
   }
 }
 
-export const getKycData = (kyc, user) => {
-  kyc = kyc || storageService().getObject("kyc") || {};
+export const getKycData = (userKyc, userData) => {
+  let kyc = !isEmpty(userKyc) ? userKyc : (storageService().getObject("kyc") || {});
   const TRADING_ENABLED = isTradingEnabled(kyc);
-  user = user || storageService().getObject("user") || {};
+  let user = !isEmpty(userData) ? userData : (storageService().getObject("user") || {});
   const isCompliant = kyc.kyc_status === "compliant";
   const kycJourneyStatus = getKycAppStatus(kyc)?.status || "";
   let kycStatusData = kycStatusMapperInvest[kycJourneyStatus];
@@ -263,6 +270,8 @@ export const getKycData = (kyc, user) => {
     showKycCard,
     isKycStatusDialogDisplayed: false,
     isPremiumBottomsheetDisplayed: false,
+    isMfInvested: user.active_investment,
+    applicationStatus: kyc.application_status_v2,
   };
   return kycData;
 }
@@ -532,7 +541,7 @@ export function handleIpoCardRedirection({ kyc, user, isDirectEntry, navigate, h
   }
 }
 
-function initiatePinSetup({ key, isDirectEntry, navigate, handleLoader, handleSummaryData, handleDialogStates }, props) {
+function initiatePinSetup({ key, isDirectEntry, navigate, handleLoader, handleSummaryData }, props) {
   const config  = getConfig();
   if (config.isNative) {
     openModule('account/setup_2fa', props, { routeUrlParams: `/${key}` });
@@ -549,7 +558,7 @@ function initiatePinSetup({ key, isDirectEntry, navigate, handleLoader, handleSu
       },
     });
   } else {
-    handleDialogStates({ openPinSetupDialog: true, cardKey: key })
+    navigate(`/account/set-pin/${key}`);
   }
 }
 
@@ -571,6 +580,12 @@ export function handleStocksAndIpoCards(
 ) {
   const config = getConfig();
   let modalData = Object.assign({key}, kycJourneyStatusMapperData);
+
+  const isKycInitState = ["init", "ground"].includes(kycJourneyStatus);
+
+  if (isKycInitState) {
+    modalData = kycStatusMapper.incomplete;
+  }
 
   if (key === "ipo") {
     const handleClick = () => {
@@ -639,8 +654,12 @@ export function handleStocksAndIpoCards(
 
 export const handleStocksRedirection = ({ isDirectEntry = false, navigate }) => {
   if (isDirectEntry) {
-    storageService().setBoolean("openEquityCallback", true);
-    navigate("/invest")
+    store.dispatch(
+      updateAppStorage({
+        openEquityCallback: true,
+      })
+    );
+    navigate("/")
   } else {
     nativeCallback({
       action: "open_equity"
@@ -675,9 +694,12 @@ export const handleKycStatus = ({
   sendEvents,
 }) => async () => {
   if (isFunction(sendEvents)) {
-    sendEvents("next", "kyc_bottom_sheet");
+    sendEvents("next", {
+      intent: modalData.title,
+    });
   }
   const { kycJourneyStatus, isReadyToInvestBase } = kycData;
+  const initialKycStatus = ["init", "ground"];
   if (
     ["submitted", "verifying_trading_account"].includes(kycJourneyStatus) ||
     (kycJourneyStatus === "complete" && kyc.mf_kyc_processed)
@@ -686,7 +708,7 @@ export const handleKycStatus = ({
   } else if (kycJourneyStatus === "rejected") {
     navigate(KYC_PATHNAME_MAPPER.uploadProgress);
   } else if (isUpgradeToEquityAccountEnabled(kyc, kycJourneyStatus)) {
-    closeKycStatusDialog(true);
+    closeKycStatusDialog();
     await setKycProductTypeAndRedirect({
       kyc,
       kycJourneyStatus,
@@ -704,6 +726,8 @@ export const handleKycStatus = ({
         ),
       },
     });
+  } else if (initialKycStatus.includes(kycJourneyStatus)) {
+    navigate(KYC_PATHNAME_MAPPER.homeKyc);
   } else if (modalData.nextState && modalData.nextState !== "/invest") {
     navigate(modalData.nextState);
   } else {
@@ -725,9 +749,15 @@ export const handleKycStatusRedirection = (
     handleLoader,
     handleSummaryData,
     handleDialogStates,
+    sendEvents
   },
   props
 ) => () => {
+  if (isFunction(sendEvents)) {
+    sendEvents("back", {
+      intent: modalData.title,
+    });
+  }
   let { kycJourneyStatus } = kycData;
   const {
     contactValue,
@@ -775,7 +805,7 @@ export const handleKycStatusRedirection = (
         });
         return;
       }
-      closeKycStatusDialog(true);
+      closeKycStatusDialog();
       handleStocksRedirection({ isDirectEntry, navigate })
       return;
     } else if (kycJourneyStatus === "fno_rejected") {
@@ -1048,5 +1078,27 @@ export function openBfdlBanner(handleDialogStates) {
   if(!isBfdlBannerDisplayed && config.code === 'bfdlmobile' && (config.isIframe || config.isSdk)) {
     storageService().setBoolean("bfdlBannerDisplayed", true);
     handleDialogStates({ openBfdlBanner: true });
+  }
+}
+
+export async function handleWealthdeskRedirection(handleLoader) {
+  handleLoader({ skelton: true });
+  try {
+    const response = await Api.get("/api/equity/api/eqm/get/wealthdesk/redirection/url");
+    if (
+      response.pfwstatus_code !== 200 ||
+      isEmpty(response.pfwresponse)
+    ) {
+      throw new Error( response?.pfwmessage || errorMessage);
+    }
+    const { status_code, result } = response.pfwresponse;
+    if (status_code === 200) {
+      window.location.href = result.url;
+    } else {
+      throw new Error(result?.message || result?.error || errorMessage);
+    }
+  } catch (er) {
+    toast(er.message);
+    handleLoader({ skelton: false });
   }
 }

@@ -1,6 +1,7 @@
 import { commonBackMapper } from "utils/constants";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { storageService } from "utils/validators";
+import { landingEntryPoints } from "./constants";
 
 
 export const backMapper = (state) => {
@@ -66,11 +67,15 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
   const backPath = backMapper(currentState);
 
   const landingRedirectPaths = ["/sip/payment/callback", "/kyc/report", "/notification", "/nps/payment/callback",
-    "/nps/mandate/callback", "/nps/success", "/page/invest/campaign/callback", "/invest", "/reports"];
+    "/nps/mandate/callback", "/nps/success", "/page/invest/campaign/callback", "/invest", "/reports", "/landing/view-all/mf"];
 
   if (landingRedirectPaths.indexOf(currentState) !== -1 || currentState.indexOf("/nps/payment/callback") !== -1) {
-     navigate("/landing");
-     return true;
+    if (landingEntryPoints.includes(fromState)) {
+      navigate(fromState);
+    } else {
+      navigate("/");
+    }
+    return true;
   }
 
   if (currentState === "/kyc/digilocker/failed") {
@@ -81,7 +86,7 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
   }
 
   if (currentState === "/kyc-esign/nsdl" && params?.status === "success") {
-     navigate("/invest");
+     navigate("/");
      return true;
   }
 

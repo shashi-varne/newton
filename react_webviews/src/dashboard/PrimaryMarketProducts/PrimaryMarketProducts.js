@@ -5,6 +5,7 @@ import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import MarketProductCard from "../mini-components/MarketProductCard";
 import WVGenericContentCarousel from "../../common/ui/GenericContentCarousel/WVGenericContentCarousel";
 import ContactUs from "../../common/components/contact_us";
+import { landingEntryPoints } from "../../utils/constants";
 import "./PrimaryMarketProducts.scss";
 
 const CARTEGORY_LISTS = [
@@ -72,7 +73,12 @@ const PrimaryMarketProducts = (props) => {
   };
 
   const goBack = () => {
-    navigate("/");
+    const fromState = props?.location?.state?.fromState || "";
+    if (landingEntryPoints.includes(fromState)) {
+      props.history.goBack();
+    } else {
+      navigate('/')
+    }
   };
 
   return (

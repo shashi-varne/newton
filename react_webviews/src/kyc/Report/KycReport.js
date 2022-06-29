@@ -31,7 +31,7 @@ const Report = (props) => {
         state: {
           disableNext: true,
           fromState: "/kyc/report",
-          toState: "/landing",
+          toState: "/",
         },
       });
       return;

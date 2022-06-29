@@ -68,7 +68,7 @@ class ESignInfo extends Component {
       } else if (landingEntryPoints.includes(fromState)) {
         navigate(fromState);
       } else {
-        navigate("/invest");
+        navigate("/");
       }
     } else {
       navigate("/")
