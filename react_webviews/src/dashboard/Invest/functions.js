@@ -236,7 +236,7 @@ export const getKycData = (userKyc, userData) => {
   let user = !isEmpty(userData) ? userData : (storageService().getObject("user") || {});
   const isCompliant = kyc.kyc_status === "compliant";
   const kycJourneyStatus = getKycAppStatus(kyc)?.status || "";
-  let kycStatusData = kycStatusMapperInvest[kycJourneyStatus];
+  let kycStatusData = Object.assign({}, kycStatusMapperInvest[kycJourneyStatus]);
   const initialKycStatus = ["init", "ground"];
   if(initialKycStatus.includes(kycJourneyStatus) && TRADING_ENABLED) {
     kycStatusData.subtitle = "Set up Trading & Demat A/c. now";

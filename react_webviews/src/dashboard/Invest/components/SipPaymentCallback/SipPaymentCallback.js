@@ -3,13 +3,14 @@ import { getConfig, navigate as navigateFunc, isIframe } from "utils/functions";
 import Container from "../../../common/Container";
 import { Imgc } from "common/ui/Imgc";
 import { resetRiskProfileJourney } from "../../functions";
-import { getCampaign } from "../../common/api";
 import { isEmpty, storageService } from "utils/validators";
 import { getCampaignBySection } from "../../../../kyc/services";
 import { getBasePath } from "utils/functions";
 import "./SipPaymentCallback.scss";
 import { isNewIframeDesktopLayout } from "../../../../utils/functions";
 import useUserKycHook from "../../../../kyc/common/hooks/userKycHook";
+import { getAccountSummary } from "businesslogic/apis/common";
+import Api from "../../../../utils/api";
 
 const SipPaymentCallback = (props) => {
   const hideImage = isNewIframeDesktopLayout();
@@ -18,7 +19,7 @@ const SipPaymentCallback = (props) => {
   const status = params.status || "";
   let message = params.message || "";
   const [campaign, setCampaign] = useState({});
-  const { user: currentUser, isLoading } = useUserKycHook();
+  const { user: currentUser, isLoading, updateUser, updateKyc } = useUserKycHook();
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [skelton, setSkelton] = useState(true);
   const basePath = getBasePath();
@@ -61,8 +62,24 @@ const SipPaymentCallback = (props) => {
 
   const initialize = async () => {
     try {
-      const result = await getCampaign();
-      if (!result) return;
+      let params = {
+        campaign: ['user_campaign'],
+      }
+      const isKycIncomplete = ["init", "incomplete"].includes(currentUser.kyc_registration_v2)
+      if (isKycIncomplete) {
+        params = {
+          ...params,
+          kyc: ['kyc'],
+          user: ['user'],
+        }
+      }
+      const result = await getAccountSummary(Api, params);
+      if (isKycIncomplete) {
+        const user = result?.data?.user?.user?.data;
+        const userKyc = result?.data?.kyc?.kyc?.data;
+        updateUser(user);
+        updateKyc(userKyc);
+      }
       let userCampaign = getCampaignBySection(
         result.data.campaign.user_campaign.data
       );

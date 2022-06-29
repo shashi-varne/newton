@@ -17,6 +17,7 @@ import {
   fetchSummary,
   getAppData,
   updateAppStorage,
+  setReferral as setReferralContent,
 } from "businesslogic/dataStore/reducers/app";
 import useLoadingState from "../../common/customHooks/useLoadingState";
 import useErrorState from "../../common/customHooks/useErrorState";
@@ -41,7 +42,7 @@ import {
   handleStocksAndIpoCards,
   openKyc,
 } from "../../dashboard/Invest/functions";
-import { isEmpty, noop } from "lodash-es";
+import { isEmpty, noop, merge } from "lodash-es";
 import {
   applyReferralCode,
   authVerification,
@@ -726,7 +727,23 @@ const landingContainer = (WrappedComponent) => (props) => {
   const applyReferral = async () => {
     try {
       handleLoader({ dotLoader: true });
-      await applyReferralCode(Api, referral);
+      const result = await applyReferralCode(Api, referral);
+      const data = {
+        ...kyc,
+        equity_enabled: result.is_equity_enabled,
+      };
+      const updatedSubbrokerCode = {
+        subbroker: {
+          data: { subbroker_code: result.subbroker },
+        },
+      };
+      const updatedReferralData = merge(
+        {},
+        referralContent,
+        updatedSubbrokerCode
+      );
+      dispatch(setReferralContent(updatedReferralData));
+      updateKyc(data);
       setReferralData(REFERRAL_DATA.success);
       handleBottomsheets({ [BOTTOMSHEET_KEYS.openReferral]: true });
     } catch (err) {
