@@ -20,6 +20,10 @@ const Landing = (props) => {
     errorData,
     sendEvents,
     hideBackIcon,
+    longPressEvent,
+    setSwiper,
+    handleSlideChange,
+    isLongPressTriggered,
     ...restProps
   } = props;
 
@@ -39,7 +43,7 @@ const Landing = (props) => {
         rightIconSrc: showSeachIcon ? require("assets/search_diy.svg") : null,
         onRightIconClick2: handleNotification,
         onRightIconClick: handleDiySearch,
-        hideLeftIcon: hideBackIcon
+        hideLeftIcon: hideBackIcon,
       }}
       eventData={sendEvents("just_set_events")}
       isFetchFailed={isFetchFailed}
@@ -53,9 +57,17 @@ const Landing = (props) => {
           handleClose={handleCarousels(true, false)}
           handleNext={handleCarousels(false, false)}
           handleBack={handleCarousels(false, true)}
+          longPressEvent={longPressEvent}
+          setSwiper={setSwiper}
+          handleSlideChange={handleSlideChange}
+          isLongPressTriggered={isLongPressTriggered}
         />
       ) : (
-        <MainLanding loaderData={loaderData} {...restProps} />
+        <MainLanding
+          loaderData={loaderData}
+          longPressEvent={longPressEvent}
+          {...restProps}
+        />
       )}
     </Container>
   );
