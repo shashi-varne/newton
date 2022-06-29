@@ -17,7 +17,7 @@ export async function initialize() {
     const categoryTitle = get(store.getState(), "app.appStorage.categoryTitle", "");
     const state = this.props.location.state;
     this.setState({
-      title: storageService().get("category_index_name") || state || categoryTitle,
+      title: storageService().get("category_index_name") || state.title || categoryTitle,
     });
   }
 }
