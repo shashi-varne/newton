@@ -86,6 +86,13 @@ const SdkLanding = (props) => {
     onLoad();
   }, []);
 
+  useEffect(() => {
+    const data = getKycData(kyc, user);
+    setKycData(data);
+    const cardsData = getSdkLandingCardsData({ user, kyc });
+    setLandingCardsData(cardsData);
+  }, [kyc, user]);
+
   const handleDialogStates = (dialogStatus, dialogData) => {
     setDialogStates({ ...dialogStates, ...dialogStatus });
     if (!isEmpty(dialogData)) {
@@ -211,7 +218,12 @@ const SdkLanding = (props) => {
   const handleReferral = async () => {
     try {
       handleLoader({ dotLoader: true });
-      await applyReferralCode(referral);
+      const result = await applyReferralCode(referral);
+      const data = {
+        ...kyc,
+        equity_enabled: result.is_equity_enabled
+      }
+      updateKyc(data);
       toast("You have applied referral code successfully", "success");
     } catch (err) {
       toast(err, "error");
