@@ -243,13 +243,13 @@ export const FINITY_EXPLORE_CATEGORIES = [
   },
   {
     icon: "sensex.svg",
-    title: "sensex backers",
+    title: "Sensex backers",
     dataAid: "sensex",
     id: "sensex",
   },
   {
     icon: `equity.svg`,
-    title: "Equity FUnds",
+    title: "Equity Funds",
     dataAid: "equityFunds",
     id: "equity",
   },
