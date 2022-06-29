@@ -1,0 +1,25 @@
+.portfolio-landing-container {
+  .top-section {
+    background: #3e1a9d url("../../assets/portfolio_landing_banner.svg")
+      no-repeat left bottom;
+    background-size: contain;
+    margin: 0 -16px 16px;
+    padding: 16px 16px 0;
+    .eye-icon {
+      cursor: pointer;
+    }
+    .one-day-change {
+      padding-bottom: 24px;
+    }
+    .realised-gains {
+      cursor: pointer;
+      padding-bottom: 30px;
+    }
+  }
+  .bottom-section {
+  }
+}
+
+.pf-landing-bottomsheet {
+  padding: 24px 16px 0;
+}
