@@ -704,7 +704,7 @@ const landingContainer = (WrappedComponent) => (props) => {
         navigate("/secondary-otp-verification", {
           state: {
             value: contactDetails?.contactValue,
-            otp_id: result.otp_id,
+            otp_id: otpRes.otp_id,
             communicationType: contactDetails.contactType,
           },
         });
