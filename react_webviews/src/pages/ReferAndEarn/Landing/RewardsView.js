@@ -14,6 +14,7 @@ import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../../constants/referAndEarn"
 import "./Landing.scss";
 import { formatAmountInr } from "businesslogic/utils/common/functions";
 import { isEmpty } from "lodash-es";
+import ReferralSkeletonLoader from "./ReferralSkeletonLoader";
 
 const STRINGS = REFERRAL_LANDING;
 const DATA = REWARDS_SCREEN_INFO_CARD_DATA;
@@ -31,6 +32,7 @@ const RewardsView = ({
   onClickInfoCard,
   noRewardsView,
   balance = 0,
+  isPageLoading,
 }) => {
   return (
     <>
@@ -59,32 +61,36 @@ const RewardsView = ({
             </LandingHeaderSubtitle>
           </LandingHeader>
           <Stack sx={{ width: "100%", marginTop: "32px" }}>
-            {DATA.map((item, index) => {
-              return (
-                <WrapperBox
-                  key={index}
-                  elevation={1}
-                  className={"rae-card-wrapper"}
-                  onClick={() => {
-                    onClickInfoCard(
-                      item.id,
-                      InfoCardExtraDataMapper[item.id].navLink
-                    );
-                  }}
-                >
-                  <InfoCard
-                    dataAid={item.dataAid}
-                    title={item.title}
-                    subtitle={item.subtitle}
-                    imgSrc={require(`assets/${
-                      InfoCardExtraDataMapper[item.id].asset
-                    }`)}
-                    imgProps={{ style: { alignSelf: "center" } }}
-                    rightImgSrc={require(`assets/iv_arrow_right.svg`)}
-                  />
-                </WrapperBox>
-              );
-            })}
+            {isPageLoading ? (
+              <ReferralSkeletonLoader cardHeight={"80px"} />
+            ) : (
+              DATA.map((item, index) => {
+                return (
+                  <WrapperBox
+                    key={index}
+                    elevation={1}
+                    className={"rae-card-wrapper"}
+                    onClick={() => {
+                      onClickInfoCard(
+                        item.id,
+                        InfoCardExtraDataMapper[item.id].navLink
+                      );
+                    }}
+                  >
+                    <InfoCard
+                      dataAid={item.dataAid}
+                      title={item.title}
+                      subtitle={item.subtitle}
+                      imgSrc={require(`assets/${
+                        InfoCardExtraDataMapper[item.id].asset
+                      }`)}
+                      imgProps={{ style: { alignSelf: "center" } }}
+                      rightImgSrc={require(`assets/iv_arrow_right.svg`)}
+                    />
+                  </WrapperBox>
+                );
+              })
+            )}
           </Stack>
         </Stack>
       )}

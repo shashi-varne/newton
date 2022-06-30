@@ -63,7 +63,6 @@ const landing = ({
         },
         tabChilds: LANDING_TABS_DATA,
       }}
-      isPageLoading={isPageLoading}
       className="refer-and-earn-landing"
       dataAid={REFERRAL_LANDING.screenDataAid}
       eventData={sendEvents("just_set_events")}
@@ -81,6 +80,7 @@ const landing = ({
       >
         <SwiperSlide key={1}>
           <ReferralsView
+            isPageLoading={isPageLoading}
             campaignTitle={campaignTitle}
             productName={productName}
             isWeb={isWeb}
@@ -92,6 +92,7 @@ const landing = ({
         </SwiperSlide>
         <SwiperSlide key={2}>
           <RewardsView
+            isPageLoading={isPageLoading}
             balance={balance}
             productName={productName}
             noRewardsView={noRewardsView}
