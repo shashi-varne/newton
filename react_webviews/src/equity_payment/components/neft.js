@@ -37,7 +37,7 @@ const SUBSCRIPTION_NEFT_INFO = [
     },
     {
         title: 'Account number',
-        value: '000205033532'
+        value: 'FISFRE'
     },
     {
         title: 'Account type',
@@ -45,15 +45,15 @@ const SUBSCRIPTION_NEFT_INFO = [
     },
     {
         title: 'IFSC code',
-        value: 'ICIC0000002'
+        value: 'ICIC0000106'
     },
     {
         title: 'Account Branch',
-        value: 'MG Road, Bangalore'
+        value: 'RPC Branch, Delhi'
     },
     {
         title: 'BRANCH ADDRESS',
-        value: '1, Shobha Pearl, Commissariat Road, Off MG Road, Ground Floor, Bangalore- 560025 - Karnataka'
+        value: 'ICICI BANK RPC Office, Videocon Towers, E-1, Jhandewalah extension, Near Delhi Press, Delhi, 110055'
     },
 ]
 

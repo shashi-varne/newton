@@ -165,7 +165,8 @@ class FundList extends Component {
     }
 
     sendEvents = (userAction, fundSelected) => {
-        let fundCategory = (this.state.title || "").toLowerCase().split(" ").join("_");
+        const category =  this.state.title || "";
+        let fundCategory = category?.toLowerCase()?.split(" ")?.join("_");
         let eventObj = {
             event_name: "passive_funds",
             properties: {
