@@ -31,6 +31,7 @@ function PfSwitchCard({
   bottomDescription,
   switchImgSrc,
   textColors,
+  dataAidSuffix,
   ...props
 }) {
   return (
@@ -38,6 +39,7 @@ function PfSwitchCard({
       sx={{ backgroundColor: "foundationColors.supporting.white" }}
       className="switch-container"
       onClick={onClick}
+      data-aid={`pfswitchCard_${dataAidSuffix}`}
     >
       <Box className="top-section">
         <RowContainer className="top-row" justifyContent="space-between">
@@ -192,6 +194,7 @@ PfSwitchCard.defaultProps = {
   labelTwo: "",
   bottomTitle: "",
   bottomDescription: "",
+  dataAidSuffix: "",
 };
 
 PfSwitchCard.PropTypes = {
@@ -209,6 +212,8 @@ PfSwitchCard.PropTypes = {
   bottomTitle: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   bottomImgSrc: PropTypes.node,
   bottomDescription: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  dataAidSuffix: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    .isRequired,
   switchImgSrc: PropTypes.node,
   textColors: PropTypes.shape({
     infoText: PropTypes.string,
