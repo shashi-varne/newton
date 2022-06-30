@@ -157,9 +157,10 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     
     const entryPath = storageService().get('entry_path');
 
+    const isExitScreen = ["/", "/mf", "/landing", "/landing/bank-list", "/invest/explore"].includes(pathname);
     if (
       config.isSdk &&
-      !["/", "/landing/bank-list"].includes(pathname) &&
+      !isExitScreen &&
       (entryPath !== pathname) &&
       (callbackData.action === 'exit_web' || callbackData.action === 'exit_module' || callbackData.action === 'open_module')
     ) {
