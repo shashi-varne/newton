@@ -4,10 +4,11 @@
   .MuiSlider-rail {
     height: 12px;
   }
-  .slider-base {
-    position: relative;
-    top: 2px;
+  .MuiSlider-thumb {
+    width: 42px;
+    height: 42px;
     .slider-arrow {
+      z-index: 2;
       position: absolute;
       left: 12px;
       top: 18px;

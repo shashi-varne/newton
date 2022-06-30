@@ -17,7 +17,6 @@ const CustomThumb = (props) => {
     <SliderThumb {...other}>
       {children}
       <div className="slider-base">
-        <img src={sliderBaseUrl} style={{ width: 42, height: 42 }} />
         <img src={sliderArrow} className="slider-arrow" />
       </div>
     </SliderThumb>

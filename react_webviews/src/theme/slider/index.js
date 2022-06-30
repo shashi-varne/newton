@@ -3,6 +3,9 @@ export const sliderStyleOverRides = (colors = {}) => {
     track: {
       backgroundColor: colors.action.brand,
     },
+    thumb: {
+      backgroundColor: colors.primary.brand,
+    },
     rail: {
       backgroundColor: colors.supporting.athensGrey,
     },
