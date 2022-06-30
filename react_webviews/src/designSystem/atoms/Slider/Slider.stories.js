@@ -1,12 +1,12 @@
 import React from "react";
-import CustomizedSlider from "./Slider";
+import Slider from "./Slider";
 
 export default {
-  component: CustomizedSlider,
-  title: "Atoms/CustomizedSlider",
+  component: Slider,
+  title: "Atoms/Slider",
 };
 
-export const SliderActive = (args) => <CustomizedSlider {...args} />;
+export const SliderActive = (args) => <Slider {...args} />;
 
 SliderActive.args = {
   min: 0,
@@ -16,7 +16,7 @@ SliderActive.args = {
   getSliderValue: () => {},
 };
 
-export const SliderDisabled = (args) => <CustomizedSlider {...args} />;
+export const SliderDisabled = (args) => <Slider {...args} />;
 
 SliderDisabled.args = {
   min: 0,

@@ -1,6 +1,6 @@
 import React from "react";
 import Box from "@mui/material/Box";
-import Slider, { SliderThumb } from "@mui/material/Slider";
+import MuiSlider, { SliderThumb } from "@mui/material/Slider";
 import "./Slider.scss";
 import PropTypes from "prop-types";
 
@@ -24,21 +24,22 @@ const CustomThumb = (props) => {
   );
 };
 
-export default function CustomizedSlider({
+export default function Slider({
   min,
   max,
   step,
   onChange,
   disabled,
   sliderValue,
+  dataAidASuffix,
 }) {
   return (
-    <Box className="customized-slider">
-      <Slider
+    <Box className="customized-slider" data-aid={`slider_${dataAidASuffix}`}>
+      <MuiSlider
         components={{ Thumb: CustomThumb }}
         min={min}
         max={max}
-        onChange={(e, val) => onChange(e, val)}
+        onChange={onChange}
         step={step}
         value={sliderValue}
         disabled={disabled}
@@ -47,7 +48,7 @@ export default function CustomizedSlider({
   );
 }
 
-CustomizedSlider.defaultProps = {
+Slider.defaultProps = {
   min: 0,
   max: 100,
   step: 1,
@@ -55,7 +56,7 @@ CustomizedSlider.defaultProps = {
   sliderValue: 0,
 };
 
-CustomizedSlider.propTypes = {
+Slider.propTypes = {
   min: PropTypes.number,
   max: PropTypes.number,
   step: PropTypes.number,
