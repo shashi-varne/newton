@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { updateAppStorage } from "businesslogic/dataStore/reducers/app";
+import { getConfig } from "../../utils/functions";
+import { nativeCallback } from "../../utils/native_callback";
 
 const AppInitialization = () => {
   const dispacth = useDispatch();
@@ -23,7 +25,15 @@ const AppInitialization = () => {
     dispacth(updateAppStorage(data));
   };
 
+  const initializeSdkData = () => {
+    const config = getConfig();
+    if (config.isSdk && config.Android) {
+      nativeCallback({ action: "get_data" });
+    }
+  };
+
   useEffect(() => {
+    initializeSdkData();
     clearBottomsheetDisplays();
   }, []);
 
