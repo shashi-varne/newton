@@ -15,6 +15,7 @@ const TermsAndCondtions = ({ points = [], productName, isPageLoading }) => {
         headerTitle: STRINGS.title.text,
         dataAid: STRINGS.title.dataAid,
       }}
+      fixedFooter={true}
       renderComponentAboveFooter={<FooterComponent productName={productName} />}
       isPageLoading={isPageLoading}
       className="refer-and-earn-tnc"
