@@ -21,7 +21,7 @@ const NoTransferView = ({ filterApplied, productName }) => {
         justifyContent="center"
         sx={{ height: "70vh" }}
       >
-        <LandingHeader variant={"center"}>
+        <LandingHeader variant={"center"}  dataAid={STRINGS.noTransferLandingHeader.dataAid} >
           <LandingHeaderImage
             imgSrc={require(`assets/${productName}/iv_no_rewards.svg`)}
           />
@@ -38,7 +38,7 @@ const NoTransferView = ({ filterApplied, productName }) => {
 
   return (
     <Stack sx={{ mt: "120px" }} alignItems="center" justifyContent={"center"}>
-      <Typography variant="body8" color="foundationColors.content.secondary">
+      <Typography variant="body8" color="foundationColors.content.secondary" dataAid='title'>
         No {filterApplied.label.toLowerCase()} transactions
       </Typography>
     </Stack>
