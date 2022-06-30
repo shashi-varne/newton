@@ -1,94 +1,127 @@
 import React, { useEffect, useMemo, useState } from "react";
 import WalletTransfers from "../../pages/ReferAndEarn/WalletTransfer";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
-import { nativeCallback } from "../../utils/native_callback";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useLoadingState from "../../common/customHooks/useLoadingState";
 import useErrorState from "../../common/customHooks/useErrorState";
 import { WALLET_TRANSFERS_FILTER_DATA } from "businesslogic/constants/referAndEarn";
+import {
+  getWalletTransactions,
+  getWalletTransactionsData,
+} from "businesslogic/dataStore/reducers/referAndEarn";
+import Api from "../../utils/api";
+import { isEmpty } from "lodash-es";
+import { getFnsFormattedDate } from "../../business/referAndEarn/utils";
+import { formatAmountInr } from "businesslogic/utils/common/functions";
+import ToastMessage from "../../designSystem/atoms/ToastMessage";
+import { nativeCallback } from "../../utils/native_callback";
 
 const screen = "WALLET_TRANSFERS";
 
 const walletTransfersContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
-  const { isWeb } = useMemo(getConfig, []);
+  const { Web: isWeb, mobile } = useMemo(getConfig, []);
   const { isPageLoading } = useLoadingState(screen);
-  const { isUpdateFailed, isFetchFailed, errorMessage } = useErrorState(screen);
+  const { isFetchFailed, errorMessage } = useErrorState(screen);
   const [filterApplied, setFilterApplied] = useState(
     WALLET_TRANSFERS_FILTER_DATA[0].value
   );
+
+  const walletTransactions = useSelector(getWalletTransactionsData);
+  let walletTransactionsViewData = useMemo(
+    () => getWalletTransactionsViewData(walletTransactions),
+    [walletTransactions]
+  );
+
+  let filteredData = useMemo(
+    () => getFilteredTansactionsData(walletTransactionsViewData, filterApplied),
+    [walletTransactionsViewData, filterApplied]
+  );
+
   const dispatch = useDispatch();
 
-  const initialize = () => {};
+  const initialize = () => {
+    dispatch(
+      getWalletTransactions({
+        Api: Api,
+        screen: screen,
+      })
+    );
+  };
 
   useEffect(() => {
     initialize();
   }, []);
 
-  const sendEvents = (userAction) => {
-    const eventObj = {
-      event_name: "",
-      properties: {
-        user_action: userAction || "",
-        screen_name: "",
-      },
-    };
-
-    if (userAction === "just_set_events") {
-      return eventObj;
-    } else {
-      nativeCallback({ events: eventObj });
+  useEffect(() => {
+    if (isFetchFailed && !isEmpty(errorMessage)) {
+      ToastMessage(errorMessage);
     }
-  };
+  }, [isFetchFailed]);
 
   const handleWalletFilter = (e, val) => {
-    console.log({ val });
     setFilterApplied(val);
   };
 
-  const onClickCopy = (id) => {};
-
-  const onClickContact = () => {};
+  const onClickContact = () => {
+    if (isWeb) {
+      navigate("/help");
+    } else {
+      nativeCallback({
+        action: "open_browser",
+        message: {
+          url: `tel:${mobile}`,
+        },
+      });
+    }
+  };
 
   return (
     <WrappedComponent
-      transactionData={dummyData}
+      transactionData={filteredData}
       isWeb={isWeb}
       filterApplied={filterApplied}
       handleWalletFilter={handleWalletFilter}
       onClickContact={onClickContact}
-      sendEvents={sendEvents}
       isPageLoading={isPageLoading}
       navigate={navigate}
     />
   );
 };
 
-const dummyData = [
-  {
-    amount: "₹8,000",
-    date: "3 May, 2022",
-    account: "HDFC •••••••• 9220",
-    status: "pending",
-  },
-  {
-    amount: "₹2000",
-    date: "3 May, 2022",
-    account: "HDFC •••••••• 9220",
-    status: "successfull",
-  },
-  {
-    amount: "₹8,000",
-    date: "3 May, 2022",
-    account: "HDFC •••••••• 9220",
-    status: "successfull",
-  },
-  {
-    amount: "₹2000",
-    date: "3 May, 2022",
-    account: "HDFC •••••••• 9220",
-    status: "failed",
-  },
-];
+const getWalletTransactionsViewData = (walletTransactions) => {
+  let walletTransactionsViewData = walletTransactions.map((item, index) => {
+    const acc =
+      item?.to_account_number &&
+      item?.bank_name &&
+      `${item.bank_name}••••••••${item?.to_account_number?.substring(6)}`;
+    const date = getFnsFormattedDate(
+      item?.dt_updated,
+      "yyyy-MM-dd",
+      "dd MMM, yyyy"
+    );
+    return {
+      amount: formatAmountInr(item.amount),
+      date: date || "NA",
+      account: acc || "NA",
+      status: item.status,
+    };
+  });
+
+  return walletTransactionsViewData;
+};
+
+const getFilteredTansactionsData = (
+  walletTransactionsViewData,
+  filterApplied
+) => {
+  let filteredData = walletTransactionsViewData;
+  if (!isEmpty(filterApplied) && filterApplied !== "all") {
+    filteredData = walletTransactionsViewData.filter(
+      (item) => item.status === filterApplied
+    );
+  }
+  return filteredData;
+};
 
 export default walletTransfersContainer(WalletTransfers);

@@ -9,6 +9,7 @@ import Badge from "../../../designSystem/atoms/Badge/Badge";
 import Separator from "../../../designSystem/atoms/Separator";
 import Button from "../../../designSystem/atoms/Button";
 import { MY_REFERRALS } from "businesslogic/strings/referAndEarn";
+import { formatAmountInr } from "businesslogic/utils/common/functions";
 
 const STRINGS = MY_REFERRALS;
 const expandIcon = require("assets/arrow_up_new.svg");
@@ -24,7 +25,7 @@ const CollapsibleReferalStatus = ({
   onClickCopy,
   showNotification,
   showSeparator,
-  data = dummyData,
+  data,
   productName,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -51,7 +52,7 @@ const CollapsibleReferalStatus = ({
               <Icon
                 dataAid={STRINGS.cardImageDataAid}
                 size="32px"
-                src={require("assets/iv_profile.svg")}
+                src={require(`assets/${productName}/iv_profile.svg`)}
                 className="c-icon-wrapper"
               />
             </Badge>
@@ -80,10 +81,10 @@ const CollapsibleReferalStatus = ({
                 justifyContent="space-between"
               >
                 <Stack>
-                  <Typography variant="body2" dataAid={item.dataAid}>
-                    {item?.label}
+                  <Typography variant="body2" dataAid={item?.dataAid}>
+                    {item?.name}
                   </Typography>
-                  {item?.status === "pending" && (
+                  {item?.event_pending === true && (
                     <Typography
                       variant="body2"
                       color="foundationColors.secondary.coralOrange.400"
@@ -93,16 +94,16 @@ const CollapsibleReferalStatus = ({
                     </Typography>
                   )}
                 </Stack>
-                {item?.status === "complete" ? (
+                {item?.event_pending === false ? (
                   <TickAnimationComp
                     isOpen={isOpen}
-                    amount={item?.amount}
+                    amount={formatAmountInr(item?.amount)}
                     productName={productName}
                   />
                 ) : (
                   <Button
                     title={STRINGS.copyBtn.text}
-                    onClick={() => onClickCopy(id)}
+                    onClick={() => onClickCopy(id, index)}
                     variant={"link"}
                     dataAid={STRINGS.copyBtn.dataAid}
                     sx={{ alignSelf: "flex-start" }}
@@ -179,23 +180,9 @@ CollapsibleReferalStatus.propTypes = {
 };
 
 CollapsibleReferalStatus.defaultProps = {
+  data: [],
   showNotification: false,
   showSeparator: true,
 };
-
-const dummyData = [
-  {
-    label: "Demat account",
-    status: "complete",
-    amount: "₹100",
-    dataAid: "dematAccount",
-  },
-  {
-    label: "SIP or one-time investment",
-    status: "pending",
-    amount: " ₹100",
-    dataAid: "sip",
-  },
-];
 
 export default CollapsibleReferalStatus;

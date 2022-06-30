@@ -11,7 +11,7 @@ import { capitalizeFirstLetter } from "../../../utils/validators";
 const STRINGS = WALLET_TRANSFERS;
 
 const StatusIconMapper = {
-  successfull: "iv_badge_successfull.svg",
+  success: "iv_badge_successfull.svg",
   failed: "iv_badge_failed.svg",
   pending: "iv_badge_pending.svg",
 };
@@ -36,7 +36,7 @@ const WalletTransactionListItem = ({
         {badgeIcon && (
           <Icon
             dataAid={STRINGS.listItem.iconDataAid}
-            size="16px"
+            size="24px"
             src={require(`assets/${badgeIcon}`)}
             className="c-icon-wrapper"
           />

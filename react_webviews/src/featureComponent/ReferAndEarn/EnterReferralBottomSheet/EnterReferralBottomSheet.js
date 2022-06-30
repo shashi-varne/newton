@@ -8,6 +8,7 @@ import "./EnterReferralBottomSheet.scss";
 import { isEmpty, noop } from "lodash-es";
 import BottomSheet from "../../../designSystem/organisms/BottomSheet/BottomSheet";
 const STRINGS = BOTTOMSHEETS_CONTENT.enterReferral;
+
 const EnterReferralBottomSheet = ({
   isOpen,
   value = "",

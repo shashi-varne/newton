@@ -4,20 +4,22 @@ import { TNC } from "businesslogic/strings/referAndEarn";
 import { Box, Stack } from "@mui/material";
 import Typography from "../../../designSystem/atoms/Typography";
 import "./TermsAndCondtions.scss";
+import { capitalizeFirstLetter } from "../../../utils/validators";
 
 const STRINGS = TNC;
 
-const TermsAndCondtions = ({ sendEvents, points = [] }) => {
+const TermsAndCondtions = ({ points = [], productName, isPageLoading }) => {
   return (
     <Container
       headerProps={{
         headerTitle: STRINGS.title.text,
         dataAid: STRINGS.title.dataAid,
       }}
-      renderComponentAboveFooter={<FooterComponent />}
+      renderComponentAboveFooter={<FooterComponent productName={productName} />}
+      isPageLoading={isPageLoading}
       className="refer-and-earn-tnc"
       dataAid={STRINGS.screenDataAid}
-      eventData={sendEvents("just_set_events")}
+      containerSx={{ backgroundColor: "foundationColors.supporting.grey" }}
     >
       <Stack className="tnc-wrapper">
         <Box
@@ -26,7 +28,7 @@ const TermsAndCondtions = ({ sendEvents, points = [] }) => {
         >
           {points.map((item, index) => {
             return (
-              <li>
+              <li key={index}>
                 <Typography
                   variant="body2"
                   align="left"
@@ -45,7 +47,9 @@ const TermsAndCondtions = ({ sendEvents, points = [] }) => {
   );
 };
 
-const FooterComponent = () => {
+const FooterComponent = ({ productName }) => {
+  const footerText = STRINGS.footer.text.replace("{product}", productName);
+
   return (
     <Stack
       justifyContent="center"
@@ -62,7 +66,7 @@ const FooterComponent = () => {
         color="foundationColors.content.tertiary"
         align="center"
       >
-        {STRINGS.footer.text}
+        {capitalizeFirstLetter(footerText)}
       </Typography>
     </Stack>
   );

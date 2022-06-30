@@ -1,6 +1,4 @@
 .c-ref-wrapper {
-  background-color: white;
-
   & .MuiBadge-badge {
     height: 6px;
     min-height: 6px;
@@ -13,8 +11,6 @@
   }
 
   .c-label-wrapper {
-    background-color: white;
-    border-radius: 12px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;

@@ -10,27 +10,30 @@ import {
 import InfoCard from "../../../designSystem/molecules/InfoCard";
 import { REFERRAL_LANDING } from "businesslogic/strings/referAndEarn";
 import { REWARDS_SCREEN_INFO_CARD_DATA } from "businesslogic/constants/referAndEarn";
+import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../../constants/referAndEarn";
 import "./Landing.scss";
+import { formatAmountInr } from "businesslogic/utils/common/functions";
 
 const STRINGS = REFERRAL_LANDING;
 const DATA = REWARDS_SCREEN_INFO_CARD_DATA;
+const { myReferrals, claimCashRewards, walletTransfer } =
+  REFER_AND_EARN_PATHNAME_MAPPER;
 
 const InfoCardExtraDataMapper = {
-  [DATA[0].id]: { asset: "iv_referrals.svg", navLink: "" },
-  [DATA[1].id]: { asset: "iv_rewards.svg", navLink: "" },
-  [DATA[2].id]: { asset: "iv_wallet.svg", navLink: "" },
+  [DATA[0].id]: { asset: "iv_referrals.svg", navLink: myReferrals },
+  [DATA[1].id]: { asset: "iv_rewards.svg", navLink: claimCashRewards },
+  [DATA[2].id]: { asset: "iv_wallet.svg", navLink: walletTransfer },
 };
 
 const RewardsView = ({
   productName = "fisdom",
-  noRewards,
+  onClickInfoCard,
+  noRewardsView,
   balance,
-  navigate,
 }) => {
-  console.log({ InfoCardExtraDataMapper });
   return (
     <>
-      {noRewards ? (
+      {noRewardsView ? (
         <NoRewardsView productName={productName} />
       ) : (
         <Stack sx={{ marginTop: "24px" }}>
@@ -45,26 +48,34 @@ const RewardsView = ({
               data-aid="iv_top"
               style={{ width: "140px", height: "120px" }}
             />
-            <LandingHeaderTitle>{balance}</LandingHeaderTitle>
+            {balance && (
+              <LandingHeaderTitle>
+                {formatAmountInr(balance)}
+              </LandingHeaderTitle>
+            )}
             <LandingHeaderSubtitle align="center" dataAid="1">
               {STRINGS.rewardsLandingHeader.subtitle}
             </LandingHeaderSubtitle>
           </LandingHeader>
           <Stack sx={{ width: "100%", marginTop: "32px" }}>
-            {DATA.map((item) => {
+            {DATA.map((item, index) => {
               return (
                 <WrapperBox
+                  key={index}
                   elevation={1}
-                  sx={{ height: "100%", marginBottom: "16px" }}
-                  onclick={() =>
-                    navigate(InfoCardExtraDataMapper[item.id].navLink)
-                  }
+                  className={"rae-card-wrapper"}
+                  onClick={() => {
+                    onClickInfoCard(
+                      item.id,
+                      InfoCardExtraDataMapper[item.id].navLink
+                    );
+                  }}
                 >
                   <InfoCard
                     dataAid={item.dataAid}
                     title={item.title}
                     subtitle={item.subtitle}
-                    imgSrc={require(`assets/fisdom/${
+                    imgSrc={require(`assets/${
                       InfoCardExtraDataMapper[item.id].asset
                     }`)}
                     imgProps={{ style: { alignSelf: "center" } }}
@@ -82,7 +93,7 @@ const RewardsView = ({
 
 const NoRewardsView = ({ productName }) => {
   return (
-    <Stack justifyContent="center" alignItem="center" sx={{ height: "70vh" }}>
+    <Stack justifyContent="center" alignItems="center" sx={{ height: "70vh" }}>
       <LandingHeader
         variant="center"
         dataAid={STRINGS.noRewardsLandingHeader.dataAid}

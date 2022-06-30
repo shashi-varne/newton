@@ -8,6 +8,7 @@ import Icon from "../../../designSystem/atoms/Icon";
 import Button from "../../../designSystem/atoms/Button";
 import Separator from "../../../designSystem/atoms/Separator";
 import "./MyReferrals.scss";
+import { inrFormatDecimal } from "../../../utils/validators";
 
 const STRINGS = MY_REFERRALS;
 
@@ -19,19 +20,27 @@ const MyReferrals = ({
   isPageLoading,
   onClickListItem,
   onClickCopy,
+  productName,
 }) => {
   return (
     <Container
       headerProps={{
         dataAid: STRINGS.title.dataAid,
         headerTitle: STRINGS.title.text,
+        hideInPageTitle: true,
       }}
       isPageLoading={isPageLoading}
       className="my-referrals"
       dataAid={STRINGS.screenDataAid}
       eventData={sendEvents("just_set_events")}
+      containerSx={{ backgroundColor: "foundationColors.supporting.grey" }}
+      disableHorizontalPadding={true}
     >
-      <Stack direction={"row"} justifyContent="space-between">
+      <Stack
+        direction={"row"}
+        justifyContent="space-between"
+        className="mr-top-header"
+      >
         <Stack>
           <Typography
             variant="body2"
@@ -45,7 +54,7 @@ const MyReferrals = ({
             color="foundationColors.content.primary"
             dataAid={STRINGS.earnedCash.valueDataAid}
           >
-            {totalEarned}
+            {inrFormatDecimal(totalEarned, 0)}
           </Typography>
         </Stack>
         <Stack alignItems="flex-end">
@@ -65,45 +74,48 @@ const MyReferrals = ({
           </Typography>
         </Stack>
       </Stack>
-      <Typography
-        variant="heading3"
-        color="foundationColors.content.primary"
-        component="div"
-        className="mr-referred-title"
-        dataAid={STRINGS.referredTitle.dataAid}
-      >
-        {STRINGS.referredTitle.text}
-      </Typography>
-      {data.map((item, index) => {
-        const isLastItem = index + 1 === data.length;
-        if (item.isExpandable) {
-          return (
-            <CollapsibleReferalStatus
-              key={index}
-              id={index}
-              label={item.title}
-              showNotification={item.showNotification}
-              onClick={onClickListItem}
-              dataAid={`${index + 1}`}
-              onClickCopy={onClickCopy}
-              showSeparator={!isLastItem}
-              productName="fisdom"
-            />
-          );
-        } else {
-          return (
-            <ReferralStatusCard
-              key={index}
-              id={index}
-              label={item.title}
-              dataAid={`${index + 1}`}
-              onClickCopy={onClickCopy}
-              showSeparator={!isLastItem}
-              productName="fisdom"
-            />
-          );
-        }
-      })}
+      <Stack className="mr-referral-list-wrapper">
+        <Typography
+          variant="heading3"
+          color="foundationColors.content.primary"
+          component="div"
+          className="mr-referred-title"
+          dataAid={STRINGS.referredTitle.dataAid}
+        >
+          {STRINGS.referredTitle.text}
+        </Typography>
+        {data.map((item, index) => {
+          const isLastItem = index + 1 === data.length;
+          if (item.isExpandable) {
+            return (
+              <CollapsibleReferalStatus
+                key={index}
+                id={index}
+                label={item.title}
+                showNotification={item.showNotification}
+                onClick={onClickListItem}
+                data={item.events}
+                dataAid={`${index + 1}`}
+                onClickCopy={onClickCopy}
+                showSeparator={!isLastItem}
+                productName={productName}
+              />
+            );
+          } else {
+            return (
+              <ReferralStatusCard
+                key={index}
+                id={index}
+                label={item.title}
+                dataAid={`${index + 1}`}
+                onClickCopy={onClickCopy}
+                showSeparator={!isLastItem}
+                productName={productName}
+              />
+            );
+          }
+        })}
+      </Stack>
     </Container>
   );
 };
@@ -114,6 +126,7 @@ const ReferralStatusCard = ({
   dataAid,
   onClickCopy,
   showSeparator,
+  productName,
 }) => {
   return (
     <>
@@ -126,7 +139,7 @@ const ReferralStatusCard = ({
         <Icon
           dataAid={STRINGS.cardImageDataAid}
           size="32px"
-          src={require("assets/iv_profile.svg")}
+          src={require(`assets/${productName}/iv_profile.svg`)}
           className="c-icon-wrapper"
         />
         <Stack style={{ marginLeft: "12px", flexGrow: 1 }}>

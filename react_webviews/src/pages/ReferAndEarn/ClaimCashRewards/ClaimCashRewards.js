@@ -9,7 +9,10 @@ import InputField from "../../../designSystem/molecules/InputField";
 import { isEmpty } from "lodash-es";
 import Checkbox from "../../../designSystem/atoms/Checkbox/Checkbox";
 import "./ClaimCashRewards.scss";
+import BottomSheet from "../../../designSystem/organisms/BottomSheet/BottomSheet";
+import { BOTTOMSHEETS_CONTENT } from "businesslogic/strings/referAndEarn";
 
+const { transferFailed } = BOTTOMSHEETS_CONTENT;
 const STRINGS = CLAIM_CASH_REWARDS;
 
 const ClaimCashRewards = ({
@@ -25,6 +28,8 @@ const ClaimCashRewards = ({
   onCheckTransferFull,
   onClickTransfer,
   sendEvents,
+  showErrorBottomSheet,
+  setShowErrorBottonSheet,
 }) => {
   return (
     <Container
@@ -45,14 +50,20 @@ const ClaimCashRewards = ({
       className="claim-cash-rewards"
       dataAid={STRINGS.screenDataAid}
       eventData={sendEvents("just_set_events")}
+      containerSx={{ backgroundColor: "foundationColors.supporting.grey" }}
+      disableHorizontalPadding={true}
     >
       <Stack>
         <HeaderTitle
-          sx={{ marginTop: "24px", marginBottom: "24px" }}
+          sx={{ margin: "24px 16px 0" }}
           title={STRINGS.headerTitle.text + totalBalance}
           dataAid={STRINGS.headerTitle.dataAid}
         />
-        <WrapperBox elevation={1}>
+        <WrapperBox
+          elevation={1}
+          data-aid="grp_enterAmount"
+          className={"ccr-enter-amount-card-wrapper"}
+        >
           <Stack className="ccr-enter-amount-wrapper">
             <Typography
               variant="heading4"
@@ -68,6 +79,7 @@ const ClaimCashRewards = ({
               inputMode="numeric"
               error={!isEmpty(inputError)}
               helperText={inputError || STRINGS.helperText + minAmount}
+              dataAid={"withdrawAmount"}
             />
             <Stack
               direction={"row"}
@@ -89,7 +101,7 @@ const ClaimCashRewards = ({
           </Stack>
         </WrapperBox>
         <Typography
-          sx={{ marginTop: "16px" }}
+          sx={{ margin: "16px" }}
           variant="body2"
           color="foundationColors.supporting.cadetBlue"
           dataAid={STRINGS.noteDataAid}
@@ -97,6 +109,22 @@ const ClaimCashRewards = ({
           {`Note: Amount will be credited to your ${accDetails.name} account ending with ${accDetails.number}`}
         </Typography>
       </Stack>
+      <BottomSheet
+        dataAid={transferFailed.dataAid}
+        isOpen={showErrorBottomSheet}
+        onClose={() => {
+          sendEvents("back");
+          setShowErrorBottonSheet(false);
+        }}
+        title={transferFailed.title}
+        imageTitleSrc={require(`assets/caution.svg`)}
+        subtitle={transferFailed.subtitle}
+        primaryBtnTitle={transferFailed.cta}
+        onPrimaryClick={() => {
+          sendEvents("okay");
+          setShowErrorBottonSheet(false);
+        }}
+      />
     </Container>
   );
 };

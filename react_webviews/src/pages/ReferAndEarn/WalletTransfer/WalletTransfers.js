@@ -6,13 +6,12 @@ import { WALLET_TRANSFERS_FILTER_DATA } from "businesslogic/constants/referAndEa
 import { Box, Stack } from "@mui/material";
 import { Pill, Pills } from "../../../designSystem/atoms/Pills";
 import WalletTransactionListItem from "../../../featureComponent/ReferAndEarn/WalletTransactionListItem";
-
 import "./WalletTransfers.scss";
+
 const STRINGS = WALLET_TRANSFERS;
 
 const WalletTransfers = ({
   transactionData = [],
-  sendEvents,
   isPageLoading,
   filterApplied,
   handleWalletFilter,
@@ -28,7 +27,6 @@ const WalletTransfers = ({
       isPageLoading={isPageLoading}
       className="wallet-transactions"
       dataAid={STRINGS.screenDataAid}
-      eventData={sendEvents("just_set_events")}
       fixedFooter={true}
       renderComponentAboveFooter={<FooterComponent onClick={onClickContact} />}
     >
@@ -55,8 +53,8 @@ const WalletTransfers = ({
             <WalletTransactionListItem
               key={index}
               amount={item.amount}
-              date={item.date}
-              account={item.account}
+              date={item.date || "NA"}
+              account={item.account || "NA"}
               status={item.status}
               showSeparator={!isLastItem}
               dataAid={`${index + 1}`}
@@ -90,6 +88,7 @@ const FooterComponent = ({ onClick }) => {
           component="span"
           onClick={onClick}
           color={"foundationColors.action.brand"}
+          style={{ cursor: "pointer" }}
         >
           {STRINGS.footer.secondaryText}
         </Typography>

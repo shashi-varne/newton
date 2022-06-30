@@ -61,10 +61,10 @@ const CopyCodeComponent = ({
           {referralCode}
         </Typography>
         <Button
-          title={STRINGS.copyCode}
+          title={STRINGS.copyCode.text}
           variant="link"
           size="small"
-          dataAid="primary"
+          dataAid={STRINGS.copyCode.dataAid}
           onClick={handleCopy}
         />
       </Stack>
