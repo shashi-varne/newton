@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import MuiSlider, { SliderThumb } from "@mui/material/Slider";
 import "./Slider.scss";
 import PropTypes from "prop-types";
+import { noop } from "lodash-es";
 
 const sliderArrow = require("assets/slider_arrow.svg");
 
@@ -49,6 +50,7 @@ Slider.defaultProps = {
   disabled: false,
   sliderValue: 0,
   dataAidSuffix: "",
+  onChange: noop,
 };
 
 Slider.propTypes = {
@@ -56,7 +58,8 @@ Slider.propTypes = {
   max: PropTypes.number,
   step: PropTypes.number,
   disabled: PropTypes.bool,
-  sliderValue: PropTypes.number.required,
+  sliderValue: PropTypes.number.isRequired,
   dataAidSuffix: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
     .isRequired,
+  onChange: PropTypes.func.isRequired,
 };
