@@ -16,7 +16,35 @@
       padding-bottom: 30px;
     }
   }
+  .heading-row {
+    margin-bottom: 16px;
+    padding: 0 16px;
+  }
+  .carousel-section {
+    margin: 0 -16px 24px -16px;
+    padding: 0;
+    .swiper-slide {
+      &:first-child {
+        padding-left: 16px;
+      }
+      &:last-child {
+        padding-right: 16px;
+      }
+    }
+  }
+  .allocations-section {
+    .MuiTabs-flexContainer {
+      justify-content: flex-start !important;
+    }
+    .swiper-container {
+      padding-top: 24px;
+      min-height: 200px;
+    }
+  }
   .bottom-section {
+    .mf-banner {
+      cursor: pointer;
+    }
   }
 }
 

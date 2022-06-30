@@ -100,7 +100,7 @@ let data = [
     id: "test",
     name: "Test",
     icon: logout,
-    path: "/component-test",
+    path: "/portfolio",
   },
 ];
 

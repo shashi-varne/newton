@@ -7,6 +7,9 @@ import InfoCard from "designSystem/molecules/InfoCard";
 import WrapperBox from "designSystem/atoms/WrapperBox";
 import { Box, Stack, Typography } from "@mui/material";
 import "./style.scss";
+import Button from "../../designSystem/atoms/Button";
+import FeatureCardCarousel from "./FeatureCardCarousel";
+import Allocations from "./Allocations";
 
 function PortfolioLanding({ handleRealisedGains, handleInsurance }) {
   const [isBottomsheetOpen, setIsBottomsheetOpen] = useState(false);
@@ -19,10 +22,10 @@ function PortfolioLanding({ handleRealisedGains, handleInsurance }) {
       className="portfolio-landing-container"
     >
       <Box
+        className="top-section"
         sx={{
           backgroundColor: "foundationColors.primary.600",
         }}
-        className="top-section"
       >
         <Typography
           variant="body2"
@@ -149,12 +152,26 @@ function PortfolioLanding({ handleRealisedGains, handleInsurance }) {
           />
         </Stack>
       </Box>
-      <Box className="bottom-section">
-        <Icon
-          width="100%"
-          style={{ marginBottom: 24 }}
-          src={require("assets/invest_in_mf_banner.svg")}
+      <Box className="carousel-section">
+        <HeadingRow
+          title="Investments"
+          titleDataAid={"investments"}
+          isActionable
         />
+        <FeatureCardCarousel />
+      </Box>
+      <Box className="allocations-section">
+        <HeadingRow title="Allocations" titleDataAid={"investmentAllocation"} />
+        <Allocations />
+      </Box>
+      <Box className="bottom-section">
+        <Box className="mf-banner">
+          <Icon
+            width="100%"
+            style={{ marginBottom: 24 }}
+            src={require("assets/invest_in_mf_banner.svg")}
+          />
+        </Box>
         <WrapperBox onClick={handleInsurance} elevation={1}>
           <InfoCard
             imgSrc={require("assets/pf_insurance.svg")}
@@ -196,6 +213,45 @@ function PortfolioLanding({ handleRealisedGains, handleInsurance }) {
     </Container>
   );
 }
+
+const HeadingRow = ({ title, titleDataAid, isActionable }) => {
+  return (
+    <Stack
+      flexDirection={"row"}
+      alignItems={"center"}
+      justifyContent={"space-between"}
+      className="heading-row"
+    >
+      <Typography
+        variant="heading4"
+        color={"foundationColors.content.primary"}
+        dataAid={titleDataAid}
+      >
+        {title}
+      </Typography>
+      {isActionable && (
+        <Stack
+          flexDirection={"row"}
+          alignItems={"center"}
+          justifyContent={"flex-start"}
+        >
+          <Button
+            style={{ marginRight: 8 }}
+            dataAid="viewAll"
+            variant="link"
+            title="View all"
+          />
+          <Icon
+            src={require("assets/generic_green_right_arrow.svg")}
+            width="6px"
+            height="10px"
+            dataAid={"right"}
+          />
+        </Stack>
+      )}
+    </Stack>
+  );
+};
 
 const BottomsheetRow = ({ label, value, labelId, valueId, valueColor }) => {
   return (
