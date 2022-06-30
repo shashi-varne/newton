@@ -72,7 +72,8 @@ ProgressBar.propTypes = {
   percentage: PropTypes.number.isRequired,
   title: PropTypes.oneOf([PropTypes.number, PropTypes.string]),
   label: PropTypes.oneOf([PropTypes.number, PropTypes.string]),
-  dataAidSuffix: PropTypes.string.isRequired,
+  dataAidSuffix: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    .isRequired,
   titleColor: PropTypes.string,
   labelColor: PropTypes.string,
 };
