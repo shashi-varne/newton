@@ -5,6 +5,9 @@ export const sliderStyleOverRides = (colors = {}) => {
     },
     thumb: {
       backgroundColor: colors.primary.brand,
+      "&.Mui-disabled": {
+        backgroundColor: colors.supporting.gainsboro,
+      },
     },
     rail: {
       backgroundColor: colors.supporting.athensGrey,

@@ -4,15 +4,10 @@ import MuiSlider, { SliderThumb } from "@mui/material/Slider";
 import "./Slider.scss";
 import PropTypes from "prop-types";
 
-const disabledImg = require("assets/disabled_slider_base.svg");
-const activeImg = require("assets/slider_base.svg");
 const sliderArrow = require("assets/slider_arrow.svg");
 
 const CustomThumb = (props) => {
   const { children, ...other } = props;
-  const disabled = props?.children?.props?.disabled;
-  const sliderBaseUrl = disabled ? disabledImg : activeImg;
-
   return (
     <SliderThumb {...other}>
       {children}
@@ -30,10 +25,10 @@ export default function Slider({
   onChange,
   disabled,
   sliderValue,
-  dataAidASuffix,
+  dataAidSuffix,
 }) {
   return (
-    <Box className="customized-slider" data-aid={`slider_${dataAidASuffix}`}>
+    <Box className="customized-slider" data-aid={`slider_${dataAidSuffix}`}>
       <MuiSlider
         components={{ Thumb: CustomThumb }}
         min={min}
@@ -53,6 +48,7 @@ Slider.defaultProps = {
   step: 1,
   disabled: false,
   sliderValue: 0,
+  dataAidSuffix: "",
 };
 
 Slider.propTypes = {
@@ -61,4 +57,6 @@ Slider.propTypes = {
   step: PropTypes.number,
   disabled: PropTypes.bool,
   sliderValue: PropTypes.number.required,
+  dataAidSuffix: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    .isRequired,
 };
