@@ -137,7 +137,8 @@ PfFundSelectionCard.propTypes = {
   middleImgSrc: PropTypes.node,
   bottomImgSrc: PropTypes.node,
   onClick: PropTypes.func,
-  dataAidSuffix: PropTypes.string.isRequired,
+  dataAidSuffix: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    .isRequired,
 };
 
 export default PfFundSelectionCard;
