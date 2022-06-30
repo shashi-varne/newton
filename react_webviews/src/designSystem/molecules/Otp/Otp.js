@@ -24,6 +24,7 @@ const Otp = ({
   otpTimerInSeconds = 30,
   helperTextColor,
   infoTextColor,
+  dataAidSuffix,
 }) => {
   const box1 = useRef(null);
   const box2 = useRef(null);
@@ -110,7 +111,7 @@ const Otp = ({
   };
 
   return (
-    <Box className="otp-container">
+    <Box className="otp-container" data-aid={`otp_${dataAidSuffix}`}>
       <Box className="otp-items-container">
         <Box className="input-container">
           {boxList.map((box, index) => {
@@ -188,6 +189,7 @@ Otp.defaultProps = {
   onClickButton: () => {},
   onChange: () => {},
   otpTimerInSeconds: 30,
+  dataAidSuffix: "",
 };
 
 Otp.propTypes = {
@@ -196,9 +198,11 @@ Otp.propTypes = {
   helperText: PropTypes.string,
   infoText: PropTypes.string,
   buttonText: PropTypes.string,
-  onClickButton: () => {},
-  onChange: () => {},
+  onClickButton: PropTypes.func,
+  onChange: PropTypes.func,
   otpTimerInSeconds: PropTypes.number,
+  dataAidSuffix: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    .isRequired,
 };
 
 export default Otp;
