@@ -6,6 +6,7 @@ import { WALLET_TRANSFERS_FILTER_DATA } from "businesslogic/constants/referAndEa
 import { Box, Stack } from "@mui/material";
 import { Pill, Pills } from "../../../designSystem/atoms/Pills";
 import WalletTransactionListItem from "../../../featureComponent/ReferAndEarn/WalletTransactionListItem";
+import NoTransferView from "./NoTransferView";
 import "./WalletTransfers.scss";
 
 const STRINGS = WALLET_TRANSFERS;
@@ -18,6 +19,8 @@ const WalletTransfers = ({
   onClickContact,
   isFetchFailed,
   errorData,
+  productName,
+  noData,
 }) => {
   return (
     <Container
@@ -34,38 +37,52 @@ const WalletTransfers = ({
       isFetchFailed={isFetchFailed}
       errorData={errorData}
     >
-      <Stack>
-        <Box className="wt-pill-filter-wrapper">
-          <Pills
-            value={filterApplied}
-            sx={{ pointerEvents: isPageLoading ? "none" : "default" }}
-            onChange={handleWalletFilter}
-          >
-            {WALLET_TRANSFERS_FILTER_DATA.map((item, index) => (
-              <Pill
-                key={index}
-                label={item.label}
-                value={item.value}
-                dataAid={item.dataAid}
-              />
-            ))}
-          </Pills>
-        </Box>
-        {transactionData.map((item, index) => {
-          const isLastItem = index + 1 === transactionData.length;
-          return (
-            <WalletTransactionListItem
-              key={index}
-              amount={item.amount}
-              date={item.date || "NA"}
-              account={item.account || "NA"}
-              status={item.status}
-              showSeparator={!isLastItem}
-              dataAid={`${index + 1}`}
+      {noData ? (
+        <NoTransferView
+          filterApplied={filterApplied}
+          productName={productName}
+        />
+      ) : (
+        <Stack>
+          <Box className="wt-pill-filter-wrapper">
+            <Pills
+              value={filterApplied}
+              sx={{ pointerEvents: isPageLoading ? "none" : "default" }}
+              onChange={handleWalletFilter}
+            >
+              {WALLET_TRANSFERS_FILTER_DATA.map((item, index) => (
+                <Pill
+                  key={index}
+                  label={item.label}
+                  value={item}
+                  dataAid={item.dataAid}
+                />
+              ))}
+            </Pills>
+          </Box>
+          {transactionData.length == 0 ? (
+            <NoTransferView
+              filterApplied={filterApplied}
+              productName={productName}
             />
-          );
-        })}
-      </Stack>
+          ) : (
+            transactionData.map((item, index) => {
+              const isLastItem = index + 1 === transactionData.length;
+              return (
+                <WalletTransactionListItem
+                  key={index}
+                  amount={item.amount}
+                  date={item.date || "NA"}
+                  account={item.account || "NA"}
+                  status={item.status}
+                  showSeparator={!isLastItem}
+                  dataAid={`${index + 1}`}
+                />
+              );
+            })
+          )}
+        </Stack>
+      )}
     </Container>
   );
 };

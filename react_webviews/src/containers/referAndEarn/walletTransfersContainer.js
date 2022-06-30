@@ -20,13 +20,13 @@ const screen = "WALLET_TRANSFERS";
 
 const walletTransfersContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
-  const { Web: isWeb, mobile } = useMemo(getConfig, []);
+  const { Web: isWeb, mobile, productName } = useMemo(getConfig, []);
   const { isPageLoading } = useLoadingState(screen);
   const { isFetchFailed, errorMessage } = useErrorState(screen);
   const [errorData, setErrorData] = useState({});
 
   const [filterApplied, setFilterApplied] = useState(
-    WALLET_TRANSFERS_FILTER_DATA[0].value
+    WALLET_TRANSFERS_FILTER_DATA[0]
   );
 
   const walletTransactions = useSelector(getWalletTransactionsData);
@@ -35,8 +35,17 @@ const walletTransfersContainer = (WrappedComponent) => (props) => {
     [walletTransactions]
   );
 
+  const noTransferData = useMemo(
+    () => walletTransactions.length === 0,
+    [walletTransactions]
+  );
+
   let filteredData = useMemo(
-    () => getFilteredTansactionsData(walletTransactionsViewData, filterApplied),
+    () =>
+      getFilteredTansactionsData(
+        walletTransactionsViewData,
+        filterApplied.value
+      ),
     [walletTransactionsViewData, filterApplied]
   );
 
@@ -92,6 +101,8 @@ const walletTransfersContainer = (WrappedComponent) => (props) => {
       navigate={navigate}
       isFetchFailed={isFetchFailed}
       errorData={errorData}
+      productName={productName}
+      noData={noTransferData}
     />
   );
 };
