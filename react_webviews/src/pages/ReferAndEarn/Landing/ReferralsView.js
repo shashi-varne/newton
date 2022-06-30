@@ -12,9 +12,11 @@ import {
 } from "../../../designSystem/molecules/LandingHeader";
 import CardHorizontal from "../../../designSystem/molecules/CardHorizontal";
 import { Box } from "@mui/system";
+import ReferralSkeletonLoader from "./ReferralSkeletonLoader";
 import "./Landing.scss";
 
 const ReferralsView = ({
+  isPageLoading,
   productName,
   campaignTitle,
   data,
@@ -34,40 +36,44 @@ const ReferralsView = ({
         <LandingHeaderTitle>{campaignTitle}</LandingHeaderTitle>
       </LandingHeader>
       <Stack sx={{ width: "100%", marginTop: "32px" }}>
-        {data.map((item, index) => {
-          return (
-            <WrapperBox
-              key={index}
-              elevation={1}
-              className="rae-card-wrapper"
-              onClick={() => {
-                setActiveSheetIndex(index);
-              }}
-            >
-              <CardHorizontal
-                title={item.title}
-                subtitle={item.subtitle}
-                description={item.expiryDescription}
-                descriptionColor={
-                  item.isExpiringSoon
-                    ? "foundationColors.secondary.mango.400"
-                    : "foundationColors.content.tertiary"
-                }
-                rightComponent={
-                  <CoinComponent
-                    productName={productName}
-                    index={index}
-                    amount={item.amount}
-                    amountDataAid={`amount${capitalizeFirstLetter(
-                      item.dataAid
-                    )}`}
-                  />
-                }
-                dataAid={item.dataAid}
-              />
-            </WrapperBox>
-          );
-        })}
+        {isPageLoading ? (
+          <ReferralSkeletonLoader cardHeight={"140px"} />
+        ) : (
+          data.map((item, index) => {
+            return (
+              <WrapperBox
+                key={index}
+                elevation={1}
+                className="rae-card-wrapper"
+                onClick={() => {
+                  setActiveSheetIndex(index);
+                }}
+              >
+                <CardHorizontal
+                  title={item.title}
+                  subtitle={item.subtitle}
+                  description={item.expiryDescription}
+                  descriptionColor={
+                    item.isExpiringSoon
+                      ? "foundationColors.secondary.mango.400"
+                      : "foundationColors.content.tertiary"
+                  }
+                  rightComponent={
+                    <CoinComponent
+                      productName={productName}
+                      index={index}
+                      amount={item.amount}
+                      amountDataAid={`amount${capitalizeFirstLetter(
+                        item.dataAid
+                      )}`}
+                    />
+                  }
+                  dataAid={item.dataAid}
+                />
+              </WrapperBox>
+            );
+          })
+        )}
       </Stack>
       <Stack sx={{ width: "100%" }}>
         <Typography

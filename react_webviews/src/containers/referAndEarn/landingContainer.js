@@ -275,7 +275,7 @@ const getActiveCampaignsViewData = (activeCampaignData) => {
     return {
       title: item.campaign_name,
       subtitle: item.description,
-      expiryDescription: expDate,
+      expiryDescription: item.campaign_end_date ? expDate : "",
       isExpiringSoon: isExpiringSoon,
       amount: item.amount_per_referral,
       dataAid: dataAid,
