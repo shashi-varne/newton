@@ -4,12 +4,20 @@ import Icon from "designSystem/atoms/Icon";
 import Typography from "designSystem/atoms/Typography";
 import RowContainer from "./RowContainer";
 
-const CustomItem = ({ title, subtitle, id, imgSrc, align }) => {
+const CustomItem = ({
+  title,
+  subtitle,
+  id,
+  imgSrc,
+  align,
+  titleColor,
+  subtitleColor,
+}) => {
   return (
     <Box sx={{ textAlign: align }}>
       <Typography
         variant="body5"
-        color="foundationColors.content.secondary"
+        color={titleColor || "foundationColors.content.secondary"}
         dataAid={`key${id}`}
       >
         {title}
@@ -24,7 +32,7 @@ const CustomItem = ({ title, subtitle, id, imgSrc, align }) => {
         />
         <Typography
           variant="body5"
-          color="foundationColors.content.secondary"
+          color={subtitleColor || "foundationColors.content.secondary"}
           dataAid={`value${id}`}
         >
           {subtitle}

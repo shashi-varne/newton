@@ -11,13 +11,14 @@ const TopSection = ({
   middleImgSrc,
   mainTitle,
   middleLabel,
+  colorProps,
 }) => {
   return (
     <Box className="top-section">
       <RowContainer className="row-one">
         <Typography
           variant="body5"
-          color="foundationColors.content.secondary"
+          color={colorProps?.label || "foundationColors.content.secondary"}
           dataAid="label1"
           className="label"
         >
@@ -33,7 +34,7 @@ const TopSection = ({
           />
           <Typography
             allCaps
-            color="foundationColors.content.secondary"
+            color={colorProps?.topTitle || "foundationColors.content.secondary"}
             dataAid="label2"
           >
             {topTitle}
@@ -51,7 +52,9 @@ const TopSection = ({
           />
           <Typography
             variant="body2"
-            color="foundationColors.content.secondary"
+            color={
+              colorProps?.mainTitle || "foundationColors.content.secondary"
+            }
             dataAid="title"
           >
             {mainTitle}
@@ -59,7 +62,7 @@ const TopSection = ({
         </RowContainer>
         <Typography
           variant="body1"
-          color="foundationColors.content.primary"
+          color={colorProps?.middleLabel || "foundationColors.content.primary"}
           dataAid="subtitle1"
         >
           {middleLabel}
