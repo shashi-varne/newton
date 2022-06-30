@@ -13,9 +13,10 @@ export const PF_DETAIL_VARIANT = {
   SECONDARY: "secondary",
 };
 
-function PfFundDetail({ variant, onClick, ...props }) {
+function PfFundDetail({ variant, onClick, dataAidSuffix, ...props }) {
   return (
     <Box
+      data-aid={`pfFundDetails_${dataAidSuffix}`}
       onClick={onClick}
       className="pf-fund-detail-container"
       sx={{
@@ -49,6 +50,8 @@ PfFundDetail.defaultProps = {
 
 PfFundDetail.propTypes = {
   variant: PropTypes.string,
+  dataAidSuffix: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    .isRequired,
   onClick: noop,
   label: PropTypes.string,
   topTitle: PropTypes.string,
@@ -67,6 +70,17 @@ PfFundDetail.propTypes = {
     middleSubtitle: PropTypes.string,
     rightTitle: PropTypes.string,
     rightImgSrc: PropTypes.node,
+    rightSubtitle: PropTypes.string,
+  }),
+  colorProps: PropTypes.shape({
+    bottomTitle: PropTypes.string,
+    bottomSubtitle: PropTypes.string,
+    label: PropTypes.string,
+    topTitle: PropTypes.string,
+    middleLabel: PropTypes.string,
+    mainTitle: PropTypes.string,
+    leftSubtitle: PropTypes.string,
+    middleSubtitle: PropTypes.string,
     rightSubtitle: PropTypes.string,
   }),
 };

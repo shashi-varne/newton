@@ -10,13 +10,16 @@ const PrimaryBottomSection = ({
   bottomLabel,
   bottomSubtitle,
   bottomImgSrc,
+  colorProps,
 }) => {
   return (
     <Box className="bottom-section">
       <RowContainer>
         <Typography
           variant="body5"
-          color="foundationColors.content.secondary"
+          color={
+            colorProps?.bottomTitle || "foundationColors.content.secondary"
+          }
           dataAid="info"
         >
           {bottomTitle}
@@ -32,7 +35,9 @@ const PrimaryBottomSection = ({
           />
           <Typography
             variant="body5"
-            color="foundationColors.content.secondary"
+            color={
+              colorProps?.bottomSubtitle || "foundationColors.content.secondary"
+            }
             dataAid="subtitle2"
           >
             {bottomSubtitle}
