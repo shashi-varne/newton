@@ -18,7 +18,7 @@ const ManageInvestments = ({ manageInvestments = [], onClick }) => {
       >
         {manageInvestmentsData.title}
       </Typography>
-      <Stack flexDirection="row" gap="24px">
+      <Stack flexDirection="row" gap="24px" className="lmw-mi-card-wrapper">
         {manageInvestments.map((data, idx) => (
           <CategoryCard
             {...data}
