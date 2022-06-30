@@ -151,15 +151,19 @@ const FeatureItem = ({
             </div>
           </Tooltip>
         ) : (
-          <Icon
-            src={src}
-            width="16px"
-            height="16px"
-            style={{ marginLeft: 4 }}
-            className="info-icon"
-            dataAid={iconId}
-            onClick={onClickIcon}
-          />
+          <>
+            {!!src && (
+              <Icon
+                src={src}
+                width="16px"
+                height="16px"
+                style={{ marginLeft: 4 }}
+                className="info-icon"
+                dataAid={iconId}
+                onClick={onClickIcon}
+              />
+            )}
+          </>
         )}
       </Stack>
       <Typography
@@ -209,7 +213,7 @@ PfFeatureCard.propTypes = {
     middleSubtitle: PropTypes.string,
   }),
   onClick: PropTypes.func,
-  dataAid: PropTypes.string.isRequired,
+  dataAid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   onClickIconLeft: PropTypes.func,
   onClickIconMiddle: PropTypes.func,
   onClickIconRight: PropTypes.func,
