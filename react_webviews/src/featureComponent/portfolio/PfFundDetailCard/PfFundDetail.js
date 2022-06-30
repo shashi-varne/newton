@@ -16,7 +16,7 @@ export const PF_DETAIL_VARIANT = {
 function PfFundDetail({ variant, onClick, dataAidSuffix, ...props }) {
   return (
     <Box
-      data-aid={dataAidSuffix}
+      data-aid={`pfFundDetails_${dataAidSuffix}`}
       onClick={onClick}
       className="pf-fund-detail-container"
       sx={{
@@ -50,7 +50,8 @@ PfFundDetail.defaultProps = {
 
 PfFundDetail.propTypes = {
   variant: PropTypes.string,
-  dataAidSuffix: PropTypes.string.isRequired,
+  dataAidSuffix: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    .isRequired,
   onClick: noop,
   label: PropTypes.string,
   topTitle: PropTypes.string,
@@ -71,7 +72,17 @@ PfFundDetail.propTypes = {
     rightImgSrc: PropTypes.node,
     rightSubtitle: PropTypes.string,
   }),
-  colorProps: PropTypes.shape({}),
+  colorProps: PropTypes.shape({
+    bottomTitle: PropTypes.string,
+    bottomSubtitle: PropTypes.string,
+    label: PropTypes.string,
+    topTitle: PropTypes.string,
+    middleLabel: PropTypes.string,
+    mainTitle: PropTypes.string,
+    leftSubtitle: PropTypes.string,
+    middleSubtitle: PropTypes.string,
+    rightSubtitle: PropTypes.string,
+  }),
 };
 
 export default PfFundDetail;
