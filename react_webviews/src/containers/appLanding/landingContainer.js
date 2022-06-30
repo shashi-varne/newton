@@ -52,6 +52,7 @@ import {
 import ToastMessage from "../../designSystem/atoms/ToastMessage";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import useLongPress from "../../common/customHooks/useLongPress";
+import { storageService } from "../../utils/validators";
 
 const screen = "LANDING";
 
@@ -549,11 +550,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     (data = {}) =>
     () => {
       if (isFinity) {
-        dispatch(
-          updateAppStorage({
-            categoryTitle: data.title,
-          })
-        );
+        storageService().set("category_index_name", data.title);
       }
       sendEvents("next", {
         primaryCategory: "category item",

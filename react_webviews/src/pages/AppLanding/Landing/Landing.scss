@@ -116,3 +116,14 @@
     margin-bottom: 50px;
   }
 }
+
+@media (max-width: 360px) {
+  .lmw-manage-investments {
+    .lmw-mi-card-wrapper {
+      gap: 16px;
+      .cc-wrapper {
+        min-width: 85px;
+      }
+    }
+  }
+}

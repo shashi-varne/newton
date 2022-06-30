@@ -1,8 +1,6 @@
 import { storageService } from "utils/validators";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
-import { get } from "lodash-es";
-import store from "../../../dataLayer/store";
 
 export const genericErrMsg = "Something went wrong";
 
@@ -14,10 +12,9 @@ export async function initialize() {
   nativeCallback({ action: "take_control_reset" });
 
   if (this.state.screen_name === "fund_list") {
-    const categoryTitle = get(store.getState(), "app.appStorage.categoryTitle", "");
     const state = this.props.location.state;
     this.setState({
-      title: storageService().get("category_index_name") || state.title || categoryTitle,
+      title: storageService().get("category_index_name") || state.title,
     });
   }
 }
