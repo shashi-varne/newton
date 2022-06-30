@@ -11,6 +11,7 @@ import Checkbox from "../../../designSystem/atoms/Checkbox/Checkbox";
 import "./ClaimCashRewards.scss";
 import BottomSheet from "../../../designSystem/organisms/BottomSheet/BottomSheet";
 import { BOTTOMSHEETS_CONTENT } from "businesslogic/strings/referAndEarn";
+import { formatAmountInr } from "businesslogic/utils/common/functions";
 
 const { transferFailed } = BOTTOMSHEETS_CONTENT;
 const STRINGS = CLAIM_CASH_REWARDS;
@@ -56,7 +57,7 @@ const ClaimCashRewards = ({
       <Stack>
         <HeaderTitle
           sx={{ margin: "24px 16px 0" }}
-          title={STRINGS.headerTitle.text + totalBalance}
+          title={STRINGS.headerTitle.text + formatAmountInr(totalBalance)}
           dataAid={STRINGS.headerTitle.dataAid}
         />
         <WrapperBox
@@ -78,7 +79,9 @@ const ClaimCashRewards = ({
               onChange={onChangeAmount}
               inputMode="numeric"
               error={!isEmpty(inputError)}
-              helperText={inputError || STRINGS.helperText + minAmount}
+              helperText={
+                inputError || STRINGS.helperText + formatAmountInr(minAmount)
+              }
               dataAid={"withdrawAmount"}
             />
             <Stack
