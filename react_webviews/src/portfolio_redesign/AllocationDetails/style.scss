@@ -1,0 +1,31 @@
+.allocation-details {
+  .nav-bar-tabs-wrapper {
+    .MuiTabs-flexContainer {
+      justify-content: flex-start !important;
+    }
+  }
+  .swiper-container {
+    padding: 24px 0 60px 0;
+    .swiper-wrapper {
+      height: auto !important;
+      .investment-card {
+        margin-bottom: 24px;
+        .MuiBox-root {
+          margin-bottom: 0;
+        }
+        background: white;
+        padding: 16px;
+        border-radius: 12px;
+      }
+      .MuiTabs-flexContainer {
+        justify-content: flex-start !important;
+      }
+      .progressBar-section {
+        margin-top: 24px;
+        .progress-container {
+          margin-bottom: 16px;
+        }
+      }
+    }
+  }
+}
