@@ -41,7 +41,12 @@ const claimCashRewardsContainer = (WrappedComponent) => (props) => {
   const [inputError, setInputError] = useState("");
   const [transferFullFlag, setTransferFullFlag] = useState(false);
   const isButtonDisabled =
-    isPageLoading || isLoading || !isEmpty(inputError) || amount < minAmount;
+    isPageLoading ||
+    isLoading ||
+    !isEmpty(inputError) ||
+    amount < minAmount ||
+    !amount ||
+    amount == 0;
 
   const dispatch = useDispatch();
 
