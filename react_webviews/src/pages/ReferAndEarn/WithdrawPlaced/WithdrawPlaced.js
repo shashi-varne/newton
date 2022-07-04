@@ -10,17 +10,13 @@ import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../../constants/referAndEarn"
 const sound = require("assets/audio/success.mp3"); // Audio file path to be added
 const STRINGS = WITHDRAW_PLACED;
 
-const WithdrawPlaced = ({ productName = "fisdom", navigate, amount }) => {
+const WithdrawPlaced = ({ productName = "fisdom", goToSuccess}) => {
   const lottieRef = React.useRef();
 
   React.useEffect(() => {
     const animationDuration = lottieRef?.current?.getDuration() || 3;
     const animationTimeout = setTimeout(() => {
-      navigate(REFER_AND_EARN_PATHNAME_MAPPER.successDetails, {
-        state: {
-          amount: amount,
-        },
-      });
+      goToSuccess()
     }, animationDuration * 1000);
     return () => {
       clearTimeout(animationTimeout);

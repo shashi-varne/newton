@@ -42,7 +42,7 @@ const successDetailsContainer = (WrappedComponent) => (props) => {
 
   const onBackPress = () => {
     sendEvents("back");
-    navigate(REFER_AND_EARN_PATHNAME_MAPPER.landing);
+    props.history.goBack()
   };
 
   return (
