@@ -6,14 +6,13 @@ import Icon from "../../../designSystem/atoms/Icon";
 import Separator from "../../../designSystem/atoms/Separator";
 import "./WalletTransactionListItem.scss";
 import { Box } from "@mui/system";
-import { capitalizeFirstLetter } from "../../../utils/validators";
 
 const STRINGS = WALLET_TRANSFERS;
 
 const StatusIconMapper = {
   success: "iv_badge_successfull.svg",
   failed: "iv_badge_failed.svg",
-  pending: "iv_badge_pending.svg",
+  processing: "iv_badge_pending.svg",
 };
 
 const WalletTransactionListItem = ({
@@ -21,7 +20,8 @@ const WalletTransactionListItem = ({
   account,
   amount,
   dataAid,
-  status = "pending",
+  status = "processing",
+  statusLabel,
   showSeparator = true,
 }) => {
   const badgeIcon = StatusIconMapper[status];
@@ -70,7 +70,7 @@ const WalletTransactionListItem = ({
             color="foundationColors.content.tertiary"
             dataAid={STRINGS.listItem.statusDataAid}
           >
-            {capitalizeFirstLetter(status)}
+            {statusLabel}
           </Typography>
         </Stack>
       </Stack>

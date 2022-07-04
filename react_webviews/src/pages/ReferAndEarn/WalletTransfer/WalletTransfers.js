@@ -56,7 +56,7 @@ const WalletTransfers = ({
               ))}
             </Pills>
           </Box>
-          {transactionData.length == 0 ? (
+          {transactionData.length === 0 ? (
             <NoTransferView
               filterApplied={filterApplied}
               productName={productName}
@@ -71,6 +71,7 @@ const WalletTransfers = ({
                   date={item.date || "NA"}
                   account={item.account || "NA"}
                   status={item.status}
+                  statusLabel={item.statusLabel}
                   showSeparator={!isLastItem}
                   dataAid={`${index + 1}`}
                 />

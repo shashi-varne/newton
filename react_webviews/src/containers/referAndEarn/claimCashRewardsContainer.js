@@ -15,11 +15,18 @@ import Api from "../../utils/api";
 import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../constants/referAndEarn";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import { isReadyToInvest } from "../../kyc/services";
+import useErrorState from "../../common/customHooks/useErrorState";
+import { checkAllowedDecimalPoints } from "../../business/referAndEarn/utils";
+
 const screen = "CLAIM_CASH_REWARDS";
 
 const claimCashRewardsContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const { isPageLoading } = useLoadingState(screen);
+
+  const { isFetchFailed, errorMessage } = useErrorState(screen);
+  const [errorData, setErrorData] = useState({});
+  const [showLoader, setShowLoader] = useState(false);
 
   const walletBalance = useSelector(getWalletBalanceData);
   const totalBalance = walletBalance.total_amount;
@@ -70,7 +77,7 @@ const claimCashRewardsContainer = (WrappedComponent) => (props) => {
   const onChangeAmount = (event) => {
     const val = event.target.value;
 
-    if (isNaN(val)) {
+    if (isNaN(val) || !checkAllowedDecimalPoints(val, 2)) {
       return;
     }
 
@@ -121,6 +128,7 @@ const claimCashRewardsContainer = (WrappedComponent) => (props) => {
   const onClickTransfer = async () => {
     sendEvents("transfer_now");
     try {
+      setShowLoader(true);
       await trigger_wallet_transfer(Api, { amount });
       navigate(REFER_AND_EARN_PATHNAME_MAPPER.withdrawPlaced, {
         state: {
@@ -130,6 +138,8 @@ const claimCashRewardsContainer = (WrappedComponent) => (props) => {
     } catch (error) {
       console.error(error);
       setShowErrorBottonSheet(true);
+    } finally {
+      setShowLoader(false);
     }
   };
 
@@ -143,6 +153,7 @@ const claimCashRewardsContainer = (WrappedComponent) => (props) => {
       sendEvents={sendEvents}
       isPageLoading={isPageLoading || isLoading}
       buttonDisabled={isButtonDisabled}
+      isButtonLoading={showLoader}
       accDetails={accDetails}
       transferFullFlag={transferFullFlag}
       onCheckTransferFull={onCheckTransferFull}

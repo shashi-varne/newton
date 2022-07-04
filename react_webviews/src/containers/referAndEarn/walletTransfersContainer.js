@@ -15,6 +15,7 @@ import { getFnsFormattedDate } from "../../business/referAndEarn/utils";
 import { formatAmountInr } from "businesslogic/utils/common/functions";
 import ToastMessage from "../../designSystem/atoms/ToastMessage";
 import { nativeCallback } from "../../utils/native_callback";
+import { capitalizeFirstLetter } from "../../utils/validators";
 
 const screen = "WALLET_TRANSFERS";
 
@@ -74,7 +75,11 @@ const walletTransfersContainer = (WrappedComponent) => (props) => {
 
   const onClickContact = () => {
     if (isWeb) {
-      navigate("/help");
+      navigate("/help", {
+        state: {
+          popOnBack: true,
+        },
+      });
     } else {
       nativeCallback({
         action: "open_browser",
@@ -105,17 +110,25 @@ const getWalletTransactionsViewData = (walletTransactions) => {
     const acc =
       item?.to_account_number &&
       item?.bank_name &&
-      `${item.bank_name}••••••••${item?.to_account_number?.substring(6)}`;
+      `${item.bank_name}••••••••${item?.to_account_number?.substr(-5)}`;
+
     const date = getFnsFormattedDate(
       item?.dt_updated,
       "yyyy-MM-dd",
       "dd MMM, yyyy"
     );
+
+    let statusLabel = capitalizeFirstLetter(item.status);
+    if ((statusLabel = "Success")) {
+      statusLabel = "Successful";
+    }
+
     return {
       amount: formatAmountInr(item.amount),
       date: date || "NA",
       account: acc || "NA",
       status: item.status,
+      statusLabel: statusLabel,
     };
   });
 

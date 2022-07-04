@@ -12,7 +12,6 @@ import "./Landing.scss";
 
 const landing = ({
   tabValue,
-  setTabValue,
   sendEvents,
   isWeb,
   noRewardsView,
@@ -32,20 +31,12 @@ const landing = ({
   showTransferNotAllowed,
   setShowTransferNotAllowed,
   productName,
+  isFetchFailed,
+  errorData,
+  handleTabChange,
+  handleSlideChange,
+  setSwiper,
 }) => {
-  const [swiper, setSwiper] = useState(null);
-
-  const handleTabChange = (e, value) => {
-    setTabValue(value);
-    if (swiper) {
-      swiper.slideTo(value);
-    }
-  };
-
-  const handleSlideChange = (swiper) => {
-    setTabValue(swiper?.activeIndex);
-  };
-
   return (
     <Container
       headerProps={{
@@ -125,7 +116,7 @@ const landing = ({
       />
       <TransferNotAllowedBottomSheet
         minAmount={minWithrawAmount}
-        isOpen={showTransferNotAllowed}
+        isOpen={!!showTransferNotAllowed}
         handleClose={() => setShowTransferNotAllowed(false)}
         isWeb={isWeb}
         onClickCta={() => setShowTransferNotAllowed(false)}

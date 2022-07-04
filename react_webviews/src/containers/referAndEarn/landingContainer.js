@@ -47,7 +47,20 @@ const landingContainer = (WrappedComponent) => (props) => {
   const refereeListData = useSelector(getRefereeListData);
   const walletBalance = useSelector(getWalletBalanceData);
   const [activeSheetIndex, setActiveSheetIndex] = useState(-1);
-  const [showTransferNotAllowed, setShowTransferNotAllowed] = useState(false);
+  const [showTransferNotAllowed, setShowTransferNotAllowed] = useState(null);
+
+  const [swiper, setSwiper] = useState(null);
+
+  const handleTabChange = (e, value) => {
+    handleSelectTab(value);
+    if (swiper) {
+      swiper.slideTo(value);
+    }
+  };
+
+  const handleSlideChange = (swiper) => {
+    handleSelectTab(swiper?.activeIndex);
+  };
 
   const tabValue = useSelector(getSelectedTabIndex);
   const handleSelectTab = (value) => {
@@ -100,14 +113,22 @@ const landingContainer = (WrappedComponent) => (props) => {
 
   useEffect(() => {
     initialize();
-    if (props?.history?.action === "PUSH") {
-      handleSelectTab(0);
-    }
   }, []);
 
   useEffect(() => {
+    if (props?.history?.action === "PUSH") {
+      handleSelectTab(0);
+      if (swiper) {
+        swiper?.slideTo(0);
+      }
+    }
+  }, [swiper]);
+
+  useEffect(() => {
     const userAction = showTransferNotAllowed ? "next" : "back";
-    sendEvents(userAction);
+    if (showTransferNotAllowed !== null) {
+      sendEvents(userAction);
+    }
   }, [showTransferNotAllowed]);
 
   useEffect(() => {
@@ -253,6 +274,10 @@ const landingContainer = (WrappedComponent) => (props) => {
       setShowTransferNotAllowed={setShowTransferNotAllowed}
       productName={productName}
       minWithrawAmount={minWithrawAmount}
+      isFetchFailed={isFetchFailed}
+      handleTabChange={handleTabChange}
+      handleSlideChange={handleSlideChange}
+      setSwiper={setSwiper}
     />
   );
 };

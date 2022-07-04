@@ -277,7 +277,11 @@ class CategoryList extends Component {
   };
 
   onBackPress = () => {
-    nativeCallback({ action: "exit" });
+    if(this.props.location.state?.popOnBack){
+       this.props.history.goBack();
+    }else{
+      nativeCallback({ action: "exit" });
+    }
   }
 
   render() {
