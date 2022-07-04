@@ -16,7 +16,6 @@ import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../constants/referAndEarn";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import { isReadyToInvest } from "../../kyc/services";
 import useErrorState from "../../common/customHooks/useErrorState";
-import { checkAllowedDecimalPoints } from "../../business/referAndEarn/utils";
 
 const screen = "CLAIM_CASH_REWARDS";
 
@@ -29,7 +28,7 @@ const claimCashRewardsContainer = (WrappedComponent) => (props) => {
   const [showLoader, setShowLoader] = useState(false);
 
   const walletBalance = useSelector(getWalletBalanceData);
-  const totalBalance = walletBalance.total_amount;
+  const totalBalance = walletBalance.balance_amount;
   const minAmount = walletBalance.min_withdraw_limit;
   const [showErrorBottomSheet, setShowErrorBottonSheet] = useState(false);
   const { user, kyc, isLoading } = useUserKycHook();
@@ -77,7 +76,7 @@ const claimCashRewardsContainer = (WrappedComponent) => (props) => {
   const onChangeAmount = (event) => {
     const val = event.target.value;
 
-    if (isNaN(val) || !checkAllowedDecimalPoints(val, 2)) {
+    if (isNaN(val)) {
       return;
     }
 
@@ -89,7 +88,7 @@ const claimCashRewardsContainer = (WrappedComponent) => (props) => {
       setInputError("");
     }
 
-    setAmount(val);
+    setAmount(Math.trunc(val));
     if (val > totalBalance) {
       setInputError(ERROR_MESSAGES.transferAmountExceeded);
     }
@@ -134,7 +133,7 @@ const claimCashRewardsContainer = (WrappedComponent) => (props) => {
         state: {
           amount: amount,
         },
-        action:'replace'
+        action: "replace",
       });
     } catch (error) {
       console.error(error);
