@@ -32,11 +32,3 @@ export const getDiffInHours = (dateStr, initialFormat = "yyyy-MM-dd") => {
 
   return hours;
 };
-
-export const checkAllowedDecimalPoints = (value, allowedPoints = 2) => {
-  let num = value.toString().split(".");
-  if (num[1] && num[1].length > allowedPoints) {
-    return false;
-  }
-  return true;
-};
