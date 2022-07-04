@@ -258,6 +258,13 @@ export const REFERRAL_DATA = {
     dataAid: "referralError",
     image: require(`assets/caution.svg`),
   },
+  noInput: {
+    title: "Referral code not entered",
+    subtitle: "Please enter referral code to proceed",
+    primaryButtonTitle: "Okay",
+    dataAid: "referralError",
+    image: require(`assets/caution.svg`),
+  },
 };
 
 export const SHARE_REFERRAL_DATA = {

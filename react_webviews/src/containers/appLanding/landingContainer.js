@@ -649,6 +649,12 @@ const landingContainer = (WrappedComponent) => (props) => {
   };
 
   const applyReferral = async () => {
+    if (isEmpty(referralCode)) {
+      setReferralData(REFERRAL_DATA.noInput);
+      handleBottomsheets({ [BOTTOMSHEET_KEYS.openReferral]: true });
+      return;
+    }
+
     try {
       handleLoader({ dotLoader: true });
       await applyReferralCode(Api, referralCode);
