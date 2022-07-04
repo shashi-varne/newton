@@ -88,6 +88,7 @@ const landingContainer = (WrappedComponent) => (props) => {
   const [referralData, setReferralData] = useState({});
   const [showPortfolioLoader, setShowPorfolioLoader] = useState(false);
   const [portfolioOverViewData, setPortfolioOverViewData] = useState({});
+  const [appliedCode, setAppliedCode] = useState(user?.accepted_referral_code);
 
   const initializeData = () => {
     const {
@@ -163,10 +164,13 @@ const landingContainer = (WrappedComponent) => (props) => {
 
   const getReferalConfig = () => {
     const showShareReferral =
-      kycData.isMfInvested && baseConfig?.referralConfig?.shareRefferal;
+      user?.referral_campaign_status === "active" &&
+      baseConfig?.referralConfig?.shareRefferal;
 
     const showApplyReferral =
-      !kycData.isMfInvested && baseConfig?.referralConfig?.applyRefferal;
+      isEmpty(appliedCode) &&
+      !kycData.isMfInvested &&
+      baseConfig?.referralConfig?.applyRefferal;
 
     return {
       showApplyReferral,
@@ -650,6 +654,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       await applyReferralCode(Api, referralCode);
       setReferralData(REFERRAL_DATA.success);
       fetchSummaryData();
+      setAppliedCode(referralCode);
       handleBottomsheets({ [BOTTOMSHEET_KEYS.openReferral]: true });
     } catch (err) {
       setReferralData({
