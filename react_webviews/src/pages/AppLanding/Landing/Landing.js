@@ -326,6 +326,7 @@ const renderCards = ({
               dataAid={shareReferralData.dataAid}
               title={shareReferralData.title}
               subtitle={shareReferralData.subtitle}
+              subtitleColor={"foundationColors.content.tertiary"}
               rightImgSrc={require(`assets/${shareReferralData.productName}/${shareReferralData.rightIcon}`)}
               onClick={handleReferral}
             />

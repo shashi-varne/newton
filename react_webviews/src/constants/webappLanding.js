@@ -271,14 +271,14 @@ export const SHARE_REFERRAL_DATA = {
   fisdom: {
     dataAid: "referEarn",
     title: "Refer & earn",
-    subtitle: "Invite your friends & earn exciting rewards",
+    subtitle: "Invite as many friends as you can & earn up to ₹2,00,000",
     rightIcon: "share_refer.svg",
     productName: "fisdom",
   },
   finity: {
     dataAid: "referEarn",
-    title: "Share the joy",
-    subtitle: "Invite your friends & family",
+    title: "Refer & earn",
+    subtitle: "Invite as many friends as you can & earn up to ₹2,00,000",
     rightIcon: "share_refer.svg",
     productName: "finity",
   },
