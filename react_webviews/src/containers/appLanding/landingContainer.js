@@ -202,7 +202,10 @@ const landingContainer = (WrappedComponent) => (props) => {
   ]);
 
   const getLandingSections = () => {
-    if (showPortfolioOverview && showSetupEasySip) {
+    if (
+      (showPortfolioOverview && showSetupEasySip) ||
+      !kycData.isReadyToInvestBase
+    ) {
       const list = landingSections.filter(
         (data) => data !== "marketingBanners"
       );
@@ -215,6 +218,7 @@ const landingContainer = (WrappedComponent) => (props) => {
   const mainLandingSections = useMemo(getLandingSections, [
     showPortfolioOverview,
     showSetupEasySip,
+    kycData.isReadyToInvestBase,
   ]);
 
   useEffect(() => {
@@ -806,9 +810,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       }
       showExploreCategories={showExploreCategories}
       showSeachIcon={showSearchIcon}
-      showMarketingBanners={
-        !isEmpty(marketingBanners) && kycData.isReadyToInvestBase
-      }
+      showMarketingBanners={!isEmpty(marketingBanners)}
       showApplyReferral={showApplyReferral}
       showShareReferral={showShareReferral}
       showSetupEasySip={showSetupEasySip}
