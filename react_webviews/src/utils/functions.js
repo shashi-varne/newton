@@ -700,7 +700,15 @@ export function navigate(pathname, data = {}) {
       params: data.params || {},
       state: data.state || {},
     });
-  } else {
+  }else if(data.action ==='replace'){
+     this.history.replace({
+      pathname: pathname,
+      search: data.searchParams || getConfig().searchParams,
+      params: data.params || {},
+      state: data.state || {},
+    });
+  }
+   else {
     this.history.push({
       pathname: pathname,
       search: data.searchParams || getConfig().searchParams,
