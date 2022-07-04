@@ -40,6 +40,11 @@ const successDetailsContainer = (WrappedComponent) => (props) => {
     }
   };
 
+  const onBackPress = () => {
+    sendEvents("back");
+    navigate(REFER_AND_EARN_PATHNAME_MAPPER.landing);
+  };
+
   return (
     <WrappedComponent
       date={date}
@@ -48,6 +53,7 @@ const successDetailsContainer = (WrappedComponent) => (props) => {
       onClickCta={onClickCta}
       sendEvents={sendEvents}
       isPageLoading={isLoading}
+      onBackClick={onBackPress}
     />
   );
 };

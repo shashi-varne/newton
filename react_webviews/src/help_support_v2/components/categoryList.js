@@ -278,7 +278,11 @@ class CategoryList extends Component {
   };
 
   onBackPress = () => {
-    handleNativeExit(this.props, {action: "exit"});
+    if(this.props.location.state?.popOnBack){
+      this.props.history.goBack();
+    }else{
+      handleNativeExit(this.props, {action: "exit"});
+    }
   }
 
   render() {

@@ -33,6 +33,7 @@ const ClaimCashRewards = ({
   setShowErrorBottonSheet,
   isFetchFailed,
   errorData,
+  isButtonLoading,
 }) => {
   return (
     <Container
@@ -47,6 +48,7 @@ const ClaimCashRewards = ({
           dataAid: STRINGS.cta.dataAid,
           onClick: onClickTransfer,
           disabled: buttonDisabled,
+          isLoading: isButtonLoading,
         },
       }}
       isPageLoading={isPageLoading}
@@ -77,6 +79,7 @@ const ClaimCashRewards = ({
               {STRINGS.enterAmount.text}
             </Typography>
             <InputField
+              step=".01"
               variant="outlined"
               prefix={<Typography variant="body2">₹</Typography>}
               value={amount}
@@ -86,6 +89,7 @@ const ClaimCashRewards = ({
               helperText={
                 inputError || STRINGS.helperText + formatAmountInr(minAmount)
               }
+              disabled={isButtonLoading}
               dataAid={"withdrawAmount"}
             />
             <Stack

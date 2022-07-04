@@ -21,11 +21,13 @@ const SuccessDetails = ({
   sendEvents,
   isPageLoading,
   onClickCta,
+  onBackClick,
 }) => {
   return (
     <Container
       headerProps={{
         showCloseIcon: true,
+        onBackClick: onBackClick,
       }}
       footer={{
         button1Props: {
