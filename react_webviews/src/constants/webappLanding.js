@@ -245,7 +245,7 @@ export const EXPLORE_CATEGORY_DATA = {
 
 export const REFERRAL_DATA = {
   success: {
-    title: "Sucessful",
+    title: "Successful",
     subtitle: "You have applied referral code successfully",
     primaryButtonTitle: "OKAY",
     dataAid: "referralSuccessful",
