@@ -12,6 +12,13 @@ import PfFeatureCard from "../../featureComponent/portfolio/PfFeatureCard/PfFeat
 import WrapperBox from "../../designSystem/atoms/WrapperBox/WrapperBox";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
+import { MF_LANDING } from "businesslogic/strings/portfolio";
+import { MORE_OPTIONS } from "businesslogic/constants/portfolio";
+
+const {
+  investmentSummary: INVESTMENT_SUMMARY,
+  assetAllocationSection: ASSET_ALLOCATION,
+} = MF_LANDING;
 
 const productName = getConfig().productName;
 const optionList = [
@@ -108,7 +115,8 @@ function MFLanding({}) {
   return (
     <Container
       headerProps={{
-        headerTitle: "Mutual funds",
+        headerTitle: MF_LANDING.navigationHeader.title,
+        dataAid: MF_LANDING.navigationHeader.dataAid,
         headerSx: {
           backgroundColor: "foundationColors.primary.600",
           color: "foundationColors.supporting.white",
@@ -116,6 +124,7 @@ function MFLanding({}) {
       }}
       className="mf-landing-container"
       noPadding
+      dataAid={MF_LANDING.screenDataAid}
     >
       <Box
         sx={{
@@ -126,9 +135,9 @@ function MFLanding({}) {
         <Typography
           variant="body2"
           color="foundationColors.supporting.gainsboro"
-          dataAid="keyTotalCurrent"
+          dataAid={INVESTMENT_SUMMARY.keyTotalCurrent.dataAid}
         >
-          Total current value
+          {INVESTMENT_SUMMARY.keyTotalCurrent.text}
         </Typography>
         <Stack
           flexDirection="row"
@@ -138,16 +147,16 @@ function MFLanding({}) {
           <Typography
             variant="heading1"
             color="foundationColors.supporting.white"
-            dataAid="valueTotalCurrent"
+            dataAid={INVESTMENT_SUMMARY.valueTotalCurrent.dataAid}
             style={{ marginRight: 10 }}
           >
             ₹19.6Cr
           </Typography>
           <Box>
             <Icon
-              dataAid="currentValue"
               src={require("assets/eye_icon.svg")}
               className="eye-icon"
+              dataAid={INVESTMENT_SUMMARY.currentValueIcon.dataAid}
             />
           </Box>
         </Stack>
@@ -159,22 +168,22 @@ function MFLanding({}) {
           <Typography
             variant="body2"
             color="foundationColors.supporting.gainsboro"
-            dataAid="keyOneDayChange"
+            dataAid={INVESTMENT_SUMMARY.keyOneDayChange.dataAid}
             style={{ marginRight: 4 }}
           >
-            1 day change:
+            {INVESTMENT_SUMMARY.keyOneDayChange.text}
           </Typography>
           <Typography
             variant="body2"
             color="foundationColors.secondary.profitGreen.400"
-            dataAid="valueOneDayChange"
+            dataAid={INVESTMENT_SUMMARY.valueOneDayChange.dataAid}
           >
             + ₹36,865 (+8.6%)
           </Typography>
         </Stack>
 
         <PfFeatureCard
-          dataAid="currentInvestment"
+          dataAid={INVESTMENT_SUMMARY.pfFeatureCard}
           textProps={{
             title: "Current investment",
             leftTitle: "Invested",
@@ -198,17 +207,17 @@ function MFLanding({}) {
         <WrapperBox elevation={1}>
           <InfoCard
             imgSrc={require("assets/give_cash.svg")}
-            title="Set up easySIP"
-            subtitle="Authorise a one-time eMandate to enable auto-debit of your SIPs"
-            dataAid="easySip"
+            title={MF_LANDING.easySip.title}
+            subtitle={MF_LANDING.easySip.subtitle}
+            dataAid={MF_LANDING.easySip.dataAid}
           />
         </WrapperBox>
         <WrapperBox elevation={1}>
-          <InfoCard
+          <InfoCard //TODO: change copy according status from businesslogic
             imgSrc={require("assets/locked_suit.svg")}
-            title="Import external portfolio"
-            subtitle={`Track & manage all your Fisdom & non-Fisdom investments in one place`}
-            dataAid="externalPortfolio"
+            title={MF_LANDING.externalPortfolio.title}
+            subtitle={MF_LANDING.externalPortfolio.subtitle}
+            dataAid={MF_LANDING.externalPortfolio.dataAid}
           />
         </WrapperBox>
       </Box>
@@ -216,7 +225,7 @@ function MFLanding({}) {
         <Icon
           src={require("assets/mf_marketing_banner.svg")}
           className="marketing-banner"
-          dataAid="marketingBanner"
+          dataAid={MF_LANDING.bannerSection.first.iconDataAid}
         />
       </Box>
 
@@ -229,9 +238,9 @@ function MFLanding({}) {
           <Typography
             variant="heading3"
             color="foundationColors.content.primary"
-            dataAid="assetAllocation"
+            dataAid={ASSET_ALLOCATION.title.dataAid}
           >
-            Asset allocation
+            {ASSET_ALLOCATION.title.text}
           </Typography>
 
           <Stack
@@ -242,13 +251,14 @@ function MFLanding({}) {
             <Typography
               variant="body8"
               color="foundationColors.action.brand"
-              dataAid="title"
+              dataAid={ASSET_ALLOCATION.viewDetails.ctaDataAid}
               style={{ marginRight: 8 }}
             >
-              View details
+              {ASSET_ALLOCATION.viewDetails.ctaTitle}
             </Typography>
             <Icon
               src={require(`assets/${[productName]}/right_arrow_small.svg`)}
+              dataAid={ASSET_ALLOCATION.viewDetails.iconDataAid}
             />
           </Stack>
         </Stack>
@@ -260,7 +270,7 @@ function MFLanding({}) {
         <Typography
           variant="heading3"
           color="foundationColors.content.primary"
-          dataAid="assetAllocation"
+          dataAid={"more"}
         >
           More options
         </Typography>
@@ -269,8 +279,8 @@ function MFLanding({}) {
             <CategoryCard
               key={index}
               variant={option.variant}
-              dataAid={option.dataAid}
-              title={option.title}
+              dataAid={MORE_OPTIONS[index].dataAid}
+              title={MORE_OPTIONS[index].title}
               imgSrc={option.imgSrc}
             />
           ))}
