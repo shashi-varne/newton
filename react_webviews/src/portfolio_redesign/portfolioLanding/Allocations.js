@@ -5,10 +5,19 @@ import CustomSwiper from "../../designSystem/molecules/CustomSwiper";
 import { SwiperSlide } from "swiper/react";
 import AssetWiseGraph from "./AssetWiseGraph";
 import ProductWiseGraph from "./ProductWiseGraph";
+import { PORTFOLIO_LANDING } from "businesslogic/strings/portfolio";
+
+const { allocationSection: ALLOCATION_SECTION } = PORTFOLIO_LANDING;
 
 const ALLOCATION_TYPES = [
-  { label: "Asset-wise", dataAid: "assetWise" },
-  { label: "Product-wise", dataAid: "productWise" },
+  {
+    label: ALLOCATION_SECTION.pillAssetWise.text,
+    dataAid: ALLOCATION_SECTION.pillAssetWise.dataAid,
+  },
+  {
+    label: ALLOCATION_SECTION.pillProductWise.text,
+    dataAid: ALLOCATION_SECTION.pillProductWise.dataAid,
+  },
 ];
 
 function Allocations() {
@@ -40,8 +49,6 @@ function Allocations() {
         onSwiper={setSwiper}
         autoHeight
         hidePagination
-        noSwiping
-        noSwipingClass="swiper-slide"
       >
         <SwiperSlide>
           <AssetWiseGraph />
