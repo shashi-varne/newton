@@ -5,28 +5,29 @@ import Typography from "../../designSystem/atoms/Typography";
 import "./style.scss";
 import PfFeatureCard from "../../featureComponent/portfolio/PfFeatureCard/PfFeatureCard";
 import WrapperBox from "../../designSystem/atoms/WrapperBox";
+import { ALL_INVESTMENTS_LANDING } from "businesslogic/strings/portfolio";
 
 const cardData = [
   {
-    src: require("assets/iv_left.svg"),
+    src: require("assets/amazon_pay.svg"),
     title: "Stocks, F&O",
     currentValue: "₹3,00,600",
     pLValue: "₹3,00,600",
   },
   {
-    src: require("assets/iv_left.svg"),
+    src: require("assets/amazon_pay.svg"),
     title: "Mutual funds",
     currentValue: "₹3,00,600",
     pLValue: "₹3,00,600",
   },
   {
-    src: require("assets/iv_left.svg"),
+    src: require("assets/amazon_pay.svg"),
     title: "NPS",
     currentValue: "₹3,00,600",
     pLValue: "₹3,00,600",
   },
   {
-    src: require("assets/iv_left.svg"),
+    src: require("assets/amazon_pay.svg"),
     title: "FD",
     currentValue: "₹3,00,600",
     pLValue: "₹3,00,600",
@@ -37,9 +38,11 @@ function AllInvestments() {
   return (
     <Container
       headerProps={{
-        headerTitle: "Investments",
+        headerTitle:
+          ALL_INVESTMENTS_LANDING.topInvestmentSection.screenTitle.text,
       }}
       className="all-investments-container"
+      dataAid={ALL_INVESTMENTS_LANDING.topInvestmentSection.screenTitle.dataAid}
     >
       <Stack
         flexDirection={"row"}
@@ -51,14 +54,18 @@ function AllInvestments() {
           <Typography
             variant="body2"
             color="foundationColors.content.secondary"
-            dataAid={"keyCurrent"}
+            dataAid={
+              ALL_INVESTMENTS_LANDING.topInvestmentSection.keyCurrent.dataAid
+            }
           >
-            Current value
+            {ALL_INVESTMENTS_LANDING.topInvestmentSection.keyCurrent.text}
           </Typography>
           <Typography
             variant="body8"
             color="foundationColors.content.primary"
-            dataAid={"valueCurrent"}
+            dataAid={
+              ALL_INVESTMENTS_LANDING.topInvestmentSection.valueCurrent.dataAid
+            }
           >
             ₹3,00,00,000
           </Typography>
@@ -68,14 +75,16 @@ function AllInvestments() {
             variant="body2"
             color="foundationColors.content.secondary"
             style={{ textAlign: "right" }}
-            dataAid={"keyCurrent"}
+            dataAid={ALL_INVESTMENTS_LANDING.topInvestmentSection.keyPl.dataAid}
           >
-            P&amp;L
+            {ALL_INVESTMENTS_LANDING.topInvestmentSection.keyPl.text}
           </Typography>
           <Typography
             variant="body8"
             color="foundationColors.secondary.profitGreen.400"
-            dataAid={"valueCurrent"}
+            dataAid={
+              ALL_INVESTMENTS_LANDING.topInvestmentSection.valuePl.dataAid
+            }
           >
             + ₹10,26,340
           </Typography>
@@ -88,8 +97,10 @@ function AllInvestments() {
               topImgSrc={card.src}
               textProps={{
                 title: card.title,
-                leftTitle: "Current value",
-                rightTitle: "P&L",
+                leftTitle:
+                  ALL_INVESTMENTS_LANDING.topInvestmentSection.keyCurrent.text,
+                rightTitle:
+                  ALL_INVESTMENTS_LANDING.topInvestmentSection.keyPl.text,
                 leftSubtitle: card.currentValue,
                 rightSubtitle: card.pLValue,
               }}
