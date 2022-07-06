@@ -169,7 +169,7 @@ const landingContainer = (WrappedComponent) => (props) => {
 
     const showApplyReferral =
       isEmpty(appliedCode) &&
-      !kycData.isMfInvested &&
+      user?.referral_campaign_status === "init" &&
       baseConfig?.referralConfig?.applyRefferal;
 
     return {
