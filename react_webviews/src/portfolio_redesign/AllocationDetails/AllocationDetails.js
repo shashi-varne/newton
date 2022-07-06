@@ -4,6 +4,7 @@ import { SwiperSlide } from "swiper/react";
 import CustomSwiper from "../../designSystem/molecules/CustomSwiper";
 import AllocationDetailsTabItem from "./AllocationDetailsTabItem";
 import "./style.scss";
+import { ALLOCATIONS_LANDING } from "businesslogic/strings/portfolio";
 
 const tabList = [
   { name: "Equity • 90%", key: "equity" },
@@ -63,7 +64,8 @@ function AllocationDetails() {
   return (
     <Container
       headerProps={{
-        headerTitle: "Allocation details",
+        headerTitle: ALLOCATIONS_LANDING.navigationHeader.title,
+        dataAid: ALLOCATIONS_LANDING.navigationHeader.dataAid,
         tabsProps: {
           selectedTab: tabValue,
           onTabChange: handleTabChange,
@@ -73,6 +75,7 @@ function AllocationDetails() {
       }}
       noFooter
       className="allocation-details"
+      dataAid={ALLOCATIONS_LANDING.screenDataAid}
     >
       <CustomSwiper
         onSlideChange={handleSlideChange}
@@ -83,8 +86,14 @@ function AllocationDetails() {
         <SwiperSlide>
           <AllocationDetailsTabItem
             pillData={[
-              { label: "Holdings", dataAid: "holdings" },
-              { label: "Sectors", dataAid: "sectors" },
+              {
+                label: ALLOCATIONS_LANDING.pillHoldings.title,
+                dataAid: ALLOCATIONS_LANDING.pillHoldings.dataAid,
+              },
+              {
+                label: ALLOCATIONS_LANDING.pillSectors.title,
+                dataAid: ALLOCATIONS_LANDING.pillSectors.dataAid,
+              },
             ]}
             holdingsData={holdingsData}
             sectorsData={sectorsData}
@@ -92,7 +101,12 @@ function AllocationDetails() {
         </SwiperSlide>
         <SwiperSlide>
           <AllocationDetailsTabItem
-            pillData={[{ label: "Holdings", dataAid: "holdings" }]}
+            pillData={[
+              {
+                label: ALLOCATIONS_LANDING.pillHoldings.title,
+                dataAid: ALLOCATIONS_LANDING.pillHoldings.dataAid,
+              },
+            ]}
             holdingsData={holdingsData}
           />
         </SwiperSlide>

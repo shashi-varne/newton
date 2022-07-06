@@ -1,6 +1,7 @@
 import { Box, Stack } from "@mui/material";
 import React from "react";
 import Typography from "../../designSystem/atoms/Typography";
+import { ALLOCATIONS_LANDING } from "businesslogic/strings/portfolio";
 
 const InvestmentCard = ({ currentValue, profitLoss }) => {
   return (
@@ -14,14 +15,14 @@ const InvestmentCard = ({ currentValue, profitLoss }) => {
         <Typography
           variant="body2"
           color={"foundationColors.content.secondary"}
-          dataAid="keyCurrent"
+          dataAid={ALLOCATIONS_LANDING.keyCurrent.dataAid}
         >
-          Current value
+          {ALLOCATIONS_LANDING.keyCurrent.text}
         </Typography>
         <Typography
           variant="body8"
           color={"foundationColors.content.primary"}
-          dataAid="valueCurrent"
+          dataAid={ALLOCATIONS_LANDING.valueCurrent.dataAid}
         >
           ₹3,00,00,500
         </Typography>
@@ -30,14 +31,14 @@ const InvestmentCard = ({ currentValue, profitLoss }) => {
         <Typography
           variant="body2"
           color={"foundationColors.content.secondary"}
-          dataAid="keyCurrent"
+          dataAid={ALLOCATIONS_LANDING.keyPl.dataAid}
         >
-          P&amp;L
+          {ALLOCATIONS_LANDING.keyPl.text}
         </Typography>
         <Typography
           variant="body8"
           color={"foundationColors.secondary.profitGreen.400"} //TODO: add loss color as well conditionally
-          dataAid="valueCurrent"
+          dataAid={ALLOCATIONS_LANDING.valuePl.dataAid}
         >
           ₹3,00,00,500
         </Typography>
