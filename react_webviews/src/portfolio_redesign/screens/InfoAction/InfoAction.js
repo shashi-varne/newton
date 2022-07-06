@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Stack } from "@mui/material";
 import Container from "designSystem/organisms/ContainerWrapper";
 import Button from "designSystem/atoms/Button";
@@ -11,6 +11,8 @@ import {
 } from "designSystem/molecules/LandingHeader";
 import "./style.scss";
 import PropTypes from "prop-types";
+import BottomSheet from "../../../designSystem/organisms/BottomSheet";
+import ReturnCalculator from "./ReturnCalculator";
 
 const INFO_ACTION_VARIANT = {
   WITH_ACTION: "WITH_ACTION",
@@ -29,7 +31,7 @@ const WithoutActionSubtitle = () => {
   );
 };
 
-const WithActionSubtitle = () => {
+const WithActionSubtitle = (setIsOpen) => {
   return (
     <Typography
       variant="inherit"
@@ -38,7 +40,12 @@ const WithActionSubtitle = () => {
     >
       Join 5M + Indians who invest their money to grow their money. Returns from
       investments help to build wealth with no sweat!
-      <Button variant="link" title="Calculate returns" />
+      <Button
+        variant="link"
+        title="Calculate returns"
+        className="btn-calculate-returns"
+        onClick={() => setIsOpen(true)}
+      />
     </Typography>
   );
 };
@@ -49,6 +56,7 @@ function InfoAction({
   subtitle,
   variant = INFO_ACTION_VARIANT.WITH_ACTION,
 }) {
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <Container
       headerProps={{
@@ -68,16 +76,23 @@ function InfoAction({
             <LandingHeaderImage
               imgSrc={require("assets/updating_shortly.svg")}
             />
-            <LandingHeaderTitle>I am title</LandingHeaderTitle>
-            <LandingHeaderSubtitle dataIdx={1}>
+            <LandingHeaderTitle align="center">I am title</LandingHeaderTitle>
+            <LandingHeaderSubtitle align="center" dataIdx={1}>
               {variant === INFO_ACTION_VARIANT.WITHOUT_ACTION
                 ? WithoutActionSubtitle()
-                : WithActionSubtitle()}
+                : WithActionSubtitle(setIsOpen)}
             </LandingHeaderSubtitle>
           </LandingHeader>
         </Box>
         <Button dataAid="primary" variant={"container"} title="VIEW ORDERS" />
       </Stack>
+      <BottomSheet
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        onBackdropClick={() => setIsOpen(false)}
+      >
+        <ReturnCalculator />
+      </BottomSheet>
     </Container>
   );
 }

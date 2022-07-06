@@ -1,0 +1,18 @@
+.return-calculator {
+    padding: 16px;
+    .MuiTabs-root {
+        margin: 24px 0;
+        .MuiTabs-flexContainer {
+            justify-content: flex-start !important;
+        }
+    }
+    .return-slider {
+        padding: 16px 20px 0;
+    }
+    .investment-period {
+        margin: 16px 0;
+    }
+    .return-results {
+        margin: 24px 0 32px;
+    }
+}

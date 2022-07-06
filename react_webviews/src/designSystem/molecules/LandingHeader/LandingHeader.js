@@ -53,63 +53,90 @@
     color: 'foundationColors.secondary.mango.300'
 */
 
-import React, { useState } from 'react';
-import { Box } from '@mui/material';
-import PropTypes from 'prop-types';
-import Typography from '../../atoms/Typography';
-import isArray from 'lodash/isArray';
+import React, { useState } from "react";
+import { Box } from "@mui/material";
+import PropTypes from "prop-types";
+import Typography from "../../atoms/Typography";
+import isArray from "lodash/isArray";
 
-import './LandingHeader.scss';
-import Icon from '../../atoms/Icon';
-import { useDispatch } from 'react-redux';
-import { setDiySeeMore } from 'businesslogic/dataStore/reducers/diy';
+import "./LandingHeader.scss";
+import Icon from "../../atoms/Icon";
+import { useDispatch } from "react-redux";
+import { setDiySeeMore } from "businesslogic/dataStore/reducers/diy";
 
 export const LandingHeader = ({ variant, children, dataAid }) => {
-  const variantClass = variant === 'center' ? 'landing-header-center-align' : '';
+  const variantClass =
+    variant === "center" ? "landing-header-center-align" : "";
   return (
-    <Box className={`landing-header-wrapper ${variantClass}`} data-aid={`landingHeader_${dataAid}`}>
+    <Box
+      className={`landing-header-wrapper ${variantClass}`}
+      data-aid={`landingHeader_${dataAid}`}
+    >
       {children}
     </Box>
   );
 };
 
 export const LandingHeaderImage = ({ imgSrc, imgProps = {} }) => {
-  return <Icon src={imgSrc} width='140px' height='120px' {...imgProps} dataAid='top' />;
+  return (
+    <Icon
+      src={imgSrc}
+      width="140px"
+      height="120px"
+      {...imgProps}
+      dataAid="top"
+    />
+  );
 };
 
 export const LandingHeaderTitle = ({ children, color }) => {
   return (
-    <Typography variant='heading1' color={color} dataAid='title' component='div'>
-      {children}
-    </Typography>
-  );
-};
-
-export const LandingHeaderSubtitle = ({ children, color, dataIdx = "" }) => {
-  return (
     <Typography
-      className='lh-subtitle'
-      dataAid={`subtitle${dataIdx}`}
-      variant='body2'
+      variant="heading1"
       color={color}
-      align='left'
-      component='div'
+      dataAid="title"
+      component="div"
     >
       {children}
     </Typography>
   );
 };
 
-export const LandingHeaderPoints = ({ children, color, dataIdx }) => {
+export const LandingHeaderSubtitle = ({
+  children,
+  color,
+  dataIdx = "",
+  align = "left",
+}) => {
   return (
-    <ul className='lh-description-list'>
-      <li className='lh-description-item'>
+    <Typography
+      className="lh-subtitle"
+      dataAid={`subtitle${dataIdx}`}
+      variant="body2"
+      color={color}
+      align={align}
+      component="div"
+    >
+      {children}
+    </Typography>
+  );
+};
+
+export const LandingHeaderPoints = ({
+  children,
+  color,
+  dataIdx,
+  align = "left",
+}) => {
+  return (
+    <ul className="lh-description-list">
+      <li className="lh-description-item">
         <Typography
-          variant='body2'
+          variant="body2"
           color={color}
-          align='left'
+          align={align}
           dataAid={`point${dataIdx}`}
-          component='div'
+          component="div"
         >
           {children}
         </Typography>
@@ -118,7 +145,11 @@ export const LandingHeaderPoints = ({ children, color, dataIdx }) => {
   );
 };
 
-export const LandingHeaderSeeMoreWrapper = ({ subtitle = '', points = [], subtitleDataIdx }) => {
+export const LandingHeaderSeeMoreWrapper = ({
+  subtitle = "",
+  points = [],
+  subtitleDataIdx,
+}) => {
   const [seeMore, setSeeMore] = useState(false);
   const dispatch = useDispatch();
 
@@ -130,7 +161,11 @@ export const LandingHeaderSeeMoreWrapper = ({ subtitle = '', points = [], subtit
     <>
       {seeMore ? (
         <div onClick={handleSeeMore}>
-          {subtitle && <LandingHeaderSubtitle dataIdx={subtitleDataIdx}>{subtitle}</LandingHeaderSubtitle>}
+          {subtitle && (
+            <LandingHeaderSubtitle dataIdx={subtitleDataIdx}>
+              {subtitle}
+            </LandingHeaderSubtitle>
+          )}
           {isArray(points) &&
             points?.map((point, idx) => {
               return (
@@ -139,7 +174,7 @@ export const LandingHeaderSeeMoreWrapper = ({ subtitle = '', points = [], subtit
                 </LandingHeaderPoints>
               );
             })}
-          <Typography variant='body8' color='secondary'>
+          <Typography variant="body8" color="secondary">
             See less
           </Typography>
         </div>
@@ -148,7 +183,7 @@ export const LandingHeaderSeeMoreWrapper = ({ subtitle = '', points = [], subtit
           {subtitle && (
             <LandingHeaderSubtitle dataIdx={subtitleDataIdx}>
               {subtitle.slice(0, 89).trim()}...
-              <Typography variant='body8' color='secondary'>
+              <Typography variant="body8" color="secondary">
                 See more
               </Typography>
             </LandingHeaderSubtitle>
@@ -160,12 +195,12 @@ export const LandingHeaderSeeMoreWrapper = ({ subtitle = '', points = [], subtit
 };
 
 LandingHeader.defaultProps = {
-  variant: 'side',
+  variant: "side",
 };
 
 LandingHeader.propTypes = {
   children: PropTypes.node,
-  variant: PropTypes.oneOf(['side', 'center']),
+  variant: PropTypes.oneOf(["side", "center"]),
   dataAid: PropTypes.string,
 };
 
@@ -181,7 +216,7 @@ LandingHeaderSubtitle.propTypes = {
 };
 
 LandingHeaderSubtitle.defaultProps = {
-  color: 'foundationColors.content.secondary',
+  color: "foundationColors.content.secondary",
 };
 LandingHeaderPoints.propTypes = {
   children: PropTypes.node,
@@ -190,5 +225,5 @@ LandingHeaderPoints.propTypes = {
 };
 
 LandingHeaderPoints.defaultProps = {
-  color: 'foundationColors.content.secondary',
+  color: "foundationColors.content.secondary",
 };
