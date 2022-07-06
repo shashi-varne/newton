@@ -125,7 +125,7 @@ const LandingSections = ({
   feature,
   kycData = {},
   marketingBanners,
-  investmentOptions,
+  investOptionsData,
   platformMotivators,
   exploreCategoryData,
   shareReferralData,
@@ -218,9 +218,9 @@ const LandingSections = ({
     ),
     featuresList: (
       <InvestmentOptions
-        titleDataAid={LANDING.investmentOptions.dataAid}
-        title={LANDING.investmentOptions.title}
-        productList={investmentOptions}
+        titleDataAid={investOptionsData.dataAid}
+        title={investOptionsData.title}
+        productList={investOptionsData.options}
         onClick={handleCardClick}
         feature={feature}
         isLoading={showKycCard && isPageLoading}

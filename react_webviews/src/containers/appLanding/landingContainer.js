@@ -53,6 +53,7 @@ import ToastMessage from "../../designSystem/atoms/ToastMessage";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import useLongPress from "../../common/customHooks/useLongPress";
 import { storageService } from "../../utils/validators";
+import { LANDING } from "../../strings/webappLanding";
 
 const screen = "LANDING";
 
@@ -132,12 +133,17 @@ const landingContainer = (WrappedComponent) => (props) => {
     const showSearchIcon = isMfOnly || isFinity;
     const exploreCategoryData = EXPLORE_CATEGORY_DATA[baseConfig.productName];
     const shareReferralData = SHARE_REFERRAL_DATA[baseConfig.productName];
+    const titleData = isMfOnly ? LANDING.investorFavorites : LANDING.getStarted;
+    let investOptionsData = {
+      ...titleData,
+      options: investCardsData,
+    }
     return {
       code,
       onboardingCarousels,
       marketingBanners,
       landingSections,
-      investCardsData,
+      investOptionsData,
       isMfOnly,
       showPortfolioOverview,
       baseConfig,
@@ -156,7 +162,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     platformMotivators,
     marketingBanners,
     baseConfig,
-    investCardsData,
+    investOptionsData,
     landingSections,
     isMfOnly,
     isFinity,
@@ -799,7 +805,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       platformMotivators={platformMotivators}
       marketingBanners={marketingBanners}
       kycData={kycData.kycStatusData}
-      investmentOptions={investCardsData}
+      investOptionsData={investOptionsData}
       exploreCategoryData={exploreCategoryData}
       manageInvestments={MANAGE_INVESTMENTS}
       portfolioOverViewData={portfolioOverViewData}
