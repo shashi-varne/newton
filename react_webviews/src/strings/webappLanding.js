@@ -9,9 +9,13 @@ export const LANDING = {
     subtitle: "Authorise one-time eMandate to automate your upcoming SIPs",
     dataAid: "easySip",
   },
-  investmentOptions: {
+  getStarted: {
     title: "Get started",
     dataAid: "moreOptions",
+  },
+  investorFavorites: {
+    title: "Investors’ favourites",
+    dataAid: "investorFavourites",
   },
   exploreCategories: {
     title: "Explore by categories",
