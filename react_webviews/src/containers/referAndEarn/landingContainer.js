@@ -106,7 +106,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       getActiveCampaigns({
         Api: Api,
         screen: screen,
-        sagaCallback: fetchRefreeData(),
+        sagaCallback: fetchRefreeData,
       })
     );
   };

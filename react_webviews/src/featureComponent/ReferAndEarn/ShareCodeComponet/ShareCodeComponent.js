@@ -68,8 +68,9 @@ const CopyCodeComponent = ({
           onClick={handleCopy}
         />
       </Stack>
-      <span onClick={onClickMail} style={{ marginTop: 0, marginLeft: "8px" }}>
+      <span style={{ marginTop: 0, marginLeft: "8px" }}>
         <Icon
+          onClick={onClickMail}
           src={require("assets/iv_share_mail.svg")}
           size="48px"
           alt="info_icon"
