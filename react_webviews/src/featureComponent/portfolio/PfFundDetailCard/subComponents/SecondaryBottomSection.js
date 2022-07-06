@@ -2,7 +2,7 @@ import React from "react";
 import CustomItem from "./CustomItem";
 import RowContainer from "./RowContainer";
 
-const SecondaryBottomSection = ({ bottomRowData }) => {
+const SecondaryBottomSection = ({ bottomRowData, colorProps }) => {
   const {
     leftTitle,
     leftSubtitle,
@@ -15,10 +15,13 @@ const SecondaryBottomSection = ({ bottomRowData }) => {
     rightSubtitle,
   } = bottomRowData;
 
+  console.log(colorProps);
   return (
     <RowContainer className="bottom-section-two">
       <CustomItem
         title={leftTitle}
+        titleColor={colorProps?.leftTitle}
+        subtitleColor={colorProps?.leftSubtitle}
         subtitle={leftSubtitle}
         id={1}
         imgSrc={leftImgSrc}
@@ -27,6 +30,8 @@ const SecondaryBottomSection = ({ bottomRowData }) => {
       <CustomItem
         title={middleTitle}
         subtitle={middleSubtitle}
+        titleColor={colorProps?.middleTitle}
+        subtitleColor={colorProps?.middleSubtitle}
         id={2}
         imgSrc={middleImgSrc}
         align="center"
@@ -34,6 +39,8 @@ const SecondaryBottomSection = ({ bottomRowData }) => {
       <CustomItem
         title={rightTitle}
         subtitle={rightSubtitle}
+        titleColor={colorProps?.rightTitle}
+        subtitleColor={colorProps?.rightSubtitle}
         id={3}
         imgSrc={rightImgSrc}
         align="right"
