@@ -187,7 +187,7 @@ export const INVESTMENT_OPTIONS = {
   equity: {
     icon: `diy_equity.svg`,
     title: "Equity",
-    subtitle: "Large, mid and samll-sized companies",
+    subtitle: "Large, mid and small-sized companies",
     dataAid: "equity",
     eventStatus: "equity",
     id: "equity",
