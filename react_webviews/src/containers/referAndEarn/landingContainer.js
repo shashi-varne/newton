@@ -192,7 +192,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     if (activeSheetIndex >= 0) {
       msg = activeCampaignViewData?.[activeSheetIndex]?.shareMessage;
     }
-    msg = msg.replace("{}", referralCode);
+    msg = msg.replaceAll("{}", referralCode);
     msg = msg + "\n" + appLink;
 
     if (isWeb) {

@@ -107,7 +107,7 @@ const myReferralsContainer = (WrappedComponent) => (props) => {
     if (eventIndex !== -1) {
       msg = refereeListViewData[cardIndex].events[eventIndex].remind_message;
     }
-    msg = msg.replace("{}", referralCode);
+    msg = msg.replaceAll("{}", referralCode);
     msg = msg + "\n" + appLink;
 
     if (isWeb) {

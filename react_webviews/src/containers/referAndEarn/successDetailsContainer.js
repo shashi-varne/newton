@@ -17,7 +17,9 @@ const successDetailsContainer = (WrappedComponent) => (props) => {
 
   const onClickCta = () => {
     sendEvents("okay");
-    navigate(REFER_AND_EARN_PATHNAME_MAPPER.walletTransfer);
+    navigate(REFER_AND_EARN_PATHNAME_MAPPER.walletTransfer, {
+      action: "replace",
+    });
   };
 
   const sendEvents = (userAction) => {
@@ -40,11 +42,6 @@ const successDetailsContainer = (WrappedComponent) => (props) => {
     }
   };
 
-  const onBackPress = () => {
-    sendEvents("back");
-    props.history.goBack()
-  };
-
   return (
     <WrappedComponent
       date={date}
@@ -53,7 +50,6 @@ const successDetailsContainer = (WrappedComponent) => (props) => {
       onClickCta={onClickCta}
       sendEvents={sendEvents}
       isPageLoading={isLoading}
-      onBackClick={onBackPress}
     />
   );
 };
