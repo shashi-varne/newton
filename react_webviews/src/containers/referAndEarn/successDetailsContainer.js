@@ -18,7 +18,7 @@ const successDetailsContainer = (WrappedComponent) => (props) => {
   const onClickCta = () => {
     sendEvents("okay");
     navigate(REFER_AND_EARN_PATHNAME_MAPPER.walletTransfer, {
-      action: "replace",
+      edit: true,
     });
   };
 
