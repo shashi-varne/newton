@@ -132,6 +132,12 @@ const landingContainer = (WrappedComponent) => (props) => {
   }, [showTransferNotAllowed]);
 
   useEffect(() => {
+    if (activeSheetIndex >= 0) {
+      sendEvents("next");
+    }
+  }, [activeSheetIndex]);
+
+  useEffect(() => {
     if (isFetchFailed) {
       setErrorData({
         handleClick: initialize,
@@ -151,7 +157,7 @@ const landingContainer = (WrappedComponent) => (props) => {
         : "cash_rewards";
 
     let cardClicked = activeCard;
-    if (!isEmpty(activeCard) && tabValue === 0 && activeSheetIndex >= 0) {
+    if (tabValue === 0 && activeSheetIndex >= 0) {
       cardClicked =
         activeCampaignViewData?.[activeSheetIndex]?.title?.toLowerCase();
     }
@@ -195,7 +201,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     if (activeSheetIndex >= 0) {
       msg = activeCampaignViewData?.[activeSheetIndex]?.shareMessage;
     }
-    msg = msg.replace("{}", referralCode);
+    msg = msg.replaceAll("{}", referralCode);
     msg = msg + "\n" + appLink;
 
     if (isWeb) {
@@ -253,6 +259,11 @@ const landingContainer = (WrappedComponent) => (props) => {
     navigate(navLink);
   };
 
+  const onCloseCampaignSheet = () => {
+    sendEvents("back");
+    setActiveSheetIndex(-1);
+  };
+
   return (
     <WrappedComponent
       isWeb={isWeb}
@@ -282,6 +293,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       handleTabChange={handleTabChange}
       handleSlideChange={handleSlideChange}
       setSwiper={setSwiper}
+      onCloseCampaignSheet={onCloseCampaignSheet}
     />
   );
 };

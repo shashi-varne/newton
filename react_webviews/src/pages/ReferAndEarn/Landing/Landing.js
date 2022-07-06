@@ -36,6 +36,7 @@ const landing = ({
   handleTabChange,
   handleSlideChange,
   setSwiper,
+  onCloseCampaignSheet,
 }) => {
   return (
     <Container
@@ -101,9 +102,7 @@ const landing = ({
             ? referralData[activeSheetIndex].bottomSheetData.stepsData
             : []
         }
-        handleClose={() => {
-          setActiveSheetIndex(-1);
-        }}
+        handleClose={onCloseCampaignSheet}
         dataAid={
           activeSheetIndex !== -1
             ? referralData[activeSheetIndex].bottomSheetData.dataAid

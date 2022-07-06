@@ -117,7 +117,7 @@ const getWalletTransactionsViewData = (walletTransactions) => {
     const acc =
       item?.to_account_number &&
       item?.bank_name &&
-      `${item.bank_name}••••••••${item?.to_account_number?.substr(-5)}`;
+      `${item.bank_name}••••••••${item?.to_account_number?.substr(-4)}`;
 
     const date = getFnsFormattedDate(
       item?.dt_updated,
@@ -126,7 +126,7 @@ const getWalletTransactionsViewData = (walletTransactions) => {
     );
 
     let statusLabel = capitalizeFirstLetter(item.status);
-    if ((statusLabel = "Success")) {
+    if (statusLabel === "Success") {
       statusLabel = "Successful";
     }
 

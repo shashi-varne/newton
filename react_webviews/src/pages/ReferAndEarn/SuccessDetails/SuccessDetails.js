@@ -21,13 +21,11 @@ const SuccessDetails = ({
   sendEvents,
   isPageLoading,
   onClickCta,
-  onBackClick,
 }) => {
   return (
     <Container
       headerProps={{
         showCloseIcon: true,
-        onBackClick: onBackClick,
       }}
       footer={{
         button1Props: {
@@ -52,7 +50,7 @@ const SuccessDetails = ({
           <LandingHeaderTitle align="center">
             {STRINGS.landingHeader.title}
           </LandingHeaderTitle>
-          <LandingHeaderPoints dataIdx={"1"} align="center">
+          <LandingHeaderPoints dataIdx={1} align="center">
             <Typography
               component="span"
               variant="body2"
@@ -62,7 +60,7 @@ const SuccessDetails = ({
             </Typography>
             {date}
           </LandingHeaderPoints>
-          <LandingHeaderPoints dataIdx={"2"} align="center">
+          <LandingHeaderPoints dataIdx={2} align="center">
             <Typography
               component="span"
               variant="body2"
@@ -72,7 +70,7 @@ const SuccessDetails = ({
             </Typography>
             {amount}
           </LandingHeaderPoints>
-          <LandingHeaderSubtitle dataIdx={"3"} align="center">
+          <LandingHeaderSubtitle dataIdx={3} align="center">
             {STRINGS.landingHeader.subtitle}
           </LandingHeaderSubtitle>
         </LandingHeader>
