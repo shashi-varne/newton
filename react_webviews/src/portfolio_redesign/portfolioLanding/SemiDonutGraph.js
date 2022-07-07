@@ -2,13 +2,7 @@ import React from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 
-const LabelColorMapper = {
-  Equity: "#33CF90",
-  Debt: "#FE794D",
-  Others: "#FFBD00",
-};
-
-function AssetWiseGraph() {
+function SemiDonutGraph({ data }) {
   const graphOptions = {
     chart: {
       backgroundColor: "#F8F8FA",
@@ -26,11 +20,6 @@ function AssetWiseGraph() {
     tooltip: {
       enabled: false,
     },
-    accessibility: {
-      point: {
-        valueSuffix: "%",
-      },
-    },
     plotOptions: {
       pie: {
         dataLabels: {
@@ -41,9 +30,9 @@ function AssetWiseGraph() {
             color: "white",
           },
           formatter: function () {
-            return `<span> <span style='color: ${LabelColorMapper[this.key]}'>${
-              this.percentage
-            }%</span> ${this.key} </span>`;
+            return `<span> <span style='color: ${
+              data?.labelColorMapper[this.key]
+            }'>${parseInt(this.percentage)}%</span> ${this.key} </span>`;
           },
           style: {},
         },
@@ -51,7 +40,7 @@ function AssetWiseGraph() {
         endAngle: 90,
         center: ["50%", "100%"],
         size: "220%",
-        colors: ["#33CF90", "#FE794D", "#FFBD00"],
+        colors: data?.colors,
       },
     },
     series: [
@@ -59,11 +48,7 @@ function AssetWiseGraph() {
         type: "pie",
         name: undefined,
         innerSize: "50%",
-        data: [
-          ["Equity", 60],
-          ["Debt", 30],
-          ["Others", 10],
-        ],
+        data: data?.seriesData,
       },
     ],
   };
@@ -74,4 +59,4 @@ function AssetWiseGraph() {
   );
 }
 
-export default AssetWiseGraph;
+export default SemiDonutGraph;

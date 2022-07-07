@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./style.scss";
+import Lottie from "lottie-react";
 import Container from "designSystem/organisms/ContainerWrapper";
 import BottomSheet from "designSystem/organisms/BottomSheet";
 import Icon from "designSystem/atoms/Icon";
@@ -11,6 +12,14 @@ import Button from "../../designSystem/atoms/Button";
 import FeatureCardCarousel from "./FeatureCardCarousel";
 import Allocations from "./Allocations";
 import { PORTFOLIO_LANDING, MF_LANDING } from "businesslogic/strings/portfolio";
+import {
+  formatAmountInr,
+  numDifferentiation,
+  numDifferentiationInr,
+} from "../../utils/validators";
+import { getConfig } from "utils/functions";
+
+const productName = getConfig().productName;
 
 const {
   investmentSummary: INVESTMENT_SUMMARY,
@@ -23,7 +32,13 @@ const {
 
 const { currentInvestmentSheet: CURRENT_INVESTMENT_SHEET } = MF_LANDING;
 
-function PortfolioLanding({ handleInsurance }) {
+function PortfolioLanding({
+  handleInsurance,
+  investmentSummary,
+  isInsuranceActive,
+  assetWiseData,
+  productWiseData,
+}) {
   const [isCurrentValueSheetOpen, setIsCurrentValueSheetOpen] = useState(false);
   const [isRealisedGainSheetOpen, setIsRealisedGainSheetOpen] = useState(false);
   return (
@@ -64,7 +79,13 @@ function PortfolioLanding({ handleInsurance }) {
               dataAid={INVESTMENT_SUMMARY.valueTotalCurrent.dataAid}
               style={{ marginRight: 8 }}
             >
-              ₹19.6L
+              {numDifferentiation(
+                investmentSummary?.current,
+                true,
+                1,
+                false,
+                true
+              )}
             </Typography>
             <Icon
               src={require("assets/eye_icon.svg")}
@@ -74,10 +95,19 @@ function PortfolioLanding({ handleInsurance }) {
               onClick={() => setIsCurrentValueSheetOpen(true)}
             />
           </Stack>
-          <Icon
-            src={require("assets/iv_positive.svg")}
-            size="40px"
-            dataAid={"positive"} //TODO: change id dynamically acc to profit/loss
+
+          <Lottie
+            animationData={require(`assets/lottie/${
+              investmentSummary?.earnings > 0 ? "positive" : "negative"
+            }.json`)}
+            autoPlay
+            loop
+            className="pf-landing-lottie-anim"
+            data-aid={
+              investmentSummary?.earnings > 0
+                ? INVESTMENT_SUMMARY.plIcon.positiveDataAid
+                : INVESTMENT_SUMMARY.plIcon.negativeDataAid
+            }
           />
         </Stack>
         <Stack
@@ -96,11 +126,17 @@ function PortfolioLanding({ handleInsurance }) {
           </Typography>
           <Typography
             variant="body2"
-            color={"foundationColors.secondary.profitGreen.400"} //TODO: change color acc to profit/loss
+            color={
+              investmentSummary?.one_day_earnings > 0
+                ? "foundationColors.secondary.profitGreen.400"
+                : "foundationColors.secondary.lossRed.400"
+            }
             dataAid={INVESTMENT_SUMMARY.valueOneDayChange.dataAid}
           >
-            + ₹36,865 (+8.6%)
-            {/* //TODO: get both values dynamically */}
+            {investmentSummary?.one_day_earnings > 0 ? "+" : "-"}
+            {formatAmountInr(investmentSummary?.one_day_earnings)} (
+            {investmentSummary?.one_day_earnings > 0 ? "+" : "-"}
+            {investmentSummary?.one_day_earnings_percent}%)
           </Typography>
         </Stack>
         <Stack
@@ -122,7 +158,13 @@ function PortfolioLanding({ handleInsurance }) {
               color={"foundationColors.supporting.white"}
               dataAid="valueInvestedAmount"
             >
-              ₹13.5L
+              {numDifferentiation(
+                investmentSummary?.invested,
+                true,
+                1,
+                false,
+                true
+              )}
             </Typography>
           </Box>
           <Box>
@@ -138,7 +180,13 @@ function PortfolioLanding({ handleInsurance }) {
               color={"foundationColors.supporting.white"}
               dataAid={INVESTMENT_SUMMARY.valuePl.dataAid}
             >
-              + ₹6.1L
+              {numDifferentiation(
+                investmentSummary?.earnings,
+                true,
+                1,
+                false,
+                true
+              )}
             </Typography>
           </Box>
         </Stack>
@@ -178,7 +226,10 @@ function PortfolioLanding({ handleInsurance }) {
           title={ALLOCATION_SECTION.title.text}
           titleDataAid={ALLOCATION_SECTION.title.dataAid}
         />
-        <Allocations />
+        <Allocations
+          productWiseData={productWiseData}
+          assetWiseData={assetWiseData}
+        />
       </Box>
       <Box className="bottom-section">
         <Box className="mf-banner">
@@ -189,16 +240,18 @@ function PortfolioLanding({ handleInsurance }) {
             src={require("assets/invest_in_mf_banner.svg")}
           />
         </Box>
-        <WrapperBox onClick={handleInsurance} elevation={1}>
-          <InfoCard
-            imgSrc={require("assets/pf_insurance.svg")}
-            title={INSURANCE.title}
-            titleColor={"foundationColors.content.primary"}
-            subtitle={INSURANCE.subtitle}
-            subtitleColor={"foundationColors.content.secondary"}
-            dataAid={INSURANCE.dataAid}
-          />
-        </WrapperBox>
+        {isInsuranceActive && (
+          <WrapperBox onClick={handleInsurance} elevation={1}>
+            <InfoCard
+              imgSrc={require("assets/pf_insurance.svg")}
+              title={INSURANCE.title}
+              titleColor={"foundationColors.content.primary"}
+              subtitle={INSURANCE.subtitle}
+              subtitleColor={"foundationColors.content.secondary"}
+              dataAid={INSURANCE.dataAid}
+            />
+          </WrapperBox>
+        )}
       </Box>
       <BottomSheet
         isOpen={isCurrentValueSheetOpen}
@@ -209,21 +262,25 @@ function PortfolioLanding({ handleInsurance }) {
           <BottomsheetRow
             label={CURRENT_INVESTMENT_SHEET.keyCurrent.text}
             labelId={CURRENT_INVESTMENT_SHEET.keyCurrent.dataAid}
-            value={"₹19.50,00,500"}
+            value={formatAmountInr(investmentSummary?.current)}
             valueId={CURRENT_INVESTMENT_SHEET.valueCurrent.dataAid}
           />
           <BottomsheetRow
             label={CURRENT_INVESTMENT_SHEET.keyInvested.text}
             labelId={CURRENT_INVESTMENT_SHEET.keyInvested.dataAid}
-            value={"₹19.50,00,500"}
+            value={formatAmountInr(investmentSummary?.invested)}
             valueId={CURRENT_INVESTMENT_SHEET.valueInvested.dataAid}
           />
           <BottomsheetRow
             label={CURRENT_INVESTMENT_SHEET.keyProfitLoss.text}
             labelId={CURRENT_INVESTMENT_SHEET.keyProfitLoss.dataAid}
-            value={"₹2,24,67,474"}
+            value={formatAmountInr(investmentSummary?.earnings)}
             valueId={CURRENT_INVESTMENT_SHEET.valueProfitLoss.dataAid}
-            valueColor={"foundationColors.secondary.profitGreen.400"}
+            valueColor={
+              investmentSummary?.earnings > 0
+                ? "foundationColors.secondary.profitGreen.400"
+                : "foundationColors.secondary.lossRed.400"
+            }
           />
         </div>
       </BottomSheet>
@@ -233,7 +290,9 @@ function PortfolioLanding({ handleInsurance }) {
         onClose={() => setIsRealisedGainSheetOpen(false)}
         onBackdropClick={() => setIsRealisedGainSheetOpen(false)}
       >
-        <RealisedGainSheet value={"₹32,50,00,500"} />
+        <RealisedGainSheet
+          value={formatAmountInr(investmentSummary?.realised_gain)}
+        />
       </BottomSheet>
     </Container>
   );
