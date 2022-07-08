@@ -74,7 +74,7 @@ export const commonCardsConfig = {
       image: "nfo.svg",
       id: "nfo",
       endDate: "07/25/2022",
-      startDate: "07/04/2022",
+      startDate: "07/12/2022",
     },
   ],
   platformMotivators: PLATFORM_MOTIVATORS,
