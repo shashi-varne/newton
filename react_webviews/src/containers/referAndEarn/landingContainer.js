@@ -247,12 +247,13 @@ const landingContainer = (WrappedComponent) => (props) => {
     navigate(REFER_AND_EARN_PATHNAME_MAPPER.tnc);
   };
 
-  const onClickRewardsInfoCard = (id, navLink) => {
+  const onClickRewardsInfoCard = (id, navLink, title) => {
     if (id === "rewards" && !allowClaimRewards) {
       setShowTransferNotAllowed(true);
       return;
     }
-    sendEvents("next", "", id);
+    const cardClicked = title.toLowerCase();
+    sendEvents("next", "", cardClicked);
     navigate(navLink);
   };
 

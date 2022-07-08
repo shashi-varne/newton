@@ -72,7 +72,8 @@ const RewardsView = ({
                     onClick={() => {
                       onClickInfoCard(
                         item.id,
-                        InfoCardExtraDataMapper[item.id].navLink
+                        InfoCardExtraDataMapper[item.id].navLink,
+                        item.title
                       );
                     }}
                   >
