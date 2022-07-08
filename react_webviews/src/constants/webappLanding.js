@@ -187,7 +187,7 @@ export const INVESTMENT_OPTIONS = {
   equity: {
     icon: `diy_equity.svg`,
     title: "Equity",
-    subtitle: "Large, mid and samll-sized companies",
+    subtitle: "Large, mid and small-sized companies",
     dataAid: "equity",
     eventStatus: "equity",
     id: "equity",
@@ -212,7 +212,7 @@ export const INVESTMENT_OPTIONS = {
 
 export const EXPLORE_CATEGORIES = [
   {
-    icon: `equity.svg`,
+    icon: `diy_eq_icon.svg`,
     title: "Equity",
     description: "Large, mid & small companies",
     dataAid: "equity",
@@ -248,7 +248,7 @@ export const FINITY_EXPLORE_CATEGORIES = [
     id: "sensex",
   },
   {
-    icon: `equity.svg`,
+    icon: `diy_eq_icon.svg`,
     title: "Equity Funds",
     dataAid: "equityFunds",
     id: "equity",
