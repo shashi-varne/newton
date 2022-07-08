@@ -69,7 +69,14 @@ export const commonCardsConfig = {
     "instaredeem",
   ],
   landingMarketingBanners: DEFAULT_MARKETING_BANNERS,
-  nfoBanners: [],
+  nfoBanners: [
+    {
+      image: "nfo.svg",
+      id: "nfo",
+      endDate: "07/25/2022",
+      startDate: "07/12/2022",
+    },
+  ],
   platformMotivators: PLATFORM_MOTIVATORS,
 };
 
@@ -284,8 +291,8 @@ export const partnerConfigs = {
     email: "bajajfinserv@finity.in",
     mobile: "+91-7829331118",
     landingMarketingBanners: [
-      ...commonCardsConfig.landingMarketingBanners,
       ...commonCardsConfig.nfoBanners,
+      ...commonCardsConfig.landingMarketingBanners,
     ],
     referralConfig: {
       applyRefferal: false, // same as hide_apply_referral but with opposite value
@@ -371,8 +378,8 @@ export const partnerConfigs = {
     mobile: "1800-212-5997",
     email: "care.futuremoney@fisdom.com",
     landingMarketingBanners: [
-      ...commonCardsConfig.landingMarketingBanners,
       ...commonCardsConfig.nfoBanners,
+      ...commonCardsConfig.landingMarketingBanners,
     ],
     features: {
       nps: true,
