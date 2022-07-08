@@ -140,7 +140,7 @@ const claimCashRewardsContainer = (WrappedComponent) => (props) => {
         state: {
           amount: amount,
         },
-        action: "replace",
+        edit: true,
       });
     } catch (error) {
       console.error(error);

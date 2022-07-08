@@ -70,9 +70,6 @@ const SuccessDetails = ({
             </Typography>
             {amount}
           </LandingHeaderPoints>
-          <LandingHeaderSubtitle dataIdx={3} align="center">
-            {STRINGS.landingHeader.subtitle}
-          </LandingHeaderSubtitle>
         </LandingHeader>
       </Stack>
     </Container>

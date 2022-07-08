@@ -67,7 +67,7 @@ const ClaimCashRewards = ({
           dataAid={STRINGS.headerTitle.dataAid}
         />
         <WrapperBox
-          elevation={1}
+          elevation={0}
           data-aid="grp_enterAmount"
           className={"ccr-enter-amount-card-wrapper"}
         >
@@ -79,8 +79,7 @@ const ClaimCashRewards = ({
               {STRINGS.enterAmount.text}
             </Typography>
             <InputField
-              step=".01"
-              variant="outlined"
+              label={"Amount"}
               prefix={<Typography variant="body2">₹</Typography>}
               value={amount}
               onChange={onChangeAmount}

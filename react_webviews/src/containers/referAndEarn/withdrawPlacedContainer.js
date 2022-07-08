@@ -9,14 +9,14 @@ const withdrawPlacedContainer = (WrappedComponent) => (props) => {
 
   const amount = props?.location?.state?.amount || "";
 
-  const goToSuccess=()=>{
+  const goToSuccess = () => {
     navigate(REFER_AND_EARN_PATHNAME_MAPPER.successDetails, {
       state: {
         amount: amount,
       },
-      action:'replace'
+      edit: true,
     });
-  }
+  };
 
   return (
     <WrappedComponent
