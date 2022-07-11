@@ -5,6 +5,7 @@ import CustomSwiper from "../../designSystem/molecules/CustomSwiper";
 import { SwiperSlide } from "swiper/react";
 import SemiDonutGraph from "./SemiDonutGraph";
 import { PORTFOLIO_LANDING } from "businesslogic/strings/portfolio";
+import { isEmpty } from "lodash-es";
 
 const { allocationSection: ALLOCATION_SECTION } = PORTFOLIO_LANDING;
 
@@ -20,6 +21,7 @@ const ALLOCATION_TYPES = [
 ];
 
 const formatSeriesData = (data) => {
+  if (isEmpty(data)) return;
   const seriesData = {};
   for (let item of data) {
     seriesData[item?.name?.toUpperCase()] = item?.value;
