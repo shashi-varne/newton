@@ -34,6 +34,7 @@ import {
   EQUITY_MARKETING_BANNERS,
   UCOMB_MARKETING_BANNERS,
   TAXWIN_MARKETING_BANNERS,
+  NFO_MARKETING_BANNERS,
 } from "./partnerConstants";
 
 // common config across all partners
@@ -69,14 +70,7 @@ export const commonCardsConfig = {
     "instaredeem",
   ],
   landingMarketingBanners: DEFAULT_MARKETING_BANNERS,
-  nfoBanners: [
-    {
-      image: "nfo.svg",
-      id: "nfo",
-      endDate: "07/25/2022",
-      startDate: "07/12/2022",
-    },
-  ],
+  nfoBanners: NFO_MARKETING_BANNERS,
   platformMotivators: PLATFORM_MOTIVATORS,
 };
 
