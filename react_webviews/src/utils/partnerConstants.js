@@ -164,3 +164,18 @@ export const TAXWIN_MARKETING_BANNERS = [
     id: "equityKyc",
   },
 ];
+
+export const NFO_MARKETING_BANNERS = [
+  {
+    image: "nfo.svg",
+    id: "nfo",
+    endDate: "07/25/2022",
+    startDate: "07/12/2022",
+  },
+  {
+    image: "nfo1.svg",
+    id: "nfo",
+    endDate: "07/24/2022",
+    startDate: "07/12/2022",
+  },
+];
