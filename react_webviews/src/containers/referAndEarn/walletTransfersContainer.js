@@ -79,20 +79,11 @@ const walletTransfersContainer = (WrappedComponent) => (props) => {
   };
 
   const onClickContact = () => {
-    if (isWeb) {
-      navigate("/help", {
-        state: {
-          popOnBack: true,
-        },
-      });
-    } else {
-      nativeCallback({
-        action: "open_browser",
-        message: {
-          url: `tel:${mobile}`,
-        },
-      });
-    }
+    navigate("/help", {
+      state: {
+        popOnBack: true,
+      },
+    });
   };
 
   return (
