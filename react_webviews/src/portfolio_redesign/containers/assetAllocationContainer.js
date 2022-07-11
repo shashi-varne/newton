@@ -1,11 +1,8 @@
-import React from "react";
-import Api from "utils/api";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import MFLanding from "../mutualFund/MFLanding";
-import { navigate as navigateFunc } from "utils/functions";
-
-const screen = "MfLanding";
+import { CategoryRounded } from "@mui/icons-material";
+import React, { useEffect, useMemo } from "react";
+import { useDispatch } from "react-redux";
+import { capitalizeFirstLetter } from "../../utils/validators";
+import AllocationDetails from "./../AllocationDetails/AllocationDetails";
 
 const mfData = {
   external_portfolio: {
@@ -201,23 +198,44 @@ const mfData = {
   },
 };
 
-const MfLandingContainer = (WrappedComponent) => (props) => {
-  const navigate = navigateFunc.bind(props);
-  const dispatch = useDispatch();
-  //   const state = useSelector((state) => state);
+const tabList = [
+  { name: "Equity • 90%", key: "equity" },
+  { name: "Debt • 10%", key: "debt" },
+  { name: "Others • 0%", key: "others", disabled: true },
+];
 
-  const goToAssetAllocation = () => {
-    navigate("/portfolio/asset-allocation");
+const AssetAllocationContainer = (WrappedComponent) => (props) => {
+  const dispatch = useDispatch();
+  const categories = mfData?.mf?.asset_allocation.categories;
+  const tabHeaders = useMemo(() => {
+    return categories.map((category, index) => {
+      return {
+        name: `${capitalizeFirstLetter(
+          category.type
+        )} • ${category.allocation.toFixed(2)}%`,
+        key: category.type,
+      };
+    });
+  }, [categories]);
+
+  const equityData = {
+    list: mfData?.mf?.asset_allocation.detailed_exposure?.equity,
+    card: categories.find((item) => item.type === "equity"),
   };
-  useEffect(() => {
-    // dispatch(getPortfolioSummary({ screen, Api }));
-  }, []);
+
+  const debtData = {
+    list: mfData?.mf?.asset_allocation.detailed_exposure?.debt,
+    card: categories.find((item) => item.type === "debt"),
+  };
+
+  useEffect(() => {}, []);
   return (
     <WrappedComponent
-      mfSummary={mfData?.mf?.portfolio_summary}
-      goToAssetAllocation={goToAssetAllocation}
+      tabHeaders={tabHeaders}
+      equityData={equityData}
+      debtData={debtData}
     />
   );
 };
 
-export default MfLandingContainer(MFLanding);
+export default AssetAllocationContainer(AllocationDetails);

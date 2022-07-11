@@ -47,7 +47,7 @@ const sectorsData = [
   { title: "Random chemicals", label: "59.20%", percentage: 35 },
 ];
 
-function AllocationDetails() {
+function AllocationDetails({ tabHeaders, equityData, debtData }) {
   const [swiper, setSwiper] = useState("");
   const [tabValue, setTabValue] = useState(0);
   const handleTabChange = (event, newValue) => {
@@ -71,7 +71,7 @@ function AllocationDetails() {
           onTabChange: handleTabChange,
           labelName: "name",
         },
-        tabChilds: tabList,
+        tabChilds: tabHeaders,
       }}
       noFooter
       className="allocation-details"
@@ -95,8 +95,9 @@ function AllocationDetails() {
                 dataAid: ALLOCATIONS_LANDING.pillSectors.dataAid,
               },
             ]}
-            holdingsData={holdingsData}
-            sectorsData={sectorsData}
+            holdingsData={equityData?.list?.top_holdings}
+            sectorsData={equityData?.list?.sector_allocation}
+            cardData={equityData?.card}
           />
         </SwiperSlide>
         <SwiperSlide>
@@ -107,7 +108,8 @@ function AllocationDetails() {
                 dataAid: ALLOCATIONS_LANDING.pillHoldings.dataAid,
               },
             ]}
-            holdingsData={holdingsData}
+            holdingsData={debtData?.list?.top_holdings}
+            cardData={debtData?.card}
           />
         </SwiperSlide>
         <SwiperSlide>OTHERS</SwiperSlide>

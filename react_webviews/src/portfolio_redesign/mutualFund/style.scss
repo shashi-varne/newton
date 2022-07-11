@@ -22,6 +22,9 @@
   }
   .asset-allocation {
     padding: 0 20px 0;
+    .view-details {
+      cursor: pointer;
+    }
   }
   .more-options {
     padding: 0 20px 50px;

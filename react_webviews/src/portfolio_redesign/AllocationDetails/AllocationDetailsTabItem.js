@@ -5,7 +5,12 @@ import ProgressBar from "../../designSystem/atoms/ProgressBar";
 import Button from "../../designSystem/atoms/Button";
 import InvestmentCard from "./InvestmentCard";
 
-function AllocationDetailsTabItem({ pillData, holdingsData, sectorsData }) {
+function AllocationDetailsTabItem({
+  pillData,
+  holdingsData,
+  sectorsData,
+  cardData,
+}) {
   const [currentProgressData, setCurrentProgressData] = useState(holdingsData);
   const [pillReturnValue, setPillReturnValue] = useState(0);
   const [showViewAll, setShowViewAll] = useState({
@@ -40,7 +45,10 @@ function AllocationDetailsTabItem({ pillData, holdingsData, sectorsData }) {
 
   return (
     <Box className="allocation-tab-item">
-      <InvestmentCard />
+      <InvestmentCard
+        currentValue={cardData?.current_amount}
+        profitLoss={cardData?.earnings}
+      />
       <Box>
         <Pills value={pillReturnValue} onChange={handleReturnValue}>
           {pillData?.map((el, idx) => {
@@ -54,10 +62,10 @@ function AllocationDetailsTabItem({ pillData, holdingsData, sectorsData }) {
           .map((item, index) => (
             <ProgressBar
               key={index}
-              percentage={item.percentage}
+              percentage={item.share}
               dataAidSuffix={""}
-              title={item.title}
-              label={item.label}
+              title={item?.name || item?.instrument_name}
+              label={`${item?.share.toFixed(2)}%`}
               progressBackgroundColor="foundationColors.supporting.athensGrey"
               progressColor="foundationColors.primary.200"
             />

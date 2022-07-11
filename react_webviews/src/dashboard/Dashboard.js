@@ -265,7 +265,6 @@ const Home = (props) => {
             component={fundDetailsV2Container}
           />
           <Route path={`${url}mf-orders`} component={mfOrderContainer} />
-          <Route path={`${url}portfolio`} component={PortfolioRedesign} />
           <Route path={`${url}nominee`} component={Nominee} />
           <Route path={`${url}portfolio`} component={PortfolioRedesign} />
         </ThemeWrapper>

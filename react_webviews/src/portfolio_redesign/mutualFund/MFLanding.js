@@ -1,25 +1,21 @@
 import { Stack } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import { MORE_OPTIONS } from "businesslogic/constants/portfolio";
+import { MF_LANDING } from "businesslogic/strings/portfolio";
+import BottomSheet from "designSystem/organisms/BottomSheet";
+import React, { useState } from "react";
 import Icon from "../../designSystem/atoms/Icon";
 import Typography from "../../designSystem/atoms/Typography";
+import WrapperBox from "../../designSystem/atoms/WrapperBox/WrapperBox";
+import CategoryCard from "../../designSystem/molecules/CategoryCard/CategoryCard";
 import InfoCard from "../../designSystem/molecules/InfoCard";
 import Container from "../../designSystem/organisms/ContainerWrapper";
-import "./style.scss";
-import { getConfig } from "../../utils/functions";
-import CategoryCard from "../../designSystem/molecules/CategoryCard/CategoryCard";
 import PfFeatureCard from "../../featureComponent/portfolio/PfFeatureCard/PfFeatureCard";
-import WrapperBox from "../../designSystem/atoms/WrapperBox/WrapperBox";
-import Highcharts from "highcharts";
-import HighchartsReact from "highcharts-react-official";
-import { MF_LANDING } from "businesslogic/strings/portfolio";
-import { MORE_OPTIONS } from "businesslogic/constants/portfolio";
-import {
-  formatAmountInr,
-  numDifferentiation,
-  numDifferentiationInr,
-} from "../../utils/validators";
+import { getConfig } from "../../utils/functions";
+import { formatAmountInr, numDifferentiation } from "../../utils/validators";
+import LandingBottomsheet from "../portfolioLanding/landingBottomsheet";
 import SemiDonutGraph from "../portfolioLanding/SemiDonutGraph";
+import "./style.scss";
 
 const {
   investmentSummary: INVESTMENT_SUMMARY,
@@ -74,7 +70,8 @@ const graphOptions = {
   ],
 };
 
-function MFLanding({ mfSummary }) {
+function MFLanding({ mfSummary, goToAssetAllocation }) {
+  const [isCurrentValueSheetOpen, setIsCurrentValueSheetOpen] = useState(false);
   return (
     <Container
       headerProps={{
@@ -121,6 +118,7 @@ function MFLanding({ mfSummary }) {
               src={require("assets/eye_icon.svg")}
               className="eye-icon"
               dataAid={INVESTMENT_SUMMARY.currentValueIcon.dataAid}
+              onClick={() => setIsCurrentValueSheetOpen(true)}
             />
           </Box>
         </Stack>
@@ -230,6 +228,8 @@ function MFLanding({ mfSummary }) {
             flexDirection="row"
             alignItems="center"
             justifyContent="flex-start"
+            onClick={goToAssetAllocation}
+            className="view-details"
           >
             <Typography
               variant="body8"
@@ -246,7 +246,6 @@ function MFLanding({ mfSummary }) {
           </Stack>
         </Stack>
         <Box className="semi-donut-graph">
-          {/* <HighchartsReact highcharts={Highcharts} options={graphOptions} /> */}
           <SemiDonutGraph data={graphOptions} />
         </Box>
       </Box>
@@ -270,6 +269,18 @@ function MFLanding({ mfSummary }) {
           ))}
         </Box>
       </Box>
+
+      <BottomSheet
+        isOpen={isCurrentValueSheetOpen}
+        onClose={() => setIsCurrentValueSheetOpen(false)}
+        onBackdropClick={() => setIsCurrentValueSheetOpen(false)}
+      >
+        <LandingBottomsheet
+          current={mfSummary?.current_value}
+          invested={mfSummary?.invested_value}
+          earning={mfSummary?.earnings}
+        />
+      </BottomSheet>
     </Container>
   );
 }

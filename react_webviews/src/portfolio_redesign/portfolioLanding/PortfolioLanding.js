@@ -1,23 +1,19 @@
-import React, { useState } from "react";
-import "./style.scss";
-import Lottie from "lottie-react";
-import Container from "designSystem/organisms/ContainerWrapper";
-import BottomSheet from "designSystem/organisms/BottomSheet";
-import Icon from "designSystem/atoms/Icon";
-import InfoCard from "designSystem/molecules/InfoCard";
-import WrapperBox from "designSystem/atoms/WrapperBox";
 import { Box, Stack, Typography } from "@mui/material";
-import "./style.scss";
-import Button from "../../designSystem/atoms/Button";
-import FeatureCardCarousel from "./FeatureCardCarousel";
-import Allocations from "./Allocations";
-import { PORTFOLIO_LANDING, MF_LANDING } from "businesslogic/strings/portfolio";
-import {
-  formatAmountInr,
-  numDifferentiation,
-  numDifferentiationInr,
-} from "../../utils/validators";
+import { MF_LANDING, PORTFOLIO_LANDING } from "businesslogic/strings/portfolio";
+import Icon from "designSystem/atoms/Icon";
+import WrapperBox from "designSystem/atoms/WrapperBox";
+import InfoCard from "designSystem/molecules/InfoCard";
+import BottomSheet from "designSystem/organisms/BottomSheet";
+import Container from "designSystem/organisms/ContainerWrapper";
+import Lottie from "lottie-react";
+import React, { useState } from "react";
 import { getConfig } from "utils/functions";
+import Button from "../../designSystem/atoms/Button";
+import { formatAmountInr, numDifferentiation } from "../../utils/validators";
+import Allocations from "./Allocations";
+import FeatureCardCarousel from "./FeatureCardCarousel";
+import LandingBottomsheet from "./landingBottomsheet";
+import "./style.scss";
 
 const productName = getConfig().productName;
 
@@ -258,31 +254,11 @@ function PortfolioLanding({
         onClose={() => setIsCurrentValueSheetOpen(false)}
         onBackdropClick={() => setIsCurrentValueSheetOpen(false)}
       >
-        <div className="pf-landing-bottomsheet">
-          <BottomsheetRow
-            label={CURRENT_INVESTMENT_SHEET.keyCurrent.text}
-            labelId={CURRENT_INVESTMENT_SHEET.keyCurrent.dataAid}
-            value={formatAmountInr(investmentSummary?.current)}
-            valueId={CURRENT_INVESTMENT_SHEET.valueCurrent.dataAid}
-          />
-          <BottomsheetRow
-            label={CURRENT_INVESTMENT_SHEET.keyInvested.text}
-            labelId={CURRENT_INVESTMENT_SHEET.keyInvested.dataAid}
-            value={formatAmountInr(investmentSummary?.invested)}
-            valueId={CURRENT_INVESTMENT_SHEET.valueInvested.dataAid}
-          />
-          <BottomsheetRow
-            label={CURRENT_INVESTMENT_SHEET.keyProfitLoss.text}
-            labelId={CURRENT_INVESTMENT_SHEET.keyProfitLoss.dataAid}
-            value={formatAmountInr(investmentSummary?.earnings)}
-            valueId={CURRENT_INVESTMENT_SHEET.valueProfitLoss.dataAid}
-            valueColor={
-              investmentSummary?.earnings > 0
-                ? "foundationColors.secondary.profitGreen.400"
-                : "foundationColors.secondary.lossRed.400"
-            }
-          />
-        </div>
+        <LandingBottomsheet
+          current={investmentSummary?.current}
+          invested={investmentSummary?.invested}
+          earning={investmentSummary?.earnings}
+        />
       </BottomSheet>
 
       <BottomSheet
@@ -371,32 +347,6 @@ const HeadingRow = ({ title, titleDataAid, isActionable }) => {
           />
         </Stack>
       )}
-    </Stack>
-  );
-};
-
-const BottomsheetRow = ({ label, value, labelId, valueId, valueColor }) => {
-  return (
-    <Stack
-      flexDirection={"row"}
-      alignItems={"center"}
-      justifyContent="space-between"
-      style={{ marginBottom: 24 }}
-    >
-      <Typography
-        variant="heading4"
-        color={"foundationColors.content.primary"}
-        dataAid={labelId}
-      >
-        {label}
-      </Typography>
-      <Typography
-        variant="body8"
-        color={valueColor || "foundationColors.content.primary"}
-        dataAid={valueId}
-      >
-        {value}
-      </Typography>
     </Stack>
   );
 };
