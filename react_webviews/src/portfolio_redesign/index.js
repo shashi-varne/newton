@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 
 import { Route, Switch } from "react-router-dom";
 import ThemeWrapper from "../theme/ThemeWrapper";
-import MfLanding from "./mutualFund/MFLanding";
+import mfLandingContainer from "./containers/mfLandingContainer";
 
 const PortfolioRedesign = ({ match }) => {
   const { url } = match;
@@ -11,8 +11,8 @@ const PortfolioRedesign = ({ match }) => {
     <ThemeWrapper>
       <Fragment>
         <Switch>
-          <Route path={`${url}`} component={MfLanding} />
-          <Route path={`${url}/mf-landing`} component={MfLanding} />
+          <Route path={`${url}`} component={mfLandingContainer} />
+          <Route path={`${url}/mf-landing`} component={mfLandingContainer} />
         </Switch>
       </Fragment>
     </ThemeWrapper>

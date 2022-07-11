@@ -14,6 +14,11 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { MF_LANDING } from "businesslogic/strings/portfolio";
 import { MORE_OPTIONS } from "businesslogic/constants/portfolio";
+import {
+  formatAmountInr,
+  numDifferentiation,
+  numDifferentiationInr,
+} from "../../utils/validators";
 
 const {
   investmentSummary: INVESTMENT_SUMMARY,
@@ -59,7 +64,7 @@ const optionList = [
   },
 ];
 
-function MFLanding({}) {
+function MFLanding({ mfSummary }) {
   const graphOptions = {
     chart: {
       backgroundColor: "#F8F8FA",
@@ -118,8 +123,9 @@ function MFLanding({}) {
         headerTitle: MF_LANDING.navigationHeader.title,
         dataAid: MF_LANDING.navigationHeader.dataAid,
         headerSx: {
-          backgroundColor: "foundationColors.primary.600",
-          color: "foundationColors.supporting.white",
+          //TODO: add header background color
+          // backgroundColor: "foundationColors.primary.600",
+          // color: "foundationColors.supporting.white",
         },
       }}
       className="mf-landing-container"
@@ -150,7 +156,7 @@ function MFLanding({}) {
             dataAid={INVESTMENT_SUMMARY.valueTotalCurrent.dataAid}
             style={{ marginRight: 10 }}
           >
-            ₹19.6Cr
+            {numDifferentiation(mfSummary?.current_value, true, 1, false, true)}
           </Typography>
           <Box>
             <Icon
@@ -175,10 +181,17 @@ function MFLanding({}) {
           </Typography>
           <Typography
             variant="body2"
-            color="foundationColors.secondary.profitGreen.400"
+            color={
+              mfSummary?.one_day_earnings > 0
+                ? "foundationColors.secondary.profitGreen.400"
+                : "foundationColors.secondary.lossRed.400"
+            }
             dataAid={INVESTMENT_SUMMARY.valueOneDayChange.dataAid}
           >
-            + ₹36,865 (+8.6%)
+            {mfSummary?.one_day_earnings > 0 ? "+" : "-"}
+            {formatAmountInr(Math.abs(mfSummary?.one_day_earnings))} ({" "}
+            {mfSummary?.one_day_earnings_percent > 0 ? "+" : "-"}
+            {Math.abs(mfSummary?.one_day_earnings_percent)}%)
           </Typography>
         </Stack>
 
@@ -187,11 +200,23 @@ function MFLanding({}) {
           textProps={{
             title: "Current investment",
             leftTitle: "Invested",
-            leftSubtitle: "32",
+            leftSubtitle: numDifferentiation(
+              mfSummary?.invested_value,
+              true,
+              1,
+              false,
+              true
+            ),
             rightTitle: "XIRR",
-            rightSubtitle: "12.34%",
+            rightSubtitle: `${mfSummary.xirr}%`,
             middleTitle: "P&L",
-            middleSubtitle: "2.2L",
+            middleSubtitle: numDifferentiation(
+              mfSummary?.earnings,
+              true,
+              1,
+              false,
+              true
+            ),
           }}
           rightIcon={require("assets/ec_info.svg")}
           textColors={{
@@ -215,9 +240,9 @@ function MFLanding({}) {
         <WrapperBox elevation={1}>
           <InfoCard //TODO: change copy according status from businesslogic
             imgSrc={require("assets/locked_suit.svg")}
-            title={MF_LANDING.externalPortfolio.title}
-            subtitle={MF_LANDING.externalPortfolio.subtitle}
-            dataAid={MF_LANDING.externalPortfolio.dataAid}
+            title={"MF_LANDING.externalPortfolio.title"}
+            subtitle={"MF_LANDING.externalPortfolio.subtitle"}
+            dataAid={"MF_LANDING.externalPortfolio.dataAid"}
           />
         </WrapperBox>
       </Box>
