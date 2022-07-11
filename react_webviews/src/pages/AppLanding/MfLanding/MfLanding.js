@@ -1,19 +1,24 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Container from "../../../designSystem/organisms/ContainerWrapper";
 import TrustIcon from "../../../designSystem/atoms/TrustIcon";
-import Typography from "../../../designSystem/atoms/Typography";
+import WrapperBox from "../../../designSystem/atoms/WrapperBox";
 import CardHorizontal from "../../../designSystem/molecules/CardHorizontal";
 import Partnership from "../../../featureComponent/appLanding/Partnership";
 import InvestmentOptions from "../../../featureComponent/appLanding/InvestmentOptions";
 import MarketingBanners from "../../../featureComponent/appLanding/MarketingBanners";
 import ExploreCategories from "../../../featureComponent/appLanding/ExploreCategories";
+import PassiveIndexFunds from "../../../featureComponent/appLanding/PassiveIndesFunds";
 import KycBottomsheet from "../../../featureComponent/appLanding/KycBottomsheet";
 import { MF_LANDING } from "../../../strings/webappLanding";
+import { FINANCIAL_TOOLS } from "../../../constants/webappLanding";
+import TrendingFunds from "../../DIY/DiyLanding/TrendingFunds";
 import { isEmpty } from "lodash-es";
+import { Stack } from "@mui/material";
 
 import "./MfLanding.scss";
 
-const passiveIndexFundsData = MF_LANDING.passiveIndexFunds;
+const { externalPortfolio: externalPortfolioData } = MF_LANDING;
+
 const MfLanding = ({
   sendEvents,
   onRightIconClick,
@@ -24,13 +29,15 @@ const MfLanding = ({
   closeKycBottomsheet,
   isPageLoading,
   showPartnership,
+  baseConfig,
+  isFinity,
   ...restProps
 }) => {
   return (
     <Container
       noPadding={true}
       noFooter={true}
-      className="mf-landing-wrapper"
+      className={`mf-landing-wrapper ${isFinity ? `mf-landing-finity` : ``}`}
       dataAid={MF_LANDING.title.dataAid}
       headerProps={{
         dataAid: MF_LANDING.title.value,
@@ -42,11 +49,13 @@ const MfLanding = ({
       eventData={sendEvents("just_set_events")}
       isPageLoading={isPageLoading}
     >
-      {renderCards({
-        ...restProps,
-      })}
+      <MfLandingSections
+        baseConfig={baseConfig}
+        isFinity={isFinity}
+        {...restProps}
+      />
       <TrustIcon
-        dataAid="1"
+        dataAid={baseConfig.productName}
         variant="registration"
         className="mfl-trust-icon"
       />
@@ -68,19 +77,36 @@ const MfLanding = ({
 
 export default MfLanding;
 
-const renderCards = ({
+const MfLandingSections = ({
   showMarketingBanners,
   showKycCard,
   kycData,
   marketingBanners,
-  investmentOptions,
-  exploreCategories,
+  investOptionsData,
+  exploreCategoriesData,
   handleKyc,
   handleCardClick,
   handleExploreCategories,
   onMarketingBannerClick,
   mfSections,
+  showPassiveFunds,
+  baseConfig,
+  handleFundDetails,
+  showExternalPortfolio,
+  isFinity,
 }) => {
+  const getStyles = () => {
+    if (isFinity) {
+      const styles = {
+        backgroundColor: "foundationColors.supporting.grey",
+      };
+      return styles;
+    }
+    return {};
+  };
+
+  const sx = useMemo(getStyles, [isFinity]);
+
   const cardsMapper = {
     marketingBanners: (
       <>
@@ -94,68 +120,98 @@ const renderCards = ({
     ),
     kyc: (
       <>
-        {showKycCard && (
-          <CardHorizontal
-            rightImgSrc={require(`assets/fisdom/${kycData.icon}`)}
-            title={kycData.title}
-            description={kycData.subtitle}
-            descriptionColor={
-              kycData.descriptionColor || "foundationColors.content.secondary"
-            }
-            actionLink={kycData.buttonTitle}
-            className="mfl-kyc"
-            variant="heroCard"
-            buttonProps={{
-              isInverted: false,
-            }}
-            sx={{
-              background: "white !important",
-            }}
-            dataAid={MF_LANDING.kycDataAid}
-            titleColor="foundationColors.content.primary"
-            onClick={handleKyc(kycData.eventStatus)}
-          />
+        {showKycCard && !isEmpty(kycData) && (
+          <div className="mfl-kyc-wrapper">
+            <WrapperBox elevation={1}>
+              <CardHorizontal
+                rightImgSrc={require(`assets/${baseConfig.productName}/${kycData.icon}`)}
+                title={kycData.title}
+                description={kycData.subtitle}
+                descriptionColor={
+                  kycData.descriptionColor ||
+                  "foundationColors.content.secondary"
+                }
+                actionLink={kycData.buttonTitle}
+                variant="heroCard"
+                buttonProps={{
+                  isInverted: false,
+                }}
+                sx={{
+                  background: "white !important",
+                }}
+                dataAid={MF_LANDING.kycDataAid}
+                titleColor="foundationColors.content.primary"
+                onClick={handleKyc(kycData.eventStatus)}
+              />
+            </WrapperBox>
+          </div>
         )}
       </>
     ),
     passiveIndexFunds: (
       <>
-        <div className="mfl-kyc">
-          <CardHorizontal
-            rightImgSrc={require(`assets/${passiveIndexFundsData.icon}`)}
-            title={passiveIndexFundsData.title}
-            subtitle={passiveIndexFundsData.subtitle}
-            actionLink={passiveIndexFundsData.buttonTitle}
-            variant="heroCard"
-            dataAid={passiveIndexFundsData.dataAid}
-            footerText={passiveIndexFundsData.footerText}
-            // onClick={handleKyc(kycData.eventStatus)}
+        {showPassiveFunds && (
+          <PassiveIndexFunds
+            productName={baseConfig.productName}
+            onClick={handleCardClick}
           />
-          <Typography
-            variant="body6"
-            dataAid="helperText"
-            color="foundationColors.content.secondary"
-          >
-            *Based on TER averages of regular large cap and direct index funds
-          </Typography>
-        </div>
+        )}
       </>
     ),
     mfOptions: (
       <InvestmentOptions
-        titleDataAid={MF_LANDING.investmentOptions.dataAid}
-        title={MF_LANDING.investmentOptions.title}
-        productList={investmentOptions}
+        titleDataAid={investOptionsData.dataAid}
+        title={investOptionsData.title}
+        productList={investOptionsData.options}
         onClick={handleCardClick}
       />
     ),
     exploreCategories: (
       <ExploreCategories
-        titleDataAid={MF_LANDING.exploreCategories.dataAid}
-        title={MF_LANDING.exploreCategories.title}
-        categories={exploreCategories}
+        titleDataAid={exploreCategoriesData.dataAid}
+        title={exploreCategoriesData.title}
+        categories={exploreCategoriesData.options}
+        onClick={handleExploreCategories}
+        className={exploreCategoriesData.className}
+        buttonData={
+          baseConfig.isMobileDevice && exploreCategoriesData.buttonData
+        }
+        sx={sx}
+      />
+    ),
+    financialTools: (
+      <ExploreCategories
+        titleDataAid={MF_LANDING.financialTools.dataAid}
+        title={MF_LANDING.financialTools.title}
+        categories={FINANCIAL_TOOLS}
         onClick={handleExploreCategories}
       />
+    ),
+    trendingFunds: (
+      <TrendingFunds
+        diyType="equity"
+        config={baseConfig}
+        handleFundDetails={handleFundDetails}
+        isLanding
+        sx={sx}
+      />
+    ),
+    portfolioTracker: (
+      <>
+        {showExternalPortfolio && (
+          <Stack sx={sx}>
+            <CardHorizontal
+              className="mfl-portfolio"
+              rightImgSrc={require(`assets/${baseConfig.productName}/${externalPortfolioData.icon}`)}
+              title={externalPortfolioData.title}
+              description={externalPortfolioData.subtitle}
+              descriptionColor="foundationColors.content.secondary"
+              actionLink={externalPortfolioData.buttonTitle}
+              dataAid={externalPortfolioData.dataAid}
+            />
+          </Stack>
+        )}
+      </>
     ),
   };
   return (

@@ -4,6 +4,7 @@ import WrapperBox from "../../designSystem/atoms/WrapperBox";
 import { Skeleton, Stack } from "@mui/material";
 import { numDifferentiationInr } from "../../utils/validators";
 import { isFunction } from "lodash-es";
+import PropTypes from "prop-types";
 
 const PortfolioOverview = ({
   showLoader,
@@ -109,3 +110,11 @@ const Tile = ({
 };
 
 export default PortfolioOverview;
+
+PortfolioOverview.propTypes = {
+  portfolioOverViewData: PropTypes.object,
+  portfolioOverView: PropTypes.object,
+  showLoader: PropTypes.bool,
+  showPortfolioOverview: PropTypes.bool,
+  onClick: PropTypes.func,
+};

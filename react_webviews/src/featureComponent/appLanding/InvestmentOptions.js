@@ -1,7 +1,19 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Typography from "../../designSystem/atoms/Typography";
 import MenuItem from "../../designSystem/molecules/MenuItem";
-import { isEmpty } from "lodash-es";
+import getPartnerThemeData from "../../theme/utils";
+import PropTypes from "prop-types";
+
+const getIconColors = () => {
+  const { colors } = getPartnerThemeData();
+  const iconColors = [
+    colors.secondary.profitGreen[400],
+    colors.secondary.coralOrange[400],
+    colors.secondary.blue[400],
+    colors.secondary.mango[400],
+  ];
+  return iconColors;
+};
 
 const InvestmentOptions = ({
   productList = [],
@@ -10,32 +22,36 @@ const InvestmentOptions = ({
   onClick,
   feature,
   isLoading,
+  productName,
 }) => {
+  const iconColors = useMemo(getIconColors, []);
+
   return (
     <div className="al-investment-options">
-      {!isEmpty(title) && (
+      {title && (
         <Typography
           dataAid={titleDataAid}
           variant="heading3"
           className="al-io-title"
+          component="div"
         >
           {title}
         </Typography>
       )}
       {productList.map((data, idx) => {
-        const showLoader = ["stocks", "ipo"].includes(data.id) && isLoading;
         const rightLottieSrc =
           feature === data.id
-            ? require(`assets/fisdom/lottie/signfier.json`)
+            ? require(`assets/${productName}/lottie/signfier.json`)
             : null;
         return (
           <MenuItem
             {...data}
-            leftImgSrc={require(`assets/${data.icon}`)}
+            leftSvgSrc={require(`assets/${data.icon}`)}
+            leftSvgIconColor={iconColors[idx % 4]}
             key={idx}
             showSeparator={productList.length !== idx + 1}
             onClick={onClick(data)}
-            showLoader={showLoader}
+            showLoader={isLoading}
             rightLottieSrc={rightLottieSrc}
           />
         );
@@ -45,3 +61,10 @@ const InvestmentOptions = ({
 };
 
 export default InvestmentOptions;
+
+InvestmentOptions.propTypes = {
+  productList: PropTypes.array,
+  title: PropTypes.string,
+  onClick: PropTypes.func,
+  titleDataAid: PropTypes.string,
+};

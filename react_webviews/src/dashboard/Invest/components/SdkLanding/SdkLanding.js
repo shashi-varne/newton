@@ -44,7 +44,8 @@ const PATHNAME_MAPPER = {
   instaredeem: "/invest/instaredeem",
   mf: "/invest",
   elss: "/invest/savetax",
-  ipo: "/market-products"
+  ipo: "/market-products",
+  taxFiling: "/tax-filing"
 };
 
 const CARD_NAME_MAPPER = {
@@ -84,6 +85,13 @@ const SdkLanding = (props) => {
   useEffect(() => {
     onLoad();
   }, []);
+
+  useEffect(() => {
+    const data = getKycData(kyc, user);
+    setKycData(data);
+    const cardsData = getSdkLandingCardsData({ user, kyc });
+    setLandingCardsData(cardsData);
+  }, [kyc, user]);
 
   const handleDialogStates = (dialogStatus, dialogData) => {
     setDialogStates({ ...dialogStates, ...dialogStatus });
@@ -210,7 +218,12 @@ const SdkLanding = (props) => {
   const handleReferral = async () => {
     try {
       handleLoader({ dotLoader: true });
-      await applyReferralCode(referral);
+      const result = await applyReferralCode(referral);
+      const data = {
+        ...kyc,
+        equity_enabled: result.is_equity_enabled
+      }
+      updateKyc(data);
       toast("You have applied referral code successfully", "success");
     } catch (err) {
       toast(err, "error");

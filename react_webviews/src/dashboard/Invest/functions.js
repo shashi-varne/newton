@@ -230,13 +230,13 @@ export async function getRecommendations({
   }
 }
 
-export const getKycData = (kyc, user) => {
-  kyc = kyc || storageService().getObject("kyc") || {};
+export const getKycData = (userKyc, userData) => {
+  let kyc = !isEmpty(userKyc) ? userKyc : (storageService().getObject("kyc") || {});
   const TRADING_ENABLED = isTradingEnabled(kyc);
-  user = user || storageService().getObject("user") || {};
+  let user = !isEmpty(userData) ? userData : (storageService().getObject("user") || {});
   const isCompliant = kyc.kyc_status === "compliant";
   const kycJourneyStatus = getKycAppStatus(kyc)?.status || "";
-  let kycStatusData = kycStatusMapperInvest[kycJourneyStatus];
+  let kycStatusData = Object.assign({}, kycStatusMapperInvest[kycJourneyStatus]);
   const initialKycStatus = ["init", "ground"];
   if(initialKycStatus.includes(kycJourneyStatus) && TRADING_ENABLED) {
     kycStatusData.subtitle = "Set up Trading & Demat A/c. now";
@@ -581,6 +581,12 @@ export function handleStocksAndIpoCards(
   const config = getConfig();
   let modalData = Object.assign({key}, kycJourneyStatusMapperData);
 
+  const isKycInitState = ["init", "ground"].includes(kycJourneyStatus);
+
+  if (isKycInitState) {
+    modalData = kycStatusMapper.incomplete;
+  }
+
   if (key === "ipo") {
     const handleClick = () => {
       handleIpoCardRedirection({ kyc, user, isDirectEntry, navigate, handleLoader, handleSummaryData, handleDialogStates }, props)
@@ -693,6 +699,7 @@ export const handleKycStatus = ({
     });
   }
   const { kycJourneyStatus, isReadyToInvestBase } = kycData;
+  const initialKycStatus = ["init", "ground"];
   if (
     ["submitted", "verifying_trading_account"].includes(kycJourneyStatus) ||
     (kycJourneyStatus === "complete" && kyc.mf_kyc_processed)
@@ -719,6 +726,8 @@ export const handleKycStatus = ({
         ),
       },
     });
+  } else if (initialKycStatus.includes(kycJourneyStatus)) {
+    navigate(KYC_PATHNAME_MAPPER.homeKyc);
   } else if (modalData.nextState && modalData.nextState !== "/invest") {
     navigate(modalData.nextState);
   } else {
@@ -740,9 +749,15 @@ export const handleKycStatusRedirection = (
     handleLoader,
     handleSummaryData,
     handleDialogStates,
+    sendEvents
   },
   props
 ) => () => {
+  if (isFunction(sendEvents)) {
+    sendEvents("back", {
+      intent: modalData.title,
+    });
+  }
   let { kycJourneyStatus } = kycData;
   const {
     contactValue,
@@ -1063,5 +1078,27 @@ export function openBfdlBanner(handleDialogStates) {
   if(!isBfdlBannerDisplayed && config.code === 'bfdlmobile' && (config.isIframe || config.isSdk)) {
     storageService().setBoolean("bfdlBannerDisplayed", true);
     handleDialogStates({ openBfdlBanner: true });
+  }
+}
+
+export async function handleWealthdeskRedirection(handleLoader) {
+  handleLoader({ skelton: true });
+  try {
+    const response = await Api.get("/api/equity/api/eqm/get/wealthdesk/redirection/url");
+    if (
+      response.pfwstatus_code !== 200 ||
+      isEmpty(response.pfwresponse)
+    ) {
+      throw new Error( response?.pfwmessage || errorMessage);
+    }
+    const { status_code, result } = response.pfwresponse;
+    if (status_code === 200) {
+      window.location.href = result.url;
+    } else {
+      throw new Error(result?.message || result?.error || errorMessage);
+    }
+  } catch (er) {
+    toast(er.message);
+    handleLoader({ skelton: false });
   }
 }

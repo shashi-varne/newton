@@ -9,12 +9,12 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Swiper } from 'swiper/react';
-import SwiperCore, { Pagination } from 'swiper';
+import SwiperCore, { Pagination, Autoplay } from 'swiper';
 import noop from 'lodash/noop';
 import 'swiper/swiper-bundle.css';
 import { Box } from '@mui/material';
 
-SwiperCore.use([Pagination]);
+SwiperCore.use([Pagination, Autoplay]);
 
 export const CustomSwiper = ({
   children,

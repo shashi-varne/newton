@@ -87,7 +87,10 @@ class Result extends Component {
           show_loader: false,
         });
       } else {
-        this.navigate('intro', true);
+        const fromState = this.props.location?.state?.fromState;
+        this.navigate('intro', true, {
+          fromState,
+        });
       }
     } catch (err) {
       this.setState({
@@ -114,6 +117,7 @@ class Result extends Component {
         pathname: pathname,
         search: getConfig().searchParams,
         params,
+        state,
       });
     }
   }

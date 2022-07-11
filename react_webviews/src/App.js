@@ -27,6 +27,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import LoginContainer from './login_and_registration/components/LoginContainer';
 import Logout from "./login_and_registration/pages/Logout/Logout";
 import AppInitialization from "./common/components/AppInitialization";
+import { nativeCallback } from "./utils/native_callback";
 
 const Prepare = lazy(() => import(
   /*webpackChunkName: "Prepare"*/ "./dashboard/Invest/components/SdkLanding/Prepare"
@@ -102,6 +103,7 @@ const App = () => {
   const [themeConfiguration, setThemeConfiguration] = useState(getMuiThemeConfig());
   const isWithoutDesktopLayout = isMobileDevice || iframe || window.location.pathname.includes('pg/eq') || isDietEnabled;
   useEffect(() => {
+    initializeSdkData();
     if (config.isSdk || config.isIframe) {
       storageService().set("entry_path", window.location.pathname);
     }
@@ -109,6 +111,13 @@ const App = () => {
     eventManager.add(EVENT_MANAGER_CONSTANTS.updateAppTheme, updateAppTheme);
     eventManager.add(EVENT_MANAGER_CONSTANTS.storePartnerCode, getConfig().code);
   }, []);
+
+
+  const initializeSdkData = () => {
+    if (config.isSdk && config.Android) {
+      nativeCallback({ action: "get_data" });
+    }
+  };
 
   const updateAppTheme = (event) => {
     const oldPartnerCode = eventManager.get(EVENT_MANAGER_CONSTANTS.storePartnerCode);

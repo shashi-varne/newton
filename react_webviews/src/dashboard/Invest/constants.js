@@ -52,18 +52,24 @@ export const investCardsBase = {
     },
   },
   ourRecommendations: {
+    wealthdesk: {
+      title: "WealthDesk",
+      subtitle: "The Investment Revolution Is Here",
+      button_text: "INVEST",
+      icon: "ic_stocks.svg"
+    },
     buildwealth: {
       title: "High growth funds (Build Wealth)",
       subtitle: "Start SIP or One-time investment",
       button_text: "START NOW",
       icon: "ic_invest_build_wealth.svg",
     },
-    instaredeem: {
-      title: "Insta redemption funds",
-      subtitle: "Superior return and money available 24x7",
-      button_text: "INVEST",
-      icon: "ic_insta_fund_redemption.svg",
-    },
+    // instaredeem: {
+    //   title: "Insta redemption funds",
+    //   subtitle: "Superior return and money available 24x7",
+    //   button_text: "INVEST",
+    //   icon: "ic_insta_fund_redemption.svg",
+    // },
     insurance: {
       title: "Insurance",
       subtitle: "Starting from Rs. 50 per year",

@@ -3,7 +3,7 @@ import { getConfig, getBasePath } from './functions';
 import { open_browser_web, renameObjectKeys } from 'utils/validators';
 import { storageService } from './validators';
 import eventManager from './eventManager';
-import { EVENT_MANAGER_CONSTANTS } from './constants';
+import { EVENT_MANAGER_CONSTANTS, landingEntryPoints } from './constants';
 import isEmpty from "lodash/isEmpty";
 
 export const nativeCallback = async ({ action = null, message = null, events = null, action_path = null, rnData = {} } = {}) => {
@@ -157,9 +157,10 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     
     const entryPath = storageService().get('entry_path');
 
+    const isExitScreen = ["/", "/mf", "/landing", "/landing/bank-list", "/invest/explore"].includes(pathname);
     if (
       config.isSdk &&
-      pathname !== "/" &&
+      !isExitScreen &&
       (entryPath !== pathname) &&
       (callbackData.action === 'exit_web' || callbackData.action === 'exit_module' || callbackData.action === 'open_module')
     ) {
@@ -291,7 +292,12 @@ export function handleNativeExit(props, data) {
         searchParams: searchParams
       });
     } else {
-      navigate("/", {
+      const fromState = props.location?.state?.fromState;
+      let pathname = "/";
+      if (landingEntryPoints.includes(fromState)) {
+        pathname = fromState;
+      }
+      navigate(pathname, {
         searchParams: searchParams
       });
     }

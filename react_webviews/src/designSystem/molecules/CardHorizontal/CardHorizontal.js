@@ -19,9 +19,9 @@ import Status from '../../atoms/Status';
 import isFunction from 'lodash/isFunction';
 import PropTypes from 'prop-types';
 import {isEmpty} from 'lodash-es'
+import Icon from '../../atoms/Icon';
 
 import './CardHorizontal.scss';
-import Icon from '../../atoms/Icon';
 
 const CardHorizontal = ({
   leftImgSrc,
@@ -44,7 +44,7 @@ const CardHorizontal = ({
   footerText,
   footerTextColor,
   footerBackground,
-  className,
+  className = "",
   sx,
   variant = 'product',
   buttonProps = {},
@@ -66,10 +66,26 @@ const CardHorizontal = ({
 
   if (showLoader) {
     return (
-      <Skeleton
-        variant="rectangular"
-        className={`${className} card-horizontal-skelton-wrapper`}
-      />
+      <Stack
+        sx={{ p: 2 }}
+        justifyContent="space-between"
+        alignItems="center"
+        direction="row"
+        className={`card-horizontal-skelton-wrapper ${className}`}
+      >
+        <Stack direction="column" spacing={1}>
+          <Typography variant="heading3">
+            <Skeleton width="140px" />
+          </Typography>
+          <Typography variant="body1">
+            <Skeleton width="180px" />
+          </Typography>
+          <Typography variant="body1">
+            <Skeleton width="180px" height="52px" className="ch-sw-button" />
+          </Typography>
+        </Stack>
+        <Icon size="110px" {...rightImgProps} />
+      </Stack>
     );
   }
 

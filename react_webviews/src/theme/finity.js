@@ -36,7 +36,7 @@ const FinityTheme = {
       blue: {
         200: '#E6F2FE',
         300: '#9CCCFA',
-        400: '5AAAF6',
+        400: '#5AAAF6',
       },
       coralOrange: {
         200: '#FFEBE4',

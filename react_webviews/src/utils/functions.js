@@ -257,7 +257,7 @@ export const getConfig = () => {
 
     // change server url here for local and staging url builds (Not commit id one's)
     if (isStaging || isLocal) {
-      base_url_default = "https://sarthak-dot-plutus-staging.appspot.com";
+      base_url_default = "https://sdk-test-dot-plutus-staging.appspot.com";
     }
 
     if (isSDKStaging) {
@@ -289,6 +289,7 @@ export const getConfig = () => {
   let { app_version } = main_query_params;
   let { pc_urlsafe } = main_query_params;
   let { diet = false } = main_query_params;
+  let { odin = false } = main_query_params;
   let project = '';
   let project_child = '';
   if (main_pathname.indexOf('group-insurance') >= 0) {
@@ -411,6 +412,12 @@ export const getConfig = () => {
     returnConfig.diet = diet;
     searchParams += getParamsMark(searchParams) + `diet=${diet}`;
     searchParamsMustAppend +=  getParamsMark(searchParams) + `diet=${diet}`;
+  }
+
+  if(checkValidString(odin)) {
+    returnConfig.odin = odin;
+    searchParams += getParamsMark(searchParams) + `odin=${odin}`;
+    searchParamsMustAppend +=  getParamsMark(searchParams) + `odin=${odin}`;
   }
   
   if( main_pathname === '/webview/help-conversation' ) {

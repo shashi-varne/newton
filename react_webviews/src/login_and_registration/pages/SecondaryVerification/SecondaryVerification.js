@@ -258,7 +258,7 @@ class SecondaryVerification extends Component {
                                     />
                                 </span>
                             </div>
-                            <div style={{ marginTop : form_data?.mobile_error ? "12px" : "2px"}} className="input-subtitle">We'll send an OTP to verify your mobile number</div>
+                            <div style={{ marginTop : form_data?.mobile_error ? "24px" : "2px"}} className="input-subtitle">We'll send an OTP to verify your mobile number</div>
                             <div className="declaration-container whatsapp-consent">
                                 <Checkbox
                                     defaultChecked

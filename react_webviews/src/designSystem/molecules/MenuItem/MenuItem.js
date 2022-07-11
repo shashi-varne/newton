@@ -16,6 +16,7 @@ import Icon from '../../atoms/Icon';
 import Lottie from "lottie-react";
 import './MenuItem.scss';
 import { Skeleton } from '@mui/material';
+import SVG from 'react-inlinesvg';
 
 const MenuItem = ({
   leftImgSrc,
@@ -32,6 +33,8 @@ const MenuItem = ({
   showSeparator,
   className,
   showLoader,
+  leftSvgSrc,
+  leftSvgIconColor
 }) => {
   if (showLoader) {
     return (
@@ -74,9 +77,27 @@ const MenuItem = ({
         onClick={onClick}
         data-aid={`menuItem_${dataAid}`}
       >
-        {leftImgSrc && (
-          <Icon src={leftImgSrc} size='32px' className='menu-item-left-img' dataAid='left' {...leftImgProps} />
-        )}
+        {leftImgSrc ? (
+          <Icon
+            src={leftImgSrc}
+            size="32px"
+            className="menu-item-left-img"
+            dataAid="left"
+            {...leftImgProps}
+          />
+        ) : leftSvgSrc ? (
+          <div className="menu-item-left-img" >
+            <SVG
+              preProcessor={(code) =>
+                code.replace(/fill=".*?"/g, `fill=${leftSvgIconColor ? leftSvgIconColor : undefined}`)
+              }
+              src={leftSvgSrc}
+              size="32px"           
+              data-aid="iv_left"
+              {...leftImgProps}
+            />
+          </div>
+        ) : null}
 
         <div className='mi-right-wrapper'>
           <div className='mi-text-wrapper'>
@@ -108,7 +129,7 @@ const MenuItem = ({
           )}
         </div>
       </div>
-      {showSeparator && <Separator marginLeft={leftImgSrc ? '72px' : '16px'} dataAid="1" />}
+      {showSeparator && <Separator marginLeft={(leftImgSrc || leftSvgSrc) ? '72px' : '16px'} dataAid="1" />}
     </div>
   );
 };

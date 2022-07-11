@@ -3,6 +3,7 @@ import Typography from "../../designSystem/atoms/Typography";
 import BottomSheet from "../../designSystem/organisms/BottomSheet";
 import Button from "../../designSystem/atoms/Button";
 import { isEmpty } from "lodash-es";
+import PropTypes from "prop-types";
 
 const AuthVerification = ({
   isOpen,
@@ -47,7 +48,8 @@ const AuthVerification = ({
       ) : (
         <div className="flex-between-center">
           <Typography variant="body2" dataAid={authData.dataAid}>
-            {authData.contactValue}{" "}
+            {authData.countryCode}
+            {authData.contactValue}
           </Typography>
           <Button variant="link" onClick={handleEdit} title="Edit" />
         </div>
@@ -57,3 +59,8 @@ const AuthVerification = ({
 };
 
 export default AuthVerification;
+
+AuthVerification.propTypes = {
+  authData: PropTypes.object,
+  handleEdit: PropTypes.func,
+};

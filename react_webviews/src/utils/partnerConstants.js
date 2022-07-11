@@ -95,36 +95,20 @@ export const DEFAULT_MARKETING_BANNERS = [
 
 export const PRODUCT_MARKETING_BANNERS = [
   {
-    image: "freedomplan.svg",
-    id: "freedomplan",
-  },
-  {
     image: "taxfiling_banner.svg",
     id: "taxFiling",
   },
   {
-    image: "stocks_banner.svg",
-    id: "stocks",
+    image: "freedomplan_1.svg",
+    id: "freedomplan",
   },
   {
-    image: "kyc.svg",
+    image: "kyc_banner.svg",
     id: "equityKyc",
   },
   {
-    image: "buildwealth.svg",
+    image: "buildwealth_2.svg",
     id: "buildwealth",
-  },
-  {
-    image: "explore.svg",
-    id: "equity",
-  },
-  {
-    image: "retirement.svg",
-    id: "retirement",
-  },
-  {
-    image: "education.svg",
-    id: "education",
   },
 ];
 
@@ -138,27 +122,60 @@ export const EQUITY_MARKETING_BANNERS = [
     id: "buildwealth",
   },
   {
-    image: "taxfiling_1.svg",
+    image: "kyc_banner.svg",
+    id: "equityKyc",
+  },
+  {
+    image: "education.svg",
+    id: "education",
+  },
+];
+
+export const UCOMB_MARKETING_BANNERS = [
+  {
+    image: "taxfiling_banner.svg",
     id: "taxFiling",
+    endDate: "06/31/2022",
+  },
+  {
+    image: "freedomplan_1.svg",
+    id: "freedomplan",
+    endDate: "06/31/2022",
+  },
+  {
+    image: "buildwealth_3.svg",
+    id: "buildwealth",
+    endDate: "06/31/2022",
+  },
+  {
+    image: "kyc.svg",
+    id: "equityKyc",
+    endDate: "06/31/2022",
+  },
+];
+
+export const TAXWIN_MARKETING_BANNERS = [
+  {
+    image: "freedomplan.svg",
+    id: "freedomplan",
   },
   {
     image: "kyc.svg",
     id: "equityKyc",
   },
+];
+
+export const NFO_MARKETING_BANNERS = [
   {
-    image: "stocks_banner.svg",
-    id: "stocks",
+    image: "nfo.svg",
+    id: "nfo",
+    endDate: "07/25/2022",
+    startDate: "07/12/2022",
   },
   {
-    image: "explore.svg",
-    id: "equity",
-  },
-  {
-    image: "retirement.svg",
-    id: "retirement",
-  },
-  {
-    image: "education.svg",
-    id: "education",
+    image: "nfo1.svg",
+    id: "nfo",
+    endDate: "07/24/2022",
+    startDate: "07/12/2022",
   },
 ];

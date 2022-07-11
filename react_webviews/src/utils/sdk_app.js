@@ -128,7 +128,7 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
         nativeCallback({ action: "exit_web" });
         return true; 
       }
-      if (currentState === "/" || isNpsOutsideSdk(fromState, currentState)) {
+      if (["/", "/mf", "/landing"].includes(currentState) || isNpsOutsideSdk(fromState, currentState)) {
         nativeCallback({ action: "exit_web" });
         return true;
       } else {
