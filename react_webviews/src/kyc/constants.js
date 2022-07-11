@@ -294,7 +294,7 @@ export const VERIFICATION_DOC_OPTIONS = [
 export const ADDRESS_PROOF_OPTIONS = [
   { name: "Driving license", value: "DL" },
   { name: "Passport", value: "PASSPORT" },
-  { name: "Aadhaar card", value: "AADHAAR" },
+  // { name: "Aadhaar card", value: "AADHAAR" },
   { name: "Voter ID", value: "VOTER_ID_CARD" },
   { name: "NREGA ID", value: "NREGA_ID" }
 ];
