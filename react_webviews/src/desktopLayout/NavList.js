@@ -30,7 +30,6 @@ import {
   isEquityCompleted,
 } from "../kyc/common/functions";
 import { isTradingEnabled } from "../utils/functions";
-import PortfolioRedesign from "../portfolio_redesign";
 let data = [
   // {
   //   id: 'register',
@@ -98,8 +97,8 @@ let data = [
     path: "/logout",
   },
   {
-    id: "portfolio",
-    name: "Portfolio",
+    id: "test",
+    name: "Test",
     icon: logout,
     path: "/portfolio",
   },

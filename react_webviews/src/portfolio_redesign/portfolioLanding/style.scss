@@ -1,0 +1,61 @@
+.portfolio-landing-container {
+  .top-section {
+    background: #3e1a9d url("../../assets/portfolio_landing_banner.svg")
+      no-repeat left bottom;
+    background-size: contain;
+    margin: 0 -16px 16px;
+    padding: 16px 16px 0;
+    .eye-icon {
+      cursor: pointer;
+    }
+    .one-day-change {
+      padding-bottom: 24px;
+    }
+    .realised-gains {
+      cursor: pointer;
+      padding-bottom: 30px;
+    }
+    .pf-landing-lottie-anim {
+      width: 40px;
+      height: 40px;
+    }
+  }
+  .heading-row {
+    margin-bottom: 16px;
+    padding: 0 16px;
+  }
+  .carousel-section {
+    margin: 0 -16px 24px -16px;
+    padding: 0;
+    .swiper-slide {
+      &:first-child {
+        padding-left: 16px;
+      }
+      &:last-child {
+        padding-right: 16px;
+      }
+    }
+  }
+  .allocations-section {
+    .MuiTabs-flexContainer {
+      justify-content: flex-start !important;
+    }
+    .swiper-container {
+      padding-top: 24px;
+      min-height: 200px;
+    }
+  }
+  .bottom-section {
+    .mf-banner {
+      cursor: pointer;
+    }
+  }
+}
+
+.pf-landing-bottomsheet {
+  padding: 24px 16px 0;
+}
+
+.realised-gain-sheet {
+  padding: 24px 16px;
+}
