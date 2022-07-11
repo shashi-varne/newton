@@ -19,6 +19,7 @@ import {
   numDifferentiation,
   numDifferentiationInr,
 } from "../../utils/validators";
+import SemiDonutGraph from "../portfolioLanding/SemiDonutGraph";
 
 const {
   investmentSummary: INVESTMENT_SUMMARY,
@@ -64,59 +65,16 @@ const optionList = [
   },
 ];
 
+const graphOptions = {
+  colors: ["#33CF90", "#FE794D", "#5AAAF6"],
+  seriesData: [
+    ["Equity", 60],
+    ["Debt", 30],
+    ["Others", 10],
+  ],
+};
+
 function MFLanding({ mfSummary }) {
-  const graphOptions = {
-    chart: {
-      backgroundColor: "#F8F8FA",
-      height: "180px",
-      panning: false,
-      zoomType: false,
-      pinchType: false,
-    },
-    credits: {
-      enabled: false,
-    },
-    title: {
-      text: undefined,
-    },
-    tooltip: {
-      pointFormat: "<b>{point.percentage:.1f}%</b>",
-    },
-    accessibility: {
-      point: {
-        valueSuffix: "%",
-      },
-    },
-    plotOptions: {
-      pie: {
-        dataLabels: {
-          enabled: true,
-          distance: 25,
-          style: {
-            fontWeight: "bold",
-            color: "white",
-          },
-        },
-        startAngle: -90,
-        endAngle: 90,
-        center: ["50%", "100%"],
-        size: "220%",
-        colors: ["#33CF90", "#FE794D", "#5AAAF6"],
-      },
-    },
-    series: [
-      {
-        type: "pie",
-        name: undefined,
-        innerSize: "50%",
-        data: [
-          ["Equity", 60],
-          ["Debt", 30],
-          ["Others", 10],
-        ],
-      },
-    ],
-  };
   return (
     <Container
       headerProps={{
@@ -288,7 +246,8 @@ function MFLanding({ mfSummary }) {
           </Stack>
         </Stack>
         <Box className="semi-donut-graph">
-          <HighchartsReact highcharts={Highcharts} options={graphOptions} />
+          {/* <HighchartsReact highcharts={Highcharts} options={graphOptions} /> */}
+          <SemiDonutGraph data={graphOptions} />
         </Box>
       </Box>
       <Box className="more-options">

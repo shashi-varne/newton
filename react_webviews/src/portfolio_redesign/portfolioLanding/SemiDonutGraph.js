@@ -30,9 +30,9 @@ function SemiDonutGraph({ data }) {
             color: "white",
           },
           formatter: function () {
-            return `<span> <span style='color: ${
-              data?.labelColorMapper[this.key]
-            }'>${parseInt(this.percentage)}%</span> ${this.key} </span>`;
+            return `<span> <span style='color: ${this.color}'>${parseInt(
+              this.percentage
+            )}%</span> ${this.key} </span>`;
           },
           style: {},
         },
