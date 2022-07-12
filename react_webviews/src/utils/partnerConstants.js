@@ -74,7 +74,23 @@ export const PLATFORM_MOTIVATORS = [
   },
 ];
 
+export const NFO_MARKETING_BANNERS = [
+  {
+    image: "nfo.svg",
+    id: "nfo",
+    endDate: "07/25/2022",
+    startDate: "07/12/2022",
+  },
+  {
+    image: "nfo1.svg",
+    id: "nfo",
+    endDate: "07/24/2022",
+    startDate: "07/12/2022",
+  },
+];
+
 export const DEFAULT_MARKETING_BANNERS = [
+  ...NFO_MARKETING_BANNERS,
   {
     image: "buildwealth.svg",
     id: "buildwealth",
@@ -94,6 +110,7 @@ export const DEFAULT_MARKETING_BANNERS = [
 ];
 
 export const PRODUCT_MARKETING_BANNERS = [
+  ...NFO_MARKETING_BANNERS,
   {
     image: "taxfiling_banner.svg",
     id: "taxFiling",
@@ -113,6 +130,7 @@ export const PRODUCT_MARKETING_BANNERS = [
 ];
 
 export const EQUITY_MARKETING_BANNERS = [
+  ...NFO_MARKETING_BANNERS,
   {
     image: "freedomplan.svg",
     id: "freedomplan",
@@ -132,26 +150,27 @@ export const EQUITY_MARKETING_BANNERS = [
 ];
 
 export const UCOMB_MARKETING_BANNERS = [
-  {
-    image: "taxfiling_banner.svg",
-    id: "taxFiling",
-    endDate: "06/31/2022",
-  },
-  {
-    image: "freedomplan_1.svg",
-    id: "freedomplan",
-    endDate: "06/31/2022",
-  },
-  {
-    image: "buildwealth_3.svg",
-    id: "buildwealth",
-    endDate: "06/31/2022",
-  },
-  {
-    image: "kyc.svg",
-    id: "equityKyc",
-    endDate: "06/31/2022",
-  },
+  ...NFO_MARKETING_BANNERS,
+  // {
+  //   image: "taxfiling_banner.svg",
+  //   id: "taxFiling",
+  //   endDate: "06/31/2022",
+  // },
+  // {
+  //   image: "freedomplan_1.svg",
+  //   id: "freedomplan",
+  //   endDate: "06/31/2022",
+  // },
+  // {
+  //   image: "buildwealth_3.svg",
+  //   id: "buildwealth",
+  //   endDate: "06/31/2022",
+  // },
+  // {
+  //   image: "kyc.svg",
+  //   id: "equityKyc",
+  //   endDate: "06/31/2022",
+  // },
 ];
 
 export const TAXWIN_MARKETING_BANNERS = [
@@ -165,17 +184,3 @@ export const TAXWIN_MARKETING_BANNERS = [
   },
 ];
 
-export const NFO_MARKETING_BANNERS = [
-  {
-    image: "nfo.svg",
-    id: "nfo",
-    endDate: "07/25/2022",
-    startDate: "07/12/2022",
-  },
-  {
-    image: "nfo1.svg",
-    id: "nfo",
-    endDate: "07/24/2022",
-    startDate: "07/12/2022",
-  },
-];
