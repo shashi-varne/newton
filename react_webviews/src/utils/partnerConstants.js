@@ -133,12 +133,12 @@ export const PRODUCT_MARKETING_BANNERS = [
   {
     image: "kyc_banner.svg",
     id: "equityKyc",
-    startDate: "07/31/2022",
+    startDate: "07/25/2022",
   },
   {
     image: "buildwealth_2.svg",
     id: "buildwealth",
-    startDate: "07/31/2022",
+    startDate: "07/26/2022",
   },
 ];
 
@@ -152,12 +152,12 @@ export const EQUITY_MARKETING_BANNERS = [
   {
     image: "buildwealth_1.svg",
     id: "buildwealth",
-    startDate: "07/31/2022",
+    startDate: "07/25/2022",
   },
   {
     image: "kyc_banner.svg",
     id: "equityKyc",
-    startDate: "07/31/2022",
+    startDate: "07/26/2022",
   },
   {
     image: "education.svg",
