@@ -7,6 +7,7 @@ import React, { useState } from "react";
 import Icon from "../../designSystem/atoms/Icon";
 import Typography from "../../designSystem/atoms/Typography";
 import WrapperBox from "../../designSystem/atoms/WrapperBox/WrapperBox";
+import CardHorizontal from "../../designSystem/molecules/CardHorizontal";
 import CategoryCard from "../../designSystem/molecules/CategoryCard/CategoryCard";
 import InfoCard from "../../designSystem/molecules/InfoCard";
 import Container from "../../designSystem/organisms/ContainerWrapper";
@@ -16,6 +17,7 @@ import { formatAmountInr, numDifferentiation } from "../../utils/validators";
 import LandingBottomsheet from "../portfolioLanding/landingBottomsheet";
 import SemiDonutGraph from "../portfolioLanding/SemiDonutGraph";
 import "./style.scss";
+import { STATUS_VARIANTS } from "../../designSystem/atoms/Status/Status";
 
 const {
   investmentSummary: INVESTMENT_SUMMARY,
@@ -193,12 +195,23 @@ function MFLanding({ mfSummary, goToAssetAllocation }) {
             dataAid={MF_LANDING.easySip.dataAid}
           />
         </WrapperBox>
-        <WrapperBox elevation={1}>
+        {/* <WrapperBox elevation={1}>
           <InfoCard //TODO: change copy according status from businesslogic
             imgSrc={require("assets/locked_suit.svg")}
             title={"MF_LANDING.externalPortfolio.title"}
             subtitle={"MF_LANDING.externalPortfolio.subtitle"}
             dataAid={"MF_LANDING.externalPortfolio.dataAid"}
+          />
+        </WrapperBox> */}
+
+        <WrapperBox elevation={1}>
+          <CardHorizontal //TODO: change copy according status from businesslogic
+            title={"Import external portfolio"}
+            subtitle={"Forward CAS email to cas@fisdom.com "}
+            statusTitle="PENDING ON YOU"
+            statusVariant={STATUS_VARIANTS.positive}
+            rightImgSrc={require("assets/ext_portfolio.svg")}
+            className="external-portfolio-card"
           />
         </WrapperBox>
       </Box>

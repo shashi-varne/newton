@@ -5,6 +5,7 @@ import ThemeWrapper from "../theme/ThemeWrapper";
 import AssetAllocationContainer from "./containers/assetAllocationContainer";
 import mfLandingContainer from "./containers/mfLandingContainer";
 import portfolioLandingContainer from "./containers/portfolioLandingContainer";
+import SomethingsWrong from "./ErrorScreen/SomethingsWrong";
 
 const PortfolioRedesign = ({ match }) => {
   const { url } = match;
@@ -19,6 +20,7 @@ const PortfolioRedesign = ({ match }) => {
             path={`${url}/asset-allocation`}
             component={AssetAllocationContainer}
           />
+          <Route path={`${url}/somethings-wrong`} component={SomethingsWrong} />
         </Switch>
       </Fragment>
     </ThemeWrapper>

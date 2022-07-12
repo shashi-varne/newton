@@ -35,7 +35,7 @@ const data = [
     earnings: 0,
   },
 ];
-function FeatureCardCarousel() {
+function FeatureCardCarousel({ investments }) {
   return (
     <CustomSwiper
       spaceBetween={8}

@@ -14,32 +14,31 @@ import PropTypes from "prop-types";
 import BottomSheet from "../../../designSystem/organisms/BottomSheet";
 import ReturnCalculator from "./ReturnCalculator";
 
-const INFO_ACTION_VARIANT = {
+export const INFO_ACTION_VARIANT = {
   WITH_ACTION: "WITH_ACTION",
   WITHOUT_ACTION: "WITHOUT_ACTION",
 };
 
-const WithoutActionSubtitle = () => {
+const WithoutActionSubtitle = (subtitle) => {
   return (
     <Typography
       variant="inherit"
       color="inherit"
       className="custom-text-elipsis"
     >
-      Your investments will start to appear here in a while
+      {subtitle}
     </Typography>
   );
 };
 
-const WithActionSubtitle = (setIsOpen) => {
+const WithActionSubtitle = (setIsOpen, subtitle) => {
   return (
     <Typography
       variant="inherit"
       color="inherit"
       className="custom-text-elipsis"
     >
-      Join 5M + Indians who invest their money to grow their money. Returns from
-      investments help to build wealth with no sweat!
+      {subtitle}
       <Button
         variant="link"
         title="Calculate returns"
@@ -51,9 +50,9 @@ const WithActionSubtitle = (setIsOpen) => {
 };
 
 function InfoAction({
-  topImage,
   title,
   subtitle,
+  kycDone,
   variant = INFO_ACTION_VARIANT.WITH_ACTION,
 }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -74,17 +73,21 @@ function InfoAction({
         <Box style={{ marginBottom: 24 }}>
           <LandingHeader dataAid="updatingShortly" variant="center">
             <LandingHeaderImage
-              imgSrc={require("assets/updating_shortly.svg")}
+              imgSrc={require("assets/portfolio_no_investment.svg")}
             />
-            <LandingHeaderTitle align="center">I am title</LandingHeaderTitle>
+            <LandingHeaderTitle align="center">{title}</LandingHeaderTitle>
             <LandingHeaderSubtitle align="center" dataIdx={1}>
               {variant === INFO_ACTION_VARIANT.WITHOUT_ACTION
-                ? WithoutActionSubtitle()
-                : WithActionSubtitle(setIsOpen)}
+                ? WithoutActionSubtitle(subtitle)
+                : WithActionSubtitle(setIsOpen, subtitle)}
             </LandingHeaderSubtitle>
           </LandingHeader>
         </Box>
-        <Button dataAid="primary" variant={"container"} title="VIEW ORDERS" />
+        <Button
+          dataAid="primary"
+          variant={"container"}
+          title={kycDone ? "INVEST NOW" : "START KYC"}
+        />
       </Stack>
       <BottomSheet
         isOpen={isOpen}

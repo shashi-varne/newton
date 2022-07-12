@@ -89,10 +89,11 @@ export const LandingHeaderImage = ({ imgSrc, imgProps = {} }) => {
   );
 };
 
-export const LandingHeaderTitle = ({ children, color }) => {
+export const LandingHeaderTitle = ({ children, color, align = "left" }) => {
   return (
     <Typography
       variant="heading1"
+      align={align}
       color={color}
       dataAid="title"
       component="div"

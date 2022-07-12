@@ -25,6 +25,7 @@ function SemiDonutGraph({ data }) {
         dataLabels: {
           enabled: true,
           distance: 25,
+          softConnector: false,
           style: {
             fontWeight: "bold",
             color: "white",

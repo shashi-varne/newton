@@ -6,47 +6,6 @@ import AllocationDetailsTabItem from "./AllocationDetailsTabItem";
 import "./style.scss";
 import { ALLOCATIONS_LANDING } from "businesslogic/strings/portfolio";
 
-const tabList = [
-  { name: "Equity • 90%", key: "equity" },
-  { name: "Debt • 10%", key: "debt" },
-  { name: "Others • 0%", key: "others", disabled: true },
-];
-const holdingsData = [
-  { title: "Reliance Industries Ltd", label: "12.20%", percentage: 65 },
-  { title: "Reliance Industries Ltd", label: "12.20%", percentage: 65 },
-  { title: "Reliance Industries Ltd", label: "12.20%", percentage: 65 },
-  { title: "Reliance Industries Ltd", label: "12.20%", percentage: 65 },
-  { title: "Reliance Industries Ltd", label: "12.20%", percentage: 65 },
-  { title: "Reliance Industries Ltd", label: "12.20%", percentage: 65 },
-  { title: "Reliance Industries Ltd", label: "12.20%", percentage: 65 },
-  { title: "Reliance Industries Ltd", label: "12.20%", percentage: 65 },
-  { title: "Reliance Industries Ltd", label: "12.20%", percentage: 65 },
-  { title: "Reliance Industries Ltd", label: "12.20%", percentage: 65 },
-  { title: "Reliance Industries Ltd", label: "12.20%", percentage: 65 },
-  { title: "Reliance Industries Ltd", label: "12.20%", percentage: 65 },
-  { title: "Reliance Industries Ltd", label: "12.20%", percentage: 65 },
-  { title: "Reliance Industries Ltd", label: "12.20%", percentage: 65 },
-  { title: "Random ind Ltd", label: "12.20%", percentage: 65 },
-];
-
-const sectorsData = [
-  { title: "Speciality chemicals", label: "59.20%", percentage: 35 },
-  { title: "Speciality chemicals", label: "59.20%", percentage: 35 },
-  { title: "Speciality chemicals", label: "59.20%", percentage: 35 },
-  { title: "Speciality chemicals", label: "59.20%", percentage: 35 },
-  { title: "Speciality chemicals", label: "59.20%", percentage: 35 },
-  { title: "Speciality chemicals", label: "59.20%", percentage: 35 },
-  { title: "Speciality chemicals", label: "59.20%", percentage: 35 },
-  { title: "Speciality chemicals", label: "59.20%", percentage: 35 },
-  { title: "Speciality chemicals", label: "59.20%", percentage: 35 },
-  { title: "Speciality chemicals", label: "59.20%", percentage: 35 },
-  { title: "Speciality chemicals", label: "59.20%", percentage: 35 },
-  { title: "Speciality chemicals", label: "59.20%", percentage: 35 },
-  { title: "Speciality chemicals", label: "59.20%", percentage: 35 },
-  { title: "Speciality chemicals", label: "59.20%", percentage: 35 },
-  { title: "Random chemicals", label: "59.20%", percentage: 35 },
-];
-
 function AllocationDetails({ tabHeaders, equityData, debtData }) {
   const [swiper, setSwiper] = useState("");
   const [tabValue, setTabValue] = useState(0);

@@ -4,6 +4,7 @@ import { Pill, Pills } from "../../designSystem/atoms/Pills";
 import ProgressBar from "../../designSystem/atoms/ProgressBar";
 import Button from "../../designSystem/atoms/Button";
 import InvestmentCard from "./InvestmentCard";
+import { isEmpty } from "lodash-es";
 
 function AllocationDetailsTabItem({
   pillData,
@@ -71,7 +72,7 @@ function AllocationDetailsTabItem({
             />
           ))}
       </Box>
-      {showViewAll[currentPill] && (
+      {showViewAll[currentPill] && !isEmpty(currentProgressData) && (
         <Button
           variant={"link"}
           onClick={handleViewAll}
