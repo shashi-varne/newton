@@ -95,16 +95,16 @@ export const FAQS = [
 
 export const TAX_FILING_OPTIONS = [
   {
-    title: 'Do it yourself',
-    subtitle: 'We guide and you file',
-    icon: 'icn_self_itr',
-    type: 'free',
-  },
-  {
     title: 'Hire a personal CA',
     subtitle: 'Experts file and you save',
     icon: 'icn_ca',
     type: 'eCA',
+  },
+  {
+    title: 'Do it yourself',
+    subtitle: 'We guide and you file',
+    icon: 'icn_self_itr',
+    type: 'free',
   },
 ]
 
