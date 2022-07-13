@@ -256,7 +256,7 @@ const CustomTitle = ({ title }) => {
       <div className="heading3-medium">{title}</div>
       <WVTag
         variant="attention"
-        content="15% off"
+        content="35% off"
         dataAidSuffix="tax2win-free-tag"
         classes={{ container: 'align-self-start m-left-1x' }}
       />
