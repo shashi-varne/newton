@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PortfolioRedesign from "../portfolioLanding/PortfolioLanding";
 import Api from "utils/api";
 import { useEffect } from "react";
@@ -16,6 +16,7 @@ import InfoAction, {
   INFO_ACTION_VARIANT,
 } from "../screens/InfoAction/InfoAction";
 import { isEmpty } from "lodash-es";
+import { ERROR_STATE_BOX_VARIANTS } from "../ErrorScreen/ErrorStateBox";
 
 const screen = "PortfolioLanding";
 
@@ -26,29 +27,86 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
   const investmentSummary = getInvestmentSummary(state);
   const investments = getInvestments(state);
   const allocationDetails = getAllocationDetails(state);
-  const statusCode = getPortfolioStatusCode(state);
+  const statusCode = 314; //TODO: getPortfolioStatusCode(state);
   const assetWiseData = allocationDetails?.asset_allocation;
   const productWiseData = allocationDetails?.product_allocation;
-
-  const init = () => {
-    // if (isEmpty(summaryData)) {
-    dispatch(getPortfolioSummary({ screen, Api }));
-    // }
-  };
-  if (statusCode === 309) {
-    return (
-      <InfoAction
-        title="No investments yet!"
-        subtitle="Join 5M + Indians who invest their money to grow their money. Returns from investments help to build wealth with no sweat! Calculate Returns"
-        kycDone={false}
-        variant={INFO_ACTION_VARIANT.WITH_ACTION}
-      />
-    );
-  }
+  const [viewData, setViewData] = useState({
+    showTopSection: true,
+    showAllocationSection: true,
+    showErrorBox: false,
+    errorVariant: "",
+  });
 
   useEffect(() => {
     init();
-  }, []);
+    if (statusCode === 313 || 315) {
+      checkErrorStatusCode();
+    }
+  }, [statusCode]);
+
+  const init = () => {
+    if (isEmpty(summaryData)) {
+      dispatch(getPortfolioSummary({ screen, Api }));
+    }
+  };
+
+  const checkErrorStatusCode = () => {
+    console.log("status", statusCode);
+    if (!statusCode) return;
+    if (statusCode === 313) {
+      setViewData({
+        showErrorBox: true,
+        showTopSection: false,
+        showAllocationSection: false,
+        errorVariant: ERROR_STATE_BOX_VARIANTS.DOWNTIME,
+      });
+    } else if (statusCode === 315) {
+      setViewData({
+        showErrorBox: true,
+        showTopSection: false,
+        showAllocationSection: false,
+        errorVariant: ERROR_STATE_BOX_VARIANTS.NO_INVESTMENT,
+      });
+    }
+  };
+  if (statusCode === 308) {
+    return (
+      <InfoAction
+        dataAidSuffix={"updatingShortly"}
+        topImgSrc={require("assets/portfolio_no_investment.svg")}
+        title="No investments yet!"
+        ctaTitle={"START KYC"}
+        subtitle="Join 5M + Indians who invest their money to grow their money. Returns from investments help to build wealth with no sweat! Calculate Returns"
+        variant={INFO_ACTION_VARIANT.WITH_ACTION}
+      />
+    );
+  } else if (statusCode === 310) {
+    return (
+      <InfoAction
+        dataAidSuffix={"noInvestment"}
+        topImgSrc={require("assets/portfolio_no_investment.svg")}
+        title="No investments yet!"
+        ctaTitle={"INVEST NOW"}
+        subtitle="Join 5M + Indians who invest their money to grow their money. Returns from investments help to build wealth with no sweat! Calculate Returns"
+        variant={INFO_ACTION_VARIANT.WITH_ACTION}
+      />
+    );
+  } else if (statusCode === 312) {
+    return (
+      <InfoAction
+        dataAidSuffix={"noInvestments"}
+        topImgSrc={require("assets/updating_shortly.svg")}
+        title="Updating shortly..."
+        subtitle="Your investments will start to appear here in a while"
+        ctaTitle={"VIEW ORDERS"}
+        variant={INFO_ACTION_VARIANT.WITHOUT_ACTION}
+      />
+    );
+  }
+  if (statusCode === 314) {
+    return <SomethingsWrong onClickCta={init} />;
+  }
+
   return (
     <WrappedComponent
       investmentSummary={investmentSummary}
@@ -56,9 +114,10 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
       isInsuranceActive={summaryData?.is_insurance_invested}
       assetWiseData={assetWiseData}
       productWiseData={productWiseData}
-      showTopSection={true}
-      showAllocationSection={true}
-      showErrorBox={false}
+      showTopSection={viewData?.showTopSection}
+      showAllocationSection={viewData?.showAllocationSection}
+      showErrorBox={viewData?.showErrorBox}
+      errorStateVariant={viewData?.errorVariant}
     />
   );
 };

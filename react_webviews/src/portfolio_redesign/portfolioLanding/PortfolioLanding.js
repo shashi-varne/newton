@@ -40,7 +40,14 @@ function PortfolioLanding({
   showTopSection,
   showAllocationSection,
   showErrorBox,
+  errorStateVariant,
 }) {
+  console.log({
+    showTopSection,
+    showAllocationSection,
+    showErrorBox,
+    errorStateVariant,
+  });
   return (
     <Container
       headerProps={{
@@ -53,7 +60,7 @@ function PortfolioLanding({
         <ErrorStateBox
           text={"Unable to load your investments in stocks"}
           onClickRefresh={() => {}}
-          variant={"noInvestment"}
+          variant={errorStateVariant}
         />
       )}
       {showTopSection && <TopSection investmentSummary={investmentSummary} />}

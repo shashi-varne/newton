@@ -18,6 +18,7 @@ import LandingBottomsheet from "../portfolioLanding/landingBottomsheet";
 import SemiDonutGraph from "../portfolioLanding/SemiDonutGraph";
 import "./style.scss";
 import { STATUS_VARIANTS } from "../../designSystem/atoms/Status/Status";
+import ExternalPortfolioCard from "./ExternalPortfolioCard";
 
 const {
   investmentSummary: INVESTMENT_SUMMARY,
@@ -205,14 +206,15 @@ function MFLanding({ mfSummary, goToAssetAllocation }) {
         </WrapperBox> */}
 
         <WrapperBox elevation={1}>
-          <CardHorizontal //TODO: change copy according status from businesslogic
+          {/* <CardHorizontal //TODO: change copy according status from businesslogic
             title={"Import external portfolio"}
             subtitle={"Forward CAS email to cas@fisdom.com "}
             statusTitle="PENDING ON YOU"
             statusVariant={STATUS_VARIANTS.positive}
             rightImgSrc={require("assets/ext_portfolio.svg")}
             className="external-portfolio-card"
-          />
+          /> */}
+          <ExternalPortfolioCard />
         </WrapperBox>
       </Box>
       <Box className="banner-section">

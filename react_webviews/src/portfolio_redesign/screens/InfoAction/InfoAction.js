@@ -51,15 +51,17 @@ const WithActionSubtitle = (setIsOpen, subtitle) => {
 
 function InfoAction({
   title,
+  ctaTitle,
   subtitle,
-  kycDone,
+  dataAidSuffix,
   variant = INFO_ACTION_VARIANT.WITH_ACTION,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <Container
       headerProps={{
-        headerTitle: "Title",
+        headerTitle: "Portfolio",
+        hideInPageTitle: true,
       }}
       className="infoAction-wrapper"
       noFooter
@@ -71,7 +73,7 @@ function InfoAction({
         className="main-container"
       >
         <Box style={{ marginBottom: 24 }}>
-          <LandingHeader dataAid="updatingShortly" variant="center">
+          <LandingHeader dataAid={dataAidSuffix} variant="center">
             <LandingHeaderImage
               imgSrc={require("assets/portfolio_no_investment.svg")}
             />
@@ -83,11 +85,7 @@ function InfoAction({
             </LandingHeaderSubtitle>
           </LandingHeader>
         </Box>
-        <Button
-          dataAid="primary"
-          variant={"container"}
-          title={kycDone ? "INVEST NOW" : "START KYC"}
-        />
+        <Button dataAid="primary" variant={"container"} title={ctaTitle} />
       </Stack>
       <BottomSheet
         isOpen={isOpen}

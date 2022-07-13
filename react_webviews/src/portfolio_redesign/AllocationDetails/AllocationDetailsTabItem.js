@@ -5,6 +5,7 @@ import ProgressBar from "../../designSystem/atoms/ProgressBar";
 import Button from "../../designSystem/atoms/Button";
 import InvestmentCard from "./InvestmentCard";
 import { isEmpty } from "lodash-es";
+import Typography from "../../designSystem/atoms/Typography";
 
 function AllocationDetailsTabItem({
   pillData,
@@ -57,21 +58,33 @@ function AllocationDetailsTabItem({
           })}
         </Pills>
       </Box>
-      <Box className="progressBar-section">
-        {currentProgressData
-          ?.slice(0, viewAllLimit[currentPill])
-          .map((item, index) => (
-            <ProgressBar
-              key={index}
-              percentage={item.share}
-              dataAidSuffix={""}
-              title={item?.name || item?.instrument_name}
-              label={`${item?.share.toFixed(2)}%`}
-              progressBackgroundColor="foundationColors.supporting.athensGrey"
-              progressColor="foundationColors.primary.200"
-            />
-          ))}
-      </Box>
+      {!isEmpty(currentProgressData) ? (
+        <Box className="progressBar-section">
+          {currentProgressData
+            ?.slice(0, viewAllLimit[currentPill])
+            .map((item, index) => (
+              <ProgressBar
+                key={index}
+                percentage={item.share}
+                dataAidSuffix={""}
+                title={item?.name || item?.instrument_name}
+                label={`${item?.share.toFixed(2)}%`}
+                progressBackgroundColor="foundationColors.supporting.athensGrey"
+                progressColor="foundationColors.primary.200"
+              />
+            ))}
+        </Box>
+      ) : (
+        <Box className="progressBar-section-empty">
+          <Typography
+            variant="body8"
+            color={"foundationColors.content.secondary"}
+            dataAid="title"
+          >
+            No entries
+          </Typography>
+        </Box>
+      )}
       {showViewAll[currentPill] && !isEmpty(currentProgressData) && (
         <Button
           variant={"link"}

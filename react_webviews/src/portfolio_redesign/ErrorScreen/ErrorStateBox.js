@@ -4,6 +4,11 @@ import Button from "../../designSystem/atoms/Button";
 import Typography from "../../designSystem/atoms/Typography";
 import "./ErrorStateBox.scss";
 
+export const ERROR_STATE_BOX_VARIANTS = {
+  DOWNTIME: "downtime",
+  NO_INVESTMENT: "noInvestment",
+};
+
 const backgroundColorMapper = {
   downtime: "foundationColors.primary.200",
   noInvestment: "foundationColors.secondary.lossRed.200",
