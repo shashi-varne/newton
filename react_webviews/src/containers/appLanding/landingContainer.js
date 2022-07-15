@@ -742,7 +742,7 @@ const landingContainer = (WrappedComponent) => (props) => {
 
     try {
       handleLoader({ dotLoader: true });
-      const result = await applyReferralCode(Api, referral);
+      const result = await applyReferralCode(Api, referralCode);
       const data = {
         ...kyc,
         equity_enabled: result.is_equity_enabled,
