@@ -1,0 +1,100 @@
+.mf-landing-container {
+  padding-bottom: 100px !important;
+  .top-section {
+    padding: 0 20px 24px;
+    .eye-icon {
+      cursor: pointer;
+    }
+    .pf-feature-card-container {
+      margin-top: 24px;
+    }
+  }
+  .info-card-section {
+    padding: 24px 20px 0;
+    .external-portfolio-card {
+      margin-bottom: 16px;
+    }
+    .info-card-wrapper:first-child {
+      margin-bottom: 16px;
+    }
+  }
+  .banner-section {
+    padding: 0 20px 24px;
+    margin-top: 24px;
+    .marketing-banner {
+      width: 100%;
+    }
+  }
+  .asset-allocation {
+    padding: 0 20px 0;
+    .view-details {
+      cursor: pointer;
+    }
+  }
+  .more-options {
+    padding: 0 20px 50px;
+    .options-grid {
+      margin-top: 24px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(100px, 1fr));
+      grid-template-rows: repeat(2, auto-fit);
+      gap: 24px;
+    }
+  }
+}
+
+.introjs-nextbutton {
+  background-color: #35cb5d !important;
+  color: white !important;
+}
+
+.introjs-prevbutton {
+  display: none !important;
+}
+
+.introjs-bullets {
+  position: fixed !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 100px !important;
+}
+
+.introjs-tooltip-header {
+  display: none !important;
+}
+
+.introjs-tooltipbuttons {
+  position: fixed !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 50px !important;
+  border: none !important;
+}
+
+#skip-button {
+  position: absolute !important;
+  left: 10px !important;
+  background-color: transparent !important;
+  padding: 10px 0 !important;
+  font-size: 14px !important;
+  color: white !important;
+  border: none !important;
+}
+
+.introjs-tooltip {
+  background-color: transparent !important;
+  color: white !important;
+  font-weight: bolder;
+  box-shadow: none !important;
+}
+
+.introjs-tooltiptext {
+  position: fixed !important;
+  left: 300px;
+  text-align: center;
+  bottom: 400px !important;
+}
+
+.introjs-arrow {
+  display: none !important;
+}
