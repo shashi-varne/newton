@@ -19,6 +19,7 @@ function PfFeatureCard({
   textColors,
   dataAid,
   toolTipProps,
+  onClick,
   onClickIconLeft,
   onClickIconMiddle,
   onClickIconRight,
@@ -40,6 +41,7 @@ function PfFeatureCard({
       }}
       className={`pf-feature-card-container  ${className}`}
       data-aid={`pfFeatureCardSmall_${dataAid}`}
+      onClick={onClick}
     >
       <Stack
         className="top-row"

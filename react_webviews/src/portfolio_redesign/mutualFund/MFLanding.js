@@ -26,43 +26,6 @@ const {
 } = MF_LANDING;
 
 const productName = getConfig().productName;
-const optionList = [
-  {
-    variant: "variant32",
-    dataAid: "sipManager",
-    title: "SIP manager",
-    imgSrc: require("assets/mf_sip.svg"),
-    // goto: TODO:
-  },
-  {
-    variant: "variant32",
-    dataAid: "yourFunds",
-    title: "Your funds",
-    imgSrc: require("assets/mf_your_funds.svg"),
-    // goto: TODO:
-  },
-  {
-    variant: "variant32",
-    dataAid: "goalTracker",
-    title: "Goal tracker",
-    imgSrc: require("assets/mf_goal_tracker.svg"),
-    // goto: TODO:
-  },
-  {
-    variant: "variant32",
-    dataAid: "yourOrders",
-    title: "Your orders",
-    imgSrc: require("assets/mf_your_orders.svg"),
-    // goto: TODO:
-  },
-  {
-    variant: "variant32",
-    dataAid: "withdraw",
-    title: "Withdraw",
-    imgSrc: require("assets/mf_withdraw.svg"),
-    // goto: TODO:
-  },
-];
 
 const graphOptions = {
   colors: ["#33CF90", "#FE794D", "#5AAAF6"],
@@ -73,8 +36,49 @@ const graphOptions = {
   ],
 };
 
-function MFLanding({ mfSummary, goToAssetAllocation }) {
+function MFLanding({
+  mfSummary,
+  goToAssetAllocation,
+  externalPfCardData,
+  externalPfStatus,
+}) {
   const [isCurrentValueSheetOpen, setIsCurrentValueSheetOpen] = useState(false);
+  const renderExternalPortfolioCard = () => {
+    const cardHorizontalCases = ["pending", "failed", "trigger_failed"];
+    console.log("status", externalPfStatus);
+    if (externalPfStatus === "init") {
+      return (
+        <WrapperBox elevation={1}>
+          <InfoCard
+            imgSrc={require("assets/locked_suit.svg")}
+            title={externalPfCardData?.title}
+            subtitle={externalPfCardData?.subtitle}
+            dataAid={externalPfCardData?.dataAid}
+          />
+        </WrapperBox>
+      );
+    } else if (cardHorizontalCases.includes(externalPfStatus)) {
+      return (
+        <WrapperBox elevation={1}>
+          <CardHorizontal
+            title={externalPfCardData?.title}
+            subtitle={externalPfCardData?.subtitle}
+            statusTitle={externalPfCardData?.status}
+            statusVariant={STATUS_VARIANTS.WARNING}
+            dataAid={externalPfCardData?.dataAid}
+            rightImgSrc={require("assets/ext_portfolio.svg")}
+            className="external-portfolio-card"
+          />
+        </WrapperBox>
+      );
+    } else {
+      return (
+        <WrapperBox elevation={1}>
+          <ExternalPortfolioCard data={externalPfCardData} />
+        </WrapperBox>
+      );
+    }
+  };
   return (
     <Container
       headerProps={{
@@ -196,26 +200,7 @@ function MFLanding({ mfSummary, goToAssetAllocation }) {
             dataAid={MF_LANDING.easySip.dataAid}
           />
         </WrapperBox>
-        {/* <WrapperBox elevation={1}>
-          <InfoCard //TODO: change copy according status from businesslogic
-            imgSrc={require("assets/locked_suit.svg")}
-            title={"MF_LANDING.externalPortfolio.title"}
-            subtitle={"MF_LANDING.externalPortfolio.subtitle"}
-            dataAid={"MF_LANDING.externalPortfolio.dataAid"}
-          />
-        </WrapperBox> */}
-
-        <WrapperBox elevation={1}>
-          {/* <CardHorizontal //TODO: change copy according status from businesslogic
-            title={"Import external portfolio"}
-            subtitle={"Forward CAS email to cas@fisdom.com "}
-            statusTitle="PENDING ON YOU"
-            statusVariant={STATUS_VARIANTS.positive}
-            rightImgSrc={require("assets/ext_portfolio.svg")}
-            className="external-portfolio-card"
-          /> */}
-          <ExternalPortfolioCard />
-        </WrapperBox>
+        {renderExternalPortfolioCard()}
       </Box>
       <Box className="banner-section">
         <Icon

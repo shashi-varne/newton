@@ -41,13 +41,9 @@ function PortfolioLanding({
   showAllocationSection,
   showErrorBox,
   errorStateVariant,
+  handleFeatureCard,
+  onClickViewAll,
 }) {
-  console.log({
-    showTopSection,
-    showAllocationSection,
-    showErrorBox,
-    errorStateVariant,
-  });
   return (
     <Container
       headerProps={{
@@ -69,8 +65,12 @@ function PortfolioLanding({
           title={INVESTMENT_SECTION.title.text}
           titleDataAid={INVESTMENT_SECTION.title.dataAid}
           isActionable
+          onClick={onClickViewAll}
         />
-        <FeatureCardCarousel investments={investments} />
+        <FeatureCardCarousel
+          handleFeatureCard={handleFeatureCard}
+          investments={investments}
+        />
       </Box>
       {showAllocationSection && (
         <Box className="allocations-section">
@@ -111,7 +111,7 @@ function PortfolioLanding({
   );
 }
 
-const HeadingRow = ({ title, titleDataAid, isActionable }) => {
+const HeadingRow = ({ title, titleDataAid, isActionable, onClick }) => {
   return (
     <Stack
       flexDirection={"row"}
@@ -137,6 +137,7 @@ const HeadingRow = ({ title, titleDataAid, isActionable }) => {
             dataAid={INVESTMENT_SECTION.viewAll.ctaDataAid}
             variant="link"
             title={INVESTMENT_SECTION.viewAll.ctaTitle}
+            onClick={onClick}
           />
           <Icon
             src={require("assets/generic_green_right_arrow.svg")}

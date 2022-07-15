@@ -6,35 +6,9 @@ import "./style.scss";
 import PfFeatureCard from "../../featureComponent/portfolio/PfFeatureCard/PfFeatureCard";
 import WrapperBox from "../../designSystem/atoms/WrapperBox";
 import { ALL_INVESTMENTS_LANDING } from "businesslogic/strings/portfolio";
+import { formatAmountInr } from "../../utils/validators";
 
-const cardData = [
-  {
-    src: require("assets/amazon_pay.svg"),
-    title: "Stocks, F&O",
-    currentValue: "₹3,00,600",
-    pLValue: "₹3,00,600",
-  },
-  {
-    src: require("assets/amazon_pay.svg"),
-    title: "Mutual funds",
-    currentValue: "₹3,00,600",
-    pLValue: "₹3,00,600",
-  },
-  {
-    src: require("assets/amazon_pay.svg"),
-    title: "NPS",
-    currentValue: "₹3,00,600",
-    pLValue: "₹3,00,600",
-  },
-  {
-    src: require("assets/amazon_pay.svg"),
-    title: "FD",
-    currentValue: "₹3,00,600",
-    pLValue: "₹3,00,600",
-  },
-];
-
-function AllInvestments() {
+function AllInvestments({ investments, investmentSummary, handleCardClick }) {
   return (
     <Container
       headerProps={{
@@ -67,7 +41,7 @@ function AllInvestments() {
               ALL_INVESTMENTS_LANDING.topInvestmentSection.valueCurrent.dataAid
             }
           >
-            ₹3,00,00,000
+            {formatAmountInr(investmentSummary?.current)}
           </Typography>
         </Box>
         <Box className="pal-value">
@@ -81,30 +55,43 @@ function AllInvestments() {
           </Typography>
           <Typography
             variant="body8"
-            color="foundationColors.secondary.profitGreen.400"
+            color={
+              investmentSummary?.earnings > 0
+                ? "foundationColors.secondary.profitGreen.400"
+                : "foundationColors.secondary.lossRed.400"
+            }
             dataAid={
               ALL_INVESTMENTS_LANDING.topInvestmentSection.valuePl.dataAid
             }
           >
-            + ₹10,26,340
+            {investmentSummary?.earnings > 0 && "+"}
+            {formatAmountInr(investmentSummary?.earnings)}
           </Typography>
         </Box>
       </Stack>
       <Box className="card-container">
-        {cardData.map((card, index) => (
+        {investments?.map((card, index) => (
           <WrapperBox key={index} elevation={1}>
             <PfFeatureCard
-              topImgSrc={card.src}
+              onClick={() => handleCardClick(card.type)}
+              topImgSrc={card.icon}
               textProps={{
                 title: card.title,
                 leftTitle:
                   ALL_INVESTMENTS_LANDING.topInvestmentSection.keyCurrent.text,
                 rightTitle:
                   ALL_INVESTMENTS_LANDING.topInvestmentSection.keyPl.text,
-                leftSubtitle: card.currentValue,
-                rightSubtitle: card.pLValue,
+                leftSubtitle: formatAmountInr(card?.current_value || 0),
+                rightSubtitle: `${
+                  card?.earnings > 0 ? "+" : ""
+                }${formatAmountInr(card?.earnings || 0)}`,
               }}
               className="investment-card"
+              textColors={{
+                rightSubtitle: !!card?.earnings
+                  ? "foundationColors.secondary.profitGreen.400"
+                  : "foundationColors.secondary.lossRed.400",
+              }}
             />
           </WrapperBox>
         ))}

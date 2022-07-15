@@ -1,41 +1,14 @@
+import { formatAmountInr } from "businesslogic/utils/common/functions";
 import React from "react";
 import { SwiperSlide } from "swiper/react";
 import CustomSwiper from "../../designSystem/molecules/CustomSwiper";
 import PfFeatureCard from "../../featureComponent/portfolio/PfFeatureCard";
 import { getConfig } from "../../utils/functions";
+import { numDifferentiation } from "../../utils/validators";
+import { ALL_INVESTMENTS_LANDING } from "businesslogic/strings/portfolio";
 
 const config = getConfig();
-const data = [
-  {
-    type: "mf",
-    title: "Mutual Funds",
-    icon: require("assets/amazon_pay.svg"),
-    current_value: 0,
-    earnings: 0,
-  },
-  {
-    type: "stocks",
-    title: "Stocks",
-    icon: require("assets/amazon_pay.svg"),
-    current_value: 0,
-    earnings: 0,
-  },
-  {
-    type: "nps",
-    title: "NPS",
-    icon: require("assets/amazon_pay.svg"),
-    current_value: 0,
-    earnings: 0,
-  },
-  {
-    type: "nps",
-    title: "NPS",
-    icon: require("assets/amazon_pay.svg"),
-    current_value: 0,
-    earnings: 0,
-  },
-];
-function FeatureCardCarousel({ investments }) {
+function FeatureCardCarousel({ investments, handleFeatureCard }) {
   return (
     <CustomSwiper
       spaceBetween={8}
@@ -60,16 +33,30 @@ function FeatureCardCarousel({ investments }) {
       freeMode
       // paginationDataAid={data?.design_id}
     >
-      {data?.map((item, idx) => (
+      {investments?.map((item, idx) => (
         <SwiperSlide key={idx}>
           <PfFeatureCard
-            topImgSrc={require("assets/fisdom/ELSS_Tax_Savings.svg")}
+            onClick={() => handleFeatureCard(item.type)}
+            topImgSrc={item?.icon}
             textProps={{
-              title: item.title,
-              leftTitle: "Current value",
-              leftSubtitle: "Subtitle 1",
-              rightTitle: "P&L",
-              rightSubtitle: "Subtitle 2",
+              title: item?.title,
+              leftSubtitle: numDifferentiation(
+                item?.current_value || 0,
+                true,
+                0,
+                false,
+                true
+              ),
+              leftTitle:
+                ALL_INVESTMENTS_LANDING.topInvestmentSection.keyCurrent.text,
+              rightTitle:
+                ALL_INVESTMENTS_LANDING.topInvestmentSection.keyPl.text,
+              rightSubtitle: formatAmountInr(item?.earnings || 0),
+            }}
+            textColors={{
+              rightSubtitle: !!item?.earnings
+                ? "foundationColors.secondary.profitGreen.400"
+                : "foundationColors.secondary.lossRed.400",
             }}
           />
         </SwiperSlide>

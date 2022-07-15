@@ -5,7 +5,13 @@ import WrapperBox from "../../designSystem/atoms/WrapperBox/WrapperBox";
 import { formatAmountInr } from "../../utils/validators";
 import "./ExternalPortfolioCard.scss";
 
-function ExternalPortfolioCard({ externalInvestment, xirr, isLoading, date }) {
+function ExternalPortfolioCard({
+  data,
+  externalInvestment,
+  xirr,
+  isLoading,
+  date,
+}) {
   return (
     <WrapperBox elevation={1} data-aid="cardHorizontal-externalPortfolio">
       <Box className="ext-card">
@@ -13,16 +19,19 @@ function ExternalPortfolioCard({ externalInvestment, xirr, isLoading, date }) {
           <Typography
             variant="body1"
             color="foundationColors.content.primary"
-            dataAid={"title"}
+            dataAid={data?.title?.dataAid}
           >
-            External Portfolio
+            {data?.title?.text}
             <EPRow
-              title="External investments"
+              title={data?.keyExternalInvestments?.text}
               dataAid={"ExternalInvestments"}
               value={formatAmountInr(23482)}
-              isLoading
             />
-            <EPRow title="XIRR" dataAid={"Xirr"} value={"+54.4%"} />
+            <EPRow
+              title={data?.keyXirr?.text}
+              dataAid={"Xirr"}
+              value={"+54.4%"}
+            />
           </Typography>
         </Box>
 
@@ -35,7 +44,7 @@ function ExternalPortfolioCard({ externalInvestment, xirr, isLoading, date }) {
             color="foundationColors.content.secondary"
             dataAid={`text`}
           >
-            Date as per CAS forwarded on 8 Sept 2021
+            {data?.bottomText?.text} 8 Sept 2021
           </Typography>
         </Box>
       </Box>

@@ -1,35 +1,46 @@
-import React, { useState } from "react";
-import PortfolioRedesign from "../portfolioLanding/PortfolioLanding";
-import Api from "utils/api";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import {
   getAllocationDetails,
   getInvestments,
   getInvestmentSummary,
-  getPortfolioStatusCode,
   getPortfolioSummary,
   getPortfolioSummaryData,
 } from "businesslogic/dataStore/reducers/portfolioV2";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Api from "utils/api";
+import { navigate as navigateFunc } from "utils/functions";
+import { nativeCallback } from "../../utils/native_callback";
+import { ERROR_STATE_BOX_VARIANTS } from "../ErrorScreen/ErrorStateBox";
 import SomethingsWrong from "../ErrorScreen/SomethingsWrong";
+import PortfolioRedesign from "../portfolioLanding/PortfolioLanding";
 import InfoAction, {
   INFO_ACTION_VARIANT,
 } from "../screens/InfoAction/InfoAction";
-import { isEmpty } from "lodash-es";
-import { ERROR_STATE_BOX_VARIANTS } from "../ErrorScreen/ErrorStateBox";
 
 const screen = "PortfolioLanding";
 
 const PortfolioLandingContainer = (WrappedComponent) => (props) => {
+  const navigate = navigateFunc.bind(props);
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const summaryData = getPortfolioSummaryData(state);
   const investmentSummary = getInvestmentSummary(state);
   const investments = getInvestments(state);
   const allocationDetails = getAllocationDetails(state);
-  const statusCode = 314; //TODO: getPortfolioStatusCode(state);
+  const statusCode = 200; //TODO: getPortfolioStatusCode(state);
   const assetWiseData = allocationDetails?.asset_allocation;
   const productWiseData = allocationDetails?.product_allocation;
+  const eventRef = useRef({
+    user_action: "back",
+    card_click: "",
+    investments_summary: "",
+    realised_gain: "",
+    view_all_investments: "",
+    allocations: "",
+    user_application_status: "",
+    user_investment_status: "",
+    user_kyc_status: "",
+  });
   const [viewData, setViewData] = useState({
     showTopSection: true,
     showAllocationSection: true,
@@ -45,13 +56,34 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
   }, [statusCode]);
 
   const init = () => {
-    if (isEmpty(summaryData)) {
-      dispatch(getPortfolioSummary({ screen, Api }));
+    // if (isEmpty(summaryData)) {
+    dispatch(getPortfolioSummary({ screen, Api }));
+    // }
+  };
+
+  const sendEvents = (userAction = "back") => {
+    const eventObj = {
+      event_name: "main_portfolio",
+      properties: {
+        user_action: userAction,
+        card_click: "",
+        investments_summary: "",
+        realised_gain: "",
+        view_all_investments: "",
+        allocations: "",
+        user_application_status: "",
+        user_investment_status: "",
+        user_kyc_status: "",
+      },
+    };
+    if (userAction) {
+      nativeCallback({ events: eventObj });
+    } else {
+      return eventObj;
     }
   };
 
   const checkErrorStatusCode = () => {
-    console.log("status", statusCode);
     if (!statusCode) return;
     if (statusCode === 313) {
       setViewData({
@@ -68,6 +100,23 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
         errorVariant: ERROR_STATE_BOX_VARIANTS.NO_INVESTMENT,
       });
     }
+  };
+
+  const handleFeatureCard = (type) => {
+    switch (type) {
+      case "mf":
+        navigate("/portfolio/mf-landing");
+        break;
+      case "nps": //TODO:
+        break;
+      case "equity": //TODO:
+        break;
+      default:
+        return;
+    }
+  };
+  const onClickViewAll = () => {
+    navigate("/portfolio/all-investments");
   };
   if (statusCode === 308) {
     return (
@@ -118,6 +167,8 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
       showAllocationSection={viewData?.showAllocationSection}
       showErrorBox={viewData?.showErrorBox}
       errorStateVariant={viewData?.errorVariant}
+      handleFeatureCard={handleFeatureCard}
+      onClickViewAll={onClickViewAll}
     />
   );
 };

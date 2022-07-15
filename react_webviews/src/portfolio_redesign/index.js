@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 
 import { Route, Switch } from "react-router-dom";
 import ThemeWrapper from "../theme/ThemeWrapper";
+import AllInvestmentsContainer from "./containers/AllInvestmentsContainer";
 import AssetAllocationContainer from "./containers/assetAllocationContainer";
 import mfLandingContainer from "./containers/mfLandingContainer";
 import portfolioLandingContainer from "./containers/portfolioLandingContainer";
@@ -19,6 +20,10 @@ const PortfolioRedesign = ({ match }) => {
           <Route
             path={`${url}/asset-allocation`}
             component={AssetAllocationContainer}
+          />
+          <Route
+            path={`${url}/all-investments`}
+            component={AllInvestmentsContainer}
           />
           <Route path={`${url}/somethings-wrong`} component={SomethingsWrong} />
         </Switch>
