@@ -26,6 +26,43 @@ const {
 } = MF_LANDING;
 
 const productName = getConfig().productName;
+const optionList = [
+  {
+    variant: "variant32",
+    dataAid: "sipManager",
+    title: "SIP manager",
+    imgSrc: require("assets/mf_sip.svg"),
+    // goto: TODO:
+  },
+  {
+    variant: "variant32",
+    dataAid: "yourFunds",
+    title: "Your funds",
+    imgSrc: require("assets/mf_your_funds.svg"),
+    // goto: TODO:
+  },
+  {
+    variant: "variant32",
+    dataAid: "goalTracker",
+    title: "Goal tracker",
+    imgSrc: require("assets/mf_goal_tracker.svg"),
+    // goto: TODO:
+  },
+  {
+    variant: "variant32",
+    dataAid: "yourOrders",
+    title: "Your orders",
+    imgSrc: require("assets/mf_your_orders.svg"),
+    // goto: TODO:
+  },
+  {
+    variant: "variant32",
+    dataAid: "withdraw",
+    title: "Withdraw",
+    imgSrc: require("assets/mf_withdraw.svg"),
+    // goto: TODO:
+  },
+];
 
 const graphOptions = {
   colors: ["#33CF90", "#FE794D", "#5AAAF6"],
