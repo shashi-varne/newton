@@ -63,7 +63,7 @@ class DigiStatus extends Component {
         kyc.etf_consent === 'not given' &&
         kyc.kyc_product_type === 'equity'
       ) {
-        this.setState({ getEtfConsent: true })
+        this.setState({ getEtfConsent: false })
       }
 
       if (
