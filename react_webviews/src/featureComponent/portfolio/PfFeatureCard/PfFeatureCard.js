@@ -22,6 +22,7 @@ function PfFeatureCard({
   onClickIconLeft,
   onClickIconMiddle,
   onClickIconRight,
+  className,
 }) {
   const {
     title,
@@ -37,7 +38,7 @@ function PfFeatureCard({
       sx={{
         backgroundColor: "foundationColors.supporting.white",
       }}
-      className="pf-feature-card-container"
+      className={`pf-feature-card-container  ${className}`}
       data-aid={`pfFeatureCardSmall_${dataAid}`}
     >
       <Stack
@@ -186,6 +187,7 @@ PfFeatureCard.defaultProps = {
   onClickIconLeft: noop,
   onClickIconMiddle: noop,
   onClickIconRight: noop,
+  className: "",
 };
 
 PfFeatureCard.propTypes = {
@@ -217,6 +219,7 @@ PfFeatureCard.propTypes = {
   onClickIconLeft: PropTypes.func,
   onClickIconMiddle: PropTypes.func,
   onClickIconRight: PropTypes.func,
+  className: PropTypes.string,
 };
 
 export default PfFeatureCard;

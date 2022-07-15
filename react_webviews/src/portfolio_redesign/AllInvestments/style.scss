@@ -1,0 +1,18 @@
+.all-investments-container {
+  .container-content-wrapper {
+    background-color: #fff;
+    height: 100vh;
+    .investment-details {
+      padding-bottom: 16px;
+    }
+    .card-container {
+      padding: 16px;
+      margin: 0 -16px;
+      height: 100%;
+      background-color: #f8f8fa;
+      .investment-card {
+        margin-bottom: 16px;
+      }
+    }
+  }
+}
