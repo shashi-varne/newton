@@ -236,7 +236,7 @@ export const getConfig = () => {
 
   if(!base_url) {
     if(isProdFisdom) {
-      base_url_default = 'https://venus-dot-plutus-india.appspot.com';
+      base_url_default = 'https://my.fisdom.com';
     }
   
     if(isProdFinity) {
