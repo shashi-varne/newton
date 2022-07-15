@@ -602,7 +602,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     });
 
     if (showApplyReferral) {
-      if (!referral) {
+      if (!referralCode) {
         ToastMessage("Please enter referral code");
         return;
       }
