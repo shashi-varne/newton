@@ -43,6 +43,8 @@ function PortfolioLanding({
   errorStateVariant,
   handleFeatureCard,
   onClickViewAll,
+  handleInvestInMf,
+  sendEvents,
 }) {
   return (
     <Container
@@ -59,11 +61,16 @@ function PortfolioLanding({
           variant={errorStateVariant}
         />
       )}
-      {showTopSection && <TopSection investmentSummary={investmentSummary} />}
+      {showTopSection && (
+        <TopSection
+          sendEvents={sendEvents}
+          investmentSummary={investmentSummary}
+        />
+      )}
       <Box className="carousel-section">
         <HeadingRow
           title={INVESTMENT_SECTION.title.text}
-          titleDataAid={INVESTMENT_SECTION.title.dataAid}
+          titleDataAid={INVESTMENT_SECTION.title?.dataAid}
           isActionable
           onClick={onClickViewAll}
         />
@@ -76,17 +83,18 @@ function PortfolioLanding({
         <Box className="allocations-section">
           <HeadingRow
             title={ALLOCATION_SECTION.title.text}
-            titleDataAid={ALLOCATION_SECTION.title.dataAid}
+            titleDataAid={ALLOCATION_SECTION.title?.dataAid}
           />
           <Allocations
             productWiseData={productWiseData}
             assetWiseData={assetWiseData}
+            sendEvents={sendEvents}
           />
         </Box>
       )}
 
       <Box className="bottom-section">
-        <Box className="mf-banner">
+        <Box className="mf-banner" onClick={handleInvestInMf}>
           <Icon
             width="100%"
             style={{ marginBottom: 24 }}
@@ -102,7 +110,7 @@ function PortfolioLanding({
               titleColor={"foundationColors.content.primary"}
               subtitle={INSURANCE.subtitle}
               subtitleColor={"foundationColors.content.secondary"}
-              dataAid={INSURANCE.dataAid}
+              dataAid={INSURANCE?.dataAid}
             />
           </WrapperBox>
         )}

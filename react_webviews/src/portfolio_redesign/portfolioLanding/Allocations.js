@@ -29,7 +29,7 @@ const formatSeriesData = (data) => {
   return Object.entries(seriesData);
 };
 
-function Allocations({ productWiseData, assetWiseData }) {
+function Allocations({ productWiseData, assetWiseData, sendEvents }) {
   const [pillReturnValue, setPillReturnValue] = useState(0);
   const [swiper, setSwiper] = useState("");
   const graphData = useMemo(() => {
@@ -56,6 +56,11 @@ function Allocations({ productWiseData, assetWiseData }) {
   }, []);
 
   const handleReturnValue = (e, value) => {
+    sendEvents(
+      "allocations",
+      value === 1 ? "product-wise" : "asset-wise",
+      "next"
+    );
     setPillReturnValue(value);
     if (swiper) {
       swiper.slideTo(value);

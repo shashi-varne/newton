@@ -78,6 +78,11 @@ function MFLanding({
   goToAssetAllocation,
   externalPfCardData,
   externalPfStatus,
+  handleInvestInMf,
+  handleEasySip,
+  handleExternalPortfolio,
+  handleOption,
+  sendEvents,
 }) {
   const [isCurrentValueSheetOpen, setIsCurrentValueSheetOpen] = useState(false);
   const renderExternalPortfolioCard = () => {
@@ -229,7 +234,7 @@ function MFLanding({
         />
       </Box>
       <Box className="info-card-section">
-        <WrapperBox elevation={1}>
+        <WrapperBox onClick={handleEasySip} elevation={1}>
           <InfoCard
             imgSrc={require("assets/give_cash.svg")}
             title={MF_LANDING.easySip.title}
@@ -237,9 +242,11 @@ function MFLanding({
             dataAid={MF_LANDING.easySip.dataAid}
           />
         </WrapperBox>
-        {renderExternalPortfolioCard()}
+        <Box onClick={handleExternalPortfolio}>
+          {renderExternalPortfolioCard()}
+        </Box>
       </Box>
-      <Box className="banner-section">
+      <Box className="banner-section" onClick={handleInvestInMf}>
         <Icon
           src={require("assets/mf_marketing_banner.svg")}
           className="marketing-banner"
@@ -297,6 +304,7 @@ function MFLanding({
         <Box className="options-grid">
           {optionList.map((option, index) => (
             <CategoryCard
+              onClick={() => handleOption(option)}
               key={index}
               variant={option.variant}
               dataAid={MORE_OPTIONS[index].dataAid}

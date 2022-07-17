@@ -14,9 +14,18 @@ const {
   realisedGainSheet: REALISED_GAIN_SHEET,
 } = PORTFOLIO_LANDING;
 
-function TopSection({ investmentSummary }) {
+function TopSection({ investmentSummary, sendEvents }) {
   const [isCurrentValueSheetOpen, setIsCurrentValueSheetOpen] = useState(false);
   const [isRealisedGainSheetOpen, setIsRealisedGainSheetOpen] = useState(false);
+  const handleInvestmentSummary = () => {
+    sendEvents("investments_summary", "yes", "next");
+    setIsCurrentValueSheetOpen(true);
+  };
+
+  const handleRealisedGain = () => {
+    sendEvents("realised_gain", "yes", "next");
+    setIsRealisedGainSheetOpen(true);
+  };
   return (
     <Box
       className="top-section"
@@ -61,7 +70,7 @@ function TopSection({ investmentSummary }) {
             size="16px"
             dataAid={INVESTMENT_SUMMARY.currentValueIcon.dataAid}
             className="eye-icon"
-            onClick={() => setIsCurrentValueSheetOpen(true)}
+            onClick={handleInvestmentSummary}
           />
         </Stack>
 
@@ -164,7 +173,7 @@ function TopSection({ investmentSummary }) {
         alignItems={"center"}
         justifyContent="flex-start"
         className="realised-gains"
-        onClick={() => setIsRealisedGainSheetOpen(true)}
+        onClick={handleRealisedGain}
       >
         <Typography
           variant="body2"

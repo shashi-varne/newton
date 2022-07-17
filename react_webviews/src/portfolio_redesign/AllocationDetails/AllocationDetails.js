@@ -6,7 +6,7 @@ import AllocationDetailsTabItem from "./AllocationDetailsTabItem";
 import "./style.scss";
 import { ALLOCATIONS_LANDING } from "businesslogic/strings/portfolio";
 
-function AllocationDetails({ tabHeaders, equityData, debtData }) {
+function AllocationDetails({ tabHeaders, equityData, debtData, sendEvents }) {
   const [swiper, setSwiper] = useState("");
   const [tabValue, setTabValue] = useState(0);
   const handleTabChange = (event, newValue) => {
@@ -17,6 +17,7 @@ function AllocationDetails({ tabHeaders, equityData, debtData }) {
   };
 
   const handleSlideChange = (swiperRef) => {
+    sendEvents("clicked_on", swiperRef?.activeIndex === 1 ? "debt" : "equity");
     swiper.slideTo(swiperRef?.activeIndex);
     setTabValue(swiperRef?.activeIndex);
   };
@@ -44,6 +45,7 @@ function AllocationDetails({ tabHeaders, equityData, debtData }) {
       >
         <SwiperSlide>
           <AllocationDetailsTabItem
+            sendEvents={sendEvents}
             pillData={[
               {
                 label: ALLOCATIONS_LANDING.pillHoldings.title,
@@ -61,6 +63,7 @@ function AllocationDetails({ tabHeaders, equityData, debtData }) {
         </SwiperSlide>
         <SwiperSlide>
           <AllocationDetailsTabItem
+            sendEvents={sendEvents}
             pillData={[
               {
                 label: ALLOCATIONS_LANDING.pillHoldings.title,

@@ -1,6 +1,7 @@
 import { getMfAssetAllocation } from "businesslogic/dataStore/reducers/portfolioV2";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { nativeCallback } from "../../utils/native_callback";
 import { capitalizeFirstLetter } from "../../utils/validators";
 import AllocationDetails from "./../AllocationDetails/AllocationDetails";
 
@@ -9,6 +10,17 @@ const AssetAllocationContainer = (WrappedComponent) => (props) => {
   const state = useSelector((state) => state);
   const assetData = getMfAssetAllocation(state);
   const categories = assetData?.categories;
+  const eventRef = useRef({
+    screen_name: "allocation details",
+    user_action: "back",
+    clicked_on: "equity",
+    swapped: "holdings",
+    "view all": "no",
+    user_application_status: "init",
+    user_investment_status: "false",
+    user_kyc_status: "false",
+  });
+
   const tabHeaders = useMemo(() => {
     return categories.map((category, index) => {
       return {
@@ -30,13 +42,31 @@ const AssetAllocationContainer = (WrappedComponent) => (props) => {
     list: assetData?.detailed_exposure?.debt,
     card: categories.find((item) => item.type === "debt"),
   };
-
+  const sendEvents = (eventKey, eventVal, userAction = "back") => {
+    const eventObj = {
+      event_name: "mf_portfolio",
+      properties: eventRef.current,
+    };
+    const properties = {
+      ...eventObj.properties,
+      [eventKey]: eventVal,
+      userAction,
+    };
+    eventObj.properties = properties;
+    eventRef.current = properties;
+    if (userAction) {
+      nativeCallback({ events: eventObj });
+    } else {
+      return eventObj;
+    }
+  };
   useEffect(() => {}, []);
   return (
     <WrappedComponent
       tabHeaders={tabHeaders}
       equityData={equityData}
       debtData={debtData}
+      sendEvents={sendEvents}
     />
   );
 };

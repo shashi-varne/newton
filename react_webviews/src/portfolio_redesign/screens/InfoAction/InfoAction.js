@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box, Stack } from "@mui/material";
 import Container from "designSystem/organisms/ContainerWrapper";
 import Button from "designSystem/atoms/Button";
@@ -13,6 +13,7 @@ import "./style.scss";
 import PropTypes from "prop-types";
 import BottomSheet from "../../../designSystem/organisms/BottomSheet";
 import ReturnCalculator from "./ReturnCalculator";
+import { nativeCallback } from "../../../utils/native_callback";
 
 export const INFO_ACTION_VARIANT = {
   WITH_ACTION: "WITH_ACTION",
@@ -53,10 +54,80 @@ function InfoAction({
   title,
   ctaTitle,
   subtitle,
-  dataAidSuffix,
+  dataAidSuffix = "",
+  eventName,
+  screenName,
   variant = INFO_ACTION_VARIANT.WITH_ACTION,
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const eventRef = useRef({
+    screen_name: screenName,
+    user_action: "back",
+    user_application_status: "init",
+    user_investment_status: false,
+    user_kyc_status: false,
+  });
+
+  const sendEvents = (events, userAction = "back") => {
+    const eventObj = {
+      event_name: eventName,
+      properties: eventRef.current,
+    };
+    const properties = {
+      ...eventObj.properties,
+      ...events,
+      user_action: userAction,
+    };
+    eventRef.current = properties;
+    eventObj.properties = properties;
+    if (userAction) {
+      nativeCallback({ events: eventObj });
+    } else {
+      return eventObj;
+    }
+  };
+  const WithoutActionSubtitle = (subtitle) => {
+    return (
+      <Typography
+        variant="inherit"
+        color="inherit"
+        className="custom-text-elipsis"
+      >
+        {subtitle}
+      </Typography>
+    );
+  };
+
+  const openCalculator = () => {
+    setIsOpen(true);
+    sendEvents({
+      screen_name: "return calculator",
+      calculated_for: "mutual funds",
+      slider_use: "no",
+      "investment period": "1Y",
+    });
+  };
+  const WithActionSubtitle = (setIsOpen, subtitle) => {
+    return (
+      <Typography
+        variant="inherit"
+        color="inherit"
+        className="custom-text-elipsis"
+      >
+        {subtitle}
+        <Button
+          variant="link"
+          title="Calculate returns"
+          className="btn-calculate-returns"
+          onClick={openCalculator}
+        />
+      </Typography>
+    );
+  };
+  const handleCta = () => {
+    sendEvents({}, ctaTitle?.toLowerCase());
+  };
+
   return (
     <Container
       headerProps={{
@@ -85,14 +156,19 @@ function InfoAction({
             </LandingHeaderSubtitle>
           </LandingHeader>
         </Box>
-        <Button dataAid="primary" variant={"container"} title={ctaTitle} />
+        <Button
+          dataAid="primary"
+          variant={"container"}
+          title={ctaTitle}
+          onClick={handleCta}
+        />
       </Stack>
       <BottomSheet
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         onBackdropClick={() => setIsOpen(false)}
       >
-        <ReturnCalculator />
+        <ReturnCalculator sendEvents={sendEvents} />
       </BottomSheet>
     </Container>
   );

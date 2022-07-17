@@ -12,6 +12,7 @@ function AllocationDetailsTabItem({
   holdingsData,
   sectorsData,
   cardData,
+  sendEvents,
 }) {
   const [currentProgressData, setCurrentProgressData] = useState(holdingsData);
   const [pillReturnValue, setPillReturnValue] = useState(0);
@@ -31,10 +32,12 @@ function AllocationDetailsTabItem({
   });
   const currentPill = pillReturnValue === 1 ? "sectors" : "holdings";
   const handleReturnValue = (e, value) => {
+    sendEvents("swapped", value === 1 ? "sectors" : "holdings");
     setPillReturnValue(value);
     setCurrentProgressData(progressDataMapper[value]);
   };
   const handleViewAll = () => {
+    sendEvents("view all", "yes");
     setViewAllLimit({
       ...viewAllLimit,
       [currentPill]: progressDataMapper[pillReturnValue]?.length,

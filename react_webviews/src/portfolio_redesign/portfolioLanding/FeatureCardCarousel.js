@@ -36,7 +36,7 @@ function FeatureCardCarousel({ investments, handleFeatureCard }) {
       {investments?.map((item, idx) => (
         <SwiperSlide key={idx}>
           <PfFeatureCard
-            onClick={() => handleFeatureCard(item.type)}
+            onClick={() => handleFeatureCard(item)}
             topImgSrc={item?.icon}
             textProps={{
               title: item?.title,

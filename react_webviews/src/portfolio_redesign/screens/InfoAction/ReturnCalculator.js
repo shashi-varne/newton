@@ -23,19 +23,19 @@ const PILL_LIST = [
   { label: "Stocks", dataAid: "stocks" },
 ];
 
-function ReturnCalculator() {
+function ReturnCalculator({ sendEvents }) {
   const [pillReturnValue, setPillReturnValue] = useState(0);
   const [sliderValue, setSliderValue] = useState(0);
   const [investmentPeriod, setInvestmentPeriod] = useState(1);
   const [returnResult, setReturnResult] = useState({});
   const [investmentType, setInvestmentType] = useState("mutual_funds");
   const handleSliderChange = (e, val) => {
+    sendEvents({ slider_use: "yes", slider_amount: val });
     setSliderValue(val);
     calculateReturn(val, investmentPeriod, investmentType);
   };
 
   const calculateReturn = (investedVal, investmentPeriod, investmentType) => {
-    console.log({ investedVal, investmentPeriod, investmentType });
     const returnResult = getEstimatedReturn(
       investedVal,
       investmentPeriod,
@@ -46,12 +46,14 @@ function ReturnCalculator() {
 
   const handlePillChange = (e, val) => {
     const type = val === 1 ? "stocks" : "mutual_funds";
+    sendEvents({ calculated_for: type });
     setInvestmentType(investmentType);
     setPillReturnValue(val);
     calculateReturn(sliderValue, investmentPeriod, type);
   };
 
   const handlePeriodChange = (e, val) => {
+    sendEvents({ "investment period": `${val}Y` });
     setInvestmentPeriod(val);
     calculateReturn(sliderValue, val, investmentType);
   };
