@@ -194,7 +194,7 @@ function Landing(props) {
               <WVListItem
                 iconSrc={require(`assets/${productName}/${icon}.svg`)}
                 title={
-                  type === "free" ? <CustomTitle title={title} /> : title
+                  type === "eCA" ? <CustomTitle title={title} /> : title
                 }
                 subtitle={subtitle}
                 classes={{ container: "pointer row-reverse" }}
@@ -256,7 +256,7 @@ const CustomTitle = ({ title }) => {
       <div className="heading3-medium">{title}</div>
       <WVTag
         variant="attention"
-        content="free"
+        content="upto 35% off"
         dataAidSuffix="tax2win-free-tag"
         classes={{ container: 'align-self-start m-left-1x' }}
       />
