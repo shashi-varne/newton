@@ -50,6 +50,7 @@ import ThemeWrapper from "../theme/ThemeWrapper";
 import fundDetailsV2Container from "../containers/fundDetailsV2/fundDetailsV2Container";
 import mfOrderContainer from "../containers/mfOrder/mfOrderContainer";
 import Nominee from "../pages/Nominee";
+import ReferAndEarn from "../pages/ReferAndEarn";
 import AppLanding from "../pages/AppLanding";
 
 const Home = (props) => {
@@ -191,6 +192,7 @@ const Home = (props) => {
           <Route path={`${url}fund-details-v2`} component={fundDetailsV2Container} />
           <Route path={`${url}mf-orders`} component={mfOrderContainer} />
           <Route path={`${url}nominee`} component={Nominee} />
+          <Route path={`${url}refer-and-earn`} component={ReferAndEarn} />
           <Route path={url} component={AppLanding} />
         </ThemeWrapper>
         <Route component={NotFound} />

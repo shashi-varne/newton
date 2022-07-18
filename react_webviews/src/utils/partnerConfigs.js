@@ -97,7 +97,7 @@ export const basePartnerConfig = {
     riskEnabledFunnels: false,
     referralConfig: {
       applyRefferal: true, // same as hide_apply_referral but with opposite value
-      shareRefferal: false, // same as hide_share_referral but with opposite value
+      shareRefferal: true, // same as hide_share_referral but with opposite value
     },
   },
   finity: {

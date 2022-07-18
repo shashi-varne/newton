@@ -33,7 +33,7 @@ export const WEBAPP_LANDING_PATHNAME_MAPPER = {
   investingOptions: "/landing/view-all/mf",
   allCategories: "/landing/view-all/category",
   bankList: "/landing/bank-list",
-  refer: "/refer",
+  refer: "/refer-and-earn/landing",
   taxFiling: "/tax-filing",
   education: "/invest/savegoal/childeducation",
   retirement: "/invest/savegoal/retirement",
@@ -339,7 +339,7 @@ export const FINANCIAL_TOOLS = [
 
 export const REFERRAL_DATA = {
   success: {
-    title: "Sucessful",
+    title: "Successful",
     subtitle: "You have applied referral code successfully",
     primaryButtonTitle: "OKAY",
     dataAid: "referralSuccessful",
@@ -352,19 +352,26 @@ export const REFERRAL_DATA = {
     dataAid: "referralError",
     image: require(`assets/caution.svg`),
   },
+  noInput: {
+    title: "Referral code not entered",
+    subtitle: "Please enter referral code to proceed",
+    primaryButtonTitle: "Okay",
+    dataAid: "referralError",
+    image: require(`assets/caution.svg`),
+  },
 };
 
 export const SHARE_REFERRAL_DATA = {
   fisdom: {
     dataAid: "referEarn",
     title: "Refer & earn",
-    subtitle: "Invite your friends & earn exciting rewards",
+    subtitle: "Invite as many friends as you can & earn up to ₹2,00,000",
     rightIcon: "share_refer.svg",
   },
   finity: {
     dataAid: "referEarn",
-    title: "Share the joy",
-    subtitle: "Invite your friends & family",
+    title: "Refer & earn",
+    subtitle: "Invite as many friends as you can & earn up to ₹2,00,000",
     rightIcon: "share_refer.svg",
   },
 };

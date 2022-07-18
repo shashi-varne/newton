@@ -76,6 +76,7 @@ let data = [
     id: 'refer',
     name: 'Refer & Earn',
     icon: refer,
+    path: '/refer-and-earn/landing',
   },
   {
     id: 'writeToUs',
@@ -96,13 +97,14 @@ const NavList = (props) => {
   const productName = config.productName;
   const isMobileDevice = config.isMobileDevice;
   const partnerLoan = config?.features?.loan;
-  const showReferral = config?.referralConfig?.shareRefferal;
   const navigate = navigateFunc.bind(props);
   const [referDialog, setReferDialog] = useState(false);
   const [activePath, setActivePath] = useState('');
   const [kycStatus, setKycStatus] = useState("");
   const kyc = storageService().getObject("kyc") || {};
   const user = storageService().getObject("user") || {};
+  const showReferral = config?.referralConfig?.shareRefferal && user?.referral_campaign_status === "active";
+
   const isReadyToInvestBase = isReadyToInvest();
   const TRADING_ENABLED = useMemo(() => {
     return isTradingEnabled(kyc);

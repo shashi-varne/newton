@@ -96,12 +96,13 @@ const landingContainer = (WrappedComponent) => (props) => {
   const [kycData, setKycData] = useState(getKycData(kyc, user));
   const [swiper, setSwiper] = useState(null);
   const [campaignData, setCampaignData] = useState({});
-  const [referral, setReferral] = useState("");
+  const [referralCode, setReferralCode] = useState("");
   const [contactDetails, setContactDetails] = useState({});
   const [kycBottomsheetData, setKycBottomsheetData] = useState({});
   const [referralData, setReferralData] = useState({});
   const [showPortfolioLoader, setShowPorfolioLoader] = useState(false);
   const [portfolioOverViewData, setPortfolioOverViewData] = useState({});
+  const [appliedCode, setAppliedCode] = useState(user?.accepted_referral_code);
 
   const initializeData = () => {
     const {
@@ -189,13 +190,14 @@ const landingContainer = (WrappedComponent) => (props) => {
 
   const getReferalConfig = () => {
     const showShareReferral =
-      kycData.isMfInvested &&
-      !baseConfig.Web &&
+      user?.referral_campaign_status === "active" &&
       baseConfig?.referralConfig?.shareRefferal;
+
     const showApplyReferral =
-      !kycData.isMfInvested &&
-      !baseConfig.Web &&
+      isEmpty(appliedCode) &&
+      user?.referral_campaign_status === "init" &&
       baseConfig?.referralConfig?.applyRefferal;
+
     return {
       showApplyReferral,
       showShareReferral,
@@ -205,6 +207,7 @@ const landingContainer = (WrappedComponent) => (props) => {
   const { showApplyReferral, showShareReferral } = useMemo(getReferalConfig, [
     user,
     partner,
+    appliedCode
   ]);
 
   const getLandingSections = () => {
@@ -600,7 +603,7 @@ const landingContainer = (WrappedComponent) => (props) => {
     });
 
     if (showApplyReferral) {
-      if (!referral) {
+      if (!referralCode) {
         ToastMessage("Please enter referral code");
         return;
       }
@@ -728,13 +731,19 @@ const landingContainer = (WrappedComponent) => (props) => {
 
   const handleReferralChange = (e) => {
     const value = e.target.value;
-    setReferral(value);
+    setReferralCode(value);
   };
 
   const applyReferral = async () => {
+    if (isEmpty(referralCode)) {
+      setReferralData(REFERRAL_DATA.noInput);
+      handleBottomsheets({ [BOTTOMSHEET_KEYS.openReferral]: true });
+      return;
+    }
+
     try {
       handleLoader({ dotLoader: true });
-      const result = await applyReferralCode(Api, referral);
+      const result = await applyReferralCode(Api, referralCode);
       const data = {
         ...kyc,
         equity_enabled: result.is_equity_enabled,
@@ -752,6 +761,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       dispatch(setReferralContent(updatedReferralData));
       updateKyc(data);
       setReferralData(REFERRAL_DATA.success);
+      setAppliedCode(referralCode);
       handleBottomsheets({ [BOTTOMSHEET_KEYS.openReferral]: true });
     } catch (err) {
       setReferralData({
@@ -827,7 +837,7 @@ const landingContainer = (WrappedComponent) => (props) => {
       bottomsheetStates={bottomsheetStates}
       authData={contactDetails}
       campaignData={campaignData}
-      referral={referral}
+      referral={referralCode}
       handlePremiumOnboarding={handlePremiumOnboarding}
       handleReferralChange={handleReferralChange}
       closeBottomsheet={closeBottomsheet}

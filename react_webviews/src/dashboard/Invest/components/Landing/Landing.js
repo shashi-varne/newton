@@ -52,9 +52,10 @@ const SECTION_TITLE_MAPPER = {
 };
 const Landing = (props) => {
   const navigate = navigateFunc.bind(props);
-  const stateParams = useMemo(() => props.location.state || {}, [
-    props.location.state,
-  ]);
+  const stateParams = useMemo(
+    () => props.location.state || {},
+    [props.location.state]
+  );
   const isFromLoginStates = fromLoginStates.includes(stateParams.fromState);
   const [loaderData, setLoaderData] = useState({
     skelton: false,
@@ -233,7 +234,8 @@ const Landing = (props) => {
       cardClick = "ipo_gold";
     }
 
-    const kycStatus = kycData?.kycStatusData?.eventStatus || kycData?.kycJourneyStatus;
+    const kycStatus =
+      kycData?.kycStatusData?.eventStatus || kycData?.kycJourneyStatus;
 
     let eventObj = {
       event_name: "landing_page",
