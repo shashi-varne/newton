@@ -24,7 +24,7 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const mfSummary = getMfPortfolioSummaryData(state);
-  const statusCode = 200; //TODO: getPortfolioStatusCode(state);
+  const statusCode = getPortfolioStatusCode(state);
   const { kyc, isLoading, user } = useUserKycHook();
   const externalPfData = getExternalPortfolioDetails(state);
   const externalPfStatus = externalPfData?.status || "init";

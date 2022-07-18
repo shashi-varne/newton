@@ -30,7 +30,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
   const investments = getInvestments(state);
   const { kyc, isLoading, user } = useUserKycHook();
   const allocationDetails = getAllocationDetails(state);
-  const statusCode = 200; //TODO: getPortfolioStatusCode(state);
+  const statusCode = getPortfolioStatusCode(state);
   const assetWiseData = allocationDetails?.asset_allocation;
   const productWiseData = allocationDetails?.product_allocation;
   const eventRef = useRef({
