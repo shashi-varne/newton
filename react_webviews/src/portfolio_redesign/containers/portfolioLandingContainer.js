@@ -2,6 +2,7 @@ import {
   getAllocationDetails,
   getInvestments,
   getInvestmentSummary,
+  getPortfolioStatusCode,
   getPortfolioSummary,
   getPortfolioSummaryData,
 } from "businesslogic/dataStore/reducers/portfolioV2";
