@@ -14,6 +14,7 @@ import PropTypes from "prop-types";
 import BottomSheet from "../../../designSystem/organisms/BottomSheet";
 import ReturnCalculator from "./ReturnCalculator";
 import { nativeCallback } from "../../../utils/native_callback";
+import useUserKycHook from "../../../kyc/common/hooks/userKycHook";
 
 export const INFO_ACTION_VARIANT = {
   WITH_ACTION: "WITH_ACTION",
@@ -60,12 +61,13 @@ function InfoAction({
   variant = INFO_ACTION_VARIANT.WITH_ACTION,
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const { kyc, isLoading, user } = useUserKycHook();
   const eventRef = useRef({
     screen_name: screenName,
     user_action: "back",
-    user_application_status: "init",
-    user_investment_status: false,
-    user_kyc_status: false,
+    user_application_status: kyc?.application_status_v2 || "init",
+    user_investment_status: user?.active_investment,
+    user_kyc_status: kyc?.mf_kyc_processed || false,
   });
 
   const sendEvents = (events, userAction = "back") => {

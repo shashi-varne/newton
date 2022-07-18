@@ -10,6 +10,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Api from "utils/api";
 import { navigate as navigateFunc } from "utils/functions";
+import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
 import { ERROR_STATE_BOX_VARIANTS } from "../ErrorScreen/ErrorStateBox";
 import SomethingsWrong from "../ErrorScreen/SomethingsWrong";
@@ -27,8 +28,9 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
   const summaryData = getPortfolioSummaryData(state);
   const investmentSummary = getInvestmentSummary(state);
   const investments = getInvestments(state);
+  const { kyc, isLoading, user } = useUserKycHook();
   const allocationDetails = getAllocationDetails(state);
-  const statusCode = 310; //TODO: getPortfolioStatusCode(state);
+  const statusCode = 200; //TODO: getPortfolioStatusCode(state);
   const assetWiseData = allocationDetails?.asset_allocation;
   const productWiseData = allocationDetails?.product_allocation;
   const eventRef = useRef({
@@ -39,9 +41,9 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
     realised_gain: "no",
     view_all_investments: "no",
     allocations: "asset-wise",
-    user_application_status: "init",
-    user_investment_status: "false",
-    user_kyc_status: "false",
+    user_application_status: kyc?.application_status_v2 || "init",
+    user_investment_status: user?.active_investment,
+    user_kyc_status: kyc?.mf_kyc_processed || false,
   });
   const [viewData, setViewData] = useState({
     showTopSection: true,

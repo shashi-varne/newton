@@ -15,6 +15,7 @@ import InfoAction, {
 import SomethingsWrong from "../ErrorScreen/SomethingsWrong";
 import { getExternalPortfolioData } from "businesslogic/constants/portfolio";
 import { nativeCallback } from "../../utils/native_callback";
+import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 
 const screen = "MfLanding";
 
@@ -24,6 +25,7 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
   const state = useSelector((state) => state);
   const mfSummary = getMfPortfolioSummaryData(state);
   const statusCode = 200; //TODO: getPortfolioStatusCode(state);
+  const { kyc, isLoading, user } = useUserKycHook();
   const externalPfData = getExternalPortfolioDetails(state);
   const externalPfStatus = externalPfData?.status || "init";
   const externalPfCardData = getExternalPortfolioData(externalPfStatus);
@@ -33,9 +35,9 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
     card_click: "",
     current_investment: "no",
     view_details: "no",
-    user_application_status: "init",
-    user_investment_status: "false",
-    user_kyc_status: "false",
+    user_application_status: kyc?.application_status_v2 || "init",
+    user_investment_status: user?.active_investment,
+    user_kyc_status: kyc?.mf_kyc_processed || false,
   });
   const goToAssetAllocation = () => {
     sendEvents("view_details", "yes", "next");
@@ -83,6 +85,7 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
 
   const handleOption = (option) => {
     sendEvents("card_click", option?.title?.toLowerCase(), "next");
+    //TODO: redirect
   };
 
   if (statusCode === 311) {
