@@ -74,7 +74,23 @@ export const PLATFORM_MOTIVATORS = [
   },
 ];
 
+export const NFO_MARKETING_BANNERS = [
+  {
+    image: "nfo.svg",
+    id: "nfo",
+    endDate: "07/25/2022",
+    startDate: "07/12/2022",
+  },
+  {
+    image: "nfo1.svg",
+    id: "nfo",
+    endDate: "07/24/2022",
+    startDate: "07/12/2022",
+  },
+];
+
 export const DEFAULT_MARKETING_BANNERS = [
+  ...NFO_MARKETING_BANNERS,
   {
     image: "buildwealth.svg",
     id: "buildwealth",
@@ -94,10 +110,7 @@ export const DEFAULT_MARKETING_BANNERS = [
 ];
 
 export const PRODUCT_MARKETING_BANNERS = [
-  {
-    image: "taxfiling_banner.svg",
-    id: "taxFiling",
-  },
+  ...NFO_MARKETING_BANNERS,
   {
     image: "freedomplan_1.svg",
     id: "freedomplan",
@@ -105,14 +118,17 @@ export const PRODUCT_MARKETING_BANNERS = [
   {
     image: "kyc_banner.svg",
     id: "equityKyc",
+    startDate: "07/25/2022",
   },
   {
     image: "buildwealth_2.svg",
     id: "buildwealth",
+    startDate: "07/26/2022",
   },
 ];
 
 export const EQUITY_MARKETING_BANNERS = [
+  ...NFO_MARKETING_BANNERS,
   {
     image: "freedomplan.svg",
     id: "freedomplan",
@@ -120,32 +136,36 @@ export const EQUITY_MARKETING_BANNERS = [
   {
     image: "buildwealth_1.svg",
     id: "buildwealth",
+    startDate: "07/25/2022",
   },
   {
     image: "kyc_banner.svg",
     id: "equityKyc",
+    startDate: "07/26/2022",
   },
   {
     image: "education.svg",
     id: "education",
+    startDate: "07/31/2022",
   },
 ];
 
 export const UCOMB_MARKETING_BANNERS = [
+  ...NFO_MARKETING_BANNERS,
   {
-    image: "taxfiling_banner.svg",
+    image: "taxfiling_banner1.svg",
     id: "taxFiling",
     endDate: "06/31/2022",
   },
   {
     image: "freedomplan_1.svg",
     id: "freedomplan",
-    endDate: "06/31/2022",
+    endDate: "06/25/2022",
   },
   {
     image: "buildwealth_3.svg",
     id: "buildwealth",
-    endDate: "06/31/2022",
+    endDate: "06/26/2022",
   },
   {
     image: "kyc.svg",
@@ -165,17 +185,3 @@ export const TAXWIN_MARKETING_BANNERS = [
   },
 ];
 
-export const NFO_MARKETING_BANNERS = [
-  {
-    image: "nfo.svg",
-    id: "nfo",
-    endDate: "07/25/2022",
-    startDate: "07/12/2022",
-  },
-  {
-    image: "nfo1.svg",
-    id: "nfo",
-    endDate: "07/24/2022",
-    startDate: "07/12/2022",
-  },
-];

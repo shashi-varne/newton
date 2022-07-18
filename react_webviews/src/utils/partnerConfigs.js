@@ -34,7 +34,6 @@ import {
   EQUITY_MARKETING_BANNERS,
   UCOMB_MARKETING_BANNERS,
   TAXWIN_MARKETING_BANNERS,
-  NFO_MARKETING_BANNERS,
 } from "./partnerConstants";
 
 // common config across all partners
@@ -70,7 +69,6 @@ export const commonCardsConfig = {
     "instaredeem",
   ],
   landingMarketingBanners: DEFAULT_MARKETING_BANNERS,
-  nfoBanners: NFO_MARKETING_BANNERS,
   platformMotivators: PLATFORM_MOTIVATORS,
 };
 
@@ -284,10 +282,6 @@ export const partnerConfigs = {
     code: "bfdlmobile",
     email: "bajajfinserv@finity.in",
     mobile: "+91-7829331118",
-    landingMarketingBanners: [
-      ...commonCardsConfig.nfoBanners,
-      ...commonCardsConfig.landingMarketingBanners,
-    ],
     referralConfig: {
       applyRefferal: false, // same as hide_apply_referral but with opposite value
       shareRefferal: false, // same as hide_share_referral but with opposite value
@@ -371,10 +365,6 @@ export const partnerConfigs = {
     code: "fpg",
     mobile: "1800-212-5997",
     email: "care.futuremoney@fisdom.com",
-    landingMarketingBanners: [
-      ...commonCardsConfig.nfoBanners,
-      ...commonCardsConfig.landingMarketingBanners,
-    ],
     features: {
       nps: true,
       instaredeem: true,
