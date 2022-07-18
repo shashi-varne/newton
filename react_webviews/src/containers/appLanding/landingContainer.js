@@ -207,6 +207,7 @@ const landingContainer = (WrappedComponent) => (props) => {
   const { showApplyReferral, showShareReferral } = useMemo(getReferalConfig, [
     user,
     partner,
+    appliedCode
   ]);
 
   const getLandingSections = () => {
