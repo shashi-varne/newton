@@ -53,6 +53,10 @@ const CopyCodeComponent = ({
         justifyContent="space-between"
         alignItems="center"
         className="copy-code-container"
+        sx={{
+          border: `1px solid `,
+          borderColor: "foundationColors.supporting.athensGrey",
+        }}
       >
         <Typography
           variant="actionText"

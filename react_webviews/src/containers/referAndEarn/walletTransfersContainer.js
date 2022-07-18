@@ -31,7 +31,7 @@ const walletTransfersContainer = (WrappedComponent) => (props) => {
   );
 
   const walletTransactions = useSelector(getWalletTransactionsData);
-  let walletTransactionsViewData = useMemo(
+  const walletTransactionsViewData = useMemo(
     () => getWalletTransactionsViewData(walletTransactions),
     [walletTransactions]
   );
@@ -104,7 +104,7 @@ const walletTransfersContainer = (WrappedComponent) => (props) => {
 };
 
 const getWalletTransactionsViewData = (walletTransactions = []) => {
-  let walletTransactionsViewData = walletTransactions.map((item, index) => {
+  const walletTransactionsViewData = walletTransactions.map((item, index) => {
     const acc =
       item?.to_account_number &&
       item?.bank_name &&
