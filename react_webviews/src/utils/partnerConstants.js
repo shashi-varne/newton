@@ -155,22 +155,22 @@ export const UCOMB_MARKETING_BANNERS = [
   {
     image: "taxfiling_banner1.svg",
     id: "taxFiling",
-    endDate: "06/31/2022",
+    endDate: "07/31/2022",
   },
   {
     image: "freedomplan_1.svg",
     id: "freedomplan",
-    endDate: "06/25/2022",
+    endDate: "07/25/2022",
   },
   {
     image: "buildwealth_3.svg",
     id: "buildwealth",
-    endDate: "06/26/2022",
+    endDate: "07/26/2022",
   },
   {
     image: "kyc.svg",
     id: "equityKyc",
-    endDate: "06/31/2022",
+    endDate: "07/31/2022",
   },
 ];
 
