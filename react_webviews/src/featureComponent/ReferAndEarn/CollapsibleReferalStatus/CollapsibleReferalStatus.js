@@ -30,9 +30,9 @@ const CollapsibleReferalStatus = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const handleCollapse = () => {
-    const val = !isOpen;
-    setIsOpen(val);
-    onClick({ id, isOpen: val });
+    const currentValue = !isOpen;
+    setIsOpen(currentValue);
+    onClick({ id, isOpen: currentValue });
   };
 
   return (
@@ -84,7 +84,7 @@ const CollapsibleReferalStatus = ({
                   <Typography variant="body2" dataAid={item?.dataAid}>
                     {item?.name}
                   </Typography>
-                  {item?.event_pending === true && (
+                  {item?.event_pending && (
                     <Typography
                       variant="body2"
                       color="foundationColors.secondary.coralOrange.400"
