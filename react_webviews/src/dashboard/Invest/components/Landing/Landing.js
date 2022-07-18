@@ -41,12 +41,6 @@ import useFreedomDataHook from "../../../../freedom_plan/common/freedomPlanHook"
 import { keyPathMapper } from "../../constants";
 import "./Landing.scss";
 
-// temp
-import WrapperBox from "../../../../designSystem/atoms/WrapperBox";
-import Typography from "../../../../designSystem/atoms/Typography";
-import { REFER_AND_EARN_PATHNAME_MAPPER } from "../../../../constants/referAndEarn";
-// end-- temp
-
 const fromLoginStates = ["/login", "/logout", "/verify-otp"];
 const screenName = "investLanding";
 const SECTION_TITLE_MAPPER = {
@@ -427,20 +421,6 @@ const Landing = (props) => {
               </React.Fragment>
             );
           })}
-        {/*temp to be removed  */}
-        <WrapperBox
-          elevation={1}
-          onClick={() => {
-            navigate(REFER_AND_EARN_PATHNAME_MAPPER.landing);
-          }}
-          sx={{ margin: "16px" }}
-        >
-          <Typography style={{ padding: "16px" }} variant="body2">
-            Refer And Earn
-          </Typography>
-        </WrapperBox>
-        {/* end-- temp to be removed  */}
-
         <SebiRegistrationFooter className="invest-sebi-registration-disclaimer" />
       </div>
       <LandingBottomSheets

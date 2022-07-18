@@ -299,7 +299,7 @@ const landingContainer = (WrappedComponent) => (props) => {
   );
 };
 
-const getActiveCampaignsViewData = (activeCampaignData) => {
+const getActiveCampaignsViewData = (activeCampaignData = []) => {
   const data = activeCampaignData.map((item) => {
     const hoursLeft = getDiffInHours(
       item.campaign_end_date,

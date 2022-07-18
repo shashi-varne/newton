@@ -20,7 +20,7 @@ const WithdrawPlaced = ({ productName = "fisdom", goToSuccess }) => {
     return () => {
       clearTimeout(animationTimeout);
     };
-  });
+  }, []);
 
   return (
     <Container

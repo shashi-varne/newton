@@ -8,18 +8,10 @@ import ShareCodeComponent from "../ShareCodeComponet/ShareCodeComponent";
 import "./ReferralStepsBottomSheet.scss";
 import OrderStep from "../../../designSystem/atoms/OrderStep/OrderStep";
 
-const dummyData = [
-  { text: "Refer a friend to open a Trading & Demat account" },
-  {
-    text: `Your friend opens an account`,
-  },
-  { text: "You get ₹150 " },
-];
-
 const ReferralStepsBottomSheet = ({
   isOpen,
   title = "",
-  stepsData = dummyData,
+  stepsData = [],
   handleClose = noop,
   dataAid = "",
   isWeb = true,

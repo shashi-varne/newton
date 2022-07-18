@@ -146,7 +146,7 @@ const myReferralsContainer = (WrappedComponent) => (props) => {
   );
 };
 
-const getRefereeListViewData = (refereeListData) => {
+const getRefereeListViewData = (refereeListData = []) => {
   let pendingReferralsCount = 0;
   const refereeListViewData = refereeListData.map((item, index) => {
     if (item.pending) {

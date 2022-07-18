@@ -103,7 +103,7 @@ const walletTransfersContainer = (WrappedComponent) => (props) => {
   );
 };
 
-const getWalletTransactionsViewData = (walletTransactions) => {
+const getWalletTransactionsViewData = (walletTransactions = []) => {
   let walletTransactionsViewData = walletTransactions.map((item, index) => {
     const acc =
       item?.to_account_number &&
