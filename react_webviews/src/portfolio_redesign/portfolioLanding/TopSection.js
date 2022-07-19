@@ -145,7 +145,11 @@ function TopSection({ investmentSummary, sendEvents }) {
             )}
           </Typography>
         </Box>
-        <Box>
+        <Box
+          sx={{
+            textAlign: "right",
+          }}
+        >
           <Typography
             variant="body2"
             color={"foundationColors.supporting.gainsboro"}

@@ -11,6 +11,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Api from "utils/api";
 import { navigate as navigateFunc } from "utils/functions";
+import useLoadingState from "../../common/customHooks/useLoadingState";
+import UiSkelton from "../../common/ui/Skelton";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
 import { ERROR_STATE_BOX_VARIANTS } from "../ErrorScreen/ErrorStateBox";
@@ -30,8 +32,9 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
   const investmentSummary = getInvestmentSummary(state);
   const investments = getInvestments(state);
   const { kyc, isLoading, user } = useUserKycHook();
+  const { isPageLoading } = useLoadingState(screen);
   const allocationDetails = getAllocationDetails(state);
-  const statusCode = getPortfolioStatusCode(state);
+  const statusCode = 200; // getPortfolioStatusCode(state);
   const assetWiseData = allocationDetails?.asset_allocation;
   const productWiseData = allocationDetails?.product_allocation;
   const eventRef = useRef({
@@ -125,10 +128,12 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
 
   const handleInvestInMf = () => {
     sendEvents("card_click", "invest in mutual funds", "next");
+    navigate("/invest/explore-v2");
   };
 
   const handleInsurance = () => {
     sendEvents("card_click", "insurance", "next");
+    navigate("/group-insurance");
   };
 
   if (statusCode === 308) {
@@ -170,9 +175,26 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
         variant={INFO_ACTION_VARIANT.WITHOUT_ACTION}
       />
     );
+  } else if (statusCode === 111) {
+    return (
+      <InfoAction
+        eventName={"main_portfolio"}
+        screenName="no active investments"
+        dataAidSuffix={"noInvestment"}
+        topImgSrc={require("assets/portfolio_no_investment.svg")}
+        title="No active investments"
+        subtitle="It seems you’ve redeemed all your investments due to which you’re not able to view them here"
+        ctaTitle={"INVEST AGAIN"}
+        variant={INFO_ACTION_VARIANT.WITHOUT_ACTION}
+      />
+    );
   }
   if (statusCode === 314) {
     return <SomethingsWrong onClickCta={init} />;
+  }
+
+  if (isPageLoading) {
+    return <UiSkelton type="g" />;
   }
 
   return (

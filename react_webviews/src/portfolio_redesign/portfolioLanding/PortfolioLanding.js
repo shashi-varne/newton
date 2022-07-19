@@ -50,6 +50,12 @@ function PortfolioLanding({
     <Container
       headerProps={{
         headerTitle: "Portfolio",
+        hideInPageTitle: true,
+        hideLeftIcon: true,
+        headerSx: {
+          backgroundColor: "foundationColors.primary.600",
+          color: "foundationColors.supporting.white",
+        },
       }}
       noFooter
       className="portfolio-landing-container"

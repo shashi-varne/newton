@@ -16,9 +16,10 @@ import { getConfig } from "../../utils/functions";
 import { formatAmountInr, numDifferentiation } from "../../utils/validators";
 import LandingBottomsheet from "../portfolioLanding/landingBottomsheet";
 import SemiDonutGraph from "../portfolioLanding/SemiDonutGraph";
-import "./style.scss";
+import "./MfLanding.scss";
 import { STATUS_VARIANTS } from "../../designSystem/atoms/Status/Status";
 import ExternalPortfolioCard from "./ExternalPortfolioCard";
+import OptionsGrid from "./OptionsGrid";
 
 const {
   investmentSummary: INVESTMENT_SUMMARY,
@@ -26,44 +27,6 @@ const {
 } = MF_LANDING;
 
 const productName = getConfig().productName;
-const optionList = [
-  {
-    variant: "variant32",
-    dataAid: "sipManager",
-    title: "SIP manager",
-    imgSrc: require("assets/mf_sip.svg"),
-    // goto: TODO:
-  },
-  {
-    variant: "variant32",
-    dataAid: "yourFunds",
-    title: "Your funds",
-    imgSrc: require("assets/mf_your_funds.svg"),
-    // goto: TODO:
-  },
-  {
-    variant: "variant32",
-    dataAid: "goalTracker",
-    title: "Goal tracker",
-    imgSrc: require("assets/mf_goal_tracker.svg"),
-    // goto: TODO:
-  },
-  {
-    variant: "variant32",
-    dataAid: "yourOrders",
-    title: "Your orders",
-    imgSrc: require("assets/mf_your_orders.svg"),
-    // goto: TODO:
-  },
-  {
-    variant: "variant32",
-    dataAid: "withdraw",
-    title: "Withdraw",
-    imgSrc: require("assets/mf_withdraw.svg"),
-    // goto: TODO:
-  },
-];
-
 const graphOptions = {
   colors: ["#33CF90", "#FE794D", "#5AAAF6"],
   seriesData: [
@@ -87,7 +50,6 @@ function MFLanding({
   const [isCurrentValueSheetOpen, setIsCurrentValueSheetOpen] = useState(false);
   const renderExternalPortfolioCard = () => {
     const cardHorizontalCases = ["pending", "failed", "trigger_failed"];
-    console.log("status", externalPfStatus);
     if (externalPfStatus === "init") {
       return (
         <WrapperBox elevation={1}>
@@ -126,10 +88,10 @@ function MFLanding({
       headerProps={{
         headerTitle: MF_LANDING.navigationHeader.title,
         dataAid: MF_LANDING.navigationHeader.dataAid,
+        leftIconSrc: require("assets/back_arrow_white.svg"),
         headerSx: {
-          //TODO: add header background color
-          // backgroundColor: "foundationColors.primary.600",
-          // color: "foundationColors.supporting.white",
+          backgroundColor: "foundationColors.primary.600",
+          color: "foundationColors.supporting.white",
         },
       }}
       className="mf-landing-container"
@@ -293,27 +255,7 @@ function MFLanding({
           <SemiDonutGraph data={graphOptions} />
         </Box>
       </Box>
-      <Box className="more-options">
-        <Typography
-          variant="heading3"
-          color="foundationColors.content.primary"
-          dataAid={"more"}
-        >
-          More options
-        </Typography>
-        <Box className="options-grid">
-          {optionList.map((option, index) => (
-            <CategoryCard
-              onClick={() => handleOption(option)}
-              key={index}
-              variant={option.variant}
-              dataAid={MORE_OPTIONS[index].dataAid}
-              title={MORE_OPTIONS[index].title}
-              imgSrc={option.imgSrc}
-            />
-          ))}
-        </Box>
-      </Box>
+      <OptionsGrid handleOption={handleOption} />
 
       <BottomSheet
         isOpen={isCurrentValueSheetOpen}

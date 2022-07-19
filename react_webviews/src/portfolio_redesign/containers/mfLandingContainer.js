@@ -17,6 +17,9 @@ import SomethingsWrong from "../ErrorScreen/SomethingsWrong";
 import { getExternalPortfolioData } from "businesslogic/constants/portfolio";
 import { nativeCallback } from "../../utils/native_callback";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
+import UiSkelton from "../../common/ui/Skelton";
+import useLoadingState from "../../common/customHooks/useLoadingState";
+import { isEmpty } from "lodash-es";
 
 const screen = "MfLanding";
 
@@ -26,6 +29,7 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
   const state = useSelector((state) => state);
   const mfSummary = getMfPortfolioSummaryData(state);
   const statusCode = getPortfolioStatusCode(state);
+  const { isPageLoading } = useLoadingState(screen);
   const { kyc, isLoading, user } = useUserKycHook();
   const externalPfData = getExternalPortfolioDetails(state);
   const externalPfStatus = externalPfData?.status || "init";
@@ -45,7 +49,9 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
     navigate("/portfolio/asset-allocation");
   };
   const init = () => {
-    dispatch(getMfPortfolioSummary({ screen, Api }));
+    if (isEmpty(mfSummary)) {
+      dispatch(getMfPortfolioSummary({ screen, Api }));
+    }
   };
   useEffect(() => {
     init();
@@ -77,16 +83,17 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
 
   const handleExternalPortfolio = () => {
     sendEvents("card_click", "import external portfolio", "next");
-    //TODO: goto
+    navigate("/hni/external_portfolio");
   };
 
   const handleInvestInMf = () => {
     sendEvents("card_click", "invest in mutual funds", "next");
+    navigate("/invest/explore-v2");
   };
 
   const handleOption = (option) => {
     sendEvents("card_click", option?.title?.toLowerCase(), "next");
-    //TODO: redirect
+    if (!!option?.path) navigate(option.path);
   };
 
   if (statusCode === 311) {
@@ -102,6 +109,27 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
     );
   } else if (statusCode === 318 || statusCode === 317) {
     return <SomethingsWrong onClickCta={init} />;
+  } else if (statusCode === 111) {
+    return (
+      <InfoAction
+        disableInPageTitle={true}
+        eventName={"main_portfolio"}
+        screenName="no active investments"
+        dataAidSuffix={"noInvestment"}
+        topImgSrc={require("assets/portfolio_no_investment.svg")}
+        title="No active investments"
+        // externalPfCardData={externalPfCardData}
+        isRedeemUser={true}
+        handleOption={handleOption}
+        subtitle="It seems you’ve redeemed all your investments due to which you’re not able to view them here"
+        ctaTitle={"INVEST AGAIN"}
+        variant={INFO_ACTION_VARIANT.WITHOUT_ACTION}
+      />
+    );
+  }
+
+  if (isPageLoading) {
+    return <UiSkelton type="g" />;
   }
 
   return (

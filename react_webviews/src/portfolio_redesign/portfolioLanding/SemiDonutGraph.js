@@ -1,6 +1,7 @@
 import React from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
+import { capitalizeFirstLetter } from "../../utils/validators";
 
 function SemiDonutGraph({ data }) {
   const graphOptions = {
@@ -24,7 +25,7 @@ function SemiDonutGraph({ data }) {
       pie: {
         dataLabels: {
           enabled: true,
-          distance: 25,
+          distance: 20,
           softConnector: false,
           style: {
             fontWeight: "bold",
@@ -33,14 +34,16 @@ function SemiDonutGraph({ data }) {
           formatter: function () {
             return `<span> <span style='color: ${this.color}'>${parseInt(
               this.percentage
-            )}%</span> ${this.key} </span>`;
+            )}%</span> ${capitalizeFirstLetter(
+              this.key?.toLowerCase()
+            )} </span>`;
           },
           style: {},
         },
         startAngle: -90,
         endAngle: 90,
         center: ["50%", "100%"],
-        size: "220%",
+        size: "190%",
         colors: data?.colors,
       },
     },

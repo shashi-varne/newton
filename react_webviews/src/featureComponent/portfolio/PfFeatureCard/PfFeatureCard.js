@@ -24,6 +24,7 @@ function PfFeatureCard({
   onClickIconMiddle,
   onClickIconRight,
   className,
+  style,
 }) {
   const {
     title,
@@ -38,6 +39,7 @@ function PfFeatureCard({
     <Box
       sx={{
         backgroundColor: "foundationColors.supporting.white",
+        ...style,
       }}
       className={`pf-feature-card-container  ${className}`}
       data-aid={`pfFeatureCardSmall_${dataAid}`}

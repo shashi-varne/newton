@@ -9,6 +9,7 @@ import { ALL_INVESTMENTS_LANDING } from "businesslogic/strings/portfolio";
 
 const config = getConfig();
 function FeatureCardCarousel({ investments, handleFeatureCard }) {
+  console.log("inn", investments);
   return (
     <CustomSwiper
       spaceBetween={8}
@@ -36,6 +37,9 @@ function FeatureCardCarousel({ investments, handleFeatureCard }) {
       {investments?.map((item, idx) => (
         <SwiperSlide key={idx}>
           <PfFeatureCard
+            style={{
+              cursor: "pointer",
+            }}
             onClick={() => handleFeatureCard(item)}
             topImgSrc={item?.icon}
             textProps={{
@@ -54,7 +58,9 @@ function FeatureCardCarousel({ investments, handleFeatureCard }) {
               rightSubtitle: formatAmountInr(item?.earnings || 0),
             }}
             textColors={{
-              rightSubtitle: !!item?.earnings
+              rightSubtitle: !item?.earnings
+                ? "foundationColors.content.primary"
+                : item?.earnings > 0
                 ? "foundationColors.secondary.profitGreen.400"
                 : "foundationColors.secondary.lossRed.400",
             }}

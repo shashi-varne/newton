@@ -9,55 +9,34 @@ import {
   LandingHeaderSubtitle,
   LandingHeaderTitle,
 } from "designSystem/molecules/LandingHeader";
-import "./style.scss";
+import "./InfoAction.scss";
 import PropTypes from "prop-types";
 import BottomSheet from "../../../designSystem/organisms/BottomSheet";
 import ReturnCalculator from "./ReturnCalculator";
 import { nativeCallback } from "../../../utils/native_callback";
 import useUserKycHook from "../../../kyc/common/hooks/userKycHook";
+import ExternalPortfolioCard from "../../mutualFund/ExternalPortfolioCard";
+import WrapperBox from "../../../designSystem/atoms/WrapperBox";
+import OptionsGrid from "../../mutualFund/OptionsGrid";
 
 export const INFO_ACTION_VARIANT = {
   WITH_ACTION: "WITH_ACTION",
   WITHOUT_ACTION: "WITHOUT_ACTION",
 };
 
-const WithoutActionSubtitle = (subtitle) => {
-  return (
-    <Typography
-      variant="inherit"
-      color="inherit"
-      className="custom-text-elipsis"
-    >
-      {subtitle}
-    </Typography>
-  );
-};
-
-const WithActionSubtitle = (setIsOpen, subtitle) => {
-  return (
-    <Typography
-      variant="inherit"
-      color="inherit"
-      className="custom-text-elipsis"
-    >
-      {subtitle}
-      <Button
-        variant="link"
-        title="Calculate returns"
-        className="btn-calculate-returns"
-        onClick={() => setIsOpen(true)}
-      />
-    </Typography>
-  );
-};
-
 function InfoAction({
+  pageTitle,
   title,
   ctaTitle,
   subtitle,
   dataAidSuffix = "",
+  handleOption,
   eventName,
+  externalPfCardData,
+  disableInPageTitle,
   screenName,
+  isRedeemUser,
+  topImgSrc,
   variant = INFO_ACTION_VARIANT.WITH_ACTION,
 }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -105,6 +84,7 @@ function InfoAction({
     sendEvents({
       screen_name: "return calculator",
       calculated_for: "mutual funds",
+      bottomsheet: true,
       slider_use: "no",
       "investment period": "1Y",
     });
@@ -133,8 +113,10 @@ function InfoAction({
   return (
     <Container
       headerProps={{
-        headerTitle: "Portfolio",
-        hideInPageTitle: true,
+        headerTitle: pageTitle,
+        hideInPageTitle: disableInPageTitle || false,
+        backgroundColor: "foundationColors.primary.600",
+        color: "foundationColors.supporting.white",
       }}
       className="infoAction-wrapper"
       noFooter
@@ -147,9 +129,7 @@ function InfoAction({
       >
         <Box style={{ marginBottom: 24 }}>
           <LandingHeader dataAid={dataAidSuffix} variant="center">
-            <LandingHeaderImage
-              imgSrc={require("assets/portfolio_no_investment.svg")}
-            />
+            <LandingHeaderImage imgSrc={topImgSrc} />
             <LandingHeaderTitle align="center">{title}</LandingHeaderTitle>
             <LandingHeaderSubtitle align="center" dataIdx={1}>
               {variant === INFO_ACTION_VARIANT.WITHOUT_ACTION
@@ -164,6 +144,15 @@ function InfoAction({
           title={ctaTitle}
           onClick={handleCta}
         />
+
+        {isRedeemUser && (
+          <>
+            <WrapperBox className={"external-card-wrapper"} elevation={1}>
+              <ExternalPortfolioCard data={externalPfCardData} />
+            </WrapperBox>
+            <OptionsGrid handleOption={handleOption} />
+          </>
+        )}
       </Stack>
       <BottomSheet
         isOpen={isOpen}

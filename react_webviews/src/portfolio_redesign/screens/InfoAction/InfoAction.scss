@@ -1,7 +1,14 @@
 .infoAction-wrapper {
+  background-color: #fff;
   .container-content-wrapper {
+    height: 90%;
     background-color: #fff;
     .main-container {
+      height: 100%;
+      .external-card-wrapper {
+        width: 100%;
+        margin: 32px 0;
+      }
       margin-bottom: 24px;
       .btn-calculate-returns {
         margin: -2px 0 0 3px;

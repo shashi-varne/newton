@@ -1,7 +1,7 @@
 export const sliderStyleOverRides = (colors = {}) => {
   return {
     track: {
-      backgroundColor: colors.action.brand,
+      backgroundColor: colors.primary.brand,
     },
     thumb: {
       backgroundColor: colors.primary.brand,

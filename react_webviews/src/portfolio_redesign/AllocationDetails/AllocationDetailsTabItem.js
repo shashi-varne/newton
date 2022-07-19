@@ -1,11 +1,11 @@
-import { Box, Stack } from "@mui/material";
+import { Box } from "@mui/material";
+import { isEmpty } from "lodash-es";
 import React, { useMemo, useState } from "react";
+import Button from "../../designSystem/atoms/Button";
 import { Pill, Pills } from "../../designSystem/atoms/Pills";
 import ProgressBar from "../../designSystem/atoms/ProgressBar";
-import Button from "../../designSystem/atoms/Button";
-import InvestmentCard from "./InvestmentCard";
-import { isEmpty } from "lodash-es";
 import Typography from "../../designSystem/atoms/Typography";
+import InvestmentCard from "./InvestmentCard";
 
 function AllocationDetailsTabItem({
   pillData,
@@ -21,8 +21,8 @@ function AllocationDetailsTabItem({
     holdings: true,
   });
   const [viewAllLimit, setViewAllLimit] = useState({
-    holdings: 10,
-    sectors: 10,
+    holdings: 5,
+    sectors: 5,
   });
   const progressDataMapper = useMemo(() => {
     return {

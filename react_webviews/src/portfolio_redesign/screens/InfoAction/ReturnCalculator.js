@@ -57,6 +57,11 @@ function ReturnCalculator({ sendEvents }) {
     setInvestmentPeriod(val);
     calculateReturn(sliderValue, val, investmentType);
   };
+
+  const handleStartInvesting = () => {
+    sendEvents({}, "start investing");
+    //TODO: redirection
+  };
   return (
     <Box className="return-calculator">
       <Typography
@@ -190,7 +195,7 @@ function ReturnCalculator({ sendEvents }) {
       <Button
         title={RETURN_CALCULATOR.cta.title}
         dataAid={RETURN_CALCULATOR.cta.dataAid}
-        onClick={() => {}}
+        onClick={handleStartInvesting}
         variant={"primary"}
       />
     </Box>

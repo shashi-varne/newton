@@ -18,6 +18,7 @@
     }
   }
   .banner-section {
+    cursor: pointer;
     padding: 0 20px 24px;
     margin-top: 24px;
     .marketing-banner {
@@ -28,16 +29,6 @@
     padding: 0 20px 0;
     .view-details {
       cursor: pointer;
-    }
-  }
-  .more-options {
-    padding: 0 20px 50px;
-    .options-grid {
-      margin-top: 24px;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(100px, 1fr));
-      grid-template-rows: repeat(2, auto-fit);
-      gap: 24px;
     }
   }
 }

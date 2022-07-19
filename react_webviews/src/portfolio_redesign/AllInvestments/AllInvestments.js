@@ -2,7 +2,7 @@ import React from "react";
 import Container from "designSystem/organisms/ContainerWrapper";
 import { Box, Stack } from "@mui/material";
 import Typography from "../../designSystem/atoms/Typography";
-import "./style.scss";
+import "./AllInvestments.scss";
 import PfFeatureCard from "../../featureComponent/portfolio/PfFeatureCard/PfFeatureCard";
 import WrapperBox from "../../designSystem/atoms/WrapperBox";
 import { ALL_INVESTMENTS_LANDING } from "businesslogic/strings/portfolio";
@@ -12,6 +12,7 @@ function AllInvestments({ investments, investmentSummary, handleCardClick }) {
   return (
     <Container
       headerProps={{
+        hideInPageTitle: true,
         headerTitle:
           ALL_INVESTMENTS_LANDING.topInvestmentSection.screenTitle.text,
       }}
@@ -71,9 +72,9 @@ function AllInvestments({ investments, investmentSummary, handleCardClick }) {
       </Stack>
       <Box className="card-container">
         {investments?.map((card, index) => (
-          <WrapperBox key={index} elevation={1}>
+          <WrapperBox key={index} elevation={1} className="">
             <PfFeatureCard
-              onClick={() => handleCardClick(card.type)}
+              onClick={() => handleCardClick(card)}
               topImgSrc={card.icon}
               textProps={{
                 title: card.title,
