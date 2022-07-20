@@ -91,7 +91,7 @@ const Journey = (props) => {
       if (config.code === 'moneycontrol') {
         navigate("/");
       } else {
-        navigate("/landing");
+        navigate("/");
       }
       return;
     } else if (!config.Web) {
@@ -651,14 +651,14 @@ const Journey = (props) => {
   if (!isEmpty(kyc) && !isEmpty(user)) {
     if (npsDetailsReq && user.kyc_registration_v2 === 'submitted' && config.isWebOrSdk ) {
       navigate('/nps/identity', {
-        state: { goBack: '/invest' },
+        state: { goBack: '/' },
       })
     } else if (!TRADING_ENABLED &&
       user.kyc_registration_v2 === 'submitted' &&
       kyc.sign_status === 'signed'
     ) {
       navigate('/kyc/report', {
-        state: { goBack: '/invest' },
+        state: { goBack: '/' },
       })
     } else if ((!TRADING_ENABLED &&
       user.kyc_registration_v2 === 'complete' &&
@@ -670,10 +670,10 @@ const Journey = (props) => {
         if (storageService().get("native") && (goBackPath === "exit")) {
           nativeCallback({ action: "exit_web"});
         } else {
-          navigate("/invest");
+          navigate("/");
         }
       } else {
-        navigate('/invest')
+        navigate('/')
       }
     }
   }

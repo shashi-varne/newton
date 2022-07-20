@@ -20,13 +20,13 @@
     />
 */
 
-import { Dialog, Box, Stack } from "@mui/material";
-import Typography from "../../atoms/Typography";
+import { Box, Dialog, Stack } from "@mui/material";
+import PropTypes from "prop-types";
 import React, { useCallback } from "react";
 import Button from "../../atoms/Button";
-import PropTypes from "prop-types";
-import "./BottomSheet.scss";
 import Icon from "../../atoms/Icon";
+import Typography from "../../atoms/Typography";
+import "./BottomSheet.scss";
 
 const BottomSheet = ({
   isOpen,
@@ -54,6 +54,9 @@ const BottomSheet = ({
   imageSrc,
   imageSrcProps,
   children,
+  renderButtonComponent,
+  children,
+  ...restProps
 }) => {
   const handleOnClose = useCallback(
     (event, reason) => {
@@ -74,6 +77,7 @@ const BottomSheet = ({
       disableEscapeKeyDown={disableEscapeKeyDown}
       onBackdropClick={onBackdropClick}
       data-aid={`bottomsheet_${dataAid}`}
+      {...restProps}
     >
       {!!children ? (
         children

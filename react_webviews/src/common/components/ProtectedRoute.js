@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { initData } from "../../kyc/services";
 import isEmpty from "lodash/isEmpty";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
@@ -9,9 +8,11 @@ import { Route } from "react-router-dom";
 import { getUrlParams, storageService } from "../../utils/validators";
 import Toast from "../ui/Toast";
 import { initializeClevertapProfile } from "../../utils/functions";
+import { initData } from "../../business/appLanding/functions";
+import { getKycData } from "../../dashboard/Invest/functions";
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
-  const { isIframe, isMobileDevice } = useMemo(getConfig, []);
+  const { isIframe, isMobileDevice, isSdk } = useMemo(getConfig, []);
   let currentUser = storageService().get("currentUser");
   let user = storageService().getObject("user") || {};
   let kyc = storageService().getObject("kyc") || {};
@@ -47,6 +48,21 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
     initialize();
   }, []);
 
+  const initializeSdkEvents = () => {
+    const kycData = getKycData();
+    const config = getConfig();
+    let eventObj = {
+      event_name: "sdk_launched",
+      properties: {
+        channel: config.code,
+        user_application_status: kycData.applicationStatus,
+        user_investment_status: kycData.isMfInvested,
+        user_kyc_status: kycData.isReadyToInvestBase,
+      },
+    };
+    nativeCallback({ events: eventObj });
+  };
+
   const initialize = async () => {
     if(currentUser && guestLeadId){ // fallback case to remove guestLeadId when user logs in
       storageService().remove('guestLeadId')
@@ -63,6 +79,9 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
     }
     user = storageService().getObject("user")
     initializeClevertapProfile(user);
+    if (isSdk) {
+      initializeSdkEvents();
+    }
   }
 
   return (

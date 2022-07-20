@@ -93,10 +93,10 @@ export const LandingHeaderTitle = ({ children, color, align = "left" }) => {
   return (
     <Typography
       variant="heading1"
-      align={align}
       color={color}
       dataAid="title"
       component="div"
+      align={align}
     >
       {children}
     </Typography>
@@ -130,19 +130,21 @@ export const LandingHeaderPoints = ({
   align = "left",
 }) => {
   return (
-    <ul className="lh-description-list">
-      <li className="lh-description-item">
-        <Typography
-          variant="body2"
-          color={color}
-          align={align}
-          dataAid={`point${dataIdx}`}
-          component="div"
-        >
-          {children}
-        </Typography>
-      </li>
-    </ul>
+    <div style={{ textAlign: align }}>
+      <ul className="lh-description-list">
+        <li className="lh-description-item">
+          <Typography
+            variant="body2"
+            color={color}
+            align="left"
+            dataAid={`point${dataIdx}`}
+            component="div"
+          >
+            {children}
+          </Typography>
+        </li>
+      </ul>
+    </div>
   );
 };
 

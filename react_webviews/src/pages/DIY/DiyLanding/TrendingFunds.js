@@ -11,7 +11,7 @@ import {
   MiddleSlot,
   RightSlot,
 } from '../../../designSystem/molecules/FeatureCard/FeatureCard';
-import { nonRoundingToFixed } from '../../../utils/validators';
+import { capitalize, nonRoundingToFixed } from '../../../utils/validators';
 import isEmpty from 'lodash/isEmpty';
 import SectionHeader from './SectionHeader';
 import Icon from '../../../designSystem/atoms/Icon';
@@ -24,9 +24,10 @@ import {
 import Api from 'utils/api';
 import useLoadingState from '../../../common/customHooks/useLoadingState';
 import { isValidValue } from '../../fundDetailsV2/helperFunctions';
+import Typography from '../../../designSystem/atoms/Typography';
 const screen = 'diyLanding';
 
-const TrendingFunds = ({ config, handleFundDetails, diyType }) => {
+const TrendingFunds = ({ config, handleFundDetails, diyType, isLanding, sx }) => {
   const isMobileDevice = config.isMobileDevice;
   const trendingFunds = useSelector((state) => getTrendingFundsByCategory(state, diyType));
   const dispatch = useDispatch();
@@ -41,10 +42,10 @@ const TrendingFunds = ({ config, handleFundDetails, diyType }) => {
   }
 
   return (
-    <Stack direction='column' spacing={2} className='diy-c-trending-wrapper'>
+    <Stack direction='column' spacing={2} className='diy-c-trending-wrapper' sx={sx}>
       <SectionHeader sx={{ pl: 2, pr: 2 }} title='Trending' dataAid='trending' />
       <CustomSwiper
-        slidesPerView={isMobileDevice ? 1 : 2}
+        slidesPerView={isLanding ? "auto": isMobileDevice ? 1 : 2}
         slidesPerColumn={1}
         slidesPerGroup={1}
         spaceBetween={10}
@@ -61,55 +62,28 @@ const TrendingFunds = ({ config, handleFundDetails, diyType }) => {
                 </SwiperSlide>
               );
             })
-          : trendingFunds?.map((trendingFund, idx) => (
-              <SwiperSlide key={idx} style={{ padding: '1px 0px' }}>
-                <WrapperBox elevation={1} onClick={handleFundDetails(trendingFund)}>
+          : trendingFunds?.map((trendingFund, idx) => {
+            const { leftProps, rightProps, middleProps } =
+              getFeatureCardData(trendingFund, diyType, isLanding);
+            return (
+              <SwiperSlide key={idx} style={{ padding: "1px 0px" }}>
+                <WrapperBox
+                  elevation={1}
+                  onClick={handleFundDetails(trendingFund)}
+                >
                   <FeatureCard
                     dataAid={idx + 1}
                     topLeftImgSrc={trendingFund?.amc_logo_small}
                     heading={trendingFund?.legal_name}
                   >
-                    <LeftSlot
-                      description={{
-                        title: '3 Year Return',
-                        titleColor: 'foundationColors.content.secondary',
-                        subtitle: !trendingFund?.three_year_return
-                          ? 'NA'
-                          : trendingFund?.three_year_return > 0
-                          ? `+ ${nonRoundingToFixed(trendingFund?.three_year_return, 2)}%`
-                          : `- ${nonRoundingToFixed(trendingFund?.three_year_return, 2)}%`,
-                        subtitleColor: !trendingFund?.three_year_return
-                          ? 'foundationColors.content.secondary'
-                          : 'foundationColors.secondary.profitGreen.400',
-                      }}
-                    />
-                    {trendingFund?.aum && (
-                      <MiddleSlot
-                        description={{
-                          title: 'Total AUM',
-                          titleColor: 'foundationColors.content.secondary',
-                          subtitle: isValidValue(trendingFund?.aum,`₹ ${trendingFund?.aum}`),
-                          subtitleColor: !trendingFund?.aum && 'foundationColors.content.secondary',
-                        }}
-                      />
-                    )}
-                    <RightSlot
-                      description={{
-                        title: 'Invested by',
-                        titleColor: 'foundationColors.content.secondary',
-                        leftImgSrc: require('assets/small_heart.svg'),
-                        subtitle: trendingFund?.purchase_percent
-                          ? `${trendingFund?.purchase_percent}% users`
-                          : 'NA',
-                        subtitleColor: trendingFund?.purchase_percent
-                          ? 'foundationColors.secondary.coralOrange.400'
-                          : 'foundationColors.content.secondary',
-                      }}
-                    />
+                    <LeftSlot {...leftProps} />
+                    {(trendingFund?.aum || isLanding) && <MiddleSlot {...middleProps} />}
+                    <RightSlot {...rightProps} />
                   </FeatureCard>
                 </WrapperBox>
               </SwiperSlide>
-            ))}
+            );
+          })}
       </CustomSwiper>
     </Stack>
   );
@@ -144,4 +118,89 @@ const TrendingSkeletonLoader = () => {
       </Stack>
     </Stack>
   );
+};
+
+const RightTitle = ({ returns }) => (
+  <div className="diy-tw-right-content">
+    <div className="diy-tw-rc-returns">
+      {!returns
+        ? "NA"
+        : returns > 0
+        ? `+ ${nonRoundingToFixed(returns, 2)}%`
+        : `- ${nonRoundingToFixed(returns, 2)}%`}
+    </div>
+    <Typography component="div" className="diy-tw-rc-text" variant="body2">
+      in 5 years
+    </Typography>
+  </div>
+);
+
+const getFeatureCardData = (trendingFund, diyType, isLanding) => {
+  if (isLanding) {
+    const leftProps = {
+      tag: {
+        label: capitalize(diyType),
+      },
+    };
+    const middleProps = {
+      tag: {
+        morningStarVariant: "small",
+        label: trendingFund?.morning_star_rating,
+        labelColor: "foundationColors.content.secondary",
+      },
+    };
+    const rightProps = {
+      title: <RightTitle returns={trendingFund?.five_year_return} />,
+      titleColor: !trendingFund?.five_year_return
+        ? "foundationColors.content.secondary"
+        : "foundationColors.secondary.profitGreen.400",
+    };
+    return {
+      leftProps,
+      middleProps,
+      rightProps,
+    };
+  } else {
+    const leftProps = {
+      description: {
+        title: "3 Year Return",
+        titleColor: "foundationColors.content.secondary",
+        subtitle: !trendingFund?.three_year_return
+          ? "NA"
+          : trendingFund?.three_year_return > 0
+          ? `+ ${nonRoundingToFixed(trendingFund?.three_year_return, 2)}%`
+          : `- ${nonRoundingToFixed(trendingFund?.three_year_return, 2)}%`,
+        subtitleColor: !trendingFund?.three_year_return
+          ? "foundationColors.content.secondary"
+          : "foundationColors.secondary.profitGreen.400",
+      },
+    };
+    const middleProps = {
+      description: {
+        title: "Total AUM",
+        titleColor: "foundationColors.content.secondary",
+        subtitle: isValidValue(trendingFund?.aum, `₹ ${trendingFund?.aum}`),
+        subtitleColor:
+          !trendingFund?.aum && "foundationColors.content.secondary",
+      },
+    };
+    const rightProps = {
+      description: {
+        title: "Invested by",
+        titleColor: "foundationColors.content.secondary",
+        leftImgSrc: require("assets/small_heart.svg"),
+        subtitle: trendingFund?.purchase_percent
+          ? `${trendingFund?.purchase_percent}% users`
+          : "NA",
+        subtitleColor: trendingFund?.purchase_percent
+          ? "foundationColors.secondary.coralOrange.400"
+          : "foundationColors.content.secondary",
+      },
+    };
+    return {
+      leftProps,
+      middleProps,
+      rightProps,
+    };
+  }
 };

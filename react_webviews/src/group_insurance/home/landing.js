@@ -43,12 +43,12 @@ class Landing extends Component {
     window.sessionStorage.setItem('group_insurance_payment_url', '');
     
     let insuranceProducts = [
-      {
-        key: 'LIFE_INSURANCE',
-        title: 'Life Insurance',
-        subtitle: 'Must have plans for your family',
-        icon: 'icn_life insurance'
-      },
+      // {
+      //   key: 'LIFE_INSURANCE',
+      //   title: 'Life Insurance',
+      //   subtitle: 'Must have plans for your family',
+      //   icon: 'icn_life insurance'
+      // },
       {
         key: 'HEALTH_INSURANCE',
         title: 'Health Insurance',

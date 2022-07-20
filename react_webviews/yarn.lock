@@ -5987,7 +5987,7 @@ builtin-status-codes@^3.0.0:
 
 "businesslogic@git+https://fdamitsingh:EafwBATbn2DqxeV7KhsN@bitbucket.org/finwizardtech/businesslogic.git#master":
   version "1.0.0"
-  resolved "git+https://fdamitsingh:EafwBATbn2DqxeV7KhsN@bitbucket.org/finwizardtech/businesslogic.git#0ebf2d7e5a8d6af9b575364e770cdcfb29ab7d30"
+  resolved "git+https://fdamitsingh:EafwBATbn2DqxeV7KhsN@bitbucket.org/finwizardtech/businesslogic.git#9253a37f8b6eb7d7dc7a9dd29adc6d4911235dc3"
   dependencies:
     "@reduxjs/toolkit" "^1.7.2"
     date-fns "^2.28.0"

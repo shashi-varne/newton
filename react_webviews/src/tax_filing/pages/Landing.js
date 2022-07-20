@@ -31,6 +31,7 @@ import useResetTakeControl from '../hooks/useResetTakeControl'
 import useBackButtonTracker from '../hooks/useBackButtonTracker'
 
 import './Landing.scss'
+import { landingEntryPoints } from '../../utils/constants'
 
 function Landing(props) {
   const stateParams = props.location.state || {}
@@ -87,6 +88,9 @@ function Landing(props) {
     clearITRSessionStorage()
     if(stateParams.fromState === "/reports") {
       navigate("/reports");
+      return;
+    } else if (landingEntryPoints.includes(stateParams.fromState)) {
+      props.history.goBack();
       return;
     }
     nativeCallback({ action: 'exit', events: sendEvents('back') })
@@ -190,7 +194,7 @@ function Landing(props) {
               <WVListItem
                 iconSrc={require(`assets/${productName}/${icon}.svg`)}
                 title={
-                  type === "free" ? <CustomTitle title={title} /> : title
+                  type === "eCA" ? <CustomTitle title={title} /> : title
                 }
                 subtitle={subtitle}
                 classes={{ container: "pointer row-reverse" }}
@@ -252,7 +256,7 @@ const CustomTitle = ({ title }) => {
       <div className="heading3-medium">{title}</div>
       <WVTag
         variant="attention"
-        content="free"
+        content="upto 35% off"
         dataAidSuffix="tax2win-free-tag"
         classes={{ container: 'align-self-start m-left-1x' }}
       />

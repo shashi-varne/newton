@@ -1,12 +1,29 @@
 .info-card-wrapper {
   display: flex;
   flex-direction: row;
+  align-items: center;
   border-radius: 12px;
   cursor: pointer;
   padding: 16px;
 
   .info-card-left-img {
     margin-right: 16px;
+  }
+
+  .ic-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+    .ic-label-wrapper {
+      display: flex;
+      align-items: center;
+
+      .ic-right-img {
+        margin-left: 6px;
+      }
+    }
   }
 
   .ic-text-wrapper {
@@ -16,5 +33,10 @@
     .ic-subtitle-text {
       margin-top: 4px;
     }
+  }
+  .ic-right-label {
+    flex-grow: 1;
+    padding-left: "8px";
+    gap: "6px";
   }
 }

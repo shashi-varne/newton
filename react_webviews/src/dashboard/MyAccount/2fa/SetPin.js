@@ -67,7 +67,7 @@ const SetPin = (props) => {
 
   const handleYes = () => {
     sendEvents("back");
-    navigate("/invest");
+    navigate("/");
   }
 
   return (

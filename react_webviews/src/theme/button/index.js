@@ -35,6 +35,7 @@ export const buttonVariantsConfig = (colors={}, partnerConfig={}) => {
       props: { size: 'small' },
       style: {
         height: '37px',
+        minHeight: "37px",
         width: 'max-content',
         paddingLeft: '16px',
         paddingRight: '16px'
@@ -110,6 +111,25 @@ export const buttonVariantsConfig = (colors={}, partnerConfig={}) => {
         },
         '.MuiTouchRipple-root': {
           color: colors?.supporting?.white
+        },
+      },
+    },
+    {
+      props: { variant: 'outlined' },
+      style: {
+        ...typographyVariants.actionText,
+        color: colors?.action?.brand,
+        borderColor: colors?.action?.brand,
+        borderRadius: partnerConfig?.button?.borderRadius || 12,
+        minHeight: '48px',
+        '&:hover': {
+          color: colors?.action?.brand,
+          backgroundColor: colors?.action[200]
+        },
+        '&.Mui-disabled': {
+          backgroundColor: 'transparent',
+          color: colors?.supporting?.athensGrey,
+          borderColor: colors?.supporting?.athensGrey,
         },
       },
     },

@@ -13,7 +13,7 @@ const options = [
   { name: "Driving license", value: "dl" },
   { name: "Utility Bill", value: "utilitybill" },
   { name: "Bank Statement", value: "bankstatement" },
-  { name: "Aadhaar card", value: "aadhar" },
+  // { name: "Aadhaar card", value: "aadhar" },
   { name: "Voter ID", value: "voterid" }
 ];
 

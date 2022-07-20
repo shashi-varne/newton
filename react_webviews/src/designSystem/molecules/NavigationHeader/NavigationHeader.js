@@ -2,9 +2,18 @@ import { Box } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import backIcon from "assets/nav_back.svg";
 import closeIcon from "assets/nav_close.svg";
+import { getPartner } from "businesslogic/dataStore/reducers/app";
 import isEmpty from "lodash/isEmpty";
 import PropTypes from "prop-types";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import {
+  default as React,
+  default as React,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { useSelector } from "react-redux";
 import ReferDialog from "../../../desktopLayout/ReferralDialog";
 import { getConfig } from "../../../utils/functions";
 import { storageService } from "../../../utils/validators";
@@ -36,6 +45,7 @@ const NavigationHeader = ({
   headerSx,
   dataAid,
 }) => {
+  const partner = useSelector(getPartner);
   const navHeaderWrapperRef = useRef();
   const subtitleRef = useRef();
   const inPageTitleRef = useRef();
@@ -114,7 +124,7 @@ const NavigationHeader = ({
               <Icon src={leftIcon} size="24px" dataAid="left" />
             </IconButton>
           )}
-          {!hideHeaderTitle && (
+          {!hideHeaderTitle && !showPartnerLogo && (
             <Typography
               className={`nav-header-title ${hideLeftIcon && "nav-header-lm"} ${
                 hideInPageTitle && "show-nav-title"
@@ -125,6 +135,13 @@ const NavigationHeader = ({
             >
               {headerTitle}
             </Typography>
+          )}
+          {showPartnerLogo && (
+            <Icon
+              dataAid="logo"
+              src={require(`assets/${logo}`)}
+              className={`nav-bar-logo ${hideLeftIcon && "nav-header-lm"}`}
+            />
           )}
         </div>
         <div className="nav-header-right">
