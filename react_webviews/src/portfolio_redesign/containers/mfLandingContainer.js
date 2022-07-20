@@ -102,6 +102,7 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
   if (statusCode === MF_PORTFOLIO_LANDING_STATUS_CODE.kycPending) {
     return (
       <InfoAction
+        pageTitle="Mutual funds"
         eventName={"main_portfolio"}
         screenName=""
         dataAidSuffix={"noInvestments"}
@@ -115,6 +116,7 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
   } else if (statusCode === MF_PORTFOLIO_LANDING_STATUS_CODE.firstInvestment) {
     return (
       <InfoAction
+        pageTitle="Mutual funds"
         eventName={"main_portfolio"}
         screenName="updating shortly"
         dataAidSuffix={"updatingShortly"}
@@ -128,6 +130,8 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
   } else if (statusCode === MF_PORTFOLIO_LANDING_STATUS_CODE.noInvestment) {
     return (
       <InfoAction
+        pageTitle="Mutual funds"
+        eventName={"main_portfolio"}
         dataAidSuffix={"updatingShortly"}
         topImgSrc={require("assets/portfolio_no_investment.svg")}
         title="No investments yet!"
@@ -146,13 +150,14 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
   ) {
     return (
       <InfoAction
-        disableInPageTitle={true}
+        pageTitle="Mutual funds"
+        disableInPageTitle={false}
         eventName={"main_portfolio"}
         screenName="no active investments"
         dataAidSuffix={"noInvestment"}
         topImgSrc={require("assets/portfolio_no_investment.svg")}
         title="No active investments"
-        // externalPfCardData={externalPfCardData}
+        externalPfData={externalPfCardData}
         isRedeemUser={true}
         handleOption={handleOption}
         subtitle="It seems you’ve redeemed all your investments due to which you’re not able to view them here"

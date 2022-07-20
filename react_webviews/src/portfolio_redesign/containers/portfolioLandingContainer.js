@@ -22,6 +22,7 @@ import InfoAction, {
   INFO_ACTION_VARIANT,
 } from "../screens/InfoAction/InfoAction";
 import { PORTFOLIO_LANDING_STATUS_CODES } from "businesslogic/constants/portfolio";
+import { getConfig } from "../../utils/functions";
 
 const screen = "PortfolioLanding";
 
@@ -35,7 +36,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
   const { kyc, isLoading, user } = useUserKycHook();
   const { isPageLoading } = useLoadingState(screen);
   const allocationDetails = getAllocationDetails(state);
-  const statusCode = 200; // getPortfolioStatusCode(state);
+  const statusCode = getPortfolioStatusCode(state);
   const assetWiseData = allocationDetails?.asset_allocation;
   const productWiseData = allocationDetails?.product_allocation;
   const eventRef = useRef({
@@ -56,8 +57,13 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
     showErrorBox: false,
     errorVariant: "",
   });
-
+  const checkIfOnlyMf = () => {
+    if (isEmpty(getConfig().features)) {
+      navigate("/portfolio/mf-landing");
+    }
+  };
   useEffect(() => {
+    checkIfOnlyMf();
     init();
     if (
       statusCode === PORTFOLIO_LANDING_STATUS_CODES.downtime ||
@@ -146,6 +152,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
   if (statusCode === PORTFOLIO_LANDING_STATUS_CODES.kycPending) {
     return (
       <InfoAction
+        pageTitle="Portfolio"
         eventName={"main_portfolio"}
         screenName=""
         dataAidSuffix={"noInvestments"}
@@ -159,6 +166,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
   } else if (statusCode === PORTFOLIO_LANDING_STATUS_CODES.noInvestment) {
     return (
       <InfoAction
+        pageTitle="Portfolio"
         eventName={"main_portfolio"}
         dataAidSuffix={"noInvestment"}
         screenName="no investments yet"
@@ -172,6 +180,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
   } else if (statusCode === PORTFOLIO_LANDING_STATUS_CODES.firstInvestment) {
     return (
       <InfoAction
+        pageTitle="Portfolio"
         eventName={"main_portfolio"}
         screenName="updating shortly"
         dataAidSuffix={"updatingShortly"}
