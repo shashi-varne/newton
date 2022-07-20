@@ -11,10 +11,11 @@ import { resetDiyData } from "businesslogic/dataStore/reducers/diy";
 import { resetMfOrders } from "businesslogic/dataStore/reducers/mfOrders";
 import { resetAppData } from "businesslogic/dataStore/reducers/app";
 import { resetFundDetails } from "businesslogic/dataStore/reducers/fundDetails";
+import { resetPortfolioV2 } from "businesslogic/dataStore/reducers/portfolioV2";
 
 const config = getConfig();
 const Logout = (props) => {
-  const navigate = navigateFunc.bind(props); 
+  const navigate = navigateFunc.bind(props);
   const isRM = isRmJourney();
   const dispatch = useDispatch();
   useEffect(() => {
@@ -26,11 +27,12 @@ const Logout = (props) => {
     dispatch(resetMfOrders());
     dispatch(resetFundDetails());
     dispatch(resetAppData());
+    dispatch(resetPortfolioV2());
     persistor.purge();
-    if (window.clevertap) {
-      window.clevertap.logout();
-      window.clevertap.profile= [];
-    }
+    // if (window.clevertap) {
+    //   window.clevertap.logout();
+    //   window.clevertap.profile= [];
+    // }
     if (config.Web) {
       storageService().clear();
       if (config.isIframe) {
@@ -41,18 +43,22 @@ const Logout = (props) => {
         return;
       }
       try {
-        if(!isRM){
+        if (!isRM) {
           await logout();
         }
       } catch (err) {
         console.log(err);
       } finally {
-        if(isRM) {
-          navigate("/rm-login")  
+        if (isRM) {
+          navigate("/rm-login");
         } else {
-          setTimeout(() => navigate("/login", {
-            searchParams: `base_url=${config.base_url}`
-          }), 2000);
+          setTimeout(
+            () =>
+              navigate("/login", {
+                searchParams: `base_url=${config.base_url}`,
+              }),
+            2000
+          );
         }
       }
     } else {
