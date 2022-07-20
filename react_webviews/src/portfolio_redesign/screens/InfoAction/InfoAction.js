@@ -18,6 +18,7 @@ import useUserKycHook from "../../../kyc/common/hooks/userKycHook";
 import ExternalPortfolioCard from "../../mutualFund/ExternalPortfolioCard";
 import WrapperBox from "../../../designSystem/atoms/WrapperBox";
 import OptionsGrid from "../../mutualFund/OptionsGrid";
+import { isEmpty } from "lodash-es";
 
 export const INFO_ACTION_VARIANT = {
   WITH_ACTION: "WITH_ACTION",
@@ -32,8 +33,8 @@ function InfoAction({
   dataAidSuffix = "",
   handleOption,
   eventName,
-  externalPfCardData,
-  disableInPageTitle,
+  externalPfData,
+  hideInPageTitle = true,
   screenName,
   isRedeemUser,
   topImgSrc,
@@ -114,7 +115,7 @@ function InfoAction({
     <Container
       headerProps={{
         headerTitle: pageTitle,
-        hideInPageTitle: disableInPageTitle || false,
+        hideInPageTitle: hideInPageTitle,
         backgroundColor: "foundationColors.primary.600",
         color: "foundationColors.supporting.white",
       }}
@@ -145,21 +146,21 @@ function InfoAction({
           onClick={handleCta}
         />
 
-        {isRedeemUser && (
+        {!isEmpty(externalPfData) && (
           <>
             <WrapperBox className={"external-card-wrapper"} elevation={1}>
-              <ExternalPortfolioCard data={externalPfCardData} />
+              <ExternalPortfolioCard data={externalPfData} />
             </WrapperBox>
-            <OptionsGrid handleOption={handleOption} />
           </>
         )}
+        {isRedeemUser && <OptionsGrid handleOption={handleOption} />}
       </Stack>
       <BottomSheet
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         onBackdropClick={() => setIsOpen(false)}
       >
-        <ReturnCalculator sendEvents={sendEvents} />
+        <ReturnCalculator screenType={eventName} sendEvents={sendEvents} />
       </BottomSheet>
     </Container>
   );

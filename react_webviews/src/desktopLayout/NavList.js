@@ -98,10 +98,10 @@ let data = [
     path: "/logout",
   },
   {
-    id: "logout",
+    id: "portfolio",
     name: "Portfolio",
     icon: logout,
-    path: "/portoflio",
+    path: "/portfolio",
   },
 ];
 

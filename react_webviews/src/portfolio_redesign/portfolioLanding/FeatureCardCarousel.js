@@ -9,7 +9,6 @@ import { ALL_INVESTMENTS_LANDING } from "businesslogic/strings/portfolio";
 
 const config = getConfig();
 function FeatureCardCarousel({ investments, handleFeatureCard }) {
-  console.log("inn", investments);
   return (
     <CustomSwiper
       spaceBetween={8}

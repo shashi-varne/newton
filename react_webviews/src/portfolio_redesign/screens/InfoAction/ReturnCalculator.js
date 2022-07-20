@@ -1,5 +1,5 @@
 import { Box } from "@mui/system";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Typography from "designSystem/atoms/Typography";
 import { RETURN_CALCULATOR } from "businesslogic/strings/portfolio";
 import Tooltip, { TOOLTIP_PLACEMENTS } from "designSystem/atoms/Tooltip";
@@ -18,15 +18,21 @@ import { Stack } from "@mui/material";
 import Icon from "../../../designSystem/atoms/Icon";
 import Button from "../../../designSystem/atoms/Button";
 import { formatAmount, numDifferentiation } from "../../../utils/validators";
+import { ReturnCalculatorDefaultValues } from "businesslogic/constants/portfolio";
+
 const PILL_LIST = [
   { label: "Mutual Funds", dataAid: "mutualFunds" },
   { label: "Stocks", dataAid: "stocks" },
 ];
 
-function ReturnCalculator({ sendEvents }) {
+function ReturnCalculator({ sendEvents, screenType }) {
   const [pillReturnValue, setPillReturnValue] = useState(0);
-  const [sliderValue, setSliderValue] = useState(0);
-  const [investmentPeriod, setInvestmentPeriod] = useState(1);
+  const [sliderValue, setSliderValue] = useState(
+    ReturnCalculatorDefaultValues.sliderValue
+  );
+  const [investmentPeriod, setInvestmentPeriod] = useState(
+    ReturnCalculatorDefaultValues.selectedYear
+  );
   const [returnResult, setReturnResult] = useState({});
   const [investmentType, setInvestmentType] = useState("mutual_funds");
   const handleSliderChange = (e, val) => {
@@ -34,6 +40,11 @@ function ReturnCalculator({ sendEvents }) {
     setSliderValue(val);
     calculateReturn(val, investmentPeriod, investmentType);
   };
+
+  useEffect(() => {
+    const type = pillReturnValue === 1 ? "stocks" : "mutual_funds";
+    calculateReturn(sliderValue, investmentPeriod, type);
+  }, []);
 
   const calculateReturn = (investedVal, investmentPeriod, investmentType) => {
     const returnResult = getEstimatedReturn(
@@ -71,26 +82,31 @@ function ReturnCalculator({ sendEvents }) {
       >
         {RETURN_CALCULATOR.sheetTitle.text}
       </Typography>
-      <Box>
-        <Pills value={pillReturnValue} onChange={handlePillChange}>
-          {PILL_LIST?.map((el, idx) => {
-            return <Pill key={idx} {...el} />;
-          })}
-        </Pills>
+      {screenType !== "main_portfolio" && (
+        <Box>
+          <Pills value={pillReturnValue} onChange={handlePillChange}>
+            {PILL_LIST?.map((el, idx) => {
+              return <Pill key={idx} {...el} />;
+            })}
+          </Pills>
+        </Box>
+      )}
+
+      <Box className={screenType === "main_portfolio" && "no-pills"}>
+        <Typography
+          variant="heading2"
+          color="foundationColors.content.primary"
+          dataAid={RETURN_CALCULATOR.amount.dataAid}
+          className="invested-value"
+        >
+          {formatAmountInr(sliderValue)}
+        </Typography>
       </Box>
-      <Typography
-        variant="heading2"
-        color="foundationColors.content.primary"
-        dataAid={RETURN_CALCULATOR.amount.dataAid}
-        className="invested-value"
-      >
-        {formatAmountInr(sliderValue)}
-      </Typography>
       <Box className="return-slider">
         <Slider
-          min={0}
-          max={100000}
-          step={500}
+          min={ReturnCalculatorDefaultValues.sliderMinValue}
+          max={ReturnCalculatorDefaultValues.sliderMaxValue}
+          step={12}
           onChange={handleSliderChange}
           sliderValue={sliderValue}
           dataAidSuffix={RETURN_CALCULATOR.slider.dataAid}

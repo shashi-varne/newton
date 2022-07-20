@@ -5,6 +5,7 @@ import Button from "../../designSystem/atoms/Button";
 import { Pill, Pills } from "../../designSystem/atoms/Pills";
 import ProgressBar from "../../designSystem/atoms/ProgressBar";
 import Typography from "../../designSystem/atoms/Typography";
+import { capitalize } from "../../utils/validators";
 import InvestmentCard from "./InvestmentCard";
 
 function AllocationDetailsTabItem({
@@ -84,7 +85,7 @@ function AllocationDetailsTabItem({
             color={"foundationColors.content.secondary"}
             dataAid="title"
           >
-            No entries
+            No {capitalize(currentPill)}
           </Typography>
         </Box>
       )}
