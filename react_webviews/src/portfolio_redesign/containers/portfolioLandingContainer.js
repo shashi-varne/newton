@@ -140,6 +140,9 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
     navigate("/group-insurance");
   };
 
+  if (isPageLoading) {
+    return <UiSkelton type="g" />;
+  }
   if (statusCode === PORTFOLIO_LANDING_STATUS_CODES.kycPending) {
     return (
       <InfoAction
@@ -182,10 +185,6 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
   }
   if (statusCode === PORTFOLIO_LANDING_STATUS_CODES.mfFailed) {
     return <SomethingsWrong onClickCta={init} />;
-  }
-
-  if (isPageLoading) {
-    return <UiSkelton type="g" />;
   }
 
   return (
