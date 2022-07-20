@@ -26,10 +26,11 @@ import {
   triggerAocPayment,
   validateAocPaymentAndRedirect,
 } from "../common/functions";
-import { getAccountSummary } from "../../services";
 
 import "./PaymentStatus.scss";
 import ConfirmBackDialog from "../../mini-components/ConfirmBackDialog";
+import { getAccountSummary } from "businesslogic/apis/common";
+import Api from "../../../utils/api";
 
 const initializePaymentStatusData = () => {
   const { status, message = "" } = getUrlParams();
@@ -93,7 +94,7 @@ const PaymentStatus = (props) => {
     try {
       setShowSkelton(true);
       setErrorData({});
-      const result = await getAccountSummary({
+      const result = await getAccountSummary(Api, {
         user: ["user"],
         kyc: ["kyc"],
       });

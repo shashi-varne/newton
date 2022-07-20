@@ -18,8 +18,8 @@ import isEmpty from "lodash/isEmpty";
 
 const LoginContainer = (props) => {
   const config = getConfig();
-  const { productName, logo, webLogo } = config;
-  const navLogo = !isEmpty(webLogo) ? webLogo : logo;
+  const { productName, logo, navLogo, navLogoClassname } = config;
+  const navbarLogo = !isEmpty(navLogo) ? navLogo : logo;
   const { match: { url }, location } = props;
   const pathName = url.split('/')[1];
   const navigate = navigateFunc.bind(props);
@@ -28,10 +28,11 @@ const LoginContainer = (props) => {
     <div className="login" data-aid='login'>
       <div className="header">
         <img
-          src={require(`assets/${navLogo}`)}
+          src={require(`assets/${navbarLogo}`)}
           alt={productName}
           style={{ cursor: 'pointer' }}
           onClick={() => navigate('/login')}
+          className={navLogoClassname}
         />
       </div>
       <div className="login-details">

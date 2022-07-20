@@ -47,7 +47,7 @@ let data = [
     id: "invest",
     name: "Invest",
     icon: invest,
-    path: "/invest",
+    path: '/',
   },
   // {
   //   id: 'loans',
@@ -83,6 +83,7 @@ let data = [
     id: "refer",
     name: "Refer & Earn",
     icon: refer,
+    path: '/refer-and-earn/landing',
   },
   {
     id: "writeToUs",
@@ -109,13 +110,14 @@ const NavList = (props) => {
   const productName = config.productName;
   const isMobileDevice = config.isMobileDevice;
   const partnerLoan = config?.features?.loan;
-  const showReferral = config?.referralConfig?.shareRefferal;
   const navigate = navigateFunc.bind(props);
   const [referDialog, setReferDialog] = useState(false);
   const [activePath, setActivePath] = useState("");
   const [kycStatus, setKycStatus] = useState("");
   const kyc = storageService().getObject("kyc") || {};
   const user = storageService().getObject("user") || {};
+  const showReferral = config?.referralConfig?.shareRefferal && user?.referral_campaign_status === "active";
+
   const isReadyToInvestBase = isReadyToInvest();
   const TRADING_ENABLED = useMemo(() => {
     return isTradingEnabled(kyc);
@@ -136,20 +138,17 @@ const NavList = (props) => {
   const handleRefferalModal = () => {
     setReferDialog(!referDialog);
   };
-  const handleClick =
-    ({ path, id }) =>
-    () => {
-      setActivePath(id);
-      if (id === "register") {
-        if (user.kyc_registration_v2 === "init") {
-          path = "/kyc/home";
-        } else if (user.kyc_registration_v2 !== "complete") {
-          path = "/kyc/journey";
-        } else if (user.active_investment) {
-          path = "/reports";
-        } else {
-          path = "/invest";
-        }
+  const handleClick = ({ path, id }) => () => {
+    setActivePath(id);
+    if(id === 'register'){
+      if (user.kyc_registration_v2 === "init") {
+        path = "/kyc/home";
+      } else if (user.kyc_registration_v2 !== "complete") {
+        path = "/kyc/journey";
+      } else if (user.active_investment) {
+        path = "/reports";
+      } else {
+        path = "/";
       }
       if (path) {
         navigate(path);

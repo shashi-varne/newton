@@ -22,7 +22,7 @@ const GoldHomeClosure = (props) => {
       nativeCallback({ action: "exit_web" });
     } else {
       props.history.push({
-        pathname: "/invest",
+        pathname: "/",
         search: props.location.search
       });
     }

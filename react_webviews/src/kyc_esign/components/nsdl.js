@@ -15,8 +15,8 @@ import { isDigilockerFlow } from "../../kyc/common/functions";
 import { getBasePath, isTradingEnabled, navigate as navigateFunc } from "../../utils/functions";
 import kycComplete from 'assets/kyc_complete.svg';
 import { openModule } from "../../utils/native_callback";
-import EtfConsentModal from "./EtfConsentModal";
-import EtfTermsAndCond from "./EtfTermsAndCond";
+// import EtfConsentModal from "./EtfConsentModal";
+// import EtfTermsAndCond from "./EtfTermsAndCond";
 
 class DigiStatus extends Component {
   constructor(props) {
@@ -25,8 +25,8 @@ class DigiStatus extends Component {
       show_loader: false,
       productName: getConfig().productName,
       params: getUrlParams(),
-      openEtfConsentModal: false,
-      openEtfTermsModal: false,
+      // openEtfConsentModal: false,
+      // openEtfTermsModal: false,
       skelton: true,
     };
 
@@ -59,12 +59,12 @@ class DigiStatus extends Component {
         this.setState({ set2faPin: true })
       }
 
-      if (
-        kyc.etf_consent === 'not given' &&
-        kyc.kyc_product_type === 'equity'
-      ) {
-        this.setState({ getEtfConsent: true })
-      }
+      // if (
+      //   kyc.etf_consent === 'not given' &&
+      //   kyc.kyc_product_type === 'equity'
+      // ) {
+      //   this.setState({ getEtfConsent: true })
+      // }
 
       if (
         user.kyc_registration_v2 === "submitted" &&
@@ -86,9 +86,9 @@ class DigiStatus extends Component {
   };
 
   handleClick = () => {
-    if (this.state.getEtfConsent) {
-      return this.setState({ openEtfConsentModal: true });
-    }
+    // if (this.state.getEtfConsent) {
+    //   return this.setState({ openEtfConsentModal: true });
+    // }
 
     const { dl_flow, show_note } = this.state;
     const config = getConfig();
@@ -126,7 +126,7 @@ class DigiStatus extends Component {
     if (config.isNative) {
       nativeCallback({ action: 'exit_web' });
     } else {
-      this.navigate("/invest");
+      this.navigate("/");
     }
   }
 
@@ -213,25 +213,25 @@ class DigiStatus extends Component {
     }
   };
 
-  onEtfModalClose = (openTnC) => {
-    this.setState({
-      openEtfConsentModal: false,
-      openEtfTermsModal: openTnC
-    });
-  }
+  // onEtfModalClose = (openTnC) => {
+  //   this.setState({
+  //     openEtfConsentModal: false,
+  //     openEtfTermsModal: openTnC
+  //   });
+  // }
 
-  onEtfConsentUpdate = () => {
-    this.setState({
-      getEtfConsent: false,
-      openEtfConsentModal: false
-    }, () => {
-      this.handleClick();
-    });
-  }
+  // onEtfConsentUpdate = () => {
+  //   this.setState({
+  //     getEtfConsent: false,
+  //     openEtfConsentModal: false
+  //   }, () => {
+  //     this.handleClick();
+  //   });
+  // }
 
-  onEtfTermsModalClose = () => {
-    this.setState({ openEtfTermsModal: false, openEtfConsentModal: true });
-  }
+  // onEtfTermsModalClose = () => {
+  //   this.setState({ openEtfTermsModal: false, openEtfConsentModal: true });
+  // }
 
   sendEvents = (userAction, screenName) => {
     let kyc = this.state.kyc;
@@ -261,9 +261,9 @@ class DigiStatus extends Component {
       kyc,
       set2faPin,
       productName,
-      getEtfConsent,
-      openEtfTermsModal,
-      openEtfConsentModal,
+      // getEtfConsent,
+      // openEtfTermsModal,
+      // openEtfConsentModal,
       params: { status = 'failed' }
     } = this.state;
 
@@ -275,7 +275,7 @@ class DigiStatus extends Component {
     let buttonText = 'HOME';
     if (status !== 'success') {
       buttonText = 'RETRY E-SIGN';
-    } else if (set2faPin || getEtfConsent) {
+    } else if (set2faPin) {
       buttonText = 'CONTINUE';
     } else if (dl_flow && !show_note) {
       buttonText = 'START INVESTING';
@@ -307,7 +307,7 @@ class DigiStatus extends Component {
             <ContactUs />
           </Fragment>
         )}
-        <EtfConsentModal
+        {/* <EtfConsentModal
           open={openEtfConsentModal}
           onClose={this.onEtfModalClose}
           onConsentUpdate={this.onEtfConsentUpdate}
@@ -315,7 +315,7 @@ class DigiStatus extends Component {
         <EtfTermsAndCond
           open={openEtfTermsModal}
           onClose={this.onEtfTermsModalClose}
-        />
+        /> */}
       </Container>
     );
   }

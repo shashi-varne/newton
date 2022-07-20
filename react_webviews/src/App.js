@@ -26,6 +26,8 @@ import store, { persistor } from "./dataLayer/store/index.js";
 import { PersistGate } from "redux-persist/integration/react";
 import LoginContainer from "./login_and_registration/components/LoginContainer";
 import Logout from "./login_and_registration/pages/Logout/Logout";
+import AppInitialization from "./common/components/AppInitialization";
+import { nativeCallback } from "./utils/native_callback";
 
 const Prepare = lazy(() =>
   import(
@@ -113,6 +115,7 @@ const App = () => {
     window.location.pathname.includes("pg/eq") ||
     isDietEnabled;
   useEffect(() => {
+    initializeSdkData();
     if (config.isSdk || config.isIframe) {
       storageService().set("entry_path", window.location.pathname);
     }
@@ -123,6 +126,13 @@ const App = () => {
       getConfig().code
     );
   }, []);
+
+
+  const initializeSdkData = () => {
+    if (config.isSdk && config.Android) {
+      nativeCallback({ action: "get_data" });
+    }
+  };
 
   const updateAppTheme = (event) => {
     const oldPartnerCode = eventManager.get(
@@ -146,6 +156,7 @@ const App = () => {
               <ErrorBoundary>
                 <Suspense fallback={<BootSkeleton />}>
                   <Tooltip />
+                  <AppInitialization />
                   <RedirectToAnyPath />
                   <Switch>
                     {/* <Route

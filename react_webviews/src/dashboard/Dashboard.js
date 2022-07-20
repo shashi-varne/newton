@@ -3,90 +3,73 @@ import { Route, Switch } from "react-router-dom";
 import "../common/theme/Style.scss";
 
 import NotFound from "../common/components/NotFound";
-import Invest from "./Invest";
-import NfoInfo from "./Invest/components/NFO";
-import NfoScheme from "./Invest/components/NFO/Scheme";
-import NfoFunds from "./Invest/components/NFO/Funds";
-import NfoFundDetail from "./Invest/components/NFO/FundDetail";
-import NfoCheckout from "./Invest/components/Checkout/Checkout";
-import SipDates from "./SipDates/SipDates";
-import InvestJourney from "./InvestJourney";
 import DIY from "./DIY";
+import Invest from "./Invest";
+import NfoCheckout from "./Invest/components/Checkout/Checkout";
+import NfoInfo from "./Invest/components/NFO";
+import NfoFundDetail from "./Invest/components/NFO/FundDetail";
+import NfoFunds from "./Invest/components/NFO/Funds";
+import NfoScheme from "./Invest/components/NFO/Scheme";
+import InvestJourney from "./InvestJourney";
+import SipDates from "./SipDates/SipDates";
 
-import MyAccount from "./MyAccount";
-import Notification from "./Notification";
-import PaymentCallback from "./Invest/components/PaymentCallback";
-import SipPaymentCallback from "./Invest/components/SipPaymentCallback";
-import PageCallback from "./Invest/components/PageCallback";
-import PaymentOptions from "./Invest/components/PaymentOptions";
-import DigilockerCallback from "../kyc/Digilocker/DigilockerCallback";
-import AccountMerge from "./AccountMerge";
-import AccountMergeOtp from "./AccountMerge/Otp";
-import AccountLinked from "./AccountMerge/Linked";
-import SdkLanding from "./Invest/components/SdkLanding";
-import NPS from "./nps";
-import PassiveIndexFunds from "./PassiveIndexFunds";
 import { getConfig } from "utils/functions";
-import BlankMandateUpload from "./MyAccount/BlankMandateUpload";
-import InvestmentProof from "./MyAccount/InvestmentProof";
-import Refer from "./Invest/components/SdkLanding/Refer";
-import CampaignCallback from "./Invest/components/PageCallback/CampaignCallback";
-import SecuritySettings from "./MyAccount/2fa/SecuritySettings";
-import ForgotPin from "./MyAccount/2fa/ForgotPin";
-import VerifyPin from "./MyAccount/2fa/VerifyPin";
-import SetPin from "./MyAccount/2fa/SetPin";
-import EnterNewPin from "./MyAccount/2fa/EnterNewPin";
-import ConfirmNewPin from "./MyAccount/2fa/ConfirmNewPin";
-import VerifyPinOtp from "./MyAccount/2fa/VerifyForgotOtp";
-import Referral from "../login_and_registration/pages/Referral/Referral.js";
-import SecondaryVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryVerification";
-import SecondaryOtpVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryOtpVerification";
-import StatusCallback from "../kyc/Native/StatusCallback";
-import NativeRedirection from "../kyc/Native/NativeRedirection";
-import ProductMarketTypes from "./ProductMarketTypes";
-import PrimaryMarketProducts from "./PrimaryMarketProducts/PrimaryMarketProducts";
-import DIYV2 from "../pages/DIY";
-import StocksAndIpoDirectEntry from "./DirectEntry/StocksAndIpoDirectEntry";
-import PaymentNativeCallback from "./nps/components/paymentCallback";
-import ThemeWrapper from "../theme/ThemeWrapper";
 import fundDetailsV2Container from "../containers/fundDetailsV2/fundDetailsV2Container";
 import mfOrderContainer from "../containers/mfOrder/mfOrderContainer";
+import DigilockerCallback from "../kyc/Digilocker/DigilockerCallback";
+import NativeRedirection from "../kyc/Native/NativeRedirection";
+import StatusCallback from "../kyc/Native/StatusCallback";
+import Referral from "../login_and_registration/pages/Referral/Referral.js";
+import SecondaryOtpVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryOtpVerification";
+import SecondaryVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryVerification";
+import DIYV2 from "../pages/DIY";
 import Nominee from "../pages/Nominee";
 import PortfolioRedesign from "../portfolio_redesign";
+import ThemeWrapper from "../theme/ThemeWrapper";
+import AccountMerge from "./AccountMerge";
+import AccountLinked from "./AccountMerge/Linked";
+import AccountMergeOtp from "./AccountMerge/Otp";
+import DirectEntry from "./DirectEntry/DirectEntry";
+import PageCallback from "./Invest/components/PageCallback";
+import CampaignCallback from "./Invest/components/PageCallback/CampaignCallback";
+import PaymentCallback from "./Invest/components/PaymentCallback";
+import PaymentOptions from "./Invest/components/PaymentOptions";
+import Refer from "./Invest/components/SdkLanding/Refer";
+import SipPaymentCallback from "./Invest/components/SipPaymentCallback";
+import MyAccount from "./MyAccount";
+import ConfirmNewPin from "./MyAccount/2fa/ConfirmNewPin";
+import EnterNewPin from "./MyAccount/2fa/EnterNewPin";
+import ForgotPin from "./MyAccount/2fa/ForgotPin";
+import SecuritySettings from "./MyAccount/2fa/SecuritySettings";
+import SetPin from "./MyAccount/2fa/SetPin";
+import VerifyPinOtp from "./MyAccount/2fa/VerifyForgotOtp";
+import VerifyPin from "./MyAccount/2fa/VerifyPin";
+import BlankMandateUpload from "./MyAccount/BlankMandateUpload";
+import InvestmentProof from "./MyAccount/InvestmentProof";
+import Notification from "./Notification";
+import NPS from "./nps";
+import PaymentNativeCallback from "./nps/components/paymentCallback";
+import PassiveIndexFunds from "./PassiveIndexFunds";
+import PrimaryMarketProducts from "./PrimaryMarketProducts/PrimaryMarketProducts";
+import ProductMarketTypes from "./ProductMarketTypes";
 
 const Home = (props) => {
   const config = getConfig();
+import ReferAndEarn from "../pages/ReferAndEarn";
+import AppLanding from "../pages/AppLanding";
+
+const Home = (props) => {
   const { url } = props.match;
   return (
     <Fragment>
       <Switch>
-        <Route
-          exact
-          path={`${url}direct/:type`}
-          component={StocksAndIpoDirectEntry}
-        />
-        <Route
-          exact
-          path={`${url}secondary-verification`}
-          component={SecondaryVerification}
-        />
-        <Route
-          exact
-          path={`${url}secondary-otp-verification`}
-          component={SecondaryOtpVerification}
-        />
+        <Route exact path={`${url}direct/:type`} component={DirectEntry} />
+        <Route exact path={`${url}secondary-verification`} component={SecondaryVerification} />
+        <Route exact path={`${url}secondary-otp-verification`} component={SecondaryOtpVerification} />
         <Route path={`${url}referral-code`} component={Referral} />
-        <Route
-          exact
-          path={`${url}`}
-          component={
-            config.isSdk && config.code !== "moneycontrol" ? SdkLanding : Invest
-          }
-        />
+        <Route path={`${url}invest`} component={Invest} />
         <Route exact path={`${url}refer`} component={Refer} />
         <Route path={`${url}invest`} component={Invest} />
-        <Route path={`${url}landing`} component={Invest} />
-        <Route path={`${url}mf`} component={SdkLanding} />
         <Route path={`${url}diy`} component={DIY} />
         <Route path={`${url}invest-journey`} component={InvestJourney} />
         <Route path={`${url}nps`} component={NPS} />
@@ -267,6 +250,8 @@ const Home = (props) => {
           <Route path={`${url}mf-orders`} component={mfOrderContainer} />
           <Route path={`${url}nominee`} component={Nominee} />
           <Route path={`${url}portfolio`} component={PortfolioRedesign} />
+          <Route path={`${url}refer-and-earn`} component={ReferAndEarn} />
+          <Route path={url} component={AppLanding} />
         </ThemeWrapper>
         <Route component={NotFound} />
       </Switch>

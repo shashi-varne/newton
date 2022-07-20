@@ -9,6 +9,7 @@ import nomineeVerifiedContainer from "../../containers/nominee/nomineeVerifiedCo
 import nomineeSubmittedContainer from "../../containers/nominee/nomineeSubmittedContainer";
 import manualSignatureContainer from "../../containers/nominee/manualSignatureContainer";
 import EsignStatusRedirectionContainer from "../../containers/nominee/esignStatusRedirectionContainer";
+import NotFound from "../../designSystem/organisms/PageNotFound";
 
 const Nominee = (props) => {
   const { url } = props.match;
@@ -45,6 +46,7 @@ const Nominee = (props) => {
         path={`${url}/esign-status`}
         component={EsignStatusRedirectionContainer}
       />
+      <Route component={NotFound} />
     </Switch>
   );
 };

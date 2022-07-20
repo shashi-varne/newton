@@ -180,7 +180,7 @@ class Checkout extends Component {
 
   goBack = () => {
     if(this.state.partner_code === "moneycontrol") {
-      this.navigate("/");
+      this.navigate("/invest/explore");
     } else {
       this.props.history.goBack();
     }

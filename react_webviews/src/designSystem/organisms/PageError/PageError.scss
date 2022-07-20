@@ -1,0 +1,26 @@
+.page-error {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 88vh;
+
+  .pe-content {
+    height: 60vh;
+  }
+
+  .pe-icon {
+    width: 140px;
+  }
+
+  .lh-subtitle {
+    text-align: center;
+  }
+
+  .pe-retry {
+    margin-top: 32px;
+  }
+
+  .pe-footer {
+    margin: 0px auto 50px auto;
+  }
+}

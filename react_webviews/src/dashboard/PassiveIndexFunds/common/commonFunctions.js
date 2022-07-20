@@ -14,7 +14,7 @@ export async function initialize() {
   if (this.state.screen_name === "fund_list") {
     const state = this.props.location.state;
     this.setState({
-      title: storageService().get("category_index_name") || state,
+      title: storageService().get("category_index_name") || state.title,
     });
   }
 }

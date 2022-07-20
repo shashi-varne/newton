@@ -257,7 +257,7 @@ export const getConfig = () => {
 
     // change server url here for local and staging url builds (Not commit id one's)
     if (isStaging || isLocal) {
-      base_url_default = "https://eqnom-dot-plutus-staging.appspot.com";
+      base_url_default = "https://sdk-test-dot-plutus-staging.appspot.com";
     }
 
     if (isSDKStaging) {
@@ -289,6 +289,7 @@ export const getConfig = () => {
   let { app_version } = main_query_params;
   let { pc_urlsafe } = main_query_params;
   let { diet = false } = main_query_params;
+  let { odin = false } = main_query_params;
   let project = '';
   let project_child = '';
   if (main_pathname.indexOf('group-insurance') >= 0) {
@@ -411,6 +412,12 @@ export const getConfig = () => {
     returnConfig.diet = diet;
     searchParams += getParamsMark(searchParams) + `diet=${diet}`;
     searchParamsMustAppend +=  getParamsMark(searchParams) + `diet=${diet}`;
+  }
+
+  if(checkValidString(odin)) {
+    returnConfig.odin = odin;
+    searchParams += getParamsMark(searchParams) + `odin=${odin}`;
+    searchParamsMustAppend +=  getParamsMark(searchParams) + `odin=${odin}`;
   }
   
   if( main_pathname === '/webview/help-conversation' ) {
@@ -700,7 +707,8 @@ export function navigate(pathname, data = {}) {
       params: data.params || {},
       state: data.state || {},
     });
-  } else {
+  }
+   else {
     this.history.push({
       pathname: pathname,
       search: data.searchParams || getConfig().searchParams,
@@ -850,21 +858,9 @@ export const isNewIframeDesktopLayout = () => {
   return config.code === "moneycontrol" && !config.isMobileDevice && config.isIframe
 }
 
-export const getInvestCards = (keysToCheck=[]) => {
+export const getInvestCards = () => {
   const config = getConfig();
-  const investSections = config.investSections || [];
-  const investSubSectionMap = config.investSubSectionMap;
-  const cardsToShow = {};
-  investSections.forEach(section => {
-    if(!isEmpty(investSubSectionMap[section])) {
-      investSubSectionMap[section].forEach(subSections => {
-        if (keysToCheck.includes(subSections)) {
-          cardsToShow[subSections] = true;
-        }
-      })
-    }
-  })
-  return cardsToShow;
+  return config.features;
 }
 
 export function stringToHexa(str) {
@@ -1014,4 +1010,15 @@ export const initializeClevertapProfile = (user) => {
   } catch (e) {
     console.log(e);
   }
+}
+
+export const getPartnerName = (partner) => {
+  if (partner === "bfdl") {
+    partner = "bfdlmobile";
+  } else if (partner === "obcweb") {
+    partner = "obc";
+  } else if (partner === "moneycontrolweb") {
+    partner = "moneycontrol";
+  }
+  return partner;
 }
