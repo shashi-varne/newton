@@ -13,7 +13,6 @@ import NfoScheme from "./Invest/components/NFO/Scheme";
 import InvestJourney from "./InvestJourney";
 import SipDates from "./SipDates/SipDates";
 
-import { getConfig } from "utils/functions";
 import fundDetailsV2Container from "../containers/fundDetailsV2/fundDetailsV2Container";
 import mfOrderContainer from "../containers/mfOrder/mfOrderContainer";
 import DigilockerCallback from "../kyc/Digilocker/DigilockerCallback";
@@ -22,8 +21,10 @@ import StatusCallback from "../kyc/Native/StatusCallback";
 import Referral from "../login_and_registration/pages/Referral/Referral.js";
 import SecondaryOtpVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryOtpVerification";
 import SecondaryVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryVerification";
+import AppLanding from "../pages/AppLanding";
 import DIYV2 from "../pages/DIY";
 import Nominee from "../pages/Nominee";
+import ReferAndEarn from "../pages/ReferAndEarn";
 import PortfolioRedesign from "../portfolio_redesign";
 import ThemeWrapper from "../theme/ThemeWrapper";
 import AccountMerge from "./AccountMerge";
@@ -54,18 +55,21 @@ import PrimaryMarketProducts from "./PrimaryMarketProducts/PrimaryMarketProducts
 import ProductMarketTypes from "./ProductMarketTypes";
 
 const Home = (props) => {
-  const config = getConfig();
-import ReferAndEarn from "../pages/ReferAndEarn";
-import AppLanding from "../pages/AppLanding";
-
-const Home = (props) => {
   const { url } = props.match;
   return (
     <Fragment>
       <Switch>
         <Route exact path={`${url}direct/:type`} component={DirectEntry} />
-        <Route exact path={`${url}secondary-verification`} component={SecondaryVerification} />
-        <Route exact path={`${url}secondary-otp-verification`} component={SecondaryOtpVerification} />
+        <Route
+          exact
+          path={`${url}secondary-verification`}
+          component={SecondaryVerification}
+        />
+        <Route
+          exact
+          path={`${url}secondary-otp-verification`}
+          component={SecondaryOtpVerification}
+        />
         <Route path={`${url}referral-code`} component={Referral} />
         <Route path={`${url}invest`} component={Invest} />
         <Route exact path={`${url}refer`} component={Refer} />

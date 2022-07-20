@@ -47,7 +47,7 @@ let data = [
     id: "invest",
     name: "Invest",
     icon: invest,
-    path: '/',
+    path: "/",
   },
   // {
   //   id: 'loans',
@@ -83,7 +83,7 @@ let data = [
     id: "refer",
     name: "Refer & Earn",
     icon: refer,
-    path: '/refer-and-earn/landing',
+    path: "/refer-and-earn/landing",
   },
   {
     id: "writeToUs",
@@ -98,10 +98,10 @@ let data = [
     path: "/logout",
   },
   {
-    id: "test",
-    name: "Test",
+    id: "logout",
+    name: "Portfolio",
     icon: logout,
-    path: "/portfolio",
+    path: "/portoflio",
   },
 ];
 
@@ -116,7 +116,9 @@ const NavList = (props) => {
   const [kycStatus, setKycStatus] = useState("");
   const kyc = storageService().getObject("kyc") || {};
   const user = storageService().getObject("user") || {};
-  const showReferral = config?.referralConfig?.shareRefferal && user?.referral_campaign_status === "active";
+  const showReferral =
+    config?.referralConfig?.shareRefferal &&
+    user?.referral_campaign_status === "active";
 
   const isReadyToInvestBase = isReadyToInvest();
   const TRADING_ENABLED = useMemo(() => {
@@ -138,17 +140,20 @@ const NavList = (props) => {
   const handleRefferalModal = () => {
     setReferDialog(!referDialog);
   };
-  const handleClick = ({ path, id }) => () => {
-    setActivePath(id);
-    if(id === 'register'){
-      if (user.kyc_registration_v2 === "init") {
-        path = "/kyc/home";
-      } else if (user.kyc_registration_v2 !== "complete") {
-        path = "/kyc/journey";
-      } else if (user.active_investment) {
-        path = "/reports";
-      } else {
-        path = "/";
+  const handleClick =
+    ({ path, id }) =>
+    () => {
+      setActivePath(id);
+      if (id === "register") {
+        if (user.kyc_registration_v2 === "init") {
+          path = "/kyc/home";
+        } else if (user.kyc_registration_v2 !== "complete") {
+          path = "/kyc/journey";
+        } else if (user.active_investment) {
+          path = "/reports";
+        } else {
+          path = "/";
+        }
       }
       if (path) {
         navigate(path);

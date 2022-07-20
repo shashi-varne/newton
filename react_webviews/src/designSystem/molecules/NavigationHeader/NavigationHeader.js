@@ -5,14 +5,7 @@ import closeIcon from "assets/nav_close.svg";
 import { getPartner } from "businesslogic/dataStore/reducers/app";
 import isEmpty from "lodash/isEmpty";
 import PropTypes from "prop-types";
-import {
-  default as React,
-  default as React,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import ReferDialog from "../../../desktopLayout/ReferralDialog";
 import { getConfig } from "../../../utils/functions";
@@ -36,6 +29,7 @@ const NavigationHeader = ({
   actionTextProps = {},
   children,
   anchorOrigin,
+  showPartnerLogo,
   rightIconSrc,
   onRightIconClick,
   tabsProps = {},
@@ -50,7 +44,7 @@ const NavigationHeader = ({
   const subtitleRef = useRef();
   const inPageTitleRef = useRef();
   const tabWrapperRef = useRef();
-  const { isIframe, Web, isMobileDevice } = useMemo(getConfig, []);
+  const { isIframe, Web, isMobileDevice, logo } = useMemo(getConfig, [partner]);
   const isGuestUser = storageService().getBoolean("guestUser");
   const [mobileViewDrawer, setMobileViewDrawer] = useState(false);
   const [referDialog, setReferDialog] = useState(false);

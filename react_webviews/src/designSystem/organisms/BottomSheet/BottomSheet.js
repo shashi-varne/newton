@@ -55,7 +55,6 @@ const BottomSheet = ({
   imageSrcProps,
   children,
   renderButtonComponent,
-  children,
   ...restProps
 }) => {
   const handleOnClose = useCallback(
