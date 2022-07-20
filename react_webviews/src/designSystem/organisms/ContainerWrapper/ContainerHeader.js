@@ -1,8 +1,13 @@
-import React, { useMemo } from 'react';
-import { getConfig } from '../../../utils/functions';
-import isArray from 'lodash/isArray';
-import { Box } from '@mui/material';
-import { NavigationHeader, NavigationHeaderPoints, NavigationHeaderSubtitle, NavigationSeeMoreWrapper } from '../../molecules/NavigationHeader';
+import React, { useMemo } from "react";
+import { getConfig } from "../../../utils/functions";
+import isArray from "lodash/isArray";
+import { Box } from "@mui/material";
+import {
+  NavigationHeader,
+  NavigationHeaderPoints,
+  NavigationHeaderSubtitle,
+  NavigationSeeMoreWrapper,
+} from "../../molecules/NavigationHeader";
 
 const ContainerHeader = ({ headerProps, containerRef, handleonBackClick }) => {
   const {
@@ -12,18 +17,22 @@ const ContainerHeader = ({ headerProps, containerRef, handleonBackClick }) => {
     headerSx,
     headerClassName,
     disableSeeMoreFeature = false,
-    hideBackButton=false,
+    hideBackButton = false,
     ...restHeaderProps
   } = headerProps;
   const subtitleLength = subtitle?.length || 0;
   const pointsLength = points?.length || 0;
-  const showSeeMore = subtitleLength > 89 || (pointsLength >= 2 && subtitleLength > 40);
+  const showSeeMore =
+    subtitleLength > 89 || (pointsLength >= 2 && subtitleLength > 40);
   const { isIframe, isMobileDevice } = useMemo(getConfig, []);
 
   return (
-    <Box className={`container-header-wrapper ${headerClassName}`} sx={headerSx}>
+    <Box
+      className={`container-header-wrapper ${headerClassName}`}
+      sx={headerSx}
+    >
       <NavigationHeader
-        className='container-nav-header'
+        className="container-nav-header"
         headerTitle={headerTitle}
         anchorOrigin={!isIframe ? containerRef : null}
         onBackClick={handleonBackClick}

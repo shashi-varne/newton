@@ -14,7 +14,10 @@ import InfoAction, {
   INFO_ACTION_VARIANT,
 } from "../screens/InfoAction/InfoAction";
 import SomethingsWrong from "../ErrorScreen/SomethingsWrong";
-import { getExternalPortfolioData } from "businesslogic/constants/portfolio";
+import {
+  getExternalPortfolioData,
+  MF_PORTFOLIO_LANDING_STATUS_CODE,
+} from "businesslogic/constants/portfolio";
 import { nativeCallback } from "../../utils/native_callback";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import UiSkelton from "../../common/ui/Skelton";
@@ -96,7 +99,33 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
     if (!!option?.path) navigate(option.path);
   };
 
-  if (statusCode === 311) {
+  if (statusCode === MF_PORTFOLIO_LANDING_STATUS_CODE.kycPending) {
+    return (
+      <InfoAction
+        eventName={"main_portfolio"}
+        screenName=""
+        dataAidSuffix={"noInvestments"}
+        topImgSrc={require("assets/portfolio_no_investment.svg")}
+        title="No investments yet!"
+        ctaTitle={"START KYC"}
+        subtitle="Join 5M + Indians who invest their money to grow their money. Returns from investments help to build wealth with no sweat! Calculate Returns"
+        variant={INFO_ACTION_VARIANT.WITH_ACTION}
+      />
+    );
+  } else if (statusCode === MF_PORTFOLIO_LANDING_STATUS_CODE.firstInvestment) {
+    return (
+      <InfoAction
+        eventName={"main_portfolio"}
+        screenName="updating shortly"
+        dataAidSuffix={"updatingShortly"}
+        topImgSrc={require("assets/updating_shortly.svg")}
+        title="Updating shortly..."
+        subtitle="Your investments will start to appear here in a while"
+        ctaTitle={"VIEW ORDERS"}
+        variant={INFO_ACTION_VARIANT.WITHOUT_ACTION}
+      />
+    );
+  } else if (statusCode === MF_PORTFOLIO_LANDING_STATUS_CODE.noInvestment) {
     return (
       <InfoAction
         dataAidSuffix={"updatingShortly"}
@@ -107,9 +136,14 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
         variant={INFO_ACTION_VARIANT.WITH_ACTION}
       />
     );
-  } else if (statusCode === 318 || statusCode === 317) {
+  } else if (
+    statusCode === MF_PORTFOLIO_LANDING_STATUS_CODE.mfFailed ||
+    statusCode === MF_PORTFOLIO_LANDING_STATUS_CODE.mfExternalPortfolioFailed
+  ) {
     return <SomethingsWrong onClickCta={init} />;
-  } else if (statusCode === 111) {
+  } else if (
+    statusCode === MF_PORTFOLIO_LANDING_STATUS_CODE.investmentRedeemed
+  ) {
     return (
       <InfoAction
         disableInPageTitle={true}

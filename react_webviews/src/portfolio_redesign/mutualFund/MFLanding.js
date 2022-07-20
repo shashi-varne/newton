@@ -89,6 +89,7 @@ function MFLanding({
         headerTitle: MF_LANDING.navigationHeader.title,
         dataAid: MF_LANDING.navigationHeader.dataAid,
         leftIconSrc: require("assets/back_arrow_white.svg"),
+        disableSeeMoreFeature: true,
         headerSx: {
           backgroundColor: "foundationColors.primary.600",
           color: "foundationColors.supporting.white",

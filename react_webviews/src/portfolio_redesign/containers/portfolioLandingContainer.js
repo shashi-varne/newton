@@ -21,6 +21,7 @@ import PortfolioRedesign from "../portfolioLanding/PortfolioLanding";
 import InfoAction, {
   INFO_ACTION_VARIANT,
 } from "../screens/InfoAction/InfoAction";
+import { PORTFOLIO_LANDING_STATUS_CODES } from "businesslogic/constants/portfolio";
 
 const screen = "PortfolioLanding";
 
@@ -58,7 +59,10 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
 
   useEffect(() => {
     init();
-    if (statusCode === 313 || 315) {
+    if (
+      statusCode === PORTFOLIO_LANDING_STATUS_CODES.downtime ||
+      PORTFOLIO_LANDING_STATUS_CODES.stocksFailed
+    ) {
       checkErrorStatusCode();
     }
   }, [statusCode]);
@@ -90,14 +94,14 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
 
   const checkErrorStatusCode = () => {
     if (!statusCode) return;
-    if (statusCode === 313) {
+    if (statusCode === PORTFOLIO_LANDING_STATUS_CODES.downtime) {
       setViewData({
         showErrorBox: true,
         showTopSection: false,
         showAllocationSection: false,
         errorVariant: ERROR_STATE_BOX_VARIANTS.DOWNTIME,
       });
-    } else if (statusCode === 315) {
+    } else if (statusCode === PORTFOLIO_LANDING_STATUS_CODES.stocksFailed) {
       setViewData({
         showErrorBox: true,
         showTopSection: false,
@@ -136,7 +140,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
     navigate("/group-insurance");
   };
 
-  if (statusCode === 308) {
+  if (statusCode === PORTFOLIO_LANDING_STATUS_CODES.kycPending) {
     return (
       <InfoAction
         eventName={"main_portfolio"}
@@ -149,7 +153,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
         variant={INFO_ACTION_VARIANT.WITH_ACTION}
       />
     );
-  } else if (statusCode === 310) {
+  } else if (statusCode === PORTFOLIO_LANDING_STATUS_CODES.noInvestment) {
     return (
       <InfoAction
         eventName={"main_portfolio"}
@@ -162,7 +166,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
         variant={INFO_ACTION_VARIANT.WITH_ACTION}
       />
     );
-  } else if (statusCode === 312) {
+  } else if (statusCode === PORTFOLIO_LANDING_STATUS_CODES.firstInvestment) {
     return (
       <InfoAction
         eventName={"main_portfolio"}
@@ -175,21 +179,8 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
         variant={INFO_ACTION_VARIANT.WITHOUT_ACTION}
       />
     );
-  } else if (statusCode === 111) {
-    return (
-      <InfoAction
-        eventName={"main_portfolio"}
-        screenName="no active investments"
-        dataAidSuffix={"noInvestment"}
-        topImgSrc={require("assets/portfolio_no_investment.svg")}
-        title="No active investments"
-        subtitle="It seems you’ve redeemed all your investments due to which you’re not able to view them here"
-        ctaTitle={"INVEST AGAIN"}
-        variant={INFO_ACTION_VARIANT.WITHOUT_ACTION}
-      />
-    );
   }
-  if (statusCode === 314) {
+  if (statusCode === PORTFOLIO_LANDING_STATUS_CODES.mfFailed) {
     return <SomethingsWrong onClickCta={init} />;
   }
 
