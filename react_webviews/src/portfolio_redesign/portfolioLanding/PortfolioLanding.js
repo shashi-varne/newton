@@ -10,7 +10,7 @@ import Button from "../../designSystem/atoms/Button";
 import ErrorStateBox from "../ErrorScreen/ErrorStateBox";
 import Allocations from "./Allocations";
 import FeatureCardCarousel from "./FeatureCardCarousel";
-import "./style.scss";
+import "./portfolioLanding.scss";
 import TopSection from "./TopSection";
 
 const productName = getConfig().productName;

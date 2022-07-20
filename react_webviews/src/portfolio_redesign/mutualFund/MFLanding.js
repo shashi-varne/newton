@@ -1,14 +1,15 @@
 import { Stack } from "@mui/material";
 import { Box } from "@mui/system";
-import { MORE_OPTIONS } from "businesslogic/constants/portfolio";
 import { MF_LANDING } from "businesslogic/strings/portfolio";
 import BottomSheet from "designSystem/organisms/BottomSheet";
-import React, { useState } from "react";
+import { Steps } from "intro.js-react";
+import React, { useEffect, useState } from "react";
+import scrollIntoView from "scroll-into-view-if-needed";
 import Icon from "../../designSystem/atoms/Icon";
+import { STATUS_VARIANTS } from "../../designSystem/atoms/Status/Status";
 import Typography from "../../designSystem/atoms/Typography";
 import WrapperBox from "../../designSystem/atoms/WrapperBox/WrapperBox";
 import CardHorizontal from "../../designSystem/molecules/CardHorizontal";
-import CategoryCard from "../../designSystem/molecules/CategoryCard/CategoryCard";
 import InfoCard from "../../designSystem/molecules/InfoCard";
 import Container from "../../designSystem/organisms/ContainerWrapper";
 import PfFeatureCard from "../../featureComponent/portfolio/PfFeatureCard/PfFeatureCard";
@@ -16,9 +17,8 @@ import { getConfig } from "../../utils/functions";
 import { formatAmountInr, numDifferentiation } from "../../utils/validators";
 import LandingBottomsheet from "../portfolioLanding/landingBottomsheet";
 import SemiDonutGraph from "../portfolioLanding/SemiDonutGraph";
-import "./MfLanding.scss";
-import { STATUS_VARIANTS } from "../../designSystem/atoms/Status/Status";
 import ExternalPortfolioCard from "./ExternalPortfolioCard";
+import "./MfLanding.scss";
 import OptionsGrid from "./OptionsGrid";
 
 const {
@@ -36,6 +36,29 @@ const graphOptions = {
   ],
 };
 
+const steps = [
+  {
+    element: ".options-grid .card-1",
+    intro: "Click here to view & manage your SIPs",
+  },
+  {
+    element: ".options-grid  .card-2",
+    intro: "Click here to view existing investments & fund performance",
+  },
+  {
+    element: ".options-grid .card-3",
+    intro: "Click here to track & manage your goals",
+  },
+  {
+    element: ".options-grid .card-4",
+    intro: "Click here to view & track your order status",
+  },
+  {
+    element: ".options-grid .card-5",
+    intro: "Click here to withdraw funds",
+  },
+];
+
 function MFLanding({
   mfSummary,
   goToAssetAllocation,
@@ -48,6 +71,7 @@ function MFLanding({
   sendEvents,
 }) {
   const [isCurrentValueSheetOpen, setIsCurrentValueSheetOpen] = useState(false);
+  const [enable, setEnable] = useState(false);
   const renderExternalPortfolioCard = () => {
     const cardHorizontalCases = ["pending", "failed", "trigger_failed"];
     if (externalPfStatus === "init") {
@@ -83,6 +107,47 @@ function MFLanding({
       );
     }
   };
+  const setSkipButton = () => {
+    const featureContainer = document.querySelector(".feature-container");
+    const navLinkContainer = document.querySelector(".navlink-container");
+    const featureWidth = featureContainer.getBoundingClientRect().width;
+    const navLinkWidth = navLinkContainer.getBoundingClientRect().width;
+
+    if (enable) {
+      const tooltipTextContainer = document.querySelector(
+        ".introjs-tooltiptext"
+      );
+      const footer = document.querySelector(".introjs-tooltipbuttons");
+      const skipButton = document.createElement("button");
+      skipButton.innerText = "Skip";
+      skipButton.setAttribute("id", "skip-button");
+      skipButton.addEventListener("click", (e) => {
+        setEnable(false);
+      });
+      // tooltipTextContainer.style.marginLeft = `${navLinkWidth}px`;
+      tooltipTextContainer.style.width = `${featureWidth}px`;
+      footer.style.marginLeft = `${navLinkWidth}px`;
+      footer.style.width = `${featureWidth}px`;
+      footer.insertAdjacentElement("afterbegin", skipButton);
+    }
+  };
+  const scrollToOptions = () => {
+    const element = document.getElementById("scrollTo");
+    scrollIntoView(element, {
+      block: "start",
+      inline: "nearest",
+      behavior: "smooth",
+    });
+    setTimeout(() => {
+      setEnable(true);
+    }, 2000);
+  };
+  useEffect(() => {
+    scrollToOptions();
+  }, []);
+  useEffect(() => {
+    setSkipButton();
+  }, [enable]);
   return (
     <Container
       eventData={sendEvents()}
@@ -258,7 +323,19 @@ function MFLanding({
         </Box>
       </Box>
       <OptionsGrid handleOption={handleOption} />
-
+      <button
+        style={{ display: enable ? "inline-block" : "none" }}
+        id="skip-button"
+        onClick={() => setEnable(false)}
+      >
+        Skip
+      </button>
+      <Steps
+        enabled={enable}
+        steps={steps}
+        initialStep={0}
+        onExit={() => setEnable(false)}
+      />
       <BottomSheet
         isOpen={isCurrentValueSheetOpen}
         onClose={() => setIsCurrentValueSheetOpen(false)}
@@ -270,6 +347,7 @@ function MFLanding({
           earning={mfSummary?.earnings}
         />
       </BottomSheet>
+      <div id="scrollTo"></div>
     </Container>
   );
 }

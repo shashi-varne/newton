@@ -55,14 +55,16 @@ function OptionsGrid({ handleOption }) {
       </Typography>
       <Box className="options-grid">
         {optionList.map((option, index) => (
-          <CategoryCard
-            onClick={() => handleOption(option)}
-            key={index}
-            variant={option.variant}
-            dataAid={MORE_OPTIONS[index].dataAid}
-            title={MORE_OPTIONS[index].title}
-            imgSrc={option.imgSrc}
-          />
+          <Box className={`card-${index + 1}`}>
+            <CategoryCard
+              onClick={() => handleOption(option)}
+              key={index}
+              variant={option.variant}
+              dataAid={MORE_OPTIONS[index].dataAid}
+              title={MORE_OPTIONS[index].title}
+              imgSrc={option.imgSrc}
+            />
+          </Box>
         ))}
       </Box>
     </Box>
