@@ -54,7 +54,9 @@ function FeatureCardCarousel({ investments, handleFeatureCard }) {
                 ALL_INVESTMENTS_LANDING.topInvestmentSection.keyCurrent.text,
               rightTitle:
                 ALL_INVESTMENTS_LANDING.topInvestmentSection.keyPl.text,
-              rightSubtitle: formatAmountInr(item?.earnings || 0),
+              rightSubtitle: `${
+                item?.earnings < 0 ? "-" : ""
+              } ${formatAmountInr(Math.abs(item?.earnings || 0))}`,
             }}
             textColors={{
               rightSubtitle: !item?.earnings

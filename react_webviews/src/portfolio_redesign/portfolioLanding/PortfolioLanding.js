@@ -3,17 +3,13 @@ import { MF_LANDING, PORTFOLIO_LANDING } from "businesslogic/strings/portfolio";
 import Icon from "designSystem/atoms/Icon";
 import WrapperBox from "designSystem/atoms/WrapperBox";
 import InfoCard from "designSystem/molecules/InfoCard";
-import BottomSheet from "designSystem/organisms/BottomSheet";
 import Container from "designSystem/organisms/ContainerWrapper";
-import Lottie from "lottie-react";
-import React, { useState } from "react";
+import React from "react";
 import { getConfig } from "utils/functions";
 import Button from "../../designSystem/atoms/Button";
-import { formatAmountInr, numDifferentiation } from "../../utils/validators";
 import ErrorStateBox from "../ErrorScreen/ErrorStateBox";
 import Allocations from "./Allocations";
 import FeatureCardCarousel from "./FeatureCardCarousel";
-import LandingBottomsheet from "./landingBottomsheet";
 import "./style.scss";
 import TopSection from "./TopSection";
 
@@ -45,9 +41,11 @@ function PortfolioLanding({
   onClickViewAll,
   handleInvestInMf,
   sendEvents,
+  onClickRefresh,
 }) {
   return (
     <Container
+      eventData={sendEvents()}
       headerProps={{
         headerTitle: "Portfolio",
         hideInPageTitle: true,
@@ -63,7 +61,7 @@ function PortfolioLanding({
       {showErrorBox && (
         <ErrorStateBox
           text={"Unable to load your investments in stocks"}
-          onClickRefresh={() => {}}
+          onClickRefresh={onClickRefresh}
           variant={errorStateVariant}
         />
       )}

@@ -1,7 +1,6 @@
 import {
   getInvestments,
   getInvestmentSummary,
-  getPortfolioSummaryData,
 } from "businesslogic/dataStore/reducers/portfolioV2";
 import React, { useRef } from "react";
 import { useSelector } from "react-redux";
@@ -24,7 +23,7 @@ const AllInvestmentsContainer = (WrappedComponent) => (props) => {
     user_investment_status: user?.active_investment,
     user_kyc_status: kyc?.mf_kyc_processed || false,
   });
-  const sendEvents = (eventKey, eventVal, userAction = "back") => {
+  const sendEvents = (eventKey, eventVal, userAction) => {
     const eventObj = {
       event_name: "mf_portfolio",
       properties: eventRef.current,
@@ -32,7 +31,7 @@ const AllInvestmentsContainer = (WrappedComponent) => (props) => {
     const properties = {
       ...eventObj.properties,
       [eventKey]: eventVal,
-      userAction,
+      user_action: userAction || "back",
     };
     eventObj.properties = properties;
     eventRef.current = properties;
@@ -49,7 +48,8 @@ const AllInvestmentsContainer = (WrappedComponent) => (props) => {
       case "mf":
         navigate("/portfolio/mf-landing");
         break;
-      case "nps": //TODO:
+      case "nps":
+        navigate("/nps/info");
         break;
       case "equity": //TODO:
         break;

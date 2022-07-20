@@ -60,7 +60,7 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
     init();
   }, []);
 
-  const sendEvents = (eventKey, eventVal, userAction = "back") => {
+  const sendEvents = (eventKey, eventVal, userAction) => {
     const eventObj = {
       event_name: "mf_portfolio",
       properties: eventRef.current,
@@ -68,7 +68,7 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
     const properties = {
       ...eventObj.properties,
       [eventKey]: eventVal,
-      userAction,
+      user_action: userAction || "back",
     };
     eventObj.properties = properties;
     eventRef.current = properties;

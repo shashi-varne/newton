@@ -85,6 +85,7 @@ function MFLanding({
   };
   return (
     <Container
+      eventData={sendEvents()}
       headerProps={{
         headerTitle: MF_LANDING.navigationHeader.title,
         dataAid: MF_LANDING.navigationHeader.dataAid,
@@ -150,15 +151,15 @@ function MFLanding({
           <Typography
             variant="body2"
             color={
-              mfSummary?.one_day_earnings > 0
+              mfSummary?.one_day_earnings >= 0
                 ? "foundationColors.secondary.profitGreen.400"
                 : "foundationColors.secondary.lossRed.400"
             }
             dataAid={INVESTMENT_SUMMARY.valueOneDayChange.dataAid}
           >
-            {mfSummary?.one_day_earnings > 0 ? "+" : "-"}
+            {mfSummary?.one_day_earnings >= 0 ? "+" : "-"}
             {formatAmountInr(Math.abs(mfSummary?.one_day_earnings))} ({" "}
-            {mfSummary?.one_day_earnings_percent > 0 ? "+" : "-"}
+            {mfSummary?.one_day_earnings_percent >= 0 ? "+" : "-"}
             {Math.abs(mfSummary?.one_day_earnings_percent)}%)
           </Typography>
         </Stack>

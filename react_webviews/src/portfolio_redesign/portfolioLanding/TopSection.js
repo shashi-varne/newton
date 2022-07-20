@@ -15,6 +15,7 @@ const {
 } = PORTFOLIO_LANDING;
 
 function TopSection({ investmentSummary, sendEvents }) {
+  console.log("sum", investmentSummary);
   const [isCurrentValueSheetOpen, setIsCurrentValueSheetOpen] = useState(false);
   const [isRealisedGainSheetOpen, setIsRealisedGainSheetOpen] = useState(false);
   const handleInvestmentSummary = () => {
@@ -76,13 +77,13 @@ function TopSection({ investmentSummary, sendEvents }) {
 
         <Lottie
           animationData={require(`assets/lottie/${
-            investmentSummary?.earnings > 0 ? "positive" : "negative"
+            investmentSummary?.earnings >= 0 ? "positive" : "negative"
           }.json`)}
           autoPlay
           loop
           className="pf-landing-lottie-anim"
           data-aid={
-            investmentSummary?.earnings > 0
+            investmentSummary?.earnings >= 0
               ? INVESTMENT_SUMMARY.plIcon.positiveDataAid
               : INVESTMENT_SUMMARY.plIcon.negativeDataAid
           }
@@ -105,15 +106,15 @@ function TopSection({ investmentSummary, sendEvents }) {
         <Typography
           variant="body2"
           color={
-            investmentSummary?.one_day_earnings > 0
+            investmentSummary?.one_day_earnings >= 0
               ? "foundationColors.secondary.profitGreen.400"
               : "foundationColors.secondary.lossRed.400"
           }
           dataAid={INVESTMENT_SUMMARY.valueOneDayChange.dataAid}
         >
-          {investmentSummary?.one_day_earnings > 0 ? "+" : "-"}
+          {investmentSummary?.one_day_earnings >= 0 ? "+" : "-"}
           {formatAmountInr(investmentSummary?.one_day_earnings)} (
-          {investmentSummary?.one_day_earnings > 0 ? "+" : "-"}
+          {investmentSummary?.one_day_earnings >= 0 ? "+" : "-"}
           {investmentSummary?.one_day_earnings_percent?.toFixed(1)}%)
         </Typography>
       </Stack>

@@ -57,6 +57,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
     showErrorBox: false,
     errorVariant: "",
   });
+
   const checkIfOnlyMf = () => {
     if (isEmpty(getConfig().features)) {
       navigate("/portfolio/mf-landing");
@@ -79,7 +80,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
     }
   };
 
-  const sendEvents = (eventKey, eventVal, userAction = "back") => {
+  const sendEvents = (eventKey, eventVal, userAction) => {
     const eventObj = {
       event_name: "main_portfolio",
       properties: eventRef.current,
@@ -87,7 +88,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
     const properties = {
       ...eventObj.properties,
       [eventKey]: eventVal,
-      userAction,
+      user_action: userAction || "back",
     };
     eventObj.properties = properties;
     eventRef.current = properties;
@@ -123,7 +124,8 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
       case "mf":
         navigate("/portfolio/mf-landing");
         break;
-      case "nps": //TODO:
+      case "nps":
+        navigate("/nps/info");
         break;
       case "equity": //TODO:
         break;
@@ -212,6 +214,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
       onClickViewAll={onClickViewAll}
       handleInsurance={handleInsurance}
       sendEvents={sendEvents}
+      onClickRefresh={init}
     />
   );
 };

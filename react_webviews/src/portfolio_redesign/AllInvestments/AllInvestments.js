@@ -8,9 +8,15 @@ import WrapperBox from "../../designSystem/atoms/WrapperBox";
 import { ALL_INVESTMENTS_LANDING } from "businesslogic/strings/portfolio";
 import { formatAmountInr } from "../../utils/validators";
 
-function AllInvestments({ investments, investmentSummary, handleCardClick }) {
+function AllInvestments({
+  investments,
+  investmentSummary,
+  handleCardClick,
+  sendEvents,
+}) {
   return (
     <Container
+      eventData={sendEvents()}
       headerProps={{
         hideInPageTitle: true,
         headerTitle:
@@ -84,12 +90,14 @@ function AllInvestments({ investments, investmentSummary, handleCardClick }) {
                   ALL_INVESTMENTS_LANDING.topInvestmentSection.keyPl.text,
                 leftSubtitle: formatAmountInr(card?.current_value || 0),
                 rightSubtitle: `${
-                  card?.earnings > 0 ? "+" : ""
-                }${formatAmountInr(card?.earnings || 0)}`,
+                  card?.earnings < 0 ? "-" : ""
+                } ${formatAmountInr(Math.abs(card?.earnings || 0))}`,
               }}
               className="investment-card"
               textColors={{
-                rightSubtitle: !!card?.earnings
+                rightSubtitle: !card?.earnings
+                  ? "foundationColors.content.primary"
+                  : card?.earnings > 0
                   ? "foundationColors.secondary.profitGreen.400"
                   : "foundationColors.secondary.lossRed.400",
               }}
