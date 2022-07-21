@@ -33,7 +33,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
   const summaryData = getPortfolioSummaryData(state);
   const investmentSummary = getInvestmentSummary(state);
   const investments = getInvestments(state);
-  const { kyc, isLoading, user } = useUserKycHook();
+  const { kyc, user } = useUserKycHook();
   const { isPageLoading } = useLoadingState(screen);
   const allocationDetails = getAllocationDetails(state);
   const statusCode = getPortfolioStatusCode(state);
