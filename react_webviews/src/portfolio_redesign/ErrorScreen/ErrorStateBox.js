@@ -39,7 +39,7 @@ function ErrorStateBox({ text, onClickRefresh, variant }) {
         >
           {text}
         </Typography>
-        {variant === "noInvestment" && (
+        {variant === ERROR_STATE_BOX_VARIANTS.NO_INVESTMENT && (
           <Button
             title="Refresh"
             variant={"link"}

@@ -2,6 +2,7 @@ import {
   getAllocationDetails,
   getInvestments,
   getInvestmentSummary,
+  getPortfolioErrorMessage,
   getPortfolioStatusCode,
   getPortfolioSummary,
   getPortfolioSummaryData,
@@ -29,14 +30,14 @@ const screen = "PortfolioLanding";
 const PortfolioLandingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const dispatch = useDispatch();
-  const state = useSelector((state) => state);
-  const summaryData = getPortfolioSummaryData(state);
-  const investmentSummary = getInvestmentSummary(state);
-  const investments = getInvestments(state);
+  const summaryData = useSelector((state) => getPortfolioSummaryData(state));
+  const investmentSummary = useSelector((state) => getInvestmentSummary(state));
+  const investments = useSelector((state) => getInvestments(state));
   const { kyc, user } = useUserKycHook();
   const { isPageLoading } = useLoadingState(screen);
-  const allocationDetails = getAllocationDetails(state);
-  const statusCode = getPortfolioStatusCode(state);
+  const allocationDetails = useSelector((state) => getAllocationDetails(state));
+  const statusCode = useSelector((state) => getPortfolioStatusCode(state));
+  const error = useSelector((state) => getPortfolioErrorMessage(state));
   const assetWiseData = allocationDetails?.asset_allocation;
   const productWiseData = allocationDetails?.product_allocation;
   const eventRef = useRef({
@@ -64,11 +65,11 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
     }
   };
   useEffect(() => {
-    checkIfOnlyMf();
     init();
+    checkIfOnlyMf();
     if (
       statusCode === PORTFOLIO_LANDING_STATUS_CODES.downtime ||
-      PORTFOLIO_LANDING_STATUS_CODES.stocksFailed
+      statusCode === PORTFOLIO_LANDING_STATUS_CODES.stocksFailed
     ) {
       checkErrorStatusCode();
     }
@@ -101,18 +102,23 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
 
   const checkErrorStatusCode = () => {
     if (!statusCode) return;
+    console.log("status in function", statusCode);
     if (statusCode === PORTFOLIO_LANDING_STATUS_CODES.downtime) {
+      console.log("inside 1");
       setViewData({
         showErrorBox: true,
         showTopSection: false,
         showAllocationSection: false,
+        errorMessage: error,
         errorVariant: ERROR_STATE_BOX_VARIANTS.DOWNTIME,
       });
     } else if (statusCode === PORTFOLIO_LANDING_STATUS_CODES.stocksFailed) {
+      console.log("inside 2");
       setViewData({
         showErrorBox: true,
         showTopSection: false,
         showAllocationSection: false,
+        errorMessage: error,
         errorVariant: ERROR_STATE_BOX_VARIANTS.NO_INVESTMENT,
       });
     }
@@ -206,6 +212,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
       assetWiseData={assetWiseData}
       productWiseData={productWiseData}
       showTopSection={viewData?.showTopSection}
+      errorMessage={viewData?.error || ""}
       showAllocationSection={viewData?.showAllocationSection}
       showErrorBox={viewData?.showErrorBox}
       errorStateVariant={viewData?.errorVariant}

@@ -10,7 +10,6 @@ import SomethingsWrong from "./ErrorScreen/SomethingsWrong";
 
 const PortfolioRedesign = ({ match }) => {
   const { url } = match;
-  console.log("url", url);
   return (
     <ThemeWrapper>
       <Fragment>

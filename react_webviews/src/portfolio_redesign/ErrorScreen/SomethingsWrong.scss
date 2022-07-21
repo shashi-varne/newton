@@ -1,7 +1,12 @@
-.something-went-wrong-wrapper {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+.something-went-wrong-container {
+  .container-content-wrapper {
+    height: 80%;
+    .something-went-wrong-wrapper {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+  }
 }

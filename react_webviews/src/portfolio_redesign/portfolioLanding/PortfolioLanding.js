@@ -39,6 +39,7 @@ function PortfolioLanding({
   errorStateVariant,
   handleFeatureCard,
   onClickViewAll,
+  errorMessage,
   handleInvestInMf,
   sendEvents,
   onClickRefresh,
@@ -60,7 +61,7 @@ function PortfolioLanding({
     >
       {showErrorBox && (
         <ErrorStateBox
-          text={"Unable to load your investments in stocks"}
+          text={errorMessage}
           onClickRefresh={onClickRefresh}
           variant={errorStateVariant}
         />

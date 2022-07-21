@@ -15,7 +15,6 @@ const {
 } = PORTFOLIO_LANDING;
 
 function TopSection({ investmentSummary, sendEvents }) {
-  console.log("sum", investmentSummary);
   const [isCurrentValueSheetOpen, setIsCurrentValueSheetOpen] = useState(false);
   const [isRealisedGainSheetOpen, setIsRealisedGainSheetOpen] = useState(false);
   const handleInvestmentSummary = () => {
