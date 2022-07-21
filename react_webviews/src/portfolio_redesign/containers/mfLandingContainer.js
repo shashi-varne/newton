@@ -6,6 +6,7 @@ import MFLanding from "../mutualFund/MFLanding";
 import { navigate as navigateFunc } from "utils/functions";
 import {
   getExternalPortfolioDetails,
+  getMfAssetAllocation,
   getMfPortfolioSummary,
   getMfPortfolioSummaryData,
   getPortfolioStatusCode,
@@ -29,12 +30,20 @@ const screen = "MfLanding";
 const MfLandingContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
   const dispatch = useDispatch();
-  const state = useSelector((state) => state);
-  const mfSummary = getMfPortfolioSummaryData(state);
-  const statusCode = getPortfolioStatusCode(state);
+  const assetAllocationData = useSelector((state) =>
+    getMfAssetAllocation(state)
+  );
+  const graphData = assetAllocationData.categories;
+  const mfSummary = useSelector((state) => getMfPortfolioSummaryData(state));
+  const statusCode = useSelector((state) => getPortfolioStatusCode(state));
   const { isPageLoading } = useLoadingState(screen);
-  const { kyc, isLoading, user } = useUserKycHook();
-  const externalPfData = getExternalPortfolioDetails(state);
+  const { kyc, user } = useUserKycHook();
+  const externalPfData = useSelector((state) =>
+    getExternalPortfolioDetails(state)
+  );
+  const showMfWalkthrough = useSelector(
+    (state) => state?.portfolioV2?.mfWalkthroughInitiated
+  );
   const externalPfStatus = externalPfData?.status || "init";
   const externalPfCardData = getExternalPortfolioData(externalPfStatus);
   const eventRef = useRef({
@@ -182,6 +191,8 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
       externalPfStatus={externalPfStatus}
       sendEvents={sendEvents}
       handleOption={handleOption}
+      showWalkthrough={showMfWalkthrough}
+      graphData={graphData}
     />
   );
 };

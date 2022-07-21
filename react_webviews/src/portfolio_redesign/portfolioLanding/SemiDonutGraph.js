@@ -32,9 +32,9 @@ function SemiDonutGraph({ data }) {
             color: "white",
           },
           formatter: function () {
-            return `<span> <span style='color: ${this.color}'>${parseInt(
-              this.percentage
-            )}%</span> ${capitalizeFirstLetter(
+            return `<span> <span style='color: ${
+              this.color
+            }'>${this.percentage.toFixed(2)}%</span> ${capitalizeFirstLetter(
               this.key?.toLowerCase()
             )} </span>`;
           },

@@ -1,9 +1,15 @@
 import { Stack } from "@mui/material";
 import { Box } from "@mui/system";
+import {
+  resetPortfolioV2,
+  setMfWalkthroughInitiated,
+} from "businesslogic/dataStore/reducers/portfolioV2";
 import { MF_LANDING } from "businesslogic/strings/portfolio";
 import BottomSheet from "designSystem/organisms/BottomSheet";
 import { Steps } from "intro.js-react";
-import React, { useEffect, useState } from "react";
+import { isEmpty } from "lodash-es";
+import React, { useEffect, useMemo, useState } from "react";
+import { useDispatch } from "react-redux";
 import scrollIntoView from "scroll-into-view-if-needed";
 import Icon from "../../designSystem/atoms/Icon";
 import { STATUS_VARIANTS } from "../../designSystem/atoms/Status/Status";
@@ -59,19 +65,38 @@ const steps = [
   },
 ];
 
+const formatSeriesData = (data) => {
+  if (isEmpty(data)) return;
+  const seriesData = {};
+  for (let item of data) {
+    if (item?.allocation > 0)
+      seriesData[item?.type?.toUpperCase()] = item?.allocation;
+  }
+  return Object.entries(seriesData);
+};
+
 function MFLanding({
   mfSummary,
   goToAssetAllocation,
   externalPfCardData,
+  graphData,
   externalPfStatus,
   handleInvestInMf,
   handleEasySip,
   handleExternalPortfolio,
   handleOption,
   sendEvents,
+  showMfWalkthrough,
 }) {
   const [isCurrentValueSheetOpen, setIsCurrentValueSheetOpen] = useState(false);
   const [enable, setEnable] = useState(false);
+  const dispatch = useDispatch();
+  const graphOptions = useMemo(() => {
+    return {
+      colors: ["#33CF90", "#FE794D", "#5AAAF6"],
+      seriesData: formatSeriesData(graphData),
+    };
+  });
   const renderExternalPortfolioCard = () => {
     const cardHorizontalCases = ["pending", "failed", "trigger_failed"];
     if (externalPfStatus === "init") {
@@ -124,7 +149,6 @@ function MFLanding({
       skipButton.addEventListener("click", (e) => {
         setEnable(false);
       });
-      // tooltipTextContainer.style.marginLeft = `${navLinkWidth}px`;
       tooltipTextContainer.style.width = `${featureWidth}px`;
       footer.style.marginLeft = `${navLinkWidth}px`;
       footer.style.width = `${featureWidth}px`;
@@ -143,11 +167,18 @@ function MFLanding({
     }, 2000);
   };
   useEffect(() => {
-    scrollToOptions();
+    if (!showMfWalkthrough) {
+      scrollToOptions();
+    }
   }, []);
   useEffect(() => {
     setSkipButton();
   }, [enable]);
+
+  const handleWalkthroughSkip = () => {
+    setEnable(false);
+    dispatch(setMfWalkthroughInitiated());
+  };
   return (
     <Container
       eventData={sendEvents()}
@@ -326,7 +357,7 @@ function MFLanding({
       <button
         style={{ display: enable ? "inline-block" : "none" }}
         id="skip-button"
-        onClick={() => setEnable(false)}
+        onClick={handleWalkthroughSkip}
       >
         Skip
       </button>
@@ -334,7 +365,7 @@ function MFLanding({
         enabled={enable}
         steps={steps}
         initialStep={0}
-        onExit={() => setEnable(false)}
+        onExit={handleWalkthroughSkip}
       />
       <BottomSheet
         isOpen={isCurrentValueSheetOpen}

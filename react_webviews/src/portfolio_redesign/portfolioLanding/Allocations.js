@@ -24,7 +24,7 @@ const formatSeriesData = (data) => {
   if (isEmpty(data)) return;
   const seriesData = {};
   for (let item of data) {
-    seriesData[item?.name?.toUpperCase()] = item?.value;
+    if (item?.value > 0) seriesData[item?.name?.toUpperCase()] = item?.value;
   }
   return Object.entries(seriesData);
 };
