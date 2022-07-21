@@ -1,24 +1,24 @@
-import React, { useEffect, useRef, useState } from "react";
 import { Box, Stack } from "@mui/material";
-import Container from "designSystem/organisms/ContainerWrapper";
 import Button from "designSystem/atoms/Button";
 import Typography from "designSystem/atoms/Typography";
 import {
   LandingHeader,
   LandingHeaderImage,
   LandingHeaderSubtitle,
-  LandingHeaderTitle,
+  LandingHeaderTitle
 } from "designSystem/molecules/LandingHeader";
-import "./InfoAction.scss";
-import PropTypes from "prop-types";
-import BottomSheet from "../../../designSystem/organisms/BottomSheet";
-import ReturnCalculator from "./ReturnCalculator";
-import { nativeCallback } from "../../../utils/native_callback";
-import useUserKycHook from "../../../kyc/common/hooks/userKycHook";
-import ExternalPortfolioCard from "../../mutualFund/ExternalPortfolioCard";
-import WrapperBox from "../../../designSystem/atoms/WrapperBox";
-import OptionsGrid from "../../mutualFund/OptionsGrid";
+import Container from "designSystem/organisms/ContainerWrapper";
 import { isEmpty } from "lodash-es";
+import PropTypes from "prop-types";
+import React, { useRef, useState } from "react";
+import WrapperBox from "../../../designSystem/atoms/WrapperBox";
+import BottomSheet from "../../../designSystem/organisms/BottomSheet";
+import useUserKycHook from "../../../kyc/common/hooks/userKycHook";
+import { nativeCallback } from "../../../utils/native_callback";
+import ExternalPortfolioCard from "../../mutualFund/ExternalPortfolioCard";
+import OptionsGrid from "../../mutualFund/OptionsGrid";
+import "./InfoAction.scss";
+import ReturnCalculator from "./ReturnCalculator";
 
 export const INFO_ACTION_VARIANT = {
   WITH_ACTION: "WITH_ACTION",

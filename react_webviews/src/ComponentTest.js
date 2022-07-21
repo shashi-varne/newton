@@ -1,12 +1,8 @@
-import React, { useEffect, useState } from "react";
-// import { Steps, Hints } from "intro.js-react";
-import { Steps } from "intro.js-react";
-import "intro.js/introjs.css";
+import React from "react";
 import "./index.css";
 import ThemeWrapper from "./theme/ThemeWrapper";
 
 function ComponentTest() {
-  console.log("in test page");
   return (
     <ThemeWrapper>
       <div

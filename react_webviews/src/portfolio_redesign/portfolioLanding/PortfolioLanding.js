@@ -1,11 +1,10 @@
 import { Box, Stack, Typography } from "@mui/material";
-import { MF_LANDING, PORTFOLIO_LANDING } from "businesslogic/strings/portfolio";
+import { PORTFOLIO_LANDING } from "businesslogic/strings/portfolio";
 import Icon from "designSystem/atoms/Icon";
 import WrapperBox from "designSystem/atoms/WrapperBox";
 import InfoCard from "designSystem/molecules/InfoCard";
 import Container from "designSystem/organisms/ContainerWrapper";
 import React from "react";
-import { getConfig } from "utils/functions";
 import Button from "../../designSystem/atoms/Button";
 import ErrorStateBox from "../ErrorScreen/ErrorStateBox";
 import Allocations from "./Allocations";
@@ -13,18 +12,14 @@ import FeatureCardCarousel from "./FeatureCardCarousel";
 import "./portfolioLanding.scss";
 import TopSection from "./TopSection";
 
-const productName = getConfig().productName;
 
 const {
-  investmentSummary: INVESTMENT_SUMMARY,
   investmentSection: INVESTMENT_SECTION,
   allocationSection: ALLOCATION_SECTION,
   bannerSection: BANNER_SECTION,
   insurance: INSURANCE,
-  realisedGainSheet: REALISED_GAIN_SHEET,
 } = PORTFOLIO_LANDING;
 
-const { currentInvestmentSheet: CURRENT_INVESTMENT_SHEET } = MF_LANDING;
 
 function PortfolioLanding({
   handleInsurance,

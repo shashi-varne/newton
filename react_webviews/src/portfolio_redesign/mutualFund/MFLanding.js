@@ -1,7 +1,6 @@
 import { Stack } from "@mui/material";
 import { Box } from "@mui/system";
 import {
-  resetPortfolioV2,
   setMfWalkthroughInitiated,
 } from "businesslogic/dataStore/reducers/portfolioV2";
 import { MF_LANDING } from "businesslogic/strings/portfolio";
@@ -33,14 +32,6 @@ const {
 } = MF_LANDING;
 
 const productName = getConfig().productName;
-const graphOptions = {
-  colors: ["#33CF90", "#FE794D", "#5AAAF6"],
-  seriesData: [
-    ["Equity", 60],
-    ["Debt", 30],
-    ["Others", 10],
-  ],
-};
 
 const steps = [
   {
@@ -97,7 +88,7 @@ function MFLanding({
       colors: ["#33CF90", "#FE794D", "#5AAAF6"],
       seriesData: formatSeriesData(graphData),
     };
-  });
+  },[]);
   const renderExternalPortfolioCard = () => {
     const cardHorizontalCases = ["pending", "failed", "trigger_failed"];
     if (externalPfStatus === "init") {

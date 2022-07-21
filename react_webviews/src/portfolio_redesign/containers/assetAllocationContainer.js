@@ -1,16 +1,15 @@
 import { getMfAssetAllocation } from "businesslogic/dataStore/reducers/portfolioV2";
 import React, { useEffect, useMemo, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
 import { capitalizeFirstLetter } from "../../utils/validators";
 import AllocationDetails from "./../AllocationDetails/AllocationDetails";
 
 const AssetAllocationContainer = (WrappedComponent) => (props) => {
-  const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const assetData = getMfAssetAllocation(state);
-  const { kyc, isLoading, user } = useUserKycHook();
+  const { kyc, user } = useUserKycHook();
   const categories = assetData?.categories;
   const eventRef = useRef({
     screen_name: "allocation details",

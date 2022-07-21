@@ -27,10 +27,7 @@ function SemiDonutGraph({ data }) {
           enabled: true,
           distance: 20,
           softConnector: false,
-          style: {
-            fontWeight: "bold",
-            color: "white",
-          },
+          
           formatter: function () {
             return `<span> <span style='color: ${
               this.color
@@ -38,7 +35,6 @@ function SemiDonutGraph({ data }) {
               this.key?.toLowerCase()
             )} </span>`;
           },
-          style: {},
         },
         startAngle: -90,
         endAngle: 90,

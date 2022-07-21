@@ -13,7 +13,7 @@ const CustomThumb = (props) => {
     <SliderThumb {...other}>
       {children}
       <div className="slider-base">
-        <img src={sliderArrow} className="slider-arrow" />
+        <img src={sliderArrow} className="slider-arrow" alt='slider-img' />
       </div>
     </SliderThumb>
   );

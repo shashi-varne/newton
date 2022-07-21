@@ -1,24 +1,22 @@
-import { Box } from "@mui/system";
-import React, { useEffect, useState } from "react";
-import Typography from "designSystem/atoms/Typography";
-import { RETURN_CALCULATOR } from "businesslogic/strings/portfolio";
-import Tooltip, { TOOLTIP_PLACEMENTS } from "designSystem/atoms/Tooltip";
-import { Pills } from "designSystem/atoms/Pills";
-import Slider from "designSystem/atoms/Slider";
-import { Pill } from "designSystem/atoms/Pills/Pills";
-import "./ReturnCalculator.scss";
-import { formatAmountInr } from "businesslogic/utils/common/functions";
-import { Timelines, TimeLine } from "../../../designSystem/atoms/TimelineList";
-import {
-  getEstimatedReturn,
-  TimeLineYearData,
-} from "businesslogic/constants/portfolio";
-import Separator from "../../../designSystem/atoms/Separator";
 import { Stack } from "@mui/material";
-import Icon from "../../../designSystem/atoms/Icon";
+import { Box } from "@mui/system";
+import {
+  getEstimatedReturn, ReturnCalculatorDefaultValues, TimeLineYearData
+} from "businesslogic/constants/portfolio";
+import { RETURN_CALCULATOR } from "businesslogic/strings/portfolio";
+import { formatAmountInr } from "businesslogic/utils/common/functions";
+import { Pills } from "designSystem/atoms/Pills";
+import { Pill } from "designSystem/atoms/Pills/Pills";
+import Slider from "designSystem/atoms/Slider";
+import Tooltip, { TOOLTIP_PLACEMENTS } from "designSystem/atoms/Tooltip";
+import Typography from "designSystem/atoms/Typography";
+import React, { useEffect, useState } from "react";
 import Button from "../../../designSystem/atoms/Button";
-import { formatAmount, numDifferentiation } from "../../../utils/validators";
-import { ReturnCalculatorDefaultValues } from "businesslogic/constants/portfolio";
+import Icon from "../../../designSystem/atoms/Icon";
+import Separator from "../../../designSystem/atoms/Separator";
+import { TimeLine, Timelines } from "../../../designSystem/atoms/TimelineList";
+import { numDifferentiation } from "../../../utils/validators";
+import "./ReturnCalculator.scss";
 
 const PILL_LIST = [
   { label: "Mutual Funds", dataAid: "mutualFunds" },

@@ -1,29 +1,28 @@
-import React, { useRef } from "react";
-import Api from "utils/api";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import MFLanding from "../mutualFund/MFLanding";
-import { navigate as navigateFunc } from "utils/functions";
+import {
+  getExternalPortfolioData,
+  MF_PORTFOLIO_LANDING_STATUS_CODE
+} from "businesslogic/constants/portfolio";
 import {
   getExternalPortfolioDetails,
   getMfAssetAllocation,
   getMfPortfolioSummary,
   getMfPortfolioSummaryData,
-  getPortfolioStatusCode,
+  getPortfolioStatusCode
 } from "businesslogic/dataStore/reducers/portfolioV2";
-import InfoAction, {
-  INFO_ACTION_VARIANT,
-} from "../screens/InfoAction/InfoAction";
-import SomethingsWrong from "../ErrorScreen/SomethingsWrong";
-import {
-  getExternalPortfolioData,
-  MF_PORTFOLIO_LANDING_STATUS_CODE,
-} from "businesslogic/constants/portfolio";
-import { nativeCallback } from "../../utils/native_callback";
-import useUserKycHook from "../../kyc/common/hooks/userKycHook";
-import UiSkelton from "../../common/ui/Skelton";
-import useLoadingState from "../../common/customHooks/useLoadingState";
 import { isEmpty } from "lodash-es";
+import React, { useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Api from "utils/api";
+import { navigate as navigateFunc } from "utils/functions";
+import useLoadingState from "../../common/customHooks/useLoadingState";
+import UiSkelton from "../../common/ui/Skelton";
+import useUserKycHook from "../../kyc/common/hooks/userKycHook";
+import { nativeCallback } from "../../utils/native_callback";
+import SomethingsWrong from "../ErrorScreen/SomethingsWrong";
+import MFLanding from "../mutualFund/MFLanding";
+import InfoAction, {
+  INFO_ACTION_VARIANT
+} from "../screens/InfoAction/InfoAction";
 
 const screen = "MfLanding";
 
@@ -44,7 +43,7 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
   const showMfWalkthrough = useSelector(
     (state) => state?.portfolioV2?.mfWalkthroughInitiated
   );
-  const state = useSelector((state) => state);
+  
   const externalPfStatus = externalPfData?.status || "init";
   const externalPfCardData = getExternalPortfolioData(externalPfStatus);
   const eventRef = useRef({

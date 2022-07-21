@@ -1,11 +1,11 @@
-import { Box, Stack } from "@mui/material";
-import React, { useMemo, useState } from "react";
-import { Pills, Pill } from "../../designSystem/atoms/Pills";
-import CustomSwiper from "../../designSystem/molecules/CustomSwiper";
-import { SwiperSlide } from "swiper/react";
-import SemiDonutGraph from "./SemiDonutGraph";
+import { Box } from "@mui/material";
 import { PORTFOLIO_LANDING } from "businesslogic/strings/portfolio";
 import { isEmpty } from "lodash-es";
+import React, { useMemo, useState } from "react";
+import { SwiperSlide } from "swiper/react";
+import { Pill, Pills } from "../../designSystem/atoms/Pills";
+import CustomSwiper from "../../designSystem/molecules/CustomSwiper";
+import SemiDonutGraph from "./SemiDonutGraph";
 
 const { allocationSection: ALLOCATION_SECTION } = PORTFOLIO_LANDING;
 
