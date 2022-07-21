@@ -35,13 +35,16 @@ function InfoAction({
   eventName,
   externalPfData,
   hideInPageTitle = true,
+  handleExternalPortfolio,
+  summaryData,
   screenName,
   isRedeemUser,
   topImgSrc,
+  onClickCta,
   variant = INFO_ACTION_VARIANT.WITH_ACTION,
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const { kyc, isLoading, user } = useUserKycHook();
+  const { kyc, user } = useUserKycHook();
   const eventRef = useRef({
     screen_name: screenName,
     user_action: "back",
@@ -109,6 +112,7 @@ function InfoAction({
   };
   const handleCta = () => {
     sendEvents({}, ctaTitle?.toLowerCase());
+    onClickCta();
   };
 
   return (
@@ -116,10 +120,13 @@ function InfoAction({
       headerProps={{
         headerTitle: pageTitle,
         hideInPageTitle: hideInPageTitle,
-        backgroundColor: "foundationColors.primary.600",
-        color: "foundationColors.supporting.white",
+        leftIconSrc: require("assets/back_arrow_white.svg"),
+        headerSx: {
+          backgroundColor: "foundationColors.primary.600",
+          color: "foundationColors.supporting.white",
+        },
       }}
-      className="infoAction-wrapper"
+      className={`infoAction-wrapper ${isRedeemUser && "redeemed-user"}`}
       noFooter
     >
       <Stack
@@ -149,7 +156,11 @@ function InfoAction({
         {!isEmpty(externalPfData) && (
           <>
             <WrapperBox className={"external-card-wrapper"} elevation={1}>
-              <ExternalPortfolioCard data={externalPfData} />
+              <ExternalPortfolioCard
+                summary={summaryData}
+                data={externalPfData}
+                onClickCta={handleExternalPortfolio}
+              />
             </WrapperBox>
           </>
         )}
@@ -160,7 +171,12 @@ function InfoAction({
         onClose={() => setIsOpen(false)}
         onBackdropClick={() => setIsOpen(false)}
       >
-        <ReturnCalculator screenType={eventName} sendEvents={sendEvents} />
+        <ReturnCalculator
+          ctaTitle={ctaTitle}
+          onClickCta={onClickCta}
+          screenType={eventName}
+          sendEvents={sendEvents}
+        />
       </BottomSheet>
     </Container>
   );

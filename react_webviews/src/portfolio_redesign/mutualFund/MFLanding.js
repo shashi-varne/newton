@@ -85,6 +85,7 @@ function MFLanding({
   handleEasySip,
   handleExternalPortfolio,
   handleOption,
+  externalPfSummary,
   sendEvents,
   showMfWalkthrough,
 }) {
@@ -127,7 +128,10 @@ function MFLanding({
     } else {
       return (
         <WrapperBox elevation={1}>
-          <ExternalPortfolioCard data={externalPfCardData} />
+          <ExternalPortfolioCard
+            summary={externalPfSummary?.data}
+            data={externalPfCardData}
+          />
         </WrapperBox>
       );
     }
@@ -167,17 +171,19 @@ function MFLanding({
     }, 2000);
   };
   useEffect(() => {
+    console.log("show", showMfWalkthrough);
     if (!showMfWalkthrough) {
       scrollToOptions();
     }
-  }, []);
+  }, [showMfWalkthrough]);
+
   useEffect(() => {
     setSkipButton();
   }, [enable]);
 
   const handleWalkthroughSkip = () => {
+    if (enable) dispatch(setMfWalkthroughInitiated());
     setEnable(false);
-    dispatch(setMfWalkthroughInitiated());
   };
   return (
     <Container

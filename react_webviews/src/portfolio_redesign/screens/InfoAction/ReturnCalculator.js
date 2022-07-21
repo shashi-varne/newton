@@ -25,7 +25,7 @@ const PILL_LIST = [
   { label: "Stocks", dataAid: "stocks" },
 ];
 
-function ReturnCalculator({ sendEvents, screenType }) {
+function ReturnCalculator({ sendEvents, screenType, ctaTitle, onClickCta }) {
   const [pillReturnValue, setPillReturnValue] = useState(0);
   const [sliderValue, setSliderValue] = useState(
     ReturnCalculatorDefaultValues.sliderValue
@@ -71,7 +71,7 @@ function ReturnCalculator({ sendEvents, screenType }) {
 
   const handleStartInvesting = () => {
     sendEvents({}, "start investing");
-    //TODO: redirection
+    onClickCta();
   };
   return (
     <Box className="return-calculator">
@@ -209,7 +209,7 @@ function ReturnCalculator({ sendEvents, screenType }) {
         </Box>
       </Stack>
       <Button
-        title={RETURN_CALCULATOR.cta.title}
+        title={ctaTitle}
         dataAid={RETURN_CALCULATOR.cta.dataAid}
         onClick={handleStartInvesting}
         variant={"primary"}

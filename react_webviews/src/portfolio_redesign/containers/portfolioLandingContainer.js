@@ -65,7 +65,9 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
     }
   };
   useEffect(() => {
-    init();
+    if (isEmpty(summaryData)) {
+      init();
+    }
     checkIfOnlyMf();
     if (
       statusCode === PORTFOLIO_LANDING_STATUS_CODES.downtime ||
@@ -76,9 +78,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
   }, [statusCode]);
 
   const init = () => {
-    if (isEmpty(summaryData)) {
-      dispatch(getPortfolioSummary({ screen, Api }));
-    }
+    dispatch(getPortfolioSummary({ screen, Api }));
   };
 
   const sendEvents = (eventKey, eventVal, userAction) => {
@@ -102,23 +102,21 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
 
   const checkErrorStatusCode = () => {
     if (!statusCode) return;
-    console.log("status in function", statusCode);
     if (statusCode === PORTFOLIO_LANDING_STATUS_CODES.downtime) {
-      console.log("inside 1");
       setViewData({
         showErrorBox: true,
         showTopSection: false,
         showAllocationSection: false,
-        errorMessage: error,
+        errorMessage:
+          error || "12 am to 3 am stock-specific data will be unavailable ",
         errorVariant: ERROR_STATE_BOX_VARIANTS.DOWNTIME,
       });
     } else if (statusCode === PORTFOLIO_LANDING_STATUS_CODES.stocksFailed) {
-      console.log("inside 2");
       setViewData({
         showErrorBox: true,
         showTopSection: false,
         showAllocationSection: false,
-        errorMessage: error,
+        errorMessage: error || "Unable to load your investments in stocks",
         errorVariant: ERROR_STATE_BOX_VARIANTS.NO_INVESTMENT,
       });
     }
@@ -154,6 +152,13 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
     navigate("/group-insurance");
   };
 
+  const goToKyc = () => {
+    navigate("/kyc/home");
+  };
+  const goToInvest = () => {
+    navigate("/");
+  };
+
   if (isPageLoading) {
     return <UiSkelton type="g" />;
   }
@@ -169,6 +174,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
         ctaTitle={"START KYC"}
         subtitle="Join 5M + Indians who invest their money to grow their money. Returns from investments help to build wealth with no sweat! Calculate Returns"
         variant={INFO_ACTION_VARIANT.WITH_ACTION}
+        onClickCta={goToKyc}
       />
     );
   } else if (statusCode === PORTFOLIO_LANDING_STATUS_CODES.noInvestment) {
@@ -183,6 +189,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
         ctaTitle={"INVEST NOW"}
         subtitle="Join 5M + Indians who invest their money to grow their money. Returns from investments help to build wealth with no sweat! Calculate Returns"
         variant={INFO_ACTION_VARIANT.WITH_ACTION}
+        onClickCta={goToInvest}
       />
     );
   } else if (statusCode === PORTFOLIO_LANDING_STATUS_CODES.firstInvestment) {
@@ -197,6 +204,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
         subtitle="Your investments will start to appear here in a while"
         ctaTitle={"VIEW ORDERS"}
         variant={INFO_ACTION_VARIANT.WITHOUT_ACTION}
+        onClickCta={() => {}} //TODO: add redirection after orders page is developed
       />
     );
   }
@@ -212,7 +220,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
       assetWiseData={assetWiseData}
       productWiseData={productWiseData}
       showTopSection={viewData?.showTopSection}
-      errorMessage={viewData?.error || ""}
+      errorMessage={viewData?.errorMessage || ""}
       showAllocationSection={viewData?.showAllocationSection}
       showErrorBox={viewData?.showErrorBox}
       errorStateVariant={viewData?.errorVariant}

@@ -59,7 +59,7 @@ let data = [
     id: "reports",
     name: "Reports",
     icon: report,
-    path: "/reports",
+    path: "/portfolio",
   },
   {
     id: "withdraw",
@@ -96,12 +96,6 @@ let data = [
     name: "Logout",
     icon: logout,
     path: "/logout",
-  },
-  {
-    id: "portfolio",
-    name: "Portfolio",
-    icon: logout,
-    path: "/portfolio",
   },
 ];
 

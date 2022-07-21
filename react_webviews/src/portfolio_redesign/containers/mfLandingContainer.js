@@ -44,6 +44,7 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
   const showMfWalkthrough = useSelector(
     (state) => state?.portfolioV2?.mfWalkthroughInitiated
   );
+  const state = useSelector((state) => state);
   const externalPfStatus = externalPfData?.status || "init";
   const externalPfCardData = getExternalPortfolioData(externalPfStatus);
   const eventRef = useRef({
@@ -61,12 +62,12 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
     navigate("/portfolio/asset-allocation");
   };
   const init = () => {
-    if (isEmpty(mfSummary)) {
-      dispatch(getMfPortfolioSummary({ screen, Api }));
-    }
+    dispatch(getMfPortfolioSummary({ screen, Api }));
   };
   useEffect(() => {
-    init();
+    if (isEmpty(mfSummary)) {
+      init();
+    }
   }, []);
 
   const sendEvents = (eventKey, eventVal, userAction) => {
@@ -108,6 +109,10 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
     if (!!option?.path) navigate(option.path);
   };
 
+  const goToKyc = () => {
+    navigate("/kyc/home");
+  };
+
   if (statusCode === MF_PORTFOLIO_LANDING_STATUS_CODE.kycPending) {
     return (
       <InfoAction
@@ -120,6 +125,7 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
         ctaTitle={"START KYC"}
         subtitle="Join 5M + Indians who invest their money to grow their money. Returns from investments help to build wealth with no sweat! Calculate Returns"
         variant={INFO_ACTION_VARIANT.WITH_ACTION}
+        onClickCta={goToKyc}
       />
     );
   } else if (statusCode === MF_PORTFOLIO_LANDING_STATUS_CODE.firstInvestment) {
@@ -134,6 +140,7 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
         subtitle="Your investments will start to appear here in a while"
         ctaTitle={"VIEW ORDERS"}
         variant={INFO_ACTION_VARIANT.WITHOUT_ACTION}
+        onClickCta={() => {}} //TODO: add redirection after orders page is developed
       />
     );
   } else if (statusCode === MF_PORTFOLIO_LANDING_STATUS_CODE.noInvestment) {
@@ -145,6 +152,9 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
         topImgSrc={require("assets/portfolio_no_investment.svg")}
         title="No investments yet!"
         ctaTitle={"START INVESTING"}
+        handleExternalPortfolio={handleExternalPortfolio}
+        summaryData={externalPfData?.data}
+        externalPfData={externalPfCardData}
         subtitle="Join 5M + Indians who invest their money to grow their money. Returns from investments help to build wealth with no sweat! Calculate Returns"
         variant={INFO_ACTION_VARIANT.WITH_ACTION}
       />
@@ -166,6 +176,8 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
         dataAidSuffix={"noInvestment"}
         topImgSrc={require("assets/portfolio_no_investment.svg")}
         title="No active investments"
+        handleExternalPortfolio={handleExternalPortfolio}
+        summaryData={externalPfData?.data}
         externalPfData={externalPfCardData}
         isRedeemUser={true}
         handleOption={handleOption}
@@ -189,9 +201,10 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
       handleEasySip={handleEasySip}
       externalPfCardData={externalPfCardData}
       externalPfStatus={externalPfStatus}
+      externalPfSummary={externalPfData}
       sendEvents={sendEvents}
       handleOption={handleOption}
-      showWalkthrough={showMfWalkthrough}
+      showMfWalkthrough={showMfWalkthrough}
       graphData={graphData}
     />
   );

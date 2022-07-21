@@ -5,15 +5,14 @@ import WrapperBox from "../../designSystem/atoms/WrapperBox/WrapperBox";
 import { formatAmountInr } from "../../utils/validators";
 import "./ExternalPortfolioCard.scss";
 
-function ExternalPortfolioCard({
-  data,
-  externalInvestment,
-  xirr,
-  isLoading,
-  date,
-}) {
+function ExternalPortfolioCard({ summary, data, isLoading, onClickCta }) {
+  console.log("summary", summary);
   return (
-    <WrapperBox elevation={1} data-aid="cardHorizontal-externalPortfolio">
+    <WrapperBox
+      elevation={1}
+      data-aid="cardHorizontal-externalPortfolio"
+      onClick={onClickCta}
+    >
       <Box className="ext-card">
         <Box className="top-section">
           <Typography
@@ -25,12 +24,14 @@ function ExternalPortfolioCard({
             <EPRow
               title={data?.keyExternalInvestments?.text}
               dataAid={"ExternalInvestments"}
-              value={formatAmountInr(23482)}
+              value={formatAmountInr(summary?.current_value)}
             />
             <EPRow
               title={data?.keyXirr?.text}
               dataAid={"Xirr"}
-              value={"+54.4%"}
+              value={`${summary?.xirr > 0 ? "+" : ""}${summary?.xirr?.toFixed(
+                2
+              )}%`}
             />
           </Typography>
         </Box>
