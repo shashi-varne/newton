@@ -38,6 +38,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
   const allocationDetails = useSelector((state) => getAllocationDetails(state));
   const statusCode = useSelector((state) => getPortfolioStatusCode(state));
   const error = useSelector((state) => getPortfolioErrorMessage(state));
+  const [npsNoInvestment, setNpsNoInvestment] = useState(false);
   const assetWiseData = allocationDetails?.asset_allocation;
   const productWiseData = allocationDetails?.product_allocation;
   const eventRef = useRef({
@@ -71,7 +72,8 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
     checkIfOnlyMf();
     if (
       statusCode === PORTFOLIO_LANDING_STATUS_CODES.downtime ||
-      statusCode === PORTFOLIO_LANDING_STATUS_CODES.stocksFailed
+      statusCode === PORTFOLIO_LANDING_STATUS_CODES.stocksFailed ||
+      statusCode === PORTFOLIO_LANDING_STATUS_CODES.stocksNpsFailed
     ) {
       checkErrorStatusCode();
     }
@@ -111,7 +113,10 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
           error || "12 am to 3 am stock-specific data will be unavailable ",
         errorVariant: ERROR_STATE_BOX_VARIANTS.DOWNTIME,
       });
-    } else if (statusCode === PORTFOLIO_LANDING_STATUS_CODES.stocksFailed) {
+    } else if (
+      statusCode === PORTFOLIO_LANDING_STATUS_CODES.stocksFailed ||
+      PORTFOLIO_LANDING_STATUS_CODES.stocksNpsFailed
+    ) {
       setViewData({
         showErrorBox: true,
         showTopSection: false,
@@ -129,7 +134,11 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
         navigate("/portfolio/mf-landing");
         break;
       case "nps":
-        navigate("/nps/info");
+        if (item?.no_active_investment) {
+          setNpsNoInvestment(true);
+        } else {
+          navigate("/nps/info");
+        }
         break;
       case "equity": //TODO:
         break;
@@ -162,7 +171,22 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
   if (isPageLoading) {
     return <UiSkelton type="g" />;
   }
-  if (statusCode === PORTFOLIO_LANDING_STATUS_CODES.kycPending) {
+  if (npsNoInvestment) {
+    return (
+      <InfoAction
+        pageTitle="NPS"
+        eventName={"main_portfolio"}
+        screenName=""
+        dataAidSuffix={"noInvestments"}
+        topImgSrc={require("assets/portfolio_no_investment.svg")}
+        title="No investments yet!"
+        ctaTitle={"START INVESTING"}
+        subtitle="Join 5M + Indians who invest their money to grow their money. Returns from investments help to build wealth with no sweat! Calculate Returns"
+        variant={INFO_ACTION_VARIANT.WITHOUT_ACTION}
+        onClickCta={goToInvest}
+      />
+    );
+  } else if (statusCode === PORTFOLIO_LANDING_STATUS_CODES.kycPending) {
     return (
       <InfoAction
         pageTitle="Portfolio"
