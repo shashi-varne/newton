@@ -1,8 +1,6 @@
 import { Stack } from "@mui/material";
 import { Box } from "@mui/system";
-import {
-  setMfWalkthroughInitiated,
-} from "businesslogic/dataStore/reducers/portfolioV2";
+import { setMfWalkthroughInitiated } from "businesslogic/dataStore/reducers/portfolioV2";
 import { MF_LANDING } from "businesslogic/strings/portfolio";
 import BottomSheet from "designSystem/organisms/BottomSheet";
 import { Steps } from "intro.js-react";
@@ -88,7 +86,7 @@ function MFLanding({
       colors: ["#33CF90", "#FE794D", "#5AAAF6"],
       seriesData: formatSeriesData(graphData),
     };
-  },[]);
+  }, []);
   const renderExternalPortfolioCard = () => {
     const cardHorizontalCases = ["pending", "failed", "trigger_failed"];
     if (externalPfStatus === "init") {
@@ -162,7 +160,6 @@ function MFLanding({
     }, 2000);
   };
   useEffect(() => {
-    console.log("show", showMfWalkthrough);
     if (!showMfWalkthrough) {
       scrollToOptions();
     }
@@ -282,7 +279,11 @@ function MFLanding({
           }}
           rightIcon={require("assets/ec_info.svg")}
           textColors={{
-            rightSubtitle: "ffoundationColors.secondary.profitGreen.400",
+            rightSubtitle: !mfSummary.xirr
+              ? "foundationColors.content.primary"
+              : mfSummary.xirr > 0
+              ? "foundationColors.secondary.profitGreen.400"
+              : "foundationColors.secondary.lossRed.400",
           }}
           toolTipProps={{
             rightText:

@@ -7,7 +7,7 @@
       height: 100%;
       .external-card-wrapper {
         width: 100%;
-        margin: 32px 0;
+        margin: 32px 0 0;
       }
       margin-bottom: 24px;
       .btn-calculate-returns {
@@ -20,5 +20,10 @@
 .infoAction-wrapper.redeemed-user {
   .container-content-wrapper {
     height: 100%;
+    .more-options {
+      margin-top: 32px;
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
 }

@@ -7,19 +7,22 @@ import "./ErrorStateBox.scss";
 export const ERROR_STATE_BOX_VARIANTS = {
   DOWNTIME: "downtime",
   NO_INVESTMENT: "noInvestment",
+  NO_EXTERNAL_PORTFOLIO: "noExternalPortfolio",
 };
 
 const backgroundColorMapper = {
   downtime: "foundationColors.primary.200",
   noInvestment: "foundationColors.secondary.lossRed.200",
+  noExternalPortfolio: "foundationColors.secondary.lossRed.200",
 };
 
 const textColorMapper = {
   downtime: "foundationColors.content.primary",
   noInvestment: "foundationColors.secondary.lossRed.400",
+  noExternalPortfolio: "foundationColors.secondary.lossRed.400",
 };
 
-function ErrorStateBox({ text, onClickRefresh, variant }) {
+function ErrorStateBox({ text, onClickRefresh, variant, sx }) {
   return (
     <Box
       className="errorstate-box"
@@ -39,7 +42,7 @@ function ErrorStateBox({ text, onClickRefresh, variant }) {
         >
           {text}
         </Typography>
-        {variant === ERROR_STATE_BOX_VARIANTS.NO_INVESTMENT && (
+        {variant !== ERROR_STATE_BOX_VARIANTS.DOWNTIME && (
           <Button
             title="Refresh"
             variant={"link"}

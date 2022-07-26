@@ -115,6 +115,7 @@ function InfoAction({
     onClickCta();
   };
 
+  console.log("ex", externalPfData);
   return (
     <Container
       headerProps={{
@@ -154,18 +155,18 @@ function InfoAction({
           onClick={handleCta}
         />
 
-        {!isEmpty(externalPfData) && (
-          <>
-            <WrapperBox className={"external-card-wrapper"} elevation={1}>
-              <ExternalPortfolioCard
-                summary={summaryData}
-                data={externalPfData}
-                onClickCta={handleExternalPortfolio}
-              />
-            </WrapperBox>
-          </>
+        {!isEmpty(summaryData) && (
+          <WrapperBox className={"external-card-wrapper"} elevation={1}>
+            <ExternalPortfolioCard
+              summary={summaryData}
+              data={externalPfData}
+              onClickCta={handleExternalPortfolio}
+            />
+          </WrapperBox>
         )}
+        {/* <div style={{ marginTop: 32 }}> */}
         {isRedeemUser && <OptionsGrid handleOption={handleOption} />}
+        {/* </div> */}
       </Stack>
       <BottomSheet
         isOpen={isOpen}
