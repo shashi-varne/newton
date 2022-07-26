@@ -58,7 +58,7 @@ function ReturnCalculator({ sendEvents, screenType, ctaTitle, onClickCta }) {
   const handlePillChange = (e, val) => {
     const type = val === 1 ? "stocks" : "mutual_funds";
     sendEvents({ calculated_for: type });
-    setInvestmentType(investmentType);
+    setInvestmentType(type);
     setPillReturnValue(val);
     calculateReturn(sliderValue, investmentPeriod, type);
   };
@@ -146,7 +146,7 @@ function ReturnCalculator({ sendEvents, screenType, ctaTitle, onClickCta }) {
             dataAid={RETURN_CALCULATOR.valueInvested.dataAid}
             style={{ marginBottom: 4 }}
           >
-            ₹{sliderValue * investmentPeriod}
+            ₹{sliderValue}
           </Typography>
           <Typography
             variant="body1"
@@ -159,17 +159,11 @@ function ReturnCalculator({ sendEvents, screenType, ctaTitle, onClickCta }) {
         <Box sx={{ textAlign: "right" }}>
           <Typography
             variant="heading2"
-            color={"foundationColors.content.primary"}
+            color={"foundationColors.primary.brand"}
             dataAid={RETURN_CALCULATOR.valueInvested.dataAid}
             style={{ marginBottom: 4 }}
           >
-            {numDifferentiation(
-              returnResult?.estimatedValue,
-              true,
-              0,
-              false,
-              true
-            )}
+            {formatAmountInr(returnResult?.estimatedValue)}
             <Tooltip
               dataAid="info"
               title={
@@ -209,7 +203,7 @@ function ReturnCalculator({ sendEvents, screenType, ctaTitle, onClickCta }) {
         </Box>
       </Stack>
       <Button
-        title={"START INVESTING"}
+        title={ctaTitle}
         dataAid={RETURN_CALCULATOR.cta.dataAid}
         onClick={handleStartInvesting}
         variant={"primary"}
