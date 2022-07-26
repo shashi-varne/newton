@@ -1,16 +1,17 @@
 import {
   getExternalPortfolioData,
-  MF_PORTFOLIO_LANDING_STATUS_CODE
+  MF_PORTFOLIO_LANDING_STATUS_CODE,
 } from "businesslogic/constants/portfolio";
 import {
   getExternalPortfolioDetails,
   getMfAssetAllocation,
+  getMfPortfolioErrorMessage,
   getMfPortfolioSummary,
   getMfPortfolioSummaryData,
-  getPortfolioStatusCode
+  getPortfolioStatusCode,
 } from "businesslogic/dataStore/reducers/portfolioV2";
 import { isEmpty } from "lodash-es";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Api from "utils/api";
 import { navigate as navigateFunc } from "utils/functions";
@@ -21,7 +22,7 @@ import { nativeCallback } from "../../utils/native_callback";
 import SomethingsWrong from "../ErrorScreen/SomethingsWrong";
 import MFLanding from "../mutualFund/MFLanding";
 import InfoAction, {
-  INFO_ACTION_VARIANT
+  INFO_ACTION_VARIANT,
 } from "../screens/InfoAction/InfoAction";
 
 const screen = "MfLanding";
@@ -34,7 +35,8 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
   );
   const graphData = assetAllocationData.categories;
   const mfSummary = useSelector((state) => getMfPortfolioSummaryData(state));
-  const statusCode = useSelector((state) => getPortfolioStatusCode(state));
+  const statusCode =
+    320 || useSelector((state) => getPortfolioStatusCode(state));
   const { isPageLoading } = useLoadingState(screen);
   const { kyc, user } = useUserKycHook();
   const externalPfData = useSelector((state) =>
@@ -43,7 +45,13 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
   const showMfWalkthrough = useSelector(
     (state) => state?.portfolioV2?.mfWalkthroughInitiated
   );
-  
+  const error = useSelector((state) => getMfPortfolioErrorMessage(state));
+  const [viewData, setViewData] = useState({
+    showTopSection: true,
+    showErrorBox: false,
+    errorVariant: "",
+  });
+
   const externalPfStatus = externalPfData?.status || "init";
   const externalPfCardData = getExternalPortfolioData(externalPfStatus);
   const eventRef = useRef({
@@ -56,6 +64,20 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
     user_investment_status: user?.active_investment,
     user_kyc_status: kyc?.mf_kyc_processed || false,
   });
+
+  const checkErrorStatusCode = () => {
+    if (
+      statusCode === MF_PORTFOLIO_LANDING_STATUS_CODE.mfExternalPortfolioFailed
+    ) {
+      setViewData({
+        showErrorBox: true,
+        showTopSection: false,
+        errorMessage: error || "Unable to load your external portfolio",
+        errorVariant: ERROR_STATE_BOX_VARIANTS.NO_EXTERNAL_PORTFOLIO,
+      });
+    }
+  };
+
   const goToAssetAllocation = () => {
     sendEvents("view_details", "yes", "next");
     navigate("/portfolio/asset-allocation");
@@ -66,6 +88,11 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
   useEffect(() => {
     if (isEmpty(mfSummary)) {
       init();
+    }
+    if (
+      statusCode === MF_PORTFOLIO_LANDING_STATUS_CODE.mfExternalPortfolioFailed
+    ) {
+      checkErrorStatusCode();
     }
   }, []);
 
@@ -112,6 +139,10 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
     navigate("/kyc/home");
   };
 
+  const goToInvest = () => {
+    navigate("/");
+  };
+
   if (statusCode === MF_PORTFOLIO_LANDING_STATUS_CODE.kycPending) {
     return (
       <InfoAction
@@ -156,6 +187,7 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
         externalPfData={externalPfCardData}
         subtitle="Join 5M + Indians who invest their money to grow their money. Returns from investments help to build wealth with no sweat! Calculate Returns"
         variant={INFO_ACTION_VARIANT.WITH_ACTION}
+        onClickCta={goToInvest}
       />
     );
   } else if (
@@ -183,6 +215,7 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
         subtitle="It seems you’ve redeemed all your investments due to which you’re not able to view them here"
         ctaTitle={"INVEST AGAIN"}
         variant={INFO_ACTION_VARIANT.WITHOUT_ACTION}
+        onClickCta={goToInvest}
       />
     );
   }
@@ -205,6 +238,10 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
       handleOption={handleOption}
       showMfWalkthrough={showMfWalkthrough}
       graphData={graphData}
+      onClickRefresh={init}
+      showErrorBox={viewData?.showErrorBox}
+      errorMessage={viewData?.errorMessage}
+      errorStateVariant={viewData?.errorVariant}
     />
   );
 };
