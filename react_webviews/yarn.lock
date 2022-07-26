@@ -5994,7 +5994,7 @@ builtin-status-codes@^3.0.0:
 
 "businesslogic@git+https://fdamitsingh:EafwBATbn2DqxeV7KhsN@bitbucket.org/finwizardtech/businesslogic.git#milestone-one-screen-ids":
   version "1.0.0"
-  resolved "git+https://fdamitsingh:EafwBATbn2DqxeV7KhsN@bitbucket.org/finwizardtech/businesslogic.git#c4a9704b8fe2a044b9a234af9622bf534e0c0649"
+  resolved "git+https://fdamitsingh:EafwBATbn2DqxeV7KhsN@bitbucket.org/finwizardtech/businesslogic.git#9889f362f29ff86961fbe5a4fa27d832847cedf6"
   dependencies:
     "@reduxjs/toolkit" "^1.7.2"
     axios "^0.21.1"
