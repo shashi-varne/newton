@@ -41,6 +41,7 @@ function InfoAction({
   isRedeemUser,
   topImgSrc,
   onClickCta,
+  pageDataAid,
   variant = INFO_ACTION_VARIANT.WITH_ACTION,
 }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -130,6 +131,7 @@ function InfoAction({
       }}
       className={`infoAction-wrapper ${isRedeemUser && "redeemed-user"}`}
       noFooter
+      dataAid={pageDataAid}
     >
       <Stack
         flexDirection="column"
@@ -172,6 +174,7 @@ function InfoAction({
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         onBackdropClick={() => setIsOpen(false)}
+        dataAid="returnCalculator"
       >
         <ReturnCalculator
           ctaTitle={ctaTitle}

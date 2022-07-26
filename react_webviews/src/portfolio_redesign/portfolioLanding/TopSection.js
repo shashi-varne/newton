@@ -198,6 +198,7 @@ function TopSection({ investmentSummary, sendEvents }) {
         isOpen={isCurrentValueSheetOpen}
         onClose={() => setIsCurrentValueSheetOpen(false)}
         onBackdropClick={() => setIsCurrentValueSheetOpen(false)}
+        dataAid={"currentInvestment"}
       >
         <LandingBottomsheet
           current={investmentSummary?.current}
@@ -210,6 +211,7 @@ function TopSection({ investmentSummary, sendEvents }) {
         isOpen={isRealisedGainSheetOpen}
         onClose={() => setIsRealisedGainSheetOpen(false)}
         onBackdropClick={() => setIsRealisedGainSheetOpen(false)}
+        dataAid={"realisedGain"}
       >
         <RealisedGainSheet
           value={formatAmountInr(investmentSummary?.realised_gain)}

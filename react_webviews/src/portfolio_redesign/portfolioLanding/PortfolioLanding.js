@@ -12,14 +12,12 @@ import FeatureCardCarousel from "./FeatureCardCarousel";
 import "./portfolioLanding.scss";
 import TopSection from "./TopSection";
 
-
 const {
   investmentSection: INVESTMENT_SECTION,
   allocationSection: ALLOCATION_SECTION,
   bannerSection: BANNER_SECTION,
   insurance: INSURANCE,
 } = PORTFOLIO_LANDING;
-
 
 function PortfolioLanding({
   handleInsurance,
@@ -53,6 +51,7 @@ function PortfolioLanding({
       }}
       noFooter
       className="portfolio-landing-container"
+      dataAid={PORTFOLIO_LANDING.screenDataAid}
     >
       {showErrorBox && (
         <ErrorStateBox

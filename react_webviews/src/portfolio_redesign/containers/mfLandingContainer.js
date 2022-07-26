@@ -156,6 +156,7 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
         subtitle="Join 5M + Indians who invest their money to grow their money. Returns from investments help to build wealth with no sweat! Calculate Returns"
         variant={INFO_ACTION_VARIANT.WITH_ACTION}
         onClickCta={goToKyc}
+        pageDataAid="mutualFundPortfolioEmptyKYC"
       />
     );
   } else if (statusCode === MF_PORTFOLIO_LANDING_STATUS_CODE.firstInvestment) {
@@ -171,6 +172,7 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
         ctaTitle={"VIEW ORDERS"}
         variant={INFO_ACTION_VARIANT.WITHOUT_ACTION}
         onClickCta={() => {}} //TODO: add redirection after orders page is developed
+        pageDataAid="mutualFundPortfolioUpdating"
       />
     );
   } else if (statusCode === MF_PORTFOLIO_LANDING_STATUS_CODE.noInvestment) {
@@ -188,6 +190,7 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
         subtitle="Join 5M + Indians who invest their money to grow their money. Returns from investments help to build wealth with no sweat! Calculate Returns"
         variant={INFO_ACTION_VARIANT.WITH_ACTION}
         onClickCta={goToInvest}
+        pageDataAid="mutualFundPortfolioEmptyKYC"
       />
     );
   } else if (
@@ -216,6 +219,7 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
         ctaTitle={"INVEST AGAIN"}
         variant={INFO_ACTION_VARIANT.WITHOUT_ACTION}
         onClickCta={goToInvest}
+        pageDataAid="mutualFundPortfolioAfterRedeem"
       />
     );
   }

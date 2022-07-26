@@ -184,6 +184,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
         subtitle="Join 5M + Indians who invest their money to grow their money. Returns from investments help to build wealth with no sweat! Calculate Returns"
         variant={INFO_ACTION_VARIANT.WITHOUT_ACTION}
         onClickCta={goToInvest}
+        pageDataAid="portfolioEmptyKYC"
       />
     );
   } else if (statusCode === PORTFOLIO_LANDING_STATUS_CODES.kycPending) {
@@ -199,6 +200,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
         subtitle="Join 5M + Indians who invest their money to grow their money. Returns from investments help to build wealth with no sweat! Calculate Returns"
         variant={INFO_ACTION_VARIANT.WITH_ACTION}
         onClickCta={goToKyc}
+        pageDataAid="portfolioEmptyKYC"
       />
     );
   } else if (statusCode === PORTFOLIO_LANDING_STATUS_CODES.noInvestment) {
@@ -214,6 +216,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
         subtitle="Join 5M + Indians who invest their money to grow their money. Returns from investments help to build wealth with no sweat! Calculate Returns"
         variant={INFO_ACTION_VARIANT.WITH_ACTION}
         onClickCta={goToInvest}
+        pageDataAid="portfolioEmptyKYC"
       />
     );
   } else if (statusCode === PORTFOLIO_LANDING_STATUS_CODES.firstInvestment) {
@@ -229,6 +232,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
         ctaTitle={"VIEW ORDERS"}
         variant={INFO_ACTION_VARIANT.WITHOUT_ACTION}
         onClickCta={() => {}} //TODO: add redirection after orders page is developed
+        pageDataAid="portfolioUpdating"
       />
     );
   }
