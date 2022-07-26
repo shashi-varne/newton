@@ -90,7 +90,7 @@ function AllInvestments({
                   ALL_INVESTMENTS_LANDING.topInvestmentSection.keyPl.text,
                 leftSubtitle: formatAmountInr(card?.current_value || 0),
                 rightSubtitle: `${
-                  card?.earnings < 0 ? "-" : ""
+                  card?.earnings > 0 ? "+" : ""
                 } ${formatAmountInr(Math.abs(card?.earnings || 0))}`,
               }}
               className="investment-card"

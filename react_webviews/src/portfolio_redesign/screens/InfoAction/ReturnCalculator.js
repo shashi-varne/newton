@@ -1,7 +1,9 @@
 import { Stack } from "@mui/material";
 import { Box } from "@mui/system";
 import {
-  getEstimatedReturn, ReturnCalculatorDefaultValues, TimeLineYearData
+  getEstimatedReturn,
+  ReturnCalculatorDefaultValues,
+  TimeLineYearData,
 } from "businesslogic/constants/portfolio";
 import { RETURN_CALCULATOR } from "businesslogic/strings/portfolio";
 import { formatAmountInr } from "businesslogic/utils/common/functions";
@@ -80,7 +82,7 @@ function ReturnCalculator({ sendEvents, screenType, ctaTitle, onClickCta }) {
       >
         {RETURN_CALCULATOR.sheetTitle.text}
       </Typography>
-      {screenType !== "main_portfolio" && (
+      {screenType === "main_portfolio" && (
         <Box>
           <Pills value={pillReturnValue} onChange={handlePillChange}>
             {PILL_LIST?.map((el, idx) => {
@@ -90,7 +92,7 @@ function ReturnCalculator({ sendEvents, screenType, ctaTitle, onClickCta }) {
         </Box>
       )}
 
-      <Box className={screenType === "main_portfolio" && "no-pills"}>
+      <Box className={screenType !== "main_portfolio" && "no-pills"}>
         <Typography
           variant="heading2"
           color="foundationColors.content.primary"
