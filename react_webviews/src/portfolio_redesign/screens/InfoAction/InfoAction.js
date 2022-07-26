@@ -5,7 +5,7 @@ import {
   LandingHeader,
   LandingHeaderImage,
   LandingHeaderSubtitle,
-  LandingHeaderTitle
+  LandingHeaderTitle,
 } from "designSystem/molecules/LandingHeader";
 import Container from "designSystem/organisms/ContainerWrapper";
 import { isEmpty } from "lodash-es";
@@ -120,6 +120,7 @@ function InfoAction({
       headerProps={{
         headerTitle: pageTitle,
         hideInPageTitle: hideInPageTitle,
+        hideLeftIcon: true,
         leftIconSrc: require("assets/back_arrow_white.svg"),
         headerSx: {
           backgroundColor: "foundationColors.primary.600",
