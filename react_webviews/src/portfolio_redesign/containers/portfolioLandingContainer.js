@@ -244,7 +244,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
       assetWiseData={assetWiseData}
       productWiseData={productWiseData}
       showTopSection={viewData?.showTopSection}
-      errorMessage={viewData?.errorMessage || ""}
+      errorMessage={viewData?.errorMessage}
       showAllocationSection={viewData?.showAllocationSection}
       showErrorBox={viewData?.showErrorBox}
       errorStateVariant={viewData?.errorVariant}

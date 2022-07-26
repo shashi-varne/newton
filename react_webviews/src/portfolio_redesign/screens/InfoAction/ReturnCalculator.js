@@ -209,7 +209,7 @@ function ReturnCalculator({ sendEvents, screenType, ctaTitle, onClickCta }) {
         </Box>
       </Stack>
       <Button
-        title={ctaTitle}
+        title={"START INVESTING"}
         dataAid={RETURN_CALCULATOR.cta.dataAid}
         onClick={handleStartInvesting}
         variant={"primary"}
