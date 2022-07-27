@@ -19,6 +19,7 @@ import useLoadingState from "../../common/customHooks/useLoadingState";
 import UiSkelton from "../../common/ui/Skelton";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
+import { ERROR_STATE_BOX_VARIANTS } from "../ErrorScreen/ErrorStateBox";
 import SomethingsWrong from "../ErrorScreen/SomethingsWrong";
 import MFLanding from "../mutualFund/MFLanding";
 import InfoAction, {
