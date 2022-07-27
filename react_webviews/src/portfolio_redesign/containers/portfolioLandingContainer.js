@@ -181,7 +181,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
         topImgSrc={require("assets/portfolio_no_investment.svg")}
         title="No investments yet!"
         ctaTitle={"START INVESTING"}
-        subtitle="Join 5M + Indians who invest their money to grow their money. Returns from investments help to build wealth with no sweat! Calculate Returns"
+        subtitle="Join 5M + Indians who invest their money to grow their money. Returns from investments help to build wealth with no sweat!"
         variant={INFO_ACTION_VARIANT.WITHOUT_ACTION}
         onClickCta={goToInvest}
         pageDataAid="portfolioEmptyKYC"
@@ -197,7 +197,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
         topImgSrc={require("assets/portfolio_no_investment.svg")}
         title="No investments yet!"
         ctaTitle={"START KYC"}
-        subtitle="Join 5M + Indians who invest their money to grow their money. Returns from investments help to build wealth with no sweat! Calculate Returns"
+        subtitle="Join 5M + Indians who invest their money to grow their money. Returns from investments help to build wealth with no sweat!"
         variant={INFO_ACTION_VARIANT.WITH_ACTION}
         onClickCta={goToKyc}
         pageDataAid="portfolioEmptyKYC"
@@ -213,7 +213,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
         topImgSrc={require("assets/portfolio_no_investment.svg")}
         title="No investments yet!"
         ctaTitle={"INVEST NOW"}
-        subtitle="Join 5M + Indians who invest their money to grow their money. Returns from investments help to build wealth with no sweat! Calculate Returns"
+        subtitle="Join 5M + Indians who invest their money to grow their money. Returns from investments help to build wealth with no sweat!"
         variant={INFO_ACTION_VARIANT.WITH_ACTION}
         onClickCta={goToInvest}
         pageDataAid="portfolioEmptyKYC"

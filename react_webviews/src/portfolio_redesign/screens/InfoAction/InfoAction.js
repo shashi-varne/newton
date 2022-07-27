@@ -177,7 +177,7 @@ function InfoAction({
         dataAid="returnCalculator"
       >
         <ReturnCalculator
-          ctaTitle={ctaTitle}
+          ctaTitle={"START INVESTING"}
           onClickCta={onClickCta}
           screenType={eventName}
           sendEvents={sendEvents}

@@ -17,7 +17,6 @@ import Button from "../../../designSystem/atoms/Button";
 import Icon from "../../../designSystem/atoms/Icon";
 import Separator from "../../../designSystem/atoms/Separator";
 import { TimeLine, Timelines } from "../../../designSystem/atoms/TimelineList";
-import { numDifferentiation } from "../../../utils/validators";
 import "./ReturnCalculator.scss";
 
 const PILL_LIST = [

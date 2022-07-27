@@ -35,37 +35,39 @@ function FeatureCardCarousel({ investments, handleFeatureCard }) {
     >
       {investments?.map((item, idx) => (
         <SwiperSlide key={idx}>
-          <PfFeatureCard
-            style={{
-              cursor: "pointer",
-            }}
-            onClick={() => handleFeatureCard(item)}
-            topImgSrc={item?.icon}
-            textProps={{
-              title: item?.title,
-              leftSubtitle: numDifferentiation(
-                item?.current_value || 0,
-                true,
-                0,
-                false,
-                true
-              ),
-              leftTitle:
-                ALL_INVESTMENTS_LANDING.topInvestmentSection.keyCurrent.text,
-              rightTitle:
-                ALL_INVESTMENTS_LANDING.topInvestmentSection.keyPl.text,
-              rightSubtitle: `${
-                item?.earnings > 0 ? "+" : ""
-              } ${formatAmountInr(Math.abs(item?.earnings || 0))}`,
-            }}
-            textColors={{
-              rightSubtitle: !item?.earnings
-                ? "foundationColors.content.primary"
-                : item?.earnings > 0
-                ? "foundationColors.secondary.profitGreen.400"
-                : "foundationColors.secondary.lossRed.400",
-            }}
-          />
+          {!item.error && (
+            <PfFeatureCard
+              style={{
+                cursor: "pointer",
+              }}
+              onClick={() => handleFeatureCard(item)}
+              topImgSrc={item?.icon}
+              textProps={{
+                title: item?.title,
+                leftSubtitle: numDifferentiation(
+                  item?.current_value || 0,
+                  true,
+                  0,
+                  false,
+                  true
+                ),
+                leftTitle:
+                  ALL_INVESTMENTS_LANDING.topInvestmentSection.keyCurrent.text,
+                rightTitle:
+                  ALL_INVESTMENTS_LANDING.topInvestmentSection.keyPl.text,
+                rightSubtitle: `${
+                  item?.earnings > 0 ? "+" : ""
+                } ${formatAmountInr(Math.abs(item?.earnings || 0))}`,
+              }}
+              textColors={{
+                rightSubtitle: !item?.earnings
+                  ? "foundationColors.content.primary"
+                  : item?.earnings > 0
+                  ? "foundationColors.secondary.profitGreen.400"
+                  : "foundationColors.secondary.lossRed.400",
+              }}
+            />
+          )}
         </SwiperSlide>
       ))}
     </CustomSwiper>

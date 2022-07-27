@@ -154,7 +154,7 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
         topImgSrc={require("assets/portfolio_no_investment.svg")}
         title="No investments yet!"
         ctaTitle={"START KYC"}
-        subtitle="Join 5M + Indians who invest their money to grow their money. Returns from investments help to build wealth with no sweat! Calculate Returns"
+        subtitle="Join 5M + Indians who invest their money to grow their money. Returns from investments help to build wealth with no sweat!"
         variant={INFO_ACTION_VARIANT.WITH_ACTION}
         onClickCta={goToKyc}
         pageDataAid="mutualFundPortfolioEmptyKYC"
@@ -184,11 +184,11 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
         dataAidSuffix={"updatingShortly"}
         topImgSrc={require("assets/portfolio_no_investment.svg")}
         title="No investments yet!"
-        ctaTitle={"START INVESTING"}
+        ctaTitle={"INVEST NOW"}
         handleExternalPortfolio={handleExternalPortfolio}
         summaryData={externalPfData?.data}
         externalPfData={externalPfCardData}
-        subtitle="Join 5M + Indians who invest their money to grow their money. Returns from investments help to build wealth with no sweat! Calculate Returns"
+        subtitle="Join 5M + Indians who invest their money to grow their money. Returns from investments help to build wealth with no sweat!"
         variant={INFO_ACTION_VARIANT.WITH_ACTION}
         onClickCta={goToInvest}
         pageDataAid="mutualFundPortfolioEmptyKYC"
@@ -216,7 +216,7 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
         externalPfData={externalPfCardData}
         isRedeemUser={true}
         handleOption={handleOption}
-        subtitle="It seems you’ve redeemed all your investments due to which you’re not able to view them here"
+        subtitle="It seems you’ve redeemed all your mutual fund investments due to which you’re not able to view them here"
         ctaTitle={"INVEST AGAIN"}
         variant={INFO_ACTION_VARIANT.WITHOUT_ACTION}
         onClickCta={goToInvest}
