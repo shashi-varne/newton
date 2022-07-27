@@ -8,6 +8,7 @@ import AllInvestments from "../AllInvestments/AllInvestments";
 import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
+import { getConfig } from "../../utils/functions";
 
 const AllInvestmentsContainer = (WrappedComponent) => (props) => {
   const navigate = navigateFunc.bind(props);
@@ -49,7 +50,15 @@ const AllInvestmentsContainer = (WrappedComponent) => (props) => {
         navigate("/portfolio/mf-landing");
         break;
       case "nps":
-        navigate("/nps/info");
+        if (card?.no_active_investment) {
+          props.history.push({
+            pathname: "/portfolio/info-action",
+            search: `${getConfig().searchParams}`,
+            state: { noNpsInvestment: true },
+          });
+        } else {
+          navigate("/nps/info");
+        }
         break;
       case "equity": //TODO:
         break;

@@ -134,14 +134,10 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
         break;
       case "nps":
         if (item?.no_active_investment) {
-          navigate("/portfolio/info-action", { name: "shashi" });
           props.history.push({
             pathname: "/portfolio/info-action",
             search: `${getConfig().searchParams}`,
-            state: {
-              id: 7,
-              color: "green",
-            },
+            state: { noNpsInvestment: true },
           });
         } else {
           navigate("/nps/info");
