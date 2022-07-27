@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { Box, ClickAwayListener } from "@mui/material";
 import Typography from "../Typography";
 import isEmpty from "lodash/isEmpty";
+import "./Tooltip.scss";
 
 export const TOOLTIP_PLACEMENTS = {
   BOTTOM_END: "bottom-end",
@@ -30,13 +31,15 @@ const styles = {
   padding: "0px 8px",
 };
 
-const initializeData = ({ title, description }) => () => {
-  if (!isEmpty(title) && !isEmpty(description)) {
-    return { styles, descriptionDataAid: "subtitle" };
-  } else {
-    return { descriptionDataAid: "title" };
-  }
-};
+const initializeData =
+  ({ title, description }) =>
+  () => {
+    if (!isEmpty(title) && !isEmpty(description)) {
+      return { styles, descriptionDataAid: "subtitle" };
+    } else {
+      return { descriptionDataAid: "title" };
+    }
+  };
 
 const TooltipDescription = ({ title, description, dataAid }) => {
   const { styles, descriptionDataAid } = useMemo(
@@ -44,7 +47,7 @@ const TooltipDescription = ({ title, description, dataAid }) => {
     [title, description]
   );
   return (
-    <Box sx={styles} data-aid={`tooltip_${dataAid}`} >
+    <Box sx={styles} data-aid={`tooltip_${dataAid}`}>
       {!isEmpty(title) && (
         <Typography
           variant="body1"
@@ -75,25 +78,26 @@ const Tooltip = (props) => {
     dataAid = "",
     arrow = false,
     placement = TOOLTIP_PLACEMENTS.BOTTOM,
-    disableFocusListener=true,
-    disableHoverListener= true,
-    disableTouchListener= true,
+    disableFocusListener = true,
+    disableHoverListener = true,
+    disableTouchListener = true,
     ...restProps
   } = props;
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
 
   const handleTooltipClose = () => {
     setIsTooltipOpen(false);
-  }
+  };
 
   const handleTooltip = () => {
     setIsTooltipOpen(!isTooltipOpen);
-  }
+  };
   return (
     <ClickAwayListener onClickAway={handleTooltipClose}>
       <MuiTooltip
         title={TooltipDescription({ title, description, dataAid })}
         arrow={arrow}
+        sx={{ zIndex: 999999 }}
         placement={placement}
         open={isTooltipOpen}
         onClose={handleTooltipClose}
@@ -102,12 +106,15 @@ const Tooltip = (props) => {
         disableTouchListener={disableTouchListener}
         {...restProps}
       >
-        <Box component='span' sx={{cursor: 'pointer'}} onClick={handleTooltip}>
+        <Box
+          component="span"
+          sx={{ cursor: "pointer" }}
+          onClick={handleTooltip}
+        >
           {children}
         </Box>
       </MuiTooltip>
     </ClickAwayListener>
-
   );
 };
 
