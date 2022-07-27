@@ -7,10 +7,11 @@ import {
   LandingHeaderSubtitle,
   LandingHeaderTitle,
 } from "designSystem/molecules/LandingHeader";
+import { navigate as navigateFunc } from "utils/functions";
 import Container from "designSystem/organisms/ContainerWrapper";
 import { isEmpty } from "lodash-es";
 import PropTypes from "prop-types";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import WrapperBox from "../../../designSystem/atoms/WrapperBox";
 import BottomSheet from "../../../designSystem/organisms/BottomSheet";
 import useUserKycHook from "../../../kyc/common/hooks/userKycHook";
@@ -43,7 +44,9 @@ function InfoAction({
   onClickCta,
   pageDataAid,
   variant = INFO_ACTION_VARIANT.WITH_ACTION,
+  ...props
 }) {
+  const navigate = navigateFunc.bind(props);
   const [isOpen, setIsOpen] = useState(false);
   const { kyc, user } = useUserKycHook();
   const eventRef = useRef({
@@ -53,6 +56,22 @@ function InfoAction({
     user_investment_status: user?.active_investment,
     user_kyc_status: kyc?.mf_kyc_processed || false,
   });
+
+  const isNpsProps = !isEmpty(props?.location?.state);
+  if (isNpsProps) {
+    pageTitle = "NPS";
+    eventName = "main_portfolio";
+    screenName = "";
+    dataAidSuffix = "noInvestments";
+    topImgSrc = require("assets/portfolio_no_investment.svg");
+    title = "No investments yet!";
+    ctaTitle = "START INVESTING";
+    subtitle =
+      "Join 5M + Indians who invest their money to grow their money. Returns from investments help to build wealth with no sweat!";
+    variant = INFO_ACTION_VARIANT.WITHOUT_ACTION;
+    onClickCta = () => navigate("/");
+    pageDataAid = "portfolioEmptyKYC";
+  }
 
   const sendEvents = (events, userAction = "back") => {
     const eventObj = {
@@ -72,6 +91,7 @@ function InfoAction({
       return eventObj;
     }
   };
+
   const WithoutActionSubtitle = (subtitle) => {
     return (
       <Typography
@@ -116,7 +136,6 @@ function InfoAction({
     onClickCta();
   };
 
-  console.log("ex", externalPfData);
   return (
     <Container
       headerProps={{

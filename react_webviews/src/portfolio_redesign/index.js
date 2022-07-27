@@ -7,6 +7,7 @@ import AssetAllocationContainer from "./containers/assetAllocationContainer";
 import mfLandingContainer from "./containers/mfLandingContainer";
 import portfolioLandingContainer from "./containers/portfolioLandingContainer";
 import SomethingsWrong from "./ErrorScreen/SomethingsWrong";
+import InfoAction from "./screens/InfoAction/InfoAction";
 
 const PortfolioRedesign = ({ match }) => {
   const { url } = match;
@@ -24,6 +25,7 @@ const PortfolioRedesign = ({ match }) => {
             path={`${url}/all-investments`}
             component={AllInvestmentsContainer}
           />
+          <Route path={`${url}/info-action`} component={InfoAction} />
           <Route path={`${url}/somethings-wrong`} component={SomethingsWrong} />
         </Switch>
       </Fragment>

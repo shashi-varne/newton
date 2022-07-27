@@ -38,7 +38,6 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
   const allocationDetails = useSelector((state) => getAllocationDetails(state));
   const statusCode = useSelector((state) => getPortfolioStatusCode(state));
   const error = useSelector((state) => getPortfolioErrorMessage(state));
-  const [npsNoInvestment, setNpsNoInvestment] = useState(false);
   const assetWiseData = allocationDetails?.asset_allocation;
   const productWiseData = allocationDetails?.product_allocation;
   const eventRef = useRef({
@@ -135,7 +134,15 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
         break;
       case "nps":
         if (item?.no_active_investment) {
-          setNpsNoInvestment(true);
+          navigate("/portfolio/info-action", { name: "shashi" });
+          props.history.push({
+            pathname: "/portfolio/info-action",
+            search: `${getConfig().searchParams}`,
+            state: {
+              id: 7,
+              color: "green",
+            },
+          });
         } else {
           navigate("/nps/info");
         }
@@ -171,23 +178,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
   if (isPageLoading) {
     return <UiSkelton type="g" />;
   }
-  if (npsNoInvestment) {
-    return (
-      <InfoAction
-        pageTitle="NPS"
-        eventName={"main_portfolio"}
-        screenName=""
-        dataAidSuffix={"noInvestments"}
-        topImgSrc={require("assets/portfolio_no_investment.svg")}
-        title="No investments yet!"
-        ctaTitle={"START INVESTING"}
-        subtitle="Join 5M + Indians who invest their money to grow their money. Returns from investments help to build wealth with no sweat!"
-        variant={INFO_ACTION_VARIANT.WITHOUT_ACTION}
-        onClickCta={goToInvest}
-        pageDataAid="portfolioEmptyKYC"
-      />
-    );
-  } else if (statusCode === PORTFOLIO_LANDING_STATUS_CODES.kycPending) {
+  if (statusCode === PORTFOLIO_LANDING_STATUS_CODES.kycPending) {
     return (
       <InfoAction
         pageTitle="Portfolio"
