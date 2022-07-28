@@ -77,6 +77,7 @@ function MFLanding({
   externalPfSummary,
   sendEvents,
   showMfWalkthrough,
+  navigate,
 }) {
   const [isCurrentValueSheetOpen, setIsCurrentValueSheetOpen] = useState(false);
   const [enable, setEnable] = useState(false);
@@ -173,6 +174,12 @@ function MFLanding({
     if (enable) dispatch(setMfWalkthroughInitiated());
     setEnable(false);
   };
+
+  const handleBackClick = () => {
+    if (isEmpty(getConfig().features)) {
+      navigate("/");
+    }
+  };
   return (
     <Container
       eventData={sendEvents()}
@@ -185,6 +192,7 @@ function MFLanding({
           backgroundColor: "foundationColors.primary.600",
           color: "foundationColors.supporting.white",
         },
+        onBackClick: handleBackClick,
       }}
       className="mf-landing-container"
       noPadding
@@ -216,12 +224,16 @@ function MFLanding({
           >
             {formatUptoFiveDigits(mfSummary?.current_value)}
           </Typography>
-          <Box>
+          <Box
+            onClick={() => {
+              sendEvents("current_investment", "yes", "next");
+              setIsCurrentValueSheetOpen(true);
+            }}
+          >
             <Icon
               src={require("assets/eye_icon.svg")}
               className="eye-icon"
               dataAid={INVESTMENT_SUMMARY.currentValueIcon.dataAid}
-              onClick={() => setIsCurrentValueSheetOpen(true)}
             />
           </Box>
         </Stack>
@@ -340,7 +352,7 @@ function MFLanding({
         </Box>
       </Box>
       <OptionsGrid handleOption={handleOption} />
-      <button
+      {/* <button
         style={{ display: enable ? "inline-block" : "none" }}
         id="skip-button"
         onClick={handleWalkthroughSkip}
@@ -352,7 +364,7 @@ function MFLanding({
         steps={steps}
         initialStep={0}
         onExit={handleWalkthroughSkip}
-      />
+      /> */}
       <BottomSheet
         isOpen={isCurrentValueSheetOpen}
         onClose={() => setIsCurrentValueSheetOpen(false)}

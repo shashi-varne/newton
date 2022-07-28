@@ -247,6 +247,7 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
       showErrorBox={viewData?.showErrorBox}
       errorMessage={viewData?.errorMessage}
       errorStateVariant={viewData?.errorVariant}
+      navigate={navigate}
     />
   );
 };
