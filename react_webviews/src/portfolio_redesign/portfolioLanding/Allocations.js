@@ -35,21 +35,11 @@ function Allocations({ productWiseData, assetWiseData, sendEvents }) {
   const graphData = useMemo(() => {
     return {
       asset: {
-        labelColorMapper: {
-          Equity: "#33CF90",
-          Debt: "#FE794D",
-          Others: "#FFBD00",
-        },
         colors: ["#33CF90", "#FE794D", "#FFBD00"],
         seriesData: formatSeriesData(assetWiseData),
       },
       product: {
-        labelColorMapper: {
-          STOCKS: "#5AAAF6",
-          NPS: "#ADB1C3",
-          MF: "#B99EFF",
-        },
-        colors: ["#5AAAF6", "#B99EFF", "#ADB1C3"],
+        colors: ["#B99EFF", "#5AAAF6", "#ADB1C3"],
         seriesData: formatSeriesData(productWiseData),
       },
     };

@@ -27,7 +27,7 @@ function SemiDonutGraph({ data }) {
           enabled: true,
           distance: 20,
           softConnector: false,
-          
+
           formatter: function () {
             return `<span> <span style='color: ${
               this.color
