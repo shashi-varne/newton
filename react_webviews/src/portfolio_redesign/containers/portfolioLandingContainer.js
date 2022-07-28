@@ -36,7 +36,8 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
   const { kyc, user } = useUserKycHook();
   const { isPageLoading } = useLoadingState(screen);
   const allocationDetails = useSelector((state) => getAllocationDetails(state));
-  const statusCode = useSelector((state) => getPortfolioStatusCode(state));
+  const statusCode =
+    308 || useSelector((state) => getPortfolioStatusCode(state));
   const error = useSelector((state) => getPortfolioErrorMessage(state));
   const assetWiseData = allocationDetails?.asset_allocation;
   const productWiseData = allocationDetails?.product_allocation;
@@ -167,7 +168,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
   };
 
   const goToKyc = () => {
-    navigate("/kyc/home");
+    navigate("/kyc/web");
   };
   const goToInvest = () => {
     navigate("/");
@@ -189,6 +190,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
         subtitle="Join 5M + Indians who invest their money to grow their money. Returns from investments help to build wealth with no sweat!"
         variant={INFO_ACTION_VARIANT.WITH_ACTION}
         pageDataAid="portfolioEmptyKYC"
+        onClickCta={goToKyc}
       />
     );
   } else if (statusCode === PORTFOLIO_LANDING_STATUS_CODES.noInvestment) {

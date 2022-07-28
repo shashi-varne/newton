@@ -136,7 +136,7 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
   };
 
   const goToKyc = () => {
-    navigate("/kyc/home");
+    navigate("/kyc/web");
   };
 
   const goToInvest = () => {
