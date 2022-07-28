@@ -43,14 +43,26 @@ function FeatureCardCarousel({ investments, handleFeatureCard }) {
               topImgSrc={item?.icon}
               textProps={{
                 title: item?.title,
-                leftSubtitle: formatUptoFiveDigits(item?.current_value || 0),
+                leftSubtitle:
+                  item?.type === "nps" && item?.is_nsdl
+                    ? formatUptoFiveDigits(item?.invested_value || 0)
+                    : formatUptoFiveDigits(item?.current_value || 0),
                 leftTitle:
-                  ALL_INVESTMENTS_LANDING.topInvestmentSection.keyCurrent.text,
+                  item?.type === "nps" && item?.is_nsdl
+                    ? "Invested value"
+                    : ALL_INVESTMENTS_LANDING.topInvestmentSection.keyCurrent
+                        .text,
                 rightTitle:
-                  ALL_INVESTMENTS_LANDING.topInvestmentSection.keyPl.text,
-                rightSubtitle: `${
-                  item?.earnings > 0 ? "+" : ""
-                } ${formatUptoFiveDigits(Math.abs(item?.earnings || 0))}`,
+                  item?.type === "nps" && item?.is_nsdl
+                    ? ""
+                    : ALL_INVESTMENTS_LANDING.topInvestmentSection.keyPl.text,
+
+                rightSubtitle:
+                  item?.type === "nps" && item?.is_nsdl
+                    ? ""
+                    : `${item?.earnings > 0 ? "+" : ""} ${formatUptoFiveDigits(
+                        Math.abs(item?.earnings || 0)
+                      )}`,
               }}
               textColors={{
                 rightSubtitle: !item?.earnings

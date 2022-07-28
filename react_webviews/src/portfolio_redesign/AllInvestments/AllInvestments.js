@@ -84,14 +84,27 @@ function AllInvestments({
               topImgSrc={card.icon}
               textProps={{
                 title: card.title,
+                title: card?.title,
+                leftSubtitle:
+                  card?.type === "nps" && card?.is_nsdl
+                    ? formatUptoFiveDigits(card?.invested_value || 0)
+                    : formatUptoFiveDigits(card?.current_value || 0),
                 leftTitle:
-                  ALL_INVESTMENTS_LANDING.topInvestmentSection.keyCurrent.text,
+                  card?.type === "nps" && card?.is_nsdl
+                    ? "Invested value"
+                    : ALL_INVESTMENTS_LANDING.topInvestmentSection.keyCurrent
+                        .text,
                 rightTitle:
-                  ALL_INVESTMENTS_LANDING.topInvestmentSection.keyPl.text,
-                leftSubtitle: formatUptoFiveDigits(card?.current_value || 0),
-                rightSubtitle: `${
-                  card?.earnings > 0 ? "+" : ""
-                } ${formatUptoFiveDigits(Math.abs(card?.earnings || 0))}`,
+                  card?.type === "nps" && card?.is_nsdl
+                    ? ""
+                    : ALL_INVESTMENTS_LANDING.topInvestmentSection.keyPl.text,
+
+                rightSubtitle:
+                  card?.type === "nps" && card?.is_nsdl
+                    ? ""
+                    : `${card?.earnings > 0 ? "+" : ""} ${formatUptoFiveDigits(
+                        Math.abs(card?.earnings || 0)
+                      )}`,
               }}
               className="investment-card"
               textColors={{
