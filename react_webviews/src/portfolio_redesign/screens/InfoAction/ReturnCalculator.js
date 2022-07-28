@@ -58,7 +58,7 @@ function ReturnCalculator({ sendEvents, screenType, ctaTitle, onClickCta }) {
   const handlePillChange = (e, val) => {
     const type = val === 1 ? "stocks" : "mutual_funds";
     sendEvents({ calculated_for: type });
-    setInvestmentType(investmentType);
+    setInvestmentType(type);
     setPillReturnValue(val);
     calculateReturn(sliderValue, investmentPeriod, type);
   };
