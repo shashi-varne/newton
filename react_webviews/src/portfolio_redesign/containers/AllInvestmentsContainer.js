@@ -17,7 +17,7 @@ const AllInvestmentsContainer = (WrappedComponent) => (props) => {
   const { user, kyc } = useUserKycHook();
   const investmentSummary = getInvestmentSummary(state);
   const eventRef = useRef({
-    screen_name: "mutual funds",
+    screen_name: "all investments",
     user_action: "back",
     card_click: "",
     user_application_status: kyc?.application_status_v2 || "init",

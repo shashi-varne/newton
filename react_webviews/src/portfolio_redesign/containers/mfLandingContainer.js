@@ -36,8 +36,7 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
   );
   const graphData = assetAllocationData.categories;
   const mfSummary = useSelector((state) => getMfPortfolioSummaryData(state));
-  const statusCode =
-    320 || useSelector((state) => getPortfolioStatusCode(state));
+  const statusCode = useSelector((state) => getPortfolioStatusCode(state));
   const { isPageLoading } = useLoadingState(screen);
   const { kyc, user } = useUserKycHook();
   const externalPfData = useSelector((state) =>
@@ -149,7 +148,7 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
       <InfoAction
         pageTitle="Mutual funds"
         eventName={"main_portfolio"}
-        screenName=""
+        screenName="no active investments"
         dataAidSuffix={"noInvestments"}
         topImgSrc={require("assets/portfolio_no_investment.svg")}
         title="No investments yet!"
@@ -180,6 +179,7 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
     return (
       <InfoAction
         pageTitle="Mutual funds"
+        screenName="no active investments"
         eventName={"main_portfolio"}
         dataAidSuffix={"updatingShortly"}
         topImgSrc={require("assets/portfolio_no_investment.svg")}

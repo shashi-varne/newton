@@ -179,14 +179,13 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
       <InfoAction
         pageTitle="Portfolio"
         eventName={"main_portfolio"}
-        screenName=""
+        screenName="no active investments"
         dataAidSuffix={"noInvestments"}
         topImgSrc={require("assets/portfolio_no_investment.svg")}
         title="No investments yet!"
         ctaTitle={"START KYC"}
         subtitle="Join 5M + Indians who invest their money to grow their money. Returns from investments help to build wealth with no sweat!"
         variant={INFO_ACTION_VARIANT.WITH_ACTION}
-        onClickCta={goToKyc}
         pageDataAid="portfolioEmptyKYC"
       />
     );
