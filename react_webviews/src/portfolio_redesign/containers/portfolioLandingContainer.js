@@ -68,7 +68,9 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
     if (isEmpty(summaryData)) {
       init();
     }
-    checkIfOnlyMf();
+    if (statusCode === 200) {
+      checkIfOnlyMf();
+    }
     if (
       statusCode === PORTFOLIO_LANDING_STATUS_CODES.downtime ||
       statusCode === PORTFOLIO_LANDING_STATUS_CODES.stocksFailed ||
