@@ -1,3 +1,4 @@
+import { PORTFOLIO_LANDING_STATUS_CODES } from "businesslogic/constants/portfolio";
 import {
   getAllocationDetails,
   getInvestments,
@@ -13,8 +14,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Api from "utils/api";
 import { navigate as navigateFunc } from "utils/functions";
 import useLoadingState from "../../common/customHooks/useLoadingState";
-import UiSkelton from "../../common/ui/Skelton";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
+import { getConfig } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 import { ERROR_STATE_BOX_VARIANTS } from "../ErrorScreen/ErrorStateBox";
 import SomethingsWrong from "../ErrorScreen/SomethingsWrong";
@@ -22,8 +23,6 @@ import PortfolioRedesign from "../portfolioLanding/PortfolioLanding";
 import InfoAction, {
   INFO_ACTION_VARIANT,
 } from "../screens/InfoAction/InfoAction";
-import { PORTFOLIO_LANDING_STATUS_CODES } from "businesslogic/constants/portfolio";
-import { getConfig } from "../../utils/functions";
 
 const screen = "PortfolioLanding";
 
@@ -36,8 +35,7 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
   const { kyc, user } = useUserKycHook();
   const { isPageLoading } = useLoadingState(screen);
   const allocationDetails = useSelector((state) => getAllocationDetails(state));
-  const statusCode =
-    308 || useSelector((state) => getPortfolioStatusCode(state));
+  const statusCode = useSelector((state) => getPortfolioStatusCode(state));
   const error = useSelector((state) => getPortfolioErrorMessage(state));
   const assetWiseData = allocationDetails?.asset_allocation;
   const productWiseData = allocationDetails?.product_allocation;
@@ -173,10 +171,10 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
   const goToInvest = () => {
     navigate("/");
   };
+  const handleRefreshIcon = () => {
+    init();
+  };
 
-  if (isPageLoading) {
-    return <UiSkelton type="g" />;
-  }
   if (statusCode === PORTFOLIO_LANDING_STATUS_CODES.kycPending) {
     return (
       <InfoAction
@@ -248,6 +246,8 @@ const PortfolioLandingContainer = (WrappedComponent) => (props) => {
       handleInsurance={handleInsurance}
       sendEvents={sendEvents}
       onClickRefresh={init}
+      handleRefreshIcon={handleRefreshIcon}
+      isPageLoading={isPageLoading}
     />
   );
 };

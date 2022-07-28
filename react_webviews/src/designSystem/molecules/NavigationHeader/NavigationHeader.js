@@ -142,7 +142,7 @@ const NavigationHeader = ({
           {rightIconSrc && (
             <Icon
               src={rightIconSrc}
-              size="24px"
+              size="18px"
               onClick={onRightIconClick}
               dataAid="right"
             />
