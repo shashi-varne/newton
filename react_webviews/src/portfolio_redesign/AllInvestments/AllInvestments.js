@@ -1,12 +1,12 @@
-import React from "react";
-import Container from "designSystem/organisms/ContainerWrapper";
 import { Box, Stack } from "@mui/material";
-import Typography from "../../designSystem/atoms/Typography";
-import "./AllInvestments.scss";
-import PfFeatureCard from "../../featureComponent/portfolio/PfFeatureCard/PfFeatureCard";
-import WrapperBox from "../../designSystem/atoms/WrapperBox";
 import { ALL_INVESTMENTS_LANDING } from "businesslogic/strings/portfolio";
-import { formatAmountInr } from "../../utils/validators";
+import Container from "designSystem/organisms/ContainerWrapper";
+import React from "react";
+import Typography from "../../designSystem/atoms/Typography";
+import WrapperBox from "../../designSystem/atoms/WrapperBox";
+import PfFeatureCard from "../../featureComponent/portfolio/PfFeatureCard/PfFeatureCard";
+import { formatUptoFiveDigits } from "../../utils/validators";
+import "./AllInvestments.scss";
 
 function AllInvestments({
   investments,
@@ -48,7 +48,7 @@ function AllInvestments({
               ALL_INVESTMENTS_LANDING.topInvestmentSection.valueCurrent.dataAid
             }
           >
-            {formatAmountInr(investmentSummary?.current)}
+            {formatUptoFiveDigits(investmentSummary?.current)}
           </Typography>
         </Box>
         <Box className="pal-value">
@@ -72,7 +72,7 @@ function AllInvestments({
             }
           >
             {investmentSummary?.earnings > 0 && "+"}
-            {formatAmountInr(investmentSummary?.earnings)}
+            {formatUptoFiveDigits(investmentSummary?.earnings)}
           </Typography>
         </Box>
       </Stack>
@@ -88,10 +88,10 @@ function AllInvestments({
                   ALL_INVESTMENTS_LANDING.topInvestmentSection.keyCurrent.text,
                 rightTitle:
                   ALL_INVESTMENTS_LANDING.topInvestmentSection.keyPl.text,
-                leftSubtitle: formatAmountInr(card?.current_value || 0),
+                leftSubtitle: formatUptoFiveDigits(card?.current_value || 0),
                 rightSubtitle: `${
                   card?.earnings > 0 ? "+" : ""
-                } ${formatAmountInr(Math.abs(card?.earnings || 0))}`,
+                } ${formatUptoFiveDigits(Math.abs(card?.earnings || 0))}`,
               }}
               className="investment-card"
               textColors={{

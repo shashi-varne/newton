@@ -3,7 +3,11 @@ import React, { useState } from "react";
 import Typography from "../../designSystem/atoms/Typography";
 import { PORTFOLIO_LANDING } from "businesslogic/strings/portfolio";
 import { Stack } from "@mui/material";
-import { formatAmountInr, numDifferentiation } from "../../utils/validators";
+import {
+  formatAmountInr,
+  formatUptoFiveDigits,
+  numDifferentiation,
+} from "../../utils/validators";
 import Lottie from "lottie-react";
 import BottomSheet from "../../designSystem/organisms/BottomSheet";
 import LandingBottomsheet from "./landingBottomsheet";
@@ -57,13 +61,7 @@ function TopSection({ investmentSummary, sendEvents }) {
             dataAid={INVESTMENT_SUMMARY.valueTotalCurrent.dataAid}
             style={{ marginRight: 8 }}
           >
-            {numDifferentiation(
-              investmentSummary?.current,
-              true,
-              1,
-              false,
-              true
-            )}
+            {formatUptoFiveDigits(investmentSummary?.current)}
           </Typography>
           <Icon
             src={require("assets/eye_icon.svg")}
@@ -112,7 +110,7 @@ function TopSection({ investmentSummary, sendEvents }) {
           dataAid={INVESTMENT_SUMMARY.valueOneDayChange.dataAid}
         >
           {investmentSummary?.one_day_earnings >= 0 ? "+" : "-"}
-          {formatAmountInr(investmentSummary?.one_day_earnings)} (
+          {formatUptoFiveDigits(investmentSummary?.one_day_earnings)} (
           {investmentSummary?.one_day_earnings >= 0 ? "+" : "-"}
           {investmentSummary?.one_day_earnings_percent?.toFixed(1)}%)
         </Typography>
@@ -136,13 +134,7 @@ function TopSection({ investmentSummary, sendEvents }) {
             color={"foundationColors.supporting.white"}
             dataAid="valueInvestedAmount"
           >
-            {numDifferentiation(
-              investmentSummary?.invested,
-              true,
-              1,
-              false,
-              true
-            )}
+            {formatUptoFiveDigits(investmentSummary?.invested)}
           </Typography>
         </Box>
         <Box
@@ -162,13 +154,7 @@ function TopSection({ investmentSummary, sendEvents }) {
             color={"foundationColors.supporting.white"}
             dataAid={INVESTMENT_SUMMARY.valuePl.dataAid}
           >
-            {numDifferentiation(
-              investmentSummary?.earnings,
-              true,
-              1,
-              false,
-              true
-            )}
+            {formatUptoFiveDigits(investmentSummary?.earnings)}
           </Typography>
         </Box>
       </Stack>
@@ -191,7 +177,7 @@ function TopSection({ investmentSummary, sendEvents }) {
           src={require("assets/generic_green_right_arrow.svg")}
           width="6px"
           height="10px"
-          dataAid={INVESTMENT_SUMMARY.realisedGain.iconDataAid}
+          dataAid="realisedGain"
         />
       </Stack>
       <BottomSheet

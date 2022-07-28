@@ -17,6 +17,7 @@ import Button from "../../../designSystem/atoms/Button";
 import Icon from "../../../designSystem/atoms/Icon";
 import Separator from "../../../designSystem/atoms/Separator";
 import { TimeLine, Timelines } from "../../../designSystem/atoms/TimelineList";
+import { formatUptoFiveDigits } from "../../../utils/validators";
 import "./ReturnCalculator.scss";
 
 const PILL_LIST = [
@@ -98,7 +99,7 @@ function ReturnCalculator({ sendEvents, screenType, ctaTitle, onClickCta }) {
           dataAid={RETURN_CALCULATOR.amount.dataAid}
           className="invested-value"
         >
-          {formatAmountInr(sliderValue)}
+          {formatUptoFiveDigits(sliderValue)}
         </Typography>
       </Box>
       <Box className="return-slider">
@@ -145,7 +146,7 @@ function ReturnCalculator({ sendEvents, screenType, ctaTitle, onClickCta }) {
             dataAid={RETURN_CALCULATOR.valueInvested.dataAid}
             style={{ marginBottom: 4 }}
           >
-            ₹{sliderValue}
+            {formatUptoFiveDigits(sliderValue)}
           </Typography>
           <Typography
             variant="body1"
@@ -162,7 +163,7 @@ function ReturnCalculator({ sendEvents, screenType, ctaTitle, onClickCta }) {
             dataAid={RETURN_CALCULATOR.valueInvested.dataAid}
             style={{ marginBottom: 4 }}
           >
-            {formatAmountInr(returnResult?.estimatedValue)}
+            {formatUptoFiveDigits(returnResult?.estimatedValue, "chill")}
             <Tooltip
               dataAid="info"
               title={

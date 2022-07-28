@@ -1,11 +1,10 @@
-import { formatAmountInr } from "businesslogic/utils/common/functions";
+import { ALL_INVESTMENTS_LANDING } from "businesslogic/strings/portfolio";
 import React from "react";
 import { SwiperSlide } from "swiper/react";
 import CustomSwiper from "../../designSystem/molecules/CustomSwiper";
 import PfFeatureCard from "../../featureComponent/portfolio/PfFeatureCard";
 import { getConfig } from "../../utils/functions";
-import { numDifferentiation } from "../../utils/validators";
-import { ALL_INVESTMENTS_LANDING } from "businesslogic/strings/portfolio";
+import { formatUptoFiveDigits } from "../../utils/validators";
 
 const config = getConfig();
 function FeatureCardCarousel({ investments, handleFeatureCard }) {
@@ -44,20 +43,14 @@ function FeatureCardCarousel({ investments, handleFeatureCard }) {
               topImgSrc={item?.icon}
               textProps={{
                 title: item?.title,
-                leftSubtitle: numDifferentiation(
-                  item?.current_value || 0,
-                  true,
-                  0,
-                  false,
-                  true
-                ),
+                leftSubtitle: formatUptoFiveDigits(item?.current_value || 0),
                 leftTitle:
                   ALL_INVESTMENTS_LANDING.topInvestmentSection.keyCurrent.text,
                 rightTitle:
                   ALL_INVESTMENTS_LANDING.topInvestmentSection.keyPl.text,
                 rightSubtitle: `${
                   item?.earnings > 0 ? "+" : ""
-                } ${formatAmountInr(Math.abs(item?.earnings || 0))}`,
+                } ${formatUptoFiveDigits(Math.abs(item?.earnings || 0))}`,
               }}
               textColors={{
                 rightSubtitle: !item?.earnings

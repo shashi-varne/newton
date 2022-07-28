@@ -17,7 +17,7 @@ import InfoCard from "../../designSystem/molecules/InfoCard";
 import Container from "../../designSystem/organisms/ContainerWrapper";
 import PfFeatureCard from "../../featureComponent/portfolio/PfFeatureCard/PfFeatureCard";
 import { getConfig } from "../../utils/functions";
-import { formatAmountInr, numDifferentiation } from "../../utils/validators";
+import { formatUptoFiveDigits } from "../../utils/validators";
 import LandingBottomsheet from "../portfolioLanding/landingBottomsheet";
 import SemiDonutGraph from "../portfolioLanding/SemiDonutGraph";
 import ExternalPortfolioCard from "./ExternalPortfolioCard";
@@ -214,7 +214,7 @@ function MFLanding({
             dataAid={INVESTMENT_SUMMARY.valueTotalCurrent.dataAid}
             style={{ marginRight: 10 }}
           >
-            {numDifferentiation(mfSummary?.current_value, true, 1, false, true)}
+            {formatUptoFiveDigits(mfSummary?.current_value)}
           </Typography>
           <Box>
             <Icon
@@ -248,7 +248,7 @@ function MFLanding({
             dataAid={INVESTMENT_SUMMARY.valueOneDayChange.dataAid}
           >
             {mfSummary?.one_day_earnings >= 0 ? "+" : "-"}
-            {formatAmountInr(Math.abs(mfSummary?.one_day_earnings))} ({" "}
+            {formatUptoFiveDigits(Math.abs(mfSummary?.one_day_earnings))} ({" "}
             {mfSummary?.one_day_earnings_percent >= 0 ? "+" : "-"}
             {Math.abs(mfSummary?.one_day_earnings_percent)}%)
           </Typography>
@@ -259,23 +259,11 @@ function MFLanding({
           textProps={{
             title: "Current investment",
             leftTitle: "Invested",
-            leftSubtitle: numDifferentiation(
-              mfSummary?.invested_value,
-              true,
-              1,
-              false,
-              true
-            ),
+            leftSubtitle: formatUptoFiveDigits(mfSummary?.invested_value),
             rightTitle: "XIRR",
             rightSubtitle: `${mfSummary.xirr}%`,
             middleTitle: "P&L",
-            middleSubtitle: numDifferentiation(
-              mfSummary?.earnings,
-              true,
-              1,
-              false,
-              true
-            ),
+            middleSubtitle: formatUptoFiveDigits(mfSummary?.earnings),
           }}
           rightIcon={require("assets/ec_info.svg")}
           textColors={{
