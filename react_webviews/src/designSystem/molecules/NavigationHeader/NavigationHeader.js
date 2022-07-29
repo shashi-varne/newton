@@ -182,9 +182,12 @@ const NavigationHeader = ({
           </Typography>
         </Box>
       )}
-      <section className="nav-bar-subtitle-wrapper" ref={subtitleRef}>
-        {children}
-      </section>
+      {!!children && (
+        <section className="nav-bar-subtitle-wrapper" ref={subtitleRef}>
+          {children}
+        </section>
+      )}
+
       {!isEmpty(tabsProps) && !isEmpty(tabChilds) && (
         <section className="nav-bar-tabs-wrapper" ref={tabWrapperRef}>
           <TabsSection tabs={tabsProps} tabChilds={tabChilds} />

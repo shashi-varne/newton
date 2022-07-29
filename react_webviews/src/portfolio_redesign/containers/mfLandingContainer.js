@@ -143,6 +143,10 @@ const MfLandingContainer = (WrappedComponent) => (props) => {
     navigate("/");
   };
 
+  const handleMissedSip = () => {
+    console.log("missed sip");
+  };
+
   if (statusCode === MF_PORTFOLIO_LANDING_STATUS_CODE.kycPending) {
     return (
       <InfoAction

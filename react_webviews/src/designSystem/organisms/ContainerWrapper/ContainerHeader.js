@@ -16,7 +16,7 @@ const ContainerHeader = ({ headerProps, containerRef, handleonBackClick }) => {
     points = [],
     headerSx,
     headerClassName,
-    hide=false,
+    hide = false,
     disableSeeMoreFeature = false,
     hideBackButton = false,
     ...restHeaderProps
@@ -27,8 +27,8 @@ const ContainerHeader = ({ headerProps, containerRef, handleonBackClick }) => {
     subtitleLength > 89 || (pointsLength >= 2 && subtitleLength > 40);
   const { isIframe, isMobileDevice } = useMemo(getConfig, []);
 
-  if(hide){
-    return null
+  if (hide) {
+    return null;
   }
 
   return (

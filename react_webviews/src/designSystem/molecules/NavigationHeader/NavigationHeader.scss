@@ -57,7 +57,7 @@
   }
 
   .nav-bar-title-wrapper {
-    padding: 0px 16px;
+    padding: 0px 16px 16px;
   }
 
   .nav-bar-tabs-wrapper {
@@ -84,10 +84,10 @@
   }
 
   .nav-bar-subtitle-wrapper {
-    padding: 0px 16px 16px 16px;
-    &:empty {
-      padding-bottom: 16px;
-    }
+    padding: 0 16px 0 16px;
+    // &:empty {
+    //   padding-bottom: 16px;
+    // }
     .lh-subtitle {
       margin-top: 8px;
     }

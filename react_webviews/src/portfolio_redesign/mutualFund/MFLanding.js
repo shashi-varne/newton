@@ -78,6 +78,7 @@ function MFLanding({
   sendEvents,
   showMfWalkthrough,
   navigate,
+  handleMissedSip,
 }) {
   const [isCurrentValueSheetOpen, setIsCurrentValueSheetOpen] = useState(false);
   const [enable, setEnable] = useState(false);
@@ -300,6 +301,16 @@ function MFLanding({
             dataAid={MF_LANDING.easySip.dataAid}
           />
         </WrapperBox>
+
+        <WrapperBox onClick={handleMissedSip} elevation={1}>
+          <InfoCard
+            imgSrc={require("assets/missed_sip.svg")}
+            title={"Missed SIP"}
+            subtitle={"Please pay this month’s SIP"}
+            dataAid={"missedSip"}
+          />
+        </WrapperBox>
+
         <Box onClick={handleExternalPortfolio}>
           {renderExternalPortfolioCard()}
         </Box>

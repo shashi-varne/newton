@@ -20,8 +20,8 @@
   text-align: center;
 
   .btn-sheet-img {
-    height:120px;
-    width:140px;
+    height: 120px;
+    width: 140px;
     margin: 40px auto 24px;
   }
 
@@ -32,6 +32,26 @@
 
   .btn-sheet-subtitle {
     margin-top: 0px;
+  }
+}
+
+.bottomsheet-secondary {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .info-box {
+    margin: 32px 0;
+    text-align: center;
+  }
+  .buttons {
+    &:nth-child(2) {
+      margin: 14px 0;
+    }
+    width: 100%;
+    text-align: center;
   }
 }
 
