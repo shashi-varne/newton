@@ -4,6 +4,7 @@ import {
   getEstimatedReturn,
   ReturnCalculatorDefaultValues,
   TimeLineYearData,
+  ToolTipMapper,
 } from "businesslogic/constants/portfolio";
 import { RETURN_CALCULATOR } from "businesslogic/strings/portfolio";
 import { formatAmountInr } from "businesslogic/utils/common/functions";
@@ -167,8 +168,11 @@ function ReturnCalculator({ sendEvents, screenType, ctaTitle, onClickCta }) {
             <Tooltip
               dataAid="info"
               title={
-                "Estimated return is calculated based on 70% equity and 30% debt allocation with a 9.9% rate of return"
-                //TODO: dynamic tooltip text
+                ToolTipMapper[
+                  investmentType === "mutual_funds"
+                    ? investmentPeriod
+                    : "stocks"
+                ]
               }
               placement={TOOLTIP_PLACEMENTS.TOP}
             >

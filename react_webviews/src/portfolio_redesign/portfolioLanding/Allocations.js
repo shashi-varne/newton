@@ -10,10 +10,10 @@ import SemiDonutGraph from "./SemiDonutGraph";
 const { allocationSection: ALLOCATION_SECTION } = PORTFOLIO_LANDING;
 
 const ALLOCATION_TYPES = [
-  {
-    label: ALLOCATION_SECTION.pillAssetWise.text,
-    dataAid: ALLOCATION_SECTION.pillAssetWise.dataAid,
-  },
+  // {
+  //   label: ALLOCATION_SECTION.pillAssetWise.text,
+  //   dataAid: ALLOCATION_SECTION.pillAssetWise.dataAid,
+  // },
   {
     label: ALLOCATION_SECTION.pillProductWise.text,
     dataAid: ALLOCATION_SECTION.pillProductWise.dataAid,
@@ -69,21 +69,21 @@ function Allocations({ productWiseData, assetWiseData, sendEvents }) {
           })}
         </Pills>
       </Box>
-      <CustomSwiper
+      {/* <CustomSwiper
         slidesPerView={1}
         slidesPerColumn={1}
         onSlideChange={handleSlideChange}
         onSwiper={setSwiper}
         autoHeight
         hidePagination
-      >
-        <SwiperSlide>
-          <SemiDonutGraph data={graphData["asset"]} />
-        </SwiperSlide>
-        <SwiperSlide>
-          <SemiDonutGraph data={graphData["product"]} />
-        </SwiperSlide>
-      </CustomSwiper>
+      > */}
+      {/* <SwiperSlide> */}
+      {/* <SemiDonutGraph data={graphData["asset"]} /> */}
+      {/* </SwiperSlide> */}
+      {/* <SwiperSlide> */}
+      <SemiDonutGraph data={graphData["product"]} />
+      {/* </SwiperSlide> */}
+      {/* </CustomSwiper> */}
     </Box>
   );
 }

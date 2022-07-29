@@ -61,7 +61,7 @@ function InfoAction({
   if (isNpsProps) {
     pageTitle = "NPS";
     eventName = "main_portfolio";
-    screenName = "";
+    screenName = "nps";
     dataAidSuffix = "noInvestments";
     topImgSrc = require("assets/portfolio_no_investment.svg");
     title = "No investments yet!";
@@ -73,19 +73,19 @@ function InfoAction({
     pageDataAid = "portfolioEmptyKYC";
   }
 
-  const sendEvents = (events, userAction = "back") => {
+  const sendEvents = (events, userAction) => {
     const eventObj = {
       event_name: eventName,
       properties: eventRef.current,
     };
     const properties = {
+      user_action: userAction || "back",
       ...eventObj.properties,
       ...events,
-      user_action: userAction,
     };
     eventRef.current = properties;
     eventObj.properties = properties;
-    if (userAction) {
+    if (eventObj?.properties?.user_action) {
       nativeCallback({ events: eventObj });
     } else {
       return eventObj;
@@ -107,11 +107,12 @@ function InfoAction({
   const openCalculator = () => {
     setIsOpen(true);
     sendEvents({
+      user_action: "start investing",
       screen_name: "return calculator",
       calculated_for: "mutual funds",
       bottomsheet: true,
       slider_use: "no",
-      "investment period": "1Y",
+      "investment period": "3Y",
     });
   };
   const WithActionSubtitle = (setIsOpen, subtitle) => {
@@ -151,6 +152,7 @@ function InfoAction({
       className={`infoAction-wrapper ${isRedeemUser && "redeemed-user"}`}
       noFooter
       dataAid={pageDataAid}
+      eventData={sendEvents()}
     >
       <Stack
         flexDirection="column"

@@ -162,7 +162,7 @@ function MFLanding({
   };
   useEffect(() => {
     if (!showMfWalkthrough) {
-      scrollToOptions();
+      // scrollToOptions();
     }
   }, [showMfWalkthrough]);
 
@@ -267,7 +267,7 @@ function MFLanding({
         </Stack>
 
         <PfFeatureCard
-          dataAid={INVESTMENT_SUMMARY.pfFeatureCard}
+          dataAid={"currentInvestment"}
           textProps={{
             title: "Current investment",
             leftTitle: "Invested",
@@ -326,7 +326,7 @@ function MFLanding({
             {ASSET_ALLOCATION.title.text}
           </Typography>
 
-          <Stack
+          {/* <Stack
             flexDirection="row"
             alignItems="center"
             justifyContent="flex-start"
@@ -345,7 +345,7 @@ function MFLanding({
               src={require(`assets/${[productName]}/right_arrow_small.svg`)}
               dataAid={ASSET_ALLOCATION.viewDetails.iconDataAid}
             />
-          </Stack>
+          </Stack> */}
         </Stack>
         <Box className="semi-donut-graph">
           <SemiDonutGraph data={graphOptions} />

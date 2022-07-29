@@ -160,7 +160,7 @@ const HeadingRow = ({ title, titleDataAid, isActionable, onClick }) => {
       <Typography
         variant="heading4"
         color={"foundationColors.content.primary"}
-        dataAid={titleDataAid}
+        data-aid={titleDataAid}
       >
         {title}
       </Typography>

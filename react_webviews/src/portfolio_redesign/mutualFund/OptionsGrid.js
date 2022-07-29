@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { MORE_OPTIONS } from "businesslogic/constants/portfolio";
-import React from "react";
+import React, { useState } from "react";
 import Typography from "../../designSystem/atoms/Typography";
 import CategoryCard from "../../designSystem/molecules/CategoryCard";
 import "./OptionsGrid.scss";
@@ -39,7 +39,7 @@ const optionList = [
     dataAid: "withdraw",
     title: "Withdraw",
     imgSrc: require("assets/mf_withdraw.svg"),
-    path: "/withdraw/reason", // goto: TODO:
+    path: "/withdraw/reason",
   },
 ];
 

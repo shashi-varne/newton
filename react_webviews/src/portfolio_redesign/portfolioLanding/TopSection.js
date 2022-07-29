@@ -1,17 +1,13 @@
-import { Box } from "@mui/system";
-import React, { useState } from "react";
-import Typography from "../../designSystem/atoms/Typography";
-import { PORTFOLIO_LANDING } from "businesslogic/strings/portfolio";
 import { Stack } from "@mui/material";
-import {
-  formatAmountInr,
-  formatUptoFiveDigits,
-  numDifferentiation,
-} from "../../utils/validators";
+import { Box } from "@mui/system";
+import { PORTFOLIO_LANDING } from "businesslogic/strings/portfolio";
 import Lottie from "lottie-react";
-import BottomSheet from "../../designSystem/organisms/BottomSheet";
-import LandingBottomsheet from "./landingBottomsheet";
+import React, { useState } from "react";
 import Icon from "../../designSystem/atoms/Icon";
+import Typography from "../../designSystem/atoms/Typography";
+import BottomSheet from "../../designSystem/organisms/BottomSheet";
+import { formatAmountInr, formatUptoFiveDigits } from "../../utils/validators";
+import LandingBottomsheet from "./landingBottomsheet";
 
 const {
   investmentSummary: INVESTMENT_SUMMARY,
