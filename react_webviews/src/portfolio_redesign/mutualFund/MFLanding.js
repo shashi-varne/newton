@@ -79,6 +79,8 @@ function MFLanding({
   showMfWalkthrough,
   navigate,
   handleMissedSip,
+  showEasySip,
+  showMissedSip,
 }) {
   const [isCurrentValueSheetOpen, setIsCurrentValueSheetOpen] = useState(false);
   const [enable, setEnable] = useState(false);
@@ -293,23 +295,27 @@ function MFLanding({
         />
       </Box>
       <Box className="info-card-section">
-        <WrapperBox onClick={handleEasySip} elevation={1}>
-          <InfoCard
-            imgSrc={require("assets/give_cash.svg")}
-            title={MF_LANDING.easySip.title}
-            subtitle={MF_LANDING.easySip.subtitle}
-            dataAid={MF_LANDING.easySip.dataAid}
-          />
-        </WrapperBox>
+        {showEasySip && (
+          <WrapperBox onClick={handleEasySip} elevation={1}>
+            <InfoCard
+              imgSrc={require("assets/give_cash.svg")}
+              title={MF_LANDING.easySip.title}
+              subtitle={MF_LANDING.easySip.subtitle}
+              dataAid={MF_LANDING.easySip.dataAid}
+            />
+          </WrapperBox>
+        )}
 
-        <WrapperBox onClick={handleMissedSip} elevation={1}>
-          <InfoCard
-            imgSrc={require("assets/missed_sip.svg")}
-            title={"Missed SIP"}
-            subtitle={"Please pay this month’s SIP"}
-            dataAid={"missedSip"}
-          />
-        </WrapperBox>
+        {showMissedSip && (
+          <WrapperBox onClick={handleMissedSip} elevation={1}>
+            <InfoCard
+              imgSrc={require("assets/missed_sip.svg")}
+              title={"Missed SIP"}
+              subtitle={"Please pay this month’s SIP"}
+              dataAid={"missedSip"}
+            />
+          </WrapperBox>
+        )}
 
         <Box onClick={handleExternalPortfolio}>
           {renderExternalPortfolioCard()}
